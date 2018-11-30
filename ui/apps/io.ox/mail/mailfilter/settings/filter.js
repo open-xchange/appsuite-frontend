@@ -243,8 +243,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
     });
 
     return {
-        editMailfilter: function ($node) {
-
+        editMailfilter: function ($node, baton) {
             var createExtpointForSelectedFilter = function (node, args, config) {
                     ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
                 },
@@ -506,6 +505,21 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     initialize: function () {
                         this.collection = collection;
+                        this.listenTo(ox, 'refresh^', this.onRefresh);
+                        this.listenTo(ox, 'app:start app:resume', function (data) { this.handleRefresh(data); });
+                        this.$el.on('dispose', function () { this.stopListening(); }.bind(this));
+                    },
+
+                    onRefresh: function () {
+                        self.refresh();
+                    },
+
+                    handleRefresh: function (data) {
+                        if (data.attributes.name !== baton.tree.app.attributes.name) {
+                            this.stopListening(ox, 'refresh^');
+                        } else {
+                            this.listenTo(ox, 'refresh^', this.onRefresh);
+                        }
                     },
 
                     render: function () {

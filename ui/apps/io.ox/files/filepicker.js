@@ -26,7 +26,8 @@ define('io.ox/files/filepicker', [
     'io.ox/core/page-controller',
     'io.ox/core/toolbars-mobile',
     'settings!io.ox/core',
-    'gettext!io.ox/files'
+    'gettext!io.ox/files',
+    'io.ox/files/mobile-navbar-extensions'
 ], function (cache, ext, Selection, dialogs, upload, folderAPI, picker, FileInfoView, filesAPI, filesExtensions, notifications, PageController, Bars, settings, gt) {
 
     'use strict';
@@ -408,6 +409,32 @@ define('io.ox/files/filepicker', [
             }
         }
 
+        function onVirtualChange(id) {
+            if (id === 'virtual/favorites/infostore') {
+                if (currentFolder === id) {
+                    hub.trigger('folder:changed');
+                    return;
+                }
+
+                if (options.uploadButton) {
+                    $('[data-action="alternative"]', filesPane.closest('.add-infostore-file'))
+                        .prop('disabled', true);
+                }
+
+                if (_.device('smartphone')) {
+                    pages.getNavbar('fileList').setTitle(gt('Favorites'));
+                }
+
+                // disable ok button on folder change (selection will enable it)
+                toggleOkButton(false);
+
+                filesPane.empty();
+                return filesAPI.getList(settings.get('favoriteFiles/infostore', []), { errors: true, cache: cache, onlyAttributes: true }).then(function (files) {
+                    updateFileList(id, files);
+                });
+            }
+        }
+
         function onFolderChange(id) {
 
             if (currentFolder === id) {
@@ -432,60 +459,64 @@ define('io.ox/files/filepicker', [
             toggleOkButton(false);
 
             filesPane.empty();
-            filesAPI.getAll(id, { cache: false }).done(function (files) {
-                /**
-                 *  fixing Bug 50949: 'Insert image' from drive offers non image file
-                 *  fixing Bug 50501: File picker:Travelling through file name list with keyboard seems random
-                 *
-                 *  [https://bugs.open-xchange.com/show_bug.cgi?id=50949]
-                 *  [https://bugs.open-xchange.com/show_bug.cgi?id=50501]
-                 */
-                files = _.chain(files)                                  // - 1stly, really do what the original intention was:
-                    .filter(options.filter)                             //
-                    .sortBy(options.sorter)                             //   ... filter and sort the model and not the view.
-                    .value();                                           //
-
-                if (files.length <= 0) {                                // (additional win: change view acoording to the filtered model)
-
-                    deletePreviewPane();
-                } else {                                                // - 2ndly, use human readable variable names
-                    var paneItems = files.map(function (file) {         //   in order to show other developers what
-                        //                                                   direction you are heading to.
-                        var guid = _.uniqueId('form-control-label-');   // - nice: model and view after 3 years are finally in sync.
-                        var title = (file['com.openexchange.file.sanitizedFilename'] || file.filename || file.title),
-                            $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
-                                $('<label class="checkbox-inline sr-only">')
-                                    .attr({ 'title': title, 'for': guid })
-                                    .append(
-                                        $('<input type="checkbox" tabindex="-1">').attr('id', guid)
-                                            .val(file.id).data('file', file)
-                                    ),
-                                $('<div class="name">').text(title)
-                            );
-                        if (options.point) {
-                            ext.point(options.point + '/filelist/filePicker/customizer').invoke('customize', $div, file);
-                        }
-                        return $div;
-                    });
-                    //                                                     - 3rd, you provide a result that got processed stepwise
-                    filesPane.append(                                   //   (and not by spaghetti code), thus other devs much easear
-                        paneItems                                       //   recognize its creation process, thus they will be able changing
-                    );                                                  //   this process' control flow (better refactoring/maintaining of code).
-                }                                                       // - last: sticking to some simple coding rules, most probably had prevented creating this bugs.
-                self.selection.clear();
-                self.selection.init(files); // - provide the filtered model ... see 1st point above.
-
-                // at first load: the file list should be focused
-                if (options.multiselect && options.wasLoaded === undefined) {
-                    self.selection.selectFirst(true);
-                    // flag to indicate the initial load
-                    options.wasLoaded = true;
-                } else {
-                    self.selection.selectFirst();
-                }
-                currentFolder = id;
-                hub.trigger('folder:changed');
+            filesAPI.getAll(id, { cache: false, params: { sort: 702 } }).done(function (files) {
+                updateFileList(id, files);
             });
+        }
+
+        function updateFileList(id, files) {
+            /**
+             *  fixing Bug 50949: 'Insert image' from drive offers non image file
+             *  fixing Bug 50501: File picker:Travelling through file name list with keyboard seems random
+             *
+             *  [https://bugs.open-xchange.com/show_bug.cgi?id=50949]
+             *  [https://bugs.open-xchange.com/show_bug.cgi?id=50501]
+             */
+            files = _.chain(files)                                  // - 1stly, really do what the original intention was:
+                .filter(options.filter)                             //
+                .sortBy(options.sorter)                             //   ... filter and sort the model and not the view.
+                .value();                                           //
+
+            if (files.length <= 0) {                                // (additional win: change view acoording to the filtered model)
+
+                deletePreviewPane();
+            } else {                                                // - 2ndly, use human readable variable names
+                var paneItems = files.map(function (file) {         //   in order to show other developers what
+                    //                                                   direction you are heading to.
+                    var guid = _.uniqueId('form-control-label-');   // - nice: model and view after 3 years are finally in sync.
+                    var title = (file['com.openexchange.file.sanitizedFilename'] || file.filename || file.title),
+                        $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
+                            $('<label class="checkbox-inline sr-only">')
+                                .attr({ 'title': title, 'for': guid })
+                                .append(
+                                    $('<input type="checkbox" tabindex="-1">').attr('id', guid)
+                                        .val(file.id).data('file', file)
+                                ),
+                            $('<div class="name">').text(title)
+                        );
+                    if (options.point) {
+                        ext.point(options.point + '/filelist/filePicker/customizer').invoke('customize', $div, file);
+                    }
+                    return $div;
+                });
+                //                                                     - 3rd, you provide a result that got processed stepwise
+                filesPane.append(                                   //   (and not by spaghetti code), thus other devs much easear
+                    paneItems                                       //   recognize its creation process, thus they will be able changing
+                );                                                  //   this process' control flow (better refactoring/maintaining of code).
+            }                                                       // - last: sticking to some simple coding rules, most probably had prevented creating this bugs.
+            self.selection.clear();
+            self.selection.init(files); // - provide the filtered model ... see 1st point above.
+
+            // at first load: the file list should be focused
+            if (options.multiselect && options.wasLoaded === undefined) {
+                self.selection.selectFirst(true);
+                // flag to indicate the initial load
+                options.wasLoaded = true;
+            } else {
+                self.selection.selectFirst();
+            }
+            currentFolder = id;
+            hub.trigger('folder:changed');
         }
 
         function fileUploadHandler(e) {
@@ -584,6 +615,14 @@ define('io.ox/files/filepicker', [
             hideTrashfolder: options.hideTrashfolder || undefined,
             createFolderButton: options.createFolderButton,
 
+            disable: function (data) {
+                if (!/^virtual\//.test(data.id)) return false;
+                // enable favorites in drive
+                if (data.id === 'virtual/favorites/infostore') return false;
+                // disable other virtual folders
+                return true;
+            },
+
             done: function (id, dialog) {
                 def.resolve(
                     _(filesPane.find('li.selected input')).map(function (node) {
@@ -639,7 +678,7 @@ define('io.ox/files/filepicker', [
                     });
 
                     // always change pages on click, do not wait for folder-change
-                    dialog.$body.on('click', 'li .folder.selectable.open', function (e) {
+                    dialog.$body.on('click', 'li .folder.selectable.open, li.folder.selectable.favorites', function (e) {
                         if ($(e.target).closest('.folder-arrow').length) return;
                         pages.changePage('fileList', { disableAnimations: true });
                     });
@@ -650,6 +689,7 @@ define('io.ox/files/filepicker', [
                 tree.once('change', focusButtons.bind(dialog));
 
                 tree.on('change', onFolderChange);
+                tree.on('virtual', onVirtualChange);
                 options.initialize(dialog);
             },
 

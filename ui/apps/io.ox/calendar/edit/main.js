@@ -127,7 +127,7 @@ define('io.ox/calendar/edit/main', [
                         self.setTitle(self.model.get('summary') || opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
 
                         win.on('show', function () {
-                            if (app.dropZone) app.dropZone.include();
+                            if (app.dropZone && app.dropZone.include) app.dropZone.include();
                             //set url parameters
                             self.setState({ folder: self.model.attributes.folder, id: self.model.get('id') ? self.model.attributes.id : null });
                         });
@@ -211,6 +211,35 @@ define('io.ox/calendar/edit/main', [
                 return !_.isEqual(this.model.toJSON(), this.initialModelData);
             },
 
+            // gets the delta for an update request. That way we don't need to send the whole model
+            getDelta: function () {
+
+                if (this.view.options.mode !== 'edit') return this.model.toJSON();
+                var self = this,
+                    data = this.model.toJSON(),
+                    delta = {
+                        id: this.initialModelData.id,
+                        folder: this.initialModelData.folder,
+                        timestamp: this.initialModelData.timestamp
+                    },
+                    keys = _(data).keys();
+
+                _(keys).each(function (key) {
+                    // endDate needs some special attention since it's one day off for allday appointments (for user convenience)
+                    if ((key === 'endDate' && util.isAllday(data) ? (self.view.tempEndDate && !_.isEqual(self.view.tempEndDate, self.initialModelData[key])) : (!_.isEqual(self.initialModelData[key], data[key])))
+                        && (self.initialModelData[key] || data[key])) {
+                        delta[key] = data[key];
+                    }
+                });
+
+                if (this.initialModelData.recurrenceId) {
+                    delta.recurrenceId = this.initialModelData.recurrenceId;
+                    delta.seriesId = this.initialModelData.seriesId;
+                }
+
+                return delta;
+            },
+
             // clean up model so no empty values are saved and dirty check has no false positives
             cleanUpModel: function () {
                 var data = this.model.toJSON(),
@@ -284,10 +313,9 @@ define('io.ox/calendar/edit/main', [
                                 self.getWindow().idle();
 
                                 // restore times (we add a day before saving allday appointments)
-                                if (self.view.tempEndDate && self.view.tempStartDate) {
+                                if (self.view.tempEndDate) {
                                     self.model.set('endDate', self.view.tempEndDate, { silent: true });
-                                    self.model.set('startDate', self.view.tempStartDate, { silent: true });
-                                    self.view.tempEndDate = self.view.tempStartDate = null;
+                                    self.view.tempEndDate = null;
                                 }
                             })
                             .on('ignore', function () {
@@ -299,7 +327,7 @@ define('io.ox/calendar/edit/main', [
                                     ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 } else {
                                     api.update(
-                                        self.model,
+                                        self.getDelta(),
                                         _.extend(util.getCurrentRangeOptions(), {
                                             attachments: self.attachmentsFormData || [],
                                             sendInternalNotifications: sendNotifications,
@@ -313,8 +341,8 @@ define('io.ox/calendar/edit/main', [
                     return;
                 }
 
-                // update model with current data
-                if (data) this.model.set(data.toJSON());
+                // update model with current data (omit undefined)
+                if (data) this.model.set(_(data.toJSON()).omit(function (value) { return !value; }));
 
                 // needed for attachment uploads to work
                 if (this.view.options.mode === 'create') {
@@ -388,13 +416,6 @@ define('io.ox/calendar/edit/main', [
             getContextualHelp: function () {
                 return 'ox.appsuite.user.sect.calendar.gui.create.html';
             }
-        });
-
-        app.setLauncher(function () {
-            // use naming convention 'dropZone' to utilise global dropZone.remove on quit
-            this.dropZone = new dnd.UploadZone({
-                ref: 'io.ox/calendar/edit/dnd/actions'
-            }, this);
         });
 
         app.setQuit(function () {

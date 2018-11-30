@@ -40,7 +40,7 @@ define('io.ox/core/main/topbar_right', [
         }, currentApp && currentApp.get('help'));
     }
 
-    ext.point('io.ox/core/topbar/right').extend({
+    ext.point('io.ox/core/appcontrol/right').extend({
         id: 'upsell',
         index: 50,
         draw: function () {
@@ -307,6 +307,7 @@ define('io.ox/core/main/topbar_right', [
             var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
                 a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('title', gt('Settings')),
                 dropdown = new Dropdown({
+                    attributes: { role: 'presentation' },
                     tagName: 'li',
                     id: 'io-ox-topbar-dropdown-icon',
                     className: 'launcher dropdown',
@@ -322,6 +323,7 @@ define('io.ox/core/main/topbar_right', [
             contactAPI.on('reset:image update:image', updatePicture);
             // via my contact data
             userAPI.on('reset:image:' + ox.user_id + ' update:image:' + ox.user_id, updatePicture);
+            userAPI.on('update', updatePicture);
 
             function updatePicture() {
                 a.empty().append(

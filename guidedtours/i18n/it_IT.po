@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-27 08:25+0100\n"
+"PO-Revision-Date: 2018-11-02 07:45+0100\n"
 "Last-Translator: Vincenzo Reale <vincenzo@workshop-chapina.comm>\n"
 "Language-Team: Italian <it@workshop-chapina.com>\n"
 "Language: it_IT\n"
@@ -52,15 +52,6 @@ msgstr ""
 "impostare i parametri di ricorrenza saranno mostrate."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Utilizzare le funzioni di promemoria"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr ""
-"Per non dimenticare l'appuntamento, utilizzare la funzione di promemoria."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr "Invitare altri partecipanti"
 
@@ -73,6 +64,15 @@ msgstr ""
 "Per invitare altri partecipanti, digitare i loro nomi nel campo sotto "
 "Partecipanti. Per evitare conflitti tra appuntamenti, fare clic su Trova "
 "tempo libero in alto a sinistra."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Utilizzare le funzioni di promemoria"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr ""
+"Per non dimenticare l'appuntamento, utilizzare la funzione di promemoria."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
@@ -370,7 +370,7 @@ msgid ""
 msgstr ""
 "Drive consente di collegarsi ad altri sistemi di archiviazione, se si "
 "dispone già di un account di archiviazione sul cloud per salvare e "
-"sincronizzare i propri file.  Basta fare clic sul logo corretto e accedere "
+"sincronizzare i propri file. Basta fare clic sul logo corretto e accedere "
 "ai propri dati esistenti."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -395,13 +395,10 @@ msgid "Launching an app"
 msgstr "Avviare un'applicazione"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
+msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Per avviare un'applicazione, utilizza le icone di avvio rapido a sinistra "
-"della barra dei menu o fai clic su un voce all'interno del menu di avvio "
-"delle applicazioni."
+"Per avviare un'applicazione, fare clic su una voce nel menu dei lanciatori"
+" delle applicazioni."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -720,9 +717,8 @@ msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
 msgstr ""
-"Per aprire le impostazioni, fare clic sull'immagine dell'utente in alto a"
-" destra della barra "
-"dei menu. Seleziona Impostazioni."
+"Per aprire le impostazioni, fare clic sull'immagine dell'utente in alto a "
+"destra della barra dei menu. Seleziona Impostazioni."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
@@ -761,8 +757,8 @@ msgid ""
 msgstr ""
 "Per aprire la guida, fare clic sull'immagine dell'utente in alto a destra "
 "della barra dei menu. Seleziona Aiuto. La guida per l'applicazione "
-"selezionata viene visualizzata. Per sfogliare la guida completa, fare clic su "
-"Pagina iniziale o Indice nella parte superiore della finestra."
+"selezionata viene visualizzata. Per sfogliare la guida completa, fare clic "
+"su Pagina iniziale o Indice nella parte superiore della finestra."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -780,8 +776,8 @@ msgstr ""
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
-"Per uscire, fare clic sull'icona di uscita in alto a destra "
-"della barra dei menu."
+"Per uscire, fare clic sull'icona di uscita in alto a destra della barra dei "
+"menu."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating a new task"
@@ -882,61 +878,6 @@ msgstr ""
 "selezione a sinistra delle attività. Se le caselle non sono visualizzate, "
 "fare clic su Vista > Caselle di selezione a destra della barra degli "
 "strumenti."
-
-#~ msgid ""
-#~ "To open the settings, click the System menu icon on the upper right side "
-#~ "of the menu bar. Select Settings."
-#~ msgstr ""
-#~ "Per aprire le impostazioni, fare clic sull'icona Menu di sistema in alto "
-#~ "a destra della barra dei menu. Selezionare Impostazioni."
-
-#~ msgid ""
-#~ "To open the help, click the System menu icon on the upper right side of "
-#~ "the menu bar. Select Help. The help for the currently selected app is "
-#~ "displayed. To browse the complete help, click on Start Page or Table Of "
-#~ "Contents at the upper part of the window."
-#~ msgstr ""
-#~ "Per aprire la guida, fare clic sull'icona Menu di sistema in alto a "
-#~ "destra della barra dei menu. Selezionare Aiuto. La guida per "
-#~ "l'applicazione selezionata viene visualizzata.Per sfogliare la guida "
-#~ "completa, fare clic su Pagina iniziale o Indice nella parte superiore "
-#~ "della finestra."
-
-#~ msgid ""
-#~ "Hint: you can always restart guided tours, any time you need them, from "
-#~ "the system menu."
-#~ msgstr ""
-#~ "Suggerimento: è sempre possibile riavviare le visite guidate, in ogni "
-#~ "momento sia necessario, dal menu di sistema."
-
-#~ msgid ""
-#~ "In case of new notifications, e.g. appointment invitations, the info area "
-#~ "is opened."
-#~ msgstr ""
-#~ "In caso di nuove notifiche, ad es. inviti di appuntamenti, l'area "
-#~ "informazioni è aperta."
-
-#~ msgid "Restart Guided Tour"
-#~ msgstr "Riavviare la visita guidata"
-
-#~ msgid "The New objects icon"
-#~ msgstr "L'icona Nuovi oggetti"
-
-#~ msgid ""
-#~ "The New objects icon shows the number of appointment reminders or other "
-#~ "notifications. If clicking the icon, the info area opens."
-#~ msgstr ""
-#~ "L'icona Nuovi oggetti mostra il numero di promemoria di appuntamenti o "
-#~ "altre notifiche. Facendo clic sull'icona, si aprirà l'area informazioni."
-
-#~ msgid "The info area"
-#~ msgstr "L'area informazioni"
-
-#~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
-#~ msgstr ""
-#~ "Per avviare un'applicazione, fare clic su una voce a sinistra della barra "
-#~ "dei menu."
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -4592,6 +4533,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "Priorità alta"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Suggerimento: è sempre possibile riavviare le visite guidate, in ogni "
+#~ "momento sia necessario, dal menu di sistema."
+
 #~ msgid "Hobby"
 #~ msgstr "Hobby"
 
@@ -4712,6 +4660,13 @@ msgstr ""
 #~ msgstr ""
 #~ "In caso di nuove notifiche, ad es. inviti ad appuntamenti, l'area "
 #~ "informazioni sarà aperta sul lato destro."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "In caso di nuove notifiche, ad es. inviti di appuntamenti, l'area "
+#~ "informazioni è aperta."
 
 #~ msgid "In progress"
 #~ msgstr "In corso"
@@ -6296,6 +6251,9 @@ msgstr ""
 #~ msgid "Resources"
 #~ msgstr "Risorse"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Riavviare la visita guidata"
+
 #~ msgid "Restore Last Operation"
 #~ msgstr "Ripristina l'ultima operazione"
 
@@ -7062,6 +7020,16 @@ msgstr ""
 #~ "un file per visualizzare ulteriori dettagli e funzioni nella finestra a "
 #~ "comparsa."
 
+#~ msgid "The New objects icon"
+#~ msgstr "L'icona Nuovi oggetti"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "L'icona Nuovi oggetti mostra il numero di promemoria di appuntamenti o "
+#~ "altre notifiche. Facendo clic sull'icona, si aprirà l'area informazioni."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -7267,6 +7235,9 @@ msgstr ""
 #~ msgstr ""
 #~ "L'icona in basso a destra aiuta a ordinare i propri messaggi di posta. "
 #~ "Fare clic sull'icona per ottenere un elenco dei criteri di ordinamento."
+
+#~ msgid "The info area"
+#~ msgstr "L'area informazioni"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Il numero di destinatari è limitato a %1$s per campo"
@@ -7659,6 +7630,14 @@ msgstr ""
 #~ msgstr "Per avviare un'applicazione, fare clic sul titolo di un riquadro."
 
 #~ msgid ""
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
+#~ msgstr ""
+#~ "Per avviare un'applicazione, utilizza le icone di avvio rapido a sinistra "
+#~ "della barra dei menu o fai clic su un voce all'interno del menu di avvio "
+#~ "delle applicazioni."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -7677,6 +7656,25 @@ msgstr ""
 #~ msgstr ""
 #~ "Per aprire la guida, fare clic sull'icona Menu di sistema in alto a "
 #~ "destra della barra dei menu. Selezionare Aiuto."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Per aprire la guida, fare clic sull'icona Menu di sistema in alto a "
+#~ "destra della barra dei menu. Selezionare Aiuto. La guida per "
+#~ "l'applicazione selezionata viene visualizzata.Per sfogliare la guida "
+#~ "completa, fare clic su Pagina iniziale o Indice nella parte superiore "
+#~ "della finestra."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Per aprire le impostazioni, fare clic sull'icona Menu di sistema in alto "
+#~ "a destra della barra dei menu. Selezionare Impostazioni."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

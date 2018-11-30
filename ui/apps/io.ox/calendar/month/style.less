@@ -11,31 +11,22 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-.month-view {
+.monthview-container {
 
     * { -webkit-tap-highlight-color: rgba(0,0,0,0); }
 
-    // overwrite display:block from page controller
-    &.io-ox-pagecontroller.page.current {
-        .flex-display();
-        .flex-direction(column);
-    }
+    height: 100%;
+    .flex-display(flex);
+    .flex-direction(column);
 
-    .month-toolbar {
-        .flex(0 0 auto);
+    .header {
+        height: 56px;
+        flex: 0 0 auto;
+        display: flex;
 
-        .controls-container {
-            padding: 17px 0 0 8px;
-            height: 56px;
-            width: auto;
-        }
-
-        .month-info {
-            margin-left: 8px;
-            font-size: 20px;
-            font-weight: bold;
-            padding-top: 8px;
-            user-select: none;
+        .smartphone & {
+            margin-left: auto;
+            margin-right: auto;
         }
     }
 
@@ -43,11 +34,6 @@
         .flex(1);
         overflow: hidden;
         outline: none;
-
-        .weekend { display: none; }
-        &.weekends .weekend { display: table-cell; }
-        .cw { display: none; }
-        &.cw .cw { display: table-cell; }
     }
 
     .month {
@@ -55,6 +41,11 @@
         height: 100%;
         width: 100%;
         table-layout: fixed;
+
+        .weekend { display: none; }
+        &.weekends .weekend { display: table-cell; }
+        .cw { display: none; }
+        &.cw .cw { display: table-cell; }
 
         thead {
             display: none;
@@ -106,7 +97,7 @@
 
                     .day-label {
                         font-weight: normal;
-                        color: #767676;
+                        color: #717171;
                         margin-right: 4px;
                     }
                 }
@@ -117,15 +108,14 @@
                     color: #fff;
                     font-weight: bold;
                     background-color: @calendar-today;
+
+                    .day-label {
+                        color: white;
+                    }
                 }
 
                 &.out {
                     background-color: rgba(238, 238, 238, 0.5);
-
-                    .number {
-                        color: #767676;
-                        font-weight: normal;
-                    }
 
                     .appointment {
                         background-color: transparent!important;
@@ -134,6 +124,13 @@
 
                         &.hover {
                             background-color: #ccc!important;
+                        }
+                    }
+
+                    &:not(.today) {
+                        .number {
+                            color: #717171;
+                            font-weight: normal;
                         }
                     }
                 }
@@ -171,7 +168,9 @@
 
         .appointment-content > * {
             margin-right: 4px;
+            display: inline;
         }
+
         .start {
             min-width: 32px;
             display: inline-block;
@@ -180,6 +179,12 @@
 
         .private-flag {
             font-size: 14px;
+        }
+
+        &.resizing {
+            outline: 2px solid @brand-primary;
+            outline-offset: -2px;
+            z-index: 1000;
         }
     }
 
@@ -260,5 +265,10 @@
                 font-weight: 300;
             }
         }
+    }
+
+    .no-select .appointment {
+        pointer-events: none;
+        user-select: none;
     }
 }

@@ -43,6 +43,9 @@ define('io.ox/settings/security/settings/pane', [
                     new ExtensibleView({ point: 'io.ox/settings/security/settings/detail/general', model: settings })
                     .build(function () {
                         this.listenTo(this.model, 'change', this.model.saveAndYell.bind(this.model, undefined));
+                        this.listenTo(this.model, 'change:autoLogout', function () {
+                            ox.autoLogout.restart();
+                        });
                     })
                     .inject({
                         getAutoLogoutOptions: function () {
@@ -103,32 +106,50 @@ define('io.ox/settings/security/settings/pane', [
         id: 'mail',
         index: 100,
         render: function () {
-
-            var isEnabled = mailSettings.get('features/authenticity', false),
-                isConfigurable = isEnabled && mailSettings.isConfigurable('authenticity/level');
-
-            // fallback default value
-            if (isEnabled && !this.model.get('authenticity/level')) this.model.set('authenticity/level', 'none');
-
             this.$el.append(
                 util.fieldset(
                     gt.pgettext('app', 'Mail'),
                     // images
-                    util.checkbox('allowHtmlImages', gt('Allow pre-loading of externally linked images'), this.model),
-                    // mail authenticity
-                    !isConfigurable ? $() :
-                        util.compactSelect('authenticity/level', gt('Show email authenticity'), this.model, [
-                            //#. Status for mail authenticity features. Do not show any information at all
-                            { label: gt('Disabled'), value: 'none' },
-                            //#. Status for mail authenticity features. Show information for dangerous and unambiguous/inconclusive
-                            { label: gt('Suspicious and unclassified emails only'), value: 'fail_neutral_trusted' },
-                            //#. Status for mail authenticity features. Show information for any mail
-                            { label: gt('All emails'), value: 'all' }
-                        ])
-                )
+                    util.checkbox('allowHtmlImages', gt('Allow pre-loading of externally linked images'), this.model)
+                ).addClass('mail')
             );
-
         }
     });
 
+    ext.point('io.ox/settings/security/settings/detail/mail').extend({
+        id: 'authenticity',
+        index: 200,
+        render: function () {
+            var isEnabled = mailSettings.get('features/authenticity', false),
+                isConfigurable = this.model.isConfigurable('authenticity/level');
+
+            if (!isEnabled || !isConfigurable) return;
+
+            // fallback default value
+            if (!this.model.get('authenticity/level')) this.model.set('authenticity/level', 'none');
+
+            this.$('fieldset.mail').append(
+                util.compactSelect('authenticity/level', gt('Show email authenticity'), this.model, [
+                    //#. Status for mail authenticity features. Do not show any information at all
+                    { label: gt('Disabled'), value: 'none' },
+                    //#. Status for mail authenticity features. Show information for dangerous and unambiguous/inconclusive
+                    { label: gt('Suspicious and unclassified emails only'), value: 'fail_neutral_trusted' },
+                    //#. Status for mail authenticity features. Show information for any mail
+                    { label: gt('All emails'), value: 'all' }
+                ])
+            );
+        }
+    });
+
+    ext.point('io.ox/settings/security/settings/detail/mail').extend({
+        id: 'trusted',
+        index: 300,
+        render: function () {
+            if (!this.model.isConfigurable('features/trusted/user')) return;
+
+            this.$('fieldset.mail').append(
+                util.textarea('features/trusted/user', gt('Always trust mails from the following senders'), this.model, gt('Comma-separated list e.g. "example.org, alice@example.com"'))
+            );
+        }
+    });
 });

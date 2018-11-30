@@ -52,7 +52,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         onChange: function () {
             if (this.name === 'size' && this.validationForSize()) {
                 this.model.set(this.name, this.$el.val());
-            } else if (this.name === 'values' || this.name === 'headers') {
+            } else if (this.name === 'values' || this.name === 'headers' || this.name === 'source') {
                 this.model.set(this.name, [this.$el.val()]);
             } else {
                 this.model.set(this.name, this.$el.val());
@@ -122,7 +122,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                 ),
                 $('<div class="col-sm-8">').append(
                     $('<div class="row">').append(
-                        $('<label class="col-sm-4 control-label">').attr('for', o.inputId).text(gt('Name')),
+                        $('<label class="col-sm-4 control-label">').attr('for', o.inputId).text(o.InputLabel ? o.InputLabel : gt('Name')),
                         $('<div class="first-label inline-input col-sm-8">').append(
                             new Input(o.inputOptions).render().$el,
                             o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []
@@ -151,10 +151,10 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                     o.seconddropdownOptions ? $('<div class="col-sm-2">').append(
                         new DropdownLinkView(o.seconddropdownOptions).render().$el
                     ) : [],
-                    $('<div>').addClass(o.seconddropdownOptions ? 'col-sm-2' : 'col-sm-4').append(
+                    $('<div>').addClass(o.inputOptions.name === 'size' ? 'col-sm-7' : 'col-sm-4').append(
                         o.dropdownOptions ? new DropdownLinkView(o.dropdownOptions).render().$el : []
                     ),
-                    $('<div class="col-sm-8">').append(
+                    $('<div>').addClass(o.inputOptions.name === 'size' ? 'col-sm-5' : 'col-sm-8').append(
                         $('<label class="sr-only">').attr('for', o.inputId).text(o.inputLabel),
                         new Input(o.inputOptions).render().$el,
                         o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []

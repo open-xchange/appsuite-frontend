@@ -20,8 +20,9 @@ define('io.ox/calendar/util', [
     'io.ox/core/tk/dialogs',
     'settings!io.ox/calendar',
     'settings!io.ox/core',
-    'gettext!io.ox/calendar'
-], function (userAPI, contactAPI, groupAPI, folderAPI, util, dialogs, settings, coreSettings, gt) {
+    'gettext!io.ox/calendar',
+    'io.ox/core/a11y'
+], function (userAPI, contactAPI, groupAPI, folderAPI, util, dialogs, settings, coreSettings, gt, a11y) {
 
     'use strict';
 
@@ -397,14 +398,8 @@ define('io.ox/calendar/util', [
             return parent;
         },
 
-        addTimezonePopover: function (parent, data, opt) {
-
-            opt = _.extend({
-                placement: 'left',
-                trigger: 'hover focus'
-            }, opt);
-
-            function getContent() {
+        addTimezonePopover: (function () {
+            function getContent(data) {
                 // hard coded for demo purposes
                 var div = $('<ul class="list-unstyled">'),
                     list = settings.get('favoriteTimezones');
@@ -434,45 +429,100 @@ define('io.ox/calendar/util', [
                 return div;
             }
 
-            function getTitle() {
+            function getTitle(data) {
                 return that.getTimeInterval(data, moment().tz()) + ' ' + moment().zoneAbbr();
             }
 
-            parent.popover({
-                container: opt.container || '#io-ox-core',
-                viewport: {
-                    selector: '#io-ox-core',
-                    padding: 10
-                },
-                content: getContent,
-                html: true,
-                placement: function (tip) {
-                    // add missing outer class
-                    $(tip).addClass('timezones');
-                    // get placement
-                    return opt.placement;
-                },
-                title: getTitle,
-                trigger: opt.trigger
-            }).on('blur dispose', function () {
-                $(this).popover('hide');
-                // set correct state or toggle doesn't work on next click
-                $(this).data('bs.popover').inState.click = false;
-            });
+            function addA11ySupport(parent) {
+                // a11y preparations such that the popover will be able to receive focus
+                var preventClose = false;
+                parent.on('focusout blur', function (e) {
+                    if (!preventClose) return;
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                }).on('show.bs.popover', function () {
+                    parent.on('keydown.a11y', function (e) {
+                        if (e.which !== 9) return;
+                        if (e.shiftKey) return;
 
-            if (opt.closeOnScroll) {
-                // add listener on popup shown. Otherwise we will not get the correct scrollparent at this point (if the popover container is not yet added to the dom)
-                parent.on('shown.bs.popover', function () {
-                    parent.scrollParent().one('scroll', function () {
-                        parent.popover('hide');
-                        // set correct state or toggle doesn't work on next click
-                        parent.data('bs.popover').inState.click = false;
+                        var popoverid = parent.attr('aria-describedby'),
+                            popover = $('#' + popoverid);
+                        if (popover.length === 0) return;
+
+                        // prevent default only if a popup is open
+                        e.preventDefault();
+                        preventClose = true;
+                        popover.attr('tabindex', -1).focus();
+                        _.defer(function () { preventClose = false; });
+
+                        popover.on('keydown.a11y', function tabOut(e) {
+                            if (e.which !== 9) return;
+                            e.preventDefault();
+                            popover.off('keydown.a11y');
+                            if (e.shiftKey) {
+                                preventClose = true;
+                                parent.focus();
+                                _.defer(function () { preventClose = false; });
+                            } else {
+                                a11y.getNextTabbable(parent).focus();
+                                parent.popover('hide');
+                            }
+                        }).on('blur', function () {
+                            if (preventClose) return;
+                            parent.popover('hide');
+                        });
                     });
+                }).on('hide.bs.popover', function (e) {
+                    $(e.target).off('keydown.a11y');
+                    preventClose = false;
                 });
             }
 
-            return parent;
-        },
+            return function (parent, data, opt) {
+
+                opt = _.extend({
+                    placement: 'left',
+                    trigger: 'hover focus'
+                }, opt);
+
+                addA11ySupport(parent);
+
+                parent.popover({
+                    container: opt.container || '#io-ox-core',
+                    viewport: {
+                        selector: '#io-ox-core',
+                        padding: 10
+                    },
+                    content: getContent.bind(null, data),
+                    html: true,
+                    placement: function (tip) {
+                        // add missing outer class
+                        $(tip).addClass('timezones');
+                        // get placement
+                        return opt.placement;
+                    },
+                    title: getTitle.bind(null, data),
+                    trigger: opt.trigger
+                }).on('blur dispose', function () {
+                    $(this).popover('hide');
+                    // set correct state or toggle doesn't work on next click
+                    $(this).data('bs.popover').inState.click = false;
+                });
+
+                if (opt.closeOnScroll) {
+                    // add listener on popup shown. Otherwise we will not get the correct scrollparent at this point (if the popover container is not yet added to the dom)
+                    parent.on('shown.bs.popover', function () {
+                        parent.scrollParent().one('scroll', function () {
+                            parent.popover('hide');
+                            // set correct state or toggle doesn't work on next click
+                            parent.data('bs.popover').inState.click = false;
+                        });
+                    });
+                }
+
+                return parent;
+            };
+        }()),
 
         getShownAsClass: function (data) {
             if (that.hasFlag(data, 'transparent')) return 'free';
@@ -650,7 +700,7 @@ define('io.ox/calendar/util', [
             return str;
         },
         // basically the same as in recurrence-view
-        // used to fix reccurence information when Ïging
+        // used to update reccurence information when moving events
         updateRecurrenceDate: function (event, oldDate) {
             if (!event || !oldDate) return;
 
@@ -662,7 +712,9 @@ define('io.ox/calendar/util', [
 
             // if weekly, shift bits
             if (type === 2) {
-                var shift = date.diff(oldDate, 'days') % 7,
+                var newDay = moment(date).startOf('day'),
+                    oldDay = moment(oldDate).startOf('day'),
+                    shift = newDay.diff(oldDay, 'days') % 7,
                     days = rruleMapModel.get('days');
                 if (shift < 0) shift += 7;
                 for (var i = 0; i < shift; i++) {
@@ -693,7 +745,10 @@ define('io.ox/calendar/util', [
 
             // change until
             if (rruleMapModel.get('until') && moment(rruleMapModel.get('until')).isBefore(date)) {
-                rruleMapModel.set('until', date.add(1, ['d', 'w', 'M', 'y'][rruleMapModel.get('recurrence_type') - 1]).valueOf());
+                rruleMapModel.set({
+                    'until': undefined,
+                    'occurrences': undefined
+                });
             }
             rruleMapModel.serialize();
             return event;
@@ -924,6 +979,8 @@ define('io.ox/calendar/util', [
             //     return 'color-label-' + folderColor;
             // }
 
+            if (!eventModel.hasFlag('organizer')) return folderColor;
+
             // set color of appointment. if color is 0, then use color of folder
             return !eventColor ? folderColor : eventColor;
         },
@@ -1035,6 +1092,8 @@ define('io.ox/calendar/util', [
             // shared appointments which are needs-action or declined don't receive color classes
             if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) return false;
 
+            if (!eventModel.hasFlag('organizer')) return true;
+
             return !eventColor && !privateFlag;
         },
 
@@ -1062,6 +1121,36 @@ define('io.ox/calendar/util', [
             ].join('');
         },
 
+        openDeeplink: function (model, opt) {
+            opt = _({}).extend(opt);
+            model = new (require('io.ox/calendar/model').Model)(model.toJSON());
+
+            ox.launch('io.ox/calendar/main', { folder: model.get('folder') }).done(function () {
+                var app = this,
+                    perspective = opt.perspective || _.url.hash('perspective') || app.props.get('layout');
+
+                function cont(perspective) {
+                    if (perspective.selectAppointment) perspective.selectAppointment(model);
+                    if (opt.showDetails) {
+                        var e = $.Event('click', { target: app.perspective.$el });
+                        perspective.showAppointment(e, model.toJSON(), { arrow: false });
+                    }
+                }
+
+                app.folders.add(model.get('folder'));
+
+                // open in current perspective
+                if (app.perspective && settings.get('viewView') === perspective) cont(app.perspective, model);
+
+                app.pages.changePage(perspective, { disableAnimations: _.device('smartphone') });
+
+                // wait for perspective change
+                app.getWindow().one('change:perspective', function (e, perspective) {
+                    cont(perspective, model);
+                });
+            });
+        },
+
         getRecurrenceEditDialog: function () {
             return new dialogs.ModalDialog()
                     .text(gt('Do you want to edit the whole series or just this appointment within the series?'))
@@ -1072,9 +1161,9 @@ define('io.ox/calendar/util', [
 
         showRecurrenceDialog: function (model) {
             if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
-            if (model.get('recurrenceId') && model.get('id') === model.get('seriesId')) {
+            if (model.get('recurrenceId')) {
                 var dialog = new dialogs.ModalDialog();
-                // first occurence or exception (we need to load the series master as the exception data doesn't work for changing the series )
+                // first occurence
                 if (model.hasFlag('first_occurrence')) {
                     dialog.text(gt('Do you want to edit the whole series or just this appointment within the series?'));
                     dialog.addPrimaryButton('series', gt('Series'), 'series');
@@ -1086,7 +1175,7 @@ define('io.ox/calendar/util', [
                 }
 
                 return dialog.addButton('appointment', gt('This appointment'), 'appointment')
-                    .addButton('cancel', gt('Cancel'), 'cancel')
+                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel')
                     .show();
             }
             return $.when('appointment');
@@ -1102,33 +1191,30 @@ define('io.ox/calendar/util', [
                 property: []
             };
 
-            if (that.hasFlag(obj, 'tentative')) icons.type.push($('<span class="tentative-flag">').append($('<i class="fa fa-question-circle" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Tentative'))));
-            if (that.hasFlag(obj, 'private')) icons.type.push($('<span class="private-flag">').append($('<i class="fa fa-user-circle" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))));
-            if (that.hasFlag(obj, 'confidential')) icons.type.push($('<span class="confidential-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Confidential'))));
-            if (this.hasFlag(obj, 'series') || this.hasFlag(obj, 'overridden')) icons.property.push($('<span class="recurrence-flag">').append($('<i class="fa fa-repeat" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Recurrence'))));
-            if (this.hasFlag(obj, 'scheduled')) icons.property.push($('<span class="participants-flag">').append($('<i class="fa fa-user-o" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Participants'))));
-            if (this.hasFlag(obj, 'attachments')) icons.property.push($('<span class="attachments-flag">').append($('<i class="fa fa-paperclip" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Attachments'))));
+            if (that.hasFlag(obj, 'tentative')) icons.type.push($('<span class="tentative-flag">').attr('title', gt('Tentative')).append($('<i class="fa fa-question-circle" aria-hidden="true">')));
+            if (that.hasFlag(obj, 'private')) icons.type.push($('<span class="private-flag">').attr('title', gt('Private')).append($('<i class="fa fa-user-circle" aria-hidden="true">')));
+            if (that.hasFlag(obj, 'confidential')) icons.type.push($('<span class="confidential-flag">').attr('title', gt('Confidential')).append($('<i class="fa fa-lock" aria-hidden="true">')));
+            if (this.hasFlag(obj, 'series') || this.hasFlag(obj, 'overridden')) icons.property.push($('<span class="recurrence-flag">').attr('title', gt('Recurrence')).append($('<i class="fa fa-repeat" aria-hidden="true">')));
+            if (this.hasFlag(obj, 'scheduled')) icons.property.push($('<span class="participants-flag">').attr('title', gt('Participants')).append($('<i class="fa fa-user-o" aria-hidden="true">')));
+            if (this.hasFlag(obj, 'attachments')) icons.property.push($('<span class="attachments-flag">').attr('title', gt('Attachments')).append($('<i class="fa fa-paperclip" aria-hidden="true">')));
             return icons;
         },
 
         getCurrentRangeOptions: function () {
             var app = ox.ui.apps.get('io.ox/calendar');
             if (!app) return {};
-            var window = app.getWindow();
-            if (!window) return {};
-            var perspective = window.getPerspective();
+            var perspective = app.perspective;
             if (!perspective) return;
 
-            var rangeStart, rangeEnd;
-            switch (perspective.name) {
+            var rangeStart, rangeEnd, model = perspective.model;
+            switch (perspective.getName()) {
                 case 'week':
-                    var view = perspective.view;
-                    rangeStart = moment(view.startDate).utc();
-                    rangeEnd = moment(view.startDate).utc().add(view.columns, 'days');
+                    rangeStart = moment(model.get('startDate')).utc();
+                    rangeEnd = moment(model.get('startDate')).utc().add(model.get('numColumns'), 'days');
                     break;
                 case 'month':
-                    rangeStart = moment(perspective.firstMonth).startOf('week').utc();
-                    rangeEnd = moment(perspective.lastMonth).endOf('month').endOf('week').utc();
+                    rangeStart = moment(model.get('startDate')).utc();
+                    rangeEnd = moment(model.get('endDate')).utc();
                     break;
                 case 'list':
                     rangeStart = moment().startOf('day').utc();
@@ -1207,7 +1293,7 @@ define('io.ox/calendar/util', [
                 // not really needed. Added just for convenience. Helps if group should be resolved
                 attendee.members = user.members;
             }
-            // not really needed. Added just for convenience. Helps if distibution list should be created
+            // not really needed. Added just for convenience. Helps if distribution list should be created
             if (attendee.cuType === 'INDIVIDUAL' || !attendee.cuType) {
                 attendee.contactInformation = { folder: user.folder_id, contact_id: user.contact_id || user.id };
                 attendee.contact = {
@@ -1269,10 +1355,10 @@ define('io.ox/calendar/util', [
             if (!data.id || !data.folder) return result(false);
 
             // organizer is allowed to edit
-            if (this.hasFlag(data, 'organizer')) return result(true);
+            if (this.hasFlag(data, 'organizer') || this.hasFlag(data, 'organizer_on_behalf')) return result(true);
 
             // if user is neither organizer nor attendee editing is not allowed
-            if (!this.hasFlag(data, 'attendee')) return result(false);
+            if (!this.hasFlag(data, 'attendee') && !this.hasFlag(data, 'attendee_on_behalf')) return result(false);
 
             // if both settings are the same, we don't need a folder check, all attendees are allowed to edit or not, no matter which folder the event is in
             if (settings.get('chronos/restrictAllowedAttendeeChanges', true) === settings.get('chronos/restrictAllowedAttendeeChangesPublic', true)) return result(!settings.get('chronos/restrictAllowedAttendeeChanges', true));
@@ -1302,6 +1388,26 @@ define('io.ox/calendar/util', [
             if (data instanceof Backbone.Model) return data.hasFlag(flag);
             if (!data.flags || !data.flags.length) return false;
             return data.flags.indexOf(flag) >= 0;
+        },
+
+        // creates data for the edit dialog when an exception should be used to update the series
+        createUpdateData: function (master, exception) {
+            // consolidate data
+            master = master instanceof Backbone.Model ? master.attributes : master;
+            exception = exception instanceof Backbone.Model ? exception.attributes : exception;
+
+            // deep copy
+            var result = JSON.parse(JSON.stringify(master)),
+                dateFormat = this.isAllday(master) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
+
+            result.recurrenceId = exception.recurrenceId;
+
+            // recreate dates
+            result.startDate.value = moment(exception.recurrenceId).tz(master.startDate.tzid).format(dateFormat);
+            // calculate duration and add it to startDate, then format
+            result.endDate.value = moment.tz(moment(result.startDate.value).valueOf() + moment(master.endDate.value).valueOf() - moment(master.startDate.value).valueOf(), result.startDate.tzid).format(dateFormat);
+
+            return result;
         }
     };
 

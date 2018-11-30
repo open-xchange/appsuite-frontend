@@ -77,8 +77,7 @@ define('plugins/portal/birthdays/register', [
         },
 
         preview: function (baton) {
-
-            var $list = $('<ul class="content list-unstyled io-ox-portal-birthdays" tabindex="0" role="button">').attr('aria-label', gt('Press [enter] to jump to complete list of Birthdays.')),
+            var $list = $('<ul class="content list-unstyled io-ox-portal-birthdays" tabindex="0">'),
                 hash = {},
                 contacts = baton.data,
                 numOfItems = _.device('smartphone') ? 5 : 8;
@@ -92,10 +91,14 @@ define('plugins/portal/birthdays/register', [
 
             if (contacts.length === 0) {
                 $list.append(
-                    $('<li class="line">').text(gt('No birthdays within the next %1$d weeks', WEEKS))
+                    $('<li class="line no-padding">').text(gt('No birthdays within the next %1$d weeks', WEEKS))
                 );
             } else {
-                $list.addClass('pointer');
+                $list.addClass('pointer')
+                    .attr({
+                        'role': 'button',
+                        'aria-label': gt('Press [enter] to jump to complete list of Birthdays.')
+                    });
                 _(contacts.slice(0, numOfItems)).each(function (contact) {
                     //just to be sure hours are the same
                     var birthday = getBirthday(contact),

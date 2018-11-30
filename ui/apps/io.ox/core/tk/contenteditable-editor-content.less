@@ -1,0 +1,59 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2018 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+.ox-mce {
+    // For large mails e.g. newsletters
+    overflow-x: auto;
+    margin: 13px;
+
+    &.mce-edit-focus {
+        outline: 0;
+        .form-control-focus();
+    }
+
+    &.simple-mail {
+        img {
+            max-width: 100%;
+            height: auto!important;
+        }
+    }
+
+    // Force aspect ratio resizing of images in tinymce
+    img.aspect-ratio {
+        height: auto!important;
+    }
+
+    a {
+        color: @link-color;
+        text-decoration: none;
+        &:hover { text-decoration: underline; }
+    }
+
+    table {
+        border: 0 none;
+        line-height: normal;
+
+        td, th { padding: 8px; }
+    }
+
+    div { word-wrap: break-word; }
+
+    blockquote {
+        font-size: 14px;
+        border-left: 1px solid @link-color;
+        padding: 7px 0 7px 19px;
+        margin: 1em 0 1em 0;
+        opacity: 0.5;
+
+        blockquote { opacity: 1.0; }
+    }
+}

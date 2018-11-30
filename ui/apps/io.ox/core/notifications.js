@@ -55,6 +55,9 @@ define('io.ox/core/notifications', [
 
             this.dropdown = new Dropdown({
                 tagName: 'li',
+                attributes: {
+                    role: 'presentation'
+                },
                 id: 'io-ox-notifications-icon',
                 className: 'launcher dropdown notifications-icon',
                 $ul: this.listNode,
@@ -65,6 +68,8 @@ define('io.ox/core/notifications', [
 
             // focus applauncher when closed and counter is 0 (notifcation icon is not there when counter is 0)
             this.dropdown.$el.on('hidden.bs.dropdown', function () {
+                // close sidepopups if open
+                self.closeSidepopup();
                 if (self.model.get('count') === 0) $('#io-ox-launcher .launcher-btn').focus();
             });
 
@@ -142,6 +147,11 @@ define('io.ox/core/notifications', [
                 if (value) {
                     subviews[id].render(self.listNode);
                 }
+            });
+            // manually calculate max-height, since this element is positioned absolute below the topbar
+            // and depends on the actual hight of the content (see Bug 59226)
+            self.listNode.css({
+                'max-height': _.device('smartphone') ? 'none' : $('#io-ox-screens').height() - 5
             });
 
             if (this.listNode.children('.notifications').length === 0) {
@@ -244,11 +254,14 @@ define('io.ox/core/notifications', [
                                 var node = popup.closest('.io-ox-sidepopup');
                                 if (!_.device('smartphone')) {
                                     node.css({
-                                        right: '400px'
+                                        right: '550px'
                                     });
                                 }
                                 node.addClass('io-ox-notifications-sidepopup first');
                                 var cont = function (data) {
+
+                                    data = data && data.get ? data.attributes : data;
+
                                     // work with real model view or just draw method with baton
                                     if (renderer.View) {
                                         var view = new renderer.View({ data: data }, options);

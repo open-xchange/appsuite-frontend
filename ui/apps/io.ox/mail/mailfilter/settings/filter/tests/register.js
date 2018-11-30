@@ -265,7 +265,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             ),
                             util.drawDeleteButton('test')
                         )
-                    ).find('legend').addClass('sr-only');
+                    ).find('[data-test-id="' + conditionKey + '"] label').addClass('sr-only');
                     if (cmodel.get('datevalue')[0] === null || cmodel.get('datevalue').length === 0) this.find('[data-test-id="' + conditionKey + '"] input.datepicker-day-field').closest('.row').addClass('has-error');
 
                     util.handleUnsupportedComparisonValues({
@@ -393,7 +393,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             ),
                             util.drawDeleteButton('test')
                         )
-                    ).find('legend').addClass('sr-only');
+                    ).find('[data-test-id="' + conditionKey + '"] label').addClass('sr-only');
                     if (cmodel.get('datevalue')[0] === null || cmodel.get('datevalue').length === 0) this.find('[data-test-id="' + conditionKey + '"] input.datepicker-day-field').closest('.row').addClass('has-error');
 
                     util.handleUnsupportedComparisonValues({
@@ -943,8 +943,8 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
                     var inputId = _.uniqueId('size_'),
                         sizeValues = {
-                            'over': gt('Is bigger than'),
-                            'under': gt('Is smaller than')
+                            'over': gt('Is bigger than (Size: B/KB/MB/GB)'),
+                            'under': gt('Is smaller than (Size: B/KB/MB/GB)')
                         }, li;
 
                     this.append(
@@ -1042,6 +1042,74 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         model: cmodel,
                         inputName: 'values'
                     });
+                }
+            });
+        }
+
+        if (supportedConditions.string) {
+            ext.point('io.ox/mail/mailfilter/tests').extend({
+
+                id: 'string',
+
+                index: 1000,
+
+                initialize: function (opt) {
+                    var defaults = {
+                        'string': {
+                            'comparison': util.returnDefault(config.tests, 'string', 'comparisons', 'matches'),
+                            'source': [''],
+                            'id': 'string',
+                            'values': ['']
+                        }
+                    };
+                    _.extend(opt.defaults.tests, defaults);
+                    _.extend(opt.conditionsTranslation, {
+                        'string': gt('String')
+                    });
+
+                    _.extend(opt.conditionsMapping, { 'string': ['string'] });
+
+                    opt.conditionsOrder.push('string');
+                },
+
+                draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
+                    var secondInputId = _.uniqueId('values'),
+                        li;
+
+                    var title,
+                        inputId = _.uniqueId('string_');
+
+                    title = baton.view.conditionsTranslation.string;
+                    this.append(
+                        li = util.drawCondition({
+                            conditionKey: conditionKey,
+                            title: title,
+                            dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions()) },
+                            inputId: inputId,
+                            InputLabel: gt('Source'),
+                            inputOptions: { name: 'source', model: cmodel, className: 'form-control', id: inputId },
+                            secondInputId: secondInputId,
+                            secondInputLabel: title + ' ' + util.returnContainsOptions()[cmodel.get('comparison')],
+                            secondInputOptions: { name: 'values', model: cmodel, className: 'form-control', id: secondInputId },
+                            errorView: true,
+                            addClass: addClass
+                        })
+                    );
+
+                    util.handleUnsupportedComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values'
+                    });
+
+                    // util.handleSpecialComparisonValues({
+                    //     $li: li,
+                    //     values: filterValues(condition.id, util.returnContainsOptions()),
+                    //     model: cmodel,
+                    //     inputName: 'values',
+                    //     defaults: baton.view.defaults.tests[baton.view.defaults.conditionsMapping[condition.id]]
+                    // });
                 }
             });
         }

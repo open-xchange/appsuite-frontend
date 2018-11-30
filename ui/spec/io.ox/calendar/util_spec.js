@@ -466,7 +466,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 });
                 it('with appointment with color', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
-                        appointment = new models.Model({ color: '#aabbcc', flags: ['accepted'] });
+                        appointment = new models.Model({ color: '#aabbcc', flags: ['accepted', 'organizer'] });
 
                     expect(util.getAppointmentColor(folder, appointment)).to.equal('#aabbcc');
                 });
@@ -479,7 +479,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
 
                 it('with private appointment with color', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
-                        appointment = new models.Model({ color: '#aabbcc', flags: ['confidential', 'accepted'] });
+                        appointment = new models.Model({ color: '#aabbcc', flags: ['confidential', 'accepted', 'organizer'] });
 
                     expect(util.getAppointmentColor(folder, appointment)).to.equal('#aabbcc');
                 });
@@ -505,20 +505,20 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 });
                 it('with appointment with color', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
-                        appointment = new models.Model({ color: '#aabbcc', flags: ['accepted'] });
+                        appointment = new models.Model({ color: '#aabbcc', flags: ['accepted', 'organizer'] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
                 it('with private appointment without color', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
-                        appointment = new models.Model({ flags: ['accepted', 'confidential'] });
+                        appointment = new models.Model({ flags: ['accepted', 'confidential', 'organizer'] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
 
                 it('with private appointment with color', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
-                        appointment = new models.Model({ color: '#aabbcc', flags: ['accepted', 'confidential'] });
+                        appointment = new models.Model({ color: '#aabbcc', flags: ['accepted', 'confidential', 'organizer'] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });

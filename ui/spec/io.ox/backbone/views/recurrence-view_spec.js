@@ -64,7 +64,7 @@ define([
 
         describe('changes recurrence on start-date change', function () {
 
-            it('adjusts until date to be after start date (daily)', function () {
+            it('adjusts until date to be endless (daily)', function () {
                 var start = 1481720709550,
                     day = 24 * 60 * 60 * 1000;
 
@@ -79,13 +79,12 @@ define([
                 // add two days to the start date
                 model.set('start_date', model.get('start_date') + 2 * day);
 
-                expect(model.get('until')).to.equal(start + 3 * day);
+                expect(model.get('until')).to.be.undefined;
             });
 
-            it('adjusts until date to be after start date (weekly)', function () {
+            it('adjusts until date to be endless (weekly)', function () {
                 var start = 1481720709550,
-                    day = 24 * 60 * 60 * 1000,
-                    week = 7 * day;
+                    day = 24 * 60 * 60 * 1000;
 
                 model.set({
                     recurrence_type: 2,
@@ -98,7 +97,7 @@ define([
                 // add two days to the start date
                 model.set('start_date', model.get('start_date') + 2 * day);
 
-                expect(model.get('until')).to.equal(start + 2 * day + week);
+                expect(model.get('until')).to.be.undefined;
             });
 
             it('changes selected days on start date change', function () {

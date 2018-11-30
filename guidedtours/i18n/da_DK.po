@@ -4,15 +4,15 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-27 10:57+0100\n"
-"Last-Translator: Jacob Sparre Andersen <jacob@workshop-chapina.com>\n"
+"PO-Revision-Date: 2018-10-14 13:55+0200\n"
+"Last-Translator: Nicky Thomassen <nicky@nt-data.dk>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Poedit 1.8.4\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -47,14 +47,6 @@ msgstr ""
 "sætte parametrene for gentagelse er vist."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Brug af funktionen til påmindelse"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Brug påmindelsesfunktionen, så du ikke kommer til at overse en aftale."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr "Inviterer andre deltagere"
 
@@ -66,6 +58,14 @@ msgid ""
 msgstr ""
 "For at invitere andre deltagere, skriv deres navn i feltet under Deltagere. "
 "For at undgå konflikter med aftaler, klik på Find ledig tid øverst til højre."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Brug af funktionen til påmindelse"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "Brug påmindelsesfunktionen, så du ikke kommer til at overse en aftale."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
@@ -81,7 +81,7 @@ msgstr "Opretter aftalen"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create the appointment, click on Create at the lower left side."
-msgstr "For at oprette en aftale, klik på »Opret« i nederste venstre side."
+msgstr "For at oprette en aftale, klik på Opret i nederste venstre side."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
 msgid "Selecting a view"
@@ -93,7 +93,7 @@ msgid ""
 "toolbar. Select a menu entry from the Layout section."
 msgstr ""
 "For at vælge en af visningerne Dag, Måned eller Liste, klik på Visning i "
-"værktøjslinjen.  Vælg en menuindgang i Layout-gruppen."
+"værktøjslinjen. Vælg en menuindgang i Layout-gruppen."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The calendar views"
@@ -116,7 +116,7 @@ msgid ""
 "clicking on an appointment, the appointment's data and some functions are "
 "displayed in the Detail view."
 msgstr ""
-"Listevisningen viser en liste med aftalerne i den aktuelle mappe.  Hvis du "
+"Listevisningen viser en liste med aftalerne i den aktuelle mappe. Hvis du "
 "klikker på en aftale bliver aftalens data og nogle funktioner vist i "
 "Detaljevisningen."
 
@@ -163,7 +163,7 @@ msgid ""
 "the contacts. If the checkboxes are not displayed, click on View > "
 "Checkboxes on the right side of the toolbar."
 msgstr ""
-"For at redigere flere kontakter på én gang, marker tjekboksene på venstre "
+"For at redigere flere kontakter på én gang, markeres tjekboksene på venstre "
 "side af kontakterne. Hvis tjekboksene ikke er vist, klik Visning > Tjekbokse "
 "i højre side af værktøjslinjen."
 
@@ -178,10 +178,10 @@ msgid ""
 "files from all your accounts. This is where you can upload and save your "
 "files, share them and synchronize them with different devices.  "
 msgstr ""
-"Velkommen til din lagerplads i skyen.  Denne rundvisning vil introducere dig "
-"til din nye on-line-lager-løsning - din ene adgangvej til lagrede filer fra "
-"alle dine konti.  Her kan du overføre og gemme dine filer, gemme dem, og "
-"synkronisere dem med forskellige enheder."
+"Velkommen til din lagerplads i skyen. Denne rundvisning vil introducere dig "
+"til din nye online lagerløsning - din ene adgangvej til lagrede filer fra "
+"alle dine konti. Her kan du overføre, dine filer, gemme dem, og synkronisere "
+"dem med forskellige enheder."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Folder tree"
@@ -194,8 +194,8 @@ msgid ""
 "life easier, we have already included folders for your Documents, Music, "
 "Pictures and Videos."
 msgstr ""
-"Til venstre kan du se mappetræet.  Det viser din mappestruktur og lader dig "
-"navigere til specifikke mapper og undermapper.  For at gøre dit liv lettere, "
+"Til venstre kan du se mappetræet. Det viser din mappestruktur og lader dig "
+"navigere til specifikke mapper og undermapper. For at gøre dit liv lettere, "
 "har vi allerede oprettet mapper til dine dokumenter, din musik, dine "
 "billeder og dine videoer."
 
@@ -218,7 +218,7 @@ msgstr "Vælg en visning"
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Different views are available. Just select the one you like best."
 msgstr ""
-"Der er frit valg mellem forskellige visninger.  Vælg den du synes bedst om."
+"Der er frit valg mellem forskellige visninger. Vælg den du synes bedst om."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Toolbar"
@@ -230,7 +230,7 @@ msgid ""
 "options. You can easily create new folders, new files and much more."
 msgstr ""
 "Øverst kan du finde værktøjslinjen med mange funktioner og yderligere "
-"muligheder.  Du kan let oprette nye mapper, nye filer og meget mere."
+"muligheder. Du kan let oprette nye mapper, nye filer og meget mere."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Upload a new file"
@@ -243,9 +243,9 @@ msgid ""
 "drag and drop files from your local device into Drive. The uploaded file is "
 "now available in Drive on all your devices."
 msgstr ""
-"For at overføre en ny fil fra din lokale enhed; klik »Tilføj lokal fil« og "
-"vælg filen du gerne vil overføre.  Det er endnu lettere, hvis du bare hiver "
-"filerne fra din lokale enhed og ind i Drive.  Den overførte fil er nu "
+"For at overføre en ny fil fra din lokale enhed, klik på Tilføj lokal fil og "
+"vælg filen du gerne vil overføre. Det er endnu lettere, hvis du bare trækker "
+"filerne fra din lokale enhed og ind i Drive. Den overførte fil er nu "
 "tilgængelig i Drive på alle dine enheder."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -255,7 +255,7 @@ msgstr "Forhåndsvisning af filer"
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Clicking on the view icon leads you to a preview of the selected file."
 msgstr ""
-"Et klik på »Vis«-ikonet leder dig til en forhåndsvisning af den valgte fil."
+"Et klik på Vis ikonet leder dig til en forhåndsvisning af den valgte fil."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview mode"
@@ -266,7 +266,7 @@ msgid ""
 "From preview you can also select other options to help you manage and work "
 "on your files."
 msgstr ""
-"Fra forhåndsvisning kan du også vælge andre muligheder for at hjælpe dig med "
+"Fra forhåndsvisning kan du også vælge andre muligheder, for at hjælpe dig med "
 "at håndtere og arbejde på dine filer."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -278,7 +278,7 @@ msgid ""
 "Here you can share files with your colleagues and external contacts. You can "
 "also collaborate on a document and set different access rights."
 msgstr ""
-"Her kan du dele filer med dine kolleger og eksterne kontakter.  Du kan også "
+"Her kan du dele filer med dine kolleger og eksterne kontakter. Du kan også "
 "samarbejde om et dokument og sætte forskellige adgangsrettigheder."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -292,11 +292,11 @@ msgid ""
 "and edit files. Or just get a link to let others view and download your "
 "files. You can use an expiration date and password protection if you like."
 msgstr ""
-"Vælg mellem to muligheder for at dele dine filer og mapper.  Brug »Invitér "
-"folk«, hvis du vil styre adgangsrettigheder og vil give modtagere lov til at "
-"oprette og redigere filer.  Eller få bare en URL og lad andre se og hente "
-"dine filer.  Du kan bruge en udløbsdato og adgangskodebeskyttelse, hvis du "
-"vil."
+"Vælg mellem to muligheder for at dele dine filer og mapper. Brug Invitér "
+"folk hvis du vil styre adgangsrettigheder, og vil give modtagere lov til at "
+"oprette og redigere filer. Eller bare få en URL og lad andre se og hente "
+"dine filer. Du kan bruge en udløbsdato og adgangskodebeskyttelse, hvis du "
+"ønsker det."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Collaborating"
@@ -310,7 +310,7 @@ msgid ""
 "time."
 msgstr ""
 "Deling af filer ved at invitere folk giver ikke kun dine modtagere mulighed "
-"for at oprette og redigere filer.  Interne og eksterne deltagere kan også "
+"for at oprette og redigere filer. Interne og eksterne deltagere kan også "
 "samarbejde med dig om tekstdokumenter og regneark samtidig."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -323,7 +323,7 @@ msgid ""
 "will automatically update your edited file, but thanks to versioning the "
 "original file stays available."
 msgstr ""
-"Vidste du at du kan redigere tekstdokumenter og regneark online?  Drive vil "
+"Vidste du at du kan redigere tekstdokumenter og regneark online? Drive vil "
 "automatisk opdatere din redigerede fil, men takket være versionsstyring vil "
 "den oprindelige udgave fortsat være tilgængelig."
 
@@ -337,8 +337,8 @@ msgid ""
 "Just enable the File details option from the View drop down menu and select "
 "a file to see the details."
 msgstr ""
-"Søjlen »Fildetaljer« giver dig flere oplysninger om dine filer.  Slå "
-"»Fildetaljer« til i »Visning«-menuen og vælg en fil for at se detaljerne."
+"Søjlen Fildetaljer giver dig flere oplysninger om dine filer. Slå "
+"Fildetaljer til i menuen Visning og vælg en fil for at se detaljerne."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Add another account"
@@ -352,7 +352,7 @@ msgid ""
 msgstr ""
 "Drive giver dig mulighed for at forbinde til andre lagringsløsninger, hvis "
 "du allerede har en lagerkontor i skyen, som du bruger til at gemme og "
-"synkronisere dine filer.  Klik på det relevante logo for at tilgå dine "
+"synkronisere dine filer. Klik på det relevante logo for at tilgå dine "
 "eksisterende data."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -368,21 +368,17 @@ msgid ""
 "This guided tour will briefly introduce you to the product. Get more "
 "detailed information in the tours for the single apps or in the online help."
 msgstr ""
-"Denne guidede tur vil give dig en kort introduktion til produktet.  Du kan "
+"Denne guidede tur vil give dig en kort introduktion til produktet. Du kan "
 "få mere detaljerede oplysninger i turene for de enkelte programmer eller i "
-"on-line-hjælpen."
+"hjælpen online."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Launching an app"
 msgstr "Start af et program"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
-msgstr ""
-"For at starte en app, brug hurtigstart-ikonene i venstre side af "
-"menubjælken, eller klik på en app inde i app-starter-menuen."
+msgid "To launch an app click on an entry inside the app launcher menu."
+msgstr "For at starte et program, klikkes der inde i programstarterens menu."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -403,7 +399,7 @@ msgstr "Lav nye elementer"
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
-"For at oprette en ny e-mail, klik \"Skriv ny e-mail\" i værktøjslinjen."
+"For at oprette en ny e-mail, klik på Skriv ny e-mail i værktøjslinjen."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Opening or closing the folder tree"
@@ -423,7 +419,7 @@ msgstr "Søger efter objekter"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
-msgstr "For at søge efter objekter, klik på \"Søg\"-ikonet i menulinjen."
+msgstr "For at søge efter objekter, klik på ikonet Søg i menulinjen."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The toolbar"
@@ -446,7 +442,7 @@ msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
 msgstr ""
-"Bruge mappetræet, til at åbne mappen med de objekter, som du vil se i listen."
+"Brug mappetræet til at åbne mappen med de objekter, som du vil se i listen."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -500,7 +496,7 @@ msgid ""
 "the first letters, suggestions from the address books are displayed. To "
 "accept a recipient suggestion, click on it."
 msgstr ""
-"Skriv modtagerens navn i modtagerfeltet.  Så snart du har tastet de første "
+"Skriv modtagerens navn i modtagerfeltet. Så snart du har tastet de første "
 "bogstaver, vil forslag fra adressebogen blive vist. Klik på et forslag for "
 "at bruge det."
 
@@ -533,7 +529,7 @@ msgid ""
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
-"Skriv brødteksten i hovedfeltet.  Hvis tekstformatet er sat til HTML i "
+"Skriv brødteksten i hovedfeltet. Hvis tekstformatet er sat til HTML i "
 "indstillingerne, så kan du formatere brødteksten. For at gøre dette, "
 "markeres et stykke tekst, og der klikkes på et ikon i formatteringslinjen."
 
@@ -543,7 +539,7 @@ msgstr "Sender e-mail'en"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To send the E-Mail, click on Send"
-msgstr "For at sende e-mail'en, klik på »Send«."
+msgstr "For at sende e-mail'en, klik på Send."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Sorting your E-Mails"
@@ -552,14 +548,14 @@ msgstr "Sortering af dine e-mails"
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
 msgstr ""
-"For at sortere e-mail, klik på Sortér efter.  Vælg et sorteringskriterie."
+"For at sortere e-mail, klik på Sortér efter. Vælg et sorteringskriterie."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
 "To choose between the different views. click on View in the toolbar. Select "
 "a menu entry in the layout."
 msgstr ""
-"For at vælge mellem forskellige visninger, klik Visning i værktøjslinjen.  "
+"For at vælge mellem forskellige visninger, klik Visning i værktøjslinjen. "
 "Vælg en menuindgang i layoutet."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
@@ -576,7 +572,7 @@ msgstr ""
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Reading E-Mail conversations"
-msgstr "Læse e-mail-samtaler"
+msgstr "Læs e-mail-samtaler"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -622,7 +618,7 @@ msgid ""
 "side of the menu bar. Select Settings. Click on E-Mail on the left side."
 msgstr ""
 "For at åbne indstillingerne til e-mail, klik på systemmenu-ikonet i øverste "
-"højre side af menulinjen. Vælg indstillinger. Klik på »E-mail« i venstre "
+"højre side af menulinjen. Vælg indstillinger. Klik på E-mail i venstre "
 "side."
 
 #. Tour name; general introduction
@@ -668,7 +664,7 @@ msgstr "Lukke en flise"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "If you no longer want to display a square, click the delete icon."
-msgstr "Hvis du ikke længere vil have et felt vist, så klik på »slet«-ikonet."
+msgstr "Hvis du ikke længere vil have et felt vist, så klik på ikonet slet."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Customizing the Portal"
@@ -679,7 +675,7 @@ msgid ""
 "To display a square again or to display further information sources, click "
 "on Customize this page."
 msgstr ""
-"For at vise en flise igen, eller for at vise flere informationskilder,klik "
+"For at vise en flise igen, eller for at vise flere informationskilder, klik "
 "Tilpas denne side."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -691,8 +687,8 @@ msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
 msgstr ""
-"For at åbne indstillingerne, klik på brugerbilledet øverst til højre på"
-" menubjælken.  Vælg »Indstillinger«."
+"For at åbne indstillingerne, klik på brugerbilledet øverst til højre på "
+"menubjælken og vælg Indstillinger."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
@@ -703,8 +699,8 @@ msgid ""
 "The settings are organized in topics. Select the topic on the left side, e.g "
 "Basic settings or E-Mail."
 msgstr ""
-"Indstillingerne er organiserede i emner.  Vælg et emne i venstre side, for "
-"eksempel »Grundlæggende indstillinger« eller »E-mail«."
+"Indstillingerne er organiserede i emner. Vælg et emne i venstre side, for "
+"eksempel Grundlæggende indstillinger eller E-mail."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Editing settings"
@@ -729,10 +725,10 @@ msgid ""
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"For at åbne hjælpen, klik på brugerbilledet øverst til højre på menubjælken. "
-" Vælg »Hjælp«.  Hjælpen til den aktuelt valgte app bliver vist.  For at se"
-" den samlede hjælp, klik på »Startside« eller »Indholdsfortegnelse« øverst i"
-" vinduet."
+"For at åbne hjælpen, klik på brugerbilledet øverst til højre på "
+"menubjælken og vælg Hjælp. Hjælpen til den aktuelt valgte app bliver "
+"så vist. For at se den samlede hjælp, klik på Startside eller "
+"Indholdsfortegnelse øverst i vinduet."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -749,7 +745,7 @@ msgstr ""
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
-msgstr "For at logge ud, klik på log-ud-ikonet øverst til højre i menubjælken."
+msgstr "For at logge ud, klik på ikonet log-ud øverst til højre i menubjælken."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating a new task"
@@ -784,7 +780,7 @@ msgid ""
 "To create recurring tasks, enable Repeat. Functions for setting the "
 "recurrence parameters are shown."
 msgstr ""
-"For at lave gentagene opgaver, aktivér gentagelse.  Funktioner til at sætte "
+"For at lave gentagene opgaver, aktivér gentagelse. Funktioner til at sætte "
 "parametrene for gentagelse er vist."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
@@ -821,16 +817,16 @@ msgstr "Opretter opgaven"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To create the task, click on Create."
-msgstr "For at oprette opgaven, klik på »Opret«."
+msgstr "For at oprette opgaven, klik på Opret."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Sorting tasks"
-msgstr "Sorterer dine opgaver"
+msgstr "Sorterer opgaver"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To sort the tasks, click on Sort by. Select a sort criteria."
 msgstr ""
-"For at sortere opgaver, klik på Sortér efter.  Vælg et sorteringskriterie."
+"For at sortere opgaver, klik på Sortér efter. Vælg et sorteringskriterie."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -845,60 +841,6 @@ msgstr ""
 "For at redigere flere opgaver på én gang, aktivér tjekboksene på venstre "
 "side af opgaverne. Hvis tjekboksene ikke er vist, klik på Visning > "
 "Tjekbokse i højre side af værktøjslinjen."
-
-#~ msgid ""
-#~ "To open the settings, click the System menu icon on the upper right side "
-#~ "of the menu bar. Select Settings."
-#~ msgstr ""
-#~ "For at åbne indstillingerne, klik på menuikonet »System« i øverste højre "
-#~ "side af menulinjen. Vælg »Indstillinger«."
-
-#~ msgid ""
-#~ "To open the help, click the System menu icon on the upper right side of "
-#~ "the menu bar. Select Help. The help for the currently selected app is "
-#~ "displayed. To browse the complete help, click on Start Page or Table Of "
-#~ "Contents at the upper part of the window."
-#~ msgstr ""
-#~ "For et åbne hjælpen, klik på menuikonet System i øverste højre side af "
-#~ "menulinjen. Vælg Hjælp.  Hjælpen for det aktuelle program bliver vist.  "
-#~ "For at se den komplette hjælp, klik på Startside eller "
-#~ "Indholdsfortegnelse øverst i vinduet."
-
-#~ msgid ""
-#~ "Hint: you can always restart guided tours, any time you need them, from "
-#~ "the system menu."
-#~ msgstr ""
-#~ "Vink: Du kan altid gentage en rundvisning fra systemmenuen, når som helst "
-#~ "du har brug for det."
-
-#~ msgid ""
-#~ "In case of new notifications, e.g. appointment invitations, the info area "
-#~ "is opened."
-#~ msgstr ""
-#~ "I tilfælde af nye underretninger, for eksempel en invitation til en "
-#~ "aftale, åbnes informationsområdet."
-
-#~ msgid "Restart Guided Tour"
-#~ msgstr "Genstart rundvisning"
-
-#~ msgid "The New objects icon"
-#~ msgstr "Nye objekter-ikonet"
-
-#~ msgid ""
-#~ "The New objects icon shows the number of appointment reminders or other "
-#~ "notifications. If clicking the icon, the info area opens."
-#~ msgstr ""
-#~ "Nye objekter-ikonet viser antallet af aftalepåmindelser og andre "
-#~ "underretninger.  Hvis der klikkes på ikonet, åbner informationsområdet."
-
-#~ msgid "The info area"
-#~ msgstr "Informationsområdet"
-
-#~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
-#~ msgstr ""
-#~ "For at starte et program, klikkes der på et element i venstre side af "
-#~ "menulinjen."
 
 #~ msgid "%1$d %2$s"
 #~ msgstr "%1$d %2$s"
@@ -3008,6 +2950,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "Høj prioritet"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Vink: Du kan altid gentage en rundvisning fra systemmenuen, når som helst "
+#~ "du har brug for det."
+
 #~ msgid "Hobby"
 #~ msgstr "Jobby"
 
@@ -3099,6 +3048,13 @@ msgstr ""
 #~ msgstr ""
 #~ "I tilfælde af nye påmindelser, fx en invitation til en aftale, åbnes "
 #~ "informationsområdet i højre side."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "I tilfælde af nye underretninger, for eksempel en invitation til en "
+#~ "aftale, åbnes informationsområdet."
 
 #~ msgid "In progress"
 #~ msgstr "Undervejs"
@@ -4490,6 +4446,9 @@ msgstr ""
 #~ msgid "Resources"
 #~ msgstr "Ressourcer"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Genstart rundvisning"
+
 #~ msgid "Restore applications"
 #~ msgstr "Gendan programmer"
 
@@ -5131,6 +5090,16 @@ msgstr ""
 #~ "Brug tjekboksene til at vælge filer.  Klik på en fil for at se flere "
 #~ "detaljer og funktioner i pop-op-vinduet."
 
+#~ msgid "The New objects icon"
+#~ msgstr "Nye objekter-ikonet"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Nye objekter-ikonet viser antallet af aftalepåmindelser og andre "
+#~ "underretninger.  Hvis der klikkes på ikonet, åbner informationsområdet."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -5322,6 +5291,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Ikonnet nederst til højre hjælper dig med at sortere dine e-mails. Klik "
 #~ "på ikonet for en liste af sorteringsmuligheder."
+
+#~ msgid "The info area"
+#~ msgstr "Informationsområdet"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Antallet af modtagere er begrænset til %1$s per felt"
@@ -5685,6 +5657,13 @@ msgstr ""
 #~ msgstr "For at starte et program, klik på en flises overskrift."
 
 #~ msgid ""
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
+#~ msgstr ""
+#~ "For at starte en app, brug hurtigstart-ikonene i venstre side af "
+#~ "menubjælken, eller klik på en app inde i app-starter-menuen."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -5702,6 +5681,24 @@ msgstr ""
 #~ msgstr ""
 #~ "For at åbne hjælp, tryk på menuikonet System i øverste højre side af "
 #~ "menulinjen. Vælg hjælp."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "For et åbne hjælpen, klik på menuikonet System i øverste højre side af "
+#~ "menulinjen. Vælg Hjælp.  Hjælpen for det aktuelle program bliver vist.  "
+#~ "For at se den komplette hjælp, klik på Startside eller "
+#~ "Indholdsfortegnelse øverst i vinduet."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "For at åbne indstillingerne, klik på menuikonet »System« i øverste højre "
+#~ "side af menulinjen. Vælg »Indstillinger«."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

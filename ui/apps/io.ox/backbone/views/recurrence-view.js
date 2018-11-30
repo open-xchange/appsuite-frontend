@@ -222,8 +222,8 @@ define('io.ox/backbone/views/recurrence-view', [
                 input.listenTo(this.model, 'change:recurrence_type', update);
 
                 this.$body.append(
-                    formGroup = $('<div class="form-group">').append(
-                        $('<label class="control-label col-sm-4">').attr('for', guid).text(
+                    formGroup = $('<fieldset class="form-group">').append(
+                        $('<legend class="control-label col-sm-4">').attr('for', guid).text(
                             //#. Used as label for the following selection: 'date' or 'weekday'
                             //#. Thus an appointment/task will be repeated by date (e.g. every 4th of a month) or by weekday (e.g. every second tuesday)
                             gt('Repeat by')
@@ -321,8 +321,8 @@ define('io.ox/backbone/views/recurrence-view', [
                 input.listenTo(this.model, 'change:recurrence_type change:every-weekday', update);
 
                 this.$body.append(
-                    formGroup = $('<div class="form-group hidden">').append(
-                        $('<label class="control-label col-sm-4">').attr('for', guid).text(gt('Weekday')),
+                    formGroup = $('<fieldset class="form-group hidden">').append(
+                        $('<legend class="control-label col-sm-4">').attr('for', guid).text(gt('Weekday')),
                         $('<div class="col-sm-8">').append(
                             input.render().$el,
                             new mini.ErrorView({
@@ -555,7 +555,7 @@ define('io.ox/backbone/views/recurrence-view', [
                         attribute: 'until',
                         clearButton: true,
                         display: 'DATE'
-                    }), formGroup,
+                    }), formGroup = $('<div class="form-group">'),
                     update = function (model) {
                         var type = model.get('recurrence_type'),
                             visible = type > 0 && model.has('until');
@@ -565,7 +565,7 @@ define('io.ox/backbone/views/recurrence-view', [
                 input.listenTo(this.model, 'change:recurrence_type change:until', update);
 
                 this.$body.append(
-                    formGroup = $('<div class="form-group">').append(
+                    formGroup.append(
                         $('<label class="control-label col-sm-4">').attr('for', guid).text(gt('Ends on')),
                         $('<div class="col-sm-8">').append(
                             input.render().$el,
@@ -705,7 +705,7 @@ define('io.ox/backbone/views/recurrence-view', [
                 this.$el.addClass('recurrence-view-dialog');
                 this.$body.addClass('form-horizontal');
             })
-            .addCancelButton()
+            .addCancelButton({ left: true })
             .addButton({ label: gt('Apply'), action: 'apply' })
             .on('apply', function () {
                 if (!this.model.checkValidation()) {
@@ -722,6 +722,8 @@ define('io.ox/backbone/views/recurrence-view', [
                 this.close();
             })
             .open();
+
+            this.trigger('openeddialog');
         },
 
         render: function () {
@@ -750,7 +752,8 @@ define('io.ox/backbone/views/recurrence-view', [
             var type = this.model.get('recurrence_type');
             if (type === 0) return;
             var oldDate = moment(recurrenceUtil.previousStart(this.model)),
-                date = moment(recurrenceUtil.getStart(this.model));
+                date = moment(recurrenceUtil.getStart(this.model)),
+                autoChanged = false;
 
             if (this.model.get('full_time') === true) date.utc();
 
@@ -763,18 +766,22 @@ define('io.ox/backbone/views/recurrence-view', [
                     days = days << 1;
                     if (days > 127) days -= 127;
                 }
+                if (days !== this.model.get('days')) autoChanged = true;
                 this.model.set('days', days);
             }
 
             // if monthly or yeary, adjust date/day of week
             if (type === 3 || type === 4) {
                 if (this.model.has('days')) {
-                    // repeat by weekday
-                    this.model.set({
+                    var value = {
                         day_in_month: ((date.date() - 1) / 7 >> 0) + 1,
                         'days': 1 << date.day()
-                    });
+                    };
+                    if (value.day_in_month !== this.model.get('day_in_month') || value.days !== this.model.get('days')) autoChanged = true;
+                    // repeat by weekday
+                    this.model.set(value);
                 } else {
+                    if (date.date() !== this.model.get('day_in_month')) autoChanged = true;
                     // repeat by date
                     this.model.set('day_in_month', date.date());
                 }
@@ -782,13 +789,19 @@ define('io.ox/backbone/views/recurrence-view', [
 
             // if yearly, adjust month
             if (type === 4) {
+                if (date.month() !== this.model.get('month')) autoChanged = true;
                 this.model.set('month', date.month());
             }
 
             // change until
             if (this.model.get('until') && moment(this.model.get('until')).isBefore(date)) {
-                this.model.set('until', date.add(1, momentShorthands[this.model.get('recurrence_type') - 1]).valueOf());
+                this.model.set({
+                    'until': undefined,
+                    'occurrences': undefined
+                });
             }
+
+            if (autoChanged) this.model.trigger('autochanged');
         },
 
         dispose: function () {

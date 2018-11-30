@@ -282,7 +282,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
             });
 
             it('should draw nodes', function () {
-                this.view.$el.find('button').length.should.equal(1);
+                this.view.$el.find('button').length.should.equal(4);
                 this.view.$el.find('.alarm-list').length.should.equal(1);
             });
 
@@ -291,7 +291,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
             });
 
             it('should create new alarm when button is clicked', function () {
-                this.view.$el.find('button').trigger('click');
+                this.view.$el.find('button:last').trigger('click');
                 this.view.$el.find('.alarm-list-item').length.should.equal(4);
             });
 

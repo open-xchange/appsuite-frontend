@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-26 17:14+0200\n"
+"PO-Revision-Date: 2018-10-09 13:13+0200\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -48,14 +48,6 @@ msgstr ""
 "параметры."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Напоминание"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Чтобы не пропустить событие, настройте напоминание."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr "Приглашение"
 
@@ -67,6 +59,14 @@ msgid ""
 msgstr ""
 "Чтобы пригласить других пользователей, введите их имена в поле «Участники». "
 "Во избежание конфликтов расписания нажмите «Найти свободное время»."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Напоминание"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "Чтобы не пропустить событие, настройте напоминание."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
@@ -372,12 +372,8 @@ msgid "Launching an app"
 msgstr "Запуск приложения"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
-msgstr ""
-"Чтобы запустить приложение, используйте значки быстрого запуска в левой "
-"части панели меню или выберите нужный элемент в меню запуска приложений."
+msgid "To launch an app click on an entry inside the app launcher menu."
+msgstr "Чтобы запустить приложение, выберите его в левой части меню запуска."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -679,7 +675,9 @@ msgstr "Доступ к параметрам"
 msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
-msgstr "Чтобы открыть настройки, щелкните изображение пользователя в правом верхнем углу панели меню и выберите «Настройки»."
+msgstr ""
+"Чтобы открыть настройки, щелкните изображение пользователя в правом верхнем "
+"углу панели меню и выберите «Настройки»."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
@@ -714,9 +712,10 @@ msgid ""
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Чтобы открыть справку по приложению, щелкните изображение пользователя в правом "
-"верхнем углу и выберите пункт «Справка». Чтобы открыть полное руководство, в "
-"верхней части окна выберите «Первая страница» или «Содержание»."
+"Чтобы открыть справку по приложению, щелкните изображение пользователя в "
+"правом верхнем углу и выберите пункт «Справка». Чтобы открыть полное "
+"руководство, в верхней части окна выберите «Первая страница» или "
+"«Содержание»."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -827,58 +826,6 @@ msgstr ""
 "Чтобы отредактировать несколько задач сразу, выберите их с помощью флажков. "
 "Если флажки недоступны, в правой части панели выберите «Вид > Флажки»."
 
-#~ msgid ""
-#~ "To open the settings, click the System menu icon on the upper right side "
-#~ "of the menu bar. Select Settings."
-#~ msgstr ""
-#~ "Для доступа к параметрам откройте системное меню в правой части панели "
-#~ "навигации и выберите «Параметры»."
-
-#~ msgid ""
-#~ "To open the help, click the System menu icon on the upper right side of "
-#~ "the menu bar. Select Help. The help for the currently selected app is "
-#~ "displayed. To browse the complete help, click on Start Page or Table Of "
-#~ "Contents at the upper part of the window."
-#~ msgstr ""
-#~ "Чтобы открыть справку текущего приложения, откройте системное меню в "
-#~ "правом верхнем углу и выберите пункт «Справка». Чтобы открыть общую "
-#~ "справку, в верхней части окна выберите «Начальная страница» или "
-#~ "«Содержание»."
-
-#~ msgid ""
-#~ "Hint: you can always restart guided tours, any time you need them, from "
-#~ "the system menu."
-#~ msgstr ""
-#~ "Подсказка. Вы можете вернуться к обзору в любое удобное для вас время, "
-#~ "запустив его из системного меню."
-
-#~ msgid ""
-#~ "In case of new notifications, e.g. appointment invitations, the info area "
-#~ "is opened."
-#~ msgstr ""
-#~ "Область уведомлений открывается при появлении новых уведомлений "
-#~ "(приглашений на встречи и пр.)"
-
-#~ msgid "Restart Guided Tour"
-#~ msgstr "Начать снова"
-
-#~ msgid "The New objects icon"
-#~ msgstr "Значок новых сообщений"
-
-#~ msgid ""
-#~ "The New objects icon shows the number of appointment reminders or other "
-#~ "notifications. If clicking the icon, the info area opens."
-#~ msgstr ""
-#~ "Значок новых сообщений показывает количество напоминаний о встречах или "
-#~ "других уведомлений. По щелчку открывается панель с подробностями."
-
-#~ msgid "The info area"
-#~ msgstr "Область уведомлений"
-
-#~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
-#~ msgstr "Чтобы запустить приложение, выберите его имя в левой части меню."
-
 #~ msgid "!!!This file has not been added"
 #~ msgstr "Файл не был добавлен!"
 
@@ -972,6 +919,7 @@ msgstr ""
 
 #~ msgid "%1$s mail"
 #~ msgid_plural "%1$s mails"
+
 #~ msgstr[0] "%1$s сообщение"
 #~ msgstr[1] "%1$s сообщения"
 #~ msgstr[2] "%1$s сообщений"
@@ -3083,6 +3031,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "Высокий приоритет"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Подсказка. Вы можете вернуться к обзору в любое удобное для вас время, "
+#~ "запустив его из системного меню."
+
 #~ msgid "Hobby"
 #~ msgstr "Хобби"
 
@@ -3177,6 +3132,13 @@ msgstr ""
 #~ "is opened on the right side."
 #~ msgstr ""
 #~ "Приглашения на встречи и другие уведомления будут показаны в правой части."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "Область уведомлений открывается при появлении новых уведомлений "
+#~ "(приглашений на встречи и пр.)"
 
 #~ msgid "In progress"
 #~ msgstr "Выполняется"
@@ -4593,6 +4555,9 @@ msgstr ""
 #~ msgid "Resources"
 #~ msgstr "Ресурсы"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Начать снова"
+
 #~ msgid "Restore applications"
 #~ msgstr "Восстановить приложения"
 
@@ -4655,6 +4620,7 @@ msgstr ""
 
 #~ msgid "Save changes"
 #~ msgstr "Сохранить изменения"
+
 
 #~ msgid "Save in file store"
 #~ msgstr "Сохранить в хранилище файлов"
@@ -5033,7 +4999,6 @@ msgstr ""
 
 #~ msgid ""
 #~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
-
 #~ "LinkedIn with the permission to do read messages."
 #~ msgstr "Для чтения сообщений ваш провайдер должен получить ключ с LinkedIn."
 
@@ -5174,6 +5139,7 @@ msgstr ""
 #~ msgstr "Телефон (ISDN)"
 
 #~ msgid "Telephone callback"
+
 #~ msgstr "Телефон (обратный вызов)"
 
 #~ msgid "Telephone primary"
@@ -5250,6 +5216,16 @@ msgstr ""
 #~ "Список содержит имена файлов, их размер и дату создания. Чтобы выбрать "
 #~ "файл, установите флажок напротив его имени. Выберите файл для просмотра "
 #~ "подробной информации."
+
+#~ msgid "The New objects icon"
+#~ msgstr "Значок новых сообщений"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Значок новых сообщений показывает количество напоминаний о встречах или "
+#~ "других уведомлений. По щелчку открывается панель с подробностями."
 
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
@@ -5443,6 +5419,9 @@ msgstr ""
 #~ "icon to get a list of sort criteria."
 #~ msgstr ""
 #~ "Нажмите значок в правом нижнем углу для просмотра критериев сортировки."
+
+#~ msgid "The info area"
+#~ msgstr "Область уведомлений"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Максимальное число получателей в поле: %1$s"
@@ -5824,6 +5803,13 @@ msgstr ""
 #~ msgstr "Чтобы запустить приложение, щелкните на заголовке плитки."
 
 #~ msgid ""
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
+#~ msgstr ""
+#~ "Чтобы запустить приложение, используйте значки быстрого запуска в левой "
+#~ "части панели меню или выберите нужный элемент в меню запуска приложений."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -5841,6 +5827,24 @@ msgstr ""
 #~ msgstr ""
 #~ "Чтобы открыть справку, нажмите значок системы в правом верхнем углу и "
 #~ "выберите «Справка». "
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Чтобы открыть справку текущего приложения, откройте системное меню в "
+#~ "правом верхнем углу и выберите пункт «Справка». Чтобы открыть общую "
+#~ "справку, в верхней части окна выберите «Начальная страница» или "
+#~ "«Содержание»."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Для доступа к параметрам откройте системное меню в правой части панели "
+#~ "навигации и выберите «Параметры»."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

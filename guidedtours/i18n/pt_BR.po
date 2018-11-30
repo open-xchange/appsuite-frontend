@@ -1,20 +1,20 @@
 # Luiz Fernando Ranghetti <luiz@workshop-chapina.com>, 2013, 2014.
-# Aracele Torres <aracele@workshop-chapina.com>, 2013, 2014, 2016.
+# Aracele Torres <aracele@workshop-chapina.com>, 2013, 2014, 2016, 2018.
 # Bianca Oliveira <bianca@workshop-chapina.com>, 2013, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-27 13:55-0300\n"
-"Last-Translator: Luiz Fernando Ranghetti <luiz@workshop-chapina.com>\n"
-"Language-Team: Portuguese <pt@workshop-chapina.com>\n"
+"PO-Revision-Date: 2018-10-23 21:27-0300\n"
+"Last-Translator: Aracele Torres <aracele@workshop-chapina.com >\n"
+"Language-Team: Portuguese <>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Lokalize 2.0\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -50,14 +50,6 @@ msgstr ""
 "os parâmetros de recorrência são exibidas."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Usando a função lembrete"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Para não perder o compromisso, use a função de lembrete."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr "Convidando outros participantes"
 
@@ -70,6 +62,14 @@ msgstr ""
 "Para convidar outros participantes, insira seus nomes no campo Participantes "
 "abaixo. Para evitar conflitos de compromisso, clique em Encontrar um tempo "
 "livre no lado superior direito."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Usando a função lembrete"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "Para não perder o compromisso, use a função de lembrete."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
@@ -393,13 +393,10 @@ msgid "Launching an app"
 msgstr "Iniciando um aplicativo"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
+msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Para iniciar um aplicativo, use os ícones de início rápido no lado esquerdo "
-"da barra de menu ou clique em uma entrada dentro do menu do aplicativo "
-"lançador."
+"Para iniciar um aplicativo, clique em uma entrada no menu do lançador de"
+" aplicativos."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -875,60 +872,6 @@ msgstr ""
 "ferramentas."
 
 #~ msgid ""
-#~ "To open the settings, click the System menu icon on the upper right side "
-#~ "of the menu bar. Select Settings."
-#~ msgstr ""
-#~ "Para abrir as configurações, clique no ícone do menu Sistema no canto "
-#~ "superior direito da barra de menu. Selecione Configurações."
-
-#~ msgid ""
-#~ "To open the help, click the System menu icon on the upper right side of "
-#~ "the menu bar. Select Help. The help for the currently selected app is "
-#~ "displayed. To browse the complete help, click on Start Page or Table Of "
-#~ "Contents at the upper part of the window."
-#~ msgstr ""
-#~ "Para abrir a ajuda, clique no ícone do Menu do sistema no canto superior "
-#~ "direito da barra de menu. Selecione Ajuda. A ajuda para o aplicativo "
-#~ "atualmente selecionado é exibida. Para navegar na ajuda completa, clique "
-#~ "em Página inicial ou Tabela de conteúdo na parte superior da janela."
-
-#~ msgid ""
-#~ "Hint: you can always restart guided tours, any time you need them, from "
-#~ "the system menu."
-#~ msgstr ""
-#~ "Dica: você pode sempre reiniciar o passeio guiado, a qualquer hora que "
-#~ "você precisar dele, a partir domenu do sistema."
-
-#~ msgid ""
-#~ "In case of new notifications, e.g. appointment invitations, the info area "
-#~ "is opened."
-#~ msgstr ""
-#~ "Em caso de novas notificações, por exemplo, convites de compromissos, a "
-#~ "área de informação será aberta."
-
-#~ msgid "Restart Guided Tour"
-#~ msgstr "Reiniciar Passeio Guiado"
-
-#~ msgid "The New objects icon"
-#~ msgstr "O ícone de Novos objetos"
-
-#~ msgid ""
-#~ "The New objects icon shows the number of appointment reminders or other "
-#~ "notifications. If clicking the icon, the info area opens."
-#~ msgstr ""
-#~ "O ícone de Novos objetos mostra o número de lembretes de compromisso ou "
-#~ "outras notificações. Se clicar no ícone, a área de informação irá abrir."
-
-#~ msgid "The info area"
-#~ msgstr "Área de informação"
-
-#~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
-#~ msgstr ""
-#~ "Para iniciar um aplicativo, clique em uma entrada no canto superior "
-#~ "esquerdo na barra de menu."
-
-#~ msgid ""
 #~ "Below the recipient you will find further functions, e.g. for sending "
 #~ "copies to other recipients or for adding attachments."
 #~ msgstr ""
@@ -970,6 +913,13 @@ msgstr ""
 #~ msgstr "Passeio guiado por este aplicativo"
 
 #~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Dica: você pode sempre reiniciar o passeio guiado, a qualquer hora que "
+#~ "você precisar dele, a partir domenu do sistema."
+
+#~ msgid ""
 #~ "If a folder contains images, you can display a slideshow. To do so click "
 #~ "the View slideshow icon in the toolbar."
 #~ msgstr ""
@@ -990,6 +940,16 @@ msgstr ""
 #~ msgstr ""
 #~ "No caso de novas notificações, por exemplo, convites de compromissos, a "
 #~ "área de informação é aberta no lado direito."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "Em caso de novas notificações, por exemplo, convites de compromissos, a "
+#~ "área de informação será aberta."
+
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Reiniciar Passeio Guiado"
 
 #~ msgid "Slideshow"
 #~ msgstr "Apresentação de slides"
@@ -1014,6 +974,16 @@ msgstr ""
 #~ "alteração. Use a caixa de seleção para selecionar arquivos. Clique em um "
 #~ "arquivo para visualizar mais detalhes e funções no menu suspenso."
 
+#~ msgid "The New objects icon"
+#~ msgstr "O ícone de Novos objetos"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "O ícone de Novos objetos mostra o número de lembretes de compromisso ou "
+#~ "outras notificações. Se clicar no ícone, a área de informação irá abrir."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -1030,6 +1000,9 @@ msgstr ""
 #~ msgstr ""
 #~ "A visualização em mosaico exibe um ícone grande para cada arquivo. Clique "
 #~ "no ícone para visualizar mais detalhes e funções no menu suspenso."
+
+#~ msgid "The info area"
+#~ msgstr "Área de informação"
 
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "
@@ -1052,6 +1025,14 @@ msgstr ""
 #~ msgstr "Para criar a tarefa, clique em Criar no lado superior direito."
 
 #~ msgid ""
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
+#~ msgstr ""
+#~ "Para iniciar um aplicativo, use os ícones de início rápido no lado "
+#~ "esquerdo da barra de menu ou clique em uma entrada dentro do menu do "
+#~ "aplicativo lançador."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -1061,6 +1042,24 @@ msgstr ""
 #~ "lado superior direito da barra de menu. Selecione Configurações. Clique "
 #~ "em E-mail no lado esquerdo. Para exibir todas as configurações, ative as "
 #~ "Configurações Avançadas no botão do lado inferior esquerdo"
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Para abrir a ajuda, clique no ícone do Menu do sistema no canto superior "
+#~ "direito da barra de menu. Selecione Ajuda. A ajuda para o aplicativo "
+#~ "atualmente selecionado é exibida. Para navegar na ajuda completa, clique "
+#~ "em Página inicial ou Tabela de conteúdo na parte superior da janela."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Para abrir as configurações, clique no ícone do menu Sistema no canto "
+#~ "superior direito da barra de menu. Selecione Configurações."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

@@ -15,17 +15,17 @@ define('io.ox/contacts/edit/main', [
     'io.ox/contacts/edit/view-form',
     'io.ox/contacts/model',
     'gettext!io.ox/contacts',
+    'io.ox/core/tk/upload',
     'io.ox/core/api/user',
     'io.ox/core/extensions',
     'io.ox/contacts/util',
-    'io.ox/core/extPatterns/dnd',
     'io.ox/core/capabilities',
     'io.ox/core/notifications',
     'io.ox/core/util',
     'io.ox/core/a11y',
     'settings!io.ox/core',
     'less!io.ox/contacts/edit/style'
-], function (view, model, gt, userApi, ext, util, dnd, capabilities, notifications, coreUtil, a11y, settings) {
+], function (view, model, gt, upload, userApi, ext, util, capabilities, notifications, coreUtil, a11y, settings) {
 
     'use strict';
 
@@ -89,7 +89,7 @@ define('io.ox/contacts/edit/main', [
 
                         app.contact = contact;
                         var editViewtoUse = app.userMode ? view.protectedMethods.createContactEdit('io.ox/core/user') : view.ContactEditView;
-                        editView = new editViewtoUse({ model: contact, app: app });
+                        app.view = editView = new editViewtoUse({ model: contact, app: app });
                         container.append(
                             editView.render().$el
                         );
@@ -183,22 +183,13 @@ define('io.ox/contacts/edit/main', [
                         });
 
                         if (settings.get('features/PIMAttachments', capabilities.has('filestore'))) {
-                            // use naming convention 'dropZone' to utilise global dropZone.remove on quit
-                            app.dropZone = new dnd.UploadZone({
-                                ref: 'io.ox/contacts/edit/dnd/actions'
-                            }, editView);
-
-                            app.dropZone.include();
-
-                            win.on('show', function () {
-                                if (app.dropZone) { app.dropZone.include(); }
-                            });
-
-                            win.on('hide', function () {
-                                if (app && app.dropZone) {
-                                    app.dropZone.remove();
-                                }
-                            });
+                            // using parent here cause it's top padding affects 'getDimensions'
+                            app.view.$el.parent().append(
+                                new upload.dnd.FloatingDropzone({
+                                    app: app,
+                                    point: 'io.ox/contacts/edit/dnd/actions'
+                                }).render().$el
+                            );
                         }
                         win.on('show', function () {
                             if (contact.get('id')) {
@@ -220,7 +211,7 @@ define('io.ox/contacts/edit/main', [
 
                     // create model & view
                     if (data.id) {
-                        app.userMode = data.id === data.user_id;
+                        app.userMode = data.id === data.user_id || (data.folder === '6' && data.id === String(ox.user_id));
                         var factory = app.userMode ? model.protectedMethods.buildFactory('io.ox/core/user/model', userApi) : model.factory;
 
                         factory.realm('edit').retain().get({
@@ -258,6 +249,7 @@ define('io.ox/contacts/edit/main', [
             };
 
             if (data) {
+                if (data.folder && !data.folder_id) data.folder_id = data.folder;
                 // hash support
                 app.setState(data.id
                     ? { folder: data.folder_id, id: data.id }
@@ -271,7 +263,9 @@ define('io.ox/contacts/edit/main', [
         });
 
         app.setQuit(function () {
-            var def = $.Deferred();
+            var def = $.Deferred(),
+                isEdit = !!app.contact.get('id'),
+                type = isEdit ? 'edit' : 'default';
 
             if (getDirtyStatus()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
@@ -290,7 +284,7 @@ define('io.ox/contacts/edit/main', [
                         .done(function (action) {
                             if (action === 'delete') {
                                 def.resolve();
-                                model.factory.realm('edit').release();
+                                model.factory.realm(type).release();
                             } else {
                                 def.reject();
                             }
@@ -298,7 +292,7 @@ define('io.ox/contacts/edit/main', [
                 });
             } else {
                 def.resolve();
-                model.factory.realm('edit').release();
+                model.factory.realm(type).release();
             }
             //clean
             return def;

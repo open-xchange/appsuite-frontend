@@ -80,6 +80,10 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                 // the first data element is the last currently visible element
                 // in the list, therefore <=1 is already complete
                 complete = data.length <= 1;
+            } else if (type === 'reload' && collection.complete) {
+                // Bug 61264: if the folder was empty before reload complete must
+                // be triggered to remove the busyIndicator
+                collection.trigger('complete', collection.complete);
             }
             if (complete !== collection.complete) {
                 collection.complete = complete;
@@ -161,13 +165,18 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         };
 
         this.reload = function (params, tail) {
-
             var collection = this.collection;
             if (this.loading) return collection;
 
             params = this.getQueryParams(_.extend({ offset: 0 }, params));
             if (this.isBad(params.folder)) return collection;
-            params.limit = '0,' + Math.max(collection.length + (tail || 0), this.PRIMARY_PAGE_SIZE);
+            // see Bug #59875
+            // calculate maxLimit correctly (times paginate was done * secondary_page_size + initial page size)
+            var maxLimit = Math.ceil((collection.length - this.PRIMARY_PAGE_SIZE) / this.SECONDARY_PAGE_SIZE) * this.SECONDARY_PAGE_SIZE + this.PRIMARY_PAGE_SIZE;
+            // in case we have an empty folder (drive), rightHand will be 0. See Bug #60086
+            var rightHand = Math.max(collection.length + (tail || 0), maxLimit);
+            params.limit = '0,' + (rightHand === 0 ? this.PRIMARY_PAGE_SIZE : rightHand);
+
             this.loading = true;
 
             _.defer(process.bind(this), params, 'reload');
@@ -238,7 +247,6 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         },
 
         fetch: function (params) {
-
             var module = this.module,
                 key = module + '/' + _.cacheKey(_.extend({ session: ox.session }, params)),
                 rampup = ox.rampup[key],

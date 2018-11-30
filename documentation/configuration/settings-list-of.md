@@ -549,6 +549,12 @@ settings!io.ox/mail
 **features/registerProtocolHandler**
 > Ask for mailto link registration (true/false)
 
+**features/trusted/user**
+> user-defined comma-separated list of mail adresses or specific domains
+
+**features/trusted/admin**
+> admin-defined comma-separated list of mail adresses or specific domains
+
 **unseenMessagesFolder**
 > Show folder with all unseen messages (true/false)
 
@@ -610,6 +616,30 @@ settings!io.ox/mail
 
 **compose/simpleLineBreaks**
 > EXPERIMENTAL WORKAROUND: use simple line breaks
+
+**imageResize/enabled**
+> feature toggle to enable resizing of images
+
+**imageResize/small**
+> size of the target image (longest edge) for a small image as integer (default 320)
+
+**imageResize/medium**
+> size of the target image (longest edge) for a medium image as integer (default 640)
+
+**imageResize/large**
+> size of the target image (longest edge) for a large image as integer (default 1024)
+
+**imageResize/quality**
+> quality for the compression while resizing as float (default 0.75)
+
+**imageResize/imageSizeThreshold**
+> threshold for the size in pixel of the longest edge after which a resize is recommended as integer (default 1024)
+
+**imageResize/fileSizeThreshold**
+> threshold for the size in byte of the image after which a resize is recommended as integer (default 1048576)
+
+**imageResize/fileSizeMax**
+> maximum size in bytes that will be resized as integer, if one image exceeds this threshold the resize dropdown will not be displayed (default 10485760)
 
 ## Compose: Attachments and Drive Mail
 
@@ -1051,6 +1081,33 @@ settings!plugins/portal/oxdriveclients
 
 **standaloneWindowsClient**
 > (true/false)
+
+## Tours
+
+```
+settings!io.ox/tours
+```
+
+**server/disableTours**
+> feature toggle
+
+**server/startOnFirstLogin**
+> starts the first start tour on the first login
+
+**user/alreadySeenVersion**
+> determine if the first start tour was seen at all
+
+**whatsNew/autoShow**
+> number of times the what's new tour should be shown to the user
+
+**whatsNew/neverShowAgain**
+> overwrites the autoshow counter and disables the autostart of the tour
+
+**whatsNew/whatsNew/menuEntry**
+> Determines if a menu entry for the what's new tour should be created
+
+**whatsNew/whatsNew/helpUrl**
+> url to the what's new help page (https://www.open-xchange.com/whats-new-7-10)
 
 ## Upsell
 

@@ -20,8 +20,10 @@ define('plugins/notifications/calendar/register', [
     'gettext!plugins/notifications',
     'io.ox/calendar/util',
     'settings!io.ox/core',
-    'io.ox/core/tk/sounds-util'
-], function (calAPI, yell, ext, Subview, gt, util, settings, soundUtil) {
+    'settings!io.ox/calendar',
+    'io.ox/core/tk/sounds-util',
+    'io.ox/core/notifications'
+], function (calAPI, yell, ext, Subview, gt, util, settings, settingsCalendar, soundUtil, notifications) {
 
     'use strict';
 
@@ -37,6 +39,16 @@ define('plugins/notifications/calendar/register', [
         settings.save();
     }
 
+    function getLayout(model) {
+        if (_.device('smartphone')) return 'week:day';
+
+        var isWeekend = /(0|6)/.test(util.getMoment(model.get('startDate')).day()),
+            layout = settingsCalendar.get('viewView') || 'week:week';
+        if (layout === 'week:workweek' && isWeekend) layout = 'week:week';
+        if (/(year|list)/.test(layout)) layout = 'week:week';
+        return layout;
+    }
+
     ext.point('io.ox/core/notifications/invites/item').extend({
         draw: function (baton) {
             var model = baton.model,
@@ -45,45 +57,51 @@ define('plugins/notifications/calendar/register', [
                     // stopPropagation could be prevented by another markup structure
                     e.stopPropagation();
                     require(['io.ox/calendar/actions/acceptdeny']).done(function (acceptdeny) {
-                        acceptdeny(model.attributes, { noFolderCheck: true });
+                        calAPI.get(calAPI.reduce(model.attributes)).then(function (data) {
+                            acceptdeny(data.attributes, { noFolderCheck: true });
+                        });
                     });
                 },
                 onClickAccept = function (e) {
                     e.stopPropagation();
-                    var o = calAPI.reduce(model.attributes),
-                        appointmentData = model.attributes;
-                    require(['settings!io.ox/calendar', 'io.ox/calendar/util'], function (calendarSettings, util) {
-                        o.data = {
-                            // default reminder
-                            alarms: util.getDefaultAlarms(appointmentData),
-                            attendee: _(appointmentData.attendees).findWhere({ entity: ox.user_id }),
-                            id: appointmentData.id,
-                            folder: appointmentData.folder
-                        };
-                        o.data.attendee.partStat = 'ACCEPTED';
+                    require(['io.ox/calendar/util'], function (util) {
+                        calAPI.get(calAPI.reduce(model.attributes)).done(function (appointmentData) {
+                            var confirmation = {
+                                // default reminder
+                                alarms: util.getDefaultAlarms(appointmentData),
+                                // make sure to use the original data here, we don't want to accidentally change data we are not allowed too change
+                                attendee: _(appointmentData.get('attendees')).findWhere({ entity: ox.user_id }),
+                                id: appointmentData.get('id'),
+                                folder: appointmentData.get('folder')
+                            };
 
-                        var expand = util.getCurrentRangeOptions();
-                        calAPI.confirm(o.data, _.extend({ checkConflicts: true }, expand)).done(function (result) {
-                            if (result && result.conflicts) {
-                                ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
-                                    conflictView.dialog(result.conflicts)
-                                        .on('ignore', function () {
-                                            calAPI.confirm(o.data, _.extend({ checkConflicts: false }, expand));
-                                        });
-                                });
+                            if (!confirmation.attendee) {
+                                yell('error', gt('Participant not found'));
                                 return;
                             }
+                            confirmation.attendee.partStat = 'ACCEPTED';
+
+                            var expand = util.getCurrentRangeOptions();
+                            calAPI.confirm(confirmation, _.extend({ checkConflicts: true }, expand)).done(function (result) {
+                                if (result && result.conflicts) {
+                                    ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                                        conflictView.dialog(result.conflicts)
+                                            .on('ignore', function () {
+                                                calAPI.confirm(confirmation, _.extend({ checkConflicts: false }, expand));
+                                            });
+                                    });
+                                    return;
+                                }
+                            })
+                            .fail(yell);
                         })
-                        .fail(function (error) {
-                            yell(error);
-                        });
+                        .fail(yell);
                     });
                 };
 
             var cid = _.cid(model.attributes),
                 strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings', zone: moment().tz() }),
                 recurrenceString = util.getRecurrenceString(model.attributes);
-
             node.attr({
                 'data-cid': cid,
                 'focus-id': 'calendar-invite-' + cid,
@@ -101,31 +119,9 @@ define('plugins/notifications/calendar/register', [
                     $('<button type="button" class="btn btn-link open-in-calendar">').text(gt('Open in calendar')).on('click', function (e) {
                         if (e.type !== 'click' && e.which !== 13) return;
 
-                        var options = {
-                            folder: model.get('folder'),
-                            id: model.get('id'),
-                            perspective: 'week:week'
-                        };
+                        if (_.device('smartphone')) notifications.dropdown.close();
 
-                        ox.launch('io.ox/calendar/main', options).done(function () {
-                            this.folders.add(options.folder);
-                            // no need for a redraw, just select the folder
-                            this.folderView.tree.$el.find('[data-id="' + options.folder + '"] .color-label').addClass('selected');
-                            var currentPage =  this.pages.getCurrentPage();
-                            // resume calendar app
-                            if (currentPage && currentPage.perspective && currentPage.perspective.showAppointment) {
-                                var e = $.Event('click', { target: currentPage.perspective.main });
-                                currentPage.perspective.setNewStart = true;
-                                currentPage.perspective.showAppointment(e, options, { arrow: false });
-                            } else {
-                                // perspective is not initialized yet on newly launched calendar app
-                                this.once('aftershow:done', function (perspective) {
-                                    var e = $.Event('click', { target: perspective.main });
-                                    perspective.setNewStart = true;
-                                    perspective.showAppointment(e, options, { arrow: false });
-                                });
-                            }
-                        });
+                        util.openDeeplink(model, { perspective: getLayout(model), showDetails: true });
                     }),
                     $('<span class="sr-only">').text(gt('Press to open Details'))
                 ),
@@ -162,28 +158,21 @@ define('plugins/notifications/calendar/register', [
                 options.push([minutes[i], gt.format(gt.npgettext('in', 'in %d minute', 'in %d minutes', minutes[i]), minutes[i])]);
             }
 
-            node.attr('data-cid', String(_.cid(baton.requestedModel.attributes)));
             require(['io.ox/core/tk/reminder-util'], function (reminderUtil) {
                 reminderUtil.draw(node, baton.model, options);
+                node.attr('model-cid', String(_.cid(baton.requestedModel.attributes)));
                 node.on('click', '[data-action="ok"]', function (e) {
                     e.stopPropagation();
-                    calAPI.acknowledgeAlarm(baton.requestedModel.attributes);
-                    baton.view.collection.remove(baton.requestedModel.attributes);
-                });
-                node.find('[data-action="selector"]').on('click change', function (e) {
-                    //if we do this on smartphones the dropdown does not close correctly
-                    if (!_.device('smartphone')) {
-                        e.stopPropagation();
-                    }
-
-                    var min = $(e.target).val();
-                    //0 means 'pick a time here' was selected. Do nothing.
+                    var min = node.find('[data-action="selector"]').val();
+                    // 0 means 'don't remind me again was selected.
                     if (min !== '0') {
                         calAPI.remindMeAgain(_(baton.requestedModel.attributes).extend({ time: min * 60000 })).done(function () {
                             calAPI.getAlarms();
                         });
-                        baton.view.collection.remove(baton.requestedModel.attributes);
+                    } else {
+                        calAPI.acknowledgeAlarm(baton.requestedModel.attributes);
                     }
+                    baton.view.removeNotifications([baton.requestedModel.attributes]);
                 });
             });
         }
@@ -195,7 +184,7 @@ define('plugins/notifications/calendar/register', [
                 //#. notification pane: action  to remove/acknowledge all reminders (they don't show up anymore)
                 this.append($('<button class="btn btn-link">').text(gt('Remove all reminders')).on('click', function () {
                     calAPI.acknowledgeAlarm(baton.view.collection.toJSON());
-                    baton.view.collection.reset();
+                    baton.view.resetNotifications();
                 }));
             }
         }
@@ -210,6 +199,11 @@ define('plugins/notifications/calendar/register', [
                     api: calAPI,
                     useListRequest: true,
                     useApiCid: true,
+                    smartRemove: true,
+                    apiEvents: {
+                        // triggered when something went wrong when getting event data in the list request -> event was probably deleted. In any case, clear the alarm
+                        remove: 'failedToFetchEvent acknowledgedAlarm'
+                    },
                     //#. Reminders (notifications) about appointments
                     title: gt('Appointment reminders'),
                     extensionPoints: {
@@ -241,7 +235,6 @@ define('plugins/notifications/calendar/register', [
                     hideAllLabel: gt('Hide all appointment reminders.')
                 },
                 nextAlarmTimer,
-                nextAlarm,
                 alarmsToShow = [],
                 subview = new Subview(options),
                 audioQueue = [],
@@ -271,57 +264,58 @@ define('plugins/notifications/calendar/register', [
             calAPI.on('resetChronosAlarms', function (alarms) {
                 var alarmsToAdd = [],
                     now = new moment().utc().format(util.ZULU_FORMAT),
+                    nextAlarmTime,
+                    getIds = function () {
+                        var ids = [];
+                        subview.collection.forEach(function (model) {
+                            ids.push(util.cid({ folder: model.get('folder'), id: model.get('eventId'), recurrenceId: model.get('recurrenceId') }));
+                        });
+                        return ids;
+                    },
                     timerFunction = function () {
-                        if (nextAlarm.action === 'AUDIO') {
-                            playAlarm(nextAlarm);
-                        } else {
-                            subview.addNotifications(nextAlarm);
-                        }
-                        nextAlarm = undefined;
+                        var ids = getIds();
+
+                        nextAlarmTime = undefined;
                         now = new moment().utc().format(util.ZULU_FORMAT);
                         var temp = [];
                         _(alarmsToShow).each(function (alarm) {
                             if (alarm.time <= now) {
                                 if (alarm.action === 'AUDIO') {
                                     playAlarm(alarm);
+                                } else if (_(ids).indexOf(util.cid({ folder: alarm.folder, id: alarm.eventId, recurrenceId: alarm.recurrenceId })) > -1) {
+                                    // acknowledge duplicates (only one alarm per event)
+                                    calAPI.acknowledgeAlarm(alarm);
                                 } else {
                                     subview.addNotifications(alarm);
+                                    ids = getIds();
                                 }
-                            } else if (!nextAlarm || nextAlarm.time > alarm.time) {
-                                if (nextAlarm) {
-                                    temp.push(nextAlarm);
-                                }
-                                nextAlarm = alarm;
                             } else {
+                                if (!nextAlarmTime || nextAlarmTime > alarm.time) {
+                                    nextAlarmTime = alarm.time;
+                                }
                                 temp.push(alarm);
                             }
                         });
                         alarmsToShow = temp;
-                        if (nextAlarm) {
-                            nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarm.time).utc().valueOf() - new moment(now).utc().valueOf());
+                        if (nextAlarmTime) {
+                            nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarmTime).utc().valueOf() - new moment(now).utc().valueOf());
                         }
                     };
 
                 // clear old data
-                nextAlarm = undefined;
                 alarmsToShow = [];
                 if (nextAlarmTimer) {
                     clearTimeout(nextAlarmTimer);
                     nextAlarmTimer = undefined;
                 }
 
-                // decide where to put alarms, instant display/play sound, add as next alarm (used to set time for timer function) or put it in the queue
+                // decide where to put alarms, instant display/play sound or put it in the queue
                 _(alarms).each(function (alarm) {
                     if (alarm.time > now) {
-                        if (!nextAlarm || nextAlarm.time > alarm.time) {
-                            if (nextAlarm) {
-                                alarmsToShow.push(nextAlarm);
-                            }
-
-                            nextAlarm = alarm;
-                        } else {
-                            alarmsToShow.push(alarm);
+                        if (nextAlarmTime === undefined || nextAlarmTime > alarm.time) {
+                            nextAlarmTime = alarm.time;
                         }
+                        alarmsToShow.push(alarm);
                     } else if (alarm.action === 'AUDIO') {
                         playAlarm(alarm);
                     } else {
@@ -329,9 +323,22 @@ define('plugins/notifications/calendar/register', [
                     }
                 });
 
-                if (nextAlarm) {
-                    nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarm.time).valueOf() - new moment(now).valueOf());
+                if (nextAlarmTime !== undefined) {
+                    nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarmTime).valueOf() - new moment(now).valueOf());
                 }
+
+                var ids = getIds();
+                alarmsToAdd = _(alarmsToAdd).uniq(function (alarm) {
+                    return util.cid({ folder: alarm.folder, id: alarm.eventId, recurrenceId: alarm.recurrenceId });
+                });
+                alarmsToAdd = alarmsToAdd.filter(function (alarm) {
+                    if (_(ids).indexOf(util.cid({ folder: alarm.folder, id: alarm.eventId, recurrenceId: alarm.recurrenceId })) > -1 && !subview.collection.get(alarm.id)) {
+                        // acknowledge duplicates (only one alarm per event)
+                        calAPI.acknowledgeAlarm(alarm);
+                        return false;
+                    }
+                    return true;
+                });
                 subview.resetNotifications(alarmsToAdd);
             });
             //react to changes in settings
@@ -351,14 +358,13 @@ define('plugins/notifications/calendar/register', [
             var options = {
                     id: 'io.ox/calendarinvitations',
                     api: calAPI,
-                    fullModel: true,
                     smartRemove: true,
                     useApiCid: true,
                     apiEvents: {
                         reset: 'new-invites',
                         remove: 'delete:appointment mark:invite:confirmed'
                     },
-                    useListRequest: true,
+                    fullModel: true,
                     //#. Invitations (notifications) about appointments
                     title: gt('Appointment invitations'),
                     extensionPoints: {
@@ -375,7 +381,7 @@ define('plugins/notifications/calendar/register', [
                         icon: ''
                     },
                     specificDesktopNotification: function (model) {
-                        var title = model.get('title'),
+                        var title = model.get('summary'),
                             date = ', ' + util.getDateInterval(model.attributes),
                             time = ', ' + util.getTimeInterval(model.attributes);
 
@@ -390,6 +396,31 @@ define('plugins/notifications/calendar/register', [
                     hideAllLabel: gt('Hide all appointment invitations.')
                 },
                 subview = new Subview(options);
+
+            ox.on('socket:calendar:updates', function (data) {
+                var checkForDeleted = false;
+                // TODO remove once backend changes the name
+                _(data.needsAction).each(function (obj) {
+                    obj.folder = obj.folderId;
+                });
+                // order is important here, first look for deleted invitations, then put in the new ones (otherwise we will always fetch the new invites in the list request which isn't needed)
+
+                // if there was an update, check if the events we have invitations for are still there
+                if (data.folders) {
+                    var requestData = _(subview.collection.models).chain().filter(function (model) {
+                        return data.folders.indexOf(model.get('folder')) > -1;
+                    }).map(function (model) {
+                        return model.pick('folder', 'id', 'recurrenceId');
+                    }).valueOf();
+                    if (requestData.length) {
+                        checkForDeleted = true;
+                        calAPI.getInvites();
+                    }
+                }
+
+                // add new invitations
+                if (data.needsAction && !checkForDeleted) subview.addNotifications(data.needsAction);
+            });
 
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {

@@ -453,9 +453,9 @@ define('io.ox/contacts/edit/view-form', [
             id: 'attachment',
             index: 100,
             label: gt('Drop here to upload a <b class="dndignore">new attachment</b>'),
-            multiple: function (files, view) {
+            multiple: function (files, app) {
                 // get attachmentList view
-                var attachmentList = view.baton.parentView.$el.find('.attachment-list').data('view');
+                var attachmentList = app.view.$el.find('.attachment-list').data('view');
                 _(files).each(function (fileData) {
                     attachmentList.addFile(fileData);
                 });
@@ -527,10 +527,8 @@ define('io.ox/contacts/edit/view-form', [
         function drawTextarea(options, model) {
             var guid = _.uniqueId('contacts-' + options.field + '-');
             this.append(
-                $('<label>').attr('for', guid).addClass('control-label col-xs-12').append(
-                    $.txt('\u00A0'), $('<br>'),
-                    new mini.TextView({ id: guid, name: options.field, model: model, maxlength: meta.maxlength[options.field] || 64 }).render().$el
-                )
+                $('<label>').attr('for', guid).addClass('control-label col-xs-12').text(meta.i18n.comment),
+                new mini.TextView({ id: guid, name: options.field, model: model, maxlength: meta.maxlength[options.field] || 64 }).render().$el
             );
         }
 
@@ -626,7 +624,8 @@ define('io.ox/contacts/edit/view-form', [
 
                     // a block has a fixed width and floats left
                     var guid = _.uniqueId('group-'),
-                        block = $('<fieldset class="block" role="group">')
+                        block = id === 'comment' ? $('<fieldset class="block" role="presentation">').attr({ 'data-id': id }) :
+                            $('<fieldset class="block" role="group">')
                             .attr({ 'data-id': id, 'aria-labelledby': guid })
                             .append(
                                 $('<legend class="group">').append(

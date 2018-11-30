@@ -104,6 +104,11 @@ define('plugins/portal/rss/register', [
 
                 // add target to a tags
                 $body.find('a').attr({ target: '_blank', rel: 'noopener' });
+                // allow images from https sources
+                $body.find('img[src=""][data-original-src^="https://"]').each(function (index, img) {
+                    $(img).attr('src', $(img).attr('data-original-src'))
+                        .css({ 'max-width': '300px', 'max-height': '300px' });
+                });
 
                 this.append(
                     $('<div class="text">').append(

@@ -45,6 +45,7 @@ define('io.ox/calendar/main', [
         }), win;
 
     app.mediator({
+
         /*
          * Init pages for mobile use
          * Each View will get a single page with own
@@ -67,6 +68,13 @@ define('io.ox/calendar/main', [
 
             win.nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
 
+            // create empty startup page
+            // such that the first change:page will always trigger a real page change with view initialization
+            app.pages.addPage({
+                name: 'start',
+                startPage: true
+            });
+
             app.pages.addPage({
                 name: 'folderTree',
                 navbar: new Bars.NavbarView({
@@ -86,12 +94,11 @@ define('io.ox/calendar/main', [
                     baton: baton,
                     page: 'month',
                     extension: 'io.ox/calendar/mobile/toolbar'
-                }),
-                startPage: true
+                })
             });
 
             app.pages.addPage({
-                name: 'week',
+                name: 'week:day',
                 navbar: new Bars.NavbarView({
                     baton: baton,
                     extension: 'io.ox/calendar/mobile/navbar'
@@ -139,7 +146,7 @@ define('io.ox/calendar/main', [
             // tell page controller about special navigation rules
             app.pages.setBackbuttonRules({
                 'month': 'folderTree',
-                'week': 'month',
+                'week:day': 'month',
                 'list': 'folderTree'
             });
         },
@@ -152,15 +159,31 @@ define('io.ox/calendar/main', [
 
             app.pages = new PageController({ appname: app.options.name });
 
-            // create 3 pages with toolbars and navbars
+            // create empty startup page
+            // such that the first change:page will always trigger a real page change with view initialization
             app.pages.addPage({
-                name: 'month',
+                name: 'start',
                 container: c,
                 startPage: true
             });
 
             app.pages.addPage({
-                name: 'week',
+                name: 'month',
+                container: c
+            });
+
+            app.pages.addPage({
+                name: 'week:day',
+                container: c
+            });
+
+            app.pages.addPage({
+                name: 'week:workweek',
+                container: c
+            });
+
+            app.pages.addPage({
+                name: 'week:week',
                 container: c
             });
 
@@ -217,9 +240,9 @@ define('io.ox/calendar/main', [
                 })
                 .setLeft(gt('Folders'));
 
-            app.pages.getNavbar('week')
+            app.pages.getNavbar('week:day')
                 .on('leftAction', function () {
-                    ox.ui.Perspective.show(app, 'month', { animation: 'slideright' });
+                    app.pages.changePage('month', { animation: 'slideright' });
                 })
                 .setLeft(gt('Back'));
 
@@ -426,6 +449,40 @@ define('io.ox/calendar/main', [
             });
         },
 
+        'views': function (app) {
+            var list = ['week:day', 'month', 'list'],
+                defaultPage = _.device('smartphone') ? 'week:day' : 'week:workweek',
+                views = {};
+            if (_.device('!smartphone')) list.push('week:workweek', 'week:week', 'year');
+            list.forEach(function (item) {
+                var node = app.pages.getPage(item);
+                node.one('pagebeforeshow', function () {
+                    var split = item.split(':'),
+                        view = split[0] || 'week',
+                        mode = split[1] || (_.device('smartphone') ? 'day' : 'workweek');
+
+                    require(['io.ox/calendar/' + view + '/view']).then(function success(View) {
+                        var view = new View({ mode: mode, app: app });
+                        node.append(view.$el);
+                        view.render();
+                        app.getWindow().trigger('change:perspective', view);
+                        app.perspective = views[item] = view;
+                        // finally store the layout. will not change anything if already selected
+                        app.props.set('layout', item);
+                    }, function fail() {
+                        if (item !== defaultPage) return app.pages.changePage(defaultPage);
+                    });
+                });
+                node.on('pagebeforeshow', function () {
+                    _.url.hash('perspective', item);
+                    if (!views[item]) return;
+                    views[item].trigger('show');
+                    app.perspective = views[item];
+                    settings.set('viewView', item);
+                });
+            });
+        },
+
         'listview': function (app) {
             app.listView = new CalendarListView({ app: app, draggable: false, pagination: false, labels: true, ignoreFocus: true, noPullToRefresh: true });
             app.listView.model.set({ view: 'list' }, { silent: true });
@@ -593,7 +650,7 @@ define('io.ox/calendar/main', [
         'change:layout': function (app) {
             app.props.on('change:layout', function (model, value) {
                 // no animations on desktop
-                ox.ui.Perspective.show(app, value, { disableAnimations: true });
+                app.pages.changePage(value, { disableAnimations: true });
             });
         },
 
@@ -684,22 +741,12 @@ define('io.ox/calendar/main', [
 
         /*
          * mobile only
-         * change current date label in navbar
-         */
-        'change:navbar:date-mobile': function (app) {
-            if (_.device('!smartphone')) return;
-            app.pages.getPage('week').on('change:navbar:date', function (e, dates) {
-                app.pages.getNavbar('week').setTitle(dates.date);
-            });
-        },
-        /*
-         * mobile only
          *
          */
         'show-weekview-mobile': function (app) {
             if (_.device('!smartphone')) return;
-            app.pages.getPage('week').on('pageshow', function () {
-                app.pages.getNavbar('week').setLeft(app.getDate().format('MMMM'));
+            app.pages.getPage('week:day').on('pageshow', function () {
+                app.pages.getNavbar('week:day').setLeft(app.getDate().format('MMMM'));
                 //app.pages.getPageObject('week').perspective.view.setScrollPos();
             });
         },
@@ -721,6 +768,7 @@ define('io.ox/calendar/main', [
          * Add support for virtual folder "All my public appointments"
          */
         'virtual-folders': function (app) {
+            if (capabilities.has('guest')) return;
             app.folderView.tree.selection.addSelectableVirtualFolder('cal://0/allPublic');
         },
 
@@ -912,6 +960,13 @@ define('io.ox/calendar/main', [
                     app.mediate();
                     win.show();
                 })
+                .fail(function (result) {
+                    var message = gt('Application may not work as expected until this problem is solved.');
+                    if (result && result.error) message = result.error + ' ' + message;
+                    require(['io.ox/core/notifications'], function (notifications) {
+                        notifications.yell('error', message);
+                    });
+                })
                 .done(function () {
                     // app perspective
                     var lastPerspective = options.perspective || _.sanitize.option(_.url.hash('perspective')) || app.props.get('layout');
@@ -923,11 +978,7 @@ define('io.ox/calendar/main', [
                         lastPerspective = 'week:workweek';
                     }
 
-                    ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true })
-                        .then(undefined, function applyFallback() {
-                            lastPerspective = 'week:workweek';
-                            return ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true });
-                        }).done(function () { app.props.set('layout', lastPerspective); });
+                    app.pages.changePage(lastPerspective, { disableAnimations: true });
                 });
         }
     });

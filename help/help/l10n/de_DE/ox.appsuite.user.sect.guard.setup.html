@@ -1,0 +1,116 @@
+<html lang="de">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>11.1. Die Guard Einrichtung</title>
+<link rel="stylesheet" type="text/css" href="../../help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Benutzeranleitung">
+<link rel="up" href="ox.appsuite.user.chap.guard.html" title="Kapitel 11. Datenverschlüsselung mit Guard">
+<link rel="prev" href="ox.appsuite.user.chap.guard.html" title="Kapitel 11. Datenverschlüsselung mit Guard">
+<link rel="next" href="ox.appsuite.user.sect.guard.email.html" title="11.2. E-Mail-Kommunikation verschlüsseln">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
+<link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../../help/jquery.min.js"></script> 
+
+   <script src="../../../help/bootstrap.min.js"></script> 
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.chap.guard.html">Zurück</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Startseite</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhaltsverzeichnis</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.email.html">Weiter</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">Datenverschlüsselung mit Guard</h1>
+<div class="sect1" id="ox.appsuite.user.sect.guard.setup">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">11.1. Die 
+      <span class="phrase"><span class="guilabel"><strong>Guard</strong></span></span>
+      
+      
+      
+      Einrichtung
+    </h2></div></div></div>
+<a class="indexterm" name="id-1.12.6.2"></a><p id="ox.appsuite.user.concept.guard.usage.setup.securitykeys">Bevor Sie
+      <span class="phrase"><span class="guilabel"><strong>Guard</strong></span></span>
+      
+      
+       
+      verwenden können, müssen Sie einige Grundeinstellungen vornehmen:
+      </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Sie bestimmen ein
+            <span class="phrase">Guard</span>-Sicherheitspasswort, um Daten verschlüsseln zu können und um auf 
+            verschlüsselte Daten zugreifen zu können.</p></li>
+<li class="listitem"><p role="presentation">Sie geben eine sekundäre E-Mail-Adresse an, für den Fall dass Sie Ihr 
+            <span class="phrase">Guard</span>-Sicherheitspasswort
+            verlieren sollten. In diesem Fall verwenden Sie die Funktion zum Zurücksetzen des 
+            <span class="phrase">Guard</span>-Sicherheitspassworts. 
+            Diese Funktion sendet Ihnen ein Ersatzpasswort.
+            Aus Sicherheitsgründen wird dringend empfohlen, hierfür eine sekundäre E-Mail-Adresse anzugeben. 
+            Andernfalls erhalten Sie das Ersatzpasswort an Ihren primären E-Mail-Account.</p></li>
+</ul>
+<p>
+      Um die Grundeinstellungen vorzunehmen, haben Sie zwei alternative Möglichkeiten:</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Sie bestimmen die Grundeinstellungen, während Sie das erste Mal eine Verschlüsselungsfunktion verwenden.</p></li>
+<li class="listitem"><p role="presentation">Sie bestimmen die Grundeinstellungen mit Hilfe der Groupware Einstellungen, bevor Sie die Verschlüsselungsfunktionen verwenden.</p></li>
+</ul>
+<p> 
+    </p>
+<div class="task" id="ox.appsuite.user.task.guard.setup.implicit">
+<p class="title">So bestimmen Sie die Grundeinstellungen während der erstmaligen Verwendung einer 
+        Verschlüsselungsfunktion:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Aktivieren Sie beim Schreiben einer E-Mail, beim Verschlüsseln einer Datei oder beim Hochladen 
+            einer neuen Datei die Verschlüsselungsfunktion, indem Sie das Symbol 
+            <span class="guibutton"><strong>Verschlüsseln</strong></span>
+            <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.setup.implicit"><img src="../../images/guard_user_icon_encrypt.png"></span> 
+            anklicken.</p></li>
+<li class="step"><p role="presentation">Sie werden nacheinander dazu aufgefordert, ein 
+            <span class="phrase">Guard</span>-Sicherheitspasswort und eine 
+            sekundäre E-Mail-Adresse anzugeben. Geben Sie diese Daten ein.</p></li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.setup.setting">
+<p class="title">So bestimmen Sie die Grundeinstellungen vor der erstmaligen Verwendung einer Verschlüsselung:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Klicken Sie in der Menüleiste rechts auf das Symbol <span class="guibutton"><strong>Systemmenü</strong></span>
+            <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.setup.securitykeys"><img src="../../images/guard_user_icon_menuebars.png"></span>. Klicken Sie im Menü auf <span class="guibutton"><strong>Einstellungen</strong></span>. </p></li>
+<li class="step">
+<p role="presentation">Öffnen Sie in der Seitenleiste den Eintrag <span class="guibutton"><strong>Sicherheit</strong></span>.
+            Klicken Sie auf
+            <span class="phrase"><span class="guibutton"><strong>Guard-Sicherheit</strong></span></span>.
+          </p>
+<p role="presentation">Wenn Sie zum ersten Mal die 
+            <span class="phrase">Guard</span>-Sicherheitseinstellungen 
+            wählen, öffnet sich das Fenster
+            <span class="phrase"><span class="guilabel"><strong>Guard-Sicherheitsschlüssel erstellen</strong></span></span>. 
+          </p>
+</li>
+<li class="step">
+<p role="presentation">Geben Sie in <span class="guibutton"><strong>Passwort</strong></span> das Passwort ein, das Sie für die Verschlüsselung 
+            Ihrer Daten verwenden möchten.</p>
+<p role="presentation">Geben Sie in <span class="guibutton"><strong>Bestätigen</strong></span> das gleiche Passwort nochmal ein. </p>
+</li>
+<li class="step"><p role="presentation">Geben Sie in <span class="guibutton"><strong>Sekundäre E-Mail-Adresse eingeben</strong></span> die E-Mail-Adresse ein,
+            an die ein temporäres Passwort gesendet wird, mit dessen Hilfe Sie Ihr 
+            <span class="phrase">Guard</span>-Sicherheitspasswort 
+            bei Bedarf zurücksetzen können.</p></li>
+<li class="step"><p role="presentation">Klicken Sie auf <span class="guibutton"><strong>OK</strong></span>.</p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.parent.guard.usage.setup.securitykeys">Übergeordnetes Thema:
+      <a class="xref" href="ox.appsuite.user.chap.guard.html"><i>Datenverschlüsselung mit Guard</i></a>
+    </p>
+</div>
+          </div>
+        </body>
+</html>

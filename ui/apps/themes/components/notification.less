@@ -19,10 +19,6 @@
     background-color: @notification-pane-background;
     background-clip: padding-box;
 
-    right: 12px;
-    position: fixed;
-    top: @appcontrol-height;
-    max-height:  ~"calc(100% - @{appcontrol-height} - 8px)";
     overflow: auto;
 
     min-height: 200px;
@@ -41,7 +37,7 @@
         right: 0;
         bottom: 0;
         top: @appcontrol-height-smartphone;
-        max-height: none;
+        position: fixed;
     }
 
     padding: 24px 14px;
@@ -102,7 +98,7 @@
          line-height: 20px;
          margin: 0 14px 0 0;
          padding: 0;
-         color: #767676;
+         color: #696969;
          font-size: 18px;
     }
 
@@ -134,7 +130,7 @@
          line-height: 24px;
          margin: 14px 14px 0 0;
          padding: 0;
-         color: #767676;
+         color: #696969;
          font-size: 18px;
     }
 
@@ -145,7 +141,7 @@
     .item {
         .notification-info {
             display: block;
-            color: #767676;
+            color: #696969;
         }
 
         .notification-item-actions {
@@ -156,7 +152,7 @@
                 width: 12px;
                 line-height: 13px;
                 padding: 0;
-                color: #767676;
+                color: #696969;
                 font-size: 14px;
                 display: none;
 
@@ -172,7 +168,7 @@
             }
         }
 
-        color: #767676;
+        color: #696969;
         padding: 8px 14px;
 
         &:last-child {
@@ -279,10 +275,6 @@
         opacity: 0;
         visibility: hidden;
     }
-}
-
-#io-ox-notifications-icon {
-    min-width: 64px;
 }
 
 #io-ox-notifications-popups {

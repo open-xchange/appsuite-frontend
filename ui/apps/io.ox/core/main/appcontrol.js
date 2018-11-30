@@ -23,7 +23,6 @@ define('io.ox/core/main/appcontrol', [
     'io.ox/core/main/autologout'
 ], function (http, upsell, ext, capabilities, icons, Dropdown, settings, gt) {
 
-
     function toggleOverlay(force) {
         $('#io-ox-appcontrol').toggleClass('open', force);
         $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle(force);
@@ -141,7 +140,7 @@ define('io.ox/core/main/appcontrol', [
             this.$el.empty().attr({
                 'data-id': this.model.get('id'),
                 'data-app-name': this.model.get('name')
-            }).append(this.icon = this.drawIcon());
+            }).toggleClass('active', ox.ui.App.isCurrent(this)).append(this.icon = this.drawIcon());
             this.updateTooltip();
             this.addAccessKey();
             // used on mobile, reverted for 7.10
@@ -158,11 +157,14 @@ define('io.ox/core/main/appcontrol', [
         getQuickLauncherCount: function () {
             var n = settings.get('apps/quickLaunchCount', 0);
             if (!_.isNumber(n)) return 0;
-            return Math.min(this.quickLauncherLimit, n);
+            return Math.min(this.quickLauncherLimit, ox.ui.apps.forLauncher().length, n);
         },
         getQuickLauncherItems: function () {
             var count = this.getQuickLauncherCount(),
-                str = settings.get('apps/quickLaunch', this.getQuickLauncherDefaults());
+                list = String(settings.get('apps/quickLaunch', this.getQuickLauncherDefaults())).trim().split(/,\s*/),
+                str = _.chain(list).filter(function (o) {
+                    return ox.ui.apps.get(o.replace(/\/main$/, ''));
+                }).value().join(',');
             // We fill up the list with 'none' in case we have more slots than defaults
             return (str + new Array(count).join(',none')).split(',').slice(0, count);
         }
@@ -218,39 +220,32 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    var LaunchersView = Backbone.View.extend({
+    var LaunchersView = Dropdown.extend({
+        attributes: { role: 'presentation' },
         tagName: 'li',
-        className: 'launcher',
+        className: 'launcher dropdown',
+        id: 'io-ox-launcher',
+        $ul: $('<ul class="launcher-dropdown dropdown-menu dropdown-menu-right" role="menu">'),
+        $toggle: $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
         initialize: function () {
-            this.listenTo(this.collection, 'add remove', function () {
-                this.$el.empty();
-                this.render();
-            });
+            Dropdown.prototype.initialize.apply(this, arguments);
+            this.listenTo(this.collection, 'add remove', this.update);
+            this.update();
         },
-        render: function () {
-            var ul = $('<ul class="launcher-dropdown dropdown-menu dropdown-menu-right" role="menu">'),
-                btn = $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
-                dropdown = new Dropdown({
-                    id: 'io-ox-launcher',
-                    $ul: ul,
-                    $toggle: btn
-                });
-
+        update: function () {
+            this.$ul.empty();
             this.collection.forLauncher().forEach(function (model, i) {
-                dropdown.append(
+                this.append(
                     new LauncherView({ model: model, pos: i + 1 }).render().$el
                 );
-            });
+            }.bind(this));
             if (_.device('smartphone')) {
                 this.collection.where({ closable: true }).forEach(function (model) {
-                    dropdown.append(
+                    this.append(
                         new LauncherView({ model: model }).render().$el
                     );
-                });
+                }.bind(this));
             }
-
-            this.$el.append(dropdown.render().$el);
-            return this;
         }
     });
 
@@ -275,7 +270,16 @@ define('io.ox/core/main/appcontrol', [
             initRefreshAnimation();
 
             ox.ui.apps.on('launch resume', function (model) {
-                $('.launcher-dropdown').find('.lcell[data-app-name="' + model.get('name') + '"]').addClass('active').siblings().removeClass('active');
+                if (model.get('floating')) return;
+
+                $('.launcher-dropdown').find('.lcell[data-app-name]')
+                    .removeClass('active').end()
+                    .find('.lcell[data-app-name="' + model.get('name') + '"]').addClass('active');
+
+                $('#io-ox-quicklaunch').find('.lcell[data-id]')
+                    .removeClass('active').end()
+                    .find('.lcell[data-id="' + model.get('name') + '"]').addClass('active');
+
                 _.defer(function () {
                     $(document).trigger('resize');
                 });
@@ -350,8 +354,6 @@ define('io.ox/core/main/appcontrol', [
         id: 'launcher',
         index: 120,
         draw: function () {
-            // reverted for 7.10
-            //if (apps.length <= 1) return;
             var launchers = window.launchers = new LaunchersView({
                 collection: ox.ui.apps
             });
@@ -359,6 +361,7 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
+    // deactivated since 7.10.0
     ext.point('io.ox/core/appcontrol').extend({
         id: 'search',
         index: 500,

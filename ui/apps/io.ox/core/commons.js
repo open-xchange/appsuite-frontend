@@ -763,7 +763,12 @@ define('io.ox/core/commons', [
                     // get fresh object
                     getter(api.reduce(data)).done(function (data) {
                         if (baton instanceof ext.Baton) {
-                            baton.data = data;
+                            if (data instanceof Backbone.Model && baton.model instanceof Backbone.Model) {
+                                baton.model = data;
+                                baton.data = data.toJSON();
+                            } else {
+                                baton.data = data;
+                            }
                         } else {
                             baton = data;
                         }

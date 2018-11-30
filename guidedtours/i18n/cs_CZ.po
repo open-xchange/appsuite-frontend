@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-07 15:53+0100\n"
+"PO-Revision-Date: 2018-10-14 14:14+0100\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -48,14 +48,6 @@ msgstr ""
 "funkce pro nastavení parametrů opakování."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Použití připomínací funkce"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Nechcete-li zmeškat schůzku, použijte připomínací funkce."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr "Pozvání dalších účastníků"
 
@@ -68,6 +60,14 @@ msgstr ""
 "Chcete-li pozvat další účastníky, zadejte jejich jména do pole pod "
 "Účastníci. Kliknutím na Najít volný čas vpravo nahoře zabráníte konfliktům "
 "ve schůzkách."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Použití připomínací funkce"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "Nechcete-li zmeškat schůzku, použijte připomínací funkce."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
@@ -377,12 +377,9 @@ msgid "Launching an app"
 msgstr "Spouštění aplikace"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
+msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Chcete-li spustit aplikaci, použijte ikony na levé straně lišty menu, nebo "
-"klikněte na položku v menu pro spouštění aplikací."
+"Chcete-li spustit aplikaci, klikněte na položku v menu pro spouštění aplikací."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -691,8 +688,8 @@ msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
 msgstr ""
-"Chcete-li otevřít nastavení, klikněte na ikonu uživatele v pravé horní části"
-" lišty s menu. Zvolte Nastavení."
+"Chcete-li otevřít nastavení, klikněte na ikonu uživatele v pravé horní části "
+"lišty s menu. Zvolte Nastavení."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
@@ -728,10 +725,10 @@ msgid ""
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Chcete-li otevřít nápovědu, klikněte na ikonu uživatele na pravé horní straně"
-" lišty s menu. Zvolte Nápověda. Zobrazí se nápověda pro aktuálně vybranou"
-" aplikaci. Chcete-li procházet kompletní nápovědu, klikněte na stránku Start"
-" nebo Obsah v horní části okna."
+"Chcete-li otevřít nápovědu, klikněte na ikonu uživatele na pravé horní "
+"straně lišty s menu. Zvolte Nápověda. Zobrazí se nápověda pro aktuálně "
+"vybranou aplikaci. Chcete-li procházet kompletní nápovědu, klikněte na "
+"stránku Start nebo Obsah v horní části okna."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -749,8 +746,8 @@ msgstr ""
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
-"Chcete-li se odhlásit, klikněte na ikonu odhlášení v pravé horní části lišty"
-" menu."
+"Chcete-li se odhlásit, klikněte na ikonu odhlášení v pravé horní části lišty "
+"menu."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating a new task"
@@ -846,59 +843,6 @@ msgstr ""
 "Chcete-li upravovat více úkolů najednou, zaškrtněte políčka na levé straně "
 "úkolů. Pokud políčka nejsou zobrazená, klikněte na Pohled > Zaškrtávací pole "
 "na pravé straně nástrojové lišty."
-
-#~ msgid ""
-#~ "To open the settings, click the System menu icon on the upper right side "
-#~ "of the menu bar. Select Settings."
-#~ msgstr ""
-#~ "Chcete-li otevřít nastavení, klikněte na ikonu Systémové menu v pravé "
-#~ "horní části lišty s menu. Zvolte Nastavení."
-
-#~ msgid ""
-#~ "To open the help, click the System menu icon on the upper right side of "
-#~ "the menu bar. Select Help. The help for the currently selected app is "
-#~ "displayed. To browse the complete help, click on Start Page or Table Of "
-#~ "Contents at the upper part of the window."
-#~ msgstr ""
-#~ "Chcete-li otevřít nápovědu, klikněte na ikonu Systémové menu na pravé "
-#~ "horní straně lišty s menu. Zvolte Nápověda. Zobrazí se nápověda pro "
-#~ "aktuálně vybranou aplikaci. Chcete-li procházet kompletní nápovědu, "
-#~ "klikněte na stránku Start nebo Obsah v horní části okna."
-
-#~ msgid ""
-#~ "Hint: you can always restart guided tours, any time you need them, from "
-#~ "the system menu."
-#~ msgstr ""
-#~ "Tip: prohlídky můžete spustit kdykoliv je potřebujete ze systémového menu."
-
-#~ msgid ""
-#~ "In case of new notifications, e.g. appointment invitations, the info area "
-#~ "is opened."
-#~ msgstr ""
-#~ "Informační oblast se otevře, pokud se objeví nová oznámení, např. "
-#~ "oznámení o schůzkách."
-
-#~ msgid "Restart Guided Tour"
-#~ msgstr "Znovu spustit průvodce"
-
-#~ msgid "The New objects icon"
-#~ msgstr "Ikona nových objektů"
-
-#~ msgid ""
-#~ "The New objects icon shows the number of appointment reminders or other "
-#~ "notifications. If clicking the icon, the info area opens."
-#~ msgstr ""
-#~ "Ikona nových objektů ukazuje počet upomínek na schůzky nebo jiná "
-#~ "upozornění. Kliknutí na ikonu otevře informační oblast."
-
-#~ msgid "The info area"
-#~ msgstr "Informační oblast"
-
-#~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
-#~ msgstr ""
-#~ "Chcete-li spustit aplikaci, klikněte na položku v levé horní části lišty "
-#~ "s menu."
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -6599,6 +6543,12 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "Vysoká priorita"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Tip: prohlídky můžete spustit kdykoliv je potřebujete ze systémového menu."
+
 #~ msgid "History of error messages"
 #~ msgstr "Historie chybových zpráv"
 
@@ -6792,6 +6742,13 @@ msgstr ""
 #~ msgstr ""
 #~ "Pokud se objeví nová upozornění, např. pozvánky na schůzky, na pravé "
 #~ "straně se otevře informační oblast."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "Informační oblast se otevře, pokud se objeví nová oznámení, např. "
+#~ "oznámení o schůzkách."
 
 #~ msgid ""
 #~ "In order to assign categories to the objects selected, use the control "
@@ -9751,6 +9708,9 @@ msgstr ""
 #~ msgid "Resources:"
 #~ msgstr "Zdroje:"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Znovu spustit průvodce"
+
 #~ msgid "Restore Last Operation"
 #~ msgstr "Obnovit poslední operaci"
 
@@ -11094,6 +11054,16 @@ msgstr ""
 #~ "Použijte zaškrtávací políčka pro výběr souborů. Kliknutím na soubor "
 #~ "zobrazíte další podrobnosti a funkce ve vyskakovacím okně."
 
+#~ msgid "The New objects icon"
+#~ msgstr "Ikona nových objektů"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Ikona nových objektů ukazuje počet upomínek na schůzky nebo jiná "
+#~ "upozornění. Kliknutí na ikonu otevře informační oblast."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -11354,6 +11324,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Ikona vpravo dole vám pomůže zprávy seřadit. Kliknutím na ni získáte "
 #~ "seznam kritérií řazení."
+
+#~ msgid "The info area"
+#~ msgstr "Informační oblast"
 
 #~ msgid "The links will be deleted by #DATE#"
 #~ msgstr "Odkazy budou smazány #DATE#"
@@ -12232,6 +12205,13 @@ msgstr ""
 #~ msgstr "Chcete-li spustit aplikaci, klikněte na nadpis dlaždice."
 
 #~ msgid ""
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
+#~ msgstr ""
+#~ "Chcete-li spustit aplikaci, použijte ikony na levé straně lišty menu, "
+#~ "nebo klikněte na položku v menu pro spouštění aplikací."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -12249,6 +12229,24 @@ msgstr ""
 #~ msgstr ""
 #~ "Chcete-li otevřít nápovědu, klikněte na ikonu Systémové menu v pravé "
 #~ "horní části lišty s menu. Zvolte Nápověda."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Chcete-li otevřít nápovědu, klikněte na ikonu Systémové menu na pravé "
+#~ "horní straně lišty s menu. Zvolte Nápověda. Zobrazí se nápověda pro "
+#~ "aktuálně vybranou aplikaci. Chcete-li procházet kompletní nápovědu, "
+#~ "klikněte na stránku Start nebo Obsah v horní části okna."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Chcete-li otevřít nastavení, klikněte na ikonu Systémové menu v pravé "
+#~ "horní části lišty s menu. Zvolte Nastavení."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

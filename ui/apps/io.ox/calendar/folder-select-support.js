@@ -19,6 +19,15 @@ define('io.ox/calendar/folder-select-support', [
 
     'use strict';
 
+    // list of error codes where a folder should be removed from the selection
+    var removeList = [
+        'FLD-1004', // folder storage service no longer available
+        'FLD-0008', // folder not found
+        'FLD-0003', // permission denied
+        'CAL-4060', // folder is not supported
+        'CAL-4030' // permission denied
+    ];
+
     function setFolders(list, opt) {
         var self = this;
         opt = opt || {};
@@ -59,7 +68,9 @@ define('io.ox/calendar/folder-select-support', [
             // this is the case, when upgrading to the new calendar. all private appointments and allPublic should be checked
             folderAPI.flat({ module: 'calendar', all: true }).then(function (data) {
                 initialList = _(data.private).pluck('id');
-                if (capabilities.has('edit_public_folders')) initialList.push('cal://0/allPublic');
+                if (!capabilities.has('guest') && capabilities.has('edit_public_folders')) initialList.push('cal://0/allPublic');
+                // fallback if no object has been added. Maybe the case for guests
+                if (initialList.length === 0) initialList = _(data.shared).pluck('id');
                 setFolders.call(self, initialList);
                 // make sure that all checkmarks are rendered
                 _(self.folders).each(self.repaintNode.bind(self));
@@ -90,7 +101,8 @@ define('io.ox/calendar/folder-select-support', [
             return folderAPI.get(folder).then(function success(folder) {
                 if (!folder.subscribed) return;
                 return folder;
-            }, function fail() {
+            }, function fail(err) {
+                if (!_(removeList).contains(err.code)) return;
                 self.remove(folder);
             });
         })).then(function () {

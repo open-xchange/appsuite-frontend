@@ -43,6 +43,11 @@
             .picture(16px, 16px);
         }
 
+        .close {
+            opacity: initial;
+            color: rgba(0, 0, 0, 0.55);
+        }
+
         &.placeholder {
             background-color: transparent;
             border: none;
@@ -78,6 +83,7 @@
         .tt-hint {
             // don't cut of hints in firefox
             width: 100% !important;
+            color: #757575;
         }
 
         .tt-dropdown-menu {
@@ -89,6 +95,13 @@
             width: @tokenfield-menu-width + 100px;
             min-width: @tokenfield-menu-width + 100px;
         }
+    }
+}
+
+// Fix for IE see bug 58917
+.internet-explorer {
+    .tokenfield .twitter-typeahead {
+        & > .token-input.tt-input { width: inherit !important; }
     }
 }
 

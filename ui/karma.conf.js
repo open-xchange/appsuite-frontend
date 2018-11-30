@@ -78,7 +78,8 @@ module.exports = function (config) {
         proxies:  {},
 
         junitReporter: {
-            outputFile: 'reports/test-results.xml'
+            outputDir: 'reports/unit/',
+            outputFile: 'result.xml'
         },
 
         appserver: localConf.appserver

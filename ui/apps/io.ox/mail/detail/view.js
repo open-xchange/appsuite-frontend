@@ -396,9 +396,21 @@ define('io.ox/mail/detail/view', [
         index: 100,
         draw: function (baton) {
 
-            baton.content = content.get(baton.data, {}, baton.flow).content;
-            var $content = $(baton.content), resizing = 0,
-                isHtml = !$content.hasClass('plain-text');
+            var contentData = content.get(baton.data, {}, baton.flow),
+                $content = $(contentData.content),
+                resizing = 0,
+                forwardEvent = function (e) {
+                    // forward events in iframe to parent window, set iframe as target, so closest selectors etc work as expected (needed in sidepopups for example)
+                    e.target = this[0];
+                    this.trigger(e);
+                }.bind(this);
+
+            baton.content = contentData.content;
+
+            // wrap plain text in body node, so we can treat plain text mails and html mails the same (replace vs append)
+            if (contentData.isText) {
+                $content = $('<body>').append($content);
+            }
 
             // inject content and listen to resize event
             this.on('load', function () {
@@ -408,24 +420,27 @@ define('io.ox/mail/detail/view', [
                     // This should be replaced with language detection in the future (https://github.com/wooorm/franc)
                     var html = $(this.contentDocument).find('html');
                     if (!html.attr('lang')) html.attr('lang', $('html').attr('lang'));
-                    // trigger click on body when theres a click in the iframe -> to close dropdownscorrectly etc
-                    html.on('click', function () {
-                        $('body').trigger('click');
-                    });
+                    // trigger click or keydown on iframe node to forward events properly -> to close none smart dropdowns correctly or jump to the listview on esc
+                    html.on('keydown click', forwardEvent);
+
+                    if (_.device('ios && smartphone')) html.addClass('ios smartphone');
 
                     $(this.contentDocument).find('head').append('<style>' + contentStyle + '</style>');
+                    $(this.contentDocument).find('body').replaceWith($content);
 
-                    if (isHtml) {
-                        $(this.contentDocument).find('body').replaceWith($content);
-                    } else {
-                        $(this.contentDocument).find('body').append($content);
-                    }
                     $(this.contentWindow)
                         .on('complete toggle-blockquote', { iframe: $(this) }, onImmediateResize)
                         .on('resize', { iframe: $(this) }, onWindowResize)
+                        .on('dragover drop', false)
                         .trigger('resize');
                 }.bind(this));
             });
+
+            // simple helper to enable resizing on
+            // browser resize events
+            function onBrowserResize() {
+                resizing = 0;
+            }
 
             function onImmediateResize(e) {
                 // scrollHeight consdiers paddings, border, and margins
@@ -451,8 +466,12 @@ define('io.ox/mail/detail/view', [
                 $(this).off().trigger('complete');
             });
 
+            // react on browser resize
+            $(window).on('resize', onBrowserResize);
+
             // remove event handlers on dispose
             this.on('dispose', function () {
+                $(window).off('resize', onBrowserResize);
                 $(this.contentWindow).off();
             });
         }

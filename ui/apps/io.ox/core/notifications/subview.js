@@ -60,7 +60,7 @@ define('io.ox/core/notifications/subview', [
                         desktopNotifications.show(specific(model));
                     });
                 }
-                var node = $('<li class="item" tabindex="0">');
+                var node = $('<li class="item" tabindex="0" role="menuitem">');
                 if (view.model.get('showHideSingleButton')) {
                     node.append(
                         $('<div class="notification-item-actions">').append(
@@ -85,9 +85,11 @@ define('io.ox/core/notifications/subview', [
                     var requestData = _(items.slice(0, max)).map(function (obj) {
                         return obj.attributes;
                     });
-                    api.getList(requestData).then(function (data) {
+                    // no cache here, or we might show reminders for deleted requests
+                    api.getList(requestData, false).then(function (data) {
                         for (i = 0; i < max && items[i]; i++) {
-                            drawItem(data[i], items[i]);
+                            // some list requests return null for items that were deleted meanwhile (request doesn't fail so the other data can still be used). Dont show these
+                            if (data[i]) drawItem(data[i], items[i]);
                         }
                         itemNode.idle();
                     }, function () {
@@ -364,6 +366,7 @@ define('io.ox/core/notifications/subview', [
                 }
                 return true;
             }
+            return false;
         },
         addNotifications: function (items, silent) {
 
@@ -402,7 +405,7 @@ define('io.ox/core/notifications/subview', [
 
                 _(items).each(function (item) {
                     if (item.get) item = item.attributes;
-                    self.$el.find('[data-cid="' + _.cid(item) + '"]').remove();
+                    self.$el.find('[data-cid="' + _.cid(item) + '"],[model-cid="' + _.cid(item) + '"]').remove();
                 });
 
                 if (this.collection.size() === 0) {
@@ -414,6 +417,8 @@ define('io.ox/core/notifications/subview', [
             this.collection.remove(items, { silent: silent });
         },
         resetNotifications: function (items, silent) {
+            // prevent [undefined] arrays
+            items = items || [];
             if (!_.isArray(items)) {
                 items = [].concat(items);
             }
@@ -437,7 +442,6 @@ define('io.ox/core/notifications/subview', [
 
             var cid = e.which === 13 ? String($(e.currentTarget).data('cid')) : String($(e.currentTarget).parent().data('cid')),
                 api = this.model.get('api'),
-                fullModel = this.model.get('fullModel'),
                 sidepopupNode = notifications.sidepopupNode,
                 getCid = this.model.get('useApiCid') ? this.model.get('api').cid : _.cid,
                 self = this;
@@ -448,7 +452,7 @@ define('io.ox/core/notifications/subview', [
             } else {
                 notifications.closeSidepopup();
                 var data;
-                if (api && !fullModel) {
+                if (api) {
                     data = api.get(_.extend({}, getCid(cid), { unseen: true }));
                 } else {
                     data = this.collection.get(getCid(cid)).attributes;

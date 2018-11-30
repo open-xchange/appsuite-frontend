@@ -15,7 +15,7 @@
     .inline-yell {
         display: inline-block;
         float: right;
-        color: #447f00;
+        color: #437d00;
         font-weight: 500;
         margin: 0 8px;
         padding-top: 6px;
@@ -137,19 +137,21 @@
     .contenteditable-editor {
         position: relative;
         z-index: 3;
+        margin-bottom: 16px;
     }
 
-    .editable-toolbar {
-        position: relative;
-        height: 100%;
+    .toolbar-fixed > .mce-tinymce > .mce-stack-layout > .mce-top-part {
+        position: fixed;
+        min-height: 34px;
+        z-index: 1;
+        border-bottom: 1px solid #ccc;
+        opacity: 0.9;
 
-        &.fixed{
-            position: fixed;
-            min-height: 34px;
-            z-index: 1;
-            border-bottom: 1px solid #ccc;
-            opacity: 0.9;
-        }
+        .width-xs.maximized & { width: 1028px; }
+        .width-xs:not(.maximized) & { width: 608px; }
+    }
+
+    .mce-tinymce > .mce-stack-layout > .mce-top-part {
 
         input.file-input:hover { cursor: pointer; }
 
@@ -159,68 +161,11 @@
 
     }
 
-    textarea.editable,
-    .mce-content-body.editable {
-        background: white;
-        border: 1px solid #ccc;
-        padding: 13px;
-    }
-
-    .mce-content-body.editable {
-
-        // For large mails e.g. newsletters
-        overflow-x: auto;
-
-        &.mce-edit-focus {
-            outline: 0;
-            .form-control-focus();
-        }
-
-        &.simple-mail {
-            img {
-                max-width: 100%;
-                height: auto!important;
-            }
-        }
-
-        // Force aspect ratio resizing of images in tinymce
-        img.aspect-ratio {
-            height: auto!important;
-        }
-
-        a {
-            color: #00a0cd;
-            text-decoration: none;
-            &:hover {
-                text-decoration: underline;
-            }
-        }
-
-        table {
-            border: 0 none;
-            line-height: normal;
-
-            td, th { padding: 8px; }
-        }
-
-        div { word-wrap: break-word; }
-
-        blockquote {
-            font-size: 14px;
-            border-left: 1px solid #08C;
-            padding: 7px 0 7px 19px;
-            margin: 1em 0 1em 0;
-            opacity: 0.5;
-
-            blockquote { opacity: 1.0; }
-        }
-
-    }
-
     .plain-text {
         width: 100%;
         border: 1px solid #ccc;
         padding: 18px 21px;
+        margin-bottom: 12px;
 
         -webkit-font-feature-settings: "liga" 0;
         font-feature-settings: "liga" 0;
@@ -282,7 +227,18 @@
         .toggle-details { white-space: nowrap; }
         // pull right
         .toggle-mode { margin-left: auto; }
-
+        .dropdown {
+            padding-left: 32px;
+            margin-top: 6px;
+            .image-resize-lable {
+                margin-right: 8px;
+                @media (max-width: @smartphone-breakpoint) { display: none; }
+            }
+        }
+        .mail-size{
+            margin-top: 8px;
+            display: block;
+        }
     }
 
     .attachments .share-attachments {
@@ -315,11 +271,86 @@
     }
 }
 
+.io-ox-mail-compose span#autocomplete {
+    color: black;
+    background-color: @grey-light;
+}
+
+.mentions-autocomplete {
+    position: absolute;
+    top:0;
+    left:0;
+    display: block;
+    z-index: 1000;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    list-style: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,0.2);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    background-clip: padding-box;
+    height: initial;
+    border-radius: 0;
+
+    .list-item {
+        padding: 11px 15px;
+        border-bottom: 1px transparent;
+    }
+
+    .list-item:hover {
+        background: #f7f7f7;
+    }
+
+    & > .list-item:last-child {
+        margin-bottom: 0;
+    }
+
+    & > .active {
+        color: #fff;
+        text-decoration: none;
+        background-color: #0081c2;
+    }
+
+    &:before {
+        content: '';
+        display: inline-block;
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-bottom: 7px solid #ccc;
+        border-bottom-color: rgba(0, 0, 0, 0.2);
+        position: absolute;
+        top: -7px;
+        left: 9px;
+    }
+
+    &:after {
+        content: '';
+        display: inline-block;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 6px solid white;
+        position: absolute;
+        top: -6px;
+        left: 10px;
+    }
+
+}
+
 .smartphone {
     .io-ox-mail-compose {
         padding-top: 8px;
         padding: 0;
         margin:0;
+
+        .contenteditable-editor {
+            margin-bottom: 0;
+            .mce-panel.mce-edit-area {
+                border: 0 !important;
+            }
+        }
 
         textarea {
             padding:8px 16px;
@@ -403,7 +434,7 @@
             }
 
             .twitter-typeahead {
-                width: 9em;
+                width: 7em;
             }
 
             .form-control {

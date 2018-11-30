@@ -37,6 +37,12 @@ define('io.ox/core/export', [
         return list;
     }
 
+    var references = {
+        'calendar': 'ox.appsuite.user.sect.calendar.manage.export.html',
+        'contacts': 'ox.appsuite.user.sect.contacts.manage.export.html',
+        'tasks':    'ox.appsuite.user.sect.tasks.manage.export.html'
+    };
+
     return {
 
         /**
@@ -55,7 +61,8 @@ define('io.ox/core/export', [
                 model: new Backbone.Model(),
                 // custom
                 module: module,
-                params: params
+                params: params,
+                help: references[module]
             }).extend({
                 'setup': function (baton) {
                     // apply default value
@@ -74,15 +81,6 @@ define('io.ox/core/export', [
                             //#. Warning dialog
                             //#. %1$s is file format for data export
                             gt('Format: %1$s', _.first(baton.formats).label)
-                        )
-                    );
-                },
-                'calendar-hint': function () {
-                    if (this.options.module !== 'calendar') return;
-
-                    this.$body.append(
-                        $('<div class="help-block">').text(
-                            gt('Please note that other participants are removed on calendar export.')
                         )
                     );
                 },

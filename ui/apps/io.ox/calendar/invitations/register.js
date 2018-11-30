@@ -98,6 +98,7 @@ define('io.ox/calendar/invitations/register', [
             this.util = options.util;
             this.settings = options.settings;
             this.AlarmsView = options.AlarmsView;
+            this.showDeeplinks = options.showDeeplinks;
 
             if (this.AlarmsView) {
                 this.alarmsModel = new Backbone.Model(this.model.toJSON());
@@ -123,7 +124,7 @@ define('io.ox/calendar/invitations/register', [
                 new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
                     popup.busy();
                     self.getFullModel().done(function (fullModel) {
-                        popup.idle().append(viewDetail.draw(fullModel, { isExternalUser: parseInt(self.mailModel.get('account_id'), 10) !== 0, noFolderCheck: true }));
+                        popup.idle().append(viewDetail.draw(fullModel, { isExternalUser: parseInt(self.mailModel.get('account_id'), 10) !== 0, noFolderCheck: true, deeplink: !!self.showDeeplinks }));
                     });
                 });
             });
@@ -245,6 +246,7 @@ define('io.ox/calendar/invitations/register', [
 
         getActions: function () {
             if (this.getConfirmationStatus() === 'ACCEPTED') return [];
+            if (this.model.hasFlag('event_cancelled')) return [];
             return ['decline', 'tentative', 'accept'];
         },
 
@@ -546,8 +548,13 @@ define('io.ox/calendar/invitations/register', [
                         self.$el.idle();
                         self.render();
                     }
-                }, function fail() {
+                }, function fail(error) {
                     self.$el.idle().hide();
+                    // unsupported char in comment
+                    if (error && error.code === 'CAL-5071') {
+                        notifications.yell(error);
+                        return;
+                    }
                     notifications.yell('error', gt('Failed to update confirmation status; most probably the appointment has been deleted.'));
                 });
             }
@@ -823,6 +830,11 @@ define('io.ox/calendar/invitations/register', [
             return { module: module, folder_id: reminder[1], id: reminder[0] };
         },
 
+        getType: function () {
+            var headers = this.model.get('headers') || {};
+            return headers['X-Open-Xchange-Type'];
+        },
+
         hasEvent: function () {
             var cid = this.getCid();
             if (!cid) return false;
@@ -837,6 +849,13 @@ define('io.ox/calendar/invitations/register', [
                 return api.resolve(cid.id, true).then(function (model) {
                     if (self.disposed) return;
 
+                    if (self.getType() === 'Deleted') {
+                        // make sure, that event_cancelled flag is added if it has been deleted
+                        // this is necessary, when the resolve requests returns a recurrence master whereas just a single occurence has been deleted
+                        model = model.clone();
+                        model.set('flags', ['event_cancelled'].concat(model.get('flags')));
+                    }
+
                     var intView = new InternalAppointmentView({
                         model: model,
                         module: 'calendar',
@@ -845,7 +864,8 @@ define('io.ox/calendar/invitations/register', [
                         settings: calendarSettings,
                         AlarmsView: AlarmsView,
                         yell: yell,
-                        mailModel: self.model
+                        mailModel: self.model,
+                        showDeeplinks: true
                     });
 
                     self.$el.append(

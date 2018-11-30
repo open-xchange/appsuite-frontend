@@ -20,7 +20,14 @@ define('io.ox/chat/views/fileList', ['io.ox/backbone/views/disposable', 'io.ox/c
         className: 'files abs',
 
         initialize: function () {
-            this.collection = new Backbone.Collection(data.files);
+
+            this.collection = data.files;
+
+            this.listenTo(this.collection, {
+                'add': this.onAdd
+            });
+
+            this.collection.fetch();
         },
 
         render: function () {
@@ -44,13 +51,19 @@ define('io.ox/chat/views/fileList', ['io.ox/backbone/views/disposable', 'io.ox/c
         renderItem: function (model, index) {
             return $('<li>').append(
                 $('<button type="button" data-cmd="show-file">').attr('data-index', index)
-                .css('backgroundImage', 'url(' + model.get('url') + ')')
+                .css('backgroundImage', 'url(' + model.getThumbnailUrl() + ')')
             );
         },
 
         getNode: function (model) {
             return this.$('[data-id="' + $.escape(model.get('id')) + '"]');
-        }
+        },
+
+        onAdd: _.debounce(function (model, collection, options) {
+            this.$('ul').prepend(
+                options.changes.added.map(this.renderItem, this)
+            );
+        }, 1)
     });
 
     return FileList;

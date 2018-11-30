@@ -77,7 +77,7 @@ define('plugins/administration/groups/settings/pane', [
 
             // respond to model change
             this.listenTo(groupAPI.collection, 'change', function (model) {
-                this.$('.detail-pane h1').text(model.get('display_name'));
+                this.$('.detail-pane h2').text(model.get('display_name'));
             });
 
             // toolbar

@@ -149,7 +149,6 @@ define('io.ox/onboarding/clients/config', [
             scenarios: {
                 // combinations
                 'eassync':          { icon: ['fa-envelope-o', 'fa-calendar', 'fa-users'] },
-                'oxupdaterinstall': { icon: ['fa-envelope-o', 'fa-calendar', 'fa-users'] },
                 'emclientinstall':  { icon: ['fa-envelope-o', 'fa-calendar', 'fa-users'] },
                 // mail
                 'mailappinstall':   { icon: 'fa-envelope-o' },

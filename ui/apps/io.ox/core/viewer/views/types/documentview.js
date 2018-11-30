@@ -460,7 +460,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 tapHandler: this.onTap.bind(this),
                 pinchHandler: this.onPinch.bind(this)
             });
-            this.$el.empty().append(this.documentContainer);
+            this.$el.empty();
             return this;
         },
 
@@ -576,6 +576,22 @@ define('io.ox/core/viewer/views/types/documentview', [
         },
 
         /**
+         * Clears the timer that is used to show a message in case it takes very long to show the pdf.
+         */
+        clearPdfDocumentWaitMessage: function () {
+            clearTimeout(this.PdfDocumentWaitTimer);
+        },
+
+        /**
+         * Creates a timer to show a message in case it takes very long to show the pdf.
+         */
+        startPdfDocumentWaitMessage: function () {
+            this.PdfDocumentWaitTimer = window.setTimeout(function () {
+                this.displayDownloadNotification('', 'io-ox-busy');
+            }.bind(this), 5000);
+        },
+
+        /**
          * "Shows" the document (Office, PDF) with the PDF.js library.
          *
          * @param {Object} options
@@ -623,6 +639,9 @@ define('io.ox/core/viewer/views/types/documentview', [
                     pdfDocumentLoadError.call(this, pageCount);
                     return;
                 }
+
+                // attach the document container to the slide
+                this.$el.empty().append(this.documentContainer);
 
                 // the stored scroll position
                 var lastScrollPosition = this.getInitialScrollPosition(this.model.get('id')) || 0;
@@ -708,8 +727,16 @@ define('io.ox/core/viewer/views/types/documentview', [
             var params = (options && options.version) ? { version: options.version } : null;
             var documentUrl = DocConverterUtils.getEncodedConverterUrl(this.model, params);
 
+            // clear the slide content
+            this.$el.empty();
+
             // create a pdf document object with the document PDF url
             this.pdfDocument = new PDFDocument(documentUrl);
+
+            // always clear first to be sure just one timer exists (case switch slide fast forward/backward)
+            this.clearPdfDocumentWaitMessage();
+            // shows a message when it takes a while to show the document in the viewer
+            this.startPdfDocumentWaitMessage();
 
             // display loading animation
             this.$el.addClass('io-ox-busy');
@@ -722,6 +749,13 @@ define('io.ox/core/viewer/views/types/documentview', [
                 // the document is NOT completely loaded yet! Often further chunks are downloaded during page rendering.
                 Util.logPerformanceTimer('DocumentView:show_getLoadPromise_done_handler');
             });
+
+            pdfLoadPromise.always(
+                // using anon function her as a wrapper to get better traces for debugging
+                function () {
+                    this.clearPdfDocumentWaitMessage();
+                }.bind(this)
+            );
 
             pdfLoadPromise.then(
                 pdfDocumentLoadSuccess.bind(this),
@@ -907,33 +941,29 @@ define('io.ox/core/viewer/views/types/documentview', [
 
         /**
          * Unloads the document slide by destroying the pdf view and model instances
-         *
-         * @param {Boolean} dispose
-         *  If true also Swiper slide duplicates will be unloaded.
          */
-        unload: function (dispose) {
+        unload: function () {
 
-            // never unload slide duplicates
-            if (!this.$el.hasClass('swiper-slide-duplicate') || dispose) {
-                if (this.pageLoader) {
-                    this.pageLoader.abortQueuedRequests();
-                    this.cancelMorePagesTimer();
-                    this.pageLoader.destroy();
-                    this.pageLoader = null;
-                }
-                if (this.pdfView) {
-                    this.pdfView.destroy();
-                    this.pdfView = null;
-                }
-                if (this.pdfDocument) {
-                    this.pdfDocument.destroy();
-                    this.pdfDocument = null;
-                }
-                // clear document container content
-                this.$el.find('div.document-container').empty();
-                // save disposed status
-                this.disposed = dispose;
-                this.isPrefetched = false;
+            if (this.pageLoader) {
+                this.pageLoader.abortQueuedRequests();
+                this.cancelMorePagesTimer();
+                this.pageLoader.destroy();
+                this.pageLoader = null;
+            }
+            if (this.pdfView) {
+                this.pdfView.destroy();
+                this.pdfView = null;
+            }
+            if (this.pdfDocument) {
+                this.pdfDocument.destroy();
+                this.pdfDocument = null;
+            }
+            // clear document container content
+            this.$el.empty();
+            this.isPrefetched = false;
+
+            if (this.PdfDocumentWaitTimer) {
+                this.clearPdfDocumentWaitMessage();
             }
 
             return this;
@@ -963,6 +993,8 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         disposeView: function () {
             this.unload(true);
+            // save disposed status
+            this.disposed = true;
             this.$el.off();
             if (this.thumbnailsView) {
                 this.thumbnailsView.disposeView();

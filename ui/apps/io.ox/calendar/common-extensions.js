@@ -22,9 +22,16 @@ define('io.ox/calendar/common-extensions', [
 
     'use strict';
 
-    function getTitle(baton) {
-        var data = baton.data.event || baton.data;
-        return _.isUndefined(data.summary) ? gt('Private') : (data.summary || '\u00A0');
+    function getTitle(baton, options) {
+        options = options || {};
+        var data = baton.data.event || baton.data,
+            result = _.isUndefined(data.summary) ? gt('Private') : (data.summary || '\u00A0');
+
+        if (options.parse) {
+            result = coreUtil.urlify(result);
+        }
+
+        return result;
     }
 
     var extensions = {
@@ -34,7 +41,7 @@ define('io.ox/calendar/common-extensions', [
         },
 
         h1: function (baton) {
-            this.append($('<h1 class="subject clear-title">').text(getTitle(baton)));
+            this.append($('<h1 class="subject clear-title">').append(getTitle(baton, { parse: true })));
         },
 
         h2: function (baton) {
@@ -67,7 +74,7 @@ define('io.ox/calendar/common-extensions', [
             if (!baton.data.location) return;
 
             this.append(
-                $('<div class="location">').text(baton.data.location)
+                $('<div class="location">').append(coreUtil.urlify(baton.data.location).replace(/\n/g, '<br>'))
             );
         },
 

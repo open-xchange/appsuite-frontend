@@ -136,6 +136,32 @@ define('io.ox/core/viewer/views/toolbarview', [
                         });
                 }
             },
+            'autoplaystart': {
+                prio: _.device('desktop') ? 'hi' : 'lo',
+                mobile: 'lo',
+                label: gt('Slideshow'),
+                ref: TOOLBAR_ACTION_ID + '/autoplaystart',
+                customize: function () {
+                    this.addClass('viewer-toolbar-autoplay-start')
+                        .attr({
+                            'aria-label': gt('Run slideshow')
+                        });
+                }
+
+            },
+            'autoplaystop': {
+                prio: _.device('desktop') ? 'hi' : 'lo',
+                mobile: 'lo',
+                label: gt('Stop slideshow'),
+                ref: TOOLBAR_ACTION_ID + '/autoplaystop',
+                customize: function () {
+                    this.addClass('viewer-toolbar-autoplay-stop')
+                        .attr({
+                            'aria-label': gt('Stop slideshow')
+                        });
+                }
+
+            },
             'togglesidebar': {
                 prio: 'hi',
                 mobile: 'hi',
@@ -474,10 +500,10 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     new Action(TOOLBAR_ACTION_ID + '/popoutstandalone', {
         capabilities: 'infostore',
-        requires: function () {
-            var currentApp = ox.ui.App.getCurrentApp().getName();
-            // detail is the target of popoutstandalone, no support for mail attachments
-            return currentApp !== 'io.ox/mail/compose' && currentApp !== 'io.ox/files/detail';
+        requires: function (e) {
+            var model = e.baton.model;
+            // no support for mail attachments and no popout for already popped out viewer
+            return model.get('group') !== 'localFile' && !e.baton.context.standalone;
         },
         action: function (baton) {
             var fileModel;
@@ -495,11 +521,12 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/close', {
         action: function () {}
     });
+
     // define actions for the zoom function
     new Action(TOOLBAR_ACTION_ID + '/zoomin', {
         requires: function (e) {
             var model = e.baton.model;
-            return model.isOffice() || model.isPDF() || model.isText();
+            return model.isOffice() || model.isPDF() || model.isText() || model.isImage();
         },
         action: function (baton) {
             baton.context.onZoomIn();
@@ -508,7 +535,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/zoomout', {
         requires: function (e) {
             var model = e.baton.model;
-            return model.isOffice() || model.isPDF() || model.isText();
+            return model.isOffice() || model.isPDF() || model.isText() || model.isImage();
         },
         action: function (baton) {
             baton.context.onZoomOut();
@@ -535,6 +562,32 @@ define('io.ox/core/viewer/views/toolbarview', [
         }
     });
 
+    new Action(TOOLBAR_ACTION_ID + '/autoplaystart', {
+        requires: function (e) {
+            var model = e.baton.model;
+            var imageModelCount = model.collection.reduce(function (memo, model) { return (model.isImage() ? memo + 1 : memo); }, 0);
+            var autoplayStarted = e.baton.context.autoplayStarted;
+
+            return model.isImage() && !autoplayStarted && (imageModelCount >= 2);
+        },
+        action: function (baton) {
+            baton.context.onAutoplayStart();
+        }
+    });
+
+    new Action(TOOLBAR_ACTION_ID + '/autoplaystop', {
+        requires: function (e) {
+            var model = e.baton.model;
+            var imageModelCount = model.collection.reduce(function (memo, model) { return (model.isImage() ? memo + 1 : memo); }, 0);
+            var autoplayStarted = e.baton.context.autoplayStarted;
+
+            return model.isImage() && autoplayStarted && (imageModelCount >= 2);
+        },
+        action: function (baton) {
+            baton.context.onAutoplayStop();
+        }
+    });
+
     // define the Backbone view
     var ToolbarView = DisposableView.extend({
 
@@ -558,10 +611,14 @@ define('io.ox/core/viewer/views/toolbarview', [
             this.listenTo(this.viewerEvents, 'viewer:document:pagechange', this.onPageChange);
             // listen to sidebar toggle for document navigation positioning
             this.listenTo(this.viewerEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
+            // listen to autoplay events
+            this.listenTo(this.viewerEvents, 'viewer:autoplay:state:changed', this.onAutoplayRunningStateChanged);
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
             // give toolbar a standalone class if its in one
             this.$el.toggleClass('standalone', this.standalone);
+            // the current autoplay state
+            this.autoplayStarted = false;
         },
 
         /**
@@ -638,14 +695,22 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Publishes zoom-in event to the MainView event aggregator.
          */
         onZoomIn: function () {
-            this.viewerEvents.trigger('viewer:zoom:in');
+            if (this.model.isImage()) {
+                this.viewerEvents.trigger('viewer:zoom:in:swiper');
+            } else {
+                this.viewerEvents.trigger('viewer:zoom:in');
+            }
         },
 
         /**
          * Publishes zoom-out event to the MainView event aggregator.
          */
         onZoomOut: function () {
-            this.viewerEvents.trigger('viewer:zoom:out');
+            if (this.model.isImage()) {
+                this.viewerEvents.trigger('viewer:zoom:out:swiper');
+            } else {
+                this.viewerEvents.trigger('viewer:zoom:out');
+            }
         },
 
         /**
@@ -660,6 +725,32 @@ define('io.ox/core/viewer/views/toolbarview', [
                 return;
             }
             this.render(changedModel);
+        },
+
+        /**
+         * Handles when autoplay is started or stopped
+         *
+         * @param {Object} state
+         */
+        onAutoplayRunningStateChanged: function (state) {
+            if (!state) { return; }
+
+            this.autoplayStarted = state.autoplayStarted;
+            this.onModelChange(this.model);
+        },
+
+        /**
+         * Publishes autoplay event to the MainView event aggregator.
+         */
+        onAutoplayStart: function () {
+            this.viewerEvents.trigger('viewer:autoplay:toggle', 'running');
+        },
+
+        /**
+         * Publishes autoplay event to the MainView event aggregator.
+         */
+        onAutoplayStop: function () {
+            this.viewerEvents.trigger('viewer:autoplay:toggle', 'pausing');
         },
 
         /**
@@ -697,9 +788,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                     toolbar = this.$el.attr({ role: 'toolbar', 'aria-label': gt('Viewer Toolbar') }),
                     pageNavigation = toolbar.find('.viewer-toolbar-navigation'),
                     isDriveFile = model.isFile(),
+                    toolbarTmp = toolbar.clone().empty(),
                     baton = Ext.Baton({
                         context: this,
-                        $el: toolbar,
+                        $el: toolbarTmp,
                         model: model,
                         models: isDriveFile ? [model] : null,
                         data: isDriveFile ? model.toJSON() : origData,
@@ -726,9 +818,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                         self.onModelChange(FilesAPI.pool.get('detail').get(file.id));
                     }
                 });
+
                 // set device type
                 Util.setDeviceClass(this.$el);
-                toolbar.empty().append(pageNavigation);
                 // enable only the link set for the current app
                 _.each(toolbarPoint.keys(), function (id) {
                     if (id === appName) {
@@ -753,8 +845,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                         );
                     }
                 }));
-                var ret = toolbarPoint.invoke('draw', toolbar, baton);
+
+                var ret = toolbarPoint.invoke('draw', toolbarTmp, baton);
                 $.when.apply(self, ret.value()).done(function () {
+                    toolbar.empty().append(pageNavigation).append(toolbarTmp.children());
                     self.currentlyDrawn = null;
                     if (self.nextToDraw) {
                         var temp = self.nextToDraw;

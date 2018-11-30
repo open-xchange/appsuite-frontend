@@ -66,7 +66,7 @@ define('plugins/portal/oxdriveclients/register', [
 
             return $('<a class="shoplink" target="_blank" rel="noopener">').attr('href', url)
                 .append($img, $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), settings.get('productName'), platform)));
-        } else if (platform === 'windows' && settings.get('standaloneWindowsClient') === true) {
+        } else if (platform === 'windows') {
             return [
                 $('<i class="fa fa-download" aria-hidden="true">'),
                 $.txt(' '),
@@ -81,9 +81,31 @@ define('plugins/portal/oxdriveclients/register', [
         return $('<div class="appicon" aria-hidden="true">').css('background-image', settings.get('appIconAsBase64'));
     }
 
+    function getText(baton) {
+        var ul, platform = getPlatform(),
+            link = getShopLinkWithImage(platform, settings.get('linkTo/' + platform));
+
+        // simple fallback for typical wrong configured customer systems (OX Drive for windows)
+        if (settings.get('linkTo/' + platform) === '') {
+            console.warn('OX Drive for windows settings URL not present! Please configure "plugins/portal/oxdriveclients/linkTo/Windows" correctly');
+            // .# Points the user to a another place in the UI to download an program file. Variable will be the product name, ie. "OX Drive"
+            link = $('<p style="font-weight: bold">').text(gt.format(gt('Please use the "Connect your device" wizard to download %s'), settings.get('productName')));
+        }
+
+
+        ul = $('<ul class="oxdrive content pointer list-unstyled">').append(
+            $('<li class="first">').append(createAppIcon()),
+            $('<li class="message">').append($('<h3>').text(baton.message)),
+            $('<li class="teaser">').text(baton.teaser),
+            $('<li class="link">').append(link)
+        );
+
+        return ul;
+    }
+
     ext.point('io.ox/portal/widget/oxdriveclients').extend({
 
-        //.# Product name will be inserted to adevertise the product. I.e. "Get OX Drive" but meant in terms of gettings a piece of software from a online store
+        //.# Product name will be inserted to advertise the product. I.e. "Get OX Drive" but meant in terms of gettings a piece of software from a online store
         title: gt.format(gt('Get %s'), settings.get('productName')),
 
         load: function (baton) {
@@ -98,35 +120,18 @@ define('plugins/portal/oxdriveclients/register', [
         },
 
         preview: function (baton) {
-            var platform = getPlatform(),
-                link = getShopLinkWithImage(platform, settings.get('linkTo/' + platform));
-            this.append(
-                $('<ul class="oxdrive content pointer list-unstyled">').append(
-                    $('<li class="first">').append(createAppIcon()),
-                    $('<li class="message">').append($('<h4>').text(baton.message)),
-                    $('<li class="teaser">').text(baton.teaser),
-                    $('<li class="link">').append(link)
-                )
-            );
+            this.append(getText(baton));
         },
 
         draw: function (baton) {
-            var ul, platform = getPlatform(),
-                link = getShopLinkWithImage(platform, settings.get('linkTo/' + platform));
-            this.append(
-                ul = $('<ul class="oxdrive content pointer list-unstyled">').append(
-                    $('<li class="first">').append(createAppIcon()),
-                    $('<li class="message">').append($('<h3>').text(baton.message)),
-                    $('<li class="teaser">').text(baton.teaser),
-                    $('<li class="link">').append(link)
-                )
-            );
+            var ul = getText(baton);
+            this.append(ul);
             // all other platforms
             // .# Product name will be inserted, i.E. "Ox Drive is also available for other platforms". Platforms is meant as operating system like Windows
             ul.append($('<li>').append($('<h3>').text(gt.format(gt('%s is also available for other platforms:'), settings.get('productName')))));
 
             _.each(getAllOtherPlatforms(), function (os) {
-                ul.append($('<li class="link">').append(getShopLinkWithImage(os, settings.get('linkTo/' + os))));
+                if (settings.get('linkTo/' + os) !== '') ul.append($('<li class="link">').append(getShopLinkWithImage(os, settings.get('linkTo/' + os))));
             });
         }
     });

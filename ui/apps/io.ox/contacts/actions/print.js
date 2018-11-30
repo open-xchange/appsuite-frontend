@@ -30,9 +30,9 @@ define('io.ox/contacts/actions/print', [
         index: 100,
         render: function (baton) {
             var $preview, def = new $.Deferred();
-            this.$body.addClass('row').append(
+            this.$body.append(
                 $('<div class="col-xs-offset-1 col-xs-6">').append(
-                    $preview = $('<iframe tabindex="-1">')
+                    $preview = $('<iframe>')
                     .attr({
                         title: gt('Print preview'),
                         src: ox.base + '/print.html'

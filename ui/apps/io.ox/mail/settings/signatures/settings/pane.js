@@ -73,6 +73,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                         'height': '230px',
                         'overflow-y': 'auto'
                     },
+                    height: 230,
+                    plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
                     class: 'io-ox-signature-edit',
                     keepalive: mailAPI.keepalive,
                     scrollpane: container,

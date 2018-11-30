@@ -23,28 +23,30 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario.skip('Create appointment with all fields', async function (I) {
+Scenario('Create appointment with all fields', async function (I) {
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
 
-    I.selectFolder('All my appointments');
+    I.click('button[aria-label="Next Week"]');
+
     I.clickToolbar('New');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'test title');
     I.fillField('Location', 'test location');
+    I.selectOption('Visibility', 'Private');
 
-    //FIXME: checkOption does not work with custom checkboxes, working around but needs a better fix!
-    //I.checkOption('Private');
-    I.click({ css: '[data-extension-id="private_flag"] .toggle' });
+    I.click('[aria-label="Start time"]');
+    I.click('12:00 PM', 'fieldset[data-attribute="startDate"]');
 
     // // save
     var newAppointmentCID = await I.executeAsyncScript(function (done) {
-        require('io.ox/calendar/api').one('create', function (e, data) {
-            done(_.cid(data));
+        var api = require('io.ox/calendar/api');
+        api.once('create', function (data) {
+            done(api.cid(data));
         });
         // click here to make sure, that the create-listener is bound before the model is saved
         $('.io-ox-calendar-edit-window button[data-action="save"]').trigger('click');
@@ -55,39 +57,39 @@ Scenario.skip('Create appointment with all fields', async function (I) {
     // // 1) day view
     I.clickToolbar('View');
     I.click('Day');
-    I.waitForVisible('.week.dayview .appointment');
-    expect(await I.grabTextFrom(`.week.dayview .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
-    expect(await I.grabTextFrom(`.week.dayview .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
-    I.seeElement(`.week.dayview .appointment[data-cid="${newAppointmentCID}"] .private-flag`);
+    I.waitForVisible('.weekview-container.day .appointment');
+    expect(await I.grabTextFrom(`.weekview-container.day .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
+    expect(await I.grabTextFrom(`.weekview-container.day .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
+    I.seeElement(`.weekview-container.day .appointment[data-cid="${newAppointmentCID}"] .confidential-flag`);
     // // 2) week view
     I.clickToolbar('View');
     I.click('Week');
-    I.waitForVisible('.week.weekview .appointment');
-    expect(await I.grabTextFrom(`.week.weekview .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
-    expect(await I.grabTextFrom(`.week.weekview .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
-    I.seeElement(`.week.weekview .appointment[data-cid="${newAppointmentCID}"] .private-flag`);
+    I.waitForVisible('.weekview-container.week .appointment');
+    expect(await I.grabTextFrom(`.weekview-container.week .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
+    expect(await I.grabTextFrom(`.weekview-container.week .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
+    I.seeElement(`.weekview-container.week .appointment[data-cid="${newAppointmentCID}"] .confidential-flag`);
     // // 3) month view
     I.clickToolbar('View');
     I.click('Month');
-    I.waitForVisible('.month-view .appointment');
-    expect(await I.grabTextFrom(`.month-view .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
-    expect(await I.grabTextFrom(`.month-view .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
-    I.seeElement(`.month-view .appointment[data-cid="${newAppointmentCID}"] .private-flag`);
+    I.waitForVisible('.monthview-container .appointment');
+    expect(await I.grabTextFrom(`.monthview-container .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
+    expect(await I.grabTextFrom(`.monthview-container .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
+    I.seeElement(`.monthview-container .appointment[data-cid="${newAppointmentCID}"] .confidential-flag`);
     // // 4) list view
     I.clickToolbar('View');
     I.click('List');
-    I.waitForVisible(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"]`);
-    expect(await I.grabTextFrom(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"] .title`)).to.equal('test title');
-    expect(await I.grabTextFrom(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"] .location`)).to.equal('test location');
-    I.seeElement(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"] .private-flag`);
+    I.waitForVisible(`.calendar-list-view li[data-cid^="${newAppointmentCID}"]`);
+    expect(await I.grabTextFrom(`.calendar-list-view li[data-cid^="${newAppointmentCID}"] .title`)).to.equal('test title');
+    expect(await I.grabTextFrom(`.calendar-list-view li[data-cid^="${newAppointmentCID}"] .location`)).to.equal('test location');
+    I.seeElement(`.calendar-list-view li[data-cid^="${newAppointmentCID}"] .private-flag`);
 
     // // delete the appointment thus it does not create conflicts for upcoming appointments
-    I.click(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"]`);
+    I.click(`.calendar-list-view li[data-cid^="${newAppointmentCID}"]`);
     I.waitForVisible('[data-action="delete"]');
     I.click('Delete');
     I.waitForVisible('.io-ox-dialog-popup .modal-body');
     I.click('Delete', '.io-ox-dialog-popup');
-    I.waitForDetached(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"]`);
+    I.waitForDetached(`.calendar-list-view li[data-cid^="${newAppointmentCID}"]`);
 
     I.logout();
 
@@ -105,15 +107,15 @@ Scenario('fullday appointments', async function (I) {
     I.fillField('Subject', 'Fullday test');
     I.click('All day', '.checkbox > label');
 
-    I.click({ css: '[data-attribute="startDate"] input' });
+    I.click('~Date (M/D/YYYY)');
     const { start, end } = await I.executeAsyncScript(function (done) {
         done({
-            start: `.date-picker[data-attribute="startDate"] .date[id="date_${moment().startOf('week').add('1', 'day').format('l')}"]`,
-            end: `.date-picker[data-attribute="endDate"] .date[id="date_${moment().endOf('week').subtract('1', 'day').format('l')}"]`
+            start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('1', 'day').format('l')}"]`,
+            end: `.date-picker[data-attribute="endDate"] .date[id$="_${moment().endOf('week').subtract('1', 'day').format('l')}"]`
         });
     });
     I.click(start);
-    I.click({ css: '[data-attribute="endDate"] input' });
+    I.click('~Date (M/D/YYYY)', '.dateinput[data-attribute="endDate"]');
     I.click(end);
 
     I.click('Create');
@@ -125,7 +127,7 @@ Scenario('fullday appointments', async function (I) {
     });
     I.wait(0.5);
 
-    I.click('Fullday test', '.weekview .appointment');
+    I.click('Fullday test', '.weekview-container.week .appointment');
 
     I.see('5 days', '.io-ox-sidepopup .calendar-detail');
 

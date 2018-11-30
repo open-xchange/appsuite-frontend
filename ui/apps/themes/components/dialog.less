@@ -69,7 +69,7 @@
     .modal-header {
         position: relative;
 
-        h2, h3, h4 {
+        h1, h2, h3, h4 {
             font-size: 18px;
             line-height: 24px;
             margin: 0;
@@ -77,7 +77,7 @@
         }
 
         &.help {
-            h2, h3, h4 { margin-right: 35px; }
+            h1, h2, h3, h4 { margin-right: 35px; }
         }
 
         .io-ox-context-help {
@@ -98,6 +98,11 @@
         &.max-height-300 { max-height: 300px; }
         &.max-height-350 { max-height: 350px; }
 
+        h1 {
+            font-size: 18px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
     }
 
     &.zero-padding {
@@ -444,6 +449,12 @@
         margin-bottom: 4px;
     }
 
+    &.zero-padding {
+        .modal-body {
+            padding: 0;
+        }
+    }
+
     .modal-header, .modal-body, .modal-footer {
         padding: 16px;
         flex-grow: 0;
@@ -497,7 +508,7 @@
             margin-right: 40px;
         }
         .io-ox-context-help {
-            padding: 16px 16px 0 16px;
+            margin: 16px 16px 0 16px;
             position: absolute;
             top: 0;
             right: 0;

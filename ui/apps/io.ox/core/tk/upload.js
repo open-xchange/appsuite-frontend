@@ -13,11 +13,12 @@
 
 define('io.ox/core/tk/upload', [
     'io.ox/core/event',
+    'io.ox/core/extensions',
     'io.ox/core/notifications',
-    'gettext!io.ox/core',
     'io.ox/core/folder/api',
-    'io.ox/core/api/filestorage'
-], function (Events, notifications, gt, folderAPI, filestorageAPI) {
+    'io.ox/core/api/filestorage',
+    'gettext!io.ox/core'
+], function (Events, ext, notifications, folderAPI, filestorageAPI, gt) {
 
     'use strict';
 
@@ -29,6 +30,152 @@ define('io.ox/core/tk/upload', [
         ) &&
         (_(e.originalEvent.dataTransfer.types).contains('Files') || _(e.originalEvent.dataTransfer.types).contains('application/x-moz-file'));
     }
+
+    var FloatingDropzone = Backbone.DisposableView.extend({
+
+        className: 'abs dropzone-overlay',
+
+        initialize: function (options) {
+            require(['less!io.ox/core/tk/upload']);
+            this.options = _.extend({ point: '', app: undefined }, options);
+            this.actions = [];
+
+            var point = ext.point(options.point);
+            point.each(function (ext) {
+                if (point.isEnabled(ext.id)) this.actions.push(ext);
+            }.bind(this));
+
+            // overlay toggling based on window/document events
+            this.listenTo(ox.dom, 'dragover', _.partial(this.toggleOverlay, true));
+            this.listenTo(ox.dom, 'dragleave', _.partial(this.toggleOverlay, false));
+            this.listenTo(ox.dom, 'drop', _.partial(this.toggleOverlay, false));
+            this.listenTo(ox.dom, 'mouseout', _.partial(this.toggleOverlay, false));
+        },
+
+        events: {
+            'dragenter': 'onDragEnter',
+            'dragover':  'onDragOver',
+            'dragleave': 'onDragLeave',
+            'drop':      'onDrop'
+        },
+
+        toggleOverlay: function (state, e) {
+            // always hide when mouse leaves browser
+            if (e.type !== 'mouseout' && this.$el.hasClass('locked')) return;
+            this.$el.toggleClass('visible', state).css(this.getDimensions());
+        },
+
+        getDimensions: function () {
+            var node = this.$el.closest('.scrollable'),
+                top = node.scrollTop(),
+                height = node.outerHeight(),
+                innerheight = node.children().outerHeight();
+
+            return {
+                'top': top,
+                'bottom': Math.max(0, innerheight - height - top)
+            };
+        },
+
+        show: function () {
+            this.$('.dropzone-floating')
+                .addClass('visible');
+            this.$el.closest('.scrollable').addClass('scrollable-disabled');
+        },
+
+        hide: function () {
+            this.$el.removeClass('locked');
+            this.$('.dropzone-floating').removeClass('visible');
+            this.$el.closest('.scrollable').removeClass('scrollable-disabled');
+        },
+
+        render: function () {
+            this.$el.append(
+                $('<div class="abs dropzone-floating">').append(
+                    _.map(this.actions, function (action) {
+                        return $('<div class="dropzone-floating-action dropzone">')
+                            .attr({ 'data-id': action.id })
+                            .append(
+                                $('<span class="dndignore">').html(action.label)
+                            );
+                    })
+                )
+            );
+            return this;
+        },
+
+        onDragEnter: function (e) {
+            // IE11 support regarding missing pointer-events support
+            var target = $(e.target).hasClass('dndignore') ? $(e.target).parent() : $(e.target);
+            target.addClass('hover');
+            if ($(e.target).hasClass('dropzone-overlay')) {
+                $(e.target).addClass('locked');
+                return this.show();
+            }
+            if (!$(e.target).hasClass('dropzone-floating')) return;
+
+            // show?
+            if (!isFileDND(e) || ($('body > .io-ox-dialog-wrapper').length > 0)) return;
+            this.show();
+        },
+
+        onDragLeave: function (e) {
+            // IE11 support regarding missing pointer-events support
+            var target = $(e.target).hasClass('dndignore') ? $(e.target).parent() : $(e.target);
+            target.removeClass('hover');
+            _.defer(function () {
+                // are still some hovered elements left?
+                if (this.$('.hover').length || this.$el.hasClass('hover')) return;
+                this.hide();
+            }.bind(this));
+        },
+
+        onDrop: function (e) {
+            e = e.originalEvent || e;
+            var files = e.dataTransfer.files,
+                id = $(e.target).closest('.dropzone-floating-action').attr('data-id'),
+                action = _.findWhere(this.actions, { id: id }), i;
+
+            if (!action) return this.hide();
+
+            // Fix for Bug 26235
+            if (_.browser.Chrome) {
+                var items = e.dataTransfer.items;
+                for (i = 0; i < items.length; i++) {
+                    var entry = items[i].webkitGetAsEntry();
+                    if (entry.isDirectory) {
+                        notifications.yell('error', gt('Uploading folders is not supported.'));
+                        //removeOverlay(e);
+                        return false;
+                    }
+                }
+            }
+
+            // extensions that gets invoked for each single file
+            if (action.action) {
+                _.each(files, function (file) {
+                    action.action.apply(action.extension, [file].concat(this.options.app));
+                }.bind(this));
+            }
+
+            // extensions that gets invoked for all singles at once
+            if (action.multiple) {
+                action.multiple.apply(action.extension, [files].concat(this.options.app));
+            }
+
+            this.hide();
+            // Prevent regular event handling
+            return false;
+
+        },
+
+        onDragOver: function (e) {
+            e.preventDefault();
+            // Prevent regular event handling
+            return false;
+        }
+
+    });
 
     // options should contain a list of actions. The action id will be the first parameter to the event handlers
     // { actions: [
@@ -144,14 +291,15 @@ define('io.ox/core/tk/upload', [
                     return false;
                 },
                 dragover: function (e) {
-                    var origEvt = e.originalEvent,
-                        effectAllowed;
-                    try {
-                        effectAllowed = origEvt.dataTransfer.effectAllowed;
-                    } catch (e) {
-                        if (ox.debug) console.error(e);
-                    }
-                    origEvt.dataTransfer.dropEffect = effectAllowed === 'move' || effectAllowed === 'linkMove' ? 'move' : 'copy';
+                    // should be fixed meanwhile https://bugs.chromium.org/p/chromium/issues/detail?id=234931
+                    // var origEvt = e.originalEvent,
+                    //     effectAllowed;
+                    // try {
+                    //     effectAllowed = origEvt.dataTransfer.effectAllowed;
+                    // } catch (e) {
+                    //     if (ox.debug) console.error(e);
+                    // }
+                    // origEvt.dataTransfer.dropEffect = effectAllowed === 'move' || effectAllowed === 'linkMove' ? 'move' : 'copy';
 
                     clearTimeout(dragLeaveTimer);
                     e.preventDefault();
@@ -245,78 +393,34 @@ define('io.ox/core/tk/upload', [
             });
         };
 
+        // returned deferred resolves or get's rejected with a list of error messages
+        // TODO: unit test
         this.validateFiles = function (newFiles, options) {
-            if (!options.folder || delegate.type === 'importEML') return $.when(newFiles);
+            if (!options.folder || delegate.type === 'importEML') return $.when([]);
             return folderAPI.get(options.folder).then(function (folder) {
-                var deferred = $.when({});
-                if (folderAPI.is('infostore', folder) && filestorageAPI.isExternal(folder)) {
-                    // if it is an external infostore folder, get quota via the new quota api
-                    deferred = require(['io.ox/core/api/quota']).then(function (quotaAPI) {
-                        return quotaAPI.getAccountQuota(folder.account_id, 'filestorage').then(function (model) {
-                            return model.toJSON();
-                        });
-                    });
-                } else if (folderAPI.is('infostore', folder)) {
-                    // internal infostore folders need to calculate quota based on the settings
-                    deferred = require(['settings!io.ox/core']).then(function (settings) {
-                        var properties = settings.get('properties') || {};
-                        return {
-                            use: properties.infostoreUsage,
-                            quota: properties.infostoreQuota,
-                            maxSize: properties.infostoreMaxUploadSize
-                        };
-                    });
-                } else {
-                    // no quota
-                    deferred = $.when({});
-                }
-
-                return deferred.then(function success(data) {
-                    var maxSize = data.maxSize || Number.MAX_VALUE;
-
-                    var validFiles = _(newFiles).filter(function (f) {
-                        return !(maxSize > 0 && f.size > maxSize);
-                    });
-
-                    // Bug-54765: Frontend no longer makes a quota check
-
-                    if (validFiles.length < newFiles.length) {
-                        require(['io.ox/core/strings'], function (strings) {
-                            if (newFiles.length - validFiles.length === 1) {
-                                var f = _.without.apply(_, [newFiles].concat(validFiles))[0];
-                                notifications.yell('error',
-                                    //#. %1$s the filename
-                                    //#. %2$s the maximum file size
-                                    gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', f.name, strings.fileSize(maxSize))
-                                );
-                            } else if (validFiles.length === 0) {
-                                notifications.yell('error',
-                                    //#. %1$s the maximum file size
-                                    gt('The files cannot be uploaded because each file exceeds the maximum file size of %1$s', strings.fileSize(maxSize))
-                                );
-                            } else {
-                                notifications.yell('warning',
-                                    //#. %1$s the maximum file size
-                                    gt('Some files cannot be uploaded because they exceed the maximum file size of %1$s', strings.fileSize(maxSize))
-                                );
-                            }
-                        });
-                    }
-
-                    return validFiles;
-                }, function fail() {
-                    throw newFiles;
+                // no quota check
+                if (!folderAPI.is('infostore', folder)) return $.when([]);
+                // quota check
+                return require(['io.ox/core/api/quota']).then(function (quotaAPI) {
+                    return quotaAPI.checkQuota(folder, newFiles);
                 });
+            }).then(function (errors) {
+                if (errors.length === 0) return [];
+                return require(['io.ox/core/tk/upload-problems']).then(function (Problems) {
+                    // show dialog and return rejected deferred with error list when dialog get's closed
+                    return Problems.report(newFiles, errors);
+                });
+            }, function (err) {
+                notifications.yell(err);
+                return $.Deferred().reject([err]);
             });
         };
 
         this.offer = function (file, options) {
             var self = this,
                 newFiles = [].concat(file);
-            this.validateFiles(newFiles, options).always(function (validFiles) {
-                validFiles = validFiles || newFiles;
-                if (validFiles.length === 0) return;
-                _(validFiles).each(function (file) {
+            this.validateFiles(newFiles, options).then(function () {
+                _(newFiles).each(function (file) {
                     files.push({ file: file, options: options });
                 });
                 self.queueChanged();
@@ -380,7 +484,8 @@ define('io.ox/core/tk/upload', [
                     return new DisabledDropZone(options.node);
                 }
                 return new DropZone(options);
-            }
+            },
+            FloatingDropzone: FloatingDropzone
         },
 
         createQueue: function (delegate) {

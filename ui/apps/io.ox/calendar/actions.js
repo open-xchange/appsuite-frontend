@@ -20,10 +20,10 @@ define('io.ox/calendar/actions', [
     'io.ox/core/print',
     'gettext!io.ox/calendar',
     'io.ox/core/capabilities',
-    'io.ox/calendar/actions/change-confirmation',
     'io.ox/core/folder/api',
-    'io.ox/core/yell'
-], function (ext, links, api, util, actions, print, gt, capabilities, changeStatus, folderAPI, yell) {
+    'io.ox/core/yell',
+    'settings!io.ox/calendar'
+], function (ext, links, api, util, actions, print, gt, capabilities, folderAPI, yell, settings) {
 
     'use strict';
 
@@ -74,7 +74,7 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/sendmail', {
         capabilities: 'webmail',
         requires: function (e) {
-            return e.baton.model && e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
+            return e.baton.model && e.baton.model.has('attendees');
         },
         action: function (baton) {
             util.resolveParticipants(baton.data).done(function (recipients) {
@@ -103,7 +103,7 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/invite', {
         capabilities: 'calendar',
         requires: function (e) {
-            return e.baton.model && e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1 && !capabilities.has('guest');
+            return e.baton.model && e.baton.model.has('attendees') && !capabilities.has('guest');
         },
         action: function (baton) {
             ox.load(['io.ox/calendar/actions/invite']).done(function (action) {
@@ -149,7 +149,7 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/delete', {
         requires: function (e) {
-            return e.collection.has('delete') && ((util.hasFlag(e.baton.data, 'organizer') || util.hasFlag(e.baton.data, 'attendee')));
+            return e.collection.has('delete') && ((util.hasFlag(e.baton.data, 'organizer') || util.hasFlag(e.baton.data, 'organizer_on_behalf') || util.hasFlag(e.baton.data, 'attendee') || util.hasFlag(e.baton.data, 'attendee_on_behalf')));
         },
         multiple: function (list) {
             ox.load(['io.ox/calendar/actions/delete']).done(function (action) {
@@ -169,16 +169,11 @@ define('io.ox/calendar/actions', [
         }
     });
 
-    new Action('io.ox/calendar/detail/actions/changestatus', {
+    new Action('io.ox/calendar/detail/actions/changeAlarms', {
         requires: function (e) {
             function cont(model, folderData) {
-
-                // in shared calendars the attendee means the calendar owner is attendee, we have to look if we have modify permission
-                if (folderAPI.is('shared', folderData)) {
-                    return e.collection.has('one', 'modify') && util.hasFlag(model, 'attendee');
-                }
-
-                return e.collection.has('one') && util.hasFlag(model, 'attendee');
+                // folder must support alarms. We don't show the action if the attendee flag is present (change status is shown instead). We only offer this for the birthday calendar for now
+                return e.collection.has('one') && !(util.hasFlag(model, 'attendee') || util.hasFlag(model, 'attendee_on_behalf')) && folderData['com.openexchange.calendar.provider'] === 'birthdays' && folderData.supported_capabilities.indexOf('alarms') !== -1;
             }
 
             var model = e.baton.model,
@@ -190,14 +185,55 @@ define('io.ox/calendar/actions', [
 
             // incomplete
             if (data && !model) {
-                return $.when(api.get(data), folderAPI.get(data.folder)).then(cont);
+                return $.when(api.get(data), folderAPI.get(data.folder)).then(cont, function () { return false; });
             }
-            return $.when(model, folderAPI.get(data.folder)).then(cont);
+            return $.when(model, folderAPI.get(data.folder)).then(cont, function () { return false; });
+        },
+        action: function (baton) {
+            // load & call
+            ox.load(['io.ox/calendar/actions/change-alarms']).done(function (action) {
+                action(baton.data);
+            });
+        }
+    });
+
+    new Action('io.ox/calendar/detail/actions/changestatus', {
+        requires: function (e) {
+            function cont(model) {
+                //no flags at all => public folder and user is no attendee. Not allowed to change attendee statuses
+                if (!util.hasFlag(model, 'accepted') && !util.hasFlag(model, 'declined') &&
+                    !util.hasFlag(model, 'tentative') && !util.hasFlag(model, 'needs_action')) return false;
+
+                // in shared calendars the attendee means the calendar owner is attendee, we have to look if we have modify permission
+                if (util.hasFlag(model, 'attendee_on_behalf') || util.hasFlag(model, 'organizer_on_behalf') && !(util.hasFlag(model, 'attendee') || util.hasFlag(model, 'organizer'))) {
+                    return e.collection.has('one', 'modify');
+                }
+
+                return e.collection.has('one') && (util.hasFlag(model, 'attendee') || util.hasFlag(model, 'organizer'));
+            }
+
+            var model = e.baton.model,
+                data = e.baton.data;
+
+            // cannot confirm appointments without proper id (happens when detail view was opened from mail invitation from external calendar)
+            // must use buttons in invitation mail instead
+            if (!data.id) return false;
+
+            // incomplete
+            if (data && !model) {
+                return $.when(api.get(data)).then(cont, function () { return false; });
+            }
+            return $.when(model).then(cont, function () { return false; });
         },
         action: function (baton) {
             // load & call
             ox.load(['io.ox/calendar/actions/acceptdeny']).done(function (action) {
-                action(baton.data, { noFolderCheck: baton.noFolderCheck });
+                // get full data if possible
+                api.get(baton.data).then(function (obj) {
+                    action(obj.toJSON(), { noFolderCheck: baton.noFolderCheck });
+                }, function () {
+                    action(baton.data, { noFolderCheck: baton.noFolderCheck });
+                });
             });
         }
     });
@@ -250,8 +286,8 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/export', {
         requires: 'some read',
         action: function (baton) {
-            require(['io.ox/core/export'], function (exportDialog) {
-                exportDialog.open('calendar', { list: [].concat(baton.data) });
+            require(['io.ox/core/download'], function (download) {
+                download.exported({ list: [].concat(baton.data), format: 'ical' });
             });
         }
     });
@@ -269,17 +305,8 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/print', {
         capabilities: 'calendar-printing',
-        requires: function (e) {
-            var win = e.baton.window;
-            if (_.device('!smartphone') && win && win.getPerspective) {
-                var pers = win.getPerspective();
-                return pers && pers.print;
-            }
-            return false;
-        },
         action: function (baton) {
-            var win = baton.app.getWindow(),
-                pers = win.getPerspective();
+            var pers = baton.app.perspective;
             if (pers.print) {
                 pers.print();
             }
@@ -324,16 +351,14 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/actions/today', {
         requires: function (baton) {
-            var p = baton.baton.app.getWindow().getPerspective();
-
-            return !!p && (p.name === 'month' || p.name === 'week');
+            var p = baton.baton.app.perspective;
+            return !!p && (p.getName() === 'month' || p.getName() === 'week');
         },
         action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
+            var p = baton.app.perspective;
 
-            if (p.view && p.view.setStartDate) {
-                p.view.setStartDate();
-                p.view.trigger('onRefresh');
+            if (p.setStartDate) {
+                p.setStartDate();
             } else if (p.gotoMonth) {
                 p.gotoMonth('today');
             }
@@ -348,15 +373,15 @@ define('io.ox/calendar/actions', [
         action: function (baton) {
             require(['io.ox/calendar/freetime/main', 'io.ox/core/api/user'], function (freetime, userAPI) {
                 userAPI.get().done(function (user) {
-                    var perspective = baton.app.getWindow().getPerspective(),
+                    var perspective = baton.app.perspective,
                         now = _.now(),
-                        startDate = perspective && perspective.name !== 'month' && perspective.getStartDate ? perspective.getStartDate() : now,
+                        startDate = perspective && perspective.model && perspective.model.get('date') ? perspective.model.get('date').valueOf() : now,
                         layout = perspective ? perspective.app.props.get('layout') : '';
 
                     // see if the current day is in the displayed week.
                     if (startDate < now && layout.indexOf('week:') === 0) {
                         // calculate end of week/workweek
-                        var max = startDate + 86400000 * (layout === 'week:workweek' ? 5 : 7);
+                        var max = startDate + 86400000 * (layout === 'week:workweek' ? settings.get('numDaysWorkweek') : 7);
                         if (now < max) {
                             startDate = now;
                         }
@@ -369,60 +394,30 @@ define('io.ox/calendar/actions', [
     });
 
     // Actions mobile
-    new Action('io.ox/calendar/actions/monthview/showNext', {
+    new Action('io.ox/calendar/actions/showNext', {
         requires: true,
         action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
+            var p = baton.app.perspective;
             if (!p) return;
-            p.gotoMonth('next');
+            p.setStartDate('next');
         }
     });
 
-    new Action('io.ox/calendar/actions/monthview/showPrevious', {
+    new Action('io.ox/calendar/actions/showPrevious', {
         requires: true,
         action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
+            var p = baton.app.perspective;
             if (!p) return;
-            p.gotoMonth('prev');
+            p.setStartDate('prev');
         }
     });
 
-    new Action('io.ox/calendar/actions/dayview/showNext', {
+    new Action('io.ox/calendar/actions/showToday', {
         requires: true,
         action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
+            var p = baton.app.perspective;
             if (!p) return;
-            p.view.setStartDate('next');
-            p.view.trigger('onRefresh');
-        }
-    });
-
-    new Action('io.ox/calendar/actions/dayview/showPrevious', {
-        requires: true,
-        action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
-            if (!p) return;
-            p.view.setStartDate('prev');
-            p.view.trigger('onRefresh');
-        }
-    });
-
-    new Action('io.ox/calendar/actions/dayview/showToday', {
-        requires: true,
-        action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
-            if (!p) return;
-            p.view.setStartDate();
-            p.view.trigger('onRefresh');
-        }
-    });
-
-    new Action('io.ox/calendar/actions/month/showToday', {
-        requires: true,
-        action: function (baton) {
-            var p = baton.app.getWindow().getPerspective();
-            if (!p) return;
-            p.gotoMonth('today');
+            p.setStartDate(moment());
         }
     });
 
@@ -444,11 +439,11 @@ define('io.ox/calendar/actions', [
         var appointment = api.reduce(baton.data),
             def = baton.noFolderCheck ? $.when() : folderAPI.get(appointment.folder);
 
-        def.done(function (folder) {
+        def.always(function (folder) {
 
             appointment.attendee = {
                 // act as folder owner in shared folder
-                entity: !baton.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
+                entity: !folder.error && !baton.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
                 partStat: accept ? 'ACCEPTED' : 'DECLINED'
             };
 
@@ -499,20 +494,15 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/actions/accept-appointment', {
         requires: function (e) {
             if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
-            if (!(util.hasFlag(e.baton.data, 'attendee') && !util.hasFlag(e.baton.data, 'accepted'))) return false;
-
-            var def = $.Deferred();
-            folderAPI.get(e.baton.data.folder).then(function (folderData) {
-                // in shared folders we also have to check if we have the permissin to modify
-                if (folderAPI.is('shared', folderData)) {
-                    def.resolve(e.collection.has('modify'));
-                }
-                def.resolve(true);
-            }, function () {
-                def.resolve(true);
-            });
-
-            return def;
+            if (util.hasFlag(e.baton.data, 'accepted')) return false;
+            //no flags at all => public folder and user is no attendee. Not allowed to change attendee statuses
+            if (!util.hasFlag(e.baton.data, 'accepted') && !util.hasFlag(e.baton.data, 'declined') &&
+                !util.hasFlag(e.baton.data, 'tentative') && !util.hasFlag(e.baton.data, 'needs_action')) return false;
+            // in shared folders we also have to check if we have the permissin to modify
+            if ((util.hasFlag(e.baton.data, 'attendee_on_behalf') || util.hasFlag(e.baton.data, 'organizer_on_behalf')) &&
+                !(util.hasFlag(e.baton.data, 'attendee') || util.hasFlag(e.baton.data, 'organizer')) &&
+                !e.collection.has('modify')) return false;
+            return true;
         },
         action: _.partial(acceptDecline, _, true)
     });
@@ -520,20 +510,15 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/actions/decline-appointment', {
         requires: function (e) {
             if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
-            if (!(util.hasFlag(e.baton.data, 'attendee') && !util.hasFlag(e.baton.data, 'declined'))) return false;
-
-            var def = $.Deferred();
-            folderAPI.get(e.baton.data.folder).then(function (folderData) {
-                // in shared folders we also have to check if we have the permissin to modify
-                if (folderAPI.is('shared', folderData)) {
-                    def.resolve(e.collection.has('modify'));
-                }
-                def.resolve(true);
-            }, function () {
-                def.resolve(true);
-            });
-
-            return def;
+            if (util.hasFlag(e.baton.data, 'declined')) return false;
+            //no flags at all => public folder and user is no attendee. Not allowed to change attendee statuses
+            if (!util.hasFlag(e.baton.data, 'accepted') && !util.hasFlag(e.baton.data, 'declined') &&
+                !util.hasFlag(e.baton.data, 'tentative') && !util.hasFlag(e.baton.data, 'needs_action')) return false;
+            // in shared folders we also have to check if we have the permissin to modify
+            if ((util.hasFlag(e.baton.data, 'attendee_on_behalf') || util.hasFlag(e.baton.data, 'organizer_on_behalf')) &&
+                !(util.hasFlag(e.baton.data, 'attendee') || util.hasFlag(e.baton.data, 'organizer')) &&
+                !e.collection.has('modify')) return false;
+            return true;
         },
         action: acceptDecline
     });
@@ -616,6 +601,16 @@ define('io.ox/calendar/actions', [
         id: 'changestatus',
         label: gt('Change status'),
         ref: 'io.ox/calendar/detail/actions/changestatus'
+    }));
+
+    // 155 because it's either changestatus or changereminder, never both
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 155,
+        prio: 'hi',
+        mobile: 'hi',
+        id: 'changereminder',
+        label: gt('Change reminder'),
+        ref: 'io.ox/calendar/detail/actions/changeAlarms'
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({

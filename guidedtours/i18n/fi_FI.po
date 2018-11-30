@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-29 14:49+0200\n"
+"PO-Revision-Date: 2018-11-05 16:01+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Poedit 2.0.5\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -47,14 +47,6 @@ msgstr ""
 "toistumisen määrittelemiseen."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Muistutustoiminnon käyttäminen"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Jottet unohtaisi tapaamista, käytä muistutustoimintoa."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr "Muiden osallistujien kutsuminen"
 
@@ -67,6 +59,14 @@ msgstr ""
 "Muita osallistujia kutsuaksesi, syötä heidän nimensä kenttään Osallistujat "
 "osiossa. Välttääksesi päällekkäisiä tapaamisia, napsauta oikealta Löydä "
 "vapaa aika."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Muistutustoiminnon käyttäminen"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "Jottet unohtaisi tapaamista, käytä muistutustoimintoa."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
@@ -184,7 +184,7 @@ msgstr ""
 "Tervetuloa pilvipalvelusovellukseesi. Tämä opastus esittelee sinulle uuden "
 "online-tallennusratkaisun - yhden reitin kaikilta tileiltäsi verkkoon "
 "tallennettuihin tiedostoihin. Tässä voit ladata, tallentaa ja jakaa "
-"tiedostojasi sekä synkronoida ne muiden laitteidesi kanssa."
+"tiedostojasi sekä synkronoida ne muiden laitteidesi kanssa. "
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Folder tree"
@@ -379,12 +379,10 @@ msgid "Launching an app"
 msgstr "Sovelluksen käynnistäminen"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
+msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Käynnistä sovellus valikkopalkin vasemmalla puolella sijaitsevista "
-"pikakuvakkeista tai klikkaa sovelluksenkäynnistysvalikon alakohtaa."
+"Sovelluksen käynnistämiseksi napsauta sovelluksen käynnistysvalikon sisällä "
+"olevaa merkintää."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -505,7 +503,7 @@ msgid ""
 msgstr ""
 "Kirjoita vastaanottajan nimi vastaanottajakenttään. Kirjoitettuasi "
 "ensimmäiset kirjaimet saat näkyviin ehdotuksia osoitekirjasta. Hyväksy "
-"ehdotus napsauttamalla sitä. "
+"ehdotus napsauttamalla sitä."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Entering the subject"
@@ -731,7 +729,7 @@ msgstr ""
 "Avaa tuki klikkaamalla käyttäjäkuvaa valintapalkin oikeassa yläosassa. "
 "Valitse Tuki. Näkyviin tulee tuki valittuna olevalle sovellukselle. Jos "
 "haluat selata tukea kokonaisuudessaan, klikkaa aloitussivua tai "
-"sisällysluetteloa ikkunan yläosassa. "
+"sisällysluetteloa ikkunan yläosassa."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -846,59 +844,6 @@ msgstr ""
 "Useamman tehtävän muokkaamiseksi, aktivoi valintaruutuja tehtävien "
 "vasemmalla puolella. Jos valintaruudut eivät näy, napsauta Näytä > "
 "Valintaruudut työkalupalkin oikeasta reunasta."
-
-#~ msgid ""
-#~ "To open the settings, click the System menu icon on the upper right side "
-#~ "of the menu bar. Select Settings."
-#~ msgstr ""
-#~ "Avaa asetukset napsauttamalla järjestelmävalikon kuvaketta valikkopalkin "
-#~ "oikeassa yläreunassa. Valitse Asetukset."
-
-#~ msgid ""
-#~ "To open the help, click the System menu icon on the upper right side of "
-#~ "the menu bar. Select Help. The help for the currently selected app is "
-#~ "displayed. To browse the complete help, click on Start Page or Table Of "
-#~ "Contents at the upper part of the window."
-#~ msgstr ""
-#~ "Avataksesi ohjeet, napsauta järjestelmävalikon kuvaketta valikkolakin "
-#~ "oikeassa yläreunassa. Valitse Ohje. Sillä hetkellä valitun sovelluksen "
-#~ "ohjeet näytetään. Selaillaksesi kaikkia ohjeita, valitse Ohje "
-#~ "aloitussivulla tai sisällysluettelossa."
-
-#~ msgid ""
-#~ "Hint: you can always restart guided tours, any time you need them, from "
-#~ "the system menu."
-#~ msgstr ""
-#~ "Vinkki: voit aloittaa ohjatun kierroksen järjestelmävalikosta uudelleen "
-#~ "milloin vain."
-
-#~ msgid ""
-#~ "In case of new notifications, e.g. appointment invitations, the info area "
-#~ "is opened."
-#~ msgstr ""
-#~ "Saadessasi uusia ilmoituksia, esim. tapaamiskutsuja, infoalue avautuu."
-
-#~ msgid "Restart Guided Tour"
-#~ msgstr "Aloita opastettu kierros uudestaan"
-
-#~ msgid "The New objects icon"
-#~ msgstr "Uusia kohteita kuvake"
-
-#~ msgid ""
-#~ "The New objects icon shows the number of appointment reminders or other "
-#~ "notifications. If clicking the icon, the info area opens."
-#~ msgstr ""
-#~ "Uudet kohteet -kuvake näyttää tapaamismuistutusten ja muiden ilmoitusten "
-#~ "määrän. Informaatioalue avautuu napauttamalla kuvaketta."
-
-#~ msgid "The info area"
-#~ msgstr "Tietoalue"
-
-#~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
-#~ msgstr ""
-#~ "Käynnistääksesi sovellus napsauta kohtaa valikkopalkin vasemmassa "
-#~ "reunassa."
 
 #~ msgid " characters"
 #~ msgstr " merkin jälkeen"
@@ -2871,6 +2816,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "Tärkeä"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Vinkki: voit aloittaa ohjatun kierroksen järjestelmävalikosta uudelleen "
+#~ "milloin vain."
+
 #~ msgid "Hobby"
 #~ msgstr "Harrastus"
 
@@ -2960,6 +2912,12 @@ msgstr ""
 #~ msgstr ""
 #~ "Uusien ilmoitusten, esimerkiksi tapaamiskutsujen, saapuessa, tietoalue "
 #~ "avautuu oikealle reunalle."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "Saadessasi uusia ilmoituksia, esim. tapaamiskutsuja, infoalue avautuu."
 
 #~ msgid "In progress"
 #~ msgstr "Meneillään"
@@ -4244,6 +4202,9 @@ msgstr ""
 #~ msgid "Resources"
 #~ msgstr "Resurssit"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Aloita opastettu kierros uudestaan"
+
 #~ msgid "Restore applications"
 #~ msgstr "Keskeneräisiä toimintoja"
 
@@ -4836,6 +4797,16 @@ msgstr ""
 #~ "Valintaruutujen avulla voit valita tiedostoja. Tiedostoa napsauttamalla "
 #~ "näet lisää yksityiskohtia ja valikoiman toimintoja."
 
+#~ msgid "The New objects icon"
+#~ msgstr "Uusia kohteita kuvake"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Uudet kohteet -kuvake näyttää tapaamismuistutusten ja muiden ilmoitusten "
+#~ "määrän. Informaatioalue avautuu napauttamalla kuvaketta."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -5044,6 +5015,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Oikean alareunan kuvake avustaa sähköpostien lajittelussa. Napsauta "
 #~ "kuvaketta saadaksesi lista lajitteluperusteista."
+
+#~ msgid "The info area"
+#~ msgstr "Tietoalue"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr ""
@@ -5408,6 +5382,13 @@ msgstr ""
 #~ msgstr "Käynnistääksesi sovelluksen, napsauta sovellusikkunan otsikkoa."
 
 #~ msgid ""
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
+#~ msgstr ""
+#~ "Käynnistä sovellus valikkopalkin vasemmalla puolella sijaitsevista "
+#~ "pikakuvakkeista tai klikkaa sovelluksenkäynnistysvalikon alakohtaa."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -5427,6 +5408,24 @@ msgstr ""
 #~ msgstr ""
 #~ "Avataksesi ohjeen, napsauta järjestelmävalikkon hammaspyöräkuvaketta "
 #~ "valikkopalkin oikeassa reunassa. Valitse Ohje. "
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Avataksesi ohjeet, napsauta järjestelmävalikon kuvaketta valikkolakin "
+#~ "oikeassa yläreunassa. Valitse Ohje. Sillä hetkellä valitun sovelluksen "
+#~ "ohjeet näytetään. Selaillaksesi kaikkia ohjeita, valitse Ohje "
+#~ "aloitussivulla tai sisällysluettelossa."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Avaa asetukset napsauttamalla järjestelmävalikon kuvaketta valikkopalkin "
+#~ "oikeassa yläreunassa. Valitse Asetukset."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

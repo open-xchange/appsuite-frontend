@@ -138,7 +138,8 @@
         position: fixed;
         left: 0;
         right: 0;
-        z-index: 666;
+        //z-index: 666;
+        z-index: 25;
         bottom: 0;
         width: 100%;
         height: 40px;
@@ -218,7 +219,10 @@
         }
 
         // always reserve space for scroll bar
-        .window-content { overflow-y: scroll !important; }
+        .window-content {
+            overflow-y: scroll !important;
+            &.scrollable-disabled { overflow: hidden !important; }
+        }
     }
 
     &.header-bottom {
@@ -258,7 +262,10 @@
         }
 
         // always reserve space for scroll bar
-        .window-content { overflow-y: scroll !important; }
+        .window-content {
+            overflow-y: scroll !important;
+            &.scrollable-disabled { overflow: hidden !important; }
+        }
     }
 
     &.classic {
@@ -538,6 +545,7 @@
 
     .container {
         width: 100% !important;
+        position: relative;
         min-width: auto;
     }
 
@@ -594,11 +602,16 @@
 
             button {
                 color: white;
-                line-height: @headerHeight;
+                line-height: @headerHeight - 2;
                 padding: 0 8px;
                 display: inline-block;
                 &[data-action="close"] {
                     font-size: 18px;
+                }
+                &:focus {
+                    box-shadow: none;
+                    outline: 2px solid #A0A0A0;
+                    outline-offset: -4px;
                 }
             }
         }

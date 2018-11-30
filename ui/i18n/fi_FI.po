@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-06-19 14:36+0300\n"
+"PO-Revision-Date: 2018-11-13 21:26+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -21,6 +21,46 @@ msgstr "Dialogi sisältää kelpaamatonta dataa"
 #: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main/offline.js
 msgid "Server unreachable"
 msgstr "Palvelin ei saatavilla"
+
+#: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Select contacts"
+msgstr "Valitse yhteystietoja"
+
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Notification"
+msgstr "Ilmoitus"
+
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Audio"
+msgstr "Ääni"
+
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js
+msgid "Mail"
+msgstr "Sähköposti"
+
+#. Used in a selectbox when the reminder for an appointment is before the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "before start"
+msgstr "viikko alkaa"
+
+#. Used in a selectbox when the reminder for an appointment is after the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "after start"
+msgstr "aloituksen jälkeen"
+
+#. Used in a selectbox when the reminder for an appointment is before the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "before end"
+msgstr "ennen loppua"
+
+#. Used in a selectbox when the reminder for an appointment is after the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "after end"
+msgstr "loppumisen jälkeen"
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
@@ -103,48 +143,88 @@ msgid "Play sound at end."
 msgstr "Soita merkkiääni tapaamisen loppuessa."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Send mail %1$s before start."
+msgstr "Lähetä sähköposti %1$s ennen aloitusta."
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Send mail %1$s after start."
+msgstr "Lähetä sähköposti %1$s aloituksen jälkeen."
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Send mail %1$s before end."
+msgstr "Lähetä sähköposti %1$s ennen lopetusta."
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Send mail %1$s after end."
+msgstr "Lähetä sähköposti %1$s lopetuksen jälkeen."
+
+#. Used to display reminders for appointments
+#. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Send mail at %1$s."
+msgstr "Lähetä sähköposti klo %1$s."
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Send mail at start."
+msgstr "Lähetä sähköposti aloitettaessa."
+
+#. Used to display reminders for appointments
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "Send mail at end."
+msgstr "Lähetä viesti lopuksi."
+
+#. Used to display reminders for appointments
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s before start."
 msgstr "%1$s %2$s ennen tapaamisen alkua."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s after start."
 msgstr "%1$s %2$s tapaamisen alusta."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s before end."
 msgstr "%1$s %2$s ennen tapaamisen päättymistä."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s %2$s after end."
 msgstr "%1$s %2$s tapaamisen loputtua."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s at %2$s."
 msgstr "%1$s %2$s."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s at start."
 msgstr "%1$s tapaamisen alkaessa."
 
 #. Used to display reminders for appointments
-#. %1$s: the reminder type, SMS/EMAIL etc
+#. %1$s: the reminder type, SMS etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "%1$s at end."
 msgstr "%1$s tapaamisen päättyessä."
@@ -153,13 +233,29 @@ msgstr "%1$s tapaamisen päättyessä."
 msgid "Add reminder"
 msgstr "Lisää muistutus"
 
+#. %1$d: is the number of the reminder
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-msgid "Notification"
-msgstr "Ilmoitus"
+msgid "Reminder %1$d"
+msgstr "Muistutus %1$d"
+
+#. screenreader label for the reminder type (audio, notification, etc)
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "type"
+msgstr "tyyppi"
+
+#. screenreader label for the reminder timeframe (15 minutes, etc)
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "timeframe"
+msgstr "aikaväli"
+
+#. screenreader label for the reminder timeframe relation (before start, after end, etc)
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "timeframe relation"
+msgstr "ajankohta"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-msgid "Audio"
-msgstr "Ääni"
+msgid "Remove reminder"
+msgstr "Poista muistutus"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -349,7 +445,6 @@ msgid "Plum"
 msgstr "Luumu"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "No color"
 msgstr "Ei väriä"
 
@@ -384,6 +479,7 @@ msgstr "Päivä"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/settings/editLocale.js
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -394,7 +490,7 @@ msgstr "Päivämäärä"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
 msgid ""
 "Use cursor keys to change the date. Press ctrl-key at the same time to "
 "change year or shift-key to change month. Close date-picker by pressing ESC "
@@ -404,6 +500,7 @@ msgstr ""
 "tai paina [shift] valitaksesi kuukausi. Sulje valitsin painamalla [Esc]."
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
+#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "Aika"
 
@@ -519,7 +616,7 @@ msgstr "Vakioaikavyöhyke"
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #: apps/io.ox/core/folder/favorites.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Favorites"
 msgstr "Suosikit"
 
@@ -660,19 +757,20 @@ msgid "Rotate image"
 msgstr "Pyöräytä kuvaa"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/core/tk/mobiscroll.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "Ok"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
-#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
-#: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
-#: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar apps/io.ox/core/about/about.js
+#: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -691,6 +789,8 @@ msgstr "Sulje"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
+#: apps/io.ox/calendar/actions/change-alarms.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -705,7 +805,7 @@ msgstr "Sulje"
 #: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/core/tk/mobiscroll.js apps/io.ox/core/upsell.js
+#: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
@@ -869,6 +969,10 @@ msgstr "Ennen"
 msgid "Search"
 msgstr "Etsi"
 
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+msgid "Minimized windows"
+msgstr "Pienennetyt ikkunat"
+
 #. window resize
 #: apps/io.ox/backbone/views/window.js module:io.ox/core
 msgid "Minimize"
@@ -939,7 +1043,7 @@ msgstr "Sarja"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/view.js
 #: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
@@ -962,6 +1066,10 @@ msgstr "Kieltäydy"
 #: apps/io.ox/calendar/toolbar.js
 msgid "Change status"
 msgstr "Muuta tilannetta"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Change reminder"
+msgstr "Muuta muistutusta"
 
 #. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -1011,6 +1119,7 @@ msgid "Synchronize calendar"
 msgstr "Synkronoi kalenteri"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-alarms.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
@@ -1055,6 +1164,10 @@ msgstr "Muuta vahvistustilanne."
 msgid "Tentative"
 msgstr "Alustava"
 
+#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
+msgid "Change reminders"
+msgstr "Muuta muistutuksia"
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
 msgstr "Tapaamiset jaetuissa kalentereissa"
@@ -1084,6 +1197,35 @@ msgstr "Omistajan puolesta"
 msgid "Invite owner"
 msgstr "Kutsu omistaja"
 
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid "Appointments in public calendars"
+msgstr "Tapaamiset julkisissa kalentereissa"
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid ""
+"The selected calendar \"%1$s\" is public. Do you really want to create an "
+"appointment in this calendar?"
+msgstr ""
+"Valittu kalenteri \"%1$s\" on julkinen. Haluatko todella luoda tapaamisen "
+"tähän kalenteriin?"
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid "Create in public calendar"
+msgstr "Luo julkisessa kalenterissa"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+msgid "Add a message to the notification email for the other participants."
+msgstr "Lisää viesti muille osallistujille lähetettävään ilmoitukseen."
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/relogin.js module:io.ox/core
+#: apps/io.ox/files/share/wizard.js module:io.ox/files
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+msgid "Password"
+msgstr "Salasana"
+
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid ""
 "Do you want to delete the whole series or just this appointment within the "
@@ -1107,6 +1249,11 @@ msgstr ""
 #: apps/io.ox/calendar/util.js
 msgid "All future appointments"
 msgstr "Kaikki tulevat tapaamiset"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
+msgid "Delete appointment"
+msgstr "Poista tapaaminen"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid "Do you want to delete this appointment?"
@@ -1134,15 +1281,6 @@ msgid "Login"
 msgstr "Kirjaudu sisään"
 
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/core/relogin.js module:io.ox/core
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "Password"
-msgstr "Salasana"
-
-#: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 msgid "Subscribe to iCal feed"
 msgstr "Tilaa iCal-syöte"
 
@@ -1162,11 +1300,10 @@ msgstr "ei väriä"
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/month/view.js
-#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-grid-template.js
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
+#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Yksityinen"
 
@@ -1186,8 +1323,8 @@ msgid "Details"
 msgstr "Yksityiskohdat"
 
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
-#: apps/io.ox/participants/chronos-views.js module:io.ox/core
-#: apps/io.ox/participants/views.js
+#: apps/io.ox/participants/chronos-detail.js module:io.ox/core
+#: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Organizer"
 msgstr "Järjestelijä"
 
@@ -1201,6 +1338,7 @@ msgstr "Näytetään tilassa"
 
 #. Context: Session Management. Refers to the macos calendar
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail apps/io.ox/settings/security/sessions/settings/pane.js
@@ -1249,13 +1387,12 @@ msgid "Ignore conflicts"
 msgstr "Älä huomioi ristiriitoja"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/perspective.js
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/perspective.js
 msgid "Appointment Details"
 msgstr "Tapaamisen yksityiskohdat"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/perspective.js
 msgid "An error occurred. Please try again."
 msgstr "Tapahtui virhe. Yritä uudelleen."
 
@@ -1316,24 +1453,6 @@ msgid "Discard"
 msgstr "Hylkää"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-msgid "Select"
-msgstr "Valitse"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Select calendar"
-msgstr "Valitse kalenteri"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Create new calendar"
-msgstr "Luo uusi kalenteri"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Calendar:"
-msgstr "Kalenteri:"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
@@ -1383,6 +1502,14 @@ msgid "Find a free time"
 msgstr "Löydä vapaa aika"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Your recurrence rule does not fit to your start date."
+msgstr "Toistuvuussääntö ei sovi aloituspäivämäärään."
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Your recurrence rule was changed automatically."
+msgstr "Toistumissääntöä muutettiin automaattisesti."
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
@@ -1397,6 +1524,47 @@ msgid "Description"
 msgstr "Kuvaus"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "User defined color"
+msgstr "Käyttäjän määrittämä väri"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid ""
+"You are using a shared calendar. The calendar owner was added as organizer."
+msgstr ""
+"Käytät jaettua kalenteria. Kalenterin omistaja on lisätty järjestäjänä."
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "You are no longer using a shared calendar. You were added as organizer."
+msgstr "Et käytää enää jaettua kalenteria. Sinut on lisätty järjestäjänä."
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "My calendars"
+msgstr "Kalenterini"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Public calendars"
+msgstr "Julkiset kalenterit"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Shared calendars"
+msgstr "Jaetut kalenterit"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Hidden calendars"
+msgstr "Piilotetut kalenterit"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/view-options.js apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
+msgid "Color"
+msgstr "Väri"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Expand form"
 msgstr "Laajenna lomake"
@@ -1405,6 +1573,10 @@ msgstr "Laajenna lomake"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Collapse form"
 msgstr "Pienennä lomake"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Visibility Help"
+msgstr "Näkyvyystuki"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Standard"
@@ -1442,6 +1614,15 @@ msgstr "Näkyvyys"
 msgid "Appointment color"
 msgstr "Tapaamisen väri"
 
+#. showed inside a color picker. Used if an appointment should not have a custom color
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Use calendar color"
+msgstr "Käytä kalenteriväriä"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "none"
+msgstr "ei ole"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Show as free"
 msgstr "Näytä vapaana"
@@ -1465,6 +1646,7 @@ msgstr "Tiputa tähän ladataksesi <b class=\"dndignore\">uusi liite</b>"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
@@ -1769,18 +1951,6 @@ msgstr "Valitse kaikki"
 msgid "Load appointments until %1$s"
 msgstr "Lataa tapaamiset %1$s saakka"
 
-#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
-msgid "Could't load appointment data."
-msgstr "Tapaamistietoja ei voitu ladata."
-
-#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
-msgid "No appointment selected"
-msgstr "Ei valittuja tapaamisia"
-
-#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
-msgid "%1$s appointments selected"
-msgstr "%1$s tapaamista valittu"
-
 #: apps/io.ox/calendar/list/view-options.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
@@ -1789,6 +1959,18 @@ msgstr "%1$s tapaamista valittu"
 #: module:io.ox/mail
 msgid "Open folder view"
 msgstr "Avaa kansionäkymä"
+
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
+msgid "No appointment selected"
+msgstr "Ei valittuja tapaamisia"
+
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
+msgid "%1$s appointments selected"
+msgstr "%1$s tapaamista valittu"
+
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
+msgid "Could't load appointment data."
+msgstr "Tapaamistietoja ei voitu ladata."
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
@@ -1839,7 +2021,7 @@ msgid "Successfully refreshed calendar"
 msgstr "Kalenterin virkistäminen onnistui"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/perspective.js apps/io.ox/calendar/week/view.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
 msgid "Appointments"
 msgstr "Tapaamiset"
@@ -1856,6 +2038,12 @@ msgstr "Tapaamisvaihtoehdot"
 msgid "No matching items found."
 msgstr "Kohteita ei löytynyt."
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/io.ox/settings/main.js module:io.ox/core
+msgid "Application may not work as expected until this problem is solved."
+msgstr ""
+"Sovellus ei välttämättä toimi odotetusti ennnen tämän ongelman korjaamista."
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Listview"
 msgstr "Listanäkymä"
@@ -1871,14 +2059,6 @@ msgstr "Näytä seuraava kuukausi"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous month"
 msgstr "Näytä edellinen kuukausi"
-
-#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-msgid "Show next day"
-msgstr "Näytä seuraava päivä"
-
-#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-msgid "Show previous day"
-msgstr "Näytä edellinen päivä"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
@@ -1917,36 +2097,18 @@ msgstr "Tiedostoja ei voida ladata, koska latausraja %1$s on ylittynyt."
 msgid "You cannot mark the appointment as secret, when blocking a ressource."
 msgstr "Tapaamista ei voida merkitä salaiseksi jos se vie resursseja."
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-msgid "Calendar Month View"
-msgstr "Kalenterin kuukausinäkymä"
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Previous Month"
+msgstr "Edellinen kuukausi"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-#: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
-msgid "Previous"
-msgstr "Edellinen"
-
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-#: apps/io.ox/core/tk/wizard.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js
-#: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
-#: apps/io.ox/tours/whats-new.js apps/io.ox/wizards/upsell.js
-#: module:io.ox/wizards
-msgid "Next"
-msgstr "Seuraava"
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Next Month"
+msgstr "Seuraava kuukausi"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 msgid "Selected - %1$s"
 msgstr "Valittu - %1$s"
-
-#. add confirmation status behind appointment title
-#. %1$s = apppintment title
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#, c-format
-msgid "%1$s (Tentative)"
-msgstr "%1$s (Alustava)"
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/calendar/util.js apps/io.ox/participants/chronos-detail.js
@@ -2177,10 +2339,6 @@ msgstr "Uusi"
 #: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Status"
 msgstr "Tila"
-
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
-msgid "Delete appointment"
-msgstr "Poista tapaaminen"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -2514,6 +2672,7 @@ msgstr[1] "%d päivää"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d minute"
 msgid_plural "%1$d minutes"
 msgstr[0] "%1$d minuuttia"
@@ -2522,6 +2681,7 @@ msgstr[1] "%1$d minuuttia"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d hour"
 msgid_plural "%1$d hours"
 msgstr[0] "%1$d tuntia"
@@ -2679,10 +2839,10 @@ msgstr "Toistuvuus"
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid ""
-"This appointment is an exception. Changing the series does not affect "
-"exceptions."
+"This appointment is an exception. Changing the exception does not affect the "
+"series."
 msgstr ""
-"Tämä tapaaminen on poikkeus. Sarjan muuttaminen ei vaikuta poikkeuksiin."
+"Tämä tapaaminen on poikkeus. Poikkeuksen muuttaminen ei vaikuta sarjan."
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid "Direct link"
@@ -2695,35 +2855,6 @@ msgstr "Suora linkki"
 msgctxt "a11y"
 msgid "at %1$s"
 msgstr "paikka %1$s"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Calendar Day View"
-msgstr "Kalenterin päivänäkymä"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Calendar Workweek View"
-msgstr "Työviikkonäkymä"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Calendar Week View"
-msgstr "Kalenterin viikkonäkymä"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Appointment list"
-msgstr "Tapaamisluettelo"
-
-#. %1$n is the maximum number of appointments
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-msgid ""
-"There are more than %n appointments in the current calendar. Some features "
-"are disabled due to performance reasons."
-msgstr ""
-"Nykyisessä kalenterissa on enemmän kuin %n tapaamista. Jotkin ominaisuudet "
-"on kytketty pois päältä suorituskykysyistä."
-
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-msgid "Manage favorites"
-msgstr "Hallitse suosikkeja"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Next Day"
@@ -2760,15 +2891,23 @@ msgid "Click to split all folders into separate columns"
 msgstr "Napauta jakaaksesi  kaikki kansiot erillisiin sarakkeiseen"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "%s %s, create all-day appointment"
+msgstr "%s %s, luo koko päivän tapaaminen"
+
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Create all-day appointment"
 msgstr "Luo koko päivän tapaaminen"
 
-#: apps/io.ox/calendar/year/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "Manage favorites"
+msgstr "Hallitse suosikkeja"
+
+#: apps/io.ox/calendar/year/view.js module:io.ox/calendar
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Previous year"
 msgstr "Edellinen vuosi"
 
-#: apps/io.ox/calendar/year/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/year/view.js module:io.ox/calendar
 msgid "Next year"
 msgstr "Ensi vuosi"
 
@@ -2900,10 +3039,11 @@ msgstr "Julkiset osoitekirjat"
 msgid "Shared address books"
 msgstr "Jaetut osoitekirjat"
 
+#. Context: Add selected contacts; German "Auswählen", for example
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Select contacts"
-msgstr "Valitse yhteystietoja"
+msgctxt "select-contacts"
+msgid "Select"
+msgstr "Valitse"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "Departments"
@@ -2923,17 +3063,15 @@ msgstr "Kaikki jakelulistat"
 msgid "All groups"
 msgstr "Kaikki ryhmät"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Apply filter"
+msgstr "Käytä suodatinta"
+
 #. empty message for list view
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Tyhjä"
-
-#. Context: Add selected contacts; German "Auswählen", for example
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgctxt "select-contacts"
-msgid "Select"
-msgstr "Valitse"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/contacts/widgets/pictureUpload.js
@@ -3109,6 +3247,11 @@ msgstr "Löydetty tyhjä nimi ja kuvaus."
 msgid "Edit to set a name."
 msgstr "Muokkaa asettaaksesi nimi."
 
+#. index used in contacts list to jump to names with a specific starting letter
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Starting letter index"
+msgstr "Alkukirjainhaku"
+
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Couldn't load contact data."
 msgstr "Yhteystietoja ei voitu ladata."
@@ -3116,6 +3259,11 @@ msgstr "Yhteystietoja ei voitu ladata."
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Contacts"
 msgstr "Yhteystiedot"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contact list. Select a contact to view details."
+msgstr ""
+"Yhteystiedot. Valitse yhteystieto, jos haluat tarkastella sitä tarkemmin."
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Contacts toolbar"
@@ -3644,6 +3792,19 @@ msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
+#. '%1$s contact's display name
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "%1$s could not be added as the contact has no valid email field."
+msgstr ""
+"%1$s ei voitu lisätä, koska yhteistiedolla ei ole kelpaavaa "
+"sähköpostikenttää."
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "Some contacts could not be added as they have no valid email field."
+msgstr ""
+"Joitakin yhteystietoja ei voitu lisätä, koska niillä ei ole kelpaavaa "
+"sähköpostikenttää."
+
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
@@ -4051,10 +4212,6 @@ msgstr "Vienti valittuna"
 #: apps/io.ox/core/export.js module:io.ox/core
 msgid "Format: %1$s"
 msgstr "Formaatti: %1$s"
-
-#: apps/io.ox/core/export.js module:io.ox/core
-msgid "Please note that other participants are removed on calendar export."
-msgstr "Huomaa, että muut osallistujat poistetaan kun kalenteri siirretään."
 
 #. file format for data export
 #: apps/io.ox/core/export.js module:io.ox/core apps/io.ox/core/import/import.js
@@ -4477,22 +4634,6 @@ msgid "Hidden address books"
 msgstr "Piilotetut osoitekirjat"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "My calendars"
-msgstr "Kalenterini"
-
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Public calendars"
-msgstr "Julkiset kalenterit"
-
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Shared calendars"
-msgstr "Jaetut kalenterit"
-
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Hidden calendars"
-msgstr "Piilotetut kalenterit"
-
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/plugins/portal/tasks/register.js module:plugins/portal
 msgid "My tasks"
 msgstr "Minun tehtäväni"
@@ -4582,7 +4723,9 @@ msgstr "%1$d yhteensä"
 msgid "Unread: %1$d"
 msgstr "Lukematon: %1$d"
 
+#. %1$d number of unread mails
 #: apps/io.ox/core/folder/node.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "%1$d unread"
 msgstr "%1$d luettu"
 
@@ -5143,8 +5286,7 @@ msgstr "Liitteet tallennettu!"
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Lataa"
 
@@ -5225,6 +5367,53 @@ msgstr "%s asiakasohjelmisto Androidille"
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Downloads"
 msgstr "Lataukset"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Regional settings"
+msgstr "Alueasetukset"
+
+#. default in terms of standard value
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
+msgid "Default"
+msgstr "Oletus"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "12 hours"
+msgstr "12 tunnin"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "24 hours"
+msgstr "24 tunnin"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Sunday"
+msgstr "Sunnuntaina"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Monday"
+msgstr "Maanantaina"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains January 1st"
+msgstr "Viikko, jolle 1. tammikuuta osuu"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Week that contains the first Thursday"
+msgstr "Viikko, jolle ensimmäinen torstai osuu"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Numbers"
+msgstr "Numerot"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "First day of week"
+msgstr "Viikon ensimmäinen päivä"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "First week of year"
+msgstr "Vuoden ensimmäinen viikko"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Error log"
@@ -5658,7 +5847,6 @@ msgid "Rich Text Area. Press ALT-F10 for toolbar"
 msgstr "Rich Text Area. Paina ALT-F10 saadaksesi näkyviin työkalupakin"
 
 #: apps/io.ox/core/tk/datepicker.js module:io.ox/core
-#: apps/io.ox/core/tk/mobiscroll.js
 msgid "Clear"
 msgstr "Tyhjennä"
 
@@ -5716,33 +5904,13 @@ msgid_plural "%1$d items"
 msgstr[0] "1 kohta"
 msgstr[1] "%1$d kohtaa"
 
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Days"
-msgstr "Päivää"
-
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Hours"
-msgstr "Tuntia"
-
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Minutes"
-msgstr "Minuuttia"
-
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Months"
-msgstr "Kuukautta"
-
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Years"
-msgstr "Vuotta"
-
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Remind me again"
 msgstr "Muistuta minua uudestaan"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Pick a time here"
-msgstr "Valitse aika tästä"
+msgid "Don't remind me again"
+msgstr "Älä muistuta minua uudestaan"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -5846,6 +6014,18 @@ msgstr "%1$s, %2$s poistettu."
 msgid "Removed %1$s."
 msgstr "%1$s poistettu."
 
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+msgid "Unable to upload file"
+msgid_plural "Unable to upload files"
+msgstr[0] "Tiedostoa ei voida ladata"
+msgstr[1] "Tiedostoja ei voida ladata"
+
+#: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
+msgid "We encountered an issue for your upload"
+msgid_plural "We encountered some issues for your upload"
+msgstr[0] "Latauksesi kanssa ilmeni ongelma"
+msgstr[1] "Latauksesi kanssa ilmeni ongelmia"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "Kansioiden lataamista ei tueta."
@@ -5854,31 +6034,6 @@ msgstr "Kansioiden lataamista ei tueta."
 #: module:io.ox/mail
 msgid "Mail was not imported. Only .eml files are supported."
 msgstr "Viestiä ei voitu tuoda. Vain .eml-tiedostot ovat tuettuja."
-
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
-"size of %2$s"
-msgstr "Tiedostoa \"%1$s\" ei voida ladata, koska se ylittää %2$s enimmäiskoon"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"The files cannot be uploaded because each file exceeds the maximum file size "
-"of %1$s"
-msgstr ""
-"Tiedostoja ei voida ladata, koska ne ylittävät tiedoston enimmäiskoon  %1$s"
-
-#. %1$s the maximum file size
-#: apps/io.ox/core/tk/upload.js module:io.ox/core
-msgid ""
-"Some files cannot be uploaded because they exceed the maximum file size of "
-"%1$s"
-msgstr ""
-"Joitakin tiedostoja ei voida ladata, koska ne ylittävät %1$s enimmäiskoon"
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Multiselect"
@@ -5908,6 +6063,14 @@ msgstr "Lopeta"
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core apps/io.ox/tours/whats-new.js
 msgid "Start tour"
 msgstr "Aloita kierros"
+
+#: apps/io.ox/core/tk/wizard.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js
+#: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
+#: apps/io.ox/tours/whats-new.js apps/io.ox/wizards/upsell.js
+#: module:io.ox/wizards
+msgid "Next"
+msgstr "Seuraava"
 
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 msgid "Welcome"
@@ -5942,15 +6105,10 @@ msgid "To print this file, please use \"Print as PDF\" in the viewer."
 msgstr ""
 "Tulosta tiedosto käyttämällä \"Tulosta PDF-tiedostona\"-toimintoa selaimessa."
 
-#. tooltip for getting auto-play mode ready for running.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Run auto-play mode"
-msgstr "Suorita automaattinen esitystila"
-
-#. tooltip for getting auto-play mode ready for pausing.
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Pause auto-play mode"
-msgstr "Keskeytä automaattinen esitystila"
+#: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
+msgid "Previous"
+msgstr "Edellinen"
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -5958,17 +6116,6 @@ msgid ""
 msgstr ""
 "Käytä sivusuuntaisia nuolinäppäimiä navigointiin ja esc-näppäintä "
 "poistuaksesi näkymästä."
-
-#. information about position of the current item in viewer
-#. this will only be shown for more than one item
-#. %1$d - position of current item
-#. %2$d - total amount of items
-#. %2$d - total amount of item
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "%1$d of %2$d item"
-msgid_plural "%1$d of %2$d items"
-msgstr[0] "%1$d / %2$d"
-msgstr[1] "%1$s / %2$s"
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Cannot require a view type for %1$s"
@@ -5979,6 +6126,16 @@ msgstr "Kohteelle %1$s ei voida vaatia näkymätyyppiä"
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "Version of %1$s"
 msgstr "%1$dn version"
+
+#. information about position of the current item in viewer
+#. this will only be shown for more than one item
+#. %1$d - position of current item
+#. %2$d - total amount of items
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "%1$d of %2$d item"
+msgid_plural "%1$d of %2$d items"
+msgstr[0] "%1$d / %2$d"
+msgstr[1] "%1$s / %2$s"
 
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
@@ -6155,6 +6312,18 @@ msgstr "Mahduta näytönleveyteen"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Fit to screen size"
 msgstr "Mahduta näyttöön"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid "Slideshow"
+msgstr "Diaesitys"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid "Run slideshow"
+msgstr "Näytä diaesitys"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid "Stop slideshow"
+msgstr "Pysäytä diaesitys"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "View details"
@@ -6542,6 +6711,11 @@ msgstr "Tiputa tähän ladataksesi <b class=\"dndignore\">uusi versio</b>"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Share your folders"
 msgstr "Jaa kansiosi"
+
+#. error message shown to the user after trying to create a duplicate account
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+msgid "Account already exists"
+msgstr "Tili on jo olemassa"
 
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -7177,6 +7351,7 @@ msgid "Password required"
 msgstr "Tarvitaan salasana"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Enter Password"
 msgstr "Kirjoita salasana"
 
@@ -7261,6 +7436,11 @@ msgstr "Vahvistus"
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Adjust"
 msgstr "Säädä"
+
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+msgid "Select"
+msgstr "Valitse"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
@@ -7747,6 +7927,12 @@ msgstr ""
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
+"The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
+"size of %2$s"
+msgstr "Tiedostoa \"%1$s\" ei voida ladata, koska se ylittää %2$s enimmäiskoon"
+
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
 "publication maximum file size of %2$s"
 msgstr ""
@@ -7992,8 +8178,16 @@ msgid "and %1$d others"
 msgstr "ja %1$d muuta"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Read"
-msgstr "Lue"
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
+msgid "Mark as read"
+msgstr "Merkitse luetuksi"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
+msgid "Mark as unread"
+msgstr "Merkitse lukemattomaksi"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Enable Links"
@@ -8198,6 +8392,10 @@ msgstr "Hallitse allekirjoituksia"
 msgid "Drop attachments here"
 msgstr "Pudota liitteet tähän"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Image size:"
+msgstr "Kuvakoko:"
+
 #. %s is a list of filenames separeted by commas
 #. it is used by screenreaders to indicate which files are currently added to the list of attachments
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -8233,11 +8431,6 @@ msgstr "Valitse lisättäväksi käypä kuvatiedosto"
 msgid "Compose"
 msgstr "Uusi viesti"
 
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js
-msgid "Mail"
-msgstr "Sähköposti"
-
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
 msgstr "Käytä mukautettua nimiä"
@@ -8260,6 +8453,43 @@ msgstr ""
 msgid "Edit real names"
 msgstr "Muokkaa oikeita nimiä"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Original"
+msgstr "Alkuperäinen"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Small"
+msgstr "Pieni"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+msgid "Medium"
+msgstr "Media"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Large"
+msgstr "Suuri"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Image size"
+msgstr "Kuvakoko"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Small (%1$s px)"
+msgstr "Pieni (%1$s px)"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Medium (%1$s px)"
+msgstr "Keskitaso (%1$s px)"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Large (%1$s px)"
+msgstr "Suuri (%1$s px)"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Mail size:"
+msgstr "Mailin koko:"
+
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d month"
 msgid_plural "%1$d months"
@@ -8272,14 +8502,15 @@ msgid_plural "%1$d years"
 msgstr[0] "%1$d vuoden kuluttua"
 msgstr[1] "%1$d vuoden kuluttua"
 
-#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Vanhentuminen"
 
+#. label of a selectbox: automatically delete files after a share/sharing-link expired?
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "delete if expired"
-msgstr "poista jos vanhentunut"
+msgid "Delete files after expiration"
+msgstr "Poista vanhentuneet tiedostot"
 
 #. checkbox label to determine if a password should be used
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -8421,16 +8652,6 @@ msgstr "[Kopio] "
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Couldn't load editor"
 msgstr "Editoria ei voitu ladata"
-
-#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
-msgid "Mark as read"
-msgstr "Merkitse luetuksi"
-
-#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
-msgid "Mark as unread"
-msgstr "Merkitse lukemattomaksi"
 
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/contextmenu.js module:io.ox/mail apps/io.ox/mail/toolbar.js
@@ -8797,13 +9018,13 @@ msgstr "Jakelulista"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is bigger than"
-msgstr "Suurempi kuin"
+msgid "Is bigger than (Size: B/KB/MB/GB)"
+msgstr "On suurempi kuin (kokoa: B/KB/MB/GB)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is smaller than"
-msgstr "Pienempi kuin"
+msgid "Is smaller than (Size: B/KB/MB/GB)"
+msgstr "On pienempi kuin (kokoa: B/KB/MB/GB)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8831,6 +9052,16 @@ msgstr "Uudelleenlähetetty-lähettäjä"
 #: module:io.ox/mailfilter
 msgid "Resent-To"
 msgstr "Uudelleenlähetetty - Vastaanottaja"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "String"
+msgstr "Merkkijono"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Source"
+msgstr "Lähde"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -9176,6 +9407,10 @@ msgid "Your vacation notice is active"
 msgstr "Lomailmoituksesi on aktiivinen"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
+msgid "vacation notice"
+msgstr "lomailmoitus"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "The time frame is in the past."
 msgstr "Aikaväli on menneisyydessä."
 
@@ -9207,6 +9442,10 @@ msgstr "Loppu"
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Message"
 msgstr "Viesti"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+msgid "Show advanced options"
+msgstr "Näytä lisävalinnat"
 
 #. Context: Vacation notices
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -9273,12 +9512,6 @@ msgid_plural "Sending %1$d messages ... %2$d%"
 msgstr[0] "Lähetetään 1 viesti ....%2$d%"
 msgstr[1] "Lähetetään %1$d  viestiä ....%2$d%"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/settings/main.js
-#: module:io.ox/core
-msgid "Application may not work as expected until this problem is solved."
-msgstr ""
-"Sovellus ei välttämättä toimi odotetusti ennnen tämän ongelman korjaamista."
-
 #: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
 msgid "Reply to all recipients"
@@ -9338,12 +9571,6 @@ msgstr "Kirjaintyyppi"
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Default font style"
 msgstr "Oletus fontti"
-
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-#: apps/io.ox/mail/view-options.js apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal
-msgid "Color"
-msgstr "Väri"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
@@ -10104,10 +10331,6 @@ msgstr "Portaalin asetukset"
 msgid "Add widget"
 msgstr "Lisää widget"
 
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-msgid "Default"
-msgstr "Oletus"
-
 #. %1$s is the title of the item, which should be colored
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Color %1$s"
@@ -10444,6 +10667,10 @@ msgid "CalDav/CardDav"
 msgstr "CalDav/CardDav"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Exchange Active Sync"
 msgstr "Exchange Active Sync"
 
@@ -10506,6 +10733,14 @@ msgstr "Vain epäilyttävät ja luokittelemattomat sähköpostit"
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "All emails"
 msgstr "Kaikki sähköpostit"
+
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
+msgid "Always trust mails from the following senders"
+msgstr "Luota aina seuraavien lähettäjien sähköposteihin"
+
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
+msgid "Comma-separated list e.g. \"example.org, alice@example.com\""
+msgstr "Pilkulla erotettava lista, esim. \"example.org, alice@example.com\""
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Change due date"
@@ -10796,10 +11031,6 @@ msgstr "Toistuvat tehtävät tarvitsevat valmistumispäivämäärän."
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Low"
 msgstr "Matala"
-
-#: apps/io.ox/tasks/print.js module:io.ox/tasks
-msgid "Medium"
-msgstr "Media"
 
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "High"
@@ -11559,12 +11790,12 @@ msgid "Birthdays"
 msgstr "Syntymäpäivät"
 
 #: apps/plugins/portal/birthdays/register.js module:plugins/portal
-msgid "Press [enter] to jump to complete list of Birthdays."
-msgstr "Paina [enter] siirtyäksesi syntymäpäivien listaan."
-
-#: apps/plugins/portal/birthdays/register.js module:plugins/portal
 msgid "No birthdays within the next %1$d weeks"
 msgstr "Ei syntymäpäiviä seuraavan %1$d viikon aikana"
+
+#: apps/plugins/portal/birthdays/register.js module:plugins/portal
+msgid "Press [enter] to jump to complete list of Birthdays."
+msgstr "Paina [enter] siirtyäksesi syntymäpäivien listaan."
 
 #: apps/plugins/portal/birthdays/register.js module:plugins/portal
 msgid "External link"
@@ -11651,6 +11882,10 @@ msgstr "alustasi"
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Download %s"
 msgstr "Lataa %s"
+
+#: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
+msgid "Please use the \"Connect your device\" wizard to download %s"
+msgstr "Käytä \"Yhdistä laitteesi\" -ohjausta ladataksesi %s"
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Get %s"
@@ -11876,22 +12111,6 @@ msgstr "Seuraat"
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Are you sure you want to delete this Tweet?"
 msgstr "Oletko varma että haluat poistaa tämän tweetin?"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid "Updater"
-msgstr "Päivittäjä"
-
-#: apps/plugins/portal/updater/register.js module:plugins/portal
-msgid ""
-"When executing the downloaded file, an installation wizard will be launched. "
-"Follow the instructions and install the updater. Installs latest versions of "
-"Windows® client software. The Updater automatically informs about new "
-"updates. You can download the updates from within the Updater."
-msgstr ""
-"Ladattu tiedosto suoritettaessa käynnistyy ohjattu asennus. Seuraa ohjeita "
-"ja asenna päivittäjä. Tämä asentaa uusimman version Windows® "
-"asiakasohjelmasta. Päivittäjä ilmoittaa automaattisesti uusista "
-"päivityksistä. Uusimmat päivitykset voit ladata päivittäjän kautta."
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Too short"
@@ -12177,632 +12396,84 @@ msgstr "Kutsu %s:in"
 msgid "Add on %s"
 msgstr "%s lisää"
 
-#~ msgid "Empty table cell"
-#~ msgstr "Tyhjennä taulukon solu"
+#~ msgid "Select calendar"
+#~ msgstr "Valitse kalenteri"
 
-#~ msgid "Encrypt"
-#~ msgstr "Salaa"
+#~ msgid "Create new calendar"
+#~ msgstr "Luo uusi kalenteri"
 
-#~ msgid "You have to enter a username and password to subscribe."
-#~ msgstr "Syötä käyttäjätunnus ja salasana tilataksesi."
+#~ msgid "Calendar:"
+#~ msgstr "Kalenteri:"
 
-#~ msgid "All future messages from %1$s will be moved to the selected folder."
-#~ msgid_plural ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
-#~ msgstr[0] ""
-#~ "Kaikki tulevat viestit lähettäjältä %1$d siirretään valittuun kansioon."
-#~ msgstr[1] ""
-#~ "Kaikki tulevat viestit valittujen sähköpostien lähettäjiltä siirretään "
-#~ "valittuun kansioon."
+#~ msgid "Show next day"
+#~ msgstr "Näytä seuraava päivä"
 
-#~ msgid "Show Links"
-#~ msgstr "Näytä linkit"
+#~ msgid "Show previous day"
+#~ msgstr "Näytä edellinen päivä"
 
-#~ msgid "Add attachment"
-#~ msgstr "Lisää liite"
+#~ msgid "Calendar Month View"
+#~ msgstr "Kalenterin kuukausinäkymä"
 
-#~ msgid "Scheduling"
-#~ msgstr "Suunnittelu"
-
-#~ msgctxt "app"
-#~ msgid "Conversations"
-#~ msgstr "Keskustelut"
-
-#~ msgctxt "app"
-#~ msgid "Settings"
-#~ msgstr "Asetukset"
-
-#~ msgctxt "app"
-#~ msgid "Documents"
-#~ msgstr "Asiakirjat"
-
-#~ msgid "iCal-feed has been imported successfully"
-#~ msgstr "iCal-syöte on tuotu onnistuneesti"
-
-#~ msgid "Change color"
-#~ msgstr "Vaihda väriä"
-
-#~ msgid "Please note that distribution lists cannot contain ressources."
-#~ msgstr "Jakelulistoihin ei voi sisältyä resursseja."
-
-#~ msgid "Never."
-#~ msgstr "Ei koskaan"
-
-#~ msgid "Town"
-#~ msgstr "Kaupunki"
-
-#~ msgid "iCal-Feed"
-#~ msgstr "iCal-syöte"
+#~ msgid "%1$s (Tentative)"
+#~ msgstr "%1$s (Alustava)"
 
 #~ msgid ""
-#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
-#~ "for example."
+#~ "This appointment is an exception. Changing the series does not affect "
+#~ "exceptions."
 #~ msgstr ""
-#~ "Jätä huomiotta olemassaolevat tapaamiset. Auttaa esim. julkisten "
-#~ "lomakalentereiden tietojen siirtämisessä."
+#~ "Tämä tapaaminen on poikkeus. Sarjan muuttaminen ei vaikuta poikkeuksiin."
 
-#~ msgid "Remind me again %1$s"
-#~ msgstr "Muistuta minua uudestaan %1$s"
+#~ msgid "Calendar Day View"
+#~ msgstr "Kalenterin päivänäkymä"
 
-#~ msgid "Sharing link created for file \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "Jaetaan tiedostoa  \"%1$d\" varten luotu linkki"
-#~ msgstr[1] "Jaetaan %1$d kohdetta varten luotu linkki"
+#~ msgid "Calendar Workweek View"
+#~ msgstr "Työviikkonäkymä"
 
-#~ msgid "Sharing link created for folder \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "Jaetaan kansiota  \"%1$d\" varten luotu linkki"
-#~ msgstr[1] "Jaetaan %1$d kohdetta varten luotu linkki"
+#~ msgid "Calendar Week View"
+#~ msgstr "Kalenterin viikkonäkymä"
 
-#~ msgid "Internal & external users"
-#~ msgstr "Sisäiset & ulkopuoliset käyttäjät"
-
-#~ msgid "Quick reply"
-#~ msgstr "Nopea vastaus"
-
-#~ msgid "Synchronize with Outlook"
-#~ msgstr "Synkronoi Outlookin kanssa"
+#~ msgid "Appointment list"
+#~ msgstr "Tapaamisluettelo"
 
 #~ msgid ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
+#~ "There are more than %n appointments in the current calendar. Some "
+#~ "features are disabled due to performance reasons."
 #~ msgstr ""
-#~ "Kaikki tulevat viestit valittujen viestien lähettäjiltä siirretään "
-#~ "valittuun kansioon."
+#~ "Nykyisessä kalenterissa on enemmän kuin %n tapaamista. Jotkin "
+#~ "ominaisuudet on kytketty pois päältä suorituskykysyistä."
 
-#~ msgid "never"
-#~ msgstr "ei koskaan"
+#~ msgid "Days"
+#~ msgstr "Päivää"
 
-#~ msgid "Use Password"
-#~ msgstr "Käytä salasanaa"
+#~ msgid "Hours"
+#~ msgstr "Tuntia"
 
-#~ msgid "when the receivers have finished downloading the files"
-#~ msgstr "kun vastaanottajat ovat ladanneet tiedostot"
+#~ msgid "Minutes"
+#~ msgstr "Minuuttia"
 
-#~ msgid "when the link is expired"
-#~ msgstr "linkin vanhennuttua"
+#~ msgid "Months"
+#~ msgstr "Kuukautta"
 
-#~ msgid "when the receivers have accessed the files"
-#~ msgstr "kun vastaanottajat ovat katsoneet tiedostot"
+#~ msgid "Years"
+#~ msgstr "Vuotta"
 
-#~ msgid "%1$s Options"
-#~ msgstr "%1$s -vaihtoehdot"
+#~ msgid "Pause auto-play mode"
+#~ msgstr "Keskeytä automaattinen esitystila"
 
-#~ msgid "Account is being created"
-#~ msgstr "Tiliä luodaan"
+#~ msgid "Run auto-play mode"
+#~ msgstr "Suorita automaattinen esitystila"
 
-#~ msgid ""
-#~ "This might be a phishing email because we could not verify that it is "
-#~ "really from %1$s."
-#~ msgstr ""
-#~ "Tämä saattaa olla kalasteluviesti, koska emme voineet varmistaa "
-#~ "lähettäjän todella olevan %1$s."
+#~ msgid "Run auto-play "
+#~ msgstr "Suorita automaattinen esitystila "
 
-#~ msgid "in"
-#~ msgstr "mukana"
+#~ msgid "Read"
+#~ msgstr "Lue"
 
-#~ msgid "Exchange ActiveSync"
-#~ msgstr "Vaihda ActiveSync"
+#~ msgid "Is bigger than"
+#~ msgstr "Suurempi kuin"
 
-#~ msgid "Dangerous emails only"
-#~ msgstr "Vain vaaralliset sähköpostit"
-
-#~ msgid "Dangerous and trusted emails"
-#~ msgstr "Vaaralliset ja luotetut sähköpostit"
-
-#~ msgid "Dangerous, trusted and valid emails"
-#~ msgstr "Vaaralliset, luotetut ja kelpaavat sähköpostit"
-
-#~ msgid "Add new reminder"
-#~ msgstr "Lisää uusi muistutus"
-
-#~ msgid "Authentication failed. Please fill in login and password."
-#~ msgstr "Varmistaminen epäonnistui. Täytä käyttäjänimi ja salasana."
-
-#~ msgid "Public"
-#~ msgstr "Julkinen"
-
-#~ msgid "The appointment is visible for all users in shared folders."
-#~ msgstr "Tapaaminen näkyy kaikille käyttäjille jaetuissa kansioissa."
-
-#~ msgid ""
-#~ "In shared folders, the appointment is displayed as a simple time slot for "
-#~ "non-attending users."
-#~ msgstr ""
-#~ "Jaetuissa kansioissa tapaaminen näkyy yksinkertaisena aikajaksona ei-"
-#~ "osallistuville käyttäjille."
-
-#~ msgid ""
-#~ "The appointment is not visible to non-attending users in shared folders "
-#~ "at all. The appointment is not considered for conflicts and does not "
-#~ "appear in the scheduling view."
-#~ msgstr ""
-#~ "Tapaaminen ei näy ei-osallistuville käyttäjille jaetuissa kansioissa. "
-#~ "Tapaamista ei otetaan huomioon aikataulukonflikteissa eikä se "
-#~ "aikataulunäkymässä."
-
-#~ msgid "Notify all participants by email."
-#~ msgstr "Ilmoita osallistujille sähköpostitse."
-
-#~ msgid "Birthday"
-#~ msgstr "Syntymäpäivä"
-
-#~ msgid "Color scheme"
-#~ msgstr "Värimaailma"
-
-#~ msgid "Custom colors"
-#~ msgstr "Omat värit"
-
-#~ msgid "Classic colors"
-#~ msgstr "Klassiset värit"
-
-#~ msgid "Dark colors"
-#~ msgstr "Tummat värit"
-
-#~ msgid "Application Toolbar"
-#~ msgstr "Sovellustyökalupalkki"
-
-#~ msgid "Folder type"
-#~ msgstr "Kansion tyyppi"
-
-#~ msgid "Number of messages"
-#~ msgstr "Viestien määrä"
-
-#~ msgid "Number of items"
-#~ msgstr "Kohteiden määrä"
-
-#~ msgid "List of public calendars and events"
-#~ msgstr "Julkisten kalenterien ja tapahtumien luettelo"
-
-#~ msgid ""
-#~ "Ignore existing events. Helpful to import public holiday calendars, for "
-#~ "example."
-#~ msgstr ""
-#~ "Älä huomioi olemassaolevia tapahtumia. Hyödyllinen esimerkiksi yleisiä "
-#~ "vapaapäiviä sisältäviä kalentereita tuotaessa."
-
-#~ msgid "Quick launch 1"
-#~ msgstr "Pikakäynnistys 1"
-
-#~ msgid "Quick launch 2"
-#~ msgstr "Pikakäynnistys 2"
-
-#~ msgid "Quick launch 3"
-#~ msgstr "Pikakäynnistys 3"
-
-#~ msgid ""
-#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-#~ msgid_plural ""
-#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
-#~ msgstr[0] "Tiedostoa ei voida ladata, koska se ylittää  %1$s kiintiön"
-#~ msgstr[1] "Tiedostoja ei voida ladata, koska ne ylittävät %1$s kiintiön"
-
-#~ msgid "This message is from a trusted sender."
-#~ msgstr "Tämä viesti on luotetulta lähettäjältä."
-
-#~ msgid ""
-#~ "This might be a phishing mail because we could not verify that this email "
-#~ "is really from %1$s."
-#~ msgstr ""
-#~ "Tämä saattaa olla urkintaviesti, koska emme voi varmistaa sähköpostin "
-#~ "lähettäjän olevan todella  %1$s."
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Tämä viesti on lähetetty laitteesta %1$s."
-
-#~ msgid "We could not verify that this email is really from %1$s."
-#~ msgstr ""
-#~ "Emme voineet varmistaa, että tämän viestin lähettäjä on varmuudella %1$s."
-
-#~ msgid "no expiry date"
-#~ msgstr "ei päättymisaikaa"
-
-#~ msgid "Expiration: %1$d"
-#~ msgstr "Vanhentumisaika: %1$d"
-
-#~ msgid "Has Attachment"
-#~ msgstr "Mukana liite"
-
-#~ msgid "Show message authenticity"
-#~ msgstr "Näytä viestin aitous"
-
-#~ msgid "Dangerous only"
-#~ msgstr "Vain vaaralliset"
-
-#~ msgid "Dangerous and trusted"
-#~ msgstr "Vaaralliset ja luotetut"
-
-#~ msgid "Acknowledge all reminders"
-#~ msgstr "Kuittaa kaikki muistutukset"
-
-#~ msgid "%1$d unread mails"
-#~ msgstr "%1$d lukematonta viestiä"
-
-#~ msgctxt "window title"
-#~ msgid "%1$s %2$s"
-#~ msgstr "%1$s %2$s"
-
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s for %2$s"
-#~ msgstr "%1$s/%2$s"
-
-#~| msgid "%s client for Android"
-#~ msgid "%1$s for Android"
-#~ msgstr "%s asiakasohjelmisto Androidille"
-
-#~| msgid "%s client for Mac OS"
-#~ msgid "%1$s for MacOS"
-#~ msgstr "%s asiakasohjelmisto Mac OS:lle"
-
-#~| msgid "%s client for Windows"
-#~ msgid "%1$s for Windows"
-#~ msgstr "%s asiakasohjelmisto Windowsille"
-
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s for iOS"
-#~ msgstr "%1$s/%2$s"
-
-#~ msgid "%1$s is a new contact"
-#~ msgstr "%1$s on uusi kontakti"
-
-#~ msgid "%1$s is now connected with %2$s"
-#~ msgstr "%1$s on nyt yhteydessä %2$s kanssa"
-
-#~ msgid "%d minute"
-#~ msgid_plural "%d minutes"
-#~ msgstr[0] "%d minuutti"
-#~ msgstr[1] "%d minuuttia"
-
-#~ msgid "%s client for Windows (Installation via the OX Updater)"
-#~ msgstr "%s asiakasohjelmisto Windowsille (asennus OX Updaterin kautta)"
-
-#~ msgid "(current app)"
-#~ msgstr "(nykyinen sovellus)"
-
-#~ msgid "Absent"
-#~ msgstr "Muualla"
-
-#~ msgid "All my appointments"
-#~ msgstr "Kaikki tapaamiset"
-
-#~ msgid "Apps"
-#~ msgstr "Apps -sovellukset"
-
-#~ msgid "Back to appointment"
-#~ msgstr "Takaisin tapaamiseen"
-
-#~ msgid ""
-#~ "By changing the date of this appointment you are creating an appointment "
-#~ "exception to the series."
-#~ msgstr ""
-#~ "Tämän tapaamisen ajankohtaa muuttamalla luot poikkeuksen toistuviin "
-#~ "tapahtumiin."
-
-#~ msgid "Change view"
-#~ msgstr "Muuta näkymää"
-
-#~| msgid "Share %1$s \"%2$s\""
-#~ msgid "Chrome %1$s on %2$s"
-#~ msgstr "Jaa  %1$s \"%2$s\""
-
-#~| msgid "close for %1$s"
-#~ msgid "Close for %1$s"
-#~ msgstr "sulje %1$s"
-
-#~ msgid "Connector for Microsoft Outlook®"
-#~ msgstr "Connector Microsoft Outlook® järjestelmille"
-
-#~ msgid ""
-#~ "Convert the entered start and end dates to match the modified timezones"
-#~ msgstr ""
-#~ "Muunna antamasi aloitus- ja lopetuspäivämäärät vastaamaan muokattuja "
-#~ "aikavyöhykkeitä"
-
-#~ msgid "Couldn't load appointment data."
-#~ msgstr "Tapaamisen tietoja ei voitu ladata."
-
-#~ msgid "Couldn't load your contact data."
-#~ msgstr "Yhteystietojasi ei voitu ladata."
-
-#~ msgid "Create exception"
-#~ msgstr "Luo poikkeus"
-
-#~| msgid "Currently refreshing"
-#~ msgid "Current session"
-#~ msgstr "Virkistetään"
-
-#~ msgid ""
-#~ "Did you know that you can take OX App Suite with you? Just click this "
-#~ "icon and choose 'Connect your device' from the menu."
-#~ msgstr ""
-#~ "Tiesitkö, että voi ottaa OX App Suiten mukaasi? Napauta tätä kuvaketta ja "
-#~ "valitse valikosta 'Yhdistä laitteesi'."
-
-#~ msgid "Display emoticons as graphics in text emails"
-#~ msgstr "Näytä hymiöt kuvina tekstimuotoisissa posteissa"
-
-#~| msgid "Do you really want to delete this account?"
-#~ msgid ""
-#~ "Do you really want to terminate all active sessions except the current "
-#~ "one?"
-#~ msgstr "Haluatko varmasti poistaa tämän tilin?"
-
-#~| msgctxt "One file only"
-#~| msgid "Do you really want to delete this version?"
-#~ msgid "Do you really want to terminate that session?"
-#~ msgstr "Haluatko todella poistaa tämän version?"
-
-#~ msgid ""
-#~ "Do you want to delete the whole series or just one appointment within the "
-#~ "series?"
-#~ msgstr "Haluatko poistaa koko sarjan vai ainoastaan yhden tapaamisen?"
-
-#~ msgid ""
-#~ "Do you want to edit the whole series or just one appointment within the "
-#~ "series?"
-#~ msgstr "Haluatko muokata koko sarjaa vai ainoastaan yhtä tapaamista?"
-
-#~ msgid "Doubleclick in this row for whole day appointment"
-#~ msgstr "Tuplaklikkaa tätä riviä valitaksesi koko päivän tapaaminen"
-
-#~ msgid "Download %s via the OX Updater"
-#~ msgstr "Lataa %s OX Updaterin kautta"
-
-#~ msgid "Download installation file (for Windows)"
-#~ msgstr "Lataa Windows asennustiedosto"
-
-#~| msgid "Due on %1$s"
-#~ msgid "Edge on %1$s"
-#~ msgstr "Erääntyy %1$s"
-
-#~ msgid "Expand timeframe by one month"
-#~ msgstr "Laajenna aikaväliä kuukaudella"
-
-#~ msgid "External guests"
-#~ msgstr "Ulkoiset vieraat"
-
-#~| msgid "%1$s of %2$s"
-#~ msgid "Firefox %1$s on %2$s"
-#~ msgstr "%1$s/%2$s"
-
-#~ msgid "Header exists"
-#~ msgstr "Otsikko on olemassa"
-
-#~ msgid "High contrast theme"
-#~ msgstr "Korkean kontrastin teema"
-
-#~ msgid "How does this work?"
-#~ msgstr "Kuinka tämä toimii?"
-
-#~| msgid "Added %1$s."
-#~ msgid "IP Address: %1$s"
-#~ msgstr "%1$s lisätty."
-
-#~ msgid ""
-#~ "If you select different timezones, the appointment's start and end dates "
-#~ "are saved in the timezone of the appointment's start date. A different "
-#~ "end date timezone only allows a convenient conversion."
-#~ msgstr ""
-#~ "Jos valitset eri aikavyöhykkeet, tapaamisen aloitus- ja "
-#~ "lopetuspäivämäärät tallennetaan samassa aikavyöhykkeessä kuin tapaamisen "
-#~ "aloituspäivämäärä. Lopetuspäivämäärän eri aikavyöhyke sallii helpon "
-#~ "muuntamisen eri aikavyöhykkeeseen."
-
-#~ msgid ""
-#~ "If you spot a free time, just select this area. To do this, move the "
-#~ "cursor to the start time, hold the mouse button, and <b>drag the mouse</"
-#~ "b> to the end time."
-#~ msgstr ""
-#~ "Jos näet vapaan ajan, valitse tämä alue. Siirrä osoitin alkuaikaan, paina "
-#~ "hiiren nappi pohjaan ja <b> vedä hiiri</b> päättymisaikaan."
-
-#~ msgid ""
-#~ "Informs about the current status of Emails and appointments without "
-#~ "having to display the user interface or another Windows® client."
-#~ msgstr ""
-#~ "Ilmoittaa tämänhetkisen viestien ja tapaamisten tilanteen ilman "
-#~ "käyttöliittymän tai toisen Windows asiakasohjelmiston näyttämistä."
-
-#~ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
-#~ msgstr "Käynnistyspudotusvalikko Paina [enter] päästäksesi pudotusvalikkoon"
-
-#~ msgid "Leave empty if you have none"
-#~ msgstr "Jätä tyhjäksi jos ei mitään"
-
-#~ msgid "LinkedIn"
-#~ msgstr "LinkedIn"
-
-#~ msgid "LinkedIn Network Updates"
-#~ msgstr "LinkedIn Network Updates"
-
-#~ msgid "LinkedIn reported an error:"
-#~ msgstr "LinkedIn virhe:"
-
-#~ msgid "Manage permission now"
-#~ msgstr "Hallinnoi oikeuksiasi"
-
-#~ msgid "Notifier"
-#~ msgstr "Ilmoitin"
-
-#~ msgid "Open in browser"
-#~ msgstr "Avaa selaimessa"
-
-#~ msgid "Open in browser tab"
-#~ msgstr "Avaa selaimessa"
-
-#~ msgid "Open on LinkedIn"
-#~ msgstr "Avaa Linkedin:ssä"
-
-#~| msgid "Other Address"
-#~ msgid "Other clients"
-#~ msgstr "Muu osoite"
-
-#~ msgid "Press [enter] to jump to the linkedin stream."
-#~ msgstr "Paina [enter] siirtyäksesi linkedin-virtaan."
-
-#~ msgid "Quit"
-#~ msgstr "Lopeta"
-
-#~ msgid "Recent activities"
-#~ msgstr "Äskettäiset tapahtumat"
-
-#~| msgid "Remove from recipient list"
-#~ msgid "Remove restore point: \"%1$s\""
-#~ msgstr "Poista vastaanottajien listalta"
-
-#~ msgid "Restore applications"
-#~ msgstr "Keskeneräisiä toimintoja"
-
-#~| msgid "Share %1$s \"%2$s\""
-#~ msgid "Safari %1$s on %2$s"
-#~ msgstr "Jaa  %1$s \"%2$s\""
-
-#~ msgid "Signed in as:"
-#~ msgstr "Kirjautuneena käyttäjänä"
-
-#~ msgid ""
-#~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
-#~ "LinkedIn with the permission to do read messages."
-#~ msgstr ""
-#~ "Emme voi auttaa, pahoittelumme. Palveluntarjoajasi pitää hankkia LinkedIn "
-#~ "avain, jolla voi lukea viestejä."
-
-#~ msgid "Subscribe IMAP folders"
-#~ msgstr "Tilaa IMAP kansioita"
-
-#~ msgid "Subscribe address book"
-#~ msgstr "Tilaa osoitekirja"
-
-#~ msgid "Subscribe calendar"
-#~ msgstr "Tilaa kalenteri"
-
-#~ msgid ""
-#~ "Synchronization of Emails, Calendar, Contacts and Tasks, along with "
-#~ "Public, Shared and System Folders to Microsoft Outlook® clients."
-#~ msgstr ""
-#~ "Viestien, kalenterin, yhteystietojen ja tehtävien sekä julkisten, "
-#~ "jaettujen ja järjestelmäkansioiden synkronointi Microsoft Outlook® "
-#~ "asiakasohjelmille."
-
-#~ msgid "Temporary"
-#~ msgstr "Tilapäinen"
-
-#~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
-#~ msgstr "\"%1$s\"  -kenttä ylittää merkkien enimmäismäärän %2$d."
-
-#~ msgid ""
-#~ "The following applications can be restored. Just remove the restore point "
-#~ "if you don't want it to be restored."
-#~ msgstr ""
-#~ "Haluatko jatkaa seuraavia kesken jääneitä toimintoja? Mikäli et halua "
-#~ "jatkaa, klikkaa roskakori-kuvaketta."
-
-#~ msgid ""
-#~ "The setting has been saved and will become active when you enter the "
-#~ "application the next time."
-#~ msgstr ""
-#~ "Asetukset ovat tallentuneet ja astuvat voimaan, kun seuraavaksi kirjaudut "
-#~ "ohjelmaan."
-
-#~ msgid ""
-#~ "The timezone of this appointment (%1$s) differs from your default "
-#~ "timezone (%2$s)."
-#~ msgstr ""
-#~ "Tämän tapaamisen (%1$s) aikavyöhyke poikkeaa oletusaikavyöhykkeestäsi  "
-#~ "(%2$s)."
-
-#~ msgid "There is no preview for this file type"
-#~ msgstr "Tälle tiedostotyypille ei ole esikatselumahdollisuutta"
-
-#~ msgid "There were not activities in your network"
-#~ msgstr "Verkostossasi ei ole tapahtumia"
-
-#~ msgid "Toggle viewport size"
-#~ msgstr "Vaihtele ikkunan kokoa"
-
-#~| msgid "Unknown sender"
-#~ msgid "Unknown client"
-#~ msgstr "Tuntematon lähettäjä"
-
-#~| msgid "Unknown sender"
-#~ msgid "Unkown client"
-#~ msgstr "Tuntematon lähettäjä"
-
-#~ msgid "Use accessibility improvements"
-#~ msgstr "Käytä saatavuusparannuksia"
-
-#~ msgid "Use cursor keys to navigate"
-#~ msgstr "Käytä nuolinäppäimiä navigointiin"
-
-#~ msgid "View attachment"
-#~ msgstr "Katsele liitettä"
-
-#~ msgid ""
-#~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
-#~ "Appointments will therefore be created in your private calendar."
-#~ msgstr ""
-#~ "Sinulla ei ole valtuuksia luoda tapaamisia kohteeseen \"%1$s\" (omistaja "
-#~ "%2$s). Tapaamiset luodaan siksi yksityiseen kalenteriisi."
-
-#~ msgid ""
-#~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
-#~ "therefore be created in your private calendar."
-#~ msgstr ""
-#~ "Sinulla ei ole valtuuksia luoda tapaamisia kohteeseen \"%1$s\". "
-#~ "Tapaamiset luodaan siksi yksityiseen kalenteriisi."
-
-#~ msgid ""
-#~ "You can import existing signatures from the previous product generation."
-#~ msgstr ""
-#~ "Voit tuoda olemassaolevia allekirjoituksia aiemmasta tuotesukupolvesta."
-
-#~ msgid "You have no new messages"
-#~ msgstr "Sinulla ei ole uusia viestejä"
-
-#~ msgid ""
-#~ "You will automatically return to the appointment dialog. The selected "
-#~ "start and end time as well as the current participant list will be "
-#~ "applied."
-#~ msgstr ""
-#~ "Palaudut automaattisesti tapaamisdialogiin. Valittu alku- ja "
-#~ "päättymisaika sekä osallistujalista otetaan käyttöön."
-
-#~ msgid ""
-#~ "Your default reminder could not be set for this appointment due to "
-#~ "insufficient permissions"
-#~ msgstr ""
-#~ "Oletusmuistutustasi ei voitu asettaa tätä tapaamista varten puuttuvien "
-#~ "lupien takia."
-
-#~ msgid "Your messages"
-#~ msgstr "Viestisi"
-
-#~ msgid "Your reply has been sent"
-#~ msgstr "Vastauksesi on lähetetty"
-
-#~ msgid "via"
-#~ msgstr "kautta"
+#~ msgid "Is smaller than"
+#~ msgstr "Pienempi kuin"
 
 #~ msgid " characters"
 #~ msgstr " merkin jälkeen"
@@ -12845,6 +12516,13 @@ msgstr "%s lisää"
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$s/%2$s"
 
+#~ msgid "%1$d unread mails"
+#~ msgstr "%1$d lukematonta viestiä"
+
+#~ msgctxt "window title"
+#~ msgid "%1$s %2$s"
+#~ msgstr "%1$s %2$s"
+
 #~ msgid "%1$s %2$s %3$s %4$s %5$s."
 #~ msgstr "%1$s %2$s %3$s %4$s %5$s."
 
@@ -12857,11 +12535,40 @@ msgstr "%s lisää"
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s."
 
+#~ msgid "%1$s Options"
+#~ msgstr "%1$s -vaihtoehdot"
+
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for %2$s"
+#~ msgstr "%1$s/%2$s"
+
+#~| msgid "%s client for Android"
+#~ msgid "%1$s for Android"
+#~ msgstr "%s asiakasohjelmisto Androidille"
+
+#~| msgid "%s client for Mac OS"
+#~ msgid "%1$s for MacOS"
+#~ msgstr "%s asiakasohjelmisto Mac OS:lle"
+
+#~| msgid "%s client for Windows"
+#~ msgid "%1$s for Windows"
+#~ msgstr "%s asiakasohjelmisto Windowsille"
+
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for iOS"
+#~ msgstr "%1$s/%2$s"
+
 #~ msgid "%1$s has ended the presentation."
 #~ msgstr "%1$s lopetti esityksen."
 
 #~ msgid "%1$s has started the presentation."
 #~ msgstr "%1$s on aloittanut esityksen."
+
+#~ msgid "%1$s is a new contact"
+#~ msgstr "%1$s on uusi kontakti"
+
+#~ msgid "%1$s is now connected with %2$s"
+#~ msgstr "%1$s on nyt yhteydessä %2$s kanssa"
 
 #~ msgid "%1$s mail"
 #~ msgid_plural "%1$s mails"
@@ -12900,6 +12607,11 @@ msgstr "%s lisää"
 #~ msgstr[0] "%d tunti"
 #~ msgstr[1] "%d tuntia"
 
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d minuutti"
+#~ msgstr[1] "%d minuuttia"
+
 #~ msgctxt "in"
 #~ msgid "%d minute"
 #~ msgid_plural "%d minutes"
@@ -12917,8 +12629,14 @@ msgstr "%s lisää"
 #~ msgstr[0] "%d viikko"
 #~ msgstr[1] "%d viikkoa"
 
+#~ msgid "%s client for Windows (Installation via the OX Updater)"
+#~ msgstr "%s asiakasohjelmisto Windowsille (asennus OX Updaterin kautta)"
+
 #~ msgid "(Default)"
 #~ msgstr "(Oletus)"
+
+#~ msgid "(current app)"
+#~ msgstr "(nykyinen sovellus)"
 
 #~ msgid "0 minutes"
 #~ msgstr "0 minuuttia"
@@ -12932,9 +12650,6 @@ msgstr "%s lisää"
 #~ msgid "1 week"
 #~ msgstr "1 viikko"
 
-#~ msgid "12 hour"
-#~ msgstr "12 tunnin"
-
 #~ msgid "2 days"
 #~ msgstr "2 päivää"
 
@@ -12946,9 +12661,6 @@ msgstr "%s lisää"
 
 #~ msgid "4 days"
 #~ msgstr "4 päivää"
-
-#~ msgid "4 hour"
-#~ msgstr "4 tunnin"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 viikkoa"
@@ -12997,8 +12709,17 @@ msgstr "%s lisää"
 #~ "Tapahtui verkon yleisvirhe. Yritä ladata asiakirja uudelleen. Ellei tästä "
 #~ "ole apua, ota yhteys järjestelmän ylläpitäjään."
 
+#~ msgid "Absent"
+#~ msgstr "Muualla"
+
 #~ msgid "Account Settings"
 #~ msgstr "Tilin asetukset"
+
+#~ msgid "Account is being created"
+#~ msgstr "Tiliä luodaan"
+
+#~ msgid "Acknowledge all reminders"
+#~ msgstr "Kuittaa kaikki muistutukset"
 
 #~ msgid "Add Attachment"
 #~ msgstr "Lisää liite"
@@ -13015,6 +12736,9 @@ msgstr "%s lisää"
 #~ msgid "Add account"
 #~ msgstr "Lisää tili"
 
+#~ msgid "Add attachment"
+#~ msgstr "Lisää liite"
+
 #~ msgid "Add cipher code"
 #~ msgstr "Lisää salauskoodi"
 
@@ -13030,11 +12754,11 @@ msgstr "%s lisää"
 #~ msgid "Add new guest"
 #~ msgstr "Lisää uusi vieras"
 
+#~ msgid "Add new reminder"
+#~ msgstr "Lisää uusi muistutus"
+
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Lisätään tilaus. Tämä voi kestää muutaman sekunnin..."
-
-#~ msgid "Additional settings"
-#~ msgstr "Lisäasetukset"
 
 #~ msgid "Addresses"
 #~ msgstr "Osoitteet"
@@ -13057,11 +12781,34 @@ msgstr "%s lisää"
 #~ msgid "All contacts"
 #~ msgstr "Lisää yhteystieto"
 
+#~ msgid "All future messages from %1$s will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] ""
+#~ "Kaikki tulevat viestit lähettäjältä %1$d siirretään valittuun kansioon."
+#~ msgstr[1] ""
+#~ "Kaikki tulevat viestit valittujen sähköpostien lähettäjiltä siirretään "
+#~ "valittuun kansioon."
+
+#~ msgid ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr ""
+#~ "Kaikki tulevat viestit valittujen viestien lähettäjiltä siirretään "
+#~ "valittuun kansioon."
+
+#~ msgid "All my appointments"
+#~ msgstr "Kaikki tapaamiset"
+
 #~ msgid "Allow us to use your %s account here"
 #~ msgstr "Salli meidän käyttää tässä %s tiliäsi"
 
 #~ msgid "An error occurred"
 #~ msgstr "Tapahtui virhe"
+
+#~ msgid "Application Toolbar"
+#~ msgstr "Sovellustyökalupalkki"
 
 #~ msgid "Applications"
 #~ msgstr "Sovellukset"
@@ -13096,6 +12843,9 @@ msgstr "%s lisää"
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "Tilausten arvioitu kesto"
 
+#~ msgid "Apps"
+#~ msgstr "Apps -sovellukset"
+
 #~ msgid "April"
 #~ msgstr "huhtikuu"
 
@@ -13129,11 +12879,17 @@ msgstr "%s lisää"
 #~ msgid "August"
 #~ msgstr "elokuu"
 
+#~ msgid "Authentication failed. Please fill in login and password."
+#~ msgstr "Varmistaminen epäonnistui. Täytä käyttäjänimi ja salasana."
+
 #~ msgid "Automatically wrap plain text after character:"
 #~ msgstr "Tekstin automaattinen rivitys näin monen merkin jälkeen:"
 
 #~ msgid "Autoplay pause in seconds"
 #~ msgstr "Automaattisen esityksen keskeytys sekunneissa"
+
+#~ msgid "Back to appointment"
+#~ msgstr "Takaisin tapaamiseen"
 
 #~| msgid "Back to sign in"
 #~ msgid "Back to devices"
@@ -13154,6 +12910,9 @@ msgstr "%s lisää"
 #~ "Vastaanottajan alapuolella on muita toimintoja esimerkiksi muille "
 #~ "vastaanottajille kopioimiseen ja liitteiden lisäämiseen."
 
+#~ msgid "Birthday"
+#~ msgstr "Syntymäpäivä"
+
 #~ msgid "Blind copy (BCC) to"
 #~ msgstr "Piilokopio (BCC)"
 
@@ -13162,6 +12921,13 @@ msgstr "%s lisää"
 
 #~ msgid "Broadcast your presentation over the Web."
 #~ msgstr "Lähetä esityksesi internetin välityksellä."
+
+#~ msgid ""
+#~ "By changing the date of this appointment you are creating an appointment "
+#~ "exception to the series."
+#~ msgstr ""
+#~ "Tämän tapaamisen ajankohtaa muuttamalla luot poikkeuksen toistuviin "
+#~ "tapahtumiin."
 
 #~ msgid "CalDAV Login"
 #~ msgstr "CalDAV -sisäänkirjautuminen"
@@ -13179,6 +12945,9 @@ msgstr "%s lisää"
 #~ msgid "Change View"
 #~ msgstr "Muuta näkymää"
 
+#~ msgid "Change color"
+#~ msgstr "Vaihda väriä"
+
 #~ msgid "Change folder"
 #~ msgstr "Vaihda kansio"
 
@@ -13187,6 +12956,9 @@ msgstr "%s lisää"
 
 #~ msgid "Change subscription"
 #~ msgstr "Muuta tilausta"
+
+#~ msgid "Change view"
+#~ msgstr "Muuta näkymää"
 
 #~ msgid "Changes have been saved."
 #~ msgstr "Muutokset tallennettu."
@@ -13197,6 +12969,13 @@ msgstr "%s lisää"
 #~| msgid "Children"
 #~ msgid "Chile"
 #~ msgstr "Lapsia"
+
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Chrome %1$s on %2$s"
+#~ msgstr "Jaa  %1$s \"%2$s\""
+
+#~ msgid "Classic colors"
+#~ msgstr "Klassiset värit"
 
 #~ msgid "Cleaning up... This may take a few seconds."
 #~ msgstr "Siivotaan... Tämä voi kestää muutaman sekunnin."
@@ -13244,6 +13023,10 @@ msgstr "%s lisää"
 #~ msgid "Click to upload image"
 #~ msgstr "Napsauta ladataksesi kuva"
 
+#~| msgid "close for %1$s"
+#~ msgid "Close for %1$s"
+#~ msgstr "sulje %1$s"
+
 #~ msgid "Close this reminder"
 #~ msgstr "Sulje tämä muistutus"
 
@@ -13253,6 +13036,9 @@ msgstr "%s lisää"
 #~| msgid "Color"
 #~ msgid "Colombia"
 #~ msgstr "Väri"
+
+#~ msgid "Color scheme"
+#~ msgstr "Värimaailma"
 
 #~ msgid "Common"
 #~ msgstr "Yleiset"
@@ -13283,6 +13069,9 @@ msgstr "%s lisää"
 #~ msgid "Confirmation status"
 #~ msgstr "Vahvistustilanne"
 
+#~ msgid "Connector for Microsoft Outlook®"
+#~ msgstr "Connector Microsoft Outlook® järjestelmille"
+
 #~ msgid "Content"
 #~ msgstr "Sisältö"
 
@@ -13295,6 +13084,16 @@ msgstr "%s lisää"
 #~ msgid "Continue the presentation"
 #~ msgstr "Jatka esitystä"
 
+#~ msgctxt "app"
+#~ msgid "Conversations"
+#~ msgstr "Keskustelut"
+
+#~ msgid ""
+#~ "Convert the entered start and end dates to match the modified timezones"
+#~ msgstr ""
+#~ "Muunna antamasi aloitus- ja lopetuspäivämäärät vastaamaan muokattuja "
+#~ "aikavyöhykkeitä"
+
 #~ msgid "Copy (CC) to"
 #~ msgstr "Kopio (CC)"
 
@@ -13303,6 +13102,9 @@ msgstr "%s lisää"
 
 #~ msgid "Could not load all participants for this task."
 #~ msgstr "Kaikkia tehtävän osallistujia ei voitu ladata."
+
+#~ msgid "Couldn't load appointment data."
+#~ msgstr "Tapaamisen tietoja ei voitu ladata."
 
 #~ msgid "Couldn't load folders."
 #~ msgstr "Kansioita ei voitu ladata."
@@ -13316,8 +13118,14 @@ msgstr "%s lisää"
 #~ msgid "Couldn't load your auto forward."
 #~ msgstr "Automaattista välitystäsi ei voitu ladata."
 
+#~ msgid "Couldn't load your contact data."
+#~ msgstr "Yhteystietojasi ei voitu ladata."
+
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Luo %s-tili käyttäen tähän tallennettuja tietoja"
+
+#~ msgid "Create exception"
+#~ msgstr "Luo poikkeus"
 
 #~ msgid "Create new task"
 #~ msgstr "Luo uusi tehtävä"
@@ -13359,8 +13167,33 @@ msgstr "%s lisää"
 #~ msgid "Current Date"
 #~ msgstr "Päivämäärä nyt"
 
+#~| msgid "Currently refreshing"
+#~ msgid "Current session"
+#~ msgstr "Virkistetään"
+
+#~ msgid "Custom colors"
+#~ msgstr "Omat värit"
+
 #~ msgid "Customizing"
 #~ msgstr "Mukauttaminen"
+
+#~ msgid "Dangerous and trusted"
+#~ msgstr "Vaaralliset ja luotetut"
+
+#~ msgid "Dangerous and trusted emails"
+#~ msgstr "Vaaralliset ja luotetut sähköpostit"
+
+#~ msgid "Dangerous emails only"
+#~ msgstr "Vain vaaralliset sähköpostit"
+
+#~ msgid "Dangerous only"
+#~ msgstr "Vain vaaralliset"
+
+#~ msgid "Dangerous, trusted and valid emails"
+#~ msgstr "Vaaralliset, luotetut ja kelpaavat sähköpostit"
+
+#~ msgid "Dark colors"
+#~ msgstr "Tummat värit"
 
 #~ msgid ""
 #~ "Data synchronization with your local (Windows) machine. Drive Client lets "
@@ -13398,6 +13231,13 @@ msgstr "%s lisää"
 #~ "Kaikkien moduulien yksityiskohtaiset opaskirjat on saatavilla asetusten "
 #~ "ohjeosiosta."
 
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Tiesitkö, että voi ottaa OX App Suiten mukaasi? Napauta tätä kuvaketta ja "
+#~ "valitse valikosta 'Yhdistä laitteesi'."
+
 #~ msgid "Direct link: %1$s"
 #~ msgstr "Suora linkki: %1$s"
 
@@ -13409,6 +13249,9 @@ msgstr "%s lisää"
 
 #~ msgid "Display area"
 #~ msgstr "Näyttöalue"
+
+#~ msgid "Display emoticons as graphics in text emails"
+#~ msgstr "Näytä hymiöt kuvina tekstimuotoisissa posteissa"
 
 #~ msgid "Displaying information"
 #~ msgstr "Tietojen näyttäminen"
@@ -13430,11 +13273,45 @@ msgstr "%s lisää"
 #~ msgid "Do you really want to discard this mail?"
 #~ msgstr "Haluatko varmasti hylätä tämän viestin?"
 
+#~| msgid "Do you really want to delete this account?"
+#~ msgid ""
+#~ "Do you really want to terminate all active sessions except the current "
+#~ "one?"
+#~ msgstr "Haluatko varmasti poistaa tämän tilin?"
+
+#~| msgctxt "One file only"
+#~| msgid "Do you really want to delete this version?"
+#~ msgid "Do you really want to terminate that session?"
+#~ msgstr "Haluatko todella poistaa tämän version?"
+
 #~ msgid "Do you want to create a %s account?"
 #~ msgstr "Haluatko luoda %s-tilin?"
 
+#~ msgid ""
+#~ "Do you want to delete the whole series or just one appointment within the "
+#~ "series?"
+#~ msgstr "Haluatko poistaa koko sarjan vai ainoastaan yhden tapaamisen?"
+
+#~ msgid ""
+#~ "Do you want to edit the whole series or just one appointment within the "
+#~ "series?"
+#~ msgstr "Haluatko muokata koko sarjaa vai ainoastaan yhtä tapaamista?"
+
+#~ msgctxt "app"
+#~ msgid "Documents"
+#~ msgstr "Asiakirjat"
+
 #~ msgid "Double click to rename"
 #~ msgstr "Kaksoisnäpäytä nimetäksesi uudelleen."
+
+#~ msgid "Doubleclick in this row for whole day appointment"
+#~ msgstr "Tuplaklikkaa tätä riviä valitaksesi koko päivän tapaaminen"
+
+#~ msgid "Download %s via the OX Updater"
+#~ msgstr "Lataa %s OX Updaterin kautta"
+
+#~ msgid "Download installation file (for Windows)"
+#~ msgstr "Lataa Windows asennustiedosto"
 
 #~ msgid "Drag and drop"
 #~ msgstr "Siirrä ja tiputa"
@@ -13459,6 +13336,10 @@ msgstr "%s lisää"
 #~| msgid "Last month"
 #~ msgid "East Timor"
 #~ msgstr "Viime kuussa"
+
+#~| msgid "Due on %1$s"
+#~ msgid "Edge on %1$s"
+#~ msgstr "Erääntyy %1$s"
 
 #~ msgid "Edit Tabs"
 #~ msgstr "Muokkaa välilehtiä"
@@ -13500,8 +13381,8 @@ msgstr "%s lisää"
 #~ msgid "Email notification for task creator?"
 #~ msgstr "Sähköposti-ilmoitus tehtävän luojalle?"
 
-#~ msgid "Email notification for task participant?"
-#~ msgstr "Sähköposti-ilmoitus tehtävän osallistujalle?"
+#~ msgid "Empty table cell"
+#~ msgstr "Tyhjennä taulukon solu"
 
 #~ msgid "Emptying folder... This may take a few seconds."
 #~ msgstr "Tyhjennetään kansiota... Tämä voi kestää muutaman sekunnin."
@@ -13522,6 +13403,9 @@ msgstr "%s lisää"
 
 #~ msgid "Enabled for inbox only"
 #~ msgstr "Käytössä vain Saapuneet kansiolle"
+
+#~ msgid "Encrypt"
+#~ msgstr "Salaa"
 
 #~ msgid "End Presentation"
 #~ msgstr "Tehtäväkutsut"
@@ -13615,11 +13499,20 @@ msgstr "%s lisää"
 #~ msgid "Every %1$d years on %2$s %3$d"
 #~ msgstr "Joka %1$d vuosi %2$s %3$d"
 
+#~ msgid "Exchange ActiveSync"
+#~ msgstr "Vaihda ActiveSync"
+
 #~ msgid "Existing shares"
 #~ msgstr "Olemassaolevat jaot"
 
 #~ msgid "Exit Fullscreen"
 #~ msgstr "Poistu"
+
+#~ msgid "Expand timeframe by one month"
+#~ msgstr "Laajenna aikaväliä kuukaudella"
+
+#~ msgid "Expiration: %1$d"
+#~ msgstr "Vanhentumisaika: %1$d"
 
 #~| msgid "Send as vCard"
 #~ msgid "Export as vCard"
@@ -13631,6 +13524,9 @@ msgstr "%s lisää"
 #~ msgctxt "help"
 #~ msgid "External E-Mail Accounts"
 #~ msgstr "Ulkoiset sähköpostitilit"
+
+#~ msgid "External guests"
+#~ msgstr "Ulkoiset vieraat"
 
 #~ msgid "Facebook"
 #~ msgstr "Facebook"
@@ -13682,6 +13578,10 @@ msgstr "%s lisää"
 #~ msgid "Files can not be uploaded, because quota exceeded."
 #~ msgstr "Tiedostoja ei voida ladata, koska kiintiö on ylitetty."
 
+#~| msgid "%1$s of %2$s"
+#~ msgid "Firefox %1$s on %2$s"
+#~ msgstr "%1$s/%2$s"
+
 #~ msgid "Flag mail with"
 #~ msgstr "Aseta tunniste"
 
@@ -13693,6 +13593,9 @@ msgstr "%s lisää"
 
 #~ msgid "Folder tree"
 #~ msgstr "Kansiopuu"
+
+#~ msgid "Folder type"
+#~ msgstr "Kansion tyyppi"
 
 #~ msgid "Folder-specific actions for %1$s"
 #~ msgstr "Kansiokohtaiset toimenpiteet  kansiolle %1$s"
@@ -13751,6 +13654,12 @@ msgstr "%s lisää"
 #~ msgid "Halo view"
 #~ msgstr "Leijuva näkymä"
 
+#~ msgid "Has Attachment"
+#~ msgstr "Mukana liite"
+
+#~ msgid "Header exists"
+#~ msgstr "Otsikko on olemassa"
+
 #~ msgid "Here is what %s knows about %s:"
 #~ msgstr "Tämän %s tietää kohteesta %s:"
 
@@ -13774,6 +13683,12 @@ msgstr "%s lisää"
 
 #~ msgid "Hide names"
 #~ msgstr "Piilota nimet"
+
+#~ msgid "High contrast theme"
+#~ msgstr "Korkean kontrastin teema"
+
+#~ msgid "How does this work?"
+#~ msgstr "Kuinka tämä toimii?"
 
 #~ msgid "How the settings are organized"
 #~ msgstr "Asetusten järjestys"
@@ -13802,6 +13717,10 @@ msgstr "%s lisää"
 #~ msgid "IMAP server"
 #~ msgstr "IMAP -palvelin"
 
+#~| msgid "Added %1$s."
+#~ msgid "IP Address: %1$s"
+#~ msgstr "%1$s lisätty."
+
 #~ msgid ""
 #~ "If a folder contains images, you can display a slideshow. To do so click "
 #~ "on Slideshow on the upper right side."
@@ -13817,6 +13736,38 @@ msgstr "%s lisää"
 #~ "right side."
 #~ msgstr ""
 #~ "Jos et enää halua nähdä sovellusikkunaa, napsauta oikean yläkulman rastia."
+
+#~ msgid ""
+#~ "If you select different timezones, the appointment's start and end dates "
+#~ "are saved in the timezone of the appointment's start date. A different "
+#~ "end date timezone only allows a convenient conversion."
+#~ msgstr ""
+#~ "Jos valitset eri aikavyöhykkeet, tapaamisen aloitus- ja "
+#~ "lopetuspäivämäärät tallennetaan samassa aikavyöhykkeessä kuin tapaamisen "
+#~ "aloituspäivämäärä. Lopetuspäivämäärän eri aikavyöhyke sallii helpon "
+#~ "muuntamisen eri aikavyöhykkeeseen."
+
+#~ msgid ""
+#~ "If you spot a free time, just select this area. To do this, move the "
+#~ "cursor to the start time, hold the mouse button, and <b>drag the mouse</"
+#~ "b> to the end time."
+#~ msgstr ""
+#~ "Jos näet vapaan ajan, valitse tämä alue. Siirrä osoitin alkuaikaan, paina "
+#~ "hiiren nappi pohjaan ja <b> vedä hiiri</b> päättymisaikaan."
+
+#~ msgid ""
+#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
+#~ "for example."
+#~ msgstr ""
+#~ "Jätä huomiotta olemassaolevat tapaamiset. Auttaa esim. julkisten "
+#~ "lomakalentereiden tietojen siirtämisessä."
+
+#~ msgid ""
+#~ "Ignore existing events. Helpful to import public holiday calendars, for "
+#~ "example."
+#~ msgstr ""
+#~ "Älä huomioi olemassaolevia tapahtumia. Hyödyllinen esimerkiksi yleisiä "
+#~ "vapaapäiviä sisältäviä kalentereita tuotaessa."
 
 #~ msgid "Import into"
 #~ msgstr "Tuo"
@@ -13836,6 +13787,13 @@ msgstr "%s lisää"
 #~ "Useamman sähköpostin muokkaamiseksi, aktivoi valintaruutuja sähköpostien "
 #~ "vasemmalla puolella. Jos valintaruudut eivät näy, napsauta kuvaketta "
 #~ "vasemmassa alareunassa."
+
+#~ msgid ""
+#~ "In shared folders, the appointment is displayed as a simple time slot for "
+#~ "non-attending users."
+#~ msgstr ""
+#~ "Jaetuissa kansioissa tapaaminen näkyy yksinkertaisena aikajaksona ei-"
+#~ "osallistuville käyttäjille."
 
 #~ msgid ""
 #~ "In the Details section at the bottom right side you can enter billing "
@@ -13867,11 +13825,21 @@ msgstr "%s lisää"
 #~ msgstr "Tietoa tilin palauttamisesta..."
 
 #~ msgid ""
+#~ "Informs about the current status of Emails and appointments without "
+#~ "having to display the user interface or another Windows® client."
+#~ msgstr ""
+#~ "Ilmoittaa tämänhetkisen viestien ja tapaamisten tilanteen ilman "
+#~ "käyttöliittymän tai toisen Windows asiakasohjelmiston näyttämistä."
+
+#~ msgid ""
 #~ "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 #~ "Screen'%4$s"
 #~ msgstr ""
 #~ "Asenna tämä web sovellus %1$s laiteeseesi: Napauta %2$s ja sitten "
 #~ "%3$s'Add to Home Screen'%4$s"
+
+#~ msgid "Internal & external users"
+#~ msgstr "Sisäiset & ulkopuoliset käyttäjät"
 
 #~ msgid "Invalid data"
 #~ msgstr "Epäkelpo tieto"
@@ -13929,14 +13897,17 @@ msgstr "%s lisää"
 #~ msgid "Label"
 #~ msgstr "Tunniste"
 
+#~ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
+#~ msgstr "Käynnistyspudotusvalikko Paina [enter] päästäksesi pudotusvalikkoon"
+
 #~ msgid "Launching an app"
 #~ msgstr "Sovelluksen käynnistäminen"
 
 #~ msgid "Leave"
 #~ msgstr "Lähde"
 
-#~ msgid "Leave Presentation"
-#~ msgstr "Tehtäväkutsut"
+#~ msgid "Leave empty if you have none"
+#~ msgstr "Jätä tyhjäksi jos ei mitään"
 
 #~ msgid "Leave presentation"
 #~ msgstr "Jätä esitys"
@@ -13952,6 +13923,18 @@ msgstr "%s lisää"
 
 #~ msgid "Line wrap when sending text mails after "
 #~ msgstr "Rivitä tekstimuotoiset postit "
+
+#~ msgid "LinkedIn"
+#~ msgstr "LinkedIn"
+
+#~ msgid "LinkedIn Network Updates"
+#~ msgstr "LinkedIn Network Updates"
+
+#~ msgid "LinkedIn reported an error:"
+#~ msgstr "LinkedIn virhe:"
+
+#~ msgid "List of public calendars and events"
+#~ msgstr "Julkisten kalenterien ja tapahtumien luettelo"
 
 #~ msgid "Loop once only"
 #~ msgstr "Toista vain kerran"
@@ -13976,6 +13959,9 @@ msgstr "%s lisää"
 
 #~ msgid "Manage applications"
 #~ msgstr "Hallinnoi sovelluksia"
+
+#~ msgid "Manage permission now"
+#~ msgstr "Hallinnoi oikeuksiasi"
 
 #~ msgctxt "help"
 #~ msgid "Managing E-Mail messages"
@@ -14036,6 +14022,9 @@ msgstr "%s lisää"
 
 #~ msgid "Navigation bar"
 #~ msgstr "Navigointipalkki"
+
+#~ msgid "Never."
+#~ msgstr "Ei koskaan"
 
 #~| msgid "New calendar"
 #~ msgid "New Caledonia"
@@ -14118,11 +14107,23 @@ msgstr "%s lisää"
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Uutisvirrassasi ei ole mitään."
 
+#~ msgid "Notifier"
+#~ msgstr "Ilmoitin"
+
+#~ msgid "Notify all participants by email."
+#~ msgstr "Ilmoita osallistujille sähköpostitse."
+
 #~ msgid "November"
 #~ msgstr "marraskuu"
 
 #~ msgid "Number of days in work week"
 #~ msgstr "Työpäivien määrä viikossa"
+
+#~ msgid "Number of items"
+#~ msgstr "Kohteiden määrä"
+
+#~ msgid "Number of messages"
+#~ msgstr "Viestien määrä"
 
 #~ msgid "October"
 #~ msgstr "lokakuu"
@@ -14144,6 +14145,15 @@ msgstr "%s lisää"
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Näytä mobiililaitteilla widget-yhteenveto"
 
+#~ msgid "Open in browser"
+#~ msgstr "Avaa selaimessa"
+
+#~ msgid "Open in browser tab"
+#~ msgstr "Avaa selaimessa"
+
+#~ msgid "Open on LinkedIn"
+#~ msgstr "Avaa Linkedin:ssä"
+
 #~ msgid "Opening E-Mail threads"
 #~ msgstr "Sähköpostikeskustelun avaaminen"
 
@@ -14152,6 +14162,10 @@ msgstr "%s lisää"
 
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Sähköpostiasetusten avaaminen"
+
+#~| msgid "Other Address"
+#~ msgid "Other clients"
+#~ msgstr "Muu osoite"
 
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Erääntynyt tehtävä. %1$s %2$s. Paina [enter] avataksesi"
@@ -14186,6 +14200,9 @@ msgstr "%s lisää"
 #~ msgid "Phone alt"
 #~ msgstr "Puhelin vaihtoehtoinen"
 
+#~ msgid "Pick a time here"
+#~ msgstr "Valitse aika tästä"
+
 #~ msgid "Play audio files"
 #~ msgstr "Soita äänitiedostoja"
 
@@ -14210,6 +14227,12 @@ msgstr "%s lisää"
 #~ msgstr ""
 #~ "Nimeä välilehdet vapaasti uudelleen paremmin tarpeitasi vastaaviksi. "
 #~ "Käytä ruutuja tiettyjen välilehtien kytkemiseksi päälle ja pois päältä."
+
+#~ msgid "Please note that distribution lists cannot contain ressources."
+#~ msgstr "Jakelulistoihin ei voi sisältyä resursseja."
+
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr "Huomaa, että muut osallistujat poistetaan kun kalenteri siirretään."
 
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Määrittele nämä puuttuvat muuttujat:"
@@ -14255,6 +14278,9 @@ msgstr "%s lisää"
 #~ msgid "Press [enter] to jump to the facebook stream."
 #~ msgstr "Paina [enter] siirtyäksesi facebook-virtaan."
 
+#~ msgid "Press [enter] to jump to the linkedin stream."
+#~ msgstr "Paina [enter] siirtyäksesi linkedin-virtaan."
+
 #~ msgid "Press [enter] to open"
 #~ msgstr "Paina [enter] avataksesi "
 
@@ -14277,11 +14303,29 @@ msgstr "%s lisää"
 #~ msgid "Privacy Notice"
 #~ msgstr "Tiedote yksityisyyden suojasta"
 
+#~ msgid "Public"
+#~ msgstr "Julkinen"
+
 #~ msgid "Publication"
 #~ msgstr "Julkaisu"
 
 #~ msgid "Publications must have a name"
 #~ msgstr "Julkaisulla täytyy olla nimi"
+
+#~ msgid "Quick launch 1"
+#~ msgstr "Pikakäynnistys 1"
+
+#~ msgid "Quick launch 2"
+#~ msgstr "Pikakäynnistys 2"
+
+#~ msgid "Quick launch 3"
+#~ msgstr "Pikakäynnistys 3"
+
+#~ msgid "Quick reply"
+#~ msgstr "Nopea vastaus"
+
+#~ msgid "Quit"
+#~ msgstr "Lopeta"
 
 #~ msgid ""
 #~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
@@ -14297,14 +14341,24 @@ msgstr "%s lisää"
 #~ msgid "Reading the details"
 #~ msgstr "Yksityiskohtien katselu"
 
+#~ msgid "Recent activities"
+#~ msgstr "Äskettäiset tapahtumat"
+
 #~ msgid "Recipients can edit"
 #~ msgstr "Vastaanottajat voivat muokata"
 
 #~ msgid "Recurring tasks need a valid end date."
 #~ msgstr "Toistuvat tehtävät tarvitsevat loppumispäivämäärän."
 
+#~ msgid "Remind me again %1$s"
+#~ msgstr "Muistuta minua uudestaan %1$s"
+
 #~ msgid "Remove facet"
 #~ msgstr "Poista asetus"
+
+#~| msgid "Remove from recipient list"
+#~ msgid "Remove restore point: \"%1$s\""
+#~ msgstr "Poista vastaanottajien listalta"
 
 #~ msgid "Reply All"
 #~ msgstr "Vastaa kaikille"
@@ -14317,6 +14371,9 @@ msgstr "%s lisää"
 
 #~ msgid "Resource name"
 #~ msgstr "Resurssin nimi"
+
+#~ msgid "Restore applications"
+#~ msgstr "Keskeneräisiä toimintoja"
 
 #~| msgid "Never"
 #~ msgid "Revert"
@@ -14368,6 +14425,10 @@ msgstr "%s lisää"
 #~ msgid "SMTP server"
 #~ msgstr "SMTP -palvelin"
 
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Safari %1$s on %2$s"
+#~ msgstr "Jaa  %1$s \"%2$s\""
+
 #~ msgid "Save in file store"
 #~ msgstr "Tallenna tiedostovarastoon"
 
@@ -14381,6 +14442,9 @@ msgstr "%s lisää"
 #~ msgid_plural "Saving attachments to Drive"
 #~ msgstr[0] "Tallennetaan liite Drivelle"
 #~ msgstr[1] "Tallennetaan liitteet Drivelle"
+
+#~ msgid "Scheduling"
+#~ msgstr "Suunnittelu"
 
 #~ msgid "Search Options"
 #~ msgstr "Hakuvaihtoehdot"
@@ -14429,6 +14493,10 @@ msgstr "%s lisää"
 #~ msgid "September"
 #~ msgstr "syyskuu"
 
+#~ msgctxt "app"
+#~ msgid "Settings"
+#~ msgstr "Asetukset"
+
 #~ msgid "Settings for advanced users"
 #~ msgstr "Laajat asetukset"
 
@@ -14444,6 +14512,16 @@ msgstr "%s lisää"
 #~ msgid "Shared by: %1$s"
 #~ msgstr "Etsittiin %1$s"
 
+#~ msgid "Sharing link created for file \"%1$d\""
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "Jaetaan tiedostoa  \"%1$d\" varten luotu linkki"
+#~ msgstr[1] "Jaetaan %1$d kohdetta varten luotu linkki"
+
+#~ msgid "Sharing link created for folder \"%1$d\""
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "Jaetaan kansiota  \"%1$d\" varten luotu linkki"
+#~ msgstr[1] "Jaetaan %1$d kohdetta varten luotu linkki"
+
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"
 #~ msgstr ""
@@ -14453,6 +14531,9 @@ msgstr "%s lisää"
 #~ msgid ""
 #~ "Should only the current message or all messages of the sender be moved"
 #~ msgstr "Poistetaanko vain tämä viesti vai kaikki saman lähettäjän viestit?"
+
+#~ msgid "Show Links"
+#~ msgstr "Näytä linkit"
 
 #~ msgid "Show QR code"
 #~ msgstr "Näytä QR koodi"
@@ -14492,6 +14573,9 @@ msgstr "%s lisää"
 #~ msgid "Show legal information"
 #~ msgstr "Näytä oikeudellinen tiedote"
 
+#~ msgid "Show message authenticity"
+#~ msgstr "Näytä viestin aitous"
+
 #~ msgid "Show message size"
 #~ msgstr "Näytä viestin koko"
 
@@ -14519,6 +14603,9 @@ msgstr "%s lisää"
 #~ msgid "Signed in as %1$s"
 #~ msgstr "Kirjautuneena käyttäjänä %1$s"
 
+#~ msgid "Signed in as:"
+#~ msgstr "Kirjautuneena käyttäjänä"
+
 #~ msgid "Signing out"
 #~ msgstr "Uloskirjautuminen"
 
@@ -14528,9 +14615,6 @@ msgstr "%s lisää"
 
 #~ msgid "Size (bytes)"
 #~ msgstr "Koko (tavuina)"
-
-#~ msgid "Slideshow"
-#~ msgstr "Diaesitys"
 
 #~ msgid "Slideshow / Autoplay mode"
 #~ msgstr "Diaesitys / Automaattinen esitys"
@@ -14544,6 +14628,12 @@ msgstr "%s lisää"
 #~ msgstr ""
 #~ "Some-tilejä käytetään vain yhteys ja/tai kalenteritietojen lataamiseen "
 #~ "(download)"
+
+#~ msgid ""
+#~ "Some files cannot be uploaded because they exceed the maximum file size "
+#~ "of %1$s"
+#~ msgstr ""
+#~ "Joitakin tiedostoja ei voida ladata, koska ne ylittävät %1$s enimmäiskoon"
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Joku jakoi kanssasi tiedoston"
@@ -14567,14 +14657,18 @@ msgstr "%s lisää"
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Tiedostoa ei voitu ladata."
 
+#~ msgid ""
+#~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
+#~ "LinkedIn with the permission to do read messages."
+#~ msgstr ""
+#~ "Emme voi auttaa, pahoittelumme. Palveluntarjoajasi pitää hankkia LinkedIn "
+#~ "avain, jolla voi lukea viestejä."
+
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Sähköpostien lajittelu"
 
 #~ msgid "Sorting your tasks"
 #~ msgstr "Tehtävien lajittelu"
-
-#~ msgid "Source"
-#~ msgstr "Lähde"
 
 #~ msgid "Spam folder"
 #~ msgstr "Roskaposti"
@@ -14594,12 +14688,32 @@ msgstr "%s lisää"
 #~ msgid "Start the presentation"
 #~ msgstr "Aloita esitys"
 
+#~ msgid "Subscribe IMAP folders"
+#~ msgstr "Tilaa IMAP kansioita"
+
+#~ msgid "Subscribe address book"
+#~ msgstr "Tilaa osoitekirja"
+
+#~ msgid "Subscribe calendar"
+#~ msgstr "Tilaa kalenteri"
+
 #~ msgid "Such data will never be uploaded"
 #~ msgstr "Tietoja ei koskaan ladata (upload)"
 
 #~| msgid "Your name"
 #~ msgid "Suriname"
 #~ msgstr "Nimesi"
+
+#~ msgid ""
+#~ "Synchronization of Emails, Calendar, Contacts and Tasks, along with "
+#~ "Public, Shared and System Folders to Microsoft Outlook® clients."
+#~ msgstr ""
+#~ "Viestien, kalenterin, yhteystietojen ja tehtävien sekä julkisten, "
+#~ "jaettujen ja järjestelmäkansioiden synkronointi Microsoft Outlook® "
+#~ "asiakasohjelmille."
+
+#~ msgid "Synchronize with Outlook"
+#~ msgstr "Synkronoi Outlookin kanssa"
 
 #~| msgid "Enable"
 #~ msgid "Tablet"
@@ -14624,6 +14738,9 @@ msgstr "%s lisää"
 
 #~ msgid "Template"
 #~ msgstr "Pohja"
+
+#~ msgid "Temporary"
+#~ msgstr "Tilapäinen"
 
 #~ msgid "Text"
 #~ msgstr "Teksti"
@@ -14679,6 +14796,15 @@ msgstr "%s lisää"
 #~ msgstr ""
 #~ "Portaali ilmoittaa sinulle ajankohtaisista sähköposteista, tapaamisista "
 #~ "ja some-uutisista."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared folders "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view."
+#~ msgstr ""
+#~ "Tapaaminen ei näy ei-osallistuville käyttäjille jaetuissa kansioissa. "
+#~ "Tapaamista ei otetaan huomioon aikataulukonflikteissa eikä se "
+#~ "aikataulunäkymässä."
 
 #~ msgid ""
 #~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
@@ -14751,6 +14877,9 @@ msgstr "%s lisää"
 #~ "<a href=\"#\" data-widget=\"options\" data-attribute=\"day\">keskiviikko</"
 #~ "a>."
 
+#~ msgid "The appointment is visible for all users in shared folders."
+#~ msgstr "Tapaaminen näkyy kaikille käyttäjille jaetuissa kansioissa."
+
 #~ msgid "The calendar views display a calendar sheet with the appointments."
 #~ msgstr "Kalenterinäkymät esittävät tapaamiset kalenterissa."
 
@@ -14767,8 +14896,25 @@ msgstr "%s lisää"
 #~ msgid "The email address %1$s is already in the list"
 #~ msgstr "Sähköpostiosoite %1$s on jo listassa"
 
+#~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
+#~ msgstr "\"%1$s\"  -kenttä ylittää merkkien enimmäismäärän %2$d."
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] "Tiedostoa ei voida ladata, koska se ylittää  %1$s kiintiön"
+#~ msgstr[1] "Tiedostoja ei voida ladata, koska ne ylittävät %1$s kiintiön"
+
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Tiedosto on saatavilla kohteesta %1$s"
+
+#~ msgid ""
+#~ "The files cannot be uploaded because each file exceeds the maximum file "
+#~ "size of %1$s"
+#~ msgstr ""
+#~ "Tiedostoja ei voida ladata, koska ne ylittävät tiedoston enimmäiskoon  "
+#~ "%1$s"
 
 #~ msgid "The folder is available at %1$s"
 #~ msgstr "Kansio on saatavilla kohteesta %1$s"
@@ -14779,6 +14925,13 @@ msgstr "%s lisää"
 #~ msgid "The following actions apply to all messages (%1$d) in this folder:"
 #~ msgstr ""
 #~ "Seuraavat toiminnot koskevat kaikkia viestejä  (%1$d) tässä kansiossa:"
+
+#~ msgid ""
+#~ "The following applications can be restored. Just remove the restore point "
+#~ "if you don't want it to be restored."
+#~ msgstr ""
+#~ "Haluatko jatkaa seuraavia kesken jääneitä toimintoja? Mikäli et halua "
+#~ "jatkaa, klikkaa roskakori-kuvaketta."
 
 #~ msgid ""
 #~ "The icon at the bottom right side helps you sort your tasks. Click the "
@@ -14877,6 +15030,13 @@ msgstr "%s lisää"
 #~ "\"options\">ei pääty koskaan</a>."
 
 #~ msgid ""
+#~ "The setting has been saved and will become active when you enter the "
+#~ "application the next time."
+#~ msgstr ""
+#~ "Asetukset ovat tallentuneet ja astuvat voimaan, kun seuraavaksi kirjaudut "
+#~ "ohjelmaan."
+
+#~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "
 #~ "e.g Basic settings, E-Mail or My contact data."
 #~ msgstr ""
@@ -14905,6 +15065,13 @@ msgstr "%s lisää"
 #~ "Välilehdellä merkitty saapuneen postin laatikko voidaan kytkeä kokonaan "
 #~ "pois päältä postin asetuksista."
 
+#~ msgid ""
+#~ "The timezone of this appointment (%1$s) differs from your default "
+#~ "timezone (%2$s)."
+#~ msgstr ""
+#~ "Tämän tapaamisen (%1$s) aikavyöhyke poikkeaa oletusaikavyöhykkeestäsi  "
+#~ "(%2$s)."
+
 #~ msgid "There are currently no participants."
 #~ msgstr "Osallistujia ei tällä hetkellä ole."
 
@@ -14912,6 +15079,12 @@ msgstr "%s lisää"
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
 #~ msgstr[0] "Tällä ajanjaksolla on jo %1$d tapaaminen."
 #~ msgstr[1] "Tällä ajanjaksolla on jo %1$d tapaamista."
+
+#~ msgid "There is no preview for this file type"
+#~ msgstr "Tälle tiedostotyypille ei ole esikatselumahdollisuutta"
+
+#~ msgid "There were not activities in your network"
+#~ msgstr "Verkostossasi ei ole tapahtumia"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "Tätä tiliä ei pystytä varmentamaan"
@@ -14975,14 +15148,34 @@ msgstr "%s lisää"
 #~ "Tämä kansio on jaettu muiden kanssa. Se ei ole enää kutsuttujen vieraiden "
 #~ "saatavilla."
 
+#~ msgid "This mail has been sent from %1$s."
+#~ msgstr "Tämä viesti on lähetetty laitteesta %1$s."
+
 #~ msgid "This may take some seconds"
 #~ msgstr "Tämä voi kestää muutaman sekunnin"
+
+#~ msgid "This message is from a trusted sender."
+#~ msgstr "Tämä viesti on luotetulta lähettäjältä."
 
 #~ msgid "This message is read, press this button to mark it as unread."
 #~ msgstr "Tämä sähköposti on luettu, paina merkitäksesi se lukemattomaksi."
 
 #~ msgid "This message is unread, press this button to mark it as read."
 #~ msgstr "Tätä sähköpostia ei ole luettu, paina merkitäksesi se luetuksi."
+
+#~ msgid ""
+#~ "This might be a phishing email because we could not verify that it is "
+#~ "really from %1$s."
+#~ msgstr ""
+#~ "Tämä saattaa olla kalasteluviesti, koska emme voineet varmistaa "
+#~ "lähettäjän todella olevan %1$s."
+
+#~ msgid ""
+#~ "This might be a phishing mail because we could not verify that this email "
+#~ "is really from %1$s."
+#~ msgstr ""
+#~ "Tämä saattaa olla urkintaviesti, koska emme voi varmistaa sähköpostin "
+#~ "lähettäjän olevan todella  %1$s."
 
 #~ msgid "Tile"
 #~ msgstr "Pinoa"
@@ -15235,11 +15428,17 @@ msgstr "%s lisää"
 #~ msgid "Toggle search"
 #~ msgstr "Vaihtele hakua"
 
+#~ msgid "Toggle viewport size"
+#~ msgstr "Vaihtele ikkunan kokoa"
+
 #~ msgid "Too many contacts in your address book."
 #~ msgstr "Osoitekirjassasi on liian monta yhteystietoa."
 
 #~ msgid "Tour: Coming from OX6"
 #~ msgstr "Esittely: Tulossa OX6"
+
+#~ msgid "Town"
+#~ msgstr "Kaupunki"
 
 #~ msgid "Tracking the editing status"
 #~ msgstr "Muokkaustilanteen seuraaminen"
@@ -15247,11 +15446,22 @@ msgstr "%s lisää"
 #~ msgid "Trash folder"
 #~ msgstr "Roskat"
 
+#~| msgid "Unknown sender"
+#~ msgid "Unknown client"
+#~ msgstr "Tuntematon lähettäjä"
+
+#~| msgid "Unknown sender"
+#~ msgid "Unkown client"
+#~ msgstr "Tuntematon lähettäjä"
+
 #~ msgid "Unnamed"
 #~ msgstr "Nimeämätön"
 
 #~ msgid "Unread only"
 #~ msgstr "Vain lukemattomat"
+
+#~ msgid "Updater"
+#~ msgstr "Päivittäjä"
 
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "Päivitetään tilitietoja Tämä saattaa kestää muutaman sekunnin."
@@ -15276,8 +15486,14 @@ msgstr "%s lisää"
 #~ msgid "Use"
 #~ msgstr "Käytä"
 
+#~ msgid "Use Password"
+#~ msgstr "Käytä salasanaa"
+
 #~ msgid "Use SSL connection"
 #~ msgstr "Käytä SSL yhteyttä"
+
+#~ msgid "Use accessibility improvements"
+#~ msgstr "Käytä saatavuusparannuksia"
 
 #~ msgid ""
 #~ "Use cursor keys to change the item position. Virtual cursor mode has to "
@@ -15285,6 +15501,9 @@ msgstr "%s lisää"
 #~ msgstr ""
 #~ "Käytä nuolinäppäimiä muuttaaksesi kohteen sijaintia. Virtuaalikursori "
 #~ "täytyy kytkeä pois päältä."
+
+#~ msgid "Use cursor keys to navigate"
+#~ msgstr "Käytä nuolinäppäimiä navigointiin"
 
 #~| msgid ""
 #~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
@@ -15335,11 +15554,18 @@ msgstr "%s lisää"
 #~ msgid "View Slideshow"
 #~ msgstr "Näytä diaesitys"
 
+#~ msgid "View attachment"
+#~ msgstr "Katsele liitettä"
+
 #~ msgid "View participants"
 #~ msgstr "Kaso osallistujat"
 
 #~ msgid "View the presentation in fullscreen on your device."
 #~ msgstr "Katso esitys koko näytön kokoisena omalla laitteellasi."
+
+#~ msgid "We could not verify that this email is really from %1$s."
+#~ msgstr ""
+#~ "Emme voineet varmistaa, että tämän viestin lähettäjä on varmuudella %1$s."
 
 #~ msgid "Week View"
 #~ msgstr "Viikkonäkymä"
@@ -15353,6 +15579,18 @@ msgstr "%s lisää"
 #~| msgid "Do you really want to discard your changes?"
 #~ msgid "What do you want to use on your iPhone?"
 #~ msgstr "Haluatko varmasti hylätä muutoksesi?"
+
+#~ msgid ""
+#~ "When executing the downloaded file, an installation wizard will be "
+#~ "launched. Follow the instructions and install the updater. Installs "
+#~ "latest versions of Windows® client software. The Updater automatically "
+#~ "informs about new updates. You can download the updates from within the "
+#~ "Updater."
+#~ msgstr ""
+#~ "Ladattu tiedosto suoritettaessa käynnistyy ohjattu asennus. Seuraa "
+#~ "ohjeita ja asenna päivittäjä. Tämä asentaa uusimman version Windows® "
+#~ "asiakasohjelmasta. Päivittäjä ilmoittaa automaattisesti uusista "
+#~ "päivityksistä. Uusimmat päivitykset voit ladata päivittäjän kautta."
 
 #~ msgid ""
 #~ "When using this feature, you as the current owner of the data are "
@@ -15398,6 +15636,20 @@ msgstr "%s lisää"
 #~ msgstr "Kyllä, siirrä aina kaikki"
 
 #~ msgid ""
+#~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
+#~ "Appointments will therefore be created in your private calendar."
+#~ msgstr ""
+#~ "Sinulla ei ole valtuuksia luoda tapaamisia kohteeseen \"%1$s\" (omistaja "
+#~ "%2$s). Tapaamiset luodaan siksi yksityiseen kalenteriisi."
+
+#~ msgid ""
+#~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
+#~ "therefore be created in your private calendar."
+#~ msgstr ""
+#~ "Sinulla ei ole valtuuksia luoda tapaamisia kohteeseen \"%1$s\". "
+#~ "Tapaamiset luodaan siksi yksityiseen kalenteriisi."
+
+#~ msgid ""
 #~ "You can drag and drop files from your computer here to add as attachment."
 #~ msgstr "Voit raahata ja pudottaa liitetiedostosi tähän."
 
@@ -15407,6 +15659,11 @@ msgstr "%s lisää"
 #~ msgstr ""
 #~ "Siirrä ja tipauta tiedostoja koneeltasi ladataksesi uuden tiedoston tai "
 #~ "uuden version tiedostosta."
+
+#~ msgid ""
+#~ "You can import existing signatures from the previous product generation."
+#~ msgstr ""
+#~ "Voit tuoda olemassaolevia allekirjoituksia aiemmasta tuotesukupolvesta."
 
 #~ msgid ""
 #~ "You can manage desktop notifications at any time, by vitising your "
@@ -15435,8 +15692,22 @@ msgstr "%s lisää"
 #~ msgid "You have 1 unread message"
 #~ msgstr "Sinulla on yksi lukematon viesti"
 
+#~ msgid "You have no new messages"
+#~ msgstr "Sinulla ei ole uusia viestejä"
+
 #~ msgid "You have reauthorized this account."
 #~ msgstr "Sinun täytyy uudelleenvaltuuttaa tämä tili."
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "Syötä käyttäjätunnus ja salasana tilataksesi."
+
+#~ msgid ""
+#~ "You will automatically return to the appointment dialog. The selected "
+#~ "start and end time as well as the current participant list will be "
+#~ "applied."
+#~ msgstr ""
+#~ "Palaudut automaattisesti tapaamisdialogiin. Valittu alku- ja "
+#~ "päättymisaika sekä osallistujalista otetaan käyttöön."
 
 #~ msgid ""
 #~ "Your %s account has been created. Expect a confirmation mail from %s soon."
@@ -15451,8 +15722,21 @@ msgstr "%s lisää"
 #~ msgid "Your applications"
 #~ msgstr "Sovelluksesi"
 
+#~ msgid ""
+#~ "Your default reminder could not be set for this appointment due to "
+#~ "insufficient permissions"
+#~ msgstr ""
+#~ "Oletusmuistutustasi ei voitu asettaa tätä tapaamista varten puuttuvien "
+#~ "lupien takia."
+
 #~ msgid "Your email address will be included when sending this feedback"
 #~ msgstr "Sähköpostiosoitteesi liitetään tähän palautteeseen"
+
+#~ msgid "Your messages"
+#~ msgstr "Viestisi"
+
+#~ msgid "Your reply has been sent"
+#~ msgstr "Vastauksesi on lähetetty"
 
 #~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"
 #~ msgstr ""
@@ -15490,14 +15774,14 @@ msgstr "%s lisää"
 #~ msgid "date range"
 #~ msgstr "päivämäärävalikoima"
 
-#~ msgid "day of the week"
-#~ msgstr "työpäivä"
-
 #~ msgid "day of the weekend"
 #~ msgstr "viikonlopun päivä"
 
 #~ msgid "dd"
 #~ msgstr "pp"
+
+#~ msgid "delete if expired"
+#~ msgstr "poista jos vanhentunut"
 
 #~ msgid "disable"
 #~ msgstr "Kytke pois päältä"
@@ -15557,9 +15841,18 @@ msgstr "%s lisää"
 #~ msgid "iCal"
 #~ msgstr "iCal"
 
+#~ msgid "iCal-Feed"
+#~ msgstr "iCal-syöte"
+
+#~ msgid "iCal-feed has been imported successfully"
+#~ msgstr "iCal-syöte on tuotu onnistuneesti"
+
 #~| msgid "Phone"
 #~ msgid "iPhone"
 #~ msgstr "Puhelin"
+
+#~ msgid "in"
+#~ msgstr "mukana"
 
 #~ msgid "in blind copy"
 #~ msgstr "piilokopioituna"
@@ -15579,8 +15872,8 @@ msgstr "%s lisää"
 #~ msgid "more"
 #~ msgstr "enemmän"
 
-#~ msgid "never ends"
-#~ msgstr "ei pääty koskaan"
+#~ msgid "never"
+#~ msgstr "ei koskaan"
 
 #~ msgid "next %1$s"
 #~ msgstr "seuraava %1$s "
@@ -15609,8 +15902,8 @@ msgstr "%s lisää"
 #~ msgid "next week"
 #~ msgstr "seuraava viikko"
 
-#~ msgid "none"
-#~ msgstr "ei ole"
+#~ msgid "no expiry date"
+#~ msgstr "ei päättymisaikaa"
 
 #~ msgid "open"
 #~ msgstr "avaa"
@@ -15666,8 +15959,20 @@ msgstr "%s lisää"
 #~ msgid "unselect all"
 #~ msgstr "Poista kaikki valinnat"
 
+#~ msgid "via"
+#~ msgstr "kautta"
+
 #~ msgid "weekly"
 #~ msgstr "viikoittain"
+
+#~ msgid "when the link is expired"
+#~ msgstr "linkin vanhennuttua"
+
+#~ msgid "when the receivers have accessed the files"
+#~ msgstr "kun vastaanottajat ovat katsoneet tiedostot"
+
+#~ msgid "when the receivers have finished downloading the files"
+#~ msgstr "kun vastaanottajat ovat ladanneet tiedostot"
 
 #~| msgid "Main window"
 #~ msgid "windows"

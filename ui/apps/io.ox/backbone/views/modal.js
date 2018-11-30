@@ -63,7 +63,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             var title_id = _.uniqueId('title');
             this.$el
                 .toggleClass('maximize', !!options.maximize)
-                .attr({ tabindex: -1, role: 'dialog', 'aria-labelledby': title_id })
+                .attr({ role: 'dialog', 'aria-labelledby': title_id })
                 .append(
                     $('<div class="modal-dialog" role="document">').width(options.width).append(
                         $('<div class="modal-content">').append(
@@ -225,8 +225,11 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             return this.addButton();
         },
 
-        addCancelButton: function () {
-            return this.addButton({ className: 'btn-default', label: gt('Cancel') });
+        addCancelButton: function (options) {
+            options = options || {};
+            var data = { className: 'btn-default', label: gt('Cancel') };
+            if (options.left) data.placement = 'left';
+            return this.addButton(data);
         },
 
         addAlternativeButton: function (options) {
@@ -332,7 +335,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         this.activeElement = this.activeElement || document.activeElement;
         if (withAnimation) {
             this.$body.addClass('invisible');
-            this.$('.modal-content').busy();
+            this.$body.parent().busy();
         } else {
             this.$body.css('opacity', 0.50);
         }
@@ -342,7 +345,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
 
     function idle() {
         this.enableFormElements();
-        this.$('.modal-content').idle();
+        this.$body.parent().idle();
         this.$body.removeClass('invisible').css('opacity', '');
         if ($.contains(this.el, this.activeElement)) $(this.activeElement).focus();
         this.activeElement = null;

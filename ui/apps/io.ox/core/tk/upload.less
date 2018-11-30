@@ -11,6 +11,43 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
+.dropzone-overlay {
+    display: none;
+    z-index: 3;
+    &.visible { display: block; }
+}
+
+.dropzone-floating {
+    display: none;
+    flex-direction: column;
+    background-color: rgba(0,0,0,0.1);
+    color: #333;
+    text-align: center;
+    font-family: @normal-font-family;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.2em;
+    z-index: 65000;
+    padding: 32px;
+
+    @hoverColor: #AFC587;
+    &.visible { display: flex; }
+
+    .dropzone-floating-action {
+        .flex-center();
+        flex: 1;
+        background: #fff;
+
+        border-top: 2px dashed #aaa;
+        border-right: 2px dashed #aaa;
+        border-left: 2px dashed #aaa;
+        &:last-child { border-bottom: 2px dashed #aaa; }
+
+        &.hover { background-color: @hoverColor; }
+
+        .dndignore { pointer-events: none }
+    }
+}
 .io-ox-dropzone-multiple-overlay {
     display: table;
     color: #333;
@@ -42,6 +79,13 @@
             background-color: @hoverColor;
         }
     }
+}
+
+.modal.upload-problems {
+    .list-group-item {
+        border: 0;
+    }
+    .list-group-item:nth-child(odd) { background-color: #f5f5f5; }
 }
 
 // this is for all browsers without CSS filter support

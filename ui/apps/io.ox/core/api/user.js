@@ -115,6 +115,14 @@ define('io.ox/core/api/user', [
             if (o.data.anniversary && moment.utc(o.data.anniversary).local(true).year() <= 1) {
                 o.data.anniversary = util.gregorianToJulian(o.data.anniversary);
             }
+
+            // remove empty values before updating
+            o.data = _(o.data).each(function (value, key) {
+                if (value === '' || value === undefined) {
+                    o.data[key] = null;
+                }
+            });
+
             return http.PUT({
                 module: 'user',
                 params: {
@@ -148,7 +156,7 @@ define('io.ox/core/api/user', [
                         api.trigger('update', data);
                         api.trigger('refresh.list');
                         // reset image?
-                        if (o.data.image1 === '') {
+                        if (o.data.image1 === null) {
                             // to clear picture halo's cache
                             contactsApi.trigger('update:image', data);
                             api.trigger('reset:image reset:image:' + o.id, { id: o.id });

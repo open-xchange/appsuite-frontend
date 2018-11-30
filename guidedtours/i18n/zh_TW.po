@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-29 00:20+0800\n"
+"PO-Revision-Date: 2018-11-02 23:37+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.2\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -43,14 +43,6 @@ msgid ""
 msgstr "要建立重複約會，選取重複。將會顯示重複發生的選項。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "使用提醒功能"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "若不要錯過約會，使用提醒功能。"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr "邀請其他參與者"
 
@@ -62,6 +54,14 @@ msgid ""
 msgstr ""
 "要邀請其他參與者，在參與者欄位下方輸入他們的姓名。要避免約會發生衝突，點選右"
 "上角的尋找空閒時間。"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "使用提醒功能"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "若不要錯過約會，使用提醒功能。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
@@ -348,12 +348,8 @@ msgid "Launching an app"
 msgstr "執行應用程式"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
-msgstr ""
-"請使用選單列左邊的快速啟動圖示，或點擊應用程式啟動器選單中的項目即可啟動應用"
-"程式。"
+msgid "To launch an app click on an entry inside the app launcher menu."
+msgstr "要啟動應用程式，點選應用程式啟動器選單內的項目。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -769,49 +765,6 @@ msgid ""
 msgstr ""
 "要一次編輯多個任務，點選任務左邊的選取盒。若選取盒未顯示，點選工具列右邊的視"
 "圖 > 選取盒。"
-
-#~ msgid ""
-#~ "To open the settings, click the System menu icon on the upper right side "
-#~ "of the menu bar. Select Settings."
-#~ msgstr "要開啟設定，點選選單列右上角的系統選單圖示，選擇設定。"
-
-#~ msgid ""
-#~ "To open the help, click the System menu icon on the upper right side of "
-#~ "the menu bar. Select Help. The help for the currently selected app is "
-#~ "displayed. To browse the complete help, click on Start Page or Table Of "
-#~ "Contents at the upper part of the window."
-#~ msgstr ""
-#~ "要開啟說明，點擊選單列右上角的系統選單圖示。選擇說明，將顯示目前選擇程式的"
-#~ "說明。要瀏覽完整說明，點擊視窗頂端的開始頁或目錄。"
-
-#~ msgid ""
-#~ "Hint: you can always restart guided tours, any time you need them, from "
-#~ "the system menu."
-#~ msgstr "提示: 您可以在需要時從系統選單隨時回來導覽。"
-
-#~ msgid ""
-#~ "In case of new notifications, e.g. appointment invitations, the info area "
-#~ "is opened."
-#~ msgstr "在新通知的情況下，例如約會邀請，資訊區域將會打開。"
-
-#~ msgid "Restart Guided Tour"
-#~ msgstr "重新開始導覽"
-
-#~ msgid "The New objects icon"
-#~ msgstr "新物件圖示"
-
-#~ msgid ""
-#~ "The New objects icon shows the number of appointment reminders or other "
-#~ "notifications. If clicking the icon, the info area opens."
-#~ msgstr ""
-#~ "新物件圖示將會顯示約會提醒數量或其他通知。點選圖示時將會開啟資訊區域。"
-
-#~ msgid "The info area"
-#~ msgstr "資訊區域"
-
-#~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
-#~ msgstr "要啟動應用程式，點選選單列左方的項目。"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s)"
@@ -4296,6 +4249,11 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "高優先順序"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr "提示: 您可以在需要時從系統選單隨時回來導覽。"
+
 #~ msgid "Hobby"
 #~ msgstr "興趣"
 
@@ -4406,6 +4364,11 @@ msgstr ""
 #~ "In case of new notifications, e.g. appointment invitations, the info area "
 #~ "is opened on the right side."
 #~ msgstr "有新通知，例如約會邀請時，資訊區域將會開啟於右邊。"
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr "在新通知的情況下，例如約會邀請，資訊區域將會打開。"
 
 #~ msgid "In progress"
 #~ msgstr "進行中"
@@ -5962,6 +5925,9 @@ msgstr ""
 #~ msgid "Resources"
 #~ msgstr "資源"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "重新開始導覽"
+
 #~ msgid "Restore Last Operation"
 #~ msgstr "還原上個操作"
 
@@ -6707,6 +6673,15 @@ msgstr ""
 #~ "清單視圖將會顯示大小與修改日期等詳情。使用選取盒來選取檔案，點擊檔案以在彈"
 #~ "出視窗中檢視更多資料或操作功能。"
 
+#~ msgid "The New objects icon"
+#~ msgstr "新物件圖示"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "新物件圖示將會顯示約會提醒數量或其他通知。點選圖示時將會開啟資訊區域。"
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -6887,6 +6862,9 @@ msgstr ""
 #~ "The icon on the bottom right side helps you sort your E-Mails. Click the "
 #~ "icon to get a list of sort criteria."
 #~ msgstr "右下角的圖示幫助您排序郵件。點選圖示以取得排序條件清單。"
+
+#~ msgid "The info area"
+#~ msgstr "資訊區域"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "收件者數量被限制為每欄位 %1$d 位收件者"
@@ -7237,6 +7215,13 @@ msgstr ""
 #~ msgstr "要執行應用程式，點選磚塊的標題。"
 
 #~ msgid ""
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
+#~ msgstr ""
+#~ "請使用選單列左邊的快速啟動圖示，或點擊應用程式啟動器選單中的項目即可啟動應"
+#~ "用程式。"
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -7250,6 +7235,20 @@ msgstr ""
 #~ "To open the help, click the System menu icon on the upper right side of "
 #~ "the menu bar. Select Help."
 #~ msgstr "要開啟說明，點選選單列右上角的系統選單，選擇說明。"
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "要開啟說明，點擊選單列右上角的系統選單圖示。選擇說明，將顯示目前選擇程式的"
+#~ "說明。要瀏覽完整說明，點擊視窗頂端的開始頁或目錄。"
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr "要開啟設定，點選選單列右上角的系統選單圖示，選擇設定。"
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

@@ -142,12 +142,8 @@ define('io.ox/core/viewer/views/types/textview', [
          *  the TextView instance.
          */
         unload: function () {
-            // never unload slide duplicates
-            if (!this.$el.hasClass('swiper-slide-duplicate')) {
-                this.$el.find('.white-page').remove();
-                this.isPrefetched = false;
-            }
-
+            this.$el.find('.white-page').remove();
+            this.isPrefetched = false;
             return this;
         },
 

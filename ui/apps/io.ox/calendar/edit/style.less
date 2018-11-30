@@ -38,10 +38,6 @@
 
     .hard-conflict { margin: 1em 0 0 0; }
 
-    .io-ox-calendar-color-picker {
-        width: 352px;
-    }
-
     .color-picker-dropdown {
         display: inline-block;
     }
@@ -56,13 +52,10 @@
         width: 20px;
         height: 20px;
         border-radius: 3px;
-        margin-right: 16px;
         background-color: rgb(255, 255, 255);
         display: inline-block;
+        margin-left: 12px;
 
-        &.no-color:before {
-            border: 1px solid #888;
-        }
         &:before {
             font-family: 'FontAwesome';
             content: '\00a0';
@@ -70,6 +63,32 @@
             height: 20px;
             display: inline-block;
             border-radius: 3px;
+        }
+    }
+
+    .folder-color {
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
+        background-color: rgb(255, 255, 255);
+        display: inline-block;
+        margin-left: 12px;
+
+        &:before {
+            font-family: 'FontAwesome';
+            content: '\00a0';
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            border-radius: 3px;
+        }
+    }
+
+    .folder-selection {
+        margin-bottom: 5px;
+
+        .dropdown {
+            display: inline-block;
         }
     }
 
@@ -91,6 +110,10 @@
 
             &.active .fa { line-height: 40px; }
         }
+
+        [data-extension-id="folder-selection"] {
+            padding-top: 10px;
+        }
     }
 
     .visibility-select {
@@ -99,7 +122,8 @@
 
     .btn.btn-link.visibility-helper-button {
         font-size: 16px;
-        padding: 0 8px;
+        padding: 0;
+        margin: 0 0 0 8px;
         position: absolute;
         top: 6px;
     }

@@ -25,6 +25,15 @@ define('io.ox/calendar/model', [
 
     'use strict';
 
+    // list of error codes where a folder should be removed from the selection
+    var removeList = [
+        'FLD-1004', // folder storage service no longer available
+        'FLD-0008', // folder not found
+        'FLD-0003', // permission denied
+        'CAL-4060', // folder is not supported
+        'CAL-4030' // permission denied
+    ];
+
     var // be careful with the add method. If the option resolveGroups is present it changes from synchronous to asynchronous (must get the proper user data first)
         AttendeeCollection = Backbone.Collection.extend({
             // if an email is present distinguisch the attendees by email address (provides support for attendee with multiple mail addresses).
@@ -152,7 +161,8 @@ define('io.ox/calendar/model', [
                     args.push('FREQ=MONTHLY');
                     if (self.get('days')) {
                         args.push('BYDAY=' + days);
-                        args.push('BYSETPOS=' + this.get('day_in_month'));
+                        var pos = this.get('day_in_month');
+                        args.push('BYSETPOS=' + (pos === 5 ? -1 : pos));
                     } else {
                         args.push('BYMONTHDAY=' + this.get('day_in_month'));
                     }
@@ -177,15 +187,11 @@ define('io.ox/calendar/model', [
             else this.model.set('rrule', null);
         },
 
-        deserialize: function () {
-            var changes = {};
-            changes.start_date = this.model.getTimestamp('startDate');
-            if (!this.model.get('rrule')) return this.set(changes);
-            var self = this,
-                str = this.model.get('rrule'),
+        splitRule: function () {
+            var str = this.model.get('rrule'),
                 attributes = str.split(';'),
-                rrule = {},
-                date = this.model.getMoment('startDate');
+                rrule = {};
+
             _(attributes).each(function (attr) {
                 attr = attr.split('=');
                 var name = attr[0],
@@ -194,6 +200,17 @@ define('io.ox/calendar/model', [
                 rrule[name] = value;
                 rrule[name.toLowerCase()] = _.isArray(value) ? attr[1].toLowerCase().split(',') : value.toLowerCase();
             });
+            return rrule;
+        },
+
+        deserialize: function () {
+            var changes = {};
+            changes.start_date = this.model.getTimestamp('startDate');
+            if (!this.model.get('rrule')) return this.set(changes);
+            var self = this,
+                rrule = this.splitRule(),
+                date = this.model.getMoment('startDate');
+
             switch (rrule.freq) {
                 case 'daily':
                     changes.recurrence_type = 1;
@@ -209,7 +226,9 @@ define('io.ox/calendar/model', [
                     if (rrule.bymonthday) {
                         changes.day_in_month = parseInt(rrule.bymonthday, 10) || 0;
                     } else if (rrule.byday) {
-                        changes.day_in_month = parseInt(rrule.bysetpos, 10) || 0;
+                        var pos = rrule.bysetpos;
+                        if (pos === -1) pos = 5;
+                        changes.day_in_month = parseInt(pos, 10) || 0;
                         changes.days = 1 << this.days.indexOf(rrule.byday);
                     } else {
                         changes.day_in_month = date.date();
@@ -323,6 +342,11 @@ define('io.ox/calendar/model', [
                     var newAttendee = util.createAttendee(user, { partStat: 'ACCEPTED' }),
                         id = newAttendee.email ? { email:  newAttendee.email } : { entity: newAttendee.entity };
 
+                    if (options.resetStates) {
+                        self.getAttendees().each(function (model) {
+                            model.set('partStat', 'NEEDS-ACTION');
+                        });
+                    }
                     // Merge attributes or add
                     if (_(self.get('attendees')).findWhere(id)) {
                         _(self.get('attendees')).findWhere(id).partStat = 'ACCEPTED';
@@ -355,10 +379,26 @@ define('io.ox/calendar/model', [
             return res;
         },
         getRruleMapModel: function () {
-            return new RRuleMapModel({ model: this });
+            if (this.rruleModel) return this.rruleModel;
+            this.rruleModel = new RRuleMapModel({ model: this });
+            return this.rruleModel;
         },
         hasFlag: function (flag) {
             return !!this.flags[flag];
+        },
+        // compares startDate with recurrence rule to check if the rule is correct (startDate wednesday, rrule says repeats on mondays)
+        checkRecurrenceRule: function () {
+            if (!this.get('rrule')) return true;
+            // Monday is 1 Sunday is 7, we subtract 1 so we can use it as an index
+            var startDateIndex = this.getMoment('startDate').isoWeekday() - 1,
+                days = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'],
+                rrule = this.getRruleMapModel().splitRule();
+
+            if (_.isEmpty(rrule.byday)) return true;
+
+            var usedDays = _([].concat(rrule.byday)).map(function (val) { return days.indexOf(val); });
+
+            return usedDays.indexOf(startDateIndex) !== -1;
         }
     });
 
@@ -438,11 +478,14 @@ define('io.ox/calendar/model', [
                 params: params,
                 data: { folders: this.folders }
             }, this.folders ? 'PUT' : 'GET').then(function success(data) {
-                var method = opt.paginate === true ? 'add' : 'set';
+                var method = opt.paginate === true ? 'add' : 'reset';
                 data = _(data)
                     .chain()
                     .map(function (data) {
+                        // no folders defaults to all folder
+                        if (!self.folders) return data;
                         if (data.events) return data.events;
+                        if (!_(removeList).contains(data.error.code)) return;
                         api.trigger('all:fail', data.folder);
                     })
                     .compact()

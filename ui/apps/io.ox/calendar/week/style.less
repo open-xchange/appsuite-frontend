@@ -13,156 +13,176 @@
 
 @weekview-time-widthSmall: @weekview-time-width - 13;
 
-.week-view {
+.weekview-container {
 
     * { -webkit-tap-highlight-color: rgba(0,0,0,0); }
 
-    .week {
-        width: 100%;
-        min-height: 100%;
-        height: 100%;
-        position: relative;
-        display: block;
-        border-right: 1px solid @weekview-border;
-        overflow: hidden;
-        .transition(background-color 0.2s);
-        .backface-visibility(hidden);
-    }
+    height: 100%;
+    .flex-display(flex);
+    .flex-direction(column);
 
-    .toolbar {
-        .info {
-            max-width: none;
-            padding: 0;
-            border: 0;
-            vertical-align: baseline;
-            margin-right: 16px;
-            margin-left: 2px;
+    .header {
+
+        .cw {
+            font-size: 14px;
+            color: @hc-gray;
+            .fontWeight(normal);
         }
-        .info[disabled] {
-            opacity: 1;
-            cursor: default;
-            .fa-caret-down { display: none; }
+
+        .merge-split {
+            margin-top: 4px;
         }
     }
 
-    .footer-container {
-        position: relative;
+    .weekview-toolbar {
         height: 50px;
+        padding-top: 10px;
+        margin-left: @weekview-time-width;
+        .flex-display(flex);
+        .align-items(center);
 
-        .footer {
-            .overflow-y(scroll);
-            .overflow-x(hidden);
-            padding-top: 17px;
+        .weekday {
+            .flex(1);
 
-            .weekday {
-                color: #767676;
-                text-align: left;
-                line-height: 24px;
-                font-size: 14px;
-                text-decoration: none;
+            color: #767676;
+            text-align: left;
+            height: 26px;
+            line-height: 24px;
+            text-decoration: none;
+            padding: 2px 3px;
+            .ellipsis();
+            border: none;
+            background: none;
 
-                &.merge-view-label {
-                    border-bottom: 2px solid;
-                    margin-right: 1px;
-                    margin-left: 1px;
+            &.merge-view-label {
+                border-bottom: 2px solid;
+                margin-right: 1px;
+                margin-left: 1px;
+                padding-top: 6px;
+                height: 34px;
+            }
+
+            .number {
+                font-size: 20px;
+                .fontWeight(bold);
+                color: black;
+
+                &:hover {
+                    text-decoration: underline;
                 }
+            }
+
+            &.today {
+                font-weight: bold;
+                color: @calendar-today;
+                background-color: transparent;
 
                 .number {
-                    font-size: 20px;
-                    .fontWeight(bold);
-                    color: black;
-
-                    &:hover {
-                        text-decoration: underline;
-                    }
-                }
-
-                &.today {
                     color: @calendar-today;
-                    background-color: transparent;
-
-                    .number {
-                        color: @calendar-today;
-                    }
                 }
             }
         }
     }
 
-    .week-view-container {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        // top: was @calendar-toolbar-height + @calendar-toolbar-top-padding;
-        // but that doesn't make sense, result is close however
-        top: 90px;
+    .fulltime-container {
+        min-height: 21px;
+        .flex-display(flex);
+        margin-top: 5px;
 
-        // see Bug 33927 - Mini calendar doesn't block hover of underlying appointment
-        z-index: 1;
 
         .time-label-bar {
-            position: absolute;
+            .flex(0 0 auto);
+            .flex-display(flex);
+            .align-items(flex-end);
+            .justify-content(flex-end);
+
+            height: 100%;
             width: @weekview-time-width;
-            display: table;
-            text-align: right;
 
             > div {
-                display: table-cell;
-                vertical-align: bottom;
                 padding-right: 11px;
-                width: 80px;
+                margin-bottom: 2px;
             }
         }
 
-        .fulltime-container {
-            height: @weekview-footer-height;
+        .appointment-panel {
+            .flex(1);
+            position: relative;
             .overflow-y(scroll);
             .overflow-x(hidden);
-            margin-left: @weekview-time-width;
-            right: 0;
+        }
 
-            .fulltime {
-                position: relative;
-                height: 100%;
+        .note {
+            position: absolute;
+            background: none;
+            width: 100%;
+            font-size: 12px;
+            font-weight: 200;
+            color: #767676;
+            text-align: right;
+            .ellipsis();
+            .user-select(none);
+            padding: 0 10px;
+        }
 
-                .note {
-                    position: absolute;
-                    background: none;
-                    width: 100%;
-                    font-size: 12px;
-                    font-weight: 200;
-                    color: #767676;
-                    text-align: right;
-                    .ellipsis();
-                    .user-select(none);
-                    padding: 0 10px;
-                }
+        .day { border: none; }
 
-                .day { border: none; }
+        .appointment .appointment-content {
+            padding: 0 4px;
+            line-height: 20px;
+        }
+        .appointment:focus {
+            //increase z-index so box shadow is shown fully
+            z-index: 1;
+        }
+    }
+
+    .appointment-container {
+        .flex(1);
+        position: relative;
+        margin-top: 16px;
+
+        .appointment {
+            // same as minCellHeight in view minus border
+            min-height: 24px - 2px;
+
+            &.resizing {
+                left: 0!important;
+                width: 100%!important;
             }
+        }
+
+        .scrollpane, .hidden-appointment-indicator-container {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
         }
 
         .scrollpane {
             .overflow-y(scroll);
             .overflow-x(hidden);
-            position: absolute;
-            top: @weekview-footer-height;
             border-top: 1px solid @weekview-border;
-            left: 0;
-            right: 0;
-            bottom: 0;
             outline: 0;
+            .flex-display(flex);
+
+            > .current-time-indicator {
+                left: @weekview-time-width;
+            }
 
             .week-container-label {
+                .flex(0 0 auto);
+                .flex-display(flex);
+                .flex-direction(column);
                 width: @weekview-time-width;
-                float: left;
 
                 .time {
+                    .flex(1);
                     position: relative;
                     margin-left: 1em;
                     border-bottom: 1px solid @weekview-border;
-                    color: #767676;
+                    color: #757575;
 
                     &.working-time-border { border-bottom: 1px solid @weekview-working-time-border; }
 
@@ -178,6 +198,8 @@
                         right: 10px;
                     }
 
+                    &:last-child { border-color: transparent; }
+
                 }
 
                 &.secondary-timezone .time.in {
@@ -185,41 +207,90 @@
                     color: #767676;
                 }
             }
+        }
 
-            .week-container {
-                margin-left: @weekview-time-width;
+        .day {
+            .flex(1);
+            .flex-display(flex);
+            .flex-direction(column);
 
-                .timeline {
-                    position: absolute;
-                    height: 0;
-                    left: -1px;
-                    right: 0;
-                    border-bottom: 2px solid @calendar-today;
-                    z-index: 10;
-                    .user-select(none);
-                }
+            border-left: 1px solid @weekview-border;
+            position: relative;
+            .user-select(none);
 
-                .appointment-content {
-                    line-height: 16px;
-                    padding: 4px;
-                }
+            .timeslot {
+                .flex(1);
+                -webkit-touch-callout: none !important;
+                border-bottom: 1px solid @weekview-border-light;
+                height: 24px;
 
-                .dark-colors & .appointment-content {
-                    padding: 4px 10px;
-                }
+                &.out { border-color: transparent; background-color: rgba(0, 0, 0, 0.02); }
+
+                &:last-child, .time:last-child { border-color: transparent; }
+
+                &.working-time-border { border-bottom: 1px solid @weekview-working-time-border; }
             }
+
+            &.today .timeslot { background-color: @calendar-today-background; }
 
         }
 
-        .more-appointments-container {
-            left: @weekview-time-width;
-            right: 12px; //assume scrollbars are around 12px width. It's not browser independent, but a good guess. Needed to center indicators
-            bottom: 0px;
-            // 0px xor 21px, needs to be "calculated" on in code
-            //top: 0px;
-            width: auto;
-            height: auto;
+        &.time-scale-1 {
+            .day .timeslot:not(.working-time-border) {
+                border-color: @weekview-border;
+                &.out { border-color: @weekview-border; }
+            }
+        }
+
+        &.time-scale-2 {
+            .day .timeslot:nth-child(2n):not(.working-time-border) {
+                border-color: @weekview-border;
+                &.out { border-color: @weekview-border; }
+            }
+        }
+
+        &.time-scale-3 {
+            .day .timeslot:nth-child(3n):not(.working-time-border) {
+                border-color: @weekview-border;
+                &.out { border-color: @weekview-border; }
+            }
+        }
+
+        &.time-scale-4 {
+            .day .timeslot:nth-child(4n):not(.working-time-border) {
+                border-color: @weekview-border;
+                &.out { border-color: @weekview-border; }
+            }
+        }
+
+        &.time-scale-6 {
+            .day .timeslot:nth-child(3n):not(.working-time-border) {
+                border-color: @weekview-border;
+                &.out { border-color: @weekview-border; }
+            }
+        }
+
+        &.time-scale-12 {
+            .day .timeslot:nth-child(3n):not(.working-time-border) {
+                border-color: @weekview-border;
+                &.out { border-color: @weekview-border; }
+            }
+        }
+
+        .current-time-indicator {
             position: absolute;
+            height: 0;
+            left: 0;
+            right: 0;
+            border-bottom: 2px solid @calendar-today;
+            z-index: 10;
+            .user-select(none);
+        }
+
+        .hidden-appointment-indicator-container {
+            left: @weekview-time-width;
+
+            right: 12px; //assume scrollbars are around 12px width. It's not browser independent, but a good guess. Needed to center indicators
             pointer-events: none;
 
             .more-appointments {
@@ -235,95 +306,10 @@
                 }
             }
         }
-
-        .day {
-            position: relative;
-            height: 100%;
-            float: left;
-            border-left: 1px solid @weekview-border;
-            .user-select(none);
-
-            .timeslot {
-                -webkit-touch-callout: none !important;
-                border-bottom: 1px solid @weekview-border-light;
-                height: 24px;
-
-                &.out { border-color: transparent; background-color: rgba(0, 0, 0, 0.02); }
-
-                &:last-child, .time:last-child { border: none; }
-
-                &.working-time-border { border-bottom: 1px solid @weekview-working-time-border; }
-            }
-
-            &.today .timeslot { background-color: @calendar-today-background; }
-
-        }
-
-        &.time-scale-1 {
-            .scrollpane .week-container-label .time { height: 24px; }
-
-            .day .timeslot:not(.working-time-border) {
-                border-color: @weekview-border;
-                &.out { border-color: @weekview-border; }
-            }
-        }
-
-        &.time-scale-2 {
-            .scrollpane .week-container-label .time { height: 48px; }
-
-            .day .timeslot:nth-child(2n):not(.working-time-border) {
-                border-color: @weekview-border;
-                &.out { border-color: @weekview-border; }
-            }
-        }
-
-        &.time-scale-3 {
-            .scrollpane .week-container-label .time { height: 72px; }
-
-            .day .timeslot:nth-child(3n):not(.working-time-border) {
-                border-color: @weekview-border;
-                &.out { border-color: @weekview-border; }
-            }
-        }
-
-        &.time-scale-4 {
-            .scrollpane .week-container-label .time { height: 96px; }
-
-            .day .timeslot:nth-child(4n):not(.working-time-border) {
-                border-color: @weekview-border;
-                &.out { border-color: @weekview-border; }
-            }
-        }
-
-        &.time-scale-6 {
-            .scrollpane .week-container-label .time { height: 144px; }
-
-            .day .timeslot:nth-child(3n):not(.working-time-border) {
-                border-color: @weekview-border;
-                &.out { border-color: @weekview-border; }
-            }
-        }
-
-        &.time-scale-12 {
-            .scrollpane .week-container-label .time { height: 288px; }
-
-            .day .timeslot:nth-child(3n):not(.working-time-border) {
-                border-color: @weekview-border;
-                &.out { border-color: @weekview-border; }
-            }
-        }
-
     }
 
-    // Hide days in dayview
-    .dayview:not(.merge-view)  {
-
-        .toolbar { padding-bottom: @calendar-toolbar-top-padding; }
-
-        .week-view-container { top: 67px; }
-
-        .footer-container { display: none; }
-
+    .no-select .appointment {
+        pointer-events: none;
     }
 
     .appointment {
@@ -334,6 +320,13 @@
         .backface-visibility(hidden);
         // see Bug 32753 - Not possible to reduce an appointment to 30 minutes using drag&drop
         box-sizing: content-box;
+
+        &.resizing {
+            opacity: 0.7;
+            z-index: 5000;
+            box-shadow: initial;
+            .user-select(none);
+        }
 
         &.no-wrap {
             .appointment-content {
@@ -360,14 +353,6 @@
             .transition(background-color 0.2s);
         }
 
-        &.lasso {
-            border: 1px solid #08c;
-            background-color: @weekview-appointment-lasso;
-            opacity: 0.4;
-            width: 100%;
-            cursor: default;
-        }
-
         .private-flag, .confidential-flag, .tentative-flag {
             float: left;
             font-size: 15px;
@@ -377,7 +362,8 @@
         .appointment-content {
             height: 100%;
             font-size: 12px;
-            padding: 0 4px;
+            line-height: 16px;
+            padding: 4px;
             border-left: 2px solid;
             border-color: inherit;
             .ellipsis();
@@ -404,18 +390,28 @@
         }
     }
 
+    .lasso {
+        position: absolute;
+        border: 1px solid #08c;
+        background-color: @weekview-appointment-lasso;
+        opacity: 0.4;
+        width: 100%;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    .io-ox-busy .resizable-handle {
+        display: none;
+    }
+
     // Resize bars
-    .ui-resizable-handle {
+    .resizable-handle {
         position: absolute;
         font-size: 0.1px;
         display: block;
     }
 
-    .ui-resizable-disabled .ui-resizable-handle,.ui-resizable-autohide .ui-resizable-handle {
-        display: none;
-    }
-
-    .ui-resizable-n {
+    .resizable-n {
         cursor: n-resize;
         height: 7px;
         width: 100%;
@@ -423,7 +419,7 @@
         left: 0;
     }
 
-    .ui-resizable-s {
+    .resizable-s {
         cursor: s-resize;
         height: 7px;
         width: 100%;
@@ -431,7 +427,7 @@
         left: 0;
     }
 
-    .ui-resizable-e {
+    .resizable-e {
         cursor: e-resize;
         width: 7px;
         right: 0;
@@ -439,7 +435,7 @@
         height: 100%;
     }
 
-    .ui-resizable-w {
+    .resizable-w {
         cursor: w-resize;
         width: 7px;
         left: 0;
@@ -450,49 +446,40 @@
     @media (min-width: 1281px) {
         @adjusted-width: @weekview-time-width * 1.25;
 
-        .week-view-container {
+        .weekview-toolbar { margin-left: @adjusted-width; }
 
-            .time-label-bar,
-            .scrollpane .week-container-label { width: @adjusted-width; }
+        .fulltime-container .time-label-bar { width: @adjusted-width; }
 
-            .scrollpane.secondary .week-container-label{ width: @weekview-time-width; }
+        .appointment-container .scrollpane .week-container-label { width: @adjusted-width; }
+        .appointment-container .scrollpane.secondary .week-container-label { width: @weekview-time-width; }
 
-            .fulltime-container,
-            .scrollpane .week-container  { margin-left: @adjusted-width; }
-
-            .more-appointments-container { left: @adjusted-width; }
-        }
-    }
-
-    // Big Screen
-    @media all and (min-height: 1200px) {
-        .week-view-container .scrollpane .week-container .appointment-content { line-height: 20px; }
+        .appointment-container .hidden-appointment-indicator-container { left: @adjusted-width; }
+        .appointment-container .scrollpane > .current-time-indicator { left: @adjusted-width; }
     }
 
     // Mobile
-    @media (max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
+    .smartphone & {
 
         .info { cursor: auto; }
 
-        .week-view-container {
+        .weekview-toolbar { display: none; }
 
-            .fulltime-container { margin-left: @weekview-time-widthSmall; }
-            .more-appointments-container { left: @weekview-time-widthSmall; right: 0; bottom: 10px; }
+        .fulltime-container { margin: 0; margin-left: @weekview-time-widthSmall; min-height: auto; }
+        .appointment-container { margin-top: 0; }
+        .more-appointments-container { left: @weekview-time-widthSmall; }
 
-            .scrollpane {
+        .scrollpane {
 
-                .week-container-label {
-                    width: @weekview-time-widthSmall;
+            .week-container-label {
+                width: @weekview-time-widthSmall;
 
-                    .time { margin-left: 0.3em; }
-                }
-
-                .week-container { margin-left: @weekview-time-widthSmall; }
+                .time { margin-left: 0.3em; }
             }
         }
 
         .dayview:not(.merge-view) .week-view-container { top: 0; }
     }
+
 }
 
 .timezone-label-dropdown {

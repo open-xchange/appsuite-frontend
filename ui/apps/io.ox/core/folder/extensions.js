@@ -40,18 +40,22 @@ define('io.ox/core/folder/extensions', [
         // define virtual/standard
         api.virtual.add('virtual/standard', function () {
             var defaultFolders = mailSettings.get('defaultFolder') || {},
-                list = [];
+                list = [],
+                // hash to avoid duplicates (see bug 59060)
+                hash = {};
             http.pause();
             // collect get requests
             list.push(api.get(INBOX));
+            hash[INBOX] = true;
             // append all-unssen below INBOX
             if (mailSettings.get('features/unseenFolder', false)) list.push(api.get('virtual/all-unseen'));
             // ensure fixed order; rely on defaultFolders (see bug 56563)
             ['drafts', 'sent', 'spam', 'trash', 'archive'].forEach(function (type) {
                 var folder = defaultFolders[type];
-                if (!folder) return;
+                if (!folder || hash[folder]) return;
                 if (type === 'archive' && !capabilities.has('archive_emails')) return;
                 list.push(api.get(folder));
+                hash[folder] = true;
             });
             http.resume();
             return this.concat.apply(this, list);
@@ -261,7 +265,7 @@ define('io.ox/core/folder/extensions', [
                 parent: tree
             });
             this.append(
-                view.render().$el.addClass('standard-folders')
+                view.render().$el.addClass('standard-folders').attr('role', 'presentation')
             );
             // show / hide folder on setting change
             view.listenTo(mailSettings, 'change:unseenMessagesFolder', function () {
@@ -291,6 +295,13 @@ define('io.ox/core/folder/extensions', [
                 parent: tree,
                 title: extensions.getLocalFolderName(),
                 tree: tree
+            });
+
+            account.on('update', function (e, accountData) {
+                // only changes to the primary account are important
+                if (accountData.id !== 0) return;
+                node.options.title = extensions.getLocalFolderName();
+                node.renderFolderLabel();
             });
 
             // open "My folders" whenever a folder is added to INBOX/root
@@ -912,8 +923,9 @@ define('io.ox/core/folder/extensions', [
                 if (baton.context !== 'app') return;
                 if (capabilities.has('guest')) return;
                 var dropdown = new DropdownView({
+                    attributes: { role: 'presentation' },
                     tagName: 'li',
-                    className: 'presentation dropdown',
+                    className: 'dropdown',
                     $toggle: $('<a href="#" class="dropdown-toggle"data-action="add-subfolder" data-toggle="dropdown">').append(
                         gt('Add new calendar'),
                         $('<i class="fa fa-caret-down" aria-hidden="true">')

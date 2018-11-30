@@ -25,7 +25,7 @@ body {
 
     box-sizing: border-box;
 
-    font-family:@normal-font-family;
+    font-family: @normal-font-family;
     font-size: 13px;
     font-weight: normal;
     font-feature-settings: "liga" 0;
@@ -35,6 +35,12 @@ body {
     width: 100%;
 
     position: relative;
+
+    // ios scrolling bug for fixed table layouts (no x-overflow possible)
+    .ios.smartphone & {
+        -webkit-overflow-scrolling: touch;
+        overflow-x: auto;
+    }
 
     // use display: table to cover padding/margin/float issues at the bottom
     //display: table;

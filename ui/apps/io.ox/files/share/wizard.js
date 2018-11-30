@@ -19,6 +19,7 @@ define('io.ox/files/share/wizard', [
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/contacts/api',
+    'io.ox/core/api/group',
     'io.ox/core/tk/tokenfield',
     'io.ox/core/yell',
     'io.ox/core/settings/util',
@@ -30,7 +31,7 @@ define('io.ox/files/share/wizard', [
     'io.ox/core/folder/util',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, settingsUtil, gt, settingsContacts, capabilities, AddressPickerView, CopyToClipboard, util) {
+], function (DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, groupApi, Tokenfield, yell, settingsUtil, gt, settingsContacts, capabilities, AddressPickerView, CopyToClipboard, util) {
 
     'use strict';
 
@@ -425,6 +426,10 @@ define('io.ox/files/share/wizard', [
         removeLink: function () {
             var model = this.model;
             return api.deleteLink(model.toJSON(), model.get('lastModified'))
+                .done(function () {
+                    // refresh the guest group (id = int max value)
+                    groupApi.refreshGroup(2147483647);
+                })
                 .done(model.destroy.bind(model));
         }
     });

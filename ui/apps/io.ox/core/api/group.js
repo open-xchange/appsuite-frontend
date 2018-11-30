@@ -151,6 +151,16 @@ define('io.ox/core/api/group', [
     };
 
     //
+    // get fresh data for a group (is used for the guest group in some places)
+    //
+    api.refreshGroup = function (id) {
+        if (!api.collection.get(id)) return $.when();
+        return api.get({ id: id }, false).done(function (data) {
+            return api.collection.get(id).set(data);
+        });
+    };
+
+    //
     // Delete group
     //
     api.remove = function (id) {

@@ -18,8 +18,8 @@ Conflicts: open-xchange-documents-ui-viewer
 Package: open-xchange-appsuite-manifest
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-core, nodejs (>= 0.6.0) | open-xchange-halo, open-xchange-appsuite-l10n-en-us | open-xchange-appsuite-l10n
-Replaces: open-xchange-documents-ui (<< 7.2.1-0)
-Conflicts: open-xchange-documents-ui (<< 7.2.1-0)
+Replaces: open-xchange-documents-ui (<< 7.2.1-0), open-xchange-appsuite-saml
+Conflicts: open-xchange-documents-ui (<< 7.2.1-0), open-xchange-appsuite-saml
 Description: Manifest and apps included in the OX App Suite HTML5 client
 
 Package: open-xchange-appsuite-l10n-ca-es
@@ -188,6 +188,12 @@ Depends: ${misc:Depends}, open-xchange-l10n-sv-se
 Provides: open-xchange-appsuite-l10n
 Breaks: open-xchange-l10n-sv-se (<< 7.0.1)
 Description: Translation of the OX App Suite HTML5 client (sv_SE)
+
+Package: open-xchange-appsuite-l10n-tr-tr
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-tr-tr
+Provides: open-xchange-appsuite-l10n
+Description: Translation of the OX App Suite HTML5 client (tr_TR)
 
 Package: open-xchange-appsuite-l10n-zh-cn
 Architecture: all

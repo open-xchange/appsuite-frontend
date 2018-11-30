@@ -282,7 +282,10 @@ define('io.ox/mail/compose/view', [
                 ext.point(POINT + '/menu').invoke('draw', node, baton);
 
                 this.append(
-                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-7">').append(node)
+                    // $('<div data-extension-id="composetoolbar-menu" class="col-xs-7">').append(node)
+                    $('<div data-extension-id="composetoolbar-menu">')
+                        .addClass(_.device('smartphone') ? 'col-xs-9' : 'col-xs-7')
+                        .append(node)
                 );
             }
         }
@@ -295,6 +298,7 @@ define('io.ox/mail/compose/view', [
             var node = $('<div data-extension-id="attachmentPreview" class="col-xs-12">');
             extensions.attachmentPreviewList.call(node, baton);
             extensions.attachmentSharing.call(node, baton);
+            extensions.imageResizeOption.call(node, baton);
             node.appendTo(this);
         }
     });
@@ -326,6 +330,7 @@ define('io.ox/mail/compose/view', [
                 //handle errors/warnings in reject case
                 if (result && result.error) baton.error = result.error;
                 if (result && result.warnings) baton.warning = result.warnings;
+                baton.rejected = true;
                 return $.when();
             }).then(function () {
                 if (baton.isPropagationStopped()) return;
@@ -841,15 +846,17 @@ define('io.ox/mail/compose/view', [
                     app: this.app,
                     view: view
                 }),
+                win = this.app.getWindow(),
                 point = ext.point('io.ox/mail/compose/actions/send');
 
             // don't ask wether the app can be closed if we have unsaved data, we just want to send
             baton.model.set('autoDismiss', true);
 
+            win.busy();
             return extensionCascade(point, baton).then(function () {
-                //app is re-opened; we want to be asked before any unsaved data is discarded
-                if (baton.error) baton.model.set('autoDismiss', false);
-            });
+                // a check/user intaction aborted the flow or app is re-opened after a request error; we want to be asked before any unsaved data is discarded again
+                if (baton.rejected || baton.error) baton.model.set('autoDismiss', false);
+            }).always(win.idle.bind(win));
         },
 
         toggleTokenfield: function (e) {
@@ -882,9 +889,9 @@ define('io.ox/mail/compose/view', [
                 //We don't want to close it automatically! Bug: 35730
                 this.model.set(type, []);
                 input.addClass('hidden');
-                $(window).trigger('resize.tinymce');
                 button.removeClass('active').attr('aria-checked', false);
             }
+            $(window).trigger('resize');
             return input;
         },
 
@@ -901,7 +908,6 @@ define('io.ox/mail/compose/view', [
             options.view = this;
             options.model = this.model;
             options.oxContext = { view: this };
-
             ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + this.model.get('editorMode')).then(function (Editor) {
                 new Editor(self.editorContainer, options).done(function (editor) {
                     def.resolve(editor);
@@ -949,7 +955,6 @@ define('io.ox/mail/compose/view', [
             }
 
             this.editorContainer.busy();
-
             return this.loadEditor(content).then(function () {
                 this.editorContainer.idle();
                 // update the content type of the mail

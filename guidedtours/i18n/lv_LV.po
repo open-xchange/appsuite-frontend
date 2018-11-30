@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-03 12:27+0300\n"
+"PO-Revision-Date: 2018-10-16 15:48+0300\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.2\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -47,14 +47,6 @@ msgstr ""
 "rezultātā tiek uzrādītas atkārtojumu definēšanas funkcijas."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Atgādinājuma funkciju lietošana"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Lai nenokavētu tikšanos, lietojiet atgādijnājuma funkcijas."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr "Citu dalībnieku uzaicināšana"
 
@@ -67,6 +59,14 @@ msgstr ""
 "Lai uzaicinātu citus dalībniekus ievadiet viņu vārdus laukā zem "
 "'Dalībnieki'. Lai izvairītos no mītiņu laiku konfliktiem noklikšķiniet uz "
 "'Atrast brīvu laiku' augšējā labajā malā."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Atgādinājuma funkciju lietošana"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "Lai nenokavētu tikšanos, lietojiet atgādijnājuma funkcijas."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
@@ -188,7 +188,7 @@ msgstr ""
 "jūs ar jauno tiešsaistes glabāšanas risinājumu - vienoto vietu tiešsaistes "
 "piekļuvei pie visiem jūsu failiem visos jūsu kontos. Šī ir vieta, kur jūs "
 "varat augšupielādēt un saglabāt failus, dalīties ar tiem un sinhronizēt tos "
-"ar citām ierīcēm."
+"ar citām ierīcēm. "
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Folder tree"
@@ -388,12 +388,9 @@ msgid "Launching an app"
 msgstr "Aplikācijas startēšana"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
+msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Lai palaistu lietotni, izmantojiet ātrās palaišanas ikonas izvēlnes joslas "
-"kreisajā pusē vai noklikšķiniet uz ieraksta lietotņu palaišanas izvēlnē."
+"Lai startētu aplikāciju, noklikšķiniet uz tās aplikāciju palaidēja izvēlnē."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -867,61 +864,6 @@ msgstr ""
 "Lai rediģētu vairākus uzdevumus vienlaicīgi aktivizējiet izvēles rūtiņas "
 "saraksta kreisajā malā. Ja izvēles rūtiņas nav uzrādītas, rīkjoslas labajā "
 "malā noklikšķiniet uz Skats > Izvēles rūtiņas."
-
-#~ msgid ""
-#~ "To open the settings, click the System menu icon on the upper right side "
-#~ "of the menu bar. Select Settings."
-#~ msgstr ""
-#~ "Lai atvērtu iestatījumus, noklikšķiniet uz sistēmas izvēlņu ikonas "
-#~ "izvēlņu joslas augšējā labajā malā un izvēlieties iestatījumu izvēlni."
-
-#~ msgid ""
-#~ "To open the help, click the System menu icon on the upper right side of "
-#~ "the menu bar. Select Help. The help for the currently selected app is "
-#~ "displayed. To browse the complete help, click on Start Page or Table Of "
-#~ "Contents at the upper part of the window."
-#~ msgstr ""
-#~ "Lai atvērtu palīgu, noklikšķiniet uz sistēmas ikonas izvēlņu joslas "
-#~ "labajā malā un izvēlieties Palīgs. Tā rezultātā tiks parādīta pašreiz "
-#~ "izvēlētajai aplikācijai atbilstošā palīdzības informācija. Lai pārlūkotu "
-#~ "visu palīdzības informāciju, noklikšķiniet uz sākuma lapas, vai arī uz "
-#~ "satura izvēlnes loga augšējā daļā."
-
-#~ msgid ""
-#~ "Hint: you can always restart guided tours, any time you need them, from "
-#~ "the system menu."
-#~ msgstr ""
-#~ "Padoms: Jūs varat atsākt ekskursijas jebkurā jums vēlamajā laikā, "
-#~ "aktivizējot tās sistēmas izvēlnē."
-
-#~ msgid ""
-#~ "In case of new notifications, e.g. appointment invitations, the info area "
-#~ "is opened."
-#~ msgstr ""
-#~ "Jaunu paziņojumu gadījumā (piemēram pie mītiņu uzaicinājumiem) tiek "
-#~ "atvērts informatīvais apgabals."
-
-#~ msgid "Restart Guided Tour"
-#~ msgstr "Atsākt ekskursiju"
-
-#~ msgid "The New objects icon"
-#~ msgstr "Jauno objektu ikona"
-
-#~ msgid ""
-#~ "The New objects icon shows the number of appointment reminders or other "
-#~ "notifications. If clicking the icon, the info area opens."
-#~ msgstr ""
-#~ "Jauno objektu ikona parāda mītiņu atgādinājumu vai citu paziņojumu "
-#~ "skaitu. Noklikšķinot uz šīs ikonas tiek atvērts informatīvais apgabals."
-
-#~ msgid "The info area"
-#~ msgstr "Informatīvais apgabals"
-
-#~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
-#~ msgstr ""
-#~ "Lai startētu aplikāciju, aktivizējiet izvēlni izvēņu joslas augšējā "
-#~ "kresajā malā."
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -4800,6 +4742,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "Augsta prioritāte"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Padoms: Jūs varat atsākt ekskursijas jebkurā jums vēlamajā laikā, "
+#~ "aktivizējot tās sistēmas izvēlnē."
+
 #~ msgid "History of error messages"
 #~ msgstr "Kļūdu ziņojumu vēsture"
 
@@ -4979,6 +4928,13 @@ msgstr ""
 #~ msgstr ""
 #~ "Jaunu paziņojumu gadījumā (piemēram, uzaicinājumiem uz tikšanos) labajā "
 #~ "pusē tiek atvērts informatīvais apgabals."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "Jaunu paziņojumu gadījumā (piemēram pie mītiņu uzaicinājumiem) tiek "
+#~ "atvērts informatīvais apgabals."
 
 #~ msgid ""
 #~ "In order to assign categories to the objects selected, use the control "
@@ -7553,6 +7509,9 @@ msgstr ""
 #~ msgid "Resources:"
 #~ msgstr "Resursi:"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Atsākt ekskursiju"
+
 #~ msgid "Restore Last Operation"
 #~ msgstr "Atjaunot pēdējo operāciju"
 
@@ -8807,6 +8766,16 @@ msgstr ""
 #~ "Noklikšķinot uz faila tiek parādīts uznirstošais logs ar papildus detaļām "
 #~ "un funkcijām."
 
+#~ msgid "The New objects icon"
+#~ msgstr "Jauno objektu ikona"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Jauno objektu ikona parāda mītiņu atgādinājumu vai citu paziņojumu "
+#~ "skaitu. Noklikšķinot uz šīs ikonas tiek atvērts informatīvais apgabals."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -9035,6 +9004,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Ikona vēstuļu saraksta apakšējā kreisajā stūrī atļauj šķirot un kārtot e-"
 #~ "pasta vēstules. Noklikšķiniet uz tās un izvēlieties kritērijus."
+
+#~ msgid "The info area"
+#~ msgstr "Informatīvais apgabals"
 
 #~ msgid "The mandatory field %1$s is not defined."
 #~ msgstr "Obligātais lauks %1$s nav definēts."
@@ -9517,6 +9489,14 @@ msgstr ""
 #~ msgstr "Lai startētu aplikāciju noklikšķiniet uz aplikācijas galvenes."
 
 #~ msgid ""
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
+#~ msgstr ""
+#~ "Lai palaistu lietotni, izmantojiet ātrās palaišanas ikonas izvēlnes "
+#~ "joslas kreisajā pusē vai noklikšķiniet uz ieraksta lietotņu palaišanas "
+#~ "izvēlnē."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -9534,6 +9514,25 @@ msgstr ""
 #~ msgstr ""
 #~ "Lai atvērtu Palīgu noklikšķiniet uzsistēmas izvēlņu ikonas izvēlņu joslas "
 #~ "augšējā labajā malā un izvēlieties palīga izvēlni."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Lai atvērtu palīgu, noklikšķiniet uz sistēmas ikonas izvēlņu joslas "
+#~ "labajā malā un izvēlieties Palīgs. Tā rezultātā tiks parādīta pašreiz "
+#~ "izvēlētajai aplikācijai atbilstošā palīdzības informācija. Lai pārlūkotu "
+#~ "visu palīdzības informāciju, noklikšķiniet uz sākuma lapas, vai arī uz "
+#~ "satura izvēlnes loga augšējā daļā."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Lai atvērtu iestatījumus, noklikšķiniet uz sistēmas izvēlņu ikonas "
+#~ "izvēlņu joslas augšējā labajā malā un izvēlieties iestatījumu izvēlni."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

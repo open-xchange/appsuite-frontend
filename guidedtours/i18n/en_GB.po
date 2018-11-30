@@ -5,9 +5,9 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-30 10:58-0700\n"
-"Last-Translator: Timothy Friesen <timothy@workshop-chapina.com>\n"
-"Language-Team: English <en_GB@workshop-chapina.com>\n"
+"PO-Revision-Date: 2018-10-13 14:13-0700\n"
+"Last-Translator: Timothy Friesen <timothy.friesen@gmail.com>\n"
+"Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -48,14 +48,6 @@ msgstr ""
 "recurrence parameters are shown."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Using the reminder function"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "To not miss the appointment, use the reminder function."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr "Inviting other participants"
 
@@ -68,6 +60,14 @@ msgstr ""
 "To invite other participants, enter their names in the field below "
 "Participants. To avoid appointment conflicts, click on Find a free time at "
 "the upper right side."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Using the reminder function"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "To not miss the appointment, use the reminder function."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
@@ -377,12 +377,8 @@ msgid "Launching an app"
 msgstr "Launching an app"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
-msgstr ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
+msgid "To launch an app click on an entry inside the app launcher menu."
+msgstr "To launch an app click on an entry inside the app launcher menu."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -841,59 +837,6 @@ msgstr ""
 "To edit multiple tasks at once, enable the checkboxes at the left side of "
 "the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
 "on the right side of the tool bar."
-
-#~ msgid ""
-#~ "To open the settings, click the System menu icon on the upper right side "
-#~ "of the menu bar. Select Settings."
-#~ msgstr ""
-#~ "To open the settings, click the System menu icon on the upper right side "
-#~ "of the menu bar. Select Settings."
-
-#~ msgid ""
-#~ "To open the help, click the System menu icon on the upper right side of "
-#~ "the menu bar. Select Help. The help for the currently selected app is "
-#~ "displayed. To browse the complete help, click on Start Page or Table Of "
-#~ "Contents at the upper part of the window."
-#~ msgstr ""
-#~ "To open the help, click the System menu icon on the upper right side of "
-#~ "the menu bar. Select Help. The help for the currently selected app is "
-#~ "displayed. To browse the complete help, click on Start Page or Table Of "
-#~ "Contents at the upper part of the window."
-
-#~ msgid ""
-#~ "Hint: you can always restart guided tours, any time you need them, from "
-#~ "the system menu."
-#~ msgstr ""
-#~ "Hint: you can always restart guided tours, any time you need them, from "
-#~ "the system menu."
-
-#~ msgid ""
-#~ "In case of new notifications, e.g. appointment invitations, the info area "
-#~ "is opened."
-#~ msgstr ""
-#~ "In case of new notifications, e.g.: appointment invitations, the info "
-#~ "area is opened."
-
-#~ msgid "Restart Guided Tour"
-#~ msgstr "Restart Guided Tour"
-
-#~ msgid "The New objects icon"
-#~ msgstr "The New objects icon"
-
-#~ msgid ""
-#~ "The New objects icon shows the number of appointment reminders or other "
-#~ "notifications. If clicking the icon, the info area opens."
-#~ msgstr ""
-#~ "The New objects icon shows the number of appointment reminders or other "
-#~ "notifications. If clicking the icon, the info area opens."
-
-#~ msgid "The info area"
-#~ msgstr "The info area"
-
-#~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
-#~ msgstr ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
 
 #~ msgid "%1$d %2$s"
 #~ msgstr "%1$d %2$s"
@@ -3032,6 +2975,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "High priority"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+
 #~ msgid "Hobby"
 #~ msgstr "Hobby"
 
@@ -3130,6 +3080,13 @@ msgstr ""
 #~ msgstr ""
 #~ "In case of new notifications, e.g.: appointment invitations, the info "
 #~ "area is opened on the right side."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "In case of new notifications, e.g.: appointment invitations, the info "
+#~ "area is opened."
 
 #~ msgid "In progress"
 #~ msgstr "In progress"
@@ -4529,6 +4486,9 @@ msgstr ""
 #~ msgid "Resources"
 #~ msgstr "Resources"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Restart Guided Tour"
+
 #~ msgid "Restore applications"
 #~ msgstr "Restore applications"
 
@@ -5178,6 +5138,16 @@ msgstr ""
 #~ "checkboxes to select files. Click on a file to view further details and "
 #~ "functions in the pop-up."
 
+#~ msgid "The New objects icon"
+#~ msgstr "The New objects icon"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -5378,6 +5348,9 @@ msgstr ""
 #~ msgstr ""
 #~ "The icon on the bottom right side helps you sort your email messages. "
 #~ "Click the icon to get a list of sort criteria."
+
+#~ msgid "The info area"
+#~ msgstr "The info area"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "The number of recipients is limited to %1$s recipients per field"
@@ -5747,6 +5720,13 @@ msgstr ""
 #~ msgstr "To launch an app, click on a tile's headline."
 
 #~ msgid ""
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
+#~ msgstr ""
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -5764,6 +5744,24 @@ msgstr ""
 #~ msgstr ""
 #~ "To open the help, click the System menu icon on the upper right side of "
 #~ "the menu bar. Select Help. "
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

@@ -51,7 +51,7 @@ define('io.ox/core/tk/list', [
             '</li>'
         ),
 
-        busyIndicator: $('<li class="busy-indicator"><i class="fa fa-chevron-down" aria-hidden="true"></i></li>'),
+        busyIndicator: $('<li class="busy-indicator" role="presentation"><i class="fa fa-chevron-down" aria-hidden="true"></i></li>'),
 
         // disabled by default via 'hidden class'
         notification: $('<li class="abs notification hidden" role="presentation"></li>'),
@@ -795,7 +795,8 @@ define('io.ox/core/tk/list', [
 
         renderListItem: function (model, drawlabels) {
             var li = this.createListItem(),
-                baton = this.getBaton(model);
+                baton = this.getBaton(model),
+                node = li.children().eq(1);
             // prepend label if necessary
             if (drawlabels && this.options.labels) {
                 var label = this.getLabel(model);
@@ -804,11 +805,16 @@ define('io.ox/core/tk/list', [
                     this.currentLabel = label;
                 }
             }
+
+            // use button markup if needed (used for a11y if listitems are clickable and open popups etc)
+            if (this.options.useButtonMarkup) {
+                li.children().wrapAll('<button type="button" class="btn-unstyled">');
+            }
             // add cid and full data
             li.attr({ 'data-cid': this.getCompositeKey(model), 'data-index': model.get('index') });
             if (this.options.labels) li.attr('data-label', this.getLabel(model));
             // draw via extensions
-            ext.point(this.ref + '/item').invoke('draw', li.children().eq(1), baton);
+            ext.point(this.ref + '/item').invoke('draw', node, baton);
             return li;
         },
 

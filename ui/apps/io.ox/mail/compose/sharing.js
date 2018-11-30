@@ -91,7 +91,7 @@ define('io.ox/mail/compose/sharing', [
                 id: 'expiration-select-box'
             });
 
-            //#. label vor a selectbox to select a time (1 day 1 month etc.) or "never"
+            //#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
             this.dialogNode.append($('<label for="expiration-select-box">').text(gt('Expiration')), selectbox.render().$el);
         }
     }, {
@@ -102,7 +102,8 @@ define('io.ox/mail/compose/sharing', [
             var node = new mini.CustomCheckboxView({
                 model: this.sharingModel,
                 name: 'autodelete',
-                label: gt('delete if expired')
+                //#. label of a selectbox: automatically delete files after a share/sharing-link expired?
+                label: gt('Delete files after expiration')
             }).render().$el;
 
             // disable when forced
@@ -120,7 +121,7 @@ define('io.ox/mail/compose/sharing', [
         id: 'password',
         index: 300,
         render: function () {
-            var model = this.sharingModel, passContainer;
+            var model = this.sharingModel, passContainer, guid;
 
             function toggleState() {
                 if (model.get('usepassword')) return passContainer.find('input').prop('disabled', false);
@@ -131,7 +132,9 @@ define('io.ox/mail/compose/sharing', [
                 $('<div class="password-wrapper">').append(
                     //#. checkbox label to determine if a password should be used
                     new mini.CustomCheckboxView({ name: 'usepassword', model: model, label: gt('Use password') }).render().$el.addClass('use-password'),
+                    $('<label class="control-label sr-only">').text(gt('Enter Password')).attr({ for: guid = _.uniqueId('share-password-label-') }),
                     passContainer = new mini.PasswordViewToggle({ name: 'password', model: model, placeholder: gt('Password'), autocomplete: false }).render().$el
+                        .find('input').attr('id', guid)
                 )
             );
             model.on('change:usepassword', toggleState);

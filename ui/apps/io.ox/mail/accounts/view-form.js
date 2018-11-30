@@ -582,11 +582,9 @@ define.async('io.ox/mail/accounts/view-form', [
                         // offer folder selector if id is not undefined (i.e. while creating a new account)
                         var text = folderLabels[folder], id = model.get('id'), enabled = id !== undefined;
                         folder = folder + '_fullname';
-                        /* eslint-disable */
                         return group(
                             label(folder, text),
-                            $('<div class="col-sm-7">').append(
-                                enabled ?
+                            $('<div class="col-sm-7">').append(enabled ?
                                 // show controls
                                 $('<div class="input-group folderselect enabled">').attr('data-property', folder).append(
                                     new InputView({ model: model, id: folder })
@@ -632,11 +630,10 @@ define.async('io.ox/mail/accounts/view-form', [
                             )
                         ),
 
-                        capabilities.has('!multiple_mail_accounts') || capabilities.has('!unified-mailbox') ?
-                        $() :
-                        group(
-                            checkbox('unified_inbox_enabled', gt('Use unified mail for this account'), model)
-                        )
+                        capabilities.has('!multiple_mail_accounts') || capabilities.has('!unified-mailbox') ? $() :
+                            group(
+                                checkbox('unified_inbox_enabled', gt('Use unified mail for this account'), model)
+                            )
                     )
                 )
             );

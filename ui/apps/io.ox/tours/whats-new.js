@@ -147,7 +147,7 @@ define('io.ox/tours/whats-new', [
         // splashscreen already has a button labeled with start tour
         tour.steps[0].options.labelNext = gt('Next');
         //#. %1$s is the product name, e.g. OX App Suite
-        new ModalDialog({ title: gt('What‘s New in %1$s 7.10.0', ox.serverConfig.productName), width: '600px' })
+        new ModalDialog({ title: gt('What\'s new'), width: '600px' })
             .build(function () {
                 // build splash screen
                 //#. %1$s is the product name, e.g. OX App Suite

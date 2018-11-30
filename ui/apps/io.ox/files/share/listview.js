@@ -16,13 +16,14 @@ define('io.ox/files/share/listview', [
     'io.ox/core/extensions',
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/tk/list',
+    'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/files/common-extensions',
     'io.ox/files/api',
     'io.ox/core/capabilities',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style',
     'io.ox/files/share/view-options'
-], function (api, ext, BreadcrumbView, ListView, extensions, filesAPI, capabilities, gt) {
+], function (api, ext, BreadcrumbView, ListView, ContextMenuUtils, extensions, filesAPI, capabilities, gt) {
 
     'use strict';
 
@@ -150,27 +151,30 @@ define('io.ox/files/share/listview', [
          * Function to create the context menu for the myshare viewList.
          * @param {jQuery.Event} event
          */
-        onContextMenu: function (event) {
+        onContextMenu: function (e) {
+            ContextMenuUtils.checkKeyboardEvent(e);
             var view = this,
                 app = view.app,
-                list = view.selection.get(),
                 // the link to render the context menu with it's entries
-                link = 'io.ox/core/file/contextmenu/myshares';
+                link = 'io.ox/core/file/contextmenu/myshares',
+                list, models, data;
 
             // android sends context events on long tap, but currently we don't want a context menu on smartphones and tablets
             if (_.device('smartphone') || _.device('android')) { return; }
 
+            list = view.selection.get();
             if (!list) return;
-
             // turn cids into proper objects
-            var modelList = _.map(list, function (cid) { return view.collection.get(cid); });
+            models = _.map(list, function (cid) { return view.collection.get(cid); });
 
-            var fileDescriptors = _(modelList).invoke('toJSON');
+            list = _(models).invoke('toJSON');
             // extract single object if length === 1
-            var data = fileDescriptors.length === 1 ? fileDescriptors[0] : fileDescriptors;
-            var baton = new ext.Baton({ data: data, models: modelList, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link, share: true });
+            data = list.length === 1 ? list[0] : list;
 
-            view.contextMenu.showContextMenu(event, baton);
+            _.defer(function () {
+                var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link, share: true });
+                view.contextMenu.showContextMenu(e, baton);
+            });
         },
 
         /**

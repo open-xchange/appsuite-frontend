@@ -202,7 +202,7 @@ define('io.ox/settings/security/sessions/settings/pane', [
         fetch: function () {
             var self = this;
             return http.GET({
-                url: '/ajax/sessionmanagement?action=all'
+                url: ox.apiRoot + '/sessionmanagement?action=all'
             }).then(function success(data) {
                 self.set(data);
             });
@@ -280,19 +280,19 @@ define('io.ox/settings/security/sessions/settings/pane', [
 
         initialize: function () {
             this.$el.data('view', this);
+            this.collection.on('update', _.bind(this.render, this));
         },
 
         render: function () {
             var self = this;
-            this.collection.initial.always(function () {
-                self.$el.append(
-                    self.listView = new SettingsListView({
-                        collection: self.collection,
-                        childView: SessionItemView,
-                        childOptions: { collection: self.collection }
-                    }).render().$el
-                );
-            });
+            this.$el.empty().append(
+                self.listView = new SettingsListView({
+                    collection: self.collection,
+                    childView: SessionItemView,
+                    childOptions: { collection: self.collection }
+                }).render().$el
+            );
+
             return this;
         }
 
@@ -302,13 +302,18 @@ define('io.ox/settings/security/sessions/settings/pane', [
         id: 'view',
         index: 100,
         draw: function () {
+            var collection = new SessionCollection();
             this.append(
                 new ExtensibleView({
                     point: 'io.ox/settings/sessions/settings/detail/view',
-                    collection: new SessionCollection()
+                    collection: collection
                 })
                 .render().$el
             );
+
+            ox.on('refresh^', function () {
+                collection.fetch();
+            });
         }
     });
 

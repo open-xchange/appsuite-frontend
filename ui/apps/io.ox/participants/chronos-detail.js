@@ -35,7 +35,7 @@ define('io.ox/participants/chronos-detail', [
             if (data.cuType !== 'RESOURCE') return;
             if (!baton.options.halo) return this.append($.txt(name));
             if (data.resource) data = data.resource;
-            this.append(
+            baton.flexWrapper.append(
                 $('<a href="#" role="button" class="halo-resource-link">')
                     .attr('title', data.display_name || name)
                     // 'looksLikeResource' duck check
@@ -63,7 +63,7 @@ define('io.ox/participants/chronos-detail', [
             if (!baton.options.halo) opt.$el = $('<span>');
             if (baton.data.entity) opt.user_id = baton.data.entity;
 
-            this.append(
+            baton.flexWrapper.append(
                 coreUtil.renderPersonalName(opt, baton.data)
             );
         }
@@ -78,30 +78,42 @@ define('io.ox/participants/chronos-detail', [
                 comment = baton.data.cuType !== 'RESOURCE' ? data.comment : undefined,
                 statusClass = util.getConfirmationClass(data.partStat);
 
-            this.children().first()
+            baton.flexWrapper.children().first()
                 .addClass(statusClass)
                 .addClass(baton.data.cuType === 'RESOURCE' ? '' : 'person');
 
-            this.append(
+            baton.flexWrapper.append(
                 // pause for screenreader
                 !baton.data.isRessource ? $('<span class="sr-only">').text(', ' + util.getConfirmationLabel(data.partStat) + '.') : '',
                 // has confirmation icon?
-                confirm ? $('<span class="status" aria-hidden="true">').addClass(statusClass).append(confirm) : '',
+                confirm ? $('<span class="status" aria-hidden="true">').addClass(statusClass).append(confirm) : ''
+            );
+            if (baton.appointment.get('attendees').length > 1 && isOrganizer(baton)) {
+                baton.flexWrapper.append($('<span class="organizer-container">').text('(' + gt('Organizer') + ')'));
+            }
+            this.append(
                 // has confirmation comment?
                 comment ? $('<div class="comment">').text(comment) : ''
             );
         }
     });
 
-    function drawParticipant(obj, options) {
+    function isOrganizer(baton) {
+        var appointment = baton.appointment.toJSON();
+        if (!appointment.organizer || !appointment.organizer.entity) return false;
+        return baton.data.entity === appointment.organizer.entity;
+    }
+
+    function drawParticipant(obj, appointment, options) {
         options = _.extend({
             halo: true
         }, options);
 
         // initialize vars
-        var node = $('<li class="participant">');
+        var flexWrapper = $('<div class="flex-wrapper" >'),
+            node = $('<li class="participant">').append(flexWrapper);
 
-        var baton = new ext.Baton({ data: obj, options: options });
+        var baton = new ext.Baton({ data: obj, options: options, appointment: appointment, flexWrapper: flexWrapper });
         ext.point('io.ox/participants/chronos/item').invoke('draw', node, baton);
 
         return node;
@@ -117,6 +129,7 @@ define('io.ox/participants/chronos-detail', [
             $('.participant', e.data.participantsContainer)
                 .show()
                 .find('a.person:not(.' + e.data.res.css + ')')
+                .parent()
                 .parent()
                 .toggle();
             $('.active', e.data.participantsContainer).removeClass('active');
@@ -187,7 +200,11 @@ define('io.ox/participants/chronos-detail', [
                         return obj.sort_name;
                     })
                     .each(function (obj) {
-                        participantListNode.append(drawParticipant(obj, options));
+                        if (isOrganizer({ data: obj, appointment: baton.model })) {
+                            participantListNode.prepend(drawParticipant(obj, baton.model, options));
+                            return;
+                        }
+                        participantListNode.append(drawParticipant(obj, baton.model, options));
                     });
 
                 //external Participants get their own section
@@ -205,7 +222,7 @@ define('io.ox/participants/chronos-detail', [
 
                 // loop over external participants
                 _(external).each(function (obj) {
-                    extList.append(drawParticipant(obj, options));
+                    extList.append(drawParticipant(obj, baton.model, options));
                 });
                 // resources
                 if (resources.length) {
@@ -225,7 +242,7 @@ define('io.ox/participants/chronos-detail', [
                             return obj.display_name;
                         })
                         .each(function (obj) {
-                            plist.append(drawParticipant(obj, options));
+                            plist.append(drawParticipant(obj, baton.model, options));
                         });
                 }
 

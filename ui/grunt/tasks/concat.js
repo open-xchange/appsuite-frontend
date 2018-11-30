@@ -90,11 +90,13 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/boot/form.js',
                             'apps/io.ox/core/boot/i18n.js',
                             'apps/io.ox/core/boot/language.js',
+                            'apps/io.ox/core/boot/rampup.js',
                             'apps/io.ox/core/boot/load.js',
                             'apps/io.ox/core/boot/util.js',
                             'apps/io.ox/core/boot/support.js',
                             'apps/io.ox/core/boot/login/auto.js',
                             'apps/io.ox/core/boot/login/openid.js',
+                            'apps/io.ox/core/boot/login/saml.js',
                             'apps/io.ox/core/boot/login/standard.js',
                             'apps/io.ox/core/boot/login/token.js',
                             'apps/io.ox/core/boot/warning.js',
@@ -265,40 +267,13 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            mobiscroll: {
-                files: [
-                    {
-                        src: [
-                            'node_modules/mobiscroll/js/mobiscroll.core.js',
-                            'node_modules/mobiscroll/js/mobiscroll.util.datetime.js',
-                            'node_modules/mobiscroll/js/mobiscroll.frame.js',
-                            'node_modules/mobiscroll/js/mobiscroll.scroller.js',
-                            'node_modules/mobiscroll/js/mobiscroll.datetimebase.js',
-                            'node_modules/mobiscroll/js/mobiscroll.datetime.js',
-                            'node_modules/mobiscroll/js/mobiscroll.frame.ios.js'
-                        ],
-                        dest: 'build/static/3rd.party/mobiscroll.js',
-                        nonull: true
-                    },
-                    {
-                        src: [
-                            'node_modules/mobiscroll/css/mobiscroll.frame.css',
-                            'node_modules/mobiscroll/css/mobiscroll.frame.ios.css',
-                            'node_modules/mobiscroll/css/mobiscroll.scroller.css',
-                            'node_modules/mobiscroll/css/mobiscroll.scroller.ios.css'
-                        ],
-                        dest: 'build/apps/3rd.party/mobiscroll.css',
-                        nonull: true
-                    }
-                ]
-            },
             tinymce: {
                 files: [
                     {
                         src: [
                             'node_modules/tinymce/tinymce.min.js',
-                            'node_modules/@open-xchange/tinymce/themes/unobtanium/theme.min.js',
-                            'node_modules/tinymce/plugins/{autolink,code,link,paste,textcolor,lists}/plugin.min.js',
+                            'node_modules/tinymce/themes/modern/theme.min.js',
+                            'node_modules/tinymce/plugins/{autoresize,autolink,code,link,paste,textcolor,lists}/plugin.min.js',
                             'node_modules/@open-xchange/tinymce/plugins/ox{image,paste,drop}/plugin.min.js'
                         ],
                         dest: 'build/apps/3rd.party/tinymce/tinymce.min.js',

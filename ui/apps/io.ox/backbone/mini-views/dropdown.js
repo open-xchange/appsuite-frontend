@@ -21,6 +21,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         return $.txt(value);
     }
 
+    function addColor($node, color) {
+        return $node.addClass('checkbox-color color-flags-no-checkbox').css('background-color', color);
+    }
+
     // Bootstrap dropdown
 
     var Dropdown = AbstractView.extend({
@@ -55,8 +59,13 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             this.$el.removeClass('open');
             this.$ul.attr('style', this.$ul.data('style') || '').removeData('style');
             this.$overlay.remove();
-            this.$toggle.attr('aria-expanded', false).focus();
+            this.$toggle.attr('aria-expanded', false);
             delete this.$overlay;
+            if (this.lastEvent && this.lastEvent.which === 9) {
+                if (this.lastEvent.shiftKey) a11y.getPreviousTabbable(this.$toggle).focus();
+                else a11y.getNextTabbable(this.$toggle).focus();
+                delete this.lastEvent;
+            }
         },
 
         setDropdownOverlay: function () {
@@ -157,6 +166,11 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             }
         },
 
+        onKeyDownMenu: function (e) {
+            if (e.which !== 9) return;
+            this.lastEvent = e;
+        },
+
         open: function () {
             if (this.$el.hasClass('open') || this.$overlay) return;
             this.$toggle.trigger('click');
@@ -214,13 +228,14 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         setup: function () {
-            this.$ul = this.options.$ul || $('<ul class="dropdown-menu" role="menu">');
+            this.$ul = this.options.$ul || this.$ul || $('<ul class="dropdown-menu" role="menu">');
             this.$placeholder = $('<div class="hidden">').attr('id', _.uniqueId('dropdown-placeholder-'));
             this.smart = this.options.smart;
             this.margin = this.options.margin || 8;
             // not so nice but we need this for mobile support
             // if $ul pops out on the overlay, this line is also required
             this.$ul.on('click', 'a', $.proxy(this.onClick, this));
+            this.$ul.on('keydown', 'a', $.proxy(this.onKeyDownMenu, this));
 
             if (this.model) this.listenTo(this.model, 'change', this.options.update || this.update);
             if (this.options.dontProcessOnMobile) {
@@ -230,17 +245,34 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         update: function () {
+            // TODO: simplify
             var $ul = this.$ul;
             if (!this.model) return;
             _(this.model.changed).each(function (value, name) {
                 var li = $ul.find('[data-name="' + name + '"]');
                 // clear check marks
-                li.children('i').attr('class', 'fa fa-fw fa-none');
+                li.children('i').each(function (index, node) {
+                    var $node = $(node),
+                        color = $node.data('color');
+                    $node.removeClass('fa-check').addClass('fa-none');
+                    if (color) {
+                        addColor($node, color);
+                    }
+                });
                 // loop over list items also allow compare non-primitive values
                 li.each(function () {
                     var node = $(this);
                     node.filter('[role=menuitemcheckbox][aria-checked]').attr({ 'aria-checked': _.isEqual(node.data('value'), value) });
-                    if (_.isEqual(node.data('value'), value)) node.children('i').attr('class', 'fa fa-fw fa-check');
+                    if (_.isEqual(node.data('value'), value)) {
+                        node.children('i').each(function (index, node) {
+                            var $node = $(node),
+                                color = $node.data('color');
+                            $node.removeClass('fa-none').addClass('fa-check');
+                            if (color) {
+                                addColor($node, color);
+                            }
+                        });
+                    }
                 });
             }, this);
             // update drop-down toggle
@@ -255,8 +287,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             return _.isObject(value) ? JSON.stringify(value) : value;
         },
 
-        append: function (fn) {
-            this.$ul.append($('<li role="presentation">').append(fn));
+        append: function (fn, options) {
+            (options && options.group ? this.$ul.find('[role="group"]:last') : this.$ul).append(
+                $('<li role="presentation">').append(fn)
+            );
             return this;
         },
 
@@ -268,34 +302,40 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 checked = _.isEqual(currentValue, value),
                 role = options.radio ? 'menuitemradio' : 'menuitemcheckbox',
                 plainText = _.isFunction(text) ? $('<div>').append(text()).text() : text,
-                ariaLabel = options.prefix ? [options.prefix, plainText].join(' ') : undefined;
+                ariaLabel = options.prefix ? [options.prefix, plainText].join(' ') : undefined,
+                $checkMark = $('<i class="fa fa-fw" aria-hidden="true">').addClass(checked ? 'fa-check' : 'fa-none'),
+                $option = $('<a href="#" draggable="false">')
+                            .attr({
+                                'role': role,
+                                'aria-checked': checked,
+                                'data-keep-open': options.keepOpen ? true : undefined,
+                                'data-name': name,
+                                'data-value': this.stringify(value),
+                                // you may use toggle with boolean values or provide a toggleValue ('togglevalue' is the option not checked value, 'value' is the option checked value)
+                                'data-toggle': _.isBoolean(value) || options.toggleValue !== undefined,
+                                'data-toggle-value': options.toggleValue,
+                                'aria-label': ariaLabel,
+                                'title': options.title,
+                                tabindex: '-1'
+                            });
 
-            return this.append(
-                $('<a href="#" draggable="false">')
-                .attr({
-                    'role': role,
-                    'aria-checked': checked,
-                    'data-keep-open': options.keepOpen ? true : undefined,
-                    'data-name': name,
-                    'data-value': this.stringify(value),
-                    // you may use toggle with boolean values or provide a toggleValue ('togglevalue' is the option not checked value, 'value' is the option checked value)
-                    'data-toggle': _.isBoolean(value) || options.toggleValue !== undefined,
-                    'data-toggle-value': options.toggleValue,
-                    'aria-label': ariaLabel,
-                    'title': options.title
-                })
+            if (options.color) $option.addClass('color-flag');
+
+            $option
                 // in firefox draggable=false is not enough to prevent dragging...
                 .on('dragstart', false)
                 // store original value
                 .data('value', value)
                 .append(
-                    $('<i class="fa fa-fw" aria-hidden="true">').addClass(checked ? 'fa-check' : 'fa-none'),
+                    // if the checkbox should have a color, add the information here
+                    options.color ? addColor($checkMark, options.color).attr({ 'data-color': options.color, 'data-color-label': options.color }) : $checkMark,
                     _.isFunction(text) ? text() : $.txt(text)
-                )
-            );
+                );
+
+            return this.append($option, _.pick(options, 'group'));
         },
 
-        // used to manually prevent the popup from closing. Make sure to reset this or the popup stays open all the time
+        // used to manually prevent the popup from closing.The only exception is a direct click on the toggle button. Make sure to reset this or the popup stays open when you don't want to
         forceOpen: function (state) {
             this.$el.attr('forceOpen', state);
         },
@@ -317,7 +357,19 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         header: function (text) {
-            this.$ul.append($('<li class="dropdown-header" role="separator">').text(text));
+            this.$ul.append(
+                $('<li class="dropdown-header" role="separator">').append(
+                    $('<span aria-hidden="true">').text(text)
+                )
+            );
+            return this;
+        },
+
+        group: function (text, nodes) {
+            this.header(text);
+            this.$ul.append(
+                $('<div role="group">').attr('aria-label', text).append(nodes)
+            );
             return this;
         },
 
@@ -335,7 +387,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
             if (_.isString(label)) ariaLabel += (' ' + label);
             this.$el.append(
-                this.$toggle = this.options.$toggle || $('<a href="#" draggable="false">').attr({
+                this.$toggle = this.options.$toggle || this.$toggle || $('<a href="#" draggable="false">').attr({
                     'aria-label': ariaLabel,
                     'data-action': this.options.dataAction,
                     'title': this.options.title || null,
@@ -362,9 +414,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             this.$toggle.attr({
                 'aria-haspopup': true,
                 'aria-expanded': false,
-                'role': 'button',
                 'data-toggle': 'dropdown'
             });
+
+            if (this.$toggle.is('a')) this.$toggle.attr('role', 'button');
 
             if (this.options.tabindex) this.$toggle.attr('tabindex', this.options.tabindex);
 

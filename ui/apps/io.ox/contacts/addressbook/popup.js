@@ -157,7 +157,7 @@ define('io.ox/contacts/addressbook/popup', [
             )
             .then(function (contacts, labels) {
                 var result = [], hash = {};
-                processAddresses(contacts[0], result, hash, options);
+                processAddresses(contacts, result, hash, options);
                 if (useLabels) processLabels(labels[0], result, hash);
                 return { items: result, hash: hash, index: buildIndex(result) };
             });
@@ -169,7 +169,8 @@ define('io.ox/contacts/addressbook/popup', [
                 // keep this list really small for good performance!
                 columns: '1,20,500,501,502,505,519,524,555,556,557,592,602,606,616,617',
                 exclude: useGlobalAddressBook ? [] : ['6'],
-                limit: LIMITS.fetch
+                limit: LIMITS.fetch,
+                lists: true
             }, options);
 
             var data = {
@@ -190,6 +191,11 @@ define('io.ox/contacts/addressbook/popup', [
                 },
                 // emailAutoComplete doesn't work; need to clean up client-side anyway
                 data: data
+            }).then(function (list) {
+                if (options.lists) return list;
+                return _.filter(list, function (item) {
+                    return !item.distribution_list;
+                });
             });
         }
 
@@ -289,7 +295,8 @@ define('io.ox/contacts/addressbook/popup', [
                 // allow sorters to have special handling for sortnames and addresses
                 sort_name_without_mail: sort_name.join('_').toLowerCase().replace(/\s/g, '_'),
                 title: item.title,
-                rank: 1000 + ((folder_id === '6' ? 10 : 0) + rank) * 10 + i
+                rank: 1000 + ((folder_id === '6' ? 10 : 0) + rank) * 10 + i,
+                user_id: item.internal_userid
             };
         }
 
@@ -408,27 +415,33 @@ define('io.ox/contacts/addressbook/popup', [
         'shared':  gt('Shared address books')
     };
 
-    function open(callback, useGABOnly) {
+    function open(callback, options) {
 
-        if (useGABOnly) folder = 'folder/6';
-
-        // avoid parallel popups
-        if (isOpen) return;
-        isOpen = true;
-
-        return new ModalDialog({
+        options = _.extend({
+            build: _.noop,
+            //#. Context: Add selected contacts; German "Auswählen", for example
+            button: gt.pgettext('select-contacts', 'Select'),
             enter: false,
             focus: '.search-field',
             maximize: 600,
             point: 'io.ox/contacts/addressbook-popup',
             help: 'ox.appsuite.user.sect.email.send.addressbook.html',
             title: gt('Select contacts'),
-            useGABOnly: useGABOnly
-        })
+            useGABOnly: false
+        }, options);
+
+        if (options.useGABOnly) folder = 'folder/6';
+
+        // avoid parallel popups
+        if (isOpen) return;
+        isOpen = true;
+
+        return new ModalDialog(options)
         .inject({
             renderFolders: function (folders) {
                 var $dropdown = this.$('.folder-dropdown'),
-                    count = 0, self = this;
+                    useGABOnly = this.options.useGABOnly,
+                    count = 0;
                 // remove global address book?
                 if (!useGlobalAddressBook && folders.public) {
                     folders.public = _(folders.public).reject({ id: '6' });
@@ -444,7 +457,7 @@ define('io.ox/contacts/addressbook/popup', [
                         return $('<optgroup>').attr('label', sections[id]).append(
                             _(section).map(function (folder) {
                                 count++;
-                                if (self.options.useGABOnly && folder.id !== '6') return;
+                                if (useGABOnly && folder.id !== '6') return;
                                 return $('<option>').val('folder/' + folder.id).text(folder.title);
                             })
                         );
@@ -497,13 +510,14 @@ define('io.ox/contacts/addressbook/popup', [
                         $('<div class="col-xs-6">').append(
                             $('<input type="text" class="form-control search-field">')
                             .attr('placeholder', gt('Search'))
+                            .attr('aria-label', gt('Search'))
                         ),
                         $('<div class="col-xs-6">').append(
                             $('<select class="form-control folder-dropdown invisible">').append(
                                 this.options.useGABOnly ? $() : $('<option value="all">').text(gt('All folders')),
                                 this.options.useGABOnly || useLabels ? $() : $('<option value="all_lists">').text(gt('All distribution lists')),
                                 useLabels ? $('<option value="all_labels">').text(gt('All groups')) : $()
-                            )
+                            ).attr('aria-label', gt('Apply filter')).val(folder)
                         )
                     )
                 );
@@ -807,6 +821,7 @@ define('io.ox/contacts/addressbook/popup', [
                     .value();
             }
         })
+        .build(options.build)
         .on({
             'close': function () {
                 isOpen = false;
@@ -822,7 +837,7 @@ define('io.ox/contacts/addressbook/popup', [
         })
         .addCancelButton()
         //#. Context: Add selected contacts; German "Auswählen", for example
-        .addButton({ label: gt.pgettext('select-contacts', 'Select'), action: 'select' })
+        .addButton({ label: options.button, action: 'select' })
         .open();
     }
 
@@ -1030,7 +1045,7 @@ define('io.ox/contacts/addressbook/popup', [
             this.$el.append(
                 // toolbar
                 $('<div class="toolbar">').append(
-                    $('<span role="header" aria-live="polite" class="count pull-left">').text(selectionLabel),
+                    $('<span role="heading" aria-level="2" aria-live="polite" class="count pull-left">').text(selectionLabel),
                     $('<a href="#" class="pull-right clear" role="button">').text(gt('Clear selection'))
                 ),
                 // list

@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-02 02:27+0800\n"
+"PO-Revision-Date: 2018-10-19 11:56+1000\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -43,14 +43,6 @@ msgid ""
 msgstr "要创建循环约会，请启用重复。会显示设置循环参数的功能。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "使用提醒功能"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "不要错过约会，请使用提醒功能。"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr "邀请其他参与者"
 
@@ -62,6 +54,14 @@ msgid ""
 msgstr ""
 "要邀请其他参与者，请在参与者下面的输入字段里输入他们的名字。要避免约会冲突，"
 "请单击右上方的找寻一个空闲时间。"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "使用提醒功能"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "不要错过约会，请使用提醒功能。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
@@ -349,12 +349,8 @@ msgid "Launching an app"
 msgstr "执行一个应用程序"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
-msgstr ""
-"要启动应用程序，请使用菜单栏左侧的快速启动图标，或点击应用程序启动器菜单中的"
-"条目。"
+msgid "To launch an app click on an entry inside the app launcher menu."
+msgstr "要执行一个应用程序，请单击应用程序执行菜单里的一个项目。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -771,48 +767,6 @@ msgid ""
 msgstr ""
 "要一次编辑多个任务，请勾选任务左边的选择框。如果选择框没有显示，请单击工具条"
 "右边的视图 > 选择框。"
-
-#~ msgid ""
-#~ "To open the settings, click the System menu icon on the upper right side "
-#~ "of the menu bar. Select Settings."
-#~ msgstr "要打开设置，单击菜单条右上方的系统菜单图标。选择设置。"
-
-#~ msgid ""
-#~ "To open the help, click the System menu icon on the upper right side of "
-#~ "the menu bar. Select Help. The help for the currently selected app is "
-#~ "displayed. To browse the complete help, click on Start Page or Table Of "
-#~ "Contents at the upper part of the window."
-#~ msgstr ""
-#~ "要打开帮助，单击在菜单条右上方上的系统菜单图标。选择帮助，会显示当前选择应"
-#~ "用程序的帮助。要浏览完整帮助，在窗口上部的开始页或目录。"
-
-#~ msgid ""
-#~ "Hint: you can always restart guided tours, any time you need them, from "
-#~ "the system menu."
-#~ msgstr "提示：您随时能按需要从系统菜单重新开始导览。"
-
-#~ msgid ""
-#~ "In case of new notifications, e.g. appointment invitations, the info area "
-#~ "is opened."
-#~ msgstr "为免有新通知，例如：约会邀请，会开启信息区域。"
-
-#~ msgid "Restart Guided Tour"
-#~ msgstr "重新开始导览"
-
-#~ msgid "The New objects icon"
-#~ msgstr "新对象图标"
-
-#~ msgid ""
-#~ "The New objects icon shows the number of appointment reminders or other "
-#~ "notifications. If clicking the icon, the info area opens."
-#~ msgstr "新对象图标显示约会提醒其他通知数。如果单击图标，会打开信息区域。"
-
-#~ msgid "The info area"
-#~ msgstr "信息区域"
-
-#~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
-#~ msgstr "要执行一个应用程序，请单击菜单条左边的一个项目。"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -4401,6 +4355,11 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "高优先级"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr "提示：您随时能按需要从系统菜单重新开始导览。"
+
 #~ msgid "Hobby"
 #~ msgstr "兴趣"
 
@@ -4511,6 +4470,11 @@ msgstr ""
 #~ "In case of new notifications, e.g. appointment invitations, the info area "
 #~ "is opened on the right side."
 #~ msgstr "假若有新通知，比如约会邀请，信息区域会在右边打开。"
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr "为免有新通知，例如：约会邀请，会开启信息区域。"
 
 #~ msgid "In progress"
 #~ msgstr "进行中"
@@ -6064,6 +6028,9 @@ msgstr ""
 #~ msgid "Resources"
 #~ msgstr "资源"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "重新开始导览"
+
 #~ msgid "Restore Last Operation"
 #~ msgstr "复原最后操作"
 
@@ -6809,6 +6776,14 @@ msgstr ""
 #~ "列表视图显示像体积和更改时间等详情。使用选择框以选择文件。在一个文件上单击"
 #~ "以在弹出窗口里检视更多详情和功能。"
 
+#~ msgid "The New objects icon"
+#~ msgstr "新对象图标"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr "新对象图标显示约会提醒其他通知数。如果单击图标，会打开信息区域。"
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -6994,6 +6969,9 @@ msgstr ""
 #~ "icon to get a list of sort criteria."
 #~ msgstr ""
 #~ "在右下方的图标帮助您排序您的电子邮件。单击图标以获得一个排序准则列表。"
+
+#~ msgid "The info area"
+#~ msgstr "信息区域"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "收件人数量限制每输入字段 %1$s 个"
@@ -7343,6 +7321,13 @@ msgstr ""
 #~ msgstr "要执行一个应用程序，请单击一个方块的标头。"
 
 #~ msgid ""
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
+#~ msgstr ""
+#~ "要启动应用程序，请使用菜单栏左侧的快速启动图标，或点击应用程序启动器菜单中"
+#~ "的条目。"
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -7356,6 +7341,20 @@ msgstr ""
 #~ "To open the help, click the System menu icon on the upper right side of "
 #~ "the menu bar. Select Help."
 #~ msgstr "要打开帮助，请单击菜单条右上方的系统菜单图标。选择帮助。"
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "要打开帮助，单击在菜单条右上方上的系统菜单图标。选择帮助，会显示当前选择应"
+#~ "用程序的帮助。要浏览完整帮助，在窗口上部的开始页或目录。"
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr "要打开设置，单击菜单条右上方的系统菜单图标。选择设置。"
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

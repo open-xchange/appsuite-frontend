@@ -195,10 +195,30 @@ define('io.ox/core/tk/typeahead', [
                     o.click.call(this, e, item);
                     self.$el.trigger('select', item);
                     self.$el.typeahead('val', '');
-                },
-                'typeahead:cursorchanged': function () {
-                    // useful for debugging
                 }
+            });
+
+            // a11y support
+            this.$el.on({
+                'typeahead:cursorchanged': function () {
+                    var id = self.$el.closest('.twitter-typeahead').find('.tt-cursor').attr('id');
+                    self.$el.attr('aria-activedescendant', id);
+                }
+            });
+
+            this.model.on('change:dropdown', function (model, status) {
+                if (status === 'closed') return self.$el.removeAttr('aria-activedescendant');
+
+                var dropdown = self.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu'),
+                    container = $('<div class="tt-suggestions" role="listbox">'),
+                    suggestions = dropdown.find('.tt-suggestions').children();
+                // use container with proper nodetype (div) and add role/id
+                container.append(
+                    suggestions.each(function () {
+                        $(this).attr({ id: _.uniqueId('option_'), role: 'option' });
+                    })
+                );
+                dropdown.find('.tt-suggestions').replaceWith(container);
             });
 
             if (this.options.init) {

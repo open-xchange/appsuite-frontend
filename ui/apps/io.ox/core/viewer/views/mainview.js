@@ -137,26 +137,32 @@ define('io.ox/core/viewer/views/mainview', [
 
         // handler for keyboard events on the viewer
         onKeydown: function (event) {
-            var viewerRootEl = this.$el,
-                self = this,
-                handleChangeSlide = _.throttle(function (direction) {
-                    if (direction === 'right') {
-                        self.displayerView.slideNext();
-                    } else {
-                        self.displayerView.slidePrev();
-                    }
-                    self.displayerView.focusActiveSlide();
-                }, 200);
+            var viewerRootEl = this.$el;
+            var swiper = this.displayerView.swiper;
+            var self = this;
+
+            var handleChangeSlide = _.throttle(function (direction) {
+                if (!swiper) { return; }
+
+                if (direction === 'right') {
+                    swiper.slideNext();
+                } else {
+                    swiper.slidePrev();
+                }
+                swiper.updateClickedSlide({ target: null });
+            }, 200);
 
             // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
             function tabHandler(event) {
-                var tabableActions = a11y.getTabbable(viewerRootEl),
-                    tabableActionsCount = tabableActions.length;
+                var tabableActions = a11y.getTabbable(viewerRootEl).filter(':not(.swiper-button-control):not([tabindex=-1])');
+                var tabableActionsCount = tabableActions.length;
+
                 // quit immediately if no tabable actions are found
                 if (tabableActionsCount === 0) { return; }
-                var focusedElementIndex = tabableActions.index(document.activeElement),
-                    traversalStep = event.shiftKey ? -1 : 1,
-                    nextElementIndex = focusedElementIndex + traversalStep;
+
+                var focusedElementIndex = tabableActions.index(document.activeElement);
+                var traversalStep = event.shiftKey ? -1 : 1;
+                var nextElementIndex = focusedElementIndex + traversalStep;
                 // prevent default TAB traversal
                 event.preventDefault();
                 // traverse to prev/next action
@@ -166,6 +172,18 @@ define('io.ox/core/viewer/views/mainview', [
                 // focus next action candidate
                 tabableActions.eq(nextElementIndex).visibleFocus();
             }
+
+            function handleLeftRightArrowKey(direction) {
+                // need to use defer here in order to let the toolbar navigation select the action link first
+                _.defer(function () {
+                    var toolbarFocused = $.contains(self.toolbarView.el, document.activeElement);
+                    // if the focus is inside the toolbar cursor left/right switches between toolbar links, otherwise between slides
+                    if (!toolbarFocused) {
+                        handleChangeSlide(direction);
+                    }
+                });
+            }
+
             switch (event.which) {
                 case 9: // TAB key
                     if (this.standalone) return;
@@ -181,16 +199,10 @@ define('io.ox/core/viewer/views/mainview', [
                     }
                     break;
                 case 37: // left arrow
-                    // bug #55252
-                    // if ($(event.target).hasClass('swiper-slide-active')) {
-                    handleChangeSlide('left');
-                    // }
+                    handleLeftRightArrowKey('left');
                     break;
                 case 39: // right arrow
-                    // bug #55252
-                    // if ($(event.target).hasClass('swiper-slide-active')) {
-                    handleChangeSlide('right');
-                    // }
+                    handleLeftRightArrowKey('right');
                     break;
                 case 33: // page up
                     event.preventDefault();
@@ -230,18 +242,14 @@ define('io.ox/core/viewer/views/mainview', [
             var rightOffset = this.sidebarView.open ? this.sidebarView.$el.outerWidth() : 0;
             var displayerEl = this.displayerView.$el;
             var activeSlide = this.displayerView.getActiveSlideNode();
-            var activeSlideIndex = activeSlide.index();
-            var swiper = this.displayerView.swiper;
+            var swiper      = this.displayerView.swiper;
 
             displayerEl.css({ width: window.innerWidth - rightOffset });
             activeSlide.find('.viewer-displayer-item').css({ maxWidth: window.innerWidth - rightOffset });
 
             if (swiper) {
-                swiper.onResize();
+                swiper.update();
                 this.viewerEvents.trigger('viewer:resize');
-                // workaround for a possible bug from swiper plugin that happens sporadically:
-                // After an on resize call, the plugin 'resets' the active slide to the beginning.
-                swiper.slideTo(activeSlideIndex);
             }
         },
 

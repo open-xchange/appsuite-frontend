@@ -1,6 +1,6 @@
 Name:           open-xchange-dynamic-theme
 Version:        @OXVERSION@
-%define         ox_release 19
+%define         ox_release 4
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -67,24 +67,16 @@ if [ -x %{update} ]; then %{update} --later; fi
 %config(noreplace) /opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties
 
 %changelog
-* Mon Nov 12 2018 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2018-11-19 (4966)
-* Mon Oct 29 2018 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2018-11-05 (4933)
-* Fri Oct 19 2018 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2018-10-22 (4930)
-* Mon Oct 08 2018 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2018-10-15 (4918)
-* Tue Sep 25 2018 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2018-10-01 (4897)
-* Mon Aug 27 2018 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2018-09-03 (4870)
-* Tue Aug 14 2018 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2018-08-20 (4863)
-* Thu Aug 02 2018 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2018-08-13 (4853)
-* Wed Jul 18 2018 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2018-07-18 (4835)
+* Wed Nov 28 2018 Viktor Pracht <viktor.pracht@open-xchange.com>
+Second candidate for 7.10.1 release
+* Fri Nov 23 2018 Viktor Pracht <viktor.pracht@open-xchange.com>
+RC 1 for 7.10.1 release
+* Fri Nov 02 2018 Viktor Pracht <viktor.pracht@open-xchange.com>
+Second preview for 7.10.1 release
+* Thu Oct 11 2018 Viktor Pracht <viktor.pracht@open-xchange.com>
+First release candidate for 7.10.1
+* Mon Sep 10 2018 Viktor Pracht <viktor.pracht@open-xchange.com>
+prepare for 7.10.1
 * Fri Jun 29 2018 Viktor Pracht <viktor.pracht@open-xchange.com>
 Fourth candidate for 7.10.0 release
 * Wed Jun 27 2018 Viktor Pracht <viktor.pracht@open-xchange.com>

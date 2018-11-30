@@ -106,7 +106,7 @@ define('io.ox/core/main/autologout', [
                         .addButton({ action: 'force', label: gt('Sign out now') })
                         .open();
 
-                        dialog.on('cancel', function () {
+                        dialog.on('close', function () {
                             resetTimeout();
                             clearInterval(countdownTimer);
                             dialog = null;

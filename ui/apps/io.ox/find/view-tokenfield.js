@@ -186,11 +186,10 @@ define('io.ox/find/view-tokenfield', [
                     return node;
                 },
                 harmonize: function (data) {
-                    var query = self.ui.container.find('.token-input').val();
                     return _(data).map(function (value) {
                         return {
                             label: value.getDisplayName(),
-                            value: query,
+                            value: value.getDisplayName(),
                             model: value
                         };
                     });

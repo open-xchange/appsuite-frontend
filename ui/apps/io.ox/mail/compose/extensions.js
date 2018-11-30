@@ -323,8 +323,9 @@ define('io.ox/mail/compose/extensions', [
 
                 if (usePicker) {
                     node.addClass('has-picker').append(
-                        $('<a href="#" role="button" class="open-addressbook-popup"><i class="fa fa-address-book" aria-hidden="true"></i></a>')
-                        .attr('aria-label', gt('Select contacts'))
+                        $('<a href="#" role="button" class="open-addressbook-popup">').append(
+                            $('<i class="fa fa-address-book" aria-hidden="true">').attr('title', gt('Select contacts'))
+                        ).attr('aria-label', gt('Select contacts'))
                         .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
                     );
                 }
@@ -548,6 +549,7 @@ define('io.ox/mail/compose/extensions', [
 
             // tinymce resize
             view.listenTo(view.collection, 'add remove reset', _.debounce(function () {
+                if (baton.resizeView) baton.resizeView.update();
                 if (this.getValidModels().length <= 1) $(window).trigger('resize');
             }));
             view.on('change:expanded', function () { $(window).trigger('resize'); });
@@ -615,6 +617,25 @@ define('io.ox/mail/compose/extensions', [
                     model: baton.model
                 });
                 baton.attachmentsView.$header.find('.links').before(view.render().$el);
+            });
+        },
+
+        imageResizeOption: function (baton) {
+            if (!settings.get('features/imageResize/enabled', true)) return;
+            require(['io.ox/mail/compose/resizeUtils'], function (resizeUtils) {
+                var view = baton.resizeView = resizeUtils.getDropDown(baton.model),
+                    $dropDown = view.render().$el.prepend($('<span>').text(gt('Image size:')).addClass('image-resize-lable'));
+                baton.attachmentsView.$el.append($dropDown.addClass('pull-right').hide());
+                baton.attachmentsView.$el.append($('<span>').addClass('mail-size').text(resizeUtils.getMailSizeString(baton.model)));
+
+                function onResizeOptionChange() {
+                    resizeUtils.resizeIntoArray(baton.model.get('attachments').localFiles(), [], baton.model.get('imageResizeOption')).done(function (resizedFiles) {
+                        baton.attachmentsView.$el.find('.mail-size').text(resizeUtils.getResizedSizeString(baton.model, resizedFiles));
+                        baton.model.set('resizedImages', resizedFiles);
+                    });
+                }
+                baton.model.on('change:imageResizeOption', onResizeOptionChange);
+                baton.attachmentsView.collection.on('add remove reset', onResizeOptionChange);
             });
         },
 
@@ -698,7 +719,6 @@ define('io.ox/mail/compose/extensions', [
                     );
                 }
             };
-
         }()),
 
         body: function () {

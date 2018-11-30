@@ -42,6 +42,7 @@ define('io.ox/backbone/views/datepicker', [
         // we use the constructor here not to collide with initialize()
         constructor: function (options) {
             this.options = options || {};
+            this.datepickerId = _.uniqueId('dp_');
             this.$target = $();
             this.$parent = $(this.options.parent || 'body');
             this.date = this.getInitialDate();
@@ -95,7 +96,7 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         getToday: function () {
-            return moment.utc().startOf('day');
+            return moment().startOf('day');
         },
 
         //
@@ -201,7 +202,7 @@ define('io.ox/backbone/views/datepicker', [
             this.$el.attr({ 'aria-labelledby': headerId, 'role': 'region', 'tabindex': 0 }).append(
                 $('<div class="navigation">').append(
                     $('<button type="button" class="btn-prev pull-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
-                    $('<span role="header" aria-live="assertive" aria-atomic="true">').attr('id', headerId),
+                    $('<span role="heading" aria-live="assertive" aria-atomic="true" aria-level="2">').attr('id', headerId),
                     $('<button type="button" class="btn-next pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>')
                 ),
                 this.$grid = $('<table class="grid" role="grid" tabindex="0">')
@@ -210,15 +211,13 @@ define('io.ox/backbone/views/datepicker', [
             // today button
             if (this.options.showTodayButton !== false) {
                 this.$el.append(
-                    $('<button type="button" class="btn-today">')
-                    .attr('aria-label', 'Go to today')
-                    .text(gt('Today: %1$s', moment().format('l')))
+                    $('<button type="button" class="btn-today">').text(gt('Today: %1$s', moment().format('l')))
                 );
             }
         },
 
         renderHeader: function () {
-            this.$('[role="header"]').empty().append(_(arguments).toArray());
+            this.$('[role="heading"]').empty().append(_(arguments).toArray());
         },
 
         renderGrid: function () {
@@ -241,7 +240,8 @@ define('io.ox/backbone/views/datepicker', [
         renderMonth: function () {
 
             var current = this.getDate().clone().startOf('day'),
-                m = current.clone();
+                m = current.clone(),
+                datepickerId = this.datepickerId;
 
             this.renderHeader(
                 $('<button type="button" class="switch-mode">')
@@ -287,7 +287,7 @@ define('io.ox/backbone/views/datepicker', [
                                         try {
                                             return $('<td role="gridcell" class="date">')
                                                 .attr({
-                                                    'id': 'date_' + m.format('l'),
+                                                    'id': datepickerId + '_' + m.format('l'),
                                                     //#. CW is calender week and %1$d is the week number
                                                     'aria-label': m.format('l, dddd') + ', ' + gt('CW %1$d', m.week()),
                                                     'aria-selected': isSame(m, current),

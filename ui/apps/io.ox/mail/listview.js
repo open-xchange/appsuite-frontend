@@ -34,6 +34,20 @@ define('io.ox/mail/listview', [
         }, 0));
     }
 
+    // if the most recent mail in a thread is deleted remove that data and use the data of the first undeleted mail instead
+    function removeDeletedMailThreadData(data) {
+        // most recent mail is not deleted
+        if (!util.isDeleted(data)) return;
+
+        var firstUndeletedMail = _(data.thread).findWhere(function (mail) {
+            return !util.isDeleted(mail);
+        });
+        // seems there is no undeleted mail
+        if (!firstUndeletedMail) return;
+
+        data = _.extend(data, firstUndeletedMail);
+    }
+
     ext.point('io.ox/mail/listview/item').extend(
         {
             id: 'default',
@@ -43,6 +57,7 @@ define('io.ox/mail/listview', [
                 // fix missing threadSize (aparently only used by tests)
                 fixThreadSize(baton.data);
 
+                removeDeletedMailThreadData(baton.data);
                 if (!baton.app) {
                     ext.point('io.ox/mail/listview/item/default').invoke('draw', this, baton);
                     return;
@@ -445,7 +460,8 @@ define('io.ox/mail/listview', [
             models = _(models).filter(function (model) {
                 var data = _(api.threads.get(model.cid)).first(),
                     lacksPreview = data && !data.text_preview;
-                if (lacksPreview) ids.push(_(data).pick('id', 'folder_id'));
+                    // no need to request models that actually have no preview again and again (empty mails)
+                if (lacksPreview && !model.hasNoPreview) ids.push(_(data).pick('id', 'folder_id'));
                 return lacksPreview;
             });
 
@@ -455,6 +471,9 @@ define('io.ox/mail/listview', [
                 _(models).each(function (model) {
                     var msg = _(api.threads.get(model.cid)).first(), cid = _.cid(msg);
                     model.set('text_preview', hash[cid]);
+                    // if a model has no preview mark it in the model, so we don't request it again all the time someone scrolls
+                    // don't mark it as part of the attributes to avoid triggering change events and reloading stuff (refresh does still work)
+                    if (hash[cid] === '') model.hasNoPreview = true;
                 });
             });
         },

@@ -498,6 +498,22 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             this.trigger('valid:headers');
                         }
 
+                        if (_.has(attrs, 'source')) {
+                            if ($.trim(attrs.source[0]) === '' && !_.contains(emptyValuesAllowed, attrs.comparison)) {
+                                if (attrs.values && $.trim(attrs.values[0]) === '' && !_.contains(emptyValuesAllowed, attrs.comparison)) {
+                                    return 'source values';
+                                }
+                                this.trigger('invalid:source');
+                                return 'headers';
+                            }
+
+                            if ($.trim(attrs.source[0]) === '' && _.contains(emptyValuesAllowed, attrs.comparison) && attrs.id === 'source') {
+                                return 'source';
+                            }
+
+                            this.trigger('valid:source');
+                        }
+
                         if (_.has(attrs, 'values')) {
                             if (attrs.values && $.trim(attrs.values[0]) === '' && !_.contains(emptyValuesAllowed, attrs.comparison)) {
                                 this.trigger('invalid:values');

@@ -40,8 +40,11 @@ module.exports.config = {
         'users': './e2e/users'
     },
     'bootstrap': function (done) {
+        // setup chai
         var chai = require('chai');
         chai.config.includeStack = true;
+        // setup axe matchers
+        require('./e2e/axe-matchers');
 
         var config = require('codeceptjs').config.get();
         if (config.helpers.WebDriverIO && /127\.0\.0\.1/.test(config.helpers.WebDriverIO.host)) {

@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-28 18:46+0200\n"
+"PO-Revision-Date: 2018-10-13 15:07+0200\n"
 "Last-Translator: Daiana Heinrich <daiana@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -49,14 +49,6 @@ msgstr ""
 "funcțiile pentru setarea parametrilor periodicității."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Utilizarea funcției de memento"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Pentru a nu rata întâlnirea, utilizați funcția de memento."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr "Invitarea altor participanți "
 
@@ -69,6 +61,14 @@ msgstr ""
 "Pentru a invita alți participanți, introduceți numele acestora în câmpul de "
 "sub Participanți. Pentru a evita conflictele între întâlniri, apăsați pe "
 "Găsește un interval de timp liber în partea dreaptă sus."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Utilizarea funcției de memento"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "Pentru a nu rata întâlnirea, utilizați funcția de memento."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
@@ -391,12 +391,9 @@ msgid "Launching an app"
 msgstr "Lansarea unei aplicații"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
+msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Pentru a lansa o aplicație, utilizați pictogramele de lansare rapidă din "
-"stânga barei de meniu sau apăsați pe o intrare din meniul de lansare de "
+"Pentru a lansa o aplicație, apăsați pe o intrare din meniul de lansate de "
 "aplicații."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -873,62 +870,6 @@ msgstr ""
 "selectare din stânga sarcinilor. În cazul în care casetele de selectare nu "
 "sunt afișate, apăsați pe Vedere > Casete de selectare în partea dreaptă a "
 "barei de unelte."
-
-#~ msgid ""
-#~ "To open the settings, click the System menu icon on the upper right side "
-#~ "of the menu bar. Select Settings."
-#~ msgstr ""
-#~ "Pentru a deschide setările, apăsați pe pictograma Meniu sistem din partea "
-#~ "dreaptă sus a barei de meniu. Selectați Setări."
-
-#~ msgid ""
-#~ "To open the help, click the System menu icon on the upper right side of "
-#~ "the menu bar. Select Help. The help for the currently selected app is "
-#~ "displayed. To browse the complete help, click on Start Page or Table Of "
-#~ "Contents at the upper part of the window."
-#~ msgstr ""
-#~ "Pentru a deschide ajutorul, apăsați pe pictograma Meniu sistem din partea "
-#~ "dreaptă sus a barei de meniu. Selectați Ajutor. Se afișează ajutorul "
-#~ "pentru aplicația selectată momentan. Pentru a naviga în ajutorul complet, "
-#~ "apăsați pe Pagina de pornire sau pe Cuprins în partea superioară a "
-#~ "ferestrei."
-
-#~ msgid ""
-#~ "Hint: you can always restart guided tours, any time you need them, from "
-#~ "the system menu."
-#~ msgstr ""
-#~ "Sugestie: puteți reporni vizitele ghidate oricând aveți nevoie, utilizând "
-#~ "meniul sistem."
-
-#~ msgid ""
-#~ "In case of new notifications, e.g. appointment invitations, the info area "
-#~ "is opened."
-#~ msgstr ""
-#~ "În cazul unor notificări noi, de ex. invitații pentru întâlniri, se "
-#~ "deschide zona de informații."
-
-#~ msgid "Restart Guided Tour"
-#~ msgstr "Repornește vizita ghidată"
-
-#~ msgid "The New objects icon"
-#~ msgstr "Pictograma Obiecte noi"
-
-#~ msgid ""
-#~ "The New objects icon shows the number of appointment reminders or other "
-#~ "notifications. If clicking the icon, the info area opens."
-#~ msgstr ""
-#~ "Pictograma pentru obiecte noi afișează numărul de mementouri pentru "
-#~ "întâlniri sau alte notificări. Atunci când apăsați pe pictogramă, se "
-#~ "deschide zona de informații."
-
-#~ msgid "The info area"
-#~ msgstr "Zona de informații"
-
-#~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
-#~ msgstr ""
-#~ "Pentru a lansa o aplicație, apăsați pe o intrare din partea stângă a "
-#~ "barei de meniu."
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -4834,6 +4775,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "Prioritate ridicată"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Sugestie: puteți reporni vizitele ghidate oricând aveți nevoie, utilizând "
+#~ "meniul sistem."
+
 #~ msgid "History of error messages"
 #~ msgstr "Istoricul mesajelor de eroare"
 
@@ -5013,6 +4961,13 @@ msgstr ""
 #~ msgstr ""
 #~ "Atunci când există notificări noi, de exemplu invitații pentru întâlniri, "
 #~ "zona de informații se deschide în partea dreaptă."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "În cazul unor notificări noi, de ex. invitații pentru întâlniri, se "
+#~ "deschide zona de informații."
 
 #~ msgid ""
 #~ "In order to assign categories to the objects selected, use the control "
@@ -7608,6 +7563,9 @@ msgstr ""
 #~ msgid "Resources:"
 #~ msgstr "Resurse:"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Repornește vizita ghidată"
+
 #~ msgid "Restore Last Operation"
 #~ msgstr "Restabilește ultima operație"
 
@@ -8866,6 +8824,17 @@ msgstr ""
 #~ "fișier pentru a vizualiza detaliile și funcțiile suplimentare într-o "
 #~ "fereastră pop-up. "
 
+#~ msgid "The New objects icon"
+#~ msgstr "Pictograma Obiecte noi"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Pictograma pentru obiecte noi afișează numărul de mementouri pentru "
+#~ "întâlniri sau alte notificări. Atunci când apăsați pe pictogramă, se "
+#~ "deschide zona de informații."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -9095,6 +9064,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Pictograma din partea stângă jos vă ajută să vă sortați e-mailurile. "
 #~ "Apăsați pe pictogramă pentru a obține o listă cu criterii de sortare."
+
+#~ msgid "The info area"
+#~ msgstr "Zona de informații"
 
 #~ msgid "The mandatory field %1$s is not defined."
 #~ msgstr "Câmpul obligatoriu %1$s nu este definit."
@@ -9584,6 +9556,14 @@ msgstr ""
 #~ msgstr "Pentru a lansa o aplicație, apăsați pe titlul unui cadru."
 
 #~ msgid ""
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
+#~ msgstr ""
+#~ "Pentru a lansa o aplicație, utilizați pictogramele de lansare rapidă din "
+#~ "stânga barei de meniu sau apăsați pe o intrare din meniul de lansare de "
+#~ "aplicații."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -9601,6 +9581,25 @@ msgstr ""
 #~ msgstr ""
 #~ "Pentru a deschide ajutorul, apăsați pe pictograma Meniu sistem din partea "
 #~ "dreapă sus a barei de meniu. Selectați Ajutor."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Pentru a deschide ajutorul, apăsați pe pictograma Meniu sistem din partea "
+#~ "dreaptă sus a barei de meniu. Selectați Ajutor. Se afișează ajutorul "
+#~ "pentru aplicația selectată momentan. Pentru a naviga în ajutorul complet, "
+#~ "apăsați pe Pagina de pornire sau pe Cuprins în partea superioară a "
+#~ "ferestrei."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "Pentru a deschide setările, apăsați pe pictograma Meniu sistem din partea "
+#~ "dreaptă sus a barei de meniu. Selectați Setări."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

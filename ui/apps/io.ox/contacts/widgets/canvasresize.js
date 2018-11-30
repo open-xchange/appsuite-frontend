@@ -311,7 +311,7 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/contacts/widgets/exif'], f
                         data = newcanvas.toDataURL('image/jpeg', ($this.options.quality * 0.01));
                     }
 
-                    $this.options.callback(data, newcanvas.width, newcanvas.height);
+                    $this.options.callback(data, newcanvas.width, newcanvas.height, newcanvas);
 
                 };
                 img.src = dataURL;

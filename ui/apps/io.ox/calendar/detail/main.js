@@ -34,7 +34,7 @@ define('io.ox/calendar/detail/main', [
                         app.setTitle(model.get('summary'));
                         app.getWindowNode().addClass('detail-view-app').append($('<div class="f6-target detail-view-container" tabindex="0" role="complementary">').attr({
                             'aria-label': gt('Appointment Details')
-                        }).append(detailView.draw(model)));
+                        }).append(detailView.draw(new ext.Baton({ model: model }))));
 
                         api.once('delete:' + util.cid(model.attributes), function () {
                             app.quit();

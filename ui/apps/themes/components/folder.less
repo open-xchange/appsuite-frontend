@@ -143,6 +143,7 @@
             display: inline-block;
             -webkit-font-smoothing: antialiased;
             margin: 0 @default-padding 0 0;
+            vertical-align: top;
             &:empty { margin: 0; }
         }
         .folder-options { margin-right: 0; }
@@ -376,6 +377,10 @@
             .folder-label > div {
                 max-width: 160px;
                 .ellipsis();
+            }
+            .folder-buttons {
+                // see bug 58993
+                vertical-align: top;
             }
         }
         li[data-id="virtual/settings"] {

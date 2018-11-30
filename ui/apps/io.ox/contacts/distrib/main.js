@@ -40,7 +40,7 @@ define('io.ox/contacts/distrib/main', [
         });
 
         app.getContextualHelp = function () {
-            return 'ox.appsuite.user.sect.contacts.distributionlist.html';
+            return 'ox.appsuite.user.sect.contacts.gui.createlist.html';
         };
 
         app.create = function (folderId, initdata) {
@@ -171,7 +171,7 @@ define('io.ox/contacts/distrib/main', [
                 }
                 container.find('[data-extension-id="displayname"] input').on('keyup', _.debounce(function () {
                     app.setTitle($.trim($(this).val()) || gt('Distribution List'));
-                    fnToggleSave($(this).val());
+                    fnToggleSave($(this).val().trim());
                 }, 150));
             });
 

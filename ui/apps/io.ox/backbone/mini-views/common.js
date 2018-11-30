@@ -70,6 +70,7 @@ define('io.ox/backbone/mini-views/common', [
         render: function () {
             this.$el.attr({ name: this.name });
             if (this.id) this.$el.attr('id', this.id);
+            if (this.attributes) this.$el.attr(this.attributes);
             if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
             if (this.options.mandatory) this.$el.attr('aria-required', true);
             if (_.isBoolean(this.options.autocomplete) && !this.options.autocomplete) this.$el.attr('autocomplete', 'off');
@@ -148,8 +149,9 @@ define('io.ox/backbone/mini-views/common', [
             // use long delay here as safari messes up the focus order
         }, 200),
         onKeyPress: function (e) {
-            // Windows Key / Left ⌘ / Chromebook Search key
-            if (e.which !== 91) return;
+            // Mac left alt / Windows Key / Chromebook Search key
+            var match = _.device('macos') ? e.which === 18 : e.which === 91;
+            if (!match) return;
             this.toggle(e, e.type === 'keydown');
         },
         toggle: function (state) {
@@ -196,6 +198,7 @@ define('io.ox/backbone/mini-views/common', [
         },
         render: function () {
             this.$el.attr({ name: this.name });
+            if (this.attributes) this.$el.attr(this.attributes);
             if (this.options.id) this.$el.attr('id', this.options.id);
             if (this.rows) this.$el.attr('rows', this.rows);
             if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
@@ -348,7 +351,7 @@ define('io.ox/backbone/mini-views/common', [
 
     var SelectView = AbstractView.extend({
         tagName: 'select',
-        className: 'input-xlarge form-control',
+        className: 'form-control',
         events: { 'change': 'onChange' },
         onChange: function () {
             var val = this.$el.val();
@@ -395,7 +398,7 @@ define('io.ox/backbone/mini-views/common', [
         InputView.extend({
             format: 'l',
             onChange: function () {
-                var t = +moment(this.$el.val(), this.format).utc(true);
+                var t = +moment(this.$el.val(), this.format);
                 this.model.set(this.name, t);
             },
             update: function () {
@@ -403,7 +406,7 @@ define('io.ox/backbone/mini-views/common', [
                 this.$el.val(date || this.options.mandatory ? this.getFormattedDate(date) : '');
             },
             getFormattedDate: function (date) {
-                return moment(date).utc(true).format(this.format);
+                return moment(date).format(this.format);
             },
             render: function () {
                 InputView.prototype.render.call(this);
@@ -414,7 +417,7 @@ define('io.ox/backbone/mini-views/common', [
                         new DatePicker({ parent: view.$el.closest('.modal, #io-ox-core'), mandatory: view.options.mandatory })
                             .attachTo(view.$el)
                             .on('select', function (date) {
-                                view.model.set(view.name, date.utc(true).valueOf());
+                                view.model.set(view.name, date.valueOf());
                             });
                     });
                 });

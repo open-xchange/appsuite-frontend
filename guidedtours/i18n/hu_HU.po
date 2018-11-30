@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-26 14:23+0200\n"
+"PO-Revision-Date: 2018-10-09 13:12+0200\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -44,14 +44,6 @@ msgid ""
 msgstr "Ismétlődő találkozó létrehozásához engedélyezze az Ismétlést. Az ismétlődés beállításához tartozó funkciók megjelennek."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Emlékeztető funkció használata"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Használja az emlékeztető funkciókat, hogy ne felejtse el a találkozókat."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr "További résztvevők meghívása"
 
@@ -61,6 +53,14 @@ msgid ""
 "Participants. To avoid appointment conflicts, click on Find a free time at "
 "the upper right side."
 msgstr "További résztvevők meghívásához adja meg azok nevét a Résztvevők alatt található mezőben. A találkozók ütközésének elkerüléséhez kattintson a jobb felső oldalon található Szabad idő keresése gombra."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Emlékeztető funkció használata"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "Használja az emlékeztető funkciókat, hogy ne felejtse el a találkozókat."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
@@ -316,10 +316,8 @@ msgid "Launching an app"
 msgstr "Alkalmazás indítása"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
-msgstr "Az alkalmazás indításához használja a menüsáv bal oldalán található gyorsindító ikonokat vagy kattintson az alkalmazásindító menü egyik elemére."
+msgid "To launch an app click on an entry inside the app launcher menu."
+msgstr "Az alkalmazás indításához kattintson a menüsáv bal oldalán található bejegyzések egyikére."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -720,23 +718,14 @@ msgid ""
 "on the right side of the toolbar."
 msgstr "Több feladat egyszerre történő szerkesztéséhez használja a feladatok bal oldalán található jelölőnégyzetet Amennyiben a jelölőnégyzetek nem láthatók, kattintson a eszköztár jobb oldalán található Nézet > Jelelölőnégyzetek ikonra."
 
-#~ msgid ""
-#~ "To open the settings, click the System menu icon on the upper right side "
-#~ "of the menu bar. Select Settings."
-#~ msgstr ""
-#~ "A beállítások megnyitásához kattintson a menüsor jobb felső részében "
-#~ "található Rendszer menü ikonra és válassza ki a Beállításokat."
+#~ msgid "Creating a note"
+#~ msgstr "Jegyzet létrehozása"
 
-#~ msgid ""
-#~ "To open the help, click the System menu icon on the upper right side of "
-#~ "the menu bar. Select Help. The help for the currently selected app is "
-#~ "displayed. To browse the complete help, click on Start Page or Table Of "
-#~ "Contents at the upper part of the window."
-#~ msgstr ""
-#~ "A súgó megnyitásához kattintson a menüsor jobb felső részén található "
-#~ "Rendszer menü ikonjára. Válassza ki a Súgót. Ekkor megjelenik a "
-#~ "kiválasztott alkalmazás súgója. A teljes Súgó megtekintéséhez kattintson "
-#~ "az oldal felső részén található Kezdőlapra vagy a Tartalomjegyzékre."
+#~ msgid "Displaying information"
+#~ msgstr "Információ megjelenítése"
+
+#~ msgid "Guided tour for this app"
+#~ msgstr "Az alkalmazás bemutatója"
 
 #~ msgid ""
 #~ "Hint: you can always restart guided tours, any time you need them, from "
@@ -752,34 +741,6 @@ msgstr "Több feladat egyszerre történő szerkesztéséhez használja a felada
 
 #~ msgid "Restart Guided Tour"
 #~ msgstr "Bemutató újraindítása"
-
-#~ msgid "The New objects icon"
-#~ msgstr "Az Új elemek ikon"
-
-#~ msgid ""
-#~ "The New objects icon shows the number of appointment reminders or other "
-#~ "notifications. If clicking the icon, the info area opens."
-#~ msgstr ""
-#~ "Az Új elemek ikon megmutatja a találkozó emlékeztetők és más értesítések "
-#~ "számát. Az ikonra kattintva megnyílik az információs terület."
-
-#~ msgid "The info area"
-#~ msgstr "Az információs terület"
-
-#~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
-#~ msgstr ""
-#~ "Az alkalmazás indításához kattintson a menüsáv bal oldalán található "
-#~ "bejegyzések egyikére."
-
-#~ msgid "Creating a note"
-#~ msgstr "Jegyzet létrehozása"
-
-#~ msgid "Displaying information"
-#~ msgstr "Információ megjelenítése"
-
-#~ msgid "Guided tour for this app"
-#~ msgstr "Az alkalmazás bemutatója"
 
 #~ msgid "The Icons view"
 #~ msgstr "Ikonnézet"
@@ -801,6 +762,16 @@ msgstr "Több feladat egyszerre történő szerkesztéséhez használja a felada
 #~ "dátuma. A fájlok kiválasztásához használja a jelölőnégyzeteket. A fájlra "
 #~ "kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
 
+#~ msgid "The New objects icon"
+#~ msgstr "Az Új elemek ikon"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Az Új elemek ikon megmutatja a találkozó emlékeztetők és más értesítések "
+#~ "számát. Az ikonra kattintva megnyílik az információs terület."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -818,6 +789,9 @@ msgstr "Több feladat egyszerre történő szerkesztéséhez használja a felada
 #~ "A Mozaik nézet minden fájlról egy nagy ikont jelenít meg. Az ikonra "
 #~ "kattintva egy felugró ablakban további részletek és funkciók jelennek meg."
 
+#~ msgid "The info area"
+#~ msgstr "Az információs terület"
+
 #~ msgid "To create a note, click on New > Add note in the toolbar."
 #~ msgstr ""
 #~ "Új megjegyzés létrehozásához kattintson az eszköztárban található Új > "
@@ -827,6 +801,32 @@ msgstr "Több feladat egyszerre történő szerkesztéséhez használja a felada
 #~ msgstr ""
 #~ "A találkozó létrehozásához kattintson a jobb felső részen található "
 #~ "Létrehozás gombra."
+
+#~ msgid ""
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
+#~ msgstr ""
+#~ "Az alkalmazás indításához használja a menüsáv bal oldalán található "
+#~ "gyorsindító ikonokat vagy kattintson az alkalmazásindító menü egyik "
+#~ "elemére."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "A súgó megnyitásához kattintson a menüsor jobb felső részén található "
+#~ "Rendszer menü ikonjára. Válassza ki a Súgót. Ekkor megjelenik a "
+#~ "kiválasztott alkalmazás súgója. A teljes Súgó megtekintéséhez kattintson "
+#~ "az oldal felső részén található Kezdőlapra vagy a Tartalomjegyzékre."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "A beállítások megnyitásához kattintson a menüsor jobb felső részében "
+#~ "található Rendszer menü ikonra és válassza ki a Beállításokat."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

@@ -60,9 +60,12 @@ define('io.ox/find/main', [
             },
             'props-mandatory': function (app) {
                 // a concrete facet is mandatory for the follwing apps/modules
-                app.props.set('mandatory',
-                    settings.get('search/mandatory', {}) || {}
-                );
+                var data = settings.get('search/mandatory', {});
+                // see bug Bug 58913
+                data.account = (data.account || []);
+                data.account.push('drive');
+
+                app.props.set('mandatory', data);
             },
             'props-default': function (app) {
                 app.props.set('default',
@@ -143,7 +146,7 @@ define('io.ox/find/main', [
                 if (!app.get('inplace')) return;
 
                 // check for vgrid
-                var grid = app.get('parent').grid;
+                var grid = app.get('parent').grid, fnEmpty;
                 if (!grid || !grid.addTemplate) return;
 
                 // search: all request
@@ -168,9 +171,16 @@ define('io.ox/find/main', [
                 app.on({
                     'find:query': function () {
                         grid.setMode('search');
+                        fnEmpty = grid.getEmptyMessage();
+                        grid.setEmptyMessage(function () {
+                            //#. search feature returns an empty result
+                            return gt('No matching items found.');
+                        });
                     },
                     'find:idle': function () {
-                        if (grid.getMode() !== 'all') grid.setMode('all');
+                        if (grid.getMode() === 'all') return;
+                        grid.setMode('all');
+                        grid.setEmptyMessage(fnEmpty);
                     }
                 });
             },
@@ -293,21 +303,12 @@ define('io.ox/find/main', [
                         // disable cache also for modules with collection loader
                         parent.listView.on('collection:load', function () {
                             if (this.loader.mode !== 'search') return;
-                            this.collection.expire();
+                            if (this.collection.expire) this.collection.expire();
                         });
                         app.trigger('collectionLoader:created', collectionLoader);
                         var register = function () {
-                            var view = app.view.model,
-                                // remember original setCollection
-                                setCollection = parent.listView.setCollection;
                             parent.listView.connect(collectionLoader);
                             mode = 'search';
-                            // wrap setCollection
-                            parent.listView.setCollection = function (collection) {
-                                view.stopListening();
-                                view.listenTo(collection, 'add reset remove', app.trigger.bind(view, 'find:query:result', collection));
-                                return setCollection.apply(this, arguments);
-                            };
                         };
 
                         // events

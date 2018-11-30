@@ -38,7 +38,7 @@ define('plugins/halo/mail/register', [
             });
 
             this.append(
-                $('<div class="widget-title clear-title">').text(gt('Recent conversations'))
+                $('<h2 class="widget-title clear-title">').text(gt('Recent conversations'))
             );
 
             require(['io.ox/core/tk/dialogs', 'io.ox/mail/listview'], function (dialogs, ListView) {
@@ -49,14 +49,15 @@ define('plugins/halo/mail/register', [
                         collection: api.pool.add(cid, data),
                         pagination: false,
                         selection:  false,
-                        scrollable: false
+                        scrollable: false,
+                        useButtonMarkup: true
                     }).render().$el.addClass('compact');
                 }
 
                 node.append(
                     // left column
                     $('<div class="io-ox-left-column">').append(
-                        $('<p class="io-ox-subheader">').text(gt('Received mails')),
+                        $('<h3 class="io-ox-subheader">').text(gt('Received mails')),
                         received.length === 0 ?
                             $('<div>').text(gt('Cannot find any messages this contact sent to you.')) :
                             createListView('received', received)
@@ -64,7 +65,7 @@ define('plugins/halo/mail/register', [
                     ),
                     // right column
                     $('<div class="io-ox-right-column">').append(
-                        $('<p class="io-ox-subheader">').text(gt('Sent mails')),
+                        $('<h3 class="io-ox-subheader">').text(gt('Sent mails')),
                         sent.length === 0 ?
                             $('<div>').text(gt('Cannot find any messages you sent to this contact.')) :
                             createListView('sent', sent)

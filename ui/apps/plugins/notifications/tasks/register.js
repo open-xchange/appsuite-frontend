@@ -147,20 +147,13 @@ define('plugins/notifications/tasks/register', [
                 reminderUtil.draw(node, new Backbone.Model(data), util.buildOptionArray(), true);
                 node.on('click', '[data-action="ok"]', function (e) {
                     e.stopPropagation();
-                    reminderAPI.deleteReminder(baton.requestedModel.attributes);
-                    baton.view.collection.remove(baton.requestedModel.attributes);
-                });
-                node.find('[data-action="reminder"]').on('click change', function (e) {
-                    //if we do this on smartphones the dropdown does not close correctly
-                    if (!_.device('smartphone')) {
-                        e.stopPropagation();
-                    }
 
                     var model = baton.model,
-                        time = ($(e.target).data('value') || $(e.target).val()).toString(),
+                        time = node.find('[data-action="selector"]').val(),
                         key = [model.get('folder_id') + '.' + model.get('id')];
+
                     if (time !== '0') {
-                        //0 means 'pick a time here' was selected. Do nothing.
+                        // 0 means 'don't remind me again was selected.
                         reminderAPI.remindMeAgain(util.computePopupTime(time).alarmDate, baton.requestedModel.get('id')).then(function () {
                             //update Caches
                             return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
@@ -168,8 +161,10 @@ define('plugins/notifications/tasks/register', [
                             //update detailview
                             api.trigger('update:' + _.ecid(key[0]));
                         });
-                        baton.view.removeNotifications([baton.requestedModel]);
+                    } else {
+                        reminderAPI.deleteReminder(baton.requestedModel.attributes);
                     }
+                    baton.view.removeNotifications([baton.requestedModel]);
                 });
             });
         }

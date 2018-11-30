@@ -79,7 +79,7 @@ module.exports = function (grunt) {
                             'croppie/croppie.min.js',
                             'marked/lib/marked.js',
                             'resize-polyfill/lib/polyfill-resize.js',
-                            'swiper/dist/js/swiper.jquery.js',
+                            'swiper/dist/js/swiper.js',
                             'typeahead.js/dist/typeahead.jquery.js',
                             'dompurify/dist/purify.min.js'
                         ],

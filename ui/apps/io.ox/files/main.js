@@ -50,7 +50,7 @@ define('io.ox/files/main', [
     'use strict';
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Drive' }),
+    var app = ox.ui.createApp({ id: 'io.ox/files', name: 'io.ox/files', title: 'Drive' }),
         // app window
         win,
         sidebarView = new Sidebarview({ closable: true, app: app }),
@@ -466,8 +466,12 @@ define('io.ox/files/main', [
                         app.getWindow().nodes.body.prepend(
                             app.mysharesListViewControl.render().$el
                                 .hide().addClass('myshares-list-control')
-                                .append(toolbar.render().$el)
+                                .prepend(toolbar.render().$el)
                         );
+
+                        function updateCallback($toolbar) {
+                            toolbar.replaceToolbar($toolbar).initButtons();
+                        }
 
                         app.updateMyshareToolbar = _.debounce(function (cidList) {
                             var // turn cids into proper objects
@@ -480,8 +484,9 @@ define('io.ox/files/main', [
                                 list = models, //_(models).invoke('toJSON'),
                                 // extract single object if length === 1
                                 data = list.length === 1 ? list[0] : list,
+                                $toolbar = toolbar.createToolbar(),
                                 baton = ext.Baton({
-                                    $el: toolbar.$list,
+                                    $el: $toolbar,
                                     app: app,
                                     data: data,
                                     models: models,
@@ -489,11 +494,11 @@ define('io.ox/files/main', [
                                     model: app.mysharesListView.collection.get(app.mysharesListView.collection.get(list))
                                 }),
                                 ret = ext.point('io.ox/files/share/classic-toolbar')
-                                .invoke('draw', toolbar.$list.empty(), baton);
+                                .invoke('draw', $toolbar, baton);
 
-                            $.when.apply($, ret.value()).then(function () {
-                                toolbar.initButtons();
-                            });
+                                // draw toolbar
+                            $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
+
                         }, 10);
 
                         app.updateMyshareToolbar([]);
@@ -578,7 +583,7 @@ define('io.ox/files/main', [
                             app.myFavoritesListViewControl.render().$el
                                 .hide()
                                 .addClass('myfavorites-list-control')
-                                .append(toolbar.render().$el)
+                                .prepend(toolbar.render().$el)
                         );
 
                         function updateCallback($toolbar) {
@@ -968,6 +973,8 @@ define('io.ox/files/main', [
                 // if the renamed folder is inside the folder currently displayed, reload
                 if (data.folder_id === app.folder.get()) {
                     app.listView.reload();
+                } else {
+                    ox.trigger('refresh^');
                 }
             }, 100));
             // use throttled updates for add:file - in case many small files are uploaded
@@ -1105,6 +1112,13 @@ define('io.ox/files/main', [
                 _.defer(function () {
                     app.listView.reload({ pregenerate_previews: false });
                 });
+            });
+        },
+
+        'account:delete': function () {
+            ox.on('account:delete', function (id) {
+                if (!id || app.folder.get().indexOf(id) === -1) return;
+                switchToDefaultFolder();
             });
         },
 
@@ -1306,7 +1320,7 @@ define('io.ox/files/main', [
 
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
-                return 'ox.appsuite.user.sect.files.gui.html';
+                return 'ox.appsuite.user.sect.drive.gui.html';
             };
         },
 
@@ -1315,14 +1329,15 @@ define('io.ox/files/main', [
             if (_.device('smartphone')) return;
 
             api.on('beforedelete', function (ids) {
-                var selection = app.listView.selection.get();
+                var selection = app.listView.selection;
                 var cids = _.map(ids, _.cid);
 
                 //intersection check for Bug 41861
-                if (_.intersection(cids, selection).length) {
-
+                if (_.intersection(cids, selection.get()).length) {
+                    // set the direction for dodge function
+                    selection.getPosition();
                     // change selection
-                    app.listView.selection.dodge();
+                    selection.dodge();
                     // optimization for many items
                     if (ids.length === 1) return;
                     // remove all DOM elements of current collection; keep the first item
@@ -1504,27 +1519,34 @@ define('io.ox/files/main', [
             });
         },
 
-        // FLD-0008 -> not found
-        //  => Bug 56943: error handling on external folder delete
         // FLD-0003 -> permission denied
         //  => Bug 57149: error handling on permission denied
+        // FLD-0008 -> not found
+        //  => Bug 56943: error handling on external folder delete
+        // FILE_STORAGE-0004 -> account missing
+        //  => Bug 58354: error handling on account missing
         // FILE_STORAGE-0055
-        //  => Bug 54793 : error handling when folder does not exists anymore
+        //  => Bug 54793: error handling when folder does not exists anymore
         'special-error-handling': function (app) {
-            var process = _.debounce(function (error) {
-                var model = folderAPI.pool.getModel(app.folder.get());
-                if (model) folderAPI.list(model.get('folder_id'), { cache: false });
-                app.folder.setDefault();
-                notifications.yell(error);
-            }, 1000, true);
-            app.listenTo(ox, 'http:error:FLD-0008 http:error:FLD-0003 http:error:FILE_STORAGE-0055', function (error, request) {
+            app.listenTo(ox, 'http:error:FLD-0003 http:error:FLD-0008 http:error:FILE_STORAGE-0004 http:error:FILE_STORAGE-0055 CHECK_CURRENT_FOLDER', function (error, request) {
                 var folder = request.params.parent || request.data.parent;
                 if (!folder || folder !== this.folder.get()) return;
                 if (folderAPI.isBeingDeleted(folder)) return;
-                process(error);
+                switchToDefaultFolder(error);
             });
         }
     });
+
+    var switchToDefaultFolder = _.debounce(function (error) {
+        var model = folderAPI.pool.getModel(app.folder.get());
+        if (model) folderAPI.list(model.get('folder_id'), { cache: false });
+        app.folder.setDefault();
+        if (!error) return;
+        folderAPI.path(model.get('folder_id')).done(function (folder) {
+            error.error += '\n' + _(folder).pluck('title').join('/');
+            notifications.yell(error);
+        });
+    }, 1000, true);
 
     // launcher
     app.setLauncher(function (options) {

@@ -47,30 +47,56 @@
 // adjust positions of top-bar and screens
 #io-ox-core {
     #io-ox-topbar { display: none; }
-    #io-ox-screens { top: @appcontrol-height - 1; }
+    #io-ox-screens {
+        top: @appcontrol-height - 1;
+        .smartphone & {
+            top: @appcontrol-height-smartphone;
+        }
+    }
 }
 
 .smartphone {
-    #io-ox-appcontrol #io-ox-top-logo {
-        margin-top: 2px;
-        line-height: initial;
-    }
-    #io-ox-core #io-ox-screens { top: @appcontrol-height-smartphone; }
     .popover-signout {
         margin-right: 10px;
         .popover-content-signout { color: #333; }
     }
 }
 
+.smartphone {
 
+    #io-ox-appcontrol {
+
+        #io-ox-launcher {
+
+            & > button {
+                // obsolete? button has always class launcher-btn
+                height: 44px; //@appcontrol-height-smartphone;
+                width: 100%; // @appcontrol-height-smartphone;
+                padding: 0;
+                &.launcher-btn {
+                    padding: 14px;
+                    width: @appcontrol-launcher-height-smartphone;
+                    height: @appcontrol-launcher-height-smartphone;
+                }
+            }
+        }
+    }
+}
 
 #io-ox-top-logo {
     list-style: none;
+    width: auto;
+    margin: 0 24px;
+
     // height: @appcontrol-height;
 
     // Keep this for dynamic themes
     font-size: 0;
-    line-height: @appcontrol-height - 1;
+    line-height: @appcontrol-height - 2;
+
+    .smartphone & {
+        line-height: @appcontrol-height-smartphone;
+    }
 
     img {
         width: 60px;
@@ -89,6 +115,7 @@
     }
 }
 
+
 #io-ox-appcontrol {
 
     position: absolute;
@@ -101,6 +128,10 @@
     padding: 0;
     display: flex;
     align-content: center;
+
+    .smartphone & {
+        height: @appcontrol-height-smartphone;
+    }
 
     &:before {
         content: '';
@@ -129,11 +160,6 @@
         background-color: @notification-icon-background;
     }
 
-    #io-ox-top-logo {
-        width: auto;
-        margin: 0 24px 0 24px; // like rightside
-    }
-
     #io-ox-launcher, #io-ox-quicklaunch {
         flex-shrink:0;
         align-self: auto;
@@ -143,18 +169,25 @@
             // styles for fa-icon
             font-size: 18px;
             color: @appcontrol-launcher-color;
-            padding: 2px 16px 0px 16px;
+            padding: 2px 16px 2px 16px;
             width: 48px;
             // svg styles
             //padding: 24px 16px;
             //width: @appcontrol-height - 16;
-            margin-top: -2px;
             position: relative;
             z-index: 2;
             height: @appcontrol-height - 1;
             display: inline-block;
             border: 0;
             svg .fill-c1 { fill: #fff; }
+
+            .smartphone & {
+                &.launcher-btn {
+                    padding: 12px;
+                    width: @appcontrol-launcher-height-smartphone;
+                    height: @appcontrol-launcher-height-smartphone - 1;
+                }
+            }
         }
         button {
             outline:0;
@@ -181,6 +214,11 @@
     }
 
     #io-ox-quicklaunch {
+
+        .smartphone & {
+            display: none;
+        }
+
         flex-shrink: 0;
         min-width: @quicklaunch-width;
         min-height: auto;
@@ -391,6 +429,10 @@
         .icon {
             width: @svg-wrap-size;
             height: 100%;
+            // no icons on smartphone as it is a dropdown there
+            .smartphone & {
+                display: none;
+            }
         }
 
         svg, i {
@@ -483,6 +525,9 @@
     right: 0;
     top: @appcontrol-height;
     &.open { display:block; }
+    .smartphone & {
+         top: @appcontrol-height-smartphone;
+    }
 }
 
 #io-ox-launchgrid-overlay-inner {
@@ -493,31 +538,4 @@
     left: 0;
     bottom: 0;
     z-index: 1;
-}
-
-.smartphone {
-
-    .icon {
-        display: none;
-    }
-
-    #io-ox-launchgrid, #io-ox-launchgrid-overlay { top: @appcontrol-height-smartphone; }
-    #io-ox-quicklaunch { display: none; }
-    #io-ox-appcontrol {
-        height: @appcontrol-height-smartphone;
-        #io-ox-launcher {
-
-            & > button {
-                // obsolete? button has always class launcher-btn
-                height: 44px; //@appcontrol-height-smartphone;
-                width: 100%; // @appcontrol-height-smartphone;
-                padding: 0;
-                &.launcher-btn {
-                    padding: 14px;
-                    width: @appcontrol-launcher-height-smartphone;
-                    height: @appcontrol-launcher-height-smartphone;
-                }
-            }
-        }
-    }
 }

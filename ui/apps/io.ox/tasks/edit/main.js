@@ -17,9 +17,8 @@ define('io.ox/tasks/edit/main', [
     'io.ox/tasks/model',
     'io.ox/tasks/edit/view',
     'io.ox/tasks/api',
-    'io.ox/core/extPatterns/dnd',
     'less!io.ox/tasks/edit/style'
-], function (gt, ext, model, view, api, dnd) {
+], function (gt, ext, model, view, api) {
 
     'use strict';
 
@@ -100,13 +99,6 @@ define('io.ox/tasks/edit/main', [
             var taskData = _.isArray(options.taskData) && options.taskData.length === 1 ? options.taskData[0] : options.taskData,
                 startApp = function () {
                     app.view = taskView = view.getView(taskModel, win.nodes.main, app);
-
-                    if (_.browser.IE === undefined || _.browser.IE > 9) {
-                        // use naming convention 'dropZone' to utilise global dropZone.remove on quit
-                        self.dropZone = new dnd.UploadZone({
-                            ref: 'io.ox/tasks/edit/dnd/actions'
-                        }, taskView);
-                    }
                     //ready for show
                     win.show();
                 };
@@ -127,7 +119,6 @@ define('io.ox/tasks/edit/main', [
             win.nodes.main.addClass('scrollable');
 
             win.on('show', function () {
-                if (app.dropZone) app.dropZone.include();
                 // no autofocus on smartphone and for iOS in special (see bug #36921)
                 if (taskView && _.device('!smartphone && !iOS')) {
                     taskView.$el.find('.title-field').focus();
@@ -140,11 +131,6 @@ define('io.ox/tasks/edit/main', [
                 }
             });
 
-            win.on('hide', function () {
-                if (app && app.dropZone) {
-                    app.dropZone.remove();
-                }
-            });
 
             //ModelView
             if (taskData && taskData.id) {

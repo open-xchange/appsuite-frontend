@@ -98,6 +98,13 @@ define('io.ox/mail/detail/content', [
                 return head + value.replace(/(^|;|\s)color:[^;]+?($|;)/g, '').replace(/text-decoration:[^;]+?($|;)/g, '') + tail;
             });
         },
+        // safari only
+        tableHeight: function (baton) {
+            if (!_.browser.safari && !baton.isHTML) return;
+            baton.source = baton.source.replace(/(<table[^>]+?style[\s]*=[\s]*["'])(.*?)(["'][^>]*>)/g, function (match, head, value, tail) {
+                return head + value.replace(/[^-]height:\s100%\s!important/, 'height: auto') + tail;
+            });
+        },
 
         //
         // Content general
@@ -119,6 +126,7 @@ define('io.ox/mail/detail/content', [
 
         disableLinks: function (baton) {
             if (!util.isMalicious(baton.data) && !util.authenticity('block', baton.data)) return;
+            if (util.isWhiteListed(baton.data)) return;
             $(this).addClass('disable-links').on('click', function () { return false; });
         },
 
@@ -305,6 +313,12 @@ define('io.ox/mail/detail/content', [
     });
 
     ext.point('io.ox/mail/detail/source').extend({
+        id: 'table-height',
+        index: 550,
+        process: extensions.tableHeight
+    });
+
+    ext.point('io.ox/mail/detail/source').extend({
         id: 'white-space',
         index: 600,
         process: extensions.whitespace
@@ -316,6 +330,7 @@ define('io.ox/mail/detail/content', [
         enabled: settings.get('maliciousCheck'),
         process: function (baton) {
             if (!util.isMalicious(baton.data) && !util.authenticity('block', baton.data)) return;
+            if (util.isWhiteListed(baton.data)) return;
             baton.source = baton.source
                 .replace(/.*/g, extensions.linkDisable)
                 .replace(/.*/g, extensions.linkRemoveRef)
@@ -647,7 +662,7 @@ define('io.ox/mail/detail/content', [
                 console.error('mail.getContent', e.message, e, data);
             }
 
-            return { content: content, isLarge: baton.isLarge, type: baton.type };
+            return { content: content, isLarge: baton.isLarge, type: baton.type, isText: baton.isText };
         },
 
         beautifyPlainText: function (str) {

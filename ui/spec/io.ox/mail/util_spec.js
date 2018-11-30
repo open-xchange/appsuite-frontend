@@ -217,6 +217,29 @@ define([
                 expect(util.hasOtherRecipients(undefined), 'hasOtherRecipients').is.false;
             });
 
+            it('should normalize a string-based list of domains and mail addresses', function () {
+                var list = ' alice@example.com,  ,      \nexample.de\nbob@example.org ';
+                expect(util.asList(list)).to.include('alice@example.com');
+                expect(util.asList(list)).to.include('example.de');
+                expect(util.asList(list)).to.include('bob@example.org');
+                expect(util.asList(list)).to.be.an('array').and.has.lengthOf(3);
+            });
+
+            it('should identify whitelisted mail addresses', function () {
+                var whitelist = 'alice@example.com, example.de, bob@example.org';
+                // empty
+                expect(util.isWhiteListed('bob@example.com')).is.false;
+                expect(util.isWhiteListed('bob@example.com', '')).is.false;
+                // strings
+                expect(util.isWhiteListed('alice@example.com', whitelist)).is.true;
+                expect(util.isWhiteListed('bob@example.de', whitelist)).is.true;
+                expect(util.isWhiteListed('alice@example.org', whitelist)).is.false;
+                expect(util.isWhiteListed('bob@example.com', whitelist)).is.false;
+                // mail object
+                expect(util.isWhiteListed({ from: [['', 'alice@example.com']] }, whitelist)).is.true;
+                expect(util.isWhiteListed({ from: [['', 'bob@example.com']] }, whitelist)).is.false;
+            });
+
             it('should return "0" for invalid date', function () {
                 expect(util.count(undefined), 'count').to.be.a('number').and.to.be.equal(0);
             });

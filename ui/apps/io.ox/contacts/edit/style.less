@@ -53,7 +53,21 @@
         }
     }
 
-    textarea { height: 221px; }
+    [data-field="note"] {
+        margin-left: 0;
+        margin-right: 0;
+
+        label {
+            padding-left: 0;
+            color: @brand-primary;
+            border-bottom: 1px solid #ccc;
+        }
+    }
+
+    textarea {
+        margin-top: 62px;
+        height: 282px;
+    }
 
     .native-date-picker div {
         &:first-child { padding-right: 0; }

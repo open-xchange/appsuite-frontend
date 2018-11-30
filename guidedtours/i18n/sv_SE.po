@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-27 06:14+0200\n"
+"PO-Revision-Date: 2018-10-15 03:43+0200\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <ox@workshop-chapina.com>\n"
 "Language: sv_SE\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -49,14 +49,6 @@ msgstr ""
 "in upprepningsparametrarna visas."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Använda påminnelsefunktionen"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "För att inte missa mötet, använd påminnelsefunktionen."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr "Bjud in andra deltagare"
 
@@ -68,6 +60,14 @@ msgid ""
 msgstr ""
 "För att bjuda in andra deltagare, ange deras namn i fältet under Deltagare. "
 "För att undvika krockande möten, klicka på Hitta ledig tid överst till höger."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Använda påminnelsefunktionen"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "För att inte missa mötet, använd påminnelsefunktionen."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
@@ -381,12 +381,8 @@ msgid "Launching an app"
 msgstr "Starta ett program"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To launch an app, use the quick launch icons on the left side of the menu "
-"bar or click on an entry inside the app launcher menu."
-msgstr ""
-"För att starta ett program, använd snabbstartikonerna på vänster sida av "
-"menyraden eller klicka på en post inuti programstartarmenyn."
+msgid "To launch an app click on an entry inside the app launcher menu."
+msgstr "För att starta ett program, klicka på en post i programstartmenyn."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -855,60 +851,6 @@ msgstr ""
 "För att redigera flera uppgifter samtidigt, aktivera kryssrutorna till "
 "vänster om uppgifterna. Om kryssrutorna inte visas, klicka på Visa > "
 "Kryssrutor till höger i verktgysraden."
-
-#~ msgid ""
-#~ "To open the settings, click the System menu icon on the upper right side "
-#~ "of the menu bar. Select Settings."
-#~ msgstr ""
-#~ "För att öppna inställningarna, klicka på Systemmenyikonen längst upp till "
-#~ "höger i menyfältet. Välj Inställningar."
-
-#~ msgid ""
-#~ "To open the help, click the System menu icon on the upper right side of "
-#~ "the menu bar. Select Help. The help for the currently selected app is "
-#~ "displayed. To browse the complete help, click on Start Page or Table Of "
-#~ "Contents at the upper part of the window."
-#~ msgstr ""
-#~ "För att öppna hjälpen, klicka på Systemmenyikonen längst upp till höger i "
-#~ "menyraden. Välj Hjälp. Hjälpen för det aktuella programmet visas. För att "
-#~ "bläddra i den fullständiga hjälpen, klicka på Startsidan eller Innehåll i "
-#~ "fönstrets övre del."
-
-#~ msgid ""
-#~ "Hint: you can always restart guided tours, any time you need them, from "
-#~ "the system menu."
-#~ msgstr ""
-#~ "Tips: du kan alltid starta om guidade rundturer, när som helst, från "
-#~ "systemmenyn."
-
-#~ msgid ""
-#~ "In case of new notifications, e.g. appointment invitations, the info area "
-#~ "is opened."
-#~ msgstr ""
-#~ "För nya aviseringar, t.ex. inbjudningar till möten, kommer "
-#~ "informationsområdet öppnas."
-
-#~ msgid "Restart Guided Tour"
-#~ msgstr "Starta om guidad rundtur"
-
-#~ msgid "The New objects icon"
-#~ msgstr "Nya objekt-ikonen"
-
-#~ msgid ""
-#~ "The New objects icon shows the number of appointment reminders or other "
-#~ "notifications. If clicking the icon, the info area opens."
-#~ msgstr ""
-#~ "Ikonen för Nya objekt visar antalet påminnelser om möten eller andra "
-#~ "aviseringar. Om du klickar på ikonen öppnas informationsområdet."
-
-#~ msgid "The info area"
-#~ msgstr "Informationsområdet"
-
-#~ msgid ""
-#~ "To launch an app, click on an entry on the left side of the menu bar."
-#~ msgstr ""
-#~ "För att starta ett program, klicka på en post på den vänstra sidan av "
-#~ "menyraden."
 
 #~ msgid "%1$d %2$s"
 #~ msgstr "%1$d %2$s"
@@ -4425,6 +4367,13 @@ msgstr ""
 #~ msgid "High priority"
 #~ msgstr "Hög prioritet"
 
+#~ msgid ""
+#~ "Hint: you can always restart guided tours, any time you need them, from "
+#~ "the system menu."
+#~ msgstr ""
+#~ "Tips: du kan alltid starta om guidade rundturer, när som helst, från "
+#~ "systemmenyn."
+
 #~ msgid "Hobby"
 #~ msgstr "Hobby"
 
@@ -4580,6 +4529,13 @@ msgstr ""
 #~ msgstr ""
 #~ "Vid nya upplysningar, t.ex. inbjudningar till möten, öppnas "
 #~ "informationsområdet till höger."
+
+#~ msgid ""
+#~ "In case of new notifications, e.g. appointment invitations, the info area "
+#~ "is opened."
+#~ msgstr ""
+#~ "För nya aviseringar, t.ex. inbjudningar till möten, kommer "
+#~ "informationsområdet öppnas."
 
 #~ msgid "In progress"
 #~ msgstr "Arbetar"
@@ -6770,6 +6726,9 @@ msgstr ""
 #~ msgid "Response package exceeds max package size value of 8192k: %1$s"
 #~ msgstr "Svarspaketet överskrider maximala paketstorleken som är 8192k: %1$s"
 
+#~ msgid "Restart Guided Tour"
+#~ msgstr "Starta om guidad rundtur"
+
 #~ msgid "Restore applications"
 #~ msgstr "Återställ program"
 
@@ -7581,6 +7540,16 @@ msgstr ""
 #~ "kryssrutorna för att välja filer. Klicka på en fil för att se ytterligare "
 #~ "detaljer och funktioner i popuprutan."
 
+#~ msgid "The New objects icon"
+#~ msgstr "Nya objekt-ikonen"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of appointment reminders or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "Ikonen för Nya objekt visar antalet påminnelser om möten eller andra "
+#~ "aviseringar. Om du klickar på ikonen öppnas informationsområdet."
+
 #~ msgid ""
 #~ "The New objects icon shows the number of unread E-Mails or other "
 #~ "notifications. If clicking the icon, the info area opens."
@@ -7874,6 +7843,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Bilden du försökte bifoga är inte en giltig bild. Den kan vara trasig "
 #~ "eller också är den inte en giltig fil."
+
+#~ msgid "The info area"
+#~ msgstr "Informationsområdet"
 
 #~ msgid "The mandatory field %1$s is not defined."
 #~ msgstr "Det obligatoriska fältet %1$s är inte definierat."
@@ -8802,6 +8774,13 @@ msgstr ""
 #~ msgstr "För att starta ett program, klicka på en rutas rubrik."
 
 #~ msgid ""
+#~ "To launch an app, use the quick launch icons on the left side of the menu "
+#~ "bar or click on an entry inside the app launcher menu."
+#~ msgstr ""
+#~ "För att starta ett program, använd snabbstartikonerna på vänster sida av "
+#~ "menyraden eller klicka på en post inuti programstartarmenyn."
+
+#~ msgid ""
 #~ "To open the E-Mail settings, click the System menu icon on the upper "
 #~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
 #~ "side. To display all settings, enable Advanced settings in the bottom "
@@ -8819,6 +8798,24 @@ msgstr ""
 #~ msgstr ""
 #~ "För att öppna hjälpen, klicka på Systemmenyikonen längst upp till höger i "
 #~ "menyraden. Välj Hjälp."
+
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "För att öppna hjälpen, klicka på Systemmenyikonen längst upp till höger i "
+#~ "menyraden. Välj Hjälp. Hjälpen för det aktuella programmet visas. För att "
+#~ "bläddra i den fullständiga hjälpen, klicka på Startsidan eller Innehåll i "
+#~ "fönstrets övre del."
+
+#~ msgid ""
+#~ "To open the settings, click the System menu icon on the upper right side "
+#~ "of the menu bar. Select Settings."
+#~ msgstr ""
+#~ "För att öppna inställningarna, klicka på Systemmenyikonen längst upp till "
+#~ "höger i menyfältet. Välj Inställningar."
 
 #~ msgid ""
 #~ "To select one of the views List, Icons or Squares, click on View on the "

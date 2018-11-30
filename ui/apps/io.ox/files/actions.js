@@ -51,6 +51,32 @@ define('io.ox/files/actions', [
         return model ? folderAPI.is('trash', model.toJSON()) : false;
     }
 
+    /**
+     * Removes items from listView and selects a file
+     *
+     * @param {ListView} listView
+     *  Object of the current listView
+     *
+     * @param {(FileDescriptor|FolderDescriptor)[]} models
+     *  a mixed set of model descriptors
+     */
+    function removeFromList(listView, models) {
+        var cids = _.map(models, function (model) { return model.folder_id ? _.cid(model) : 'folder.' + model.id; }),
+            selection = listView.selection,
+            items2remove = selection.getItems().filter('.selected');
+
+        if (_.intersection(cids, selection.get()).length) {
+            // set the direction for dodge function
+            selection.getPosition();
+            // change selection
+            selection.dodge();
+            // remove all DOM elements of previous selection
+            _.each(items2remove, function (item) {
+                item.remove();
+            });
+        }
+    }
+
     // actions
     new Action('io.ox/files/actions/upload', {
         requires: function (e) {
@@ -689,7 +715,7 @@ define('io.ox/files/actions', [
                                                     } else {
                                                         //no error, must be success
                                                         require(['io.ox/core/yell'], function (yell) {
-                                                            yell('success', itemsLeft.length > 1 ? success.multiple : success.single);
+                                                            yell('success', list.length > 1 ? success.multiple : success.single);
                                                         });
                                                     }
 
@@ -872,7 +898,10 @@ define('io.ox/files/actions', [
                         options = { module: 'infostore', folder: folderId },
                         permissionsToKeep,
                         fileModel, folderModel,
-                        newPermissionList, newExtendedPermissionList;
+                        newPermissionList, newExtendedPermissionList,
+                        ids = _.map(baton.models, function (model) { return model.toJSON(); });
+
+                    removeFromList(baton.app.mysharesListView, ids);
 
                     // do nothing when the item is removed from DOM, because the type is (unfortunately) determined by DOM attributes
                     // revoking an sharing link while the DOM does not exist would remove permissions for example as shareType is undefined
@@ -954,7 +983,7 @@ define('io.ox/files/actions', [
                                             .update(fileDesc, {
                                                 object_permissions: newPermissionList,
                                                 'com.openexchange.share.extendedObjectPermissions': newExtendedPermissionList
-                                            })
+                                            }, { silent: true })
                                             .done(function () {
                                                 fileModel.destroy.bind(fileModel);
                                                 yell('success', gt('Revoked access.'));
@@ -1201,6 +1230,7 @@ define('io.ox/files/actions', [
                 }
             }
             ox.load(['io.ox/files/actions/favorites']).done(function (action) {
+                removeFromList(baton.app.myFavoriteListView, list);
                 action.remove(list);
             });
         }

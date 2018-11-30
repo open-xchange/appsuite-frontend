@@ -94,13 +94,14 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                 if (count < maxCount && !_.url.hash('language-select') && _.device('!smartphone')) {
 
                     node.append(
-                        $('<span class="lang-label" id="io-ox-languages-label" data-i18n="Languages" data-i18n-attr="text">'),
+                        $('<span class="lang-label" id="io-ox-languages-label" data-i18n="Language" data-i18n-attr="text">'),
                         $('<div class="dropup">').append(
                             toggle = $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').append(
-                                $('<span class="toggle-text">').text(lang[defaultLanguage]),
+                                $('<span class="sr-only" data-i18n="Language:" data-i18n-attr="text">'),
+                                $('<span class="toggle-text">').attr('lang', languageToTag(defaultLanguage)).text(lang[defaultLanguage]),
                                 $('<span class="caret">')
                             ),
-                            list = $('<ul id="io-ox-language-list" class="dropdown-menu" role="menu" aria-labelledby="io-ox-languages-label">')
+                            list = $('<ul id="io-ox-language-list" class="dropdown-menu" role="menu" data-i18n="Languages" data-i18n-attr="aria-label">')
                         )
                     );
 
@@ -122,7 +123,7 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                         var node = $(e.currentTarget), value = node.attr('data-value');
                         e.preventDefault();
                         self.changeByUser(value);
-                        $(e.delegateTarget).parent().find('.toggle-text').text(lang[value]);
+                        $(e.delegateTarget).parent().find('.toggle-text').text(lang[value]).attr('lang', languageToTag(value));
                     });
 
                     // init dropdown

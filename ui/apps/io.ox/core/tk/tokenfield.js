@@ -73,9 +73,16 @@ define('io.ox/core/tk/tokenfield', [
 
         return this.$element.get(0);
     };
+    // totally annoying IE11/Edge Fix (who else could it be) so the dropdown stays open when clicking on the scrollbars
+    // see for example https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15558714/, https://github.com/corejavascript/typeahead.js/issues/166, https://github.com/twitter/typeahead.js/issues/705
+    var mouseIsInDropdown = false;
 
     // needs overwrite because of bug 54034
     $.fn.tokenfield.Constructor.prototype.blur = function (e) {
+        if (mouseIsInDropdown) {
+            this.$input.focus();
+            return;
+        }
         this.focused = false;
         this.$wrapper.removeClass('focus');
 
@@ -399,20 +406,19 @@ define('io.ox/core/tk/tokenfield', [
                     if (e.attrs) {
                         var model = e.attrs.model || self.getModelByCID(e.attrs.value),
                             node = $(e.relatedTarget),
-                            label = node.find('.token-label');
+                            label = node.find('.token-label'),
+                            token = model.get('token'),
+                            hasLabel = token.label && token.label !== token.value,
+                            title = hasLabel ? token.label + ' ' + token.value : token.value;
+
                         // remove wrongly calculated max-width
                         if (label.css('max-width') === '0px') label.css('max-width', 'none');
 
-                        // a11y: set title
-                        node.attr('aria-label', function () {
-                            var token = model.get('token'),
-                                title = token.label;
-                            if (token.label !== token.value) {
-                                title = token.label ? token.label + ' ' + token.value : token.value;
-                            }
-                            //.# Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
-                            return gt('%1$s. Press backspace to delete.', title);
-                        });
+                        // mouse hover tooltip / a11y title
+                        label.attr({ 'aria-hidden': true, 'title': title });
+                        //.# Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
+                        node.attr('aria-label', gt('%1$s. Press backspace to delete.', title));
+
                         // customize token
                         ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e, self.getInput());
                     }
@@ -530,11 +536,31 @@ define('io.ox/core/tk/tokenfield', [
                 _onSuggestionMouseLeave: function (e) {
                     if (!hasMouseMoved(e)) return;
                     this._removeCursor();
+                },
+                onDropdownMouseEnter: function () {
+                    mouseIsInDropdown = true;
+                },
+                onDropdownMouseLeave: function () {
+                    mouseIsInDropdown = false;
                 }
             });
+
             dropdown.$menu.off('mouseenter.tt mouseleave.tt')
                 .on('mouseenter.tt mousemove.tt', '.tt-suggestion', dropdown._onSuggestionMouseEnter.bind(dropdown))
                 .on('mouseleave.tt', '.tt-suggestion', dropdown._onSuggestionMouseLeave.bind(dropdown));
+
+            if (_.browser.IE || _.browser.Edge) {
+
+                this.input.off('blur.tt').on('blur.tt', function () {
+                    if (mouseIsInDropdown) return;
+                    this.resetInputValue();
+                    this.trigger('blurred');
+                }.bind(this.hiddenapi.input));
+
+                dropdown.$menu
+                    .on('mouseenter.tt', dropdown.onDropdownMouseEnter.bind(dropdown))
+                    .on('mouseleave.tt', dropdown.onDropdownMouseLeave.bind(dropdown));
+            }
 
             // calculate position for typeahead dropdown (tt-dropdown-menu)
             if (_.device('smartphone') || o.leftAligned) {
@@ -573,9 +599,10 @@ define('io.ox/core/tk/tokenfield', [
                 this.input.on('keydown', function (e) {
                     var enter = e.which === 13,
                         validquery = !!self.input.val() && self.input.val().length >= o.minLength,
-                        runningrequest = self.model.get('query') !== self.input.val();
+                        runningrequest = self.model.get('query') !== self.input.val(),
+                        automated = e.which === 38 || e.which === 40;
                     // clear dropdown when query changes
-                    if (runningrequest && !enter) {
+                    if (runningrequest && !enter && !automated) {
                         self.hiddenapi.dropdown.empty();
                         self.hiddenapi.dropdown.close();
                     }
@@ -596,6 +623,7 @@ define('io.ox/core/tk/tokenfield', [
                     cancel: 'a.close',
                     placeholder: 'token placeholder',
                     revert: 0,
+                    tolerance: 'pointer',
                     forcePlaceholderSize: true,
                     // update: _.bind(this.resort, this),
                     stop: function (e, ui) {
@@ -640,7 +668,7 @@ define('io.ox/core/tk/tokenfield', [
                 });
             }
 
-            this.$el.closest('div.tokenfield').attr('role', 'application').on('copy', function (e) {
+            this.$el.closest('div.tokenfield').on('copy', function (e) {
                 // value might contain more than one id so split
                 var values = e.target.value.split(', ');
 
@@ -661,7 +689,9 @@ define('io.ox/core/tk/tokenfield', [
 
             this.getInput().on('focus blur updateWidth', function (e) {
                 var tokenfield = self.$el.data('bs.tokenfield');
-                tokenfield.options.minWidth = e.type === 'focus' ? 320 : 0;
+                // tokenfield minwidth 320 caused height calculation to be broken as soon
+                // as there is less than 320 pixel space left in the search field
+                tokenfield.options.minWidth = e.type === 'focus' ? 1 : 0;
                 tokenfield.update();
             });
 

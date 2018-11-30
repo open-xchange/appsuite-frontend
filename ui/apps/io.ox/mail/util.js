@@ -24,6 +24,27 @@ define('io.ox/mail/util', [
 
     'use strict';
 
+    var fontDefaults = [
+        { label: 'System', font: '-apple-system,BlinkMacSystemFont,helvetica,sans-serif' },
+        { label: 'Andale Mono', font: 'andale mono,times' },
+        { label: 'Arial', font: 'arial,helvetica,sans-serif' },
+        { label: 'Arial Black', font: 'arial black,avant garde' },
+        { label: 'Book Antiqua', font: 'book antiqua,palatino' },
+        { label: 'Comic Sans MS', font: 'comic sans ms,sans-serif' },
+        { label: 'Courier New', font: 'courier new,courier' },
+        { label: 'Georgia', font: 'georgia,palatino' },
+        { label: 'Helvetica', font: 'helvetica' },
+        { label: 'Impact', font: 'impact,chicago' },
+        { label: 'Symbol', font: 'symbol' },
+        { label: 'Tahoma', font: 'tahoma,arial,helvetica,sans-serif' },
+        { label: 'Terminal', font: 'terminal,monaco' },
+        { label: 'Times New Roman', font: 'times new roman,times' },
+        { label: 'Trebuchet MS', font: 'trebuchet ms,geneva' },
+        { label: 'Verdana', font: 'verdana,geneva' },
+        { label: 'Webdings', font: 'webdings' },
+        { label: 'Wingdings', font: 'wingdings,zapf dingbats' }
+    ];
+
     var that,
         prefix = ox.serverConfig.prefix || '/ajax',
         regImageSrc = new RegExp('(<img[^>]+src=")' + prefix, 'g'),
@@ -280,7 +301,9 @@ define('io.ox/mail/util', [
         },
 
         getFontFormats: function () {
-            return settings.get('tinyMCE/font_formats', 'System=-apple-system, BlinkMacSystemFont,helvetica,sans-serif,Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats');
+            return settings.get('tinyMCE/font_formats', fontDefaults.map(function (o) {
+                return o.label + '=' + o.font;
+            }).join(';'));
         },
 
         getDefaultStyle: function () {
@@ -288,7 +311,7 @@ define('io.ox/mail/util', [
                 obj = { css: {}, string: '', node: $() };
             // styles
             if (styles.size && styles.size !== 'browser-default') obj.css['font-size'] = styles.size;
-            if (styles.family && styles.family !== 'browser-default') obj.css['font-family'] = styles.family;
+            if (styles.family) obj.css['font-family'] = (styles.family !== 'browser-default') ? styles.family : fontDefaults[0].font;
             if (styles.color && styles.color !== 'transparent') obj.css.color = styles.color;
             // styles as string
             obj.string = _.reduce(_.pairs(obj.css), function (memo, list) { return memo + list[0] + ':' + list[1] + ';'; }, '');
@@ -542,6 +565,35 @@ define('io.ox/mail/util', [
         isEmbedded: function (data) {
             if (!_.isObject(data)) return false;
             return data.folder_id === undefined && data.filename !== undefined;
+        },
+
+        asList: _.memoize(function (str) {
+            // comma-seperated, stringbased list
+            return (str || '')
+                // linebreak, whitespace
+                .replace(/[\s\n]+/g, ',')
+                // duplicate commas
+                .replace(/(,+),/g, ',')
+                // trailing commas
+                .replace(/^,|,$/g, '')
+                .toLowerCase()
+                .split(',');
+        }),
+
+        isWhiteListed: function (data, list) {
+            var whitelist = [].concat(
+                    that.asList(settings.get('features/trusted/user', list || '')),
+                    that.asList(settings.get('features/trusted/admin', ''))
+                ),
+                address = _.isObject(data) ?
+                    data.from && data.from.length && String(data.from[0][1] || '') :
+                    data || '';
+            // normalize
+            whitelist = _.compact(whitelist);
+            address = (address || '').trim().toLowerCase();
+            return _.some(whitelist, function (whitelisted) {
+                return address.endsWith(whitelisted.trim());
+            });
         },
 
         authenticity: (function () {

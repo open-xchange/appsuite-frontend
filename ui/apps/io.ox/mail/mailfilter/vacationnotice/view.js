@@ -199,6 +199,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
 
                 this.listenTo(this.model, 'change:dateFrom', function (model, value) {
                     var length = (model.get('dateUntil') - model.previous('dateFrom')) || 0;
+                    if (length < 0) return;
                     model.set('dateUntil', value + length);
                 });
             }
@@ -378,8 +379,10 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
     //
     function getData() {
         var model = new Model();
+        return $.when(userAPI.get(), api.getConfig(), accountAPI.getPrimaryAddress(), api.getRules(), model.fetch()).then(function (user, config, primary, currentRules) {
+            // vacation notice becomes first rule upon creation
+            if (!_.isEmpty(currentRules) && model.get('position') === undefined) model.set('position', 0);
 
-        return $.when(userAPI.get(), api.getConfig(), accountAPI.getPrimaryAddress(), model.fetch()).then(function (user, config, primary) {
             return { model: model, aliases: user.aliases, config: config, user: user, primary: primary[1] };
         });
     }
