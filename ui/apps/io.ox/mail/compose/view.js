@@ -543,7 +543,7 @@ define('io.ox/mail/compose/view', [
 
                     var attachments = _.clone(data.attachments);
                     // to keep the previews working we copy data from the original mail
-                    if (mode === 'forward' || mode === 'edit') {
+                    if (/^(forward|edit)$/.test(mode)) {
                         attachments.forEach(function (file) {
                             _.extend(file, { group: 'mail', mail: mailReference, security: obj.security });
                         });
@@ -552,7 +552,7 @@ define('io.ox/mail/compose/view', [
                     delete data.attachments;
 
                     //FIXME: remove this if statement? Should still work without it
-                    if (mode === 'forward' || mode === 'edit' || mode === 'reply' || mode === 'replyall') {
+                    if (/^(forward|edit|reply|replyall)$/.test(mode)) {
                         // move nested messages into attachment array
                         _(data.nested_msgs).each(function (obj) {
                             attachments.push({
@@ -580,8 +580,9 @@ define('io.ox/mail/compose/view', [
                     attachmentCollection.reset(_(attachments).map(function (attachment) {
                         return new attachmentModel.Model(attachment);
                     }));
-                    var content = attachmentCollection.at(0).get('content'),
-                        content_type = attachmentCollection.at(0).get('content_type');
+
+                    var content = window.new ? data.content : attachmentCollection.at(0).get('content'),
+                        content_type = window.new ? data.contentType : attachmentCollection.at(0).get('content_type');
 
                     // Force text edit mode when alternative editorMode and text/plain mail
                     if (mode === 'edit' && self.model.get('editorMode') === 'alternative' && content_type === 'text/plain') {
@@ -592,7 +593,7 @@ define('io.ox/mail/compose/view', [
                     if (content_type === 'text/plain' && self.model.get('editorMode') === 'html') {
                         require(['io.ox/mail/detail/content'], function (proc) {
                             var html = proc.transformForHTMLEditor(content);
-                            attachmentCollection.at(0).set('content_type', 'text/html');
+                            if (!window.new) attachmentCollection.at(0).set('content_type', 'text/html');
                             content = html;
                             def.resolve();
                         });
@@ -605,7 +606,11 @@ define('io.ox/mail/compose/view', [
                         def.resolve();
                     }
                     return $.when(def).then(function () {
-                        attachmentCollection.at(0).set('content', content);
+                        if (window.new) {
+                            self.model.set('content', content);
+                        } else {
+                            attachmentCollection.at(0).set('content', content);
+                        }
                         self.model.unset('attachments');
                         self.model.set('attachments', attachmentCollection);
                         obj = data = attachmentCollection = null;

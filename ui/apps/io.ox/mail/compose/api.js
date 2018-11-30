@@ -148,8 +148,27 @@ define('io.ox/mail/compose/api', [
      * @param  {string} view (html or text)
      * @return { deferred} done returns prepared object
      */
-    api.reply = function (obj, view) {
+    api.replyOld = function (obj, view) {
         return react('reply', obj, view);
+    };
+
+    // test case for new compose api
+    api.reply = function (obj, format) {
+        if (!window.new) return api.replyold(obj, format);
+
+        //return react('forward', obj, format);
+        return api.space.add('reply', obj, { format: format }).then(function (space) {
+            var obj;
+            return api.space.get(space.id).then(function (data) {
+                // TODO: from should be wrapped like cc/bcc
+                data.from = [data.from];
+                obj = _.extend({}, data);
+                return api.space.attachments.original(data.id);
+            }).then(function (list) {
+                obj.attachments = list;
+                return obj;
+            });
+        });
     };
 
     /**
