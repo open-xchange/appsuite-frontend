@@ -129,12 +129,14 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core', 'stat
 
         // detect URLs in plain text
         urlify: function (text) {
-            return (text || '').replace(regUrl, function (url) {
+            text = (text || '').replace(regUrl, function (url) {
                 var fix = this.fixUrlSuffix(url);
                 // soft-break long words (like long URLs)
                 var node = $('<a target="_blank" rel="noopener">').attr('href', encodeURI(decodeURI(fix.url))).append(that.breakableHTML(fix.url));
-                return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a', 'wbr'], ALLOWED_ATTR: ['target', 'rel', 'href'], SAFE_FOR_JQUERY: true }) + fix.suffix;
+                return node.prop('outerHTML') + fix.suffix;
             }.bind(this));
+
+            return DOMPurify.sanitize(text, { ALLOW_TAGS: ['a', 'wbr'], ALLOWED_ATTR: ['target', 'rel', 'href'], SAFE_FOR_JQUERY: true });
         },
 
         // split long character sequences
