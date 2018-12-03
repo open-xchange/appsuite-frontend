@@ -71,8 +71,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.waitForVisible('.io-ox-settings-window .leftside [title="Favorite timezones"]');
     I.click('~Favorite timezones', '.leftside');
 
-    I.waitForVisible('.rightside h1', 'Favorite timezones');
-    I.waitForVisible('.rightside', 'Add timezone');
+    I.waitForText('Add timezone', 5);
     I.click('Add timezone');
 
     I.waitForVisible('.io-ox-dialog-popup');

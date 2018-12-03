@@ -62,8 +62,7 @@ Scenario('Create never ending appointment and check display in several views', a
     const { start, dayCountNextMonth } = await I.executeAsyncScript(function (done) {
         done({
             start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('1', 'day').format('l')}"]`,
-            dayCountNextMonth: moment().add(1, 'months').daysInMonth()
-
+            dayCountNextMonth: moment().add(2, 'months').daysInMonth()
         });
     });
 
@@ -90,21 +89,22 @@ Scenario('Create never ending appointment and check display in several views', a
     // check in week view
     I.clickToolbar('View');
     I.click('Week');
-    I.waitForVisible('.weekview-container.week button.weekday.today');
+    I.waitForVisible('.weekview-container.week button.weekday.today', 5);
 
     I.see('test caching', '.weekview-container.week .appointment .title');
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 6);
-
     I.click('.weekview-container.week button[title="Next Week"]');
+    I.wait(2); // Nothing else seems to work here
     I.dontSeeElement('.weekview-container.week button.weekday.today');
 
     I.see('test caching', '.weekview-container.week .appointment .title');
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 7);
     I.click('.weekview-container.week button[title="Previous Week"]');
-    I.waitForVisible('.weekview-container.week button.weekday.today');
+    I.waitForVisible('.weekview-container.week button.weekday.today', 5);
     // check in month view
     I.clickToolbar('View');
     I.click('Month');
+
     I.waitForVisible('.monthview-container td.day.today');
 
     I.waitForVisible('.monthview-container .day .appointment .title');

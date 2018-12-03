@@ -7,7 +7,7 @@
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  * © 2018 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
+ * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
 Feature('Calendar: Create appointment');
@@ -110,6 +110,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
 
     I.click('test appointment two', '.workweek');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
@@ -117,6 +118,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
 
     // create in Week view
     I.selectFolder('New calendar');
@@ -177,6 +179,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
 
     I.click('test appointment two', '.weekview-container.week');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
@@ -184,6 +187,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
 
     // create in Month view
     I.selectFolder(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name);
@@ -244,6 +248,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
 
     I.click('test appointment two', '.month-container');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
@@ -251,6 +256,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
 
     // create in Day view
     I.clickToolbar('View');
@@ -310,6 +316,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
 
     I.click('test appointment two', '.weekview-container.day');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
@@ -317,6 +324,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
 
     I.logout();
 

@@ -38,9 +38,8 @@ Scenario('Change working time and check in weekview', async function (I) {
     I.click('Settings', '#topbar-settings-dropdown');
 
     I.waitForVisible('.io-ox-settings-window .leftside [title="Calendar"]');
-
     I.click('~Calendar', '.leftside');
-    I.waitForVisible('.rightside h1', 'Calendar');
+    I.waitForText('Start of working time', 5);
 
     I.selectOption('Start of working time', '6:00 AM');
     I.selectOption('End of working time', '6:00 PM');

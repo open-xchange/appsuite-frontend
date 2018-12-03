@@ -54,6 +54,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     // check in Workweek view
     I.clickToolbar('View');
     I.click('Workweek');
+    I.waitForText('test appointment one', 5, '.workweek');
     I.see('test appointment one', '.workweek .appointment .title');
 
     I.seeNumberOfElements('.workweek .appointment .title', 1);
@@ -105,6 +106,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-dialog-sidepopup');
 
     I.logout();
 
@@ -154,8 +156,6 @@ Scenario('Changing calendar color should change appointment color that uses cale
     I.click('Create', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
-    I.waitForDetached('.io-ox-calendar-edit-window', 5);
-
     // check
     I.see('test appointment one', '.workweek .appointment .title');
     I.see('test appointment two', '.workweek .appointment .title');
@@ -180,6 +180,7 @@ Scenario('Changing calendar color should change appointment color that uses cale
     // click some stuff
     I.clickToolbar('View');
     I.click('Workweek');
+    I.waitForText('test appointment one', 5, '.workweek');
 
     // get folder color
     let folderColor = await I.grabCssPropertyFrom('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label', 'background-color');
@@ -198,6 +199,7 @@ Scenario('Changing calendar color should change appointment color that uses cale
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-dialog-sidepopup');
 
     I.click('test appointment two', '.workweek');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
@@ -205,6 +207,7 @@ Scenario('Changing calendar color should change appointment color that uses cale
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-dialog-sidepopup');
 
     I.logout();
 
