@@ -63,6 +63,9 @@ define('io.ox/mail/compose/api', [
     };
 
     var react = function (action, obj, view) {
+
+        if (window.new) return api.spaced(action, obj, { format: view });
+
         var isDraft = (action === 'edit'),
             isAlternative = (view === 'alternative');
 
@@ -148,27 +151,8 @@ define('io.ox/mail/compose/api', [
      * @param  {string} view (html or text)
      * @return { deferred} done returns prepared object
      */
-    api.replyOld = function (obj, view) {
+    api.reply = function (obj, view) {
         return react('reply', obj, view);
-    };
-
-    // test case for new compose api
-    api.reply = function (obj, format) {
-        if (!window.new) return api.replyold(obj, format);
-
-        //return react('forward', obj, format);
-        return api.space.add('reply', obj, { format: format }).then(function (space) {
-            var obj;
-            return api.space.get(space.id).then(function (data) {
-                // TODO: from should be wrapped like cc/bcc
-                data.from = [data.from];
-                obj = _.extend({}, data);
-                return api.space.attachments.original(data.id);
-            }).then(function (list) {
-                obj.attachments = list;
-                return obj;
-            });
-        });
     };
 
     /**
@@ -427,6 +411,21 @@ define('io.ox/mail/compose/api', [
             if (_.contains(list, id)) console.log('%c' + 'CONTAINS', 'color: white; background-color: red');
         }).catch(function () {
             console.log('%c' + 'CATCH', 'color: white; background-color: red');
+        });
+    };
+
+    api.spaced = function (type, obj, opt) {
+        return api.space.add(type, obj, opt).then(function (space) {
+            var obj;
+            return api.space.get(space.id).then(function (data) {
+                // TODO: from should be wrapped like cc/bcc
+                data.from = [data.from];
+                obj = _.extend({}, data);
+                return api.space.attachments.original(data.id);
+            }).then(function (list) {
+                obj.attachments = list;
+                return obj;
+            });
         });
     };
 

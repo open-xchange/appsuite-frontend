@@ -99,7 +99,7 @@ define('io.ox/core/attachments/backbone', [
                 var security = model.get('security');
                 if (security && security.authentication) meta.previewUrl += '&decrypt=true&cryptoAuth=' + encodeURIComponent(security.authentication);
                 // non-image files need special format parameter
-                if (!regIsImage.test(model.get('filename'))) meta.previewUrl += '&format=preview_image&session=' + ox.session;
+                if (!regIsImage.test(model.get('filename') || model.get('name'))) meta.previewUrl += '&format=preview_image&session=' + ox.session;
                 def.resolve(meta.previewUrl);
                 model.set('meta', meta);
             }, def.reject);
@@ -136,7 +136,7 @@ define('io.ox/core/attachments/backbone', [
 
         getTitle: function () {
             // attachments from drive may have a sanitized filename
-            return this.get('com.openexchange.file.sanitizedFilename') || this.get('filename');
+            return this.get('com.openexchange.file.sanitizedFilename') || this.get('filename') || this.get('name');
         },
 
         getShortTitle: function (length) {
@@ -148,12 +148,12 @@ define('io.ox/core/attachments/backbone', [
         },
 
         getExtension: function () {
-            var parts = String(this.get('filename') || '').split('.');
+            var parts = String(this.get('filename') || this.get('name') || '').split('.');
             return parts.length === 1 ? '' : parts.pop().toLowerCase();
         },
 
         isFileAttachment: function () {
-            return this.get('disp') === 'attachment' ||
+            return this.get('disp') === 'attachment' || this.get('contentDisposition') === 'ATTACHMENT' ||
                 this.get('disp') === 'inline' && this.get('filename');
         },
 
@@ -176,7 +176,7 @@ define('io.ox/core/attachments/backbone', [
         previewUrl: function (options) {
             options = options || {};
             var supportsDocumentPreview = capabilities.has('document_preview'),
-                filename = this.get('filename'), url;
+                filename = this.get('filename') || this.get('name'), url;
 
             // special handling for psd and tiff; These can only be previewed by MW, not local (on upload)
             if (this.isLocalFile() && filename.match(/psd|tif/)) return null;

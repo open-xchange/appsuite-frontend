@@ -31,12 +31,11 @@ define('io.ox/mail/compose/view', [
     'io.ox/core/tk/dialogs',
     'io.ox/mail/compose/signatures',
     'io.ox/mail/sanitizer',
-    'io.ox/core/attachments/backbone',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send',
     'io.ox/mail/compose/actions/save'
-], function (extensions, Dropdown, ext, composeAPI, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, Attachments, dialogs, signatureUtil, sanitizer, attachmentModel) {
+], function (extensions, Dropdown, ext, composeAPI, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, Attachments, dialogs, signatureUtil, sanitizer) {
 
     'use strict';
 
@@ -575,10 +574,9 @@ define('io.ox/mail/compose/view', [
                     if (mode === 'edit') data.disp_notification_to = !!data.disp_notification_to;
 
                     self.model.set(data);
-
                     var attachmentCollection = self.model.get('attachments');
                     attachmentCollection.reset(_(attachments).map(function (attachment) {
-                        return new attachmentModel.Model(attachment);
+                        return new Attachments.Model(attachment);
                     }));
 
                     var content = window.new ? data.content : attachmentCollection.at(0).get('content'),
@@ -1154,6 +1152,10 @@ define('io.ox/mail/compose/view', [
         }
 
     });
+
+
+    //TODO: switch to new mail compose api
+    window.new = true;
 
     return MailComposeView;
 });

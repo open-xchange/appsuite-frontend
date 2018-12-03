@@ -81,13 +81,15 @@ define('io.ox/mail/compose/model', [
                 attachmentsCollection = c;
             }
 
-            var content = attachmentsCollection.at(0);
-            if (!content || content.get('disp') !== 'inline' || !_.isString(content.get('content'))) {
-                attachmentsCollection.add({
-                    content: '',
-                    content_type: this.getContentType(),
-                    disp: 'inline'
-                }, { at: 0, silent: true });
+            if (!window.new) {
+                var content = attachmentsCollection.at(0);
+                if (!content || content.get('disp') !== 'inline' || !_.isString(content.get('content'))) {
+                    attachmentsCollection.add({
+                        content: '',
+                        content_type: this.getContentType(),
+                        disp: 'inline'
+                    }, { at: 0, silent: true });
+                }
             }
 
             _.mapObject({ contacts_ids: 'contact', infostore_ids: 'file', nested_msgs: 'nested' }, function (v, k) {
@@ -183,7 +185,7 @@ define('io.ox/mail/compose/model', [
 
         setInitialMailContentType: function () {
             if (this.get('editorMode') === 'alternative') {
-                var content_type = this.get('attachments').at(0).get('content_type'),
+                var content_type = window.new ? this.get('content_type') : this.get('attachments').at(0).get('content_type'),
                     ret = 'html';
                 if (content_type === 'text/plain') {
                     ret = 'text';
@@ -193,17 +195,30 @@ define('io.ox/mail/compose/model', [
         },
 
         setMailContentType: function (type) {
-            this.get('attachments').at(0).set('content_type', type, { silent: true });
+            if (window.new) {
+                this.set('content_type', type, { silent: true });
+            } else {
+                this.get('attachments').at(0).set('content_type', type, { silent: true });
+            }
         },
 
         setContent: function (content) {
-            var model = this.get('attachments').at(0);
-            model.set('content', content);
+            if (window.new) {
+                this.set('content', content);
+            } else {
+                var model = this.get('attachments').at(0);
+                model.set('content', content);
+            }
         },
 
         getContent: function () {
-            var content = this.get('attachments').at(0).get('content') || '',
+            var content,
                 mode = this.get('editorMode');
+            if (window.new) {
+                content = this.get('content');
+            } else {
+                content = this.get('attachments').at(0).get('content') || '';
+            }
 
             if (mode === 'text') {
                 content = _.unescapeHTML(content.replace(/<br\s*\/?>/g, '\n'));
@@ -232,7 +247,13 @@ define('io.ox/mail/compose/model', [
             // a model may not be dirty anymore but still needs currenct data for the restore point (happens on autosave/save as draft)
             if (!this.forceNextFailSave && !this.dirty()) return false;
             this.forceNextFailSave = false;
-            var content = this.get('attachments').at(0).get('content');
+            var content;
+            if (window.new) {
+                content = this.get('content');
+            } else {
+                content = this.get('attachments').at(0).get('content');
+            }
+
             // Fails silently if content size is over 512kb
             if (strings.size(content) > 524288) return false;
             this.trigger('needsync');
@@ -269,12 +290,16 @@ define('io.ox/mail/compose/model', [
             var result,
                 attachmentCollection = this.get('attachments'),
                 mailAttachments = attachmentCollection.mailAttachments(),
-                content = attachmentCollection.at(0).get('content');
+                content = window.new ? this.get('content') : attachmentCollection.at(0).get('content');
 
             // fix inline images
             content = mailUtil.fixInlineImages(content);
 
-            attachmentCollection.at(0).set('content', content, { silent: true });
+            if (window.new) {
+                this.set('content', content, { silent: true });
+            } else {
+                attachmentCollection.at(0).set('content', content, { silent: true });
+            }
 
             result = this.pick(
                 'from',

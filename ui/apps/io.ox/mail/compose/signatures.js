@@ -94,7 +94,7 @@ define('io.ox/mail/compose/signatures', [
         // use defaultSignature or reference already used one (edit-case)
         setInitialSignature: function () {
             // TODO: breaks when you open text draft in html mode
-            var content = this.get('attachments').at(0).get('content'),
+            var content = window.new ? this.get('content') : this.get('attachments').at(0).get('content'),
                 signatures = this.get('signatures'), signature, wasDirty = this.dirty();
 
             // when editing a draft we might have a signature
