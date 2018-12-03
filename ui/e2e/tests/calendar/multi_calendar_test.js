@@ -66,6 +66,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     // check in Workweek view
     I.clickToolbar('View');
     I.click('Workweek');
+    I.waitForText('test appointment one', 5, '.workweek');
     I.see('test appointment one', '.workweek .appointment .title');
 
     I.seeNumberOfElements('.workweek .appointment .title', 1);
@@ -90,6 +91,8 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     // check in Workweek view
     I.clickToolbar('View');
     I.click('Workweek');
+    I.waitForText('test appointment one', 5, '.workweek');
+    I.waitForText('test appointment two', 5, '.workweek');
     I.see('test appointment one', '.workweek .appointment .title');
     I.see('test appointment two', '.workweek .appointment .title');
     I.seeNumberOfElements('.workweek .appointment .title', 2);
@@ -158,7 +161,8 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     // check in Week view
     I.clickToolbar('View');
     I.click('Week');
-
+    I.waitForText('test appointment one', 5, '.week');
+    I.waitForText('test appointment two', 5, '.week');
     I.see('test appointment one', '.weekview-container.week .appointment .title');
     I.see('test appointment two', '.weekview-container.week .appointment .title');
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 2);
@@ -223,11 +227,11 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.click('Create', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
-    I.waitForDetached('.io-ox-calendar-edit-window', 5);
-
     // check in Month view
     I.clickToolbar('View');
     I.click('Month');
+    I.waitForText('test appointment one', 5, '.month-container');
+    I.waitForText('test appointment two', 5, '.month-container');
     I.see('test appointment one', '.month-container .appointment .title');
     I.see('test appointment two', '.month-container .appointment .title');
     I.seeNumberOfElements('.month-container .appointment .title', 2);
@@ -295,6 +299,8 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     // check in Day view
     I.clickToolbar('View');
     I.click('Day');
+    I.waitForText('test appointment one', 5, '.weekview-container');
+    I.waitForText('test appointment two', 5, '.weekview-container');
 
     I.see('test appointment one', '.weekview-container.day .appointment .title');
     I.see('test appointment two', '.weekview-container.day .appointment .title');

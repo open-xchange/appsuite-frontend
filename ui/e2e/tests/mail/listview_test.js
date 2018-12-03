@@ -58,11 +58,13 @@ Scenario('remove mail from thread', async (I, users) => {
     I.waitForText('Sent objects', 5, '.folder-node');
 
     I.selectFolder('Sent objects');
-    I.waitForElement('.list-view .selectable');
-    I.click('Test subject', '.subject');
+    I.waitForText('Test subject', 5, '.subject');
+    I.click('.list-item[aria-label*="Test subject"]');
 
     I.click('Reply');
     I.waitForInvisible('.window-blocker.io-ox-busy');
+    I.wait(1);
+
     I.click('Send');
     // wait a little for everything to be sent
     I.wait(1);
@@ -70,8 +72,8 @@ Scenario('remove mail from thread', async (I, users) => {
     I.logout();
     I.login();
 
-    I.waitForText('Test subject');
-    I.click('Test subject', '.subject');
+    I.waitForText('Test subject', 5, '.subject');
+    I.click('.list-item[aria-label*="Test subject"]');
     // wait for 2 mails rendered in thread list
     I.waitForFunction(() => window.$('.mail-detail').length === 2);
 
