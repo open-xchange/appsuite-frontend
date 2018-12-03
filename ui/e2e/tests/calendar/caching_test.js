@@ -29,10 +29,9 @@ Scenario('Create never ending appointment and check display in several views', a
     I.clickToolbar('View');
     I.click('Week');
     I.waitForVisible('.weekview-container.week button.weekday.today');
-
-    I.click('.weekview-container.week button[title="Next Week"]');
+    I.click('~Next Week', '.weekview-container.week');
     I.dontSeeElement('.weekview-container.week button.weekday.today');
-    I.click('.weekview-container.week button[title="Previous Week"]');
+    I.click('~Previous Week', '.weekview-container.week');
     I.waitForVisible('.weekview-container.week button.weekday.today');
 
     // toggle months to activate caching
@@ -41,12 +40,12 @@ Scenario('Create never ending appointment and check display in several views', a
     I.waitForVisible('.monthview-container td.day.today');
 
     // just skip 2 months, because "today" might still be visible in the "next" month
-    I.click('.monthview-container button[title="Next Month"]');
-    I.click('.monthview-container button[title="Next Month"]');
+    I.click('~Next Month', '.monthview-container');
+    I.click('~Next Month', '.monthview-container');
     I.dontSeeElement('.monthview-container td.day.today:not(.out)');
 
-    I.click('.monthview-container button[title="Previous Month"]');
-    I.click('.monthview-container button[title="Previous Month"]');
+    I.click('~Previous Month', '.monthview-container');
+    I.click('~Previous Month', '.monthview-container');
     I.waitForVisible('.monthview-container td.day.today');
 
     // create in List view
@@ -72,9 +71,8 @@ Scenario('Create never ending appointment and check display in several views', a
     I.click('All day', '.io-ox-calendar-edit-window');
 
     I.click('Repeat', '.io-ox-calendar-edit-window');
-    I.click('.btn.btn-link.summary');
+    I.click('.btn.btn-link.summary'); // Variable so it needs a selector
 
-    I.click('.modal-dialog [name="recurrence_type"]');
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Daily');
 
     I.click('Apply', '.modal-dialog');
@@ -93,13 +91,13 @@ Scenario('Create never ending appointment and check display in several views', a
 
     I.see('test caching', '.weekview-container.week .appointment .title');
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 6);
-    I.click('.weekview-container.week button[title="Next Week"]');
+    I.click('~Next Week', '.weekview-container.week');
     I.wait(2); // Nothing else seems to work here
     I.dontSeeElement('.weekview-container.week button.weekday.today');
 
     I.see('test caching', '.weekview-container.week .appointment .title');
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 7);
-    I.click('.weekview-container.week button[title="Previous Week"]');
+    I.click('~Previous Week', '.weekview-container.week');
     I.waitForVisible('.weekview-container.week button.weekday.today', 5);
     // check in month view
     I.clickToolbar('View');
@@ -111,8 +109,8 @@ Scenario('Create never ending appointment and check display in several views', a
     I.see('test caching', '.monthview-container .day .appointment .title');
 
     // just skip 2 months, because "today" might still be visible in the "next" month
-    I.click('.monthview-container button[title="Next Month"]');
-    I.click('.monthview-container button[title="Next Month"]');
+    I.click('~Next Month', '.monthview-container');
+    I.click('~Next Month', '.monthview-container');
     I.dontSeeElement('.monthview-container td.day.today:not(.out)');
 
     I.see('test caching', '.monthview-container .appointment .title');

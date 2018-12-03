@@ -28,6 +28,7 @@ Scenario('add and remove Inbox widget', async function (I) {
     I.waitForElement('[data-app-name="io.ox/portal"] .header', 20);
     let [oldWidgetId] = await I.grabAttributeFrom('.io-ox-portal-window .widgets li:first-child', 'data-widget-id');
     I.click('Add widget');
+    I.waitForText('Inbox', 5, '.dropdown.open');
     I.click('Inbox', '.dropdown.open');
     I.click('Save', '.io-ox-dialog-popup');
     let [widgetId] = await I.grabAttributeFrom('.io-ox-portal-window .widgets li:first-child', 'data-widget-id');

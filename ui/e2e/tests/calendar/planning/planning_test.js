@@ -30,7 +30,7 @@ Scenario('use planning view opened from edit view', async function (I) {
 
     I.fillField('Subject', 'Planning View Test');
 
-    I.click('.find-free-time button');
+    I.click('Find a free time');
 
     I.waitForVisible('.freetime-view-header');
     I.waitForVisible('.freetime-view-body');
@@ -41,7 +41,7 @@ Scenario('use planning view opened from edit view', async function (I) {
     });
     I.click('.timeline-day:first-child .freetime-hour:nth-child(6)');
 
-    I.click('.modal-footer [data-action="save"]');
+    I.click('Apply changes', '.modal-footer');
 
     I.waitForInvisible('.freetime-view-header');
     I.waitForInvisible('.freetime-view-body');
@@ -71,7 +71,7 @@ Scenario('use planning view as Standalone app', async function (I) {
     I.click('.timeline-day:first-child .freetime-hour:nth-child(6)');
 
     //add a participant
-    I.fillField('.tt-input', 'testdude1@test.test');
+    I.fillField('Add contact/resource', 'testdude1@test.test');
     I.pressKey('Enter');
     I.see('testdude1');
 
@@ -138,7 +138,7 @@ Scenario('create distributionlist from planning view', async function (I) {
     I.waitForVisible('.freetime-view-body');
 
     //add a participant
-    I.fillField('.tt-input', 'testdude1@test.test');
+    I.fillField('Add contact/resource', 'testdude1@test.test');
     I.pressKey('Enter');
     I.see('testdude1');
 
@@ -147,7 +147,7 @@ Scenario('create distributionlist from planning view', async function (I) {
     I.waitForVisible('.io-ox-contacts-distrib-window');
 
     I.fillField('Name', 'Test distribution list');
-    I.click('Create list');
+    I.click('Create list', '.io-ox-contacts-distrib-window');
 
     I.click('.scheduling-app-close');
 

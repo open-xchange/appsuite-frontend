@@ -99,7 +99,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.click('test timezones');
     I.waitForVisible('.io-ox-sidepopup [data-action="edit"]');
     I.click('Edit', '.io-ox-sidepopup');
-    I.waitForVisible('.floating-window-content [data-attribute="startDate"] .timezone')
+    I.waitForVisible('.floating-window-content [data-attribute="startDate"] .timezone');
     I.click('.floating-window-content [data-attribute="startDate"] .timezone');
     I.waitForVisible('.io-ox-dialog-popup [name="startTimezone"]');
     I.selectOption('Start date timezone', '+09:00 JST Asia/Tokyo');

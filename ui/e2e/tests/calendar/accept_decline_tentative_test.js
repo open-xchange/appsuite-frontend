@@ -45,15 +45,15 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.click('4:00 PM');
 
     // add user 1
-    I.fillField('input.add-participant.tt-input', users[1].userdata.primaryEmail);
+    I.fillField('Add contact/resource', users[1].userdata.primaryEmail);
     I.pressKey('Enter');
 
     // add user 2
-    I.fillField('input.add-participant.tt-input', users[2].userdata.primaryEmail);
+    I.fillField('Add contact/resource', users[2].userdata.primaryEmail);
     I.pressKey('Enter');
 
     // add user 3
-    I.fillField('input.add-participant.tt-input', users[3].userdata.primaryEmail);
+    I.fillField('Add contact/resource', users[3].userdata.primaryEmail);
     I.pressKey('Enter');
 
     I.see(users[0].userdata.primaryEmail, '.participant-wrapper');

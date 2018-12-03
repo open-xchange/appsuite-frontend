@@ -20,10 +20,17 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('checks if an auto forward rule is correctly listet after a status update', function (I, users) {
-    let [user] = users;
+Scenario('checks if an auto forward rule is correctly listet after a status update', function (I) {
 
-    I.haveMailFilterRule({'rulename': 'autoforward', 'actioncmds': [{'id': 'redirect', 'to': 'test@tester.com', 'copy': true }], 'active': true, 'flags': ['autoforward'], 'test': {'id': 'true'}});
+    I.haveMailFilterRule({
+        'rulename': 'autoforward',
+        'actioncmds': [
+            { 'id': 'redirect', 'to': 'test@tester.com', 'copy': true }
+        ],
+        'active': true,
+        'flags': ['autoforward'],
+        'test': { 'id': 'true' }
+    });
 
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
@@ -42,7 +49,7 @@ Scenario('checks if an auto forward rule is correctly listet after a status upda
     I.waitForInvisible('.modal-dialog');
 
     I.selectFolder('Filter Rules');
-    I.waitForElement('.io-ox-settings-window .io-ox-mailfilter-settings')
+    I.waitForElement('.io-ox-settings-window .io-ox-mailfilter-settings');
     I.waitForElement('.io-ox-mailfilter-settings .settings-list-item.disabled');
 
     I.logout();
@@ -54,7 +61,7 @@ Scenario('checks if an avacation notice rule is correctly listet after a status 
     I.haveMailFilterRule({
         'active': true,
         'actioncmds': [
-            {'days': '7', 'subject': 'test', 'text': 'test', 'id': 'vacation', 'addresses': [user.userdata.primaryEmail]}
+            { 'days': '7', 'subject': 'test', 'text': 'test', 'id': 'vacation', 'addresses': [user.userdata.primaryEmail] }
         ],
         'test': { 'id': true },
         'flags': ['vacation'],
@@ -78,7 +85,7 @@ Scenario('checks if an avacation notice rule is correctly listet after a status 
     I.waitForInvisible('.modal-dialog');
 
     I.selectFolder('Filter Rules');
-    I.waitForElement('.io-ox-settings-window .io-ox-mailfilter-settings')
+    I.waitForElement('.io-ox-settings-window .io-ox-mailfilter-settings');
     I.waitForElement('.io-ox-mailfilter-settings .settings-list-item.disabled');
 
     I.logout();

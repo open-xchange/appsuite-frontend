@@ -22,7 +22,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-function prepare(user, I, W) {
+function prepare(user, I) {
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
 }
@@ -30,7 +30,7 @@ function prepare(user, I, W) {
 Scenario('User start with no picture', async function (I, users) {
     const W = require('./edit-picture_commands')(I);
     const [user] = users;
-    prepare(user, I, W);
+    prepare(user, I);
 
     // toolbar
     let image = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
@@ -38,9 +38,9 @@ Scenario('User start with no picture', async function (I, users) {
     // edit contact data
     W.myContactData('open');
     W.myContactData('check:empty-state');
-        W.EditPicture('open');
-        W.EditPicture('check:empty-state');
-        W.EditPicture('cancel');
+    W.EditPicture('open');
+    W.EditPicture('check:empty-state');
+    W.EditPicture('cancel');
     W.myContactData('discard');
 
     I.logout();
@@ -51,7 +51,7 @@ Scenario('User can upload and remove a picture', async function (I, users) {
     const W = require('./edit-picture_commands')(I);
     const [user] = users;
 
-    prepare(user, I, W);
+    prepare(user, I);
 
     // user image in toolbar?
     let image1 = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
@@ -59,10 +59,10 @@ Scenario('User can upload and remove a picture', async function (I, users) {
 
     // open and check empty-state
     W.myContactData('open');
-        W.EditPicture('open');
-        W.EditPicture('upload');
-        W.EditPicture('check:not:empty-state');
-        W.EditPicture('ok');
+    W.EditPicture('open');
+    W.EditPicture('upload');
+    W.EditPicture('check:not:empty-state');
+    W.EditPicture('ok');
 
     // picture-uploader
     W.myContactData('check:not:empty-state');
@@ -80,9 +80,9 @@ Scenario('User can upload and remove a picture', async function (I, users) {
 
     // check again
     W.myContactData('open');
-        W.EditPicture('open');
-        W.EditPicture('check:empty-state');
-        W.EditPicture('cancel');
+    W.EditPicture('open');
+    W.EditPicture('check:empty-state');
+    W.EditPicture('cancel');
     W.myContactData('discard');
 
     I.logout();
@@ -92,7 +92,7 @@ Scenario('User can rotate a picture', async function (I, users) {
     const W = require('./edit-picture_commands')(I);
     const [user] = users;
 
-    prepare(user, I, W);
+    prepare(user, I);
 
     // user image in toolbar?
     let image = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
@@ -100,15 +100,15 @@ Scenario('User can rotate a picture', async function (I, users) {
 
     // open and check empty-state
     W.myContactData('open');
-        W.EditPicture('open');
-        W.EditPicture('upload');
-        W.EditPicture('check:not:empty-state');
+    W.EditPicture('open');
+    W.EditPicture('upload');
+    W.EditPicture('check:not:empty-state');
 
     // rotate (portrait to landscape)
     let height = await I.grabAttributeFrom('.cr-image', 'height');
     I.click('[data-action="rotate"]');
     let width = await I.grabAttributeFrom('.cr-image', 'width');
-    expect(height).to.be.equal(width)
+    expect(height).to.be.equal(width);
     W.EditPicture('check:empty-state');
     W.EditPicture('ok');
 

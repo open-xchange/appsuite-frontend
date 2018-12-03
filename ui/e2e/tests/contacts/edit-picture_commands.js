@@ -15,7 +15,7 @@ let assert = require('assert');
 module.exports = function (I) {
 
     // topbar > contact image > my contact data
-    function myContactData (op) {
+    function myContactData(op) {
         switch (op) {
             case 'open':
                 I.click('.contact-picture');
@@ -50,7 +50,7 @@ module.exports = function (I) {
     }
 
     // my contact data > image
-    function EditPicture (op) {
+    function EditPicture(op) {
         switch (op) {
             case 'open':
                 I.click('.contact-picture-upload');

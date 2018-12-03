@@ -65,6 +65,7 @@ Scenario('check actions', async function (I) {
     I.clickToolbar('Delete');
     I.click('Delete', '.modal-footer');
     I.waitForVisible('.summary.empty');
+    I.waitForDetached('.io-ox-dialog-underlay');
 
     I.logout();
 });

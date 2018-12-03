@@ -20,10 +20,17 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('checks if an auto forward rule with copy statement is handled correctly', function (I, users) {
-    let [user] = users;
+Scenario('checks if an auto forward rule with copy statement is handled correctly', function (I) {
 
-    I.haveMailFilterRule({'rulename': 'autoforward', 'actioncmds': [{'id': 'redirect', 'to': 'test@tester.com', 'copy': true }], 'active': true, 'flags': ['autoforward'], 'test': {'id': 'true'}});
+    I.haveMailFilterRule({
+        'rulename': 'autoforward',
+        'actioncmds': [
+            { 'id': 'redirect', 'to': 'test@tester.com', 'copy': true }
+        ],
+        'active': true,
+        'flags': ['autoforward'],
+        'test': { 'id': 'true' }
+    });
 
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
@@ -43,10 +50,18 @@ Scenario('checks if an auto forward rule with copy statement is handled correctl
     I.logout();
 });
 
-Scenario('checks if an auto forward rule with keep statement is handled correctly', function (I, users) {
-    let [user] = users;
+Scenario('checks if an auto forward rule with keep statement is handled correctly', function (I) {
 
-    I.haveMailFilterRule({'rulename': 'autoforward', 'actioncmds': [{'id': 'redirect', 'to': 'test@tester.com'}, {'id': 'keep' }], 'active': true, 'flags': ['autoforward'], 'test': {'id': 'true'}});
+    I.haveMailFilterRule({
+        'rulename': 'autoforward',
+        'actioncmds': [
+            { 'id': 'redirect', 'to': 'test@tester.com' },
+            { 'id': 'keep' }
+        ],
+        'active': true,
+        'flags': ['autoforward'],
+        'test': { 'id': 'true' }
+    });
 
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
@@ -102,8 +117,7 @@ Scenario('checks if an auto forward rule with keep statement is written correctl
     I.logout();
 });
 
-Scenario('checks if an auto forward rule with copy statement is written correctly', function (I, users) {
-    let [user] = users;
+Scenario('checks if an auto forward rule with copy statement is written correctly', function (I) {
 
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
