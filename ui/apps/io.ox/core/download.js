@@ -38,6 +38,7 @@ define('io.ox/core/download', [
     // Note: This does not work for iOS as Safari will show the content of the download in the iframe as a preview
     // for the most known file types like MS Office, pictures, plain text, pdf, etc.!
     function iframe(url) {
+        showAntiVirusPopup();
         url += (url.indexOf('?') === -1 ? '?' : '&') + 'callback=yell';
         $('#tmp').append(
             $('<iframe>', { src: url, 'class': 'hidden download-frame' })
@@ -55,6 +56,7 @@ define('io.ox/core/download', [
                 $('<input type="hidden" name="body" value="">').val(options.body)
             );
 
+        showAntiVirusPopup();
         // except for iOS we use a hidden iframe
         // iOS will open the form in a new window/tab
         if (!_.device('ios')) $('#tmp').append(iframe);
@@ -92,6 +94,21 @@ define('io.ox/core/download', [
         }
     });
 
+    function showAntiVirusPopup(error) {
+        error = {
+            error: 'ALERT! ALERT! TOTALLY DANGEROUS VIRUS FOUND !!!11elf',
+            // categories tbd: threatFound, notScanned
+            category: 'threatFound'
+        };
+        new ModalDialog({
+            title: gt('Anti virus warning'),
+            point: 'io.ox/core/download/antiviruspopup',
+            model: new Backbone.Model(error)
+        })
+        .addButton({ action: 'cancel', label: gt('OK') })
+        .open();
+    }
+
     return {
 
         // publish utility functions for general use
@@ -103,27 +120,13 @@ define('io.ox/core/download', [
             return blankshield.open(url, '_blank');
         },
 
-        showAntiVirusPopup: function (error) {
-            error = {
-                error: 'ALERT! ALERT! TOTALLY DANGEROUS VIRUS FOUND !!!11elf',
-                // categories tbd: threatFound, notScanned
-                category: 'threatFound'
-            };
-            new ModalDialog({
-                title: gt('Anti virus warning'),
-                point: 'io.ox/core/download/antiviruspopup',
-                model: new Backbone.Model(error)
-            })
-            .addButton({ action: 'cancel', label: gt('OK') })
-            .open();
-        },
+        showAntiVirusPopup: showAntiVirusPopup,
 
         // download single file
         file: function (options) {
 
             // on iOS we need a new window, so open this right now
-            var win = _.device('ios') && this.window('blank.html'),
-                self = this;
+            var win = _.device('ios') && this.window('blank.html');
 
             api.get(options).done(function (file) {
                 if (options.version) {
@@ -137,7 +140,7 @@ define('io.ox/core/download', [
                     options.params = (options.params || {});
                     options.params.scan = true;
                 }
-                self.showAntiVirusPopup();
+                showAntiVirusPopup();
 
                 var url = api.getUrl(file, 'download', { params: options.params });
                 if (_.device('ios')) {
