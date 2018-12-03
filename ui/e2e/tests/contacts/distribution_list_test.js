@@ -20,7 +20,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario.skip('Add a distribution list to an existing distribution list', function (I) {
+Scenario('Add a distribution list to an existing distribution list', function (I) {
 
     I.login('app=io.ox/contacts');
     I.waitForVisible('[data-app-name="io.ox/contacts"]', 5);
@@ -28,18 +28,19 @@ Scenario.skip('Add a distribution list to an existing distribution list', functi
     // create new address book
     I.waitForVisible('[data-action="add-subfolder"]', 5);
     I.click('Add new address book');
-    I.waitForVisible('.modal-title', 5);
-    I.fillField(locate('input').withAttr({ placeholder: 'New address book' }), 'test address book');
+    I.waitForVisible('.modal-dialog');
+    I.fillField('New address book', 'test address book');
     I.click('Add');
-    I.waitForDetached('.modal-title', 5);
-
+    I.waitForDetached('.modal-dialog');
     // create distribution list
     I.selectFolder('test address book');
-    I.click('[data-action="create"]');
-    I.waitForVisible('[data-action="io.ox/contacts/actions/distrib"]', 1);
-    I.click('[data-action="io.ox/contacts/actions/distrib"]');
+    I.waitForText('Empty'); // Empty in list view
+    I.waitForText('New');
+    I.click('New');
+    I.wait(0.5);
+    I.click('Add distribution list');
     I.waitForVisible('.io-ox-contacts-distrib-window', 5);
-    I.fillField(locate('input').withAttr({ name: 'display_name' }), 'test distribution list one');
+    I.fillField('Name', 'test distribution list one');
     I.fillField('input.add-participant.tt-input', 'testdude1@test.case');
     I.pressKey('Enter');
     I.fillField('input.add-participant.tt-input', 'testdude2@test.case');
@@ -48,26 +49,26 @@ Scenario.skip('Add a distribution list to an existing distribution list', functi
     I.pressKey('Enter');
     I.fillField('input.add-participant.tt-input', 'testdude4@test.case');
     I.pressKey('Enter');
-    I.click('[data-action="save"]');
+    I.click('Create list');
     I.waitForDetached('.io-ox-contacts-distrib-window', 5);
-
-    I.see('test distribution list one');
+    I.waitForText('test distribution list one', 5, '.vgrid-cell');
 
     // create second list
-    I.click('[data-action="create"]');
-    I.waitForVisible('[data-action="io.ox/contacts/actions/distrib"]', 1);
-    I.click('[data-action="io.ox/contacts/actions/distrib"]');
+    I.click('New');
+    I.wait(0.5);
+    I.click('Add distribution list');
     I.waitForVisible('.io-ox-contacts-distrib-window', 5);
-    I.fillField(locate('input').withAttr({ name: 'display_name' }), 'test distribution list two');
+    I.fillField('Name', 'test distribution list two');
 
     // search in address book for distribution list one
-    I.click('[aria-label="Select contacts"]');
+    I.click('~Select contacts');
     I.waitForVisible('.modal-header input.search-field', 5);
     I.waitForEnabled('.modal-header input.search-field', 5);
     I.fillField('.modal-header input.search-field', 'test distribution list one');
-    I.click(locate('strong').withText('test distribution list one'));
+    I.wait(1);
+    I.pressKey('Enter');
 
-    I.see('4 addresses selected');
+    I.waitForText('4 addresses selected', 5);
     I.see('test distribution list one', 'li.token');
 
     I.click('Select');
@@ -84,7 +85,7 @@ Scenario.skip('Add a distribution list to an existing distribution list', functi
     I.see('testdude4@test.case');
     I.see('testdude5@test.case');
 
-    I.click('[data-action="save"]');
+    I.click('Create list');
     I.waitForDetached('.io-ox-contacts-distrib-window', 5);
 
     I.see('test distribution list two');
