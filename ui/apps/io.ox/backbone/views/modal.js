@@ -104,7 +104,10 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             }
 
             // track focusin
-            $(document).on('focusin', $.proxy(this.keepFocus, this));
+            // keep focus is a prototype function and all listeners will be removed from document with off
+            // make it unique by binding to this
+            this.keepFocus = this.keepFocus.bind(this);
+            $(document).on('focusin', this.keepFocus);
             this.on('dispose', function () {
                 $(document).off('focusin', this.keepFocus);
                 $(window).off('resize', this.scrollToInput);
@@ -304,7 +307,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         },
 
         resume: function () {
-            $(document).on('focusin', $.proxy(this.keepFocus, this));
+            $(document).on('focusin', this.keepFocus);
             this.$el.next().addBack().show();
             // add marker class again(needed by yells for example)
             $(document.body).addClass('modal-open');
