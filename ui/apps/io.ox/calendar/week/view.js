@@ -333,6 +333,8 @@ define('io.ox/calendar/week/view', [
                 this.listenTo(this.model, 'change:mergeView', this.render);
                 this.listenTo(opt.app, 'folders:change', this.onFoldersChange);
             }
+
+            this.listenTo(this.model, 'change:gridSize', this.render);
         },
 
         renderAppointment: function (model) {
