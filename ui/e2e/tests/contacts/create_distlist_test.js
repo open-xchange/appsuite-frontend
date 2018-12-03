@@ -31,7 +31,7 @@ Scenario('adds a unsaved contact', function (I) {
     I.click('Add distribution list');
     I.waitForVisible('.io-ox-contacts-distrib-window');
     I.fillField('Name', 'Testlist');
-    I.fillField('.io-ox-contacts-distrib-window input.add-participant.tt-input', 'test@tester.com');
+    I.fillField('Add contact', 'test@tester.com');
     I.pressKey('Enter');
 
     I.waitForVisible('a.halo-link');
