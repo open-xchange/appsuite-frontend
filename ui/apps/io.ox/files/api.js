@@ -192,7 +192,7 @@ define('io.ox/files/api', [
         },
 
         isEmptyFile: function () {
-            return this.isFile() && !this.get('filename');
+            return this.isFile() && !this.get('filename') && !this.get('name');
         },
 
         getDisplayName: function () {
@@ -200,7 +200,7 @@ define('io.ox/files/api', [
         },
 
         getExtension: function () {
-            var parts = String(this.get('filename') || '').split('.');
+            var parts = String(this.get('filename') || this.get('name') || '').split('.');
             return parts.length === 1 ? '' : parts.pop().toLowerCase();
         },
 
@@ -465,6 +465,10 @@ define('io.ox/files/api', [
     api.getUrl = function (file, type, options) {
 
         options = _.extend({ scaleType: 'contain' }, options);
+
+        if (file.space) {
+            return ox.apiRoot + '/mail/compose/' + file.space + '/attachments/' + file.id + '?session=' + ox.session;
+        }
 
         var url = '/files',
             folder = encodeURIComponent(file.folder_id),

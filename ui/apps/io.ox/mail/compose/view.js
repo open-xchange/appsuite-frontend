@@ -576,7 +576,7 @@ define('io.ox/mail/compose/view', [
                     self.model.set(data);
                     var attachmentCollection = self.model.get('attachments');
                     attachmentCollection.reset(_(attachments).map(function (attachment) {
-                        return new Attachments.Model(attachment);
+                        return new Attachments.Model(_.extend({}, attachment, { group: 'mail', space: self.model.get('id') }));
                     }));
 
                     var content = window.new ? data.content : attachmentCollection.at(0).get('content'),

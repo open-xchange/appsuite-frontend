@@ -1241,6 +1241,10 @@ define('io.ox/mail/api', [
 
             return url;
         }
+
+        if (data.space) {
+            return ox.apiRoot + '/mail/compose/' + data.space + '/attachments/' + data.id + '?session=' + ox.session;
+        }
         // inject filename for more convenient file downloads
         var filename = data.filename ? data.filename.replace(/[\\:/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined,
             // scaling options
