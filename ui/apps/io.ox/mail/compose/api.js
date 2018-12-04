@@ -423,7 +423,7 @@ define('io.ox/mail/compose/api', [
                 obj = _.extend({}, data);
                 return api.space.attachments.original(data.id);
             }).then(function (list) {
-                obj.attachments = list;
+                obj.attachments = (obj.attachments || []).concat(list);
                 return obj;
             });
         });

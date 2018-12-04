@@ -576,10 +576,11 @@ define('io.ox/mail/compose/view', [
                     if (mode === 'edit') data.disp_notification_to = !!data.disp_notification_to;
 
                     self.model.set(data);
+                    // > model > initialized
                     var attachmentCollection = self.model.get('attachments');
-                    attachmentCollection.reset(_(attachments).map(function (attachment) {
-                        return new Attachments.Model(_.extend({}, attachment, { group: 'mail', space: self.model.get('id') }));
-                    }));
+                    // attachmentCollection.reset(_(attachments).map(function (attachment) {
+                    //     return new Attachments.Model(_.extend({}, attachment, { group: 'mail', space: self.model.get('id') }));
+                    // }));
 
                     var content = window.new ? data.content : attachmentCollection.at(0).get('content'),
                         content_type = window.new ? data.contentType : attachmentCollection.at(0).get('content_type');

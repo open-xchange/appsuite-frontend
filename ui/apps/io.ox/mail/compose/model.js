@@ -81,24 +81,6 @@ define('io.ox/mail/compose/model', [
     //             attachmentsCollection = c;
     //         }
 
-    //         if (!window.new) {
-    //             var content = attachmentsCollection.at(0);
-    //             if (!content || content.get('disp') !== 'inline' || !_.isString(content.get('content'))) {
-    //                 attachmentsCollection.add({
-    //                     content: '',
-    //                     content_type: this.getContentType(),
-    //                     disp: 'inline'
-    //                 }, { at: 0, silent: true });
-    //             }
-    //         }
-
-    //         _.mapObject({ contacts_ids: 'contact', infostore_ids: 'file', nested_msgs: 'nested' }, function (v, k) {
-    //             if (self.get(k)) {
-    //                 attachmentsCollection.add(self.get(k).map(function (o) { o.group = v; return o; }), { silent: true });
-    //             }
-    //         });
-
-
     //         // disable auto remove on discard for draft mails
     //         this.set('autoDiscard', this.get('mode') !== 'edit');
 
@@ -393,6 +375,12 @@ define('io.ox/mail/compose/model', [
         initialize: function () {
             this.set('attachments', new AttachmentCollection());
             this.initialized = this.save().then(function (data) {
+                // fix previewUrl
+                var collection = this.get('attachments');
+                collection.space = data.id;
+                collection.reset(_(data.attachments).map(function (attachment) {
+                    return new Attachments.Model(_.extend({}, attachment, { group: 'mail', space: collection.space }));
+                }));
                 // update model and attachments collection
                 this.set(_.omit(data, 'attachments'));
             }.bind(this));
