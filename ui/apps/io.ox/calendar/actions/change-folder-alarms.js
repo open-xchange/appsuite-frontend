@@ -14,10 +14,9 @@
 define('io.ox/calendar/actions/change-folder-alarms', [
     'io.ox/backbone/views/modal',
     'io.ox/backbone/mini-views/alarms',
-    'io.ox/calendar/util',
     'gettext!io.ox/calendar',
-    'less!io.ox/calendar/style'
-], function (ModalDialog, AlarmsView, util, gt) {
+    'io.ox/core/folder/api'
+], function (ModalDialog, AlarmsView, gt, api) {
 
     'use strict';
 
@@ -38,7 +37,7 @@ define('io.ox/calendar/actions/change-folder-alarms', [
             this.$body.append(
                 $('<p>').attr('id', descriptionId).append(
                     //#. %1$s:  is the calendar's name
-                    $.txt(gt('Default reminders for calendar: %1$s', folderData.display_title || folderData.title))
+                    $.txt(gt('Edit default reminders for calendar: %1$s', folderData.display_title || folderData.title))
                 ),
                 $('<fieldset>').append(
                     $('<legend class="confirm-dialog-legend">').text(gt('Default reminder')),
@@ -53,7 +52,13 @@ define('io.ox/calendar/actions/change-folder-alarms', [
         .addAlternativeButton({ action: 'cancel', label: gt('Cancel') })
         .addButton({ action: 'ok', label: gt('Ok'), className: 'btn-primary' })
         .on('ok', function () {
-            console.log('do some funky alarm update stuff here', alarmsviewDate.model.alarms, alarmsviewDateTime.model.alarms);
+            api.update(folderData.id, {
+                // empty object as first parameter is needed to prevent folderData Object from being changed accidentally
+                'com.openexchange.calendar.config': _.extend({}, folderData['com.openexchange.calendar.config'], {
+                    defaultAlarmDate: alarmsviewDate.model.get('alarms'),
+                    defaultAlarmDateTime: alarmsviewDateTime.model.get('alarms')
+                })
+            });
         })
         .open();
     };
