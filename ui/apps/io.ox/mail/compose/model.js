@@ -396,7 +396,7 @@ define('io.ox/mail/compose/model', [
 
     console.log(gt);
 
-    var AttachmentCollection = Backbone.Collection.extend({
+    var AttachmentCollection = Attachments.Collection.extend({
         sync: function (method, model, options) {
             switch (method) {
                 case 'create':
@@ -414,8 +414,7 @@ define('io.ox/mail/compose/model', [
                 default: // nothing
             }
             return model;
-        },
-        getValidModels: $.noop
+        }
     });
 
     var MailModel = Backbone.Model.extend({
