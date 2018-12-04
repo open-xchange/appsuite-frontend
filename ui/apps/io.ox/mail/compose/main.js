@@ -12,15 +12,19 @@
  */
 
 define('io.ox/mail/compose/main', [
+    'io.ox/core/extensions',
     'io.ox/mail/compose/api',
     'io.ox/mail/api',
+    'io.ox/core/api/account',
+    'io.ox/mail/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (composeAPI, mailAPI, settings, gt) {
+], function (ext, composeAPI, mailAPI, accountAPI, mailUtil, settings, gt) {
 
     'use strict';
 
-    var blocked = {};
+    var blocked = {},
+        point = ext.point('io.ox/mail/compose/init');
 
     function keepData(obj) {
         return /(compose|edit)/.test(obj.mode) ||
@@ -28,6 +32,35 @@ define('io.ox/mail/compose/main', [
                /(forward)/.test(obj.mode) && !obj.id ||
                obj.restored;
     }
+
+    point.extend({
+        id: 'default',
+        index: 100,
+        init: function () {
+
+        }
+    }, {
+        id: 'from',
+        index: 200,
+        init: function () {
+            var model = this.model;
+
+            if (model.get('from') && model.get('from').length) return;
+            accountAPI.getPrimaryAddressFromFolder(model.get('folder_id')).then(function (address) {
+                // ensure defaultName is set (bug 56342)
+                settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
+                // custom display names
+                if (settings.get(['customDisplayNames', address[1], 'overwrite'])) {
+                    address[0] = settings.get(['customDisplayNames', address[1], 'name'], '');
+                }
+                if (!settings.get('sendDisplayName', true)) {
+                    address[0] = null;
+                }
+                model.set('from', [address]);
+            });
+        }
+        }
+    });
 
     // multi instance pattern
     function createInstance() {
@@ -112,6 +145,9 @@ define('io.ox/mail/compose/main', [
                         app.config = new MailComposeConfig(data);
                         app.model = new MailComposeModel();
                         app.view = new MailComposeView({ app: app, model: app.model, config: app.config });
+
+                        point.invoke('init', app);
+
                         // TODO can we simplify that?
                         return $.when(app.view.fetchMail(data), app.model.initialized);
                     })
