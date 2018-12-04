@@ -511,14 +511,15 @@ define('io.ox/mail/compose/api', [
             });
         },
         add: function (space, file, type) {
-            console.log('> ATTACHMENTS VCARD: ' + space);
-            return http.POST({
-                url: ox.apiRoot + '/mail/compose/' + space + '/attachments',
-                params: $.extend({}, {
-                    file: file,
-                    contentDisposition: type || 'attachment'
-                })
+            console.log('> ATTACHMENTS: ' + space);
 
+            var formData = new FormData();
+            formData.append('contentDisposition', type || 'attachment');
+            formData.append('file', file);
+
+            return http.UPLOAD({
+                url: ox.apiRoot + '/mail/compose/' + space + '/attachments',
+                data: formData
             });
         },
         get: function (space, attachment) {

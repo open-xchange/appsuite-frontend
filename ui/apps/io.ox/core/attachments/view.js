@@ -234,6 +234,10 @@ define('io.ox/core/attachments/view', [
             'keydown': 'onKeydown'
         },
 
+        initialize: function () {
+            this.listenTo(this.model, 'change:id', this.render);
+        },
+
         lazyload: function (previewUrl) {
             // use defer to make sure this view has already been added to the DOM
             _.defer(function () {

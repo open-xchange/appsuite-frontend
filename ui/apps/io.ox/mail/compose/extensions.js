@@ -13,6 +13,7 @@
 
 define('io.ox/mail/compose/extensions', [
     'io.ox/contacts/api',
+    'io.ox/mail/compose/api',
     'io.ox/mail/sender',
     'io.ox/backbone/mini-views/common',
     'io.ox/backbone/mini-views/dropdown',
@@ -29,10 +30,10 @@ define('io.ox/mail/compose/extensions', [
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/core/extPatterns/links',
-    'settings!io.ox/core',
     'settings!io.ox/contacts',
+    'io.ox/core/attachments/backbone',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, Attachments, yell, mailUtil, settings, gt, links, coreSettings, settingsContacts) {
+], function (contactAPI, composeApi, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, yell, mailUtil, settings, gt, links, settingsContacts, Attachments) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -500,7 +501,7 @@ define('io.ox/mail/compose/extensions', [
         attachmentPreviewList: function (baton) {
             var $el = this;
 
-            var view = baton.attachmentsView = new Attachments.List({
+            var view = baton.attachmentsView = new AttachmentView.List({
                 point: 'io.ox/mail/compose/attachment/header',
                 collection: baton.model.get('attachments'),
                 editable: true,
@@ -659,11 +660,24 @@ define('io.ox/mail/compose/extensions', [
                     //#. %s is a list of filenames separeted by commas
                     //#. it is used by screenreaders to indicate which files are currently added to the list of attachments
                     self.trigger('aria-live-update', gt('Added %s to attachments.', _(e.target.files).map(function (file) { return file.name; }).join(', ')));
-                    model.attachFiles(
-                        _(e.target.files).map(function (file) {
-                            return _.extend(file, { group: 'localFile' });
-                        })
-                    );
+                    var models = _(e.target.files).map(function (file) {
+                        var m = new Attachments.Model({ uploaded: 0 });
+                        composeApi.space.attachments.add(model.get('id'), file, 'attachment').progress(function (e) {
+                            m.set('uploaded', e.loaded / e.total);
+                        }).then(function success(result) {
+                            var data = result.data;
+                            m.set({
+                                id: data.id,
+                                disp: data.contentDisposition.toLowerCase(),
+                                filename: data.name,
+                                size: data.size
+                            });
+                        }, function fail() {
+                            m.destroy();
+                        });
+                        return m;
+                    });
+                    model.attachFiles(models);
                 }
             }
 
