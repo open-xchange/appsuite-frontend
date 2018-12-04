@@ -59,6 +59,25 @@ define('io.ox/mail/compose/main', [
                 model.set('from', [address]);
             });
         }
+    }, {
+        id: 'displayname',
+        index: 300,
+        init: function () {
+            var model = this.model,
+                config = this.config;
+
+            // TODO: check senderView scenarios
+
+            updateDisplayName();
+            config.on('change:sendDisplayName', updateDisplayName);
+            ox.on('change:customDisplayNames', updateDisplayName);
+
+            // fix current value
+            function updateDisplayName() {
+                var from = model.get('from');
+                if (!from) return;
+                model.set('from', [mailUtil.getSender(from[0], config.get('sendDisplayName'))]);
+            }
         }
     });
 

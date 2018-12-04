@@ -104,11 +104,6 @@ define('io.ox/mail/compose/model', [
 
     //         if (!this.get('signatures')) this.set('signatures', this.getSignatures());
 
-    //         // update from when custom displayname changes
-    //         this.updateDisplayName();
-    //         this.on('change:sendDisplayName', this.updateDisplayName);
-    //         ox.on('change:customDisplayNames', this.updateDisplayName.bind(this));
-
     //         this.updateShadow();
     //     },
 
@@ -122,13 +117,6 @@ define('io.ox/mail/compose/model', [
     //         var ret = _.clone(this.toJSON());
     //         ret.attachments = _.clone(this.attributes.attachments.toJSON());
     //         return ret;
-    //     },
-
-    //     updateDisplayName: function () {
-    //         // fix current value
-    //         var from = this.get('from');
-    //         if (!from) return;
-    //         this.set('from', [mailUtil.getSender(from[0], this.get('sendDisplayName'))]);
     //     },
 
     //     updateShadow: function () {

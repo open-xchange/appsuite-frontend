@@ -60,14 +60,14 @@ define('io.ox/mail/compose/extensions', [
         initialize: function (options) {
             this.config = options.config;
             this.dropdown = new Dropdown({
-                model: this.model,
+                model: this.config,
                 label: this.getItemNode.bind(this),
                 aria: gt('From'),
                 caret: true
             });
 
             this.listenTo(this.model, 'change:from', this.renderDropdown);
-            this.listenTo(this.model, 'change:sendDisplayName', function (model, value) {
+            this.listenTo(this.config, 'change:sendDisplayName', function (model, value) {
                 settings.set('sendDisplayName', value);
             });
         },
@@ -112,7 +112,7 @@ define('io.ox/mail/compose/extensions', [
             var sortedAddresses = _(this.list.sortedAddresses)
                 .chain()
                 .map(function (address) {
-                    var array = mailUtil.getSender(address.option, self.model.get('sendDisplayName'));
+                    var array = mailUtil.getSender(address.option, self.config.get('sendDisplayName'));
                     return { key: _(array).compact().join(' ').toLowerCase(), array: array };
                 })
                 .sortBy('key')
@@ -220,13 +220,13 @@ define('io.ox/mail/compose/extensions', [
 
         senderRealName: function (baton) {
             var fields = this,
-                model = baton.model;
+                config = baton.config;
 
             function toggleVisibility() {
-                fields.toggleClass('no-realname', !model.get('sendDisplayName'));
+                fields.toggleClass('no-realname', !config.get('sendDisplayName'));
             }
 
-            model.on('change:sendDisplayName', toggleVisibility);
+            config.on('change:sendDisplayName', toggleVisibility);
             toggleVisibility();
 
             this.append(
