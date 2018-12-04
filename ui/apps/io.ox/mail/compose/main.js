@@ -168,7 +168,7 @@ define('io.ox/mail/compose/main', [
                         point.invoke('init', app);
 
                         // TODO can we simplify that?
-                        return $.when(app.view.fetchMail(data), app.model.initialized);
+                        return $.when(/*app.view.fetchMail(data), */app.model.initialized);
                     })
                     .then(function () {
                         win.nodes.main.addClass('scrollable').append(app.view.render().$el);
