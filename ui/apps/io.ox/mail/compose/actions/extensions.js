@@ -23,33 +23,30 @@ define('io.ox/mail/compose/actions/extensions', [
     var api = {};
 
     api.emptyAttachmentCheck = function (baton) {
-        return attachmentEmpty.emptinessCheck(baton.mail.files).then(_.identity, function () {
+        // TOOD: rewrite to match collection
+        return attachmentEmpty.emptinessCheck(baton.model.get('attachments').toJSON()).then(_.identity, function () {
             baton.stopPropagation();
             throw arguments;
         });
     };
 
-    api.waitForPendingImages = function (baton) {
+    api.waitForPendingImages = function () {
         if (!window.tinymce || !window.tinymce.activeEditor || !window.tinymce.activeEditor.plugins.oximage) return $.when();
 
         var ids = $('img[data-pending="true"]', window.tinymce.activeEditor.getElement()).map(function () {
                 return $(this).attr('data-id');
             }),
             deferreds = window.tinymce.activeEditor.plugins.oximage.getPendingDeferreds(ids);
-
-        return $.when.apply($, deferreds).then(function () {
-            // use actual content since the image urls could have changed
-            baton.mail.attachments[0].content = baton.model.getMail().attachments[0].content;
-        });
+        //TODO apply within collection
+        return $.when.apply($, deferreds);
     };
 
     api.publishMailAttachments = function (baton) {
-        return attachmentQuota.publishMailAttachmentsNotification(baton.mail.files);
+        return attachmentQuota.publishMailAttachmentsNotification(baton.model.get('attachments').toJSON());
     };
 
     api.attachmentMissingCheck = function (baton) {
-
-        if (baton.mail.files || baton.mail.infostore_ids || (baton.mail.attachments && baton.mail.attachments.length > 1)) return;
+        if (baton.model.get('attachments').length > 1) return;
 
         // Native language via gt
         //#. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.

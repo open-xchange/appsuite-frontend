@@ -390,6 +390,10 @@ define('io.ox/mail/compose/model', [
             return this.get('content');
         },
 
+        send: function () {
+            return composeAPI.space.send(this.get('id'), this.toJSON());
+        },
+
         sync: function (method, model, options) {
             var meta = model.get('meta');
             switch (method) {

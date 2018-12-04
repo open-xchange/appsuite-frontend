@@ -848,11 +848,10 @@ define('io.ox/mail/compose/view', [
             }
             // make sure the tokenfields have created all tokens and updated the to cc, bcc attributes
             this.trigger('updateTokens');
-            var mail = this.model.getMail(),
-                view = this,
+            var view = this,
                 baton = new ext.Baton({
-                    mail: mail,
                     model: this.model,
+                    config: this.config,
                     app: this.app,
                     view: view
                 }),
@@ -860,12 +859,12 @@ define('io.ox/mail/compose/view', [
                 point = ext.point('io.ox/mail/compose/actions/send');
 
             // don't ask wether the app can be closed if we have unsaved data, we just want to send
-            baton.model.set('autoDismiss', true);
+            baton.config.set('autoDismiss', true);
 
             win.busy();
             return extensionCascade(point, baton).then(function () {
                 // a check/user intaction aborted the flow or app is re-opened after a request error; we want to be asked before any unsaved data is discarded again
-                if (baton.rejected || baton.error) baton.model.set('autoDismiss', false);
+                if (baton.rejected || baton.error) baton.config.set('autoDismiss', false);
             }).always(win.idle.bind(win));
         },
 

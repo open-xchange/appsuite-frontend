@@ -44,8 +44,8 @@ define('io.ox/mail/compose/actions/send', [
             index: 200,
             perform: function (baton) {
                 // force correct content-type
-                if (baton.mail.attachments[0].content_type === 'text/plain' && baton.model.get('editorMode') === 'html') {
-                    baton.mail.attachments[0].content_type = 'text/html';
+                if (baton.model.get('contentType') === 'text/plain' && baton.config.get('editorMode') === 'html') {
+                    baton.model.set('contentType', 'text/html', { silent: true });
                 }
             }
         },
@@ -54,49 +54,49 @@ define('io.ox/mail/compose/actions/send', [
             index: 300,
             perform: function (baton) {
                 // ask for empty to,cc,bcc and/or empty subject
-                var noRecipient = _.isEmpty(baton.mail.to) && _.isEmpty(baton.mail.cc) && _.isEmpty(baton.mail.bcc);
-                if (noRecipient) {
-                    notifications.yell('error', gt('Mail has no recipient.'));
-                    baton.view.$el.find('.tokenfield:first .token-input').focus();
-                    baton.stopPropagation();
-                    return $.Deferred().reject();
-                }
+                var noRecipient = _.isEmpty(baton.model.get('to')) && _.isEmpty(baton.model.get('cc')) && _.isEmpty(baton.model.get('bcc'));
+                if (!noRecipient) return;
+                notifications.yell('error', gt('Mail has no recipient.'));
+                baton.view.$el.find('.tokenfield:first .token-input').focus();
+                baton.stopPropagation();
+                return $.Deferred().reject();
             }
         },
         {
             id: 'check:no-subject',
             index: 400,
             perform: function (baton) {
-                if ($.trim(baton.mail.subject) === '') {
-                    var def = $.Deferred();
-                    // show dialog
-                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        new dialogs.ModalDialog({ focus: false })
-                        .text(gt('Mail has empty subject. Send it anyway?'))
-                        .addPrimaryButton('send', gt('Yes, send without subject'), 'send')
-                        .addButton('subject', gt('Add subject'), 'subject')
-                        .show(function () {
-                            def.notify('empty subject');
-                        })
-                        .done(function (action) {
-                            if (action !== 'send') {
-                                this.remove();
-                                baton.view.$el.find('input[name="subject"]').focus();
-                                baton.stopPropagation();
-                                def.reject();
-                            } else {
-                                def.resolve();
-                            }
-                        });
+                if ($.trim(baton.model.get('subject')) !== '') return;
+
+                var def = $.Deferred();
+                // show dialog
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog({ focus: false })
+                    .text(gt('Mail has empty subject. Send it anyway?'))
+                    .addPrimaryButton('send', gt('Yes, send without subject'), 'send')
+                    .addButton('subject', gt('Add subject'), 'subject')
+                    .show(function () {
+                        def.notify('empty subject');
+                    })
+                    .done(function (action) {
+                        if (action !== 'send') {
+                            this.remove();
+                            baton.view.$el.find('input[name="subject"]').focus();
+                            baton.stopPropagation();
+                            def.reject();
+                        } else {
+                            def.resolve();
+                        }
                     });
-                    return def;
-                }
+                });
+                return def;
             }
         },
         {
             id: 'image-resize',
             index: 450,
             perform: function (baton) {
+                // TODO: ask Björn
                 var def = $.Deferred(),
                     win = baton.app.getWindow();
                 if (!settings.get('features/imageResize/enabled', true)) return def.resolve();
@@ -131,7 +131,8 @@ define('io.ox/mail/compose/actions/send', [
             id: 'busy:start',
             index: 700,
             perform: function (baton) {
-                baton.view.blockReuse(baton.mail.sendtype);
+                // TODO: fix
+                //baton.view.blockReuse(baton.mail.sendtype);
 
                 var win = baton.app.getWindow();
                 // start being busy
@@ -143,15 +144,15 @@ define('io.ox/mail/compose/actions/send', [
             }
         },
         // Placeholder for Guard delay send for key check at index 750
-        {
-            id: 'fix-draft-sendtype',
-            index: 800,
-            perform: function (baton) {
-                if (baton.mail.sendtype === composeAPI.SENDTYPE.EDIT_DRAFT) {
-                    baton.mail.sendtype = composeAPI.SENDTYPE.DRAFT;
-                }
-            }
-        },
+        // {
+        //     id: 'fix-draft-sendtype',
+        //     index: 800,
+        //     perform: function (baton) {
+        //         if (baton.mail.sendtype === composeAPI.SENDTYPE.EDIT_DRAFT) {
+        //             baton.mail.sendtype = composeAPI.SENDTYPE.DRAFT;
+        //         }
+        //     }
+        // },
         {
             id: 'wait-for-pending-images',
             index: 900,
@@ -171,7 +172,8 @@ define('io.ox/mail/compose/actions/send', [
             id: 'send',
             index: 1000,
             perform: function (baton) {
-                return composeAPI.send(baton.mail, baton.mail.files);
+                return baton.model.send();
+                //return composeAPI.send(baton.mail, baton.mail.files);
             }
         },
         {
