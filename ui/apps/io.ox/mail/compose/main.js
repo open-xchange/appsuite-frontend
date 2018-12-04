@@ -105,13 +105,15 @@ define('io.ox/mail/compose/main', [
                         else latestMail.forEach(function (m, i) { m.security = obj[i].security; });
 
                         obj = _.extend({ mode: type }, latestMail);
-                        return require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model']);
+                        return require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model', 'io.ox/mail/compose/config']);
                     })
-                    .then(function (MailComposeView, MailComposeModel) {
+                    .then(function (MailComposeView, MailComposeModel, MailComposeConfig) {
                         var data = keepData(obj) ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type', 'security');
-                        app.model = new MailComposeModel(data);
-                        app.view = new MailComposeView({ app: app, model: app.model });
-                        return app.view.fetchMail(data);
+                        app.config = new MailComposeConfig(data);
+                        app.model = new MailComposeModel();
+                        app.view = new MailComposeView({ app: app, model: app.model, config: app.config });
+                        // TODO can we simplify that?
+                        return $.when(app.view.fetchMail(data), app.model.initialized);
                     })
                     .then(function () {
                         win.nodes.main.addClass('scrollable').append(app.view.render().$el);
@@ -150,6 +152,7 @@ define('io.ox/mail/compose/main', [
             if (app.view) return app.view.discard();
         });
 
+        // TODO what is the benefit of this?
         app.compose = compose('compose');
         app.forward = compose('forward');
         app.reply = compose('reply');
