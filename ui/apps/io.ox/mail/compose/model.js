@@ -392,9 +392,9 @@ define('io.ox/mail/compose/model', [
 
         initialize: function () {
             this.set('attachments', new AttachmentCollection());
-            this.initialized = this.save().then(function () {
-                this.get('attachments').space = this.get('id');
-
+            this.initialized = this.save().then(function (data) {
+                // update model and attachments collection
+                this.set(_.omit(data, 'attachments'));
             }.bind(this));
         },
 
@@ -403,8 +403,9 @@ define('io.ox/mail/compose/model', [
         },
 
         sync: function (method, model, options) {
+            var meta = model.get('meta');
             switch (method) {
-                case 'create': return composeAPI.space.add(model.get('type'), model.toJSON(), { vcard: settings.get('appendVcard', false) }).then(options.success, options.error);
+                case 'create': return composeAPI.spaced(meta.type, meta, { vcard: settings.get('appendVcard', false) });//.then(options.success, options.error);
                 case 'read': return composeAPI.space.get(model.get('id')).then(options.success, options.error);
                 case 'update': return composeAPI.space.update(model.get('id'), model.toJSON()).then(options.success, options.error);
                 case 'delete': return composeAPI.space.remove(model.get('id')).then(options.success, options.error);

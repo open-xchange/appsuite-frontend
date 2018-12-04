@@ -162,7 +162,7 @@ define('io.ox/mail/compose/main', [
                     .then(function (MailComposeView, MailComposeModel, MailComposeConfig) {
                         var data = keepData(obj) ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type', 'security');
                         app.config = new MailComposeConfig(data);
-                        app.model = new MailComposeModel();
+                        app.model = new MailComposeModel({ meta: { type: obj.mode, originalFolderId: data.folder_id, originalId: data.id } });
                         app.view = new MailComposeView({ app: app, model: app.model, config: app.config });
 
                         point.invoke('init', app);

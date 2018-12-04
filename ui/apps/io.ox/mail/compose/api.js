@@ -440,8 +440,8 @@ define('io.ox/mail/compose/api', [
                 module: 'mail/compose',
                 params: $.extend({}, {
                     type: type,
-                    id: obj.id,
-                    folderId: obj.folder_id || obj.folder,
+                    id: obj.originalId || obj.id,
+                    folderId: obj.originalFolderId || obj.folder_id,
                     vcard: opt.vcard
                 })
             });
