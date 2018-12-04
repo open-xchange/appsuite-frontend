@@ -585,12 +585,15 @@ define('io.ox/mail/compose/extensions', [
                 list = view.collection.filter(function (a) {
                     return a.get('disp') === 'attachment';
                 })
-                .map(function (a) {
-                    var obj = a.toJSON();
+
+                .map(function (model) {
+                    var obj = model.toJSON();
+                    // map name attibute for composition space attachments
+                    obj.filename = obj.filename || obj.name;
                     if (obj.group === 'localFile') {
-                        obj.fileObj = a.fileObj;
+                        obj.fileObj = model.fileObj;
                         // generate pseudo id so multiple localFile attachments do not overwrite themselves in the Viewer collection
-                        obj.id = 'localFileAttachment-' + a.cid;
+                        obj.id = 'localFileAttachment-' + model.cid;
                     }
                     return obj;
                 });

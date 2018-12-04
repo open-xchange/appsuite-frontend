@@ -192,7 +192,7 @@ define('io.ox/files/api', [
         },
 
         isEmptyFile: function () {
-            return this.isFile() && !this.get('filename') && !this.get('name');
+            return this.isFile() && !this.get('filename');
         },
 
         getDisplayName: function () {
@@ -200,7 +200,7 @@ define('io.ox/files/api', [
         },
 
         getExtension: function () {
-            var parts = String(this.get('filename') || this.get('name') || '').split('.');
+            var parts = String(this.get('filename') || '').split('.');
             return parts.length === 1 ? '' : parts.pop().toLowerCase();
         },
 
