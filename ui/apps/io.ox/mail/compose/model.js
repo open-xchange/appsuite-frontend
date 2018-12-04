@@ -418,6 +418,11 @@ define('io.ox/mail/compose/model', [
     });
 
     var MailModel = Backbone.Model.extend({
+
+        defaults: {
+            content: ''
+        },
+
         initialize: function () {
             this.set('attachments', new AttachmentCollection());
             this.initialized = this.save().then(function () {
@@ -425,6 +430,11 @@ define('io.ox/mail/compose/model', [
 
             }.bind(this));
         },
+
+        getContent: function () {
+            return this.get('content');
+        },
+
         sync: function (method, model, options) {
             switch (method) {
                 case 'create': return composeAPI.space.add(model.get('type'), model.toJSON(), { vcard: settings.get('appendVcard', false) }).then(options.success, options.error);
@@ -435,6 +445,7 @@ define('io.ox/mail/compose/model', [
             }
             return model;
         },
+
         toJSON: function () {
             var data = Backbone.Model.prototype.toJSON.call(this);
             data.attachments = this.get('attachments').toJSON();
@@ -442,6 +453,10 @@ define('io.ox/mail/compose/model', [
         },
         keepDraftOnClose: $.noop,
         initializeSignatures: $.noop,
+        setInitialSignature: $.noop,
+        setMailContentType: $.noop,
+        setAutoBCC: $.noop,
+        dirty: $.noop,
         setInitialMailContentType: $.noop
     });
 
