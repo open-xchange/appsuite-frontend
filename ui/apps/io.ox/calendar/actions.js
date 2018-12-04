@@ -166,8 +166,10 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/changeAlarms', {
         requires: function (e) {
             function cont(model, folderData) {
-                // folder must support alarms. We don't show the action if the attendee flag is present (change status is shown instead). We only offer this for the birthday calendar for now
-                return e.collection.has('one') && !(util.hasFlag(model, 'attendee') || util.hasFlag(model, 'attendee_on_behalf')) && folderData['com.openexchange.calendar.provider'] === 'birthdays' && folderData.supported_capabilities.indexOf('alarms') !== -1;
+                // folder must support alarms. We don't show the action if attendee or organizer flag is present (change status is shown instead)
+                return e.collection.has('one') &&
+                    !(util.hasFlag(model, 'attendee') || util.hasFlag(model, 'attendee_on_behalf') || util.hasFlag(model, 'organizer') || util.hasFlag(model, 'organizer_on_behalf')) &&
+                    folderData.supported_capabilities.indexOf('alarms') !== -1;
             }
 
             var model = e.baton.model,
