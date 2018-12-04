@@ -98,13 +98,6 @@ define('io.ox/mail/compose/model', [
     //             }
     //         });
 
-    //         // special case #1: 'alternative'
-    //         if (this.get('preferredEditorMode') === 'alternative') {
-    //             this.set('editorMode', 'html', { silent: true });
-    //             if (this.get('content_type') === 'text/plain') {
-    //                 this.set('editorMode', 'text', { silent: true });
-    //             }
-    //         }
     //         if (!this.get('from') || this.get('from').length === 0) {
     //             accountAPI.getPrimaryAddressFromFolder(this.get('folder_id')).then(function (address) {
     //                 // ensure defaultName is set (bug 56342)

@@ -385,8 +385,8 @@ define('io.ox/mail/compose/view', [
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
 
             this.listenTo(this.model, 'keyup:subject change:subject', this.setTitle);
-            this.listenTo(this.model, 'change:editorMode', this.toggleEditorMode);
             this.listenTo(this.model, 'needsync', this.syncMail);
+            this.listenTo(this.config, 'change:editorMode', this.toggleEditorMode);
             // handler can be found in signatures.js
             this.listenTo(this.model, 'change:signatureId', this.setSignature);
             this.listenTo(this.model, 'change:signatures', this.updateSignatures);
@@ -922,7 +922,7 @@ define('io.ox/mail/compose/view', [
             options.view = this;
             options.model = this.model;
             options.oxContext = { view: this };
-            ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + this.model.get('editorMode')).then(function (Editor) {
+            ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + this.config.get('editorMode')).then(function (Editor) {
                 new Editor(self.editorContainer, options).done(function (editor) {
                     def.resolve(editor);
                 });

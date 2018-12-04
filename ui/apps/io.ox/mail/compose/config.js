@@ -21,7 +21,20 @@ define('io.ox/mail/compose/config', [
     console.log(settings);
 
     return Backbone.Model.extend({
+        defaults: {
+            preferredEditorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
+            editorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html')
+        },
 
+        initialize: function () {
+            // map 'alternative' to editor
+            if (this.get('preferredEditorMode') === 'alternative') {
+                this.set('editorMode', 'html', { silent: true });
+                if (this.get('content_type') === 'text/plain') {
+                    this.set('editorMode', 'text', { silent: true });
+                }
+            }
+        }
     });
 
 });
