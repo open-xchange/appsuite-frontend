@@ -23,7 +23,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'gettext!io.ox/mail',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/mini-views/settings-list-view',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'settings!io.ox/mail',
     'io.ox/mail/mailfilter/settings/filter/defaults',
     'static/3rd.party/jquery-ui.min.js',

@@ -56,12 +56,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
                     };
                 }
 
-                // do not use listen to here, does not work with dom events, see http://stackoverflow.com/questions/14460855/
-                $(window).on('resize', $.proxy(this.computeWidth, this));
-
-                this.on('dispose', function () {
-                    $(window).off('resize', this.computeWidth);
-                });
+                this.listenToDOM(window, 'resize', this.computeWidth);
             }
         },
 

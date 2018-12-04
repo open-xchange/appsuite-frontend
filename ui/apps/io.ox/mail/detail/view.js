@@ -12,7 +12,7 @@
  */
 
 define('io.ox/mail/detail/view', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/mail/common-extensions',
     'io.ox/core/extensions',
     'io.ox/mail/api',

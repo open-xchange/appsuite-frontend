@@ -12,7 +12,7 @@
  */
 
 define('io.ox/calendar/freetime/timeView', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/extensions',
     'gettext!io.ox/calendar',
     'io.ox/calendar/api',
@@ -476,10 +476,7 @@ define('io.ox/calendar/freetime/timeView', [
             }
             this.updateVisibility();
 
-            $(window).on('resize', this.onResize);
-            this.on('dispose', function () {
-                $(window).off('resize', this.onResize);
-            });
+            this.listenToDOM(window, 'resize', this.onResize);
         },
 
         updateZoom: function () {

@@ -17,7 +17,7 @@ define('io.ox/settings/security/sessions/settings/pane', [
     'gettext!io.ox/core',
     'io.ox/core/http',
     'io.ox/backbone/mini-views/settings-list-view',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/backbone/mini-views/listutils',
     'settings!io.ox/core',
     'less!io.ox/settings/security/sessions/settings/style'

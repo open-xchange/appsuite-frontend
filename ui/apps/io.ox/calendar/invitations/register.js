@@ -12,7 +12,7 @@
  */
 
 define('io.ox/calendar/invitations/register', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/extensions',
     'io.ox/core/http',
     'io.ox/calendar/model',

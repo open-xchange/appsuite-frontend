@@ -10,7 +10,7 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 define('io.ox/core/viewer/views/document/thumbnailview', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/capabilities',
     'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/viewer/util'
@@ -34,8 +34,6 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             this.listenTo(this.viewerEvents, 'viewer:sidebar:scroll', this.refreshThumbnails);
             // listen to window resize
             this.listenTo(this.viewerEvents, 'viewer:resize', this.refreshThumbnails);
-            // dispose view on global dispose
-            this.on('dispose', this.disposeView.bind(this));
             this.thumbnailLoadDef = Util.createAbortableDeferred($.noop);
             this.thumbnailImages = [];
         },
@@ -215,7 +213,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             }.bind(this));
         },
 
-        disposeView: function () {
+        onDispose: function () {
             var def = this.thumbnailLoadDef;
             // cancel any pending thumbnail loading
             if (def.state() === 'pending') {

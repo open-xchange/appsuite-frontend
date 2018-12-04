@@ -225,7 +225,6 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             this.setPanelHeader(gt('Details'));
             // attach event handlers
             this.listenTo(this.model, 'change:cid change:filename change:title change:com.openexchange.file.sanitizedFilename change:file_size change:last_modified change:folder_id change:object_permissions change:permissions', this.render);
-            this.on('dispose', this.disposeView.bind(this));
         },
 
         render: function () {
@@ -249,7 +248,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         /**
          * Destructor function of this view.
          */
-        disposeView: function () {
+        onDispose: function () {
             if (this.model) this.model = null;
         }
 

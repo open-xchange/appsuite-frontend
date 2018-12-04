@@ -17,7 +17,7 @@ define('io.ox/settings/security/certificates/settings/certificate-view', [
     'io.ox/core/manifests',
     'io.ox/core/upsell',
     'gettext!io.ox/settings/certificates',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/api/certificate',
     'io.ox/core/api/account',
     'less!io.ox/settings/security/certificates/settings/style'

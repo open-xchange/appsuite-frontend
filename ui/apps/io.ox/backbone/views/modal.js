@@ -100,18 +100,14 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             if (_.device('smartphone') && options.smartphoneInputFocus) {
                 // make sure scrolling actually works
                 this.$el.find('.modal-content').css('overflow-y', 'auto');
-                $(window).on('resize', this.scrollToInput);
+                this.listenToDOM(window, 'resize', this.scrollToInput);
             }
 
             // track focusin
             // keep focus is a prototype function and all listeners will be removed from document with off
             // make it unique by binding to this
             this.keepFocus = this.keepFocus.bind(this);
-            $(document).on('focusin', this.keepFocus);
-            this.on('dispose', function () {
-                $(document).off('focusin', this.keepFocus);
-                $(window).off('resize', this.scrollToInput);
-            });
+            this.listenToDOM(document, 'focusin', this.keepFocus);
         },
 
         scrollToInput: function () {

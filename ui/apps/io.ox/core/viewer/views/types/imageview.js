@@ -34,9 +34,6 @@ define('io.ox/core/viewer/views/types/imageview', [
 
         initialize: function () {
             this.isPrefetched = false;
-
-            // call view destroyer on viewer global dispose event
-            this.on('dispose', this.disposeView.bind(this));
         },
 
         /**
@@ -199,7 +196,7 @@ define('io.ox/core/viewer/views/types/imageview', [
         /**
          * Destructor function of this view.
          */
-        disposeView: function () {
+        onDispose: function () {
             this.unload();
             this.$el.find('img.viewer-displayer-image').off();
             this.$el.off();

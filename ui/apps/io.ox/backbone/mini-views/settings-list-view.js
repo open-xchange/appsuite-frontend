@@ -12,7 +12,7 @@
 */
 
 define('io.ox/backbone/mini-views/settings-list-view', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/backbone/mini-views/listutils',
     'gettext!io.ox/core',
     'less!io.ox/backbone/mini-views/settings-list-view'

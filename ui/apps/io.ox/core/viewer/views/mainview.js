@@ -14,7 +14,7 @@ define('io.ox/core/viewer/views/mainview', [
     'io.ox/core/viewer/views/toolbarview',
     'io.ox/core/viewer/views/displayerview',
     'io.ox/core/viewer/views/sidebarview',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/tk/nodetouch',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
@@ -77,8 +77,6 @@ define('io.ox/core/viewer/views/mainview', [
             }
             // handle DOM events
             $(window).on('resize', this.refreshViewSizes.bind(this));
-            // clean stuff on dispose event from core/commons.js
-            this.on('dispose', this.disposeView.bind(this));
             // display the selected file initially
             var startIndex = this.collection.getStartIndex(),
                 startModel = this.collection.at(startIndex);
@@ -294,7 +292,7 @@ define('io.ox/core/viewer/views/mainview', [
             }
         },
 
-        disposeView: function () {
+        onDispose: function () {
             this.toolbarView.remove();
             this.displayerView.remove();
             this.sidebarView.remove();
@@ -313,7 +311,6 @@ define('io.ox/core/viewer/views/mainview', [
                 this.app.quit();
                 this.app = null;
             }
-            return this;
         }
     });
     return MainView;

@@ -13,7 +13,7 @@
 define('io.ox/core/viewer/views/displayerview', [
     'io.ox/files/api',
     'io.ox/core/viewer/views/types/typesregistry',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/viewer/util',
     'static/3rd.party/swiper.js',
     'static/3rd.party/bigscreen.min.js',
@@ -70,8 +70,6 @@ define('io.ox/core/viewer/views/displayerview', [
 
         initialize: function (options) {
             _.extend(this, options);
-            // run own disposer function at global dispose
-            this.on('dispose', this.disposeView.bind(this));
             // timeout object for the slide caption
             this.captionTimeoutId = null;
             // timeout object for navigation items
@@ -1321,7 +1319,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.loadedSlides = cachedRange;
         },
 
-        disposeView: function () {
+        onDispose: function () {
+
             window.clearTimeout(this.captionTimeoutId);
             window.clearTimeout(this.navigationTimeoutId);
 
@@ -1351,8 +1350,6 @@ define('io.ox/core/viewer/views/displayerview', [
             this.sidebarBeforeFullscreen = null;
             this.fullscreenPromise = null;
             this.fullscreen = null;
-
-            return this;
         }
     });
 

@@ -14,7 +14,7 @@ define('io.ox/core/viewer/views/types/baseview', [
     'io.ox/files/api',
     'io.ox/mail/api',
     'io.ox/core/api/attachment',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/viewer/util',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/extensions',

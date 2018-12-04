@@ -218,8 +218,8 @@ define('io.ox/calendar/year/view', [
             });
 
             this.listenTo(this.model, 'change:year', this.getCallback('onChangeYear'));
-            this.listenTo(ox.dom, 'resize', this.onWindowResize);
             this.listenTo(this.app, 'change:folderview', this.onWindowResize);
+            this.listenToDOM(window, 'resize', this.onWindowResize);
             this.on('show', this.onShow);
 
             PerspectiveView.prototype.initialize.call(this, opt);

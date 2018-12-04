@@ -14,7 +14,7 @@
 
 define('io.ox/files/share/permissions', [
     'io.ox/core/extensions',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/yell',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/dropdown',

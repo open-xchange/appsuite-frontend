@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/tk/list', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/core/tk/list-selection',
     'io.ox/core/tk/list-dnd',
@@ -585,12 +585,10 @@ define('io.ox/core/tk/list', [
 
             if (this.options.pagination) {
                 // respond to window resize (see bug 37728)
-                $(window).on('resize.list-view', this.onScroll.bind(this));
+                // make onScroll unique function first (all instance share same function otherwise)
+                this.onScroll = this.onScroll.bind(this);
+                this.listenToDOM(window, 'resize', this.onScroll);
             }
-
-            this.on('dispose', function () {
-                $(window).off('resize.list-view');
-            });
 
             this.queue = {
 

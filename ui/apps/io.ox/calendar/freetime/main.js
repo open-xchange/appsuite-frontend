@@ -12,7 +12,7 @@
  */
 
 define('io.ox/calendar/freetime/main', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/calendar/freetime/model',
     'io.ox/calendar/freetime/participantsView',
     'io.ox/calendar/freetime/timeView',

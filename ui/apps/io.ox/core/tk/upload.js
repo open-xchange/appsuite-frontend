@@ -46,10 +46,8 @@ define('io.ox/core/tk/upload', [
             }.bind(this));
 
             // overlay toggling based on window/document events
-            this.listenTo(ox.dom, 'dragover', _.partial(this.toggleOverlay, true));
-            this.listenTo(ox.dom, 'dragleave', _.partial(this.toggleOverlay, false));
-            this.listenTo(ox.dom, 'drop', _.partial(this.toggleOverlay, false));
-            this.listenTo(ox.dom, 'mouseout', _.partial(this.toggleOverlay, false));
+            this.listenToDOM(document, 'dragover', this.toggleOverlay.bind(this, true));
+            this.listenToDOM(document, 'dragleave drop mouseout', this.toggleOverlay.bind(this, false));
         },
 
         events: {

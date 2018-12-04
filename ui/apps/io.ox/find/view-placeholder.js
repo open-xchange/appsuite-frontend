@@ -11,7 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/find/view-placeholder', ['io.ox/backbone/disposable'], function (DisposableView) {
+define('io.ox/find/view-placeholder', ['io.ox/backbone/views/disposable'], function (DisposableView) {
 
     'use strict';
 

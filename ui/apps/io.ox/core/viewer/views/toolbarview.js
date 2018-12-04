@@ -13,7 +13,7 @@
 /* global blankshield */
 define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/backbone/mini-views/dropdown',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
@@ -613,8 +613,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             this.listenTo(this.viewerEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
             // listen to autoplay events
             this.listenTo(this.viewerEvents, 'viewer:autoplay:state:changed', this.onAutoplayRunningStateChanged);
-            // run own disposer function at global dispose
-            this.on('dispose', this.disposeView.bind(this));
             // give toolbar a standalone class if its in one
             this.$el.toggleClass('standalone', this.standalone);
             // the current autoplay state
@@ -940,7 +938,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         /**
          * Destructor of this view
          */
-        disposeView: function () {
+        onDispose: function () {
             this.model = null;
         }
 

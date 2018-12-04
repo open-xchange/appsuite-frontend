@@ -74,8 +74,6 @@ define('io.ox/core/viewer/views/types/documentview', [
             this.loadedPageNodes = [];
             // the timer that loads more pages above and below the visible ones
             this.loadMorePagesTimerId = null;
-            // call view destroyer on viewer global dispose event
-            this.on('dispose', this.disposeView.bind(this));
             // bind resize, zoom and close handler
             this.listenTo(this.viewerEvents, 'viewer:resize', this.onResize);
             this.listenTo(this.viewerEvents, 'viewer:zoom:in', _.bind(this.changeZoomLevel, this, 'increase'));
@@ -991,13 +989,13 @@ define('io.ox/core/viewer/views/types/documentview', [
         /**
          * Destructor function of this view.
          */
-        disposeView: function () {
+        onDispose: function () {
             this.unload(true);
             // save disposed status
             this.disposed = true;
             this.$el.off();
             if (this.thumbnailsView) {
-                this.thumbnailsView.disposeView();
+                this.thumbnailsView.onDispose();
             }
         }
 
