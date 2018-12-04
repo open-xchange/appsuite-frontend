@@ -57,7 +57,8 @@ define('io.ox/mail/compose/extensions', [
 
         attributes: { 'data-extension-id': 'sender' },
 
-        initialize: function () {
+        initialize: function (options) {
+            this.config = options.config;
             this.dropdown = new Dropdown({
                 model: this.model,
                 label: this.getItemNode.bind(this),
@@ -213,7 +214,7 @@ define('io.ox/mail/compose/extensions', [
         },
 
         sender: function (baton) {
-            var view = new SenderView({ model: baton.model });
+            var view = new SenderView({ model: baton.model, config: baton.config });
             this.append(view.render().$el);
         },
 

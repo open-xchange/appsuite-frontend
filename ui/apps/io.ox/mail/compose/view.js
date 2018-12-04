@@ -358,6 +358,7 @@ define('io.ox/mail/compose/view', [
         initialize: function (options) {
             _.extend(this, signatureUtil.view, this);
             this.app = options.app;
+            this.config = options.config;
             this.editorHash = {};
             this.autosave = {};
             this.blocked = [];
@@ -376,6 +377,7 @@ define('io.ox/mail/compose/view', [
 
             this.baton = ext.Baton({
                 model: this.model,
+                config: this.config,
                 view: this
             });
 
@@ -916,6 +918,7 @@ define('io.ox/mail/compose/view', [
 
             options.useFixedWithFont = settings.get('useFixedWithFont');
             options.app = this.app;
+            options.config = this.config;
             options.view = this;
             options.model = this.model;
             options.oxContext = { view: this };
