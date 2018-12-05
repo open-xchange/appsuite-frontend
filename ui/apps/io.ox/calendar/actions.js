@@ -373,6 +373,21 @@ define('io.ox/calendar/actions', [
         }
     });
 
+    new Action('io.ox/calendar/detail/actions/change-organizer', {
+        requires: function (e) {
+            if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
+            // we ned at least 2 users
+            if (_(e.baton.data.attendees).reduce(function (users, attendee) { return users + (_(attendee).has('entity') ? 1 : 0); }, 0) < 2) return false;
+            return e.collection.has('modify') && (util.hasFlag(e.baton.data, 'organizer') || util.hasFlag(e.baton.data, 'organizer_on_behalf'));
+        },
+        action: function (baton) {
+            require(['io.ox/calendar/actions/change-organizer'], function (changeOrganizer) {
+                debugger;
+                changeOrganizer.openDialog(baton.data);
+            });
+        }
+    });
+
     new Action('io.ox/calendar/actions/today', {
         requires: function (baton) {
             var p = baton.baton.app.perspective;
@@ -722,6 +737,17 @@ define('io.ox/calendar/actions', [
         sectionDescription: gt('Participant related actions'),
         label: gt('Save as distribution list'),
         ref: 'io.ox/calendar/detail/actions/save-as-distlist'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 1000,
+        prio: 'lo',
+        mobile: 'lo',
+        id: 'change-organizer',
+        section: 'participants',
+        sectionDescription: gt('Participant related actions'),
+        label: gt('Change organizer'),
+        ref: 'io.ox/calendar/detail/actions/change-organizer'
     }));
 
     ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({
