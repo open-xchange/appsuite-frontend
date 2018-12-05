@@ -116,8 +116,8 @@ define('io.ox/core/tk/list', [
 
         // use throttle instead of debouce in order to respond during scroll momentum
         onScroll: _.throttle(function () {
-            if (!this.loader || !this.loader.collection) return;
-            if (this.isBusy || this.collection.complete || !this.$el.is(':visible')) return;
+
+            if (this.disposed || this.isBusy || !this.loader.collection || this.collection.complete || !this.$el.is(':visible')) return;
 
             var height = this.$el.outerHeight(),
                 scrollTop = this.el.scrollTop,
@@ -584,13 +584,6 @@ define('io.ox/core/tk/list', [
                 }
             }
 
-            if (this.options.pagination) {
-                // respond to window resize (see bug 37728)
-                // make onScroll unique function first (all instance share same function otherwise)
-                this.onScroll = this.onScroll.bind(this);
-                this.listenToDOM(window, 'resize', this.onScroll);
-            }
-
             this.queue = {
 
                 list: [],
@@ -715,6 +708,13 @@ define('io.ox/core/tk/list', [
             // remove listeners; make sure this.collection is an object otherwise we remove all listeners
             if (this.collection) this.stopListening(this.collection);
             this.collection = loader.getDefaultCollection();
+            // register listener as soon as the first loader is connected
+            if (this.options.pagination && !this.loader) {
+                // respond to window resize (see bug 37728)
+                // make onScroll unique function first (all instance share same function otherwise)
+                this.onScroll = this.onScroll.bind(this);
+                this.listenToDOM(window, 'resize', this.onScroll);
+            }
             this.loader = loader;
 
             this.load = function (options) {
