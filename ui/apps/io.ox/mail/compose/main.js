@@ -23,8 +23,7 @@ define('io.ox/mail/compose/main', [
 
     'use strict';
 
-    var blocked = {},
-        point = ext.point('io.ox/mail/compose/init');
+    var blocked = {};
 
     function keepData(obj) {
         return /(compose|edit)/.test(obj.mode) ||
@@ -33,15 +32,9 @@ define('io.ox/mail/compose/main', [
                obj.restored;
     }
 
-    point.extend({
-        id: 'default',
-        index: 100,
-        init: function () {
-
-        }
-    }, {
+    ext.point('io.ox/mail/compose/init').extend({
         id: 'from',
-        index: 200,
+        index: 100,
         init: function () {
             var model = this.model;
 
@@ -61,12 +54,24 @@ define('io.ox/mail/compose/main', [
         }
     }, {
         id: 'displayname',
-        index: 300,
+        index: 200,
         init: function () {
             var model = this.model,
                 config = this.config;
 
             // TODO: check senderView scenarios
+            updateDisplayName();
+            config.on('change:sendDisplayName', updateDisplayName);
+            ox.on('change:customDisplayNames', updateDisplayName);
+
+            // fix current value
+            function updateDisplayName() {
+                var from = model.get('from');
+                if (!from) return;
+                model.set('from', [mailUtil.getSender(from[0], config.get('sendDisplayName'))]);
+            }
+        }
+    });
 
             updateDisplayName();
             config.on('change:sendDisplayName', updateDisplayName);
@@ -165,7 +170,7 @@ define('io.ox/mail/compose/main', [
                         app.model = new MailComposeModel({ meta: { type: obj.mode, originalFolderId: data.folder_id, originalId: data.id } });
                         app.view = new MailComposeView({ app: app, model: app.model, config: app.config });
 
-                        point.invoke('init', app);
+                        ext.point('io.ox/mail/compose/init').invoke('init', app);
 
                         // TODO can we simplify that?
                         return $.when(/*app.view.fetchMail(data), */app.model.initialized);

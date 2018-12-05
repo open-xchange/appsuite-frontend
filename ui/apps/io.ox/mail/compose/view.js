@@ -1152,8 +1152,5 @@ define('io.ox/mail/compose/view', [
     });
 
 
-    //TODO: switch to new mail compose api
-    window.new = true;
-
     return MailComposeView;
 });

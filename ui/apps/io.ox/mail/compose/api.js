@@ -434,7 +434,7 @@ define('io.ox/mail/compose/api', [
         // limit (aktuell 3)
         add: function (meta, opt) {
             opt = _.extend({ vcard: false }, opt);
-            console.log('> ADD: ' + meta.id);
+            console.log('> ADD: ' + meta.type);
             return http.POST({
                 module: 'mail/compose',
                 params: $.extend({}, {
