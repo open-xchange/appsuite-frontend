@@ -23,10 +23,13 @@ define('io.ox/mail/compose/config', [
 
     return Backbone.Model.extend({
 
-        defaults: {
-            preferredEditorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
-            editorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
-            sendDisplayName: !!settings.get('sendDisplayName', true)
+        defaults: function () {
+            return {
+                autosavedAsDraft: false,
+                preferredEditorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
+                editorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
+                sendDisplayName: !!settings.get('sendDisplayName', true)
+            };
         },
 
         initialize: function () {

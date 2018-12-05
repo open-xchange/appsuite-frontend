@@ -30,7 +30,6 @@ define('io.ox/mail/compose/model', [
 
     //     defaults: function () {
     //         return {
-    //             autosavedAsDraft: false,
     //             // Autodismiss confirmation dialog
     //             autoDismiss: false,
     //             // enable auto-remove on "discard"

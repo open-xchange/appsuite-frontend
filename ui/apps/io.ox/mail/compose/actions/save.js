@@ -141,7 +141,7 @@ define('io.ox/mail/compose/actions/save', [
 
                 baton.model.set('msgref', baton.resultData);
                 baton.model.set('sendtype', composeAPI.SENDTYPE.EDIT_DRAFT);
-                baton.model.set('autosavedAsDraft', false);
+                baton.config.set('autosavedAsDraft', false);
                 baton.model.dirty(baton.model.previous('sendtype') !== composeAPI.SENDTYPE.EDIT_DRAFT);
                 //#. %1$s is the time, the draft was saved
                 //#, c-format

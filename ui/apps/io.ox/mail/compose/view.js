@@ -685,8 +685,10 @@ define('io.ox/mail/compose/view', [
                     ext.point('io.ox/mail/compose/autosave/error').invoke('handler', self, baton);
                     def = baton.returnValue;
                 } else {
+                    self.config.set({
+                        'autosavedAsDraft': true
+                    });
                     model.set({
-                        'autosavedAsDraft': true,
                         'msgref': result,
                         'sendtype': composeAPI.SENDTYPE.EDIT_DRAFT,
                         'infostore_ids_saved': [].concat(model.get('infostore_ids_saved'), mail.infostore_ids || [])
@@ -791,7 +793,7 @@ define('io.ox/mail/compose/view', [
                 isDraft = this.model.keepDraftOnClose();
 
             // This dialog gets automatically dismissed
-            if ((this.model.dirty() || this.model.get('autosavedAsDraft') || isDraft) && !this.model.get('autoDismiss')) {
+            if ((this.model.dirty() || this.config.get('autosavedAsDraft') || isDraft) && !this.model.get('autoDismiss')) {
                 var discardText = isDraft ? gt.pgettext('dialog', 'Delete draft') : gt.pgettext('dialog', 'Discard message'),
                     saveText = isDraft ? gt('Keep draft') : gt('Save as draft'),
                     modalText = isDraft ? gt('Do you really want to delete this draft?') : gt('Do you really want to discard your message?');
