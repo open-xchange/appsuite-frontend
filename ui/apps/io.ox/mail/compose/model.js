@@ -151,26 +151,6 @@ define('io.ox/mail/compose/model', [
     //         this.set('content', content);
     //     },
 
-    //     getContent: function () {
-    //         var content,
-    //             mode = this.get('editorMode');
-    //         content = this.get('content');
-    //
-    //         if (mode === 'text') {
-    //             content = _.unescapeHTML(content.replace(/<br\s*\/?>/g, '\n'));
-    //         }
-
-    //         // image URL fix
-    //         if (mode === 'html') {
-    //             // look if prefix needs do be replaced
-    //             content = mailUtil.replaceImagePrefix(content);
-    //             // Remove wrapping div
-    //             content = content.replace(/^<div\sid="ox-\S+">/, '').replace(/<\/div>$/, '');
-    //         }
-
-    //         return content;
-    //     },
-
     //     parse: function (list) {
     //         return _(mailUtil.parseRecipients([].concat(list).join(', ')))
     //             .map(function (recipient) {
@@ -362,7 +342,21 @@ define('io.ox/mail/compose/model', [
         },
 
         getContent: function () {
-            return this.get('content');
+            var content = this.get('content');
+
+            // var mode = this.get('editorMode');
+            // if (mode === 'text') {
+            //     content = _.unescapeHTML(content.replace(/<br\s*\/?>/g, '\n'));
+            // }
+            // // image URL fix
+            // if (mode === 'html') {
+            //     // look if prefix needs do be replaced
+            //     content = mailUtil.replaceImagePrefix(content);
+            //     // Remove wrapping div
+            //     content = content.replace(/^<div\sid="ox-\S+">/, '').replace(/<\/div>$/, '');
+            // }
+
+            return content;
         },
 
         send: function () {
