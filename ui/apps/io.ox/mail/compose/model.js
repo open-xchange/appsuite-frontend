@@ -134,7 +134,7 @@ define('io.ox/mail/compose/model', [
 
     //     setInitialMailContentType: function () {
     //         if (this.get('editorMode') === 'alternative') {
-    //             var content_type = window.new ? this.get('content_type') : this.get('attachments').at(0).get('content_type'),
+    //             var content_type = this.get('content_type'),
     //                 ret = 'html';
     //             if (content_type === 'text/plain') {
     //                 ret = 'text';
@@ -144,31 +144,18 @@ define('io.ox/mail/compose/model', [
     //     },
 
     //     setMailContentType: function (type) {
-    //         if (window.new) {
-    //             this.set('content_type', type, { silent: true });
-    //         } else {
-    //             this.get('attachments').at(0).set('content_type', type, { silent: true });
-    //         }
+    //         this.set('content_type', type, { silent: true });
     //     },
 
     //     setContent: function (content) {
-    //         if (window.new) {
-    //             this.set('content', content);
-    //         } else {
-    //             var model = this.get('attachments').at(0);
-    //             model.set('content', content);
-    //         }
+    //         this.set('content', content);
     //     },
 
     //     getContent: function () {
     //         var content,
     //             mode = this.get('editorMode');
-    //         if (window.new) {
-    //             content = this.get('content');
-    //         } else {
-    //             content = this.get('attachments').at(0).get('content') || '';
-    //         }
-
+    //         content = this.get('content');
+    //
     //         if (mode === 'text') {
     //             content = _.unescapeHTML(content.replace(/<br\s*\/?>/g, '\n'));
     //         }
@@ -196,12 +183,7 @@ define('io.ox/mail/compose/model', [
     //         // a model may not be dirty anymore but still needs currenct data for the restore point (happens on autosave/save as draft)
     //         if (!this.forceNextFailSave && !this.dirty()) return false;
     //         this.forceNextFailSave = false;
-    //         var content;
-    //         if (window.new) {
-    //             content = this.get('content');
-    //         } else {
-    //             content = this.get('attachments').at(0).get('content');
-    //         }
+    //         var content = this.get('content');
 
     //         // Fails silently if content size is over 512kb
     //         if (strings.size(content) > 524288) return false;
@@ -239,16 +221,12 @@ define('io.ox/mail/compose/model', [
     //         var result,
     //             attachmentCollection = this.get('attachments'),
     //             mailAttachments = attachmentCollection.mailAttachments(),
-    //             content = window.new ? this.get('content') : attachmentCollection.at(0).get('content');
+    //             content = this.get('content') ;
 
     //         // fix inline images
     //         content = mailUtil.fixInlineImages(content);
 
-    //         if (window.new) {
-    //             this.set('content', content, { silent: true });
-    //         } else {
-    //             attachmentCollection.at(0).set('content', content, { silent: true });
-    //         }
+    //         this.set('content', content, { silent: true });
 
     //         result = this.pick(
     //             'from',

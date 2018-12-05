@@ -64,8 +64,6 @@ define('io.ox/mail/compose/api', [
 
     var react = function (action, obj, view) {
 
-        if (window.new) return api.spaced(action, obj, { format: view });
-
         var isDraft = (action === 'edit'),
             isAlternative = (view === 'alternative');
 

@@ -582,8 +582,8 @@ define('io.ox/mail/compose/view', [
                     //     return new Attachments.Model(_.extend({}, attachment, { group: 'mail', space: self.model.get('id') }));
                     // }));
 
-                    var content = window.new ? data.content : attachmentCollection.at(0).get('content'),
-                        content_type = window.new ? data.contentType : attachmentCollection.at(0).get('content_type');
+                    var content = data.content,
+                        content_type = data.contentType;
 
                     // Force text edit mode when alternative editorMode and text/plain mail
                     if (mode === 'edit' && self.model.get('editorMode') === 'alternative' && content_type === 'text/plain') {
@@ -594,7 +594,6 @@ define('io.ox/mail/compose/view', [
                     if (content_type === 'text/plain' && self.model.get('editorMode') === 'html') {
                         require(['io.ox/mail/detail/content'], function (proc) {
                             var html = proc.transformForHTMLEditor(content);
-                            if (!window.new) attachmentCollection.at(0).set('content_type', 'text/html');
                             content = html;
                             def.resolve();
                         });
@@ -607,11 +606,7 @@ define('io.ox/mail/compose/view', [
                         def.resolve();
                     }
                     return $.when(def).then(function () {
-                        if (window.new) {
-                            self.model.set('content', content);
-                        } else {
-                            attachmentCollection.at(0).set('content', content);
-                        }
+                        self.model.set('content', content);
                         self.model.unset('attachments');
                         self.model.set('attachments', attachmentCollection);
                         obj = data = attachmentCollection = null;
