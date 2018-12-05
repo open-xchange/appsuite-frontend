@@ -116,7 +116,8 @@ define('io.ox/core/tk/list', [
 
         // use throttle instead of debouce in order to respond during scroll momentum
         onScroll: _.throttle(function () {
-            if (this.isBusy || !this.loader.collection || this.collection.complete || !this.$el.is(':visible')) return;
+            if (!this.loader || !this.loader.collection) return;
+            if (this.isBusy || this.collection.complete || !this.$el.is(':visible')) return;
 
             var height = this.$el.outerHeight(),
                 scrollTop = this.el.scrollTop,
