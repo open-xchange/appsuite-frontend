@@ -66,12 +66,6 @@ define('io.ox/calendar/invitations/register', [
         'decline': gt('You have declined the appointment')
     };
 
-    var successInternal = {
-        'accept': gt('You have accepted the appointment'),
-        'decline': gt('You have declined the appointment'),
-        'tentative': gt('You have tentatively accepted the appointment')
-    };
-
     var priority = ['update', 'ignore', 'create', 'delete', 'decline', 'tentative', 'accept', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher'];
 
     //
@@ -246,7 +240,7 @@ define('io.ox/calendar/invitations/register', [
 
         getActions: function () {
             if (this.getConfirmationStatus() === 'ACCEPTED') return [];
-            if (this.model.hasFlag('event_cancelled')) return [];
+            if (this.model.hasFlag && this.model.hasFlag('event_cancelled')) return [];
             return ['decline', 'tentative', 'accept'];
         },
 
@@ -537,7 +531,11 @@ define('io.ox/calendar/invitations/register', [
                     if (calendarSettings.get('deleteInvitationMailAfterAction', false)) {
                         // remove mail
                         if (self.options.yell !== false) {
-                            notifications.yell('success', successInternal[action]);
+                            var message;
+                            if (action === 'accept') message = this.getAcceptedMessage();
+                            else if (action === 'tentative') message = this.getTentativeMessage();
+                            else if (action === 'decline') message = this.getRejectedMessage();
+                            notifications.yell('success', message);
                         }
                         require(['io.ox/mail/api'], function (api) {
                             api.remove([self.mailModel.toJSON()]);
@@ -683,7 +681,11 @@ define('io.ox/calendar/invitations/register', [
             if (calendarSettings.get('deleteInvitationMailAfterAction', false)) {
                 // remove mail
                 if (this.options.yell !== false) {
-                    notifications.yell('success', successInternal[action]);
+                    var message;
+                    if (action === 'accept') message = this.getAcceptedMessage();
+                    else if (action === 'tentative') message = this.getTentativeMessage();
+                    else if (action === 'decline') message = this.getRejectedMessage();
+                    notifications.yell('success', message);
                 }
                 require(['io.ox/mail/api'], function (api) {
                     api.remove([this.mailModel.toJSON()]);
