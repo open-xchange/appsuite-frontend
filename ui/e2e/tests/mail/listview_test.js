@@ -62,8 +62,8 @@ Scenario('remove mail from thread', async (I, users) => {
     I.click('.list-item[aria-label*="Test subject"]');
 
     I.click('Reply');
+    I.waitForVisible('.window-blocker.io-ox-busy');
     I.waitForInvisible('.window-blocker.io-ox-busy');
-    I.wait(1);
 
     I.click('Send');
     // wait a little for everything to be sent
