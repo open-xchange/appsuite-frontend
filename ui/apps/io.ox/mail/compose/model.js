@@ -322,12 +322,41 @@ define('io.ox/mail/compose/model', [
 
     var MailModel = Backbone.Model.extend({
 
-        defaults: {
-            content: ''
+        defaults: function () {
+            return {
+                //from: '',
+                to:  [],
+                cc:  [],
+                bcc: [],
+                subject: '',
+                content: '',
+                contentType: '',
+                attachments: new AttachmentCollection(),
+                meta: {
+                    // new/reply/replyall/forward/resend
+                    type: 'new',
+                    date: '',
+                    originalId: '',
+                    originalFolderId: '',
+                    security: {
+                        encrypt: false,
+                        pgpInline: false,
+                        sign: false
+                    },
+                    sharedAttachments: {
+                        language: '',
+                        enabled: false,
+                        autodelete: false,
+                        expiryDate: '',
+                        password: ''
+                    }
+                },
+                requestReadReceipt: false,
+                priority: 'normal'
+            };
         },
 
         initialize: function () {
-            this.set('attachments', new AttachmentCollection());
             this.initialized = this.save().then(function (data) {
                 // fix previewUrl
                 var collection = this.get('attachments');
