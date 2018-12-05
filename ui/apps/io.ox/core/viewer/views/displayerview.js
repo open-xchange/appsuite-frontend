@@ -126,6 +126,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.displayerviewMousemoveClickHandler = _.throttle(this.blendNavigation.bind(this), 500);
             // blend in navigation by user activity
             this.$el.on('mousemove click', this.displayerviewMousemoveClickHandler);
+            // handle zoom when double clicking on an image
+            this.$el.on('dblclick', '.viewer-displayer-item-container', this.onToggleZoom.bind(this));
 
             // listen to full screen mode changes
             BigScreen.onchange = this.onChangeFullScreen.bind(this);
@@ -176,7 +178,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 loop: !this.standalone && (this.collection.length > 1),
                 loopedSlides: 0,
                 followFinger: false,
-                simulateTouch: true,
+                simulateTouch: false,   // simulateTouch interferes with mouse clicks of the plugged spreadsheet app
                 noSwiping: true,
                 speed: 0,
                 initialSlide: startIndex,
@@ -195,7 +197,6 @@ define('io.ox/core/viewer/views/displayerview', [
                     slideChangeTransitionStart: this.onSlideChangeStart.bind(this),
                     slideNextTransitionEnd: this.onSlideNextChangeEnd.bind(this),
                     slidePrevTransitionEnd: this.onSlidePrevChangeEnd.bind(this),
-                    doubleTap: this.onToggleZoom.bind(this),
                     touchEnd: this.hideCaption.bind(this)
                 }
             };
