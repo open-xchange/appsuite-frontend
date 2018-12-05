@@ -30,8 +30,6 @@ define('io.ox/mail/compose/model', [
 
     //     defaults: function () {
     //         return {
-    //             // Autodismiss confirmation dialog
-    //             autoDismiss: false,
     //             // enable auto-remove on "discard"
     //             autoDiscard: true,
     //             preferredEditorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),

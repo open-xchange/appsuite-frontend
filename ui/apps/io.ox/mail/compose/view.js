@@ -793,7 +793,7 @@ define('io.ox/mail/compose/view', [
                 isDraft = this.model.keepDraftOnClose();
 
             // This dialog gets automatically dismissed
-            if ((this.model.dirty() || this.config.get('autosavedAsDraft') || isDraft) && !this.model.get('autoDismiss')) {
+            if ((this.model.dirty() || this.config.get('autosavedAsDraft') || isDraft) && !this.config.get('autoDismiss')) {
                 var discardText = isDraft ? gt.pgettext('dialog', 'Delete draft') : gt.pgettext('dialog', 'Discard message'),
                     saveText = isDraft ? gt('Keep draft') : gt('Save as draft'),
                     modalText = isDraft ? gt('Do you really want to delete this draft?') : gt('Do you really want to discard your message?');

@@ -26,6 +26,8 @@ define('io.ox/mail/compose/config', [
         defaults: function () {
             return {
                 autosavedAsDraft: false,
+                // Autodismiss confirmation dialog
+                autoDismiss: false,
                 preferredEditorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
                 editorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
                 sendDisplayName: !!settings.get('sendDisplayName', true)
