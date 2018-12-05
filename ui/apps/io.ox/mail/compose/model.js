@@ -358,6 +358,14 @@ define('io.ox/mail/compose/model', [
                 // update model and attachments collection
                 this.set(_.omit(data, 'attachments'));
             }.bind(this));
+
+            // TODO:
+            // setInitialSignature
+            // getDefaultSignature
+            // getSignatureById
+            // getSignatures
+            _.extend(this, signatureUtil.model, this);
+
         },
 
         getContent: function () {
@@ -393,8 +401,6 @@ define('io.ox/mail/compose/model', [
             return data;
         },
         keepDraftOnClose: $.noop,
-        initializeSignatures: $.noop,
-        setInitialSignature: $.noop,
         setMailContentType: $.noop,
         setAutoBCC: $.noop,
         dirty: $.noop,

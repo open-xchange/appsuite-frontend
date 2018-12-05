@@ -68,29 +68,6 @@ define('io.ox/mail/compose/signatures', [
     // MODEL: extends mail compose model
     var model = {
 
-        // get snippets from server
-        initializeSignatures: function (dropdown) {
-            var dropdownView = dropdown.data('view'),
-                def = $.Deferred();
-            // load snippets
-            require(['io.ox/core/api/snippets'], function (snippetAPI) {
-                snippetAPI.getAll('signature').always(function (signatures) {
-                    var oldSignatures = this.get('signatures') || [],
-                        allSignatures = _.uniq(signatures.concat(oldSignatures), false, function (o) { return o.id; });
-                    // update model
-                    this.set('signatures', allSignatures);
-                    // add options to dropdown (empty signature already set)
-                    _.each(signatures, function (o) {
-                        dropdownView.option('signatureId', o.id, o.displayname);
-                    });
-                    // TODO: mobile signatures
-                    def.resolve(allSignatures);
-                }.bind(this));
-            }.bind(this));
-            // resolve
-            return def;
-        },
-
         // use defaultSignature or reference already used one (edit-case)
         setInitialSignature: function () {
             // TODO: breaks when you open text draft in html mode

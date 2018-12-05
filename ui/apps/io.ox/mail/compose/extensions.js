@@ -449,7 +449,27 @@ define('io.ox/mail/compose/extensions', [
 
         signature: function (baton) {
             if (_.device('smartphone')) return;
-            baton.view.signaturesLoading = baton.model.initializeSignatures(this);
+            // TODO: switch to config model
+            var model = baton.model,
+                def = baton.view.signaturesLoading = $.Deferred(),
+                dropdown = this,
+                dropdownView = dropdown.data('view');
+
+            // load snippets
+            require(['io.ox/core/api/snippets'], function (snippetAPI) {
+                snippetAPI.getAll('signature').always(function (signatures) {
+                    var oldSignatures = model.get('signatures') || [],
+                        allSignatures = _.uniq(signatures.concat(oldSignatures), false, function (o) { return o.id; });
+                    // update model
+                    model.set('signatures', allSignatures);
+                    // add options to dropdown (empty signature already set)
+                    _.each(signatures, function (o) {
+                        dropdownView.option('signatureId', o.id, o.displayname);
+                    });
+                    // TODO: mobile signatures
+                    def.resolve(allSignatures);
+                });
+            });
         },
 
         signaturemenu: function (baton) {
