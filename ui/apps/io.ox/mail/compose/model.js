@@ -327,20 +327,16 @@ define('io.ox/mail/compose/model', [
         sync: function (method, model, options) {
             switch (method) {
                 case 'create':
-                    composeAPI.space.attachments.add(model.get('type'), model.toJSON()).then(options.success, options.error);
-                    break;
+                    return composeAPI.space.attachments.add(model.get('type'), model.toJSON()).then(options.success, options.error);
                 case 'read':
-                    composeAPI.space.attachments.get(model.get('id')).then(options.success, options.error);
-                    break;
+                    return composeAPI.space.attachments.get(model.get('id')).then(options.success, options.error);
                 case 'update':
-                    composeAPI.space.attachments.update(model.get('id'), model.toJSON()).then(options.success, options.error);
-                    break;
+                    return composeAPI.space.attachments.update(model.get('id'), model.toJSON()).then(options.success, options.error);
                 case 'delete':
-                    composeAPI.space.attachments.remove(model.get('id')).then(options.success, options.error);
-                    break;
-                default: // nothing
+                    return composeAPI.space.attachments.remove(model.get('id')).then(options.success, options.error);
+                default:
+                    return $.when(model);
             }
-            return model;
         }
     });
 
@@ -373,15 +369,22 @@ define('io.ox/mail/compose/model', [
         },
 
         sync: function (method, model, options) {
-            var meta = model.get('meta');
+            var meta = model.get('meta'),
+                opt = {};
             switch (method) {
-                case 'create': return composeAPI.spaced(meta.type, meta, { vcard: settings.get('appendVcard', false) });//.then(options.success, options.error);
-                case 'read': return composeAPI.space.get(model.get('id')).then(options.success, options.error);
-                case 'update': return composeAPI.space.update(model.get('id'), model.toJSON()).then(options.success, options.error);
-                case 'delete': return composeAPI.space.remove(model.get('id')).then(options.success, options.error);
-                default: // nothing
+                case 'create':
+                    opt.vcard = settings.get('appendVcard', false);
+                    opt.original = /(reply|replayall)/.test(meta.type);
+                    return composeAPI.spaced(meta, opt);//.then(options.success, options.error);
+                case 'read':
+                    return composeAPI.space.get(model.get('id')).then(options.success, options.error);
+                case 'update':
+                    return composeAPI.space.update(model.get('id'), model.toJSON()).then(options.success, options.error);
+                case 'delete':
+                    return composeAPI.space.remove(model.get('id')).then(options.success, options.error);
+                default:
+                    return $.when(model);
             }
-            return model;
         },
 
         toJSON: function () {

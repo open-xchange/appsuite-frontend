@@ -208,7 +208,7 @@ define('io.ox/mail/compose/main', [
         });
 
         // TODO what is the benefit of this?
-        app.compose = compose('compose');
+        app.compose = compose('new');
         app.forward = compose('forward');
         app.reply = compose('reply');
         app.replyall = compose('replyall');

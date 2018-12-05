@@ -412,14 +412,15 @@ define('io.ox/mail/compose/api', [
         });
     };
 
-    api.spaced = function (type, obj, opt) {
-        return api.space.add(type, obj, opt).then(function (space) {
+    api.spaced = function (meta, opt) {
+        return api.space.add(meta, opt).then(function (space) {
             var obj;
             return api.space.get(space.id).then(function (data) {
                 // TODO: from should be wrapped like cc/bcc
                 data.from = [data.from];
                 obj = _.extend({}, data);
-                return api.space.attachments.original(data.id);
+                // TOOD: should be an option like 'vcard' in space.add request
+                return opt.original ? api.space.attachments.original(data.id) : $.when([]);
             }).then(function (list) {
                 obj.attachments = (obj.attachments || []).concat(list);
                 return obj;
@@ -431,15 +432,15 @@ define('io.ox/mail/compose/api', [
     api.space = {
 
         // limit (aktuell 3)
-        add: function (type, obj, opt) {
+        add: function (meta, opt) {
             opt = _.extend({ vcard: false }, opt);
-            console.log('> ADD: ' + obj.id);
+            console.log('> ADD: ' + meta.id);
             return http.POST({
                 module: 'mail/compose',
                 params: $.extend({}, {
-                    type: type,
-                    id: obj.originalId || obj.id,
-                    folderId: obj.originalFolderId || obj.folder_id,
+                    type: meta.type,
+                    id: meta.originalId,
+                    folderId: meta.originalFolderId,
                     vcard: opt.vcard
                 })
             });
