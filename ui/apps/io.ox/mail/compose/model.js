@@ -359,13 +359,6 @@ define('io.ox/mail/compose/model', [
                 this.set(_.omit(data, 'attachments'));
             }.bind(this));
 
-            // TODO:
-            // setInitialSignature
-            // getDefaultSignature
-            // getSignatureById
-            // getSignatures
-            _.extend(this, signatureUtil.model, this);
-
         },
 
         getContent: function () {

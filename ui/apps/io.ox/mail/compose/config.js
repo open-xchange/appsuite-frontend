@@ -13,8 +13,9 @@
  */
 
 define('io.ox/mail/compose/config', [
-    'settings!io.ox/mail'
-], function (settings) {
+    'settings!io.ox/mail',
+    'io.ox/mail/compose/signatures'
+], function (settings, signatureUtil) {
 
     'use strict';
 
@@ -29,6 +30,13 @@ define('io.ox/mail/compose/config', [
         },
 
         initialize: function () {
+            // TODO:
+            // setInitialSignature
+            // getDefaultSignature
+            // getSignatureById
+            // getSignatures
+            _.extend(this, signatureUtil.model, this);
+
             // map 'alternative' to editor
             if (this.get('preferredEditorMode') === 'alternative') {
                 this.set('editorMode', 'html', { silent: true });
@@ -36,7 +44,29 @@ define('io.ox/mail/compose/config', [
                     this.set('editorMode', 'text', { silent: true });
                 }
             }
+        },
+
+        dirty: function (/*flag*/) {
+            // TODO
+            // var previous = !_.isEqual(this._shadowAttributes, this.getCopy()),
+            //     current;
+            // // sync mail editor content to model
+            // this.trigger('needsync');
+            // if (flag === true) {
+            //     // always dirty this way
+            //     this._shadowAttributes = {};
+            // } else if (flag === false) {
+            //     this.updateShadow();
+            // }
+            // current = !_.isEqual(this._shadowAttributes, this.getCopy());
+            // if (!current && previous) {
+            //     // model changed to not dirty force next restorepoint save to have up to date data
+            //     this.forceNextFailSave = true;
+            // }
+            // previous = null;
+            // return current;
         }
+
     });
 
 });

@@ -32,6 +32,7 @@ define('io.ox/mail/compose/main', [
                obj.restored;
     }
 
+    // formerly part of 'compose'
     ext.point('io.ox/mail/compose/init').extend({
         id: 'from',
         index: 100,
@@ -73,16 +74,29 @@ define('io.ox/mail/compose/main', [
         }
     });
 
-            updateDisplayName();
-            config.on('change:sendDisplayName', updateDisplayName);
-            ox.on('change:customDisplayNames', updateDisplayName);
-
-            // fix current value
-            function updateDisplayName() {
-                var from = model.get('from');
-                if (!from) return;
-                model.set('from', [mailUtil.getSender(from[0], config.get('sendDisplayName'))]);
-            }
+    // formerly part of setMail
+    ext.point('io.ox/mail/compose/set').extend({
+        id: 'editor-mode',
+        index: 100,
+        init: function () {
+            if (this.config.get('editorMode') !== 'alternative') return;
+            var mode = this.model.get('contentType') === 'text/plain' ? 'text' : 'html';
+            this.config.set('editorMode', mode, { silent: true });
+        }
+    }, {
+        id: 'auto-bcc',
+        index: 200,
+        init: function () {
+            if (!settings.get('autobcc') || this.get('mode') === 'edit') return;
+            this.model.set('bcc', mailUtil.parseRecipients(settings.get('autobcc'), { localpart: false }));
+        }
+    }, {
+        id: 'initial-signature',
+        index: 300,
+        init: function () {
+            this.view.signaturesLoading.done(function () {
+                this.config.setInitialSignature();
+            }.bind(this));
         }
     });
 
@@ -177,6 +191,8 @@ define('io.ox/mail/compose/main', [
                     })
                     .then(function () {
                         win.nodes.main.addClass('scrollable').append(app.view.render().$el);
+                        ext.point('io.ox/mail/compose/set').invoke('init', app);
+
                         return app.view.setMail();
                     })
                     .done(function () {

@@ -155,7 +155,7 @@ define('io.ox/mail/compose/signatures', [
             if (!currentSignature) return;
 
             // get latest signature object of current signature
-            var changedSignature = this.model.getSignatureById(currentSignature.id);
+            var changedSignature = this.config.getSignatureById(currentSignature.id);
             // has changed?
             if (currentSignature.content !== changedSignature.content) {
                 var isHTML = !!this.editor.find;
@@ -205,7 +205,7 @@ define('io.ox/mail/compose/signatures', [
 
         removeSignature: function (signature) {
             // fallback: get signature by id
-            signature = _.isString(signature) ? this.model.getSignatureById(signature) : signature;
+            signature = _.isString(signature) ? this.config.getSignatureById(signature) : signature;
             // fallback: get current signature object
             if (!signature) {
                 if (!this.model.get('signature')) return;

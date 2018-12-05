@@ -1025,8 +1025,6 @@ define('io.ox/mail/compose/view', [
         setMail: function () {
             var self = this;
 
-            this.model.setInitialMailContentType();
-
             return this.toggleEditorMode().then(function () {
                 return self.signaturesLoading;
             })
@@ -1049,16 +1047,15 @@ define('io.ox/mail/compose/view', [
                     }
                     target.focus();
                 }
-                self.model.setAutoBCC();
+
                 if (mode === 'replyall' || mode === 'edit') {
                     if (!_.isEmpty(self.model.get('cc'))) self.toggleTokenfield('cc');
                 }
                 if (!_.isEmpty(self.model.get('bcc'))) self.toggleTokenfield('bcc');
+
                 self.setBody(self.model.getContent());
                 // Set model as dirty only when attaching infostore ids initially (Send as pdf from text)
                 self.model.dirty(self.model.get('mode') === 'compose' && !_.isEmpty(self.model.get('infostore_ids')));
-                // compose vs. edit
-                self.model.setInitialSignature();
             });
         },
 
