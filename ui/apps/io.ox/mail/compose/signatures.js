@@ -165,6 +165,12 @@ define('io.ox/mail/compose/signatures', [
     // VIEW: extends mail compose view
     var view = {
 
+        getSignatureContent: function () {
+            var isUnquotedForward = settings.get('forwardunquoted', false) && this.model.get('mode') === 'forward';
+            if (isUnquotedForward) return this.editor.find('div[class$="io-ox-signature"]');
+            return this.editor.children('div[class$="io-ox-signature"]');
+        },
+
         // handler -> change:signatures
         updateSignatures: function () {
             var currentSignature = this.model.get('signature');
@@ -178,7 +184,7 @@ define('io.ox/mail/compose/signatures', [
                 var isHTML = !!this.editor.find;
                 if (isHTML) {
                     // HTML
-                    this.editor.children('div[class$="io-ox-signature"]').each(function () {
+                    this.getSignatureContent().each(function () {
                         var node = $(this),
                             text = node.text(),
                             changed = getRaw(changedSignature) === stripWhitespace(text);
@@ -235,7 +241,7 @@ define('io.ox/mail/compose/signatures', [
 
             // remove current signature from editor
             if (isHTML) {
-                this.editor.children('div[class$="io-ox-signature"]').each(function () {
+                this.getSignatureContent().each(function () {
 
                     var node = $(this),
                         text = node.text(),

@@ -41,7 +41,7 @@ define([
                     pagination: false,
                     collection: new Backbone.Collection([{ id: 'testItem' }])
                 });
-                view.complete = true;
+                view.collection.complete = true;
                 $('body').append(view.render().$el);
                 view.selection.select(0);
             });
@@ -69,7 +69,7 @@ define([
                     pagination: false,
                     collection: new Backbone.Collection([{ id: 'testItem' }])
                 });
-                view.complete = true;
+                view.collection.complete = true;
                 $('body').append(view.render().$el);
                 view.selection.select(0);
             });
@@ -131,7 +131,7 @@ define([
                     collection: new Backbone.Collection([{ id: 'testItem' }]),
                     app: { id: 'testApp' }
                 });
-                view.complete = true;
+                view.collection.complete = true;
                 $('body').append(view.render().$el);
                 view.selection.select(0);
             });
@@ -208,7 +208,7 @@ define([
                     pagination: false,
                     collection: new Backbone.Collection([{ id: 'testItem' }])
                 });
-                view.complete = true;
+                view.collection.complete = true;
                 $('body').append(view.render().$el);
                 view.selection.select(0);
             });

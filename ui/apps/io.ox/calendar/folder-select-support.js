@@ -19,6 +19,15 @@ define('io.ox/calendar/folder-select-support', [
 
     'use strict';
 
+    // list of error codes where a folder should be removed from the selection
+    var removeList = [
+        'FLD-1004', // folder storage service no longer available
+        'FLD-0008', // folder not found
+        'FLD-0003', // permission denied
+        'CAL-4060', // folder is not supported
+        'CAL-4030' // permission denied
+    ];
+
     function setFolders(list, opt) {
         var self = this;
         opt = opt || {};
@@ -92,7 +101,8 @@ define('io.ox/calendar/folder-select-support', [
             return folderAPI.get(folder).then(function success(folder) {
                 if (!folder.subscribed) return;
                 return folder;
-            }, function fail() {
+            }, function fail(err) {
+                if (!_(removeList).contains(err.code)) return;
                 self.remove(folder);
             });
         })).then(function () {

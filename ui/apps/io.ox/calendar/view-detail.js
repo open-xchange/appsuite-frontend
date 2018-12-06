@@ -98,7 +98,7 @@ define('io.ox/calendar/view-detail', [
             if (!(baton.data.recurrenceId && baton.data.id !== baton.data.seriesId)) return;
 
             // use exact check for isCreateEvent === false here or the recurrence warning is drawn on initial drawing too
-            this.append($('<p class="alert alert-info recurrence-warning" role="alert">').text(gt('This appointment is an exception. Changing the series does not affect exceptions.')).toggle(baton.isCreateEvent === false));
+            this.append($('<p class="alert alert-info recurrence-warning" role="alert">').text(gt('This appointment is an exception. Changing the exception does not affect the series.')).toggle(baton.isCreateEvent === false));
         }
     });
 
@@ -185,25 +185,8 @@ define('io.ox/calendar/view-detail', [
     function openDeeplink(e) {
         e.preventDefault();
 
-        var baton = e.data.baton,
-            folder = String(baton.data.folder);
-
-        ox.launch('io.ox/calendar/main', { folder: folder }).done(function () {
-            var app = this,
-                perspective = app.props.get('layout') || 'week:week';
-
-            ox.ui.Perspective.show(app, perspective).done(function (p) {
-                function cont() {
-                    if (p.selectAppointment) p.selectAppointment(baton.model);
-                }
-
-                if (app.folder.get() === folder) {
-                    cont();
-                } else {
-                    app.folder.set(folder).done(cont);
-                }
-            });
-        });
+        var baton = e.data.baton;
+        util.openDeeplink(baton.model);
     }
 
     // created on/by
@@ -245,15 +228,15 @@ define('io.ox/calendar/view-detail', [
     }));
 
     function redraw(e, baton) {
-        // new calendar api returns models. Make sure that data and model is not mixed
-        baton.model = baton.data;
-        delete baton.data;
         $(this).replaceWith(e.data.view.draw(baton));
     }
 
     return {
 
         draw: function (baton, options) {
+            // make sure that you can enter a model directly
+            if (baton instanceof Backbone.Model) baton = new ext.Baton({ model: baton });
+
             // make sure we have a baton
             baton = ext.Baton.ensure(baton);
 

@@ -26,7 +26,7 @@ module.exports = function (grunt) {
                         src: [
                             'node_modules/jquery/dist/jquery.js',
                             //'node_modules/jquery-migrate/dist/jquery-migrate.js',
-                            'node_modules/jquery-touch-events/src/jquery.mobile-events.min.js',
+                            'node_modules/@open-xchange/jquery-touch-events/src/jquery.mobile-events.min.js',
                             'node_modules/underscore/underscore.js', // load this before require.js to keep global object
                             'build/ox.js',
                             // add backbone and dot.js may be a AMD-variant would be better
@@ -90,11 +90,13 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/boot/form.js',
                             'apps/io.ox/core/boot/i18n.js',
                             'apps/io.ox/core/boot/language.js',
+                            'apps/io.ox/core/boot/rampup.js',
                             'apps/io.ox/core/boot/load.js',
                             'apps/io.ox/core/boot/util.js',
                             'apps/io.ox/core/boot/support.js',
                             'apps/io.ox/core/boot/login/auto.js',
                             'apps/io.ox/core/boot/login/openid.js',
+                            'apps/io.ox/core/boot/login/saml.js',
                             'apps/io.ox/core/boot/login/standard.js',
                             'apps/io.ox/core/boot/login/token.js',
                             'apps/io.ox/core/boot/warning.js',
@@ -232,7 +234,8 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/print.js',
                             'apps/io.ox/contacts/api.js',
                             'apps/io.ox/core/tk/flag-picker.js',
-                            'apps/io.ox/backbone/disposable.js',
+                            'apps/io.ox/backbone/views/disposable.js',
+                            'apps/io.ox/backbone/views/extensible.js',
                             'apps/io.ox/backbone/mini-views/abstract.js',
                             'apps/io.ox/backbone/mini-views/dropdown.js',
                             'apps/io.ox/backbone/mini-views/toolbar.js',
@@ -261,33 +264,6 @@ module.exports = function (grunt) {
                             'apps/io.ox/mail/main.js'
                         ],
                         dest: 'build/precore.js',
-                        nonull: true
-                    }
-                ]
-            },
-            mobiscroll: {
-                files: [
-                    {
-                        src: [
-                            'node_modules/mobiscroll/js/mobiscroll.core.js',
-                            'node_modules/mobiscroll/js/mobiscroll.util.datetime.js',
-                            'node_modules/mobiscroll/js/mobiscroll.frame.js',
-                            'node_modules/mobiscroll/js/mobiscroll.scroller.js',
-                            'node_modules/mobiscroll/js/mobiscroll.datetimebase.js',
-                            'node_modules/mobiscroll/js/mobiscroll.datetime.js',
-                            'node_modules/mobiscroll/js/mobiscroll.frame.ios.js'
-                        ],
-                        dest: 'build/static/3rd.party/mobiscroll.js',
-                        nonull: true
-                    },
-                    {
-                        src: [
-                            'node_modules/mobiscroll/css/mobiscroll.frame.css',
-                            'node_modules/mobiscroll/css/mobiscroll.frame.ios.css',
-                            'node_modules/mobiscroll/css/mobiscroll.scroller.css',
-                            'node_modules/mobiscroll/css/mobiscroll.scroller.ios.css'
-                        ],
-                        dest: 'build/apps/3rd.party/mobiscroll.css',
                         nonull: true
                     }
                 ]

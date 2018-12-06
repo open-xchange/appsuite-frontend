@@ -218,7 +218,7 @@ define('io.ox/files/main', [
                 module: 'file',
                 upsell: {
                     title: gt('Need more space?'),
-                    requires: 'boxcom || google || msliveconnect',
+                    requires: 'boxcom || google || microsoftgraph',
                     id: 'files-folderview-quota',
                     icon: ''
                 },
@@ -466,8 +466,12 @@ define('io.ox/files/main', [
                         app.getWindow().nodes.body.prepend(
                             app.mysharesListViewControl.render().$el
                                 .hide().addClass('myshares-list-control')
-                                .append(toolbar.render().$el)
+                                .prepend(toolbar.render().$el)
                         );
+
+                        function updateCallback($toolbar) {
+                            toolbar.replaceToolbar($toolbar).initButtons();
+                        }
 
                         app.updateMyshareToolbar = _.debounce(function (cidList) {
                             var // turn cids into proper objects
@@ -480,8 +484,9 @@ define('io.ox/files/main', [
                                 list = models, //_(models).invoke('toJSON'),
                                 // extract single object if length === 1
                                 data = list.length === 1 ? list[0] : list,
+                                $toolbar = toolbar.createToolbar(),
                                 baton = ext.Baton({
-                                    $el: toolbar.$list,
+                                    $el: $toolbar,
                                     app: app,
                                     data: data,
                                     models: models,
@@ -489,11 +494,11 @@ define('io.ox/files/main', [
                                     model: app.mysharesListView.collection.get(app.mysharesListView.collection.get(list))
                                 }),
                                 ret = ext.point('io.ox/files/share/classic-toolbar')
-                                .invoke('draw', toolbar.$list.empty(), baton);
+                                .invoke('draw', $toolbar, baton);
 
-                            $.when.apply($, ret.value()).then(function () {
-                                toolbar.initButtons();
-                            });
+                                // draw toolbar
+                            $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
+
                         }, 10);
 
                         app.updateMyshareToolbar([]);
@@ -578,7 +583,7 @@ define('io.ox/files/main', [
                             app.myFavoritesListViewControl.render().$el
                                 .hide()
                                 .addClass('myfavorites-list-control')
-                                .append(toolbar.render().$el)
+                                .prepend(toolbar.render().$el)
                         );
 
                         function updateCallback($toolbar) {
@@ -1253,7 +1258,7 @@ define('io.ox/files/main', [
                         commons.addPremiumFeatures(baton.app, {
                             append: false,
                             upsellId: 'folderview/infostore/bottom',
-                            upsellRequires: 'boxcom || google || msliveconnect'
+                            upsellRequires: 'boxcom || google || microsoftgraph'
                         })
                     );
                 }
@@ -1315,7 +1320,7 @@ define('io.ox/files/main', [
 
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
-                return 'ox.appsuite.user.sect.files.gui.html';
+                return 'ox.appsuite.user.sect.drive.gui.html';
             };
         },
 
@@ -1324,14 +1329,15 @@ define('io.ox/files/main', [
             if (_.device('smartphone')) return;
 
             api.on('beforedelete', function (ids) {
-                var selection = app.listView.selection.get();
+                var selection = app.listView.selection;
                 var cids = _.map(ids, _.cid);
 
                 //intersection check for Bug 41861
-                if (_.intersection(cids, selection).length) {
-
+                if (_.intersection(cids, selection.get()).length) {
+                    // set the direction for dodge function
+                    selection.getPosition();
                     // change selection
-                    app.listView.selection.dodge();
+                    selection.dodge();
                     // optimization for many items
                     if (ids.length === 1) return;
                     // remove all DOM elements of current collection; keep the first item
@@ -1385,11 +1391,11 @@ define('io.ox/files/main', [
         },
 
         'metrics': function (app) {
+
+            // hint: toolbar metrics are registery by extension 'metrics-toolbar'
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
                 var nodes = app.getWindow().nodes,
-                    //node = nodes.outer,
-                    toolbar = nodes.body.find('.classic-toolbar-container'),
                     control = nodes.body.find('.list-view-control > .generic-toolbar'),
                     sidepanel = nodes.sidepanel;
                 metrics.watch({
@@ -1402,28 +1408,7 @@ define('io.ox/files/main', [
                     type: 'click',
                     action: 'add'
                 });
-                // toolbar actions
-                toolbar.on('mousedown', '.io-ox-action-link:not(.dropdown-toggle)', function (e) {
-                    metrics.trackEvent({
-                        app: 'drive',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
-                    });
-                });
-                // toolbar options dropdown
-                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
-                    var node =  $(e.target).closest('a'),
-                        isToggle = node.attr('data-toggle') === 'true';
-                    if (!node.attr('data-name')) return;
-                    metrics.trackEvent({
-                        app: 'drive',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: node.attr('data-tracking-id') || node.attr('data-name') || node.attr('data-action'),
-                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
-                    });
-                });
+
                 // list view control toolbar dropdown
                 control.on('mousedown', 'a[data-name], a[data-action]', function (e) {
                     var node =  $(e.target).closest('a'),

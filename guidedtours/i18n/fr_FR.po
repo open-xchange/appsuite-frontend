@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-01 22:41+0900\n"
+"PO-Revision-Date: 2018-11-01 21:47+0900\n"
 "Last-Translator: Sandrine Burriel <sandrine@workshop-chapina.com>\n"
 "Language-Team: French <fr@workshop-chapina.com>\n"
 "Language: fr_FR\n"
@@ -698,13 +698,10 @@ msgstr ""
 "jointes à la tâche."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
 "Pour lancer une application (app), cliquez sur l'un des éléments figurant "
-"sur la gauche de la barre de menu."
+"dans le menu de lancement des applications."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -727,8 +724,8 @@ msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
 msgstr ""
-"Pour ouvrir ou fermer l'arborescence des dossiers, cliquez « Vue > Vue en "
-"dossier » à droite de la barre d'outils."
+"Pour ouvrir ou fermer l'arborescence des dossiers, cliquez « Vue > Vue des "
+"dossiers » à droite de la barre d'outils."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""

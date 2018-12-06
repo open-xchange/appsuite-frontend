@@ -45,6 +45,7 @@ define('io.ox/mail/compose/model', [
                 defaultSignatureId: mailUtil.getDefaultSignature('compose'),
                 // identifier for empty signature (dropdown)
                 signatureId: '',
+                imageResizeOption: 'original',
                 csid: mailAPI.csid(),
                 vcard: settings.get('appendVcard', false) ? 1 : 0,
                 infostore_ids_saved: [],

@@ -17,7 +17,7 @@ define('io.ox/settings/security/sessions/settings/pane', [
     'gettext!io.ox/core',
     'io.ox/core/http',
     'io.ox/backbone/mini-views/settings-list-view',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/backbone/mini-views/listutils',
     'settings!io.ox/core',
     'less!io.ox/settings/security/sessions/settings/style'
@@ -153,7 +153,8 @@ define('io.ox/settings/security/sessions/settings/pane', [
                 windows_phone: gt('CalDav/CardDav'),
                 windows: gt('CalDav/CardDav'),
                 generic_caldav: gt('CalDav'),
-                generic_carddav: gt('CardDav')
+                generic_carddav: gt('CardDav'),
+                webdav: gt('WebDAV')
             };
             return function () {
                 var deviceInfo = this.getDeviceInfo('client');
@@ -201,7 +202,7 @@ define('io.ox/settings/security/sessions/settings/pane', [
         fetch: function () {
             var self = this;
             return http.GET({
-                url: '/ajax/sessionmanagement?action=all'
+                url: ox.apiRoot + '/sessionmanagement?action=all'
             }).then(function success(data) {
                 self.set(data);
             });
@@ -279,19 +280,19 @@ define('io.ox/settings/security/sessions/settings/pane', [
 
         initialize: function () {
             this.$el.data('view', this);
+            this.collection.on('update', _.bind(this.render, this));
         },
 
         render: function () {
             var self = this;
-            this.collection.initial.always(function () {
-                self.$el.append(
-                    self.listView = new SettingsListView({
-                        collection: self.collection,
-                        childView: SessionItemView,
-                        childOptions: { collection: self.collection }
-                    }).render().$el
-                );
-            });
+            this.$el.empty().append(
+                self.listView = new SettingsListView({
+                    collection: self.collection,
+                    childView: SessionItemView,
+                    childOptions: { collection: self.collection }
+                }).render().$el
+            );
+
             return this;
         }
 
@@ -301,13 +302,18 @@ define('io.ox/settings/security/sessions/settings/pane', [
         id: 'view',
         index: 100,
         draw: function () {
+            var collection = new SessionCollection();
             this.append(
                 new ExtensibleView({
                     point: 'io.ox/settings/sessions/settings/detail/view',
-                    collection: new SessionCollection()
+                    collection: collection
                 })
                 .render().$el
             );
+
+            ox.on('refresh^', function () {
+                collection.fetch();
+            });
         }
     });
 

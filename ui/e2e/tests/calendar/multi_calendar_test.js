@@ -7,10 +7,8 @@
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  * © 2018 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
+ * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-
-const expect = require('chai').expect;
 
 Feature('Calendar: Create appointment');
 
@@ -23,8 +21,6 @@ After(async function (users) {
 });
 
 Scenario('Create appointments in multiple calendars', function (I, users) {
-    let [user] = users;
-
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//showCheckboxes', true);
@@ -35,6 +31,8 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.selectFolder(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name);
     I.clickToolbar('View');
     I.click('Workweek');
+
+    I.click('button[aria-label="Next Week"]');
 
     // create new Calendar
     I.waitForVisible('.window-sidepanel [data-action="add-subfolder"]');
@@ -48,7 +46,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     // select new calendar
     I.selectFolder(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name);
-    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name +'"] .color-label');
+    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label');
 
     // create in Workweek view
     I.clickToolbar('New');
@@ -56,10 +54,10 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     I.fillField('Subject', 'test appointment one');
     I.fillField('Location', 'invite location');
-    I.see('Calendar:' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .header.container .header-right');
+    I.see(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
 
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('4:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -68,9 +66,10 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     // check in Workweek view
     I.clickToolbar('View');
     I.click('Workweek');
-    I.see('test appointment one', '.week-view .appointment .title');
+    I.waitForText('test appointment one', 5, '.workweek');
+    I.see('test appointment one', '.workweek .appointment .title');
 
-    I.seeNumberOfElements('.week-view .appointment .title', 1);
+    I.seeNumberOfElements('.workweek .appointment .title', 1);
 
     // create second appointment in different calendar
     I.selectFolder('New calendar');
@@ -80,10 +79,10 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     I.fillField('Subject', 'test appointment two');
     I.fillField('Location', 'invite location');
-    I.see('Calendar:New calendar', '.io-ox-calendar-edit-window .header.container .header-right');
+    I.see('New calendar', '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
 
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('5:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('5:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -92,36 +91,37 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     // check in Workweek view
     I.clickToolbar('View');
     I.click('Workweek');
-    I.see('test appointment one', '.week-view .appointment .title');
-    I.see('test appointment two', '.week-view .appointment .title');
-    I.seeNumberOfElements('.week-view .appointment .title', 2);
+    I.waitForText('test appointment one', 5, '.workweek');
+    I.waitForText('test appointment two', 5, '.workweek');
+    I.see('test appointment one', '.workweek .appointment .title');
+    I.see('test appointment two', '.workweek .appointment .title');
+    I.seeNumberOfElements('.workweek .appointment .title', 2);
 
     // switch off New calendar
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.dontSee('test appointment two', '.week-view .appointment .title');
-    I.seeNumberOfElements('.week-view .appointment .title', 1);
+    I.seeNumberOfElements('.workweek .appointment .title', 1);
 
     // switch on again
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.see('test appointment two', '.week-view .appointment .title');
-    I.seeNumberOfElements('.week-view .appointment .title', 2);
+    I.see('test appointment two', '.workweek .appointment .title');
+    I.seeNumberOfElements('.workweek .appointment .title', 2);
 
     // remove appointments
-    I.click('//div[@class="title" and text()="test appointment one"]');
-    I.waitForVisible('.io-ox-sidepopup');
+    I.click('test appointment one', '.workweek');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
-    I.click('.io-ox-sidepopup [data-action="delete"]');
+    I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
 
-    I.click('//div[@class="title" and text()="test appointment two"]');
-    I.waitForVisible('.io-ox-sidepopup');
+    I.click('test appointment two', '.workweek');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
-    I.click('.io-ox-sidepopup [data-action="delete"]');
+    I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
 
     // create in Week view
     I.selectFolder('New calendar');
@@ -133,9 +133,9 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     I.fillField('Subject', 'test appointment one');
     I.fillField('Location', 'invite location');
-    I.see('Calendar:New calendar', '.io-ox-calendar-edit-window .header.container .header-right');
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.see('New calendar', '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
+    I.click('~Start time');
+    I.click('4:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -143,16 +143,16 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     // create second appointment in different calendar
     I.selectFolder(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name);
-    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name +'"] .color-label');
+    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label');
     I.clickToolbar('New');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'test appointment two');
     I.fillField('Location', 'invite location');
-    I.see('Calendar:' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .header.container .header-right');
+    I.see(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
 
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('5:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('5:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -161,41 +161,41 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     // check in Week view
     I.clickToolbar('View');
     I.click('Week');
-
-    I.see('test appointment one', '.weekview .appointment .title');
-    I.see('test appointment two', '.weekview .appointment .title');
-    I.seeNumberOfElements('.weekview .appointment .title', 2);
+    I.waitForText('test appointment one', 5, '.week');
+    I.waitForText('test appointment two', 5, '.week');
+    I.see('test appointment one', '.weekview-container.week .appointment .title');
+    I.see('test appointment two', '.weekview-container.week .appointment .title');
+    I.seeNumberOfElements('.weekview-container.week .appointment .title', 2);
 
     // switch off New calendar
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.dontSee('test appointment one', '.week-view .appointment .title');
-    I.seeNumberOfElements('.weekview .appointment .appointment-content .title', 1);
+    I.seeNumberOfElements('.weekview-container.week .appointment .appointment-content .title', 1);
 
     // switch on again
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.see('test appointment one', '.week-view .appointment .title');
-    I.seeNumberOfElements('.weekview .appointment .appointment-content .title', 2);
+    I.see('test appointment one', '.week .appointment .title');
+    I.seeNumberOfElements('.weekview-container.week .appointment .appointment-content .title', 2);
 
     // remove
-    I.click('(//div[@class="title" and text()="test appointment one"])[2]');
-    I.waitForVisible('.io-ox-sidepopup');
+    I.click('test appointment one', '.weekview-container.week');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
-    I.click('.io-ox-sidepopup [data-action="delete"]');
+    I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
 
-    I.click('(//div[@class="title" and text()="test appointment two"])[2]');
-    I.waitForVisible('.io-ox-sidepopup');
+    I.click('test appointment two', '.weekview-container.week');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
-    I.click('.io-ox-sidepopup [data-action="delete"]');
+    I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
 
     // create in Month view
     I.selectFolder(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name);
-    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name +'"] .color-label');
+    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label');
     I.clickToolbar('View');
     I.click('Month');
     I.clickToolbar('New');
@@ -203,9 +203,9 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     I.fillField('Subject', 'test appointment one');
     I.fillField('Location', 'invite location');
-    I.see('Calendar:' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .header.container .header-right');
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.see(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
+    I.click('~Start time');
+    I.click('4:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -218,27 +218,26 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     I.fillField('Subject', 'test appointment two');
     I.fillField('Location', 'invite location');
-    I.see('Calendar:New calendar', '.io-ox-calendar-edit-window .header.container .header-right');
+    I.see('New calendar', '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
 
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('5:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('5:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
-    I.waitForDetached('.io-ox-calendar-edit-window', 5);
-
     // check in Month view
     I.clickToolbar('View');
     I.click('Month');
+    I.waitForText('test appointment one', 5, '.month-container');
+    I.waitForText('test appointment two', 5, '.month-container');
     I.see('test appointment one', '.month-container .appointment .title');
     I.see('test appointment two', '.month-container .appointment .title');
     I.seeNumberOfElements('.month-container .appointment .title', 2);
 
     // switch off New calendar
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.dontSee('test appointment two', '.month-container .appointment .title');
     I.seeNumberOfElements('.month-container .appointment .appointment-content .title', 1);
 
     // switch on again
@@ -247,21 +246,21 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.seeNumberOfElements('.month-container .appointment .appointment-content .title', 2);
 
     // remove
-    I.click('//span[@class="title" and text()="test appointment one"]');
-    I.waitForVisible('.io-ox-sidepopup');
+    I.click('test appointment one', '.month-container');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
-    I.click('.io-ox-sidepopup [data-action="delete"]');
+    I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
 
-    I.click('//span[@class="title" and text()="test appointment two"]');
-    I.waitForVisible('.io-ox-sidepopup');
+    I.click('test appointment two', '.month-container');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
-    I.click('.io-ox-sidepopup [data-action="delete"]');
+    I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
 
     // create in Day view
     I.clickToolbar('View');
@@ -272,9 +271,9 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     I.fillField('Subject', 'test appointment one');
     I.fillField('Location', 'invite location');
-    I.see('Calendar:New calendar', '.io-ox-calendar-edit-window .header.container .header-right');
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.see('New calendar', '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
+    I.click('~Start time');
+    I.click('4:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -282,16 +281,16 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     // create second appointment in different calendar
     I.selectFolder(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name);
-    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name +'"] .color-label');
+    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label');
     I.clickToolbar('New');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'test appointment two');
     I.fillField('Location', 'invite location');
-    I.see('Calendar:' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .header.container .header-right');
+    I.see(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
 
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('5:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('5:00 PM');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -300,37 +299,38 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     // check in Day view
     I.clickToolbar('View');
     I.click('Day');
+    I.waitForText('test appointment one', 5, '.weekview-container');
+    I.waitForText('test appointment two', 5, '.weekview-container');
 
-    I.see('test appointment one', '.dayview .appointment .title');
-    I.see('test appointment two', '.dayview .appointment .title');
-    I.seeNumberOfElements('.dayview .appointment .title', 2);
+    I.see('test appointment one', '.weekview-container.day .appointment .title');
+    I.see('test appointment two', '.weekview-container.day .appointment .title');
+    I.seeNumberOfElements('.weekview-container.day .appointment .title', 2);
 
     // switch off New calendar
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.dontSee('test appointment one', '.dayview .appointment .title');
-    I.seeNumberOfElements('.dayview .appointment .title', 1);
+    I.seeNumberOfElements('.weekview-container.day .appointment .title', 1);
 
     // switch on again
     I.click('[aria-label="New calendar"] .color-label', '.window-sidepanel');
-    I.see('test appointment one', '.dayview .appointment .title');
-    I.seeNumberOfElements('.dayview .appointment .title', 2);
+    I.see('test appointment one', '.weekview-container.day .appointment .title');
+    I.seeNumberOfElements('.weekview-container.day .appointment .title', 2);
 
     // remove
-    I.click('(//div[@class="title" and text()="test appointment one"])[3]');
-    I.waitForVisible('.io-ox-sidepopup');
+    I.click('test appointment one', '.weekview-container.day');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
-    I.click('.io-ox-sidepopup [data-action="delete"]');
+    I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
 
-    I.click('(//div[@class="title" and text()="test appointment two"])[3]');
-    I.waitForVisible('.io-ox-sidepopup');
+    I.click('test appointment two', '.weekview-container.day');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
-    I.click('.io-ox-sidepopup [data-action="delete"]');
+    I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
 
     I.logout();
 

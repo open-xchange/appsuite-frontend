@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/folder/node', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
     'io.ox/core/api/account',

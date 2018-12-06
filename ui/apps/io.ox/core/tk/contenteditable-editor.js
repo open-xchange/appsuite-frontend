@@ -114,16 +114,18 @@ define('io.ox/core/tk/contenteditable-editor', [
         }())
     });
 
+    /*
+    // disabled for 7.10.1, will be removed with 7.10.2
     ext.point(POINT + '/options').extend({
         id: 'mention',
         index: INDEX += 100,
         config: function (context) {
 
-            var enabled = settings.get('features/mentions', false);
+            var enabled = mailSettings.get('features/mentions', false);
 
             if (!enabled) return;
 
-            this.plugins = this.plugins + ' advlink paste oxmention';
+            this.plugins = this.plugins + ' oxmention';
 
             var model = context.view.model,
                 cachedResponse;
@@ -188,6 +190,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             });
         }
     });
+    */
 
     function splitContent_W3C(ed) {
         // get current range
@@ -431,6 +434,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             init_instance_callback: function (editor) {
                 ed = editor;
+                $(ed.contentDocument).on('dragover drop', false);
                 initialized.resolve();
             },
 
@@ -684,7 +688,8 @@ define('io.ox/core/tk/contenteditable-editor', [
         // hint: does not detects the cite block
         this.getContentParts = function () {
             var content = this.getContent(),
-                index = content.indexOf('<blockquote type="cite">');
+                isForwardUnquoted = opt.view.model.get('mode') === 'forward' && mailSettings.get('forwardunquoted', false),
+                index = content.indexOf(isForwardUnquoted ? '----' : '<blockquote type="cite">');
             // special case: initially replied/forwarded text mail
             if (content.substring(0, 15) === '<blockquote><div>') index = 0;
             // special case: switching between signatures in such a mail

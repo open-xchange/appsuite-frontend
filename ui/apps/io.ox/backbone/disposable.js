@@ -15,6 +15,8 @@ define('io.ox/backbone/disposable', [], function () {
 
     'use strict';
 
+    if (ox.debug) console.warn('io.ox/backbone/disposable is deprecated. Please use io.ox/backbone/views/disposable.');
+
     //
     // Disposable view. Implements "dipose" for a rigorous clean up.
     //

@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/share/wizard', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/extensions',
     'io.ox/files/share/api',
     'io.ox/files/share/model',

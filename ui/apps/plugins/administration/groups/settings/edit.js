@@ -13,7 +13,7 @@
 
 define('plugins/administration/groups/settings/edit', [
     'io.ox/core/extensions',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/backbone/mini-views/common',
     'io.ox/core/tk/dialogs',
     'io.ox/core/tk/typeahead',

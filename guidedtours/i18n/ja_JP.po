@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-26 17:13+0200\n"
+"PO-Revision-Date: 2018-11-06 21:26+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 2.2\n"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Add another account"
@@ -655,13 +655,10 @@ msgstr ""
 "を入力します。仕事にドキュメントを追加すれば、添付ファイルを作成できます。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"アプリケーションを起動するには、メニュー バーの左側にある項目をクリックしま"
-"す。"
+"アプリケーションを起動するには、アプリケーションランチャーメニュー内の項目を"
+"クリックします。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."

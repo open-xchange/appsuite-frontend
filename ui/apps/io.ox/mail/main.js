@@ -440,8 +440,7 @@ define('io.ox/mail/main', [
 
             // register load listener which triggers complete
             collection.on('load reload', function () {
-                this.complete = true;
-                this.trigger('complete');
+                this.setComplete(true);
             });
 
             // use mail API's "all-unseen" event to update counter (that is also used in top-bar)
@@ -517,6 +516,22 @@ define('io.ox/mail/main', [
             if (!_.device('smartphone')) return;
             app.props.set('checkboxes', false);
             app.listView.toggleCheckboxes(false);
+        },
+
+        'react to markunread': function () {
+            // relevant to preserve the unread status when using list perspective as there is no parallel detailview opened
+            // if we would not save this state the mail would be marked as read when the detailview is opened without the user selecting a different mail
+            api.on('after:refresh.unseen', function (e, list) {
+                if (list.length === 1) api.setToUnread = list[0].cid;
+            });
+            // delete marker on selection change
+            app.listView.on('selection:multiple selection:one', function () {
+                delete api.setToUnread;
+            });
+            // delete marker on selection action wehn not in list perspective
+            app.listView.on('selection:action', function () {
+                if (app.props.get('layout') !== 'list') delete api.setToUnread;
+            });
         },
 
         /*
@@ -1352,6 +1367,7 @@ define('io.ox/mail/main', [
 
             // fixes scrolling issue on mobiles during delete
             if (_.device('smartphone')) return;
+            if (!settings.get('features/selectBeforeDelete', true)) return;
 
             function isSingleThreadMessage(ids, selection) {
                 if (ids.length !== 1) return false;
@@ -1368,6 +1384,9 @@ define('io.ox/mail/main', [
                 // looks for intersection
                 if (_.intersection(ids, selection).length) {
                     app.listView.selection.dodge();
+                    // we might have removed the mail defining the thread, so we need to refresh
+                    // the list or the thread will be gone until next refresh
+                    if (app.isThreaded()) api.one('deleted-mails', function () { app.listView.reload(); });
                     if (ids.length === 1) return;
                     app.listView.onBatchRemove(ids.slice(1));
                 }
@@ -1787,12 +1806,13 @@ define('io.ox/mail/main', [
         },
 
         'metrics': function (app) {
+
+            // hint: toolbar metrics are registery by extension 'metrics-toolbar'
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
 
                 var nodes = app.getWindow().nodes,
                     node = nodes.outer,
-                    toolbar = nodes.body.find('.classic-toolbar-container, .categories-toolbar-container'),
                     sidepanel = nodes.sidepanel;
                 // A/B testing which add mail account button is prefered
                 metrics.watch({
@@ -1826,37 +1846,6 @@ define('io.ox/mail/main', [
                         type: 'click',
                         action: action,
                         detail: node.attr('data-value')
-                    });
-                });
-                // toolbar actions
-                toolbar.on('mousedown', '.io-ox-action-link', function (e) {
-                    metrics.trackEvent({
-                        app: 'mail',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
-                    });
-                });
-                toolbar.on('mousedown', '.category', function (e) {
-                    metrics.trackEvent({
-                        app: 'mail',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: 'select-tab',
-                        detail: $(e.currentTarget).attr('data-id')
-                    });
-                });
-                // toolbar options dropdown
-                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
-                    var node =  $(e.target).closest('a'),
-                        isToggle = node.attr('data-toggle') === 'true';
-                    if (!node.attr('data-name')) return;
-                    metrics.trackEvent({
-                        app: 'mail',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: node.attr('data-name'),
-                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
                     });
                 });
                 // folder tree action

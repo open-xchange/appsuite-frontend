@@ -28,7 +28,7 @@ define('io.ox/calendar/common-extensions', [
             result = _.isUndefined(data.summary) ? gt('Private') : (data.summary || '\u00A0');
 
         if (options.parse) {
-            result = coreUtil.urlify(baton.data.summary);
+            result = coreUtil.urlify(result);
         }
 
         return result;

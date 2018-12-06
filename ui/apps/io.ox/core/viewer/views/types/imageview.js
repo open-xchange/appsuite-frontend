@@ -48,26 +48,35 @@ define('io.ox/core/viewer/views/types/imageview', [
             var options    = _.extend({ scaleType: 'contain' }, imageSize);
             var previewUrl = this.getPreviewUrl(options);
             var filename   = this.model.get('filename') || '';
-            var self       = this;
 
             this.$el.empty();
 
             if (previewUrl) {
                 previewUrl = _.unescapeHTML(previewUrl);
                 image.attr({ 'data-src': previewUrl, alt: filename });
-                this.$el.busy();
-                image.one('load', function () {
-                    self.$el.idle();
-                    image.removeClass('hidden');
-                });
-                image.one('error', function () {
-                    var notification = self.displayDownloadNotification(gt('Sorry, there is no preview available for this image.'));
-                    self.$el.idle().append(notification);
-                });
+                image.on('load', this.onLoadSuccess.bind(this));
+                image.on('error', this.onLoadError.bind(this));
+
                 this.$el.append($('<div class="viewer-displayer-item-container">').append(image));
             }
 
             return this;
+        },
+
+        /**
+         * Image load handler
+         */
+        onLoadSuccess: function () {
+            this.$el.idle();
+            this.$el.find('img.viewer-displayer-image').removeClass('hidden');
+        },
+
+        /**
+         * Image load error handler
+         */
+        onLoadError: function () {
+            var notification = this.displayDownloadNotification(gt('Sorry, there is no preview available for this image.'));
+            this.$el.idle().append(notification);
         },
 
         /**
@@ -122,30 +131,36 @@ define('io.ox/core/viewer/views/types/imageview', [
 
         /**
          * "Prefetches" the image slide by transferring the image source from the 'data-src'
-         *  to the 'src' attribute of the <img> HTMLElement, or by generating a Base64 URL
+         *  to the 'src' attribute of the <img> HTML element, or by generating a Base64 URL
          *  for local files.
          *
          * @returns {ImageView}
          *  the ImageView instance.
          */
         prefetch: function () {
+            if (this.isPrefetched) { return; }
+
             var image = this.$el.find('img.viewer-displayer-image');
-            if (image.length > 0) {
-                // handle local file that has not yet been uploaded to the server
-                if (this.model.get('group') === 'localFile') {
-                    this.getLocalFilePreviewUrl().done(function (previewUrl) {
-                        if (previewUrl) {
-                            image.attr('src', previewUrl);
-                        }
-                    });
+            if (image.length === 0) { return; }
 
-                } else {
-                    image.attr('src', image.attr('data-src'));
-                }
+            this.$el.busy();
 
-                this.isPrefetched = true;
+            // handle local file that has not yet been uploaded to the server
+            if (this.model.get('group') === 'localFile') {
+                this.getLocalFilePreviewUrl().done(function (previewUrl) {
+                    if (previewUrl) {
+                        image.attr('src', previewUrl);
+                    }
+                });
+
+            } else {
+                image.attr('src', image.attr('data-src'));
             }
 
+            // set to pixel values instead of 100% in order to make it work with retina and scaled browser windows
+            image.css({ maxWidth: this.$el.width() + 'px', maxHeight: this.$el.height() + 'px' });
+
+            this.isPrefetched = true;
             return this;
         },
 
@@ -176,6 +191,15 @@ define('io.ox/core/viewer/views/types/imageview', [
 
             this.isPrefetched = false;
             return this;
+        },
+
+        /**
+         * Destructor function of this view.
+         */
+        onDispose: function () {
+            this.unload();
+            this.$el.find('img.viewer-displayer-image').off();
+            this.$el.off();
         }
 
     });

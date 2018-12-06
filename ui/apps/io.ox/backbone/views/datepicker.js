@@ -211,9 +211,7 @@ define('io.ox/backbone/views/datepicker', [
             // today button
             if (this.options.showTodayButton !== false) {
                 this.$el.append(
-                    $('<button type="button" class="btn-today">')
-                    .attr('aria-label', 'Go to today')
-                    .text(gt('Today: %1$s', moment().format('l')))
+                    $('<button type="button" class="btn-today">').text(gt('Today: %1$s', moment().format('l')))
                 );
             }
         },

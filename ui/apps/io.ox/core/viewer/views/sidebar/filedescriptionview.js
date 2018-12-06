@@ -80,7 +80,6 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
                 this.togglePanel(true);
                 // attach event handlers
                 this.listenTo(this.model, 'change:description', this.render);
-                this.on('dispose', this.disposeView.bind(this));
             } else {
                 this.$el.hide();
             }
@@ -112,7 +111,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         /**
          * Destructor function of this view.
          */
-        disposeView: function () {
+        onDispose: function () {
             if (this.model) this.model = null;
         }
     });

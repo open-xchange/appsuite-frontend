@@ -143,14 +143,14 @@ define('io.ox/calendar/toolbar', [
     }
 
     function updatePrintLink(baton) {
-        if (baton.app.getWindow().currentPerspective !== 'list') return;
+        if (baton.app.perspective.getName() !== 'list') return;
         var link = this.$el.find('[data-name="print"]');
         link.toggleClass('disabled', baton.data && _.isEmpty(baton.data));
     }
 
     function print(baton, e) {
         e.preventDefault();
-        if (baton.app.getWindow().currentPerspective === 'list') {
+        if (baton.app.perspective.getName() === 'list') {
             if (!baton.data || _.isEmpty(baton.data)) return;
             actions.invoke('io.ox/calendar/detail/actions/print-appointment', null, baton);
         } else {
@@ -164,26 +164,26 @@ define('io.ox/calendar/toolbar', [
         index: 10000,
         draw: function (baton) {
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li' })
-            .header(gt('Layout'))
-            .option('layout', 'week:day', gt('Day'), { radio: true });
-            if (_.device('!smartphone')) dropdown.option('layout', 'week:workweek', gt('Workweek'), { radio: true });
-            dropdown.option('layout', 'week:week', gt('Week'), { radio: true })
-                .option('layout', 'month', gt('Month'), { radio: true })
-                .option('layout', 'year', gt('Year'), { radio: true })
-                .option('layout', 'list', gt('List'), { radio: true })
+            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li', attributes: { role: 'presentation' } })
+            .group(gt('Layout'))
+            .option('layout', 'week:day', gt('Day'), { radio: true, group: true });
+            if (_.device('!smartphone')) dropdown.option('layout', 'week:workweek', gt('Workweek'), { radio: true, group: true });
+            dropdown.option('layout', 'week:week', gt('Week'), { radio: true, group: true })
+                .option('layout', 'month', gt('Month'), { radio: true, group: true })
+                .option('layout', 'year', gt('Year'), { radio: true, group: true })
+                .option('layout', 'list', gt('List'), { radio: true, group: true })
                 .divider()
-                .header(gt('Options'))
-                .option('folderview', true, gt('Folder view'))
-                .option('showMiniCalendar', true, gt('Mini calendar'));
+                .group(gt('Options'))
+                .option('folderview', true, gt('Folder view'), { group: true })
+                .option('showMiniCalendar', true, gt('Mini calendar'), { group: true });
 
             if (baton.app.props.get('layout') === 'month') {
-                dropdown.option('showMonthviewWeekend', true, gt('Weekends'));
+                dropdown.option('showMonthviewWeekend', true, gt('Weekends'), { group: true });
                 // dropdown.option('showMonthviewCW', true, gt('CW'));
             }
 
             dropdown
-                .option('checkboxes', true, gt('Checkboxes'))
+                .option('checkboxes', true, gt('Checkboxes'), { group: true })
                 .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
                 .listenTo(baton.app.props, 'change:layout', updateColorOption);
 
@@ -244,8 +244,8 @@ define('io.ox/calendar/toolbar', [
     });
 
     function prepareUpdateToolbar(app) {
-        var perspective = app.getWindow().getPerspective(),
-            list = perspective && perspective.name === 'list' ? app.listView.selection.get() : {};
+        var perspective = app.perspective,
+            list = perspective && perspective.getName() === 'list' ? app.listView.selection.get() : {};
         list = _(list).map(function (item) {
             if (_.isString(item)) return util.cid(item);
             return item;
@@ -289,6 +289,43 @@ define('io.ox/calendar/toolbar', [
             app.getWindow().on('change:perspective', function (e, value) {
                 app.getWindow().nodes.body.toggleClass('bottom-toolbar', value !== 'list');
                 toolbar.toggle(value !== 'list');
+            });
+        }
+    });
+
+    ext.point('io.ox/calendar/mediator').extend({
+        id: 'metrics-toolbar',
+        index: 10300,
+        setup: function (app) {
+
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+
+                var nodes = app.getWindow().nodes,
+                    toolbar = nodes.body.find('.classic-toolbar-container');
+
+                // toolbar actions
+                toolbar.on('mousedown', '.io-ox-action-link:not(.dropdown-toggle)', function (e) {
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // toolbar options dropdown
+                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
+                    var node =  $(e.target).closest('a'),
+                        isToggle = node.attr('data-toggle') === 'true';
+                    if (!node.attr('data-name')) return;
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: node.attr('data-action') || node.attr('data-name'),
+                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
+                    });
+                });
             });
         }
     });

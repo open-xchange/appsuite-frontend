@@ -76,9 +76,11 @@ define('io.ox/backbone/views/edit-picture', [
                         .then(function () {
                             var file = self.model.get('pictureFile'),
                                 imageurl = self.model.get('image1_url');
+                            // add unique identifier to prevent caching bugs
+                            if (imageurl) imageurl = imageurl + '&' + $.param({ uniq: _.now() });
                             // a) dataUrl (webcam photo)
                             if (_.isString(file)) return file;
-                            // b) server image
+                            // b) server image (or blank)
                             if (!file || !file.lastModified) return imageurl;
                             // c) local file
                             return getContent(file);
@@ -195,7 +197,7 @@ define('io.ox/backbone/views/edit-picture', [
                             getButton({ label: gt('Rotate image'), action: 'rotate', className: 'fa-repeat' })
                                 .on('click', this.onRotate.bind(this))
                         ).on('click', 'button', function (e) {
-                            $(e.target).tooltip('hide');
+                            $(e.currentTarget).tooltip('hide');
                         })
                     );
                     this.$('.empty-state').append(
@@ -207,7 +209,7 @@ define('io.ox/backbone/views/edit-picture', [
                                 .addClass('btn-lg')
                                 .on('click', this.onUserMedia.bind(this))
                         ).on('click', 'button', function (e) {
-                            $(e.target).tooltip('hide');
+                            $(e.currentTarget).tooltip('hide');
                         })
                     );
                 }

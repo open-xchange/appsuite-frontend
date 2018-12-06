@@ -79,8 +79,8 @@ define('io.ox/core/boot/config', [
             return fetch('server');
         }),
 
-        user: function () {
+        user: _.memoize(function () {
             return fetch('user');
-        }
+        })
     };
 });

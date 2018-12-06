@@ -16,7 +16,7 @@ define('plugins/core/feedback/register', [
     'io.ox/core/api/apps',
     'gettext!io.ox/core',
     'io.ox/core/yell',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'settings!io.ox/core',
     'io.ox/core/api/user',
     'io.ox/core/extensions',

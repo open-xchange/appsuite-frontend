@@ -12,7 +12,7 @@
  */
 
 define('io.ox/mail/detail/view', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/mail/common-extensions',
     'io.ox/core/extensions',
     'io.ox/mail/api',
@@ -396,10 +396,21 @@ define('io.ox/mail/detail/view', [
         index: 100,
         draw: function (baton) {
 
-            baton.content = content.get(baton.data, {}, baton.flow).content;
-            var $content = $(baton.content), resizing = 0,
-                self = this,
-                isHtml = !$content.hasClass('plain-text');
+            var contentData = content.get(baton.data, {}, baton.flow),
+                $content = $(contentData.content),
+                resizing = 0,
+                forwardEvent = function (e) {
+                    // forward events in iframe to parent window, set iframe as target, so closest selectors etc work as expected (needed in sidepopups for example)
+                    e.target = this[0];
+                    this.trigger(e);
+                }.bind(this);
+
+            baton.content = contentData.content;
+
+            // wrap plain text in body node, so we can treat plain text mails and html mails the same (replace vs append)
+            if (contentData.isText) {
+                $content = $('<body>').append($content);
+            }
 
             // inject content and listen to resize event
             this.on('load', function () {
@@ -409,34 +420,26 @@ define('io.ox/mail/detail/view', [
                     // This should be replaced with language detection in the future (https://github.com/wooorm/franc)
                     var html = $(this.contentDocument).find('html');
                     if (!html.attr('lang')) html.attr('lang', $('html').attr('lang'));
-                    // trigger click on iframe node when theres a click in the iframe -> to close dropdowns correctly etc
-                    html.on('keydown', onKeyDown)
-                        .on('click', onClick);
+                    // trigger click or keydown on iframe node to forward events properly -> to close none smart dropdowns correctly or jump to the listview on esc
+                    html.on('keydown click', forwardEvent);
 
-                    if (_.device('ios && smartphone')) html.attr('class', 'ios smartphone');
+                    if (_.device('ios && smartphone')) html.addClass('ios smartphone');
 
                     $(this.contentDocument).find('head').append('<style>' + contentStyle + '</style>');
+                    $(this.contentDocument).find('body').replaceWith($content);
 
-                    if (isHtml) {
-                        $(this.contentDocument).find('body').replaceWith($content);
-                    } else {
-                        $(this.contentDocument).find('body').append($content);
-                    }
                     $(this.contentWindow)
                         .on('complete toggle-blockquote', { iframe: $(this) }, onImmediateResize)
                         .on('resize', { iframe: $(this) }, onWindowResize)
+                        .on('dragover drop', false)
                         .trigger('resize');
                 }.bind(this));
             });
 
-            var onKeyDown = function (e) {
-                if (e.which !== 27) return;
-                // Sets focus on escape to the list view
-                this.closest('.window-container').find('.folder-tree .folder.selected, .list-item.selectable.selected').last().focus();
-            }.bind(this);
-
-            function onClick() {
-                self.trigger('click');
+            // simple helper to enable resizing on
+            // browser resize events
+            function onBrowserResize() {
+                resizing = 0;
             }
 
             function onImmediateResize(e) {
@@ -463,8 +466,12 @@ define('io.ox/mail/detail/view', [
                 $(this).off().trigger('complete');
             });
 
+            // react on browser resize
+            $(window).on('resize', onBrowserResize);
+
             // remove event handlers on dispose
             this.on('dispose', function () {
+                $(window).off('resize', onBrowserResize);
                 $(this.contentWindow).off();
             });
         }
@@ -682,6 +689,11 @@ define('io.ox/mail/detail/view', [
 
         onUnseen: function () {
             var data = this.model.toJSON();
+
+            // check if this mail was manually set to unread previously so we don't remove the unread state when not intended (only relevant for list perspective as the detailview is already drawn in other perspectives) see Bug 61525
+            if (this.model.cid === api.setToUnread) {
+                return;
+            }
             if (util.isToplevel(data)) api.markRead(data);
         },
 
@@ -755,7 +767,8 @@ define('io.ox/mail/detail/view', [
                             this.onLoadFail.bind(this)
                         );
                     } else {
-                        api.get(cid).pipe(
+                        // check if this mail was manually set to unread previously so we don't remove the unread state when not intended (only relevant for list perspective as the detailview is already drawn in other perspectives) see Bug 61525
+                        api.get(_.extend({}, cid, { unseen: this.model.cid === api.setToUnread })).pipe(
                             this.onLoad.bind(this),
                             this.onLoadFail.bind(this)
                         );

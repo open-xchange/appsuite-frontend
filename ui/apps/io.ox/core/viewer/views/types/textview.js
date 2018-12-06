@@ -37,8 +37,6 @@ define('io.ox/core/viewer/views/types/textview', [
             this.size = 13;
             // quick hack to get rid of flex box
             this.$el.empty().css('display', 'block');
-            // run own disposer function on dispose event from DisposableView
-            this.on('dispose', this.disposeView.bind(this));
             return this;
         },
 
@@ -172,7 +170,7 @@ define('io.ox/core/viewer/views/types/textview', [
          * Destructor function of this view.
          *  Aborts the AJAX request and clears the load timeout.
          */
-        disposeView: function () {
+        onDispose: function () {
             this.abortAjaxRequest();
             this.clearLoadTimeout();
         }

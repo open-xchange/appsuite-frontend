@@ -14,7 +14,7 @@ define('io.ox/core/viewer/views/mainview', [
     'io.ox/core/viewer/views/toolbarview',
     'io.ox/core/viewer/views/displayerview',
     'io.ox/core/viewer/views/sidebarview',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/tk/nodetouch',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
@@ -77,8 +77,6 @@ define('io.ox/core/viewer/views/mainview', [
             }
             // handle DOM events
             $(window).on('resize', this.refreshViewSizes.bind(this));
-            // clean stuff on dispose event from core/commons.js
-            this.on('dispose', this.disposeView.bind(this));
             // display the selected file initially
             var startIndex = this.collection.getStartIndex(),
                 startModel = this.collection.at(startIndex);
@@ -149,18 +147,20 @@ define('io.ox/core/viewer/views/mainview', [
                 } else {
                     swiper.slidePrev();
                 }
-                self.displayerView.focusActiveSlide();
+                swiper.updateClickedSlide({ target: null });
             }, 200);
 
             // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
             function tabHandler(event) {
-                var tabableActions = a11y.getTabbable(viewerRootEl),
-                    tabableActionsCount = tabableActions.length;
+                var tabableActions = a11y.getTabbable(viewerRootEl).filter(':not(.swiper-button-control):not([tabindex=-1])');
+                var tabableActionsCount = tabableActions.length;
+
                 // quit immediately if no tabable actions are found
                 if (tabableActionsCount === 0) { return; }
-                var focusedElementIndex = tabableActions.index(document.activeElement),
-                    traversalStep = event.shiftKey ? -1 : 1,
-                    nextElementIndex = focusedElementIndex + traversalStep;
+
+                var focusedElementIndex = tabableActions.index(document.activeElement);
+                var traversalStep = event.shiftKey ? -1 : 1;
+                var nextElementIndex = focusedElementIndex + traversalStep;
                 // prevent default TAB traversal
                 event.preventDefault();
                 // traverse to prev/next action
@@ -170,6 +170,18 @@ define('io.ox/core/viewer/views/mainview', [
                 // focus next action candidate
                 tabableActions.eq(nextElementIndex).visibleFocus();
             }
+
+            function handleLeftRightArrowKey(direction) {
+                // need to use defer here in order to let the toolbar navigation select the action link first
+                _.defer(function () {
+                    var toolbarFocused = $.contains(self.toolbarView.el, document.activeElement);
+                    // if the focus is inside the toolbar cursor left/right switches between toolbar links, otherwise between slides
+                    if (!toolbarFocused) {
+                        handleChangeSlide(direction);
+                    }
+                });
+            }
+
             switch (event.which) {
                 case 9: // TAB key
                     if (this.standalone) return;
@@ -185,10 +197,10 @@ define('io.ox/core/viewer/views/mainview', [
                     }
                     break;
                 case 37: // left arrow
-                    handleChangeSlide('left');
+                    handleLeftRightArrowKey('left');
                     break;
                 case 39: // right arrow
-                    handleChangeSlide('right');
+                    handleLeftRightArrowKey('right');
                     break;
                 case 33: // page up
                     event.preventDefault();
@@ -228,8 +240,7 @@ define('io.ox/core/viewer/views/mainview', [
             var rightOffset = this.sidebarView.open ? this.sidebarView.$el.outerWidth() : 0;
             var displayerEl = this.displayerView.$el;
             var activeSlide = this.displayerView.getActiveSlideNode();
-            // var activeSlideIndex = activeSlide.index();
-            var swiper = this.displayerView.swiper;
+            var swiper      = this.displayerView.swiper;
 
             displayerEl.css({ width: window.innerWidth - rightOffset });
             activeSlide.find('.viewer-displayer-item').css({ maxWidth: window.innerWidth - rightOffset });
@@ -237,9 +248,6 @@ define('io.ox/core/viewer/views/mainview', [
             if (swiper) {
                 swiper.update();
                 this.viewerEvents.trigger('viewer:resize');
-                // workaround for a possible bug from swiper plugin that happens sporadically:
-                // After an on resize call, the plugin 'resets' the active slide to the beginning.
-                // swiper.slideTo(activeSlideIndex);
             }
         },
 
@@ -284,7 +292,7 @@ define('io.ox/core/viewer/views/mainview', [
             }
         },
 
-        disposeView: function () {
+        onDispose: function () {
             this.toolbarView.remove();
             this.displayerView.remove();
             this.sidebarView.remove();
@@ -303,7 +311,6 @@ define('io.ox/core/viewer/views/mainview', [
                 this.app.quit();
                 this.app = null;
             }
-            return this;
         }
     });
     return MainView;

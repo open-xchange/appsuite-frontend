@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-27 06:14+0200\n"
+"PO-Revision-Date: 2018-10-15 03:43+0200\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <ox@workshop-chapina.com>\n"
 "Language: sv_SE\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Add another account"
@@ -672,13 +672,8 @@ msgstr ""
 "Deltagare. Du kan lägga till dokument som bilagor i uppgiften."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid "To launch an app click on an entry inside the app launcher menu."
-msgstr ""
-"För att starta ett program, klicka på en post på den vänstra sidan av "
-"menyraden."
+msgstr "För att starta ett program, klicka på en post i programstartmenyn."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."

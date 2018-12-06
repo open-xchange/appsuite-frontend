@@ -12,7 +12,7 @@
  */
 
 define('plugins/administration/groups/settings/members', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/api/user',
     'io.ox/core/api/group',
     'io.ox/contacts/util',

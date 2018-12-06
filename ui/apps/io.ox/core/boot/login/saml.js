@@ -21,6 +21,12 @@ define('io.ox/core/boot/login/saml', [
 
     function RedirectHandler(options) {
         options = options || {};
+        function checkReload(uri) {
+            _.defer(function () {
+                if (window.location.href !== uri) return;
+                window.location.reload();
+            });
+        }
 
         _.extend(this, options, {
             id: 'saml_redirect',
@@ -31,26 +37,14 @@ define('io.ox/core/boot/login/saml', [
                 baton.handled = $.Deferred();
                 if ((/^http/i).test(uri)) {
                     window.location = uri;
-                    _.defer(function () {
-                        if (window.location.href !== uri) return;
-                        window.location.reload();
-                    });
+                    checkReload(uri);
                 } else {
-                    var path = '';
-                    if (uri.indexOf('/') === 0) {
-                        path = uri;
-                    } else {
-                        path = '/' + uri;
-                    }
+                    var path = uri[0] === '/' ? '' : '/';
+                    path += uri;
 
-                    var proto = window.location.protocol,
-                        host = window.location.host;
-                    uri = proto + '//' + host + path;
+                    uri = window.location.protocol + '//' + window.location.host + path;
                     window.location = uri;
-                    _.defer(function () {
-                        if (window.location.href !== uri) return;
-                        window.location.reload();
-                    });
+                    checkReload(uri);
                 }
             }
         });
@@ -72,24 +66,6 @@ define('io.ox/core/boot/login/saml', [
         id: 'saml',
         after: 'autologin',
         login: function () {
-            var def = $.when();
-            def = $.Deferred();
-            $.get(ox.apiRoot + samlPath + '/init?flow=login').done(function (data) {
-                var baton = new ext.Baton({ data: data });
-                ext.point('io.ox.saml/login').invoke('handle', baton, baton);
-                if (baton.handled && baton.handled.always) {
-                    baton.handled.always(def.resolve);
-                } else {
-                    def.resolve();
-                }
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                if (ox.serverConfig.samlLoginErrorRedirect) {
-                    _.url.redirect(ox.serverConfig.samlLoginErrorRedirectURL +
-                        '#&' + _.serialize({ language: ox.language, statusCode: jqXHR.status || 'undefined', statusText: textStatus, error: errorThrown }));
-                } else {
-                    def.resolve();
-                }
-            });
             if (ox.serverConfig.samlLoginErrorPage === true) {
                 setTimeout(function () {
                     ox.trigger('server:down');
@@ -104,7 +80,19 @@ define('io.ox/core/boot/login/saml', [
                     console.warn('Server is down.');
                 }, 250);
             }
-            return def;
+            return $.get(ox.apiRoot + samlPath + '/init?flow=login').then(function (data) {
+                var baton = new ext.Baton({ data: data });
+                ext.point('io.ox.saml/login').invoke('handle', baton, baton);
+                if (baton.handled && baton.handled.catch) {
+                    // silently catch errors
+                    return baton.handled.catch(_.noop);
+                }
+            }, function (jqXHR, textStatus, errorThrown) {
+                if (ox.serverConfig.samlLoginErrorRedirect) {
+                    _.url.redirect(ox.serverConfig.samlLoginErrorRedirectURL +
+                        '#&' + _.serialize({ language: ox.language, statusCode: jqXHR.status || 'undefined', statusText: textStatus, error: errorThrown }));
+                }
+            });
         }
     });
 
@@ -112,7 +100,7 @@ define('io.ox/core/boot/login/saml', [
     ox.once('boot:done', def.resolve);
     def.then(function () {
         return require(['io.ox/core/capabilities']);
-    }).then(function (caps) {
+    }).then(function (capabilities) {
         ox.on('relogin:required', function () {
             return $.get(ox.apiRoot + samlPath + '/init?flow=relogin').done(function (data) {
                 var baton = new ext.Baton({ data: data });
@@ -120,7 +108,7 @@ define('io.ox/core/boot/login/saml', [
             });
         });
 
-        if (caps.has('saml-single-logout') || ox.serverConfig.samlSingleLogout) {
+        if (capabilities.has('saml-single-logout') || ox.serverConfig.samlSingleLogout) {
             ext.point('io.ox/core/logout').extend({
                 id: 'saml_logout',
                 index: 'last',
@@ -130,7 +118,7 @@ define('io.ox/core/boot/login/saml', [
                         var baton = new ext.Baton({ data: data });
                         ext.point('io.ox.saml/logout').invoke('handle', baton, baton);
                     }).fail(def.reject);
-                    return def; // Hack to stop all further processing. This is never resolved.
+                    return def; // stop all further processing. This is never resolved.
                 }
             });
         }

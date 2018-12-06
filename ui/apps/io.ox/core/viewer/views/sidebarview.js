@@ -11,7 +11,7 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/sidebarview', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/viewer/util',
     'io.ox/files/api',
     'io.ox/core/folder/api',
@@ -125,7 +125,6 @@ define('io.ox/core/viewer/views/sidebarview', [
 
             // bind scroll handler
             this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
-            this.on('dispose', this.disposeView.bind(this));
             this.initTabNavigation();
         },
 
@@ -404,7 +403,7 @@ define('io.ox/core/viewer/views/sidebarview', [
         /**
          * Destructor function of this view.
          */
-        disposeView: function () {
+        onDispose: function () {
             this.$el.disableTouch();
             if (this.zone) {
                 this.zone.off();

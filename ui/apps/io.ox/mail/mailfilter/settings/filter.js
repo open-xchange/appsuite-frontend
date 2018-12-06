@@ -23,7 +23,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'gettext!io.ox/mail',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/mini-views/settings-list-view',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'settings!io.ox/mail',
     'io.ox/mail/mailfilter/settings/filter/defaults',
     'static/3rd.party/jquery-ui.min.js',
@@ -273,6 +273,15 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     className: 'settings-list-item',
 
                     saveTimeout: 0,
+
+                    initialize: function () {
+                        if (_.indexOf(this.model.get('flags'), 'vacation') !== -1) this.listenTo(ox, 'mail:change:vacation-notice', this.handleToogleState);
+                        if (_.indexOf(this.model.get('flags'), 'autoforward') !== -1) this.listenTo(ox, 'mail:change:auto-forward', this.handleToogleState);
+                    },
+
+                    handleToogleState: function (model) {
+                        this.model.set('active', model.get('active'));
+                    },
 
                     render: function () {
                         var flag = (this.model.get('flags') || [])[0],

@@ -171,7 +171,8 @@ define('io.ox/contacts/widgets/pictureUpload', [
                     dataUrl;
 
                 if (imageUrl) {
-                    imageUrl = util.getShardingRoot(util.replacePrefix(imageUrl));
+                    // add unique identifier to prevent caching bugs
+                    imageUrl = util.getShardingRoot(util.replacePrefix(imageUrl + '&' + $.param({ uniq: _.now() })));
                 } else if (this.model.get('image1') && this.model.get('image1_content_type')) {
                     // temporary support for data-url images
                     dataUrl = 'data:' + this.model.get('image1_content_type') + ';base64,' + this.model.get('image1');

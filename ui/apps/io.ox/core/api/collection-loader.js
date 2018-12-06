@@ -73,18 +73,12 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             });
 
             // track completeness
-            var complete = collection.complete;
-            if (type === 'load') {
-                complete = data.length < PAGE_SIZE;
-            } else if (type === 'paginate') {
-                // the first data element is the last currently visible element
-                // in the list, therefore <=1 is already complete
-                complete = data.length <= 1;
-            }
-            if (complete !== collection.complete) {
-                collection.complete = complete;
-                collection.trigger('complete', complete);
-            }
+            // load: always complete if we get less than requested
+            // paginate: the first data element is the last currently visible element in the list, therefore <=1 is already complete
+            // reload: keep the previous state. no need to trigger complete
+            if (type === 'load') collection.setComplete(data.length < PAGE_SIZE);
+            else if (type === 'paginate') collection.setComplete(data.length <= 1);
+
             collection.trigger(type);
         }
 
@@ -126,7 +120,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             collection = this.collection = this.getCollection(params);
             this.loading = false;
 
-            if (this.isBad(params.folder) || (collection.length > 0 && !collection.expired && collection.sorted && !collection.preserve)) {
+            if (this.isBad(params.folder) || ((collection.length > 0 || collection.complete) && !collection.expired && collection.sorted && !collection.preserve)) {
                 // reduce too large collections
                 var pageSize = collection.CUSTOM_PAGE_SIZE || this.PRIMARY_PAGE_SIZE;
                 if (collection.length > pageSize) {
@@ -169,7 +163,9 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             // see Bug #59875
             // calculate maxLimit correctly (times paginate was done * secondary_page_size + initial page size)
             var maxLimit = Math.ceil((collection.length - this.PRIMARY_PAGE_SIZE) / this.SECONDARY_PAGE_SIZE) * this.SECONDARY_PAGE_SIZE + this.PRIMARY_PAGE_SIZE;
-            params.limit = '0,' + Math.max(collection.length + (tail || 0), maxLimit);
+            // in case we have an empty folder (drive), rightHand will be 0. See Bug #60086
+            var rightHand = Math.max(collection.length + (tail || 0), maxLimit);
+            params.limit = '0,' + (rightHand === 0 ? this.PRIMARY_PAGE_SIZE : rightHand);
 
             this.loading = true;
 

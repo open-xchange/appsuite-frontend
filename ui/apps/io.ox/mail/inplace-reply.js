@@ -12,7 +12,7 @@
  */
 
 define('io.ox/mail/inplace-reply', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/mail/api',
     'io.ox/core/api/account',
     'io.ox/core/yell',

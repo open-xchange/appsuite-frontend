@@ -196,7 +196,13 @@ define('io.ox/mail/detail/content', [
                     link.addClass(data.className).data(data);
                     // if this is a sharing link add the generic deep link class so event handlers work properly and it doesn't get opened in a new tab
                     if (shareLinkUrl && link.attr('href') === shareLinkUrl) link.addClass('deep-link-app');
-                } else if (href.search(/^\s*mailto:/i) > -1) {
+                    return;
+                }
+
+                // important: if this is not an internal deeplink (not in valid hosts), we must remove deeplink markup. Otherwise our event listeners are triggered instead of opening in a new tab.
+                link.removeClass('deep-link-files', 'deep-link-contacts', 'deep-link-calendar', 'deep-link-tasks', 'deep-link-app');
+
+                if (href.search(/^\s*mailto:/i) > -1) {
                     // mailto:
                     link.addClass('mailto-link').attr('target', '_blank');
                     text = link.text();
@@ -588,7 +594,7 @@ define('io.ox/mail/detail/content', [
                 return { content: $(), isLarge: false, type: 'text/plain' };
             }
 
-            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain', flow: flow }), content,
+            var baton = new ext.Baton(_({ data: data, options: options || {}, source: '', type: 'text/plain', flow: flow }).omit(function (val) { return val === undefined; })), content,
                 isTextOrHTML = /^text\/(plain|html)$/i,
                 isImage = /^image\//i;
 
@@ -662,7 +668,7 @@ define('io.ox/mail/detail/content', [
                 console.error('mail.getContent', e.message, e, data);
             }
 
-            return { content: content, isLarge: baton.isLarge, type: baton.type };
+            return { content: content, isLarge: baton.isLarge, type: baton.type, isText: baton.isText };
         },
 
         beautifyPlainText: function (str) {

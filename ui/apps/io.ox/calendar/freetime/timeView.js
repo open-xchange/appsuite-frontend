@@ -12,7 +12,7 @@
  */
 
 define('io.ox/calendar/freetime/timeView', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/extensions',
     'gettext!io.ox/calendar',
     'io.ox/calendar/api',
@@ -476,10 +476,7 @@ define('io.ox/calendar/freetime/timeView', [
             }
             this.updateVisibility();
 
-            $(window).on('resize', this.onResize);
-            this.on('dispose', function () {
-                $(window).off('resize', this.onResize);
-            });
+            this.listenToDOM(window, 'resize', this.onResize);
         },
 
         updateZoom: function () {
@@ -609,6 +606,11 @@ define('io.ox/calendar/freetime/timeView', [
                 self.bodyNode.idle();
                 // set appointments silent, force trigger to redraw correctly. (normal setting does not trigger correctly when just switching times)
                 self.model.set('timeSlots', timeSlots, { silent: true }).trigger('change:timeSlots');
+            }).fail(function (error) {
+                self.bodyNode.idle();
+                require(['io.ox/core/yell'], function (yell) {
+                    yell(error);
+                });
             });
         },
 

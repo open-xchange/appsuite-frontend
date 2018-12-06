@@ -266,40 +266,40 @@ define('io.ox/mail/toolbar', [
             if (_.device('smartphone')) return;
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li' })
-            .header(gt('Layout'))
-            .option('layout', 'vertical', gt('Vertical'), { radio: true });
+            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li', attributes: { role: 'presentation' } })
+            .group(gt('Layout'))
+            .option('layout', 'vertical', gt('Vertical'), { radio: true, group: true });
             // offer compact view only on desktop
-            if (_.device('desktop')) dropdown.option('layout', 'compact', gt('Compact'), { radio: true });
-            dropdown.option('layout', 'horizontal', gt('Horizontal'), { radio: true })
-            .option('layout', 'list', gt('List'), { radio: true })
+            if (_.device('desktop')) dropdown.option('layout', 'compact', gt('Compact'), { radio: true, group: true });
+            dropdown.option('layout', 'horizontal', gt('Horizontal'), { radio: true, group: true })
+            .option('layout', 'list', gt('List'), { radio: true, group: true })
             .divider();
 
             // feature: tabbed inbox
             if (capabilities.has('mail_categories') && !_.device('smartphone')) {
                 dropdown
-                .header(gt('Inbox'))
-                .option('categories', true, gt('Use categories'))
+                .group(gt('Inbox'))
+                .option('categories', true, gt('Use categories'), { group: true })
                 //#. term is followed by a space and three dots (' …')
                 //#. the dots refer to the term 'Categories' right above this dropdown entry
                 //#. so user reads it as 'Configure Categories'
-                .link('categories-config', gt('Configure') + ' …', _.bind(onConfigureCategories, this, baton.app.props), { icon: true })
+                .link('categories-config', gt('Configure') + ' …', _.bind(onConfigureCategories, this, baton.app.props), { icon: true, group: true })
                 .divider();
             }
 
             dropdown
-            .header(gt('Options'))
-            .option('folderview', true, gt('Folder view'));
+            .group(gt('Options'))
+            .option('folderview', true, gt('Folder view'), { group: true });
             if (settings.get('selectionMode') !== 'alternative') {
-                dropdown.option('checkboxes', true, gt('Checkboxes'));
+                dropdown.option('checkboxes', true, gt('Checkboxes'), { group: true });
             }
             if (baton.app.supportsTextPreview()) {
-                dropdown.option('textPreview', true, gt('Text preview'));
+                dropdown.option('textPreview', true, gt('Text preview'), { group: true });
             }
             dropdown
-            .option('contactPictures', true, gt('Contact pictures'))
-            .option('exactDates', true, gt('Exact dates'))
-            .option('alwaysShowSize', true, gt('Message size'))
+            .option('contactPictures', true, gt('Contact pictures'), { group: true })
+            .option('exactDates', true, gt('Exact dates'), { group: true })
+            .option('alwaysShowSize', true, gt('Message size'), { group: true })
             .divider();
 
             if (capabilities.has('mailfilter_v2')) {
@@ -410,6 +410,52 @@ define('io.ox/mail/toolbar', [
             // update toolbar on selection change as well as any model change (seen/unseen flag)
             app.listView.on('selection:change change', function () {
                 app.updateToolbar(app.listView.selection.get());
+            });
+        }
+    });
+
+    ext.point('io.ox/mail/mediator').extend({
+        id: 'metrics-toolbar',
+        index: 10300,
+        setup: function (app) {
+
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+
+                var nodes = app.getWindow().nodes,
+                    toolbar = nodes.body.find('.classic-toolbar-container, .categories-toolbar-container');
+
+                // toolbar actions
+                toolbar.on('mousedown', '.io-ox-action-link', function (e) {
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                toolbar.on('mousedown', '.category', function (e) {
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: 'select-tab',
+                        detail: $(e.currentTarget).attr('data-id')
+                    });
+                });
+                // toolbar options dropdown
+                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
+                    var node =  $(e.target).closest('a'),
+                        isToggle = node.attr('data-toggle') === 'true';
+                    if (!node.attr('data-name')) return;
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: node.attr('data-name'),
+                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
+                    });
+                });
             });
         }
     });

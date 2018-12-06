@@ -13,7 +13,7 @@
 /* global blankshield */
 define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/backbone/mini-views/dropdown',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
@@ -137,14 +137,27 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             },
             'autoplaystart': {
-                prio: 'lo',
+                prio: _.device('desktop') ? 'hi' : 'lo',
                 mobile: 'lo',
-                label: gt('Run auto-play '),
+                label: gt('Slideshow'),
                 ref: TOOLBAR_ACTION_ID + '/autoplaystart',
                 customize: function () {
                     this.addClass('viewer-toolbar-autoplay-start')
                         .attr({
-                            'aria-label': gt('Run auto-play ')
+                            'aria-label': gt('Run slideshow')
+                        });
+                }
+
+            },
+            'autoplaystop': {
+                prio: _.device('desktop') ? 'hi' : 'lo',
+                mobile: 'lo',
+                label: gt('Stop slideshow'),
+                ref: TOOLBAR_ACTION_ID + '/autoplaystop',
+                customize: function () {
+                    this.addClass('viewer-toolbar-autoplay-stop')
+                        .attr({
+                            'aria-label': gt('Stop slideshow')
                         });
                 }
 
@@ -489,9 +502,8 @@ define('io.ox/core/viewer/views/toolbarview', [
         capabilities: 'infostore',
         requires: function (e) {
             var model = e.baton.model;
-            var currentApp = ox.ui.App.getCurrentApp().getName();
-            // detail is the target of popoutstandalone, no support for mail attachments
-            return model.get('group') !== 'localFile' && currentApp !== 'io.ox/files/detail';
+            // no support for mail attachments and no popout for already popped out viewer
+            return model.get('group') !== 'localFile' && !e.baton.context.standalone;
         },
         action: function (baton) {
             var fileModel;
@@ -509,11 +521,12 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/close', {
         action: function () {}
     });
+
     // define actions for the zoom function
     new Action(TOOLBAR_ACTION_ID + '/zoomin', {
         requires: function (e) {
             var model = e.baton.model;
-            return model.isOffice() || model.isPDF() || model.isText();
+            return model.isOffice() || model.isPDF() || model.isText() || model.isImage();
         },
         action: function (baton) {
             baton.context.onZoomIn();
@@ -522,7 +535,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/zoomout', {
         requires: function (e) {
             var model = e.baton.model;
-            return model.isOffice() || model.isPDF() || model.isText();
+            return model.isOffice() || model.isPDF() || model.isText() || model.isImage();
         },
         action: function (baton) {
             baton.context.onZoomOut();
@@ -562,6 +575,19 @@ define('io.ox/core/viewer/views/toolbarview', [
         }
     });
 
+    new Action(TOOLBAR_ACTION_ID + '/autoplaystop', {
+        requires: function (e) {
+            var model = e.baton.model;
+            var imageModelCount = model.collection.reduce(function (memo, model) { return (model.isImage() ? memo + 1 : memo); }, 0);
+            var autoplayStarted = e.baton.context.autoplayStarted;
+
+            return model.isImage() && autoplayStarted && (imageModelCount >= 2);
+        },
+        action: function (baton) {
+            baton.context.onAutoplayStop();
+        }
+    });
+
     // define the Backbone view
     var ToolbarView = DisposableView.extend({
 
@@ -587,8 +613,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             this.listenTo(this.viewerEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
             // listen to autoplay events
             this.listenTo(this.viewerEvents, 'viewer:autoplay:state:changed', this.onAutoplayRunningStateChanged);
-            // run own disposer function at global dispose
-            this.on('dispose', this.disposeView.bind(this));
             // give toolbar a standalone class if its in one
             this.$el.toggleClass('standalone', this.standalone);
             // the current autoplay state
@@ -669,14 +693,22 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Publishes zoom-in event to the MainView event aggregator.
          */
         onZoomIn: function () {
-            this.viewerEvents.trigger('viewer:zoom:in');
+            if (this.model.isImage()) {
+                this.viewerEvents.trigger('viewer:zoom:in:swiper');
+            } else {
+                this.viewerEvents.trigger('viewer:zoom:in');
+            }
         },
 
         /**
          * Publishes zoom-out event to the MainView event aggregator.
          */
         onZoomOut: function () {
-            this.viewerEvents.trigger('viewer:zoom:out');
+            if (this.model.isImage()) {
+                this.viewerEvents.trigger('viewer:zoom:out:swiper');
+            } else {
+                this.viewerEvents.trigger('viewer:zoom:out');
+            }
         },
 
         /**
@@ -710,6 +742,13 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onAutoplayStart: function () {
             this.viewerEvents.trigger('viewer:autoplay:toggle', 'running');
+        },
+
+        /**
+         * Publishes autoplay event to the MainView event aggregator.
+         */
+        onAutoplayStop: function () {
+            this.viewerEvents.trigger('viewer:autoplay:toggle', 'pausing');
         },
 
         /**
@@ -899,7 +938,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         /**
          * Destructor of this view
          */
-        disposeView: function () {
+        onDispose: function () {
             this.model = null;
         }
 

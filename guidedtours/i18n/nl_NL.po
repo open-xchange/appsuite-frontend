@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-09-23 23:16+0100\n"
+"PO-Revision-Date: 2018-10-12 22:00+0100\n"
 "Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -686,11 +686,8 @@ msgstr ""
 "Deelnemers. U kan documenten toevoegen als bijlage bij de taak."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid "To launch an app click on an entry inside the app launcher menu."
-msgstr "Om een app te starten moet u op een item links in de menubalk klikken."
+msgstr "Om een app te starten moet u op een item in het startmenu."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."

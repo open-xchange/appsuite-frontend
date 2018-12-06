@@ -505,20 +505,20 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 });
                 it('with appointment with color', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
-                        appointment = new models.Model({ color: '#aabbcc', flags: ['accepted'] });
+                        appointment = new models.Model({ color: '#aabbcc', flags: ['accepted', 'organizer'] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
                 it('with private appointment without color', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
-                        appointment = new models.Model({ flags: ['accepted', 'confidential'] });
+                        appointment = new models.Model({ flags: ['accepted', 'confidential', 'organizer'] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
 
                 it('with private appointment with color', function () {
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
-                        appointment = new models.Model({ color: '#aabbcc', flags: ['accepted', 'confidential'] });
+                        appointment = new models.Model({ color: '#aabbcc', flags: ['accepted', 'confidential', 'organizer'] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
@@ -601,10 +601,6 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 entity: 1337,
                 email: 'miss.test@test.com',
                 uri: 'mailto:miss.test@test.com',
-                contactInformation: {
-                    folder: 123,
-                    contact_id: 123456
-                },
                 contact: {
                     display_name: 'Test, Miss',
                     first_name: 'Miss',
@@ -644,10 +640,6 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 email: 'hannibal@a.team',
                 partStat: 'NEEDS-ACTION',
                 uri: 'mailto:hannibal@a.team',
-                contactInformation: {
-                    folder: 123,
-                    contact_id: 1337
-                },
                 contact: {
                     display_name: 'Smith, Hannibal',
                     first_name: 'Hannibal',
@@ -704,10 +696,6 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 email: 'vader@dark.side',
                 partStat: 'NEEDS-ACTION',
                 uri: 'mailto:vader@dark.side',
-                contactInformation: {
-                    folder: undefined,
-                    contact_id: undefined
-                },
                 contact: {
                     display_name: 'vader',
                     first_name: undefined,

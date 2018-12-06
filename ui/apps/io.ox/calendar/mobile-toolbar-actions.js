@@ -58,42 +58,23 @@ define('io.ox/calendar/mobile-toolbar-actions', [
                 ref: 'io.ox/calendar/actions/switch-to-month-view',
                 cssClasses: 'io-ox-action-link mobile-toolbar-action'
             },
-            'nextMonth': {
+            'next': {
                 prio: 'hi',
                 mobile: 'hi',
                 label: gt('Show next month'),
                 icon: 'fa fa-chevron-right',
                 drawDisabled: true,
-                ref: 'io.ox/calendar/actions/monthview/showNext',
+                ref: 'io.ox/calendar/actions/showNext',
                 cssClasses: 'io-ox-action-link mobile-toolbar-action'
 
             },
-            'prevMonth': {
+            'prev': {
                 prio: 'hi',
                 mobile: 'hi',
                 label: gt('Show previous month'),
                 icon: 'fa fa-chevron-left',
                 drawDisabled: true,
-                ref: 'io.ox/calendar/actions/monthview/showPrevious',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
-            },
-            'nextDay': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Show next day'),
-                icon: 'fa fa-chevron-right',
-                drawDisabled: true,
-                ref: 'io.ox/calendar/actions/dayview/showNext',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
-
-            },
-            'prevDay': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Show previous day'),
-                icon: 'fa fa-chevron-left',
-                drawDisabled: true,
-                ref: 'io.ox/calendar/actions/dayview/showPrevious',
+                ref: 'io.ox/calendar/actions/showPrevious',
                 cssClasses: 'io-ox-action-link mobile-toolbar-action'
             },
             'today': {
@@ -101,15 +82,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
                 mobile: 'hi',
                 label: gt('Today'),
                 drawDisabled: true,
-                ref: 'io.ox/calendar/actions/dayview/showToday',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action text-button'
-            },
-            'today-month': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Today'),
-                drawDisabled: true,
-                ref: 'io.ox/calendar/actions/month/showToday',
+                ref: 'io.ox/calendar/actions/showToday',
                 cssClasses: 'io-ox-action-link mobile-toolbar-action text-button'
             },
             'move': {
@@ -166,8 +139,8 @@ define('io.ox/calendar/mobile-toolbar-actions', [
     }));
 
     // add other actions
-    addAction(pMonth, ['create', 'listView', 'prevMonth', 'today-month', 'nextMonth']);
-    addAction(pWeek, ['create', 'listView', 'prevDay', 'today', 'nextDay']);
+    addAction(pMonth, ['create', 'listView', 'prev', 'today', 'next']);
+    addAction(pWeek, ['create', 'listView', 'prev', 'today', 'next']);
     addAction(pList, ['calendarView']);
     addAction(multiInlineActions, ['move', 'delete']);
 
@@ -187,7 +160,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
         // draw toolbar
         var baton = ext.Baton({ data: list, app: this });
         this.pages.getToolbar('month').setBaton(baton);
-        this.pages.getToolbar('week').setBaton(baton);
+        this.pages.getToolbar('week:day').setBaton(baton);
         this.pages.getToolbar('list').setBaton(baton);
         this.pages.getSecondaryToolbar('list').setBaton(baton);
 

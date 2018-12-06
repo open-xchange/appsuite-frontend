@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/tk/attachments', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/api/attachment',
     'io.ox/core/folder/title',
     'io.ox/core/strings',

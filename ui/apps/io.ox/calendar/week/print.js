@@ -150,8 +150,8 @@ define('io.ox/calendar/week/print', [
                             label: moment().startOf('hour').hour(hour).format('LT')
                         };
                     }),
-                    weekdays: _.range(moment(selection.start).day(), moment(selection.end).subtract(1).day() + 1).map(function (index) {
-                        return moment().day(index).format('dddd');
+                    weekdays: _.range(0, 7).map(function (index) {
+                        return moment().startOf('week').add(index, 'days').format('dddd');
                     })
                 },
 

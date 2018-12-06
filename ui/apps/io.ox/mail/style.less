@@ -37,7 +37,7 @@
 .io-ox-mail-window .vsplit .leftside .alert {
     position: relative;
     border-radius: 0;
-    padding: 8px 16px;
+    padding: 8px 30px 8px 16px;
     line-height: 24px;
     border: 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.10);
@@ -454,6 +454,8 @@ html.macos, html.ios {
 
     .recipients .person-link {
         color: #333;
+        text-overflow: ellipsis;
+        overflow: hidden;
         @media(max-width: 900px) { white-space: normal; }
     }
 
@@ -480,7 +482,11 @@ html.macos, html.ios {
     .detail-view-row {
         position: relative;
 
-        .recipients { float: left; }
+        .recipients {
+            float: left;
+            width: 100%;
+            display: flex;
+        }
         .priority { font-size: 14px; }
         .flag-picker {
             text-align: right;
@@ -506,6 +512,10 @@ html.macos, html.ios {
             .fa-bars {
                 font-size: 14px;
             }
+        }
+
+        &.row-3 {
+            margin-bottom: 16px;
         }
     }
 

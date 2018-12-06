@@ -12,7 +12,7 @@
  */
 
 define('io.ox/calendar/freetime/main', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/calendar/freetime/model',
     'io.ox/calendar/freetime/participantsView',
     'io.ox/calendar/freetime/timeView',
@@ -154,8 +154,15 @@ define('io.ox/calendar/freetime/main', [
                 distributionListButton = $('<button type="button" class="btn btn-link scheduling-distributionlist-button">').text(gt('Save as distribution list'));
 
             distributionListButton.on('click', function () {
-                require(['io.ox/calendar/freetime/distributionListPopup'], function (distrib) {
-                    distrib.showDialog({ attendees: self.model.get('attendees') });
+                util.resolveAttendees({ attendees: self.model.get('attendees').toJSON() }).done(function (distlist) {
+                    require(['settings!io.ox/core'], function (coreSettings) {
+                        ox.launch('io.ox/contacts/distrib/main')
+                            .done(function () {
+                                this.create(coreSettings.get('folder/contacts'), {
+                                    distribution_list: distlist
+                                });
+                            });
+                    });
                 });
             });
             return distributionListButton;

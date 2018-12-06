@@ -52,9 +52,6 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
             this.spreadsheetApp = null;
             this.tempFileModel = null;
 
-            // call view destroyer on viewer global dispose event
-            this.on('dispose', this.disposeView.bind(this));
-
             // bind resize and zoom handler
             this.listenTo(this.viewerEvents, 'viewer:resize', this.onResize);
             this.listenTo(this.viewerEvents, 'viewer:zoom:in', this.onZoomIn);
@@ -393,7 +390,7 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
         /**
          * Destructor function of this view.
          */
-        disposeView: function () {
+        onDispose: function () {
             this.unload(true);
             this.$el.off();
             this.documentContainer = null;

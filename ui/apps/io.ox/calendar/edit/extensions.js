@@ -109,9 +109,7 @@ define('io.ox/calendar/edit/extensions', [
                     if (calendarUtil.isAllday(baton.model)) {
                         // save unchanged dates, so they can be restored on error or when handling conflicts
                         baton.parentView.tempEndDate = baton.model.get('endDate');
-                        baton.parentView.tempStartDate = baton.model.get('startDate');
                         baton.model.set('endDate', { value: moment(baton.model.get('endDate').value).add(1, 'days').format('YYYYMMDD') }, { silent: true });
-                        baton.model.set('startDate', { value: moment(baton.model.get('startDate').value).format('YYYYMMDD') }, { silent: true });
                     }
 
 
@@ -159,12 +157,13 @@ define('io.ox/calendar/edit/extensions', [
                     baton.app.attachmentsFormData = attachments;
                     if (baton.mode === 'edit') {
                         var options = _.extend(calendarUtil.getCurrentRangeOptions(), {
-                            recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
-                            attachments: attachments,
-                            checkConflicts: true,
-                            sendInternalNotifications: sendNotifications
-                        });
-                        api.update(baton.model, options).then(save, fail);
+                                recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
+                                attachments: attachments,
+                                checkConflicts: true,
+                                sendInternalNotifications: sendNotifications
+                            }),
+                            delta = baton.app.getDelta();
+                        api.update(delta, options).then(save, fail);
                         return;
                     }
 
@@ -208,108 +207,6 @@ define('io.ox/calendar/edit/extensions', [
             });
         }
     });
-
-    var CalendarSelectionView = mini.AbstractView.extend({
-        tagName: 'div',
-        className: 'header-right',
-        events: {
-            'click a': 'onSelect'
-        },
-        setup: function () {
-            this.listenTo(this.model, 'change:folder', this.render);
-        },
-        onSelect: function () {
-            var self = this;
-
-            picker({
-                async: true,
-                button: gt('Select'),
-                flat: true,
-                indent: false,
-                module: 'calendar',
-                persistent: 'folderpopup',
-                root: '1',
-                settings: settings,
-                title: gt('Select calendar'),
-                createFolderText: gt('Create new calendar'),
-                folder: this.model.get('folder'),
-
-                done: function (id, dialog) {
-
-                    dialog.close();
-                    var model = folderAPI.pool.getModel(id),
-                        prevOrg = self.model.get('organizer').entity,
-                        previousModel = folderAPI.pool.getModel(self.model.get('folder'));
-
-                    self.model.set('folder', id);
-                    // check if we need to make changes to the appointment
-                    // needed when switch from shared to private or private to shared happens
-                    if (model.is('shared') || previousModel.is('shared')) {
-                        self.model.setDefaultAttendees({ create: true, resetStates: !self.model.get('id') }).done(function () {
-                            // trigger reset to trigger a redrawing of all participants (avoid 2 organizers)
-                            self.model.getAttendees().trigger('reset');
-                            // same organizer? No message needed (switched between shared calendars of the same user)
-                            if (prevOrg === self.model.get('organizer').entity) return;
-
-                            require(['io.ox/core/yell'], function (yell) {
-                                if (model.is('shared')) {
-                                    yell('info', gt('You are using a shared calendar. The calendar owner was added as organizer.'));
-                                } else {
-                                    yell('info', gt('You are no longer using a shared calendar. You were added as organizer.'));
-                                }
-                            });
-                        });
-                    }
-                },
-
-                disable: function (data, options) {
-                    var create = folderAPI.can('create', data),
-                        // we dont allow moving an already existing appointment to a folder from another user (moving from shared user A's folder to shared user A's folder is allowed).
-                        allowed = !self.model.get('id') || folderAPI.is('public', data) || data.created_by === self.model.get('organizer').entity;
-
-                    return !create || !allowed || (options && /^virtual/.test(options.folder));
-                }
-            });
-        },
-        render: function () {
-            var link = $('<a href="#">'),
-                folderId = this.model.get('folder');
-
-            folderAPI.get(folderId).done(function (folder) {
-                link.text(folder.display_title || folder.title);
-            });
-
-            this.$el.empty().append(
-                $('<span>').text(gt('Calendar:')),
-                link
-            );
-
-            return this;
-        }
-    });
-
-    if (_.device('smartphone')) {
-        point.extend({
-            id: 'folder-selection',
-            index: 725,
-            className: 'col-xs-12',
-            render: function () {
-                this.$el.append(
-                    new CalendarSelectionView({ model: this.model }).render().$el
-                );
-            }
-        });
-    } else {
-        ext.point('io.ox/calendar/edit/section/buttons').extend({
-            index: 1000,
-            id: 'folder-selection',
-            draw: function (baton) {
-                this.append(
-                    new CalendarSelectionView({ model: baton.model }).render().$el
-                );
-            }
-        });
-    }
 
     // title
     point.extend({
@@ -362,7 +259,7 @@ define('io.ox/calendar/edit/extensions', [
         draw: function (baton) {
             baton.parentView.startDatePicker = new DatePicker({
                 model: baton.model,
-                className: 'col-xs-6',
+                className: 'col-sm-6 col-xs-12',
                 display: calendarUtil.isAllday(baton.model) ? 'DATE' : 'DATETIME',
                 attribute: 'startDate',
                 label: gt('Starts on'),
@@ -372,8 +269,6 @@ define('io.ox/calendar/edit/extensions', [
                     timeLabel: gt('Start time')
                 },
                 chronos: true
-            }).listenTo(baton.model, 'change:startDate', function (model) {
-                this.toggleTimeInput(!calendarUtil.isAllday(model));
             }).on('click:timezone', openTimezoneDialog, baton)
                 .on('click:time', function () {
                     var target = this.$el.find('.dropdown-menu.calendaredit'),
@@ -398,7 +293,7 @@ define('io.ox/calendar/edit/extensions', [
         draw: function (baton) {
             baton.parentView.endDatePicker = new DatePicker({
                 model: baton.model,
-                className: 'col-xs-6',
+                className: 'col-sm-6 col-xs-12',
                 display: calendarUtil.isAllday(baton.model) ? 'DATE' : 'DATETIME',
                 attribute: 'endDate',
                 label: gt('Ends on'),
@@ -408,8 +303,6 @@ define('io.ox/calendar/edit/extensions', [
                     timeLabel: gt('End time')
                 },
                 chronos: true
-            }).listenTo(baton.model, 'change:endDate', function (model) {
-                this.toggleTimeInput(!calendarUtil.isAllday(model));
             }).on('click:timezone', openTimezoneDialog, baton)
                 .on('click:time', function () {
                     var target = this.$el.find('.dropdown-menu.calendaredit'),
@@ -432,30 +325,27 @@ define('io.ox/calendar/edit/extensions', [
         index: 550,
         nextTo: 'end-date',
         render: function () {
-            var model = this.model,
+            var helpBlock = $('<div class="col-xs-12 help-block">').hide(),
                 userTimezone = moment().tz(),
-                helpBlock = $('<div class="col-xs-12 help-block">').hide();
+                self = this;
 
             function setHint() {
-                var startTimezone = model.getMoment('startDate').tz(),
-                    endTimezone = model.getMoment('endDate').tz(),
+                var startTimezone = self.baton.model.getMoment('startDate').tz(),
+                    endTimezone = self.baton.model.getMoment('endDate').tz(),
                     isVisible = startTimezone !== userTimezone || endTimezone !== userTimezone;
                 helpBlock.toggle(isVisible);
                 if (isVisible) {
-                    var start = model.getMoment('startDate'),
-                        end = model.getMoment('endDate'),
-                        interval = calendarUtil.getTimeInterval(model.attributes, moment().tz()),
-                        duration = moment.duration(end.diff(start, 'ms')).humanize();
-                    helpBlock.text(
-                        //#. %1$s timezone abbreviation of the user
-                        //#. %2$s time interval of event
-                        //#. %2$s duration of event
-                        gt('In your timezone (%1$s): %2$s (Duration: %3$s)', userTimezone, interval, duration)
+                    var interval = calendarUtil.getDateTimeIntervalMarkup(self.baton.model.attributes, { zone: moment().tz(), noTimezoneLabel: true });
+                    interval.prepend($('<span>').append(userTimezone + ': '));
+                    helpBlock.empty();
+                    helpBlock.append(
+                        interval
                     );
                 }
             }
+
             this.$el.append(helpBlock);
-            this.listenTo(model, 'change:startDate change:endDate', setHint);
+            this.listenTo(this.baton.model, 'change:startDate change:endDate', setHint);
             setHint();
         }
     });
@@ -513,9 +403,37 @@ define('io.ox/calendar/edit/extensions', [
         className: 'col-xs-12',
         index: 650,
         render: function () {
-            this.$el.append(new RecurrenceView({
-                model: this.model
-            }).render().$el);
+
+            // changes not allowed when editing or creating an exception
+            if ((this.model.get('recurrenceId') && this.model.mode === 'appointment')) return;
+
+            var helpNode = $('<div class="alert">'),
+                errorText = gt('Your recurrence rule does not fit to your start date.'),
+                helpText = gt('Your recurrence rule was changed automatically.'),
+                self = this,
+                recurrenceView = new RecurrenceView({
+                    model: this.model
+                });
+            this.$el.append(
+                recurrenceView.render().$el,
+                helpNode.hide()
+            );
+
+            this.model.on('change:rrule', function () {
+                if (!self.model.get('rrule')) {
+                    helpNode.hide();
+                    return;
+                }
+                // just return, no hide here (autochange hint might be there)
+                if (self.model.checkRecurrenceRule()) return;
+                helpNode.removeClass('alert-info').addClass('alert-warning').text(errorText).show();
+            });
+            this.model.getRruleMapModel().on('autochanged', function () {
+                helpNode.removeClass('alert-warning').addClass('alert-info').text(helpText).show();
+            });
+            recurrenceView.on('openeddialog', function () {
+                helpNode.hide();
+            });
         }
     });
 
@@ -532,6 +450,134 @@ define('io.ox/calendar/edit/extensions', [
             );
         }
     });
+
+    var CalendarDropdownView = mini.AbstractView.extend({
+
+        tagName: 'fieldset',
+        dropDown: {},
+        $toggle: $('<button class="btn btn-link dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true">'),
+
+        getColor: function (folder) {
+            var props = folder['com.openexchange.calendar.extendedProperties'],
+                color = settings.get('defaultFolderColor', '#CFE6FF');
+
+            if (props && props.color && props.color.value) color = props.color.value;
+            var label = _(calendarUtil.colors).findWhere({ value: color }) || {};
+            return { value: color, label: label.label || gt('User defined color') };
+        },
+
+        setup: function () {
+            var self = this;
+
+            this.listenTo(this.model, 'change:folder', function (model, folder) {
+                var getNewModel = folderAPI.get(folder),
+                    getPreviousModel = folderAPI.get(self.model.previous('folder'));
+
+                $.when(getNewModel, getPreviousModel).done(function (newModel, previousModel) {
+                    var prevOrg = self.model.previousAttributes().organizer.entity;
+                    // check if we need to make changes to the appointment
+                    // needed when switch from shared to private or private to shared happens
+                    if (folderAPI.is('shared', newModel) || folderAPI.is('shared', previousModel)) {
+                        self.model.setDefaultAttendees({ create: true, resetStates: !self.model.get('id') }).done(function () {
+                            // trigger reset to trigger a redrawing of all participants (avoid 2 organizers)
+                            self.model.getAttendees().trigger('reset');
+                            // same organizer? No message needed (switched between shared calendars of the same user)
+                            if (prevOrg === self.model.get('organizer').entity) return;
+
+                            require(['io.ox/core/yell'], function (yell) {
+                                if (folderAPI.is('shared', newModel)) {
+                                    yell('info', gt('You are using a shared calendar. The calendar owner was added as organizer.'));
+                                } else {
+                                    yell('info', gt('You are no longer using a shared calendar. You were added as organizer.'));
+                                }
+                            });
+                        });
+                    }
+                });
+
+                self.update();
+            });
+        },
+
+        update: function () {
+            var self = this;
+
+            folderAPI.get(self.model.get('folder')).done(function (folder) {
+                var folderLabel = folder.display_title || folder.title;
+                self.$toggle.text(folderLabel);
+            });
+
+            self.dropDown.update();
+        },
+
+        render: function () {
+            var self = this,
+                folderDef = folderAPI.get(self.model.get('folder')),
+                folderSectionsDef = folderAPI.flat({ module: 'calendar' });
+
+            self.dropDown = new Dropdown({ caret: false, model: self.model, $toggle: self.$toggle });
+
+            $.when(folderDef, folderSectionsDef).done(function (folder, folderSections) {
+
+                //var color = self.getColor(folder),
+                var folderLabel = folder.display_title || folder.title,
+                    folderNames = {
+                        'private':  gt('My calendars'),
+                        'public':   gt('Public calendars'),
+                        'shared':   gt('Shared calendars'),
+                        'hidden':   gt('Hidden calendars')
+                    },
+                    i = 0;
+
+                function addSection(text, sectionName) {
+                    var folderSection = folderSections[sectionName];
+                    if (!folderSection || folderSection.length === 0) return;
+
+                    folderSection = _(folderSection).filter(function (folder) {
+                        var create = folderAPI.can('create', folder),
+                            // we dont allow moving an already existing appointment to a folder from another user (moving from shared user A's folder to shared user A's folder is allowed).
+                            allowed = !self.model.get('id') || folderAPI.is('public', folder) || folder.created_by === self.model.get('organizer').entity;
+
+                        return (create && allowed && !/^virtual/.test(folder.id));
+                    });
+
+                    if (folderSection.length === 0) return;
+
+                    if (i !== 0) self.dropDown.divider();
+                    self.dropDown.header(text);
+
+
+                    _(folderSection).forEach(function (folder) {
+                        var checkboxColor = self.getColor(folder);
+                        self.dropDown.option(
+                            'folder',
+                            folder.id,
+                            function () {
+                                return [
+                                    folder.display_title || folder.title,
+                                    $('<span class="sr-only">').text(', ' + gt('Color') + ': ' + checkboxColor.label)
+                                ];
+                            },
+                            { radio: true, color: checkboxColor.value }
+                        );
+                    });
+                    i++;
+                }
+
+                self.$toggle.text(folderLabel);
+
+                _(folderNames).each(addSection);
+
+                self.$el.append(
+                    $('<legend>').addClass('simple').text(gt('Calendar')),
+                    self.dropDown.render().$el
+                );
+            });
+
+            return this;
+        }
+    });
+
 
     // separator or toggle
     point.basicExtend({
@@ -561,7 +607,7 @@ define('io.ox/calendar/edit/extensions', [
     point.basicExtend({
         id: 'participants_list',
         index: 800,
-        rowClass: 'collapsed form-spacer',
+        rowClass: 'collapsed',
         draw: function (baton) {
             this.append(new pViews.UserContainer({
                 collection: baton.model.getAttendees(),
@@ -597,6 +643,18 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
+    point.extend({
+        id: 'folder-selection',
+        index: 950,
+        className: 'col-xs-12 folder-selection',
+        render: function () {
+            var view = new CalendarDropdownView({ model: this.model }).render().$el;
+            this.$el.append(view).addClass('col-xs-12');
+        }
+    }, {
+        rowClass: 'collapsed form-spacer'
+    });
+
     // alarms
     point.extend({
         id: 'alarms',
@@ -611,8 +669,6 @@ define('io.ox/calendar/edit/extensions', [
                 )
             );
         }
-    }, {
-        rowClass: 'collapsed form-spacer'
     });
 
     // private checkbox
@@ -622,9 +678,9 @@ define('io.ox/calendar/edit/extensions', [
         className: 'col-sm-6 col-xs-12',
         render: function () {
 
-            // visibility flag only works in private folders
+            // visibility flag only works in private folders and does not work with exceptions
             var folder = this.model.get('folder');
-            if (!folderAPI.pool.getModel(folder).is('private')) return;
+            if (!folderAPI.pool.getModel(folder).is('private') || (this.model.get('recurrenceId') && this.model.mode === 'appointment')) return;
             var popoverUid = _.uniqueId('popover-'),
                 helpNode = $('<button type="button" class="visibility-helper-button btn btn-link" data-toggle="popover" data-trigger="manual" data-placement="left" data-content=" ">').attr('aria-label', gt('Visibility Help')).append('<i class="fa fa-question-circle" aria-hidden="true">')
                 .attr('data-template', '<div class="popover calendar-popover" role="tooltip"><div class="arrow"></div><div id="' + popoverUid + '">' +
@@ -681,28 +737,27 @@ define('io.ox/calendar/edit/extensions', [
                 }),
                 toggle = $('<button class="btn btn-link dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true">').text(gt('Appointment color')),
                 menu = $('<ul class="dropdown-menu">'),
+                pickedColor = $('<span class="picked-color" aria-hidden="true">'),
+                pickedColorLabel = $('<span class="sr-only">'),
                 dropdown = new Dropdown({
-                    smart: false,
-                    className: 'color-picker-dropdown dropup',
-                    $toggle: toggle,
+                    smart: true,
+                    className: 'color-picker-dropdown dropdown',
+                    $toggle: toggle.append(pickedColor, pickedColorLabel),
                     $ul: menu,
                     margin: 24,
                     model: this.model,
                     carret: true,
                     allowUndefined: true
-                }),
-                pickedColor = $('<span class="picked-color">');
+                });
             //#. showed inside a color picker. Used if an appointment should not have a custom color
-            dropdown.option('color', undefined, gt('Use calendar color'));
-            dropdown.divider();
-            menu.append($('<li role="presentation" class="io-ox-calendar-color-picker-container">').append(picker.render().$el));
+            dropdown.option('color', '', gt('Use calendar color'), { radio: true });
+            dropdown.$ul.find('[data-name="color"]').addClass('folder-default-color');
+            menu.append($('<li role="presentation" class="io-ox-calendar-color-picker-container">').append($('<div class="color-picker-scroll">').append(picker.render().$el)));
 
-            this.$el.append(
-                dropdown.render().$el,
-                pickedColor
-            );
+            this.$el.append(dropdown.render().$el);
 
             function onChangeColor() {
+                var colorLabel = gt('none');
                 if (!self.model.get('color')) {
                     // try to get the folder color
                     var model = folderAPI.pool.getModel(self.model.get('folder')) || new Backbone.Model(),
@@ -710,11 +765,14 @@ define('io.ox/calendar/edit/extensions', [
                         color = '#fff';
 
                     if (props.color && props.color.value) color = props.color.value;
-
                     pickedColor.css({ 'background-color': color });
+                    if (_(calendarUtil.colors).findWhere({ value: color })) colorLabel = _(calendarUtil.colors).findWhere({ value: color }).label;
+                    pickedColorLabel.text(colorLabel);
                     picker.$el.find(':checked').prop('checked', false);
                     return;
                 }
+                if (_(calendarUtil.colors).findWhere({ value: self.model.get('color') })) colorLabel = _(calendarUtil.colors).findWhere({ value: self.model.get('color') }).label;
+                pickedColorLabel.text(colorLabel);
                 pickedColor.css('background-color', self.model.get('color'));
             }
 

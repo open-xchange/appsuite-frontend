@@ -146,10 +146,10 @@ define('io.ox/tasks/toolbar', [
         draw: function (baton) {
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li' })
-                .header(gt('Options'))
-                .option('folderview', true, gt('Folder view'))
-                .option('checkboxes', true, gt('Checkboxes'));
+            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li', attributes: { role: 'presentation' } })
+                .group(gt('Options'))
+                .option('folderview', true, gt('Folder view'), { group: true })
+                .option('checkboxes', true, gt('Checkboxes'), { group: true });
 
             this.append(
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
@@ -210,4 +210,40 @@ define('io.ox/tasks/toolbar', [
         }
     });
 
+    ext.point('io.ox/tasks/mediator').extend({
+        id: 'metrics-toolbar',
+        index: 10300,
+        setup: function (app) {
+
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+
+                var nodes = app.getWindow().nodes,
+                    toolbar = nodes.body.find('.classic-toolbar-container');
+
+                // toolbar actions
+                toolbar.on('mousedown', '.io-ox-action-link:not(.dropdown-toggle)', function (e) {
+                    metrics.trackEvent({
+                        app: 'tasks',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // toolbar options dropdown
+                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
+                    var node =  $(e.target).closest('a'),
+                        isToggle = node.attr('data-toggle') === 'true';
+                    if (!node.attr('data-name')) return;
+                    metrics.trackEvent({
+                        app: 'tasks',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: node.attr('data-name'),
+                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
+                    });
+                });
+            });
+        }
+    });
 });

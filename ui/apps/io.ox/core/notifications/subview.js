@@ -366,6 +366,7 @@ define('io.ox/core/notifications/subview', [
                 }
                 return true;
             }
+            return false;
         },
         addNotifications: function (items, silent) {
 
@@ -404,7 +405,7 @@ define('io.ox/core/notifications/subview', [
 
                 _(items).each(function (item) {
                     if (item.get) item = item.attributes;
-                    self.$el.find('[data-cid="' + _.cid(item) + '"]').remove();
+                    self.$el.find('[data-cid="' + _.cid(item) + '"],[model-cid="' + _.cid(item) + '"]').remove();
                 });
 
                 if (this.collection.size() === 0) {
@@ -416,6 +417,8 @@ define('io.ox/core/notifications/subview', [
             this.collection.remove(items, { silent: silent });
         },
         resetNotifications: function (items, silent) {
+            // prevent [undefined] arrays
+            items = items || [];
             if (!_.isArray(items)) {
                 items = [].concat(items);
             }
@@ -439,7 +442,6 @@ define('io.ox/core/notifications/subview', [
 
             var cid = e.which === 13 ? String($(e.currentTarget).data('cid')) : String($(e.currentTarget).parent().data('cid')),
                 api = this.model.get('api'),
-                fullModel = this.model.get('fullModel'),
                 sidepopupNode = notifications.sidepopupNode,
                 getCid = this.model.get('useApiCid') ? this.model.get('api').cid : _.cid,
                 self = this;
@@ -450,7 +452,7 @@ define('io.ox/core/notifications/subview', [
             } else {
                 notifications.closeSidepopup();
                 var data;
-                if (api && !fullModel) {
+                if (api) {
                     data = api.get(_.extend({}, getCid(cid), { unseen: true }));
                 } else {
                     data = this.collection.get(getCid(cid)).attributes;

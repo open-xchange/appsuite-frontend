@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-03 12:27+0300\n"
+"PO-Revision-Date: 2018-10-16 15:48+0300\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.2\n"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Add another account"
@@ -678,13 +678,9 @@ msgstr ""
 "'Dalībnieki'. Uzdevumam var tikt pievienoti atbilstošie dokumenti."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Lai startētu aplikāciju, aktivizējiet izvēlni izvēņu joslas augšējā kresajā "
-"malā."
+"Lai startētu aplikāciju, noklikšķiniet uz tās aplikāciju palaidēja izvēlnē."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -867,7 +863,7 @@ msgstr ""
 "jūs ar jauno tiešsaistes glabāšanas risinājumu - vienoto vietu tiešsaistes "
 "piekļuvei pie visiem jūsu failiem visos jūsu kontos. Šī ir vieta, kur jūs "
 "varat augšupielādēt un saglabāt failus, dalīties ar tiem un sinhronizēt tos "
-"ar citām ierīcēm."
+"ar citām ierīcēm. "
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "

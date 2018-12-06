@@ -700,7 +700,7 @@ define('io.ox/calendar/util', [
             return str;
         },
         // basically the same as in recurrence-view
-        // used to fix reccurence information when Ïging
+        // used to update reccurence information when moving events
         updateRecurrenceDate: function (event, oldDate) {
             if (!event || !oldDate) return;
 
@@ -745,7 +745,10 @@ define('io.ox/calendar/util', [
 
             // change until
             if (rruleMapModel.get('until') && moment(rruleMapModel.get('until')).isBefore(date)) {
-                rruleMapModel.set('until', date.add(1, ['d', 'w', 'M', 'y'][rruleMapModel.get('recurrence_type') - 1]).valueOf());
+                rruleMapModel.set({
+                    'until': undefined,
+                    'occurrences': undefined
+                });
             }
             rruleMapModel.serialize();
             return event;
@@ -868,20 +871,21 @@ define('io.ox/calendar/util', [
             return ret;
         },
 
-        resolveParticipants: function (data) {
+        // returns array of {mail, displayName} objects
+        // resolves groups, eliminates duplicates, uses provided mail address of attendee, filters out resources
+        resolveAttendees: function (data, options) {
+            options = options || {};
             // clone array
             var attendees = data.attendees.slice(),
-                IDs = {
-                    user: [],
-                    group: [],
-                    ext: []
-                };
+                users = [],
+                groups = [],
+                result = [];
 
-            var organizerIsExternalParticipant = !data.organizer.entity && _.isString(data.organizer.email) && _.find(attendees, function (p) {
+            var organizerIsExternalParticipant = data.organizer && !data.organizer.entity && _.isString(data.organizer.email) && _.find(attendees, function (p) {
                 return p.mail === data.organizer.email;
             });
 
-            if (!organizerIsExternalParticipant) {
+            if (data.organizer && !organizerIsExternalParticipant) {
                 attendees.unshift(data.organizer);
             }
 
@@ -889,23 +893,21 @@ define('io.ox/calendar/util', [
                 switch (attendee.cuType) {
                     case undefined:
                     case 'INDIVIDUAL':
+                        if (!attendee.email) return;
                         // internal user
                         if (attendee.entity) {
-                            // user API expects array of integer [1337]
-                            IDs.user.push(attendee.entity);
-                        } else {
-                            // external attendee
-                            IDs.ext.push({
-                                display_name: attendee.cn,
-                                mail: attendee.email,
-                                mail_field: 0
-                            });
+                            if (options.filterSelf && attendee.entity === ox.user_id) return;
+                            users.push(attendee.entity);
                         }
+                        result.push({
+                            display_name: attendee.cn,
+                            mail: attendee.email
+                        });
                         break;
                     // group
                     case 'GROUP':
                         // group expects array of object [{ id: 1337 }], yay (see bug 47207)
-                        IDs.group.push({ id: attendee.entity });
+                        groups.push({ id: attendee.entity });
                         break;
                     // resource or rescource group
                     case 'RESOURCE':
@@ -915,39 +917,29 @@ define('io.ox/calendar/util', [
                 }
             });
 
-            return groupAPI.getList(IDs.group)
+            if (!groups.length) return $.Deferred().resolve(result);
+
+            return groupAPI.getList(groups)
                 // resolve groups
                 .then(function (groups) {
+                    var members = [];
                     _.each(groups, function (single) {
-                        IDs.user = _.union(single.members, IDs.user);
+                        members = _.union(single.members, members);
                     });
-                    return userAPI.getList(IDs.user);
+                    members = _(members).difference(users);
+                    if (!members.length) return result;
+                    return userAPI.getList(members);
                 })
-                // add mail to user objects
                 .then(function (users) {
-                    // add user type 1 to all internal users
-                    _.each(users, function (obj) {
-                        _.extend(obj, { type: 1 });
-                    });
-                    // search for external users in contacts
-                    var defs = _(IDs.ext).map(function (ext) {
-                        return contactAPI.search(ext.mail);
-                    });
-                    return $.when.apply($, defs).then(function () {
-                        _(arguments).each(function (result, i) {
-                            if (_.isArray(result) && result.length) {
-                                IDs.ext[i] = result[0];
-                            }
-                        });
-                        // combine results with groups and map
-                        return _([].concat(IDs.ext, users))
-                            .chain()
-                            .uniq()
-                            .map(function (user) {
-                                return $.extend(user, { mail: user.email1, mail_field: 1 });
-                            })
-                            .value();
-                    });
+                    return result.concat(_(_(users).map(function (user) {
+                        return {
+                            display_name: user.display_name,
+                            mail:  user.email1 || user.email2 || user.email3
+                        };
+                    })).filter(function (user) {
+                        // don't add if mail address is missing (yep, edge-case)
+                        return !!user.mail;
+                    }));
                 });
         },
 
@@ -1089,6 +1081,8 @@ define('io.ox/calendar/util', [
             // shared appointments which are needs-action or declined don't receive color classes
             if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) return false;
 
+            if (!eventModel.hasFlag('organizer')) return true;
+
             return !eventColor && !privateFlag;
         },
 
@@ -1116,6 +1110,36 @@ define('io.ox/calendar/util', [
             ].join('');
         },
 
+        openDeeplink: function (model, opt) {
+            opt = _({}).extend(opt);
+            model = new (require('io.ox/calendar/model').Model)(model.toJSON());
+
+            ox.launch('io.ox/calendar/main', { folder: model.get('folder') }).done(function () {
+                var app = this,
+                    perspective = opt.perspective || _.url.hash('perspective') || app.props.get('layout');
+
+                function cont(perspective) {
+                    if (perspective.selectAppointment) perspective.selectAppointment(model);
+                    if (opt.showDetails) {
+                        var e = $.Event('click', { target: app.perspective.$el });
+                        perspective.showAppointment(e, model.toJSON(), { arrow: false });
+                    }
+                }
+
+                app.folders.add(model.get('folder'));
+
+                // open in current perspective
+                if (app.perspective && settings.get('viewView') === perspective) cont(app.perspective, model);
+
+                app.pages.changePage(perspective, { disableAnimations: _.device('smartphone') });
+
+                // wait for perspective change
+                app.getWindow().one('change:perspective', function (e, perspective) {
+                    cont(perspective, model);
+                });
+            });
+        },
+
         getRecurrenceEditDialog: function () {
             return new dialogs.ModalDialog()
                     .text(gt('Do you want to edit the whole series or just this appointment within the series?'))
@@ -1124,15 +1148,16 @@ define('io.ox/calendar/util', [
                     .addButton('cancel', gt('Cancel'), 'cancel');
         },
 
-        showRecurrenceDialog: function (model) {
+        showRecurrenceDialog: function (model, options) {
             if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
             if (model.get('recurrenceId')) {
+                options = options || {};
                 var dialog = new dialogs.ModalDialog();
-                // first occurence or exception (we need to load the series master as the exception data doesn't work for changing the series )
-                if (model.hasFlag('first_occurrence') || model.get('id') !== model.get('seriesId')) {
+                // first occurence
+                if (model.hasFlag('first_occurrence')) {
                     dialog.text(gt('Do you want to edit the whole series or just this appointment within the series?'));
                     dialog.addPrimaryButton('series', gt('Series'), 'series');
-                } else if (model.hasFlag('last_occurrence')) {
+                } else if (model.hasFlag('last_occurrence') && !options.allowEditOnLastOccurence) {
                     return $.when('appointment');
                 } else {
                     dialog.text(gt('Do you want to edit this and all future appointments or just this appointment within the series?'));
@@ -1168,21 +1193,18 @@ define('io.ox/calendar/util', [
         getCurrentRangeOptions: function () {
             var app = ox.ui.apps.get('io.ox/calendar');
             if (!app) return {};
-            var window = app.getWindow();
-            if (!window) return {};
-            var perspective = window.getPerspective();
+            var perspective = app.perspective;
             if (!perspective) return;
 
-            var rangeStart, rangeEnd;
-            switch (perspective.name) {
+            var rangeStart, rangeEnd, model = perspective.model;
+            switch (perspective.getName()) {
                 case 'week':
-                    var view = perspective.view;
-                    rangeStart = moment(view.startDate).utc();
-                    rangeEnd = moment(view.startDate).utc().add(view.columns, 'days');
+                    rangeStart = moment(model.get('startDate')).utc();
+                    rangeEnd = moment(model.get('startDate')).utc().add(model.get('numColumns'), 'days');
                     break;
                 case 'month':
-                    rangeStart = moment(perspective.firstMonth).startOf('week').utc();
-                    rangeEnd = moment(perspective.lastMonth).endOf('month').endOf('week').utc();
+                    rangeStart = moment(model.get('startDate')).utc();
+                    rangeEnd = moment(model.get('endDate')).utc();
                     break;
                 case 'list':
                     rangeStart = moment().startOf('day').utc();
@@ -1261,9 +1283,8 @@ define('io.ox/calendar/util', [
                 // not really needed. Added just for convenience. Helps if group should be resolved
                 attendee.members = user.members;
             }
-            // not really needed. Added just for convenience. Helps if distibution list should be created
+            // not really needed. Added just for convenience. Helps if distribution list should be created
             if (attendee.cuType === 'INDIVIDUAL' || !attendee.cuType) {
-                attendee.contactInformation = { folder: user.folder_id, contact_id: user.contact_id || user.id };
                 attendee.contact = {
                     display_name: user.display_name,
                     first_name: user.first_name,
@@ -1356,6 +1377,26 @@ define('io.ox/calendar/util', [
             if (data instanceof Backbone.Model) return data.hasFlag(flag);
             if (!data.flags || !data.flags.length) return false;
             return data.flags.indexOf(flag) >= 0;
+        },
+
+        // creates data for the edit dialog when an exception should be used to update the series
+        createUpdateData: function (master, exception) {
+            // consolidate data
+            master = master instanceof Backbone.Model ? master.attributes : master;
+            exception = exception instanceof Backbone.Model ? exception.attributes : exception;
+
+            // deep copy
+            var result = JSON.parse(JSON.stringify(master)),
+                dateFormat = this.isAllday(master) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
+
+            result.recurrenceId = exception.recurrenceId;
+
+            // recreate dates
+            result.startDate.value = moment(exception.recurrenceId).tz(master.startDate.tzid).format(dateFormat);
+            // calculate duration and add it to startDate, then format
+            result.endDate.value = moment.tz(moment(result.startDate.value).valueOf() + moment(master.endDate.value).valueOf() - moment(master.startDate.value).valueOf(), result.startDate.tzid).format(dateFormat);
+
+            return result;
         }
     };
 

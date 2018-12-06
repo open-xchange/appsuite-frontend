@@ -217,7 +217,6 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             // initially hide the panel
             this.$el.hide();
             // attach event handlers
-            this.on('dispose', this.disposeView.bind(this));
             this.$el.on({
                 open: this.onOpen.bind(this),
                 close: this.onClose.bind(this)
@@ -283,7 +282,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         /**
          * Destructor function of this view.
          */
-        disposeView: function () {
+        onDispose: function () {
             this.model = null;
         }
     });

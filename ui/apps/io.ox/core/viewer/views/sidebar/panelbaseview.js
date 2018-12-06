@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/viewer/views/sidebar/panelbaseview', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'gettext!io.ox/core/viewer'
 ], function (DisposableView, gt) {
 

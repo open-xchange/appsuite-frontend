@@ -178,7 +178,7 @@ define('io.ox/core/folder/extensions', [
     }
 
     function getAvailableServices() {
-        var services = ['google', 'dropbox', 'boxcom', 'msliveconnect'];
+        var services = ['google', 'dropbox', 'boxcom', 'graph'];
 
         ext.point('io.ox/core/folder/storage-accounts/list').invoke('customize', services);
 
@@ -265,7 +265,7 @@ define('io.ox/core/folder/extensions', [
                 parent: tree
             });
             this.append(
-                view.render().$el.addClass('standard-folders')
+                view.render().$el.addClass('standard-folders').attr('role', 'presentation')
             );
             // show / hide folder on setting change
             view.listenTo(mailSettings, 'change:unseenMessagesFolder', function () {
@@ -295,6 +295,13 @@ define('io.ox/core/folder/extensions', [
                 parent: tree,
                 title: extensions.getLocalFolderName(),
                 tree: tree
+            });
+
+            account.on('update', function (e, accountData) {
+                // only changes to the primary account are important
+                if (accountData.id !== 0) return;
+                node.options.title = extensions.getLocalFolderName();
+                node.renderFolderLabel();
             });
 
             // open "My folders" whenever a folder is added to INBOX/root
@@ -916,8 +923,9 @@ define('io.ox/core/folder/extensions', [
                 if (baton.context !== 'app') return;
                 if (capabilities.has('guest')) return;
                 var dropdown = new DropdownView({
+                    attributes: { role: 'presentation' },
                     tagName: 'li',
-                    className: 'presentation dropdown',
+                    className: 'dropdown',
                     $toggle: $('<a href="#" class="dropdown-toggle"data-action="add-subfolder" data-toggle="dropdown">').append(
                         gt('Add new calendar'),
                         $('<i class="fa fa-caret-down" aria-hidden="true">')

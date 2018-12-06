@@ -19,7 +19,7 @@ define('io.ox/core/tk/reminder-util', [
 
     'use strict';
 
-    function buildActions(node, values, model) {
+    function buildActions(node, values) {
         var guid = _.uniqueId('reminder-label-');
         node.append(
             $('<label>').text(gt('Remind me again')).attr('for', guid),
@@ -31,8 +31,6 @@ define('io.ox/core/tk/reminder-util', [
                 return ret;
             }),
             $('<button type="button" class="btn btn-primary btn-sm remindOkBtn" data-action="ok">').text(gt('OK'))
-            //#. %1$s appointment or task title
-            .attr('aria-label', gt('Close reminder for %1$s', model.get('title')))
         );
     }
 

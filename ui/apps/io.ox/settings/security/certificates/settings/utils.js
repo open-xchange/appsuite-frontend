@@ -14,7 +14,7 @@ define('io.ox/settings/security/certificates/settings/utils', [
     'io.ox/backbone/views/modal',
     'io.ox/settings/security/certificates/settings/certificate-view',
     'gettext!io.ox/settings/certificates',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/api/certificate',
     'io.ox/core/api/account'
 ], function (ModalDialog, view, gt, DisposableView, api, accountAPI) {

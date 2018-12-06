@@ -14,12 +14,14 @@
 define('io.ox/core/pim/actions', [
     'io.ox/core/api/attachment',
     'io.ox/core/download',
+    'io.ox/files/api',
     'io.ox/core/yell',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/extPatterns/links',
+    'io.ox/core/viewer/views/types/typesregistry',
     'gettext!io.ox/core'
-], function (attachmentAPI, downloadAPI, yell, ext, actions, links, gt) {
+], function (attachmentAPI, downloadAPI, filesAPI, yell, ext, actions, links, viewerTypes, gt) {
 
     'use strict';
 
@@ -27,7 +29,17 @@ define('io.ox/core/pim/actions', [
 
         // view attachment
         view: {
-            requires: 'some',
+            requires: function (e) {
+                if (!e.collection.has('some')) { return false; }
+
+                var attachments = _.isArray(e.baton.data) ? e.baton.data : [e.baton.data];
+                var canView = _.some(attachments, function (data) {
+                    var model = new filesAPI.Model(data);
+                    return viewerTypes.canView(model);
+                });
+
+                return canView;
+            },
             multiple: function (baton) {
                 require(['io.ox/core/viewer/main'], function (Viewer) {
                     var viewer = new Viewer();

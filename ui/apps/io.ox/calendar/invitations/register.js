@@ -12,7 +12,7 @@
  */
 
 define('io.ox/calendar/invitations/register', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/extensions',
     'io.ox/core/http',
     'io.ox/calendar/model',
@@ -66,12 +66,6 @@ define('io.ox/calendar/invitations/register', [
         'decline': gt('You have declined the appointment')
     };
 
-    var successInternal = {
-        'accept': gt('You have accepted the appointment'),
-        'decline': gt('You have declined the appointment'),
-        'tentative': gt('You have tentatively accepted the appointment')
-    };
-
     var priority = ['update', 'ignore', 'create', 'delete', 'decline', 'tentative', 'accept', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher'];
 
     //
@@ -98,6 +92,7 @@ define('io.ox/calendar/invitations/register', [
             this.util = options.util;
             this.settings = options.settings;
             this.AlarmsView = options.AlarmsView;
+            this.showDeeplinks = options.showDeeplinks;
 
             if (this.AlarmsView) {
                 this.alarmsModel = new Backbone.Model(this.model.toJSON());
@@ -123,7 +118,7 @@ define('io.ox/calendar/invitations/register', [
                 new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
                     popup.busy();
                     self.getFullModel().done(function (fullModel) {
-                        popup.idle().append(viewDetail.draw(new ext.Baton({ model: fullModel }), { isExternalUser: parseInt(self.mailModel.get('account_id'), 10) !== 0, noFolderCheck: true }));
+                        popup.idle().append(viewDetail.draw(fullModel, { isExternalUser: parseInt(self.mailModel.get('account_id'), 10) !== 0, noFolderCheck: true, deeplink: !!self.showDeeplinks }));
                     });
                 });
             });
@@ -245,7 +240,7 @@ define('io.ox/calendar/invitations/register', [
 
         getActions: function () {
             if (this.getConfirmationStatus() === 'ACCEPTED') return [];
-            if (this.model.hasFlag('event_cancelled')) return [];
+            if (this.model.hasFlag && this.model.hasFlag('event_cancelled')) return [];
             return ['decline', 'tentative', 'accept'];
         },
 
@@ -441,8 +436,7 @@ define('io.ox/calendar/invitations/register', [
         },
 
         getActions: function () {
-            if (this.getConfirmationStatus() !== 'ACCEPTED') return this.options.actions;
-            return _(this.options.actions).without('decline', 'tentative', 'accept');
+            return this.options.actions;
         },
 
         renderAnnotations: function () {
@@ -537,7 +531,11 @@ define('io.ox/calendar/invitations/register', [
                     if (calendarSettings.get('deleteInvitationMailAfterAction', false)) {
                         // remove mail
                         if (self.options.yell !== false) {
-                            notifications.yell('success', successInternal[action]);
+                            var message;
+                            if (action === 'accept') message = this.getAcceptedMessage();
+                            else if (action === 'tentative') message = this.getTentativeMessage();
+                            else if (action === 'decline') message = this.getRejectedMessage();
+                            notifications.yell('success', message);
                         }
                         require(['io.ox/mail/api'], function (api) {
                             api.remove([self.mailModel.toJSON()]);
@@ -683,7 +681,11 @@ define('io.ox/calendar/invitations/register', [
             if (calendarSettings.get('deleteInvitationMailAfterAction', false)) {
                 // remove mail
                 if (this.options.yell !== false) {
-                    notifications.yell('success', successInternal[action]);
+                    var message;
+                    if (action === 'accept') message = this.getAcceptedMessage();
+                    else if (action === 'tentative') message = this.getTentativeMessage();
+                    else if (action === 'decline') message = this.getRejectedMessage();
+                    notifications.yell('success', message);
                 }
                 require(['io.ox/mail/api'], function (api) {
                     api.remove([this.mailModel.toJSON()]);
@@ -863,7 +865,8 @@ define('io.ox/calendar/invitations/register', [
                         settings: calendarSettings,
                         AlarmsView: AlarmsView,
                         yell: yell,
-                        mailModel: self.model
+                        mailModel: self.model,
+                        showDeeplinks: true
                     });
 
                     self.$el.append(

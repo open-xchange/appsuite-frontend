@@ -10,8 +10,6 @@
  * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
  */
 
-const expect = require('chai').expect;
-
 Feature('Calendar: Create appointment');
 
 Before(async function (users) {
@@ -26,8 +24,6 @@ After(async function (users) {
 });
 
 Scenario('Create appointments with participants who will accept/decline/accept tentative', function (I, users) {
-    let [user] = users;
-
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//showCheckboxes', true);
@@ -45,25 +41,25 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.fillField('Subject', 'test invite accept/decline/accept tentative');
     I.fillField('Location', 'invite location');
 
-    I.click('.io-ox-calendar-edit-window .time-field');
-    I.click('4:00 PM', '.io-ox-calendar-edit-window .calendaredit');
+    I.click('~Start time');
+    I.click('4:00 PM');
 
     // add user 1
-    I.fillField('input.add-participant.tt-input', users[1].userdata.primaryEmail);
+    I.fillField('Add contact/resource', users[1].userdata.primaryEmail);
     I.pressKey('Enter');
 
     // add user 2
-    I.fillField('input.add-participant.tt-input', users[2].userdata.primaryEmail);
+    I.fillField('Add contact/resource', users[2].userdata.primaryEmail);
     I.pressKey('Enter');
 
     // add user 3
-    I.fillField('input.add-participant.tt-input', users[3].userdata.primaryEmail);
+    I.fillField('Add contact/resource', users[3].userdata.primaryEmail);
     I.pressKey('Enter');
 
-    I.see(users[0].userdata.primaryEmail , '.participant-wrapper');
-    I.see(users[1].userdata.primaryEmail , '.participant-wrapper.removable');
-    I.see(users[2].userdata.primaryEmail , '.participant-wrapper.removable');
-    I.see(users[3].userdata.primaryEmail , '.participant-wrapper.removable');
+    I.see(users[0].userdata.primaryEmail, '.participant-wrapper');
+    I.see(users[1].userdata.primaryEmail, '.participant-wrapper.removable');
+    I.see(users[2].userdata.primaryEmail, '.participant-wrapper.removable');
+    I.see(users[3].userdata.primaryEmail, '.participant-wrapper.removable');
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');

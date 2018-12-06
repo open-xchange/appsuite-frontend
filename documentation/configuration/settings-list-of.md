@@ -549,6 +549,12 @@ settings!io.ox/mail
 **features/registerProtocolHandler**
 > Ask for mailto link registration (true/false)
 
+**features/trusted/user**
+> user-defined comma-separated list of mail adresses or specific domains
+
+**features/trusted/admin**
+> admin-defined comma-separated list of mail adresses or specific domains
+
 **unseenMessagesFolder**
 > Show folder with all unseen messages (true/false)
 
@@ -610,6 +616,30 @@ settings!io.ox/mail
 
 **compose/simpleLineBreaks**
 > EXPERIMENTAL WORKAROUND: use simple line breaks
+
+**imageResize/enabled**
+> feature toggle to enable resizing of images
+
+**imageResize/small**
+> size of the target image (longest edge) for a small image as integer (default 320)
+
+**imageResize/medium**
+> size of the target image (longest edge) for a medium image as integer (default 640)
+
+**imageResize/large**
+> size of the target image (longest edge) for a large image as integer (default 1024)
+
+**imageResize/quality**
+> quality for the compression while resizing as float (default 0.75)
+
+**imageResize/imageSizeThreshold**
+> threshold for the size in pixel of the longest edge after which a resize is recommended as integer (default 1024)
+
+**imageResize/fileSizeThreshold**
+> threshold for the size in byte of the image after which a resize is recommended as integer (default 1048576)
+
+**imageResize/fileSizeMax**
+> maximum size in bytes that will be resized as integer, if one image exceeds this threshold the resize dropdown will not be displayed (default 10485760)
 
 ## Compose: Attachments and Drive Mail
 

@@ -68,10 +68,10 @@ function getTestMail(user) {
             content_type: 'text/html',
             disp: 'inline'
         }],
-        from: [[user.get('displayname'), user.get('primaryEmail')]],
+        from: [[user.get('display_name'), user.get('primaryEmail')]],
         sendtype: 0,
         subject: 'Test subject',
-        to: [[user.get('displayname'), user.get('primaryEmail')]]
+        to: [[user.get('display_name'), user.get('primaryEmail')]]
     };
 }
 

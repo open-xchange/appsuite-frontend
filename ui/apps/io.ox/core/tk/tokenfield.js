@@ -60,7 +60,7 @@ define('io.ox/core/tk/tokenfield', [
             if (this._delimiters.length) {
                 // Split at delimiter; ignore delimiters in quotes
                 // delimiters are: comma, semi-colon, tab, newline
-                tokens = util.getAddresses(tokens);
+                tokens = _(tokens.split(new RegExp('[' + this._delimiters.join('|') + ']', 'g'))).map(function (str) { return str.trim(); });
             } else {
                 tokens = [tokens];
             }
@@ -97,6 +97,28 @@ define('io.ox/core/tk/tokenfield', [
 
         this.preventDeactivation = false;
         this.preventCreateTokens = false;
+    };
+
+    // and another overwrite. This time because of bug 61477
+    $.fn.tokenfield.Constructor.prototype.keypress = function (e) {
+        // Comma
+        if ($.inArray(e.which, this._triggerKeys) !== -1 && this.$input.is(document.activeElement)) {
+            var val = this.$input.val(),
+                quoting = /^"[^"]*$/.test(val);
+            if (quoting) return;
+            if (val) {
+                // if we are in edit mode, wait for the comma to actually appear in the input field. This way the token is divided correctly.
+                if (this.$input.data('edit')) {
+                    var self = this;
+                    this.$input.one('input', function () {
+                        self.createTokensFromInput(e);
+                    });
+                    return;
+                }
+                this.createTokensFromInput(e);
+            }
+            return false;
+        }
     };
 
     var uniqPModel = pModel.Participant.extend({
@@ -406,20 +428,19 @@ define('io.ox/core/tk/tokenfield', [
                     if (e.attrs) {
                         var model = e.attrs.model || self.getModelByCID(e.attrs.value),
                             node = $(e.relatedTarget),
-                            label = node.find('.token-label');
+                            label = node.find('.token-label'),
+                            token = model.get('token'),
+                            hasLabel = token.label && token.label !== token.value,
+                            title = hasLabel ? token.label + ' ' + token.value : token.value;
+
                         // remove wrongly calculated max-width
                         if (label.css('max-width') === '0px') label.css('max-width', 'none');
 
-                        // a11y: set title
-                        node.attr('aria-label', function () {
-                            var token = model.get('token'),
-                                title = token.label;
-                            if (token.label !== token.value) {
-                                title = token.label ? token.label + ' ' + token.value : token.value;
-                            }
-                            //.# Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
-                            return gt('%1$s. Press backspace to delete.', title);
-                        });
+                        // mouse hover tooltip / a11y title
+                        label.attr({ 'aria-hidden': true, 'title': title });
+                        //.# Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
+                        node.attr('aria-label', gt('%1$s. Press backspace to delete.', title));
+
                         // customize token
                         ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e, self.getInput());
                     }
@@ -669,7 +690,7 @@ define('io.ox/core/tk/tokenfield', [
                 });
             }
 
-            this.$el.closest('div.tokenfield').attr('role', 'application').on('copy', function (e) {
+            this.$el.closest('div.tokenfield').on('copy', function (e) {
                 // value might contain more than one id so split
                 var values = e.target.value.split(', ');
 
@@ -690,7 +711,9 @@ define('io.ox/core/tk/tokenfield', [
 
             this.getInput().on('focus blur updateWidth', function (e) {
                 var tokenfield = self.$el.data('bs.tokenfield');
-                tokenfield.options.minWidth = e.type === 'focus' ? 320 : 0;
+                // tokenfield minwidth 320 caused height calculation to be broken as soon
+                // as there is less than 320 pixel space left in the search field
+                tokenfield.options.minWidth = e.type === 'focus' ? 1 : 0;
                 tokenfield.update();
             });
 

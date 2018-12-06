@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-06-19 21:17+0200\n"
+"PO-Revision-Date: 2018-11-11 16:42+0100\n"
 "Last-Translator: Daiana Heinrich <daiana@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -14,6 +14,12 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
 "X-Generator: Poedit 2.0.3\n"
+
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid ""
+"\n"
+" Alternatively you can download the file."
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
@@ -162,7 +168,6 @@ msgstr[2] "%1$d de notificări."
 #. this will only be shown for more than one item
 #. %1$d - position of current item
 #. %2$d - total amount of items
-#. %2$d - total amount of item
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid "%1$d of %2$d item"
 msgid_plural "%1$d of %2$d items"
@@ -199,7 +204,9 @@ msgstr "%1$d selectate"
 msgid "%1$d total"
 msgstr "%1$d în total"
 
+#. %1$d number of unread mails
 #: apps/io.ox/core/folder/node.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "%1$d unread"
 msgstr "%1$d necitite"
 
@@ -280,19 +287,12 @@ msgstr "%1$s %2$s înainte de final."
 msgid "%1$s %2$s before start."
 msgstr "%1$s %2$s înainte de început."
 
-#. add confirmation status behind appointment title
-#. %1$s = apppintment title
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#, c-format
-msgid "%1$s (Tentative)"
-msgstr "%1$s (Tentativă)"
-
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 msgid "%1$s Toolbar"
 msgstr "Bară de unelte %1$s"
 
-#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 msgid "%1$s appointments selected"
 msgstr "%1$s întâlniri selectate"
 
@@ -347,6 +347,7 @@ msgstr "Completat %1$s"
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
 msgid "%1$s could not be added as the contact has no valid email field."
 msgstr ""
+"%1$s nu a putut fi adăugat deoarece contactul nu are câmp de e-mail valid."
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
@@ -452,6 +453,10 @@ msgstr[0] "%d zi"
 msgstr[1] "%d zile"
 msgstr[2] "%d de zile"
 
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "%s %s, create all-day appointment"
+msgstr "%s %s, creează o întâlnire de o zi întreagă"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Android"
 msgstr "Client %s pentru Android"
@@ -520,8 +525,6 @@ msgid "100%"
 msgstr "100%"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#, fuzzy
-#| msgid "12 hour"
 msgid "12 hours"
 msgstr "12 ore"
 
@@ -531,10 +534,8 @@ msgid "15 minutes"
 msgstr "15 minute"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#, fuzzy
-#| msgid "4 hour"
 msgid "24 hours"
-msgstr "4 ore"
+msgstr "24 de ore"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "3 minutes"
@@ -662,10 +663,8 @@ msgstr "Contul a fost adăugat cu succes"
 
 #. error message shown to the user after trying to create a duplicate account
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
-#, fuzzy
-#| msgid "This Team name already exists"
 msgid "Account already exists"
-msgstr "Numele de echipă există deja."
+msgstr "Contul există deja."
 
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -754,10 +753,8 @@ msgid "Add a description"
 msgstr "Adaugă o descriere"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Email notification for task participant?"
 msgid "Add a message to the notification email for the other participants."
-msgstr "Notificare pe e-mail pentru participantul la sarcină?"
+msgstr "Adaugă un mesaj la notificarea pe e-mail pentru ceilalți participanți."
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -1207,7 +1204,7 @@ msgstr "Adaugă întotdeauna următorul destinatar la BCC"
 
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "Always trust mails from the following senders"
-msgstr ""
+msgstr "Aveți întotdeauna încrede in mesaje trimise de următorii expeditori"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Amber"
@@ -1229,7 +1226,7 @@ msgid "An error occurred."
 msgstr "A apărut o eroare."
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/perspective.js
 msgid "An error occurred. Please try again."
 msgstr "A apărut o eroare. Încercați din nou. "
 
@@ -1302,10 +1299,8 @@ msgid "Apply changes"
 msgstr "Aplică modificările"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Apply role"
 msgid "Apply filter"
-msgstr "Aplică rolul"
+msgstr "Aplică filtrul"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1328,15 +1323,14 @@ msgstr "Aplică pentru toate dosarele subordonate"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/view.js
 #: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Întâlnire"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/perspective.js
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/perspective.js
 msgid "Appointment Details"
 msgstr "Detalii întâlnire"
 
@@ -1349,10 +1343,6 @@ msgstr "Culoare întâlnire"
 #: module:plugins/notifications
 msgid "Appointment invitations"
 msgstr "Invitații la întâlniri"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Appointment list"
-msgstr "Listă întâlniri"
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
@@ -1375,10 +1365,14 @@ msgid "Appointment types"
 msgstr "Tipuri de întâlniri"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/perspective.js apps/io.ox/calendar/week/view.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
 msgid "Appointments"
 msgstr "Întâlniri"
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid "Appointments in public calendars"
+msgstr "Întâlniri în calendarele publice"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
@@ -1768,6 +1762,7 @@ msgstr "CalDav/CardDav"
 
 #. Context: Session Management. Refers to the macos calendar
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail apps/io.ox/settings/security/sessions/settings/pane.js
@@ -1779,22 +1774,6 @@ msgstr "Calendar"
 msgctxt "app"
 msgid "Calendar"
 msgstr "Calendar"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Calendar Day View"
-msgstr "Vedere calendar pe zile"
-
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-msgid "Calendar Month View"
-msgstr "Vedere calendar pe luni"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Calendar Week View"
-msgstr "Vedere calendar pe săptămâni"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Calendar Workweek View"
-msgstr "Vedere calendar pe săptămâni de lucru"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendar account error"
@@ -1812,10 +1791,6 @@ msgstr "Vedere calendar"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Calendar/Addressbook"
 msgstr "Calendar/Agendă de contacte"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Calendar:"
-msgstr "Calendar:"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendars"
@@ -1848,7 +1823,7 @@ msgstr "Camera %1$s"
 #: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/core/tk/mobiscroll.js apps/io.ox/core/upsell.js
+#: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
@@ -2011,16 +1986,12 @@ msgid "Change password and sign out"
 msgstr "Modificare parolă și deconectare"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Create reminder"
 msgid "Change reminder"
-msgstr "Creează un memento"
+msgstr "Modifică mementoul"
 
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Create reminder"
 msgid "Change reminders"
-msgstr "Creează un memento"
+msgstr "Modifică mementourile"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -2083,7 +2054,6 @@ msgid "Cleaning up ..."
 msgstr "Se curăță..."
 
 #: apps/io.ox/core/tk/datepicker.js module:io.ox/core
-#: apps/io.ox/core/tk/mobiscroll.js
 msgid "Clear"
 msgstr "Golește "
 
@@ -2172,11 +2142,6 @@ msgstr "Închide zona de notificare"
 msgid "Close premium features"
 msgstr "Închide funcționalitățile premium"
 
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr "Închide mementoul pentru %1$s"
-
 #: apps/io.ox/core/yell.js module:io.ox/core
 msgid "Close this notification"
 msgstr "Închide această notificare"
@@ -2190,6 +2155,7 @@ msgstr "Închide vizualizarea"
 msgid "Collapse form"
 msgstr "Restrânge formularul"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
@@ -2207,7 +2173,7 @@ msgstr "Colorează liniile citate"
 
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "Comma-separated list e.g. \"example.org, alice@example.com\""
-msgstr ""
+msgstr "Listă separată prin virgule, de ex. \"exemplu.org, alice@exemplu.com\""
 
 #. is in the same window as "You are about to change your confirmation status. Please leave a comment for other participants". So "comment" should be translated the same in both cases to not confuse users
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
@@ -2281,8 +2247,7 @@ msgstr "Compune un mail nou"
 msgid "Conditions"
 msgstr "Condiții"
 
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Confidential"
 msgstr "Confidențial"
 
@@ -2395,7 +2360,7 @@ msgstr "Contactul a fost mutat"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Contact list. Select a contact to view details."
-msgstr ""
+msgstr "Listă de contacte. Selectați un contact ca să-i vedeți detaliile."
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Contact pictures"
@@ -2542,7 +2507,7 @@ msgstr ""
 "Setările nu au putut fi salvate. Trebuie să existe cel puțin un utilizator "
 "cu drepturi de administrare."
 
-#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 msgid "Could't load appointment data."
 msgstr "Nu s-au putut încărca datele întâlnirii."
 
@@ -2590,11 +2555,6 @@ msgstr "Creează o întâlnire"
 msgid "Create contact"
 msgstr "Creează un contact"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Create distibution list"
-msgstr "Creează o listă de distribuție"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -2609,6 +2569,10 @@ msgstr "Creează o regulă de filtrare"
 msgid "Create folder"
 msgstr "Creează dosar"
 
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid "Create in public calendar"
+msgstr "Creează în calendarul public"
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid "Create list"
 msgstr "Creează o listă"
@@ -2617,10 +2581,6 @@ msgstr "Creează o listă"
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Create new %1$s account"
 msgstr "Creează cont %1$s nou"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Create new calendar"
-msgstr "Creează calendar nou"
 
 #: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -2781,10 +2741,6 @@ msgstr "Interval de date"
 msgid "Day"
 msgstr "Zi"
 
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Days"
-msgstr "Zile"
-
 #. Context: Vacation notices
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Days between notices to the same sender"
@@ -2938,10 +2894,8 @@ msgstr "Șterge schița."
 
 #. label of a selectbox: automatically delete files after a share/sharing-link expired?
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#, fuzzy
-#| msgid "Delete old signatures after import"
 msgid "Delete files after expiration"
-msgstr "Șterge semnăturile vechi după importare"
+msgstr "Șterge fișierele după expirare"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
@@ -3176,7 +3130,6 @@ msgstr "Detalii listă de distribuție"
 msgid "Distribution list"
 msgstr "Listă de distribuție"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "Lista de distribuție a fost salvată"
@@ -3405,10 +3358,8 @@ msgid "Domain"
 msgstr "Domeniu"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#, fuzzy
-#| msgid "Remind me again"
 msgid "Don't remind me again"
-msgstr "Amintește-mi din nou"
+msgstr "Nu-mi mai aminti"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -3748,8 +3699,8 @@ msgstr "Editează sarcina"
 msgid "Edit to set a name."
 msgstr "Editează pentru a seta un nume."
 
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Editor"
 msgstr "Editor"
 
@@ -4429,10 +4380,8 @@ msgid "Firefox"
 msgstr "Firefox"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#, fuzzy
-#| msgid "day of the week"
 msgid "First day of week"
-msgstr "zi din săptămână"
+msgstr "Prima zi din săptămână"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -4450,7 +4399,7 @@ msgstr "Prenumele nu poate fi gol pentru utilizatorii interni"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 msgid "First week of year"
-msgstr ""
+msgstr "Prima săptămână din an"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Fit to screen size"
@@ -4653,7 +4602,7 @@ msgstr "Liber"
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Freelancer"
-msgstr "Liber-profesionist "
+msgstr "Liber-profesionist"
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -4887,6 +4836,7 @@ msgstr "Ajutor"
 msgid "Hidden address books"
 msgstr "Agende de contacte ascunse"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden calendars"
 msgstr "Calendare ascunse"
@@ -5012,10 +4962,6 @@ msgstr "Gazdă"
 msgid "Hostname"
 msgstr "Nume gazdă"
 
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Hours"
-msgstr "Ore"
-
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "How likely is it that you would recommend %1$s to a friend?"
@@ -5103,6 +5049,14 @@ msgstr ""
 msgid "Image 1"
 msgstr "Imagine 1"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Image size"
+msgstr "Dimensiune imagine"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Image size:"
+msgstr "Dimensiune imagine:"
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Images"
 msgstr "Imagini"
@@ -5145,13 +5099,6 @@ msgid ""
 msgstr ""
 "În calendarele partajate, întâlnirea este afișată ca spațiu obișnuit pentru "
 "utilizatorii care nu participă."
-
-#. %1$s timezone abbreviation of the user
-#. %2$s time interval of event
-#. %2$s duration of event
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
-msgstr "În fusul dvs. orar (%1$s): %2$s (Durată: %3$s)"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail apps/io.ox/portal/widgets.js
 #: module:io.ox/portal apps/plugins/portal/mail/register.js
@@ -5301,8 +5248,8 @@ msgstr "Invită la întâlnirea nouă"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is bigger than"
-msgstr "Este mai mare decât"
+msgid "Is bigger than (Size: B/KB/MB/GB)"
+msgstr "Este mai mare decât (Dimensiune: B/KB/MB/GB)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -5318,8 +5265,8 @@ msgstr "Nu este identic"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is smaller than"
-msgstr "Este mai mic decât"
+msgid "Is smaller than (Size: B/KB/MB/GB)"
+msgstr "Este mai mic decât (Dimensiune: B/KB/MB/GB)"
 
 #: apps/io.ox/settings/security/certificates/settings/utils.js
 #: module:io.ox/settings/certificates
@@ -5430,9 +5377,9 @@ msgid "Keep mails with subject %1$s"
 msgstr "Păstrează mesajele cu subiectul %1$s"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
-#: module:io.ox/core apps/plugins/portal/xing/register.js
-#: module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
 msgstr "Limbă"
 
@@ -5441,8 +5388,22 @@ msgid "Language-specific default"
 msgstr "Specific limbă implicit"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Language"
+msgid "Language:"
+msgstr "Limbă"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
 msgstr "Limbi"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Large"
+msgstr "Mare"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Large (%1$s px)"
+msgstr "Mare (%1$s px)"
 
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Last 30 days"
@@ -5779,6 +5740,10 @@ msgstr "Memento pentru mail"
 msgid "Mail reminder for"
 msgstr "Memento pentru mail pentru"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Mail size:"
+msgstr "Dimensiune mail:"
+
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail
 msgid "Mail source"
 msgstr "Sursa mailului"
@@ -5874,8 +5839,9 @@ msgstr "Marchează ca listă de distribuție"
 msgid "Mark as done"
 msgstr "Marchează ca finalizat"
 
-#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
 msgid "Mark as read"
 msgstr "Marchează ca citit"
 
@@ -5889,8 +5855,9 @@ msgstr "Marchează ca mesaj nedorit"
 msgid "Mark as undone"
 msgstr "Marchează ca anulat"
 
-#: apps/io.ox/mail/contextmenu.js module:io.ox/mail
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
 msgid "Mark as unread"
 msgstr "Marchează ca necitit"
 
@@ -5954,6 +5921,7 @@ msgstr "Nu se potrivește cu"
 msgid "Maximize"
 msgstr "Maximizează"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
 msgstr "Mediu"
@@ -5962,6 +5930,10 @@ msgstr "Mediu"
 msgctxt "Tasks priority"
 msgid "Medium"
 msgstr "Medie"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Medium (%1$s px)"
+msgstr "Mediu (%1$s px)"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Medium gray"
@@ -6045,10 +6017,8 @@ msgid "Minimize"
 msgstr "Minimizează"
 
 #: apps/io.ox/backbone/views/window.js module:io.ox/core
-#, fuzzy
-#| msgid "Embedded windows"
 msgid "Minimized windows"
-msgstr "Ferestre integrate"
+msgstr "Ferestre minimizate"
 
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
@@ -6059,10 +6029,6 @@ msgstr "Lungimea minimă a parolei este %1$d."
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Minus"
 msgstr "Minus"
-
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Minutes"
-msgstr "Minute"
 
 #. section name for contact fields in detail view
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -6080,9 +6046,6 @@ msgid "Modified"
 msgstr "Modificat"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#, fuzzy
-#| msgctxt "superessive"
-#| msgid "Monday"
 msgid "Monday"
 msgstr "Luni"
 
@@ -6103,10 +6066,6 @@ msgstr "Lună"
 #: module:io.ox/calendar/edit/main
 msgid "Monthly"
 msgstr "Lunar"
-
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Months"
-msgstr "Luni"
 
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/find/extensions-api.js apps/io.ox/search/facets/extensions.js
@@ -6230,6 +6189,7 @@ msgstr "My Google Calendar"
 msgid "My address books"
 msgstr "Agendele mele de contacte"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "My calendars"
 msgstr "Calendarele mele"
@@ -6265,7 +6225,6 @@ msgid "My tasks"
 msgstr "Sarcinile mele"
 
 #. Name of distribution list
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -6446,7 +6405,6 @@ msgstr "Memento nou pentru sarcină"
 msgid "New task reminders"
 msgstr "Mementouri noi pentru sarcini"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -6458,6 +6416,10 @@ msgstr "Următorul"
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Next Day"
 msgstr "Ziua următoare"
+
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Next Month"
+msgstr "Luna următoare"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Next Week"
@@ -6479,7 +6441,7 @@ msgstr "Pagina următoare"
 msgid "Next week"
 msgstr "Săptămâna următoare"
 
-#: apps/io.ox/calendar/year/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/year/view.js module:io.ox/calendar
 msgid "Next year"
 msgstr "Anul următor"
 
@@ -6505,7 +6467,7 @@ msgstr "Niciun mesaj Twitter până acum."
 msgid "No action available"
 msgstr "Nicio acțiune disponibilă"
 
-#: apps/io.ox/calendar/list/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 msgid "No appointment selected"
 msgstr "Nicio întâlnire selectată"
 
@@ -6778,10 +6740,8 @@ msgid "Now active"
 msgstr "Activ acum"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#, fuzzy
-#| msgid "Members"
 msgid "Numbers"
-msgstr "Membri"
+msgstr "Numere"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -6814,7 +6774,6 @@ msgstr "Mod offline"
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/core/tk/mobiscroll.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "Ok"
@@ -7050,6 +7009,10 @@ msgstr "Ordine"
 msgid "Organizer"
 msgstr "Organizator"
 
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Original"
+msgstr "Original"
+
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Original mail"
 msgstr "E-mail original"
@@ -7119,6 +7082,13 @@ msgstr "Pager"
 #: module:io.ox/mailfilter
 msgid "Part"
 msgstr "Parte"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+#, fuzzy
+#| msgid "Participant"
+msgid "Participant not found"
+msgstr "Participant"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Participant related actions"
@@ -7191,10 +7161,6 @@ msgstr "Puterea parolei: slabă"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Wrong length"
 msgstr "Puterea parolei: lungime eronată"
-
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Pause auto-play mode"
-msgstr "Pauză mod redare automată"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -7412,10 +7378,6 @@ msgstr "Introduceți o descirere."
 msgid "Please enter a feed URL."
 msgstr "Introduceți un URL pentru flux."
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please enter a name for the distribution list"
-msgstr "Introduceți un nume pentru lista de distribuție"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "Please enter a positive number"
@@ -7503,10 +7465,6 @@ msgstr "Permiteți accesul la webcam înainte."
 msgid "Please insert a date after the start date"
 msgstr "Introduceți o dată după data de început."
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please note that distribution lists cannot contain resources."
-msgstr "Atenție: listele de distribuție nu pot conține resurse."
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please note that other participants are removed on calendar import."
 msgstr ""
@@ -7563,7 +7521,7 @@ msgstr "Selectați fișierul care trebuie importat"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Please select a rating."
-msgstr "Selectați o apreciere"
+msgstr "Selectați o apreciere."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
@@ -7582,10 +7540,6 @@ msgstr "Selectați un fișier imagine corect de inserat"
 #: module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
 msgstr "Selectați cel puțin o zi"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please select at least one participant"
-msgstr "Selectați cel puțin un participant"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -7622,7 +7576,7 @@ msgstr "Actualizați navigatorul."
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Please use the \"Connect your device\" wizard to download %s"
-msgstr ""
+msgstr "Utilizați asistentul \"Conectare dispozitiv\" pentru a descărca %s"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
@@ -7730,7 +7684,6 @@ msgstr "Previzualizare"
 msgid "Preview not available"
 msgstr "Previzualizarea nu este disponibilă"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 msgid "Previous"
@@ -7739,6 +7692,10 @@ msgstr "Precedent"
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Previous Day"
 msgstr "Ziua precedentă"
+
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Previous Month"
+msgstr "Luna precedentă"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Previous Week"
@@ -7762,7 +7719,7 @@ msgstr "Pagina precedentă"
 msgid "Previous week"
 msgstr "Săptămâna precedentă"
 
-#: apps/io.ox/calendar/year/perspective.js module:io.ox/calendar
+#: apps/io.ox/calendar/year/view.js module:io.ox/calendar
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "Previous year"
 msgstr "Anul precedent"
@@ -7815,8 +7772,8 @@ msgstr "Prioritate"
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/month/view.js
-#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/view-grid-template.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
@@ -7872,6 +7829,7 @@ msgstr "Proprietăți"
 msgid "Public address books"
 msgstr "Agende de contacte publice"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public calendars"
 msgstr "Calendare publice"
@@ -7945,10 +7903,6 @@ msgstr "Flux RSS"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "Fluxuri RSS"
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Read"
-msgstr "Citește"
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8159,10 +8113,8 @@ msgid "Regex"
 msgstr "Expresie regulată"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#, fuzzy
-#| msgid "Additional settings"
 msgid "Regional settings"
-msgstr "Setări suplimentare"
+msgstr "Setări regionale"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Register now"
@@ -8214,6 +8166,12 @@ msgstr "Reîncarcă pagina"
 msgid "Reload statistics"
 msgstr "Reîncarcă statisticile"
 
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "login"
+msgid "Relogin"
+msgstr "autentificare"
+
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
@@ -8238,10 +8196,8 @@ msgstr "Memento"
 
 #. %1$d: is the number of the reminder
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Reminder date %1$s"
 msgid "Reminder %1$d"
-msgstr "Dată memento %1$s"
+msgstr "Memento %1$d"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -8338,10 +8294,8 @@ msgid "Remove member"
 msgstr "Elimină membrul"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Remove all reminders"
 msgid "Remove reminder"
-msgstr "Elimină toate mementourile"
+msgstr "Elimină memento"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -8593,14 +8547,8 @@ msgid "Rule name"
 msgstr "Nume regulă"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-#, fuzzy
-#| msgid "Run auto-play mode"
-msgid "Run auto-play "
-msgstr "Mod redare automată"
-
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Run auto-play mode"
-msgstr "Mod redare automată"
+msgid "Run slideshow"
+msgstr "Redă prezentarea"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP"
@@ -8727,9 +8675,9 @@ msgstr "Verde de apă"
 
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js apps/io.ox/core/main/topbar_right.js
-#: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
-#: apps/io.ox/find/view-tokenfield.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/main/apps.js
+#: apps/io.ox/core/main/topbar_right.js apps/io.ox/find/extensions-facets.js
+#: apps/io.ox/find/main.js apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
 #: module:io.ox/search apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
@@ -8776,7 +8724,6 @@ msgstr "Secret"
 msgid "Security"
 msgstr "Securitate"
 
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Select"
@@ -8813,10 +8760,6 @@ msgstr "Selectează tot"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Select all messages"
 msgstr "Selectează toate mesajele"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Select calendar"
-msgstr "Selectați calendarul"
 
 #: apps/io.ox/backbone/mini-views/addresspicker.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -8893,56 +8836,42 @@ msgstr "Trimite mail"
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Notify %1$s after end."
 msgid "Send mail %1$s after end."
-msgstr "Amintește-mi cu %1$s după final."
+msgstr "Trimite mesajs cu %1$s după final."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Notify %1$s after start."
 msgid "Send mail %1$s after start."
-msgstr "Amintește-mi cu %1$s după început."
+msgstr "Trimite mesaj cu %1$s după început."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Notify %1$s before end."
 msgid "Send mail %1$s before end."
-msgstr "Amintește-mi cu %1$s înainte de final."
+msgstr "Trimite mesaj cu %1$s înainte de final."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Notify %1$s before start."
 msgid "Send mail %1$s before start."
-msgstr "Amintește-mi cu %1$s înainte de început."
+msgstr "Trimite mesaj cu %1$s înainte de început."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Keep mails to %1$s"
 msgid "Send mail at %1$s."
-msgstr "Păstrează mesajele către %1$s"
+msgstr "Trimite mesajele pe %1$s."
 
 #. Used to display reminders for appointments
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Send mail"
 msgid "Send mail at end."
-msgstr "Trimite mail"
+msgstr "Trimite mesaj la final."
 
 #. Used to display reminders for appointments
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Saved mail attachment"
 msgid "Send mail at start."
-msgstr "Fișier atașat salvat"
+msgstr "Trimite mesaj la început."
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
@@ -9135,6 +9064,7 @@ msgstr "Agende de contacte partajate"
 msgid "Shared by other users"
 msgstr "Partajat de alți utilizatori"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared calendars"
 msgstr "Calendare partajate"
@@ -9184,10 +9114,8 @@ msgid "Show"
 msgstr "Afișează"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
-#, fuzzy
-#| msgid "Advanced settings"
 msgid "Show advanced options"
-msgstr "Setări avansate"
+msgstr "Afișează setările avansate"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show all calendars"
@@ -9299,20 +9227,12 @@ msgid "Show names"
 msgstr "Afișează numele"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-msgid "Show next day"
-msgstr "Afișează ziua următoare"
-
-#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show next month"
 msgstr "Afișează luna următoare"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Show or hide actions for advanced users."
 msgstr "Afișează sau ascunde acțiunile pentru utilizatorii avansați."
-
-#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-msgid "Show previous day"
-msgstr "Afișează ziua precedentă"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous month"
@@ -9412,6 +9332,10 @@ msgstr "Dimensiune"
 msgid "Sky blue"
 msgstr "Albastru celest"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid "Slideshow"
+msgstr "Prezentare"
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Slideshow / Autoplay mode for images"
 msgstr "Prezentare / Mod redare automată pentru imagini"
@@ -9419,6 +9343,14 @@ msgstr "Prezentare / Mod redare automată pentru imagini"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
 msgstr "Cereri lente"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Small"
+msgstr "Mic"
+
+#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+msgid "Small (%1$s px)"
+msgstr "Mic (%1$s px)"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Smartphone settings:"
@@ -9432,6 +9364,7 @@ msgstr "SoftBank"
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
 msgid "Some contacts could not be added as they have no valid email field."
 msgstr ""
+"Anumite contacte nu au putut fi adăugate deoarece nu au câmp de e-mail valid."
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Some fields contain invalid data"
@@ -9441,6 +9374,17 @@ msgstr "Anumite câmpuri conțin date incorecte"
 msgid ""
 "Some settings (language, timezone, theme) require a page reload or relogin "
 "to take effect."
+msgstr ""
+"Anumite setări (limbă, fus orar, temă) necesită o reîncărcare a paginii sau "
+"o reautentificare pentru a avea efect."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Some settings (language, timezone, theme) require a page reload or "
+#| "relogin to take effect."
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
 msgstr ""
 "Anumite setări (limbă, fus orar, temă) necesită o reîncărcare a paginii sau "
 "o reautentificare pentru a avea efect."
@@ -9596,10 +9540,8 @@ msgstr "StartTLS"
 
 #. index used in contacts list to jump to names with a specific starting letter
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Start date timezone"
 msgid "Starting letter index"
-msgstr "Fusul orar al datei de început"
+msgstr "Index pentru litere inițiale"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -9633,16 +9575,18 @@ msgstr "Stare"
 msgid "Stay signed in"
 msgstr "Rămâi conectat"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid "Stop slideshow"
+msgstr "Oprește prezentarea"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Street"
 msgstr "Stradă"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Sharing"
 msgid "String"
-msgstr "Partajare"
+msgstr "Șir"
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Student"
@@ -9728,9 +9672,6 @@ msgid "Summary"
 msgstr "Rezumat"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#, fuzzy
-#| msgctxt "superessive"
-#| msgid "Sunday"
 msgid "Sunday"
 msgstr "Duminică"
 
@@ -10159,6 +10100,14 @@ msgstr "Adresele selectate. Apăsați Backspace sau Delete pentru a elimina."
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
+"The selected calendar \"%1$s\" is public. Do you really want to create an "
+"appointment in this calendar?"
+msgstr ""
+"Calendarul selectat \"%1$s\" este public. Sigur doriți să creați o întâlnire "
+"în acest calendar?"
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
 "will generally be created on behalf of the owner."
 msgstr ""
@@ -10208,6 +10157,14 @@ msgstr "Seria nu se termină niciodată."
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
+msgstr ""
+"Această setare necesită o reîncărcare sau o reautentificare pentru a avea "
+"efect."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "The setting requires a reload or relogin to take effect."
+msgid "The setting requires a relogin to take effect."
 msgstr ""
 "Această setare necesită o reîncărcare sau o reautentificare pentru a avea "
 "efect."
@@ -10279,15 +10236,6 @@ msgid ""
 "There are currently no compatible media devices available on your device."
 msgstr ""
 "Momentan nu există niciun dispozitiv media compatibil pe dispozitivul dvs."
-
-#. %1$n is the maximum number of appointments
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-msgid ""
-"There are more than %n appointments in the current calendar. Some features "
-"are disabled due to performance reasons."
-msgstr ""
-"Există mai mult de %n întâlniri în calendarul actual. Anumite "
-"funcționalități sunt dezactivate din motive de performanță."
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
@@ -10362,11 +10310,10 @@ msgstr "Această întâlnire"
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid ""
-"This appointment is an exception. Changing the series does not affect "
-"exceptions."
+"This appointment is an exception. Changing the exception does not affect the "
+"series."
 msgstr ""
-"Această întâlnire este o excepție. Modificarea seriei nu afectează "
-"excepțiile."
+"Această întâlnire este o excepție. Modificarea excepției nu afectează seria."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "This browser is not supported on your current platform."
@@ -10924,11 +10871,9 @@ msgstr ""
 "mai târziu."
 
 #: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
-#, fuzzy
-#| msgid "Upload file"
 msgid "Unable to upload file"
 msgid_plural "Unable to upload files"
-msgstr[0] "Încarcă un fișier"
+msgstr[0] "Fișierul nu s-a putut încărca"
 msgstr[1] "Încarcă un fișier"
 msgstr[2] "Încarcă un fișier"
 
@@ -11123,10 +11068,8 @@ msgstr "Utilizează setările implicite ale navigatorului"
 
 #. showed inside a color picker. Used if an appointment should not have a custom color
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#, fuzzy
-#| msgid "New calendar"
 msgid "Use calendar color"
-msgstr "Calendar nou"
+msgstr "utilizează culoarea calendarului"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Use categories"
@@ -11134,7 +11077,7 @@ msgstr "Utilizează categoriile"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
 msgid ""
 "Use cursor keys to change the date. Press ctrl-key at the same time to "
 "change year or shift-key to change month. Close date-picker by pressing ESC "
@@ -11198,6 +11141,10 @@ msgstr "Nume utilizator"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"
 msgstr "Datele utilizatorului"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "User defined color"
+msgstr "Culoare personalizată"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "User fields"
@@ -11312,10 +11259,8 @@ msgid "Visibility"
 msgstr "Vizibilitate"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#, fuzzy
-#| msgid "Visibility"
 msgid "Visibility Help"
-msgstr "Vizibilitate"
+msgstr "Ajutor pentru vizibilitate"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
@@ -11360,9 +11305,9 @@ msgstr "Am putut confirma acest mesaj este într-adevăr de la %1$s."
 #: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
 msgid "We encountered an issue for your upload"
 msgid_plural "We encountered some issues for your upload"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "A apărut o problemă la încărcare"
+msgstr[1] "Au apărut câteva probleme la încărcare"
+msgstr[2] "Au apărut câteva probleme la încărcare"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -11372,6 +11317,10 @@ msgstr[2] ""
 #: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Weather • Season"
 msgstr "Vreme • Anotimp"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "WebDAV"
+msgstr "WebDAV"
 
 #. label for a list of webcam devices currently available
 #: apps/io.ox/backbone/views/capture-media.js module:io.ox/core
@@ -11396,11 +11345,11 @@ msgstr "Săptămâna începe"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 msgid "Week that contains January 1st"
-msgstr ""
+msgstr "Săptămâna care conține 1 ianuarie"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 msgid "Week that contains the first Thursday"
-msgstr ""
+msgstr "Săptămâna care conține prima marți"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -11471,14 +11420,10 @@ msgstr "Ce doriți să utilizați?"
 msgid "What type of device do you want to configure?"
 msgstr "Ce tip de dispozitiv doriți să configurați?"
 
+#. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "Noutăți"
-
-#. %1$s is the product name, e.g. OX App Suite
-#: apps/io.ox/tours/whats-new.js module:io.ox/core
-msgid "What‘s New in %1$s 7.10.0"
-msgstr "Noutăți în %1$s 7.10.0"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -11542,10 +11487,6 @@ msgstr "An"
 msgid "Yearly"
 msgstr "Anual"
 
-#: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
-msgid "Years"
-msgstr "Ani"
-
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
@@ -11608,6 +11549,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "You are no longer using a shared calendar. You were added as organizer."
 msgstr ""
+"Nu mai utilizați un calendar partajat. Ați fost adăugat ca organizator."
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
@@ -11623,6 +11565,8 @@ msgstr "Sunteți organizatorul"
 msgid ""
 "You are using a shared calendar. The calendar owner was added as organizer."
 msgstr ""
+"Utilizați un calendar partajat. Proprietarul calendarului a fost adăugat ca "
+"organizator."
 
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 msgid ""
@@ -11740,7 +11684,7 @@ msgstr "Ați respins întâlnirea"
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
 msgid "You have new appointment invitations"
-msgstr "Aveți invitații noi la întâlniri."
+msgstr "Aveți invitații noi la întâlniri"
 
 #. Body text of generic desktop notification about new reminders for appointments
 #: apps/plugins/notifications/calendar/register.js
@@ -11829,7 +11773,7 @@ msgstr[2] "Veți fi deconectat automat peste %1$d de secunde"
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Your %s newsfeed"
-msgstr "Fluxul de știri %s "
+msgstr "Fluxul de știri %s"
 
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Your IP address has changed"
@@ -11927,6 +11871,20 @@ msgstr ""
 msgid "Your platform is not supported!"
 msgstr "Platforma dumneavoastră nu este suportată!"
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+#, fuzzy
+#| msgid "Account is being created"
+msgid "Your preview is being generated."
+msgstr "Contul este în curs de creare"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Your recurrence rule does not fit to your start date."
+msgstr "Regula de repetare nu se potrivește cu data inițială."
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Your recurrence rule was changed automatically."
+msgstr "Regula de repetare a fost modificată automat."
+
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
@@ -12003,17 +11961,13 @@ msgstr "acceptat"
 
 #. Used in a selectbox when the reminder for an appointment is after the end time
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "never ends"
 msgid "after end"
-msgstr "nu se termină niciodată"
+msgstr "după final"
 
 #. Used in a selectbox when the reminder for an appointment is after the start time
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "%1$s %2$s after start."
 msgid "after start"
-msgstr "%1$s %2$s după început."
+msgstr "după start"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -12051,17 +12005,13 @@ msgstr "inapoi"
 
 #. Used in a selectbox when the reminder for an appointment is before the end time
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "%1$s %2$s before end."
 msgid "before end"
-msgstr "%1$s %2$s înainte de final."
+msgstr "înainte de final"
 
 #. Used in a selectbox when the reminder for an appointment is before the start time
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Week start"
 msgid "before start"
-msgstr "Săptămâna începe"
+msgstr "înainte de start"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "blue"
@@ -12438,6 +12388,10 @@ msgstr "fără permisiune de editare"
 msgid "no read permissions"
 msgstr "fără permisiune de citire"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "none"
+msgstr "nimeni"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "not a full match (allows DOS-style wildcards)"
@@ -12575,17 +12529,13 @@ msgstr "imagine în miniatură"
 
 #. screenreader label for the reminder timeframe (15 minutes, etc)
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Blocked time frame"
 msgid "timeframe"
-msgstr "Interval de timp blocat"
+msgstr "Interval de timp"
 
 #. screenreader label for the reminder timeframe relation (before start, after end, etc)
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Estimated Duration:"
 msgid "timeframe relation"
-msgstr "Durata estimată:"
+msgstr "relație interval de timp"
 
 #. title of toggle button within password field
 #: apps/io.ox/backbone/mini-views/common.js module:io.ox/core
@@ -12602,10 +12552,8 @@ msgstr "deseară"
 
 #. screenreader label for the reminder type (audio, notification, etc)
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Mime type"
 msgid "type"
-msgstr "Tip Mime"
+msgstr "tip"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "unconfirmed"
@@ -12631,10 +12579,8 @@ msgid "vCard"
 msgstr "vCard"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
-#, fuzzy
-#| msgid "Vacation notice"
 msgid "vacation notice"
-msgstr "Mesaj de absență"
+msgstr "mesaj de absență"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -12754,6 +12700,9 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s."
+
+#~ msgid "%1$s (Tentative)"
+#~ msgstr "%1$s (Tentativă)"
 
 #~ msgid "%1$s Options"
 #~ msgstr "Opțiuni %1$s"
@@ -13093,9 +13042,6 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Account Settings"
 #~ msgstr "Setări cont"
 
-#~ msgid "Account is being created"
-#~ msgstr "Contul este în curs de creare"
-
 #~ msgid "Account:"
 #~ msgstr "Cont:"
 
@@ -13367,6 +13313,9 @@ msgstr "platforma dumneavoastră"
 #~ msgstr ""
 #~ "Invitație întâlnire. %1$s %2$s %3$s %4$s %5$s. Apăsați [Enter] pentru a "
 #~ "deschide"
+
+#~ msgid "Appointment list"
+#~ msgstr "Listă întâlniri"
 
 #~ msgid "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
 #~ msgstr ""
@@ -13776,11 +13725,26 @@ msgstr "platforma dumneavoastră"
 #~ msgid "CalDAV Login"
 #~ msgstr "Autentificare CalDAV"
 
+#~ msgid "Calendar Day View"
+#~ msgstr "Vedere calendar pe zile"
+
+#~ msgid "Calendar Month View"
+#~ msgstr "Vedere calendar pe luni"
+
+#~ msgid "Calendar Week View"
+#~ msgstr "Vedere calendar pe săptămâni"
+
+#~ msgid "Calendar Workweek View"
+#~ msgstr "Vedere calendar pe săptămâni de lucru"
+
 #~ msgid "Calendar custom view"
 #~ msgstr "Calendar vedere personalizată"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "Calendar vedere pe săptămâni de lucru"
+
+#~ msgid "Calendar:"
+#~ msgstr "Calendar:"
 
 #~ msgid "Cambodia"
 #~ msgstr "Cambodgia"
@@ -14007,6 +13971,9 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Close recurrence view"
 #~ msgstr "Apăsați pentru a închide vederea pe serii"
 
+#~ msgid "Close reminder for %1$s"
+#~ msgstr "Închide mementoul pentru %1$s"
+
 #~ msgid "Close search"
 #~ msgstr "Închide căutarea"
 
@@ -14186,8 +14153,14 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Creează un cont %s pe baza datelor stocate aici"
 
+#~ msgid "Create distibution list"
+#~ msgstr "Creează o listă de distribuție"
+
 #~ msgid "Create exception"
 #~ msgstr "Creează excepție"
+
+#~ msgid "Create new calendar"
+#~ msgstr "Creează calendar nou"
 
 #~ msgid "Create new task"
 #~ msgstr "Creează sarcină nouă"
@@ -14360,6 +14333,9 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Day View"
 #~ msgstr "Vedere pe zile"
+
+#~ msgid "Days"
+#~ msgstr "Zile"
 
 #~ msgid "Debug"
 #~ msgstr "Depanare"
@@ -15616,6 +15592,9 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Hong Kong"
 #~ msgstr "Hong Kong"
 
+#~ msgid "Hours"
+#~ msgstr "Ore"
+
 #~ msgid "How does this work?"
 #~ msgstr "Cum funcționează?"
 
@@ -15817,6 +15796,9 @@ msgstr "platforma dumneavoastră"
 #~ "În vederea pe pictograme, puteți vizualiza fișierele dosarelor selectate "
 #~ "în zona de afișare."
 
+#~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
+#~ msgstr "În fusul dvs. orar (%1$s): %2$s (Durată: %3$s)"
+
 #~ msgid "Inbox Tabs"
 #~ msgstr "File mesaje primite"
 
@@ -15992,6 +15974,12 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Is at most"
 #~ msgstr "Este cel mult"
+
+#~ msgid "Is bigger than"
+#~ msgstr "Este mai mare decât"
+
+#~ msgid "Is smaller than"
+#~ msgstr "Este mai mic decât"
 
 #~ msgid "Isle of Man"
 #~ msgstr "Insula Man"
@@ -16409,6 +16397,9 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Mime Type"
 #~ msgstr "Tip Mime"
 
+#~ msgid "Minutes"
+#~ msgstr "Minute"
+
 #~ msgid "Mobile"
 #~ msgstr "Mobil"
 
@@ -16468,6 +16459,9 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Monthly on the %1$s %2$s"
 #~ msgstr "Lunar în data de %1$s %2$s"
+
+#~ msgid "Months"
+#~ msgstr "Luni"
 
 #, fuzzy
 #~| msgid "Months"
@@ -16985,9 +16979,6 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Parameter:"
 #~ msgstr "Parametru:"
 
-#~ msgid "Participant"
-#~ msgstr "Participant"
-
 #~ msgid "Participant:"
 #~ msgstr "Participant:"
 
@@ -17009,6 +17000,9 @@ msgstr "platforma dumneavoastră"
 #, fuzzy
 #~ msgid "Pause Presentation"
 #~ msgstr "Destinație"
+
+#~ msgid "Pause auto-play mode"
+#~ msgstr "Pauză mod redare automată"
 
 #~ msgid "Pause presentation"
 #~ msgstr "Oprește prezentarea"
@@ -17101,6 +17095,9 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Please enter a correct number."
 #~ msgstr "Introduceți un număr corect."
 
+#~ msgid "Please enter a name for the distribution list"
+#~ msgstr "Introduceți un nume pentru lista de distribuție"
+
 #~ msgid "Please enter a valid date."
 #~ msgstr "Introduceți o dată corectă."
 
@@ -17121,6 +17118,9 @@ msgstr "platforma dumneavoastră"
 #~ msgstr ""
 #~ "Consultați pagina %sModule UWA interesante%s. Aceasta prezintă o listă de "
 #~ "componente și datele lor asociate."
+
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr "Atenție: listele de distribuție nu pot conține resurse."
 
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Atenție: lista de distribuție nu poate conține resurse."
@@ -17163,6 +17163,9 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Please select a file to insert"
 #~ msgstr "Selectați fișierul de inserat"
+
+#~ msgid "Please select at least one participant"
+#~ msgstr "Selectați cel puțin un participant"
 
 #~ msgid "Please select only one Publication"
 #~ msgstr "Selectați o singură publicație"
@@ -17386,6 +17389,9 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "Pagina %1$d din %2$d"
 
+#~ msgid "Read"
+#~ msgstr "Citește"
+
 #~ msgctxt "to"
 #~ msgid "Read"
 #~ msgstr "Citește"
@@ -17551,6 +17557,12 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Rules"
 #~ msgstr "Reguli"
+
+#~ msgid "Run auto-play "
+#~ msgstr "Lansați redarea automată"
+
+#~ msgid "Run auto-play mode"
+#~ msgstr "Mod redare automată"
 
 #~ msgid "Running applications"
 #~ msgstr "Aplicații în execuție"
@@ -17731,6 +17743,9 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Select appointment display type"
 #~ msgstr "Selectați un tip de afișare a întâlnirilor"
+
+#~ msgid "Select calendar"
+#~ msgstr "Selectați calendarul"
 
 #~ msgid "Select from the list and add selected as members"
 #~ msgstr "Selectează din listă și adaugă elementele selectate la membri"
@@ -17968,8 +17983,14 @@ msgstr "platforma dumneavoastră"
 #~ msgstr ""
 #~ "Afișează numele în locul adresei de e-mail în câmpurile Către și Cc:"
 
+#~ msgid "Show next day"
+#~ msgstr "Afișează ziua următoare"
+
 #~ msgid "Show original publication"
 #~ msgstr "Afișează publicația originală"
+
+#~ msgid "Show previous day"
+#~ msgstr "Afișează ziua precedentă"
 
 #~ msgid "Show sender image?"
 #~ msgstr "Afișează imaginea expeditorului?"
@@ -18045,9 +18066,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Skip this step"
 #~ msgstr "Ignoră această etapă"
-
-#~ msgid "Slideshow"
-#~ msgstr "Prezentare"
 
 #~ msgid "Slideshow / Autoplay mode"
 #~ msgstr "Mod prezentare  / redare automată"
@@ -18935,6 +18953,13 @@ msgstr "platforma dumneavoastră"
 #~ msgid "There are currently no participants."
 #~ msgstr "Momentan nu există participanți"
 
+#~ msgid ""
+#~ "There are more than %n appointments in the current calendar. Some "
+#~ "features are disabled due to performance reasons."
+#~ msgstr ""
+#~ "Există mai mult de %n întâlniri în calendarul actual. Anumite "
+#~ "funcționalități sunt dezactivate din motive de performanță."
+
 #~ msgid "There is already %1$d appointment in this timeframe."
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
 #~ msgstr[0] "Există deja %1$d întâlnire în acest interval de timp."
@@ -18952,6 +18977,13 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "Contul nu poate fi validat"
+
+#~ msgid ""
+#~ "This appointment is an exception. Changing the series does not affect "
+#~ "exceptions."
+#~ msgstr ""
+#~ "Această întâlnire este o excepție. Modificarea seriei nu afectează "
+#~ "excepțiile."
 
 #~ msgid "This document contains unsaved changes. Do you really want to close?"
 #~ msgstr ""
@@ -19795,6 +19827,9 @@ msgstr "platforma dumneavoastră"
 #~ msgid "What to you want to use on your smartphone?"
 #~ msgstr "Doriți să salvați configurația?"
 
+#~ msgid "What‘s New in %1$s 7.10.0"
+#~ msgstr "Noutăți în %1$s 7.10.0"
+
 #~ msgid "When \"Reply all\":"
 #~ msgstr "Când se \"Răspunde tuturor\":"
 
@@ -19869,6 +19904,9 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Yearly on the %1$s %2$s of %3$d"
 #~ msgstr "Anual în data de %1$s %2$s a lunii %3$d"
+
+#~ msgid "Years"
+#~ msgstr "Ani"
 
 #~ msgid "Yemen"
 #~ msgstr "Yemen"
@@ -20404,9 +20442,6 @@ msgstr "platforma dumneavoastră"
 #~ msgid "locked by"
 #~ msgstr "blocat de"
 
-#~ msgid "login"
-#~ msgstr "autentificare"
-
 #~ msgid "march"
 #~ msgstr "martie"
 
@@ -20458,9 +20493,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "no expiry date"
 #~ msgstr "nicio dată de expirare"
-
-#~ msgid "none"
-#~ msgstr "nimeni"
 
 #~ msgid "not sent"
 #~ msgstr "nu s-a trimis"

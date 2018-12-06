@@ -13,7 +13,7 @@
 
 define('plugins/administration/resources/settings/pane', [
     'io.ox/core/extensions',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/api/backbone',
     'io.ox/core/tk/list',
     'io.ox/core/api/resource',

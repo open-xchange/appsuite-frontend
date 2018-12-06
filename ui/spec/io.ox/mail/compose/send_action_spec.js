@@ -67,6 +67,7 @@ define([
                         quit: sinon.spy()
                     }
                 });
+                baton.disable('io.ox/mail/compose/actions/send', 'image-resize');
 
                 // for 'disable-manual-close' extension
                 sinon.stub(ox.ui.apps, 'get').withArgs('compose_test').returns(baton.app);

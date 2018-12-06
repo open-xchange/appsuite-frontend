@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-04-04 20:35+0100\n"
+"PO-Revision-Date: 2018-10-31 23:49+0100\n"
 "Last-Translator: Andrés Herrera <andres@workshop-chapina.com>\n"
 "Language-Team: Spanish <ox7doc@workshop-chapina.com>\n"
 "Language: es_ES\n"
@@ -681,13 +681,10 @@ msgstr ""
 "hay debajo de Participantes. Puede agregar documentos adjuntos a la tarea."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Para iniciar una aplicación, pulse en un elemento de la izquierda de la "
-"barra de menús."
+"Para iniciar una aplicación, pulse en un elemento del menú del lanzador de "
+"aplicaciones."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."

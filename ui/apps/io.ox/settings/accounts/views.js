@@ -19,7 +19,7 @@ define('io.ox/settings/accounts/views', [
     'io.ox/core/folder/api',
     'io.ox/settings/util',
     'io.ox/backbone/mini-views/listutils',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'gettext!io.ox/settings/accounts'
 ], function (ext, accounts, filestorageApi, folderAPI, settingsUtil, listUtils, DisposableView, gt) {
     'use strict';

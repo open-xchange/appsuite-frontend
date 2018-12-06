@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-29 00:20+0800\n"
+"PO-Revision-Date: 2018-11-02 23:37+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.2\n"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Add another account"
@@ -612,11 +612,8 @@ msgstr ""
 "附件。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid "To launch an app click on an entry inside the app launcher menu."
-msgstr "要啟動應用程式，點選選單列左方的項目。"
+msgstr "要啟動應用程式，點選應用程式啟動器選單內的項目。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."

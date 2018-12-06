@@ -160,6 +160,10 @@ define('io.ox/core/desktop', [
 
                 var folder = null, that, win = null, grid = null, type, initialized = $.Deferred();
 
+                folderAPI.on('after:rename', function (id, data) {
+                    if (win) win.setTitle(data.title || '');
+                });
+
                 that = {
 
                     initialized: initialized.promise(),
@@ -180,15 +184,6 @@ define('io.ox/core/desktop', [
 
                     set: (function () {
 
-                        /**
-                         * Change folder if the app has changed
-                         * @param {String} id
-                         * @param {file|folder} data
-                         * @param {Application} app
-                         * @param {Deferred} def
-                         * @param {Boolean} favorite
-                         *  change to the favorite section in the tree or not
-                         */
                         function change(id, data, app, def, favorite) {
                             //app has changed while folder was requested
                             var appchange = _.url.hash('app') !== app;
@@ -762,7 +757,7 @@ define('io.ox/core/desktop', [
         },
 
         removeRestorePoint: function (id) {
-            var self =  this;
+            var self = this;
             return this.getSavePoints().then(function (list) {
                 list = list || [];
                 var ids = _(list).pluck('id'),
@@ -816,10 +811,7 @@ define('io.ox/core/desktop', [
                                         app.launch({ floatingWindowModel: model }).then(function () {
                                             // update unique id
                                             obj.id = this.get('uniqueID');
-                                            if (this.failRestore) {
-                                                // restore
-                                                return this.failRestore(obj.point);
-                                            }
+                                            if (this.failRestore) return this.failRestore(obj.point);
                                             return $.when();
                                         }).done(function () {
                                             // replace restore point with old id with restore point with new id (prevents duplicates)
@@ -827,6 +819,13 @@ define('io.ox/core/desktop', [
                                                 sp.push(obj);
                                                 self.setSavePoints(sp);
                                                 if (model.get('quitAfterLaunch')) model.trigger('quit');
+                                            });
+                                        }).fail(function (e) {
+                                            if (!e || e.code !== 'MSG-0032') return;
+                                            // restoreById-savepoint after draft got deleted
+                                            _.delay(function () {
+                                                ox.ui.App.removeRestorePoint(oldId);
+                                                model.trigger('close');
                                             });
                                         });
                                         return;
@@ -1835,16 +1834,6 @@ define('io.ox/core/desktop', [
         }
         return def;
     };
-
-    // retrigger jquery events to allow listenTo event registration
-    ox.dom = _.extend({
-        retrigger: function (e) { ox.dom.trigger(e.type, e); }
-    }, ox.dom, Backbone.Events);
-    $(document).on('dragover', ox.dom.retrigger);
-    $(document).on('mouseout', ox.dom.retrigger);
-    $(document).on('dragleave', ox.dom.retrigger);
-    $(document).on('drop', ox.dom.retrigger);
-    $(window).on('resize', ox.dom.retrigger);
 
     apps.on('resume', function (app) {
         adaptiveLoader.stop();

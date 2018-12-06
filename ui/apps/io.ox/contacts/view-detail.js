@@ -731,6 +731,8 @@ define('io.ox/contacts/view-detail', [
                 return '<a href="callto:' + number + '">' + match + '</a>';
             });
 
+            str = coreUtil.urlify(str);
+
             // fix missing newlines
             str = str.replace(/\n/g, '<br>');
 

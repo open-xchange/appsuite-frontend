@@ -129,7 +129,7 @@ define('io.ox/oauth/backbone', [
 
                         if (!response.data) {
                             // TODO handle a possible error object in response
-                            return $.Deferred().reject();
+                            return $.Deferred().reject(response.error);
                         }
 
                         var id = response.data.id;

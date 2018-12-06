@@ -356,6 +356,11 @@
 
         &:hover { text-decoration: underline; }
 
+        &.declined {
+            text-decoration: line-through;
+            &:hover { text-decoration: line-through underline; }
+        }
+
         &:focus {
             background-color: rgba(0, 0, 0, 0.10);
             outline: 0;

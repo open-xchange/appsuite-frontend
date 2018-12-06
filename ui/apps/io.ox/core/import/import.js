@@ -166,7 +166,7 @@ define('io.ox/core/import/import', [
                     $.txt(' '),
                     // link to online help
                     $('<a href="" target="help" style="white-space: nowrap">')
-                        .attr('href', 'help/l10n/' + ox.language + '/ox.appsuite.user.sect.datainterchange.import.contactscsv.html')
+                        .attr('href', 'help/l10n/' + ox.language + '/ox.appsuite.user.sect.contacts.manage.import.html')
                         .text(gt('Learn more'))
                 )
             );
@@ -191,9 +191,9 @@ define('io.ox/core/import/import', [
     });
 
     var references = {
-        'calendar': 'ox.appsuite.user.sect.calendar.folder.import.html',
-        'contacts': 'ox.appsuite.user.sect.datainterchange.import.contactscsv.html',
-        'tasks':    'ox.appsuite.user.sect.datainterchange.import.ical.html'
+        'calendar': 'ox.appsuite.user.sect.calendar.manage.import.html',
+        'contacts': 'ox.appsuite.user.sect.contacts.manage.import.html',
+        'tasks':    'ox.appsuite.user.sect.tasks.manage.import.html'
     };
 
     return {

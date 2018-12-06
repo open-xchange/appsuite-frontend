@@ -23,11 +23,13 @@ define('io.ox/calendar/actions/edit', [
     return function (baton) {
         var o = api.reduce(baton.data);
 
-        util.showRecurrenceDialog(baton.data)
+        // allow editing the series on last occurence. This allows people to prolong the series by changing the rrule
+        util.showRecurrenceDialog(baton.data, { allowEditOnLastOccurence: true })
             .done(function (action) {
                 if (action === 'cancel') return;
 
-                if (action === 'series') {
+                // use series master for this and future
+                if (action === 'series' || action === 'thisandfuture') {
                     // edit the series, discard recurrenceId and reference to seriesId if exception
                     delete o.recurrenceId;
                     o.id = baton.data.seriesId || baton.data.id;
@@ -37,6 +39,9 @@ define('io.ox/calendar/actions/edit', [
                 // disable cache with second param
                 api.get(o, false).then(
                     function (data) {
+                        data = data.toJSON();
+                        if (action === 'thisandfuture') data = util.createUpdateData(data, baton.data);
+
                         if (m.reuse('edit', data, { action: action })) return;
                         m.getApp().launch().done(function () {
                             this.edit(data, { action: action });

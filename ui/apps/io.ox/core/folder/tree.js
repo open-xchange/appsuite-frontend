@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/folder/tree', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/core/folder/selection',

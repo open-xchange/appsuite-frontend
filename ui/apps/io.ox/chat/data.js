@@ -16,7 +16,7 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
     'use strict';
 
     var user_id = parseInt(_.url.hash('chatUser'), 10) || ox.user_id,
-        chatHost = _.url.hash('chatHost') || 'devtank.de';
+        chatHost = _.url.hash('chatHost');
 
     var data = {
         // yes, it contains the user_id; just a POC; no auth

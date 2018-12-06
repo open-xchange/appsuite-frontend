@@ -11,63 +11,72 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-.io-ox-calendar-color-picker {
-
+.mixin-box {
     @rect-size: 20px;
 
-    padding-top: 8px;
+    width: @rect-size;
+    height: @rect-size;
+    border-radius: @border-radius-small;
+
+    line-height: @rect-size;
+    text-align: center;
+}
+
+.color-picker-dropdown {
+    .folder-default-color {
+        display: flex;
+        align-content: center;
+        // fake divider
+        padding: 3px 14px 8px 14px;
+        margin-bottom: 8px;
+        border-bottom: 1px solid #e5e5e5;
+
+        i {
+            .mixin-box();
+            line-height: 18px;
+            margin-right: 4px;
+            border: 1px solid @dark-silver;
+            margin-left: 2px;
+        }
+    }
+}
+
+.io-ox-calendar-color-picker-container {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.io-ox-calendar-color-picker {
+    //padding-top: 8px;
     max-width: 100%;
     overflow-x: auto;
-    display: inline-block;
-    padding: 3px 20px;
+    display: flex;
+    padding: 3px 14px 3px 14px;
     white-space: nowrap;
     text-align: left;
+    width: 340px;
 
-    input[type="radio"] {
-        // display: none does NOT work; cannot receive focus
-        position: absolute;
-        clip: rect(0, 0, 0, 0);
-    }
+    flex-wrap: wrap;
 
-    label {
-        padding: 0;
-        margin: 0;
-        cursor: pointer;
-        display: inline-block;
-    }
+    a {
+        // margin-bottom: 4px;
+        // margin-right: 4px;
+        margin: 0 2px 4px 2px;
+        i.box {
+            .mixin-box();
+        }
 
-    .box:before {
-        font-family: 'FontAwesome';
-        content: '\00a0';
-        width: @rect-size;
-        height: @rect-size;
-        display: inline-block;
-        border-radius: @border-radius-small;
-        text-align: center;
-        font-size: 14px;
-        line-height: @rect-size;
-    }
+        .fa.color-label {
+            font-family: 'FontAwesome';
+            display: inline-block;
+            font-size: 14px;
+        }
 
-    input[type="radio"]:focus + .box:before {
-        box-shadow: 0 0 3px @link-color;
-    }
-
-    input[type="radio"]:checked + .box:before {
-        content: '\f00c';
-    }
-
-    .color-label {
-        width: @rect-size;
-        height: @rect-size;
-        border-radius: @border-radius-small;
-        margin-right: 4px;
-        margin-bottom: 4px;
-    }
-
-    .no-color .box {
-        margin-right: 24px;
-        &:before {
-            border: 1px solid #888;
+        .no-color .box {
+            margin-right: 24px;
+            &:before {
+                border: 1px solid #888;
+            }
         }
     }
 }
@@ -75,6 +84,7 @@
 @media all and (max-width: @smartphone-breakpoint), all and (max-device-width: @smartphone-breakpoint) {
 
     @rect-size-mobile: 36px;
+    @rect-distancte-mobile: 2px;
 
     .io-ox-calendar-color-picker-container {
         position: relative;
@@ -93,8 +103,20 @@
             pointer-events: none;
         }
 
+        .color-picker-scroll {
+            overflow-x: auto;
+        }
+
         .io-ox-calendar-color-picker {
             padding: 8px 10px;
+            max-width: (@rect-size-mobile + (@rect-distancte-mobile * 2) + @rect-distancte-mobile) * 13;
+            width: (@rect-size-mobile + (@rect-distancte-mobile * 2) + @rect-distancte-mobile) * 13;
+
+            a[id^="color-label"].color-box-link {
+                padding: 0px !important;
+                margin: 0px !important;
+                height: @rect-size-mobile + (@rect-distancte-mobile * 2);
+            }
 
             .box:before {
                 width: @rect-size-mobile;
@@ -106,6 +128,7 @@
             .color-label {
                 width: @rect-size-mobile;
                 height: @rect-size-mobile;
+                margin: @rect-distancte-mobile;
             }
         }
     }

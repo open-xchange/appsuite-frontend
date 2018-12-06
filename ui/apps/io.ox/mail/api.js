@@ -42,8 +42,8 @@ define('io.ox/mail/api', [
             return colorLabelResort[b.color_label] - colorLabelResort[a.color_label];
         };
 
-    // model pool
-    var pool = Pool.create('mail');
+    // model pool, global for debugging
+    var pool = window.mailpool = Pool.create('mail');
 
     var fixtoccbcc = settings.get('features/fixtoccbcc'),
         showDeleted = !settings.get('features/ignoreDeleted', false),
@@ -265,33 +265,45 @@ define('io.ox/mail/api', [
         api.threads.touch(model.toJSON());
     }
 
-    function allowImages(obj) {
-        if (util.authenticity('block', obj)) return false;
-        if (util.isWhiteListed(obj)) return true;
-        if (!settings.get('allowHtmlImages', false)) return false;
-        if (accountAPI.is('spam|confirmed_spam|trash', obj.folder_id || obj.folder)) return false;
-        return true;
+    function getPreferredView() {
+        return settings.get('allowHtmlMessages', true) ? 'html' : 'text';
     }
 
-    function defaultView(obj) {
-        if (!settings.get('allowHtmlMessages', true)) return 'text';
-        return allowImages(obj) ? 'html' : 'noimg';
+    function getView(data) {
+        // never show images for failed messages
+        if (util.authenticity('block', data)) return 'noimg';
+
+        // check authenticity && whitelist
+        var isTrusted = util.authenticity('box', data) === 'trusted';
+        var isWhiteListed = util.isWhiteListed(data);
+        if (isTrusted || isWhiteListed) return getPreferredView();
+
+        // check for general setting
+        if (!settings.get('allowHtmlImages', false)) return 'noimg';
+
+        // block images for specific folders
+        if (accountAPI.is('spam|confirmed_spam|trash', data.folder_id || data.folder)) return 'noimg';
+
+        // finally
+        return getPreferredView();
     }
 
     api.get = function (obj, options) {
 
         var cid = _.isObject(obj) ? _.cid(obj) : obj,
             model = pool.get('detail').get(cid),
-            cache = options && (options.cache !== undefined) ? options.cache : true;
+            useCache = options && (options.cache !== undefined) ? options.cache : true,
+            isDefaultView = obj.view === 'noimg' || !obj.view,
+            isComplete;
 
-        if (model && util.authenticity('box', model.toJSON()) === 'trusted') obj.view = defaultView(obj) === 'text' ? 'text' : 'html';
-        if (model && util.isWhiteListed(model.toJSON())) obj.view = defaultView(obj) === 'text' ? 'text' : 'html';
+        if (model) {
+            isComplete = !!model.get('attachments');
+            // check for cache hit
+            if (useCache && !obj.src && isComplete && isDefaultView) return $.when(model.toJSON());
+        }
 
-        // TODO: make this smarter
-        if (cache && !obj.src && (obj.view === 'noimg' || !obj.view) && model && model.get('attachments')) return $.when(model.toJSON());
-
-        // determine default view parameter
-        if (!obj.view) obj.view = defaultView(obj);
+        // set view if needed
+        if (!obj.view) obj.view = getView(_.extend({}, obj, model && model.toJSON()));
 
         // limit default size
         obj.max_size = settings.get('maxSize/view', 1024 * 100);
@@ -1000,7 +1012,7 @@ define('io.ox/mail/api', [
         // clear affected collections
         _(pool.getByFolder(source)).each(function (collection) {
             collection.reset([]);
-            collection.complete = true;
+            collection.setComplete(true);
         });
 
         return http.wait(
@@ -1390,7 +1402,7 @@ define('io.ox/mail/api', [
         form.append('json_0', JSON.stringify(data));
         // add files
         _(files).each(function (file, index) {
-            if (window.cordova && _.device('android')) {
+            if (file.name) {
                 form.append('file_' + index, file, file.name);
             } else {
                 form.append('file_' + index, file);
@@ -1456,7 +1468,8 @@ define('io.ox/mail/api', [
         .then(function (response) {
             var hash = {};
             _(response).each(function (item) {
-                hash[_.cid(item)] = item.text_preview || '\u00a0';
+                // please don't change the empty string fallback. if setting this to something else this causes model change events and reloading stuff.
+                hash[_.cid(item)] = item.text_preview || '';
             });
             return hash;
         });

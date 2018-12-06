@@ -103,6 +103,23 @@ define('io.ox/core/main/logout', [
         }
     });
 
+    function getLogoutLocation() {
+        var location = capabilities.has('guest') ?
+            settings.get('customLocations/guestLogout') || ox.serverConfig.guestLogoutLocation :
+            settings.get('customLocations/logout') || ox.serverConfig.logoutLocation;
+        return _.url.vars(location || ox.logoutLocation || '');
+
+    }
+
+    function needsReload(target) {
+        // see bug 56170 and 61385
+        if (!/#autologout=true/.test(target)) return;
+        var parser = document.createElement('a');
+        parser.href = target;
+        return (location.host === parser.host) &&
+               (location.pathname === parser.pathname);
+    }
+
     var logout = function (opt) {
 
         opt = _.extend({
@@ -122,14 +139,21 @@ define('io.ox/core/main/logout', [
                         }
 
                         session.logout().always(function () {
-                            // get logout locations
-                            var targetLocation = (capabilities.has('guest') && ox.serverConfig.guestLogoutLocation) ? ox.serverConfig.guestLogoutLocation : settings.get('customLocations/logout'),
-                                fallback = ox.serverConfig.logoutLocation || ox.logoutLocation,
-                                logoutLocation = targetLocation || (fallback + (opt.autologout ? '#autologout=true' : ''));
+                            var logoutLocation = getLogoutLocation();
+
+                            // add autologout param
+                            if (opt.autologout) {
+                                var separator = logoutLocation.indexOf('#') > -1 ? '&' : '#';
+                                logoutLocation = logoutLocation + separator + 'autologout=true';
+                            }
+
                             // Substitute some variables
                             _.url.redirect(_.url.vars(logoutLocation));
-                            // prevent empty white pane (see bug 56170)
-                            if (/#autologout=true/.test(logoutLocation)) _.defer(location.reload.bind(location, true));
+
+                            if (needsReload(logoutLocation)) {
+                                // location.reload will cause an IE error
+                                _.defer(function () { location.reload(true); });
+                            }
                         });
                     });
         });

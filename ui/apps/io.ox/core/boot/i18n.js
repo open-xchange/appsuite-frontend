@@ -28,6 +28,8 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
         gt('Stay signed in');
         gt('Forgot your password?');
         gt('Languages');
+        gt('Language');
+        gt('Language:');
         gt('No connection to server. Please check your internet connection ' +
            'and retry.');
         gt('Please enter your credentials.');

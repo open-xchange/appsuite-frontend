@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-26 14:23+0200\n"
+"PO-Revision-Date: 2018-10-09 13:12+0200\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -677,9 +677,6 @@ msgstr ""
 "található mezőben. Mellékletként dokumentumok csatolhatók a feladathoz."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
 "Az alkalmazás indításához kattintson a menüsáv bal oldalán található "

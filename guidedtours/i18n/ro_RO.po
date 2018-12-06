@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-28 18:46+0200\n"
+"PO-Revision-Date: 2018-10-13 15:07+0200\n"
 "Last-Translator: Daiana Heinrich <daiana@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -682,13 +682,10 @@ msgstr ""
 "sub Participanți. Puteți adăuga documente ca fișiere atașate la sarcină."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Pentru a lansa o aplicație, apăsați pe o intrare din partea stângă a barei "
-"de meniu."
+"Pentru a lansa o aplicație, apăsați pe o intrare din meniul de lansate de "
+"aplicații."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."

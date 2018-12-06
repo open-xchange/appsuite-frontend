@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-29 14:49+0200\n"
+"PO-Revision-Date: 2018-11-05 16:01+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Poedit 2.0.5\n"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Add another account"
@@ -205,7 +205,7 @@ msgid ""
 msgstr ""
 "Kirjoita vastaanottajan nimi vastaanottajakenttään. Kirjoitettuasi "
 "ensimmäiset kirjaimet saat näkyviin ehdotuksia osoitekirjasta. Hyväksy "
-"ehdotus napsauttamalla sitä. "
+"ehdotus napsauttamalla sitä."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Enter the subject into the subject field."
@@ -664,12 +664,10 @@ msgstr ""
 "osiossa. Voit lisätä asiakirjoja tehtävän liitteiksi."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To launch an app, click on an entry on the left side of the menu bar."
 msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Käynnistääksesi sovellus napsauta kohtaa valikkopalkin vasemmassa reunassa."
+"Sovelluksen käynnistämiseksi napsauta sovelluksen käynnistysvalikon sisällä "
+"olevaa merkintää."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
@@ -714,7 +712,7 @@ msgstr ""
 "Avaa tuki klikkaamalla käyttäjäkuvaa valintapalkin oikeassa yläosassa. "
 "Valitse Tuki. Näkyviin tulee tuki valittuna olevalle sovellukselle. Jos "
 "haluat selata tukea kokonaisuudessaan, klikkaa aloitussivua tai "
-"sisällysluetteloa ikkunan yläosassa. "
+"sisällysluetteloa ikkunan yläosassa."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -845,7 +843,7 @@ msgstr ""
 "Tervetuloa pilvipalvelusovellukseesi. Tämä opastus esittelee sinulle uuden "
 "online-tallennusratkaisun - yhden reitin kaikilta tileiltäsi verkkoon "
 "tallennettuihin tiedostoihin. Tässä voit ladata, tallentaa ja jakaa "
-"tiedostojasi sekä synkronoida ne muiden laitteidesi kanssa."
+"tiedostojasi sekä synkronoida ne muiden laitteidesi kanssa. "
 
 #~ msgid " characters"
 #~ msgstr " merkin jälkeen"

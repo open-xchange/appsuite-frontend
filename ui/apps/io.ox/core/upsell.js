@@ -201,10 +201,10 @@ define('io.ox/core/upsell', [
             c.calendar = c.infostore = c.tasks = c.active_sync = c['active_sync || caldav || carddav'] = false;
             c.publication = c.subscription = false;
             // uncomment the following lines to show the triggers at the bottom of all folderviews.
-            // e.caldav = e.boxcom = e.google = e.msliveconnect = true;
+            // e.caldav = e.boxcom = e.google = e.microsoftgraph = true;
             // c.calendar = c.infostore = true;
-            // c.caldav = c.carddav = c['boxcom || google || msliveconnect'] = false;
-            // c.boxcom = c.google = c.msliveconnect = false;
+            // c.caldav = c.carddav = c['boxcom || google || microsoftgraph'] = false;
+            // c.boxcom = c.google = c.microsoftgraph = false;
             // settings.set('upsell/premium/folderView/visible', true);
             settings.set('features/upsell/secondary-launcher', { icon: 'fa-star fa-star fa-star', color: '#ff0' });
             settings.set('features/upsell/portal-widget', { imageURL: 'http://lorempixel.com/400/300/' });

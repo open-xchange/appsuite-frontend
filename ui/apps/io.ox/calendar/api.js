@@ -94,7 +94,7 @@ define('io.ox/calendar/api', [
             return response;
         },
 
-        defaultFields = ['lastModified', 'color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'seriesId', 'startDate', 'summary', 'timestamp', 'transp'].join(','),
+        defaultFields = ['lastModified', 'color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'rrule', 'seriesId', 'startDate', 'summary', 'timestamp', 'transp'].join(','),
 
         api = {
             // used externally by itip updates in mail invites
@@ -206,8 +206,7 @@ define('io.ox/calendar/api', [
                     return http.PUT({
                         module: 'chronos',
                         params: {
-                            action: 'list',
-                            extendedEntities: true
+                            action: 'list'
                         },
                         data: list
                     }).catch(function (err) {
@@ -568,9 +567,10 @@ define('io.ox/calendar/api', [
                 }, options);
 
                 // entity for users ressources etc, uri for externals
-                var order = _(list).map(function (attendee) { return attendee.entity || attendee.uri; });
+                var order = _(list).map(function (attendee) { return attendee.entity || attendee.uri; }),
+                    def = $.Deferred();
 
-                return http.PUT({
+                http.PUT({
                     module: 'chronos',
                     params: {
                         action: 'freeBusy',
@@ -583,8 +583,34 @@ define('io.ox/calendar/api', [
                     items.sort(function (a, b) {
                         return order.indexOf(a.attendee.entity || a.attendee.uri) - order.indexOf(b.attendee.entity || b.attendee.uri);
                     });
-                    return items;
+                    def.resolve(items);
+                },
+                function (err) {
+                    // to many events
+                    if (err.code !== 'CAL-5072') def.reject(err);
+                    // split request and send as multiple instead
+                    http.pause();
+                    _(list).each(function (attendee) {
+                        http.PUT({
+                            module: 'chronos',
+                            params: {
+                                action: 'freeBusy',
+                                from: options.from,
+                                until: options.until
+                            },
+                            data: { attendees: [attendee] }
+                        });
+                    });
+                    http.resume().then(function (result) {
+                        // change errors to empty arrays. If theres an error with one attendee we can still show the rest
+                        result = result.map(function (singleResult) {
+                            return singleResult.error ? { freeBusyTime: [] } : singleResult.data[0];
+                        });
+                        def.resolve(result);
+                    });
                 });
+
+                return def;
             },
 
             reduce: function (obj) {
@@ -654,15 +680,16 @@ define('io.ox/calendar/api', [
             },
 
             getInvites: function () {
-                return api.request({
+                return http.GET({
                     module: 'chronos',
                     params: {
                         action: 'needsAction',
                         folder: folderApi.getDefaultFolder('calendar'),
                         rangeStart: moment().subtract(2, 'hours').utc().format(util.ZULU_FORMAT),
-                        rangeEnd: moment().add(1, 'years').utc().format(util.ZULU_FORMAT)
+                        rangeEnd: moment().add(1, 'years').utc().format(util.ZULU_FORMAT),
+                        fields: 'folder,id,recurrenceId,organizer,endDate,startDate,summary,location,rrule'
                     }
-                }, 'GET').then(function (data) {
+                }).then(function (data) {
                     // even if empty array is given it needs to be triggered to remove
                     // notifications that does not exist anymore (already handled in ox6 etc)
                     // no filtering needed because of new needsAction request

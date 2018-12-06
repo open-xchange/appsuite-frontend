@@ -13,6 +13,9 @@ module.exports.config = {
     'timeout': 10000,
     'output': './build/e2e/',
     'helpers': {
+        'Mochawesome': {
+            'uniqueScreenshotNames': true
+        },
         'WebDriverIO': _.extend({}, {
             'url': process.env.LAUNCH_URL || 'http://localhost:8337/appsuite/',
             'host': process.env.SELENIUM_HOST || '10.50.0.94',
@@ -21,10 +24,11 @@ module.exports.config = {
             'browser': 'chrome',
             'restart': true,
             'windowSize': 'maximize',
+            'uniqueScreenshotNames': true,
             'desiredCapabilities': {
                 'browserName': 'chrome',
                 'chromeOptions': {
-                    'args': ['no-sandbox', 'start-maximized']
+                    'args': ['no-sandbox']
                 },
                 'acceptSslCerts': true
             }
@@ -40,8 +44,11 @@ module.exports.config = {
         'users': './e2e/users'
     },
     'bootstrap': function (done) {
+        // setup chai
         var chai = require('chai');
         chai.config.includeStack = true;
+        // setup axe matchers
+        require('./e2e/axe-matchers');
 
         var config = require('codeceptjs').config.get();
         if (config.helpers.WebDriverIO && /127\.0\.0\.1/.test(config.helpers.WebDriverIO.host)) {
@@ -58,6 +65,32 @@ module.exports.config = {
             require('@open-xchange/codecept-helper').selenium.stop();
         }, 500);
     },
-    'mocha': {},
+    'mocha': {
+        'reporterOptions': {
+            'codeceptjs-cli-reporter': {
+                'stdout': '-'
+            },
+            'mocha-junit-reporter': {
+                'stdout': '-',
+                'options': {
+                    'mochaFile': './build/e2e/report.xml'
+                }
+            },
+            'mochawesome': {
+                'stdout': './build/e2e/console.log',
+                'options': {
+                    'reportTitle': 'E2E Report: App Suite UI',
+                    'reportPageTitle': 'E2E: App Suite UI',
+                    'inline': true,
+                    'cdn': true,
+                    'json': false,
+                    'reportDir': './build/e2e',
+                    'reportFilename': 'index',
+                    'autoOpen': process.env.CI !== 'true',
+                    'showPassed': false
+                }
+            }
+        }
+    },
     'name': 'App Suite Core UI'
 };

@@ -45,15 +45,79 @@ run e2e tests:
     SELENIUM_HOST: selenium-standalone-chrome
   script:
     - cd ui
-    - yarn --cache-folder ../.yarn-cache
+    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
     - yarn e2e
   tags:
     - shm
   artifacts:
+    when: always
     paths:
       - ui/build/e2e/
-    when: on_failure
     expire_in: 1 day
+
+publish e2e junit report:
+  stage: cleanup
+  dependencies:
+    - run e2e tests
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - "true"
+  artifacts:
+    reports:
+      junit: ui/build/e2e/report.xml
+  when: always
+
+publish e2e reports for stable branches:
+  stage: cleanup
+  variables:
+    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    GIT_STRATEGY: none
+  dependencies:
+    - run e2e tests
+  script:
+    - docker exec reports rm -rf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG
+    - docker cp ui/build/e2e/ reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG/
+  environment:
+    name: reports/$CI_COMMIT_REF_SLUG
+    url: http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/
+  when: always
+  only:
+    - develop
+    - master
+    - master-*
+
+publish e2e failure report:
+  stage: cleanup
+  variables:
+    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    GIT_STRATEGY: none
+  dependencies:
+    - run e2e tests
+  script:
+    - docker cp ui/build/e2e/ reports:/usr/share/nginx/html/$CI_PIPELINE_ID/
+  environment:
+    name: reports/$CI_PIPELINE_IID
+    url: http://reports.ui.cloud.open-xchange.com/$CI_PIPELINE_ID/
+    on_stop: remove e2e report
+  when: on_failure
+  except:
+    - develop
+    - master
+    - master-*
+
+remove e2e report:
+  stage: cleanup
+  dependencies: []
+  variables:
+    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    GIT_STRATEGY: none
+  script:
+    - docker exec reports rm -rf /usr/share/nginx/html/$CI_PIPELINE_ID
+  environment:
+    name: reports/$CI_PIPELINE_IID
+    action: stop
+  when: manual
 
 stop e2e testserver:
   stage: cleanup
