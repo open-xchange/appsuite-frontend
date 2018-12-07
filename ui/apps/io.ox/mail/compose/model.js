@@ -86,12 +86,6 @@ define('io.ox/mail/compose/model', [
     //         this.updateShadow();
     //     },
 
-    //     setAutoBCC: function () {
-    //         if (settings.get('autobcc') && this.get('mode') !== 'edit') {
-    //             this.set('bcc', mailUtil.parseRecipients(settings.get('autobcc'), { localpart: false }));
-    //         }
-    //     },
-
     //     getCopy: function () {
     //         var ret = _.clone(this.toJSON());
     //         ret.attachments = _.clone(this.attributes.attachments.toJSON());
@@ -129,17 +123,6 @@ define('io.ox/mail/compose/model', [
     //         return this.get('editorMode') === 'html' ? 'text/html' : 'alternative';
     //     },
 
-    //     setInitialMailContentType: function () {
-    //         if (this.get('editorMode') === 'alternative') {
-    //             var content_type = this.get('content_type'),
-    //                 ret = 'html';
-    //             if (content_type === 'text/plain') {
-    //                 ret = 'text';
-    //             }
-    //             this.set('editorMode', ret, { silent: true });
-    //         }
-    //     },
-
     //     setMailContentType: function (type) {
     //         this.set('content_type', type, { silent: true });
     //     },
@@ -147,7 +130,6 @@ define('io.ox/mail/compose/model', [
     //     setContent: function (content) {
     //         this.set('content', content);
     //     },
-
 
     //     getFailSave: function () {
     //         // a model may not be dirty anymore but still needs currenct data for the restore point (happens on autosave/save as draft)
@@ -405,8 +387,7 @@ define('io.ox/mail/compose/model', [
         keepDraftOnClose: $.noop,
         setMailContentType: $.noop,
         setAutoBCC: $.noop,
-        dirty: $.noop,
-        setInitialMailContentType: $.noop
+        dirty: $.noop
     });
 
     return MailModel;
