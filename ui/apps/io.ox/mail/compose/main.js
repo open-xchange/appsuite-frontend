@@ -95,10 +95,11 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                             // in most cases, this should return the mail from pool ('detail')
                             // need circumvent caching, here, because all requests always break data again and we can
                             // never be sure about data being correct
-                            return mailAPI.get(_.pick(obj, 'id', 'folder_id'), { cache: false });
+                            return mailAPI.get(_.extend(_.pick(obj, 'id', 'folder_id'), { view: 'raw' }), { cache: false });
                         }
                         return obj;
                     }).then(function (latestMail) {
+                        latestMail.security = obj.security;  // Fix for Bug 56496 above breaking Guard.  Security lost with reload
                         obj = _.extend({ mode: type }, latestMail);
                         return require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model']);
                     })
