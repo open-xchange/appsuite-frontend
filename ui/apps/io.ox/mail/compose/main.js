@@ -91,6 +91,13 @@ define('io.ox/mail/compose/main', [
             this.model.set('bcc', mailUtil.parseRecipients(settings.get('autobcc'), { localpart: false }));
         }
     }, {
+        id: 'auto-discard',
+        index: 200,
+        init: function () {
+            // disable auto remove on discard for draft mails
+            this.config.set('autoDiscard', this.config.get('mode') !== 'edit');
+        }
+    }, {
         id: 'initial-signature',
         index: 300,
         init: function () {

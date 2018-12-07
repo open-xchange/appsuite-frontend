@@ -30,8 +30,6 @@ define('io.ox/mail/compose/model', [
 
     //     defaults: function () {
     //         return {
-    //             // enable auto-remove on "discard"
-    //             autoDiscard: true,
     //             preferredEditorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
     //             editorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
     //             attachments: new Attachments.Collection(),
@@ -77,9 +75,6 @@ define('io.ox/mail/compose/model', [
     //             this.set('attachments', c);
     //             attachmentsCollection = c;
     //         }
-
-    //         // disable auto remove on discard for draft mails
-    //         this.set('autoDiscard', this.get('mode') !== 'edit');
 
     //         if (!this.get('signatures')) this.set('signatures', this.getSignatures());
 

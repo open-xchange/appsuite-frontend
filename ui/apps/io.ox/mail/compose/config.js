@@ -25,6 +25,8 @@ define('io.ox/mail/compose/config', [
 
         defaults: function () {
             return {
+                // enable auto-remove on "discard"
+                autoDiscard: true,
                 autosavedAsDraft: false,
                 // Autodismiss confirmation dialog
                 autoDismiss: false,
