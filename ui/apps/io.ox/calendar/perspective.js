@@ -22,12 +22,13 @@ define('io.ox/calendar/perspective', [
     'gettext!io.ox/calendar',
     'io.ox/core/capabilities',
     'settings!io.ox/calendar',
-    'io.ox/core/folder/api'
-], function (ext, api, calendarModel, util, detailView, dialogs, yell, gt, capabilities, settings, folderAPI) {
+    'io.ox/core/folder/api',
+    'io.ox/backbone/views/disposable'
+], function (ext, api, calendarModel, util, detailView, dialogs, yell, gt, capabilities, settings, folderAPI, disposableView) {
 
     'use strict';
 
-    return Backbone.View.extend({
+    return disposableView.extend({
 
         clickTimer:     null, // timer to separate single and double click
         clicks:         0, // click counter
