@@ -148,13 +148,6 @@ define('io.ox/mail/compose/model', [
     //         this.set('content', content);
     //     },
 
-    //     parse: function (list) {
-    //         return _(mailUtil.parseRecipients([].concat(list).join(', ')))
-    //             .map(function (recipient) {
-    //                 var typesuffix = mailUtil.getChannel(recipient[1]) === 'email' ? '' : mailUtil.getChannelSuffixes().msisdn;
-    //                 return ['"' + recipient[0] + '"', recipient[1], typesuffix];
-    //             });
-    //     },
 
     //     getFailSave: function () {
     //         // a model may not be dirty anymore but still needs currenct data for the restore point (happens on autosave/save as draft)
@@ -282,9 +275,6 @@ define('io.ox/mail/compose/model', [
     //         return mail;
     //     },
 
-    //     attachFiles: function attachFiles(files) {
-    //         this.get('attachments').add(files);
-    //     },
 
     //     keepDraftOnClose: function () {
     //         if (settings.get('features/deleteDraftOnClose') !== true) return false;
@@ -381,6 +371,11 @@ define('io.ox/mail/compose/model', [
 
         send: function () {
             return composeAPI.space.send(this.get('id'), this.toJSON());
+        },
+
+        attachFiles: function attachFiles(files) {
+            // TODO: mapping?!
+            this.get('attachments').add(files);
         },
 
         sync: function (method, model, options) {
