@@ -381,7 +381,6 @@ define('io.ox/mail/compose/model', [
         },
         keepDraftOnClose: $.noop,
         setMailContentType: $.noop,
-        setAutoBCC: $.noop,
         dirty: $.noop
     });
 

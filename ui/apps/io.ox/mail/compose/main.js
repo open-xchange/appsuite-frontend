@@ -87,7 +87,7 @@ define('io.ox/mail/compose/main', [
         id: 'auto-bcc',
         index: 200,
         init: function () {
-            if (!settings.get('autobcc') || this.get('mode') === 'edit') return;
+            if (!settings.get('autobcc') || this.config.get('mode') === 'edit') return;
             this.model.set('bcc', mailUtil.parseRecipients(settings.get('autobcc'), { localpart: false }));
         }
     }, {
