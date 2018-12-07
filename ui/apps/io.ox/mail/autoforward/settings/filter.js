@@ -84,7 +84,7 @@ define('io.ox/mail/autoforward/settings/filter', [
                                 autoForwardData.forwardmail = value.to;
                                 break;
                             case 'keep':
-                                autoForwardData.keep = getIdList().copy ? data[0].actioncmds[0].copy : true;
+                                autoForwardData.keep = true;
                                 break;
                             case 'stop':
                                 autoForwardData.processSub = false;
