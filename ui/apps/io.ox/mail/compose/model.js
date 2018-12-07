@@ -282,12 +282,6 @@ define('io.ox/mail/compose/model', [
     //         return mail;
     //     },
 
-    //     discard: function () {
-    //         if (!this.get('autoDiscard')) return;
-    //         // only delete autosaved drafts that are not saved manually and have a msgref
-    //         if (this.get('autosavedAsDraft') && this.get('msgref')) mailAPI.remove([mailUtil.parseMsgref(mailAPI.separator, this.get('msgref'))]);
-    //     },
-
     //     attachFiles: function attachFiles(files) {
     //         this.get('attachments').add(files);
     //     },
