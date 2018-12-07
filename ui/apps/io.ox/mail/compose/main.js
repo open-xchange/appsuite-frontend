@@ -61,9 +61,9 @@ define('io.ox/mail/compose/main', [
         index: 400,
         perform: function () {
             var model = this.model;
-
+            // TODO: should be handle by middleware
             if (model.get('from') && model.get('from').length) return;
-            accountAPI.getPrimaryAddressFromFolder(model.get('folder_id')).then(function (address) {
+            accountAPI.getPrimaryAddressFromFolder(model.get('meta').originalFolderId).then(function (address) {
                 // ensure defaultName is set (bug 56342)
                 settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
                 // custom display names
@@ -112,10 +112,7 @@ define('io.ox/mail/compose/main', [
             // map 'alternative' to editor
             // TODO moved here from initialize of config model. don't know if this works correctly
             if (config.get('preferredEditorMode') === 'alternative') {
-                config.set('editorMode', 'html', { silent: true });
-                if (this.model.get('contentType') === 'text/plain') {
-                    config.set('editorMode', 'text', { silent: true });
-                }
+                config.set('editorMode', this.model.get('content_type') === 'text/plain' ? 'text' : 'html', { silent: true });
             }
 
             // TODO this was moved from the compose function. Need to evaluate, how this works together with the above code
