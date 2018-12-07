@@ -786,7 +786,13 @@ define('io.ox/calendar/util', [
                     return $.when.apply($, defs).then(function () {
                         _(arguments).each(function (result, i) {
                             if (_.isArray(result) && result.length) {
-                                IDs.ext[i] = result[0];
+                                // use correct mail field, some contacts only have mail addresses in 2nd or 3rd
+                                for (var n = 1; n < 4; n++) {
+                                    if (result[0]['email' + n] && IDs.ext[i].mail === result[0]['email' + n]) {
+                                        IDs.ext[i] = $.extend(result[0], { mail: IDs.ext[i].mail, mail_field: n });
+                                        break;
+                                    }
+                                }
                             }
                         });
                         // combine results with groups and map
@@ -794,6 +800,8 @@ define('io.ox/calendar/util', [
                             .chain()
                             .uniq()
                             .map(function (user) {
+                                // don't overwrite data
+                                if (user.mail && user.mail_field !== undefined) return user;
                                 return $.extend(user, { mail: user.email1, mail_field: 1 });
                             })
                             .value();
