@@ -35,16 +35,16 @@
   resolved "https://registry.yarnpkg.com/@open-xchange/bootstrap-tokenfield/-/bootstrap-tokenfield-0.13.0.tgz#97fa5fb6f318f68ac2698cd2242d89ec4ae8db7d"
   integrity sha512-EdLeFAXEnW+rotn+hDq8btKh1ufWMZsDtxHENqS5zMD9VDY9/b38AGZGuJLVm4ss2/IkCyMv35Q1WwunMlBAlg==
 
-"@open-xchange/codecept-helper@0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.6.tgz#2da550496d142412b655b6f0d87f21cc27580255"
-  integrity sha512-gjdvClZsBYbQSLFhpkJ8I0HtVQuH006vvCEPgReUYiXhTKFpo3NDEutrdjzI6JD2HGlrXlctnH/cJoOy/ja1Pw==
+"@open-xchange/codecept-helper@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.7.tgz#a0141623e152d747e01c28e0596cb695e65ed6e4"
+  integrity sha512-zLiDft3BPUNu9EufuD+9RG6woN5Hy+YgyQ0cH0TSIqLcDhYbSKkGrBgs2Sxn3itGCuC/ZsyINPoJET7O+YcelQ==
   dependencies:
     axios "^0.18.0"
-    codeceptjs "^1.2.1"
-    form-data "^2.3.2"
-    soap "^0.24.0"
-    underscore "^1.8.3"
+    codeceptjs "^1.4.5"
+    form-data "^2.3.3"
+    soap "^0.25.0"
+    underscore "^1.9.1"
 
 "@open-xchange/hopscotch@0.0.1":
   version "0.0.1"
@@ -1113,7 +1113,7 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
-codeceptjs@^1.2.1, codeceptjs@^1.4.3:
+codeceptjs@^1.4.3, codeceptjs@^1.4.5:
   version "1.4.6"
   resolved "https://registry.yarnpkg.com/codeceptjs/-/codeceptjs-1.4.6.tgz#8652949c275a76ef4c8dc95c663f946223d8d122"
   integrity sha512-duBU5/octSUcbfAZQBemfzeNBQHPlYpkuYh0tlkMvlAoAGm57uIo4v14ZnvrjQFijXfgpzsSXpcg0hHLnSSPIw==
@@ -2471,7 +2471,7 @@ forever-agent@~0.6.1:
   resolved "https://registry.yarnpkg.com/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
   integrity sha1-+8cfDEGt6zf5bFd60e1C2P2sypE=
 
-form-data@^2.3.2, form-data@~2.3.0, form-data@~2.3.2:
+form-data@^2.3.3, form-data@~2.3.0, form-data@~2.3.2:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/form-data/-/form-data-2.3.3.tgz#dcce52c05f644f298c6a7ab936bd724ceffbf3a6"
   integrity sha512-1lLKB2Mu3aGP1Q/2eCOx0fNbRMe7XdwktwOruhfqqd0rIJWwN4Dh+E3hrPSlDCXnSR7UtZ1N38rVXm+6+MEhJQ==
@@ -3267,6 +3267,14 @@ httpntlm@1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/httpntlm/-/httpntlm-1.6.1.tgz#ad01527143a2e8773cfae6a96f58656bb52a34b2"
   integrity sha1-rQFScUOi6Hc8+uapb1hla7UqNLI=
+  dependencies:
+    httpreq ">=0.4.22"
+    underscore "~1.7.0"
+
+httpntlm@^1.5.2:
+  version "1.7.6"
+  resolved "https://registry.yarnpkg.com/httpntlm/-/httpntlm-1.7.6.tgz#6991e8352836007d67101b83db8ed0f915f906d0"
+  integrity sha1-aZHoNSg2AH1nEBuD247Q+RX5BtA=
   dependencies:
     httpreq ">=0.4.22"
     underscore "~1.7.0"
@@ -5964,11 +5972,6 @@ select@^1.1.2:
   resolved "https://registry.yarnpkg.com/select/-/select-1.1.2.tgz#0e7350acdec80b1108528786ec1d4418d11b396d"
   integrity sha1-DnNQrN7ICxEIUoeG7B1EGNEbOW0=
 
-selectn@^0.9.6:
-  version "0.9.6"
-  resolved "https://registry.yarnpkg.com/selectn/-/selectn-0.9.6.tgz#bd873a556d18f96d8515fc91503ec6ff398ff9a2"
-  integrity sha1-vYc6VW0Y+W2FFfyRUD7G/zmP+aI=
-
 "semver@2 || 3 || 4 || 5", semver@^5.1.0, semver@^5.3.0, semver@^5.4.1, semver@^5.5.0, semver@^5.5.1:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.6.0.tgz#7e74256fbaa49c75aa7c7a205cc22799cac80004"
@@ -6180,20 +6183,20 @@ sntp@1.x.x:
   dependencies:
     hoek "2.x.x"
 
-soap@^0.24.0:
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/soap/-/soap-0.24.0.tgz#8a101e63ae0763afc45e876b2761091665abaed8"
-  integrity sha512-1bGC2R+KKzC6pm8bbWZTvgryzwnGh4E4AjKnIgyClOpBpL20NcScbVXk0cg52WbueaQT0LDLDQVB1uo8sT8Mcw==
+soap@^0.25.0:
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/soap/-/soap-0.25.0.tgz#deda92e1454e77ac942033cb7ca18b88f57b0abf"
+  integrity sha512-1fCilERdB28ImnjWUFUr0pYxRlZyZNR1zu2uSuHdGRPnC0XKyWbvSm0m8Pll8xIYwecaKIu5Bqcp2zKtEcQcrA==
   dependencies:
     bluebird "^3.5.0"
     concat-stream "^1.5.1"
     debug "^2.6.9"
     ejs "~2.5.5"
     finalhandler "^1.0.3"
+    httpntlm "^1.5.2"
     lodash "^4.17.5"
     request ">=2.9.0"
     sax ">=0.6"
-    selectn "^0.9.6"
     serve-static "^1.11.1"
     strip-bom "~0.3.1"
     uuid "^3.1.0"
@@ -6866,7 +6869,7 @@ underscore.string@~3.2.3:
   resolved "https://registry.yarnpkg.com/underscore.string/-/underscore.string-3.2.3.tgz#806992633665d5e5fcb4db1fb3a862eb68e9e6da"
   integrity sha1-gGmSYzZl1eX8tNsfs6hi62jp5to=
 
-underscore@1.9.1, underscore@>=1.4.3, underscore@>=1.8.3, underscore@^1.8.3:
+underscore@1.9.1, underscore@>=1.4.3, underscore@>=1.8.3, underscore@^1.8.3, underscore@^1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.1.tgz#06dce34a0e68a7babc29b365b8e74b8925203961"
   integrity sha512-5/4etnCkd9c8gwgowi5/om/mYO5ajCaOgdzj/oW+0eQV9WxKBDZw5+ycmKmeaTXjInS/W0BzpGLo2xR2aBwZdg==
