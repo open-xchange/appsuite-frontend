@@ -635,13 +635,6 @@ define('io.ox/mail/compose/view', [
             this.app.setTitle(this.model.get('subject') || gt('Compose'));
         },
 
-        parseMsgref: function (msgref) {
-            var base = _(msgref.toString().split(mailAPI.separator)),
-                id = base.last(),
-                folder = base.without(id).join(mailAPI.separator);
-            return { folder_id: folder, id: id };
-        },
-
         saveDraft: function () {
             var win = this.app.getWindow();
             // make sure the tokenfields have created all tokens and updated the to cc, bcc attributes
@@ -816,8 +809,8 @@ define('io.ox/mail/compose/view', [
                     .show()
                     .then(function (action) {
                         if (action === 'delete') {
-                            if (isDraft) mailAPI.remove([self.parseMsgref(self.model.get('msgref'))]);
                             self.model.discard();
+                            if (isDraft) mailAPI.remove([mailUtil.parseMsgref(mailAPI.separator, self.model.get('msgref'))]);
                         } else if (action === 'savedraft') {
                             return self.saveDraft();
                         } else {

@@ -16,9 +16,10 @@ define('io.ox/mail/compose/actions/save', [
     'io.ox/mail/compose/actions/extensions',
     'io.ox/mail/compose/api',
     'io.ox/mail/api',
+    'io.ox/mail/util',
     'io.ox/core/notifications',
     'gettext!io.ox/mail'
-], function (ext, extensions, composeAPI, mailAPI, notifications, gt) {
+], function (ext, extensions, composeAPI, mailAPI, mailUtil, notifications, gt) {
 
     'use strict';
 
@@ -78,7 +79,7 @@ define('io.ox/mail/compose/actions/save', [
             id: 'reload',
             index: 1200,
             perform: function (baton) {
-                var opt = baton.view.parseMsgref(baton.resultData);
+                var opt = mailUtil.parseMsgref(mailAPI.separator, baton.resultData);
                 switch (baton.mail.attachments[0].content_type) {
                     case 'text/plain':
                         opt.view = 'raw';
