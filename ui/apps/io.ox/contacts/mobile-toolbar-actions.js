@@ -13,134 +13,94 @@
 
 define('io.ox/contacts/mobile-toolbar-actions', [
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
+    'io.ox/backbone/views/toolbar',
+    'io.ox/backbone/views/actions/mobile',
     'io.ox/contacts/api',
     'gettext!io.ox/mail'
-], function (ext, links, api, gt) {
+], function (ext, ToolbarView, mobile, api, gt) {
 
     'use strict';
 
     // define links for each page
 
-    var pointListViewActions = ext.point('io.ox/contacts/mobile/toolbar/actions'),
-        pointDetailView = ext.point('io.ox/contacts/mobile/toolbar/detailView'),
-        pointDetailViewLinks = ext.point('io.ox/contacts/mobile/toolbar/detailView/links'),
-        actions = ext.point('io.ox/contacts/mobile/actions'),
-        pointListView = ext.point('io.ox/contacts/mobile/toolbar/listView'),
-        meta = {
-            'create': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('New'),
-                icon: 'fa fa-plus',
-                drawDisabled: true,
-                ref: 'io.ox/contacts/actions/create',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
-            },
-            'send': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Send mail'),
-                icon: 'fa fa-envelope-o',
-                ref: 'io.ox/contacts/actions/send',
-                drawDisabled: true,
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
-            },
-            'export': {
-                prio: 'lo',
-                mobile: 'lo',
-                label: gt('Export'),
-                ref: 'io.ox/contacts/actions/export',
-                drawDisabled: true
-            },
-            'vcard': {
-                prio: 'lo',
-                mobile: 'lo',
-                label: gt('Send as vCard'),
-                ref: 'io.ox/contacts/actions/vcard',
-                drawDisabled: true
-            },
-            'invite': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Invite to appointment'),
-                icon: 'fa fa-calendar-o',
-                ref: 'io.ox/contacts/actions/invite',
-                drawDisabled: true,
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
-            },
-            'edit': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Edit'),
-                icon: 'fa fa-edit',
-                ref: 'io.ox/contacts/actions/update',
-                drawDisabled: true,
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+    var meta = {
+        'create': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('New'),
+            icon: 'fa fa-plus',
+            steady: true,
+            ref: 'io.ox/contacts/actions/create'
+        },
+        'send': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Send email'),
+            icon: 'fa fa-envelope-o',
+            ref: 'io.ox/contacts/actions/send',
+            steady: true
+        },
+        'export': {
+            prio: 'lo',
+            mobile: 'lo',
+            title: gt('Export'),
+            ref: 'io.ox/contacts/actions/export',
+            steady: true
+        },
+        'vcard': {
+            prio: 'lo',
+            mobile: 'lo',
+            title: gt('Send as vCard'),
+            ref: 'io.ox/contacts/actions/vcard',
+            steady: true
+        },
+        'invite': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Invite to appointment'),
+            icon: 'fa fa-calendar-o',
+            ref: 'io.ox/contacts/actions/invite',
+            steady: true
+        },
+        'edit': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Edit'),
+            icon: 'fa fa-pencil',
+            ref: 'io.ox/contacts/actions/update',
+            steady: true
 
-            },
-            'delete': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Delete'),
-                drawDisabled: true,
-                ref: 'io.ox/contacts/actions/delete'
-            },
-            'move': {
-                mobile: 'lo',
-                label: gt('Move'),
-                drawDisabled: true,
-                ref: 'io.ox/contacts/actions/move'
-            },
-            'copy': {
-                mobile: 'lo',
-                label: gt('Copy'),
-                drawDisabled: true,
-                ref: 'io.ox/contacts/actions/copy'
-            }
-        };
+        },
+        'delete': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Delete'),
+            icon: 'fa fa-trash-o',
+            steady: true,
+            ref: 'io.ox/contacts/actions/delete'
+        },
+        'move': {
+            mobile: 'lo',
+            title: gt('Move'),
+            steady: true,
+            ref: 'io.ox/contacts/actions/move'
+        },
+        'copy': {
+            mobile: 'lo',
+            title: gt('Copy'),
+            steady: true,
+            ref: 'io.ox/contacts/actions/copy'
+        }
+    };
 
-    function addAction(point, ids) {
-        var index = 0;
-        _(ids).each(function (id) {
-            var extension = meta[id];
-            extension.id = id;
-            extension.index = (index += 100);
-            point.extend(new links.Link(extension));
-        });
-        index = 0;
-    }
+    var points = {
+        listView: 'io.ox/contacts/mobile/toolbar/listView',
+        detailView: 'io.ox/contacts/mobile/toolbar/detailView'
+    };
 
-    addAction(pointListViewActions, ['create']);
-
-    pointListView.extend(new links.InlineLinks({
-        attributes: {},
-        classes: '',
-        index: 100,
-        id: 'toolbar-links',
-        ref: 'io.ox/contacts/mobile/toolbar/actions'
-    }));
-
-    addAction(actions, ['vcard', 'delete', 'move', 'copy']);
-
-    pointDetailView.extend(new links.InlineLinks({
-        id: 'links',
-        index: 100,
-        classes: '',
-        ref: 'io.ox/contacts/mobile/toolbar/detailView/links'
-    }));
-
-    addAction(pointDetailViewLinks, ['edit', 'send', 'invite']);
-    pointDetailViewLinks.extend(new links.Dropdown({
-        id: 'test',
-        index: 900,
-        noCaret: true,
-        icon: 'fa fa-bars',
-        label: gt('Actions'),
-        ariaLabel: gt('Actions'),
-        ref: 'io.ox/contacts/mobile/actions',
-        classes: 'io-ox-action-link mobile-toolbar-action'
-    }));
+    mobile.addAction(points.listView, meta, ['create']);
+    mobile.addAction(points.detailView, meta, ['edit', 'send', 'invite', 'vcard', 'delete', 'move', 'copy']);
+    mobile.createToolbarExtensions(points);
 
     var updateToolbar = _.debounce(function (contact) {
         var self = this;

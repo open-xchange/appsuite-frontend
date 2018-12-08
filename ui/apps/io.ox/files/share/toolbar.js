@@ -13,51 +13,50 @@
 
 define('io.ox/files/share/toolbar', [
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
-    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/views/actions/util',
     'io.ox/core/yell',
     'io.ox/files/share/api',
     'gettext!io.ox/files',
     'io.ox/files/actions',
     'less!io.ox/files/style'
-], function (ext, links, actions, yell, api, gt) {
+], function (ext, actionsUtil, yell, api, gt) {
 
     'use strict';
 
     // define links for classic toolbar
-    var point = ext.point('io.ox/files/share/classic-toolbar/links');
+    var point = ext.point('io.ox/files/share/toolbar/links');
+
     // the link meta data used for desktop and tablets
     var meta = {
         'edit': {
             prio: 'hi',
             mobile: 'lo',
-            label: gt('Edit share'),
-            ref: 'io.ox/files/actions/editShare'
+            title: gt('Edit share'),
+            ref: 'io.ox/files/actions/editShare',
+            steady: true
         },
         'delete': {
             prio: 'hi',
             mobile: 'lo',
-            label: gt('Revoke access'),
-            ref: 'io.ox/files/share/revoke'
-        },
-        'back': {
-            prio: 'lo',
-            mobile: 'hi',
-            label: gt('Folders'),
-            ref: 'io.ox/files/share/back'
+            title: gt('Revoke access'),
+            ref: 'io.ox/files/share/revoke',
+            steady: true
         }
     };
+
     // the link meta data used for smartphones
     var metaPhone = {
         'back': {
             prio: 'lo',
             mobile: 'hi',
-            label: gt('Folders'),
+            title: gt('Folders'),
             ref: 'io.ox/files/share/back'
         }
     };
 
-    new actions.Action('io.ox/files/share/edit', {
+    var Action = actionsUtil.Action;
+
+    new Action('io.ox/files/share/edit', {
         requires: 'one',
         action: function (baton) {
             require(['io.ox/files/share/permissions'], function (permissions) {
@@ -66,34 +65,19 @@ define('io.ox/files/share/toolbar', [
         }
     });
 
-    new actions.Action('io.ox/files/share/back', {
-        requires: function () {
-            return _.device('smartphone');
-        },
+    new Action('io.ox/files/share/back', {
+        toggle: _.device('smartphone'),
         action: function () {
             $('[data-page-id="io.ox/files/main"]').trigger('myshares-folder-back');
         }
     });
 
     // transform into extensions
-
     var index = 0;
-
     // fix for #58808 - use different link meta data on smartphones
     _(_.device('smartphone') ? metaPhone : meta).each(function (extension, id) {
         extension.id = id;
         extension.index = (index += 100);
-        point.extend(new links.Link(extension));
+        point.extend(extension);
     });
-
-    ext.point('io.ox/files/share/classic-toolbar').extend(new links.InlineLinks({
-        attributes: {},
-        classes: '',
-        // always use drop-down
-        dropdown: true,
-        index: 200,
-        id: 'toolbar-links',
-        ref: 'io.ox/files/share/classic-toolbar/links'
-    }));
-
 });

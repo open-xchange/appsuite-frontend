@@ -308,14 +308,12 @@ define('io.ox/core/folder/contextmenu', [
             function handler(e) {
                 e.preventDefault();
                 var id = e.data.id;
-                ox.load(['io.ox/files/api', 'io.ox/core/extPatterns/actions']).done(function (filesApi, action) {
+                ox.load(['io.ox/files/api', 'io.ox/backbone/views/actions/util']).done(function (filesApi, actionsUtil) {
                     var model = new filesApi.Model(api.pool.getModel(id).toJSON());
-
                     // id from the model must be a compositeKey
                     var key = e.data.listView.getCompositeKey(model);
                     var convertedModel = filesApi.resolve([key]);
-
-                    action.invoke('io.ox/files/actions/move', null, ext.Baton({
+                    actionsUtil.invoke('io.ox/files/actions/move', ext.Baton({
                         models: convertedModel,
                         data: convertedModel[0]
                     }));

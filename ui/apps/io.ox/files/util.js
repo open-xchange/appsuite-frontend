@@ -123,7 +123,7 @@ define('io.ox/files/util', [
          */
         hasStatus: function (type, e) {
             var self = this,
-                list = _.getArray(e.context),
+                list = _.isArray(e) ? e : _.getArray(e.context),
                 mapping = {
                     'locked': function (obj) {
                         return obj.locked_until > _.now();

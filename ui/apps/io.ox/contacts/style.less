@@ -99,7 +99,10 @@
 .contact-detail {
     width: 100%;
 
-    .io-ox-inline-links:first-child { margin: 0 0 20px 0; }
+    .inline-toolbar:first-child {
+        margin-top: 0;
+        margin-bottom: 16px;
+    }
 
     .contact-header {
         margin-bottom: 24px;
@@ -162,13 +165,10 @@
 
     .attachments-container {
         min-height: 3em;
-        font-weight: 300;
-
         .dropdown {
             display: inline-block;
             position: static;
-            margin-right: 1em;
-
+            margin-right: 16px;
             &.open { position: relative; }
         }
     }
@@ -345,13 +345,16 @@
         width: @thumbIndexWidth;
         padding: 10px 0;
 
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
         .thumb-index {
             font-size: 11px;
             line-height: 12px;
             padding: 0 5px 0 5px;
             margin: 0 1px 0 1px;
         }
-
     }
 }
 

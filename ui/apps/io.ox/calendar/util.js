@@ -1336,54 +1336,32 @@ define('io.ox/calendar/util', [
         },
 
         // checks if the user is allowed to edit an event
-        // can be used in synced or deferred mode(deferred is default) by setting options.synced
-        // If synced mode is used make sure to give the folder data in the options.folderData attribute
-        allowedToEdit: function (event, options) {
-            options = options || {};
-            var result = function (val) { return options.synced ? val : $.when(val); };
+        // data is plain object, folder is folderModel (e.g. via app.folder.getModel())
+        allowedToEdit: function (data, folder) {
 
-            // no event
-            if (!event) return result(false);
-
-            // support objects and models
-            var data = event.attributes || event,
-                folder = data.folder;
-            // no id or folder
-            if (!data.id || !data.folder) return result(false);
+            if (!data || !folder) return false;
+            if (!data.id || !data.folder) return false;
 
             // organizer is allowed to edit
-            if (this.hasFlag(data, 'organizer') || this.hasFlag(data, 'organizer_on_behalf')) return result(true);
-
+            if (this.hasFlag(data, 'organizer') || this.hasFlag(data, 'organizer_on_behalf')) return true;
             // if user is neither organizer nor attendee editing is not allowed
-            if (!this.hasFlag(data, 'attendee') && !this.hasFlag(data, 'attendee_on_behalf')) return result(false);
+            if (!this.hasFlag(data, 'attendee') && !this.hasFlag(data, 'attendee_on_behalf')) return true;
             // if user is attendee, check if modify privileges are granted
-            if ((this.hasFlag(data, 'attendee') || this.hasFlag(data, 'attendee_on_behalf')) && data.attendeePrivileges === 'MODIFY') return result(true);
+            if ((this.hasFlag(data, 'attendee') || this.hasFlag(data, 'attendee_on_behalf')) && data.attendeePrivileges === 'MODIFY') return true;
 
-            // if both settings are the same, we don't need a folder check, all attendees are allowed to edit or not, no matter which folder the event is in
-            if (settings.get('chronos/restrictAllowedAttendeeChanges', true) === settings.get('chronos/restrictAllowedAttendeeChangesPublic', true)) return result(!settings.get('chronos/restrictAllowedAttendeeChanges', true));
+            var restrictChanges = settings.get('chronos/restrictAllowedAttendeeChanges', true),
+                restrictChangesPublic = settings.get('chronos/restrictAllowedAttendeeChangesPublic', true);
 
-            // synced mode needs folderData at this point. Stop if not given
-            if (options.synced && !options.folderData) return result(false);
-            if (options.synced) {
-                // public folder
-                if (folderAPI.is('public', options.folderData)) return !settings.get('chronos/restrictAllowedAttendeeChangesPublic', true);
-                // no public folder
-                return !settings.get('chronos/restrictAllowedAttendeeChanges', true);
-            }
+            // if both settings are the same, we don't need a folder check
+            // all attendees are allowed to edit or not, no matter which folder the event is in
+            if (restrictChanges === restrictChangesPublic) return !restrictChanges;
 
-            // check if this is a public or non public folder
-            return folderAPI.get(folder).then(function (folderData) {
-                // public folder
-                if (folderAPI.is('public', folderData)) return !settings.get('chronos/restrictAllowedAttendeeChangesPublic', true);
-                // no public folder
-                return !settings.get('chronos/restrictAllowedAttendeeChanges', true);
-            });
+            return folder.is('public') ? !restrictChangesPublic : !restrictChanges;
         },
 
         hasFlag: function (data, flag) {
             // support for arrays (used in multiple selection). returns true if all items in the array have the flag
             if (_.isArray(data) && data.length > 0) return _(data).reduce(function (oldVal, item) { return oldVal && that.hasFlag(item, flag); }, true);
-
             if (data instanceof Backbone.Model) return data.hasFlag(flag);
             if (!data.flags || !data.flags.length) return false;
             return data.flags.indexOf(flag) >= 0;

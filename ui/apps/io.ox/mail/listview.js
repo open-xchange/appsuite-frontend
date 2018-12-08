@@ -584,6 +584,10 @@ define('io.ox/mail/listview', [
         getCompositeKey: function (model) {
             // seems that threaded option is used for tests only
             return this.options.threaded ? 'thread.' + model.cid : model.cid;
+        },
+
+        getContextMenuData: function (selection) {
+            return this.app.getContextualData(selection);
         }
     });
 

@@ -16,7 +16,7 @@ define('io.ox/files/share/listview', [
     'io.ox/core/extensions',
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/tk/list',
-    'io.ox/backbone/mini-views/contextmenu-utils',
+    'io.ox/core/tk/list-contextmenu',
     'io.ox/files/common-extensions',
     'io.ox/files/api',
     'io.ox/core/capabilities',
@@ -24,27 +24,25 @@ define('io.ox/files/share/listview', [
     'gettext!io.ox/files',
     'less!io.ox/files/share/style',
     'io.ox/files/share/view-options'
-], function (api, ext, BreadcrumbView, ListView, ContextMenuUtils, extensions, filesAPI, capabilities, yell, gt) {
+], function (api, ext, BreadcrumbView, ListView, ContextMenu, extensions, filesAPI, capabilities, yell, gt) {
 
     'use strict';
 
     var LISTVIEW = 'io.ox/files/share/myshares/listview', ITEM = LISTVIEW + '/item';
 
-    var MyShareListView = ListView.extend({
+    var MyShareListView = ListView.extend(ContextMenu).extend({
 
         ref: LISTVIEW,
 
         initialize: function (options) {
-            var
-                self = this;
+
+            var self = this;
 
             options.collection = this.collection = api.collection;
 
             ListView.prototype.initialize.call(this, options);
 
             this.$el.addClass('myshares-list column-layout');
-
-            this.contextMenu = arguments[0].contextMenu;
 
             this.load();
 
@@ -146,36 +144,6 @@ define('io.ox/files/share/listview', [
             });
             this.collection.trigger('sort');
             this.app.props.set(this.model.attributes);
-        },
-
-        /**
-         * Function to create the context menu for the myshare viewList.
-         * @param {jQuery.Event} event
-         */
-        onContextMenu: function (e) {
-            ContextMenuUtils.checkKeyboardEvent(e);
-            var view = this,
-                app = view.app,
-                // the link to render the context menu with it's entries
-                link = 'io.ox/core/file/contextmenu/myshares',
-                list, models, data;
-
-            // android sends context events on long tap, but currently we don't want a context menu on smartphones and tablets
-            if (_.device('smartphone') || _.device('android')) { return; }
-
-            list = view.selection.get();
-            if (!list) return;
-            // turn cids into proper objects
-            models = _.map(list, function (cid) { return view.collection.get(cid); });
-
-            list = _(models).invoke('toJSON');
-            // extract single object if length === 1
-            data = list.length === 1 ? list[0] : list;
-
-            _.defer(function () {
-                var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link, share: true });
-                view.contextMenu.showContextMenu(e, baton);
-            });
         },
 
         /**
@@ -302,6 +270,10 @@ define('io.ox/files/share/listview', [
 
             // needs to be called manually cause drawing is debounced
             this.onSort();
+        },
+
+        getContextMenuData: function (selection) {
+            return this.app.getContextualData(selection, 'shares');
         }
     });
 

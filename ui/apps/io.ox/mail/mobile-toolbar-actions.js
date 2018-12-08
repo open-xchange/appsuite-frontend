@@ -13,193 +13,120 @@
 
 define('io.ox/mail/mobile-toolbar-actions', [
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
+    'io.ox/backbone/views/toolbar',
+    'io.ox/backbone/views/actions/mobile',
     'io.ox/mail/api',
     'io.ox/core/capabilities',
     'gettext!io.ox/mail'
-], function (ext, links, api, cap, gt) {
+], function (ext, ToolbarView, mobile, api, cap, gt) {
 
     'use strict';
-
-    // define links for each page
-
-    //var pointFolderView = ext.point('io.ox/mail/mobile/toolbar/folderView'),
-    var pointListView = ext.point('io.ox/mail/mobile/toolbar/listView'),
-        pointListViewMultiSelect = ext.point('io.ox/mail/mobile/toolbar/listView/multiselect'),
-        pointThreadView = ext.point('io.ox/mail/mobile/toolbar/threadView'),
-        pointDetailView = ext.point('io.ox/mail/mobile/toolbar/detailView'),
-        submenu = ext.point('io.ox/mail/mobile/toolbar/submenuActions');
 
     var meta = {
         'compose': {
             prio: 'hi',
             mobile: 'hi',
-            label: gt('Compose'),
-            icon: 'fa fa-edit',
-            drawDisabled: true,
+            title: gt('Compose'),
+            icon: 'fa fa-pencil',
             ref: 'io.ox/mail/actions/compose',
-            cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            steady: true
         },
         'reply': {
             prio: 'hi',
             mobile: 'hi',
             icon: 'fa fa-reply',
-            label: gt('Reply to sender'),
-            drawDisabled: true,
+            title: gt('Reply to sender'),
             ref: 'io.ox/mail/actions/reply',
-            cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            steady: true
         },
         'reply-all': {
             prio: 'hi',
             mobile: 'hi',
             icon: 'fa fa-reply-all',
-            label: gt('Reply to all recipients'),
-            drawDisabled: true,
+            title: gt('Reply to all recipients'),
             ref: 'io.ox/mail/actions/reply-all',
-            cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            steady: true
         },
         'forward': {
             prio: 'hi',
             mobile: 'hi',
             icon: 'fa fa-mail-forward',
-            label: gt('Forward'),
-            drawDisabled: true,
+            title: gt('Forward'),
             ref: 'io.ox/mail/actions/forward',
-            cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            steady: true
         },
         'delete': {
             prio: 'hi',
             mobile: 'hi',
             icon: 'fa fa-trash-o',
-            label: gt('Delete'),
-            drawDisabled: true,
+            title: gt('Delete'),
             ref: 'io.ox/mail/actions/delete',
-            cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            steady: true
         },
         'move': {
             prio: 'hi',
-            mobile: 'hi',
-            label: gt('Move'),
-            icon: 'fa fa-sign-in',
-            drawDisabled: true,
+            mobile: 'lo',
+            title: gt('Move'),
             ref: 'io.ox/mail/actions/move',
             section: 'file-op',
-            cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            steady: true
         },
         'mark-read': {
             prio: 'hi',
-            mobile: 'hi',
-            drawDisabled: true,
-            label: gt('Mark as read'),
+            mobile: 'lo',
+            title: gt('Mark as read'),
             ref: 'io.ox/mail/actions/mark-read',
-            section: 'flags'
+            section: 'flags',
+            steady: true
         },
         'mark-unread': {
             prio: 'hi',
-            mobile: 'hi',
-            drawDisabled: true,
-            label: gt('Mark as unread'),
+            mobile: 'lo',
+            title: gt('Mark as unread'),
             ref: 'io.ox/mail/actions/mark-unread',
-            section: 'flags'
+            section: 'flags',
+            steady: true
         },
         'copy': {
             prio: 'hi',
-            mobile: 'hi',
-            label: gt('Copy'),
+            mobile: 'lo',
+            title: gt('Copy'),
             ref: 'io.ox/mail/actions/copy',
             section: 'file-op'
         },
         'archive': {
             prio: 'hi',
-            mobile: 'hi',
+            mobile: 'lo',
             icon: 'fa fa-archive',
             //#. Verb: (to) archive messages
-            label: gt.pgettext('verb', 'Archive'),
-            ref: 'io.ox/mail/actions/archive',
-            cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            title: gt.pgettext('verb', 'Archive')
         },
         'spam': {
             prio: 'hi',
-            mobile: 'hi',
-
-            label: gt('Mark as spam'),
+            mobile: 'lo',
+            title: gt('Mark as spam'),
             ref: 'io.ox/mail/actions/spam'
         },
         'nospam': {
             prio: 'hi',
-            mobile: 'hi',
-
-            label: gt('Not spam'),
+            mobile: 'lo',
+            title: gt('Not spam'),
             ref: 'io.ox/mail/actions/nospam'
         }
     };
 
-    function addAction(point, ids) {
-        var index = 0;
-        _(ids).each(function (id) {
-            var extension = meta[id];
-            extension.id = id;
-            extension.index = (index += 100);
-            point.extend(new links.Link(extension));
-        });
-        index = 0;
-    }
+    var points = {
+        listView: 'io.ox/mail/mobile/toolbar/listView',
+        multiselect: 'io.ox/mail/mobile/toolbar/listView/multiselect',
+        threadView: 'io.ox/mail/mobile/toolbar/threadView',
+        detailView: 'io.ox/mail/mobile/toolbar/detailView'
+    };
 
-    addAction(submenu, ['mark-read', 'mark-unread', 'spam', 'nospam', 'copy']);
-
-    addAction(pointListView, ['compose']);
-
-    addAction(pointThreadView, ['compose']);
-
-    addAction(pointDetailView, ['reply', 'reply-all', 'delete', 'forward']);
-
-    //multiselect in listview
-
-    var actionList = ['delete', 'forward', 'move'];
-
-    if (cap.has('archive_emails')) actionList.push('archive');
-
-    addAction(pointListViewMultiSelect, actionList);
-
-    pointDetailView.extend(new links.Dropdown({
-        id: 'test',
-        index: 900,
-        noCaret: true,
-        icon: 'fa fa-bars',
-        label: gt('Actions'),
-        ariaLabel: gt('Actions'),
-        ref: 'io.ox/mail/links/inline',
-        classes: 'io-ox-action-link mobile-toolbar-action'
-    }));
-
-    // add submenu as text link to toolbar in multiselect
-    pointListViewMultiSelect.extend(new links.Dropdown({
-        index: 50,
-        icon: 'fa fa-bars',
-        prio: 'hi',
-        mobile: 'hi',
-        label: gt('Actions'),
-        // don't draw the caret icon beside menu link
-        noCaret: true,
-        classes: 'io-ox-action-link mobile-toolbar-action',
-        ref: 'io.ox/mail/mobile/toolbar/submenuActions'
-    }));
-
-    // special "edit draft button"
-    ext.point('io.ox/mail/mobile/navbar/links').extend(new links.Link({
-        prio: 'hi',
-        mobile: 'hi',
-        label: gt('Edit draft'),
-
-        ref: 'io.ox/mail/actions/edit'
-    }));
-
-    ext.point('io.ox/mail/mobile/navbar/links/action').extend(new links.ToolbarLinks({
-        classes: 'navbar-action right',
-        index: 100,
-        id: 'edit-draft-button',
-        ref: 'io.ox/mail/mobile/navbar/links'
-    }));
+    mobile.addAction(points.listView, meta, ['compose']);
+    mobile.addAction(points.multiselect, meta, ['compose', 'delete', 'forward', 'move', 'archive']);
+    mobile.addAction(points.threadView, meta, ['compose']);
+    mobile.addAction(points.detailView, meta, ['reply', 'reply-all', 'delete', 'forward', 'mark-read', 'mark-unread', 'spam', 'nospam', 'copy']);
+    mobile.createToolbarExtensions(points);
 
     var updateToolbar = _.debounce(function (selection) {
         if (!selection) return;
@@ -237,7 +164,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
     // This should be done via our Link concept, but I
     // didn't get it running. Feel free to refactor this
     // to a nicer solutioun
-    pointListViewMultiSelect.extend({
+    ext.point(points.multiselect).extend({
         id: 'update-button-states',
         index: 10000,
         draw: function (baton) {

@@ -15,11 +15,10 @@ define('io.ox/core/tk/attachmentsUtil', [
     'io.ox/core/strings',
     'io.ox/preview/main',
     'io.ox/core/tk/dialogs',
-    'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
     'io.ox/core/extensions',
     'gettext!io.ox/core'
-], function (strings, pre, dialogs, links, capabilities, ext, gt) {
+], function (strings, pre, dialogs, capabilities, ext, gt) {
 
     'use strict';
 

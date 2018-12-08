@@ -26,10 +26,9 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/viewer/views/sidebar/uploadnewversionview',
     'io.ox/core/extensions',
     'gettext!io.ox/core/viewer',
-    'io.ox/core/extPatterns/links',
     // prefetch cause all views need the base view
     'io.ox/core/viewer/views/sidebar/panelbaseview'
-], function (DisposableView, Util, FilesAPI, folderApi, Dropzone, Capabilities, ViewerSettings, TypesRegistry, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt, links) {
+], function (DisposableView, Util, FilesAPI, folderApi, Dropzone, Capabilities, ViewerSettings, TypesRegistry, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt) {
 
     'use strict';
 
@@ -68,7 +67,7 @@ define('io.ox/core/viewer/views/sidebarview', [
         }
     });
 
-    ext.point('io.ox/core/viewer/views/sidebarview/detail').extend(new links.Link({
+    ext.point('io.ox/core/viewer/views/sidebarview/detail').extend({
         id: 'upload-new-version',
         index: 400,
         draw: function (baton) {
@@ -76,7 +75,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             if (!(baton.model.isFile() && folderApi.pool.models[baton.data.folder_id] && folderApi.pool.models[baton.data.folder_id].can('add:version'))) return;
             this.append(new UploadNewVersionView({ model: baton.model, app: baton.app }).render().el);
         }
-    }));
+    });
 
     /**
      * notifications lazy load

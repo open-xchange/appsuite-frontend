@@ -32,6 +32,7 @@ define('io.ox/core/print', [
     function escapeTitle(str) {
         return (str || '').replace(/[#%&§/$*!`´'"=:@+^\\.+?{}|]/g, '_');
     }
+    //'
 
     function addCallback(options, it) {
         var id = 'print_' + _.now();

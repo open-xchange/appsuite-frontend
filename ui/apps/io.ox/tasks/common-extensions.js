@@ -105,9 +105,14 @@ define('io.ox/tasks/common-extensions', [
             }
 
             return function (baton) {
-                var $ul = $('<ul class="dropdown-menu pull-right" role="menu">').append(
-                    util.buildDropdownMenu({ bootstrapDropdown: true, daysOnly: true })
-                ).on('click', 'li > a:not([data-action="close-menu"])', { data: baton.data }, onClick);
+
+                var data = baton.first();
+
+                var $ul = $('<ul class="dropdown-menu" role="menu">')
+                    .append(
+                        util.buildDropdownMenu({ bootstrapDropdown: true, daysOnly: true })
+                    )
+                    .on('click', 'li > a:not([data-action="close-menu"])', { data: data }, onClick);
 
                 this.attr({
                     'aria-haspopup': 'true',

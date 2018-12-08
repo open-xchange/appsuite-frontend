@@ -25,7 +25,7 @@ define('io.ox/files/main', [
     'io.ox/files/listview',
     'io.ox/core/tk/list-control',
     'io.ox/backbone/mini-views/toolbar',
-    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/views/actions/util',
     'io.ox/core/toolbars-mobile',
     'io.ox/core/page-controller',
     'io.ox/core/capabilities',
@@ -34,6 +34,7 @@ define('io.ox/files/main', [
     'io.ox/core/viewer/views/sidebarview',
     'io.ox/backbone/mini-views/quota',
     'io.ox/core/notifications',
+    'io.ox/backbone/views/toolbar',
     // prefetch
     'io.ox/files/mobile-navbar-extensions',
     'io.ox/files/mobile-toolbar-actions',
@@ -41,11 +42,10 @@ define('io.ox/files/main', [
     'less!io.ox/files/style',
     'less!io.ox/core/viewer/style',
     'io.ox/files/toolbar',
-    'io.ox/files/share/toolbar',
-    'io.ox/files/favorite/toolbar',
     'io.ox/files/upload/dropzone',
-    'io.ox/core/folder/breadcrumb'
-], function (commons, gt, settings, coreSettings, ext, folderAPI, jobsAPI, TreeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView, notifications) {
+    'io.ox/core/folder/breadcrumb',
+    'io.ox/files/contextmenu'
+], function (commons, gt, settings, coreSettings, ext, folderAPI, jobsAPI, TreeView, FolderView, FileListView, ListViewControl, Toolbar, actionsUtil, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView, notifications, ToolbarView) {
 
     'use strict';
 
@@ -53,8 +53,7 @@ define('io.ox/files/main', [
     var app = ox.ui.createApp({ id: 'io.ox/files', name: 'io.ox/files', title: 'Drive' }),
         // app window
         win,
-        sidebarView = new Sidebarview({ closable: true, app: app }),
-        contextmenu;
+        sidebarView = new Sidebarview({ closable: true, app: app });
 
     app.mediator({
 
@@ -388,7 +387,7 @@ define('io.ox/files/main', [
          * Setup list view
          */
         'list-view': function (app) {
-            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true, noPullToRefresh: true, contextMenu: contextmenu });
+            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true, noPullToRefresh: true });
             app.listView.model.set({ folder: app.folder.get(), sort: app.props.get('sort'), order: app.props.get('order') });
             // for debugging
             window.list = app.listView;
@@ -451,6 +450,31 @@ define('io.ox/files/main', [
 
             });
         },
+
+        'getContextualData': function (app) {
+            // get data required for toolbars and context menus
+            app.getContextualData = function (selection, type) {
+                // todo: check where and whether collection and allIds are needed
+                var options = { folder_id: app.folder.get(), app: app, allIds: [] };
+                switch (type) {
+                    case 'favorites': options.all = this.myFavoriteListView.collection; break;
+                    case 'shares': options.all = this.mysharesListView.collection; break;
+                    default: options.all = this.listView.collection; break;
+                    // no default
+                }
+                // turn cids into proper objects
+                if (type === 'shares') {
+                    options.models = selection.map(function (cid) {
+                        return options.all.get(cid);
+                    });
+                } else {
+                    options.models = api.resolve(selection, false);
+                }
+                options.data = _(options.models).invoke('toJSON');
+                return options;
+            };
+        },
+
         /*
          * Respond to virtual myshares
          */
@@ -479,7 +503,7 @@ define('io.ox/files/main', [
                     if (loading) return;
                     loading = true;
 
-                    require(['io.ox/files/share/listview', 'io.ox/files/share/api'], function (MySharesView, shareApi) {
+                    require(['io.ox/files/share/listview', 'io.ox/files/share/api', 'io.ox/files/share/toolbar'], function (MySharesView, shareApi) {
 
                         app.mysharesListView = new MySharesView({
                             app: app,
@@ -487,8 +511,7 @@ define('io.ox/files/main', [
                             draggable: false,
                             ignoreFocus: true,
                             noSwipe: true,
-                            noPullToRefresh: true,
-                            contextMenu: contextmenu
+                            noPullToRefresh: true
                         });
 
                         app.mysharesListViewControl = new ListViewControl({
@@ -509,47 +532,22 @@ define('io.ox/files/main', [
                             app.mysharesListView.reload();
                         }), 10);
 
-                        var toolbar = new Toolbar({ title: app.getTitle() });
+                        var toolbar = new ToolbarView({ point: 'io.ox/files/share/toolbar/links', title: app.getTitle() });
 
                         app.getWindow().nodes.body.prepend(
                             app.mysharesListViewControl.render().$el
                                 .hide().addClass('myshares-list-control')
-                                .prepend(toolbar.render().$el)
+                                .prepend(toolbar.$el)
                         );
 
-                        function updateCallback($toolbar) {
-                            toolbar.replaceToolbar($toolbar).initButtons();
-                        }
-
-                        app.updateMyshareToolbar = _.debounce(function (cidList) {
-                            var // turn cids into proper objects
-                                cids = _.uniq(cidList),
-                                modelList = [];
-                            _.each(cids, function (cid) {
-                                modelList.push(app.mysharesListView.collection.get(cid));
-                            });
-                            var models = modelList,
-                                list = models, //_(models).invoke('toJSON'),
-                                // extract single object if length === 1
-                                data = list.length === 1 ? list[0] : list,
-                                $toolbar = toolbar.createToolbar(),
-                                baton = ext.Baton({
-                                    $el: $toolbar,
-                                    app: app,
-                                    data: data,
-                                    models: models,
-                                    collection: app.mysharesListView.collection,
-                                    model: app.mysharesListView.collection.get(app.mysharesListView.collection.get(list))
-                                }),
-                                ret = ext.point('io.ox/files/share/classic-toolbar')
-                                .invoke('draw', $toolbar, baton);
-
-                            // draw toolbar
-                            $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
-
-                        }, 10);
+                        app.updateMyshareToolbar = function (selection) {
+                            toolbar.setSelection(selection.map(_.cid), function () {
+                                return this.getContextualData(selection, 'shares');
+                            }.bind(this));
+                        };
 
                         app.updateMyshareToolbar([]);
+
                         // update toolbar on selection change as well as any model change
                         app.mysharesListView.on('selection:change change', function () {
                             app.updateMyshareToolbar(app.mysharesListView.selection.get());
@@ -592,7 +590,9 @@ define('io.ox/files/main', [
             var loading = false;
 
             app.folderView.tree.on({
+
                 'virtual': function (id) {
+
                     if (id !== 'virtual/favorites/infostore') return;
 
                     app.folder.unset();
@@ -615,8 +615,7 @@ define('io.ox/files/main', [
                             draggable: false,
                             ignoreFocus: true,
                             noSwipe: true,
-                            noPullToRefresh: true,
-                            contextMenu: contextmenu
+                            noPullToRefresh: true
                         });
 
                         app.myFavoritesListViewControl = new ListViewControl({
@@ -625,45 +624,25 @@ define('io.ox/files/main', [
                             app: app
                         });
 
-                        var toolbar = new Toolbar({ title: app.getTitle() });
+                        var toolbar = new ToolbarView({ point: 'io.ox/files/toolbar/links', title: app.getTitle() });
 
                         app.getWindow().nodes.body.prepend(
                             app.myFavoritesListViewControl.render().$el
-                                .hide()
-                                .addClass('myfavorites-list-control')
-                                .prepend(toolbar.render().$el)
+                                .hide().addClass('myfavorites-list-control')
+                                .prepend(toolbar.$el)
                         );
 
-                        function updateCallback($toolbar) {
-                            toolbar.replaceToolbar($toolbar).initButtons();
-                        }
+                        app.updateMyFavoritesToolbar = function (selection) {
+                            toolbar.setSelection(selection.map(_.cid), function () {
+                                var options = this.getContextualData(selection, 'favorites');
+                                options.folder_id = null;
+                                options.favorite = true;
+                                return options;
+                            }.bind(this));
+                        };
 
-                        app.updateMyFavoritesToolbar = _.debounce(function (cidList) {
-                            // var folder = api.pool.getModel(_.cid(folder));
-                            toolbar.disableButtons();
-                            var // turn cids into proper objects
-                                cids = cidList,
-                                models = api.resolve(cids, false),
-                                list = _(models).invoke('toJSON'),
-                                // extract single object if length === 1
-                                data = list.length === 1 ? list[0] : list,
-                                $toolbar = toolbar.createToolbar(),
-                                baton = ext.Baton({
-                                    $el: $toolbar,
-                                    data: data,
-                                    models: models,
-                                    app: this,
-                                    allIds: [],
-                                    favorite: true,
-                                    collection: app.myFavoriteListView.collection
-                                }),
-                                // draw toolbar
-                                ret = ext.point('io.ox/files/favorite/classic-toolbar')
-                                .invoke('draw', $toolbar, baton);
-                            $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
-                        }, 10);
+                        app.updateMyFavoritesToolbar([]);
 
-                        app.updateMyFavoritesToolbar();
                         // update toolbar on selection change as well as any model change
                         app.myFavoriteListView.on('selection:change change favorite:add favorite:remove', function () {
                             app.updateMyFavoritesToolbar(app.myFavoriteListView.selection.get());
@@ -962,9 +941,8 @@ define('io.ox/files/main', [
             app.listView.$el.on(ev, '.list-item:not(.file-type-folder) .list-item-content', function (e) {
                 var cid = $(e.currentTarget).parent().attr('data-cid'),
                     selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
-                    baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app, options: { eventname: 'selection-doubleclick' } });
-
-                actions.invoke('io.ox/files/actions/default', null, baton);
+                    baton = ext.Baton({ data: selectedModel[0], all: app.listView.collection, app: app, options: { eventname: 'selection-doubleclick' } });
+                actionsUtil.invoke('io.ox/files/actions/default', baton);
             });
         },
 
@@ -995,8 +973,7 @@ define('io.ox/files/main', [
                     var cid = app.listView.selection.get()[0],
                         selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
                         baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app, options: { eventname: 'selection-enter' } });
-
-                    actions.invoke('io.ox/files/actions/default', null, baton);
+                    actionsUtil.invoke('io.ox/files/actions/default', baton);
                 }
             });
         },
@@ -1393,10 +1370,7 @@ define('io.ox/files/main', [
             app.listView.on('selection:delete', function (cids) {
                 // turn cids into proper objects
                 var list = _(api.resolve(cids, false)).invoke('toJSON');
-                // check if action can be called
-                actions.check('io.ox/files/actions/delete', list).done(function () {
-                    actions.invoke('io.ox/files/actions/delete', null, ext.Baton({ data: list }));
-                });
+                actionsUtil.checkAndInvokeAction('io.ox/files/actions/delete', list);
             });
         },
 
@@ -1524,10 +1498,10 @@ define('io.ox/files/main', [
 
             app.selectFile = function (obj) {
                 obj = _.isString(obj) ? _.cid(obj) : obj;
-
                 api.get(obj).done(function (model) {
-                    var models = api.resolve(model, false);
-                    actions.invoke('io.ox/files/actions/show-in-folder', null, ext.Baton({ models: models, app: app, favorites: false, portal: true }));
+                    var models = api.resolve(model, false),
+                        baton = ext.Baton({ models: models, app: app, favorites: false, portal: true });
+                    actionsUtil.invoke('io.ox/files/actions/show-in-folder', baton);
                 });
             };
         },
@@ -1625,9 +1599,8 @@ define('io.ox/files/main', [
             // ensure proper type
             baton.dropType = 'infostore';
             baton.target = baton.target.replace(/^folder\./, '');
-
             // call move action (instead of API) to have visual error handlers
-            actions.invoke('io.ox/files/actions/move', null, baton);
+            actionsUtil.invoke('io.ox/files/actions/move', baton);
         });
 
         // fix missing default folder
@@ -1636,13 +1609,6 @@ define('io.ox/files/main', [
         // go!
         return commons.addFolderSupport(app, null, 'infostore', options.folder)
             .then(function () {
-                return require(['io.ox/files/contextmenu']);
-            })
-            .then(function (Contextmenu) {
-                // contextmenu for all listviews
-                if (!(_.device('smartphone') && _.device('tablet'))) {
-                    contextmenu = new Contextmenu({ el: win.nodes.outer });
-                }
                 app.mediate();
                 win.show(function () {
                     // trigger grid resize

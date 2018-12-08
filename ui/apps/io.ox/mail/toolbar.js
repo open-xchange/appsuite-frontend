@@ -13,25 +13,24 @@
 
 define('io.ox/mail/toolbar', [
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
-    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/views/actions/util',
     'io.ox/core/tk/flag-picker',
     'io.ox/mail/api',
     'io.ox/core/capabilities',
     'io.ox/backbone/mini-views/dropdown',
-    'io.ox/backbone/mini-views/toolbar',
+    'io.ox/backbone/views/toolbar',
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/mail/actions',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (ext, links, actions, flagPicker, api, capabilities, Dropdown, Toolbar, settings, mailSettings, gt) {
+], function (ext, actionsUtil, flagPicker, api, capabilities, Dropdown, ToolbarView, settings, mailSettings, gt) {
 
     'use strict';
 
     // define links for classic toolbar
-    var point = ext.point('io.ox/mail/classic-toolbar/links');
+    var point = ext.point('io.ox/mail/toolbar/links');
 
     var meta = {
         //
@@ -40,74 +39,74 @@ define('io.ox/mail/toolbar', [
         'compose': {
             prio: 'hi',
             mobile: 'hi',
-            label: gt('Compose'),
-            title: gt('Compose new email'),
-            drawDisabled: true,
+            title: gt('Compose'),
+            tooltip: gt('Compose new email'),
+            steady: true,
             ref: 'io.ox/mail/actions/compose'
         },
         'edit': {
             prio: 'hi',
             mobile: 'lo',
-            label: gt('Edit draft'),
+            title: gt('Edit draft'),
             ref: 'io.ox/mail/actions/edit'
         },
         'edit-copy': {
             prio: 'hi',
             mobile: 'lo',
-            label: gt('Edit copy'),
+            title: gt('Edit copy'),
             ref: 'io.ox/mail/actions/edit-copy'
         },
         'reply': {
             prio: 'hi',
             mobile: 'lo',
             icon: 'fa fa-reply',
-            label: gt('Reply to sender'),
-            drawDisabled: true,
+            title: gt('Reply to sender'),
+            steady: true,
             ref: 'io.ox/mail/actions/reply'
         },
         'reply-all': {
             prio: 'hi',
             mobile: 'lo',
             icon: 'fa fa-reply-all',
-            label: gt('Reply to all recipients'),
-            drawDisabled: true,
+            title: gt('Reply to all recipients'),
+            steady: true,
             ref: 'io.ox/mail/actions/reply-all'
         },
         'forward': {
             prio: 'hi',
             mobile: 'lo',
             icon: 'fa fa-mail-forward',
-            label: gt('Forward'),
-            drawDisabled: true,
+            title: gt('Forward'),
+            steady: true,
             ref: 'io.ox/mail/actions/forward'
         },
         'delete': {
             prio: 'hi',
             mobile: 'lo',
             icon: 'fa fa-trash-o',
-            label: gt('Delete'),
-            drawDisabled: true,
+            title: gt('Delete'),
+            steady: true,
             ref: 'io.ox/mail/actions/delete'
         },
         'spam': {
             prio: 'hi',
             mobile: 'lo',
             icon: 'fa fa-ban',
-            label: gt('Mark as spam'),
+            title: gt('Mark as spam'),
             ref: 'io.ox/mail/actions/spam'
         },
         'nospam': {
             prio: 'hi',
             mobile: 'lo',
             icon: 'fa fa-thumbs-up',
-            label: gt('Not spam'),
+            title: gt('Not spam'),
             ref: 'io.ox/mail/actions/nospam'
         },
         'category': {
             prio: 'hi',
             mobile: 'none',
             icon: 'fa fa-folder-open-o',
-            label: gt('Set category'),
+            title: gt('Set category'),
             ref: 'io.ox/mail/actions/category',
             customize: function (baton) {
                 if (!mailSettings.get('categories/enabled')) return;
@@ -120,7 +119,7 @@ define('io.ox/mail/toolbar', [
             prio: 'hi',
             mobile: 'none',
             icon: 'fa fa-bookmark-o',
-            label: gt('Set color'),
+            title: gt('Set color'),
             ref: 'io.ox/mail/actions/color',
             customize: function (baton) {
                 if (!mailSettings.get('features/flag/color')) return;
@@ -132,7 +131,7 @@ define('io.ox/mail/toolbar', [
             mobile: 'lo',
             icon: 'fa fa-star',
             //#. Verb: (to) flag messages
-            label: gt.pgettext('verb', 'Flag'),
+            title: gt.pgettext('verb', 'Flag'),
             ref: 'io.ox/mail/actions/flag'
         },
         'unflag': {
@@ -140,7 +139,7 @@ define('io.ox/mail/toolbar', [
             mobile: 'lo',
             icon: 'fa fa-star-o',
             //#. Verb: (to) unflag messages
-            label: gt.pgettext('verb', 'Unflag'),
+            title: gt.pgettext('verb', 'Unflag'),
             ref: 'io.ox/mail/actions/unflag'
         },
         'archive': {
@@ -148,7 +147,7 @@ define('io.ox/mail/toolbar', [
             mobile: 'lo',
             icon: 'fa fa-archive',
             //#. Verb: (to) archive messages
-            label: gt.pgettext('verb', 'Archive'),
+            title: gt.pgettext('verb', 'Archive'),
             ref: 'io.ox/mail/actions/archive'
         },
         //
@@ -157,42 +156,42 @@ define('io.ox/mail/toolbar', [
         'mark-read': {
             prio: 'lo',
             mobile: 'lo',
-            label: gt('Mark as read'),
+            title: gt('Mark as read'),
             ref: 'io.ox/mail/actions/mark-read',
             section: 'flags'
         },
         'mark-unread': {
             prio: 'lo',
             mobile: 'lo',
-            label: gt('Mark as unread'),
+            title: gt('Mark as unread'),
             ref: 'io.ox/mail/actions/mark-unread',
             section: 'flags'
         },
         'move': {
             prio: 'lo',
             mobile: 'lo',
-            label: gt('Move'),
+            title: gt('Move'),
             ref: 'io.ox/mail/actions/move',
             section: 'file-op'
         },
         'copy': {
             prio: 'lo',
             mobile: 'lo',
-            label: gt('Copy'),
+            title: gt('Copy'),
             ref: 'io.ox/mail/actions/copy',
             section: 'file-op'
         },
         'print': {
             prio: 'lo',
             mobile: 'lo',
-            label: gt('Print'),
+            title: gt('Print'),
             ref: 'io.ox/mail/actions/print',
             section: 'export'
         },
         'save-as-eml': {
             prio: 'lo',
             mobile: 'lo',
-            label: gt('Save as file'),
+            title: gt('Save as file'),
             ref: 'io.ox/mail/actions/save',
             section: 'export'
         },
@@ -200,73 +199,63 @@ define('io.ox/mail/toolbar', [
             prio: 'lo',
             mobile: 'none',
             //#. source in terms of source code
-            label: gt('View source'),
+            title: gt('View source'),
             ref: 'io.ox/mail/actions/source',
             section: 'export'
         },
         'reminder': {
             prio: 'lo',
             mobile: 'none',
-            label: gt('Reminder'),
+            title: gt('Reminder'),
             ref: 'io.ox/mail/actions/reminder',
             section: 'keep'
         },
         'add-to-portal': {
             prio: 'lo',
             mobile: 'none',
-            label: gt('Add to portal'),
+            title: gt('Add to portal'),
             ref: 'io.ox/mail/actions/add-to-portal',
             section: 'keep'
         }
     };
 
-    // local dummy action
-
-    new actions.Action('io.ox/mail/actions/category', {
-        capabilities: 'mail_categories',
-        requires: function (e) {
-            return e.collection.has('some') && e.baton.app.props.get('categories');
-        },
-        action: $.noop
-    });
-
-    new actions.Action('io.ox/mail/actions/color', {
-        requires: function (e) {
-            return mailSettings.get('features/flag/color') && e.collection.has('some');
-        },
-        action: $.noop
-    });
-
     // transform into extensions
 
     var index = 0;
-
     _(meta).each(function (extension, id) {
-        extension.id = id;
-        extension.index = (index += 100);
-        point.extend(new links.Link(extension));
+        point.extend(_.extend({ id: id, index: index += 100 }, extension));
     });
 
-    ext.point('io.ox/mail/classic-toolbar').extend(new links.InlineLinks({
-        attributes: {},
-        classes: '',
-        // always use drop-down
-        dropdown: true,
-        index: 200,
-        id: 'toolbar-links',
-        ref: 'io.ox/mail/classic-toolbar/links'
-    }));
+    // local dummy action
+
+    var Action = actionsUtil.Action;
+
+    new Action('io.ox/mail/actions/category', {
+        capabilities: 'mail_categories',
+        collection: 'some',
+        matches: function (baton) {
+            return !!baton.app.props.categories;
+        },
+        action: $.noop
+    });
+
+    new Action('io.ox/mail/actions/color', {
+        toggle: mailSettings.get('features/flag/color'),
+        collection: 'some',
+        action: $.noop
+    });
 
     // view dropdown
-    ext.point('io.ox/mail/classic-toolbar').extend({
+    ext.point('io.ox/mail/toolbar/links').extend({
         id: 'view-dropdown',
         index: 10000,
+        custom: true,
         draw: function (baton) {
 
             if (_.device('smartphone')) return;
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li', attributes: { role: 'presentation' } })
+            var dropdown = new Dropdown({ el: this, caret: true, model: baton.app.props, label: gt('View') })
             .group(gt('Layout'))
             .option('layout', 'vertical', gt('Vertical'), { radio: true, group: true });
             // offer compact view only on desktop
@@ -314,9 +303,7 @@ define('io.ox/mail/toolbar', [
             .link('statistics', gt('Statistics'), statistics.bind(null, baton.app))
             .listenTo(baton.app.props, 'change:layout', updateContactPicture);
 
-            this.append(
-                dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
-            );
+            dropdown.render().$el.addClass('dropdown pull-right').attr('data-dropdown', 'view');
 
             toggleTextPreview();
             baton.app.on('folder:change', toggleTextPreview);
@@ -373,31 +360,24 @@ define('io.ox/mail/toolbar', [
 
             if (_.device('smartphone')) return;
 
-            var toolbarView = new Toolbar({ title: app.getTitle() });
-
+            var toolbarView = new ToolbarView({ point: 'io.ox/mail/toolbar/links', title: app.getTitle() });
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                toolbarView.render().$el
+                toolbarView.$el
             );
 
-            function updateCallback($toolbar) {
-                toolbarView.replaceToolbar($toolbar).initButtons();
-            }
+            app.updateToolbar = function (selection) {
+                var options = { data: [], folder_id: this.folder.get(), app: this, isThread: this.isThreaded() };
+                toolbarView.setSelection(selection.map(_.cid), function () {
+                    // resolve thread
+                    options.data = api.resolve(selection, options.isThread);
+                    return options;
+                });
+            };
 
-            app.updateToolbar = _.debounce(function (selection) {
-                if (!selection) return;
-                var isThread = this.isThreaded();
-                // resolve thread
-                var list = api.resolve(selection, isThread);
-                // extract single object if length === 1
-                list = list.length === 1 ? list[0] : list;
-                // disable visible buttons
-                toolbarView.disableButtons();
-                // draw toolbar
-                var $toolbar = toolbarView.createToolbar(),
-                    baton = ext.Baton({ $el: $toolbar, data: list, isThread: isThread, selection: selection, app: this }),
-                    ret = ext.point('io.ox/mail/classic-toolbar').invoke('draw', $toolbar, baton);
-                $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
-            }, 10);
+            app.forceUpdateToolbar = function (selection) {
+                toolbarView.selection = null;
+                this.updateToolbar(selection);
+            };
         }
     });
 
@@ -406,10 +386,14 @@ define('io.ox/mail/toolbar', [
         index: 10200,
         setup: function (app) {
             if (_.device('smartphone')) return;
-            app.updateToolbar();
+            app.updateToolbar([]);
             // update toolbar on selection change as well as any model change (seen/unseen flag)
-            app.listView.on('selection:change change', function () {
+            app.listView.on('selection:change', function () {
                 app.updateToolbar(app.listView.selection.get());
+            });
+            app.listView.on('change', function (model) {
+                if (!('flags' in model.changed)) return;
+                app.forceUpdateToolbar(app.listView.selection.get());
             });
         }
     });

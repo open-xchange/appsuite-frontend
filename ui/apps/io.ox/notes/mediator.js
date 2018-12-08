@@ -222,19 +222,6 @@ define('io.ox/notes/mediator', [
                 });
             },
 
-            'drag-and-drop': function (app) {
-                // drag & drop
-                app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
-                    require(['io.ox/core/extPatterns/actions'], function (actions) {
-                        // convert composite keys to objects
-                        baton.data = _(baton.data).map(function (item) {
-                            return _.isString(item) ? _.cid(item) : item;
-                        });
-                        actions.invoke('io.ox/files/actions/move', null, baton);
-                    });
-                });
-            },
-
             'refresh': function (app) {
                 ox.on('refresh^', function () {
                     _.defer(function () { app.listView.reload(); });

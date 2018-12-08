@@ -13,15 +13,15 @@
 
 define('io.ox/core/commons', [
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
     'gettext!io.ox/core',
     'io.ox/core/folder/api',
     'io.ox/core/api/account',
     'io.ox/backbone/mini-views/helplink',
     'settings!io.ox/core',
     'io.ox/backbone/mini-views/upsell',
+    'io.ox/backbone/views/actions/util',
     'io.ox/core/capabilities'
-], function (ext, links, gt, folderAPI, accountAPI, HelpLinkView, coreSettings, UpsellView, capabilities) {
+], function (ext, gt, folderAPI, accountAPI, HelpLinkView, coreSettings, UpsellView, actionsUtil, capabilities) {
 
     'use strict';
 
@@ -56,61 +56,6 @@ define('io.ox/core/commons', [
             );
         },
 
-        mobileMultiSelection: (function () {
-            var points = {};
-
-            // counter is always shown
-            ext.point('io.ox/core/commons/mobile/multiselect').extend({
-                id: 'selectCounter',
-                index: '100',
-                draw: function (data) {
-                    this.append(
-                        $('<div class="toolbar-button select-counter">')
-                            .text(data.count)
-                    );
-                }
-            });
-
-            function draw(id, selection, grid) {
-                var node = $('<div>');
-
-                ext.point('io.ox/core/commons/mobile/multiselect').invoke('draw', node, { count: selection.length });
-
-                (points[id] || (points[id] = ext.point(id + '/mobileMultiSelect/toolbar')))
-                    .invoke('draw', node, { data: selection, grid: grid });
-                return node;
-            }
-
-            return function (id, node, selection, api, grid) {
-
-                // get current app's window container as context
-                var context = $(node).closest('.window-container'),
-                    buttons = $('.window-toolbar .toolbar-button', context),
-                    toolbar = $('.window-toolbar', context),
-                    toolbarID = 'multi-select-toolbar',
-                    container;
-
-                if ($('#' + toolbarID).length > 0) {
-                    // reuse old toolbar
-                    container = $('#' + toolbarID);
-                } else {
-                    // or creaet a new one
-                    container = $('<div>', { id: toolbarID });
-                }
-                _.defer(function () {
-                    if (selection.length > 0) {
-                        // update selection in toolbar
-                        buttons.hide();
-                        $('#' + toolbarID).remove();
-                        toolbar.append(container.append(draw(id, selection, grid)));
-                    } else {
-                        // selection empty
-                        $('#' + toolbarID).remove();
-                        buttons.show();
-                    }
-                }, 10);
-            };
-        }()),
 
         wireGridAndSelectionChange: function (grid, id, draw, node, api) {
             var last = '', label;
@@ -171,10 +116,6 @@ define('io.ox/core/commons', [
                     // remember current selection
                     last = flat;
                 }
-            });
-
-            grid.selection.on('_m_change', function () {
-                commons.mobileMultiSelection(id, node, this.unique(this.unfold()), api, grid);
             });
 
             // look for id change
@@ -752,9 +693,23 @@ define('io.ox/core/commons', [
                 )
             );
 
-            ext.point(app.get('name') + '/folderview/premium-area').invoke('draw', container, {});
+            function renderActions(ref, baton) {
+                return ext.point(ref).list().map(function (item) {
+                    return $('<p>').append(
+                        $('<a href="#" role="button">')
+                            .attr('data-action', item.action)
+                            .data({ baton: baton })
+                            .text(item.title)
+                    );
+                });
+            }
 
-            if (container.find('li').length === 0) return;
+            var baton = actionsUtil.getBaton([], { app: app, renderActions: renderActions });
+            ext.point(app.get('name') + '/folderview/premium-area').invoke('draw', container, baton);
+
+            if (container.find('a[data-action]').length === 0) return;
+
+            container.on('click', 'a[data-action]', actionsUtil.invokeByEvent);
 
             var upsellView = new UpsellView({
                 id: opt.upsellId || 'folderview/' + app.get('name') + '/bottom',

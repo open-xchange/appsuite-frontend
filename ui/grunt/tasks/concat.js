@@ -143,7 +143,6 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/tk/wizard.js',
                             'apps/io.ox/tours/get-started.js',
                             // 3rd wave
-                            'apps/io.ox/core/extPatterns/links.js',
                             'apps/io.ox/core/adaptiveLoader.js',
                             'apps/io.ox/core/a11y.js',
                             'apps/io.ox/core/tk/dialogs.js',
@@ -180,7 +179,6 @@ module.exports = function (grunt) {
                             'apps/io.ox/metrics/adapters/console.js',
                             // 4th wave
                             'apps/io.ox/core/collection.js',
-                            'apps/io.ox/core/extPatterns/actions.js',
                             'apps/io.ox/core/api/account.js',
                             'apps/io.ox/core/tk/selection.js',
                             'apps/io.ox/core/tk/visibility-api-util.js',

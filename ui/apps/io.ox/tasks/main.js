@@ -14,7 +14,6 @@
 define('io.ox/tasks/main', [
     'io.ox/tasks/api',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/actions',
     'gettext!io.ox/tasks',
     'io.ox/core/tk/vgrid',
     'io.ox/tasks/view-grid-template',
@@ -28,11 +27,12 @@ define('io.ox/tasks/main', [
     'io.ox/core/toolbars-mobile',
     'io.ox/core/page-controller',
     'io.ox/core/capabilities',
+    'io.ox/backbone/views/actions/util',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/tasks/toolbar',
     'io.ox/tasks/mobile-navbar-extensions',
     'io.ox/tasks/mobile-toolbar-actions'
-], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI, TreeView, FolderView, Bars, PageController, capabilities, Dropdown) {
+], function (api, ext, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI, TreeView, FolderView, Bars, PageController, capabilities, actionsUtil, Dropdown) {
 
     'use strict';
 
@@ -581,7 +581,7 @@ define('io.ox/tasks/main', [
         'drag-n-drop': function (app) {
             if (_.device('touch')) return;
             app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
-                actions.invoke('io.ox/tasks/actions/move', null, baton);
+                actionsUtil.invoke('io.ox/tasks/actions/move', baton);
             });
         },
 
@@ -620,7 +620,7 @@ define('io.ox/tasks/main', [
         'selection-delete': function (app) {
             app.grid.selection.on('selection:delete', function (e, list) {
                 var baton = ext.Baton({ data: list });
-                actions.invoke('io.ox/tasks/actions/delete', null, baton);
+                actionsUtil.invoke('io.ox/tasks/actions/delete', baton);
             });
         },
 
@@ -808,11 +808,12 @@ define('io.ox/tasks/main', [
                         // we have to use mousedown as the selection listens to this, too
                         // otherwise we are to late to get the event
                         e.stopImmediatePropagation();
-                    }).on('tap', function (e) {
+                    })
+                    .on('tap', function (e) {
                         e.preventDefault();
                         removeButton();
                         showSwipeButton = false;
-                        actions.invoke('io.ox/tasks/actions/delete', null, baton);
+                        actionsUtil.invoke('io.ox/tasks/actions/delete', baton);
                     })
                 );
                 showSwipeButton = true;

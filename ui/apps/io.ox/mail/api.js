@@ -1486,7 +1486,7 @@ define('io.ox/mail/api', [
         });
 
         function tick() {
-            document.title = (alt = !alt) ? gt('New Mail') : document.customTitle;
+            document.title = (alt = !alt) ? gt('New mail') : document.customTitle;
         }
 
         function blink() {

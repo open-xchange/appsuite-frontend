@@ -16,8 +16,9 @@ define('io.ox/core/extPatterns/actions', [
     'io.ox/core/extensions',
     'io.ox/core/upsell',
     'io.ox/core/collection',
-    'io.ox/core/capabilities'
-], function (ext, upsell, Collection, capabilities) {
+    'io.ox/core/capabilities',
+    'io.ox/backbone/views/actions/util'
+], function (ext, upsell, Collection, capabilities, util) {
 
     'use strict';
 
@@ -32,6 +33,7 @@ define('io.ox/core/extPatterns/actions', [
     };
 
     var Action = function (id, options) {
+        if (ox.debug) console.warn('Action is DEPRECATED with 7.10.2 (io.ox/core/extPatterns/actions.js)', options);
         // get options - use 'requires one' as default
         var o = _.extend({ id: 'default', index: 100, requires: requiresOne }, options);
         // string?
@@ -140,36 +142,53 @@ define('io.ox/core/extPatterns/actions', [
         // combine actions
         var defs = ext.point(ref).map(function (action) {
 
-            var ret = true, params;
+            var retRequires, retMatches, retMatchesAsync, actionBaton, params = {};
 
-            if (stopped) {
-                return $.Deferred().resolve(false);
-            }
+            if (stopped) return $.when(false);
 
-            if (_.isFunction(action.requires)) {
-                params = {
-                    baton: baton,
-                    collection: collection,
-                    context: baton.data,
-                    extension: action,
-                    point: ref,
-                    stopPropagation: stopPropagation
-                };
-                try {
-                    ret = action.requires(params);
-                } catch (e) {
-                    params.exception = e;
-                    console.error(
-                        'point("' + ref + '") > "' + action.id + '" > processActions() > requires()', e.message, e.stack, params
-                    );
+            try {
+                if (action.matches || action.collection || action.device || action.folder || ('toogle' in action)) {
+                    // new school
+                    actionBaton = ext.Baton({
+                        app: baton.app,
+                        collection: collection,
+                        data: [].concat(baton.data),
+                        folder_id: baton.app && baton.app.folder.get(),
+                        stopPropagation: stopPropagation
+                    });
+                    if (!util.checkActionAvailability(action)) {
+                        retMatches = false;
+                    } else if (!util.checkActionEnabled(actionBaton, action)) {
+                        retMatches = false;
+                    } else {
+                        retMatches = true;
+                        if (_.isFunction(action.matchesAsync)) {
+                            retMatchesAsync = action.matchesAsync(actionBaton);
+                        }
+                    }
+                } else if (_.isFunction(action.requires)) {
+                    // old school
+                    params = {
+                        baton: baton,
+                        collection: collection,
+                        context: baton.data,
+                        extension: action,
+                        point: ref,
+                        stopPropagation: stopPropagation
+                    };
+                    retRequires = action.requires(params);
                 }
+            } catch (e) {
+                params.exception = e;
+                console.error(
+                    'point("' + ref + '") > "' + action.id + '" > processActions() > requires()', e.message, e.stack, params
+                );
             }
 
-            // is not deferred?
-            if (ret && !ret.promise) {
-                ret = $.Deferred().resolve(ret);
-            }
-            return ret;
+            if (retRequires) return $.when(retRequires);
+            if (retMatches === false) return $.when(false);
+            if (retMatchesAsync) return $.when(retMatchesAsync);
+            return $.when(true);
         })
         .value();
 

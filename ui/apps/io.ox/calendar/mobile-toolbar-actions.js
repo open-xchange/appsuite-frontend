@@ -13,145 +13,120 @@
 
 define('io.ox/calendar/mobile-toolbar-actions', [
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
+    'io.ox/backbone/views/toolbar',
+    'io.ox/backbone/views/actions/mobile',
     'io.ox/calendar/api',
     'io.ox/calendar/util',
-    'gettext!io.ox/calendar'
-], function (ext, links, api, util, gt) {
+    'gettext!io.ox/calendar',
+    'io.ox/calendar/actions'
+], function (ext, ToolbarView, mobile, api, util, gt) {
 
     'use strict';
 
     // define links for each page
 
-    var pMonth = ext.point('io.ox/calendar/mobile/toolbar/month'),
-        // actually a single day as we use week:day
-        pWeek = ext.point('io.ox/calendar/mobile/toolbar/week'),
-        pList = ext.point('io.ox/calendar/mobile/toolbar/list'),
-        pListMulti = ext.point('io.ox/calendar/mobile/toolbar/list/multiselect'),
-        multiInlineActions = ext.point('io.ox/calendar/mobile/toolbar/list/multiselectactions'),
-        pDetail = ext.point('io.ox/calendar/mobile/toolbar/detailView'),
-        meta = {
-            'create': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Create'),
-                icon: 'fa fa-plus',
-                drawDisabled: true,
-                ref: 'io.ox/calendar/detail/actions/create',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
-            },
-            'listView': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Listview'),
-                icon: 'fa fa-list',
-                drawDisabled: true,
-                ref: 'io.ox/calendar/actions/switch-to-list-view',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
-            },
-            'calendarView': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Calendar view'),
-                icon: 'fa fa-table',
-                drawDisabled: true,
-                ref: 'io.ox/calendar/actions/switch-to-month-view',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
-            },
-            'next': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Show next month'),
-                icon: 'fa fa-chevron-right',
-                drawDisabled: true,
-                ref: 'io.ox/calendar/actions/showNext',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+    var meta = {
+        'create': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Create'),
+            icon: 'fa fa-plus',
+            steady: true,
+            ref: 'io.ox/calendar/detail/actions/create'
+        },
+        'listView': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Listview'),
+            icon: 'fa fa-list',
+            steady: true,
+            ref: 'io.ox/calendar/actions/switch-to-list-view'
+        },
+        'calendarView': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Calendar view'),
+            icon: 'fa fa-table',
+            steady: true,
+            ref: 'io.ox/calendar/actions/switch-to-month-view'
+        },
+        'next': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Show next month'),
+            icon: 'fa fa-chevron-right',
+            steady: true,
+            ref: 'io.ox/calendar/actions/showNext'
+        },
+        'prev': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Show previous month'),
+            icon: 'fa fa-chevron-left',
+            steady: true,
+            ref: 'io.ox/calendar/actions/showPrevious'
+        },
+        'today': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Today'),
+            steady: true,
+            ref: 'io.ox/calendar/actions/showToday'
+        },
+        'move': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Move'),
+            icon: 'fa fa-sign-in',
+            steady: true,
+            ref: 'io.ox/calendar/detail/actions/move'
+        },
+        'delete': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Delete'),
+            icon: 'fa fa-trash-o',
+            steady: true,
+            ref: 'io.ox/calendar/detail/actions/delete'
+        },
+        'export': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Export'),
+            steady: true,
+            ref: 'io.ox/calendar/detail/actions/export'
+        }
+    };
 
-            },
-            'prev': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Show previous month'),
-                icon: 'fa fa-chevron-left',
-                drawDisabled: true,
-                ref: 'io.ox/calendar/actions/showPrevious',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
-            },
-            'today': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Today'),
-                drawDisabled: true,
-                ref: 'io.ox/calendar/actions/showToday',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action text-button'
-            },
-            'move': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Move'),
-                icon: 'fa fa-sign-in',
-                drawDisabled: true,
-                ref: 'io.ox/calendar/detail/actions/move',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
-            },
-            'delete': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Delete'),
-                icon: 'fa fa-trash-o',
-                drawDisabled: true,
-                ref: 'io.ox/calendar/detail/actions/delete',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
-            },
-            'export': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Export'),
-                //icon: 'fa fa-trash-o',
-                drawDisabled: true,
-                ref: 'io.ox/calendar/detail/actions/export',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+    var points = {
+        monthView: 'io.ox/calendar/mobile/toolbar/month',
+        weekView: 'io.ox/calendar/mobile/toolbar/week',
+        listView: 'io.ox/calendar/mobile/toolbar/list',
+        listViewMulti: 'io.ox/calendar/mobile/toolbar/list/multiselect',
+        detailView: 'io.ox/calendar/mobile/toolbar/detailView'
+    };
+
+    // clone all available links from inline links (larger set)
+    ext.point(points.detailView + '/links').extend(
+        ext.point('io.ox/calendar/links/inline').list().map(function (item) {
+            item = _(item).pick('id', 'index', 'prio', 'mobile', 'icon', 'title', 'ref', 'section', 'sectionTitle');
+            switch (item.id) {
+                case 'edit': item.icon = 'fa fa-pencil'; break;
+                case 'accept': item.mobile = 'hi'; item.icon = 'fa fa-check'; break;
+                case 'decline': item.mobile = 'lo'; break;
+                case 'delete': item.mobile = 'hi'; item.icon = 'fa fa-trash'; break;
+                case 'send mail': item.mobile = 'hi'; item.icon = 'fa fa-envelope-o'; break;
+                // no default
             }
-        };
+            return item;
+        })
+    );
 
-    // helper for extending
-    function addAction(point, ids) {
-        var index = 0;
-        _(ids).each(function (id) {
-            var extension = meta[id];
-            extension.id = id;
-            extension.index = (index += 100);
-            point.extend(new links.Link(extension));
-        });
-        index = 0;
-    }
-    // add default actions to toolbar which might be extended by 3rd party apps
-    pDetail.extend(new links.Dropdown({
-        index: 100,
-        label: $('<span>').text(
-            //#. Will be used as button label in the toolbar, allowing the user to peform actions for the current appointment
-            gt('Actions')
-        ),
-        // don't draw the caret icon beside menu link
-        noCaret: true,
-        drawDisabled: true,
-        ref: 'io.ox/calendar/links/inline'
-    }));
-
-    // add other actions
-    addAction(pMonth, ['create', 'listView', 'prev', 'today', 'next']);
-    addAction(pWeek, ['create', 'listView', 'prev', 'today', 'next']);
-    addAction(pList, ['calendarView']);
-    addAction(multiInlineActions, ['move', 'delete']);
-
-    // have to use inline actions to process actions the right way
-    pListMulti.extend(new links.InlineLinks({
-        attributes: {},
-        classes: '',
-        index: 100,
-        id: 'toolbar-links',
-        ref: 'io.ox/calendar/mobile/toolbar/list/multiselectactions'
-    }));
+    mobile.addAction(points.monthView, meta, ['create', 'listView', 'prev', 'today', 'next']);
+    mobile.addAction(points.weekView, meta, ['create', 'listView', 'prev', 'today', 'next']);
+    mobile.addAction(points.listView, meta, ['calendarView']);
+    mobile.addAction(points.listViewMulti, meta, ['move', 'delete']);
+    mobile.createToolbarExtensions(points);
 
     var updateToolbar = _.debounce(function (list) {
         if (!list) return;
@@ -167,7 +142,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
     }, 10);
 
     function prepareUpdateToolbar(app) {
-        var list = app.pages.getCurrentPage().name === 'list' ? app.listView.selection.get() : {};
+        var list = app.pages.getCurrentPage().name === 'list' ? app.listView.selection.get() : [];
         list = _(list).map(function (item) {
             if (_.isString(item)) item = _.extend(util.cid(item), { flags: app.listView.selection.getNode(item).attr('data-flags') || '' });
             return item;
@@ -191,7 +166,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
         index: 10300,
         setup: function (app) {
             if (_.device('!smartphone')) return;
-            app.updateToolbar();
+            app.updateToolbar([]);
             // update toolbar on selection change
             app.listView.on('selection:change', function () {
                 prepareUpdateToolbar(app);

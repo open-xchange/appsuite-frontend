@@ -30,7 +30,7 @@ define('io.ox/mail/actions/addToPortal', [
                     title: baton.data.subject ? baton.data.subject : gt('No subject')
                 }, baton.data.parent || {})
             });
-            notifications.yell('success', gt('This mail has been added to the portal'));
+            notifications.yell('success', gt('This email has been added to the portal'));
         });
     };
 

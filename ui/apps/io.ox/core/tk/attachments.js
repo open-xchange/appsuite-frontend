@@ -13,6 +13,7 @@
 
 define('io.ox/core/tk/attachments', [
     'io.ox/backbone/views/disposable',
+    'io.ox/backbone/views/action-dropdown',
     'io.ox/core/api/attachment',
     'io.ox/core/folder/title',
     'io.ox/core/strings',
@@ -20,12 +21,11 @@ define('io.ox/core/tk/attachments', [
     'io.ox/core/capabilities',
     'io.ox/preview/main',
     'io.ox/core/tk/dialogs',
-    'io.ox/core/extPatterns/links',
     'settings!io.ox/core',
     'io.ox/core/notifications',
     'gettext!io.ox/core',
     'io.ox/core/pim/actions'
-], function (DisposableView, attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, links, settings, notifications, gt) {
+], function (DisposableView, ActionDropdownView, attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, settings, notifications, gt) {
 
     'use strict';
 
@@ -238,47 +238,40 @@ define('io.ox/core/tk/attachments', [
         _.extend(this, {
 
             draw: function (baton) {
+
                 if (self.processArguments) {
                     baton = self.processArguments.apply(this, $.makeArray(arguments));
                 }
 
-                var $node = $('<div>').addClass('attachment-list').appendTo(this);
+                var $node = $('<div class="attachment-list">').appendTo(this);
 
-                function drawAttachment(data, label) {
+                function drawAttachment(data, title) {
+
                     if (options.module === 1) {
-                        if (_.isArray(data)) {
-                            data = _(data).map(function (att) {
-                                // files api can only handle old folder ids
-                                // TODO check if that can be changed
-                                // until then cut off the additional cal://0/ etc from the folder
-                                att.folder = baton.model.get('folder').split('/');
-                                att.folder = att.folder[att.folder.length - 1];
-                                att.module = 1;
-                                att.attached = parseInt(baton.model.get('id'), 10);
-                                return att;
-                            });
-                        } else {
-                            data.folder = baton.model.get('folder').split('/');
-                            data.folder = data.folder[data.folder.length - 1];
-                            data.module = 1;
-                            data.attached = parseInt(baton.model.get('id'), 10);
-                        }
+                        data = _(data).map(function (att) {
+                            // files api can only handle old folder ids
+                            // TODO check if that can be changed
+                            // until then cut off the additional cal://0/ etc from the folder
+                            att.folder = baton.model.get('folder').split('/');
+                            att.folder = att.folder[att.folder.length - 1];
+                            att.module = 1;
+                            att.attached = parseInt(baton.model.get('id'), 10);
+                            return att;
+                        });
                     }
-                    return new links.Dropdown({
-                        label: $.txt(label || data.filename),
-                        classes: 'attachment-link',
-                        ref: 'io.ox/core/tk/attachment/links'
-                    }).draw.call($node, { data: data, options: options });
+
+                    var dropdown = new ActionDropdownView({ point: 'io.ox/core/tk/attachment/links', title: title || data.filename, data: data });
+                    $node.append(dropdown.$el);
                 }
 
                 function redraw(e, obj) {
                     var callback = function (attachments) {
                         if (attachments.length) {
                             _(attachments).each(function (a) {
-                                drawAttachment(a, a.filename);
+                                drawAttachment([a], a.filename);
                             });
                             if (attachments.length > 1) {
-                                drawAttachment(attachments, gt('All attachments')).find('a').removeClass('attachment-link');
+                                drawAttachment(attachments, gt('All attachments'));
                             }
                         } else {
                             $node.append(gt('None'));

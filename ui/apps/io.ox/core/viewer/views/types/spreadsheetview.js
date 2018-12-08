@@ -12,12 +12,11 @@
 define('io.ox/core/viewer/views/types/spreadsheetview', [
     'io.ox/core/viewer/views/types/baseview',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/actions',
     'io.ox/core/capabilities',
     'io.ox/files/api',
     'settings!io.ox/files',
     'gettext!io.ox/core'
-], function (BaseView, Ext, ActionsPattern, Capabilities, FilesAPI, Settings, gt) {
+], function (BaseView, Ext, Capabilities, FilesAPI, Settings, gt) {
 
     'use strict';
 

@@ -18,10 +18,9 @@ define('io.ox/mail/detail/mobileView', [
     'io.ox/mail/api',
     'io.ox/mail/util',
     'io.ox/mail/detail/content',
-    'io.ox/core/extPatterns/links',
     'gettext!io.ox/mail',
     'less!io.ox/mail/style'
-], function (DetailView, extensions, ext, api, util, content, links, gt) {
+], function (DetailView, extensions, ext, api, util, content, gt) {
 
     'use strict';
 
@@ -254,9 +253,11 @@ define('io.ox/mail/detail/mobileView', [
     var MobileDetailView = DetailView.View.extend({
 
         onChangeAttachments: function () {
+
             var data = this.model.toJSON(),
-                baton = ext.Baton({ view: this, data: data, attachments: util.getAttachments(data) }),
+                baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
                 node = this.$el.find('section.attachments').empty();
+
             ext.point('io.ox/mail/mobile/detail/attachments').invoke('draw', node, baton);
 
             if (this.model.previous('attachments') &&

@@ -894,6 +894,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 }, this))
                 // double click
                 .on('dblclick', SELECTABLE, $.proxy(function (e) {
+                    if (e.ctrlKey || e.metaKey) return;
                     this.triggerDouble(e);
                 }, this))
                 // avoid context menu

@@ -14,24 +14,21 @@
 define('io.ox/notes/toolbar', [
     'io.ox/notes/api',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
-    'io.ox/core/extPatterns/actions',
-    'io.ox/backbone/mini-views/toolbar',
+    'io.ox/backbone/views/actions/util',
+    'io.ox/backbone/views/toolbar',
     'io.ox/core/notifications',
     'gettext!io.ox/notes',
     'io.ox/files/actions'
-], function (api, ext, links, actions, Toolbar, notifications, gt) {
+], function (api, ext, actionsUtil, ToolbarView, notifications, gt) {
 
     'use strict';
 
-    new actions.Action('io.ox/notes/actions/create', {
-        index: 100,
-        requires:  function (e) {
-            return e.baton.app.folder.can('create');
-        },
-        action: function (baton) {
+    var Action = actionsUtil.Action;
 
-            api.create({ folder: baton.app.folder.get() })
+    new Action('io.ox/notes/actions/create', {
+        folder: 'create',
+        action: function (baton) {
+            api.create({ folder: baton.folder_id })
                 .done(function (data) {
                     var cid = _.cid(data), list = baton.app.listView;
                     list.listenToOnce(list.collection, 'add', function () {
@@ -46,58 +43,46 @@ define('io.ox/notes/toolbar', [
     });
 
     // define links for classic toolbar
-    var point = ext.point('io.ox/notes/classic-toolbar/links');
+    var point = ext.point('io.ox/notes/toolbar/links');
 
     var meta = {
         'create': {
             prio: 'hi',
-            label: gt('New note'),
-            drawDisabled: true,
+            title: gt('New note'),
+            steady: true,
             ref: 'io.ox/notes/actions/create'
         },
         'download': {
             prio: 'hi',
-            label: gt('Download'),
+            title: gt('Download'),
             icon: 'fa fa-download',
-            drawDisabled: true,
+            steady: true,
             ref: 'io.ox/files/actions/download'
         },
         'send': {
             prio: 'hi',
-            label: gt('Send by mail'),
+            title: gt('Send by mail'),
             icon: 'fa fa-envelope-o',
-            drawDisabled: true,
+            steady: true,
             ref: 'io.ox/files/actions/send',
             section: 'share'
         },
         'delete': {
             prio: 'hi',
-            label: gt('Delete'),
+            title: gt('Delete'),
             icon: 'fa fa-trash-o',
-            drawDisabled: true,
+            steady: true,
             ref: 'io.ox/files/actions/delete'
         }
     };
 
     // transform into extensions
-
     var index = 0;
-
     _(meta).each(function (extension, id) {
         extension.id = id;
         extension.index = (index += 100);
-        point.extend(new links.Link(extension));
+        point.extend(extension);
     });
-
-    ext.point('io.ox/notes/classic-toolbar').extend(new links.InlineLinks({
-        attributes: {},
-        classes: '',
-        // always use drop-down
-        dropdown: true,
-        index: 200,
-        id: 'toolbar-links',
-        ref: 'io.ox/notes/classic-toolbar/links'
-    }));
 
     // classic toolbar
     ext.point('io.ox/notes/mediator').extend({
@@ -105,34 +90,20 @@ define('io.ox/notes/toolbar', [
         index: 10000,
         setup: function (app) {
 
-            var toolbarView = new Toolbar({ title: app.getTitle(), tabindex: 0 });
+            var toolbarView = new ToolbarView({ point: 'io.ox/notes/toolbar/links', title: app.getTitle() });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                toolbarView.render().$el
+                toolbarView.$el
             );
 
-            function updateCallback($toolbar) {
-                toolbarView.replaceToolbar($toolbar).initButtons();
-            }
-
-            function render(cids) {
-                var data = api.resolve(cids, true);
-                // extract single object if length === 1
-                data = data.length === 1 ? data[0] : data;
-                // disable visible buttons
-                toolbarView.disableButtons();
-                // draw toolbar
-                var $toolbar = toolbarView.createToolbar(),
-                    baton = ext.Baton({ $el: $toolbar, data: data, app: app }),
-                    ret = ext.point('io.ox/notes/classic-toolbar').invoke('draw', $toolbar, baton);
-                $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
-            }
-
-            app.updateToolbar = _.debounce(function (list) {
-                if (!list) return;
-                var callback = _.lfo(render);
-                callback.call(this, list);
-            }, 10);
+            // list is array of object (with id and folder_id)
+            app.updateToolbar = function (list) {
+                var options = { data: list.map(_.cid), folder_id: this.folder.get(), app: this };
+                toolbarView.setSelection(options.data, function () {
+                    options.data = api.resolve(list, true);
+                    return options;
+                });
+            };
         }
     });
 

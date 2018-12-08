@@ -13,113 +13,82 @@
 
 define('io.ox/tasks/mobile-toolbar-actions', [
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
+    'io.ox/backbone/views/toolbar',
+    'io.ox/backbone/views/actions/mobile',
     'io.ox/tasks/api',
-    'gettext!io.ox/tasks'
-], function (ext, links, api, gt) {
+    'gettext!io.ox/tasks',
+    'io.ox/tasks/actions'
+], function (ext, ToolbarView, mobile, api, gt) {
 
     'use strict';
 
-    // define links for each page
+    var meta = {
+        'create': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('New'),
+            icon: 'fa fa-plus',
+            steady: true,
+            ref: 'io.ox/tasks/actions/create'
+        },
+        'edit': {
+            prio: 'hi',
+            mobile: 'hi',
+            icon: 'fa fa-pencil',
+            title: gt('Edit'),
+            ref: 'io.ox/tasks/actions/edit',
+            steady: true
+        },
+        'delete': {
+            prio: 'hi',
+            mobile: 'hi',
+            icon: 'fa fa-trash-o',
+            title: gt('Delete'),
+            ref: 'io.ox/tasks/actions/delete',
+            steady: true
+        },
+        'done': {
+            prio: 'hi',
+            mobile: 'hi',
+            icon: 'fa fa-check',
+            title: gt('Mark as done'),
+            ref: 'io.ox/tasks/actions/done',
+            steady: true
+        },
+        'undone': {
+            prio: 'hi',
+            mobile: 'lo',
+            title: gt('Mark as undone'),
+            ref: 'io.ox/tasks/actions/undone'
+        },
+        'confirm': {
+            prio: 'hi',
+            mobile: 'lo',
+            title: gt('Change confirmation status'),
+            ref: 'io.ox/tasks/actions/confirm'
+        },
+        'move': {
+            prio: 'hi',
+            mobile: 'lo',
+            title: gt('Move'),
+            ref: 'io.ox/tasks/actions/move'
+        },
+        'export': {
+            prio: 'hi',
+            mobile: 'lo',
+            title: gt('Export'),
+            ref: 'io.ox/tasks/actions/export'
+        }
+    };
 
-    var pointListViewActions = ext.point('io.ox/tasks/mobile/toolbar/actions'),
-        pointListView = ext.point('io.ox/tasks/mobile/toolbar/listView'),
-        pointDetailView = ext.point('io.ox/tasks/mobile/toolbar/detailView'),
-        actions = ext.point('io.ox/tasks/mobile/actions'),
-        meta = {
-            'create': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('New'),
-                icon: 'fa fa-plus',
-                drawDisabled: true,
-                ref: 'io.ox/tasks/actions/create',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
-            },
-            'edit': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Edit'),
-                ref: 'io.ox/tasks/actions/edit',
-                drawDisabled: true
-            },
-            'delete': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Delete'),
-                drawDisabled: true,
-                ref: 'io.ox/tasks/actions/delete'
-            },
-            'done': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Mark as done'),
-                drawDisabled: true,
-                ref: 'io.ox/tasks/actions/done'
-            },
-            'undone': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Mark as undone'),
-                drawDisabled: true,
-                ref: 'io.ox/tasks/actions/undone'
-            },
-            'confirm': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Change confirmation status'),
-                drawDisabled: true,
-                ref: 'io.ox/tasks/actions/confirm'
-            },
-            'move': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Move'),
-                ref: 'io.ox/tasks/actions/move'
-            },
-            'export': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Move'),
-                ref: 'io.ox/tasks/actions/export'
-            }
-        };
+    var points = {
+        listView: 'io.ox/tasks/mobile/toolbar/listView',
+        detailView: 'io.ox/tasks/mobile/toolbar/detailView'
+    };
 
-    function addAction(point, ids) {
-        var index = 0;
-        _(ids).each(function (id) {
-            var extension = meta[id];
-            extension.id = id;
-            extension.index = (index += 100);
-            point.extend(new links.Link(extension));
-        });
-        index = 0;
-    }
-
-    addAction(pointListViewActions, ['create']);
-
-    pointListView.extend(new links.InlineLinks({
-        attributes: {},
-        classes: '',
-        index: 100,
-        id: 'toolbar-links',
-        ref: 'io.ox/tasks/mobile/toolbar/actions'
-    }));
-
-    addAction(actions, ['done', 'undone', 'confirm', 'edit', 'delete', 'confirm', 'move']);
-
-    // add submenu as text link to toolbar in multiselect
-    pointDetailView.extend(new links.Dropdown({
-        index: 50,
-        label: $('<span>').text(
-            //#. Will be used as menu heading in tasks module which then show the actions which can be performed with a task like "mark as done"
-            gt('Actions')
-        ),
-        // don't draw the caret icon beside menu link
-        noCaret: true,
-        drawDisabled: true,
-        ref: 'io.ox/tasks/mobile/actions'
-    }));
+    mobile.addAction(points.listView, meta, ['create']);
+    mobile.addAction(points.detailView, meta, ['edit', 'done', 'delete', 'undone', 'confirm', 'move', 'export']);
+    mobile.createToolbarExtensions(points);
 
     var updateToolbar = _.debounce(function (task) {
         var self = this;
@@ -131,24 +100,6 @@ define('io.ox/tasks/mobile-toolbar-actions', [
             self.pages.getToolbar('detailView').setBaton(baton);
         });
     }, 50);
-
-    // multi select toolbar links need some attention
-    // in case nothing is selected disabled buttons
-    // This should be done via our Link concept, but I
-    // didn't get it running. Feel free to refactor this
-    // to a nicer solutioun
-    /*pointListViewMultiSelect.extend({
-        id: 'update-button-states',
-        index: 10000,
-        draw: function (baton) {
-            // hmmmm, should work for this easy case
-            if (baton.data.length === 0) {
-                $('.mobile-toolbar-action', this).addClass('ui-disabled');
-            } else {
-                $('.mobile-toolbar-action', this).removeClass('ui-disabled');
-            }
-        }
-    });*/
 
     // some mediator extensions
     // register update function and introduce toolbar updating

@@ -352,7 +352,7 @@ define('io.ox/mail/util', [
                 subject = subject.replace(/\[[^[]*\]\s*/g, '');
             }
 
-            return keepPrefix ? subject : subject.replace(/^((re|ref|aw|fwd|wg|rv|tr):\s?)+/i, '');
+            return keepPrefix ? subject : subject.replace(/^((re|ref|aw|fwd|wg|rv|tr)(\[\d+\])?:\s?)+/i, '');
         },
 
         getPriority: function (data) {

@@ -18,7 +18,6 @@ define('io.ox/core/desktop', [
     'io.ox/core/event',
     'io.ox/backbone/views/window',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
     'io.ox/core/cache',
     'io.ox/core/notifications',
     'io.ox/core/upsell',
@@ -29,7 +28,7 @@ define('io.ox/core/desktop', [
     'io.ox/core/main/icons',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Events, FloatingWindow, ext, links, cache, notifications, upsell, adaptiveLoader, folderAPI, apps, findFactory, icons, coreSettings, gt) {
+], function (Events, FloatingWindow, ext, cache, notifications, upsell, adaptiveLoader, folderAPI, apps, findFactory, icons, coreSettings, gt) {
 
     'use strict';
 
@@ -279,11 +278,15 @@ define('io.ox/core/desktop', [
                     },
 
                     getData: function () {
-
                         if (folder === null) return $.Deferred().resolve({});
-
                         var model = folderAPI.pool.getModel(folder);
                         return $.Deferred().resolve(model.toJSON());
+                    },
+
+                    // getData() became internally sync over time, but it kept its async return value
+                    // getModel() is sync; return undefined if model doesn't exist (yet)
+                    getModel: function () {
+                        return folderAPI.pool.getModel(folder);
                     },
 
                     can: function (action) {
@@ -1734,18 +1737,8 @@ define('io.ox/core/desktop', [
             }
 
             // fix height/position/appearance
-            if (opt.chromeless) {
+            if (opt.chromeless) win.setChromeless(true);
 
-                win.setChromeless(true);
-
-            } else if (opt.name) {
-
-                // toolbar
-                ext.point(opt.name + '/toolbar').extend(new links.ToolbarLinks({
-                    id: 'links',
-                    ref: opt.name + '/links/toolbar'
-                }));
-            }
             // inc
             guid++;
 

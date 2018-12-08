@@ -18,9 +18,10 @@ define('io.ox/tasks/actions/delete', [
 
     'use strict';
 
-    return function (baton) {
-        var data = baton.data,
-            numberOfTasks = data.length || 1;
+    return function (data) {
+
+        var numberOfTasks = data.length;
+
         ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
             // build popup
             var popup = new dialogs.ModalDialog({ async: true })

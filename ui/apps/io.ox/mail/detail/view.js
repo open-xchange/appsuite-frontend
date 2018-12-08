@@ -15,20 +15,21 @@
 
 define('io.ox/mail/detail/view', [
     'io.ox/backbone/views/disposable',
+    'io.ox/backbone/views/toolbar',
     'io.ox/mail/common-extensions',
     'io.ox/core/extensions',
     'io.ox/mail/api',
     'io.ox/mail/util',
     'io.ox/core/api/collection-pool',
     'io.ox/mail/detail/content',
-    'io.ox/core/extPatterns/links',
     'io.ox/core/a11y',
+    'io.ox/core/capabilities',
     'gettext!io.ox/mail',
     'less!io.ox/mail/detail/content',
     'less!io.ox/mail/detail/style',
     'less!io.ox/mail/style',
     'io.ox/mail/actions'
-], function (DisposableView, extensions, ext, api, util, Pool, content, links, a11y, gt, contentStyle) {
+], function (DisposableView, ToolbarView, extensions, ext, api, util, Pool, content, a11y, capabilities, gt, contentStyle) {
 
     'use strict';
 
@@ -110,23 +111,6 @@ define('io.ox/mail/detail/view', [
             });
         }
     });
-
-    /* move the actions menu to the top in sidepanel on smartphones */
-    var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header/row5';
-
-    ext.point(extPoint).extend(new links.InlineLinks({
-        id: 'actions',
-        index: _.device('smartphone') ? 50 : INDEX_header += 100,
-        classes: _.device('smartphone') ? '' : 'actions',
-        label: gt('Actions'),
-        ariaLabel: gt('Actions'),
-        icon: _.device('smartphone') ? undefined : 'fa fa-bars',
-        noCaret: true,
-        // lfo breaks thread toolbars under certan conditions see ( bug 50939)
-        noLfo: true,
-        ref: 'io.ox/mail/links/inline',
-        smart: true
-    }));
 
     //
     // Header
@@ -290,6 +274,18 @@ define('io.ox/mail/detail/view', [
             }
         }
     );
+
+    //
+    // Row 5
+    //
+    ext.point('io.ox/mail/detail/header/row5').extend({
+        id: 'inline-links',
+        index: 100,
+        draw: function (baton) {
+            var toolbarView = new ToolbarView({ el: this[0], point: 'io.ox/mail/links/inline', inline: true });
+            toolbarView.setSelection([_.cid(baton.data)], { data: baton.data });
+        }
+    });
 
     ext.point('io.ox/mail/detail').extend({
         id: 'notifications',
@@ -543,26 +539,14 @@ define('io.ox/mail/detail/view', [
         }
     });
 
-
     ext.point('io.ox/mail/detail/attachments').extend({
         id: 'attachment-list',
         index: 200,
         draw: function (baton) {
             if (baton.attachments.length === 0) return;
-            // reuse existing view, to not duplicate event listeners
-            if (baton.view.attachmentView) {
-                baton.view.attachmentView.$header.empty();
-                this.append(baton.view.attachmentView.render());
-                baton.view.attachmentView.renderInlineLinks();
-            } else {
-                baton.view.attachmentView = extensions.attachmentList.call(this, baton);
-                baton.view.listenTo(baton.view.attachmentView, 'dispose', function () {
-                    delete baton.view.attachmentView;
-                });
-            }
+            extensions.attachmentList.call(this, baton);
         }
     });
-
 
     var pool = Pool.create('mail');
 
@@ -724,7 +708,8 @@ define('io.ox/mail/detail/view', [
             this.onChangeSubject();
             this.onChangeAttachments();
             this.onChangeContent();
-            if (data && (data.security || data.security_info)) this.onChangeSecurity();
+
+            if (capabilities.has('guard') && data && (data.security || data.security_info)) this.onChangeSecurity();
 
             // process unseen flag
             if (unseen) {

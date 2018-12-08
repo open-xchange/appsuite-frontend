@@ -15,8 +15,7 @@
 define('io.ox/contacts/edit/view-form', [
     'io.ox/contacts/model',
     'io.ox/backbone/views',
-    'io.ox/core/extPatterns/actions',
-    'io.ox/core/extPatterns/links',
+    'io.ox/backbone/views/actions/util',
     'io.ox/contacts/widgets/pictureUpload',
     'io.ox/contacts/api',
     'io.ox/contacts/util',
@@ -29,7 +28,7 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/core/folder/util',
     'settings!io.ox/core',
     'less!io.ox/contacts/edit/style'
-], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt, folderApi, folderUtils, settings) {
+], function (model, views, actionsUtil, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt, folderApi, folderUtils, settings) {
 
     'use strict';
 
@@ -255,7 +254,7 @@ define('io.ox/contacts/edit/view-form', [
                 this.append($('<button type="button" class="btn btn-primary save" data-action="save">')
                     .text(gt('Save'))
                     .on('click', function () {
-                        actions.invoke(ref + '/actions/edit/save', this, baton);
+                        actionsUtil.invoke(ref + '/actions/edit/save', baton);
                     })
                 );
 
@@ -269,7 +268,7 @@ define('io.ox/contacts/edit/view-form', [
                 this.append($('<button type="button" class="btn btn-default discard" data-action="discard">')
                     .text(gt('Discard'))
                     .on('click', function () {
-                        actions.invoke(ref + '/actions/edit/discard', this, baton);
+                        actionsUtil.invoke(ref + '/actions/edit/discard', baton);
                     })
                 );
             }
@@ -482,8 +481,10 @@ define('io.ox/contacts/edit/view-form', [
             }
         });
 
+        var Action = actionsUtil.Action;
+
         // Edit Actions
-        new actions.Action(ref + '/actions/edit/save', {
+        new Action(ref + '/actions/edit/save', {
             action: function (baton) {
 
                 // check if attachments are changed
@@ -506,13 +507,13 @@ define('io.ox/contacts/edit/view-form', [
             }
         });
 
-        new actions.Action(ref + '/actions/edit/discard', {
+        new Action(ref + '/actions/edit/discard', {
             action: function () {
                 $(this).trigger('controller:quit');
             }
         });
 
-        new actions.Action(ref + '/actions/edit/reset-image', {
+        new Action(ref + '/actions/edit/reset-image', {
             action: function (baton) {
                 baton.model.set('image1', '', { validate: true });
                 var imageUrl = api.getFallbackImage();
