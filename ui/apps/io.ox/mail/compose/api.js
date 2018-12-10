@@ -417,7 +417,7 @@ define('io.ox/mail/compose/api', [
             var obj;
             return api.space.get(space.id).then(function (data) {
                 // TODO: from should be wrapped like cc/bcc
-                data.from = [data.from];
+                if (data.from) data.from = [data.from];
                 obj = _.extend({}, data);
                 // TOOD: should be an option like 'vcard' in space.add request
                 return opt.original ? api.space.attachments.original(data.id) : $.when([]);
