@@ -683,7 +683,7 @@ define('io.ox/mail/compose/extensions', [
                     self.trigger('aria-live-update', gt('Added %s to attachments.', _(e.target.files).map(function (file) { return file.name; }).join(', ')));
                     var models = _(e.target.files).map(function (file) {
                         var m = new Attachments.Model({ uploaded: 0 });
-                        composeApi.space.attachments.add(model.get('id'), file, 'attachment').progress(function (e) {
+                        composeApi.space.attachments.add(model.get('id'), { file: file }, 'attachment').progress(function (e) {
                             m.set('uploaded', e.loaded / e.total);
                         }).then(function success(result) {
                             var data = result.data;

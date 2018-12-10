@@ -509,12 +509,14 @@ define('io.ox/mail/compose/api', [
                 url: ox.apiRoot + '/mail/compose/' + space + '/attachments/vcard'
             });
         },
-        add: function (space, file, type) {
+        add: function (space, data, type) {
             console.log('> ATTACHMENTS: ' + space);
 
             var formData = new FormData();
             formData.append('contentDisposition', type || 'attachment');
-            formData.append('file', file);
+            _(data).each(function (value, key) {
+                formData.append(key, value);
+            });
 
             return http.UPLOAD({
                 url: ox.apiRoot + '/mail/compose/' + space + '/attachments',
