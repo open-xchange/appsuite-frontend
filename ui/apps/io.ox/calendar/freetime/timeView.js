@@ -539,7 +539,14 @@ define('io.ox/calendar/freetime/timeView', [
         },
 
         renderBody: function () {
-            if (this.model.get('attendees').length !== _(this.model.get('timeSlots')).keys().length) {
+            var missingAppointmentInfo = false,
+                self = this;
+
+            _(this.model.get('attendees').toJSON()).each(function (attendee) {
+                if (!missingAppointmentInfo && !_(self.model.get('timeSlots')).has([attendee.entity || attendee.uri])) missingAppointmentInfo = true;
+            });
+
+            if (missingAppointmentInfo) {
                 this.getAppointmentsInstant();
             } else {
                 var baton = new ext.Baton({ view: this, model: this.model });

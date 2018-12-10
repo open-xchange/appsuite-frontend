@@ -1276,6 +1276,7 @@ define('io.ox/calendar/util', [
                 if (user.description) attendee.comment = user.description;
                 attendee.entity = user.id;
                 attendee.resource = user;
+                if (user.mailaddress) attendee.email = user.mailaddress;
             }
 
             if (attendee.cuType === 'GROUP') {

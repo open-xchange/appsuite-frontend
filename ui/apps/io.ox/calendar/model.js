@@ -36,7 +36,7 @@ define('io.ox/calendar/model', [
 
     var // be careful with the add method. If the option resolveGroups is present it changes from synchronous to asynchronous (must get the proper user data first)
         AttendeeCollection = Backbone.Collection.extend({
-            // if an email is present distinguisch the attendees by email address (provides support for attendee with multiple mail addresses).
+            // if an email is present distinguish the attendees by email address (provides support for attendee with multiple mail addresses).
             // Some attendee types don't have an email address (groups and resources), but have entity numbers. Use those as id to prevent duplicates
             modelId: function (attrs) {
                 return attrs.email || attrs.entity;
