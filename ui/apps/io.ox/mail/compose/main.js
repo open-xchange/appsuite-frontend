@@ -252,29 +252,9 @@ define('io.ox/mail/compose/main', [
 
         getApp: createInstance,
 
-        reuse: function (type, data) {
-            // disable reuse if at least one app is sending (depends on type)
-            var unblocked = function (sendtype) {
-                return blocked[sendtype] === undefined || blocked[sendtype] <= 0;
-            };
-            if (type === 'reply' && unblocked(composeAPI.SENDTYPE.REPLY)) {
-                return ox.ui.App.reuse('io.ox/mail:reply.' + _.cid(data));
-            }
-            if (type === 'replyall' && unblocked(composeAPI.SENDTYPE.REPLY)) {
-                return ox.ui.App.reuse('io.ox/mail:replyall.' + _.cid(data));
-            }
-            if (type === 'forward' && unblocked(composeAPI.SENDTYPE.FORWARD)) {
-                var cid;
-                if (_.isArray(data)) {
-                    cid = _(data).map(function (o) { return _.cid(o); }).join();
-                } else {
-                    cid = _.cid(data);
-                }
-                return ox.ui.App.reuse('io.ox/mail:forward.' + cid);
-            }
-            if (type === 'edit' && unblocked(composeAPI.SENDTYPE.DRAFT)) {
-                return ox.ui.App.reuse('io.ox/mail:edit.' + _.cid(data));
-            }
+        reuse: function () {
+            // disable reuse since a floating window is never reused
+            return false;
         }
     };
 });
