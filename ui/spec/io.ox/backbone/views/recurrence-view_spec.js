@@ -213,7 +213,7 @@ define([
 
             it('parses a yearly rrule by date', function () {
                 model = new models.Model({
-                    rrule: 'FREQ=YEARLY;BYMONTH=7;BYMONTHDAY=3;UNTIL=20181003T180000Z',
+                    rrule: 'FREQ=YEARLY;BYMONTH=7;BYMONTHDAY=3;UNTIL=20181003T235959Z',
                     startDate: { value: '20161214T010000', tzid: 'Europe/Berlin' }
                 });
                 view = new RecurrenceView({
@@ -224,7 +224,7 @@ define([
                 expect(view.model.get('interval')).to.equal(1);
                 expect(view.model.get('day_in_month')).to.equal(3);
                 expect(view.model.get('month')).to.equal(6);
-                expect(view.model.get('until')).to.equal(1538589600000);
+                expect(view.model.get('until')).to.equal(1538607599000);
             });
 
             it('parses a monthly rrule by weekday', function () {
@@ -289,7 +289,7 @@ define([
 
             it('for recurrence endings', function () {
                 view.model.set('until', 1482584709550); // Saturday, December 24, 2016 2:05 PM
-                model.get('rrule').should.equal('FREQ=DAILY;UNTIL=20161224T130509Z');
+                model.get('rrule').should.equal('FREQ=DAILY;UNTIL=20161224T235959Z');
 
                 view.model.unset('until');
                 view.model.set('occurrences', 10);

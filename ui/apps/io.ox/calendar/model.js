@@ -171,7 +171,7 @@ define('io.ox/calendar/model', [
                 default:
             }
             if (this.get('interval') > 1) args.push('INTERVAL=' + this.get('interval'));
-            if (this.get('until')) args.push('UNTIL=' + moment(this.get('until')).utc().format(util.ZULU_FORMAT));
+            if (this.get('until')) args.push('UNTIL=' + moment(this.get('until')).utc().endOf('day').format(util.ZULU_FORMAT));
             if (this.get('occurrences')) args.push('COUNT=' + this.get('occurrences'));
             if (args.length > 0) this.model.set('rrule', args.join(';'));
             else this.model.set('rrule', null);
@@ -233,7 +233,7 @@ define('io.ox/calendar/model', [
                     changes.recurrence_type = 0;
             }
             if (rrule.count) changes.occurrences = parseInt(rrule.count, 10) || 1;
-            if (rrule.UNTIL) changes.until = moment(rrule.UNTIL).valueOf() || 0;
+            if (rrule.UNTIL) changes.until = moment(rrule.UNTIL).subtract(date.hour(), 'hours').valueOf() || 0;
             changes.interval = parseInt(rrule.interval, 10) || 1;
             this.set(changes);
         }
