@@ -41,14 +41,6 @@ define('io.ox/mail/compose/config', [
             // getSignatureById
             // getSignatures
             _.extend(this, signatureUtil.model, this);
-
-            // map 'alternative' to editor
-            if (this.get('preferredEditorMode') === 'alternative') {
-                this.set('editorMode', 'html', { silent: true });
-                if (this.get('content_type') === 'text/plain') {
-                    this.set('editorMode', 'text', { silent: true });
-                }
-            }
         },
 
         dirty: function (/*flag*/) {
