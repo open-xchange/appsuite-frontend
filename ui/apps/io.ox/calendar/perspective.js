@@ -39,8 +39,8 @@ define('io.ox/calendar/perspective', [
             };
             if (_.device('touch')) {
                 _.extend(events, {
-                    'swipeleft': 'onPrevious',
-                    'swiperight': 'onNext'
+                    'swipeleft': 'onNext',
+                    'swiperight': 'onPrevious'
                 });
             }
             return events;
