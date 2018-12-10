@@ -359,23 +359,30 @@ define('io.ox/mail/compose/model', [
             this.get('attachments').add(files);
         },
 
-        sync: function (method, model, options) {
-            var meta = model.get('meta'),
+        create: function () {
+            if (this.has('id')) return composeAPI.space.get(this.get('id'));
+            var meta = this.get('meta'),
                 opt = {};
-            switch (method) {
-                case 'create':
-                    opt.vcard = settings.get('appendVcard', false);
-                    opt.original = /(reply|replayall)/.test(meta.type);
-                    return composeAPI.spaced(meta, opt);//.then(options.success, options.error);
-                case 'read':
-                    return composeAPI.space.get(model.get('id')).then(options.success, options.error);
-                case 'update':
-                    return composeAPI.space.update(model.get('id'), model.toJSON()).then(options.success, options.error);
-                case 'delete':
-                    return composeAPI.space.remove(model.get('id')).then(options.success, options.error);
-                default:
-                    return $.when(model);
-            }
+            opt.vcard = /(new|reply|replayall|forward|resend)/.test(meta.type) && settings.get('appendVcard', false);
+            opt.original = /(reply|replayall)/.test(meta.type);
+            return composeAPI.spaced(meta, opt).then(function (data) {
+                if (!this.get('attachments') || !this.get('attachments').length) return data;
+
+                return $.when(this.get('attachments').map(function (attachment) {
+                    return composeAPI.space.attachments.add(data.id, attachment);
+                })).then(function (attachments) {
+                    data.attachments = (data.attachments || []).concat(attachments);
+                    return data;
+                });
+            }.bind(this));
+        },
+
+        save: function () {
+            return composeAPI.space.update(this.get('id'), this.toJSON());
+        },
+
+        destroy: function () {
+            return composeAPI.space.remove(this.get('id'));
         },
 
         toJSON: function () {
