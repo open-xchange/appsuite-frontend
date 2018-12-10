@@ -195,20 +195,22 @@ define('io.ox/mail/compose/main', [
 
         app.failSave = function () {
             if (!app.view) return;
-            var failSaveData = app.model.getFailSave();
-            return failSaveData ? _.extend({ module: 'io.ox/mail/compose' }, failSaveData) : false;
+            var model = app.model;
+            if (!model) return;
+            return {
+                module: 'io.ox/mail/compose',
+                point: model.get('id'),
+                description: gt('Mail') + ': ' + (model.get('subject') || gt('No subject'))
+            };
         };
 
         app.failRestore = function (point) {
-            if (point.restoreById || !point.mode) {
-                delete point.restoreById;
-                return compose('edit')(point);
-            }
-            point.initial = false;
-            // special flag/handling for 'replace' cause we want
-            // to keep the attachments that will be removed otherwise
-            if (/(reply|replyall|forward)/.test(point.mode)) point.restored = true;
-            return compose(point.mode)(point);
+            return require(['io.ox/mail/compose/bundle']).then(function () {
+                return require(['io.ox/mail/compose/model']);
+            }).then(function (MailComposeModel) {
+                var model = new MailComposeModel({ id: point });
+                return app.open({}, model);
+            });
         };
 
         app.getContextualHelp = function () {
