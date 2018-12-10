@@ -19,8 +19,6 @@ define('io.ox/mail/compose/config', [
 
     'use strict';
 
-    console.log(settings);
-
     return Backbone.Model.extend({
 
         defaults: function () {
