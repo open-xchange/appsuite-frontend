@@ -129,7 +129,7 @@ define('io.ox/core/boot/load', [
     // we need to get the default all/threadedAll request out as soon as possible
     function prefetch(mailSettings) {
 
-        if (!capabilities.has('webmail')) return;
+        if (!capabilities.has('webmail') || !mailSettings.get('features/prefetchOnBoot', true)) return;
 
         var columns = http.defaultColumns.mail;
 
