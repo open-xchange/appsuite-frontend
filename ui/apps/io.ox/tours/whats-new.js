@@ -79,7 +79,7 @@ define('io.ox/tours/whats-new', [
                         return;
                     }
                     ox.launch('io.ox/mail/main').done(function () {
-                        ox.registry.call('mail-compose', 'compose').then(function (result) {
+                        ox.registry.call('mail-compose', 'open').then(function (result) {
                             composeApp = result.app;
                         });
                     });

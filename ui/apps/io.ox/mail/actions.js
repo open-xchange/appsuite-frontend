@@ -47,8 +47,8 @@ define('io.ox/mail/actions', [
         requires: function () {
             return !isGuest();
         },
-        action: function (baton) {
-            ox.registry.call('mail-compose', 'compose', { folder_id: baton.app.folder.get() });
+        action: function () {
+            ox.registry.call('mail-compose', 'open');
         }
     });
 
@@ -93,7 +93,7 @@ define('io.ox/mail/actions', [
             var data = baton.first();
             require(['io.ox/mail/compose/checks'], function (checks) {
                 checks.replyToMailingList(_.cid(data), mode, data).then(function (mode) {
-                    ox.registry.call('mail-compose', mode, data);
+                    ox.registry.call('mail-compose', 'open', { meta: { type: mode, originalFolderId: data.folder_id, originalId: data.id } });
                 });
             });
         };
@@ -147,7 +147,7 @@ define('io.ox/mail/actions', [
                 data = baton.first();
             }
 
-            ox.registry.call('mail-compose', 'forward', data);
+            ox.registry.call('mail-compose', 'open', { meta: { type: 'forward', originalFolderId: data.folder_id, originalId: data.id } });
         }
     });
 
@@ -166,15 +166,6 @@ define('io.ox/mail/actions', [
         return data && isDraftMail(data);
     };
 
-    var setEditorMode = function (settings, data) {
-        // Open Drafts in HTML mode if content type is html even if text-editor is default
-        if (data.content_type === 'text/html' && settings.get('messageFormat', 'html') === 'text') {
-            data.preferredEditorMode = 'html';
-            data.editorMode = 'html';
-        }
-        return data;
-    };
-
     new Action('io.ox/mail/actions/edit', {
         requires: validDraft,
         action: function (baton) {
@@ -186,9 +177,8 @@ define('io.ox/mail/actions', [
             // reuse open editor
             if (app) return app.launch();
 
-            require(['settings!io.ox/mail'], function (settings) {
-                data = setEditorMode(settings, data);
-                ox.registry.call('mail-compose', 'edit', data);
+            ox.registry.call('mail-compose', 'open', {
+                meta: { type: 'edit', originalFolderId: data.folder_id, originalId: data.id }
             });
         }
     });
@@ -196,20 +186,16 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/edit-copy', {
         requires: validDraft,
         action: function (baton) {
-            var data = _.extend({}, baton.first());
+            var data = baton.first();
 
-            api.copy(data, data.folder_id).done(function (list) {
-                api.refresh();
-                require(['settings!io.ox/mail'], function (settings) {
-                    data = setEditorMode(settings, _.extend(data, list[0]));
-                    ox.registry.call('mail-compose', 'edit', data).done(function (window) {
-                        var model = window.app.model;
-                        //#. If the user selects 'copy of' in the drafts folder, the subject of the email is prefixed with [Copy].
-                        //#. Please make sure that this is a prefix in every translation since it will be removed when the mail is sent.
-                        //#. %1$s the original subject of the mail
-                        model.set('subject', gt('[Copy] %1$s', model.get('subject')));
-                    });
-                });
+            ox.registry.call('mail-compose', 'open', {
+                meta: { type: 'copy', originalFolderId: data.folder_id, originalId: data.id }
+            }).done(function (window) {
+                var model = window.app.model;
+                //#. If the user selects 'copy of' in the drafts folder, the subject of the email is prefixed with [Copy].
+                //#. Please make sure that this is a prefix in every translation since it will be removed when the mail is sent.
+                //#. %1$s the original subject of the mail
+                model.set('subject', gt('[Copy] %1$s', model.get('subject')));
             });
         }
     });
@@ -595,7 +581,7 @@ define('io.ox/mail/actions', [
                             return addr[1];
                         });
 
-                        ox.registry.call('mail-compose', 'compose', { folder_id: data.folder_id, to: filtered });
+                        ox.registry.call('mail-compose', 'open', { to: filtered });
                     });
                 });
             });

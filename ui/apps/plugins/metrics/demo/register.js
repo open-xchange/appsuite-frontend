@@ -204,7 +204,7 @@ define('plugins/metrics/demo/register', [
                         setTimeout(done, 500);
                     }.bind(this));
 
-                    ox.registry.call('mail-compose', 'compose');
+                    ox.registry.call('mail-compose', 'open');
                 });
 
                 this.step('Enter subject and first 3 letters of recipient', function (done) {
@@ -257,7 +257,7 @@ define('plugins/metrics/demo/register', [
                         done();
                     }.bind(this));
 
-                    ox.registry.call('mail-compose', 'compose');
+                    ox.registry.call('mail-compose', 'open');
                 });
 
                 this.step('Add attachment', function (done) {

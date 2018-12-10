@@ -1015,7 +1015,8 @@ define('io.ox/mail/main', [
                             isThread = this.collection.get(cid).get('threadSize') > 1;
 
                         if (isDraftFolder) {
-                            ox.registry.call('mail-compose', 'edit', _.cid(cid));
+                            var data = _.cid(cid);
+                            ox.registry.call('mail-compose', 'open', { meta: { type: 'copy', originalFolderId: data.folder_id, originalId: data.id } });
                         } else if (isThread) {
                             app.showThreadOverview(cid);
                             app.pages.changePage('threadView');
@@ -2067,7 +2068,7 @@ define('io.ox/mail/main', [
             find: capabilities.has('search')
         });
 
-        if (_.url.hash('mailto')) ox.registry.call('mail-compose', 'compose');
+        if (_.url.hash('mailto')) ox.registry.call('mail-compose', 'open');
 
         app.setWindow(win);
         app.settings = settings;

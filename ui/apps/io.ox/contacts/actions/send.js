@@ -56,7 +56,7 @@ define('io.ox/contacts/actions/send', [
     return function (list) {
         return resolve(list).done(function (recipients) {
             // open compose
-            ox.registry.call('mail-compose', 'compose', { to: recipients });
+            ox.registry.call('mail-compose', 'open', { to: recipients });
         });
     };
 });

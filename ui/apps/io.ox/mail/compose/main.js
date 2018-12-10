@@ -23,20 +23,43 @@ define('io.ox/mail/compose/main', [
 
     'use strict';
 
-    var blocked = {};
-
-    function keepData(obj) {
-        return /(compose|edit)/.test(obj.mode) ||
-               // forwarding muliple messages
-               /(forward)/.test(obj.mode) && !obj.id ||
-               obj.restored;
-    }
-
-    // formerly part of 'compose'
-    ext.point('io.ox/mail/compose/init').extend({
-        id: 'from',
+    ext.point('io.ox/mail/compose/boot').extend({
+        id: 'bundle',
         index: 100,
-        init: function () {
+        perform: function () {
+            return require(['io.ox/mail/compose/bundle']);
+        }
+    }, {
+        id: 'compose-model',
+        index: 200,
+        perform: function (baton) {
+            var self = this;
+
+            // already has a model. e.g. when opened via restorepoint
+            if (baton.model) {
+                this.model = baton.model;
+                return this.model.initialized;
+            }
+
+            return require(['io.ox/mail/compose/model']).then(function (MailComposeModel) {
+                self.model = baton.model = new MailComposeModel(baton.data.obj);
+                return self.model.initialized;
+            });
+        }
+    }, {
+        id: 'compose-view',
+        index: 300,
+        perform: function (baton) {
+            var self = this;
+            return require(['io.ox/mail/compose/config', 'io.ox/mail/compose/view']).then(function (MailComposeConfig, MailComposeView) {
+                self.config = new MailComposeConfig({ app: self });
+                self.view = baton.view = new MailComposeView({ app: self, model: self.model, config: self.config });
+            });
+        }
+    }, {
+        id: 'fix-from',
+        index: 400,
+        perform: function () {
             var model = this.model;
 
             if (model.get('from') && model.get('from').length) return;
@@ -54,13 +77,14 @@ define('io.ox/mail/compose/main', [
             });
         }
     }, {
-        id: 'displayname',
-        index: 200,
-        init: function () {
+        id: 'fix-displayname',
+        index: 500,
+        perform: function () {
             var model = this.model,
                 config = this.config;
 
             // TODO: check senderView scenarios
+            // TODO listeners never gets removed
             updateDisplayName();
             config.on('change:sendDisplayName', updateDisplayName);
             ox.on('change:customDisplayNames', updateDisplayName);
@@ -72,38 +96,65 @@ define('io.ox/mail/compose/main', [
                 model.set('from', [mailUtil.getSender(from[0], config.get('sendDisplayName'))]);
             }
         }
-    });
-
-    // formerly part of setMail
-    ext.point('io.ox/mail/compose/set').extend({
+    }, {
+        id: 'render-view',
+        index: 600,
+        perform: function (baton) {
+            var win = baton.data.win;
+            win.nodes.main.addClass('scrollable').append(this.view.render().$el);
+        }
+    }, {
         id: 'editor-mode',
-        index: 100,
-        init: function () {
-            if (this.config.get('editorMode') !== 'alternative') return;
+        index: 700,
+        perform: function () {
+            var config = this.config;
+
+            // TODO this was moved from the compose function. Need to evaluate, how this works together with the above code
+            if (config.get('editorMode') !== 'alternative') return;
             var mode = this.model.get('contentType') === 'text/plain' ? 'text' : 'html';
-            this.config.set('editorMode', mode, { silent: true });
+            config.set('editorMode', mode, { silent: true });
         }
     }, {
         id: 'auto-bcc',
-        index: 200,
-        init: function () {
+        index: 800,
+        perform: function () {
             if (!settings.get('autobcc') || this.config.get('mode') === 'edit') return;
             this.model.set('bcc', mailUtil.parseRecipients(settings.get('autobcc'), { localpart: false }));
         }
     }, {
         id: 'auto-discard',
-        index: 200,
-        init: function () {
+        index: 900,
+        perform: function () {
             // disable auto remove on discard for draft mails
             this.config.set('autoDiscard', this.config.get('mode') !== 'edit');
         }
     }, {
         id: 'initial-signature',
-        index: 300,
-        init: function () {
-            this.view.signaturesLoading.done(function () {
+        index: 1000,
+        perform: function () {
+            return this.view.signaturesLoading.then(function () {
                 this.config.setInitialSignature();
             }.bind(this));
+        }
+    }, {
+        id: 'set-mail',
+        index: 1100,
+        perform: function () {
+            return this.view.setMail();
+        }
+    }, {
+        id: 'finally',
+        index: 1200,
+        perform: function (baton) {
+            var win = baton.data.win;
+            // calculate right margin for to field (some languages like chinese need extra space for cc bcc fields)
+            win.nodes.main.find('.tokenfield').css('padding-right', 14 + win.nodes.main.find('.recipient-actions').width() + win.nodes.main.find('[data-extension-id="to"] .has-picker').length * 20);
+            // Set window and toolbars visible again
+            win.nodes.header.removeClass('sr-only');
+            win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0);
+            win.idle();
+            $(window).trigger('resize');  // Needed for proper initial resizing in editors
+            win.setTitle(this.model.get('subject') || gt('Compose'));
         }
     });
 
@@ -155,92 +206,37 @@ define('io.ox/mail/compose/main', [
             return 'ox.appsuite.user.sect.email.gui.create.html';
         };
 
-        function compose(type) {
+        app.open = function (obj, model) {
+            var def = $.Deferred();
+            obj = _.extend({ meta: { type: 'new' } }, obj);
 
-            return function (obj) {
+            // Set window and toolbars invisible initially
+            win.nodes.header.addClass('sr-only');
+            win.nodes.body.addClass('sr-only');
 
-                var def = $.Deferred();
-                obj = obj || {};
-
-                app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
-
-                // Set window and toolbars invisible initially
-                win.nodes.header.addClass('sr-only');
-                win.nodes.body.addClass('sr-only');
-
-                win.busy().show(function () {
-                    require(['io.ox/mail/compose/bundle']).then(function () {
-                        if (settings.get('features/fixContentType', false) && type !== 'compose' && !_.isArray(obj)) {
-                            // mitigate Bug#56496, force a get request to make sure content_type is correctly set
-                            // in most cases, this should return the mail from pool ('detail')
-                            // need circumvent caching, here, because all requests always break data again and we can
-                            // never be sure about data being correct
-                            return mailAPI.get(_.extend(_.pick(obj, 'id', 'folder_id'), { view: 'raw' }), { cache: false });
-                        }
-                        return obj;
-                    }).then(function (latestMail) {
-                        if (!_.isArray(latestMail)) latestMail.security = obj.security;  // Fix for Bug 56496 above breaking Guard.  Security lost with reload
-                        else latestMail.forEach(function (m, i) { m.security = obj[i].security; });
-
-                        obj = _.extend({ mode: type }, latestMail);
-                        return require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model', 'io.ox/mail/compose/config']);
-                    })
-                    .then(function (MailComposeView, MailComposeModel, MailComposeConfig) {
-                        var data = keepData(obj) ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type', 'security');
-                        app.config = new MailComposeConfig(data);
-                        app.model = new MailComposeModel({ meta: { type: obj.mode, originalFolderId: data.folder_id, originalId: data.id } });
-                        app.view = new MailComposeView({ app: app, model: app.model, config: app.config });
-
-                        ext.point('io.ox/mail/compose/init').invoke('init', app);
-
-                        // TODO can we simplify that?
-                        return $.when(/*app.view.fetchMail(data), */app.model.initialized);
-                    })
-                    .then(function () {
-                        win.nodes.main.addClass('scrollable').append(app.view.render().$el);
-                        ext.point('io.ox/mail/compose/set').invoke('init', app);
-
-                        return app.view.setMail();
-                    })
-                    .done(function () {
-                        // calculate right margin for to field (some languages like chinese need extra space for cc bcc fields)
-                        win.nodes.main.find('.tokenfield').css('padding-right', 14 + win.nodes.main.find('.recipient-actions').width() + win.nodes.main.find('[data-extension-id="to"] .has-picker').length * 20);
-                        // Set window and toolbars visible again
-                        win.nodes.header.removeClass('sr-only');
-                        win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0);
-                        win.idle();
-                        $(window).trigger('resize');  // Needed for proper initial resizing in editors
-                        win.setTitle(obj.subject || gt('Compose'));
-                        def.resolve({ app: app });
-                        ox.trigger('mail:' + type + ':ready', obj, app);
-                    })
-                    .fail(function (e) {
-                        require(['io.ox/core/notifications'], function (notifications) {
-                            notifications.yell(e);
-                            // makes no sense to show discard changes popup here
-                            app.model.dirty(false);
-                            app.view.removeLogoutPoint();
-                            app.quit();
-                            def.reject(e);
-                        });
+            win.busy().show(function () {
+                ext.point('io.ox/mail/compose/boot').cascade(app, { obj: obj, model: model, win: win }).then(function success() {
+                    def.resolve({ app: app });
+                    ox.trigger('mail:' + app.model.get('meta').type + ':ready', obj, app);
+                }, function fail(e) {
+                    require(['io.ox/core/notifications'], function (notifications) {
+                        notifications.yell(e);
+                        // makes no sense to show discard changes popup here
+                        app.model.dirty(false);
+                        app.view.removeLogoutPoint();
+                        app.quit();
+                        def.reject(e);
                     });
                 });
+            });
 
-                return def;
-            };
-        }
+            return def;
+        };
 
         // destroy
         app.setQuit(function () {
             if (app.view) return app.view.discard();
         });
-
-        // TODO what is the benefit of this?
-        app.compose = compose('new');
-        app.forward = compose('forward');
-        app.reply = compose('reply');
-        app.replyall = compose('replyall');
-        app.edit = compose('edit');
 
         // for debugging purposes
         window.compose = app;
