@@ -777,6 +777,7 @@ define('io.ox/calendar/week/view', [
             AppointmentContainer.prototype.initialize.call(this, opt);
 
             this.listenTo(this.model, 'change:additionalTimezones', this.updateTimezones);
+            this.listenTo(this.model, 'change:startDate', this.updateToday);
 
             this.$hiddenIndicators = $('<div class="hidden-appointment-indicator-container">');
             this.initCurrentTimeIndicator();
@@ -840,7 +841,6 @@ define('io.ox/calendar/week/view', [
 
         renderColumn: function (index) {
             var column = $('<div class="day">');
-            if (this.model.get('mode') !== 'day' && util.isToday(this.model.get('startDate').clone().add(index, 'days'))) column.addClass('today');
             if (this.model.get('mergeView')) column.attr('data-folder-cid', index);
             for (var i = 1; i <= this.getNumTimeslots(); i++) {
                 column.append(
@@ -851,6 +851,14 @@ define('io.ox/calendar/week/view', [
                 );
             }
             return column;
+        },
+
+        updateToday: function () {
+            if (this.model.get('mode') === 'day') return;
+            var start = this.model.get('startDate');
+            this.$('>> .day').each(function (index) {
+                $(this).toggleClass('today', util.isToday(start.clone().add(index, 'days')));
+            });
         },
 
         render: function () {
@@ -867,6 +875,7 @@ define('io.ox/calendar/week/view', [
                 this.$hiddenIndicators.css('right', coreUtil.getScrollBarWidth())
             );
             this.updateTimezones();
+            this.updateToday();
             pane.children().css('height', height);
             this.applyTimeScale();
             this.updateCurrentTimeIndicator();
