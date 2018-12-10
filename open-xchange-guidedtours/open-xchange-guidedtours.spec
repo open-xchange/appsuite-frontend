@@ -17,7 +17,7 @@ BuildRequires:  npm6
 BuildRequires:  nodejs >= 0.10.0
 %endif
 Version:        @OXVERSION@
-%define         ox_release 20
+%define         ox_release 21
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -60,6 +60,8 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -DkeepCache=tru
 /opt/open-xchange/etc/settings/guidedtours.properties
 
 %changelog
+* Mon Dec 10 2018 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2018-12-17 (5018)
 * Wed Nov 28 2018 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2018-12-03 (4993)
 * Mon Nov 12 2018 Marcus Klein <marcus.klein@open-xchange.com>
