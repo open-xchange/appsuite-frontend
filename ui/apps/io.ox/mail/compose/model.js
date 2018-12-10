@@ -315,13 +315,17 @@ define('io.ox/mail/compose/model', [
         },
 
         initialize: function () {
-            this.initialized = this.save().then(function (data) {
+            this.initialized = this.create().then(function (data) {
                 // fix previewUrl
                 var collection = this.get('attachments');
                 collection.space = data.id;
                 collection.reset(_(data.attachments).map(function (attachment) {
                     return new Attachments.Model(_.extend({}, attachment, { group: 'mail', space: collection.space }));
                 }));
+                // TODO can we generalize this?!?
+                data.to = (data.to || []).concat(this.get('to'));
+                data.cc = (data.cc || []).concat(this.get('cc'));
+                data.bcc = (data.bcc || []).concat(this.get('bcc'));
                 // update model and attachments collection
                 this.set(_.omit(data, 'attachments'));
             }.bind(this));
