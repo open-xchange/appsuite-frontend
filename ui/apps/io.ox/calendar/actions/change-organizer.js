@@ -17,23 +17,49 @@ define('io.ox/calendar/actions/change-organizer', [
     'io.ox/calendar/util',
     'gettext!io.ox/calendar',
     'io.ox/backbone/mini-views/common',
+    'io.ox/contacts/util',
     'less!io.ox/calendar/style'
-], function (calApi, ModalDialog, util, gt, mini) {
+], function (calApi, ModalDialog, util, gt, mini, contactsUtil) {
 
     'use strict';
 
     return {
         openDialog: function (appointmentData) {
-            var model = new Backbone.Model({ comment: '' });
+
+            if (!appointmentData) return;
+
+            var attendeeList = _(appointmentData.attendees).chain().map(function (attendee) {
+                // only internal attendees for now
+                if (attendee.cuType !== 'INDIVIDUAL' || attendee.entity === undefined) return;
+                if (appointmentData.organizer && appointmentData.organizer.entity && attendee.entity === appointmentData.organizer.entity) return;
+                var sortName = attendee.contact ? attendee.contact.last_name || attendee.contact.first_name || attendee.contact.display_name || attendee.cn || '' : attendee.cn || '';
+
+                return { value: attendee.entity, label: attendee.contact ? contactsUtil.getFullName(attendee.contact) : attendee.cn, sortName: sortName };
+            })
+            .compact()
+            .sortBy(function (obj) {
+                return obj.sortName;
+            }).value();
+
+            if (!attendeeList.length) {
+                require(['io.ox/core/yell'], function (yell) {
+                    //.# error message when someone tries to change the organizer of an appointment
+                    yell('info', gt('You need at least one other user to change the organizer.'));
+                });
+                return;
+            }
 
             new ModalDialog({
                 title: gt('Change organizer')
             })
             .build(function () {
+
                 var strings = util.getDateTimeIntervalMarkup(appointmentData, { output: 'strings', zone: moment().tz() }),
                     recurrenceString = util.getRecurrenceString(appointmentData),
                     descriptionId = _.uniqueId('alarms-dialog-description-'),
-                    guid = _.uniqueId('containerlabel-');
+                    guid = _.uniqueId('label-');
+
+                this.model = new Backbone.Model({ comment: '', newOrganizer: attendeeList[0].value });
 
                 this.$el.attr('aria-describedby', descriptionId);
 
@@ -46,15 +72,23 @@ define('io.ox/calendar/actions/change-organizer', [
                         $.txt(' '),
                         $.txt(strings.timeStr)
                     ),
-                    $('<label>').text(gt('Leave a comment for the new organizer.')).attr({ for: guid }),
-                    new mini.InputView({ name: 'comment', model: model, placeholder: gt('Password'), autocomplete: false }).render().$el.attr('id', guid)
+                    $('<label>').text(gt('Select new organizer')).attr({ for: guid = _.uniqueId('label-') }),
+                    new mini.SelectView({ name: 'newOrganizer', model: this.model, list: attendeeList }).render().$el.attr('id', guid),
+                    $('<label>').text(gt('Leave a comment for the new organizer.')).attr({ for: guid = _.uniqueId('label-') }),
+                    new mini.InputView({ name: 'comment', model: this.model, placeholder: gt('Password'), autocomplete: false }).render().$el.attr('id', guid)
                 );
             })
             .addAlternativeButton({ action: 'cancel', label: gt('Cancel') })
             .addButton({ action: 'ok', label: gt('Ok'), className: 'btn-primary' })
             .on('ok', function () {
-                console.log(model.attributes);
-                model = null;
+
+                calApi.update({
+                    id: appointmentData.id,
+                    folder: appointmentData.folder, organizer: _(_(appointmentData.attendees).where({ entity: this.model.get('newOrganizer') })[0]).pick(['cn', 'email', 'entity', 'uri'])
+                }, {
+                    comment: this.model.get('comment')
+                });
+                this.model = null;
             })
             .open();
         }

@@ -376,13 +376,12 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/change-organizer', {
         requires: function (e) {
             if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
-            // we ned at least 2 users
-            if (_(e.baton.data.attendees).reduce(function (users, attendee) { return users + (_(attendee).has('entity') ? 1 : 0); }, 0) < 2) return false;
+            // we need at least 2 users
+            if (_(e.baton.data.attendees).reduce(function (users, attendee) { return users + (_(attendee).has('entity') && attendee.cuType === 'INDIVIDUAL' ? 1 : 0); }, 0) < 2) return false;
             return e.collection.has('modify') && (util.hasFlag(e.baton.data, 'organizer') || util.hasFlag(e.baton.data, 'organizer_on_behalf'));
         },
         action: function (baton) {
             require(['io.ox/calendar/actions/change-organizer'], function (changeOrganizer) {
-                debugger;
                 changeOrganizer.openDialog(baton.data);
             });
         }
