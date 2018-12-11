@@ -107,18 +107,10 @@ define('io.ox/mail/compose/main', [
         id: 'editor-mode',
         index: 700,
         perform: function () {
-            var config = this.config;
-
-            // map 'alternative' to editor
-            // TODO moved here from initialize of config model. don't know if this works correctly
-            if (config.get('preferredEditorMode') === 'alternative') {
-                config.set('editorMode', this.model.get('content_type') === 'text/plain' ? 'text' : 'html', { silent: true });
-            }
-
-            // TODO this was moved from the compose function. Need to evaluate, how this works together with the above code
-            if (config.get('editorMode') !== 'alternative') return;
-            var mode = this.model.get('contentType') === 'text/plain' ? 'text' : 'html';
-            config.set('editorMode', mode, { silent: true });
+            // map 'alternative'
+            var isAlternative = this.config.get('preferredEditorMode') === 'alternative' || this.config.get('editorMode') === 'alternative';
+            if (!isAlternative) return;
+            this.config.set('editorMode', this.model.get('content_type') === 'text/plain' ? 'text' : 'html', { silent: true });
         }
     }, {
         id: 'auto-bcc',
