@@ -289,7 +289,7 @@ define('io.ox/mail/compose/model', [
                 subject: '',
                 content: '',
                 contentType: '',
-                attachments: new AttachmentCollection(),
+                attachments: [],
                 meta: {
                     // new/reply/replyall/forward/resend
                     type: 'new',
@@ -317,7 +317,7 @@ define('io.ox/mail/compose/model', [
         initialize: function () {
             this.initialized = this.create().then(function (data) {
                 // fix previewUrl
-                var collection = this.get('attachments');
+                var collection = new AttachmentCollection();
                 collection.space = data.id;
                 collection.reset(_(data.attachments).map(function (attachment) {
                     return new Attachments.Model(_.extend({}, attachment, { group: 'mail', space: collection.space }));
@@ -326,8 +326,8 @@ define('io.ox/mail/compose/model', [
                 data.to = (data.to || []).concat(this.get('to'));
                 data.cc = (data.cc || []).concat(this.get('cc'));
                 data.bcc = (data.bcc || []).concat(this.get('bcc'));
-                // update model and attachments collection
-                this.set(_.omit(data, 'attachments'));
+                data.attachments = collection;
+                this.set(data);
             }.bind(this));
 
         },
@@ -368,7 +368,7 @@ define('io.ox/mail/compose/model', [
             return composeAPI.spaced(meta, opt).then(function (data) {
                 if (!this.get('attachments') || !this.get('attachments').length) return data;
 
-                return $.when(this.get('attachments').map(function (attachment) {
+                return $.when.apply($, this.get('attachments').map(function (attachment) {
                     return composeAPI.space.attachments.add(data.id, attachment);
                 })).then(function (attachments) {
                     data.attachments = (data.attachments || []).concat(attachments);
