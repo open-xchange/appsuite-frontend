@@ -20,10 +20,11 @@ define('io.ox/files/share/listview', [
     'io.ox/files/common-extensions',
     'io.ox/files/api',
     'io.ox/core/capabilities',
+    'io.ox/core/yell',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style',
     'io.ox/files/share/view-options'
-], function (api, ext, BreadcrumbView, ListView, ContextMenuUtils, extensions, filesAPI, capabilities, gt) {
+], function (api, ext, BreadcrumbView, ListView, ContextMenuUtils, extensions, filesAPI, capabilities, yell, gt) {
 
     'use strict';
 
@@ -82,7 +83,7 @@ define('io.ox/files/share/listview', [
             var self = this;
             return api.all().then(function (data) {
                 self.collection.reset(data);
-            });
+            }, yell);
         },
 
         reload: function () {
