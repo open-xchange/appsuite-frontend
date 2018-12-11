@@ -44,7 +44,7 @@ define('io.ox/mail/compose/main', [
             }
 
             return require(['io.ox/mail/compose/model']).then(function (MailComposeModel) {
-                self.model = baton.model = new MailComposeModel(baton.data.obj);
+                self.model = baton.model = new MailComposeModel(baton.data);
                 return self.model.initialized;
             });
         }
@@ -102,7 +102,7 @@ define('io.ox/mail/compose/main', [
         id: 'render-view',
         index: 600,
         perform: function (baton) {
-            var win = baton.data.win;
+            var win = baton.win;
             win.nodes.main.addClass('scrollable').append(this.view.render().$el);
         }
     }, {
@@ -147,7 +147,7 @@ define('io.ox/mail/compose/main', [
         id: 'finally',
         index: 1200,
         perform: function (baton) {
-            var win = baton.data.win;
+            var win = baton.win;
             // calculate right margin for to field (some languages like chinese need extra space for cc bcc fields)
             win.nodes.main.find('.tokenfield').css('padding-right', 14 + win.nodes.main.find('.recipient-actions').width() + win.nodes.main.find('[data-extension-id="to"] .has-picker').length * 20);
             // Set window and toolbars visible again
@@ -218,7 +218,8 @@ define('io.ox/mail/compose/main', [
             win.nodes.body.addClass('sr-only');
 
             win.busy().show(function () {
-                ext.point('io.ox/mail/compose/boot').cascade(app, { obj: obj, model: model, win: win }).then(function success() {
+
+                ext.point('io.ox/mail/compose/boot').cascade(app, { data: obj || {}, model: model, win: win }).then(function success() {
                     def.resolve({ app: app });
                     ox.trigger('mail:' + app.model.get('meta').type + ':ready', obj, app);
                 }, function fail(e) {
