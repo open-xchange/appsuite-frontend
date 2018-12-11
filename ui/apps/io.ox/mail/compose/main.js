@@ -23,6 +23,8 @@ define('io.ox/mail/compose/main', [
 
     'use strict';
 
+    // via point.cascade
+
     ext.point('io.ox/mail/compose/boot').extend({
         id: 'bundle',
         index: 100,
@@ -130,6 +132,7 @@ define('io.ox/mail/compose/main', [
         id: 'initial-signature',
         index: 1000,
         perform: function () {
+            if (_.device('smartphone')) return;
             return this.view.signaturesLoading.then(function () {
                 this.config.setInitialSignature();
             }.bind(this));
