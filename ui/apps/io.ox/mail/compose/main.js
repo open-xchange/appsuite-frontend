@@ -225,10 +225,10 @@ define('io.ox/mail/compose/main', [
                 }, function fail(e) {
                     require(['io.ox/core/notifications'], function (notifications) {
                         notifications.yell(e);
-                        // makes no sense to show discard changes popup here
-                        app.model.dirty(false);
-                        app.view.removeLogoutPoint();
+                        if (app.model) app.model.dirty(false);
+                        if (app.view) app.view.removeLogoutPoint();
                         app.quit();
+
                         def.reject(e);
                     });
                 });
@@ -239,6 +239,7 @@ define('io.ox/mail/compose/main', [
 
         // destroy
         app.setQuit(function () {
+            if (app.model) app.model.destroy();
             if (app.view) return app.view.discard();
         });
 

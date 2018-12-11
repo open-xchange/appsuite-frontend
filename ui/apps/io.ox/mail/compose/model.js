@@ -351,6 +351,7 @@ define('io.ox/mail/compose/model', [
         },
 
         send: function () {
+            this.destroyed = true;
             return composeAPI.space.send(this.get('id'), this.toJSON());
         },
 
@@ -382,6 +383,8 @@ define('io.ox/mail/compose/model', [
         },
 
         destroy: function () {
+            if (this.destroyed) return;
+            this.destroyed = true;
             return composeAPI.space.remove(this.get('id'));
         },
 
