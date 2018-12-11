@@ -742,8 +742,6 @@ define('io.ox/core/folder/api', [
             pool.addCollection(collectionId, array, { all: options.all });
             // to make sure we always get the same result (just data; not timestamp)
             return array;
-        }, function (/* error */) {
-            // Bug: 61260 Drive breadcrumb navigation is not working as expected
         });
     }
 
