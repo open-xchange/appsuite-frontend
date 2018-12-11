@@ -821,8 +821,9 @@ define('io.ox/core/desktop', [
                                                 if (model.get('quitAfterLaunch')) model.trigger('quit');
                                             });
                                         }).fail(function (e) {
-                                            if (!e || e.code !== 'MSG-0032') return;
-                                            // restoreById-savepoint after draft got deleted
+                                            // MSGCS-0007 := Found no such composition space for identifier: %s
+                                            if (!e || !/(MSG-0032|MSGCS-0007)/.test(e.code)) return;
+                                            // restoreById-savepoint after draft/composition space got deleted
                                             _.delay(function () {
                                                 ox.ui.App.removeRestorePoint(oldId);
                                                 model.trigger('close');
