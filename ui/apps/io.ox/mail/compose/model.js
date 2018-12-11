@@ -328,8 +328,12 @@ define('io.ox/mail/compose/model', [
                 data.bcc = (data.bcc || []).concat(this.get('bcc'));
                 data.attachments = collection;
                 this.set(data);
+
+                this.prevAttributes = data;
+                this.on('change', this.requestSave);
             }.bind(this));
 
+            this.requestSave = _.debounce(this.save.bind(this), 5000);
         },
 
         getContent: function () {
@@ -378,8 +382,38 @@ define('io.ox/mail/compose/model', [
             }.bind(this));
         },
 
+        /**
+         * Traverses the two given objects and only return attributes (and sub attributes) which has been changed.
+         * Used to only update necessary parts of the mail model
+         */
+        deepDiff: function (old, current) {
+            var self = this;
+
+            current = current || this.attributes;
+
+            return _(current)
+                .chain()
+                .mapObject(function (value, key) {
+                    if (value instanceof Backbone.Model || value instanceof Backbone.Collection) return;
+                    if (_.isObject(value) && !_.isArray(value)) {
+                        var sub = self.deepDiff(old[key], value);
+                        if (_.isEmpty(sub)) return;
+                        return sub;
+                    }
+                    if (_.isEqual(old[key], value)) return;
+                    return value;
+                })
+                .omit(function (value) {
+                    return !value;
+                })
+                .value();
+        },
+
         save: function () {
-            return composeAPI.space.update(this.get('id'), this.toJSON());
+            if (this.destroyed) return;
+            var diff = this.deepDiff(this.prevAttributes);
+            if (_.isEmpty(diff)) return;
+            return composeAPI.space.update(this.get('id'), diff);
         },
 
         destroy: function () {

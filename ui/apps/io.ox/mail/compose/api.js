@@ -489,7 +489,7 @@ define('io.ox/mail/compose/api', [
             console.log('> UPDATE: ' + id);
             return http.PATCH({
                 url: 'api/mail/compose/' + id,
-                params: $.extend({}, data)
+                data: $.extend({}, data)
             });
         }
     };
