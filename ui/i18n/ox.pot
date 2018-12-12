@@ -2447,6 +2447,8 @@ msgstr ""
 #: apps/io.ox/core/commons.js
 #: module:io.ox/core
 #: apps/io.ox/core/main/autologout.js
+#: apps/io.ox/files/listview.js
+#: module:io.ox/files
 #: apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/listview.js
@@ -8662,6 +8664,11 @@ msgstr ""
 #: apps/io.ox/files/guidance/statistics.js
 #: module:io.ox/files
 msgid "Top 10 file types"
+msgstr ""
+
+#: apps/io.ox/files/listview.js
+#: module:io.ox/files
+msgid "Error: Failed to load files"
 msgstr ""
 
 #. Quota means a general quota for mail and files
