@@ -124,10 +124,15 @@ define('io.ox/find/date/patterns', [
         };
     })();
 
+    var tree = {},
+        generated;
+
     // generated list of fixed values
-    var lookup = (function () {
+    function getTree() {
+        // cache for current date
+        if (generated === moment().format('YYYY-MM-DD')) return tree;
+
         var hash = {},
-            tree = {},
             weekdays = getSingleValueList(moment.weekdays()),
             months = getSingleValueList(moment.months()),
             currentMonth = moment().month(),
@@ -232,38 +237,45 @@ define('io.ox/find/date/patterns', [
         //
         // convert hash into little tree structure for fast lookups
         //
+        tree = {};
         _(hash).each(function (obj, id) {
             // use two characters as look-ahead
             var key = id.substr(0, 2);
             (tree[key] || (tree[key] = [])).push(_.extend(obj, { id: id }));
         });
-        return function (str) {
-            var key = str.substr(0, 2), len = str.length;
-            return _(tree[key])
-                .chain()
-                .filter(function (obj) {
-                    return obj.id.substr(0, len) === str;
-                })
-                .sortBy('index')
-                .value();
-        };
+        generated = moment().format('YYYY-MM-DD');
+        return tree;
+    }
 
-    })();
+    function lookup(str) {
+        // build catalogue when needed
+        var tree = getTree(),
+            key = str.substr(0, 2), len = str.length;
+        return _(tree[key])
+            .chain()
+            .filter(function (obj) {
+                return obj.id.substr(0, len) === str;
+            })
+            .sortBy('index')
+            .value();
+    }
+
+    function getMatches(value, options) {
+        value = String(value || '').toLowerCase();
+
+        var opt = _.extend({ limit: 3 }, options || {}),
+            baton = ext.Baton.ensure({ data: { matched: [], value: value }, options: opt });
+
+        // possible matches add data to baton
+        ext.point('io.ox/find/date/patterns').invoke('match', this, baton);
+
+        return baton.data.matched;
+    }
 
     return {
         lookup: lookup,
-        getMatches: function (value, options) {
-
-            value = String(value || '').toLowerCase();
-
-            var opt = _.extend({ limit: 3 }, options || {}),
-                baton = ext.Baton.ensure({ data: { matched: [], value: value }, options: opt });
-
-            // possible matches add data to baton
-            ext.point('io.ox/find/date/patterns').invoke('match', this, baton);
-
-            return baton.data.matched;
-        }
+        getTree: getTree,
+        getMatches: getMatches
     };
 
 });
