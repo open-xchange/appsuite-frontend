@@ -97,13 +97,6 @@ define('io.ox/mail/compose/model', [
     //         return current;
     //     },
 
-    //     getContentType: function () {
-    //         if (this.get('editorMode') === 'text') {
-    //             return 'text/plain';
-    //         }
-    //         return this.get('editorMode') === 'html' ? 'text/html' : 'alternative';
-    //     },
-
     //     setMailContentType: function (type) {
     //         this.set('content_type', type, { silent: true });
     //     },
