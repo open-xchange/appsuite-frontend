@@ -55,19 +55,6 @@ define('io.ox/mail/compose/model', [
     //         var self = this,
     //             attachmentsCollection = this.get('attachments');
 
-    //         // Legacy support
-    //         // Todo: This should be removed soon
-    //         // TODO: clarify (legacy)
-    //         // if (_.isObject(attachmentsCollection) && !_.isEmpty(attachmentsCollection)) {
-    //         //     var editorMode = this.get('editorMode') === 'text' ? 'text' : 'html';
-    //         //     if (editorMode in attachmentsCollection) {
-    //         //         attachmentsCollection = [{
-    //         //             content: attachmentsCollection[editorMode][0].content,
-    //         //             content_type: this.getContentType(),
-    //         //             disp: 'inline'
-    //         //         }];
-    //         //     }
-    //         // }
     //         if (_.isArray(attachmentsCollection)) {
     //             var c = new Attachments.Collection();
     //             c.add(attachmentsCollection);
