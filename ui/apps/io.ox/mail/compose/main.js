@@ -64,7 +64,7 @@ define('io.ox/mail/compose/main', [
         perform: function () {
             var model = this.model;
             // TODO: should be handle by middleware
-            if (model.get('from') && model.get('from').length) return;
+            if (model.get('from')) return;
             accountAPI.getPrimaryAddressFromFolder(model.get('meta').originalFolderId).then(function (address) {
                 // ensure defaultName is set (bug 56342)
                 settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
@@ -75,7 +75,7 @@ define('io.ox/mail/compose/main', [
                 if (!settings.get('sendDisplayName', true)) {
                     address[0] = null;
                 }
-                model.set('from', [address]);
+                model.set('from', address);
             });
         }
     }, {
@@ -95,7 +95,7 @@ define('io.ox/mail/compose/main', [
             function updateDisplayName() {
                 var from = model.get('from');
                 if (!from) return;
-                model.set('from', [mailUtil.getSender(from[0], config.get('sendDisplayName'))]);
+                model.set('from', mailUtil.getSender(from, config.get('sendDisplayName')));
             }
         }
     }, {

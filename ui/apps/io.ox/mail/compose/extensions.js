@@ -146,7 +146,7 @@ define('io.ox/mail/compose/extensions', [
         },
 
         getItemNode: function (item) {
-            item = item || _(this.model.get('from')).first();
+            item = item || this.model.get('from');
             if (!item) return;
             var name = item[0], address = item[1];
             return [

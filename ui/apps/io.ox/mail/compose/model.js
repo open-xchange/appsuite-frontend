@@ -222,7 +222,7 @@ define('io.ox/mail/compose/model', [
 
     //         // remove display name from sender if necessary
     //         if (this.get('sendDisplayName') === false) {
-    //             result.from[0][0] = null;
+    //             result.from[0] = null;
     //         }
 
     //         return result;
