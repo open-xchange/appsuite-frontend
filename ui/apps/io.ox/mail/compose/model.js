@@ -30,7 +30,6 @@ define('io.ox/mail/compose/model', [
 
     //     defaults: function () {
     //         return {
-    //             preferredEditorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
     //             editorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
     //             attachments: new Attachments.Collection(),
     //             folder_id: 'default0/INBOX',
@@ -154,9 +153,6 @@ define('io.ox/mail/compose/model', [
     //             }
     //         });
 
-    //         // special case #1: 'alternative'
-    //         if (mail.preferredEditorMode === 'alternative') mail.content_type = mail.editorMode === 'html' ? 'text/html' : 'text/plain';
-
     //         return {
     //             description: gt('Mail') + ': ' + (mail.subject || gt('No subject')),
     //             point: mail
@@ -259,7 +255,7 @@ define('io.ox/mail/compose/model', [
     //     }
     // });
 
-    console.log(gt);
+    $.noop(gt);
 
     var AttachmentCollection = Attachments.Collection.extend({
         sync: function (method, model, options) {
