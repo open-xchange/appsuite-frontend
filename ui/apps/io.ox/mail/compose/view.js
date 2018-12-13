@@ -387,6 +387,7 @@ define('io.ox/mail/compose/view', [
 
             this.listenTo(this.model, 'keyup:subject change:subject', this.setTitle);
             this.listenTo(this.config, 'change:editorMode', this.toggleEditorMode);
+            this.listenTo(this.config, 'change:vcard', this.onAttachVcard);
             // handler can be found in signatures.js
             this.listenTo(this.model, 'change:signatureId', this.setSignature);
             this.listenTo(this.model, 'change:signatures', this.updateSignatures);
@@ -977,6 +978,11 @@ define('io.ox/mail/compose/view', [
                 if (!_.isFunction(this.editor.tinymce)) return;
                 this.editor.tinymce().undoManager.clear();
             }.bind(this));
+        },
+
+        onAttachVcard: function () {
+            if (this.config.get('vcard') === 1) this.model.attachVCard();
+            this.config.set('vcard', 0);
         },
 
         onRemoveInlineImage: function (e, id) {

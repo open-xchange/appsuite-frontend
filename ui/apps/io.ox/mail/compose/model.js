@@ -339,6 +339,12 @@ define('io.ox/mail/compose/model', [
             this.get('attachments').add(files);
         },
 
+        attachVCard: function attachVCard() {
+            composeAPI.space.attachments.vcard(this.get('id')).then(function (vcard) {
+                this.get('attachments').add(vcard);
+            }.bind(this));
+        },
+
         onRemoveAttachment: function (model) {
             if (this.destroyed) return;
             composeAPI.space.attachments.remove(this.get('id'), model.get('id'));
