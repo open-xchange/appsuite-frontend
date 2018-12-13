@@ -32,7 +32,6 @@ define('io.ox/mail/compose/model', [
     //         return {
     //             editorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
     //             attachments: new Attachments.Collection(),
-    //             folder_id: 'default0/INBOX',
     //             initial: true,
     //             priority: 3,
     //             sendDisplayName: !!settings.get('sendDisplayName', true),

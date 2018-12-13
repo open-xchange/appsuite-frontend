@@ -504,13 +504,11 @@ define('io.ox/mail/compose/view', [
                 .then(accountAPI.getValidAddress)
                 // TOOD: clarifiy (trun)
                 // .then(function checkTruncated(data) {
-
                 //     //check for truncated message content, warn the user, provide alternative
                 //     if (data.attachments[0] && data.attachments[0].truncated) {
                 //         //only truncated if forwarded inline and too large
                 //         var dialog = new dialogs.ModalDialog(),
                 //             def = $.Deferred();
-
                 //         dialog
                 //             .header($('<h4>').text(gt('This message has been truncated due to size limitations.')))
                 //             .append(gt('Loading the full mail might lead to performance problems.'))
