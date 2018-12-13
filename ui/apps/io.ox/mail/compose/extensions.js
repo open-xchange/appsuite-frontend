@@ -682,12 +682,11 @@ define('io.ox/mail/compose/extensions', [
                     //#. it is used by screenreaders to indicate which files are currently added to the list of attachments
                     self.trigger('aria-live-update', gt('Added %s to attachments.', _(e.target.files).map(function (file) { return file.name; }).join(', ')));
                     var models = _(e.target.files).map(function (file) {
-                        var m = new Attachments.Model({ uploaded: 0 });
+                        var m = new Attachments.Model({ filename: file.name, uploaded: 0 });
                         composeApi.space.attachments.add(model.get('id'), { file: file }, 'attachment').progress(function (e) {
                             m.set('uploaded', e.loaded / e.total);
                         }).then(function success(result) {
                             var data = result.data;
-                            model.trigger('upload:complete');
                             m.set({
                                 id: data.id,
                                 disp: data.contentDisposition.toLowerCase(),
@@ -696,6 +695,7 @@ define('io.ox/mail/compose/extensions', [
                                 group: 'mail',
                                 space: model.get('id')
                             });
+                            m.trigger('upload:complete');
                         }, function fail() {
                             m.destroy();
                         });
