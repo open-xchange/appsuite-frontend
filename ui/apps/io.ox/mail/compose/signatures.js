@@ -150,7 +150,7 @@ define('io.ox/mail/compose/signatures', [
 
         // handler -> change:signatures
         updateSignatures: function () {
-            var currentSignature = this.model.get('signature');
+            var currentSignature = this.config.get('signature');
 
             if (!currentSignature) return;
 
@@ -174,7 +174,7 @@ define('io.ox/mail/compose/signatures', [
                     this.editor.replaceParagraph(currentContent, changedContent);
                 }
 
-                this.model.set('signature', changedSignature);
+                this.config.set('signature', changedSignature);
             }
         },
 
@@ -189,8 +189,8 @@ define('io.ox/mail/compose/signatures', [
 
             // edit-case: signature already in DOM
             // compose-case: signature not in DOM
-            this.model.set('signature', signature, { silent: !!this.model.get('signatureIsRendered') });
-            this.model.unset('signatureIsRendered');
+            this.config.set('signature', signature, { silent: !!this.model.get('signatureIsRendered') });
+            this.config.unset('signatureIsRendered');
         },
 
         // handler -> change:signature
@@ -208,8 +208,8 @@ define('io.ox/mail/compose/signatures', [
             signature = _.isString(signature) ? this.config.getSignatureById(signature) : signature;
             // fallback: get current signature object
             if (!signature) {
-                if (!this.model.get('signature')) return;
-                signature = this.model.get('signature');
+                if (!this.config.get('signature')) return;
+                signature = this.config.get('signature');
             }
 
             var self = this,
@@ -222,7 +222,7 @@ define('io.ox/mail/compose/signatures', [
 
                     var node = $(this),
                         text = node.text(),
-                        unchanged = _(self.model.get('signatures')).find(function (signature) {
+                        unchanged = _(self.config.get('signatures')).find(function (signature) {
                             return getRaw(signature) === stripWhitespace(text);
                         });
 

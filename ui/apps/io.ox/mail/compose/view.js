@@ -389,9 +389,9 @@ define('io.ox/mail/compose/view', [
             this.listenTo(this.config, 'change:editorMode', this.toggleEditorMode);
             this.listenTo(this.config, 'change:vcard', this.onAttachVcard);
             // handler can be found in signatures.js
-            this.listenTo(this.model, 'change:signatureId', this.setSignature);
-            this.listenTo(this.model, 'change:signatures', this.updateSignatures);
-            this.listenTo(this.model, 'change:signature', this.redrawSignature);
+            this.listenTo(this.config, 'change:signatureId', this.setSignature);
+            this.listenTo(this.config, 'change:signatures', this.updateSignatures);
+            this.listenTo(this.config, 'change:signature', this.redrawSignature);
 
             var mailto, params, self = this;
             // triggered by mailto?

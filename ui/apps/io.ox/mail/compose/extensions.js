@@ -450,7 +450,7 @@ define('io.ox/mail/compose/extensions', [
         signature: function (baton) {
             if (_.device('smartphone')) return;
             // TODO: switch to config model
-            var model = baton.model,
+            var config = baton.config,
                 def = baton.view.signaturesLoading = $.Deferred(),
                 dropdown = this,
                 dropdownView = dropdown.data('view');
@@ -458,10 +458,10 @@ define('io.ox/mail/compose/extensions', [
             // load snippets
             require(['io.ox/core/api/snippets'], function (snippetAPI) {
                 snippetAPI.getAll('signature').always(function (signatures) {
-                    var oldSignatures = model.get('signatures') || [],
+                    var oldSignatures = config.get('signatures') || [],
                         allSignatures = _.uniq(signatures.concat(oldSignatures), false, function (o) { return o.id; });
                     // update model
-                    model.set('signatures', allSignatures);
+                    config.set('signatures', allSignatures);
                     // add options to dropdown (empty signature already set)
                     _.each(signatures, function (o) {
                         dropdownView.option('signatureId', o.id, o.displayname);
@@ -474,9 +474,8 @@ define('io.ox/mail/compose/extensions', [
 
         signaturemenu: function (baton) {
             if (_.device('smartphone')) return;
-
             var self = this,
-                dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true });
+                dropdown = new Dropdown({ model: baton.config, label: gt('Signatures'), caret: true });
 
             // IDEA: move to view to have a reference or trigger a refresh?!
 

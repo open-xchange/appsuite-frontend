@@ -14,8 +14,9 @@
 
 define('io.ox/mail/compose/config', [
     'settings!io.ox/mail',
+    'io.ox/mail/util',
     'io.ox/mail/compose/signatures'
-], function (settings, signatureUtil) {
+], function (settings, mailUtil, signatureUtil) {
 
     'use strict';
 
@@ -30,7 +31,13 @@ define('io.ox/mail/compose/config', [
                 autoDismiss: false,
                 preferredEditorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
                 editorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
-                sendDisplayName: !!settings.get('sendDisplayName', true)
+                sendDisplayName: !!settings.get('sendDisplayName', true),
+                // signatures
+                defaultSignatureId: mailUtil.getDefaultSignature('compose'),
+                // identifier for empty signature (dropdown)
+                signatureId: '',
+                signature: '',
+                signatureIsRendered: undefined
             };
         },
 

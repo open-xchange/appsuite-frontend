@@ -35,9 +35,6 @@ define('io.ox/mail/compose/model', [
     //             initial: true,
     //             sendDisplayName: !!settings.get('sendDisplayName', true),
     //             sendtype: composeAPI.SENDTYPE.NORMAL,
-    //             defaultSignatureId: mailUtil.getDefaultSignature('compose'),
-    //             // identifier for empty signature (dropdown)
-    //             signatureId: '',
     //             imageResizeOption: 'original',
     //             csid: composeAPI.csid(),
     //             vcard: settings.get('appendVcard', false) ? 1 : 0,
