@@ -585,12 +585,12 @@ define('io.ox/mail/compose/view', [
                         content_type = data.contentType;
 
                     // Force text edit mode when alternative editorMode and text/plain mail
-                    if (mode === 'edit' && self.model.get('editorMode') === 'alternative' && content_type === 'text/plain') {
+                    if (mode === 'edit' && self.config.get('editorMode') === 'alternative' && content_type === 'text/plain') {
                         self.model.set('editorMode', 'text', { silent: true });
                     }
 
                     var def = $.Deferred();
-                    if (content_type === 'text/plain' && self.model.get('editorMode') === 'html') {
+                    if (content_type === 'text/plain' && self.config.get('editorMode') === 'html') {
                         require(['io.ox/mail/detail/content'], function (proc) {
                             var html = proc.transformForHTMLEditor(content);
                             content = html;
@@ -900,7 +900,7 @@ define('io.ox/mail/compose/view', [
         },
 
         loadEditor: function (content) {
-            if (this.editorHash[this.model.get('editorMode')]) {
+            if (this.editorHash[this.config.get('editorMode')]) {
                 return this.reuseEditor(content);
             }
             var self = this,
@@ -922,7 +922,7 @@ define('io.ox/mail/compose/view', [
                 def.reject({ error: gt("Couldn't load editor") });
             });
             return def.then(function (editor) {
-                self.editorHash[self.model.get('editorMode')] = editor;
+                self.editorHash[self.config.get('editorMode')] = editor;
                 // maybe there will be a better place for the following line in the future, but until then it will stay here
                 // attaches listeners to the tinymce instance
                 if (editor.tinymce) $(editor.tinymce().getElement()).on('removeInlineImage', self.onRemoveInlineImage.bind(self));
@@ -1019,7 +1019,7 @@ define('io.ox/mail/compose/view', [
             // Prepend newline in all modes except when editing draft
             if (this.model.get('mode') === 'edit') return;
             var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<div[^>]*class="default-style"[^>]*><br><\/div>)+/, '');
-            var nl = this.model.get('editorMode') === 'html' ? mailUtil.getDefaultStyle().node.get(0).outerHTML : '\n';
+            var nl = this.config.get('editorMode') === 'html' ? mailUtil.getDefaultStyle().node.get(0).outerHTML : '\n';
             this.editor.setContent(nl + content);
         },
 
@@ -1061,7 +1061,7 @@ define('io.ox/mail/compose/view', [
         },
 
         setSimpleMail: function (content) {
-            if (this.model.get('editorMode') === 'text') return;
+            if (this.config.get('editorMode') === 'text') return;
             if (!/<table/.test(content)) this.editorContainer.find('.editable.mce-content-body').addClass('simple-mail');
         },
 

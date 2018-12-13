@@ -511,7 +511,7 @@ define('io.ox/mail/compose/extensions', [
         },
 
         optionsmenu: function (baton) {
-            var dropdown = new Dropdown({ model: baton.model, label: gt('Options'), caret: true });
+            var dropdown = new Dropdown({ model: baton.config, label: gt('Options'), caret: true });
             ext.point(POINT + '/menuoptions').invoke('draw', dropdown.$el, baton);
 
             dropdown.$ul.addClass('pull-right');
