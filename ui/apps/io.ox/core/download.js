@@ -14,18 +14,17 @@
 define('io.ox/core/download', [
     'io.ox/files/api',
     'io.ox/mail/api',
-    'io.ox/core/yell',
     'io.ox/core/capabilities',
     'io.ox/backbone/views/modal',
     'gettext!io.ox/core',
-    'io.ox/core/extensions'], function (api, mailAPI, yell, capabilities, ModalDialog, gt, ext) {
+    'io.ox/core/extensions'], function (api, mailAPI, capabilities, ModalDialog, gt, ext) {
 
     /* global blankshield:true */
 
     'use strict';
 
     // export global callback; used by server response
-    window.callback_yell = yell;
+    window.callback_antivirus = showAntiVirusPopup;
 
     function map(o) {
         return { id: o.id, folder_id: o.folder || o.folder_id };
@@ -38,8 +37,10 @@ define('io.ox/core/download', [
     // Note: This does not work for iOS as Safari will show the content of the download in the iframe as a preview
     // for the most known file types like MS Office, pictures, plain text, pdf, etc.!
     function iframe(url) {
-        showAntiVirusPopup();
-        url += (url.indexOf('?') === -1 ? '?' : '&') + 'callback=yell';
+        url += (url.indexOf('?') === -1 ? '?' : '&') + 'callback=antivirus';
+        if (capabilities.has('antivirus')) {
+            url += '&scan=true';
+        }
         $('#tmp').append(
             $('<iframe>', { src: url, 'class': 'hidden download-frame' })
         );
@@ -56,7 +57,6 @@ define('io.ox/core/download', [
                 $('<input type="hidden" name="body" value="">').val(options.body)
             );
 
-        showAntiVirusPopup();
         // except for iOS we use a hidden iframe
         // iOS will open the form in a new window/tab
         if (!_.device('ios')) $('#tmp').append(iframe);
@@ -68,8 +68,7 @@ define('io.ox/core/download', [
         index: 100,
         id: 'buttonThreatFound',
         render: function (baton) {
-            console.log(baton);
-            if (baton.model.get('category') !== 'threatFound') return;
+            if (baton.model.get('categories') !== 'ERROR') return;
             this.addButton({ action: 'ignore', label: gt('Download infected file') });
         }
     });
@@ -78,7 +77,7 @@ define('io.ox/core/download', [
         index: 200,
         id: 'buttonNotScanned',
         render: function (baton) {
-            if (baton.model.get('category') !== 'notScanned') return;
+            if (baton.model.get('categories') === 'ERROR') return;
             this.addButton({ action: 'ignore', label: gt('Download unscanned') });
         }
     });
@@ -90,22 +89,36 @@ define('io.ox/core/download', [
             this.$body.append($('<div class="alert">')
                 .text(baton.model.get('error'))
                 .css('margin-bottom', '0')
-                .addClass(baton.model.get('category') === 'threatFound' ? 'alert-danger' : 'alert-warning'));
+                .addClass(baton.model.get('categories') === 'ERROR' ? 'alert-danger' : 'alert-warning'));
         }
     });
 
     function showAntiVirusPopup(error) {
-        error = {
-            error: 'ALERT! ALERT! TOTALLY DANGEROUS VIRUS FOUND !!!11elf',
-            // categories tbd: threatFound, notScanned
-            category: 'threatFound'
-        };
+        // no error
+        if (!error) return;
+        // not virus related
+        if (error.code.indexOf('ANTI-VIRUS-SERVICE') !== 0) {
+            require(['io.ox/core/yell'], function (yell) {
+                yell(error);
+            });
+            return;
+        }
+
+        // find correct download iframe (needed to retrigger the download without scan parameter)
+        _($('#tmp iframe.hidden.download-frame')).each(function (dlFrame) {
+            if (dlFrame.contentDocument.head.innerHTML.includes(error.error_id)) error.dlFrame = dlFrame;
+        });
+        console.log(error);
         new ModalDialog({
             title: gt('Anti virus warning'),
             point: 'io.ox/core/download/antiviruspopup',
             model: new Backbone.Model(error)
         })
         .addButton({ action: 'cancel', label: gt('OK') })
+        .on('ignore', function () {
+            // trigger download again, but without scan parameter
+            error.dlFrame.src = error.dlFrame.src.replace('&scan=true', '');
+        })
         .open();
     }
 
@@ -120,8 +133,6 @@ define('io.ox/core/download', [
             return blankshield.open(url, '_blank');
         },
 
-        showAntiVirusPopup: showAntiVirusPopup,
-
         // download single file
         file: function (options) {
 
@@ -135,12 +146,6 @@ define('io.ox/core/download', [
                 if (options.filename) {
                     file = _.extend(file, { filename: options.filename });
                 }
-
-                if (capabilities.has('antivirus')) {
-                    options.params = (options.params || {});
-                    options.params.scan = true;
-                }
-                showAntiVirusPopup();
 
                 var url = api.getUrl(file, 'download', { params: options.params });
                 if (_.device('ios')) {
@@ -171,7 +176,7 @@ define('io.ox/core/download', [
         // download multiple files as zip file
         files: function (list) {
             form({
-                url: ox.apiRoot + '/files?action=zipdocuments&callback=yell&session=' + ox.session,
+                url: ox.apiRoot + '/files?action=zipdocuments&callback=antivirus&session=' + ox.session,
                 // this one wants folder_id
                 body: JSON.stringify(_.map(list, map))
             });
