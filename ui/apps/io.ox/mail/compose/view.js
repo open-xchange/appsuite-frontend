@@ -365,6 +365,7 @@ define('io.ox/mail/compose/view', [
             this.messageFormat = options.messageFormat || settings.get('messageFormat', 'html');
 
             // Open Drafts in HTML mode if content type is html even if text-editor is default
+            // TODO this seems to be duplicate code. See boot process of the app. This should not be handled by the view
             if (this.model.get('mode') === 'edit' && this.model.get('content_type') === 'text/html' && settings.get('messageFormat', 'html') === 'text') {
                 this.messageFormat = 'html';
             }
@@ -457,6 +458,7 @@ define('io.ox/mail/compose/view', [
         },
 
         onSendProgress: function (model, value) {
+            // TODO what exactly is happening here?
             var csid = this.model.get('csid');
             if (csid !== model.get('id')) return;
             if (value >= 0) this.app.getWindow().busy(value);
@@ -466,6 +468,8 @@ define('io.ox/mail/compose/view', [
             this.$('[data-extension-id="arialive"]').text(msg);
         },
 
+        // TODO fetchMail is not used anymore. Has been moved to the compose model initialization process.
+        // TODO we need to check what may be moved there
         fetchMail: function (obj) {
             // Empty compose (early exit)
             if (obj.mode === 'compose') return $.when();
