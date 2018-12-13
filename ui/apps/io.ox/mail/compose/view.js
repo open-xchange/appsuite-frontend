@@ -257,7 +257,7 @@ define('io.ox/mail/compose/view', [
                 this.data('view')
                     .header(gt('Options'))
                     .option('vcard', 1, gt('Attach Vcard'), { prefix: gt('Options'), toggleValue: 0 })
-                    .option('disp_notification_to', true, gt('Request read receipt'), { prefix: gt('Options') });
+                    .option('requestReadReceipt', true, gt('Request read receipt'), { prefix: gt('Options') });
             }
         }
     );
