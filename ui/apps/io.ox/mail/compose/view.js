@@ -1000,7 +1000,7 @@ define('io.ox/mail/compose/view', [
                 content = content.replace(/[\s\uFEFF\xA0]+$/, '');
             }
 
-            if (this.model.get('mode') !== 'compose') {
+            if (this.model.get('meta').type !== 'new') {
                 // Remove extranous <br>
                 content = content.replace(/\n<br>&nbsp;$/, '\n');
             }

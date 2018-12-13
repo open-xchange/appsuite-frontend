@@ -100,7 +100,7 @@ define('io.ox/mail/compose/actions/send', [
                 var def = $.Deferred(),
                     win = baton.app.getWindow();
                 if (!settings.get('features/imageResize/enabled', true)) return def.resolve();
-                if (baton.mail.files === undefined || baton.mail.files.length === 0) return def.resolve();
+                if (!baton.model.has('files') || baton.model.get('files').length === 0) return def.resolve();
                 require(['io.ox/mail/compose/resizeUtils'], function (resizeUtils) {
                     win.busy();
                     resizeUtils.mergeResizedFiles(baton.mail.files, baton.model.get('resizedImages'), baton.model.get('imageResizeOption')).done(function () {
@@ -231,15 +231,15 @@ define('io.ox/mail/compose/actions/send', [
             index: 3000,
             perform: function (baton) {
                 // update base mail
-                var isReply = baton.mail.sendtype === composeAPI.SENDTYPE.REPLY,
-                    isForward = baton.mail.sendtype === composeAPI.SENDTYPE.FORWARD,
+                var isReply = baton.model.get('meta').type === 'reply',
+                    isForward = baton.model.get('meta').type === 'forward',
                     sep = mailAPI.separator,
                     base, folder, id, msgrefs, ids;
 
                 if (isReply || isForward) {
                     //single vs. multiple
-                    if (baton.mail.msgref) {
-                        msgrefs = [baton.mail.msgref];
+                    if (baton.model.get('meta').originalId) {
+                        msgrefs = [baton.model.get('meta').originalId];
                     } else {
                         msgrefs = _.chain(baton.mail.attachments)
                             .filter(function (attachment) {
@@ -275,7 +275,7 @@ define('io.ox/mail/compose/actions/send', [
             id: 'busy:end',
             index: 10000,
             perform: function (baton) {
-                baton.view.unblockReuse(baton.mail.sendtype);
+                baton.view.unblockReuse(baton.model.get('meta').type);
             }
         }
     );
