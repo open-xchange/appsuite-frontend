@@ -51,9 +51,13 @@ define('io.ox/core/download', [
 
         options = options || {};
 
+        if (capabilities.has('antivirus')) {
+            options.url += '&scan=true';
+        }
+
         var name = _.uniqueId('iframe'),
             iframe = $('<iframe>', { src: 'blank.html', name: name, 'class': 'hidden download-frame' }),
-            form = $('<form>', { action: options.url, method: 'post', target: name }).append(
+            form = $('<form>', { iframeName: name, action: options.url, method: 'post', target: name }).append(
                 $('<input type="hidden" name="body" value="">').val(options.body)
             );
 
@@ -69,7 +73,7 @@ define('io.ox/core/download', [
         id: 'buttonThreatFound',
         render: function (baton) {
             if (baton.model.get('categories') !== 'ERROR') return;
-            this.addButton({ action: 'ignore', label: gt('Download infected file') });
+            this.addButton({ action: 'ignore', label: gt('Download infected file'), className: 'btn-default' });
         }
     });
 
@@ -78,7 +82,7 @@ define('io.ox/core/download', [
         id: 'buttonNotScanned',
         render: function (baton) {
             if (baton.model.get('categories') === 'ERROR') return;
-            this.addButton({ action: 'ignore', label: gt('Download unscanned') });
+            this.addButton({ action: 'ignore', label: gt('Download unscanned'), className: 'btn-default' });
         }
     });
 
@@ -108,7 +112,7 @@ define('io.ox/core/download', [
         _($('#tmp iframe.hidden.download-frame')).each(function (dlFrame) {
             if (dlFrame.contentDocument.head.innerHTML.includes(error.error_id)) error.dlFrame = dlFrame;
         });
-        console.log(error);
+
         new ModalDialog({
             title: gt('Anti virus warning'),
             point: 'io.ox/core/download/antiviruspopup',
@@ -117,6 +121,15 @@ define('io.ox/core/download', [
         .addButton({ action: 'cancel', label: gt('OK') })
         .on('ignore', function () {
             // trigger download again, but without scan parameter
+            // form download (used for multiple files)
+            if (error.dlFrame.src.indexOf('blank.html') !== -1) {
+                var form = $('#tmp form[iframeName="' + error.dlFrame.name + '"]');
+                if (!form.length) return;
+                form[0].action = form[0].action.replace('&scan=true', '');
+                form.submit();
+                return;
+            }
+            // iframe download
             error.dlFrame.src = error.dlFrame.src.replace('&scan=true', '');
         })
         .open();
