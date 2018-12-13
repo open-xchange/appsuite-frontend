@@ -616,15 +616,23 @@ define('io.ox/core/tk/tokenfield', [
                 }
             }.bind(this.hiddenapi);
 
+            // workaround: select suggestion by space key
+            this.hiddenapi.input.$input.on('keydown', function (e) {
+                var isSuggestionSelected = !!this.hiddenapi.dropdown.getDatumForCursor();
+                if (e.which !== 32 || !isSuggestionSelected) return;
+                this.hiddenapi._onEnterKeyed('ox.spaceKeyed', e);
+            }.bind(this));
+
             // workaround: register handler for delayed autoselect
             if (this.options.delayedautoselect) {
                 this.input.on('keydown', function (e) {
                     var enter = e.which === 13,
+                        space = e.which === 32,
                         validquery = !!self.input.val() && self.input.val().length >= o.minLength,
                         runningrequest = self.model.get('query') !== self.input.val(),
                         automated = e.which === 38 || e.which === 40;
                     // clear dropdown when query changes
-                    if (runningrequest && !enter && !automated) {
+                    if (runningrequest && !enter && !space && !automated) {
                         self.hiddenapi.dropdown.empty();
                         self.hiddenapi.dropdown.close();
                     }
