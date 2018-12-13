@@ -33,7 +33,6 @@ define('io.ox/mail/compose/model', [
     //             editorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
     //             attachments: new Attachments.Collection(),
     //             initial: true,
-    //             priority: 3,
     //             sendDisplayName: !!settings.get('sendDisplayName', true),
     //             sendtype: composeAPI.SENDTYPE.NORMAL,
     //             defaultSignatureId: mailUtil.getDefaultSignature('compose'),
@@ -189,7 +188,7 @@ define('io.ox/mail/compose/model', [
     //             files:          attachmentCollection.localFiles()        // get fileObjs for locally attached files
     //         });
 
-    //         // Drop empty values except for subject (may be empty), Numbers (priority, vcard) or Booleans (disp_notification_to)
+    //         // Drop empty values except for subject (may be empty), Numbers (vcard) or Booleans (disp_notification_to)
     //         result = _.omit(result, function (value, key) {
     //             if (key === 'subject' || _.isNumber(value) || _.isBoolean(value)) return false;
     //             return _.isEmpty(value);
