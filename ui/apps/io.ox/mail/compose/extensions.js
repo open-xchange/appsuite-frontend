@@ -687,11 +687,14 @@ define('io.ox/mail/compose/extensions', [
                             m.set('uploaded', e.loaded / e.total);
                         }).then(function success(result) {
                             var data = result.data;
+                            model.trigger('upload:complete');
                             m.set({
                                 id: data.id,
                                 disp: data.contentDisposition.toLowerCase(),
                                 filename: data.name,
-                                size: data.size
+                                size: data.size,
+                                group: 'mail',
+                                space: model.get('id')
                             });
                         }, function fail() {
                             m.destroy();

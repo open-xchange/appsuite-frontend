@@ -331,6 +331,7 @@ define('io.ox/mail/compose/model', [
 
                 this.prevAttributes = data;
                 this.on('change', this.requestSave);
+                this.listenTo(collection, 'remove', this.onRemoveAttachment);
             }.bind(this));
 
             this.requestSave = _.debounce(this.save.bind(this), 5000);
@@ -362,6 +363,11 @@ define('io.ox/mail/compose/model', [
         attachFiles: function attachFiles(files) {
             // TODO: mapping?!
             this.get('attachments').add(files);
+        },
+
+        onRemoveAttachment: function (model) {
+            if (this.destroyed) return;
+            composeAPI.space.attachments.remove(this.get('id'), model.get('id'));
         },
 
         create: function () {
