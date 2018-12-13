@@ -116,6 +116,14 @@ define('io.ox/core/tk/contenteditable-editor', [
         }())
     });
 
+    ext.point(POINT + '/setup').extend({
+        id: 'retrigger-change',
+        index: INDEX += 100,
+        draw: function (ed) {
+            ed.on('Change', this.trigger.bind(this, 'change'));
+        }
+    });
+
     /*
     // disabled for 7.10.1, will be removed with 7.10.2
     ext.point(POINT + '/options').extend({
@@ -341,9 +349,11 @@ define('io.ox/core/tk/contenteditable-editor', [
 
     function Editor(el, opt) {
 
-        var $el, initialized = $.Deferred(), ed;
+        var $el, initialized = $.Deferred(), ed, self = this;
         var editor, editorId = el.data('editorId');
         var defaultStyle = mailUtil.getDefaultStyle();
+
+        _.extend(this, Backbone.Events);
 
         el.append(
             $el = $('<div class="contenteditable-editor">').attr('data-editor-id', editorId).on('keydown', function (e) { if (e.which === 27) e.preventDefault(); }).append(
@@ -460,7 +470,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             setup: function (ed) {
                 if (opt.oxContext) ed.oxContext = opt.oxContext;
-                ext.point(POINT + '/setup').invoke('draw', this, ed);
+                ext.point(POINT + '/setup').invoke('draw', self, ed);
                 ed.on('init', function () {
                     // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
                     $(fixed_toolbar).find('span.mce-txt').attr('tabindex', -1);

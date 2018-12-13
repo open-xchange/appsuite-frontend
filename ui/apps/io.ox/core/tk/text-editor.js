@@ -26,6 +26,9 @@ define('io.ox/core/tk/text-editor', [
         opt = _.extend({ useFixedWithFont: false }, opt);
         var textarea = $('<textarea class="plain-text">').toggleClass('monospace', opt.useFixedWidthFont);
 
+        _.extend(this, Backbone.Events);
+        textarea.on('change', this.trigger.bind(this, 'change'));
+
         $(el).append(textarea);
 
         if (_.device('tablet && iOS >= 6')) {

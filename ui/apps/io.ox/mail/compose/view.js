@@ -385,7 +385,6 @@ define('io.ox/mail/compose/view', [
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
 
             this.listenTo(this.model, 'keyup:subject change:subject', this.setTitle);
-            this.listenTo(this.model, 'needsync', this.syncMail);
             this.listenTo(this.config, 'change:editorMode', this.toggleEditorMode);
             // handler can be found in signatures.js
             this.listenTo(this.model, 'change:signatureId', this.setSignature);
@@ -417,7 +416,7 @@ define('io.ox/mail/compose/view', [
 
                 params.body = sanitizer.sanitize({ content: params.body, content_type: 'text/html' }, { WHOLE_DOCUMENT: false }).content;
                 this.setSubject(params.subject || '');
-                this.model.setContent(params.body || '');
+                this.model.set('content', params.body || '');
                 // clear hash
                 _.url.hash('mailto', null);
             }
@@ -933,8 +932,14 @@ define('io.ox/mail/compose/view', [
 
         reuseEditor: function (content) {
             var self = this;
-            this.editor = this.editorHash[this.model.get('editorMode')];
+            if (this.editor) this.stopListening(this.editor);
+            this.editor = this.editorHash[this.config.get('editorMode')];
+            this.listenTo(this.editor, 'change', this.syncMail);
             return $.when(this.editor.setPlainText(content)).then(function () {
+                self.model.set({
+                    content: self.editor.getContent(),
+                    contentType: self.editor.content_type
+                });
                 self.editor.show();
                 return self.editor;
             });
@@ -979,9 +984,8 @@ define('io.ox/mail/compose/view', [
         },
 
         syncMail: function () {
-            if (this.editor) {
-                this.model.setContent(this.editor.getContent());
-            }
+            if (!this.editor) return;
+            this.model.set('content', this.editor.getContent());
         },
 
         setBody: function (content) {
