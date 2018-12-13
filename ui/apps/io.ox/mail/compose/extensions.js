@@ -510,14 +510,49 @@ define('io.ox/mail/compose/extensions', [
             self.append(dropdown.$el.addClass('signatures text-left'));
         },
 
-        optionsmenu: function (baton) {
-            var dropdown = new Dropdown({ model: baton.config, label: gt('Options'), caret: true });
-            ext.point(POINT + '/menuoptions').invoke('draw', dropdown.$el, baton);
+        optionsmenu: (function () {
+            var Model = Backbone.Model.extend({
+                configFields: ['editorMode', 'vcard'],
+                modelFields: ['priority', 'requestReadReceipt'],
+                initialize: function (opt) {
+                    this.config = opt.config;
+                    this.model = opt.model;
 
-            dropdown.$ul.addClass('pull-right');
+                    delete this.attributes.config;
+                    delete this.attributes.model;
 
-            this.append(dropdown.render().$el.addClass('text-left'));
-        },
+                    this.listenTo(this.config, this.configFields.map(this.changeMapper).join(' '), this.getData);
+                    this.listenTo(this.model, this.modelFields.map(this.changeMapper).join(' '), this.getData);
+                    this.getData();
+                    this.on('change', this.updateModels);
+                },
+                changeMapper: function (str) {
+                    return 'change:' + str;
+                },
+                getData: function () {
+                    this.configFields.forEach(function (attr) {
+                        this.set(attr, this.config.get(attr));
+                    }.bind(this));
+                    this.modelFields.forEach(function (attr) {
+                        this.set(attr, this.model.get(attr));
+                    }.bind(this));
+                },
+                updateModels: function () {
+                    _(this.changed).forEach(function (value, key) {
+                        if (this.configFields.indexOf(key) >= 0) return this.config.set(key, value);
+                        if (this.modelFields.indexOf(key) >= 0) return this.model.set(key, value);
+                    }.bind(this));
+                }
+            });
+            return function (baton) {
+                var dropdown = new Dropdown({ model: new Model({ model: baton.model, config: baton.config }), label: gt('Options'), caret: true });
+                ext.point(POINT + '/menuoptions').invoke('draw', dropdown.$el, baton);
+
+                dropdown.$ul.addClass('pull-right');
+
+                this.append(dropdown.render().$el.addClass('text-left'));
+            };
+        }()),
 
         attachmentPreviewList: function (baton) {
             var $el = this;
