@@ -114,7 +114,7 @@ define('io.ox/mail/compose/actions/save', [
             index: 2000,
             perform: function (baton) {
                 // Replace inline images in contenteditable with links from draft response
-                if (baton.model.get('editorMode') === 'html') {
+                if (baton.config.get('editorMode') === 'html') {
                     $('<div>').html(baton.newData.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
                         var $el = $(el);
                         $('img:not(.emoji):eq(' + index + ')', baton.view.editorContainer.find('.editable')).attr({
