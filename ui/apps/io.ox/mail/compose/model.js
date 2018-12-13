@@ -419,7 +419,9 @@ define('io.ox/mail/compose/model', [
             if (this.destroyed) return;
             var diff = this.deepDiff(this.prevAttributes);
             if (_.isEmpty(diff)) return;
-            return composeAPI.space.update(this.get('id'), diff);
+            return composeAPI.space.update(this.get('id'), diff).then(function () {
+                this.prevAttributes = this.toJSON();
+            }.bind(this));
         },
 
         destroy: function () {
