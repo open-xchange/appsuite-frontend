@@ -399,8 +399,10 @@ define('io.ox/mail/compose/model', [
             if (this.destroyed) return;
             var diff = this.deepDiff(this.prevAttributes);
             if (_.isEmpty(diff)) return;
-            return composeAPI.space.update(this.get('id'), diff).then(function () {
+            return composeAPI.space.update(this.get('id'), diff).then(function success() {
                 this.prevAttributes = this.toJSON();
+            }.bind(this), function fail() {
+                if (ox.debug) console.warn('Update composition space failed', this.get('id'));
             }.bind(this));
         },
 
