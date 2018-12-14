@@ -24,14 +24,15 @@ define('io.ox/calendar/week/view', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/capabilities',
     'io.ox/core/print',
+    'io.ox/backbone/views/disposable',
     'io.ox/calendar/extensions',
     'io.ox/calendar/week/extensions',
     'less!io.ox/calendar/week/style'
-], function (ext, PerspectiveView, util, coreUtil, api, folderAPI, gt, settings, coreSettings, Dropdown, capabilities, print) {
+], function (ext, PerspectiveView, util, coreUtil, api, folderAPI, gt, settings, coreSettings, Dropdown, capabilities, print, DisposableView) {
 
     'use strict';
 
-    var BasicView = Backbone.View.extend({
+    var BasicView = DisposableView.extend({
 
         constructor: function (opt) {
             this.opt = _.extend({}, this.options || {}, opt);
@@ -780,6 +781,7 @@ define('io.ox/calendar/week/view', [
 
             this.listenTo(this.model, 'change:additionalTimezones', this.updateTimezones);
             this.listenTo(this.model, 'change:startDate', this.updateToday);
+            this.listenToDOM(window, 'resize', _.throttle(this.onWindowResize, 50));
 
             this.$hiddenIndicators = $('<div class="hidden-appointment-indicator-container">');
             this.initCurrentTimeIndicator();
@@ -1402,6 +1404,13 @@ define('io.ox/calendar/week/view', [
                     });
                 }
             });
+        },
+
+        onWindowResize: function () {
+            this.updateCellHeight();
+            var height = this.getContainerHeight();
+            console.log('cell height', this.model.get('cellHeight'), 'height', height);
+            this.$('.scrollpane').children().css('height', height);
         }
 
     });
