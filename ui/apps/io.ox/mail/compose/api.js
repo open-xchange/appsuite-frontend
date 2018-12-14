@@ -477,9 +477,12 @@ define('io.ox/mail/compose/api', [
 
         send: function (id, data) {
             console.log('> SEND: ' + id);
-            return http.POST({
-                url: 'api/mail/compose/' + id + '/send',
-                params: $.extend({}, data)
+            // TODO missing spec/support for addional data on send
+            return api.space.update(id, data).then(function () {
+                return http.POST({
+                    url: 'api/mail/compose/' + id + '/send',
+                    params: $.extend({}, data)
+                });
             });
         },
 
