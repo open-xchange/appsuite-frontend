@@ -339,9 +339,7 @@ define('io.ox/calendar/week/view', [
         },
 
         renderAppointment: function (model) {
-            // do not use a button here even if it's correct from a11y perspective. This breaks resize handles (you cannot make appointments longer/shorter) and hover styles on firefox.
-            // it is fine in month perspective as there are no resize handles there.
-            var node = $('<div role="button" class="appointment">')
+            var node = $('<button type="button" class="appointment">')
                 .attr({
                     'data-cid': model.cid,
                     'data-master-id': util.cid({ id: model.get('id'), folder: model.get('folder') }),
