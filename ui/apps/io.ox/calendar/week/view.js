@@ -903,8 +903,10 @@ define('io.ox/calendar/week/view', [
 
         updateCellHeight: function () {
             var cells = Math.min(Math.max(4, (this.model.get('workEnd') - this.model.get('workStart') + 1)), 18),
+                // try to estimate the height, the container will have when drawn. Is only needed sometimes as a fallback, when the element is not in the dom yet
+                height = this.$el.height() || (window.innerHeight - 250),
                 cellHeight = Math.floor(
-                    Math.max(this.$el.height() / (cells * this.model.get('gridSize')), this.options.minCellHeight)
+                    Math.max(height / (cells * this.model.get('gridSize')), this.options.minCellHeight)
                 );
             this.model.set('cellHeight', cellHeight);
         },
