@@ -24,7 +24,7 @@ define('io.ox/mail/compose/resizeUtils', [
     var ResizeDropDown = DropDown.extend({
         label: function () {
             var self = this,
-                attachments = this.model.get('attachments').localFiles(),
+                attachments = this.model.get('attachments'),
                 //.# In the context of resizing images before uploading them this text is used as a label for a dropdown
                 sizeOption = gt('Original'),
                 settingSmall = settings.get('features/imageResize/small', 320),
@@ -58,26 +58,28 @@ define('io.ox/mail/compose/resizeUtils', [
         }
     });
 
-    function getImagesToResize(files) {
+    function getImagesToResize(attachments) {
         var fileSizeMaxExceeded = false,
-            images = _.chain(files)
-        .map(function (file, index) {
-            // Add original files array index to file
-            return _.extend(file, { '_index': index });
-        })
-        .filter(function (file) {
-            // Check for filetype and max filesize restriction
-            if (imageResize.isFileSizeMaxViolated(file.size)) fileSizeMaxExceeded = true;
-            return imageResize.isResizableImage(file);
-        })
-        .map(function (file) {
-            // Get image dimension and check if this image is ellegibable for resize
-            return imageResize.getImageDimensions(file).then(function (dimensions) {
-                if (!imageResize.resizeRecommended(dimensions, file.size)) return;
-                return _.extend(file, { '_dimensions': dimensions });
-            });
-        })
-        .value();
+            images = attachments.chain()
+                .each(function (model, index) {
+                    if (!model.isLocalFile()) return;
+                    model.set('_index', index, { silent: true });
+                })
+                .filter(function (model) {
+                    if (!model.isLocalFile()) return;
+                    // Check for filetype and max filesize restriction
+                    if (imageResize.isFileSizeMaxViolated(model.get('size'))) fileSizeMaxExceeded = true;
+                    return imageResize.isResizableImage(model.fileObj);
+                })
+                .map(function (model) {
+                    var file = model.fileObj;
+                    // Get image dimension and check if this image is ellegibable for resize
+                    return imageResize.getImageDimensions(file).then(function (dimensions) {
+                        if (!imageResize.resizeRecommended(dimensions, file.size)) return;
+                        return _.extend(file, { '_dimensions': dimensions, '_index': model.get('_index') });
+                    });
+                })
+                .value();
 
         return $.when.apply($, images).then(function () {
             if (fileSizeMaxExceeded) return [];
@@ -110,56 +112,27 @@ define('io.ox/mail/compose/resizeUtils', [
         return dropDown;
     }
 
-    function resize(files, resizeOption) {
-        var def = $.Deferred();
+    function resizeIntoArray(attachments, resizeOption) {
+        if (resizeOption === 'original') return $.when();
 
-        if (resizeOption === 'original') return def.resolve();
+        var targetArray = [];
 
-        getImagesToResize(files)
-        .then(function (images) {
+        return getImagesToResize(attachments).then(function (images) {
             var resizeQueue = _(images)
             .map(function (image) {
                 var targetDimensions = imageResize.getTargetDimensions(image._dimensions, resizeOption);
                 _.extend(image, { _targetDimensions: targetDimensions });
-                return imageResize.resizeImage(files[image._index], targetDimensions)
-                .then(function (newImage) {
-                    files[image._index] = newImage;
-                    image._resized = true;
-                });
-            });
-            $.when.apply($, resizeQueue)
-            .done(function () {
-                def.resolve();
-            });
-        });
-
-        return def;
-    }
-
-    function resizeIntoArray(files, targetArray, resizeOption) {
-        var def = $.Deferred();
-
-        if (resizeOption === 'original') return def.resolve();
-
-        getImagesToResize(files)
-        .then(function (images) {
-            var resizeQueue = _(images)
-            .map(function (image) {
-                var targetDimensions = imageResize.getTargetDimensions(image._dimensions, resizeOption);
-                _.extend(image, { _targetDimensions: targetDimensions });
-                return imageResize.resizeImage(files[image._index], targetDimensions)
+                return imageResize.resizeImage(attachments.at(image._index).fileObj, targetDimensions)
                 .then(function (newImage) {
                     targetArray[image._index] = _.extend(newImage, { '_index': image._index });
                     image._resized = true;
                 });
             });
-            $.when.apply($, resizeQueue)
-            .done(function () {
-                def.resolve(targetArray);
-            });
-        });
 
-        return def;
+            return $.when.apply($, resizeQueue);
+        }).then(function () {
+            return targetArray;
+        });
     }
 
     function mergeResizedFiles(originalFiles, resizedFiles, resizeOption) {
@@ -186,29 +159,23 @@ define('io.ox/mail/compose/resizeUtils', [
     }
 
     function getResizedSizeString(model, resizedFiles) {
-        var originalFiles = model.get('attachments').localFiles(),
-            contentSize = model.getContent().length,
-            filteredResizedFiles = _(resizedFiles).filter(function (file) {
-                var size = file ? file.size : undefined;
-                return typeof size !== 'undefined';
-            }),
-            resizedImageIndices = _(filteredResizedFiles).map(function (file) { return file._index; }),
-            resizedFilesSize = _(filteredResizedFiles).reduce(function (agg, file) { return agg + file.size; }, 0),
-            filteredOriginalFiles = _(originalFiles).filter(function (file, index) {
-                var size = file ? file.size : undefined,
-                    defined = typeof size !== 'undefined',
-                    notResized = !_(resizedImageIndices).contains(index);
-                return defined && notResized;
-            }),
-            oringinalFilesSize = _(filteredOriginalFiles).reduce(function (agg, file) { return agg + file.size; }, 0),
-            mailSize = oringinalFilesSize + resizedFilesSize + contentSize;
+        var attachmentsSize =  model.get('attachments').chain()
+            .map(function (file, index) {
+                var resizedFile = _(resizedFiles).findWhere({ _index: index });
+                if (resizedFile && resizedFile.size) return resizedFile.size;
+                return file.getSize();
+            })
+            .reduce(function (memo, size) {
+                return memo + size;
+            }, 0)
+            .value(),
+            mailSize = attachmentsSize + model.getContent().length;
         return gt('Mail size:') + ' ' + strings.fileSize(mailSize, 1);
     }
 
     var api = {
         getDropDown: getDropDown,
         getImagesToResize: getImagesToResize,
-        resize: resize,
         resizeIntoArray: resizeIntoArray,
         getMailSizeString: getMailSizeString,
         getResizedSizeString: getResizedSizeString,
