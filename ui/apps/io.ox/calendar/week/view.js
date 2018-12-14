@@ -1411,7 +1411,6 @@ define('io.ox/calendar/week/view', [
         onWindowResize: function () {
             this.updateCellHeight();
             var height = this.getContainerHeight();
-            console.log('cell height', this.model.get('cellHeight'), 'height', height);
             this.$('.scrollpane').children().css('height', height);
         }
 
