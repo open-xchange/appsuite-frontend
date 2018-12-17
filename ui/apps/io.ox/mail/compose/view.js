@@ -375,6 +375,9 @@ define('io.ox/mail/compose/view', [
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
 
             this.listenTo(this.model, 'keyup:subject change:subject', this.setTitle);
+            this.listenTo(this.model, 'change', _.throttle(this.onChangeSaved.bind(this, 'dirty'), 100));
+            this.listenTo(this.model, 'before:save', this.onChangeSaved.bind(this, 'saving'));
+            this.listenTo(this.model, 'success:save', this.onChangeSaved.bind(this, 'saved'));
             this.listenTo(this.config, 'change:editorMode', this.toggleEditorMode);
             this.listenTo(this.config, 'change:vcard', this.onAttachVcard);
             // handler can be found in signatures.js
@@ -633,6 +636,13 @@ define('io.ox/mail/compose/view', [
             });
         },
 
+        // has three states, dirty, saving, saved
+        onChangeSaved: function (state) {
+            if (this.autoSaveState === state) return;
+            if (state === 'dirty') this.inlineYell('');
+            else if (state === 'saving') this.inlineYell('Saving...');
+            else if (state === 'saved' && this.autoSaveState === 'saving') this.inlineYell('Saved');
+            this.autoSaveState = state;
         },
 
         inlineYell: function (text) {
