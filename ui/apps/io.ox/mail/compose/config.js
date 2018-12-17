@@ -26,7 +26,6 @@ define('io.ox/mail/compose/config', [
             return {
                 // enable auto-remove on "discard"
                 autoDiscard: true,
-                autosavedAsDraft: false,
                 // Autodismiss confirmation dialog
                 autoDismiss: false,
                 preferredEditorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),

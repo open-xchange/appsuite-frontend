@@ -303,16 +303,6 @@ define('io.ox/mail/compose/view', [
         }
     });
 
-    ext.point(POINT + '/autosave/error').extend({
-        id: 'default',
-        handler: function (baton) {
-            if (!baton.isLogout && !ox.handleLogoutError) {
-                notifications.yell('error', baton.error);
-            }
-            baton.returnValue.reject(baton.error);
-        }
-    });
-
     // invoke extensions as a waterfall, but jQuery deferreds don't have an API for this
     // TODO: at the moment, this resolves with the result of the last extension point.
     // not sure if this is desired.
@@ -360,7 +350,6 @@ define('io.ox/mail/compose/view', [
             this.app = options.app;
             this.config = options.config;
             this.editorHash = {};
-            this.autosave = {};
             this.blocked = [];
             this.messageFormat = options.messageFormat || settings.get('messageFormat', 'html');
 
@@ -434,26 +423,7 @@ define('io.ox/mail/compose/view', [
                 id: this.logoutPointId,
                 index: 1000 + this.app.guid,
                 logout: function () {
-                    return self.autoSaveDraft({ isLogout: true }).then(function (result) {
-                        var base = _(result.split(mailAPI.separator)),
-                            id = base.last(),
-                            folder = base.without(id).join(mailAPI.separator),
-                            // use JSlob to save the draft ID so it can be used as a restore point.
-                            idSavePoints = coreSettings.get('savepoints', []);
-
-                        idSavePoints.push({
-                            module: 'io.ox/mail/compose',
-                            // flag to indicate that this savepoint is non default but uses cid to restore the application
-                            restoreById: true,
-                            id: self.app.get('uniqueID'),
-                            version: ox.version,
-                            description: gt('Mail') + ': ' + (self.model.get('subject') || gt('No subject')),
-                            // data that is send to restore function. Also include flag so it can detect the non default savepoint
-                            point: { id: id, folder_id: folder, restoreById: true }
-                        });
-
-                        return coreSettings.set('savepoints', idSavePoints).save();
-                    });
+                    return self.model.save();
                 }
             });
         },
@@ -663,89 +633,6 @@ define('io.ox/mail/compose/view', [
             });
         },
 
-        autoSaveDraft: function (options) {
-            options = options || {};
-            var def = new $.Deferred(),
-                model = this.model,
-                self = this,
-                mail = this.model.getMailForAutosave();
-
-            composeAPI.autosave(mail).always(function (result) {
-                if (result.error) {
-                    var baton = new ext.Baton(result);
-                    baton.model = model;
-                    baton.view = self;
-                    baton.isLogout = options.isLogout;
-                    baton.returnValue = def;
-                    ext.point('io.ox/mail/compose/autosave/error').invoke('handler', self, baton);
-                    def = baton.returnValue;
-                } else {
-                    self.config.set({
-                        'autosavedAsDraft': true
-                    });
-                    model.set({
-                        'msgref': result,
-                        'sendtype': composeAPI.SENDTYPE.EDIT_DRAFT,
-                        'infostore_ids_saved': [].concat(model.get('infostore_ids_saved'), mail.infostore_ids || [])
-                    });
-                    model.dirty(model.previous('sendtype') !== composeAPI.SENDTYPE.EDIT_DRAFT);
-                    //#. %1$s is the time, the draft was saved
-                    //#, c-format
-                    self.inlineYell(gt('Draft saved at %1$s', moment().format('LT')));
-                    def.resolve(result);
-                }
-            });
-
-            this.initAutoSaveAsDraft();
-
-            return def;
-        },
-
-        stopAutoSave: function () {
-            if (this.autosave) {
-                window.clearTimeout(this.autosave.timer);
-            }
-        },
-
-        initAutoSaveAsDraft: function () {
-
-            var timeout = settings.get('autoSaveDraftsAfter', false),
-                timerScale = {
-                    seconds: 1000,
-                    minute: 60000,
-                    minutes: 60000
-                },
-                scale,
-                delay,
-                timer,
-                self = this;
-
-            if (!timeout) return;
-
-            timeout = timeout.split('_');
-            scale = timerScale[timeout[1]];
-            timeout = timeout[0];
-
-            // settings not parsable
-            if (!timeout || !scale) return;
-
-            this.stopAutoSave();
-
-            delay = function () {
-                self.autosave.timer = _.delay(timer, timeout * scale);
-            };
-
-            timer = function () {
-                // only auto-save if something changed (see Bug #26927)
-                if (self.model.dirty()) {
-                    self.autoSaveDraft();
-                } else {
-                    delay();
-                }
-            };
-
-            this.autosave = {};
-            delay();
         },
 
         inlineYell: function (text) {
@@ -766,8 +653,6 @@ define('io.ox/mail/compose/view', [
                 this.editorHash[id].destroy();
                 delete this.editorHash[id];
             }
-            // clear timer for autosave
-            this.stopAutoSave();
         },
 
         removeLogoutPoint: function () {
@@ -788,7 +673,7 @@ define('io.ox/mail/compose/view', [
                 isDraft = this.model.keepDraftOnClose();
 
             // This dialog gets automatically dismissed
-            if ((this.model.dirty() || this.config.get('autosavedAsDraft') || isDraft) && !this.config.get('autoDismiss')) {
+            if ((this.model.dirty() || isDraft) && !this.config.get('autoDismiss')) {
                 var discardText = isDraft ? gt.pgettext('dialog', 'Delete draft') : gt.pgettext('dialog', 'Discard message'),
                     saveText = isDraft ? gt('Keep draft') : gt('Save as draft'),
                     modalText = isDraft ? gt('Do you really want to delete this draft?') : gt('Do you really want to discard your message?');
@@ -811,7 +696,7 @@ define('io.ox/mail/compose/view', [
                     .show()
                     .then(function (action) {
                         if (action === 'delete') {
-                            var isAutoDiscard = this.config.get('autoDiscard') && this.config.get('autosavedAsDraft') && self.model.get('msgref');
+                            var isAutoDiscard = this.config.get('autoDiscard') && self.model.get('msgref');
                             if (!isDraft && !isAutoDiscard) return;
                             // only delete autosaved drafts that are not saved manually and have a msgref
                             mailAPI.remove([mailUtil.parseMsgref(mailAPI.separator, self.model.get('msgref'))]);
@@ -1149,8 +1034,6 @@ define('io.ox/mail/compose/view', [
             });
 
             this.$el.append(this.editorContainer);
-
-            this.initAutoSaveAsDraft();
 
             return this;
         }
