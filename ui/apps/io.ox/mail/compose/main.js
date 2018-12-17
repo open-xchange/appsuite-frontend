@@ -231,8 +231,12 @@ define('io.ox/mail/compose/main', [
 
         // destroy
         app.setQuit(function () {
-            if (app.model) app.model.destroy();
             if (app.view) return app.view.discard();
+        });
+
+        // after view is detroyed
+        app.on('quit', function () {
+            if (app.model) app.model.destroy();
         });
 
         // for debugging purposes
