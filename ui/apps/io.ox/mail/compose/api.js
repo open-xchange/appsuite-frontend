@@ -477,12 +477,25 @@ define('io.ox/mail/compose/api', [
 
         send: function (id, data) {
             console.log('> SEND: ' + id);
-            // TODO missing spec/support for addional data on send
-            return api.space.update(id, data).then(function () {
-                return http.POST({
-                    url: 'api/mail/compose/' + id + '/send',
-                    params: $.extend({}, data)
-                });
+
+            var formData = new FormData();
+            formData.append('JSON', JSON.stringify(data));
+
+            return http.UPLOAD({
+                url: 'api/mail/compose/' + id + '/send',
+                data: formData
+            });
+        },
+
+        save: function (id, data) {
+            console.log('> SAVE: ' + id);
+
+            var formData = new FormData();
+            formData.append('JSON', JSON.stringify(data));
+
+            return http.UPLOAD({
+                url: 'api/mail/compose/' + id + '/save',
+                data: formData
             });
         },
 

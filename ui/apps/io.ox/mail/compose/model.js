@@ -328,7 +328,9 @@ define('io.ox/mail/compose/model', [
 
         send: function () {
             this.destroyed = true;
-            return composeAPI.space.send(this.get('id'), this.toJSON());
+            return composeAPI.space.send(this.get('id'), this.toJSON()).fail(function () {
+                this.destroyed = false;
+            }.bind(this));
         },
 
         attachFiles: function attachFiles(files) {
@@ -393,9 +395,9 @@ define('io.ox/mail/compose/model', [
         },
 
         save: function () {
-            if (this.destroyed) return;
+            if (this.destroyed) return $.when();
             var diff = this.deepDiff(this.prevAttributes);
-            if (_.isEmpty(diff)) return;
+            if (_.isEmpty(diff)) return $.when();
             return composeAPI.space.update(this.get('id'), diff).then(function success() {
                 this.prevAttributes = this.toJSON();
             }.bind(this), function fail() {
