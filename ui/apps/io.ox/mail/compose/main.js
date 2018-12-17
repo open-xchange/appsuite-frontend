@@ -185,17 +185,6 @@ define('io.ox/mail/compose/main', [
             }));
         });
 
-        app.failSave = function () {
-            if (!app.view) return;
-            var model = app.model;
-            if (!model) return;
-            return {
-                module: 'io.ox/mail/compose',
-                point: model.get('id'),
-                description: gt('Mail') + ': ' + (model.get('subject') || gt('No subject'))
-            };
-        };
-
         app.failRestore = function (point) {
             return require(['io.ox/mail/compose/bundle']).then(function () {
                 return require(['io.ox/mail/compose/model']);
