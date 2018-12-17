@@ -333,6 +333,13 @@ define('io.ox/mail/compose/model', [
             }.bind(this));
         },
 
+        saveDraft: function () {
+            this.destroyed = true;
+            return composeAPI.space.save(this.get('id'), this.toJSON()).fail(function () {
+                this.destroyed = false;
+            }.bind(this));
+        },
+
         attachFiles: function attachFiles(files) {
             // TODO: mapping?!
             this.get('attachments').add(files);

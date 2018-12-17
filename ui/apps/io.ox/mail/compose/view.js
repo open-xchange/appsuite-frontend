@@ -625,6 +625,7 @@ define('io.ox/mail/compose/view', [
                 baton = new ext.Baton({
                     mail: mail,
                     model: this.model,
+                    config: this.config,
                     app: this.app,
                     view: view
                 });

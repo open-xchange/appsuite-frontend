@@ -23,6 +23,7 @@ define('io.ox/mail/compose/actions/save', [
 
     'use strict';
 
+    // TODO use new compose model
     ext.point('io.ox/mail/compose/actions/save').extend(
         {
             id: 'metrics',
@@ -60,7 +61,7 @@ define('io.ox/mail/compose/actions/save', [
             id: 'send',
             index: 1000,
             perform: function (baton) {
-                return composeAPI.send(baton.mail, baton.mail.files);
+                return baton.model.saveDraft();
             }
         },
         // Placeholder for Guard auth check, index 1050
