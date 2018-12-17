@@ -121,6 +121,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         index: INDEX += 100,
         draw: function (ed) {
             ed.on('Change', this.trigger.bind(this, 'change'));
+            ed.on('keyup', _.throttle(this.trigger.bind(this, 'change'), 50));
         }
     });
 

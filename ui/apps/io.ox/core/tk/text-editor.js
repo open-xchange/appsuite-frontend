@@ -28,6 +28,7 @@ define('io.ox/core/tk/text-editor', [
 
         _.extend(this, Backbone.Events);
         textarea.on('change', this.trigger.bind(this, 'change'));
+        textarea.on('input', _.throttle(this.trigger.bind(this, 'change'), 100));
 
         $(el).append(textarea);
 
