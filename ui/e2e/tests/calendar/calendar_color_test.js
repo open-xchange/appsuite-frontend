@@ -67,7 +67,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     expect(folderColor).equal(appointmentColor);
 
     // change color
-    I.click('test appointment one', '.workweek');
+    I.click('test appointment one', '.workweek .appointment .title');
     I.waitForVisible('.io-ox-sidepopup [data-action="edit"]');
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-calendar-edit-window');
@@ -84,7 +84,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     expect(appointmentColor).be.oneOf(['rgba(181, 54, 54, 1)', 'rgba(200, 70, 70, 1)']);
 
     // change color back to folder color
-    I.click('test appointment one', '.workweek');
+    I.click('test appointment one', '.workweek .appointment .title');
     I.waitForText('Edit', 5, '.io-ox-sidepopup');
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-calendar-edit-window');
@@ -100,7 +100,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     expect(appointmentColor).not.to.be.oneOf(['rgba(181, 54, 54, 1)', 'rgba(200, 70, 70, 1)']);
 
     // remove
-    I.click('test appointment one', '.workweek');
+    I.click('test appointment one', '.workweek .appointment .title');
     I.waitForText('Delete', 5, '.io-ox-sidepopup');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForText('Delete', 5, '.io-ox-dialog-popup');
@@ -162,7 +162,7 @@ Scenario('Changing calendar color should change appointment color that uses cale
     I.seeNumberOfElements('.workweek .appointment .title', 2);
 
     // change color of first appointment
-    I.click('test appointment one', '.workweek');
+    I.click('test appointment one', '.workweek .appointment .title');
     I.waitForVisible('.io-ox-sidepopup [data-action="edit"]');
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-calendar-edit-window');
@@ -194,7 +194,7 @@ Scenario('Changing calendar color should change appointment color that uses cale
 
     // remove
     I.waitForText('test appointment one', 5, '.workweek');
-    I.click('test appointment one', '.workweek');
+    I.click('test appointment one', '.workweek .appointment .title');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
@@ -203,7 +203,7 @@ Scenario('Changing calendar color should change appointment color that uses cale
     I.waitForDetached('.io-ox-dialog-sidepopup');
 
     I.waitForText('test appointment two', 5, '.workweek');
-    I.click('test appointment two', '.workweek');
+    I.click('test appointment two', '.workweek .appointment .title');
     I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
