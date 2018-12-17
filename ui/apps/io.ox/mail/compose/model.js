@@ -305,7 +305,7 @@ define('io.ox/mail/compose/model', [
                 this.listenTo(collection, 'remove', this.onRemoveAttachment);
             }.bind(this));
 
-            this.requestSave = _.debounce(this.save.bind(this), 5000);
+            this.requestSave = _.throttle(this.save.bind(this), 15000);
         },
 
         getContent: function () {
