@@ -108,7 +108,7 @@ define('io.ox/tours/whats-new', [
             .on('stop', function () {
                 if (composeApp) {
                     //prevent app from asking about changed content
-                    composeApp.model.dirty(false);
+                    composeApp.view.dirty(false);
                     composeApp.quit();
                     composeApp = null;
                 }

@@ -206,7 +206,7 @@ define('io.ox/mail/compose/actions/send', [
                     // no clue if warning(s) is always object or if it might also be a simple string (see bug 42714)
                     var message = baton.warning.error || baton.warning;
                     notifications.yell('warning', message);
-                    baton.model.dirty(false);
+                    baton.view.dirty(false);
                     baton.app.quit();
                 }
             }
@@ -221,7 +221,7 @@ define('io.ox/mail/compose/actions/send', [
                 if (settings.get('features/notifyOnSent', false)) {
                     notifications.yell('success', gt('The email has been sent'));
                 }
-                baton.model.dirty(false);
+                baton.view.dirty(false);
                 baton.app.quit();
             }
         },

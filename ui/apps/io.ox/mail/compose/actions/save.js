@@ -143,6 +143,7 @@ define('io.ox/mail/compose/actions/save', [
 
                 baton.model.set('msgref', baton.resultData);
                 baton.model.set('sendtype', composeAPI.SENDTYPE.EDIT_DRAFT);
+                // TODO why is baton.model.dirty and baton.view.model.dirty called with different values?!?
                 baton.model.dirty(baton.model.previous('sendtype') !== composeAPI.SENDTYPE.EDIT_DRAFT);
                 //#. %1$s is the time, the draft was saved
                 //#, c-format
