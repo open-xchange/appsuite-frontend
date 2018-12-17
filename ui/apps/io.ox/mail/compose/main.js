@@ -156,6 +156,7 @@ define('io.ox/mail/compose/main', [
             win.idle();
             $(window).trigger('resize');  // Needed for proper initial resizing in editors
             win.setTitle(this.model.get('subject') || gt('Compose'));
+            this.view.dirty(false);
         }
     });
 
@@ -214,8 +215,10 @@ define('io.ox/mail/compose/main', [
                 }, function fail(e) {
                     require(['io.ox/core/notifications'], function (notifications) {
                         notifications.yell(e);
-                        if (app.model) app.model.dirty(false);
-                        if (app.view) app.view.removeLogoutPoint();
+                        if (app.view) {
+                            app.view.dirty(false);
+                            app.view.removeLogoutPoint();
+                        }
                         app.quit();
 
                         def.reject(e);

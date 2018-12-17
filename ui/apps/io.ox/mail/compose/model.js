@@ -427,8 +427,7 @@ define('io.ox/mail/compose/model', [
             return data;
         },
         keepDraftOnClose: $.noop,
-        setMailContentType: $.noop,
-        dirty: $.noop
+        setMailContentType: $.noop
     });
 
     return MailModel;

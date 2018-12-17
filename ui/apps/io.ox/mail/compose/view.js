@@ -615,15 +615,9 @@ define('io.ox/mail/compose/view', [
             // make sure the tokenfields have created all tokens and updated the to cc, bcc attributes
             this.trigger('updateTokens');
             if (win) win.busy();
-            // get mail
-            var mail = this.model.getMailForDraft();
-
-            // disabled for fix of bug 56704
-            //delete mail.vcard;
 
             var view = this,
                 baton = new ext.Baton({
-                    mail: mail,
                     model: this.model,
                     config: this.config,
                     app: this.app,
@@ -656,9 +650,15 @@ define('io.ox/mail/compose/view', [
             this.$el.closest('.io-ox-mail-compose-window').find('.inline-yell').text(text).fadeIn();
         },
 
+        dirty: function (state) {
+            if (state === false) this.initialModel = this.model.toJSON();
+            else if (state === true) this.initialModel = {};
+            else return !_.isEmpty(this.model.deepDiff(this.initialModel));
+        },
+
         clean: function () {
             // mark as not dirty
-            this.model.dirty(false);
+            this.dirty(false);
             // clean up editors
             for (var id in this.editorHash) {
                 this.editorHash[id].destroy();
@@ -684,7 +684,7 @@ define('io.ox/mail/compose/view', [
                 isDraft = this.model.keepDraftOnClose();
 
             // This dialog gets automatically dismissed
-            if ((this.model.dirty() || isDraft) && !this.config.get('autoDismiss')) {
+            if ((this.dirty() || isDraft) && !this.config.get('autoDismiss')) {
                 var discardText = isDraft ? gt.pgettext('dialog', 'Delete draft') : gt.pgettext('dialog', 'Discard message'),
                     saveText = isDraft ? gt('Keep draft') : gt('Save as draft'),
                     modalText = isDraft ? gt('Do you really want to delete this draft?') : gt('Do you really want to discard your message?');
@@ -707,7 +707,7 @@ define('io.ox/mail/compose/view', [
                     .show()
                     .then(function (action) {
                         if (action === 'delete') {
-                            var isAutoDiscard = this.config.get('autoDiscard') && self.model.get('msgref');
+                            var isAutoDiscard = self.config.get('autoDiscard') && self.model.get('msgref');
                             if (!isDraft && !isAutoDiscard) return;
                             // only delete autosaved drafts that are not saved manually and have a msgref
                             mailAPI.remove([mailUtil.parseMsgref(mailAPI.separator, self.model.get('msgref'))]);
@@ -959,8 +959,9 @@ define('io.ox/mail/compose/view', [
                 if (!_.isEmpty(self.model.get('bcc'))) self.toggleTokenfield('bcc');
 
                 self.setBody(self.model.getContent());
+                // TODO double check this, especially the dirty setting
                 // Set model as dirty only when attaching infostore ids initially (Send as pdf from text)
-                self.model.dirty(self.model.get('mode') === 'compose' && !_.isEmpty(self.model.get('infostore_ids')));
+                self.dirty(self.model.get('mode') === 'compose' && !_.isEmpty(self.model.get('infostore_ids')));
             });
         },
 

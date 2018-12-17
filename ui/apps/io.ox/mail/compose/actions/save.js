@@ -81,7 +81,7 @@ define('io.ox/mail/compose/actions/save', [
             index: 1200,
             perform: function (baton) {
                 var opt = mailUtil.parseMsgref(mailAPI.separator, baton.resultData);
-                switch (baton.mail.attachments[0].content_type) {
+                switch (baton.model.get('contentType')) {
                     case 'text/plain':
                         opt.view = 'raw';
                         break;
