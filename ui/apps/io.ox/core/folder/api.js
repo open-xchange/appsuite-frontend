@@ -378,7 +378,6 @@ define('io.ox/core/folder/api', [
                 var data = this.models[id].toJSON();
                 this.models[id] = null;
                 delete this.models[id];
-                api.trigger('before:remove', data);
                 api.trigger('remove', id, data);
                 api.trigger('remove:' + id, data);
                 api.trigger('remove:' + data.module, data);
