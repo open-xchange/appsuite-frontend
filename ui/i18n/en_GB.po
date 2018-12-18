@@ -11871,6 +11871,12 @@ msgctxt "a11y"
 msgid "at %1$s"
 msgstr "at %1$s"
 
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Auto forward"
+msgid "autoforward"
+msgstr "Auto forward"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "azure"
 msgstr "azure"
