@@ -17,9 +17,8 @@ define('io.ox/mail/compose/actions/save', [
     'io.ox/mail/compose/api',
     'io.ox/mail/api',
     'io.ox/mail/util',
-    'io.ox/core/notifications',
-    'gettext!io.ox/mail'
-], function (ext, extensions, composeAPI, mailAPI, mailUtil, notifications, gt) {
+    'io.ox/core/notifications'
+], function (ext, extensions, composeAPI, mailAPI, mailUtil, notifications) {
 
     'use strict';
 
@@ -141,15 +140,8 @@ define('io.ox/mail/compose/actions/save', [
                     });
                 }
 
-                baton.model.set('msgref', baton.resultData);
-                baton.model.set('sendtype', composeAPI.SENDTYPE.EDIT_DRAFT);
-                // TODO why is baton.model.dirty and baton.view.model.dirty called with different values?!?
-                baton.model.dirty(baton.model.previous('sendtype') !== composeAPI.SENDTYPE.EDIT_DRAFT);
-                //#. %1$s is the time, the draft was saved
-                //#, c-format
-                baton.view.inlineYell(gt('Draft saved at %1$s', moment().format('LT')));
-                // make model not dirty after save
-                baton.view.model.dirty(false);
+                // make view not dirty after save
+                baton.view.dirty(false);
                 return baton.resultData;
             }
         }
