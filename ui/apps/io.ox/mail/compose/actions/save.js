@@ -22,7 +22,6 @@ define('io.ox/mail/compose/actions/save', [
 
     'use strict';
 
-    // TODO use new compose model
     ext.point('io.ox/mail/compose/actions/save').extend(
         {
             id: 'metrics',
@@ -113,6 +112,7 @@ define('io.ox/mail/compose/actions/save', [
             id: 'replace',
             index: 2000,
             perform: function (baton) {
+                // TODO need to investigate this "newData" stuff
                 // Replace inline images in contenteditable with links from draft response
                 if (baton.config.get('editorMode') === 'html') {
                     $('<div>').html(baton.newData.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {

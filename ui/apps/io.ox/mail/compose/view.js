@@ -307,6 +307,7 @@ define('io.ox/mail/compose/view', [
     // TODO: at the moment, this resolves with the result of the last extension point.
     // not sure if this is desired.
     // TODO: factor this out into a library or util class
+    // TODO this was alread done... see how we can use ext.point(...).cascade but need to compare error cases
     function extensionCascade(point, baton) {
         return point.reduce(function (def, p) {
             if (!def || !def.then) def = $.when(def);
