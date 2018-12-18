@@ -33,14 +33,6 @@ define('io.ox/mail/compose/api', [
 
     Events.extend(api);
 
-    api.SENDTYPE = {
-        NORMAL:     0,
-        REPLY:      1,
-        FORWARD:    2,
-        EDIT_DRAFT: 3,
-        DRAFT:      4
-    };
-
     var GET_IDS = 'id: folder_id:folder folder: recurrence_position:'.split(' ');
 
     /**
