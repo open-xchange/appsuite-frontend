@@ -16,7 +16,11 @@ for (var file in window.__karma__.files) {
 
 _.extend(ox, Backbone.Events);
 
-require(['io.ox/core/extPatterns/stage', 'io.ox/core/boot/login/auto'], function (Stage) {
+require([
+    'io.ox/core/extPatterns/stage',
+    'io.ox/core/extensions',
+    'io.ox/core/boot/login/auto'
+], function (Stage, ext) {
 
     'use strict';
 
@@ -40,6 +44,8 @@ require(['io.ox/core/extPatterns/stage', 'io.ox/core/boot/login/auto'], function
     server.autoRespond = true;
 
     $('body').prepend('<div id="background-loader">');
+
+    ext.point('io.ox/core/boot/rampup').disable('compositionSpaces');
 
     new Stage('io.ox/core/stages', {
         id: 'basic_settings',

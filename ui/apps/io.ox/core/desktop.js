@@ -788,7 +788,7 @@ define('io.ox/core/desktop', [
 
             return $.when(this.getSavePoints(), ox.rampup.compositionSpaces).then(function (list, compositionSpaces) {
                 return $.when.apply($,
-                    _([].concat(list, compositionSpaces)).map(function (obj) {
+                    _([].concat(list, compositionSpaces || [])).map(function (obj) {
                         adaptiveLoader.stop();
                         var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
                         return ox.load(requirements).then(function (m) {
