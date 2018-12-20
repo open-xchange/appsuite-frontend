@@ -77,19 +77,13 @@ define('io.ox/calendar/actions', [
             return e.baton.model && e.baton.model.has('attendees') && e.baton.model.get('attendees').length > 1;
         },
         action: function (baton) {
-            util.resolveParticipants(baton.data).done(function (recipients) {
+            util.resolveParticipants(baton.data, { filterSelf: true }).done(function (recipients) {
                 var hash = {};
                 recipients = _(recipients)
                     .chain()
                     .filter(function (rec) {
                         // don't add duplicates
                         return rec.mail in hash ? false : (hash[rec.mail] = true);
-                    })
-                    .filter(function (rec) {
-                        // don't add myself
-                        // don't add if mail address is missing (yep, edge-case)
-                        // support user and contact data
-                        return rec.id !== ox.user_id && rec.internal_userid !== ox.user_id && !!rec.mail;
                     })
                     .map(function (rec) {
                         return [rec.display_name, rec.mail];
