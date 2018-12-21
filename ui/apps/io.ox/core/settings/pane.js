@@ -18,6 +18,7 @@ define('io.ox/core/settings/pane', [
     'io.ox/backbone/mini-views/common',
     'io.ox/core/settings/util',
     'io.ox/core/api/apps',
+    'io.ox/core/upsell',
     'io.ox/core/capabilities',
     'io.ox/core/notifications',
     'io.ox/core/desktopNotifications',
@@ -27,14 +28,17 @@ define('io.ox/core/settings/pane', [
     'gettext!io.ox/core',
     'io.ox/backbone/mini-views/timezonepicker',
     'io.ox/core/main/appcontrol'
-], function (ext, ExtensibleView, DisposableView, mini, util, apps, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol) {
+], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol) {
 
     'use strict';
 
     var INDEX = 0,
         MINUTES = 60000,
         AUTOLOGIN = capabilities.has('autologin') && ox.secretCookie === true,
-        availableApps = apps.forLauncher().map(function (o) {
+        availableApps = apps.forLauncher().filter(function (model) {
+            var requires = model.get('requires');
+            return upsell.has(requires);
+        }).map(function (o) {
             return {
                 label: o.getTitle(),
                 value: o.get('path')
