@@ -59,6 +59,7 @@ define('io.ox/mail/compose/resizeUtils', [
     });
 
     function getImagesToResize(attachments) {
+        // TODO: eventually add image dimension into the model if image is added
         var fileSizeMaxExceeded = false,
             images = attachments.chain()
                 .each(function (model, index) {
@@ -113,7 +114,13 @@ define('io.ox/mail/compose/resizeUtils', [
     }
 
     function resizeIntoArray(attachments, resizeOption) {
-        if (resizeOption === 'original') return $.when();
+        if (resizeOption === 'original') {
+            // reset attachmentsize to original size
+            attachments.each(function (attachment) {
+                if (attachment._size) attachment.set('file_size', attachment._size);
+            });
+            return $.when();
+        }
 
         var targetArray = [];
 
@@ -126,6 +133,9 @@ define('io.ox/mail/compose/resizeUtils', [
                 .then(function (newImage) {
                     targetArray[image._index] = _.extend(newImage, { '_index': image._index });
                     image._resized = true;
+                    var model = attachments.at(image._index);
+                    if (!model._size) model._size = model.get('file_size');
+                    model.set('file_size', newImage.size);
                 });
             });
 
@@ -149,28 +159,12 @@ define('io.ox/mail/compose/resizeUtils', [
     }
 
     function getMailSizeString(model) {
-        var attachments = model.get('attachments').filter(function (file) {
-                var size = file.get('size');
-                return typeof size !== 'undefined';
-            }),
-            mailSize = _(attachments).reduce(function (agg, file) { return agg + file.get('size'); }, 0);
+        var attachmentSize = model.get('attachments').reduce(function (memo, attachment) {
+                return memo + (attachment.getSize() || 0);
+            }, 0),
+            mailSize = model.getContent().length;
 
-        return gt('Mail size:') + ' ' + strings.fileSize(mailSize, 1);
-    }
-
-    function getResizedSizeString(model, resizedFiles) {
-        var attachmentsSize =  model.get('attachments').chain()
-            .map(function (file, index) {
-                var resizedFile = _(resizedFiles).findWhere({ _index: index });
-                if (resizedFile && resizedFile.size) return resizedFile.size;
-                return file.getSize();
-            })
-            .reduce(function (memo, size) {
-                return memo + size;
-            }, 0)
-            .value(),
-            mailSize = attachmentsSize + model.getContent().length;
-        return gt('Mail size:') + ' ' + strings.fileSize(mailSize, 1);
+        return gt('Mail size:') + ' ' + strings.fileSize(attachmentSize + mailSize, 1);
     }
 
     var api = {
@@ -178,7 +172,6 @@ define('io.ox/mail/compose/resizeUtils', [
         getImagesToResize: getImagesToResize,
         resizeIntoArray: resizeIntoArray,
         getMailSizeString: getMailSizeString,
-        getResizedSizeString: getResizedSizeString,
         mergeResizedFiles: mergeResizedFiles
     };
 
