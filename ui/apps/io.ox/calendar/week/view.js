@@ -54,10 +54,18 @@ define('io.ox/calendar/week/view', [
                 if (!active) return;
                 opt.update.call(self, e);
             }, 100));
-            $(document).on('mouseup' + context, function (e) {
+
+            function clear() {
                 active = false;
                 self.undelegate('mousemove' + context);
+                self.undelegate('focusout' + context);
                 $(document).off('mouseup' + context);
+                opt.clear.call(self);
+            }
+
+            if (opt.clear) this.delegate('focusout' + context, clear);
+            $(document).on('mouseup' + context, function (e) {
+                clear();
                 opt.end.call(self, e);
             });
         }
@@ -1193,9 +1201,11 @@ define('io.ox/calendar/week/view', [
                         start.parent().prevAll().find('.lasso').remove();
                         day.nextAll().addBack().find('.lasso').remove();
                     },
-                    end: function () {
+                    clear: function () {
                         this.$('.lasso').remove();
                         this.$el.removeClass('no-select');
+                    },
+                    end: function () {
                         if (!startDate || !endDate) return;
                         this.opt.view.createAppointment({
                             startDate: { value: startDate.format('YYYYMMDD[T]HHmmss'), tzid: startDate.tz() },
