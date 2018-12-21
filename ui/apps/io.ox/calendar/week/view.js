@@ -60,7 +60,7 @@ define('io.ox/calendar/week/view', [
                 self.undelegate('mousemove' + context);
                 self.undelegate('focusout' + context);
                 $(document).off('mouseup' + context);
-                opt.clear.call(self);
+                if (opt.clear) opt.clear.call(self);
             }
 
             if (opt.clear) this.delegate('focusout' + context, clear);
