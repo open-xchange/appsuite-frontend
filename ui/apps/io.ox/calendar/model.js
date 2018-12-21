@@ -205,7 +205,7 @@ define('io.ox/calendar/model', [
 
         deserialize: function () {
             var changes = {};
-            changes.start_date = this.model.getTimestamp('startDate');
+            changes.startDate = _.clone(this.model.get('startDate'));
             if (!this.model.get('rrule')) return this.set(changes);
             var self = this,
                 rrule = this.splitRule(),
