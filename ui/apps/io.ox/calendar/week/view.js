@@ -1243,11 +1243,10 @@ define('io.ox/calendar/week/view', [
             }
 
             function getPivot(model, name) {
-                var date = model.getMoment(name).local(),
+                var date = model.getMoment(name).subtract(name === 'endDate' ? 1 : 0).local(),
                     startOfDay = date.clone().startOf('day'),
                     day = date.diff(this.model.get('startDate'), 'days'),
                     minutes = date.diff(startOfDay, 'minutes');
-                if (name === 'endDate') minutes -= 1;
                 var index = (minutes / 60 * this.model.get('gridSize')) >> 0;
                 return this.$('.day').eq(day).find('.timeslot').eq(index);
             }
