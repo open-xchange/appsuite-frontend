@@ -1017,7 +1017,7 @@ define('io.ox/calendar/week/view', [
                 }
 
                 // kill overlap appointments with length null
-                if (startLocal.isSame(endLocal) && maxCount > 1) {
+                if (startLocal.isSame(endLocal) && maxCount > 0) {
                     break;
                 }
 
