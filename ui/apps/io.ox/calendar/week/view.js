@@ -1298,9 +1298,10 @@ define('io.ox/calendar/week/view', [
                             if (end.parent().is(day)) endDate = startOfDay.clone().add(bottom / numTimeslots * 24 * 60 - endOffset, 'minutes');
 
                             if (slot.length === 0) slot = node.clone().appendTo(day);
+                            var offsetTop = startDate.diff(startOfDay, 'minutes') / 60 / 24 * 100;
                             slot.css({
-                                top: startDate.diff(startOfDay, 'minutes') / 60 / 24 * 100 + '%',
-                                height: endDate.diff(startDate, 'minutes') / 60 / 24 * 100 + '%'
+                                top: offsetTop + '%',
+                                height: Math.min(100 - offsetTop, endDate.diff(startDate, 'minutes') / 60 / 24 * 100) + '%'
                             });
                         }
                         start.parent().prevAll().find('.resizing').remove();
