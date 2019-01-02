@@ -40,7 +40,7 @@ define('io.ox/backbone/mini-views/timezonepicker', [
                 return !!available[tz.name];
             })
             .sortBy(function (tz) {
-                return tz.offset(now) * -1;
+                return tz.utcOffset(now) * -1;
             })
             .map(function (tz) {
                 return { label: tz.displayName, value: tz.name };
