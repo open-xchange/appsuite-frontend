@@ -369,7 +369,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                 function onSelectAll(e) {
                     var view = e.data.view;
                     _(view.data.aliases).each(function (alias) {
-                        view.model.set(alias, true);
+                        view.model.set('alias_' + alias, true);
                     });
                 }
             }
