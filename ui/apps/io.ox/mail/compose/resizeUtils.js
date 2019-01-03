@@ -150,8 +150,12 @@ define('io.ox/mail/compose/resizeUtils', [
 
         if (resizeOption === 'original' || typeof resizedFiles === 'undefined') return def.resolve();
 
-        _(resizedFiles).each(function (file) {
-            if (typeof file !== 'undefined') originalFiles[file._index] = file;
+        _(originalFiles).each(function (originalFile, index) {
+            if (originalFile && originalFile._index) {
+                originalFiles[index] = _(resizedFiles).find(function (resizedFile) {
+                    return resizedFile ? originalFile._index === resizedFile._index : false;
+                }) || originalFile;
+            }
         });
 
         def.resolve();
