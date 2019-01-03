@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-11-10 16:26-0700\n"
+"PO-Revision-Date: 2019-01-03 16:23+0100\n"
 "Last-Translator: Timothy Friesen <timothy.friesen@gmail.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -961,9 +961,9 @@ msgstr "Before"
 
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js apps/io.ox/core/main/topbar_right.js
-#: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
-#: apps/io.ox/find/view-tokenfield.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/main/apps.js
+#: apps/io.ox/core/main/topbar_right.js apps/io.ox/find/extensions-facets.js
+#: apps/io.ox/find/main.js apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
 #: module:io.ox/search apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
@@ -1489,13 +1489,6 @@ msgstr "Start time"
 msgid "End time"
 msgstr "End time"
 
-#. %1$s timezone abbreviation of the user
-#. %2$s time interval of event
-#. %2$s duration of event
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
-msgstr "In your timezone (%1$s): %2$s (Duration: %3$s)"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
@@ -1731,10 +1724,6 @@ msgstr "Name"
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "Please note that distribution lists cannot contain resources."
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Create distibution list"
-msgstr "Create distribution list"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
@@ -2286,8 +2275,9 @@ msgid "subscribe to calendar"
 msgstr "subscribe to calendar"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
-#: module:io.ox/core apps/plugins/portal/xing/register.js module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
 msgstr "Language"
 
@@ -3945,6 +3935,10 @@ msgid "Languages"
 msgstr "Languages"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Language:"
+msgstr "Language:"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
 "No connection to server. Please check your internet connection and retry."
 msgstr ""
@@ -4914,6 +4908,11 @@ msgctxt "app"
 msgid "Notes"
 msgstr "Notes"
 
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Editor"
+msgstr "Editor"
+
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
@@ -5522,6 +5521,12 @@ msgstr ""
 "to take effect."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
+msgstr ""
+"Some settings (language, time zone, theme) require a re-login to take effect."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Default Theme"
 msgstr "Default Theme"
 
@@ -5578,8 +5583,16 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr "The setting requires a reload or relogin to take effect."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "The setting requires a relogin to take effect."
+msgstr "The setting requires a re-login to take effect."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
 msgstr "Reload page"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Relogin"
+msgstr "Re-login"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -5915,11 +5928,6 @@ msgstr "Do not remind me again"
 msgid "OK"
 msgstr "OK"
 
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr "Close reminder for %1$s"
-
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 #: apps/plugins/notifications/tasks/register.js
@@ -6024,7 +6032,7 @@ msgstr[1] "Unable to upload files"
 #: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
 msgid "We encountered an issue for your upload"
 msgid_plural "We encountered some issues for your upload"
-msgstr[0] "We encountered an issue for your upload"
+msgstr[0] "We encountered an issue with your upload"
 msgstr[1] ""
 
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -6510,11 +6518,6 @@ msgstr "Note"
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "You can quick-save your changes via Ctrl+Enter."
-
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Editor"
-msgstr "Editor"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "This file will be written in your default folder to allow editing"
@@ -8751,6 +8754,10 @@ msgstr "Error: Failed to load messages"
 #: apps/io.ox/mail/mailfilter/autoforward/indicator.js module:io.ox/mail
 msgid "Auto forwarding is active"
 msgstr "Auto forwarding is active"
+
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
@@ -11262,6 +11269,7 @@ msgstr ""
 "Windows you have minimized will appear in all applications for easy access. "
 "You can maximize a window again by clicking on it."
 
+#. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "What is new"
@@ -11269,11 +11277,6 @@ msgstr "What is new"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "To learn more about the new and improved features you can visit "
 msgstr "To learn more about the new and improved features you can visit "
-
-#. %1$s is the product name, e.g. OX App Suite
-#: apps/io.ox/tours/whats-new.js module:io.ox/core
-msgid "What‘s New in %1$s 7.10.0"
-msgstr "What is New in %1$s 7.10.0"
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
@@ -11607,6 +11610,10 @@ msgstr "Sorry, could not connect to %s right now."
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Sorry, there is no data available for you on %s."
+
+#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+msgid "Participant not found"
+msgstr "Participant not found"
 
 #. %1$s Appointment title
 #. %1$s task title
@@ -12401,85 +12408,16 @@ msgstr "Invite to %s"
 msgid "Add on %s"
 msgstr "Add on %s"
 
-#~ msgid "Select calendar"
-#~ msgstr "Select calendar"
-
-#~ msgid "Create new calendar"
-#~ msgstr "Create new calendar"
-
-#~ msgid "Calendar:"
-#~ msgstr "Calendar:"
-
-#~ msgid "Show next day"
-#~ msgstr "Show next day"
-
-#~ msgid "Show previous day"
-#~ msgstr "Show previous day"
-
-#~ msgid "Calendar Month View"
-#~ msgstr "Calendar Month View"
-
-#~ msgid "%1$s (Tentative)"
-#~ msgstr "%1$s (Tentative)"
+#~| msgid "Account is being created"
+#~ msgid "Your preview is being generated."
+#~ msgstr "Your preview is being generated."
 
 #~ msgid ""
-#~ "This appointment is an exception. Changing the series does not affect "
-#~ "exceptions."
+#~ "\n"
+#~ " Alternatively you can download the file."
 #~ msgstr ""
-#~ "This appointment is an exception. Changing the series does not affect "
-#~ "exceptions."
-
-#~ msgid "Calendar Day View"
-#~ msgstr "Calendar Day View"
-
-#~ msgid "Calendar Workweek View"
-#~ msgstr "Calendar Workweek View"
-
-#~ msgid "Calendar Week View"
-#~ msgstr "Calendar Week View"
-
-#~ msgid "Appointment list"
-#~ msgstr "Appointment list"
-
-#~ msgid ""
-#~ "There are more than %n appointments in the current calendar. Some "
-#~ "features are disabled due to performance reasons."
-#~ msgstr ""
-#~ "There are more than %n appointments in the current calendar. Some "
-#~ "features are disabled due to performance reasons."
-
-#~ msgid "Days"
-#~ msgstr "Days"
-
-#~ msgid "Hours"
-#~ msgstr "Hours"
-
-#~ msgid "Minutes"
-#~ msgstr "Minutes"
-
-#~ msgid "Months"
-#~ msgstr "Months"
-
-#~ msgid "Years"
-#~ msgstr "Years"
-
-#~ msgid "Pause auto-play mode"
-#~ msgstr "Pause auto-play mode"
-
-#~ msgid "Run auto-play mode"
-#~ msgstr "Run auto-play mode"
-
-#~ msgid "Run auto-play "
-#~ msgstr "Run auto-play "
-
-#~ msgid "Read"
-#~ msgstr "Read"
-
-#~ msgid "Is bigger than"
-#~ msgstr "Is bigger than"
-
-#~ msgid "Is smaller than"
-#~ msgstr "Is smaller than"
+#~ "\n"
+#~ " Alternatively you can download the file."
 
 #, fuzzy
 #~| msgid "is not a valid user or group."
@@ -12538,6 +12476,9 @@ msgstr "Add on %s"
 
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s."
+
+#~ msgid "%1$s (Tentative)"
+#~ msgstr "%1$s (Tentative)"
 
 #~ msgid "%1$s Options"
 #~ msgstr "%1$s Options"
@@ -12739,9 +12680,6 @@ msgstr "Add on %s"
 #~ msgid "Account Settings"
 #~ msgstr "Account Settings"
 
-#~ msgid "Account is being created"
-#~ msgstr "Account is being created"
-
 #~ msgid "Acknowledge all reminders"
 #~ msgstr "Acknowledge all reminders"
 
@@ -12869,6 +12807,9 @@ msgstr "Add on %s"
 #~ "Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open"
 #~ msgstr ""
 #~ "Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open"
+
+#~ msgid "Appointment list"
+#~ msgstr "Appointment list"
 
 #~ msgid "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
 #~ msgstr "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
@@ -13002,8 +12943,23 @@ msgstr "Add on %s"
 #~ msgid "CalDAV Login"
 #~ msgstr "CalDAV Login"
 
+#~ msgid "Calendar Day View"
+#~ msgstr "Calendar Day View"
+
+#~ msgid "Calendar Month View"
+#~ msgstr "Calendar Month View"
+
+#~ msgid "Calendar Week View"
+#~ msgstr "Calendar Week View"
+
+#~ msgid "Calendar Workweek View"
+#~ msgstr "Calendar Workweek View"
+
 #~ msgid "Calendar workweek view"
 #~ msgstr "Calendar workweek view"
+
+#~ msgid "Calendar:"
+#~ msgstr "Calendar:"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV Login"
@@ -13105,6 +13061,9 @@ msgstr "Add on %s"
 #~| msgid "Click to close the recurrence view"
 #~ msgid "Close recurrence view"
 #~ msgstr "Click to close the recurrence view"
+
+#~ msgid "Close reminder for %1$s"
+#~ msgstr "Close reminder for %1$s"
 
 #~ msgid "Close this reminder"
 #~ msgstr "Close this reminder"
@@ -13212,8 +13171,14 @@ msgstr "Add on %s"
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Create a %s account using the data stored here"
 
+#~ msgid "Create distibution list"
+#~ msgstr "Create distribution list"
+
 #~ msgid "Create exception"
 #~ msgstr "Create exception"
+
+#~ msgid "Create new calendar"
+#~ msgstr "Create new calendar"
 
 #~ msgid "Create new task"
 #~ msgstr "Create new task"
@@ -13293,6 +13258,9 @@ msgstr "Add on %s"
 
 #~ msgid "Day View"
 #~ msgstr "Day View"
+
+#~ msgid "Days"
+#~ msgstr "Days"
 
 #~ msgid "December"
 #~ msgstr "December"
@@ -13870,6 +13838,9 @@ msgstr "Add on %s"
 #~ msgid "High contrast theme"
 #~ msgstr "High contrast theme"
 
+#~ msgid "Hours"
+#~ msgstr "Hours"
+
 #~ msgid "How does this work?"
 #~ msgstr "How does this work?"
 
@@ -13997,6 +13968,9 @@ msgstr "Add on %s"
 #~ "In the Icons view you can see the files of the selected folder in the "
 #~ "display area."
 
+#~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
+#~ msgstr "In your timezone (%1$s): %2$s (Duration: %3$s)"
+
 #~ msgid "Inbox Tabs"
 #~ msgstr "Inbox Tabs"
 
@@ -14046,6 +14020,12 @@ msgstr "Add on %s"
 
 #~ msgid "Inviting other participants"
 #~ msgstr "Inviting other participants"
+
+#~ msgid "Is bigger than"
+#~ msgstr "Is bigger than"
+
+#~ msgid "Is smaller than"
+#~ msgstr "Is smaller than"
 
 #~ msgid "Item List"
 #~ msgstr "Item List"
@@ -14212,6 +14192,9 @@ msgstr "Add on %s"
 #~ msgid "Message is read"
 #~ msgstr "Message is read"
 
+#~ msgid "Minutes"
+#~ msgstr "Minutes"
+
 #~ msgid "Mobile"
 #~ msgstr "Mobile"
 
@@ -14229,6 +14212,9 @@ msgstr "Add on %s"
 
 #~ msgid "Monthly on the %1$s %2$s"
 #~ msgstr "Monthly on the %1$s %2$s"
+
+#~ msgid "Months"
+#~ msgstr "Months"
 
 #, fuzzy
 #~| msgid "Months"
@@ -14445,6 +14431,9 @@ msgstr "Add on %s"
 #~ msgid "Pause Presentation"
 #~ msgstr "Task invitations"
 
+#~ msgid "Pause auto-play mode"
+#~ msgstr "Pause auto-play mode"
+
 #~ msgid "Pause presentation"
 #~ msgstr "Pause presentation"
 
@@ -14628,6 +14617,9 @@ msgstr "Add on %s"
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "Page %1$d of %2$d"
 
+#~ msgid "Read"
+#~ msgstr "Read"
+
 #~ msgid "Reading the details"
 #~ msgstr "Reading the details"
 
@@ -14698,6 +14690,12 @@ msgstr "Add on %s"
 #~ msgid "Rule applies until"
 #~ msgstr "Rule applies until"
 
+#~ msgid "Run auto-play "
+#~ msgstr "Run auto-play "
+
+#~ msgid "Run auto-play mode"
+#~ msgstr "Run auto-play mode"
+
 #~ msgid "Running applications"
 #~ msgstr "Running applications"
 
@@ -14761,6 +14759,9 @@ msgstr "Add on %s"
 
 #~ msgid "Select Folder"
 #~ msgstr "Select Folder"
+
+#~ msgid "Select calendar"
+#~ msgstr "Select calendar"
 
 #~ msgid "Select none"
 #~ msgstr "Select none"
@@ -14901,8 +14902,14 @@ msgstr "Add on %s"
 #~ msgid "Show more comments"
 #~ msgstr "Show more comments"
 
+#~ msgid "Show next day"
+#~ msgstr "Show next day"
+
 #~ msgid "Show original publication"
 #~ msgstr "Show original publication"
+
+#~ msgid "Show previous day"
+#~ msgstr "Show previous day"
 
 #~ msgid "Show side panel"
 #~ msgstr "Show side panel"
@@ -15436,6 +15443,13 @@ msgstr "Add on %s"
 #~ msgid "There are currently no participants."
 #~ msgstr "There are currently no participants."
 
+#~ msgid ""
+#~ "There are more than %n appointments in the current calendar. Some "
+#~ "features are disabled due to performance reasons."
+#~ msgstr ""
+#~ "There are more than %n appointments in the current calendar. Some "
+#~ "features are disabled due to performance reasons."
+
 #~ msgid "There is already %1$d appointment in this timeframe."
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
 #~ msgstr[0] "There is already %1$d appointment in this timeframe."
@@ -15449,6 +15463,13 @@ msgstr "Add on %s"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "This account cannot be validated"
+
+#~ msgid ""
+#~ "This appointment is an exception. Changing the series does not affect "
+#~ "exceptions."
+#~ msgstr ""
+#~ "This appointment is an exception. Changing the series does not affect "
+#~ "exceptions."
 
 #~ msgid "This document does not have any content."
 #~ msgstr "This document does not have any content."
@@ -15948,6 +15969,9 @@ msgstr "Add on %s"
 #~ msgid "What do you want to use on your iPhone?"
 #~ msgstr "Do you really want to discard your changes?"
 
+#~ msgid "What‘s New in %1$s 7.10.0"
+#~ msgstr "What is New in %1$s 7.10.0"
+
 #~ msgid ""
 #~ "When executing the downloaded file, an installation wizard will be "
 #~ "launched. Follow the instructions and install the updater. Installs "
@@ -16005,6 +16029,9 @@ msgstr "Add on %s"
 
 #~ msgid "Yearly on the %1$s %2$s of %3$d"
 #~ msgstr "Yearly on the %1$s %2$s of %3$d"
+
+#~ msgid "Years"
+#~ msgstr "Years"
 
 #~ msgid "Yes, always move them all"
 #~ msgstr "Yes, always move them all"
@@ -16291,9 +16318,6 @@ msgstr "Add on %s"
 
 #~ msgid "later"
 #~ msgstr "later"
-
-#~ msgid "login"
-#~ msgstr "login"
 
 #~ msgid "march"
 #~ msgstr "March"

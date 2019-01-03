@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-11-08 22:51+0100\n"
+"PO-Revision-Date: 2019-01-03 16:24+0100\n"
 "Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -966,9 +966,9 @@ msgstr "Voor"
 
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js apps/io.ox/core/main/topbar_right.js
-#: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
-#: apps/io.ox/find/view-tokenfield.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/main/apps.js
+#: apps/io.ox/core/main/topbar_right.js apps/io.ox/find/extensions-facets.js
+#: apps/io.ox/find/main.js apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
 #: module:io.ox/search apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
@@ -1218,8 +1218,8 @@ msgid ""
 "The selected calendar \"%1$s\" is public. Do you really want to create an "
 "appointment in this calendar?"
 msgstr ""
-"De gekozen agenda \"%1$s\" is publiek. Weet u zeker dat u een afspraak in"
-" deze agenda wilt maken?"
+"De gekozen agenda \"%1$s\" is publiek. Weet u zeker dat u een afspraak in "
+"deze agenda wilt maken?"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Create in public calendar"
@@ -1495,13 +1495,6 @@ msgstr "Begintijd"
 msgid "End time"
 msgstr "Eindtijd"
 
-#. %1$s timezone abbreviation of the user
-#. %2$s time interval of event
-#. %2$s duration of event
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
-msgstr "In uw tijdzone (%1$s): %2$s (Looptijd: %3$s)"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
@@ -1741,10 +1734,6 @@ msgstr "Naam"
 msgid "Please note that distribution lists cannot contain resources."
 msgstr ""
 "Houd er rekening mee dat distributielijsten geen bronnen kunnen bevatten."
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Create distibution list"
-msgstr "Distributielijst aanmaken"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
@@ -2302,8 +2291,9 @@ msgid "subscribe to calendar"
 msgstr "abonneren op agenda"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
-#: module:io.ox/core apps/plugins/portal/xing/register.js module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
 msgstr "Taal"
 
@@ -2870,8 +2860,8 @@ msgid ""
 "This appointment is an exception. Changing the exception does not affect the "
 "series."
 msgstr ""
-"De afspraak is een uitzondering. Het aanpassen van de uitzondering heeft geen"
-" effect op de serie."
+"De afspraak is een uitzondering. Het aanpassen van de uitzondering heeft "
+"geen effect op de serie."
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid "Direct link"
@@ -3977,6 +3967,10 @@ msgid "Languages"
 msgstr "Talen"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Language:"
+msgstr "Taal:"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
 "No connection to server. Please check your internet connection and retry."
 msgstr ""
@@ -4959,6 +4953,11 @@ msgctxt "app"
 msgid "Notes"
 msgstr "Opmerkingen"
 
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Editor"
+msgstr "Editor"
+
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
@@ -5573,6 +5572,13 @@ msgstr ""
 "opnieuw laadt of dat u zich opnieuw aanmeldt."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
+msgstr ""
+"Sommige instellingen (taal, tijdzone, thema) vereisen dat u zich opnieuw "
+"aanmeldt."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Default Theme"
 msgstr "Standaard Thema"
 
@@ -5631,8 +5637,16 @@ msgstr ""
 "aanmeldt."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "The setting requires a relogin to take effect."
+msgstr "De gemaakte wijziging vereist dat u zich opnieuw aanmeldt."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
 msgstr "Pagina herladen"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Relogin"
+msgstr "Opnieuw aanmelden"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -5970,11 +5984,6 @@ msgstr "Herinner me niet opnieuw"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "OK"
-
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr "Sluit deze herinnering voor %1$s"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
@@ -6574,11 +6583,6 @@ msgstr "Notitie"
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "U kunt uw wijzigingen snel opslaan met Ctrl+Enter."
-
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Editor"
-msgstr "Editor"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "This file will be written in your default folder to allow editing"
@@ -8846,6 +8850,10 @@ msgstr "Fout tijdens het lezen van de berichten"
 #: apps/io.ox/mail/mailfilter/autoforward/indicator.js module:io.ox/mail
 msgid "Auto forwarding is active"
 msgstr "Automatisch doorsturen is ingeschakeld"
+
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
@@ -11368,6 +11376,7 @@ msgstr ""
 "deze snel te kunnen benaderen. U kan een scherm opnieuw maximaliseren door "
 "er op te klikken."
 
+#. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "Wat is nieuw"
@@ -11377,11 +11386,6 @@ msgid "To learn more about the new and improved features you can visit "
 msgstr ""
 "Om meer te weten te komen van de nieuwe en verbeterde functies kan u naar de "
 "volgende pagina gaan "
-
-#. %1$s is the product name, e.g. OX App Suite
-#: apps/io.ox/tours/whats-new.js module:io.ox/core
-msgid "What‘s New in %1$s 7.10.0"
-msgstr "Wat is nieuw in %1$s 7.10.0"
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
@@ -11717,6 +11721,10 @@ msgstr "Sorry, kan momenteel geen verbinding maken met %s."
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Sorry, er zijn geen gegevens beschikbaar voor u op %s."
+
+#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+msgid "Participant not found"
+msgstr "Deelnemer niet gevonden"
 
 #. %1$s Appointment title
 #. %1$s task title
@@ -12517,87 +12525,16 @@ msgstr "Uitnodigingen voor %s"
 msgid "Add on %s"
 msgstr "Toegevoegd  op %s"
 
-#~ msgid "Select calendar"
-#~ msgstr "Selecteer agenda"
-
-#~ msgid "Create new calendar"
-#~ msgstr "Maak een nieuwe agenda"
-
-#~ msgid "Calendar:"
-#~ msgstr "Agenda:"
-
-#~ msgid "Show next day"
-#~ msgstr "Toon volgende dag"
-
-#~ msgid "Show previous day"
-#~ msgstr "Toon vorige dag"
-
-#~ msgid "Calendar Month View"
-#~ msgstr "Agendamaandoverzicht"
-
-# Reinout: Onder voorbehoud?
-# Elma: Ik heb geen idee, geen context gevonden???
-#~ msgid "%1$s (Tentative)"
-#~ msgstr "%1$s (Voorlopig)"
+#~| msgid "Account is being created"
+#~ msgid "Your preview is being generated."
+#~ msgstr "Uw voorbeeld wordt gemaakt."
 
 #~ msgid ""
-#~ "This appointment is an exception. Changing the series does not affect "
-#~ "exceptions."
+#~ "\n"
+#~ " Alternatively you can download the file."
 #~ msgstr ""
-#~ "Deze afspraak is een uitzondering. Bij het aanpassen van de serie "
-#~ "veranderd de uitzondering niet mee."
-
-#~ msgid "Calendar Day View"
-#~ msgstr "Agendadagoverzicht"
-
-#~ msgid "Calendar Workweek View"
-#~ msgstr "Agendawerkweekoverzicht"
-
-#~ msgid "Calendar Week View"
-#~ msgstr "Agendaweekoverzicht"
-
-#~ msgid "Appointment list"
-#~ msgstr "Afsprakenoverzicht"
-
-#~ msgid ""
-#~ "There are more than %n appointments in the current calendar. Some "
-#~ "features are disabled due to performance reasons."
-#~ msgstr ""
-#~ "Er zijn meer dan %n afspraken in de huidige agenda. Sommige opties zijn "
-#~ "uitgeschakeld om de prestaties te garanderen."
-
-#~ msgid "Days"
-#~ msgstr "Dagen"
-
-#~ msgid "Hours"
-#~ msgstr "Uren"
-
-#~ msgid "Minutes"
-#~ msgstr "Minuten"
-
-#~ msgid "Months"
-#~ msgstr "Maanden"
-
-#~ msgid "Years"
-#~ msgstr "Jaren"
-
-#~ msgid "Pause auto-play mode"
-#~ msgstr "Pauzeer autoplay modus"
-
-#~ msgid "Run auto-play mode"
-#~ msgstr "Start autoplay modus"
-
-#~ msgid "Run auto-play "
-#~ msgstr "Start autoplay"
-
-#~ msgid "Read"
-#~ msgstr "Lezen"
-
-#~ msgid "Is bigger than"
-#~ msgstr "Is groter dan"
-
-#~ msgid "Is smaller than"
-#~ msgstr "Is kleiner dan"
+#~ "\n"
+#~ " Eventueel kan u het bestand downloaden."
 
 #, fuzzy
 #~| msgid "is not a valid user or group."
@@ -12656,6 +12593,11 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s."
+
+# Reinout: Onder voorbehoud?
+# Elma: Ik heb geen idee, geen context gevonden???
+#~ msgid "%1$s (Tentative)"
+#~ msgstr "%1$s (Voorlopig)"
 
 #~ msgid "%1$s Options"
 #~ msgstr "%1$s Opties"
@@ -12850,9 +12792,6 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Account Settings"
 #~ msgstr "Accountinstellingen"
 
-#~ msgid "Account is being created"
-#~ msgstr "Account wordt aangemaakt"
-
 #~ msgid "Acknowledge all reminders"
 #~ msgstr "Bevestig alle herinneringen"
 
@@ -12972,6 +12911,9 @@ msgstr "Toegevoegd  op %s"
 #~ msgstr ""
 #~ "Afspraakuitnodiging. %1$s %2$s %3$s %4$s %5$s. Toets [enter] om te openen"
 
+#~ msgid "Appointment list"
+#~ msgstr "Afsprakenoverzicht"
+
 #~ msgid "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
 #~ msgstr ""
 #~ "Afspraakherinnering. %1$s %2$s %3$s %4$s. Toets [enter] om te openen"
@@ -13079,8 +13021,23 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "CalDAV Login"
 #~ msgstr "CalDAV Aanmeldnaam"
 
+#~ msgid "Calendar Day View"
+#~ msgstr "Agendadagoverzicht"
+
+#~ msgid "Calendar Month View"
+#~ msgstr "Agendamaandoverzicht"
+
+#~ msgid "Calendar Week View"
+#~ msgstr "Agendaweekoverzicht"
+
+#~ msgid "Calendar Workweek View"
+#~ msgstr "Agendawerkweekoverzicht"
+
 #~ msgid "Calendar workweek view"
 #~ msgstr "Agendawerkweekoverzicht"
+
+#~ msgid "Calendar:"
+#~ msgstr "Agenda:"
 
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV Aanmeldnaam"
@@ -13179,6 +13136,9 @@ msgstr "Toegevoegd  op %s"
 #~| msgid "Click to close the recurrence view"
 #~ msgid "Close recurrence view"
 #~ msgstr "Klik om het terugkeeroverzicht te sluiten"
+
+#~ msgid "Close reminder for %1$s"
+#~ msgstr "Sluit deze herinnering voor %1$s"
 
 #~ msgid "Close this reminder"
 #~ msgstr "Deze herinnering sluiten"
@@ -13281,8 +13241,14 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Maak een %s account aan met de hier opgeslagen gegevens"
 
+#~ msgid "Create distibution list"
+#~ msgstr "Distributielijst aanmaken"
+
 #~ msgid "Create exception"
 #~ msgstr "Uitzondering aanmaken"
+
+#~ msgid "Create new calendar"
+#~ msgstr "Maak een nieuwe agenda"
 
 #~ msgid "Create new task"
 #~ msgstr "Nieuwe taak aanmaken"
@@ -13362,6 +13328,9 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Day View"
 #~ msgstr "Dagoverzicht"
+
+#~ msgid "Days"
+#~ msgstr "Dagen"
 
 #~ msgid "December"
 #~ msgstr "december"
@@ -13857,6 +13826,9 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "High contrast theme"
 #~ msgstr "Hoog-contrast thema"
 
+#~ msgid "Hours"
+#~ msgstr "Uren"
+
 #~ msgid "How does this work?"
 #~ msgstr "Hoe werkt dit?"
 
@@ -13982,6 +13954,9 @@ msgstr "Toegevoegd  op %s"
 #~ "In het pictogrammenoverzicht kan u de bestanden van de gekozen map in het "
 #~ "hoofdgebied zien."
 
+#~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
+#~ msgstr "In uw tijdzone (%1$s): %2$s (Looptijd: %3$s)"
+
 #~ msgid "Inbox Tabs"
 #~ msgstr "Postvak IN Tabblad"
 
@@ -14032,6 +14007,12 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Inviting other participants"
 #~ msgstr "Andere deelnemers uitnodigen"
+
+#~ msgid "Is bigger than"
+#~ msgstr "Is groter dan"
+
+#~ msgid "Is smaller than"
+#~ msgstr "Is kleiner dan"
 
 #~ msgid "Item List"
 #~ msgstr "Itemoverzicht"
@@ -14176,6 +14157,9 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Message is read"
 #~ msgstr "Bericht is gelezen"
 
+#~ msgid "Minutes"
+#~ msgstr "Minuten"
+
 #~ msgid "Mobile"
 #~ msgstr "Mobiel"
 
@@ -14193,6 +14177,9 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Monthly on the %1$s %2$s"
 #~ msgstr "Maandelijks op de %1$s %2$s"
+
+#~ msgid "Months"
+#~ msgstr "Maanden"
 
 #, fuzzy
 #~| msgid "Months"
@@ -14379,6 +14366,9 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Pause Presentation"
 #~ msgstr "Taak uitnodigingen"
 
+#~ msgid "Pause auto-play mode"
+#~ msgstr "Pauzeer autoplay modus"
+
 #~ msgid "Pause presentation"
 #~ msgstr "Presentatie pauzeren"
 
@@ -14547,6 +14537,9 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "Pagina %1$d van %2$d"
 
+#~ msgid "Read"
+#~ msgstr "Lezen"
+
 #~ msgid "Reading the details"
 #~ msgstr "Details lezen"
 
@@ -14619,6 +14612,12 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Rule applies until"
 #~ msgstr "Regel toepassen tot"
 
+#~ msgid "Run auto-play "
+#~ msgstr "Start autoplay"
+
+#~ msgid "Run auto-play mode"
+#~ msgstr "Start autoplay modus"
+
 #~ msgid "Running applications"
 #~ msgstr "Applicaties starten"
 
@@ -14679,6 +14678,9 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Select Folder"
 #~ msgstr "Selecteer Map"
+
+#~ msgid "Select calendar"
+#~ msgstr "Selecteer agenda"
 
 #~ msgid "Select none"
 #~ msgstr "Selecteer niets"
@@ -14809,8 +14811,14 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Show more comments"
 #~ msgstr "Toon meer commentaar"
 
+#~ msgid "Show next day"
+#~ msgstr "Toon volgende dag"
+
 #~ msgid "Show original publication"
 #~ msgstr "Toon de originele publicatie"
+
+#~ msgid "Show previous day"
+#~ msgstr "Toon vorige dag"
 
 #~ msgid "Show version history"
 #~ msgstr "Toon versie geschiedenis"
@@ -15323,6 +15331,13 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "There are currently no participants."
 #~ msgstr "Er zijn momenteel geen deelnemers."
 
+#~ msgid ""
+#~ "There are more than %n appointments in the current calendar. Some "
+#~ "features are disabled due to performance reasons."
+#~ msgstr ""
+#~ "Er zijn meer dan %n afspraken in de huidige agenda. Sommige opties zijn "
+#~ "uitgeschakeld om de prestaties te garanderen."
+
 #~ msgid "There is already %1$d appointment in this timeframe."
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
 #~ msgstr[0] "U heeft reeds %1$d afspraak in deze periode."
@@ -15337,6 +15352,13 @@ msgstr "Toegevoegd  op %s"
 # (Reinout)
 #~ msgid "This account cannot be validated"
 #~ msgstr "Deze account kan niet worden gevalideerd"
+
+#~ msgid ""
+#~ "This appointment is an exception. Changing the series does not affect "
+#~ "exceptions."
+#~ msgstr ""
+#~ "Deze afspraak is een uitzondering. Bij het aanpassen van de serie "
+#~ "veranderd de uitzondering niet mee."
 
 #~ msgid "This document does not have any content."
 #~ msgstr "Het document bevat geen inhoud."
@@ -15833,6 +15855,9 @@ msgstr "Toegevoegd  op %s"
 #~ msgid "Welcome. Please provide your feedback about this product"
 #~ msgstr "Welkom. Geef alstublieft feedback over dit product"
 
+#~ msgid "What‘s New in %1$s 7.10.0"
+#~ msgstr "Wat is nieuw in %1$s 7.10.0"
+
 #~ msgid ""
 #~ "When executing the downloaded file, an installation wizard will be "
 #~ "launched. Follow the instructions and install the updater. Installs "
@@ -15884,6 +15909,9 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Yearly on the %1$s %2$s of %3$d"
 #~ msgstr "Jaarlijks op de %1$s %2$s van %3$d"
+
+#~ msgid "Years"
+#~ msgstr "Jaren"
 
 #~ msgid "Yes, always move them all"
 #~ msgstr "Ja, verplaats ze allemaal"

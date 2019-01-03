@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-11-11 23:26+0800\n"
+"PO-Revision-Date: 2019-01-03 16:26+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.1.1\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,731,-1,-1,-1,-1,-1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
@@ -960,9 +960,9 @@ msgstr "之前"
 
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js apps/io.ox/core/main/topbar_right.js
-#: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
-#: apps/io.ox/find/view-tokenfield.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/main/apps.js
+#: apps/io.ox/core/main/topbar_right.js apps/io.ox/find/extensions-facets.js
+#: apps/io.ox/find/main.js apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
 #: module:io.ox/search apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
@@ -1475,13 +1475,6 @@ msgstr "開始時間"
 msgid "End time"
 msgstr "結束時間"
 
-#. %1$s timezone abbreviation of the user
-#. %2$s time interval of event
-#. %2$s duration of event
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
-msgstr "於您的時區（%1$s）: %2$s（長度: %3$s）"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
@@ -1711,10 +1704,6 @@ msgstr "姓名"
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "請注意通訊組清單中不得包含資源。"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Create distibution list"
-msgstr "建立新通訊組清單"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
@@ -2256,8 +2245,9 @@ msgid "subscribe to calendar"
 msgstr "訂閱行事曆"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
-#: module:io.ox/core apps/plugins/portal/xing/register.js module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
 msgstr "語言"
 
@@ -3906,6 +3896,10 @@ msgid "Languages"
 msgstr "語言"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Language:"
+msgstr "語言:"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
 "No connection to server. Please check your internet connection and retry."
 msgstr "連接失敗！請檢查您的網路連線並重試。"
@@ -4857,6 +4851,11 @@ msgctxt "app"
 msgid "Notes"
 msgstr "Notes"
 
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Editor"
+msgstr "編輯器"
+
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
@@ -5455,6 +5454,11 @@ msgid ""
 msgstr "某些設定（語言、時區、佈景主題）需要重新載入頁面或重新登入後才會生效。"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
+msgstr "某些設定（語言、時區、佈景主題）需要重新登入後才會生效。"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Default Theme"
 msgstr "預設佈景"
 
@@ -5511,8 +5515,16 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr "此選項需要重新載入或重新登入才能生效。"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "The setting requires a relogin to take effect."
+msgstr "此選項需要重新登入才能生效。"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
 msgstr "重新載入頁面"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Relogin"
+msgstr "重新登入"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -5839,11 +5851,6 @@ msgstr "不要再提醒我"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "確認"
-
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr "關閉 %1$s 提醒"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
@@ -6426,11 +6433,6 @@ msgstr "備註"
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "您可以按下 Ctrl+Enter 快速儲存您的修改。"
-
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Editor"
-msgstr "編輯器"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "This file will be written in your default folder to allow editing"
@@ -8609,6 +8611,10 @@ msgstr "錯誤: 訊息載入失敗"
 #: apps/io.ox/mail/mailfilter/autoforward/indicator.js module:io.ox/mail
 msgid "Auto forwarding is active"
 msgstr "已開啟自動轉寄"
+
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
@@ -11090,6 +11096,7 @@ msgstr ""
 "被最小化的視窗將會顯示在所有應用程式中，方便您快速切換。再次點擊視窗後即可最"
 "大化。"
 
+#. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "最新消息"
@@ -11097,11 +11104,6 @@ msgstr "最新消息"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "To learn more about the new and improved features you can visit "
 msgstr "要了解新功能與改善過的功能，請造訪 "
-
-#. %1$s is the product name, e.g. OX App Suite
-#: apps/io.ox/tours/whats-new.js module:io.ox/core
-msgid "What‘s New in %1$s 7.10.0"
-msgstr "%1$s 7.10.0 版的最新內容"
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
@@ -11430,6 +11432,10 @@ msgstr "抱歉，目前無法連線至 %s。"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "抱歉，%s 上目前沒有可提供給您的資料。"
+
+#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+msgid "Participant not found"
+msgstr "找不到與會者"
 
 #. %1$s Appointment title
 #. %1$s task title
@@ -12210,81 +12216,15 @@ msgstr "邀請至 %s"
 msgid "Add on %s"
 msgstr "新增至 %s"
 
-#~ msgid "Select calendar"
-#~ msgstr "選擇行事曆"
-
-#~ msgid "Create new calendar"
-#~ msgstr "建立新行事曆"
-
-#~ msgid "Calendar:"
-#~ msgstr "行事曆:"
-
-#~ msgid "Show next day"
-#~ msgstr "顯示下一天"
-
-#~ msgid "Show previous day"
-#~ msgstr "顯示上一天"
-
-#~ msgid "Calendar Month View"
-#~ msgstr "日曆月視圖"
-
-#~ msgid "%1$s (Tentative)"
-#~ msgstr "%1$s (暫定)"
+#~ msgid "Your preview is being generated."
+#~ msgstr "正在產生預覽。"
 
 #~ msgid ""
-#~ "This appointment is an exception. Changing the series does not affect "
-#~ "exceptions."
-#~ msgstr "這場約會是系列約會當中的例外場次，修改系列時不會影響此例外場次。"
-
-#~ msgid "Calendar Day View"
-#~ msgstr "日曆日視圖"
-
-#~ msgid "Calendar Workweek View"
-#~ msgstr "日曆工作週視圖"
-
-#~ msgid "Calendar Week View"
-#~ msgstr "日曆週視圖"
-
-#~ msgid "Appointment list"
-#~ msgstr "約會清單"
-
-#~ msgid ""
-#~ "There are more than %n appointments in the current calendar. Some "
-#~ "features are disabled due to performance reasons."
-#~ msgstr "目前的行事曆中有超過 %n 場約會，已停用某些功能以確保效能正常。"
-
-#~ msgid "Days"
-#~ msgstr "日"
-
-#~ msgid "Hours"
-#~ msgstr "時"
-
-#~ msgid "Minutes"
-#~ msgstr "分鐘"
-
-#~ msgid "Months"
-#~ msgstr "月"
-
-#~ msgid "Years"
-#~ msgstr "年"
-
-#~ msgid "Pause auto-play mode"
-#~ msgstr "暫停自動播放模式"
-
-#~ msgid "Run auto-play mode"
-#~ msgstr "執行自動播放模式"
-
-#~ msgid "Run auto-play "
-#~ msgstr "執行自動播放 "
-
-#~ msgid "Read"
-#~ msgstr "閱讀"
-
-#~ msgid "Is bigger than"
-#~ msgstr "大於"
-
-#~ msgid "Is smaller than"
-#~ msgstr "小於"
+#~ "\n"
+#~ " Alternatively you can download the file."
+#~ msgstr ""
+#~ "\n"
+#~ "或者您也可以下載檔案。"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s)"
@@ -12375,6 +12315,9 @@ msgstr "新增至 %s"
 
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s。"
+
+#~ msgid "%1$s (Tentative)"
+#~ msgstr "%1$s (暫定)"
 
 #~ msgid "%1$s Options"
 #~ msgstr "%1$s 選項"
@@ -12677,9 +12620,6 @@ msgstr "新增至 %s"
 #~ msgid "Account Settings"
 #~ msgstr "帳戶設置"
 
-#~ msgid "Account is being created"
-#~ msgstr "正在建立帳號"
-
 #~ msgid "Account:"
 #~ msgstr "帳戶："
 
@@ -12925,6 +12865,9 @@ msgstr "新增至 %s"
 #~ msgid ""
 #~ "Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open"
 #~ msgstr "約會邀請。%1$s %2$s %3$s %4$s %5$s。按 Enter 以開啟"
+
+#~ msgid "Appointment list"
+#~ msgstr "約會清單"
 
 #~ msgid "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
 #~ msgstr "約會提醒。%1$s %2$s %3$s %4$s。按 Enter 以開啟"
@@ -13301,11 +13244,26 @@ msgstr "新增至 %s"
 #~ msgid "CalDAV Login"
 #~ msgstr "CalDAV 登入資訊"
 
+#~ msgid "Calendar Day View"
+#~ msgstr "日曆日視圖"
+
+#~ msgid "Calendar Month View"
+#~ msgstr "日曆月視圖"
+
+#~ msgid "Calendar Week View"
+#~ msgstr "日曆週視圖"
+
+#~ msgid "Calendar Workweek View"
+#~ msgstr "日曆工作週視圖"
+
 #~ msgid "Calendar custom view"
 #~ msgstr "日曆自定義視圖"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "行事曆工作週視圖"
+
+#~ msgid "Calendar:"
+#~ msgstr "行事曆:"
 
 #~ msgid "Cambodia"
 #~ msgstr "柬埔寨"
@@ -13510,6 +13468,9 @@ msgstr "新增至 %s"
 #~ msgid "Close recurrence view"
 #~ msgstr "點擊關閉重複發生視圖"
 
+#~ msgid "Close reminder for %1$s"
+#~ msgstr "關閉 %1$s 提醒"
+
 #~ msgid "Close search"
 #~ msgstr "關閉搜尋"
 
@@ -13684,8 +13645,14 @@ msgstr "新增至 %s"
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "使用儲存於此的資料註冊 %s 帳號"
 
+#~ msgid "Create distibution list"
+#~ msgstr "建立新通訊組清單"
+
 #~ msgid "Create exception"
 #~ msgstr "建立例外"
+
+#~ msgid "Create new calendar"
+#~ msgstr "建立新行事曆"
 
 #~ msgid "Create new task"
 #~ msgstr "建立新任務"
@@ -13850,6 +13817,9 @@ msgstr "新增至 %s"
 
 #~ msgid "Day View"
 #~ msgstr "日視圖"
+
+#~ msgid "Days"
+#~ msgstr "日"
 
 #~ msgid "Debug"
 #~ msgstr "除錯"
@@ -14848,6 +14818,9 @@ msgstr "新增至 %s"
 #~ msgid "High contrast theme"
 #~ msgstr "高對比佈景主題"
 
+#~ msgid "Hours"
+#~ msgstr "時"
+
 #~ msgid "How does this work?"
 #~ msgstr "這個功能如何使用？"
 
@@ -14977,6 +14950,9 @@ msgstr "新增至 %s"
 #~ "display area."
 #~ msgstr "在圖示視圖，您可以在顯示區域中檢視所選的資料夾當中的檔案。"
 
+#~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
+#~ msgstr "於您的時區（%1$s）: %2$s（長度: %3$s）"
+
 #~ msgid "Inbox Tabs"
 #~ msgstr "收件匣分頁"
 
@@ -15073,6 +15049,12 @@ msgstr "新增至 %s"
 
 #~ msgid "Inviting other participants"
 #~ msgstr "邀請其他參與者"
+
+#~ msgid "Is bigger than"
+#~ msgstr "大於"
+
+#~ msgid "Is smaller than"
+#~ msgstr "小於"
 
 #~ msgid "Italian (Italy)"
 #~ msgstr "義大利文 (義大利)"
@@ -15276,6 +15258,9 @@ msgstr "新增至 %s"
 #~ msgid "Message is read"
 #~ msgstr "標記為已讀"
 
+#~ msgid "Minutes"
+#~ msgstr "分鐘"
+
 #~ msgid "Mobile"
 #~ msgstr "手機"
 
@@ -15298,6 +15283,9 @@ msgstr "新增至 %s"
 
 #~ msgid "Monthly on the %1$s %2$s"
 #~ msgstr "每月的  %1$s %2$s"
+
+#~ msgid "Months"
+#~ msgstr "月"
 
 #, fuzzy
 #~| msgid "Months"
@@ -15572,6 +15560,9 @@ msgstr "新增至 %s"
 #~ msgid "Pause Presentation"
 #~ msgstr "目的地"
 
+#~ msgid "Pause auto-play mode"
+#~ msgstr "暫停自動播放模式"
+
 #~ msgid "Pause presentation"
 #~ msgstr "暫停簡報"
 
@@ -15772,6 +15763,9 @@ msgstr "新增至 %s"
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "第 %1$d 頁，共 %2$d 頁"
 
+#~ msgid "Read"
+#~ msgstr "閱讀"
+
 #~ msgid "Read Only Mode"
 #~ msgstr "唯讀模式"
 
@@ -15861,6 +15855,12 @@ msgstr "新增至 %s"
 #~ msgid "Rule applies until"
 #~ msgstr "規則套用至"
 
+#~ msgid "Run auto-play "
+#~ msgstr "執行自動播放 "
+
+#~ msgid "Run auto-play mode"
+#~ msgstr "執行自動播放模式"
+
 #~ msgid "Running applications"
 #~ msgstr "執行中的應用程式"
 
@@ -15934,6 +15934,9 @@ msgstr "新增至 %s"
 
 #~ msgid "Select Folder"
 #~ msgstr "選擇資料夾"
+
+#~ msgid "Select calendar"
+#~ msgstr "選擇行事曆"
 
 #~ msgid "Select none"
 #~ msgstr "全部不選"
@@ -16079,8 +16082,14 @@ msgstr "新增至 %s"
 #~ msgid "Show more..."
 #~ msgstr "顯示更多..."
 
+#~ msgid "Show next day"
+#~ msgstr "顯示下一天"
+
 #~ msgid "Show original publication"
 #~ msgstr "顯示原始發佈"
+
+#~ msgid "Show previous day"
+#~ msgstr "顯示上一天"
 
 #~ msgid "Show side panel"
 #~ msgstr "顯示側面板"
@@ -16643,6 +16652,11 @@ msgstr "新增至 %s"
 #~ msgid "There are currently no participants."
 #~ msgstr "目前沒有參與者"
 
+#~ msgid ""
+#~ "There are more than %n appointments in the current calendar. Some "
+#~ "features are disabled due to performance reasons."
+#~ msgstr "目前的行事曆中有超過 %n 場約會，已停用某些功能以確保效能正常。"
+
 #~ msgid "There is already %1$d appointment in this timeframe."
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
 #~ msgstr[0] "此時段內您有 %1$s 場約會。"
@@ -16656,6 +16670,11 @@ msgstr "新增至 %s"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "無法驗證此帳號"
+
+#~ msgid ""
+#~ "This appointment is an exception. Changing the series does not affect "
+#~ "exceptions."
+#~ msgstr "這場約會是系列約會當中的例外場次，修改系列時不會影響此例外場次。"
 
 #~ msgid "This document contains unsaved changes. Do you really want to close?"
 #~ msgstr "此文件包含為儲存更改，您確定要關閉嗎？"
@@ -17154,6 +17173,9 @@ msgstr "新增至 %s"
 #~ msgid "What to you want to use on your smartphone?"
 #~ msgstr "您是否想保存您的配置？"
 
+#~ msgid "What‘s New in %1$s 7.10.0"
+#~ msgstr "%1$s 7.10.0 版的最新內容"
+
 #~ msgid ""
 #~ "When executing the downloaded file, an installation wizard will be "
 #~ "launched. Follow the instructions and install the updater. Installs "
@@ -17203,6 +17225,9 @@ msgstr "新增至 %s"
 
 #~ msgid "Yearly on the %1$s %2$s of %3$d"
 #~ msgstr "每年 %3$d 月的 %1$s %2$s"
+
+#~ msgid "Years"
+#~ msgstr "年"
 
 #~ msgid "Yes, always move them all"
 #~ msgstr "好，總是全部移動"
@@ -17492,9 +17517,6 @@ msgstr "新增至 %s"
 
 #~ msgid "later"
 #~ msgstr "後"
-
-#~ msgid "login"
-#~ msgstr "帳號"
 
 #~ msgid "march"
 #~ msgstr "三月"
