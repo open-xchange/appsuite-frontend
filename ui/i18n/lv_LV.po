@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-06-21 11:55+0200\n"
+"PO-Revision-Date: 2019-01-03 16:28+0100\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -22,6 +22,26 @@ msgstr "Dialogs satur nederīgus datus"
 #: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main/offline.js
 msgid "Server unreachable"
 msgstr "Serveris nav pieejams"
+
+#. Used in a selectbox when the reminder for an appointment is before the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "before start"
+msgstr "pirms sākuma"
+
+#. Used in a selectbox when the reminder for an appointment is after the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "after start"
+msgstr "pēc sākuma"
+
+#. Used in a selectbox when the reminder for an appointment is before the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "before end"
+msgstr "pirms beigām"
+
+#. Used in a selectbox when the reminder for an appointment is after the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "after end"
+msgstr "pēc beigām"
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
@@ -669,11 +689,12 @@ msgid "Ok"
 msgstr "Labi"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
-#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
-#: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
-#: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar apps/io.ox/core/about/about.js
+#: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -2519,6 +2540,7 @@ msgstr[2] "%d dienas"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d minute"
 msgid_plural "%1$d minutes"
 msgstr[0] "%1$d minūte"
@@ -2528,6 +2550,7 @@ msgstr[2] "%1$d minūtes"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d hour"
 msgid_plural "%1$d hours"
 msgstr[0] "%1$d stunda"
@@ -3667,6 +3690,18 @@ msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
+#. '%1$s contact's display name
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "%1$s could not be added as the contact has no valid email field."
+msgstr ""
+"%1$s nevar tikt pievienots, jo kontaktpersonai nav derīga e-pasta lauka."
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "Some contacts could not be added as they have no valid email field."
+msgstr ""
+"Dažas kontaktpersonas nevar tikt pievienotas, jo tām nav derīga e-pasta "
+"lauka."
+
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
@@ -4612,7 +4647,9 @@ msgstr "%1$ d kopā"
 msgid "Unread: %1$d"
 msgstr "Nelasīts: %1$d"
 
+#. %1$d number of unread mails
 #: apps/io.ox/core/folder/node.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "%1$d unread"
 msgstr "%1$ d nelasīts"
 
@@ -5375,12 +5412,23 @@ msgstr ""
 "atkārtotu pieslēgšnos."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
+msgstr ""
+"Daži iestatījumi (valoda, laika zona, tēma) prasa atkārtotu pieslēgšanos."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Default Theme"
 msgstr "Noklusētā tēma"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Unicolor"
 msgstr "Vienkrāsas"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+msgid "Default"
+msgstr "Noklusētais"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Multicolor"
@@ -5432,8 +5480,16 @@ msgstr ""
 "Lai iestatījumi stātos spēkā ir jāveic pārlāde vai atkārtota pielēgšanās."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "The setting requires a relogin to take effect."
+msgstr "Lai iestatījumi stātos spēkā ir jāveic atkārtota pieslēgšanās."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
 msgstr "Pārlādēt lapu"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Relogin"
+msgstr "Pieslēgties no jauna"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -8611,6 +8667,10 @@ msgstr "Kļūda pie ziņojumu ielādēšanas"
 msgid "Auto forwarding is active"
 msgstr "Automātiskā pārsūtīšana ir aktīva"
 
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 #: apps/io.ox/settings/util.js module:io.ox/core
@@ -9261,6 +9321,10 @@ msgid "Your vacation notice is active"
 msgstr "Jūsu prombūtnes paziņojums ir aktīvs"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
+msgid "vacation notice"
+msgstr "prombūtnes paziņojums"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "The time frame is in the past."
 msgstr "Laika apgabals ir pagātnē."
 
@@ -9293,6 +9357,10 @@ msgstr "Beigas"
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Message"
 msgstr "Ziņojums"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+msgid "Show advanced options"
+msgstr "Rādīt papildus iestatījumus"
 
 #. Context: Vacation notices
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -10196,10 +10264,6 @@ msgstr "Portāla iestatījumi"
 msgid "Add widget"
 msgstr "Pievienot vidžetu"
 
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-msgid "Default"
-msgstr "Noklusētais"
-
 #. %1$s is the title of the item, which should be colored
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Color %1$s"
@@ -10534,6 +10598,10 @@ msgstr "DAVdroid"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "CalDav/CardDav"
 msgstr "CalDav/CardDav"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "WebDAV"
+msgstr "WebDAV"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Exchange Active Sync"
@@ -12279,655 +12347,245 @@ msgstr "Uzaicināt %s"
 msgid "Add on %s"
 msgstr "Pievienot %s"
 
-#~ msgid "Empty table cell"
-#~ msgstr "Tukša tabulas šūna"
+#~ msgid "Send mail %1$s before start."
+#~ msgstr "Sūtīt e-pastu %1$s pirms sākuma."
 
-#~ msgid "Encrypt"
-#~ msgstr "Šifrēt"
+#~ msgid "Send mail %1$s after start."
+#~ msgstr "Sūtīt e-pastu %1$s pēc sākuma."
 
-#~ msgid "You have to enter a username and password to subscribe."
-#~ msgstr "Lai abonētu jums ir jāievada lietotāja vārds un parole."
+#~ msgid "Send mail %1$s before end."
+#~ msgstr "Sūtīt e-pastu %1$s pirms beigām."
 
-#~ msgid "All future messages from %1$s will be moved to the selected folder."
-#~ msgid_plural ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
-#~ msgstr[0] "Visi turpmākie %1$s ziņojumi tiks pārvietoti uz norādīto mapi."
-#~ msgstr[1] ""
-#~ "Visi turpmākie ziņojumi no izvēlēto vēstuļu sūtītājiem tiks pārvietoti uz "
-#~ "norādīto mapi."
-#~ msgstr[2] ""
-#~ "Visi turpmākie ziņojumi no izvēlēto vēstuļu sūtītājiem tiks pārvietoti uz "
-#~ "norādīto mapi."
+#~ msgid "Send mail %1$s after end."
+#~ msgstr "Sūtīt e-pastu %1$s pēc beigām."
 
-#~ msgid "Show Links"
-#~ msgstr "Rādīt saites"
+#~ msgid "Send mail at %1$s."
+#~ msgstr "Sūtīt e-pastu %1$s."
 
-#~ msgid "Add attachment"
-#~ msgstr "Pievienot pielikumu"
+#~ msgid "Send mail at start."
+#~ msgstr "Sūtīt e-pastu pie sākuma."
 
-#~ msgid "Scheduling"
-#~ msgstr "Plānošana"
+#~ msgid "Send mail at end."
+#~ msgstr "Sūtīt e-pastu pie beigām."
 
-#~ msgctxt "app"
-#~ msgid "Conversations"
-#~ msgstr "Sarunas"
+#~ msgid "Reminder %1$d"
+#~ msgstr "Atgādinājums %1$s"
 
-#~ msgctxt "app"
-#~ msgid "Settings"
-#~ msgstr "Iestatījumi"
+#~ msgid "type"
+#~ msgstr "tips"
 
-#~ msgctxt "app"
-#~ msgid "Documents"
-#~ msgstr "Dokumenti"
+#~ msgid "timeframe"
+#~ msgstr "laika apgabals"
 
-#~ msgid "iCal-feed has been imported successfully"
-#~ msgstr "iCal straume ir veiksmīgi importēta"
+#~ msgid "timeframe relation"
+#~ msgstr "laika apgabala saite"
 
-#~ msgid "Change color"
-#~ msgstr "Mainīt krāsu"
+#~ msgid "Remove reminder"
+#~ msgstr "Noņemt atgādinājumu"
 
-#~ msgid "Please note that distribution lists cannot contain ressources."
-#~ msgstr "Lūdzu, ņemiet vērā, ka adresātu saraksti nevar saturēt resursus."
+#~ msgid "Minimized windows"
+#~ msgstr "Minimizētie logi"
 
-#~ msgid "Never."
-#~ msgstr "Nekad"
+#~ msgid "Change reminder"
+#~ msgstr "Mainīt atgādinājumu"
 
-#~ msgid "Town"
-#~ msgstr "Pilsēta"
+#~ msgid "Change reminders"
+#~ msgstr "Mainīt atgādinājumus"
 
-#~ msgid "iCal-Feed"
-#~ msgstr "iCal straume"
+#~ msgid "Appointments in public calendars"
+#~ msgstr "Mītiņi publiskajos kalendāros"
 
 #~ msgid ""
-#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
-#~ "for example."
+#~ "The selected calendar \"%1$s\" is public. Do you really want to create an "
+#~ "appointment in this calendar?"
 #~ msgstr ""
-#~ "Ignorēt esošos mītiņus. Tas ir praktiski lai, piemēram, ielādētu publisko "
-#~ "brīvdienu kalendārus."
+#~ "Atlasītais kalendārs \"%1$s\" ir publisks. Vai tiešām vēlaties šajā "
+#~ "kalendārā izveidot tikšanos?"
 
-#~ msgid "Remind me again %1$s"
-#~ msgstr "Atgādināt man pēc %1$s"
+#~ msgid "Create in public calendar"
+#~ msgstr "Izveidot publiskajā kalendārā"
 
-#~ msgid "Sharing link created for file \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "Koplietojuma saite failam \"%1$d\" ir izveidota"
-#~ msgstr[1] "Koplietojuma saite %1$d failiem ir izveidota"
-#~ msgstr[2] "Koplietojuma saite %1$d failiem ir izveidota"
+#~ msgid "Add a message to the notification email for the other participants."
+#~ msgstr "Pievienot ziņojumu paziņojuma citiem dalībniekiem e-pastam."
 
-#~ msgid "Sharing link created for folder \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "Koplietojuma saite mapei \"%1$d\" ir izveidota"
-#~ msgstr[1] "Koplietojuma saite %1$d mapēm ir izveidota"
-#~ msgstr[2] "Koplietojuma saite %1$d mapēm ir izveidota"
+#~ msgid "Your recurrence rule does not fit to your start date."
+#~ msgstr "Atkārtošanās kārtula neatbilst sākuma datumam."
 
-#~ msgid "Internal & external users"
-#~ msgstr "Iekšējie un ārējie lietotāji"
+#~ msgid "Your recurrence rule was changed automatically."
+#~ msgstr "Atkārtošanās kārtula tika automātiski izmainīta."
 
-#~ msgid "Quick reply"
-#~ msgstr "Ātrā atbilde"
-
-#~ msgid "Synchronize with Outlook"
-#~ msgstr "Sinhronizēt ar Outlook"
+#~ msgid "User defined color"
+#~ msgstr "Lietotāja definēta krāsa"
 
 #~ msgid ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
+#~ "You are using a shared calendar. The calendar owner was added as "
+#~ "organizer."
 #~ msgstr ""
-#~ "Visi turpmākie ziņojumi no izvēlēto e-pastu nosūtītājiem tiks pārvietoti "
-#~ "uz norādīto mapi."
-
-#~ msgid "never"
-#~ msgstr "nekad"
-
-#~ msgid "Use Password"
-#~ msgstr "Lietot paroli"
-
-#~ msgid "when the receivers have finished downloading the files"
-#~ msgstr "kad saņēmēji būs pabeiguši failu lejupielādi"
-
-#~ msgid "when the link is expired"
-#~ msgstr "kad siates derīgums ir beidzies"
-
-#~ msgid "when the receivers have accessed the files"
-#~ msgstr "kad saņēmēji būs piekļuvuši failiem"
-
-#~ msgid "%1$s Options"
-#~ msgstr "%1$s Opcijas"
-
-#~ msgid "Account is being created"
-#~ msgstr "Konts pašlaik tiek izveidots"
+#~ "Jūs izmantojat kopīgotu kalendāru. Kalendāra īpašnieks tika pievienots kā "
+#~ "organizators."
 
 #~ msgid ""
-#~ "This might be a phishing email because we could not verify that it is "
-#~ "really from %1$s."
+#~ "You are no longer using a shared calendar. You were added as organizer."
 #~ msgstr ""
-#~ "Šis varētu būt pikšķerēšanas e-pasts, jo nevar tikt pārbaudīts vai šī e-"
-#~ "pasta sūtītājs tiešam ir %1$s."
+#~ "Jūs vairs nelietojat kopīgotu kalendāru. Jūs esat pievienots kā "
+#~ "organizators."
 
-#~ msgid "in"
-#~ msgstr "iekš"
+#~ msgid "Visibility Help"
+#~ msgstr "Redzamība palīgs"
 
-#~ msgid "Exchange ActiveSync"
-#~ msgstr "Exchange ActiveSync"
+#~ msgid "Use calendar color"
+#~ msgstr "Lietot kalendāra krāsu"
 
-#~ msgid "Dangerous emails only"
-#~ msgstr "Tikai bīstamie e-pasti"
+#~ msgid "none"
+#~ msgstr "neviens"
 
-#~ msgid "Dangerous and trusted emails"
-#~ msgstr "Bīstamie un uzticamie e-pasti"
+#~ msgid "Previous Month"
+#~ msgstr "Iepriekšējais mēnesis"
 
-#~ msgid "Dangerous, trusted and valid emails"
-#~ msgstr "Bīstamie, uzticamie un derīgie e-pasti"
-
-#~ msgid "Add new reminder"
-#~ msgstr "Pievienot atgādinājumu"
-
-#~ msgid "Authentication failed. Please fill in login and password."
-#~ msgstr "Nesekmīga autorizēšanās. Lūdzu norādiet lietotāju un paroli."
-
-#~ msgid "Public"
-#~ msgstr "Publisks"
-
-#~ msgid "The appointment is visible for all users in shared folders."
-#~ msgstr "Mītiņš ir redzams visiem lietotājiem koplietojuma mapēs."
+#~ msgid "Next Month"
+#~ msgstr "Nākamais mēnesis"
 
 #~ msgid ""
-#~ "In shared folders, the appointment is displayed as a simple time slot for "
-#~ "non-attending users."
+#~ "This appointment is an exception. Changing the exception does not affect "
+#~ "the series."
+#~ msgstr "Šis mītiņš ir izņēmums. Izņēmuma maiņa neietekmē sēriju."
+
+#~ msgid "%s %s, create all-day appointment"
+#~ msgstr "%s %s, izveidot visas dienas mītiņu"
+
+#~ msgid "Apply filter"
+#~ msgstr "Piemērot filtru"
+
+#~ msgid "Starting letter index"
+#~ msgstr "Sākuma burta indekss"
+
+#~ msgid "Contact list. Select a contact to view details."
+#~ msgstr "Kontaktu saraksts. Lai skatītu detaļās, atlasiet kontaktpersonu."
+
+#~ msgid "Language:"
+#~ msgstr "Valoda:"
+
+#~ msgid "Regional settings"
+#~ msgstr "Reģionālie iestatījumi"
+
+#~ msgid "12 hours"
+#~ msgstr "12 stundas"
+
+#~ msgid "24 hours"
+#~ msgstr "24 stundas"
+
+#~ msgid "Sunday"
+#~ msgstr "Svētdiena"
+
+#~ msgid "Monday"
+#~ msgstr "Pirmdiena"
+
+#~ msgid "Week that contains January 1st"
+#~ msgstr "Nedēļa, kas satur 1. janvāri"
+
+#~ msgid "Week that contains the first Thursday"
+#~ msgstr "Nedēļa, kas satur pirmo ceturtdienu"
+
+#~ msgid "Numbers"
+#~ msgstr "Cipari"
+
+#~ msgid "First day of week"
+#~ msgstr "Nedēļas pirmā diena"
+
+#~ msgid "First week of year"
+#~ msgstr "Gada pirmā nedēļa"
+
+#~ msgid "Don't remind me again"
+#~ msgstr "Vairs neatgādināt"
+
+#~ msgid "Unable to upload file"
+#~ msgid_plural "Unable to upload files"
+#~ msgstr[0] "Nevar augšupielādēt failu"
+#~ msgstr[1] "Nevar augšupielādēt failus"
+#~ msgstr[2] "Nevar augšupielādēt failus"
+
+#~ msgid "We encountered an issue for your upload"
+#~ msgid_plural "We encountered some issues for your upload"
+#~ msgstr[0] "Reģistrēta augšupielādes problēma"
+#~ msgstr[1] "Reģistrētas vairākas augšupielādes problēmas"
+#~ msgstr[2] "Reģistrētas vairākas augšupielādes problēmas"
+
+#~ msgid "Slideshow"
+#~ msgstr "Slaidrāde"
+
+#~ msgid "Run slideshow"
+#~ msgstr "Uzsākt slaidrādi"
+
+#~ msgid "Stop slideshow"
+#~ msgstr "Apturēt slaidrādi"
+
+#~ msgid "Your preview is being generated."
+#~ msgstr "Priekšskatījums tiek ģenerēts."
+
+#~ msgid ""
+#~ "\n"
+#~ " Alternatively you can download the file."
 #~ msgstr ""
-#~ "Visiem lietotājiem, kuri nav dalībnieki, mītiņš ir redzams koplietojuma "
-#~ "mapēs kā vienkāršs laika apgabals."
+#~ "\n"
+#~ "Alternatīvi, jūs varat arī lejupielādēt failu."
 
-#~ msgid ""
-#~ "The appointment is not visible to non-attending users in shared folders "
-#~ "at all. The appointment is not considered for conflicts and does not "
-#~ "appear in the scheduling view."
+#~ msgid "Account already exists"
+#~ msgstr "Šis konts jau eksistē"
+
+#~ msgid "Image size:"
+#~ msgstr "Attēla izmērs:"
+
+#~ msgid "Original"
+#~ msgstr "Oriģināls"
+
+#~ msgid "Small"
+#~ msgstr "Mazs"
+
+#~ msgid "Large"
+#~ msgstr "Liels"
+
+#~ msgid "Image size"
+#~ msgstr "Attēla izmērs"
+
+#~ msgid "Small (%1$s px)"
+#~ msgstr "Mazs (%1$s px)"
+
+#~ msgid "Medium (%1$s px)"
+#~ msgstr "Vidējs (%1$s px)"
+
+#~ msgid "Large (%1$s px)"
+#~ msgstr "Liels (%1$s px)"
+
+#~ msgid "Mail size:"
+#~ msgstr "Pasta izmērs:"
+
+#~ msgid "Delete files after expiration"
+#~ msgstr "Dzēst failus pēc derīguma termiņa beigām"
+
+#~ msgid "Is bigger than (Size: B/KB/MB/GB)"
+#~ msgstr "Ir lielāks par (Izmērs: B/KB/MB/GB)"
+
+#~ msgid "Is smaller than (Size: B/KB/MB/GB)"
+#~ msgstr "Ir mazāks par (Izmērs: B/KB/MB/GB)"
+
+#~ msgid "String"
+#~ msgstr "Teksts"
+
+#~ msgid "Source"
+#~ msgstr "Avots"
+
+#~ msgid "Always trust mails from the following senders"
+#~ msgstr "Vienmēr uzticēties sekojošu sūtītāju e-pastiem"
+
+#~ msgid "Comma-separated list e.g. \"example.org, alice@example.com\""
 #~ msgstr ""
-#~ "Mītiņš nav redzams lietotājiem, kuri nav dalībnieki, netiek ņemts vērā "
-#~ "laika konfliktu apzināšanai un netiek uzrādīts plānošanas skatā."
+#~ "Ar komatu atdalīts saraksts, piem. \"example.org, alice@example.com\""
 
-#~ msgid "Notify all participants by email."
-#~ msgstr "Paziņot visiem dalībniekiem ar e-pastu."
+#~ msgid "Participant not found"
+#~ msgstr "Dalībnieks nav atrasts"
 
-#~ msgid "Birthday"
-#~ msgstr "Dzimšanas diena"
-
-#~ msgid "Color scheme"
-#~ msgstr "Krāsu shēma"
-
-#~ msgid "Custom colors"
-#~ msgstr "Pielāgotas krāsas"
-
-#~ msgid "Classic colors"
-#~ msgstr "Klasikās krāsas"
-
-#~ msgid "Dark colors"
-#~ msgstr "Tumšas krāsas"
-
-#~ msgid "Application Toolbar"
-#~ msgstr "Aplikācijas rīkjosla"
-
-#~ msgid "Folder type"
-#~ msgstr "Mapes tips"
-
-#~ msgid "Number of messages"
-#~ msgstr "Ziņojumu skaits"
-
-#~ msgid "Number of items"
-#~ msgstr "Vienību skaits"
-
-#~ msgid "List of public calendars and events"
-#~ msgstr "Publisko kalendāru un notikumu saraksts"
-
-#~ msgid ""
-#~ "Ignore existing events. Helpful to import public holiday calendars, for "
-#~ "example."
-#~ msgstr ""
-#~ "Ignorēt esošos notikumus. Ir praktiski lai, piemēram, ielādētu publiso "
-#~ "brīvdienu kalendārus."
-
-#~ msgid "Quick launch 1"
-#~ msgstr "Ātrā piekļuve 1"
-
-#~ msgid "Quick launch 2"
-#~ msgstr "Ātrā piekļuve 2"
-
-#~ msgid "Quick launch 3"
-#~ msgstr "Ātrā piekļuve 3"
-
-#~ msgid ""
-#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-#~ msgid_plural ""
-#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
-#~ msgstr[0] ""
-#~ "Fails nevar tikt augšupielādēts, jo tas pārsniedz %1$s kvotas limitu"
-#~ msgstr[1] ""
-#~ "Faili nevar tikt augšupielādēti, jo tie pārsniedz %1$s kvotas limitu"
-#~ msgstr[2] ""
-#~ "Faili nevar tikt augšupielādēti, jo tie pārsniedz %1$s kvotas limitu"
-
-#~ msgid "This message is from a trusted sender."
-#~ msgstr "Šis ziņojums ir no uzticama sūtītāja."
-
-#~ msgid ""
-#~ "This might be a phishing mail because we could not verify that this email "
-#~ "is really from %1$s."
-#~ msgstr ""
-#~ "Šis varētu būt pikšķerēšanas e-pasts, jo nevar tikt pārbaudīts vai šī e-"
-#~ "pasta sūtītājs tiešam ir %1$s."
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Šī e-pasta sūtītājs ir %1$s."
-
-#~ msgid "We could not verify that this email is really from %1$s."
-#~ msgstr "Nevar pārliecināties ka ši e-pasta sūtītājs tiešām ir %1$s."
-
-#~ msgid "no expiry date"
-#~ msgstr "bez beigu datuma"
-
-#~ msgid "Expiration: %1$d"
-#~ msgstr "Derīgums: %1$d"
-
-#~ msgid "Has Attachment"
-#~ msgstr "Ir pievienojums"
-
-#~ msgid "Show message authenticity"
-#~ msgstr "Rādīt ziņojuma autentiskumu"
-
-#~ msgid "Dangerous only"
-#~ msgstr "Tikai bīstamie"
-
-#~ msgid "Dangerous and trusted"
-#~ msgstr "Bīstamie un uzticamie"
-
-#~ msgid "Acknowledge all reminders"
-#~ msgstr "Apstiprināt visus atgādinājumus"
-
-#~ msgid "%1$d unread mails"
-#~ msgstr "%1$d nelasītas vēstules"
-
-#~ msgctxt "window title"
-#~ msgid "%1$s %2$s"
-#~ msgstr "%1$s %2$s"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s for %2$s"
-#~ msgstr "%1$s no %2$s"
-
-#, fuzzy
-#~| msgid "%s client for Android"
-#~ msgid "%1$s for Android"
-#~ msgstr "%s klients priekš Android"
-
-#, fuzzy
-#~| msgid "%s client for Mac OS"
-#~ msgid "%1$s for MacOS"
-#~ msgstr "%s klients priekš Mac OS"
-
-#, fuzzy
-#~| msgid "%s client for Windows"
-#~ msgid "%1$s for Windows"
-#~ msgstr "%s klients priekš Windows"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s for iOS"
-#~ msgstr "%1$s no %2$s"
-
-#~ msgid "%1$s is a new contact"
-#~ msgstr "%1$s ir jauns kontakts"
-
-#~ msgid "%1$s is now connected with %2$s"
-#~ msgstr "%1$s tagad ir sasaistīts ar %2$s"
-
-#~ msgid "%d minute"
-#~ msgid_plural "%d minutes"
-#~ msgstr[0] "%d minūte"
-#~ msgstr[1] "%d minūtes"
-#~ msgstr[2] "%d minūtes"
-
-#~ msgid "%s client for Windows (Installation via the OX Updater)"
-#~ msgstr "%s klients priekš Windows (uzstādīšana izmantojot OX Jauninātāju)"
-
-#~ msgid "(current app)"
-#~ msgstr "(pašreizējā apl.)"
-
-#~ msgid "Absent"
-#~ msgstr "Nav"
-
-#~ msgid "All my appointments"
-#~ msgstr "Visi mani mītiņi"
-
-#~ msgid "Apps"
-#~ msgstr "Aplikācijas"
-
-#~ msgid "Back to appointment"
-#~ msgstr "Atpakaļ uz mītiņu"
-
-#~ msgid ""
-#~ "By changing the date of this appointment you are creating an appointment "
-#~ "exception to the series."
-#~ msgstr "Izmainot šī mītiņa datumu jūs radīsiet izņēmumu mītiņu sērijā."
-
-#~ msgid "Change view"
-#~ msgstr "Mainīt skatu"
-
-#, fuzzy
-#~| msgid "Share %1$s \"%2$s\""
-#~ msgid "Chrome %1$s on %2$s"
-#~ msgstr "Koplietojums %1$s \"%2$s\""
-
-#, fuzzy
-#~| msgid "close for %1$s"
-#~ msgid "Close for %1$s"
-#~ msgstr "slēgts priekš %1$s"
-
-#~ msgid "Connector for Microsoft Outlook®"
-#~ msgstr "Microsoft Outlook® konektors"
-
-#~ msgid ""
-#~ "Convert the entered start and end dates to match the modified timezones"
-#~ msgstr ""
-#~ "Konvertēt ievadītos sākuma un beigu datumus atbilstoši izmainītajām laika "
-#~ "zonām"
-
-#~ msgid "Couldn't load appointment data."
-#~ msgstr "Nevar ielādēt mītiņa datus."
-
-#~ msgid "Couldn't load your contact data."
-#~ msgstr "Nevar ielādēt jūsu kontaktpersonas datus."
-
-#~ msgid "Create exception"
-#~ msgstr "Izveidot izņēmumu"
-
-#, fuzzy
-#~| msgid "Current Costs:"
-#~ msgid "Current session"
-#~ msgstr "Pašreiz. izmaksas:"
-
-#~ msgid ""
-#~ "Did you know that you can take OX App Suite with you? Just click this "
-#~ "icon and choose 'Connect your device' from the menu."
-#~ msgstr ""
-#~ "Vai jūs zināt, ka jūs varat paņemt OX App Suite sev līdz? Vienkārši "
-#~ "noklikšķiniet uz šīs ikonas un izvēlieties \"Savienot ar ierīci\"."
-
-#~ msgid "Display emoticons as graphics in text emails"
-#~ msgstr "Rādīt emocijzīmes kā grafiku teksta e-pastā"
-
-#, fuzzy
-#~| msgid "Do you really want to delete this account?"
-#~ msgid ""
-#~ "Do you really want to terminate all active sessions except the current "
-#~ "one?"
-#~ msgstr "Vai tiešām vēlaties dzēst šo kontu?"
-
-#, fuzzy
-#~| msgctxt "One file only"
-#~| msgid "Do you really want to delete this version?"
-#~ msgid "Do you really want to terminate that session?"
-#~ msgstr "Vai tiešām vēlaties dzēst šo versiju?"
-
-#~ msgid ""
-#~ "Do you want to delete the whole series or just one appointment within the "
-#~ "series?"
-#~ msgstr "Vai vēlaties dzēst visu sēriju vai tikai atsevišķu mītiņu?"
-
-#~ msgid ""
-#~ "Do you want to edit the whole series or just one appointment within the "
-#~ "series?"
-#~ msgstr "Vai vēlaties rediģēt visu sēriju vai tikai atsevišķu mītiņu?"
-
-#~ msgid "Doubleclick in this row for whole day appointment"
-#~ msgstr "Dubultklišķis rindā, lai izveidotu visas dienas mītiņu"
-
-#~ msgid "Download %s via the OX Updater"
-#~ msgstr "%s lejupielāde, izmantojot OX jauninātāju"
-
-#~ msgid "Download installation file (for Windows)"
-#~ msgstr "Lejuplādēt instalēšanas failu (Windows) "
-
-#, fuzzy
-#~| msgid "Due on %1$s"
-#~ msgid "Edge on %1$s"
-#~ msgstr "Izpildāms %1$s"
-
-#~ msgid "Expand timeframe by one month"
-#~ msgstr "Palielināt laika grafiku par vienu mēnesiP"
-
-#~ msgid "External guests"
-#~ msgstr "Ārējie viesi"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "Firefox %1$s on %2$s"
-#~ msgstr "%1$s no %2$s"
-
-#~ msgid "Header exists"
-#~ msgstr "Galvene eksistē"
-
-#~ msgid "High contrast theme"
-#~ msgstr "Augsta kontrasta tēma"
-
-#~ msgid "How does this work?"
-#~ msgstr "Kā tas strādā?"
-
-#, fuzzy
-#~| msgid "Added %1$s."
-#~ msgid "IP Address: %1$s"
-#~ msgstr "Pievienots %1$s."
-
-#~ msgid ""
-#~ "If you select different timezones, the appointment's start and end dates "
-#~ "are saved in the timezone of the appointment's start date. A different "
-#~ "end date timezone only allows a convenient conversion."
-#~ msgstr ""
-#~ "Ja izvēlēsities atšķirīgas laika zonas, mītiņa sākuma un beigu datumi "
-#~ "tiks saglabāti atbilstoši mītiņa sākuma datuma laika zonai. Atšķirīga "
-#~ "laika zona mītiņa beigu datumam tiek izmantota tika konvertēšanas ērtībām."
-
-#~ msgid ""
-#~ "If you spot a free time, just select this area. To do this, move the "
-#~ "cursor to the start time, hold the mouse button, and <b>drag the mouse</"
-#~ "b> to the end time."
-#~ msgstr ""
-#~ "Kad atrodiet brīvu laiku, izvēlieties šo apgabalu. Lai to izdarītu, "
-#~ "novietojiet kursoru uz sākuma laika, turiet nospiestu peles taustiņu un "
-#~ "<b>velciet peli </b>līdz beigu laikam."
-
-#~ msgid ""
-#~ "Informs about the current status of Emails and appointments without "
-#~ "having to display the user interface or another Windows® client."
-#~ msgstr ""
-#~ "Informē par pašreizējo e-pasta un mītiņu statusu bez atsevišķas  "
-#~ "lietotāja saskarnes vai Windows® klienta aplikācijas aktivizēšanas."
-
-#~ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
-#~ msgstr "Palaidēja nolaid-izvēlne. Lai atvērtu piespiediet [enter]."
-
-#~ msgid "Leave empty if you have none"
-#~ msgstr "Atstājiet tukšu, ja tāda nav"
-
-#~ msgid "LinkedIn"
-#~ msgstr "LinkedIn"
-
-#~ msgid "LinkedIn Network Updates"
-#~ msgstr "LinkedIn tīkla jauninājumi"
-
-#~ msgid "LinkedIn reported an error:"
-#~ msgstr "Reģistrēta LinkedIn kļūda:"
-
-#~ msgid "Manage permission now"
-#~ msgstr "Pārvaldīt ziņojumu darbības"
-
-#~ msgid "Notifier"
-#~ msgstr "Paziņotājs"
-
-#~ msgid "Open in browser"
-#~ msgstr "Atvērt pārlūkā"
-
-#~ msgid "Open in browser tab"
-#~ msgstr "Atvērt pārlūka lapā"
-
-#~ msgid "Open on LinkedIn"
-#~ msgstr "Atvērt iekš LinkedIn"
-
-#, fuzzy
-#~| msgid "Others"
-#~ msgid "Other clients"
-#~ msgstr "Citi"
-
-#~ msgid "Press [enter] to jump to the linkedin stream."
-#~ msgstr "lai pārslēgtos uz LinkedIn straumi, piespiediet [enter]."
-
-#~ msgid "Quit"
-#~ msgstr "Beigt"
-
-#~ msgid "Recent activities"
-#~ msgstr "Nesenās darbības"
-
-#, fuzzy
-#~| msgid "Remove from recipient list"
-#~ msgid "Remove restore point: \"%1$s\""
-#~ msgstr "Izņemt no saņēmēju saraksta"
-
-#~ msgid "Restore applications"
-#~ msgstr "Atjaunot aplikācijas"
-
-#, fuzzy
-#~| msgid "Share %1$s \"%2$s\""
-#~ msgid "Safari %1$s on %2$s"
-#~ msgstr "Koplietojums %1$s \"%2$s\""
-
-#~ msgid "Signed in as:"
-#~ msgstr "Pieslēgums kā:"
-
-#~ msgid ""
-#~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
-#~ "LinkedIn with the permission to do read messages."
-#~ msgstr ""
-#~ "Diemžēl, mēs šeit nevaram palīdzēt. Jūsu pakalpojuma nodrošinātājam ir "
-#~ "jāiegūst LinkeIn atslēga ar tiesībām lasīt ziņojumus."
-
-#~ msgid "Subscribe IMAP folders"
-#~ msgstr "IMAP mapju abonēšana"
-
-#~ msgid "Subscribe address book"
-#~ msgstr "Abonēt adrešu grāmatu"
-
-#~ msgid "Subscribe calendar"
-#~ msgstr "Abonēt kalendāru"
-
-#~ msgid ""
-#~ "Synchronization of Emails, Calendar, Contacts and Tasks, along with "
-#~ "Public, Shared and System Folders to Microsoft Outlook® clients."
-#~ msgstr ""
-#~ "E-pasta, kalendāra, kontaktu un uzdevumu sinhronizācija publiskajās, "
-#~ "koplietojuma un sistēmas mapēs ar Microsoft Outlook® klientiem."
-
-#~ msgid "Temporary"
-#~ msgstr "Pagaidu"
-
-#~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
-#~ msgstr ""
-#~ "Lauka \"%1$s\" izmērs pārsniedz maksimāli atļauto %2$d simbolu skaitu."
-
-#~ msgid ""
-#~ "The following applications can be restored. Just remove the restore point "
-#~ "if you don't want it to be restored."
-#~ msgstr ""
-#~ "Sekojošas aplikācijas var tikt atjaunotas. Ja nevēlaties tās atjaunot "
-#~ "vienkārši noņemiet atjaunošanas punktu."
-
-#~ msgid ""
-#~ "The setting has been saved and will become active when you enter the "
-#~ "application the next time."
-#~ msgstr ""
-#~ "Iestatījums ir saglabāts un tiks aktivizēts nākamreiz, kad pieslēgsieties "
-#~ "aplikācijai."
-
-#~ msgid ""
-#~ "The timezone of this appointment (%1$s) differs from your default "
-#~ "timezone (%2$s)."
-#~ msgstr ""
-#~ "Šī mītiņa laika zona (%1$s) atšķiras no jūsu noklusētās laika zonas "
-#~ "(%2$s)."
-
-#~ msgid "There is no preview for this file type"
-#~ msgstr "Šim failu tipam nav apskata iespēju"
-
-#~ msgid "There were not activities in your network"
-#~ msgstr "Jūsu tīklā nav bijušas nekādas aktivitātes"
-
-#~ msgid "Toggle viewport size"
-#~ msgstr "Pārslēgt izmēru"
-
-#, fuzzy
-#~| msgid "Unknown sender"
-#~ msgid "Unknown client"
-#~ msgstr "Nezināms nosūtītājs"
-
-#, fuzzy
-#~| msgid "Unknown sender"
-#~ msgid "Unkown client"
-#~ msgstr "Nezināms nosūtītājs"
-
-#~ msgid "Use accessibility improvements"
-#~ msgstr "Izmantot pieejamības uzlabojumus"
-
-#~ msgid "Use cursor keys to navigate"
-#~ msgstr "Lai pārvietotos, izmantojiet kursora taustiņus"
-
-#~ msgid "View attachment"
-#~ msgstr "Skatīt pievienojumus"
-
-#~ msgid ""
-#~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
-#~ "Appointments will therefore be created in your private calendar."
-#~ msgstr ""
-#~ "Jums nav tiesību izveidot mītiņa ierakstus iekš \"%1$s\", kura īpašnieks "
-#~ "ir %2$s. Mītiņa ieraksti tiks izveidotai jūsu privātajā kalendārā."
-
-#~ msgid ""
-#~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
-#~ "therefore be created in your private calendar."
-#~ msgstr ""
-#~ "Jums nav tiesību izveidot mītiņa ierakstus iekš \"%1$s\". Mītiņa ieraksti "
-#~ "tiks izveidotai jūsu privātajā kalendārā."
-
-#~ msgid ""
-#~ "You can import existing signatures from the previous product generation."
-#~ msgstr ""
-#~ "Jūs varat importēt esošos parakstus no iepriekšējās produkta paaudzes."
-
-#~ msgid "You have no new messages"
-#~ msgstr "Jums nav jaunu ziņojumu"
-
-#~ msgid ""
-#~ "You will automatically return to the appointment dialog. The selected "
-#~ "start and end time as well as the current participant list will be "
-#~ "applied."
-#~ msgstr ""
-#~ "Jūs automātiski atgriezīsieties pie mītiņa dialoga, kurā tiks piemēroti "
-#~ "izvēlētie sākuma un beigu laiki un dalībnieku saraksts."
-
-#~ msgid ""
-#~ "Your default reminder could not be set for this appointment due to "
-#~ "insufficient permissions"
-#~ msgstr ""
-#~ "Jūsu noklusētais atgādinājums nevar tikt iestatīts šim mītiņam "
-#~ "nepietiekamu tiesību dēļ"
-
-#~ msgid "Your messages"
-#~ msgstr "Jūsu ziņojumi"
-
-#~ msgid "Your reply has been sent"
-#~ msgstr "Jūsu atbilde ir nosūtīta"
-
-#~ msgid "via"
-#~ msgstr "caur"
+#~ msgid "Please use the \"Connect your device\" wizard to download %s"
+#~ msgstr "Lai lejupielādētu %s, lūdzu izmantojiet ierīču pieslēgšanas vedni"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -13004,7 +12662,14 @@ msgstr "Pievienot %s"
 #~ msgstr[1] "%1$d rindas"
 #~ msgstr[2] "%1$d rindas"
 
+#~ msgid "%1$d unread mails"
+#~ msgstr "%1$d nelasītas vēstules"
+
 #~ msgctxt "datetime"
+#~ msgid "%1$s %2$s"
+#~ msgstr "%1$s %2$s"
+
+#~ msgctxt "window title"
 #~ msgid "%1$s %2$s"
 #~ msgstr "%1$s %2$s"
 
@@ -13020,11 +12685,45 @@ msgstr "Pievienot %s"
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s."
 
+#~ msgid "%1$s Options"
+#~ msgstr "%1$s Opcijas"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for %2$s"
+#~ msgstr "%1$s no %2$s"
+
+#, fuzzy
+#~| msgid "%s client for Android"
+#~ msgid "%1$s for Android"
+#~ msgstr "%s klients priekš Android"
+
+#, fuzzy
+#~| msgid "%s client for Mac OS"
+#~ msgid "%1$s for MacOS"
+#~ msgstr "%s klients priekš Mac OS"
+
+#, fuzzy
+#~| msgid "%s client for Windows"
+#~ msgid "%1$s for Windows"
+#~ msgstr "%s klients priekš Windows"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for iOS"
+#~ msgstr "%1$s no %2$s"
+
 #~ msgid "%1$s has ended the presentation."
 #~ msgstr "%1$s ir pabeidzis(gusi) prezentāciju."
 
 #~ msgid "%1$s has started the presentation."
 #~ msgstr "%1$s ir uzsācis(kusi) prezentāciju."
+
+#~ msgid "%1$s is a new contact"
+#~ msgstr "%1$s ir jauns kontakts"
+
+#~ msgid "%1$s is now connected with %2$s"
+#~ msgstr "%1$s tagad ir sasaistīts ar %2$s"
 
 #~ msgid "%1$s mail"
 #~ msgid_plural "%1$s mails"
@@ -13084,6 +12783,12 @@ msgstr "Pievienot %s"
 #~ msgstr[1] "%d info vienības"
 #~ msgstr[2] "%d info vienības"
 
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d minūte"
+#~ msgstr[1] "%d minūtes"
+#~ msgstr[2] "%d minūtes"
+
 #~ msgctxt "in"
 #~ msgid "%d minute"
 #~ msgid_plural "%d minutes"
@@ -13109,6 +12814,9 @@ msgstr "Pievienot %s"
 #~ msgstr[0] "%d nedēļa"
 #~ msgstr[1] "%d nedēļas"
 #~ msgstr[2] "%d nedēļas"
+
+#~ msgid "%s client for Windows (Installation via the OX Updater)"
+#~ msgstr "%s klients priekš Windows (uzstādīšana izmantojot OX Jauninātāju)"
 
 #~ msgid "%s, EEE"
 #~ msgstr "%s, EEE"
@@ -13149,6 +12857,9 @@ msgstr "Pievienot %s"
 #~ msgid "(Default)"
 #~ msgstr "(Noklusētais)"
 
+#~ msgid "(current app)"
+#~ msgstr "(pašreizējā apl.)"
+
 #~ msgid "(may be slow on old machines)"
 #~ msgstr "(var būt lēni uz vecākiem datoriem)"
 
@@ -13172,9 +12883,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "10"
 #~ msgstr "10"
-
-#~ msgid "12 hour"
-#~ msgstr "12 stundas"
 
 #~ msgid "15"
 #~ msgstr "15"
@@ -13202,9 +12910,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "4 days"
 #~ msgstr "4 dienas"
-
-#~ msgid "4 hour"
-#~ msgstr "4 stundas"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 nedēļas"
@@ -13279,6 +12984,9 @@ msgstr "Pievienot %s"
 #~ msgid "AM"
 #~ msgstr "AM"
 
+#~ msgid "Absent"
+#~ msgstr "Nav"
+
 #~ msgid "Absent on business"
 #~ msgstr "Promesošs biznesam"
 
@@ -13311,6 +13019,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Account:"
 #~ msgstr "Konts:"
+
+#~ msgid "Acknowledge all reminders"
+#~ msgstr "Apstiprināt visus atgādinājumus"
 
 #~ msgid "Acquire Edit Rights"
 #~ msgstr "Iegūt rediģēšanas tiesības"
@@ -13360,6 +13071,9 @@ msgstr "Pievienot %s"
 #~ msgid "Add account"
 #~ msgstr "Pievienot kontu"
 
+#~ msgid "Add attachment"
+#~ msgstr "Pievienot pielikumu"
+
 #~ msgid "Add cipher code"
 #~ msgstr "Pievienot šifra kodu"
 
@@ -13389,6 +13103,9 @@ msgstr "Pievienot %s"
 #~ msgid "Add new guest"
 #~ msgstr "Pievienot jaunu viesi"
 
+#~ msgid "Add new reminder"
+#~ msgstr "Pievienot atgādinājumu"
+
 #~ msgid "Add new subfolder"
 #~ msgstr "Pievienot jaunu apakšmapi"
 
@@ -13403,9 +13120,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Tiek pievienots abonements. Process var aizņemt dažas sekundes ..."
-
-#~ msgid "Additional settings"
-#~ msgstr "Papildus iestatījumi"
 
 #~ msgid "Additional:"
 #~ msgstr "Papildus:"
@@ -13465,6 +13179,28 @@ msgstr "Pievienot %s"
 #~ msgid "All contacts"
 #~ msgstr "Pievienot kontaktu"
 
+#~ msgid "All future messages from %1$s will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] "Visi turpmākie %1$s ziņojumi tiks pārvietoti uz norādīto mapi."
+#~ msgstr[1] ""
+#~ "Visi turpmākie ziņojumi no izvēlēto vēstuļu sūtītājiem tiks pārvietoti uz "
+#~ "norādīto mapi."
+#~ msgstr[2] ""
+#~ "Visi turpmākie ziņojumi no izvēlēto vēstuļu sūtītājiem tiks pārvietoti uz "
+#~ "norādīto mapi."
+
+#~ msgid ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr ""
+#~ "Visi turpmākie ziņojumi no izvēlēto e-pastu nosūtītājiem tiks pārvietoti "
+#~ "uz norādīto mapi."
+
+#~ msgid "All my appointments"
+#~ msgstr "Visi mani mītiņi"
+
 #~ msgid "All users"
 #~ msgstr "Visi lietotāji"
 
@@ -13516,6 +13252,9 @@ msgstr "Pievienot %s"
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "Antigva un Barbuda"
 
+#~ msgid "Application Toolbar"
+#~ msgstr "Aplikācijas rīkjosla"
+
 #~ msgid "Applications"
 #~ msgstr "Aplikācijas"
 
@@ -13559,6 +13298,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "Aptuvenais abonēšanas laiks"
+
+#~ msgid "Apps"
+#~ msgstr "Aplikācijas"
 
 #~ msgid "Apr"
 #~ msgstr "Apr."
@@ -13711,6 +13453,9 @@ msgstr "Pievienot %s"
 #~ msgid "Austria"
 #~ msgstr "Austija"
 
+#~ msgid "Authentication failed. Please fill in login and password."
+#~ msgstr "Nesekmīga autorizēšanās. Lūdzu norādiet lietotāju un paroli."
+
 #~ msgid "Auto"
 #~ msgstr "Auto"
 
@@ -13760,6 +13505,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Azerbaijan"
 #~ msgstr "Azerbaidžāna"
+
+#~ msgid "Back to appointment"
+#~ msgstr "Atpakaļ uz mītiņu"
 
 #, fuzzy
 #~| msgid "Back to sign in"
@@ -13831,6 +13579,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Bhutan"
 #~ msgstr "Butāna"
+
+#~ msgid "Birthday"
+#~ msgstr "Dzimšanas diena"
 
 #~ msgid "Birthday Appointment"
 #~ msgstr "Dzimšanas dienas atzīmēšana"
@@ -13922,6 +13673,11 @@ msgstr "Pievienot %s"
 #~ msgid "Burundi"
 #~ msgstr "Burundija"
 
+#~ msgid ""
+#~ "By changing the date of this appointment you are creating an appointment "
+#~ "exception to the series."
+#~ msgstr "Izmainot šī mītiņa datumu jūs radīsiet izņēmumu mītiņu sērijā."
+
 #~ msgid "CAD"
 #~ msgstr "CAD"
 
@@ -14009,6 +13765,9 @@ msgstr "Pievienot %s"
 #~ msgid "Change View"
 #~ msgstr "Mainīt skatu"
 
+#~ msgid "Change color"
+#~ msgstr "Mainīt krāsu"
+
 #~ msgid "Change folder"
 #~ msgstr "Mainīt mapi"
 
@@ -14017,6 +13776,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Change subscription"
 #~ msgstr "Mainīt abonementu"
+
+#~ msgid "Change view"
+#~ msgstr "Mainīt skatu"
 
 #~ msgid "Changes have been saved."
 #~ msgstr "Izmaiņas ir saglabātas"
@@ -14054,6 +13816,11 @@ msgstr "Pievienot %s"
 #~ msgid "Christmas Island"
 #~ msgstr "Ziemassvētku sala"
 
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Chrome %1$s on %2$s"
+#~ msgstr "Koplietojums %1$s \"%2$s\""
+
 #~ msgid "City (business)"
 #~ msgstr "Pilsēta (bizness)"
 
@@ -14062,6 +13829,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "City:"
 #~ msgstr "Pilsēta:"
+
+#~ msgid "Classic colors"
+#~ msgstr "Klasikās krāsas"
 
 #~ msgid "Cleaning up... This may take a few seconds."
 #~ msgstr "Notiek tīrīšana.. Tas var aizņemt vairākas sekundes."
@@ -14134,6 +13904,11 @@ msgstr "Pievienot %s"
 #~ msgid "Close document"
 #~ msgstr "Aizvērt dokumentu"
 
+#, fuzzy
+#~| msgid "close for %1$s"
+#~ msgid "Close for %1$s"
+#~ msgstr "slēgts priekš %1$s"
+
 #~ msgid "Close quick config"
 #~ msgstr "Aizvērt ātro konfig."
 
@@ -14162,6 +13937,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Colombia"
 #~ msgstr "Kolumbija"
+
+#~ msgid "Color scheme"
+#~ msgstr "Krāsu shēma"
 
 #~ msgid "Comma Separated"
 #~ msgstr "Atdalīts ar komatu"
@@ -14221,6 +13999,9 @@ msgstr "Pievienot %s"
 #~ msgid "Connection failed! Please check your settings: "
 #~ msgstr "Pieslēgšanās nesekmīga! Lūdzu pārbaudoet iestatījumus:"
 
+#~ msgid "Connector for Microsoft Outlook®"
+#~ msgstr "Microsoft Outlook® konektors"
+
 #~ msgid "Contact folder..."
 #~ msgstr "Kontaktu mape..."
 
@@ -14242,6 +14023,16 @@ msgstr "Pievienot %s"
 
 #~ msgid "Continue the presentation"
 #~ msgstr "Turpināt prezentāciju"
+
+#~ msgctxt "app"
+#~ msgid "Conversations"
+#~ msgstr "Sarunas"
+
+#~ msgid ""
+#~ "Convert the entered start and end dates to match the modified timezones"
+#~ msgstr ""
+#~ "Konvertēt ievadītos sākuma un beigu datumus atbilstoši izmainītajām laika "
+#~ "zonām"
 
 #~ msgid "Cook Islands"
 #~ msgstr "Kuka salas"
@@ -14267,6 +14058,9 @@ msgstr "Pievienot %s"
 #~ msgid "Couldn't load all contact images."
 #~ msgstr "Nevar ielādēt visus kontaktu attēlus."
 
+#~ msgid "Couldn't load appointment data."
+#~ msgstr "Nevar ielādēt mītiņa datus."
+
 #~ msgid "Couldn't load folders."
 #~ msgstr "Nevar ielādēt mapes."
 
@@ -14278,6 +14072,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Couldn't load your auto forward."
 #~ msgstr "Nevar ielādēt jūsu automātisko pārsūtīšanu."
+
+#~ msgid "Couldn't load your contact data."
+#~ msgstr "Nevar ielādēt jūsu kontaktpersonas datus."
 
 #~ msgid "Country (other)"
 #~ msgstr "Valsts (cita)"
@@ -14293,6 +14090,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Izveidot %s kontu, izmantojot šeit saglabātos datus"
+
+#~ msgid "Create exception"
+#~ msgstr "Izveidot izņēmumu"
 
 #~ msgid "Create new task"
 #~ msgstr "Izveidot jaunu uzdevumu"
@@ -14374,6 +14174,11 @@ msgstr "Pievienot %s"
 #~ msgid "Current page and total page count"
 #~ msgstr "Pašreizējā lapa un un lapu kopskaits"
 
+#, fuzzy
+#~| msgid "Current Costs:"
+#~ msgid "Current session"
+#~ msgstr "Pašreiz. izmaksas:"
+
 #~ msgid "Current week, next week"
 #~ msgstr "Pašreizējā nedēļa, nākošā nedēļa"
 
@@ -14395,6 +14200,9 @@ msgstr "Pievienot %s"
 #~ msgid "Custom"
 #~ msgstr "Pielāgots"
 
+#~ msgid "Custom colors"
+#~ msgstr "Pielāgotas krāsas"
+
 #~ msgid "Customizing"
 #~ msgstr "Pielāgošana"
 
@@ -14413,8 +14221,26 @@ msgstr "Pievienot %s"
 #~ msgid "DKK"
 #~ msgstr "DKK"
 
+#~ msgid "Dangerous and trusted"
+#~ msgstr "Bīstamie un uzticamie"
+
+#~ msgid "Dangerous and trusted emails"
+#~ msgstr "Bīstamie un uzticamie e-pasti"
+
+#~ msgid "Dangerous emails only"
+#~ msgstr "Tikai bīstamie e-pasti"
+
+#~ msgid "Dangerous only"
+#~ msgstr "Tikai bīstamie"
+
+#~ msgid "Dangerous, trusted and valid emails"
+#~ msgstr "Bīstamie, uzticamie un derīgie e-pasti"
+
 #~ msgid "Danish"
 #~ msgstr "Dāņu"
+
+#~ msgid "Dark colors"
+#~ msgstr "Tumšas krāsas"
 
 #~ msgid "Darker"
 #~ msgstr "Tumšāks"
@@ -14593,6 +14419,13 @@ msgstr "Pievienot %s"
 #~ msgid "Details:"
 #~ msgstr "Detaļas:"
 
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Vai jūs zināt, ka jūs varat paņemt OX App Suite sev līdz? Vienkārši "
+#~ "noklikšķiniet uz šīs ikonas un izvēlieties \"Savienot ar ierīci\"."
+
 #~ msgid "Direct link: %1$s"
 #~ msgstr "Tiešā saite: %1$s"
 
@@ -14613,6 +14446,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Display as:"
 #~ msgstr "Uzrādīt kā:"
+
+#~ msgid "Display emoticons as graphics in text emails"
+#~ msgstr "Rādīt emocijzīmes kā grafiku teksta e-pastā"
 
 #~ msgid "Displayed name"
 #~ msgstr "Uzrādītais vārds"
@@ -14654,6 +14490,19 @@ msgstr "Pievienot %s"
 #~ msgid "Do you really want to discard this mail?"
 #~ msgstr "Vai tiešām vēlaties izmest šo vēstuli?"
 
+#, fuzzy
+#~| msgid "Do you really want to delete this account?"
+#~ msgid ""
+#~ "Do you really want to terminate all active sessions except the current "
+#~ "one?"
+#~ msgstr "Vai tiešām vēlaties dzēst šo kontu?"
+
+#, fuzzy
+#~| msgctxt "One file only"
+#~| msgid "Do you really want to delete this version?"
+#~ msgid "Do you really want to terminate that session?"
+#~ msgstr "Vai tiešām vēlaties dzēst šo versiju?"
+
 #~ msgid "Do you want to create a %s account?"
 #~ msgstr "Vai vēlaties izveidot %s kontu?"
 
@@ -14666,6 +14515,11 @@ msgstr "Pievienot %s"
 #~ "Do you want to delete the whole recurrence or single instances of the "
 #~ "recurrence?"
 #~ msgstr "Vai vēlaties dzēst visu sēriju vai tikai atsevišķu tās elementu?"
+
+#~ msgid ""
+#~ "Do you want to delete the whole series or just one appointment within the "
+#~ "series?"
+#~ msgstr "Vai vēlaties dzēst visu sēriju vai tikai atsevišķu mītiņu?"
 
 #~ msgid ""
 #~ "Do you want to edit the whole recurrence or a single recurrence "
@@ -14692,6 +14546,11 @@ msgstr "Pievienot %s"
 #~ "Vai vēlaties rediģēt visu sēriju vai tikai atsevišķu sērijas tikšanos? "
 #~ "Ievērojiet ka izmainot sēriju visi sērijas izņēmumi tiek pārstatīti."
 
+#~ msgid ""
+#~ "Do you want to edit the whole series or just one appointment within the "
+#~ "series?"
+#~ msgstr "Vai vēlaties rediģēt visu sēriju vai tikai atsevišķu mītiņu?"
+
 #~ msgid "Do you want to keep the draft after sending this mail?"
 #~ msgstr "Vai vēlaties saglabāt melnrakstu pēc vēstules nosūtīšanas?"
 
@@ -14704,6 +14563,10 @@ msgstr "Pievienot %s"
 #~ msgid "Document saved in folder \"%1$s\"."
 #~ msgstr "Dokuments ir saglabāts mapē \"%1$s\"."
 
+#~ msgid "Documents"
+#~ msgstr "Dokumenti"
+
+#~ msgctxt "app"
 #~ msgid "Documents"
 #~ msgstr "Dokumenti"
 
@@ -14727,6 +14590,15 @@ msgstr "Pievienot %s"
 
 #~ msgid "Double click to rename"
 #~ msgstr "Lai pārsauktu, izmantojiet dubultklikšķi"
+
+#~ msgid "Doubleclick in this row for whole day appointment"
+#~ msgstr "Dubultklišķis rindā, lai izveidotu visas dienas mītiņu"
+
+#~ msgid "Download %s via the OX Updater"
+#~ msgstr "%s lejupielāde, izmantojot OX jauninātāju"
+
+#~ msgid "Download installation file (for Windows)"
+#~ msgstr "Lejuplādēt instalēšanas failu (Windows) "
 
 #~ msgid "Drag and drop"
 #~ msgstr "Pārvikšana"
@@ -14825,6 +14697,11 @@ msgstr "Pievienot %s"
 #~ msgid "Ecuador"
 #~ msgstr "Ekvadora"
 
+#, fuzzy
+#~| msgid "Due on %1$s"
+#~ msgid "Edge on %1$s"
+#~ msgstr "Izpildāms %1$s"
+
 #~ msgid "Edit Furigana"
 #~ msgstr "Rediģēt \" Furigana\""
 
@@ -14900,14 +14777,11 @@ msgstr "Pievienot %s"
 #~ msgid "Email notification for task creator?"
 #~ msgstr "E-pasta paziņojums uzdevuma izveidotājam?"
 
-#~ msgid "Email notification for task participant?"
-#~ msgstr "E-pasta paziņojums uzdevuma dalībniekiem?"
-
-#~ msgid "Embedded windows"
-#~ msgstr "Ievietoti logi"
-
 #~ msgid "Employee ID:"
 #~ msgstr "Darbinieka ID:"
+
+#~ msgid "Empty table cell"
+#~ msgstr "Tukša tabulas šūna"
 
 #~ msgid "Emptying folder... This may take a few seconds."
 #~ msgstr "Mapes tukšošana... Tas var aizņemt vairākas sekundes."
@@ -14972,6 +14846,9 @@ msgstr "Pievienot %s"
 #~ "Atļauj bezsaistes piekļuvi e-pastam, kalendāram, uzdevumiem un kontaktu "
 #~ "mapēm. Visas izmaiņas, kas tiek veiktas ar MS Outlook bezsaistes režīmā "
 #~ "tiks automātiski sinhronizētas nākamreiz kad pieslēgsieties tiešsaistē:"
+
+#~ msgid "Encrypt"
+#~ msgstr "Šifrēt"
 
 #, fuzzy
 #~ msgid "End Presentation"
@@ -15105,9 +14982,6 @@ msgstr "Pievienot %s"
 #~ msgid "Estimated Costs:"
 #~ msgstr "Izmaksu prognoze:"
 
-#~ msgid "Estimated Duration:"
-#~ msgstr "Ilguma prognoze:"
-
 #~ msgid "Estonia"
 #~ msgstr "Igaunija"
 
@@ -15147,11 +15021,20 @@ msgstr "Pievienot %s"
 #~ msgid "Exception caught: "
 #~ msgstr "Reģistrēta kļūda:"
 
+#~ msgid "Exchange ActiveSync"
+#~ msgstr "Exchange ActiveSync"
+
 #~ msgid "Existing shares"
 #~ msgstr "Esošie koplietojumi"
 
 #~ msgid "Exit Fullscreen"
 #~ msgstr "Iziet no pilnekrāna"
+
+#~ msgid "Expand timeframe by one month"
+#~ msgstr "Palielināt laika grafiku par vienu mēnesiP"
+
+#~ msgid "Expiration: %1$d"
+#~ msgstr "Derīgums: %1$d"
 
 #, fuzzy
 #~| msgid "Send as vCard"
@@ -15164,6 +15047,9 @@ msgstr "Pievienot %s"
 #~ msgctxt "help"
 #~ msgid "External E-Mail Accounts"
 #~ msgstr "Ārējie e-pasta konti"
+
+#~ msgid "External guests"
+#~ msgstr "Ārējie viesi"
 
 #~ msgctxt "friday"
 #~ msgid "F"
@@ -15272,6 +15158,11 @@ msgstr "Pievienot %s"
 #~ msgid "Finland"
 #~ msgstr "Somija"
 
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "Firefox %1$s on %2$s"
+#~ msgstr "%1$s no %2$s"
+
 #~ msgid "First Tab"
 #~ msgstr "Pirmais tabulators"
 
@@ -15323,6 +15214,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Folder tree"
 #~ msgstr "Mapju koks"
+
+#~ msgid "Folder type"
+#~ msgstr "Mapes tips"
 
 #~ msgid "Folder-specific actions for %1$s"
 #~ msgstr "Mapes %1$s specifiskās darbības"
@@ -15542,6 +15436,12 @@ msgstr "Pievienot %s"
 #~ msgid "Halo view"
 #~ msgstr "Halo skats"
 
+#~ msgid "Has Attachment"
+#~ msgstr "Ir pievienojums"
+
+#~ msgid "Header exists"
+#~ msgstr "Galvene eksistē"
+
 #~ msgid "Heading"
 #~ msgstr "Galvene"
 
@@ -15594,6 +15494,9 @@ msgstr "Pievienot %s"
 #~ msgid "Hide side panel"
 #~ msgstr "Paslēpt sānu paneli"
 
+#~ msgid "High contrast theme"
+#~ msgstr "Augsta kontrasta tēma"
+
 #~ msgid "History of error messages"
 #~ msgstr "Kļūdu ziņojumu vēsture"
 
@@ -15605,6 +15508,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Hong Kong"
 #~ msgstr "Honkonga"
+
+#~ msgid "How does this work?"
+#~ msgstr "Kā tas strādā?"
 
 #~ msgid "How the settings are organized"
 #~ msgstr "Iestatījumu organizācija"
@@ -15647,6 +15553,11 @@ msgstr "Pievienot %s"
 #~ msgid "IMAP server"
 #~ msgstr "IMAP serveris"
 
+#, fuzzy
+#~| msgid "Added %1$s."
+#~ msgid "IP Address: %1$s"
+#~ msgstr "Pievienots %1$s."
+
 #~ msgid "IP phone (private)"
 #~ msgstr "IP telefons (privāts)"
 
@@ -15685,6 +15596,38 @@ msgstr "Pievienot %s"
 #~ msgstr ""
 #~ "Lai aizvērtu aplikācijas apskatlogu noklikškiniet uz krusta šī loga "
 #~ "augšējā labajā stūrī."
+
+#~ msgid ""
+#~ "If you select different timezones, the appointment's start and end dates "
+#~ "are saved in the timezone of the appointment's start date. A different "
+#~ "end date timezone only allows a convenient conversion."
+#~ msgstr ""
+#~ "Ja izvēlēsities atšķirīgas laika zonas, mītiņa sākuma un beigu datumi "
+#~ "tiks saglabāti atbilstoši mītiņa sākuma datuma laika zonai. Atšķirīga "
+#~ "laika zona mītiņa beigu datumam tiek izmantota tika konvertēšanas ērtībām."
+
+#~ msgid ""
+#~ "If you spot a free time, just select this area. To do this, move the "
+#~ "cursor to the start time, hold the mouse button, and <b>drag the mouse</"
+#~ "b> to the end time."
+#~ msgstr ""
+#~ "Kad atrodiet brīvu laiku, izvēlieties šo apgabalu. Lai to izdarītu, "
+#~ "novietojiet kursoru uz sākuma laika, turiet nospiestu peles taustiņu un "
+#~ "<b>velciet peli </b>līdz beigu laikam."
+
+#~ msgid ""
+#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
+#~ "for example."
+#~ msgstr ""
+#~ "Ignorēt esošos mītiņus. Tas ir praktiski lai, piemēram, ielādētu publisko "
+#~ "brīvdienu kalendārus."
+
+#~ msgid ""
+#~ "Ignore existing events. Helpful to import public holiday calendars, for "
+#~ "example."
+#~ msgstr ""
+#~ "Ignorēt esošos notikumus. Ir praktiski lai, piemēram, ielādētu publiso "
+#~ "brīvdienu kalendārus."
 
 #~ msgid "Illegal Date in remind date"
 #~ msgstr "Nepareizs atgādinājuma datums"
@@ -15748,6 +15691,13 @@ msgstr "Pievienot %s"
 #~ "noklikšķiniet uz ikonas apakšējā kreisajā malā."
 
 #~ msgid ""
+#~ "In shared folders, the appointment is displayed as a simple time slot for "
+#~ "non-attending users."
+#~ msgstr ""
+#~ "Visiem lietotājiem, kuri nav dalībnieki, mītiņš ir redzams koplietojuma "
+#~ "mapēs kā vienkāršs laika apgabals."
+
+#~ msgid ""
 #~ "In the Details section at the bottom right side you can enter billing "
 #~ "information."
 #~ msgstr ""
@@ -15797,6 +15747,13 @@ msgstr "Pievienot %s"
 #~ msgid "Information about account recovery..."
 #~ msgstr "Informācija par kontu atgūšanu..."
 
+#~ msgid ""
+#~ "Informs about the current status of Emails and appointments without "
+#~ "having to display the user interface or another Windows® client."
+#~ msgstr ""
+#~ "Informē par pašreizējo e-pasta un mītiņu statusu bez atsevišķas  "
+#~ "lietotāja saskarnes vai Windows® klienta aplikācijas aktivizēšanas."
+
 #~ msgid "Infostore"
 #~ msgstr "Infoglabātuve"
 
@@ -15842,6 +15799,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Instant Messenger:"
 #~ msgstr "Tūlītējais ziņotājs:"
+
+#~ msgid "Internal & external users"
+#~ msgstr "Iekšējie un ārējie lietotāji"
 
 #~ msgid "Internal Error"
 #~ msgstr "Iekšēja kļūda"
@@ -16045,6 +16005,9 @@ msgstr "Pievienot %s"
 #~ msgid "Last name:"
 #~ msgstr "Uzvārds:"
 
+#~ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
+#~ msgstr "Palaidēja nolaid-izvēlne. Lai atvērtu piespiediet [enter]."
+
 #~ msgid "Launching an app"
 #~ msgstr "Aplikācijas startēšana"
 
@@ -16054,6 +16017,9 @@ msgstr "Pievienot %s"
 #, fuzzy
 #~ msgid "Leave Presentation"
 #~ msgstr "Saņēmējs"
+
+#~ msgid "Leave empty if you have none"
+#~ msgstr "Atstājiet tukšu, ja tāda nav"
 
 #~ msgid "Leave messages on server"
 #~ msgstr "Atstāt ziņojumus uz servera"
@@ -16113,6 +16079,18 @@ msgstr "Pievienot %s"
 
 #~ msgid "Link/Url"
 #~ msgstr "Saite/URL"
+
+#~ msgid "LinkedIn"
+#~ msgstr "LinkedIn"
+
+#~ msgid "LinkedIn Network Updates"
+#~ msgstr "LinkedIn tīkla jauninājumi"
+
+#~ msgid "LinkedIn reported an error:"
+#~ msgstr "Reģistrēta LinkedIn kļūda:"
+
+#~ msgid "List of public calendars and events"
+#~ msgstr "Publisko kalendāru un notikumu saraksts"
 
 #~ msgid "Lithuania"
 #~ msgstr "Lietuva"
@@ -16230,6 +16208,9 @@ msgstr "Pievienot %s"
 #~ msgid "Manage applications"
 #~ msgstr "Aplikāciju pārvaldība"
 
+#~ msgid "Manage permission now"
+#~ msgstr "Pārvaldīt ziņojumu darbības"
+
 #~ msgid "Manager:"
 #~ msgstr "Menedžeris:"
 
@@ -16310,9 +16291,6 @@ msgstr "Pievienot %s"
 #~ msgstr "Otrais vārds:"
 
 #~ msgid "Mime Type"
-#~ msgstr "MIME tips"
-
-#~ msgid "Mime type"
 #~ msgstr "MIME tips"
 
 #~ msgid "Mobile"
@@ -16449,6 +16427,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Network Problems"
 #~ msgstr "Tīkla kļūda"
+
+#~ msgid "Never."
+#~ msgstr "Nekad"
 
 #~ msgid "New Appointment"
 #~ msgstr "Jauna tikšanās"
@@ -16655,6 +16636,12 @@ msgstr "Pievienot %s"
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Jūsu ziņu straumē nav jaunas informācijas."
 
+#~ msgid "Notifier"
+#~ msgstr "Paziņotājs"
+
+#~ msgid "Notify all participants by email."
+#~ msgstr "Paziņot visiem dalībniekiem ar e-pastu."
+
 #~ msgid "Notify on delivery receipt?"
 #~ msgstr "Paziņot par piegādi?"
 
@@ -16684,6 +16671,12 @@ msgstr "Pievienot %s"
 
 #~ msgid "Number of days in work week"
 #~ msgstr "Dienu skaits darba nedēļā"
+
+#~ msgid "Number of items"
+#~ msgstr "Vienību skaits"
+
+#~ msgid "Number of messages"
+#~ msgstr "Ziņojumu skaits"
 
 #~ msgid "Number of rows to be displayed in card view:"
 #~ msgstr "Uzrādāmo rindu skaits kartiņu skatā:"
@@ -16754,8 +16747,17 @@ msgstr "Pievienot %s"
 #~ "logus darbam ar sistēmu. Neizmantojiet šo opciju ja pieslēdzaties no "
 #~ "sveša vai publiska datora."
 
+#~ msgid "Open in browser"
+#~ msgstr "Atvērt pārlūkā"
+
+#~ msgid "Open in browser tab"
+#~ msgstr "Atvērt pārlūka lapā"
+
 #~ msgid "Open in new tab"
 #~ msgstr "Atvērt jaunā lapā"
+
+#~ msgid "Open on LinkedIn"
+#~ msgstr "Atvērt iekš LinkedIn"
 
 #~ msgid "Open-Xchange Server"
 #~ msgstr "Open-Xchange serveris"
@@ -16780,6 +16782,11 @@ msgstr "Pievienot %s"
 
 #~ msgid "Organizer:"
 #~ msgstr "Organizators:"
+
+#, fuzzy
+#~| msgid "Others"
+#~ msgid "Other clients"
+#~ msgstr "Citi"
 
 #~ msgid "Outlook file"
 #~ msgstr "Outlook fails"
@@ -16856,9 +16863,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Parameter:"
 #~ msgstr "Parametrs:"
-
-#~ msgid "Participant"
-#~ msgstr "Dalībnieks"
 
 #~ msgid "Participant:"
 #~ msgstr "Dalībnieks:"
@@ -16990,6 +16994,9 @@ msgstr "Pievienot %s"
 #~ "Lūdzu apskatiet %sInteresanto UWA moduļu%s lapu. Tajā ir uzrādīts dažādo "
 #~ "logrīku saraksts ar tiem atbilstošajiem datiem."
 
+#~ msgid "Please note that distribution lists cannot contain ressources."
+#~ msgstr "Lūdzu, ņemiet vērā, ka adresātu saraksti nevar saturēt resursus."
+
 #~ msgid ""
 #~ "Please note: All messages received from the POP3 account will be stored "
 #~ "to a folder on your local IMAP account."
@@ -17110,6 +17117,9 @@ msgstr "Pievienot %s"
 #~ msgid "Press [enter] to jump to the facebook stream."
 #~ msgstr "Lai pārslēgtos uz Facebook straumi, piespiediet [enter]."
 
+#~ msgid "Press [enter] to jump to the linkedin stream."
+#~ msgstr "lai pārslēgtos uz LinkedIn straumi, piespiediet [enter]."
+
 #~ msgid "Press [enter] to open"
 #~ msgstr "Lai atvērtu, piespiediet [enter]"
 
@@ -17155,6 +17165,9 @@ msgstr "Pievienot %s"
 #~ msgid "Promote One Level"
 #~ msgstr "Paaugstināt par vienu līmeni"
 
+#~ msgid "Public"
+#~ msgstr "Publisks"
+
 #~ msgid "Public contacts"
 #~ msgstr "Publiskie kontakti"
 
@@ -17193,6 +17206,21 @@ msgstr "Pievienot %s"
 
 #~ msgid "Quick config"
 #~ msgstr "Ātrā konfigurācija"
+
+#~ msgid "Quick launch 1"
+#~ msgstr "Ātrā piekļuve 1"
+
+#~ msgid "Quick launch 2"
+#~ msgstr "Ātrā piekļuve 2"
+
+#~ msgid "Quick launch 3"
+#~ msgstr "Ātrā piekļuve 3"
+
+#~ msgid "Quick reply"
+#~ msgstr "Ātrā atbilde"
+
+#~ msgid "Quit"
+#~ msgstr "Beigt"
 
 #~ msgid "Quota Exceed"
 #~ msgstr "Pārsniegta kvota"
@@ -17236,6 +17264,9 @@ msgstr "Pievienot %s"
 #~ msgid "Received:"
 #~ msgstr "Saņemts:"
 
+#~ msgid "Recent activities"
+#~ msgstr "Nesenās darbības"
+
 #~ msgid "Recipients can edit"
 #~ msgstr "Saņēmēji var rediģēt"
 
@@ -17268,6 +17299,9 @@ msgstr "Pievienot %s"
 #~ msgid "Reload current view every:"
 #~ msgstr "Pārlādēt pašreizējo skatu katras:"
 
+#~ msgid "Remind me again %1$s"
+#~ msgstr "Atgādināt man pēc %1$s"
+
 #~ msgid "Reminder:"
 #~ msgstr "Atgādinājums:"
 
@@ -17279,6 +17313,11 @@ msgstr "Pievienot %s"
 
 #~ msgid "Remove picture"
 #~ msgstr "Noņemt attēlu"
+
+#, fuzzy
+#~| msgid "Remove from recipient list"
+#~ msgid "Remove restore point: \"%1$s\""
+#~ msgstr "Izņemt no saņēmēju saraksta"
 
 #~ msgid "Rename Document"
 #~ msgstr "Pārdēvēt dokumentu"
@@ -17309,6 +17348,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Restore Last Operation"
 #~ msgstr "Atjaunot pēdējo operāciju"
+
+#~ msgid "Restore applications"
+#~ msgstr "Atjaunot aplikācijas"
 
 #~ msgid "Retweet new"
 #~ msgstr "'Retweet'-tot jauns"
@@ -17367,6 +17409,9 @@ msgstr "Pievienot %s"
 #~ msgid "Rules"
 #~ msgstr "Noteikumi"
 
+#~ msgid "Run auto-play "
+#~ msgstr "Automātiski atskaņot "
+
 #~ msgid "Running applications"
 #~ msgstr "Darbojošās aplikācijas"
 
@@ -17417,6 +17462,11 @@ msgstr "Pievienot %s"
 
 #~ msgid "SMTP server"
 #~ msgstr "SMTP serveris"
+
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Safari %1$s on %2$s"
+#~ msgstr "Koplietojums %1$s \"%2$s\""
 
 #, fuzzy
 #~| msgid "Saint Barthélemy"
@@ -17490,6 +17540,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Schedule an all-day event"
 #~ msgstr "Ieplānot visas dienas notikumu"
+
+#~ msgid "Scheduling"
+#~ msgstr "Plānošana"
 
 #~ msgid "Search Options"
 #~ msgstr "Meklēšanas opcijas"
@@ -17635,6 +17688,10 @@ msgstr "Pievienot %s"
 #~ msgid "Service"
 #~ msgstr "Serviss"
 
+#~ msgctxt "app"
+#~ msgid "Settings"
+#~ msgstr "Iestatījumi"
+
 #~ msgid "Settings for advanced users"
 #~ msgstr "Eksperta lietotāju iestatījumi"
 
@@ -17657,6 +17714,18 @@ msgstr "Pievienot %s"
 #~ msgctxt "owner"
 #~ msgid "Shared by: %1$s"
 #~ msgstr "Meklējums pēc: %1$s"
+
+#~ msgid "Sharing link created for file \"%1$d\""
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "Koplietojuma saite failam \"%1$d\" ir izveidota"
+#~ msgstr[1] "Koplietojuma saite %1$d failiem ir izveidota"
+#~ msgstr[2] "Koplietojuma saite %1$d failiem ir izveidota"
+
+#~ msgid "Sharing link created for folder \"%1$d\""
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "Koplietojuma saite mapei \"%1$d\" ir izveidota"
+#~ msgstr[1] "Koplietojuma saite %1$d mapēm ir izveidota"
+#~ msgstr[2] "Koplietojuma saite %1$d mapēm ir izveidota"
 
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"
@@ -17684,6 +17753,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Show Group Members"
 #~ msgstr "Rādīt grupas locekļus"
+
+#~ msgid "Show Links"
+#~ msgstr "Rādīt saites"
 
 #~ msgid "Show QR code"
 #~ msgstr "Rādīt QR kodu"
@@ -17743,6 +17815,9 @@ msgstr "Pievienot %s"
 #~ msgid "Show legal information"
 #~ msgstr "Rādīt juridisko informāciju"
 
+#~ msgid "Show message authenticity"
+#~ msgstr "Rādīt ziņojuma autentiskumu"
+
 #~ msgid "Show message size"
 #~ msgstr "Rādīt ziņojuma izmēru"
 
@@ -17798,6 +17873,9 @@ msgstr "Pievienot %s"
 #~ msgid "Signed in as %1$s"
 #~ msgstr "Pieslēdzies kā lietotājs %1$s"
 
+#~ msgid "Signed in as:"
+#~ msgstr "Pieslēgums kā:"
+
 #~ msgid "Signing out"
 #~ msgstr "Atslēgšanās no sistēmas"
 
@@ -17830,9 +17908,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Skip this step"
 #~ msgstr "Izlaist šo soli"
-
-#~ msgid "Slideshow"
-#~ msgstr "Slaidrāde"
 
 #~ msgid "Slideshow / Autoplay mode"
 #~ msgstr "Slaidrādes / Auto-atskaņošanas režīms"
@@ -17893,14 +17968,18 @@ msgstr "Pievienot %s"
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Šo failu nevar augšupielādēt."
 
+#~ msgid ""
+#~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
+#~ "LinkedIn with the permission to do read messages."
+#~ msgstr ""
+#~ "Diemžēl, mēs šeit nevaram palīdzēt. Jūsu pakalpojuma nodrošinātājam ir "
+#~ "jāiegūst LinkeIn atslēga ar tiesībām lasīt ziņojumus."
+
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "E-pasta šķirošana"
 
 #~ msgid "Sorting your tasks"
 #~ msgstr "Uzdevumu šķirošana"
-
-#~ msgid "Source"
-#~ msgstr "Avots"
 
 #~ msgid "South Africa"
 #~ msgstr "Dienvidāfrika"
@@ -18039,6 +18118,15 @@ msgstr "Pievienot %s"
 #~ msgid "Subscribe Folder"
 #~ msgstr "Abonēšanas mape"
 
+#~ msgid "Subscribe IMAP folders"
+#~ msgstr "IMAP mapju abonēšana"
+
+#~ msgid "Subscribe address book"
+#~ msgstr "Abonēt adrešu grāmatu"
+
+#~ msgid "Subscribe calendar"
+#~ msgstr "Abonēt kalendāru"
+
 #~ msgid "Subscribe contacts from LinkedIn, Facebook, Google..."
 #~ msgstr "Abonēt kontaktus no LinkedIn, Facebook, Google..."
 
@@ -18115,8 +18203,18 @@ msgstr "Pievienot %s"
 #~ msgid "Synchronization"
 #~ msgstr "Sinhronizācija"
 
+#~ msgid ""
+#~ "Synchronization of Emails, Calendar, Contacts and Tasks, along with "
+#~ "Public, Shared and System Folders to Microsoft Outlook® clients."
+#~ msgstr ""
+#~ "E-pasta, kalendāra, kontaktu un uzdevumu sinhronizācija publiskajās, "
+#~ "koplietojuma un sistēmas mapēs ar Microsoft Outlook® klientiem."
+
 #~ msgid "Synchronization to the server has been lost."
 #~ msgstr "Zaudēta sinhronizācija ar serveri."
+
+#~ msgid "Synchronize with Outlook"
+#~ msgstr "Sinhronizēt ar Outlook"
 
 #~ msgid ""
 #~ "Syntax error in config: \n"
@@ -18223,6 +18321,9 @@ msgstr "Pievienot %s"
 #~ msgid "Template"
 #~ msgstr "Sagatave"
 
+#~ msgid "Temporary"
+#~ msgstr "Pagaidu"
+
 #~ msgid "Text"
 #~ msgstr "Teksts"
 
@@ -18307,6 +18408,14 @@ msgstr "Pievienot %s"
 #~ "tikšanās reizēm un sociālo tīklu jaunumiem."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared folders "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view."
+#~ msgstr ""
+#~ "Mītiņš nav redzams lietotājiem, kuri nav dalībnieki, netiek ņemts vērā "
+#~ "laika konfliktu apzināšanai un netiek uzrādīts plānošanas skatā."
+
+#~ msgid ""
 #~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
 #~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
 #~ "days</a>."
@@ -18379,6 +18488,9 @@ msgstr "Pievienot %s"
 #~ "\" data-attribute=\"interval\"> katrā <span class=\"number-control\">2</"
 #~ "span> mēnesī</a>. "
 
+#~ msgid "The appointment is visible for all users in shared folders."
+#~ msgstr "Mītiņš ir redzams visiem lietotājiem koplietojuma mapēs."
+
 #~ msgid "The calendar views"
 #~ msgstr "Kalendāra skati"
 
@@ -18417,6 +18529,21 @@ msgstr "Pievienot %s"
 #~ "Ievadītā %s vērtība nav atļautajā diapazonā. Lūdzu ievadiet vērtību "
 #~ "diapazonā no -130000 līdz 130000."
 
+#~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
+#~ msgstr ""
+#~ "Lauka \"%1$s\" izmērs pārsniedz maksimāli atļauto %2$d simbolu skaitu."
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] ""
+#~ "Fails nevar tikt augšupielādēts, jo tas pārsniedz %1$s kvotas limitu"
+#~ msgstr[1] ""
+#~ "Faili nevar tikt augšupielādēti, jo tie pārsniedz %1$s kvotas limitu"
+#~ msgstr[2] ""
+#~ "Faili nevar tikt augšupielādēti, jo tie pārsniedz %1$s kvotas limitu"
+
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Fails ir pieejams iekš %1$s"
 
@@ -18434,6 +18561,13 @@ msgstr "Pievienot %s"
 #~ "therefore not been added: %s"
 #~ msgstr ""
 #~ "Sekojošas adreses jau ir dalībnieku sarakstā un tāpēc nav pievienotas: %s"
+
+#~ msgid ""
+#~ "The following applications can be restored. Just remove the restore point "
+#~ "if you don't want it to be restored."
+#~ msgstr ""
+#~ "Sekojošas aplikācijas var tikt atjaunotas. Ja nevēlaties tās atjaunot "
+#~ "vienkārši noņemiet atjaunošanas punktu."
 
 #~ msgid "The following task is already past due:"
 #~ msgstr "Sekojošs uzdevums jau ir nokavēts:"
@@ -18565,6 +18699,13 @@ msgstr "Pievienot %s"
 #~ msgstr "Nav atbildes no servera!"
 
 #~ msgid ""
+#~ "The setting has been saved and will become active when you enter the "
+#~ "application the next time."
+#~ msgstr ""
+#~ "Iestatījums ir saglabāts un tiks aktivizēts nākamreiz, kad pieslēgsieties "
+#~ "aplikācijai."
+
+#~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "
 #~ "e.g Basic settings, E-Mail or My contact data."
 #~ msgstr ""
@@ -18599,6 +18740,13 @@ msgstr "Pievienot %s"
 #~ msgstr "Vērtņu-veida iesūtne var tikt pilnībā atspējota pasta iestatījumos."
 
 #~ msgid ""
+#~ "The timezone of this appointment (%1$s) differs from your default "
+#~ "timezone (%2$s)."
+#~ msgstr ""
+#~ "Šī mītiņa laika zona (%1$s) atšķiras no jūsu noklusētās laika zonas "
+#~ "(%2$s)."
+
+#~ msgid ""
 #~ "The updater will inform you of any updates for the Connector for "
 #~ "Microsoft Outlook and Notifier."
 #~ msgstr ""
@@ -18630,11 +18778,14 @@ msgstr "Pievienot %s"
 #~ msgstr[1] "Šajā laikā jau ir %1$d mītiņi."
 #~ msgstr[2] "Šajā laikā jau ir %1$d mītiņš."
 
+#~ msgid "There is no preview for this file type"
+#~ msgstr "Šim failu tipam nav apskata iespēju"
+
+#~ msgid "There were not activities in your network"
+#~ msgstr "Jūsu tīklā nav bijušas nekādas aktivitātes"
+
 #~ msgid "This Signature name already exists"
 #~ msgstr "Šis paraksta vārds jau eksistē"
-
-#~ msgid "This Team name already exists"
-#~ msgstr "Šis grupas vārds jau eksistē"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "Šis konts nevar tikt pārbaudīts"
@@ -18718,8 +18869,14 @@ msgstr "Pievienot %s"
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Šis pasts satur URL uz publikāciju."
 
+#~ msgid "This mail has been sent from %1$s."
+#~ msgstr "Šī e-pasta sūtītājs ir %1$s."
+
 #~ msgid "This may take some seconds"
 #~ msgstr "Process var aizņemt dažas sekundes"
+
+#~ msgid "This message is from a trusted sender."
+#~ msgstr "Šis ziņojums ir no uzticama sūtītāja."
 
 #~ msgid "This message is read, press this button to mark it as unread."
 #~ msgstr ""
@@ -18730,6 +18887,20 @@ msgstr "Pievienot %s"
 #~ msgstr ""
 #~ "Šis e-pasts ir nelasīts. Piespiediet šo taustiņu, lai iezīmētu to kā "
 #~ "izlasītu."
+
+#~ msgid ""
+#~ "This might be a phishing email because we could not verify that it is "
+#~ "really from %1$s."
+#~ msgstr ""
+#~ "Šis varētu būt pikšķerēšanas e-pasts, jo nevar tikt pārbaudīts vai šī e-"
+#~ "pasta sūtītājs tiešam ir %1$s."
+
+#~ msgid ""
+#~ "This might be a phishing mail because we could not verify that this email "
+#~ "is really from %1$s."
+#~ msgstr ""
+#~ "Šis varētu būt pikšķerēšanas e-pasts, jo nevar tikt pārbaudīts vai šī e-"
+#~ "pasta sūtītājs tiešam ir %1$s."
 
 #~ msgid ""
 #~ "This object does not contain a file, would you like to send the link?"
@@ -19027,6 +19198,9 @@ msgstr "Pievienot %s"
 #~ msgid "Toggle search"
 #~ msgstr "Pārslēgt meklēšanu"
 
+#~ msgid "Toggle viewport size"
+#~ msgstr "Pārslēgt izmēru"
+
 #~ msgid "Togo"
 #~ msgstr "Togo"
 
@@ -19047,6 +19221,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Tour: Coming from OX6"
 #~ msgstr "Iepazīšanās: Pārejot no OX6"
+
+#~ msgid "Town"
+#~ msgstr "Pilsēta"
 
 #~ msgid "Tracking the editing status"
 #~ msgstr "Izpildes statusa sekošana"
@@ -19158,8 +19335,18 @@ msgstr "Pievienot %s"
 #~ msgid "United States Minor Outlying Islands"
 #~ msgstr "ASV aizjūras mazās teritorijas"
 
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unknown client"
+#~ msgstr "Nezināms nosūtītājs"
+
 #~ msgid "Unknown error while checking subreddit."
 #~ msgstr "Neatpazīta kļūda pie 'Subreddit' pārbaudes."
+
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unkown client"
+#~ msgstr "Nezināms nosūtītājs"
 
 #~ msgid "Unnamed"
 #~ msgstr "Nenosaukts"
@@ -19213,8 +19400,14 @@ msgstr "Pievienot %s"
 #~ msgid "Use \"Standalone\" Mode:"
 #~ msgstr "Lietot \"Savrupo\" režīmu:"
 
+#~ msgid "Use Password"
+#~ msgstr "Lietot paroli"
+
 #~ msgid "Use SSL connection"
 #~ msgstr "Lietot SSL pieslēgumu"
+
+#~ msgid "Use accessibility improvements"
+#~ msgstr "Izmantot pieejamības uzlabojumus"
 
 #~ msgid ""
 #~ "Use cursor keys to change the item position. Virtual cursor mode has to "
@@ -19222,6 +19415,9 @@ msgstr "Pievienot %s"
 #~ msgstr ""
 #~ "Lai izmainītu vienības atrašanās vietu, izmantojiet kursora taustiņus. "
 #~ "Virtuālam kursora režīmam ir jābūt atspējotam."
+
+#~ msgid "Use cursor keys to navigate"
+#~ msgstr "Lai pārvietotos, izmantojiet kursora taustiņus"
 
 #~ msgid "Use for appointment"
 #~ msgstr "Lietot priekš tikšanām"
@@ -19335,6 +19531,9 @@ msgstr "Pievienot %s"
 #~ msgid "View all appointments from all available calendars"
 #~ msgstr "Skatīt visas tikšanās no visiem pieejamajiem kalendāriem"
 
+#~ msgid "View attachment"
+#~ msgstr "Skatīt pievienojumus"
+
 #~ msgid "View participants"
 #~ msgstr "Skatīt dalībniekus"
 
@@ -19356,6 +19555,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Warning: %2$s"
 #~ msgstr "Brīdinājums: %2$s"
+
+#~ msgid "We could not verify that this email is really from %1$s."
+#~ msgstr "Nevar pārliecināties ka ši e-pasta sūtītājs tiešām ir %1$s."
 
 #~ msgid "Weak"
 #~ msgstr "Vājš"
@@ -19483,6 +19685,20 @@ msgstr "Pievienot %s"
 #~ msgid "You already accepted this invitation"
 #~ msgstr "Jūs jau esat apstiprinājis šo uzaicinājumu."
 
+#~ msgid ""
+#~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
+#~ "Appointments will therefore be created in your private calendar."
+#~ msgstr ""
+#~ "Jums nav tiesību izveidot mītiņa ierakstus iekš \"%1$s\", kura īpašnieks "
+#~ "ir %2$s. Mītiņa ieraksti tiks izveidotai jūsu privātajā kalendārā."
+
+#~ msgid ""
+#~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
+#~ "therefore be created in your private calendar."
+#~ msgstr ""
+#~ "Jums nav tiesību izveidot mītiņa ierakstus iekš \"%1$s\". Mītiņa ieraksti "
+#~ "tiks izveidotai jūsu privātajā kalendārā."
+
 #~ msgid "You can download the updates from within the updater."
 #~ msgstr "Jūs varat lejupielādēt jauninājumus, izmantojot jauninātāju."
 
@@ -19498,6 +19714,11 @@ msgstr "Pievienot %s"
 #~ msgstr ""
 #~ "Jūs varat pārvilkt un nomest failus no jūsu datora, lai augšupielādētu "
 #~ "jaunus failus vai šo failu versijas."
+
+#~ msgid ""
+#~ "You can import existing signatures from the previous product generation."
+#~ msgstr ""
+#~ "Jūs varat importēt esošos parakstus no iepriekšējās produkta paaudzes."
 
 #~ msgid ""
 #~ "You can manage desktop notifications at any time, by vitising your "
@@ -19573,6 +19794,9 @@ msgstr "Pievienot %s"
 #~ msgid "You have edit rights."
 #~ msgstr "Jums ir rediģēšanas tiesības."
 
+#~ msgid "You have no new messages"
+#~ msgstr "Jums nav jaunu ziņojumu"
+
 #~ msgid "You have reauthorized this account."
 #~ msgstr "Veikta atkārtota šī konta autorizēšana."
 
@@ -19586,6 +19810,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "You have the following appointment in %s:"
 #~ msgstr "Jums ir sekojošas tikšanās iekš %s:"
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "Lai abonētu jums ir jāievada lietotāja vārds un parole."
 
 #~ msgid "You must specify an E-Mail address for redirection."
 #~ msgstr "Jums ir jānorāda e-pasta adrese pāradresācijai."
@@ -19605,6 +19832,14 @@ msgstr "Pievienot %s"
 
 #~ msgid "You wanted to be reminded about the following InfoItem:"
 #~ msgstr "Jūs vēlējāties atgādinājumu par sekojošu info-vienību:"
+
+#~ msgid ""
+#~ "You will automatically return to the appointment dialog. The selected "
+#~ "start and end time as well as the current participant list will be "
+#~ "applied."
+#~ msgstr ""
+#~ "Jūs automātiski atgriezīsieties pie mītiņa dialoga, kurā tiks piemēroti "
+#~ "izvēlētie sākuma un beigu laiki un dalībnieku saraksts."
 
 #~ msgid "You will need to re-login for the change to take effect."
 #~ msgstr ""
@@ -19641,8 +19876,18 @@ msgstr "Pievienot %s"
 #~ msgid "Your data has been saved"
 #~ msgstr "Jūsu dati ir saglabāti"
 
+#~ msgid ""
+#~ "Your default reminder could not be set for this appointment due to "
+#~ "insufficient permissions"
+#~ msgstr ""
+#~ "Jūsu noklusētais atgādinājums nevar tikt iestatīts šim mītiņam "
+#~ "nepietiekamu tiesību dēļ"
+
 #~ msgid "Your email address will be included when sending this feedback"
 #~ msgstr "Nosūtītajām atsauksmēm tiks pievienota jūsu e-pasta adrese"
+
+#~ msgid "Your messages"
+#~ msgstr "Jūsu ziņojumi"
 
 #~ msgid ""
 #~ "Your password changed. For a future use of your subscriptions and "
@@ -19660,6 +19905,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Your primary mail account can not be deleted."
 #~ msgstr "Jūsu primārais pasta konts nevar tikt dzēsts."
+
+#~ msgid "Your reply has been sent"
+#~ msgstr "Jūsu atbilde ir nosūtīta"
 
 #~ msgid ""
 #~ "Your scheduled appointment conflicts with one or more previously "
@@ -19795,9 +20043,6 @@ msgstr "Pievienot %s"
 #~ msgid "day every"
 #~ msgstr "diena katrā"
 
-#~ msgid "day of the week"
-#~ msgstr "nedēļas diena"
-
 #~ msgid "day of the weekend"
 #~ msgstr "izejamā diena"
 
@@ -19911,10 +20156,19 @@ msgstr "Pievienot %s"
 #~ msgid "iCal"
 #~ msgstr "iCal"
 
+#~ msgid "iCal-Feed"
+#~ msgstr "iCal straume"
+
+#~ msgid "iCal-feed has been imported successfully"
+#~ msgstr "iCal straume ir veiksmīgi importēta"
+
 #, fuzzy
 #~| msgid "Phone"
 #~ msgid "iPhone"
 #~ msgstr "Telefons"
+
+#~ msgid "in"
+#~ msgstr "iekš"
 
 #~ msgid "in blind copy"
 #~ msgstr "paslēptā kopija"
@@ -19943,9 +20197,6 @@ msgstr "Pievienot %s"
 #~ msgid "locked by"
 #~ msgstr "noslēgts"
 
-#~ msgid "login"
-#~ msgstr "pieslēgums"
-
 #~ msgid "march"
 #~ msgstr "marts"
 
@@ -19962,8 +20213,8 @@ msgstr "Pievienot %s"
 #~ msgid "more"
 #~ msgstr "vairāk"
 
-#~ msgid "never ends"
-#~ msgstr "nekad nebeidzas"
+#~ msgid "never"
+#~ msgstr "nekad"
 
 #~ msgid "new"
 #~ msgstr "jauns"
@@ -19995,8 +20246,8 @@ msgstr "Pievienot %s"
 #~ msgid "next week"
 #~ msgstr "nākošā nedēļa"
 
-#~ msgid "none"
-#~ msgstr "neviens"
+#~ msgid "no expiry date"
+#~ msgstr "bez beigu datuma"
 
 #~ msgid "not sent"
 #~ msgstr "nenosūtīts"
@@ -20115,11 +20366,23 @@ msgstr "Pievienot %s"
 #~ msgid "vacation"
 #~ msgstr "prombūtne"
 
+#~ msgid "via"
+#~ msgstr "caur"
+
 #~ msgid "waiting"
 #~ msgstr "gaida"
 
 #~ msgid "weekly"
 #~ msgstr "ik-nedēļas"
+
+#~ msgid "when the link is expired"
+#~ msgstr "kad siates derīgums ir beidzies"
+
+#~ msgid "when the receivers have accessed the files"
+#~ msgstr "kad saņēmēji būs piekļuvuši failiem"
+
+#~ msgid "when the receivers have finished downloading the files"
+#~ msgstr "kad saņēmēji būs pabeiguši failu lejupielādi"
 
 #, fuzzy
 #~| msgid "Main window"

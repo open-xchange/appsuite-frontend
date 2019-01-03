@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-06-19 11:00+1000\n"
+"PO-Revision-Date: 2019-01-03 16:29+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -22,6 +22,26 @@ msgstr "对话包括无效数据"
 #: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main/offline.js
 msgid "Server unreachable"
 msgstr "服务器无法访问"
+
+#. Used in a selectbox when the reminder for an appointment is before the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "before start"
+msgstr "开始之前"
+
+#. Used in a selectbox when the reminder for an appointment is after the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "after start"
+msgstr "开始之后"
+
+#. Used in a selectbox when the reminder for an appointment is before the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "before end"
+msgstr "结束之前"
+
+#. Used in a selectbox when the reminder for an appointment is after the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "after end"
+msgstr "结束之后"
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
@@ -667,11 +687,12 @@ msgid "Ok"
 msgstr "确定"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
-#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
-#: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
-#: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar apps/io.ox/core/about/about.js
+#: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -1664,7 +1685,7 @@ msgstr "更改被驳回"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
-msgstr "您已经暂时的接受约会吗。"
+msgstr "您已经暂时的接受约会"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have declined the appointment"
@@ -2492,6 +2513,7 @@ msgstr[0] "%d 天"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d minute"
 msgid_plural "%1$d minutes"
 msgstr[0] "%1$d 分钟"
@@ -2499,6 +2521,7 @@ msgstr[0] "%1$d 分钟"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d hour"
 msgid_plural "%1$d hours"
 msgstr[0] "%1$d 小时"
@@ -2520,14 +2543,14 @@ msgstr "已保留"
 #. make sure that the leading and trailing spaces are also in the translation
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid " and "
-msgstr "和"
+msgstr " 和 "
 
 #. This delimiter is used to concatenate a list of string
 #. Example: Monday, Tuesday, Wednesday
 #. make sure, that the trailing space is also in the translation
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ", "
-msgstr ","
+msgstr "、"
 
 #. recurrence string
 #. %1$d: numeric
@@ -2590,7 +2613,7 @@ msgstr[0] "每个月的第 %2$d 天。"
 msgctxt "monthly"
 msgid "Every month on the %2$s %3$s."
 msgid_plural "Every %1$d months on the %2$s %3$s."
-msgstr[0] "每个月的 %1$s %1$s"
+msgstr[0] "每%1$d月的%3$s月%2$s日。"
 
 #. recurrence string
 #. %1$s: Month nane, e.g. January
@@ -3455,7 +3478,7 @@ msgstr "地址（其他）"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "This contact is private and cannot be shared"
-msgstr "此联系人为私人，不能予以分享。"
+msgstr "此联系人为私人，不能予以分享"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
@@ -3512,7 +3535,7 @@ msgstr "即时通讯软件"
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
-msgstr[0] "备注：因为缺少电话号码，有一个联系人没有显示。"
+msgstr[0] "备注：因为缺少电话号码，有%1$d个联系人没有显示"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
@@ -3600,6 +3623,15 @@ msgstr "%2$s、%1$s"
 msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
+
+#. '%1$s contact's display name
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "%1$s could not be added as the contact has no valid email field."
+msgstr "由于联系人没有有效的电子邮件字段, 无法添加%1$s。"
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "Some contacts could not be added as they have no valid email field."
+msgstr "无法添加某些联系人, 因为它们没有有效的电子邮件字段。"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Distribution list with 1 entry"
@@ -3747,7 +3779,7 @@ msgstr "请输入您的密码。"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your browser version is not supported!"
-msgstr "不支持您的浏览器版本。"
+msgstr "不支持您的浏览器版本！"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your browser is not supported!"
@@ -3789,11 +3821,11 @@ msgstr "为更好的结果，安卓我们建议使用谷歌 Chrome 浏览器。"
 #. The missing word at the end of the sentence ('Play Store') will be injected later by script
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Get the latest version from the "
-msgstr "获取最新版本的"
+msgstr "从这里获取最新版本："
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
-msgstr "不支持您的操作系统！"
+msgstr "不支持您的操作系统。"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your password is expired. Please change your password to continue."
@@ -3806,7 +3838,7 @@ msgstr "请更新您的浏览器。"
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "For best results, please use "
-msgstr "为了最好的结果，请使用"
+msgstr "为了最好的结果，请使用 "
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "You have been automatically signed out"
@@ -3817,7 +3849,7 @@ msgid ""
 "Unsupported Preview - Certain functions disabled and stability not assured "
 "until general release later this year"
 msgstr ""
-"不支持预览 - 某些功能为关闭、不保证稳定性，直到今年往后发布的一般版本。"
+"不支持预览 - 某些功能为关闭、稳定性，直到今年往后发布的一般版本前不被保证"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Offline mode"
@@ -4518,7 +4550,9 @@ msgstr "共 %1$d"
 msgid "Unread: %1$d"
 msgstr "未读：%1$d"
 
+#. %1$d number of unread mails
 #: apps/io.ox/core/folder/node.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "%1$d unread"
 msgstr "%1$d 个未读"
 
@@ -5249,12 +5283,22 @@ msgid ""
 msgstr "有些设置（语言、时区、主题）必须要重载页面或重新登录已生效。"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
+msgstr "有些设置（语言、时区、主题）必须重新登录才能生效。"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Default Theme"
 msgstr "默认主题"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Unicolor"
 msgstr "单一颜色"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+msgid "Default"
+msgstr "默认"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Multicolor"
@@ -5305,8 +5349,16 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr "设置要求重新读取或登陆以生效。"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "The setting requires a relogin to take effect."
+msgstr "设置要求重新登陆才能生效。"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
 msgstr "重载页面"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Relogin"
+msgstr "重新登录"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -8346,6 +8398,10 @@ msgstr "错误：加载消息失败"
 msgid "Auto forwarding is active"
 msgstr "自动转发处于激活状态"
 
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 #: apps/io.ox/settings/util.js module:io.ox/core
@@ -8992,6 +9048,10 @@ msgid "Your vacation notice is active"
 msgstr "您的假期通知为激活"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
+msgid "vacation notice"
+msgstr "假期通知"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "The time frame is in the past."
 msgstr "时间框架为过去的。"
 
@@ -9023,6 +9083,10 @@ msgstr "结束"
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Message"
 msgstr "消息"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+msgid "Show advanced options"
+msgstr "显示进阶选项"
 
 #. Context: Vacation notices
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -9905,10 +9969,6 @@ msgstr "门户设定"
 msgid "Add widget"
 msgstr "添加迷你程序"
 
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-msgid "Default"
-msgstr "默认"
-
 #. %1$s is the title of the item, which should be colored
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Color %1$s"
@@ -10239,6 +10299,10 @@ msgstr "DAVdroid"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "CalDav/CardDav"
 msgstr "CalDav/CardDav"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "WebDAV"
+msgstr "WebDAV"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Exchange Active Sync"
@@ -11926,611 +11990,234 @@ msgstr "邀请到 %s"
 msgid "Add on %s"
 msgstr "在 %s 上添加"
 
-#~ msgid "Empty table cell"
-#~ msgstr "空白表单单元格"
+#~ msgid "Send mail %1$s before start."
+#~ msgstr "在开始之前发送邮件 %1$s 通知。"
 
-#~ msgid "Encrypt"
-#~ msgstr "加密"
+#~ msgid "Send mail %1$s after start."
+#~ msgstr "在开始之后发送邮件 %1$s 通知。"
 
-#~ msgid "You have to enter a username and password to subscribe."
-#~ msgstr "您必须输入一个用户名称和密码以订阅。"
+#~ msgid "Send mail %1$s before end."
+#~ msgstr "在结束之前发送邮件 %1$s 通知。"
 
-#~ msgid "All future messages from %1$s will be moved to the selected folder."
-#~ msgid_plural ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
-#~ msgstr[0] "所有来自发送人的未来消息，将会移到选定的文件夹里。"
+#~ msgid "Send mail %1$s after end."
+#~ msgstr "在结束之后发送邮件 %1$s 通知。"
 
-#~ msgid "Show Links"
-#~ msgstr "显示链接"
+#~ msgid "Send mail at %1$s."
+#~ msgstr "于 %1$s 发送邮件。"
 
-#~ msgid "Add attachment"
-#~ msgstr "添加附件"
+#~ msgid "Send mail at start."
+#~ msgstr "在开始时保存邮件。"
 
-#~ msgid "Scheduling"
-#~ msgstr "安排时间"
+#~ msgid "Send mail at end."
+#~ msgstr "在结束时发送邮件。"
 
-#~ msgctxt "app"
-#~ msgid "Conversations"
-#~ msgstr "谈话"
+#~ msgid "Reminder %1$d"
+#~ msgstr "提醒 %1$d"
 
-#~ msgctxt "app"
-#~ msgid "Settings"
-#~ msgstr "设定"
+#~ msgid "type"
+#~ msgstr "类型"
 
-#~ msgctxt "app"
-#~ msgid "Documents"
-#~ msgstr "文档"
+#~ msgid "timeframe"
+#~ msgstr "时间框架"
 
-#~ msgid "iCal-feed has been imported successfully"
-#~ msgstr "已成功导入 iCal 提要"
+#~ msgid "timeframe relation"
+#~ msgstr "时间框架关系"
 
-#~ msgid "Change color"
-#~ msgstr "更改颜色"
+#~ msgid "Remove reminder"
+#~ msgstr "移除提醒"
 
-#~ msgid "Please note that distribution lists cannot contain ressources."
-#~ msgstr "请注意通讯组列表不能包含资源。"
+#~ msgid "Minimized windows"
+#~ msgstr "最小化窗口"
 
-#~ msgid "Never."
-#~ msgstr "从来没有。"
+#~ msgid "Change reminder"
+#~ msgstr "更改提醒"
 
-#~ msgid "Town"
-#~ msgstr "城镇"
+#~ msgid "Change reminders"
+#~ msgstr "更改提醒"
 
-#~ msgid "iCal-Feed"
-#~ msgstr "iCal-源"
+#~ msgid "Appointments in public calendars"
+#~ msgstr "公共日历中的约会"
 
 #~ msgid ""
-#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
-#~ "for example."
-#~ msgstr "忽视现存约会，对像导入公众假期日历有用。"
+#~ "The selected calendar \"%1$s\" is public. Do you really want to create an "
+#~ "appointment in this calendar?"
+#~ msgstr "选定的日历 \"%1$s\" 是公开的。是否确实要在此日历中创建约会？"
 
-#~ msgid "Remind me again %1$s"
-#~ msgstr "%1$s 后再次提醒我"
+#~ msgid "Create in public calendar"
+#~ msgstr "在公共日历中创建"
 
-#~ msgid "Sharing link created for file \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "分享为文件 \"%1$d\" 创建的链接"
+#~ msgid "Add a message to the notification email for the other participants."
+#~ msgstr "向其他参与者的通知电子邮件添加消息。"
 
-#~ msgid "Sharing link created for folder \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "分享为文件夹 \"%1$d\" 创建的链接"
+#~ msgid "Your recurrence rule does not fit to your start date."
+#~ msgstr "您重复规则不适合您的开始日期。"
 
-#~ msgid "Internal & external users"
-#~ msgstr "内部与外部用户"
+#~ msgid "Your recurrence rule was changed automatically."
+#~ msgstr "您的重复规则已自动更改。"
 
-#~ msgid "Quick reply"
-#~ msgstr "快速回复"
-
-#~ msgid "Synchronize with Outlook"
-#~ msgstr "与 Outlook 同步"
+#~ msgid "User defined color"
+#~ msgstr "用户定义的颜色"
 
 #~ msgid ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
-#~ msgstr "所有来自选定邮件发送人的未来消息，将会移到选定的文件夹里。"
-
-#~ msgid "never"
-#~ msgstr "从不"
-
-#~ msgid "Use Password"
-#~ msgstr "使用密码"
-
-#~ msgid "when the receivers have finished downloading the files"
-#~ msgstr "在接收者结束下载文件时"
-
-#~ msgid "when the link is expired"
-#~ msgstr "在链接过期时"
-
-#~ msgid "when the receivers have accessed the files"
-#~ msgstr "在接收者已经访问文件时"
-
-#~ msgid "%1$s Options"
-#~ msgstr "%1$s 选项"
-
-#~ msgid "Account is being created"
-#~ msgstr "正在创建户口"
+#~ "You are using a shared calendar. The calendar owner was added as "
+#~ "organizer."
+#~ msgstr "您使用的是共享日历。日历所有者已添加为组织者。"
 
 #~ msgid ""
-#~ "This might be a phishing email because we could not verify that it is "
-#~ "really from %1$s."
+#~ "You are no longer using a shared calendar. You were added as organizer."
+#~ msgstr "您不再使用共享日历。您被添加为组织者。"
+
+#~ msgid "Visibility Help"
+#~ msgstr "能见度帮助"
+
+#~ msgid "Use calendar color"
+#~ msgstr "使用日历颜色"
+
+#~ msgid "none"
+#~ msgstr "无"
+
+#~ msgid "Previous Month"
+#~ msgstr "上月"
+
+#~ msgid "Next Month"
+#~ msgstr "下月"
+
+#~ msgid ""
+#~ "This appointment is an exception. Changing the exception does not affect "
+#~ "the series."
+#~ msgstr "此约会是一个例外，更改异常不会影响系列。"
+
+#~ msgid "%s %s, create all-day appointment"
+#~ msgstr "%s %s、创建全天约会"
+
+#~ msgid "Apply filter"
+#~ msgstr "套用过滤器"
+
+#~ msgid "Starting letter index"
+#~ msgstr "起始字母索引"
+
+#~ msgid "Contact list. Select a contact to view details."
+#~ msgstr "联系人名单。选择联系人以查看详细信息。"
+
+#~ msgid "Language:"
+#~ msgstr "语言:"
+
+#~ msgid "Regional settings"
+#~ msgstr "区域设置"
+
+#~ msgid "12 hours"
+#~ msgstr "12 小时"
+
+#~ msgid "24 hours"
+#~ msgstr "24 小时"
+
+#~ msgid "Sunday"
+#~ msgstr "星期日"
+
+#~ msgid "Monday"
+#~ msgstr "星期一"
+
+#~ msgid "Week that contains January 1st"
+#~ msgstr "包括1月1日的周"
+
+#~ msgid "Week that contains the first Thursday"
+#~ msgstr "包括第一个星期四的周"
+
+#~ msgid "Numbers"
+#~ msgstr "数字"
+
+#~ msgid "First day of week"
+#~ msgstr "一周的第一天"
+
+#~ msgid "First week of year"
+#~ msgstr "一年中的第一周"
+
+#~ msgid "Don't remind me again"
+#~ msgstr "别再提醒我"
+
+#~ msgid "Unable to upload file"
+#~ msgid_plural "Unable to upload files"
+#~ msgstr[0] "无法上载文件"
+
+#~ msgid "We encountered an issue for your upload"
+#~ msgid_plural "We encountered some issues for your upload"
+#~ msgstr[0] "我们遇到了您上传的问题"
+
+#~ msgid "Slideshow"
+#~ msgstr "幻灯片"
+
+#~ msgid "Run slideshow"
+#~ msgstr "运行幻灯片放映"
+
+#~ msgid "Stop slideshow"
+#~ msgstr "停止幻灯片放映"
+
+#~ msgid "Your preview is being generated."
+#~ msgstr "正在创建您的预览。"
+
+#~ msgid ""
+#~ "\n"
+#~ " Alternatively you can download the file."
 #~ msgstr ""
-#~ "由于我们不能鉴定此电子邮件是否来自%1$s，因此可能为一封钓鱼电子邮件。"
+#~ "\n"
+#~ "或者, 您也可以下载该文件。"
 
-#~ msgid "in"
-#~ msgstr "在"
+#~ msgid "Account already exists"
+#~ msgstr "戶口已經存在"
 
-#~ msgid "Exchange ActiveSync"
-#~ msgstr "Exchange ActiveSync"
+#~ msgid "Image size:"
+#~ msgstr "图像大小："
 
-#~ msgid "Dangerous emails only"
-#~ msgstr "仅危险电子邮件"
+#~ msgid "Original"
+#~ msgstr "原始"
 
-#~ msgid "Dangerous and trusted emails"
-#~ msgstr "危险与可信电子邮件"
+#~ msgid "Small"
+#~ msgstr "小"
 
-#~ msgid "Dangerous, trusted and valid emails"
-#~ msgstr "危险、可信、和有效的电子邮件"
+#~ msgid "Large"
+#~ msgstr "大"
 
-#~ msgid "Add new reminder"
-#~ msgstr "添加新提醒"
+#~ msgid "Image size"
+#~ msgstr "图像大小"
 
-#~ msgid "Authentication failed. Please fill in login and password."
-#~ msgstr "验证失败。请填写登录和密码。"
+#~ msgid "Small (%1$s px)"
+#~ msgstr "小（%1$s 像素）"
 
-#~ msgid "Public"
-#~ msgstr "公共"
+#~ msgid "Medium (%1$s px)"
+#~ msgstr "中（%1$s 像素）"
 
-#~ msgid "The appointment is visible for all users in shared folders."
-#~ msgstr "对于共享文件夹中的所有用户，约会都是可见的。"
+#~ msgid "Large (%1$s px)"
+#~ msgstr "大（%1$s 像素）"
 
-#~ msgid ""
-#~ "In shared folders, the appointment is displayed as a simple time slot for "
-#~ "non-attending users."
-#~ msgstr "在共享文件夹中，约会显示为非参与用户的简单时间插槽。"
+#~ msgid "Mail size:"
+#~ msgstr "邮件大小："
 
-#~ msgid ""
-#~ "The appointment is not visible to non-attending users in shared folders "
-#~ "at all. The appointment is not considered for conflicts and does not "
-#~ "appear in the scheduling view."
-#~ msgstr ""
-#~ "共享文件夹中的非参加用户的约会是不可见的。约会不考虑冲突，并且不会出现在计"
-#~ "划视图中。"
+#~ msgid "Delete files after expiration"
+#~ msgstr "过期后删除文件"
 
-#~ msgid "Notify all participants by email."
-#~ msgstr "以电子邮件通知所有参与者。"
+#~ msgid "Is bigger than (Size: B/KB/MB/GB)"
+#~ msgstr "大于（大小: B/KB/MB/GB）"
 
-#~ msgid "Birthday"
-#~ msgstr "生日"
+#~ msgid "Is smaller than (Size: B/KB/MB/GB)"
+#~ msgstr "小于（大小: B/KB/MB/GB）"
 
-#~ msgid "Color scheme"
-#~ msgstr "颜色方案"
+#~ msgid "String"
+#~ msgstr "字串"
 
-#~ msgid "Custom colors"
-#~ msgstr "自定义颜色"
+#~ msgid "Source"
+#~ msgstr "来源"
 
-#~ msgid "Classic colors"
-#~ msgstr "经典颜色"
+#~ msgid "Always trust mails from the following senders"
+#~ msgstr "始终信任来自以下发件人的邮件"
 
-#~ msgid "Dark colors"
-#~ msgstr "深颜色"
+#~ msgid "Comma-separated list e.g. \"example.org, alice@example.com\""
+#~ msgstr "逗号分隔列表, 例如 \"example.org, alice@example.com alice@example\""
 
-#~ msgid "Application Toolbar"
-#~ msgstr "应用程序工具条"
+#~ msgid "Participant not found"
+#~ msgstr "找不到参与者"
 
-#~ msgid "Folder type"
-#~ msgstr "文件夹类型"
-
-#~ msgid "Number of messages"
-#~ msgstr "消息数"
-
-#~ msgid "Number of items"
-#~ msgstr "搜寻项目数"
-
-#~ msgid "List of public calendars and events"
-#~ msgstr "公共日历和事件列表"
-
-#~ msgid ""
-#~ "Ignore existing events. Helpful to import public holiday calendars, for "
-#~ "example."
-#~ msgstr "忽视存在的事件，对像导入公众假期日历有用。"
-
-#~ msgid "Quick launch 1"
-#~ msgstr "快速启动1"
-
-#~ msgid "Quick launch 2"
-#~ msgstr "快速启动2"
-
-#~ msgid "Quick launch 3"
-#~ msgstr "快速启动3"
-
-#~ msgid ""
-#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-#~ msgid_plural ""
-#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
-#~ msgstr[0] "因为文件超出限额 %1$s，所以未能上载。"
-
-#~ msgid "This message is from a trusted sender."
-#~ msgstr "此消息来自受信任的发件人。"
-
-#~ msgid ""
-#~ "This might be a phishing mail because we could not verify that this email "
-#~ "is really from %1$s."
-#~ msgstr "由于我们不能鉴定此电子邮件是否来自%1$s，因此可能为一封钓鱼邮件。"
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "此邮件已从 %1$s 发送。"
-
-#~ msgid "We could not verify that this email is really from %1$s."
-#~ msgstr "我们无法验证此电子邮件是否真的来自 %1$s。"
-
-#~ msgid "no expiry date"
-#~ msgstr "没有到期日"
-
-#~ msgid "Expiration: %1$d"
-#~ msgstr "过期：%1$d"
-
-#~ msgid "Has Attachment"
-#~ msgstr "有附件"
-
-#~ msgid "Show message authenticity"
-#~ msgstr "顯示消息认证性"
-
-#~ msgid "Dangerous only"
-#~ msgstr "仅危险"
-
-#~ msgid "Dangerous and trusted"
-#~ msgstr "危险和可信"
-
-#~ msgid "Acknowledge all reminders"
-#~ msgstr "确认所有提醒"
-
-#~ msgid "%1$d unread mails"
-#~ msgstr "%1$d 封未读邮件"
-
-#~ msgctxt "window title"
-#~ msgid "%1$s %2$s"
-#~ msgstr "%1$s %2$s"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s for %2$s"
-#~ msgstr "%2$s 的 %1$s"
-
-#, fuzzy
-#~| msgid "%s client for Android"
-#~ msgid "%1$s for Android"
-#~ msgstr "Android 版 %s 客户端"
-
-#, fuzzy
-#~| msgid "%s client for Mac OS"
-#~ msgid "%1$s for MacOS"
-#~ msgstr "Mac OS 版 %s 客户端"
-
-#, fuzzy
-#~| msgid "%s client for Windows"
-#~ msgid "%1$s for Windows"
-#~ msgstr "视窗版 %s 客户端"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s for iOS"
-#~ msgstr "%2$s 的 %1$s"
-
-#~ msgid "%1$s is a new contact"
-#~ msgstr "%1$s 为新联系人"
-
-#~ msgid "%1$s is now connected with %2$s"
-#~ msgstr "%1$s 现在与 %2$s 连接"
-
-#~ msgid "%d minute"
-#~ msgid_plural "%d minutes"
-#~ msgstr[0] "%d 分钟"
-#~ msgstr[1] "%d 分钟"
-
-#~ msgid "%s client for Windows (Installation via the OX Updater)"
-#~ msgstr "视窗版 %s 客户端（经由 OX 更新器安装）"
-
-#~ msgid "(current app)"
-#~ msgstr "(当前应用程序)"
-
-#~ msgid "Absent"
-#~ msgstr "缺乏"
-
-#~ msgid "All my appointments"
-#~ msgstr "我所有的约会"
-
-#~ msgid "Apps"
-#~ msgstr "应用程序"
-
-#~ msgid "Back to appointment"
-#~ msgstr "回到约会"
-
-#~ msgid ""
-#~ "By changing the date of this appointment you are creating an appointment "
-#~ "exception to the series."
-#~ msgstr "更改此约会日期可创建一个系列约会的例外。"
-
-#~ msgid "Change view"
-#~ msgstr "更改视图"
-
-#, fuzzy
-#~| msgid "Share %1$s \"%2$s\""
-#~ msgid "Chrome %1$s on %2$s"
-#~ msgstr "分享 %1$s \"%2$s\""
-
-#, fuzzy
-#~| msgid "close for %1$s"
-#~ msgid "Close for %1$s"
-#~ msgstr "按 %1$s 关闭"
-
-#~ msgid "Connector for Microsoft Outlook®"
-#~ msgstr "Microsoft Outlook® 的连接器"
-
-#~ msgid ""
-#~ "Convert the entered start and end dates to match the modified timezones"
-#~ msgstr "转换输入的开始和结束日期，以匹配更改的时区"
-
-#~ msgid "Couldn't load appointment data."
-#~ msgstr "读取约会数据失败。"
-
-#~ msgid "Couldn't load your contact data."
-#~ msgstr "不能加载您的联系人数据。"
-
-#~ msgid "Create exception"
-#~ msgstr "创建例外"
-
-#, fuzzy
-#~| msgid "Current Costs:"
-#~ msgid "Current session"
-#~ msgstr "当前费用："
-
-#~ msgid ""
-#~ "Did you know that you can take OX App Suite with you? Just click this "
-#~ "icon and choose 'Connect your device' from the menu."
-#~ msgstr ""
-#~ "你知道你可以随身携带OX App Suite吗？只需点击此图标，然后从菜单中选择“连接"
-#~ "您的设备”。"
-
-#~ msgid "Display emoticons as graphics in text emails"
-#~ msgstr "在文本电子邮件中以图形显示表情符号"
-
-#, fuzzy
-#~| msgid "Do you really want to delete this account?"
-#~ msgid ""
-#~ "Do you really want to terminate all active sessions except the current "
-#~ "one?"
-#~ msgstr "确定要删除此户口吗？"
-
-#, fuzzy
-#~| msgctxt "One file only"
-#~| msgid "Do you really want to delete this version?"
-#~ msgid "Do you really want to terminate that session?"
-#~ msgstr "您真的要删除此版本吗？"
-
-#~ msgid ""
-#~ "Do you want to delete the whole series or just one appointment within the "
-#~ "series?"
-#~ msgstr "您是否想删除整个循环约会或循环约会中其中一个？"
-
-#~ msgid ""
-#~ "Do you want to edit the whole series or just one appointment within the "
-#~ "series?"
-#~ msgstr "您是否想编辑整个循环约会或循环约会中的其中一个？"
-
-#~ msgid "Doubleclick in this row for whole day appointment"
-#~ msgstr "在此行里双击以查看全天约会"
-
-#~ msgid "Download %s via the OX Updater"
-#~ msgstr "经由 OX 更新器下载 %s"
-
-#~ msgid "Download installation file (for Windows)"
-#~ msgstr "下载安装文件（为 Windows）"
-
-#, fuzzy
-#~| msgid "Due on %1$s"
-#~ msgid "Edge on %1$s"
-#~ msgstr "结束于 %1$s"
-
-#~ msgid "Expand timeframe by one month"
-#~ msgstr "扩张一个月的时段"
-
-#~ msgid "External guests"
-#~ msgstr "外部访客"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "Firefox %1$s on %2$s"
-#~ msgstr "%2$s 的 %1$s"
-
-#~ msgid "Header exists"
-#~ msgstr "页头存在"
-
-#~ msgid "High contrast theme"
-#~ msgstr "高对比主题"
-
-#~ msgid "How does this work?"
-#~ msgstr "这如何运作？"
-
-#, fuzzy
-#~| msgid "Added %1$s."
-#~ msgid "IP Address: %1$s"
-#~ msgstr "添加了 %1$s。"
-
-#~ msgid ""
-#~ "If you select different timezones, the appointment's start and end dates "
-#~ "are saved in the timezone of the appointment's start date. A different "
-#~ "end date timezone only allows a convenient conversion."
-#~ msgstr ""
-#~ "如果您选择不同的时区，约会的开始和结束日期会保存于约会开始日的时区。一个不"
-#~ "同的日期时区只允许一个方便的交谈。"
-
-#~ msgid ""
-#~ "If you spot a free time, just select this area. To do this, move the "
-#~ "cursor to the start time, hold the mouse button, and <b>drag the mouse</"
-#~ "b> to the end time."
-#~ msgstr ""
-#~ "如果您看到一个空闲时间，只需选择此区域。为此，把鼠标移动到开始时间，按紧鼠"
-#~ "标按钮；然后 <b>拖动鼠标</b> 到结束时间。"
-
-#~ msgid ""
-#~ "Informs about the current status of Emails and appointments without "
-#~ "having to display the user interface or another Windows® client."
-#~ msgstr ""
-#~ "不用显示用户界面或别的 Windows® 客户端，通知有关电子邮件和约会的当前状态。"
-
-#~ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
-#~ msgstr "执行器下拉。请按 [enter] 以跳到下拉。"
-
-#~ msgid "Leave empty if you have none"
-#~ msgstr "如果你没有请留空"
-
-#~ msgid "LinkedIn"
-#~ msgstr "LinkedIn"
-
-#~ msgid "LinkedIn Network Updates"
-#~ msgstr "LinkedIn 网路更新"
-
-#~ msgid "LinkedIn reported an error:"
-#~ msgstr "LinkedIn 报告一个错误："
-
-#~ msgid "Manage permission now"
-#~ msgstr "现在管理权限"
-
-#~ msgid "Notifier"
-#~ msgstr "通知器"
-
-#~ msgid "Open in browser"
-#~ msgstr "在浏览器打开"
-
-#~ msgid "Open in browser tab"
-#~ msgstr "在浏览器选项卡打开"
-
-#~ msgid "Open on LinkedIn"
-#~ msgstr "在 LinkedIn 打开"
-
-#, fuzzy
-#~| msgid "Other Address"
-#~ msgid "Other clients"
-#~ msgstr "其他地址"
-
-#~ msgid "Press [enter] to jump to the linkedin stream."
-#~ msgstr "按下 [enter] 以跳到 linkedin stream。"
-
-#~ msgid "Quit"
-#~ msgstr "退出"
-
-#~ msgid "Recent activities"
-#~ msgstr "最近活动"
-
-#, fuzzy
-#~| msgid "Remove from recipient list"
-#~ msgid "Remove restore point: \"%1$s\""
-#~ msgstr "从收件人列表删除"
-
-#~ msgid "Restore applications"
-#~ msgstr "恢复应用"
-
-#, fuzzy
-#~| msgid "Share %1$s \"%2$s\""
-#~ msgid "Safari %1$s on %2$s"
-#~ msgstr "分享 %1$s \"%2$s\""
-
-#~ msgid "Signed in as:"
-#~ msgstr "登录为："
-
-#~ msgid ""
-#~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
-#~ "LinkedIn with the permission to do read messages."
-#~ msgstr ""
-#~ "抱歉，我们在这不能帮到您。您的提供者需要从 LinkedIn 获取一个包含进行读取消"
-#~ "息权限的键。"
-
-#~ msgid "Subscribe IMAP folders"
-#~ msgstr "订阅 IMAP 文件夹"
-
-#~ msgid "Subscribe address book"
-#~ msgstr "订阅地址簿"
-
-#~ msgid "Subscribe calendar"
-#~ msgstr "订阅日历"
-
-#~ msgid ""
-#~ "Synchronization of Emails, Calendar, Contacts and Tasks, along with "
-#~ "Public, Shared and System Folders to Microsoft Outlook® clients."
-#~ msgstr ""
-#~ "从电子邮件、日历、联系人、任务、公共文件夹、共享文件夹、系统文件夹，到 "
-#~ "Microsoft Outlook® 客户端的同步。"
-
-#~ msgid "Temporary"
-#~ msgstr "临时"
-
-#~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
-#~ msgstr "字段 \"%1$s\" 超出 %2$d 个字符之最大体积。"
-
-#~ msgid ""
-#~ "The following applications can be restored. Just remove the restore point "
-#~ "if you don't want it to be restored."
-#~ msgstr "以下应用已恢复，如果您不想它被恢复只需删除恢复点。"
-
-#~ msgid ""
-#~ "The setting has been saved and will become active when you enter the "
-#~ "application the next time."
-#~ msgstr "设置已保存，在您下一次进入应用时会生效。"
-
-#~ msgid ""
-#~ "The timezone of this appointment (%1$s) differs from your default "
-#~ "timezone (%2$s)."
-#~ msgstr "此约会 (%1$s) 的时区异于您的默认时区 (%2$s)。"
-
-#~ msgid "There is no preview for this file type"
-#~ msgstr "没有此文件类别的预览"
-
-#~ msgid "There were not activities in your network"
-#~ msgstr "那些不是您网路里的活动"
-
-#~ msgid "Toggle viewport size"
-#~ msgstr "切换视口大小"
-
-#, fuzzy
-#~| msgid "Unknown sender"
-#~ msgid "Unknown client"
-#~ msgstr "未知发送人"
-
-#, fuzzy
-#~| msgid "Unknown sender"
-#~ msgid "Unkown client"
-#~ msgstr "未知发送人"
-
-#~ msgid "Use accessibility improvements"
-#~ msgstr "使用辅助功能改进"
-
-#~ msgid "Use cursor keys to navigate"
-#~ msgstr "使用方向键导航"
-
-#~ msgid "View attachment"
-#~ msgstr "检视附件"
-
-#~ msgid ""
-#~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
-#~ "Appointments will therefore be created in your private calendar."
-#~ msgstr ""
-#~ "您不允许在 %2$s 拥有的  \"%1$s\" 里创建约会。因此，约会将会在您的私人日历"
-#~ "里创建。"
-
-#~ msgid ""
-#~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
-#~ "therefore be created in your private calendar."
-#~ msgstr ""
-#~ "您不允许在  \"%1$s\" 里创建约会。因此，约会将会在您的私人日历里创建。"
-
-#~ msgid ""
-#~ "You can import existing signatures from the previous product generation."
-#~ msgstr "您能从前代产品导入存在的签名。"
-
-#~ msgid "You have no new messages"
-#~ msgstr "您没有新信息"
-
-#~ msgid ""
-#~ "You will automatically return to the appointment dialog. The selected "
-#~ "start and end time as well as the current participant list will be "
-#~ "applied."
-#~ msgstr ""
-#~ "您会自动回到约会对话。选择的开始和结束时间，还有当前参与者列表将会套用。"
-
-#~ msgid ""
-#~ "Your default reminder could not be set for this appointment due to "
-#~ "insufficient permissions"
-#~ msgstr "此约会由于权限不足，无法设置您的默认提醒"
-
-#~ msgid "Your messages"
-#~ msgstr "您的信息"
-
-#~ msgid "Your reply has been sent"
-#~ msgstr "您的回复已发送"
-
-#~ msgid "via"
-#~ msgstr "经由"
+#~ msgid "Please use the \"Connect your device\" wizard to download %s"
+#~ msgstr "请使用 \"连接您的设备\" 向导下载%s"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -12599,7 +12286,14 @@ msgstr "在 %s 上添加"
 #~ msgstr[0] "%1$d 行"
 #~ msgstr[1] "%1$d 行"
 
+#~ msgid "%1$d unread mails"
+#~ msgstr "%1$d 封未读邮件"
+
 #~ msgctxt "datetime"
+#~ msgid "%1$s %2$s"
+#~ msgstr "%1$s %2$s"
+
+#~ msgctxt "window title"
 #~ msgid "%1$s %2$s"
 #~ msgstr "%1$s %2$s"
 
@@ -12615,11 +12309,45 @@ msgstr "在 %s 上添加"
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s"
 
+#~ msgid "%1$s Options"
+#~ msgstr "%1$s 选项"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for %2$s"
+#~ msgstr "%2$s 的 %1$s"
+
+#, fuzzy
+#~| msgid "%s client for Android"
+#~ msgid "%1$s for Android"
+#~ msgstr "Android 版 %s 客户端"
+
+#, fuzzy
+#~| msgid "%s client for Mac OS"
+#~ msgid "%1$s for MacOS"
+#~ msgstr "Mac OS 版 %s 客户端"
+
+#, fuzzy
+#~| msgid "%s client for Windows"
+#~ msgid "%1$s for Windows"
+#~ msgstr "视窗版 %s 客户端"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for iOS"
+#~ msgstr "%2$s 的 %1$s"
+
 #~ msgid "%1$s has ended the presentation."
 #~ msgstr "%1$s 结束了演讲。"
 
 #~ msgid "%1$s has started the presentation."
 #~ msgstr "%1$s 开始了演讲。"
+
+#~ msgid "%1$s is a new contact"
+#~ msgstr "%1$s 为新联系人"
+
+#~ msgid "%1$s is now connected with %2$s"
+#~ msgstr "%1$s 现在与 %2$s 连接"
 
 #~ msgid "%1$s mail"
 #~ msgid_plural "%1$s mails"
@@ -12672,6 +12400,11 @@ msgstr "在 %s 上添加"
 #~ msgstr[0] "%d 个信息项"
 #~ msgstr[1] "%d 个信息项"
 
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d 分钟"
+#~ msgstr[1] "%d 分钟"
+
 #~ msgctxt "in"
 #~ msgid "%d minute"
 #~ msgid_plural "%d minutes"
@@ -12688,6 +12421,9 @@ msgstr "在 %s 上添加"
 #~ msgid_plural "%d weeks"
 #~ msgstr[0] "%d 周"
 #~ msgstr[1] "%d 周"
+
+#~ msgid "%s client for Windows (Installation via the OX Updater)"
+#~ msgstr "视窗版 %s 客户端（经由 OX 更新器安装）"
 
 #~ msgid "%s, EEE"
 #~ msgstr "%s、EEE"
@@ -12725,6 +12461,9 @@ msgstr "在 %s 上添加"
 #~ msgid "(Default)"
 #~ msgstr "（默认）"
 
+#~ msgid "(current app)"
+#~ msgstr "(当前应用程序)"
+
 #~ msgid "(may be slow on old machines)"
 #~ msgstr "（在旧机器上可能较慢）"
 
@@ -12748,9 +12487,6 @@ msgstr "在 %s 上添加"
 
 #~ msgid "10"
 #~ msgstr "10"
-
-#~ msgid "12 hour"
-#~ msgstr "12 小时"
 
 #~ msgid "15"
 #~ msgstr "15"
@@ -12778,9 +12514,6 @@ msgstr "在 %s 上添加"
 
 #~ msgid "4 days"
 #~ msgstr "4 天"
-
-#~ msgid "4 hour"
-#~ msgstr "4 小时"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 周"
@@ -12852,6 +12585,9 @@ msgstr "在 %s 上添加"
 #~ msgid "AM"
 #~ msgstr "AM"
 
+#~ msgid "Absent"
+#~ msgstr "缺乏"
+
 #~ msgid "Absent on business"
 #~ msgstr "出差"
 
@@ -12884,6 +12620,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Account:"
 #~ msgstr "账户："
+
+#~ msgid "Acknowledge all reminders"
+#~ msgstr "确认所有提醒"
 
 #~ msgid "Acquire Edit Rights"
 #~ msgstr "获取编辑权"
@@ -12933,6 +12672,9 @@ msgstr "在 %s 上添加"
 #~ msgid "Add account"
 #~ msgstr "添加新户口"
 
+#~ msgid "Add attachment"
+#~ msgstr "添加附件"
+
 #~ msgid "Add cipher code"
 #~ msgstr "添加暗号"
 
@@ -12959,6 +12701,9 @@ msgstr "在 %s 上添加"
 #~ msgid "Add new guest"
 #~ msgstr "添加新访客"
 
+#~ msgid "Add new reminder"
+#~ msgstr "添加新提醒"
+
 #~ msgid "Add new subfolder"
 #~ msgstr "添加新子文件夹"
 
@@ -12973,9 +12718,6 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "添加订阅中，可能稍时片刻..."
-
-#~ msgid "Additional settings"
-#~ msgstr "额外设定"
 
 #~ msgid "Additional:"
 #~ msgstr "其他："
@@ -13030,6 +12772,20 @@ msgstr "在 %s 上添加"
 #~ msgid "All contacts"
 #~ msgstr "添加联系人"
 
+#~ msgid "All future messages from %1$s will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] "所有来自发送人的未来消息，将会移到选定的文件夹里。"
+
+#~ msgid ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr "所有来自选定邮件发送人的未来消息，将会移到选定的文件夹里。"
+
+#~ msgid "All my appointments"
+#~ msgstr "我所有的约会"
+
 #~ msgid "All users"
 #~ msgstr "所有用户"
 
@@ -13081,6 +12837,9 @@ msgstr "在 %s 上添加"
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "安提瓜和巴布达"
 
+#~ msgid "Application Toolbar"
+#~ msgstr "应用程序工具条"
+
 #~ msgid "Applications"
 #~ msgstr "应用程序"
 
@@ -13118,6 +12877,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "大致订阅持续时间"
+
+#~ msgid "Apps"
+#~ msgstr "应用程序"
 
 #~ msgid "Apr"
 #~ msgstr "四月"
@@ -13255,6 +13017,9 @@ msgstr "在 %s 上添加"
 #~ msgid "Austria"
 #~ msgstr "奥地利"
 
+#~ msgid "Authentication failed. Please fill in login and password."
+#~ msgstr "验证失败。请填写登录和密码。"
+
 #~ msgid "Auto"
 #~ msgstr "自动"
 
@@ -13297,6 +13062,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Azerbaijan"
 #~ msgstr "阿塞拜疆"
+
+#~ msgid "Back to appointment"
+#~ msgstr "回到约会"
 
 #, fuzzy
 #~| msgid "Back to sign in"
@@ -13366,6 +13134,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Bhutan"
 #~ msgstr "不丹"
+
+#~ msgid "Birthday"
+#~ msgstr "生日"
 
 #~ msgid "Birthday Appointment"
 #~ msgstr "生日约会"
@@ -13449,6 +13220,11 @@ msgstr "在 %s 上添加"
 #~ msgid "Burundi"
 #~ msgstr "布隆迪"
 
+#~ msgid ""
+#~ "By changing the date of this appointment you are creating an appointment "
+#~ "exception to the series."
+#~ msgstr "更改此约会日期可创建一个系列约会的例外。"
+
 #~ msgid "CAD"
 #~ msgstr "CAD"
 
@@ -13530,6 +13306,9 @@ msgstr "在 %s 上添加"
 #~ msgid "Change View"
 #~ msgstr "更改视图"
 
+#~ msgid "Change color"
+#~ msgstr "更改颜色"
+
 #~ msgid "Change folder"
 #~ msgstr "更改文件夹"
 
@@ -13538,6 +13317,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Change subscription"
 #~ msgstr "更改订阅"
+
+#~ msgid "Change view"
+#~ msgstr "更改视图"
 
 #~ msgid "Changes have been saved."
 #~ msgstr "已保存更改。"
@@ -13575,6 +13357,11 @@ msgstr "在 %s 上添加"
 #~ msgid "Christmas Island"
 #~ msgstr "圣诞岛"
 
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Chrome %1$s on %2$s"
+#~ msgstr "分享 %1$s \"%2$s\""
+
 #~ msgid "City (business)"
 #~ msgstr "城市（业务）"
 
@@ -13583,6 +13370,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "City:"
 #~ msgstr "城市："
+
+#~ msgid "Classic colors"
+#~ msgstr "经典颜色"
 
 #~ msgid "Cleaning up... This may take a few seconds."
 #~ msgstr "清理中... 可能需时片刻。"
@@ -13646,6 +13436,11 @@ msgstr "在 %s 上添加"
 #~ msgid "Close document"
 #~ msgstr "关闭文档"
 
+#, fuzzy
+#~| msgid "close for %1$s"
+#~ msgid "Close for %1$s"
+#~ msgstr "按 %1$s 关闭"
+
 #~ msgid "Close quick config"
 #~ msgstr "关闭快速配置"
 
@@ -13679,6 +13474,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Colombia"
 #~ msgstr "哥伦比亚"
+
+#~ msgid "Color scheme"
+#~ msgstr "颜色方案"
 
 #~ msgid "Comma Separated"
 #~ msgstr "逗号分隔"
@@ -13735,6 +13533,9 @@ msgstr "在 %s 上添加"
 #~ msgid "Connection failed! Please check your settings: "
 #~ msgstr "连接失败！请检查您的设置："
 
+#~ msgid "Connector for Microsoft Outlook®"
+#~ msgstr "Microsoft Outlook® 的连接器"
+
 #~ msgid "Contact folder..."
 #~ msgstr "联系人文件夹..."
 
@@ -13756,6 +13557,14 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Continue the presentation"
 #~ msgstr "继续演讲"
+
+#~ msgctxt "app"
+#~ msgid "Conversations"
+#~ msgstr "谈话"
+
+#~ msgid ""
+#~ "Convert the entered start and end dates to match the modified timezones"
+#~ msgstr "转换输入的开始和结束日期，以匹配更改的时区"
 
 #~ msgid "Cook Islands"
 #~ msgstr "库克群岛"
@@ -13781,6 +13590,9 @@ msgstr "在 %s 上添加"
 #~ msgid "Couldn't load all contact images."
 #~ msgstr "不能加载所有联系人图像。"
 
+#~ msgid "Couldn't load appointment data."
+#~ msgstr "读取约会数据失败。"
+
 #~ msgid "Couldn't load folders."
 #~ msgstr "加载文件夹失败。"
 
@@ -13792,6 +13604,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Couldn't load your auto forward."
 #~ msgstr "不能加载您的自动转发。"
+
+#~ msgid "Couldn't load your contact data."
+#~ msgstr "不能加载您的联系人数据。"
 
 #~ msgid "Country (other)"
 #~ msgstr "国家/地区（其他）"
@@ -13807,6 +13622,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "使用储存在这里的数据创建一个 %s 户口"
+
+#~ msgid "Create exception"
+#~ msgstr "创建例外"
 
 #~ msgid "Create new task"
 #~ msgstr "创建新任务"
@@ -13882,6 +13700,11 @@ msgstr "在 %s 上添加"
 #~ msgid "Current page and total page count"
 #~ msgstr "当前页面和页面总数"
 
+#, fuzzy
+#~| msgid "Current Costs:"
+#~ msgid "Current session"
+#~ msgstr "当前费用："
+
 #~ msgid "Current week, next week"
 #~ msgstr "本周、下周"
 
@@ -13903,6 +13726,9 @@ msgstr "在 %s 上添加"
 #~ msgid "Custom"
 #~ msgstr "自定义"
 
+#~ msgid "Custom colors"
+#~ msgstr "自定义颜色"
+
 #~ msgid "Customizing"
 #~ msgstr "自定义"
 
@@ -13921,8 +13747,26 @@ msgstr "在 %s 上添加"
 #~ msgid "DKK"
 #~ msgstr "DKK"
 
+#~ msgid "Dangerous and trusted"
+#~ msgstr "危险和可信"
+
+#~ msgid "Dangerous and trusted emails"
+#~ msgstr "危险与可信电子邮件"
+
+#~ msgid "Dangerous emails only"
+#~ msgstr "仅危险电子邮件"
+
+#~ msgid "Dangerous only"
+#~ msgstr "仅危险"
+
+#~ msgid "Dangerous, trusted and valid emails"
+#~ msgstr "危险、可信、和有效的电子邮件"
+
 #~ msgid "Danish"
 #~ msgstr "丹麦文"
+
+#~ msgid "Dark colors"
+#~ msgstr "深颜色"
 
 #~ msgid "Darker"
 #~ msgstr "更深色"
@@ -14080,6 +13924,13 @@ msgstr "在 %s 上添加"
 #~ msgid "Details:"
 #~ msgstr "详细信息："
 
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "你知道你可以随身携带OX App Suite吗？只需点击此图标，然后从菜单中选择“连接"
+#~ "您的设备”。"
+
 #~ msgid "Direct link: %1$s"
 #~ msgstr "直接链接：%1$s"
 
@@ -14100,6 +13951,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Display as:"
 #~ msgstr "显示为："
+
+#~ msgid "Display emoticons as graphics in text emails"
+#~ msgstr "在文本电子邮件中以图形显示表情符号"
 
 #~ msgid "Displayed name"
 #~ msgstr "显示名"
@@ -14141,6 +13995,19 @@ msgstr "在 %s 上添加"
 #~ msgid "Do you really want to discard this mail?"
 #~ msgstr "您真的想放弃此邮件吗？"
 
+#, fuzzy
+#~| msgid "Do you really want to delete this account?"
+#~ msgid ""
+#~ "Do you really want to terminate all active sessions except the current "
+#~ "one?"
+#~ msgstr "确定要删除此户口吗？"
+
+#, fuzzy
+#~| msgctxt "One file only"
+#~| msgid "Do you really want to delete this version?"
+#~ msgid "Do you really want to terminate that session?"
+#~ msgstr "您真的要删除此版本吗？"
+
 #~ msgid "Do you want to create a %s account?"
 #~ msgstr "您要创建一个 %s 户口吗？"
 
@@ -14148,6 +14015,11 @@ msgstr "在 %s 上添加"
 #~ "Do you want to delete the whole recurrence or a single instance of the "
 #~ "recurrence?"
 #~ msgstr "您是否想删除整个循环任务或循环任务中的单次任务？"
+
+#~ msgid ""
+#~ "Do you want to delete the whole series or just one appointment within the "
+#~ "series?"
+#~ msgstr "您是否想删除整个循环约会或循环约会中其中一个？"
 
 #~ msgid ""
 #~ "Do you want to edit the whole recurrence or a single recurrence "
@@ -14173,6 +14045,11 @@ msgstr "在 %s 上添加"
 #~ "您是否想编辑整个系列或单个系列约会？请注意更改系列约会时，需重设系列例外情"
 #~ "况。"
 
+#~ msgid ""
+#~ "Do you want to edit the whole series or just one appointment within the "
+#~ "series?"
+#~ msgstr "您是否想编辑整个循环约会或循环约会中的其中一个？"
+
 #~ msgid "Do you want to keep the draft after sending this mail?"
 #~ msgstr "您确定要发送此邮件后保留草稿吗？"
 
@@ -14185,6 +14062,10 @@ msgstr "在 %s 上添加"
 #~ msgid "Document saved in folder \"%1$s\"."
 #~ msgstr "文档已保存在文件夹 \"%1$s\"。"
 
+#~ msgid "Documents"
+#~ msgstr "文档"
+
+#~ msgctxt "app"
 #~ msgid "Documents"
 #~ msgstr "文档"
 
@@ -14208,6 +14089,15 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Double click to rename"
 #~ msgstr "双击以更名"
+
+#~ msgid "Doubleclick in this row for whole day appointment"
+#~ msgstr "在此行里双击以查看全天约会"
+
+#~ msgid "Download %s via the OX Updater"
+#~ msgstr "经由 OX 更新器下载 %s"
+
+#~ msgid "Download installation file (for Windows)"
+#~ msgstr "下载安装文件（为 Windows）"
 
 #~ msgid "Drag and drop"
 #~ msgstr "拖放"
@@ -14303,6 +14193,11 @@ msgstr "在 %s 上添加"
 #~ msgid "Ecuador"
 #~ msgstr "厄瓜多尔"
 
+#, fuzzy
+#~| msgid "Due on %1$s"
+#~ msgid "Edge on %1$s"
+#~ msgstr "结束于 %1$s"
+
 #~ msgid "Edit Furigana"
 #~ msgstr "编辑假名"
 
@@ -14376,14 +14271,11 @@ msgstr "在 %s 上添加"
 #~ msgid "Email notification for task creator?"
 #~ msgstr "向任务创建者发送电子邮件通知？"
 
-#~ msgid "Email notification for task participant?"
-#~ msgstr "向任务参与者发送电子邮件通知？"
-
-#~ msgid "Embedded windows"
-#~ msgstr "嵌入窗口"
-
 #~ msgid "Employee ID:"
 #~ msgstr "员工 ID："
+
+#~ msgid "Empty table cell"
+#~ msgstr "空白表单单元格"
 
 #~ msgid "Emptying folder... This may take a few seconds."
 #~ msgstr "清空文件夹... 可能需时片刻。"
@@ -14447,6 +14339,9 @@ msgstr "在 %s 上添加"
 #~ msgstr ""
 #~ "启用离线访问电子邮件，日历，任务和联系人文件夹。使用Microsoft Outlook离线"
 #~ "功能所做的任何更改会在您下次上网时自动同步："
+
+#~ msgid "Encrypt"
+#~ msgstr "加密"
 
 #, fuzzy
 #~ msgid "End Presentation"
@@ -14575,9 +14470,6 @@ msgstr "在 %s 上添加"
 #~ msgid "Estimated Costs:"
 #~ msgstr "预估成本："
 
-#~ msgid "Estimated Duration:"
-#~ msgstr "预估持续时间："
-
 #~ msgid "Estonia"
 #~ msgstr "爱沙尼亚"
 
@@ -14617,11 +14509,20 @@ msgstr "在 %s 上添加"
 #~ msgid "Exception caught: "
 #~ msgstr "找到例外："
 
+#~ msgid "Exchange ActiveSync"
+#~ msgstr "Exchange ActiveSync"
+
 #~ msgid "Existing shares"
 #~ msgstr "当前共享"
 
 #~ msgid "Exit Fullscreen"
 #~ msgstr "离开全屏幕"
+
+#~ msgid "Expand timeframe by one month"
+#~ msgstr "扩张一个月的时段"
+
+#~ msgid "Expiration: %1$d"
+#~ msgstr "过期：%1$d"
 
 #, fuzzy
 #~| msgid "Send as vCard"
@@ -14634,6 +14535,9 @@ msgstr "在 %s 上添加"
 #~ msgctxt "help"
 #~ msgid "External E-Mail Accounts"
 #~ msgstr "外部电子邮件户口"
+
+#~ msgid "External guests"
+#~ msgstr "外部访客"
 
 #~ msgctxt "friday"
 #~ msgid "F"
@@ -14739,6 +14643,11 @@ msgstr "在 %s 上添加"
 #~ msgid "Finland"
 #~ msgstr "芬兰"
 
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "Firefox %1$s on %2$s"
+#~ msgstr "%2$s 的 %1$s"
+
 #~ msgid "First Tab"
 #~ msgstr "第一个标签页"
 
@@ -14788,6 +14697,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Folder tree"
 #~ msgstr "文件夹树"
+
+#~ msgid "Folder type"
+#~ msgstr "文件夹类型"
 
 #~ msgid "Folder-specific actions for %1$s"
 #~ msgstr "%1$s 的文件夹指定动作"
@@ -14919,6 +14831,12 @@ msgstr "在 %s 上添加"
 #~ msgid "Halo view"
 #~ msgstr "光环视图"
 
+#~ msgid "Has Attachment"
+#~ msgstr "有附件"
+
+#~ msgid "Header exists"
+#~ msgstr "页头存在"
+
 #~ msgid "Hello"
 #~ msgstr "您好"
 
@@ -14955,6 +14873,12 @@ msgstr "在 %s 上添加"
 #~ msgid "Hide side panel"
 #~ msgstr "隐藏侧面板"
 
+#~ msgid "High contrast theme"
+#~ msgstr "高对比主题"
+
+#~ msgid "How does this work?"
+#~ msgstr "这如何运作？"
+
 #~ msgid "How the settings are organized"
 #~ msgstr "设定如何组织的"
 
@@ -14987,6 +14911,11 @@ msgstr "在 %s 上添加"
 #~ msgid "IMAP server"
 #~ msgstr "IMAP 服务器"
 
+#, fuzzy
+#~| msgid "Added %1$s."
+#~ msgid "IP Address: %1$s"
+#~ msgstr "添加了 %1$s。"
+
 #~ msgid "Icon view"
 #~ msgstr "图标视图"
 
@@ -15003,6 +14932,32 @@ msgstr "在 %s 上添加"
 #~ "If you no longer want to display a tile, click the cross on the upper "
 #~ "right side."
 #~ msgstr "如果您不在需要显示一个方块，请单击在右上方的交叉。"
+
+#~ msgid ""
+#~ "If you select different timezones, the appointment's start and end dates "
+#~ "are saved in the timezone of the appointment's start date. A different "
+#~ "end date timezone only allows a convenient conversion."
+#~ msgstr ""
+#~ "如果您选择不同的时区，约会的开始和结束日期会保存于约会开始日的时区。一个不"
+#~ "同的日期时区只允许一个方便的交谈。"
+
+#~ msgid ""
+#~ "If you spot a free time, just select this area. To do this, move the "
+#~ "cursor to the start time, hold the mouse button, and <b>drag the mouse</"
+#~ "b> to the end time."
+#~ msgstr ""
+#~ "如果您看到一个空闲时间，只需选择此区域。为此，把鼠标移动到开始时间，按紧鼠"
+#~ "标按钮；然后 <b>拖动鼠标</b> 到结束时间。"
+
+#~ msgid ""
+#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
+#~ "for example."
+#~ msgstr "忽视现存约会，对像导入公众假期日历有用。"
+
+#~ msgid ""
+#~ "Ignore existing events. Helpful to import public holiday calendars, for "
+#~ "example."
+#~ msgstr "忽视存在的事件，对像导入公众假期日历有用。"
 
 #~ msgid "Import into"
 #~ msgstr "导入到"
@@ -15036,6 +14991,11 @@ msgstr "在 %s 上添加"
 #~ "单击左下方的图标。"
 
 #~ msgid ""
+#~ "In shared folders, the appointment is displayed as a simple time slot for "
+#~ "non-attending users."
+#~ msgstr "在共享文件夹中，约会显示为非参与用户的简单时间插槽。"
+
+#~ msgid ""
 #~ "In the Details section at the bottom right side you can enter billing "
 #~ "information."
 #~ msgstr "在右下部的详情部分，您可以输入账项信息。"
@@ -15064,6 +15024,12 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Information about account recovery..."
 #~ msgstr "有关户口恢复的信息......"
+
+#~ msgid ""
+#~ "Informs about the current status of Emails and appointments without "
+#~ "having to display the user interface or another Windows® client."
+#~ msgstr ""
+#~ "不用显示用户界面或别的 Windows® 客户端，通知有关电子邮件和约会的当前状态。"
 
 #~ msgid "Inline With Text"
 #~ msgstr "附文本内联"
@@ -15103,6 +15069,9 @@ msgstr "在 %s 上添加"
 #~ "Screen'%4$s"
 #~ msgstr ""
 #~ "在您的 %1$s 上安装此网页软件： 轻按 %2$s 后，再按 %3$s'添加到主页画面'%4$s"
+
+#~ msgid "Internal & external users"
+#~ msgstr "内部与外部用户"
 
 #~ msgid "Internal Error"
 #~ msgstr "内部错误"
@@ -15195,6 +15164,9 @@ msgstr "在 %s 上添加"
 #~ msgid "Last modified"
 #~ msgstr "最近修改日期"
 
+#~ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
+#~ msgstr "执行器下拉。请按 [enter] 以跳到下拉。"
+
 #~ msgid "Launching an app"
 #~ msgstr "执行一个应用程序"
 
@@ -15204,6 +15176,9 @@ msgstr "在 %s 上添加"
 #, fuzzy
 #~ msgid "Leave Presentation"
 #~ msgstr "目的地"
+
+#~ msgid "Leave empty if you have none"
+#~ msgstr "如果你没有请留空"
 
 #~ msgid "Leave messages on server"
 #~ msgstr "在服务器上保留邮件"
@@ -15242,6 +15217,18 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Line wrap when sending text mails after: "
 #~ msgstr "当发送文本邮件后换行："
+
+#~ msgid "LinkedIn"
+#~ msgstr "LinkedIn"
+
+#~ msgid "LinkedIn Network Updates"
+#~ msgstr "LinkedIn 网路更新"
+
+#~ msgid "LinkedIn reported an error:"
+#~ msgstr "LinkedIn 报告一个错误："
+
+#~ msgid "List of public calendars and events"
+#~ msgstr "公共日历和事件列表"
 
 #~ msgid "Load Error"
 #~ msgstr "加载错误"
@@ -15287,6 +15274,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Manage applications"
 #~ msgstr "管理应用"
+
+#~ msgid "Manage permission now"
+#~ msgstr "现在管理权限"
 
 #~ msgctxt "help"
 #~ msgid "Managing E-Mail messages"
@@ -15382,6 +15372,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Network Problems"
 #~ msgstr "网络错误"
+
+#~ msgid "Never."
+#~ msgstr "从来没有。"
 
 #, fuzzy
 #~| msgid "New calendar"
@@ -15491,11 +15484,23 @@ msgstr "在 %s 上添加"
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "您的新闻条目没有东西。"
 
+#~ msgid "Notifier"
+#~ msgstr "通知器"
+
+#~ msgid "Notify all participants by email."
+#~ msgstr "以电子邮件通知所有参与者。"
+
 #~ msgid "November"
 #~ msgstr "十一月"
 
 #~ msgid "Number of days in work week"
 #~ msgstr "工作周的天数"
+
+#~ msgid "Number of items"
+#~ msgstr "搜寻项目数"
+
+#~ msgid "Number of messages"
+#~ msgstr "消息数"
 
 #~ msgid "Numbering On/Off"
 #~ msgstr "编号列表开/关"
@@ -15538,8 +15543,17 @@ msgstr "在 %s 上添加"
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "只显示移动装置上的小部件摘要"
 
+#~ msgid "Open in browser"
+#~ msgstr "在浏览器打开"
+
+#~ msgid "Open in browser tab"
+#~ msgstr "在浏览器选项卡打开"
+
 #~ msgid "Open in new tab"
 #~ msgstr "在新选项卡打开"
+
+#~ msgid "Open on LinkedIn"
+#~ msgstr "在 LinkedIn 打开"
 
 #~ msgid "Opening E-Mail threads"
 #~ msgstr "打开电子邮件帖子"
@@ -15549,6 +15563,11 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "打开电子邮件设定"
+
+#, fuzzy
+#~| msgid "Other Address"
+#~ msgid "Other clients"
+#~ msgstr "其他地址"
 
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "过期任务。%1$s %2$s。请按 [enter] 打开"
@@ -15642,6 +15661,9 @@ msgstr "在 %s 上添加"
 #~ msgstr ""
 #~ "请自便更名选项卡以更配合您的需求。使用复选框以启用或请用指定的选项卡。"
 
+#~ msgid "Please note that distribution lists cannot contain ressources."
+#~ msgstr "请注意通讯组列表不能包含资源。"
+
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "请指定这些缺少的变量："
 
@@ -15702,6 +15724,9 @@ msgstr "在 %s 上添加"
 #~ msgid "Press [enter] to jump to the facebook stream."
 #~ msgstr "按下 [enter] 以跳到脸书 stream。"
 
+#~ msgid "Press [enter] to jump to the linkedin stream."
+#~ msgstr "按下 [enter] 以跳到 linkedin stream。"
+
 #~ msgid "Press [enter] to open"
 #~ msgstr "按下 [enter] 以打开"
 
@@ -15732,6 +15757,9 @@ msgstr "在 %s 上添加"
 #~ msgid "Promote One Level"
 #~ msgstr "升一级"
 
+#~ msgid "Public"
+#~ msgstr "公共"
+
 #~ msgid "Publication"
 #~ msgstr "发布"
 
@@ -15756,6 +15784,21 @@ msgstr "在 %s 上添加"
 #~ msgid "Pull To Refresh"
 #~ msgstr "下拉刷新"
 
+#~ msgid "Quick launch 1"
+#~ msgstr "快速启动1"
+
+#~ msgid "Quick launch 2"
+#~ msgstr "快速启动2"
+
+#~ msgid "Quick launch 3"
+#~ msgstr "快速启动3"
+
+#~ msgid "Quick reply"
+#~ msgstr "快速回复"
+
+#~ msgid "Quit"
+#~ msgstr "退出"
+
 #~ msgid ""
 #~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
 #~ "arrowkeys to adjust your rating."
@@ -15774,14 +15817,25 @@ msgstr "在 %s 上添加"
 #~ msgid "Reading the details"
 #~ msgstr "阅读详情"
 
+#~ msgid "Recent activities"
+#~ msgstr "最近活动"
+
 #~ msgid "Recipients can edit"
 #~ msgstr "收件人能编辑"
 
 #~ msgid "Recurring tasks need a valid end date."
 #~ msgstr "重复任务需要一个有效结束日期。"
 
+#~ msgid "Remind me again %1$s"
+#~ msgstr "%1$s 后再次提醒我"
+
 #~ msgid "Remove facet"
 #~ msgstr "移除刻面"
+
+#, fuzzy
+#~| msgid "Remove from recipient list"
+#~ msgid "Remove restore point: \"%1$s\""
+#~ msgstr "从收件人列表删除"
 
 #~ msgid "Rename Document"
 #~ msgstr "文档更名"
@@ -15800,6 +15854,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Restore Last Operation"
 #~ msgstr "复原最后操作"
+
+#~ msgid "Restore applications"
+#~ msgstr "恢复应用"
 
 #, fuzzy
 #~| msgid "Never"
@@ -15843,6 +15900,9 @@ msgstr "在 %s 上添加"
 #~ msgid "Rule applies until"
 #~ msgstr "规则适用至"
 
+#~ msgid "Run auto-play "
+#~ msgstr "运行自动播放模式"
+
 #~ msgid "Running applications"
 #~ msgstr "运行中应用"
 
@@ -15877,6 +15937,11 @@ msgstr "在 %s 上添加"
 #~ msgid "SMTP server"
 #~ msgstr "SMTP 服务器"
 
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Safari %1$s on %2$s"
+#~ msgstr "分享 %1$s \"%2$s\""
+
 #~ msgid "Save in file store"
 #~ msgstr "保存在文件存储中"
 
@@ -15893,6 +15958,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Saving latest changes ..."
 #~ msgstr "保存更改中 ..."
+
+#~ msgid "Scheduling"
+#~ msgstr "安排时间"
 
 #~ msgid "Search Options"
 #~ msgstr "搜寻选项"
@@ -15947,6 +16015,10 @@ msgstr "在 %s 上添加"
 #~ msgid "Server Error"
 #~ msgstr "服务器错误"
 
+#~ msgctxt "app"
+#~ msgid "Settings"
+#~ msgstr "设定"
+
 #~ msgid "Settings for advanced users"
 #~ msgstr "进阶用户设置"
 
@@ -15963,6 +16035,14 @@ msgstr "在 %s 上添加"
 #~ msgid "Shared by: %1$s"
 #~ msgstr "搜寻：%1$s"
 
+#~ msgid "Sharing link created for file \"%1$d\""
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "分享为文件 \"%1$d\" 创建的链接"
+
+#~ msgid "Sharing link created for folder \"%1$d\""
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "分享为文件夹 \"%1$d\" 创建的链接"
+
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"
 #~ msgstr "从 %1$s 来的其他过去和未来消息皆移到 %2$s 吗？"
@@ -15970,6 +16050,9 @@ msgstr "在 %s 上添加"
 #~ msgid ""
 #~ "Should only the current message or all messages of the sender be moved"
 #~ msgstr "只有移动当前消息或所有消息"
+
+#~ msgid "Show Links"
+#~ msgstr "显示链接"
 
 #~ msgid "Show QR code"
 #~ msgstr "显示 QR 码"
@@ -16021,6 +16104,9 @@ msgstr "在 %s 上添加"
 #~ msgid "Show legal information"
 #~ msgstr "显示法律信息"
 
+#~ msgid "Show message authenticity"
+#~ msgstr "顯示消息认证性"
+
 #~ msgid "Show message size"
 #~ msgstr "显示消息体积"
 
@@ -16061,6 +16147,9 @@ msgstr "在 %s 上添加"
 #~ msgid "Signed in as %1$s"
 #~ msgstr "登入为 %1$s"
 
+#~ msgid "Signed in as:"
+#~ msgstr "登录为："
+
 #~ msgid "Signing out"
 #~ msgstr "注销"
 
@@ -16082,9 +16171,6 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Skip this step"
 #~ msgstr "略过此步"
-
-#~ msgid "Slideshow"
-#~ msgstr "幻灯片"
 
 #~ msgid "Slideshow / Autoplay mode"
 #~ msgstr "幻灯片显示 / 自动播放模式"
@@ -16130,14 +16216,18 @@ msgstr "在 %s 上添加"
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "无法上载此文件。"
 
+#~ msgid ""
+#~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
+#~ "LinkedIn with the permission to do read messages."
+#~ msgstr ""
+#~ "抱歉，我们在这不能帮到您。您的提供者需要从 LinkedIn 获取一个包含进行读取消"
+#~ "息权限的键。"
+
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "排序您的电子邮件"
 
 #~ msgid "Sorting your tasks"
 #~ msgstr "排序您的任务"
-
-#~ msgid "Source"
-#~ msgstr "来源"
 
 #~ msgid "Spam folder"
 #~ msgstr "垃圾邮件文件夹"
@@ -16188,6 +16278,15 @@ msgstr "在 %s 上添加"
 #~ msgid "Subreddits"
 #~ msgstr "Subreddits"
 
+#~ msgid "Subscribe IMAP folders"
+#~ msgstr "订阅 IMAP 文件夹"
+
+#~ msgid "Subscribe address book"
+#~ msgstr "订阅地址簿"
+
+#~ msgid "Subscribe calendar"
+#~ msgstr "订阅日历"
+
 #~ msgid ""
 #~ "Subscribing to items that are not delivered by another Open-Xchange "
 #~ "Server (i.e. OXMF) may take some time. Example: Importing 100 contacts "
@@ -16217,8 +16316,18 @@ msgstr "在 %s 上添加"
 #~ msgid "Swedish (Sweden)"
 #~ msgstr "瑞典文"
 
+#~ msgid ""
+#~ "Synchronization of Emails, Calendar, Contacts and Tasks, along with "
+#~ "Public, Shared and System Folders to Microsoft Outlook® clients."
+#~ msgstr ""
+#~ "从电子邮件、日历、联系人、任务、公共文件夹、共享文件夹、系统文件夹，到 "
+#~ "Microsoft Outlook® 客户端的同步。"
+
 #~ msgid "Synchronization to the server has been lost."
 #~ msgstr "丢失到服务器的同步。"
+
+#~ msgid "Synchronize with Outlook"
+#~ msgstr "与 Outlook 同步"
 
 #, fuzzy
 #~| msgid "Table"
@@ -16244,6 +16353,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Template"
 #~ msgstr "模版"
+
+#~ msgid "Temporary"
+#~ msgstr "临时"
 
 #~ msgid "Text"
 #~ msgstr "文本"
@@ -16316,6 +16428,14 @@ msgstr "在 %s 上添加"
 #~ msgstr "门户通知您有关电子邮件、约会、或社交网路新闻。"
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared folders "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view."
+#~ msgstr ""
+#~ "共享文件夹中的非参加用户的约会是不可见的。约会不考虑冲突，并且不会出现在计"
+#~ "划视图中。"
+
+#~ msgid ""
 #~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
 #~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
 #~ "days</a>."
@@ -16384,6 +16504,9 @@ msgstr "在 %s 上添加"
 #~ "\" data-widget=\"options\" data-attribute=\"day\">星期三</a><a href=\"#\" "
 #~ "data-widget=\"number\" data-attribute=\"interval\">重复，"
 
+#~ msgid "The appointment is visible for all users in shared folders."
+#~ msgstr "对于共享文件夹中的所有用户，约会都是可见的。"
+
 #~ msgid "The calendar views"
 #~ msgstr "日历视图"
 
@@ -16406,6 +16529,15 @@ msgstr "在 %s 上添加"
 #~ msgid "The email address %1$s is already in the list"
 #~ msgstr "邮件地址 %1$s 已经在列表里"
 
+#~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
+#~ msgstr "字段 \"%1$s\" 超出 %2$d 个字符之最大体积。"
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] "因为文件超出限额 %1$s，所以未能上载。"
+
 #~ msgid "The file is available at %1$s"
 #~ msgstr "此文件于 %1$s 可用"
 
@@ -16417,6 +16549,11 @@ msgstr "在 %s 上添加"
 
 #~ msgid "The following actions apply to all messages (%1$d) in this folder:"
 #~ msgstr "以下动作套用到此文件夹里的所有消息 (%1$d)："
+
+#~ msgid ""
+#~ "The following applications can be restored. Just remove the restore point "
+#~ "if you don't want it to be restored."
+#~ msgstr "以下应用已恢复，如果您不想它被恢复只需删除恢复点。"
 
 #~ msgid ""
 #~ "The graph shows performance frequencies in percent. Grey line shows ideal "
@@ -16512,6 +16649,11 @@ msgstr "在 %s 上添加"
 #~ "结束</a>。"
 
 #~ msgid ""
+#~ "The setting has been saved and will become active when you enter the "
+#~ "application the next time."
+#~ msgstr "设置已保存，在您下一次进入应用时会生效。"
+
+#~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "
 #~ "e.g Basic settings, E-Mail or My contact data."
 #~ msgstr ""
@@ -16534,6 +16676,11 @@ msgstr "在 %s 上添加"
 #~ msgid "The tabbed inbox can be completely disabled in the mail settings."
 #~ msgstr "选项卡化收件夹能够在邮件设置里完全停用。"
 
+#~ msgid ""
+#~ "The timezone of this appointment (%1$s) differs from your default "
+#~ "timezone (%2$s)."
+#~ msgstr "此约会 (%1$s) 的时区异于您的默认时区 (%2$s)。"
+
 #~ msgid "Theme colors"
 #~ msgstr "主题颜色"
 
@@ -16544,6 +16691,12 @@ msgstr "在 %s 上添加"
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
 #~ msgstr[0] "您已经在此时段有一个 %1$d 约会。"
 #~ msgstr[1] "您已经在此时段有一个 %1$d 约会。"
+
+#~ msgid "There is no preview for this file type"
+#~ msgstr "没有此文件类别的预览"
+
+#~ msgid "There were not activities in your network"
+#~ msgstr "那些不是您网路里的活动"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "无法确认此户口"
@@ -16608,14 +16761,31 @@ msgstr "在 %s 上添加"
 #~ "guests any more."
 #~ msgstr "此文件夹与其他人分享。它将不再为邀请访客可用。"
 
+#~ msgid "This mail has been sent from %1$s."
+#~ msgstr "此邮件已从 %1$s 发送。"
+
 #~ msgid "This may take some seconds"
 #~ msgstr "可能稍时片刻"
+
+#~ msgid "This message is from a trusted sender."
+#~ msgstr "此消息来自受信任的发件人。"
 
 #~ msgid "This message is read, press this button to mark it as unread."
 #~ msgstr "此消息为已读，单击此按钮以标记成未读。"
 
 #~ msgid "This message is unread, press this button to mark it as read."
 #~ msgstr "此消息为未读，单击此按钮以标记成已读。"
+
+#~ msgid ""
+#~ "This might be a phishing email because we could not verify that it is "
+#~ "really from %1$s."
+#~ msgstr ""
+#~ "由于我们不能鉴定此电子邮件是否来自%1$s，因此可能为一封钓鱼电子邮件。"
+
+#~ msgid ""
+#~ "This might be a phishing mail because we could not verify that this email "
+#~ "is really from %1$s."
+#~ msgstr "由于我们不能鉴定此电子邮件是否来自%1$s，因此可能为一封钓鱼邮件。"
 
 #~ msgid "Tile"
 #~ msgstr "方块"
@@ -16821,6 +16991,9 @@ msgstr "在 %s 上添加"
 #~ msgid "Toggle search"
 #~ msgstr "切换搜寻"
 
+#~ msgid "Toggle viewport size"
+#~ msgstr "切换视口大小"
+
 #~ msgid "Too many contacts in your address book."
 #~ msgstr "您的地址簿太多联系人。"
 
@@ -16829,6 +17002,9 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Tour: Coming from OX6"
 #~ msgstr "导游：从 OX6 来的"
+
+#~ msgid "Town"
+#~ msgstr "城镇"
 
 #~ msgid "Tracking the editing status"
 #~ msgstr "追踪编辑状态"
@@ -16853,8 +17029,18 @@ msgstr "在 %s 上添加"
 #~ msgid "Underline"
 #~ msgstr "下划线"
 
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unknown client"
+#~ msgstr "未知发送人"
+
 #~ msgid "Unknown error while checking subreddit."
 #~ msgstr "检查 subreddit 时不明错误"
+
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unkown client"
+#~ msgstr "未知发送人"
 
 #~ msgid "Unnamed"
 #~ msgstr "未命名"
@@ -16888,13 +17074,22 @@ msgstr "在 %s 上添加"
 #~ msgid "Use"
 #~ msgstr "使用"
 
+#~ msgid "Use Password"
+#~ msgstr "使用密码"
+
 #~ msgid "Use SSL connection"
 #~ msgstr "使用 SSL 连接"
+
+#~ msgid "Use accessibility improvements"
+#~ msgstr "使用辅助功能改进"
 
 #~ msgid ""
 #~ "Use cursor keys to change the item position. Virtual cursor mode has to "
 #~ "be disabled."
 #~ msgstr "使用方向键以更改项目位置，必须停用虚拟方向模式。"
+
+#~ msgid "Use cursor keys to navigate"
+#~ msgstr "使用方向键导航"
 
 #, fuzzy
 #~| msgid ""
@@ -16946,11 +17141,17 @@ msgstr "在 %s 上添加"
 #~ msgid "View Slideshow"
 #~ msgstr "显示幻灯片"
 
+#~ msgid "View attachment"
+#~ msgstr "检视附件"
+
 #~ msgid "View participants"
 #~ msgstr "检视参与者"
 
 #~ msgid "View the presentation in fullscreen on your device."
 #~ msgstr "在您的装置上以全屏检视此演讲。"
+
+#~ msgid "We could not verify that this email is really from %1$s."
+#~ msgstr "我们无法验证此电子邮件是否真的来自 %1$s。"
 
 #~ msgid "Week View"
 #~ msgstr "周视图"
@@ -17042,6 +17243,19 @@ msgstr "在 %s 上添加"
 #~ msgstr "您已接受此邀请"
 
 #~ msgid ""
+#~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
+#~ "Appointments will therefore be created in your private calendar."
+#~ msgstr ""
+#~ "您不允许在 %2$s 拥有的  \"%1$s\" 里创建约会。因此，约会将会在您的私人日历"
+#~ "里创建。"
+
+#~ msgid ""
+#~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
+#~ "therefore be created in your private calendar."
+#~ msgstr ""
+#~ "您不允许在  \"%1$s\" 里创建约会。因此，约会将会在您的私人日历里创建。"
+
+#~ msgid ""
 #~ "You can drag and drop files from your computer here to add as attachment."
 #~ msgstr "您可以在这里从您的计算机拖放文件，以添加成附件。"
 
@@ -17049,6 +17263,10 @@ msgstr "在 %s 上添加"
 #~ "You can drag and drop files from your computer to upload either a new "
 #~ "file or another version of a file."
 #~ msgstr "您可以从您的计算机拖放文件，以上载一个新文件或一个文件的别的版本。"
+
+#~ msgid ""
+#~ "You can import existing signatures from the previous product generation."
+#~ msgstr "您能从前代产品导入存在的签名。"
 
 #~ msgid ""
 #~ "You can manage desktop notifications at any time, by vitising your "
@@ -17081,8 +17299,21 @@ msgstr "在 %s 上添加"
 #~ msgid "You have edit rights."
 #~ msgstr "您有编辑权。"
 
+#~ msgid "You have no new messages"
+#~ msgstr "您没有新信息"
+
 #~ msgid "You have reauthorized this account."
 #~ msgstr "您已重认证此户口。"
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "您必须输入一个用户名称和密码以订阅。"
+
+#~ msgid ""
+#~ "You will automatically return to the appointment dialog. The selected "
+#~ "start and end time as well as the current participant list will be "
+#~ "applied."
+#~ msgstr ""
+#~ "您会自动回到约会对话。选择的开始和结束时间，还有当前参与者列表将会套用。"
 
 #~ msgid ""
 #~ "Your %s account has been created. Expect a confirmation mail from %s soon."
@@ -17106,14 +17337,25 @@ msgstr "在 %s 上添加"
 #~ msgid "Your data has been saved"
 #~ msgstr "您的数据已被保存"
 
+#~ msgid ""
+#~ "Your default reminder could not be set for this appointment due to "
+#~ "insufficient permissions"
+#~ msgstr "此约会由于权限不足，无法设置您的默认提醒"
+
 #~ msgid "Your email address will be included when sending this feedback"
 #~ msgstr "您的电子邮件地址将会在发送此回馈是包含"
+
+#~ msgid "Your messages"
+#~ msgstr "您的信息"
 
 #~ msgid "Your password has been changed"
 #~ msgstr "您的密码已更改"
 
 #~ msgid "Your primary mail account can not be deleted."
 #~ msgstr "不能删除您的主要邮件户口。"
+
+#~ msgid "Your reply has been sent"
+#~ msgstr "您的回复已发送"
 
 #, fuzzy
 #~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"
@@ -17166,9 +17408,6 @@ msgstr "在 %s 上添加"
 
 #~ msgid "date range"
 #~ msgstr "日期范围"
-
-#~ msgid "day of the week"
-#~ msgstr "每周的"
 
 #~ msgid "day of the weekend"
 #~ msgstr "每周末的"
@@ -17247,10 +17486,19 @@ msgstr "在 %s 上添加"
 #~ msgid "iCal"
 #~ msgstr "iCal"
 
+#~ msgid "iCal-Feed"
+#~ msgstr "iCal-源"
+
+#~ msgid "iCal-feed has been imported successfully"
+#~ msgstr "已成功导入 iCal 提要"
+
 #, fuzzy
 #~| msgid "Phone"
 #~ msgid "iPhone"
 #~ msgstr "电话"
+
+#~ msgid "in"
+#~ msgstr "在"
 
 #~ msgid "in blind copy"
 #~ msgstr "无名副本"
@@ -17276,9 +17524,6 @@ msgstr "在 %s 上添加"
 #~ msgid "later"
 #~ msgstr "之后"
 
-#~ msgid "login"
-#~ msgstr "登录"
-
 #~ msgid "march"
 #~ msgstr "三月"
 
@@ -17291,8 +17536,8 @@ msgstr "在 %s 上添加"
 #~ msgid "more"
 #~ msgstr "更多"
 
-#~ msgid "never ends"
-#~ msgstr "永不结束"
+#~ msgid "never"
+#~ msgstr "从不"
 
 #~ msgid "new"
 #~ msgstr "新"
@@ -17324,8 +17569,8 @@ msgstr "在 %s 上添加"
 #~ msgid "next week"
 #~ msgstr "下周"
 
-#~ msgid "none"
-#~ msgstr "无"
+#~ msgid "no expiry date"
+#~ msgstr "没有到期日"
 
 #~ msgid "november"
 #~ msgstr "十一月"
@@ -17396,8 +17641,20 @@ msgstr "在 %s 上添加"
 #~ msgid "vacation"
 #~ msgstr "假期"
 
+#~ msgid "via"
+#~ msgstr "经由"
+
 #~ msgid "weekly"
 #~ msgstr "每周"
+
+#~ msgid "when the link is expired"
+#~ msgstr "在链接过期时"
+
+#~ msgid "when the receivers have accessed the files"
+#~ msgstr "在接收者已经访问文件时"
+
+#~ msgid "when the receivers have finished downloading the files"
+#~ msgstr "在接收者结束下载文件时"
 
 #, fuzzy
 #~| msgid "Main window"

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-06-16 14:57+0100\n"
+"PO-Revision-Date: 2019-01-03 16:26+0100\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -23,6 +23,26 @@ msgstr "Dialogové okno obsahuje neplatná data"
 #: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main/offline.js
 msgid "Server unreachable"
 msgstr "Server je nedostupný"
+
+#. Used in a selectbox when the reminder for an appointment is before the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "before start"
+msgstr "před začátkem"
+
+#. Used in a selectbox when the reminder for an appointment is after the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "after start"
+msgstr "po začátku"
+
+#. Used in a selectbox when the reminder for an appointment is before the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "before end"
+msgstr "před koncem"
+
+#. Used in a selectbox when the reminder for an appointment is after the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "after end"
+msgstr "po konci"
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
@@ -669,11 +689,12 @@ msgid "Ok"
 msgstr "OK"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
-#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
-#: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
-#: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar apps/io.ox/core/about/about.js
+#: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -2512,6 +2533,7 @@ msgstr[2] "%d dní"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d minute"
 msgid_plural "%1$d minutes"
 msgstr[0] "%1$d minuta"
@@ -2521,6 +2543,7 @@ msgstr[2] "%d minut"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d hour"
 msgid_plural "%1$d hours"
 msgstr[0] "%d hodina"
@@ -3656,6 +3679,18 @@ msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
+#. '%1$s contact's display name
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "%1$s could not be added as the contact has no valid email field."
+msgstr ""
+"%1$s nebylo možné přidat, protože kontakt nemá platnou e-mailovou adresu."
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "Some contacts could not be added as they have no valid email field."
+msgstr ""
+"Některé kontakty nebylo možné přidat, protože nemají platnou e-mailovou "
+"adresu."
+
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
@@ -4597,7 +4632,9 @@ msgstr "%1$d celkem"
 msgid "Unread: %1$d"
 msgstr "Nepřečtených: %1$d"
 
+#. %1$d number of unread mails
 #: apps/io.ox/core/folder/node.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "%1$d unread"
 msgstr "%1$d nepřečtených"
 
@@ -5350,12 +5387,24 @@ msgstr ""
 "nebo opětovné přihlášení, aby se projevila."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
+msgstr ""
+"Některá nastavení (jazyk, časové pásmo, motiv) vyžadují opětovné přihlášení, "
+"aby se projevila."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Default Theme"
 msgstr "Výchozí téma"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Unicolor"
 msgstr "Unicolor"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+msgid "Default"
+msgstr "Výchozí"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Multicolor"
@@ -5406,8 +5455,16 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr "Aby se nastavení projevilo, je nutné se odhlásit a znovu přihlásit."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "The setting requires a relogin to take effect."
+msgstr "Aby se nastavení projevilo, je nutné se odhlásit a znovu přihlásit."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
 msgstr "Znovu načíst"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Relogin"
+msgstr "Opětovné přihlášení"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -5967,8 +6024,8 @@ msgstr "Je nám líto, není k dispozici žádný náhled."
 #: apps/io.ox/core/viewer/main.js module:io.ox/core
 msgid "To print this file, please use \"Print as PDF\" in the viewer."
 msgstr ""
-"Chcete-li vytisknout tento soubor, použijte „Vytisknout jako PDF“ v"
-" prohlížeči."
+"Chcete-li vytisknout tento soubor, použijte „Vytisknout jako PDF“ v "
+"prohlížeči."
 
 #. tooltip for getting auto-play mode ready for running.
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
@@ -8578,6 +8635,10 @@ msgstr "Chyba: Nepodařilo se načíst zprávy"
 msgid "Auto forwarding is active"
 msgstr "Automatické přeposílání je zapnuté"
 
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 #: apps/io.ox/settings/util.js module:io.ox/core
@@ -9227,6 +9288,10 @@ msgid "Your vacation notice is active"
 msgstr "Vaše oznámení o nepřítomnosti je zapnuté"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
+msgid "vacation notice"
+msgstr "oznámení o nepřítomnosti"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "The time frame is in the past."
 msgstr "Časový interval je v minulosti."
 
@@ -9259,6 +9324,10 @@ msgstr "Konec"
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Message"
 msgstr "Zpráva"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+msgid "Show advanced options"
+msgstr "Zobrazit pokročilá nastavení"
 
 #. Context: Vacation notices
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -10158,10 +10227,6 @@ msgstr "Nastavení portálu"
 msgid "Add widget"
 msgstr "Přidat widget"
 
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-msgid "Default"
-msgstr "Výchozí"
-
 #. %1$s is the title of the item, which should be colored
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Color %1$s"
@@ -10496,6 +10561,10 @@ msgstr "DAVdroid"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "CalDav/CardDav"
 msgstr "CalDav/CardDav"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "WebDAV"
+msgstr "WebDAV"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Exchange Active Sync"
@@ -12238,653 +12307,245 @@ msgstr "Pozvat na %s"
 msgid "Add on %s"
 msgstr "Přidat do %s"
 
-#~ msgid "Empty table cell"
-#~ msgstr "Prázdná buňka"
+#~ msgid "Send mail %1$s before start."
+#~ msgstr "Poslat zprávu %1$s před začátkem."
 
-#~ msgid "Encrypt"
-#~ msgstr "Zašifrovat"
+#~ msgid "Send mail %1$s after start."
+#~ msgstr "Poslat zprávu %1$s po začátku."
 
-#~ msgid "You have to enter a username and password to subscribe."
-#~ msgstr "Chcete-li se přihlásit, musíte zadat uživatelské jméno a heslo."
+#~ msgid "Send mail %1$s before end."
+#~ msgstr "Poslat zprávu %1$s před koncem."
 
-#~ msgid "All future messages from %1$s will be moved to the selected folder."
-#~ msgid_plural ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
-#~ msgstr[0] ""
-#~ "Všechny budoucí zprávy od %1$s budou přesunuty do vyznačené složky."
-#~ msgstr[1] ""
-#~ "Všechny budoucí zprávy od odesílatelů vybraných zpráv budou přesunuty do "
-#~ "vybrané složky."
-#~ msgstr[2] ""
-#~ "Všechny budoucí zprávy od odesílatelů vybraných zpráv budou přesunuty do "
-#~ "vybrané složky."
+#~ msgid "Send mail %1$s after end."
+#~ msgstr "Poslat zprávu %1$s po konci."
 
-#~ msgid "Show Links"
-#~ msgstr "Zobrazit odkazy"
+#~ msgid "Send mail at %1$s."
+#~ msgstr "Poslat zprávu %1$s."
 
-#~ msgid "Add attachment"
-#~ msgstr "Přidat přílohu"
+#~ msgid "Send mail at start."
+#~ msgstr "Poslat zprávu na začátku."
 
-#~ msgid "Scheduling"
-#~ msgstr "Plánování"
+#~ msgid "Send mail at end."
+#~ msgstr "Poslat zprávu na konci."
 
-#~ msgctxt "app"
-#~ msgid "Conversations"
-#~ msgstr "Konverzace"
+#~ msgid "Reminder %1$d"
+#~ msgstr "Upomínka %1$s"
 
-#~ msgctxt "app"
-#~ msgid "Settings"
-#~ msgstr "Nastavení"
+#~ msgid "type"
+#~ msgstr "druh"
 
-#~ msgctxt "app"
-#~ msgid "Documents"
-#~ msgstr "Dokumenty"
+#~ msgid "timeframe"
+#~ msgstr "časový interval"
 
-#~ msgid "iCal-feed has been imported successfully"
-#~ msgstr "iCal úspěšně importován"
+#~ msgid "timeframe relation"
+#~ msgstr "časový interval vzhledem k události"
 
-#~ msgid "Change color"
-#~ msgstr "Změnit barvu"
+#~ msgid "Remove reminder"
+#~ msgstr "Odstranit upomínku"
 
-#~ msgid "Please note that distribution lists cannot contain ressources."
-#~ msgstr "Distribuční seznamy nemohou obsahovat zdroje."
+#~ msgid "Minimized windows"
+#~ msgstr "Minimalizovaná okna"
 
-#~ msgid "Never."
-#~ msgstr "Nikdy."
+#~ msgid "Change reminder"
+#~ msgstr "Změnit upomínku"
 
-#~ msgid "Town"
-#~ msgstr "Město"
+#~ msgid "Change reminders"
+#~ msgstr "Změnit upomínky"
 
-#~ msgid "iCal-Feed"
-#~ msgstr "Zdroj iCal"
+#~ msgid "Appointments in public calendars"
+#~ msgstr "Schůzky ve veřejných kalendářích"
 
 #~ msgid ""
-#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
-#~ "for example."
+#~ "The selected calendar \"%1$s\" is public. Do you really want to create an "
+#~ "appointment in this calendar?"
 #~ msgstr ""
-#~ "Ignorovat existující schůzky. Hodí se například pro importování kalendářů "
-#~ "se státními svátky."
+#~ "Zvolený kalendář, %1$s, je veřejný. Opravdu v něm chcete vytvořit schůzku?"
 
-#~ msgid "Remind me again %1$s"
-#~ msgstr "Připomenout znovu za %1$s"
+#~ msgid "Create in public calendar"
+#~ msgstr "Vytvořit ve veřejném kalendáři"
 
-#~ msgid "Sharing link created for file \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "Odkaz pro sdílení souboru „%1$d“ vytvořen"
-#~ msgstr[1] "Odkaz pro sdílení %1$d souborů vytvořen"
-#~ msgstr[2] "Odkaz pro sdílení %1$d souborů vytvořen"
+#~ msgid "Add a message to the notification email for the other participants."
+#~ msgstr "Přidat do upozornění zprávu pro ostatní účastníky."
 
-#~ msgid "Sharing link created for folder \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "Odkaz pro sdílení složky „%1$d“ vytvořen"
-#~ msgstr[1] "Odkaz pro sdílení %1$d položek vytvořen"
-#~ msgstr[2] "Odkaz pro sdílení %1$d položek vytvořen"
+#~ msgid "Your recurrence rule does not fit to your start date."
+#~ msgstr "Vaše pravidlo pro opakování nevyhovuje počátečnímu datu."
 
-#~ msgid "Internal & external users"
-#~ msgstr "Interní a externí uživatelé"
+#~ msgid "Your recurrence rule was changed automatically."
+#~ msgstr "Vaše pravidlo pro opakování bylo automaticky změněno."
 
-#~ msgid "Quick reply"
-#~ msgstr "Rychlá odpověď"
-
-#~ msgid "Synchronize with Outlook"
-#~ msgstr "Synchronizovat s Outlookem"
+#~ msgid "User defined color"
+#~ msgstr "Barva definovaná uživatelem"
 
 #~ msgid ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
+#~ "You are using a shared calendar. The calendar owner was added as "
+#~ "organizer."
 #~ msgstr ""
-#~ "Všechny budoucí zprávy od odesílatelů vyznačených zpráv budou přesunuty "
-#~ "do vyznačené složky."
-
-#~ msgid "never"
-#~ msgstr "nikdy"
-
-#~ msgid "Use Password"
-#~ msgstr "Použijte heslo"
-
-#~ msgid "when the receivers have finished downloading the files"
-#~ msgstr "když příjemci dokončili stahování souborů"
-
-#~ msgid "when the link is expired"
-#~ msgstr "když odkaz vypršel"
-
-#~ msgid "when the receivers have accessed the files"
-#~ msgstr "když příjemci otevřeli soubory"
-
-#~ msgid "%1$s Options"
-#~ msgstr "Možnosti %1$s"
-
-#~ msgid "Account is being created"
-#~ msgstr "Účet je právě vytvářen"
+#~ "Používáte sdílený kalendář. Vlastník kalendáře byl přidán jako "
+#~ "organizátor."
 
 #~ msgid ""
-#~ "This might be a phishing email because we could not verify that it is "
-#~ "really from %1$s."
+#~ "You are no longer using a shared calendar. You were added as organizer."
 #~ msgstr ""
-#~ "Tato zpráva je možná e-mailový podvod, protože se nám nepodařilo ověřit, "
-#~ "že by skutečně byla od %1$s."
+#~ "Již nepoužíváte sdílený kalendář. Byl(a) přidán(a) jako organizátor."
 
-#~ msgid "in"
-#~ msgstr "v"
+#~ msgid "Visibility Help"
+#~ msgstr "Nápověda pro viditelnost"
 
-#~ msgid "Exchange ActiveSync"
-#~ msgstr "Exchange ActiveSync"
+#~ msgid "Use calendar color"
+#~ msgstr "Použít barvy kalendáře"
 
-#~ msgid "Dangerous emails only"
-#~ msgstr "Jen nebezpečné zprávy"
+#~ msgid "none"
+#~ msgstr "nikdo"
 
-#~ msgid "Dangerous and trusted emails"
-#~ msgstr "Nebezpečné a věrohodné zprávy"
+#~ msgid "Previous Month"
+#~ msgstr "Minulý měsíc"
 
-#~ msgid "Dangerous, trusted and valid emails"
-#~ msgstr "Nebezpečné, věrohodné a platné zprávy"
+#~ msgid "Next Month"
+#~ msgstr "Příští měsíc"
 
-#~ msgid "Add new reminder"
-#~ msgstr "Přidat novou upomínku"
+#~ msgid ""
+#~ "This appointment is an exception. Changing the exception does not affect "
+#~ "the series."
+#~ msgstr "Tato schůzka je výjimka. Změna výjimky neovlivní sérii."
 
-#~ msgid "Authentication failed. Please fill in login and password."
+#~ msgid "%s %s, create all-day appointment"
+#~ msgstr "%s %s, vytvořit celodenní schůzku"
+
+#~ msgid "Apply filter"
+#~ msgstr "Aplikovat filtr"
+
+#~ msgid "Starting letter index"
+#~ msgstr "Počáteční písmeno"
+
+#~ msgid "Contact list. Select a contact to view details."
+#~ msgstr "Seznam kontaktů. Vyberte kontakt, jehož detaily chcete zobrazit."
+
+#~| msgid "Language"
+#~ msgid "Language:"
+#~ msgstr "Jazyk:"
+
+#~ msgid "Regional settings"
+#~ msgstr "Regionální nastavení"
+
+#~ msgid "12 hours"
+#~ msgstr "12 hodin"
+
+#~ msgid "24 hours"
+#~ msgstr "24 hodin"
+
+#~ msgid "Sunday"
+#~ msgstr "neděle"
+
+#~ msgid "Monday"
+#~ msgstr "pondělí"
+
+#~ msgid "Week that contains January 1st"
+#~ msgstr "Týden, který zahrnuje 1. leden"
+
+#~ msgid "Week that contains the first Thursday"
+#~ msgstr "Týden, který zahrnuje první čtvrtek"
+
+#~ msgid "Numbers"
+#~ msgstr "Čísla"
+
+#~ msgid "First day of week"
+#~ msgstr "První den týdne"
+
+#~ msgid "First week of year"
+#~ msgstr "První týden roku"
+
+#~ msgid "Don't remind me again"
+#~ msgstr "Již mi to nepřipomínej"
+
+#~ msgid "Unable to upload file"
+#~ msgid_plural "Unable to upload files"
+#~ msgstr[0] "Soubor se nepodařilo nahrát"
+#~ msgstr[1] "Soubory se nepodařilo nahrát"
+#~ msgstr[2] "Soubory se nepodařilo nahrát"
+
+#~ msgid "We encountered an issue for your upload"
+#~ msgid_plural "We encountered some issues for your upload"
+#~ msgstr[0] "Při nahrávání došlo k problému"
+#~ msgstr[1] "Při nahrávání došlo k problémům"
+#~ msgstr[2] "Při nahrávání došlo k problémům"
+
+#~ msgid "Slideshow"
+#~ msgstr "Slideshow"
+
+#~ msgid "Run slideshow"
+#~ msgstr "Spustit prezentaci"
+
+#~ msgid "Stop slideshow"
+#~ msgstr "Zastavit prezentaci"
+
+#~| msgid "Account is being created"
+#~ msgid "Your preview is being generated."
+#~ msgstr "Váš náhled je právě vytvářen."
+
+#~ msgid ""
+#~ "\n"
+#~ " Alternatively you can download the file."
 #~ msgstr ""
-#~ "Autentizace selhala. Zadejte, prosím, znovu svoje přihlašovací jméno a "
-#~ "heslo."
+#~ "\n"
+#~ " Případně můžete soubor stáhnout."
 
-#~ msgid "Public"
-#~ msgstr "Veřejné"
+#~ msgid "Account already exists"
+#~ msgstr "Účet již existuje"
 
-#~ msgid "The appointment is visible for all users in shared folders."
-#~ msgstr "Schůzka je viditelná pro všechny uživatele ve sdílených složkách."
+#~ msgid "Image size:"
+#~ msgstr "Velikost obrázku:"
 
-#~ msgid ""
-#~ "In shared folders, the appointment is displayed as a simple time slot for "
-#~ "non-attending users."
-#~ msgstr ""
-#~ "Uživatelům, kteří se neúčastní, je ve sdílených složkách schůzka "
-#~ "zobrazená jako časový interval."
+#~ msgid "Original"
+#~ msgstr "Původní"
 
-#~ msgid ""
-#~ "The appointment is not visible to non-attending users in shared folders "
-#~ "at all. The appointment is not considered for conflicts and does not "
-#~ "appear in the scheduling view."
-#~ msgstr ""
-#~ "Uživatelům, kteří se neúčastní, není ve sdílených složkách schůzka "
-#~ "viditelná vůbec. Schůzka není brána v potaz při vyhodnocování konfliktů a "
-#~ "neukazuje se v plánovacím pohledu."
+#~ msgid "Small"
+#~ msgstr "Malý"
 
-#~ msgid "Notify all participants by email."
-#~ msgstr "Upozornit všechny účastníky e-mailem."
+#~ msgid "Large"
+#~ msgstr "Velký"
 
-#~ msgid "Birthday"
-#~ msgstr "Narozeniny"
+#~ msgid "Image size"
+#~ msgstr "Velikost obrázku"
 
-#~ msgid "Color scheme"
-#~ msgstr "Barevné schéma"
+#~ msgid "Small (%1$s px)"
+#~ msgstr "Malý (%1$s px)"
 
-#~ msgid "Custom colors"
-#~ msgstr "Vlastní barvy"
+#~ msgid "Medium (%1$s px)"
+#~ msgstr "Střední (%1$s px)"
 
-#~ msgid "Classic colors"
-#~ msgstr "Klasické barvy"
+#~ msgid "Large (%1$s px)"
+#~ msgstr "Velký (%1$s px)"
 
-#~ msgid "Dark colors"
-#~ msgstr "Tmavé barvy"
+#~ msgid "Mail size:"
+#~ msgstr "Velikost zprávy:"
 
-#~ msgid "Application Toolbar"
-#~ msgstr "Nástrojová lišta aplikace"
+#~ msgid "Delete files after expiration"
+#~ msgstr "Po vypršení soubory smazat"
 
-#~ msgid "Folder type"
-#~ msgstr "Druh složky"
+#~ msgid "Is bigger than (Size: B/KB/MB/GB)"
+#~ msgstr "Je větší než (velikost: B/KB/MB/GB)"
 
-#~ msgid "Number of messages"
-#~ msgstr "Počet zpráv"
+#~ msgid "Is smaller than (Size: B/KB/MB/GB)"
+#~ msgstr "Je menší než (velikost: B/KB/MB/GB)"
 
-#~ msgid "Number of items"
-#~ msgstr "Počet položek"
+#~ msgid "String"
+#~ msgstr "Řetězec"
 
-#~ msgid "List of public calendars and events"
-#~ msgstr "Seznam veřejných kalendářů a událostí"
+#~ msgid "Source"
+#~ msgstr "Zdroj"
 
-#~ msgid ""
-#~ "Ignore existing events. Helpful to import public holiday calendars, for "
-#~ "example."
-#~ msgstr ""
-#~ "Ignorovat existující události. Hodí se například pro importování "
-#~ "kalendářů se státními svátky."
+#~ msgid "Always trust mails from the following senders"
+#~ msgstr "Zprávám od následujících odesílatelů vždy důvěřovat"
 
-#~ msgid "Quick launch 1"
-#~ msgstr "Rychlý start 1"
+#~ msgid "Comma-separated list e.g. \"example.org, alice@example.com\""
+#~ msgstr "Čárkami oddělovaný seznam, např. „example.org, alice@example.com“"
 
-#~ msgid "Quick launch 2"
-#~ msgstr "Rychlý start 2"
+#~| msgid "Participant"
+#~ msgid "Participant not found"
+#~ msgstr "Účastník nenalezen"
 
-#~ msgid "Quick launch 3"
-#~ msgstr "Rychlý start 3"
-
-#~ msgid ""
-#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-#~ msgid_plural ""
-#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
-#~ msgstr[0] "Soubor nelze nahrát, protože je přesahuje limit %1$s"
-#~ msgstr[1] "Soubory nelze nahrát, protože je přesahují limit %1$s"
-#~ msgstr[2] "Soubory nelze nahrát, protože je přesahují limit %1$s"
-
-#~ msgid "This message is from a trusted sender."
-#~ msgstr "Tato zpráva je od důvěryhodného odesílatele."
-
-#~ msgid ""
-#~ "This might be a phishing mail because we could not verify that this email "
-#~ "is really from %1$s."
-#~ msgstr ""
-#~ "Tato zpráva je možná e-mailový podvod, protože se nám nepodařilo ověřit, "
-#~ "že by skutečně byla od %1$s."
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Tuto zprávu odeslal(a) %1$s."
-
-#~ msgid "We could not verify that this email is really from %1$s."
-#~ msgstr "Nepodařilo se nám ověřit, že by tato zpráva skutečně byla od %1$s."
-
-#~ msgid "no expiry date"
-#~ msgstr "není nastavené koncové datum"
-
-#~ msgid "Expiration: %1$d"
-#~ msgstr "Platnost: %1$d"
-
-#~ msgid "Has Attachment"
-#~ msgstr "Má přílohu"
-
-#~ msgid "Show message authenticity"
-#~ msgstr "Zobrazit informace o autentičnosti zprávy"
-
-#~ msgid "Dangerous only"
-#~ msgstr "Jen nebezpečné"
-
-#~ msgid "Dangerous and trusted"
-#~ msgstr "Nebezpečné a věrohodné"
-
-#~ msgid "Acknowledge all reminders"
-#~ msgstr "Vzít v potaz všechny upomínky"
-
-#~ msgid "%1$d unread mails"
-#~ msgstr "%1$d nepřečtených zpráv"
-
-#~ msgctxt "window title"
-#~ msgid "%1$s %2$s"
-#~ msgstr "%1$s %2$s"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s for %2$s"
-#~ msgstr "%1$s z %2$s"
-
-#, fuzzy
-#~| msgid "%s client for Android"
-#~ msgid "%1$s for Android"
-#~ msgstr "%s klient pro Android"
-
-#, fuzzy
-#~| msgid "%s client for Mac OS"
-#~ msgid "%1$s for MacOS"
-#~ msgstr "%s klient pro Mac OS"
-
-#, fuzzy
-#~| msgid "%s client for Windows"
-#~ msgid "%1$s for Windows"
-#~ msgstr "%s klient pro Windows"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s for iOS"
-#~ msgstr "%1$s z %2$s"
-
-#~ msgid "%1$s is a new contact"
-#~ msgstr "%1$s je nový kontakt"
-
-#~ msgid "%1$s is now connected with %2$s"
-#~ msgstr "%1$s je nyní spojené s %2$s"
-
-#~ msgid "%d minute"
-#~ msgid_plural "%d minutes"
-#~ msgstr[0] "%d minuta"
-#~ msgstr[1] "%d minuty"
-#~ msgstr[2] "%d minut"
-
-#~ msgid "%s client for Windows (Installation via the OX Updater)"
-#~ msgstr "%s klient pro Windows (instalace prostřednictvím OX Updater)"
-
-#~ msgid "(current app)"
-#~ msgstr "(aktuální aplikace)"
-
-#~ msgid "Absent"
-#~ msgstr "Chybí"
-
-#~ msgid "All my appointments"
-#~ msgstr "Všechny mé schůzky"
-
-#~ msgid "Apps"
-#~ msgstr "Aplikace"
-
-#~ msgid "Back to appointment"
-#~ msgstr "Zpět na schůzku"
-
-#~ msgid ""
-#~ "By changing the date of this appointment you are creating an appointment "
-#~ "exception to the series."
-#~ msgstr "Změnou data schůzky vytvoříte výjimku v sérii schůzek."
-
-#~ msgid "Change view"
-#~ msgstr "Změnit pohled"
-
-#, fuzzy
-#~| msgid "Share %1$s \"%2$s\""
-#~ msgid "Chrome %1$s on %2$s"
-#~ msgstr "Sdílet %1$s „%2$s“"
-
-#, fuzzy
-#~| msgid "close for %1$s"
-#~ msgid "Close for %1$s"
-#~ msgstr "zavřít kvůli %1$s"
-
-#~ msgid "Connector for Microsoft Outlook®"
-#~ msgstr "Connector pro Microsoft Outlook®"
-
-#~ msgid ""
-#~ "Convert the entered start and end dates to match the modified timezones"
-#~ msgstr ""
-#~ "Převést zadaná data počátku a konce, aby odpovídala upraveným časovým "
-#~ "pásmům"
-
-#~ msgid "Couldn't load appointment data."
-#~ msgstr "Nepodařilo se načíst údaje schůzky."
-
-#~ msgid "Couldn't load your contact data."
-#~ msgstr "Nepodařilo se načíst vaše kontaktní údaje."
-
-#~ msgid "Create exception"
-#~ msgstr "Vytvořit výjimku"
-
-#, fuzzy
-#~| msgid "Current Costs:"
-#~ msgid "Current session"
-#~ msgstr "Aktuální náklady:"
-
-#~ msgid ""
-#~ "Did you know that you can take OX App Suite with you? Just click this "
-#~ "icon and choose 'Connect your device' from the menu."
-#~ msgstr ""
-#~ "Věděli jste, že si OX App Suite můžete vzít s sebou? Prostě klikněte na "
-#~ "tuto ikonku a zvolte v menu ‚Připojit zařízení‘."
-
-#~ msgid "Display emoticons as graphics in text emails"
-#~ msgstr "Zobrazit emotikony graficky v textových zprávách"
-
-#, fuzzy
-#~| msgid "Do you really want to delete this account?"
-#~ msgid ""
-#~ "Do you really want to terminate all active sessions except the current "
-#~ "one?"
-#~ msgstr "Opravdu chcete smazat tento účet?"
-
-#, fuzzy
-#~| msgctxt "One file only"
-#~| msgid "Do you really want to delete this version?"
-#~ msgid "Do you really want to terminate that session?"
-#~ msgstr "Opravdu chcete smazat tuto verzi?"
-
-#~ msgid ""
-#~ "Do you want to delete the whole series or just one appointment within the "
-#~ "series?"
-#~ msgstr "Chcete smazat celou sérii, nebo jednu schůzku ze série?"
-
-#~ msgid ""
-#~ "Do you want to edit the whole series or just one appointment within the "
-#~ "series?"
-#~ msgstr "Chcete upravit celou sérii, nebo jednu schůzku ze série?"
-
-#~ msgid "Doubleclick in this row for whole day appointment"
-#~ msgstr "Dvojitým kliknutím na tento řádek zvolíte celodenní schůzku"
-
-#~ msgid "Download %s via the OX Updater"
-#~ msgstr "Stáhnout %s prostřednictvím OX Updater"
-
-#~ msgid "Download installation file (for Windows)"
-#~ msgstr "Stáhnout instalační soubor (pro Windows)"
-
-#, fuzzy
-#~| msgid "Due on %1$s"
-#~ msgid "Edge on %1$s"
-#~ msgstr "Dokončit do %1$s"
-
-#~ msgid "Expand timeframe by one month"
-#~ msgstr "Rozšířit časový rámec o jeden měsíc"
-
-#~ msgid "External guests"
-#~ msgstr "Externí hosté"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "Firefox %1$s on %2$s"
-#~ msgstr "%1$s z %2$s"
-
-#~ msgid "Header exists"
-#~ msgstr "Hlavička existuje"
-
-#~ msgid "High contrast theme"
-#~ msgstr "Vysoce kontrastní téma"
-
-#~ msgid "How does this work?"
-#~ msgstr "Jak to funguje?"
-
-#, fuzzy
-#~| msgid "Added %1$s."
-#~ msgid "IP Address: %1$s"
-#~ msgstr "Přidáno %1$s."
-
-#~ msgid ""
-#~ "If you select different timezones, the appointment's start and end dates "
-#~ "are saved in the timezone of the appointment's start date. A different "
-#~ "end date timezone only allows a convenient conversion."
-#~ msgstr ""
-#~ "Zvolíte-li různá časová pásma, budou data počátku a konce schůzky uložena "
-#~ "v časovém pásmu počátku. Odlišné časové pásmo koncového data slouží jen k "
-#~ "snazšímu přepočtu."
-
-#~ msgid ""
-#~ "If you spot a free time, just select this area. To do this, move the "
-#~ "cursor to the start time, hold the mouse button, and <b>drag the mouse</"
-#~ "b> to the end time."
-#~ msgstr ""
-#~ "Pokud najdete volný čas, označte tuto oblast. Provedete to tak, že "
-#~ "přesunute kurzor nad počáteční čas, podržíte tlačítko a <b>potáhnete "
-#~ "myší</b> ke koncovému času."
-
-#~ msgid ""
-#~ "Informs about the current status of Emails and appointments without "
-#~ "having to display the user interface or another Windows® client."
-#~ msgstr ""
-#~ "Informuje o aktuálním stavu pošty a schůzek, aniž by bylo nutné "
-#~ "zobrazovat uživatelské rozhraní nebo jiného klienta pro Windows®."
-
-#~ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
-#~ msgstr "Nabídka spouštěče. Stisknutím [enter] skočíte do nabídky."
-
-#~ msgid "Leave empty if you have none"
-#~ msgstr "Nemáte-li žádný, ponechte prázdné"
-
-#~ msgid "LinkedIn"
-#~ msgstr "LinkedIn"
-
-#~ msgid "LinkedIn Network Updates"
-#~ msgstr "Novinky v síti LinkedIn"
-
-#~ msgid "LinkedIn reported an error:"
-#~ msgstr "LinkedIn hlásí chybu:"
-
-#~ msgid "Manage permission now"
-#~ msgstr "Spravovat oprávnění"
-
-#~ msgid "Notifier"
-#~ msgstr "Oznamovatel"
-
-#~ msgid "Open in browser"
-#~ msgstr "Otevřít v prohlížeči"
-
-#~ msgid "Open in browser tab"
-#~ msgstr "Otevřít v panelu prohlížeče"
-
-#~ msgid "Open on LinkedIn"
-#~ msgstr "Otevřít na LinkedIn"
-
-#, fuzzy
-#~| msgid "Others"
-#~ msgid "Other clients"
-#~ msgstr "Další"
-
-#~ msgid "Press [enter] to jump to the linkedin stream."
-#~ msgstr "Stisknutím [Enter] skočíte do zpráv LinkedIn."
-
-#~ msgid "Quit"
-#~ msgstr "Konec"
-
-#~ msgid "Recent activities"
-#~ msgstr "Nedávná činnost"
-
-#, fuzzy
-#~| msgid "Remove from recipient list"
-#~ msgid "Remove restore point: \"%1$s\""
-#~ msgstr "Odstranit ze seznamů adresátů"
-
-#~ msgid "Restore applications"
-#~ msgstr "Obnovit aplikace"
-
-#, fuzzy
-#~| msgid "Share %1$s \"%2$s\""
-#~ msgid "Safari %1$s on %2$s"
-#~ msgstr "Sdílet %1$s „%2$s“"
-
-#~ msgid "Signed in as:"
-#~ msgstr "Přihlášený(á) jako:"
-
-#~ msgid ""
-#~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
-#~ "LinkedIn with the permission to do read messages."
-#~ msgstr ""
-#~ "Je nám líto, ale tady vám nemůžeme pomoct. Váš poskytovatel musí získat "
-#~ "klíč od LinkedIn, který mu umožní číst zprávy."
-
-#~ msgid "Subscribe IMAP folders"
-#~ msgstr "Přihlásit IMAP složky"
-
-#~ msgid "Subscribe address book"
-#~ msgstr "Přihlaste adresář"
-
-#~ msgid "Subscribe calendar"
-#~ msgstr "Přihlaste kalendář"
-
-#~ msgid ""
-#~ "Synchronization of Emails, Calendar, Contacts and Tasks, along with "
-#~ "Public, Shared and System Folders to Microsoft Outlook® clients."
-#~ msgstr ""
-#~ "Synchronizace e-mailových zpráv, kalendáře, kontaktů a úkolů, spolu s "
-#~ "veřejnými, sdílenými a systémovými složkami s klienty Microsoft Outlook®."
-
-#~ msgid "Temporary"
-#~ msgstr "Dočasné"
-
-#~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
-#~ msgstr "Pole „%1$s“ obsahuje více znaků než povolených %2$d."
-
-#~ msgid ""
-#~ "The following applications can be restored. Just remove the restore point "
-#~ "if you don't want it to be restored."
-#~ msgstr ""
-#~ "Následující aplikace mohou být obnoveny. Pokud si obnovu nepřejete, "
-#~ "odstraňte bod obnovy."
-
-#~ msgid ""
-#~ "The setting has been saved and will become active when you enter the "
-#~ "application the next time."
-#~ msgstr ""
-#~ "Nastavení bylo uloženo a bude aktivováno po příštím vstupu do aplikace."
-
-#~ msgid ""
-#~ "The timezone of this appointment (%1$s) differs from your default "
-#~ "timezone (%2$s)."
-#~ msgstr ""
-#~ "Časové pásmo této schůzky (%1$s) se liší od vašeho výchozího časového "
-#~ "pásma (%2$s)."
-
-#~ msgid "There is no preview for this file type"
-#~ msgstr "Pro soubor tohoto druhu není k dispozici náhled"
-
-#~ msgid "There were not activities in your network"
-#~ msgstr "Ve vaší síti se nic nového neudálo."
-
-#~ msgid "Toggle viewport size"
-#~ msgstr "Přepnout velikost plochy"
-
-#, fuzzy
-#~| msgid "Unknown sender"
-#~ msgid "Unknown client"
-#~ msgstr "Neznámý odesílatel"
-
-#, fuzzy
-#~| msgid "Unknown sender"
-#~ msgid "Unkown client"
-#~ msgstr "Neznámý odesílatel"
-
-#~ msgid "Use accessibility improvements"
-#~ msgstr "Použít funkce pro zlepšení přístupnosti"
-
-#~ msgid "Use cursor keys to navigate"
-#~ msgstr "K navigaci použijte kurzorové klávesy"
-
-#~ msgid "View attachment"
-#~ msgstr "Zobrazit přílohu"
-
-#~ msgid ""
-#~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
-#~ "Appointments will therefore be created in your private calendar."
-#~ msgstr ""
-#~ "Nemáte právo vytvářet schůzky v „%1$s“ s vlastníkem %2$s. Schůzky budou "
-#~ "proto vytvořeny ve vašem soukromém kalendáři."
-
-#~ msgid ""
-#~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
-#~ "therefore be created in your private calendar."
-#~ msgstr ""
-#~ "Nemáte právo vytvářet schůzky v „%1$s“. Schůzky budou proto vytvořeny ve "
-#~ "vašem soukromém kalendáři."
-
-#~ msgid ""
-#~ "You can import existing signatures from the previous product generation."
-#~ msgstr "Existující podpisy můžete importovat z předchozí generace produktu."
-
-#~ msgid "You have no new messages"
-#~ msgstr "Nemáte žádné nové zprávy"
-
-#~ msgid ""
-#~ "You will automatically return to the appointment dialog. The selected "
-#~ "start and end time as well as the current participant list will be "
-#~ "applied."
-#~ msgstr ""
-#~ "Automaticky se vrátíte do okna schůzky. Vybraný počáteční a koncový čas a "
-#~ "zároveň aktuální seznam účastníků budou vloženy."
-
-#~ msgid ""
-#~ "Your default reminder could not be set for this appointment due to "
-#~ "insufficient permissions"
-#~ msgstr ""
-#~ "Kvůli nedostatečným oprávněním nebylo možné pro tuto schůzku nastavit "
-#~ "vaše výchozí upozornění"
-
-#~ msgid "Your messages"
-#~ msgstr "Vaše zprávy"
-
-#~ msgid "Your reply has been sent"
-#~ msgstr "Vaše odpověď byla odeslána"
-
-#~ msgid "via"
-#~ msgstr "přes"
+#~ msgid "Please use the \"Connect your device\" wizard to download %s"
+#~ msgstr "Pro stažení %s použijte průvodce „Připojit zařízení“"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -12962,7 +12623,14 @@ msgstr "Přidat do %s"
 #~ msgstr[1] "%1$d řady"
 #~ msgstr[2] "%1$d řad"
 
+#~ msgid "%1$d unread mails"
+#~ msgstr "%1$d nepřečtených zpráv"
+
 #~ msgctxt "datetime"
+#~ msgid "%1$s %2$s"
+#~ msgstr "%1$s %2$s"
+
+#~ msgctxt "window title"
 #~ msgid "%1$s %2$s"
 #~ msgstr "%1$s %2$s"
 
@@ -12981,8 +12649,36 @@ msgstr "Přidat do %s"
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s."
 
+#~ msgid "%1$s Options"
+#~ msgstr "Možnosti %1$s"
+
 #~ msgid "%1$s created a recurrence exception. Original date: %2$s:"
 #~ msgstr "%1$s vytvořil(a) výjimku opakování. Původní datum: %2$s:"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for %2$s"
+#~ msgstr "%1$s z %2$s"
+
+#, fuzzy
+#~| msgid "%s client for Android"
+#~ msgid "%1$s for Android"
+#~ msgstr "%s klient pro Android"
+
+#, fuzzy
+#~| msgid "%s client for Mac OS"
+#~ msgid "%1$s for MacOS"
+#~ msgstr "%s klient pro Mac OS"
+
+#, fuzzy
+#~| msgid "%s client for Windows"
+#~ msgid "%1$s for Windows"
+#~ msgstr "%s klient pro Windows"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for iOS"
+#~ msgstr "%1$s z %2$s"
 
 #~ msgid ""
 #~ "%1$s has %2$s the appointment, but would like to make a counter proposal: "
@@ -13040,6 +12736,12 @@ msgstr "Přidat do %s"
 
 #~ msgid "%1$s has started the presentation."
 #~ msgstr "%1$s začal(a) prezentaci."
+
+#~ msgid "%1$s is a new contact"
+#~ msgstr "%1$s je nový kontakt"
+
+#~ msgid "%1$s is now connected with %2$s"
+#~ msgstr "%1$s je nyní spojené s %2$s"
 
 #~ msgid "%1$s is organizing an event on your behalf."
 #~ msgstr "%1$s organizuje vaším jménem událost."
@@ -13121,6 +12823,12 @@ msgstr "Přidat do %s"
 #~ msgstr[1] "%d informační položky"
 #~ msgstr[2] "%d informační položek"
 
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d minuta"
+#~ msgstr[1] "%d minuty"
+#~ msgstr[2] "%d minut"
+
 #~ msgctxt "in"
 #~ msgid "%d minute"
 #~ msgid_plural "%d minutes"
@@ -13146,6 +12854,9 @@ msgstr "Přidat do %s"
 #~ msgstr[0] "%d týden"
 #~ msgstr[1] "%d týdny"
 #~ msgstr[2] "%d týdnů"
+
+#~ msgid "%s client for Windows (Installation via the OX Updater)"
+#~ msgstr "%s klient pro Windows (instalace prostřednictvím OX Updater)"
 
 #~ msgid "%s, EEE"
 #~ msgstr "%s, EEE"
@@ -13192,6 +12903,9 @@ msgstr "Přidat do %s"
 #~ msgid "(Default)"
 #~ msgstr "(Výchozí)"
 
+#~ msgid "(current app)"
+#~ msgstr "(aktuální aplikace)"
+
 #~ msgid "(may be slow on old machines)"
 #~ msgstr "(může být pomalé na starých počítačích)"
 
@@ -13235,9 +12949,6 @@ msgstr "Přidat do %s"
 #~ msgid "10"
 #~ msgstr "10"
 
-#~ msgid "12 hour"
-#~ msgstr "12 hodin"
-
 #~ msgid "15"
 #~ msgstr "15"
 
@@ -13264,9 +12975,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "4 days"
 #~ msgstr "4 dny"
-
-#~ msgid "4 hour"
-#~ msgstr "4 hodiny"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 týdny"
@@ -13640,6 +13348,9 @@ msgstr "Přidat do %s"
 #~ msgid "AM"
 #~ msgstr "dop."
 
+#~ msgid "Absent"
+#~ msgstr "Chybí"
+
 #~ msgid "Absent on business"
 #~ msgstr "Nepřítomnost kvůli pracovním povinnostem"
 
@@ -13675,6 +13386,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Account:"
 #~ msgstr "Účet:"
+
+#~ msgid "Acknowledge all reminders"
+#~ msgstr "Vzít v potaz všechny upomínky"
 
 #~ msgid "Acquire Edit Rights"
 #~ msgstr "Získat práva k úpravě"
@@ -13730,6 +13444,9 @@ msgstr "Přidat do %s"
 #~ msgid "Add account"
 #~ msgstr "Přidat účet"
 
+#~ msgid "Add attachment"
+#~ msgstr "Přidat přílohu"
+
 #~ msgid "Add cipher code"
 #~ msgstr "Přidat šifrovací kód"
 
@@ -13759,6 +13476,9 @@ msgstr "Přidat do %s"
 #~ msgid "Add new guest"
 #~ msgstr "Přidat hosta"
 
+#~ msgid "Add new reminder"
+#~ msgstr "Přidat novou upomínku"
+
 #~ msgid "Add new subfolder"
 #~ msgstr "Přidat novou podsložku"
 
@@ -13776,9 +13496,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Přidávám nové přihlášení k odběru. Může to několik sekund trvat..."
-
-#~ msgid "Additional settings"
-#~ msgstr "Další nastavení"
 
 #~ msgid "Additional:"
 #~ msgstr "Dodatečné:"
@@ -13999,6 +13716,29 @@ msgstr "Přidat do %s"
 #~| msgid "All my contacts"
 #~ msgid "All contacts"
 #~ msgstr "Všechny mé kontakty"
+
+#~ msgid "All future messages from %1$s will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] ""
+#~ "Všechny budoucí zprávy od %1$s budou přesunuty do vyznačené složky."
+#~ msgstr[1] ""
+#~ "Všechny budoucí zprávy od odesílatelů vybraných zpráv budou přesunuty do "
+#~ "vybrané složky."
+#~ msgstr[2] ""
+#~ "Všechny budoucí zprávy od odesílatelů vybraných zpráv budou přesunuty do "
+#~ "vybrané složky."
+
+#~ msgid ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr ""
+#~ "Všechny budoucí zprávy od odesílatelů vyznačených zpráv budou přesunuty "
+#~ "do vyznačené složky."
+
+#~ msgid "All my appointments"
+#~ msgstr "Všechny mé schůzky"
 
 #~ msgid "All times will be shown in the timezone %1$s"
 #~ msgstr "Všechny časy budou zobrazeny v časové zóně %1$s"
@@ -14571,6 +14311,9 @@ msgstr "Přidat do %s"
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "Antigua a Barbuda"
 
+#~ msgid "Application Toolbar"
+#~ msgstr "Nástrojová lišta aplikace"
+
 #~ msgid "Applications"
 #~ msgstr "Aplikace"
 
@@ -14636,6 +14379,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "Přibližná doba trvání u odběrů"
+
+#~ msgid "Apps"
+#~ msgstr "Aplikace"
 
 #~ msgid "Apr"
 #~ msgstr "Dub"
@@ -15157,6 +14903,11 @@ msgstr "Přidat do %s"
 #~ msgid "Austria"
 #~ msgstr "Rakousko"
 
+#~ msgid "Authentication failed. Please fill in login and password."
+#~ msgstr ""
+#~ "Autentizace selhala. Zadejte, prosím, znovu svoje přihlašovací jméno a "
+#~ "heslo."
+
 #~ msgid "Auto"
 #~ msgstr "Automaticky"
 
@@ -15203,6 +14954,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Azerbaijan"
 #~ msgstr "Ázerbájdžán"
+
+#~ msgid "Back to appointment"
+#~ msgstr "Zpět na schůzku"
 
 #, fuzzy
 #~| msgid "Back to sign in"
@@ -15278,6 +15032,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Bhutan"
 #~ msgstr "Bhutan"
+
+#~ msgid "Birthday"
+#~ msgstr "Narozeniny"
 
 #~ msgid "Birthday Appointment"
 #~ msgstr "Narozeninová schůzka"
@@ -15388,6 +15145,11 @@ msgstr "Přidat do %s"
 
 #~ msgid "Burundi"
 #~ msgstr "Burundi"
+
+#~ msgid ""
+#~ "By changing the date of this appointment you are creating an appointment "
+#~ "exception to the series."
+#~ msgstr "Změnou data schůzky vytvoříte výjimku v sérii schůzek."
 
 #~ msgid "CAD"
 #~ msgstr "CAD"
@@ -15503,6 +15265,9 @@ msgstr "Přidat do %s"
 #~ msgid "Change View"
 #~ msgstr "Změnit pohled"
 
+#~ msgid "Change color"
+#~ msgstr "Změnit barvu"
+
 #~ msgid "Change exception of %1$s on %2$s"
 #~ msgstr "Výjimka změny %1$s v %2$s"
 
@@ -15523,6 +15288,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Change the location to %1$s."
 #~ msgstr "Změňte místo konání na: %1$s"
+
+#~ msgid "Change view"
+#~ msgstr "Změnit pohled"
 
 #~ msgid "Changes have been saved."
 #~ msgstr "Změny byly uloženy."
@@ -15566,6 +15334,11 @@ msgstr "Přidat do %s"
 #~ msgid "Christmas Island"
 #~ msgstr "Vánoční ostrov"
 
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Chrome %1$s on %2$s"
+#~ msgstr "Sdílet %1$s „%2$s“"
+
 #~ msgid "City (business)"
 #~ msgstr "Město (firemní)"
 
@@ -15574,6 +15347,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "City:"
 #~ msgstr "Město:"
+
+#~ msgid "Classic colors"
+#~ msgstr "Klasické barvy"
 
 #~ msgid "Cleaning up... This may take a few seconds."
 #~ msgstr "Pročišťuji... To může několik sekund trvat."
@@ -15647,6 +15423,11 @@ msgstr "Přidat do %s"
 #~ msgid "Close document"
 #~ msgstr "Zavřít dokument"
 
+#, fuzzy
+#~| msgid "close for %1$s"
+#~ msgid "Close for %1$s"
+#~ msgstr "zavřít kvůli %1$s"
+
 #~ msgid "Close quick config"
 #~ msgstr "Zavřít rychlé nastavení"
 
@@ -15683,6 +15464,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Colombia"
 #~ msgstr "Kolumbie"
+
+#~ msgid "Color scheme"
+#~ msgstr "Barevné schéma"
 
 #~ msgid "Comma Separated"
 #~ msgstr "Oddělený čárkami"
@@ -15761,6 +15545,9 @@ msgstr "Přidat do %s"
 #~ msgid "Connection failed! Please check your settings: "
 #~ msgstr "Spojení selhalo! Zkontrolujte, prosím, nastavení:"
 
+#~ msgid "Connector for Microsoft Outlook®"
+#~ msgstr "Connector pro Microsoft Outlook®"
+
 #~ msgid "Contact folder..."
 #~ msgstr "Složka kontaktů..."
 
@@ -15782,6 +15569,16 @@ msgstr "Přidat do %s"
 
 #~ msgid "Continue the presentation"
 #~ msgstr "Pokračovat v prezentaci"
+
+#~ msgctxt "app"
+#~ msgid "Conversations"
+#~ msgstr "Konverzace"
+
+#~ msgid ""
+#~ "Convert the entered start and end dates to match the modified timezones"
+#~ msgstr ""
+#~ "Převést zadaná data počátku a konce, aby odpovídala upraveným časovým "
+#~ "pásmům"
 
 #~ msgid "Cook Islands"
 #~ msgstr "Cookovy ostrovy"
@@ -15807,6 +15604,9 @@ msgstr "Přidat do %s"
 #~ msgid "Couldn't load all contact images."
 #~ msgstr "Nepodařilo se načíst všechny obrázky kontaktů."
 
+#~ msgid "Couldn't load appointment data."
+#~ msgstr "Nepodařilo se načíst údaje schůzky."
+
 #~ msgid "Couldn't load folders."
 #~ msgstr "Nepodařilo se načíst složky."
 
@@ -15818,6 +15618,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Couldn't load your auto forward."
 #~ msgstr "Nepodařilo se načíst vaše automatické odeslání."
+
+#~ msgid "Couldn't load your contact data."
+#~ msgstr "Nepodařilo se načíst vaše kontaktní údaje."
 
 #~ msgid "Country (other)"
 #~ msgstr "Země (jiná)"
@@ -15836,6 +15639,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Create a recurring appointment"
 #~ msgstr "Vytvořit opakující schůzku"
+
+#~ msgid "Create exception"
+#~ msgstr "Vytvořit výjimku"
 
 #~ msgid "Create new task"
 #~ msgstr "Vytvořit nový úkol"
@@ -15928,6 +15734,11 @@ msgstr "Přidat do %s"
 #~ msgid "Current page and total page count"
 #~ msgstr "Aktuální strana a celkový počet stran"
 
+#, fuzzy
+#~| msgid "Current Costs:"
+#~ msgid "Current session"
+#~ msgstr "Aktuální náklady:"
+
 #~ msgid "Current week, next week"
 #~ msgstr "Aktuální týden, následující týden"
 
@@ -15949,6 +15760,9 @@ msgstr "Přidat do %s"
 #~ msgid "Custom"
 #~ msgstr "Vlastní"
 
+#~ msgid "Custom colors"
+#~ msgstr "Vlastní barvy"
+
 #~ msgid "Customizing"
 #~ msgstr "Přizpůsobení"
 
@@ -15967,8 +15781,26 @@ msgstr "Přidat do %s"
 #~ msgid "DKK"
 #~ msgstr "DKK"
 
+#~ msgid "Dangerous and trusted"
+#~ msgstr "Nebezpečné a věrohodné"
+
+#~ msgid "Dangerous and trusted emails"
+#~ msgstr "Nebezpečné a věrohodné zprávy"
+
+#~ msgid "Dangerous emails only"
+#~ msgstr "Jen nebezpečné zprávy"
+
+#~ msgid "Dangerous only"
+#~ msgstr "Jen nebezpečné"
+
+#~ msgid "Dangerous, trusted and valid emails"
+#~ msgstr "Nebezpečné, věrohodné a platné zprávy"
+
 #~ msgid "Danish"
 #~ msgstr "dánština"
+
+#~ msgid "Dark colors"
+#~ msgstr "Tmavé barvy"
 
 #~ msgid "Darker"
 #~ msgstr "Tmavší"
@@ -16155,6 +15987,13 @@ msgstr "Přidat do %s"
 #~ msgid "Details:"
 #~ msgstr "Podrobnosti:"
 
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Věděli jste, že si OX App Suite můžete vzít s sebou? Prostě klikněte na "
+#~ "tuto ikonku a zvolte v menu ‚Připojit zařízení‘."
+
 #~ msgid "Direct link: %1$s"
 #~ msgstr "Přímý odkaz: %1$s"
 
@@ -16175,6 +16014,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Display as:"
 #~ msgstr "Zobrazit jako:"
+
+#~ msgid "Display emoticons as graphics in text emails"
+#~ msgstr "Zobrazit emotikony graficky v textových zprávách"
 
 #~ msgid "Displayed name"
 #~ msgstr "Zobrazené jméno"
@@ -16216,6 +16058,19 @@ msgstr "Přidat do %s"
 #~ msgid "Do you really want to discard this mail?"
 #~ msgstr "Opravdu chcete tuto zprávu zahodit?"
 
+#, fuzzy
+#~| msgid "Do you really want to delete this account?"
+#~ msgid ""
+#~ "Do you really want to terminate all active sessions except the current "
+#~ "one?"
+#~ msgstr "Opravdu chcete smazat tento účet?"
+
+#, fuzzy
+#~| msgctxt "One file only"
+#~| msgid "Do you really want to delete this version?"
+#~ msgid "Do you really want to terminate that session?"
+#~ msgstr "Opravdu chcete smazat tuto verzi?"
+
 #~ msgid "Do you want to create a %s account?"
 #~ msgstr "Chcete vytvořit účet %s?"
 
@@ -16228,6 +16083,11 @@ msgstr "Přidat do %s"
 #~ "Do you want to delete the whole recurrence or single instances of the "
 #~ "recurrence?"
 #~ msgstr "Chcete smazat celou sérii, nebo jednotlivé schůzky ze série?"
+
+#~ msgid ""
+#~ "Do you want to delete the whole series or just one appointment within the "
+#~ "series?"
+#~ msgstr "Chcete smazat celou sérii, nebo jednu schůzku ze série?"
 
 #~ msgid ""
 #~ "Do you want to edit the whole recurrence or a single recurrence "
@@ -16253,6 +16113,11 @@ msgstr "Přidat do %s"
 #~ "Chcete upravit celou sérii, nebo jednu schůzku ze série? Mějte, prosím, "
 #~ "na paměti, že změnou sériové schůzky se zruší výjimky série."
 
+#~ msgid ""
+#~ "Do you want to edit the whole series or just one appointment within the "
+#~ "series?"
+#~ msgstr "Chcete upravit celou sérii, nebo jednu schůzku ze série?"
+
 #~ msgid "Do you want to keep the draft after sending this mail?"
 #~ msgstr "Chcete po odeslání e-mailu koncept ponechat?"
 
@@ -16265,6 +16130,10 @@ msgstr "Přidat do %s"
 #~ msgid "Document saved in folder \"%1$s\"."
 #~ msgstr "Dokument uložen do složky „%1$s“."
 
+#~ msgid "Documents"
+#~ msgstr "Dokumenty"
+
+#~ msgctxt "app"
 #~ msgid "Documents"
 #~ msgstr "Dokumenty"
 
@@ -16288,6 +16157,15 @@ msgstr "Přidat do %s"
 
 #~ msgid "Double click to rename"
 #~ msgstr "Dvojité kliknutí pro přejmenování"
+
+#~ msgid "Doubleclick in this row for whole day appointment"
+#~ msgstr "Dvojitým kliknutím na tento řádek zvolíte celodenní schůzku"
+
+#~ msgid "Download %s via the OX Updater"
+#~ msgstr "Stáhnout %s prostřednictvím OX Updater"
+
+#~ msgid "Download installation file (for Windows)"
+#~ msgstr "Stáhnout instalační soubor (pro Windows)"
 
 #~ msgid "Download updater for the Connector for Microsoft Outlook"
 #~ msgstr "Stahovač aktualizací pro Connector pro Microsoft Outlook"
@@ -16402,6 +16280,11 @@ msgstr "Přidat do %s"
 #~ msgid "Ecuador"
 #~ msgstr "Ekvádor"
 
+#, fuzzy
+#~| msgid "Due on %1$s"
+#~ msgid "Edge on %1$s"
+#~ msgstr "Dokončit do %1$s"
+
 #~ msgid "Edit Furigana"
 #~ msgstr "Upravit furiganu"
 
@@ -16483,14 +16366,11 @@ msgstr "Přidat do %s"
 #~ msgid "Email notification for task creator?"
 #~ msgstr "E-mailové oznámení pro autora úkolu?"
 
-#~ msgid "Email notification for task participant?"
-#~ msgstr "E-mailové oznámení pro účastníka úkolu?"
-
-#~ msgid "Embedded windows"
-#~ msgstr "Vložená okna"
-
 #~ msgid "Employee ID:"
 #~ msgstr "ID zaměstnance:"
+
+#~ msgid "Empty table cell"
+#~ msgstr "Prázdná buňka"
 
 #~ msgid "Emptying folder... This may take a few seconds."
 #~ msgstr "Vyprazdňuji složku... To může několik sekund trvat."
@@ -16555,6 +16435,9 @@ msgstr "Přidat do %s"
 #~ "Povolí offline přístup ke složkám e-mailu, kalendáře, úkolů a kontaktů. "
 #~ "Veškeré změny provedené offline pomocí Microsoft Outlooku budou "
 #~ "automaticky synchronizovány při příštím přihlášení:"
+
+#~ msgid "Encrypt"
+#~ msgstr "Zašifrovat"
 
 #, fuzzy
 #~ msgid "End Presentation"
@@ -16691,9 +16574,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Estimated Costs:"
 #~ msgstr "Odhadované náklady:"
-
-#~ msgid "Estimated Duration:"
-#~ msgstr "Odhadovaná doba:"
 
 #~ msgid "Estonia"
 #~ msgstr "Estonsko"
@@ -16908,11 +16788,20 @@ msgstr "Přidat do %s"
 #~ msgid "Exception caught: "
 #~ msgstr "Zachycena výjimka: "
 
+#~ msgid "Exchange ActiveSync"
+#~ msgstr "Exchange ActiveSync"
+
 #~ msgid "Existing shares"
 #~ msgstr "Existující sdílené položky"
 
 #~ msgid "Exit Fullscreen"
 #~ msgstr "Opustit režim celé obrazovky"
+
+#~ msgid "Expand timeframe by one month"
+#~ msgstr "Rozšířit časový rámec o jeden měsíc"
+
+#~ msgid "Expiration: %1$d"
+#~ msgstr "Platnost: %1$d"
 
 #, fuzzy
 #~| msgid "Send as vCard"
@@ -16925,6 +16814,9 @@ msgstr "Přidat do %s"
 #~ msgctxt "help"
 #~ msgid "External E-Mail Accounts"
 #~ msgstr "Externí e-mailové účty"
+
+#~ msgid "External guests"
+#~ msgstr "Externí hosté"
 
 #
 #~ msgctxt "friday"
@@ -17040,6 +16932,11 @@ msgstr "Přidat do %s"
 #~ msgid "Finland"
 #~ msgstr "Finsko"
 
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "Firefox %1$s on %2$s"
+#~ msgstr "%1$s z %2$s"
+
 #~ msgid "First Tab"
 #~ msgstr "První karta"
 
@@ -17089,6 +16986,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Folder tree"
 #~ msgstr "Strom složek"
+
+#~ msgid "Folder type"
+#~ msgstr "Druh složky"
 
 #~ msgid "Folder-specific actions for %1$s"
 #~ msgstr "Činnosti týkající se složky %1$s"
@@ -17316,6 +17216,12 @@ msgstr "Přidat do %s"
 #~ msgid "Halo view"
 #~ msgstr "Souhrnný pohled"
 
+#~ msgid "Has Attachment"
+#~ msgstr "Má přílohu"
+
+#~ msgid "Header exists"
+#~ msgstr "Hlavička existuje"
+
 #~ msgid "Heading"
 #~ msgstr "Hlavička"
 
@@ -17371,6 +17277,9 @@ msgstr "Přidat do %s"
 #~ msgid "Hide side panel"
 #~ msgstr "Skrýt postranní panel"
 
+#~ msgid "High contrast theme"
+#~ msgstr "Vysoce kontrastní téma"
+
 #~ msgid "History of error messages"
 #~ msgstr "Historie chybových zpráv"
 
@@ -17385,6 +17294,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Hongkong"
 #~ msgstr "Hongkong"
+
+#~ msgid "How does this work?"
+#~ msgstr "Jak to funguje?"
 
 #~ msgid "How the settings are organized"
 #~ msgstr "Jak je Nastavení organizované"
@@ -17436,6 +17348,11 @@ msgstr "Přidat do %s"
 #~ msgid "IMAP server"
 #~ msgstr "IMAP server"
 
+#, fuzzy
+#~| msgid "Added %1$s."
+#~ msgid "IP Address: %1$s"
+#~ msgstr "Přidáno %1$s."
+
 #~ msgid "IP phone (private)"
 #~ msgstr "IP telefon (soukr.)"
 
@@ -17473,6 +17390,38 @@ msgstr "Přidat do %s"
 #~ msgstr ""
 #~ "Pokud už nechcete mít některou dlaždici zobrazenou, klikněte na křížek v "
 #~ "pravé horní části."
+
+#~ msgid ""
+#~ "If you select different timezones, the appointment's start and end dates "
+#~ "are saved in the timezone of the appointment's start date. A different "
+#~ "end date timezone only allows a convenient conversion."
+#~ msgstr ""
+#~ "Zvolíte-li různá časová pásma, budou data počátku a konce schůzky uložena "
+#~ "v časovém pásmu počátku. Odlišné časové pásmo koncového data slouží jen k "
+#~ "snazšímu přepočtu."
+
+#~ msgid ""
+#~ "If you spot a free time, just select this area. To do this, move the "
+#~ "cursor to the start time, hold the mouse button, and <b>drag the mouse</"
+#~ "b> to the end time."
+#~ msgstr ""
+#~ "Pokud najdete volný čas, označte tuto oblast. Provedete to tak, že "
+#~ "přesunute kurzor nad počáteční čas, podržíte tlačítko a <b>potáhnete "
+#~ "myší</b> ke koncovému času."
+
+#~ msgid ""
+#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
+#~ "for example."
+#~ msgstr ""
+#~ "Ignorovat existující schůzky. Hodí se například pro importování kalendářů "
+#~ "se státními svátky."
+
+#~ msgid ""
+#~ "Ignore existing events. Helpful to import public holiday calendars, for "
+#~ "example."
+#~ msgstr ""
+#~ "Ignorovat existující události. Hodí se například pro importování "
+#~ "kalendářů se státními svátky."
 
 #~ msgid "Illegal Date in remind date"
 #~ msgstr "Neplatné datum upomínky"
@@ -17533,6 +17482,13 @@ msgstr "Přidat do %s"
 #~ "Chcete-li upravovat více zpráv najednou, zaškrtněte políčka na levé "
 #~ "straně zpráv. Pokud nejsou políčka zobrazená, klikněte na ikonu vlevo "
 #~ "dole."
+
+#~ msgid ""
+#~ "In shared folders, the appointment is displayed as a simple time slot for "
+#~ "non-attending users."
+#~ msgstr ""
+#~ "Uživatelům, kteří se neúčastní, je ve sdílených složkách schůzka "
+#~ "zobrazená jako časový interval."
 
 #~ msgid ""
 #~ "In the Details section at the bottom right side you can enter billing "
@@ -17614,6 +17570,13 @@ msgstr "Přidat do %s"
 #~ msgid "Information about account recovery..."
 #~ msgstr "Informace o obnovení účtu..."
 
+#~ msgid ""
+#~ "Informs about the current status of Emails and appointments without "
+#~ "having to display the user interface or another Windows® client."
+#~ msgstr ""
+#~ "Informuje o aktuálním stavu pošty a schůzek, aniž by bylo nutné "
+#~ "zobrazovat uživatelské rozhraní nebo jiného klienta pro Windows®."
+
 #~ msgid "Infostore"
 #~ msgstr "Úložiště informací"
 
@@ -17659,6 +17622,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Instant Messenger:"
 #~ msgstr "Instant Messenger:"
+
+#~ msgid "Internal & external users"
+#~ msgstr "Interní a externí uživatelé"
 
 #~ msgid "Internal Error"
 #~ msgstr "Interní chyba"
@@ -17871,6 +17837,9 @@ msgstr "Přidat do %s"
 #~ msgid "Later tasks:"
 #~ msgstr "Pozdější úkoly:"
 
+#~ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
+#~ msgstr "Nabídka spouštěče. Stisknutím [enter] skočíte do nabídky."
+
 #~ msgid "Launching an app"
 #~ msgstr "Spouštění aplikace"
 
@@ -17880,6 +17849,9 @@ msgstr "Přidat do %s"
 #, fuzzy
 #~ msgid "Leave Presentation"
 #~ msgstr "Cíl"
+
+#~ msgid "Leave empty if you have none"
+#~ msgstr "Nemáte-li žádný, ponechte prázdné"
 
 #~ msgid "Leave messages on server"
 #~ msgstr "Ponechat zprávy na serveru"
@@ -17942,6 +17914,18 @@ msgstr "Přidat do %s"
 
 #~ msgid "Link/Url"
 #~ msgstr "Odkaz/URL"
+
+#~ msgid "LinkedIn"
+#~ msgstr "LinkedIn"
+
+#~ msgid "LinkedIn Network Updates"
+#~ msgstr "Novinky v síti LinkedIn"
+
+#~ msgid "LinkedIn reported an error:"
+#~ msgstr "LinkedIn hlásí chybu:"
+
+#~ msgid "List of public calendars and events"
+#~ msgstr "Seznam veřejných kalendářů a událostí"
 
 #~ msgid "Lithuania"
 #~ msgstr "Litva"
@@ -18072,6 +18056,9 @@ msgstr "Přidat do %s"
 #~ msgid "Manage applications"
 #~ msgstr "Spravovat aplikace"
 
+#~ msgid "Manage permission now"
+#~ msgstr "Spravovat oprávnění"
+
 #~ msgid "Manager:"
 #~ msgstr "Manažer:"
 
@@ -18174,9 +18161,6 @@ msgstr "Přidat do %s"
 #~ msgstr "Střední východ/Rijád89"
 
 #~ msgid "Mime Type"
-#~ msgstr "Druh souboru"
-
-#~ msgid "Mime type"
 #~ msgstr "Druh souboru"
 
 #~ msgid "Mobile"
@@ -18322,6 +18306,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Network Problems"
 #~ msgstr "Problémy sítě"
+
+#~ msgid "Never."
+#~ msgstr "Nikdy."
 
 #~ msgid "New Appointment"
 #~ msgstr "Nová schůzka"
@@ -18547,6 +18534,12 @@ msgstr "Přidat do %s"
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Žádné nové zprávy"
 
+#~ msgid "Notifier"
+#~ msgstr "Oznamovatel"
+
+#~ msgid "Notify all participants by email."
+#~ msgstr "Upozornit všechny účastníky e-mailem."
+
 #~ msgid "Notify on delivery receipt?"
 #~ msgstr "Upozornit na potvrzení o doručení"
 
@@ -18576,6 +18569,12 @@ msgstr "Přidat do %s"
 
 #~ msgid "Number of days in work week"
 #~ msgstr "Počet dní v pracovním týdnu"
+
+#~ msgid "Number of items"
+#~ msgstr "Počet položek"
+
+#~ msgid "Number of messages"
+#~ msgstr "Počet zpráv"
 
 #~ msgid "Number of rows to be displayed in card view:"
 #~ msgstr "Počet řádků zobrazených v kartovém pohledu:"
@@ -18678,8 +18677,17 @@ msgstr "Přidat do %s"
 #~ "aplikací můžete pracovat ve více oknech prohlížeče. Nepoužívejte tuto "
 #~ "volbu, pokud pracujete na cizím počítači (např. v internetové kavárně)."
 
+#~ msgid "Open in browser"
+#~ msgstr "Otevřít v prohlížeči"
+
+#~ msgid "Open in browser tab"
+#~ msgstr "Otevřít v panelu prohlížeče"
+
 #~ msgid "Open in new tab"
 #~ msgstr "Otevřít v nové záložce"
+
+#~ msgid "Open on LinkedIn"
+#~ msgstr "Otevřít na LinkedIn"
 
 #~ msgid "Open-Xchange Server"
 #~ msgstr "Server Open-Xchange"
@@ -18704,6 +18712,11 @@ msgstr "Přidat do %s"
 
 #~ msgid "Organizer:"
 #~ msgstr "Organizátor:"
+
+#, fuzzy
+#~| msgid "Others"
+#~ msgid "Other clients"
+#~ msgstr "Další"
 
 #~ msgid "Other contact folders"
 #~ msgstr "Další kontaktové složky"
@@ -18910,9 +18923,6 @@ msgstr "Přidat do %s"
 #~ msgid "Parameter:"
 #~ msgstr "Parametr:"
 
-#~ msgid "Participant"
-#~ msgstr "Účastník"
-
 #~ msgid "Participant:"
 #~ msgstr "Účastník:"
 
@@ -19061,6 +19071,9 @@ msgstr "Přidat do %s"
 #~ msgid "Please invite the group %1$s to the appointment."
 #~ msgstr "Pozvěte, prosím, skupinu %1$s na schůzku."
 
+#~ msgid "Please note that distribution lists cannot contain ressources."
+#~ msgstr "Distribuční seznamy nemohou obsahovat zdroje."
+
 #~ msgid ""
 #~ "Please note: All messages received from the POP3 account will be stored "
 #~ "to a folder on your local IMAP account."
@@ -19202,6 +19215,9 @@ msgstr "Přidat do %s"
 #~ msgid "Press [enter] to jump to the facebook stream."
 #~ msgstr "Stisknutím [Enter] skočíte na kanál Facebook."
 
+#~ msgid "Press [enter] to jump to the linkedin stream."
+#~ msgstr "Stisknutím [Enter] skočíte do zpráv LinkedIn."
+
 #~ msgid "Press [enter] to open"
 #~ msgstr "Stiskněte [Enter] pro otevření"
 
@@ -19281,6 +19297,9 @@ msgstr "Přidat do %s"
 #~ msgid "Proposed changes for appointment: %1$s"
 #~ msgstr "Navrhované změny schůzky: %1$s"
 
+#~ msgid "Public"
+#~ msgstr "Veřejné"
+
 #~ msgid "Public contacts"
 #~ msgstr "Veřejné kontakty"
 
@@ -19328,6 +19347,21 @@ msgstr "Přidat do %s"
 #~ msgid "Quick config"
 #~ msgstr "Rychlé nastavení"
 
+#~ msgid "Quick launch 1"
+#~ msgstr "Rychlý start 1"
+
+#~ msgid "Quick launch 2"
+#~ msgstr "Rychlý start 2"
+
+#~ msgid "Quick launch 3"
+#~ msgstr "Rychlý start 3"
+
+#~ msgid "Quick reply"
+#~ msgstr "Rychlá odpověď"
+
+#~ msgid "Quit"
+#~ msgstr "Konec"
+
 #~ msgid "Quota Exceed"
 #~ msgstr "Kvóta překročena"
 
@@ -19373,6 +19407,9 @@ msgstr "Přidat do %s"
 #~ msgid "Received:"
 #~ msgstr "Přijato:"
 
+#~ msgid "Recent activities"
+#~ msgstr "Nedávná činnost"
+
 #~ msgid "Recipients can edit"
 #~ msgstr "Příjemci mohou upravovat"
 
@@ -19405,6 +19442,9 @@ msgstr "Přidat do %s"
 #~ msgid "Reload current view every:"
 #~ msgstr "Obnovit stávající pohled každých:"
 
+#~ msgid "Remind me again %1$s"
+#~ msgstr "Připomenout znovu za %1$s"
+
 #~ msgid "Reminder:"
 #~ msgstr "Upomínka:"
 
@@ -19419,6 +19459,11 @@ msgstr "Přidat do %s"
 
 #~ msgid "Remove picture"
 #~ msgstr "Odstranit obrázek"
+
+#, fuzzy
+#~| msgid "Remove from recipient list"
+#~ msgid "Remove restore point: \"%1$s\""
+#~ msgstr "Odstranit ze seznamů adresátů"
 
 #~ msgid "Remove the group %1$s from the appointment."
 #~ msgstr "Odeberte skupinu %1$s ze schůzky."
@@ -19464,6 +19509,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Restore Last Operation"
 #~ msgstr "Obnovit poslední operaci"
+
+#~ msgid "Restore applications"
+#~ msgstr "Obnovit aplikace"
 
 #~ msgid "Retweet new"
 #~ msgstr "Retweet nový"
@@ -19522,6 +19570,9 @@ msgstr "Přidat do %s"
 #~ msgid "Rules"
 #~ msgstr "Pravidla"
 
+#~ msgid "Run auto-play "
+#~ msgstr "Pustit režim automatického přehrávání"
+
 #~ msgid "Running applications"
 #~ msgstr "Spuštěné aplikace"
 
@@ -19577,6 +19628,11 @@ msgstr "Přidat do %s"
 
 #~ msgid "SMTP server"
 #~ msgstr "SMTP server"
+
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Safari %1$s on %2$s"
+#~ msgstr "Sdílet %1$s „%2$s“"
 
 #, fuzzy
 #~| msgid "Saint Barthélemy"
@@ -19650,6 +19706,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Schedule an all-day event"
 #~ msgstr "Naplánovat celodenní událost"
+
+#~ msgid "Scheduling"
+#~ msgstr "Plánování"
 
 #~ msgid "Search Options"
 #~ msgstr "Možnosti hledání"
@@ -19824,6 +19883,10 @@ msgstr "Přidat do %s"
 #~ msgid "Service"
 #~ msgstr "Služba"
 
+#~ msgctxt "app"
+#~ msgid "Settings"
+#~ msgstr "Nastavení"
+
 #~ msgid "Settings for advanced users"
 #~ msgstr "Možnosti pro pokročilé uživatele"
 
@@ -19846,6 +19909,18 @@ msgstr "Přidat do %s"
 #~ msgctxt "owner"
 #~ msgid "Shared by: %1$s"
 #~ msgstr "Vyhledáváno: %1$s"
+
+#~ msgid "Sharing link created for file \"%1$d\""
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "Odkaz pro sdílení souboru „%1$d“ vytvořen"
+#~ msgstr[1] "Odkaz pro sdílení %1$d souborů vytvořen"
+#~ msgstr[2] "Odkaz pro sdílení %1$d souborů vytvořen"
+
+#~ msgid "Sharing link created for folder \"%1$d\""
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "Odkaz pro sdílení složky „%1$d“ vytvořen"
+#~ msgstr[1] "Odkaz pro sdílení %1$d položek vytvořen"
+#~ msgstr[2] "Odkaz pro sdílení %1$d položek vytvořen"
 
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"
@@ -19876,6 +19951,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Show Group Members"
 #~ msgstr "Zobrazit členy skupiny"
+
+#~ msgid "Show Links"
+#~ msgstr "Zobrazit odkazy"
 
 #~ msgid "Show QR code"
 #~ msgstr "Zobrazit kód QR"
@@ -19939,6 +20017,9 @@ msgstr "Přidat do %s"
 #~ msgid "Show legal information"
 #~ msgstr "Zobrazit právní informace"
 
+#~ msgid "Show message authenticity"
+#~ msgstr "Zobrazit informace o autentičnosti zprávy"
+
 #~ msgid "Show message size"
 #~ msgstr "Zobrazit velikost zprávy"
 
@@ -19994,6 +20075,9 @@ msgstr "Přidat do %s"
 #~ msgid "Signed in as %1$s"
 #~ msgstr "Přihlášený(á) jako %1$s"
 
+#~ msgid "Signed in as:"
+#~ msgstr "Přihlášený(á) jako:"
+
 #~ msgid "Signing out"
 #~ msgstr "Odhlášení"
 
@@ -20032,9 +20116,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Skip this step"
 #~ msgstr "Přeskočit tento krok"
-
-#~ msgid "Slideshow"
-#~ msgstr "Slideshow"
 
 #~ msgid "Slideshow / Autoplay mode"
 #~ msgstr "Slideshow/režim automatického přehrávání"
@@ -20094,14 +20175,18 @@ msgstr "Přidat do %s"
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Soubor se nepodařilo nahrát"
 
+#~ msgid ""
+#~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
+#~ "LinkedIn with the permission to do read messages."
+#~ msgstr ""
+#~ "Je nám líto, ale tady vám nemůžeme pomoct. Váš poskytovatel musí získat "
+#~ "klíč od LinkedIn, který mu umožní číst zprávy."
+
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Řazení zpráv"
 
 #~ msgid "Sorting your tasks"
 #~ msgstr "Řazení úkolů"
-
-#~ msgid "Source"
-#~ msgstr "Zdroj"
 
 #~ msgid "South Africa"
 #~ msgstr "Jihoafrická republika"
@@ -20249,6 +20334,15 @@ msgstr "Přidat do %s"
 #~ msgid "Subscribe Folder"
 #~ msgstr "Přihlásit složku"
 
+#~ msgid "Subscribe IMAP folders"
+#~ msgstr "Přihlásit IMAP složky"
+
+#~ msgid "Subscribe address book"
+#~ msgstr "Přihlaste adresář"
+
+#~ msgid "Subscribe calendar"
+#~ msgstr "Přihlaste kalendář"
+
 #~ msgid "Subscribe contacts from LinkedIn, Facebook, Google..."
 #~ msgstr "Přihlásit kontakty z LinkedIn, Facebook, Google, ..."
 
@@ -20332,8 +20426,18 @@ msgstr "Přidat do %s"
 #~ msgid "Synchronization"
 #~ msgstr "Synchronizace"
 
+#~ msgid ""
+#~ "Synchronization of Emails, Calendar, Contacts and Tasks, along with "
+#~ "Public, Shared and System Folders to Microsoft Outlook® clients."
+#~ msgstr ""
+#~ "Synchronizace e-mailových zpráv, kalendáře, kontaktů a úkolů, spolu s "
+#~ "veřejnými, sdílenými a systémovými složkami s klienty Microsoft Outlook®."
+
 #~ msgid "Synchronization to the server has been lost."
 #~ msgstr "Synchronizace se serverem se ztratila."
+
+#~ msgid "Synchronize with Outlook"
+#~ msgstr "Synchronizovat s Outlookem"
 
 #~ msgid ""
 #~ "Syntax error in config: \n"
@@ -20455,6 +20559,9 @@ msgstr "Přidat do %s"
 #~ msgid "Template"
 #~ msgstr "Šablona"
 
+#~ msgid "Temporary"
+#~ msgstr "Dočasné"
+
 #~ msgid "Text"
 #~ msgstr "Text"
 
@@ -20545,6 +20652,15 @@ msgstr "Přidat do %s"
 #~ msgstr "Schůzka má nový popis: %1$s."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared folders "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view."
+#~ msgstr ""
+#~ "Uživatelům, kteří se neúčastní, není ve sdílených složkách schůzka "
+#~ "viditelná vůbec. Schůzka není brána v potaz při vyhodnocování konfliktů a "
+#~ "neukazuje se v plánovacím pohledu."
+
+#~ msgid ""
 #~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
 #~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
 #~ "days</a>."
@@ -20615,6 +20731,9 @@ msgstr "Přidat do %s"
 #~ "attribute=\"interval\">každé <span class=\"number-control\">2</span> "
 #~ "měsíce</a>. "
 
+#~ msgid "The appointment is visible for all users in shared folders."
+#~ msgstr "Schůzka je viditelná pro všechny uživatele ve sdílených složkách."
+
 #~ msgid "The appointment takes place in a new location: %1$s."
 #~ msgstr "Schůzka proběhne na jiném místě: %1$s."
 
@@ -20674,6 +20793,17 @@ msgstr "Přidat do %s"
 #~ msgid "The entire day"
 #~ msgstr "Celý den"
 
+#~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
+#~ msgstr "Pole „%1$s“ obsahuje více znaků než povolených %2$d."
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] "Soubor nelze nahrát, protože je přesahuje limit %1$s"
+#~ msgstr[1] "Soubory nelze nahrát, protože je přesahují limit %1$s"
+#~ msgstr[2] "Soubory nelze nahrát, protože je přesahují limit %1$s"
+
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Soubor je k dispozici na %1$s"
 
@@ -20693,6 +20823,13 @@ msgstr "Přidat do %s"
 #~ msgstr ""
 #~ "Následující adresy už jsou na seznamu účastníků, a proto nebyly přidány: "
 #~ "%s"
+
+#~ msgid ""
+#~ "The following applications can be restored. Just remove the restore point "
+#~ "if you don't want it to be restored."
+#~ msgstr ""
+#~ "Následující aplikace mohou být obnoveny. Pokud si obnovu nepřejete, "
+#~ "odstraňte bod obnovy."
 
 #~ msgid "The following task is already past due:"
 #~ msgstr "Následující úkol již měl být dokončen:"
@@ -20867,6 +21004,12 @@ msgstr "Přidat do %s"
 #~ msgstr "Server nereagoval!"
 
 #~ msgid ""
+#~ "The setting has been saved and will become active when you enter the "
+#~ "application the next time."
+#~ msgstr ""
+#~ "Nastavení bylo uloženo a bude aktivováno po příštím vstupu do aplikace."
+
+#~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "
 #~ "e.g Basic settings, E-Mail or My contact data."
 #~ msgstr ""
@@ -20900,6 +21043,13 @@ msgstr "Přidat do %s"
 #~ msgstr "Karta příchozí pošty může být úplně odstraněna v nastaveních pošty."
 
 #~ msgid ""
+#~ "The timezone of this appointment (%1$s) differs from your default "
+#~ "timezone (%2$s)."
+#~ msgstr ""
+#~ "Časové pásmo této schůzky (%1$s) se liší od vašeho výchozího časového "
+#~ "pásma (%2$s)."
+
+#~ msgid ""
 #~ "The updater will inform you of any updates for the Connector for "
 #~ "Microsoft Outlook and Notifier."
 #~ msgstr ""
@@ -20931,11 +21081,14 @@ msgstr "Přidat do %s"
 #~ msgstr[1] "V tuto dobu již máte %1$d schůzky."
 #~ msgstr[2] "V tuto dobu již máte %1$d schůzek."
 
+#~ msgid "There is no preview for this file type"
+#~ msgstr "Pro soubor tohoto druhu není k dispozici náhled"
+
+#~ msgid "There were not activities in your network"
+#~ msgstr "Ve vaší síti se nic nového neudálo."
+
 #~ msgid "This Signature name already exists"
 #~ msgstr "Tento název podpisu již existuje"
-
-#~ msgid "This Team name already exists"
-#~ msgstr "Tento název týmu již existuje"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "Tento účet nelze ověřit"
@@ -21204,6 +21357,9 @@ msgstr "Přidat do %s"
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Tato zpráva obsahuje URL publikace."
 
+#~ msgid "This mail has been sent from %1$s."
+#~ msgstr "Tuto zprávu odeslal(a) %1$s."
+
 #~ msgid "This may take some seconds"
 #~ msgstr "Může to několik sekund trvat"
 
@@ -21219,6 +21375,9 @@ msgstr "Přidat do %s"
 #~ "Tato zpráva obsahuje aktualizace schůzky, které již přijal jiný uživatel. "
 #~ "Touto zprávou se nemusíte zabývat."
 
+#~ msgid "This message is from a trusted sender."
+#~ msgstr "Tato zpráva je od důvěryhodného odesílatele."
+
 #~ msgid "This message is read, press this button to mark it as unread."
 #~ msgstr ""
 #~ "Tato zpráva je přečtená. Kliknutím na toto tlačítko ji označíte jako "
@@ -21228,6 +21387,20 @@ msgstr "Přidat do %s"
 #~ msgstr ""
 #~ "Tato zpráva není přečtená. Kliknutím na toto tlačítko ji označíte jako "
 #~ "přečtenou."
+
+#~ msgid ""
+#~ "This might be a phishing email because we could not verify that it is "
+#~ "really from %1$s."
+#~ msgstr ""
+#~ "Tato zpráva je možná e-mailový podvod, protože se nám nepodařilo ověřit, "
+#~ "že by skutečně byla od %1$s."
+
+#~ msgid ""
+#~ "This might be a phishing mail because we could not verify that this email "
+#~ "is really from %1$s."
+#~ msgstr ""
+#~ "Tato zpráva je možná e-mailový podvod, protože se nám nepodařilo ověřit, "
+#~ "že by skutečně byla od %1$s."
 
 #~ msgid ""
 #~ "This object does not contain a file, would you like to send the link?"
@@ -21677,6 +21850,9 @@ msgstr "Přidat do %s"
 #~ msgid "Toggle search"
 #~ msgstr "Přepnout hledání"
 
+#~ msgid "Toggle viewport size"
+#~ msgstr "Přepnout velikost plochy"
+
 #~ msgid "Togo"
 #~ msgstr "Togo"
 
@@ -21697,6 +21873,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Tour: Coming from OX6"
 #~ msgstr "Prohlídka: Přechod z OX6"
+
+#~ msgid "Town"
+#~ msgstr "Město"
 
 #~ msgid "Tracking the editing status"
 #~ msgstr "Sledování stavu úprav"
@@ -21853,8 +22032,18 @@ msgstr "Přidat do %s"
 #~ msgid "United States Minor Outlying Islands"
 #~ msgstr "Menší odlehlé ostrovy Spojených států amerických"
 
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unknown client"
+#~ msgstr "Neznámý odesílatel"
+
 #~ msgid "Unknown error while checking subreddit."
 #~ msgstr "Neznámá chyba při načítání subreddit."
+
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unkown client"
+#~ msgstr "Neznámý odesílatel"
 
 #~ msgid "Unnamed"
 #~ msgstr "Bez názvu"
@@ -21913,8 +22102,14 @@ msgstr "Přidat do %s"
 #~ msgid "Use \"Standalone\" Mode:"
 #~ msgstr "Použít „samostatný“ režim:"
 
+#~ msgid "Use Password"
+#~ msgstr "Použijte heslo"
+
 #~ msgid "Use SSL connection"
 #~ msgstr "Použít SSL spojení"
+
+#~ msgid "Use accessibility improvements"
+#~ msgstr "Použít funkce pro zlepšení přístupnosti"
 
 #~ msgid ""
 #~ "Use cursor keys to change the item position. Virtual cursor mode has to "
@@ -21922,6 +22117,9 @@ msgstr "Přidat do %s"
 #~ msgstr ""
 #~ "Pozici položky změňte pomocí kurzorových kláves. Je nutné vypnout režim "
 #~ "virtuálního kurzoru."
+
+#~ msgid "Use cursor keys to navigate"
+#~ msgstr "K navigaci použijte kurzorové klávesy"
 
 #~ msgid "Use for appointment"
 #~ msgstr "Použít pro schůzku"
@@ -22041,6 +22239,9 @@ msgstr "Přidat do %s"
 #~ msgid "View all appointments from all available calendars"
 #~ msgstr "Zobrazit všechny schůzky ze všech dostupných kalendářů"
 
+#~ msgid "View attachment"
+#~ msgstr "Zobrazit přílohu"
+
 #~ msgid "View participants"
 #~ msgstr "Zobrazit účastníky"
 
@@ -22063,6 +22264,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Warning: %2$s"
 #~ msgstr "Varování: %2$s"
+
+#~ msgid "We could not verify that this email is really from %1$s."
+#~ msgstr "Nepodařilo se nám ověřit, že by tato zpráva skutečně byla od %1$s."
 
 #~ msgid "Weak"
 #~ msgstr "Slabá"
@@ -22197,6 +22401,20 @@ msgstr "Přidat do %s"
 #~ msgid "You already accepted this invitation"
 #~ msgstr "Toto pozvání jste už přijal(a)"
 
+#~ msgid ""
+#~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
+#~ "Appointments will therefore be created in your private calendar."
+#~ msgstr ""
+#~ "Nemáte právo vytvářet schůzky v „%1$s“ s vlastníkem %2$s. Schůzky budou "
+#~ "proto vytvořeny ve vašem soukromém kalendáři."
+
+#~ msgid ""
+#~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
+#~ "therefore be created in your private calendar."
+#~ msgstr ""
+#~ "Nemáte právo vytvářet schůzky v „%1$s“. Schůzky budou proto vytvořeny ve "
+#~ "vašem soukromém kalendáři."
+
 #~ msgid "You can download the updates from within the updater."
 #~ msgstr "Aktualizace můžete stáhnout v rámci aktualizačního nástroje."
 
@@ -22210,6 +22428,10 @@ msgstr "Přidat do %s"
 #~ msgstr ""
 #~ "Přetažením ze svého počítače můžete nahrávat nové soubory nebo přidávat "
 #~ "nové verze souborů."
+
+#~ msgid ""
+#~ "You can import existing signatures from the previous product generation."
+#~ msgstr "Existující podpisy můžete importovat z předchozí generace produktu."
 
 #~ msgid ""
 #~ "You can manage desktop notifications at any time, by vitising your "
@@ -22289,6 +22511,9 @@ msgstr "Přidat do %s"
 #~ msgid "You have edit rights."
 #~ msgstr "Máte práva k upravování."
 
+#~ msgid "You have no new messages"
+#~ msgstr "Nemáte žádné nové zprávy"
+
 #~ msgid "You have reauthorized this account."
 #~ msgstr "Znovu jste autorizovali tento účet."
 
@@ -22321,6 +22546,9 @@ msgstr "Přidat do %s"
 #~ msgid "You have the following appointment in %s:"
 #~ msgstr "V %s máte následující schůzku:"
 
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "Chcete-li se přihlásit, musíte zadat uživatelské jméno a heslo."
+
 #~ msgid "You must specify an E-Mail address for redirection."
 #~ msgstr "Musíte určit e-mailovou adresu pro přesměrování."
 
@@ -22339,6 +22567,14 @@ msgstr "Přidat do %s"
 
 #~ msgid "You wanted to be reminded about the following InfoItem:"
 #~ msgstr "Přál(a) jste si připomenout následující informační položku:"
+
+#~ msgid ""
+#~ "You will automatically return to the appointment dialog. The selected "
+#~ "start and end time as well as the current participant list will be "
+#~ "applied."
+#~ msgstr ""
+#~ "Automaticky se vrátíte do okna schůzky. Vybraný počáteční a koncový čas a "
+#~ "zároveň aktuální seznam účastníků budou vloženy."
 
 #~ msgid "You will need to re-login for the change to take effect."
 #~ msgstr "Aby se změna projevila, budete se muset znovu přihlásit."
@@ -22371,9 +22607,19 @@ msgstr "Přidat do %s"
 #~ msgid "Your data has been saved"
 #~ msgstr "Vaše data byla uložena"
 
+#~ msgid ""
+#~ "Your default reminder could not be set for this appointment due to "
+#~ "insufficient permissions"
+#~ msgstr ""
+#~ "Kvůli nedostatečným oprávněním nebylo možné pro tuto schůzku nastavit "
+#~ "vaše výchozí upozornění"
+
 #~ msgid "Your email address will be included when sending this feedback"
 #~ msgstr ""
 #~ "Při odesílání této zpětné vazby bude poslána i vaše e-mailová adresa"
+
+#~ msgid "Your messages"
+#~ msgstr "Vaše zprávy"
 
 #~ msgid ""
 #~ "Your password changed. For a future use of your subscriptions and "
@@ -22391,6 +22637,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Your primary mail account can not be deleted."
 #~ msgstr "Váš primární poštovní účet nelze smazat."
+
+#~ msgid "Your reply has been sent"
+#~ msgstr "Vaše odpověď byla odeslána"
 
 #~ msgid ""
 #~ "Your scheduled appointment conflicts with one or more previously "
@@ -22742,9 +22991,6 @@ msgstr "Přidat do %s"
 #~ msgid "day every"
 #~ msgstr "den každý"
 
-#~ msgid "day of the week"
-#~ msgstr "den týdne"
-
 #~ msgid "day of the weekend"
 #~ msgstr "den víkendu"
 
@@ -22858,10 +23104,19 @@ msgstr "Přidat do %s"
 #~ msgid "iCal"
 #~ msgstr "iCal"
 
+#~ msgid "iCal-Feed"
+#~ msgstr "Zdroj iCal"
+
+#~ msgid "iCal-feed has been imported successfully"
+#~ msgstr "iCal úspěšně importován"
+
 #, fuzzy
 #~| msgid "Phone"
 #~ msgid "iPhone"
 #~ msgstr "Telefon"
+
+#~ msgid "in"
+#~ msgstr "v"
 
 #~ msgid "in blind copy"
 #~ msgstr "ve slepé kopii"
@@ -22890,9 +23145,6 @@ msgstr "Přidat do %s"
 #~ msgid "locked by"
 #~ msgstr "uzamkl(a)"
 
-#~ msgid "login"
-#~ msgstr "přihlašovací jméno"
-
 #~ msgid "march"
 #~ msgstr "březen"
 
@@ -22912,8 +23164,8 @@ msgstr "Přidat do %s"
 #~ msgid "nd"
 #~ msgstr "."
 
-#~ msgid "never ends"
-#~ msgstr "nikdy nekončí"
+#~ msgid "never"
+#~ msgstr "nikdy"
 
 #~ msgid "new"
 #~ msgstr "nové"
@@ -22945,8 +23197,8 @@ msgstr "Přidat do %s"
 #~ msgid "next week"
 #~ msgstr "příští týden"
 
-#~ msgid "none"
-#~ msgstr "nikdo"
+#~ msgid "no expiry date"
+#~ msgstr "není nastavené koncové datum"
 
 #~ msgid "not sent"
 #~ msgstr "neodesláno"
@@ -23080,11 +23332,23 @@ msgstr "Přidat do %s"
 #~ msgid "vacation"
 #~ msgstr "nepřítomnost"
 
+#~ msgid "via"
+#~ msgstr "přes"
+
 #~ msgid "waiting"
 #~ msgstr "čekám"
 
 #~ msgid "weekly"
 #~ msgstr "týdně"
+
+#~ msgid "when the link is expired"
+#~ msgstr "když odkaz vypršel"
+
+#~ msgid "when the receivers have accessed the files"
+#~ msgstr "když příjemci otevřeli soubory"
+
+#~ msgid "when the receivers have finished downloading the files"
+#~ msgstr "když příjemci dokončili stahování souborů"
 
 #, fuzzy
 #~| msgid "Main window"
