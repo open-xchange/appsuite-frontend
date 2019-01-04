@@ -1,0 +1,52 @@
+html.embedded .navbar {
+    min-height: initial;
+    margin-top: 16px;
+    &, & > .navbar-header , & > .navbar-collapse {
+        background: #fff;
+        color: #000;
+        border-color: #fff;
+        border-top: 0px;
+        margin-bottom: 0px;
+        a, a:visited {
+            padding: 8px;
+            color: #3c61aa;
+        }
+        a:hover, a:focus {
+            color: #284171;
+            text-decoration: none;
+            background-color: #eee;
+            outline: 0;
+        }
+    }
+    & .nav > li > a:first-child {
+        padding-left: 8px;
+    }
+}
+
+html.embedded .oxhelp-content {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+@media (max-width: 768px) {
+    html.embedded .navbar-nav {
+        float: left;
+        margin: 0;
+    }
+}
+
+@screen-sm: 625px;
+
+@media(min-width: @screen-sm) {
+    html.embedded {
+        & .navbar-collapse, & .navbar-header {
+            margin-left: -8px;
+            margin-right: -8px;
+        }
+        & .navbar > .container-fluid .navbar-brand {
+            margin-left: 0px;
+            padding: 8px;
+            height: initial;
+        }
+    }
+}

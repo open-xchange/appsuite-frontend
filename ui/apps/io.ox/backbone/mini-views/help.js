@@ -44,17 +44,12 @@ define('io.ox/backbone/mini-views/help', [
             e.preventDefault();
 
             var href = this.options.href,
-                base = this.options.base;
+                opt = this.options;
 
-            // if target is dynamic, execute as function
-            if (_.isFunction(href)) href = this.options.href();
-
-            if (_.isObject(href)) {
-                base = href.base || base;
-                href = href.target || href;
-            }
-
-            window.open(base + '/l10n/' + ox.language + '/' + href);
+            require(['io.ox/help/main'], function (HelpApp) {
+                if (HelpApp.reuse(opt)) return;
+                HelpApp.getApp(opt).launch();
+            });
 
             // metrics
             require(['io.ox/metrics/main'], function (metrics) {
@@ -80,7 +75,8 @@ define('io.ox/backbone/mini-views/help', [
                 base: 'help',
                 content: $('<i class="fa" aria-hidden="true">').attr('title', gt('Online help')),
                 href: 'index.html',
-                iconClass: 'fa-question-circle'
+                iconClass: 'fa-question-circle',
+                modal: false
             }, options);
 
             if (!_.isString(this.options.content)) {

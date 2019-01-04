@@ -91,7 +91,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                     var parent = helpPlaceholder.parent();
                     parent.addClass('help');
                     helpPlaceholder.replaceWith(
-                        new HelpView({ href: options.help }).render().$el
+                        new HelpView({ href: options.help, modal: true }).render().$el
                     );
                 });
             }

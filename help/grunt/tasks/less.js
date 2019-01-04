@@ -8,7 +8,7 @@ module.exports = function (grunt) {
             files: [
                 {
                     src: [
-                        'node_modules/bootstrap/less/bootstrap.less'
+                        'help/compile.less'
                     ],
                     expand: true,
                     rename: function (dest) { return dest; },
@@ -16,6 +16,6 @@ module.exports = function (grunt) {
                 }
             ]
         }
-    }});
+    } });
 };
 
