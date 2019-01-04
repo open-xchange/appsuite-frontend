@@ -88,11 +88,13 @@ define('io.ox/mail/compose/extensions', [
         },
 
         renderDropdown: function () {
+            var from = this.model.get('from') ? this.model.get('from')[0][1] : undefined;
             // reset
             this.dropdown.$ul.empty().css('width', 'auto');
             // render
             this.setDropdownOptions();
             this.dropdown.$toggle.find('.dropdown-label').empty().append(this.getItemNode());
+            this.dropdown.$toggle.attr('href', from ? 'mailto:' + from : '#');
             if (this.dropdown.$el.hasClass('open')) this.dropdown.adjustBounds();
             // re-focus element otherwise the bootstap a11y closes the drop-down
             this.dropdown.$ul.find('[data-name="sendDisplayName"]').focus();
