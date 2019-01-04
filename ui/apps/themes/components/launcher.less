@@ -254,7 +254,6 @@
     #io-ox-topsearch {
         margin-top: 15px;
         margin-right: 24px;
-        @media (max-width: 320px)  { margin-right: 0; }
         flex-grow: 1;
 
         .search-box > .form-group { margin-bottom: 0; }
@@ -539,4 +538,13 @@
     left: 0;
     bottom: 0;
     z-index: 1;
+}
+
+@media (max-width: 320px)  {
+    // reduce spacings to fit topbar on really small devices
+    .smartphone #io-ox-appcontrol {
+        #io-ox-topsearch { margin-right: 0; }
+        #io-ox-toprightbar .launcher > a { padding: 16px 9px; }
+        #io-ox-launcher > button.launcher-btn { width: 44px; }
+    }
 }
