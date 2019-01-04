@@ -212,7 +212,7 @@ define('io.ox/find/extensions-facets', [
                 'contacts': 'ox.appsuite.user.sect.contacts.search.html',
                 'calendar': 'ox.appsuite.user.sect.calendar.search.html',
                 'tasks': 'ox.appsuite.user.sect.tasks.search.html',
-                'files': 'ox.appsuite.user.sect.files.search.html'
+                'files': 'ox.appsuite.user.sect.drive.search.html'
             };
             return function (baton) {
                 var target = links[baton.app.getModuleParam()];
