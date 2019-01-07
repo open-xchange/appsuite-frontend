@@ -56,7 +56,7 @@ define('io.ox/calendar/perspective', [
             this.listenTo(settings, 'change:showDeclinedAppointments', this.getCallback('onResetAppointments'));
             this.listenTo(folderAPI, 'before:update', this.beforeUpdateFolder);
 
-            this.followDeepLink(options.deepLink);
+            _.defer(this.followDeepLink.bind(this, options.deepLink));
         },
 
         // needs to be implemented by the according view
