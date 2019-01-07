@@ -1410,6 +1410,7 @@ define('io.ox/calendar/week/view', [
                     this.$('.resizing').removeClass('resizing');
                     startDate.tz(model.getMoment('startDate').tz());
                     endDate.tz(model.getMoment('endDate').tz());
+                    if (startDate.isSame(model.getMoment('startDate'))) return;
                     this.opt.view.updateAppointment(model, {
                         'startDate': { value: startDate.format('YYYYMMDD[T]HHmmss'), tzid: startDate.tz() },
                         'endDate': { value: endDate.format('YYYYMMDD[T]HHmmss'), tzid: endDate.tz() }
