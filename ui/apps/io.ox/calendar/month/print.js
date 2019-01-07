@@ -14,8 +14,9 @@
 define('io.ox/calendar/month/print', [
     'io.ox/calendar/api',
     'io.ox/calendar/util',
-    'io.ox/core/print'
-], function (api, util, print) {
+    'io.ox/core/print',
+    'io.ox/core/folder/api'
+], function (api, util, print, folderAPI) {
 
     'use strict';
 
@@ -35,9 +36,10 @@ define('io.ox/calendar/month/print', [
         return util.isAllday(event) ? -1 : util.getMoment(event.get('startDate')).valueOf();
     }
 
-    function map(event, folders) {
+    function map(event) {
         // if declined use base grey color
-        var color = util.getAppointmentColor(folders[event.get('folder')], event) || '#e8e8e8';
+        var folder = folderAPI.pool.models[event.get('folder')],
+            color = util.getAppointmentColor(folder, event) || '#e8e8e8';
 
         return {
             time: util.isAllday(event) ? undefined : util.getMoment(event.get('startDate')).format('LT'),
@@ -52,13 +54,13 @@ define('io.ox/calendar/month/print', [
         open: function (selection, win) {
 
             print.smart({
-                selection: [_(selection.folders).pluck('id')],
+                selection: [selection.folders],
 
                 get: function () {
                     var collection = api.getCollection({
                         start: selection.start,
                         end: selection.end,
-                        folders: _(selection.folders).pluck('id'),
+                        folders: selection.folders,
                         view: 'month'
                     });
                     return collection.sync().then(function () {
@@ -83,7 +85,7 @@ define('io.ox/calendar/month/print', [
                                         .filter(getFilter(start, dayEnd))
                                         .sortBy(sortBy)
                                         .map(function (event) {
-                                            return map(event, selection.folders);
+                                            return map(event);
                                         })
                                         .value(),
                                     className: start.month() === currentMonth ? 'in' : 'out'
