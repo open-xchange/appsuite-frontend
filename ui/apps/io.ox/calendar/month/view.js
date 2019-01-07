@@ -582,13 +582,13 @@ define('io.ox/calendar/month/view', [
         print: function () {
             var folders = this.model.get('folders'),
                 title = gt('Appointments');
-            if (_(folders).keys().length === 1) title = folders[_(folders).keys()[0]].display_title || folders[_(folders).keys()[0]].title;
+            if (folders.length === 1) title = folders[0].display_title || folders[0].title;
 
             print.request('io.ox/calendar/month/print', {
                 current: this.model.get('startOfMonth').valueOf(),
                 start: this.model.get('startDate').valueOf(),
                 end: this.model.get('endDate').valueOf(),
-                folders: folders,
+                folders: _(folders).pluck('id'),
                 title: title
             });
         },

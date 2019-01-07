@@ -106,8 +106,7 @@ define('io.ox/calendar/folder-select-support', [
                 self.remove(folder);
             });
         })).then(function () {
-            var data = _(arguments).chain().toArray().compact().value();
-            return _.indexBy(data, 'id');
+            return _(arguments).chain().toArray().compact().value();
         });
     };
 
