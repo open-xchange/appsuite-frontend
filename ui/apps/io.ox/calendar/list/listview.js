@@ -254,7 +254,9 @@ define('io.ox/calendar/list/listview', [
             collection.cid = this.originalCollection.cid;
 
             // apply intermediate collection to ListView
+            var hasCollection = !!this.collection;
             ListView.prototype.setCollection.call(this, collection);
+            if (hasCollection && collection.length > 0) collection.trigger('reset');
 
             this.listenTo(this.originalCollection, {
                 'all': function (event) {
