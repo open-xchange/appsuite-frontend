@@ -45,7 +45,7 @@ define('io.ox/calendar/conflicts/conflictList', [
         calAPI.get(baton.data.event).done(function (appointment) {
             // we don't show details for private appointments in shared/public folders (see bug 37971)
             var folder = folderAPI.pool.getModel(baton.data.event.folder);
-            if (appointment.get('private_flag') && appointment.get('createdBy').entity !== ox.user_id && !folderAPI.is('private', folder)) return;
+            if (appointment.get('private_flag') && (appointment.get('createdBy') || {}).entity !== ox.user_id && !folderAPI.is('private', folder)) return;
             appointment.nohalo = true;
             baton = ext.Baton.ensure(appointment.attributes);
             baton.model = appointment;

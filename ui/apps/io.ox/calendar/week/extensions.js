@@ -53,7 +53,7 @@ define('io.ox/calendar/week/extensions', [
                 folderAPI.get(folderId).done(addColors);
             }
 
-            if (util.isPrivate(a) && ox.user_id !== a.get('createdBy').entity && !folderAPI.is('private', folder)) {
+            if (util.isPrivate(a) && ox.user_id !== (a.get('createdBy') || {}).entity && !folderAPI.is('private', folder)) {
                 classes = 'private disabled';
             } else {
                 var canModifiy = folderAPI.can('write', folder, a.attributes) && util.allowedToEdit(a, { synced: true, folderData: folder });
