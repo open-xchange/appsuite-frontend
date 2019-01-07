@@ -93,16 +93,18 @@ define('io.ox/calendar/list/view', [
             });
 
             this.listenTo(app, 'folders:change', this.onUpdateFolders);
-            $.when(app.folder.getData(), app.folders.getData()).done(this.onUpdateFolders.bind(this));
+            $.when(app.folder.getData(), app.folders.getData()).done(function (folder, folders) {
+                self.onUpdateFolders(_(folders).pluck('id'));
+            });
 
             app.listView.load();
 
             PerspectiveView.prototype.initialize.call(this, opt);
         },
 
-        onUpdateFolders: function () {
+        onUpdateFolders: function (folders) {
             var app = this.app;
-            app.listView.model.set('folders', app.folders.list());
+            app.listView.model.set('folders', folders);
         },
 
         render: function () {

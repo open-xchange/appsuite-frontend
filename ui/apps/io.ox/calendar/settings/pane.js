@@ -161,6 +161,12 @@ define('io.ox/calendar/settings/pane', [
                     view.listenTo(model, 'change:birthday', _.debounce(function (model) {
                         if (_.isUndefined(model.previous('birthday'))) return;
                         folderAPI.update(folderId, { subscribed: !!model.get('birthday') });
+                        // update selected folders
+                        var app = ox.ui.apps.get('io.ox/calendar');
+                        if (!app) return;
+                        var folders = app.folders;
+                        if (!folders) return;
+                        app.folders[!!model.get('birthday') ? 'add' : 'remove'](folderId);
                     }, 500));
 
                     this.$el.append(

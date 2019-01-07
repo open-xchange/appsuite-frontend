@@ -545,6 +545,7 @@ define('io.ox/calendar/month/view', [
             this.setCollection(collection);
             $.when(this.app.folder.getData(), this.app.folders.getData()).done(function (folder, folders) {
                 self.model.set('folders', folders);
+                collection.folders = _(folders).pluck('id');
                 collection.sync();
             });
         },
