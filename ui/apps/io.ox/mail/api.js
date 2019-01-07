@@ -270,13 +270,17 @@ define('io.ox/mail/api', [
     }
 
     function getView(data) {
+        var preferred = getPreferredView();
+
+        // 'text' will always be 'text'
+        if (preferred === 'text') return 'text';
         // never show images for failed messages
         if (util.authenticity('block', data)) return 'noimg';
 
         // check authenticity && whitelist
         var isTrusted = util.authenticity('box', data) === 'trusted';
         var isWhiteListed = util.isWhiteListed(data);
-        if (isTrusted || isWhiteListed) return getPreferredView();
+        if (isTrusted || isWhiteListed) return preferred;
 
         // check for general setting
         if (!settings.get('allowHtmlImages', false)) return 'noimg';
@@ -285,7 +289,7 @@ define('io.ox/mail/api', [
         if (accountAPI.is('spam|confirmed_spam|trash', data.folder_id || data.folder)) return 'noimg';
 
         // finally
-        return getPreferredView();
+        return preferred;
     }
 
     api.get = function (obj, options) {
