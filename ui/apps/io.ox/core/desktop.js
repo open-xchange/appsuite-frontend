@@ -818,7 +818,7 @@ define('io.ox/core/desktop', [
                                             // replace restore point with old id with restore point with new id (prevents duplicates)
                                             self.removeRestorePoint(oldId).then(self.getSavePoints).then(function (sp) {
                                                 sp.push(obj);
-                                                self.setSavePoints(sp);
+                                                if (obj.keepOnRestore !== false) self.setSavePoints(sp);
                                                 if (model.get('quitAfterLaunch')) model.trigger('quit');
                                             });
                                         }).fail(function (e) {

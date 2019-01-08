@@ -36,6 +36,7 @@ define('io.ox/core/boot/rampup', [
                         description: gt('Mail: %1$s', compositionSpace.subject || gt('No subject')),
                         floating: true,
                         id: compositionSpace.id + Math.random().toString(16),
+                        keepOnRestore: false,
                         module: 'io.ox/mail/compose',
                         point: compositionSpace.id,
                         timestamp: new Date().valueOf(),
