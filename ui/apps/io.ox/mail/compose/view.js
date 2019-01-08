@@ -835,7 +835,9 @@ define('io.ox/mail/compose/view', [
             if (this.editor) this.stopListening(this.editor);
             this.editor = this.editorHash[this.config.get('editorMode')];
             this.listenTo(this.editor, 'change', this.syncMail);
-            return $.when(this.editor.setPlainText(content)).then(function () {
+            // if contentType already matches editor (e.g. while startup), content can be set explicitedly
+            var setMethod = 'text/' + this.editor.getMode() === this.model.get('contentType') ? 'setContent' : 'setPlainText';
+            return $.when(this.editor[setMethod](content)).then(function () {
                 self.model.set({
                     content: self.editor.getContent(),
                     contentType: self.editor.content_type
@@ -863,6 +865,9 @@ define('io.ox/mail/compose/view', [
                 // this.removeSignature();
                 content = this.editor.getPlainText();
                 this.editor.hide();
+            } else {
+                // initial, use existing content of composition space
+                content = this.model.get('content');
             }
 
             this.editorContainer.busy();
