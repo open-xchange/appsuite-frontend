@@ -129,19 +129,19 @@ define('io.ox/mail/compose/main', [
             this.config.set('autoDiscard', this.config.get('mode') !== 'edit');
         }
     }, {
-        id: 'initial-signature',
+        id: 'set-mail',
         index: 1000,
+        perform: function () {
+            return this.view.setMail();
+        }
+    }, {
+        id: 'initial-signature',
+        index: 1100,
         perform: function () {
             if (_.device('smartphone')) return;
             return this.view.signaturesLoading.then(function () {
                 this.config.setInitialSignature();
             }.bind(this));
-        }
-    }, {
-        id: 'set-mail',
-        index: 1100,
-        perform: function () {
-            return this.view.setMail();
         }
     }, {
         id: 'finally',
