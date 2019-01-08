@@ -21,8 +21,9 @@ define('io.ox/mail/compose/model', [
     'io.ox/mail/compose/signatures',
     'io.ox/core/strings',
     'settings!io.ox/mail',
-    'gettext!io.ox/mail'
-], function (composeAPI, mailAPI, mailUtil, capabilities, accountAPI, Attachments, signatureUtil, strings, settings, gt) {
+    'gettext!io.ox/mail',
+    'io.ox/mail/sanitizer'
+], function (composeAPI, mailAPI, mailUtil, capabilities, accountAPI, Attachments, signatureUtil, strings, settings, gt, sanitizer) {
 
     'use strict';
 
@@ -356,6 +357,56 @@ define('io.ox/mail/compose/model', [
             composeAPI.space.attachments.remove(this.get('id'), model.get('id'));
         },
 
+        quoteMessage: (function () {
+            function mailAddress(item) {
+                if (item.length < 2) return item[0] || '';
+                return item[0] + ' <' + item[1] + '>';
+            }
+            return function (data) {
+                var meta = data.meta;
+                // TODO remove this line when backend is updated
+                meta = /^(REPLY|REPLY_ALL)$/.test(data.meta.type) ? meta.replyFor : meta.forwardsFor;
+                return mailAPI.get({ id: meta.originalId, folder: meta.originalFolderId }).then(function (mail) {
+                    var header = [];
+
+                    if (/^(REPLY|REPLY_ALL)$/.test(data.meta.type)) {
+                        header.push(gt('On %1$s %2$s wrote:', moment(data.meta.date).format('LLL'), mail.from.map(mailAddress).join(', ')));
+                    } else if (/^FORWARD_INLINE$/.test(data.meta.type)) {
+                        header.push(
+                            gt('---------- Original Message ----------'),
+                            gt('From: %1%s', mail.from.map(mailAddress).join(', ')),
+                            gt('To: %1$s', mail.to.map(mailAddress).join(', ')),
+                            gt('Date: %1%s', moment(data.meta.date).format('LLL')),
+                            gt('Subject: %1$s', mail.subject)
+                        );
+                    }
+
+                    // append two empty lines
+                    header.push('', '');
+
+                    if (data.contentType === 'text/html') {
+                        // get the content inside the body of the mail
+                        var content = data.content.replace(/^[\s\S]*?<body[^>]*>([\s\S]*?)<\/body>[\s\S]*?$/i, '$1').trim();
+                        content = sanitizer.simpleSanitize(content);
+                        data.content = '<div><br></div>' + $('<blockquote>').append(
+                            header.map(function (line) {
+                                if (!line) return '<div><br></div>';
+                                return $('<div>').text(line);
+                            }),
+                            content
+                        ).prop('outerHTML');
+                    } else if (data.contentType === 'text/plain') {
+                        data.content = '\n' +
+                            header.map(function (line) { return '> ' + line; }).join('\n') +
+                            ' \n' +
+                            data.content.trim().split('\n').map(function (l) { return '> ' + l; }).join('\n');
+                    }
+
+                    return data;
+                });
+            };
+        }()),
+
         create: function () {
             if (this.has('id')) return composeAPI.space.get(this.get('id'));
             var meta = this.get('meta'),
@@ -363,6 +414,9 @@ define('io.ox/mail/compose/model', [
             opt.vcard = /(new|reply|replayall|forward|resend)/.test(meta.type) && settings.get('appendVcard', false);
             opt.original = /(reply|replayall)/.test(meta.type);
             return composeAPI.spaced(meta, opt).then(function (data) {
+                if (!data.content) return data;
+                return this.quoteMessage(data);
+            }.bind(this)).then(function (data) {
                 if (!this.get('attachments') || !this.get('attachments').length) return data;
 
                 return $.when.apply($, this.get('attachments').map(function (attachment) {
