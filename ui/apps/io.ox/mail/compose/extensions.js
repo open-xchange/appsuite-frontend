@@ -688,18 +688,20 @@ define('io.ox/mail/compose/extensions', [
             if (!settings.get('features/imageResize/enabled', true)) return;
             require(['io.ox/mail/compose/resizeUtils'], function (resizeUtils) {
                 var view = baton.resizeView = resizeUtils.getDropDown(baton.model),
+                    attachmentView = baton.attachmentsView,
                     $dropDown = view.render().$el.prepend($('<span>').text(gt('Image size:')).addClass('image-resize-lable'));
-                baton.attachmentsView.$el.append($dropDown.addClass('pull-right').hide());
-                baton.attachmentsView.$el.append($('<span>').addClass('mail-size').text(resizeUtils.getMailSizeString(baton.model)));
+                attachmentView.$el.append($dropDown.addClass('pull-right').hide());
+                attachmentView.$el.append($('<span>').addClass('mail-size').text(resizeUtils.getMailSizeString(baton.model)));
 
                 function onResizeOptionChange() {
                     resizeUtils.resizeIntoArray(baton.model.get('attachments'), baton.model.get('imageResizeOption')).then(function (resizedFiles) {
-                        baton.attachmentsView.$el.find('.mail-size').text(resizeUtils.getMailSizeString(baton.model));
+                        if (attachmentView.disposed) return;
+                        attachmentView.$el.find('.mail-size').text(resizeUtils.getMailSizeString(baton.model));
                         baton.model.set('resizedImages', resizedFiles);
                     });
                 }
-                baton.model.on('change:imageResizeOption', onResizeOptionChange);
-                baton.attachmentsView.collection.on('add remove reset', onResizeOptionChange);
+                attachmentView.listenTo(baton.model, 'change:imageResizeOption', onResizeOptionChange);
+                attachmentView.listenTo(attachmentView.collection, 'add remove reset', onResizeOptionChange);
             });
         },
 
