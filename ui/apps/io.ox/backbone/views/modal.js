@@ -220,6 +220,25 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             return this;
         },
 
+        // special button (a with href and download attribute)
+        // needed for downloads in safari to prevent the Frame load interrupted error
+        addDownloadButton: function (options) {
+            var o = _.extend({ placement: 'right', className: 'btn-primary', label: gt('Download'), action: 'cancel', href: '#' }, options),
+                left = o.placement === 'left', fn = left ? 'prepend' : 'append';
+            if (left) o.className += ' pull-left';
+            this.$footer[fn](
+                $('<a role="button" class="btn">')
+                    .addClass(o.className)
+                    .attr({
+                        'data-action': o.action,
+                        href: o.href,
+                        download: 'download'
+                    })
+                    .text(o.label)
+            );
+            return this;
+        },
+
         addCloseButton: function () {
             return this.addButton();
         },

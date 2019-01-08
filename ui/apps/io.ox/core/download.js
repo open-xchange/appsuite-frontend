@@ -68,11 +68,16 @@ define('io.ox/core/download', [
         form.submit();
     }
 
+    // two different extension points for unscanned and virus found, so behavior can be customized individually
     ext.point('io.ox/core/download/antiviruspopup').extend({
         index: 100,
         id: 'buttonThreatFound',
         render: function (baton) {
             if (baton.model.get('categories') !== 'ERROR') return;
+            if (_.device('safari')) {
+                this.addDownloadButton({ href: baton.model.get('dlFrame').src.replace('&scan=true', ''), action: 'ignore', label: gt('Download infected file'), className: 'btn-default' });
+                return;
+            }
             this.addButton({ action: 'ignore', label: gt('Download infected file'), className: 'btn-default' });
         }
     });
@@ -82,6 +87,10 @@ define('io.ox/core/download', [
         id: 'buttonNotScanned',
         render: function (baton) {
             if (baton.model.get('categories') === 'ERROR') return;
+            if (_.device('safari')) {
+                this.addDownloadButton({ href: baton.model.get('dlFrame').src.replace('&scan=true', ''), action: 'ignore', label: gt('Download unscanned'), className: 'btn-default' });
+                return;
+            }
             this.addButton({ action: 'ignore', label: gt('Download unscanned'), className: 'btn-default' });
         }
     });
@@ -130,8 +139,13 @@ define('io.ox/core/download', [
                 form.submit();
                 return;
             }
+            // safari has a special donwload link button
+            if (_.device('safari')) return;
             // iframe download
             error.dlFrame.src = error.dlFrame.src.replace('&scan=true', '');
+        })
+        .on('cancel', function () {
+            $(error.dlFrame).remove();
         })
         .open();
     }
