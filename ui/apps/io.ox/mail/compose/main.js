@@ -99,7 +99,9 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                         }
                         return obj;
                     }).then(function (latestMail) {
-                        latestMail.security = obj.security;  // Fix for Bug 56496 above breaking Guard.  Security lost with reload
+                        if (!_.isArray(latestMail)) latestMail.security = obj.security;  // Fix for Bug 56496 above breaking Guard.  Security lost with reload
+                        else latestMail.forEach(function (m, i) { m.security = obj[i].security; });
+
                         obj = _.extend({ mode: type }, latestMail);
                         return require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model']);
                     })
