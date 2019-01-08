@@ -110,7 +110,8 @@ define('io.ox/core/download', [
 
         // find correct download iframe (needed to retrigger the download without scan parameter)
         _($('#tmp iframe.hidden.download-frame')).each(function (dlFrame) {
-            if (dlFrame.contentDocument.head.innerHTML.includes(error.error_id)) error.dlFrame = dlFrame;
+            // use indexOf and not includes... ie doesn't support that
+            if (dlFrame.contentDocument.head.innerHTML.indexOf(error.error_id) !== -1) error.dlFrame = dlFrame;
         });
 
         new ModalDialog({
