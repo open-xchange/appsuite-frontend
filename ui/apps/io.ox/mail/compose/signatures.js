@@ -143,7 +143,7 @@ define('io.ox/mail/compose/signatures', [
     var view = {
 
         getSignatureContent: function () {
-            var isUnquotedForward = settings.get('forwardunquoted', false) && this.model.get('mode') === 'forward';
+            var isUnquotedForward = settings.get('forwardunquoted', false) && this.config.get('mode') === 'forward';
             if (isUnquotedForward) return this.editor.find('div[class$="io-ox-signature"]');
             return this.editor.children('div[class$="io-ox-signature"]');
         },
@@ -180,22 +180,20 @@ define('io.ox/mail/compose/signatures', [
 
         // handler -> change:signatureId
         setSignature: function (model, id) {
-            var signatures = this.model.get('signatures'),
+            var signatures = this.config.get('signatures'),
                 signature = _(signatures).where({ id: id })[0],
                 isEmptySignature = (id === '');
-
             // invalid signature
             if (!signature && !isEmptySignature) return;
 
             // edit-case: signature already in DOM
             // compose-case: signature not in DOM
-            this.config.set('signature', signature, { silent: !!this.model.get('signatureIsRendered') });
+            this.config.set('signature', signature, { silent: !!this.config.get('signatureIsRendered') });
             this.config.unset('signatureIsRendered');
         },
 
         // handler -> change:signature
         redrawSignature: function (model, signature) {
-            var previous = model && model.previous('signature');
             // remove old signature
             if (previous) this.removeSignature(previous);
             // set new signature
@@ -239,7 +237,7 @@ define('io.ox/mail/compose/signatures', [
                 isHTML = !!this.editor.find;
 
             // add signature?
-            if (this.model.get('signatures').length > 0) {
+            if (this.config.get('signatures').length > 0) {
                 text = cleanUp(signature.content, isHTML);
                 if (isHTML) text = this.getParagraph(text, looksLikeHTML(text));
                 // signature wrapper
