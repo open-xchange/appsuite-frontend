@@ -114,7 +114,8 @@ module.exports = function (grunt) {
                         src: [
                             'build/pdf.min.js',
                             'build/pdf.worker.min.js',
-                            'web/images/*'
+                            'web/images/*',
+                            'cmaps/*'
                         ],
                         cwd: 'node_modules/pdfjs-dist',
                         dest: 'build/apps/pdfjs-dist/',

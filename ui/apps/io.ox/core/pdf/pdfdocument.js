@@ -89,6 +89,16 @@ define('io.ox/core/pdf/pdfdocument', [
          */
         PDFJS.imageResourcesPath = ox.base + '/apps/pdfjs-dist/web/images/';
 
+        /**
+         * The url to the predefined Adobe CMaps.
+         */
+        PDFJS.cMapUrl = ox.base + '/apps/pdfjs-dist/cmaps/';
+
+        /**
+         * Specifies if CMaps are binary packed.
+         */
+        PDFJS.cMapPacked = true;
+
         // ---------------------------------------------------------------------
 
         function initializePageSize(pageNumber) {
