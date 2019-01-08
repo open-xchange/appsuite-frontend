@@ -194,6 +194,7 @@ define('io.ox/mail/compose/signatures', [
 
         // handler -> change:signature
         redrawSignature: function (model, signature) {
+            var previous = this.config && this.config.previous('signature');
             // remove old signature
             if (previous) this.removeSignature(previous);
             // set new signature
