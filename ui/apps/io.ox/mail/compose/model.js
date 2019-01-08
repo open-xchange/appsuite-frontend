@@ -370,13 +370,20 @@ define('io.ox/mail/compose/model', [
                     var header = [];
 
                     if (/^(REPLY|REPLY_ALL)$/.test(data.meta.type)) {
+                        //#. %1$s A date
+                        //#. %2$s An email address
+                        //#. Example: On January 8, 2019 2:23 PM richard@open-xchange.com wrote:
                         header.push(gt('On %1$s %2$s wrote:', moment(data.meta.date).format('LLL'), mail.from.map(mailAddress).join(', ')));
                     } else if (/^FORWARD_INLINE$/.test(data.meta.type)) {
                         header.push(
                             gt('---------- Original Message ----------'),
+                            //#. %1$s An email address
+                            //#. Example: From: richard@open-xchange.com
                             gt('From: %1%s', mail.from.map(mailAddress).join(', ')),
+                            //#. %1$s An email address or a comma separated list of mail addresses
                             gt('To: %1$s', mail.to.map(mailAddress).join(', ')),
                             gt('Date: %1%s', moment(data.meta.date).format('LLL')),
+                            //#. %1$s The subject of an email
                             gt('Subject: %1$s', mail.subject)
                         );
                     }
