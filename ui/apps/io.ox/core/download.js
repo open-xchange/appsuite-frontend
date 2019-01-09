@@ -75,7 +75,7 @@ define('io.ox/core/download', [
         render: function (baton) {
             if (baton.model.get('categories') !== 'ERROR') return;
             if (_.device('safari')) {
-                this.addDownloadButton({ href: baton.model.get('dlFrame').src.replace('&scan=true', ''), action: 'ignore', label: gt('Download infected file'), className: 'btn-default' });
+                this.addDownloadButton({ href: (baton.model.get('url') || baton.model.get('dlFrame').src).replace('&scan=true', ''), action: 'ignore', label: gt('Download infected file'), className: 'btn-default' });
                 return;
             }
             this.addButton({ action: 'ignore', label: gt('Download infected file'), className: 'btn-default' });
@@ -88,7 +88,7 @@ define('io.ox/core/download', [
         render: function (baton) {
             if (baton.model.get('categories') === 'ERROR') return;
             if (_.device('safari')) {
-                this.addDownloadButton({ href: baton.model.get('dlFrame').src.replace('&scan=true', ''), action: 'ignore', label: gt('Download unscanned'), className: 'btn-default' });
+                this.addDownloadButton({ href: (baton.model.get('url') || baton.model.get('dlFrame').src).replace('&scan=true', ''), action: 'ignore', label: gt('Download unscanned'), className: 'btn-default' });
                 return;
             }
             this.addButton({ action: 'ignore', label: gt('Download unscanned'), className: 'btn-default' });
@@ -130,6 +130,9 @@ define('io.ox/core/download', [
         })
         .addButton({ action: 'cancel', label: gt('OK') })
         .on('ignore', function () {
+
+            if (!error.dlFrame) return;
+
             // trigger download again, but without scan parameter
             // form download (used for multiple files)
             if (error.dlFrame.src.indexOf('blank.html') !== -1) {
@@ -145,7 +148,7 @@ define('io.ox/core/download', [
             error.dlFrame.src = error.dlFrame.src.replace('&scan=true', '');
         })
         .on('cancel', function () {
-            $(error.dlFrame).remove();
+            if (error.dlFrame) $(error.dlFrame).remove();
         })
         .open();
     }
@@ -177,6 +180,15 @@ define('io.ox/core/download', [
 
                 var url = api.getUrl(file, 'download', { params: options.params });
                 if (_.device('ios')) {
+                    url += (url.indexOf('?') === -1 ? '?' : '&') + 'callback=antivirus';
+                    if (capabilities.has('antivirus')) {
+                        url += '&scan=true';
+                    }
+                    win.callback_antivirus = function (error) {
+                        error.url = url;
+                        showAntiVirusPopup(error);
+                        win.close();
+                    };
                     win.location = url;
                 } else {
                     iframe(url);
