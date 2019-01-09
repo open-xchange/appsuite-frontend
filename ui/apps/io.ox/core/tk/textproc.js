@@ -10,9 +10,13 @@
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
-'use strict';
 
-define('io.ox/core/tk/textproc', ['settings!io.ox/mail'], function (mailSettings) {
+define('io.ox/core/tk/textproc', [
+    'settings!io.ox/mail',
+    'static/3rd.party/purify.min.js'
+], function (mailSettings, DOMPurify) {
+
+    'use strict';
 
     // simplify DOM tree
     function simplify(memo, elem) {
@@ -191,6 +195,97 @@ define('io.ox/core/tk/textproc', ['settings!io.ox/mail'], function (mailSettings
         },
 
         htmltotext: function (string) {
+
+            // START ------------------------------------------------------------------
+
+            var node = DOMPurify.sanitize(string, {
+                FORBID_TAGS: ['STYLE', 'SCRIPT', 'TITLE'],
+                ALLOWED_ATTR: ['href', 'type', 'value', 'checked', 'start'],
+                RETURN_DOM: true
+            });
+            // console.log('sanitized:', node.outerHTML);
+            if (true) return finalize(traverse(node));
+
+            function traverse(node) {
+                return removeMarkers(_(node.childNodes).map(processElement).join(''));
+            }
+
+            function processElement(item, i, all) {
+                if (item.nodeType === 3) return item.nodeValue;
+                return processEmptyElements(item, i, all.length) || markBlockElements(item, processNestedElements(item));
+            }
+
+            function processEmptyElements(item, i, length) {
+                switch (item.nodeName) {
+                    case 'BR':
+                        // <br> at first or last position doesn't necessarily add a line break
+                        // \u0001 = line break, \u200B = zero width space
+                        var first = i === 0, last = i === length - 1, alone = length === 1;
+                        return (first && alone) || last ? '\u200B' : '\u0001';
+                    case 'HR':
+                        return '\0------------------------------\0';
+                    case 'INPUT':
+                        switch (item.getAttribute('type')) {
+                            case 'checkbox':
+                            case 'radio':
+                                return '[' + (item.hasAttribute('checked') ? 'X' : ' ') + ']';
+                            default:
+                                return '[' + (item.getAttribute('value') || '') + ']';
+                        }
+                    // no default
+                }
+            }
+
+            function processNestedElements(item) {
+                var str = traverse(item);
+                switch (item.nodeName) {
+                    case 'A':
+                        var href = item.getAttribute('href');
+                        if (!/^https?:\/\//i.test(href)) return str;
+                        return str ? str + ' (' + href + ')' : href;
+                    case 'BLOCKQUOTE':
+                        return str.replace(/^/gm, '> ');
+                    case 'UL':
+                        return str.replace(/^/gm, '  ');
+                    case 'OL':
+                        var count = parseInt(item.getAttribute('start') || '1', 10);
+                        return str.replace(/^\* /gm, function () {
+                            return '  ' + (count++) + '. ';
+                        });
+                    case 'LI':
+                        return '* ' + str.replace(/\u0001/g, '\n  ');
+                    case 'TD':
+                        return str + '\t';
+                    case 'H1':
+                    case 'H2':
+                    case 'H3':
+                        return '\n' + str;
+                    default:
+                        return str;
+                }
+            }
+
+            function markBlockElements(item, str) {
+                return /^(P|DIV|BLOCKQUOTE|UL|OL|LI|PRE|H\d|DL|ADDRESS|FIELDSET|FORM|NOSCRIPT|SECTION|TABLE|TR)$/.test(item.nodeName) ? '\0' + str + '\0' : str;
+            }
+
+            function removeMarkers(str) {
+                return str
+                    // remove superfluous markers (head & tail)
+                    .replace(/(^\0+|\0+$)/g, '')
+                    // finally replace block element markers by \n
+                    .replace(/\0+/g, '\n');
+            }
+
+            function finalize(str) {
+                return str
+                    // remove zero width space
+                    .replace(/\u200B/g, '')
+                    // finally convert all <br> to \n
+                    .replace(/\u0001/g, '\n');
+            }
+
+            // END --------------------------------------------------------------------
 
             var ELEMENTS = [
                 {
