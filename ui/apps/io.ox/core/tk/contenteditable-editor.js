@@ -713,9 +713,9 @@ define('io.ox/core/tk/contenteditable-editor', [
                 isForwardUnquoted = opt.view.model.get('mode') === 'forward' && mailSettings.get('forwardunquoted', false),
                 index = content.indexOf(isForwardUnquoted ? '----' : '<blockquote type="cite">');
             // special case: initially replied/forwarded text mail
-            if (content.substring(0, 15) === '<blockquote><div>') index = 0;
+            if (content.substring(0, 15) === '<blockquote type="cite"><div>') index = 0;
             // special case: switching between signatures in such a mail
-            if (content.substring(0, 23) === '<div><br></div><blockquote>') index = 0;
+            if (content.substring(0, 23) === '<div><br></div><blockquote type="cite">') index = 0;
             if (index < 0) return { content: content };
             return {
                 // content without trailing whitespace

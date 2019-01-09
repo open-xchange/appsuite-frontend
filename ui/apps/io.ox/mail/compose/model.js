@@ -395,7 +395,7 @@ define('io.ox/mail/compose/model', [
                         // get the content inside the body of the mail
                         var content = data.content.replace(/^[\s\S]*?<body[^>]*>([\s\S]*?)<\/body>[\s\S]*?$/i, '$1').trim();
                         content = sanitizer.simpleSanitize(content);
-                        data.content = '<div><br></div>' + $('<blockquote>').append(
+                        data.content = '<div><br></div>' + $('<blockquote type="cite">').append(
                             header.map(function (line) {
                                 if (!line) return '<div><br></div>';
                                 return $('<div>').text(line);
