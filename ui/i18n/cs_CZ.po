@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-01-03 16:26+0100\n"
+"PO-Revision-Date: 2019-01-09 12:18+0100\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -8637,7 +8637,7 @@ msgstr "Automatické přeposílání je zapnuté"
 
 #: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
 msgid "autoforward"
-msgstr ""
+msgstr "Automaticky přeposlat"
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
