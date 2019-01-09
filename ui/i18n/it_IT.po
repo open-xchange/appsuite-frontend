@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: info@open-xchange.com\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-01-03 16:24+0100\n"
+"PO-Revision-Date: 2019-01-09 12:09+0100\n"
 "Last-Translator: Vincenzo Reale <vincenzo@workshop-chapina.com>\n"
 "Language-Team: Italian <it@workshop-chapina.com>\n"
 "Language: it_IT\n"
@@ -8828,7 +8828,7 @@ msgstr "L'inoltro automatico è attivo"
 
 #: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
 msgid "autoforward"
-msgstr ""
+msgstr "Inoltro automatico"
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js

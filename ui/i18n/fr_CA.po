@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-01-03 16:24+0100\n"
+"PO-Revision-Date: 2019-01-09 12:09+0100\n"
 "Last-Translator: Sandrine Burriel <sandrine@workshop-chapina.com>\n"
 "Language-Team: French <fr@workshop-chapina.com>\n"
 "Language: fr_CA\n"
@@ -8890,7 +8890,7 @@ msgstr "Le transfert automatique est actif"
 
 #: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
 msgid "autoforward"
-msgstr ""
+msgstr "Transfert automatique"
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js

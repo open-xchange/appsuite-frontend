@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-01-03 16:26+0100\n"
+"PO-Revision-Date: 2019-01-09 12:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -8614,7 +8614,7 @@ msgstr "已開啟自動轉寄"
 
 #: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
 msgid "autoforward"
-msgstr ""
+msgstr "自動轉寄"
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js

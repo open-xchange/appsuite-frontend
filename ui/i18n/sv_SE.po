@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-01-03 16:25+0100\n"
+"PO-Revision-Date: 2019-01-09 12:10+0100\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <ox@workshop-chapina.com>\n"
 "Language: sv_SE\n"
@@ -8771,7 +8771,7 @@ msgstr "Autovidarebefordran är aktiv"
 
 #: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
 msgid "autoforward"
-msgstr ""
+msgstr "Autovidarebefordran"
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
