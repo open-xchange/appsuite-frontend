@@ -836,7 +836,10 @@ define('io.ox/mail/compose/view', [
             this.editor = this.editorHash[this.config.get('editorMode')];
             this.listenTo(this.editor, 'change', this.syncMail);
             // if contentType already matches editor (e.g. while startup), content can be set explicitedly
-            var setMethod = 'text/' + this.editor.getMode() === this.model.get('contentType') ? 'setContent' : 'setPlainText';
+            var bothText = this.editor.getMode() === 'text' && this.model.get('contentType') === 'text/plain',
+                bothHTML = this.editor.getMode() === 'html' && this.model.get('contentType') === 'text/html',
+                setMethod = bothText || bothHTML ? 'setContent' : 'setPlainText';
+            console.log('setMethod', setMethod, this.editor.getMode());
             return $.when(this.editor[setMethod](content)).then(function () {
                 self.model.set({
                     content: self.editor.getContent(),
@@ -868,6 +871,7 @@ define('io.ox/mail/compose/view', [
             } else {
                 // initial, use existing content of composition space
                 content = this.model.get('content');
+                if (this.model.get('contentType') === 'text/html' && this.config.get('editorMode') === 'text') content = textproc.htmltotext(content);
             }
 
             this.editorContainer.busy();
