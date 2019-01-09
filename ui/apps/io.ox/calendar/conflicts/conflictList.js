@@ -175,10 +175,11 @@ define('io.ox/calendar/conflicts/conflictList', [
                 details = $('<div class="conflict-details">').hide(),
                 icon = $('<i class="fa fa-angle-right" aria-hidden="true">'),
                 toggle = $('<a href="#" role="button" class="detail-toggle">').attr('summary', gt('Show appointment details')).append(icon),
-                li = $('<li>').append(toggle, summary, details);
+                li = $('<li>').append(toggle, summary, details),
+                entity = (conflict.event.createdBy || {}).entity;
 
             // use same setting as schedulingview (freeBusyStrict) to decide if we show infos about appointments the user is not invited too
-            if (settings.get('freeBusyStrict', true) && conflict.event.createdBy.entity !== ox.user_id && _.isUndefined(conflict.event.summary)) {
+            if (settings.get('freeBusyStrict', true) && entity !== ox.user_id && _.isUndefined(conflict.event.summary)) {
                 toggle.remove();
                 details.remove();
             } else {
