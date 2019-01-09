@@ -381,6 +381,8 @@ define('io.ox/mail/compose/view', [
             this.listenTo(this.model, 'success:save', this.onChangeSaved.bind(this, 'saved'));
             this.listenTo(this.config, 'change:editorMode', this.toggleEditorMode);
             this.listenTo(this.config, 'change:vcard', this.onAttachVcard);
+            this.listenTo(this.model, 'change:content', this.onChangeContent);
+
             // handler can be found in signatures.js
             this.listenTo(this.config, 'change:signatureId', this.setSignature);
             this.listenTo(this.config, 'change:signatures', this.updateSignatures);
@@ -437,6 +439,12 @@ define('io.ox/mail/compose/view', [
             var csid = this.model.get('csid');
             if (csid !== model.get('id')) return;
             if (value >= 0) this.app.getWindow().busy(value);
+        },
+
+        onChangeContent: function (model, value) {
+            // easy one: when content get's removed completely set signature to 'no signature'
+            if (value && value !== '<div style="" class="default-style"><br></div>') return;
+            this.config.set('signatureId', '');
         },
 
         ariaLiveUpdate: function (e, msg) {
