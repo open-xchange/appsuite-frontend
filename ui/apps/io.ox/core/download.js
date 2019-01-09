@@ -74,8 +74,9 @@ define('io.ox/core/download', [
         id: 'buttonThreatFound',
         render: function (baton) {
             if (baton.model.get('categories') !== 'ERROR') return;
-            if (_.device('safari')) {
-                this.addDownloadButton({ href: (baton.model.get('url') || baton.model.get('dlFrame').src).replace('&scan=true', ''), action: 'ignore', label: gt('Download infected file'), className: 'btn-default' });
+            // special treatment for desktop safari to avoid frame load interrupted error
+            if (_.device('!ios && safari')) {
+                this.addDownloadButton({ href: baton.model.get('dlFrame').src.replace('&scan=true', ''), action: 'ignore', label: gt('Download infected file'), className: 'btn-default' });
                 return;
             }
             this.addButton({ action: 'ignore', label: gt('Download infected file'), className: 'btn-default' });
@@ -87,8 +88,9 @@ define('io.ox/core/download', [
         id: 'buttonNotScanned',
         render: function (baton) {
             if (baton.model.get('categories') === 'ERROR') return;
-            if (_.device('safari')) {
-                this.addDownloadButton({ href: (baton.model.get('url') || baton.model.get('dlFrame').src).replace('&scan=true', ''), action: 'ignore', label: gt('Download unscanned'), className: 'btn-default' });
+            // special treatment for desktop safari to avoid frame load interrupted error
+            if (_.device('!ios && safari')) {
+                this.addDownloadButton({ href: baton.model.get('dlFrame').src.replace('&scan=true', ''), action: 'ignore', label: gt('Download unscanned'), className: 'btn-default' });
                 return;
             }
             this.addButton({ action: 'ignore', label: gt('Download unscanned'), className: 'btn-default' });
@@ -131,7 +133,16 @@ define('io.ox/core/download', [
         .addButton({ action: 'cancel', label: gt('OK') })
         .on('ignore', function () {
 
-            if (!error.dlFrame) return;
+            // download in new window instead of iframe (ios only)
+            if (error.url) {
+                var win = blankshield.open('blank.html', '_blank');
+                win.callback_antivirus = function (error) {
+                    showAntiVirusPopup(error);
+                    win.close();
+                };
+                win.location = error.url.replace('&scan=true', '');
+                return;
+            }
 
             // trigger download again, but without scan parameter
             // form download (used for multiple files)
