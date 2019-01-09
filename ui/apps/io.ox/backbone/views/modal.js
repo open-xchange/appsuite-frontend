@@ -148,7 +148,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 this.$el.addClass('mobile-dialog');
                 this.$footer.rowfluid = $('<div class="row">');
                 this.$footer.append(this.$footer.rowfluid);
-                this.$buttons = this.$footer.find('button');
+                this.$buttons = this.$footer.find('button,a.btn');
                 _.each(this.$buttons, function (buttonNode) {
                     self.$footer.rowfluid.prepend($(buttonNode).addClass('btn-medium'));
                     $(buttonNode).wrap('<div class="col-xs-12 col-md-3">');
