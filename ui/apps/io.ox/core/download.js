@@ -90,10 +90,10 @@ define('io.ox/core/download', [
             if (baton.model.get('categories') === 'ERROR') return;
             // special treatment for desktop safari to avoid frame load interrupted error
             if (_.device('!ios && safari')) {
-                this.addDownloadButton({ href: baton.model.get('dlFrame').src.replace('&scan=true', ''), action: 'ignore', label: gt('Download unscanned'), className: 'btn-default' });
+                this.addDownloadButton({ href: baton.model.get('dlFrame').src.replace('&scan=true', ''), action: 'ignore', label: gt('Download unscanned file'), className: 'btn-default' });
                 return;
             }
-            this.addButton({ action: 'ignore', label: gt('Download unscanned'), className: 'btn-default' });
+            this.addButton({ action: 'ignore', label: gt('Download unscanned file'), className: 'btn-default' });
         }
     });
 
@@ -105,6 +105,14 @@ define('io.ox/core/download', [
                 .text(baton.model.get('error'))
                 .css('margin-bottom', '0')
                 .addClass(baton.model.get('categories') === 'ERROR' ? 'alert-danger' : 'alert-warning'));
+        }
+    });
+
+    ext.point('io.ox/core/download/antiviruspopup').extend({
+        index: 400,
+        id: 'buttonCancel',
+        render: function () {
+            this.addButton({ action: 'cancel', label: gt('Cancel download') });
         }
     });
 
@@ -130,7 +138,6 @@ define('io.ox/core/download', [
             point: 'io.ox/core/download/antiviruspopup',
             model: new Backbone.Model(error)
         })
-        .addButton({ action: 'cancel', label: gt('OK') })
         .on('ignore', function () {
 
             // download in new window instead of iframe (ios only)
