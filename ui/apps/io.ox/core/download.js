@@ -73,7 +73,8 @@ define('io.ox/core/download', [
         index: 100,
         id: 'buttonThreatFound',
         render: function (baton) {
-            if (baton.model.get('categories') !== 'ERROR') return;
+            // error code 11 is virus found
+            if (baton.model.get('code') !== 'ANTI-VIRUS-SERVICE-0011') return;
             // special treatment for desktop safari to avoid frame load interrupted error
             if (_.device('!ios && safari')) {
                 this.addDownloadButton({ href: baton.model.get('dlFrame').src.replace('&scan=true', ''), action: 'ignore', label: gt('Download infected file'), className: 'btn-default' });
@@ -87,7 +88,8 @@ define('io.ox/core/download', [
         index: 200,
         id: 'buttonNotScanned',
         render: function (baton) {
-            if (baton.model.get('categories') === 'ERROR') return;
+            // error code 11 is virus found
+            if (baton.model.get('code') === 'ANTI-VIRUS-SERVICE-0011') return;
             // special treatment for desktop safari to avoid frame load interrupted error
             if (_.device('!ios && safari')) {
                 this.addDownloadButton({ href: baton.model.get('dlFrame').src.replace('&scan=true', ''), action: 'ignore', label: gt('Download unscanned file'), className: 'btn-default' });
@@ -104,7 +106,8 @@ define('io.ox/core/download', [
             this.$body.append($('<div class="alert">')
                 .text(baton.model.get('error'))
                 .css('margin-bottom', '0')
-                .addClass(baton.model.get('categories') === 'ERROR' ? 'alert-danger' : 'alert-warning'));
+                // error code 11 is virus found
+                .addClass(baton.model.get('code') === 'ANTI-VIRUS-SERVICE-0011' ? 'alert-danger' : 'alert-warning'));
         }
     });
 
