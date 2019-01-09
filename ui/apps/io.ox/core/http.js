@@ -889,51 +889,52 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             return JSON.parse(JSON.stringify(data));
         }
 
-        function send(r) {
-
-            var hash = null;
+        function isConcurrent(r) {
+            var hash;
 
             // look for concurrent identical GET/PUT requests
-            if (r.o.type === 'GET' || r.o.type === 'PUT') {
+            if (r.o.type !== 'GET' && r.o.type !== 'PUT') return;
 
-                // get hash value - we just use stringify here (xhr contains payload for unique PUT requests)
-                try { hash = JSON.stringify(r.xhr); } catch (e) { if (ox.debug) console.error(e); }
+            // get hash value - we just use stringify here (xhr contains payload for unique PUT requests)
+            try { hash = JSON.stringify(r.xhr); } catch (e) { if (ox.debug) console.error(e); }
 
-                if (r.o.consolidate !== false && hash && _.isArray(requests[hash])) {
+            if (r.o.consolidate !== false && hash && _.isArray(requests[hash])) {
 
-                    if (r.o.consolidate === 'reject') {
-                        r.def.reject({ error: 'request is already pending and consolidate parameter is set to reject', code: 'UI_CONSREJECT' });
-                        return;
-                    }
-
-                    // enqueue callbacks
-                    requests[hash].push(r);
-                    r = hash = null;
-                } else {
-                    // init queue
-                    requests[hash] = [];
-                    // create new request
-                    r.def.always(function () {
-                        // success or failure?
-                        var success = r.def.state() === 'resolved';
-                        // at first, remove request from hash (see bug 37113)
-                        var reqs = requests[hash];
-                        delete requests[hash];
-                        if (!reqs || !reqs.length) return;
-                        // now resolve all callbacks
-                        var args = _(arguments).map(clone);
-                        _(reqs).each(function (r) {
-                            r.def[success ? 'resolve' : 'reject'].apply(r.def, args);
-                            that.trigger('stop ' + (success ? 'done' : 'fail'), r.xhr);
-                        });
-                        r = hash = null;
-                    });
-                    limitedSend(r);
+                if (r.o.consolidate === 'reject') {
+                    r.def.reject({ error: 'request is already pending and consolidate parameter is set to reject', code: 'UI_CONSREJECT' });
+                    return;
                 }
-            } else {
-                limitedSend(r);
-                r = null;
+
+                // enqueue callbacks
+                requests[hash].push(r);
+                r = hash = null;
+                return true;
             }
+
+            // init queue
+            requests[hash] = [];
+            // create new request
+            r.def.always(function () {
+                // success or failure?
+                var success = r.def.state() === 'resolved';
+                // at first, remove request from hash (see bug 37113)
+                var reqs = requests[hash];
+                delete requests[hash];
+                if (!reqs || !reqs.length) return;
+                // now resolve all callbacks
+                var args = _(arguments).map(clone);
+                _(reqs).each(function (r) {
+                    r.def[success ? 'resolve' : 'reject'].apply(r.def, args);
+                    that.trigger('stop ' + (success ? 'done' : 'fail'), r.xhr);
+                });
+                r = hash = null;
+            });
+        }
+
+        function send(r) {
+
+            if (!isConcurrent(r)) limitedSend(r);
+
         }
 
         return function (o, type) {
@@ -957,12 +958,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     return def;
                 }
             }
-
-            // paused?
-            if (paused === true) {
-                queue.push({ deferred: def, options: o });
-                return def;
-            }
             // build request object
             r = {
                 def: def,
@@ -980,6 +975,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     beforeSend: o.beforeSend
                 }
             };
+            // paused?
+            if (paused === true) {
+                if (!isConcurrent(r)) queue.push({ deferred: def, options: o });
+                return def;
+            }
             // use timeout?
             if (typeof o.timeout === 'number') {
                 r.xhr.timeout = o.timeout;
