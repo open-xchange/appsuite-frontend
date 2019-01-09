@@ -43,6 +43,9 @@ define('io.ox/core/boot/rampup', [
                         ua: navigator.userAgent
                     };
                 });
+            }).catch(function (e) {
+                // add a catch such that the boot process is not stopped due to errors
+                if (ox.debug) console.error(e);
             });
         }
     }, {
