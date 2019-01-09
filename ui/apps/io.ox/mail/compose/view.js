@@ -847,7 +847,6 @@ define('io.ox/mail/compose/view', [
             var bothText = this.editor.getMode() === 'text' && this.model.get('contentType') === 'text/plain',
                 bothHTML = this.editor.getMode() === 'html' && this.model.get('contentType') === 'text/html',
                 setMethod = bothText || bothHTML ? 'setContent' : 'setPlainText';
-            console.log('setMethod', setMethod, this.editor.getMode());
             return $.when(this.editor[setMethod](content)).then(function () {
                 self.model.set({
                     content: self.editor.getContent(),
