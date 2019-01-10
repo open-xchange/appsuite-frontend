@@ -556,30 +556,24 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         }
         // publish request before a potential use of JSON.stringify that omits undefined values
         ox.trigger('http:before:send', o);
-
-        switch (type) {
-            case 'GET':
-            case 'POST':
-                o._url += '?' + _.serialize(_.omit(o.params, _.isUndefined));
-                break;
-            case 'PUT':
-            case 'PATCH':
-            case 'DELETE':
-                o._url += '?' + _.serialize(o.params);
-                o.original = o.data;
-                o.data = typeof o.data !== 'string' ? JSON.stringify(o.data) : o.data;
-                o.contentType = 'text/javascript; charset=UTF-8';
-                break;
-            case 'UPLOAD':
-                // POST with FormData object
-                o._url += '?' + _.serialize(o.params);
-                o.contentType = false;
-                o.processData = false;
-                o.processResponse = false;
-                break;
-            // no default
+        // data & body
+        if (type === 'GET' || type === 'POST') {
+            // GET & POST
+            o.data = o.params;
+        } else if (type === 'PUT' || type === 'DELETE') {
+            // PUT & DELETE
+            o._url += '?' + _.serialize(o.params);
+            o.original = o.data;
+            o.data = typeof o.data !== 'string' ? JSON.stringify(o.data) : o.data;
+            o.contentType = 'text/javascript; charset=UTF-8';
+        } else if (type === 'UPLOAD') {
+            // POST with FormData object
+            o._url += '?' + _.serialize(o.params);
+            o.contentType = false;
+            o.processData = false;
+            o.processResponse = false;
         }
-
+        // done
         return o;
     };
 
