@@ -383,11 +383,15 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 this.trigger('ready');
             }.bind(this));
             var label = getLabel(this.options.label),
-                ariaLabel = this.options.aria ? this.options.aria : null;
+                ariaLabel = this.options.aria ? this.options.aria : null,
+                toggleNode = '<a href="#" draggable="false">';
 
             if (_.isString(label)) ariaLabel += (' ' + label);
+
+            if (this.options.buttonToggle) toggleNode = '<button type="button" draggable="false" class="btn btn-link">';
+
             this.$el.append(
-                this.$toggle = this.options.$toggle || this.$toggle || $('<a href="#" draggable="false">').attr({
+                this.$toggle = this.options.$toggle || this.$toggle || $(toggleNode).attr({
                     'aria-label': ariaLabel,
                     'data-action': this.options.dataAction,
                     'title': this.options.title || null,
