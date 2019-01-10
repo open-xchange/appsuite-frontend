@@ -82,11 +82,13 @@ define('io.ox/calendar/actions/change-organizer', [
             .addButton({ action: 'ok', label: gt('Ok'), className: 'btn-primary' })
             .on('ok', function () {
 
+                // only series master updates are supported atm
                 calApi.update({
-                    id: appointmentData.id,
+                    id: appointmentData.seriesId || appointmentData.id,
                     folder: appointmentData.folder, organizer: _(_(appointmentData.attendees).where({ entity: this.model.get('newOrganizer') })[0]).pick(['cn', 'email', 'entity', 'uri'])
                 }, {
-                    comment: this.model.get('comment')
+                    comment: this.model.get('comment'),
+                    sendInternalNotifications: true
                 });
                 this.model = null;
             })
