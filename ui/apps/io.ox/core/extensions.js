@@ -446,7 +446,6 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
     }
 
     function Baton(obj) {
-        obj = obj || {};
         // bypass?
         if (obj instanceof Baton) return obj;
         // called via new?
@@ -456,11 +455,8 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             this.options = {};
             this.flow = { disable: {} };
             this.$ = {};
-            // makes no sense to create a new baton that is already stopped or prevented
-            obj.isDefaultPrevented = returnFalse;
-            obj.isPropagationStopped = returnFalse;
             // just copy given object
-            _.extend(this, obj);
+            _.extend(this, _(obj).omit('isDefaultPrevented', 'isPropagationStopped'));
         } else {
             // for the lazy way: b = Baton() instead of b = new Baton()
             return new Baton(obj);
