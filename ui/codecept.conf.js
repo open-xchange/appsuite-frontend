@@ -16,7 +16,7 @@ module.exports.config = {
         'Mochawesome': {
             'uniqueScreenshotNames': true
         },
-        'WebDriverIO': _.extend({}, {
+        'WebDriver': _.extend({}, {
             'url': process.env.LAUNCH_URL || 'http://localhost:8337/appsuite/',
             'host': process.env.SELENIUM_HOST || '10.50.0.94',
             'smartWait': 1000,
@@ -29,10 +29,9 @@ module.exports.config = {
                 'browserName': 'chrome',
                 'chromeOptions': {
                     'args': ['no-sandbox']
-                },
-                'acceptSslCerts': true
+                }
             }
-        }, localConf.e2e.helpers.WebDriverIO || {}),
+        }, localConf.e2e.helpers.WebDriver || {}),
         OpenXchange: _.extend({}, {
             require: './e2e/helper',
             mxDomain: 'ox-e2e-backend.novalocal',
@@ -51,7 +50,7 @@ module.exports.config = {
         require('./e2e/axe-matchers');
 
         var config = require('codeceptjs').config.get();
-        if (config.helpers.WebDriverIO && /127\.0\.0\.1/.test(config.helpers.WebDriverIO.host)) {
+        if (config.helpers.WebDriver && /127\.0\.0\.1/.test(config.helpers.WebDriver.host)) {
             require('@open-xchange/codecept-helper').selenium
                 .start(localConf.e2e.selenium)
                 .then(done);

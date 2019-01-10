@@ -3,7 +3,7 @@ class MyHelper extends Helper {
 
     // helper to create a fresh contact including an attachment with evil filename
     createContactWithEvilAttachment() {
-        let wdio = this.helpers['WebDriverIO'],
+        let wdio = this.helpers['WebDriver'],
             browser = wdio.browser;
 
         browser.executeAsync((done) => {

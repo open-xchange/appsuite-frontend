@@ -29,10 +29,10 @@
   },
   "devDependencies": {
     "@open-xchange/appserver": "^0.8.0-pre3",
-    "@open-xchange/codecept-helper": "^0.0.7",
+    "@open-xchange/codecept-helper": "0.0.8",
     "axe-core": "^3.1.2",
     "chai": "^4.0.2",
-    "codeceptjs": "^1.4.3",
+    "codeceptjs": "^2.0.2",
     "eslint-plugin-codeceptjs": "^0.4.0",
     "grunt-contrib-connect": "^2.0.0",
     "grunt-contrib-watch": "^1.0.0",
@@ -53,7 +53,7 @@
     "sinon": "^7.0.0",
     "sinon-chai": "^3.3.0",
     "time-grunt": "^2.0.0",
-    "webdriverio": "^4.11.0"
+    "webdriverio": "^5.2.6"
   },
   "engines": {
     "node": ">=0.10"
