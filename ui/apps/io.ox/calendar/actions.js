@@ -375,6 +375,7 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/change-organizer', {
         requires: function (e) {
+            if (settings.get('chronos/restrictAllowedOrganizerChange', false)) return false;
             if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
             // we need at least 2 users
             if (_(e.baton.data.attendees).reduce(function (users, attendee) { return users + (_(attendee).has('entity') && attendee.cuType === 'INDIVIDUAL' ? 1 : 0); }, 0) < 2) return false;
