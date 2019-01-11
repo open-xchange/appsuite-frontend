@@ -82,7 +82,7 @@
     "pdfjs-dist": "1.9.426",
     "requirejs": "2.3.6",
     "resize-polyfill": "1.1.1",
-    "socket.io-client": "2.0.3",
+    "socket.io-client": "2.2.0",
     "swiper": "4.3.3",
     "tinymce": "4.9.2",
     "typeahead.js": "0.10.5",
