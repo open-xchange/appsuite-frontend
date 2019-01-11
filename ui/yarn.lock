@@ -23,6 +23,19 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.2.3.tgz#32f5df65744b70888d17872ec106b02434ba1489"
   integrity sha512-0LyEcVlfCoFmci8mXx8A5oIkpkOgyo8dRHtxBnK9RRBwxO2+JZPNsqtVEZQ7mJFPxnXF9lfmU24mHOPI0qnlkA==
 
+"@open-xchange/appserver@^0.8.0-pre1":
+  version "0.8.0-pre1"
+  resolved "https://registry.yarnpkg.com/@open-xchange/appserver/-/appserver-0.8.0-pre1.tgz#856a161fbbdc8a1bacd635a9565a414657c6720f"
+  integrity sha512-6dds7IFHD/jEJ+tJ8YGNsXn2fN6613VM6F0KHYTXZ53hJOLnyWfAxX6BBA8G8q3L+5ZB1Ypn1DSSXmTJP+5cbw==
+  dependencies:
+    "@open-xchange/ui-middleware" "^7.10.0"
+    connect "^3.6.2"
+    express "^4.15.3"
+    http-proxy "^1.16.2"
+    nopt "^4.0.1"
+    serve-static "^1.12.3"
+    underscore "^1.8.3"
+
 "@open-xchange/bootstrap-datepicker@1.3.1":
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/@open-xchange/bootstrap-datepicker/-/bootstrap-datepicker-1.3.1.tgz#d642f8b47d5d648e859503c260c17e7cdc40d956"
@@ -68,7 +81,7 @@
   dependencies:
     tinymce "^4.8.0"
 
-"@open-xchange/ui-middleware@^7.10.0-0":
+"@open-xchange/ui-middleware@^7.10.0":
   version "7.10.1"
   resolved "https://registry.yarnpkg.com/@open-xchange/ui-middleware/-/ui-middleware-7.10.1.tgz#f2dc14944a669e5eab492fb4c91d319aa160160b"
   integrity sha512-9FXLzpn9nDUtXOnWbOUDkAPbWSsmi3rR1L+9rCn/XNdtiZxuqIg73DRKx0OvKgUM+RdRXPv6XEUp3e4HHm2luw==
@@ -241,19 +254,6 @@ appserver@^0.6.0:
     nopt "^4.0.1"
     proxy-agent "~2.1.0"
     serve-static "^1.12.3"
-
-appserver@^0.7.0-pre9:
-  version "0.7.0-pre9"
-  resolved "https://registry.yarnpkg.com/appserver/-/appserver-0.7.0-pre9.tgz#273bdfffe7a26e7557b75e0580ffb9cc2f53752d"
-  integrity sha512-FFynK0M+CTfMnne24nDqAo04bSr7GMEsnwmaX8XFcZnBEH11GV5JbTlnx2R4jaQU7nSRAltxjMHhc3w/9hQc8Q==
-  dependencies:
-    "@open-xchange/ui-middleware" "^7.10.0-0"
-    connect "^3.6.2"
-    express "^4.15.3"
-    http-proxy "^1.16.2"
-    nopt "^4.0.1"
-    serve-static "^1.12.3"
-    underscore "^1.8.3"
 
 aproba@^1.0.3:
   version "1.2.0"
