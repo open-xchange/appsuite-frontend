@@ -927,10 +927,6 @@ msgstr "Tilføj til favoritter"
 msgid "Add to portal"
 msgstr "Tilføj til portal"
 
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "Add user/group"
-msgstr "Tilføj bruger/gruppe"
-
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Add widget"
 msgstr "Tilføj widget"
@@ -1038,8 +1034,7 @@ msgstr "Administratorrolle"
 
 #. Role: all permissions
 #. object permissions - admin role
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Administrator"
 msgstr "Administrator"
 
@@ -1280,10 +1275,6 @@ msgstr "Anvend ændringer"
 msgid "Apply filter"
 msgstr "Brug filter"
 
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "Apply role"
-msgstr "Tildel rolle"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Apply rule if all conditions are met"
@@ -1294,8 +1285,7 @@ msgstr "Brug regel hvis alle betingelserne er opfyldt"
 msgid "Apply rule if any condition is met"
 msgstr "Brug regel bare én betingelse er opfyldt"
 
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Apply to all subfolders"
 msgstr "Anvend på alle undermapper"
 
@@ -1470,8 +1460,7 @@ msgid "Authentication details"
 msgstr "Godkendelsesdetaljer"
 
 #. Role: create folder + read/write/delete all
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Author"
 msgstr "Forfatter"
 
@@ -1797,8 +1786,7 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
-#: apps/io.ox/core/folder/actions/rename.js
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
+#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/upsell.js
@@ -2072,9 +2060,8 @@ msgstr "Klient-on-boarding"
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar apps/io.ox/core/about/about.js
 #: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
-#: apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/main.js apps/io.ox/core/tk/dialogs.js
+#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -4420,10 +4407,6 @@ msgstr "Mappenavn"
 msgid "Folder options"
 msgstr "Mappeindstillinger"
 
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "Folder permissions"
-msgstr "Mappetilladelser"
-
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
@@ -4744,8 +4727,7 @@ msgstr "Gruppenavn"
 msgid "Groups"
 msgstr "Grupper"
 
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Guest"
 msgstr "Gæst"
 
@@ -6398,9 +6380,7 @@ msgstr "Næste år"
 msgid "Nickname"
 msgstr "Kaldenavn"
 
-#. folder permissions - Is Admin? NO
 #: apps/io.ox/core/main/logout.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js
 msgid "No"
 msgstr "Nej"
 
@@ -6692,10 +6672,6 @@ msgstr "Numre"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "OK"
-
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "Object permissions"
-msgstr "Objekttilladelser"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -6997,8 +6973,7 @@ msgid "Overdue Tasks"
 msgstr "Opgaver over tid"
 
 #. Role: Owner (same as admin)
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Owner"
 msgstr "Ejer"
 
@@ -8517,11 +8492,11 @@ msgstr "lørdage"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
-#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
-#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/editor/main.js module:io.ox/editor
+#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
+#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
@@ -8635,19 +8610,6 @@ msgstr "Søg i alle mapper"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
 msgstr "Søgeresultater"
-
-#. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid ""
-"Search results page lists all active facets to allow them to be easly "
-"adjustable/removable. Below theses common facets additonal advanced facets "
-"are listed. To narrow down search result please adjust active facets or add "
-"new ones"
-msgstr ""
-"Søgeresultatsiden viser alle aktive kategorier for at gøre det let at "
-"justere/fravælge dem.  Under disse almindelige kategorier kommer en liste "
-"med avancerede kategorier.  For at indsnævre søgeresultaterne, justér "
-"venligst de aktive kategorier eller tilføj nye."
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -9447,8 +9409,7 @@ msgstr "Starttidspunkt"
 msgid "Start tour"
 msgstr "Start rundvisning"
 
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Begynd at skrive for at finde brugernavne"
@@ -10114,10 +10075,6 @@ msgid_plural "None of the uploaded files matches the requested file type."
 msgstr[0] "Den overførte fil har ikke den ønskede filtype."
 msgstr[1] "Ingen af de overførte filer har den ønskede filtype."
 
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "The user has administrative rights"
-msgstr "Brugeren har administrative"
-
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid ""
 "The widget \"%s\" was disabled as the account might have been removed or is "
@@ -10408,12 +10365,6 @@ msgstr "Dette er ikke en gyldig e-mail-adresse"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
 msgstr "Dette er ikke en gyldig e-mail-adresse"
-
-#. permissions dialog
-#. error message when selected user or group can not be used
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "This is not a valid user or group."
-msgstr "Dette er ikke en gyldig bruger eller gruppe."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -11375,9 +11326,7 @@ msgstr "Gul"
 msgid "Yellow green"
 msgstr "Gulgrøn"
 
-#. folder permissions - Is Admin? YES
-#: apps/io.ox/core/main/logout.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
+#: apps/io.ox/core/main/logout.js module:io.ox/core apps/io.ox/files/util.js
 #: module:io.ox/files
 msgid "Yes"
 msgstr "Ja"
@@ -11919,16 +11868,6 @@ msgstr "fortsæt hvis alle disse betingelser er opfyldt"
 msgid "continue if any of these conditions are met"
 msgstr "fortsæt bare én af disse betingelser er opfyldt"
 
-#. folder permissions
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "create objects"
-msgstr "opret objekter"
-
-#. folder permissions
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "create objects and subfolders"
-msgstr "opret objekter og undermapper"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "cyan"
 msgstr "turkisblå"
@@ -11999,16 +11938,6 @@ msgstr "dag(e)"
 msgid "declined"
 msgstr "afslået"
 
-#. object permissions - delete
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "delete all objects"
-msgstr "slet alle objekter"
-
-#. object permissions - delete
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "delete only own objects"
-msgstr "slet kun egne objekter"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "deleted"
@@ -12022,16 +11951,6 @@ msgstr "passer ikke med en delstreng"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "eM Client"
 msgstr "eM Client"
-
-#. object permissions - edit/modify
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "edit all objects"
-msgstr "ændr alle objekter"
-
-#. object permissions - edit/modify
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "edit own objects"
-msgstr "ændr egne objekter"
 
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
@@ -12247,21 +12166,6 @@ msgstr "måned(er)"
 msgid "no color"
 msgstr "ingen farve"
 
-#. object permissions - delete
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "no delete permissions"
-msgstr "ingen slettetilladelse"
-
-#. object permissions - edit/modify
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "no edit permissions"
-msgstr "ingen ændringstilladelse"
-
-#. object permissions - read
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "no read permissions"
-msgstr "ingen læsetilladelser"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "none"
 msgstr "ingen"
@@ -12320,16 +12224,6 @@ msgstr "privat"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "purple"
 msgstr "lilla"
-
-#. object permissions - read
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "read all objects"
-msgstr "læs alle objekter"
-
-#. object permissions - read
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "read own objects"
-msgstr "læs egne objekter"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
@@ -12451,11 +12345,6 @@ msgstr "vCard"
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "vacation notice"
 msgstr "feriesvar"
-
-#. folder permissions
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "view the folder"
-msgstr "vis mappen"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12790,6 +12679,9 @@ msgstr "din platform"
 #~ msgid "Add new reminder"
 #~ msgstr "Tilføj ny påmindelse"
 
+#~ msgid "Add user/group"
+#~ msgstr "Tilføj bruger/gruppe"
+
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Tilføjer abonnement.  Det kan tage nogle sekunder…"
 
@@ -12848,6 +12740,9 @@ msgstr "din platform"
 
 #~ msgid "Applications"
 #~ msgstr "Programmer"
+
+#~ msgid "Apply role"
+#~ msgstr "Tildel rolle"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Brug regel hvis en betingelse er opfyldt."
@@ -13754,6 +13649,9 @@ msgstr "din platform"
 #~ msgid "Folder names must not contain slashes"
 #~ msgstr "Mappenavne må ikke indeholde skråstreger"
 
+#~ msgid "Folder permissions"
+#~ msgstr "Mappetilladelser"
+
 #~ msgid "Folder settings"
 #~ msgstr "Mappeindstillinger"
 
@@ -14384,6 +14282,9 @@ msgstr "din platform"
 #~ msgid "Number of messages"
 #~ msgstr "Antal beskeder"
 
+#~ msgid "Object permissions"
+#~ msgstr "Objekttilladelser"
+
 #~ msgid "October"
 #~ msgstr "Oktober"
 
@@ -14792,6 +14693,17 @@ msgstr "din platform"
 
 #~ msgid "Search here"
 #~ msgstr "Søg her"
+
+#~ msgid ""
+#~ "Search results page lists all active facets to allow them to be easly "
+#~ "adjustable/removable. Below theses common facets additonal advanced "
+#~ "facets are listed. To narrow down search result please adjust active "
+#~ "facets or add new ones"
+#~ msgstr ""
+#~ "Søgeresultatsiden viser alle aktive kategorier for at gøre det let at "
+#~ "justere/fravælge dem.  Under disse almindelige kategorier kommer en liste "
+#~ "med avancerede kategorier.  For at indsnævre søgeresultaterne, justér "
+#~ "venligst de aktive kategorier eller tilføj nye."
 
 #~ msgid "Search within application"
 #~ msgstr "Søg i program"
@@ -15461,6 +15373,9 @@ msgstr "din platform"
 #~ msgstr ""
 #~ "Aftalens tidszone (%1$s) er forskellig fra din standardtidszone (%2$s)."
 
+#~ msgid "The user has administrative rights"
+#~ msgstr "Brugeren har administrative"
+
 #~ msgid "There are currently no participants."
 #~ msgstr "Der er ingen deltagere lige nu."
 
@@ -15550,6 +15465,9 @@ msgstr "din platform"
 #~ msgstr ""
 #~ "Denne mappe deles med andre.  Den vil ikke længere være tilgængelig for "
 #~ "gæster."
+
+#~ msgid "This is not a valid user or group."
+#~ msgstr "Dette er ikke en gyldig bruger eller gruppe."
 
 #~ msgid "This mail has been sent from %1$s."
 #~ msgstr "Denne besked er sendt fra %1$s."
@@ -16204,6 +16122,12 @@ msgstr "din platform"
 #~ msgid "continue if any of these condition is met."
 #~ msgstr "fortsæt bare én af disse betingelser er opfyldt"
 
+#~ msgid "create objects"
+#~ msgstr "opret objekter"
+
+#~ msgid "create objects and subfolders"
+#~ msgstr "opret objekter og undermapper"
+
 #~ msgid "daily"
 #~ msgstr "dagligt"
 
@@ -16216,14 +16140,26 @@ msgstr "din platform"
 #~ msgid "dd"
 #~ msgstr "dd"
 
+#~ msgid "delete all objects"
+#~ msgstr "slet alle objekter"
+
 #~ msgid "delete if expired"
 #~ msgstr "slet hvis udløbet"
+
+#~ msgid "delete only own objects"
+#~ msgstr "slet kun egne objekter"
 
 #~ msgid "disable"
 #~ msgstr "deaktivér"
 
 #~ msgid "disabled"
 #~ msgstr "deaktiveret"
+
+#~ msgid "edit all objects"
+#~ msgstr "ændr alle objekter"
+
+#~ msgid "edit own objects"
+#~ msgstr "ændr egne objekter"
 
 #, fuzzy
 #~| msgid "Edit signature"
@@ -16343,8 +16279,17 @@ msgstr "din platform"
 #~ msgid "next week"
 #~ msgstr "næste uge"
 
+#~ msgid "no delete permissions"
+#~ msgstr "ingen slettetilladelse"
+
+#~ msgid "no edit permissions"
+#~ msgstr "ingen ændringstilladelse"
+
 #~ msgid "no expiry date"
 #~ msgstr "ingen udløbsdato"
+
+#~ msgid "no read permissions"
+#~ msgstr "ingen læsetilladelser"
 
 #~ msgid "open"
 #~ msgstr "åbn"
@@ -16357,6 +16302,12 @@ msgstr "din platform"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "afvikl efterfølgende regler"
+
+#~ msgid "read all objects"
+#~ msgstr "læs alle objekter"
+
+#~ msgid "read own objects"
+#~ msgstr "læs egne objekter"
 
 #~ msgid "remove"
 #~ msgstr "fjern"
@@ -16405,6 +16356,9 @@ msgstr "din platform"
 
 #~ msgid "via"
 #~ msgstr "via"
+
+#~ msgid "view the folder"
+#~ msgstr "vis mappen"
 
 #~ msgid "weekly"
 #~ msgstr "ugentligt"

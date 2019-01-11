@@ -936,10 +936,6 @@ msgstr "Lisa lemmikutesse"
 msgid "Add to portal"
 msgstr "Lisa portaali"
 
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "Add user/group"
-msgstr "Lisa kasutaja/rühm"
-
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Add widget"
 msgstr "Lisa vidin"
@@ -1045,8 +1041,7 @@ msgstr "Haldusroll"
 
 #. Role: all permissions
 #. object permissions - admin role
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Administrator"
 msgstr "Administraator"
 
@@ -1290,10 +1285,6 @@ msgstr "Rakenda muudatused"
 msgid "Apply filter"
 msgstr "Rakenda roll"
 
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "Apply role"
-msgstr "Rakenda roll"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Apply rule if all conditions are met"
@@ -1304,8 +1295,7 @@ msgstr "Rakenda reeglit, kui kõik tingimused on täidetud"
 msgid "Apply rule if any condition is met"
 msgstr "Rakenda reeglit, kui mõni tingimus on täidetud."
 
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Apply to all subfolders"
 msgstr "Rakenda kõigil alamkaustadel"
 
@@ -1484,8 +1474,7 @@ msgid "Authentication details"
 msgstr ""
 
 #. Role: create folder + read/write/delete all
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Author"
 msgstr "Autor"
 
@@ -1817,8 +1806,7 @@ msgstr ""
 #: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
-#: apps/io.ox/core/folder/actions/rename.js
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
+#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/upsell.js
@@ -2099,9 +2087,8 @@ msgstr "Kliendi kaasamine"
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar apps/io.ox/core/about/about.js
 #: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
-#: apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/main.js apps/io.ox/core/tk/dialogs.js
+#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -4461,10 +4448,6 @@ msgstr "Kausta nimi"
 msgid "Folder options"
 msgstr "Kausta seaded"
 
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "Folder permissions"
-msgstr "Kausta õigused"
-
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
@@ -4788,8 +4771,7 @@ msgstr "Rühma nimi"
 msgid "Groups"
 msgstr "Rühmad"
 
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Guest"
 msgstr "Külaline"
 
@@ -6464,9 +6446,7 @@ msgstr ""
 msgid "Nickname"
 msgstr "Hüüdnimi"
 
-#. folder permissions - Is Admin? NO
 #: apps/io.ox/core/main/logout.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js
 msgid "No"
 msgstr "Ei"
 
@@ -6763,10 +6743,6 @@ msgstr "Liikmed"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "OK"
-
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "Object permissions"
-msgstr "Objekti õigused"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -7069,8 +7045,7 @@ msgid "Overdue Tasks"
 msgstr "Tähtajaks tegemata ülesanded"
 
 #. Role: Owner (same as admin)
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Owner"
 msgstr "Omanik"
 
@@ -8599,11 +8574,11 @@ msgstr "laupäeval"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
-#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
-#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/editor/main.js module:io.ox/editor
+#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
+#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
@@ -8718,19 +8693,6 @@ msgstr "Otsi kõigist kaustadest"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
 msgstr "Otsingutulemused"
-
-#. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid ""
-"Search results page lists all active facets to allow them to be easly "
-"adjustable/removable. Below theses common facets additonal advanced facets "
-"are listed. To narrow down search result please adjust active facets or add "
-"new ones"
-msgstr ""
-"Otsingu tulemuste lehekülg loetleb kõik aktiivsed aspektid, võimaldades "
-"nende lihtsat kohandamist/eemaldamist. Nende üldiste aspektide all on "
-"loetletud täiendavad kõrgema järgu aspektid. Otsingutulemuste täpsustamiseks "
-"kohandage aktiivseid aspekte või lisage uusi"
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -9557,8 +9519,7 @@ msgstr "Alguskuupäev"
 msgid "Start tour"
 msgstr "Alusta tutvustust"
 
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Alustage tähtede sisestamist kasutajanimede otsinguks"
@@ -10234,10 +10195,6 @@ msgid_plural "None of the uploaded files matches the requested file type."
 msgstr[0] "Üleslaetud fail ei vasta nõutud failitüübile."
 msgstr[1] "Ükski üleslaetud failidest ei vasta nõutud failitüübile."
 
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "The user has administrative rights"
-msgstr "Kasutajal on haldusõigused"
-
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid ""
 "The widget \"%s\" was disabled as the account might have been removed or is "
@@ -10522,12 +10479,6 @@ msgstr "See ei ole kehtiv e-posti aadress"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
 msgstr "See ei ole kehtiv postiaadress"
-
-#. permissions dialog
-#. error message when selected user or group can not be used
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "This is not a valid user or group."
-msgstr "See ei ole kehtiv kasutaja või rühm."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -11495,9 +11446,7 @@ msgstr "Kollane"
 msgid "Yellow green"
 msgstr "Kollakas-roheline"
 
-#. folder permissions - Is Admin? YES
-#: apps/io.ox/core/main/logout.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
+#: apps/io.ox/core/main/logout.js module:io.ox/core apps/io.ox/files/util.js
 #: module:io.ox/files
 msgid "Yes"
 msgstr "Jah"
@@ -12040,16 +11989,6 @@ msgstr "rakenda reeglit, kui kõik tingimused on täidetud"
 msgid "continue if any of these conditions are met"
 msgstr "rakenda reeglit, kui kõik tingimused on täidetud"
 
-#. folder permissions
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "create objects"
-msgstr "objektide loomine"
-
-#. folder permissions
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "create objects and subfolders"
-msgstr "objektide ja alamkaustade loomine"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "cyan"
 msgstr ""
@@ -12120,16 +12059,6 @@ msgstr "päev(a)"
 msgid "declined"
 msgstr "keeldutud"
 
-#. object permissions - delete
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "delete all objects"
-msgstr "kõigi objektide kustutamine"
-
-#. object permissions - delete
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "delete only own objects"
-msgstr "ainult oma objektide kustutamine"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "deleted"
@@ -12144,16 +12073,6 @@ msgstr "ei kattu alamstringiga"
 #, fuzzy
 msgid "eM Client"
 msgstr "Muu aadress"
-
-#. object permissions - edit/modify
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "edit all objects"
-msgstr "kõigi objektide muutmine"
-
-#. object permissions - edit/modify
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "edit own objects"
-msgstr "oma objektide muutmine"
 
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
@@ -12372,21 +12291,6 @@ msgstr "kuu(d)"
 msgid "no color"
 msgstr "värvitu"
 
-#. object permissions - delete
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "no delete permissions"
-msgstr "kustutamisõigused puuduvad"
-
-#. object permissions - edit/modify
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "no edit permissions"
-msgstr "muutmisõigused puuduvad"
-
-#. object permissions - read
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "no read permissions"
-msgstr "lugemisõigused puuduvad"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "none"
 msgstr "puudub"
@@ -12445,16 +12349,6 @@ msgstr "isiklik"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "purple"
 msgstr "purpurpunane"
-
-#. object permissions - read
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "read all objects"
-msgstr "kõigi objektide lugemine"
-
-#. object permissions - read
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "read own objects"
-msgstr "oma objektide lugemine"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
@@ -12578,11 +12472,6 @@ msgstr "vCard"
 #, fuzzy
 msgid "vacation notice"
 msgstr "puhkuseteade"
-
-#. folder permissions
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-msgid "view the folder"
-msgstr "kausta vaatamine"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12787,6 +12676,9 @@ msgstr "teie platvorm"
 #~ msgid "Add participant/resource"
 #~ msgstr "Lisa osaleja/ressurss"
 
+#~ msgid "Add user/group"
+#~ msgstr "Lisa kasutaja/rühm"
+
 #~ msgid ""
 #~ "All future messages from the senders of the selected mails will be moved "
 #~ "to the selected folder."
@@ -12796,6 +12688,9 @@ msgstr "teie platvorm"
 
 #~ msgid "Application Toolbar"
 #~ msgstr "Rakenduste tööriistariba"
+
+#~ msgid "Apply role"
+#~ msgstr "Rakenda roll"
 
 #~ msgid "Appointment list"
 #~ msgstr "Kohtumiste loend"
@@ -13143,6 +13038,9 @@ msgstr "teie platvorm"
 #~ msgid "Flag mail with"
 #~ msgstr "Lisa e-kirjale lipp"
 
+#~ msgid "Folder permissions"
+#~ msgstr "Kausta õigused"
+
 #~ msgid "Folder type"
 #~ msgstr "Kausta tüüp"
 
@@ -13356,6 +13254,9 @@ msgstr "teie platvorm"
 #~ msgid "Number of messages"
 #~ msgstr "Sõnumite arv"
 
+#~ msgid "Object permissions"
+#~ msgstr "Objekti õigused"
+
 #~ msgid "October"
 #~ msgstr "Oktoober"
 
@@ -13498,6 +13399,17 @@ msgstr "teie platvorm"
 
 #~ msgid "Scheduling"
 #~ msgstr "Ajaplaanimine"
+
+#~ msgid ""
+#~ "Search results page lists all active facets to allow them to be easly "
+#~ "adjustable/removable. Below theses common facets additonal advanced "
+#~ "facets are listed. To narrow down search result please adjust active "
+#~ "facets or add new ones"
+#~ msgstr ""
+#~ "Otsingu tulemuste lehekülg loetleb kõik aktiivsed aspektid, võimaldades "
+#~ "nende lihtsat kohandamist/eemaldamist. Nende üldiste aspektide all on "
+#~ "loetletud täiendavad kõrgema järgu aspektid. Otsingutulemuste "
+#~ "täpsustamiseks kohandage aktiivseid aspekte või lisage uusi"
 
 #~ msgid "Send as internal link"
 #~ msgstr "Saada siselingina"
@@ -13783,6 +13695,9 @@ msgstr "teie platvorm"
 #~ msgstr ""
 #~ "Selle kohtumise ajavöönd (%1$s) erineb teie vaikimisi ajavööndist (%2$s)."
 
+#~ msgid "The user has administrative rights"
+#~ msgstr "Kasutajal on haldusõigused"
+
 #~ msgid ""
 #~ "There are %1$d messages in this folder; not all messages are displayed in "
 #~ "the list. If you want to move or delete all messages, you find "
@@ -13818,6 +13733,9 @@ msgstr "teie platvorm"
 
 #~ msgid "This field has to be filled"
 #~ msgstr "Välja täitmine on kohustuslik"
+
+#~ msgid "This is not a valid user or group."
+#~ msgstr "See ei ole kehtiv kasutaja või rühm."
 
 #~ msgid "This list has no contacts yet"
 #~ msgstr "Selles loendis ei ole veel kontakte"
@@ -13981,6 +13899,12 @@ msgstr "teie platvorm"
 #~ msgid "continue if any of these condition is met"
 #~ msgstr "Rakenda reeglit, kui mõni tingimus on täidetud."
 
+#~ msgid "create objects"
+#~ msgstr "objektide loomine"
+
+#~ msgid "create objects and subfolders"
+#~ msgstr "objektide ja alamkaustade loomine"
+
 #~ msgid "daily"
 #~ msgstr "iga päev"
 
@@ -13990,14 +13914,26 @@ msgstr "teie platvorm"
 #~ msgid "dd"
 #~ msgstr "pp"
 
+#~ msgid "delete all objects"
+#~ msgstr "kõigi objektide kustutamine"
+
 #~ msgid "delete if expired"
 #~ msgstr "kustutada aegumise järel"
+
+#~ msgid "delete only own objects"
+#~ msgstr "ainult oma objektide kustutamine"
 
 #~ msgid "disable"
 #~ msgstr "keela"
 
 #~ msgid "disabled"
 #~ msgstr "keelatud"
+
+#~ msgid "edit all objects"
+#~ msgstr "kõigi objektide muutmine"
+
+#~ msgid "edit own objects"
+#~ msgstr "oma objektide muutmine"
 
 #~ msgid "ends"
 #~ msgstr "lõpeb"
@@ -14053,8 +13989,23 @@ msgstr "teie platvorm"
 #~ msgid "monthly"
 #~ msgstr "iga kuu"
 
+#~ msgid "no delete permissions"
+#~ msgstr "kustutamisõigused puuduvad"
+
+#~ msgid "no edit permissions"
+#~ msgstr "muutmisõigused puuduvad"
+
 #~ msgid "no expiry date"
 #~ msgstr "ilma kehtivuse lõputa"
+
+#~ msgid "no read permissions"
+#~ msgstr "lugemisõigused puuduvad"
+
+#~ msgid "read all objects"
+#~ msgstr "kõigi objektide lugemine"
+
+#~ msgid "read own objects"
+#~ msgstr "oma objektide lugemine"
 
 #~ msgid "seconds"
 #~ msgstr "sekundit"
@@ -14070,6 +14021,9 @@ msgstr "teie platvorm"
 
 #~ msgid "via"
 #~ msgstr "kaudu"
+
+#~ msgid "view the folder"
+#~ msgstr "kausta vaatamine"
 
 #~ msgid "weekly"
 #~ msgstr "iga nädal"

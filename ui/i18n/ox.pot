@@ -978,7 +978,6 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/properties.js
 #: apps/io.ox/core/folder/tree.js
 #: apps/io.ox/core/main.js
-#: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/tk/dialogs.js
 #: apps/io.ox/core/tk/wizard.js
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -1031,7 +1030,6 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js
-#: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js
 #: apps/io.ox/core/sub/subscriptions.js
@@ -1828,7 +1826,6 @@ msgstr ""
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js
 #: module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/editor/main.js
 #: module:io.ox/editor
 #: apps/io.ox/files/actions/edit-description.js
@@ -5210,12 +5207,6 @@ msgstr ""
 msgid "Cancel search"
 msgstr ""
 
-#. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js
-#: module:io.ox/core
-msgid "Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones"
-msgstr ""
-
 #: apps/io.ox/core/desktop.js
 #: module:io.ox/core
 msgid "Failed to start application. Maybe you have connection problems. Please try again."
@@ -6222,19 +6213,15 @@ msgstr ""
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr ""
 
-#. folder permissions - Is Admin? YES
 #: apps/io.ox/core/main/logout.js
 #: module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/files/util.js
 #: module:io.ox/files
 msgid "Yes"
 msgstr ""
 
-#. folder permissions - Is Admin? NO
 #: apps/io.ox/core/main/logout.js
 #: module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js
 msgid "No"
 msgstr ""
 
@@ -6445,151 +6432,6 @@ msgstr ""
 #: apps/io.ox/core/notifications/subview.js
 #: module:io.ox/core
 msgid "You have new notifications"
-msgstr ""
-
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Guest"
-msgstr ""
-
-#. Role: create folder + read/write/delete all
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Author"
-msgstr ""
-
-#. Role: all permissions
-#. object permissions - admin role
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Administrator"
-msgstr ""
-
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "Apply role"
-msgstr ""
-
-#. folder permissions
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "view the folder"
-msgstr ""
-
-#. folder permissions
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "create objects"
-msgstr ""
-
-#. folder permissions
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "create objects and subfolders"
-msgstr ""
-
-#. object permissions - read
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "no read permissions"
-msgstr ""
-
-#. object permissions - read
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "read own objects"
-msgstr ""
-
-#. object permissions - read
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "read all objects"
-msgstr ""
-
-#. object permissions - edit/modify
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "no edit permissions"
-msgstr ""
-
-#. object permissions - edit/modify
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "edit own objects"
-msgstr ""
-
-#. object permissions - edit/modify
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "edit all objects"
-msgstr ""
-
-#. object permissions - delete
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "no delete permissions"
-msgstr ""
-
-#. object permissions - delete
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "delete only own objects"
-msgstr ""
-
-#. object permissions - delete
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "delete all objects"
-msgstr ""
-
-#. Role: Owner (same as admin)
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Owner"
-msgstr ""
-
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "Folder permissions"
-msgstr ""
-
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "Object permissions"
-msgstr ""
-
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "The user has administrative rights"
-msgstr ""
-
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Apply to all subfolders"
-msgstr ""
-
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "Add user/group"
-msgstr ""
-
-#. permissions dialog
-#. error message when selected user or group can not be used
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-msgid "This is not a valid user or group."
-msgstr ""
-
-#: apps/io.ox/core/permissions/permissions.js
-#: module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-#: apps/plugins/administration/groups/settings/edit.js
-msgid "Start typing to search for user names"
 msgstr ""
 
 #: apps/io.ox/core/pim/actions.js
@@ -8830,6 +8672,25 @@ msgstr ""
 msgid "Reviewer"
 msgstr ""
 
+#. Role: create folder + read/write/delete all
+#: apps/io.ox/files/share/permissions.js
+#: module:io.ox/core
+msgid "Author"
+msgstr ""
+
+#. Role: all permissions
+#. object permissions - admin role
+#: apps/io.ox/files/share/permissions.js
+#: module:io.ox/core
+msgid "Administrator"
+msgstr ""
+
+#. Role: Owner (same as admin)
+#: apps/io.ox/files/share/permissions.js
+#: module:io.ox/core
+msgid "Owner"
+msgstr ""
+
 #: apps/io.ox/files/share/permissions.js
 #: module:io.ox/core
 msgid "The notification has been resent"
@@ -8845,6 +8706,11 @@ msgstr ""
 #: apps/io.ox/participants/chronos-views.js
 #: apps/io.ox/participants/views.js
 msgid "Group"
+msgstr ""
+
+#: apps/io.ox/files/share/permissions.js
+#: module:io.ox/core
+msgid "Guest"
 msgstr ""
 
 #: apps/io.ox/files/share/permissions.js
@@ -8993,6 +8859,17 @@ msgstr ""
 #: apps/io.ox/files/share/permissions.js
 #: module:io.ox/core
 msgid "Add people"
+msgstr ""
+
+#: apps/io.ox/files/share/permissions.js
+#: module:io.ox/core
+msgid "Apply to all subfolders"
+msgstr ""
+
+#: apps/io.ox/files/share/permissions.js
+#: module:io.ox/core
+#: apps/plugins/administration/groups/settings/edit.js
+msgid "Start typing to search for user names"
 msgstr ""
 
 #: apps/io.ox/files/share/permissions.js
