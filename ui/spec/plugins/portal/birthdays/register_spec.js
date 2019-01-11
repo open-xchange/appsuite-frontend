@@ -45,8 +45,7 @@ define([
         describe('with a list of birthdays', function () {
             var clock;
             beforeEach(function () {
-                //TODO: this is an object in later versions of sinon
-                clock = sinon.useFakeTimers(1483574400000, 'Date');
+                clock = sinon.useFakeTimers({ now: 1483574400000, toFake: ['Date'] });
                 this.server.respondWith('GET', /api\/contacts\?action=birthdays/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                         '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData) + '}');

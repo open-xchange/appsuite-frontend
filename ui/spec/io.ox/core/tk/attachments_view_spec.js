@@ -263,7 +263,7 @@ define([
     describe('Core Attachment View:', function () {
         var FakeModel = Backbone.Model.extend({
             needsUpload: sinon.stub().returns(false),
-            getTitle: sinon.stub.returns('TestTitle'),
+            getTitle: sinon.stub().returns('TestTitle'),
             getShortTitle: sinon.stub().returns('TestTitle'),
             getSize: sinon.stub().returns(65535)
         });
