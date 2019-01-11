@@ -358,57 +358,6 @@ define('io.ox/core/tk/textproc', ['settings!io.ox/mail'], function (mailSettings
                 string = string.replace(/^\n/, '');
             }
             return string;
-        },
-
-        texttohtml: function (string) {
-            var noop = { exec: $.noop },
-                def = $.Deferred();
-            require(['static/3rd.party/marked.js']).then(function (marked) {
-
-                marked.prototype.constructor.Parser.prototype.parse = function (src) {
-                    this.inline = new marked.InlineLexer(src.links, this.options, this.renderer);
-                    _.extend(this.inline.rules, {
-                        em:       noop,
-                        strong:   noop,
-                        escape:   noop,
-                        del:      noop,
-                        image:    noop,
-                        codespan: noop,
-                        autolink: noop
-                    });
-                    this.tokens = src.reverse();
-
-                    var out = '';
-                    while (this.next()) {
-                        out += this.tok();
-                    }
-
-                    return out;
-                };
-
-                marked.setOptions({
-                    renderer: new marked.Renderer(),
-                    gfm: true,
-                    tables: false,
-                    breaks: true,
-                    pedantic: false,
-                    sanitize: true,
-                    smartLists: true,
-                    smartypants: false
-                });
-
-                var lexer = new marked.Lexer();
-
-                _.extend(lexer.rules, {
-                    heading:  noop,
-                    code: noop,
-                    hr: noop,
-                    lheading: noop
-                });
-
-                def.resolve(marked.parser(lexer.lex(string)));
-            });
-            return def;
         }
     };
 });
