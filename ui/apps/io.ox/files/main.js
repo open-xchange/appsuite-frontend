@@ -496,7 +496,7 @@ define('io.ox/files/main', [
                                 ret = ext.point('io.ox/files/share/classic-toolbar')
                                 .invoke('draw', $toolbar, baton);
 
-                                // draw toolbar
+                            // draw toolbar
                             $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
 
                         }, 10);
