@@ -6047,10 +6047,10 @@ thunkify@^2.1.2:
   resolved "https://registry.yarnpkg.com/thunkify/-/thunkify-2.1.2.tgz#faa0e9d230c51acc95ca13a361ac05ca7e04553d"
   integrity sha1-+qDp0jDFGsyVyhOjYawFyn4EVT0=
 
-time-grunt@^1.0.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/time-grunt/-/time-grunt-1.4.0.tgz#062213e660c907e86f440556c01ea6597b712420"
-  integrity sha1-BiIT5mDJB+hvRAVWwB6mWXtxJCA=
+time-grunt@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/time-grunt/-/time-grunt-2.0.0.tgz#db41853f92b879b2f5ec33731af885b451800ec9"
+  integrity sha512-iQD2AeDYCAJrsPC/eUsfYZD9UT7TuBOmUIgFV5zeTQgRk6yLJKoc3aYR0gusJ0m+bG13B6qrDZ0SwPLe0/htHw==
   dependencies:
     chalk "^1.0.0"
     date-time "^1.1.0"
