@@ -932,6 +932,10 @@ msgstr "Añadir a favoritos"
 msgid "Add to portal"
 msgstr "Añadir al portal"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Add user/group"
+msgstr "Añadir usuario/grupo"
+
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Add widget"
 msgstr "Añadir widget"
@@ -1039,7 +1043,8 @@ msgstr "Rol administrativo"
 
 #. Role: all permissions
 #. object permissions - admin role
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Administrator"
 msgstr "Administrador"
 
@@ -1281,6 +1286,10 @@ msgstr "Aplicar cambios"
 msgid "Apply filter"
 msgstr "Aplicar filtro"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Apply role"
+msgstr "Aplicar rol"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Apply rule if all conditions are met"
@@ -1291,7 +1300,8 @@ msgstr "Aplicar regla si se cumplen todas las condiciones"
 msgid "Apply rule if any condition is met"
 msgstr "Aplicar regla si se cumple cualquier condición"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
 msgstr "Aplicar a todas las subcarpetas"
 
@@ -1466,7 +1476,8 @@ msgid "Authentication details"
 msgstr "Detalles de autenticación"
 
 #. Role: create folder + read/write/delete all
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Author"
 msgstr "Autor"
 
@@ -1795,7 +1806,8 @@ msgstr "Cámara %1$s"
 #: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/print.js
+#: apps/io.ox/core/folder/actions/rename.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/upsell.js
@@ -2073,8 +2085,9 @@ msgstr "Incorporación del cliente"
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar apps/io.ox/core/about/about.js
 #: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -4435,6 +4448,10 @@ msgstr "Nombre de carpeta"
 msgid "Folder options"
 msgstr "Opciones de carpeta"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Folder permissions"
+msgstr "Permisos de carpeta"
+
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
@@ -4757,7 +4774,8 @@ msgstr "Nombre del grupo"
 msgid "Groups"
 msgstr "Grupos"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Guest"
 msgstr "Invitado"
 
@@ -6413,7 +6431,9 @@ msgstr "Año siguiente"
 msgid "Nickname"
 msgstr "Apodo"
 
+#. folder permissions - Is Admin? NO
 #: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
 msgid "No"
 msgstr "No"
 
@@ -6706,6 +6726,10 @@ msgstr "Números"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "Aceptar"
+
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Object permissions"
+msgstr "Permisos de objeto"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -7007,7 +7031,8 @@ msgid "Overdue Tasks"
 msgstr "Tareas atrasadas"
 
 #. Role: Owner (same as admin)
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Owner"
 msgstr "Propietario"
 
@@ -8541,11 +8566,11 @@ msgstr "Sábado"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
-#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
+#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
+#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
@@ -9462,7 +9487,8 @@ msgstr "Hora de comienzo"
 msgid "Start tour"
 msgstr "Comenzar visita"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Comience a escribir para buscar nombres de usuario"
@@ -10140,6 +10166,10 @@ msgstr[0] "El archivo cargado no coincide con el tipo de archivo solicitado."
 msgstr[1] ""
 "Ninguno de los archivos cargados coinciden con el tipo de archivo solicitado."
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "The user has administrative rights"
+msgstr "El usuario tiene derechos de administración"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid ""
 "The widget \"%s\" was disabled as the account might have been removed or is "
@@ -10434,6 +10464,12 @@ msgstr "Esta no es una dirección de correo válida"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
 msgstr "Esta no es una dirección de correo válida"
+
+#. permissions dialog
+#. error message when selected user or group can not be used
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "This is not a valid user or group."
+msgstr "Este no es un usuario o un grupo válido."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -11405,7 +11441,9 @@ msgstr "Amarillo"
 msgid "Yellow green"
 msgstr "Verde amarillento"
 
-#: apps/io.ox/core/main/logout.js module:io.ox/core apps/io.ox/files/util.js
+#. folder permissions - Is Admin? YES
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
 #: module:io.ox/files
 msgid "Yes"
 msgstr "Sí"
@@ -11954,6 +11992,16 @@ msgstr "continuar si se cumplen todas estas condiciones"
 msgid "continue if any of these conditions are met"
 msgstr "continuar si se cumplen cualquiera de estas condiciones"
 
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects"
+msgstr "crear objetos"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects and subfolders"
+msgstr "crear objetos y subcarpetas"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "cyan"
 msgstr "cian"
@@ -12024,6 +12072,16 @@ msgstr "día(s)"
 msgid "declined"
 msgstr "rechazada"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete all objects"
+msgstr "borrar todos los objetos"
+
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete only own objects"
+msgstr "borrar sólo los objetos propios"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "deleted"
@@ -12037,6 +12095,16 @@ msgstr "no coincide con una subcadena"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "eM Client"
 msgstr "Cliente eM"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit all objects"
+msgstr "editar todos los objetos"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit own objects"
+msgstr "editar objetos propios"
 
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
@@ -12252,6 +12320,21 @@ msgstr "mes(es)"
 msgid "no color"
 msgstr "sin color"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no delete permissions"
+msgstr "no hay permiso de borrado"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no edit permissions"
+msgstr "no hay permiso de edición"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no read permissions"
+msgstr "no hay permiso de lectura"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "none"
 msgstr "ninguno"
@@ -12310,6 +12393,16 @@ msgstr "privada"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "purple"
 msgstr "morado"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read all objects"
+msgstr "leer todos los objetos"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read own objects"
+msgstr "leer objetos propios"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
@@ -12437,6 +12530,11 @@ msgstr "vCard"
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "vacation notice"
 msgstr "aviso de ausencia"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "view the folder"
+msgstr "ver la carpeta"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -13393,9 +13491,6 @@ msgstr "su plataforma"
 #~ msgid "Add sender to \"To\", recipients to \"Cc\""
 #~ msgstr "Añadir el remitente a \"Para\", los destinatarios a \"Cc\""
 
-#~ msgid "Add user/group"
-#~ msgstr "Añadir usuario/grupo"
-
 #~ msgid "Added"
 #~ msgstr "Añadida"
 
@@ -14223,9 +14318,6 @@ msgstr "su plataforma"
 
 #~ msgid "Apply a Template (optional)"
 #~ msgstr "Aplicar una plantilla (opcional)"
-
-#~ msgid "Apply role"
-#~ msgstr "Aplicar rol"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Aplicar regla si se cumple alguna condición"
@@ -16921,9 +17013,6 @@ msgstr "su plataforma"
 #~ msgid "Folder path"
 #~ msgstr "Ruta de la carpeta"
 
-#~ msgid "Folder permissions"
-#~ msgstr "Permisos de carpeta"
-
 #~ msgid "Folder settings"
 #~ msgstr "Ajustes de carpeta"
 
@@ -18576,9 +18665,6 @@ msgstr "su plataforma"
 
 #~ msgid "OXMF Infostore"
 #~ msgstr "Almacén de información OXMF"
-
-#~ msgid "Object permissions"
-#~ msgstr "Permisos de objeto"
 
 #~ msgid "Occurs %1$s times"
 #~ msgstr "Se produce %1$s veces"
@@ -21135,9 +21221,6 @@ msgstr "su plataforma"
 #~ "El actualizador le informará de cualquier actualización del Conector para "
 #~ "Microsoft Outlook y del Notificador."
 
-#~ msgid "The user has administrative rights"
-#~ msgstr "El usuario tiene derechos de administración"
-
 #~ msgid ""
 #~ "The window could not be opened. Most likely it has been blocked by a pop-"
 #~ "up or advertisement blocker. Please check your browser settings and make "
@@ -21443,9 +21526,6 @@ msgstr "su plataforma"
 #~ msgstr ""
 #~ "Esto es una actualización de una cita que se ha cambiado desde entonces. "
 #~ "Lo mejor es simplemente ignorar esto."
-
-#~ msgid "This is not a valid user or group."
-#~ msgstr "Este no es un usuario o un grupo válido."
 
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Este correo contiene una URL de una publicación."
@@ -23107,12 +23187,6 @@ msgstr "su plataforma"
 #~ msgid "continue if any of these condition is met."
 #~ msgstr "continuar si se cumple cualquiera de estas condiciones."
 
-#~ msgid "create objects"
-#~ msgstr "crear objetos"
-
-#~ msgid "create objects and subfolders"
-#~ msgstr "crear objetos y subcarpetas"
-
 #~ msgid "created by %s"
 #~ msgstr "creado por %s"
 
@@ -23161,26 +23235,14 @@ msgstr "su plataforma"
 #~ msgid "default"
 #~ msgstr "predeterminado"
 
-#~ msgid "delete all objects"
-#~ msgstr "borrar todos los objetos"
-
 #~ msgid "delete if expired"
 #~ msgstr "borrar si está caducado"
-
-#~ msgid "delete only own objects"
-#~ msgstr "borrar sólo los objetos propios"
 
 #~ msgid "disable"
 #~ msgstr "desactivar"
 
 #~ msgid "disabled"
 #~ msgstr "desactivado"
-
-#~ msgid "edit all objects"
-#~ msgstr "editar todos los objetos"
-
-#~ msgid "edit own objects"
-#~ msgstr "editar objetos propios"
 
 #, fuzzy
 #~| msgid "Edit signature"
@@ -23352,17 +23414,8 @@ msgstr "su plataforma"
 #~ msgid "next week"
 #~ msgstr "semana siguiente"
 
-#~ msgid "no delete permissions"
-#~ msgstr "no hay permiso de borrado"
-
-#~ msgid "no edit permissions"
-#~ msgstr "no hay permiso de edición"
-
 #~ msgid "no expiry date"
 #~ msgstr "sin fecha de caducidad"
-
-#~ msgid "no read permissions"
-#~ msgstr "no hay permiso de lectura"
 
 #~ msgid "not sent"
 #~ msgstr "no enviado"
@@ -23393,12 +23446,6 @@ msgstr "su plataforma"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "procesar las reglas posteriores"
-
-#~ msgid "read all objects"
-#~ msgstr "leer todos los objetos"
-
-#~ msgid "read own objects"
-#~ msgstr "leer objetos propios"
 
 #~ msgid "remove"
 #~ msgstr "borrar"
@@ -23505,9 +23552,6 @@ msgstr "su plataforma"
 
 #~ msgid "via"
 #~ msgstr "vía"
-
-#~ msgid "view the folder"
-#~ msgstr "ver la carpeta"
 
 #~ msgid "waiting"
 #~ msgstr "en espera"

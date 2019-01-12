@@ -929,6 +929,10 @@ msgstr "Hozzáadás a kedvencekhez"
 msgid "Add to portal"
 msgstr "Hozzáadás a portálhoz"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Add user/group"
+msgstr "Felhasználó/csoport hozzáadása"
+
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Add widget"
 msgstr "Widget hozzáadása"
@@ -1035,7 +1039,8 @@ msgstr "Adminisztrátori szerep"
 
 #. Role: all permissions
 #. object permissions - admin role
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Administrator"
 msgstr "Adminisztrátor"
 
@@ -1274,6 +1279,10 @@ msgstr "Változások elfogadása"
 msgid "Apply filter"
 msgstr "Szűrő alkalmazása"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Apply role"
+msgstr "Szerep alkalmazása"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Apply rule if all conditions are met"
@@ -1284,7 +1293,8 @@ msgstr "Szabály alkalmazása, ha minden feltétel teljesül"
 msgid "Apply rule if any condition is met"
 msgstr "Szabály alkalmazása, ha bármely feltétel teljesül"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
 msgstr "Alkalmazás az összes mappára"
 
@@ -1459,7 +1469,8 @@ msgid "Authentication details"
 msgstr "Hitelesítés részletei"
 
 #. Role: create folder + read/write/delete all
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Author"
 msgstr "Szerző"
 
@@ -1788,7 +1799,8 @@ msgstr "%1$s kamera"
 #: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/print.js
+#: apps/io.ox/core/folder/actions/rename.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/upsell.js
@@ -2066,8 +2078,9 @@ msgstr "Bemutatás"
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar apps/io.ox/core/about/about.js
 #: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -4425,6 +4438,10 @@ msgstr "Mappa neve"
 msgid "Folder options"
 msgstr "Mappa beállításai"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Folder permissions"
+msgstr "Mappa jogosultságai"
+
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
@@ -4748,7 +4765,8 @@ msgstr "Csoportnév"
 msgid "Groups"
 msgstr "Csoportok"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Guest"
 msgstr "Vendég"
 
@@ -6399,7 +6417,9 @@ msgstr "Következő év"
 msgid "Nickname"
 msgstr "Becenév"
 
+#. folder permissions - Is Admin? NO
 #: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
 msgid "No"
 msgstr "Nem"
 
@@ -6691,6 +6711,10 @@ msgstr "Számok"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "OK"
+
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Object permissions"
+msgstr "Elemek jogosultságai"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -6991,7 +7015,8 @@ msgid "Overdue Tasks"
 msgstr "Lejárt határidejű feladatok"
 
 #. Role: Owner (same as admin)
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Owner"
 msgstr "Tulajdonos"
 
@@ -8513,11 +8538,11 @@ msgstr "Szombat"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
-#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
+#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
+#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
@@ -9432,7 +9457,8 @@ msgstr "Kezdési idő"
 msgid "Start tour"
 msgstr "Termékbemutató"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Kezdje el beírni a keresett felhasználónevet"
@@ -10109,6 +10135,10 @@ msgid_plural "None of the uploaded files matches the requested file type."
 msgstr[0] "A feltöltött fájl nem illeszkedik a kért fájltípusra."
 msgstr[1] "Egyik feltöltött fájl sem illeszkedik a kért fájltípusra."
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "The user has administrative rights"
+msgstr "A felhasználó rendelkezik adminisztrációs jogosultságokkal"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid ""
 "The widget \"%s\" was disabled as the account might have been removed or is "
@@ -10399,6 +10429,12 @@ msgstr "Ez nem érvényes e-mail cím"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
 msgstr "Ez nem egy érvényes e-mail cím"
+
+#. permissions dialog
+#. error message when selected user or group can not be used
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "This is not a valid user or group."
+msgstr "Ez nem érvényes felhasználó vagy csoport."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -11367,7 +11403,9 @@ msgstr "Sárga"
 msgid "Yellow green"
 msgstr "Sárgászöld"
 
-#: apps/io.ox/core/main/logout.js module:io.ox/core apps/io.ox/files/util.js
+#. folder permissions - Is Admin? YES
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
 #: module:io.ox/files
 msgid "Yes"
 msgstr "Igen"
@@ -11907,6 +11945,16 @@ msgstr "folytassa, ha ezen feltételek mindegyike teljesül"
 msgid "continue if any of these conditions are met"
 msgstr "folytassa, ha ezen feltételek bármelyike teljesül"
 
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects"
+msgstr "elemek létrehozása"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects and subfolders"
+msgstr "elemek és almappák létrehozása"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "cyan"
 msgstr "ciánkék"
@@ -11977,6 +12025,16 @@ msgstr "nap"
 msgid "declined"
 msgstr "elutasítva"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete all objects"
+msgstr "minden elem törlése"
+
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete only own objects"
+msgstr "csak saját elemek törlése"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "deleted"
@@ -11990,6 +12048,16 @@ msgstr "nem egyezik rész-karaktersorozatra"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "eM Client"
 msgstr "eM kliens"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit all objects"
+msgstr "minden elem szerkesztése"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit own objects"
+msgstr "saját elemek szerkesztése"
 
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
@@ -12205,6 +12273,21 @@ msgstr "hónap"
 msgid "no color"
 msgstr "nincs szín"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no delete permissions"
+msgstr "nincs törlési jogosultságai"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no edit permissions"
+msgstr "nincs szerkesztési jogosultság"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no read permissions"
+msgstr "nincs olvasási jogosultság"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "none"
 msgstr "nincs"
@@ -12263,6 +12346,16 @@ msgstr "személyes"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "purple"
 msgstr "bíbor"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read all objects"
+msgstr "minden elem olvasása"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read own objects"
+msgstr "saját elemek olvasása"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
@@ -12386,6 +12479,11 @@ msgstr "vCard"
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "vacation notice"
 msgstr "szabadságértesítő"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "view the folder"
+msgstr "mappa megtekintése"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12623,9 +12721,6 @@ msgstr "az Ön rendszere"
 #~ msgid "Add new reminder"
 #~ msgstr "Új emlékeztető hozzáadása"
 
-#~ msgid "Add user/group"
-#~ msgstr "Felhasználó/csoport hozzáadása"
-
 #, fuzzy
 #~| msgid "Assistant"
 #~ msgid "Afghanistan"
@@ -12662,9 +12757,6 @@ msgstr "az Ön rendszere"
 
 #~ msgid "Applications"
 #~ msgstr "Alkalmazások"
-
-#~ msgid "Apply role"
-#~ msgstr "Szerep alkalmazása"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Szabály alkalmazása, ha bármely feltétel teljesül."
@@ -13183,9 +13275,6 @@ msgstr "az Ön rendszere"
 #~ msgid "Flag mail with"
 #~ msgstr "Levél megjelölése:"
 
-#~ msgid "Folder permissions"
-#~ msgstr "Mappa jogosultságai"
-
 #~ msgid "Folder type"
 #~ msgstr "Mappatípus"
 
@@ -13548,9 +13637,6 @@ msgstr "az Ön rendszere"
 
 #~ msgid "Number of messages"
 #~ msgstr "Üzenetek száma"
-
-#~ msgid "Object permissions"
-#~ msgstr "Elemek jogosultságai"
 
 #~ msgid "October"
 #~ msgstr "Október"
@@ -14194,9 +14280,6 @@ msgstr "az Ön rendszere"
 #~ msgstr ""
 #~ "A találkozó időzónája (%1$s) eltár az alapértelmezett időzónától (%2$s)."
 
-#~ msgid "The user has administrative rights"
-#~ msgstr "A felhasználó rendelkezik adminisztrációs jogosultságokkal"
-
 #~ msgid "There are currently no participants."
 #~ msgstr "Jelenleg nincsenek résztvevők."
 
@@ -14257,9 +14340,6 @@ msgstr "az Ön rendszere"
 #~ msgstr ""
 #~ "Ez a mappa meg van osztva másokkal. Nem lesz elérhető a meghívottak "
 #~ "számára a továbbiakban."
-
-#~ msgid "This is not a valid user or group."
-#~ msgstr "Ez nem érvényes felhasználó vagy csoport."
 
 #~ msgid "This mail has been sent from %1$s."
 #~ msgstr "Ezt az e-mailt %1$s küldte."
@@ -14551,12 +14631,6 @@ msgstr "az Ön rendszere"
 #~ msgid "continue if any of these condition is met."
 #~ msgstr "folytassa, ha bármely feltétel teljesül."
 
-#~ msgid "create objects"
-#~ msgstr "elemek létrehozása"
-
-#~ msgid "create objects and subfolders"
-#~ msgstr "elemek és almappák létrehozása"
-
 #~ msgid "daily"
 #~ msgstr "naponta"
 
@@ -14566,26 +14640,14 @@ msgstr "az Ön rendszere"
 #~ msgid "dd"
 #~ msgstr "dd"
 
-#~ msgid "delete all objects"
-#~ msgstr "minden elem törlése"
-
 #~ msgid "delete if expired"
 #~ msgstr "törlés lejáratkor"
-
-#~ msgid "delete only own objects"
-#~ msgstr "csak saját elemek törlése"
 
 #~ msgid "disable"
 #~ msgstr "letiltás"
 
 #~ msgid "disabled"
 #~ msgstr "letiltott"
-
-#~ msgid "edit all objects"
-#~ msgstr "minden elem szerkesztése"
-
-#~ msgid "edit own objects"
-#~ msgstr "saját elemek szerkesztése"
 
 #~ msgid "end date "
 #~ msgstr "befejező dátum"
@@ -14664,17 +14726,8 @@ msgstr "az Ön rendszere"
 #~ msgid "next %1$s"
 #~ msgstr "következő %1$s"
 
-#~ msgid "no delete permissions"
-#~ msgstr "nincs törlési jogosultságai"
-
-#~ msgid "no edit permissions"
-#~ msgstr "nincs szerkesztési jogosultság"
-
 #~ msgid "no expiry date"
 #~ msgstr "nincs lejárati dátum"
-
-#~ msgid "no read permissions"
-#~ msgstr "nincs olvasási jogosultság"
 
 #~ msgid "optional password"
 #~ msgstr "opcionális jelszó"
@@ -14684,12 +14737,6 @@ msgstr "az Ön rendszere"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "soron következő szabályok feldolgozása"
-
-#~ msgid "read all objects"
-#~ msgstr "minden elem olvasása"
-
-#~ msgid "read own objects"
-#~ msgstr "saját elemek olvasása"
 
 #~ msgid "remove"
 #~ msgstr "eltávolítás"
@@ -14719,9 +14766,6 @@ msgstr "az Ön rendszere"
 
 #~ msgid "via"
 #~ msgstr "megbízó:"
-
-#~ msgid "view the folder"
-#~ msgstr "mappa megtekintése"
 
 #~ msgid "weekly"
 #~ msgstr "hetente"

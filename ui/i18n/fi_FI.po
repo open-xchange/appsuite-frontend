@@ -927,6 +927,10 @@ msgstr "Lisää suosikkeihin"
 msgid "Add to portal"
 msgstr "Lisää portaaliin"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Add user/group"
+msgstr "Lisää käyttäjä/ryhmä"
+
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Add widget"
 msgstr "Lisää widget"
@@ -1032,7 +1036,8 @@ msgstr "Hallinnointirooli"
 
 #. Role: all permissions
 #. object permissions - admin role
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Administrator"
 msgstr "Ylläpitäjä"
 
@@ -1268,6 +1273,10 @@ msgstr "Käytä muutoksia"
 msgid "Apply filter"
 msgstr "Käytä suodatinta"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Apply role"
+msgstr "Sovella rooli"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Apply rule if all conditions are met"
@@ -1278,7 +1287,8 @@ msgstr "Sovella sääntöä, jos kaikki ehdot täyttyvät"
 msgid "Apply rule if any condition is met"
 msgstr "Käytä sääntöä jos jokin ehto täyttyy"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
 msgstr "Käytä kaikkiin alakansioihin"
 
@@ -1451,7 +1461,8 @@ msgid "Authentication details"
 msgstr "Todennustiedot"
 
 #. Role: create folder + read/write/delete all
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Author"
 msgstr "Tekijä"
 
@@ -1778,7 +1789,8 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/print.js
+#: apps/io.ox/core/folder/actions/rename.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/upsell.js
@@ -2053,8 +2065,9 @@ msgstr "Asiakassovellukseen perehdytys"
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar apps/io.ox/core/about/about.js
 #: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -4402,6 +4415,10 @@ msgstr "Kansion nimi"
 msgid "Folder options"
 msgstr "Kansiovalinnat"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Folder permissions"
+msgstr "Kansion oikeudet"
+
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
@@ -4723,7 +4740,8 @@ msgstr "Ryhmän nimi"
 msgid "Groups"
 msgstr "Ryhmät"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Guest"
 msgstr "Vieras"
 
@@ -6370,7 +6388,9 @@ msgstr "Ensi vuosi"
 msgid "Nickname"
 msgstr "Kutsumanimi"
 
+#. folder permissions - Is Admin? NO
 #: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
 msgid "No"
 msgstr "Ei"
 
@@ -6661,6 +6681,10 @@ msgstr "Numerot"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "OK"
+
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Object permissions"
+msgstr "Kohteen oikeudet"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -6961,7 +6985,8 @@ msgid "Overdue Tasks"
 msgstr "Erääntyneet tehtävät"
 
 #. Role: Owner (same as admin)
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Owner"
 msgstr "Omistaja"
 
@@ -8479,11 +8504,11 @@ msgstr "Lauantaina"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
-#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
+#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
+#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
@@ -9397,7 +9422,8 @@ msgstr "Aloitusaika"
 msgid "Start tour"
 msgstr "Aloita kierros"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Aloita kirjoittaminen hakeaksesi käyttäjänimiä"
@@ -10068,6 +10094,10 @@ msgstr[0] "Ladattu tiedosto ei vastaa pyydettyä tiedostotyyppiä."
 msgstr[1] ""
 "Yksikään ladatuista tiedostoista ei vastaa pyydettyä tiedostotyyppiä."
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "The user has administrative rights"
+msgstr "Käyttäjällä on ylläpitäjän oikeuksia"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid ""
 "The widget \"%s\" was disabled as the account might have been removed or is "
@@ -10355,6 +10385,12 @@ msgstr "Tämä ei ole käypä sähköpostiosoite"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
 msgstr "Tämä ei ole käypä postiosoite"
+
+#. permissions dialog
+#. error message when selected user or group can not be used
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "This is not a valid user or group."
+msgstr "Tämä ei ole käypä käyttäjä tai ryhmä."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -11317,7 +11353,9 @@ msgstr "Keltainen"
 msgid "Yellow green"
 msgstr "Keltavihreä"
 
-#: apps/io.ox/core/main/logout.js module:io.ox/core apps/io.ox/files/util.js
+#. folder permissions - Is Admin? YES
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
 #: module:io.ox/files
 msgid "Yes"
 msgstr "Kyllä"
@@ -11856,6 +11894,16 @@ msgstr "jatka jos kaikki nämä ehdot täyttyvät"
 msgid "continue if any of these conditions are met"
 msgstr "jatka jos yksikin  näistä ehdoista täyttyy"
 
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects"
+msgstr "luo kohteita"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects and subfolders"
+msgstr "luo uusia kohteita ja alikansioita"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "cyan"
 msgstr "sinivihreä"
@@ -11926,6 +11974,16 @@ msgstr "päivää"
 msgid "declined"
 msgstr "hylännyt"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete all objects"
+msgstr "poista kaikki kohteet"
+
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete only own objects"
+msgstr "poista vain omat kohteet"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "deleted"
@@ -11939,6 +11997,16 @@ msgstr "ei löydy vastaavaa alajonoa"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "eM Client"
 msgstr "eM Client"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit all objects"
+msgstr "muokkaa kaikkia kohteita"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit own objects"
+msgstr "muokkaa omia kohteita"
 
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
@@ -12154,6 +12222,21 @@ msgstr "kuukautta"
 msgid "no color"
 msgstr "ei väriä"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no delete permissions"
+msgstr "ei poisto-oikeuksia"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no edit permissions"
+msgstr "ei muokkausoikeuksia"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no read permissions"
+msgstr "ei lukuoikeuksia"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "none"
 msgstr "ei ole"
@@ -12212,6 +12295,16 @@ msgstr "yksityinen"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "purple"
 msgstr "violetti"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read all objects"
+msgstr "lue kaikki kohteet"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read own objects"
+msgstr "lue omat kohteet"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
@@ -12338,6 +12431,11 @@ msgstr "vCard"
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "vacation notice"
 msgstr "lomailmoitus"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "view the folder"
+msgstr "näytä kansio"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12639,9 +12737,6 @@ msgstr "alustasi"
 #~ msgid "Add new reminder"
 #~ msgstr "Lisää uusi muistutus"
 
-#~ msgid "Add user/group"
-#~ msgstr "Lisää käyttäjä/ryhmä"
-
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Lisätään tilaus. Tämä voi kestää muutaman sekunnin..."
 
@@ -12697,9 +12792,6 @@ msgstr "alustasi"
 
 #~ msgid "Applications"
 #~ msgstr "Sovellukset"
-
-#~ msgid "Apply role"
-#~ msgstr "Sovella rooli"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Sovella sääntöä, jos jokin ehto täyttyy."
@@ -13506,9 +13598,6 @@ msgstr "alustasi"
 #~ msgid "Folder names must not contain slashes"
 #~ msgstr "Kansion nimi ei voi sisältää kauttaviivoja"
 
-#~ msgid "Folder permissions"
-#~ msgstr "Kansion oikeudet"
-
 #~ msgid "Folder settings"
 #~ msgstr "Kansion asetukset"
 
@@ -14063,9 +14152,6 @@ msgstr "alustasi"
 
 #~ msgid "Number of messages"
 #~ msgstr "Viestien määrä"
-
-#~ msgid "Object permissions"
-#~ msgstr "Kohteen oikeudet"
 
 #~ msgid "October"
 #~ msgstr "lokakuu"
@@ -15055,9 +15141,6 @@ msgstr "alustasi"
 #~ "Tämän tapaamisen (%1$s) aikavyöhyke poikkeaa oletusaikavyöhykkeestäsi  "
 #~ "(%2$s)."
 
-#~ msgid "The user has administrative rights"
-#~ msgstr "Käyttäjällä on ylläpitäjän oikeuksia"
-
 #~ msgid "There are currently no participants."
 #~ msgstr "Osallistujia ei tällä hetkellä ole."
 
@@ -15146,9 +15229,6 @@ msgstr "alustasi"
 #~ msgstr ""
 #~ "Tämä kansio on jaettu muiden kanssa. Se ei ole enää kutsuttujen vieraiden "
 #~ "saatavilla."
-
-#~ msgid "This is not a valid user or group."
-#~ msgstr "Tämä ei ole käypä käyttäjä tai ryhmä."
 
 #~ msgid "This mail has been sent from %1$s."
 #~ msgstr "Tämä viesti on lähetetty laitteesta %1$s."
@@ -15776,12 +15856,6 @@ msgstr "alustasi"
 #~ msgid "continue if any of these condition is met."
 #~ msgstr "jatka jos jokin näistä ehdoista täyttyy."
 
-#~ msgid "create objects"
-#~ msgstr "luo kohteita"
-
-#~ msgid "create objects and subfolders"
-#~ msgstr "luo uusia kohteita ja alikansioita"
-
 #~ msgid "daily"
 #~ msgstr "päivittäin"
 
@@ -15794,26 +15868,14 @@ msgstr "alustasi"
 #~ msgid "dd"
 #~ msgstr "pp"
 
-#~ msgid "delete all objects"
-#~ msgstr "poista kaikki kohteet"
-
 #~ msgid "delete if expired"
 #~ msgstr "poista jos vanhentunut"
-
-#~ msgid "delete only own objects"
-#~ msgstr "poista vain omat kohteet"
 
 #~ msgid "disable"
 #~ msgstr "Kytke pois päältä"
 
 #~ msgid "disabled"
 #~ msgstr "pois käytöstä"
-
-#~ msgid "edit all objects"
-#~ msgstr "muokkaa kaikkia kohteita"
-
-#~ msgid "edit own objects"
-#~ msgstr "muokkaa omia kohteita"
 
 #~| msgid "Edit signature"
 #~ msgid "edit share"
@@ -15928,17 +15990,8 @@ msgstr "alustasi"
 #~ msgid "next week"
 #~ msgstr "seuraava viikko"
 
-#~ msgid "no delete permissions"
-#~ msgstr "ei poisto-oikeuksia"
-
-#~ msgid "no edit permissions"
-#~ msgstr "ei muokkausoikeuksia"
-
 #~ msgid "no expiry date"
 #~ msgstr "ei päättymisaikaa"
-
-#~ msgid "no read permissions"
-#~ msgstr "ei lukuoikeuksia"
 
 #~ msgid "open"
 #~ msgstr "avaa"
@@ -15951,12 +16004,6 @@ msgstr "alustasi"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "suorita myös muut säännöt"
-
-#~ msgid "read all objects"
-#~ msgstr "lue kaikki kohteet"
-
-#~ msgid "read own objects"
-#~ msgstr "lue omat kohteet"
 
 #~ msgid "remove"
 #~ msgstr "poista"
@@ -16002,9 +16049,6 @@ msgstr "alustasi"
 
 #~ msgid "via"
 #~ msgstr "kautta"
-
-#~ msgid "view the folder"
-#~ msgstr "näytä kansio"
 
 #~ msgid "weekly"
 #~ msgstr "viikoittain"

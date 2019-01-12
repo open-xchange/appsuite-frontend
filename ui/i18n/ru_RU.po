@@ -948,6 +948,10 @@ msgstr "Добавить в избранное"
 msgid "Add to portal"
 msgstr "Добавить в портал"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Add user/group"
+msgstr "Добавить пользователя/группу"
+
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Add widget"
 msgstr "Добавить модуль"
@@ -1051,7 +1055,8 @@ msgstr "Права администратора"
 
 #. Role: all permissions
 #. object permissions - admin role
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Administrator"
 msgstr "Администратор"
 
@@ -1292,6 +1297,10 @@ msgstr "Применить изменения"
 msgid "Apply filter"
 msgstr "Применить фильтр"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Apply role"
+msgstr "Назначить роль"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Apply rule if all conditions are met"
@@ -1302,7 +1311,8 @@ msgstr "Применить правило, если выполнены все у
 msgid "Apply rule if any condition is met"
 msgstr "Применить правило, если выполнено любое из условий"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
 msgstr "Применить к вложенным папкам"
 
@@ -1477,7 +1487,8 @@ msgid "Authentication details"
 msgstr "Свойства аутентификации"
 
 #. Role: create folder + read/write/delete all
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Author"
 msgstr "Автор"
 
@@ -1805,7 +1816,8 @@ msgstr "Камера %1$s"
 #: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/print.js
+#: apps/io.ox/core/folder/actions/rename.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/upsell.js
@@ -2084,8 +2096,9 @@ msgstr "Ориентирование клиентов"
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar apps/io.ox/core/about/about.js
 #: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -4440,6 +4453,10 @@ msgstr "Имя папки"
 msgid "Folder options"
 msgstr "Параметры папки"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Folder permissions"
+msgstr "Разрешения папок"
+
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
@@ -4759,7 +4776,8 @@ msgstr "Имя группы"
 msgid "Groups"
 msgstr "Группы"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Guest"
 msgstr "Гость"
 
@@ -6412,7 +6430,9 @@ msgstr "Следующий год"
 msgid "Nickname"
 msgstr "Псевдоним"
 
+#. folder permissions - Is Admin? NO
 #: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
 msgid "No"
 msgstr "Нет"
 
@@ -6708,6 +6728,10 @@ msgstr "Числа"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "OK"
+
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Object permissions"
+msgstr "Разрешения объектов"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -7009,7 +7033,8 @@ msgid "Overdue Tasks"
 msgstr "Просроченные задачи"
 
 #. Role: Owner (same as admin)
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Owner"
 msgstr "Владелец"
 
@@ -8524,11 +8549,11 @@ msgstr "Суббота"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
-#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
+#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
+#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
@@ -9448,7 +9473,8 @@ msgstr "Время начала"
 msgid "Start tour"
 msgstr "Начать знакомство"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Начните вводить имя пользователя для быстрого поиска"
@@ -10117,6 +10143,10 @@ msgstr[0] "Тип отправляемого файла не соответст�
 msgstr[1] "Типы отправляемых файлов не соответствуют запрошенному."
 msgstr[2] "Типы отправляемых файлов не соответствуют запрошенному."
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "The user has administrative rights"
+msgstr "Пользователь обладает правами администратора"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid ""
 "The widget \"%s\" was disabled as the account might have been removed or is "
@@ -10404,6 +10434,12 @@ msgstr "Недопустимый электронный адрес"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
 msgstr "Недопустимый электронный адрес"
+
+#. permissions dialog
+#. error message when selected user or group can not be used
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "This is not a valid user or group."
+msgstr "Недопустимый пользователь или группа."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -11370,7 +11406,9 @@ msgstr "Желтый"
 msgid "Yellow green"
 msgstr "Желто-зеленый"
 
-#: apps/io.ox/core/main/logout.js module:io.ox/core apps/io.ox/files/util.js
+#. folder permissions - Is Admin? YES
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
 #: module:io.ox/files
 msgid "Yes"
 msgstr "Да"
@@ -11907,6 +11945,16 @@ msgstr "продолжить, если выполнены все из указа
 msgid "continue if any of these conditions are met"
 msgstr "продолжить, если выполнено любое из условий"
 
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects"
+msgstr "создать объекты"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects and subfolders"
+msgstr "создать объекты и вложенные папки"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "cyan"
 msgstr "голубой"
@@ -11977,6 +12025,16 @@ msgstr "дн."
 msgid "declined"
 msgstr "отклонено"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete all objects"
+msgstr "удалять все объекты"
+
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete only own objects"
+msgstr "удалять только свои объекты"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "deleted"
@@ -11990,6 +12048,16 @@ msgstr "не совпадает с подстрокой"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "eM Client"
 msgstr "eM Client"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit all objects"
+msgstr "изменять все объекты"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit own objects"
+msgstr "изменять свои объекты"
 
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
@@ -12206,6 +12274,21 @@ msgstr "мес."
 msgid "no color"
 msgstr "без цвета"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no delete permissions"
+msgstr "нет разрешений удаления"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no edit permissions"
+msgstr "нет разрешений изменения"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no read permissions"
+msgstr "нет разрешений чтения"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "none"
 msgstr "нет"
@@ -12264,6 +12347,16 @@ msgstr "личная"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "purple"
 msgstr "сиреневый"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read all objects"
+msgstr "читать все объекты"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read own objects"
+msgstr "читать свои объекты"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
@@ -12390,6 +12483,11 @@ msgstr "vCard"
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "vacation notice"
 msgstr "автоматический ответ"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "view the folder"
+msgstr "просмотр папки"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12742,9 +12840,6 @@ msgstr "вашей платформы"
 #~ msgid "Add new reminder"
 #~ msgstr "Добавить напоминание"
 
-#~ msgid "Add user/group"
-#~ msgstr "Добавить пользователя/группу"
-
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Добавление подписки... Это может занять несколько секунд."
 
@@ -12815,9 +12910,6 @@ msgstr "вашей платформы"
 
 #~ msgid "Applications"
 #~ msgstr "Приложения"
-
-#~ msgid "Apply role"
-#~ msgstr "Назначить роль"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Применить правило, если выполнено любое условие"
@@ -13742,9 +13834,6 @@ msgstr "вашей платформы"
 #~ msgid "Folder names must not contain slashes"
 #~ msgstr "Имя папки не может содержать «/»"
 
-#~ msgid "Folder permissions"
-#~ msgstr "Разрешения папок"
-
 #~ msgid "Folder settings"
 #~ msgstr "Параметры папки"
 
@@ -14382,9 +14471,6 @@ msgstr "вашей платформы"
 
 #~ msgid "Number of messages"
 #~ msgstr "Число сообщений"
-
-#~ msgid "Object permissions"
-#~ msgstr "Разрешения объектов"
 
 #~ msgid "October"
 #~ msgstr "Октябрь"
@@ -15502,9 +15588,6 @@ msgstr "вашей платформы"
 #~ msgstr ""
 #~ "Часовой пояс встречи %1$s не совпадает с вашим часовым поясом (%2$s)."
 
-#~ msgid "The user has administrative rights"
-#~ msgstr "Пользователь обладает правами администратора"
-
 #~ msgid "There are currently no participants."
 #~ msgstr "Пока нет участников."
 
@@ -15609,9 +15692,6 @@ msgstr "вашей платформы"
 #~ msgstr ""
 #~ "К этой папке открыт совместный доступ. Доступ гостей по приглашению будет "
 #~ "невозможен."
-
-#~ msgid "This is not a valid user or group."
-#~ msgstr "Недопустимый пользователь или группа."
 
 #~ msgid "This mail has been sent from %1$s."
 #~ msgstr "Это письмо было отправлено %1$s."
@@ -16284,12 +16364,6 @@ msgstr "вашей платформы"
 #~ msgid "continue if any of these condition is met."
 #~ msgstr "продолжить, если выполнено любое из условий"
 
-#~ msgid "create objects"
-#~ msgstr "создать объекты"
-
-#~ msgid "create objects and subfolders"
-#~ msgstr "создать объекты и вложенные папки"
-
 #~ msgid "daily"
 #~ msgstr "каждый день"
 
@@ -16302,26 +16376,14 @@ msgstr "вашей платформы"
 #~ msgid "dd"
 #~ msgstr "дд"
 
-#~ msgid "delete all objects"
-#~ msgstr "удалять все объекты"
-
 #~ msgid "delete if expired"
 #~ msgstr "удалить, если истекло"
-
-#~ msgid "delete only own objects"
-#~ msgstr "удалять только свои объекты"
 
 #~ msgid "disable"
 #~ msgstr "отключить"
 
 #~ msgid "disabled"
 #~ msgstr "отключено"
-
-#~ msgid "edit all objects"
-#~ msgstr "изменять все объекты"
-
-#~ msgid "edit own objects"
-#~ msgstr "изменять свои объекты"
 
 #, fuzzy
 #~| msgid "Edit signature"
@@ -16465,17 +16527,8 @@ msgstr "вашей платформы"
 #~ msgid "next week"
 #~ msgstr "следующая неделя"
 
-#~ msgid "no delete permissions"
-#~ msgstr "нет разрешений удаления"
-
-#~ msgid "no edit permissions"
-#~ msgstr "нет разрешений изменения"
-
 #~ msgid "no expiry date"
 #~ msgstr "нет срока действия"
-
-#~ msgid "no read permissions"
-#~ msgstr "нет разрешений чтения"
 
 #~ msgid "november"
 #~ msgstr "ноябрь"
@@ -16494,12 +16547,6 @@ msgstr "вашей платформы"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "последовательная обработка правил"
-
-#~ msgid "read all objects"
-#~ msgstr "читать все объекты"
-
-#~ msgid "read own objects"
-#~ msgstr "читать свои объекты"
 
 #~ msgid "remove"
 #~ msgstr "удалить"
@@ -16551,9 +16598,6 @@ msgstr "вашей платформы"
 
 #~ msgid "via"
 #~ msgstr "через"
-
-#~ msgid "view the folder"
-#~ msgstr "просмотр папки"
 
 #~ msgid "weekly"
 #~ msgstr "каждую неделю"

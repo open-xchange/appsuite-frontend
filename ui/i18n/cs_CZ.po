@@ -950,6 +950,10 @@ msgstr "Přidat do oblíbených"
 msgid "Add to portal"
 msgstr "Přidat do portálu"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Add user/group"
+msgstr "Přidat uživatele/skupinu"
+
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Add widget"
 msgstr "Přidat widget"
@@ -1057,7 +1061,8 @@ msgstr "Role administrátora"
 
 #. Role: all permissions
 #. object permissions - admin role
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Administrator"
 msgstr "Administrátor"
 
@@ -1297,6 +1302,10 @@ msgstr "Přijmout změny"
 msgid "Apply filter"
 msgstr "Aplikovat filtr"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Apply role"
+msgstr "Aplikovat roli"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Apply rule if all conditions are met"
@@ -1307,7 +1316,8 @@ msgstr "Uplatnit pravidlo, pokud jsou všechny podmínky splněny"
 msgid "Apply rule if any condition is met"
 msgstr "Uplatnit pravidlo, pokud je kterákoliv z podmínek splněna"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
 msgstr "Uplatnit na všechny podsložky"
 
@@ -1482,7 +1492,8 @@ msgid "Authentication details"
 msgstr "Údaje pro autentizaci"
 
 #. Role: create folder + read/write/delete all
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Author"
 msgstr "Autor"
 
@@ -1804,7 +1815,8 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/print.js
+#: apps/io.ox/core/folder/actions/rename.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/upsell.js
@@ -2080,8 +2092,9 @@ msgstr "Úvodní nastavení klienta"
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar apps/io.ox/core/about/about.js
 #: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -4432,6 +4445,10 @@ msgstr "Název složky"
 msgid "Folder options"
 msgstr "Nastavení složky"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Folder permissions"
+msgstr "Oprávnění složky"
+
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
@@ -4754,7 +4771,8 @@ msgstr "Název skupiny"
 msgid "Groups"
 msgstr "Skupiny"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Guest"
 msgstr "Host"
 
@@ -6405,7 +6423,9 @@ msgstr "Následující rok"
 msgid "Nickname"
 msgstr "Přezdívka"
 
+#. folder permissions - Is Admin? NO
 #: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
 msgid "No"
 msgstr "Ne"
 
@@ -6700,6 +6720,10 @@ msgstr "Čísla"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "OK"
+
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Object permissions"
+msgstr "Oprávnění objektu"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -7003,7 +7027,8 @@ msgid "Overdue Tasks"
 msgstr "Přetažené úkoly"
 
 #. Role: Owner (same as admin)
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Owner"
 msgstr "Vlastník"
 
@@ -8521,11 +8546,11 @@ msgstr "sobotu"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
-#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
+#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
+#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
@@ -9446,7 +9471,8 @@ msgstr "Čas začátku"
 msgid "Start tour"
 msgstr "Začít prohlídku"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Začněte psát a uživatelská jména budou automaticky vyhledávána"
@@ -10116,6 +10142,10 @@ msgstr[0] "Nahraný soubor neodpovídá požadovanému druhu souboru."
 msgstr[1] "Žádný z nahraných souborů neodpovídá požadovanému druhu souboru."
 msgstr[2] "Žádný z nahraných souborů neodpovídá požadovanému druhu souboru."
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "The user has administrative rights"
+msgstr "Uživatel má práva administrátora"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid ""
 "The widget \"%s\" was disabled as the account might have been removed or is "
@@ -10404,6 +10434,12 @@ msgstr "Toto není platná poštovní adresa"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
 msgstr "Toto není platná poštovní adresa"
+
+#. permissions dialog
+#. error message when selected user or group can not be used
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "This is not a valid user or group."
+msgstr "Toto není platný uživatel nebo skupina."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -11369,7 +11405,9 @@ msgstr "Žlutá"
 msgid "Yellow green"
 msgstr "žlutozelená"
 
-#: apps/io.ox/core/main/logout.js module:io.ox/core apps/io.ox/files/util.js
+#. folder permissions - Is Admin? YES
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
 #: module:io.ox/files
 msgid "Yes"
 msgstr "Ano"
@@ -11906,6 +11944,16 @@ msgstr "pokračovat, pokud jsou všechny podmínky splněny"
 msgid "continue if any of these conditions are met"
 msgstr "pokračovat, pokud je kterákoliv z podmínek splněna"
 
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects"
+msgstr "vytvořit objekty"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects and subfolders"
+msgstr "vytvořit objekty a podsložky"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "cyan"
 msgstr "tyrkysová"
@@ -11976,6 +12024,16 @@ msgstr "den (dny)"
 msgid "declined"
 msgstr "odmítnuté"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete all objects"
+msgstr "mazání všech objektů"
+
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete only own objects"
+msgstr "mazání vlastních objektů"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "deleted"
@@ -11989,6 +12047,16 @@ msgstr "neodpovídá podřetězci"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "eM Client"
 msgstr "eM Client"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit all objects"
+msgstr "upravovat všechny objekty"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit own objects"
+msgstr "upravovat vlastní objekty"
 
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
@@ -12205,6 +12273,21 @@ msgstr "měsíc(e)"
 msgid "no color"
 msgstr "žádná barva"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no delete permissions"
+msgstr "není oprávnění k mazání"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no edit permissions"
+msgstr "není oprávnění k úpravám"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no read permissions"
+msgstr "není oprávnění ke čtení"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "none"
 msgstr "nikdo"
@@ -12263,6 +12346,16 @@ msgstr "soukromé"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "purple"
 msgstr "purpurová"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read all objects"
+msgstr "číst všechny objekty"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read own objects"
+msgstr "číst vlastní objekty"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
@@ -12392,6 +12485,11 @@ msgstr "vCard"
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "vacation notice"
 msgstr "oznámení o nepřítomnosti"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "view the folder"
+msgstr "zobrazit složku"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -13358,9 +13456,6 @@ msgstr "vaše platforma"
 #~ msgid "Add sender to \"To\", recipients to \"Cc\""
 #~ msgstr "Přidat odesílatele ke „Komu“, adresáty k „Cc“"
 
-#~ msgid "Add user/group"
-#~ msgstr "Přidat uživatele/skupinu"
-
 #~ msgid "Added"
 #~ msgstr "Přidáno"
 
@@ -14189,9 +14284,6 @@ msgstr "vaše platforma"
 
 #~ msgid "Apply a Template (optional)"
 #~ msgstr "Použít šablonu (volitelné)"
-
-#~ msgid "Apply role"
-#~ msgstr "Aplikovat roli"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Uplatnit pravidlo, pokud je kterákoliv z podmínek splněna"
@@ -16884,9 +16976,6 @@ msgstr "vaše platforma"
 #~ msgid "Folder path"
 #~ msgstr "Cesta složky"
 
-#~ msgid "Folder permissions"
-#~ msgstr "Oprávnění složky"
-
 #~ msgid "Folder settings"
 #~ msgstr "Nastavení složky"
 
@@ -18514,9 +18603,6 @@ msgstr "vaše platforma"
 
 #~ msgid "OXMF Infostore"
 #~ msgstr "OXMF úložiště informací"
-
-#~ msgid "Object permissions"
-#~ msgstr "Oprávnění objektu"
 
 #~ msgid "Occurs %1$s times"
 #~ msgstr "%1$skrát"
@@ -21044,9 +21130,6 @@ msgstr "vaše platforma"
 #~ "Aktualizační nástroj vás uvědomí o všech aktualizacích pro Connector pro "
 #~ "Microsoft Outlook a pro nástroj Oznamovatel."
 
-#~ msgid "The user has administrative rights"
-#~ msgstr "Uživatel má práva administrátora"
-
 #~ msgid ""
 #~ "The window could not be opened. Most likely it has been blocked by a pop-"
 #~ "up or advertisement blocker. Please check your browser settings and make "
@@ -21356,9 +21439,6 @@ msgstr "vaše platforma"
 #~ msgstr ""
 #~ "Toto je aktualizace schůzky, která byla mezitím změněna. Nejlepší je tuto "
 #~ "aktualizaci ignorovat."
-
-#~ msgid "This is not a valid user or group."
-#~ msgstr "Toto není platný uživatel nebo skupina."
 
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Tato zpráva obsahuje URL publikace."
@@ -22998,12 +23078,6 @@ msgstr "vaše platforma"
 #~ msgid "continue if any of these condition is met."
 #~ msgstr "pokračovat, pokud jě některá z podmínek splněna."
 
-#~ msgid "create objects"
-#~ msgstr "vytvořit objekty"
-
-#~ msgid "create objects and subfolders"
-#~ msgstr "vytvořit objekty a podsložky"
-
 #~ msgid "created by %s"
 #~ msgstr "vytvořil(a) %s"
 
@@ -23052,26 +23126,14 @@ msgstr "vaše platforma"
 #~ msgid "default"
 #~ msgstr "výchozí"
 
-#~ msgid "delete all objects"
-#~ msgstr "mazání všech objektů"
-
 #~ msgid "delete if expired"
 #~ msgstr "smazat, pokud již doba vypršela"
-
-#~ msgid "delete only own objects"
-#~ msgstr "mazání vlastních objektů"
 
 #~ msgid "disable"
 #~ msgstr "zakázat"
 
 #~ msgid "disabled"
 #~ msgstr "zakázáno"
-
-#~ msgid "edit all objects"
-#~ msgstr "upravovat všechny objekty"
-
-#~ msgid "edit own objects"
-#~ msgstr "upravovat vlastní objekty"
 
 #, fuzzy
 #~| msgid "Edit signature"
@@ -23246,17 +23308,8 @@ msgstr "vaše platforma"
 #~ msgid "next week"
 #~ msgstr "příští týden"
 
-#~ msgid "no delete permissions"
-#~ msgstr "není oprávnění k mazání"
-
-#~ msgid "no edit permissions"
-#~ msgstr "není oprávnění k úpravám"
-
 #~ msgid "no expiry date"
 #~ msgstr "není nastavené koncové datum"
-
-#~ msgid "no read permissions"
-#~ msgstr "není oprávnění ke čtení"
 
 #~ msgid "not sent"
 #~ msgstr "neodesláno"
@@ -23287,12 +23340,6 @@ msgstr "vaše platforma"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "zpracovat následující pravidla"
-
-#~ msgid "read all objects"
-#~ msgstr "číst všechny objekty"
-
-#~ msgid "read own objects"
-#~ msgstr "číst vlastní objekty"
 
 #~ msgid "remove"
 #~ msgstr "odstranit"
@@ -23398,9 +23445,6 @@ msgstr "vaše platforma"
 
 #~ msgid "via"
 #~ msgstr "přes"
-
-#~ msgid "view the folder"
-#~ msgstr "zobrazit složku"
 
 #~ msgid "waiting"
 #~ msgstr "čekám"

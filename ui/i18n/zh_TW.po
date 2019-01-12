@@ -917,6 +917,10 @@ msgstr "新增至最愛"
 msgid "Add to portal"
 msgstr "新增至入口"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Add user/group"
+msgstr "新增使用者/群組"
+
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Add widget"
 msgstr "新增小工具"
@@ -1020,7 +1024,8 @@ msgstr "管理角色"
 
 #. Role: all permissions
 #. object permissions - admin role
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Administrator"
 msgstr "管理員"
 
@@ -1252,6 +1257,10 @@ msgstr "套用變更"
 msgid "Apply filter"
 msgstr "套用過濾器"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Apply role"
+msgstr "套用腳色"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Apply rule if all conditions are met"
@@ -1262,7 +1271,8 @@ msgstr "符合所有條件時套用規則"
 msgid "Apply rule if any condition is met"
 msgstr "若符合任何條件就套用規則"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
 msgstr "套用至所有子資料夾"
 
@@ -1435,7 +1445,8 @@ msgid "Authentication details"
 msgstr "驗證詳細資訊"
 
 #. Role: create folder + read/write/delete all
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Author"
 msgstr "作者"
 
@@ -1754,7 +1765,8 @@ msgstr "攝影機 %1$s"
 #: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/print.js
+#: apps/io.ox/core/folder/actions/rename.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/upsell.js
@@ -2028,8 +2040,9 @@ msgstr "新手上路"
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar apps/io.ox/core/about/about.js
 #: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -4342,6 +4355,10 @@ msgstr "資料夾名稱"
 msgid "Folder options"
 msgstr "資料夾選項"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Folder permissions"
+msgstr "文件夾許可權"
+
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
@@ -4659,7 +4676,8 @@ msgstr "群組名稱"
 msgid "Groups"
 msgstr "群組"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Guest"
 msgstr "訪客"
 
@@ -6300,7 +6318,9 @@ msgstr "下一年"
 msgid "Nickname"
 msgstr "別名"
 
+#. folder permissions - Is Admin? NO
 #: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
 msgid "No"
 msgstr "否"
 
@@ -6588,6 +6608,10 @@ msgstr "數字"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "確認"
+
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Object permissions"
+msgstr "物件權限"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -6887,7 +6911,8 @@ msgid "Overdue Tasks"
 msgstr "過期工作"
 
 #. Role: Owner (same as admin)
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Owner"
 msgstr "擁有者"
 
@@ -8382,11 +8407,11 @@ msgstr "星期六"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
-#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
+#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
+#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
@@ -9293,7 +9318,8 @@ msgstr "開始時間"
 msgid "Start tour"
 msgstr "開始導覽"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "輸入使用者名稱進行搜尋"
@@ -9936,6 +9962,10 @@ msgid_plural "None of the uploaded files matches the requested file type."
 msgstr[0] "上傳的檔案不符合請求的檔案類型。"
 msgstr[1] "沒有上傳的檔案符合請求的檔案類型。"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "The user has administrative rights"
+msgstr "使用者有管理員全線"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid ""
 "The widget \"%s\" was disabled as the account might have been removed or is "
@@ -10201,6 +10231,12 @@ msgstr "這是無效的電子郵件位址"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
 msgstr "這是無效的電子郵件位址"
+
+#. permissions dialog
+#. error message when selected user or group can not be used
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "This is not a valid user or group."
+msgstr "這是無效的使用者或群組。"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -11148,7 +11184,9 @@ msgstr "黃色"
 msgid "Yellow green"
 msgstr "黃綠色"
 
-#: apps/io.ox/core/main/logout.js module:io.ox/core apps/io.ox/files/util.js
+#. folder permissions - Is Admin? YES
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
 #: module:io.ox/files
 msgid "Yes"
 msgstr "是"
@@ -11668,6 +11706,16 @@ msgstr "若符合上述所有條件就繼續"
 msgid "continue if any of these conditions are met"
 msgstr "若符合上述任何條件就繼續"
 
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects"
+msgstr "建立物件"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects and subfolders"
+msgstr "建立物件與子資料夾"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "cyan"
 msgstr "青"
@@ -11738,6 +11786,16 @@ msgstr "天"
 msgid "declined"
 msgstr "已拒絕"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete all objects"
+msgstr "刪除所有物件"
+
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete only own objects"
+msgstr "僅刪除自己的物件"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "deleted"
@@ -11751,6 +11809,16 @@ msgstr "不包含一段字串"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "eM Client"
 msgstr "eM 客戶端"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit all objects"
+msgstr "編輯所有物件"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit own objects"
+msgstr "編輯自己的物件"
 
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
@@ -11966,6 +12034,21 @@ msgstr "個月"
 msgid "no color"
 msgstr "無顏色"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no delete permissions"
+msgstr "無刪除全縣"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no edit permissions"
+msgstr "無編輯權限"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no read permissions"
+msgstr "無閱讀權限"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "none"
 msgstr "無"
@@ -12024,6 +12107,16 @@ msgstr "私人"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "purple"
 msgstr "紫色"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read all objects"
+msgstr "讀取所有的物件"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read own objects"
+msgstr "讀取自己的物件"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
@@ -12151,6 +12244,11 @@ msgstr "vCard"
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "vacation notice"
 msgstr "假期通知"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "view the folder"
+msgstr "檢視文件夾"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12662,9 +12760,6 @@ msgstr "您的平台"
 #~ msgid "Add sender to \"To\", recipients to \"Cc\""
 #~ msgstr "將發件人添加至“收件人”，收件人添加至“抄送”"
 
-#~ msgid "Add user/group"
-#~ msgstr "新增使用者/群組"
-
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "正在新增訂閱，這可能需要幾秒鐘.."
 
@@ -12792,9 +12887,6 @@ msgstr "您的平台"
 
 #~ msgid "Applications"
 #~ msgstr "應用程式"
-
-#~ msgid "Apply role"
-#~ msgstr "套用腳色"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "符合任何條件時套用規則。"
@@ -14612,9 +14704,6 @@ msgstr "您的平台"
 #~ msgid "Folder names must not contain slashes"
 #~ msgstr "資料夾名稱不含斜線"
 
-#~ msgid "Folder permissions"
-#~ msgstr "文件夾許可權"
-
 #~ msgid "Folder settings"
 #~ msgstr "資料夾設定"
 
@@ -15408,9 +15497,6 @@ msgstr "您的平台"
 
 #~ msgid "Numbering On/Off"
 #~ msgstr "編號開關"
-
-#~ msgid "Object permissions"
-#~ msgstr "物件權限"
 
 #~ msgid "October"
 #~ msgstr "十月"
@@ -16621,9 +16707,6 @@ msgstr "您的平台"
 #~ "timezone (%2$s)."
 #~ msgstr "此約會的時區（%1$s）與您的預設時區（%2$s）不同。"
 
-#~ msgid "The user has administrative rights"
-#~ msgstr "使用者有管理員全線"
-
 #~ msgid "Theme colors"
 #~ msgstr "佈景主題色彩"
 
@@ -16714,9 +16797,6 @@ msgstr "您的平台"
 #~ "This folder is shared with others. It won't be available for the invited "
 #~ "guests any more."
 #~ msgstr "已與其他人分享此資料夾，被邀請的訪客將無法再使用。"
-
-#~ msgid "This is not a valid user or group."
-#~ msgstr "這是無效的使用者或群組。"
 
 #~ msgid "This mail has been sent from %1$s."
 #~ msgstr "此郵件是由 %1$s 寄送。"
@@ -17375,12 +17455,6 @@ msgstr "您的平台"
 #~ msgid "continue if any of these condition is met."
 #~ msgstr "若符合上述任一條件就繼續。"
 
-#~ msgid "create objects"
-#~ msgstr "建立物件"
-
-#~ msgid "create objects and subfolders"
-#~ msgstr "建立物件與子資料夾"
-
 #~ msgid "daily"
 #~ msgstr "每天"
 
@@ -17393,26 +17467,14 @@ msgstr "您的平台"
 #~ msgid "dd"
 #~ msgstr "日"
 
-#~ msgid "delete all objects"
-#~ msgstr "刪除所有物件"
-
 #~ msgid "delete if expired"
 #~ msgstr "過期時刪除"
-
-#~ msgid "delete only own objects"
-#~ msgstr "僅刪除自己的物件"
 
 #~ msgid "disable"
 #~ msgstr "停用"
 
 #~ msgid "disabled"
 #~ msgstr "已停用"
-
-#~ msgid "edit all objects"
-#~ msgstr "編輯所有物件"
-
-#~ msgid "edit own objects"
-#~ msgstr "編輯自己的物件"
 
 #, fuzzy
 #~| msgid "Edit signature"
@@ -17562,17 +17624,8 @@ msgstr "您的平台"
 #~ msgid "next week"
 #~ msgstr "下週"
 
-#~ msgid "no delete permissions"
-#~ msgstr "無刪除全縣"
-
-#~ msgid "no edit permissions"
-#~ msgstr "無編輯權限"
-
 #~ msgid "no expiry date"
 #~ msgstr "不過期"
-
-#~ msgid "no read permissions"
-#~ msgstr "無閱讀權限"
 
 #~ msgid "november"
 #~ msgstr "十一月"
@@ -17591,12 +17644,6 @@ msgstr "您的平台"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "處理後續規則"
-
-#~ msgid "read all objects"
-#~ msgstr "讀取所有的物件"
-
-#~ msgid "read own objects"
-#~ msgstr "讀取自己的物件"
 
 #~ msgid "remove"
 #~ msgstr "刪除"
@@ -17651,9 +17698,6 @@ msgstr "您的平台"
 
 #~ msgid "via"
 #~ msgstr "經由"
-
-#~ msgid "view the folder"
-#~ msgstr "檢視文件夾"
 
 #~ msgid "weekly"
 #~ msgstr "每週"

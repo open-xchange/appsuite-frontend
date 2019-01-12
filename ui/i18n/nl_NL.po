@@ -933,6 +933,10 @@ msgstr "Toevoegen aan favorieten"
 msgid "Add to portal"
 msgstr "Toevoegen aan het portaal"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Add user/group"
+msgstr "Gebruiker/groep toevoegen"
+
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Add widget"
 msgstr "Widget toevoegen"
@@ -1040,7 +1044,8 @@ msgstr "Beheerdersrol"
 
 #. Role: all permissions
 #. object permissions - admin role
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Administrator"
 msgstr "Beheerder"
 
@@ -1284,6 +1289,10 @@ msgstr "Wijzigingen doorvoeren"
 msgid "Apply filter"
 msgstr "Filter instellen"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Apply role"
+msgstr "Rol toewijzen"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Apply rule if all conditions are met"
@@ -1294,7 +1303,8 @@ msgstr "Pas regel toe als aan alle voorwaarden is voldaan"
 msgid "Apply rule if any condition is met"
 msgstr "Toepassen als minimaal één van de voorwaarden is gehaald"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
 msgstr "Toepassen op alle sub-mappen"
 
@@ -1469,7 +1479,8 @@ msgid "Authentication details"
 msgstr "Authenticatie details"
 
 #. Role: create folder + read/write/delete all
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Author"
 msgstr "Auteur"
 
@@ -1798,7 +1809,8 @@ msgstr "Camera %1$s"
 #: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/print.js
+#: apps/io.ox/core/folder/actions/rename.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/upsell.js
@@ -2075,8 +2087,9 @@ msgstr "Client aanmelden"
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar apps/io.ox/core/about/about.js
 #: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -4445,6 +4458,10 @@ msgstr "Mapnaam"
 msgid "Folder options"
 msgstr "Mapopties"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Folder permissions"
+msgstr "Maprechten"
+
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
@@ -4767,7 +4784,8 @@ msgstr "Groepsnaam"
 msgid "Groups"
 msgstr "Groepen"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Guest"
 msgstr "Gast"
 
@@ -6423,7 +6441,9 @@ msgstr "Volgend jaar"
 msgid "Nickname"
 msgstr "Roepnaam"
 
+#. folder permissions - Is Admin? NO
 #: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
 msgid "No"
 msgstr "Nee"
 
@@ -6722,6 +6742,10 @@ msgstr "Nummers"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "OK"
+
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Object permissions"
+msgstr "Objectrechten"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -7023,7 +7047,8 @@ msgid "Overdue Tasks"
 msgstr "Achterstallige Taken"
 
 #. Role: Owner (same as admin)
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Owner"
 msgstr "Eigenaar"
 
@@ -8556,11 +8581,11 @@ msgstr "Zaterdag"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
-#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
+#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
+#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
@@ -9477,7 +9502,8 @@ msgstr "Begintijd"
 msgid "Start tour"
 msgstr "Start rondleiding"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Begin met typen om een gebruikersnaam te zoeken"
@@ -10155,6 +10181,10 @@ msgstr[0] ""
 msgstr[1] ""
 "Geen van de geüploade bestanden komt overeen met het gevraagde bestandstype."
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "The user has administrative rights"
+msgstr "De gebruiker heeft beheerdersrechten"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid ""
 "The widget \"%s\" was disabled as the account might have been removed or is "
@@ -10455,6 +10485,12 @@ msgstr "Dit is geen geldig e-mailadres"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
 msgstr "Dit is geen geldig e-mailadres"
+
+#. permissions dialog
+#. error message when selected user or group can not be used
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "This is not a valid user or group."
+msgstr "Dit is geen geldige gebruiker of groep."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -11427,7 +11463,9 @@ msgstr "Geel"
 msgid "Yellow green"
 msgstr "Geelgroen"
 
-#: apps/io.ox/core/main/logout.js module:io.ox/core apps/io.ox/files/util.js
+#. folder permissions - Is Admin? YES
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
 #: module:io.ox/files
 msgid "Yes"
 msgstr "Ja"
@@ -11976,6 +12014,16 @@ msgstr "doorgaan als deze voorwaarden zijn gehaald"
 msgid "continue if any of these conditions are met"
 msgstr "doorgaan als áán van deze voorwaarden zijn gehaald"
 
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects"
+msgstr "objecten aanmaken"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects and subfolders"
+msgstr "submappen en objecten aanmaken"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "cyan"
 msgstr "cyaan"
@@ -12046,6 +12094,16 @@ msgstr "dag(en)"
 msgid "declined"
 msgstr "afgewezen"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete all objects"
+msgstr "verwijder alle objecten"
+
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete only own objects"
+msgstr "verwijder alleen eigen objecten"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "deleted"
@@ -12059,6 +12117,16 @@ msgstr "bevat niet de zinsnede"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "eM Client"
 msgstr "eM Client"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit all objects"
+msgstr "bewerk alle objecten"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit own objects"
+msgstr "bewerk alleen eigen objecten"
 
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
@@ -12274,6 +12342,21 @@ msgstr "maand(en)"
 msgid "no color"
 msgstr "geen kleur"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no delete permissions"
+msgstr "geen verwijderrechten"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no edit permissions"
+msgstr "geen bewerkrechten"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no read permissions"
+msgstr "geen leesrechten"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "none"
 msgstr "geen"
@@ -12332,6 +12415,16 @@ msgstr "privé"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "purple"
 msgstr "paars"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read all objects"
+msgstr "lees alle objecten"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read own objects"
+msgstr "lees alleen eigen objecten"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
@@ -12458,6 +12551,11 @@ msgstr "vCard"
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "vacation notice"
 msgstr "afwezigheidsmelding"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "view the folder"
+msgstr "toon de map"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12772,9 +12870,6 @@ msgstr "uw platform"
 #~ msgid "Add new reminder"
 #~ msgstr "Nieuwe herinnering toevoegen"
 
-#~ msgid "Add user/group"
-#~ msgstr "Gebruiker/groep toevoegen"
-
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Abonnement toevoegen. Dit kan enige seconden duren …"
 
@@ -12833,9 +12928,6 @@ msgstr "uw platform"
 
 #~ msgid "Applications"
 #~ msgstr "Applicaties"
-
-#~ msgid "Apply role"
-#~ msgstr "Rol toewijzen"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Pas regel toe als aan één voorwaarde is voldaan"
@@ -13670,9 +13762,6 @@ msgstr "uw platform"
 #~ msgid "Folder names must not contain slashes"
 #~ msgstr "Mapnamen mogen geen schuine streep bevatten"
 
-#~ msgid "Folder permissions"
-#~ msgstr "Maprechten"
-
 #~ msgid "Folder settings"
 #~ msgstr "Mapinstellingen"
 
@@ -14257,9 +14346,6 @@ msgstr "uw platform"
 
 #~ msgid "Number of messages"
 #~ msgstr "Aantal berichten"
-
-#~ msgid "Object permissions"
-#~ msgstr "Objectrechten"
 
 #~ msgid "October"
 #~ msgstr "oktober"
@@ -15302,9 +15388,6 @@ msgstr "uw platform"
 #~ "De tijdzone van deze afspraak (%1$s) is anders dan uw standaard tijdzone "
 #~ "(%2$s)."
 
-#~ msgid "The user has administrative rights"
-#~ msgstr "De gebruiker heeft beheerdersrechten"
-
 #~ msgid "There are currently no participants."
 #~ msgstr "Er zijn momenteel geen deelnemers."
 
@@ -15393,9 +15476,6 @@ msgstr "uw platform"
 #~ msgstr ""
 #~ "Deze map is gedeeld met anderen. Deze zal niet beschikbaar zijn voor de "
 #~ "uitgenodigde gasten."
-
-#~ msgid "This is not a valid user or group."
-#~ msgstr "Dit is geen geldige gebruiker of groep."
 
 #~ msgid "This mail has been sent from %1$s."
 #~ msgstr "Dit e-mailbericht is verzonden vanuit %1$s."
@@ -16042,12 +16122,6 @@ msgstr "uw platform"
 #~ msgid "continue if any of these condition is met."
 #~ msgstr "doorgaan als één van deze voorwaarden is gehaald"
 
-#~ msgid "create objects"
-#~ msgstr "objecten aanmaken"
-
-#~ msgid "create objects and subfolders"
-#~ msgstr "submappen en objecten aanmaken"
-
 #~ msgid "daily"
 #~ msgstr "dagelijks"
 
@@ -16060,26 +16134,14 @@ msgstr "uw platform"
 #~ msgid "dd"
 #~ msgstr "dd"
 
-#~ msgid "delete all objects"
-#~ msgstr "verwijder alle objecten"
-
 #~ msgid "delete if expired"
 #~ msgstr "verwijder indien verlopen"
-
-#~ msgid "delete only own objects"
-#~ msgstr "verwijder alleen eigen objecten"
 
 #~ msgid "disable"
 #~ msgstr "uitschakelen"
 
 #~ msgid "disabled"
 #~ msgstr "uitgeschakeld"
-
-#~ msgid "edit all objects"
-#~ msgstr "bewerk alle objecten"
-
-#~ msgid "edit own objects"
-#~ msgstr "bewerk alleen eigen objecten"
 
 #, fuzzy
 #~| msgid "Edit signature"
@@ -16191,17 +16253,8 @@ msgstr "uw platform"
 #~ msgid "next week"
 #~ msgstr "volgende Week"
 
-#~ msgid "no delete permissions"
-#~ msgstr "geen verwijderrechten"
-
-#~ msgid "no edit permissions"
-#~ msgstr "geen bewerkrechten"
-
 #~ msgid "no expiry date"
 #~ msgstr "Geen verloopdatum"
-
-#~ msgid "no read permissions"
-#~ msgstr "geen leesrechten"
 
 #~ msgid "open"
 #~ msgstr "openen"
@@ -16214,12 +16267,6 @@ msgstr "uw platform"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "verwerk de volgende regels"
-
-#~ msgid "read all objects"
-#~ msgstr "lees alle objecten"
-
-#~ msgid "read own objects"
-#~ msgstr "lees alleen eigen objecten"
 
 #~ msgid "remove"
 #~ msgstr "verwijderen"
@@ -16268,9 +16315,6 @@ msgstr "uw platform"
 
 #~ msgid "via"
 #~ msgstr "via"
-
-#~ msgid "view the folder"
-#~ msgstr "toon de map"
 
 #~ msgid "weekly"
 #~ msgstr "wekelijks"

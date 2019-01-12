@@ -931,6 +931,10 @@ msgstr "Lägg till i favoriter"
 msgid "Add to portal"
 msgstr "Lägg till portal"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Add user/group"
+msgstr "Lägg till användare/grupp"
+
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Add widget"
 msgstr "Lägg till komponent"
@@ -1038,7 +1042,8 @@ msgstr "Administrativ roll"
 
 #. Role: all permissions
 #. object permissions - admin role
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Administrator"
 msgstr "Administratör"
 
@@ -1276,6 +1281,10 @@ msgstr "Verkställ ändringar"
 msgid "Apply filter"
 msgstr "Verkställ filter"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Apply role"
+msgstr "Tillämpa roll"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Apply rule if all conditions are met"
@@ -1286,7 +1295,8 @@ msgstr "Tillämpa regeln om alla villkor möts"
 msgid "Apply rule if any condition is met"
 msgstr "Verkställ regel om något villkor uppfylls"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
 msgstr "Verkställ för alla underliggande mappar"
 
@@ -1461,7 +1471,8 @@ msgid "Authentication details"
 msgstr "Autentiseringsdetaljer"
 
 #. Role: create folder + read/write/delete all
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Author"
 msgstr "Författare"
 
@@ -1787,7 +1798,8 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/print.js
+#: apps/io.ox/core/folder/actions/rename.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/upsell.js
@@ -2062,8 +2074,9 @@ msgstr "On-board-klient"
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar apps/io.ox/core/about/about.js
 #: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -4408,6 +4421,10 @@ msgstr "Mappnamn"
 msgid "Folder options"
 msgstr "Mappalternativ"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Folder permissions"
+msgstr "Mapprättigheter"
+
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
@@ -4729,7 +4746,8 @@ msgstr "Gruppnamn"
 msgid "Groups"
 msgstr "Grupper"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Guest"
 msgstr "Gäst"
 
@@ -6378,7 +6396,9 @@ msgstr "Nästa år"
 msgid "Nickname"
 msgstr "Smeknamn"
 
+#. folder permissions - Is Admin? NO
 #: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
 msgid "No"
 msgstr "Nej"
 
@@ -6668,6 +6688,10 @@ msgstr "Siffror"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "Ok"
+
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Object permissions"
+msgstr "Objekträttigheter"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -6968,7 +6992,8 @@ msgid "Overdue Tasks"
 msgstr "Försenade uppgifter"
 
 #. Role: Owner (same as admin)
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Owner"
 msgstr "Ägare"
 
@@ -8485,11 +8510,11 @@ msgstr "lördag"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
-#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
+#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
+#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
@@ -9403,7 +9428,8 @@ msgstr "Starttid"
 msgid "Start tour"
 msgstr "Starta rundtur"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Börja skriva för att söka efter användarnamn"
@@ -10070,6 +10096,10 @@ msgid_plural "None of the uploaded files matches the requested file type."
 msgstr[0] "Den uppladdade filen matchar inte den begärda filtypen."
 msgstr[1] "Ingen av de uppladdade filerna matchar den begärda filtypen."
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "The user has administrative rights"
+msgstr "Användaren har administratörsrättigheter"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid ""
 "The widget \"%s\" was disabled as the account might have been removed or is "
@@ -10365,6 +10395,12 @@ msgstr "Det här inte en giltig e-postadress"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
 msgstr "Det här är inte en giltig e-postadress"
+
+#. permissions dialog
+#. error message when selected user or group can not be used
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "This is not a valid user or group."
+msgstr "Det här är inte en giltig användare eller grupp."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -11329,7 +11365,9 @@ msgstr "Gult"
 msgid "Yellow green"
 msgstr "Gulgrönt"
 
-#: apps/io.ox/core/main/logout.js module:io.ox/core apps/io.ox/files/util.js
+#. folder permissions - Is Admin? YES
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
 #: module:io.ox/files
 msgid "Yes"
 msgstr "Ja"
@@ -11870,6 +11908,16 @@ msgstr "fortsätt om alla dessa villkor uppfylls"
 msgid "continue if any of these conditions are met"
 msgstr "fortsätt om något dessa villkor uppfylls"
 
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects"
+msgstr "skapa objekt"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects and subfolders"
+msgstr "skapa objekt och underliggande mappar"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "cyan"
 msgstr "cyan"
@@ -11940,6 +11988,16 @@ msgstr "dag(ar)"
 msgid "declined"
 msgstr "nekad"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete all objects"
+msgstr "ta bort alla objekt"
+
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete only own objects"
+msgstr "ta bara bort egna objekt"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "deleted"
@@ -11953,6 +12011,16 @@ msgstr "matchar inte en delsträng"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "eM Client"
 msgstr "eM Client"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit all objects"
+msgstr "redigera alla objekt"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit own objects"
+msgstr "redigera egna objekt"
 
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
@@ -12168,6 +12236,21 @@ msgstr "månad(er)"
 msgid "no color"
 msgstr "ingen färg"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no delete permissions"
+msgstr "inga borttagningsrättigheter"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no edit permissions"
+msgstr "inga ändringsrättigheter"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no read permissions"
+msgstr "inga läsrättigheter"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "none"
 msgstr "ingen"
@@ -12226,6 +12309,16 @@ msgstr "privat"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "purple"
 msgstr "lila"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read all objects"
+msgstr "läs alla objekt"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read own objects"
+msgstr "läs egna objekt"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
@@ -12352,6 +12445,11 @@ msgstr "vCard"
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "vacation notice"
 msgstr "semesternotis"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "view the folder"
+msgstr "visa mappen"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -13056,9 +13154,6 @@ msgstr "din plattform"
 #~ msgid "Add new reminder"
 #~ msgstr "Lägg till ny påminnelse"
 
-#~ msgid "Add user/group"
-#~ msgstr "Lägg till användare/grupp"
-
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Lägger till prenumeration. Det här kan ta en liten stund ..."
 
@@ -13281,9 +13376,6 @@ msgstr "din plattform"
 
 #~ msgid "Applications"
 #~ msgstr "Program"
-
-#~ msgid "Apply role"
-#~ msgstr "Tillämpa roll"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Tillämpa regeln om något villkor möts."
@@ -14960,9 +15052,6 @@ msgstr "din plattform"
 #~ msgid "Folder of the object is missing."
 #~ msgstr "Objektets mapp saknas."
 
-#~ msgid "Folder permissions"
-#~ msgstr "Mapprättigheter"
-
 #~ msgid "Folder settings"
 #~ msgstr "Mappinställningar"
 
@@ -16336,9 +16425,6 @@ msgstr "din plattform"
 
 #~ msgid "Object not found. %s"
 #~ msgstr "Objekt hittas inte. %s"
-
-#~ msgid "Object permissions"
-#~ msgstr "Objekträttigheter"
 
 #~ msgid "October"
 #~ msgstr "Oktober"
@@ -18055,9 +18141,6 @@ msgstr "din plattform"
 #~ msgid "The types of specified data source are not supported"
 #~ msgstr "Typerna för specificerad informationsursprung stöds inte"
 
-#~ msgid "The user has administrative rights"
-#~ msgstr "Användaren har administratörsrättigheter"
-
 #~ msgid "There are currently no participants."
 #~ msgstr "Det finns för närvarande inga deltagare."
 
@@ -18357,9 +18440,6 @@ msgstr "din plattform"
 #~ "Notera: Detta returkvitto bekräftar bara att meddelandet visats på "
 #~ "mottagarens dator. Det finns ingen garanti att mottagaren har läst eller "
 #~ "förstått meddelandets innehåll."
-
-#~ msgid "This is not a valid user or group."
-#~ msgstr "Det här är inte en giltig användare eller grupp."
 
 #~ msgid "This mail has been sent from %1$s."
 #~ msgstr "Detta meddelande skickades från %1$s."
@@ -20014,12 +20094,6 @@ msgstr "din plattform"
 #~ msgid "continue if any of these condition is met."
 #~ msgstr "fortsätt om något av dessa villkor uppfylls."
 
-#~ msgid "create objects"
-#~ msgstr "skapa objekt"
-
-#~ msgid "create objects and subfolders"
-#~ msgstr "skapa objekt och underliggande mappar"
-
 #~ msgid "daily"
 #~ msgstr "varje dag"
 
@@ -20032,26 +20106,14 @@ msgstr "din plattform"
 #~ msgid "dd"
 #~ msgstr "dd"
 
-#~ msgid "delete all objects"
-#~ msgstr "ta bort alla objekt"
-
 #~ msgid "delete if expired"
 #~ msgstr "radera vid utgångsdatum"
-
-#~ msgid "delete only own objects"
-#~ msgstr "ta bara bort egna objekt"
 
 #~ msgid "disable"
 #~ msgstr "avaktivera"
 
 #~ msgid "disabled"
 #~ msgstr "avaktiverad"
-
-#~ msgid "edit all objects"
-#~ msgstr "redigera alla objekt"
-
-#~ msgid "edit own objects"
-#~ msgstr "redigera egna objekt"
 
 #, fuzzy
 #~| msgid "Edit signature"
@@ -20171,17 +20233,8 @@ msgstr "din plattform"
 #~ msgid "next week"
 #~ msgstr "nästa vecka"
 
-#~ msgid "no delete permissions"
-#~ msgstr "inga borttagningsrättigheter"
-
-#~ msgid "no edit permissions"
-#~ msgstr "inga ändringsrättigheter"
-
 #~ msgid "no expiry date"
 #~ msgstr "inget utgångsdatum"
-
-#~ msgid "no read permissions"
-#~ msgstr "inga läsrättigheter"
 
 #~ msgid "open"
 #~ msgstr "öppna"
@@ -20194,12 +20247,6 @@ msgstr "din plattform"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "behandla efterföljande regler"
-
-#~ msgid "read all objects"
-#~ msgstr "läs alla objekt"
-
-#~ msgid "read own objects"
-#~ msgstr "läs egna objekt"
 
 #~ msgid "remove"
 #~ msgstr "ta bort"
@@ -20248,9 +20295,6 @@ msgstr "din plattform"
 
 #~ msgid "via"
 #~ msgstr "via"
-
-#~ msgid "view the folder"
-#~ msgstr "visa mappen"
 
 #~ msgid "weekly"
 #~ msgstr "varje vecka"

@@ -950,6 +950,10 @@ msgstr "Adaugă la favorite"
 msgid "Add to portal"
 msgstr "Adaugă la portal"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Add user/group"
+msgstr "Adaugă utilizator/grup"
+
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Add widget"
 msgstr "Adaugă o aplicație"
@@ -1057,7 +1061,8 @@ msgstr "Rol administrativ"
 
 #. Role: all permissions
 #. object permissions - admin role
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Administrator"
 msgstr "Administrator"
 
@@ -1299,6 +1304,10 @@ msgstr "Aplică modificările"
 msgid "Apply filter"
 msgstr "Aplică filtrul"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Apply role"
+msgstr "Aplică rolul"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Apply rule if all conditions are met"
@@ -1309,7 +1318,8 @@ msgstr "Aplică regula dacă toate condițiile sunt respectate"
 msgid "Apply rule if any condition is met"
 msgstr "Aplică regula dacă una din condiții este respectată"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
 msgstr "Aplică pentru toate dosarele subordonate"
 
@@ -1485,7 +1495,8 @@ msgid "Authentication details"
 msgstr "Detalii autentificare"
 
 #. Role: create folder + read/write/delete all
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Author"
 msgstr "Autor"
 
@@ -1810,7 +1821,8 @@ msgstr "Camera %1$s"
 #: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/print.js
+#: apps/io.ox/core/folder/actions/rename.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/upsell.js
@@ -2089,8 +2101,9 @@ msgstr "Introducere pentru client"
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar apps/io.ox/core/about/about.js
 #: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -4460,6 +4473,10 @@ msgstr "Nume dosar"
 msgid "Folder options"
 msgstr "Opțiuni dosar"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Folder permissions"
+msgstr "Permisiuni dosar"
+
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
@@ -4781,7 +4798,8 @@ msgstr "Nume grup"
 msgid "Groups"
 msgstr "Grupuri"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Guest"
 msgstr "Invitat"
 
@@ -6437,7 +6455,9 @@ msgstr "Anul următor"
 msgid "Nickname"
 msgstr "Pseudonim"
 
+#. folder permissions - Is Admin? NO
 #: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
 msgid "No"
 msgstr "Nu"
 
@@ -6732,6 +6752,10 @@ msgstr "Numere"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "OK"
+
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Object permissions"
+msgstr "Permisiuni obiect"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -7034,7 +7058,8 @@ msgid "Overdue Tasks"
 msgstr "Sarcini cu scadență depășită"
 
 #. Role: Owner (same as admin)
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Owner"
 msgstr "Proprietar"
 
@@ -8558,11 +8583,11 @@ msgstr "Sâmbătă"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
-#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
+#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
+#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
@@ -9484,7 +9509,8 @@ msgstr "Ora de început"
 msgid "Start tour"
 msgstr "Începe vizita ghidată"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Începeți să tastați pentru a căuta nume de utilizatori"
@@ -10165,6 +10191,10 @@ msgstr[1] ""
 msgstr[2] ""
 "Niciunul dintre fișierele încărcate nu corespunde tipului de fișier cerut."
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "The user has administrative rights"
+msgstr "Utilizatorul are drepturi de administrare"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid ""
 "The widget \"%s\" was disabled as the account might have been removed or is "
@@ -10470,6 +10500,12 @@ msgstr "Adresa de mail nu este validă"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
 msgstr "Adresa de mail nu este validă"
+
+#. permissions dialog
+#. error message when selected user or group can not be used
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "This is not a valid user or group."
+msgstr "Acesta nu este un utilizator sau un grup valid."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -11443,7 +11479,9 @@ msgstr "Galben"
 msgid "Yellow green"
 msgstr "Verde gălbui"
 
-#: apps/io.ox/core/main/logout.js module:io.ox/core apps/io.ox/files/util.js
+#. folder permissions - Is Admin? YES
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
 #: module:io.ox/files
 msgid "Yes"
 msgstr "Da"
@@ -11990,6 +12028,16 @@ msgstr "continuă dacă toate aceste condiții sunt adevărate"
 msgid "continue if any of these conditions are met"
 msgstr "continuă dacă cel puțin una dintre aceste condiții este adevărată"
 
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects"
+msgstr "creează obiecte"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects and subfolders"
+msgstr "creează obiecte și dosare subordonate"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "cyan"
 msgstr "cyan"
@@ -12060,6 +12108,16 @@ msgstr "zi(le)"
 msgid "declined"
 msgstr "respins"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete all objects"
+msgstr "șterge toate obiectele"
+
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete only own objects"
+msgstr "șterge doar obiectele personale"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "deleted"
@@ -12073,6 +12131,16 @@ msgstr "nu se potrivește cu un subșir"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "eM Client"
 msgstr "Client eM"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit all objects"
+msgstr "editează toate obiectele"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit own objects"
+msgstr "editează obiectele personale"
 
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
@@ -12289,6 +12357,21 @@ msgstr "lună/i"
 msgid "no color"
 msgstr "nicio culoare"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no delete permissions"
+msgstr "fără permisiune de ștergere"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no edit permissions"
+msgstr "fără permisiune de editare"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no read permissions"
+msgstr "fără permisiune de citire"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "none"
 msgstr "nimeni"
@@ -12347,6 +12430,16 @@ msgstr "personal"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "purple"
 msgstr "violet"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read all objects"
+msgstr "citește toate obiectele"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read own objects"
+msgstr "citește obiectele personale"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
@@ -12472,6 +12565,11 @@ msgstr "vCard"
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "vacation notice"
 msgstr "mesaj de absență"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "view the folder"
+msgstr "vizualizează dosarul"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -13034,9 +13132,6 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Add sender to \"To\", recipients to \"Cc\""
 #~ msgstr "Adaugă expeditorul la \"Către\", destinatarii la \"Cc\""
 
-#~ msgid "Add user/group"
-#~ msgstr "Adaugă utilizator/grup"
-
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr ""
 #~ "Se adaugă abonamentul. Această operație poate să dureze câteva secunde ..."
@@ -13178,9 +13273,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Applications"
 #~ msgstr "Aplicații"
-
-#~ msgid "Apply role"
-#~ msgstr "Aplică rolul"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Aplică regula dacă oricare din condiții este respectată."
@@ -15179,9 +15271,6 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Folder path"
 #~ msgstr "Cale dosar"
 
-#~ msgid "Folder permissions"
-#~ msgstr "Permisiuni dosar"
-
 #~ msgid "Folder settings"
 #~ msgstr "Setări dosar"
 
@@ -16691,9 +16780,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Numbering On/Off"
 #~ msgstr "Numerotare activată/dezactivată"
-
-#~ msgid "Object permissions"
-#~ msgstr "Permisiuni obiect"
 
 #~ msgid "Oct"
 #~ msgstr "Oct"
@@ -18844,9 +18930,6 @@ msgstr "platforma dumneavoastră"
 #~ "Aplicația de actualizare vă va informa despre toate actualizările pentru "
 #~ "Conectorul pentru Microsoft Outlook și Notificator."
 
-#~ msgid "The user has administrative rights"
-#~ msgstr "Utilizatorul are drepturi de administrare"
-
 #~ msgid ""
 #~ "The window could not be opened. Most likely it has been blocked by a pop-"
 #~ "up or advertisement blocker. Please check your browser settings and make "
@@ -18974,9 +19057,6 @@ msgstr "platforma dumneavoastră"
 #~ msgstr ""
 #~ "Acest dosar este partajat. Nu va mai fi disponibil pentru utilizatorii "
 #~ "invitați."
-
-#~ msgid "This is not a valid user or group."
-#~ msgstr "Acesta nu este un utilizator sau un grup valid."
 
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Acest e-mail conține o legătură către o publicație."
@@ -20180,12 +20260,6 @@ msgstr "platforma dumneavoastră"
 #~ msgid "copy to clipboard"
 #~ msgstr "copiere în clipboard"
 
-#~ msgid "create objects"
-#~ msgstr "creează obiecte"
-
-#~ msgid "create objects and subfolders"
-#~ msgstr "creează obiecte și dosare subordonate"
-
 #~ msgid "created by %s"
 #~ msgstr "creat de %s"
 
@@ -20234,26 +20308,14 @@ msgstr "platforma dumneavoastră"
 #~ msgid "default"
 #~ msgstr "predefinit"
 
-#~ msgid "delete all objects"
-#~ msgstr "șterge toate obiectele"
-
 #~ msgid "delete if expired"
 #~ msgstr "șterge dacă a expirat"
-
-#~ msgid "delete only own objects"
-#~ msgstr "șterge doar obiectele personale"
 
 #~ msgid "disable"
 #~ msgstr "dezactivează"
 
 #~ msgid "disabled"
 #~ msgstr "dezactivat"
-
-#~ msgid "edit all objects"
-#~ msgstr "editează toate obiectele"
-
-#~ msgid "edit own objects"
-#~ msgstr "editează obiectele personale"
 
 #, fuzzy
 #~| msgid "Edit signature"
@@ -20425,17 +20487,8 @@ msgstr "platforma dumneavoastră"
 #~ msgid "next week"
 #~ msgstr "săptămâna următoare"
 
-#~ msgid "no delete permissions"
-#~ msgstr "fără permisiune de ștergere"
-
-#~ msgid "no edit permissions"
-#~ msgstr "fără permisiune de editare"
-
 #~ msgid "no expiry date"
 #~ msgstr "nicio dată de expirare"
-
-#~ msgid "no read permissions"
-#~ msgstr "fără permisiune de citire"
 
 #~ msgid "not sent"
 #~ msgstr "nu s-a trimis"
@@ -20466,12 +20519,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "procesează regulile ulterioare"
-
-#~ msgid "read all objects"
-#~ msgstr "citește toate obiectele"
-
-#~ msgid "read own objects"
-#~ msgstr "citește obiectele personale"
 
 #~ msgid "remove"
 #~ msgstr "elimină"
@@ -20576,9 +20623,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "via"
 #~ msgstr "prin"
-
-#~ msgid "view the folder"
-#~ msgstr "vizualizează dosarul"
 
 #~ msgid "waiting"
 #~ msgstr "în așteptare"

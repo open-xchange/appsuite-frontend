@@ -928,6 +928,10 @@ msgstr "Add to favourites"
 msgid "Add to portal"
 msgstr "Add to portal"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Add user/group"
+msgstr "Add user/group"
+
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Add widget"
 msgstr "Add widget"
@@ -1035,7 +1039,8 @@ msgstr "Administrative role"
 
 #. Role: all permissions
 #. object permissions - admin role
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Administrator"
 msgstr "Administrator"
 
@@ -1270,6 +1275,10 @@ msgstr "Apply changes"
 msgid "Apply filter"
 msgstr "Apply filter"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Apply role"
+msgstr "Apply role"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Apply rule if all conditions are met"
@@ -1280,7 +1289,8 @@ msgstr "Apply rule if all conditions are met"
 msgid "Apply rule if any condition is met"
 msgstr "Apply rule if any condition is met"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
 msgstr "Apply to all subfolders"
 
@@ -1455,7 +1465,8 @@ msgid "Authentication details"
 msgstr "Authentication details"
 
 #. Role: create folder + read/write/delete all
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Author"
 msgstr "Author"
 
@@ -1783,7 +1794,8 @@ msgstr "Camera %1$s"
 #: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/print.js
+#: apps/io.ox/core/folder/actions/rename.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/upsell.js
@@ -2057,8 +2069,9 @@ msgstr "Client onboarding"
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar apps/io.ox/core/about/about.js
 #: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
-#: apps/io.ox/core/main.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -4416,6 +4429,10 @@ msgstr "Folder name"
 msgid "Folder options"
 msgstr "Folder options"
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Folder permissions"
+msgstr "Folder permissions"
+
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
@@ -4736,7 +4753,8 @@ msgstr "Group name"
 msgid "Groups"
 msgstr "Groups"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Guest"
 msgstr "Guest"
 
@@ -6387,7 +6405,9 @@ msgstr "Next year"
 msgid "Nickname"
 msgstr "Nickname"
 
+#. folder permissions - Is Admin? NO
 #: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
 msgid "No"
 msgstr "No"
 
@@ -6677,6 +6697,10 @@ msgstr "Numbers"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "OK"
+
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "Object permissions"
+msgstr "Object permissions"
 
 #. Emoji category
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -6977,7 +7001,8 @@ msgid "Overdue Tasks"
 msgstr "Overdue Tasks"
 
 #. Role: Owner (same as admin)
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Owner"
 msgstr "Owner"
 
@@ -8497,11 +8522,11 @@ msgstr "Saturday"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
-#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
+#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
+#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
@@ -9412,7 +9437,8 @@ msgstr "Start time"
 msgid "Start tour"
 msgstr "Start tour"
 
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Start typing to search for user names"
@@ -10075,6 +10101,10 @@ msgid_plural "None of the uploaded files matches the requested file type."
 msgstr[0] "The uploaded file does not match the requested file type."
 msgstr[1] "None of the uploaded files matches the requested file type."
 
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "The user has administrative rights"
+msgstr "The user has administrative rights"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid ""
 "The widget \"%s\" was disabled as the account might have been removed or is "
@@ -10366,6 +10396,12 @@ msgstr "This is not a valid email address"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
 msgstr "This is not a valid email address"
+
+#. permissions dialog
+#. error message when selected user or group can not be used
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "This is not a valid user or group."
+msgstr "This is not a valid user or group."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -11322,7 +11358,9 @@ msgstr "Yellow"
 msgid "Yellow green"
 msgstr "Yellow green"
 
-#: apps/io.ox/core/main/logout.js module:io.ox/core apps/io.ox/files/util.js
+#. folder permissions - Is Admin? YES
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
 #: module:io.ox/files
 msgid "Yes"
 msgstr "Yes"
@@ -11860,6 +11898,16 @@ msgstr "continue if all of these conditions are met"
 msgid "continue if any of these conditions are met"
 msgstr "continue if any of these conditions are met"
 
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects"
+msgstr "create objects"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "create objects and subfolders"
+msgstr "create objects and subfolders"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "cyan"
 msgstr "cyan"
@@ -11930,6 +11978,16 @@ msgstr "day(s)"
 msgid "declined"
 msgstr "declined"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete all objects"
+msgstr "delete all objects"
+
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "delete only own objects"
+msgstr "delete only own objects"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "deleted"
@@ -11943,6 +12001,16 @@ msgstr "does not match a substring"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "eM Client"
 msgstr "eM Client"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit all objects"
+msgstr "edit all objects"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "edit own objects"
+msgstr "edit own objects"
 
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
@@ -12158,6 +12226,21 @@ msgstr "month(s)"
 msgid "no color"
 msgstr "no colour"
 
+#. object permissions - delete
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no delete permissions"
+msgstr "no delete permissions"
+
+#. object permissions - edit/modify
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no edit permissions"
+msgstr "no edit permissions"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "no read permissions"
+msgstr "no read permissions"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "none"
 msgstr "none"
@@ -12216,6 +12299,16 @@ msgstr "private"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "purple"
 msgstr "purple"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read all objects"
+msgstr "read all objects"
+
+#. object permissions - read
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "read own objects"
+msgstr "read own objects"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
@@ -12342,6 +12435,11 @@ msgstr "vCard"
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "vacation notice"
 msgstr "vacation notice"
+
+#. folder permissions
+#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+msgid "view the folder"
+msgstr "view the folder"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12664,9 +12762,6 @@ msgstr "your platform"
 #~ msgid "Add new reminder"
 #~ msgstr "Add new reminder"
 
-#~ msgid "Add user/group"
-#~ msgstr "Add user/group"
-
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Adding subscription. This may take a few seconds …"
 
@@ -12731,9 +12826,6 @@ msgstr "your platform"
 
 #~ msgid "Applications"
 #~ msgstr "Applications"
-
-#~ msgid "Apply role"
-#~ msgstr "Apply role"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Apply rule if any condition is met."
@@ -13659,9 +13751,6 @@ msgstr "your platform"
 #~ msgid "Folder names must not contain slashes"
 #~ msgstr "Folder names must not contain slashes"
 
-#~ msgid "Folder permissions"
-#~ msgstr "Folder permissions"
-
 #~ msgid "Folder settings"
 #~ msgstr "Folder settings"
 
@@ -14302,9 +14391,6 @@ msgstr "your platform"
 
 #~ msgid "Number of messages"
 #~ msgstr "Number of messages"
-
-#~ msgid "Object permissions"
-#~ msgstr "Object permissions"
 
 #~ msgid "October"
 #~ msgstr "October"
@@ -15414,9 +15500,6 @@ msgstr "your platform"
 #~ "The timezone of this appointment (%1$s) differs from your default "
 #~ "timezone (%2$s)."
 
-#~ msgid "The user has administrative rights"
-#~ msgstr "The user has administrative rights"
-
 #~ msgid "There are currently no participants."
 #~ msgstr "There are currently no participants."
 
@@ -15509,9 +15592,6 @@ msgstr "your platform"
 #~ msgstr ""
 #~ "This folder is shared with others. It will not be available for the "
 #~ "invited guests any more."
-
-#~ msgid "This is not a valid user or group."
-#~ msgstr "This is not a valid user or group."
 
 #~ msgid "This mail has been sent from %1$s."
 #~ msgstr "This e-mail has been sent from %1$s."
@@ -16184,12 +16264,6 @@ msgstr "your platform"
 #~ msgid "continue if any of these condition is met."
 #~ msgstr "continue if any of these conditions is met."
 
-#~ msgid "create objects"
-#~ msgstr "create objects"
-
-#~ msgid "create objects and subfolders"
-#~ msgstr "create objects and subfolders"
-
 #~ msgid "daily"
 #~ msgstr "daily"
 
@@ -16202,26 +16276,14 @@ msgstr "your platform"
 #~ msgid "dd"
 #~ msgstr "dd"
 
-#~ msgid "delete all objects"
-#~ msgstr "delete all objects"
-
 #~ msgid "delete if expired"
 #~ msgstr "delete if expired"
-
-#~ msgid "delete only own objects"
-#~ msgstr "delete only own objects"
 
 #~ msgid "disable"
 #~ msgstr "disable"
 
 #~ msgid "disabled"
 #~ msgstr "disabled"
-
-#~ msgid "edit all objects"
-#~ msgstr "edit all objects"
-
-#~ msgid "edit own objects"
-#~ msgstr "edit own objects"
 
 #, fuzzy
 #~| msgid "Edit signature"
@@ -16359,17 +16421,8 @@ msgstr "your platform"
 #~ msgid "next week"
 #~ msgstr "next week"
 
-#~ msgid "no delete permissions"
-#~ msgstr "no delete permissions"
-
-#~ msgid "no edit permissions"
-#~ msgstr "no edit permissions"
-
 #~ msgid "no expiry date"
 #~ msgstr "no expiry date"
-
-#~ msgid "no read permissions"
-#~ msgstr "no read permissions"
 
 #~ msgid "november"
 #~ msgstr "November"
@@ -16388,12 +16441,6 @@ msgstr "your platform"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "process subsequent rules"
-
-#~ msgid "read all objects"
-#~ msgstr "read all objects"
-
-#~ msgid "read own objects"
-#~ msgstr "read own objects"
 
 #~ msgid "remove"
 #~ msgstr "remove"
@@ -16445,9 +16492,6 @@ msgstr "your platform"
 
 #~ msgid "via"
 #~ msgstr "via"
-
-#~ msgid "view the folder"
-#~ msgstr "view the folder"
 
 #~ msgid "weekly"
 #~ msgstr "weekly"
