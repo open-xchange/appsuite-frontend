@@ -444,7 +444,8 @@ define('io.ox/calendar/month/view', [
             this.app = opt.app;
 
             this.model = new Backbone.Model({
-                date: opt.startDate || moment(this.app.props.get('date'))
+                date: opt.startDate || moment(this.app.props.get('date')),
+                currentDate: moment() // stores the current date to detect day changes and update the today label
             });
             this.initializeSubviews();
 
@@ -541,6 +542,9 @@ define('io.ox/calendar/month/view', [
                     c.expired = true;
                 });
             }
+
+            // Rerender the view when the date changes (e.g. keep appsuite open overnight)
+            if (!this.model.get('currentDate').isSame(moment(), 'day')) this.render();
 
             this.setCollection(collection);
             $.when(this.app.folder.getData(), this.app.folders.getData()).done(function (folder, folders) {
