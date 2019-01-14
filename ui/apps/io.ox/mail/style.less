@@ -40,6 +40,12 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        &.unread .drag-title {
+            width: calc(~"100% - 19px");
+        }
+        .from {
+            max-height: 16px;
+        }
     }
 }
 
@@ -705,6 +711,7 @@ html.macos, html.ios {
         }
 
         .subject {
+            height: 16px;
             overflow: hidden;
             text-overflow: ellipsis;
         }
