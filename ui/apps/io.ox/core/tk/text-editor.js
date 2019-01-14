@@ -211,6 +211,11 @@ define('io.ox/core/tk/text-editor', [
 
         function resizeEditor() {
             if (el === null) return;
+            // potential fix for textarea
+            // var isFloating = !!textarea.closest('.floating-window').length,
+            //     content = textarea.closest('.window-content'),
+            //     height = content.height() + content.offset().top - textarea.offset().top;
+            // if (isFloating) return textarea.css('minHeight', Math.max(300, height - 16 - 1));
             var toolbarHeight = (textarea.closest('.io-ox-mail-compose-window').hasClass('header-top') ? 0 : $('[data-extension-id="header"]').parent().outerHeight());
             textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - toolbarHeight)));
         }
