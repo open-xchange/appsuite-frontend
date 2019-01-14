@@ -12,7 +12,6 @@
     "test": "grunt copy:specs karma:continuous"
   },
   "optionalDependencies": {
-    "@open-xchange/shared-grunt-config": "^0.15.0-pre4",
     "assemble-less": "0.7.0",
     "eslint": "5.12.0",
     "eslint-config-open-xchange-appsuite": "^0.4.0",
@@ -25,7 +24,8 @@
     "grunt-contrib-uglify": "3.0.1",
     "grunt-eslint": "21.0.0",
     "grunt-newer": "1.3.0",
-    "grunt-require-gettext": "^0.8.1"
+    "grunt-require-gettext": "^0.8.1",
+    "open-xchange-shared-grunt-config": "^0.15.0-pre3"
   },
   "devDependencies": {
     "@open-xchange/appserver": "^0.8.0-pre1",
