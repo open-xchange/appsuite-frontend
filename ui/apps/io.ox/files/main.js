@@ -958,7 +958,7 @@ define('io.ox/files/main', [
          */
         'requires-reload': function (app) {
             // listen to events that affect the filename, description add files, or remove files
-            api.on('rename description add:version remove:version change:version', _.debounce(function () {
+            api.on('rename description add:version remove:version change:version change:file', _.debounce(function () {
                 app.listView.reload();
             }, 100));
             // bug 53498
@@ -966,7 +966,7 @@ define('io.ox/files/main', [
                 app.listView.selection.clear();
                 app.listView.reload();
             }, 100));
-            api.on('refresh:listviews change:file', _.debounce(function () {
+            api.on('refresh:listviews', _.debounce(function () {
                 ox.trigger('refresh^');
             }, 100));
             folderAPI.on('rename', _.debounce(function (id, data) {
