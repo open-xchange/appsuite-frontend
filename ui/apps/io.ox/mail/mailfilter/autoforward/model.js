@@ -15,8 +15,9 @@
 
 define('io.ox/mail/mailfilter/autoforward/model', [
     'io.ox/core/api/mailfilter',
-    'io.ox/core/api/user'
-], function (api, userAPI) {
+    'io.ox/core/api/user',
+    'gettext!io.ox/mail'
+], function (api, userAPI, gt) {
 
     'use strict';
 
@@ -75,7 +76,7 @@ define('io.ox/mail/mailfilter/autoforward/model', [
                 active: !!attr.active,
                 flags: ['autoforward'],
                 position: attr.position,
-                rulename: 'autoforward',
+                rulename: gt('autoforward'),
                 test: { id: 'true' }
             };
 

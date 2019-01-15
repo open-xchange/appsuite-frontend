@@ -4,15 +4,15 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-06-18 08:41+0000\n"
-"Last-Translator: Jacob Sparre Andersen <jacob@workshop-chapina.com>\n"
+"PO-Revision-Date: 2019-01-09 12:18+0100\n"
+"Last-Translator: Nicky Thomassen <nicky@nt-data.dk>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -23,6 +23,26 @@ msgstr "Dialogen indeholder ugyldige data"
 #: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main/offline.js
 msgid "Server unreachable"
 msgstr "Kan ikke tilgå server"
+
+#. Used in a selectbox when the reminder for an appointment is before the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "before start"
+msgstr "før start"
+
+#. Used in a selectbox when the reminder for an appointment is after the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "after start"
+msgstr "efter start"
+
+#. Used in a selectbox when the reminder for an appointment is before the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "before end"
+msgstr "før afslutning"
+
+#. Used in a selectbox when the reminder for an appointment is after the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "after end"
+msgstr "efter afslutning"
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
@@ -669,11 +689,12 @@ msgid "Ok"
 msgstr "OK"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
-#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
-#: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
-#: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar apps/io.ox/core/about/about.js
+#: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -2516,6 +2537,7 @@ msgstr[1] "%d dage"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d minute"
 msgid_plural "%1$d minutes"
 msgstr[0] "%1$d minut"
@@ -2524,6 +2546,7 @@ msgstr[1] "%1$d minutter"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d hour"
 msgid_plural "%1$d hours"
 msgstr[0] "%1$d time"
@@ -3646,6 +3669,16 @@ msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
+#. '%1$s contact's display name
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "%1$s could not be added as the contact has no valid email field."
+msgstr "%1$s kunne ikke tilføjes, da kontaken ikke har et gyldigt e-mail-felt."
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "Some contacts could not be added as they have no valid email field."
+msgstr ""
+"Nogle kontakter kunne ikke tilføjes da de ikke har et gyldigt e-mail-felt."
+
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
@@ -4588,7 +4621,9 @@ msgstr "%1$d i alt"
 msgid "Unread: %1$d"
 msgstr "Ulæst: %1$d"
 
+#. %1$d number of unread mails
 #: apps/io.ox/core/folder/node.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "%1$d unread"
 msgstr "%1$d ulæste"
 
@@ -5340,12 +5375,24 @@ msgstr ""
 "eller logger ud og ind igen, for at træde i kraft."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
+msgstr ""
+"Visse indstillinger (sprog, tidszone, tema) kræver at du logger ud og ind "
+"igen, for at træde i kraft."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Default Theme"
 msgstr "Standard tema"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Unicolor"
 msgstr "Enkeltfarvet"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+msgid "Default"
+msgstr "Standard"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Multicolor"
@@ -5398,8 +5445,16 @@ msgstr ""
 "træde i kraft."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "The setting requires a relogin to take effect."
+msgstr "Denne indstilling kræver at der logges ind igen."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
 msgstr "Genindlæs side"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Relogin"
+msgstr "Login igen"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -8539,6 +8594,10 @@ msgstr "Fejl: Kunne ikke indlæse af beskeder"
 msgid "Auto forwarding is active"
 msgstr "Automatisk vidersending er aktiv"
 
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr "Automatisk videresendelse"
+
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 #: apps/io.ox/settings/util.js module:io.ox/core
@@ -9187,6 +9246,10 @@ msgid "Your vacation notice is active"
 msgstr "Dit feriesvar er aktivt"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
+msgid "vacation notice"
+msgstr "feriesvar"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "The time frame is in the past."
 msgstr "Tidsrummet er i fortiden"
 
@@ -9218,6 +9281,10 @@ msgstr "Slut"
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Message"
 msgstr "Besked"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+msgid "Show advanced options"
+msgstr "Vis avancerede indstillinger"
 
 #. Context: Vacation notices
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -10116,10 +10183,6 @@ msgstr "Portalindstillinger"
 msgid "Add widget"
 msgstr "Tilføj widget"
 
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-msgid "Default"
-msgstr "Standard"
-
 #. %1$s is the title of the item, which should be colored
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Color %1$s"
@@ -10454,6 +10517,10 @@ msgstr "DAVdroid"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "CalDav/CardDav"
 msgstr "CalDav/CardDav"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "WebDAV"
+msgstr "WebDAV"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Exchange Active Sync"
@@ -12187,650 +12254,242 @@ msgstr "Invitér til %s"
 msgid "Add on %s"
 msgstr "Tilføj på %s"
 
-#~ msgid "Empty table cell"
-#~ msgstr "Tomt tabelfelt"
+#~ msgid "Send mail %1$s before start."
+#~ msgstr "Send e-mail %1$s før start."
 
-#~ msgid "Encrypt"
-#~ msgstr "Kryptér"
+#~ msgid "Send mail %1$s after start."
+#~ msgstr "Send e-mail %1$s efter start."
 
-#~ msgid "You have to enter a username and password to subscribe."
-#~ msgstr "Du skal indtaste et brugernavn og en adgangskode for at abonnere."
+#~ msgid "Send mail %1$s before end."
+#~ msgstr "Send e-mail %1$s før afslutning."
 
-#~ msgid "All future messages from %1$s will be moved to the selected folder."
-#~ msgid_plural ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
-#~ msgstr[0] ""
-#~ "Alle fremtidige beskeder fra %1$s vil blive flyttet til den valgte mappe."
-#~ msgstr[1] ""
-#~ "Alle fremtidige beskeder fra afsenderne af de valgte beskeder vil blive "
-#~ "flyttet til den valgte mappe."
+#~ msgid "Send mail %1$s after end."
+#~ msgstr "Send e-mail %1$s efter afslutning."
 
-#~ msgid "Show Links"
-#~ msgstr "Vis URL'er"
+#~ msgid "Send mail at %1$s."
+#~ msgstr "Send e-mail ved %1$s."
 
-#~ msgid "Add attachment"
-#~ msgstr "Vedhæft fil"
+#~ msgid "Send mail at start."
+#~ msgstr "Send e-mail ved begyndelse."
 
-#~ msgid "Scheduling"
-#~ msgstr "Planlægning"
+#~ msgid "Send mail at end."
+#~ msgstr "Send e-mail ved afslutning."
 
-#~ msgctxt "app"
-#~ msgid "Conversations"
-#~ msgstr "Samtaler"
+#~ msgid "Reminder %1$d"
+#~ msgstr "Påmindelse %1$d"
 
-#~ msgctxt "app"
-#~ msgid "Settings"
-#~ msgstr "Indstillinger"
+#~ msgid "type"
+#~ msgstr "type"
 
-#~ msgctxt "app"
-#~ msgid "Documents"
-#~ msgstr "Dokumenter"
+#~ msgid "timeframe"
+#~ msgstr "tidsrum"
 
-#~ msgid "iCal-feed has been imported successfully"
-#~ msgstr "ICal-kilde er blevet importeret"
+#~ msgid "timeframe relation"
+#~ msgstr "horisont for tidsrum"
 
-#~ msgid "Change color"
-#~ msgstr "Ændr farve"
+#~ msgid "Remove reminder"
+#~ msgstr "Fjern påmindelse"
 
-#~ msgid "Please note that distribution lists cannot contain ressources."
+#~ msgid "Minimized windows"
+#~ msgstr "Minimeret vinduer"
+
+#~ msgid "Change reminder"
+#~ msgstr "Ændr påmindelse"
+
+#~ msgid "Change reminders"
+#~ msgstr "Ændr påmindelser"
+
+#~ msgid "Appointments in public calendars"
+#~ msgstr "Aftaler i offentlige kalendere"
+
+#~ msgid ""
+#~ "The selected calendar \"%1$s\" is public. Do you really want to create an "
+#~ "appointment in this calendar?"
 #~ msgstr ""
-#~ "Bemærk venligst at distributionslister ikke kan indeholde ressourcer."
+#~ "Den valgte kalender \"%1$s\" er offentlig. Er du sikker på, at du vil "
+#~ "lave aftalen i denne kalender?"
 
-#~ msgid "Never."
-#~ msgstr "Aldrig."
+#~ msgid "Create in public calendar"
+#~ msgstr "Lav i offentlig kalender"
 
-#~ msgid "Town"
-#~ msgstr "By"
+#~ msgid "Add a message to the notification email for the other participants."
+#~ msgstr "Tilføj en besked til e-mail'en som de andre deltagere modtagere."
 
-#~ msgid "iCal-Feed"
-#~ msgstr "iCal-kilde"
+#~ msgid "Your recurrence rule does not fit to your start date."
+#~ msgstr "Din regl om gentagelser passer ikke overens med din start-dato."
+
+#~ msgid "Your recurrence rule was changed automatically."
+#~ msgstr "Din regl om gentagelser blev automatisk ændret."
+
+#~ msgid "User defined color"
+#~ msgstr "Brugerdefineret farve"
 
 #~ msgid ""
-#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
-#~ "for example."
+#~ "You are using a shared calendar. The calendar owner was added as "
+#~ "organizer."
 #~ msgstr ""
-#~ "Ignorér eksisterende aftaler.  Er for eksempel praktisk når du vil "
-#~ "importere helligdagskalendere."
-
-#~ msgid "Remind me again %1$s"
-#~ msgstr "Påmind mig igen %1$s"
-
-#~ msgid "Sharing link created for file \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "Har oprettet fildelings-URL for »%1$d«"
-#~ msgstr[1] "Har oprettet fildelings-URL for %1$d elementer"
-
-#~ msgid "Sharing link created for folder \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "Har oprettet fildelings-URL for mappen »%1$d«"
-#~ msgstr[1] "Har oprettet fildelings-URL for %1$d elementer"
-
-#~ msgid "Internal & external users"
-#~ msgstr "Interne og eksterne brugere"
-
-#~ msgid "Quick reply"
-#~ msgstr "Hurtigt svar"
-
-#~ msgid "Synchronize with Outlook"
-#~ msgstr "Synkronisér med Outlook"
+#~ "Du bruger en delt kaldender. Ejeren af kaldeneren blev tilføjeret som "
+#~ "arrangøren."
 
 #~ msgid ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
+#~ "You are no longer using a shared calendar. You were added as organizer."
 #~ msgstr ""
-#~ "Alle fremtidige beskeder fra afsenderne af de valgte e-mails vil blive "
-#~ "flyttet til den valgte mappe."
+#~ "Du bruger ikke længere en delt kaldender. Du blev tilføjet som arrangøren."
 
-#~ msgid "never"
-#~ msgstr "aldrig"
+#~ msgid "Visibility Help"
+#~ msgstr "Hjælp til synlighed"
 
-#~ msgid "Use Password"
-#~ msgstr "Brug adgangskode"
+#~ msgid "Use calendar color"
+#~ msgstr "Brug kalenderens farve"
 
-#~ msgid "when the receivers have finished downloading the files"
-#~ msgstr "når modtagerne er færdige med at hente filerne"
+#~ msgid "none"
+#~ msgstr "ingen"
 
-#~ msgid "when the link is expired"
-#~ msgstr "når URL'en udløber"
+#~ msgid "Previous Month"
+#~ msgstr "Sidste måned"
 
-#~ msgid "when the receivers have accessed the files"
-#~ msgstr "når modtagerne har tilgået filerne"
-
-#~ msgid "%1$s Options"
-#~ msgstr "%1$s valg"
-
-#~ msgid "Account is being created"
-#~ msgstr "Konto bliver oprettet"
+#~ msgid "Next Month"
+#~ msgstr "Næste måned"
 
 #~ msgid ""
-#~ "This might be a phishing email because we could not verify that it is "
-#~ "really from %1$s."
+#~ "This appointment is an exception. Changing the exception does not affect "
+#~ "the series."
 #~ msgstr ""
-#~ "Dette kan være en phishing-mail.  Vi kunne ikke verificere at beskeden "
-#~ "virkelig er fra %1$s."
+#~ "Denne aftale er en undtagelse. At ændre undtagelsen ændrer ikke serien."
 
-#~ msgid "in"
-#~ msgstr "i"
+#~ msgid "%s %s, create all-day appointment"
+#~ msgstr "%s %s, lav en heldags-aftale"
 
-#~ msgid "Exchange ActiveSync"
-#~ msgstr "Exchange ActiveSync"
+#~ msgid "Apply filter"
+#~ msgstr "Brug filter"
 
-#~ msgid "Dangerous emails only"
-#~ msgstr "Kun farlige beskeder"
+#~ msgid "Starting letter index"
+#~ msgstr "Starter indeks"
 
-#~ msgid "Dangerous and trusted emails"
-#~ msgstr "Farlige og betroede beskeder"
+#~ msgid "Contact list. Select a contact to view details."
+#~ msgstr "kontaktliste. Vælg en kontakt for at se detaljerne."
 
-#~ msgid "Dangerous, trusted and valid emails"
-#~ msgstr "Farlige, betroede og gyldige beskeder"
+#~ msgid "Language:"
+#~ msgstr "Sprog:"
 
-#~ msgid "Add new reminder"
-#~ msgstr "Tilføj ny påmindelse"
+#~ msgid "Regional settings"
+#~ msgstr "Regionale indstillinger"
 
-#~ msgid "Authentication failed. Please fill in login and password."
+#~ msgid "12 hours"
+#~ msgstr "12 timer"
+
+#~ msgid "24 hours"
+#~ msgstr "24 timer"
+
+#~ msgid "Sunday"
+#~ msgstr "Søndag"
+
+#~ msgid "Monday"
+#~ msgstr "Mandag"
+
+#~ msgid "Week that contains January 1st"
+#~ msgstr "Uge som har januar d. 1."
+
+#~ msgid "Week that contains the first Thursday"
+#~ msgstr "Uge som har den første torsdag"
+
+#~ msgid "Numbers"
+#~ msgstr "Numre"
+
+#~ msgid "First day of week"
+#~ msgstr "Første dag i ugen"
+
+#~ msgid "First week of year"
+#~ msgstr "første uge på året"
+
+#~ msgid "Don't remind me again"
+#~ msgstr "Påmind mig ikke igen"
+
+#~ msgid "Unable to upload file"
+#~ msgid_plural "Unable to upload files"
+#~ msgstr[0] "Kan ikke overføre fil"
+#~ msgstr[1] "Kan ikke overføre filer"
+
+#~ msgid "We encountered an issue for your upload"
+#~ msgid_plural "We encountered some issues for your upload"
+#~ msgstr[0] "Vi stødte ind i et problem med din overførelse"
+#~ msgstr[1] "Vi stødte ind i nogle problemer med din overførelse"
+
+#~ msgid "Slideshow"
+#~ msgstr "Diasshow"
+
+#~ msgid "Run slideshow"
+#~ msgstr "Start diasshow"
+
+#~ msgid "Stop slideshow"
+#~ msgstr "Stop diasshow"
+
+#~ msgid "Your preview is being generated."
+#~ msgstr "Din forhåndsvisning er ved at blive lavet."
+
+#~ msgid ""
+#~ "\n"
+#~ " Alternatively you can download the file."
 #~ msgstr ""
-#~ "Godkendelse mislykkedes.  Udfyld venligst brugernavn og adgangskode."
+#~ "\n"
+#~ "Alternativt kan du hente filen."
 
-#~ msgid "Public"
-#~ msgstr "Offentlig"
+#~ msgid "Account already exists"
+#~ msgstr "Kontoen findes allerede"
 
-#~ msgid "The appointment is visible for all users in shared folders."
-#~ msgstr "Aftalen er synlig for alle brugere i delte mapper."
+#~ msgid "Image size:"
+#~ msgstr "Størrelse på billede:"
 
-#~ msgid ""
-#~ "In shared folders, the appointment is displayed as a simple time slot for "
-#~ "non-attending users."
-#~ msgstr ""
-#~ "I delte mapper bliver aftalen vist som et simpelt tidsrum for ikke-"
-#~ "deltagende brugere."
+#~ msgid "Original"
+#~ msgstr "Original"
 
-#~ msgid ""
-#~ "The appointment is not visible to non-attending users in shared folders "
-#~ "at all. The appointment is not considered for conflicts and does not "
-#~ "appear in the scheduling view."
-#~ msgstr ""
-#~ "Aftalen er overhovedet ikke synlig for ikke-deltagende brugere i delta "
-#~ "mapper.  Aftalen bliver ikke taget med, når der undersøges for "
-#~ "planlægningskonflikter, og optræder ikke i planlægningsvisningen."
+#~ msgid "Small"
+#~ msgstr "Lille"
 
-#~ msgid "Notify all participants by email."
-#~ msgstr "Underret alle deltagere pr. e-mail."
+#~ msgid "Large"
+#~ msgstr "Stor"
 
-#~ msgid "Birthday"
-#~ msgstr "Fødselsdag"
+#~ msgid "Image size"
+#~ msgstr "Størrelse på billede"
 
-#~ msgid "Color scheme"
-#~ msgstr "Farveskema"
+#~ msgid "Small (%1$s px)"
+#~ msgstr "Lille (%1$s px)"
 
-#~ msgid "Custom colors"
-#~ msgstr "Tilpassede farve"
+#~ msgid "Medium (%1$s px)"
+#~ msgstr "Medium (%1$s px)"
 
-#~ msgid "Classic colors"
-#~ msgstr "Klassiske farver"
+#~ msgid "Large (%1$s px)"
+#~ msgstr "Stor (%1$s px)"
 
-#~ msgid "Dark colors"
-#~ msgstr "Mørke farver"
+#~ msgid "Mail size:"
+#~ msgstr "Størrelse på e-mail:"
 
-#~ msgid "Application Toolbar"
-#~ msgstr "Programværktøjslinjen"
+#~ msgid "Delete files after expiration"
+#~ msgstr "Slet filer når de udløber"
 
-#~ msgid "Folder type"
-#~ msgstr "Mappetype"
+#~ msgid "Is bigger than (Size: B/KB/MB/GB)"
+#~ msgstr "Er større end (størrelse: B/KB/MB/GB)"
 
-#~ msgid "Number of messages"
-#~ msgstr "Antal beskeder"
+#~ msgid "Is smaller than (Size: B/KB/MB/GB)"
+#~ msgstr "Er mindre end (størrelse: B/KB/MB/GB)"
 
-#~ msgid "Number of items"
-#~ msgstr "Antal elementer"
+#~ msgid "String"
+#~ msgstr "Streng"
 
-#~ msgid "List of public calendars and events"
-#~ msgstr "Liste med offentlige kalendre og begivenheder"
+#~ msgid "Source"
+#~ msgstr "Kilde"
 
-#~ msgid ""
-#~ "Ignore existing events. Helpful to import public holiday calendars, for "
-#~ "example."
-#~ msgstr ""
-#~ "Ignorér eksisterende begivenheder. For eksempel praktisk når man "
-#~ "importerer helligdagskalendre."
+#~ msgid "Always trust mails from the following senders"
+#~ msgstr "Stol altid på e-mails fra de følgende afsendere"
 
-#~ msgid "Quick launch 1"
-#~ msgstr "Hurtigstart-1"
+#~ msgid "Comma-separated list e.g. \"example.org, alice@example.com\""
+#~ msgstr "kommasepareret liste, fx \"example.org, alice@example.com\""
 
-#~ msgid "Quick launch 2"
-#~ msgstr "Hurtigstart-2"
+#~ msgid "Participant not found"
+#~ msgstr "Deltagereren blev ikke fundet"
 
-#~ msgid "Quick launch 3"
-#~ msgstr "Hurtigstart-3"
-
-#~ msgid ""
-#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-#~ msgid_plural ""
-#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
-#~ msgstr[0] "Filen kan ikke overføres, da den overskrider kvoten på %1$s"
-#~ msgstr[1] "Filerne kan ikke overføres, da de overskrider kvoten på %1$s"
-
-#~ msgid "This message is from a trusted sender."
-#~ msgstr "Denne besked er fra en betroet afsender."
-
-#~ msgid ""
-#~ "This might be a phishing mail because we could not verify that this email "
-#~ "is really from %1$s."
-#~ msgstr ""
-#~ "Dette kan være en phishing-mail.  Vi kunne ikke verificere at beskeden "
-#~ "virkelig er fra %1$s."
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Denne besked er sendt fra %1$s."
-
-#~ msgid "We could not verify that this email is really from %1$s."
-#~ msgstr "Vi kunne ikke verificere at beskeden virkelig er fra %1$s."
-
-#~ msgid "no expiry date"
-#~ msgstr "ingen udløbsdato"
-
-#~ msgid "Expiration: %1$d"
-#~ msgstr "Udløbstid: %1$d"
-
-#~ msgid "Has Attachment"
-#~ msgstr "Har vedhæftning"
-
-#~ msgid "Show message authenticity"
-#~ msgstr "Vis beskedægthed"
-
-#~ msgid "Dangerous only"
-#~ msgstr "Kun farlig"
-
-#~ msgid "Dangerous and trusted"
-#~ msgstr "Farlig og betroet"
-
-#~ msgid "Acknowledge all reminders"
-#~ msgstr "Anerkend alle påmindelser"
-
-#~ msgid "%1$d unread mails"
-#~ msgstr "%1$d ulæste e-mails"
-
-#~ msgctxt "window title"
-#~ msgid "%1$s %2$s"
-#~ msgstr "%1$s %2$s"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s for %2$s"
-#~ msgstr "%1$s af %2$s"
-
-#, fuzzy
-#~| msgid "%s client for Android"
-#~ msgid "%1$s for Android"
-#~ msgstr "%s klient for Android"
-
-#, fuzzy
-#~| msgid "%s client for Mac OS"
-#~ msgid "%1$s for MacOS"
-#~ msgstr "%s klient for Mac OS"
-
-#, fuzzy
-#~| msgid "%s client for Windows"
-#~ msgid "%1$s for Windows"
-#~ msgstr "%s klient for Windows"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s for iOS"
-#~ msgstr "%1$s af %2$s"
-
-#~ msgid "%1$s is a new contact"
-#~ msgstr "%1$s er en ny kontakt"
-
-#~ msgid "%1$s is now connected with %2$s"
-#~ msgstr "%1$s er nu forbundet med %2$s"
-
-#~ msgid "%d minute"
-#~ msgid_plural "%d minutes"
-#~ msgstr[0] "%d minut"
-#~ msgstr[1] "%d minutter"
-
-#~ msgid "%s client for Windows (Installation via the OX Updater)"
-#~ msgstr "%s klient for Windows (installation via OX Updater)"
-
-#~ msgid "(current app)"
-#~ msgstr "(aktuel app)"
-
-#~ msgid "Absent"
-#~ msgstr "Fraværende"
-
-#~ msgid "All my appointments"
-#~ msgstr "Alle mine aftaler"
-
-#~ msgid "Apps"
-#~ msgstr "Apps"
-
-#~ msgid "Back to appointment"
-#~ msgstr "Tilbage til aftale"
-
-#~ msgid ""
-#~ "By changing the date of this appointment you are creating an appointment "
-#~ "exception to the series."
-#~ msgstr ""
-#~ "Ved at ændre denne aftales dato, laver du en undtagelse til aftaleserien."
-
-#~ msgid "Change view"
-#~ msgstr "Skift visning"
-
-#, fuzzy
-#~| msgid "Share %1$s \"%2$s\""
-#~ msgid "Chrome %1$s on %2$s"
-#~ msgstr "Del %1$s »%2$s«"
-
-#, fuzzy
-#~| msgid "close for %1$s"
-#~ msgid "Close for %1$s"
-#~ msgstr "luk for %1$s"
-
-#~ msgid "Connector for Microsoft Outlook®"
-#~ msgstr "Forbindelse til Microsoft Outlook®"
-
-#~ msgid ""
-#~ "Convert the entered start and end dates to match the modified timezones"
-#~ msgstr ""
-#~ "Ændr de indtastede start- og slutdatoer så de passer til de ændrede "
-#~ "tidszoner"
-
-#~ msgid "Couldn't load appointment data."
-#~ msgstr "Kunne ikke indlæse aftalens data."
-
-#~ msgid "Couldn't load your contact data."
-#~ msgstr "Dine kontaktdata kunne ikke indlæses."
-
-#~ msgid "Create exception"
-#~ msgstr "Opret undtagelse"
-
-#, fuzzy
-#~| msgid "Currently refreshing"
-#~ msgid "Current session"
-#~ msgstr "I gang med at opdatere"
-
-#~ msgid ""
-#~ "Did you know that you can take OX App Suite with you? Just click this "
-#~ "icon and choose 'Connect your device' from the menu."
-#~ msgstr ""
-#~ "Vidste du at du kan tage OX App Suite med dig?  Klik bare på dette ikon "
-#~ "og vælg »Forbind din enhed« fra menuen."
-
-#~ msgid "Display emoticons as graphics in text emails"
-#~ msgstr "Vis smilelys som grafik i tekst e-mails"
-
-#, fuzzy
-#~| msgid "Do you really want to delete this account?"
-#~ msgid ""
-#~ "Do you really want to terminate all active sessions except the current "
-#~ "one?"
-#~ msgstr "Vil du virkelig slette denne konto?"
-
-#, fuzzy
-#~| msgctxt "One file only"
-#~| msgid "Do you really want to delete this version?"
-#~ msgid "Do you really want to terminate that session?"
-#~ msgstr "Vil du virkelig slette denne udgave?"
-
-#~ msgid ""
-#~ "Do you want to delete the whole series or just one appointment within the "
-#~ "series?"
-#~ msgstr "Vil du slette hele serien, eller kun én aftale i serien?"
-
-#~ msgid ""
-#~ "Do you want to edit the whole series or just one appointment within the "
-#~ "series?"
-#~ msgstr "Vil du redigere hele serien, eller kun én aftale i serien?"
-
-#~ msgid "Doubleclick in this row for whole day appointment"
-#~ msgstr "Dobbeltklik i denne række for en heldagsaftale"
-
-#~ msgid "Download %s via the OX Updater"
-#~ msgstr "Hent %s via OX Updater"
-
-#~ msgid "Download installation file (for Windows)"
-#~ msgstr "Hent installationsfil (til Windows)"
-
-#, fuzzy
-#~| msgid "Due on %1$s"
-#~ msgid "Edge on %1$s"
-#~ msgstr "Forfalder d. %1$s"
-
-#~ msgid "Expand timeframe by one month"
-#~ msgstr "Udvid tidsramme med en måned"
-
-#~ msgid "External guests"
-#~ msgstr "Eksterne gæster"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "Firefox %1$s on %2$s"
-#~ msgstr "%1$s af %2$s"
-
-#~ msgid "Header exists"
-#~ msgstr "Hoved findes"
-
-#~ msgid "High contrast theme"
-#~ msgstr "Tema med høj kontrast"
-
-#~ msgid "How does this work?"
-#~ msgstr "Hvordan virker dette?"
-
-#, fuzzy
-#~| msgid "Added %1$s."
-#~ msgid "IP Address: %1$s"
-#~ msgstr "Tilføjede %1$s."
-
-#~ msgid ""
-#~ "If you select different timezones, the appointment's start and end dates "
-#~ "are saved in the timezone of the appointment's start date. A different "
-#~ "end date timezone only allows a convenient conversion."
-#~ msgstr ""
-#~ "Hvis du vælger forskellige tidszoner, vil aftalens start- og slutdato "
-#~ "blive gemt i tidszonen for startdatoen.  Forskellige tidszoner er kun en "
-#~ "bekvem konvertering."
-
-#~ msgid ""
-#~ "If you spot a free time, just select this area. To do this, move the "
-#~ "cursor to the start time, hold the mouse button, and <b>drag the mouse</"
-#~ "b> to the end time."
-#~ msgstr ""
-#~ "Hvis du ser en ledig tid, så bare marker dette område. For at gøre det "
-#~ "flyttes musen til starttiden, museknappen holdes nede, og <b>musen "
-#~ "trækkes</b> til sluttiden."
-
-#~ msgid ""
-#~ "Informs about the current status of Emails and appointments without "
-#~ "having to display the user interface or another Windows® client."
-#~ msgstr ""
-#~ "Oplyser om den aktuelle status for e-mails og aftaler uden at skulle vise "
-#~ "brugergrænsefladen eller en anden Windows®-klient."
-
-#~ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
-#~ msgstr "Starter drop-ned liste. Tryk [enter] for at gå til hop-ned."
-
-#~ msgid "Leave empty if you have none"
-#~ msgstr "Efterlad tom, hvis du ikke har nogen"
-
-#~ msgid "LinkedIn"
-#~ msgstr "LinkedIn"
-
-#~ msgid "LinkedIn Network Updates"
-#~ msgstr "LinkedIn netværksopdateringer"
-
-#~ msgid "LinkedIn reported an error:"
-#~ msgstr "LinkedIn gav en fejl:"
-
-#~ msgid "Manage permission now"
-#~ msgstr "Håndtér tilladelse nu"
-
-#~ msgid "Notifier"
-#~ msgstr "Underretter"
-
-#~ msgid "Open in browser"
-#~ msgstr "Åbn i browser"
-
-#~ msgid "Open in browser tab"
-#~ msgstr "Åbn i browserfaneblad"
-
-#~ msgid "Open on LinkedIn"
-#~ msgstr "Åbn på LinkedIn"
-
-#, fuzzy
-#~| msgid "Other Address"
-#~ msgid "Other clients"
-#~ msgstr "Anden adresse"
-
-#~ msgid "Press [enter] to jump to the linkedin stream."
-#~ msgstr "Tast [enter] for at gå til LinkedIn-strømmen."
-
-#~ msgid "Quit"
-#~ msgstr "Afslut"
-
-#~ msgid "Recent activities"
-#~ msgstr "Nylige aktiviteter"
-
-#, fuzzy
-#~| msgid "Remove from recipient list"
-#~ msgid "Remove restore point: \"%1$s\""
-#~ msgstr "Fjern fra modtagerliste"
-
-#~ msgid "Restore applications"
-#~ msgstr "Gendan programmer"
-
-#, fuzzy
-#~| msgid "Share %1$s \"%2$s\""
-#~ msgid "Safari %1$s on %2$s"
-#~ msgstr "Del %1$s »%2$s«"
-
-#~ msgid "Signed in as:"
-#~ msgstr "Logget ind som:"
-
-#~ msgid ""
-#~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
-#~ "LinkedIn with the permission to do read messages."
-#~ msgstr ""
-#~ "Beklager, men vi kan ikke hjælpe dig her. Din udbyder skal skaffe en "
-#~ "nøgle fra LinkedIn, med tilladelse til at læse beskeder."
-
-#~ msgid "Subscribe IMAP folders"
-#~ msgstr "Tilmeld IMAP mapper"
-
-#~ msgid "Subscribe address book"
-#~ msgstr "Abonnér på adressebog"
-
-#~ msgid "Subscribe calendar"
-#~ msgstr "Abonnér på kalender"
-
-#~ msgid ""
-#~ "Synchronization of Emails, Calendar, Contacts and Tasks, along with "
-#~ "Public, Shared and System Folders to Microsoft Outlook® clients."
-#~ msgstr ""
-#~ "Synkronisering af e-mails, kalender, kontakter og opgaver, samt "
-#~ "offentlige, delte og systemmapper med Microsoft Outlook®-klienter."
-
-#~ msgid "Temporary"
-#~ msgstr "Midlertidig"
-
-#~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
-#~ msgstr ""
-#~ "Feltet »%1$s« overskrider dets største tilladte størrelse på %2$d tegn."
-
-#~ msgid ""
-#~ "The following applications can be restored. Just remove the restore point "
-#~ "if you don't want it to be restored."
-#~ msgstr ""
-#~ "De følgende programmer kan gendannes. Bare fjern gendannelsespunktet hvis "
-#~ "du ikke vil gendanne det."
-
-#~ msgid ""
-#~ "The setting has been saved and will become active when you enter the "
-#~ "application the next time."
-#~ msgstr ""
-#~ "Indstillingen er blevet gemt, og vil være aktiv næste gang du starter "
-#~ "programmet."
-
-#~ msgid ""
-#~ "The timezone of this appointment (%1$s) differs from your default "
-#~ "timezone (%2$s)."
-#~ msgstr ""
-#~ "Aftalens tidszone (%1$s) er forskellig fra din standardtidszone (%2$s)."
-
-#~ msgid "There is no preview for this file type"
-#~ msgstr "Der er ingen forhåndsvisning for denne filtype"
-
-#~ msgid "There were not activities in your network"
-#~ msgstr "Der var ikke aktivitet i dit netværk"
-
-#~ msgid "Toggle viewport size"
-#~ msgstr "Skift præsentationsstørrelse"
-
-#, fuzzy
-#~| msgid "Unknown sender"
-#~ msgid "Unknown client"
-#~ msgstr "Ukendt afsender"
-
-#, fuzzy
-#~| msgid "Unknown sender"
-#~ msgid "Unkown client"
-#~ msgstr "Ukendt afsender"
-
-#~ msgid "Use accessibility improvements"
-#~ msgstr "Brug tilgængelighedsforbedringer"
-
-#~ msgid "Use cursor keys to navigate"
-#~ msgstr "Brug piltaster for at navigere"
-
-#~ msgid "View attachment"
-#~ msgstr "Se vedhæftning"
-
-#~ msgid ""
-#~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
-#~ "Appointments will therefore be created in your private calendar."
-#~ msgstr ""
-#~ "Du har ikke tilladelse til at lave aftaler i \"%1$s\" ejet af %2$s. "
-#~ "Aftaler vil derfor blive lavet i din private kalender."
-
-#~ msgid ""
-#~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
-#~ "therefore be created in your private calendar."
-#~ msgstr ""
-#~ "Du har ikke tilladelse til at lave aftaler i \"%1$s\". Aftaler vil derfor "
-#~ "blive lavet i din private kaldende."
-
-#~ msgid ""
-#~ "You can import existing signatures from the previous product generation."
-#~ msgstr ""
-#~ "Du kan importere eksisterende underskrifter fra den forrige generation af "
-#~ "produktet."
-
-#~ msgid "You have no new messages"
-#~ msgstr "Du har ingen nye beskeder"
-
-#~ msgid ""
-#~ "You will automatically return to the appointment dialog. The selected "
-#~ "start and end time as well as the current participant list will be "
-#~ "applied."
-#~ msgstr ""
-#~ "Du vil automatisk vende tilbage til aftalevinduet. Den valgte start- og "
-#~ "sluttid, samt deltagerlisten, vil blive anvendt."
-
-#~ msgid ""
-#~ "Your default reminder could not be set for this appointment due to "
-#~ "insufficient permissions"
-#~ msgstr ""
-#~ "Din standardpåmindelse kunne ikke sættes for denne aftale på grund af "
-#~ "mangelfulde rettigheder."
-
-#~ msgid "Your messages"
-#~ msgstr "Dine beskeder"
-
-#~ msgid "Your reply has been sent"
-#~ msgstr "Dit svar er blevet sendt"
-
-#~ msgid "via"
-#~ msgstr "via"
+#~ msgid "Please use the \"Connect your device\" wizard to download %s"
+#~ msgstr "Brug venligst \"Forbind din enhed\"-hjælperen til at hente %s"
 
 #, fuzzy
 #~| msgid "is not a valid user or group."
@@ -12871,6 +12530,13 @@ msgstr "Tilføj på %s"
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$d af %2$d"
 
+#~ msgid "%1$d unread mails"
+#~ msgstr "%1$d ulæste e-mails"
+
+#~ msgctxt "window title"
+#~ msgid "%1$s %2$s"
+#~ msgstr "%1$s %2$s"
+
 #~ msgid "%1$s %2$s %3$s %4$s %5$s."
 #~ msgstr ""
 #~ "%1$s\n"
@@ -12895,11 +12561,45 @@ msgstr "Tilføj på %s"
 #~ "%1$s\n"
 #~ "%2$s"
 
+#~ msgid "%1$s Options"
+#~ msgstr "%1$s valg"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for %2$s"
+#~ msgstr "%1$s af %2$s"
+
+#, fuzzy
+#~| msgid "%s client for Android"
+#~ msgid "%1$s for Android"
+#~ msgstr "%s klient for Android"
+
+#, fuzzy
+#~| msgid "%s client for Mac OS"
+#~ msgid "%1$s for MacOS"
+#~ msgstr "%s klient for Mac OS"
+
+#, fuzzy
+#~| msgid "%s client for Windows"
+#~ msgid "%1$s for Windows"
+#~ msgstr "%s klient for Windows"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for iOS"
+#~ msgstr "%1$s af %2$s"
+
 #~ msgid "%1$s has ended the presentation."
 #~ msgstr "%1$s har afsluttet præsentationen."
 
 #~ msgid "%1$s has started the presentation."
 #~ msgstr "%1$s er gået i gang med præsentationen."
+
+#~ msgid "%1$s is a new contact"
+#~ msgstr "%1$s er en ny kontakt"
+
+#~ msgid "%1$s is now connected with %2$s"
+#~ msgstr "%1$s er nu forbundet med %2$s"
 
 #~ msgid "%1$s mail"
 #~ msgid_plural "%1$s mails"
@@ -12939,6 +12639,11 @@ msgstr "Tilføj på %s"
 #~ msgstr[0] "%d time"
 #~ msgstr[1] "%d timer"
 
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d minut"
+#~ msgstr[1] "%d minutter"
+
 #~ msgctxt "in"
 #~ msgid "%d minute"
 #~ msgid_plural "%d minutes"
@@ -12956,8 +12661,14 @@ msgstr "Tilføj på %s"
 #~ msgstr[0] "%d uge"
 #~ msgstr[1] "%d uger"
 
+#~ msgid "%s client for Windows (Installation via the OX Updater)"
+#~ msgstr "%s klient for Windows (installation via OX Updater)"
+
 #~ msgid "(Default)"
 #~ msgstr "(Standard)"
+
+#~ msgid "(current app)"
+#~ msgstr "(aktuel app)"
 
 #~ msgid "0 minutes"
 #~ msgstr "0 minutter"
@@ -12970,9 +12681,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "1 week"
 #~ msgstr "1 uge"
-
-#~ msgid "12 hour"
-#~ msgstr "12 timer"
 
 #~ msgid "150%"
 #~ msgstr "150%"
@@ -12991,9 +12699,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "4 days"
 #~ msgstr "4 dage"
-
-#~ msgid "4 hour"
-#~ msgstr "4 timer"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 uger"
@@ -13050,8 +12755,14 @@ msgstr "Tilføj på %s"
 #~ "Der opstod en generel netværksfejl.  Prøv at genindlæse dokumentet.  Hvis "
 #~ "det ikke hjælper, bør du kontakte din systemadministrator."
 
+#~ msgid "Absent"
+#~ msgstr "Fraværende"
+
 #~ msgid "Account Settings"
 #~ msgstr "Kontoindstillinger"
+
+#~ msgid "Acknowledge all reminders"
+#~ msgstr "Anerkend alle påmindelser"
 
 #~ msgid "Add Attachment"
 #~ msgstr "Tilføj vedhæftning"
@@ -13067,6 +12778,9 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Add account"
 #~ msgstr "Tilføj konto"
+
+#~ msgid "Add attachment"
+#~ msgstr "Vedhæft fil"
 
 #~ msgid "Add cipher code"
 #~ msgstr "Tilføj nøglekode"
@@ -13086,11 +12800,11 @@ msgstr "Tilføj på %s"
 #~ msgid "Add new guest"
 #~ msgstr "Tilføj ny gæst"
 
+#~ msgid "Add new reminder"
+#~ msgstr "Tilføj ny påmindelse"
+
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Tilføjer abonnement.  Det kan tage nogle sekunder…"
-
-#~ msgid "Additional settings"
-#~ msgstr "Flere indstillinger"
 
 #~ msgid "Addresses"
 #~ msgstr "Adresser"
@@ -13116,11 +12830,34 @@ msgstr "Tilføj på %s"
 #~ msgid "All contacts"
 #~ msgstr "Tilføj kontakt"
 
+#~ msgid "All future messages from %1$s will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] ""
+#~ "Alle fremtidige beskeder fra %1$s vil blive flyttet til den valgte mappe."
+#~ msgstr[1] ""
+#~ "Alle fremtidige beskeder fra afsenderne af de valgte beskeder vil blive "
+#~ "flyttet til den valgte mappe."
+
+#~ msgid ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr ""
+#~ "Alle fremtidige beskeder fra afsenderne af de valgte e-mails vil blive "
+#~ "flyttet til den valgte mappe."
+
+#~ msgid "All my appointments"
+#~ msgstr "Alle mine aftaler"
+
 #~ msgid "Allow us to use your %s account here"
 #~ msgstr "Giv os lov til at bruge din %s-konto her"
 
 #~ msgid "An error occurred"
 #~ msgstr "Der opstod en fejl"
+
+#~ msgid "Application Toolbar"
+#~ msgstr "Programværktøjslinjen"
 
 #~ msgid "Applications"
 #~ msgstr "Programmer"
@@ -13154,6 +12891,9 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "Cirka længde af abonnementer"
+
+#~ msgid "Apps"
+#~ msgstr "Apps"
 
 #~ msgid "April"
 #~ msgstr "April"
@@ -13196,6 +12936,10 @@ msgstr "Tilføj på %s"
 #~ msgid "August"
 #~ msgstr "August"
 
+#~ msgid "Authentication failed. Please fill in login and password."
+#~ msgstr ""
+#~ "Godkendelse mislykkedes.  Udfyld venligst brugernavn og adgangskode."
+
 #~ msgid "Auto Logout"
 #~ msgstr "Automatisk logud"
 
@@ -13222,6 +12966,9 @@ msgstr "Tilføj på %s"
 #~ msgid "Autoplay pause in seconds"
 #~ msgstr "Sekunder mellem hver slide"
 
+#~ msgid "Back to appointment"
+#~ msgstr "Tilbage til aftale"
+
 #, fuzzy
 #~| msgid "Back to sign in"
 #~ msgid "Back to devices"
@@ -13244,6 +12991,9 @@ msgstr "Tilføj på %s"
 #~ "Under modtageren finder du flere funktioner, som fx til at sende kopier "
 #~ "til andre modtagere, eller til at tilføje vedhæftninger."
 
+#~ msgid "Birthday"
+#~ msgstr "Fødselsdag"
+
 #~ msgid "Blind copy (BCC) to"
 #~ msgstr "Bcc til"
 
@@ -13255,6 +13005,12 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Broadcast your presentation over the Web."
 #~ msgstr "Udsend din præsentation på nettet."
+
+#~ msgid ""
+#~ "By changing the date of this appointment you are creating an appointment "
+#~ "exception to the series."
+#~ msgstr ""
+#~ "Ved at ændre denne aftales dato, laver du en undtagelse til aftaleserien."
 
 #~ msgid "CalDAV Login"
 #~ msgstr "CalDAV-brugernavn"
@@ -13273,6 +13029,9 @@ msgstr "Tilføj på %s"
 #~ msgid "Change View"
 #~ msgstr "Skift visning"
 
+#~ msgid "Change color"
+#~ msgstr "Ændr farve"
+
 #~ msgid "Change folder"
 #~ msgstr "Skift mappe"
 
@@ -13281,6 +13040,9 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Change subscription"
 #~ msgstr "Ændr abonnement"
+
+#~ msgid "Change view"
+#~ msgstr "Skift visning"
 
 #~ msgid "Changes have been saved."
 #~ msgstr "Ændringerne er blevet gemt."
@@ -13292,6 +13054,14 @@ msgstr "Tilføj på %s"
 #~| msgid "Children"
 #~ msgid "Chile"
 #~ msgstr "Børn"
+
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Chrome %1$s on %2$s"
+#~ msgstr "Del %1$s »%2$s«"
+
+#~ msgid "Classic colors"
+#~ msgstr "Klassiske farver"
 
 #~ msgid "Cleaning up... This may take a few seconds."
 #~ msgstr "Rydder op... Dette kan tage nogle sekunder."
@@ -13340,6 +13110,11 @@ msgstr "Tilføj på %s"
 #~ msgstr "Luk dokument"
 
 #, fuzzy
+#~| msgid "close for %1$s"
+#~ msgid "Close for %1$s"
+#~ msgstr "luk for %1$s"
+
+#, fuzzy
 #~| msgid "Click to close the recurrence view"
 #~ msgid "Close recurrence view"
 #~ msgstr "Klik for at lukke gentagelsesvinduet"
@@ -13354,6 +13129,9 @@ msgstr "Tilføj på %s"
 #~| msgid "Color"
 #~ msgid "Colombia"
 #~ msgstr "Farve"
+
+#~ msgid "Color scheme"
+#~ msgstr "Farveskema"
 
 #~ msgid "Common"
 #~ msgstr "Fælles"
@@ -13386,6 +13164,9 @@ msgstr "Tilføj på %s"
 #~ msgid "Confirmation status"
 #~ msgstr "Bekræftelsesstatus"
 
+#~ msgid "Connector for Microsoft Outlook®"
+#~ msgstr "Forbindelse til Microsoft Outlook®"
+
 #~ msgid "Content"
 #~ msgstr "Indhold"
 
@@ -13399,6 +13180,16 @@ msgstr "Tilføj på %s"
 #~ msgid "Continue the presentation"
 #~ msgstr "Fortsæt præsentationen"
 
+#~ msgctxt "app"
+#~ msgid "Conversations"
+#~ msgstr "Samtaler"
+
+#~ msgid ""
+#~ "Convert the entered start and end dates to match the modified timezones"
+#~ msgstr ""
+#~ "Ændr de indtastede start- og slutdatoer så de passer til de ændrede "
+#~ "tidszoner"
+
 #~ msgid "Copy (CC) to"
 #~ msgstr "Cc til"
 
@@ -13407,6 +13198,9 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Could not load all participants for this task."
 #~ msgstr "Kunne ikke indlæse alle deltagere for denne opgave."
+
+#~ msgid "Couldn't load appointment data."
+#~ msgstr "Kunne ikke indlæse aftalens data."
 
 #~ msgid "Couldn't load folders."
 #~ msgstr "Mapper kunne ikke indlæses."
@@ -13420,8 +13214,14 @@ msgstr "Tilføj på %s"
 #~ msgid "Couldn't load your auto forward."
 #~ msgstr "Din automatiske videresendelse kunne ikke indlæses."
 
+#~ msgid "Couldn't load your contact data."
+#~ msgstr "Dine kontaktdata kunne ikke indlæses."
+
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Opret en %s-konto med dataene gemt her"
+
+#~ msgid "Create exception"
+#~ msgstr "Opret undtagelse"
 
 #~ msgid "Create new task"
 #~ msgstr "Lav ny opgave"
@@ -13463,8 +13263,34 @@ msgstr "Tilføj på %s"
 #~ msgid "Current Date"
 #~ msgstr "Dags dato"
 
+#, fuzzy
+#~| msgid "Currently refreshing"
+#~ msgid "Current session"
+#~ msgstr "I gang med at opdatere"
+
+#~ msgid "Custom colors"
+#~ msgstr "Tilpassede farve"
+
 #~ msgid "Customizing"
 #~ msgstr "Tilpasser"
+
+#~ msgid "Dangerous and trusted"
+#~ msgstr "Farlig og betroet"
+
+#~ msgid "Dangerous and trusted emails"
+#~ msgstr "Farlige og betroede beskeder"
+
+#~ msgid "Dangerous emails only"
+#~ msgstr "Kun farlige beskeder"
+
+#~ msgid "Dangerous only"
+#~ msgstr "Kun farlig"
+
+#~ msgid "Dangerous, trusted and valid emails"
+#~ msgstr "Farlige, betroede og gyldige beskeder"
+
+#~ msgid "Dark colors"
+#~ msgstr "Mørke farver"
 
 #~ msgid ""
 #~ "Data synchronization with your local (Windows) machine. Drive Client lets "
@@ -13513,6 +13339,13 @@ msgstr "Tilføj på %s"
 #~ "Detaljerede guides til alle modulerne er placeret i hjælpe-sektionen af "
 #~ "indstillingerne."
 
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Vidste du at du kan tage OX App Suite med dig?  Klik bare på dette ikon "
+#~ "og vælg »Forbind din enhed« fra menuen."
+
 #~ msgid "Direct link: %1$s"
 #~ msgstr "Direkte link: %1$s"
 
@@ -13524,6 +13357,9 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Display area"
 #~ msgstr "Visningsområde"
+
+#~ msgid "Display emoticons as graphics in text emails"
+#~ msgstr "Vis smilelys som grafik i tekst e-mails"
 
 #~ msgid "Displaying information"
 #~ msgstr "Viser information"
@@ -13546,14 +13382,50 @@ msgstr "Tilføj på %s"
 #~ msgid "Do you really want to discard this mail?"
 #~ msgstr "Vil du virkelig kassere denne e-mail?"
 
+#, fuzzy
+#~| msgid "Do you really want to delete this account?"
+#~ msgid ""
+#~ "Do you really want to terminate all active sessions except the current "
+#~ "one?"
+#~ msgstr "Vil du virkelig slette denne konto?"
+
+#, fuzzy
+#~| msgctxt "One file only"
+#~| msgid "Do you really want to delete this version?"
+#~ msgid "Do you really want to terminate that session?"
+#~ msgstr "Vil du virkelig slette denne udgave?"
+
 #~ msgid "Do you want to create a %s account?"
 #~ msgstr "Ønsker du at oprette en %s-konto?"
 
+#~ msgid ""
+#~ "Do you want to delete the whole series or just one appointment within the "
+#~ "series?"
+#~ msgstr "Vil du slette hele serien, eller kun én aftale i serien?"
+
+#~ msgid ""
+#~ "Do you want to edit the whole series or just one appointment within the "
+#~ "series?"
+#~ msgstr "Vil du redigere hele serien, eller kun én aftale i serien?"
+
+#~ msgid "Documents"
+#~ msgstr "Dokumenter"
+
+#~ msgctxt "app"
 #~ msgid "Documents"
 #~ msgstr "Dokumenter"
 
 #~ msgid "Double click to rename"
 #~ msgstr "Dobbeltklik for at omdøbe"
+
+#~ msgid "Doubleclick in this row for whole day appointment"
+#~ msgstr "Dobbeltklik i denne række for en heldagsaftale"
+
+#~ msgid "Download %s via the OX Updater"
+#~ msgstr "Hent %s via OX Updater"
+
+#~ msgid "Download installation file (for Windows)"
+#~ msgstr "Hent installationsfil (til Windows)"
 
 #~ msgid "Drag and drop"
 #~ msgstr "Træk og slip"
@@ -13592,6 +13464,11 @@ msgstr "Tilføj på %s"
 #~| msgid "Last month"
 #~ msgid "East Timor"
 #~ msgstr "Sidste måned"
+
+#, fuzzy
+#~| msgid "Due on %1$s"
+#~ msgid "Edge on %1$s"
+#~ msgstr "Forfalder d. %1$s"
 
 #~ msgid "Edit Tabs"
 #~ msgstr "Redigér faner"
@@ -13638,8 +13515,8 @@ msgstr "Tilføj på %s"
 #~ msgid "Email notification for task creator?"
 #~ msgstr "E-mailunderretning for opgavens opretter?"
 
-#~ msgid "Email notification for task participant?"
-#~ msgstr "E-mailunderretning for deltager af opgave?"
+#~ msgid "Empty table cell"
+#~ msgstr "Tomt tabelfelt"
 
 #~ msgid "Emptying folder... This may take a few seconds."
 #~ msgstr "Tømmer mappe... Dette kan tage nogle sekunder."
@@ -13665,6 +13542,9 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Enabled for inbox only"
 #~ msgstr "Kun aktiveret for indboksen"
+
+#~ msgid "Encrypt"
+#~ msgstr "Kryptér"
 
 #, fuzzy
 #~ msgid "End Presentation"
@@ -13758,11 +13638,20 @@ msgstr "Tilføj på %s"
 #~ msgid "Every %1$d years on %2$s %3$d"
 #~ msgstr "Hvert %1$d. år den %3$d. %2$s"
 
+#~ msgid "Exchange ActiveSync"
+#~ msgstr "Exchange ActiveSync"
+
 #~ msgid "Existing shares"
 #~ msgstr "Eksisterende delinger"
 
 #~ msgid "Exit Fullscreen"
 #~ msgstr "Luk fuldskærm"
+
+#~ msgid "Expand timeframe by one month"
+#~ msgstr "Udvid tidsramme med en måned"
+
+#~ msgid "Expiration: %1$d"
+#~ msgstr "Udløbstid: %1$d"
 
 #, fuzzy
 #~| msgid "Send as vCard"
@@ -13775,6 +13664,9 @@ msgstr "Tilføj på %s"
 #~ msgctxt "help"
 #~ msgid "External E-Mail Accounts"
 #~ msgstr "Eksterne e-mail konti"
+
+#~ msgid "External guests"
+#~ msgstr "Eksterne gæster"
 
 #~ msgid "Facebook"
 #~ msgstr "Facebook"
@@ -13830,6 +13722,11 @@ msgstr "Tilføj på %s"
 #~ msgstr "Afslut tur"
 
 #, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "Firefox %1$s on %2$s"
+#~ msgstr "%1$s af %2$s"
+
+#, fuzzy
 #~| msgid "Fit to screen width"
 #~ msgid "Fit to screen height"
 #~ msgstr "Tilpas til skærmbredde"
@@ -13845,6 +13742,9 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Folder tree"
 #~ msgstr "Mappetræ"
+
+#~ msgid "Folder type"
+#~ msgstr "Mappetype"
 
 #~ msgid "Folder-specific actions for %1$s"
 #~ msgstr "Mappespecifikke handlinger for %1$s"
@@ -13922,6 +13822,12 @@ msgstr "Tilføj på %s"
 #~ msgid "Halo view"
 #~ msgstr "Samlet visning"
 
+#~ msgid "Has Attachment"
+#~ msgstr "Har vedhæftning"
+
+#~ msgid "Header exists"
+#~ msgstr "Hoved findes"
+
 #~ msgid "Hello"
 #~ msgstr "Hej"
 
@@ -13952,6 +13858,12 @@ msgstr "Tilføj på %s"
 #~ msgid "Hide side panel"
 #~ msgstr "Skjul sidepanel"
 
+#~ msgid "High contrast theme"
+#~ msgstr "Tema med høj kontrast"
+
+#~ msgid "How does this work?"
+#~ msgstr "Hvordan virker dette?"
+
 #~ msgid "How the settings are organized"
 #~ msgstr "Hvordan indstillingerne er organiseret"
 
@@ -13979,6 +13891,11 @@ msgstr "Tilføj på %s"
 #~ msgid "IMAP server"
 #~ msgstr "IMAP-server"
 
+#, fuzzy
+#~| msgid "Added %1$s."
+#~ msgid "IP Address: %1$s"
+#~ msgstr "Tilføjede %1$s."
+
 #~ msgid ""
 #~ "If a folder contains images, you can display a slideshow. To do so click "
 #~ "on Slideshow on the upper right side."
@@ -13995,6 +13912,38 @@ msgstr "Tilføj på %s"
 #~ msgstr ""
 #~ "Hvis du ikke længere vil have en flise vist, så klik på krydset oppe i "
 #~ "højre side."
+
+#~ msgid ""
+#~ "If you select different timezones, the appointment's start and end dates "
+#~ "are saved in the timezone of the appointment's start date. A different "
+#~ "end date timezone only allows a convenient conversion."
+#~ msgstr ""
+#~ "Hvis du vælger forskellige tidszoner, vil aftalens start- og slutdato "
+#~ "blive gemt i tidszonen for startdatoen.  Forskellige tidszoner er kun en "
+#~ "bekvem konvertering."
+
+#~ msgid ""
+#~ "If you spot a free time, just select this area. To do this, move the "
+#~ "cursor to the start time, hold the mouse button, and <b>drag the mouse</"
+#~ "b> to the end time."
+#~ msgstr ""
+#~ "Hvis du ser en ledig tid, så bare marker dette område. For at gøre det "
+#~ "flyttes musen til starttiden, museknappen holdes nede, og <b>musen "
+#~ "trækkes</b> til sluttiden."
+
+#~ msgid ""
+#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
+#~ "for example."
+#~ msgstr ""
+#~ "Ignorér eksisterende aftaler.  Er for eksempel praktisk når du vil "
+#~ "importere helligdagskalendere."
+
+#~ msgid ""
+#~ "Ignore existing events. Helpful to import public holiday calendars, for "
+#~ "example."
+#~ msgstr ""
+#~ "Ignorér eksisterende begivenheder. For eksempel praktisk når man "
+#~ "importerer helligdagskalendre."
 
 #~ msgid "Import into"
 #~ msgstr "Impoter ind i"
@@ -14014,6 +13963,13 @@ msgstr "Tilføj på %s"
 #~ "For at redigere flere e-mails af gangen, skal tjekboksen på venstre side "
 #~ "af e-mails markeres. Hvis tjekboksen ikke er synlig, klik på ikonet "
 #~ "nederst i venstre side."
+
+#~ msgid ""
+#~ "In shared folders, the appointment is displayed as a simple time slot for "
+#~ "non-attending users."
+#~ msgstr ""
+#~ "I delte mapper bliver aftalen vist som et simpelt tidsrum for ikke-"
+#~ "deltagende brugere."
 
 #~ msgid ""
 #~ "In the Details section at the bottom right side you can enter billing "
@@ -14049,11 +14005,21 @@ msgstr "Tilføj på %s"
 #~ msgstr "Oplysninger om kontogendannelse..."
 
 #~ msgid ""
+#~ "Informs about the current status of Emails and appointments without "
+#~ "having to display the user interface or another Windows® client."
+#~ msgstr ""
+#~ "Oplyser om den aktuelle status for e-mails og aftaler uden at skulle vise "
+#~ "brugergrænsefladen eller en anden Windows®-klient."
+
+#~ msgid ""
 #~ "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 #~ "Screen'%4$s"
 #~ msgstr ""
 #~ "Installér denne web-app på din %1$s: Tap %2$s og så %3$s'Tilføj til Home "
 #~ "Screen'%4$s"
+
+#~ msgid "Internal & external users"
+#~ msgstr "Interne og eksterne brugere"
 
 #~ msgid "Invalid data"
 #~ msgstr "Ugyldige data"
@@ -14115,15 +14081,17 @@ msgstr "Tilføj på %s"
 #~ msgid "Last modified"
 #~ msgstr "Sidst ændret"
 
+#~ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
+#~ msgstr "Starter drop-ned liste. Tryk [enter] for at gå til hop-ned."
+
 #~ msgid "Launching an app"
 #~ msgstr "Start af et program"
 
 #~ msgid "Leave"
 #~ msgstr "Forlad"
 
-#, fuzzy
-#~ msgid "Leave Presentation"
-#~ msgstr "Opgaveinvitationer"
+#~ msgid "Leave empty if you have none"
+#~ msgstr "Efterlad tom, hvis du ikke har nogen"
 
 #~ msgid "Leave presentation"
 #~ msgstr "Forlad præsentation"
@@ -14147,6 +14115,18 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Line wrap when sending text mails after: "
 #~ msgstr "Linieombryd når tekst e-mails sendes efter: "
+
+#~ msgid "LinkedIn"
+#~ msgstr "LinkedIn"
+
+#~ msgid "LinkedIn Network Updates"
+#~ msgstr "LinkedIn netværksopdateringer"
+
+#~ msgid "LinkedIn reported an error:"
+#~ msgstr "LinkedIn gav en fejl:"
+
+#~ msgid "List of public calendars and events"
+#~ msgstr "Liste med offentlige kalendre og begivenheder"
 
 #~ msgid "Load Error"
 #~ msgstr "Indlæsningsfejl"
@@ -14189,6 +14169,9 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Manage applications"
 #~ msgstr "Håndtér programmer"
+
+#~ msgid "Manage permission now"
+#~ msgstr "Håndtér tilladelse nu"
 
 #~ msgctxt "help"
 #~ msgid "Managing E-Mail messages"
@@ -14255,6 +14238,9 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Navigation bar"
 #~ msgstr "Navigationslinje"
+
+#~ msgid "Never."
+#~ msgstr "Aldrig."
 
 #, fuzzy
 #~| msgid "New calendar"
@@ -14345,11 +14331,23 @@ msgstr "Tilføj på %s"
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Intet i din nyhedsstrøm."
 
+#~ msgid "Notifier"
+#~ msgstr "Underretter"
+
+#~ msgid "Notify all participants by email."
+#~ msgstr "Underret alle deltagere pr. e-mail."
+
 #~ msgid "November"
 #~ msgstr "November"
 
 #~ msgid "Number of days in work week"
 #~ msgstr "Antal dage i arbejdsugen"
+
+#~ msgid "Number of items"
+#~ msgstr "Antal elementer"
+
+#~ msgid "Number of messages"
+#~ msgstr "Antal beskeder"
 
 #~ msgid "October"
 #~ msgstr "Oktober"
@@ -14386,8 +14384,17 @@ msgstr "Tilføj på %s"
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Vi kun widget-opsummering på mobile enheder"
 
+#~ msgid "Open in browser"
+#~ msgstr "Åbn i browser"
+
+#~ msgid "Open in browser tab"
+#~ msgstr "Åbn i browserfaneblad"
+
 #~ msgid "Open in new tab"
 #~ msgstr "Åbn i ny fane"
+
+#~ msgid "Open on LinkedIn"
+#~ msgstr "Åbn på LinkedIn"
 
 #~ msgid "Opening E-Mail threads"
 #~ msgstr "Åbner e-mail tråde"
@@ -14397,6 +14404,11 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Åbner E-mail-indstillingerne"
+
+#, fuzzy
+#~| msgid "Other Address"
+#~ msgid "Other clients"
+#~ msgstr "Anden adresse"
 
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Opgave som er over tid. %1$s %2$s. Tryk [enter] for at åbne"
@@ -14467,6 +14479,10 @@ msgstr "Tilføj på %s"
 #~ "behov.  Brug afkrydsningsfelterne til at slå specifikke faneblade til "
 #~ "eller fra."
 
+#~ msgid "Please note that distribution lists cannot contain ressources."
+#~ msgstr ""
+#~ "Bemærk venligst at distributionslister ikke kan indeholde ressourcer."
+
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Angiv venligst disse manglende variable: "
 
@@ -14513,6 +14529,9 @@ msgstr "Tilføj på %s"
 #~ msgid "Press [enter] to jump to the facebook stream."
 #~ msgstr "Tast [enter] for at gå til Facebook-strømmen."
 
+#~ msgid "Press [enter] to jump to the linkedin stream."
+#~ msgstr "Tast [enter] for at gå til LinkedIn-strømmen."
+
 #~ msgid "Press [enter] to open"
 #~ msgstr "Tast [enter] for at åbne"
 
@@ -14540,6 +14559,9 @@ msgstr "Tilføj på %s"
 #~ msgid "Privacy Notice"
 #~ msgstr "Persondatapolitik"
 
+#~ msgid "Public"
+#~ msgstr "Offentlig"
+
 #~ msgid "Publication"
 #~ msgstr "Udgivelse"
 
@@ -14558,6 +14580,21 @@ msgstr "Tilføj på %s"
 #~ msgid "Publish item"
 #~ msgstr "Udgiv element"
 
+#~ msgid "Quick launch 1"
+#~ msgstr "Hurtigstart-1"
+
+#~ msgid "Quick launch 2"
+#~ msgstr "Hurtigstart-2"
+
+#~ msgid "Quick launch 3"
+#~ msgstr "Hurtigstart-3"
+
+#~ msgid "Quick reply"
+#~ msgstr "Hurtigt svar"
+
+#~ msgid "Quit"
+#~ msgstr "Afslut"
+
 #~ msgid ""
 #~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
 #~ "arrowkeys to adjust your rating."
@@ -14574,14 +14611,25 @@ msgstr "Tilføj på %s"
 #~ msgid "Reading the details"
 #~ msgstr "Læser detaljerne"
 
+#~ msgid "Recent activities"
+#~ msgstr "Nylige aktiviteter"
+
 #~ msgid "Recipients can edit"
 #~ msgstr "Modtagere kan ændre"
 
 #~ msgid "Recurring tasks need a valid end date."
 #~ msgstr "Gentagende opgaver skal have en gyldig slutdato."
 
+#~ msgid "Remind me again %1$s"
+#~ msgstr "Påmind mig igen %1$s"
+
 #~ msgid "Remove facet"
 #~ msgstr "Fjern kategori"
+
+#, fuzzy
+#~| msgid "Remove from recipient list"
+#~ msgid "Remove restore point: \"%1$s\""
+#~ msgstr "Fjern fra modtagerliste"
 
 #~ msgid "Reply All"
 #~ msgstr "Svar alle"
@@ -14594,6 +14642,9 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Resource name"
 #~ msgstr "Ressourcenavn"
+
+#~ msgid "Restore applications"
+#~ msgstr "Gendan programmer"
 
 #, fuzzy
 #~| msgid "Never"
@@ -14626,6 +14677,9 @@ msgstr "Tilføj på %s"
 #~ msgid "Rule applies until"
 #~ msgstr "Regel gælder indtil"
 
+#~ msgid "Run auto-play "
+#~ msgstr "Kør autostart"
+
 #~ msgid "Running applications"
 #~ msgstr "Kør programmer"
 
@@ -14650,6 +14704,11 @@ msgstr "Tilføj på %s"
 #~ msgid "SMTP server"
 #~ msgstr "SMTP-server"
 
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Safari %1$s on %2$s"
+#~ msgstr "Del %1$s »%2$s«"
+
 #~ msgid "Save in file store"
 #~ msgstr "Gem i fillager"
 
@@ -14663,6 +14722,9 @@ msgstr "Tilføj på %s"
 #~ msgid_plural "Saving attachments to Drive"
 #~ msgstr[0] "Gemmer vedhæftning på Drive"
 #~ msgstr[1] "Gemmer vedhæftninger på Drive"
+
+#~ msgid "Scheduling"
+#~ msgstr "Planlægning"
 
 #~ msgid "Search Options"
 #~ msgstr "Søgeindstillinger"
@@ -14711,6 +14773,10 @@ msgstr "Tilføj på %s"
 #~ msgid "September"
 #~ msgstr "September"
 
+#~ msgctxt "app"
+#~ msgid "Settings"
+#~ msgstr "Indstillinger"
+
 #~ msgid "Settings for advanced users"
 #~ msgstr "Indstillinger for avancerede brugere"
 
@@ -14727,6 +14793,16 @@ msgstr "Tilføj på %s"
 #~ msgid "Shared by: %1$s"
 #~ msgstr "Søgte efter: %1$s"
 
+#~ msgid "Sharing link created for file \"%1$d\""
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "Har oprettet fildelings-URL for »%1$d«"
+#~ msgstr[1] "Har oprettet fildelings-URL for %1$d elementer"
+
+#~ msgid "Sharing link created for folder \"%1$d\""
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "Har oprettet fildelings-URL for mappen »%1$d«"
+#~ msgstr[1] "Har oprettet fildelings-URL for %1$d elementer"
+
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"
 #~ msgstr ""
@@ -14737,6 +14813,9 @@ msgstr "Tilføj på %s"
 #~ "Should only the current message or all messages of the sender be moved"
 #~ msgstr ""
 #~ "Skal kun den aktuelle besked, eller alle beskeder fra afsenderen flyttes."
+
+#~ msgid "Show Links"
+#~ msgstr "Vis URL'er"
 
 #~ msgid "Show QR code"
 #~ msgstr "Vis QR-kode"
@@ -14785,6 +14864,9 @@ msgstr "Tilføj på %s"
 #~ msgid "Show legal information"
 #~ msgstr "Vis juridisk information"
 
+#~ msgid "Show message authenticity"
+#~ msgstr "Vis beskedægthed"
+
 #~ msgid "Show message size"
 #~ msgstr "Vis beskedestørrelse"
 
@@ -14822,6 +14904,9 @@ msgstr "Tilføj på %s"
 #~ msgid "Signed in as %1$s"
 #~ msgstr "Logget ind som %1$s"
 
+#~ msgid "Signed in as:"
+#~ msgstr "Logget ind som:"
+
 #~ msgid "Signing out"
 #~ msgstr "Logger ud"
 
@@ -14835,9 +14920,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Skip this step"
 #~ msgstr "Spring dette skridt over"
-
-#~ msgid "Slideshow"
-#~ msgstr "Diasshow"
 
 #~ msgid "Slideshow / Autoplay mode"
 #~ msgstr "Diasshow / spil-selv-modus"
@@ -14877,14 +14959,18 @@ msgstr "Tilføj på %s"
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Denne fil kunne ikke overføre."
 
+#~ msgid ""
+#~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
+#~ "LinkedIn with the permission to do read messages."
+#~ msgstr ""
+#~ "Beklager, men vi kan ikke hjælpe dig her. Din udbyder skal skaffe en "
+#~ "nøgle fra LinkedIn, med tilladelse til at læse beskeder."
+
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Sortering af dine e-mails"
 
 #~ msgid "Sorting your tasks"
 #~ msgstr "Sorterer dine opgaver"
-
-#~ msgid "Source"
-#~ msgstr "Kilde"
 
 #~ msgid "Spam folder"
 #~ msgstr "Spam mappe"
@@ -14905,6 +14991,15 @@ msgstr "Tilføj på %s"
 #~ msgid "Start the presentation"
 #~ msgstr "Gå i gang med præsentationen"
 
+#~ msgid "Subscribe IMAP folders"
+#~ msgstr "Tilmeld IMAP mapper"
+
+#~ msgid "Subscribe address book"
+#~ msgstr "Abonnér på adressebog"
+
+#~ msgid "Subscribe calendar"
+#~ msgstr "Abonnér på kalender"
+
 #~ msgid ""
 #~ "Subscribing to items that are not delivered by another Open-Xchange "
 #~ "Server (i.e. OXMF) may take some time. Example: Importing 100 contacts "
@@ -14924,6 +15019,16 @@ msgstr "Tilføj på %s"
 #~| msgid "Your name"
 #~ msgid "Suriname"
 #~ msgstr "Dit navn"
+
+#~ msgid ""
+#~ "Synchronization of Emails, Calendar, Contacts and Tasks, along with "
+#~ "Public, Shared and System Folders to Microsoft Outlook® clients."
+#~ msgstr ""
+#~ "Synkronisering af e-mails, kalender, kontakter og opgaver, samt "
+#~ "offentlige, delte og systemmapper med Microsoft Outlook®-klienter."
+
+#~ msgid "Synchronize with Outlook"
+#~ msgstr "Synkronisér med Outlook"
 
 #, fuzzy
 #~| msgid "Enable"
@@ -14949,6 +15054,9 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Template"
 #~ msgstr "Skabelon"
+
+#~ msgid "Temporary"
+#~ msgstr "Midlertidig"
 
 #~ msgid "Text"
 #~ msgstr "Tekst"
@@ -15002,6 +15110,15 @@ msgstr "Tilføj på %s"
 #~ msgstr ""
 #~ "Portalen informerer dig om aktuelle e-mails, aftaler eller nyheder på "
 #~ "sociale netværk."
+
+#~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared folders "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view."
+#~ msgstr ""
+#~ "Aftalen er overhovedet ikke synlig for ikke-deltagende brugere i delta "
+#~ "mapper.  Aftalen bliver ikke taget med, når der undersøges for "
+#~ "planlægningskonflikter, og optræder ikke i planlægningsvisningen."
 
 #~ msgid ""
 #~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
@@ -15073,6 +15190,9 @@ msgstr "Tilføj på %s"
 #~ "attribute=\"interval\">hver <span class=\"number-control\">anden</span> "
 #~ "måned</a>."
 
+#~ msgid "The appointment is visible for all users in shared folders."
+#~ msgstr "Aftalen er synlig for alle brugere i delte mapper."
+
 #~ msgid "The calendar views display a calendar sheet with the appointments."
 #~ msgstr "Kalendervisning viser et kalenderark med aftaler."
 
@@ -15092,6 +15212,17 @@ msgstr "Tilføj på %s"
 #~ msgid "The email address %1$s is already in the list"
 #~ msgstr "E-mail-adressen %1$s er allerede på listen"
 
+#~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
+#~ msgstr ""
+#~ "Feltet »%1$s« overskrider dets største tilladte størrelse på %2$d tegn."
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] "Filen kan ikke overføres, da den overskrider kvoten på %1$s"
+#~ msgstr[1] "Filerne kan ikke overføres, da de overskrider kvoten på %1$s"
+
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Denne fil er tilgængelig på %1$s"
 
@@ -15104,6 +15235,13 @@ msgstr "Tilføj på %s"
 #~ msgid "The following actions apply to all messages (%1$d) in this folder:"
 #~ msgstr ""
 #~ "De følgende handlinger gælder for alle beskeder  (%1$d) i denne mappe:"
+
+#~ msgid ""
+#~ "The following applications can be restored. Just remove the restore point "
+#~ "if you don't want it to be restored."
+#~ msgstr ""
+#~ "De følgende programmer kan gendannes. Bare fjern gendannelsespunktet hvis "
+#~ "du ikke vil gendanne det."
 
 #~ msgid ""
 #~ "The icon at the bottom right side helps you sort your tasks. Click the "
@@ -15201,6 +15339,13 @@ msgstr "Tilføj på %s"
 #~ "\">slutter aldrig</a>."
 
 #~ msgid ""
+#~ "The setting has been saved and will become active when you enter the "
+#~ "application the next time."
+#~ msgstr ""
+#~ "Indstillingen er blevet gemt, og vil være aktiv næste gang du starter "
+#~ "programmet."
+
+#~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "
 #~ "e.g Basic settings, E-Mail or My contact data."
 #~ msgstr ""
@@ -15228,6 +15373,12 @@ msgstr "Tilføj på %s"
 #~ msgstr ""
 #~ "Den fanebladsopdelte indbakke kan slås helt fra i e-mail-indstillingerne."
 
+#~ msgid ""
+#~ "The timezone of this appointment (%1$s) differs from your default "
+#~ "timezone (%2$s)."
+#~ msgstr ""
+#~ "Aftalens tidszone (%1$s) er forskellig fra din standardtidszone (%2$s)."
+
 #~ msgid "There are currently no participants."
 #~ msgstr "Der er ingen deltagere lige nu."
 
@@ -15235,6 +15386,12 @@ msgstr "Tilføj på %s"
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
 #~ msgstr[0] "Der er allerede %1$d aftale i dette tidsrum."
 #~ msgstr[1] "Der er allerede %1$d aftaler i dette tidsrum."
+
+#~ msgid "There is no preview for this file type"
+#~ msgstr "Der er ingen forhåndsvisning for denne filtype"
+
+#~ msgid "There were not activities in your network"
+#~ msgstr "Der var ikke aktivitet i dit netværk"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "Denne konto kan ikke valideres"
@@ -15298,8 +15455,14 @@ msgstr "Tilføj på %s"
 #~ "Denne mappe deles med andre.  Den vil ikke længere være tilgængelig for "
 #~ "gæster."
 
+#~ msgid "This mail has been sent from %1$s."
+#~ msgstr "Denne besked er sendt fra %1$s."
+
 #~ msgid "This may take some seconds"
 #~ msgstr "Dette kan tage nogle sekunder"
+
+#~ msgid "This message is from a trusted sender."
+#~ msgstr "Denne besked er fra en betroet afsender."
 
 #~ msgid "This message is read, press this button to mark it as unread."
 #~ msgstr ""
@@ -15308,6 +15471,20 @@ msgstr "Tilføj på %s"
 #~ msgid "This message is unread, press this button to mark it as read."
 #~ msgstr ""
 #~ "Denne besked er ulæst, klik på denne knap for at markere den som læst."
+
+#~ msgid ""
+#~ "This might be a phishing email because we could not verify that it is "
+#~ "really from %1$s."
+#~ msgstr ""
+#~ "Dette kan være en phishing-mail.  Vi kunne ikke verificere at beskeden "
+#~ "virkelig er fra %1$s."
+
+#~ msgid ""
+#~ "This might be a phishing mail because we could not verify that this email "
+#~ "is really from %1$s."
+#~ msgstr ""
+#~ "Dette kan være en phishing-mail.  Vi kunne ikke verificere at beskeden "
+#~ "virkelig er fra %1$s."
 
 #~ msgid "Tile"
 #~ msgstr "Titel"
@@ -15545,6 +15722,9 @@ msgstr "Tilføj på %s"
 #~ msgid "Toggle search"
 #~ msgstr "Slå søgning til/fra"
 
+#~ msgid "Toggle viewport size"
+#~ msgstr "Skift præsentationsstørrelse"
+
 #~ msgid "Too many contacts in your address book."
 #~ msgstr "For mange kontakter i din adressebog."
 
@@ -15553,6 +15733,9 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Tour: Coming from OX6"
 #~ msgstr "Tur: Kommer fra OX6"
+
+#~ msgid "Town"
+#~ msgstr "By"
 
 #~ msgid "Tracking the editing status"
 #~ msgstr "Sporer status på redigering"
@@ -15565,6 +15748,16 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Under construction"
 #~ msgstr "Under opbygning"
+
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unknown client"
+#~ msgstr "Ukendt afsender"
+
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unkown client"
+#~ msgstr "Ukendt afsender"
 
 #~ msgid "Unnamed"
 #~ msgstr "Unavngiven"
@@ -15596,8 +15789,14 @@ msgstr "Tilføj på %s"
 #~ msgid "Use"
 #~ msgstr "Brug"
 
+#~ msgid "Use Password"
+#~ msgstr "Brug adgangskode"
+
 #~ msgid "Use SSL connection"
 #~ msgstr "Brug en SSL-forbindelse"
+
+#~ msgid "Use accessibility improvements"
+#~ msgstr "Brug tilgængelighedsforbedringer"
 
 #~ msgid ""
 #~ "Use cursor keys to change the item position. Virtual cursor mode has to "
@@ -15605,6 +15804,9 @@ msgstr "Tilføj på %s"
 #~ msgstr ""
 #~ "Brug piltaster for at ændre elementets position.  Virtuel cursor skal "
 #~ "være slået fra."
+
+#~ msgid "Use cursor keys to navigate"
+#~ msgstr "Brug piltaster for at navigere"
 
 #, fuzzy
 #~| msgid ""
@@ -15661,11 +15863,17 @@ msgstr "Tilføj på %s"
 #~ msgid "View Slideshow"
 #~ msgstr "Se diasshow"
 
+#~ msgid "View attachment"
+#~ msgstr "Se vedhæftning"
+
 #~ msgid "View participants"
 #~ msgstr "Se deltagere"
 
 #~ msgid "View the presentation in fullscreen on your device."
 #~ msgstr "Se præsentationen i fuldskærmsmodus på din enhed."
+
+#~ msgid "We could not verify that this email is really from %1$s."
+#~ msgstr "Vi kunne ikke verificere at beskeden virkelig er fra %1$s."
 
 #~ msgid "Week View"
 #~ msgstr "Ugevisning"
@@ -15725,6 +15933,20 @@ msgstr "Tilføj på %s"
 #~ msgstr "Ja.  Flyt altid dem allesammen."
 
 #~ msgid ""
+#~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
+#~ "Appointments will therefore be created in your private calendar."
+#~ msgstr ""
+#~ "Du har ikke tilladelse til at lave aftaler i \"%1$s\" ejet af %2$s. "
+#~ "Aftaler vil derfor blive lavet i din private kalender."
+
+#~ msgid ""
+#~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
+#~ "therefore be created in your private calendar."
+#~ msgstr ""
+#~ "Du har ikke tilladelse til at lave aftaler i \"%1$s\". Aftaler vil derfor "
+#~ "blive lavet i din private kaldende."
+
+#~ msgid ""
 #~ "You can drag and drop files from your computer here to add as attachment."
 #~ msgstr ""
 #~ "Du kan trække-og-slippe filer fra din computer her for at vedhæfte dem."
@@ -15735,6 +15957,12 @@ msgstr "Tilføj på %s"
 #~ msgstr ""
 #~ "Du kan trække-og-slippe filer fra din computer til her, for enten at "
 #~ "overføre en ny fil, eller en anden version af en fil."
+
+#~ msgid ""
+#~ "You can import existing signatures from the previous product generation."
+#~ msgstr ""
+#~ "Du kan importere eksisterende underskrifter fra den forrige generation af "
+#~ "produktet."
 
 #~ msgid ""
 #~ "You can manage desktop notifications at any time, by vitising your "
@@ -15765,8 +15993,22 @@ msgstr "Tilføj på %s"
 #~ msgid "You have 1 unread message"
 #~ msgstr "Du har en ulæst besked"
 
+#~ msgid "You have no new messages"
+#~ msgstr "Du har ingen nye beskeder"
+
 #~ msgid "You have reauthorized this account."
 #~ msgstr "Du har re-godkendt denne konto."
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "Du skal indtaste et brugernavn og en adgangskode for at abonnere."
+
+#~ msgid ""
+#~ "You will automatically return to the appointment dialog. The selected "
+#~ "start and end time as well as the current participant list will be "
+#~ "applied."
+#~ msgstr ""
+#~ "Du vil automatisk vende tilbage til aftalevinduet. Den valgte start- og "
+#~ "sluttid, samt deltagerlisten, vil blive anvendt."
 
 #~ msgid ""
 #~ "Your %s account has been created. Expect a confirmation mail from %s soon."
@@ -15789,9 +16031,22 @@ msgstr "Tilføj på %s"
 #~ msgid "Your data has been saved"
 #~ msgstr "Dine data er blevet gemt"
 
+#~ msgid ""
+#~ "Your default reminder could not be set for this appointment due to "
+#~ "insufficient permissions"
+#~ msgstr ""
+#~ "Din standardpåmindelse kunne ikke sættes for denne aftale på grund af "
+#~ "mangelfulde rettigheder."
+
 #~ msgid "Your email address will be included when sending this feedback"
 #~ msgstr ""
 #~ "Din e-mail-adresse vil blive inkluderet, når du sender denne respons"
+
+#~ msgid "Your messages"
+#~ msgstr "Dine beskeder"
+
+#~ msgid "Your reply has been sent"
+#~ msgstr "Dit svar er blevet sendt"
 
 #, fuzzy
 #~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"
@@ -15837,9 +16092,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "date range"
 #~ msgstr "dato rækkevidde"
-
-#~ msgid "day of the week"
-#~ msgstr "ugedag"
 
 #~ msgid "day of the weekend"
 #~ msgstr "weekenddag"
@@ -15909,10 +16161,19 @@ msgstr "Tilføj på %s"
 #~ msgid "iCal"
 #~ msgstr "iCal"
 
+#~ msgid "iCal-Feed"
+#~ msgstr "iCal-kilde"
+
+#~ msgid "iCal-feed has been imported successfully"
+#~ msgstr "ICal-kilde er blevet importeret"
+
 #, fuzzy
 #~| msgid "Phone"
 #~ msgid "iPhone"
 #~ msgstr "Telefon"
+
+#~ msgid "in"
+#~ msgstr "i"
 
 #~ msgid "in blind copy"
 #~ msgstr "i blind kopi"
@@ -15926,17 +16187,14 @@ msgstr "Tilføj på %s"
 #~ msgid "later"
 #~ msgstr "senere"
 
-#~ msgid "login"
-#~ msgstr "brugernavn"
-
 #~ msgid "monthly"
 #~ msgstr "månedsligt"
 
 #~ msgid "more"
 #~ msgstr "mere"
 
-#~ msgid "never ends"
-#~ msgstr "slutter aldrig"
+#~ msgid "never"
+#~ msgstr "aldrig"
 
 #~ msgid "next %1$s"
 #~ msgstr "næste %1$s"
@@ -15965,8 +16223,8 @@ msgstr "Tilføj på %s"
 #~ msgid "next week"
 #~ msgstr "næste uge"
 
-#~ msgid "none"
-#~ msgstr "ingen"
+#~ msgid "no expiry date"
+#~ msgstr "ingen udløbsdato"
 
 #~ msgid "open"
 #~ msgstr "åbn"
@@ -16025,8 +16283,20 @@ msgstr "Tilføj på %s"
 #~ msgid "unselect all"
 #~ msgstr "fravælg alle"
 
+#~ msgid "via"
+#~ msgstr "via"
+
 #~ msgid "weekly"
 #~ msgstr "ugentligt"
+
+#~ msgid "when the link is expired"
+#~ msgstr "når URL'en udløber"
+
+#~ msgid "when the receivers have accessed the files"
+#~ msgstr "når modtagerne har tilgået filerne"
+
+#~ msgid "when the receivers have finished downloading the files"
+#~ msgstr "når modtagerne er færdige med at hente filerne"
 
 #, fuzzy
 #~| msgid "Main window"

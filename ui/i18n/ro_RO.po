@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-06-19 21:17+0200\n"
-"Last-Translator: Daiana Heinrich <daiana@workshop-chapina.com>\n"
+"PO-Revision-Date: 2019-01-09 12:19+0100\n"
+"Last-Translator: Adi David <adi@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
 "MIME-Version: 1.0\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -24,6 +24,26 @@ msgstr "Dialogul conține date incorecte"
 #: apps/io.ox/backbone/extendedModel.js apps/io.ox/core/main/offline.js
 msgid "Server unreachable"
 msgstr "Server inaccesibil"
+
+#. Used in a selectbox when the reminder for an appointment is before the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "before start"
+msgstr "înainte de start"
+
+#. Used in a selectbox when the reminder for an appointment is after the start time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "after start"
+msgstr "după start"
+
+#. Used in a selectbox when the reminder for an appointment is before the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "before end"
+msgstr "înainte de final"
+
+#. Used in a selectbox when the reminder for an appointment is after the end time
+#: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
+msgid "after end"
+msgstr "după final"
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
@@ -496,7 +516,7 @@ msgstr "necunoscut"
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 #, c-format
 msgid "%1$s of %2$s"
-msgstr "%1$s, proprietar %2$s"
+msgstr "%1$s din %2$s"
 
 #. Quota maxed out; 100%
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -513,7 +533,7 @@ msgstr "Utilizați tastele săgeți pentru a reordona elementele"
 
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
 msgid "%1$s moved to position %2$s of %3$s"
-msgstr "%1$s a fost mutat în poziția %2$s of %3$s"
+msgstr "%1$s a fost mutat în poziția %2$s din %3$s"
 
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
@@ -672,11 +692,12 @@ msgid "Ok"
 msgstr "Ok"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
-#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
-#: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
-#: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/dialogs.js
-#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar apps/io.ox/core/about/about.js
+#: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
+#: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -838,7 +859,7 @@ msgstr "Introduceți un număr pozitiv"
 
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Please insert a date after the start date"
-msgstr "Introduceți o dată după data de început."
+msgstr "Introduceți o dată după data de început"
 
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
@@ -1049,7 +1070,7 @@ msgstr "Comentariu"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
-msgstr "Comentați starea confirmării dumneavoastră. "
+msgstr "Comentați starea confirmării dumneavoastră."
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
@@ -1067,7 +1088,7 @@ msgid ""
 "will generally be created on behalf of the owner."
 msgstr ""
 "Calendarul selectat este partajat de către %1$s. Întâlnirile din calendarele "
-"partajate vor fi create în general în numele proprietarului"
+"partajate vor fi create în general în numele proprietarului."
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
@@ -1081,7 +1102,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "On behalf of the owner"
-msgstr "în numele proprietarului"
+msgstr "În numele proprietarului"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Invite owner"
@@ -1260,7 +1281,7 @@ msgstr "Detalii întâlnire"
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js
 msgid "An error occurred. Please try again."
-msgstr "A apărut o eroare. Încercați din nou. "
+msgstr "A apărut o eroare. Încercați din nou."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/toolbar.js
@@ -1365,7 +1386,7 @@ msgstr "Ora de început"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "End time"
-msgstr "Ora de sfârșit:"
+msgstr "Ora de sfârșit"
 
 #. %1$s timezone abbreviation of the user
 #. %2$s time interval of event
@@ -2525,6 +2546,7 @@ msgstr[2] "%d de zile"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d minute"
 msgid_plural "%1$d minutes"
 msgstr[0] "%1$d minut"
@@ -2534,6 +2556,7 @@ msgstr[2] "%1$d de minute"
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d hour"
 msgid_plural "%1$d hours"
 msgstr[0] "%1$d oră"
@@ -2559,7 +2582,7 @@ msgstr "Rezervat"
 #. make sure that the leading and trailing spaces are also in the translation
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid " and "
-msgstr "și"
+msgstr " și "
 
 #. This delimiter is used to concatenate a list of string
 #. Example: Monday, Tuesday, Wednesday
@@ -2575,8 +2598,8 @@ msgctxt "daily"
 msgid "Every day."
 msgid_plural "Every %1$d days."
 msgstr[0] "În fiecare zi."
-msgstr[1] "O dată la %1$d zile"
-msgstr[2] "O dată la %1$d de zile"
+msgstr[1] "O dată la %1$d zile."
+msgstr[2] "O dată la %1$d de zile."
 
 #. recurrence string
 #. %1$d: numeric
@@ -2585,8 +2608,8 @@ msgctxt "weekly"
 msgid "Every day."
 msgid_plural "Every %1$d weeks on all days."
 msgstr[0] "În fiecare zi."
-msgstr[1] "O dată la %1$d săptămîni în fiecare zi"
-msgstr[2] "O dată la %1$d de săptămîni în fiecare zi"
+msgstr[1] "O dată la %1$d săptămâni în fiecare zi."
+msgstr[2] "O dată la %1$d de săptămâni în fiecare zi."
 
 #. recurrence string
 #. %1$d: numeric
@@ -2784,7 +2807,7 @@ msgstr "Apăsați pentru a despărți toate dosarele în coloane separate"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Create all-day appointment"
-msgstr "Creează o întâlnire de o zi întreagă "
+msgstr "Creează o întâlnire de o zi întreagă"
 
 #: apps/io.ox/calendar/year/perspective.js module:io.ox/calendar
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
@@ -3023,7 +3046,7 @@ msgid ""
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
 "Pentru a adăuga contacte manual, introduceți o adresă de mail validă (de "
-"exemplu john.doe@example.com sau \"John Doe\" <jd@example.com>) "
+"exemplu john.doe@example.com sau \"John Doe\" <jd@example.com>)"
 
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution List"
@@ -3504,7 +3527,7 @@ msgstr "Marchează ca listă de distribuție"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Default address"
-msgstr "Adresă implicită "
+msgstr "Adresă implicită"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Address Home"
@@ -3579,7 +3602,7 @@ msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] ""
 "Notiță: Unul dintre contacte nu este afișat deoarece lipsește numărul de "
-"telefon."
+"telefon"
 msgstr[1] ""
 "Notiță: %1$d contacte nu sunt afișate deoarece lipsesc numerele de telefon"
 msgstr[2] ""
@@ -3672,6 +3695,17 @@ msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
+#. '%1$s contact's display name
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "%1$s could not be added as the contact has no valid email field."
+msgstr ""
+"%1$s nu a putut fi adăugat deoarece contactul nu are câmp de e-mail valid."
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "Some contacts could not be added as they have no valid email field."
+msgstr ""
+"Anumite contacte nu au putut fi adăugate deoarece nu au câmp de e-mail valid."
+
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
@@ -3756,7 +3790,7 @@ msgstr "Versiune server"
 
 #: apps/io.ox/core/api/attachment.js module:io.ox/core
 msgid "Saved appointment attachment"
-msgstr "Fișier atașat întâlnirii salvat "
+msgstr "Fișier atașat întâlnirii salvat"
 
 #: apps/io.ox/core/api/attachment.js module:io.ox/core
 msgid "Saved task attachment"
@@ -3764,7 +3798,7 @@ msgstr "Fișier atașat sarcinii salvat"
 
 #: apps/io.ox/core/api/attachment.js module:io.ox/core
 msgid "Saved contact attachment"
-msgstr "Fișier atașat contactului salvat "
+msgstr "Fișier atașat contactului salvat"
 
 #: apps/io.ox/core/api/attachment.js module:io.ox/core
 msgid "Saved attachment"
@@ -3886,7 +3920,7 @@ msgstr "Actualizați navigatorul."
 #. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "For best results, please use "
-msgstr "Pentru rezultate optime, utilizați"
+msgstr "Pentru rezultate optime, utilizați "
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "You have been automatically signed out"
@@ -3966,7 +4000,7 @@ msgstr "Listă elemente"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
-msgstr "Funcționalitățile versiunii Premium"
+msgstr "Funcționalitățile versiunii premium"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
@@ -4250,7 +4284,7 @@ msgstr "Nu se pot muta elemente în acest dosar"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved into itself"
-msgstr "Dosarul nu poate fi mutat în el însuși."
+msgstr "Dosarul nu poate fi mutat în el însuși"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved to one of its subfolders"
@@ -4623,7 +4657,9 @@ msgstr "%1$d în total"
 msgid "Unread: %1$d"
 msgstr "Necitite: %1$d"
 
+#. %1$d number of unread mails
 #: apps/io.ox/core/folder/node.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "%1$d unread"
 msgstr "%1$d necitite"
 
@@ -4903,7 +4939,7 @@ msgstr "Actualizați-vă contul"
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/settings/main.js
 msgid "Settings"
-msgstr "Setări "
+msgstr "Setări"
 
 #. starts the client onboarding wizard that helps users
 #. to configure their devices to access/sync appsuites
@@ -5019,7 +5055,7 @@ msgstr[2] "%1$d de notificări."
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "No notifications"
-msgstr "Nicio notificare "
+msgstr "Nicio notificare"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Close notification area"
@@ -5177,7 +5213,7 @@ msgstr "Adaugă utilizator/grup"
 #. error message when selected user or group can not be used
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "This is not a valid user or group."
-msgstr "Acesta nu este un utilizator sau un grup valid"
+msgstr "Acesta nu este un utilizator sau un grup valid."
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -5240,7 +5276,7 @@ msgstr "Adresa dumneavoastră IP a fost modificată"
 
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "You have to sign in again"
-msgstr "Trebuie să vă autentificați din nou."
+msgstr "Trebuie să vă autentificați din nou"
 
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Please enter correct password"
@@ -5350,7 +5386,7 @@ msgstr "Pierdere"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No errors"
-msgstr "Nicio eroare "
+msgstr "Nicio eroare"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No slow requests"
@@ -5384,12 +5420,24 @@ msgstr ""
 "o reautentificare pentru a avea efect."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
+msgstr ""
+"Anumite setări (limbă, fus orar, temă) necesită o reautentificare pentru a "
+"avea efect."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Default Theme"
 msgstr "Temă implicită"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Unicolor"
 msgstr "Unicolor"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+msgid "Default"
+msgstr "Implicit"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Multicolor"
@@ -5442,8 +5490,16 @@ msgstr ""
 "efect."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "The setting requires a relogin to take effect."
+msgstr "Această setare necesită o reautentificare pentru a avea efect."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
 msgstr "Reîncarcă pagina"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Relogin"
+msgstr "Reautentificare"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -5476,7 +5532,7 @@ msgid ""
 "Please check your browser settings and enable desktop notifications for this "
 "domain"
 msgstr ""
-"Verificați setările navigatoruluu și activați notificările desktop pentru "
+"Verificați setările navigatorului și activați notificările desktop pentru "
 "acest domeniu"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
@@ -5485,7 +5541,7 @@ msgstr "Deschidere automată a zonei de notificare"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Show desktop notifications"
-msgstr "Afișează notificările desktop."
+msgstr "Afișează notificările desktop"
 
 #. Bytes
 #: apps/io.ox/core/strings.js module:io.ox/core
@@ -5601,7 +5657,7 @@ msgid ""
 msgstr ""
 "O actualizare durează un anumit timp, așadar vă rugăm să așteptați în timp "
 "ce actualizarea rulează în fundal. Este permisă o singură actualizare pe "
-"abonament și pe sesiune.  "
+"abonament și pe sesiune."
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid ""
@@ -5713,7 +5769,7 @@ msgstr "Zonă de text îmbogățit. Apăsați ALT-F10 pentru bara de unelte"
 #: apps/io.ox/core/tk/datepicker.js module:io.ox/core
 #: apps/io.ox/core/tk/mobiscroll.js
 msgid "Clear"
-msgstr "Golește "
+msgstr "Golește"
 
 #: apps/io.ox/core/tk/filestorageUtil.js module:io.ox/core
 msgid "Ignore warnings"
@@ -6189,7 +6245,7 @@ msgstr "Imagini în miniatură"
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
 msgid "Drop new version of \"%1$s\" here"
-msgstr "Glisați aici noua versiune a \"%1$s\" "
+msgstr "Glisați aici noua versiune a \"%1$s\""
 
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
 msgid "Drop only a single file as new version."
@@ -6336,7 +6392,7 @@ msgstr "Ne pare rău, această pagină nu este disponibilă momentan."
 
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
-msgstr "Ne pare rău, pentru această imagine nu există previzualizare"
+msgstr "Ne pare rău, pentru această imagine nu există previzualizare."
 
 #: apps/io.ox/core/viewer/views/types/spreadsheetview.js module:io.ox/core
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
@@ -6391,7 +6447,7 @@ msgstr "Închide această notificare"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Title"
-msgstr "*Titlu"
+msgstr "Titlu"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Enter document title here"
@@ -6650,13 +6706,13 @@ msgid_plural ""
 "Some files/folder are shared with others. They won't be available for them "
 "any more."
 msgstr[0] ""
-"Acest fișier (sau dosar) este partajat. Nu va mai fi dosponibil pentru "
+"Acest fișier (sau dosar) este partajat. Nu va mai fi disponibil pentru "
 "acești utilizatori."
 msgstr[1] ""
-"Anumite fișiere/dosare sunt partajate. Nu vor mai fi dosponibile pentru "
+"Anumite fișiere/dosare sunt partajate. Nu vor mai fi disponibile pentru "
 "acești utilizatori."
 msgstr[2] ""
-"Anumite fișiere/dosare sunt partajate. Nu vor mai fi dosponibile pentru "
+"Anumite fișiere/dosare sunt partajate. Nu vor mai fi disponibile pentru "
 "acești utilizatori."
 
 #: apps/io.ox/files/actions/download.js module:io.ox/files
@@ -7486,7 +7542,7 @@ msgstr "Parola veche"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
-msgstr "Recuperează "
+msgstr "Recuperează"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Failed to recover accounts"
@@ -7544,7 +7600,7 @@ msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
-msgstr "Tentativă de auto-configurare a contului dumneavoatră de mail"
+msgstr "Tentativă de auto-configurare a contului dumneavoastră de mail"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "There was no suitable server found for this mail/password combination"
@@ -7605,7 +7661,7 @@ msgstr "Cont actualizat"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Username must not be empty."
-msgstr "Numele de utilizator nu poate fi gol"
+msgstr "Numele de utilizator nu poate fi gol."
 
 #. %1$s the missing request parameter
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -7958,7 +8014,7 @@ msgstr "Detalii autentificare"
 
 #: apps/io.ox/mail/actions/vcard.js module:io.ox/mail
 msgid "Failed to add. Maybe the vCard attachment is invalid."
-msgstr "Adăugarea a eșuat. Probabil că fișierul VCard atașat este incorect."
+msgstr "Adăugarea a eșuat. Probabil că fișierul vCard atașat este incorect."
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
 msgid "Saved mail attachment"
@@ -8494,7 +8550,7 @@ msgstr "Adaugă mesajul original ca fișier atașat"
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
 msgid "Delete draft"
-msgstr "Șterge schița."
+msgstr "Șterge schița"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -8632,6 +8688,10 @@ msgstr "Eroare: Încărcarea mesajelor a eșuat"
 msgid "Auto forwarding is active"
 msgstr "Redirecționarea automată este activă"
 
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr "Redirecționare automată"
+
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 #: apps/io.ox/settings/util.js module:io.ox/core
@@ -8651,7 +8711,7 @@ msgstr "Redirecționare automată"
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 msgid "Enable or disable auto forward"
-msgstr "Activați sau dezactivați redirecționarea automată "
+msgstr "Activați sau dezactivați redirecționarea automată"
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 msgid "Forward all incoming emails to this address"
@@ -9023,7 +9083,7 @@ msgstr "potrivire exactă, completă"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "not an exact, full match "
-msgstr "nu este potrivire exactă, completă"
+msgstr "nu este potrivire exactă, completă "
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -9072,7 +9132,7 @@ msgstr "Aplică regula dacă toate condițiile sunt respectate"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Apply rule if any condition is met"
-msgstr "Aplică regula dacă una din condiții este respectată."
+msgstr "Aplică regula dacă una din condiții este respectată"
 
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/util.js
@@ -9282,6 +9342,10 @@ msgid "Your vacation notice is active"
 msgstr "Mesajul dumneavoastră de absență este activ"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
+msgid "vacation notice"
+msgstr "mesaj de absență"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "The time frame is in the past."
 msgstr "Intervalul de timp este din trecut."
 
@@ -9315,6 +9379,10 @@ msgstr "Sfârșit"
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Message"
 msgstr "Mesaj"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+msgid "Show advanced options"
+msgstr "Afișează setările avansate"
 
 #. Context: Vacation notices
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -9538,7 +9606,7 @@ msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "sending"
 msgstr ""
-"Colectează automat contactele în dosarul  \"Adrese colectate\" la trimitere"
+"Colectează automat contactele în dosarul \"Adrese colectate\" la trimitere"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid ""
@@ -9573,7 +9641,7 @@ msgstr "Adaugă semnătura sub textul între ghilimele"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature"
-msgstr "Adaugă o semnătură "
+msgstr "Adaugă o semnătură"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Edit signature"
@@ -9874,7 +9942,7 @@ msgstr "Descarcă aplicația."
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Get your device configured by email."
-msgstr "Configurați-vă dispozitivul via e-mail"
+msgstr "Configurați-vă dispozitivul via e-mail."
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid ""
@@ -9995,7 +10063,7 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
-msgstr "inapoi"
+msgstr "înapoi"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -10168,7 +10236,7 @@ msgstr "Bine ați venit la %1$s"
 #. %1$s is social media name, e.g. Facebook
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Add your %1$s account"
-msgstr "Adăugați contul dumneavoastră %1$s "
+msgstr "Adăugați contul dumneavoastră %1$s"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Try again."
@@ -10218,10 +10286,6 @@ msgstr "Setări portal"
 msgid "Add widget"
 msgstr "Adaugă o aplicație"
 
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-msgid "Default"
-msgstr "Implicit"
-
 #. %1$s is the title of the item, which should be colored
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Color %1$s"
@@ -10241,7 +10305,7 @@ msgstr "Activează %1$s"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Smartphone settings:"
-msgstr "Setări smartphone"
+msgstr "Setări smartphone:"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Reduce to widget summary"
@@ -10276,7 +10340,7 @@ msgstr "Golește câmpul"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
-msgstr "S-au găsit mai multe elemente decât cele %1$s afișate momentan."
+msgstr "S-au găsit mai multe elemente decât cele %1$s afișate momentan"
 
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "Allow connections with untrusted certificates"
@@ -10303,7 +10367,7 @@ msgstr ""
 "utilizând parola principală a contului dumneavoastră. Dacă modificați parola "
 "principală, conturile dumneavoastră externe pot să nu mai funcționeze. În "
 "acest caz puteți utiliza parola veche pentru a recupera toate parolele "
-"conturilor:"
+"conturilor."
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Delete %1$s"
@@ -10561,6 +10625,10 @@ msgid "CalDav/CardDav"
 msgstr "CalDav/CardDav"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Exchange Active Sync"
 msgstr "Exchange Active Sync"
 
@@ -10613,7 +10681,7 @@ msgstr "Afișează autenticitatea e-mailului"
 #. Status for mail authenticity features. Do not show any information at all
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "Disabled"
-msgstr "Deazctivat"
+msgstr "Dezactivat"
 
 #. Status for mail authenticity features. Show information for dangerous and unambiguous/inconclusive
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
@@ -10685,7 +10753,7 @@ msgstr "A apărut o eroare gravă!"
 
 #: apps/io.ox/tasks/actions/doneUndone.js module:io.ox/tasks
 msgid "Task was modified before, please reload"
-msgstr "Sarcina a fost modificată între timp, reîncărcați "
+msgstr "Sarcina a fost modificată între timp, reîncărcați."
 
 #: apps/io.ox/tasks/actions/move.js module:io.ox/tasks
 msgid "Tasks can not be moved to or out of shared folders"
@@ -11144,7 +11212,7 @@ msgid ""
 "minimized and closed."
 msgstr ""
 "Mesajele vor fi afișate într-o fereastră nouă. Aceste ferestre pot fi "
-"maximizate, minimizate sau închise"
+"maximizate, minimizate sau închise."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
@@ -11346,7 +11414,7 @@ msgstr "Foarte improbabil"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "%1$d of 10 points."
-msgstr "%1$d din 10 puncte"
+msgstr "%1$d din 10 puncte."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Extremely likely"
@@ -11380,11 +11448,11 @@ msgid ""
 msgstr ""
 "Vă atragem atenția că solicitările de asistență nu pot fi soluționate prin "
 "intermediul formularului de feedback. Dacă aveți întrebări sau probleme, "
-"contactați direct serviciul nostru de asistență"
+"contactați direct serviciul nostru de asistență."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Please select a rating."
-msgstr "Selectați o apreciere"
+msgstr "Selectați o apreciere."
 
 #. popup info message
 #: apps/plugins/core/feedback/register.js module:io.ox/core
@@ -11440,7 +11508,7 @@ msgstr "Antreprenor"
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Freelancer"
-msgstr "Liber-profesionist "
+msgstr "Liber-profesionist"
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Employee"
@@ -11584,7 +11652,7 @@ msgstr "Invitații noi la întâlniri"
 #. Body text of generic desktop notification about new invitations to appointments
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 msgid "You have new appointment invitations"
-msgstr "Aveți invitații noi la întâlniri."
+msgstr "Aveți invitații noi la întâlniri"
 
 #. Invitations (notifications) about appointments
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
@@ -12277,7 +12345,7 @@ msgstr ""
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Your %s newsfeed"
-msgstr "Fluxul de știri %s "
+msgstr "Fluxul de știri %s"
 
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid "Welcome to %s"
@@ -12315,661 +12383,247 @@ msgstr "Invită la %s"
 msgid "Add on %s"
 msgstr "Adaugă pe %s"
 
-#~ msgid "Empty table cell"
-#~ msgstr "Celulă de tabel goală"
+#~ msgid "Send mail %1$s before start."
+#~ msgstr "Trimite mesaj cu %1$s înainte de început."
 
-#~ msgid "Encrypt"
-#~ msgstr "Criptează "
+#~ msgid "Send mail %1$s after start."
+#~ msgstr "Trimite mesaj cu %1$s după început."
 
-#~ msgid "You have to enter a username and password to subscribe."
-#~ msgstr "Introduceți un nume de utilizator și o parolă pentru a vă abona."
+#~ msgid "Send mail %1$s before end."
+#~ msgstr "Trimite mesaj cu %1$s înainte de final."
 
-#~ msgid "All future messages from %1$s will be moved to the selected folder."
-#~ msgid_plural ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
-#~ msgstr[0] ""
-#~ "Toate mesajele viitoare de la %1$s vor fi mutate în dosarul selectat."
-#~ msgstr[1] ""
-#~ "Toate mesajele viitoare de la expeditorii adreselor selectate vor fi "
-#~ "mutate în dosarul selectat."
-#~ msgstr[2] ""
-#~ "Toate mesajele viitoare de la expeditorii adreselor selectate vor fi "
-#~ "mutate în dosarul selectat."
+#~ msgid "Send mail %1$s after end."
+#~ msgstr "Trimite mesaj cu %1$s după final."
 
-#~ msgid "Show Links"
-#~ msgstr "Afișează legăturile"
+#~ msgid "Send mail at %1$s."
+#~ msgstr "Trimite mesajele pe %1$s."
 
-#~ msgid "Add attachment"
-#~ msgstr "Adaugă fișier atașat"
+#~ msgid "Send mail at start."
+#~ msgstr "Trimite mesaj la început."
 
-#~ msgid "Scheduling"
-#~ msgstr "Programare"
+#~ msgid "Send mail at end."
+#~ msgstr "Trimite mesaj la final."
 
-#~ msgctxt "app"
-#~ msgid "Conversations"
-#~ msgstr "Conversații"
+#~ msgid "Reminder %1$d"
+#~ msgstr "Memento %1$d"
 
-#~ msgctxt "app"
-#~ msgid "Settings"
-#~ msgstr "Setări"
+#~ msgid "type"
+#~ msgstr "tip"
 
-#~ msgctxt "app"
-#~ msgid "Documents"
-#~ msgstr "Documente"
+#~ msgid "timeframe"
+#~ msgstr "interval de timp"
 
-#~ msgid "iCal-feed has been imported successfully"
-#~ msgstr "Fluxul iCal a fost importat cu succes"
+#~ msgid "timeframe relation"
+#~ msgstr "relație interval de timp"
 
-#~ msgid "Change color"
-#~ msgstr "Schimbă culoarea"
+#~ msgid "Remove reminder"
+#~ msgstr "Elimină memento"
 
-#~ msgid "Please note that distribution lists cannot contain ressources."
-#~ msgstr "Atenție: lista de distribuție nu poate conține resurse."
+#~ msgid "Minimized windows"
+#~ msgstr "Ferestre minimizate"
 
-#~ msgid "Never."
-#~ msgstr "Niciodată."
+#~ msgid "Change reminder"
+#~ msgstr "Modifică mementoul"
 
-#~ msgid "Town"
-#~ msgstr "Oraș"
+#~ msgid "Change reminders"
+#~ msgstr "Modifică mementourile"
 
-#~ msgid "iCal-Feed"
-#~ msgstr "Flux iCal"
+#~ msgid "Appointments in public calendars"
+#~ msgstr "Întâlniri în calendarele publice"
 
 #~ msgid ""
-#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
-#~ "for example."
+#~ "The selected calendar \"%1$s\" is public. Do you really want to create an "
+#~ "appointment in this calendar?"
 #~ msgstr ""
-#~ "Ignoră întâlnirile existente. Util, de exemplu, pentru calendarele de "
-#~ "sărbători oficiale."
+#~ "Calendarul selectat \"%1$s\" este public. Sigur doriți să creați o "
+#~ "întâlnire în acest calendar?"
 
-#~ msgid "Remind me again %1$s"
-#~ msgstr "Amintește-mi din nou %1$s"
+#~ msgid "Create in public calendar"
+#~ msgstr "Creează în calendarul public"
 
-#~ msgid "Sharing link created for file \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "Se partajează legătura creată pentru fișierul \"%1$d\""
-#~ msgstr[1] "Sharing link created for %1$d items"
-#~ msgstr[2] "Sharing link created for %1$d items"
-
-#~ msgid "Sharing link created for folder \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "Se partajează legătura creată pentru dosarul \"%1$d\""
-#~ msgstr[1] "Se partajează legătura creată pentru %1$d elemente"
-#~ msgstr[2] "Se partajează legătura creată pentru %1$d de elemente"
-
-#~ msgid "Internal & external users"
-#~ msgstr "Utilizatori interni și externi"
-
-#~ msgid "Quick reply"
-#~ msgstr "Răspuns rapid"
-
-#~ msgid "Synchronize with Outlook"
-#~ msgstr "Sincronizare cu Outlook"
-
-#~ msgid ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
+#~ msgid "Add a message to the notification email for the other participants."
 #~ msgstr ""
-#~ "Toate mesajele viitoare de la expeditorii mesajelor selectate vor fi "
-#~ "mutate în dosarul selectat."
+#~ "Adaugă un mesaj la notificarea pe e-mail pentru ceilalți participanți."
 
-#~ msgid "never"
-#~ msgstr "niciodată"
+#~ msgid "Your recurrence rule does not fit to your start date."
+#~ msgstr "Regula de repetare nu se potrivește cu data inițială."
 
-#~ msgid "Use Password"
-#~ msgstr "Utilizează parola"
+#~ msgid "Your recurrence rule was changed automatically."
+#~ msgstr "Regula de repetare a fost modificată automat."
 
-#~ msgid "when the receivers have finished downloading the files"
-#~ msgstr "când destinatarii au finalizat descărcarea fișierelor"
-
-#~ msgid "when the link is expired"
-#~ msgstr "când a expirat legătura"
-
-#~ msgid "when the receivers have accessed the files"
-#~ msgstr "când destinatarii au accesat fișierele"
-
-#~ msgid "%1$s Options"
-#~ msgstr "Opțiuni %1$s"
-
-#~ msgid "Account is being created"
-#~ msgstr "Contul este în curs de creare"
+#~ msgid "User defined color"
+#~ msgstr "Culoare personalizată"
 
 #~ msgid ""
-#~ "This might be a phishing email because we could not verify that it is "
-#~ "really from %1$s."
+#~ "You are using a shared calendar. The calendar owner was added as "
+#~ "organizer."
 #~ msgstr ""
-#~ "Acesta poate fi un mesaj de phishing, deoarece nu s-a putut verifica dacă "
-#~ "este într-adevăr de la %1$s."
+#~ "Utilizați un calendar partajat. Proprietarul calendarului a fost adăugat "
+#~ "ca organizator."
 
-#~ msgid "in"
-#~ msgstr "în"
-
-#~ msgid "Exchange ActiveSync"
-#~ msgstr "Exchange ActiveSync"
-
-#~ msgid "Dangerous emails only"
-#~ msgstr "Doar e-mailurile periculoase"
-
-#~ msgid "Dangerous and trusted emails"
-#~ msgstr "E-mailuri periculoase și de încredere"
-
-#~ msgid "Dangerous, trusted and valid emails"
-#~ msgstr "E-mailuri periculoase, de încredere și valide"
-
-#~ msgid "Add new reminder"
-#~ msgstr "Adaugă memento nou"
-
-#~ msgid "Authentication failed. Please fill in login and password."
-#~ msgstr "Autentificarea a eșuat. Introduceți numele de utilizator și parola."
-
-#~ msgid "Public"
-#~ msgstr "Public"
-
-#~ msgid "The appointment is visible for all users in shared folders."
+#~ msgid ""
+#~ "You are no longer using a shared calendar. You were added as organizer."
 #~ msgstr ""
-#~ "Întâlnirea este vizibilă pentru toți utilizatorii din dosarele partajate."
+#~ "Nu mai utilizați un calendar partajat. Ați fost adăugat ca organizator."
+
+#~ msgid "Visibility Help"
+#~ msgstr "Ajutor pentru vizibilitate"
+
+#~ msgid "Use calendar color"
+#~ msgstr "utilizează culoarea calendarului"
+
+#~ msgid "none"
+#~ msgstr "nimeni"
+
+#~ msgid "Previous Month"
+#~ msgstr "Luna precedentă"
+
+#~ msgid "Next Month"
+#~ msgstr "Luna următoare"
 
 #~ msgid ""
-#~ "In shared folders, the appointment is displayed as a simple time slot for "
-#~ "non-attending users."
+#~ "This appointment is an exception. Changing the exception does not affect "
+#~ "the series."
 #~ msgstr ""
-#~ "În dosare partajate, întâlnirea este afișată ca spațiu obișnuit pentru "
-#~ "utilizatorii care nu participă."
+#~ "Această întâlnire este o excepție. Modificarea excepției nu afectează "
+#~ "seria."
+
+#~ msgid "%s %s, create all-day appointment"
+#~ msgstr "%s %s, creează o întâlnire de o zi întreagă"
+
+#~ msgid "Apply filter"
+#~ msgstr "Aplică filtrul"
+
+#~ msgid "Starting letter index"
+#~ msgstr "Index pentru litere inițiale"
+
+#~ msgid "Contact list. Select a contact to view details."
+#~ msgstr "Listă de contacte. Selectați un contact ca să-i vedeți detaliile."
+
+#~ msgid "Language:"
+#~ msgstr "Limbă:"
+
+#~ msgid "Regional settings"
+#~ msgstr "Setări regionale"
+
+#~ msgid "12 hours"
+#~ msgstr "12 ore"
+
+#~ msgid "24 hours"
+#~ msgstr "24 de ore"
+
+#~ msgid "Sunday"
+#~ msgstr "Duminică"
+
+#~ msgid "Monday"
+#~ msgstr "Luni"
+
+#~ msgid "Week that contains January 1st"
+#~ msgstr "Săptămâna care conține 1 ianuarie"
+
+#~ msgid "Week that contains the first Thursday"
+#~ msgstr "Săptămâna care conține prima joi"
+
+#~ msgid "Numbers"
+#~ msgstr "Numere"
+
+#~ msgid "First day of week"
+#~ msgstr "Prima zi din săptămână"
+
+#~ msgid "First week of year"
+#~ msgstr "Prima săptămână din an"
+
+#~ msgid "Don't remind me again"
+#~ msgstr "Nu-mi mai aminti"
+
+#~ msgid "Unable to upload file"
+#~ msgid_plural "Unable to upload files"
+#~ msgstr[0] "Fișierul nu s-a putut încărca"
+#~ msgstr[1] "Încarcă un fișier"
+#~ msgstr[2] "Încarcă un fișier"
+
+#~ msgid "We encountered an issue for your upload"
+#~ msgid_plural "We encountered some issues for your upload"
+#~ msgstr[0] "A apărut o problemă la încărcare"
+#~ msgstr[1] "Au apărut câteva probleme la încărcare"
+#~ msgstr[2] "Au apărut câteva probleme la încărcare"
+
+#~ msgid "Slideshow"
+#~ msgstr "Prezentare"
+
+#~ msgid "Run slideshow"
+#~ msgstr "Redă prezentarea"
+
+#~ msgid "Stop slideshow"
+#~ msgstr "Oprește prezentarea"
+
+#~ msgid "Your preview is being generated."
+#~ msgstr "Previzualizarea este în curs de creare."
 
 #~ msgid ""
-#~ "The appointment is not visible to non-attending users in shared folders "
-#~ "at all. The appointment is not considered for conflicts and does not "
-#~ "appear in the scheduling view."
+#~ "\n"
+#~ " Alternatively you can download the file."
 #~ msgstr ""
-#~ "Întâlnirea nu este vizibilă deloc pentru utilizatorii care nu participă. "
-#~ "Nu se ține cont de intâlnire din cauza unor conflicte și de aceea nu "
-#~ "apare în vederea planificare."
+#~ "\n"
+#~ "Alternativ puteți descărca fișierul."
 
-#~ msgid "Notify all participants by email."
-#~ msgstr "Informează toți participanții prin e-mail."
+#~ msgid "Account already exists"
+#~ msgstr "Contul există deja"
 
-#~ msgid "Birthday"
-#~ msgstr "Aniversare"
+#~ msgid "Image size:"
+#~ msgstr "Dimensiune imagine:"
 
-#~ msgid "Color scheme"
-#~ msgstr "Schemă de culori"
+#~ msgid "Original"
+#~ msgstr "Original"
 
-#~ msgid "Custom colors"
-#~ msgstr "Culori personalizate"
+#~ msgid "Small"
+#~ msgstr "Mic"
 
-#~ msgid "Classic colors"
-#~ msgstr "Culori clasice"
+#~ msgid "Large"
+#~ msgstr "Mare"
 
-#~ msgid "Dark colors"
-#~ msgstr "Culori închise"
+#~ msgid "Image size"
+#~ msgstr "Dimensiune imagine"
 
-#~ msgid "Application Toolbar"
-#~ msgstr "Bară de unelte pentru aplicații"
+#~ msgid "Small (%1$s px)"
+#~ msgstr "Mic (%1$s px)"
 
-#~ msgid "Folder type"
-#~ msgstr "Tip dosar"
+#~ msgid "Medium (%1$s px)"
+#~ msgstr "Mediu (%1$s px)"
 
-#~ msgid "Number of messages"
-#~ msgstr "Număr de mesaje"
+#~ msgid "Large (%1$s px)"
+#~ msgstr "Mare (%1$s px)"
 
-#~ msgid "Number of items"
-#~ msgstr "Număr de elemente"
+#~ msgid "Mail size:"
+#~ msgstr "Dimensiune mail:"
 
-#~ msgid "List of public calendars and events"
-#~ msgstr "Listă de calendare și evenimente publice"
+#~ msgid "Delete files after expiration"
+#~ msgstr "Șterge fișierele după expirare"
 
-#~ msgid ""
-#~ "Ignore existing events. Helpful to import public holiday calendars, for "
-#~ "example."
+#~ msgid "Is bigger than (Size: B/KB/MB/GB)"
+#~ msgstr "Este mai mare decât (Dimensiune: B/KB/MB/GB)"
+
+#~ msgid "Is smaller than (Size: B/KB/MB/GB)"
+#~ msgstr "Este mai mic decât (Dimensiune: B/KB/MB/GB)"
+
+#~ msgid "String"
+#~ msgstr "Șir"
+
+#~ msgid "Source"
+#~ msgstr "Sursă"
+
+#~ msgid "Always trust mails from the following senders"
+#~ msgstr "Aveți întotdeauna încrede in mesaje trimise de următorii expeditori"
+
+#~ msgid "Comma-separated list e.g. \"example.org, alice@example.com\""
 #~ msgstr ""
-#~ "Ignoră evenimentele existente. Util, de exemplu, pentru calendarele de "
-#~ "sărbători."
+#~ "Listă separată prin virgule, de ex. \"exemplu.org, alice@exemplu.com\""
 
-#~ msgid "Quick launch 1"
-#~ msgstr "Lansare rapidă 1"
+#~ msgid "Participant not found"
+#~ msgstr "Participantul nu a fost găsit"
 
-#~ msgid "Quick launch 2"
-#~ msgstr "Lansare rapidă 2"
-
-#~ msgid "Quick launch 3"
-#~ msgstr "Lansare rapidă 3"
-
-#~ msgid ""
-#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-#~ msgid_plural ""
-#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
-#~ msgstr[0] "Fișierul nu poate fi încărcat deoarece depășește limita de %1$s"
-#~ msgstr[1] "Fișierele nu pot fi încărcate deoarece depășesc limita de %1$s"
-#~ msgstr[2] "Fișierele nu pot fi încărcate deoarece depășesc limita de %1$s"
-
-#~ msgid "This message is from a trusted sender."
-#~ msgstr "Acest mesaj este de la un expeditor de încredere."
-
-#~ msgid ""
-#~ "This might be a phishing mail because we could not verify that this email "
-#~ "is really from %1$s."
-#~ msgstr ""
-#~ "Acesta poate fi un mesaj de phishing, deoarece nu s-a putut verifica dacă "
-#~ "e-mailul este într-adevăr de la %1$s."
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Acest mesaj a fost trimis de %1$s."
-
-#~ msgid "We could not verify that this email is really from %1$s."
-#~ msgstr "N-am putut verifica dacă acest mesaj este într-adevăr de la %1$s."
-
-#~ msgid "no expiry date"
-#~ msgstr "nicio dată de expirare"
-
-#~ msgid "Expiration: %1$d"
-#~ msgstr "Expiră: %1$d"
-
-#~ msgid "Has Attachment"
-#~ msgstr "Are fișier atașat"
-
-#~ msgid "Show message authenticity"
-#~ msgstr "Afișează autenticitatea mesajului"
-
-#~ msgid "Dangerous only"
-#~ msgstr "Doar periculoase"
-
-#~ msgid "Dangerous and trusted"
-#~ msgstr "Periculoase și de încredere"
-
-#~ msgid "Acknowledge all reminders"
-#~ msgstr "Confirmă toate mementourile"
-
-#~ msgid "%1$d unread mails"
-#~ msgstr "%1$d mesaje necitite"
-
-#~ msgctxt "window title"
-#~ msgid "%1$s %2$s"
-#~ msgstr "%1$s %2$s"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s for %2$s"
-#~ msgstr "%1$s, proprietar %2$s"
-
-#, fuzzy
-#~| msgid "%s client for Android"
-#~ msgid "%1$s for Android"
-#~ msgstr "Client %s pentru Android"
-
-#, fuzzy
-#~| msgid "%s client for Mac OS"
-#~ msgid "%1$s for MacOS"
-#~ msgstr "Client %s pentru Mac OS"
-
-#, fuzzy
-#~| msgid "%s client for Windows"
-#~ msgid "%1$s for Windows"
-#~ msgstr "Client %s pentru Windows"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s for iOS"
-#~ msgstr "%1$s, proprietar %2$s"
-
-#~ msgid "%1$s is a new contact"
-#~ msgstr "%1$s este un contact nou"
-
-#~ msgid "%1$s is now connected with %2$s"
-#~ msgstr "%1$s este acum în conexiune cu %2$s"
-
-#~ msgid "%d minute"
-#~ msgid_plural "%d minutes"
-#~ msgstr[0] "%d minut"
-#~ msgstr[1] "%d minute"
-#~ msgstr[2] "%d de minute"
-
-#~ msgid "%s client for Windows (Installation via the OX Updater)"
-#~ msgstr ""
-#~ "Client %s pentru Windows (Instalare prin aplicația de actualizare OX)"
-
-#~ msgid "(current app)"
-#~ msgstr "(aplicația curentă)"
-
-#~ msgid "Absent"
-#~ msgstr "Absent"
-
-#~ msgid "All my appointments"
-#~ msgstr "Toate întâlnirile mele"
-
-#~ msgid "Apps"
-#~ msgstr "Aplicații"
-
-#~ msgid "Back to appointment"
-#~ msgstr "Înapoi la întâlnire"
-
-#~ msgid ""
-#~ "By changing the date of this appointment you are creating an appointment "
-#~ "exception to the series."
-#~ msgstr ""
-#~ "Dacă modificați data acestei întâlniri se va crea o întâlnire excepție "
-#~ "într-o serie."
-
-#~ msgid "Change view"
-#~ msgstr "Modifică vederea"
-
-#, fuzzy
-#~| msgid "Share %1$s \"%2$s\""
-#~ msgid "Chrome %1$s on %2$s"
-#~ msgstr "Partajează %1$s \"%2$s\""
-
-#, fuzzy
-#~| msgid "close for %1$s"
-#~ msgid "Close for %1$s"
-#~ msgstr "închide pentru %1$s"
-
-#~ msgid "Connector for Microsoft Outlook®"
-#~ msgstr "Conector pentru Microsoft Outlook®"
-
-#~ msgid ""
-#~ "Convert the entered start and end dates to match the modified timezones"
-#~ msgstr ""
-#~ "Convertește datele de început și sfârșit în conformitate cu fusul orar "
-#~ "modificat."
-
-#~ msgid "Couldn't load appointment data."
-#~ msgstr "Nu s-au putut încărca datele întâlnirii."
-
-#~ msgid "Couldn't load your contact data."
-#~ msgstr "Nu s-au putut încărca datele de contact."
-
-#~ msgid "Create exception"
-#~ msgstr "Creează excepție"
-
-#, fuzzy
-#~| msgid "Current Costs:"
-#~ msgid "Current session"
-#~ msgstr "Costuri curente:"
-
-#~ msgid ""
-#~ "Did you know that you can take OX App Suite with you? Just click this "
-#~ "icon and choose 'Connect your device' from the menu."
-#~ msgstr ""
-#~ "Știați că puteți să luați OX App Suite cu dumneavoastră? Apăsați pe "
-#~ "această pictogramă și selectați 'Conectează dispozitivul' din meniu."
-
-#~ msgid "Display emoticons as graphics in text emails"
-#~ msgstr "Afișează emotigramele ca imagini în mesajele text"
-
-#, fuzzy
-#~| msgid "Do you really want to delete this account?"
-#~ msgid ""
-#~ "Do you really want to terminate all active sessions except the current "
-#~ "one?"
-#~ msgstr "Sigur doriți să ștergeți acest cont?"
-
-#, fuzzy
-#~| msgctxt "One file only"
-#~| msgid "Do you really want to delete this version?"
-#~ msgid "Do you really want to terminate that session?"
-#~ msgstr "Sigur doriți să ștergeți această versiune?"
-
-#~ msgid ""
-#~ "Do you want to delete the whole series or just one appointment within the "
-#~ "series?"
-#~ msgstr ""
-#~ "Doriți să ștergeți toată seria sau doar o anumită întâlnire din serie?"
-
-#~ msgid ""
-#~ "Do you want to edit the whole series or just one appointment within the "
-#~ "series?"
-#~ msgstr "Doriți să editați toată seria sau doar anumite întâlniri din serie?"
-
-#~ msgid "Doubleclick in this row for whole day appointment"
-#~ msgstr "Dublu clic în această linie pentru o întâlnire pentru întreaga zi"
-
-#~ msgid "Download %s via the OX Updater"
-#~ msgstr "Descarcă %s prin aplicația de actualizare OX"
-
-#~ msgid "Download installation file (for Windows)"
-#~ msgstr "Descarcă fișierul de instalare (pentru Windows)"
-
-#, fuzzy
-#~| msgid "Due on %1$s"
-#~ msgid "Edge on %1$s"
-#~ msgstr "Scadent pe %1$s"
-
-#~ msgid "Expand timeframe by one month"
-#~ msgstr "Extinde intervalul de timp cu o lună"
-
-#~ msgid "External guests"
-#~ msgstr "Invitați externi"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "Firefox %1$s on %2$s"
-#~ msgstr "%1$s, proprietar %2$s"
-
-#~ msgid "Header exists"
-#~ msgstr "Antetul există"
-
-#~ msgid "High contrast theme"
-#~ msgstr "Temă cu contrast ridicat"
-
-#~ msgid "How does this work?"
-#~ msgstr "Cum funcționează?"
-
-#, fuzzy
-#~| msgid "Added %1$s."
-#~ msgid "IP Address: %1$s"
-#~ msgstr "S-a adăugat %1$s."
-
-#~ msgid ""
-#~ "If you select different timezones, the appointment's start and end dates "
-#~ "are saved in the timezone of the appointment's start date. A different "
-#~ "end date timezone only allows a convenient conversion."
-#~ msgstr ""
-#~ "Dacă selectați fusuri orare diferite, datele de început și sfârșit sunt "
-#~ "salvate în fusul orar al datei de început. Un fus orar diferit pentru "
-#~ "data de sfârșit facilitează doar conversia."
-
-#~ msgid ""
-#~ "If you spot a free time, just select this area. To do this, move the "
-#~ "cursor to the start time, hold the mouse button, and <b>drag the mouse</"
-#~ "b> to the end time."
-#~ msgstr ""
-#~ "Dacă găsiți un interval de timp liber, este de ajuns să selectați această "
-#~ "zonă. Pentru aceasta, deplasați cursorul pe ora de început, mențineți "
-#~ "apăsat butonul mouse-ului și <b>glisați mouse-ul</b> pe ora de sfârșit."
-
-#~ msgid ""
-#~ "Informs about the current status of Emails and appointments without "
-#~ "having to display the user interface or another Windows® client."
-#~ msgstr ""
-#~ "Informează despre starea curentă a e-mailurilor și a întâlnirilor fără a "
-#~ "afișa interfața utilizator sau alt client Windows®."
-
-#~ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
-#~ msgstr ""
-#~ "Listă derulantă de lansare de aplicații. Apăsați [Enter] pentru a vedea "
-#~ "lista."
-
-#~ msgid "Leave empty if you have none"
-#~ msgstr "Lăsați gol dacă nu aveți"
-
-#~ msgid "LinkedIn"
-#~ msgstr "LinkedIn"
-
-#~ msgid "LinkedIn Network Updates"
-#~ msgstr "Actualizări rețea LinkedIn"
-
-#~ msgid "LinkedIn reported an error:"
-#~ msgstr "LinkedIn a returnat o eroare:"
-
-#~ msgid "Manage permission now"
-#~ msgstr "Gestionați permisiunile acum"
-
-#~ msgid "Notifier"
-#~ msgstr "Notificator"
-
-#~ msgid "Open in browser"
-#~ msgstr "Deschide în navigator"
-
-#~ msgid "Open in browser tab"
-#~ msgstr "Deschide într-o filă de navigator"
-
-#~ msgid "Open on LinkedIn"
-#~ msgstr "Deschide în LinkedIn"
-
-#, fuzzy
-#~| msgid "Others"
-#~ msgid "Other clients"
-#~ msgstr "Altele"
-
-#~ msgid "Press [enter] to jump to the linkedin stream."
-#~ msgstr "Apăsați [Enter] pentru a ajunge la fluxul LinkedIn."
-
-#~ msgid "Quit"
-#~ msgstr "Ieși"
-
-#~ msgid "Recent activities"
-#~ msgstr "Activități recente"
-
-#, fuzzy
-#~| msgid "Remove from recipient list"
-#~ msgid "Remove restore point: \"%1$s\""
-#~ msgstr "Elimină din lista  destinatarilor"
-
-#~ msgid "Restore applications"
-#~ msgstr "Restabilește aplicațiile"
-
-#, fuzzy
-#~| msgid "Share %1$s \"%2$s\""
-#~ msgid "Safari %1$s on %2$s"
-#~ msgstr "Partajează %1$s \"%2$s\""
-
-#~ msgid "Signed in as:"
-#~ msgstr "Conectat ca:"
-
-#~ msgid ""
-#~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
-#~ "LinkedIn with the permission to do read messages."
-#~ msgstr ""
-#~ "Ne pare rău, dar nu vă putem ajuta. Furnizorul dumneavoastră trebuie să "
-#~ "obțină de la LinkedIn o cheie cu permisiuni pentru a citi mesajele. "
-
-#~ msgid "Subscribe IMAP folders"
-#~ msgstr "Abonare la dosarele IMAP"
-
-#~ msgid "Subscribe address book"
-#~ msgstr "abonează agenda de contacte"
-
-#~ msgid "Subscribe calendar"
-#~ msgstr "Abonează calendarul"
-
-#~ msgid ""
-#~ "Synchronization of Emails, Calendar, Contacts and Tasks, along with "
-#~ "Public, Shared and System Folders to Microsoft Outlook® clients."
-#~ msgstr ""
-#~ "Sincronizare cu clienții Microsoft Outlook® a e-mailurilor, calendarului, "
-#~ "contactelor și sarcinilor, precum și a dosarelor publice, partajate și "
-#~ "sistem."
-
-#~ msgid "Temporary"
-#~ msgstr "Temporar"
-
-#~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
-#~ msgstr "Câmpul \"%1$s\" depășește limita maximă de %2$d caractere."
-
-#~ msgid ""
-#~ "The following applications can be restored. Just remove the restore point "
-#~ "if you don't want it to be restored."
-#~ msgstr ""
-#~ "Următoarele aplicații nu pot fi restabilite. Eliminați punctul de "
-#~ "restabilire dacă nu doriți să fie restabilite."
-
-#~ msgid ""
-#~ "The setting has been saved and will become active when you enter the "
-#~ "application the next time."
-#~ msgstr "Setarea a fost salvată și va fi activată la următoarea accesare."
-
-#~ msgid ""
-#~ "The timezone of this appointment (%1$s) differs from your default "
-#~ "timezone (%2$s)."
-#~ msgstr ""
-#~ "Această întâlnire are un fus orar (%1$s) diferit de fusul orar implicit "
-#~ "(%2$s)."
-
-#~ msgid "There is no preview for this file type"
-#~ msgstr "Pentru acest tip de fișier nu există previzualizare"
-
-#~ msgid "There were not activities in your network"
-#~ msgstr "Nicio activitate în rețeaua dumneavoastră"
-
-#~ msgid "Toggle viewport size"
-#~ msgstr "Comutare dimensiune poartă de vizualizare"
-
-#, fuzzy
-#~| msgid "Unknown sender"
-#~ msgid "Unknown client"
-#~ msgstr "Expeditor necunoscut"
-
-#, fuzzy
-#~| msgid "Unknown sender"
-#~ msgid "Unkown client"
-#~ msgstr "Expeditor necunoscut"
-
-#~ msgid "Use accessibility improvements"
-#~ msgstr "Utilizați funcționalitățile de accesibilitate"
-
-#~ msgid "Use cursor keys to navigate"
-#~ msgstr "Utilizați tastele săgeți pentru navigare"
-
-#~ msgid "View attachment"
-#~ msgstr "Vizualizează fișier atașat"
-
-#~ msgid ""
-#~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
-#~ "Appointments will therefore be created in your private calendar."
-#~ msgstr ""
-#~ "Nu aveți permisiune pentru a crea întâlniri în \"%1$s\" deținut de %2$s. "
-#~ "Prin urmare, întâlnirile vor fi create în calendarul dumneavoastră "
-#~ "personal."
-
-#~ msgid ""
-#~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
-#~ "therefore be created in your private calendar."
-#~ msgstr ""
-#~ "Nu aveți permisiune pentru a crea întâlniri în \"%1$s\". Prin urmare, "
-#~ "întâlnirile vor fi create în calendarul dumneavoastră personal."
-
-#~ msgid ""
-#~ "You can import existing signatures from the previous product generation."
-#~ msgstr ""
-#~ "Puteți importa semnături existente din generația trecută a produsului."
-
-#~ msgid "You have no new messages"
-#~ msgstr "Nu aveți niciun mesaj nou"
-
-#~ msgid ""
-#~ "You will automatically return to the appointment dialog. The selected "
-#~ "start and end time as well as the current participant list will be "
-#~ "applied."
-#~ msgstr ""
-#~ "Veți reveni automat la fereastra de dialog pentru întâlnire. Data de "
-#~ "început și cea de sfârșit, precum și lista actuală de participanți, vor "
-#~ "fi aplicate."
-
-#~ msgid ""
-#~ "Your default reminder could not be set for this appointment due to "
-#~ "insufficient permissions"
-#~ msgstr ""
-#~ "Mementoul implicit nu a putut fi setat pentru această întâlnire din lipsă "
-#~ "de permisiuni"
-
-#~ msgid "Your messages"
-#~ msgstr "Mesajele dumneavoastră"
-
-#~ msgid "Your reply has been sent"
-#~ msgstr "Răspunsul a fost trimis"
-
-#~ msgid "via"
-#~ msgstr "prin"
+#~ msgid "Please use the \"Connect your device\" wizard to download %s"
+#~ msgstr "Utilizați asistentul \"Conectare dispozitiv\" pentru a descărca %s"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -13044,7 +12698,14 @@ msgstr "Adaugă pe %s"
 #~ msgstr[1] "%1$d linii"
 #~ msgstr[2] "%1$d de linii"
 
+#~ msgid "%1$d unread mails"
+#~ msgstr "%1$d mesaje necitite"
+
 #~ msgctxt "datetime"
+#~ msgid "%1$s %2$s"
+#~ msgstr "%1$s %2$s"
+
+#~ msgctxt "window title"
 #~ msgid "%1$s %2$s"
 #~ msgstr "%1$s %2$s"
 
@@ -13060,11 +12721,45 @@ msgstr "Adaugă pe %s"
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s."
 
+#~ msgid "%1$s Options"
+#~ msgstr "Opțiuni %1$s"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for %2$s"
+#~ msgstr "%1$s, proprietar %2$s"
+
+#, fuzzy
+#~| msgid "%s client for Android"
+#~ msgid "%1$s for Android"
+#~ msgstr "Client %s pentru Android"
+
+#, fuzzy
+#~| msgid "%s client for Mac OS"
+#~ msgid "%1$s for MacOS"
+#~ msgstr "Client %s pentru Mac OS"
+
+#, fuzzy
+#~| msgid "%s client for Windows"
+#~ msgid "%1$s for Windows"
+#~ msgstr "Client %s pentru Windows"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s for iOS"
+#~ msgstr "%1$s, proprietar %2$s"
+
 #~ msgid "%1$s has ended the presentation."
 #~ msgstr "%1$s a finalizat prezentarea."
 
 #~ msgid "%1$s has started the presentation."
 #~ msgstr "%1$s a pornit prezentarea."
+
+#~ msgid "%1$s is a new contact"
+#~ msgstr "%1$s este un contact nou"
+
+#~ msgid "%1$s is now connected with %2$s"
+#~ msgstr "%1$s este acum în conexiune cu %2$s"
 
 #~ msgid "%1$s mail"
 #~ msgid_plural "%1$s mails"
@@ -13124,6 +12819,12 @@ msgstr "Adaugă pe %s"
 #~ msgstr[1] "%d elemente de informație"
 #~ msgstr[2] "%d de elemente de informație"
 
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d minut"
+#~ msgstr[1] "%d minute"
+#~ msgstr[2] "%d de minute"
+
 #~ msgctxt "in"
 #~ msgid "%d minute"
 #~ msgid_plural "%d minutes"
@@ -13149,6 +12850,10 @@ msgstr "Adaugă pe %s"
 #~ msgstr[0] "%d săptămână"
 #~ msgstr[1] "%d săptămâni"
 #~ msgstr[2] "%d de săptămâni"
+
+#~ msgid "%s client for Windows (Installation via the OX Updater)"
+#~ msgstr ""
+#~ "Client %s pentru Windows (Instalare prin aplicația de actualizare OX)"
 
 #~ msgid "%s, EEE"
 #~ msgstr "%s, EEE"
@@ -13192,6 +12897,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "(Default)"
 #~ msgstr "(Implicit)"
 
+#~ msgid "(current app)"
+#~ msgstr "(aplicația curentă)"
+
 #~ msgid "(may be slow on old machines)"
 #~ msgstr "(poate funcționa încet pe calculatoare vechi)"
 
@@ -13219,9 +12927,6 @@ msgstr "Adaugă pe %s"
 #~ msgid "10"
 #~ msgstr "10"
 
-#~ msgid "12 hour"
-#~ msgstr "12 ore"
-
 #~ msgid "15"
 #~ msgstr "15"
 
@@ -13248,9 +12953,6 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "4 days"
 #~ msgstr "4 zile"
-
-#~ msgid "4 hour"
-#~ msgstr "4 ore"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 săptămâni"
@@ -13324,6 +13026,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "AM"
 #~ msgstr "AM"
 
+#~ msgid "Absent"
+#~ msgstr "Absent"
+
 #~ msgid "Absent on business"
 #~ msgstr "Absent în scop de afaceri"
 
@@ -13356,6 +13061,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Account:"
 #~ msgstr "Cont:"
+
+#~ msgid "Acknowledge all reminders"
+#~ msgstr "Confirmă toate mementourile"
 
 #~ msgid "Acquire Edit Rights"
 #~ msgstr "Obține drepturi de editare"
@@ -13410,6 +13118,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Add account"
 #~ msgstr "Adaugă un cont"
 
+#~ msgid "Add attachment"
+#~ msgstr "Adaugă fișier atașat"
+
 #~ msgid "Add cipher code"
 #~ msgstr "Adaugă cod de criptare"
 
@@ -13439,6 +13150,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Add new guest"
 #~ msgstr "Adaugă un nou utilizator invitat"
 
+#~ msgid "Add new reminder"
+#~ msgstr "Adaugă memento nou"
+
 #~ msgid "Add new subfolder"
 #~ msgstr "Adaugă un dosar subordonat nou"
 
@@ -13454,9 +13168,6 @@ msgstr "Adaugă pe %s"
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr ""
 #~ "Se adaugă abonamentul. Această operație poate să dureze câteva secunde ..."
-
-#~ msgid "Additional settings"
-#~ msgstr "Setări suplimentare"
 
 #~ msgid "Additional:"
 #~ msgstr "Adițional:"
@@ -13516,6 +13227,29 @@ msgstr "Adaugă pe %s"
 #~ msgid "All contacts"
 #~ msgstr "Adaugă contact"
 
+#~ msgid "All future messages from %1$s will be moved to the selected folder."
+#~ msgid_plural ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr[0] ""
+#~ "Toate mesajele viitoare de la %1$s vor fi mutate în dosarul selectat."
+#~ msgstr[1] ""
+#~ "Toate mesajele viitoare de la expeditorii adreselor selectate vor fi "
+#~ "mutate în dosarul selectat."
+#~ msgstr[2] ""
+#~ "Toate mesajele viitoare de la expeditorii adreselor selectate vor fi "
+#~ "mutate în dosarul selectat."
+
+#~ msgid ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr ""
+#~ "Toate mesajele viitoare de la expeditorii mesajelor selectate vor fi "
+#~ "mutate în dosarul selectat."
+
+#~ msgid "All my appointments"
+#~ msgstr "Toate întâlnirile mele"
+
 #~ msgid "All users"
 #~ msgstr "Toți utilizatorii"
 
@@ -13567,6 +13301,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "Antigua și Barbuda"
 
+#~ msgid "Application Toolbar"
+#~ msgstr "Bară de unelte pentru aplicații"
+
 #~ msgid "Applications"
 #~ msgstr "Aplicații"
 
@@ -13609,6 +13346,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "Durata aproximativă de abonare"
+
+#~ msgid "Apps"
+#~ msgstr "Aplicații"
 
 #~ msgid "Apr"
 #~ msgstr "Apr"
@@ -13761,6 +13501,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Austria"
 #~ msgstr "Austria"
 
+#~ msgid "Authentication failed. Please fill in login and password."
+#~ msgstr "Autentificarea a eșuat. Introduceți numele de utilizator și parola."
+
 #~ msgid "Auto"
 #~ msgstr "Automat"
 
@@ -13810,6 +13553,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Azerbaijan"
 #~ msgstr "Azerbaidjan"
+
+#~ msgid "Back to appointment"
+#~ msgstr "Înapoi la întâlnire"
 
 #, fuzzy
 #~| msgid "Back to sign in"
@@ -13880,6 +13626,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Bhutan"
 #~ msgstr "Bhutan"
+
+#~ msgid "Birthday"
+#~ msgstr "Aniversare"
 
 #~ msgid "Birthday Appointment"
 #~ msgstr "Întâlnire aniversară"
@@ -13971,6 +13720,13 @@ msgstr "Adaugă pe %s"
 #~ msgid "Burundi"
 #~ msgstr "Burundi"
 
+#~ msgid ""
+#~ "By changing the date of this appointment you are creating an appointment "
+#~ "exception to the series."
+#~ msgstr ""
+#~ "Dacă modificați data acestei întâlniri se va crea o întâlnire excepție "
+#~ "într-o serie."
+
 #~ msgid "CAD"
 #~ msgstr "CAD"
 
@@ -14059,6 +13815,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Change View"
 #~ msgstr "Modifică vederea"
 
+#~ msgid "Change color"
+#~ msgstr "Schimbă culoarea"
+
 #~ msgid "Change folder"
 #~ msgstr "Schimbă dosarul"
 
@@ -14067,6 +13826,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Change subscription"
 #~ msgstr "Modifică abonamentul"
+
+#~ msgid "Change view"
+#~ msgstr "Modifică vederea"
 
 #~ msgid "Changes have been saved."
 #~ msgstr "Modificările au fost salvate."
@@ -14104,6 +13866,11 @@ msgstr "Adaugă pe %s"
 #~ msgid "Christmas Island"
 #~ msgstr "Insula Crăciunului"
 
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Chrome %1$s on %2$s"
+#~ msgstr "Partajează %1$s \"%2$s\""
+
 #~ msgid "City (business)"
 #~ msgstr "Localitate (profesional)"
 
@@ -14112,6 +13879,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "City:"
 #~ msgstr "Localitate:"
+
+#~ msgid "Classic colors"
+#~ msgstr "Culori clasice"
 
 #~ msgid "Cleaning up... This may take a few seconds."
 #~ msgstr ""
@@ -14187,6 +13957,11 @@ msgstr "Adaugă pe %s"
 #~ msgid "Close document"
 #~ msgstr "închide documentul"
 
+#, fuzzy
+#~| msgid "close for %1$s"
+#~ msgid "Close for %1$s"
+#~ msgstr "închide pentru %1$s"
+
 #~ msgid "Close quick config"
 #~ msgstr "Închide configurația rapidă"
 
@@ -14220,6 +13995,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Colombia"
 #~ msgstr "Columbia"
+
+#~ msgid "Color scheme"
+#~ msgstr "Schemă de culori"
 
 #~ msgid "Comma Separated"
 #~ msgstr "Separate prin virgule"
@@ -14279,6 +14057,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Connection failed! Please check your settings: "
 #~ msgstr "Conexiunea a eșuat! Verificați setările: "
 
+#~ msgid "Connector for Microsoft Outlook®"
+#~ msgstr "Conector pentru Microsoft Outlook®"
+
 #~ msgid "Contact folder..."
 #~ msgstr "Dosar de contacte..."
 
@@ -14300,6 +14081,16 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Continue the presentation"
 #~ msgstr "Continuă prezentarea"
+
+#~ msgctxt "app"
+#~ msgid "Conversations"
+#~ msgstr "Conversații"
+
+#~ msgid ""
+#~ "Convert the entered start and end dates to match the modified timezones"
+#~ msgstr ""
+#~ "Convertește datele de început și sfârșit în conformitate cu fusul orar "
+#~ "modificat."
 
 #~ msgid "Cook Islands"
 #~ msgstr "Insulele Cook"
@@ -14325,6 +14116,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Couldn't load all contact images."
 #~ msgstr "Nu s-au putut încărca toate imaginile contactului."
 
+#~ msgid "Couldn't load appointment data."
+#~ msgstr "Nu s-au putut încărca datele întâlnirii."
+
 #~ msgid "Couldn't load folders."
 #~ msgstr "Nu s-au putut încărca dosarele."
 
@@ -14336,6 +14130,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Couldn't load your auto forward."
 #~ msgstr "Nu s-au putut încărca redirecționarea dumneavoastră automată."
+
+#~ msgid "Couldn't load your contact data."
+#~ msgstr "Nu s-au putut încărca datele de contact."
 
 #~ msgid "Country (other)"
 #~ msgstr "Țară (altele)"
@@ -14351,6 +14148,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Creează un cont %s pe baza datelor stocate aici"
+
+#~ msgid "Create exception"
+#~ msgstr "Creează excepție"
 
 #~ msgid "Create new task"
 #~ msgstr "Creează sarcină nouă"
@@ -14434,6 +14234,11 @@ msgstr "Adaugă pe %s"
 #~ msgid "Current page and total page count"
 #~ msgstr "Pagina curentă și numărul total de pagini"
 
+#, fuzzy
+#~| msgid "Current Costs:"
+#~ msgid "Current session"
+#~ msgstr "Costuri curente:"
+
 #~ msgid "Current week, next week"
 #~ msgstr "Săptămâna curentă, săptămâna următoare"
 
@@ -14455,6 +14260,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Custom"
 #~ msgstr "Personalizat"
 
+#~ msgid "Custom colors"
+#~ msgstr "Culori personalizate"
+
 #~ msgid "Customizing"
 #~ msgstr "Personalizarea"
 
@@ -14473,8 +14281,26 @@ msgstr "Adaugă pe %s"
 #~ msgid "DKK"
 #~ msgstr "DKK"
 
+#~ msgid "Dangerous and trusted"
+#~ msgstr "Periculoase și de încredere"
+
+#~ msgid "Dangerous and trusted emails"
+#~ msgstr "E-mailuri periculoase și de încredere"
+
+#~ msgid "Dangerous emails only"
+#~ msgstr "Doar e-mailurile periculoase"
+
+#~ msgid "Dangerous only"
+#~ msgstr "Doar periculoase"
+
+#~ msgid "Dangerous, trusted and valid emails"
+#~ msgstr "E-mailuri periculoase, de încredere și valide"
+
 #~ msgid "Danish"
 #~ msgstr "Daneză"
+
+#~ msgid "Dark colors"
+#~ msgstr "Culori închise"
 
 #~ msgid "Darker"
 #~ msgstr "Mai închis"
@@ -14653,6 +14479,13 @@ msgstr "Adaugă pe %s"
 #~ msgid "Details:"
 #~ msgstr "Detalii:"
 
+#~ msgid ""
+#~ "Did you know that you can take OX App Suite with you? Just click this "
+#~ "icon and choose 'Connect your device' from the menu."
+#~ msgstr ""
+#~ "Știați că puteți să luați OX App Suite cu dumneavoastră? Apăsați pe "
+#~ "această pictogramă și selectați 'Conectează dispozitivul' din meniu."
+
 #~ msgid "Direct link: %1$s"
 #~ msgstr "Legătură directă: %1$s"
 
@@ -14673,6 +14506,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Display as:"
 #~ msgstr "Afișează ca:"
+
+#~ msgid "Display emoticons as graphics in text emails"
+#~ msgstr "Afișează emotigramele ca imagini în mesajele text"
 
 #~ msgid "Displayed name"
 #~ msgstr "Nume afișat"
@@ -14714,6 +14550,19 @@ msgstr "Adaugă pe %s"
 #~ msgid "Do you really want to discard this mail?"
 #~ msgstr "Sigur doriți să renunțați la acest mail?"
 
+#, fuzzy
+#~| msgid "Do you really want to delete this account?"
+#~ msgid ""
+#~ "Do you really want to terminate all active sessions except the current "
+#~ "one?"
+#~ msgstr "Sigur doriți să ștergeți acest cont?"
+
+#, fuzzy
+#~| msgctxt "One file only"
+#~| msgid "Do you really want to delete this version?"
+#~ msgid "Do you really want to terminate that session?"
+#~ msgstr "Sigur doriți să ștergeți această versiune?"
+
 #~ msgid "Do you want to create a %s account?"
 #~ msgstr "Doriți să creați un cont %s?"
 
@@ -14721,6 +14570,12 @@ msgstr "Adaugă pe %s"
 #~ "Do you want to delete the whole recurrence or a single instance of the "
 #~ "recurrence?"
 #~ msgstr "Doriți să ștergeți toată seria sau o anumită instanță din serie?"
+
+#~ msgid ""
+#~ "Do you want to delete the whole series or just one appointment within the "
+#~ "series?"
+#~ msgstr ""
+#~ "Doriți să ștergeți toată seria sau doar o anumită întâlnire din serie?"
 
 #~ msgid ""
 #~ "Do you want to edit the whole recurrence or a single recurrence "
@@ -14749,6 +14604,11 @@ msgstr "Adaugă pe %s"
 #~ "Atenție: dacă modificați o serie de întâlniri, excepțiile acestei serii "
 #~ "vor fi resetate."
 
+#~ msgid ""
+#~ "Do you want to edit the whole series or just one appointment within the "
+#~ "series?"
+#~ msgstr "Doriți să editați toată seria sau doar anumite întâlniri din serie?"
+
 #~ msgid "Do you want to keep the draft after sending this mail?"
 #~ msgstr "Doriți să păstrați schița după trimiterea acestui mail?"
 
@@ -14761,6 +14621,10 @@ msgstr "Adaugă pe %s"
 #~ msgid "Document saved in folder \"%1$s\"."
 #~ msgstr "Document salvat în dosarul \"%1$s\"."
 
+#~ msgid "Documents"
+#~ msgstr "Documente"
+
+#~ msgctxt "app"
 #~ msgid "Documents"
 #~ msgstr "Documente"
 
@@ -14784,6 +14648,15 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Double click to rename"
 #~ msgstr "Dublu clic pentru redenumire"
+
+#~ msgid "Doubleclick in this row for whole day appointment"
+#~ msgstr "Dublu clic în această linie pentru o întâlnire pentru întreaga zi"
+
+#~ msgid "Download %s via the OX Updater"
+#~ msgstr "Descarcă %s prin aplicația de actualizare OX"
+
+#~ msgid "Download installation file (for Windows)"
+#~ msgstr "Descarcă fișierul de instalare (pentru Windows)"
 
 #~ msgid "Download updater for the Connector for Microsoft Outlook"
 #~ msgstr ""
@@ -14886,6 +14759,11 @@ msgstr "Adaugă pe %s"
 #~ msgid "Ecuador"
 #~ msgstr "Ecuador"
 
+#, fuzzy
+#~| msgid "Due on %1$s"
+#~ msgid "Edge on %1$s"
+#~ msgstr "Scadent pe %1$s"
+
 #~ msgid "Edit Furigana"
 #~ msgstr "Editează furigana"
 
@@ -14964,14 +14842,11 @@ msgstr "Adaugă pe %s"
 #~ msgid "Email notification for task creator?"
 #~ msgstr "Notificare pe e-mail pentru creatorul sarcinii?"
 
-#~ msgid "Email notification for task participant?"
-#~ msgstr "Notificare pe e-mail pentru participantul la sarcină?"
-
-#~ msgid "Embedded windows"
-#~ msgstr "Ferestre integrate"
-
 #~ msgid "Employee ID:"
 #~ msgstr "Identificator angajat:"
+
+#~ msgid "Empty table cell"
+#~ msgstr "Celulă de tabel goală"
 
 #~ msgid "Emptying folder... This may take a few seconds."
 #~ msgstr ""
@@ -15037,6 +14912,9 @@ msgstr "Adaugă pe %s"
 #~ "Activează accesul offline la dosarele de e-mail, calendar, sarcini și "
 #~ "contacte. Modificările efectuate utilizând offline Microfost Outlook vor "
 #~ "fi sincronizate automat la următoarea conectare la rețea."
+
+#~ msgid "Encrypt"
+#~ msgstr "Criptează "
 
 #, fuzzy
 #~ msgid "End Presentation"
@@ -15171,9 +15049,6 @@ msgstr "Adaugă pe %s"
 #~ msgid "Estimated Costs:"
 #~ msgstr "Costuri estimate:"
 
-#~ msgid "Estimated Duration:"
-#~ msgstr "Durata estimată:"
-
 #~ msgid "Estonia"
 #~ msgstr "Estonia"
 
@@ -15213,11 +15088,20 @@ msgstr "Adaugă pe %s"
 #~ msgid "Exception caught: "
 #~ msgstr "S-a găsit o excepție"
 
+#~ msgid "Exchange ActiveSync"
+#~ msgstr "Exchange ActiveSync"
+
 #~ msgid "Existing shares"
 #~ msgstr "Partajări existente"
 
 #~ msgid "Exit Fullscreen"
 #~ msgstr "Ieșire ecran complet"
+
+#~ msgid "Expand timeframe by one month"
+#~ msgstr "Extinde intervalul de timp cu o lună"
+
+#~ msgid "Expiration: %1$d"
+#~ msgstr "Expiră: %1$d"
 
 #, fuzzy
 #~| msgid "Send as vCard"
@@ -15230,6 +15114,9 @@ msgstr "Adaugă pe %s"
 #~ msgctxt "help"
 #~ msgid "External E-Mail Accounts"
 #~ msgstr "Conturi de e-mail externe"
+
+#~ msgid "External guests"
+#~ msgstr "Invitați externi"
 
 #~ msgctxt "friday"
 #~ msgid "F"
@@ -15341,6 +15228,11 @@ msgstr "Adaugă pe %s"
 #~ msgid "Finland"
 #~ msgstr "Finlanda"
 
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "Firefox %1$s on %2$s"
+#~ msgstr "%1$s, proprietar %2$s"
+
 #~ msgid "First name:"
 #~ msgstr "Prenume:"
 
@@ -15387,6 +15279,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Folder tree"
 #~ msgstr "Arborele de dosare"
+
+#~ msgid "Folder type"
+#~ msgstr "Tip dosar"
 
 #~ msgid "Folder-specific actions for %1$s"
 #~ msgstr "Acțiuni specifice dosarului pentru %1$s"
@@ -15606,6 +15501,12 @@ msgstr "Adaugă pe %s"
 #~ msgid "Halo view"
 #~ msgstr "Vedere halou"
 
+#~ msgid "Has Attachment"
+#~ msgstr "Are fișier atașat"
+
+#~ msgid "Header exists"
+#~ msgstr "Antetul există"
+
 #~ msgid "Heading"
 #~ msgstr "Titlu"
 
@@ -15663,6 +15564,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Hide side panel"
 #~ msgstr "Ascunde panoul lateral"
 
+#~ msgid "High contrast theme"
+#~ msgstr "Temă cu contrast ridicat"
+
 #~ msgid "History of error messages"
 #~ msgstr "Istoricul mesajelor de eroare"
 
@@ -15674,6 +15578,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Hong Kong"
 #~ msgstr "Hong Kong"
+
+#~ msgid "How does this work?"
+#~ msgstr "Cum funcționează?"
 
 #~ msgid "How the settings are organized"
 #~ msgstr "Cum sunt organizate setările"
@@ -15716,6 +15623,11 @@ msgstr "Adaugă pe %s"
 #~ msgid "IMAP server"
 #~ msgstr "Server IMAP"
 
+#, fuzzy
+#~| msgid "Added %1$s."
+#~ msgid "IP Address: %1$s"
+#~ msgstr "S-a adăugat %1$s."
+
 #~ msgid "IP phone (private)"
 #~ msgstr "Telefon IP (personal)"
 
@@ -15753,6 +15665,38 @@ msgstr "Adaugă pe %s"
 #~ msgstr ""
 #~ "Dacă nu mai doriți să afișați un cadru, apăsați pe crucea din partea "
 #~ "dreaptă sus."
+
+#~ msgid ""
+#~ "If you select different timezones, the appointment's start and end dates "
+#~ "are saved in the timezone of the appointment's start date. A different "
+#~ "end date timezone only allows a convenient conversion."
+#~ msgstr ""
+#~ "Dacă selectați fusuri orare diferite, datele de început și sfârșit sunt "
+#~ "salvate în fusul orar al datei de început. Un fus orar diferit pentru "
+#~ "data de sfârșit facilitează doar conversia."
+
+#~ msgid ""
+#~ "If you spot a free time, just select this area. To do this, move the "
+#~ "cursor to the start time, hold the mouse button, and <b>drag the mouse</"
+#~ "b> to the end time."
+#~ msgstr ""
+#~ "Dacă găsiți un interval de timp liber, este de ajuns să selectați această "
+#~ "zonă. Pentru aceasta, deplasați cursorul pe ora de început, mențineți "
+#~ "apăsat butonul mouse-ului și <b>glisați mouse-ul</b> pe ora de sfârșit."
+
+#~ msgid ""
+#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
+#~ "for example."
+#~ msgstr ""
+#~ "Ignoră întâlnirile existente. Util, de exemplu, pentru calendarele de "
+#~ "sărbători oficiale."
+
+#~ msgid ""
+#~ "Ignore existing events. Helpful to import public holiday calendars, for "
+#~ "example."
+#~ msgstr ""
+#~ "Ignoră evenimentele existente. Util, de exemplu, pentru calendarele de "
+#~ "sărbători."
 
 #~ msgid "Illegal Date in remind date"
 #~ msgstr "Dată incorectă pentru memento"
@@ -15816,6 +15760,13 @@ msgstr "Adaugă pe %s"
 #~ "nu sunt afișate, apăsați pe pictograma din partea stângă jos."
 
 #~ msgid ""
+#~ "In shared folders, the appointment is displayed as a simple time slot for "
+#~ "non-attending users."
+#~ msgstr ""
+#~ "În dosare partajate, întâlnirea este afișată ca spațiu obișnuit pentru "
+#~ "utilizatorii care nu participă."
+
+#~ msgid ""
 #~ "In the Details section at the bottom right side you can enter billing "
 #~ "information."
 #~ msgstr ""
@@ -15867,6 +15818,13 @@ msgstr "Adaugă pe %s"
 #~ msgid "Information about account recovery..."
 #~ msgstr "Informații despre recuperarea contului..."
 
+#~ msgid ""
+#~ "Informs about the current status of Emails and appointments without "
+#~ "having to display the user interface or another Windows® client."
+#~ msgstr ""
+#~ "Informează despre starea curentă a e-mailurilor și a întâlnirilor fără a "
+#~ "afișa interfața utilizator sau alt client Windows®."
+
 #~ msgid "Infostore"
 #~ msgstr "Depozit de informații"
 
@@ -15912,6 +15870,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Instant Messenger:"
 #~ msgstr "Mesagerie instantanee:"
+
+#~ msgid "Internal & external users"
+#~ msgstr "Utilizatori interni și externi"
 
 #~ msgid "Internal Error"
 #~ msgstr "Eroare internă"
@@ -16119,6 +16080,11 @@ msgstr "Adaugă pe %s"
 #~ msgid "Later tasks:"
 #~ msgstr "Sarcini ulterioare:"
 
+#~ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
+#~ msgstr ""
+#~ "Listă derulantă de lansare de aplicații. Apăsați [Enter] pentru a vedea "
+#~ "lista."
+
 #~ msgid "Launching an app"
 #~ msgstr "Lansarea unei aplicații"
 
@@ -16128,6 +16094,9 @@ msgstr "Adaugă pe %s"
 #, fuzzy
 #~ msgid "Leave Presentation"
 #~ msgstr "Destinație"
+
+#~ msgid "Leave empty if you have none"
+#~ msgstr "Lăsați gol dacă nu aveți"
 
 #~ msgid "Leave messages on server"
 #~ msgstr "Păstrează mesajele pe server"
@@ -16187,6 +16156,18 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Link/Url"
 #~ msgstr "Legătură/URL"
+
+#~ msgid "LinkedIn"
+#~ msgstr "LinkedIn"
+
+#~ msgid "LinkedIn Network Updates"
+#~ msgstr "Actualizări rețea LinkedIn"
+
+#~ msgid "LinkedIn reported an error:"
+#~ msgstr "LinkedIn a returnat o eroare:"
+
+#~ msgid "List of public calendars and events"
+#~ msgstr "Listă de calendare și evenimente publice"
 
 #~ msgid "Lithuania"
 #~ msgstr "Lituania"
@@ -16306,6 +16287,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Manage applications"
 #~ msgstr "Gestionează aplicațiile"
 
+#~ msgid "Manage permission now"
+#~ msgstr "Gestionați permisiunile acum"
+
 #~ msgid "Manager:"
 #~ msgstr "Manager:"
 
@@ -16386,9 +16370,6 @@ msgstr "Adaugă pe %s"
 #~ msgstr "Prenume 2:"
 
 #~ msgid "Mime Type"
-#~ msgstr "Tip Mime"
-
-#~ msgid "Mime type"
 #~ msgstr "Tip Mime"
 
 #~ msgid "Mobile"
@@ -16526,6 +16507,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Network Problems"
 #~ msgstr "Probleme de rețea"
+
+#~ msgid "Never."
+#~ msgstr "Niciodată."
 
 #~ msgid "New Appointment"
 #~ msgstr "Întâlnire nouă"
@@ -16733,6 +16717,12 @@ msgstr "Adaugă pe %s"
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Nimic în fluxul de știri."
 
+#~ msgid "Notifier"
+#~ msgstr "Notificator"
+
+#~ msgid "Notify all participants by email."
+#~ msgstr "Informează toți participanții prin e-mail."
+
 #~ msgid "Notify on delivery receipt?"
 #~ msgstr "Informare despre confirmarea de primire?"
 
@@ -16763,6 +16753,12 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Number of days in work week"
 #~ msgstr "Număr de zile în săptămâna de lucru"
+
+#~ msgid "Number of items"
+#~ msgstr "Număr de elemente"
+
+#~ msgid "Number of messages"
+#~ msgstr "Număr de mesaje"
 
 #~ msgid "Number of rows to be displayed in card view:"
 #~ msgstr "Număr de linii care trebuie afișate în vederea fișe:"
@@ -16834,8 +16830,17 @@ msgstr "Adaugă pe %s"
 #~ "această opțiune când lucrați pe calculatorul unei alte persoane (de "
 #~ "exemplu într-un internet café)"
 
+#~ msgid "Open in browser"
+#~ msgstr "Deschide în navigator"
+
+#~ msgid "Open in browser tab"
+#~ msgstr "Deschide într-o filă de navigator"
+
 #~ msgid "Open in new tab"
 #~ msgstr "Deschide într-o filă nouă"
+
+#~ msgid "Open on LinkedIn"
+#~ msgstr "Deschide în LinkedIn"
 
 #~ msgid "Open-Xchange Server"
 #~ msgstr "Server Open-Xchange "
@@ -16860,6 +16865,11 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Organizer:"
 #~ msgstr "Organizator:"
+
+#, fuzzy
+#~| msgid "Others"
+#~ msgid "Other clients"
+#~ msgstr "Altele"
 
 #~ msgid "Outlook file"
 #~ msgstr "Fișier Outlook"
@@ -16937,9 +16947,6 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Parameter:"
 #~ msgstr "Parametru:"
-
-#~ msgid "Participant"
-#~ msgstr "Participant"
 
 #~ msgid "Participant:"
 #~ msgstr "Participant:"
@@ -17072,6 +17079,9 @@ msgstr "Adaugă pe %s"
 #~ "Consultați pagina %sModule UWA interesante%s. Aceasta prezintă o listă de "
 #~ "componente și datele lor asociate."
 
+#~ msgid "Please note that distribution lists cannot contain ressources."
+#~ msgstr "Atenție: lista de distribuție nu poate conține resurse."
+
 #~ msgid ""
 #~ "Please note: All messages received from the POP3 account will be stored "
 #~ "to a folder on your local IMAP account."
@@ -17202,6 +17212,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Press [enter] to jump to the facebook stream."
 #~ msgstr "Apăsați [Enter] pentru a ajunge la fluxul Facebook."
 
+#~ msgid "Press [enter] to jump to the linkedin stream."
+#~ msgstr "Apăsați [Enter] pentru a ajunge la fluxul LinkedIn."
+
 #~ msgid "Press [enter] to open"
 #~ msgstr "Apăsați [Enter] pentru a deschide"
 
@@ -17247,6 +17260,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Promote One Level"
 #~ msgstr "Urcă cu un nivel"
 
+#~ msgid "Public"
+#~ msgstr "Public"
+
 #~ msgid "Public contacts"
 #~ msgstr "Contacte publice"
 
@@ -17285,6 +17301,21 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Quick config"
 #~ msgstr "Configurare rapidă"
+
+#~ msgid "Quick launch 1"
+#~ msgstr "Lansare rapidă 1"
+
+#~ msgid "Quick launch 2"
+#~ msgstr "Lansare rapidă 2"
+
+#~ msgid "Quick launch 3"
+#~ msgstr "Lansare rapidă 3"
+
+#~ msgid "Quick reply"
+#~ msgstr "Răspuns rapid"
+
+#~ msgid "Quit"
+#~ msgstr "Ieși"
 
 #~ msgid "Quota Exceed"
 #~ msgstr "Cotă depășită"
@@ -17332,6 +17363,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Received:"
 #~ msgstr "Primit:"
 
+#~ msgid "Recent activities"
+#~ msgstr "Activități recente"
+
 #~ msgid "Recipients can edit"
 #~ msgstr "Destinatarii pot edita"
 
@@ -17365,6 +17399,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Reload current view every:"
 #~ msgstr "Reîncarcă vederea curentă la fiecare:"
 
+#~ msgid "Remind me again %1$s"
+#~ msgstr "Amintește-mi din nou %1$s"
+
 #~ msgid "Reminder:"
 #~ msgstr "Memento:"
 
@@ -17376,6 +17413,11 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Remove picture"
 #~ msgstr "Elimină imaginea"
+
+#, fuzzy
+#~| msgid "Remove from recipient list"
+#~ msgid "Remove restore point: \"%1$s\""
+#~ msgstr "Elimină din lista  destinatarilor"
 
 #~ msgid "Rename Document"
 #~ msgstr "Redenumește documentul"
@@ -17406,6 +17448,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Restore Last Operation"
 #~ msgstr "Restabilește ultima operație"
+
+#~ msgid "Restore applications"
+#~ msgstr "Restabilește aplicațiile"
 
 #~ msgid "Retweet new"
 #~ msgstr "Retrimite mesaj Twitter nou"
@@ -17459,6 +17504,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Rules"
 #~ msgstr "Reguli"
 
+#~ msgid "Run auto-play "
+#~ msgstr "Lansați redarea automată"
+
 #~ msgid "Running applications"
 #~ msgstr "Aplicații în execuție"
 
@@ -17509,6 +17557,11 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "SMTP server"
 #~ msgstr "Server SMTP"
+
+#, fuzzy
+#~| msgid "Share %1$s \"%2$s\""
+#~ msgid "Safari %1$s on %2$s"
+#~ msgstr "Partajează %1$s \"%2$s\""
 
 #, fuzzy
 #~| msgid "Saint Barthélemy"
@@ -17582,6 +17635,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Schedule an all-day event"
 #~ msgstr "Programează un eveniment pe durata întregii zile"
+
+#~ msgid "Scheduling"
+#~ msgstr "Programare"
 
 #~ msgid "Search Options"
 #~ msgstr "Opțiuni de căutare"
@@ -17718,6 +17774,10 @@ msgstr "Adaugă pe %s"
 #~ msgid "Server Error"
 #~ msgstr "Eroare de server"
 
+#~ msgctxt "app"
+#~ msgid "Settings"
+#~ msgstr "Setări"
+
 #~ msgid "Settings for advanced users"
 #~ msgstr "Setări pentru utilizatori avansați"
 
@@ -17740,6 +17800,18 @@ msgstr "Adaugă pe %s"
 #~ msgctxt "owner"
 #~ msgid "Shared by: %1$s"
 #~ msgstr "S-a căutat: %1$s"
+
+#~ msgid "Sharing link created for file \"%1$d\""
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "Se partajează legătura creată pentru fișierul \"%1$d\""
+#~ msgstr[1] "Sharing link created for %1$d items"
+#~ msgstr[2] "Sharing link created for %1$d items"
+
+#~ msgid "Sharing link created for folder \"%1$d\""
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "Se partajează legătura creată pentru dosarul \"%1$d\""
+#~ msgstr[1] "Se partajează legătura creată pentru %1$d elemente"
+#~ msgstr[2] "Se partajează legătura creată pentru %1$d de elemente"
 
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"
@@ -17766,6 +17838,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Show Group Members"
 #~ msgstr "Afișează membrii grupului"
+
+#~ msgid "Show Links"
+#~ msgstr "Afișează legăturile"
 
 #~ msgid "Show QR code"
 #~ msgstr "Afișează codul QR"
@@ -17829,6 +17904,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Show legal information"
 #~ msgstr "Afișează informațiile legale"
 
+#~ msgid "Show message authenticity"
+#~ msgstr "Afișează autenticitatea mesajului"
+
 #~ msgid "Show message size"
 #~ msgstr "Afișează dimensiunea mesajului"
 
@@ -17885,6 +17963,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Signed in as %1$s"
 #~ msgstr "Conectat ca %1$s"
 
+#~ msgid "Signed in as:"
+#~ msgstr "Conectat ca:"
+
 #~ msgid "Signing out"
 #~ msgstr "Deconectare"
 
@@ -17919,9 +18000,6 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Skip this step"
 #~ msgstr "Ignoră această etapă"
-
-#~ msgid "Slideshow"
-#~ msgstr "Prezentare"
 
 #~ msgid "Slideshow / Autoplay mode"
 #~ msgstr "Mod prezentare  / redare automată"
@@ -17984,14 +18062,18 @@ msgstr "Adaugă pe %s"
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Nu s-a putut încărca fișierul."
 
+#~ msgid ""
+#~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
+#~ "LinkedIn with the permission to do read messages."
+#~ msgstr ""
+#~ "Ne pare rău, dar nu vă putem ajuta. Furnizorul dumneavoastră trebuie să "
+#~ "obțină de la LinkedIn o cheie cu permisiuni pentru a citi mesajele. "
+
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Sortarea e-mailurilor"
 
 #~ msgid "Sorting your tasks"
 #~ msgstr "Sortarea sarcinilor"
-
-#~ msgid "Source"
-#~ msgstr "Sursă"
 
 #~ msgid "South Africa"
 #~ msgstr "Africa de Sud"
@@ -18133,6 +18215,15 @@ msgstr "Adaugă pe %s"
 #~ msgid "Subscribe Folder"
 #~ msgstr "Abonare la dosar"
 
+#~ msgid "Subscribe IMAP folders"
+#~ msgstr "Abonare la dosarele IMAP"
+
+#~ msgid "Subscribe address book"
+#~ msgstr "abonează agenda de contacte"
+
+#~ msgid "Subscribe calendar"
+#~ msgstr "Abonează calendarul"
+
 #~ msgid "Subscribe contacts from LinkedIn, Facebook, Google..."
 #~ msgstr "Abonare la contacte din LinkedIn, Facebook, Google..."
 
@@ -18216,8 +18307,19 @@ msgstr "Adaugă pe %s"
 #~ msgid "Synchronization"
 #~ msgstr "Sincronizare"
 
+#~ msgid ""
+#~ "Synchronization of Emails, Calendar, Contacts and Tasks, along with "
+#~ "Public, Shared and System Folders to Microsoft Outlook® clients."
+#~ msgstr ""
+#~ "Sincronizare cu clienții Microsoft Outlook® a e-mailurilor, calendarului, "
+#~ "contactelor și sarcinilor, precum și a dosarelor publice, partajate și "
+#~ "sistem."
+
 #~ msgid "Synchronization to the server has been lost."
 #~ msgstr "Sincronizarea cu serverul a fost pierdută."
+
+#~ msgid "Synchronize with Outlook"
+#~ msgstr "Sincronizare cu Outlook"
 
 #~ msgid ""
 #~ "Syntax error in config: \n"
@@ -18320,6 +18422,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Template"
 #~ msgstr "Model"
 
+#~ msgid "Temporary"
+#~ msgstr "Temporar"
+
 #~ msgid "Text"
 #~ msgstr "Text"
 
@@ -18404,6 +18509,15 @@ msgstr "Adaugă pe %s"
 #~ "rețelele sociale curente."
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared folders "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view."
+#~ msgstr ""
+#~ "Întâlnirea nu este vizibilă deloc pentru utilizatorii care nu participă. "
+#~ "Nu se ține cont de intâlnire din cauza unor conflicte și de aceea nu "
+#~ "apare în vederea planificare."
+
+#~ msgid ""
 #~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
 #~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
 #~ "days</a>."
@@ -18474,6 +18588,10 @@ msgstr "Adaugă pe %s"
 #~ "attribute=\"interval\">o dată la <span class=\"number-control\">2</span> "
 #~ "luni</a>. "
 
+#~ msgid "The appointment is visible for all users in shared folders."
+#~ msgstr ""
+#~ "Întâlnirea este vizibilă pentru toți utilizatorii din dosarele partajate."
+
 #~ msgid "The calendar views"
 #~ msgstr "Vederile calendarului"
 
@@ -18510,6 +18628,17 @@ msgstr "Adaugă pe %s"
 #~ "Valoarea introdusă pentru %s nu se încadrează în limitele permise. "
 #~ "Introduceți o valoare cuprinsă între -130000 și 130000."
 
+#~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
+#~ msgstr "Câmpul \"%1$s\" depășește limita maximă de %2$d caractere."
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] "Fișierul nu poate fi încărcat deoarece depășește limita de %1$s"
+#~ msgstr[1] "Fișierele nu pot fi încărcate deoarece depășesc limita de %1$s"
+#~ msgstr[2] "Fișierele nu pot fi încărcate deoarece depășesc limita de %1$s"
+
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Fișierul este disponibil la %1$s"
 
@@ -18529,6 +18658,13 @@ msgstr "Adaugă pe %s"
 #~ msgstr ""
 #~ "Următoarele adrese se regăsesc deja pe lista de participanți și ca urmare "
 #~ "nu au fost adăugate: %s"
+
+#~ msgid ""
+#~ "The following applications can be restored. Just remove the restore point "
+#~ "if you don't want it to be restored."
+#~ msgstr ""
+#~ "Următoarele aplicații nu pot fi restabilite. Eliminați punctul de "
+#~ "restabilire dacă nu doriți să fie restabilite."
 
 #~ msgid "The following task is already past due:"
 #~ msgstr "Scadența următoarei sarcini este deja depășită:"
@@ -18662,6 +18798,11 @@ msgstr "Adaugă pe %s"
 #~ msgid "The server didn't respond!"
 #~ msgstr "Serverul nu a răspuns!"
 
+#~ msgid ""
+#~ "The setting has been saved and will become active when you enter the "
+#~ "application the next time."
+#~ msgstr "Setarea a fost salvată și va fi activată la următoarea accesare."
+
 #~ msgid "The setting has been saved."
 #~ msgstr "Setarea a fost salvată."
 
@@ -18700,6 +18841,13 @@ msgstr "Adaugă pe %s"
 #~ "Filele de mesaje primite pot fi dezactivate complet din setările de mail."
 
 #~ msgid ""
+#~ "The timezone of this appointment (%1$s) differs from your default "
+#~ "timezone (%2$s)."
+#~ msgstr ""
+#~ "Această întâlnire are un fus orar (%1$s) diferit de fusul orar implicit "
+#~ "(%2$s)."
+
+#~ msgid ""
 #~ "The updater will inform you of any updates for the Connector for "
 #~ "Microsoft Outlook and Notifier."
 #~ msgstr ""
@@ -18731,11 +18879,14 @@ msgstr "Adaugă pe %s"
 #~ msgstr[1] "Există deja %1$d întâlniri în acest interval de timp."
 #~ msgstr[2] "Există deja %1$d de întâlniri în acest interval de timp."
 
+#~ msgid "There is no preview for this file type"
+#~ msgstr "Pentru acest tip de fișier nu există previzualizare"
+
+#~ msgid "There were not activities in your network"
+#~ msgstr "Nicio activitate în rețeaua dumneavoastră"
+
 #~ msgid "This Signature name already exists"
 #~ msgstr "Numele de semnătură există deja."
-
-#~ msgid "This Team name already exists"
-#~ msgstr "Numele de echipă există deja."
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "Contul nu poate fi validat"
@@ -18820,8 +18971,14 @@ msgstr "Adaugă pe %s"
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Acest e-mail conține o legătură către o publicație."
 
+#~ msgid "This mail has been sent from %1$s."
+#~ msgstr "Acest mesaj a fost trimis de %1$s."
+
 #~ msgid "This may take some seconds"
 #~ msgstr "Această operație poate să dureze câteva secunde"
+
+#~ msgid "This message is from a trusted sender."
+#~ msgstr "Acest mesaj este de la un expeditor de încredere."
 
 #~ msgid "This message is read, press this button to mark it as unread."
 #~ msgstr ""
@@ -18830,6 +18987,20 @@ msgstr "Adaugă pe %s"
 #~ msgid "This message is unread, press this button to mark it as read."
 #~ msgstr ""
 #~ "Acest mesaj nu a fost citit, apăsați acest buton pentru marcare ca citit."
+
+#~ msgid ""
+#~ "This might be a phishing email because we could not verify that it is "
+#~ "really from %1$s."
+#~ msgstr ""
+#~ "Acesta poate fi un mesaj de phishing, deoarece nu s-a putut verifica dacă "
+#~ "este într-adevăr de la %1$s."
+
+#~ msgid ""
+#~ "This might be a phishing mail because we could not verify that this email "
+#~ "is really from %1$s."
+#~ msgstr ""
+#~ "Acesta poate fi un mesaj de phishing, deoarece nu s-a putut verifica dacă "
+#~ "e-mailul este într-adevăr de la %1$s."
 
 #~ msgid ""
 #~ "This object does not contain a file, would you like to send the link?"
@@ -19127,6 +19298,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "Toggle search"
 #~ msgstr "Comutare căutare"
 
+#~ msgid "Toggle viewport size"
+#~ msgstr "Comutare dimensiune poartă de vizualizare"
+
 #~ msgid "Togo"
 #~ msgstr "Togo"
 
@@ -19147,6 +19321,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Tour: Coming from OX6"
 #~ msgstr "*Vizită: Pentru utilizatorii de OX6"
+
+#~ msgid "Town"
+#~ msgstr "Oraș"
 
 #~ msgid "Tracking the editing status"
 #~ msgstr "Urmărirea stării de editare"
@@ -19268,8 +19445,18 @@ msgstr "Adaugă pe %s"
 #~ msgid "United States Minor Outlying Islands"
 #~ msgstr "Insulele Minore Îndepărtate ale Statelor Unite"
 
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unknown client"
+#~ msgstr "Expeditor necunoscut"
+
 #~ msgid "Unknown error while checking subreddit."
 #~ msgstr "Eroare necunoscută la verificarea subredditului."
+
+#, fuzzy
+#~| msgid "Unknown sender"
+#~ msgid "Unkown client"
+#~ msgstr "Expeditor necunoscut"
 
 #~ msgid "Unnamed"
 #~ msgstr "Fără nume"
@@ -19324,8 +19511,14 @@ msgstr "Adaugă pe %s"
 #~ msgid "Use \"Standalone\" Mode:"
 #~ msgstr "Folosește modul \"Autonom\":"
 
+#~ msgid "Use Password"
+#~ msgstr "Utilizează parola"
+
 #~ msgid "Use SSL connection"
 #~ msgstr "Folosește conexiunea SSL"
+
+#~ msgid "Use accessibility improvements"
+#~ msgstr "Utilizați funcționalitățile de accesibilitate"
 
 #~ msgid ""
 #~ "Use cursor keys to change the item position. Virtual cursor mode has to "
@@ -19333,6 +19526,9 @@ msgstr "Adaugă pe %s"
 #~ msgstr ""
 #~ "Utilizați tastele cursor pentru a schimba poziția elementului. Modul "
 #~ "cursor virtual trebuie să fie dezactivat."
+
+#~ msgid "Use cursor keys to navigate"
+#~ msgstr "Utilizați tastele săgeți pentru navigare"
 
 #~ msgid "Use for appointment"
 #~ msgstr "Folosește pentru întâlnire"
@@ -19447,6 +19643,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "View all appointments from all available calendars"
 #~ msgstr "Vizualizează toate întâlnirile din toate calendarele disponibile"
 
+#~ msgid "View attachment"
+#~ msgstr "Vizualizează fișier atașat"
+
 #~ msgid "View participants"
 #~ msgstr "Vizualizare participanți"
 
@@ -19473,6 +19672,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Warning: %2$s"
 #~ msgstr "Avertisment: %2$s"
+
+#~ msgid "We could not verify that this email is really from %1$s."
+#~ msgstr "N-am putut verifica dacă acest mesaj este într-adevăr de la %1$s."
 
 #~ msgid "Weak"
 #~ msgstr "Slab"
@@ -19602,6 +19804,21 @@ msgstr "Adaugă pe %s"
 #~ msgid "You already accepted this invitation"
 #~ msgstr "Ați acceptat deja această invitație"
 
+#~ msgid ""
+#~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
+#~ "Appointments will therefore be created in your private calendar."
+#~ msgstr ""
+#~ "Nu aveți permisiune pentru a crea întâlniri în \"%1$s\" deținut de %2$s. "
+#~ "Prin urmare, întâlnirile vor fi create în calendarul dumneavoastră "
+#~ "personal."
+
+#~ msgid ""
+#~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
+#~ "therefore be created in your private calendar."
+#~ msgstr ""
+#~ "Nu aveți permisiune pentru a crea întâlniri în \"%1$s\". Prin urmare, "
+#~ "întâlnirile vor fi create în calendarul dumneavoastră personal."
+
 #~ msgid "You can download the updates from within the updater."
 #~ msgstr "Puteți să descărcați actualizările din aplicația de actualizare."
 
@@ -19617,6 +19834,11 @@ msgstr "Adaugă pe %s"
 #~ msgstr ""
 #~ "Puteți să glisați și să fixați fișiere din calculator pentru încărca "
 #~ "fișiere noi sau versiuni noi ale unor fișiere existente."
+
+#~ msgid ""
+#~ "You can import existing signatures from the previous product generation."
+#~ msgstr ""
+#~ "Puteți importa semnături existente din generația trecută a produsului."
 
 #~ msgid ""
 #~ "You can manage desktop notifications at any time, by vitising your "
@@ -19693,6 +19915,9 @@ msgstr "Adaugă pe %s"
 #~ msgid "You have edit rights."
 #~ msgstr "Aveți drepturi de editare."
 
+#~ msgid "You have no new messages"
+#~ msgstr "Nu aveți niciun mesaj nou"
+
 #~ msgid "You have reauthorized this account."
 #~ msgstr "Ați autorizat din nou acest cont."
 
@@ -19707,6 +19932,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "You have the following appointment in %s:"
 #~ msgstr "Aveți următoarea întâlnire peste %s:"
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "Introduceți un nume de utilizator și o parolă pentru a vă abona."
 
 #~ msgid "You must specify an E-Mail address for redirection."
 #~ msgstr "Trebuie să introduceți o adresă de e-mail pentru redirecționare."
@@ -19727,6 +19955,15 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "You wanted to be reminded about the following InfoItem:"
 #~ msgstr "Ați solicitat un memento despre elementul de informație următor:"
+
+#~ msgid ""
+#~ "You will automatically return to the appointment dialog. The selected "
+#~ "start and end time as well as the current participant list will be "
+#~ "applied."
+#~ msgstr ""
+#~ "Veți reveni automat la fereastra de dialog pentru întâlnire. Data de "
+#~ "început și cea de sfârșit, precum și lista actuală de participanți, vor "
+#~ "fi aplicate."
 
 #~ msgid "You will need to re-login for the change to take effect."
 #~ msgstr "Pentru a aplica modificările trebuie să vă reconectați."
@@ -19761,8 +19998,18 @@ msgstr "Adaugă pe %s"
 #~ msgid "Your data has been saved"
 #~ msgstr "Datele dumneavoastră au fost salvate"
 
+#~ msgid ""
+#~ "Your default reminder could not be set for this appointment due to "
+#~ "insufficient permissions"
+#~ msgstr ""
+#~ "Mementoul implicit nu a putut fi setat pentru această întâlnire din lipsă "
+#~ "de permisiuni"
+
 #~ msgid "Your email address will be included when sending this feedback"
 #~ msgstr "Adresa dumneavoastră de mail va fi inclusă în mesajul de feedback"
+
+#~ msgid "Your messages"
+#~ msgstr "Mesajele dumneavoastră"
 
 #~ msgid ""
 #~ "Your password changed. For a future use of your subscriptions and "
@@ -19781,6 +20028,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Your primary mail account can not be deleted."
 #~ msgstr "Contul dumneavoastră principal de mail nu poate fi șters."
+
+#~ msgid "Your reply has been sent"
+#~ msgstr "Răspunsul a fost trimis"
 
 #~ msgid ""
 #~ "Your scheduled appointment conflicts with one or more previously "
@@ -19919,9 +20169,6 @@ msgstr "Adaugă pe %s"
 #~ msgid "day every"
 #~ msgstr "zi o dată la"
 
-#~ msgid "day of the week"
-#~ msgstr "zi din săptămână"
-
 #~ msgid "day of the weekend"
 #~ msgstr "zi din weekend"
 
@@ -20035,10 +20282,19 @@ msgstr "Adaugă pe %s"
 #~ msgid "iCal"
 #~ msgstr "iCal"
 
+#~ msgid "iCal-Feed"
+#~ msgstr "Flux iCal"
+
+#~ msgid "iCal-feed has been imported successfully"
+#~ msgstr "Fluxul iCal a fost importat cu succes"
+
 #, fuzzy
 #~| msgid "Phone"
 #~ msgid "iPhone"
 #~ msgstr "Telefon"
+
+#~ msgid "in"
+#~ msgstr "în"
 
 #~ msgid "in blind copy"
 #~ msgstr "în copie invizibilă "
@@ -20067,9 +20323,6 @@ msgstr "Adaugă pe %s"
 #~ msgid "locked by"
 #~ msgstr "blocat de"
 
-#~ msgid "login"
-#~ msgstr "autentificare"
-
 #~ msgid "march"
 #~ msgstr "martie"
 
@@ -20086,8 +20339,8 @@ msgstr "Adaugă pe %s"
 #~ msgid "more"
 #~ msgstr "mai multe"
 
-#~ msgid "never ends"
-#~ msgstr "nu se termină niciodată"
+#~ msgid "never"
+#~ msgstr "niciodată"
 
 #~ msgid "new"
 #~ msgstr "nou"
@@ -20119,8 +20372,8 @@ msgstr "Adaugă pe %s"
 #~ msgid "next week"
 #~ msgstr "săptămâna următoare"
 
-#~ msgid "none"
-#~ msgstr "nimeni"
+#~ msgid "no expiry date"
+#~ msgstr "nicio dată de expirare"
 
 #~ msgid "not sent"
 #~ msgstr "nu s-a trimis"
@@ -20253,11 +20506,23 @@ msgstr "Adaugă pe %s"
 #~ msgid "vacation"
 #~ msgstr "absență"
 
+#~ msgid "via"
+#~ msgstr "prin"
+
 #~ msgid "waiting"
 #~ msgstr "în așteptare"
 
 #~ msgid "weekly"
 #~ msgstr "săptămânal"
+
+#~ msgid "when the link is expired"
+#~ msgstr "când a expirat legătura"
+
+#~ msgid "when the receivers have accessed the files"
+#~ msgstr "când destinatarii au accesat fișierele"
+
+#~ msgid "when the receivers have finished downloading the files"
+#~ msgstr "când destinatarii au finalizat descărcarea fișierelor"
 
 #, fuzzy
 #~| msgid "Main window"

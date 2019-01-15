@@ -270,7 +270,10 @@ define('io.ox/core/folder/extensions', [
         },
 
         getLocalFolderName: function () {
-            return account.getPrimaryName() || gt('My folders');
+            // Use account name for root node in tree or the fallback if no name is set or it is overwritten
+            // by the setting. See Bug #62074
+            var name = mailSettings.get('features/usePrimaryAccountNameInTree', true) ? (account.getPrimaryName() || gt('My folders')) : gt('My folders');
+            return name;
         },
 
         localFolders: function (tree) {

@@ -499,6 +499,9 @@ settings!io.ox/mail
 **defaultFolder/[type]**
 > Name of default folder or `null` of not existing
 
+**usePrimaryAccountNameInTree**
+> When disabled "My Folders" string is used for private mail folders (default value is true)
+
 
 ## Folderpopup
 
