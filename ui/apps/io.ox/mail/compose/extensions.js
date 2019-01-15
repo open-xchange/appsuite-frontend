@@ -629,8 +629,8 @@ define('io.ox/mail/compose/extensions', [
                 baton.attachmentsView.$el.append($('<span>').addClass('mail-size').text(resizeUtils.getMailSizeString(baton.model)));
 
                 function onResizeOptionChange() {
-                    resizeUtils.resizeIntoArray(baton.model.get('attachments').localFiles(), [], baton.model.get('imageResizeOption')).done(function (resizedFiles) {
-                        baton.attachmentsView.$el.find('.mail-size').text(resizeUtils.getResizedSizeString(baton.model, resizedFiles));
+                    resizeUtils.resizeIntoArray(baton.model.get('attachments'), baton.model.get('imageResizeOption')).then(function (resizedFiles) {
+                        baton.attachmentsView.$el.find('.mail-size').text(resizeUtils.getMailSizeString(baton.model));
                         baton.model.set('resizedImages', resizedFiles);
                     });
                 }

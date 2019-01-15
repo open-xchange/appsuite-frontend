@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-11-14 12:47+0100\n"
+"PO-Revision-Date: 2019-01-09 12:09+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -961,9 +961,9 @@ msgstr "次の日付前"
 
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js apps/io.ox/core/main/topbar_right.js
-#: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
-#: apps/io.ox/find/view-tokenfield.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/main/apps.js
+#: apps/io.ox/core/main/topbar_right.js apps/io.ox/find/extensions-facets.js
+#: apps/io.ox/find/main.js apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
 #: module:io.ox/search apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
@@ -1480,13 +1480,6 @@ msgstr "開始時刻"
 msgid "End time"
 msgstr "終了時刻"
 
-#. %1$s timezone abbreviation of the user
-#. %2$s time interval of event
-#. %2$s duration of event
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
-msgstr "お使いのタイムゾーン(%1$s): %2$s (期間: %3$s)"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
@@ -1721,10 +1714,6 @@ msgstr "名前"
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "配布リストにリソースを含めることはできません。"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Create distibution list"
-msgstr "連絡先グループを作成"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
@@ -2270,8 +2259,9 @@ msgid "subscribe to calendar"
 msgstr "予定表に登録"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
-#: module:io.ox/core apps/plugins/portal/xing/register.js module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
 msgstr "言語"
 
@@ -3914,6 +3904,10 @@ msgid "Languages"
 msgstr "言語"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Language:"
+msgstr "言語："
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
 "No connection to server. Please check your internet connection and retry."
 msgstr ""
@@ -4884,6 +4878,11 @@ msgctxt "app"
 msgid "Notes"
 msgstr "メモ"
 
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Editor"
+msgstr "エディタ"
+
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
@@ -5484,6 +5483,13 @@ msgstr ""
 "ドまたは再ログインが必要です。"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
+msgstr ""
+"設定（言語、タイムゾーン、テーマ）によっては、設定を有効にするには、ログオン"
+"しなおしてください。"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Default Theme"
 msgstr "既定のテーマ"
 
@@ -5540,8 +5546,16 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr "設定を反映するために再読み込みを行ってください。"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "The setting requires a relogin to take effect."
+msgstr "設定を有効にするには、ログオンしなおしてください。"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
 msgstr "ページのリロード"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Relogin"
+msgstr "ログオン"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -5872,11 +5886,6 @@ msgstr "再通知しないでください。"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "OK"
-
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr "%1$s のアラームを閉じる"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
@@ -6462,11 +6471,6 @@ msgstr "メモ"
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Ctrl キー + Enter キーで、変更をすぐに保存できます。"
-
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Editor"
-msgstr "エディタ"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "This file will be written in your default folder to allow editing"
@@ -8672,6 +8676,10 @@ msgstr "エラー: メッセージを読み込みできませんでした"
 #: apps/io.ox/mail/mailfilter/autoforward/indicator.js module:io.ox/mail
 msgid "Auto forwarding is active"
 msgstr "自動転送が有効です。"
+
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr "自動転送"
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
@@ -11156,6 +11164,7 @@ msgstr ""
 "最小化したウィンドウは、簡単にアクセスできるように、すべてのアプリケーション"
 "で表示されます。再度最大化するには、ウィンドウをクリックしてください。"
 
+#. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "最新情報"
@@ -11165,11 +11174,6 @@ msgid "To learn more about the new and improved features you can visit "
 msgstr ""
 "次をご覧いただくと、新しい機能や改善された機能についてさらに知ることができま"
 "す。 "
-
-#. %1$s is the product name, e.g. OX App Suite
-#: apps/io.ox/tours/whats-new.js module:io.ox/core
-msgid "What‘s New in %1$s 7.10.0"
-msgstr "%1$s 7.10.0の最新情報"
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
@@ -11499,6 +11503,10 @@ msgstr "現在 %s に接続できません。"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "%s には利用できるデータがありません。"
+
+#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+msgid "Participant not found"
+msgstr "参加者が見つかりません"
 
 #. %1$s Appointment title
 #. %1$s task title
@@ -12292,85 +12300,15 @@ msgstr "%s に招待"
 msgid "Add on %s"
 msgstr "%s に追加"
 
-#~ msgid "Select calendar"
-#~ msgstr "予定表を選択"
-
-#~ msgid "Create new calendar"
-#~ msgstr "新規予定表を作成"
-
-#~ msgid "Calendar:"
-#~ msgstr "予定表:"
-
-#~ msgid "Show next day"
-#~ msgstr "次の日を表示"
-
-#~ msgid "Show previous day"
-#~ msgstr "前の日を表示"
-
-#~ msgid "Calendar Month View"
-#~ msgstr "予定表 月ビュー"
-
-#~ msgid "%1$s (Tentative)"
-#~ msgstr "%1$s (仮の予定)"
+#~ msgid "Your preview is being generated."
+#~ msgstr "プレビューが作成中です。"
 
 #~ msgid ""
-#~ "This appointment is an exception. Changing the series does not affect "
-#~ "exceptions."
+#~ "\n"
+#~ " Alternatively you can download the file."
 #~ msgstr ""
-#~ "この予定は例外の予定です。繰り返しの予定に対する変更はこの予定を変更しませ"
-#~ "ん。"
-
-#~ msgid "Calendar Day View"
-#~ msgstr "予定表日ビュー"
-
-#~ msgid "Calendar Workweek View"
-#~ msgstr "予定表稼働日ビュー"
-
-#~ msgid "Calendar Week View"
-#~ msgstr "予定表週ビュー"
-
-#~ msgid "Appointment list"
-#~ msgstr "予定リスト"
-
-#~ msgid ""
-#~ "There are more than %n appointments in the current calendar. Some "
-#~ "features are disabled due to performance reasons."
-#~ msgstr ""
-#~ "現在のカレンダーには %n 件以上の予定があります。パフォーマンスに影響するた"
-#~ "め、いくつかの機能が無効になります。"
-
-#~ msgid "Days"
-#~ msgstr "日"
-
-#~ msgid "Hours"
-#~ msgstr "時間"
-
-#~ msgid "Minutes"
-#~ msgstr "分"
-
-#~ msgid "Months"
-#~ msgstr "月"
-
-#~ msgid "Years"
-#~ msgstr "年"
-
-#~ msgid "Pause auto-play mode"
-#~ msgstr "自動再生モードを一時停止"
-
-#~ msgid "Run auto-play mode"
-#~ msgstr "自動再生モードを実行"
-
-#~ msgid "Run auto-play "
-#~ msgstr "自動再生を実行 "
-
-#~ msgid "Read"
-#~ msgstr "既読"
-
-#~ msgid "Is bigger than"
-#~ msgstr "次のサイズより大きい"
-
-#~ msgid "Is smaller than"
-#~ msgstr "次のサイズより小さい"
+#~ "\n"
+#~ " 代わりにファイルをダウンロードできます。"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -12468,6 +12406,9 @@ msgstr "%s に追加"
 
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s。"
+
+#~ msgid "%1$s (Tentative)"
+#~ msgstr "%1$s (仮の予定)"
 
 #~ msgid "%1$s Options"
 #~ msgstr "%1$s オプション"
@@ -12791,9 +12732,6 @@ msgstr "%s に追加"
 
 #~ msgid "Account Settings"
 #~ msgstr "アカウント設定"
-
-#~ msgid "Account is being created"
-#~ msgstr "アカウントが現在作成中です。"
 
 #~ msgid "Account:"
 #~ msgstr "アカウント:"
@@ -13421,6 +13359,9 @@ msgstr "%s に追加"
 #~ "Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open"
 #~ msgstr ""
 #~ "アポイントへの出席依頼: %1$s %2$s %3$s %4$s %5$s Enter キーで開きます。"
+
+#~ msgid "Appointment list"
+#~ msgstr "予定リスト"
 
 #~ msgid "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
 #~ msgstr "アポイントのアラーム: %1$s %2$s %3$s %4$s Enter キーで開きます。"
@@ -14058,11 +13999,26 @@ msgstr "%s に追加"
 #~ msgid "Calendar (Manually)"
 #~ msgstr "予定表の日ビュー"
 
+#~ msgid "Calendar Day View"
+#~ msgstr "予定表日ビュー"
+
+#~ msgid "Calendar Month View"
+#~ msgstr "予定表 月ビュー"
+
+#~ msgid "Calendar Week View"
+#~ msgstr "予定表週ビュー"
+
+#~ msgid "Calendar Workweek View"
+#~ msgstr "予定表稼働日ビュー"
+
 #~ msgid "Calendar custom view"
 #~ msgstr "予定表のカスタム ビュー"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "予定表稼働週ビュー"
+
+#~ msgid "Calendar:"
+#~ msgstr "予定表:"
 
 #~ msgid "Cambodia"
 #~ msgstr "カンボジア"
@@ -14300,6 +14256,9 @@ msgstr "%s に追加"
 #~ msgid "Close recurrence view"
 #~ msgstr "繰り返しビューを閉じるには、クリックしてください。"
 
+#~ msgid "Close reminder for %1$s"
+#~ msgstr "%1$s のアラームを閉じる"
+
 #~ msgid "Close search"
 #~ msgstr "検索を閉じる"
 
@@ -14489,8 +14448,14 @@ msgstr "%s に追加"
 #~ msgid "Create a new appointment"
 #~ msgstr "新規アポイントを作成"
 
+#~ msgid "Create distibution list"
+#~ msgstr "連絡先グループを作成"
+
 #~ msgid "Create exception"
 #~ msgstr "例外を作成"
+
+#~ msgid "Create new calendar"
+#~ msgstr "新規予定表を作成"
 
 #~ msgid "Create new task"
 #~ msgstr "新規の仕事を作成"
@@ -14669,6 +14634,9 @@ msgstr "%s に追加"
 
 #~ msgid "Day View"
 #~ msgstr "日ビュー"
+
+#~ msgid "Days"
+#~ msgstr "日"
 
 #~ msgid "Debug"
 #~ msgstr "デバッグ"
@@ -16037,6 +16005,9 @@ msgstr "%s に追加"
 #~ msgid "Hong Kong"
 #~ msgstr "香港"
 
+#~ msgid "Hours"
+#~ msgstr "時間"
+
 #~ msgid "How does this work?"
 #~ msgstr "アポイントの作成方法について"
 
@@ -16237,6 +16208,9 @@ msgstr "%s に追加"
 #~ msgstr ""
 #~ "アイコン ビューでは、選択したフォルダにあるファイルが表示エリアに表示され"
 #~ "ます。"
+
+#~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
+#~ msgstr "お使いのタイムゾーン(%1$s): %2$s (期間: %3$s)"
 
 #~ msgid "Inbox Tabs"
 #~ msgstr "受信トレイのタブ"
@@ -16440,6 +16414,12 @@ msgstr "%s に追加"
 
 #~ msgid "Is at most"
 #~ msgstr "最大"
+
+#~ msgid "Is bigger than"
+#~ msgstr "次のサイズより大きい"
+
+#~ msgid "Is smaller than"
+#~ msgstr "次のサイズより小さい"
 
 #~ msgid "Isle of Man"
 #~ msgstr "マン島"
@@ -16863,6 +16843,9 @@ msgstr "%s に追加"
 #~ msgid "Mime Type"
 #~ msgstr "MIME タイプ"
 
+#~ msgid "Minutes"
+#~ msgstr "分"
+
 #~ msgid "Mobile"
 #~ msgstr "携帯電話"
 
@@ -16928,6 +16911,9 @@ msgstr "%s に追加"
 
 #~ msgid "Monthly on the %1$s %2$s"
 #~ msgstr "毎月 %1$s %2$s"
+
+#~ msgid "Months"
+#~ msgstr "月"
 
 #~| msgid "America/Montserrat"
 #~ msgid "Montserrat"
@@ -17571,9 +17557,6 @@ msgstr "%s に追加"
 #~ msgid "Parameter:"
 #~ msgstr "パラメータ:"
 
-#~ msgid "Participant"
-#~ msgstr "出席者"
-
 #~ msgid "Participant:"
 #~ msgstr "出席者:"
 
@@ -17594,6 +17577,9 @@ msgstr "%s に追加"
 
 #~ msgid "Pause Presentation"
 #~ msgstr "送付先"
+
+#~ msgid "Pause auto-play mode"
+#~ msgstr "自動再生モードを一時停止"
 
 #~ msgid "Pause presentation"
 #~ msgstr "プレゼンテーションを一時停止"
@@ -18021,6 +18007,9 @@ msgstr "%s に追加"
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "%2$d ページ中の %1$d ページ"
 
+#~ msgid "Read"
+#~ msgstr "既読"
+
 #~ msgid "Read Only Mode"
 #~ msgstr "読み取り専用モード"
 
@@ -18182,6 +18171,12 @@ msgstr "%s に追加"
 
 #~ msgid "Rules"
 #~ msgstr "ルール"
+
+#~ msgid "Run auto-play "
+#~ msgstr "自動再生を実行 "
+
+#~ msgid "Run auto-play mode"
+#~ msgstr "自動再生モードを実行"
 
 #~ msgid "Running applications"
 #~ msgstr "実行中のアプリケーション"
@@ -18362,6 +18357,9 @@ msgstr "%s に追加"
 
 #~ msgid "Select appointment display type"
 #~ msgstr "アポイントの表示タイプを選択してください。"
+
+#~ msgid "Select calendar"
+#~ msgstr "予定表を選択"
 
 #~ msgid "Select contact folder"
 #~ msgstr "連絡先フォルダを選択"
@@ -18614,8 +18612,14 @@ msgstr "%s に追加"
 #~ msgid "Show name instead of E-Mail address in To and Cc fields:"
 #~ msgstr "宛先と Cc の各フィールドでメール アドレスの代わりに名前を表示:"
 
+#~ msgid "Show next day"
+#~ msgstr "次の日を表示"
+
 #~ msgid "Show original publication"
 #~ msgstr "元の公開を表示"
+
+#~ msgid "Show previous day"
+#~ msgstr "前の日を表示"
 
 #~ msgid "Show sender image?"
 #~ msgstr "差出人の画像を表示"
@@ -19629,6 +19633,13 @@ msgstr "%s に追加"
 #~ msgid "There are currently no participants."
 #~ msgstr "現在出席者はいません。"
 
+#~ msgid ""
+#~ "There are more than %n appointments in the current calendar. Some "
+#~ "features are disabled due to performance reasons."
+#~ msgstr ""
+#~ "現在のカレンダーには %n 件以上の予定があります。パフォーマンスに影響するた"
+#~ "め、いくつかの機能が無効になります。"
+
 #~ msgid "There is already %1$d appointment in this timeframe."
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
 #~ msgstr[0] "この期間には既に %1$d 件のアポイントがあります。"
@@ -19644,6 +19655,13 @@ msgstr "%s に追加"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "このアカウントは検証できません。"
+
+#~ msgid ""
+#~ "This appointment is an exception. Changing the series does not affect "
+#~ "exceptions."
+#~ msgstr ""
+#~ "この予定は例外の予定です。繰り返しの予定に対する変更はこの予定を変更しませ"
+#~ "ん。"
 
 #~ msgid "This document contains unsaved changes. Do you really want to close?"
 #~ msgstr ""
@@ -20510,6 +20528,9 @@ msgstr "%s に追加"
 #~ msgid "What to you want to use on your smartphone?"
 #~ msgstr "レイアウトの変更を保存しますか？"
 
+#~ msgid "What‘s New in %1$s 7.10.0"
+#~ msgstr "%1$s 7.10.0の最新情報"
+
 #~ msgid "When \"Reply all\":"
 #~ msgstr "\"全員に返信\" の場合:"
 
@@ -20581,6 +20602,9 @@ msgstr "%s に追加"
 
 #~ msgid "Yearly on the %1$s %2$s of %3$d"
 #~ msgstr "毎年 %3$d の %1$s %2$s"
+
+#~ msgid "Years"
+#~ msgstr "年"
 
 #~ msgid "Yemen"
 #~ msgstr "イエメン"
@@ -21103,9 +21127,6 @@ msgstr "%s に追加"
 
 #~ msgid "locked by"
 #~ msgstr "ロック設定者"
-
-#~ msgid "login"
-#~ msgstr "ログイン"
 
 #~ msgid "march"
 #~ msgstr "3 月"

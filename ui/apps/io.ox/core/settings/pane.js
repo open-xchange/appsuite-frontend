@@ -18,6 +18,7 @@ define('io.ox/core/settings/pane', [
     'io.ox/backbone/mini-views/common',
     'io.ox/core/settings/util',
     'io.ox/core/api/apps',
+    'io.ox/core/upsell',
     'io.ox/core/capabilities',
     'io.ox/core/notifications',
     'io.ox/core/desktopNotifications',
@@ -27,13 +28,17 @@ define('io.ox/core/settings/pane', [
     'gettext!io.ox/core',
     'io.ox/backbone/mini-views/timezonepicker',
     'io.ox/core/main/appcontrol'
-], function (ext, ExtensibleView, DisposableView, mini, util, apps, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol) {
+], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol) {
 
     'use strict';
 
     var INDEX = 0,
         MINUTES = 60000,
-        availableApps = apps.forLauncher().map(function (o) {
+        AUTOLOGIN = capabilities.has('autologin') && ox.secretCookie === true,
+        availableApps = apps.forLauncher().filter(function (model) {
+            var requires = model.get('requires');
+            return upsell.has(requires);
+        }).map(function (o) {
             return {
                 label: o.getTitle(),
                 value: o.get('path')
@@ -62,7 +67,9 @@ define('io.ox/core/settings/pane', [
                         });
                     },
 
-                    reloadHint: gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.'),
+                    reloadHint: AUTOLOGIN ?
+                        gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.') :
+                        gt('Some settings (language, timezone, theme) require a relogin to take effect.'),
 
                     getLanguageOptions: function () {
                         return _(ox.serverConfig.languages).map(function (key, val) {
@@ -160,7 +167,10 @@ define('io.ox/core/settings/pane', [
                     settings.saveAndYell(undefined, { force: !!showNotice }).then(
                         function success() {
                             if (!showNotice) return;
-                            notifications.yell('success', gt('The setting requires a reload or relogin to take effect.'));
+                            var message = AUTOLOGIN ?
+                                gt('The setting requires a reload or relogin to take effect.') :
+                                gt('The setting requires a relogin to take effect.');
+                            notifications.yell('success', message);
                         }
                     );
                 });
@@ -177,7 +187,11 @@ define('io.ox/core/settings/pane', [
                 this.$el.append(
                     $('<div class="help-block">').text(this.reloadHint + ' ').css('margin-bottom', '24px')
                     .append(
-                        $('<a href="#" role="button" data-action="reload">').text(gt('Reload page')).on('click', reload)
+                        $('<a href="#" role="button" data-action="reload">').text(
+                            AUTOLOGIN ?
+                                gt('Reload page') :
+                                gt('Relogin')
+                        ).on('click', reload)
                     )
                 );
 

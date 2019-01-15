@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-11-09 03:46+0100\n"
+"PO-Revision-Date: 2019-01-09 12:10+0100\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <ox@workshop-chapina.com>\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.1.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
@@ -964,9 +964,9 @@ msgstr "Före"
 
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js apps/io.ox/core/main/topbar_right.js
-#: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
-#: apps/io.ox/find/view-tokenfield.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/main/apps.js
+#: apps/io.ox/core/main/topbar_right.js apps/io.ox/find/extensions-facets.js
+#: apps/io.ox/find/main.js apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
 #: module:io.ox/search apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
@@ -1486,13 +1486,6 @@ msgstr "Starttid"
 msgid "End time"
 msgstr "Sluttid"
 
-#. %1$s timezone abbreviation of the user
-#. %2$s time interval of event
-#. %2$s duration of event
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
-msgstr "I din tidszon (%1$s): %2$s (Varaktighet: %3$s)"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
@@ -1728,10 +1721,6 @@ msgstr "Namn"
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "Observera att sändlistor inte får innehålla resurser."
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Create distibution list"
-msgstr "Skapa sändlista"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
@@ -2284,8 +2273,9 @@ msgid "subscribe to calendar"
 msgstr "prenumerera på kalender"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
-#: module:io.ox/core apps/plugins/portal/xing/register.js module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
 msgstr "Språk"
 
@@ -3944,6 +3934,10 @@ msgid "Languages"
 msgstr "Språk"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Language:"
+msgstr "Språk:"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
 "No connection to server. Please check your internet connection and retry."
 msgstr ""
@@ -4915,6 +4909,11 @@ msgctxt "app"
 msgid "Notes"
 msgstr "Anteckningar"
 
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Editor"
+msgstr "Editor"
+
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
@@ -5526,6 +5525,13 @@ msgstr ""
 "att du loggar ut och sedan in igen för att börja gälla."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
+msgstr ""
+"Vissa inställningar (språk, tidszon, tema) kräver att du loggar ut och sedan "
+"in igen för att börja gälla."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Default Theme"
 msgstr "Förvalt tema"
 
@@ -5584,8 +5590,18 @@ msgstr ""
 "igen för att verkställas."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "The setting requires a relogin to take effect."
+msgstr ""
+"Inställningen kräver att du loggar ut och tillbaka in igen för att börja "
+"gälla."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
 msgstr "Ladda om sida"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Relogin"
+msgstr "Logga in igen"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -5921,11 +5937,6 @@ msgstr "Påminn mig inte igen"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "Ok"
-
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr "Stäng påminnelse för %1$s"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
@@ -6521,11 +6532,6 @@ msgstr "Anteckning"
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Du kan snabbspara dina ändringar med Ctrl+Enter."
-
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Editor"
-msgstr "Editor"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "This file will be written in your default folder to allow editing"
@@ -8762,6 +8768,10 @@ msgstr "Fel: Kunde inte läsa in meddelanden"
 #: apps/io.ox/mail/mailfilter/autoforward/indicator.js module:io.ox/mail
 msgid "Auto forwarding is active"
 msgstr "Autovidarebefordran är aktiv"
+
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr "Autovidarebefordran"
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
@@ -11269,6 +11279,7 @@ msgstr ""
 "Fönster som du har minimerat kommer visas i alla program för enkel åtkomst. "
 "Du kan maximera ett fönster igen genom att klicka på det."
 
+#. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "Nyheter"
@@ -11276,11 +11287,6 @@ msgstr "Nyheter"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "To learn more about the new and improved features you can visit "
 msgstr "För att läsa mer om de nya och förbättrade funktionerna kan du besöka "
-
-#. %1$s is the product name, e.g. OX App Suite
-#: apps/io.ox/tours/whats-new.js module:io.ox/core
-msgid "What‘s New in %1$s 7.10.0"
-msgstr "Nyheter i %1$s 7.10.0"
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
@@ -11611,6 +11617,10 @@ msgstr "Kunde tyvärr inte ansluta till %s just nu."
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Det finns tyvärr ingen data tillgänglig för dig på %s."
+
+#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+msgid "Participant not found"
+msgstr "Deltagaren hittas inte"
 
 #. %1$s Appointment title
 #. %1$s task title
@@ -12408,84 +12418,15 @@ msgstr "Bjud in till %s"
 msgid "Add on %s"
 msgstr "Lägg till på %s"
 
-#~ msgid "Select calendar"
-#~ msgstr "Välj kalender"
-
-#~ msgid "Create new calendar"
-#~ msgstr "Skapa ny kalender"
-
-#~ msgid "Calendar:"
-#~ msgstr "Kalender:"
-
-#~ msgid "Show next day"
-#~ msgstr "Visa nästa dag"
-
-#~ msgid "Show previous day"
-#~ msgstr "Visa föregående dag"
-
-#~ msgid "Calendar Month View"
-#~ msgstr "Kalenderns månadsvy"
-
-#~ msgid "%1$s (Tentative)"
-#~ msgstr "%1$s (Preliminär)"
+#~ msgid "Your preview is being generated."
+#~ msgstr "Din förhandsgranskning skapas."
 
 #~ msgid ""
-#~ "This appointment is an exception. Changing the series does not affect "
-#~ "exceptions."
+#~ "\n"
+#~ " Alternatively you can download the file."
 #~ msgstr ""
-#~ "Det här mötet är ett undantag. Ändringar på serien påverkar inte undantag."
-
-#~ msgid "Calendar Day View"
-#~ msgstr "Kalenderns dagsvy"
-
-#~ msgid "Calendar Workweek View"
-#~ msgstr "Kalenderns arbetsveckovy"
-
-#~ msgid "Calendar Week View"
-#~ msgstr "Kalenderns veckovy"
-
-#~ msgid "Appointment list"
-#~ msgstr "Möten"
-
-#~ msgid ""
-#~ "There are more than %n appointments in the current calendar. Some "
-#~ "features are disabled due to performance reasons."
-#~ msgstr ""
-#~ "Det finns fler än %n möten i den aktuella kalendern. Vissa funktioner har "
-#~ "avaktiverats för att bibehålla prestandan."
-
-#~ msgid "Days"
-#~ msgstr "Dagar"
-
-#~ msgid "Hours"
-#~ msgstr "Timmar"
-
-#~ msgid "Minutes"
-#~ msgstr "Minuter"
-
-#~ msgid "Months"
-#~ msgstr "Månader"
-
-#~ msgid "Years"
-#~ msgstr "År"
-
-#~ msgid "Pause auto-play mode"
-#~ msgstr "Pausa autouppspelningsläge"
-
-#~ msgid "Run auto-play mode"
-#~ msgstr "Kör autouppspelningsläge"
-
-#~ msgid "Run auto-play "
-#~ msgstr "Kör autouppspelning "
-
-#~ msgid "Read"
-#~ msgstr "Läst"
-
-#~ msgid "Is bigger than"
-#~ msgstr "Är större än"
-
-#~ msgid "Is smaller than"
-#~ msgstr "Är mindre än"
+#~ "\n"
+#~ "Annars kan du ladda ned filen."
 
 #, fuzzy
 #~| msgid "is not a valid user or group."
@@ -12547,6 +12488,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s."
+
+#~ msgid "%1$s (Tentative)"
+#~ msgstr "%1$s (Preliminär)"
 
 #~ msgid "%1$s Options"
 #~ msgstr "%1$s-alternativ"
@@ -13121,9 +13065,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Account Settings"
 #~ msgstr "Kontoinställningar"
 
-#~ msgid "Account is being created"
-#~ msgstr "Kontot skapas"
-
 #~ msgid "Acknowledge all reminders"
 #~ msgstr "Bekräfta alla påminnelser"
 
@@ -13416,6 +13357,9 @@ msgstr "Lägg till på %s"
 #~ msgstr ""
 #~ "Inbjudan till möte. %1$s %2$s %3$s %4$s %5$s. Tryck [enter] för att öppna"
 
+#~ msgid "Appointment list"
+#~ msgstr "Möten"
+
 #~ msgid "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
 #~ msgstr "Mötespåminnelse. %1$s %2$s %3$s %4$s. Tryck [enter] för att öppna"
 
@@ -13588,6 +13532,18 @@ msgstr "Lägg till på %s"
 #~ msgid "CalDAV Login"
 #~ msgstr "CalDAV-inloggning"
 
+#~ msgid "Calendar Day View"
+#~ msgstr "Kalenderns dagsvy"
+
+#~ msgid "Calendar Month View"
+#~ msgstr "Kalenderns månadsvy"
+
+#~ msgid "Calendar Week View"
+#~ msgstr "Kalenderns veckovy"
+
+#~ msgid "Calendar Workweek View"
+#~ msgstr "Kalenderns arbetsveckovy"
+
 #~ msgid "Calendar calculation requires a proper defined time zone."
 #~ msgstr "Kalenderns uträkning behöver en korrekt definierad tidszon."
 
@@ -13596,6 +13552,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "Kalenderns arbetsveckovy"
+
+#~ msgid "Calendar:"
+#~ msgstr "Kalender:"
 
 #~ msgid "Can not generate uid."
 #~ msgstr "Kan inte skapa uid."
@@ -13912,6 +13871,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Close recurrence view"
 #~ msgstr "Klicka för att stänga upprepningsvyn"
 
+#~ msgid "Close reminder for %1$s"
+#~ msgstr "Stäng påminnelse för %1$s"
+
 #~ msgid "Close this reminder"
 #~ msgstr "Stäng påminnelse"
 
@@ -14176,8 +14138,14 @@ msgstr "Lägg till på %s"
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Skapa ett %s-konto med datan som lagras här"
 
+#~ msgid "Create distibution list"
+#~ msgstr "Skapa sändlista"
+
 #~ msgid "Create exception"
 #~ msgstr "Skapa undantag"
+
+#~ msgid "Create new calendar"
+#~ msgstr "Skapa ny kalender"
 
 #~ msgid "Create new task"
 #~ msgstr "Skapa ny uppgift"
@@ -14275,6 +14243,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Day View"
 #~ msgstr "Dagvy"
+
+#~ msgid "Days"
+#~ msgstr "Dagar"
 
 #~ msgid "December"
 #~ msgstr "December"
@@ -15249,6 +15220,9 @@ msgstr "Lägg till på %s"
 #~ msgid "High contrast theme"
 #~ msgstr "Tema med hög kontrast"
 
+#~ msgid "Hours"
+#~ msgstr "Timmar"
+
 #~ msgid "How does this work?"
 #~ msgstr "Hur funkar det här?"
 
@@ -15435,6 +15409,9 @@ msgstr "Lägg till på %s"
 #~ "display area."
 #~ msgstr ""
 #~ "I ikonvyn kan du se filerna i den markerade mappen i visningsområdet."
+
+#~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
+#~ msgstr "I din tidszon (%1$s): %2$s (Varaktighet: %3$s)"
 
 #~ msgid "Inbox Tabs"
 #~ msgstr "Inkorgflikar"
@@ -15646,6 +15623,12 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Inviting other participants"
 #~ msgstr "Bjud in andra deltagare"
+
+#~ msgid "Is bigger than"
+#~ msgstr "Är större än"
+
+#~ msgid "Is smaller than"
+#~ msgstr "Är mindre än"
 
 #~ msgid "Item List"
 #~ msgstr "Objekt"
@@ -15921,6 +15904,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Mime type is null"
 #~ msgstr "Mimetypen är null"
 
+#~ msgid "Minutes"
+#~ msgstr "Minuter"
+
 #~ msgid "Missing %1$s folder in mail move operation"
 #~ msgstr "Saknar mappen %1$s i flyttoperationen"
 
@@ -16052,6 +16038,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Monthly on the %1$s %2$s"
 #~ msgstr "Varje månad den %1$s %2$s"
+
+#~ msgid "Months"
+#~ msgstr "Månader"
 
 #, fuzzy
 #~| msgid "Months"
@@ -16542,15 +16531,15 @@ msgstr "Lägg till på %s"
 #~ msgid "Parsing problem in URL parameter \"%1$s\"."
 #~ msgstr "Tolkningsproblem i URL parametern \"%1$s\"."
 
-#~ msgid "Participant %d for task %d is not found."
-#~ msgstr "Deltagare %d för uppgift %d hittas inte."
-
 #~ msgid "Pause"
 #~ msgstr "Paus"
 
 #, fuzzy
 #~ msgid "Pause Presentation"
 #~ msgstr "Inbjudningar till uppgifter"
+
+#~ msgid "Pause auto-play mode"
+#~ msgstr "Pausa autouppspelningsläge"
 
 #~ msgid "Pause presentation"
 #~ msgstr "Pausa presentation"
@@ -16828,6 +16817,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "Sida %1$d av %2$d"
 
+#~ msgid "Read"
+#~ msgstr "Läst"
+
 #~ msgid "Read Acknowledgement"
 #~ msgstr "Läs bekräftelse"
 
@@ -16927,6 +16919,12 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Rule applies until"
 #~ msgstr "Regel gäller till"
+
+#~ msgid "Run auto-play "
+#~ msgstr "Kör autouppspelning "
+
+#~ msgid "Run auto-play mode"
+#~ msgstr "Kör autouppspelningsläge"
 
 #~ msgid "Running applications"
 #~ msgstr "Program som körs"
@@ -17035,6 +17033,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Select Folder"
 #~ msgstr "Välj mapp"
+
+#~ msgid "Select calendar"
+#~ msgstr "Välj kalender"
 
 #~ msgid "Select none"
 #~ msgstr "Välj inga"
@@ -17208,8 +17209,14 @@ msgstr "Lägg till på %s"
 #~ msgid "Show more comments"
 #~ msgstr "Visa fler kommentarer"
 
+#~ msgid "Show next day"
+#~ msgstr "Visa nästa dag"
+
 #~ msgid "Show original publication"
 #~ msgstr "Visa ursprunglig publikation"
+
+#~ msgid "Show previous day"
+#~ msgstr "Visa föregående dag"
 
 #~ msgid "Show side panel"
 #~ msgstr "Visa sidopanelen"
@@ -18076,6 +18083,13 @@ msgstr "Lägg till på %s"
 #~ msgid "There are currently no participants."
 #~ msgstr "Det finns för närvarande inga deltagare."
 
+#~ msgid ""
+#~ "There are more than %n appointments in the current calendar. Some "
+#~ "features are disabled due to performance reasons."
+#~ msgstr ""
+#~ "Det finns fler än %n möten i den aktuella kalendern. Vissa funktioner har "
+#~ "avaktiverats för att bibehålla prestandan."
+
 #~ msgid "There is already %1$d appointment in this timeframe."
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
 #~ msgstr[0] "Det finns redan %1$d möte i den här tidsramen."
@@ -18161,6 +18175,12 @@ msgstr "Lägg till på %s"
 #~ "[resources]\n"
 #~ "\n"
 #~ "=========================================="
+
+#~ msgid ""
+#~ "This appointment is an exception. Changing the series does not affect "
+#~ "exceptions."
+#~ msgstr ""
+#~ "Det här mötet är ett undantag. Ändringar på serien påverkar inte undantag."
 
 #~ msgid ""
 #~ "This appointment was changed by [changed_by].\n"
@@ -19536,6 +19556,9 @@ msgstr "Lägg till på %s"
 #~ msgid "What do you want to use on your iPhone?"
 #~ msgstr "Vill du verkligen kasta dina ändringar?"
 
+#~ msgid "What‘s New in %1$s 7.10.0"
+#~ msgstr "Nyheter i %1$s 7.10.0"
+
 #~ msgid ""
 #~ "When executing the downloaded file, an installation wizard will be "
 #~ "launched. Follow the instructions and install the updater. Installs "
@@ -19605,6 +19628,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Yearly on the %1$s %2$s of %3$d"
 #~ msgstr "Varje år den %1$s %2$s i %3$d"
+
+#~ msgid "Years"
+#~ msgstr "År"
 
 #~ msgid "Yes, always move them all"
 #~ msgstr "Ja, flytta alltid allihop"
@@ -20109,9 +20135,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "later"
 #~ msgstr "senare"
-
-#~ msgid "login"
-#~ msgstr "inloggning"
 
 #~ msgid "monthly"
 #~ msgstr "varje månad"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-11-14 09:02+0900\n"
+"PO-Revision-Date: 2019-01-09 12:09+0100\n"
 "Last-Translator: Sandrine Burriel <sandrine@workshop-chapina.com>\n"
 "Language-Team: French <fr@workshop-chapina.com>\n"
 "Language: fr_CA\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -970,9 +970,9 @@ msgstr "Avant"
 
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js apps/io.ox/core/main/topbar_right.js
-#: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
-#: apps/io.ox/find/view-tokenfield.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/main/apps.js
+#: apps/io.ox/core/main/topbar_right.js apps/io.ox/find/extensions-facets.js
+#: apps/io.ox/find/main.js apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
 #: module:io.ox/search apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
@@ -1501,13 +1501,6 @@ msgstr "Date de début"
 msgid "End time"
 msgstr "Date de fin"
 
-#. %1$s timezone abbreviation of the user
-#. %2$s time interval of event
-#. %2$s duration of event
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
-msgstr "Dans votre fuseau horaire (%1$s): %2$s (durée : %3$s)"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
@@ -1752,10 +1745,6 @@ msgid "Please note that distribution lists cannot contain resources."
 msgstr ""
 "Veuillez noter que les listes de diffusions ne peuvent pas contenir de "
 "ressources."
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Create distibution list"
-msgstr "Créer une liste de distribution"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
@@ -2314,8 +2303,9 @@ msgid "subscribe to calendar"
 msgstr "s'abonner à l'agenda"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
-#: module:io.ox/core apps/plugins/portal/xing/register.js module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
 msgstr "Langue"
 
@@ -2881,8 +2871,8 @@ msgid ""
 "This appointment is an exception. Changing the exception does not affect the "
 "series."
 msgstr ""
-"Ce rendez-vous est une exception. Modifier l'exception n'aura aucun effet sur "
-"la série."
+"Ce rendez-vous est une exception. Modifier l'exception n'aura aucun effet "
+"sur la série."
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid "Direct link"
@@ -3988,6 +3978,10 @@ msgid "Languages"
 msgstr "Langues"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Language:"
+msgstr "Langue :"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
 "No connection to server. Please check your internet connection and retry."
 msgstr ""
@@ -4977,6 +4971,11 @@ msgctxt "app"
 msgid "Notes"
 msgstr "Remarques"
 
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Editor"
+msgstr "Éditeur"
+
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
@@ -5594,8 +5593,15 @@ msgid ""
 "Some settings (language, timezone, theme) require a page reload or relogin "
 "to take effect."
 msgstr ""
-"Certains réglages (langue, fuseau horaire, thème) requiert le rechargement "
-"de la page, ou même la réauthentification pour prendre effets."
+"Certains réglages (langue, fuseau horaire, thème) nécessitent de recharger "
+"la page ou de vous réauthentifier pour prendre effet."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
+msgstr ""
+"Certains réglages (langue, fuseau horaire, thème) nécessitent de vous "
+"réauthentifier pour prendre effet."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Default Theme"
@@ -5652,12 +5658,20 @@ msgstr "Réglages de base"
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
-"Ce réglage nécessite de recharger la page ou de se connecter à nouveau pour "
+"Ce réglage nécessite de recharger la page ou de vous réauthentifier pour "
 "prendre effet."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "The setting requires a relogin to take effect."
+msgstr "Ce réglage nécessite de vous réauthentifier pour prendre effet."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
 msgstr "Recharger la page"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Relogin"
+msgstr "Réauthentification"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -5995,11 +6009,6 @@ msgstr "Ne plus me le rappeler"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "OK"
-
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr "Fermer le rappel de %1$s"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
@@ -6603,11 +6612,6 @@ msgstr "Remarque"
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr ""
 "Vous pouvez enregistrer rapidement vos modifications avec [Ctrl]+[Entrée]."
-
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Editor"
-msgstr "Éditeur"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "This file will be written in your default folder to allow editing"
@@ -7678,8 +7682,8 @@ msgstr "Récupérer les mots de passe"
 msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr ""
-"Veuillez saisir l'ancien mot de passe pour récupérer les mots de "
-"passe du compte."
+"Veuillez saisir l'ancien mot de passe pour récupérer les mots de passe du "
+"compte."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Your old password"
@@ -8339,8 +8343,7 @@ msgstr ""
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr ""
-"Attention : ce message pourrait être une tentative d'escroquerie par "
-"courriel"
+"Attention : ce message pourrait être une tentative d'escroquerie par courriel"
 
 #. read receipt; German "Lesebestätigung"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
@@ -8884,6 +8887,10 @@ msgstr "Erreur : échec du chargement des messages"
 #: apps/io.ox/mail/mailfilter/autoforward/indicator.js module:io.ox/mail
 msgid "Auto forwarding is active"
 msgstr "Le transfert automatique est actif"
+
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr "Transfert automatique"
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
@@ -11421,6 +11428,7 @@ msgstr ""
 "applications pour un accès rapide. Vous pouvez agrandir une fenêtre en "
 "cliquant dessus."
 
+#. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "Nouveautés"
@@ -11428,11 +11436,6 @@ msgstr "Nouveautés"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "To learn more about the new and improved features you can visit "
 msgstr "Pour découvrir les nouveautés et améliorations, vous pouvez consulter "
-
-#. %1$s is the product name, e.g. OX App Suite
-#: apps/io.ox/tours/whats-new.js module:io.ox/core
-msgid "What‘s New in %1$s 7.10.0"
-msgstr "Nouveautés de la version %1$s 7.10.0"
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
@@ -11769,6 +11772,10 @@ msgstr "Désolés, impossible de se connecter à %s pour le moment."
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Désolés, il n'y a pas de données mises à votre disposition sur %s."
+
+#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+msgid "Participant not found"
+msgstr "Participant non trouvé"
 
 #. %1$s Appointment title
 #. %1$s task title
@@ -12581,85 +12588,16 @@ msgstr "Inviter à %s"
 msgid "Add on %s"
 msgstr "Ajouter à %s"
 
-#~ msgid "Select calendar"
-#~ msgstr "Sélectionner l'agenda"
-
-#~ msgid "Create new calendar"
-#~ msgstr "Créer un nouvel agenda"
-
-#~ msgid "Calendar:"
-#~ msgstr "Agenda :"
-
-#~ msgid "Show next day"
-#~ msgstr "Afficher la journée suivante"
-
-#~ msgid "Show previous day"
-#~ msgstr "Afficher la journée précédente"
-
-#~ msgid "Calendar Month View"
-#~ msgstr "Agenda en vue mensuelle"
-
-#~ msgid "%1$s (Tentative)"
-#~ msgstr "%1$s (Provisoire)"
+#~| msgid "Account is being created"
+#~ msgid "Your preview is being generated."
+#~ msgstr "Votre aperçu est en cours de création"
 
 #~ msgid ""
-#~ "This appointment is an exception. Changing the series does not affect "
-#~ "exceptions."
+#~ "\n"
+#~ " Alternatively you can download the file."
 #~ msgstr ""
-#~ "Ce rendez-vous est une exception. Changer la série ne modifie pas les "
-#~ "exceptions."
-
-#~ msgid "Calendar Day View"
-#~ msgstr "Agenda en vue journalière"
-
-#~ msgid "Calendar Workweek View"
-#~ msgstr "Agenda en vue semaine ouvrée"
-
-#~ msgid "Calendar Week View"
-#~ msgstr "Agenda en vue journalière"
-
-#~ msgid "Appointment list"
-#~ msgstr "Liste des rendez-vous"
-
-#~ msgid ""
-#~ "There are more than %n appointments in the current calendar. Some "
-#~ "features are disabled due to performance reasons."
-#~ msgstr ""
-#~ "L'agenda courant contient plus de %n rendez-vous. Certaines "
-#~ "fonctionnalités sont désactivées pour des raisons de performances."
-
-#~ msgid "Days"
-#~ msgstr "Jours"
-
-#~ msgid "Hours"
-#~ msgstr "Heures"
-
-#~ msgid "Minutes"
-#~ msgstr "Minutes"
-
-#~ msgid "Months"
-#~ msgstr "Mois"
-
-#~ msgid "Years"
-#~ msgstr "Années"
-
-#~ msgid "Pause auto-play mode"
-#~ msgstr "Mettre le mode lecture automatique en pause"
-
-#~ msgid "Run auto-play mode"
-#~ msgstr "Mode lecture automatique"
-
-#~ msgid "Run auto-play "
-#~ msgstr "Jouer en mode lecture automatique"
-
-#~ msgid "Read"
-#~ msgstr "Lu"
-
-#~ msgid "Is bigger than"
-#~ msgstr "Est plus grand que"
-
-#~ msgid "Is smaller than"
-#~ msgstr "Est plus petit que"
+#~ "\n"
+#~ " Vous pouvez également télécharger le fichier."
 
 #~ msgid " is currently editing this document."
 #~ msgstr " est en train de modifier ce document."
@@ -12735,6 +12673,9 @@ msgstr "Ajouter à %s"
 
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s."
+
+#~ msgid "%1$s (Tentative)"
+#~ msgstr "%1$s (Provisoire)"
 
 #~ msgid "%1$s Options"
 #~ msgstr "Options %1$s"
@@ -12983,9 +12924,6 @@ msgstr "Ajouter à %s"
 #~ msgid "Account Settings"
 #~ msgstr "Réglages du compte"
 
-#~ msgid "Account is being created"
-#~ msgstr "Le compte est en cours de création"
-
 #~ msgid "Acknowledge all reminders"
 #~ msgstr "Confirmer tous les rappels"
 
@@ -13146,6 +13084,9 @@ msgstr "Ajouter à %s"
 #~ "Invitation à un rendez-vous. %1$s %2$s %3$s %4$s %5$s. Appuyez sur [Entr] "
 #~ "pour l'ouvrir"
 
+#~ msgid "Appointment list"
+#~ msgstr "Liste des rendez-vous"
+
 #~ msgid "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
 #~ msgstr ""
 #~ "Rappel de rendez-vous. %1$s %2$s %3$s %4$s. Appuyez sur [Entr] pour "
@@ -13302,8 +13243,23 @@ msgstr "Ajouter à %s"
 #~ msgid "CalDAV Login"
 #~ msgstr "Authentification CalDAV"
 
+#~ msgid "Calendar Day View"
+#~ msgstr "Agenda en vue journalière"
+
+#~ msgid "Calendar Month View"
+#~ msgstr "Agenda en vue mensuelle"
+
+#~ msgid "Calendar Week View"
+#~ msgstr "Agenda en vue journalière"
+
+#~ msgid "Calendar Workweek View"
+#~ msgstr "Agenda en vue semaine ouvrée"
+
 #~ msgid "Calendar workweek view"
 #~ msgstr "Vue semaine ouvrée"
+
+#~ msgid "Calendar:"
+#~ msgstr "Agenda :"
 
 #~ msgid "Cannot move folder into itself."
 #~ msgstr "Impossible de déplacer un dossier dans lui-même."
@@ -13414,6 +13370,9 @@ msgstr "Ajouter à %s"
 #~| msgid "Click to close the recurrence view"
 #~ msgid "Close recurrence view"
 #~ msgstr "Cliquez pour fermer la vue des répétitions"
+
+#~ msgid "Close reminder for %1$s"
+#~ msgstr "Fermer le rappel de %1$s"
 
 #~ msgid "Close search"
 #~ msgstr "Fermer la recherche"
@@ -13531,8 +13490,14 @@ msgstr "Ajouter à %s"
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Créer un compte %s au moyen des données enregistrées ici"
 
+#~ msgid "Create distibution list"
+#~ msgstr "Créer une liste de distribution"
+
 #~ msgid "Create exception"
 #~ msgstr "Créer une exception"
+
+#~ msgid "Create new calendar"
+#~ msgstr "Créer un nouvel agenda"
 
 #~ msgid "Create new task"
 #~ msgstr "Créer une nouvelle tâche"
@@ -13621,6 +13586,9 @@ msgstr "Ajouter à %s"
 
 #~ msgid "Day View"
 #~ msgstr "Vue de la journée"
+
+#~ msgid "Days"
+#~ msgstr "Jours"
 
 #~ msgid "December"
 #~ msgstr "Décembre"
@@ -14297,6 +14265,9 @@ msgstr "Ajouter à %s"
 #~ msgid "High contrast theme"
 #~ msgstr "Thème à haut contraste"
 
+#~ msgid "Hours"
+#~ msgstr "Heures"
+
 #~ msgid "How does this work?"
 #~ msgstr "Comment cela fonctionne-t-il ?"
 
@@ -14441,6 +14412,9 @@ msgstr "Ajouter à %s"
 #~ "Dans la vue en icônes, vous pouvez voir les fichiers du dossier "
 #~ "sélectionné dans la zone d'affichage."
 
+#~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
+#~ msgstr "Dans votre fuseau horaire (%1$s): %2$s (durée : %3$s)"
+
 #~ msgid "Inbox Tabs"
 #~ msgstr "Onglets de boîte de réception"
 
@@ -14513,6 +14487,12 @@ msgstr "Ajouter à %s"
 
 #~ msgid "Inviting other participants"
 #~ msgstr "Inviter d'autres participants"
+
+#~ msgid "Is bigger than"
+#~ msgstr "Est plus grand que"
+
+#~ msgid "Is smaller than"
+#~ msgstr "Est plus petit que"
 
 #~ msgid "Item List"
 #~ msgstr "Liste des éléments"
@@ -14691,6 +14671,9 @@ msgstr "Ajouter à %s"
 #~ msgid "Message is read"
 #~ msgstr "Le message est lu"
 
+#~ msgid "Minutes"
+#~ msgstr "Minutes"
+
 #~ msgid "Mobile"
 #~ msgstr "Tél. mobile"
 
@@ -14708,6 +14691,9 @@ msgstr "Ajouter à %s"
 
 #~ msgid "Monthly on the %1$s %2$s"
 #~ msgstr "Le %1$s %2$s de chaque mois"
+
+#~ msgid "Months"
+#~ msgstr "Mois"
 
 #, fuzzy
 #~| msgid "Months"
@@ -14948,6 +14934,9 @@ msgstr "Ajouter à %s"
 #~ msgid "Pause Presentation"
 #~ msgstr "Invitations à des tâches"
 
+#~ msgid "Pause auto-play mode"
+#~ msgstr "Mettre le mode lecture automatique en pause"
+
 #~ msgid "Pause presentation"
 #~ msgstr "Mettre la présentation en pause"
 
@@ -15144,6 +15133,9 @@ msgstr "Ajouter à %s"
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "Page %1$d sur %2$d"
 
+#~ msgid "Read"
+#~ msgstr "Lu"
+
 #~ msgid "Read Only Mode"
 #~ msgstr "Mode lecture seulement"
 
@@ -15217,6 +15209,12 @@ msgstr "Ajouter à %s"
 #~ msgid "Rule applies until"
 #~ msgstr "La règle s'applique jusqu'au"
 
+#~ msgid "Run auto-play "
+#~ msgstr "Jouer en mode lecture automatique"
+
+#~ msgid "Run auto-play mode"
+#~ msgstr "Mode lecture automatique"
+
 #~ msgid "Running applications"
 #~ msgstr "Applications en cours d'exécution"
 
@@ -15288,6 +15286,9 @@ msgstr "Ajouter à %s"
 
 #~ msgid "Select Image File"
 #~ msgstr "Choisissez le fichier image"
+
+#~ msgid "Select calendar"
+#~ msgstr "Sélectionner l'agenda"
 
 #~ msgid "Select none"
 #~ msgstr "Ne rien sélectionner"
@@ -15439,8 +15440,14 @@ msgstr "Ajouter à %s"
 #~ msgid "Show more..."
 #~ msgstr "Afficher plus…"
 
+#~ msgid "Show next day"
+#~ msgstr "Afficher la journée suivante"
+
 #~ msgid "Show original publication"
 #~ msgstr "Afficher la publication d'origine"
+
+#~ msgid "Show previous day"
+#~ msgstr "Afficher la journée précédente"
 
 #~ msgid "Show side panel"
 #~ msgstr "Afficher le panneau latéral"
@@ -16045,6 +16052,13 @@ msgstr "Ajouter à %s"
 #~ msgid "There are currently no participants."
 #~ msgstr "Il n'y a actuellement aucun participant."
 
+#~ msgid ""
+#~ "There are more than %n appointments in the current calendar. Some "
+#~ "features are disabled due to performance reasons."
+#~ msgstr ""
+#~ "L'agenda courant contient plus de %n rendez-vous. Certaines "
+#~ "fonctionnalités sont désactivées pour des raisons de performances."
+
 #~ msgid "There is already %1$d appointment in this timeframe."
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
 #~ msgstr[0] "Il y a déjà %1$d rendez-vous dans cette plage horaire."
@@ -16058,6 +16072,13 @@ msgstr "Ajouter à %s"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "Ce compte ne peut pas être validé"
+
+#~ msgid ""
+#~ "This appointment is an exception. Changing the series does not affect "
+#~ "exceptions."
+#~ msgstr ""
+#~ "Ce rendez-vous est une exception. Changer la série ne modifie pas les "
+#~ "exceptions."
 
 #~ msgid "This document contains unsaved changes. Do you really want to close?"
 #~ msgstr ""
@@ -16602,6 +16623,9 @@ msgstr "Ajouter à %s"
 #~ msgid "What do you want to use on your iPhone?"
 #~ msgstr "Voulez-vous vraiment perdre toutes vos modifications ?"
 
+#~ msgid "What‘s New in %1$s 7.10.0"
+#~ msgstr "Nouveautés de la version %1$s 7.10.0"
+
 #~ msgid ""
 #~ "When executing the downloaded file, an installation wizard will be "
 #~ "launched. Follow the instructions and install the updater. Installs "
@@ -16665,6 +16689,9 @@ msgstr "Ajouter à %s"
 
 #~ msgid "Yearly on the %1$s %2$s of %3$d"
 #~ msgstr "Annuel le %1$s %2$s de %3$d"
+
+#~ msgid "Years"
+#~ msgstr "Années"
 
 #~ msgid "Yes, always move them all"
 #~ msgstr "Oui, toujours les déplacer"
@@ -16984,9 +17011,6 @@ msgstr "Ajouter à %s"
 
 #~ msgid "later"
 #~ msgstr "ultérieurement"
-
-#~ msgid "login"
-#~ msgstr "Identifiant de connexion"
 
 #~ msgid "march"
 #~ msgstr "Mars"

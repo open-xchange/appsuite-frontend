@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-11-13 02:22+0100\n"
+"PO-Revision-Date: 2019-01-09 12:08+0100\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -961,9 +961,9 @@ msgstr "Před"
 
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js apps/io.ox/core/main/topbar_right.js
-#: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
-#: apps/io.ox/find/view-tokenfield.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/main/apps.js
+#: apps/io.ox/core/main/topbar_right.js apps/io.ox/find/extensions-facets.js
+#: apps/io.ox/find/main.js apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
 #: module:io.ox/search apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
@@ -1482,13 +1482,6 @@ msgstr "Čas začátku"
 msgid "End time"
 msgstr "Koncové datum"
 
-#. %1$s timezone abbreviation of the user
-#. %2$s time interval of event
-#. %2$s duration of event
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
-msgstr "Ve vašem časovém pásmu (%1$s): %2$s (trvání: %3$s)"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
@@ -1723,10 +1716,6 @@ msgstr "Název"
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 msgid "Please note that distribution lists cannot contain resources."
 msgstr "Distribuční seznamy nemohou obsahovat zdroje."
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Create distibution list"
-msgstr "Vytvořit distribuční seznam"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
@@ -2273,8 +2262,9 @@ msgid "subscribe to calendar"
 msgstr "přihlásit ke kalendáři"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/settings/pane.js
-#: module:io.ox/core apps/plugins/portal/xing/register.js module:plugins/portal
+#: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
 msgstr "Jazyk"
 
@@ -3951,6 +3941,10 @@ msgid "Languages"
 msgstr "Jazyky"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Language:"
+msgstr "Jazyk:"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
 "No connection to server. Please check your internet connection and retry."
 msgstr ""
@@ -4924,6 +4918,11 @@ msgctxt "app"
 msgid "Notes"
 msgstr "Poznámky"
 
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Editor"
+msgstr "Upravit"
+
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
@@ -5534,6 +5533,13 @@ msgstr ""
 "nebo opětovné přihlášení, aby se projevila."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
+msgstr ""
+"Některá nastavení (jazyk, časové pásmo, motiv) vyžadují opětovné přihlášení, "
+"aby se projevila."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Default Theme"
 msgstr "Výchozí téma"
 
@@ -5590,8 +5596,16 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr "Aby se nastavení projevilo, je nutné se odhlásit a znovu přihlásit."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "The setting requires a relogin to take effect."
+msgstr "Aby se nastavení projevilo, je nutné se odhlásit a znovu přihlásit."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
 msgstr "Znovu načíst"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Relogin"
+msgstr "Opětovné přihlášení"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
@@ -5930,11 +5944,6 @@ msgstr "Již mi to nepřipomínej"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
 msgstr "OK"
-
-#. %1$s appointment or task title
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close reminder for %1$s"
-msgstr "Zavřít upomínku pro %1$s"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
@@ -6533,11 +6542,6 @@ msgstr "Poznámka"
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Změny lze rychle uložit pomocí Ctrl+Enter."
-
-#: apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Editor"
-msgstr "Upravit"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "This file will be written in your default folder to allow editing"
@@ -8792,6 +8796,10 @@ msgstr "Chyba: Nepodařilo se načíst zprávy"
 #: apps/io.ox/mail/mailfilter/autoforward/indicator.js module:io.ox/mail
 msgid "Auto forwarding is active"
 msgstr "Automatické přeposílání je zapnuté"
+
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr "Automaticky přeposlat"
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
@@ -11310,6 +11318,7 @@ msgstr ""
 "Okna, která máte minimalizována, se pro snadný přístup objeví ve všech "
 "aplikacích. Okno můžete opět maximalizovat kliknutím."
 
+#. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "Co je nového"
@@ -11317,11 +11326,6 @@ msgstr "Co je nového"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "To learn more about the new and improved features you can visit "
 msgstr "Chcete-li se o nových a vylepšených funkcích dozvědět více, navštivte "
-
-#. %1$s is the product name, e.g. OX App Suite
-#: apps/io.ox/tours/whats-new.js module:io.ox/core
-msgid "What‘s New in %1$s 7.10.0"
-msgstr "Co je nového v %1$s 7.10.0"
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
@@ -11652,6 +11656,10 @@ msgstr "Je nám líto, v tuto chvíli se nepodařilo k %s připojit."
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Je nám líto, na %s pro vás nejsou k dispozici žádná data."
+
+#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+msgid "Participant not found"
+msgstr "Účastník nenalezen"
 
 #. %1$s Appointment title
 #. %1$s task title
@@ -12450,84 +12458,16 @@ msgstr "Pozvat na %s"
 msgid "Add on %s"
 msgstr "Přidat do %s"
 
-#~ msgid "Select calendar"
-#~ msgstr "Vybrat kalendář"
-
-#~ msgid "Create new calendar"
-#~ msgstr "Vytvořit nový kalendář"
-
-#~ msgid "Calendar:"
-#~ msgstr "Kalendář:"
-
-#~ msgid "Show next day"
-#~ msgstr "Zobrazit následující den"
-
-#~ msgid "Show previous day"
-#~ msgstr "Zobrazit předchozí den"
-
-#~ msgid "Calendar Month View"
-#~ msgstr "Zobrazení kalendáře: měsíc"
-
-#~ msgid "%1$s (Tentative)"
-#~ msgstr "%1$s (předběžně)"
+#~| msgid "Account is being created"
+#~ msgid "Your preview is being generated."
+#~ msgstr "Váš náhled je právě vytvářen."
 
 #~ msgid ""
-#~ "This appointment is an exception. Changing the series does not affect "
-#~ "exceptions."
-#~ msgstr "Tato schůzka je výjimečná. Změna série neovlivní výjimky."
-
-#~ msgid "Calendar Day View"
-#~ msgstr "Zobrazení kalendáře: den"
-
-#~ msgid "Calendar Workweek View"
-#~ msgstr "Zobrazení kalendáře: pracovní týden"
-
-#~ msgid "Calendar Week View"
-#~ msgstr "Zobrazení kalendáře: týden"
-
-#~ msgid "Appointment list"
-#~ msgstr "Seznam schůzek"
-
-#~ msgid ""
-#~ "There are more than %n appointments in the current calendar. Some "
-#~ "features are disabled due to performance reasons."
+#~ "\n"
+#~ " Alternatively you can download the file."
 #~ msgstr ""
-#~ "V aktuálním kalendářije více než %n schůzek. Některé funkce jsou vypnuté "
-#~ "kvůli výkonu."
-
-#~ msgid "Days"
-#~ msgstr "Dny"
-
-#~ msgid "Hours"
-#~ msgstr "Hodiny"
-
-#~ msgid "Minutes"
-#~ msgstr "Minuty"
-
-#~ msgid "Months"
-#~ msgstr "Měsíce"
-
-#~ msgid "Years"
-#~ msgstr "Roky"
-
-#~ msgid "Pause auto-play mode"
-#~ msgstr "Pozastavit režim automatického přehrávání"
-
-#~ msgid "Run auto-play mode"
-#~ msgstr "Pustit režim automatického přehrávání"
-
-#~ msgid "Run auto-play "
-#~ msgstr "Pustit režim automatického přehrávání"
-
-#
-#~ msgid "Read"
-#~ msgstr "Přečíst"
-
-#~ msgid "Is bigger than"
-#~ msgstr "Je větší než"
-
-#~ msgid "Is smaller than"
-#~ msgstr "Je menší než"
+#~ "\n"
+#~ " Případně můžete soubor stáhnout."
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -12630,6 +12570,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s."
+
+#~ msgid "%1$s (Tentative)"
+#~ msgstr "%1$s (předběžně)"
 
 #~ msgid "%1$s Options"
 #~ msgstr "Možnosti %1$s"
@@ -13365,9 +13308,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Account Settings"
 #~ msgstr "Nastavení účtu"
-
-#~ msgid "Account is being created"
-#~ msgstr "Účet je právě vytvářen"
 
 #~ msgid "Account:"
 #~ msgstr "Účet:"
@@ -14349,6 +14289,9 @@ msgstr "Přidat do %s"
 #~ msgstr ""
 #~ "Pozvánka na schůzku. %1$s %2$s %3$s %4$s %5$s. Otevřete stisknutím [enter]"
 
+#~ msgid "Appointment list"
+#~ msgstr "Seznam schůzek"
+
 #~ msgid "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
 #~ msgstr ""
 #~ "Připomenutí schůzky. %1$s %2$s %3$s %4$s. Otevřete stisknutím [enter]"
@@ -15148,11 +15091,26 @@ msgstr "Přidat do %s"
 #~ msgid "CalDAV Login"
 #~ msgstr "Přihlášovací jméno CalDAV"
 
+#~ msgid "Calendar Day View"
+#~ msgstr "Zobrazení kalendáře: den"
+
+#~ msgid "Calendar Month View"
+#~ msgstr "Zobrazení kalendáře: měsíc"
+
+#~ msgid "Calendar Week View"
+#~ msgstr "Zobrazení kalendáře: týden"
+
+#~ msgid "Calendar Workweek View"
+#~ msgstr "Zobrazení kalendáře: pracovní týden"
+
 #~ msgid "Calendar custom view"
 #~ msgstr "Vlastní zobrazení kalendáře"
 
 #~ msgid "Calendar workweek view"
 #~ msgstr "Pohled: pracovní týden"
+
+#~ msgid "Calendar:"
+#~ msgstr "Kalendář:"
 
 #~ msgid "Cambodia"
 #~ msgstr "Kambodža"
@@ -15421,6 +15379,9 @@ msgstr "Přidat do %s"
 #~ msgid "Close recurrence view"
 #~ msgstr "Klikněte pro zavření pohledu na opakování"
 
+#~ msgid "Close reminder for %1$s"
+#~ msgstr "Zavřít upomínku pro %1$s"
+
 #~ msgid "Close search"
 #~ msgstr "Zavřít hledání"
 
@@ -15625,8 +15586,14 @@ msgstr "Přidat do %s"
 #~ msgid "Create a recurring appointment"
 #~ msgstr "Vytvořit opakující schůzku"
 
+#~ msgid "Create distibution list"
+#~ msgstr "Vytvořit distribuční seznam"
+
 #~ msgid "Create exception"
 #~ msgstr "Vytvořit výjimku"
+
+#~ msgid "Create new calendar"
+#~ msgstr "Vytvořit nový kalendář"
 
 #~ msgid "Create new task"
 #~ msgstr "Vytvořit nový úkol"
@@ -15808,6 +15775,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Day View"
 #~ msgstr "Pohled: den"
+
+#~ msgid "Days"
+#~ msgstr "Dny"
 
 #~ msgid "Dear Sir or Madam"
 #~ msgstr "Vážená paní nebo pane"
@@ -17280,6 +17250,9 @@ msgstr "Přidat do %s"
 #~ msgid "Hongkong"
 #~ msgstr "Hongkong"
 
+#~ msgid "Hours"
+#~ msgstr "Hodiny"
+
 #~ msgid "How does this work?"
 #~ msgstr "Jak to funguje?"
 
@@ -17485,6 +17458,9 @@ msgstr "Přidat do %s"
 #~ "display area."
 #~ msgstr ""
 #~ "V Ikonovém pohledu vidíte v zobrazovací oblasti soubory ve vybrané složce."
+
+#~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
+#~ msgstr "Ve vašem časovém pásmu (%1$s): %2$s (trvání: %3$s)"
 
 #~ msgid "Inbox Tabs"
 #~ msgstr "Karty příchozí pošty"
@@ -17694,6 +17670,12 @@ msgstr "Přidat do %s"
 
 #~ msgid "Is at most"
 #~ msgstr "Je maximálně"
+
+#~ msgid "Is bigger than"
+#~ msgstr "Je větší než"
+
+#~ msgid "Is smaller than"
+#~ msgstr "Je menší než"
 
 #~ msgid "Isle of Man"
 #~ msgstr "Ostrov Man"
@@ -18148,6 +18130,9 @@ msgstr "Přidat do %s"
 #~ msgid "Mime Type"
 #~ msgstr "Druh souboru"
 
+#~ msgid "Minutes"
+#~ msgstr "Minuty"
+
 #~ msgid "Mobile"
 #~ msgstr "Mobil"
 
@@ -18213,6 +18198,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Monthly on the %1$s %2$s"
 #~ msgstr "Měsíčně %1$s %2$s"
+
+#~ msgid "Months"
+#~ msgstr "Měsíce"
 
 #, fuzzy
 #~| msgid "America/Montserrat"
@@ -18908,9 +18896,6 @@ msgstr "Přidat do %s"
 #~ msgid "Parameter:"
 #~ msgstr "Parametr:"
 
-#~ msgid "Participant"
-#~ msgstr "Účastník"
-
 #~ msgid "Participant:"
 #~ msgstr "Účastník:"
 
@@ -18932,6 +18917,9 @@ msgstr "Přidat do %s"
 #, fuzzy
 #~ msgid "Pause Presentation"
 #~ msgstr "Cíl"
+
+#~ msgid "Pause auto-play mode"
+#~ msgstr "Pozastavit režim automatického přehrávání"
 
 #~ msgid "Pause presentation"
 #~ msgstr "Pozastavit prezentaci"
@@ -19379,6 +19367,10 @@ msgstr "Přidat do %s"
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "Strana %1$d z %2$d"
 
+#
+#~ msgid "Read"
+#~ msgstr "Přečíst"
+
 #~ msgid "Read Acknowledgement"
 #~ msgstr "Přečíst potvrzení"
 
@@ -19565,6 +19557,12 @@ msgstr "Přidat do %s"
 
 #~ msgid "Rules"
 #~ msgstr "Pravidla"
+
+#~ msgid "Run auto-play "
+#~ msgstr "Pustit režim automatického přehrávání"
+
+#~ msgid "Run auto-play mode"
+#~ msgstr "Pustit režim automatického přehrávání"
 
 #~ msgid "Running applications"
 #~ msgstr "Spuštěné aplikace"
@@ -19762,6 +19760,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Select appointment display type"
 #~ msgstr "Vybrat druh zobrazení schůzky"
+
+#~ msgid "Select calendar"
+#~ msgstr "Vybrat kalendář"
 
 #~ msgid "Select from the list and add selected as members"
 #~ msgstr "Vyberte ze seznamu a přidejte jako členy"
@@ -20028,8 +20029,14 @@ msgstr "Přidat do %s"
 #~ msgid "Show name instead of E-Mail address in To and Cc fields:"
 #~ msgstr "Zobrazit jméno místo e-mailové adresy v polích Pro a Cc:"
 
+#~ msgid "Show next day"
+#~ msgstr "Zobrazit následující den"
+
 #~ msgid "Show original publication"
 #~ msgstr "Zobrazit původní publikaci"
+
+#~ msgid "Show previous day"
+#~ msgstr "Zobrazit předchozí den"
 
 #~ msgid "Show sender image?"
 #~ msgstr "Zobrazovat obrázek odesílatele?"
@@ -21082,6 +21089,13 @@ msgstr "Přidat do %s"
 #~ msgid "There are currently no participants."
 #~ msgstr "Žádní účastníci."
 
+#~ msgid ""
+#~ "There are more than %n appointments in the current calendar. Some "
+#~ "features are disabled due to performance reasons."
+#~ msgstr ""
+#~ "V aktuálním kalendářije více než %n schůzek. Některé funkce jsou vypnuté "
+#~ "kvůli výkonu."
+
 #~ msgid "There is already %1$d appointment in this timeframe."
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
 #~ msgstr[0] "V tuto dobu již máte %1$d schůzku."
@@ -21157,6 +21171,11 @@ msgstr "Přidat do %s"
 #~ msgstr ""
 #~ "Tato schůzka má přílohy. Otevřete, prosím, schůzku na adrese %1$s pro "
 #~ "stažení těchto příloh."
+
+#~ msgid ""
+#~ "This appointment is an exception. Changing the series does not affect "
+#~ "exceptions."
+#~ msgstr "Tato schůzka je výjimečná. Změna série neovlivní výjimky."
 
 #~ msgid ""
 #~ "This appointment was changed by [changed_by].\n"
@@ -22337,6 +22356,9 @@ msgstr "Přidat do %s"
 #~ msgid "What to you want to use on your smartphone?"
 #~ msgstr "Přejete si uložit nastavení?"
 
+#~ msgid "What‘s New in %1$s 7.10.0"
+#~ msgstr "Co je nového v %1$s 7.10.0"
+
 #~ msgid "When \"Reply all\":"
 #~ msgstr "Při „Odpovědět všem“:"
 
@@ -22411,6 +22433,9 @@ msgstr "Přidat do %s"
 
 #~ msgid "Yearly on the %1$s %2$s of %3$d"
 #~ msgstr "Ročně %1$s %2$s v %3$d"
+
+#~ msgid "Years"
+#~ msgstr "Roky"
 
 #~ msgid "Yemen"
 #~ msgstr "Jemen"
@@ -23170,9 +23195,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "locked by"
 #~ msgstr "uzamkl(a)"
-
-#~ msgid "login"
-#~ msgstr "přihlašovací jméno"
 
 #~ msgid "march"
 #~ msgstr "březen"

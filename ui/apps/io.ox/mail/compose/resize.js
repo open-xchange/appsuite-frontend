@@ -31,8 +31,10 @@ define('io.ox/mail/compose/resize', [
                 img.src = fileReader.result;
             };
 
+            fileReader.onerror = def.reject;
+
             fileReader.readAsDataURL(file);
-            return def;
+            return def.promise();
         },
 
         getTargetDimensions: function (dimensions, targetSize) {

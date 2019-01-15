@@ -249,7 +249,7 @@ define('io.ox/mail/view-options', [
 
             // hide in all-unseen folder and for search results
             var toggle = _.partial(toggleByState, app, dropdown.$el);
-            app.props.on('change:find-result change:find-result', toggle);
+            app.props.on('change:find-result', toggle);
             app.on('folder:change', toggle);
             toggle();
         }
@@ -304,12 +304,15 @@ define('io.ox/mail/view-options', [
                 e.stopPropagation();
             }));
 
-            app.on('folder:change', function () {
+            app.props.on('change:find-result change:categories', redraw);
+            app.on('folder:change', redraw);
+
+            function redraw() {
                 // cleanup menu
                 dropdown.prepareReuse().render();
-                // redraw options with current folder data
+                // redraw options with current folder data / search state
                 ext.point('io.ox/mail/all-options').invoke('draw', dropdown, baton);
-            });
+            }
         }
     });
 

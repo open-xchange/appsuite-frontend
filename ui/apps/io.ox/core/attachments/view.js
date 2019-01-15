@@ -314,6 +314,7 @@ define('io.ox/core/attachments/view', [
                     var w = model.get('uploaded') * this.$el.width();
                     this.$('.progress').width(w);
                 },
+                'change:file_size change:size': this.render,
                 'upload:complete': function () {
                     this.render();
                 },
@@ -333,7 +334,7 @@ define('io.ox/core/attachments/view', [
 
         render: function () {
 
-            this.$el.append(
+            this.$el.empty().append(
                 $('<span class="file">'),
                 $('<span class="filesize">'),
                 // progress?
