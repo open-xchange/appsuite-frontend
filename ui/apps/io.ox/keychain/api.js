@@ -171,7 +171,7 @@ define('io.ox/keychain/api', [
     api.migrateFromOldSecret = function (oldPassword) {
         return http.POST({
             module: 'recovery/secret',
-            params: {
+            data: {
                 action: 'migrate',
                 password: oldPassword
             }

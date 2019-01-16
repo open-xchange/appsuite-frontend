@@ -671,7 +671,7 @@ define('io.ox/core/api/account', [
     api.autoconfig = function (data) {
         return http.POST({
             module: 'autoconfig',
-            params: _.extend({
+            data: _.extend({
                 action: 'get'
             }, data)
         });
