@@ -37,7 +37,7 @@ define('io.ox/calendar/actions/change-folder-alarms', [
             this.$body.append(
                 $('<p>').attr('id', descriptionId).append(
                     //#. %1$s:  is the calendar's name
-                    $.txt(gt('Edit default reminders for calendar: %1$s', folderData.display_title || folderData.title))
+                    $.txt(gt('Edit all reminders for calendar: %1$s', folderData.display_title || folderData.title))
                 ),
                 $('<fieldset>').append(
                     $('<legend class="confirm-dialog-legend">').text(gt('Default reminder')),
