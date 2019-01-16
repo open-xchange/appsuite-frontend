@@ -1837,9 +1837,10 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-"open-xchange-shared-grunt-config@git://github.com/Open-Xchange-Frontend/shared-grunt-config.git#master":
+open-xchange-shared-grunt-config@^0.15.0-pre3:
   version "0.15.0-pre3"
-  resolved "git://github.com/Open-Xchange-Frontend/shared-grunt-config.git#4efdd9039964907016786d9c56a02fb27eb0d3e8"
+  resolved "https://registry.yarnpkg.com/open-xchange-shared-grunt-config/-/open-xchange-shared-grunt-config-0.15.0-pre3.tgz#84f7279502236b1107a0000c96e669eb703b5762"
+  integrity sha512-YfXPaqOY/yMUHEjZkIPrcx5o/mLY5H8Y2r9dTkxkIVp3sSfhNEO7tJa8ba/aOmEFMxgJqPQKBHMzjZPPM1E7XQ==
   dependencies:
     async "^2.4.1"
 
