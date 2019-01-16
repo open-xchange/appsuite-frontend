@@ -27,7 +27,7 @@ module.exports = function (grunt) {
     grunt.config('copy.local_install_dynamic.files.0.src', dynamicSrc);
 
     // do not add custom i18n package prefix
-    grunt.config.get('local.i18n.packages.dest_template', '/');
+    grunt.config.set('local.i18n.packages.dest_template', '/');
     // add language properties file to each language package
     grunt.file.expand('i18n/*.po').map(function (fileName) {
         return fileName.match(/([a-zA-Z]+_[a-zA-Z]+).po$/)[1];
