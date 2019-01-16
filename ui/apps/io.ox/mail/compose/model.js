@@ -379,10 +379,10 @@ define('io.ox/mail/compose/model', [
                             gt('---------- Original Message ----------'),
                             //#. %1$s An email address
                             //#. Example: From: richard@open-xchange.com
-                            gt('From: %1%s', mail.from.map(mailAddress).join(', ')),
+                            gt('From: %1$s', mail.from.map(mailAddress).join(', ')),
                             //#. %1$s An email address or a comma separated list of mail addresses
                             gt('To: %1$s', mail.to.map(mailAddress).join(', ')),
-                            gt('Date: %1%s', moment(data.meta.date).format('LLL')),
+                            gt('Date: %1$s', moment(data.meta.date).format('LLL')),
                             //#. %1$s The subject of an email
                             gt('Subject: %1$s', mail.subject)
                         );
