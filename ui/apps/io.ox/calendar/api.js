@@ -93,6 +93,17 @@ define('io.ox/calendar/api', [
 
             return response;
         },
+        // checks if attendees have the extended Contact information (list request does not have them, get has them, we need to distinguish)
+        hasExtendedEntities = function (attendees) {
+            if (!attendees) return false;
+            var extendedEntities = true;
+
+            _(attendees).each(function (attendee) {
+                // if we have an entity we need either contact or ressource information
+                if (attendee.entity && !(attendee.contact || attendee.resource)) extendedEntities = false;
+            });
+            return extendedEntities;
+        },
 
         defaultFields = ['lastModified', 'color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'rrule', 'seriesId', 'startDate', 'summary', 'timestamp', 'transp'].join(','),
 
@@ -152,7 +163,8 @@ define('io.ox/calendar/api', [
 
                 if (useCache !== false) {
                     var model = api.pool.getModel(util.cid(obj));
-                    if (model && (model.has('attendees') || model.has('calendarUser'))) return $.when(model);
+                    // check if we have a full model with extended entities
+                    if (model && ((model.has('attendees') && hasExtendedEntities(model.get('attendees'))) || model.has('calendarUser'))) return $.when(model);
                 }
                 // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
                 if (obj.eventId) {
@@ -259,18 +271,30 @@ define('io.ox/calendar/api', [
                                     return;
                                 }
                                 if (isRecurrenceMaster(obj)) return;
+
+                                var model = api.pool.getModel(util.cid(obj));
+                                // do not overwrite cache data that has extended entities and the same or newer lastModified timestamp
+                                if (model && hasExtendedEntities(model.get('attendees')) && (model.get('lastModified') >= obj.lastModified)) {
+                                    return;
+                                }
                                 api.pool.propagateAdd(obj);
                             });
                         }
 
-                        return list.map(function (obj, index) {
+                        return list.map(function (obj) {
                             // if we have full data use the full data, in list data recurrence ids might be missing
                             // you can request exceptions without recurrence id because they have own ids, but in the reponse they still have a recurrence id, which is needed for the correct cid
-                            if (data && data[index]) {
-                                obj = data[index];
-                            } else if (data && data[index] === null) {
-                                // null is returned when the event was deleted meanwhile
-                                return null;
+                            if (data) {
+                                // find correct index
+                                var index = _(reqList).findIndex(function (req) {
+                                    return req.id === obj.id && req.folder === obj.folder && (!req.recurrenceId || req.recurrenceId === obj.recurrenceId);
+                                });
+                                if (index !== -1 && data[index]) {
+                                    obj = data[index];
+                                } else if (index !== -1 && data[index] === null) {
+                                    // null is returned when the event was deleted meanwhile
+                                    return null;
+                                }
                             }
 
                             if (isRecurrenceMaster(obj)) {
