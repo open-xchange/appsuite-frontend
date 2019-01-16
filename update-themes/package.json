@@ -30,6 +30,6 @@
     "grunt-eslint": "^20.0.0",
     "grunt-newer": "^1.3.0",
     "grunt-require-gettext": "^0.8.1",
-    "open-xchange-shared-grunt-config": "^0.14.6"
+    "open-xchange-shared-grunt-config": "^0.15.0-pre3"
   }
 }
