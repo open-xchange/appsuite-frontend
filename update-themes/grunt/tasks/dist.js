@@ -46,7 +46,7 @@ module.exports = function (grunt) {
                     dest: 'dist/appsuite/share/update-themes/',
                     filter: function (f) {
                         return !/\.bak$/.test(f);
-		    }
+                    }
                 },
                 {
                     expand: true,
