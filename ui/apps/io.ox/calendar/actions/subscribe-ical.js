@@ -128,6 +128,7 @@ define('io.ox/calendar/actions/subscribe-ical', [
             point: 'io.ox/calendar/subscribe/ical',
             help: 'ox.appsuite.user.sect.calendar.folder.ical.html',
             model: new Backbone.Model(),
+            focus: 'input',
             async: true,
             width: 500
         })
