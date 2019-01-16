@@ -366,6 +366,7 @@ define('io.ox/mail/compose/model', [
                 var meta = data.meta;
                 // TODO remove this line when backend is updated
                 meta = /^(REPLY|REPLY_ALL)$/.test(data.meta.type) ? meta.replyFor : meta.forwardsFor;
+                meta = [].concat(meta)[0];
                 return mailAPI.get({ id: meta.originalId, folder: meta.originalFolderId }).then(function (mail) {
                     var header = [];
 
@@ -416,11 +417,15 @@ define('io.ox/mail/compose/model', [
 
         create: function () {
             if (this.has('id')) return composeAPI.space.get(this.get('id'));
-            var meta = this.get('meta'),
+            var type = this.get('type') || 'new',
+                original = this.get('original'),
                 opt = {};
-            opt.vcard = /(new|reply|replayall|forward|resend)/.test(meta.type) && settings.get('appendVcard', false);
-            opt.original = /(reply|replayall)/.test(meta.type);
-            return composeAPI.spaced(meta, opt).then(function (data) {
+            // unset type and original since both are only used on creation of a model
+            this.unset('type');
+            this.unset('original');
+            opt.vcard = /(new|reply|replayall|forward|resend)/.test(type) && settings.get('appendVcard', false);
+            opt.original = /(reply|replayall)/.test(type);
+            return composeAPI.spaced({ type: type, original: original }, opt).then(function (data) {
                 if (!data.content) return data;
                 return this.quoteMessage(data);
             }.bind(this)).then(function (data) {

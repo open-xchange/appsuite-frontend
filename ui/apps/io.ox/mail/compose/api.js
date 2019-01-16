@@ -422,17 +422,16 @@ define('io.ox/mail/compose/api', [
     api.space = {
 
         // limit (aktuell 3)
-        add: function (meta, opt) {
+        add: function (obj, opt) {
             opt = _.extend({ vcard: false }, opt);
-            console.log('> ADD: ' + meta.type);
+            console.log('> ADD: ' + obj.type);
+            var data;
+            if (obj.original) data = [].concat(obj.original);
             return http.POST({
                 module: 'mail/compose',
-                params: $.extend({}, {
-                    type: meta.type,
-                    id: meta.originalId,
-                    folderId: meta.originalFolderId,
-                    vcard: opt.vcard
-                })
+                data: data ? JSON.stringify(data) : '',
+                params: { type: obj.type, vcard: opt.vcard },
+                contentType: 'application/json'
             });
         },
 
