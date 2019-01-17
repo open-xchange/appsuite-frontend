@@ -433,8 +433,8 @@ define('io.ox/mail/compose/model', [
 
                 return $.when.apply($, this.get('attachments').map(function (attachment) {
                     return composeAPI.space.attachments.add(data.id, attachment);
-                })).then(function (attachments) {
-                    data.attachments = (data.attachments || []).concat(attachments);
+                })).then(function () {
+                    data.attachments = (data.attachments || []).concat(_.toArray(arguments));
                     return data;
                 });
             }.bind(this));

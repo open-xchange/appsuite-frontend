@@ -526,6 +526,8 @@ define('io.ox/mail/compose/api', [
             return http.UPLOAD({
                 url: ox.apiRoot + '/mail/compose/' + space + '/attachments',
                 data: formData
+            }).then(function (res) {
+                return res.data;
             });
         },
         get: function (space, attachment) {

@@ -182,7 +182,7 @@ define('io.ox/mail/actions', [
             if (app) return app.launch();
 
             ox.registry.call('mail-compose', 'open', {
-                meta: { type: 'edit', originalFolderId: data.folder_id, originalId: data.id }
+                meta: { type: 'edit', original: { folderId: data.folder_id, id: data.id } }
             });
         }
     });
@@ -193,7 +193,7 @@ define('io.ox/mail/actions', [
             var data = baton.first();
 
             ox.registry.call('mail-compose', 'open', {
-                meta: { type: 'copy', originalFolderId: data.folder_id, originalId: data.id }
+                meta: { type: 'copy', original: { folderId: data.folder_id, id: data.id } }
             }).done(function (window) {
                 var model = window.app.model;
                 //#. If the user selects 'copy of' in the drafts folder, the subject of the email is prefixed with [Copy].
