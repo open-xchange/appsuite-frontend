@@ -48,9 +48,11 @@ define('io.ox/help/main', ['io.ox/help/view', 'io.ox/backbone/views/modal', 'get
         app.cid = 'io.ox/help:' + getAddress(opt);
 
         app.showModal = function (iframe) {
-            iframe.on('load', function () {
-                $(this).height($(this).contents().find('body').height() + 16);
-            });
+            // resize the modal body height to fit the html inside of the iframe
+            // otherwise we will have two overflow scrollbars
+            // iframe.on('load', function () {
+            //     $(this).height($(this).contents().find('html').height());
+            // });
             var modal = new ModalDialogView({
                 focus: _.device('smartphone') ? '' : 'iframe',
                 title: gt('Online help'),
@@ -80,25 +82,64 @@ define('io.ox/help/main', ['io.ox/help/view', 'io.ox/backbone/views/modal', 'get
         };
 
         app.createIframe = function () {
-            var iframe;
-            iframe = $('<iframe>', { src: getAddress(opt), frameborder: 0 })
-                .addClass('hidden');
+            var iframe = $('<iframe class="hidden inline-help-iframe" frameborder="0" style="width:100%;height:100%">')
+                .attr({ src: getAddress(opt), title: gt('loading') });
+
+            function onEscape(e) {
+                if (e.which !== 27) return;
+                e.preventDefault();
+                $('.inline-help').find('[data-action="cancel"]').click();
+            }
+
+            function onShiftTab(e) {
+                if (!opt.modal) return;
+                if (!(e.which === 9 && e.shiftKey)) return;
+                e.preventDefault();
+                $('.inline-help').find('[data-action="cancel"]').focus();
+            }
+
+            function onTab(e) {
+                if (opt.modal) return;
+                if (!(e.which === 9 && !e.shiftKey)) return;
+                e.preventDefault();
+                $('.io-ox-help-window').find('[data-action="minimize"]').focus();
+            }
+
             iframe.on('load', function () {
-                $(this).contents().find('html').addClass('embedded');
-                $(this).attr('title', $(this).contents().attr('title'));
-                $(this).removeClass('hidden');
-                this.contentWindow.focus();
-                this.contentWindow.$('a').not(function () { return !$(this).html().trim(); }).first().focus();
-                setTimeout(function () {
-                    $('a').not(function () { return !$(this).html().trim(); }).first().focus();
-                }, 100);
+                // mark the iframes html as embedded class and modal to override the styles in the help less files
+                var classesToAdd = opt.modal ? 'embedded in-modal' : 'embedded',
+                    contents = $('.inline-help-iframe').contents(),
+                    firstTabbable = contents.find('.navbar-nav > li > a:first'),
+                    lastTabbable = contents.find('body a:last');
+
+                $.noop(lastTabbable);
+                contents.find('html')
+                    .addClass(classesToAdd)
+                    // remove brand link because this is most likely an empty link
+                    .find('.navbar-brand').remove();
+
+                contents.find('body').on('keydown', onEscape);
+                firstTabbable.on('keydown', onShiftTab);
+                lastTabbable.on('keydown', onTab);
+
+                $(this).attr('title', contents.attr('title'))
+                    .removeClass('hidden');
+
+                _.defer(function () {
+                    // set the focus to the first navigation link after loading and dom construction
+                    iframe.focus();
+                    firstTabbable.focus();
+                    iframe.height(contents.find('.oxhelp-content').parent().height());
+                    console.log(contents.find('.oxhelp-content').parent().height(), iframe.height());
+                });
+
                 this.contentWindow.addEventListener('beforeunload', function () {
                     iframe.addClass('hidden');
+                    iframe.css('height', 'auto');
+                    contents.find('body').off('keydown', onEscape);
+                    firstTabbable.off('keydown', onShiftTab);
+                    lastTabbable.off('keydown', onTab);
                 });
-            });
-            iframe.css({
-                width: '100%',
-                height: '100%'
             });
             return iframe;
         };

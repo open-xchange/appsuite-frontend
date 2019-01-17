@@ -1,31 +1,40 @@
-html.embedded .navbar {
-    min-height: initial;
-    margin-top: 16px;
-    &, & > .navbar-header , & > .navbar-collapse {
-        background: #fff;
-        color: #000;
-        border-color: #fff;
-        border-top: 0px;
-        margin-bottom: 0px;
-        a, a:visited {
-            padding: 8px;
-            color: #3c61aa;
+html.embedded {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    & .navbar {
+        min-height: initial;
+        margin-top: 16px;
+        &, & > .navbar-header , & > .navbar-collapse {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+            border-top: 0px;
+            margin-bottom: 0px;
+            a, a:visited {
+                padding: 8px;
+                color: #3c61aa;
+            }
+            a:hover, a:focus {
+                color: #284171;
+                text-decoration: none;
+                background-color: #eee;
+                outline: 0;
+            }
         }
-        a:hover, a:focus {
-            color: #284171;
-            text-decoration: none;
-            background-color: #eee;
-            outline: 0;
+        & .nav > li > a:first-child {
+            padding-left: 8px;
         }
     }
-    & .nav > li > a:first-child {
-        padding-left: 8px;
+    & .oxhelp-content {
+        padding-left: 15px;
+        padding-right: 15px;
     }
-}
-
-html.embedded .oxhelp-content {
-	padding-left: 15px;
-	padding-right: 15px;
 }
 
 @media (max-width: 768px) {
@@ -35,7 +44,7 @@ html.embedded .oxhelp-content {
     }
 }
 
-@screen-sm: 625px;
+@screen-sm: 620px;
 
 @media(min-width: @screen-sm) {
     html.embedded {
@@ -47,6 +56,7 @@ html.embedded .oxhelp-content {
             margin-left: 0px;
             padding: 8px;
             height: initial;
+            visibility: hidden;
         }
     }
 }
