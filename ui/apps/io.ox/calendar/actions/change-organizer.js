@@ -18,8 +18,9 @@ define('io.ox/calendar/actions/change-organizer', [
     'gettext!io.ox/calendar',
     'io.ox/backbone/mini-views/common',
     'io.ox/contacts/util',
+    'io.ox/calendar/util',
     'less!io.ox/calendar/style'
-], function (calApi, ModalDialog, util, gt, mini, contactsUtil) {
+], function (calApi, ModalDialog, util, gt, mini, contactsUtil, calendarUtil) {
 
     'use strict';
 
@@ -83,13 +84,11 @@ define('io.ox/calendar/actions/change-organizer', [
             .on('ok', function () {
 
                 // only series master updates are supported atm
-                calApi.update({
+                calApi.updateOrganizer({
                     id: appointmentData.seriesId || appointmentData.id,
-                    folder: appointmentData.folder, organizer: _(_(appointmentData.attendees).where({ entity: this.model.get('newOrganizer') })[0]).pick(['cn', 'email', 'entity', 'uri'])
-                }, {
-                    comment: this.model.get('comment'),
-                    sendInternalNotifications: true
-                });
+                    folder: appointmentData.folder,
+                    organizer: _(_(appointmentData.attendees).where({ entity: this.model.get('newOrganizer') })[0]).pick(['cn', 'email', 'entity', 'uri'])
+                }, _.extend(calendarUtil.getCurrentRangeOptions(), { comment: this.model.get('comment') }));
                 this.model = null;
             })
             .open();

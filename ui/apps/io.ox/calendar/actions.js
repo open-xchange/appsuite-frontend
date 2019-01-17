@@ -375,8 +375,11 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/change-organizer', {
         requires: function (e) {
-            if (settings.get('chronos/restrictAllowedOrganizerChange', false)) return false;
+            if (!settings.get('chronos/allowChangeOfOrganizer', false)) return false;
             if (!e || !e.baton || !e.baton.data || !e.baton.data.flags) return false;
+
+            // not allowed if there are external participants (update handling doesnt work correctly + single user contexts doesnt need this)
+            if (_(e.baton.data.attendees).some(function (attendee) { return !_(attendee).has('entity'); })) return false;
             // we need at least 2 users
             if (_(e.baton.data.attendees).reduce(function (users, attendee) { return users + (_(attendee).has('entity') && attendee.cuType === 'INDIVIDUAL' ? 1 : 0); }, 0) < 2) return false;
             return e.collection.has('modify') && (util.hasFlag(e.baton.data, 'organizer') || util.hasFlag(e.baton.data, 'organizer_on_behalf'));
