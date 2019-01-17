@@ -13,7 +13,7 @@
 define(['io.ox/mail/compose/model'], function (MailModel) {
     'use strict';
 
-    describe.only('Mail Compose Model', function () {
+    describe('Mail Compose Model', function () {
         describe('deep diffs', function () {
             it('should omit same values', function () {
                 var diff = MailModel.prototype.deepDiff(
