@@ -436,6 +436,9 @@ define('io.ox/mail/compose/model', [
                 })).then(function () {
                     data.attachments = (data.attachments || []).concat(_.toArray(arguments));
                     return data;
+                }).catch(function (err) {
+                    if (ox.debug) console.warn('Could not load initial attachments', err);
+                    return data;
                 });
             }.bind(this));
         },
