@@ -372,7 +372,8 @@ define('io.ox/core/tk/contenteditable-editor', [
             toolbar3: '',
             plugins: 'autoresize autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
             theme: 'modern',
-            height: null
+            height: null,
+            imageLoader: null // is required to upload images. should have upload(file) and getUrl(response) methods
         }, opt);
 
         editor.addClass(opt.class);
@@ -492,8 +493,9 @@ define('io.ox/core/tk/contenteditable-editor', [
                     });
 
                 });
+            },
 
-            }
+            oxImageLoader: opt.imageLoader
         };
 
         ext.point(POINT + '/options').invoke('config', options, opt.oxContext);

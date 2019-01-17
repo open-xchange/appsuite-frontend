@@ -821,6 +821,35 @@ define('io.ox/mail/compose/view', [
             options.view = this;
             options.model = this.model;
             options.oxContext = { view: this };
+            if (this.config.get('editorMode') === 'html') {
+                options.imageLoader = {
+                    upload: function (file) {
+                        var m = new Attachments.Model({ filename: file.name, uploaded: 0 }),
+                            def = composeAPI.space.attachments.add(self.model.get('id'), { file: file }, 'attachment').progress(function (e) {
+                                m.set('uploaded', e.loaded / e.total);
+                            }).then(function success(data) {
+                                m.set({
+                                    id: data.id,
+                                    disp: data.contentDisposition.toLowerCase(),
+                                    filename: data.name,
+                                    size: data.size,
+                                    group: 'mail',
+                                    space: self.model.get('id')
+                                });
+                                m.trigger('upload:complete');
+                                return data;
+                            }, function fail() {
+                                m.destroy();
+                            });
+                        self.model.attachFiles([m]);
+                        return def;
+                    },
+                    getUrl: function (response) {
+                        return mailAPI.getUrl(_.extend({ space: self.model.get('id') }, response), 'view');
+                    }
+                };
+            }
+
             ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + this.config.get('editorMode')).then(function (Editor) {
                 new Editor(self.editorContainer, options).done(function (editor) {
                     def.resolve(editor);

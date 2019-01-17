@@ -12,8 +12,9 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     'io.ox/backbone/mini-views/listutils',
     'io.ox/mail/util',
     'io.ox/backbone/mini-views/settings-list-view',
+    'io.ox/mail/compose/inline-images',
     'less!io.ox/mail/settings/signatures/style'
-], function (ext, ExtensibleView, gt, settings, util, ModalDialog, snippets, mini, config, notifications, listutils, mailutil, ListView) {
+], function (ext, ExtensibleView, gt, settings, util, ModalDialog, snippets, mini, config, notifications, listutils, mailutil, ListView, inline) {
 
     'use strict';
 
@@ -78,7 +79,15 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     class: 'io-ox-signature-edit',
                     keepalive: mailAPI.keepalive,
                     scrollpane: container,
-                    oxContext: { signature: true }
+                    oxContext: { signature: true },
+                    imageLoader: {
+                        upload: function (file) {
+                            return inline.api.inlineImage({ file: file });
+                        },
+                        getUrl: function (response) {
+                            return inline.api.getInsertedImageUrl(response);
+                        }
+                    }
                 }).done(function (editor) {
                     editor.show();
                     signature.content = signature.content || '';
