@@ -13,30 +13,44 @@
 define(['io.ox/mail/compose/model'], function (MailModel) {
     'use strict';
 
-    describe('Mail Compose Model', function () {
+    describe.only('Mail Compose Model', function () {
         describe('deep diffs', function () {
-            it('accepts simple without changes', function () {
+            it('should omit same values', function () {
                 var diff = MailModel.prototype.deepDiff(
                     { test: 'test', num: 123, bool: false },
                     { test: 'test', num: 123, bool: false }
                 );
                 diff.should.deep.equal({});
             });
-            it('rejects simple with changes', function () {
+            it('should contain simple changes', function () {
                 var diff = MailModel.prototype.deepDiff(
                     { test: 'test', s2: 'test', num: 123, bool: false },
                     { test: 'testNew', s2: 'test', num: 1234, bool: true }
                 );
                 diff.should.deep.equal({ test: 'testNew', num: 1234, bool: true });
             });
-            it('accepts complex without changes', function () {
+            it('should contain changes to undefined', function () {
+                var diff = MailModel.prototype.deepDiff(
+                    { test: 'test' },
+                    { test: undefined }
+                );
+                diff.should.deep.equal({ test: null });
+            });
+            it('should omit nested changes', function () {
                 var diff = MailModel.prototype.deepDiff(
                     { test: ['test', 'test1'], object: { test: { str: 'test' } } },
                     { test: ['test', 'test1'], object: { test: { str: 'test' } } }
                 );
                 diff.should.deep.equal({});
             });
-            it('reject complext with changes', function () {
+            it('should contain nested changes for objects which did not exist before', function () {
+                var diff = MailModel.prototype.deepDiff(
+                    {},
+                    { test: { test: 'test' } }
+                );
+                diff.should.deep.equal({ test: { test: 'test' } });
+            });
+            it('should contain complex nested changes', function () {
                 var diff = MailModel.prototype.deepDiff(
                     { test: ['test', 'test1'], object: { test: { str: 'test', str2: 'change' } } },
                     { test: ['testNew', 'test1'], object: { test: { str: 'test', str2: 'changed!' } } }

@@ -74,19 +74,19 @@ define('io.ox/mail/compose/sharing', [
                 var option = getTimeOption(seed);
                 options.push(option);
 
-                if (!this.sharingModel.get('expiry_date') && seed === mailSettings.get('compose/shareAttachments/defaultExpiryDate', '')) this.sharingModel.set('expiry_date', option.value);
+                if (!this.sharingModel.get('expiryDate') && seed === mailSettings.get('compose/shareAttachments/defaultExpiryDate', '')) this.sharingModel.set('expiryDate', option.value);
             }.bind(this));
 
 
             // option: none
             if (!mailSettings.get('compose/shareAttachments/requiredExpiration') && !mailSettings.get('compose/shareAttachments/forceAutoDelete', false)) {
                 options.push({ label: gt('Never'), value: '' });
-                if (!this.sharingModel.get('expiry_date') && mailSettings.get('compose/shareAttachments/defaultExpiryDate', '') === '') this.sharingModel.set('expiry_date', '');
+                if (!this.sharingModel.get('expiryDate') && mailSettings.get('compose/shareAttachments/defaultExpiryDate', '') === '') this.sharingModel.set('expiryDate', '');
             }
 
             selectbox = new mini.SelectView({
                 model: this.sharingModel,
-                name: 'expiry_date',
+                name: 'expiryDate',
                 list: options,
                 id: 'expiration-select-box'
             });
@@ -109,11 +109,11 @@ define('io.ox/mail/compose/sharing', [
             // disable when forced
             if (mailSettings.get('compose/shareAttachments/forceAutoDelete', false)) return node.prop('disabled', true).addClass('disabled');
             // hide option and divider when 'no expire' is used
-            this.listenTo(this.sharingModel, 'change:expiry_date', updateVisibility);
+            this.listenTo(this.sharingModel, 'change:expiryDate', updateVisibility);
             updateVisibility();
 
             function updateVisibility() {
-                node.toggleClass('hidden', self.sharingModel.get('expiry_date') === '');
+                node.toggleClass('hidden', self.sharingModel.get('expiryDate') === '');
             }
             this.dialogNode.append(node);
         }
@@ -194,18 +194,18 @@ define('io.ox/mail/compose/sharing', [
 
         initialize: function () {
             var data = {
-                'instruction_language': coreSettings.get('language'),
-                'enable': false,
+                'language': coreSettings.get('language'),
+                'enabled': false,
                 'autodelete': mailSettings.get('compose/shareAttachments/forceAutoDelete', false)
             };
 
             // make sure default expiry date is set if it is mandatory
-            if (mailSettings.get('compose/shareAttachments/requiredExpiration')) data.expiry_date = getTimeOption(mailSettings.get('compose/shareAttachments/defaultExpiryDate', '1w')).value;
+            if (mailSettings.get('compose/shareAttachments/requiredExpiration')) data.expiryDate = getTimeOption(mailSettings.get('compose/shareAttachments/defaultExpiryDate', '1w')).value;
 
             this.sharingModel = new Backbone.Model(data);
             this.listenTo(this.model.get('attachments'), 'add remove reset', this.updateVisibility);
-            this.listenTo(this.sharingModel, 'change:enable', this.updateVisibility);
-            this.listenTo(this.sharingModel, 'change:enable', this.syncToMailModel);
+            this.listenTo(this.sharingModel, 'change:enabled', this.updateVisibility);
+            this.listenTo(this.sharingModel, 'change:enabled', this.syncToMailModel);
         },
 
         updateVisibility: function () {
@@ -213,26 +213,29 @@ define('io.ox/mail/compose/sharing', [
 
             if (mailSettings.get('compose/shareAttachments/threshold', 0) > 0) {
                 var actualAttachmentSize = this.model.get('attachments').getSize();
-                if (actualAttachmentSize > mailSettings.get('compose/shareAttachments/threshold', 0) && this.sharingModel.get('enable') === false) {
+                if (actualAttachmentSize > mailSettings.get('compose/shareAttachments/threshold', 0) && this.sharingModel.get('enabled') === false) {
                     //#. %1$s is usually "Drive Mail" (product name; might be customized)
                     yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', mailSettings.get('compose/shareAttachments/name')));
-                    this.sharingModel.set('enable', true);
+                    this.sharingModel.set('enabled', true);
                 }
             }
             // offer option t ocactivate when attachments are present
             this.$el.toggle(!!this.model.get('attachments').getValidModels().length);
             // is active
-            this.optionsButton.toggleClass('hidden', !this.sharingModel.get('enable'));
+            this.optionsButton.toggleClass('hidden', !this.sharingModel.get('enabled'));
         },
 
         syncToMailModel: function () {
-            if (!this.sharingModel.get('enable')) return this.model.unset('share_attachments');
+
+            if (!this.sharingModel.get('enabled')) {
+                return this.model.set('sharedAttachments', { enabled: false });
+            }
 
             var obj =  this.sharingModel.toJSON(),
                 blacklist = ['usepassword'];
             // don't save password if the field is empty or disabled.
             if (!this.sharingModel.get('usepassword') || _.isEmpty(this.sharingModel.get('password'))) blacklist.push('password');
-            this.model.set('share_attachments', _.omit(obj, blacklist));
+            this.model.set('sharedAttachments', _.omit(obj, blacklist));
         },
 
         render: function () {
@@ -241,7 +244,7 @@ define('io.ox/mail/compose/sharing', [
             this.$el.append(
                 new mini.CustomCheckboxView({
                     model: this.sharingModel,
-                    name: 'enable',
+                    name: 'enabled',
                     //#. %1$s is usually "Drive Mail" (product name; might be customized)
                     label: gt('Use %1$s', mailSettings.get('compose/shareAttachments/name'))
                 }).render().$el,

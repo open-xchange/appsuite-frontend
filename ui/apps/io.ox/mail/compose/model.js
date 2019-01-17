@@ -445,6 +445,8 @@ define('io.ox/mail/compose/model', [
          * Used to only update necessary parts of the mail model
          */
         deepDiff: function (old, current) {
+            if (_.isUndefined(old)) return current;
+
             var self = this;
 
             current = current || this.attributes;
@@ -459,10 +461,10 @@ define('io.ox/mail/compose/model', [
                         return sub;
                     }
                     if (_.isEqual(old[key], value)) return;
-                    return value;
+                    return _.isUndefined(value) ? null : value;
                 })
                 .omit(function (value) {
-                    return !value;
+                    return _.isUndefined(value);
                 })
                 .value();
         },
