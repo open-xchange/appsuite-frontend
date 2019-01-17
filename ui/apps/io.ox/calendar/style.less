@@ -800,3 +800,51 @@
 
     .date { white-space: nowrap; }
 }
+
+.shared-calendars {
+
+    h4 {
+        margin-bottom: 15px;
+    }
+
+    .item {
+        display: flex;
+    }
+
+    .item-name {
+        flex: 1;
+        margin-top: 12px;
+    }
+
+    .item-block {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .checkbox label {
+        padding-left: 0px;
+    }
+    .checkbox,  .checkbox + .checkbox {
+        margin: 10px 16px;
+    }
+
+    .disabled .checkbox.custom i.toggle{
+        background-color: #eeeeee;
+    }
+
+    .list-group-item {
+        padding: 5px 15px;
+
+        &.page {
+            cursor: pointer;
+        }
+    }
+    .list-group-item.disabled {
+        background-color: #fff;
+    }
+
+    li:focus {
+        outline: 2px solid #3c73aa;
+        text-decoration: underline;
+    }
+}

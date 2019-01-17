@@ -905,6 +905,16 @@ define('io.ox/core/folder/extensions', [
                 });
             }
         }, {
+            id: 'shared',
+            index: 500,
+            draw: function () {
+                this.link('shared', gt('Subscribe shared Calendar'), function () {
+                    require(['io.ox/calendar/actions/subscribe-shared'], function (subscribe) {
+                        subscribe.open();
+                    });
+                });
+            }
+        }, {
             id: 'import',
             index: 600,
             draw: function () {
