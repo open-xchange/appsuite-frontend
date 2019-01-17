@@ -171,8 +171,15 @@ define('io.ox/contacts/actions', [
             return api.getList(list, false, {
                 allColumns: true
             }).then(function (list) {
-                // TODO somehow need to attach the vcards
-                ox.registry.call('mail-compose', 'compose', { contacts_ids: list });
+                ox.registry.call('mail-compose', 'open', {
+                    attachments: list.map(function (contact) {
+                        return {
+                            origin: 'contacts',
+                            id: contact.id,
+                            folderId: contact.folder_id
+                        };
+                    })
+                });
             });
         }
     });
