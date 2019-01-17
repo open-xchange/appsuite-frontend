@@ -315,8 +315,8 @@ define('io.ox/core/attachments/view', [
 
             this.listenTo(this.model, {
                 'change:uploaded': function (model) {
-                    var w = model.get('uploaded') * this.$el.width();
-                    this.$('.progress').width(w);
+                    var w = model.get('uploaded') * 100;
+                    this.$('.progress').width(w + '%');
                 },
                 'change:file_size change:size': this.render,
                 'upload:complete': function () {
@@ -342,7 +342,7 @@ define('io.ox/core/attachments/view', [
                 $('<span class="file">'),
                 $('<span class="filesize">'),
                 // progress?
-                this.model.needsUpload() ? $('<div class="progress">') : $()
+                this.model.needsUpload() ? $('<div class="progress-container">').append($('<div class="progress">')) : $()
             );
 
             if (this.preview) this.preview.render();
