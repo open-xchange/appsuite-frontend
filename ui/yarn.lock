@@ -74,10 +74,10 @@
   resolved "https://registry.yarnpkg.com/@open-xchange/moment-interval/-/moment-interval-0.0.1.tgz#293778b2e4fe1605c9949692f9f8259ce11a3c33"
   integrity sha512-ovLY+eYBpABccARwqSuZSTupR36Flid8TcfJwP8K7ShICY2p5EtgNQs1+wYlbdCBDEEY0khNCx/pnQslUmkypA==
 
-"@open-xchange/shared-grunt-config@^0.15.0-pre4":
-  version "0.15.0-pre4"
-  resolved "https://registry.yarnpkg.com/@open-xchange/shared-grunt-config/-/shared-grunt-config-0.15.0-pre4.tgz#b2ba7e3ca1853ed89d803dc0460d1725e5756233"
-  integrity sha512-nc9HLfgazBBEg+s7naOM+nQEhjuC7cUJv0bWR0O8cfhsxfkveijTWjl5YZ54ppXGR583SXZ2tMgo3nkXCEWIww==
+"@open-xchange/shared-grunt-config@^0.15.0-pre5":
+  version "0.15.0-pre5"
+  resolved "https://registry.yarnpkg.com/@open-xchange/shared-grunt-config/-/shared-grunt-config-0.15.0-pre5.tgz#3b581d526ec7d51b90fbc4b9884e35db1e316793"
+  integrity sha512-dhzXEIse86qRYzDM3rG9fs0/+BPEvGOEi7nR7Dr/ZJgqT3WzRjG7KANN72mvMNXDQHji0mmEiBaW52q/6P3Q7Q==
   dependencies:
     async "^2.4.1"
 

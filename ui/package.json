@@ -12,7 +12,7 @@
     "test": "grunt copy:specs karma:continuous"
   },
   "optionalDependencies": {
-    "@open-xchange/shared-grunt-config": "^0.15.0-pre4",
+    "@open-xchange/shared-grunt-config": "^0.15.0-pre5",
     "assemble-less": "0.7.0",
     "eslint": "5.12.0",
     "eslint-config-open-xchange-appsuite": "^0.4.0",
