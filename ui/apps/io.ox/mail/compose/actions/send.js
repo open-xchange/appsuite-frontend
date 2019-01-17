@@ -103,7 +103,7 @@ define('io.ox/mail/compose/actions/send', [
                 if (!baton.model.has('files') || baton.model.get('files').length === 0) return def.resolve();
                 require(['io.ox/mail/compose/resizeUtils'], function (resizeUtils) {
                     win.busy();
-                    resizeUtils.mergeResizedFiles(baton.mail.files, baton.model.get('resizedImages'), baton.model.get('imageResizeOption')).done(function () {
+                    resizeUtils.mergeResizedFiles(baton.mail.files, baton.config.get('resizedImages'), baton.model.get('imageResizeOption')).done(function () {
                         win.idle();
                         def.resolve();
                     });

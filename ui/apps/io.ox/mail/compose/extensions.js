@@ -697,7 +697,7 @@ define('io.ox/mail/compose/extensions', [
                     resizeUtils.resizeIntoArray(baton.model.get('attachments'), baton.model.get('imageResizeOption')).then(function (resizedFiles) {
                         if (attachmentView.disposed) return;
                         attachmentView.$el.find('.mail-size').text(resizeUtils.getMailSizeString(baton.model));
-                        baton.model.set('resizedImages', resizedFiles);
+                        baton.config.set('resizedImages', resizedFiles);
                     });
                 }
                 attachmentView.listenTo(baton.model, 'change:imageResizeOption', onResizeOptionChange);
