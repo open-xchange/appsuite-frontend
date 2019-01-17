@@ -755,11 +755,24 @@ define('io.ox/mail/compose/extensions', [
                     })
                     .done(function (files) {
                         self.trigger('aria-live-update', gt('Added %s to attachments.', _(files).map(function (file) { return file.filename; }).join(', ')));
-                        model.attachFiles(
-                            _(files).map(function (file) {
-                                return _.extend(file, { group: 'file' });
-                            })
-                        );
+                        var models = files.map(function (file) {
+                            var m = new Attachments.Model({ filename: file.filename });
+                            composeApi.space.attachments.add(model.get('id'), { origin: 'drive', id: file.id, folderId: file.folder_id }).then(function success(data) {
+                                m.set({
+                                    id: data.id,
+                                    disp: data.contentDisposition.toLowerCase(),
+                                    filename: data.name,
+                                    size: data.size,
+                                    group: 'file',
+                                    space: model.get('id')
+                                });
+                                m.trigger('upload:complete');
+                            }, function fail() {
+                                m.destroy();
+                            });
+                            return m;
+                        });
+                        model.attachFiles(models);
                     });
                 });
             }
