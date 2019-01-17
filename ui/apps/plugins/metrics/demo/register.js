@@ -318,8 +318,13 @@ define('plugins/metrics/demo/register', [
                         setTimeout(done, 500);
                     }.bind(this));
 
-                    var file = _.extend({ group: 'infostore', filename: 'test.jpg' }, FILE);
-                    ox.registry.call('mail-compose', 'compose', { infostore_ids: [file] });
+                    ox.registry.call('mail-compose', 'open', {
+                        attachments: [{
+                            origin: 'drive',
+                            id: FILE.id,
+                            folder_id: FILE.folder_id
+                        }]
+                    });
                 });
 
                 this.step('Enter subject and first 3 letters of recipient', function (done) {
