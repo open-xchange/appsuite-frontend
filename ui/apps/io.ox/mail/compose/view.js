@@ -976,9 +976,6 @@ define('io.ox/mail/compose/view', [
                 if (!_.isEmpty(self.model.get('bcc'))) self.toggleTokenfield('bcc');
 
                 self.setBody(self.model.getContent());
-                // TODO double check this, especially the dirty setting
-                // Set model as dirty only when attaching infostore ids initially (Send as pdf from text)
-                self.dirty(self.model.get('mode') === 'compose' && !_.isEmpty(self.model.get('infostore_ids')));
             });
         },
 
