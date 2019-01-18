@@ -31,7 +31,8 @@ define('io.ox/calendar/model', [
         'FLD-0008', // folder not found
         'FLD-0003', // permission denied
         'CAL-4060', // folder is not supported
-        'CAL-4030' // permission denied
+        'CAL-4030', // permission denied
+        'CAL-4044'  // account not found
     ];
 
     var // be careful with the add method. If the option resolveGroups is present it changes from synchronous to asynchronous (must get the proper user data first)

@@ -144,7 +144,8 @@ define('io.ox/calendar/api', [
                                     error = r.error;
                                 }
                             });
-                            if (error) throw error;
+                            // only throw that specific error too many appointments error because otherwise this error might only affect a few folders
+                            if (error && error.code === 'CAL-5072') throw error;
                         }
                         return result;
                     }).catch(function (err) {
