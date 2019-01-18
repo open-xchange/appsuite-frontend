@@ -804,13 +804,13 @@ define('io.ox/calendar/api', [
                 .then(processResponse);
             },
 
-            updateOrganizer: function (obj, options) {
+            changeOrganizer: function (obj, options) {
                 options = options || {};
 
                 obj = obj instanceof Backbone.Model ? obj.attributes : obj;
 
                 var params = {
-                    action: 'updateOrganizer',
+                    action: 'changeOrganizer',
                     folder: obj.folder,
                     id: obj.id,
                     timestamp: _.then(),

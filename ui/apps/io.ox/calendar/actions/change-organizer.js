@@ -27,96 +27,100 @@ define('io.ox/calendar/actions/change-organizer', [
     'use strict';
 
     return {
+        // only allow series and this and future
         openDialog: function (appointmentData) {
 
             if (!appointmentData) return;
-
-            new ModalDialog({
-                title: gt('Change organizer')
-            })
-            .build(function () {
-                this.model = new Backbone.Model({
-                    newOrganizer: new Backbone.Model(_(appointmentData.attendees).findWhere({ entity: appointmentData.organizer.entity })),
-                    comment: ''
-                });
-
-                var self = this,
-                    strings = util.getDateTimeIntervalMarkup(appointmentData, { output: 'strings', zone: moment().tz() }),
-                    recurrenceString = util.getRecurrenceString(appointmentData),
-                    descriptionId = _.uniqueId('alarms-dialog-description-'),
-                    guid = _.uniqueId('label-'),
-                    organizerView = new pViews.ParticipantEntryView({
-                        tagName: 'div',
-                        model: this.model.get('newOrganizer'),
-                        halo: false,
-                        closeButton: false,
-                        asHtml: true
-                    }),
-                    typeahead = new Typeahead({
-                        apiOptions: {
-                            contacts: false,
-                            users: true,
-                            groups: false,
-                            distributionlists: false,
-                            resources: false
-                        },
-                        extPoint: 'io.ox/participants/add',
-                        harmonize: function (data) {
-                            data = _(data).map(function (m) {
-                                return new pModel.Participant(m);
-                            });
-
-                            return _(data).filter(function (model) {
-                                // only internal users allowed, so no secondary mail addresses
-                                return model.get('field') === 'email1';
-                            });
-                        },
-                        click: function (e, data, value) {
-                            self.model.set('newOrganizer', new Backbone.Model(util.createAttendee(data)));
-
-                            // clean typeahad input and redraw organizer
-                            if (value) typeahead.$el.typeahead('val', '');
-                            organizerView.model = self.model.get('newOrganizer');
-                            organizerView.$el.empty();
-                            organizerView.render();
-                        }
+            util.showRecurrenceDialog(appointmentData, { dontAllowExceptions: true }).done(function (result) {
+                new ModalDialog({
+                    title: gt('Change organizer')
+                })
+                .build(function () {
+                    this.model = new Backbone.Model({
+                        newOrganizer: new Backbone.Model(_(appointmentData.attendees).findWhere({ entity: appointmentData.organizer.entity })),
+                        comment: ''
                     });
 
-                this.$body.addClass('change-organizer-dialog').append(
-                    $('<p>').attr('id', descriptionId).append(
-                        $('<b>').text(appointmentData.summary),
-                        $.txt(', '),
-                        $.txt(strings.dateStr),
-                        $.txt(recurrenceString !== '' ? ' \u2013 ' + recurrenceString : ''),
-                        $.txt(' '),
-                        $.txt(strings.timeStr)
-                    ),
-                    $('<label>').text(gt('Organizer')).attr({ for: guid = _.uniqueId('label-') }),
-                    organizerView.render().$el,
-                    $('<label>').text(gt('Select new organizer')).attr({ for: guid = _.uniqueId('label-') }),
-                    typeahead.$el.attr({ id: guid }),
-                    $('<label>').text(gt('Leave a comment for the new organizer.')).attr({ for: guid = _.uniqueId('label-') }),
-                    new mini.InputView({ name: 'comment', model: this.model, placeholder: gt('Password'), autocomplete: false }).render().$el.attr('id', guid)
-                );
-                typeahead.render();
+                    var self = this,
+                        strings = util.getDateTimeIntervalMarkup(appointmentData, { output: 'strings', zone: moment().tz() }),
+                        recurrenceString = util.getRecurrenceString(appointmentData),
+                        descriptionId = _.uniqueId('alarms-dialog-description-'),
+                        guid = _.uniqueId('label-'),
+                        organizerView = new pViews.ParticipantEntryView({
+                            tagName: 'div',
+                            model: this.model.get('newOrganizer'),
+                            halo: false,
+                            closeButton: false,
+                            asHtml: true
+                        }),
+                        typeahead = new Typeahead({
+                            apiOptions: {
+                                contacts: false,
+                                users: true,
+                                groups: false,
+                                distributionlists: false,
+                                resources: false
+                            },
+                            extPoint: 'io.ox/participants/add',
+                            harmonize: function (data) {
+                                data = _(data).map(function (m) {
+                                    return new pModel.Participant(m);
+                                });
 
-                // for debugging (prevents closing of autocomplete)
-                // typeahead.$el.data('ttTypeahead').dropdown.close = $.noop;
-                // typeahead.$el.data('ttTypeahead').dropdown.empty = $.noop;
-            })
-            .addAlternativeButton({ action: 'cancel', label: gt('Cancel') })
-            .addButton({ action: 'ok', label: gt('Ok'), className: 'btn-primary' })
-            .on('ok', function () {
+                                return _(data).filter(function (model) {
+                                    // only internal users allowed, so no secondary mail addresses
+                                    return model.get('field') === 'email1';
+                                });
+                            },
+                            click: function (e, data, value) {
+                                self.model.set('newOrganizer', new Backbone.Model(util.createAttendee(data)));
 
-                // only series master updates are supported atm
-                calApi.updateOrganizer({
-                    id: appointmentData.seriesId || appointmentData.id,
-                    folder: appointmentData.folder,
-                    organizer: _(this.model.get('newOrganizer')).pick(['cn', 'email', 'entity', 'uri'])
-                }, _.extend(util.getCurrentRangeOptions(), { comment: this.model.get('comment') }));
-                this.model = null;
-            })
-            .open();
+                                // clean typeahad input and redraw organizer
+                                if (value) typeahead.$el.typeahead('val', '');
+                                organizerView.model = self.model.get('newOrganizer');
+                                organizerView.$el.empty();
+                                organizerView.render();
+                            }
+                        });
+
+                    this.$body.addClass('change-organizer-dialog').append(
+                        $('<p>').attr('id', descriptionId).append(
+                            $('<b>').text(appointmentData.summary),
+                            $.txt(', '),
+                            $.txt(strings.dateStr),
+                            $.txt(recurrenceString !== '' ? ' \u2013 ' + recurrenceString : ''),
+                            $.txt(' '),
+                            $.txt(strings.timeStr)
+                        ),
+                        $('<label>').text(gt('Organizer')).attr({ for: guid = _.uniqueId('label-') }),
+                        organizerView.render().$el,
+                        $('<label>').text(gt('Select new organizer')).attr({ for: guid = _.uniqueId('label-') }),
+                        typeahead.$el.attr({ id: guid }),
+                        $('<label>').text(gt('Leave a comment for the new organizer.')).attr({ for: guid = _.uniqueId('label-') }),
+                        new mini.InputView({ name: 'comment', model: this.model, placeholder: gt('Password'), autocomplete: false }).render().$el.attr('id', guid)
+                    );
+                    typeahead.render();
+
+                    // for debugging (prevents closing of autocomplete)
+                    // typeahead.$el.data('ttTypeahead').dropdown.close = $.noop;
+                    // typeahead.$el.data('ttTypeahead').dropdown.empty = $.noop;
+                })
+                .addAlternativeButton({ action: 'cancel', label: gt('Cancel') })
+                .addButton({ action: 'ok', label: gt('Ok'), className: 'btn-primary' })
+                .on('ok', function () {
+                    var params = {
+                        id: appointmentData.seriesId || appointmentData.id,
+                        folder: appointmentData.folder,
+                        organizer: this.model.get('newOrganizer').pick(['cn', 'email', 'entity', 'uri'])
+                    };
+                    if (result === 'thisandfuture') {
+                        params.recurrenceId = appointmentData.recurrenceId;
+                    }
+                    calApi.changeOrganizer(params, _.extend(util.getCurrentRangeOptions(), { comment: this.model.get('comment'), recurrenceRange: (result === 'thisandfuture' ? 'THISANDFUTURE' : undefined) }));
+                    this.model = null;
+                })
+                .open();
+            });
         }
     };
 });
