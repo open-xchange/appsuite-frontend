@@ -244,7 +244,7 @@ define('io.ox/calendar/settings/pane', [
                 this.$el.append(
                     util.fieldset(gt('Email notifications'),
                         $('<div class="form-group">').append(
-                            util.checkbox('notifyNewModifiedDeleted', gt('Receive notification for appointment changes'), settings),
+                            util.checkbox('notifyNewModifiedDeleted', gt('Receive notifications when an appointment in which you participate is created, modified or deleted'), settings),
                             util.checkbox('notifyAcceptedDeclinedAsCreator', gt('Receive notification as appointment creator when participants accept or decline'), settings),
                             util.checkbox('notifyAcceptedDeclinedAsParticipant', gt('Receive notification as appointment participant when other participants accept or decline'), settings),
                             util.checkbox('deleteInvitationMailAfterAction', gt('Automatically delete the invitation email after the appointment has been accepted or declined'), settings)
