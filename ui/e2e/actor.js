@@ -24,6 +24,8 @@ module.exports = actor({
         this.waitForDetached('#io-ox-refresh-icon .fa-spin');
     },
     grabAxeReport: async function (context, options) {
+        if (typeof options === 'undefined') options = {};
+        if (typeof context === 'undefined') context = '';
         const report = await this.executeAsyncScript(function (axeSource, context, options, done) {
             if (typeof axe === 'undefined') {
                 // eslint-disable-next-line no-eval

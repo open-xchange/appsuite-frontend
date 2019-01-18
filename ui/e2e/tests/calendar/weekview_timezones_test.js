@@ -79,7 +79,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.click('Add', '.io-ox-dialog-popup');
     I.waitForDetached('.io-ox-dialog-popup');
 
-    I.waitForVisible('.rightside li[title="Asia/Tokyo"]');
+    I.waitForText('Asia/Tokyo', '.rightside li');
 
     // switch to calendar
     I.openApp('Calendar');
@@ -129,11 +129,11 @@ Scenario('Create appointment and switch timezones', async function (I) {
 
     I.click('~Calendar', '.leftside');
     I.click('~Favorite timezones', '.leftside');
-    I.waitForVisible('.rightside li[title="Asia/Tokyo"]');
+    I.waitForText('Asia/Tokyo', '.rightside li');
 
     // remove extra timezone
-    I.click('.rightside li[title="Asia/Tokyo"] a[data-action="delete"]');
-    I.waitForDetached('.rightside li[title="Asia/Tokyo"]');
+    I.click('.rightside li a[data-action="delete"]');
+    I.dontSee('Asia/Tokyo', '.rightside ul');
 
     // inspect in calendar app
     I.openApp('Calendar');

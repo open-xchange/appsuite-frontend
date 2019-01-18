@@ -60,9 +60,9 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     I.seeNumberOfElements('.workweek .appointment .title', 1);
 
     // get folder color
-    const folderColor = await I.grabCssPropertyFrom('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label', 'background-color');
+    const [folderColor] = await I.grabCssPropertyFrom('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label', 'background-color');
     // get appointment color
-    let appointmentColor = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
+    let [appointmentColor] = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
     // check if the color is the same
     expect(folderColor).equal(appointmentColor);
 
@@ -77,7 +77,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
     // get appointment color
-    appointmentColor = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
+    [appointmentColor] = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
     // check if the color is the same
     expect(folderColor).not.equal(appointmentColor);
     // the color might differ if the appointment has .hover class which is not predictable
@@ -94,7 +94,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
     // get appointment color
-    appointmentColor = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
+    [appointmentColor] = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
     // check if the color is the same
     expect(folderColor).equal(appointmentColor);
     expect(appointmentColor).not.to.be.oneOf(['rgba(181, 54, 54, 1)', 'rgba(200, 70, 70, 1)']);
@@ -167,14 +167,14 @@ Scenario('Changing calendar color should change appointment color that uses cale
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.click('Appointment color');
-    const darkRed = await I.grabCssPropertyFrom('a[title="dark red"] > i', 'background-color');
+    const [darkRed] = await I.grabCssPropertyFrom('a[title="dark red"] > i', 'background-color');
     I.click('dark red');
     I.click('Save', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
     // change calendar color to dark green
     I.click('.folder-options');
-    const darkGreen = await I.grabCssPropertyFrom('a[title="dark green"] > i', 'background-color');
+    const [darkGreen] = await I.grabCssPropertyFrom('a[title="dark green"] > i', 'background-color');
     I.click('dark green');
 
     // click some stuff
@@ -183,14 +183,14 @@ Scenario('Changing calendar color should change appointment color that uses cale
     I.waitForText('test appointment one', 5, '.workweek');
 
     // get folder color
-    const folderColor = await I.grabCssPropertyFrom('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label', 'background-color');
+    const [folderColor] = await I.grabCssPropertyFrom('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label', 'background-color');
     // get appointment colors
-    const appointmentOneColor = await I.grabCssPropertyFrom('.workweek .appointment[aria-label*="test appointment one"]', 'background-color');
-    const appointmentTwoColor = await I.grabCssPropertyFrom('.workweek .appointment[aria-label*="test appointment two"]', 'background-color');
+    const [appointmentOneColor] = await I.grabCssPropertyFrom('.workweek .appointment[aria-label*="test appointment one"]', 'background-color');
+    const [appointmentTwoColor] = await I.grabCssPropertyFrom('.workweek .appointment[aria-label*="test appointment two"]', 'background-color');
     // check if the colors are correctly applied
-    expect(folderColor).equal(darkGreen);
-    expect(appointmentOneColor).equal(darkRed);
-    expect(appointmentTwoColor).equal(darkGreen);
+    expect(folderColor, 'folderColor equals darkGreen').equal(darkGreen);
+    expect(appointmentOneColor, 'appointment one color equals darkRed').equal(darkRed);
+    expect(appointmentTwoColor, 'appointment two color equals darkGreen').equal(darkGreen);
 
     // remove
     I.waitForText('test appointment one', 5, '.workweek');

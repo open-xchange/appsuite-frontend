@@ -89,9 +89,11 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
 
     // condition and all components visible?
     I.see('From', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .nested[data-test-id="1_0"] .list-title');
-    expect(await I.grabAttributeFrom('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"]', 'disabled')).to.exist;
+    let [saveActionState] = await I.grabAttributeFrom('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"]', 'disabled');
+    expect(saveActionState).to.exist;
     I.fillField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1_0"] input[name="values"]' }, 'Test Value');
-    expect(await I.grabAttributeFrom('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"]', 'disabled')).not.to.exist;
+    [saveActionState] = await I.grabAttributeFrom('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"]', 'disabled');
+    expect(saveActionState).not.to.exist;
 
     // add an action which includes the folder picker
     I.click('Add action');

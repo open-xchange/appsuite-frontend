@@ -52,8 +52,8 @@ Scenario('adding a mail containing XSS code', async function (I, users) {
     I.waitForElement({ css: '[data-app-name="io.ox/portal"] .widgets' }, 20);
     I.waitForDetached({ css: '.widgets .widget.io-ox-busy' }, 20);
 
-    let widgetId = await I.grabAttributeFrom('.io-ox-portal-window .widgets li.widget:first-child', 'data-widget-id');
-    let type = await I.grabAttributeFrom('.io-ox-portal-window .widgets li.widget:first-child', 'data-widget-type');
+    let [widgetId] = await I.grabAttributeFrom('.io-ox-portal-window .widgets li.widget:first-child', 'data-widget-id');
+    let [type] = await I.grabAttributeFrom('.io-ox-portal-window .widgets li.widget:first-child', 'data-widget-type');
     expect(type).to.equal('stickymail');
     let title = await I.grabTextFrom(`.io-ox-portal-window .widgets li.widget[data-widget-id="${widgetId}"] .title`);
     expect(title).to.equal('Test subject <img src="x" onerror="alert(666);">');
