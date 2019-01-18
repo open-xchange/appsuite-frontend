@@ -825,7 +825,7 @@ define('io.ox/mail/compose/view', [
                 options.imageLoader = {
                     upload: function (file) {
                         var m = new Attachments.Model({ filename: file.name, uploaded: 0 }),
-                            def = composeAPI.space.attachments.add(self.model.get('id'), { file: file }, 'attachment').progress(function (e) {
+                            def = composeAPI.space.attachments.add(self.model.get('id'), { file: file }, 'inline').progress(function (e) {
                                 m.set('uploaded', e.loaded / e.total);
                             }).then(function success(data) {
                                 m.set({
