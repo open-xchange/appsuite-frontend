@@ -86,10 +86,9 @@ define('io.ox/mail/compose/main', [
                 config = this.config;
 
             // TODO: check senderView scenarios
-            // TODO listeners never gets removed
             updateDisplayName();
-            config.on('change:sendDisplayName', updateDisplayName);
-            ox.on('change:customDisplayNames', updateDisplayName);
+            this.view.listenTo(config, 'change:sendDisplayName', updateDisplayName);
+            this.view.listenTo(ox, 'change:sendDisplayName', updateDisplayName);
 
             // fix current value
             function updateDisplayName() {
