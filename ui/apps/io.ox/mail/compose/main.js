@@ -198,7 +198,7 @@ define('io.ox/mail/compose/main', [
 
         app.open = function (obj, model) {
             var def = $.Deferred();
-            obj = _.extend({ meta: { type: 'new' } }, obj);
+            obj = _.extend({}, obj);
 
             // Set window and toolbars invisible initially
             win.nodes.header.addClass('sr-only');
