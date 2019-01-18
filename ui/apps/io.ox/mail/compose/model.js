@@ -426,6 +426,8 @@ define('io.ox/mail/compose/model', [
             opt.vcard = /(new|reply|replayall|forward|resend)/.test(type) && settings.get('appendVcard', false);
             opt.original = /(reply|replayall)/.test(type);
             return composeAPI.spaced({ type: type, original: original }, opt).then(function (data) {
+                // TODO: alternative solution: middleware introduces api param
+                if (data.content && !settings.get('appendMailTextOnReply', true)) delete data.content;
                 if (!data.content) return data;
                 return this.quoteMessage(data);
             }.bind(this)).then(function (data) {
