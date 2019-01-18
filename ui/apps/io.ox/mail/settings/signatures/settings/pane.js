@@ -107,10 +107,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         id: 'position',
         index: 400,
         render: function () {
-            var signature = this.getSignature(),
-                position = signature.misc.insertion ?
-                    signature.misc.insertion :
-                    settings.get('defaultSignaturePosition', 'below');
+            var signature = this.getSignature();
 
             this.$body.append(
                 $('<div class="form-group">').append(
@@ -119,7 +116,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                             $('<option value="above">').text(gt('Add signature above quoted text')),
                             $('<option value="below">').text(gt('Add signature below quoted text'))
                         )
-                        .val(position)
+                        .val(signature.misc.insertion)
                 )
             );
         }
