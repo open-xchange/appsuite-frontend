@@ -242,8 +242,7 @@ define('io.ox/mail/compose/signatures', [
                 text = cleanUp(signature.content, isHTML);
                 if (isHTML) text = this.getParagraph(text, looksLikeHTML(text));
                 // signature wrapper
-                if (_.isString(signature.misc)) signature.misc = JSON.parse(signature.misc);
-                if (signature.misc && signature.misc.insertion === 'below') {
+                if (signature.misc.insertion === 'below') {
                     proc = _.bind(this.editor.insertPostCite || this.editor.appendContent, this.editor);
                     proc(text);
                     this.editor.scrollTop('bottom');

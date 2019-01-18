@@ -182,10 +182,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     );
 
     function fnEditSignature(e, signature) {
-        signature = signature || { id: null, name: '', signature: '' };
-
-        // support for 'old' signatures
-        signature.misc = _.isString(signature.misc) ? JSON.parse(signature.misc) : signature.misc || {};
+        signature = signature || { id: null, name: '', signature: '', misc: {} };
 
         return new ModalDialog({
             width: 640,
