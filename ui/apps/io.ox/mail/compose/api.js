@@ -457,7 +457,6 @@ define('io.ox/mail/compose/api', [
         reset: function () {
             console.log('> RESET');
             return api.space.list().then(function (list) {
-                // TODO: use case? adjust http pause/resume? add mw endpoint?
                 // process all updates
                 _(list).map(function (id) {
                     return api.space.remove(id);

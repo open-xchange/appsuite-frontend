@@ -84,7 +84,6 @@ define('io.ox/mail/compose/main', [
             var model = this.model,
                 config = this.config;
 
-            // TODO: check senderView scenarios
             updateDisplayName();
             this.view.listenTo(config, 'change:sendDisplayName', updateDisplayName);
             this.view.listenTo(ox, 'change:customDisplayNames', updateDisplayName);
