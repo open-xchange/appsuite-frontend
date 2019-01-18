@@ -141,15 +141,6 @@ define('io.ox/mail/compose/actions/send', [
             }
         },
         // Placeholder for Guard delay send for key check at index 750
-        // {
-        //     id: 'fix-draft-sendtype',
-        //     index: 800,
-        //     perform: function (baton) {
-        //         if (baton.mail.sendtype === composeAPI.SENDTYPE.EDIT_DRAFT) {
-        //             baton.mail.sendtype = composeAPI.SENDTYPE.DRAFT;
-        //         }
-        //     }
-        // },
         {
             id: 'wait-for-pending-uploads',
             index: 900,
