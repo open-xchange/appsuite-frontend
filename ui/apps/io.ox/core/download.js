@@ -115,7 +115,7 @@ define('io.ox/core/download', [
         index: 400,
         id: 'buttonCancel',
         render: function () {
-            this.addButton({ action: 'cancel', label: gt('Cancel download') });
+            this.addButton({ action: 'cancel', label: gt('Cancel') });
         }
     });
 
@@ -137,7 +137,7 @@ define('io.ox/core/download', [
         });
 
         new ModalDialog({
-            title: gt('Anti virus warning'),
+            title: gt('Anti-Virus Warning'),
             point: 'io.ox/core/download/antiviruspopup',
             model: new Backbone.Model(error)
         })
