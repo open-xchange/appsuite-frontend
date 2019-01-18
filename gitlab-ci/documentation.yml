@@ -19,6 +19,11 @@ build documentation:
       - doku/
     expire_in: 2 hours
   only:
+    refs:
+      - develop
+      - master
+      - /^master-.*$/
+      - /^release-.*$/
     changes:
       - ./documentation/**/*
       - ui/package.json
