@@ -13,19 +13,13 @@
 
 define('io.ox/mail/compose/view', [
     'io.ox/mail/compose/extensions',
-    'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/extensions',
     'io.ox/mail/compose/api',
     'io.ox/mail/api',
     'io.ox/mail/util',
-    'io.ox/core/tk/textproc',
     'settings!io.ox/mail',
-    'settings!io.ox/core',
     'io.ox/core/notifications',
-    'io.ox/core/api/snippets',
-    'io.ox/core/api/account',
     'gettext!io.ox/mail',
-    'io.ox/mail/actions/attachmentQuota',
     'io.ox/core/attachments/backbone',
     'io.ox/core/tk/dialogs',
     'io.ox/mail/compose/signatures',
@@ -34,7 +28,7 @@ define('io.ox/mail/compose/view', [
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send',
     'io.ox/mail/compose/actions/save'
-], function (extensions, Dropdown, ext, composeAPI, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentQuota, Attachments, dialogs, signatureUtil, sanitizer) {
+], function (extensions, ext, composeAPI, mailAPI, mailUtil, settings, notifications, gt, Attachments, dialogs, signatureUtil, sanitizer) {
 
     'use strict';
 
@@ -692,10 +686,10 @@ define('io.ox/mail/compose/view', [
             if (this.editor) this.stopListening(this.editor);
             this.editor = this.editorHash[this.config.get('editorMode')];
             this.listenTo(this.editor, 'change', this.syncMail);
-            // if contentType already matches editor (e.g. while startup), content can be set explicitedly
-            var bothText = this.editor.getMode() === 'text' && this.model.get('contentType') === 'text/plain',
-                bothHTML = this.editor.getMode() === 'html' && this.model.get('contentType') === 'text/html',
-                setMethod = bothText || bothHTML ? 'setContent' : 'setPlainText';
+
+            // set plaintext if switching from html to text. Otherwise content should already match the setContent method
+            var htmlToText = this.model.get('contentType') === 'text/html' && this.editor.getMode() === 'text',
+                setMethod = htmlToText ? 'setPlainText' : 'setContent';
             return $.when(this.editor[setMethod](content)).then(function () {
                 self.model.set({
                     content: self.editor.getContent(),
@@ -718,20 +712,30 @@ define('io.ox/mail/compose/view', [
 
         toggleEditorMode: function () {
 
-            var content;
+            var self = this, content;
 
             if (this.editor) {
                 // this.removeSignature();
                 content = this.editor.getPlainText();
                 this.editor.hide();
+            } else if (this.model.get('contentType') === 'text/html' && this.config.get('editorMode') === 'text') {
+                // intial set, transfrom html to text
+                content = require(['io.ox/core/tk/textproc']).then(function (textproc) {
+                    return textproc.htmltotext(self.model.get('content'));
+                });
+            } else if (this.model.get('contentType') === 'text/plain' && this.config.get('editorMode') === 'html') {
+                // intial set, transfrom text to html
+                content = require(['io.ox/mail/detail/content']).then(function (proc) {
+                    return proc.transformForHTMLEditor(self.model.get('content'));
+                });
             } else {
-                // initial, use existing content of composition space
                 content = this.model.get('content');
-                if (this.model.get('contentType') === 'text/html' && this.config.get('editorMode') === 'text') content = textproc.htmltotext(content);
             }
 
             this.editorContainer.busy();
-            return this.loadEditor(content).then(function () {
+            return $.when(content).then(function (content) {
+                return self.loadEditor(content);
+            }).then(function () {
                 this.editorContainer.idle();
                 // update the content type of the mail
                 // FIXME: may be, do this somewhere else? in the model?
