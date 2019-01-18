@@ -59,7 +59,9 @@ define('io.ox/mail/compose/actions/save', [
             id: 'send',
             index: 1000,
             perform: function (baton) {
-                return baton.model.saveDraft();
+                return baton.model.saveDraft().then(function (res) {
+                    baton.msgref = res.data;
+                });
             }
         },
         // Placeholder for Guard auth check, index 1050
@@ -78,7 +80,7 @@ define('io.ox/mail/compose/actions/save', [
             id: 'reload',
             index: 1200,
             perform: function (baton) {
-                var opt = mailUtil.parseMsgref(mailAPI.separator, baton.resultData);
+                var opt = mailUtil.parseMsgref(mailAPI.separator, baton.msgref);
                 switch (baton.model.get('contentType')) {
                     case 'text/plain':
                         opt.view = 'raw';
@@ -91,10 +93,9 @@ define('io.ox/mail/compose/actions/save', [
                         break;
                 }
 
-                return $.when(
-                    baton.resultData,
-                    mailAPI.get(opt)
-                );
+                return mailAPI.get(opt).then(function (data) {
+                    baton.mail = data;
+                });
             }
         },
         {
@@ -112,10 +113,10 @@ define('io.ox/mail/compose/actions/save', [
             id: 'replace',
             index: 2000,
             perform: function (baton) {
-                // TODO need to investigate this "newData" stuff
                 // Replace inline images in contenteditable with links from draft response
                 if (baton.config.get('editorMode') === 'html') {
-                    $('<div>').html(baton.newData.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
+                    // TODO may need some rework
+                    $('<div>').html(baton.mail.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
                         var $el = $(el);
                         $('img:not(.emoji):eq(' + index + ')', baton.view.editorContainer.find('.editable')).attr({
                             src: $el.attr('src'),
@@ -123,9 +124,9 @@ define('io.ox/mail/compose/actions/save', [
                         });
                     });
                 }
-                var encrypted = baton.newData.security_info && baton.newData.security_info.encrypted;
+                var encrypted = baton.mail.security_info && baton.mail.security_info.encrypted;
                 if (!encrypted) {  // Don't update attachments for encrypted files
-                    baton.newData.attachments.forEach(function (a, index) {
+                    baton.mail.attachments.forEach(function (a, index) {
                         var m = baton.model.get('attachments').at(index);
                         if (typeof m === 'undefined') {
                             if (a.content_type !== 'application/pgp-signature') { // Don't add signature files

@@ -303,34 +303,6 @@ define('io.ox/mail/compose/view', [
         }
     });
 
-    // invoke extensions as a waterfall, but jQuery deferreds don't have an API for this
-    // TODO: at the moment, this resolves with the result of the last extension point.
-    // not sure if this is desired.
-    // TODO: factor this out into a library or util class
-    // TODO this was alread done... see how we can use ext.point(...).cascade but need to compare error cases
-    function extensionCascade(point, baton) {
-        return point.reduce(function (def, p) {
-            if (!def || !def.then) def = $.when(def);
-            return def.then(function (result, newData) {
-                if (result && result.data) baton.resultData = result.data;
-                if (newData) baton.newData = newData;
-                return $.when();
-            }, function (result) {
-                //TODO: think about the naming, here
-                if (result) baton.result = result;
-                //handle errors/warnings in reject case
-                if (result && result.error) baton.error = result.error;
-                if (result && result.warnings) baton.warning = result.warnings;
-                baton.rejected = true;
-                return $.when();
-            }).then(function () {
-                if (baton.isPropagationStopped()) return;
-                if (baton.isDisabled(point.id, p.id)) return;
-                return p.perform.apply(undefined, [baton]);
-            });
-        }, $.when());
-    }
-
     // disable attachmentList by default
     ext.point(POINT + '/attachments').disable('attachmentList');
 
@@ -630,12 +602,11 @@ define('io.ox/mail/compose/view', [
                     model: this.model,
                     config: this.config,
                     app: this.app,
-                    view: view
+                    view: view,
+                    catchErrors: true
                 });
 
-            var point = ext.point('io.ox/mail/compose/actions/save');
-
-            return extensionCascade(point, baton).always(function () {
+            return ext.point('io.ox/mail/compose/actions/save').cascade(this, baton).always(function () {
                 if (win) win.idle();
             });
         },
@@ -752,7 +723,8 @@ define('io.ox/mail/compose/view', [
                     model: this.model,
                     config: this.config,
                     app: this.app,
-                    view: view
+                    view: view,
+                    catchErrors: true
                 }),
                 win = this.app.getWindow(),
                 point = ext.point('io.ox/mail/compose/actions/send');
@@ -761,7 +733,7 @@ define('io.ox/mail/compose/view', [
             baton.config.set('autoDismiss', true);
 
             win.busy();
-            return extensionCascade(point, baton).then(function () {
+            return point.cascade(this, baton).then(function () {
                 // a check/user intaction aborted the flow or app is re-opened after a request error; we want to be asked before any unsaved data is discarded again
                 if (baton.rejected || baton.error) baton.config.set('autoDismiss', false);
             }).always(win.idle.bind(win));
