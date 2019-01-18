@@ -319,11 +319,6 @@ define('io.ox/mail/compose/view', [
             this.blocked = [];
             this.messageFormat = options.messageFormat || settings.get('messageFormat', 'html');
 
-            // Open Drafts in HTML mode if content type is html even if text-editor is default
-            // TODO this seems to be duplicate code. See boot process of the app. This should not be handled by the view
-            if (this.model.get('mode') === 'edit' && this.model.get('content_type') === 'text/html' && settings.get('messageFormat', 'html') === 'text') {
-                this.messageFormat = 'html';
-            }
             this.editor = null;
             this.composeMode = 'compose';
             this.editorId = _.uniqueId('editor-');

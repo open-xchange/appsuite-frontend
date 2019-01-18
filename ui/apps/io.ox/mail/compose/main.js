@@ -106,10 +106,15 @@ define('io.ox/mail/compose/main', [
         id: 'editor-mode',
         index: 700,
         perform: function () {
+            // if draft, force editor in the same mode as the draft
+            if (this.model.get('meta').editFor) {
+                this.config.set('editorMode', this.model.get('contentType') === 'text/plain' ? 'text' : 'html', { silent: true });
+            }
+
             // map 'alternative'
             var isAlternative = this.config.get('preferredEditorMode') === 'alternative' || this.config.get('editorMode') === 'alternative';
             if (!isAlternative) return;
-            this.config.set('editorMode', this.model.get('content_type') === 'text/plain' ? 'text' : 'html', { silent: true });
+            this.config.set('editorMode', this.model.get('contentType') === 'text/plain' ? 'text' : 'html', { silent: true });
         }
     }, {
         id: 'auto-bcc',
