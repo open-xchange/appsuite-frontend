@@ -395,7 +395,7 @@ define('io.ox/backbone/mini-views/common', [
         InputView.extend({
             format: 'l',
             onChange: function () {
-                var t = this.options.utcMode ? moment(this.$el.val(), this.format).valueOf() + moment(this.$el.val(), this.format).utcOffset() * 60 * 1000 : moment(this.$el.val(), this.format).valueOf();
+                var t = +moment(this.$el.val(), this.format);
                 this.model.set(this.name, t);
             },
             update: function () {
@@ -403,7 +403,7 @@ define('io.ox/backbone/mini-views/common', [
                 this.$el.val(date || this.options.mandatory ? this.getFormattedDate(date) : '');
             },
             getFormattedDate: function (date) {
-                return this.options.utcMode ? moment(date).utc().format(this.format) : moment(date).format(this.format);
+                return moment(date).format(this.format);
             },
             render: function () {
                 InputView.prototype.render.call(this);
