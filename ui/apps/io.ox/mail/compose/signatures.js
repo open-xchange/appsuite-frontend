@@ -229,7 +229,9 @@ define('io.ox/mail/compose/signatures', [
                     if (unchanged) node.remove(); else node.removeAttr('class');
                 });
             } else if (currentSignature) {
-                this.editor.replaceParagraph(currentSignature, '');
+                // matches linebreaks in insertPostCite
+                var str = (signature.misc.insertion === 'below') ? '\n\n' + currentSignature : currentSignature + '\n\n';
+                this.editor.replaceParagraph(str, '');
             }
         },
 
