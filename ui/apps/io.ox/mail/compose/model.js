@@ -363,11 +363,10 @@ define('io.ox/mail/compose/model', [
                 return item[0] + ' <' + item[1] + '>';
             }
             return function (data) {
-                var meta = data.meta;
-                // TODO remove this line when backend is updated
-                meta = /^(REPLY|REPLY_ALL)$/.test(data.meta.type) ? meta.replyFor : meta.forwardsFor;
-                meta = [].concat(meta)[0];
-                return mailAPI.get({ id: meta.originalId, folder: meta.originalFolderId }).then(function (mail) {
+                var meta = data.meta,
+                    original = /^(REPLY|REPLY_ALL)$/.test(data.meta.type) ? meta.replyFor : meta.forwardsFor;
+                original = [].concat(original)[0];
+                return mailAPI.get({ id: original.originalId, folder: original.originalFolderId }).then(function (mail) {
                     var header = [];
 
                     if (/^(REPLY|REPLY_ALL)$/.test(data.meta.type)) {
