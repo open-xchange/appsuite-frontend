@@ -112,18 +112,13 @@ define('io.ox/mail/compose/actions/send', [
             }
         },
         {
-            id: 'check:attachment-empty',
-            index: 500,
-            perform: extensions.emptyAttachmentCheck
-        },
-        {
             id: 'check:attachment-publishmailattachments',
-            index: 550,
+            index: 500,
             perform: extensions.publishMailAttachments
         },
         {
             id: 'check:attachment-missing',
-            index: 560,
+            index: 550,
             perform: extensions.attachmentMissingCheck
         },
         // Placeholder for Guard extensions at index 600-630

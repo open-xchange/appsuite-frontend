@@ -38,11 +38,6 @@ define('io.ox/mail/compose/actions/save', [
                 });
             }
         },
-        {
-            id: 'check:attachment-empty',
-            index: 200,
-            perform: extensions.emptyAttachmentCheck
-        },
         // Placeholder for Guard.  Guard actions for signature check at index 300
         {
             id: 'wait-for-pending-uploads',

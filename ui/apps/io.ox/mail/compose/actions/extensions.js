@@ -13,22 +13,12 @@
  */
 
 define('io.ox/mail/compose/actions/extensions', [
-    'io.ox/mail/actions/attachmentEmpty',
     'io.ox/mail/actions/attachmentQuota',
-    'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (attachmentEmpty, attachmentQuota, mailSettings, gt) {
+], function (attachmentQuota, gt) {
     'use strict';
 
     var api = {};
-
-    api.emptyAttachmentCheck = function (baton) {
-        // TOOD: rewrite to match collection
-        return attachmentEmpty.emptinessCheck(baton.model.get('attachments').toJSON()).then(_.identity, function () {
-            baton.stopPropagation();
-            throw arguments;
-        });
-    };
 
     api.waitForPendingUploads = function (baton) {
         var deferreds = baton.model.get('attachments')

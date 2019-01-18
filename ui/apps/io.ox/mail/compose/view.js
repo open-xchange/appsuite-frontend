@@ -25,7 +25,6 @@ define('io.ox/mail/compose/view', [
     'io.ox/core/api/snippets',
     'io.ox/core/api/account',
     'gettext!io.ox/mail',
-    'io.ox/mail/actions/attachmentEmpty',
     'io.ox/mail/actions/attachmentQuota',
     'io.ox/core/attachments/backbone',
     'io.ox/core/tk/dialogs',
@@ -35,7 +34,7 @@ define('io.ox/mail/compose/view', [
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send',
     'io.ox/mail/compose/actions/save'
-], function (extensions, Dropdown, ext, composeAPI, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, Attachments, dialogs, signatureUtil, sanitizer) {
+], function (extensions, Dropdown, ext, composeAPI, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentQuota, Attachments, dialogs, signatureUtil, sanitizer) {
 
     'use strict';
 
