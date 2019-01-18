@@ -51,6 +51,42 @@ define('io.ox/mail/compose/extensions', [
         reply_to: /*#. Must not exceed 8 characters. e.g. German would be: "Antworten an", needs to be abbreviated like "Antw. an" as space is very limited */ gt.pgettext('compose', 'Reply to')
     };
 
+    var IntermediateModel = Backbone.Model.extend({
+        initialize: function (opt) {
+            this.config = opt.config;
+            this.model = opt.model;
+            this.configFields = opt.configFields;
+            this.modelFields = opt.modelFields;
+
+            delete this.attributes.config;
+            delete this.attributes.model;
+            delete this.attributes.configFields;
+            delete this.attributes.modelFields;
+
+            this.listenTo(this.config, this.configFields.map(this.changeMapper).join(' '), this.getData);
+            this.listenTo(this.model, this.modelFields.map(this.changeMapper).join(' '), this.getData);
+            this.getData();
+            this.on('change', this.updateModels);
+        },
+        changeMapper: function (str) {
+            return 'change:' + str;
+        },
+        getData: function () {
+            this.configFields.forEach(function (attr) {
+                this.set(attr, this.config.get(attr));
+            }.bind(this));
+            this.modelFields.forEach(function (attr) {
+                this.set(attr, this.model.get(attr));
+            }.bind(this));
+        },
+        updateModels: function () {
+            _(this.changed).forEach(function (value, key) {
+                if (this.configFields.indexOf(key) >= 0) return this.config.set(key, value);
+                if (this.modelFields.indexOf(key) >= 0) return this.model.set(key, value);
+            }.bind(this));
+        }
+    });
+
     var SenderView = Backbone.DisposableView.extend({
 
         className: 'row sender',
@@ -60,7 +96,12 @@ define('io.ox/mail/compose/extensions', [
         initialize: function (options) {
             this.config = options.config;
             this.dropdown = new Dropdown({
-                model: this.config,
+                model: new IntermediateModel({
+                    model: this.model,
+                    config: this.config,
+                    configFields: ['sendDisplayName'],
+                    modelFields: ['from']
+                }),
                 label: this.getItemNode.bind(this),
                 aria: gt('From'),
                 caret: true
@@ -122,7 +163,7 @@ define('io.ox/mail/compose/extensions', [
             // draw default address first
             sortedAddresses = _(sortedAddresses).filter(function (item) {
                 if (item[1] !== defaultAddress) return true;
-                self.dropdown.option('from', [item], function () {
+                self.dropdown.option('from', item, function () {
                     return self.getItemNode(item);
                 });
                 if (sortedAddresses.length > 1) self.dropdown.divider();
@@ -130,7 +171,7 @@ define('io.ox/mail/compose/extensions', [
             });
 
             _(sortedAddresses).each(function (item) {
-                self.dropdown.option('from', [item], function () {
+                self.dropdown.option('from', item, function () {
                     return self.getItemNode(item);
                 });
             });
@@ -513,41 +554,14 @@ define('io.ox/mail/compose/extensions', [
         },
 
         optionsmenu: (function () {
-            var Model = Backbone.Model.extend({
-                configFields: ['editorMode', 'vcard'],
-                modelFields: ['priority', 'requestReadReceipt'],
-                initialize: function (opt) {
-                    this.config = opt.config;
-                    this.model = opt.model;
-
-                    delete this.attributes.config;
-                    delete this.attributes.model;
-
-                    this.listenTo(this.config, this.configFields.map(this.changeMapper).join(' '), this.getData);
-                    this.listenTo(this.model, this.modelFields.map(this.changeMapper).join(' '), this.getData);
-                    this.getData();
-                    this.on('change', this.updateModels);
-                },
-                changeMapper: function (str) {
-                    return 'change:' + str;
-                },
-                getData: function () {
-                    this.configFields.forEach(function (attr) {
-                        this.set(attr, this.config.get(attr));
-                    }.bind(this));
-                    this.modelFields.forEach(function (attr) {
-                        this.set(attr, this.model.get(attr));
-                    }.bind(this));
-                },
-                updateModels: function () {
-                    _(this.changed).forEach(function (value, key) {
-                        if (this.configFields.indexOf(key) >= 0) return this.config.set(key, value);
-                        if (this.modelFields.indexOf(key) >= 0) return this.model.set(key, value);
-                    }.bind(this));
-                }
-            });
             return function (baton) {
-                var dropdown = new Dropdown({ model: new Model({ model: baton.model, config: baton.config }), label: gt('Options'), caret: true });
+                var dropdown = new Dropdown({ model: new IntermediateModel({
+                    model: baton.model,
+                    config: baton.config,
+                    configFields: ['editorMode', 'vcard'],
+                    modelFields: ['priority', 'requestReadReceipt']
+                }), label: gt('Options'), caret: true });
+
                 ext.point(POINT + '/menuoptions').invoke('draw', dropdown.$el, baton);
 
                 dropdown.$ul.addClass('pull-right');
