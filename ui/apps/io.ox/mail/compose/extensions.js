@@ -90,7 +90,7 @@ define('io.ox/mail/compose/extensions', [
         },
 
         renderDropdown: function () {
-            var from = this.model.get('from') ? this.model.get('from')[0][1] : undefined;
+            var from = this.model.get('from') ? this.model.get('from')[1] : undefined;
             // reset
             this.dropdown.$ul.empty().css('width', 'auto');
             // render

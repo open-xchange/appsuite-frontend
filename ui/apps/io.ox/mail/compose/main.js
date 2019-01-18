@@ -88,7 +88,7 @@ define('io.ox/mail/compose/main', [
             // TODO: check senderView scenarios
             updateDisplayName();
             this.view.listenTo(config, 'change:sendDisplayName', updateDisplayName);
-            this.view.listenTo(ox, 'change:sendDisplayName', updateDisplayName);
+            this.view.listenTo(ox, 'change:customDisplayNames', updateDisplayName);
 
             // fix current value
             function updateDisplayName() {
