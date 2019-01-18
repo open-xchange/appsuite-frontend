@@ -131,9 +131,6 @@ define('io.ox/mail/compose/actions/send', [
             id: 'busy:start',
             index: 700,
             perform: function (baton) {
-                // TODO: fix
-                //baton.view.blockReuse(baton.mail.sendtype);
-
                 var win = baton.app.getWindow();
                 // start being busy
                 if (win) {
