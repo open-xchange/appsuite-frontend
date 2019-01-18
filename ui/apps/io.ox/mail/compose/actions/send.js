@@ -154,10 +154,9 @@ define('io.ox/mail/compose/actions/send', [
         //     }
         // },
         {
-            id: 'wait-for-pending-images',
+            id: 'wait-for-pending-uploads',
             index: 900,
-            // important: replaces mail.attachments[0].content
-            perform: extensions.waitForPendingImages
+            perform: extensions.waitForPendingUploads
         },
         {
             id: 'disable-manual-close',

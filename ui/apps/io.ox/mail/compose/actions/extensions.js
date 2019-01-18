@@ -30,15 +30,21 @@ define('io.ox/mail/compose/actions/extensions', [
         });
     };
 
-    api.waitForPendingImages = function () {
-        if (!window.tinymce || !window.tinymce.activeEditor || !window.tinymce.activeEditor.plugins.oximage) return $.when();
-
-        var ids = $('img[data-pending="true"]', window.tinymce.activeEditor.getElement()).map(function () {
-                return $(this).attr('data-id');
-            }),
-            deferreds = window.tinymce.activeEditor.plugins.oximage.getPendingDeferreds(ids);
-        //TODO apply within collection
-        return $.when.apply($, deferreds);
+    api.waitForPendingUploads = function (baton) {
+        var deferreds = baton.model.get('attachments')
+            .chain()
+            .map(function (model) {
+                if (model.get('uploaded') >= 1) return;
+                var def = new $.Deferred();
+                model.once('upload:complete', def.resolve);
+                return def;
+            })
+            .compact()
+            .value();
+        if (deferreds.length <= 0) return;
+        return $.when.apply($, deferreds).then(function () {
+            baton.view.syncMail();
+        });
     };
 
     api.publishMailAttachments = function (baton) {
