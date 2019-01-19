@@ -7905,10 +7905,6 @@ msgstr ""
 "Értesítés a találkozó résztvevőinek, amikor más résztvevők elfogadják vagy "
 "elutasítják azt"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "Értesítés a találkozó módosításakor"
-
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Receive notification when someone accesses the file(s)"
@@ -7943,6 +7939,18 @@ msgstr ""
 msgid ""
 "Receive notifications when a task in which you participate is created, "
 "modified or deleted"
+msgstr ""
+"Értesítés olyan feladatok létrehozásakor, módosításakor és törlésekor, "
+"amelyekben résztvevő"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Receive notifications when a task in which you participate is created, "
+#| "modified or deleted"
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
 msgstr ""
 "Értesítés olyan feladatok létrehozásakor, módosításakor és törlésekor, "
 "amelyekben résztvevő"
@@ -13807,6 +13815,9 @@ msgstr "az Ön rendszere"
 
 #~ msgid "Read"
 #~ msgstr "Olvasás"
+
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "Értesítés a találkozó módosításakor"
 
 #~ msgid "Recent activities"
 #~ msgstr "Legutóbbi tevékenységek"

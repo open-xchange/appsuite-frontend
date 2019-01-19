@@ -7885,10 +7885,6 @@ msgid ""
 msgstr ""
 "Modtag underretning som deltager, når andre deltagere takker ja eller nej"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "Modtag underretning om aftaleændringer"
-
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Receive notification when someone accesses the file(s)"
@@ -7924,6 +7920,18 @@ msgstr ""
 msgid ""
 "Receive notifications when a task in which you participate is created, "
 "modified or deleted"
+msgstr ""
+"Modtag påmindelser, når en opgave du deltager i bliver oprettet, ændret "
+"eller slettet."
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Receive notifications when a task in which you participate is created, "
+#| "modified or deleted"
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
 msgstr ""
 "Modtag påmindelser, når en opgave du deltager i bliver oprettet, ændret "
 "eller slettet."
@@ -14655,6 +14663,9 @@ msgstr "din platform"
 
 #~ msgid "Reading the details"
 #~ msgstr "Læser detaljerne"
+
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "Modtag underretning om aftaleændringer"
 
 #~ msgid "Recent activities"
 #~ msgstr "Nylige aktiviteter"

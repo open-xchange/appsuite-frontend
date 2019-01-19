@@ -7940,10 +7940,6 @@ msgstr ""
 "Saņemt paziņojumus kā mītiņa dalībniekam, kad citi dalībnieki apstiprina vai "
 "noraida dalību"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "Saņemt paziņojumus par mītiņu izmaiņām"
-
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Receive notification when someone accesses the file(s)"
@@ -7979,6 +7975,18 @@ msgstr ""
 msgid ""
 "Receive notifications when a task in which you participate is created, "
 "modified or deleted"
+msgstr ""
+"Saņemt paziņojumus par uzdevumu, kuros esat iesaistīts, izveidi, izmaiņām "
+"vai dzēšanu"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Receive notifications when a task in which you participate is created, "
+#| "modified or deleted"
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
 msgstr ""
 "Saņemt paziņojumus par uzdevumu, kuros esat iesaistīts, izveidi, izmaiņām "
 "vai dzēšanu"
@@ -17300,6 +17308,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "Rebuild Tree..."
 #~ msgstr "Pārbūvēt koku..."
+
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "Saņemt paziņojumus par mītiņu izmaiņām"
 
 #~ msgid "Received:"
 #~ msgstr "Saņemts:"

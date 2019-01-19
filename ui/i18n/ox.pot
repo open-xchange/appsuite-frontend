@@ -2856,7 +2856,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js
 #: module:io.ox/calendar
-msgid "Receive notification for appointment changes"
+msgid "Receive notifications when an appointment in which you participate is created, modified or deleted"
 msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js

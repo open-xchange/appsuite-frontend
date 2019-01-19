@@ -7948,10 +7948,6 @@ msgstr ""
 "Ontvang een e-mailkennisgeving voor u als deelnemer als andere deelnemers "
 "accepteren of weigeren"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "Ontvang een kennisgeving voor een veranderde afspraak"
-
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Receive notification when someone accesses the file(s)"
@@ -7988,6 +7984,18 @@ msgstr ""
 msgid ""
 "Receive notifications when a task in which you participate is created, "
 "modified or deleted"
+msgstr ""
+"Ontvang kennisgevingen als een taak waar u deelnemer van bent wordt "
+"aangemaakt, aangepast of wordt verwijderd"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Receive notifications when a task in which you participate is created, "
+#| "modified or deleted"
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
 msgstr ""
 "Ontvang kennisgevingen als een taak waar u deelnemer van bent wordt "
 "aangemaakt, aangepast of wordt verwijderd"
@@ -14591,6 +14599,9 @@ msgstr "uw platform"
 
 #~ msgid "Reading the details"
 #~ msgstr "Details lezen"
+
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "Ontvang een kennisgeving voor een veranderde afspraak"
 
 # Reinout: Onder voorbehoud?
 # Elma: Ik heb geen idee, geen context gevonden???

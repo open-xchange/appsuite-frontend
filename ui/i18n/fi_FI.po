@@ -7873,10 +7873,6 @@ msgstr ""
 "Vastaanota ilmoitus tapaamiseen osallistujana kun muut osallistujat "
 "hyväksyvät tai kieltäytyvät tapaamisesta"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "Vastaanota sähköposti-ilmoitus muuttuneista tapaamisista"
-
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Receive notification when someone accesses the file(s)"
@@ -7911,6 +7907,18 @@ msgstr ""
 msgid ""
 "Receive notifications when a task in which you participate is created, "
 "modified or deleted"
+msgstr ""
+"Vastaanota ilmoituksia kun tehtävää, johon osallistut, luodaan, muokataan "
+"tai poistetaan"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Receive notifications when a task in which you participate is created, "
+#| "modified or deleted"
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
 msgstr ""
 "Vastaanota ilmoituksia kun tehtävää, johon osallistut, luodaan, muokataan "
 "tai poistetaan"
@@ -14383,6 +14391,9 @@ msgstr "alustasi"
 
 #~ msgid "Reading the details"
 #~ msgstr "Yksityiskohtien katselu"
+
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "Vastaanota sähköposti-ilmoitus muuttuneista tapaamisista"
 
 #~ msgid "Recent activities"
 #~ msgstr "Äskettäiset tapahtumat"

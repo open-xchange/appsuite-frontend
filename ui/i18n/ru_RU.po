@@ -7918,10 +7918,6 @@ msgstr ""
 "Уведомлять как участника встречи о принятии или отказе от приглашения "
 "другими пользователями"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "Уведомлять об изменениях встречи"
-
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Receive notification when someone accesses the file(s)"
@@ -7954,6 +7950,18 @@ msgstr ""
 msgid ""
 "Receive notifications when a task in which you participate is created, "
 "modified or deleted"
+msgstr ""
+"Получать уведомления о создании, изменении и удалении задач, в которых вы "
+"участвуете"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Receive notifications when a task in which you participate is created, "
+#| "modified or deleted"
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
 msgstr ""
 "Получать уведомления о создании, изменении и удалении задач, в которых вы "
 "участвуете"
@@ -14761,6 +14769,9 @@ msgstr "вашей платформы"
 
 #~ msgid "Reading the details"
 #~ msgstr "Подробности"
+
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "Уведомлять об изменениях встречи"
 
 #~ msgid "Recent activities"
 #~ msgstr "Последние действия"

@@ -7781,10 +7781,6 @@ msgid ""
 "accept or decline"
 msgstr "當其他參與者接受或拒絕時，作為參與者接收通知"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "接收約會變更的電子郵件通知"
-
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Receive notification when someone accesses the file(s)"
@@ -7816,6 +7812,16 @@ msgstr "當您參與的任務當中的參與者接受或拒絕時接收通知"
 msgid ""
 "Receive notifications when a task in which you participate is created, "
 "modified or deleted"
+msgstr "當您參與的任務建立、修改或刪除時接收通知"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Receive notifications when a task in which you participate is created, "
+#| "modified or deleted"
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
 msgstr "當您參與的任務建立、修改或刪除時接收通知"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -15822,6 +15828,9 @@ msgstr "您的平台"
 
 #~ msgid "Reading the details"
 #~ msgstr "閱讀詳情"
+
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "接收約會變更的電子郵件通知"
 
 #~ msgid "Recent activities"
 #~ msgstr "最近活動"

@@ -7926,10 +7926,6 @@ msgstr ""
 "Recibir notificación como participante de una cita cuando otro participante "
 "la acepte o la rechace "
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "Recibir notificación por cambios en la cita"
-
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Receive notification when someone accesses the file(s)"
@@ -7967,6 +7963,18 @@ msgstr ""
 msgid ""
 "Receive notifications when a task in which you participate is created, "
 "modified or deleted"
+msgstr ""
+"Recibir notificaciones cuando una tarea en la que participa se cree, "
+"modifique o se elimine."
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Receive notifications when a task in which you participate is created, "
+#| "modified or deleted"
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
 msgstr ""
 "Recibir notificaciones cuando una tarea en la que participa se cree, "
 "modifique o se elimine."
@@ -19502,6 +19510,9 @@ msgstr "su plataforma"
 
 #~ msgid "Rebuild Tree..."
 #~ msgstr "Reconstruir árbol..."
+
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "Recibir notificación por cambios en la cita"
 
 #~ msgid "Received:"
 #~ msgstr "Recibido:"

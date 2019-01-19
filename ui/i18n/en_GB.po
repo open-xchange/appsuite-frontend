@@ -7890,10 +7890,6 @@ msgstr ""
 "Receive notification as appointment participant when other participants "
 "accept or decline"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "Receive notification for appointment changes"
-
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Receive notification when someone accesses the file(s)"
@@ -7929,6 +7925,18 @@ msgstr ""
 msgid ""
 "Receive notifications when a task in which you participate is created, "
 "modified or deleted"
+msgstr ""
+"Receive notifications when a task in which you participate is created, "
+"modified or deleted"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Receive notifications when a task in which you participate is created, "
+#| "modified or deleted"
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
 msgstr ""
 "Receive notifications when a task in which you participate is created, "
 "modified or deleted"
@@ -14671,6 +14679,9 @@ msgstr "your platform"
 
 #~ msgid "Reading the details"
 #~ msgstr "Reading the details"
+
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "Receive notification for appointment changes"
 
 #~ msgid "Recent activities"
 #~ msgstr "Recent activities"
