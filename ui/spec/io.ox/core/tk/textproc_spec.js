@@ -3,7 +3,7 @@ define([
 ], function (textproc) {
     'use strict';
 
-    describe.only('Text processing toolkit', function () {
+    describe('Text processing toolkit', function () {
         describe('htmltotext', function () {
             describe('should handle links', function () {
                 it('should convert links', function () {
