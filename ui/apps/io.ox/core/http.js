@@ -160,12 +160,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '606': 'image1_url',
                 '607': 'sort_name',
                 '608': 'useCount',
-                '616': 'yomiFirstName',
-                '617': 'yomiLastName',
-                '618': 'yomiCompany',
-                '619': 'addressHome',
-                '620': 'addressBusiness',
-                '621': 'addressOther'
+                '610': 'yomiFirstName',
+                '611': 'yomiLastName',
+                '612': 'yomiCompany'
             },
             'calendar': {
                 '200': 'title',
