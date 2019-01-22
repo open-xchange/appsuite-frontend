@@ -1,14 +1,12 @@
 ---
 title: Upsell
-description: End-user has a set of so-called capabilities. UI, however, offers functionality beyond that limited set for promotion purposes.
-source: http://oxpedia.org/wiki/index.php?title=AppSuite:Upsell
 ---
 
-This article is mainly for UI developers and introduces the concept of upsell from a technical point of view. 
-In short: End-user has a set of so-called capabilities. 
-UI, however, offers functionality beyond that limited set for promotion purposes. 
+This article is mainly for UI developers and introduces the concept of upsell from a technical point of view.
+In short: End-user has a set of so-called capabilities.
+UI, however, offers functionality beyond that limited set for promotion purposes.
 Actions, e.g. inline links, that require missing capabilities trigger an **in-app** upsell. This process leads to a trial period or a new subscription.
-Technical challenge for the UI developer is to check what the end-user has, what can be shown beyond that, and how to handle upsell. 
+Technical challenge for the UI developer is to check what the end-user has, what can be shown beyond that, and how to handle upsell.
 It is also possible for hosting companies to easily integrate their own online shop into OX Upsell, since the internal mechanisms are loosely coupled via events.
 
 # Enable upsell
@@ -31,15 +29,15 @@ For simple demo purposes, you can enable an internal upsell configuration by app
 
 # Custom upsell links
 
-Since other upsell triggers than the usual links would require custom development of the UI, the OX App Suite provides several upsell triggers which can be configured via settings. 
-Those triggers will appear, when the expression of required capabilities is not satisfied and the required set of upsell triggers is satisfied. 
+Since other upsell triggers than the usual links would require custom development of the UI, the OX App Suite provides several upsell triggers which can be configured via settings.
+Those triggers will appear, when the expression of required capabilities is not satisfied and the required set of upsell triggers is satisfied.
 If you configure the upsell settings, the custom upsell triggers will be enabled by default but you can disable them if you want to.
 
 ## Example
 
-To clearify, when triggers are shown or not, we proceed with an example: A hoster can provide a custom upsell trigger in the secondary toolbar (next to the reload icon). 
-This upsell trigger is inteded to sell a premium account to a user and has the default requirement of active_sync OR caldav OR carddav. 
-That means, if one of those capabilities is not set for a user and the upsell is activated for active_sync AND caldav AND carddav the upsell trigger will be shown. 
+To clearify, when triggers are shown or not, we proceed with an example: A hoster can provide a custom upsell trigger in the secondary toolbar (next to the reload icon).
+This upsell trigger is inteded to sell a premium account to a user and has the default requirement of active_sync OR caldav OR carddav.
+That means, if one of those capabilities is not set for a user and the upsell is activated for active_sync AND caldav AND carddav the upsell trigger will be shown.
 You can enable upsell for those capabilities with
 
 ```javascript
@@ -87,8 +85,8 @@ to a **.properties** file.
 
 ## Customize strings
 
-Some of the custom upsell triggers use have a title (or other strings) which a hoster could customize. 
-It is important, that several translations are provided. 
+Some of the custom upsell triggers use have a title (or other strings) which a hoster could customize.
+It is important, that several translations are provided.
 You can provide your own texts via
 
 ```
@@ -103,10 +101,10 @@ ox.language
 
 ## Customize required capabilities
 
-If you want certain upsell triggers to appear on different capabilities, you can configure this inside a .properties file. 
-Therefore, you have to configure the requires field of the appropriate trigger. 
-This field expects a logical expression of capabilities. 
-The following example requires eas and caldav or not carddav. 
+If you want certain upsell triggers to appear on different capabilities, you can configure this inside a .properties file.
+Therefore, you have to configure the requires field of the appropriate trigger.
+This field expects a logical expression of capabilities.
+The following example requires eas and caldav or not carddav.
 If the actual capabilities does not satisfy the expression and the upsell capabilites satisfy this expression, the upsell trigger will be drawn.
 
 ```
@@ -135,8 +133,8 @@ This sections lists the custom triggers and how they can be configured.
 
 # Upsell Wizard
 
-Customers usually want to offer context-sensitive content in an IFRAME if the upsell is triggered. 
-Therefore, OX App Suite comes with an integrated but optional plugin that takes care of this. 
+Customers usually want to offer context-sensitive content in an IFRAME if the upsell is triggered.
+Therefore, OX App Suite comes with an integrated but optional plugin that takes care of this.
 Just enable `plugins/upsell/simple-wizard` by setting the capability simple-wizard server-side (or by adding it to the URL ...**&cap=simple-wizard** for testing/development purposes).
 
 This plugin registers for the event "_upsell:requires-upsell_", opens a modal popup, and loads a custom URL in an embedded IFRAME.
@@ -167,8 +165,8 @@ plugins/upsell/simple-wizard//closeButton=true
 
 ## Custom URL variables
 
-The plugin offers a set of variables that help providing context-sensitive content. 
-$missing is probably the most prominent one. 
+The plugin offers a set of variables that help providing context-sensitive content.
+$missing is probably the most prominent one.
 Other variables help identifying the user. An example:
 
 ```
@@ -198,10 +196,10 @@ While experimenting or developing, you can use the following helpful functions:
 // get plugin (this must be properly loaded, otherwise you get a runtime error)
 var wizard = require('plugins/upsell/simple-wizard/register');
 
-// if you have no chance to enabled this plugin server-side, use the following approach 
-   // but don't use this in production plugins, it's just a hack for console: 
-   // if you don't know the difference please take a look at 
-   // http://requirejs.org/docs/errors.html#notloaded 
+// if you have no chance to enabled this plugin server-side, use the following approach
+   // but don't use this in production plugins, it's just a hack for console:
+   // if you don't know the difference please take a look at
+   // http://requirejs.org/docs/errors.html#notloaded
 var wizard; require(['plugins/upsell/simple-wizard/register'], function (w) { wizard = w; });
 
 // get variables (optional: options from upsell:require-upgrade event)
@@ -242,7 +240,7 @@ Some examples for customizations in UI plugins or in console:
 
 ```javascript
 // get plugin (this muse be properly loaded, otherwise you get a runtime error)
-var wizard = require('plugins/upsell/simple-wizard/register'); 
+var wizard = require('plugins/upsell/simple-wizard/register');
 
 // extend IFRAME constructor (see http://underscorejs.org/#compose)
 var custom = function (iframe) {
@@ -259,7 +257,7 @@ ox.on('upsell:simple-wizard:show:before', function (e, popup) {
 
 ## Close wizard
 
-The upsell wizard can easily be closed via javascript or by redirecting the IFRAME to a prepared HTML page. 
+The upsell wizard can easily be closed via javascript or by redirecting the IFRAME to a prepared HTML page.
 In order to see this in action, run the following code (step by step):
 
 ```javascript
@@ -274,17 +272,17 @@ wizard.setSrc('apps/plugins/upsell/simple-wizard/close.html');
 ```
 
 Custom backend systems that run [on a different domain cannot use javascript](http://en.wikipedia.org/wiki/Cross-site_scripting) to close the wizard.
-However, such systems can redirect to close.html. 
+However, such systems can redirect to close.html.
 Since this page is part of the UI and therefore located on the same domain, it is allowed to call the wizard's close function.
 
 # Custom development
 
-This section documents some of the inner workings of the upsell layer. 
+This section documents some of the inner workings of the upsell layer.
 It should provide some useful insights and hopefully helps at implementing custom upsell solutions.
 
 # Events
 
-Whenever the user starts an app or clicks on an inline-action, a capability-check is performed. 
+Whenever the user starts an app or clicks on an inline-action, a capability-check is performed.
 For example, all inline actions have native support for such checks:
 
 ```javascript
@@ -318,9 +316,9 @@ ox.trigger('upsell:requires-upgrade');
 
 ## Capabilities and Upsell triggers
 
-There are lots of different capabilities. 
-They are defined on the server-side and basically they are just strings. 
-Let's keep it simple and understand them as either services (e.g. mobility), specific functionalities (e.g. multiple_mail_accounts) or applications (e.g. calendar). 
+There are lots of different capabilities.
+They are defined on the server-side and basically they are just strings.
+Let's keep it simple and understand them as either services (e.g. mobility), specific functionalities (e.g. multiple_mail_accounts) or applications (e.g. calendar).
 Some obvious examples:
 
 | Capability | Description                 | Upsell trigger (if capability is missing)                                                                                                                |
@@ -341,14 +339,14 @@ _(ox.serverConfig.capabilities).pluck('id').sort();
 
 Free-mail users might just have **webmail** and **contacts**.
 If **infostore** is enabled for upsell, end-users will see the link to store mail attachments.
-But since this capability is missing, the event "upsell:requires-upgrade" is triggered which starts the upsell process. 
+But since this capability is missing, the event "upsell:requires-upgrade" is triggered which starts the upsell process.
 Upon successful completion this process should unlock the capability **infostore** for the end-user.
 
 The advantage of using rather atomic capabilities as the foundation for upsell is that developers don't have to consider and implement sales programs or marketing matrices in UI code.
 
 ## Example dialog
 
-Whenever the event "_upsell:requires-upgrade_" is triggered there should be some response for the end-user. 
+Whenever the event "_upsell:requires-upgrade_" is triggered there should be some response for the end-user.
 Usually an upsell dialog should open. This can be implemented as follows:
 
 ```javascript
@@ -403,7 +401,7 @@ The second event "**upsell:upgrade**" can be understood as the final imperative 
 
 ## Example portal widget
 
-Besides waiting for the user to click on such links, it's always a good idea to offer explicit controls to trigger an upsell. 
+Besides waiting for the user to click on such links, it's always a good idea to offer explicit controls to trigger an upsell.
 One option is creating a portal widget that advertises a premium subscription:
 
 ```javascript
@@ -463,31 +461,31 @@ If upsell is **not** enabled and the end-user lacks specific capabilities, the a
 If upsell is enabled by the upper configuration, inline-actions are shown and trigger the upsell event "_upsell:requires-upgrade_" if clicked (but do not execute the action itself).
 
 ```javascript
-/* 
- * if you want to create your own controls, you can use the following helpers 
+/*
+ * if you want to create your own controls, you can use the following helpers
  */
 var upsell = require('io.ox/core/upsell');
 
-// check capabilities (space-separated) 
+// check capabilities (space-separated)
 upsell.has('portal webmail');
 
-// get missing capabilities (would return "calendar" in demo mode) 
+// get missing capabilities (would return "calendar" in demo mode)
 upsell.missing(['portal webmail', 'contacts', 'calendar']);
 
-/* checks if upsell is enabled for a set of capabilities 
- * true if at least one set matches 
+/* checks if upsell is enabled for a set of capabilities
+ * true if at least one set matches
  */
 upsell.enabled(['portal webmail', 'webmail calendar']);
 
-/* convenience function: "visible" 
- * checks if something should be visible depending on required capabilities 
- * true if any item matches requires capabilities 
- * true if any item does not match its requirements but is enabled for upsell 
- * this function is used for any inline link, for example, to decide whether or not showing it 
+/* convenience function: "visible"
+ * checks if something should be visible depending on required capabilities
+ * true if any item matches requires capabilities
+ * true if any item does not match its requirements but is enabled for upsell
+ * this function is used for any inline link, for example, to decide whether or not showing it
  */
 upsell.visible(['portal webmail', 'contacts', 'calendar']);
 
-// likewise if neither capability set nor enabled for upsell, we get a false 
+// likewise if neither capability set nor enabled for upsell, we get a false
 upsell.visible(['foo']);
 
 // in case something weird happens (usually bad configuration) debug() helps
