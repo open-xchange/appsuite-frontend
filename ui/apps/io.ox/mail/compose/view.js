@@ -299,6 +299,113 @@ define('io.ox/mail/compose/view', [
     // disable attachmentList by default
     ext.point(POINT + '/attachments').disable('attachmentList');
 
+    // via ext.cascade
+    ext.point(POINT + '/editor/load').extend({
+        id: 'options',
+        index: 100,
+        perform: function (baton) {
+            baton.options = {
+                useFixedWithFont: settings.get('useFixedWithFont'),
+                app: this,
+                config: baton.config,
+                view: baton.view,
+                model:  baton.model,
+                oxContext: { view: baton.view }
+            };
+        }
+    }, {
+        id: 'image-loader',
+        index: 200,
+        perform: function (baton) {
+            if (this.config.get('editorMode') !== 'html') return;
+            baton.options.imageLoader = {
+                upload: function (file) {
+                    var m = new Attachments.Model({ filename: file.name, uploaded: 0, contentDisposition: 'INLINE' }),
+                        def = composeAPI.space.attachments.add(self.model.get('id'), { file: file }, 'inline').progress(function (e) {
+                            m.set('uploaded', e.loaded / e.total);
+                        }).then(function success(data) {
+                            data = _({ group: 'mail', space: self.model.get('id') }).extend(data);
+                            m.set(data);
+                            m.trigger('upload:complete');
+                            return data;
+                        }, function fail() {
+                            m.destroy();
+                        });
+                    self.model.attachFiles([m]);
+                    return def;
+                },
+                getUrl: function (response) {
+                    return mailAPI.getUrl(_.extend({ space: self.model.get('id') }, response), 'view');
+                }
+            };
+        }
+    }, {
+        id: 'editor',
+        index: 300,
+        perform: function (baton) {
+            var def = $.Deferred();
+            ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + baton.config.get('editorMode')).then(function (Editor) {
+                new Editor(baton.view.editorContainer, baton.options).done(function (editor) {
+                    baton.editor = editor;
+                    def.resolve();
+                });
+            }, function () {
+                // something went wrong
+                def.reject({ error: gt("Couldn't load editor") });
+            });
+            return def;
+        }
+    }, {
+        id: 'pick',
+        index: 400,
+        perform: function (baton) {
+            return baton.editor;
+        }
+    });
+
+    ext.point(POINT + '/editor/use').extend({
+        id: 'register',
+        index: 100,
+        perform: function (baton) {
+            var view = baton.view;
+            if (view.editor) view.stopListening(view.editor);
+            view.listenTo(baton.editor, 'change', view.syncMail);
+        }
+    }, {
+        id: 'content',
+        index: 200,
+        perform: function (baton) {
+            var model = baton.model,
+                editor = baton.editor,
+                htmlToText = model.get('contentType') === 'text/html' && editor.getMode() === 'text',
+                setMethod = htmlToText ? 'setPlainText' : 'setContent';
+            return $.when(editor[setMethod](baton.content));
+        }
+    }, {
+        id: 'model',
+        index: 300,
+        perform: function (baton) {
+            baton.model.set({
+                content: baton.editor.getContent(),
+                contentType: baton.editor.content_type
+            });
+        }
+    }, {
+        id: 'show',
+        index: 400,
+        perform: function (baton) {
+            var editor = baton.editor;
+            editor.show();
+            baton.view.editor = editor;
+        }
+    }, {
+        id: 'pick',
+        index: 400,
+        perform: function (baton) {
+            return baton.editor;
+        }
+    });
+
     var MailComposeView = Backbone.View.extend({
 
         className: 'io-ox-mail-compose container f6-target',
@@ -478,7 +585,9 @@ define('io.ox/mail/compose/view', [
             this.dirty(false);
             // clean up editors
             for (var id in this.editorHash) {
-                this.editorHash[id].destroy();
+                this.editorHash[id].then(function (editor) {
+                    editor.destroy();
+                });
                 delete this.editorHash[id];
             }
         },
@@ -617,75 +726,18 @@ define('io.ox/mail/compose/view', [
         },
 
         loadEditor: function (content) {
-            if (this.editorHash[this.config.get('editorMode')]) {
-                return this.reuseEditor(content);
-            }
-            var self = this,
-                def = $.Deferred(),
-                options = {};
-
-            options.useFixedWithFont = settings.get('useFixedWithFont');
-            options.app = this.app;
-            options.config = this.config;
-            options.view = this;
-            options.model = this.model;
-            options.oxContext = { view: this };
-            if (this.config.get('editorMode') === 'html') {
-                options.imageLoader = {
-                    upload: function (file) {
-                        var m = new Attachments.Model({ filename: file.name, uploaded: 0, contentDisposition: 'INLINE' }),
-                            def = composeAPI.space.attachments.add(self.model.get('id'), { file: file }, 'inline').progress(function (e) {
-                                m.set('uploaded', e.loaded / e.total);
-                            }).then(function success(data) {
-                                data = _({ group: 'mail', space: self.model.get('id') }).extend(data);
-                                m.set(data);
-                                m.trigger('upload:complete');
-                                return data;
-                            }, function fail() {
-                                m.destroy();
-                            });
-                        self.model.attachFiles([m]);
-                        return def;
-                    },
-                    getUrl: function (response) {
-                        return mailAPI.getUrl(_.extend({ space: self.model.get('id') }, response), 'view');
-                    }
-                };
-            }
-
-            ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + this.config.get('editorMode')).then(function (Editor) {
-                new Editor(self.editorContainer, options).done(function (editor) {
-                    def.resolve(editor);
-                });
-            }, function () {
-                // something went wrong
-                def.reject({ error: gt("Couldn't load editor") });
-            });
+            var mode = this.config.get('editorMode'),
+                baton = new ext.Baton({ view: this, model: this.model, config: this.config, content: content }),
+                def = this.editorHash[mode] = this.editorHash[mode] || ext.point(POINT + '/editor/load').cascade(this.app, baton);
+            // load or reuse editor
             return def.then(function (editor) {
-                self.editorHash[self.config.get('editorMode')] = editor;
-                return self.reuseEditor(content);
-            });
+                baton.editor = editor;
+                // returns editor
+                return ext.point(POINT + '/editor/use').cascade(this.app, baton);
+            }.bind(this));
         },
 
-        reuseEditor: function (content) {
-            var self = this;
-            if (this.editor) this.stopListening(this.editor);
-            this.editor = this.editorHash[this.config.get('editorMode')];
-            this.listenTo(this.editor, 'change', this.syncMail);
-
-            // set plaintext if switching from html to text. Otherwise content should already match the setContent method
-            var htmlToText = this.model.get('contentType') === 'text/html' && this.editor.getMode() === 'text',
-                setMethod = htmlToText ? 'setPlainText' : 'setContent';
-            return $.when(this.editor[setMethod](content)).then(function () {
-                self.model.set({
-                    content: self.editor.getContent(),
-                    contentType: self.editor.content_type
-                });
-                self.editor.show();
-                return self.editor;
-            });
-        },
-
+        // metrics
         getEditor: function () {
             var def = $.Deferred();
             if (this.editor) {
