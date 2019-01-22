@@ -43,6 +43,7 @@ define('io.ox/mail/compose/actions/send', [
             id: 'fix-content-type',
             index: 200,
             perform: function (baton) {
+                // TODO is this still needed?
                 // force correct content-type
                 if (baton.model.get('contentType') === 'text/plain' && baton.config.get('editorMode') === 'html') {
                     baton.model.set('contentType', 'text/html', { silent: true });
