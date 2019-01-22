@@ -1009,6 +1009,24 @@ msgstr ""
 
 #: apps/io.ox/backbone/views/modal.js
 #: module:io.ox/core
+#: apps/io.ox/core/pim/actions.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js
+#: module:io.ox/files
+#: apps/io.ox/files/contextmenu.js
+#: apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js
+#: module:io.ox/mail
+#: apps/io.ox/notes/toolbar.js
+#: module:io.ox/notes
+#: apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
+msgid "Download"
+msgstr ""
+
+#: apps/io.ox/backbone/views/modal.js
+#: module:io.ox/core
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
@@ -1027,6 +1045,7 @@ msgstr ""
 #: apps/io.ox/contacts/edit/main.js
 #: apps/io.ox/contacts/main.js
 #: apps/io.ox/core/desktop.js
+#: apps/io.ox/core/download.js
 #: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
@@ -5215,6 +5234,21 @@ msgstr ""
 msgid "Failed to start application. Maybe you have connection problems. Please try again."
 msgstr ""
 
+#: apps/io.ox/core/download.js
+#: module:io.ox/core
+msgid "Download infected file"
+msgstr ""
+
+#: apps/io.ox/core/download.js
+#: module:io.ox/core
+msgid "Download unscanned file"
+msgstr ""
+
+#: apps/io.ox/core/download.js
+#: module:io.ox/core
+msgid "Anti-Virus Warning"
+msgstr ""
+
 #: apps/io.ox/core/emoji/view.js
 #: module:io.ox/mail
 msgid "Reset this list"
@@ -6589,23 +6623,6 @@ msgstr ""
 #: apps/io.ox/core/pim/actions.js
 #: module:io.ox/core
 msgid "Attachments have been saved!"
-msgstr ""
-
-#: apps/io.ox/core/pim/actions.js
-#: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js
-#: apps/io.ox/files/actions.js
-#: module:io.ox/files
-#: apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorite/toolbar.js
-#: apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js
-#: module:io.ox/mail
-#: apps/io.ox/notes/toolbar.js
-#: module:io.ox/notes
-#: apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
-msgid "Download"
 msgstr ""
 
 #. %1$s is usually "Drive" (product name; might be customized)
