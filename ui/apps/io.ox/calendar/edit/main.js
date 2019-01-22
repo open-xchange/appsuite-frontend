@@ -113,7 +113,9 @@ define('io.ox/calendar/edit/main', [
                             app: self,
                             callbacks: {
                                 extendDescription: app.extendDescription
-                            }
+                            },
+                            // restore meta data for used groups if given
+                            usedGroups: opt.usedGroups || []
                         });
 
                         self.model.on({
@@ -325,7 +327,11 @@ define('io.ox/calendar/edit/main', [
                                 if (self.view.options.mode === 'create') {
                                     api.create(
                                         self.model,
-                                        _.extend(util.getCurrentRangeOptions(), { attachments: self.attachmentsFormData || [], sendInternalNotifications: sendNotifications, checkConflicts: false })
+                                        _.extend(util.getCurrentRangeOptions(), {
+                                            usedGroups: self.model._attendees.usedGroups,
+                                            attachments: self.attachmentsFormData || [],
+                                            sendInternalNotifications: sendNotifications,
+                                            checkConflicts: false })
                                     ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 } else {
                                     api.update(
@@ -334,7 +340,8 @@ define('io.ox/calendar/edit/main', [
                                             attachments: self.attachmentsFormData || [],
                                             sendInternalNotifications: sendNotifications,
                                             checkConflicts: false,
-                                            recurrenceRange: self.view.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined
+                                            recurrenceRange: self.view.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
+                                            usedGroups: self.model._attendees.usedGroups
                                         })
                                     ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 }
@@ -397,6 +404,7 @@ define('io.ox/calendar/edit/main', [
                         module: 'io.ox/calendar/edit',
                         point:  {
                             data: this.model.attributes,
+                            meta: { usedGroups: this.model._attendees.usedGroups },
                             // save this so the dirty check works correctly after the restore
                             initialModelData: this.initialModelData
                         }
@@ -410,7 +418,8 @@ define('io.ox/calendar/edit/main', [
                 var data = point.data || point;
                 this.edit(data, {
                     mode: _.isUndefined(data.id) ? 'create' : 'edit',
-                    initialModelData: point.initialModelData
+                    initialModelData: point.initialModelData,
+                    usedGroups: point.meta ? point.meta.usedGroups : []
                 });
                 return $.when();
             },

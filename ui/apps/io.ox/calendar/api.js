@@ -341,6 +341,12 @@ define('io.ox/calendar/api', [
                     params.rangeStart = options.rangeStart;
                     params.rangeEnd = options.rangeEnd;
                 }
+
+                // backend uses this to calculate the usecount of groups (frontend resolves them that's why we tell the backend manually which groups were used)
+                if (options.usedGroups) {
+                    params.usedGroups = _(options.usedGroups).isArray() ? options.usedGroups.join(',') : options.usedGroups;
+                }
+
                 if (options.attachments && options.attachments.length) {
                     var formData = new FormData();
 
@@ -404,6 +410,11 @@ define('io.ox/calendar/api', [
                     params.expand = true;
                     params.rangeStart = options.rangeStart;
                     params.rangeEnd = options.rangeEnd;
+                }
+
+                // backend uses this to calculate the usecount of groups (frontend resolves them that's why we tell the backend manually which groups were used)
+                if (options.usedGroups) {
+                    params.usedGroups = _(options.usedGroups).isArray() ? options.usedGroups.join(',') : options.usedGroups;
                 }
 
                 var data = {
