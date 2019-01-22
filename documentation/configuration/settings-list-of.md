@@ -1,5 +1,5 @@
 ---
-title: UI Configuration
+title: Settings list
 ---
 # Introduction
 This page shows a list of useful config option to customize App Suite UI. We recommend to read the [main article](../configuration.html) on how to configure App Suite UI first.
@@ -239,32 +239,12 @@ Specifies behavior when selecting items in mail listview. Default: `normal` ('no
 Please read http://oxpedia.org/wiki/index.php?title=AppSuite:Configuring_portal_plugins for detailed
 information and expamples how to customize the App Suite UI Portal and pre configure widgets for users.
 
-## Sets
-
-<config>io.ox/portal//widgetSet</config>
-Defines a widget set that is used as part of the settings path ('widgets/deleted' + widgetSet )
-
-<config>io.ox/portal//widgets/user</config>
-All widgets added/created by the user
-
-<config>io.ox/portal//widgets/deleted\[widgetSet\]/gen_\[generation\]</config>
-List of deleted widgets.
-
-<config>io.ox/portal//widgets/eager\[widgetSet\]/gen_\[generation\]</config>
-List of eager widgets.
-
-<config>io.ox/portal//widgets/protected\[widgetSet\]</config>
-List of protected widgets that are not disableable and not deletable.
-
 ## First Start Widget
 
 <config>io.ox/portal//settings/getStartedLink=`<string>`</config>
 Target of 'get started' labled link in 'getting started' widget
 
 ## Widget properties
-
-<config>io.ox/portal//widgets/defaults</config>
-default properties
 
 <config>io.ox/portal//widgets/user/\[widgetid\]/color=`<string>`</config>
 Color of title and highligting within widget preview/content
@@ -471,6 +451,10 @@ Sets how many mails will loaded on each paginate call. Default `200`
 <config>io.ox/mail//prefetch/count=`<bool>`</config>
 Prefetch N mails on Mail App startup. Default `5`
 
+<config>io.ox/mail//features/prefetchOnBoot='<bool>'</config>
+Prefetch the first chunk of mail data (action=all) already on App Suite boot.
+Only disable this if you want to customize mail columns later on. Default `true`
+
 <config>io.ox/mail//prefetch/next=`<bool>`</config>
 Prefetch next mail in line during list traversing via cursor or selection. Default `true`
 
@@ -609,15 +593,14 @@ Slideshow / Autoplay mode pause in seconds. Default `5`
 <config>io.ox/files//audioEnabled=`<bool>`</config>
 Play audio files in viewer. Default `true`
 
-<config>io.ox/files//videoEnabled=`<string>`</config>
+<config>io.ox/files//videoEnabled=`<bool>`</config>
 Play video files in viewer. Default `true`.
 
 <config>io.ox/files//autoplayLoopMode=`<string>`</config>
-Autoplaymode of the viewer. Default `loopEndlessly`
+Autoplaymode of the viewer. `loopEndlessly` or `loopOnlyOnce`. Default `loopEndlessly`
 
 <config>io.ox/files//features/comments=`<bool>`</config>
 Allow comments when uploaded a new version of a file. Default `true`
-
 
 # Tasks
 
@@ -629,16 +612,6 @@ Receive notifications when a participant accepted or declined a task in which yo
 
 <config>io.ox/tasks//notifyNewModifiedDeleted=`<bool>`</config>
 Receive notifications when a task in which you participate is created, modified or deleted. Default `false`
-
-## Special folderview settings
-
-<config>io.ox/mail//folderview/blacklist=`<string>`</config>
-<config>io.ox/contacts//folderview/blacklist=`<string>`</config>
-<config>io.ox/calendar//folderview/blacklist=`<string>`</config>
-<config>io.ox/tasks//folderview/blacklist=`<string>`</config>
-<config>io.ox/files//folderview/blacklist=`<string>`</config>
-
-Defines a blacklist of folders which are hidden in the folder tree for each App. Array of IDs.
 
 # Portal: OX Drive Clients Widget
 
