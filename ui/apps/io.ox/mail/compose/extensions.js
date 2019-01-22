@@ -99,7 +99,7 @@ define('io.ox/mail/compose/extensions', [
                 model: new IntermediateModel({
                     model: this.model,
                     config: this.config,
-                    configFields: ['sendDisplayName'],
+                    configFields: ['sendDisplayName', 'editorMode'],
                     modelFields: ['from']
                 }),
                 label: this.getItemNode.bind(this),

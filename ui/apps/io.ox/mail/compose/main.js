@@ -108,13 +108,13 @@ define('io.ox/mail/compose/main', [
         perform: function () {
             // if draft, force editor in the same mode as the draft
             if (this.model.get('meta').editFor) {
-                this.config.set('editorMode', this.model.get('contentType') === 'text/plain' ? 'text' : 'html', { silent: true });
+                this.config.set('editorMode', this.model.get('contentType') === 'text/plain' ? 'text' : 'html');
             }
 
             // map 'alternative'
             var isAlternative = this.config.get('preferredEditorMode') === 'alternative' || this.config.get('editorMode') === 'alternative';
             if (!isAlternative) return;
-            this.config.set('editorMode', this.model.get('contentType') === 'text/plain' ? 'text' : 'html', { silent: true });
+            this.config.set('editorMode', this.model.get('contentType') === 'text/plain' ? 'text' : 'html');
         }
     }, {
         id: 'auto-bcc',
@@ -164,7 +164,6 @@ define('io.ox/mail/compose/main', [
 
     // multi instance pattern
     function createInstance() {
-
         // application object
         var app = ox.ui.createApp({
                 name: 'io.ox/mail/compose',
