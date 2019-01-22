@@ -364,8 +364,9 @@ define('io.ox/mail/compose/model', [
             }
             return function (data) {
                 var meta = data.meta,
-                    original = meta.replyFor || meta.forwardsFor || meta.editFor;
+                    original = meta.replyFor || meta.forwardsFor;
                 original = [].concat(original)[0];
+                if (!original) return data;
                 return mailAPI.get({ id: original.originalId, folder: original.originalFolderId }).then(function (mail) {
                     var header = [];
 
