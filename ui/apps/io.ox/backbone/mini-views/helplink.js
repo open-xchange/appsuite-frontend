@@ -11,7 +11,7 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views/help', [
+define('io.ox/backbone/mini-views/helplink', [
     'settings!io.ox/core',
     'gettext!io.ox/core'
 ], function (settings, gt) {
@@ -29,7 +29,7 @@ define('io.ox/backbone/mini-views/help', [
     //  iconClass       {string} These classes are added to the i-tag
     //  content         {object or string} The object to display. If unset, the help icon will be displayed
 
-    var HelpView = Backbone.View.extend({
+    var HelpLinkView = Backbone.View.extend({
 
         tagName: 'a',
 
@@ -99,5 +99,5 @@ define('io.ox/backbone/mini-views/help', [
         }
     });
 
-    return HelpView;
+    return HelpLinkView;
 });

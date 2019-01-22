@@ -273,7 +273,6 @@ define('io.ox/core/a11y', [], function () {
         var index = $(document.activeElement).is('iframe') ? items.index($(document.activeElement).contents()[0].activeElement) : items.index(document.activeElement),
             catchFirst = e.shiftKey && index === 0,
             catchLast = index === items.length - 1;
-        console.log(items, index);
         // only jump in if first or last item; radio groups are a problem otherwise
         if (!catchFirst && !catchLast) return;
         e.preventDefault();

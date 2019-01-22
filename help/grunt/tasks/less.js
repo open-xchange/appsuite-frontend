@@ -8,7 +8,7 @@ module.exports = function (grunt) {
             files: [
                 {
                     src: [
-                        'help/compile.less'
+                        'help/inline_help.less'
                     ],
                     expand: true,
                     rename: function (dest) { return dest; },

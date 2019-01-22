@@ -1,13 +1,15 @@
+@import 'node_modules/bootstrap/less/bootstrap.less';
 html.embedded {
-    overflow: hidden;
     margin: 0;
     padding: 0;
-    body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
+    img {
+        max-width: 100%;
     }
-    & .navbar {
+    .navbar {
+        .collapse{
+            padding-left: 0px;
+            padding-right: 0px;
+        }
         min-height: initial;
         margin-top: 16px;
         &, & > .navbar-header , & > .navbar-collapse {
@@ -17,8 +19,8 @@ html.embedded {
             border-top: 0px;
             margin-bottom: 0px;
             a, a:visited {
-                padding: 8px;
                 color: #3c61aa;
+                padding: 8px;
             }
             a:hover, a:focus {
                 color: #284171;
@@ -27,11 +29,11 @@ html.embedded {
                 outline: 0;
             }
         }
-        & .nav > li > a:first-child {
+        .nav > li > a:first-child {
             padding-left: 8px;
         }
     }
-    & .oxhelp-content {
+    .oxhelp-content {
         padding-left: 15px;
         padding-right: 15px;
     }

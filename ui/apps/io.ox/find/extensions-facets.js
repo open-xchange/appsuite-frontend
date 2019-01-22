@@ -15,9 +15,9 @@ define('io.ox/find/extensions-facets', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/toolbar',
     'io.ox/backbone/mini-views/dropdown',
-    'io.ox/backbone/mini-views/help',
+    'io.ox/backbone/mini-views/helplink',
     'gettext!io.ox/core'
-], function (ext, Toolbar, Dropdown, HelpView, gt) {
+], function (ext, Toolbar, Dropdown, HelpLinkView, gt) {
 
     'use strict';
 
@@ -217,7 +217,7 @@ define('io.ox/find/extensions-facets', [
             return function (baton) {
                 var target = links[baton.app.getModuleParam()];
                 if (!target) return;
-                var helpView = new HelpView({ href: target });
+                var helpView = new HelpLinkView({ href: target });
                 if (helpView.$el.hasClass('hidden')) return;
                 this.append($('<li class="pull-right" role="presentation">').append(
                     helpView.render().$el

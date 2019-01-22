@@ -11,7 +11,7 @@
  * @author Björn Köster <bjoern.koester@open-xchange.com>
  */
 
-define('io.ox/help/main', ['io.ox/help/view', 'io.ox/backbone/views/modal', 'gettext!io.ox/help', 'less!io.ox/help/style'], function (HelpView, ModalDialogView, gt) {
+define('io.ox/help/main', ['io.ox/backbone/views/modal', 'gettext!io.ox/help', 'less!io.ox/help/style'], function (ModalDialogView, gt) {
 
     'use strict';
 
@@ -31,14 +31,16 @@ define('io.ox/help/main', ['io.ox/help/view', 'io.ox/backbone/views/modal', 'get
     function createInstance(options) {
 
         var opt = _.extend({
-            base: 'help',
-            href: 'index.html',
-            modal: false
-        }, options);
+                base: 'help',
+                href: 'index.html',
+                modal: false
+            }, options),
+            // .# This is a concatenated string to build a window title like "OX Appsuite help"
+            windowTitle = gt('%1$s help', ox.serverConfig.productName || 'OX App Suite');
 
         var app = ox.ui.createApp({
             name: 'io.ox/help',
-            title: gt('Online help'),
+            title: windowTitle,
             closable: true,
             floating: !_.device('smartphone'),
             size: 'width-xs height-md',
@@ -48,19 +50,14 @@ define('io.ox/help/main', ['io.ox/help/view', 'io.ox/backbone/views/modal', 'get
         app.cid = 'io.ox/help:' + getAddress(opt);
 
         app.showModal = function (iframe) {
-            // resize the modal body height to fit the html inside of the iframe
-            // otherwise we will have two overflow scrollbars
-            // iframe.on('load', function () {
-            //     $(this).height($(this).contents().find('html').height());
-            // });
             var modal = new ModalDialogView({
                 focus: _.device('smartphone') ? '' : 'iframe',
-                title: gt('Online help'),
+                title: windowTitle,
                 width: '640px',
                 maximize: 650
             }).build(function () {
                 this.$el.addClass('inline-help');
-                this.$body.append(iframe);
+                this.$body.append(iframe.addClass('abs'));
             }).addCloseButton()
                 .on('close', function () { app.quit(); })
                 .open();
@@ -82,7 +79,7 @@ define('io.ox/help/main', ['io.ox/help/view', 'io.ox/backbone/views/modal', 'get
         };
 
         app.createIframe = function () {
-            var iframe = $('<iframe class="hidden inline-help-iframe" frameborder="0" style="width:100%;height:100%">')
+            var iframe = $('<iframe class="hidden inline-help-iframe" frameborder="0">')
                 .attr({ src: getAddress(opt), title: gt('loading') });
 
             function onEscape(e) {
@@ -129,13 +126,10 @@ define('io.ox/help/main', ['io.ox/help/view', 'io.ox/backbone/views/modal', 'get
                     // set the focus to the first navigation link after loading and dom construction
                     iframe.focus();
                     firstTabbable.focus();
-                    iframe.height(contents.find('.oxhelp-content').parent().height());
-                    console.log(contents.find('.oxhelp-content').parent().height(), iframe.height());
                 });
 
                 this.contentWindow.addEventListener('beforeunload', function () {
                     iframe.addClass('hidden');
-                    iframe.css('height', 'auto');
                     contents.find('body').off('keydown', onEscape);
                     firstTabbable.off('keydown', onShiftTab);
                     lastTabbable.off('keydown', onTab);
