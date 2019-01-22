@@ -89,34 +89,6 @@ define('io.ox/core/tk/contenteditable-editor', [
     });
 
     ext.point(POINT + '/setup').extend({
-        id: 'image-remove',
-        index: INDEX += 100,
-        draw: (function () {
-            function getImageIds(content) {
-                // content can be just a string when e.g. pasting
-                var images = $('<div>' + content + '</div>').find('img');
-                return _(images.toArray()).chain().map(function (img) {
-                    return $(img).attr('id');
-                }).compact().value();
-            }
-            return function (ed) {
-                var oldsIds = [];
-                ed.on('BeforeSetContent change Focus Blur', function (e) {
-                    // use e.content for BeforeSetContent events
-                    // no events is important or the style nodes get the mce-bogus attribute. this causes the toolbar buttons to have the wrong state aver a couple of clicks, see Bug 59394
-                    var ids = getImageIds(e.content || ed.getContent({ no_events: true })),
-                        removed = _.difference(oldsIds, ids);
-                    removed.forEach(function (id) {
-                        var editorElement = $(ed.getElement());
-                        editorElement.trigger('removeInlineImage', id);
-                    });
-                    oldsIds = ids;
-                });
-            };
-        }())
-    });
-
-    ext.point(POINT + '/setup').extend({
         id: 'retrigger-change',
         index: INDEX += 100,
         draw: function (ed) {

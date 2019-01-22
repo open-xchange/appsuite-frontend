@@ -663,9 +663,6 @@ define('io.ox/mail/compose/view', [
             });
             return def.then(function (editor) {
                 self.editorHash[self.config.get('editorMode')] = editor;
-                // maybe there will be a better place for the following line in the future, but until then it will stay here
-                // attaches listeners to the tinymce instance
-                if (editor.tinymce) $(editor.tinymce().getElement()).on('removeInlineImage', self.onRemoveInlineImage.bind(self));
                 return self.reuseEditor(content);
             });
         },
@@ -738,12 +735,6 @@ define('io.ox/mail/compose/view', [
         onAttachVcard: function () {
             if (this.config.get('vcard') === 1) this.model.attachVCard();
             this.config.set('vcard', 0);
-        },
-
-        onRemoveInlineImage: function (e, id) {
-            var attachments = this.model.get('attachments'),
-                image = attachments.findWhere({ cid: '<' + id + '>' });
-            if (image) attachments.remove(image);
         },
 
         syncMail: function () {
