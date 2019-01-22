@@ -633,18 +633,12 @@ define('io.ox/mail/compose/view', [
             if (this.config.get('editorMode') === 'html') {
                 options.imageLoader = {
                     upload: function (file) {
-                        var m = new Attachments.Model({ filename: file.name, uploaded: 0 }),
+                        var m = new Attachments.Model({ filename: file.name, uploaded: 0, contentDisposition: 'INLINE' }),
                             def = composeAPI.space.attachments.add(self.model.get('id'), { file: file }, 'inline').progress(function (e) {
                                 m.set('uploaded', e.loaded / e.total);
                             }).then(function success(data) {
-                                m.set({
-                                    id: data.id,
-                                    disp: data.contentDisposition.toLowerCase(),
-                                    filename: data.name,
-                                    size: data.size,
-                                    group: 'mail',
-                                    space: self.model.get('id')
-                                });
+                                data = _({ group: 'mail', space: self.model.get('id') }).extend(data);
+                                m.set(data);
                                 m.trigger('upload:complete');
                                 return data;
                             }, function fail() {

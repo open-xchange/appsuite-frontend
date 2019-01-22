@@ -153,8 +153,8 @@ define('io.ox/core/attachments/backbone', [
         },
 
         isFileAttachment: function () {
-            return this.get('disp') === 'attachment' || this.get('contentDisposition') === 'ATTACHMENT' ||
-                this.get('disp') === 'inline' && this.get('filename');
+            return (this.get('disp') === 'attachment' || this.get('contentDisposition') === 'ATTACHMENT' || this.get('disp') === 'inline')
+                && this.get('contentDisposition') !== 'INLINE' && !!this.getTitle();
         },
 
         isContact: function () {

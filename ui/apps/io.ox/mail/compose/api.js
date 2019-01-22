@@ -517,7 +517,7 @@ define('io.ox/mail/compose/api', [
             console.log('> ATTACHMENTS: ' + space);
 
             var formData = new FormData();
-            formData.append('contentDisposition', type || 'attachment');
+            formData.append('contentDisposition', (type || 'attachment').toUpperCase());
 
             if (data.file) formData.append('file', data.file);
             else formData.append('JSON', JSON.stringify(data));

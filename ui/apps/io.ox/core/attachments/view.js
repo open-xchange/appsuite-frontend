@@ -133,7 +133,7 @@ define('io.ox/core/attachments/view', [
             // use inner function cause we do this twice
             function render(list, target, mode) {
                 target.append(
-                    _(list).map(this.renderAttachment.bind(this, mode))
+                    list.map(this.renderAttachment.bind(this, mode))
                 );
             }
 
@@ -150,6 +150,7 @@ define('io.ox/core/attachments/view', [
 
         addAttachment: function (model) {
             if (!this.isListRendered) return;
+            if (!this.collection.isValidModel(model)) return;
             this.$list.append(this.renderAttachment('list', model));
             this.$preview.append(this.renderAttachment('preview', model));
         },

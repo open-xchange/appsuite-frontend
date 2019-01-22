@@ -46,6 +46,11 @@ define('io.ox/mail/compose/actions/save', [
             perform: extensions.waitForPendingUploads
         },
         {
+            id: 'remove-unused-inline-images',
+            index: 450,
+            perform: extensions.removeUnusedInlineImages
+        },
+        {
             id: 'check:attachment-publishmailattachments',
             index: 500,
             perform: extensions.publishMailAttachments

@@ -93,8 +93,18 @@ define('io.ox/mail/compose/actions/send', [
             }
         },
         {
+            id: 'wait-for-pending-uploads',
+            index: 420,
+            perform: extensions.waitForPendingUploads
+        },
+        {
+            id: 'remove-unused-inline-images',
+            index: 440,
+            perform: extensions.removeUnusedInlineImages
+        },
+        {
             id: 'image-resize',
-            index: 450,
+            index: 460,
             perform: function (baton) {
                 // TODO: ask Björn
                 var def = $.Deferred(),
@@ -137,11 +147,6 @@ define('io.ox/mail/compose/actions/send', [
         },
         // Placeholder for Guard delay send for key check at index 750
         {
-            id: 'wait-for-pending-uploads',
-            index: 900,
-            perform: extensions.waitForPendingUploads
-        },
-        {
             id: 'disable-manual-close',
             index: 950,
             perform: function () {
@@ -155,7 +160,6 @@ define('io.ox/mail/compose/actions/send', [
             index: 1000,
             perform: function (baton) {
                 return baton.model.send();
-                //return composeAPI.send(baton.mail, baton.mail.files);
             }
         },
         {

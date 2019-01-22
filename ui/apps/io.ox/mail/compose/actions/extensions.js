@@ -14,8 +14,10 @@
 
 define('io.ox/mail/compose/actions/extensions', [
     'io.ox/mail/actions/attachmentQuota',
+    'io.ox/mail/api',
+    'io.ox/mail/compose/api',
     'gettext!io.ox/mail'
-], function (attachmentQuota, gt) {
+], function (attachmentQuota, mailAPI, composeAPI, gt) {
     'use strict';
 
     var api = {};
@@ -35,6 +37,25 @@ define('io.ox/mail/compose/actions/extensions', [
         return $.when.apply($, deferreds).then(function () {
             baton.view.syncMail();
         });
+    };
+
+    api.removeUnusedInlineImages = function (baton) {
+        var inlineAttachments = baton.model.get('attachments').where({ contentDisposition: 'INLINE' }),
+            deferreds = _(inlineAttachments)
+                .chain()
+                .map(function (attachment) {
+                    var space = baton.model.get('id'),
+                        url = mailAPI.getUrl(_.extend({ space: space }, attachment), 'view').replace('?', '\\?');
+                    if (new RegExp('<img[^>]*src="' + url + '"[^>]*>').test(baton.model.get('content'))) return;
+
+                    if (!attachment.get('id')) debugger;
+
+                    return composeAPI.space.attachments.remove(space, attachment.get('id'));
+                })
+                .compact()
+                .value();
+
+        return $.when.apply($, deferreds);
     };
 
     api.publishMailAttachments = function (baton) {

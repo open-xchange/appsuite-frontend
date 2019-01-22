@@ -739,14 +739,8 @@ define('io.ox/mail/compose/extensions', [
                         composeApi.space.attachments.add(model.get('id'), { file: file }, 'attachment').progress(function (e) {
                             m.set('uploaded', e.loaded / e.total);
                         }).then(function success(data) {
-                            m.set({
-                                id: data.id,
-                                disp: data.contentDisposition.toLowerCase(),
-                                filename: data.name,
-                                size: data.size,
-                                group: 'mail',
-                                space: model.get('id')
-                            });
+                            data = _({ group: 'mail', space: model.get('id') }).extend(data);
+                            m.set(data);
                             m.trigger('upload:complete');
                         }, function fail() {
                             m.destroy();
