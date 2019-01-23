@@ -317,6 +317,7 @@ define('io.ox/mail/compose/view', [
         id: 'image-loader',
         index: 200,
         perform: function (baton) {
+            var self = this;
             if (this.config.get('editorMode') !== 'html') return;
             baton.options.imageLoader = {
                 upload: function (file) {
