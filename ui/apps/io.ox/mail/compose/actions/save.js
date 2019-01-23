@@ -130,6 +130,8 @@ define('io.ox/mail/compose/actions/save', [
                                 baton.model.get('attachments').add(a);
                             }
                         } else if (m.id !== a.id) {
+                            // add correct group so previews work
+                            if (a.id && !m.id && m.get('group')) a.group = 'mail';
                             m.clear({ silent: true });
                             m.set(a);
                         }
