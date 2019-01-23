@@ -198,7 +198,7 @@ define('io.ox/core/tk/textproc', [
 
             var node = DOMPurify.sanitize(string, {
                 FORBID_TAGS: ['STYLE', 'SCRIPT', 'TITLE'],
-                ALLOWED_ATTR: ['href', 'type', 'value', 'checked', 'start'],
+                ALLOWED_ATTR: ['href', 'type', 'value', 'checked', 'start', 'class'],
                 RETURN_DOM: true
             });
 
@@ -237,6 +237,8 @@ define('io.ox/core/tk/textproc', [
             function processNestedElements(item) {
                 var str = traverse(item);
                 switch (item.nodeName) {
+                    case 'DIV':
+                        return item.classList.contains('io-ox-signature') ? '\0' + str + '\n' : str;
                     case 'A':
                         var href = item.getAttribute('href');
                         if (!/^https?:\/\//i.test(href)) return str;
