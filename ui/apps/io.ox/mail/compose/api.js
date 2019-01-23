@@ -78,7 +78,6 @@ define('io.ox/mail/compose/api', [
         // limit (aktuell 3)
         add: function (obj, opt) {
             opt = _.extend({ vcard: false }, opt);
-            console.log('> ADD: ' + obj.type);
             var data;
             if (obj.original) data = [].concat(obj.original);
             return http.POST({
@@ -90,18 +89,15 @@ define('io.ox/mail/compose/api', [
         },
 
         get: function (id) {
-            console.log('> GET: ' + id);
             return http.GET({ url: 'api/mail/compose/' + id });
         },
 
 
         list: function () {
-            console.log('> LIST');
             return http.GET({ url: 'api/mail/compose' });
         },
 
         remove: function (id) {
-            console.log('> REMOVE: ' + id);
             return http.DELETE({ url: 'api/mail/compose/' + id }).then(function (data) {
                 if (data && data.success) return data;
                 return $.Deferred().reject({ action: 'remove', error: 'unknown', id: id });
@@ -109,7 +105,6 @@ define('io.ox/mail/compose/api', [
         },
 
         reset: function () {
-            console.log('> RESET');
             return api.space.list().then(function (list) {
                 // process all updates
                 _(list).map(function (id) {
@@ -120,8 +115,6 @@ define('io.ox/mail/compose/api', [
         },
 
         send: function (id, data) {
-            console.log('> SEND: ' + id);
-
             var formData = new FormData();
             formData.append('JSON', JSON.stringify(data));
 
@@ -132,8 +125,6 @@ define('io.ox/mail/compose/api', [
         },
 
         save: function (id, data) {
-            console.log('> SAVE: ' + id);
-
             var formData = new FormData();
             formData.append('JSON', JSON.stringify(data));
 
@@ -144,7 +135,6 @@ define('io.ox/mail/compose/api', [
         },
 
         update: function (id, data) {
-            console.log('> UPDATE: ' + id);
             return http.PATCH({
                 url: 'api/mail/compose/' + id,
                 data: $.extend({}, data)
@@ -156,20 +146,16 @@ define('io.ox/mail/compose/api', [
     api.space.attachments = {
 
         original: function (space) {
-            console.log('> ATTACHMENTS ORIGINAL: ' + space);
             return http.POST({
                 url: ox.apiRoot + '/mail/compose/' + space + '/attachments/original'
             });
         },
         vcard: function (space) {
-            console.log('> ATTACHMENTS VCARD: ' + space);
             return http.POST({
                 url: ox.apiRoot + '/mail/compose/' + space + '/attachments/vcard'
             });
         },
         add: function (space, data, type) {
-            console.log('> ATTACHMENTS: ' + space);
-
             var formData = new FormData();
             formData.append('contentDisposition', (type || 'attachment').toUpperCase());
 
@@ -184,13 +170,11 @@ define('io.ox/mail/compose/api', [
             });
         },
         get: function (space, attachment) {
-            console.log('> ATTACHMENTS GET: ' + space + ', ' + attachment);
             return http.POST({
                 url: ox.apiRoot + '/mail/compose/' + space + '/attachments/' + attachment
             });
         },
         remove: function (space, attachment) {
-            console.log('> ATTACHMENTS REMOVE: ' + space + ', ' + attachment);
             return http.DELETE({
                 url: ox.apiRoot + '/mail/compose/' + space + '/attachments/' + attachment
             });
