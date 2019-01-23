@@ -185,7 +185,7 @@ define('io.ox/core/attachments/backbone', [
             // no support for localFile document preview
             if (this.get('group') === 'localFile' && supportsDocumentPreview && regIsDocument.test(filename)) return null;
 
-            url = this.get('meta').previewUrl;
+            url = this.get('meta') ? this.get('meta').previewUrl : false;
             if (url) return url;
 
             var fetchPreview = previewFetcher[this.get('group')];
