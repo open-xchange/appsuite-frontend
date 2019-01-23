@@ -96,9 +96,16 @@ define('io.ox/calendar/actions/subscribe-shared', [
         initialize: function (opt) {
             var self = this;
             this.opt = _.extend({}, opt);
-            this.model.on('change:subscribed', function () {
+            this.model.on('change:subscribed', function (model, val) {
                 if (!self.opt.dialog.hash[this.get('id')]) self.opt.dialog.hash[this.get('id')] = {};
                 self.opt.dialog.hash[this.get('id')].subscribed = this.get('subscribed');
+
+                if (!val) {
+                    var falseValue = self.model.get('com.openexchange.calendar.extendedProperties');
+                    falseValue.usedForSync.value = 'false';
+                    self.model.set('com.openexchange.calendar.extendedProperties', falseValue);
+                    self.model.trigger('change:com.openexchange.calendar.extendedProperties');
+                }
             });
 
             this.model.on('change:com.openexchange.calendar.extendedProperties', function () {
