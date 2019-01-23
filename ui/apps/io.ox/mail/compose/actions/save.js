@@ -14,11 +14,10 @@
 define('io.ox/mail/compose/actions/save', [
     'io.ox/core/extensions',
     'io.ox/mail/compose/actions/extensions',
-    'io.ox/mail/compose/api',
     'io.ox/mail/api',
     'io.ox/mail/util',
     'io.ox/core/notifications'
-], function (ext, extensions, composeAPI, mailAPI, mailUtil, notifications) {
+], function (ext, extensions, mailAPI, mailUtil, notifications) {
 
     'use strict';
 

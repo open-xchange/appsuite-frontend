@@ -33,7 +33,7 @@ define('io.ox/mail/compose/extensions', [
     'settings!io.ox/contacts',
     'io.ox/core/attachments/backbone',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, composeApi, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, yell, mailUtil, settings, gt, links, settingsContacts, Attachments) {
+], function (contactAPI, composeAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, yell, mailUtil, settings, gt, links, settingsContacts, Attachments) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -736,7 +736,7 @@ define('io.ox/mail/compose/extensions', [
                     self.trigger('aria-live-update', gt('Added %s to attachments.', _(e.target.files).map(function (file) { return file.name; }).join(', ')));
                     var models = _(e.target.files).map(function (file) {
                         var m = new Attachments.Model({ filename: file.name, uploaded: 0 });
-                        composeApi.space.attachments.add(model.get('id'), { file: file }, 'attachment').progress(function (e) {
+                        composeAPI.space.attachments.add(model.get('id'), { file: file }, 'attachment').progress(function (e) {
                             m.set('uploaded', e.loaded / e.total);
                         }).then(function success(data) {
                             data = _({ group: 'mail', space: model.get('id') }).extend(data);
@@ -765,7 +765,7 @@ define('io.ox/mail/compose/extensions', [
                         self.trigger('aria-live-update', gt('Added %s to attachments.', _(files).map(function (file) { return file.filename; }).join(', ')));
                         var models = files.map(function (file) {
                             var m = new Attachments.Model({ filename: file.filename });
-                            composeApi.space.attachments.add(model.get('id'), { origin: 'drive', id: file.id, folderId: file.folder_id }).then(function success(data) {
+                            composeAPI.space.attachments.add(model.get('id'), { origin: 'drive', id: file.id, folderId: file.folder_id }).then(function success(data) {
                                 m.set({
                                     id: data.id,
                                     disp: data.contentDisposition.toLowerCase(),
