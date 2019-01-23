@@ -48,6 +48,9 @@ Placement of buttons in new/edit dialogs. Default is 'bottom' (`'top', 'bottom'`
 <config>io.ox/core//disabledSettingsPanes=`<string>`</config>
 Disable one or more settings panes vie extension point ids of _io.ox/settings/pane_
 
+<config>io.ox/core//pdf/enablePreconversionOnUpload=`<bool>`</config>
+Enable/disable PDF preconversion of office documents on file upload and when a new file version is added.
+
 ## Topbar / Apps
 
 <config>io.ox/core//apps/quickLaunchCount=`<number>`</config>
