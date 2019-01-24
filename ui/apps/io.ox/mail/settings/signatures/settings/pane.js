@@ -463,7 +463,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     .on('delete', function (e) {
                         var id = $(e.currentTarget).closest('li').attr('data-id');
                         if (mailutil.getDefaultSignature('compose') === id) settings.set('defaultSignature', '');
-                        if (mailutil.getDefaultSignature('replay/forward') === id) settings.set('defaultReplyForwardSignature', '');
+                        if (mailutil.getDefaultSignature('reply/forward') === id) settings.set('defaultReplyForwardSignature', '');
                         snippets.destroy(id).fail(require('io.ox/core/notifications').yell);
                         e.preventDefault();
                     })

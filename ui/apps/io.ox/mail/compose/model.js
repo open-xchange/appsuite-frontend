@@ -423,8 +423,8 @@ define('io.ox/mail/compose/model', [
             // unset type and original since both are only used on creation of a model
             this.unset('type');
             this.unset('original');
-            opt.vcard = /(new|reply|replayall|forward|resend)/.test(type) && settings.get('appendVcard', false);
-            opt.original = /(reply|replayall)/.test(type);
+            opt.vcard = /(new|reply|replyall|forward|resend)/.test(type) && settings.get('appendVcard', false);
+            opt.original = /(reply|replyall)/.test(type);
             return composeAPI.spaced({ type: type, original: original }, opt).then(function (data) {
                 // TODO: alternative solution: middleware introduces api param
                 if (data.content && !settings.get('appendMailTextOnReply', true)) delete data.content;
