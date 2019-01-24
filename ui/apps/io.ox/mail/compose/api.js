@@ -59,16 +59,15 @@ define('io.ox/mail/compose/api', [
     }());
 
     api.spaced = function (meta, opt) {
-        return api.space.add(meta, opt).then(function (space) {
-            var obj;
-            return api.space.get(space.id).then(function (data) {
-                obj = _.extend({}, data);
-                // TOOD: should be an option like 'vcard' in space.add request
-                return opt.original ? api.space.attachments.original(data.id) : $.when([]);
-            }).then(function (list) {
-                obj.attachments = (obj.attachments || []).concat(list);
-                return obj;
-            });
+        var obj;
+        return api.space.add(meta, opt).then(function (data) {
+            //debugger;
+            obj = _.extend({}, data);
+            // TOOD: should be an option like 'vcard' in space.add request
+            return opt.original ? api.space.attachments.original(data.id) : $.when([]);
+        }).then(function (list) {
+            obj.attachments = (obj.attachments || []).concat(list);
+            return obj;
         });
     };
 
