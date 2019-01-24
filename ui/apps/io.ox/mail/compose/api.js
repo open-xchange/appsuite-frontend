@@ -61,7 +61,6 @@ define('io.ox/mail/compose/api', [
     api.spaced = function (meta, opt) {
         var obj;
         return api.space.add(meta, opt).then(function (data) {
-            //debugger;
             obj = _.extend({}, data);
             // TOOD: should be an option like 'vcard' in space.add request
             return opt.original ? api.space.attachments.original(data.id) : $.when([]);
@@ -74,15 +73,14 @@ define('io.ox/mail/compose/api', [
     // composition space
     api.space = {
 
-        // limit (aktuell 3)
+        // limit of 3 currently
         add: function (obj, opt) {
-            opt = _.extend({ vcard: false }, opt);
-            var data;
-            if (obj.original) data = [].concat(obj.original);
+            // reply or forwarding of single/multiple mails
+            var references = JSON.stringify([].concat(obj.original || []));
             return http.POST({
                 module: 'mail/compose',
-                data: data ? JSON.stringify(data) : '',
-                params: { type: obj.type, vcard: opt.vcard },
+                data: references,
+                params: { type: obj.type, vcard: !!opt.vcard },
                 contentType: 'application/json'
             });
         },
@@ -90,7 +88,6 @@ define('io.ox/mail/compose/api', [
         get: function (id) {
             return http.GET({ url: 'api/mail/compose/' + id });
         },
-
 
         list: function () {
             return http.GET({ url: 'api/mail/compose' });
