@@ -55,8 +55,8 @@ define('io.ox/core/pdf/pdfdocument', [
             // the size of the first page is treated as default page size {[{width, height}, ...]}
             pageSizes = [],
 
-            // whether to enable range requests support
-            enableRangeRequests = Settings.get('pdf/enableRangeRequests');
+            // whether to enable range requests support, if not present the default is true
+            enableRangeRequests = (Settings.get('pdf/enableRangeRequests') !== false);
 
         /**
          * Range request support. If the server supports range requests the PDF will be fetched in chunks.
