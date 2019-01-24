@@ -418,18 +418,18 @@ define('io.ox/mail/compose/model', [
         create: function () {
             if (this.has('id')) return composeAPI.space.get(this.get('id'));
             var type = this.get('type') || 'new',
+                isReply = /(reply|replyall)/.test(type),
                 original = this.get('original'),
-                opt = {};
+                opt = {
+                    attachments: isReply,
+                    quote: !isReply || settings.get('appendMailTextOnReply', true),
+                    vcard: !/(edit|copy)/.test(type) && settings.get('appendVcard', false)
+                };
             // unset type and original since both are only used on creation of a model
             this.unset('type');
             this.unset('original');
-            opt.vcard = /(new|reply|replyall|forward|resend)/.test(type) && settings.get('appendVcard', false);
-            opt.original = /(reply|replyall)/.test(type);
-            return composeAPI.spaced({ type: type, original: original }, opt).then(function (data) {
-                // TODO: alternative solution: middleware introduces api param
-                if (data.content && !settings.get('appendMailTextOnReply', true)) delete data.content;
-                if (!data.content) return data;
-                return this.quoteMessage(data);
+            return composeAPI.create({ type: type, original: original }, opt).then(function (data) {
+                return data.content ? this.quoteMessage(data) : data;
             }.bind(this)).then(function (data) {
                 if (!this.get('attachments') || !this.get('attachments').length) return data;
 
