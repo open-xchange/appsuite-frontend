@@ -88,8 +88,8 @@ define('io.ox/mail/compose/resize', [
                     for (var i = 0; i < len; i++) {
                         arr[i] = binStr.charCodeAt(i);
                     }
-                    blob = new Blob([arr], { type: type, group: 'localFile' });
-                    //newFile = new File([blob], filenamePrefix + '.' + typeSuffix, { type: type, group: 'localFile' });
+                    blob = new Blob([arr], { type: type, filename: filenamePrefix + '.' + typeSuffix });
+                    // blob = new File([blob], filenamePrefix + '.' + typeSuffix, { type: type });
                     blob.lastModifiedDate = new Date();
                     blob.name = filenamePrefix + '.' + typeSuffix;
                     blob.filename = filenamePrefix + '.' + typeSuffix;
