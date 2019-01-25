@@ -57,7 +57,10 @@ Enable/disable range requests support to fetch PDF rendering data in chunks. Def
 ## Topbar / Apps
 
 <config>io.ox/core//apps/quickLaunchCount=`<number>`</config>
-How many quick launch icons should appear in the Topbar (default: `0`)
+How many quick launch icons should appear in the Topbar by default (default: `3`)
+
+<config>io.ox/core//apps/quickLauncherLimit=`<number>`</config>
+How many quick launch icons should be allowed as maximum (default: `3`)
 
 <config>io.ox/core//apps/quickLaunch=`<string>`</config>
 Default Apps for quick launcher. Comma-separated string of App IDs
