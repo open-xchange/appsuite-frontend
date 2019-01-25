@@ -168,12 +168,17 @@ define('io.ox/mail/compose/api', [
                 formData.append('JSON', JSON.stringify(data));
             }
 
-            return http.UPLOAD({
-                url: ox.apiRoot + '/mail/compose/' + space + '/attachments',
-                data: formData
-            }).then(function (res) {
-                return res.data;
-            });
+            var upload = http.UPLOAD({
+                    url: ox.apiRoot + '/mail/compose/' + space + '/attachments',
+                    data: formData
+                }),
+                process = upload.then(function (res) {
+                    return res.data;
+                });
+
+            // keep abort function as attribute of the returning promise
+            process.abort = upload.abort;
+            return process;
         },
         get: function (space, attachment) {
             return http.POST({
