@@ -161,8 +161,12 @@ define('io.ox/mail/compose/api', [
             var formData = new FormData();
             formData.append('contentDisposition', (type || 'attachment').toUpperCase());
 
-            if (data.file) formData.append('file', data.file);
-            else formData.append('JSON', JSON.stringify(data));
+            if (data.file) {
+                if (data.file.name) formData.append('file', data.file, data.file.name);
+                else formData.append('file', data.file);
+            } else {
+                formData.append('JSON', JSON.stringify(data));
+            }
 
             return http.UPLOAD({
                 url: ox.apiRoot + '/mail/compose/' + space + '/attachments',
