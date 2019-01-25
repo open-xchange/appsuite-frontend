@@ -161,10 +161,6 @@ define('io.ox/core/attachments/backbone', [
             return this.get('group') === 'contact';
         },
 
-        isDriveFile: function () {
-            return this.get('group') === 'file';
-        },
-
         isLocalFile: function () {
             return this.get('group') === 'localFile';
         },
@@ -243,23 +239,6 @@ define('io.ox/core/attachments/backbone', [
                 }
                 return attr;
             });
-        },
-        contactsIds: function () {
-            return this.filter(function (model) {
-                return model.isContact();
-            }).map(function (o) {
-                return o.pick('folder_id', 'id');
-            });
-        },
-        driveFiles: function () {
-            return _(this.filter(function (model) {
-                return model.isDriveFile();
-            })).pluck('id');
-        },
-        localFiles: function () {
-            return _(this.filter(function (model) {
-                return model.isLocalFile();
-            })).pluck('fileObj');
         },
         getSize: function () {
             return this.reduce(function (memo, model) { return memo + model.getSize(); }, 0);
