@@ -62,11 +62,11 @@ define('io.ox/mail/compose/api', [
         var obj;
         return api.space.add(meta, opt).then(function (data) {
             obj = _.extend({}, data);
-            // TODO: should be an option like 'vcard' in space.add request
+            // TODO: can be removed once the original param of POST is supported
             return opt.attachments ? api.space.attachments.original(data.id) : $.when([]);
         }).then(function (list) {
             obj.attachments = (obj.attachments || []).concat(list);
-            // TODO: alternative solution: middleware introduces api param
+            // TODO: can be removed once the setting is evaluated on the middleware
             if (!opt.quote) delete obj.content;
             return obj;
         });
@@ -82,7 +82,11 @@ define('io.ox/mail/compose/api', [
             return http.POST({
                 module: 'mail/compose',
                 data: references,
-                params: { type: obj.type, vcard: !!opt.vcard },
+                params: {
+                    type: obj.type,
+                    vcard: !!opt.vcard,
+                    orginal: opt.attachments
+                },
                 contentType: 'application/json'
             });
         },
