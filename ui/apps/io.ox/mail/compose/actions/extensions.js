@@ -48,8 +48,6 @@ define('io.ox/mail/compose/actions/extensions', [
                         url = mailAPI.getUrl(_.extend({ space: space }, attachment), 'view').replace('?', '\\?');
                     if (new RegExp('<img[^>]*src="' + url + '"[^>]*>').test(baton.model.get('content'))) return;
 
-                    if (!attachment.get('id')) debugger;
-
                     return composeAPI.space.attachments.remove(space, attachment.get('id'));
                 })
                 .compact()

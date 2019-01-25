@@ -317,6 +317,8 @@ define('io.ox/core/attachments/view', [
             this.listenTo(this.model, {
                 'change:uploaded': function (model) {
                     var w = model.get('uploaded') * 100;
+                    // special case. Has been reset to 0 and therefore needs to be rendered again
+                    if (w === 0) this.render();
                     this.$('.progress').width(w + '%');
                 },
                 'change:file_size change:size': this.render,

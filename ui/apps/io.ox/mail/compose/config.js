@@ -36,7 +36,8 @@ define('io.ox/mail/compose/config', [
                 // identifier for empty signature (dropdown)
                 signatureId: '',
                 signature: '',
-                signatureIsRendered: undefined
+                signatureIsRendered: undefined,
+                imageResizeOption: 'original'
             };
         },
 
