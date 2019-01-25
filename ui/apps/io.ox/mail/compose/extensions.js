@@ -31,8 +31,10 @@ define('io.ox/mail/compose/extensions', [
     'settings!io.ox/contacts',
     'io.ox/core/attachments/backbone',
     'io.ox/core/strings',
+    'io.ox/mail/compose/resize-view',
+    'io.ox/mail/compose/resize',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, settingsContacts, Attachments, strings) {
+], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, settingsContacts, Attachments, strings, ResizeView, imageResize) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -704,24 +706,35 @@ define('io.ox/mail/compose/extensions', [
         },
 
         imageResizeOption: function (baton) {
-            if (!settings.get('features/imageResize/enabled', true)) return;
-            require(['io.ox/mail/compose/resizeUtils'], function (resizeUtils) {
-                var view = baton.resizeView = resizeUtils.getDropDown(baton.model),
-                    attachmentView = baton.attachmentsView,
-                    $dropDown = view.render().$el.prepend($('<span>').text(gt('Image size:')).addClass('image-resize-lable'));
-                attachmentView.$el.append($dropDown.addClass('pull-right').hide());
-                attachmentView.$el.append($('<span>').addClass('mail-size').text(resizeUtils.getMailSizeString(baton.model)));
+            var attachmentView = baton.attachmentsView,
+                resizeView = new ResizeView({ model: baton.config, collection: attachmentView.collection });
 
-                function onResizeOptionChange() {
-                    resizeUtils.resizeIntoArray(baton.model.get('attachments'), baton.model.get('imageResizeOption')).then(function (resizedFiles) {
-                        if (attachmentView.disposed) return;
-                        attachmentView.$el.find('.mail-size').text(resizeUtils.getMailSizeString(baton.model));
-                        baton.config.set('resizedImages', resizedFiles);
-                    });
-                }
-                attachmentView.listenTo(baton.model, 'change:imageResizeOption', onResizeOptionChange);
-                attachmentView.listenTo(attachmentView.collection, 'add remove reset', onResizeOptionChange);
-            });
+            function getMailSize() {
+                var attachmentSize = baton.model.get('attachments').reduce(function (memo, attachment) {
+                        return memo + (attachment.getSize() || 0);
+                    }, 0),
+                    mailSize = baton.model.getContent().length;
+
+                return strings.fileSize(attachmentSize + mailSize, 1);
+            }
+
+            function update() {
+                var visible = baton.model.get('attachments').some(function (model) {
+                    var file = model.get('originalFile');
+                    if (!file) return false;
+                    return imageResize.isResizableImage(file);
+                });
+                resizeView.$el.toggle(visible);
+                attachmentView.$('.mail-size').text(gt('Mail size: %1$s', getMailSize()));
+            }
+
+            attachmentView.$el.append(resizeView.render().$el.addClass('pull-right'));
+            resizeView.$el.prepend($('<span>').text(gt('Image size:')).addClass('image-resize-lable'));
+            attachmentView.$el.append($('<span>').addClass('mail-size'));
+            update();
+
+            attachmentView.listenTo(attachmentView.collection, 'add remove reset change:size', update);
+
         },
 
         attachment: (function () {
