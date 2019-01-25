@@ -95,17 +95,17 @@ define('io.ox/mail/compose/actions/send', [
         },
         {
             id: 'wait-for-pending-uploads',
-            index: 420,
+            index: 500,
             perform: extensions.waitForPendingUploads
         },
         {
             id: 'remove-unused-inline-images',
-            index: 440,
+            index: 600,
             perform: extensions.removeUnusedInlineImages
         },
         {
             id: 'image-resize',
-            index: 460,
+            index: 700,
             perform: function (baton) {
                 // TODO: ask Björn
                 var def = $.Deferred(),
@@ -124,18 +124,17 @@ define('io.ox/mail/compose/actions/send', [
         },
         {
             id: 'check:attachment-publishmailattachments',
-            index: 500,
+            index: 800,
             perform: extensions.publishMailAttachments
         },
         {
             id: 'check:attachment-missing',
-            index: 550,
+            index: 900,
             perform: extensions.attachmentMissingCheck
         },
-        // Placeholder for Guard extensions at index 600-630
         {
             id: 'busy:start',
-            index: 700,
+            index: 1000,
             perform: function (baton) {
                 var win = baton.app.getWindow();
                 // start being busy
@@ -146,10 +145,9 @@ define('io.ox/mail/compose/actions/send', [
                 }
             }
         },
-        // Placeholder for Guard delay send for key check at index 750
         {
             id: 'disable-manual-close',
-            index: 950,
+            index: 1100,
             perform: function () {
                 // var app = ox.ui.apps.get(baton.app.id);
                 //baton.close = $(app.get('topbarNode').find('.closelink')).hide();
@@ -158,14 +156,14 @@ define('io.ox/mail/compose/actions/send', [
         },
         {
             id: 'send',
-            index: 1000,
+            index: 2000,
             perform: function (baton) {
                 return baton.model.send();
             }
         },
         {
             id: 'errors',
-            index: 2000,
+            index: 3000,
             perform: function (baton) {
                 if (baton.error && !baton.warning) {
                     var win = baton.app.getWindow(),
@@ -187,7 +185,7 @@ define('io.ox/mail/compose/actions/send', [
         },
         {
             id: 'warnings',
-            index: 2000,
+            index: 3100,
             perform: function (baton) {
                 if (!baton.errors && baton.warning) {
                     // no clue if warning(s) is always object or if it might also be a simple string (see bug 42714)
@@ -200,7 +198,7 @@ define('io.ox/mail/compose/actions/send', [
         },
         {
             id: 'success',
-            index: 2000,
+            index: 4000,
             perform: function (baton) {
                 if (baton.error || baton.warning) return;
 
@@ -214,7 +212,7 @@ define('io.ox/mail/compose/actions/send', [
         },
         {
             id: 'update-caches',
-            index: 3000,
+            index: 4100,
             perform: function (baton) {
                 // update base mail
                 var isReply = baton.model.get('meta').type === 'reply',

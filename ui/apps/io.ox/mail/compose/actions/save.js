@@ -37,21 +37,20 @@ define('io.ox/mail/compose/actions/save', [
                 });
             }
         },
-        // Placeholder for Guard.  Guard actions for signature check at index 300
         {
             id: 'wait-for-pending-uploads',
-            index: 400,
+            index: 200,
             // important: does changes in 'content' in case of pending uploads
             perform: extensions.waitForPendingUploads
         },
         {
             id: 'remove-unused-inline-images',
-            index: 450,
+            index: 300,
             perform: extensions.removeUnusedInlineImages
         },
         {
             id: 'check:attachment-publishmailattachments',
-            index: 500,
+            index: 400,
             perform: extensions.publishMailAttachments
         },
         {
