@@ -52,7 +52,7 @@ define('io.ox/core/attachments/backbone', [
             // use double size in combination with background-size: cover
             var size = 2 * (_.device('retina') ? 240 : 120);
             require(['io.ox/contacts/widgets/canvasresize'], function (canvasResize) {
-                canvasResize(model.fileObj, {
+                canvasResize(model.fileObj || model.get('originalFile'), {
                     width: size,
                     height: size,
                     crop: false,

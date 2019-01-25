@@ -55,28 +55,32 @@ define('io.ox/mail/compose/util', [
                 return def;
             }
 
-            if (origin.file && contentDisposition !== 'inline' && resize.isResizableImage(origin.file)) {
-                attachment.set({
-                    originalFile: origin.file,
-                    uploaded: 0
-                });
+            if (origin.file && contentDisposition === 'attachment') {
+                attachment.set('group', 'localFile');
 
-                attachment.on('image:resized', function (image) {
-                    if (def.state() === 'pending') def.abort();
-                    else composeAPI.space.attachments.remove(model.get('id'), attachment.get('id'));
+                if (resize.isResizableImage(origin.file)) {
+                    attachment.set({
+                        originalFile: origin.file,
+                        uploaded: 0
+                    });
 
-                    origin = { file: image };
-                    throttled(origin);
-                });
+                    attachment.on('image:resized', function (image) {
+                        if (def.state() === 'pending') def.abort();
+                        else composeAPI.space.attachments.remove(model.get('id'), attachment.get('id'));
 
-                attachment.on('force:upload', function () {
-                    // only trigger immediate upload
-                    if (def) return;
-                    throttled.cancel();
-                    upload(origin);
-                });
+                        origin = { file: image };
+                        throttled(origin);
+                    });
 
-                return throttled(origin);
+                    attachment.on('force:upload', function () {
+                        // only trigger immediate upload
+                        if (def) return;
+                        throttled.cancel();
+                        upload(origin);
+                    });
+
+                    return throttled(origin);
+                }
             }
 
             return upload(origin);
