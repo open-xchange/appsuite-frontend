@@ -28,6 +28,7 @@ define('io.ox/mail/compose/actions/extensions', [
             .map(function (model) {
                 if (model.get('uploaded') >= 1) return;
                 var def = new $.Deferred();
+                model.trigger('force:upload');
                 model.once('upload:complete', def.resolve);
                 return def;
             })
