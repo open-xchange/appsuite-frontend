@@ -20,7 +20,7 @@ build documentation:
     expire_in: 2 hours
   only:
     changes:
-      - ./documentation/**/*
+      - documentation/**/*
       - ui/package.json
 
 deploy documentation:
