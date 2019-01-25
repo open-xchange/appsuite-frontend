@@ -24,11 +24,12 @@ define('io.ox/mail/compose/view', [
     'io.ox/core/tk/dialogs',
     'io.ox/mail/compose/signatures',
     'io.ox/mail/sanitizer',
+    'io.ox/mail/compose/util',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send',
     'io.ox/mail/compose/actions/save'
-], function (extensions, ext, composeAPI, mailAPI, mailUtil, settings, notifications, gt, Attachments, dialogs, signatureUtil, sanitizer) {
+], function (extensions, ext, composeAPI, mailAPI, mailUtil, settings, notifications, gt, Attachments, dialogs, signatureUtil, sanitizer, composeUtil) {
 
     'use strict';
 
@@ -321,18 +322,15 @@ define('io.ox/mail/compose/view', [
             if (this.config.get('editorMode') !== 'html') return;
             baton.options.imageLoader = {
                 upload: function (file) {
-                    var m = new Attachments.Model({ filename: file.name, uploaded: 0, contentDisposition: 'INLINE' }),
-                        def = composeAPI.space.attachments.add(self.model.get('id'), { file: file }, 'inline').progress(function (e) {
-                            m.set('uploaded', e.loaded / e.total);
-                        }).then(function success(data) {
-                            data = _({ group: 'mail', space: self.model.get('id') }).extend(data);
-                            m.set(data);
-                            m.trigger('upload:complete');
-                            return data;
-                        }, function fail() {
-                            m.destroy();
+                    var attachment = new Attachments.Model({ filename: file.name, uploaded: 0, contentDisposition: 'INLINE' }),
+                        def = composeUtil.uploadAttachment({
+                            model: self.model,
+                            filename: file.name,
+                            origin: { file: file },
+                            attachment: attachment,
+                            contentDisposition: 'inline'
                         });
-                    self.model.attachFiles([m]);
+                    self.model.attachFiles([attachment]);
                     return def;
                 },
                 getUrl: function (response) {

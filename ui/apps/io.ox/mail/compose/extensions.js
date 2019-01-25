@@ -13,7 +13,6 @@
 
 define('io.ox/mail/compose/extensions', [
     'io.ox/contacts/api',
-    'io.ox/mail/compose/api',
     'io.ox/mail/sender',
     'io.ox/backbone/mini-views/common',
     'io.ox/backbone/mini-views/dropdown',
@@ -25,15 +24,15 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/mail/actions/attachmentQuota',
     'io.ox/core/util',
     'io.ox/core/attachments/view',
-    'io.ox/core/yell',
+    'io.ox/mail/compose/util',
     'io.ox/mail/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
-    'io.ox/core/extPatterns/links',
     'settings!io.ox/contacts',
     'io.ox/core/attachments/backbone',
+    'io.ox/core/strings',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, composeAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, yell, mailUtil, settings, gt, links, settingsContacts, Attachments) {
+], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, settingsContacts, Attachments, strings) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -596,11 +595,17 @@ define('io.ox/mail/compose/extensions', [
                     $(window).trigger('resize');
                 },
                 'drop': function (files) {
-                    baton.model.attachFiles(
-                        _(files).map(function (file) {
-                            return _.extend(file, { group: 'localFile' });
-                        })
-                    );
+                    var models = _(files).map(function (file) {
+                        var attachment = new Attachments.Model({ filename: file.name, origin: { file: file } });
+                        composeUtil.uploadAttachment({
+                            model: baton.model,
+                            filename: file.filename,
+                            origin: { file: file },
+                            attachment: attachment
+                        });
+                        return attachment;
+                    });
+                    baton.model.attachFiles(models);
                     $(window).trigger('resize');
                 }
             });
@@ -735,17 +740,14 @@ define('io.ox/mail/compose/extensions', [
                     //#. it is used by screenreaders to indicate which files are currently added to the list of attachments
                     self.trigger('aria-live-update', gt('Added %s to attachments.', _(e.target.files).map(function (file) { return file.name; }).join(', ')));
                     var models = _(e.target.files).map(function (file) {
-                        var m = new Attachments.Model({ filename: file.name, uploaded: 0 });
-                        composeAPI.space.attachments.add(model.get('id'), { file: file }, 'attachment').progress(function (e) {
-                            m.set('uploaded', e.loaded / e.total);
-                        }).then(function success(data) {
-                            data = _({ group: 'mail', space: model.get('id') }).extend(data);
-                            m.set(data);
-                            m.trigger('upload:complete');
-                        }, function fail() {
-                            m.destroy();
+                        var attachment = new Attachments.Model({ filename: file.name, origin: { file: file } });
+                        composeUtil.uploadAttachment({
+                            model: model,
+                            filename: file.filename,
+                            origin: { file: file },
+                            attachment: attachment
                         });
-                        return m;
+                        return attachment;
                     });
                     model.attachFiles(models);
                 }
@@ -764,21 +766,14 @@ define('io.ox/mail/compose/extensions', [
                     .done(function (files) {
                         self.trigger('aria-live-update', gt('Added %s to attachments.', _(files).map(function (file) { return file.filename; }).join(', ')));
                         var models = files.map(function (file) {
-                            var m = new Attachments.Model({ filename: file.filename });
-                            composeAPI.space.attachments.add(model.get('id'), { origin: 'drive', id: file.id, folderId: file.folder_id }).then(function success(data) {
-                                m.set({
-                                    id: data.id,
-                                    disp: data.contentDisposition.toLowerCase(),
-                                    filename: data.name,
-                                    size: data.size,
-                                    group: 'file',
-                                    space: model.get('id')
-                                });
-                                m.trigger('upload:complete');
-                            }, function fail() {
-                                m.destroy();
+                            var attachment = new Attachments.Model({ filename: file.filename });
+                            composeUtil.uploadAttachment({
+                                model: model,
+                                filename: file.filename,
+                                origin: { origin: 'drive', id: file.id, folderId: file.folder_id },
+                                attachment: attachment
                             });
-                            return m;
+                            return attachment;
                         });
                         model.attachFiles(models);
                     });
