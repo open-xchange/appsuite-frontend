@@ -49,7 +49,7 @@ Placement of buttons in new/edit dialogs. Default is 'bottom' (`'top', 'bottom'`
 Disable one or more settings panes vie extension point ids of _io.ox/settings/pane_
 
 <config>io.ox/core//pdf/enablePreconversionOnUpload=`<bool>`</config>
-Enable/disable PDF preconversion of office documents on file upload and when a new file version is added. Default is 'true'.
+Enable/disable PDF preconversion of office documents on file upload and when a new file version is added. Default is `true`.
 
 <config>io.ox/core//pdf/enableRangeRequests=`<bool>`</config>
 Enable/disable range requests support to fetch PDF rendering data in chunks. Default is 'true'.
