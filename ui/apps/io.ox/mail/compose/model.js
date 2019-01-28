@@ -148,7 +148,9 @@ define('io.ox/mail/compose/model', [
 
         onRemoveAttachment: function (model) {
             if (this.destroyed) return;
-            composeAPI.space.attachments.remove(this.get('id'), model.get('id'));
+
+            if (model.get('id')) composeAPI.space.attachments.remove(this.get('id'), model.get('id'));
+            else model.trigger('abort:upload');
         },
 
         quoteMessage: (function () {

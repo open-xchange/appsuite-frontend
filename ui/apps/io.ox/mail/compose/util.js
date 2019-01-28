@@ -38,6 +38,9 @@ define('io.ox/mail/compose/util', [
                 // reset debouncedupload to upload to not postpone any future execution
                 throttled = upload;
 
+                // if attachment is not in a collection, it has been removed before it has been uploaded
+                if (!attachment.collection) return;
+
                 attachment.set('uploaded', 0);
 
                 // need exactly this deferred to be able to abort
@@ -77,6 +80,11 @@ define('io.ox/mail/compose/util', [
                         if (def) return;
                         throttled.cancel();
                         upload(origin);
+                    });
+
+                    attachment.on('abort:upload', function () {
+                        if (throttled.cancel) throttled.cancel();
+                        if (def && def.state() === 'pending') def.abort();
                     });
 
                     return throttled(origin);
