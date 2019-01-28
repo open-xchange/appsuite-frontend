@@ -23,6 +23,7 @@ define('io.ox/mail/compose/model', [
 
     'use strict';
 
+    var attachmentsAPI = composeAPI.space.attachments;
 
     var MailModel = Backbone.Model.extend({
 
@@ -126,7 +127,7 @@ define('io.ox/mail/compose/model', [
         onRemoveAttachment: function (model) {
             if (this.destroyed) return;
 
-            if (model.get('id')) composeAPI.space.attachments.remove(this.get('id'), model.get('id'));
+            if (model.get('id')) attachmentsAPI.remove(this.get('id'), model.get('id'));
             else model.trigger('abort:upload');
         },
 
@@ -208,7 +209,7 @@ define('io.ox/mail/compose/model', [
                 if (!this.get('attachments') || !this.get('attachments').length) return data;
 
                 return $.when.apply($, this.get('attachments').map(function (attachment) {
-                    return composeAPI.space.attachments.add(data.id, attachment);
+                    return attachmentsAPI.add(data.id, attachment);
                 })).then(function () {
                     data.attachments = (data.attachments || []).concat(_.toArray(arguments));
                     return data;
