@@ -713,7 +713,7 @@ define('io.ox/mail/compose/extensions', [
                 var attachmentSize = baton.model.get('attachments').reduce(function (memo, attachment) {
                         return memo + (attachment.getSize() || 0);
                     }, 0),
-                    mailSize = baton.model.getContent().length;
+                    mailSize = baton.model.get('content').length;
 
                 return strings.fileSize(attachmentSize + mailSize, 1);
             }
