@@ -82,7 +82,7 @@ define('io.ox/mail/compose/model', [
                 this.listenTo(data.attachments, 'remove', this.onRemoveAttachment);
             }.bind(this));
 
-            this.requestSave = _.throttle(this.save.bind(this), 15000);
+            this.requestSave = _.throttle(this.save.bind(this), settings.get('autoSaveAfter', 15000));
         },
 
         getFixedContent: function () {

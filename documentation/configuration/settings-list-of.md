@@ -362,6 +362,9 @@ Value `html` (default), `text` or `alternative`.
 <config>io.ox/mail//defaultSendAddress=`<string>`</config>
 Default sender address from available accounts. Default not set.
 
+<config>io.ox/mail//autoSaveAfter=`<number>`</config>
+Interval to update composition space during compose in milliseconds. Default: `15000` (15 seconds)
+
 <config>io.ox/mail//autoSaveDraftsAfter=`<string>`</config>
 Interval to safe drafts during compose. One of `disabled`, `1_minute`, `3_minutes`, `5_minutes` or `10_minutes`
 
