@@ -255,17 +255,20 @@ define('io.ox/mail/compose/model', [
 
         save: function () {
             if (this.destroyed) return $.when();
-            var diff = this.deepDiff(this.prevAttributes);
+            var prevAttributes = this.prevAttributes,
+                diff = this.deepDiff(prevAttributes);
             // do not upload attachments on save
             delete diff.attachments;
 
             if (_.isEmpty(diff)) return $.when();
 
+            this.prevAttributes = this.toJSON();
+
             this.trigger('before:save');
             return composeAPI.space.update(this.get('id'), diff).then(function success() {
-                this.prevAttributes = this.toJSON();
                 this.trigger('success:save');
             }.bind(this), function fail() {
+                this.prevAttributes = prevAttributes;
                 if (ox.debug) console.warn('Update composition space failed', this.get('id'));
                 this.trigger('fail:save');
             }.bind(this));
