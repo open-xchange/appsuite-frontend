@@ -15,15 +15,11 @@ define('io.ox/mail/compose/model', [
     'io.ox/mail/compose/api',
     'io.ox/mail/api',
     'io.ox/mail/util',
-    'io.ox/core/capabilities',
-    'io.ox/core/api/account',
     'io.ox/core/attachments/backbone',
-    'io.ox/mail/compose/signatures',
-    'io.ox/core/strings',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/mail/sanitizer'
-], function (composeAPI, mailAPI, mailUtil, capabilities, accountAPI, Attachments, signatureUtil, strings, settings, gt, sanitizer) {
+], function (composeAPI, mailAPI, mailUtil, Attachments, settings, gt, sanitizer) {
 
     'use strict';
 
