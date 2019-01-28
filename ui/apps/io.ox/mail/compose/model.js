@@ -27,22 +27,6 @@ define('io.ox/mail/compose/model', [
 
     'use strict';
 
-    var AttachmentCollection = Attachments.Collection.extend({
-        sync: function (method, model, options) {
-            switch (method) {
-                case 'create':
-                    return composeAPI.space.attachments.add(model.get('type'), model.toJSON()).then(options.success, options.error);
-                case 'read':
-                    return composeAPI.space.attachments.get(model.get('id')).then(options.success, options.error);
-                case 'update':
-                    return composeAPI.space.attachments.update(model.get('id'), model.toJSON()).then(options.success, options.error);
-                case 'delete':
-                    return composeAPI.space.attachments.remove(model.get('id')).then(options.success, options.error);
-                default:
-                    return $.when(model);
-            }
-        }
-    });
 
     var MailModel = Backbone.Model.extend({
 
@@ -83,7 +67,7 @@ define('io.ox/mail/compose/model', [
         initialize: function () {
             this.initialized = this.create().then(function (data) {
                 // fix previewUrl
-                var collection = new AttachmentCollection();
+                var collection = new Attachments.Collection();
                 collection.space = data.id;
                 collection.reset(_(data.attachments).map(function (attachment) {
                     return new Attachments.Model(_.extend({}, attachment, { group: 'mail', space: collection.space }));
