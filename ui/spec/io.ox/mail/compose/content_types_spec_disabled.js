@@ -22,7 +22,7 @@ define(['io.ox/mail/compose/model'], function (MailModel) {
                 model.setContent('This is some plain text\n\n with line breaks and stuff.');
                 expect(model.get('attachments').at(0).get('content_type')).to.equal('text/plain');
                 model.setMailContentType('text/html');
-                expect(model.getContent()).to.equal('This is some plain text\n\n with line breaks and stuff.');
+                expect(model.get('content')).to.equal('This is some plain text\n\n with line breaks and stuff.');
                 expect(model.get('attachments').at(0).get('content')).to.equal('This is some plain text\n\n with line breaks and stuff.');
                 expect(model.get('attachments').at(0).get('content_type')).to.equal('text/html');
             });
@@ -35,7 +35,7 @@ define(['io.ox/mail/compose/model'], function (MailModel) {
                 model.setMailContentType('text/plain');
                 expect(model.get('attachments').at(0).get('content_type')).to.equal('text/plain');
                 expect(model.get('attachments').at(0).get('content')).to.equal('This is some <i>html</i> <b>text</b><br /><br> with line breaks and stuff.');
-                expect(model.getContent()).to.equal('This is some <i>html</i> <b>text</b><br /><br> with line breaks and stuff.');
+                expect(model.get('content')).to.equal('This is some <i>html</i> <b>text</b><br /><br> with line breaks and stuff.');
             });
         });
     });
