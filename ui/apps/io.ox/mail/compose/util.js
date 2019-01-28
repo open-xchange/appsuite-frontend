@@ -44,7 +44,7 @@ define('io.ox/mail/compose/util', [
                 attachment.set('uploaded', 0);
 
                 // need exactly this deferred to be able to abort
-                def = composeAPI.space.attachments.add(space, origin, contentDisposition);
+                def = composeAPI.space.attachments[attachment.has('id') ? 'update' : 'add'](space, origin, contentDisposition, attachment.get('id'));
                 def.progress(function (e) {
                     attachment.set('uploaded', e.loaded / e.total);
                 }).then(function success(data) {
@@ -69,7 +69,6 @@ define('io.ox/mail/compose/util', [
 
                     attachment.on('image:resized', function (image) {
                         if (def.state() === 'pending') def.abort();
-                        else composeAPI.space.attachments.remove(model.get('id'), attachment.get('id'));
 
                         origin = { file: image };
                         throttled(origin);
@@ -91,7 +90,7 @@ define('io.ox/mail/compose/util', [
                 }
             }
 
-            return upload(origin);
+            return _.defer(upload, origin);
         }
 
     };

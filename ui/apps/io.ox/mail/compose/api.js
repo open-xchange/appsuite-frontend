@@ -130,6 +130,30 @@ define('io.ox/mail/compose/api', [
         }
     };
 
+    function upload(url, data, type) {
+        var formData = new FormData();
+        formData.append('contentDisposition', (type || 'attachment').toUpperCase());
+
+        if (data.file) {
+            if (data.file.name) formData.append('file', data.file, data.file.name);
+            else formData.append('file', data.file);
+        } else {
+            formData.append('JSON', JSON.stringify(data));
+        }
+
+        var upload = http.UPLOAD({
+                url: url,
+                data: formData
+            }),
+            process = upload.then(function (res) {
+                return res.data;
+            });
+
+        // keep abort function as attribute of the returning promise
+        process.abort = upload.abort;
+        return process;
+    }
+
     // composition space
     api.space.attachments = {
 
@@ -144,27 +168,12 @@ define('io.ox/mail/compose/api', [
             });
         },
         add: function (space, data, type) {
-            var formData = new FormData();
-            formData.append('contentDisposition', (type || 'attachment').toUpperCase());
-
-            if (data.file) {
-                if (data.file.name) formData.append('file', data.file, data.file.name);
-                else formData.append('file', data.file);
-            } else {
-                formData.append('JSON', JSON.stringify(data));
-            }
-
-            var upload = http.UPLOAD({
-                    url: ox.apiRoot + '/mail/compose/' + space + '/attachments',
-                    data: formData
-                }),
-                process = upload.then(function (res) {
-                    return res.data;
-                });
-
-            // keep abort function as attribute of the returning promise
-            process.abort = upload.abort;
-            return process;
+            var url = ox.apiRoot + '/mail/compose/' + space + '/attachments';
+            return upload(url, data, type);
+        },
+        update: function (space, data, type, attachmentId) {
+            var url = ox.apiRoot + '/mail/compose/' + space + '/attachments/' + attachmentId;
+            return upload(url, data, type);
         },
         get: function (space, attachment) {
             return http.POST({
