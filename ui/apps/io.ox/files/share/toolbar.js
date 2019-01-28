@@ -55,7 +55,7 @@ define('io.ox/files/share/toolbar', [
     };
 
     var Action = actionsUtil.Action;
-
+    // TODO check action Kristof
     new Action('io.ox/files/share/edit', {
         requires: 'one',
         action: function (baton) {
@@ -64,7 +64,7 @@ define('io.ox/files/share/toolbar', [
             });
         }
     });
-
+    // TODO check action Kristof
     new Action('io.ox/files/share/back', {
         toggle: _.device('smartphone'),
         action: function () {

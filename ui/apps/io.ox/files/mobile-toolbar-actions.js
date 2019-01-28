@@ -81,18 +81,19 @@ define('io.ox/files/mobile-toolbar-actions', [
     mobile.createToolbarExtensions(points);
 
     // actions
+    // TODO check action Jonas
     new Action('io.ox/files/actions/layout-list', {
         action: function (baton) {
             baton.app.props.set('layout', 'list');
         }
     });
-
+    // TODO check action Jonas
     new Action('io.ox/files/actions/layout-icon', {
         action: function (baton) {
             baton.app.props.set('layout', 'icon');
         }
     });
-
+    // TODO check action Jonas
     new Action('io.ox/files/actions/layout-tile', {
         action: function (baton) {
             baton.app.props.set('layout', 'tile');
