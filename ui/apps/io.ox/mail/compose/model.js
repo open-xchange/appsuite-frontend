@@ -278,7 +278,12 @@ define('io.ox/mail/compose/model', [
             data.attachments = this.get('attachments').toJSON();
             return data;
         },
-        keepDraftOnClose: $.noop,
+
+        keepDraftOnClose: function () {
+            if (settings.get('features/deleteDraftOnClose') !== true) return false;
+            return !!this.get('meta').editFor;
+        },
+
         setMailContentType: $.noop
     });
 });
