@@ -1629,6 +1629,45 @@ define('io.ox/files/api', [
             });
         },
 
+        /**
+         * All versions were deleted that are older than the passed version file.
+         * @param {FileDescriptor} file version descriptor
+         *
+         * @returns {Deferred}
+         */
+        removeOlderVersions: function (file) {
+
+            // update model instantly
+            var model = pool.get('detail').get(_.cid(file)), versions = model.get('versions');
+            if (model && _.isArray(versions)) {
+                model.set('versions', versions.filter(function (item) {
+                    return item.version >= file.version;
+                }));
+            }
+
+            // send which versions should be removed to the backend
+            return http.PUT({
+                module: 'files',
+                params: {
+                    action: 'detach',
+                    id: file.id,
+                    folder: file.folder_id,
+                    timestamp: _.then()
+                },
+                data: versions.filter(function (item) { return item.version < file.version; }).map(
+                    function (version) { return version.version; }
+                ),
+                appendColumns: false
+            })
+            .then(function () {
+                versions.filter(function (item) { return item.version < file.version; }).map(
+                    function (version) {
+                        return api.propagate('remove:version', _.extend(_.pick(file, 'id', 'folder_id'), { version: version.version }));
+                    }
+                );
+            });
+        },
+
         setCurrent: function (file) {
             // update model
             var model = pool.get('detail').get(_.cid(file));
