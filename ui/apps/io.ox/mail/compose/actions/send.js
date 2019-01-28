@@ -104,37 +104,18 @@ define('io.ox/mail/compose/actions/send', [
             perform: extensions.removeUnusedInlineImages
         },
         {
-            id: 'image-resize',
-            index: 700,
-            perform: function (baton) {
-                // TODO: ask Björn
-                var def = $.Deferred(),
-                    win = baton.app.getWindow();
-                if (!settings.get('features/imageResize/enabled', true)) return def.resolve();
-                if (!baton.model.has('files') || baton.model.get('files').length === 0) return def.resolve();
-                require(['io.ox/mail/compose/resizeUtils'], function (resizeUtils) {
-                    win.busy();
-                    resizeUtils.mergeResizedFiles(baton.mail.files, baton.config.get('resizedImages'), baton.model.get('imageResizeOption')).done(function () {
-                        win.idle();
-                        def.resolve();
-                    });
-                });
-                return def;
-            }
-        },
-        {
             id: 'check:attachment-publishmailattachments',
-            index: 800,
+            index: 700,
             perform: extensions.publishMailAttachments
         },
         {
             id: 'check:attachment-missing',
-            index: 900,
+            index: 800,
             perform: extensions.attachmentMissingCheck
         },
         {
             id: 'busy:start',
-            index: 1000,
+            index: 900,
             perform: function (baton) {
                 var win = baton.app.getWindow();
                 // start being busy
@@ -147,7 +128,7 @@ define('io.ox/mail/compose/actions/send', [
         },
         {
             id: 'disable-manual-close',
-            index: 1100,
+            index: 1000,
             perform: function () {
                 // var app = ox.ui.apps.get(baton.app.id);
                 //baton.close = $(app.get('topbarNode').find('.closelink')).hide();
