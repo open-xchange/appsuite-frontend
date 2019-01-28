@@ -139,8 +139,16 @@ define('io.ox/mail/compose/model', [
             return function (data) {
                 var meta = data.meta,
                     original = meta.replyFor || meta.forwardsFor;
+
+                // get the content inside the body of the mail
+                if (data.contentType === 'text/html') {
+                    data.content = data.content.replace(/^[\s\S]*?<body[^>]*>([\s\S]*?)<\/body>[\s\S]*?$/i, '$1').trim();
+                    data.content = sanitizer.simpleSanitize(data.content);
+                }
+
                 original = [].concat(original)[0];
                 if (!original) return data;
+
                 return mailAPI.get({ id: original.originalId, folder: original.originalFolderId }).then(function (mail) {
                     var header = [];
 
@@ -167,15 +175,12 @@ define('io.ox/mail/compose/model', [
                     header.push('', '');
 
                     if (data.contentType === 'text/html') {
-                        // get the content inside the body of the mail
-                        var content = data.content.replace(/^[\s\S]*?<body[^>]*>([\s\S]*?)<\/body>[\s\S]*?$/i, '$1').trim();
-                        content = sanitizer.simpleSanitize(content);
                         data.content = '<div><br></div>' + $('<blockquote type="cite">').append(
                             header.map(function (line) {
                                 if (!line) return '<div><br></div>';
                                 return $('<div>').text(line);
                             }),
-                            content
+                            data.content
                         ).prop('outerHTML');
                     } else if (data.contentType === 'text/plain') {
                         data.content = '\n' +
