@@ -528,7 +528,7 @@ define('io.ox/mail/compose/view', [
                 this.editor.focus();
                 node.removeAttr('data-enter-keydown');
             }
-            this.model.set('subject', value, { silent: true }).trigger('keyup:subject', value);
+            this.model.set('subject', value).trigger('keyup:subject', value);
         },
 
         setTitle: function () {
