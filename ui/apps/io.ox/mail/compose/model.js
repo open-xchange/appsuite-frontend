@@ -234,7 +234,7 @@ define('io.ox/mail/compose/model', [
             return _(current)
                 .chain()
                 .mapObject(function (value, key) {
-                    if (value instanceof Backbone.Model || value instanceof Backbone.Collection) return;
+                    if (value instanceof Backbone.Model || value instanceof Backbone.Collection) value = value.toJSON();
                     if (_.isObject(value) && !_.isArray(value)) {
                         var sub = self.deepDiff(old[key], value);
                         if (_.isEmpty(sub)) return;
