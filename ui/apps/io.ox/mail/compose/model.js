@@ -256,7 +256,11 @@ define('io.ox/mail/compose/model', [
         save: function () {
             if (this.destroyed) return $.when();
             var diff = this.deepDiff(this.prevAttributes);
+            // do not upload attachments on save
+            delete diff.attachments;
+
             if (_.isEmpty(diff)) return $.when();
+
             this.trigger('before:save');
             return composeAPI.space.update(this.get('id'), diff).then(function success() {
                 this.prevAttributes = this.toJSON();
