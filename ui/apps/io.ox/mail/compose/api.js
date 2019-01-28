@@ -58,18 +58,6 @@ define('io.ox/mail/compose/api', [
         };
     }());
 
-    api.create = function (meta, opt) {
-        var obj;
-        return api.space.add(meta, opt).then(function (data) {
-            obj = _.extend({}, data);
-            // TODO: can be removed once the original param of POST is supported
-            return opt.attachments ? api.space.attachments.original(data.id) : $.when([]);
-        }).then(function (list) {
-            obj.attachments = (obj.attachments || []).concat(list);
-            return obj;
-        });
-    };
-
     // composition space
     api.space = {
 
@@ -83,7 +71,7 @@ define('io.ox/mail/compose/api', [
                 params: {
                     type: obj.type,
                     vcard: !!opt.vcard,
-                    orginal: opt.attachments
+                    originalAttachments: opt.attachments
                 },
                 contentType: 'application/json'
             });

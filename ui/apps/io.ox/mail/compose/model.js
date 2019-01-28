@@ -207,7 +207,7 @@ define('io.ox/mail/compose/model', [
             // unset type and original since both are only used on creation of a model
             this.unset('type');
             this.unset('original');
-            return composeAPI.create({ type: type, original: original }, opt).then(function (data) {
+            return composeAPI.space.add({ type: type, original: original }, opt).then(function (data) {
                 return data.content ? this.quoteMessage(data) : data;
             }.bind(this)).then(function (data) {
                 if (!this.get('attachments') || !this.get('attachments').length) return data;
