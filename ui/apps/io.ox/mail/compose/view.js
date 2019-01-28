@@ -377,7 +377,9 @@ define('io.ox/mail/compose/view', [
             var model = baton.model,
                 editor = baton.editor,
                 htmlToText = model.get('contentType') === 'text/html' && editor.getMode() === 'text',
-                setMethod = htmlToText ? 'setPlainText' : 'setContent';
+                textToHTML = model.get('contentType') === 'text/plain' && editor.getMode() === 'html',
+                setMethod = htmlToText || textToHTML ? 'setPlainText' : 'setContent';
+            console.log("model.get('contentType')", model.get('contentType'), 'editor.getMode()', editor.getMode(), 'setMethod', setMethod);
             return $.when(editor[setMethod](baton.content));
         }
     }, {
@@ -759,11 +761,6 @@ define('io.ox/mail/compose/view', [
                 // intial set, transfrom html to text
                 content = require(['io.ox/core/tk/textproc']).then(function (textproc) {
                     return textproc.htmltotext(self.model.get('content'));
-                });
-            } else if (this.model.get('contentType') === 'text/plain' && this.config.get('editorMode') === 'html') {
-                // intial set, transfrom text to html
-                content = require(['io.ox/mail/detail/content']).then(function (proc) {
-                    return proc.transformForHTMLEditor(self.model.get('content'));
                 });
             } else {
                 content = this.model.get('content');
