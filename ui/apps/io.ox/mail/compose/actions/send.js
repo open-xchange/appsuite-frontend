@@ -40,19 +40,8 @@ define('io.ox/mail/compose/actions/send', [
             }
         },
         {
-            id: 'fix-content-type',
-            index: 200,
-            perform: function (baton) {
-                // TODO is this still needed?
-                // force correct content-type
-                if (baton.model.get('contentType') === 'text/plain' && baton.config.get('editorMode') === 'html') {
-                    baton.model.set('contentType', 'text/html', { silent: true });
-                }
-            }
-        },
-        {
             id: 'check:no-recipients',
-            index: 300,
+            index: 200,
             perform: function (baton) {
                 // ask for empty to,cc,bcc and/or empty subject
                 var noRecipient = _.isEmpty(baton.model.get('to')) && _.isEmpty(baton.model.get('cc')) && _.isEmpty(baton.model.get('bcc'));
@@ -65,7 +54,7 @@ define('io.ox/mail/compose/actions/send', [
         },
         {
             id: 'check:no-subject',
-            index: 400,
+            index: 300,
             perform: function (baton) {
                 if ($.trim(baton.model.get('subject')) !== '') return;
 
@@ -95,27 +84,27 @@ define('io.ox/mail/compose/actions/send', [
         },
         {
             id: 'wait-for-pending-uploads',
-            index: 500,
+            index: 400,
             perform: extensions.waitForPendingUploads
         },
         {
             id: 'remove-unused-inline-images',
-            index: 600,
+            index: 500,
             perform: extensions.removeUnusedInlineImages
         },
         {
             id: 'check:attachment-publishmailattachments',
-            index: 700,
+            index: 600,
             perform: extensions.publishMailAttachments
         },
         {
             id: 'check:attachment-missing',
-            index: 800,
+            index: 700,
             perform: extensions.attachmentMissingCheck
         },
         {
             id: 'busy:start',
-            index: 900,
+            index: 800,
             perform: function (baton) {
                 var win = baton.app.getWindow();
                 // start being busy
@@ -128,7 +117,7 @@ define('io.ox/mail/compose/actions/send', [
         },
         {
             id: 'disable-manual-close',
-            index: 1000,
+            index: 900,
             perform: function () {
                 // var app = ox.ui.apps.get(baton.app.id);
                 //baton.close = $(app.get('topbarNode').find('.closelink')).hide();
