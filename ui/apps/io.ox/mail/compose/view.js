@@ -379,7 +379,6 @@ define('io.ox/mail/compose/view', [
                 htmlToText = model.get('contentType') === 'text/html' && editor.getMode() === 'text',
                 textToHTML = model.get('contentType') === 'text/plain' && editor.getMode() === 'html',
                 setMethod = htmlToText || textToHTML ? 'setPlainText' : 'setContent';
-            console.log("model.get('contentType')", model.get('contentType'), 'editor.getMode()', editor.getMode(), 'setMethod', setMethod);
             return $.when(editor[setMethod](baton.content));
         }
     }, {
