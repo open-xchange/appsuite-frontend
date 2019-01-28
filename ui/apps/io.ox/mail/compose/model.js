@@ -198,12 +198,10 @@ define('io.ox/mail/compose/model', [
         create: function () {
             if (this.has('id')) return composeAPI.space.get(this.get('id'));
             var type = this.get('type') || 'new',
-                isReply = /(reply|replyall)/.test(type),
                 original = this.get('original'),
                 opt = {
                     // add original attachments
                     attachments: /(reply|replyall|forward)/.test(type),
-                    quote: !isReply || settings.get('appendMailTextOnReply', true),
                     vcard: !/(edit|copy)/.test(type) && settings.get('appendVcard', false)
                 };
             // unset type and original since both are only used on creation of a model
