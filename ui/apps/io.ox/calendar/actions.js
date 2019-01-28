@@ -323,27 +323,55 @@ define('io.ox/calendar/actions', [
                     if (!isSeries) isSeries = !!item.recurrenceId;
                 });
             }
-            return e.collection.has('some', 'delete') && util.hasFlag(e.baton.data, 'organizer') && !isSeries;
+            return e.collection.has('some', 'delete') && !isSeries;
         },
         multiple: function (list, baton) {
             ox.load(['io.ox/core/folder/actions/move', 'settings!io.ox/calendar']).done(function (move, settings) {
-                move.item({
-                    api: api,
-                    button: gt('Move'),
-                    flat: true,
-                    indent: false,
-                    list: list,
-                    module: 'calendar',
-                    root: '1',
-                    settings: settings,
-                    success: {
-                        single: 'Appointment has been moved',
-                        multiple: 'Appointments have been moved'
-                    },
-                    target: baton.target,
-                    title: gt('Move'),
-                    type: 'move',
-                    all: util.getCurrentRangeOptions()
+                folderAPI.get(list[0].folder).done(function (folderData) {
+
+                    // maybe we need a whoAmI util function ...
+                    var myId;
+                    // acting myself
+                    if (util.hasFlag(list[0], 'attendee') || util.hasFlag(list[0], 'organizer')) {
+                        myId = ox.user_id;
+                    // action on behalf of attendee
+                    } else if (util.hasFlag(list[0], 'attendee_on_behalf')) {
+                        myId = folderData.created_by;
+                    // action on behalf of organizer
+                    } else if (util.hasFlag(list[0], 'organizer_on_behalf')) {
+                        myId = list[0].organizer.entity;
+                    }
+
+                    move.item({
+                        api: api,
+                        button: gt('Move'),
+                        flat: true,
+                        indent: false,
+                        list: list,
+                        module: 'calendar',
+                        root: '1',
+                        settings: settings,
+                        success: {
+                            single: 'Appointment has been moved',
+                            multiple: 'Appointments have been moved'
+                        },
+                        target: baton.target,
+                        title: gt('Move'),
+                        type: 'move',
+                        all: util.getCurrentRangeOptions(),
+                        disable: function (data, options) {
+                            var sameFolder = data.id === list[0].folder,
+                                sameOwner = data.created_by === myId,
+                                isPublic = folderAPI.is('public', data),
+                                sourceFolderIsPublic = folderAPI.is('public', folderData),
+                                noOtherAttendees = list[0].attendees.length < 2,
+                                create = folderAPI.can('create', data);
+
+                            // totally awesome check
+                            // not same folder, must be folder of same user, public folder or there must only be one attendee(the organizer), if the source folder is not public, must have create permission in that folder, folder must not be virtual
+                            return sameFolder || !((!sourceFolderIsPublic && noOtherAttendees) || sameOwner || isPublic) || !create || (options && /^virtual/.test(options.folder));
+                        }
+                    });
                 });
             });
         }
