@@ -34,12 +34,14 @@ define('io.ox/core/settings/defaults', function () {
         design: 'primary',
         autoStart: 'io.ox/mail/main',
         coloredIcons: false,
-        quicklaunch: ['io.ox/mail/main', 'io.ox/contacts/main'].join(','),
         autoOpenNotification: 'noEmail',
         autoLogout: 0,
         showDesktopNotifications: true,
         settings: {
             downloadsDisabled: false
+        },
+        apps: {
+            quickLaunch: 'io.ox/mail/main,io.ox/contacts/main,io.ox/portal/main'
         }
     };
 
