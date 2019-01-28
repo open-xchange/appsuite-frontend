@@ -34,7 +34,7 @@ define('io.ox/core/settings/defaults', function () {
         design: 'primary',
         autoStart: 'io.ox/mail/main',
         coloredIcons: false,
-        quicklaunch: ['io.ox/mail/main', 'io.ox/contacts/main'].join(','),
+        quickLaunch: 'io.ox/mail/main,io.ox/contacts/main,io.ox/io.ox/portal/main',
         autoOpenNotification: 'noEmail',
         autoLogout: 0,
         showDesktopNotifications: true,
