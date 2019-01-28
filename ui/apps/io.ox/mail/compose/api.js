@@ -67,6 +67,7 @@ define('io.ox/mail/compose/api', [
         }).then(function (list) {
             obj.attachments = (obj.attachments || []).concat(list);
             // TODO: can be removed once the setting is evaluated on the middleware
+            // TODO: mw currently returns content: "<!doctype html>↵<html>↵ <head> ↵  <meta charset="UTF-8"> ↵ </head>↵ <body>↵  &nbsp; ↵ </body>↵</html>"
             if (!opt.quote) delete obj.content;
             return obj;
         });
