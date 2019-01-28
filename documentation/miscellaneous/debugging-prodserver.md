@@ -91,6 +91,7 @@ By default, Grunt looks for the certificates in the subdirectory `ssl`, so you c
 
 ```bash
 mkdir ssl
+# on MacOS, this file is generated at ~/Library/Application\ Support/mkcert/rootCA.pem
 cp ~/.local/share/mkcert/rootCA.pem ssl/rootCA.crt
 ```
 
