@@ -502,9 +502,8 @@ define('io.ox/mail/compose/view', [
         },
 
         onSendProgress: function (model, value) {
-            // TODO what exactly is happening here?
-            var csid = this.model.get('csid');
-            if (csid !== model.get('id')) return;
+            var id = this.model.get('id');
+            if (id !== model.get('id')) return;
             if (value >= 0) this.app.getWindow().busy(value);
         },
 

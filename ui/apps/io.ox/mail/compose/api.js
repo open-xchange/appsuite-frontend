@@ -124,13 +124,21 @@ define('io.ox/mail/compose/api', [
             var formData = new FormData();
             formData.append('JSON', JSON.stringify(data));
 
-            return http.UPLOAD({
+            var def = http.UPLOAD({
                 url: 'api/mail/compose/' + id + '/send',
                 data: formData
+            });
+
+            def.progress(function (e) {
+                api.queue.update(id, e.loaded, e.total);
             }).done(function () {
                 refreshFolders();
                 api.trigger('after:send');
             });
+
+            api.queue.add(id, def.abort);
+
+            return def;
         },
 
         save: function (id, data) {
