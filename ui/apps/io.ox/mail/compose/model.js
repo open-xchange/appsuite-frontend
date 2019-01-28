@@ -149,7 +149,7 @@ define('io.ox/mail/compose/model', [
                 original = [].concat(original)[0];
                 if (!original) return data;
 
-                return mailAPI.get({ id: original.originalId, folder: original.originalFolderId }).then(function (mail) {
+                return mailAPI.get({ id: original.originalId, folder: original.originalFolderId }, { cache: !settings.get('features/fixContentType', false) }).then(function (mail) {
                     var header = [];
 
                     if (/^(REPLY|REPLY_ALL)$/.test(data.meta.type)) {
