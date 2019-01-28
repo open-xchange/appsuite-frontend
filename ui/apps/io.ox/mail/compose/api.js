@@ -12,15 +12,14 @@
  */
 
 define('io.ox/mail/compose/api', [
-    'io.ox/core/http',
-    'io.ox/core/event'
-], function (http, Events) {
+    'io.ox/core/http'
+], function (http) {
 
     'use strict';
 
     var api = {};
 
-    Events.extend(api);
+    _.extend(api, Backbone.Events);
 
     api.queue = (function () {
 
@@ -57,6 +56,23 @@ define('io.ox/mail/compose/api', [
             }
         };
     }());
+
+    var refreshFolders = _.throttle(function () {
+        require(['io.ox/core/api/account', 'io.ox/core/folder/api', 'io.ox/mail/api'], function (accountAPI, folderAPI, mailAPI) {
+            // reset collections and folder (to update total count)
+            var affectedFolders = _(['inbox', 'sent', 'drafts'])
+                .chain()
+                .map(function (type) {
+                    var folders = accountAPI.getFoldersByType(type);
+                    mailAPI.pool.resetFolder(folders);
+                    return folders;
+                })
+                .flatten()
+                .value();
+            folderAPI.multiple(affectedFolders, { cache: false });
+            api.trigger('refresh.all');
+        });
+    }, 5000, { leading: false });
 
     // composition space
     api.space = {
@@ -103,22 +119,32 @@ define('io.ox/mail/compose/api', [
         },
 
         send: function (id, data) {
+            api.trigger('before:send', id, data);
+
             var formData = new FormData();
             formData.append('JSON', JSON.stringify(data));
 
             return http.UPLOAD({
                 url: 'api/mail/compose/' + id + '/send',
                 data: formData
+            }).done(function () {
+                refreshFolders();
+                api.trigger('after:send');
             });
         },
 
         save: function (id, data) {
+            api.trigger('before:save', id, data);
+
             var formData = new FormData();
             formData.append('JSON', JSON.stringify(data));
 
             return http.UPLOAD({
                 url: 'api/mail/compose/' + id + '/save',
                 data: formData
+            }).done(function () {
+                refreshFolders();
+                api.trigger('after:save');
             });
         },
 

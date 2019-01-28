@@ -1730,6 +1730,26 @@ define('io.ox/mail/main', [
             app.folder.handleErrors();
         },
 
+        'save-draft': function (app) {
+            composeAPI.on('before:send before:save', function (id, data) {
+                var editFor = data.meta.editFor;
+                if (!editFor) return;
+
+                var cid = _.cid({ id: editFor.originalId, folder_id: editFor.originalFolderId }),
+                    draftsId = account.getFoldersByType('drafts');
+                _(draftsId).each(function (id) {
+                    _(api.pool.getByFolder(id)).each(function (collection) {
+                        collection.remove(cid);
+                    });
+                });
+            });
+            composeAPI.on('after:send after:save', function () {
+                var folder = app.folder.get();
+                if (account.is('drafts', folder)) app.listView.reload();
+            });
+        },
+
+
         'mail-progress': function () {
             if (_.device('smartphone')) return;
             ext.point('io.ox/mail/sidepanel').extend({
