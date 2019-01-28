@@ -633,10 +633,11 @@ define('io.ox/mail/compose/view', [
                     .show()
                     .then(function (action) {
                         if (action === 'delete') {
-                            var isAutoDiscard = self.config.get('autoDiscard') && self.model.get('msgref');
-                            if (!isDraft && !isAutoDiscard) return;
+                            var isAutoDiscard = self.config.get('autoDiscard'),
+                                editFor = self.model.get('meta').editFor;
+                            if (!isDraft || !isAutoDiscard || !editFor) return;
                             // only delete autosaved drafts that are not saved manually and have a msgref
-                            mailAPI.remove([mailUtil.parseMsgref(mailAPI.separator, self.model.get('msgref'))]);
+                            mailAPI.remove([{ id: editFor.originalId, folder_id: editFor.originalFolderId }]);
                         } else if (action === 'savedraft') {
                             return self.saveDraft();
                         } else {
