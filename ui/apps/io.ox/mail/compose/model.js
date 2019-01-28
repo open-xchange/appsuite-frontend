@@ -57,7 +57,7 @@ define('io.ox/mail/compose/model', [
                 contentType: '',
                 attachments: [],
                 meta: {
-                    // new/reply/replyall/forward/resend
+                    // new/reply/replyall/forward/resend/edit/copy
                     type: 'new',
                     date: '',
                     originalId: '',
@@ -214,7 +214,8 @@ define('io.ox/mail/compose/model', [
                 isReply = /(reply|replyall)/.test(type),
                 original = this.get('original'),
                 opt = {
-                    attachments: isReply,
+                    // add original attachments
+                    attachments: /(reply|replyall|forward)/.test(type),
                     quote: !isReply || settings.get('appendMailTextOnReply', true),
                     vcard: !/(edit|copy)/.test(type) && settings.get('appendVcard', false)
                 };
