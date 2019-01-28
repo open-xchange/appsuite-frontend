@@ -69,6 +69,16 @@ define([
                 text.should.equal('> Line 1\n> \n> Line 4');
             });
 
+            it('should not keep whitespaces (newline, tabs, multiple space) in textnodes', function () {
+                var text = textproc.htmltotext('<blockquote type="cite"><div>Test\n   </div>\n\t\t</blockquote>');
+                expect(text).to.equal('> Test');
+            });
+
+            it('should keep whitespaces in pre tag', function () {
+                var text = textproc.htmltotext('<pre>\n\nSecond line\n\tTabbed third line\n   Multiple spaces</pre>');
+                expect(text).to.equal('\nSecond line\n\tTabbed third line\n   Multiple spaces');
+            });
+
             it('should transform unordered lists', function () {
                 var text = textproc.htmltotext('First line<ul><li>Item 1</li><li>Item 2</li><li>Item 3</li></ul>Last line');
                 expect(text).to.equal('First line\n  * Item 1\n  * Item 2\n  * Item 3\nLast line');

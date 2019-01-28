@@ -202,15 +202,29 @@ define('io.ox/core/tk/textproc', [
                 RETURN_DOM: true
             });
 
-            return finalize(traverse(node));
+            return finalize(traverse(node, {}));
 
-            function traverse(node) {
-                return removeMarkers(_(node.childNodes).map(processElement).join(''));
+            function traverse(node, flags) {
+                return removeMarkers(_(node.childNodes).map(processElement.bind(null, flags)).join(''));
             }
 
-            function processElement(item, i, all) {
-                if (item.nodeType === 3) return item.nodeValue;
-                return processEmptyElements(item, i, all.length) || markBlockElements(item, processNestedElements(item));
+            function processElement(flags, item, i, all) {
+                if (item.nodeType === 3) {
+                    if (flags.preserveWhitespace) return item.nodeValue;
+
+                    // https://www.w3.org/TR/css-text-3/#white-space-processing
+                    var str = item.nodeValue;
+                    // remove leading whitespace only after a segment brak
+                    if (i === 0 || isBlockElement(all[i - 1].nodeType)) str = str.replace(/^\s+/g, '');
+                    // remove trailing whitespace only before a segment break
+                    if (i === all.length - 1 || isBlockElement(all[i + 1].nodeType)) str = str.replace(/\s+$/g, '');
+                    return str
+                        // replace all newlines and tags by spaces
+                        .replace(/[\n\t]/g, ' ')
+                        // remove multiple space
+                        .replace(/\s{2,}/g, ' ');
+                }
+                return processEmptyElements(item, i, all.length) || markBlockElements(item, processNestedElements(item, flags));
             }
 
             function processEmptyElements(item, i, length) {
@@ -234,8 +248,9 @@ define('io.ox/core/tk/textproc', [
                 }
             }
 
-            function processNestedElements(item) {
-                var str = traverse(item);
+            function processNestedElements(item, flags) {
+                var str = traverse(item, { preserveWhitespace: flags.preserveWhitespace || item.nodeName === 'PRE' });
+
                 switch (item.nodeName) {
                     case 'DIV':
                         return item.classList.contains('io-ox-signature') ? '\0' + str + '\n' : str;
@@ -266,7 +281,11 @@ define('io.ox/core/tk/textproc', [
             }
 
             function markBlockElements(item, str) {
-                return /^(P|DIV|BLOCKQUOTE|UL|OL|LI|PRE|H\d|DL|ADDRESS|FIELDSET|FORM|NOSCRIPT|SECTION|TABLE|TR)$/.test(item.nodeName) ? '\0' + str + '\0' : str;
+                return isBlockElement(item) ? '\0' + str + '\0' : str;
+            }
+
+            function isBlockElement(item) {
+                return /^(P|DIV|BLOCKQUOTE|UL|OL|LI|PRE|H\d|DL|ADDRESS|FIELDSET|FORM|NOSCRIPT|SECTION|TABLE|TR)$/.test(item.nodeName);
             }
 
             function removeMarkers(str) {
@@ -282,7 +301,7 @@ define('io.ox/core/tk/textproc', [
                     // remove zero width space
                     .replace(/\u200B/g, '')
                     // finally convert all <br> to \n
-                    .replace(/\u0001/g, '\n');
+                    .replace(/\u0001+/g, '\n');
             }
 
         }
