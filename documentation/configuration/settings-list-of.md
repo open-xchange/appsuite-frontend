@@ -64,7 +64,7 @@ How many quick launch icons should be allowed as maximum (default: `3`)
 
 <config>io.ox/core//apps/quickLaunch=`<string>`</config>
 Default Apps for quick launcher. Comma-separated string of App IDs
-Default: `'io.ox/mail/main,io.ox/calendar/main,io.ox/files/main'`
+Default: `'io.ox/mail/main,io.ox/contacts/main,io.ox/portal/main'`
 
 ## Notifications
 
