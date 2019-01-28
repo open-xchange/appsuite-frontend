@@ -114,12 +114,11 @@ define('io.ox/mail/compose/model', [
             }.bind(this));
         },
 
-        attachFiles: function attachFiles(files) {
-            // TODO: mapping?!
+        attachFiles: function (files) {
             this.get('attachments').add(files);
         },
 
-        attachVCard: function attachVCard() {
+        attachVCard: function () {
             composeAPI.space.attachments.vcard(this.get('id')).then(function (vcard) {
                 this.get('attachments').add(vcard);
             }.bind(this));
