@@ -25,7 +25,7 @@ define('io.ox/mail/compose/model', [
 
     var attachmentsAPI = composeAPI.space.attachments;
 
-    var MailModel = Backbone.Model.extend({
+    return Backbone.Model.extend({
 
         defaults: function () {
             return {
@@ -63,22 +63,23 @@ define('io.ox/mail/compose/model', [
 
         initialize: function () {
             this.initialized = this.create().then(function (data) {
-                // fix previewUrl
+                // adjust data
+                data.to = (data.to || []).concat(this.get('to'));
+                data.cc = (data.cc || []).concat(this.get('cc'));
+                data.bcc = (data.bcc || []).concat(this.get('bcc'));
+
                 var collection = new Attachments.Collection();
                 collection.space = data.id;
                 collection.reset(_(data.attachments).map(function (attachment) {
                     return new Attachments.Model(_.extend({}, attachment, { group: 'mail', space: collection.space }));
                 }));
-                // TODO can we generalize this?!?
-                data.to = (data.to || []).concat(this.get('to'));
-                data.cc = (data.cc || []).concat(this.get('cc'));
-                data.bcc = (data.bcc || []).concat(this.get('bcc'));
                 data.attachments = collection;
+                return data;
+            }.bind(this)).then(function (data) {
                 this.set(data);
-
                 this.prevAttributes = data;
                 this.on('change', this.requestSave);
-                this.listenTo(collection, 'remove', this.onRemoveAttachment);
+                this.listenTo(data.attachments, 'remove', this.onRemoveAttachment);
             }.bind(this));
 
             this.requestSave = _.throttle(this.save.bind(this), 15000);
@@ -282,6 +283,4 @@ define('io.ox/mail/compose/model', [
         keepDraftOnClose: $.noop,
         setMailContentType: $.noop
     });
-
-    return MailModel;
 });
