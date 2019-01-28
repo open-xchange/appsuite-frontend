@@ -70,7 +70,7 @@ define('io.ox/mail/compose/api', [
                 .flatten()
                 .value();
             folderAPI.multiple(affectedFolders, { cache: false });
-            api.trigger('refresh.all');
+            mailAPI.trigger('refresh.all');
         });
     }, 5000, { leading: false });
 
