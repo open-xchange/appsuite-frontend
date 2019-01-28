@@ -282,8 +282,7 @@ define('io.ox/mail/compose/model', [
         keepDraftOnClose: function () {
             if (settings.get('features/deleteDraftOnClose') !== true) return false;
             return !!this.get('meta').editFor;
-        },
+        }
 
-        setMailContentType: $.noop
     });
 });

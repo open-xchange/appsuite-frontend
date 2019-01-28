@@ -770,9 +770,6 @@ define('io.ox/mail/compose/view', [
                 return self.loadEditor(content);
             }).then(function () {
                 this.editorContainer.idle();
-                // update the content type of the mail
-                // FIXME: may be, do this somewhere else? in the model?
-                this.model.setMailContentType(this.editor.content_type);
                 // reset tinyMCE's undo stack
                 if (!_.isFunction(this.editor.tinymce)) return;
                 this.editor.tinymce().undoManager.clear();
