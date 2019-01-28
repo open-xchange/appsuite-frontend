@@ -1,0 +1,56 @@
+Return-Path: <mheiland@sender.ox>
+Delivered-To: mheiland@recipient.ox
+Received: from mx.sender.ox (unknown [10.50.0.4])
+	by mx.recipient.ox (Postfix) with ESMTP id 472B24226B
+	for <mheiland@recipient.ox>; Mon, 26 Mar 2018 10:45:37 +0000 (UTC)
+Authentication-Results: mx.recipient.ox; dmarc=none (p=none dis=none) header.from=sender.ox
+Authentication-Results: mx.recipient.ox; spf=pass smtp.mailfrom=mheiland@sender.ox
+Authentication-Results: mx.recipient.ox;
+	dkim=pass (1024-bit key; unprotected) header.d=sender.ox header.i=@sender.ox header.b="oDUmQEAl";
+	dkim-atps=neutral
+Received: from null (localhost [127.0.0.1])
+	by mx.sender.ox (Postfix) with ESMTPS id 2DBD261C36
+	for <mheiland@recipient.ox>; Mon, 26 Mar 2018 10:45:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=sender.ox; s=mail;
+	t=1522061137; bh=0Vqi7C96uaAcruTPekAzRKB4ESweW7Xq2r+Tl/V4AFo=;
+	h=Date:From:Reply-To:To:Subject:From;
+	b=oDUmQEAlQWvYkou2aomX+8o3X4dPFKWbZquZNXh27C6VCwSH5xB8G+9jE996u3YSw
+	 nbFj92zNokJglWQZMzHZ7aC1jGROeyuMJ0UZ3ePeulrRrmm9yp+2hVm2pbQWfAcLNX
+	 OOkqPHeY5BHLIkMNl84GFRClHK/mkRKc+RoVZJqI=
+Date: Mon, 26 Mar 2018 12:45:36 +0200 (CEST)
+From: Martin Heiland <mheiland@sender.ox>
+Reply-To: Martin Heiland <mheiland@sender.ox>
+To: Recipient <mheiland@recipient.ox>
+Message-ID: <1589498096.67.1522061137083@10.50.0.4>
+Subject: Multiple Headers
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_66_1883128510.1522061137074"
+X-Priority: 3
+Importance: Medium
+X-Mailer: Open-Xchange Mailer v7.10.0-Rev3
+X-Originating-Client: open-xchange-appsuite
+
+------=_Part_66_1883128510.1522061137074
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Multiple Headers
+------=_Part_66_1883128510.1522061137074
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<!doctype html>
+<html>
+ <head> 
+  <meta charset="UTF-8"> 
+ </head>
+ <body>
+  <div>
+   Multiple Headers
+  </div> 
+ </body>
+</html>
+------=_Part_66_1883128510.1522061137074--

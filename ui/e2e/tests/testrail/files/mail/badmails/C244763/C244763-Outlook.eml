@@ -1,0 +1,95 @@
+Received: from AM5EUR03HT167.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:800:1f::19) by VI1PR0202MB2829.eurprd02.prod.outlook.com with
+ HTTPS via VI1PR0101CA0051.EURPRD01.PROD.EXCHANGELABS.COM; Wed, 28 Mar 2018
+ 14:51:28 +0000
+Received: from AM5EUR03FT057.eop-EUR03.prod.protection.outlook.com
+ (10.152.16.58) by AM5EUR03HT167.eop-EUR03.prod.protection.outlook.com
+ (10.152.17.209) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.20.631.7; Wed, 28
+ Mar 2018 14:51:27 +0000
+Authentication-Results: spf=pass (sender IP is 87.191.39.187)
+ smtp.mailfrom=open-xchange.com; outlook.com; dkim=pass (signature was
+ verified) header.d=open-xchange.com;outlook.com; dmarc=pass action=none
+ header.from=open-xchange.com;
+Received-SPF: Pass (protection.outlook.com: domain of open-xchange.com
+ designates 87.191.39.187 as permitted sender)
+ receiver=protection.outlook.com; client-ip=87.191.39.187;
+ helo=mx4.open-xchange.com;
+Received: from mx4.open-xchange.com (87.191.39.187) by
+ AM5EUR03FT057.mail.protection.outlook.com (10.152.17.44) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.20.631.7 via Frontend Transport; Wed, 28 Mar 2018 14:51:27 +0000
+X-IncomingTopHeaderMarker: OriginalChecksum:D31B83D3999E54148C9DB17ADB17058D4F9C608264388B13AD135C3E0528DD25;UpperCasedChecksum:6C3D98B7EDF5008026D565B6132B957E29C0206A8423441CBEA8AF26A2D4CCE8;SizeAsReceived:1572;Count:12
+Received: from open-xchange.com (imap.open-xchange.com [10.20.30.10])
+    (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+    (No client certificate requested)
+    by mx4.open-xchange.com (Postfix) with ESMTPS id 4CF376A297
+    for <ewaldbartkowiak@outlook.com>; Wed, 28 Mar 2018 16:51:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=open-xchange.com;
+    s=201705; t=1522248687;
+    bh=ZgcKPCczsab4AOf5w/FB3KhFJXSQl2LFdGRLyPXNkxw=;
+    h=From:Subject:Date:To:From;
+    b=O6GF0rYT62A6TyZtht0l4wMHpWLY5zunCvpXlpBtbfpFok9Fr7g1VfilbqFRr8tLv
+     9pM0ed/HmimUtgZHUkHsi5VqHDoMdn45xqaC9ekX9RudAZHZUnXCJjgM5bEolhFwFd
+     e/haB0UU6eGFFqHAl+pkuc4Mh0lfNScx8IN410FDfhZ2cdEtFwnYa0X1pofmQutDLj
+     MFgi2fDGLlXO5Z+n8lexNTYCKilwyw5mzV+NIws3IJ1fWgi/6a5Yo5eE7u7/FRKQ0o
+     PYElAsVw0I1Pu1n6LuxSmLnhtLzv0wLifjbnyPMYOGiisGWAGfel9HbrUjILzBlXod
+     X9CkkLc6tJaOQ==
+Received: from dhcp26.oxoe.int (dhcp26.oxoe.int [192.168.33.26])
+    (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+    (No client certificate requested)
+    by open-xchange.com (Postfix) with ESMTPSA id 2D49D3C1700
+    for <ewaldbartkowiak@outlook.com>; Wed, 28 Mar 2018 16:51:27 +0200 (CEST)
+From: Martin Heiland <martin.heiland@open-xchange.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: MA Test Outlook
+Message-ID: <310AB93C-A9A1-480D-AEF6-A300BB51ABD5@open-xchange.com>
+Date: Wed, 28 Mar 2018 16:51:26 +0200
+To: ewaldbartkowiak@outlook.com
+X-Mailer: Apple Mail (2.3445.5.20)
+X-IncomingHeaderCount: 12
+Return-Path: martin.heiland@open-xchange.com
+X-MS-Exchange-Organization-Network-Message-Id: 9a9a77da-efc8-4987-24d9-08d594bb6268
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-Microsoft-Exchange-Diagnostics: 1;AM5EUR03FT057;1:msaw6Wm4ngvRpTW+qmgsdxMIaSYN85oyBClZu0o5g/c9K5zsKjpMbOOseyG9Ut6ERfpydaj/9tzwQaO+GtZhnfQWHr9ryarVO2i4054UOY8k3ZO3FI2UUfIofSCr/Uqe
+X-Forefront-Antispam-Report: EFV:NLI;
+X-MS-Exchange-Organization-AuthSource: AM5EUR03FT057.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9a9a77da-efc8-4987-24d9-08d594bb6268
+X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(5000109)(4604075)(4605076)(610169)(650170)(651021)(8291501071);SRVR:AM5EUR03HT167;
+X-Microsoft-Exchange-Diagnostics: 1;AM5EUR03HT167;3:MNg7g4JgVHEYr69ZDZ+/D4PL3oQHhPEUiS4rw+UHM3YSWuCSExJtOiOgzEtUvwK8CZhxbxqkO5wfnAtfqDnB8LT+hifMaCfJ0zMyiekH1u1mZKRpy7p2QwgSiLE8+hJD3vjyBtLwQJqYMwHWDmQ27c33frGRL4SN5F30M0yX8is4kYpBDicrUjutKHiYej5/4+rUlyDDAvGC0sNwMGtnF3rgEvA4AlxTgqAn8AIjQ5SbLI6WX5lEYVQzc8cuJ7jMoulca3p93R00SjcLP++E2mjkdkgHepdkBvNv00yO4lZS/UKhCQkKWT0jWrd2/B/6;25:vs0343Km89qxN+gOzq+8zP35yBTznaPPklZtIFkv3z0NiuCnKnk8HI8ey7q6HKvvKW5bUzU8NdxINTbE87GHsSMrguh5isUQSkZODP0kJ0Ltcd0P2hSv2xb+fxXbRPraBeFY2+SShElc57bRzwxMP01c8Xm0MFAZSRx+ry87ND8xZ1OVPLlfotCQHnR5FwHr3f6MPnXqHf+0j/F1dTyWWJkbFvyAWuEhM6kOmHr8zv8=;31:n9SJuE/tJaFshUlrPFsQVUaEFQSuy+LY3uVHJ1zyS3oZVe5xPxWmGh4mF3+/BUaOqvTX5x8NYzynUI7KegZCCY+5wrKfb9/hK2RSGMoZ6AkUvWeZhenqPYWyQGAsNas5;4:7dKZ0qeHvMUU1wnEJbv5ML9dKGSwlJ307C7R1aY3EAq9TKLhZDIlxy6SntscyBP2gYst6L6bWiYnHSwgDaHARlwURjvwEExiHsEQZAjWVqHRvTSRWedkt/qDKDksOoDH0iMUOXVwHS1piq1zuanPF9Fzpk+xDEKuQFHYPL9LcEw=
+X-MS-TrafficTypeDiagnostic: AM5EUR03HT167:
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 87.191.39.187
+X-SID-PRA: MARTIN.HEILAND@OPEN-XCHANGE.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-Exchange-Antispam-Report-Test: UriScan:;
+X-Exchange-Antispam-Report-CFA-Test: BCL:0;PCL:0;RULEID:(444111676)(52401095)(52601095)(52505095)(52406095)(82015058);SRVR:AM5EUR03HT167;BCL:0;PCL:0;RULEID:;SRVR:AM5EUR03HT167;
+X-Microsoft-Antispam-Message-Info: hv9dzCwTuc9D9zWDVjp23AV88w89Adyd12KEKnqNPR039n8+lIG2XOOfmSS++6FmN1HKjQV8MmkOAE9ITzZ7It/DAFtj7GrA+oJ5zf0C/d02MdvTQ/XRD7xWymUyhn+A6SjgK1uCmo6lOGkAhkqNsUalp4D5Cc4A2s7I78DMM6hQgjgs4jWmFNC254W8v1ok
+X-Microsoft-Exchange-Diagnostics: 1;AM5EUR03HT167;6:O2Vmyjf+VYuaG8Zb0ZrZzDl/4aSBbb7oX2Gmo7D7ycYsr5yDbvQ9aHhhJ3BruHD840tgigpcZ5n67BKFioc0lIGeSMDEEkAX3PY3XHa42OnTlyiQXTsUSr15zoz7NCX7sLo9t9s1Z/o3/hQ1uCGnqjRNMcbfeRWEIVNM1D5DGQT6PniK/5tPLOjf0d2rMj8NEp/d4B2NZjjFIJRDI5F1cP7S7m39yzA8l14GuIDY+J+V93QSXjbdwj7JlB1RyvVfzUkngg7xo8nGBCH+OfeM9h/cQoUcCBPjvsxxJ2pAbwPbJx/GYUHU35YdYAU+H6CsPw+WoQsQKbDaCmgDEPuCBfXhsAZntkapr/6UU3j/94Y=;5:MiNhhdfPw9f8LlTIe8yJu1Ey65cpl0kW/2j6PFhK+OU+PMnaMwEdHYreTTrq0O4hmLXSjM+HKkBFhyhVeeb5y6MRBVEkwfcSa7USiDUmiHMG1w8BAs6vKkdW2Ag2OMrA9vcYX2b7GJ3B7JjV95jskeJRlJ28ikw1gZ8JvEv8gEY=;7:GBRtKaZUSyVpI+9zf5XfemK5rP+Msqc8rLqqN9teXkoWaQu30fj37VgbDE7WPR+EsaCIVZ6lqdUgudX/VwoGM71n9Z+5lPWjmp2Xti6jvY0wdbcmMj8akNDDOIbxciDPCW2XH7JoXeJAqj+vBrrKbydxMd5hAF/KbVuEnqA+rxaDM+uxf1DpoOG8cR010Yy0QqvEPU2X6i3gYGsbhvt2YLwCKlFkcOlt17fbNx20C4411V8FjY8h3oRNhBnRWEUm
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2018 14:51:27.3424
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a9a77da-efc8-4987-24d9-08d594bb6268
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5EUR03HT167
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:00.8163686
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.0609.000
+X-Microsoft-Exchange-Diagnostics:
+    1;VI1PR0202MB2829;27:nGCme6y3Jgeyv+AN3GkMBbQDvtpkDEApBLdIlZXdXWksDkNjLXX/DmTReC2E/DlA00g8OjvocSEYuVUCcKirYsllihjrfbHjTFr/2UccnJa5niNaixVaqrHhbAJI6cXP
+X-Microsoft-Antispam-Mailbox-Delivery:
+    abwl:0;wl:0;pcwl:0;kl:0;iwl:0;ijl:0;dwl:0;dkl:0;rwl:0;ex:0;auth:1;dest:I;ENG:(400001000128)(400125000095)(5062000261)(5061607266)(5061608174)(4900095)(4920089)(6515079)(4950130)(4990090)(400001001318)(400125100095)(61617190)(400001002128)(400125200095);
+X-Message-Info:
+    5vMbyqxGkddqdxOam6Y85Xngdmf6oIZvpyTX0/A7TVxXKfBoRTS+EVsSrQ/PL9ywwAMWzjSYYoq2BoV7Ihh+aY1nXycQsdznnIP2oqfjvG806lq3L4ytYrVpyCERIh5a39oZDWFsmTG3SzT2y+rgQHy9AnbWDnVodt7hQGVLs6h6AOXWceul4QRbiPRVAN0YHv4DRIz8KkPxy4CMLT0WEA==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+    17SkwiJB4dWzZK4KfBle0fZE7eJx6jBFrAj4G3LxYintpuOpuYk7CS+kjCg1sjHcnHyL51EOHC4DcLrmQnQARSJYbo76lmUv96oXzyAs43LaeC4eutL5iZdnBHqvpigjurfxCDeYmWKTQBw8DoRS1b6fGOI8//IO0V3w0J8otduBXepU3EoKW6MyIKht5ZgtJp4mvnCfKeWsngY2mnV/VzOY2Pcd15VEG0zBeZ3n8Ml7jPqkEyQRas4JHNw1KqP6cJc4P/nUAPh/Q7IVfM1SGogFL5Big88eBboBrtBCR3XRc+0IEnULh50GTpqy28zJLFmgtFakGqqB7Z2LoVa/ILSYXM2Klk+uxJVDCjbQtno=
+MIME-Version: 1.0
+
+Outlook

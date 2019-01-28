@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const Helper = require('@open-xchange/codecept-helper').helper,
     axe = require('axe-core');
 
@@ -7,6 +8,13 @@ function assertElementExists(res, locator, prefixMessage = 'Element', postfixMes
         throw new Error(`${prefixMessage} "${locator}" ${postfixMessage}`);
     }
 }
+=======
+const Helper = require('@open-xchange/codecept-helper').helper;
+const { util } = require('@open-xchange/codecept-helper');
+const fs = require('fs');
+const FormData = require('form-data');
+
+>>>>>>> 475f1f5253... tests, helper, testfiles and more gimmicks
 class MyHelper extends Helper {
 
     // helper to create a fresh contact including an attachment with evil filename
@@ -47,9 +55,78 @@ class MyHelper extends Helper {
                 });
             });
         });
-
+    };
+    async createContact(contact, options) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        return httpClient.put('/appsuite/api/contacts', contact, {
+            params: {
+                action: 'new',
+                session: session
+            },
+        });
+    }
+    async getDefaultFolder(module, options) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        const response = await httpClient.put('/appsuite/api/jslob', ['io.ox/core'], {
+            params: {
+                action: 'list',
+                session: session
+            }
+        });
+        //Debug
+        //console.log(response.data.data[0].tree)
+        return response.data.data[0].tree.folder[module];
     }
 
+    async importMail(options, folder, path) {
+        let form = new FormData();
+        form.append('file', fs.createReadStream(path));
+
+        const { httpClient, session } = await util.getSessionForUser(options);
+        return httpClient.post('/appsuite/api/mail', form, {
+            params: {
+                action: 'import',
+                session: session,
+                folder: folder,
+                force: true,
+            },
+            headers: form.getHeaders()
+        });
+    }
+    async importContact(options, folder, path) {
+        let form = new FormData();
+        form.append('file', fs.createReadStream(path));
+
+        const { httpClient, session } = await util.getSessionForUser(options);
+        return httpClient.post('/appsuite/api/import', form, {
+            params: {
+                action: 'VCARD',
+                session: session,
+                ignoreUIDs: '',
+                folder: folder,
+            },
+            headers: form.getHeaders()
+        });
+    }
+
+    async addAttachment(options, filepath, modulo, folder, id) {
+        //The module type of the object: 1 (appointment), 4 (task), 7 (contact), 137 (infostore).
+        let form = new FormData();
+        form.append('json_0', JSON.stringify({ module: modulo, attached: id, folder: folder }));
+        form.append('file_0', fs.createReadStream(filepath))
+
+        const { httpClient, session } = await util.getSessionForUser(options);
+        return httpClient.post('/appsuite/api/attachment', form, {
+            params: {
+                action: 'attach',
+                session: session,
+                force_json_response: true,
+            },
+            headers: form.getHeaders()
+        });
+    }
+
+<<<<<<< HEAD
     // will hopefully be removed when codecept 2.0 works as expected
     async grabHTMlFrom2(locator) {
 
@@ -102,6 +179,26 @@ class MyHelper extends Helper {
         if (typeof report === 'string') throw report;
         return report;
     }
+=======
+    async getContact(options, first_name, last_name) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        console.log(session)
+        let test = {first_name: first_name, last_name: last_name}
+        const response = await httpClient.put('/appsuite/api/contacts', test , {
+            params: {
+                action: 'search',
+                session: session,
+                columns: '1,20',
+            },
+          
+        });
+        //Debug
+        return response.data.data.map(function(data){
+            return {id:data[0], folder:data[1]};
+        })
+    }
+
+>>>>>>> 475f1f5253... tests, helper, testfiles and more gimmicks
 }
 
 module.exports = MyHelper;

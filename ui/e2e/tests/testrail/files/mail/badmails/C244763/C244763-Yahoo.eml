@@ -1,0 +1,94 @@
+X-Apparently-To: ewaldbartkowiak@yahoo.de; Wed, 28 Mar 2018 14:46:45 +0000
+Return-Path: <martin.heiland@open-xchange.com>
+Received-SPF: pass (domain of open-xchange.com designates 87.191.39.187 as permitted sender)
+X-YMailISG: jSkuIzoWLDsQWocy_zbz2HtXsiJDZrU2b7YsxsZo1uY8G4KV
+ zMyKZM6ROEAsYvlortRcMnXLIUZqGM6GCYT6M.fU_tL_rG6l24VzaeD1FgsU
+ mOCxnbAmpEmPy6zSKQ1Gakt7Iy.DlRS8fcuxhtm8wh4MBk.yqllkGZHAilab
+ x53JwfCMeG_Kst.F3UV2PsB8H5WST95W9GGZku8QfqbKemBUXWvb167_xvIp
+ DSgaUpr0mU1EcDNPrlsOYfpU4VP067mMLo5uPW4twf3U9ub_AKbQQ9sogGej
+ Dkdv172p_TieKrAahVv3HBCIHzpHwWU2P77fKuBxNXGpix_bo_UXPtvtvM3M
+ gUa81XQmmEnESoplaNkV6tFko1B9o77axSkFkDEls1aSzp.QKknbMN.ViKO_
+ edX0WHvIh8S7qT8Fg_WUW.1SBkJ949AgWSH.veXZn9GQ9VeQj9BzkAqEVP1L
+ ZxLOqu3ExirVEZfrsxGFecGQGVtipk7zMMAsQkagkas9j0PVAsuJdUFYtSHv
+ WrBgiMw2TshLA3Nn4ZUG_XoYR7OhMjwv_lud9AVsHTGygzWfb6TWAdo3YcMU
+ Wwc8s_RA5bMchlXwO0mVX63Q8ALbgn6E4uH4H91W_Qbiy7dgqWLX5uYM_I11
+ HrHkVOXpvW7biqvybZ7dXYw2Y4aiMSgSejCE6dhZ.fb.qOguIUxa79.gqDXM
+ ifSHR8B9ZHJK3P4Ek4PXpGIjscD4vT3IjA9c_g_HyvQPR8lzcBLGnIG0oBNx
+ iI8UcNLp6DjswoQItM.9CrwBhol1Zdx2ajbqeyGJT3KAyGEnpmGiLYX6HhBo
+ kgUU4LZWoi7jCqZSYCYqZGTIbD3iECoIDCM7KWO1.l_ALzcYZ5JWobHBD37o
+ iiOyNSmSZvgv5km8CPGmD2cgEcQUC6T2ESYjE.CrU1PKITX4HIN0YtrH4mU0
+ wxnY5mYWVzr7K86fZ.yEpw2GluecfzmwEKDMW.1skJ8Nxn_iIQZ2RvvJ2M7l
+ F4NxIJ6sz95_7Hk5GEQw6QM.AK1m3xi9f.BciGqHDVoT6QZJH4ZxnCqZiafG
+ Q8WUNR67uiWwsj5NziSq9aDNW8HP.NjqCb5AqVcUEx9qF1f43jxK9njOHgSM
+ N6ZkWUE-
+X-Originating-IP: [87.191.39.187]
+Authentication-Results: mta1121.mail.ir2.yahoo.com  from=open-xchange.com; domainkeys=neutral (no sig);  from=open-xchange.com; dkim=pass (ok)
+Received: from 127.0.0.1  (EHLO mx4.open-xchange.com) (87.191.39.187)
+  by mta1121.mail.ir2.yahoo.com with SMTPS; Wed, 28 Mar 2018 14:46:45 +0000
+Received: from open-xchange.com (imap.open-xchange.com [10.20.30.10])
+  (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+  (No client certificate requested)
+  by mx4.open-xchange.com (Postfix) with ESMTPS id 4267D6A1FB
+  for <ewaldbartkowiak@yahoo.de>; Wed, 28 Mar 2018 16:46:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=open-xchange.com;
+  s=201705; t=1522248404;
+  bh=oMrsyAdxBmD0IxQiqmRAcS7KqC1ocwVhaV7l4V+OTIA=;
+  h=From:Subject:Date:To:From;
+  b=IrbO7q7C2rH90y6jPKjOQek86IIiCbko/Z7B1QOxiKYwx2jaSXAnn4+hiLeus8qKg
+   QPJ4DyMPUgj1QkvjaaNU91EhB3XBJ1Y/H8wR0Ky6d1LJ2RL+QhpLyMpJemE2AApYal
+   ZKy8Ppi2UlcL7/NCtbHcS3WzxdCd2Cq4yyyWyr8CLDtCX3ODQSXu7PmVBdKg8BrZou
+   LxosIVF8bhmDQfWxPIfPPy0/Fz/6XkqjnJOcYa8w9L6djP4FuPeiRSkx6c/TKBBfll
+   tenULAp7yj7mPTvHWDvvFm4x8Rt5y8dY83JfC71g0Jv2cVSo9j8h2Q7KNwVFj3KZZI
+   X8qFgufqV0HSg==
+Received: from dhcp26.oxoe.int (dhcp26.oxoe.int [192.168.33.26])
+  (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+  (No client certificate requested)
+  by open-xchange.com (Postfix) with ESMTPSA id 22D683C04FE
+  for <ewaldbartkowiak@yahoo.de>; Wed, 28 Mar 2018 16:46:44 +0200 (CEST)
+From: Martin Heiland <martin.heiland@open-xchange.com>
+Content-Type: multipart/signed;
+  boundary="Apple-Mail=_BAEC7B64-9872-4EDB-9EC4-006980447339";
+  protocol="application/pgp-signature";
+  micalg=pgp-sha256
+Mime-Version: 1.0 (Mac OS X Mail 11.2 \(3445.5.20\))
+Subject: MA Test Yahoo
+Message-Id: <B5AA3E5B-F1DC-4852-A34C-6ECF0E33C9D1@open-xchange.com>
+Date: Wed, 28 Mar 2018 16:46:42 +0200
+To: ewaldbartkowiak@yahoo.de
+X-Mailer: Apple Mail (2.3445.5.20)
+Content-Length: 1274
+
+
+--Apple-Mail=_BAEC7B64-9872-4EDB-9EC4-006980447339
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+  charset=us-ascii
+
+Yahoo
+
+--Apple-Mail=_BAEC7B64-9872-4EDB-9EC4-006980447339
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+  filename=signature.asc
+Content-Type: application/pgp-signature;
+  name=signature.asc
+Content-Description: Message signed with OpenPGP
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEzExzEDLODcbiUqirAmE8EMMGImMFAlq7qtIACgkQAmE8EMMG
+ImNkXhAAmsG+URvcPtBWgn8Llg5c6akvs1uujt39w7w7QF6DCIoLxYDXRHpsed65
+dwQHSZ8WsSTC2Kvl4Td1yGVJzzCvspbqaw1QZmJuvwPM/pEK/Yv1y3EB8+VI4J8+
+ZIW9vMLCQj+ARPIWLjQL59cJUB+lyZx9ZaWrNxOD2Xb2yuptbv5vLwBraegGgNYP
+x8WvbNRo4thYx610upiD3GCZ0kgCBKQSWknbwDNsxjJYeZv7PP5u378Us6ypJpLK
++5PYSI07e204rB88GO1FpXZbjS7m+CIEb3SKal4SBgpztKYx2fKp/XypkpXSA1+5
+CNqU1Qe5tXmKuQiYfYKEtNJv5Hx0TqQ+c3cQRDIoUGfsIgrAN2J5DqaXwfMNAsWV
+cbg8DzaEAoWA59RGH8Zxh5Cx38Vdu2SasldUk5H23x4NcOJVdx+ntAkg7cfqCIop
+dRKOWtS+cOodsVLoAwTAfO6z5i0ptDXT4YaxK6qTwSrlOBRmq/Qu5jDGpCH9jlk1
+h2FNXOdIaJMxzpyKbDXen4M68f9AfXmFlOm8xpJDpbM1tONcdUhA+XJZeDGs6sId
+cdJO66zFBnlKd2MaTtUavVWPzRq2TdQXHN1p3XFWRwqG9+emLQLuIDYtwyK4vDnK
+bLfA5AjVFM8C7fly7PXWOH7q5Mz6gffpcmA8H2C8UIbYAoJFKSQ=
+=r8QZ
+-----END PGP SIGNATURE-----
+
+--Apple-Mail=_BAEC7B64-9872-4EDB-9EC4-006980447339--

@@ -1,0 +1,54 @@
+Return-Path: <mheiland@sender.ox>
+Delivered-To: mheiland@recipient.ox
+Received: from mx.sender.ox (unknown [10.50.0.4])
+	by mx.recipient.ox (Postfix) with ESMTP id 325CF42430
+	for <mheiland@recipient.ox>; Tue, 27 Mar 2018 08:29:42 +0000 (UTC)
+Authentication-Results: mx.recipient.ox;
+	dkim=pass (1024-bit key; unprotected) header.d=sender.ox header.i=@sender.ox header.b="Ddx9gjNi";
+	dkim-atps=neutral
+Received: from null (localhost [127.0.0.1])
+	by mx.sender.ox (Postfix) with ESMTPS id 2A3C061C36
+	for <mheiland@recipient.ox>; Tue, 27 Mar 2018 08:29:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=sender.ox; s=mail;
+	t=1522139382; bh=zm95Fdg8iDhA4n6rZgoVT5sGoCeqnuxQA78RhqTtrNg=;
+	h=Date:From:Reply-To:To:Subject:From;
+	b=Ddx9gjNigAocwIJHvMPxQu/JgkjXL0twdTAdAPEOBVK+3GrpL/MvQe8WGrhucH66J
+	 PhAIDzGzqGbsTncRmAz0J/zCIXGa6qXdGQzwd5fzw+wVUgF7dwA+BaH5hC8AbuhAtK
+	 O5PmkHs3SyGdEztk16NBrMF01gwdRlRLUG3CMSoU=
+Date: Tue, 27 Mar 2018 10:29:41 +0200 (CEST)
+From: Martin Heiland <mheiland@sender.ox>
+Reply-To: Martin Heiland <mheiland@sender.ox>
+To: Recipient <mheiland@recipient.ox>
+Message-ID: <751905656.97.1522139382097@10.50.0.4>
+Subject: C244757-hasNoDMARC_hasNoSPF_hasPassedDKIM
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_96_519988722.1522139382074"
+X-Priority: 3
+Importance: Medium
+X-Mailer: Open-Xchange Mailer v7.10.0-Rev3
+X-Originating-Client: open-xchange-appsuite
+
+------=_Part_96_519988722.1522139382074
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+C244757-hasNoDMARC_hasNoSPF_hasPassedDKIM
+------=_Part_96_519988722.1522139382074
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<!doctype html>
+<html>
+ <head> 
+  <meta charset="UTF-8"> 
+ </head>
+ <body>
+  <div>
+   C244757-hasNoDMARC_hasNoSPF_hasPassedDKIM
+  </div> 
+ </body>
+</html>
+------=_Part_96_519988722.1522139382074--

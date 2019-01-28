@@ -1,0 +1,193 @@
+Return-Path: <opensuse-buildservice+bounces-25693-marcus.klein=open-xchange.com@opensuse.org>
+Delivered-To: marcus.klein@open-xchange.com
+Received: from mx1.open-xchange.com ([192.168.110.96])
+	by imap.open-xchange.com with LMTP id 8I6SL97qi1q2RQAA3c6Kzw
+	for <marcus.klein@open-xchange.com>; Tue, 20 Feb 2018 10:31:10 +0100
+Received: by mx1.open-xchange.com (Postfix, from userid 1001)
+	id AE4066A5E2; Tue, 20 Feb 2018 10:31:10 +0100 (CET)
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on mx1.open-xchange.com
+X-Spam-Level:
+X-Spam-Status: No, score=-5.1 required=5.0 tests=AWL,BAYES_00,
+	RCVD_IN_DNSWL_MED,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.1
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mx1.open-xchange.com (Postfix) with ESMTP id 774FF6A5E8
+	for <marcus.klein@open-xchange.com>; Tue, 20 Feb 2018 10:31:07 +0100 (CET)
+Received: from [127.0.0.1] (helo=mx1.open-xchange.com)
+	by localhost with ESMTP (eXpurgate 4.1.8)
+	(envelope-from <opensuse-buildservice+bounces-25693-marcus.klein=open-xchange.com@opensuse.org>)
+	id 5a8beadb-023e-7f000001272a-7f0000019984-1
+	for <marcus.klein@open-xchange.com>; Tue, 20 Feb 2018 10:31:07 +0100
+Authentication-Results: open-xchange.com; spf=none (mailfrom) smtp.mailfrom=opensuse.org (client-ip=195.135.221.145; helo=hydra.opensuse.org; envelope-from=opensuse-buildservice+bounces-25693-marcus.klein=open-xchange.com@opensuse.org; receiver=<UNKNOWN>)
+Authentication-Results: open-xchange.com; dmarc=none (p=none dis=none) header.from=suse.de
+Received: from hydra.opensuse.org (proxy-nue1.opensuse.org [195.135.221.145])
+	by mx1.open-xchange.com (Postfix) with ESMTP id 465156A5A0
+	for <marcus.klein@open-xchange.com>; Tue, 20 Feb 2018 10:31:07 +0100 (CET)
+Received: from lists5.opensuse.org (baloo.infra.opensuse.org [192.168.47.38])
+	by hydra.opensuse.org (Postfix) with ESMTP id 2EDE321D50
+	for <marcus.klein@open-xchange.com>; Tue, 20 Feb 2018 09:31:04 +0000 (UTC)
+Received: from baloo.infra.opensuse.org (localhost [127.0.0.1])
+	by lists5.opensuse.org (Postfix) with ESMTP id 0612310E64;
+	Tue, 20 Feb 2018 09:31:03 +0000 (UTC)
+X-Original-To: opensuse-buildservice@lists5-opensuse.suse.de
+Delivered-To: opensuse-buildservice@lists5-opensuse.suse.de
+Received: from relay2.suse.de (unknown [149.44.160.134])
+	by lists5.opensuse.org (Postfix) with ESMTP id A383D10E42
+	for <opensuse-buildservice@lists5-opensuse.suse.de>; Tue, 20 Feb 2018 09:31:02 +0000 (UTC)
+Received: from imap.suse.de (imap2-int.suse.de [195.135.220.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by relay2.suse.de (Postfix) with ESMTPS id 905B52C14F;
+	Tue, 20 Feb 2018 09:31:02 +0000 (UTC)
+Received: from linux-izwb.site (gate-dmz1.suse.de [195.135.220.254])
+	by imap.suse.de (Postfix) with ESMTPSA id 3481011417;
+	Tue, 20 Feb 2018 09:31:02 +0000 (UTC)
+From: Adrian =?ISO-8859-1?Q?Schr=F6ter?= <adrian@suse.de>
+To: opensuse-buildservice@opensuse.org
+Cc: Eike Waldt <waldt@b1-systems.de>
+Subject: Re: [opensuse-buildservice] Re: cannot build SLES15 kiwi image in OBS #2
+Date: Tue, 20 Feb 2018 10:31:02 +0100
+Message-ID: <11104307.Ke49HynKEi@linux-izwb.site>
+In-Reply-To: <dc04fe1d-3e80-69e5-9bd1-575973ae5f41@b1-systems.de>
+References: <756f010c-7630-ec3d-a69e-082defab9c2c@b1-systems.de> <3606943.EXdmtcVl4a@linux-izwb.site> <dc04fe1d-3e80-69e5-9bd1-575973ae5f41@b1-systems.de>
+Precedence: bulk
+Mailing-List: contact opensuse-buildservice+help@opensuse.org; run by mlmmj
+X-Mailinglist: opensuse-buildservice
+List-Post: <mailto:opensuse-buildservice@opensuse.org>
+List-Help: <mailto:opensuse-buildservice+help@opensuse.org>
+List-Subscribe: <mailto:opensuse-buildservice+subscribe@opensuse.org>
+List-Unsubscribe: <mailto:opensuse-buildservice+unsubscribe@opensuse.org>
+List-Owner: <mailto:opensuse-buildservice+owner@opensuse.org>
+List-Archive: <http://lists.opensuse.org/opensuse-buildservice/>
+X-MIME-Notice: attachments may have been removed from this message
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-purgate-ID: 151428::1519119067-0000023E-73931872/9/21425
+X-purgate-type: bulk
+X-purgate-size: 4454
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is sent in bulk (visit http://www.eleven.de for further information)
+X-purgate: bulk
+X-OX-Marker: 3bcdee47-8516-4133-be20-d99106c1ecbe
+
+On Dienstag, 20. Februar 2018, 09:18:39 CET wrote Eike Waldt:
+>=20
+> On 02/19/2018 10:47 AM, Adrian Schr=F6ter wrote:
+> > On Montag, 19. Februar 2018, 10:29:57 CET wrote Eike Waldt:
+> >> Hi there,
+> >>
+> >> now that I figured out which repos to use and which rpms to build by
+> >> hand, my kiwi build is stuck again...
+> >> Again, I can repdoduce this at my local OBS instance and also on
+> >> build.opensuse.org.
+> >>
+> >> Something with creating lvs is broken.
+> >> This config works fine on SLES12 kiwi builds.
+> >>
+> >>       <systemdisk name=3D'local'>
+> >>           <volume name=3D'@root' size=3D'10240M'/>
+> >>       </systemdisk>
+> >>
+> >> Sadly I also did not find any recent examples for a LVM scenario in any
+> >> of you git repos (except for the schema docs, which tell me that this =
+is
+> >> right).
+> >>
+> >> https://build.opensuse.org/package/show/home:waldt:branches:SUSE:Templ=
+ates:Images:SLE-15/kiwi-SLES15-xen
+> >> https://build.opensuse.org/package/live_build_log/home:waldt:branches:=
+SUSE:Templates:Images:SLE-15/kiwi-SLES15-xen/images/x86_64
+> >>
+> >> [  237s] [ DEBUG   ]: 09:19:55 | EXEC: [pvcreate /dev/mapper/loop0p3]
+> >> [  237s] [ DEBUG   ]: 09:19:55 | EXEC: [vgcreate local /dev/mapper/loo=
+p0p3]
+> >> [  237s] [ INFO    ]: 09:19:55 | Creating volumes(ext4)
+> >> [  237s] [ DEBUG   ]: 09:19:55 | EXEC: [du -s --apparent-size
+> >> --block-size 1 /usr/src/packages/KIWI-oem/build/image-root]
+> >> [  238s] [ DEBUG   ]: 09:19:55 | EXEC: [bash -c find
+> >> /usr/src/packages/KIWI-oem/build/image-root | wc -l]
+> >> [  238s] [ INFO    ]: 09:19:55 | --> volume LVRoot with 2680 MB
+> >> [  238s] [ DEBUG   ]: 09:19:55 | EXEC: [lvcreate -L 2680 -n LVRoot loc=
+al]
+> >> [  238s] [ DEBUG   ]: 09:19:55 | EXEC: Failed with stderr:   WARNING:
+> >> Failed to connect to lvmetad. Falling back to device scanning.
+> >> [  238s]   /dev/local/LVRoot: not found: device not cleared
+> >> [  238s]   Aborting. Failed to wipe start of new LV.
+> >> [  238s] , stdout: (no output on stdout)
+> >=20
+> > Have you check with kiwi developers? Because this looks more like a pro=
+blem
+> > in kiwi or lvm tools in first place ... okay, maybe they rely now on so=
+me more
+> > running daemon, but I would check with them first.
+> The kiwi dev told me that this is not a kiwi issue, but an issue with
+> the OBS worker.
+>=20
+> https://github.com/SUSE/kiwi/issues/631
+>=20
+> schaefi: "Oh and I see you build in obs, then it's clear. The obs
+> workers do not support creating lvm devices
+> You could report this to the obs team like I did some time ago. A
+> possible solution could be to use
+> kernel-default instead of kernel-obs-build for the obs worker (untested
+> though).
+
+instead is not an option, but you could try to add it additionly, if=20
+this is about missing kernel modules.
+
+Just add
+
+Support: kernel-default
+
+to your project config to test.
+
+> I think this can be
+> setup in the prjconf"
+> ^-- Would this help something, what do you think?
+> Is there on equivalent to "VMInstall:" which I could use to get rid of
+> "kernel-obs-build"?
+
+do not get rid of it, since the modules need to match the kernel version.
+
+> schaefi: "yes none of osc build or build in obs can deal with lvm
+> builds. For an unknown reason the device paths created by the lvm tools
+> does not work inside of the chroot or worker environment from obs. I
+> guess the kernel or the udev rules or a combination of both prevents
+> that this works. You can try to just build with kiwi on the host instead
+> of osc build and this under normal conditions works well as I also test
+> this pretty often.
+
+k, chroot might not work, but you could try
+
+ osc build --vm-type=3Dkvm ...
+
+> But be aware the above mentioned issues for lvm also applies if you
+> build from a "normal" host. The most annoying thing here is the lvmetad
+> which I usually replace by a /usr/bin/true when I want to use the host
+> as build host for lvm images (yes nasty but works)"
+>=20
+> >=20
+>=20
+>=20
+
+
+=2D-=20
+
+Adrian Schroeter
+email: adrian@suse.de
+
+SUSE Linux GmbH, GF: Felix Imend=F6rffer, Jane Smithard, Graham Norton, HRB=
+ 21284 (AG N=FCrnberg)=20
+=20
+Maxfeldstra=DFe 5                        =20
+90409 N=FCrnberg=20
+Germany=20
+
+
+
+
+--
+To unsubscribe, e-mail: opensuse-buildservice+unsubscribe@opensuse.org
+To contact the owner, e-mail: opensuse-buildservice+owner@opensuse.org
+

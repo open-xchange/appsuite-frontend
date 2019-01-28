@@ -1,5 +1,5 @@
 
-type ICodeceptCallback = (i: CodeceptJS.I, users:any) => void;
+type ICodeceptCallback = (i: CodeceptJS.I, users:CodeceptJS.users, search:CodeceptJS.search, contacts:CodeceptJS.contacts) => void;
 
 declare class FeatureConfig {
   retry(times:number): FeatureConfig
@@ -127,6 +127,10 @@ declare const codeceptjs: any;
 
 declare namespace CodeceptJS {
   export interface I {
+    addMochawesomeContext(context: ILocator) : void,
+    addMochawesomeContext(context: string) : void,
+    debug(msg: string) : void,
+    debugSection(section: string, msg: string) : void,
     defineTimeout(timeouts: string) : void,
     amOnPage(url: string) : void,
     click(locator: ILocator, context?: ILocator) : void,
@@ -199,7 +203,8 @@ declare namespace CodeceptJS {
     grabCurrentUrl() : Promise<string>,
     grabBrowserUrl() : Promise<string>,
     dontSeeInSource(text: string) : void,
-    seeNumberOfElements(selector: string, num: number) : void,
+    seeNumberOfElements(locator: ILocator, num: number) : void,
+    seeNumberOfElements(locator: string, num: number) : void,
     seeNumberOfVisibleElements(locator: ILocator, num: number) : void,
     seeNumberOfVisibleElements(locator: string, num: number) : void,
     seeCssPropertiesOnElements(locator: ILocator, cssProperties: string) : void,
@@ -241,7 +246,8 @@ declare namespace CodeceptJS {
     waitUntilExists(locator: string, sec?: number) : void,
     waitInUrl(urlPart: string, sec?: number) : void,
     waitUrlEquals(urlPart: string, sec?: number) : void,
-    waitForText(text: string, sec?: number, aContext?: string) : void,
+    waitForText(text: string, sec?: number, context?: ILocator) : void,
+    waitForText(text: string, sec?: number, context?: string) : void,
     waitForValue(field: ILocator, value: string, sec?: number) : void,
     waitForValue(field: string, value: string, sec?: number) : void,
     waitForVisible(locator: ILocator, sec?: number) : void,
@@ -272,22 +278,26 @@ declare namespace CodeceptJS {
     runOnIOS(caps: string, fn: Function) : void,
     runOnAndroid(caps: string, fn: Function) : void,
     runInWeb(fn: Function) : void,
-    debug(msg: string) : void,
-    debugSection(section: string, msg: string) : void,
     createContactWithEvilAttachment() : void,
+    doSearch() : void,
     clickToolbar(selector: string, timeout: string, interval: string) : void,
     selectFolder(id: string) : void,
     waitForFocus(selector: string, timeout: string, interval: string) : void,
+    scrollElementToTop(selector: string) : void,
+    scrollElementToBottom(selector: string) : void,
     executeSoapRequest(type: string, action: string, data: string) : void,
     haveSetting(key: string, value: string, options: string) : void,
     haveSnippet(snippet: string, options: string) : void,
     haveMail(mail: string, options: string) : void,
+    haveMails(iteratable: string, options: string) : void,
     haveMailFilterRule(rule: string, options: string) : void,
+    haveFolder(title: string, module: string, parent: string, options: string) : void,
     insertMailaddress(selector: string, userIndex: string) : void,
     login(params: string, options: string) : void,
     logout() : void,
     openApp(name: string) : void,
     removeAllAppointments() : void,
+    grabAxeReport() : void,
     say(msg: string) : void,
     retryStep(opts: string) : void,
 
@@ -298,17 +308,13 @@ declare namespace CodeceptJS {
     () : void,
     () : void,
     concat() : void,
-    copyWithin() : void,
-    fill() : void,
     find() : void,
     findIndex() : void,
     pop() : void,
     push() : void,
-    reverse() : void,
     shift() : void,
     unshift() : void,
     slice() : void,
-    sort() : void,
     splice() : void,
     includes() : void,
     indexOf() : void,
@@ -322,10 +328,24 @@ declare namespace CodeceptJS {
     reduce() : void,
     reduceRight() : void,
     join() : void,
+    reverse() : void,
+    sort() : void,
     lastIndexOf() : void,
+    copyWithin() : void,
+    fill() : void,
     values() : void,
-    flat() : void,
-    flatMap() : void,
+
+  }
+
+
+  export interface search {
+    doSearch(query: string) : void,
+
+  }
+
+
+  export interface contacts {
+    addContact(folder: string, alloptions: string) : void,
 
   }
 

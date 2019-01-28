@@ -1,0 +1,13 @@
+Return-Path: <tester@example.com>
+Delivered-To: steffen.templin@open-xchange.com
+Authentication-Results: open-xchange.com; spf=none (mailfrom) smtp.mailfrom=example.com (client-ip=192.168.0.1; helo=mailout.example.com; envelope-from=tester@example.com; receiver=<UNKNOWN>)
+Authentication-Results: open-xchange.com; dmarc=none (p=none dis=none) header.from=example.com
+Date: Tue, 20 Feb 2018 17:41:12 +0100 (CET)
+From: tester@example.com
+To: steffen.templin@open-xchange.com
+Message-ID: <1720025532.8103.1519144872181@example.com>
+Subject: Auth test
+MIME-Version: 1.0
+Content-Type: text/plain
+
+Test

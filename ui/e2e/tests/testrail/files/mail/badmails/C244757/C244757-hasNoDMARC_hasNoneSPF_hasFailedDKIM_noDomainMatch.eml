@@ -1,0 +1,55 @@
+Return-Path: <mheiland@sender.ox>
+Delivered-To: mheiland@recipient.ox
+Received: from mx.sender.ox (unknown [10.50.0.4])
+	by mx.recipient.ox (Postfix) with ESMTP id 1749742430
+	for <mheiland@recipient.ox>; Tue, 27 Mar 2018 11:31:24 +0000 (UTC)
+Authentication-Results: mx.recipient.ox; spf=none smtp.mailfrom=mheiland@sender.ox
+Authentication-Results: mx.recipient.ox;
+	dkim=fail reason="key not found in DNS" (0-bit key; unprotected) header.d=sender.ox header.i=@sender.ox header.b="K281rQ/r";
+	dkim-atps=neutral
+Received: from null (localhost [127.0.0.1])
+	by mx.sender.ox (Postfix) with ESMTPS id EA2A761C39
+	for <mheiland@recipient.ox>; Tue, 27 Mar 2018 11:31:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=sender.ox; s=mail;
+	t=1522150283; bh=llqre/reLkIGvxIwfnOuF20wEUWyeP0HNv/MgFfxDnY=;
+	h=Date:From:Reply-To:To:Subject:From;
+	b=K281rQ/rVXZz33Tb0JioJVHORH6p1mnNOcpruKbw2nRz2CG4WkHbhtrIDFzqDIRiH
+	 2KOVvxMYpGM08eCx1wvhdT5ruLRkOQgbX2Sf4RYZrplVC8DFUC+eCi7JnGNKVIinBL
+	 Ii9YMCOQeoNN7/f2ADSTFe1uoD1FXuBUPNDesfBE=
+Date: Tue, 27 Mar 2018 13:31:23 +0200 (CEST)
+From: Martin Heiland <mheiland@fake.ox>
+Reply-To: Martin Heiland <mheiland@sender.ox>
+To: Recipient <mheiland@recipient.ox>
+Message-ID: <1442028344.107.1522150283824@10.50.0.4>
+Subject: C244757-hasNoDMARC_hasNoneSPF_hasFailedDKIM_noDomainMatch
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_106_767550373.1522150283808"
+X-Priority: 3
+Importance: Medium
+X-Mailer: Open-Xchange Mailer v7.10.0-Rev3
+X-Originating-Client: open-xchange-appsuite
+
+------=_Part_106_767550373.1522150283808
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+C244757-hasNoDMARC_hasNoneSPF_hasFailedDKIM_noDomainMatch
+------=_Part_106_767550373.1522150283808
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<!doctype html>
+<html>
+ <head> 
+  <meta charset="UTF-8"> 
+ </head>
+ <body>
+  <div>
+   C244757-hasNoDMARC_hasNoneSPF_hasFailedDKIM_noDomainMatch
+  </div> 
+ </body>
+</html>
+------=_Part_106_767550373.1522150283808--

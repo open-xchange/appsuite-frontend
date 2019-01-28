@@ -1,0 +1,56 @@
+Return-Path: <mheiland@sender.ox>
+Delivered-To: mheiland@recipient.ox
+Received: from mx.sender.ox (unknown [10.50.0.4])
+	by mx.recipient.ox (Postfix) with ESMTP id 5078F42430
+	for <mheiland@recipient.ox>; Tue, 27 Mar 2018 08:39:53 +0000 (UTC)
+Authentication-Results: mx.recipient.ox; dmarc=pass (p=reject dis=none) header.from=sender.ox
+Authentication-Results: mx.recipient.ox; spf=pass smtp.mailfrom=mheiland@sender.ox
+Authentication-Results: mx.recipient.ox;
+	dkim=fail reason="signature verification failed" (1024-bit key; unprotected) header.d=sender.ox header.i=@sender.ox header.b="QL6x/hBL";
+	dkim-atps=neutral
+Received: from null (localhost [127.0.0.1])
+	by mx.sender.ox (Postfix) with ESMTPS id 0C7EE61C36
+	for <mheiland@recipient.ox>; Tue, 27 Mar 2018 08:39:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=sender.ox; s=mail;
+	t=1522139993; bh=EzH4Nqn1nbU7WqkzE2VNoql15FzZRgzSi8yI4+hAp0E=;
+	h=Date:From:Reply-To:To:Subject:From;
+	b=QL6x/hBLqbET46WeJdTMXEfZ1vbLsJrTu3WvlqBPp56CccqkEaziiw85BSFR91UdT
+	 TLDounxjaHf+pX8+rCWQ0a7oho73xWnP5NDCrJbsy3+eGJyMzWsCNhgG4CbwPILhnG
+	 b/se8K6apsOJ0WSQSaEzzAkeAmnTFPM2g7lMjDQE=
+Date: Tue, 27 Mar 2018 10:39:52 +0200 (CEST)
+From: Martin Heiland <mheiland@fake.ox>
+Reply-To: Martin Heiland <mheiland@sender.ox>
+To: Recipient <mheiland@recipient.ox>
+Message-ID: <603549892.101.1522139992915@10.50.0.4>
+Subject: C244757-hasPassedDMARC_hasPassedSPF_hasFailedDKIM_noDomainMatch
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_100_1954089231.1522139992886"
+X-Priority: 3
+Importance: Medium
+X-Mailer: Open-Xchange Mailer v7.10.0-Rev3
+X-Originating-Client: open-xchange-appsuite
+
+------=_Part_100_1954089231.1522139992886
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+C244757-hasPassedDMARC_hasPassedSPF_hasFailedDKIM_noDomainMatch
+------=_Part_100_1954089231.1522139992886
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<!doctype html>
+<html>
+ <head> 
+  <meta charset="UTF-8"> 
+ </head>
+ <body>
+  <div>
+   C244757-hasPassedDMARC_hasPassedSPF_hasFailedDKIM_noDomainMatch
+  </div> 
+ </body>
+</html>
+------=_Part_100_1954089231.1522139992886--

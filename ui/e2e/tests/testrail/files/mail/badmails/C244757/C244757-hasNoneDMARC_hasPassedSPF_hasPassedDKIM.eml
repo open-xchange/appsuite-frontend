@@ -1,0 +1,56 @@
+Return-Path: <mheiland@sender.ox>
+Delivered-To: mheiland@recipient.ox
+Received: from mx.sender.ox (unknown [10.50.0.4])
+	by mx.recipient.ox (Postfix) with ESMTP id 56B0F42430
+	for <mheiland@recipient.ox>; Tue, 27 Mar 2018 08:51:07 +0000 (UTC)
+Authentication-Results: mx.recipient.ox; dmarc=none (p=none dis=none) header.from=sender.ox
+Authentication-Results: mx.recipient.ox; spf=pass smtp.mailfrom=mheiland@sender.ox
+Authentication-Results: mx.recipient.ox;
+	dkim=pass (1024-bit key; unprotected) header.d=sender.ox header.i=@sender.ox header.b="gtpZGRkC";
+	dkim-atps=neutral
+Received: from null (localhost [127.0.0.1])
+	by mx.sender.ox (Postfix) with ESMTPS id 4194561C36
+	for <mheiland@recipient.ox>; Tue, 27 Mar 2018 08:51:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=sender.ox; s=mail;
+	t=1522140667; bh=LyVAS0k5gG/6osgDZdF0T4c4GK6wI1/7JH71TTbGgnI=;
+	h=Date:From:Reply-To:To:Subject:From;
+	b=gtpZGRkCcBEO6/GpsjoRsQmH4e0XYiHOPL7QQIV7pJIgyI0dZNDn3f3yvUDnRoGDB
+	 MCnXSTGEr+hyEUodUcDrSuiZZqRPuZX9p92sd2UOuq52S8AwfW88OjJkmhBAHLw80d
+	 C+C8p6COJzSSnLFOeJFD0e71JcmGaKBLIoPSkw00=
+Date: Tue, 27 Mar 2018 10:51:07 +0200 (CEST)
+From: Martin Heiland <mheiland@sender.ox>
+Reply-To: Martin Heiland <mheiland@sender.ox>
+To: Recipient <mheiland@recipient.ox>
+Message-ID: <2095504445.105.1522140667161@10.50.0.4>
+Subject: C244757-hasNoneDMARC_hasPassedSPF_hasPassedDKIM
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_104_403544067.1522140667150"
+X-Priority: 3
+Importance: Medium
+X-Mailer: Open-Xchange Mailer v7.10.0-Rev3
+X-Originating-Client: open-xchange-appsuite
+
+------=_Part_104_403544067.1522140667150
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+C244757-hasNoneDMARC_hasPassedSPF_hasPassedDKIM
+------=_Part_104_403544067.1522140667150
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<!doctype html>
+<html>
+ <head> 
+  <meta charset="UTF-8"> 
+ </head>
+ <body>
+  <div>
+   C244757-hasNoneDMARC_hasPassedSPF_hasPassedDKIM
+  </div> 
+ </body>
+</html>
+------=_Part_104_403544067.1522140667150--

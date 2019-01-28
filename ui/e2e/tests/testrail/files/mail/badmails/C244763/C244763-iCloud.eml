@@ -1,0 +1,80 @@
+Return-path: <martin.heiland@open-xchange.com>
+Received: from ms11p00im-qufv17091101.mac.com ([17.58.36.65])
+ by ms46524.mac.com
+ (Oracle Communications Messaging Server 8.0.1.3.20170906 64bit (built Sep  6
+ 2017)) with ESMTP id <0P6B000LU1O29B30@ms46524.mac.com> for
+ ewaldbartkowiak@icloud.com; Wed, 28 Mar 2018 14:31:14 +0000 (GMT)
+Original-recipient: rfc822;ewaldbartkowiak@icloud.com
+Received: from mx4.open-xchange.com (alcatraz.open-xchange.com [87.191.39.187])
+ by ms11p00im-qufv17091101.me.com
+ (Oracle Communications Messaging Server 8.0.1.2.20170607 64bit (built Jun  7
+ 2017)) with ESMTPS id <0P6B00M2Z1O01D00@ms11p00im-qufv17091101.me.com> for
+ ewaldbartkowiak@icloud.com (ORCPT ewaldbartkowiak@icloud.com); Wed,
+ 28 Mar 2018 14:31:14 +0000 (GMT)
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=2 spamscore=2
+ clxscore=109 suspectscore=1 malwarescore=0 phishscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1707230000 definitions=main-1803280155
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10432:,,
+ definitions=2018-03-28_05:,, signatures=0
+Authentication-results: ms11p00im-qufv10113201.me.com; dmarc=pass
+ header.from=open-xchange.com
+Authentication-results: ms11p00im-qufv10074001.me.com; spf=pass
+ (ms11p00im-qufv10074001.me.com: domain of martin.heiland@open-xchange.com
+ designates 87.191.39.187 as permitted sender)
+ smtp.mailfrom=martin.heiland@open-xchange.com
+Received-SPF: pass (ms11p00im-qufv10074001.me.com: domain of
+ martin.heiland@open-xchange.com designates 87.191.39.187 as permitted sender)
+ receiver=ms11p00im-qufv10074001.me.com; client-ip=87.191.39.187;
+ helo=mx4.open-xchange.com; envelope-from=martin.heiland@open-xchange.com
+Authentication-results: ms11p00im-qufv10092901.me.com;	dkim=pass (2048-bit key)
+ header.d=open-xchange.com header.i=@open-xchange.com header.b=GHZVqQfN
+Received: from open-xchange.com (imap.open-xchange.com [10.20.30.10])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)	by mx4.open-xchange.com (Postfix)
+ with ESMTPS id 14F1C6A26B	for <ewaldbartkowiak@icloud.com>; Wed,
+ 28 Mar 2018 16:31:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=open-xchange.com;
+	s=201705; t=1522247472;	bh=yHSn/T+YsaWNjzDPKnKyEpBA80rtvSnOQdznmkKxbRM=;
+	h=From:Subject:Date:To:From;
+	b=GHZVqQfN961H4GrvlYD40MhfBidQ+ePpc/FJa2h7VMuxva3CbNwERpAOoigJ+eAGh
+ 7yZ/b+qzPoW8zg6SZEpSTPtsxxaRqDkDqrEqknF9yPWGcaDGTEXX+FRzH7Eli4jJ5n
+ r8bAnaQA5CWOwCB+xNxxDSaLI1YVODDc7U1zbokbdjVOOLhV18V6qPwOyUY7QhtrRD
+ nm2kUx6Vhf6C8rnkVFjonajY6Kg+jHwCETNssTyoPXomjaYwNfaVjlswAj0EqVcd8X
+ kYhgMh1yKrOkfTWGibzKWBexxoEJwp7mqb1y7ImNrhHKeasXfyeEkmcaitBBvV6l0e
+ ziwCRYcMJtTqw==
+Received: from dhcp26.oxoe.int (dhcp26.oxoe.int [192.168.33.26])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)	by open-xchange.com (Postfix)
+ with ESMTPSA id E8C023C04FE	for <ewaldbartkowiak@icloud.com>; Wed,
+ 28 Mar 2018 16:31:11 +0200 (CEST)
+From: Martin Heiland <martin.heiland@open-xchange.com>
+Content-type: text/plain; charset=us-ascii
+Content-transfer-encoding: 7bit
+MIME-version: 1.0 (Mac OS X Mail 11.2 \(3445.5.20\))
+Subject: MA Test iCloud
+Message-id: <D0A07778-F8BB-4E80-95D9-3F61EEF9AD97@open-xchange.com>
+Date: Wed, 28 Mar 2018 16:31:10 +0200
+To: ewaldbartkowiak@icloud.com
+X-Mailer: Apple Mail (2.3445.5.20)
+x-icloud-spam-score: 33313310
+ f=open-xchange.com;e=open-xchange.com;is=yes;ir=no;spf=pass;dkim=pass;dmarc=pass/none/none;gdwl=absent;pps=ham;clxs=ham;clxw=neutral
+X-CLX-Spam: false
+X-CLX-UnSpecialScore: None
+X-CLX-Score: 109
+X-CLX-UShades: None
+X-CLX-Shades: None
+X-MANTSH: 1TEIXR1kbG1oaGkNHB1tfTFwbGhoTGx8aGxEKTEMXGxoEGxsYBBsbGgQeGRAbHho
+ fGhEKTFkXGxoTEQpZTRdkRURPEQpZSRcHGRpxGwYHHBp3BhscGAYZGkIaBhoGBxkGGnEaEBp3B
+ hoGGgYaBgcfGgYaBhpxGhAadwYaEQpZXhdra3kRCkNOF0RaUl9kTHhYYRhmSGlgTUtyQFpzWRI
+ SZRx4Tk1MW1ltEQpYXBcZBBoEGRgHTRlOE08TGRgFGxoEEwQbBB0fEBseGh8aEQpeWRd4En9cZ
+ BEKTVwXBxwRCkxaF3hpTW9rEQpFWRd7EQpMXxd6BQUFBQUFBQUFZREKQ1oXEh0EGxMbBBkTBBs
+ SHREKQl4XGxEKQlwXGxEKXk4XGxEKQksXbUAeeUF5Z2gFR1ARCkJFF2hfe0RzS1paRGtiEQpCT
+ hdtQB55QXlnaAVHUBEKQkwXaW4aUmcZeEVABVIRCkJsF2htS1xbSUVGQGZ8EQpCQBduBX9Aa0t
+ EaXprXxEKQlgXaGd8Z2RQRGtjUx8RCk1eFwcbEQpwaBdoQX4daU9rR19YYBAHGRoRCnBsF2tGU
+ kNaZFgTflpBEAcZGhEKbX4XBxsRClhNF0sR
+x-dmarc-info: pass=pass; dmarc-policy=none; s=r1; d=r1
+x-dmarc-policy: v=DMARC1; p=none; rua=mailto:dmarc-report@open-xchange.com
+X-OX-Marker: 9719a225-5d1f-41aa-a25a-f7173da0c499
+
+iCloud

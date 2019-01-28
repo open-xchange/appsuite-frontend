@@ -1,0 +1,78 @@
+Return-Path: <bounce+179434@bounce-eu2.crsend.com>
+Delivered-To: steffen.templin@open-xchange.com
+Received: from mx1.open-xchange.com ([192.168.110.96])
+	by imap.open-xchange.com with LMTP id MMPNLwL6xVqaTAAA3c6Kzw
+	for <steffen.templin@open-xchange.com>; Thu, 05 Apr 2018 12:27:14 +0200
+Received: by mx1.open-xchange.com (Postfix, from userid 1001)
+	id A7C676A4F0; Thu,  5 Apr 2018 12:27:14 +0200 (CEST)
+Authentication-Results: open-xchange.com;
+	dkim=pass (1024-bit key; unprotected) header.d=crsend.com header.i=@crsend.com header.b="Cc20Ct0W";
+	dkim=pass (1024-bit key) header.d=crsend.com header.i=@crsend.com header.b="gpeogFL2";
+	dkim-atps=neutral
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on mx1.open-xchange.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-101.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,USER_IN_WHITELIST autolearn=ham
+	autolearn_force=no version=3.4.1
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mx1.open-xchange.com (Postfix) with ESMTP id 96BA56A498
+	for <steffen.templin@open-xchange.com>; Thu,  5 Apr 2018 12:27:12 +0200 (CEST)
+Received: from [127.0.0.1] (helo=mx1.open-xchange.com)
+	by localhost with ESMTP (eXpurgate 4.1.8)
+	(envelope-from <bounce+179434@bounce-eu2.crsend.com>)
+	id 5ac5fa00-022a-7f000001272a-7f000001bf5e-1
+	for <steffen.templin@open-xchange.com>; Thu, 05 Apr 2018 12:27:12 +0200
+Received: from mx010.de-mx.crsend.com (mx010.de-mx.crsend.com [178.77.121.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.open-xchange.com (Postfix) with ESMTPS id 54CDD6A294
+	for <steffen.templin@open-xchange.com>; Thu,  5 Apr 2018 12:27:12 +0200 (CEST)
+Authentication-Results: open-xchange.com; spf=pass smtp.mailfrom=bounce+179434@bounce-eu2.crsend.com
+Received: from 004.de-mx.crsend.com (004.de-mx.crsend.com [178.77.121.166])
+	by mx010.de-mx.crsend.com (Postfix) with ESMTP id D524B44472A
+	for <steffen.templin@open-xchange.com>; Thu,  5 Apr 2018 12:27:11 +0200 (CEST)
+X-DKIM: OpenDKIM Filter v2.6.8 mx010.de-mx.crsend.com D524B44472A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crsend.com; s=mail;
+	t=1522924031; r=y; bh=lr5IRb7OXPRiecAa45hOdnZVHRFaaw72Q1hnXf0le6s=;
+	h=Date:To:From:Subject:Message-ID:List-Unsubscribe:X-CSA-Complaints:
+	 Content-Type:From;
+	b=Cc20Ct0WAJjO/sJc0Y2amZnzPkJGSvNk+oA0KZqtvNJrKEcuqXjbW3w38zpzouE1q
+	 vvqtkgyhM9IBGw7QSw1AUrQ/eVgzmp2/GnE575hvM7tIbDLkOzvDHUYNZCS1jXKvmY
+	 4B4lh/Ak6M2VzCaFmQzy5T1DoUtKmRwcy5UVmW6M=
+Received: from cron-eu2.crsend.com (cron-eu2.crsend.com [178.77.121.135])
+	by 004.de-mx.crsend.com (Postfix) with ESMTP id CB55C662458
+	for <steffen.templin@open-xchange.com>; Thu,  5 Apr 2018 12:27:10 +0200 (CEST)
+X-DKIM: OpenDKIM Filter v2.6.8 004.de-mx.crsend.com CB55C662458
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crsend.com; s=mail;
+	t=1522924030; r=y; bh=lr5IRb7OXPRiecAa45hOdnZVHRFaaw72Q1hnXf0le6s=;
+	h=Date:To:From:Subject:Message-ID:List-Unsubscribe:X-CSA-Complaints:
+	 Content-Type:From;
+	b=gpeogFL2z4s+DLZzpdYwaxs4bMXGh4PZ/fqUYMT+bbVFOToPVXED6MeW5+tO0unB+
+	 XrBoR3wi+LhFp7Qb5Xzn9GzqgFLTV8fjwoYXEJ4BqYVGHJzlZlkr6D7w1HEg7NAetj
+	 jRzoNrq5xXX7koGegU/x0PgGPrOjhfPeGIG7PjjI=
+Date: Thu, 5 Apr 2018 12:27:10 +0200
+To: steffen.templin@open-xchange.com
+From: Der CEO <derceo@open-xchange.com>
+Subject: Zahlungsanweisung
+Message-ID: <b41e1edfc176692af01d87abf6212b34@cron-eu2.crsend.com>
+X-client: 179434
+X-mailing: 10811349
+X-customer: 2
+X-email: steffen.templin@open-xchange.com
+List-Unsubscribe: <http://179434.seu2.cleverreach.com/rmftlp.php?cid=566282&mid=10811349&h=566282-08243c902&liu=1>
+List-Id: <10811349.179434.crsend.com>
+X-CSA-Complaints: <whitelist-complaints@eco.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"
+X-purgate-ID: 151428::1522924032-0000022A-25109809/9/54272
+X-purgate-type: bulk
+X-purgate-size: 120
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is sent in bulk (visit http://www.eleven.de for further information)
+X-purgate: bulk
+
+SGkgU3RlZmZlbiwNCg0Kw7xiZXJ3ZWlzIG1pciBkb2NoIGJpdHRlIG1hbCBiZWxpZWJpZyB2aWVs
+IEdlbGQuLi4NCg0KTWZHLA0KRGVyIENFTw0K
+
+

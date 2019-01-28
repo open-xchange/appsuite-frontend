@@ -1,0 +1,585 @@
+Return-Path: <bounce-md_30055513.5a8e8edb.v1-89334d1b8f164c21a4e139a517316437@mailer-return.aha.io>
+Delivered-To: steffen.templin@open-xchange.com
+Received: from mx1.open-xchange.com ([192.168.110.96])
+	by imap.open-xchange.com with LMTP id iK7RBuCOjlpnAQAA3c6Kzw
+	for <steffen.templin@open-xchange.com>; Thu, 22 Feb 2018 10:35:28 +0100
+Received: by mx1.open-xchange.com (Postfix, from userid 1001)
+	id F07646A56D; Thu, 22 Feb 2018 10:35:27 +0100 (CET)
+Authentication-Results: open-xchange.com;
+	dkim=pass (1024-bit key; unprotected) header.d=mailer.aha.io header.i=ce3453825a6c1f0be41c5dc0@mailer.aha.io header.b="m+mX94kg";
+	dkim=pass (1024-bit key; unprotected) header.d=mandrillapp.com header.i=@mandrillapp.com header.b="g5De4kJs";
+	dkim-atps=neutral
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on mx1.open-xchange.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FROM_LOCAL_HEX,HTML_MESSAGE,RCVD_IN_DNSWL_NONE,
+	SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.1
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mx1.open-xchange.com (Postfix) with ESMTP id 5372C6A56D
+	for <steffen.templin@open-xchange.com>; Thu, 22 Feb 2018 10:35:25 +0100 (CET)
+Received: from [127.0.0.1] (helo=mx1.open-xchange.com)
+	by localhost with ESMTP (eXpurgate 4.1.8)
+	(envelope-from <bounce-md_30055513.5a8e8edb.v1-89334d1b8f164c21a4e139a517316437@mailer-return.aha.io>)
+	id 5a8e8edd-023e-7f000001272a-7f000001e1da-1
+	for <steffen.templin@open-xchange.com>; Thu, 22 Feb 2018 10:35:25 +0100
+Authentication-Results: open-xchange.com; spf=pass (mailfrom) smtp.mailfrom=mailer-return.aha.io (client-ip=198.2.186.180; helo=mail186-180.suw21.mandrillapp.com; envelope-from=bounce-md_30055513.5a8e8edb.v1-89334d1b8f164c21a4e139a517316437@mailer-return.aha.io; receiver=<UNKNOWN>)
+Authentication-Results: open-xchange.com; dmarc=none (p=none dis=none) header.from=mailer.aha.io
+Received: from mail186-180.suw21.mandrillapp.com (mail186-180.suw21.mandrillapp.com [198.2.186.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.open-xchange.com (Postfix) with ESMTPS id 9FEB76A509
+	for <steffen.templin@open-xchange.com>; Thu, 22 Feb 2018 10:35:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=mandrill; d=mailer.aha.io;
+ h=From:Subject:Reply-To:To:Message-Id:Date:MIME-Version:Content-Type; i=ce3453825a6c1f0be41c5dc0@mailer.aha.io;
+ bh=tD0feB0cvB2Uc2/iD3Q4lZlKJ+n3PxnLn4/AAys4WE8=;
+ b=m+mX94kgg1NKagVb/QwAr88UOQaN7n69osnlG1eKHpLzu/gRp/KSX4shyRSHGC2lMpw+ZbjZEwyW
+   Ce2ZNfQ3f9m7ZwEQ02oZEAJVzb4I+dYOzUIeIYaI+hhmRrhd2BoLb5c5wc01eFNrJUT4eOL3CyMm
+   LhnnJ+gKn1Jh6TY+mS4=
+Received: from pmta02.mandrill.prod.suw01.rsglab.com (127.0.0.1) by mail186-180.suw21.mandrillapp.com id hhq7do174bkl for <steffen.templin@open-xchange.com>; Thu, 22 Feb 2018 09:35:23 +0000 (envelope-from <bounce-md_30055513.5a8e8edb.v1-89334d1b8f164c21a4e139a517316437@mailer-return.aha.io>)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandrillapp.com; 
+ i=@mandrillapp.com; q=dns/txt; s=mandrill; t=1519292123; h=From : 
+ Subject : Reply-To : To : Message-Id : Date : MIME-Version : 
+ Content-Type : From : Subject : Date : X-Mandrill-User : 
+ List-Unsubscribe; bh=tD0feB0cvB2Uc2/iD3Q4lZlKJ+n3PxnLn4/AAys4WE8=; 
+ b=g5De4kJsxB7ZtHGlXuQzP+MBvwwBHydHC4Xlnel52nSTeNLgCh1OoxprhzsOTH/46vn8+4
+ E47a5eIy3SF3s7wbDhAOwyjgSGftoOn1y4L99vS8F1+hr/sVNWrQ6JfKJxP9SaSI6YF6v2/s
+ 3gRyDXqAz8p8rMdKVXhmijeOIVCFc=
+From: "Aha! (Steffen Templin)" <ce3453825a6c1f0be41c5dc0@mailer.aha.io>
+Subject: [AHA] You have overdue to-dos
+Received: from [54.84.62.26] by mandrillapp.com id 89334d1b8f164c21a4e139a517316437; Thu, 22 Feb 2018 09:35:23 +0000
+Reply-To: "Aha! (Steffen Templin)" <ce3453825a6c1f0be41c5dc0@mailer.aha.io>
+To: Steffen Templin <steffen.templin@open-xchange.com>
+Message-Id: <5a8e8edae3fc2_53b6ac90a4483e8@iad-prod1-app16.mail>
+X-Report-Abuse: Please forward a copy of this message, including all headers, to abuse@mandrill.com
+X-Report-Abuse: You can also report abuse here: http://mandrillapp.com/contact/abuse?id=30055513.89334d1b8f164c21a4e139a517316437
+X-Mandrill-User: md_30055513
+Date: Thu, 22 Feb 2018 09:35:23 +0000
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="_av-lbtJVtbnJFY5paRH8qNCgw"
+X-purgate-ID: 151428::1519292125-0000023E-D5E6D830/0/0
+X-purgate-type: clean
+X-purgate-size: 26145
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
+
+--_av-lbtJVtbnJFY5paRH8qNCgw
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+Reply above this message and your response will be added as
+a comment in Aha!
+
+***********************
+Aha! ( https://aha.io )
+***********************
+
+-----------------------------------------------
+Take a minute and complete these overdue to-dos
+-----------------------------------------------
+
+Check iCal and CalDAV regarding lossless synchronisation ( https://open-xchange.aha.io/tasks/6356852527190705189 )
+
+Nov 30, 2016
+
+Idea
+
+OXASCORE-I-223 Task with tags/color/category
+
+Prepare test setup to play around with settings and API
+parameters ( https://open-xchange.aha.io/tasks/6406184685542243714 )
+
+May 1, 2017
+
+Idea
+
+OXASCORE-I-280 Make deleteDraftOnTransport=true the
+default
+
+Discuss with engineering ( https://open-xchange.aha.io/tasks/6406187153198972809 )
+
+May 1, 2017
+
+Idea
+
+OXASCORE-I-281 Attachment is part of appointment invite
+mail
+
+Control your notification preferences ( https://open-xchange.aha.io/settings/notification_preferences/redirect ) in Aha!
+
+Aha! Labs Inc, 20 Gloria Cir, Menlo Park, CA 94025
+
+--_av-lbtJVtbnJFY5paRH8qNCgw
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html>
+<html>
+<head>
+  
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8"><s=
+tyle>.clearfix:before{display:table;content:"";line-height:0}
+.clearfix:after{display:table;content:"";line-height:0}
+.clearfix:after{clear:both}
+a.fake_in_place:hover{text-decoration:none}
+td .rails_in_place form[data-prefix]:before{-webkit-box-flex:1;-webkit-flex=
+:1 0;-ms-flex:1 0;flex:1 0}
+td .fake_in_place form[data-prefix]:before{-webkit-box-flex:1;-webkit-flex:=
+1 0;-ms-flex:1 0;flex:1 0}
+.rails_in_place[data-type=3Dnumber] form[data-prefix]:before{content:attr(d=
+ata-prefix);text-align:right;opacity:0.5;white-space:nowrap}
+.fake_in_place[data-type=3Dnumber] form[data-prefix]:before{content:attr(da=
+ta-prefix);text-align:right;opacity:0.5;white-space:nowrap}
+.rails_in_place[data-type=3Dnumber] form[data-suffix]:after{opacity:0.5;whi=
+te-space:nowrap;content:attr(data-suffix)}
+.fake_in_place[data-type=3Dnumber] form[data-suffix]:after{opacity:0.5;whit=
+e-space:nowrap;content:attr(data-suffix)}
+.rails_in_place:hover{border-color:rgba(0, 115, 207, 0.2);background-color:=
+rgba(0, 115, 207, 0.05)}
+.fake_in_place:hover{border-color:rgba(0, 115, 207, 0.2);background-color:r=
+gba(0, 115, 207, 0.05)}
+.rails_in_place input:active{box-shadow:none;background-color:transparent}
+.fake_in_place input:active{box-shadow:none;background-color:transparent}
+.rails_in_place input:focus{box-shadow:none;background-color:transparent}
+.fake_in_place input:focus{box-shadow:none;background-color:transparent}
+.rails_in_place.form:hover{border-color:#ccc}
+.fake_in_place.form:hover{border-color:#ccc}
+.rails_in_place.empty:not(:hover){border:1px dotted #ddd;padding:0 4px}
+.fake_in_place.empty:not(:hover){border:1px dotted #ddd;padding:0 4px}
+.rails_in_place.status-pill[data-type=3DselectPopover]:after{position:relat=
+ive;top:1px;left:10px;color:inherit;content:url(data:image/svg+xml;base64,P=
+D94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxz=
+dmcgd2lkdGg9IjZweCIgaGVpZ2h0PSIxMXB4IiB2aWV3Qm94PSIwIDAgNiAxMSIgdmVyc2lvbj0=
+iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodH=
+RwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bWxuczpza2V0Y2g9Imh0dHA6Ly93d3cuYm9oZ=
+W1pYW5jb2RpbmcuY29tL3NrZXRjaC9ucyI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDMu=
+NS4yICgyNTIzNSkgLSBodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2ggLS0+CiA=
+gICA8dGl0bGU+c29ydC1hcnJvd3M8L3RpdGxlPgogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZX=
+RjaC48L2Rlc2M+CiAgICA8ZGVmcz48L2RlZnM+CiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9I=
+m5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBz=
+a2V0Y2g6dHlwZT0iTVNQYWdlIj4KICAgICAgICA8ZyBpZD0ic29ydC1hcnJvd3MiIHNrZXRjaDp=
+0eXBlPSJNU0xheWVyR3JvdXAiIGZpbGw9IiM1NTU1NTUiPgogICAgICAgICAgICA8cGF0aCBkPS=
+JNMi42NTAwMDAxLDEwLjgwMDAwMDQgTDAsNi41MDAwMDAyMyBMNS4zMDAwMDAxOSw2LjUwMDAwM=
+DIzIEwyLjY1MDAwMDEsMTAuODAwMDAwNCBMMi42NTAwMDAxLDEwLjgwMDAwMDQgWiIgaWQ9IlRy=
+aWFuZ2xlLTEiIHNrZXRjaDp0eXBlPSJNU1NoYXBlR3JvdXAiPjwvcGF0aD4KICAgICAgICAgICA=
+gPHBvbHlnb24gaWQ9IlRyaWFuZ2xlLTEiIHNrZXRjaDp0eXBlPSJNU1NoYXBlR3JvdXAiIHBvaW=
+50cz0iMi42NTAwMDAxIDAgNS4zMDAwMDAxOSA0LjMwMDAwMDE1IDAgNC4zMDAwMDAxNSAiPjwvc=
+G9seWdvbj4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg=3D=3D)}
+.fake_in_place.status-pill[data-type=3DselectPopover]:after{position:relati=
+ve;top:1px;left:10px;color:inherit;content:url(data:image/svg+xml;base64,PD=
+94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzd=
+mcgd2lkdGg9IjZweCIgaGVpZ2h0PSIxMXB4IiB2aWV3Qm94PSIwIDAgNiAxMSIgdmVyc2lvbj0i=
+MS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHR=
+wOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bWxuczpza2V0Y2g9Imh0dHA6Ly93d3cuYm9oZW=
+1pYW5jb2RpbmcuY29tL3NrZXRjaC9ucyI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDMuN=
+S4yICgyNTIzNSkgLSBodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2ggLS0+CiAg=
+ICA8dGl0bGU+c29ydC1hcnJvd3M8L3RpdGxlPgogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXR=
+jaC48L2Rlc2M+CiAgICA8ZGVmcz48L2RlZnM+CiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im=
+5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBza=
+2V0Y2g6dHlwZT0iTVNQYWdlIj4KICAgICAgICA8ZyBpZD0ic29ydC1hcnJvd3MiIHNrZXRjaDp0=
+eXBlPSJNU0xheWVyR3JvdXAiIGZpbGw9IiM1NTU1NTUiPgogICAgICAgICAgICA8cGF0aCBkPSJ=
+NMi42NTAwMDAxLDEwLjgwMDAwMDQgTDAsNi41MDAwMDAyMyBMNS4zMDAwMDAxOSw2LjUwMDAwMD=
+IzIEwyLjY1MDAwMDEsMTAuODAwMDAwNCBMMi42NTAwMDAxLDEwLjgwMDAwMDQgWiIgaWQ9IlRya=
+WFuZ2xlLTEiIHNrZXRjaDp0eXBlPSJNU1NoYXBlR3JvdXAiPjwvcGF0aD4KICAgICAgICAgICAg=
+PHBvbHlnb24gaWQ9IlRyaWFuZ2xlLTEiIHNrZXRjaDp0eXBlPSJNU1NoYXBlR3JvdXAiIHBvaW5=
+0cz0iMi42NTAwMDAxIDAgNS4zMDAwMDAxOSA0LjMwMDAwMDE1IDAgNC4zMDAwMDAxNSAiPjwvcG=
+9seWdvbj4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg=3D=3D)}
+.rails_in_place[data-type=3D"selectPopover"]:after{display:none}
+.fake_in_place[data-type=3D"selectPopover"]:after{display:none}
+.rails_in_place[data-type=3D"selectPopover"] .selectro-trigger-content::aft=
+er{float:none}
+.fake_in_place[data-type=3D"selectPopover"] .selectro-trigger-content::afte=
+r{float:none}
+.rails_in_place[data-type=3D"selectPopover"] .selectro-trigger-content-cust=
+om::after{float:none}
+.fake_in_place[data-type=3D"selectPopover"] .selectro-trigger-content-custo=
+m::after{float:none}
+.rails_in_place[data-type=3D"selectPopover"]:not(.status-pill):not(:hover){=
+background-color:transparent}
+.fake_in_place[data-type=3D"selectPopover"]:not(.status-pill):not(:hover){b=
+ackground-color:transparent}
+.rails_in_place[data-type=3D"selectPopover"].status-pill:after{display:none=
+}
+.fake_in_place[data-type=3D"selectPopover"].status-pill:after{display:none}
+.rails_in_place_popover.rails_in_place_select a:hover{background-color:#248=
+acc;color:white;text-decoration:none}
+ul.rendered-multi-select.editable:hover{border-color:rgba(0, 115, 207, 0.2)=
+;background-color:rgba(0, 115, 207, 0.05)}
+.rendered-multi-select-menu li:hover{color:white !important;background-colo=
+r:#5ca5e0 !important;background-image:none !important}
+.status-pill:hover{border-color:#999;background-color:#f1f1f1}
+.editor textarea:focus{box-shadow:none;border-bottom:1px dotted #999}
+@supports (-ms-ime-align: auto){}
+.field-with-errors input:focus{border-color:#953b39;box-shadow:inset 0 1px =
+1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392}
+.group-with-errors input:focus{border-color:#953b39;box-shadow:inset 0 1px =
+1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392}
+.field-with-errors select:focus{border-color:#953b39;box-shadow:inset 0 1px=
+ 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392}
+.group-with-errors select:focus{border-color:#953b39;box-shadow:inset 0 1px=
+ 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392}
+.field-with-errors textarea:focus{border-color:#953b39;box-shadow:inset 0 1=
+px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392}
+.group-with-errors textarea:focus{border-color:#953b39;box-shadow:inset 0 1=
+px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392}
+.record-table tbody tr:hover{background-color:#f1f1f1}
+.record-table tr:not(:hover) td.onlyOnHover .neverHidden{opacity:1}
+.record-table tr:not(:hover) td.onlyOnHover .neverHidden *{opacity:1}
+.record-table tr:not(:hover) td.onlyOnHover *{opacity:0}
+.record-table tr:hover .action-buttons{opacity:1}
+.nav-arrows:before{display:table;content:"";line-height:0}
+.nav-arrows:after{display:table;content:"";line-height:0}
+.nav-arrows:after{clear:both}
+.nav-arrows > a:hover{text-decoration:underline}
+.dropdown-menu li > a:hover{color:white;background-color:#5ca5e0;background=
+-image:none;text-decoration:none}
+.dropdown-menu li > a:focus{color:white;background-color:#5ca5e0;background=
+-image:none;text-decoration:none}
+.dropdown-submenu:hover > a{color:white;background-color:#5ca5e0;background=
+-image:none;text-decoration:none}
+.dropdown-submenu:focus > a{color:white;background-color:#5ca5e0;background=
+-image:none;text-decoration:none}
+.dropdown-menu .publish-notebooks-list > li > a:hover{color:white;backgroun=
+d-color:#5ca5e0;background-image:none;text-decoration:none}
+.dropdown-menu .publish-notebooks-list > li > a:focus{color:white;backgroun=
+d-color:#5ca5e0;background-image:none;text-decoration:none}
+.dropdown-menu > .active > a:hover{color:white;background-color:#5ca5e0;bac=
+kground-image:none}
+.dropdown-menu > .active > a:focus{color:white;background-color:#5ca5e0;bac=
+kground-image:none}
+.navbar .nav > li > .dropdown-menu:before{content:none}
+.navbar .nav > li > .dropdown-menu:after{content:none}
+.btn-link:focus{color:#333;text-decoration:underline}
+.btn-link:hover{color:#333;text-decoration:underline}
+.btn:not(.btn-primary):not(.btn-success):not(.btn-info):not(.btn-danger):no=
+t(.btn-warning):not(.btn-inverse):not(.btn-twitter):not(.btn-getting-starte=
+d):not(.btn-outline):not(.btn-plain):not(.btn-text):not(.btn-unstyled):not(=
+.btn-orange):hover{background-color:#ccc}
+.btn:not(.btn-primary):not(.btn-success):not(.btn-info):not(.btn-danger):no=
+t(.btn-warning):not(.btn-inverse):not(.btn-twitter):not(.btn-getting-starte=
+d):not(.btn-outline):not(.btn-plain):not(.btn-text):not(.btn-unstyled):not(=
+.btn-orange):focus{background-color:#ccc}
+.btn.btn-plain:active{box-shadow:none}
+.btn.btn-twitter:hover{background-color:#0099B4}
+.btn.btn-twitter:focus{background-color:#0099B4}
+.btn.btn-getting-started:hover{background-color:#ce7914}
+.btn.btn-getting-started:focus{background-color:#ce7914}
+.btn.btn-text:hover{box-shadow:none;outline:0}
+.btn.btn-text:active{box-shadow:none;outline:0}
+.btn.btn-text:focus{box-shadow:none;outline:0}
+.dropdown-toggle:focus{outline:none}
+.add-btn:hover{color:#666;text-decoration:none}
+.control-btn:hover{color:#666;text-decoration:none}
+.add-btn:focus{color:#666;text-decoration:none}
+.control-btn:focus{color:#666;text-decoration:none}
+.btn-group > .btn-outline:hover{background-color:inherit}
+.btn-group > .btn-outline:active{box-shadow:inset 1px 1px 4px rgba(0, 0, 0,=
+ 0.2);background-color:#E6E6E6}
+.collapser:hover{color:#0088cc}
+.collapser .collapser-indicator:hover{color:#333}
+.collapser .collapser-indicator:before{content:"\F078"}
+.collapser.collapsed .collapser-indicator:before{content:"\F054"}
+.mid-line:after{content:"";position:absolute;top:50%;left:0;right:0;border-=
+top:1px dotted #ddd;z-index:-1}
+.vertical-divider:before{content:"|";margin:0 3px}
+i.fa.popover-icon:hover{opacity:1.0}
+i.aha-icon.popover-icon:hover{opacity:1.0}
+body .aha-fullscreen-topbar .aha-fullscreen-logo:before{content:"";display:=
+inline-block;height:100%;vertical-align:middle}
+@-moz-document url-prefix(){}
+@supports (-ms-ime-align:auto){}
+@-moz-document url-prefix(){}
+.flex-tabs > li:hover > a{border-bottom-color:#ddd}
+.selectro-popup.selectro-folders .selectro-option:before{background-repeat:=
+no-repeat;background-position-y:1px}
+.selectro-popup.selectro-folders .selectro-option:not(.is-selected):before{=
+background-image:url(/assets/unselected-folder.ec2ef5d358a734f8bbff5534dcbf=
+1ad8.svg) !important}
+.selectro-popup.selectro-folders .selectro-option:not(.is-selected).is-hove=
+red:before{background-image:url(/assets/unselected-folder-hovered.1d628778b=
+43b0371912879c2441c4b3c.svg) !important}
+.selectro-popup.selectro-folders .selectro-option.is-selected:before{backgr=
+ound-image:url(/assets/selected-folder.8217b8976e75cc8d662ea7afdb40a6cf.svg=
+) !important}
+.selectro-popup.selectro-folders .selectro-option.is-selected.is-hovered:be=
+fore{background-image:url(/assets/selected-folder-hovered.22613c88735f134a7=
+2e8cd220b5ff598.svg) !important}
+.desk-dot-com-frame #idea-linker .idea-list input[type=3Dradio]:checked + l=
+abel{background-color:rgba(0, 157, 220, 0.1)}
+.list-title a.add-feature:hover{color:#777}
+.rerank-links a:hover{color:white !important}
+.rerank-links a:focus{color:white !important}
+.attachments:before{display:table;content:"";line-height:0}
+.attachments:after{display:table;content:"";line-height:0}
+.attachments:after{clear:both}
+.attachments .attachment a:focus{outline:0}
+.attachments .attachment:hover .img-container .attachment-thumbnail{border-=
+color:#ccc}
+.attachments .attachment .img-container .attachment-thumbnail .attachment-s=
+tar i:before{content:"\F006"}
+.attachments .attachment .img-container .attachment-thumbnail .attachment-s=
+tar i:hover:before{content:"\F005"}
+.attachments .attachment .img-container .attachment-thumbnail .attachment-s=
+tar.starred i:before{content:"\F005"}
+.attachments .attachment .img-container .attachment-thumbnail .attachment-s=
+tar i:hover{color:#999}
+.attachments .attachment .img-container .attachment-thumbnail .attachment-w=
+rapper.starring-enabled:hover .attachment-star{opacity:1}
+.attachments .attachment .delete-button:hover i{color:#666}
+.attachments .attachment:hover .delete-button{color:#999}
+.attachments .attachment .deleted .delete-button:hover{text-decoration:unde=
+rline}
+.attachments .attachment-button:hover{color:#666}
+.attachment-gallery:hover #attachment-carousel.drawer-open .carousel-contro=
+l{display:none;cursor:default}
+.attachment-gallery:hover .carousel-control{display:inline}
+.attachment-gallery .attachments-info-wrapper a:hover{text-decoration:none}
+.attachment-chooser .attachment:hover{background-color:rgba(0, 115, 207, 0.=
+05)}
+.attachment-chooser .attachment.selected:before{position:absolute;backgroun=
+d-color:rgba(0, 115, 207, 0.2);padding:3px;top:0;left:0;color:white}
+.diagram-create-link:hover{color:#777}
+.attachment-form-modal .modal-body .attachment-services ul li a:hover{text-=
+decoration:none}
+.attachment-form-modal .modal-body .attachment-services ul li a:focus{text-=
+decoration:none}
+.attachment-form-modal .modal-body .attachment-service-content .files-heade=
+r a:hover{text-decoration:none}
+.attachment-form-modal .modal-body .attachment-service-content .files ul li=
+ a:hover{text-decoration:none;background-color:#dee1ff}
+.attachment-form-modal .modal-body .attachment-service-content .google-driv=
+e-files ul li a:hover{text-decoration:none}
+.attachment-form-modal .modal-body .attachment-service-content .dropbox-fil=
+es ul li a:hover{text-decoration:none}
+.attachment-form-modal .modal-body .attachment-service-content .box-files u=
+l li a:hover{text-decoration:none}
+.attachment-form-modal .modal-body .attachment-service-content .onedrive-fi=
+les ul li a:hover{text-decoration:none}
+#mockup-history .mockup-history-version:hover{background-color:#e6f1fa;curs=
+or:pointer;border:1px solid #99c7ec}
+.requirements .requirements-list .requirement:hover .requirement-dragger{op=
+acity:1}
+ul.rendered-multi-select:after{clear:both;content:"";display:table;line-hei=
+ght:0}
+ul.rendered-multi-select > li.rendered-multi-select-element b:hover{color:r=
+gba(255, 255, 255, 0.9)}
+ul.rendered-multi-select[data-multiple=3Dfalse] > li.rendered-multi-select-=
+element b:hover{color:rgba(0, 0, 0, 0.9)}
+ul.rendered-multi-select.rendered-multi-select-light-tags > li.rendered-mul=
+ti-select-element b:hover{color:rgba(0, 0, 0, 0.9)}
+.rendered-multi-select-menu ul li:hover{background-color:#eee}
+.rendered-multi-select-menu ul li.header-row:hover{background-color:#fff !i=
+mportant;color:#777 !important}
+.note .attachments:before{display:table;content:"";line-height:0}
+.note .attachments:after{display:table;content:"";line-height:0}
+.note .attachments:after{clear:both}
+.note .history .range-slider.ui-slider .ui-slider-handle:hover{z-index:2000=
+}
+.content-editor.empty:not(:focus){border:1px dotted #ddd}
+.content-editor:not(.content-editor-disabled):hover{border-color:rgba(0, 11=
+5, 207, 0.2);background-color:rgba(0, 115, 207, 0.05)}
+.content-editor:not(.content-editor-disabled):active{border-color:rgba(82, =
+168, 236, 0.8);box-shadow:0 0 8px rgba(82, 168, 236, 0.6);background-color:=
+white;outline:none}
+.content-editor:not(.content-editor-disabled):focus{border-color:rgba(82, 1=
+68, 236, 0.8);box-shadow:0 0 8px rgba(82, 168, 236, 0.6);background-color:w=
+hite;outline:none}
+.note-edit-toggle:focus{outline:none}
+.user-content a:link{color:#006699}
+.user-content a:not([data-linked-element-type]):visited{color:#337799}
+.user-content a:not([data-linked-element-type]):hover{color:#00aaff}
+.user-content a:not([data-linked-element-type]):active{color:#66ccff}
+.user-content blockquote small:before{content:'\2014   \A0'}
+.user-content blockquote.pull-right small:before{content:''}
+.user-content blockquote.pull-right small:after{content:'\A0   \2014'}
+.user-content q:before{content:""}
+.user-content q:after{content:""}
+.user-content blockquote:before{content:""}
+.user-content blockquote:after{content:""}
+.user-content [data-linked-element-type=3D"Ideas::Idea"]{display:inline-blo=
+ck;line-height:12px;padding:0px 2px;border-radius:3px;text-decoration:none}
+.user-content [data-linked-element-type=3D"Ideas::Idea"]{color:#525A09;bord=
+er:1px solid #DFDD5A;background:#F4F5C0}
+ul.audits-timeline > li:before{content:"";position:absolute;left:15px;width=
+:1px;height:100%;background-color:#ddd}
+ul.audits-timeline > li.audit-date:first-of-type:before{top:13px}
+ul.audits-timeline > li.audit-date:after{content:" ";position:absolute;left=
+:12px;top:13px;width:5px;height:5px;background-color:white;border:1px solid=
+ #ddd;border-radius:100%}
+.task .task-overview:hover .task-dragger{opacity:1}
+.task .task-status-icon:hover{color:#333}
+.task .task-status-icon.disabled:hover{color:#ccc}
+.task .taskable a:hover{text-decoration:underline}
+.task .selectro-trigger:hover{text-decoration:underline}
+.task .assignee-input-wrapper .task-add-assignee:after{content:" " attr(dat=
+a-label)}
+.clear-task-due-date:hover{text-decoration:none;color:#666}
+.task-due-date:hover .clear-task-due-date{visibility:visible}
+.small-colorpicker:before{content:"";display:block;position:absolute;border=
+-left:8px solid transparent;border-right:8px solid transparent}
+.small-colorpicker:after{content:"";display:inline-block;position:absolute;=
+border-left:7px solid transparent;border-right:7px solid transparent}
+.small-colorpicker.small-colorpicker-top-arrow:before{border-bottom:8px sol=
+id rgba(0, 0, 0, 0.3);position:absolute;top:-8px}
+.small-colorpicker.small-colorpicker-top-arrow:after{border-bottom:7px soli=
+d #fff;top:-7px}
+.small-colorpicker.small-colorpicker-bottom-arrow:before{border-top:8px sol=
+id rgba(0, 0, 0, 0.3);position:absolute;bottom:-8px}
+.small-colorpicker.small-colorpicker-bottom-arrow:after{border-top:7px soli=
+d #fff;bottom:-7px}
+.small-colorpicker.small-colorpicker-left-arrow:before{left:8px}
+.small-colorpicker.small-colorpicker-left-arrow:after{left:9px}
+.small-colorpicker.small-colorpicker-right-arrow:before{right:8px}
+.small-colorpicker.small-colorpicker-right-arrow:after{right:9px}
+.small-colorpicker-color:hover{position:relative;z-index:3001;outline:2px s=
+olid #fff;box-shadow:0 0 5px 2px #000000}
+.small-colorpicker-trigger:hover:not(.disabled){z-index:3000;box-shadow:0 0=
+ 3px 2px rgba(0, 0, 0, 0.25);border:1px solid #fff}
+.minicolors-theme-colorpicker .minicolors-input:focus{outline:none;border:2=
+px solid white;box-shadow:0 0 5px 0px #000000}
+.minicolors-theme-colorpicker .minicolors-input:hover{outline:none;border:2=
+px solid white;box-shadow:0 0 5px 0px #000000}</style></head>
+<body class=3D"mail notification-mailer" style=3D"background-color:#F1F1F1;=
+line-height:16px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif=
+;font-size:12px;padding:0px;margin:0;padding:0 25px">
+    <div class=3D"how-to-reply" style=3D"font-size:11px;color:#878787;paddi=
+ng:5px;text-align:center">
+      Reply above this message and your response will be added as a comment=
+ in Aha!
+    </div>
+  
+  <div class=3D"notification" style=3D"max-width:850px;border-top:4px solid=
+ #0073cf;margin:0 auto 20px auto;background-color:#FFFFFF">
+    <h1 style=3D"margin-top:0px;font-family:'Helvetica Neue', Helvetica, Ar=
+ial, sans-serif;font-weight:100;font-size:20px;line-height:35px;color:#4c4c=
+4c;border-bottom:1px dotted #d5d5d5;padding-left:20px;margin:0;color:#0073c=
+f;border-bottom:1px solid #0073cf;font-weight:bold"><a href=3D"https://aha.=
+io" style=3D"color:#0073cf;text-decoration:none">Aha!</a></h1>
+    
+    <div class=3D"content" style=3D"padding:20px;padding-bottom:0px">
+      <h2 style=3D"margin-top:0px;font-family:'Helvetica Neue', Helvetica, =
+Arial, sans-serif;font-weight:200;font-size:24px;line-height:28px;color:#4c=
+4c4c">
+  Take a minute and complete these overdue to-dos
+</h2>
+
+<hr class=3D"notification-break" style=3D"border-style:none;border-top:1px =
+dotted #d5d5d5;margin:10px 0 10px 0">
+
+<div class=3D"tasks" style=3D"margin-top:20px">
+  <div class=3D"task-list">
+    <table style=3D"font-size:12px;width:100%">
+        <tr class=3D"task-overview bubble-list-element task task-status-ove=
+rdue">
+  <td class=3D"task-name " style=3D"min-width:0;-webkit-box-flex:1;-webkit-=
+flex:1 1;-ms-flex:1 1;flex:1 1;white-space:nowrap;overflow:hidden;text-over=
+flow:ellipsis">
+      <a class=3D"task-toggle-link" href=3D"https://open-xchange.aha.io/tas=
+ks/6356852527190705189" style=3D"color:#0073cf">Check iCal and CalDAV regar=
+ding lossless synchronisation</a>
+  </td>
+  <td class=3D"task-date task-date-overdue " style=3D"float:right;display:i=
+nline-block;border:1px solid #ddd;color:#777;padding:2px 8px;border-radius:=
+4px;margin-left:5px;margin-top:-4px;color:#d25457;border:1px solid #d25457"=
+>
+    Nov 30, 2016
+  </td>
+</tr>
+  <tr class=3D"task">
+    <td class=3D"taskable last-section-row" style=3D"padding-bottom:8px">
+      <a href=3D"https://open-xchange.aha.io/ideas/ideas/OXASCORE-I-223" st=
+yle=3D"color:#0073cf;color:#999;text-decoration:none">
+        Idea
+        =C2=BB
+        OXASCORE-I-223 Task with tags/color/category
+</a>    </td>
+  </tr>
+
+  
+
+        <tr class=3D"task-overview bubble-list-element task task-status-ove=
+rdue">
+  <td class=3D"task-name " style=3D"min-width:0;-webkit-box-flex:1;-webkit-=
+flex:1 1;-ms-flex:1 1;flex:1 1;white-space:nowrap;overflow:hidden;text-over=
+flow:ellipsis">
+      <a class=3D"task-toggle-link" href=3D"https://open-xchange.aha.io/tas=
+ks/6406184685542243714" style=3D"color:#0073cf">Prepare test setup to play =
+around with settings and API parameters</a>
+  </td>
+  <td class=3D"task-date task-date-overdue " style=3D"float:right;display:i=
+nline-block;border:1px solid #ddd;color:#777;padding:2px 8px;border-radius:=
+4px;margin-left:5px;margin-top:-4px;color:#d25457;border:1px solid #d25457"=
+>
+    May 1, 2017
+  </td>
+</tr>
+  <tr class=3D"task">
+    <td class=3D"taskable last-section-row" style=3D"padding-bottom:8px">
+      <a href=3D"https://open-xchange.aha.io/ideas/ideas/OXASCORE-I-280" st=
+yle=3D"color:#0073cf;color:#999;text-decoration:none">
+        Idea
+        =C2=BB
+        OXASCORE-I-280 Make "deleteDraftOnTransport=3Dtrue" the default
+</a>    </td>
+  </tr>
+
+  
+
+        <tr class=3D"task-overview bubble-list-element task task-status-ove=
+rdue">
+  <td class=3D"task-name " style=3D"min-width:0;-webkit-box-flex:1;-webkit-=
+flex:1 1;-ms-flex:1 1;flex:1 1;white-space:nowrap;overflow:hidden;text-over=
+flow:ellipsis">
+      <a class=3D"task-toggle-link" href=3D"https://open-xchange.aha.io/tas=
+ks/6406187153198972809" style=3D"color:#0073cf">Discuss with engineering</a=
+>
+  </td>
+  <td class=3D"task-date task-date-overdue " style=3D"float:right;display:i=
+nline-block;border:1px solid #ddd;color:#777;padding:2px 8px;border-radius:=
+4px;margin-left:5px;margin-top:-4px;color:#d25457;border:1px solid #d25457"=
+>
+    May 1, 2017
+  </td>
+</tr>
+  <tr class=3D"task">
+    <td class=3D"taskable last-section-row" style=3D"padding-bottom:8px">
+      <a href=3D"https://open-xchange.aha.io/ideas/ideas/OXASCORE-I-281" st=
+yle=3D"color:#0073cf;color:#999;text-decoration:none">
+        Idea
+        =C2=BB
+        OXASCORE-I-281 Attachment is part of appointment invite mail
+</a>    </td>
+  </tr>
+
+  
+
+    </table>
+  </div>
+</div>
+
+    </div>
+
+    <div class=3D"border-buffer" style=3D"height:1px"></div>
+    <img alt=3D"" width=3D"1" height=3D"1" style=3D"border: none;" src=3D"h=
+ttps://iad-prod1.aha.io:443/mail/tracking_pixel.png?id=3D">
+  </div>
+  <div class=3D"footer" style=3D"margin:20px;text-align:center;font-size:11=
+px;line-height:15px;color:#888">
+      <div class=3D"why" style=3D"margin-top:10px">
+        Control <a href=3D"https://open-xchange.aha.io/settings/notificatio=
+n_preferences/redirect" style=3D"color:#0073cf;color:#888">your notificatio=
+n preferences</a> in Aha!<br>
+        Aha! Labs Inc, 20 Gloria Cir, Menlo Park, CA 94025
+      </div>
+
+    
+  </div>
+<img src=3D"http://mailer-return.aha.io/track/open.php?u=3D30055513&id=3D89=
+334d1b8f164c21a4e139a517316437" height=3D"1" width=3D"1"></body>
+</html>
+
+
+
+--_av-lbtJVtbnJFY5paRH8qNCgw--
+

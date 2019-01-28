@@ -1,0 +1,71 @@
+Delivered-To: ewaldbartkowiak@gmail.com
+Received: by 10.107.211.18 with SMTP id s18csp563678iob;
+        Wed, 28 Mar 2018 07:42:41 -0700 (PDT)
+X-Google-Smtp-Source: AIpwx48EwuLUWiFEggTsNgKx6X6BsHCGBrB/g5mR6VQT1kKWXFSBQ+OViNvHECPQ/nbfaRxjvPm4
+X-Received: by 10.223.187.199 with SMTP id z7mr3079372wrg.260.1522248161476;
+        Wed, 28 Mar 2018 07:42:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1522248161; cv=none;
+        d=google.com; s=arc-20160816;
+        b=tWoeFg6xbzNzbhj/MizUeRu6SC/KcbcKhtA3+f54glSQzA3uD7jx+HIwYUozIHVxsQ
+         98VhzzhlKQOyKBteVk/s4x2PxY8xi+Z1FQI+8kyWZ9OYNmtOVgjvoa7FBWoV3OcO87wX
+         FrgnXAH3U7KZhPv9nSIwNsoi+VyzXFtUqqcGYKhhC+TNokq28ONX8lPWHj6gADLGta2q
+         S6oII0D5/AmQ7BjJwA+9SqYg9PjlMeFlcYiEwNQP95dPg5b1yEWsPN37dpf1qynQSVUt
+         UdLfpp9IMYTehCrHAnQvap/G2BdIEywLfiW1A/e/2dbIDduMexDMreZAul/vTfBBfBqV
+         Nk1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=to:date:message-id:subject:mime-version:content-transfer-encoding
+         :from:dkim-signature:arc-authentication-results;
+        bh=6Pi/nz/Xtka8UZjRta8Cfkrsgj5emTXzUBKLQAl6gRA=;
+        b=S1qbS4H5bF+MPMcxwpjzUr80ZWMelMQvMvqYwbcaQXOTcL19OXw/TC9PXkCneNlnxY
+         wVEGOkvFVJ/4CTPCVz0vUzfd4Cod66V1sXb2T9dDPvJEoLsK2RnVp9Gc2ml5zFNq7t2D
+         bQQxviqvuGJ8pueL1bDnnyECYIy2r/lGU/cRuYW8guXm37kSEjsfGwOAISXOsgjfRL3X
+         vDTr+270/5vY5HjIEvhBgPOrVBFPVIb9+9QaaWhU0tgnhj3g/I0NHbo/ysd6EL8sK+5F
+         fmTr4nFZEAMVKHFO/jbgou96u1PVdq+1csgbzvpKuXpZUNAo28abT9h2NydkbTva9tg1
+         Nkvw==
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@open-xchange.com header.s=201705 header.b=X/eNoq6A;
+       spf=pass (google.com: domain of martin.heiland@open-xchange.com designates 87.191.39.187 as permitted sender) smtp.mailfrom=martin.heiland@open-xchange.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=open-xchange.com
+Return-Path: <martin.heiland@open-xchange.com>
+Received: from mx4.open-xchange.com (alcatraz.open-xchange.com. [87.191.39.187])
+        by mx.google.com with ESMTPS id 36si2825007wrh.452.2018.03.28.07.42.41
+        for <ewaldbartkowiak@gmail.com>
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 28 Mar 2018 07:42:41 -0700 (PDT)
+Received-SPF: pass (google.com: domain of martin.heiland@open-xchange.com designates 87.191.39.187 as permitted sender) client-ip=87.191.39.187;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@open-xchange.com header.s=201705 header.b=X/eNoq6A;
+       spf=pass (google.com: domain of martin.heiland@open-xchange.com designates 87.191.39.187 as permitted sender) smtp.mailfrom=martin.heiland@open-xchange.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=open-xchange.com
+Received: from open-xchange.com (imap.open-xchange.com [10.20.30.10])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx4.open-xchange.com (Postfix) with ESMTPS id C2DBD6A36D
+	for <ewaldbartkowiak@gmail.com>; Wed, 28 Mar 2018 16:42:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=open-xchange.com;
+	s=201705; t=1522248160;
+	bh=6Pi/nz/Xtka8UZjRta8Cfkrsgj5emTXzUBKLQAl6gRA=;
+	h=From:Subject:Date:To:From;
+	b=X/eNoq6A2RxU59JwIfqwcRx6AkWZkRcySmT2E6jPlgyc44QyvL446zq79F3uSieBO
+	 AEQ4994t3f4vv8niJJkwyl09homdcw2LY/YBUfx5ZBJopGbQsyeXPix3fth4SupgHo
+	 jZ6MuGbkMFg0kUSpzjejVCsZAjrgYOlrS/e2vCvCsRB/CNI/mY5vrk897KsDGU/xt8
+	 1txmPhLWTq/94lVpCsueehiIsTkCHlD+sDHAZozu/QGzmgDLDD95aS2P3jEOhGuyuf
+	 z8OZpBod2jBF72Dg3Mqzzt3v6o9UHG++QBG3597+SJl80fvh/46k3Y9ofB4jgnd1PF
+	 DZ9y4souNzv6w==
+Received: from dhcp26.oxoe.int (dhcp26.oxoe.int [192.168.33.26])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by open-xchange.com (Postfix) with ESMTPSA id A2DDC3C04FE
+	for <ewaldbartkowiak@gmail.com>; Wed, 28 Mar 2018 16:42:40 +0200 (CEST)
+From: Martin Heiland <martin.heiland@open-xchange.com>
+Content-Type: text/plain;
+	charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0 (Mac OS X Mail 11.2 \(3445.5.20\))
+Subject: MA Test GMail
+Message-Id: <697EFF71-0A35-4E7E-B247-6028F68E2123@open-xchange.com>
+Date: Wed, 28 Mar 2018 16:42:39 +0200
+To: ewaldbartkowiak@gmail.com
+X-Mailer: Apple Mail (2.3445.5.20)
+
+GMail

@@ -1,0 +1,67 @@
+Return-Path: <templin@ox.io>
+Delivered-To: steffen.templin@open-xchange.com
+Received: from mx1.open-xchange.com ([192.168.110.96])
+	by imap.open-xchange.com with LMTP id oEasCM26lVrHLwAA3c6Kzw
+	for <steffen.templin@open-xchange.com>; Tue, 27 Feb 2018 21:08:45 +0100
+Received: by mx1.open-xchange.com (Postfix, from userid 1001)
+	id 07C926A43B; Tue, 27 Feb 2018 21:08:45 +0100 (CET)
+Authentication-Results: open-xchange.com;
+	dkim=pass (1024-bit key; unprotected) header.d=ox.io header.i=@ox.io header.b="JftY9+lv";
+	dkim-atps=neutral
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on mx1.open-xchange.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-101.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,SPF_PASS,USER_IN_WHITELIST autolearn=ham autolearn_force=no
+	version=3.4.1
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mx1.open-xchange.com (Postfix) with ESMTP id 3E2806A3E0
+	for <steffen.templin@open-xchange.com>; Tue, 27 Feb 2018 21:08:43 +0100 (CET)
+Received: from [127.0.0.1] (helo=mx1.open-xchange.com)
+	by localhost with ESMTP (eXpurgate 4.1.8)
+	(envelope-from <templin@ox.io>)
+	id 5a95bacb-02e3-7f000001272a-7f0000018d8c-1
+	for <steffen.templin@open-xchange.com>; Tue, 27 Feb 2018 21:08:43 +0100
+Authentication-Results: open-xchange.com; spf=pass (mailfrom) smtp.mailfrom=ox.io (client-ip=91.223.20.31; helo=oxmailout01.ox.io; envelope-from=templin@ox.io; receiver=<UNKNOWN>)
+Received: from oxmailout01.ox.io (oxmailout01.ox.io [91.223.20.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.open-xchange.com (Postfix) with ESMTPS id E08B26A33E
+	for <steffen.templin@open-xchange.com>; Tue, 27 Feb 2018 21:08:42 +0100 (CET)
+Received: from localhost (oxmailout02.ox.io [91.223.20.53])
+	by oxmailout01.ox.io (Postfix) with ESMTP id 05920240FDE
+	for <steffen.templin@open-xchange.com>; Tue, 27 Feb 2018 21:08:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ox.io; h=
+	content-transfer-encoding:content-type:content-type:mime-version
+	:date:date:message-id:subject:subject:from:from:received
+	:received; s=main; t=1519762121; bh=H1uQ2pXIq+zJNSbYHM7czWGubh+j
+	RtTF8M/bczWIypo=; b=JftY9+lv5YcSMa5Q+3VHATXag423uU9mBOaj9W8d5kQd
+	H2DNTbXOJL95PTxaCUtYybuzJV6XSsb4EROH3blH6Os2O94Un3YEMRx7yfyJd9da
+	wLX0FD2Kxz9juX9XEFiCErm0Tz33fzBSkPQ22X89OLS2nU4MM0otqwGX6LWFDIU=
+X-Virus-Scanned: amavisd-new at ox.io
+Received: from smtp2.mailbox.org ([80.241.60.241])
+	by localhost (mailout02.ox.io [91.223.20.53]) (amavisd-new, port 10024)
+	with ESMTP id CwwZLDYCLcAC for <steffen.templin@open-xchange.com>;
+	Tue, 27 Feb 2018 21:08:41 +0100 (CET)
+Received: from Steffens-Air.fritz.box (p549A432B.dip0.t-ipconnect.de [84.154.67.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.ox.io (Postfix) with ESMTPSA id 3BAF311B6
+	for <steffen.templin@open-xchange.com>; Tue, 27 Feb 2018 21:08:40 +0100 (CET)
+To: steffen.templin@open-xchange.com
+From: Phisher <phisher@open-xchange.com>
+Subject: Authenticate thiz!
+Message-ID: <5c3a2256-e1f3-16d1-ce3f-00f6e7406439@ox.io>
+Date: Tue, 27 Feb 2018 21:08:39 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-purgate-ID: 151428::1519762123-000002E3-7A3787EF/0/0
+X-purgate-type: clean
+X-purgate-size: 24
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
+X-OX-Marker: 778f3b70-d175-465f-a61e-a34d7a2a9c83
+
+Hey, did I make it!?
+

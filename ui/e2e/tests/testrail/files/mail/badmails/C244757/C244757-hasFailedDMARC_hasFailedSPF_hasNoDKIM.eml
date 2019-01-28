@@ -1,0 +1,54 @@
+Return-Path: <mheiland@sender.ox>
+Delivered-To: mheiland@recipient.ox
+Received: from mx.sender.ox (unknown [10.50.0.4])
+	by mx.recipient.ox (Postfix) with ESMTP id 3845442430
+	for <mheiland@recipient.ox>; Tue, 27 Mar 2018 11:34:09 +0000 (UTC)
+Authentication-Results: mx.recipient.ox; dmarc=fail (p=none dis=none) header.from=sender.ox
+Authentication-Results: mx.recipient.ox; spf=fail smtp.mailfrom=mheiland@sender.ox
+Received: from null (localhost [127.0.0.1])
+	by mx.sender.ox (Postfix) with ESMTPS id 1EDAC61C38
+	for <mheiland@recipient.ox>; Tue, 27 Mar 2018 11:34:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=sender.ox; s=mail;
+	t=1522150449; bh=696/WvCJEXlTmTNqu2gqV+4PrYEgMtQqwZ7J2iTbRwQ=;
+	h=Date:From:Reply-To:To:Subject:From;
+	b=DKoYsR1DUCxaNzifDnALWUXZSuRIauvntTflqaFDN/WcOwibtG/xBNwotb18aMgXK
+	 4h7RIPBrLs8HIN5+G5/jFF4J8EOdTfy85jNtKN4kxx34hihix4B09YCqebV7Ka7uEY
+	 gJezX32aCYez/eIlSQ3ZJj/7VXJl1jAfscfpnoTc=
+Date: Tue, 27 Mar 2018 13:34:08 +0200 (CEST)
+From: Martin Heiland <mheiland@sender.ox>
+Reply-To: Martin Heiland <mheiland@sender.ox>
+To: Recipient <mheiland@recipient.ox>
+Message-ID: <1709612241.109.1522150449016@10.50.0.4>
+Subject: C244757-hasFailedDMARC_hasFailedSPF_hasNoDKIM
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_108_883237167.1522150449000"
+X-Priority: 3
+Importance: Medium
+X-Mailer: Open-Xchange Mailer v7.10.0-Rev3
+X-Originating-Client: open-xchange-appsuite
+X-OX-Marker: fea7b422-a6cd-4d51-98a4-a4d65a4ca358
+
+------=_Part_108_883237167.1522150449000
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+C244757-hasFailedDMARC_hasFailedSPF_hasNoDKIM
+------=_Part_108_883237167.1522150449000
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<!doctype html>
+<html>
+ <head> 
+  <meta charset="UTF-8"> 
+ </head>
+ <body>
+  <div>
+   C244757-hasFailedDMARC_hasFailedSPF_hasNoDKIM
+  </div> 
+ </body>
+</html>
+------=_Part_108_883237167.1522150449000--

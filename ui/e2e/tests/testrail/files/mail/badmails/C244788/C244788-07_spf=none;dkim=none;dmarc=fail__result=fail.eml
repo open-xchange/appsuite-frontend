@@ -1,0 +1,89 @@
+Return-Path: <www-data@wiki.open-xchange.com>
+Delivered-To: marc.arens@open-xchange.com
+Received: from mx1.open-xchange.com ([192.168.110.96])
+	by imap.open-xchange.com with LMTP id MAoNJ4OBjloHRAAA3c6Kzw
+	for <marc.arens@open-xchange.com>; Thu, 22 Feb 2018 09:38:27 +0100
+Received: by mx1.open-xchange.com (Postfix, from userid 1001)
+	id 8647F6A57D; Thu, 22 Feb 2018 09:38:27 +0100 (CET)
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on mx1.open-xchange.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-101.9 required=5.0 tests=AWL,BAYES_00,URIBL_BLOCKED,
+	USER_IN_WHITELIST autolearn=ham autolearn_force=no version=3.4.1
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mx1.open-xchange.com (Postfix) with ESMTP id 2AD056A547
+	for <marc.arens@open-xchange.com>; Thu, 22 Feb 2018 09:38:25 +0100 (CET)
+Received: from [127.0.0.1] (helo=mx1.open-xchange.com)
+	by localhost with ESMTP (eXpurgate 4.1.8)
+	(envelope-from <www-data@wiki.open-xchange.com>)
+	id 5a8e8180-023e-7f000001272a-7f000001cbba-1
+	for <marc.arens@open-xchange.com>; Thu, 22 Feb 2018 09:38:25 +0100
+Authentication-Results: open-xchange.com; spf=none (mailfrom) smtp.mailfrom=wiki.open-xchange.com (client-ip=80.237.131.214; helo=wiki.open-xchange.com; envelope-from=www-data@wiki.open-xchange.com; receiver=<UNKNOWN>)
+Authentication-Results: open-xchange.com; dmarc=fail (p=none dis=none) header.from=open-xchange.com
+Received: from wiki.open-xchange.com (wiki.open-xchange.com [80.237.131.214])
+	by mx1.open-xchange.com (Postfix) with ESMTP id E06976A4E3
+	for <marc.arens@open-xchange.com>; Thu, 22 Feb 2018 09:38:24 +0100 (CET)
+Received: by wiki.open-xchange.com (Postfix, from userid 33)
+	id AFC4A40F53; Thu, 22 Feb 2018 08:38:27 +0000 (UTC)
+To: Marens <marc.arens@open-xchange.com>
+Subject: Open-Xchange page AppSuite:Deployment with Chef Showcase has been changed by Marcus.klein
+X-PHP-Originating-Script: 33:UserMailer.php
+From: Open-Xchange <sysadmin@open-xchange.com>
+Reply-To: reply@not.possible
+Date: Thu, 22 Feb 2018 08:38:27 +0000
+Message-ID: <mediawiki.5a8e8183aad931.75139293@oxpedia.org>
+X-Mailer: MediaWiki mailer
+MIME-Version: 1.0
+Content-type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-purgate-ID: 151428::1519288705-0000023E-2E0E5B5B/0/0
+X-purgate-type: clean
+X-purgate-size: 1496
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
+X-OX-Marker: 5fb8483c-ca92-410d-b22c-dccaec7eabf1
+
+Dear Marens,
+
+The Open-Xchange page AppSuite:Deployment with Chef Showcase has been
+changed on 22 February 2018 by Marcus.klein, see
+http://oxpedia.org/wiki/index.php?title=3DAppSuite:Deployment_with_Chef_S=
+howcase
+for the current revision.=20
+
+See
+http://oxpedia.org/wiki/index.php?title=3DAppSuite:Deployment_with_Chef_S=
+howcase&diff=3Dnext&oldid=3D22960
+to view this change.
+
+See
+http://oxpedia.org/wiki/index.php?title=3DAppSuite:Deployment_with_Chef_S=
+howcase&diff=3D0&oldid=3D22960
+for all changes since your last visit.
+
+Editor's summary: /* Introduction */=20
+
+Contact the editor:
+mail:
+http://oxpedia.org/wiki/index.php?title=3DSpecial:EmailUser/Marcus.klein
+wiki: http://oxpedia.org/wiki/index.php?title=3DUser:Marcus.klein
+
+There will be no other notifications in case of further activity unless
+you visit this page while logged in. You could also reset the
+notification flags for all your watched pages on your watchlist.
+
+Your friendly Open-Xchange notification system
+
+--
+To change your email notification settings, visit
+http://oxpedia.org/wiki/index.php?title=3DSpecial:Preferences
+
+To change your watchlist settings, visit
+http://oxpedia.org/wiki/index.php?title=3DSpecial:EditWatchlist
+
+To delete the page from your watchlist, visit
+http://oxpedia.org/wiki/index.php?title=3DAppSuite:Deployment_with_Chef_S=
+howcase&action=3Dunwatch
+
+Feedback and further assistance:
+https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents

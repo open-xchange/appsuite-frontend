@@ -1,0 +1,167 @@
+Return-Path: <www-data@intranet.open-xchange.com>
+Delivered-To: thorben.betten@open-xchange.com
+Received: from mx2.open-xchange.com ([10.20.30.2])
+	by imap.open-xchange.com with LMTP id SHd7FYUtjVq0HgAA3c6Kzw
+	for <thorben.betten@open-xchange.com>; Wed, 21 Feb 2018 09:27:49 +0100
+Received: by mx2.open-xchange.com (Postfix, from userid 1001)
+	id 515CA6A499; Wed, 21 Feb 2018 09:27:49 +0100 (CET)
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on mx2.open-xchange.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-102.5 required=5.0 tests=ALL_TRUSTED,AWL,BAYES_00,
+	HTML_FONT_LOW_CONTRAST,HTML_MESSAGE,MIME_HTML_ONLY,URIBL_BLOCKED,
+	USER_IN_WHITELIST autolearn=no autolearn_force=no version=3.4.1
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mx2.open-xchange.com (Postfix) with ESMTP id 3E47F6A47E
+	for <thorben.betten@open-xchange.com>; Wed, 21 Feb 2018 09:27:47 +0100 (CET)
+Received: from [127.0.0.1] (helo=mx2.open-xchange.com)
+	by localhost with ESMTP (eXpurgate 4.1.8)
+	(envelope-from <www-data@intranet.open-xchange.com>)
+	id 5a8d2d82-050f-7f000001272a-7f0000019140-1
+	for <thorben.betten@open-xchange.com>; Wed, 21 Feb 2018 09:27:46 +0100
+Authentication-Results: open-xchange.com; spf=none (mailfrom) smtp.mailfrom=intranet.open-xchange.com (client-ip=10.20.30.4; helo=mx4.open-xchange.com; envelope-from=www-data@intranet.open-xchange.com; receiver=<UNKNOWN>)
+Authentication-Results: open-xchange.com; dmarc=fail (p=none dis=none) header.from=open-xchange.com
+Received: from mx4.open-xchange.com (mx4.open-xchange.com [10.20.30.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx2.open-xchange.com (Postfix) with ESMTPS id A6E8D6A23C
+	for <thorben.betten@open-xchange.com>; Wed, 21 Feb 2018 09:27:46 +0100 (CET)
+Received: from intranet.open-xchange.com (intranet.open-xchange.com [10.20.30.90])
+	by mx4.open-xchange.com (Postfix) with ESMTP id 7F0E16A230
+	for <thorben.betten@open-xchange.com>; Wed, 21 Feb 2018 09:27:46 +0100 (CET)
+Received: by intranet.open-xchange.com (Postfix, from userid 33)
+	id 2EEF0800D0; Wed, 21 Feb 2018 09:26:41 +0100 (CET)
+To: thorben.betten@open-xchange.com
+Subject: =?utf-8?Q?=F0=9F=8C=B4?= New Vacation Request - martin.herfurth
+X-PHP-Originating-Script: 0:vacationrequest.actions.php
+MIME-Version: 1.0
+Content-type: text/html; charset=iso-8859-1
+From: sysadmin@open-xchange.com
+Message-Id: <20180221082641.2EEF0800D0@intranet.open-xchange.com>
+Date: Wed, 21 Feb 2018 09:26:41 +0100 (CET)
+X-purgate-ID: 151428::1519201667-0000050F-30870314/0/0
+X-purgate-type: clean
+X-purgate-size: 5400
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
+
+
+<!DOCTYPE html>
+<html><head>
+    <meta charset='UTF-8'>
+
+    <style>
+                .button {
+                        
+                        display: inline-block;
+                        outline: none;
+                        cursor: pointer;
+                        text-align: center;
+                        text-decoration: none;
+                        font: 12px/100% Arial, Helvetica, sans-serif;
+                        padding: .3em 2em .55em;
+                        text-shadow: 0 0px 0px rgba(0,0,0,.3);
+                        -webkit-border-radius: .5em; 
+                        -moz-border-radius: .5em;
+                        border-radius: .5em;
+                        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+                        -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+                        box-shadow: 0 1px 2px rgba(0,0,0,.2);
+                }
+                .button:hover {
+                        text-decoration: none;
+                }
+                .button:active {
+                        position: relative;
+                        top: 1px;
+                }
+                
+                .blue {
+                        color: #d9eef7;
+                        border: solid 1px #0076a3;
+                        background: #0076a3;
+                        background: -webkit-gradient(linear, left top, left bottom, from(#0076a3), to(#2C578D));
+                        background: -moz-linear-gradient(top,  #0076a3,  #2C578D);
+                        filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0076a3', endColorstr='#2C578D');
+                }
+                .blue:hover {
+                        background: #007ead;
+                        background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
+                        background: -moz-linear-gradient(top,  #0095cc,  #00678e);
+                        filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095cc', endColorstr='#00678e');
+                }
+                .blue:active {
+                        color: #80bed6;
+                        background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
+                        background: -moz-linear-gradient(top,  #0078a5,  #00adee);
+                        filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
+                }
+                
+                    </style>
+                
+</head>
+<body><p>A new Vacation Request has been placed. Please find the details below.</p>
+<p></p>
+
+
+<table border='0' width='100%'>
+
+<tr>
+ <td valign='top' width='160'><b>Requested from:</b> <br><td> martin.herfurth <br></td>
+</tr>
+<tr>
+ <td valign='top' width='160'><b>Manager:</b> <br><br><td> thorben.betten <br><br></td>
+</tr>
+
+<tr>
+ <td valign='top' width='160'><b>Date of request:</b> <br><td> 2018-02-21 <br></td>
+</tr>
+<tr>
+ <td valign='top' width='160'><b>Vacation representative:</b><br><br><td> tobias.friedrich <br><br></td>
+</tr>
+
+<tr>
+ <td valign='top' width='160'><b>Start Date:</b> <br></td><td> 2018-10-29 <br></td>
+</tr>
+<tr>
+ <td valign='top' width='160'><b>End Date:</b> <br></td><td> 2018-11-02 <br></td>
+</tr>
+<tr>
+ <td valign='top' width='160'><b>Days for vacation:</b> <br><br></td><td> 4 <br><br></td>
+</tr>
+
+<tr>
+ <td valign='top' width='160'><b>special leave:</b> <br></td> <td><input type='checkbox' name='specialleave' value='yes' ><br></td>
+</tr>                
+<tr>
+ <td valign='top' width='160'><b>floatingday:</b> <br><br></td> <td><input type='checkbox' name='floatingday' value='yes' ><br><br></td>
+</tr>
+<tr>
+ <td valign='top' width='160'><b>Comment:</b> <br><br></td><td>  <br><br></td>
+</tr>
+
+
+
+</table>
+
+You can find the details of the complete request here:<br>
+https://intranet.open-xchange.com/office/vacationrequest.approve.php?ID=4408<br>
+
+
+<br><br>
+
+
+                <table cellspacing='0' cellpadding='0'>
+                <tr>
+                <td align='center' width='120' height='22' bgcolor='#2F5E9A' style='-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;'>
+                  <a href='https://intranet.open-xchange.com/office/ack/ack.php?app=vacation&uuid=5a8d2d412510e&decision=approve&member=martin.herfurth' style='font-size:12px; font-weight: normal; font-family: Helvetica, Arial, sans-serif; text-decoration: none; line-height:22px; width:100%; display:inline-block'>
+                  <span style='color: #FFFFFF'>Accept</span></a>
+                </td>
+                <td width='20'> </td>
+                <td align='center' width='120' height='22' bgcolor='#2F5E9A' style='-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;'>
+                  <a href='https://intranet.open-xchange.com/office/ack/ack.php?app=vacation&uuid=5a8d2d412510e&decision=reject&member=martin.herfurth' style='font-size:12px; font-weight: normal; font-family: Helvetica, Arial, sans-serif; text-decoration: none; line-height:22px; width:100%; display:inline-block'>
+                  <span style='color: #FFFFFF'>Reject</span></a>
+                </td> 
+                </tr>
+                </table>
+</body></html>

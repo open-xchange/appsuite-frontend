@@ -1,0 +1,77 @@
+Return-Path: <>
+Delivered-To: steffen.templin@open-xchange.com
+Received: from mx2.open-xchange.com ([10.20.30.2])
+	by imap.open-xchange.com with LMTP id aDqQBAKRfVpxZQAA3c6Kzw
+	for <steffen.templin@open-xchange.com>; Fri, 09 Feb 2018 13:16:02 +0100
+Received: by mx2.open-xchange.com (Postfix, from userid 1001)
+	id 038726A28C; Fri,  9 Feb 2018 13:16:02 +0100 (CET)
+Authentication-Results: open-xchange.com;
+	dkim=fail reason="signature verification failed" (2048-bit key; unprotected) header.d=open-xchange.com header.i=@open-xchange.com header.b="wqjE3F0c";
+	dkim-atps=neutral
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on mx2.open-xchange.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-102.8 required=5.0 tests=ALL_TRUSTED,AWL,BAYES_00,
+	DKIM_SIGNED,T_DKIM_INVALID,USER_IN_WHITELIST autolearn=no autolearn_force=no
+	version=3.4.1
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mx2.open-xchange.com (Postfix) with ESMTP id 5D7C16A258
+	for <steffen.templin@open-xchange.com>; Fri,  9 Feb 2018 13:16:00 +0100 (CET)
+Received: from [127.0.0.1] (helo=mx2.open-xchange.com)
+	by localhost with ESMTP (eXpurgate 4.1.8)
+	(envelope-from <>)
+	id 5a7d9100-026b-7f000001272a-7f000001a892-1
+	for <steffen.templin@open-xchange.com>; Fri, 09 Feb 2018 13:16:00 +0100
+Authentication-Results: open-xchange.com; spf=none (no SPF record) smtp.helo=mx4.open-xchange.com (client-ip=10.20.30.4; helo=mx4.open-xchange.com; envelope-from=<>; receiver=<UNKNOWN>)
+Received: from mx4.open-xchange.com (mx4.open-xchange.com [10.20.30.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx2.open-xchange.com (Postfix) with ESMTPS id 3736F6A246
+	for <steffen.templin@open-xchange.com>; Fri,  9 Feb 2018 13:16:00 +0100 (CET)
+Received: from open-xchange.com (imap.open-xchange.com [10.20.30.10])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx4.open-xchange.com (Postfix) with ESMTPS id 0F89C6A434
+	for <steffen.templin@open-xchange.com>; Fri,  9 Feb 2018 13:16:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=open-xchange.com;
+	s=201705; t=1518178560;
+	bh=MPFGJdGz4BLl88P+RwNSUO71wj3muZuDG/2mFFCCbHM=;
+	h=Date:From:To:Subject:In-Reply-To:References:From;
+	b=wqjE3F0cfR9G9WR95lm7bfFmTMBHugIiQxzBVJ86kL4SSu5LMB2cwros+t6+zzjnr
+	 JFZIxpmarRsObpaoq69ZWzEgYX3MYCirq6FWgOLk/zZfhTlpVk3JvbDBcLqDtyw3cx
+	 gu5P7LZexXm+51SBb8WNePn4Ms0BTS8TBibSO1n+sP2DwLY7IYJZ3HE0h7SUi8PWep
+	 6kLpLyzg989ivwH/rvqytshK2XX3E7/G0F+TUQqzZwICY0HvfU9dNMwudRAtJYPY2X
+	 jSC4TJ2M6lgGN7kAv79PpyPe6Sk1f6G5GGvHOfoy5+JRl44wFN+ho0WetxutFHU6tC
+	 eqTIpirwTXEjg==
+Received: by open-xchange.com (Postfix, from userid 109)
+	id D3D983C2064; Fri,  9 Feb 2018 13:15:59 +0100 (CET)
+X-Sieve: Pigeonhole Sieve 0.4.21 (3e1590c)
+Message-ID: <dovecot-sieve-1518178559-857359-0@imap.open-xchange.com>
+Date: Fri, 09 Feb 2018 13:15:59 +0100
+From: <stefan.preuss@open-xchange.com>
+To: "Steffen Templin" <steffen.templin@open-xchange.com>
+Subject: Out of Office
+In-Reply-To: <927127192.2625.1518178504404@appsuite-dev.open-xchange.com>
+References: <172297447.957.1517837614782@appsuite-dev.open-xchange.com>
+	<A7A1B4B6-9480-415F-8E85-F1E2BD8AA4F2@open-xchange.com>
+	<405527355.1333.1518084202936@appsuite-dev.open-xchange.com>
+	<1292936677.10229.1518091504405@appsuite.open-xchange.com>
+	<927127192.2625.1518178504404@appsuite-dev.open-xchange.com>
+Auto-Submitted: auto-replied (vacation)
+Precedence: bulk
+X-Auto-Response-Suppress: All
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-purgate-ID: 151428::1518178560-0000026B-D484B21D/0/0
+X-purgate-type: clean
+X-purgate-size: 181
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
+X-OX-Marker: 352e2955-a787-4170-8bd1-ea66382bba39
+
+Thank you for your email. I=E2=80=99m out of the office and will be back =
+at Feb 15th. During this period I will have limited access to my email.
+
+Best Regards,
+Stefan Preuss
