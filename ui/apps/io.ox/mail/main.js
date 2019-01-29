@@ -1794,6 +1794,59 @@ define('io.ox/mail/main', [
             });
         },
 
+        'refresh-folders': function () {
+            var resetMailFolders = _.throttle(function () {
+                // reset collections and folder (to update total count)
+                var affectedFolders = _(['inbox', 'sent', 'drafts'])
+                    .chain()
+                    .map(function (type) {
+                        var folders = accountAPI.getFoldersByType(type);
+                        api.pool.resetFolder(folders);
+                        return folders;
+                    })
+                    .flatten()
+                    .value();
+                folderAPI.multiple(affectedFolders, { cache: false });
+                api.trigger('refresh.all');
+            }, 5000, { leading: false });
+
+            function refreshFolders(data, result) {
+                if (result.error) {
+                    return $.Deferred().reject(result).promise();
+                } else if (result.data) {
+                    var base = _(result.data.toString().split(api.separator)),
+                        id = base.last(),
+                        folder = base.without(id).join(api.separator);
+                    $.when(accountAPI.getUnifiedMailboxName(), accountAPI.getPrimaryAddress())
+                    .done(function (isUnified, senderAddress) {
+                        // check if mail was sent to self to update inbox counters correctly
+                        var sendToSelf = false;
+                        _.chain(_.union(data.to, data.cc, data.bcc)).each(function (item) {
+                            if (item[1] === senderAddress[1]) {
+                                sendToSelf = true;
+                                return;
+                            }
+                        });
+                        // wait a moment, then update folders as well
+                        setTimeout(function () {
+                            if (isUnified !== null) {
+                                folderAPI.refresh();
+                            } else if (sendToSelf) {
+                                folderAPI.reload(folder, accountAPI.getInbox());
+                            } else {
+                                folderAPI.reload(folder);
+                            }
+                        }, 5000);
+                    });
+                }
+            }
+
+            composeAPI.on('after:save after:send', function (data, result) {
+                resetMailFolders();
+                refreshFolders(data, result);
+            });
+        },
+
         // reverted for 7.10
         // 'primary-action': function (app) {
 

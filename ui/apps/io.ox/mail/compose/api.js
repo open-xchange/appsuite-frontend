@@ -61,52 +61,6 @@ define('io.ox/mail/compose/api', [
         };
     }());
 
-    var resetMailFolders = _.throttle(function () {
-        // reset collections and folder (to update total count)
-        var affectedFolders = _(['inbox', 'sent', 'drafts'])
-            .chain()
-            .map(function (type) {
-                var folders = accountAPI.getFoldersByType(type);
-                mailAPI.pool.resetFolder(folders);
-                return folders;
-            })
-            .flatten()
-            .value();
-        folderAPI.multiple(affectedFolders, { cache: false });
-        mailAPI.trigger('refresh.all');
-    }, 5000, { leading: false });
-
-    function refreshFolders(data, result) {
-        if (result.error) {
-            return $.Deferred().reject(result).promise();
-        } else if (result.data) {
-            var base = _(result.data.toString().split(api.separator)),
-                id = base.last(),
-                folder = base.without(id).join(api.separator);
-            $.when(accountAPI.getUnifiedMailboxName(), accountAPI.getPrimaryAddress())
-            .done(function (isUnified, senderAddress) {
-                // check if mail was sent to self to update inbox counters correctly
-                var sendToSelf = false;
-                _.chain(_.union(data.to, data.cc, data.bcc)).each(function (item) {
-                    if (item[1] === senderAddress[1]) {
-                        sendToSelf = true;
-                        return;
-                    }
-                });
-                // wait a moment, then update folders as well
-                setTimeout(function () {
-                    if (isUnified !== null) {
-                        folderAPI.refresh();
-                    } else if (sendToSelf) {
-                        folderAPI.reload(folder, accountAPI.getInbox());
-                    } else {
-                        folderAPI.reload(folder);
-                    }
-                }, 5000);
-            });
-        }
-    }
-
     // composition space
     api.space = {
 
@@ -175,11 +129,8 @@ define('io.ox/mail/compose/api', [
             }).always(function () {
                 api.queue.remove(id);
             }).done(function (result) {
-                resetMailFolders();
-                refreshFolders(data, result);
-
                 contactsAPI.trigger('maybeNewContact');
-                api.trigger('after:send');
+                api.trigger('after:send', data, result);
                 ox.trigger('mail:send:stop', data);
                 if (data.meta && data.meta.sharedAttachments && data.meta.sharedAttachments.enabled) ox.trigger('please:refresh refresh^');
             });
@@ -199,9 +150,7 @@ define('io.ox/mail/compose/api', [
                 url: 'api/mail/compose/' + id + '/save',
                 data: formData
             }).done(function (result) {
-                resetMailFolders();
-                refreshFolders(data, result);
-                api.trigger('after:save');
+                api.trigger('after:save', data, result);
             });
         },
 
