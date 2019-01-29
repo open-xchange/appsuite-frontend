@@ -82,6 +82,7 @@ define('io.ox/core/folder/actions/imap-subscription', [
             selection: false,
             title: gt('Subscribe to IMAP folders'),
             help: 'ox.appsuite.user.sect.email.teamwork.subscribe.html',
+            createFolderButton: false,
 
             always: function (dialog) {
 

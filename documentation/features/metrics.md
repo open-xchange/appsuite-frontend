@@ -1,6 +1,5 @@
 ---
 title: Metrics
-description: Track user behaviour and conditions within OX App Suite
 ---
 
 The Metrics module provides a very flexible and extendible way to track user behaviour and conditions within OX App Suite.
@@ -14,7 +13,7 @@ Please follow [theses steps](metrics/03-analytics-solutions.html#install-piwik) 
 # Basics
 
 The metrics framework is located in OX App Suite’s front end and can be [configured](#backend) by backend properties. The components and their tasks are listed as follows:
- 
+
 
 - listener/handler: waiting for events and call metrics module
 - metrics module: provides a central API for tracking and propagate events to enabled adapters
@@ -74,8 +73,8 @@ Use the following setting properties to enhance/adjust usage. Please be aware of
 For more details visit the [adapter article](metrics/02-adapters.html).
 
 ```
-  # ADAPTER BLOCK PIWIK: START 
- 
+  # ADAPTER BLOCK PIWIK: START
+
   # adapter switch (PIWIK) [true/false]
   # current default: true
   io.ox/core//tracking/piwik/enabled
@@ -88,5 +87,5 @@ For more details visit the [adapter article](metrics/02-adapters.html).
   # current default: 1
   io.ox/core//tracking/piwik/id
 
-  # ADAPTER BLOCK PIWIK: END 
+  # ADAPTER BLOCK PIWIK: END
 ```

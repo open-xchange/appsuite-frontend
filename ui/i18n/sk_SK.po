@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-11-10 01:05+0200\n"
+"PO-Revision-Date: 2019-01-09 10:12+0100\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -14,13 +14,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid ""
 "\n"
 " Alternatively you can download the file."
 msgstr ""
+"\n"
+" Prípadne si môžete stiahnuť súbor."
 
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
@@ -1019,7 +1021,8 @@ msgstr "Adresa"
 msgid "Address Book"
 msgstr "Adresár kontaktov"
 
-#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Address Book"
 msgstr "Adresár kontaktov"
@@ -1250,6 +1253,12 @@ msgstr "Android"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "Výročie"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Ignore Warnings"
+msgid "Anti-Virus Warning"
+msgstr "Ignorovať upozornenia"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -1767,7 +1776,8 @@ msgid "Calendar"
 msgstr "Kalendár"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalendár"
@@ -1813,7 +1823,8 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
-#: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/download.js
+#: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js
@@ -1823,7 +1834,8 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
 #: apps/io.ox/files/actions/upload-new-version.js
@@ -2842,6 +2854,7 @@ msgstr "Odložené"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-older-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
@@ -2876,6 +2889,12 @@ msgstr "Zmazať všetky správy"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Delete all objects"
 msgstr "Mazať všetky objekty"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Delete all older versions"
+msgstr "Zmazať verziu"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -3156,6 +3175,13 @@ msgstr ""
 "chcete vytvoriť schôdzku <b>s vlastníkom priečinka</b> vo vašom vlastnom "
 "kalendári?"
 
+#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this version?"
+msgid "Do you really want to delete all older versions?"
+msgstr "Ste si istý, že chcete túto verziu zmazať?"
+
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete calendar \"%s\"?"
 msgstr "Ste si istý, že chcete kalendár „%s“ zmazať?"
@@ -3373,13 +3399,13 @@ msgstr "Hotovo"
 msgid "Downlad"
 msgstr "Stiahnuť"
 
-#: apps/io.ox/core/pim/actions.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
-#: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Stiahnuť"
 
@@ -3401,6 +3427,12 @@ msgstr "Stiahnite si teraz %s za %s"
 msgid "Download entire folder"
 msgstr "Stiahnuť celý priečinok"
 
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Download entire folder"
+msgid "Download infected file"
+msgstr "Stiahnuť celý priečinok"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Download installation file"
 msgstr "Stiahnuť inštalačný súbor"
@@ -3413,6 +3445,12 @@ msgstr "Stiahnuť klienta %s %s"
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Download the application."
 msgstr "Stiahnuť aplikáciu."
+
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Download installation file"
+msgid "Download unscanned file"
+msgstr "Stiahnuť inštalačný súbor"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Downloads"
@@ -3917,6 +3955,12 @@ msgstr "Chyba:"
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 msgid "Error: Failed to load appointments"
 msgstr "Chyba: Nepodarilo sa načítať schôdzky"
+
+#: apps/io.ox/files/listview.js module:io.ox/files
+#, fuzzy
+#| msgid "Error: Failed to load messages"
+msgid "Error: Failed to load files"
+msgstr "Chyba: Nepodarilo sa načítať správy"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
@@ -4449,8 +4493,7 @@ msgid "Folder"
 msgstr "Priečinok"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/core/folder/actions/rename.js
 msgid "Folder name"
 msgstr "Názov priečinka"
 
@@ -5381,10 +5424,8 @@ msgid "Language-specific default"
 msgstr "Predvoľby špecifické pre jazyk"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Language"
 msgid "Language:"
-msgstr "Jazyk"
+msgstr "Jazyk:"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
@@ -7077,10 +7118,8 @@ msgstr "Časť"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Participant"
 msgid "Participant not found"
-msgstr "Účastník"
+msgstr "Účastník nebol nájdený"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Participant related actions"
@@ -7936,10 +7975,6 @@ msgstr ""
 "Posielať účastníkovi schôdzky oznámenie, keď ostatní účastníci prijmú alebo "
 "odmietnu pozvanie"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "Posielať oznámenie zmien schôdzok"
-
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Receive notification when someone accesses the file(s)"
@@ -7975,6 +8010,18 @@ msgstr ""
 msgid ""
 "Receive notifications when a task in which you participate is created, "
 "modified or deleted"
+msgstr ""
+"Dostávať upozornenia pri vytvorení zmenení alebo odstránení úlohy, ktorej sa "
+"zúčastňujete"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Receive notifications when a task in which you participate is created, "
+#| "modified or deleted"
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
 msgstr ""
 "Dostávať upozornenia pri vytvorení zmenení alebo odstránení úlohy, ktorej sa "
 "zúčastňujete"
@@ -8156,10 +8203,8 @@ msgid "Reload statistics"
 msgstr "Aktualizovať štatistiky"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "login"
 msgid "Relogin"
-msgstr "Prihlasovacie meno"
+msgstr "Znovu sa prihlásiť"
 
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
@@ -8461,9 +8506,10 @@ msgstr "V dôchodku"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
-#: apps/io.ox/core/main/autologout.js apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
+#: module:io.ox/files apps/io.ox/mail/detail/view.js module:io.ox/mail
+#: apps/io.ox/mail/listview.js apps/plugins/portal/twitter/register.js
+#: module:plugins/portal
 msgid "Retry"
 msgstr "Skúsiť znova"
 
@@ -8688,19 +8734,6 @@ msgstr "Vyhľadávať vo všetkých priečinkoch"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
 msgstr "Výsledky vyhľadávania"
-
-#. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid ""
-"Search results page lists all active facets to allow them to be easly "
-"adjustable/removable. Below theses common facets additonal advanced facets "
-"are listed. To narrow down search result please adjust active facets or add "
-"new ones"
-msgstr ""
-"Stránka s výsledkami vyhľadávania uvádza všetky aktívne filtre, aby ste ich "
-"mohli jednoducho nastaviť alebo odstrániť. Pod hľadanými výrazmi sú uvedené "
-"bežne používané pokročilé filtre. Ak chcete zúžiť výsledky vyhľadávania, "
-"prosím, upravte aktívne filtre alebo pridajte nové."
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -9368,15 +9401,11 @@ msgstr ""
 "stránku alebo znova sa prihlásiť, aby sa prejavili."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a page reload or "
-#| "relogin to take effect."
 msgid ""
 "Some settings (language, timezone, theme) require a relogin to take effect."
 msgstr ""
-"Niektoré nastavenia (jazyk, časové pásmo, téma) vyžadujú znova načítať "
-"stránku alebo znova sa prihlásiť, aby sa prejavili."
+"Niektoré nastavenia (jazyk, časové pásmo, téma vzhľadu) vyžadujú opätovné "
+"prihlásenie, aby sa prejavili."
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
@@ -10148,12 +10177,8 @@ msgstr ""
 "prejavilo."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "The setting requires a reload or relogin to take effect."
 msgid "The setting requires a relogin to take effect."
-msgstr ""
-"Nastavenie vyžaduje obnovenie stránky alebo opätovné prihlásenie, aby sa "
-"prejavilo."
+msgstr "Nastavenie vyžaduje opätovné prihlásenie, aby sa prejavilo."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -11844,10 +11869,8 @@ msgid "Your platform is not supported!"
 msgstr "Vaša platforma nie je podporovaná!"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
-#, fuzzy
-#| msgid "Account is being created"
 msgid "Your preview is being generated."
-msgstr "Prebieha vytvorenie účtu"
+msgstr "Prebieha vytvorenie náhľadu."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule does not fit to your start date."
@@ -11966,6 +11989,10 @@ msgstr "rozsah dátumov"
 msgctxt "a11y"
 msgid "at %1$s"
 msgstr "miesto: %1$s"
+
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr "Automatické preposielanie"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "azure"
@@ -17314,6 +17341,9 @@ msgstr "vaša platforma"
 #~ msgid "Rebuild Tree..."
 #~ msgstr "Znovu zostaviť strom..."
 
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "Posielať oznámenie zmien schôdzok"
+
 #~ msgid "Received:"
 #~ msgstr "Prijaté:"
 
@@ -17604,6 +17634,17 @@ msgstr "vaša platforma"
 
 #~ msgid "Search here"
 #~ msgstr "Hľadať tu"
+
+#~ msgid ""
+#~ "Search results page lists all active facets to allow them to be easly "
+#~ "adjustable/removable. Below theses common facets additonal advanced "
+#~ "facets are listed. To narrow down search result please adjust active "
+#~ "facets or add new ones"
+#~ msgstr ""
+#~ "Stránka s výsledkami vyhľadávania uvádza všetky aktívne filtre, aby ste "
+#~ "ich mohli jednoducho nastaviť alebo odstrániť. Pod hľadanými výrazmi sú "
+#~ "uvedené bežne používané pokročilé filtre. Ak chcete zúžiť výsledky "
+#~ "vyhľadávania, prosím, upravte aktívne filtre alebo pridajte nové."
 
 #~ msgid "Search within application"
 #~ msgstr "Vyhľadávanie v rámci aplikácie"

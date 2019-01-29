@@ -1647,16 +1647,17 @@ define('io.ox/core/desktop', [
                     draw: function (baton) {
                         // share data
                         _.extend(baton.data, {
-                            label: gt('Search'),
-                            id:  _.uniqueId(win.name + '-search-field'),
-                            guid:  _.uniqueId('form-control-description-')
+                            label: gt('Search')
+                            // id:  _.uniqueId(win.name + '-search-field'),
+                            // guid:  _.uniqueId('form-control-description-')
                         });
                         // search box form
                         baton.$.group = $('<div class="form-group has-feedback">').append(
                             $('<input type="text" class="form-control has-feedback search-field tokenfield-placeholder f6-target">').attr({
-                                id: baton.data.id,
+                                //  id: baton.data.id,
                                 placeholder: baton.data.label + '...',
-                                'aria-describedby': baton.data.guid
+                                // 'aria-describedby': baton.data.guid
+                                title: baton.data.label
                             })
                         );
                         // add to searchbox area
@@ -1689,6 +1690,11 @@ define('io.ox/core/desktop', [
                     }
                 });
 
+                /*
+
+                A11y NOTE: This does not work like this. Instructions indicating a position on screen has no meaning to blind users.
+                Also the label serves no purpose here, the best workaround in the moment is to attach a title to the input field.
+
                 ext.point('io.ox/find/view').extend({
                     id: 'screenreader',
                     index: 500,
@@ -1707,6 +1713,7 @@ define('io.ox/core/desktop', [
                         );
                     }
                 });
+                */
 
                 // draw searchfield and attach lazy load listener
                 ext.point('io.ox/find/view').invoke('draw', win, ext.Baton.ensure({}));

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-11-11 23:26+0800\n"
+"PO-Revision-Date: 2019-01-09 10:13+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.1.1\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,731,-1,-1,-1,-1,-1\n"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
@@ -19,6 +19,8 @@ msgid ""
 "\n"
 " Alternatively you can download the file."
 msgstr ""
+"\n"
+"或者您也可以下載檔案。"
 
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
@@ -982,7 +984,8 @@ msgstr "地址"
 msgid "Address Book"
 msgstr "通訊錄"
 
-#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Address Book"
 msgstr "通訊錄"
@@ -1207,6 +1210,12 @@ msgstr "Android"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "周年紀念日"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Ignore Warnings"
+msgid "Anti-Virus Warning"
+msgstr "忽略警告"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -1714,7 +1723,8 @@ msgid "Calendar"
 msgstr "日曆"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Calendar"
 msgstr "日曆"
@@ -1760,7 +1770,8 @@ msgstr "攝影機 %1$s"
 #: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
-#: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/download.js
+#: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js
@@ -1770,7 +1781,8 @@ msgstr "攝影機 %1$s"
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
 #: apps/io.ox/files/actions/upload-new-version.js
@@ -2775,6 +2787,7 @@ msgstr "延遲"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-older-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
@@ -2809,6 +2822,12 @@ msgstr "刪除所有訊息"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Delete all objects"
 msgstr "刪除所有物件"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Delete all older versions"
+msgstr "刪除版本"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -3086,6 +3105,13 @@ msgstr ""
 "您真的想要 <b>以資料夾擁有者的身分</b> 建立約會，或是想要在您自己的行事曆中建"
 "立一個 <b>資料夾擁有者參與</b> 的約會？"
 
+#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this version?"
+msgid "Do you really want to delete all older versions?"
+msgstr "您真的要刪除這個版本嗎？"
+
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete calendar \"%s\"?"
 msgstr "您真的要刪除行事曆「%s」嗎？"
@@ -3289,13 +3315,13 @@ msgstr "已完成"
 msgid "Downlad"
 msgstr "下載"
 
-#: apps/io.ox/core/pim/actions.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
-#: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Download"
 msgstr "下載"
 
@@ -3317,6 +3343,12 @@ msgstr "立刻下載 %2$s 的 %1$s"
 msgid "Download entire folder"
 msgstr "下載整個資料夾"
 
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Download entire folder"
+msgid "Download infected file"
+msgstr "下載整個資料夾"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Download installation file"
 msgstr "下載安裝檔"
@@ -3329,6 +3361,12 @@ msgstr "下載 %2$s 的 %1$s 客戶端"
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Download the application."
 msgstr "下載應用程式。"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Download installation file"
+msgid "Download unscanned file"
+msgstr "下載安裝檔"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Downloads"
@@ -3825,6 +3863,12 @@ msgstr "錯誤:"
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 msgid "Error: Failed to load appointments"
 msgstr "錯誤: 約會載入失敗"
+
+#: apps/io.ox/files/listview.js module:io.ox/files
+#, fuzzy
+#| msgid "Error: Failed to load messages"
+msgid "Error: Failed to load files"
+msgstr "錯誤: 訊息載入失敗"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
@@ -4337,8 +4381,7 @@ msgid "Folder"
 msgstr "文件夾"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/core/folder/actions/rename.js
 msgid "Folder name"
 msgstr "資料夾名稱"
 
@@ -5255,10 +5298,8 @@ msgid "Language-specific default"
 msgstr "不同語言的細部設定"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Language"
 msgid "Language:"
-msgstr "語言"
+msgstr "語言:"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
@@ -6938,10 +6979,8 @@ msgstr "部分"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Participant related actions"
 msgid "Participant not found"
-msgstr "與與會者相關的操作"
+msgstr "找不到與會者"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Participant related actions"
@@ -7777,10 +7816,6 @@ msgid ""
 "accept or decline"
 msgstr "當其他參與者接受或拒絕時，作為參與者接收通知"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "接收約會變更的電子郵件通知"
-
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Receive notification when someone accesses the file(s)"
@@ -7812,6 +7847,16 @@ msgstr "當您參與的任務當中的參與者接受或拒絕時接收通知"
 msgid ""
 "Receive notifications when a task in which you participate is created, "
 "modified or deleted"
+msgstr "當您參與的任務建立、修改或刪除時接收通知"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Receive notifications when a task in which you participate is created, "
+#| "modified or deleted"
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
 msgstr "當您參與的任務建立、修改或刪除時接收通知"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -7991,10 +8036,8 @@ msgid "Reload statistics"
 msgstr "重新載入統計資訊"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "login"
 msgid "Relogin"
-msgstr "帳號"
+msgstr "重新登入"
 
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
@@ -8296,9 +8339,10 @@ msgstr "已退休"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
-#: apps/io.ox/core/main/autologout.js apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
+#: module:io.ox/files apps/io.ox/mail/detail/view.js module:io.ox/mail
+#: apps/io.ox/mail/listview.js apps/plugins/portal/twitter/register.js
+#: module:plugins/portal
 msgid "Retry"
 msgstr "蟲試"
 
@@ -8522,18 +8566,6 @@ msgstr "在所有資料夾中搜尋"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
 msgstr "搜尋結果"
-
-#. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid ""
-"Search results page lists all active facets to allow them to be easly "
-"adjustable/removable. Below theses common facets additonal advanced facets "
-"are listed. To narrow down search result please adjust active facets or add "
-"new ones"
-msgstr ""
-"搜尋結果頁面會列出所有使用的中 facet 以讓其可被簡單地調整/移除。在這些常用的 "
-"facet 下方會顯示其他的進階 facet。要篩選搜尋結果請調整使用中的 facet 或新增其"
-"他 facet"
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -9191,13 +9223,9 @@ msgid ""
 msgstr "某些設定（語言、時區、佈景主題）需要重新載入頁面或重新登入後才會生效。"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a page reload or "
-#| "relogin to take effect."
 msgid ""
 "Some settings (language, timezone, theme) require a relogin to take effect."
-msgstr "某些設定（語言、時區、佈景主題）需要重新載入頁面或重新登入後才會生效。"
+msgstr "某些設定（語言、時區、佈景主題）需要重新登入後才會生效。"
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
@@ -9938,10 +9966,8 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr "此選項需要重新載入或重新登入才能生效。"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "The setting requires a reload or relogin to take effect."
 msgid "The setting requires a relogin to take effect."
-msgstr "此選項需要重新載入或重新登入才能生效。"
+msgstr "此選項需要重新登入才能生效。"
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -11550,10 +11576,8 @@ msgid "Your platform is not supported!"
 msgstr "不支援您的平台！"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
-#, fuzzy
-#| msgid "Account is being created"
 msgid "Your preview is being generated."
-msgstr "正在建立帳號"
+msgstr "正在產生預覽。"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule does not fit to your start date."
@@ -11669,6 +11693,10 @@ msgstr "作為日期範圍"
 msgctxt "a11y"
 msgid "at %1$s"
 msgstr "位於 %1$s"
+
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr "自動轉寄"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "azure"
@@ -15836,6 +15864,9 @@ msgstr "您的平台"
 #~ msgid "Reading the details"
 #~ msgstr "閱讀詳情"
 
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "接收約會變更的電子郵件通知"
+
 #~ msgid "Recent activities"
 #~ msgstr "最近活動"
 
@@ -15989,6 +16020,16 @@ msgstr "您的平台"
 
 #~ msgid "Search here"
 #~ msgstr "在此搜索"
+
+#~ msgid ""
+#~ "Search results page lists all active facets to allow them to be easly "
+#~ "adjustable/removable. Below theses common facets additonal advanced "
+#~ "facets are listed. To narrow down search result please adjust active "
+#~ "facets or add new ones"
+#~ msgstr ""
+#~ "搜尋結果頁面會列出所有使用的中 facet 以讓其可被簡單地調整/移除。在這些常用"
+#~ "的 facet 下方會顯示其他的進階 facet。要篩選搜尋結果請調整使用中的 facet 或"
+#~ "新增其他 facet"
 
 #~ msgid "Search within application"
 #~ msgstr "在應用程式內搜尋"

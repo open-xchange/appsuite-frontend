@@ -172,7 +172,7 @@ define('io.ox/core/folder/actions/move', [
                     if (dialog) dialog.close();
                 },
 
-                disable: function (data, options) {
+                disable: options.disable || function (data, options) {
                     var same = isMove && data.id === current,
                         create = onlyFolder ? api.can('create:folder', data) : api.can('create', data);
                     return same || !create || (options && /^virtual/.test(options.folder));

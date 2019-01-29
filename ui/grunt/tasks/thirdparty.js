@@ -77,7 +77,6 @@ module.exports = function (grunt) {
                             'chart.js/dist/Chart.min.js',
                             'clipboard/dist/clipboard.min.js',
                             'croppie/croppie.min.js',
-                            'marked/lib/marked.js',
                             'resize-polyfill/lib/polyfill-resize.js',
                             'swiper/dist/js/swiper.js',
                             'typeahead.js/dist/typeahead.jquery.js',
@@ -114,7 +113,8 @@ module.exports = function (grunt) {
                         src: [
                             'build/pdf.min.js',
                             'build/pdf.worker.min.js',
-                            'web/images/*'
+                            'web/images/*',
+                            'cmaps/*'
                         ],
                         cwd: 'node_modules/pdfjs-dist',
                         dest: 'build/apps/pdfjs-dist/',

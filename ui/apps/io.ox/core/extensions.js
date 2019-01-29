@@ -456,7 +456,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             this.flow = { disable: {} };
             this.$ = {};
             // just copy given object
-            _.extend(this, obj);
+            _.extend(this, _(obj).omit('isDefaultPrevented', 'isPropagationStopped'));
         } else {
             // for the lazy way: b = Baton() instead of b = new Baton()
             return new Baton(obj);

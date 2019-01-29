@@ -1041,7 +1041,8 @@ msgstr "Adreça privada"
 msgid "Address Book"
 msgstr "Llibreta d'adreces"
 
-#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Address Book"
 msgstr "Llibreta d'adreces"
@@ -1287,6 +1288,12 @@ msgstr ""
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "Aniversari"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Ignore Warnings"
+msgid "Anti-Virus Warning"
+msgstr "Ignora els advertiments"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -1822,7 +1829,8 @@ msgid "Calendar"
 msgstr "Calendari"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Calendar"
 msgstr "Calendari"
@@ -1873,7 +1881,8 @@ msgstr ""
 #: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
-#: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/download.js
+#: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js
@@ -1883,7 +1892,8 @@ msgstr ""
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
 #: apps/io.ox/files/actions/upload-new-version.js
@@ -2945,6 +2955,7 @@ msgstr "Ajornada"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-older-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
@@ -2981,6 +2992,12 @@ msgstr "Missatges esborrats"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Delete all objects"
 msgstr ""
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Delete all older versions"
+msgstr "Suprimeix la versió"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -3272,6 +3289,11 @@ msgid ""
 "b> in your own calendar?"
 msgstr ""
 
+#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#, fuzzy
+msgid "Do you really want to delete all older versions?"
+msgstr "Realment voleu suprimir aquest fitxer?"
+
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 #, fuzzy
 msgid "Do you really want to delete calendar \"%s\"?"
@@ -3485,13 +3507,13 @@ msgstr "Fet"
 msgid "Downlad"
 msgstr ""
 
-#: apps/io.ox/core/pim/actions.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
-#: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Descarrega"
 
@@ -3513,6 +3535,12 @@ msgstr "Descarrega %s per %s"
 msgid "Download entire folder"
 msgstr "Descarrega la carpeta sencera"
 
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Download entire folder"
+msgid "Download infected file"
+msgstr "Descarrega la carpeta sencera"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Download installation file"
 msgstr "Descarrega el fitxer d'instal·lació"
@@ -3526,6 +3554,12 @@ msgstr "Descarrega el client de %s per a %s"
 #, fuzzy
 msgid "Download the application."
 msgstr "Administra les aplicacions"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Download installation file"
+msgid "Download unscanned file"
+msgstr "Descarrega el fitxer d'instal·lació"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Downloads"
@@ -4047,6 +4081,11 @@ msgstr "Error:"
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 msgid "Error: Failed to load appointments"
 msgstr ""
+
+#: apps/io.ox/files/listview.js module:io.ox/files
+#, fuzzy
+msgid "Error: Failed to load files"
+msgstr "No teniu missatges nous"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 #, fuzzy
@@ -4591,8 +4630,7 @@ msgid "Folder"
 msgstr "Carpeta"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/core/folder/actions/rename.js
 msgid "Folder name"
 msgstr "Nom de la carpeta"
 
@@ -8235,10 +8273,6 @@ msgstr ""
 "Rep una notificació com a participant d'una cita quan un altre participant "
 "l'accepti o la refusi"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "Notificació de canvi de cita per correu electrònic"
-
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #, fuzzy
@@ -8274,6 +8308,18 @@ msgid ""
 "Receive notifications when a task in which you participate is created, "
 "modified or deleted"
 msgstr ""
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Receive notification as appointment participant when other participants "
+#| "accept or decline"
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
+msgstr ""
+"Rep una notificació com a participant d'una cita quan un altre participant "
+"l'accepti o la refusi"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer
@@ -8770,9 +8816,10 @@ msgstr "Jubilat"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
-#: apps/io.ox/core/main/autologout.js apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
+#: module:io.ox/files apps/io.ox/mail/detail/view.js module:io.ox/mail
+#: apps/io.ox/mail/listview.js apps/plugins/portal/twitter/register.js
+#: module:plugins/portal
 msgid "Retry"
 msgstr "Torna-ho a provar"
 
@@ -9007,15 +9054,6 @@ msgstr "Carpetes estàndard"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
-msgstr ""
-
-#. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid ""
-"Search results page lists all active facets to allow them to be easly "
-"adjustable/removable. Below theses common facets additonal advanced facets "
-"are listed. To narrow down search result please adjust active facets or add "
-"new ones"
 msgstr ""
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
@@ -12316,6 +12354,11 @@ msgctxt "a11y"
 msgid "at %1$s"
 msgstr "Venciment %1$s"
 
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+#, fuzzy
+msgid "autoforward"
+msgstr "Reenviament automàtic"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "azure"
 msgstr ""
@@ -14023,6 +14066,9 @@ msgstr "la vostra plataforma"
 #~ "Puntuació %1$d de %2$d confirmada. Premeu Intro per a confirmar-la o "
 #~ "emprau les tecles de moviment del cursor a l'esquerra i a la dreta per a "
 #~ "ajustar la vostra puntuació."
+
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "Notificació de canvi de cita per correu electrònic"
 
 #~ msgid "Recent activities"
 #~ msgstr "Activitats recents"

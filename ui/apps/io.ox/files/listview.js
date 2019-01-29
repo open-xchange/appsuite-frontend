@@ -18,9 +18,10 @@ define('io.ox/files/listview', [
     'io.ox/files/common-extensions',
     'io.ox/files/api',
     'settings!io.ox/core',
+    'gettext!io.ox/files',
     'io.ox/files/view-options',
     'less!io.ox/files/style'
-], function (ListView, ContextMenuUtils, ext, extensions, filesAPI, settings) {
+], function (ListView, ContextMenuUtils, ext, extensions, filesAPI, settings, gt) {
 
     'use strict';
 
@@ -122,6 +123,23 @@ define('io.ox/files/listview', [
     //
     // Extensions
     //
+    ext.point(LISTVIEW + '/notification/error').extend({
+        id: 'default',
+        index: 100,
+        draw: function (baton) {
+            function retry(e) {
+                e.data.baton.listView.load();
+            }
+
+            this.append(
+                $('<i class="fa fa-exclamation-triangle" aria-hidden="true">'),
+                $.txt(gt('Error: Failed to load files')),
+                $('<button type="button" class="btn btn-link">')
+                    .text(gt('Retry'))
+                    .on('click', { baton: baton }, retry)
+            );
+        }
+    });
 
     ext.point(ITEM).extend(
         {

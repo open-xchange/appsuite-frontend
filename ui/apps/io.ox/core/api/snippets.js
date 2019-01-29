@@ -43,7 +43,9 @@ define('io.ox/core/api/snippets', [
             module: 'snippet',
             params: {
                 action: 'all'
-            }
+            },
+            // See bug 62222, we add a timeout as this should be a highly available service and should not block the ui
+            timeout: 15000
         })
         .then(
             function success(data) {

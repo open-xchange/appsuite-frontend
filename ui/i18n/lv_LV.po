@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-11-22 13:15+0100\n"
+"PO-Revision-Date: 2019-01-09 10:11+0100\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -11,13 +11,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid ""
 "\n"
 " Alternatively you can download the file."
 msgstr ""
+"\n"
+"Alternatīvi, jūs varat arī lejupielādēt failu."
 
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
@@ -1017,7 +1019,8 @@ msgstr "Adrese"
 msgid "Address Book"
 msgstr "Adrešu grāmata"
 
-#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Address Book"
 msgstr "Adrešu grāmata"
@@ -1248,6 +1251,12 @@ msgstr "Android"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "Dzimšanas diena"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Ignore Warnings"
+msgid "Anti-Virus Warning"
+msgstr "Neievērot brīdinājumus"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -1769,7 +1778,8 @@ msgid "Calendar"
 msgstr "Kalendārs"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalendārs"
@@ -1815,7 +1825,8 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
-#: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/download.js
+#: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js
@@ -1825,7 +1836,8 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
 #: apps/io.ox/files/actions/upload-new-version.js
@@ -2838,6 +2850,7 @@ msgstr "Atlikts"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-older-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
@@ -2872,6 +2885,12 @@ msgstr "Izdzēst visas ziņas"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Delete all objects"
 msgstr "Dzēst visus objektus"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Delete all older versions"
+msgstr "Dzēst versiju"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -3152,6 +3171,13 @@ msgstr ""
 "Vai tiešām vēlaties izveidot mītiņu <b>mapes īpašnieka vārdā</b> vai arī "
 "vēlaties izveidot mītiņu <b>ar mapes īpašnieku</b> savā kalendārā?"
 
+#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this version?"
+msgid "Do you really want to delete all older versions?"
+msgstr "Vai tiešām vēlaties dzēst šo versiju?"
+
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete calendar \"%s\"?"
 msgstr "Vai tiešām vēlaties dzēst kalendāru \"%s\"?"
@@ -3366,13 +3392,13 @@ msgstr "Paveikts"
 msgid "Downlad"
 msgstr "Lejupielāde"
 
-#: apps/io.ox/core/pim/actions.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
-#: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Lejupielāde"
 
@@ -3394,6 +3420,12 @@ msgstr "Lejupielādēt %s priekš %s tūlīt"
 msgid "Download entire folder"
 msgstr "Lejupielādēt visu mapi"
 
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Download entire folder"
+msgid "Download infected file"
+msgstr "Lejupielādēt visu mapi"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Download installation file"
 msgstr "Lejupielādēt instalēšanas failu"
@@ -3406,6 +3438,12 @@ msgstr "Lejupielādēt %s klientu priekš %s"
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Download the application."
 msgstr "Lejupielādēt aplikāciju."
+
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Download installation file"
+msgid "Download unscanned file"
+msgstr "Lejupielādēt instalēšanas failu"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Downloads"
@@ -3914,6 +3952,12 @@ msgstr "Kļūda:"
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 msgid "Error: Failed to load appointments"
 msgstr "Kļūda: Nevar ielādēt mītiņus"
+
+#: apps/io.ox/files/listview.js module:io.ox/files
+#, fuzzy
+#| msgid "Error: Failed to load messages"
+msgid "Error: Failed to load files"
+msgstr "Kļūda pie ziņojumu ielādēšanas"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
@@ -4445,8 +4489,7 @@ msgid "Folder"
 msgstr "Mape"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/core/folder/actions/rename.js
 msgid "Folder name"
 msgstr "Mapes vārds"
 
@@ -5379,10 +5422,8 @@ msgid "Language-specific default"
 msgstr "Specifiskie valodas noklusējumi"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Language"
 msgid "Language:"
-msgstr "Valoda"
+msgstr "Valoda:"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
@@ -7078,10 +7119,8 @@ msgstr "Daļa"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Participant"
 msgid "Participant not found"
-msgstr "Dalībnieks"
+msgstr "Dalībnieks nav atrasts"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Participant related actions"
@@ -7936,10 +7975,6 @@ msgstr ""
 "Saņemt paziņojumus kā mītiņa dalībniekam, kad citi dalībnieki apstiprina vai "
 "noraida dalību"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "Saņemt paziņojumus par mītiņu izmaiņām"
-
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Receive notification when someone accesses the file(s)"
@@ -7975,6 +8010,18 @@ msgstr ""
 msgid ""
 "Receive notifications when a task in which you participate is created, "
 "modified or deleted"
+msgstr ""
+"Saņemt paziņojumus par uzdevumu, kuros esat iesaistīts, izveidi, izmaiņām "
+"vai dzēšanu"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Receive notifications when a task in which you participate is created, "
+#| "modified or deleted"
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
 msgstr ""
 "Saņemt paziņojumus par uzdevumu, kuros esat iesaistīts, izveidi, izmaiņām "
 "vai dzēšanu"
@@ -8156,10 +8203,8 @@ msgid "Reload statistics"
 msgstr "Pārlādēt statistiku"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "login"
 msgid "Relogin"
-msgstr "pieslēgums"
+msgstr "Pieslēgties no jauna"
 
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
@@ -8461,9 +8506,10 @@ msgstr "Atvaļināts"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
-#: apps/io.ox/core/main/autologout.js apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
+#: module:io.ox/files apps/io.ox/mail/detail/view.js module:io.ox/mail
+#: apps/io.ox/mail/listview.js apps/plugins/portal/twitter/register.js
+#: module:plugins/portal
 msgid "Retry"
 msgstr "Vēlreiz"
 
@@ -8688,19 +8734,6 @@ msgstr "Meklēt visās mapēs"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
 msgstr "Meklēšanas rezultāti"
-
-#. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid ""
-"Search results page lists all active facets to allow them to be easly "
-"adjustable/removable. Below theses common facets additonal advanced facets "
-"are listed. To narrow down search result please adjust active facets or add "
-"new ones"
-msgstr ""
-"Meklēšanas rezultātu lapa uzrāda visus aktīvos vienumus, ļaujot tos ērti "
-"modificēt/noņemt. Zem šiem parasti lietotajiem vienumiem ir uzrādīti "
-"papildus vienumu iestatījumi. Lai samazinātu meklēšanas rezultātus, lūdzu "
-"pielāgojiet aktīvos vienumus vai pievienojiet jaunus"
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -9369,15 +9402,10 @@ msgstr ""
 "atkārtotu pieslēgšnos."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a page reload or "
-#| "relogin to take effect."
 msgid ""
 "Some settings (language, timezone, theme) require a relogin to take effect."
 msgstr ""
-"Daži iestatījumi (valoda, laika zona, tēma) prasa lapas pārlādi vai "
-"atkārtotu pieslēgšnos."
+"Daži iestatījumi (valoda, laika zona, tēma) prasa atkārtotu pieslēgšanos."
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
@@ -10151,11 +10179,8 @@ msgstr ""
 "Lai iestatījumi stātos spēkā ir jāveic pārlāde vai atkārtota pielēgšanās."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "The setting requires a reload or relogin to take effect."
 msgid "The setting requires a relogin to take effect."
-msgstr ""
-"Lai iestatījumi stātos spēkā ir jāveic pārlāde vai atkārtota pielēgšanās."
+msgstr "Lai iestatījumi stātos spēkā ir jāveic atkārtota pieslēgšanās."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -11838,10 +11863,8 @@ msgid "Your platform is not supported!"
 msgstr "Jūsu platforma netiek atbalstīta!"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
-#, fuzzy
-#| msgid "Account is being created"
 msgid "Your preview is being generated."
-msgstr "Konts pašlaik tiek izveidots"
+msgstr "Priekšskatījums tiek ģenerēts."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule does not fit to your start date."
@@ -11959,6 +11982,10 @@ msgstr "kā datumu apgabals"
 msgctxt "a11y"
 msgid "at %1$s"
 msgstr "vieta: %1$s"
+
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr "Automātiski pārsūtīt"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "azure"
@@ -17317,6 +17344,9 @@ msgstr "jūsu platforma"
 #~ msgid "Rebuild Tree..."
 #~ msgstr "Pārbūvēt koku..."
 
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "Saņemt paziņojumus par mītiņu izmaiņām"
+
 #~ msgid "Received:"
 #~ msgstr "Saņemts:"
 
@@ -17608,6 +17638,17 @@ msgstr "jūsu platforma"
 
 #~ msgid "Search here"
 #~ msgstr "Meklēšt šeit"
+
+#~ msgid ""
+#~ "Search results page lists all active facets to allow them to be easly "
+#~ "adjustable/removable. Below theses common facets additonal advanced "
+#~ "facets are listed. To narrow down search result please adjust active "
+#~ "facets or add new ones"
+#~ msgstr ""
+#~ "Meklēšanas rezultātu lapa uzrāda visus aktīvos vienumus, ļaujot tos ērti "
+#~ "modificēt/noņemt. Zem šiem parasti lietotajiem vienumiem ir uzrādīti "
+#~ "papildus vienumu iestatījumi. Lai samazinātu meklēšanas rezultātus, lūdzu "
+#~ "pielāgojiet aktīvos vienumus vai pievienojiet jaunus"
 
 #~ msgid "Search within application"
 #~ msgstr "Meklēt aplikācijā"

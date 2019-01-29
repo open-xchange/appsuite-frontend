@@ -1250,20 +1250,30 @@ define('io.ox/mail/main', [
             // no auto-selection needed on smartphones
             if (_.device('smartphone')) return;
 
-            app.listView.on('first-reset', function () {
-                // defer to have a visible window
-                _.defer(function () {
-                    app.listView.collection.find(function (model, index) {
-                        if (!util.isUnseen(model.get('flags'))) {
-                            app.autoSelect = true;
-                            // select but keep focus in topbar. Don't use set here, as it breaks alternative selection mode (message is selected instead of displayed)
-                            app.listView.selection.select(index, false, false);
-                            // scroll node into view
-                            app.listView.selection.getItems().eq(index).attr('tabindex', '0').intoViewport();
-                            return true;
-                        }
-                    });
+            var select = function () {
+                app.listView.collection.find(function (model, index) {
+                    if (!util.isUnseen(model.get('flags'))) { // && app.props.get('layout') !== 'list') {
+                        app.autoSelect = true;
+                        // select but keep focus in topbar. Don't use set here, as it breaks alternative selection mode (message is selected instead of displayed)
+                        app.listView.selection.select(index, false, false);
+                        // scroll node into view
+                        app.listView.selection.getItems().eq(index).attr('tabindex', '0').intoViewport();
+                        return true;
+                    }
                 });
+            };
+
+            app.listView.on('first-reset', function () {
+                if (app.props.get('layout') === 'list') {
+                    app.props.once('change:layout', function () {
+                        if (app.listView.selection.get().length) return;
+                        // defer to have a visible window
+                        _.defer(select);
+                    });
+                    return;
+                }
+                // defer to have a visible window
+                _.defer(select);
             });
         },
 
@@ -1302,7 +1312,7 @@ define('io.ox/mail/main', [
                             if (_.isString(obj)) obj = _.cid(obj);
                             // most recent or first unseen? (in line with threadview's autoSelectMail)
                             if ((i === 0 || util.isUnseen(obj)) && !util.isDeleted(obj)) {
-                                api.get({ unseen: true, id: obj.id, folder: obj.folder_id });
+                                api.get({ folder: obj.folder_id, id: obj.id, unseen: true });
                                 break;
                             }
                         }

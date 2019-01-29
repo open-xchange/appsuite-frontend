@@ -88,11 +88,13 @@ define('io.ox/mail/compose/extensions', [
         },
 
         renderDropdown: function () {
+            var from = this.model.get('from') ? this.model.get('from')[0][1] : undefined;
             // reset
             this.dropdown.$ul.empty().css('width', 'auto');
             // render
             this.setDropdownOptions();
             this.dropdown.$toggle.find('.dropdown-label').empty().append(this.getItemNode());
+            this.dropdown.$toggle.attr('href', from ? 'mailto:' + from : '#');
             if (this.dropdown.$el.hasClass('open')) this.dropdown.adjustBounds();
             // re-focus element otherwise the bootstap a11y closes the drop-down
             this.dropdown.$ul.find('[data-name="sendDisplayName"]').focus();
@@ -629,8 +631,8 @@ define('io.ox/mail/compose/extensions', [
                 baton.attachmentsView.$el.append($('<span>').addClass('mail-size').text(resizeUtils.getMailSizeString(baton.model)));
 
                 function onResizeOptionChange() {
-                    resizeUtils.resizeIntoArray(baton.model.get('attachments').localFiles(), [], baton.model.get('imageResizeOption')).done(function (resizedFiles) {
-                        baton.attachmentsView.$el.find('.mail-size').text(resizeUtils.getResizedSizeString(baton.model, resizedFiles));
+                    resizeUtils.resizeIntoArray(baton.model.get('attachments'), baton.model.get('imageResizeOption')).then(function (resizedFiles) {
+                        baton.attachmentsView.$el.find('.mail-size').text(resizeUtils.getMailSizeString(baton.model));
                         baton.model.set('resizedImages', resizedFiles);
                     });
                 }

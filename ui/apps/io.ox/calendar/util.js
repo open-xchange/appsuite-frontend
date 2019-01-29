@@ -1276,6 +1276,7 @@ define('io.ox/calendar/util', [
                 if (user.description) attendee.comment = user.description;
                 attendee.entity = user.id;
                 attendee.resource = user;
+                if (user.mailaddress) attendee.email = user.mailaddress;
             }
 
             if (attendee.cuType === 'GROUP') {
@@ -1386,15 +1387,15 @@ define('io.ox/calendar/util', [
             exception = exception instanceof Backbone.Model ? exception.attributes : exception;
 
             // deep copy
-            var result = JSON.parse(JSON.stringify(master)),
-                dateFormat = this.isAllday(master) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
+            var result = JSON.parse(JSON.stringify(master));
 
             result.recurrenceId = exception.recurrenceId;
 
             // recreate dates
-            result.startDate.value = moment(exception.recurrenceId).tz(master.startDate.tzid).format(dateFormat);
+            result.startDate.value = this.isAllday(master) ? moment(exception.recurrenceId).format('YYYYMMDD') : moment(exception.recurrenceId).tz(master.startDate.tzid).format('YYYYMMDD[T]HHmmss');
             // calculate duration and add it to startDate, then format
-            result.endDate.value = moment.tz(moment(result.startDate.value).valueOf() + moment(master.endDate.value).valueOf() - moment(master.startDate.value).valueOf(), result.startDate.tzid).format(dateFormat);
+            result.endDate.value = this.isAllday(master) ? moment(moment(result.startDate.value).valueOf() + moment(master.endDate.value).valueOf() - moment(master.startDate.value).valueOf()).format('YYYYMMDD') :
+                moment.tz(moment(result.startDate.value).valueOf() + moment(master.endDate.value).valueOf() - moment(master.startDate.value).valueOf(), result.startDate.tzid).format('YYYYMMDD[T]HHmmss');
 
             return result;
         }

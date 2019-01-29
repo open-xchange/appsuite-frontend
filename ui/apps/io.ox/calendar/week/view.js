@@ -24,14 +24,15 @@ define('io.ox/calendar/week/view', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/capabilities',
     'io.ox/core/print',
+    'io.ox/backbone/views/disposable',
     'io.ox/calendar/extensions',
     'io.ox/calendar/week/extensions',
     'less!io.ox/calendar/week/style'
-], function (ext, PerspectiveView, util, coreUtil, api, folderAPI, gt, settings, coreSettings, Dropdown, capabilities, print) {
+], function (ext, PerspectiveView, util, coreUtil, api, folderAPI, gt, settings, coreSettings, Dropdown, capabilities, print, DisposableView) {
 
     'use strict';
 
-    var BasicView = Backbone.View.extend({
+    var BasicView = DisposableView.extend({
 
         constructor: function (opt) {
             this.opt = _.extend({}, this.options || {}, opt);
@@ -53,10 +54,18 @@ define('io.ox/calendar/week/view', [
                 if (!active) return;
                 opt.update.call(self, e);
             }, 100));
-            $(document).on('mouseup' + context, function (e) {
+
+            function clear() {
                 active = false;
                 self.undelegate('mousemove' + context);
+                self.undelegate('focusout' + context);
                 $(document).off('mouseup' + context);
+                if (opt.clear) opt.clear.call(self);
+            }
+
+            if (opt.clear) this.delegate('focusout' + context, clear);
+            $(document).on('mouseup' + context, function (e) {
+                clear();
                 opt.end.call(self, e);
             });
         }
@@ -338,7 +347,9 @@ define('io.ox/calendar/week/view', [
         },
 
         renderAppointment: function (model) {
-            var node = $('<button type="button" class="appointment">')
+            // do not use a button here even if it's correct from a11y perspective. This breaks resize handles (you cannot make appointments longer/shorter) and hover styles on firefox.
+            // it is fine in month perspective as there are no resize handles there.
+            var node = $('<div role="button" class="appointment">')
                 .attr({
                     'data-cid': model.cid,
                     'data-master-id': util.cid({ id: model.get('id'), folder: model.get('folder') }),
@@ -777,6 +788,8 @@ define('io.ox/calendar/week/view', [
             AppointmentContainer.prototype.initialize.call(this, opt);
 
             this.listenTo(this.model, 'change:additionalTimezones', this.updateTimezones);
+            this.listenTo(this.model, 'change:startDate', this.updateToday);
+            this.listenToDOM(window, 'resize', _.throttle(this.onWindowResize, 50));
 
             this.$hiddenIndicators = $('<div class="hidden-appointment-indicator-container">');
             this.initCurrentTimeIndicator();
@@ -840,7 +853,6 @@ define('io.ox/calendar/week/view', [
 
         renderColumn: function (index) {
             var column = $('<div class="day">');
-            if (this.model.get('mode') !== 'day' && util.isToday(this.model.get('startDate').clone().add(index, 'days'))) column.addClass('today');
             if (this.model.get('mergeView')) column.attr('data-folder-cid', index);
             for (var i = 1; i <= this.getNumTimeslots(); i++) {
                 column.append(
@@ -851,6 +863,14 @@ define('io.ox/calendar/week/view', [
                 );
             }
             return column;
+        },
+
+        updateToday: function () {
+            if (this.model.get('mode') === 'day') return;
+            var start = this.model.get('startDate');
+            this.$('>> .day').each(function (index) {
+                $(this).toggleClass('today', util.isToday(start.clone().add(index, 'days')));
+            });
         },
 
         render: function () {
@@ -867,6 +887,7 @@ define('io.ox/calendar/week/view', [
                 this.$hiddenIndicators.css('right', coreUtil.getScrollBarWidth())
             );
             this.updateTimezones();
+            this.updateToday();
             pane.children().css('height', height);
             this.applyTimeScale();
             this.updateCurrentTimeIndicator();
@@ -890,8 +911,10 @@ define('io.ox/calendar/week/view', [
 
         updateCellHeight: function () {
             var cells = Math.min(Math.max(4, (this.model.get('workEnd') - this.model.get('workStart') + 1)), 18),
+                // try to estimate the height, the container will have when drawn. Is only needed sometimes as a fallback, when the element is not in the dom yet
+                height = this.$el.height() || (window.innerHeight - 250),
                 cellHeight = Math.floor(
-                    Math.max(this.$el.height() / (cells * this.model.get('gridSize')), this.options.minCellHeight)
+                    Math.max(height / (cells * this.model.get('gridSize')), this.options.minCellHeight)
                 );
             this.model.set('cellHeight', cellHeight);
         },
@@ -1002,7 +1025,7 @@ define('io.ox/calendar/week/view', [
                 }
 
                 // kill overlap appointments with length null
-                if (startLocal.isSame(endLocal) && maxCount > 1) {
+                if (startLocal.isSame(endLocal) && maxCount > 0) {
                     break;
                 }
 
@@ -1178,9 +1201,11 @@ define('io.ox/calendar/week/view', [
                         start.parent().prevAll().find('.lasso').remove();
                         day.nextAll().addBack().find('.lasso').remove();
                     },
-                    end: function () {
+                    clear: function () {
                         this.$('.lasso').remove();
                         this.$el.removeClass('no-select');
+                    },
+                    end: function () {
                         if (!startDate || !endDate) return;
                         this.opt.view.createAppointment({
                             startDate: { value: startDate.format('YYYYMMDD[T]HHmmss'), tzid: startDate.tz() },
@@ -1218,11 +1243,10 @@ define('io.ox/calendar/week/view', [
             }
 
             function getPivot(model, name) {
-                var date = model.getMoment(name).local(),
+                var date = model.getMoment(name).subtract(name === 'endDate' ? 1 : 0).local(),
                     startOfDay = date.clone().startOf('day'),
                     day = date.diff(this.model.get('startDate'), 'days'),
                     minutes = date.diff(startOfDay, 'minutes');
-                if (name === 'endDate') minutes -= 1;
                 var index = (minutes / 60 * this.model.get('gridSize')) >> 0;
                 return this.$('.day').eq(day).find('.timeslot').eq(index);
             }
@@ -1274,9 +1298,10 @@ define('io.ox/calendar/week/view', [
                             if (end.parent().is(day)) endDate = startOfDay.clone().add(bottom / numTimeslots * 24 * 60 - endOffset, 'minutes');
 
                             if (slot.length === 0) slot = node.clone().appendTo(day);
+                            var offsetTop = startDate.diff(startOfDay, 'minutes') / 60 / 24 * 100;
                             slot.css({
-                                top: startDate.diff(startOfDay, 'minutes') / 60 / 24 * 100 + '%',
-                                height: endDate.diff(startDate, 'minutes') / 60 / 24 * 100 + '%'
+                                top: offsetTop + '%',
+                                height: Math.min(100 - offsetTop, endDate.diff(startDate, 'minutes') / 60 / 24 * 100) + '%'
                             });
                         }
                         start.parent().prevAll().find('.resizing').remove();
@@ -1385,12 +1410,19 @@ define('io.ox/calendar/week/view', [
                     this.$('.resizing').removeClass('resizing');
                     startDate.tz(model.getMoment('startDate').tz());
                     endDate.tz(model.getMoment('endDate').tz());
+                    if (startDate.isSame(model.getMoment('startDate'))) return;
                     this.opt.view.updateAppointment(model, {
                         'startDate': { value: startDate.format('YYYYMMDD[T]HHmmss'), tzid: startDate.tz() },
                         'endDate': { value: endDate.format('YYYYMMDD[T]HHmmss'), tzid: endDate.tz() }
                     });
                 }
             });
+        },
+
+        onWindowResize: function () {
+            this.updateCellHeight();
+            var height = this.getContainerHeight();
+            this.$('.scrollpane').children().css('height', height);
         }
 
     });
@@ -1570,6 +1602,7 @@ define('io.ox/calendar/week/view', [
             this.setCollection(collection);
             $.when(this.app.folder.getData(), this.app.folders.getData()).done(function (folder, folders) {
                 self.model.set('folders', folders);
+                collection.folders = _(folders).pluck('id');
                 collection.sync();
             });
         },
@@ -1660,11 +1693,11 @@ define('io.ox/calendar/week/view', [
         print: function () {
             var folders = this.model.get('folders'),
                 title = gt('Appointments');
-            if (_(folders).keys().length === 1) title = folders[_(folders).keys()[0]].display_title || folders[_(folders).keys()[0]].title;
+            if (folders.length === 1) title = folders[0].display_title || folders[0].title;
             print.request('io.ox/calendar/week/print', {
                 start: this.model.get('startDate').valueOf(),
                 end: this.model.get('startDate').clone().add(this.model.get('numColumns'), 'days').valueOf(),
-                folders: folders,
+                folders: _(folders).pluck('id'),
                 title:  title
             });
         }

@@ -106,7 +106,6 @@ define('io.ox/mail/actions/create', [
                         contact.user_id = contact.internal_userid;
                     } else {
                         contact.type = 5;
-                        contact.display_name = contact.display_name;
                         contact.mail = contact.email1;
                     }
 

@@ -26,7 +26,10 @@ define('io.ox/oauth/settings', [
 
     var accountTypeAppMapping = {
         mail: gt.pgettext('app', 'Mail'),
-        fileStorage: gt.pgettext('app', 'Drive')
+        fileStorage: gt.pgettext('app', 'Drive'),
+        infostore: gt.pgettext('app', 'Drive'),
+        calendar: gt.pgettext('app', 'Calendar'),
+        contacts: gt.pgettext('app', 'Address Book')
     };
 
     function OAuthAccountDetailExtension(serviceId) {
@@ -121,58 +124,14 @@ define('io.ox/oauth/settings', [
                 $el = this;
             if (!account) return;
 
-            account.fetchRelatedAccounts().then(function (accounts) {
-                $el.append(accounts.map(function (a) {
-                    var mapping = accountTypeAppMapping[a.accountType];
-                    return mapping || a.displayName;
-                }).join(', '));
-            });
+            $el.append($.txt(account.get('associations').map(function (association) {
+                return accountTypeAppMapping[association.module] || account.get('displayName');
+            }).join(', ')));
         };
     }
 
     _(oauthKeychain.serviceIDs).each(function (serviceId) {
         ext.point('io.ox/settings/accounts/' + serviceId + '/settings/detail').extend(new OAuthAccountDetailExtension(serviceId));
-    });
-
-    ext.point('io.ox/settings/accounts/fileStorage/settings/detail').extend({
-        id: 'fileStorage',
-        draw: function (args) {
-            new ModalDialog({
-                async: true,
-                title: args.data.model.get('displayName'),
-                point: 'io.ox/settings/accounts/fileStorage/settings/detail/dialog',
-                account: args.data.model
-            })
-            .extend({
-                text: function () {
-                    var account = this.options.account,
-                        guid = _.uniqueId('input');
-                    this.$body.append(
-                        $('<div class="form-group">').append(
-                            $('<label>', { 'for': guid }).text(gt('Folder name')),
-                            new MiniViews.InputView({ name: 'displayName', model: account, id: guid }).render().$el
-                        )
-                    );
-                }
-            })
-            .addCancelButton()
-            .addButton({
-                action: 'save',
-                label: gt('Save')
-            })
-            .on('save', function () {
-                var dialog = this,
-                    account = this.options.account;
-                require(['io.ox/core/api/filestorage']).then(function (fsAPI) {
-                    return fsAPI.updateAccount(account.toJSON());
-                }).then(function () {
-                    dialog.close();
-                }, function () {
-                    dialog.idle();
-                });
-            })
-            .open();
-        }
     });
 
     return {};

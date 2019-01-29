@@ -653,6 +653,7 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
+#: apps/io.ox/files/actions/delete-older-versions.js
 #: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js
@@ -1009,6 +1010,24 @@ msgstr ""
 
 #: apps/io.ox/backbone/views/modal.js
 #: module:io.ox/core
+#: apps/io.ox/core/pim/actions.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js
+#: module:io.ox/files
+#: apps/io.ox/files/contextmenu.js
+#: apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js
+#: module:io.ox/mail
+#: apps/io.ox/notes/toolbar.js
+#: module:io.ox/notes
+#: apps/io.ox/onboarding/clients/extensions.js
+#: module:io.ox/core/onboarding
+msgid "Download"
+msgstr ""
+
+#: apps/io.ox/backbone/views/modal.js
+#: module:io.ox/core
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
@@ -1027,6 +1046,7 @@ msgstr ""
 #: apps/io.ox/contacts/edit/main.js
 #: apps/io.ox/contacts/main.js
 #: apps/io.ox/core/desktop.js
+#: apps/io.ox/core/download.js
 #: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
@@ -1042,8 +1062,9 @@ msgstr ""
 #: module:io.ox/core/viewer
 #: apps/io.ox/editor/main.js
 #: module:io.ox/editor
-#: apps/io.ox/files/actions/delete.js
+#: apps/io.ox/files/actions/delete-older-versions.js
 #: module:io.ox/files
+#: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js
 #: apps/io.ox/files/actions/save-as-pdf.js
@@ -2447,6 +2468,8 @@ msgstr ""
 #: apps/io.ox/core/commons.js
 #: module:io.ox/core
 #: apps/io.ox/core/main/autologout.js
+#: apps/io.ox/files/listview.js
+#: module:io.ox/files
 #: apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/listview.js
@@ -2757,6 +2780,8 @@ msgstr[1] ""
 #: module:io.ox/calendar
 #: apps/io.ox/core/main/apps.js
 #: module:io.ox/core
+#: apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Calendar"
 msgstr ""
@@ -2854,7 +2879,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js
 #: module:io.ox/calendar
-msgid "Receive notification for appointment changes"
+msgid "Receive notifications when an appointment in which you participate is created, modified or deleted"
 msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js
@@ -5208,15 +5233,24 @@ msgstr ""
 msgid "Cancel search"
 msgstr ""
 
-#. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js
-#: module:io.ox/core
-msgid "Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones"
-msgstr ""
-
 #: apps/io.ox/core/desktop.js
 #: module:io.ox/core
 msgid "Failed to start application. Maybe you have connection problems. Please try again."
+msgstr ""
+
+#: apps/io.ox/core/download.js
+#: module:io.ox/core
+msgid "Download infected file"
+msgstr ""
+
+#: apps/io.ox/core/download.js
+#: module:io.ox/core
+msgid "Download unscanned file"
+msgstr ""
+
+#: apps/io.ox/core/download.js
+#: module:io.ox/core
+msgid "Anti-Virus Warning"
 msgstr ""
 
 #: apps/io.ox/core/emoji/view.js
@@ -5385,8 +5419,6 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/add.js
 #: module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js
-#: apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
 msgid "Folder name"
 msgstr ""
 
@@ -6128,6 +6160,8 @@ msgstr ""
 
 #: apps/io.ox/core/main/apps.js
 #: module:io.ox/core
+#: apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Address Book"
 msgstr ""
@@ -6593,23 +6627,6 @@ msgstr ""
 #: apps/io.ox/core/pim/actions.js
 #: module:io.ox/core
 msgid "Attachments have been saved!"
-msgstr ""
-
-#: apps/io.ox/core/pim/actions.js
-#: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js
-#: apps/io.ox/files/actions.js
-#: module:io.ox/files
-#: apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorite/toolbar.js
-#: apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js
-#: module:io.ox/mail
-#: apps/io.ox/notes/toolbar.js
-#: module:io.ox/notes
-#: apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
-msgid "Download"
 msgstr ""
 
 #. %1$s is usually "Drive" (product name; might be customized)
@@ -8303,6 +8320,11 @@ msgstr ""
 
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
+msgid "Delete all older versions"
+msgstr ""
+
+#: apps/io.ox/files/actions.js
+#: module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr ""
 
@@ -8337,6 +8359,11 @@ msgstr ""
 #: apps/io.ox/files/actions/add-to-portal.js
 #: module:io.ox/files
 msgid "This file has been added to the portal"
+msgstr ""
+
+#: apps/io.ox/files/actions/delete-older-versions.js
+#: module:io.ox/files
+msgid "Do you really want to delete all older versions?"
 msgstr ""
 
 #: apps/io.ox/files/actions/delete.js
@@ -8662,6 +8689,11 @@ msgstr ""
 #: apps/io.ox/files/guidance/statistics.js
 #: module:io.ox/files
 msgid "Top 10 file types"
+msgstr ""
+
+#: apps/io.ox/files/listview.js
+#: module:io.ox/files
+msgid "Error: Failed to load files"
 msgstr ""
 
 #. Quota means a general quota for mail and files
@@ -10693,6 +10725,11 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/autoforward/indicator.js
 #: module:io.ox/mail
 msgid "Auto forwarding is active"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/autoforward/model.js
+#: module:io.ox/mail
+msgid "autoforward"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js

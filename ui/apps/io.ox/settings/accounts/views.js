@@ -83,7 +83,9 @@ define('io.ox/settings/accounts/views', [
 
             render: function () {
                 var self = this,
-                    title = self.getTitle();
+                    title = self.getTitle(),
+                    canEdit = ext.point('io.ox/settings/accounts/' + self.model.get('accountType') + '/settings/detail').pluck('draw').length > 0,
+                    canDelete = self.model.get('id') !== 0;
                 self.$el.attr({
                     'data-id': self.model.get('id'),
                     'data-accounttype': self.model.get('accountType')
@@ -95,12 +97,12 @@ define('io.ox/settings/accounts/views', [
                         this.renderSubTitle()
                     ),
                     listUtils.makeControls().append(
-                        listUtils.appendIconText(
+                        canEdit ? listUtils.appendIconText(
                             listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', title) }),
                             gt('Edit'),
                             'edit'
-                        ),
-                        self.model.get('id') !== 0 ? listUtils.controlsDelete({ title: gt('Delete %1$s', title) }) : $('<div class="remove-placeholder">')
+                        ) : '',
+                        canDelete ? listUtils.controlsDelete({ title: gt('Delete %1$s', title) }) : $('<div class="remove-placeholder">')
                     ),
                     drawAccountState(this.model) // show a possible account error
                 );

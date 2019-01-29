@@ -207,6 +207,54 @@ define('io.ox/files/main', [
             });
         },
 
+        /**
+         * PDF preconversion of office documents on file upload and when a new file version is added
+         */
+        'pdf-preconversion': function () {
+            // check if document converter is available
+            if (!capabilities.has('document_preview')) { return; }
+
+            // check setting 'io.ox/core//pdf/enablePreconversionOnUpload'
+            // if true or not present, perform preconversion on file upload
+            if (coreSettings.get('pdf/enablePreconversionOnUpload') === false) { return; }
+
+            function getFileModelFromDescriptor(fileDescriptor) {
+                return api.get(fileDescriptor).then(function (file) {
+                    return api.pool.get('detail').get(_.cid(file));
+                });
+            }
+
+            function getConverterUrl(model) {
+                return require(['io.ox/core/tk/doc-converter-utils']).then(function (DocConverterUtils) {
+                    return DocConverterUtils.getEncodedConverterUrl(model, { async: true });
+                });
+            }
+
+            function isOfficeDocumentAndNeedsPDFConversion(model) {
+                var file = model.toJSON();
+                // always preconvert for Text and Presentation documents, but for spreadsheets only if the Spreadsheet app is not available
+                return (api.isWordprocessing(file) || api.isPresentation(file) || (api.isSpreadsheet(file) && !capabilities.has('spreadsheet')));
+            }
+
+            function preconvertPDF(file) {
+                getFileModelFromDescriptor(file).then(function (model) {
+                    // resolve with document converter url or reject to skip Ajax call
+                    if (isOfficeDocumentAndNeedsPDFConversion(model)) {
+                        return getConverterUrl(model);
+                    }
+                    return $.Deferred().reject();
+
+                }).then(function (url) {
+                    $.ajax({
+                        url: url,
+                        dataType: 'text'
+                    });
+                });
+            }
+
+            api.on('add:file add:version', preconvertPDF);
+        },
+
         'files-quota': function (app) {
 
             if (_.device('smartphone')) return;
@@ -496,7 +544,7 @@ define('io.ox/files/main', [
                                 ret = ext.point('io.ox/files/share/classic-toolbar')
                                 .invoke('draw', $toolbar, baton);
 
-                                // draw toolbar
+                            // draw toolbar
                             $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
 
                         }, 10);
@@ -958,7 +1006,7 @@ define('io.ox/files/main', [
          */
         'requires-reload': function (app) {
             // listen to events that affect the filename, description add files, or remove files
-            api.on('rename description add:version remove:version change:version', _.debounce(function () {
+            api.on('rename description add:version remove:version change:version change:file', _.debounce(function () {
                 app.listView.reload();
             }, 100));
             // bug 53498
@@ -966,7 +1014,7 @@ define('io.ox/files/main', [
                 app.listView.selection.clear();
                 app.listView.reload();
             }, 100));
-            api.on('refresh:listviews change:file', _.debounce(function () {
+            api.on('refresh:listviews', _.debounce(function () {
                 ox.trigger('refresh^');
             }, 100));
             folderAPI.on('rename', _.debounce(function (id, data) {

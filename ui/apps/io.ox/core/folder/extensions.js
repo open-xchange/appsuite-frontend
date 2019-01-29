@@ -192,7 +192,7 @@ define('io.ox/core/folder/extensions', [
             return _(keychainApi.submodules).filter(function (submodule) {
                 if (services.indexOf(submodule.id) < 0) return false;
                 // we need support for both accounts, Oauth accounts and filestorage accounts.
-                return availableFilestorageServices.indexOf(submodule.id) >= 0;
+                return (!submodule.canAdd || submodule.canAdd.apply(this)) && availableFilestorageServices.indexOf(submodule.id) >= 0;
             });
         });
     }
@@ -274,7 +274,10 @@ define('io.ox/core/folder/extensions', [
         },
 
         getLocalFolderName: function () {
-            return account.getPrimaryName() || gt('My folders');
+            // Use account name for root node in tree or the fallback if no name is set or it is overwritten
+            // by the setting. See Bug #62074
+            var name = mailSettings.get('features/usePrimaryAccountNameInTree', true) ? (account.getPrimaryName() || gt('My folders')) : gt('My folders');
+            return name;
         },
 
         localFolders: function (tree) {

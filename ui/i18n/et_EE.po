@@ -1003,7 +1003,8 @@ msgstr "Aadress"
 msgid "Address Book"
 msgstr "Aadressiraamat"
 
-#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Address Book"
 msgstr "Address Book"
@@ -1239,6 +1240,12 @@ msgstr ""
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "Aastapäev"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Ignore Warnings"
+msgid "Anti-Virus Warning"
+msgstr "Ignoreeri hoiatusi"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -1764,7 +1771,8 @@ msgid "Calendar"
 msgstr "Kalender"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalender"
@@ -1814,7 +1822,8 @@ msgstr ""
 #: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
-#: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/download.js
+#: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js
@@ -1824,7 +1833,8 @@ msgstr ""
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
 #: apps/io.ox/files/actions/upload-new-version.js
@@ -2848,6 +2858,7 @@ msgstr "Edasi lükatud"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-older-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
@@ -2882,6 +2893,12 @@ msgstr "Kustuta kõik sõnumid"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Delete all objects"
 msgstr "Kõigi objektide kustutamine"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Delete all older versions"
+msgstr "Kustuta versioon"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -3162,6 +3179,13 @@ msgstr ""
 "Kas soovite tõepoolest luua kohtumise <b>kausta omaniku</b> nimel või "
 "soovite luua kohtumise <b>kausta omanikuga</b> oma kalendris?"
 
+#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this version?"
+msgid "Do you really want to delete all older versions?"
+msgstr "Kas soovite tõesti seda versiooni kustutada?"
+
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 #, fuzzy
 msgid "Do you really want to delete calendar \"%s\"?"
@@ -3374,13 +3398,13 @@ msgstr "Valmis"
 msgid "Downlad"
 msgstr ""
 
-#: apps/io.ox/core/pim/actions.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
-#: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Lae alla"
 
@@ -3402,6 +3426,12 @@ msgstr "Lae alla %s %s jaoks"
 msgid "Download entire folder"
 msgstr "Lae alla kogu kaust"
 
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Download entire folder"
+msgid "Download infected file"
+msgstr "Lae alla kogu kaust"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Download installation file"
 msgstr "Lae alla paigaldusfail"
@@ -3414,6 +3444,12 @@ msgstr "%s kliendi allalaadimine %s jaoks"
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Download the application."
 msgstr "Lae rakendus alla."
+
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Download installation file"
+msgid "Download unscanned file"
+msgstr "Lae alla paigaldusfail"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Downloads"
@@ -3919,6 +3955,12 @@ msgstr "Viga:"
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 msgid "Error: Failed to load appointments"
 msgstr ""
+
+#: apps/io.ox/files/listview.js module:io.ox/files
+#, fuzzy
+#| msgid "Error: Failed to load messages"
+msgid "Error: Failed to load files"
+msgstr "Viga: kirjade laadimine ebaõnnestus"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
@@ -4445,8 +4487,7 @@ msgid "Folder"
 msgstr "Kaust"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/core/folder/actions/rename.js
 msgid "Folder name"
 msgstr "Kausta nimi"
 
@@ -7957,10 +7998,6 @@ msgstr ""
 "Teavituse saamine teiste osalejate nõustumise või keeldumise kohta "
 "kohtumisel osalejana"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "Teavituse saamine kohtumiste muudatustest"
-
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #, fuzzy
@@ -7999,6 +8036,17 @@ msgstr ""
 msgid ""
 "Receive notifications when a task in which you participate is created, "
 "modified or deleted"
+msgstr ""
+"Teavitus ülesande, milles te osalete, loomisest, muutmisest või kustutamisest"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Receive notifications when a task in which you participate is created, "
+#| "modified or deleted"
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
 msgstr ""
 "Teavitus ülesande, milles te osalete, loomisest, muutmisest või kustutamisest"
 
@@ -8482,9 +8530,10 @@ msgstr "Pensionil"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
-#: apps/io.ox/core/main/autologout.js apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
+#: module:io.ox/files apps/io.ox/mail/detail/view.js module:io.ox/mail
+#: apps/io.ox/mail/listview.js apps/plugins/portal/twitter/register.js
+#: module:plugins/portal
 msgid "Retry"
 msgstr "Proovi uuesti"
 
@@ -8711,19 +8760,6 @@ msgstr "Otsi kõigist kaustadest"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
 msgstr "Otsingutulemused"
-
-#. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid ""
-"Search results page lists all active facets to allow them to be easly "
-"adjustable/removable. Below theses common facets additonal advanced facets "
-"are listed. To narrow down search result please adjust active facets or add "
-"new ones"
-msgstr ""
-"Otsingu tulemuste lehekülg loetleb kõik aktiivsed aspektid, võimaldades "
-"nende lihtsat kohandamist/eemaldamist. Nende üldiste aspektide all on "
-"loetletud täiendavad kõrgema järgu aspektid. Otsingutulemuste täpsustamiseks "
-"kohandage aktiivseid aspekte või lisage uusi"
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -11977,6 +12013,11 @@ msgctxt "a11y"
 msgid "at %1$s"
 msgstr "kohas %1$s"
 
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+#, fuzzy
+msgid "autoforward"
+msgstr "Automaatne edasisaatmine"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "azure"
 msgstr ""
@@ -13439,6 +13480,9 @@ msgstr "teie platvorm"
 #~ msgid "Read"
 #~ msgstr "Loetud"
 
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "Teavituse saamine kohtumiste muudatustest"
+
 #~ msgid "Recent activities"
 #~ msgstr "Hiljutised tegevused"
 
@@ -13486,6 +13530,17 @@ msgstr "teie platvorm"
 
 #~ msgid "Scheduling"
 #~ msgstr "Ajaplaanimine"
+
+#~ msgid ""
+#~ "Search results page lists all active facets to allow them to be easly "
+#~ "adjustable/removable. Below theses common facets additonal advanced "
+#~ "facets are listed. To narrow down search result please adjust active "
+#~ "facets or add new ones"
+#~ msgstr ""
+#~ "Otsingu tulemuste lehekülg loetleb kõik aktiivsed aspektid, võimaldades "
+#~ "nende lihtsat kohandamist/eemaldamist. Nende üldiste aspektide all on "
+#~ "loetletud täiendavad kõrgema järgu aspektid. Otsingutulemuste "
+#~ "täpsustamiseks kohandage aktiivseid aspekte või lisage uusi"
 
 #~ msgid "Send as internal link"
 #~ msgstr "Saada siselingina"

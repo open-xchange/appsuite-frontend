@@ -235,8 +235,8 @@ define('io.ox/mail/detail/content', [
             each(this, 'blockquote', function (node) {
                 // ignore nested blockquotes
                 if (hasParent(node, 'blockquote')) return;
-                var text = getText(node);
-                if (text.length > 300) text = text.substr(0, 300) + '\u2026'; else return;
+                var fulltext = getText(node);
+                if (fulltext.length < 500) return;
                 var blockquoteId = _.uniqueId('collapsed-blockquote-');
                 var ellipsisButton = $('<button type="button" class="bqt">').attr('title', gt('Show quoted text')).append(
                     $('<span aria-hidden="true">').text('...')
@@ -247,17 +247,22 @@ define('io.ox/mail/detail/content', [
                         'aria-expanded': false
                     });
                 }
+                // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
+                var parts = [ellipsisButton];
+                // some text optimizations
+                var text = getText(node, true).replace(/<\s/g, '<').replace(/\s>/g, '>')
+                    .replace(/("'\s?|\s?'")/g, '').replace(/[-_]{3,}/g, '');
+                if (text.length > 500) {
+                    parts.push(
+                        $.txt(text.substr(0, 210).replace(/\s\S{1,10}$/, ' ') + '\u2026'),
+                        $('<br>'),
+                        $.txt('\u2026' + text.substr(-210).replace(/^\S{1,10}\s/, ' '))
+                    );
+                } else {
+                    parts.push($.txt(text));
+                }
                 $(node).addClass('collapsed-blockquote').hide().attr('id', blockquoteId).after(
-                    $('<div class="blockquote-toggle">').append(
-                        // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
-                        ellipsisButton,
-                        $.txt(
-                            text.replace(/<\s/g, '<')
-                                .replace(/\s>/g, '>')
-                                .replace(/("'\s?|\s?'")/g, '')
-                                .replace(/[-_]{3,}/g, '')
-                        )
-                    )
+                    $('<div class="blockquote-toggle">').append(parts)
                 );
             });
             // delegate
@@ -556,7 +561,7 @@ define('io.ox/mail/detail/content', [
         return false;
     }
 
-    function getText(node) {
+    function getText(node, skipBlockquote) {
         // get text content for current node if it's a text node
         var value = (node.nodeType === 3 && String(node.nodeValue).trim()) || '',
             // ignore white-space
@@ -564,7 +569,8 @@ define('io.ox/mail/detail/content', [
         // loop over child nodes for recursion
         _(node.childNodes).each(function (child) {
             if (child.tagName === 'STYLE') return;
-            str += getText(child);
+            if (skipBlockquote && child.tagName === 'BLOCKQUOTE') return;
+            str += getText(child, skipBlockquote);
         });
         return str;
     }

@@ -1,6 +1,5 @@
 ---
 title: Sign In
-description: How to write a plugin extending login mechanisms
 ---
 # Customizing the login process
 

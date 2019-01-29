@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-11-14 12:47+0100\n"
+"PO-Revision-Date: 2019-01-09 10:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -12,13 +12,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid ""
 "\n"
 " Alternatively you can download the file."
 msgstr ""
+"\n"
+" 代わりにファイルをダウンロードできます。"
 
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
@@ -973,7 +975,8 @@ msgstr "アドレス"
 msgid "Address Book"
 msgstr "アドレス帳"
 
-#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Address Book"
 msgstr "アドレス帳"
@@ -1197,6 +1200,12 @@ msgstr "Android"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "記念日"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Ignore Warnings"
+msgid "Anti-Virus Warning"
+msgstr "警告を無視"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -1709,7 +1718,8 @@ msgid "Calendar"
 msgstr "予定表"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Calendar"
 msgstr "予定表"
@@ -1755,7 +1765,8 @@ msgstr "カメラ %1$s"
 #: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
-#: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/download.js
+#: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js
@@ -1765,7 +1776,8 @@ msgstr "カメラ %1$s"
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
 #: apps/io.ox/files/actions/upload-new-version.js
@@ -2774,6 +2786,7 @@ msgstr "延期"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-older-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
@@ -2808,6 +2821,12 @@ msgstr "すべてのメッセージを削除する"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Delete all objects"
 msgstr "すべてのオブジェクトを削除"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Delete all older versions"
+msgstr "このバージョンを削除"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -3084,6 +3103,13 @@ msgstr ""
 "<b>共有予定表の所有者の代理</b>として予定を作成しますか? または自分の予定表に"
 "\"予定を作成し<b>所有者を招待</b>しますか?"
 
+#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this version?"
+msgid "Do you really want to delete all older versions?"
+msgstr "このバージョンを削除しますか?"
+
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete calendar \"%s\"?"
 msgstr "予定表 \"%s\" を削除しますか？"
@@ -3289,13 +3315,13 @@ msgstr "完了"
 msgid "Downlad"
 msgstr "ダウンロード"
 
-#: apps/io.ox/core/pim/actions.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
-#: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Download"
 msgstr "ダウンロード"
 
@@ -3317,6 +3343,12 @@ msgstr "%s (%s 用) を今すぐダウンロード"
 msgid "Download entire folder"
 msgstr "フォルダ全体をダウンロード"
 
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Download entire folder"
+msgid "Download infected file"
+msgstr "フォルダ全体をダウンロード"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Download installation file"
 msgstr "インストールファイルをダウンロード"
@@ -3329,6 +3361,12 @@ msgstr "%s クライアント (%s 用) をダウンロード"
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Download the application."
 msgstr "アプリケーションをダウンロード"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Download installation file"
+msgid "Download unscanned file"
+msgstr "インストールファイルをダウンロード"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Downloads"
@@ -3835,6 +3873,12 @@ msgstr "次のエラーが発生しました:"
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 msgid "Error: Failed to load appointments"
 msgstr "エラー：予定の読み込みに失敗しました。"
+
+#: apps/io.ox/files/listview.js module:io.ox/files
+#, fuzzy
+#| msgid "Error: Failed to load messages"
+msgid "Error: Failed to load files"
+msgstr "エラー: メッセージを読み込みできませんでした"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
@@ -4351,8 +4395,7 @@ msgid "Folder"
 msgstr "フォルダ"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/core/folder/actions/rename.js
 msgid "Folder name"
 msgstr "フォルダ名"
 
@@ -5278,10 +5321,8 @@ msgid "Language-specific default"
 msgstr "言語に固有の既定値"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Language"
 msgid "Language:"
-msgstr "言語"
+msgstr "言語："
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
@@ -6962,10 +7003,8 @@ msgstr "パート"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Participant"
 msgid "Participant not found"
-msgstr "出席者"
+msgstr "参加者が見つかりません"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Participant related actions"
@@ -7813,10 +7852,6 @@ msgid ""
 "accept or decline"
 msgstr "招待された予定の他の招待者が承諾または辞退した場合に通知を受け取る"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "予定変更の通知を受信"
-
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Receive notification when someone accesses the file(s)"
@@ -7848,6 +7883,16 @@ msgstr "招待された仕事の他の招待者が承諾または辞退した場
 msgid ""
 "Receive notifications when a task in which you participate is created, "
 "modified or deleted"
+msgstr "仕事が作成、変更、または削除された場合に通知を受け取る"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Receive notifications when a task in which you participate is created, "
+#| "modified or deleted"
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
 msgstr "仕事が作成、変更、または削除された場合に通知を受け取る"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -8027,10 +8072,8 @@ msgid "Reload statistics"
 msgstr "統計を再読み込み"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "login"
 msgid "Relogin"
-msgstr "ログイン"
+msgstr "ログオン"
 
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
@@ -8332,9 +8375,10 @@ msgstr "退職"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
-#: apps/io.ox/core/main/autologout.js apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
+#: module:io.ox/files apps/io.ox/mail/detail/view.js module:io.ox/mail
+#: apps/io.ox/mail/listview.js apps/plugins/portal/twitter/register.js
+#: module:plugins/portal
 msgid "Retry"
 msgstr "再試行"
 
@@ -8557,19 +8601,6 @@ msgstr "すべてのフォルダを検索"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
 msgstr "検索結果"
-
-#. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid ""
-"Search results page lists all active facets to allow them to be easly "
-"adjustable/removable. Below theses common facets additonal advanced facets "
-"are listed. To narrow down search result please adjust active facets or add "
-"new ones"
-msgstr ""
-"検索結果ページはアクティブファセットの一覧を表示することによって簡単に調整・"
-"削除できます。その一般的なファセットの下に詳細ファセットも表示されます。検索"
-"結果絞り込むをためにアクティブファセットを調整するか新規ファセットを追加しま"
-"す。"
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -9227,15 +9258,11 @@ msgstr ""
 "ドまたは再ログインが必要です。"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a page reload or "
-#| "relogin to take effect."
 msgid ""
 "Some settings (language, timezone, theme) require a relogin to take effect."
 msgstr ""
-"言語、タイムゾーン、またはテーマの設定変更を有効にするために、ページのリロー"
-"ドまたは再ログインが必要です。"
+"設定（言語、タイムゾーン、テーマ）によっては、設定を有効にするには、ログオン"
+"しなおしてください。"
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
@@ -9989,10 +10016,8 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr "設定を反映するために再読み込みを行ってください。"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "The setting requires a reload or relogin to take effect."
 msgid "The setting requires a relogin to take effect."
-msgstr "設定を反映するために再読み込みを行ってください。"
+msgstr "設定を有効にするには、ログオンしなおしてください。"
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -11634,10 +11659,8 @@ msgid "Your platform is not supported!"
 msgstr "ご利用のプラットフォームはサポートされていません。"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
-#, fuzzy
-#| msgid "Account is being created"
 msgid "Your preview is being generated."
-msgstr "アカウントが現在作成中です。"
+msgstr "プレビューが作成中です。"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule does not fit to your start date."
@@ -11756,6 +11779,10 @@ msgstr "日付の範囲"
 msgctxt "a11y"
 msgid "at %1$s"
 msgstr "宛先：%1$s"
+
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr "自動転送"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "azure"
@@ -18095,6 +18122,9 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Rebuild Tree..."
 #~ msgstr "ツリーを再構築します..."
 
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "予定変更の通知を受信"
+
 #~ msgid "Received:"
 #~ msgstr "受信日時:"
 
@@ -18376,6 +18406,17 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Search here"
 #~ msgstr "ここを検索"
+
+#~ msgid ""
+#~ "Search results page lists all active facets to allow them to be easly "
+#~ "adjustable/removable. Below theses common facets additonal advanced "
+#~ "facets are listed. To narrow down search result please adjust active "
+#~ "facets or add new ones"
+#~ msgstr ""
+#~ "検索結果ページはアクティブファセットの一覧を表示することによって簡単に調"
+#~ "整・削除できます。その一般的なファセットの下に詳細ファセットも表示されま"
+#~ "す。検索結果絞り込むをためにアクティブファセットを調整するか新規ファセット"
+#~ "を追加します。"
 
 #~ msgid "Search within application"
 #~ msgstr "アプリケーション内の検索"

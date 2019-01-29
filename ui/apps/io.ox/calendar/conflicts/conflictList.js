@@ -45,7 +45,7 @@ define('io.ox/calendar/conflicts/conflictList', [
         calAPI.get(baton.data.event).done(function (appointment) {
             // we don't show details for private appointments in shared/public folders (see bug 37971)
             var folder = folderAPI.pool.getModel(baton.data.event.folder);
-            if (appointment.get('private_flag') && appointment.get('createdBy').entity !== ox.user_id && !folderAPI.is('private', folder)) return;
+            if (appointment.get('private_flag') && (appointment.get('createdBy') || {}).entity !== ox.user_id && !folderAPI.is('private', folder)) return;
             appointment.nohalo = true;
             baton = ext.Baton.ensure(appointment.attributes);
             baton.model = appointment;
@@ -175,10 +175,11 @@ define('io.ox/calendar/conflicts/conflictList', [
                 details = $('<div class="conflict-details">').hide(),
                 icon = $('<i class="fa fa-angle-right" aria-hidden="true">'),
                 toggle = $('<a href="#" role="button" class="detail-toggle">').attr('summary', gt('Show appointment details')).append(icon),
-                li = $('<li>').append(toggle, summary, details);
+                li = $('<li>').append(toggle, summary, details),
+                entity = (conflict.event.createdBy || {}).entity;
 
             // use same setting as schedulingview (freeBusyStrict) to decide if we show infos about appointments the user is not invited too
-            if (settings.get('freeBusyStrict', true) && conflict.event.createdBy.entity !== ox.user_id && _.isUndefined(conflict.event.summary)) {
+            if (settings.get('freeBusyStrict', true) && entity !== ox.user_id && _.isUndefined(conflict.event.summary)) {
                 toggle.remove();
                 details.remove();
             } else {

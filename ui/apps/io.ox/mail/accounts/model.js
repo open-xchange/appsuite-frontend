@@ -180,6 +180,12 @@ define('io.ox/mail/accounts/model', [
                             }).then(function () {
                                 folderAPI.pool.unfetch('1');
                             });
+                        } else if (id === 0) {
+                            // reload settings before folder refresh when the primary account is changed to get correct default folders (virtual standard relies on these settings)
+                            def = require(['settings!io.ox/mail']).then(function (settings) {
+                                // reload settings to fetch unifiedInboxIdentifier
+                                return settings.reload();
+                            });
                         }
                         def.then(function () {
                             folderAPI.refresh();

@@ -1,7 +1,5 @@
 ---
 title: Your first plugin
-description: Get started with developing your first plugin for OX App Suite as quickly and simply as possible
-source: http://oxpedia.org/wiki/index.php?title=AppSuite:GettingStarted_7.6.0
 ---
 
 Hello and welcome to the world of OX App Suite development.

@@ -31,14 +31,11 @@
 <div class="oxhelp-content">
   <h1 class="sr-only">
     <span class="phrase">Kalender</span>
-    
-    
-    
   </h1>
 <h2 class="sr-only">Termine anlegen</h2>
 <div class="sect2" id="ox.appsuite.user.sect.calendar.add.serial">
 <div class="titlepage"><div><div><h3 class="title">7.4.3. Serientermin anlegen</h3></div></div></div>
-<a class="indexterm" name="id-1.8.9.6.2"></a><div class="task" id="ox.appsuite.user.task.calendar.add.serial">
+<a class="indexterm" name="id-1.8.9.9.2"></a><div class="task" id="ox.appsuite.user.task.calendar.add.serial">
 <p class="title">So legen Sie im Terminbearbeitungsfenster einen Serientermin an:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p role="presentation">Aktivieren Sie <span class="guibutton"><strong>Wiederholen</strong></span>. Die aktuellen
@@ -54,13 +51,83 @@
             </p></li>
 </ol></div>
 </div>
-<p id="ox.appsuite.user.tip.calendar.add.serial">Tipp: Beispiele zur Anwendung finden Sie bei den 
-        <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.serial">Fragen und Antworten</a>.</p>
-<p class="title">Siehe auch:</p>
-<ul class="itemizedlist" id="ox.appsuite.user.related.calendar.add.serial" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html">Neuen Termin anlegen</a></p></li>
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.gui.create.html">Das Terminbearbeitungsfenster</a></p></li>
+<p id="ox.appsuite.user.example.calendar.add.serial">Beispiele:
+        </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">Ein Termin oder eine Aufgabe soll jeden 2. Tag stattfinden. Das Ereignis soll insgesamt fünfmal stattfinden.
+              </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Wiederholen <span class="guibutton"><strong>Täglich</strong></span></p></li>
+<li class="listitem"><p role="presentation">Intervall <span class="guibutton"><strong>2</strong></span> Tag(e)</p></li>
+<li class="listitem"><p role="presentation">Endet <span class="guibutton"><strong>Nach einer Anzahl von Ereignissen</strong></span></p></li>
+<li class="listitem"><p role="presentation">Ereignisse <span class="guibutton"><strong>5</strong></span></p></li>
 </ul>
+<p role="presentation">
+            </p>
+</li>
+<li class="listitem">
+<p role="presentation">Ein Termin oder eine Aufgabe sollen jeden Dienstag und Freitag stattfinden. 
+              </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Wiederholen <span class="guibutton"><strong>Wöchentlich</strong></span></p></li>
+<li class="listitem"><p role="presentation">Wochentag <span class="guibutton"><strong>Di</strong></span>, <span class="guibutton"><strong>Fr</strong></span></p></li>
+<li class="listitem"><p role="presentation">Intervall <span class="guibutton"><strong>1</strong></span> Woche(n)</p></li>
+<li class="listitem"><p role="presentation">Endet <span class="guibutton"><strong>Nie</strong></span></p></li>
+</ul>
+<p role="presentation">
+            </p>
+</li>
+<li class="listitem">
+<p role="presentation">Ein Termin oder eine Aufgabe sollen jeden zweiten Mittwoch stattfinden. Letzter Termin ist der 29.11.2023. 
+              </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Wiederholen <span class="guibutton"><strong>Wöchentlich</strong></span></p></li>
+<li class="listitem"><p role="presentation">Wochentag <span class="guibutton"><strong>Mi</strong></span></p></li>
+<li class="listitem"><p role="presentation">Intervall <span class="guibutton"><strong>2</strong></span> Woche(n)</p></li>
+<li class="listitem"><p role="presentation">Endet <span class="guibutton"><strong>An bestimmtem Datum</strong></span></p></li>
+<li class="listitem"><p role="presentation">Endet am <span class="guibutton"><strong>29.11.2023</strong></span></p></li>
+</ul>
+<p role="presentation">
+            </p>
+</li>
+<li class="listitem">
+<p role="presentation">Ein Termin oder eine Aufgabe sollen stets am ersten Montag eines Monats stattfinden. Das Ereignis soll zwölfmal stattfinden.
+              </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Wiederholen <span class="guibutton"><strong>Monatlich</strong></span></p></li>
+<li class="listitem"><p role="presentation">Wiederholen am <span class="guibutton"><strong>Datum</strong></span></p></li>
+<li class="listitem"><p role="presentation">Intervall <span class="guibutton"><strong>1</strong></span> Monat(e)</p></li>
+<li class="listitem"><p role="presentation">Endet <span class="guibutton"><strong>Nach einer Anzahl von Ereignissen</strong></span></p></li>
+<li class="listitem"><p role="presentation">Ereignisse <span class="guibutton"><strong>12</strong></span></p></li>
+</ul>
+<p role="presentation">
+            </p>
+</li>
+<li class="listitem">
+<p role="presentation">Ein Termin oder eine Aufgabe sollen stets am letzten Freitag im November eines Jahres stattfinden.
+              </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Wiederholen <span class="guibutton"><strong>Jährlich</strong></span></p></li>
+<li class="listitem"><p role="presentation">Wiederholen am <span class="guibutton"><strong>Wochentag</strong></span></p></li>
+<li class="listitem"><p role="presentation">Endet <span class="guibutton"><strong>Nie</strong></span></p></li>
+</ul>
+<p role="presentation">
+            </p>
+</li>
+</ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.related.calendar.add.serial">
+        </p>
+<p class="title">Übergeordnete Aktion:</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html">Neuen Termin anlegen</a></p></li></ul>
+<p>
+        </p>
+<p class="title">Ähnliche Aktionen:</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.tasks.add.serial.html">Serienaufgabe anlegen</a></p></li></ul>
+<p>
+      </p>
 <p id="ox.appsuite.user.parent.calendar.add.serial">Übergeordnetes Thema:
         <a class="xref" href="ox.appsuite.user.sect.calendar.add.html">Termine anlegen</a>
       </p>

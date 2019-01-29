@@ -15,7 +15,8 @@ define('plugins/portal/tasks/register', [
     'io.ox/core/extensions',
     'io.ox/tasks/api',
     'gettext!plugins/portal',
-    'io.ox/tasks/util'
+    'io.ox/tasks/util',
+    'less!io.ox/tasks/style'
 ], function (ext, taskAPI, gt, util) {
 
     'use strict';
@@ -63,15 +64,16 @@ define('plugins/portal/tasks/register', [
 
                 sum.append(
                     $('<li class="item" tabindex="0">').data('item', task).append(
-                        $('<span class="bold">').text(_.ellipsis(task.title, { max: 50 })), $.txt(' '),
-                        task.end_time === '' ? $() :
-                            $('<span class="accent">').text(
-                                //#. Due on date
-                                gt('Due on %1$s', task.end_time)
-                            ),
-                        $.txt(' '),
-                        $('<span class="status pull-right">').text(task.status).addClass(task.badge),
-                        $('<span class="gray">').text(_.ellipsis(task.note, { max: 100 }))
+                        $('<span class="flex-wrapper">').append(
+                            $('<span class="bold">').text(_.ellipsis(task.title, { max: 50 })), $.txt(' '),
+                            task.end_time === '' ? $() :
+                                $('<span class="accent">').text(
+                                    //#. Due on date
+                                    gt('Due on %1$s', task.end_time)
+                                ),
+                            $.txt(' ')
+                        ),
+                        $('<span class="status pull-right">').text(task.status).addClass(task.badge)
                     )
                 );
 
@@ -106,15 +108,16 @@ define('plugins/portal/tasks/register', [
                 task = util.interpretTask(task);
                 content.append(
                     $('<li class="item" tabindex="0">').data('item', task).append(
-                        $('<span class="bold">').text(_.ellipsis(task.title, { max: 50 })), $.txt(' '),
-                        task.end_time === '' ? $() :
-                            $('<span class="accent">').text(
-                                //#. Due on date
-                                gt('Due on %1$s', task.end_time)
-                            ),
-                        $.txt(' '),
-                        $('<span class="pull-right">').text(task.status).addClass(task.badge),
-                        $('<span class="gray">').text(_.ellipsis(task.note, { max: 100 }))
+                        $('<span class="flex-wrapper">').append(
+                            $('<span class="bold">').text(_.ellipsis(task.title, { max: 50 })), $.txt(' '),
+                            task.end_time === '' ? $() :
+                                $('<span class="accent">').text(
+                                    //#. Due on date
+                                    gt('Due on %1$s', task.end_time)
+                                ),
+                            $.txt(' ')
+                        ),
+                        $('<span>').text(task.status).addClass(task.badge)
                     )
                 );
             });

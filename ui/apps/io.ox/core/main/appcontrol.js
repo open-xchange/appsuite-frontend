@@ -150,18 +150,17 @@ define('io.ox/core/main/appcontrol', [
     });
 
     var api = {
-        quickLauncherLimit: 3,
-        getQuickLauncherDefaults: function () {
-            return 'io.ox/mail/main,io.ox/calendar/main,io.ox/files/main';
+        getQuickLauncherLimit: function () {
+            return settings.get('apps/quickLauncherLimit', 3);
         },
         getQuickLauncherCount: function () {
-            var n = settings.get('apps/quickLaunchCount', 0);
+            var n = settings.get('apps/quickLaunchCount', 3);
             if (!_.isNumber(n)) return 0;
-            return Math.min(this.quickLauncherLimit, ox.ui.apps.forLauncher().length, n);
+            return Math.min(this.getQuickLauncherLimit(), ox.ui.apps.forLauncher().length, n);
         },
         getQuickLauncherItems: function () {
             var count = this.getQuickLauncherCount(),
-                list = String(settings.get('apps/quickLaunch', this.getQuickLauncherDefaults())).trim().split(/,\s*/),
+                list = String(settings.get('apps/quickLaunch')).trim().split(/,\s*/),
                 str = _.chain(list).filter(function (o) {
                     return ox.ui.apps.get(o.replace(/\/main$/, ''));
                 }).value().join(',');

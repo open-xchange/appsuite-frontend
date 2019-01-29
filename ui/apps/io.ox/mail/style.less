@@ -32,6 +32,21 @@
         .leftside  { width: 240px; }
         .rightside { left:  240px; }
     }
+
+    .mail-item .list-item {
+        .drag-title, .person {
+            width: 100%;
+            display: inline-block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        &.unread .drag-title {
+            width: calc(~"100% - 19px");
+        }
+        .from {
+            max-height: 16px;
+        }
+    }
 }
 
 .io-ox-mail-window .vsplit .leftside .alert {
@@ -454,8 +469,6 @@ html.macos, html.ios {
 
     .recipients .person-link {
         color: #333;
-        text-overflow: ellipsis;
-        overflow: hidden;
         @media(max-width: 900px) { white-space: normal; }
     }
 
@@ -485,7 +498,8 @@ html.macos, html.ios {
         .recipients {
             float: left;
             width: 100%;
-            display: flex;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .priority { font-size: 14px; }
         .flag-picker {
@@ -512,10 +526,6 @@ html.macos, html.ios {
             .fa-bars {
                 font-size: 14px;
             }
-        }
-
-        &.row-3 {
-            margin-bottom: 16px;
         }
     }
 
@@ -701,6 +711,7 @@ html.macos, html.ios {
         }
 
         .subject {
+            height: 16px;
             overflow: hidden;
             text-overflow: ellipsis;
         }
@@ -1533,6 +1544,10 @@ body.dragging .categories-toolbar-container {
             background-color: #fff;
 
             &.unread.selected .subject { color: #000; }
+
+            .subject {
+                height: @phone-line-height;
+            }
 
             &.complete > .list-item:last-child {
                 margin-bottom: @toolbar-height;

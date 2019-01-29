@@ -304,7 +304,7 @@ define('io.ox/mail/view-options', [
                 e.stopPropagation();
             }));
 
-            app.props.on('change:find-result', redraw);
+            app.props.on('change:find-result change:categories', redraw);
             app.on('folder:change', redraw);
 
             function redraw() {

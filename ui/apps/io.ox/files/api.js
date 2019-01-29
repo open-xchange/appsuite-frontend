@@ -1553,22 +1553,25 @@ define('io.ox/files/api', [
          *     - promise can be aborted using promise.abort function
          */
         upload: function (options) {
+            // TODO: this smells, once you look into api.upload; Martin Fowler would be crying
 
-            return performUpload('update', options, {
-                id: options.id,
-                folder_id: options.folder_id || options.folder,
-                version_comment: options.version_comment || ''
-            })
-            .then(function (result) {
-                var id = result.data;
-                // id changed?
-                if (options.id !== id) {
-                    var model = api.pool.get('detail').get(_.cid(options));
-                    model.set('id', id);
-                    return api.propagate('add:version', model.toJSON());
-                }
-                return api.propagate('add:version', options);
-            });
+            var def = performUpload('update', options, {
+                    id: options.id,
+                    folder_id: options.folder_id || options.folder,
+                    version_comment: options.version_comment || ''
+                }),
+                chain = def.then(function (result) {
+                    var id = result.data;
+                    // id changed?
+                    if (options.id !== id) {
+                        var model = api.pool.get('detail').get(_.cid(options));
+                        model.set('id', id);
+                        return api.propagate('add:version', model.toJSON());
+                    }
+                    return api.propagate('add:version', options);
+                });
+            chain.abort = def.abort;
+            return chain;
         },
 
         load: function (file, options) {
@@ -1623,6 +1626,45 @@ define('io.ox/files/api', [
             })
             .then(function () {
                 return api.propagate('remove:version', file);
+            });
+        },
+
+        /**
+         * All versions were deleted that are older than the passed version file.
+         * @param {FileDescriptor} file version descriptor
+         *
+         * @returns {Deferred}
+         */
+        removeOlderVersions: function (file) {
+
+            // update model instantly
+            var model = pool.get('detail').get(_.cid(file)), versions = model.get('versions');
+            if (model && _.isArray(versions)) {
+                model.set('versions', versions.filter(function (item) {
+                    return item.version >= file.version;
+                }));
+            }
+
+            // send which versions should be removed to the backend
+            return http.PUT({
+                module: 'files',
+                params: {
+                    action: 'detach',
+                    id: file.id,
+                    folder: file.folder_id,
+                    timestamp: _.then()
+                },
+                data: versions.filter(function (item) { return item.version < file.version; }).map(
+                    function (version) { return version.version; }
+                ),
+                appendColumns: false
+            })
+            .then(function () {
+                versions.filter(function (item) { return item.version < file.version; }).map(
+                    function (version) {
+                        return api.propagate('remove:version', _.extend(_.pick(file, 'id', 'folder_id'), { version: version.version }));
+                    }
+                );
             });
         },
 

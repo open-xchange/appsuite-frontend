@@ -147,7 +147,7 @@ define('io.ox/core/session', [
                         appendColumns: false,
                         appendSession: false,
                         processResponse: false,
-                        params: {
+                        data: {
                             action: 'tokens',
                             client: that.client(),
                             version: that.version(),
@@ -229,7 +229,7 @@ define('io.ox/core/session', [
                         appendColumns: false,
                         appendSession: false,
                         processResponse: false,
-                        params: params
+                        data: params
                     })
                     .then(
                         function success(data) {
@@ -283,7 +283,7 @@ define('io.ox/core/session', [
                 module: 'login',
                 appendColumns: false,
                 processResponse: false,
-                params: { action: 'store' }
+                data: { action: 'store' }
             })
             .then(function () {
                 ox.secretCookie = true;
@@ -300,7 +300,7 @@ define('io.ox/core/session', [
                 appendColumns: false,
                 module: 'login',
                 url: 'api/login?action=redeemToken',
-                params: {
+                data: {
                     authId: uuids.randomUUID(),
                     token: token,
                     client: 'mobile-notifier',
@@ -316,7 +316,7 @@ define('io.ox/core/session', [
                     module: 'login',
                     appendColumns: false,
                     processResponse: false,
-                    params: {
+                    data: {
                         action: 'logout'
                     }
                 }).then(function () {

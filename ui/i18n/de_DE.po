@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-11-05 13:06+0100\n"
+"PO-Revision-Date: 2019-01-22 13:03+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -22,6 +22,8 @@ msgid ""
 "\n"
 " Alternatively you can download the file."
 msgstr ""
+"\n"
+"Alternativ können Sie die Datei herunterladen."
 
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
@@ -437,7 +439,6 @@ msgstr[0] "%d Tag"
 msgstr[1] "%d Tage"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-#, fuzzy
 msgid "%s %s, create all-day appointment"
 msgstr "%s %s, ganztägigen Termin erstellen"
 
@@ -1005,7 +1006,8 @@ msgstr "Anschrift"
 msgid "Address Book"
 msgstr "Adressbuch"
 
-#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Address Book"
 msgstr "Adressbuch"
@@ -1240,6 +1242,10 @@ msgstr "Android"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "Jahrestag"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Anti-Virus Warning"
+msgstr "Anti-Virus-Warnung"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -1761,7 +1767,8 @@ msgid "Calendar"
 msgstr "Kalender"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalender"
@@ -1807,7 +1814,8 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
-#: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/download.js
+#: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js
@@ -1817,7 +1825,8 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
 #: apps/io.ox/files/actions/upload-new-version.js
@@ -2836,6 +2845,7 @@ msgstr "Verschoben"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-older-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
@@ -2870,6 +2880,12 @@ msgstr "Alle Nachrichten löschen"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Delete all objects"
 msgstr "Alle Objekte löschen"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Delete all older versions"
+msgstr "Version löschen"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -3151,6 +3167,13 @@ msgstr ""
 "anlegen oder wollen Sie einen Termin <b>mit dem Ordner-Eigentümer</b> in "
 "Ihrem eigenen Kalender anlegen?"
 
+#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this version?"
+msgid "Do you really want to delete all older versions?"
+msgstr "Wollen Sie diese Version wirklich löschen?"
+
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete calendar \"%s\"?"
 msgstr "Möchten Sie Kalender %s wirklich löschen?"
@@ -3375,13 +3398,13 @@ msgstr "Erledigt"
 msgid "Downlad"
 msgstr "Herunterladen"
 
-#: apps/io.ox/core/pim/actions.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
-#: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Download"
 
@@ -3403,6 +3426,10 @@ msgstr "%s für %s jetzt herunterladen"
 msgid "Download entire folder"
 msgstr "Gesamten Ordner herunterladen"
 
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Download infected file"
+msgstr "Infizierte Datei herunterladen"
+
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Download installation file"
 msgstr "Installationsdatei herunterladen"
@@ -3415,6 +3442,10 @@ msgstr "%s-Client für %s herunterladen"
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Download the application."
 msgstr "Laden Sie die Applikation herunter."
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Download unscanned file"
+msgstr "Nicht geprüfte Datei herunterladen"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Downloads"
@@ -3923,6 +3954,10 @@ msgstr "Fehler:"
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 msgid "Error: Failed to load appointments"
 msgstr "Fehler: Termine konnten nicht geladen werden"
+
+#: apps/io.ox/files/listview.js module:io.ox/files
+msgid "Error: Failed to load files"
+msgstr "Fehler: Dateien konnten nicht geladen werden"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
@@ -4452,8 +4487,7 @@ msgid "Folder"
 msgstr "Ordner"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/core/folder/actions/rename.js
 msgid "Folder name"
 msgstr "Ordnername"
 
@@ -5386,10 +5420,8 @@ msgid "Language-specific default"
 msgstr "Sprachenabhängiger Standard"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Language"
 msgid "Language:"
-msgstr "Sprache"
+msgstr "Sprache:"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
@@ -7083,10 +7115,8 @@ msgstr "Teil"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Participant related actions"
 msgid "Participant not found"
-msgstr "Teilnehmerbezogene Aktionen"
+msgstr "Teilnehmer nicht gefunden"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Participant related actions"
@@ -7953,10 +7983,6 @@ msgstr ""
 "Benachrichtigung als Terminteilnehmer, wenn andere Teilnehmer zusagen oder "
 "ablehnen"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "Benachrichtigung bei Terminänderungen"
-
 #. There is a label "Nofification" before this text
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Receive notification when someone accesses the file(s)"
@@ -7995,6 +8021,14 @@ msgid ""
 msgstr ""
 "Benachrichtigung als Aufgabenteilnehmer, wenn Aufgabe erstellt, geändert "
 "oder gelöscht wird"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
+msgstr ""
+"Benachrichtigung als Terminteilnehmer, wenn Termin erstellt, geändert oder "
+"gelöscht wird"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer
@@ -8174,10 +8208,8 @@ msgid "Reload statistics"
 msgstr "Statistiken neu laden"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "login"
 msgid "Relogin"
-msgstr "Anmelden"
+msgstr "Erneut anmelden"
 
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
@@ -8479,9 +8511,10 @@ msgstr "im Ruhestand"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
-#: apps/io.ox/core/main/autologout.js apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
+#: module:io.ox/files apps/io.ox/mail/detail/view.js module:io.ox/mail
+#: apps/io.ox/mail/listview.js apps/plugins/portal/twitter/register.js
+#: module:plugins/portal
 msgid "Retry"
 msgstr "Erneut versuchen"
 
@@ -8705,20 +8738,6 @@ msgstr "In allen Ordnern suchen"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
 msgstr "Suchergebnisse"
-
-#. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid ""
-"Search results page lists all active facets to allow them to be easly "
-"adjustable/removable. Below theses common facets additonal advanced facets "
-"are listed. To narrow down search result please adjust active facets or add "
-"new ones"
-msgstr ""
-"Auf der Seite mit den Suchergebnissen werden alle aktiven Suchfilter "
-"angezeigt, um sie schnell und einfach anpassen oder entfernen zu können. "
-"Unterhalb dieser allgemeinen Suchfilter werden erweiterte Suchfilter "
-"angezeigt. Um die Suche einzugrenzen, passen Sie bitte die aktiven "
-"Suchfilter an oder fügen Sie neue hinzu."
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -9382,15 +9401,11 @@ msgstr ""
 "erneuten Laden der Seite oder einer Neuanmeldung wirksam."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a page reload or "
-#| "relogin to take effect."
 msgid ""
 "Some settings (language, timezone, theme) require a relogin to take effect."
 msgstr ""
-"Einige Einstellungen (Sprache, Zeitzone, Design) werden erst nach dem "
-"erneuten Laden der Seite oder einer Neuanmeldung wirksam."
+"Einige Einstellungen (Sprache, Zeitzone, Design) werden erst nach einer "
+"Neuanmeldung wirksam."
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
@@ -10170,12 +10185,8 @@ msgstr ""
 "erforderlich."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "The setting requires a reload or relogin to take effect."
 msgid "The setting requires a relogin to take effect."
-msgstr ""
-"Zum Aktivieren der Einstellung ist ein erneutes Laden oder Anmelden "
-"erforderlich."
+msgstr "Zum Aktivieren der Einstellung ist ein erneutes Anmelden erforderlich."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -11882,10 +11893,8 @@ msgid "Your platform is not supported!"
 msgstr "Ihre Plattform wird nicht unterstützt."
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
-#, fuzzy
-#| msgid "Account is being created"
 msgid "Your preview is being generated."
-msgstr "Der Account wird eingerichtet"
+msgstr "Ihre Vorschau wird generiert."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule does not fit to your start date."
@@ -12004,6 +12013,10 @@ msgstr "als Zeitraum"
 msgctxt "a11y"
 msgid "at %1$s"
 msgstr "Ort: %1$s"
+
+#: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+msgid "autoforward"
+msgstr "Automatische Weiterleitung"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "azure"
@@ -16529,6 +16542,9 @@ msgstr "Ihre Plattform"
 #~ msgid "Reading the details"
 #~ msgstr "Details lesen"
 
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "Benachrichtigung bei Terminänderungen"
+
 #, fuzzy
 #~ msgid ""
 #~ "Receive notification when the someone finished downloading the file(s)"
@@ -16760,6 +16776,18 @@ msgstr "Ihre Plattform"
 
 #~ msgid "Search in all folders?"
 #~ msgstr "In allen Ordnern suchen?"
+
+#~ msgid ""
+#~ "Search results page lists all active facets to allow them to be easly "
+#~ "adjustable/removable. Below theses common facets additonal advanced "
+#~ "facets are listed. To narrow down search result please adjust active "
+#~ "facets or add new ones"
+#~ msgstr ""
+#~ "Auf der Seite mit den Suchergebnissen werden alle aktiven Suchfilter "
+#~ "angezeigt, um sie schnell und einfach anpassen oder entfernen zu können. "
+#~ "Unterhalb dieser allgemeinen Suchfilter werden erweiterte Suchfilter "
+#~ "angezeigt. Um die Suche einzugrenzen, passen Sie bitte die aktiven "
+#~ "Suchfilter an oder fügen Sie neue hinzu."
 
 #~ msgid "Search within application"
 #~ msgstr "In Applikation suchen"

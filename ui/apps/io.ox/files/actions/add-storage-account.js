@@ -41,6 +41,12 @@ define('io.ox/files/actions/add-storage-account', [
         }
 
         return account.enableScopes('drive').save().then(function (res) {
+            require('io.ox/core/folder/api').once('pool:add', function () {
+                // fetch account again - there should be new "associations" for this account
+                var a = oauthAPI.accounts.get(res.id);
+                if (a) a.fetch();
+            });
+
             return filestorageApi.createAccountFromOauth(res);
         }).then(function () {
             yell('success', gt('Account added successfully'));

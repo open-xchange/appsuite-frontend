@@ -22,12 +22,13 @@ define('io.ox/calendar/perspective', [
     'gettext!io.ox/calendar',
     'io.ox/core/capabilities',
     'settings!io.ox/calendar',
-    'io.ox/core/folder/api'
-], function (ext, api, calendarModel, util, detailView, dialogs, yell, gt, capabilities, settings, folderAPI) {
+    'io.ox/core/folder/api',
+    'io.ox/backbone/views/disposable'
+], function (ext, api, calendarModel, util, detailView, dialogs, yell, gt, capabilities, settings, folderAPI, disposableView) {
 
     'use strict';
 
-    return Backbone.View.extend({
+    return disposableView.extend({
 
         clickTimer:     null, // timer to separate single and double click
         clicks:         0, // click counter
@@ -38,8 +39,8 @@ define('io.ox/calendar/perspective', [
             };
             if (_.device('touch')) {
                 _.extend(events, {
-                    'swipeleft': 'onPrevious',
-                    'swiperight': 'onNext'
+                    'swipeleft': 'onNext',
+                    'swiperight': 'onPrevious'
                 });
             }
             return events;
@@ -55,7 +56,7 @@ define('io.ox/calendar/perspective', [
             this.listenTo(settings, 'change:showDeclinedAppointments', this.getCallback('onResetAppointments'));
             this.listenTo(folderAPI, 'before:update', this.beforeUpdateFolder);
 
-            this.followDeepLink(options.deepLink);
+            _.defer(this.followDeepLink.bind(this, options.deepLink));
         },
 
         // needs to be implemented by the according view

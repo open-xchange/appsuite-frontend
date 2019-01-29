@@ -93,6 +93,17 @@ define('io.ox/calendar/api', [
 
             return response;
         },
+        // checks if attendees have the extended Contact information (list request does not have them, get has them, we need to distinguish)
+        hasExtendedEntities = function (attendees) {
+            if (!attendees) return false;
+            var extendedEntities = true;
+
+            _(attendees).each(function (attendee) {
+                // if we have an entity we need either contact or ressource information
+                if (attendee.entity && !(attendee.contact || attendee.resource)) extendedEntities = false;
+            });
+            return extendedEntities;
+        },
 
         defaultFields = ['lastModified', 'color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'rrule', 'seriesId', 'startDate', 'summary', 'timestamp', 'transp'].join(','),
 
@@ -114,32 +125,43 @@ define('io.ox/calendar/api', [
                     });
                     return opt;
                 }
+                function merge(data1, data2) {
+                    return _(data1)
+                        .chain()
+                        .union(data2)
+                        .uniq(function (event) { return util.cid(event); })
+                        .compact()
+                        .value();
+                }
                 return function request(opt, method) {
                     method = method || 'GET';
                     return http[method](opt).then(function (result) {
                         if (_.isArray(result)) {
+                            var error;
                             result.forEach(function (r) {
                                 if (r.error) {
                                     ox.trigger('http:error:' + r.error.code, r.error);
+                                    error = r.error;
                                 }
                             });
+                            // only throw that specific error too many appointments error because otherwise this error might only affect a few folders
+                            if (error && error.code === 'CAL-5072') throw error;
                         }
                         return result;
-                    }, function (err) {
+                    }).catch(function (err) {
                         if (err.code !== 'CAL-5072') throw err;
 
-                        var start = moment(opt.params.rangeStart),
-                            end = moment(opt.params.rangeEnd),
+                        var start = moment(opt.params.rangeStart).utc(),
+                            end = moment(opt.params.rangeEnd).utc(),
                             middle = moment(start).add(end.diff(start, 'ms') / 2, 'ms');
 
                         return request(getParams(opt, start, middle), method).then(function (data1) {
                             return request(getParams(opt, middle, end), method).then(function (data2) {
-                                return _(data1)
-                                    .chain()
-                                    .union(data2)
-                                    .uniq(function (event) { return util.cid(event); })
-                                    .compact()
-                                    .value();
+                                if (!_.isArray(data1)) return merge(data1, data2);
+                                data1.forEach(function (d, index) {
+                                    d.events = merge(d.events, data2[index].events);
+                                });
+                                return data1;
                             });
                         });
                     });
@@ -152,7 +174,8 @@ define('io.ox/calendar/api', [
 
                 if (useCache !== false) {
                     var model = api.pool.getModel(util.cid(obj));
-                    if (model && (model.has('attendees') || model.has('calendarUser'))) return $.when(model);
+                    // check if we have a full model with extended entities
+                    if (model && ((model.has('attendees') && hasExtendedEntities(model.get('attendees'))) || model.has('calendarUser'))) return $.when(model);
                 }
                 // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
                 if (obj.eventId) {
@@ -259,18 +282,30 @@ define('io.ox/calendar/api', [
                                     return;
                                 }
                                 if (isRecurrenceMaster(obj)) return;
+
+                                var model = api.pool.getModel(util.cid(obj));
+                                // do not overwrite cache data that has extended entities and the same or newer lastModified timestamp
+                                if (model && hasExtendedEntities(model.get('attendees')) && (model.get('lastModified') >= obj.lastModified)) {
+                                    return;
+                                }
                                 api.pool.propagateAdd(obj);
                             });
                         }
 
-                        return list.map(function (obj, index) {
+                        return list.map(function (obj) {
                             // if we have full data use the full data, in list data recurrence ids might be missing
                             // you can request exceptions without recurrence id because they have own ids, but in the reponse they still have a recurrence id, which is needed for the correct cid
-                            if (data && data[index]) {
-                                obj = data[index];
-                            } else if (data && data[index] === null) {
-                                // null is returned when the event was deleted meanwhile
-                                return null;
+                            if (data) {
+                                // find correct index
+                                var index = _(reqList).findIndex(function (req) {
+                                    return req.id === obj.id && req.folder === obj.folder && (!req.recurrenceId || req.recurrenceId === obj.recurrenceId);
+                                });
+                                if (index !== -1 && data[index]) {
+                                    obj = data[index];
+                                } else if (index !== -1 && data[index] === null) {
+                                    // null is returned when the event was deleted meanwhile
+                                    return null;
+                                }
                             }
 
                             if (isRecurrenceMaster(obj)) {

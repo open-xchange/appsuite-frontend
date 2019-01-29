@@ -1,7 +1,5 @@
 ---
 title: Welcome Wizards
-description: Build a simple welcome wizard that tries to complete the users information
-source: http://oxpedia.org/wiki/index.php?title=AppSuite:Writing_a_wizard
 ---
 
 # Writing a wizard
@@ -17,12 +15,12 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
     // Grab the extension point for the wizard
     // Every page in the wizard will be an extension to this extension point
     var point = ext.point("io.ox/dev/wizard/welcomeWizard");
- 
+
     // We will build a few pages here to showcase how you can use the framework.
     // Firstly, the simplest case, just a static page
-    // It's a nice trick to start off with a static page, so the subsequent page 
+    // It's a nice trick to start off with a static page, so the subsequent page
     // can already start loading data
-    // and initialize itself without the user having to wait around for that. 
+    // and initialize itself without the user having to wait around for that.
     // Distract them with a nice welcome page!
     point.extend({
         id: 'welcomeMessage',
@@ -30,42 +28,42 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
         title: "Welcome to OX App Suite", // be sure to internationalize this
         draw: function (baton) {
             // A regular #draw method, that you may know and love from other extension points
-            // Just append to 'this' to draw what you need. One caveat though: Make sure to 
+            // Just append to 'this' to draw what you need. One caveat though: Make sure to
             // unlock the 'next' button
             // so this step can be finished
- 
+
             // Some text. Note that you want to take some more care here, to make this look
-            // good and make sense. We'll firmly stay in example land here and not make a 
+            // good and make sense. We'll firmly stay in example land here and not make a
             // fuss about looks
-            // Make sure you do better than this, also, this needs to be internationalized 
+            // Make sure you do better than this, also, this needs to be internationalized
             // with a gt() call!
             this.append($("<p>").text("Hi there, stranger! Welcome to OX App Suite, glad you made it. To make sure your experience with us is a pleasant one, let's set up some basics together!"));
- 
+
             // Enable the next (or 'done', if this is the last page) button.
             // You will have to call this once for every page, once every needed entry has been made.
             baton.buttons.enableNext();
         }
     });
- 
+
     // Now let's actually ask for some user input. Let's start with the users gender.
     point.extend({
         id: 'gender',
         index: 200,
         title: "Gender",
         draw: function (baton) {
-            // Every method of a page is always called with a baton that is unique to 
+            // Every method of a page is always called with a baton that is unique to
             // every page instance, so
-            // we can set state information in it to our hearts content without 
+            // we can set state information in it to our hearts content without
             // bothering everyone else.
-            // The baton holds some interesting objects, though. 'wizard' is the instance 
+            // The baton holds some interesting objects, though. 'wizard' is the instance
             // of the wizard object, 'buttons', like above
-            // can be used to enable or disable the next button. The wizard also has a 
+            // can be used to enable or disable the next button. The wizard also has a
             // pageData member object that we can use to store
-            // data that is available to every subsequent page. Note though, that that 
+            // data that is available to every subsequent page. Note though, that that
             // tightly couples pages together, so use this with care!
             // We will use this for some fun, though.
             baton.form = {};
- 
+
             this.append(
                 $('<p/>').text("Please pick one:"),
                 $('<form>').append(
@@ -81,7 +79,7 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
                     )
                 )
             );
- 
+
             // We want to enable the navigation once the user picked his or her gender.
             // And we'll capture that logic in one method that we call everytime we have
             // reason to believe the state changed
@@ -98,47 +96,47 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
             };
             baton.form.male.on('click', baton.helpers.updateState);
             baton.form.female.on('click', baton.helpers.updateState);
- 
+
         },
- 
+
         activate: function (baton) {
             // Whenever the page is entered, the activate method is called.
             // we just have to make sure the button state is correct
             baton.helpers.updateState();
         },
- 
+
         finish: function (baton) {
             // When the page is left, the 'finish' method is called and we can do something
             // with the entered value, in this case we'll remember it in the wizards data section for inter-page stuff
- 
+
             var gender = null;
             if (baton.form.male.attr("checked") === 'checked') {
                 gender = 'male';
             } else if (baton.form.female.attr("checked") === 'checked') {
                 gender = 'female';
             }
- 
+
             baton.wizard.pageData.gender = gender;
         }
     });
- 
+
     // Anything above a trivial form may benefit from using backbone model and view classes
     point.extend({
         id: 'completeUserInfo',
         index: 300,
         title: "Personal Information",
         load: function (baton) {
-            // The load method is an optional method. It is called to load data that you 
+            // The load method is an optional method. It is called to load data that you
             // need to set up the page
-            // And it is called as soon as the page is the 'next' or 'previous' page of the 
+            // And it is called as soon as the page is the 'next' or 'previous' page of the
             // active page, so you can start loading
-            // even before the page shows up. Return a deferred to let the wizard framework 
+            // even before the page shows up. Return a deferred to let the wizard framework
             // know when you're done.
- 
- 
+
+
             // We will fetch the user data for our example.
             var def = $.Deferred();
- 
+
             require(["io.ox/core/api/user", "io.ox/backbone/basicModel", "io.ox/backbone/mini-views"], function (userAPI, Model, mini) {
                 // Alright, let's stick the APIs into our baton, we'll need these later
                 // This is also a nice little trick for loading APIs in the wizard framework.
@@ -146,15 +144,15 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
                     userAPI: userAPI,
                     mini: mini
                 };
- 
+
                 // And let's load the current user
- 
+
                 userAPI.getCurrentUser().done(function (user) {
                     // Note, that this is a backbone model
                     // We could turn this into a model by instantiating a BasicModel, otherwise.
                     baton.user = user;
- 
-                    // We want to enable the next button on this page based on whether a first 
+
+                    // We want to enable the next button on this page based on whether a first
                     // an last name is set, so, let's listen for the change events on the user object
                     function updateButtonState() {
                         if (!_.isEmpty(user.get("first_name")) && !_.isEmpty(user.get("last_name"))) {
@@ -164,17 +162,17 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
                         }
                     }
                     baton.user.on('change', updateButtonState);
- 
+
                     updateButtonState();
- 
+
                     // And we're done
                     def.resolve();
                 }).fail(def.reject);
             });
- 
+
             return def;
         },
- 
+
         draw: function (baton) {
             // Now, for fun, let's try and build a backbone backed form
             // Depending on the complexity of the form, this is a good route to take
@@ -182,9 +180,9 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
             // reusable parts, as they will usually be internationalized, localized,
             // responsive to different devices and accessible. Depending on the use of this
             // wizard, you'll have to take care of these aspects yourself.
- 
+
             // Firstly some fun, though. Why not have this wizard be flirtatious, since it's just
-            // getting to know the user. Personally, I think software would do well to be more 
+            // getting to know the user. Personally, I think software would do well to be more
             // flirtatious, but I'm just a lonely developer, so YMMV
             if (baton.wizard.pageData.gender && baton.wizard.pageData.gender === 'male') {
                 this.append($("<p>").text("So, who are you, handsome?"));
@@ -193,10 +191,10 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
             } else {
                 this.append($("<p>").text("So, who are you, stranger?"));
             }
- 
+
             // Now, on to the serious business
             var mini = baton.libraries.mini;
- 
+
             this.append(
                 $('<form class="form-horizontal" />').append(
                     $('<div class="control-group" />').append(
@@ -213,9 +211,9 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
                     )
                 )
             );
- 
+
         },
- 
+
         finish: function (baton) {
             // Depending on the capabilities of the model, this could be more complicated
             // you might have to interrogate the model for the #changedAttributes
@@ -224,12 +222,12 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
             return baton.user.save();
         }
     });
- 
+
     // If you want to provide your own navigation controls in the page
     // (useful for a simple choice), you can get rid of the default buttons
-    // of the dialog, but have to then call baton.wizard.next or baton.wizard.prev 
+    // of the dialog, but have to then call baton.wizard.next or baton.wizard.prev
     // or baton.wizard.goToPage(pageNumberOrID) manually.
- 
+
     point.extend({
         id: 'spamMe',
         index: 400,
@@ -256,13 +254,13 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
                 )
             );
         },
- 
+
         finish: function (baton) {
             // Save baton.specialOffers preference
             console.log(baton.specialOffers);
         }
     });
- 
+
     point.extend({
         id: 'byebye',
         index: 500,
@@ -272,21 +270,21 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
             baton.buttons.enableNext();
         }
     });
- 
-    // To enable the wizard to run upon startup, you have to use the extension system to add a new 
+
+    // To enable the wizard to run upon startup, you have to use the extension system to add a new
     // stage to the boot process.
     // Use a manifest.json to extend the core/main file:
     // {
     //      namespace: 'io.ox/core/main'
     // }
- 
-    // Then, in the plugins file, define a new stage that runs the wizard after the curtain has 
+
+    // Then, in the plugins file, define a new stage that runs the wizard after the curtain has
     // been drawn back:
- 
+
     /*
     define('...', ['io.ox/core/extPatterns/stage'], function (Stage) {
     'use strict';
- 
+
         new Stage('io.ox/core/stages', {
             id: 'welcome-wizard',
             after: 'curtain',
@@ -301,18 +299,18 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
                         def.resolve();
                     }).fail(def.reject);
                 });
- 
+
                 return def;
             }
         });
- 
- 
+
+
     });
- 
+
     */
     return {
         getInstance: function () {
-            // Create a new instance of the wizard. Note that the id of the wizard determines 
+            // Create a new instance of the wizard. Note that the id of the wizard determines
             // the extension point
             // that pages have to extend
             return wizards.getWizard({id: 'io.ox/dev/wizard/welcomeWizard', closeable: true});

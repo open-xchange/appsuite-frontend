@@ -404,6 +404,25 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                 self.$el.toggleClass('active', self.model.get('active'));
                                 self.$el.toggleClass('disabled', !self.model.get('active'));
                                 $(e.target).text(self.model.get('active') ? gt('Disable') : gt('Enable'));
+
+                                if (_.indexOf(self.model.get('flags'), 'autoforward') !== -1) {
+                                    require(['io.ox/mail/mailfilter/autoforward/model'], function (Model) {
+                                        var autoforwardModel = new Model();
+                                        autoforwardModel.set(self.model.attributes);
+                                        ox.trigger('mail:change:auto-forward', autoforwardModel);
+
+                                    });
+                                }
+
+                                if (_.indexOf(self.model.get('flags'), 'vacation') !== -1) {
+                                    require(['io.ox/mail/mailfilter/vacationnotice/model'], function (Model) {
+                                        var vacationnoticeModel = new Model();
+                                        vacationnoticeModel.set(self.model.attributes);
+                                        ox.trigger('mail:change:vacation-notice', vacationnoticeModel);
+
+                                    });
+                                }
+
                             })
                         );
                     },

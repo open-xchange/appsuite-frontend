@@ -378,7 +378,6 @@ define('io.ox/core/folder/api', [
                 var data = this.models[id].toJSON();
                 this.models[id] = null;
                 delete this.models[id];
-                api.trigger('before:remove', data);
                 api.trigger('remove', id, data);
                 api.trigger('remove:' + id, data);
                 api.trigger('remove:' + data.module, data);
@@ -743,8 +742,6 @@ define('io.ox/core/folder/api', [
             pool.addCollection(collectionId, array, { all: options.all });
             // to make sure we always get the same result (just data; not timestamp)
             return array;
-        }, function (/* error */) {
-            // Bug: 61260 Drive breadcrumb navigation is not working as expected
         });
     }
 
@@ -990,8 +987,6 @@ define('io.ox/core/folder/api', [
                 if (!options.silent) {
                     api.trigger('update update:' + id, id, newId, model.toJSON());
                     if ('permissions' in changes) api.trigger('change:permissions', id);
-                    // used by drive to respond to updated foldernames in icon/list view
-                    if ('title' in changes) api.trigger('rename', id, model.toJSON());
                 }
                 // fetch subfolders of parent folder to ensure proper order after rename/move
                 if (id !== newId || changes.title || changes.folder_id) {
@@ -999,15 +994,12 @@ define('io.ox/core/folder/api', [
                             .then(function () {
                                 pool.getCollection(model.get('folder_id')).sort();
 
-                                if ('title' in changes) {
+                                // used by drive to respond to updated foldernames in icon/list view
+                                // note: this is moved inside the 'list' deferred chain, otherwise the drive list reload
+                                // could refresh with old data when having high latency/slow connections see #62552 and #56749
+                                if ('title' in changes) api.trigger('rename', id, model.toJSON());
 
-                                    // it's possible that external storage adapter rename a folder again after a user-rename (e.g. #56749), depending on the result update drive icon/list view
-                                    var renamedByResponse = _.propertyOf(changes)('title') !== model.get('title');
-                                    if (renamedByResponse) api.trigger('rename', id, model.toJSON());
-
-                                    api.trigger('after:rename', id, model.toJSON());
-                                }
-
+                                if ('title' in changes) api.trigger('after:rename', id, model.toJSON());
                                 return newId;
                             });
                 }

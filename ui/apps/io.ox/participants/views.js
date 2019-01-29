@@ -166,7 +166,7 @@ define('io.ox/participants/views', [
 
                     if (mail && this.options.halo) {
                         this.nodes.$mail
-                            .attr({ href: '#' })
+                            .attr({ href: 'mailto:' + mail })
                             .data({ email1: mail })
                             .addClass('halo-link');
                     }
