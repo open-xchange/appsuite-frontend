@@ -423,7 +423,6 @@ define('io.ox/mail/compose/view', [
             this.app = options.app;
             this.config = options.config;
             this.editorHash = {};
-            this.blocked = [];
             this.messageFormat = options.messageFormat || settings.get('messageFormat', 'html');
 
             this.editor = null;
@@ -859,15 +858,6 @@ define('io.ox/mail/compose/view', [
         setSimpleMail: function (content) {
             if (this.config.get('editorMode') === 'text') return;
             if (!/<table/.test(content)) this.editorContainer.find('.editable.mce-content-body').addClass('simple-mail');
-        },
-
-        blockReuse: function (sendtype) {
-            this.blocked[sendtype] = (this.blocked[sendtype] || 0) + 1;
-        },
-
-        unblockReuse: function (sendtype) {
-            this.blocked[sendtype] = (this.blocked[sendtype] || 0) - 1;
-            if (this.blocked[sendtype] <= 0) delete this.blocked[sendtype];
         },
 
         focusEditor: function () {

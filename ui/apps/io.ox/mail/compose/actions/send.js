@@ -146,7 +146,6 @@ define('io.ox/mail/compose/actions/send', [
 
                         win.idle().show();
                     }
-                    baton.app.launch();
                     // TODO: check if backend just says "A severe error occurred"
                     notifications.yell('error', text);
                     return;
@@ -199,13 +198,6 @@ define('io.ox/mail/compose/actions/send', [
                     if (isForward) flags |= 256;
                     model.set('flags', flags);
                 });
-            }
-        },
-        {
-            id: 'busy:end',
-            index: 10000,
-            perform: function (baton) {
-                baton.view.unblockReuse(baton.model.get('meta').type);
             }
         }
     );
