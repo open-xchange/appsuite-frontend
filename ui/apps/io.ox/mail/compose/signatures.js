@@ -21,49 +21,52 @@ define('io.ox/mail/compose/signatures', [
 
     'use strict';
 
-    // extract the raw content
-    function getRaw(signature) {
-        var str = $('<div>').html(signature.content).text();
-        return stripWhitespace(str);
-    }
+    var util = {
 
-    function stripWhitespace(str) {
-        return str.replace(/\s+/g, '');
-    }
+        // extract the raw content
+        getRaw: function (signature) {
+            var str = $('<div>').html(signature.content).text();
+            return util.stripWhitespace(str);
+        },
 
-    function looksLikeHTML(text) {
-        return /(<\/?\w+(\s[^<>]*)?>)/.test(text);
-    }
+        stripWhitespace: function (str) {
+            return str.replace(/\s+/g, '');
+        },
 
-    function cleanUpWhiteSpace(text) {
-        return String(text || '')
-            // replace white-space and evil \r
-            .replace(/(\r\n|\n|\r)/g, '\n')
-            // replace subsequent white-space (except linebreaks)
-            .replace(/[\t\f\v ][\t\f\v ]+/g, ' ')
-            .trim();
-    }
+        looksLikeHTML: function (text) {
+            return /(<\/?\w+(\s[^<>]*)?>)/.test(text);
+        },
 
-    function cleanUp(str, isHTML) {
+        cleanUpWhiteSpace: function (text) {
+            return String(text || '')
+                // replace white-space and evil \r
+                .replace(/(\r\n|\n|\r)/g, '\n')
+                // replace subsequent white-space (except linebreaks)
+                .replace(/[\t\f\v ][\t\f\v ]+/g, ' ')
+                .trim();
+        },
 
-        // special entities like '&'/&amp;
-        var sourceLooksLikeHTML = looksLikeHTML(str),
-            $el = $('<div>')[sourceLooksLikeHTML ? 'html' : 'text'](cleanUpWhiteSpace(str)),
-            html = $el.html();
+        cleanUp: function (str, isHTML) {
 
-        if (isHTML) return html;
+            // special entities like '&'/&amp;
+            var sourceLooksLikeHTML = util.looksLikeHTML(str),
+                $el = $('<div>')[sourceLooksLikeHTML ? 'html' : 'text'](util.cleanUpWhiteSpace(str)),
+                html = $el.html();
 
-        // process plain text
-        if (sourceLooksLikeHTML) {
-            html = html.replace(/(<pre>([^<]+)<\/pre>|>\s*|\r\n\s*|\n\s*|\r)/gi, function (all, match, pre) {
-                if (/^<pre>/i.test(match)) return pre;
-                if (match[0] === '>') return '>';
-                return '';
-            });
+            if (isHTML) return html;
+
+            // process plain text
+            if (sourceLooksLikeHTML) {
+                html = html.replace(/(<pre>([^<]+)<\/pre>|>\s*|\r\n\s*|\n\s*|\r)/gi, function (all, match, pre) {
+                    if (/^<pre>/i.test(match)) return pre;
+                    if (match[0] === '>') return '>';
+                    return '';
+                });
+            }
+
+            return textproc.htmltotext(html);
         }
-
-        return textproc.htmltotext(html);
-    }
+    };
 
     // MODEL: extends mail compose model
     var model = {
@@ -79,16 +82,16 @@ define('io.ox/mail/compose/signatures', [
 
                 // get id of currently drawn signature
                 signature = _.find(signatures, function (signature) {
-                    var raw = getRaw(signature);
+                    var raw = util.getRaw(signature);
                     // ignore empty signatures (match empty content)
                     if (_.isEmpty(raw)) return;
                     // HTML: node content matches signature
                     if (this.get('editorMode') === 'html') {
                         var node = $('<div>').append(content).children('div[class$="io-ox-signature"]:last');
-                        return stripWhitespace(node.text()) === raw;
+                        return util.stripWhitespace(node.text()) === raw;
                     }
                     // TEXT: contains
-                    return stripWhitespace(content).indexOf(raw) > -1;
+                    return util.stripWhitespace(content).indexOf(raw) > -1;
                 }.bind(this));
 
                 if (signature) {
@@ -163,13 +166,13 @@ define('io.ox/mail/compose/signatures', [
                     this.getSignatureContent().each(function () {
                         var node = $(this),
                             text = node.text(),
-                            changed = getRaw(changedSignature) === stripWhitespace(text);
+                            changed = util.getRaw(changedSignature) === util.stripWhitespace(text);
                         if (changed) node.empty().append($(changedSignature.content));
                     });
                 } else {
                     // TEXT
-                    var currentContent = cleanUp(currentSignature.content, false),
-                        changedContent = cleanUp(changedSignature.content, false);
+                    var currentContent = util.cleanUp(currentSignature.content, false),
+                        changedContent = util.cleanUp(changedSignature.content, false);
                     this.editor.replaceParagraph(currentContent, changedContent);
                 }
 
@@ -212,7 +215,7 @@ define('io.ox/mail/compose/signatures', [
 
             var self = this,
                 isHTML = !!this.editor.find,
-                currentSignature = cleanUp(signature.content, isHTML);
+                currentSignature = util.cleanUp(signature.content, isHTML);
 
             // remove current signature from editor
             if (isHTML) {
@@ -221,7 +224,7 @@ define('io.ox/mail/compose/signatures', [
                     var node = $(this),
                         text = node.text(),
                         unchanged = _(self.config.get('signatures')).find(function (signature) {
-                            return getRaw(signature) === stripWhitespace(text);
+                            return util.getRaw(signature) === util.stripWhitespace(text);
                         });
 
                     // remove entire block unless it seems edited
@@ -240,8 +243,8 @@ define('io.ox/mail/compose/signatures', [
 
             // add signature?
             if (this.config.get('signatures').length > 0) {
-                text = cleanUp(signature.content, isHTML);
-                if (isHTML) text = this.getParagraph(text, looksLikeHTML(text));
+                text = util.cleanUp(signature.content, isHTML);
+                if (isHTML) text = this.getParagraph(text, util.looksLikeHTML(text));
                 // signature wrapper
                 if (signature.misc.insertion === 'below') {
                     proc = _.bind(this.editor.insertPostCite || this.editor.appendContent, this.editor);
@@ -258,6 +261,7 @@ define('io.ox/mail/compose/signatures', [
     };
 
     return {
+        util: util,
         model: model,
         view: view
     };
