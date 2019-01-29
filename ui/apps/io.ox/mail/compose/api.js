@@ -172,6 +172,8 @@ define('io.ox/mail/compose/api', [
                 api.queue.update(id, e.loaded, e.total);
             }).fail(function () {
                 ox.trigger('mail:send:fail');
+            }).always(function () {
+                api.queue.remove(id);
             }).done(function (result) {
                 resetMailFolders();
                 refreshFolders(data, result);
