@@ -591,8 +591,8 @@ define('io.ox/mail/compose/extensions', [
                     return obj;
                 });
 
-                baton = ext.Baton({ startItem: data, data: list, openedBy: 'io.ox/mail/compose', restoreFocus: $(e.target) });
-                actionsUtil.invoke('io.ox/mail/actions/view-attachment', null, baton);
+                baton = ext.Baton({ simple: true, startItem: data, data: list, openedBy: 'io.ox/mail/compose', restoreFocus: $(e.target) });
+                actionsUtil.invoke('io.ox/mail/attachment/actions/view', baton);
             });
 
             // needed when adding several contacts via 'send as vcard'

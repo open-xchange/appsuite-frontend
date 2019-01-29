@@ -14,8 +14,9 @@
 define([
     'io.ox/backbone/views/toolbar',
     'io.ox/backbone/views/action-dropdown',
+    'io.ox/backbone/views/actions/util',
     'io.ox/core/extensions'
-], function (ToolbarView, ActionDropdownView, ext) {
+], function (ToolbarView, ActionDropdownView, util, ext) {
 
     'use strict';
 
@@ -176,6 +177,142 @@ define([
                 // all <a> have proper role
                 expect(this.dropdown.$('a[role="button"]').length).to.equal(1);
                 expect(this.dropdown.$('a[role="menuitem"]').length).to.equal(6);
+            });
+        });
+
+        describe.only('Invoke', function () {
+
+            // ----------------------------------------------------------
+
+            action(POINT + '/actions/simple', {
+                matches: function (baton) {
+                    baton.spies.matches();
+                    return true;
+                },
+                action: function (baton) {
+                    baton.spies.action();
+                }
+            });
+
+            // ----------------------------------------------------------
+
+            action(POINT + '/actions/skip-first', {
+                id: 'skip',
+                index: 'first',
+                collection: 'one',
+                matches: function (baton) {
+                    baton.spies.first.matches();
+                    return false;
+                },
+                action: function (baton) {
+                    baton.spies.first.action();
+                }
+            });
+
+            action(POINT + '/actions/skip-first', {
+                collection: 'one',
+                matches: function (baton) {
+                    baton.spies.second.matches();
+                    return true;
+                },
+                action: function (baton) {
+                    baton.spies.second.action();
+                }
+            });
+
+            // ----------------------------------------------------------
+
+            action(POINT + '/actions/skip-second', {
+                collection: 'one',
+                matches: function (baton) {
+                    baton.spies.first.matches();
+                    return true;
+                },
+                action: function (baton) {
+                    baton.spies.first.action();
+                }
+            });
+
+            action(POINT + '/actions/skip-second', {
+                id: 'skip',
+                index: 'last',
+                collection: 'one',
+                matches: function (baton) {
+                    baton.spies.second.matches();
+                    return true;
+                },
+                action: function (baton) {
+                    baton.spies.second.action();
+                }
+            });
+
+            // ----------------------------------------------------------
+
+            action(POINT + '/actions/stop', {
+                matches: function (baton) {
+                    baton.stopPropagation();
+                    baton.spies.first.matches();
+                    return false;
+                },
+                action: function (baton) {
+                    baton.spies.first.action();
+                }
+            });
+
+            action(POINT + '/actions/stop', {
+                id: 'skip',
+                index: 'last',
+                matches: function (baton) {
+                    baton.spies.second.matches();
+                    return true;
+                },
+                action: function (baton) {
+                    baton.spies.second.action();
+                }
+            });
+
+            // ----------------------------------------------------------
+
+            it('calls stacking actions (skip first)', function () {
+                var spies = {
+                    first: { matches: sinon.spy(), action: sinon.spy() },
+                    second: { matches: sinon.spy(), action: sinon.spy() }
+                };
+                var baton = ext.Baton({ data: [{}], simple: true, spies: spies });
+                return util.invoke(POINT + '/actions/skip-first', baton).done(function () {
+                    expect(baton.spies.first.matches.called, '#1').to.be.true;
+                    expect(baton.spies.first.action.called, '#2').to.be.false;
+                    expect(baton.spies.second.matches.called, '#3').to.be.true;
+                    expect(baton.spies.second.action.called, '#4').to.be.true;
+                });
+            });
+
+            it('calls stacking actions (skip last)', function () {
+                var spies = {
+                    first: { matches: sinon.spy(), action: sinon.spy() },
+                    second: { matches: sinon.spy(), action: sinon.spy() }
+                };
+                var baton = ext.Baton({ data: [{}], simple: true, spies: spies });
+                return util.invoke(POINT + '/actions/skip-second', baton).done(function () {
+                    expect(baton.spies.first.matches.called, '#1').to.be.true;
+                    expect(baton.spies.first.action.called, '#2').to.be.true;
+                    expect(baton.spies.second.matches.called, '#3').to.be.false;
+                    expect(baton.spies.second.action.called, '#4').to.be.false;
+                });
+            });
+
+            it('calls stacking actions (stop propagation)', function () {
+                var spies = {
+                    first: { matches: sinon.spy(), action: sinon.spy() },
+                    second: { matches: sinon.spy(), action: sinon.spy() }
+                };
+                var baton = ext.Baton({ data: [{}], simple: true, spies: spies });
+                return util.invoke(POINT + '/actions/stop', baton).done(function () {
+                    expect(baton.spies.first.matches.called, '#1').to.be.true;
+                    expect(baton.spies.first.action.called, '#2').to.be.false;
+                    expect(baton.spies.second.matches.called, '#3').to.be.false;
+                    expect(baton.spies.second.action.called, '#4').to.be.false;
+                });
             });
         });
     });

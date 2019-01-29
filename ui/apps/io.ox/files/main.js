@@ -942,6 +942,7 @@ define('io.ox/files/main', [
                 var cid = $(e.currentTarget).parent().attr('data-cid'),
                     selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
                     baton = ext.Baton({ data: selectedModel[0], all: app.listView.collection, app: app, options: { eventname: 'selection-doubleclick' } });
+                // Tested: false
                 actionsUtil.invoke('io.ox/files/actions/default', baton);
             });
         },
@@ -973,6 +974,7 @@ define('io.ox/files/main', [
                     var cid = app.listView.selection.get()[0],
                         selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
                         baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app, options: { eventname: 'selection-enter' } });
+                    // Tested: false
                     actionsUtil.invoke('io.ox/files/actions/default', baton);
                 }
             });
@@ -1370,7 +1372,8 @@ define('io.ox/files/main', [
             app.listView.on('selection:delete', function (cids) {
                 // turn cids into proper objects
                 var list = _(api.resolve(cids, false)).invoke('toJSON');
-                actionsUtil.checkAndInvokeAction('io.ox/files/actions/delete', list);
+                // Tested: false
+                actionsUtil.invoke('io.ox/files/actions/delete', list);
             });
         },
 
@@ -1501,6 +1504,7 @@ define('io.ox/files/main', [
                 api.get(obj).done(function (model) {
                     var models = api.resolve(model, false),
                         baton = ext.Baton({ models: models, app: app, favorites: false, portal: true });
+                    // Tested: false
                     actionsUtil.invoke('io.ox/files/actions/show-in-folder', baton);
                 });
             };
@@ -1600,6 +1604,7 @@ define('io.ox/files/main', [
             baton.dropType = 'infostore';
             baton.target = baton.target.replace(/^folder\./, '');
             // call move action (instead of API) to have visual error handlers
+            // Tested: false
             actionsUtil.invoke('io.ox/files/actions/move', baton);
         });
 

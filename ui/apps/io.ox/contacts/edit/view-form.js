@@ -268,6 +268,7 @@ define('io.ox/contacts/edit/view-form', [
                 this.append($('<button type="button" class="btn btn-default discard" data-action="discard">')
                     .text(gt('Discard'))
                     .on('click', function () {
+                        baton.$discardButton = $(this);
                         actionsUtil.invoke(ref + '/actions/edit/discard', baton);
                     })
                 );
@@ -508,8 +509,8 @@ define('io.ox/contacts/edit/view-form', [
         });
 
         new Action(ref + '/actions/edit/discard', {
-            action: function () {
-                $(this).trigger('controller:quit');
+            action: function (baton) {
+                baton.$discardButton.trigger('controller:quit');
             }
         });
 

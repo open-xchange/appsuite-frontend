@@ -65,6 +65,7 @@ define('io.ox/files/favorite/listview', [
                         var app = options.app,
                             selectedModel = _(FilesAPI.resolve([cid], false)).invoke('toJSON'),
                             baton = ext.Baton({ data: selectedModel[0], all: app.myFavoriteListView.collection, app: app, options: { eventname: 'selection-doubleclick' } });
+                        // Tested: false
                         actionsUtil.invoke('io.ox/files/actions/default', baton);
                     } else {
                         options.app.folder.set(cid.replace(/^folder./, ''), true);

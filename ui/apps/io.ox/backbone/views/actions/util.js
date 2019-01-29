@@ -68,6 +68,7 @@ define('io.ox/backbone/views/actions/util', [
             if (!available) return { link: link, available: false };
             // check collection && matches
             var enabled = actions.some(util.checkActionEnabled.bind(null, baton));
+            baton.resumePropagation();
             if (/\bactions/.test(_.url.hash('debug'))) {
                 console.debug('item', link.ref, 'available', available, 'enabled', enabled, actions, baton.data, baton);
             }
@@ -92,6 +93,8 @@ define('io.ox/backbone/views/actions/util', [
         },
 
         checkActionEnabled: function (baton, action) {
+            // stopped? (special case, e.g. first action stops other actions)
+            if (baton.isPropagationStopped()) return false;
             // has required attribute and some items are missing it
             if (action.every && !util.every(baton.data, action.every)) return false;
             // matches as string?
@@ -332,7 +335,8 @@ define('io.ox/backbone/views/actions/util', [
             var point = ext.point(ref),
                 // get all sets of capabilities including empty sets
                 sets = point.pluck('capabilities'),
-                list = point.list(), i = 0, $i = list.length, extension;
+                list = point.list(),
+                done = $.Deferred();
 
             // check capabilities upfront; if no action can be applied due to missing
             // capabilities, we try to offer upsell
@@ -345,37 +349,72 @@ define('io.ox/backbone/views/actions/util', [
                         missing: upsell.missing(sets)
                     });
                 }
-                return;
+                return done.resolve();
             }
 
-            // loop over all actions; skip 'default' extension if preventDefault was called
-            for (; i < $i && !baton.isPropagationStopped(); i++) {
-                extension = list[i];
+            baton = ensureBaton(baton);
+
+            new (baton.simple ? Collection.Simple : Collection)(baton.array())
+                .getPromise()
+                .pipe(function (collection) {
+                    baton.collection = collection;
+                    nextAction();
+                });
+
+            function nextAction() {
+                var action = list.shift();
+                if (action) checkAction(action); else done.resolve();
+            }
+
+            function checkAction(action) {
+                // has action callback?
+                if (!_.isFunction(action.action)) return nextAction();
                 // avoid default behaviour?
-                if (extension.id === 'default' && baton.isDefaultPrevented()) continue;
+                if (action.id === 'default' && baton.isDefaultPrevented()) return nextAction();
                 // check for disabled extensions
-                if (baton.isDisabled(point.id, extension.id)) continue;
+                if (baton.isDisabled(point.id, action.id)) return nextAction();
                 // has all capabilities?
-                if (extension.capabilities && !capabilities.has(extension.capabilities)) continue;
-                // call handlers
+                if (action.capabilities && !capabilities.has(action.capabilities)) return nextAction();
+                // check general availability
+                if (!util.checkActionAvailability(action)) return nextAction();
+                // check specific context
+                if (!util.checkActionEnabled(baton, action)) return nextAction();
+                // check async matches
+                if (_.isFunction(action.matchesAsync)) checkMatchesAsync(action, baton);
+                // call action directly
+                callAction(action, baton);
+            }
+
+            function checkMatchesAsync(action, baton) {
+                // use pipe to avoid async behavior
+                $.when(action.matchesAsync(baton)).pipe(function (state) {
+                    if (state) callAction(action, baton); else nextAction();
+                });
+            }
+
+            function callAction(action, baton) {
                 try {
-                    if (_.isFunction(extension.action)) extension.action(baton);
+                    action.action(baton);
                 } catch (e) {
                     console.error('point("' + ref + '") > invoke()', e.message, {
                         baton: baton,
-                        extension: extension,
+                        action: action,
                         exception: e
                     });
+                } finally {
+                    done.resolve();
                 }
             }
+
+            return done;
         },
 
         checkAction: function (action, baton) {
             var actions = ext.point(action).list();
             if (!actions.some(util.checkActionAvailability)) return $.when(false);
             baton = ensureBaton(baton);
-            return new (baton.simple ? Collection.Simple : Collection)(baton.array)
-                .promise()
+            return new (baton.simple ? Collection.Simple : Collection)(baton.array())
+                .getPromise()
                 .then(function (collection) {
                     baton.collection = collection;
                     if (!actions.some(util.checkActionEnabled.bind(null, baton))) return $.when([false]);
@@ -391,12 +430,6 @@ define('io.ox/backbone/views/actions/util', [
                 .then(function () {
                     return _(arguments).some(Boolean) ? $.when(baton) : $.Deferred().reject();
                 });
-        },
-
-        // action is string
-        // data is either baton, object, or array (will become baton internally)
-        checkAndInvokeAction: function (action, data) {
-            this.checkAction(action, data).done(this.invoke.bind(this, action));
         }
     };
 

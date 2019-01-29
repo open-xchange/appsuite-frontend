@@ -66,7 +66,8 @@ define('io.ox/mail/categories/picker', [
         },
 
         onLink: function (data) {
-            actionsUtil.checkAndInvokeAction('io.ox/mail/actions/move', data);
+            // Tested: false
+            actionsUtil.invoke('io.ox/mail/actions/move', data);
         }
     });
 

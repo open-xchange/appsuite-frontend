@@ -379,6 +379,7 @@ define('io.ox/files/actions', [
             actionsUtil.invoke('io.ox/files/actions/viewer', baton);
         }
     });
+
     // TODO check action Jonas
     new Action('io.ox/files/actions/lock', {
         capabilities: '!alone',

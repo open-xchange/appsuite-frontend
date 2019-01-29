@@ -630,6 +630,7 @@ define('io.ox/mail/main', [
 
         'getContextualData': function (app) {
             // get data required for toolbars and context menus
+            // selection is array of strings (cid)
             app.getContextualData = function (selection) {
                 var isThreaded = app.isThreaded(),
                     data = api.resolve(selection, isThreaded);
@@ -1434,15 +1435,10 @@ define('io.ox/mail/main', [
          * Add support for drag & drop
          */
         'drag-drop': function () {
-            app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
-                // remember if this list is based on a single thread
-                baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
-                // resolve thread
-                baton.data = api.resolve(baton.data, app.isThreaded());
-                // call action
-                actionsUtil.checkAction('io.ox/mail/actions/move', baton).done(function () {
-                    actionsUtil.invoke('io.ox/mail/actions/move', baton);
-                });
+            app.getWindow().nodes.outer.on('selection:drop', function (e, _baton) {
+                var baton = ext.Baton(app.getContextualData(_baton.data));
+                baton.target = _baton.target;
+                actionsUtil.invoke('io.ox/mail/actions/move', baton);
             });
         },
 
@@ -1450,16 +1446,10 @@ define('io.ox/mail/main', [
          * Handle archive event based on keyboard shortcut
          */
         'selection-archive': function () {
-            app.listView.on('selection:archive', function (list) {
-                var baton = ext.Baton({ data: list });
-                // remember if this list is based on a single thread
-                baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
-                // resolve thread
-                baton.data = api.resolve(baton.data, app.isThreaded());
-                // call action
-                actionsUtil.checkAction('io.ox/mail/actions/archive', baton).done(function () {
-                    actionsUtil.invoke('io.ox/mail/actions/archive', baton);
-                });
+            // selection is array of strings (cid)
+            app.listView.on('selection:archive', function (selection) {
+                var baton = ext.Baton(app.getContextualData(selection));
+                actionsUtil.invoke('io.ox/mail/actions/archive', baton);
             });
         },
 
@@ -1467,16 +1457,10 @@ define('io.ox/mail/main', [
          * Handle delete event based on keyboard shortcut or swipe gesture
          */
         'selection-delete': function () {
-            app.listView.on('selection:delete', function (list, shiftDelete) {
-                var baton = ext.Baton({ data: list, options: { shiftDelete: shiftDelete } });
-                // remember if this list is based on a single thread
-                baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
-                // resolve thread
-                baton.data = api.resolve(baton.data, app.isThreaded());
-                // call action
-                actionsUtil.checkAction('io.ox/mail/actions/delete', baton).done(function () {
-                    actionsUtil.invoke('io.ox/mail/actions/delete', baton);
-                });
+            app.listView.on('selection:delete', function (selection, shiftDelete) {
+                var baton = ext.Baton(app.getContextualData(selection));
+                baton.options.shiftDelete = shiftDelete;
+                actionsUtil.invoke('io.ox/mail/actions/delete', baton);
             });
         },
 
@@ -1494,7 +1478,7 @@ define('io.ox/mail/main', [
                     isDraft = account.is('drafts', obj.folder_id);
                 if (isDraft) {
                     api.get(obj).then(function (data) {
-                        actionsUtil.invoke('io.ox/mail/actions/edit', ext.Baton({ data: data }));
+                        actionsUtil.invoke('io.ox/mail/actions/edit', data);
                     });
                 } else {
                     ox.launch('io.ox/mail/detail/main', { cid: cid });

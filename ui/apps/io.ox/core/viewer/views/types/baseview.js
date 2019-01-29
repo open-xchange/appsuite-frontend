@@ -93,6 +93,7 @@ define('io.ox/core/viewer/views/types/baseview', [
             downloadButton.on('click', { model: this.model }, function (e) {
                 var model = e.data.model,
                     data = model.isFile() ? model.toJSON() : model.get('origData');
+                // Tested: No
                 actionsUtil.invoke(Util.getRefByModelSource(self.model.get('source')), ext.Baton({ model: model, data: data }));
             });
         },

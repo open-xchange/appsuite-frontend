@@ -87,7 +87,7 @@ define('io.ox/calendar/list/view', [
             app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
                 var list = _.map(baton.data, util.cid);
                 api.getList(list).then(function (models) {
-                    baton.data = _(models).map(api.reduce);
+                    baton.data = _(models).invoke('toJSON');
                     actionsUtil.invoke('io.ox/calendar/detail/actions/move', baton);
                 });
             });

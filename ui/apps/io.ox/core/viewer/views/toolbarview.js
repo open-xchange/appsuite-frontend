@@ -293,7 +293,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'lo',
                     //#. %1$s is usually "Drive" (product name; might be customized)
                     title: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
-                    ref: 'io.ox/mail/actions/save-attachment'
+                    ref: 'io.ox/mail/attachment/actions/save'
                 }
             },
             pim: {
@@ -624,7 +624,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             if (!(e.which === 32 || e.which === 13 || e.type === 'click')) return;
             e.preventDefault();
             if (!this.model.isFile()) return;
-            actionsUtil.checkAndInvokeAction('io.ox/files/actions/rename', this.model.toJSON());
+            actionsUtil.invoke('io.ox/files/actions/rename', this.model.toJSON());
         },
 
         /**

@@ -648,8 +648,8 @@ define('io.ox/mail/common-extensions', [
 
                     id = node.attr('data-id');
                     data = collection.get(id).toJSON();
-                    baton = ext.Baton({ startItem: data, data: list, restoreFocus: clickTarget });
-                    actionsUtil.invoke('io.ox/mail/actions/view-attachment', null, baton);
+                    baton = ext.Baton({ simple: true, startItem: data, data: list, restoreFocus: clickTarget });
+                    actionsUtil.invoke('io.ox/mail/attachment/actions/view', baton);
                 });
 
                 view.on('change:layout', function (mode) {

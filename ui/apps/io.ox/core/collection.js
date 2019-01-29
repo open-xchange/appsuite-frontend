@@ -190,7 +190,7 @@ define('io.ox/core/collection', ['io.ox/core/folder/api', 'io.ox/core/api/user']
             });
         };
 
-        this.promise = function () {
+        this.getPromise = function () {
             return this.getProperties().then(_.identity.bind(null, this));
         };
 
@@ -226,7 +226,7 @@ define('io.ox/core/collection', ['io.ox/core/folder/api', 'io.ox/core/api/user']
         var l = items.length,
             properties = { none: l === 0, some: l > 0, one: l === 1, multiple: l > 1 };
         this.matches = createMatches(properties);
-        this.promise = function () { return $.when(this); };
+        this.getPromise = function () { return $.when(this); };
     };
 
     function createMatches(properties) {

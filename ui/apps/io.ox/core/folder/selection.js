@@ -275,6 +275,7 @@ define('io.ox/core/folder/selection', [], function () {
             if (showInDrive) {
                 require(['io.ox/core/extensions', 'io.ox/files/api', 'io.ox/backbone/views/actions/util']).then(function (ext, api, actionsUtil) {
                     var models = api.pool.get('detail').get(id);
+                    // Tested: No (no clue how to get here)
                     actionsUtil.invoke('io.ox/files/actions/show-in-folder', ext.Baton({
                         models: [models],
                         app: self.view.app,
