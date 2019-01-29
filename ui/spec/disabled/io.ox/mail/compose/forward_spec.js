@@ -110,8 +110,7 @@ define(['io.ox/mail/compose/main', 'settings!io.ox/mail'], function (compose, se
                 });
             });
 
-            // TODO maybe we need a new test for this
-            it.skip('should switch to sendtype 3 when autosave is triggered', function () {
+            it('should switch to sendtype 3 when autosave is triggered', function () {
                 settings.set('autoSaveDraftsAfter', '1_minute');
                 var callback = sinon.spy();
                 var api = require('io.ox/mail/api');
