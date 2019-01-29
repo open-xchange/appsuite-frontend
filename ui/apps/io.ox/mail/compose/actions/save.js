@@ -62,7 +62,6 @@ define('io.ox/mail/compose/actions/save', [
                 });
             }
         },
-        // Placeholder for Guard auth check, index 1050
         {
             id: 'error',
             index: 1100,
@@ -105,43 +104,6 @@ define('io.ox/mail/compose/actions/save', [
                     baton.stopPropagation();
                     return new $.Deferred().reject(baton.error);
                 }
-            }
-        },
-        {
-            id: 'replace',
-            index: 2000,
-            perform: function (baton) {
-                // Replace inline images in contenteditable with links from draft response
-                if (baton.config.get('editorMode') === 'html') {
-                    // TODO may need some rework
-                    $('<div>').html(baton.mail.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
-                        var $el = $(el);
-                        $('img:not(.emoji):eq(' + index + ')', baton.view.editorContainer.find('.editable')).attr({
-                            src: $el.attr('src'),
-                            id: $el.attr('id')
-                        });
-                    });
-                }
-                var encrypted = baton.mail.security_info && baton.mail.security_info.encrypted;
-                if (!encrypted) {  // Don't update attachments for encrypted files
-                    baton.mail.attachments.forEach(function (a, index) {
-                        var m = baton.model.get('attachments').at(index);
-                        if (typeof m === 'undefined') {
-                            if (a.content_type !== 'application/pgp-signature') { // Don't add signature files
-                                baton.model.get('attachments').add(a);
-                            }
-                        } else if (m.id !== a.id) {
-                            // add correct group so previews work
-                            if (a.id && !m.id && m.get('group')) a.group = 'mail';
-                            m.clear({ silent: true });
-                            m.set(a);
-                        }
-                    });
-                }
-
-                // make view not dirty after save
-                baton.view.dirty(false);
-                return baton.resultData;
             }
         }
     );
