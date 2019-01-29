@@ -189,24 +189,16 @@ define('io.ox/mail/compose/actions/send', [
                     isReply = !!meta.replyFor,
                     isForward = !!meta.forwardsFor;
 
-                if (isReply || isForward) {
-                    var ids = [].concat(meta.replyFor || []).concat(meta.forwardsFor || []).map(function (obj) {
-                        return { folder_id: obj.originalFolderId, id: obj.originalId };
-                    });
-                    // update cache
-                    mailAPI.getList(ids).then(function (data) {
-                        // update answered/forwarded flag
-                        var len = data.length;
-                        for (var i = 0; i < len; i++) {
-                            if (isReply) data[i].flags |= 1;
-                            if (isForward) data[i].flags |= 256;
-                        }
-                        $.when(mailAPI.caches.list.merge(data), mailAPI.caches.get.merge(data))
-                        .done(function () {
-                            mailAPI.trigger('refresh.list');
-                        });
-                    });
-                }
+                if (!isReply && !isForward) return;
+
+                [].concat(meta.replyFor, meta.forwardsFor).filter(Boolean).forEach(function (obj) {
+                    var model = mailAPI.pool.get('detail').get(_.cid({ id: obj.originalId, folder_id: obj.originalFolderId }));
+                    if (!model) return;
+                    var flags = model.get('flags');
+                    if (isReply) flags |= 1;
+                    if (isForward) flags |= 256;
+                    model.set('flags', flags);
+                });
             }
         },
         {
