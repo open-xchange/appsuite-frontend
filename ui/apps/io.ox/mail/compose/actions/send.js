@@ -185,29 +185,13 @@ define('io.ox/mail/compose/actions/send', [
             index: 4100,
             perform: function (baton) {
                 // update base mail
-                var isReply = baton.model.get('meta').type === 'reply',
-                    isForward = baton.model.get('meta').type === 'forward',
-                    sep = mailAPI.separator,
-                    base, folder, id, msgrefs, ids;
+                var meta = baton.model.get('meta'),
+                    isReply = !!meta.replyFor,
+                    isForward = !!meta.forwardsFor;
 
                 if (isReply || isForward) {
-                    //single vs. multiple
-                    if (baton.model.get('meta').originalId) {
-                        msgrefs = [baton.model.get('meta').originalId];
-                    } else {
-                        msgrefs = _.chain(baton.mail.attachments)
-                            .filter(function (attachment) {
-                                return attachment.content_type === 'message/rfc822';
-                            })
-                            .map(function (attachment) { return attachment.msgref; })
-                            .value();
-                    }
-                    //prepare
-                    ids = _.map(msgrefs, function (obj) {
-                        base = _(obj.split(sep));
-                        folder = base.initial().join(sep);
-                        id = base.last();
-                        return { folder_id: folder, id: id };
+                    var ids = [].concat(meta.replyFor || []).concat(meta.forwardsFor || []).map(function (obj) {
+                        return { folder_id: obj.originalFolderId, id: obj.originalId };
                     });
                     // update cache
                     mailAPI.getList(ids).then(function (data) {
