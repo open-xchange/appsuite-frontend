@@ -398,7 +398,7 @@ define('io.ox/contacts/addressbook/popup', [
     var isOpen = false, cachedResponse = null, folder = 'all', appeared = {};
 
     // clear cache on address book changes
-    api.on('create update delete', function () {
+    api.on('create update delete import', function () {
         cachedResponse = null;
     });
 
