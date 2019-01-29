@@ -67,6 +67,34 @@ define('io.ox/files/settings/pane', [
                             i = String(i);
                             return { value: i, label: gt('%1$d seconds', i) };
                         });
+                    },
+                    getRetentionDaysOptions: function () {
+                        return [
+                            { label: gt('Forever'), value: 0 },
+                            { label: gt('1 day'), value: 1 },
+                            { label: gt('7 days'), value: 7 },
+                            { label: gt('30 days'), value: 30 },
+                            { label: gt('60 days'), value: 60 },
+                            { label: gt('90 days'), value: 90 },
+                            { label: gt('1 year'), value: 365 }
+                        ];
+                    },
+                    getMaxVersionsOptions: function () {
+                        return [
+                            { label: gt('Keep all versions'), value: 0 },
+                            { label: gt('1 version'), value: 1 },
+                            { label: gt('5 versions'), value: 5 },
+                            { label: gt('10 versions'), value: 10 },
+                            { label: gt('20 versions'), value: 20 },
+                            { label: gt('30 versions'), value: 30 },
+                            { label: gt('40 versions'), value: 40 },
+                            { label: gt('50 versions'), value: 50 },
+                            { label: gt('60 versions'), value: 60 },
+                            { label: gt('70 versions'), value: 70 },
+                            { label: gt('80 versions'), value: 80 },
+                            { label: gt('90 versions'), value: 90 },
+                            { label: gt('100 versions'), value: 100 }
+                        ];
                     }
                 })
                 .render().$el
@@ -137,6 +165,57 @@ define('io.ox/files/settings/pane', [
                         util.checkbox('showHidden', gt('Show hidden files and folders'), settings)
                     )
                 );
+            }
+        },
+        //
+        // Automatic version cleanup
+        //
+        {
+            id: 'versionCleanup',
+            index: INDEX += 100,
+            render: function () {
+                if (!capabilities.has('autodelete_file_versions')) return;
+                var summaryContainer = $('<div>').addClass('help-block');
+
+                this.getSummary = function () {
+                    var summaryList = $('<ul>'),
+                        summary = $('<span>').text(gt('Summary')).append(summaryList),
+                        retentionDays = settings.get('features/autodelete/retentionDays'),
+                        maxVersions = settings.get('features/autodelete/maxVersions');
+
+                    if (maxVersions <= 0 && retentionDays <= 0) {
+                        summaryList.append($('<li>').text(gt('All file versions are retained')));
+                        return summary;
+                    }
+
+                    if (retentionDays > 0) {
+                        summaryList.append($('<li>').append(
+                            gt.format(gt.ngettext('All file versions older than 1 day will be deleted after next login', 'All file versions older than %1$d days will be deleted after next login', retentionDays), retentionDays)
+                        ));
+                    }
+                    if (maxVersions > 0) {
+                        summaryList.append($('<li>').append(
+                            gt.format(gt.ngettext('When a file has more than 1 version, older versions of the file will be deleted after next login', 'When a file has more than %1$d versions, older versions of the file will be deleted after next login', maxVersions), maxVersions)
+                        ));
+                    }
+
+                    return summary;
+                };
+
+                this.$el.append(
+                    util.fieldset(
+                        gt('File version history'),
+                        $('<span>').append(gt('Timeframe')),
+                        util.compactSelect('features/autodelete/retentionDays', gt('Keep saved versions'), settings, this.getRetentionDaysOptions(), { width: 4, integer: true }),
+                        $('<span>').append(gt('File version limit')),
+                        util.compactSelect('features/autodelete/maxVersions', gt('Keep number of recent versions'), settings, this.getMaxVersionsOptions(), { width: 4, integer: true }),
+                        summaryContainer.append(this.getSummary())
+                    )
+                );
+
+                this.listenTo(settings, 'change:features/autodelete/maxVersions change:features/autodelete/retentionDays', function () {
+                    summaryContainer.empty().append(this.getSummary());
+                }).bind(this);
             }
         }
     );
