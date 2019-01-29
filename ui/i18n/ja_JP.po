@@ -1,10 +1,9 @@
 # translation of ox.ja_JP.po to deutsch
-# Antje Faber <antje.faber@open-xchange.com>, 2009, 2011, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-07-03 16:11+0200\n"
+"PO-Revision-Date: 2019-01-16 14:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -13,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -3039,6 +3038,19 @@ msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%2$s %1$s"
 
+#. '%1$s contact's display name
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "%1$s could not be added as the contact has no valid email field."
+msgstr ""
+"連絡先が有効なメールフィールドではないため、%1$sを追加することができませんで"
+"した。"
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "Some contacts could not be added as they have no valid email field."
+msgstr ""
+"複数の連絡先が有効なメールフィールドではないため、追加することができませんで"
+"した。"
+
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
@@ -3290,6 +3302,11 @@ msgstr ""
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Connection timed out. Please try reloading the page."
 msgstr "接続がタイムアウトです。ページをもう一度読み込んでください。"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Something went wrong. Please close this browser tab and try again."
+msgstr ""
+"エラーが発生しました。このブラウザタブを閉じて、もう一度やり直してください。"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -7863,7 +7880,7 @@ msgstr "IMAPキーワードを付加"
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "Set color flag"
-msgstr "カラーフラグをセット"
+msgstr "次のカラーフラグを付ける"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
@@ -7958,37 +7975,37 @@ msgstr "元のタイムゾーン"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Greater equals"
-msgstr "次の日付以降"
+msgstr "次の日時以降"
 
 #. lower than or equal to
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Lower equals"
-msgstr "次の日付以前"
+msgstr "次の日時以前"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 msgid "Is exactly"
-msgstr "次と完全に一致"
+msgstr "次の文字列に一致する"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 msgid "Is not exactly"
-msgstr "次と一致しない"
+msgstr "次の文字列に一致しない"
 
 #. lower than the given value
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Lower"
-msgstr "次の日付より前"
+msgstr "次の日時より前"
 
 #. greater than the given value
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Greater"
-msgstr "次の日付より後"
+msgstr "次の日時より後"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8086,22 +8103,22 @@ msgstr "パート"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Contains"
-msgstr "次を含む"
+msgstr "次の文字列を含む"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Contains not"
-msgstr "次を含まない"
+msgstr "次の文字列を含まない"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Matches"
-msgstr "次にマッチする"
+msgstr "次のワイルドカード条件に一致する"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Matches not"
-msgstr "次にマッチしない"
+msgstr "次のワイルドカード条件に一致しない"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8128,22 +8145,22 @@ msgstr "次の文字列で終了しない"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Regex"
-msgstr "正規表現にマッチする"
+msgstr "次の正規表現に一致する"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Not Regex"
-msgstr "正規表現にマッチしない"
+msgstr "次の正規表現に一致しない"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Exists"
-msgstr "存在する"
+msgstr "選択した条件が存在する"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Does not exist"
-msgstr "存在しない"
+msgstr "選択した条件が存在しない"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8187,7 +8204,7 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Please define at least one action."
-msgstr "アクションを指定してください。"
+msgstr "少なくとも１つのアクションを指定してください。"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -11111,6 +11128,21 @@ msgstr "%s に招待"
 msgid "Add on %s"
 msgstr "%s に追加"
 
+#~ msgid "Audio"
+#~ msgstr "オーディオ"
+
+#~ msgid "before start"
+#~ msgstr "開始前"
+
+#~ msgid "after start"
+#~ msgstr "開始後"
+
+#~ msgid "before end"
+#~ msgstr "終了前"
+
+#~ msgid "after end"
+#~ msgstr "終了後"
+
 #~ msgid "Notify %1$s before start."
 #~ msgstr "開始前に%1$sを通知します。"
 
@@ -11153,6 +11185,27 @@ msgstr "%s に追加"
 #~ msgid "Play sound at end."
 #~ msgstr "終了時に音を流します。"
 
+#~ msgid "Send mail %1$s before start."
+#~ msgstr "開始前に%1$sのメールを送信"
+
+#~ msgid "Send mail %1$s after start."
+#~ msgstr "開始後に%1$sのメールを送信"
+
+#~ msgid "Send mail %1$s before end."
+#~ msgstr "終了前に%1$sのメールを送信"
+
+#~ msgid "Send mail %1$s after end."
+#~ msgstr "終了後に%1$sのメールを送信"
+
+#~ msgid "Send mail at %1$s."
+#~ msgstr "%1$sにメールを送信"
+
+#~ msgid "Send mail at start."
+#~ msgstr "開始時にメールを送信"
+
+#~ msgid "Send mail at end."
+#~ msgstr "終了時にメールを送信"
+
 #~ msgid "%1$s %2$s before start."
 #~ msgstr "開始前に%1$s%2$s"
 
@@ -11177,8 +11230,20 @@ msgstr "%s に追加"
 #~ msgid "Add reminder"
 #~ msgstr "アラームを追加"
 
-#~ msgid "Audio"
-#~ msgstr "オーディオ"
+#~ msgid "Reminder %1$d"
+#~ msgstr "アラーム%1$d"
+
+#~ msgid "type"
+#~ msgstr "タイプ"
+
+#~ msgid "timeframe"
+#~ msgstr "タイムフレーム"
+
+#~ msgid "timeframe relation"
+#~ msgstr "タイムフレーム関連"
+
+#~ msgid "Remove reminder"
+#~ msgstr "アラームを削除"
 
 #~ msgid "Edit reminders"
 #~ msgstr "アラームを編集"
@@ -11222,6 +11287,9 @@ msgstr "%s に追加"
 #~ msgid "Before"
 #~ msgstr "次の日付前"
 
+#~ msgid "Minimized windows"
+#~ msgstr "ウィンドウを最小化"
+
 #~ msgid "Shrink"
 #~ msgstr "縮小"
 
@@ -11233,11 +11301,33 @@ msgstr "%s に追加"
 #~ "the series?"
 #~ msgstr "繰り返しを辞退しますか、それともこの予定のみを辞退しますか？"
 
+#~ msgid "Change reminder"
+#~ msgstr "アラームを変更"
+
 #~ msgid "Participant related actions"
 #~ msgstr "参加者関連アクション"
 
 #~ msgid "You are currently acting on behalf of the calendar owner."
 #~ msgstr "あなたは現在予定表の所有者の代理です。"
+
+#~ msgid "Change reminders"
+#~ msgstr "アラームを変更"
+
+#~ msgid "Appointments in public calendars"
+#~ msgstr "パブリック予定表の予定"
+
+#~ msgid ""
+#~ "The selected calendar \"%1$s\" is public. Do you really want to create an "
+#~ "appointment in this calendar?"
+#~ msgstr ""
+#~ "選択された予定表\"%1$s\"はパブリック予定表です。この予定表に予定を作成しま"
+#~ "すか？"
+
+#~ msgid "Create in public calendar"
+#~ msgstr "パブリック予定表に作成"
+
+#~ msgid "Add a message to the notification email for the other participants."
+#~ msgstr "他の出席者のためにメッセージを通知メールに追加する"
 
 #~ msgid ""
 #~ "Do you want to delete the whole series or just this appointment within "
@@ -11275,14 +11365,30 @@ msgstr "%s に追加"
 #~ msgid "Sent by"
 #~ msgstr "差出人"
 
-#~ msgid "Select calendar"
-#~ msgstr "予定表を選択"
-
-#~ msgid "Create new calendar"
-#~ msgstr "新規予定表を作成"
-
 #~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
 #~ msgstr "お使いのタイムゾーン(%1$s): %2$s (期間: %3$s)"
+
+#~ msgid "Your recurrence rule does not fit to your start date."
+#~ msgstr "繰り返しルールは開始日時に合っていません。"
+
+#~ msgid "Your recurrence rule was changed automatically."
+#~ msgstr "繰り返しルールは自動で変更されました。"
+
+#~ msgid "User defined color"
+#~ msgstr "ユーザ設定カラー"
+
+#~ msgid ""
+#~ "You are using a shared calendar. The calendar owner was added as "
+#~ "organizer."
+#~ msgstr ""
+#~ "共有予定表を使用しています。予定表の所有者が開催者として追加されました。"
+
+#~ msgid ""
+#~ "You are no longer using a shared calendar. You were added as organizer."
+#~ msgstr "共有予定表を使用していません。開催者として追加されました。"
+
+#~ msgid "Visibility Help"
+#~ msgstr "表示ヘルプ"
 
 #~ msgid "Standard"
 #~ msgstr "標準"
@@ -11312,6 +11418,12 @@ msgstr "%s に追加"
 
 #~ msgid "Appointment color"
 #~ msgstr "予定カラー"
+
+#~ msgid "Use calendar color"
+#~ msgstr "予定表の色を使用"
+
+#~ msgid "none"
+#~ msgstr "なし"
 
 #~ msgid "Show as free"
 #~ msgstr "空き時間として表示"
@@ -11346,14 +11458,14 @@ msgstr "%s に追加"
 #~ msgid "Load appointments until %1$s"
 #~ msgstr "%s まで予定を読み込みます。"
 
-#~ msgid "Could't load appointment data."
-#~ msgstr "予定データを読み込めませんでした。"
-
 #~ msgid "No appointment selected"
 #~ msgstr "予定が選択されていません。"
 
 #~ msgid "%1$s appointments selected"
 #~ msgstr "%1$s 件の予定が選択されています。"
+
+#~ msgid "Could't load appointment data."
+#~ msgstr "予定データを読み込めませんでした。"
 
 #~ msgid "Calendar account error"
 #~ msgstr "予定表アカウントエラー"
@@ -11380,6 +11492,12 @@ msgstr "%s に追加"
 #~ "You cannot mark the appointment as secret, when blocking a ressource."
 #~ msgstr ""
 #~ "リソースをブロ臆している場合は、予定に秘密の印をつけることができません。"
+
+#~ msgid "Previous Month"
+#~ msgstr "前月"
+
+#~ msgid "Next Month"
+#~ msgstr "翌月"
 
 #~ msgid "%1$d minutes"
 #~ msgstr "%1$d 分"
@@ -11532,6 +11650,11 @@ msgstr "%s に追加"
 #~ msgid "Recurrence"
 #~ msgstr "繰り返し"
 
+#~ msgid ""
+#~ "This appointment is an exception. Changing the exception does not affect "
+#~ "the series."
+#~ msgstr "この予定は例外です。例外の変更はシリーズに影響しません。"
+
 #~ msgid "Merge"
 #~ msgstr "統合"
 
@@ -11544,19 +11667,26 @@ msgstr "%s に追加"
 #~ msgid "Click to split all folders into separate columns"
 #~ msgstr "クリックして、すべてのフォルダを別々の行に分割します。"
 
+#~ msgid "%s %s, create all-day appointment"
+#~ msgstr "%s %s, 終日の予定を作成"
+
 #~ msgid "Next year"
 #~ msgstr "翌年"
+
+#~ msgid "Apply filter"
+#~ msgstr "フィルタを適用"
+
+#~ msgid "Starting letter index"
+#~ msgstr "文字インデックスを開始"
+
+#~ msgid "Contact list. Select a contact to view details."
+#~ msgstr "連絡先リスト。連絡先を選択して、詳細を表示してください。"
 
 #~ msgid "First name must not be empty for internal users"
 #~ msgstr "内部ユーザの場合、名前は空にできません"
 
 #~ msgid "Last name must not be empty for internal users"
 #~ msgstr "内部ユーザの場合、姓は空にできません"
-
-#~ msgid "Something went wrong. Please close this browser tab and try again."
-#~ msgstr ""
-#~ "エラーが発生しました。このブラウザタブを閉じて、もう一度やり直してくださ"
-#~ "い。"
 
 #~ msgid "iCalendar"
 #~ msgstr "iCalendar"
@@ -11566,9 +11696,6 @@ msgstr "%s に追加"
 
 #~ msgid "Format: %1$s"
 #~ msgstr "形式: %1$s"
-
-#~ msgid "Please note that other participants are removed on calendar export."
-#~ msgstr "他の参加者は予定表エクスポートから削除されます。"
 
 #~ msgid "No export format available"
 #~ msgstr "利用可能なエクスポート形式がありません。"
@@ -11716,6 +11843,39 @@ msgstr "%s に追加"
 #~ msgstr ""
 #~ "ご利用のブラウザはご利用可能なメディアデバイス一覧をサポートしていません。"
 
+#~ msgid "Regional settings"
+#~ msgstr "地域設定"
+
+#~ msgid "Default"
+#~ msgstr "既定"
+
+#~ msgid "12 hours"
+#~ msgstr "12 時間"
+
+#~ msgid "24 hours"
+#~ msgstr "24 時間"
+
+#~ msgid "Sunday"
+#~ msgstr "日曜日"
+
+#~ msgid "Monday"
+#~ msgstr "月曜日"
+
+#~ msgid "Week that contains January 1st"
+#~ msgstr "1月1日を含む週"
+
+#~ msgid "Week that contains the first Thursday"
+#~ msgstr "第一木曜日を含む週"
+
+#~ msgid "Numbers"
+#~ msgstr "数値"
+
+#~ msgid "First day of week"
+#~ msgstr "週の最初の日\\t"
+
+#~ msgid "First week of year"
+#~ msgstr "年の最初の週"
+
 #~ msgid "Unicolor"
 #~ msgstr "単色"
 
@@ -11743,6 +11903,26 @@ msgstr "%s に追加"
 #~ msgid "%1$s must not be empty."
 #~ msgstr "%1$sは空にしてはいけません。"
 
+#~ msgid "Don't remind me again"
+#~ msgstr "再通知しないでください。"
+
+#~ msgid "Unable to upload file"
+#~ msgid_plural "Unable to upload files"
+#~ msgstr[0] "ファイルをアップロードできません。"
+
+#~ msgid "We encountered an issue for your upload"
+#~ msgid_plural "We encountered some issues for your upload"
+#~ msgstr[0] "アップロードに問題が発生しました。"
+
+#~ msgid "Slideshow"
+#~ msgstr "スライドショー"
+
+#~ msgid "Run slideshow"
+#~ msgstr "スライドショーを実施"
+
+#~ msgid "Stop slideshow"
+#~ msgstr "スライドショーを停止"
+
 #~ msgid ""
 #~ "\n"
 #~ " Please download the file using the button below."
@@ -11758,6 +11938,9 @@ msgstr "%s に追加"
 
 #~ msgid "There is no preview for this file type."
 #~ msgstr "このファイルタイプはプレビューできません"
+
+#~ msgid "Account already exists"
+#~ msgstr "アカウントはすでに存在しています"
 
 #~ msgid ""
 #~ "Restored into multiple folders:\n"
@@ -11879,8 +12062,38 @@ msgstr "%s に追加"
 #~ "このメールには差出人としてメールアドレスのみが含まれます。本当の名前は使用"
 #~ "されていません。"
 
+#~ msgid "Image size:"
+#~ msgstr "画像サイズ："
+
 #~ msgid "One of the embedded images could not be used."
 #~ msgstr "埋め込み画像の一枚が使用できませんでした。"
+
+#~ msgid "Original"
+#~ msgstr "元"
+
+#~ msgid "Small"
+#~ msgstr "小"
+
+#~ msgid "Large"
+#~ msgstr "大"
+
+#~ msgid "Image size"
+#~ msgstr "画像サイズ"
+
+#~ msgid "Small (%1$s px)"
+#~ msgstr "小 (%1$s px)"
+
+#~ msgid "Medium (%1$s px)"
+#~ msgstr "中 (%1$s px)"
+
+#~ msgid "Large (%1$s px)"
+#~ msgstr "大 (%1$s px)"
+
+#~ msgid "Mail size:"
+#~ msgstr "メールサイズ："
+
+#~ msgid "Delete files after expiration"
+#~ msgstr "利用期限後にファイルを削除"
 
 #~ msgid "Use password"
 #~ msgstr "パスワードを使用"
@@ -11919,6 +12132,18 @@ msgstr "%s に追加"
 #~ msgid "Enable or disable auto forward"
 #~ msgstr "自動転送を有効また無効にする"
 
+#~ msgid "Is bigger than (Size: B/KB/MB/GB)"
+#~ msgstr "次の数より大きい (サイズ: B/KB/MB/GB)"
+
+#~ msgid "Is smaller than (Size: B/KB/MB/GB)"
+#~ msgstr "次の数より小さい (Size: B/KB/MB/GB)"
+
+#~ msgid "String"
+#~ msgstr "文字列"
+
+#~ msgid "Source"
+#~ msgstr "ソース"
+
 #~ msgid "Your vacation notice is active"
 #~ msgstr "休暇通知が有効です。"
 
@@ -11939,6 +12164,9 @@ msgstr "%s に追加"
 
 #~ msgid "Message"
 #~ msgstr "メッセージ"
+
+#~ msgid "Show advanced options"
+#~ msgstr "詳細オプションを表示"
 
 #~ msgid "Days between notices to the same sender"
 #~ msgstr "同じ差出人への休暇通知の通知周期"
@@ -12011,9 +12239,6 @@ msgstr "%s に追加"
 #~ msgstr ""
 #~ "アカウントが削除されたか、もはや利用可能ではないため、ウィジェット\"%s\"が"
 #~ "無効になりました。"
-
-#~ msgid "Default"
-#~ msgstr "既定"
 
 #~ msgid "Security"
 #~ msgstr "セキュリティ"
@@ -12147,6 +12372,9 @@ msgstr "%s に追加"
 #~ msgid "CalDav/CardDav"
 #~ msgstr "CalDav/CardDav"
 
+#~ msgid "WebDAV"
+#~ msgstr "WebDAV"
+
 #~ msgid "Exchange Active Sync"
 #~ msgstr "Exchange Active Sync"
 
@@ -12184,6 +12412,12 @@ msgstr "%s に追加"
 
 #~ msgid "All emails"
 #~ msgstr "すべてのメール"
+
+#~ msgid "Always trust mails from the following senders"
+#~ msgstr "次の差出人からのメールを常に信用する"
+
+#~ msgid "Comma-separated list e.g. \"example.org, alice@example.com\""
+#~ msgstr "コンマ区切りリスト　例：\\”example.org, alice@example.com\\”"
 
 #~ msgid "App Launcher"
 #~ msgstr "アプリケーションランチャー"
@@ -12247,175 +12481,28 @@ msgstr "%s に追加"
 #~ msgid "Appointment reminder"
 #~ msgstr "予定のアラーム"
 
-#~ msgid "Encrypt"
-#~ msgstr "暗号化"
-
-#~ msgid "Show Links"
-#~ msgstr "リンクを表示"
-
-#~ msgid "Add attachment"
-#~ msgstr "添付ファイルを追加"
-
-#~ msgid "iCal-feed has been imported successfully"
-#~ msgstr "iCalフィードは正しくインポートされました。"
-
-#~ msgid "Change color"
-#~ msgstr "色を変更"
-
-#~ msgid "Town"
-#~ msgstr "市区町村"
-
-#~ msgid "iCal-Feed"
-#~ msgstr "ICalフィード"
-
-#~ msgid ""
-#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
-#~ "for example."
+#~ msgid "Please use the \"Connect your device\" wizard to download %s"
 #~ msgstr ""
-#~ "既存の予定を無視します。例えば、祝日付きのカレンダーをインポートする際に役"
-#~ "に立ちます。"
+#~ "「お使いのデバイスを接続」ウィザードを使用して、%sをダウンロードしてくださ"
+#~ "い。"
 
-#~ msgid "Internal & external users"
-#~ msgstr "内部と外部ユーザ"
+#~ msgid "Select calendar"
+#~ msgstr "予定表を選択"
 
-#~ msgid ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
-#~ msgstr ""
-#~ "選択したメールの差出人からのこれからのメッセージは選択したフォルダへ移動し"
-#~ "ます。"
+#~ msgid "Create new calendar"
+#~ msgstr "新規予定表を作成"
 
-#~ msgid "never"
-#~ msgstr "非設定"
-
-#~ msgid "Use Password"
-#~ msgstr "パスワードを使用"
-
-#~ msgid "%1$s Options"
-#~ msgstr "%1$s オプション"
-
-#~ msgid "Account is being created"
-#~ msgstr "アカウントが現在作成中です。"
-
-#~ msgid ""
-#~ "This might be a phishing email because we could not verify that it is "
-#~ "really from %1$s."
-#~ msgstr ""
-#~ "このメールが本当に%1$sからかどうか確認できないため、フィッシングメールの可"
-#~ "能性があります。"
-
-#~ msgid "in"
-#~ msgstr "指定月"
-
-#~ msgid "Exchange ActiveSync"
-#~ msgstr "Exchange ActiveSync"
-
-#~ msgid "Dangerous emails only"
-#~ msgstr "危険メールのみ"
-
-#~ msgid "Dangerous and trusted emails"
-#~ msgstr "危険で信頼できるメール"
-
-#~ msgid "Dangerous, trusted and valid emails"
-#~ msgstr "危険で信頼できる有効なメール"
-
-#~ msgid "Add new reminder"
-#~ msgstr "新規アラームを追加"
-
-#~ msgid "Authentication failed. Please fill in login and password."
-#~ msgstr "認証に失敗しました。ログインとパスワードを入力してください。"
-
-#~ msgid "Public"
-#~ msgstr "パブリック"
-
-#~ msgid "The appointment is visible for all users in shared folders."
-#~ msgstr "共有フォルダのすべてのユーザが予定を見ることができます。"
-
-#~ msgid ""
-#~ "In shared folders, the appointment is displayed as a simple time slot for "
-#~ "non-attending users."
-#~ msgstr ""
-#~ "共有フォルダでは、参加しないユーザには予定が単純なタイムスロットとして表示"
-#~ "されます。"
-
-#~ msgid ""
-#~ "The appointment is not visible to non-attending users in shared folders "
-#~ "at all. The appointment is not considered for conflicts and does not "
-#~ "appear in the scheduling view."
-#~ msgstr ""
-#~ "共有フォルダのすべてのユーザが予定を全くみることができません。予定は競合と"
-#~ "はみなされず、スケジューリング表示に表示されません。"
-
-#~ msgid "Birthday"
-#~ msgstr "誕生日"
-
-#~ msgid "List of public calendars and events"
-#~ msgstr "パブリック予定表とイベントの一覧"
-
-#~ msgid "Quick launch 1"
-#~ msgstr "クイック起動 1"
-
-#~ msgid "Quick launch 2"
-#~ msgstr "クイック起動 2"
-
-#~ msgid "Quick launch 3"
-#~ msgstr "クイック起動 3"
-
-#~ msgid ""
-#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
-#~ msgid_plural ""
-#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
-#~ msgstr[0] ""
-#~ "ファイルが割当量の上限 \"%1$s\" を超えたため、アップロードできません。"
-
-#~ msgid "This message is from a trusted sender."
-#~ msgstr "このメッセージは信頼できる差出人からです。"
-
-#~ msgid ""
-#~ "This might be a phishing mail because we could not verify that this email "
-#~ "is really from %1$s."
-#~ msgstr ""
-#~ "このメールが本当に%1$sからかどうか確認できないため、フィッシングメールの可"
-#~ "能性があります。"
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "このメールは%1$sから送信されています。"
-
-#~ msgid "We could not verify that this email is really from %1$s."
-#~ msgstr "このメールが本当に%1$sからだと確認できませんでした。"
-
-#~ msgid "Expiration: %1$d"
-#~ msgstr "期限: %1$d"
-
-#~ msgid "Has Attachment"
-#~ msgstr "添付ファイルあります"
-
-#~ msgid "Show message authenticity"
-#~ msgstr "メッセージの認証を表示"
-
-#~ msgid "Dangerous only"
-#~ msgstr "危険のみ"
-
-#~ msgid "Dangerous and trusted"
-#~ msgstr "危険で信頼できる"
-
-#~ msgid "Acknowledge all reminders"
-#~ msgstr "すべてのアラームを認証"
-
-#~ msgid "Moving \"%1$s\""
-#~ msgstr "\"%1$s\"をアップロードしています..."
-
-#~ msgid "Moving folder"
-#~ msgstr "フォルダを移動"
-
-#~ msgid " Finished moving folder \"%1$s\""
-#~ msgstr "ドキュメントをフォルダ \"%1$s\"に保存しました。"
+#~ msgid "Run auto-play "
+#~ msgstr "自動再生を実行 "
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
 
 #~ msgid " %1$s (%2$s); "
 #~ msgstr " %1$s (%2$s); "
+
+#~ msgid " Finished moving folder \"%1$s\""
+#~ msgstr "ドキュメントをフォルダ \"%1$s\"に保存しました。"
 
 #~ msgid " is currently editing this document."
 #~ msgstr " が現在ドキュメントを編集しています。"
@@ -12476,6 +12563,9 @@ msgstr "%s に追加"
 
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s。"
+
+#~ msgid "%1$s Options"
+#~ msgstr "%1$s オプション"
 
 #~| msgid "%1$s of %2$s"
 #~ msgid "%1$s for %2$s"
@@ -12610,9 +12700,6 @@ msgstr "%s に追加"
 #~ msgid "10"
 #~ msgstr "10"
 
-#~ msgid "12 hour"
-#~ msgstr "12 時間"
-
 #~ msgid "15"
 #~ msgstr "15"
 
@@ -12639,9 +12726,6 @@ msgstr "%s に追加"
 
 #~ msgid "4 days"
 #~ msgstr "4 日"
-
-#~ msgid "4 hour"
-#~ msgstr "4 時間"
 
 #~ msgid "4 weeks"
 #~ msgstr "4 週間"
@@ -12753,8 +12837,14 @@ msgstr "%s に追加"
 #~ msgid "Account Settings"
 #~ msgstr "アカウント設定"
 
+#~ msgid "Account is being created"
+#~ msgstr "アカウントが現在作成中です。"
+
 #~ msgid "Account:"
 #~ msgstr "アカウント:"
+
+#~ msgid "Acknowledge all reminders"
+#~ msgstr "すべてのアラームを認証"
 
 #~ msgid "Acquire Edit Rights"
 #~ msgstr "編集権限を獲得"
@@ -12804,6 +12894,9 @@ msgstr "%s に追加"
 #~ msgid "Add account"
 #~ msgstr "アカウントを追加"
 
+#~ msgid "Add attachment"
+#~ msgstr "添付ファイルを追加"
+
 #~ msgid "Add cipher code"
 #~ msgstr "暗号コードを追加"
 
@@ -12834,6 +12927,9 @@ msgstr "%s に追加"
 
 #~ msgid "Add new guest"
 #~ msgstr "新規ゲストを追加"
+
+#~ msgid "Add new reminder"
+#~ msgstr "新規アラームを追加"
 
 #~ msgid "Add new subfolder"
 #~ msgstr "新規サブフォルダを追加"
@@ -13050,6 +13146,13 @@ msgstr "%s に追加"
 #~| msgid "Add contact"
 #~ msgid "All contacts"
 #~ msgstr "メンバを追加する"
+
+#~ msgid ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr ""
+#~ "選択したメールの差出人からのこれからのメッセージは選択したフォルダへ移動し"
+#~ "ます。"
 
 #~ msgid "All users"
 #~ msgstr "すべてのユーザー"
@@ -13738,6 +13841,9 @@ msgstr "%s に追加"
 #~ msgid "Austria"
 #~ msgstr "オーストリア"
 
+#~ msgid "Authentication failed. Please fill in login and password."
+#~ msgstr "認証に失敗しました。ログインとパスワードを入力してください。"
+
 #~ msgid "Auto"
 #~ msgstr "自動"
 
@@ -13856,6 +13962,9 @@ msgstr "%s に追加"
 
 #~ msgid "Bhutan"
 #~ msgstr "ブータン"
+
+#~ msgid "Birthday"
+#~ msgstr "誕生日"
 
 #~ msgid "Birthday Appointment"
 #~ msgstr "誕生日のアポイント"
@@ -14039,6 +14148,9 @@ msgstr "%s に追加"
 
 #~ msgid "Change View"
 #~ msgstr "ビューを変更"
+
+#~ msgid "Change color"
+#~ msgstr "色を変更"
 
 #~ msgid "Change folder"
 #~ msgstr "フォルダを変更"
@@ -14491,6 +14603,21 @@ msgstr "%s に追加"
 
 #~ msgid "DKK"
 #~ msgstr "DKK"
+
+#~ msgid "Dangerous and trusted"
+#~ msgstr "危険で信頼できる"
+
+#~ msgid "Dangerous and trusted emails"
+#~ msgstr "危険で信頼できるメール"
+
+#~ msgid "Dangerous emails only"
+#~ msgstr "危険メールのみ"
+
+#~ msgid "Dangerous only"
+#~ msgstr "危険のみ"
+
+#~ msgid "Dangerous, trusted and valid emails"
+#~ msgstr "危険で信頼できる有効なメール"
 
 #~ msgid "Danish"
 #~ msgstr "デンマーク語"
@@ -15009,9 +15136,6 @@ msgstr "%s に追加"
 #~ msgid "Email notification for task creator?"
 #~ msgstr "作成者にメールで通知"
 
-#~ msgid "Email notification for task participant?"
-#~ msgstr "出席者にメールで通知"
-
 #~ msgid "Embedded windows"
 #~ msgstr "エンべデッド ウィンドウ"
 
@@ -15076,6 +15200,9 @@ msgstr "%s に追加"
 #~ "メール、予定表、仕事、連絡先フォルダへのオフライン アクセスを有効にする。"
 #~ "Microsoft Outlookオフラインを使用して加えられたすべての変更は、次回オンラ"
 #~ "インになった際に自動的に同期されます:"
+
+#~ msgid "Encrypt"
+#~ msgstr "暗号化"
 
 #~ msgid "End Presentation"
 #~ msgstr "送付先"
@@ -15214,9 +15341,6 @@ msgstr "%s に追加"
 
 #~ msgid "Estimated Costs:"
 #~ msgstr "予測されるコスト:"
-
-#~ msgid "Estimated Duration:"
-#~ msgstr "予測される期間:"
 
 #~ msgid "Estonia"
 #~ msgstr "エストニア"
@@ -15374,6 +15498,9 @@ msgstr "%s に追加"
 #~ msgid "Exception caught:"
 #~ msgstr "次の例外が発生しました:"
 
+#~ msgid "Exchange ActiveSync"
+#~ msgstr "Exchange ActiveSync"
+
 #~ msgid "Existing shares"
 #~ msgstr "既存の共有ファイル"
 
@@ -15382,6 +15509,9 @@ msgstr "%s に追加"
 
 #~ msgid "Expand the panel"
 #~ msgstr "パネルを拡張"
+
+#~ msgid "Expiration: %1$d"
+#~ msgstr "期限: %1$d"
 
 #~ msgid "Extended view"
 #~ msgstr "拡張ビュー"
@@ -15755,6 +15885,9 @@ msgstr "%s に追加"
 #~ msgid "Halo view"
 #~ msgstr "ハロー ビュー"
 
+#~ msgid "Has Attachment"
+#~ msgstr "添付ファイルあります"
+
 #~ msgid "Header exists"
 #~ msgstr "ヘッダが存在"
 
@@ -15914,6 +16047,13 @@ msgstr "%s に追加"
 #~ "right side."
 #~ msgstr "タイルを表示しない場合は、右上の×印をクリックします。"
 
+#~ msgid ""
+#~ "Ignore existing appointments. Helpful to import public holiday calendars, "
+#~ "for example."
+#~ msgstr ""
+#~ "既存の予定を無視します。例えば、祝日付きのカレンダーをインポートする際に役"
+#~ "に立ちます。"
+
 #~ msgid "Illegal Date in remind date"
 #~ msgstr "不正なアラーム日時"
 
@@ -15974,6 +16114,13 @@ msgstr "%s に追加"
 #~ "複数のメールを一度に編集するには、メールの左側にあるチェックボックスを有効"
 #~ "にします。チェックボックスが表示されていない場合は、左下にあるアイコンをク"
 #~ "リックします。"
+
+#~ msgid ""
+#~ "In shared folders, the appointment is displayed as a simple time slot for "
+#~ "non-attending users."
+#~ msgstr ""
+#~ "共有フォルダでは、参加しないユーザには予定が単純なタイムスロットとして表示"
+#~ "されます。"
 
 #~ msgid ""
 #~ "In the Details section at the bottom right side you can enter billing "
@@ -16094,6 +16241,9 @@ msgstr "%s に追加"
 
 #~ msgid "Instant Messenger:"
 #~ msgstr "インスタント メッセンジャー:"
+
+#~ msgid "Internal & external users"
+#~ msgstr "内部と外部ユーザ"
 
 #~ msgid "Internal Error: The server didn't provide any data."
 #~ msgstr "内部エラー: サーバからデータが送信されませんでした。"
@@ -16370,8 +16520,8 @@ msgstr "%s に追加"
 #~ msgid "List day view"
 #~ msgstr "リスト日ビュー"
 
-#~ msgid "List week view"
-#~ msgstr "リスト週ビュー"
+#~ msgid "List of public calendars and events"
+#~ msgstr "パブリック予定表とイベントの一覧"
 
 #~ msgid "List workweek view"
 #~ msgstr "リスト稼働日ビュー"
@@ -16480,9 +16630,6 @@ msgstr "%s に追加"
 #~ msgid "Mailing list %s"
 #~ msgstr "メーリング リスト %s"
 
-#~ msgid "Main window"
-#~ msgstr "メイン ウィンドウ"
-
 #~ msgid "Malawi"
 #~ msgstr "マラウイ"
 
@@ -16578,9 +16725,6 @@ msgstr "%s に追加"
 #~ msgid "Mime Type"
 #~ msgstr "MIME タイプ"
 
-#~ msgid "Mime type"
-#~ msgstr "MIME タイプ"
-
 #~ msgid "Mobile"
 #~ msgstr "携帯電話"
 
@@ -16656,6 +16800,12 @@ msgstr "%s に追加"
 
 #~ msgid "Morocco"
 #~ msgstr "モロッコ"
+
+#~ msgid "Moving \"%1$s\""
+#~ msgstr "\"%1$s\"をアップロードしています..."
+
+#~ msgid "Moving folder"
+#~ msgstr "フォルダを移動"
 
 #~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "メールを移動しています... 数秒かかる場合があります。"
@@ -17383,6 +17533,9 @@ msgstr "%s に追加"
 #~ "%sOpen-Xchange UWA モジュール%s ページをご覧ください。ウィジェットやその関"
 #~ "連データの一覧があります。"
 
+#~ msgid "Please note that other participants are removed on calendar export."
+#~ msgstr "他の参加者は予定表エクスポートから削除されます。"
+
 #~ msgid ""
 #~ "Please note: All messages received from the POP3 account will be stored "
 #~ "to a folder on your local IMAP account."
@@ -17585,6 +17738,9 @@ msgstr "%s に追加"
 #~ msgid "Promote One Level"
 #~ msgstr "1 レベル上げる"
 
+#~ msgid "Public"
+#~ msgstr "パブリック"
+
 #~ msgid "Public contacts"
 #~ msgstr "パブリック連絡先"
 
@@ -17646,6 +17802,15 @@ msgstr "%s に追加"
 
 #~ msgid "Quick config"
 #~ msgstr "クイック構成"
+
+#~ msgid "Quick launch 1"
+#~ msgstr "クイック起動 1"
+
+#~ msgid "Quick launch 2"
+#~ msgstr "クイック起動 2"
+
+#~ msgid "Quick launch 3"
+#~ msgstr "クイック起動 3"
 
 #~ msgid "Quota Exceed"
 #~ msgstr "割当量を超えました。"
@@ -18158,6 +18323,9 @@ msgstr "%s に追加"
 #~ msgid "Show InfoBox after Login"
 #~ msgstr "ログイン後にインフォボックスを表示"
 
+#~ msgid "Show Links"
+#~ msgstr "リンクを表示"
+
 #~ msgid "Show MiniCalendar"
 #~ msgstr "ミニカレンダを表示"
 
@@ -18214,6 +18382,9 @@ msgstr "%s に追加"
 
 #~ msgid "Show legal information"
 #~ msgstr "法的情報を表示"
+
+#~ msgid "Show message authenticity"
+#~ msgstr "メッセージの認証を表示"
 
 #~ msgid "Show more"
 #~ msgstr "詳細表示"
@@ -18293,9 +18464,6 @@ msgstr "%s に追加"
 #~ msgid "Skip this step"
 #~ msgstr "この手順をスキップ"
 
-#~ msgid "Slideshow"
-#~ msgstr "スライドショー"
-
 #~ msgid "Slideshow / Autoplay mode"
 #~ msgstr "スライドショー / 自動再生モード"
 
@@ -18357,9 +18525,6 @@ msgstr "%s に追加"
 
 #~ msgid "Sorting your tasks"
 #~ msgstr "仕事のソート"
-
-#~ msgid "Source"
-#~ msgstr "ソース"
 
 #~ msgid "South Africa"
 #~ msgstr "南アフリカ"
@@ -18852,6 +19017,14 @@ msgstr "%s に追加"
 #~ "ルダを共有すると、それらのフォルダにあるオブジェクトを閲覧できます。"
 
 #~ msgid ""
+#~ "The appointment is not visible to non-attending users in shared folders "
+#~ "at all. The appointment is not considered for conflicts and does not "
+#~ "appear in the scheduling view."
+#~ msgstr ""
+#~ "共有フォルダのすべてのユーザが予定を全くみることができません。予定は競合と"
+#~ "はみなされず、スケジューリング表示に表示されません。"
+
+#~ msgid ""
 #~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
 #~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
 #~ "days</a>."
@@ -18924,6 +19097,9 @@ msgstr "%s に追加"
 #~ "</a><a href=\"#\" data-widget=\"options\" data-attribute=\"day\">水曜日</"
 #~ "a>に繰り返されます。"
 
+#~ msgid "The appointment is visible for all users in shared folders."
+#~ msgstr "共有フォルダのすべてのユーザが予定を見ることができます。"
+
 #~ msgid "The calendar views"
 #~ msgstr "予定表ビュー"
 
@@ -18959,6 +19135,13 @@ msgstr "%s に追加"
 #~ msgstr ""
 #~ "%s に入力した値は許容範囲を超えています。-130000 から 130000 の範囲の数字"
 #~ "を使用してください。"
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
+#~ msgid_plural ""
+#~ "The files cannot be uploaded because they exceed the quota limit of %1$s"
+#~ msgstr[0] ""
+#~ "ファイルが割当量の上限 \"%1$s\" を超えたため、アップロードできません。"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "このファイルは %1$s にあります。"
@@ -19178,9 +19361,6 @@ msgstr "%s に追加"
 #~ msgid "This Tag already exists in your private tag list"
 #~ msgstr "このタグは既にプライベートのタグ リストに存在しています。"
 
-#~ msgid "This Team name already exists"
-#~ msgstr "このチーム名は既に存在します。"
-
 #~ msgid "This account cannot be validated"
 #~ msgstr "このアカウントは検証できません。"
 
@@ -19249,8 +19429,14 @@ msgstr "%s に追加"
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "このメールには公開への URL があります。"
 
+#~ msgid "This mail has been sent from %1$s."
+#~ msgstr "このメールは%1$sから送信されています。"
+
 #~ msgid "This may take some seconds"
 #~ msgstr "この処理には数秒かかる場合があります。"
+
+#~ msgid "This message is from a trusted sender."
+#~ msgstr "このメッセージは信頼できる差出人からです。"
 
 #~ msgid "This message is read, press this button to mark it as unread."
 #~ msgstr ""
@@ -19259,6 +19445,20 @@ msgstr "%s に追加"
 #~ msgid "This message is unread, press this button to mark it as read."
 #~ msgstr ""
 #~ "このメールは未読になっています。このボタンを押して、既読にしてください。"
+
+#~ msgid ""
+#~ "This might be a phishing email because we could not verify that it is "
+#~ "really from %1$s."
+#~ msgstr ""
+#~ "このメールが本当に%1$sからかどうか確認できないため、フィッシングメールの可"
+#~ "能性があります。"
+
+#~ msgid ""
+#~ "This might be a phishing mail because we could not verify that this email "
+#~ "is really from %1$s."
+#~ msgstr ""
+#~ "このメールが本当に%1$sからかどうか確認できないため、フィッシングメールの可"
+#~ "能性があります。"
 
 #~ msgid ""
 #~ "This object does not contain a file, would you like to send the link?"
@@ -19583,6 +19783,9 @@ msgstr "%s に追加"
 #~ msgid "Tour: Coming from OX6"
 #~ msgstr "ツアー: OX6 からのアップグレード"
 
+#~ msgid "Town"
+#~ msgstr "市区町村"
+
 #~ msgid "Tracking the editing status"
 #~ msgstr "進捗状況の記録"
 
@@ -19764,6 +19967,9 @@ msgstr "%s に追加"
 
 #~ msgid "Use \"Standalone\" Mode:"
 #~ msgstr "\"Standalone\" モードを使用してください:"
+
+#~ msgid "Use Password"
+#~ msgstr "パスワードを使用"
 
 #~ msgid "Use SSL connection"
 #~ msgstr "SSL 接続を使用"
@@ -19949,6 +20155,9 @@ msgstr "%s に追加"
 
 #~ msgid "Warning: %2$s"
 #~ msgstr "警告: %2$s"
+
+#~ msgid "We could not verify that this email is really from %1$s."
+#~ msgstr "このメールが本当に%1$sからだと確認できませんでした。"
 
 #~ msgid "Weak"
 #~ msgstr "脆弱です"
@@ -20388,9 +20597,6 @@ msgstr "%s に追加"
 #~ msgid "day every"
 #~ msgstr "日。　毎"
 
-#~ msgid "day of the week"
-#~ msgstr "稼働日"
-
 #~ msgid "day of the weekend"
 #~ msgstr "週末"
 
@@ -20485,9 +20691,18 @@ msgstr "%s に追加"
 #~ msgid "i18n test string - do not translate this"
 #~ msgstr "i18n test string"
 
+#~ msgid "iCal-Feed"
+#~ msgstr "ICalフィード"
+
+#~ msgid "iCal-feed has been imported successfully"
+#~ msgstr "iCalフィードは正しくインポートされました。"
+
 #~| msgid "Phone"
 #~ msgid "iPhone"
 #~ msgstr "電話"
+
+#~ msgid "in"
+#~ msgstr "指定月"
 
 #~ msgid "in blind copy"
 #~ msgstr "BCC"
@@ -20535,8 +20750,8 @@ msgstr "%s に追加"
 #~ msgid "more"
 #~ msgstr "その他"
 
-#~ msgid "never ends"
-#~ msgstr "期限なし"
+#~ msgid "never"
+#~ msgstr "非設定"
 
 #~ msgid "new"
 #~ msgstr "新規"
@@ -20564,9 +20779,6 @@ msgstr "%s に追加"
 
 #~ msgid "next Wednesday"
 #~ msgstr "次の水曜日"
-
-#~ msgid "none"
-#~ msgstr "なし"
 
 #~ msgid "not sent"
 #~ msgstr "未送信"
