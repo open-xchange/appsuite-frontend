@@ -30,8 +30,6 @@ define('io.ox/mail/compose/signatures', [
             var self = this,
                 dropdown = new Dropdown({ model: baton.config, label: gt('Signatures'), caret: true });
 
-            // IDEA: move to view to have a reference or trigger a refresh?!
-
             function draw() {
                 dropdown.prepareReuse();
                 dropdown.option('signatureId', '', gt('No signature'));

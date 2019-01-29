@@ -282,18 +282,6 @@ define('io.ox/mail/compose/extensions', [
             );
         },
 
-        // TODO: only used by search
-        tokenPicture: function (model) {
-            // add contact picture
-            $(this).prepend(
-                contactAPI.pictureHalo(
-                    $('<div class="contact-image">'),
-                    model.toJSON(),
-                    { width: 16, height: 16, scaleType: 'contain' }
-                )
-            );
-        },
-
         recipientActionLink: function (type) {
             return function () {
                 var node = $('<button type="button" class="btn btn-link" data-action="add">');
@@ -632,7 +620,6 @@ define('io.ox/mail/compose/extensions', [
         attachmentSharing: function (baton) {
             if (!settings.get('compose/shareAttachments/enabled', false)) return;
             if (!capabilities.has('infostore')) return;
-            // TODO: accidently deactivated on mobile?
             if (_.device('smartphone')) return;
 
             require(['io.ox/mail/compose/sharing'], function (SharingView) {
