@@ -15,8 +15,9 @@ define('io.ox/mail/compose/api', [
     'io.ox/core/http',
     'io.ox/core/api/account',
     'io.ox/core/folder/api',
-    'io.ox/mail/api'
-], function (http, accountAPI, folderAPI, mailAPI) {
+    'io.ox/mail/api',
+    'io.ox/contacts/api'
+], function (http, accountAPI, folderAPI, mailAPI, contactsAPI) {
 
     'use strict';
 
@@ -152,6 +153,7 @@ define('io.ox/mail/compose/api', [
 
         send: function (id, data) {
             api.trigger('before:send', id, data);
+            ox.trigger('mail:send:start', data);
 
             var formData = new FormData();
             formData.append('JSON', JSON.stringify(data));
@@ -163,10 +165,16 @@ define('io.ox/mail/compose/api', [
 
             def.progress(function (e) {
                 api.queue.update(id, e.loaded, e.total);
+            }).fail(function () {
+                ox.trigger('mail:send:fail');
             }).done(function (result) {
                 resetMailFolders();
                 refreshFolders(data, result);
+
+                contactsAPI.trigger('maybeNewContact');
                 api.trigger('after:send');
+                ox.trigger('mail:send:stop', data);
+                if (data.meta && data.meta.sharedAttachments && data.meta.sharedAttachments.enabled) ox.trigger('please:refresh refresh^');
             });
 
             api.queue.add(id, def.abort);
