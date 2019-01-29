@@ -173,7 +173,7 @@ define('io.ox/mail/compose/signatures', [
             // no differentiation between compose/edit and reply/forward on mobile
             return /compose|edit/.test(this.get('mode')) || _.device('smartphone') ?
                 this.get('defaultSignatureId') :
-                mailUtil.getDefaultSignature('reply/forward');
+                mailUtil.getDefaultSignature(this.get('mode'));
         },
 
         // getter
