@@ -19,7 +19,7 @@ define([
     'use strict';
 
     describe('Mail Compose', function () {
-        describe.only('signatures', function () {
+        describe('signatures', function () {
 
             var signatureController = ext.point('io.ox/mail/compose/boot').get('initial-signature').perform;
 
