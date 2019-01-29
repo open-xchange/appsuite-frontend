@@ -474,7 +474,7 @@ define('io.ox/mail/accounts/settings', [
                 })
                 .addPrimaryButton('add', gt('Add'), 'add')
                 .addButton('cancel', gt('Cancel'), 'cancel')
-                .addAlternativeButton('skip', gt('Manual'), 'skip')
+                //.addAlternativeButton('skip', gt('Manual'), 'skip')
                 .on('add', function () {
 
                     var content = this.getContentNode(),
@@ -492,19 +492,19 @@ define('io.ox/mail/accounts/settings', [
                         this.idle();
                     }
                 })
-                .on('skip', function () {
-                    // primary address needs to be provided, why? fails without
-                    args.data = { primary_address: this.getContentNode().find('.add-mail-account-address').val() };
+                // .on('skip', function () {
+                //     // primary address needs to be provided, why? fails without
+                //     args.data = { primary_address: this.getContentNode().find('.add-mail-account-address').val() };
 
-                    if (this.getContentNode().find('input[name="unified_inbox_enabled"]').length > 0) {
-                        args.data.unified_inbox_enabled = this.getContentNode().find('input[name="unified_inbox_enabled"]').prop('checked');
-                    }
-                    // close
-                    this.close();
-                    def.reject();
-                    // jump to manual configuration
-                    createExtpointForNewAccount(args);
-                })
+                //     if (this.getContentNode().find('input[name="unified_inbox_enabled"]').length > 0) {
+                //         args.data.unified_inbox_enabled = this.getContentNode().find('input[name="unified_inbox_enabled"]').prop('checked');
+                //     }
+                //     // close
+                //     this.close();
+                //     def.reject();
+                //     // jump to manual configuration
+                //     createExtpointForNewAccount(args);
+                // })
                 .show(function () {
                     // hide add button for now
                     this.find('[data-action="add"]').hide();

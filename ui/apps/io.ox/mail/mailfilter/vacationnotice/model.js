@@ -133,7 +133,7 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
                     comparison: cmp,
                     datepart: 'date',
                     // server expects UTC timestamp
-                    datevalue: [moment(value).utc().startOf('day').valueOf()],
+                    datevalue: [value + moment(value).utcOffset() * 60 * 1000],
                     // zone readds offset
                     zone: utcOffset(value)
                 });
