@@ -280,8 +280,9 @@ define('io.ox/mail/compose/model', [
         },
 
         toJSON: function () {
-            var data = Backbone.Model.prototype.toJSON.call(this);
-            data.attachments = this.get('attachments').toJSON();
+            var data = Backbone.Model.prototype.toJSON.call(this),
+                attachments = this.get('attachments');
+            if (attachments && attachments.toJSON) data.attachments = attachments.toJSON();
             return data;
         },
 
