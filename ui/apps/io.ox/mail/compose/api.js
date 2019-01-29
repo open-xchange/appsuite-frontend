@@ -163,6 +163,11 @@ define('io.ox/mail/compose/api', [
                 data: formData
             });
 
+            if (data.meta && data.meta.sharedAttachments && data.meta.sharedAttachments.expiryDate) {
+                // expiry date should count from mail send
+                data.meta.sharedAttachments.expiryDate = _.now() + parseInt(data.meta.sharedAttachments.expiryDate, 10);
+            }
+
             def.progress(function (e) {
                 api.queue.update(id, e.loaded, e.total);
             }).fail(function () {
