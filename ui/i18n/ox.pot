@@ -653,6 +653,7 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
+#: apps/io.ox/files/actions/delete-older-versions.js
 #: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js
@@ -1061,8 +1062,9 @@ msgstr ""
 #: module:io.ox/core/viewer
 #: apps/io.ox/editor/main.js
 #: module:io.ox/editor
-#: apps/io.ox/files/actions/delete.js
+#: apps/io.ox/files/actions/delete-older-versions.js
 #: module:io.ox/files
+#: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js
 #: apps/io.ox/files/actions/save-as-pdf.js
@@ -8318,6 +8320,11 @@ msgstr ""
 
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
+msgid "Delete all older versions"
+msgstr ""
+
+#: apps/io.ox/files/actions.js
+#: module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr ""
 
@@ -8352,6 +8359,11 @@ msgstr ""
 #: apps/io.ox/files/actions/add-to-portal.js
 #: module:io.ox/files
 msgid "This file has been added to the portal"
+msgstr ""
+
+#: apps/io.ox/files/actions/delete-older-versions.js
+#: module:io.ox/files
+msgid "Do you really want to delete all older versions?"
 msgstr ""
 
 #: apps/io.ox/files/actions/delete.js
