@@ -492,68 +492,6 @@ define('io.ox/mail/compose/extensions', [
             );
         },
 
-        signature: function (baton) {
-            if (_.device('smartphone')) return;
-            // TODO: switch to config model
-            var config = baton.config,
-                def = baton.view.signaturesLoading = $.Deferred(),
-                dropdown = this,
-                dropdownView = dropdown.data('view');
-
-            // load snippets
-            require(['io.ox/core/api/snippets'], function (snippetAPI) {
-                snippetAPI.getAll('signature').always(function (signatures) {
-                    var oldSignatures = config.get('signatures') || [],
-                        allSignatures = _.uniq(signatures.concat(oldSignatures), false, function (o) { return o.id; });
-                    // update model
-                    config.set('signatures', allSignatures);
-                    // add options to dropdown (empty signature already set)
-                    _.each(signatures, function (o) {
-                        dropdownView.option('signatureId', o.id, o.displayname);
-                    });
-                    // TODO: mobile signatures
-                    def.resolve(allSignatures);
-                });
-            });
-        },
-
-        signaturemenu: function (baton) {
-            if (_.device('smartphone')) return;
-            var self = this,
-                dropdown = new Dropdown({ model: baton.config, label: gt('Signatures'), caret: true });
-
-            // IDEA: move to view to have a reference or trigger a refresh?!
-
-            function draw() {
-                dropdown.prepareReuse();
-                dropdown.option('signatureId', '', gt('No signature'));
-                ext.point(POINT + '/signatures').invoke('draw', dropdown.$el, baton);
-                dropdown.$ul.addClass('pull-right');
-                baton.view.signaturesLoading.done(function () {
-                    dropdown.divider();
-                    dropdown.link('settings', gt('Manage signatures'), function () {
-                        var options = { id: 'io.ox/mail/settings/signatures' };
-                        ox.launch('io.ox/settings/main', options).done(function () {
-                            // minimize this window, so it doesn't overlap the setting the user wants to manage now
-                            if (baton.view.app.getWindow().floating) baton.view.app.getWindow().floating.onMinimize();
-                            this.setSettingsPane(options);
-                        });
-                    });
-                    dropdown.$ul.addClass('pull-right');
-                    dropdown.render();
-                });
-            }
-
-            require(['io.ox/core/api/snippets'], function (snippetAPI) {
-                // use normal event listeners since view.listenTo does not trigger correctly.
-                snippetAPI.on('refresh.all', draw);
-                baton.view.$el.one('dispose', function () { snippetAPI.off('refresh.all', draw); });
-
-                draw();
-            });
-            self.append(dropdown.$el.addClass('signatures text-left'));
-        },
-
         optionsmenu: (function () {
             return function (baton) {
                 var dropdown = new Dropdown({ model: new IntermediateModel({
