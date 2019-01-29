@@ -42,33 +42,7 @@ define('io.ox/mail/compose/config', [
         },
 
         initialize: function () {
-            // TODO:
-            // setInitialSignature
-            // getDefaultSignature
-            // getSignatureById
-            // getSignatures
             _.extend(this, signatureUtil.model, this);
-        },
-
-        dirty: function (/*flag*/) {
-            // TODO
-            // var previous = !_.isEqual(this._shadowAttributes, this.getCopy()),
-            //     current;
-            // // sync mail editor content to model
-            // this.trigger('needsync');
-            // if (flag === true) {
-            //     // always dirty this way
-            //     this._shadowAttributes = {};
-            // } else if (flag === false) {
-            //     this.updateShadow();
-            // }
-            // current = !_.isEqual(this._shadowAttributes, this.getCopy());
-            // if (!current && previous) {
-            //     // model changed to not dirty force next restorepoint save to have up to date data
-            //     this.forceNextFailSave = true;
-            // }
-            // previous = null;
-            // return current;
         }
 
     });

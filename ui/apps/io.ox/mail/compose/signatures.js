@@ -72,7 +72,7 @@ define('io.ox/mail/compose/signatures', [
         setInitialSignature: function () {
             // TODO: breaks when you open text draft in html mode
             var content = this.get('content'),
-                signatures = this.get('signatures'), signature, wasDirty = this.dirty();
+                signatures = this.get('signatures'), signature;
 
             // when editing a draft we might have a signature
             if (this.get('mode') === 'edit') {
@@ -99,7 +99,6 @@ define('io.ox/mail/compose/signatures', [
                 // if not editing a draft we add the default signature (if it exists)
                 this.set('signatureId', this.getDefaultSignature(), { silent: false });
             }
-            this.dirty(wasDirty);
         },
 
         // set default signature dependant on mode, there are settings that correspond to this
