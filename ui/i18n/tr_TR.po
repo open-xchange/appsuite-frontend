@@ -474,6 +474,13 @@ msgstr "(Okuma, yazma ve silme)"
 msgid ", "
 msgstr ", "
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "%1$d day"
+#| msgid_plural "%1$d days"
+msgid "1 day"
+msgstr "%1$d gün"
+
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "1 dosya son zamanlarda değiştirildi"
@@ -490,11 +497,36 @@ msgstr[1] "%1$d öğe"
 msgid "1 minute"
 msgstr "1 dakika"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "1 version"
+msgstr "Arayüz sürümü"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "%1$d year"
+#| msgid_plural "%1$d years"
+msgid "1 year"
+msgstr "%1$d yıl"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "10 minutes"
 msgstr "10 dakika"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "10 versions"
+msgstr "Arayüz sürümü"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "100 versions"
+msgstr "Arayüz sürümü"
 
 #. Quota maxed out; 100%
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -510,6 +542,12 @@ msgstr "12 saat"
 msgid "15 minutes"
 msgstr "15 dakika"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "20 versions"
+msgstr "Arayüz sürümü"
+
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 msgid "24 hours"
 msgstr "23 saat"
@@ -518,16 +556,88 @@ msgstr "23 saat"
 msgid "3 minutes"
 msgstr "3 dakika"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Last 30 days"
+msgid "30 days"
+msgstr "Son 30 gün"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "30 minutes"
 msgstr "30 dakika"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "30 versions"
+msgstr "Arayüz sürümü"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "40 versions"
+msgstr "Arayüz sürümü"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "5 minutes"
 msgstr "5 dakika"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "5 versions"
+msgstr "Arayüz sürümü"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "50 versions"
+msgstr "Arayüz sürümü"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Last 30 days"
+msgid "60 days"
+msgstr "Son 30 gün"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "60 versions"
+msgstr "Arayüz sürümü"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Last 7 days"
+msgid "7 days"
+msgstr "Son 7 gün"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "70 versions"
+msgstr "Arayüz sürümü"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "80 versions"
+msgstr "Arayüz sürümü"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Last 30 days"
+msgid "90 days"
+msgstr "Son 30 gün"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "90 versions"
+msgstr "Arayüz sürümü"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved into itself"
@@ -1097,6 +1207,22 @@ msgstr "Tüm dağıtım listesileri"
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "All emails"
 msgstr "Tüm e-postalar"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All file versions are retained"
+msgstr "Tüm dosyalar silindi"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid ""
+#| "All messages older than %1$d days will be moved to the archive folder"
+msgid "All file versions older than 1 day will be deleted after next login"
+msgid_plural ""
+"All file versions older than %1$d days will be deleted after next login"
+msgstr[0] "%1$d günden eski tüm mesajlar arşiv klasörüne taşınacak"
+msgstr[1] "%1$d günden eski tüm mesajlar arşiv klasörüne taşınacak"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -4306,6 +4432,18 @@ msgstr "Dosya adı"
 msgid "File quota"
 msgstr "Dosya kotası"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "File into"
+msgid "File version history"
+msgstr "Klasöre taşı"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "File version limit"
+msgstr "Sürümü sil"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
@@ -4546,6 +4684,12 @@ msgstr "Çıkışa zorla"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
 msgstr "Çıkışa zorlamanız veri kaybına yol açabilir."
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Never"
+msgid "Forever"
+msgstr "Asla"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Forgot attachment?"
@@ -5339,6 +5483,12 @@ msgstr "Sakla"
 msgid "Keep a copy of the message"
 msgstr "İletinin kopyasını sakla"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Keep all versions"
+msgstr "Sürümü sil"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Keep draft"
 msgstr "Taslağı sakla"
@@ -5360,6 +5510,16 @@ msgstr "%1$s adresine giden-postaları sakla"
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Keep mails with subject %1$s"
 msgstr "%1$s konulu e-postaları sakla"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Keep number of recent versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Keep saved versions"
+msgstr "Sürümü sil"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
@@ -9615,6 +9775,7 @@ msgstr "Takvim başarıyla yenilendi"
 msgid "Suffix"
 msgstr "Son ek"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
@@ -10546,6 +10707,12 @@ msgstr "Saat dilimi"
 msgid "Time-dependent"
 msgstr "Zamana bağlı"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "timeframe"
+msgid "Timeframe"
+msgstr "zaman aralığı"
+
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Title"
 msgstr "Başlık"
@@ -11323,6 +11490,16 @@ msgstr "Ne tür bir cihazı yapılandırmak istiyorsunuz?"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "Yeni neler var?"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid ""
+"When a file has more than 1 version, older versions of the file will be "
+"deleted after next login"
+msgid_plural ""
+"When a file has more than %1$d versions, older versions of the file will be "
+"deleted after next login"
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks

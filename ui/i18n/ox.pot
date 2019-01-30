@@ -8791,6 +8791,106 @@ msgstr ""
 
 #: apps/io.ox/files/settings/pane.js
 #: module:io.ox/files
+msgid "Forever"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "1 day"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "7 days"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "30 days"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "60 days"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "90 days"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "1 year"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "Keep all versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "1 version"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "5 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "10 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "20 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "30 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "40 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "50 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "60 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "70 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "80 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "90 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "100 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
 msgid "Adding files with identical names"
 msgstr ""
 
@@ -8814,6 +8914,58 @@ msgstr ""
 #: apps/io.ox/files/settings/pane.js
 #: module:io.ox/files
 msgid "Show hidden files and folders"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+#: apps/io.ox/participants/chronos-detail.js
+#: module:io.ox/core
+#: apps/io.ox/participants/detail.js
+msgid "Summary"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "All file versions are retained"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "All file versions older than 1 day will be deleted after next login"
+msgid_plural "All file versions older than %1$d days will be deleted after next login"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "When a file has more than 1 version, older versions of the file will be deleted after next login"
+msgid_plural "When a file has more than %1$d versions, older versions of the file will be deleted after next login"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "File version history"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "Timeframe"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "Keep saved versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "File version limit"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "Keep number of recent versions"
 msgstr ""
 
 #: apps/io.ox/files/share/listview.js
@@ -12370,12 +12522,6 @@ msgstr ""
 #: apps/plugins/administration/resources/register.js
 #: apps/plugins/administration/resources/settings/pane.js
 msgid "Resources"
-msgstr ""
-
-#: apps/io.ox/participants/chronos-detail.js
-#: module:io.ox/core
-#: apps/io.ox/participants/detail.js
-msgid "Summary"
 msgstr ""
 
 #: apps/io.ox/participants/chronos-views.js

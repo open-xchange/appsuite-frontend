@@ -497,6 +497,10 @@ msgstr "(Pro čtení, zápis a vymazání)"
 msgid ", "
 msgstr ", "
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "1 day"
+msgstr "1 den"
+
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "V nedávné době byl změněn jeden soubor"
@@ -514,11 +518,36 @@ msgstr[2] "%1$d položek"
 msgid "1 minute"
 msgstr "1 minuta"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "1 version"
+msgstr "Verze uživatelského rozhraní"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "%1$d year"
+#| msgid_plural "%1$d years"
+msgid "1 year"
+msgstr "%1$d rok"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "10 minutes"
 msgstr "10 minut"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "10 versions"
+msgstr "Verze uživatelského rozhraní"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "100 versions"
+msgstr "Verze uživatelského rozhraní"
 
 #. Quota maxed out; 100%
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -534,6 +563,12 @@ msgstr "12 hodin"
 msgid "15 minutes"
 msgstr "15 minut"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "20 versions"
+msgstr "Verze uživatelského rozhraní"
+
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 msgid "24 hours"
 msgstr "24 hodin"
@@ -542,16 +577,88 @@ msgstr "24 hodin"
 msgid "3 minutes"
 msgstr "3 minuty"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "30 days"
+msgstr "2 dny"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "30 minutes"
 msgstr "30 minut"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "30 versions"
+msgstr "Verze uživatelského rozhraní"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "40 versions"
+msgstr "Verze uživatelského rozhraní"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "5 minutes"
 msgstr "5 minut"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "5 versions"
+msgstr "Verze uživatelského rozhraní"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "50 versions"
+msgstr "Verze uživatelského rozhraní"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "6 days"
+msgid "60 days"
+msgstr "6 dní"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "60 versions"
+msgstr "Verze uživatelského rozhraní"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "7 days"
+msgstr "2 dny"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "70 versions"
+msgstr "Verze uživatelského rozhraní"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "80 versions"
+msgstr "Verze uživatelského rozhraní"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "90 days"
+msgstr "2 dny"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "90 versions"
+msgstr "Verze uživatelského rozhraní"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved into itself"
@@ -1127,6 +1234,26 @@ msgstr "Všechny distribuční seznamy"
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "All emails"
 msgstr "Všechny zprávy"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All file versions are retained"
+msgstr "Všechny soubory byly smazány"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid ""
+#| "All messages older than %1$d days will be moved to the archive folder"
+msgid "All file versions older than 1 day will be deleted after next login"
+msgid_plural ""
+"All file versions older than %1$d days will be deleted after next login"
+msgstr[0] ""
+"Všechny zprávy starší než %1$d dní budou přesunuty do archivační složky"
+msgstr[1] ""
+"Všechny zprávy starší než %1$d dní budou přesunuty do archivační složky"
+msgstr[2] ""
+"Všechny zprávy starší než %1$d dní budou přesunuty do archivační složky"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -4330,6 +4457,18 @@ msgstr "Název souboru"
 msgid "File quota"
 msgstr "Souborový limit"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Show version history"
+msgid "File version history"
+msgstr "Zobrazit historii verzí"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "File versions"
+msgid "File version limit"
+msgstr "Verze souboru"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
@@ -4572,6 +4711,12 @@ msgstr "Vynutit odhlášení"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
 msgstr "Vynucení odhlášení může způsobit ztrátu dat."
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Never"
+msgid "Forever"
+msgstr "Nikdy"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Forgot attachment?"
@@ -5366,6 +5511,12 @@ msgstr "Ponechat"
 msgid "Keep a copy of the message"
 msgstr "Uchovat kopii zprávy"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Keep all versions"
+msgstr "Smazat verzi"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Keep draft"
 msgstr "Ponechat koncept"
@@ -5387,6 +5538,16 @@ msgstr "Ponechat zprávy pro %1$s"
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Keep mails with subject %1$s"
 msgstr "Ponechat zprávy s předmětem %1$s"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Keep number of recent versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Keep saved versions"
+msgstr "Smazat verzi"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
@@ -9657,6 +9818,7 @@ msgstr "Kalendář úspěšně obnoven"
 msgid "Suffix"
 msgstr "Přípona"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
@@ -10596,6 +10758,12 @@ msgstr "Časové pásmo"
 msgid "Time-dependent"
 msgstr "Podle času"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "timeframe"
+msgid "Timeframe"
+msgstr "časový interval"
+
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Title"
 msgstr "Titul"
@@ -11375,6 +11543,17 @@ msgstr "Jaký druh zařízení chcete nastavit?"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "Co je nového"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid ""
+"When a file has more than 1 version, older versions of the file will be "
+"deleted after next login"
+msgid_plural ""
+"When a file has more than %1$d versions, older versions of the file will be "
+"deleted after next login"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -12945,9 +13124,6 @@ msgstr "vaše platforma"
 #~ msgid "0 minutes"
 #~ msgstr "0 minut"
 
-#~ msgid "1 day"
-#~ msgstr "1 den"
-
 #~ msgid "1 hour"
 #~ msgstr "1 hodina"
 
@@ -12962,9 +13138,6 @@ msgstr "vaše platforma"
 
 #~ msgid "150%"
 #~ msgstr "150 %"
-
-#~ msgid "2 days"
-#~ msgstr "2 dny"
 
 #~ msgid "2 hour"
 #~ msgstr "2 hodiny"
@@ -12995,9 +13168,6 @@ msgstr "vaše platforma"
 
 #~ msgid "50%"
 #~ msgstr "50 %"
-
-#~ msgid "6 days"
-#~ msgstr "6 dní"
 
 #~ msgid "6 hour"
 #~ msgstr "6 hodin"
@@ -16933,9 +17103,6 @@ msgstr "vaše platforma"
 #~ msgid "File type:"
 #~ msgstr "Druh souboru:"
 
-#~ msgid "File versions"
-#~ msgstr "Verze souboru"
-
 #~ msgid "File..."
 #~ msgstr "Soubor..."
 
@@ -20155,9 +20322,6 @@ msgstr "vaše platforma"
 
 #~ msgid "Show task"
 #~ msgstr "Ukázat úkol"
-
-#~ msgid "Show version history"
-#~ msgstr "Zobrazit historii verzí"
 
 #, fuzzy
 #~ msgid "Show/hide folder"

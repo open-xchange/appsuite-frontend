@@ -453,6 +453,10 @@ msgstr "（读取、写入、删除）"
 msgid ", "
 msgstr "、"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "1 day"
+msgstr "1 天"
+
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "最近更改了一个文件"
@@ -468,11 +472,36 @@ msgstr[0] "%1$d 项目"
 msgid "1 minute"
 msgstr "1 分钟"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "1 version"
+msgstr "界面版本"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "%1$d year"
+#| msgid_plural "%1$d years"
+msgid "1 year"
+msgstr "1 年"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "10 minutes"
 msgstr "10 分钟"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "10 versions"
+msgstr "界面版本"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "100 versions"
+msgstr "界面版本"
 
 #. Quota maxed out; 100%
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -488,6 +517,12 @@ msgstr "12 小时"
 msgid "15 minutes"
 msgstr "15 分钟"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "20 versions"
+msgstr "界面版本"
+
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 msgid "24 hours"
 msgstr "24 小时"
@@ -496,16 +531,88 @@ msgstr "24 小时"
 msgid "3 minutes"
 msgstr "3 分钟"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "30 days"
+msgstr "2 天"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "30 minutes"
 msgstr "30 分钟"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "30 versions"
+msgstr "界面版本"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "40 versions"
+msgstr "界面版本"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "5 minutes"
 msgstr "5 分钟"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "5 versions"
+msgstr "界面版本"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "50 versions"
+msgstr "界面版本"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "6 days"
+msgid "60 days"
+msgstr "6 天"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "60 versions"
+msgstr "界面版本"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "7 days"
+msgstr "2 天"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "70 versions"
+msgstr "界面版本"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "80 versions"
+msgstr "界面版本"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "90 days"
+msgstr "2 天"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "90 versions"
+msgstr "界面版本"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved into itself"
@@ -1070,6 +1177,21 @@ msgstr "所有通讯组列表"
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "All emails"
 msgstr "所有电子邮件"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All file versions are retained"
+msgstr "已删除所有文件"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid ""
+#| "All messages older than %1$d days will be moved to the archive folder"
+msgid "All file versions older than 1 day will be deleted after next login"
+msgid_plural ""
+"All file versions older than %1$d days will be deleted after next login"
+msgstr[0] "所有超过 %1$d 天的消息将会移到归档文件夹"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -4208,6 +4330,18 @@ msgstr "文件名称"
 msgid "File quota"
 msgstr "文件限额"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Show version history"
+msgid "File version history"
+msgstr "显示版本历史"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "File version limit"
+msgstr "删除版本"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
@@ -4446,6 +4580,12 @@ msgstr "强制注销"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
 msgstr "强制注销可能会导致数据丢失。"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Never"
+msgid "Forever"
+msgstr "从来没有"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Forgot attachment?"
@@ -5230,6 +5370,12 @@ msgstr "保留"
 msgid "Keep a copy of the message"
 msgstr "保留一个消息副本"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Keep all versions"
+msgstr "删除版本"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Keep draft"
 msgstr "保留草稿"
@@ -5251,6 +5397,16 @@ msgstr "保留到 %1$s 的邮件"
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Keep mails with subject %1$s"
 msgstr "保留带有主题 %1$s 的邮件"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Keep number of recent versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Keep saved versions"
+msgstr "删除版本"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
@@ -9459,6 +9615,7 @@ msgstr "成功重刷日历"
 msgid "Suffix"
 msgstr "后缀"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
@@ -10328,6 +10485,12 @@ msgstr "时区"
 msgid "Time-dependent"
 msgstr "时间依赖"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "timeframe"
+msgid "Timeframe"
+msgstr "时间框架"
+
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Title"
 msgstr "标题"
@@ -11091,6 +11254,15 @@ msgstr "您要设置那一类的装置？"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "最新内容"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid ""
+"When a file has more than 1 version, older versions of the file will be "
+"deleted after next login"
+msgid_plural ""
+"When a file has more than %1$d versions, older versions of the file will be "
+"deleted after next login"
+msgstr[0] ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -12501,9 +12673,6 @@ msgstr "您的平台"
 #~ msgid "0 minutes"
 #~ msgstr "0 分钟"
 
-#~ msgid "1 day"
-#~ msgstr "1 天"
-
 #~ msgid "1 hour"
 #~ msgstr "1 小时"
 
@@ -12518,9 +12687,6 @@ msgstr "您的平台"
 
 #~ msgid "150%"
 #~ msgstr "150%"
-
-#~ msgid "2 days"
-#~ msgstr "2 天"
 
 #~ msgid "2 hour"
 #~ msgstr "2 小时"
@@ -12551,9 +12717,6 @@ msgstr "您的平台"
 
 #~ msgid "50%"
 #~ msgstr "50%"
-
-#~ msgid "6 days"
-#~ msgstr "6 天"
 
 #~ msgid "6 hour"
 #~ msgstr "6 小时"
@@ -16245,9 +16408,6 @@ msgstr "您的平台"
 
 #~ msgid "Show task"
 #~ msgstr "显示任务"
-
-#~ msgid "Show version history"
-#~ msgstr "显示版本历史"
 
 #, fuzzy
 #~ msgid "Show/hide folder"

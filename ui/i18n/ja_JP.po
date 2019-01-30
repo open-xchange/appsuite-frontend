@@ -458,6 +458,10 @@ msgstr "（読み込み、書き込み、削除）"
 msgid ", "
 msgstr "、"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "1 day"
+msgstr "1日"
+
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "最近変更されたファイルが１個あります"
@@ -473,11 +477,36 @@ msgstr[0] "%1$d 個のアイテム"
 msgid "1 minute"
 msgstr "1分"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "1 version"
+msgstr "UI バージョン"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "%1$d year"
+#| msgid_plural "%1$d years"
+msgid "1 year"
+msgstr "%1$d 年"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "10 minutes"
 msgstr "10 分"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "10 versions"
+msgstr "UI バージョン"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "100 versions"
+msgstr "UI バージョン"
 
 #. Quota maxed out; 100%
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -493,6 +522,12 @@ msgstr "12 時間"
 msgid "15 minutes"
 msgstr "15 分"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "20 versions"
+msgstr "UI バージョン"
+
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 msgid "24 hours"
 msgstr "24 時間"
@@ -501,16 +536,88 @@ msgstr "24 時間"
 msgid "3 minutes"
 msgstr "3分"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "30 days"
+msgstr "2 日"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "30 minutes"
 msgstr "30 分"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "30 versions"
+msgstr "UI バージョン"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "40 versions"
+msgstr "UI バージョン"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "5 minutes"
 msgstr "5 分"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "5 versions"
+msgstr "UI バージョン"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "50 versions"
+msgstr "UI バージョン"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "6 days"
+msgid "60 days"
+msgstr "6 日"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "60 versions"
+msgstr "UI バージョン"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "7 days"
+msgstr "2 日"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "70 versions"
+msgstr "UI バージョン"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "80 versions"
+msgstr "UI バージョン"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "90 days"
+msgstr "2 日"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "90 versions"
+msgstr "UI バージョン"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved into itself"
@@ -1081,6 +1188,21 @@ msgstr "すべての連絡先グループ"
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "All emails"
 msgstr "すべてのメール"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All file versions are retained"
+msgstr "すべてのファイルを削除しました"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid ""
+#| "All messages older than %1$d days will be moved to the archive folder"
+msgid "All file versions older than 1 day will be deleted after next login"
+msgid_plural ""
+"All file versions older than %1$d days will be deleted after next login"
+msgstr[0] "%1$d 日以上経過したメッセージはアーカイブ フォルダに移動されます"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -4254,6 +4376,18 @@ msgstr "ファイル名"
 msgid "File quota"
 msgstr "ファイル容量"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Show version history"
+msgid "File version history"
+msgstr "バージョン履歴を表示"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "File versions"
+msgid "File version limit"
+msgstr "ファイル バージョン"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
@@ -4495,6 +4629,12 @@ msgstr "強制サインアウト"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
 msgstr "強制的にログアウトすることでデータが失われる可能性があります。"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Never"
+msgid "Forever"
+msgstr "無期限"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Forgot attachment?"
@@ -5287,6 +5427,12 @@ msgstr "保持"
 msgid "Keep a copy of the message"
 msgstr "メッセージのコピーを保存"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Keep all versions"
+msgstr "このバージョンを削除"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Keep draft"
 msgstr "下書きを保持"
@@ -5308,6 +5454,16 @@ msgstr "%1$s へのメールを保持"
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Keep mails with subject %1$s"
 msgstr "件名 %1$s のメールを保持"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Keep number of recent versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Keep saved versions"
+msgstr "このバージョンを削除"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
@@ -9540,6 +9696,7 @@ msgstr "予定表の再読み込みに成功しました。"
 msgid "Suffix"
 msgstr "敬称"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
@@ -10458,6 +10615,12 @@ msgstr "タイムゾーン"
 msgid "Time-dependent"
 msgstr "時間依存"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "timeframe"
+msgid "Timeframe"
+msgstr "タイムフレーム"
+
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Title"
 msgstr "敬称"
@@ -11228,6 +11391,15 @@ msgstr "どんなデバイスを構成しますか？"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "最新情報"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid ""
+"When a file has more than 1 version, older versions of the file will be "
+"deleted after next login"
+msgid_plural ""
+"When a file has more than %1$d versions, older versions of the file will be "
+"deleted after next login"
+msgstr[0] ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -12663,9 +12835,6 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "0 minutes"
 #~ msgstr "0 分"
 
-#~ msgid "1 day"
-#~ msgstr "1日"
-
 #~ msgid "1 hour"
 #~ msgstr "1 時間"
 
@@ -12680,9 +12849,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "150%"
 #~ msgstr "150%"
-
-#~ msgid "2 days"
-#~ msgstr "2 日"
 
 #~ msgid "2 hour"
 #~ msgstr "2 時間"
@@ -12713,9 +12879,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "50%"
 #~ msgstr "50%"
-
-#~ msgid "6 days"
-#~ msgstr "6 日"
 
 #~ msgid "6 hour"
 #~ msgstr "6 時間"
@@ -15706,9 +15869,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "File type:"
 #~ msgstr "ファイル タイプ:"
-
-#~ msgid "File versions"
-#~ msgstr "ファイル バージョン"
 
 #~ msgid "File..."
 #~ msgstr "ファイル..."
@@ -18734,9 +18894,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Show task"
 #~ msgstr "仕事を表示"
-
-#~ msgid "Show version history"
-#~ msgstr "バージョン履歴を表示"
 
 #~ msgid "Show/hide folder"
 #~ msgstr "フォルダを移動"

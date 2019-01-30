@@ -481,6 +481,10 @@ msgstr "(Lesen, Schreiben und Löschen)"
 msgid ", "
 msgstr ", "
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "1 day"
+msgstr "1 Tag"
+
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "1 Datei wurde kürzlich geändert"
@@ -497,11 +501,33 @@ msgstr[1] "%1$d Objekte"
 msgid "1 minute"
 msgstr "1 Minute"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "1 version"
+msgstr "Version der Benutzeroberfläche"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "1 year"
+msgstr "1 Jahr"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "10 minutes"
 msgstr "10 Minuten"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "10 versions"
+msgstr "Version der Benutzeroberfläche"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "100 versions"
+msgstr "Version der Benutzeroberfläche"
 
 #. Quota maxed out; 100%
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -517,6 +543,12 @@ msgstr "12 Stunden"
 msgid "15 minutes"
 msgstr "15 Minuten"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "20 versions"
+msgstr "Version der Benutzeroberfläche"
+
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 msgid "24 hours"
 msgstr "24 Stunden"
@@ -525,16 +557,88 @@ msgstr "24 Stunden"
 msgid "3 minutes"
 msgstr "3 Minuten"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "30 days"
+msgstr "2 Tage"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "30 minutes"
 msgstr "30 Minuten"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "30 versions"
+msgstr "Version der Benutzeroberfläche"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "40 versions"
+msgstr "Version der Benutzeroberfläche"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "5 minutes"
 msgstr "5 Minuten"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "5 versions"
+msgstr "Version der Benutzeroberfläche"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "50 versions"
+msgstr "Version der Benutzeroberfläche"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "6 days"
+msgid "60 days"
+msgstr "6 Tage"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "60 versions"
+msgstr "Version der Benutzeroberfläche"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "7 days"
+msgstr "2 Tage"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "70 versions"
+msgstr "Version der Benutzeroberfläche"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "80 versions"
+msgstr "Version der Benutzeroberfläche"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "90 days"
+msgstr "2 Tage"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "90 versions"
+msgstr "Version der Benutzeroberfläche"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved into itself"
@@ -1112,6 +1216,26 @@ msgstr "Alle Verteilerlisten"
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "All emails"
 msgstr "Alle E-Mails"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All file versions are retained"
+msgstr "Alle Dateien wurden gelöscht"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid ""
+#| "All messages older than %1$d days will be moved to the archive folder"
+msgid "All file versions older than 1 day will be deleted after next login"
+msgid_plural ""
+"All file versions older than %1$d days will be deleted after next login"
+msgstr[0] ""
+"Nachrichten, die älter als %1$d Tage sind, werden in den Archiv-Ordner "
+"verschoben"
+msgstr[1] ""
+"Nachrichten, die älter als %1$d Tage sind, werden in den Archiv-Ordner "
+"verschoben"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -4344,6 +4468,18 @@ msgstr "Dateiname"
 msgid "File quota"
 msgstr "Datei-Speicherplatz"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Show version history"
+msgid "File version history"
+msgstr "Versionshistorie anzeigen"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "File version limit"
+msgstr "Version löschen"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
@@ -4588,6 +4724,12 @@ msgstr "Abmelden erzwingen"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
 msgstr "Ein erzwungenes Abmelden kann zu Datenverlust führen."
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Never"
+msgid "Forever"
+msgstr "Nie"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Forgot attachment?"
@@ -5386,6 +5528,12 @@ msgstr "Behalten"
 msgid "Keep a copy of the message"
 msgstr "Kopie der Nachricht behalten"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Keep all versions"
+msgstr "Version löschen"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Keep draft"
 msgstr "Entwurf behalten"
@@ -5407,6 +5555,16 @@ msgstr "E-Mails an %1$s behalten"
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Keep mails with subject %1$s"
 msgstr "E-Mails mit dem Betreff %1$s behalten"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Keep number of recent versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Keep saved versions"
+msgstr "Version löschen"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
@@ -9684,6 +9842,7 @@ msgstr "Kalender erfolgreich aktualisiert"
 msgid "Suffix"
 msgstr "Namenszusatz"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
@@ -10651,6 +10810,12 @@ msgstr "Zeitzone"
 msgid "Time-dependent"
 msgstr "Zeitabhängig"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "timeframe"
+msgid "Timeframe"
+msgstr "Zeitrahmen"
+
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Title"
 msgstr "Anrede"
@@ -11438,6 +11603,16 @@ msgstr "Welche Art von Gerät möchten Sie konfigurieren?"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "Was ist neu"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid ""
+"When a file has more than 1 version, older versions of the file will be "
+"deleted after next login"
+msgid_plural ""
+"When a file has more than %1$d versions, older versions of the file will be "
+"deleted after next login"
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -12887,17 +13062,11 @@ msgstr "Ihre Plattform"
 #~ msgid "09:00"
 #~ msgstr "09:00"
 
-#~ msgid "1 day"
-#~ msgstr "1 Tag"
-
 #~ msgid "1 month"
 #~ msgstr "1 Monat"
 
 #~ msgid "1 week"
 #~ msgstr "1 Woche"
-
-#~ msgid "1 year"
-#~ msgstr "1 Jahr"
 
 #~ msgid "10"
 #~ msgstr "10"
@@ -12946,9 +13115,6 @@ msgstr "Ihre Plattform"
 
 #~ msgid "1_minute"
 #~ msgstr "1_Minute"
-
-#~ msgid "2 days"
-#~ msgstr "2 Tage"
 
 #~ msgid "2 hour"
 #~ msgstr "2 Stunden"
@@ -13012,9 +13178,6 @@ msgstr "Ihre Plattform"
 
 #~ msgid "5_minutes"
 #~ msgstr "5_Minuten"
-
-#~ msgid "6 days"
-#~ msgstr "6 Tage"
 
 #~ msgid "6 hour"
 #~ msgstr "6 Stunden"
@@ -17022,9 +17185,6 @@ msgstr "Ihre Plattform"
 
 #~ msgid "Show side panel"
 #~ msgstr "Seitenleiste anzeigen"
-
-#~ msgid "Show version history"
-#~ msgstr "Versionshistorie anzeigen"
 
 #, fuzzy
 #~ msgid "Show/hide folder"
