@@ -195,6 +195,7 @@ div.phonelist-details ul {
 
 div.phonelist-details address {
     font-style: normal;
+    white-space: pre;
 }
 
 div.phonelist-details table {
