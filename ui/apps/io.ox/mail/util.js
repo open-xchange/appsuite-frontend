@@ -694,7 +694,7 @@ define('io.ox/mail/util', [
             // default: false, used: [id], disabled by user: ''
             var compose = settings.get('defaultSignature') || '',
                 replyforward = settings.get('defaultReplyForwardSignature');
-            if (/(compose|edit)/.test(mode)) return compose;
+            if (/(new|edit)/.test(mode)) return compose;
             return _.isBoolean(replyforward) ? compose : replyforward;
         },
 

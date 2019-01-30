@@ -833,7 +833,7 @@ define('io.ox/mail/compose/view', [
                 var target;
                 // set focus in compose and forward mode to recipient tokenfield
                 if (_.device('!ios')) {
-                    if (config.is('compose|forward')) {
+                    if (config.is('new|forward')) {
                         target = self.$('.tokenfield:first .token-input');
                     } else {
                         target = self.editor;
