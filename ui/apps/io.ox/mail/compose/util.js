@@ -68,7 +68,7 @@ define('io.ox/mail/compose/util', [
                     });
 
                     attachment.on('image:resized', function (image) {
-                        if (def.state() === 'pending') def.abort();
+                        if (def && def.state() === 'pending') def.abort();
 
                         origin = { file: image };
                         throttled(origin);
