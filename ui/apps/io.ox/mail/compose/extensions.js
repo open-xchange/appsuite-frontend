@@ -630,13 +630,16 @@ define('io.ox/mail/compose/extensions', [
             }
 
             function update() {
-                var visible = baton.model.get('attachments').some(function (model) {
+                var hasResizableAttachments = baton.model.get('attachments').some(function (model) {
                     var file = model.get('originalFile');
                     if (!file) return false;
                     return imageResize.isResizableImage(file);
                 });
-                resizeView.$el.toggle(visible);
-                attachmentView.$('.mail-size').text(gt('Mail size: %1$s', getMailSize()));
+                var hasUploadedAttachments = baton.model.get('attachments').some(function (model) {
+                    return model.get('group') === 'mail';
+                });
+                resizeView.$el.toggle(hasResizableAttachments);
+                attachmentView.$('.mail-size').text(gt('Mail size: %1$s', getMailSize())).toggle(hasUploadedAttachments);
             }
 
             attachmentView.$el.append(resizeView.render().$el.addClass('pull-right'));
