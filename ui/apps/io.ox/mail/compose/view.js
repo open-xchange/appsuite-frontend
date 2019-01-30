@@ -820,16 +820,18 @@ define('io.ox/mail/compose/view', [
         },
 
         setMail: function () {
-            var self = this;
+            var self = this,
+                model = this.model,
+                config = this.config;
 
             return this.toggleEditorMode().then(function () {
                 return self.signaturesLoading;
             })
             .done(function () {
-                var target, type = self.config.get('type');
+                var target;
                 // set focus in compose and forward mode to recipient tokenfield
                 if (_.device('!ios')) {
-                    if (/(compose|forward)/.test(type)) {
+                    if (config.is('compose|forward')) {
                         target = self.$('.tokenfield:first .token-input');
                     } else {
                         target = self.editor;
@@ -845,12 +847,12 @@ define('io.ox/mail/compose/view', [
                     target.focus();
                 }
 
-                if (type === 'replyall' || type === 'edit') {
-                    if (!_.isEmpty(self.model.get('cc'))) self.toggleTokenfield('cc');
+                if (config.is('replyall|edit')) {
+                    if (!_.isEmpty(model.get('cc'))) self.toggleTokenfield('cc');
                 }
-                if (!_.isEmpty(self.model.get('bcc'))) self.toggleTokenfield('bcc');
+                if (!_.isEmpty(model.get('bcc'))) self.toggleTokenfield('bcc');
                 //TODO: outdated? Maybe we could switch to .get('content')
-                self.setBody(self.model.getFixedContent());
+                self.setBody(model.getFixedContent());
             });
         },
 

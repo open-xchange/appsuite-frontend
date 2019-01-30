@@ -119,7 +119,7 @@ define('io.ox/mail/compose/main', [
         id: 'auto-bcc',
         index: 800,
         perform: function () {
-            if (!settings.get('autobcc') || this.config.get('type') === 'edit') return;
+            if (!settings.get('autobcc') || this.config.is('edit')) return;
             this.model.set('bcc', mailUtil.parseRecipients(settings.get('autobcc'), { localpart: false }));
         }
     }, {
@@ -127,7 +127,7 @@ define('io.ox/mail/compose/main', [
         index: 900,
         perform: function () {
             // disable auto remove on discard for draft mails
-            this.config.set('autoDiscard', this.config.get('type') !== 'edit');
+            this.config.set('autoDiscard', !this.config.is('edit'));
         }
     }, {
         id: 'set-mail',

@@ -45,6 +45,11 @@ define('io.ox/mail/compose/config', [
 
         initialize: function () {
             _.extend(this, signatureUtil.model, this);
+        },
+
+        is: function (type) {
+            var reType = new RegExp('^(' + type + ')$');
+            return reType.test(this.get('type'));
         }
 
     });

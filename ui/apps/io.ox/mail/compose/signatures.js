@@ -209,7 +209,7 @@ define('io.ox/mail/compose/signatures', [
     var view = {
 
         getSignatureContent: function () {
-            var isUnquotedForward = settings.get('forwardunquoted', false) && this.config.get('type') === 'forward';
+            var isUnquotedForward = settings.get('forwardunquoted', false) && this.config.is('forward');
             if (isUnquotedForward) return this.editor.find('div[class$="io-ox-signature"]');
             return this.editor.children('div[class$="io-ox-signature"]');
         },
