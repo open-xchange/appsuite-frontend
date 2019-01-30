@@ -14,8 +14,9 @@
 
 define('io.ox/tours/tasks', [
     'io.ox/core/tk/wizard',
-    'gettext!io.ox/tours'
-], function (Tour, gt) {
+    'gettext!io.ox/tours',
+    'io.ox/core/capabilities'
+], function (Tour, gt, capabilities) {
 
     'use strict';
 
@@ -27,7 +28,7 @@ define('io.ox/tours/tasks', [
         app: 'io.ox/tasks',
         priority: 1
     }, function () {
-        new Tour()
+        var taskTour = new Tour()
         .step()
             .title(gt('Creating a new task'))
             .content(gt('To create a new task, click on New in the toolbar.'))
@@ -96,19 +97,21 @@ define('io.ox/tours/tasks', [
             .on('before:show', function () {
                 $('.io-ox-tasks-edit-window.active [data-extension-id="status"]:last')[0].scrollIntoView();
             })
-            .end()
-        .step()
-            .title(gt('Inviting other participants'))
-            .content(gt('To invite other participants, enter their names in the field below Participants. You can add documents as attachment to the task.'))
-            .spotlight('.io-ox-tasks-edit-window.active .add-participant.task-participant-input-field')
-            .on('before:show', function () {
-                $('.io-ox-tasks-edit-window.active .add-participant.task-participant-input-field:last')[0].scrollIntoView();
-            })
-            .on('next', function () {
-                $('.io-ox-tasks-edit-window.active .expand-details-link')[0].scrollIntoView();
-            })
-            .end()
-        .step()
+            .end();
+        if (capabilities.has('filestore') && capabilities.has('delegate_tasks')) {
+            taskTour.step()
+                .title(gt('Inviting other participants'))
+                .content(gt('To invite other participants, enter their names in the field below Participants. You can add documents as attachment to the task.'))
+                .spotlight('.io-ox-tasks-edit-window.active .add-participant.task-participant-input-field')
+                .on('before:show', function () {
+                    $('.io-ox-tasks-edit-window.active .add-participant.task-participant-input-field:last')[0].scrollIntoView();
+                })
+                .on('next', function () {
+                    $('.io-ox-tasks-edit-window.active .expand-details-link')[0].scrollIntoView();
+                })
+                .end();
+        }
+        taskTour.step()
             .title(gt('Entering billing information'))
             .content(gt('To enter billing information, click on Show details.'))
             .spotlight('.io-ox-tasks-edit-window.active .expand-details-link')
