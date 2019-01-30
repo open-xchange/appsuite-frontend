@@ -1012,6 +1012,7 @@ define('io.ox/calendar/week/view', [
                 endLocal = model.getMoment('endDate').local(),
                 start = moment(startLocal).startOf('day'),
                 end = moment(endLocal).startOf('day'),
+                startOfNextWeek = moment(this.model.get('startDate')).startOf('day').add(this.model.get('numColumns'), 'days'),
                 maxCount = 0;
 
             // draw across multiple days
@@ -1026,6 +1027,11 @@ define('io.ox/calendar/week/view', [
 
                 // kill overlap appointments with length null
                 if (startLocal.isSame(endLocal) && maxCount > 0) {
+                    break;
+                }
+
+                // break if appointment overlaps into next week
+                if (start.isSame(startOfNextWeek)) {
                     break;
                 }
 
