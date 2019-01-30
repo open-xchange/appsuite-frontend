@@ -78,6 +78,10 @@ define('io.ox/settings/accounts/views', [
                 return el;
             },
 
+            renderTitle: function (title) {
+                return listUtils.makeTitle(title);
+            },
+
             render: function () {
                 var self = this,
                     title = self.getTitle(),
@@ -90,7 +94,7 @@ define('io.ox/settings/accounts/views', [
 
                 self.$el.empty().append(
                     drawIcon(self.model),
-                    listUtils.makeTitle(title).append(
+                    this.renderTitle(title).append(
                         this.renderSubTitle()
                     ),
                     listUtils.makeControls().append(

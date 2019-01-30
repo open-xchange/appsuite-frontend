@@ -88,14 +88,14 @@ define('io.ox/oauth/settings', [
                                     // fall back to default implementation if we can not figure out a custom title
                                     return customTitle || AccountViews.ListItem.prototype.getTitle.apply(this);
                                 },
-                                renderSubTitle: function () {
-                                    return $('<div class="list-item-subtitle">').append(
+                                renderTitle: function (title) {
+                                    return $('<div class="list-item-title">').append(
                                         $('<button type="button" class="btn btn-link deeplink">').attr({
                                             //#. link title for related accounts into the corresponding folder
                                             //#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
                                             //#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
-                                            title: gt('Open %1$s in %2$s', this.model.get('name'), accountTypeAppMapping[this.model.get('module')])
-                                        }).append(gt('Open'))
+                                            title: gt('Open %1$s in %2$s', title, accountTypeAppMapping[this.model.get('module')])
+                                        }).append(title)
                                     );
                                 },
                                 openModule: function () {
