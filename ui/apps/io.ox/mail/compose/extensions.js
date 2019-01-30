@@ -229,20 +229,6 @@ define('io.ox/mail/compose/extensions', [
                         .appendTo(this)
                 );
             },
-            save: function (baton) {
-                this.append($('<button type="button" class="btn btn-default" data-action="save">')
-                    .on('click', (function () {
-                        var isSaving = false;
-                        return function () {
-                            if (isSaving) return;
-                            isSaving = true;
-                            baton.model.save().always(function () {
-                                isSaving = false;
-                            });
-                        };
-                    }()))
-                    .text(gt('Save')));
-            },
             send: function (baton) {
                 this.append($('<button type="button" class="btn btn-primary" data-action="send">')
                     .on('click', function () { baton.view.send(); })
