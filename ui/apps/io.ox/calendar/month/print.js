@@ -39,7 +39,7 @@ define('io.ox/calendar/month/print', [
     function map(event) {
         // if declined use base grey color
         var folder = folderAPI.pool.models[event.get('folder')],
-            color = util.getAppointmentColor(folder, event) || '#e8e8e8';
+            color = util.getAppointmentColor(folder.attributes, event) || '#e8e8e8';
 
         return {
             time: util.isAllday(event) ? undefined : util.getMoment(event.get('startDate')).format('LT'),
