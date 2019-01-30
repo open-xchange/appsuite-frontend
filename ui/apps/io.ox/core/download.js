@@ -181,7 +181,23 @@ define('io.ox/core/download', [
         multiple: form,
 
         // actually only for ios
-        window: function (url) {
+        window: function (url, options) {
+            options = options || {};
+            // check if url attributes and antivirus callback should be added (needed for attachments)
+            if (options.antivirus) {
+                url += (url.indexOf('?') === -1 ? '?' : '&') + 'callback=antivirus';
+                if (capabilities.has('antivirus')) {
+                    url += '&scan=true';
+                }
+                var win = blankshield.open(url, '_blank');
+
+                win.callback_antivirus = function (error) {
+                    error.url = url;
+                    showAntiVirusPopup(error);
+                    win.close();
+                };
+                return win;
+            }
             return blankshield.open(url, '_blank');
         },
 

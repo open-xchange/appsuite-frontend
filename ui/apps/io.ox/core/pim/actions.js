@@ -56,8 +56,8 @@ define('io.ox/core/pim/actions', [
             },
             action: function (baton) {
                 var url = attachmentAPI.getUrl(baton.data, 'download');
-                if (_.device('ios >= 11') || _.device('android')) {
-                    downloadAPI.window(url);
+                if (_.device('ios >= 11')) {
+                    downloadAPI.window(url, { antivirus: true });
                 } else {
                     downloadAPI.url(url);
                 }
