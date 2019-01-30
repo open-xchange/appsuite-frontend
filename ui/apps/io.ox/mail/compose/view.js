@@ -811,7 +811,7 @@ define('io.ox/mail/compose/view', [
 
         prependNewLine: function () {
             // Prepend newline in all modes except when editing draft
-            if (this.model.get('mode') === 'edit') return;
+            if (this.config.get('type') === 'edit') return;
             var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<div[^>]*class="default-style"[^>]*><br><\/div>)+/, '');
             var nl = this.config.get('editorMode') === 'html' ? mailUtil.getDefaultStyle().node.get(0).outerHTML : '\n';
             this.editor.setContent(nl + content);
@@ -824,10 +824,10 @@ define('io.ox/mail/compose/view', [
                 return self.signaturesLoading;
             })
             .done(function () {
-                var target, mode = self.model.get('mode');
+                var target, type = self.config.get('type');
                 // set focus in compose and forward mode to recipient tokenfield
                 if (_.device('!ios')) {
-                    if (/(compose|forward)/.test(mode)) {
+                    if (/(compose|forward)/.test(type)) {
                         target = self.$('.tokenfield:first .token-input');
                     } else {
                         target = self.editor;
@@ -843,7 +843,7 @@ define('io.ox/mail/compose/view', [
                     target.focus();
                 }
 
-                if (mode === 'replyall' || mode === 'edit') {
+                if (type === 'replyall' || type === 'edit') {
                     if (!_.isEmpty(self.model.get('cc'))) self.toggleTokenfield('cc');
                 }
                 if (!_.isEmpty(self.model.get('bcc'))) self.toggleTokenfield('bcc');

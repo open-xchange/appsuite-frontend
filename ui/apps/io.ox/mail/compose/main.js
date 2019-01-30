@@ -53,7 +53,7 @@ define('io.ox/mail/compose/main', [
         perform: function (baton) {
             var self = this;
             return require(['io.ox/mail/compose/config', 'io.ox/mail/compose/view']).then(function (MailComposeConfig, MailComposeView) {
-                self.config = new MailComposeConfig({ app: self });
+                self.config = new MailComposeConfig({ type: self.model.type });
                 self.view = baton.view = new MailComposeView({ app: self, model: self.model, config: self.config });
             });
         }
@@ -119,7 +119,7 @@ define('io.ox/mail/compose/main', [
         id: 'auto-bcc',
         index: 800,
         perform: function () {
-            if (!settings.get('autobcc') || this.config.get('mode') === 'edit') return;
+            if (!settings.get('autobcc') || this.config.get('type') === 'edit') return;
             this.model.set('bcc', mailUtil.parseRecipients(settings.get('autobcc'), { localpart: false }));
         }
     }, {
@@ -127,7 +127,7 @@ define('io.ox/mail/compose/main', [
         index: 900,
         perform: function () {
             // disable auto remove on discard for draft mails
-            this.config.set('autoDiscard', this.config.get('mode') !== 'edit');
+            this.config.set('autoDiscard', this.config.get('type') !== 'edit');
         }
     }, {
         id: 'set-mail',

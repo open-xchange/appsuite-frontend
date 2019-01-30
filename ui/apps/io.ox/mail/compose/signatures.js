@@ -142,7 +142,7 @@ define('io.ox/mail/compose/signatures', [
                 signatures = this.get('signatures'), signature;
 
             // when editing a draft we might have a signature
-            if (this.get('mode') === 'edit') {
+            if (this.get('type') === 'edit') {
 
                 // get id of currently drawn signature
                 signature = _.find(signatures, function (signature) {
@@ -171,9 +171,9 @@ define('io.ox/mail/compose/signatures', [
         // set default signature dependant on mode, there are settings that correspond to this
         getDefaultSignature: function () {
             // no differentiation between compose/edit and reply/forward on mobile
-            return /compose|edit/.test(this.get('mode')) || _.device('smartphone') ?
+            return /compose|edit/.test(this.get('type')) || _.device('smartphone') ?
                 this.get('defaultSignatureId') :
-                mailUtil.getDefaultSignature(this.get('mode'));
+                mailUtil.getDefaultSignature(this.get('type'));
         },
 
         // getter
@@ -186,7 +186,7 @@ define('io.ox/mail/compose/signatures', [
 
         // TODO: cleanup; rename to something with 'mobile'?
         getSignatures: function () {
-            if (_.device('!smartphone') || this.get('mode') === 'edit') return [];
+            if (_.device('!smartphone') || this.get('type') === 'edit') return [];
 
             if (settings.get('mobileSignatureType') === 'custom') {
                 this.set('defaultSignatureId', '0', { silent: true });
@@ -209,7 +209,7 @@ define('io.ox/mail/compose/signatures', [
     var view = {
 
         getSignatureContent: function () {
-            var isUnquotedForward = settings.get('forwardunquoted', false) && this.config.get('mode') === 'forward';
+            var isUnquotedForward = settings.get('forwardunquoted', false) && this.config.get('type') === 'forward';
             if (isUnquotedForward) return this.editor.find('div[class$="io-ox-signature"]');
             return this.editor.children('div[class$="io-ox-signature"]');
         },

@@ -38,7 +38,7 @@ define('io.ox/mail/compose/model', [
                 contentType: '',
                 attachments: [],
                 meta: {
-                    // new/reply/replyall/forward/resend/edit/copy
+                    //new/reply/reply_all/forward_inline/forward_attachment/resend
                     type: 'new',
                     date: '',
                     originalId: '',
@@ -196,6 +196,8 @@ define('io.ox/mail/compose/model', [
 
         create: function () {
             if (this.has('id')) return composeAPI.space.get(this.get('id'));
+
+            //new/reply/replyall/forward/resend/edit/copy
             var type = this.get('type') || 'new',
                 original = this.get('original'),
                 opt = {
@@ -204,6 +206,7 @@ define('io.ox/mail/compose/model', [
                     vcard: !/(edit|copy)/.test(type) && settings.get('appendVcard', false)
                 };
             // unset type and original since both are only used on creation of a model
+            this.type = type;
             this.unset('type');
             this.unset('original');
             return composeAPI.space.add({ type: type, original: original }, opt).then(function (data) {
