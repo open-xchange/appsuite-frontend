@@ -44,6 +44,8 @@ define('io.ox/calendar/week/print', [
                 bStart = util.getMoment(ev.get('startDate')).valueOf(),
                 // make sure an appointment lasts at least 30 minutes
                 bEnd = moment.max(moment(bStart).add(30, 'minutes'), util.getMoment(ev.get('endDate'))).valueOf();
+            if (util.isAllday(event)) return false;
+            if (util.isAllday(ev)) return false;
             if (aEnd <= bStart) return false;
             if (aStart >= bEnd) return false;
             return true;
