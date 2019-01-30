@@ -74,7 +74,7 @@ define('io.ox/calendar/week/print', [
                 var top = startDate.minutes() + (startRange - hour) * 60,
                     folder = folderAPI.pool.models[event.get('folder')],
                     // if declined use base grey color
-                    color = util.getAppointmentColor(folder, event) || '#e8e8e8';
+                    color = util.getAppointmentColor(folder.attributes, event) || '#e8e8e8';
 
                 parts.push({
                     isAllday: isAllday,
