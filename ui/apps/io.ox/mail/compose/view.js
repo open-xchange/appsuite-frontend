@@ -318,13 +318,15 @@ define('io.ox/mail/compose/view', [
             baton.options.imageLoader = {
                 upload: function (file) {
                     var attachment = new Attachments.Model({ filename: file.name, uploaded: 0, contentDisposition: 'INLINE' }),
-                        def = composeUtil.uploadAttachment({
-                            model: self.model,
-                            filename: file.name,
-                            origin: { file: file },
-                            attachment: attachment,
-                            contentDisposition: 'inline'
-                        });
+                        def = new $.Deferred();
+                    composeUtil.uploadAttachment({
+                        model: self.model,
+                        filename: file.name,
+                        origin: { file: file },
+                        attachment: attachment,
+                        contentDisposition: 'inline'
+                    });
+                    attachment.once('upload:complete', def.resolve);
                     self.model.attachFiles([attachment]);
                     return def;
                 },

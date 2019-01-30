@@ -50,7 +50,7 @@ define('io.ox/mail/compose/util', [
                 }).then(function success(data) {
                     data = _({ group: 'mail', space: space }).extend(data);
                     attachment.set(data);
-                    attachment.trigger('upload:complete');
+                    attachment.trigger('upload:complete', data);
                 }, function fail(error) {
                     if (error.error === 'abort') return;
                     attachment.destroy();
