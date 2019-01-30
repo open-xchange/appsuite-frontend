@@ -393,17 +393,13 @@ define('plugins/core/feedback/register', [
         },
 
         drawButton: function () {
-            var button;
-            $('#io-ox-core').append(
-                button = $('<button type="button" class="feedback-button">')
-                .text(gt('Feedback'))
-                .addClass(settings.get('feedback/position', 'right') + 'side-button')
-                .on('click', this.show)
+            var node,
+                position = settings.get('feedback/position', 'right');
+            node = $('<div role="region" class="feedback-button">').attr('aria-label', gt('Feedback')).addClass('feedback-' + position).append(
+                $('<button type="button">').text(gt('Feedback')).on('click', this.show)
             );
-            // there was a css only solution... until IE support came along...
-            if (settings.get('feedback/position', 'right') === 'right') {
-                button.css('bottom', button.width() + 128 + 'px');
-            }
+            if (position === 'right') node.css('bottom', node.width() + 128 + 'px');
+            $('#io-ox-core').append(node);
         }
     };
 

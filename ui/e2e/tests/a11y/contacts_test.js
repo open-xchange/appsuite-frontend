@@ -20,7 +20,7 @@ const excludedElements = [
 ];
 
 const excludedRules = {
-    'region': { enabled: false }, // Feedback Button and Foldertree toggle should have a landmark role
+    'region': { enabled: false }, // Foldertree toggle should have a landmark role
     'landmark-no-duplicate-banner': { enabled: false } // No duplicate landmark (No header in contact detail)
 };
 
