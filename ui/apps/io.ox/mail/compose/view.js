@@ -380,9 +380,11 @@ define('io.ox/mail/compose/view', [
         id: 'model',
         index: 300,
         perform: function (baton) {
+            var contentType = baton.editor.content_type;
+            if (contentType.toLowerCase() === 'alternative') contentType = 'text/html';
             baton.model.set({
                 content: baton.editor.getContent(),
-                contentType: baton.editor.content_type
+                contentType: contentType
             });
         }
     }, {
