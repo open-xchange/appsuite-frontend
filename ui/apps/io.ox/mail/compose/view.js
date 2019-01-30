@@ -558,6 +558,8 @@ define('io.ox/mail/compose/view', [
         },
 
         inlineYell: function (text) {
+            if (!this.$el.is(':visible')) return;
+
             // no inline yell on smartphones, use default yell as fallback
             if (_.device('smartphone')) {
                 notifications.yell('success', text);
