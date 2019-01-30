@@ -24,15 +24,18 @@ define('io.ox/mail/compose/main', [
 
     // via point.cascade
 
-    ext.point('io.ox/mail/compose/boot').extend({
+    var POINT = ext.point('io.ox/mail/compose/boot'),
+        INDEX = 0;
+
+    POINT.extend({
         id: 'bundle',
-        index: 100,
+        index: INDEX += 100,
         perform: function () {
             return require(['io.ox/mail/compose/bundle']);
         }
     }, {
         id: 'compose-model',
-        index: 200,
+        index: INDEX += 100,
         perform: function (baton) {
             var self = this;
 
@@ -49,7 +52,7 @@ define('io.ox/mail/compose/main', [
         }
     }, {
         id: 'compose-view',
-        index: 300,
+        index: INDEX += 100,
         perform: function (baton) {
             var self = this;
             return require(['io.ox/mail/compose/config', 'io.ox/mail/compose/view']).then(function (MailComposeConfig, MailComposeView) {
@@ -59,7 +62,7 @@ define('io.ox/mail/compose/main', [
         }
     }, {
         id: 'fix-from',
-        index: 400,
+        index: INDEX += 100,
         perform: function () {
             var model = this.model;
             if (model.get('from')) return;
@@ -78,7 +81,7 @@ define('io.ox/mail/compose/main', [
         }
     }, {
         id: 'fix-displayname',
-        index: 500,
+        index: INDEX += 100,
         perform: function () {
             var model = this.model,
                 config = this.config;
@@ -96,14 +99,14 @@ define('io.ox/mail/compose/main', [
         }
     }, {
         id: 'render-view',
-        index: 600,
+        index: INDEX += 100,
         perform: function (baton) {
             var win = baton.win;
             win.nodes.main.addClass('scrollable').append(this.view.render().$el);
         }
     }, {
         id: 'editor-mode',
-        index: 700,
+        index: INDEX += 100,
         perform: function () {
             // if draft, force editor in the same mode as the draft
             if (this.model.get('meta').editFor) {
@@ -117,27 +120,27 @@ define('io.ox/mail/compose/main', [
         }
     }, {
         id: 'auto-bcc',
-        index: 800,
+        index: INDEX += 100,
         perform: function () {
             if (!settings.get('autobcc') || this.config.is('edit')) return;
             this.model.set('bcc', mailUtil.parseRecipients(settings.get('autobcc'), { localpart: false }));
         }
     }, {
         id: 'auto-discard',
-        index: 900,
+        index: INDEX += 100,
         perform: function () {
             // disable auto remove on discard for draft mails
             this.config.set('autoDiscard', !this.config.is('edit'));
         }
     }, {
         id: 'set-mail',
-        index: 1000,
+        index: INDEX += 100,
         perform: function () {
             return this.view.setMail();
         }
     }, {
         id: 'initial-signature',
-        index: 1100,
+        index: INDEX += 100,
         perform: function () {
             if (_.device('smartphone')) return;
             return this.view.signaturesLoading.then(function () {
@@ -146,7 +149,7 @@ define('io.ox/mail/compose/main', [
         }
     }, {
         id: 'finally',
-        index: 1200,
+        index: INDEX += 100,
         perform: function (baton) {
             var win = baton.win;
             // calculate right margin for to field (some languages like chinese need extra space for cc bcc fields)
@@ -209,7 +212,7 @@ define('io.ox/mail/compose/main', [
 
             win.busy().show(function () {
 
-                ext.point('io.ox/mail/compose/boot').cascade(app, { data: obj || {}, model: model, win: win }).then(function success() {
+                POINT.cascade(app, { data: obj || {}, model: model, win: win }).then(function success() {
                     def.resolve({ app: app });
                     ox.trigger('mail:' + app.model.get('meta').type + ':ready', obj, app);
                 }, function fail(e) {
