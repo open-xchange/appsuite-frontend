@@ -191,12 +191,6 @@ define('io.ox/mail/compose/view', [
         }
     );
 
-    ext.point(POINT + '/signatures').extend({
-        id: 'item',
-        index: 100,
-        draw: signatureUtil.extensions.menuitems
-    });
-
     ext.point(POINT + '/editors').extend(
         {
             id: 'plain-text',

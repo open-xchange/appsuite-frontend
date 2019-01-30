@@ -34,7 +34,7 @@ define('io.ox/mail/compose/config', [
                 editorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
                 sendDisplayName: !!settings.get('sendDisplayName', true),
                 // signatures
-                defaultSignatureId: mailUtil.getDefaultSignature('new'),
+                defaultSignatureId: '',
                 // identifier for empty signature (dropdown)
                 signatureId: '',
                 signature: '',

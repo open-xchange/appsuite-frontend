@@ -98,6 +98,35 @@ define('io.ox/mail/compose/main', [
             }
         }
     }, {
+        id: 'load-signature',
+        index: INDEX += 100,
+        perform: function () {
+            var self = this,
+                def = this.view.signaturesLoading = $.Deferred();
+
+            if (_.device('smartphone')) {
+                //#. %s is the product name
+                var value = settings.get('mobileSignature', gt('Sent from %s via mobile', ox.serverConfig.productName));
+                def.resolve([{ id: '0', content: value, misc: { insertion: 'below' } }]);
+            } else {
+                require(['io.ox/core/api/snippets'], function (snippetAPI) {
+                    snippetAPI.getAll('signature').always(function (signatures) {
+                        var oldSignatures = self.config.get('signatures') || [],
+                            allSignatures = _.uniq(signatures.concat(oldSignatures), false, function (o) { return o.id; });
+                        // update model
+                        self.config.set('signatures', allSignatures);
+                        // add options to dropdown (empty signature already set)
+                        // TODO: mobile signatures
+                        def.resolve(allSignatures);
+                    });
+                });
+            }
+            return def.then(function (list) {
+                this.config.set('signatures', list);
+                return list;
+            }.bind(this));
+        }
+    }, {
         id: 'render-view',
         index: INDEX += 100,
         perform: function (baton) {
@@ -142,7 +171,6 @@ define('io.ox/mail/compose/main', [
         id: 'initial-signature',
         index: INDEX += 100,
         perform: function () {
-            if (_.device('smartphone')) return;
             return this.view.signaturesLoading.then(function () {
                 this.config.setInitialSignature();
             }.bind(this));

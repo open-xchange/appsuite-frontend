@@ -33,9 +33,12 @@ define('io.ox/mail/compose/signatures', [
             function draw() {
                 dropdown.prepareReuse();
                 dropdown.option('signatureId', '', gt('No signature'));
-                ext.point('io.ox/mail/compose/signatures').invoke('draw', dropdown.$el, baton);
                 dropdown.$ul.addClass('pull-right');
-                baton.view.signaturesLoading.done(function () {
+
+                baton.view.signaturesLoading.done(function (signatures) {
+                    _.each(signatures, function (o) {
+                        dropdown.option('signatureId', o.id, o.displayname);
+                    });
                     dropdown.divider();
                     dropdown.link('settings', gt('Manage signatures'), function () {
                         var options = { id: 'io.ox/mail/settings/signatures' };
@@ -54,34 +57,10 @@ define('io.ox/mail/compose/signatures', [
                 // use normal event listeners since view.listenTo does not trigger correctly.
                 snippetAPI.on('refresh.all', draw);
                 baton.view.$el.one('dispose', function () { snippetAPI.off('refresh.all', draw); });
-
                 draw();
             });
+
             self.append(dropdown.$el.addClass('signatures text-left'));
-        },
-
-        menuitems: function (baton) {
-            if (_.device('smartphone')) return;
-            var config = baton.config,
-                def = baton.view.signaturesLoading = $.Deferred(),
-                dropdown = this,
-                dropdownView = dropdown.data('view');
-
-            // load snippets
-            require(['io.ox/core/api/snippets'], function (snippetAPI) {
-                snippetAPI.getAll('signature').always(function (signatures) {
-                    var oldSignatures = config.get('signatures') || [],
-                        allSignatures = _.uniq(signatures.concat(oldSignatures), false, function (o) { return o.id; });
-                    // update model
-                    config.set('signatures', allSignatures);
-                    // add options to dropdown (empty signature already set)
-                    _.each(signatures, function (o) {
-                        dropdownView.option('signatureId', o.id, o.displayname);
-                    });
-                    // TODO: mobile signatures
-                    def.resolve(allSignatures);
-                });
-            });
         }
     };
 
@@ -142,8 +121,7 @@ define('io.ox/mail/compose/signatures', [
                 signatures = this.get('signatures'), signature;
 
             // when editing a draft we might have a signature
-            if (this.get('type') === 'edit') {
-
+            if (this.is('edit|copy')) {
                 // get id of currently drawn signature
                 signature = _.find(signatures, function (signature) {
                     var raw = util.getRaw(signature);
@@ -164,16 +142,18 @@ define('io.ox/mail/compose/signatures', [
                 }
             } else {
                 // if not editing a draft we add the default signature (if it exists)
-                this.set('signatureId', this.getDefaultSignature(), { silent: false });
+                this.set('signatureId', this.getDefaultSignatureId());
             }
         },
 
         // set default signature dependant on mode, there are settings that correspond to this
-        getDefaultSignature: function () {
+        getDefaultSignatureId: function () {
+            if (_.device('smartphone')) {
+                // custom|none
+                return settings.get('mobileSignatureType', 'none') === 'custom' ? '0' : '';
+            }
             // no differentiation between compose/edit and reply/forward on mobile
-            return /compose|edit/.test(this.get('type')) || _.device('smartphone') ?
-                this.get('defaultSignatureId') :
-                mailUtil.getDefaultSignature(this.get('type'));
+            return mailUtil.getDefaultSignature(this.get('type'));
         },
 
         // getter
@@ -182,26 +162,6 @@ define('io.ox/mail/compose/signatures', [
             return _.find(this.get('signatures'), function (data) {
                 return data.id === id;
             });
-        },
-
-        // TODO: cleanup; rename to something with 'mobile'?
-        getSignatures: function () {
-            if (_.device('!smartphone') || this.get('type') === 'edit') return [];
-
-            if (settings.get('mobileSignatureType') === 'custom') {
-                this.set('defaultSignatureId', '0', { silent: true });
-            } else if (!this.get('defaultSignatureId')) {
-                this.set('defaultSignatureId', '1', { silent: true });
-            }
-
-            var value = settings.get('mobileSignature');
-
-            if (value === undefined) {
-                //#. %s is the product name
-                value = gt('Sent from %s via mobile', ox.serverConfig.productName);
-            }
-
-            return [{ id: '0', content: value, misc: { insertion: 'below' } }];
         }
     };
 
