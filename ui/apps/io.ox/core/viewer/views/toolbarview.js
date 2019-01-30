@@ -537,7 +537,6 @@ define('io.ox/core/viewer/views/toolbarview', [
 
         events: {
             'click a[data-action="io.ox/core/viewer/actions/toolbar/close"]': 'onClose',
-            'click a[data-action="io.ox/core/viewer/actions/toolbar/popoutstandalone"]': 'onClose',
             'click a[data-action="io.ox/core/viewer/actions/toolbar/rename"]': 'onRename',
             'keydown a[data-action="io.ox/core/viewer/actions/toolbar/rename"]': 'onRename'
         },
