@@ -148,6 +148,62 @@
     align-items: center;
 }
 
+.bootstrap-four-btn(@color, @background) {
+    color: @color;
+    background-color: @background;
+    border-color: @background;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+
+    &:focus,
+    &.focus {
+        box-shadow: 0 0 0 @btn-focus-outline-width fade(@background, 30);
+        outline: 0;
+        outline-offset: 0;
+        border-color: fade(@background, 30);
+    }
+
+    &:hover {
+        color: @color;
+        background-color: darken(@background, 10%);
+            border-color: darken(@background, 10%);
+    }
+
+    &:active,
+    &.active,
+    .open > .dropdown-toggle& {
+        color: @color;
+        background-color: darken(@background, 10%);
+            border-color: darken(@background, 10%);
+
+        &:hover,
+        &:focus,
+        &.focus {
+        color: @color;
+        background-color: darken(@background, 17%);
+            border-color: darken(@background, 17%);
+        }
+    }
+    &:active,
+    &.active,
+    .open > .dropdown-toggle& {
+        background-image: none;
+    }
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        &:hover,
+        &:focus,
+        &.focus {
+        background-color: @background;
+            border-color: @background;
+        }
+    }
+
+    .badge {
+        color: @background;
+        background-color: @color;
+    }
+}
 // .fontWeight(@weight) when (@weight = 300) {
 //     // automatically inject light font-family, especially for Windows
 //     font-family: @light-font-family;

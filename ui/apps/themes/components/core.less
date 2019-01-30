@@ -81,6 +81,32 @@ legend {
     }
 }
 
+
+.btn-default {
+    .bootstrap-four-btn(@btn-default-color, @btn-default-bg);
+    &:focus,
+    &.focus {
+        box-shadow: 0 0 0 @btn-focus-outline-width darken(@btn-default-bg, 15);
+        border-color: darken(@btn-default-bg, 15);
+    }
+}
+.btn-primary {
+    .bootstrap-four-btn(@btn-primary-color, @btn-primary-bg);
+}
+.btn-info {
+    .bootstrap-four-btn(@btn-info-color, @btn-info-bg);
+}
+.btn-warning {
+    .bootstrap-four-btn(@btn-warning-color, @btn-warning-bg);
+}
+.btn-danger {
+    .bootstrap-four-btn(@btn-danger-color, @btn-danger-bg);
+}
+.btn-success {
+    .bootstrap-four-btn(@btn-success-color, @btn-success-bg);
+}
+
+
 .btn-file {
     position: relative;
     overflow: hidden;
