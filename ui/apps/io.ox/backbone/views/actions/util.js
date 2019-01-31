@@ -123,7 +123,6 @@ define('io.ox/backbone/views/actions/util', [
                 item.link.draw.call($li, baton);
             } else if (item.link.dropdown) {
                 util.renderDropdown($li, baton, { point: item.link.dropdown, title: item.link.title, icon: item.link.icon });
-                if (!util.hasActions($li)) return;
             } else {
                 util.renderListItem($li, baton, item);
             }
@@ -143,7 +142,7 @@ define('io.ox/backbone/views/actions/util', [
                     if (item.link.steady) $li.children('a').addClass('disabled').attr('aria-disabled', true);
                     else $li.addClass('hidden');
                     return $.when(action.matchesAsync(baton))
-                        .then(null, function () { return false; })
+                        .pipe(null, function () { return false; })
                         .always(function (state) {
                             if (!state) {
                                 if (!item.link.steady) $li.remove();
@@ -415,7 +414,7 @@ define('io.ox/backbone/views/actions/util', [
             baton = ensureBaton(baton);
             return new (baton.simple ? Collection.Simple : Collection)(baton.array())
                 .getPromise()
-                .then(function (collection) {
+                .pipe(function (collection) {
                     baton.collection = collection;
                     if (!actions.some(util.checkActionEnabled.bind(null, baton))) return $.when([false]);
                     var defs = actions
@@ -427,7 +426,7 @@ define('io.ox/backbone/views/actions/util', [
                         });
                     return $.when.apply($, defs);
                 })
-                .then(function () {
+                .pipe(function () {
                     return _(arguments).some(Boolean) ? $.when(baton) : $.Deferred().reject();
                 });
         }

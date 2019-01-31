@@ -226,6 +226,11 @@ define('io.ox/files/toolbar', [
                     return this.getContextualData(selection, 'main');
                 }.bind(this));
             };
+
+            app.forceUpdateToolbar = function (selection) {
+                toolbarView.selection = null;
+                this.updateToolbar(selection);
+            };
         }
     });
 
@@ -243,6 +248,9 @@ define('io.ox/files/toolbar', [
             });
             folderApi.on('favorite:add favorite:remove', function () {
                 app.updateToolbar(app.listView.selection.get());
+            });
+            app.on('folder:change', function () {
+                app.forceUpdateToolbar([]);
             });
         }
     });

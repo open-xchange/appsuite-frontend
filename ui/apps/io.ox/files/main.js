@@ -494,8 +494,10 @@ define('io.ox/files/main', [
 
                     app.folder.unset();
                     app.getWindow().setTitle(gt('My shares'));
+
                     if (app.mysharesListViewControl) {
                         app.mysharesListViewControl.$el.show().siblings().hide();
+                        app.updateMyshareToolbar([]);
                         return;
                     }
 
@@ -597,9 +599,10 @@ define('io.ox/files/main', [
 
                     app.folder.unset();
                     app.getWindow().setTitle(gt('Favorites'));
+
                     if (app.myFavoritesListViewControl) {
-                        app.myFavoriteListView.trigger('selection:change');
                         app.myFavoritesListViewControl.$el.show().siblings().hide();
+                        app.updateMyFavoritesToolbar([]);
                         return;
                     }
 
