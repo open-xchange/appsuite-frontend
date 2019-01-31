@@ -432,6 +432,7 @@ define('io.ox/backbone/views/datepicker', [
             var target = $(e.currentTarget),
                 date = moment(target.data('date'));
             if (target.hasClass('cw')) return;
+            if (this.$el.hasClass('open')) e.stopPropagation();
             this.trigger('select', date);
         },
 
