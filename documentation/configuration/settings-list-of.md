@@ -438,8 +438,11 @@ Attach original message on touch devices
 <config>io.ox/mail//features/accounts/configureUnifiedInboxOnCreate=`<bool>`</config>
 Allow enabling unified inbox for an account at the "Add Mail account" dialog
 
+<config>io.ox/mail//features/authenticity=`<bool>`</config>
+Enables the authenticity feature. Please note that `com.openexchange.mail.authenticity.enabled` on MW has to be turned on as well. (default: false)
+
 <config>io.ox/mail//authenticity/level=`<string>`</config>
-If `com.openexchange.mail.authenticity.enabled` is turnend on MW side, the user can select a level which
+If authenticity is enabled on MW and UI (see `features/authenticity`) and this value is not marked as proteced, the user can select a level which
 controls how strict the authenticty results are shown at UI side. (default: `none`, values: `none`, `fail_neutral_trusted` and `all`)
 
 <config>io.ox/mail//features/autoCollapseBlockquotes=`<bool>`</config>
