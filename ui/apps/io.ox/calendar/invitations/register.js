@@ -532,9 +532,9 @@ define('io.ox/calendar/invitations/register', [
                         // remove mail
                         if (self.options.yell !== false) {
                             var message;
-                            if (action === 'accept') message = this.getAcceptedMessage();
-                            else if (action === 'tentative') message = this.getTentativeMessage();
-                            else if (action === 'decline') message = this.getRejectedMessage();
+                            if (action === 'accept') message = self.getAcceptedMessage();
+                            else if (action === 'tentative') message = self.getTentativeMessage();
+                            else if (action === 'decline') message = self.getRejectedMessage();
                             notifications.yell('success', message);
                         }
                         require(['io.ox/mail/api'], function (api) {
