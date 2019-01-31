@@ -204,7 +204,7 @@ define('io.ox/settings/main', [
                     mainGroups.map(function (group) {
                         var folderOptions = _.extend({}, defaults, group.folderOptions || {}, { model_id: group.id });
                         return new TreeNodeView(folderOptions)
-                        .render().$el.addClass('standard-folders');
+                        .render().$el.addClass('standard-folders').attr('role', 'presentation');
                     })
 
                 );

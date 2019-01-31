@@ -267,9 +267,9 @@ define('io.ox/core/settings/errorlog/settings/pane', [
             this.$el.append(
                 // draw tab controls
                 $('<ul class="nav nav-tabs" role="tablist">').append(
-                    $('<li class="active" role="presentation">').append($('<a href="#errors" role="tab">').text(gt('Errors'))),
-                    $('<li>').append($('<a href="#slow" role="tab">').text(gt('Slow requests'))),
-                    $('<li>').append($('<a href="#loss" role="tab">').text(gt('Loss')))
+                    $('<li class="active" role="presentation">').append($('<a href="#" data-target="#errors" role="tab">').text(gt('Errors'))),
+                    $('<li role="presentation">').append($('<a href="#" data-target="#slow" role="tab">').text(gt('Slow requests'))),
+                    $('<li role="presentation">').append($('<a href="#" data-target="#loss" role="tab">').text(gt('Loss')))
                 ),
                 // draw tab panes
                 $('<div class="tab-content">').append(
@@ -346,7 +346,7 @@ define('io.ox/core/settings/errorlog/settings/pane', [
             var items = this.$el.find(id).children(), tab;
 
             if (items.length > 0) {
-                tab = this.$el.find('a[href="' + id + '"]');
+                tab = this.$el.find('a[data-target="' + id + '"]');
                 tab.find('.count').remove();
                 tab.append(
                     $('<span class="count">').text(' (' + items.length + ')')

@@ -143,7 +143,9 @@ define('io.ox/files/settings/pane', [
                     util.fieldset(gt('Slideshow / Autoplay mode for images'),
                         $('<div class="form-group">').append(
                             new mini.CustomRadioView({ name: 'autoplayLoopMode', model: settings, list: this.getAutoPlayOptions() }).render().$el
-                        ),
+                        )
+                    ).css('margin-bottom', '0'),
+                    $('<fieldset style="padding-top:0">').append(
                         util.compactSelect('autoplayPause', gt('Duration per image'), settings, this.getAutoPlayPauseOptions(), { width: 3 })
                     )
                 );
