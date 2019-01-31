@@ -1275,25 +1275,7 @@ define('io.ox/files/main', [
          * Folerview toolbar
          */
         'folderview-toolbar': function (app) {
-
-            if (_.device('smartphone')) return;
-
-            function toggleFolderView(e) {
-                e.preventDefault();
-                app.folderView.toggle(e.data.state);
-            }
-
-            var side = app.getWindow().nodes.sidepanel;
-            side.find('.foldertree-container').addClass('bottom-toolbar');
-            side.find('.foldertree-sidepanel').append(
-                $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" class="toolbar-item" role="button" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
-                    .append(
-                        $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
-                    )
-                    .on('click', { app: app, state: false }, toggleFolderView)
-                )
-            );
+            commons.addFolderViewToggle(app);
         },
 
         'premium-area': function () {

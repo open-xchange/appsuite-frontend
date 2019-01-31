@@ -14,15 +14,8 @@
 const { expect } = require('chai');
 
 const excludedElements = [
-    ['.search-field'],  // Search field does not have a visible label
-    ['.select-all[role="checkbox"]'], // role checkbox is not allowed here
-    ['header.contact-header'] // The banner landmark is contained in another landmark
+    ['.search-field'] // Search field does not have a visible label
 ];
-
-const excludedRules = {
-    'region': { enabled: false }, // Foldertree toggle should have a landmark role
-    'landmark-no-duplicate-banner': { enabled: false } // No duplicate landmark (No header in contact detail)
-};
 
 Feature('A11y for Contacts App');
 
@@ -40,7 +33,7 @@ Scenario('Default List view w/o contact', async function (I) {
     I.click('.vgrid-cell.selectable.contact.selected .vgrid-cell-checkbox');
     I.waitForElement('.summary.empty');
 
-    const currentView = await I.grabAxeReport({ exclude: excludedElements }, { rules: excludedRules });
+    const currentView = await I.grabAxeReport({ exclude: excludedElements });
     expect(currentView).to.be.accessible;
 });
 
@@ -49,6 +42,6 @@ Scenario('Default List view with contact detail view', async function (I) {
     I.login('app=io.ox/contacts');
 
     I.waitForElement('.contact-detail');
-    const currentView = await I.grabAxeReport({ exclude: excludedElements }, { rules: excludedRules });
+    const currentView = await I.grabAxeReport({ exclude: excludedElements });
     expect(currentView).to.be.accessible;
 });

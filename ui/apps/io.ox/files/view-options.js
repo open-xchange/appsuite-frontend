@@ -291,8 +291,8 @@ define('io.ox/files/view-options', [
         index: 1000,
         draw: function (baton) {
             this.addClass('bottom-toolbar').append(
-                $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" role="button" class="toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view')).append(
+                $('<div class="generic-toolbar bottom visual-focus" role="region">').append(
+                    $('<button class="btn btn-link toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view')).append(
                         $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                     ).on('click', { app: baton.app, state: false }, toggleFolderView)
                 )

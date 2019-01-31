@@ -613,9 +613,7 @@ define('io.ox/core/commons', [
         }()),
 
         mediateFolderView: function (app) {
-
             function toggleFolderView(e) {
-                e.preventDefault();
                 e.data.app.folderView.toggle(e.data.state);
             }
 
@@ -636,7 +634,7 @@ define('io.ox/core/commons', [
                 index: 100,
                 draw: function () {
                     this.addClass('visual-focus').append(
-                        $('<a href="#" class="toolbar-item" data-action="open-folder-view">')
+                        $('<button type="button" class="btn btn-link toolbar-item" data-action="open-folder-view">')
                         .attr('aria-label', gt('Open folder view'))
                         .append($('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view')))
                         .on('click', { app: app, state: true }, toggleFolderView)
@@ -649,8 +647,8 @@ define('io.ox/core/commons', [
                 index: 1000,
                 draw: function () {
                     this.addClass('bottom-toolbar').append(
-                        $('<div class="generic-toolbar bottom visual-focus">').append(
-                            $('<a href="#" class="toolbar-item" role="button" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
+                        $('<div class="generic-toolbar bottom visual-focus" role="region">').append(
+                            $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
                             .append(
                                 $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                             )
@@ -670,6 +668,32 @@ define('io.ox/core/commons', [
             onFolderViewClose(app);
 
             if (app.folderViewIsVisible()) _.defer(onFolderViewOpen, app);
+        },
+
+        addFolderViewToggle: function (app) {
+            if (_.device('smartphone')) return;
+            app.toggleFolderView = function (e) {
+                e.preventDefault();
+                app.trigger('before:change:folderview');
+                app.folderView.toggle(e.data.state);
+            };
+
+            ext.point(app.get('name') + '/sidepanel').extend({
+                id: 'toggle-folderview',
+                index: 1000,
+                draw: function () {
+                    if (_.device('smartphone')) return;
+                    this.addClass('bottom-toolbar').append(
+                        $('<div class="generic-toolbar bottom visual-focus" role="region">').append(
+                            $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
+                            .append(
+                                $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
+                            )
+                            .on('click', { state: false }, app.toggleFolderView)
+                        )
+                    );
+                }
+            });
         },
 
         addPremiumFeatures: function (app, opt) {

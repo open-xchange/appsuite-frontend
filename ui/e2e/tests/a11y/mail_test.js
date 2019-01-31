@@ -27,10 +27,6 @@ Scenario('Default List view w/o mail', async function (I) {
         exclude: [
             ['.search-field'] // Search field does not have a visible label
         ]
-    }, {
-        rules: {
-            'region': { enabled: false } // Feedback Button and Foldertree toggle should have a landmark role
-        }
     });
     expect(currentView).to.be.accessible;
 });

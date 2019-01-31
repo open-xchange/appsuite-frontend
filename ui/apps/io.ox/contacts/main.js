@@ -790,7 +790,7 @@ define('io.ox/contacts/main', [
         },
 
         /*
-         * Folerview toolbar
+         * Folderview toolbar
          */
         'folderview-toolbar': function (app) {
             if (_.device('smartphone')) return;

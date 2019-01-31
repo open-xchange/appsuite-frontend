@@ -341,7 +341,7 @@ define('io.ox/core/a11y', [], function () {
 
         if (e.which === 9 || e.which === 16 && e.shiftKey) return;
         // space on role="button" is already handled
-        if (e.which === 32 && $(e.target).attr('role') !== 'button') $(e.target).click(); // space
+        // if (e.which === 32 && $(e.target).attr('role') !== 'button') $(e.target).click(); // space
 
         var isList = $(e.currentTarget).is('ul');
         var links = $(e.currentTarget).find(isList ? '> li > a, > li > button:not([disabled])' : '> a, > button:not([disabled])').filter(':visible');

@@ -784,8 +784,7 @@ define('io.ox/core/tk/list', [
         },
 
         renderListLabel: function (label) {
-            return $('<li class="list-item list-item-label">')
-                .text(label);
+            return $('<li class="list-item list-item-label" role="presentation">').text(label);
         },
 
         renderListItem: function (model, drawlabels) {

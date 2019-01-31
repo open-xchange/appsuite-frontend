@@ -330,12 +330,11 @@
 
         &.no-wrap {
             .appointment-content {
-                * {
-                    display: inline;
-                    text-overflow: clip;
+                display: flex;
+                & > .location {
+                    flex: 2 1;
+                    margin-left: 4px;
                 }
-
-                .location { margin-left: 5px; }
             }
         }
 

@@ -392,28 +392,7 @@ define('io.ox/calendar/main', [
         },
 
         'toggle-folder-view': function (app) {
-            app.toggleFolderView = function (e) {
-                e.preventDefault();
-                app.trigger('before:change:folderview');
-                app.folderView.toggle(e.data.state);
-            };
-
-            ext.point('io.ox/calendar/sidepanel').extend({
-                id: 'toggle-folderview',
-                index: 1000,
-                draw: function () {
-                    if (_.device('smartphone')) return;
-                    this.addClass('bottom-toolbar').append(
-                        $('<div class="generic-toolbar bottom visual-focus">').append(
-                            $('<a href="#" class="toolbar-item" role="button" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
-                            .append(
-                                $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
-                            )
-                            .on('click', { state: false }, app.toggleFolderView)
-                        )
-                    );
-                }
-            });
+            commons.addFolderViewToggle(app);
         },
 
         'account-errors': function (app) {

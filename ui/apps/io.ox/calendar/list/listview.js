@@ -190,7 +190,7 @@ define('io.ox/calendar/list/listview', [
 
             var i;
             this.append(
-                $('<a href="#" class="toolbar-item select-all" data-name="select-all" role="checkbox" aria-checked="false">').append(
+                $('<button type="button" class="btn btn-link select-all" data-name="select-all">').append(
                     i = $('<i class="fa fa-square-o" aria-hidden="true">'),
                     $.txt(gt('Select all'))
                 )

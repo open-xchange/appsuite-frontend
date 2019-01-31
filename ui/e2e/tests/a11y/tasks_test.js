@@ -14,13 +14,8 @@
 const { expect } = require('chai');
 
 const excludedElements = [
-    ['.search-field'],  // Search field does not have a visible label
-    ['.select-all[role="checkbox"]'] // role checkbox is not allowed here
+    ['.search-field']  // Search field does not have a visible label
 ];
-
-const excludedRules = {
-    'region': { enabled: false } // Feedback Button and Foldertree toggle should have a landmark role
-};
 
 Feature('A11y for Tasks App');
 
@@ -38,6 +33,6 @@ Scenario('Default List view w/o tasks', async function (I) {
 
     I.waitForVisible('.summary.empty');
 
-    const currentView = await I.grabAxeReport({ exclude: excludedElements }, { rules: excludedRules });
+    const currentView = await I.grabAxeReport({ exclude: excludedElements });
     expect(currentView).to.be.accessible;
 });

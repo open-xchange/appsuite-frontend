@@ -342,7 +342,7 @@ define('io.ox/files/toolbar', [
             if (_.device('!touch')) dropdown.option('details', true, gt('File details'), { group: true });
 
             this.append(
-                dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
+                dropdown.render().$el.addClass('pull-right').attr({ 'role': 'presentation', 'data-dropdown': 'view' })
             );
         }
     });

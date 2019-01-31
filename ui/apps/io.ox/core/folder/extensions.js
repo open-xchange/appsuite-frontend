@@ -327,7 +327,7 @@ define('io.ox/core/folder/extensions', [
                     isRemote: true,
                     empty: false
                 })
-                .render().$el.addClass('remote-folders')
+                .render().$el.addClass('remote-folders').attr('role', 'presentation')
             );
         },
 
@@ -342,7 +342,7 @@ define('io.ox/core/folder/extensions', [
                     tree: tree,
                     parent: tree
                 })
-                .render().$el.addClass('filestorage-folders')
+                .render().$el.addClass('filestorage-folders').attr('role', 'presentation')
             );
         },
 
@@ -448,7 +448,7 @@ define('io.ox/core/folder/extensions', [
                     tree: tree,
                     parent: tree
                 })
-                .render().$el.addClass('other-folders')
+                .render().$el.addClass('other-folders').attr('role', 'treeitem')
             );
         },
 
@@ -505,7 +505,7 @@ define('io.ox/core/folder/extensions', [
                     tree: tree,
                     parent: tree
                 })
-                .render().$el.addClass('private-drive-folders')
+                .render().$el.addClass('private-drive-folders').attr('role', 'presentation')
             );
         },
 
@@ -520,7 +520,7 @@ define('io.ox/core/folder/extensions', [
                     tree: tree,
                     parent: tree
                 })
-                .render().$el.addClass('private-drive-folders')
+                .render().$el.addClass('private-drive-folders').attr('role', 'presentation')
             );
         },
 
@@ -535,7 +535,7 @@ define('io.ox/core/folder/extensions', [
                     tree: tree,
                     parent: tree
                 })
-                .render().$el.addClass('public-drive-folders')
+                .render().$el.addClass('public-drive-folders').attr('role', 'presentation')
             );
         }
     };

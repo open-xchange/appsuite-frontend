@@ -159,21 +159,18 @@
         .backface-visibility(hidden);
 
         .appointment-content {
+            display: flex;
             height: 100%;
-            width: 100%;
             font-size: 12px;
             padding: 0 4px;
-            .ellipsis();
-        }
 
-        .appointment-content > * {
-            margin-right: 4px;
-            display: inline;
+            & > * { margin-right: 4px; }
+            & > .location { flex: 2 1; padding-right: 0; }
+            & > .title, & > .location { .ellipsis(); }
         }
 
         .start {
             min-width: 32px;
-            display: inline-block;
             text-align: right;
         }
 

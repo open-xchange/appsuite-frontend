@@ -260,12 +260,10 @@ define('io.ox/core/tk/vgrid', [
             mobileSelectMode = false,
 
             fnToggleCheckbox = function (icon, state) {
-                icon.attr('class', state ? 'fa fa-check-square-o' : 'fa fa-square-o').parent().attr('aria-checked', state);
+                icon.toggleClass('fa-check-square-o', state).toggleClass('fa-square-o', !state).parent().attr('title', state ? gt('Deselect all') : gt('Select all'));
             },
 
             fnClickCheckbox = function (e) {
-                if (!(e.type === 'click' || e.which === 32)) return;
-                e.preventDefault();
                 var grid = e.data.grid, checked = $(this).find('i').hasClass('fa-square-o');
                 if (checked) {
                     grid.selection.selectAll();
@@ -286,23 +284,22 @@ define('io.ox/core/tk/vgrid', [
                 fnToggleCheckbox(node.find('.select-all i.fa'), check);
             },
 
-            topbar = $('<div>').addClass('vgrid-toolbar generic-toolbar ' + (options.toolbarPlacement === 'top' ? 'bottom border-top' : 'top border-bottom'))
+            topbar = $('<div class="vgrid-toolbar generic-toolbar">').addClass(options.toolbarPlacement === 'top' ? 'bottom border-top' : 'top border-bottom')
                 .appendTo(node),
-            toolbar = $('<div>').addClass('vgrid-toolbar generic-toolbar ' + (options.toolbarPlacement === 'top' ? 'top border-bottom' : 'bottom border-top'))
-                .attr({
-                    role: 'toolbar',
+            toolbar = $('<div role="toolbar" class="vgrid-toolbar generic-toolbar">').addClass(options.toolbarPlacement === 'top' ? 'top border-bottom' : 'bottom border-top')
+                .attr(
                     //#. toolbar with 'select all' and 'sort by'
-                    'aria-label': gt('Item list options')
-                })
+                    'aria-label', gt('Item list options')
+                )
                 .append(
                     // show checkbox
                     options.showCheckbox === false ?
                         [] :
-                        $('<a href="#" class="select-all" data-name="select-all" role="checkbox" aria-checked="false">').append(
+                        $('<button type="button" class="btn btn-link select-all" data-name="select-all">').append(
                             $('<i class="fa fa-square-o" aria-hidden="true">')
                         )
                         .attr('title', gt('Select all'))
-                        .on('click keydown', { grid: this }, fnClickCheckbox)
+                        .on('click', { grid: this }, fnClickCheckbox)
                 )
                 .prependTo(node),
             // item template

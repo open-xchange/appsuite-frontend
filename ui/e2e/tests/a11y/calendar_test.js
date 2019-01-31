@@ -14,14 +14,8 @@
 const { expect } = require('chai');
 
 const excludedElements = [
-    ['.search-field'],  // Search field does not have a visible label
-    ['.select-all[role="checkbox"]'] // role checkbox is not allowed here
+    ['.search-field'] // Search field does not have a visible label
 ];
-
-const excludedRules = {
-    'region': { enabled: false }, // Foldertree toggle should have a landmark role
-    'landmark-no-duplicate-banner': { enabled: false } // No duplicate landmark (No header in contact detail)
-};
 
 Feature('A11y for Calendar App');
 
@@ -43,7 +37,7 @@ Scenario('Default List view w/o appointments', async function (I) {
     I.click('List');
     I.waitForVisible('.io-ox-center.multi-selection-message');
 
-    const currentView = await I.grabAxeReport({ exclude: excludedElements }, { rules: excludedRules });
+    const currentView = await I.grabAxeReport({ exclude: excludedElements });
     expect(currentView).to.be.accessible;
 });
 
