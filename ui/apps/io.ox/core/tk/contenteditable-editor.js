@@ -434,7 +434,6 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             init_instance_callback: function (editor) {
                 ed = editor;
-                $(ed.contentDocument).on('dragover drop', false);
                 initialized.resolve();
             },
 

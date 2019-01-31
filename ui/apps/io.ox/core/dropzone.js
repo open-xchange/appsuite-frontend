@@ -70,7 +70,7 @@ define('io.ox/core/dropzone', [], function () {
                     ox.trigger('drag:start', this.cid);
                     this.stop(e);
                     this.leaving = false;
-                    if (!this.isScope(e)) return this.hide();
+                    if (!this.isScope(e.target)) return this.hide();
                     if (!this.checked) this.checked = true; else return;
                     if (!this.isValid(e)) return;
                     if (!this.visible) this.show();
@@ -118,13 +118,36 @@ define('io.ox/core/dropzone', [], function () {
             this.leaving = false;
             this.timeout = -1;
             this.window = undefined;
+            this.eventTarget = options.eventTarget;
 
-            $(document).on(EVENTS, this.onDrag.bind(this));
+            // isScope is super slow due to these parental checks (especially when in iframe)
+            // memoize isScope based on the target element gives the ultimate speedup
+            this.isScope = _.memoize(this.isScope);
+
+            this.onDrag = this.onDrag.bind(this);
+            $(document).on(EVENTS, this.onDrag);
             // firefox does not fire dragleave correct when leaving the window.
             // it also does not fire mouseevents while dragging (so mouseout does not work either)
             // use mouseenter to remove the dropzones when eintering the window wiand nothing is dragged
             if (_.device('firefox')) {
-                $(document).on('mouseenter', this.onMouseenter.bind(this));
+                this.onMouseenter = this.onMouseenter.bind(this);
+                $(document).on('mouseenter', this.onMouseenter);
+            }
+
+            if (this.eventTarget) {
+                // check if event target is inside a different document (e.g. iframe)
+                this.eventTargetDocument = this.eventTarget.prop('nodeName') === '#document' ? this.eventTarget.get(0) : this.eventTarget.prop('ownerDocument');
+                if (this.eventTargetDocument !== document) $(this.eventTargetDocument).on(EVENTS, this.onDrag);
+
+                this.onDrop = this.onDrop.bind(this);
+                this.onDragenter = this.onDragenter.bind(this);
+                this.onDragover = this.onDragover.bind(this);
+                this.onDragleave = this.onDragleave.bind(this);
+                this.eventTarget
+                    .on('drop', this.onDrop)
+                    .on('dragenter', this.onDragenter)
+                    .on('dragover', this.onDragover)
+                    .on('dragleave', this.onDragleave);
             }
 
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
@@ -134,9 +157,11 @@ define('io.ox/core/dropzone', [], function () {
             return this.isEnabled(e) && this.isFile(e);
         },
 
-        isScope: function (e) {
+        isScope: function (target) {
             if (_.isUndefined(this.window)) this.window = this.$el.closest('.window-container, .io-ox-viewer');
-            return $(e.target).closest('.window-container, .io-ox-viewer').is(this.window);
+            var inEventTargetScope = this.eventTarget && this.eventTargetDocument !== document && $.contains(this.eventTargetDocument, target);
+            var inWindowScope = $(target).closest('.window-container, .io-ox-viewer').is(this.window);
+            return inEventTargetScope || inWindowScope;
         },
 
         // overwrite for custom checks
@@ -272,6 +297,15 @@ define('io.ox/core/dropzone', [], function () {
             $(document).off(EVENTS, this.onDrag);
             if (_.device('firefox')) {
                 $(document).off('mouseenter', this.onMouseenter);
+            }
+            if (this.eventTarget) {
+                if (this.eventTargetDocument !== document) $(this.eventTargetDocument).off(EVENTS, this.onDrag);
+
+                this.eventTarget
+                    .off('drop', this.onDrop)
+                    .off('dragenter', this.onDragenter)
+                    .off('dragover', this.onDragover)
+                    .off('dragleave', this.onDragleave);
             }
         }
     });
