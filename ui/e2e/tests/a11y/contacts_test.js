@@ -13,10 +13,6 @@
 
 const { expect } = require('chai');
 
-const excludedElements = [
-    ['.search-field'] // Search field does not have a visible label
-];
-
 Feature('A11y for Contacts App');
 
 Before(async function (users) {
@@ -33,7 +29,7 @@ Scenario('Default List view w/o contact', async function (I) {
     I.click('.vgrid-cell.selectable.contact.selected .vgrid-cell-checkbox');
     I.waitForElement('.summary.empty');
 
-    const currentView = await I.grabAxeReport({ exclude: excludedElements });
+    const currentView = await I.grabAxeReport();
     expect(currentView).to.be.accessible;
 });
 
@@ -42,6 +38,6 @@ Scenario('Default List view with contact detail view', async function (I) {
     I.login('app=io.ox/contacts');
 
     I.waitForElement('.contact-detail');
-    const currentView = await I.grabAxeReport({ exclude: excludedElements });
+    const currentView = await I.grabAxeReport();
     expect(currentView).to.be.accessible;
 });

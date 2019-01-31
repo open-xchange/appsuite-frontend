@@ -1647,17 +1647,15 @@ define('io.ox/core/desktop', [
                     draw: function (baton) {
                         // share data
                         _.extend(baton.data, {
-                            label: gt('Search')
-                            // id:  _.uniqueId(win.name + '-search-field'),
+                            label: gt('Search'),
+                            id: _.uniqueId('search')
                             // guid:  _.uniqueId('form-control-description-')
                         });
                         // search box form
                         baton.$.group = $('<div class="form-group has-feedback">').append(
                             $('<input type="text" class="form-control has-feedback search-field tokenfield-placeholder f6-target">').attr({
-                                //  id: baton.data.id,
-                                placeholder: baton.data.label + '...',
-                                // 'aria-describedby': baton.data.guid
-                                title: baton.data.label
+                                'aria-labelledby': baton.data.id,
+                                placeholder: baton.data.label + '...'
                             })
                         );
                         // add to searchbox area
@@ -1676,7 +1674,8 @@ define('io.ox/core/desktop', [
                             $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
                                 .attr({
                                     'data-original-title': gt('Start search'),
-                                    'aria-label': gt('Start search')
+                                    'aria-label': gt('Start search'),
+                                    'id': baton.data.id
                                 }).append($('<i class="fa fa-search" aria-hidden="true">'))
                                 .tooltip(),
                             // cancel/reset

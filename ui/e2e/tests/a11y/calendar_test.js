@@ -13,10 +13,6 @@
 
 const { expect } = require('chai');
 
-const excludedElements = [
-    ['.search-field'] // Search field does not have a visible label
-];
-
 Feature('A11y for Calendar App');
 
 Before(async function (users) {
@@ -37,7 +33,7 @@ Scenario('Default List view w/o appointments', async function (I) {
     I.click('List');
     I.waitForVisible('.io-ox-center.multi-selection-message');
 
-    const currentView = await I.grabAxeReport({ exclude: excludedElements });
+    const currentView = await I.grabAxeReport();
     expect(currentView).to.be.accessible;
 });
 

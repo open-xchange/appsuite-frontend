@@ -23,10 +23,6 @@ Scenario('Default List view w/o mail', async function (I) {
     I.login('app=io.ox/mail');
 
     I.waitForElement('.mail-detail-pane');
-    const currentView = await I.grabAxeReport({
-        exclude: [
-            ['.search-field'] // Search field does not have a visible label
-        ]
-    });
+    const currentView = await I.grabAxeReport();
     expect(currentView).to.be.accessible;
 });

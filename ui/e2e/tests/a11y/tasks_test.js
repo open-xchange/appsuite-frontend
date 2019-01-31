@@ -13,10 +13,6 @@
 
 const { expect } = require('chai');
 
-const excludedElements = [
-    ['.search-field']  // Search field does not have a visible label
-];
-
 Feature('A11y for Tasks App');
 
 Before(async function (users) {
@@ -33,6 +29,6 @@ Scenario('Default List view w/o tasks', async function (I) {
 
     I.waitForVisible('.summary.empty');
 
-    const currentView = await I.grabAxeReport({ exclude: excludedElements });
+    const currentView = await I.grabAxeReport();
     expect(currentView).to.be.accessible;
 });
