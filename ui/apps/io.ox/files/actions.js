@@ -357,6 +357,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/viewer', {
         collection: 'some && items',
         matches: function (baton) {
+            if (baton.isViewer) { return false; }   // don't open a new viewer instance within the viewer
             return !baton.collection.has('guard') || capabilities.has('guard');
         },
         action: function (baton) {
