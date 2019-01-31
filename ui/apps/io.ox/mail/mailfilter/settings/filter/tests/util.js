@@ -28,8 +28,19 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         }
     });
 
+    var pasteHelper =  function (e) {
+        if (!e || e.type !== 'paste') return;
+        if (e.originalEvent.clipboardData.types.indexOf('text/plain') !== -1) {
+            var self = this;
+            // use a one time listener for the input Event, so we can trigger the changes after the input updated (onDrop is still to early)
+            this.$el.one('input', function () {
+                self.$el.trigger('change');
+            });
+        }
+    };
+
     var Input = mini.InputView.extend({
-        events: { 'change': 'onChange', 'keyup': 'onKeyup' },
+        events: { 'change': 'onChange', 'keyup': 'onKeyup', 'paste': 'onPaste' },
 
         validationForSize: function () {
             var listOfUnits = ['B', 'K', 'KB', 'M', 'MB', 'G', 'GB'],
@@ -58,6 +69,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                 this.model.set(this.name, this.$el.val());
             }
 
+            // force validation
+            this.onKeyup();
         },
         onKeyup: function () {
             var state;
@@ -71,7 +84,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
 
             this.model.trigger(state + this.name);
             this.$el.trigger('toggle:saveButton');
-        }
+        },
+        onPaste: pasteHelper
     });
 
     var drawDeleteButton = function (type) {

@@ -34,8 +34,19 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
         });
     }
 
+    var pasteHelper =  function (e) {
+        if (!e || e.type !== 'paste') return;
+        if (e.originalEvent.clipboardData.types.indexOf('text/plain') !== -1) {
+            var self = this;
+            // use a one time listener for the input Event, so we can trigger the changes after the input updated (onDrop is still to early)
+            this.$el.one('input', function () {
+                self.$el.trigger('change');
+            });
+        }
+    };
+
     var Input = mini.InputView.extend({
-        events: { 'change': 'onChange', 'keyup': 'onKeyup' },
+        events: { 'change': 'onChange', 'keyup': 'onKeyup', 'paste': 'onPaste' },
         onChange: function () {
             if (this.name === 'flags') {
                 var value = ((/customflag_/g.test(this.id)) || (/removeflags_/g.test(this.id))) ? ['$' + this.$el.val().toString()] : [this.$el.val()];
@@ -45,6 +56,10 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
             } else {
                 this.model.set(this.name, this.$el.val());
             }
+
+            // force validation
+            this.onKeyup();
+
         },
         update: function () {
             if (/customflag_/g.test(this.id) || /removeflags_/g.test(this.id)) {
@@ -59,7 +74,9 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
             var state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
             this.model.trigger(state + this.name);
             this.$el.trigger('toggle:saveButton');
-        }
+        },
+        onPaste:  pasteHelper
+
     });
 
     var Dropdown = mini.DropdownLinkView.extend({
