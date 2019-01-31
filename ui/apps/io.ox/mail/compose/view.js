@@ -847,8 +847,8 @@ define('io.ox/mail/compose/view', [
                     if (!_.isEmpty(model.get('cc'))) self.toggleTokenfield('cc');
                 }
                 if (!_.isEmpty(model.get('bcc'))) self.toggleTokenfield('bcc');
-                //TODO: outdated? Maybe we could switch to .get('content')
-                self.setBody(model.getFixedContent());
+
+                self.setBody(model.get('content'));
             });
         },
 

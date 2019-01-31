@@ -85,21 +85,6 @@ define('io.ox/mail/compose/model', [
             this.requestSave = _.throttle(this.save.bind(this), settings.get('autoSaveAfter', 15000));
         },
 
-        getFixedContent: function () {
-            var content = this.get('content'),
-                type = this.get('contentType');
-            //TODO: outdated? (introduced with b6be5517159c76b0597fdf9debeed9928e9799ba)
-            if (type === 'text/plain') {
-                content = _.unescapeHTML(content.replace(/<br\s*\/?>/g, '\n'));
-            } else if (type === 'text/html') {
-                //TODO: outdated? (introduced with 605da1af76716a3e4a505fd8287fa2b39bb4d574)
-                content = mailUtil.replaceImagePrefix(content);
-                //TODO: outdated? (introduce with bfc365096f7c19c6e73fc03057bdf8fd9b22d5c1)
-                content = content.replace(/^<div\sid="ox-\S+">/, '').replace(/<\/div>$/, '');
-            }
-            return content;
-        },
-
         send: function () {
             this.destroyed = true;
             return composeAPI.space.send(this.get('id'), this.toJSON()).fail(function () {
