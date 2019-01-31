@@ -46,8 +46,8 @@ define('io.ox/backbone/views/action-dropdown', [
         },
 
         render: function (baton) {
-            util.renderDropdownItems(this.$el, baton, this.options);
-            this.trigger('ready');
+            util.renderDropdownItems(this.$el, baton, this.options).done(this.trigger.bind(this, 'ready'));
+            this.trigger('rendered');
             return this;
         },
 

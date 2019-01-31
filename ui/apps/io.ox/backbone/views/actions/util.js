@@ -142,24 +142,22 @@ define('io.ox/backbone/views/actions/util', [
                 .map(function (action) {
                     if (item.link.steady) $li.children('a').addClass('disabled').attr('aria-disabled', true);
                     else $li.addClass('hidden');
-                    return $.when(action.matchesAsync(baton)).then(
-                        function (state) {
+                    return $.when(action.matchesAsync(baton))
+                        .then(null, function () { return false; })
+                        .always(function (state) {
                             if (!state) {
                                 if (!item.link.steady) $li.remove();
                                 return;
                             }
                             if (item.link.steady) $li.children('a').removeClass('disabled').attr('aria-disabled', null);
                             else $li.removeClass('hidden');
-                        },
-                        // capture rejects; might stop outer $.when() too early otherwise
-                        _.noop
-                    );
+                        });
                 });
         },
 
         waitForAllAsyncItems: function (items, callback) {
             var defs = _(items).chain().pluck('def').flatten().value();
-            $.when.apply($, defs).done(callback);
+            return $.when.apply($, defs).done(callback);
         },
 
         renderListItem: function ($li, baton, item) {
@@ -216,11 +214,13 @@ define('io.ox/backbone/views/actions/util', [
             var $ul = $el.find('> .dropdown-menu');
             $ul.empty().append(_(items).pluck('$li'));
             $ul.find('a[role="button"]').attr('role', 'menuitem');
-            util.injectSectionDividers($ul);
 
-            // disable empty or completely disabled drop-downs
-            var disabled = !$ul.find('[data-action]:not(.disabled)').length;
-            $el.find('.dropdown-toggle').toggleClass('disabled', disabled).attr('aria-disabled', disabled);
+            return util.waitForAllAsyncItems(items, function () {
+                util.injectSectionDividers($ul);
+                // disable empty or completely disabled drop-downs
+                var disabled = !$ul.find('[data-action]:not(.disabled)').length;
+                $el.find('.dropdown-toggle').toggleClass('disabled', disabled).attr('aria-disabled', disabled);
+            });
         },
 
         injectSectionDividers: function ($ul) {

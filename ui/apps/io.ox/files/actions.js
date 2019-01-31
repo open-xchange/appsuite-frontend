@@ -362,8 +362,9 @@ define('io.ox/files/actions', [
         action: function (baton) {
             ox.load(['io.ox/core/viewer/main']).done(function (Viewer) {
                 var viewer = new Viewer(), selection = baton.array();
-                if (selection.length > 1) {
+                if (selection.length > 1 || !baton.all) {
                     // only show selected files - the first one is automatically selected
+                    // baton.all is not defined when opening from version dropdown
                     viewer.launch({ files: selection });
                 } else {
                     viewer.launch({ selection: _(selection).first(), files: baton.all.models });
@@ -1377,12 +1378,13 @@ define('io.ox/files/actions', [
 
     ext.point('io.ox/files/versions/links/inline').extend(
         {
-            id: 'open',
+            id: 'view',
             index: 100,
             prio: 'lo',
             mobile: 'lo',
-            title: gt('Open'),
-            ref: 'io.ox/files/actions/open'
+            title: gt('View'),
+            ref: 'io.ox/files/actions/viewer',
+            section: 'view'
         },
         {
             id: 'editor',
@@ -1390,8 +1392,8 @@ define('io.ox/files/actions', [
             prio: 'lo',
             mobile: 'lo',
             title: gt('Edit'),
-            section: 'edit',
-            ref: 'io.ox/files/actions/editor'
+            ref: 'io.ox/files/actions/editor',
+            section: 'edit'
         },
         {
             id: 'download',
@@ -1399,7 +1401,8 @@ define('io.ox/files/actions', [
             prio: 'lo',
             mobile: 'lo',
             title: gt('Download'),
-            ref: 'io.ox/files/actions/downloadversion'
+            ref: 'io.ox/files/actions/downloadversion',
+            section: 'edit'
         },
         {
             id: 'makeCurrent',
@@ -1407,7 +1410,8 @@ define('io.ox/files/actions', [
             prio: 'lo',
             mobile: 'lo',
             title: gt('Make this the current version'),
-            ref: 'io.ox/files/versions/actions/makeCurrent'
+            ref: 'io.ox/files/versions/actions/makeCurrent',
+            section: 'edit'
         },
         {
             id: 'delete',

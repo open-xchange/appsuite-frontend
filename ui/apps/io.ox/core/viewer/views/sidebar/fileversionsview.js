@@ -87,7 +87,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         index: 100,
         prio: 'lo',
         mobile: 'lo',
-        title: gt('View'),
+        title: gt('View this version'),
         section: 'view',
         ref: 'io.ox/files/actions/viewer/display-version'
     });
@@ -114,7 +114,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
             var dropdown = new ActionDropdownView({ point: 'io.ox/files/versions/links/inline' });
 
-            dropdown.once('ready', function () {
+            dropdown.once('rendered', function () {
                 var $toggle = this.$('> .dropdown-toggle');
                 if (baton.data.current_version) $toggle.addClass('current');
                 Util.setClippedLabel($toggle, baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename);

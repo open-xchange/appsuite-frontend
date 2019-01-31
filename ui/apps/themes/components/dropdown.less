@@ -161,9 +161,10 @@ ul.dropdown-menu li a.disabled {
     .dropdown-menu.io-ox-busy {
         min-height: 100px;
     }
+}
 
-    .dropdown-menu:empty,
-    .divider:first-child, .divider:last-child, .divider + .divider { display: none; }
+.dropdown-menu {
+    &:empty, .divider:first-child, .divider:last-child, .divider + .divider { display: none; }
 }
 
 .smart-dropdown-container {
