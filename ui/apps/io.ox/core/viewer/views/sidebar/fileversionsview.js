@@ -87,7 +87,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         index: 100,
         prio: 'lo',
         mobile: 'lo',
-        label: gt('View'),
+        title: gt('View'),
         section: 'view',
         ref: 'io.ox/files/actions/viewer/display-version'
     });
