@@ -32,6 +32,8 @@ define('io.ox/calendar/actions/change-organizer', [
 
             if (!appointmentData) return;
             util.showRecurrenceDialog(appointmentData, { dontAllowExceptions: true }).done(function (result) {
+                if (result === 'cancel') return;
+
                 new ModalDialog({
                     title: gt('Change organizer')
                 })
@@ -96,7 +98,7 @@ define('io.ox/calendar/actions/change-organizer', [
                         organizerView.render().$el,
                         $('<label>').text(gt('Select new organizer')).attr({ for: guid = _.uniqueId('label-') }),
                         typeahead.$el.attr({ id: guid }),
-                        $('<label>').text(gt('Leave a comment for the new organizer.')).attr({ for: guid = _.uniqueId('label-') }),
+                        $('<label>').text(gt('Please leave a comment for other participants.')).attr({ for: guid = _.uniqueId('label-') }),
                         new mini.InputView({ name: 'comment', model: this.model, placeholder: gt('Password'), autocomplete: false }).render().$el.attr('id', guid)
                     );
                     typeahead.render();
@@ -113,6 +115,9 @@ define('io.ox/calendar/actions/change-organizer', [
                         folder: appointmentData.folder,
                         organizer: this.model.get('newOrganizer').pick(['cn', 'email', 'entity', 'uri'])
                     };
+                    // new organizer is the same as the old organizer... nothing to do
+                    if (params.organizer.entity === appointmentData.organizer.entity) return;
+
                     if (result === 'thisandfuture') {
                         params.recurrenceId = appointmentData.recurrenceId;
                     }
