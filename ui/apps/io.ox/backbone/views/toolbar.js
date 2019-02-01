@@ -121,8 +121,6 @@ define('io.ox/backbone/views/toolbar', [
                 $ul.on('click', 'a', $.proxy(util.invokeByEvent, this));
             }
             $dropdown.insertAfter($lo.last());
-            // rewrite button role for correct a11y support
-            $lo.find('a[role="button"]').attr('role', 'menuitem');
             $ul.append($lo);
             util.injectSectionDividers($ul);
         },

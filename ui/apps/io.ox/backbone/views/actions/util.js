@@ -214,8 +214,6 @@ define('io.ox/backbone/views/actions/util', [
             $ul.empty().append(_(items).pluck('$li'));
 
             return util.waitForAllAsyncItems(items, function () {
-                $ul.find('li.hidden').remove();
-                $ul.find('a[role="button"]').attr('role', 'menuitem');
                 util.injectSectionDividers($ul);
                 // disable empty or completely disabled drop-downs
                 var disabled = !$ul.find('[data-action]:not(.disabled)').length;
@@ -225,6 +223,10 @@ define('io.ox/backbone/views/actions/util', [
 
         injectSectionDividers: function ($ul) {
             var section = null;
+            // clean up first
+            $ul.find('li.hidden').remove();
+            $ul.find('a[role="button"]').attr('role', 'menuitem');
+            // inject sections
             $ul.children().each(function (i, node) {
                 var data = $(node).data();
                 // add link caption?
