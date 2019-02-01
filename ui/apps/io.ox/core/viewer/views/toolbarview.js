@@ -250,14 +250,14 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'lo',
                     title: gt('Add to favorites'),
                     section: 'favorites',
-                    ref: 'io.ox/files/favorites/add'
+                    ref: 'io.ox/files/actions/favorites/add'
                 },
                 'removefromfavorites': {
                     prio: 'lo',
                     mobile: 'lo',
                     title: gt('Remove from favorites'),
                     section: 'favorites',
-                    ref: 'io.ox/files/favorites/remove'
+                    ref: 'io.ox/files/actions/favorites/remove'
                 },
                 'uploadnewversion': {
                     prio: 'lo',
