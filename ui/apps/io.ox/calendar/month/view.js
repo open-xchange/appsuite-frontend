@@ -521,6 +521,12 @@ define('io.ox/calendar/month/view', [
             return this;
         },
 
+        rerender: function () {
+            this.toolbarView.update();
+            this.monthView.render();
+            return this;
+        },
+
         getRequestParam: function () {
             var params = {
                 start: this.model.get('startDate').valueOf(),
@@ -544,7 +550,10 @@ define('io.ox/calendar/month/view', [
             }
 
             // Rerender the view when the date changes (e.g. keep appsuite open overnight)
-            if (!this.model.get('currentDate').isSame(moment(), 'day')) this.render();
+            if (!this.model.get('currentDate').isSame(moment(), 'day')) {
+                this.model.set('currentDate', moment());
+                this.rerender();
+            }
 
             this.setCollection(collection);
             $.when(this.app.folder.getData(), this.app.folders.getData()).done(function (folder, folders) {
