@@ -150,9 +150,11 @@ define('io.ox/files/actions', [
         toggle: !!window.Blob,
         collection: 'one && modify',
         matches: function (baton) {
+
             if (isTrash(baton)) return false;
             if (fromMailCompose(baton)) return false;
             if (hasStatus('lockedByOthers', baton)) return false;
+
             var model = _.first(baton.models),
                 isEncrypted = model && model.isEncrypted(),
                 encryptionPart = isEncrypted ? '\\.pgp' : '',
@@ -160,9 +162,9 @@ define('io.ox/files/actions', [
                 fileExtensions = _.without(allowedFileExtensions, 'pgp'),
                 // build regex from list, pgp is added if guard is available
                 regex = new RegExp('\\.(' + fileExtensions.join('|') + '?)' + encryptionPart + '$', 'i');
-            return regex.test(baton.first().filename);
-        },
-        matchesAsync: function (baton) {
+
+            if (!regex.test(baton.first().filename)) return false;
+
             return api.versions.getCurrentState(baton.first()).then(function (currentVersion) {
                 return currentVersion;
             });
@@ -238,6 +240,7 @@ define('io.ox/files/actions', [
             download(baton.array());
         }
     });
+
     // TODO check action Mario
     new Action('io.ox/files/actions/download-folder', {
         // no download for older ios devices
@@ -392,9 +395,8 @@ define('io.ox/files/actions', [
             if (fromMailCompose(baton)) return false;
             if (isEmpty(baton)) return false;
             if (hasStatus('locked', baton)) return false;
-            return true;
+            return lockMatches(baton);
         },
-        matchesAsync: lockMatchesAsync,
         action: function (baton) {
             ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
                 action.lock(baton.array());
@@ -411,9 +413,9 @@ define('io.ox/files/actions', [
             if (isEmpty(baton)) return false;
             if (fromMailCompose(baton)) return false;
             if (!hasStatus('locked', baton)) return false;
-            return hasStatus('lockedByMe', baton) || hasStatus('createdByMe', baton);
+            if (!hasStatus('lockedByMe', baton) && !hasStatus('createdByMe', baton)) return false;
+            return lockMatches(baton);
         },
-        matchesAsync: lockMatchesAsync,
         action: function (baton) {
             ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
                 action.unlock(baton.array());
@@ -421,7 +423,7 @@ define('io.ox/files/actions', [
         }
     });
 
-    function lockMatchesAsync(baton) {
+    function lockMatches(baton) {
         var folder_id = _.first(baton.models).get('folder_id');
         return folderAPI.get(folder_id).then(function (fileModel) {
             return !folderAPI.isExternalFileStorage(fileModel);
@@ -467,9 +469,6 @@ define('io.ox/files/actions', [
             if (isTrash(baton)) return false;
             if (hasStatus('lockedByOthers', baton)) return false;
             if (fromMailCompose(baton)) return false;
-            return true;
-        },
-        matchesAsync: function (baton) {
             // shortcuts
             if (baton.collection.has('folders')) return baton.collection.has('rename:folder');
             if (baton.collection.has('modify')) return true;
@@ -518,9 +517,7 @@ define('io.ox/files/actions', [
             if (isTrash(baton)) return false;
             if (fromMailCompose(baton)) return false;
             if (hasStatus('lockedByOthers', baton)) return false;
-            return folderAPI.pool.getModel(baton.first().folder_id).supports('extended_metadata');
-        },
-        matchesAsync: function (baton) {
+            if (!folderAPI.pool.getModel(baton.first().folder_id).supports('extended_metadata')) return false;
             if (baton.collection.has('modify')) return true;
             return hasObjectWritePermissions(baton.first());
         },

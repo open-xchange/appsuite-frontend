@@ -43,7 +43,7 @@ define('io.ox/calendar/toolbar', [
             mobile: 'hi',
             title: gt('New'),
             tooltip: gt('New appointment'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/create'
         },
         'schedule': {
@@ -87,14 +87,14 @@ define('io.ox/calendar/toolbar', [
             prio: 'lo',
             mobile: 'lo',
             title: gt('Export'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/export'
         },
         'print': {
             prio: 'lo',
             mobile: 'lo',
             title: gt('Print'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/print-appointment'
         },
         'move': {
@@ -102,7 +102,7 @@ define('io.ox/calendar/toolbar', [
             mobile: 'lo',
             title: gt('Move'),
             ref: 'io.ox/calendar/detail/actions/move',
-            steady: true,
+            drawDisabled: true,
             section: 'file-op'
         }
     };

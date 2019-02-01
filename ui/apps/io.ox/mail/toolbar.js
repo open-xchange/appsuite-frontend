@@ -41,7 +41,7 @@ define('io.ox/mail/toolbar', [
             mobile: 'hi',
             title: gt('Compose'),
             tooltip: gt('Compose new email'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/mail/actions/compose'
         },
         'edit': {
@@ -61,7 +61,7 @@ define('io.ox/mail/toolbar', [
             mobile: 'lo',
             icon: 'fa fa-reply',
             title: gt('Reply to sender'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/mail/actions/reply'
         },
         'reply-all': {
@@ -69,7 +69,7 @@ define('io.ox/mail/toolbar', [
             mobile: 'lo',
             icon: 'fa fa-reply-all',
             title: gt('Reply to all recipients'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/mail/actions/reply-all'
         },
         'forward': {
@@ -77,7 +77,7 @@ define('io.ox/mail/toolbar', [
             mobile: 'lo',
             icon: 'fa fa-mail-forward',
             title: gt('Forward'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/mail/actions/forward'
         },
         'delete': {
@@ -85,7 +85,7 @@ define('io.ox/mail/toolbar', [
             mobile: 'lo',
             icon: 'fa fa-trash-o',
             title: gt('Delete'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/mail/actions/delete'
         },
         'spam': {

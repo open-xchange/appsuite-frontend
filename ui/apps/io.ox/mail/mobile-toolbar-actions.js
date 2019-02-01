@@ -29,7 +29,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
             title: gt('Compose'),
             icon: 'fa fa-pencil',
             ref: 'io.ox/mail/actions/compose',
-            steady: true
+            drawDisabled: true
         },
         'reply': {
             prio: 'hi',
@@ -37,7 +37,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
             icon: 'fa fa-reply',
             title: gt('Reply to sender'),
             ref: 'io.ox/mail/actions/reply',
-            steady: true
+            drawDisabled: true
         },
         'reply-all': {
             prio: 'hi',
@@ -45,7 +45,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
             icon: 'fa fa-reply-all',
             title: gt('Reply to all recipients'),
             ref: 'io.ox/mail/actions/reply-all',
-            steady: true
+            drawDisabled: true
         },
         'forward': {
             prio: 'hi',
@@ -53,7 +53,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
             icon: 'fa fa-mail-forward',
             title: gt('Forward'),
             ref: 'io.ox/mail/actions/forward',
-            steady: true
+            drawDisabled: true
         },
         'delete': {
             prio: 'hi',
@@ -61,7 +61,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
             icon: 'fa fa-trash-o',
             title: gt('Delete'),
             ref: 'io.ox/mail/actions/delete',
-            steady: true
+            drawDisabled: true
         },
         'move': {
             prio: 'hi',
@@ -69,7 +69,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
             title: gt('Move'),
             ref: 'io.ox/mail/actions/move',
             section: 'file-op',
-            steady: true
+            drawDisabled: true
         },
         'mark-read': {
             prio: 'hi',
@@ -77,7 +77,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
             title: gt('Mark as read'),
             ref: 'io.ox/mail/actions/mark-read',
             section: 'flags',
-            steady: true
+            drawDisabled: true
         },
         'mark-unread': {
             prio: 'hi',
@@ -85,7 +85,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
             title: gt('Mark as unread'),
             ref: 'io.ox/mail/actions/mark-unread',
             section: 'flags',
-            steady: true
+            drawDisabled: true
         },
         'copy': {
             prio: 'hi',

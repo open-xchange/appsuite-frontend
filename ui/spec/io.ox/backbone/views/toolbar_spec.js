@@ -29,7 +29,7 @@ define([
     ext.point(POINT + '/links').extend(
         { id: 'one', title: 'One', prio: 'hi', ref: POINT + '/actions/one', section: 'a' },
         { id: 'two', title: 'Two', prio: 'hi', ref: POINT + '/actions/two', icon: 'fa fa-trash', section: 'a' },
-        { id: 'three', title: 'Three', prio: 'hi', ref: POINT + '/actions/three', steady: true, section: 'a' },
+        { id: 'three', label: 'Three', prio: 'hi', ref: POINT + '/actions/three', drawDisabled: true, section: 'a' },
         { id: 'four', title: 'Four', prio: 'lo', ref: POINT + '/actions/four', section: 'b' },
         { id: 'five', title: 'Five', prio: 'lo', ref: POINT + '/actions/five', section: 'b' },
         { id: 'six', title: 'Six', prio: 'lo', ref: POINT + '/actions/six', section: 'c' },
@@ -39,19 +39,25 @@ define([
 
     // define actions
     action(POINT + '/actions/one', {
-        device: 'chrome'
-    });
-
-    action(POINT + '/actions/two', {
+        device: 'chrome',
         collection: 'some'
     });
 
+    action(POINT + '/actions/two', {
+        // backwars compat
+        requires: function (e) {
+            if (!e.collection.has('some')) return;
+            return $.when(true);
+        }
+    });
+
     action(POINT + '/actions/three', {
-        matches: function () { return false; }
+        // drawDisabled
+        matches: _.constant(false)
     });
 
     action(POINT + '/actions/four', {
-        matches: function () { return true; }
+        matches: _.constant(true)
     });
 
     action(POINT + '/actions/five');
@@ -66,10 +72,8 @@ define([
 
     action(POINT + '/actions/eight', {
         matches: function () {
-            return enableEight;
-        },
-        matchesAsync: function () {
-            return _.wait(1).then(function () { return true; });
+            if (!enableEight) return false;
+            return _.wait(1).then(_.constant(true));
         }
     });
 
@@ -96,8 +100,12 @@ define([
                 expect(this.toolbar.$('> ul').attr('class'), 'class').to.equal('classic-toolbar');
                 // toolbar has a label
                 expect(this.toolbar.$('> ul[aria-label]', 'aria-label').length).to.equal(1);
+                // enabled actions are: one, two, three (drawDisabled), four, five, +1 for the "more" dropdown
                 // all <li> have proper role
                 expect(this.toolbar.$('li[role="presentation"]', 'presentation').length).to.equal(6);
+                // has proper title
+                expect(this.toolbar.$('a[role="button"]', 'title').eq(0).text()).to.equal('One');
+                expect(this.toolbar.$('a[role="button"]', 'label').eq(2).text()).to.equal('Three');
                 // all <a> have proper role
                 expect(this.toolbar.$('a[role="button"]', 'role button').length).to.equal(4);
                 expect(this.toolbar.$('a[role="menuitem"]', 'role menuitem').length).to.equal(2);

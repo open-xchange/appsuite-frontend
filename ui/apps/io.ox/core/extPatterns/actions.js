@@ -142,7 +142,7 @@ define('io.ox/core/extPatterns/actions', [
         // combine actions
         var defs = ext.point(ref).map(function (action) {
 
-            var retRequires, retMatches, retMatchesAsync, actionBaton, params = {};
+            var retRequires, retStatic, retMatches, actionBaton, params = {};
 
             if (stopped) return $.when(false);
 
@@ -157,13 +157,13 @@ define('io.ox/core/extPatterns/actions', [
                         stopPropagation: stopPropagation
                     });
                     if (!util.checkActionAvailability(action)) {
-                        retMatches = false;
+                        retStatic = false;
                     } else if (!util.checkActionEnabled(actionBaton, action)) {
-                        retMatches = false;
+                        retStatic = false;
                     } else {
-                        retMatches = true;
-                        if (_.isFunction(action.matchesAsync)) {
-                            retMatchesAsync = action.matchesAsync(actionBaton);
+                        retStatic = true;
+                        if (_.isFunction(action.matches)) {
+                            retMatches = action.matches(actionBaton);
                         }
                     }
                 } else if (_.isFunction(action.requires)) {
@@ -186,8 +186,8 @@ define('io.ox/core/extPatterns/actions', [
             }
 
             if (retRequires) return $.when(retRequires);
-            if (retMatches === false) return $.when(false);
-            if (retMatchesAsync) return $.when(retMatchesAsync);
+            if (retStatic === false) return $.when(false);
+            if (retMatches) return $.when(retMatches);
             return $.when(true);
         })
         .value();

@@ -31,7 +31,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             mobile: 'hi',
             title: gt('Create'),
             icon: 'fa fa-plus',
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/create'
         },
         'listView': {
@@ -39,7 +39,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             mobile: 'hi',
             title: gt('Listview'),
             icon: 'fa fa-list',
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/calendar/actions/switch-to-list-view'
         },
         'calendarView': {
@@ -47,7 +47,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             mobile: 'hi',
             title: gt('Calendar view'),
             icon: 'fa fa-table',
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/calendar/actions/switch-to-month-view'
         },
         'next': {
@@ -55,7 +55,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             mobile: 'hi',
             title: gt('Show next month'),
             icon: 'fa fa-chevron-right',
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/calendar/actions/showNext'
         },
         'prev': {
@@ -63,14 +63,14 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             mobile: 'hi',
             title: gt('Show previous month'),
             icon: 'fa fa-chevron-left',
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/calendar/actions/showPrevious'
         },
         'today': {
             prio: 'hi',
             mobile: 'hi',
             title: gt('Today'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/calendar/actions/showToday'
         },
         'move': {
@@ -78,7 +78,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             mobile: 'hi',
             title: gt('Move'),
             icon: 'fa fa-sign-in',
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/move'
         },
         'delete': {
@@ -86,14 +86,14 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             mobile: 'hi',
             title: gt('Delete'),
             icon: 'fa fa-trash-o',
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/delete'
         },
         'export': {
             prio: 'hi',
             mobile: 'hi',
             title: gt('Export'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/export'
         }
     };

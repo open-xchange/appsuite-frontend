@@ -62,7 +62,7 @@ define('io.ox/backbone/views/toolbar', [
                 .map(util.processItem.bind(null, baton))
                 .map(util.createItem.bind(null, baton));
             var $toolbar = this.createToolbar().append(_(items).pluck('$li'));
-            util.waitForAllAsyncItems(items, function () {
+            util.waitForMatches(items, function () {
                 this.injectMoreDropdown($toolbar);
                 this.replaceToolbar($toolbar);
                 this.initButtons($toolbar);
@@ -96,6 +96,9 @@ define('io.ox/backbone/views/toolbar', [
         },
 
         injectMoreDropdown: function ($toolbar) {
+            // remove hidden elements first
+            $toolbar.find('li.hidden').remove();
+            // get elements with lower priority
             var $lo = $toolbar.children('[data-prio="lo"]');
             // hide $lo if all items are disabled (we had this behavior before)
             // reason: no disabled items at the end of the list & no useless dropdown

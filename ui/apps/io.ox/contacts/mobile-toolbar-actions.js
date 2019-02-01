@@ -29,7 +29,7 @@ define('io.ox/contacts/mobile-toolbar-actions', [
             mobile: 'hi',
             title: gt('New'),
             icon: 'fa fa-plus',
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/contacts/actions/create'
         },
         'send': {
@@ -38,21 +38,21 @@ define('io.ox/contacts/mobile-toolbar-actions', [
             title: gt('Send email'),
             icon: 'fa fa-envelope-o',
             ref: 'io.ox/contacts/actions/send',
-            steady: true
+            drawDisabled: true
         },
         'export': {
             prio: 'lo',
             mobile: 'lo',
             title: gt('Export'),
             ref: 'io.ox/contacts/actions/export',
-            steady: true
+            drawDisabled: true
         },
         'vcard': {
             prio: 'lo',
             mobile: 'lo',
             title: gt('Send as vCard'),
             ref: 'io.ox/contacts/actions/vcard',
-            steady: true
+            drawDisabled: true
         },
         'invite': {
             prio: 'hi',
@@ -60,7 +60,7 @@ define('io.ox/contacts/mobile-toolbar-actions', [
             title: gt('Invite to appointment'),
             icon: 'fa fa-calendar-o',
             ref: 'io.ox/contacts/actions/invite',
-            steady: true
+            drawDisabled: true
         },
         'edit': {
             prio: 'hi',
@@ -68,7 +68,7 @@ define('io.ox/contacts/mobile-toolbar-actions', [
             title: gt('Edit'),
             icon: 'fa fa-pencil',
             ref: 'io.ox/contacts/actions/update',
-            steady: true
+            drawDisabled: true
 
         },
         'delete': {
@@ -76,19 +76,19 @@ define('io.ox/contacts/mobile-toolbar-actions', [
             mobile: 'hi',
             title: gt('Delete'),
             icon: 'fa fa-trash-o',
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/contacts/actions/delete'
         },
         'move': {
             mobile: 'lo',
             title: gt('Move'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/contacts/actions/move'
         },
         'copy': {
             mobile: 'lo',
             title: gt('Copy'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/contacts/actions/copy'
         }
     };

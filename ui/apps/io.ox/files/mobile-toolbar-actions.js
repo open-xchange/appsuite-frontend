@@ -30,7 +30,7 @@ define('io.ox/files/mobile-toolbar-actions', [
             'create': {
                 prio: 'hi',
                 mobile: 'hi',
-                steady: true,
+                drawDisabled: true,
                 icon: 'fa fa-plus',
                 dropdown: 'io.ox/files/toolbar/new'
             },
@@ -39,7 +39,7 @@ define('io.ox/files/mobile-toolbar-actions', [
                 mobile: 'hi',
                 label: gt('Show icons'),
                 icon: 'fa fa-th',
-                steady: true,
+                drawDisabled: true,
                 ref: 'io.ox/files/actions/layout-icon'
             },
             'view-tile': {
@@ -47,7 +47,7 @@ define('io.ox/files/mobile-toolbar-actions', [
                 mobile: 'hi',
                 label: gt('Show tiles'),
                 icon: 'fa fa-th-large',
-                steady: true,
+                drawDisabled: true,
                 ref: 'io.ox/files/actions/layout-tile'
             },
             'view-list': {
@@ -55,7 +55,7 @@ define('io.ox/files/mobile-toolbar-actions', [
                 mobile: 'hi',
                 label: gt('Show list'),
                 icon: 'fa fa-align-justify',
-                steady: true,
+                drawDisabled: true,
                 ref: 'io.ox/files/actions/layout-list'
             }
         };

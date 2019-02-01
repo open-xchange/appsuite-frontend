@@ -71,7 +71,7 @@ define('plugins/administration/resources/settings/toolbar', [
             prio: 'hi',
             id: 'create',
             title: gt('Create new resource'),
-            steady: true,
+            drawDisabled: true,
             ref: 'administration/resources/create'
         },
         {
@@ -79,7 +79,7 @@ define('plugins/administration/resources/settings/toolbar', [
             prio: 'hi',
             id: 'edit',
             title: gt('Edit'),
-            steady: true,
+            drawDisabled: true,
             ref: 'administration/resources/edit'
         },
         {
@@ -87,7 +87,7 @@ define('plugins/administration/resources/settings/toolbar', [
             prio: 'hi',
             id: 'delete',
             title: gt('Delete'),
-            steady: true,
+            drawDisabled: true,
             ref: 'administration/resources/delete'
         }
     );

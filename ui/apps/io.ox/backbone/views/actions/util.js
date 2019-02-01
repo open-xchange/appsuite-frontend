@@ -68,7 +68,6 @@ define('io.ox/backbone/views/actions/util', [
             if (!available) return { link: link, available: false };
             // check collection && matches
             var enabled = actions.some(util.checkActionEnabled.bind(null, baton));
-            baton.resumePropagation();
             if (/\bactions/.test(_.url.hash('debug'))) {
                 console.debug('item', link.ref, 'available', available, 'enabled', enabled, actions, baton.data, baton);
             }
@@ -101,22 +100,13 @@ define('io.ox/backbone/views/actions/util', [
             if (action.collection && !baton.collection.matches(action.collection)) return false;
             // folder check?
             if (action.folder && !util.checkFolder(baton, action)) return false;
-            // matches as function?
-            if (_.isFunction(action.matches)) {
-                try {
-                    return action.matches(baton);
-                } catch (e) {
-                    console.error(e);
-                    return false;
-                }
-            }
             // otherwise
             return true;
         },
 
         createItem: function (baton, item) {
             if (!item.available) return;
-            if (!item.enabled && !item.link.steady) return;
+            if (!item.enabled && !item.link.drawDisabled) return;
             var $li = util.createListItem(), def;
             // nested dropdown?
             if (item.link.dropdown) {
@@ -129,32 +119,39 @@ define('io.ox/backbone/views/actions/util', [
             } else {
                 util.renderListItem($li, baton, item);
             }
-            // finally looks for async checks
-            return { $li: $li, def: util.processAsync($li, baton, item) };
+            // finally looks for dynamic checks
+            return { $li: $li, def: util.processMatches($li, baton, item) };
         },
 
-        // cover matchesAsync
-        // some actions need to run async checks
-        // toolbar item gets hidden or disabled (if steady) until function resolves
-        processAsync: function ($li, baton, item) {
-            var list = ext.point(item.link.ref).list().filter(hasAsyncCheck);
-            // return early if there is no matchesAsync
-            if (!list.length) return [];
-            // hide element
-            if (item.link.steady) $li.children('a').addClass('disabled').attr('aria-disabled', true);
-            else $li.addClass('hidden');
-            // process matchesAsync
-            var deps = list.map(asyncCheck.bind(null, baton));
-            // wait for all matchesAsync
-            return $.when.apply($, deps).done(function () {
-                var state = _(arguments).some(Boolean);
-                if (!state) return;
-                if (item.link.steady) $li.children('a').removeClass('disabled').attr('aria-disabled', null);
-                else $li.removeClass('hidden');
+        // some actions need to run further checks
+        // toolbar item gets hidden or disabled (if drawDisabled) until function resolves
+        processMatches: function ($li, baton, item) {
+
+            var list = ext.point(item.link.ref).list(),
+                result = $.Deferred();
+
+            nextAction();
+
+            function nextAction() {
+                var action = list.shift();
+                if (action && !baton.isPropagationStopped()) checkAction(action); else result.resolve(false);
+            }
+
+            function checkAction(action) {
+                matches(baton, action).done(function (state) {
+                    if (state) result.resolve(true); else nextAction();
+                });
+            }
+
+            return result.done(function (state) {
+                baton.resumePropagation();
+                if (state) return;
+                if (item.link.drawDisabled) $li.children('a').addClass('disabled').attr('aria-disabled', true);
+                else $li.addClass('hidden');
             });
         },
 
-        waitForAllAsyncItems: function (items, callback) {
+        waitForMatches: function (items, callback) {
             var defs = _(items).chain().pluck('def').flatten().compact().value();
             return $.when.apply($, defs).done(callback);
         },
@@ -213,7 +210,7 @@ define('io.ox/backbone/views/actions/util', [
             var $ul = $el.find('> .dropdown-menu');
             $ul.empty().append(_(items).pluck('$li'));
 
-            return util.waitForAllAsyncItems(items, function () {
+            return util.waitForMatches(items, function () {
                 util.injectSectionDividers($ul);
                 // disable empty or completely disabled drop-downs
                 var disabled = !$ul.find('[data-action]:not(.disabled)').length;
@@ -332,7 +329,7 @@ define('io.ox/backbone/views/actions/util', [
             return ext.Baton(_.extend({ data: data, selection: data, collection: new Collection.Simple(data) }, options));
         },
 
-        invoke: function (ref, baton) {
+        invoke: function (ref, baton, checkOnly) {
 
             var point = ext.point(ref),
                 // get all sets of capabilities including empty sets
@@ -344,14 +341,14 @@ define('io.ox/backbone/views/actions/util', [
             // capabilities, we try to offer upsell
             // if an action has an empty set we must not run into upsell (see bug 39009)
             if (sets.length && !upsell.any(sets)) {
-                if (upsell.enabled(sets)) {
+                if (!checkOnly && upsell.enabled(sets)) {
                     upsell.trigger({
                         type: 'inline-action',
                         id: ref,
                         missing: upsell.missing(sets)
                     });
                 }
-                return done.resolve();
+                return done.resolve(false);
             }
 
             baton = ensureBaton(baton);
@@ -365,7 +362,7 @@ define('io.ox/backbone/views/actions/util', [
 
             function nextAction() {
                 var action = list.shift();
-                if (action) checkAction(action); else done.resolve();
+                if (action) checkAction(action); else done.resolve(false);
             }
 
             function checkAction(action) {
@@ -379,24 +376,29 @@ define('io.ox/backbone/views/actions/util', [
                 if (action.capabilities && !capabilities.has(action.capabilities)) return nextAction();
                 // check general availability
                 if (!util.checkActionAvailability(action)) return nextAction();
-                // check specific context
+                // static checks
                 if (!util.checkActionEnabled(baton, action)) return nextAction();
-                // check async matches
-                if (hasAsyncCheck(action)) return checkMatchesAsync(action, baton);
+                // dynamic checks
+                if (hasMatches(action)) return checkMatches(action, baton);
                 // call action directly
                 callAction(action, baton);
             }
 
-            function checkMatchesAsync(action, baton) {
+            function checkMatches(action, baton) {
                 // use pipe to avoid async behavior
-                asyncCheck(baton, action).pipe(function (state) {
-                    if (state) callAction(action, baton); else nextAction();
-                });
+                try {
+                    matches(baton, action).pipe(function (state) {
+                        if (state) callAction(action, baton); else nextAction();
+                    });
+                } catch (e) {
+                    console.error(e);
+                    nextAction();
+                }
             }
 
             function callAction(action, baton) {
                 try {
-                    action.action(baton);
+                    if (!checkOnly) action.action(baton);
                 } catch (e) {
                     console.error('point("' + ref + '") > invoke()', e.message, {
                         baton: baton,
@@ -404,7 +406,7 @@ define('io.ox/backbone/views/actions/util', [
                         exception: e
                     });
                 } finally {
-                    done.resolve();
+                    done.resolve(true);
                 }
             }
 
@@ -412,20 +414,9 @@ define('io.ox/backbone/views/actions/util', [
         },
 
         checkAction: function (action, baton) {
-            var actions = ext.point(action).list();
-            if (!actions.some(util.checkActionAvailability)) return $.when(false);
-            baton = ensureBaton(baton);
-            return new (baton.simple ? Collection.Simple : Collection)(baton.array())
-                .getPromise()
-                .pipe(function (collection) {
-                    baton.collection = collection;
-                    if (!actions.some(util.checkActionEnabled.bind(null, baton))) return $.when([false]);
-                    var defs = actions.filter(hasAsyncCheck).map(asyncCheck.bind(null, baton));
-                    return $.when.apply($, defs);
-                })
-                .pipe(function () {
-                    return _(arguments).some(Boolean) ? $.when(baton) : $.Deferred().reject();
-                });
+            return util.invoke(action, baton, true).pipe(function (state) {
+                return state ? baton : $.Deferred().reject();
+            });
         }
     };
 
@@ -443,15 +434,16 @@ define('io.ox/backbone/views/actions/util', [
         return ext.Baton({ data: data });
     }
 
-    function hasAsyncCheck(action) {
+    function hasMatches(action) {
         // action.requires is DEPRECATED
-        return _.isFunction(action.matchesAsync || action.requires);
+        return _.isFunction(action.matches || action.requires);
     }
 
-    function asyncCheck(baton, action) {
+    function matches(baton, action) {
         // action.requires is DEPRECATED
-        var ret = (action.matchesAsync && action.matchesAsync(baton)) ||
-            (action.requires && action.requires({ baton: baton, collection: baton.collection, data: baton.data, extension: action }));
+        var ret = true;
+        if (action.matches) ret = action.matches(baton);
+        else if (action.requires) ret = action.requires({ baton: baton, collection: baton.collection, data: baton.data, extension: action });
         return $.when(ret).pipe(null, _.constant(false));
     }
 

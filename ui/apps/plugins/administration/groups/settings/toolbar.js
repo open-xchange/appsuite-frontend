@@ -82,7 +82,7 @@ define('plugins/administration/groups/settings/toolbar', [
             prio: 'hi',
             id: 'create',
             title: gt('Create new group'),
-            steady: true,
+            drawDisabled: true,
             ref: 'administration/groups/create'
         },
         {
@@ -90,7 +90,7 @@ define('plugins/administration/groups/settings/toolbar', [
             prio: 'hi',
             id: 'edit',
             title: gt('Edit'),
-            steady: true,
+            drawDisabled: true,
             ref: 'administration/groups/edit'
         },
         {
@@ -98,7 +98,7 @@ define('plugins/administration/groups/settings/toolbar', [
             prio: 'hi',
             id: 'delete',
             title: gt('Delete'),
-            steady: true,
+            drawDisabled: true,
             ref: 'administration/groups/delete'
         }
     );

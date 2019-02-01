@@ -49,21 +49,21 @@ define('io.ox/notes/toolbar', [
         'create': {
             prio: 'hi',
             title: gt('New note'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/notes/actions/create'
         },
         'download': {
             prio: 'hi',
             title: gt('Download'),
             icon: 'fa fa-download',
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/files/actions/download'
         },
         'send': {
             prio: 'hi',
             title: gt('Send by mail'),
             icon: 'fa fa-envelope-o',
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/files/actions/send',
             section: 'share'
         },
@@ -71,7 +71,7 @@ define('io.ox/notes/toolbar', [
             prio: 'hi',
             title: gt('Delete'),
             icon: 'fa fa-trash-o',
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/files/actions/delete'
         }
     };

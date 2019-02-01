@@ -43,7 +43,7 @@ define('io.ox/contacts/toolbar', [
             mobile: 'hi',
             title: gt('Edit'),
             tooltip: gt('Edit contact'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/contacts/actions/update'
         },
         'send': {
@@ -65,7 +65,7 @@ define('io.ox/contacts/toolbar', [
             mobile: 'hi',
             title: gt('Delete'),
             tooltip: gt('Delete contact'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/contacts/actions/delete'
         },
         //
@@ -75,7 +75,7 @@ define('io.ox/contacts/toolbar', [
             prio: 'lo',
             mobile: 'lo',
             title: gt('Send as vCard'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/contacts/actions/vcard'
         },
         'move': {
@@ -83,7 +83,7 @@ define('io.ox/contacts/toolbar', [
             mobile: 'lo',
             title: gt('Move'),
             ref: 'io.ox/contacts/actions/move',
-            steady: true,
+            drawDisabled: true,
             section: 'file-op'
         },
         'copy': {
@@ -91,14 +91,14 @@ define('io.ox/contacts/toolbar', [
             mobile: 'lo',
             title: gt('Copy'),
             ref: 'io.ox/contacts/actions/copy',
-            steady: true,
+            drawDisabled: true,
             section: 'file-op'
         },
         'print': {
             prio: 'lo',
             mobile: 'lo',
             title: gt('Print'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/contacts/actions/print',
             section: 'export'
         },
@@ -106,7 +106,7 @@ define('io.ox/contacts/toolbar', [
             prio: 'lo',
             mobile: 'lo',
             title: gt('Export'),
-            steady: true,
+            drawDisabled: true,
             ref: 'io.ox/contacts/actions/export',
             section: 'export'
         },

@@ -223,10 +223,20 @@ define('io.ox/core/collection', ['io.ox/core/folder/api', 'io.ox/core/api/user']
     }
 
     Collection.Simple = function (items) {
+
         var l = items.length,
             properties = { none: l === 0, some: l > 0, one: l === 1, multiple: l > 1 };
+
         this.matches = createMatches(properties);
+
         this.getPromise = function () { return $.when(this); };
+
+        // backward compatibility
+        this.has = function () {
+            return _(arguments).inject(function (memo, key) {
+                return memo && properties[key] === true;
+            }, true);
+        };
     };
 
     function createMatches(properties) {
