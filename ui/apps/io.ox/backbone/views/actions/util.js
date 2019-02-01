@@ -120,7 +120,7 @@ define('io.ox/backbone/views/actions/util', [
             var $li = util.createListItem(), def;
             // nested dropdown?
             if (item.link.dropdown) {
-                def = util.renderDropdown($li, baton, { point: item.link.dropdown, title: item.link.title, icon: item.link.icon });
+                def = util.renderDropdown($li, baton, { point: item.link.dropdown, title: item.link.title || item.link.label, icon: item.link.icon });
                 return { $li: $li, def: def };
             }
             // use own draw function?
@@ -137,25 +137,18 @@ define('io.ox/backbone/views/actions/util', [
         // some actions need to run async checks
         // toolbar item gets hidden or disabled (if steady) until function resolves
         processAsync: function ($li, baton, item) {
-            var list = ext.point(item.link.ref).list().filter(function (action) {
-                return _.isFunction(action.matchesAsync);
-            });
+            var list = ext.point(item.link.ref).list().filter(hasAsyncCheck);
             // return early if there is no matchesAsync
             if (!list.length) return [];
             // hide element
             if (item.link.steady) $li.children('a').addClass('disabled').attr('aria-disabled', true);
             else $li.addClass('hidden');
             // process matchesAsync
-            var deps = list.map(function (action) {
-                return $.when(action.matchesAsync(baton)).pipe(null, _.constant(false));
-            });
+            var deps = list.map(asyncCheck.bind(null, baton));
             // wait for all matchesAsync
             return $.when.apply($, deps).done(function () {
-                var state = _(arguments).every(Boolean);
-                if (!state) {
-                    if (!item.link.steady) $li.remove();
-                    return;
-                }
+                var state = _(arguments).some(Boolean);
+                if (!state) return;
                 if (item.link.steady) $li.children('a').removeClass('disabled').attr('aria-disabled', null);
                 else $li.removeClass('hidden');
             });
@@ -179,7 +172,7 @@ define('io.ox/backbone/views/actions/util', [
             })
             .append(function () {
                 var icon = item.link.icon,
-                    title = item.link.title,
+                    title = item.link.title || item.link.label,
                     tooltip = item.link.tooltip || (icon && title),
                     $a = $('<a href="#" role="button" draggable="false" tabindex="-1">')
                     .data({ baton: baton })
@@ -219,9 +212,10 @@ define('io.ox/backbone/views/actions/util', [
 
             var $ul = $el.find('> .dropdown-menu');
             $ul.empty().append(_(items).pluck('$li'));
-            $ul.find('a[role="button"]').attr('role', 'menuitem');
 
             return util.waitForAllAsyncItems(items, function () {
+                $ul.find('li.hidden').remove();
+                $ul.find('a[role="button"]').attr('role', 'menuitem');
                 util.injectSectionDividers($ul);
                 // disable empty or completely disabled drop-downs
                 var disabled = !$ul.find('[data-action]:not(.disabled)').length;
@@ -386,14 +380,14 @@ define('io.ox/backbone/views/actions/util', [
                 // check specific context
                 if (!util.checkActionEnabled(baton, action)) return nextAction();
                 // check async matches
-                if (_.isFunction(action.matchesAsync)) return checkMatchesAsync(action, baton);
+                if (hasAsyncCheck(action)) return checkMatchesAsync(action, baton);
                 // call action directly
                 callAction(action, baton);
             }
 
             function checkMatchesAsync(action, baton) {
                 // use pipe to avoid async behavior
-                $.when(action.matchesAsync(baton)).pipe(function (state) {
+                asyncCheck(baton, action).pipe(function (state) {
                     if (state) callAction(action, baton); else nextAction();
                 });
             }
@@ -424,13 +418,7 @@ define('io.ox/backbone/views/actions/util', [
                 .pipe(function (collection) {
                     baton.collection = collection;
                     if (!actions.some(util.checkActionEnabled.bind(null, baton))) return $.when([false]);
-                    var defs = actions
-                        .filter(function (action) {
-                            return _.isFunction(action.matchesAsync);
-                        })
-                        .map(function (action) {
-                            return $.when(action.matchesAsync(baton));
-                        });
+                    var defs = actions.filter(hasAsyncCheck).map(asyncCheck.bind(null, baton));
                     return $.when.apply($, defs);
                 })
                 .pipe(function () {
@@ -451,6 +439,18 @@ define('io.ox/backbone/views/actions/util', [
         if (data instanceof ext.Baton) return data;
         if (!_.isArray(data)) data = [data];
         return ext.Baton({ data: data });
+    }
+
+    function hasAsyncCheck(action) {
+        // action.requires is DEPRECATED
+        return _.isFunction(action.matchesAsync || action.requires);
+    }
+
+    function asyncCheck(baton, action) {
+        // action.requires is DEPRECATED
+        var ret = (action.matchesAsync && action.matchesAsync(baton)) ||
+            (action.requires && action.requires({ baton: baton, collection: baton.collection, data: baton.data, extension: action }));
+        return $.when(ret).pipe(null, _.constant(false));
     }
 
     $.fn.addActionTooltip = function (title) {
