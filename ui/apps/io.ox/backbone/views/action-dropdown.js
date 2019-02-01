@@ -46,9 +46,15 @@ define('io.ox/backbone/views/action-dropdown', [
         },
 
         render: function (baton) {
-            util.renderDropdownItems(this.$el, baton, this.options).done(this.trigger.bind(this, 'ready'));
+            this.$menu.addClass('invisible');
+            util.renderDropdownItems(this.$el, baton, this.options).done(this.finalizeRender.bind(this));
             this.trigger('rendered');
             return this;
+        },
+
+        finalizeRender: function () {
+            this.$menu.removeClass('invisible');
+            this.trigger('ready');
         },
 
         hasActions: function () {

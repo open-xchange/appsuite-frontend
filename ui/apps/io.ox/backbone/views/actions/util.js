@@ -117,12 +117,15 @@ define('io.ox/backbone/views/actions/util', [
         createItem: function (baton, item) {
             if (!item.available) return;
             if (!item.enabled && !item.link.steady) return;
-            var $li = util.createListItem();
+            var $li = util.createListItem(), def;
+            // nested dropdown?
+            if (item.link.dropdown) {
+                def = util.renderDropdown($li, baton, { point: item.link.dropdown, title: item.link.title, icon: item.link.icon });
+                return { $li: $li, def: def };
+            }
             // use own draw function?
             if (item.link.custom) {
                 item.link.draw.call($li, baton);
-            } else if (item.link.dropdown) {
-                util.renderDropdown($li, baton, { point: item.link.dropdown, title: item.link.title, icon: item.link.icon });
             } else {
                 util.renderListItem($li, baton, item);
             }
@@ -134,28 +137,32 @@ define('io.ox/backbone/views/actions/util', [
         // some actions need to run async checks
         // toolbar item gets hidden or disabled (if steady) until function resolves
         processAsync: function ($li, baton, item) {
-            return ext.point(item.link.ref).list()
-                .filter(function (action) {
-                    return _.isFunction(action.matchesAsync);
-                })
-                .map(function (action) {
-                    if (item.link.steady) $li.children('a').addClass('disabled').attr('aria-disabled', true);
-                    else $li.addClass('hidden');
-                    return $.when(action.matchesAsync(baton))
-                        .pipe(null, function () { return false; })
-                        .always(function (state) {
-                            if (!state) {
-                                if (!item.link.steady) $li.remove();
-                                return;
-                            }
-                            if (item.link.steady) $li.children('a').removeClass('disabled').attr('aria-disabled', null);
-                            else $li.removeClass('hidden');
-                        });
-                });
+            var list = ext.point(item.link.ref).list().filter(function (action) {
+                return _.isFunction(action.matchesAsync);
+            });
+            // return early if there is no matchesAsync
+            if (!list.length) return [];
+            // hide element
+            if (item.link.steady) $li.children('a').addClass('disabled').attr('aria-disabled', true);
+            else $li.addClass('hidden');
+            // process matchesAsync
+            var deps = list.map(function (action) {
+                return $.when(action.matchesAsync(baton)).pipe(null, _.constant(false));
+            });
+            // wait for all matchesAsync
+            return $.when.apply($, deps).done(function () {
+                var state = _(arguments).every(Boolean);
+                if (!state) {
+                    if (!item.link.steady) $li.remove();
+                    return;
+                }
+                if (item.link.steady) $li.children('a').removeClass('disabled').attr('aria-disabled', null);
+                else $li.removeClass('hidden');
+            });
         },
 
         waitForAllAsyncItems: function (items, callback) {
-            var defs = _(items).chain().pluck('def').flatten().value();
+            var defs = _(items).chain().pluck('def').flatten().compact().value();
             return $.when.apply($, defs).done(callback);
         },
 
@@ -200,7 +207,7 @@ define('io.ox/backbone/views/actions/util', [
 
             $el.addClass('dropdown').append($toggle, util.createDropdownList());
 
-            if (baton) util.renderDropdownItems($el, baton, options);
+            return baton ? util.renderDropdownItems($el, baton, options) : $.when();
         },
 
         renderDropdownItems: function ($el, baton, options) {
@@ -379,7 +386,7 @@ define('io.ox/backbone/views/actions/util', [
                 // check specific context
                 if (!util.checkActionEnabled(baton, action)) return nextAction();
                 // check async matches
-                if (_.isFunction(action.matchesAsync)) checkMatchesAsync(action, baton);
+                if (_.isFunction(action.matchesAsync)) return checkMatchesAsync(action, baton);
                 // call action directly
                 callAction(action, baton);
             }

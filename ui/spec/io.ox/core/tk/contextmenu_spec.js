@@ -140,10 +140,14 @@ define([
                     title: 'test label of disabled action'
                 });
 
+
+                var model = new Backbone.Model({ id: 'testItem' });
+                model.cid = 'testItem';
+
                 view = new (Listview.extend(Contextmenu))({
                     ref: 'io.ox/test',
                     pagination: false,
-                    collection: new Backbone.Collection([{ id: 'testItem' }]),
+                    collection: new Backbone.Collection([model]),
                     app: { id: 'testApp' }
                 });
                 view.collection.complete = true;
@@ -203,7 +207,6 @@ define([
                     expect(baton.collection.has, 'quacks like a Collection').to.be.a('function');
                     expect(baton.array(), 'array').to.have.length(1);
                     expect(baton.first().id, 'id').to.equal('testItem');
-                    expect(baton.app, 'app').to.equal(view.app);
                 });
             });
         });

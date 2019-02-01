@@ -159,13 +159,20 @@ define([
         describe('Dropdown view', function () {
 
             beforeEach(function () {
+                this.clock = sinon.useFakeTimers();
                 this.dropdown = new ActionDropdownView({ point: POINT + '/links', simple: true });
+            });
+
+            afterEach(function () {
+                this.clock.restore();
             });
 
             it('has proper markup', function () {
                 enableEight = true;
                 this.dropdown.setSelection(data);
                 enableEight = false;
+                // clock tick (whatever number is right)
+                this.clock.tick(111);
                 // proper role and class
                 expect(this.dropdown.$el.hasClass('dropdown')).to.be.true;
                 // dropdown toggle
@@ -180,7 +187,7 @@ define([
             });
         });
 
-        describe.only('Invoke', function () {
+        describe('Invoke', function () {
 
             // ----------------------------------------------------------
 
