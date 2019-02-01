@@ -1,6 +1,6 @@
 Name:           open-xchange-dynamic-theme
 Version:        @OXVERSION@
-%define         ox_release 41
+%define         ox_release 42
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -54,6 +54,8 @@ if [ -x %{update} ]; then %{update}; fi
 %config(noreplace) /opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties
 
 %changelog
+* Fri Feb 01 2019 Viktor Pracht <viktor.pracht@open-xchange.com>
+Build for patch 2019-02-11 (5104)
 * Thu Jan 31 2019 Viktor Pracht <viktor.pracht@open-xchange.com>
 revision increase to solve packaging issue
 * Mon Nov 12 2018 Viktor Pracht <viktor.pracht@open-xchange.com>
