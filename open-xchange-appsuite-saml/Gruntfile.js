@@ -11,6 +11,10 @@
 module.exports = function (grunt) {
     grunt.loadNpmTasks('open-xchange-shared-grunt-config');
 
+    // make bower task a noop, fixes build with ancient node versions
+    // only an ugly workaround, **never** forward port this anywhere.
+    grunt.registerTask('bower', []);
+
     // load custom tasks
     // those can be used to override configuration from shared-grunt-config
     if (grunt.file.isDir('grunt/tasks/')) {
