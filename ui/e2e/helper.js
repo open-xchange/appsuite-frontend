@@ -1,4 +1,11 @@
 const Helper = require('@open-xchange/codecept-helper').helper;
+
+function assertElementExists(res, locator, prefixMessage = 'Element', postfixMessage = 'was not found by text|CSS|XPath') {
+    if (!res || res.length === 0) {
+        if (typeof locator === 'object') locator = locator.toString();
+        throw new Error(`${prefixMessage} "${locator}" ${postfixMessage}`);
+    }
+}
 class MyHelper extends Helper {
 
     // helper to create a fresh contact including an attachment with evil filename
@@ -39,6 +46,19 @@ class MyHelper extends Helper {
                 });
             });
         });
+
+    }
+
+    // will hopefully be removed when codecept 2.0 works as expected
+    async grabHTMlFrom2(locator) {
+
+        let wdio = this.helpers['WebDriver'];
+
+        const elems = await wdio._locate(locator, true);
+        assertElementExists(elems, locator);
+        const html = Promise.all(elems.map(async elem => elem.getHTML()));
+        this.debugSection('Grab', html);
+        return html;
 
     }
 }
