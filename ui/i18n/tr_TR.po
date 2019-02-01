@@ -2222,9 +2222,8 @@ msgstr "Tüm iletileri kapat"
 msgid "Close description panel"
 msgstr "Açıklama panelini kapat"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Klasör görünümünü kapat"
@@ -3088,6 +3087,12 @@ msgstr "Açıklama kopyalandı"
 #: module:io.ox/core/viewer
 msgid "Description text"
 msgstr "Açıklama metni"
+
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#, fuzzy
+#| msgid "Select all"
+msgid "Deselect all"
+msgstr "Tümünü seç"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Design"

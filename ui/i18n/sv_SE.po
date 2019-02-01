@@ -2237,9 +2237,8 @@ msgstr "Stäng alla meddelanden"
 msgid "Close description panel"
 msgstr "Stäng beskrivningspanel"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Stäng mappvy"
@@ -3102,6 +3101,12 @@ msgstr "Beskrivningen har kopierats"
 #: module:io.ox/core/viewer
 msgid "Description text"
 msgstr "Beskrivande text"
+
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#, fuzzy
+#| msgid "select all"
+msgid "Deselect all"
+msgstr "markera alla"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Design"
@@ -20472,9 +20477,6 @@ msgstr "din plattform"
 
 #~ msgid "seconds"
 #~ msgstr "sekunder"
-
-#~ msgid "select all"
-#~ msgstr "markera alla"
 
 #, fuzzy
 #~| msgid "show image"

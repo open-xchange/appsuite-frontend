@@ -2263,9 +2263,8 @@ msgstr "Aizvērt visus ziņojumus"
 msgid "Close description panel"
 msgstr "Aizvērt apraksta paneli"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Aizvērt mapes skatu"
@@ -3127,6 +3126,12 @@ msgstr "Apraksts ir nokopēts"
 #: module:io.ox/core/viewer
 msgid "Description text"
 msgstr "Apraksta teksts"
+
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#, fuzzy
+#| msgid "select all"
+msgid "Deselect all"
+msgstr "izvēlēties visu"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Design"
@@ -20621,9 +20626,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "seconds"
 #~ msgstr "sekundes"
-
-#~ msgid "select all"
-#~ msgstr "izvēlēties visu"
 
 #~ msgid "september"
 #~ msgstr "septembris"

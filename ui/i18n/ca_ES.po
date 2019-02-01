@@ -2329,9 +2329,8 @@ msgstr "Obre/tanca tots els missatges"
 msgid "Close description panel"
 msgstr "Descripció del treball"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Tanca la vista de carpeta"
@@ -3239,6 +3238,11 @@ msgstr "La descripció ha estat copiada"
 #, fuzzy
 msgid "Description text"
 msgstr "Descripció"
+
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#, fuzzy
+msgid "Deselect all"
+msgstr "Selecciona-ho tot"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Design"
@@ -15023,10 +15027,6 @@ msgstr "la vostra plataforma"
 #, fuzzy
 #~ msgid "seconds"
 #~ msgstr "segon"
-
-#, fuzzy
-#~ msgid "select all"
-#~ msgstr "Selecciona-ho tot"
 
 #~ msgid "show image"
 #~ msgstr "mostra imatge"

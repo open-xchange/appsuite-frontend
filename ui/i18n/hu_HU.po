@@ -2241,9 +2241,8 @@ msgstr "Összes üzenet bezárása"
 msgid "Close description panel"
 msgstr "Leírópanel bezárása"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Mappanézet bezárása"
@@ -3107,6 +3106,12 @@ msgstr "A leírás átmásolva"
 #: module:io.ox/core/viewer
 msgid "Description text"
 msgstr "Leírás"
+
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#, fuzzy
+#| msgid "select all"
+msgid "Deselect all"
+msgstr "minden kijelölése"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Design"
@@ -14962,9 +14967,6 @@ msgstr "az Ön rendszere"
 
 #~ msgid "seconds"
 #~ msgstr "másodperc"
-
-#~ msgid "select all"
-#~ msgstr "minden kijelölése"
 
 #, fuzzy
 #~| msgid "New mail"

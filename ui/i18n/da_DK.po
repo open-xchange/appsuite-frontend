@@ -2235,9 +2235,8 @@ msgstr "Luk alle beskeder"
 msgid "Close description panel"
 msgstr "Luk beskrivelsespanel"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Luk mappevisning"
@@ -3100,6 +3099,12 @@ msgstr "Beskrivelsen blev kopieret"
 #: module:io.ox/core/viewer
 msgid "Description text"
 msgstr "Beskrivelse"
+
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#, fuzzy
+#| msgid "select all"
+msgid "Deselect all"
+msgstr "vælg alle"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Design"
@@ -16581,9 +16586,6 @@ msgstr "din platform"
 
 #~ msgid "seconds"
 #~ msgstr "sekunder"
-
-#~ msgid "select all"
-#~ msgstr "vælg alle"
 
 #, fuzzy
 #~| msgid "show image"

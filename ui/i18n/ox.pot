@@ -2561,18 +2561,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/main.js
 #: module:io.ox/calendar
-#: apps/io.ox/core/commons.js
-#: module:io.ox/core
-#: apps/io.ox/files/main.js
-#: module:io.ox/files
-#: apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
-msgid "Close folder view"
-msgstr ""
-
-#: apps/io.ox/calendar/main.js
-#: module:io.ox/calendar
 msgid "Calendar account error"
 msgstr ""
 
@@ -5196,6 +5184,15 @@ msgstr ""
 
 #: apps/io.ox/core/commons.js
 #: module:io.ox/core
+#: apps/io.ox/files/view-options.js
+#: module:io.ox/files
+#: apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
+msgid "Close folder view"
+msgstr ""
+
+#: apps/io.ox/core/commons.js
+#: module:io.ox/core
 msgid "Premium features"
 msgstr ""
 
@@ -7529,6 +7526,11 @@ msgstr ""
 #: apps/io.ox/core/tk/vgrid.js
 #: module:io.ox/core
 msgid "Multiselect"
+msgstr ""
+
+#: apps/io.ox/core/tk/vgrid.js
+#: module:io.ox/core
+msgid "Deselect all"
 msgstr ""
 
 #. toolbar with 'select all' and 'sort by'

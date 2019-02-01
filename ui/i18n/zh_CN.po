@@ -2177,9 +2177,8 @@ msgstr "关闭所有消息"
 msgid "Close description panel"
 msgstr "关闭描述面板"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "关闭文件夹视图"
@@ -3037,6 +3036,12 @@ msgstr "描述已复制"
 #: module:io.ox/core/viewer
 msgid "Description text"
 msgstr "描述文本"
+
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#, fuzzy
+#| msgid "select all"
+msgid "Deselect all"
+msgstr "选择所有"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Design"
@@ -17926,9 +17931,6 @@ msgstr "您的平台"
 
 #~ msgid "seconds"
 #~ msgstr "秒"
-
-#~ msgid "select all"
-#~ msgstr "选择所有"
 
 #~ msgid "september"
 #~ msgstr "九月"

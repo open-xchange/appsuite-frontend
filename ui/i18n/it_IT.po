@@ -2253,9 +2253,8 @@ msgstr "Chiudi tutti i messaggi"
 msgid "Close description panel"
 msgstr "Chiudi il pannello della descrizione"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Chiudi la vista delle cartelle"
@@ -3121,6 +3120,12 @@ msgstr "La descrizione è stata copiata"
 #: module:io.ox/core/viewer
 msgid "Description text"
 msgstr "Testo della descrizione"
+
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#, fuzzy
+#| msgid "select all"
+msgid "Deselect all"
+msgstr "seleziona tutto"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Design"
@@ -18576,9 +18581,6 @@ msgstr "la tua piattaforma"
 
 #~ msgid "seconds"
 #~ msgstr "secondi"
-
-#~ msgid "select all"
-#~ msgstr "seleziona tutto"
 
 #~ msgid "september"
 #~ msgstr "settembre"

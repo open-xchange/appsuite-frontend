@@ -2258,9 +2258,8 @@ msgstr "Закрыть все сообщения"
 msgid "Close description panel"
 msgstr "Закрыть панель описания"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Закрыть просмотр папок"
@@ -3123,6 +3122,12 @@ msgstr "Описание скопировано"
 #: module:io.ox/core/viewer
 msgid "Description text"
 msgstr "Текст описания"
+
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#, fuzzy
+#| msgid "select all"
+msgid "Deselect all"
+msgstr "Выбрать все"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Design"
@@ -16773,9 +16778,6 @@ msgstr "вашей платформы"
 
 #~ msgid "seconds"
 #~ msgstr "сек."
-
-#~ msgid "select all"
-#~ msgstr "Выбрать все"
 
 #~ msgid "september"
 #~ msgstr "сентябрь"

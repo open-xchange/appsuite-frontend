@@ -2266,9 +2266,8 @@ msgstr "Închide toate mesajele"
 msgid "Close description panel"
 msgstr "Închide panoul descriere"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Închide vederea dosar"
@@ -3133,6 +3132,12 @@ msgstr "Descrierea a fost copiată"
 #: module:io.ox/core/viewer
 msgid "Description text"
 msgstr "Text descriere"
+
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#, fuzzy
+#| msgid "select all"
+msgid "Deselect all"
+msgstr "Selectează tot"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Design"
@@ -20751,9 +20756,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "seconds"
 #~ msgstr "secunde"
-
-#~ msgid "select all"
-#~ msgstr "Selectează tot"
 
 #~ msgid "september"
 #~ msgstr "septembrie"
