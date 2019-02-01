@@ -11,7 +11,7 @@
  * @author Kristof Kamin <kristof.kamin@open-xchange.com>
  */
 
-define('io.ox/files/actions/delete-older-versions', [
+define('io.ox/files/actions/delete-previous-versions', [
     'io.ox/files/api',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/files'
@@ -21,11 +21,11 @@ define('io.ox/files/actions/delete-older-versions', [
 
     return function (data) {
         new dialogs.ModalDialog()
-            .text(gt('Do you really want to delete all older versions?'))
-            .addPrimaryButton('deleteOlderVersions', gt('Delete'), 'deleteOlderVersions')
+            .text(gt('Do you really want to delete all previous versions except the current version?'))
+            .addPrimaryButton('deletePreviousVersions', gt('Delete'), 'deletePreviousVersions')
             .addButton('cancel', gt('Cancel'), 'cancel')
-            .on('deleteOlderVersions', function () {
-                api.versions.removeOlderVersions(data);
+            .on('deletePreviousVersions', function () {
+                api.versions.removePreviousVersions(data);
             })
             .show();
     };

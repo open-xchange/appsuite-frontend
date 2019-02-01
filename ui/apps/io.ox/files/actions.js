@@ -1016,13 +1016,16 @@ define('io.ox/files/actions', [
         }
     });
 
-    new Action('io.ox/files/versions/actions/deleteOlderVersions', {
+    new Action('io.ox/files/versions/actions/deletePreviousVersions', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one', 'items', 'modify') && e.context.version > 1 && (e.baton.openedBy !== 'io.ox/mail/compose');
+            if (!e.collection.has('one', 'items', 'modify')) return false;
+            if (e.baton.latestVersion) return false;
+            if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+            return true;
         },
         action: function (baton) {
-            ox.load(['io.ox/files/actions/delete-older-versions']).done(function (action) {
+            ox.load(['io.ox/files/actions/delete-previous-versions']).done(function (action) {
                 action(baton.data);
             });
         }
@@ -1533,13 +1536,13 @@ define('io.ox/files/actions', [
     }));
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
-        id: 'deleteOlderVersions',
+        id: 'deletePreviousVersions',
         index: 310,
         prio: 'lo',
         mobile: 'lo',
-        label: gt('Delete all older versions'),
+        label: gt('Delete all previous versions'),
         section: 'delete',
-        ref: 'io.ox/files/versions/actions/deleteOlderVersions'
+        ref: 'io.ox/files/versions/actions/deletePreviousVersions'
     }));
 
     // Drag and Drop

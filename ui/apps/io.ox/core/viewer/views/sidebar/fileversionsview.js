@@ -34,6 +34,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 versions = model && model.get('versions'),
                 panelHeading = this.find('.sidebar-panel-heading'),
                 panelBody = this.find('.sidebar-panel-body'),
+                versionCounter = 1,
                 table;
 
             function drawAllVersions(allVersions) {
@@ -43,9 +44,9 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 .sort(versionSorter)
                 .each(function (version) {
                     var entryRow = $('<tr class="version">');
-
-                    Ext.point(POINT + '/version').invoke('draw', entryRow, Ext.Baton({ data: version, viewerEvents: viewerEvents, isViewer: isViewer }));
+                    Ext.point(POINT + '/version').invoke('draw', entryRow, Ext.Baton({ data: version, viewerEvents: viewerEvents, isViewer: isViewer, latestVersion: versionCounter === allVersions.length }));
                     table.append(entryRow);
+                    versionCounter++;
                 });
             }
 

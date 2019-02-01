@@ -1630,18 +1630,18 @@ define('io.ox/files/api', [
         },
 
         /**
-         * All versions were deleted that are older than the passed version file.
+         * All versions were deleted that are older than the passed version file except the current one.
          * @param {FileDescriptor} file version descriptor
          *
          * @returns {Deferred}
          */
-        removeOlderVersions: function (file) {
+        removePreviousVersions: function (file) {
 
             // update model instantly
             var model = pool.get('detail').get(_.cid(file)), versions = model.get('versions');
             if (model && _.isArray(versions)) {
                 model.set('versions', versions.filter(function (item) {
-                    return item.version >= file.version;
+                    return item.current_version || parseInt(item.version, 10) >= parseInt(file.version, 10);
                 }));
             }
 
@@ -1654,13 +1654,13 @@ define('io.ox/files/api', [
                     folder: file.folder_id,
                     timestamp: _.then()
                 },
-                data: versions.filter(function (item) { return item.version < file.version; }).map(
+                data: versions.filter(function (item) { return !item.current_version && parseInt(item.version, 10) < parseInt(file.version, 10); }).map(
                     function (version) { return version.version; }
                 ),
                 appendColumns: false
             })
             .then(function () {
-                versions.filter(function (item) { return item.version < file.version; }).map(
+                versions.filter(function (item) { return !item.current_version && parseInt(item.version, 10) < parseInt(file.version, 10); }).map(
                     function (version) {
                         return api.propagate('remove:version', _.extend(_.pick(file, 'id', 'folder_id'), { version: version.version }));
                     }
