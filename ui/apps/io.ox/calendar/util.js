@@ -1267,7 +1267,8 @@ define('io.ox/calendar/util', [
             };
 
             if (attendee.cuType !== 'RESOURCE') {
-                if ((user.user_id !== undefined || user.contact_id) && user.type !== 5) attendee.entity = user.user_id || user.id;
+                // guests have a user id but are still considered external, so dont add an entity here (normal users have guest_created_by === 0)
+                if (!user.guest_created_by && (user.user_id !== undefined || user.contact_id) && user.type !== 5) attendee.entity = user.user_id || user.id;
                 attendee.email = user.field && user[user.field] ? user[user.field] : (user.email1 || user.mail);
                 if (!attendee.cn) attendee.cn = attendee.email;
                 attendee.uri = 'mailto:' + attendee.email;
