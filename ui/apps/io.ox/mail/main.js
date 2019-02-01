@@ -1252,7 +1252,7 @@ define('io.ox/mail/main', [
 
             var select = function () {
                 app.listView.collection.find(function (model, index) {
-                    if (!util.isUnseen(model.get('flags'))) { // && app.props.get('layout') !== 'list') {
+                    if (!util.isUnseen(model.get('flags'))) {
                         app.autoSelect = true;
                         // select but keep focus in topbar. Don't use set here, as it breaks alternative selection mode (message is selected instead of displayed)
                         app.listView.selection.select(index, false, false);
