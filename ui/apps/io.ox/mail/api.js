@@ -1293,6 +1293,8 @@ define('io.ox/mail/api', [
         data.cc = _(data.cc).map(flatten);
         data.bcc = _(data.bcc).map(flatten);
         if (data.share_attachments && data.share_attachments.expiry_date) {
+            // explicitedy clone share attachments before doing some computations
+            data.share_attachments = _.clone(data.share_attachments);
             // expiry date should count from mail send
             data.share_attachments.expiry_date = _.now() + parseInt(data.share_attachments.expiry_date, 10);
         }
