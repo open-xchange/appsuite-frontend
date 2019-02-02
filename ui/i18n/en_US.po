@@ -1857,7 +1857,7 @@ msgstr ""
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 #: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
@@ -2861,7 +2861,7 @@ msgstr ""
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/actions/delete-older-versions.js
+#: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
@@ -2898,7 +2898,7 @@ msgid "Delete all objects"
 msgstr ""
 
 #: apps/io.ox/files/actions.js module:io.ox/files
-msgid "Delete all older versions"
+msgid "Delete all previous versions"
 msgstr ""
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
@@ -3177,8 +3177,10 @@ msgid ""
 "b> in your own calendar?"
 msgstr ""
 
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
-msgid "Do you really want to delete all older versions?"
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
+msgid ""
+"Do you really want to delete all previous versions except the current "
+"version?"
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
@@ -6806,6 +6808,13 @@ msgstr ""
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
+msgstr ""
+
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+msgid "Open %1$s in %2$s"
 msgstr ""
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts

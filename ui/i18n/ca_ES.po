@@ -2015,7 +2015,7 @@ msgstr ""
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 #: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
@@ -3077,7 +3077,7 @@ msgstr "Ajornada"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/actions/delete-older-versions.js
+#: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
@@ -3118,7 +3118,7 @@ msgstr ""
 #: apps/io.ox/files/actions.js module:io.ox/files
 #, fuzzy
 #| msgid "Delete version"
-msgid "Delete all older versions"
+msgid "Delete all previous versions"
 msgstr "Suprimeix la versió"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
@@ -3416,10 +3416,13 @@ msgid ""
 "b> in your own calendar?"
 msgstr ""
 
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 #, fuzzy
-msgid "Do you really want to delete all older versions?"
-msgstr "Realment voleu suprimir aquest fitxer?"
+#| msgid "Do you really want to delete this account?"
+msgid ""
+"Do you really want to delete all previous versions except the current "
+"version?"
+msgstr "Segur que voleu suprimir aquest compte?"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 #, fuzzy
@@ -7293,6 +7296,14 @@ msgstr "Es mostren només els elements relacionats amb la carpeta \"%1$s\""
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
 msgstr "Obre"
+
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#, fuzzy
+msgid "Open %1$s in %2$s"
+msgstr "Venç el %1$s"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -13701,17 +13712,14 @@ msgstr "la vostra plataforma"
 #~ msgid "Display emoticons as graphics in text emails"
 #~ msgstr "Mostra emoticones com a gràfics en correus de text"
 
+#, fuzzy
+#~ msgid "Do you really want to delete all older versions?"
+#~ msgstr "Realment voleu suprimir aquest fitxer?"
+
 #~ msgid "Do you really want to delete this file?"
 #~ msgid_plural "Do you really want to delete these files?"
 #~ msgstr[0] "Realment voleu suprimir aquest fitxer?"
 #~ msgstr[1] "Realment voleu suprimir aquests fitxers?"
-
-#, fuzzy
-#~| msgid "Do you really want to delete this account?"
-#~ msgid ""
-#~ "Do you really want to terminate all active sessions except the current "
-#~ "one?"
-#~ msgstr "Segur que voleu suprimir aquest compte?"
 
 #, fuzzy
 #~ msgid "Do you really want to terminate that session?"

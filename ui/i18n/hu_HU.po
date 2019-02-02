@@ -1940,7 +1940,7 @@ msgstr "%1$s kamera"
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 #: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
@@ -2955,7 +2955,7 @@ msgstr "Elhalasztott"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/actions/delete-older-versions.js
+#: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
@@ -2994,7 +2994,7 @@ msgstr "Minden elem törlése"
 #: apps/io.ox/files/actions.js module:io.ox/files
 #, fuzzy
 #| msgid "Delete version"
-msgid "Delete all older versions"
+msgid "Delete all previous versions"
 msgstr "Verzió törlése"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
@@ -3282,12 +3282,13 @@ msgstr ""
 "nevében</b> vagy szeretne egy találkozót létrehozni <b>a mappa "
 "tulajdonosával</b> a saját naptárában?"
 
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 #, fuzzy
-#| msgctxt "One file only"
-#| msgid "Do you really want to delete this version?"
-msgid "Do you really want to delete all older versions?"
-msgstr "Biztos, hogy törölni szeretné a verziót?"
+#| msgid "Do you really want to delete this account?"
+msgid ""
+"Do you really want to delete all previous versions except the current "
+"version?"
+msgstr "Biztos, hogy törölni szeretné ezt a fiókot?"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete calendar \"%s\"?"
@@ -6998,6 +6999,15 @@ msgstr "Csak a(z) „%1$s” mappával kapcsolatos elemek megjelenítése"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
 msgstr "Megnyitás"
+
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#, fuzzy
+#| msgid "Open in %1$s"
+msgid "Open %1$s in %2$s"
+msgstr "Megnyitás ebben: %1$s"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -13296,16 +13306,15 @@ msgstr "az Ön rendszere"
 #~ msgid "Djibouti"
 #~ msgstr "Névjegy"
 
+#, fuzzy
+#~| msgctxt "One file only"
+#~| msgid "Do you really want to delete this version?"
+#~ msgid "Do you really want to delete all older versions?"
+#~ msgstr "Biztos, hogy törölni szeretné a verziót?"
+
 #~ msgctxt "One file only"
 #~ msgid "Do you really want to delete this file?"
 #~ msgstr "Biztos, hogy törölni szeretné ezt a fájlt?"
-
-#, fuzzy
-#~| msgid "Do you really want to delete this account?"
-#~ msgid ""
-#~ "Do you really want to terminate all active sessions except the current "
-#~ "one?"
-#~ msgstr "Biztos, hogy törölni szeretné ezt a fiókot?"
 
 #, fuzzy
 #~| msgctxt "One file only"

@@ -1914,7 +1914,7 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 #: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
@@ -2933,7 +2933,7 @@ msgstr "Verschoben"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/actions/delete-older-versions.js
+#: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
@@ -2970,7 +2970,9 @@ msgid "Delete all objects"
 msgstr "Alle Objekte löschen"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
-msgid "Delete all older versions"
+#, fuzzy
+#| msgid "Delete all older versions"
+msgid "Delete all previous versions"
 msgstr "Alle älteren Versionen löschen"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
@@ -3259,9 +3261,17 @@ msgstr ""
 "anlegen oder wollen Sie einen Termin <b>mit dem Ordner-Eigentümer</b> in "
 "Ihrem eigenen Kalender anlegen?"
 
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
-msgid "Do you really want to delete all older versions?"
-msgstr "Wollen Sie wirklich alle älteren Versionen löschen?"
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
+#, fuzzy
+#| msgid ""
+#| "Do you really want to terminate all active sessions except the current "
+#| "one?"
+msgid ""
+"Do you really want to delete all previous versions except the current "
+"version?"
+msgstr ""
+"Möchten Sie wirklich alle aktiven Sitzungen mit Ausnahme der aktuellen "
+"beenden?"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete calendar \"%s\"?"
@@ -6981,6 +6991,15 @@ msgstr ""
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
 msgstr "Öffnen"
+
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#, fuzzy
+#| msgid "Open in %1$s"
+msgid "Open %1$s in %2$s"
+msgstr "In %1$s öffnen"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -14392,6 +14411,9 @@ msgstr "Ihre Plattform"
 #~ msgid "Do you already have a %s account?"
 #~ msgstr "Haben Sie bereits einen %s-Account?"
 
+#~ msgid "Do you really want to delete all older versions?"
+#~ msgstr "Wollen Sie wirklich alle älteren Versionen löschen?"
+
 #~ msgid "Do you really want to delete the following blog?"
 #~ msgstr "Wollen Sie den folgenden Blog wirklich löschen?"
 
@@ -14425,13 +14447,6 @@ msgstr "Ihre Plattform"
 
 #~ msgid "Do you really want to quit?"
 #~ msgstr "Wollen Sie wirklich das Fenster schließen?"
-
-#~ msgid ""
-#~ "Do you really want to terminate all active sessions except the current "
-#~ "one?"
-#~ msgstr ""
-#~ "Möchten Sie wirklich alle aktiven Sitzungen mit Ausnahme der aktuellen "
-#~ "beenden?"
 
 #~ msgid "Do you really want to terminate that session?"
 #~ msgstr "Möchten Sie diese Sitzung wirklich beenden?"

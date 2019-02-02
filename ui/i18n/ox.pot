@@ -653,7 +653,7 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
-#: apps/io.ox/files/actions/delete-older-versions.js
+#: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js
@@ -1062,7 +1062,7 @@ msgstr ""
 #: module:io.ox/core/viewer
 #: apps/io.ox/editor/main.js
 #: module:io.ox/editor
-#: apps/io.ox/files/actions/delete-older-versions.js
+#: apps/io.ox/files/actions/delete-previous-versions.js
 #: module:io.ox/files
 #: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
@@ -8323,7 +8323,7 @@ msgstr ""
 
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
-msgid "Delete all older versions"
+msgid "Delete all previous versions"
 msgstr ""
 
 #: apps/io.ox/files/actions.js
@@ -8364,9 +8364,9 @@ msgstr ""
 msgid "This file has been added to the portal"
 msgstr ""
 
-#: apps/io.ox/files/actions/delete-older-versions.js
+#: apps/io.ox/files/actions/delete-previous-versions.js
 #: module:io.ox/files
-msgid "Do you really want to delete all older versions?"
+msgid "Do you really want to delete all previous versions except the current version?"
 msgstr ""
 
 #: apps/io.ox/files/actions/delete.js
@@ -12249,6 +12249,14 @@ msgstr ""
 #: apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
 msgid "Reauthorize"
+msgstr ""
+
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+#: apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
+msgid "Open %1$s in %2$s"
 msgstr ""
 
 #: apps/io.ox/oauth/settings.js
