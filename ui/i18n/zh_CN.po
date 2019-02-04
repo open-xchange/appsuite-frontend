@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-07-03 16:14+0200\n"
+"PO-Revision-Date: 2019-02-04 10:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -3016,6 +3016,15 @@ msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
+#. '%1$s contact's display name
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "%1$s could not be added as the contact has no valid email field."
+msgstr "由于联系人没有有效的电子邮件字段, 无法添加%1$s。"
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "Some contacts could not be added as they have no valid email field."
+msgstr "无法添加某些联系人, 因为它们没有有效的电子邮件字段。"
+
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
@@ -3259,6 +3268,10 @@ msgstr "您的浏览器停用 cookie 功能，请您启用它。"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Connection timed out. Please try reloading the page."
 msgstr "连接超时。请尝试重新加载该页。"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Something went wrong. Please close this browser tab and try again."
+msgstr "出了一些问题，请关闭此浏览器选项卡并重试。"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -4646,15 +4659,24 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr "设置要求重新读取或登陆以生效。"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/settings/main.js
-msgid "Basic settings"
-msgstr "基本设置"
+msgid "The setting requires a relogin to take effect."
+msgstr "设置要求重新登陆才能生效。"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
 "Some settings (language, timezone, theme) require a page reload or relogin "
 "to take effect."
 msgstr "有些设置（语言、时区、主题）必须要重载页面或重新登录已生效。"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
+msgstr "有些设置（语言、时区、主题）必须重新登录才能生效。"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/main.js
+msgid "Basic settings"
+msgstr "基本设置"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
@@ -7931,13 +7953,13 @@ msgstr "邮件列表"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is bigger than"
-msgstr "是大于"
+msgid "Is bigger than (Size: B/KB/MB/GB)"
+msgstr "大于（大小: B/KB/MB/GB）"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is smaller than"
-msgstr "是小于"
+msgid "Is smaller than (Size: B/KB/MB/GB)"
+msgstr "小于（大小: B/KB/MB/GB）"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -10970,6 +10992,12 @@ msgstr "邀请到 %s"
 msgid "Add on %s"
 msgstr "在 %s 上添加"
 
+#~ msgid "Is bigger than"
+#~ msgstr "是大于"
+
+#~ msgid "Is smaller than"
+#~ msgstr "是小于"
+
 #~ msgid "Notify %1$s before start."
 #~ msgstr "开始前 %1$s 通知。"
 
@@ -11403,9 +11431,6 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Last name must not be empty for internal users"
 #~ msgstr "内部用户的姓氏不能为空"
-
-#~ msgid "Something went wrong. Please close this browser tab and try again."
-#~ msgstr "出了一些问题，请关闭此浏览器选项卡并重试。"
 
 #~ msgid "iCalendar"
 #~ msgstr "iCalendar"

@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-07-03 15:53+0200\n"
+"PO-Revision-Date: 2019-02-04 10:49+0100\n"
 "Last-Translator: Jacob Sparre Andersen <jacob@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -3063,6 +3063,16 @@ msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
+#. '%1$s contact's display name
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "%1$s could not be added as the contact has no valid email field."
+msgstr "%1$s kunne ikke tilføjes, da kontaken ikke har et gyldigt e-mail-felt."
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "Some contacts could not be added as they have no valid email field."
+msgstr ""
+"Nogle kontakter kunne ikke tilføjes da de ikke har et gyldigt e-mail-felt."
+
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
@@ -3316,6 +3326,10 @@ msgstr "Cookies er slået fra i din browser. Slå dem venligst til."
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Connection timed out. Please try reloading the page."
 msgstr "Forbindelse udløbet.  Prøv venligst at genindlæse siden."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Something went wrong. Please close this browser tab and try again."
+msgstr "Noget gik galt.  Luk venligst dette browserfaneblad og prøv igen."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -4746,9 +4760,8 @@ msgstr ""
 "træde i kraft."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/settings/main.js
-msgid "Basic settings"
-msgstr "Grundlæggende indstillinger"
+msgid "The setting requires a relogin to take effect."
+msgstr "Denne indstilling kræver at der logges ind igen."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
@@ -4757,6 +4770,18 @@ msgid ""
 msgstr ""
 "Visse indstillinger (sprog, tidszone, tema) kræver at du genindlæser siden "
 "eller logger ud og ind igen, for at træde i kraft."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
+msgstr ""
+"Visse indstillinger (sprog, tidszone, tema) kræver at du logger ud og ind "
+"igen, for at træde i kraft."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/main.js
+msgid "Basic settings"
+msgstr "Grundlæggende indstillinger"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
@@ -8137,13 +8162,13 @@ msgstr "E-mail-liste"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is bigger than"
-msgstr "Er større end"
+msgid "Is bigger than (Size: B/KB/MB/GB)"
+msgstr "Er større end (størrelse: B/KB/MB/GB)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is smaller than"
-msgstr "Er mindre end"
+msgid "Is smaller than (Size: B/KB/MB/GB)"
+msgstr "Er mindre end (størrelse: B/KB/MB/GB)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -11230,6 +11255,12 @@ msgstr "Invitér til %s"
 msgid "Add on %s"
 msgstr "Tilføj på %s"
 
+#~ msgid "Is bigger than"
+#~ msgstr "Er større end"
+
+#~ msgid "Is smaller than"
+#~ msgstr "Er mindre end"
+
 #~ msgid "Notify %1$s before start."
 #~ msgstr "Påmind %1$s før start."
 
@@ -11675,9 +11706,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Last name must not be empty for internal users"
 #~ msgstr "Efternavn må ikke være tomt for interne brugere"
-
-#~ msgid "Something went wrong. Please close this browser tab and try again."
-#~ msgstr "Noget gik galt.  Luk venligst dette browserfaneblad og prøv igen."
 
 #~ msgid "iCalendar"
 #~ msgstr "iCalendar"

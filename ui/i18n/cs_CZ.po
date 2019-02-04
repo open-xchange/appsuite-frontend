@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-07-03 16:06+0200\n"
+"PO-Revision-Date: 2019-02-04 10:48+0100\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -3073,6 +3073,18 @@ msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
+#. '%1$s contact's display name
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "%1$s could not be added as the contact has no valid email field."
+msgstr ""
+"%1$s nebylo možné přidat, protože kontakt nemá platnou e-mailovou adresu."
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "Some contacts could not be added as they have no valid email field."
+msgstr ""
+"Některé kontakty nebylo možné přidat, protože nemají platnou e-mailovou "
+"adresu."
+
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
@@ -3326,6 +3338,11 @@ msgstr "Váš prohlížeč má vypnutou možnost ukládat cookie. Zapněte ji, p
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Connection timed out. Please try reloading the page."
 msgstr "Vypršel časový limit spojení. Nahrajte stránku znovu, prosím."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Something went wrong. Please close this browser tab and try again."
+msgstr ""
+"Došlo k chybě. Zavřete tento panel prohlížeče a zkuste to, prosím, znovu."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -4763,9 +4780,8 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr "Aby se nastavení projevilo, je nutné se odhlásit a znovu přihlásit."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/settings/main.js
-msgid "Basic settings"
-msgstr "Základní nastavení"
+msgid "The setting requires a relogin to take effect."
+msgstr "Aby se nastavení projevilo, je nutné se odhlásit a znovu přihlásit."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
@@ -4774,6 +4790,18 @@ msgid ""
 msgstr ""
 "Některá nastavení (jazyk, časové pásmo, motiv) vyžadují znovunačtení stránky "
 "nebo opětovné přihlášení, aby se projevila."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
+msgstr ""
+"Některá nastavení (jazyk, časové pásmo, motiv) vyžadují opětovné přihlášení, "
+"aby se projevila."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/main.js
+msgid "Basic settings"
+msgstr "Základní nastavení"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
@@ -8179,13 +8207,13 @@ msgstr "Poštovní konference"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is bigger than"
-msgstr "Je větší než"
+msgid "Is bigger than (Size: B/KB/MB/GB)"
+msgstr "Je větší než (velikost: B/KB/MB/GB)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is smaller than"
-msgstr "Je menší než"
+msgid "Is smaller than (Size: B/KB/MB/GB)"
+msgstr "Je menší než (velikost: B/KB/MB/GB)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -11278,6 +11306,12 @@ msgstr "Pozvat na %s"
 msgid "Add on %s"
 msgstr "Přidat do %s"
 
+#~ msgid "Is bigger than"
+#~ msgstr "Je větší než"
+
+#~ msgid "Is smaller than"
+#~ msgstr "Je menší než"
+
 #~ msgid "Notify %1$s before start."
 #~ msgstr "Upozornit %1$s před začátkem."
 
@@ -11721,10 +11755,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Last name must not be empty for internal users"
 #~ msgstr "U interních uživatelů nemůže být příjmení prázdné"
-
-#~ msgid "Something went wrong. Please close this browser tab and try again."
-#~ msgstr ""
-#~ "Došlo k chybě. Zavřete tento panel prohlížeče a zkuste to, prosím, znovu."
 
 #~ msgid "iCalendar"
 #~ msgstr "iCalendar"
