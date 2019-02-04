@@ -221,7 +221,21 @@ define('io.ox/mail/compose/main', [
             return require(['io.ox/mail/compose/bundle']).then(function () {
                 return require(['io.ox/mail/compose/model']);
             }).then(function (MailComposeModel) {
-                var model = new MailComposeModel({ id: point });
+                var data = { id: point };
+                if (_.isObject(point)) {
+                    // create composition space from old restore point
+                    data = _(point).pick('to', 'cc', 'bcc', 'subject');
+                    if (point.from && point.from[0]) data.from = point.from[0];
+                    if (point.attachments && point.attachments[0]) {
+                        data.content = point.attachments[0].content;
+                        data.contentType = point.attachments[0].content_type;
+                    }
+                    data.meta = {};
+                    data.meta.security = point.security;
+                    data.requestRqe = point.disp_notification_to;
+                    data.priority = ['high', 'medium', 'low'][(data.priority || 1) - 1];
+                }
+                var model = new MailComposeModel(data);
                 return app.open({}, model);
             });
         };
