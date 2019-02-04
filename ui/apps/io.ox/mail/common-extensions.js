@@ -669,7 +669,8 @@ define('io.ox/mail/common-extensions', [
                 view.on('change:layout', function (mode) {
                     settings.set('attachments/layout/detail/' + _.display(), mode).save();
                 });
-
+                // A11y: Fixup roles
+                view.$el.find('[role="toolbar"]').find('a[role="menuitem"]').attr('role', 'button');
                 return view;
             };
         }()),

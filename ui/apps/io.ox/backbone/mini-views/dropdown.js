@@ -71,7 +71,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         setDropdownOverlay: function () {
             var self = this;
 
-            this.$overlay = $('<div class="smart-dropdown-container dropdown open">', this.onReady.bind(this))
+            this.$overlay = $('<div class="smart-dropdown-container dropdown open" role="navigation">', this.onReady.bind(this))
                 .addClass(this.$el.prop('className'));
 
             this.$ul.data('style', this.$ul.attr('style'));
