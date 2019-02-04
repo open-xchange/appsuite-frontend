@@ -158,9 +158,12 @@ define('io.ox/core/main/appcontrol', [
             if (!_.isNumber(n)) return 0;
             return Math.min(this.getQuickLauncherLimit(), ox.ui.apps.forLauncher().length, n);
         },
+        getQuickLauncherDefaults: function () {
+            return 'io.ox/mail/main,io.ox/contacts/main,io.ox/portal/main';
+        },
         getQuickLauncherItems: function () {
             var count = this.getQuickLauncherCount(),
-                list = String(settings.get('apps/quickLaunch')).trim().split(/,\s*/),
+                list = String(settings.get('apps/quickLaunch', this.getQuickLauncherDefaults())).trim().split(/,\s*/),
                 str = _.chain(list).filter(function (o) {
                     return ox.ui.apps.get(o.replace(/\/main$/, ''));
                 }).value().join(',');

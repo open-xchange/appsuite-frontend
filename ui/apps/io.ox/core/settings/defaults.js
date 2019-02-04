@@ -39,9 +39,6 @@ define('io.ox/core/settings/defaults', function () {
         showDesktopNotifications: true,
         settings: {
             downloadsDisabled: false
-        },
-        apps: {
-            quickLaunch: 'io.ox/mail/main,io.ox/contacts/main,io.ox/portal/main'
         }
     };
 
