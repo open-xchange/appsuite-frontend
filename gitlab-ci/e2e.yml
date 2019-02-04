@@ -55,29 +55,38 @@ run e2e tests:
       - ui/build/e2e/
     expire_in: 1 day
 
-publish e2e junit report:
-  stage: cleanup
-  dependencies:
-    - run e2e tests
+generate e2e report:
+  stage: report
+  image: gitlab.open-xchange.com:4567/frontend/dev_env/allure:latest
   variables:
     GIT_STRATEGY: none
+  dependencies:
+    - run e2e tests
   script:
-    - "true"
-  artifacts:
-    reports:
-      junit: ui/build/e2e/report.xml
+    - allure generate ui/build/e2e/ -o ui/build/allure-report
   when: always
+  artifacts:
+    when: always
+    paths:
+      - ui/build/allure-report
+    expire_in: 1 day
+  only:
+    - develop
+    - master
+    - master-*
+    - /^feature\//
+    - /^bug\//
 
-publish e2e reports for stable branches:
+publish e2e report:
   stage: cleanup
   variables:
     DOCKER_HOST: docker.ui.cloud.open-xchange.com
     GIT_STRATEGY: none
   dependencies:
-    - run e2e tests
+    - generate e2e report
   script:
     - docker exec reports rm -rf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG
-    - docker cp ui/build/e2e/ reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG/
+    - docker cp ui/build/allure-report/ reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG/
   environment:
     name: reports/$CI_COMMIT_REF_SLUG
     url: http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/
@@ -86,25 +95,8 @@ publish e2e reports for stable branches:
     - develop
     - master
     - master-*
-
-publish e2e failure report:
-  stage: cleanup
-  variables:
-    DOCKER_HOST: docker.ui.cloud.open-xchange.com
-    GIT_STRATEGY: none
-  dependencies:
-    - run e2e tests
-  script:
-    - docker cp ui/build/e2e/ reports:/usr/share/nginx/html/$CI_PIPELINE_ID/
-  environment:
-    name: reports/$CI_PIPELINE_IID
-    url: http://reports.ui.cloud.open-xchange.com/$CI_PIPELINE_ID/
-    on_stop: remove e2e report
-  when: on_failure
-  except:
-    - develop
-    - master
-    - master-*
+    - /^feature\//
+    - /^bug\//
 
 remove e2e report:
   stage: cleanup
@@ -113,9 +105,9 @@ remove e2e report:
     DOCKER_HOST: docker.ui.cloud.open-xchange.com
     GIT_STRATEGY: none
   script:
-    - docker exec reports rm -rf /usr/share/nginx/html/$CI_PIPELINE_ID
+    - docker exec reports rm -rf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG
   environment:
-    name: reports/$CI_PIPELINE_IID
+    name: reports/$CI_COMMIT_REF_SLUG
     action: stop
   when: manual
 

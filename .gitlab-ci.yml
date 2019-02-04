@@ -11,6 +11,7 @@ stages:
   - test
   - deploy
   - e2e
+  - report
   - cleanup
 
 .default_cache: &default_cache
