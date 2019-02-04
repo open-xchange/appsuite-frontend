@@ -64,14 +64,14 @@ define('io.ox/backbone/views/actions/util', [
             // get actions
             var actions = ext.point(link.ref).list();
             // check general availability
-            var available = actions.some(util.checkActionAvailability);
-            if (!available) return { link: link, available: false };
+            var available = actions.filter(util.checkActionAvailability);
+            if (!available.length) return { link: link, available: false };
             // check collection && matches
-            var enabled = actions.some(util.checkActionEnabled.bind(null, baton));
+            var enabled = available.filter(util.checkActionEnabled.bind(null, baton));
             if (/\bactions/.test(_.url.hash('debug'))) {
                 console.debug('item', link.ref, 'available', available, 'enabled', enabled, actions, baton.data, baton);
             }
-            return { link: link, available: true, enabled: enabled };
+            return { link: link, available: true, enabled: enabled.length > 0, actions: enabled };
         },
 
         checkLink: function (link) {
@@ -127,20 +127,20 @@ define('io.ox/backbone/views/actions/util', [
         // toolbar item gets hidden or disabled (if drawDisabled) until function resolves
         processMatches: function ($li, baton, item) {
 
-            var list = ext.point(item.link.ref).list(),
-                result = $.Deferred();
-
+            var result = $.Deferred();
             nextAction();
 
             function nextAction() {
-                var action = list.shift();
+                var action = (item.actions || []).shift();
                 if (action && !baton.isPropagationStopped()) checkAction(action); else result.resolve(false);
             }
 
             function checkAction(action) {
-                matches(baton, action).done(function (state) {
-                    if (state) result.resolve(true); else nextAction();
-                });
+                matches(baton, action)
+                    .done(function (state) {
+                        if (state) result.resolve(true); else nextAction();
+                    })
+                    .fail(nextAction);
             }
 
             return result.done(function (state) {
@@ -385,11 +385,12 @@ define('io.ox/backbone/views/actions/util', [
             }
 
             function checkMatches(action, baton) {
-                // use pipe to avoid async behavior
                 try {
-                    matches(baton, action).pipe(function (state) {
-                        if (state) callAction(action, baton); else nextAction();
-                    });
+                    matches(baton, action)
+                        .done(function (state) {
+                            if (state) callAction(action, baton); else nextAction();
+                        })
+                        .fail(nextAction);
                 } catch (e) {
                     console.error(e);
                     nextAction();
