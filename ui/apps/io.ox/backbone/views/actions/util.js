@@ -367,7 +367,7 @@ define('io.ox/backbone/views/actions/util', [
 
             function checkAction(action) {
                 // has action callback?
-                if (!_.isFunction(action.action)) return nextAction();
+                if (!_.isFunction(action.action || action.multiple)) return nextAction();
                 // avoid default behaviour?
                 if (action.id === 'default' && baton.isDefaultPrevented()) return nextAction();
                 // check for disabled extensions
@@ -398,7 +398,10 @@ define('io.ox/backbone/views/actions/util', [
 
             function callAction(action, baton) {
                 try {
-                    if (!checkOnly) action.action(baton);
+                    if (!checkOnly) {
+                        if (action.action) action.action(baton);
+                        else if (action.multiple) action.multiple(baton.array(), baton);
+                    }
                 } catch (e) {
                     console.error('point("' + ref + '") > invoke()', e.message, {
                         baton: baton,

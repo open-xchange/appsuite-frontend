@@ -53,6 +53,7 @@ define('io.ox/backbone/views/action-dropdown', [
         },
 
         finalizeRender: function () {
+            if (this.disposed) return;
             this.$menu.removeClass('invisible');
             this.trigger('ready');
         },
