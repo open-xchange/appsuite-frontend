@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2019 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
@@ -22,16 +22,18 @@ define('io.ox/core/duration', [
     our tracker. We want to calculate the real seconds of visible
     UI per App. As soon as the Browser is not visibile anymore
     we stop tracking eyeball time.
-    For each full minite of eyeball time we will send a POST to the tracker, aka
+    For each full minute of eyeball time we will send a POST to the tracker, aka
     we use the core tracker and call the .add() function with our object like
     {duration: 1, app: 'io.ox/mail/main'}. The tracking will only be done per module, open
     floating windows will not be taken into account.
-    We will use visibilitychange event on document and query the value of document.isHidden (true/false)
+    We will use visibility api
     which indicates if the browser is hidden (aka, minimized, another tab is open, completely hidden by other windows)
     This does not cover the case that only a part of the browser is not visible.
     */
+
     // feature toggle
     if (settings.get('tracker/eyeballs', true) === false) return;
+    if (ox.debug) console.info('Enabled eyeball stats');
 
     var interval = 1000,
         temp = {},
@@ -42,15 +44,16 @@ define('io.ox/core/duration', [
     }
 
     function send(app, duration) {
-        tracker.add([app, duration]);
+        tracker.add('duration', { eyeballs: duration, app: app });
     }
 
     function track() {
-        var app = getApp();
+        if (document.visibilityState === 'hidden') return;
 
-        if (document.hidden === false) {
-            temp[app] = (!!temp[app]) ? temp[app] + 1 : 1;
-        }
+        var app = getApp();
+        // counting seconds
+        temp[app] = (!!temp[app]) ? temp[app] + 1 : 1;
+
         // only track full minutes
         if (temp[app] % 60 === 0) {
             counts[app] = (!!counts[app]) ? counts[app] + 1 : 1;
@@ -58,6 +61,13 @@ define('io.ox/core/duration', [
         }
     }
 
-    window.counts = counts;
+    function getCount() {
+        return counts;
+    }
+
     setInterval(track, interval);
+
+    return {
+        getCount: getCount
+    };
 });
