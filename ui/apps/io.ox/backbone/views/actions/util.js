@@ -127,11 +127,14 @@ define('io.ox/backbone/views/actions/util', [
         // toolbar item gets hidden or disabled (if drawDisabled) until function resolves
         processMatches: function ($li, baton, item) {
 
-            var result = $.Deferred();
-            nextAction();
+            var actions = item.actions || [],
+                result = $.Deferred();
+
+            // return true if there is no action to check
+            if (actions.length) nextAction(); else result.resolve(true);
 
             function nextAction() {
-                var action = (item.actions || []).shift();
+                var action = actions.shift();
                 if (action && !baton.isPropagationStopped()) checkAction(action); else result.resolve(false);
             }
 
