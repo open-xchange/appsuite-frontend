@@ -59,13 +59,12 @@ define('io.ox/mail/compose/util', [
             }
 
             if (origin.file && contentDisposition === 'attachment') {
-                attachment.set('group', 'localFile');
-
+                attachment.set({
+                    group: 'localFile',
+                    originalFile: origin.file
+                });
                 if (resize.isResizableImage(origin.file)) {
-                    attachment.set({
-                        originalFile: origin.file,
-                        uploaded: 0
-                    });
+                    attachment.set('uploaded', 0);
 
                     attachment.on('image:resized', function (image) {
                         if (def && def.state() === 'pending') def.abort();
