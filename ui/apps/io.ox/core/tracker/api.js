@@ -12,7 +12,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tracker', ['settings!io.ox/core'], function (settings) {
+define('io.ox/core/tracker/api', ['settings!io.ox/core'], function (settings) {
 
     'use strict';
 
@@ -35,10 +35,6 @@ define('io.ox/core/tracker', ['settings!io.ox/core'], function (settings) {
         api.trigger('add', data);
         api.queue.push(data);
     };
-
-    // track browser and unique visit once on setup
-    api.add('browser');
-    api.add('unique', { id: ox.context_id + '/' + ox.user_id });
 
     var intervalId = setInterval(function () {
 
