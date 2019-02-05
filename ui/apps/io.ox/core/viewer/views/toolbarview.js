@@ -708,8 +708,17 @@ define('io.ox/core/viewer/views/toolbarview', [
             var appName = appName = model.get('source'),
                 isDriveFile = model.isFile();
 
+            // remove listener from previous model
+            if (this.model) { this.stopListening(this.model, 'change'); }
+
             // save current data as view model
             this.model = model;
+
+            // add listener for new model
+            this.listenTo(this.model, 'change', this.onModelChange);
+
+            // add CSS device class to $el for smartphones or tablets
+            Util.setDeviceClass(this.$el);
 
             this.toolbar
                 .setPoint(TOOLBAR_LINKS_ID + '/' + appName)
