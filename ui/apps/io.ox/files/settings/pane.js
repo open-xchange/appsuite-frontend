@@ -82,18 +82,18 @@ define('io.ox/files/settings/pane', [
                     getMaxVersionsOptions: function () {
                         return [
                             { label: gt('Keep all versions'), value: 0 },
-                            { label: gt('1 version'), value: 1 },
-                            { label: gt('5 versions'), value: 5 },
-                            { label: gt('10 versions'), value: 10 },
-                            { label: gt('20 versions'), value: 20 },
-                            { label: gt('30 versions'), value: 30 },
-                            { label: gt('40 versions'), value: 40 },
-                            { label: gt('50 versions'), value: 50 },
-                            { label: gt('60 versions'), value: 60 },
-                            { label: gt('70 versions'), value: 70 },
-                            { label: gt('80 versions'), value: 80 },
-                            { label: gt('90 versions'), value: 90 },
-                            { label: gt('100 versions'), value: 100 }
+                            { label: gt('1 version'), value: 2 },
+                            { label: gt('5 versions'), value: 6 },
+                            { label: gt('10 versions'), value: 11 },
+                            { label: gt('20 versions'), value: 21 },
+                            { label: gt('30 versions'), value: 31 },
+                            { label: gt('40 versions'), value: 41 },
+                            { label: gt('50 versions'), value: 51 },
+                            { label: gt('60 versions'), value: 61 },
+                            { label: gt('70 versions'), value: 71 },
+                            { label: gt('80 versions'), value: 81 },
+                            { label: gt('90 versions'), value: 91 },
+                            { label: gt('100 versions'), value: 101 }
                         ];
                     }
                 })
@@ -176,10 +176,33 @@ define('io.ox/files/settings/pane', [
             id: 'versionCleanup',
             index: INDEX += 100,
             render: function () {
-                if (!capabilities.has('autodelete_file_versions')) return;
+
+                // disabled
+                if (!capabilities.has('autodelete_file_versions')) {
+                    var retentionDays = settings.get('features/autodelete/retentionDays'),
+                        maxVersions = settings.get('features/autodelete/maxVersions');
+
+                    // nothing configured
+                    if (!retentionDays && !maxVersions) return;
+
+                    // configured by admin
+                    this.$el.append(
+                        util.fieldset(
+                            gt('File version history'),
+                            $('<span>').append(gt('Timeframe')),
+                            $('<ul>').append($('<li>').append((retentionDays <= 0) ? gt('The timeframe is not limited') : gt.format(gt.ngettext('The timeframe is limited to 1 day.', 'The timeframe is limited to %1$d days.', retentionDays), retentionDays))),
+                            $('<span>').append(gt('File version limit')),
+                            $('<ul>').append($('<li>').append((maxVersions <= 0) ? gt('The number of versions is not limited') : gt.format(gt.ngettext('The number of versions is limited to 1 version.', 'The number of versions is limited to %1$d versions.', maxVersions - 1), maxVersions - 1)))
+                        )
+                    );
+
+                    return;
+                }
+
                 var summaryContainer = $('<div>').addClass('help-block');
 
                 this.getSummary = function () {
+                    // appends legend list for explanation
                     var summaryList = $('<ul>'),
                         summary = $('<span>').text(gt('Summary')).append(summaryList),
                         retentionDays = settings.get('features/autodelete/retentionDays'),
@@ -190,16 +213,9 @@ define('io.ox/files/settings/pane', [
                         return summary;
                     }
 
-                    if (retentionDays > 0) {
-                        summaryList.append($('<li>').append(
-                            gt.format(gt.ngettext('All file versions older than 1 day will be deleted after next login', 'All file versions older than %1$d days will be deleted after next login', retentionDays), retentionDays)
-                        ));
-                    }
-                    if (maxVersions > 0) {
-                        summaryList.append($('<li>').append(
-                            gt.format(gt.ngettext('When a file has more than 1 version, older versions of the file will be deleted after next login', 'When a file has more than %1$d versions, older versions of the file will be deleted after next login', maxVersions), maxVersions)
-                        ));
-                    }
+                    if (retentionDays > 0) summaryList.append($('<li>').append(gt.format(gt.ngettext('All file versions older than 1 day will be deleted', 'All file versions older than %1$d days will be deleted', retentionDays), retentionDays)));
+                    if (maxVersions > 0) summaryList.append($('<li>').append(gt.format(gt.ngettext('When a file has more than 1 additional version, older versions of the file will be deleted', 'When a file has more than %1$d additional versions, older versions of the file will be deleted', maxVersions - 1), maxVersions - 1)));
+                    summaryList.append($('<li>').append(gt('Older versions will be deleted after next login or when a new version is created')));
 
                     return summary;
                 };
