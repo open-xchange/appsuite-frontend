@@ -237,6 +237,7 @@ define('io.ox/core/attachments/view', [
 
         initialize: function () {
             this.listenTo(this.model, 'change:id', this.render);
+            this.$el.on('error.lazyload', this.fallback.bind(this));
         },
 
         lazyload: function (previewUrl) {
