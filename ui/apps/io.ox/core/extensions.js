@@ -166,41 +166,42 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
                 }
 
                 // skip duplicates (= same id)
-                if (!has(extension.id)) {
-
-                    if ('enabled' in extension) {
-                        if (_.isObject(extension.enabled)) {
-                            return console.error("Extending of '" + this.id + "' with '" + extension.id + "' failed. Ensure extensions 'enabled' property is a primitive.");
-                        }
-                        if (!extension.enabled) this.disable(extension.id);
-                        delete extension.enabled;
-                    }
-
-                    extension.invoke = createInvoke(this, extension);
-
-                    if (replacements[extension.id]) {
-                        _.extend(extension, replacements[extension.id]);
-                        delete replacements[extension.id];
-                    }
-
-                    extensions.push(extension);
-                    sort();
-
-
-                    if (!extension.metadata) {
-                        extension.metadata = function (name, args) {
-                            if (this[name]) {
-                                if (_.isFunction(this[name])) {
-                                    return this[name].apply(this, args);
-                                }
-                                return this[name];
-                            }
-                            return undefined;
-                        };
-                    }
-
-                    this.trigger('extended', extension);
+                if (has(extension.id)) {
+                    if (ox.debug) console.warn('Extensions MUST HAVE unique identifiers! Point: %s ID: %s', this.id, extension.id);
+                    return;
                 }
+
+                if ('enabled' in extension) {
+                    if (_.isObject(extension.enabled)) {
+                        return console.error("Extending of '" + this.id + "' with '" + extension.id + "' failed. Ensure extensions 'enabled' property is a primitive.");
+                    }
+                    if (!extension.enabled) this.disable(extension.id);
+                    delete extension.enabled;
+                }
+
+                extension.invoke = createInvoke(this, extension);
+
+                if (replacements[extension.id]) {
+                    _.extend(extension, replacements[extension.id]);
+                    delete replacements[extension.id];
+                }
+
+                extensions.push(extension);
+                sort();
+
+                if (!extension.metadata) {
+                    extension.metadata = function (name, args) {
+                        if (this[name]) {
+                            if (_.isFunction(this[name])) {
+                                return this[name].apply(this, args);
+                            }
+                            return this[name];
+                        }
+                        return undefined;
+                    };
+                }
+
+                this.trigger('extended', extension);
 
             }, this);
 

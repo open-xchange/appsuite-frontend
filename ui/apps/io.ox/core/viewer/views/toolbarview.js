@@ -47,21 +47,33 @@ define('io.ox/core/viewer/views/toolbarview', [
                 mobile: 'hi',
                 ref: TOOLBAR_ACTION_ID + '/rename',
                 title: gt('File name'),
-                customize: function (baton) {
+                customize: (function () {
 
-                    this.empty()
-                        .append(
-                            // icon
-                            !baton.context.standalone ?
-                                $('<i class="fa" aria-hidden="true">').addClass(Util.getIconClass(baton.model)) : null,
-                            // filename
-                            $('<span class="filename-label">').text(baton.model.getDisplayName())
-                        )
-                        .addClass('viewer-toolbar-filename')
-                        .parent().addClass('align-left');
+                    var RenameView = DisposableView.extend({
+                        initialize: function (options) {
+                            this.standalone = options.standalone;
+                            this.listenTo(this.model, 'change', this.render);
+                            this.$el.addClass('viewer-toolbar-filename');
+                        },
+                        render: function () {
+                            this.$el.empty().append(
+                                // icon
+                                !this.standalone ? $('<i class="fa" aria-hidden="true">').addClass(Util.getIconClass(this.model)) : null,
+                                // filename
+                                $('<span class="filename-label">').text(this.model.getDisplayName())
+                            );
+                            return this;
+                        }
+                    });
 
-                    // check if action is available
-                    if (baton.model.isFile()) {
+                    return function (baton) {
+
+                        new RenameView({ el: this, model: baton.model, standalone: baton.standalone }).render();
+                        this.parent().addClass('align-left');
+
+                        // check if action is available
+                        if (!baton.model.isFile()) return;
+
                         actionsUtil.checkAction('io.ox/files/actions/rename', baton.data).then(
                             function yep() {
                                 this.attr({
@@ -74,8 +86,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                                 this.addClass('disabled');
                             }.bind(this)
                         );
-                    }
-                }
+                    };
+                }())
             },
             'zoomout': {
                 prio: 'hi',
