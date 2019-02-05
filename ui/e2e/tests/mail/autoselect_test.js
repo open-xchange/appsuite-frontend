@@ -98,6 +98,7 @@ Scenario('check auto select behavior in list view', async (I, users) => {
     I.haveSetting('io.ox/mail//layout', 'list');
 
     I.login('app=io.ox/mail');
+    I.waitForText('First mail!', 5, '.subject');
 
     I.seeNumberOfElements('.list-item.selectable.unread', 2);
     I.dontSeeElement('.list-item.selected');
