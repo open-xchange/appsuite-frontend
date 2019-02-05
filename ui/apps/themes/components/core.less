@@ -23,6 +23,13 @@ textarea,
 
 textarea { resize: none; }
 
+// disable native styles because of ios safari browser bugs, see https://stackoverflow.com/questions/26573346/ios-safari-messes-up-input-type-date/31362574
+html.ios input[type="datetime-local"], html.ios input[type="date"] {
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    padding-top: 0;
+}
+
 span.hint {
     font-size: 8pt;
     text-align: left;
