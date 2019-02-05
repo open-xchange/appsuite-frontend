@@ -552,6 +552,8 @@ define('io.ox/core/viewer/views/toolbarview', [
             this.listenTo(this.viewerEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
             // listen to autoplay events
             this.listenTo(this.viewerEvents, 'viewer:autoplay:state:changed', this.onAutoplayRunningStateChanged);
+            // listen to added/removed favorites
+            this.listenTo(FilesAPI, 'favorite:add favorite:remove', this.onFavoritesChange);
             // give toolbar a standalone class if its in one
             this.$el.toggleClass('standalone', this.standalone);
             // the current autoplay state
@@ -663,6 +665,18 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
 
         /**
+         * Listener for added/removed favorites.
+         * - rerenders the toolbar
+         * @param {Object} file
+         *  the file descriptor.
+         */
+        onFavoritesChange: function (file) {
+            if (file.id === _.cid(this.model.toJSON())) {
+                this.onModelChange(FilesAPI.pool.get('detail').get(file.id));
+            }
+        },
+
+        /**
          * Handles when autoplay is started or stopped
          *
          * @param {Object} state
@@ -729,6 +743,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                         model: model,
                         models: isDriveFile ? [model] : null,
                         openedBy: this.openedBy,
+                        // TODO: check if still needed, the actions 'io.ox/files/actions/favorites/add' and 'io.ox/files/actions/favorites/remove' don't use this parameter (anymore)
                         favorites: CoreSettings.get('favorites/infostore', [])
                     };
                 }.bind(this));
@@ -818,6 +833,7 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Destructor of this view
          */
         onDispose: function () {
+            this.stopListening(FilesAPI);
             this.model = null;
         }
 
