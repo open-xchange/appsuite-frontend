@@ -15,8 +15,9 @@ define([
     'io.ox/backbone/views/toolbar',
     'io.ox/backbone/views/action-dropdown',
     'io.ox/backbone/views/actions/util',
-    'io.ox/core/extensions'
-], function (ToolbarView, ActionDropdownView, util, ext) {
+    'io.ox/core/extensions',
+    'io.ox/core/collection'
+], function (ToolbarView, ActionDropdownView, util, ext, Collection) {
 
     'use strict';
 
@@ -288,6 +289,30 @@ define([
 
             // ----------------------------------------------------------
 
+            action(POINT + '/actions/filter', {
+                collection: 'some',
+                matches: function (baton) {
+                    baton.spies.first.matches();
+                    return true;
+                },
+                action: function (baton) {
+                    baton.spies.first.action();
+                }
+            });
+
+            action(POINT + '/actions/filter', {
+                id: 'seconds',
+                matches: function (baton) {
+                    baton.spies.second.matches();
+                    return true;
+                },
+                action: function (baton) {
+                    baton.spies.second.action();
+                }
+            });
+
+            // ----------------------------------------------------------
+
             it('calls stacking actions (skip first)', function () {
                 var spies = {
                     first: { matches: sinon.spy(), action: sinon.spy() },
@@ -327,6 +352,26 @@ define([
                     expect(baton.spies.first.action.called, '#2').to.be.false;
                     expect(baton.spies.second.matches.called, '#3').to.be.false;
                     expect(baton.spies.second.action.called, '#4').to.be.false;
+                });
+            });
+
+            it('considers static checks before matches()', function () {
+
+                var spies = {
+                    first: { matches: sinon.spy(), action: sinon.spy() },
+                    second: { matches: sinon.spy(), action: sinon.spy() }
+                };
+
+                var collection = new Collection.Simple([]),
+                    baton = ext.Baton({ collection: collection, data: [], selection: [], simple: true, spies: spies }),
+                    item = util.processItem(baton, { ref: POINT + '/actions/filter' });
+
+                expect(item.available, 'available').to.be.true;
+                expect(item.enabled, 'enabled').to.be.true;
+
+                return util.processMatches(util.createListItem(), baton, item).done(function () {
+                    expect(baton.spies.first.matches.called, 'first/matches').to.be.false;
+                    expect(baton.spies.second.matches.called, 'second/matches').to.be.true;
                 });
             });
         });
