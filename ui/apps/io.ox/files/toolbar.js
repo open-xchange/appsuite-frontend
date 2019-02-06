@@ -238,11 +238,17 @@ define('io.ox/files/toolbar', [
         id: 'update-toolbar',
         index: 10200,
         setup: function (app) {
-            app.updateToolbar([]);
-            // update toolbar on selection change as well as any model change
-            app.listView.on('selection:change change', function () {
+            app.updateToolbar(app.listView.selection.get());
+            // update toolbar on selection change
+            app.listView.on('selection:change', function () {
                 app.updateToolbar(app.listView.selection.get());
             });
+
+            // update toolbar on model changes
+            app.listView.on('change', _.debounce(function () {
+                app.forceUpdateToolbar(app.listView.selection.get());
+            }), 10);
+
             api.on('favorite:add favorite:remove', function () {
                 app.updateToolbar(app.listView.selection.get());
             });
