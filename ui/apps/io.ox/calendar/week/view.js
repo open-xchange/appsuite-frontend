@@ -437,9 +437,11 @@ define('io.ox/calendar/week/view', [
         },
 
         drawDropdown: (function () {
+            var self;
             function drawOption() {
                 // this = timezone name (string)
-                var timezone = moment.tz(this);
+                // must use start of view to get correct daylight saving timezone names (cet vs cest)
+                var timezone = moment(self.model.get('startDate')).tz(this);
                 return [
                     $('<span class="offset">').text(timezone.format('Z')),
                     $('<span class="timezone-abbr">').text(timezone.zoneAbbr()),
@@ -461,6 +463,7 @@ define('io.ox/calendar/week/view', [
             });
 
             return function () {
+                self = this;
                 var list = _.intersection(
                         settings.get('favoriteTimezones', []),
                         settings.get('renderTimezones', [])
@@ -472,33 +475,37 @@ define('io.ox/calendar/week/view', [
                     dropdown = new Dropdown({
                         className: 'dropdown timezone-label-dropdown',
                         model: model,
-                        label: moment().tz(coreSettings.get('timezone')).zoneAbbr(),
+                        // must use start of view to get correct daylight saving timezone names (cet vs cest)
+                        label: moment(self.model.get('startDate')).tz(coreSettings.get('timezone')).zoneAbbr(),
                         tagName: 'div'
-                    })
-                        .header(gt('Standard timezone'))
-                        .option('default', true, drawOption.bind(coreSettings.get('timezone')));
+                    }),
+                    render = function () {
+                        dropdown.header(gt('Standard timezone'))
+                            .option('default', true, drawOption.bind(coreSettings.get('timezone')));
 
-                if (settings.get('favoriteTimezones', []).length > 0) {
-                    dropdown.header(gt('Favorites'));
-                }
-                $('li[role="presentation"]', dropdown.$ul).first().addClass('disabled');
-                $('a', dropdown.$ul).first().removeAttr('data-value').removeData('value');
+                        if (settings.get('favoriteTimezones', []).length > 0) {
+                            dropdown.header(gt('Favorites'));
+                        }
+                        $('li[role="presentation"]', dropdown.$ul).first().addClass('disabled');
+                        $('a', dropdown.$ul).first().removeAttr('data-value').removeData('value');
+                        _(settings.get('favoriteTimezones', [])).each(function (fav) {
+                            if (fav !== coreSettings.get('timezone')) {
+                                dropdown.option(fav, true, drawOption.bind(fav));
+                            }
+                        });
+                        // add keep open for all timezone options, *not* the link to settings (Bug 53471)
+                        $('a', dropdown.$ul).attr('data-keep-open', 'true');
 
-                _(settings.get('favoriteTimezones', [])).each(function (fav) {
-                    if (fav !== coreSettings.get('timezone')) {
-                        dropdown.option(fav, true, drawOption.bind(fav));
-                    }
-                });
-                // add keep open for all timezone options, *not* the link to settings (Bug 53471)
-                $('a', dropdown.$ul).attr('data-keep-open', 'true');
+                        dropdown.divider();
+                        dropdown.link('settings', gt('Manage favorites'), function () {
+                            var options = { id: 'io.ox/timezones' };
+                            ox.launch('io.ox/settings/main', options).done(function () {
+                                this.setSettingsPane(options);
+                            });
+                        });
+                    };
 
-                dropdown.divider();
-                dropdown.link('settings', gt('Manage favorites'), function () {
-                    var options = { id: 'io.ox/timezones' };
-                    ox.launch('io.ox/settings/main', options).done(function () {
-                        this.setSettingsPane(options);
-                    });
-                });
+                render();
 
                 model.on('change', function (model) {
                     var list = [];
@@ -513,13 +520,23 @@ define('io.ox/calendar/week/view', [
                     settings.save();
                 });
 
+                // update on startdate change to get daylight savings right
+                this.model.on('change:startDate', function () {
+                    console.log(dropdown);
+                    dropdown.$el.find('.dropdown-label').empty().append(moment(self.model.get('startDate')).tz(coreSettings.get('timezone')).zoneAbbr(), $('<i class="fa fa-caret-down" aria-hidden="true">'));
+                    dropdown.$ul.empty();
+                    render();
+                });
+
                 return dropdown;
             };
         }()),
 
         render: function () {
             if (!_.device('smartphone')) {
-                var dropdown = this.drawDropdown();
+                var dropdown = this.drawDropdown(),
+                    self = this;
+
                 this.$el.empty().append(
                     $('<div class="time-label-bar">').append(
                         $('<div class="timezone">'),
@@ -529,6 +546,10 @@ define('io.ox/calendar/week/view', [
 
                 $('.dropdown-label', dropdown.$el).append($('<i class="fa fa-caret-down" aria-hidden="true">'));
                 this.updateTimezones();
+                // update on startdate change to get daylight savings right
+                this.model.on('change:startDate', function () {
+                    self.updateTimezones();
+                });
             }
 
             this.$el.append(this.$appointmentContainer);
@@ -541,12 +562,13 @@ define('io.ox/calendar/week/view', [
         },
 
         updateTimezones: function () {
-            var timezoneLabels = this.model.get('additionalTimezones');
+            var timezoneLabels = this.model.get('additionalTimezones'),
+                self = this;
             this.$('.timezone').remove();
             this.$('.time-label-bar')
                 .prepend(
                     _(timezoneLabels).map(function (tz) {
-                        return $('<div class="timezone">').text(moment().tz(tz).zoneAbbr());
+                        return $('<div class="timezone">').text(moment(self.model.get('startDate')).tz(tz).zoneAbbr());
                     })
                 )
                 .css('width', timezoneLabels.length > 0 ? (timezoneLabels.length + 1) * 80 : '');
