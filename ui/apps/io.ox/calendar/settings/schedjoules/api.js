@@ -13,8 +13,9 @@
 
 define('io.ox/calendar/settings/schedjoules/api', [
     'io.ox/core/folder/api',
-    'io.ox/core/http'
-], function (folderAPI, http) {
+    'io.ox/core/http',
+    'settings!io.ox/calendar'
+], function (folderAPI, http, settings) {
 
     var api = {
 
@@ -51,7 +52,9 @@ define('io.ox/calendar/settings/schedjoules/api', [
                 'com.openexchange.calendar.config': {
                     'itemId': obj.itemId,
                     'refreshInterval': 10080,
-                    'locale': obj.locale
+                    'locale': obj.locale,
+                    defaultAlarmDate: settings.get('chronos/defaultAlarmDate', []),
+                    defaultAlarmDateTime: settings.get('chronos/defaultAlarmDateTime', [])
                 }
             });
         }

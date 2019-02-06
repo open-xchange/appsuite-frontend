@@ -191,6 +191,29 @@ define('io.ox/core/folder/contextmenu', [
         }()),
 
         //
+        // Edit default alarms
+        //
+        alarms: (function () {
+
+            function handler(e) {
+                ox.load(['io.ox/calendar/actions/change-folder-alarms']).done(function (alarms) {
+                    alarms(e.data);
+                });
+            }
+
+            return function (baton) {
+
+                contextUtils.addLink(this, {
+                    action: 'alarms',
+                    data: baton.data,
+                    enabled: true,
+                    handler: handler,
+                    text: gt('Change reminder')
+                });
+            };
+        }()),
+
+        //
         // Remove folder
         //
         removeFolder: (function () {
@@ -676,6 +699,11 @@ define('io.ox/core/folder/contextmenu', [
             id: 'rename',
             index: 1100,
             draw: extensions.rename
+        },
+        {
+            id: 'change-alarms',
+            index: 1100,
+            draw: extensions.alarms
         },
         {
             id: 'move',
