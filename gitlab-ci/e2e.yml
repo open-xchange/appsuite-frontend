@@ -90,6 +90,7 @@ publish e2e report:
   environment:
     name: reports/$CI_COMMIT_REF_SLUG
     url: http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/
+    on_stop: remove e2e report
   when: always
   only:
     - develop
