@@ -253,25 +253,37 @@ define('io.ox/mail/compose/main', [
             win.nodes.body.addClass('sr-only');
 
             win.busy().show(function () {
-
                 POINT.cascade(app, { data: obj || {}, model: model, win: win }).then(function success() {
                     def.resolve({ app: app });
                     ox.trigger('mail:' + app.model.get('meta').type + ':ready', obj, app);
                 }, function fail(e) {
-                    require(['io.ox/core/notifications'], function (notifications) {
-                        notifications.yell(e);
-                        if (app.view) {
-                            app.view.dirty(false);
-                            app.view.removeLogoutPoint();
-                        }
-                        app.quit();
+                    app.notify(e);
+                    if (app.view) {
+                        app.view.dirty(false);
+                        app.view.removeLogoutPoint();
+                    }
+                    app.quit();
 
-                        def.reject(e);
-                    });
+                    def.reject(e);
                 });
             });
-
             return def;
+        };
+
+        app.notify = function (e) {
+            var error = _.extend({}, e);
+            switch (e.code) {
+                // Maximum number of composition spaces is reached. Please terminate existing open spaces in order to open new ones.
+                case 'MSGCS-0011':
+                    error.message = gt('You have reached the maximum of simultaneously opened compose windows.');
+                    break;
+                default:
+                    break;
+            }
+            require(['io.ox/core/notifications'], function (notifications) {
+                notifications.yell(e);
+                notifications.yell(error);
+            });
         };
 
         // destroy
