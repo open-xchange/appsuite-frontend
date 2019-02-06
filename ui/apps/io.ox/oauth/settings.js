@@ -127,16 +127,6 @@ define('io.ox/oauth/settings', [
                 action: 'save',
                 label: gt('Save')
             })
-            .addAlternativeButton({
-                action: 'reauthorize',
-                label: gt('Reauthorize')
-            })
-            .on('reauthorize', function () {
-                this.options.account.reauthorize();
-                // reauthorization is always independent, because it kicks of an external process and we don't always get a response
-                // however, there might be unsaved changes to the model, so do not close the dialog, yet.
-                this.idle();
-            })
             .on('save', function () {
                 var dialog = this,
                     account = this.options.account,
