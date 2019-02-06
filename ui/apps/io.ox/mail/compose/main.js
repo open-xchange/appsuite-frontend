@@ -281,7 +281,6 @@ define('io.ox/mail/compose/main', [
                     break;
             }
             require(['io.ox/core/notifications'], function (notifications) {
-                notifications.yell(e);
                 notifications.yell(error);
             });
         };
