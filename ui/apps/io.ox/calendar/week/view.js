@@ -522,7 +522,6 @@ define('io.ox/calendar/week/view', [
 
                 // update on startdate change to get daylight savings right
                 this.model.on('change:startDate', function () {
-                    console.log(dropdown);
                     dropdown.$el.find('.dropdown-label').empty().append(moment(self.model.get('startDate')).tz(coreSettings.get('timezone')).zoneAbbr(), $('<i class="fa fa-caret-down" aria-hidden="true">'));
                     dropdown.$ul.empty();
                     render();
@@ -811,6 +810,7 @@ define('io.ox/calendar/week/view', [
 
             this.listenTo(this.model, 'change:additionalTimezones', this.updateTimezones);
             this.listenTo(this.model, 'change:startDate', this.updateToday);
+            this.listenTo(this.model, 'change:startDate', this.updateTimezones);
             this.listenToDOM(window, 'resize', _.throttle(this.onWindowResize, 50));
 
             this.$hiddenIndicators = $('<div class="hidden-appointment-indicator-container">');
@@ -861,7 +861,7 @@ define('io.ox/calendar/week/view', [
 
             timeLabel.append(
                 _(_.range(24)).map(function (i) {
-                    var number = moment().startOf('day').hours(i).tz(timezone).format('LT');
+                    var number = moment(self.model.get('startDate')).startOf('day').hours(i).tz(timezone).format('LT');
 
                     return $('<div class="time">')
                         .addClass((i >= self.model.get('workStart') && i < self.model.get('workEnd')) ? 'in' : '')
