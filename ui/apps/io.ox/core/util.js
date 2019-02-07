@@ -73,6 +73,9 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core', 'stat
                 user_id: options.user_id
             };
 
+            // add contact data if available, (extended entities for attendees for example)
+            if (options.contact) halo.contact = options.contact;
+
             if (data && data.nohalo) options.$el = $('<span>');
 
             var baton = new ext.Baton({ data: data || {}, halo: halo, html: options.html });
