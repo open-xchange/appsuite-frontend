@@ -56,6 +56,7 @@ define('io.ox/core/attachments/view', [
             this.$header = $('<div class="header">');
             this.$list = $('<ul class="inline-items">');
             this.$preview = $('<ul class="inline-items preview">');
+            this.$footer = $('<footer>');
             this.isListRendered = false;
 
             // things to do whenever the collection changes:
@@ -93,7 +94,9 @@ define('io.ox/core/attachments/view', [
                     $('<button type="button" class="scroll-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
                     this.$preview,
                     $('<button type="button" class="scroll-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>')
-                )
+                ),
+                // footer
+                this.$footer
             );
 
             if (this.openByDefault) this.toggleDetails(true);
