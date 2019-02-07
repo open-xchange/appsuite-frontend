@@ -93,7 +93,7 @@ define('io.ox/mail/actions', [
             var data = baton.first();
             require(['io.ox/mail/compose/checks'], function (checks) {
                 checks.replyToMailingList(_.cid(data), mode, data).then(function (mode) {
-                    ox.registry.call('mail-compose', 'open', { type: mode, original: { folderId: data.folder_id, id: data.id } });
+                    ox.registry.call('mail-compose', 'open', { type: mode, original: { folderId: data.folder_id, id: data.id, security: data.security } });
                 });
             });
         };
@@ -148,7 +148,7 @@ define('io.ox/mail/actions', [
             }
 
             data = [].concat(data).map(function (mail) {
-                return { id: mail.id, folderId: mail.folder_id };
+                return { id: mail.id, folderId: mail.folder_id, security: mail.security };
             });
 
             ox.registry.call('mail-compose', 'open', { type: 'forward', original: data });
@@ -182,7 +182,7 @@ define('io.ox/mail/actions', [
             if (app) return app.launch();
 
             ox.registry.call('mail-compose', 'open', {
-                type: 'edit', original: { folderId: data.folder_id, id: data.id }
+                type: 'edit', original: { folderId: data.folder_id, id: data.id, security: data.security }
             });
         }
     });
