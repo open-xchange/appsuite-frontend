@@ -107,15 +107,15 @@ define('io.ox/backbone/views/actions/util', [
         createItem: function (baton, item) {
             if (!item.available) return;
             if (!item.enabled && !item.link.drawDisabled) return;
-            var $li = util.createListItem(), def;
+            var $li = util.createListItem(), link = item.link, def;
             // nested dropdown?
-            if (item.link.dropdown) {
-                def = util.renderDropdown($li, baton, { point: item.link.dropdown, title: item.link.title || item.link.label, icon: item.link.icon });
+            if (link.dropdown) {
+                def = util.renderDropdown($li, baton, { point: link.dropdown, title: link.title || link.label, icon: link.icon, caret: link.caret });
                 return { $li: $li, def: def };
             }
             // use own draw function?
-            if (item.link.custom) {
-                item.link.draw.call($li, baton);
+            if (link.custom) {
+                link.draw.call($li, baton);
             } else {
                 util.renderListItem($li, baton, item);
             }
@@ -195,8 +195,10 @@ define('io.ox/backbone/views/actions/util', [
         renderDropdown: function ($el, baton, options) {
 
             var $toggle = util.createDropdownToggle();
-            if (options.title) $toggle.text(options.title).append(util.createCaret());
+            if (options.title) $toggle.text(options.title);
             else if (options.icon) $toggle.append($('<i>').addClass(options.icon));
+
+            if (options.caret !== false) $toggle.append(util.createCaret());
 
             $el.addClass('dropdown').append($toggle, util.createDropdownList());
 
