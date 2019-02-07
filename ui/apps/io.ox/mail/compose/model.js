@@ -14,12 +14,11 @@
 define('io.ox/mail/compose/model', [
     'io.ox/mail/compose/api',
     'io.ox/mail/api',
-    'io.ox/mail/util',
     'io.ox/core/attachments/backbone',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/mail/sanitizer'
-], function (composeAPI, mailAPI, mailUtil, Attachments, settings, gt, sanitizer) {
+], function (composeAPI, mailAPI, Attachments, settings, gt, sanitizer) {
 
     'use strict';
 
@@ -243,7 +242,11 @@ define('io.ox/mail/compose/model', [
         save: function () {
             if (this.destroyed) return $.when();
             var prevAttributes = this.prevAttributes,
-                diff = this.deepDiff(prevAttributes);
+                attributes = this.toJSON();
+            // remove pending inline images from content
+            attributes.content = attributes.content.replace(/<img[^>]*data-pending="true"[^>]*>/g, '');
+
+            var diff = this.deepDiff(prevAttributes, attributes);
             // do not upload attachments on save
             delete diff.attachments;
 
