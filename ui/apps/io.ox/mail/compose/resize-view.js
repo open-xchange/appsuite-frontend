@@ -20,6 +20,8 @@ define('io.ox/mail/compose/resize-view', [
 
     'use strict';
 
+    var label = gt('Image size');
+
     function resize(size, model) {
         var file = model.get('originalFile');
         if (!file) return;
@@ -56,8 +58,10 @@ define('io.ox/mail/compose/resize-view', [
         setup: function () {
             Dropdown.prototype.setup.apply(this, arguments);
 
+            this.$el.addClass('resize-options');
+
             if (_.device('smartphone')) {
-                this.header('Image size');
+                this.header(label);
                 this.divider();
             }
 
@@ -73,6 +77,8 @@ define('io.ox/mail/compose/resize-view', [
             this.listenTo(this.model, 'change:imageResizeOption', function () {
                 this.collection.each(resize.bind(null, this.model.get('imageResizeOption')));
             }.bind(this));
+
+            if (!_.device('smartphone')) this.$el.prepend($('<span class="image-resize-label">').text(label + ':\u00A0'));
         },
 
         label: function () {
@@ -97,7 +103,7 @@ define('io.ox/mail/compose/resize-view', [
                     label = gt('Original');
             }
 
-            this.$el.find('.dropdown-label').text(label);
+            this.$el.find('.dropdown-label').text(label + '\u00A0');
             this.$toggle.attr('aria-label', gt('Image size') + ': ' + label);
         }
 

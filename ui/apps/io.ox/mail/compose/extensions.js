@@ -616,18 +616,43 @@ define('io.ox/mail/compose/extensions', [
             });
         },
 
+
+        mailSize: function (baton) {
+            var attachmentView = baton.attachmentsView,
+                node = $('<span class="mail-size">');
+
+            attachmentView.$footer.append(node);
+
+            // set mail size
+            attachmentView.listenTo(attachmentView.collection, 'add remove reset change:size', update);
+            update();
+
+            function update() {
+                var hasUploadedAttachments = baton.model.get('attachments').some(function (model) {
+                    return model.get('group') === 'mail';
+                });
+                node.text(gt('Mail size: %1$s', getMailSize())).toggleClass('invisible', !hasUploadedAttachments);
+            }
+
+            function getMailSize() {
+                var mailSize = baton.model.get('content').length,
+                    attachmentSize = baton.model.get('attachments').reduce(function (memo, attachment) {
+                        return memo + (attachment.getSize() || 0);
+                    }, 0);
+                return strings.fileSize(mailSize + attachmentSize, 1);
+            }
+        },
+
         imageResizeOption: function (baton) {
             var attachmentView = baton.attachmentsView,
                 resizeView = new ResizeView({ model: baton.config, collection: attachmentView.collection });
 
-            function getMailSize() {
-                var attachmentSize = baton.model.get('attachments').reduce(function (memo, attachment) {
-                        return memo + (attachment.getSize() || 0);
-                    }, 0),
-                    mailSize = baton.model.get('content').length;
+            attachmentView.$footer.append(
+                resizeView.render().$el
+            );
 
-                return strings.fileSize(attachmentSize + mailSize, 1);
-            }
+            attachmentView.listenTo(attachmentView.collection, 'add remove reset', update);
+            update();
 
             function update() {
                 var hasResizableAttachments = baton.model.get('attachments').some(function (model) {
@@ -635,20 +660,8 @@ define('io.ox/mail/compose/extensions', [
                     if (!file) return false;
                     return imageResize.isResizableImage(file);
                 });
-                var hasUploadedAttachments = baton.model.get('attachments').some(function (model) {
-                    return model.get('group') === 'mail';
-                });
                 resizeView.$el.toggle(hasResizableAttachments);
-                attachmentView.$('.mail-size').text(gt('Mail size: %1$s', getMailSize())).toggle(hasUploadedAttachments);
             }
-
-            attachmentView.$el.append(resizeView.render().$el.addClass('pull-right'));
-            resizeView.$el.prepend($('<span>').text(gt('Image size:')).addClass('image-resize-lable'));
-            attachmentView.$el.append($('<span>').addClass('mail-size'));
-            update();
-
-            attachmentView.listenTo(attachmentView.collection, 'add remove reset change:size', update);
-
         },
 
         attachment: (function () {

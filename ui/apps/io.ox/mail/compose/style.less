@@ -218,7 +218,7 @@
         }
     }
 
-    .attachments {
+    .attachments.row {
         header {
             display: flex;
             align-items: center;
@@ -227,18 +227,8 @@
         .toggle-details { white-space: nowrap; }
         // pull right
         .toggle-mode { margin-left: auto; }
-        .dropdown {
-            padding-left: 32px;
-            margin-top: 6px;
-            .image-resize-lable {
-                margin-right: 8px;
-                @media (max-width: @smartphone-breakpoint) { display: none; }
-            }
-        }
-        .mail-size{
-            margin-top: 8px;
-            display: block;
-        }
+        .resize-options.dropdown { margin-bottom: 0; }
+        .mail-size { flex-grow: 1; }
     }
 
     .attachments .share-attachments {

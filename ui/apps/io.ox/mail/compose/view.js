@@ -281,6 +281,7 @@ define('io.ox/mail/compose/view', [
             var node = $('<div data-extension-id="attachmentPreview" class="col-xs-12">');
             extensions.attachmentPreviewList.call(node, baton);
             extensions.attachmentSharing.call(node, baton);
+            extensions.mailSize.call(node, baton);
             extensions.imageResizeOption.call(node, baton);
             node.appendTo(this);
         }
