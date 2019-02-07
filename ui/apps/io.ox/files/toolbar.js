@@ -249,12 +249,14 @@ define('io.ox/files/toolbar', [
                 app.forceUpdateToolbar(app.listView.selection.get());
             }), 10);
 
-            api.on('favorite:add favorite:remove', function () {
-                app.updateToolbar(app.listView.selection.get());
-            });
-            folderApi.on('favorite:add favorite:remove', function () {
-                app.updateToolbar(app.listView.selection.get());
-            });
+            api.on('favorite:add favorite:remove', _.debounce(function () {
+                app.forceUpdateToolbar(app.listView.selection.get());
+            }), 10);
+
+            folderApi.on('favorite:add favorite:remove', _.debounce(function () {
+                app.forceUpdateToolbar(app.listView.selection.get());
+            }), 10);
+
             app.on('folder:change', function () {
                 app.forceUpdateToolbar([]);
             });
