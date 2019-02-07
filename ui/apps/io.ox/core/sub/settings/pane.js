@@ -81,7 +81,6 @@ define('io.ox/core/sub/settings/pane', [
             };
 
             var view = new SettingView({
-                publications: model.publications(),
                 subscriptions: model.subscriptions()
             });
 

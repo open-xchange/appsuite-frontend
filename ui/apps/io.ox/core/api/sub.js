@@ -98,16 +98,6 @@ define('io.ox/core/api/sub', [
         });
     }
 
-    var publications = api({
-        module: 'publications',
-        requests: {
-            all: {
-                columns: 'id,displayName,enabled',
-                extendColumns: 'io.ox/core/api/pubsub/publications/all'
-            }
-        }
-    });
-
     var subscriptions = $.extend(true, api({
         module: 'subscriptions',
         requests: {
@@ -151,7 +141,7 @@ define('io.ox/core/api/sub', [
     });
 
     ox.on('refresh^', function () {
-        _([publications, subscriptions]).each(function (api) {
+        _([subscriptions]).each(function (api) {
             api.caches.get.clear();
             api.caches.all.clear().then(function () {
                 api.trigger('refresh:all');
@@ -164,16 +154,6 @@ define('io.ox/core/api/sub', [
      * @link: https://intranet.open-xchange.com/wiki/development:misc:publication.api.proposal
      */
     return {
-        publications: publications,
-        publicationTargets: api({
-            module: 'publicationTargets',
-            requests: {
-                all: {
-                    columns: 'id,displayName,icon,module,formDescription',
-                    extendColumns: 'io.ox/core/api/pubsub/publicationTargets/all'
-                }
-            }
-        }),
         subscriptions: subscriptions,
         sources: apiFactory({
             module: 'subscriptionSources',

@@ -44,22 +44,7 @@ define('io.ox/core/sub/model', [
         };
     }
 
-    var Publication = BasicModel.extend({
-            ref: 'io.ox/core/sub/publication/',
-            defaults: function () {
-                return {
-                    entity: {},
-                    entityModule: '',
-                    target: ''
-                };
-            },
-
-            url: function () {
-                return this.attributes[this.attributes.target].url;
-            },
-            syncer: createSyncer(api.publications)
-        }),
-        Subscription = BasicModel.extend({
+    var Subscription = BasicModel.extend({
             ref: 'io.ox/core/sub/subscription/',
             url: function () {
                 return this.attributes[this.attributes.source].url;
@@ -161,18 +146,6 @@ define('io.ox/core/sub/model', [
         });
     }
 
-    ext.point('io.ox/core/sub/publication/validation').extend({
-        validate: function (obj, errors) {
-            if (!obj.target) {
-                errors.add('target', gt('Publication must have a target.'));
-                return;
-            }
-            if ((obj[obj.target] || {}).siteName === '') {
-                errors.add('siteName', gt('Publication must have a site.'));
-            }
-        }
-    });
-
     ext.point('io.ox/core/sub/subscription/validation').extend({
         validate: function (obj, errors) {
             var ref = obj[obj.source];
@@ -188,10 +161,6 @@ define('io.ox/core/sub/model', [
     });
 
     return {
-        Publication: Publication,
-        publications: function () {
-            return [];
-        },
         subscriptions: function () {
             if (!subscriptions) {
                 subscriptions = new Subscriptions();

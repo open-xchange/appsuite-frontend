@@ -349,13 +349,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 'displayName': 'displayName',
                 'enabled': 'enabled'
             },
-            'publications': {
-                'id': 'id',
-                'entity': 'entity',
-                'entityModule': 'entityModule',
-                'target': 'target',
-                'enabled': 'enabled'
-            },
             'subscriptionSources': {
                 'id': 'id',
                 'displayName': 'displayName',

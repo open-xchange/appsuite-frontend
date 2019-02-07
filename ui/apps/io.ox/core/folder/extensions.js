@@ -1064,7 +1064,7 @@ define('io.ox/core/folder/extensions', [
                 baton.view.$.buttons.append(
                     $('<i class="fa folder-sub">').attr('title', gt('This folder has subscriptions')).on('click', { folder: baton.data }, openSubSettings)
                 );
-                baton.view.addA11yDescription(gt('This folder has publications and/or subscriptions'));
+                baton.view.addA11yDescription(gt('This folder has subscriptions'));
             }
         },
         {
