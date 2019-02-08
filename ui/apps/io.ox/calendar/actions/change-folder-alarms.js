@@ -39,12 +39,13 @@ define('io.ox/calendar/actions/change-folder-alarms', [
                     //#. %1$s:  is the calendar's name
                     $.txt(gt('Edit all reminders for calendar: %1$s', folderData.display_title || folderData.title))
                 ),
-                $('<fieldset>').append(
+                // only fullday appointments in birthday calendar
+                (folderData['com.openexchange.calendar.provider'] === 'birthdays' ? '' : $('<fieldset>').append(
                     $('<legend class="confirm-dialog-legend">').text(gt('Default reminder')),
                     alarmsviewDateTime.render().$el
-                ),
+                )),
                 $('<fieldset>').append(
-                    $('<legend class="confirm-dialog-legend">').text(gt('Default reminder for all-day appointments')),
+                    $('<legend class="confirm-dialog-legend">').text(folderData['com.openexchange.calendar.provider'] === 'birthdays' ? gt('Default reminder for appointments in birthday calendar') : gt('Default reminder for all-day appointments')),
                     alarmsviewDate.render().$el
                 )
             );
@@ -52,6 +53,11 @@ define('io.ox/calendar/actions/change-folder-alarms', [
         .addAlternativeButton({ action: 'cancel', label: gt('Cancel') })
         .addButton({ action: 'ok', label: gt('Ok'), className: 'btn-primary' })
         .on('ok', function () {
+            if (folderData['com.openexchange.calendar.provider'] === 'birthdays') {
+                require(['settings!io.ox/calendar'], function (settings) {
+                    settings.set('birthdays/defaultAlarmDate', alarmsviewDate.model.get('alarms')).save();
+                });
+            }
             api.update(folderData.id, {
                 // empty object as first parameter is needed to prevent folderData Object from being changed accidentally
                 'com.openexchange.calendar.config': _.extend({}, folderData['com.openexchange.calendar.config'], {
