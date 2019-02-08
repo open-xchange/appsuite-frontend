@@ -359,6 +359,31 @@ define('io.ox/calendar/model', [
                 });
             });
         },
+        getExtendedProperties: function () {
+            if (this._extendedProperties) return this._extendedProperties;
+
+            var self = this;
+
+            this._extendedProperties = new Backbone.Model(_(this.get('extendedProperties') || {}).mapObject(function (value) {
+                // only use value attributes for now, easier because we can use native change events
+                return value.value;
+            }));
+
+            this._extendedProperties.on('change', function () {
+                var extendedProperties =  self.get('extendedProperties') || {};
+
+                _(this.attributes).each(function (value, key) {
+                    if (extendedProperties[key]) {
+                        extendedProperties[key].value = value;
+                        return;
+                    }
+                    extendedProperties[key] = { value: value };
+                });
+                self.set('extendedProperties', extendedProperties);
+            });
+
+            return this._extendedProperties;
+        },
         getMoment: function (name) {
             if (!this.has(name)) return;
             return util.getMoment(this.get(name));

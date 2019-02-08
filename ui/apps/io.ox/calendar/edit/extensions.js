@@ -646,13 +646,37 @@ define('io.ox/calendar/edit/extensions', [
     point.extend({
         id: 'folder-selection',
         index: 950,
-        className: 'col-xs-12 folder-selection',
+        className: 'col-xs-12 col-sm-6 folder-selection',
         render: function () {
             var view = new CalendarDropdownView({ model: this.model }).render().$el;
             this.$el.append(view).addClass('col-xs-12');
         }
     }, {
         rowClass: 'collapsed form-spacer'
+    });
+
+    point.extend({
+        id: 'allowAttendeeChanges',
+        index: 970,
+        className: 'col-xs-12 col-sm-6 folder-selection',
+        render: function () {
+            if (settings.get('chronos/restrictAllowedAttendeeChanges', true)) return;
+            this.$el.append(
+                $('<fieldset>').append(
+                    $('<legend class="simple">').text(gt('Participant permissions')),
+                    new mini.CustomCheckboxView({
+                        label: gt('Allow participants to edit this appointment'),
+                        name: 'attendeePrivileges',
+                        model: this.model.getExtendedProperties(),
+                        customValues: { 'false': 'default', 'true': 'modify' },
+                        defaultVal: settings.get('chronos/allowAttendeeEditsByDefault', 'default')
+                    }).render().$el
+                )
+            );
+        }
+    }, {
+        nextTo: 'folder-selection',
+        rowClass: 'collapsed'
     });
 
     // alarms
