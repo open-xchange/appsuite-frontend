@@ -377,7 +377,8 @@ define('io.ox/contacts/edit/view-form', [
                 // This should be considered for refactoring
                 this.$el.attr('id', 'dialog-title');
 
-                this.$el.text(util.getFullName(mod) || '\u00A0');
+                var text = util.getFullName(mod);
+                this.$el.toggle(!!text).text(text);
                 //fix top margin if picture upload was removed
                 if (isMyContactData && !capabilities.has('gab')) {
                     this.$el.css('margin-top', '0px');
@@ -393,7 +394,8 @@ define('io.ox/contacts/edit/view-form', [
                 this.listenTo(this.model, 'change:position change:department change:company', this.render);
             },
             render: function () {
-                this.$el.text(util.getJob(this.model.toJSON()) || '\u00A0');
+                var text = util.getJob(this.model.toJSON());
+                this.$el.toggle(!!text).text(text);
                 return this;
             }
         });
@@ -533,11 +535,13 @@ define('io.ox/contacts/edit/view-form', [
         }
 
         function drawDate(options, model) {
+            var label,
+                guid = _.uniqueId('contacts-' + options.field + '-');
             this.append(
                 $('<fieldset class="col-lg-12 form-group birthdate">').append(
-                    $('<legend class="simple">').text(options.label),
+                    label = $('<legend class="simple">').attr('id', guid).text(options.label),
                     // don't wrap the date control with a label (see bug #27559)
-                    new mini.DateSelectView({ name: options.field, model: model }).render().$el
+                    new mini.DateSelectView({ name: options.field, model: model, label: label }).render().$el
                 )
             );
         }

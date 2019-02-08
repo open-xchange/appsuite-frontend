@@ -185,11 +185,10 @@ define('io.ox/contacts/widgets/pictureUpload', [
                             .append('<i class="fa fa-times" aria-hidden="true">'),
                         this.addImgText = $('<div class="add-img-text">')
                             .append(
-                                $('<span>').text(gt('Upload image'))
+                                $('<label>').attr('for', guid).text(gt('Upload image'))
                             )
                     ),
                     $('<form>').append(
-                        $('<label class="sr-only">').attr('for', guid).text(gt('Upload image')),
                         this.fileInput = $('<input type="file" name="file" class="file" accept="image/*">').attr('id', guid)
                     )
                 );
