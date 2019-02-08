@@ -19,7 +19,8 @@ define('io.ox/mail/compose/resize', [
     'use strict';
 
     var api = {
-        getImageDimensions: function (file) {
+
+        getDimensions: function (file) {
             var def = $.Deferred(),
                 fileReader = new FileReader(),
                 img = new Image();
@@ -37,36 +38,85 @@ define('io.ox/mail/compose/resize', [
             return def.promise();
         },
 
-        getTargetDimensions: function (dimensions, targetSize) {
-            var scalar;
-            scalar = targetSize / Math.max(dimensions.width, dimensions.height);
-
-            return { width: Math.round(dimensions.width * scalar), height: Math.round(dimensions.height * scalar) };
+        addDimensionsProperty: function (file) {
+            // early exit when custom property is set already
+            if (file._dimensions) { return $.Deferred().resolve(file._dimensions); }
+            return api.getDimensions(file).then(function (dimensions) {
+                file._dimensions = dimensions;
+                return file;
+            });
         },
 
-        isFileSizeMaxViolated: function (size) {
-            var fileSizeMax = settings.get('features/imageResize/fileSizeMax', 10 * 1024 * 1024);
+        getTargetDimensions: function (file, targetSize) {
+            var dimensions = file._dimensions;
+            if (!dimensions) return;
 
-            return size > fileSizeMax;
+            var maximum = Math.max(dimensions.width || -1, dimensions.height || -1),
+                scalar = targetSize / maximum;
+            // prevent upscaling
+            if (targetSize >= maximum) return dimensions;
+            return {
+                width:  Math.round(dimensions.width * scalar),
+                height: Math.round(dimensions.height * scalar)
+            };
         },
 
-        isResizableImage: function (file) {
-            var isCorrectType = (/^image\/jpe?g|png/).test(file.type);
-
-            return isCorrectType && !this.isFileSizeMaxViolated(file.size);
+        resizeRecommended: function (file) {
+            return api.matches('type', file) &&
+                   api.matches('size', file) &&
+                   api.matches('dimensions', file);
         },
 
-        resizeRecommended: function (dimensions, size) {
-            var fileSizeThreshold = settings.get('features/imageResize/fileSizeThreshold', 1024 * 1024),
-                imageSizeThreshold = settings.get('features/imageResize/imageSizeThreshold', 1024),
-                fileSizeOverThreshold = size > fileSizeThreshold,
-                imageSizeOverThreshold = Math.max(dimensions.width, dimensions.height) > imageSizeThreshold,
-                overThreshold = fileSizeOverThreshold || imageSizeOverThreshold;
+        matches: (function () {
+            var reType = /^image\/(jpg|jpeg|png)/i,
+                minDimension = settings.get('features/imageResize/imageSizeThreshold', 1024),
+                minSize = settings.get('features/imageResize/fileSizeThreshold', 1024 * 1024),
+                maxSize = settings.get('features/imageResize/fileSizeMax', 10 * 1024 * 1024);
 
-            return overThreshold && !this.isFileSizeMaxViolated(size);
+            return function (aspect, file, options) {
+                var opt = _.extend({
+                    dimensions: file._dimensions || {},
+                    target: undefined
+                }, options);
+
+                var fileMaxDimension = Math.max(opt.dimensions.width || -1, opt.dimensions.height || -1);
+                switch (aspect) {
+                    case 'type':
+                        return reType.test(file.type);
+                    case 'size':
+                        return minSize <= file.size <= maxSize;
+                    case 'dimensions':
+                        // prevent upscaling
+                        if (opt.target && opt.target >= fileMaxDimension) console.log('dimensions', false);
+                        if (opt.target && opt.target >= fileMaxDimension) return false;
+                        return minDimension < fileMaxDimension;
+                    default:
+                        break;
+                }
+            };
+        }()),
+
+        containsResizables: function (list) {
+            var defs = [],
+                files = _.chain(list)
+                    .map(function (obj) { return obj.get ? obj.get('originalFile') : obj; })
+                    .compact()
+                    .filter(function (file) { return api.matches('type', file); })
+                    .value();
+            // ensure custom dimension property is set
+            _.each(files, function (file) {
+                defs.push(api.addDimensionsProperty(file));
+            });
+
+            return $.when.apply($, defs).then(function () {
+                return _.some(files, function (file) {
+                    return api.resizeRecommended(file);
+                });
+            });
         },
 
         resizeImage: function (file, targetDimensions) {
+            if (!targetDimensions) return;
             var def = $.Deferred(),
                 quality = settings.get('features/imageResize/quality', 0.75);
 

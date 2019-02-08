@@ -63,7 +63,9 @@ define('io.ox/mail/compose/util', [
                     group: 'localFile',
                     originalFile: origin.file
                 });
-                if (resize.isResizableImage(origin.file)) {
+                var isResizableImage = resize.matches('type', origin.file) &&
+                                       resize.matches('size', origin.file);
+                if (isResizableImage) {
                     attachment.set('uploaded', 0);
 
                     attachment.on('image:resized', function (image) {

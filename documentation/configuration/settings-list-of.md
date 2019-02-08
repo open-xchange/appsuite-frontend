@@ -394,6 +394,9 @@ Max size of returned characters for mail viewing in bytes. Default: `102400` (10
 <config>io.ox/mail//features/imageResize/enabled=`<bool>`</config>
 Feature toggle to enable resizing of images
 
+<config>io.ox/mail//features/imageResize/default=`<string>`</config>
+Feature toggle to enable resizing of images (default `320`)
+
 <config>io.ox/mail//features/imageResize/small=`<number>`</config>
 Size of the target image (longest edge) for a small image as integer (default `320`)
 
@@ -401,7 +404,7 @@ Size of the target image (longest edge) for a small image as integer (default `3
 Size of the target image (longest edge) for a medium image as integer (default `640`)
 
 <config>io.ox/mail//features/imageResize/large=`<number>`</config>
-Size of the target image (longest edge) for a large image as integer (default `1024`)
+Size of the target image (longest edge) for a large image as integer (default `1280`)
 
 <config>io.ox/mail//features/imageResize/quality=`<number>`</config>
 Quality for the compression while resizing as float (default `0.75`)

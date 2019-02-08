@@ -39,7 +39,7 @@ define('io.ox/mail/compose/config', [
                 signatureId: '',
                 signature: '',
                 signatureIsRendered: undefined,
-                imageResizeOption: 'original'
+                imageResizeOption: ''
             };
         },
 

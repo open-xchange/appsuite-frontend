@@ -24,21 +24,20 @@ define('io.ox/mail/compose/resize-view', [
 
     function resize(size, model) {
         var file = model.get('originalFile');
-        if (!file) return;
-        if (!imageResize.isResizableImage(file)) return;
+        // no computation necessary for original size
+        if (size === 'original' || !file) return $.when();
+        if (!imageResize.matches('type', file)) return $.when();
+        if (!imageResize.matches('size', file)) return $.when();
 
-        // Get image dimension and check if this image is ellegibable for resize
-        return imageResize.getImageDimensions(file).then(function (dimensions) {
-            if (!imageResize.resizeRecommended(dimensions, file.size)) return;
-
-            // no computation necessary for original size
-            if (size === 'original') return file;
-
-            var targetDimensions = imageResize.getTargetDimensions(dimensions, size);
+        // add image dimension and check if this image is ellegibable for resize
+        return imageResize.addDimensionsProperty(file).then(function () {
+            if (!file._dimensions) return;
+            // check dimensions threshold and potential upscaling
+            if (!imageResize.matches('dimensions', file, { target: size })) return;
+            var targetDimensions = imageResize.getTargetDimensions(file, size);
             return imageResize.resizeImage(file, targetDimensions);
         }).then(function (file) {
-            if (!file) return;
-            model.trigger('image:resized', file);
+            if (file) model.trigger('image:resized', file);
         });
     }
 
@@ -47,10 +46,14 @@ define('io.ox/mail/compose/resize-view', [
         settings: {
             small: settings.get('features/imageResize/small', 320),
             medium: settings.get('features/imageResize/medium', 640),
-            large: settings.get('features/imageResize/large', 1024)
+            large: settings.get('features/imageResize/large', 1280)
         },
 
         initialize: function (opt) {
+            // apply default imageResizeOption
+            var predefined = settings.get('features/imageResize/default', 'large');
+            this.model.set('imageResizeOption', this.settings[predefined] || 'original');
+
             opt = _({ label: '', caret: true }).extend(opt);
             Dropdown.prototype.initialize.call(this, opt);
         },
@@ -74,12 +77,20 @@ define('io.ox/mail/compose/resize-view', [
             //.# Original is used as an option for resizing images and refers to the original image size
             this.option('imageResizeOption', 'original', gt('Original'), { radio: true });
 
-            this.listenTo(this.model, 'change:imageResizeOption', function () {
-                this.collection.each(resize.bind(null, this.model.get('imageResizeOption')));
-            }.bind(this));
+            this.listenTo(this.model, 'change:imageResizeOption', this.onChange);
+            this.listenTo(this.collection, 'add reset', this.onAddReset);
 
             if (!_.device('smartphone')) this.$el.prepend($('<span class="image-resize-label">').text(label + ':\u00A0'));
         },
+
+        onChange: function () {
+            this.collection.each(resize.bind(null, this.model.get('imageResizeOption')));
+        },
+
+        onAddReset: function (model) {
+            resize(this.model.get('imageResizeOption'), model);
+        },
+
 
         label: function () {
             //.# In the context of resizing images before uploading them this text is used as a label for a dropdown

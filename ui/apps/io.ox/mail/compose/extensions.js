@@ -655,12 +655,10 @@ define('io.ox/mail/compose/extensions', [
             update();
 
             function update() {
-                var hasResizableAttachments = baton.model.get('attachments').some(function (model) {
-                    var file = model.get('originalFile');
-                    if (!file) return false;
-                    return imageResize.isResizableImage(file);
+                var models = baton.model.get('attachments').models;
+                imageResize.containsResizables(models).then(function (show) {
+                    resizeView.$el.toggle(show);
                 });
-                resizeView.$el.toggle(hasResizableAttachments);
             }
         },
 
