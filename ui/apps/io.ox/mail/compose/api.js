@@ -106,8 +106,18 @@ define('io.ox/mail/compose/api', [
         },
 
         send: function (id, data) {
+            data = _(data).clone();
+
             api.trigger('before:send', id, data);
             ox.trigger('mail:send:start', data);
+
+            if (data.meta && data.meta.sharedAttachments && data.meta.sharedAttachments.expiryDate) {
+                // explicitedy clone share attachments before doing some computations
+                data.meta = _(data.meta).clone();
+                data.meta.sharedAttachments = _(data.meta.sharedAttachments).clone();
+                // expiry date should count from mail send
+                data.meta.sharedAttachments.expiryDate = _.now() + parseInt(data.meta.sharedAttachments.expiryDate, 10);
+            }
 
             var formData = new FormData();
             formData.append('JSON', JSON.stringify(data));
@@ -116,11 +126,6 @@ define('io.ox/mail/compose/api', [
                 url: 'api/mail/compose/' + id + '/send',
                 data: formData
             });
-
-            if (data.meta && data.meta.sharedAttachments && data.meta.sharedAttachments.expiryDate) {
-                // expiry date should count from mail send
-                data.meta.sharedAttachments.expiryDate = _.now() + parseInt(data.meta.sharedAttachments.expiryDate, 10);
-            }
 
             def.progress(function (e) {
                 api.queue.update(id, e.loaded, e.total);
