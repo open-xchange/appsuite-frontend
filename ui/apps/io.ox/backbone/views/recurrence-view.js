@@ -36,13 +36,15 @@ define('io.ox/backbone/views/recurrence-view', [
             // calendar model
             if (model.has('startDate')) return util.getMoment(model.get('startDate'));
             // tasks model
-            return moment(model.get('start_time') || model.get('start_date')).utc();
+            var timezone = model.get('timezone') || moment().tz();
+            return moment.tz(model.get('start_time') || model.get('start_date'), timezone);
         },
         previousStart: function (model) {
             // calendar model
             if (model.has('startDate')) return util.getMoment(model.previous('startDate'));
             // tasks model
-            return moment(model.previous('start_time') || model.previous('start_date')).utc();
+            var timezone = model.get('timezone') || moment().tz();
+            return moment.tz(model.previous('start_time') || model.previous('start_date'), timezone);
         }
     };
 
