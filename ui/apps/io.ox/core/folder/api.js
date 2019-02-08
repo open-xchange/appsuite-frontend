@@ -1623,6 +1623,7 @@ define('io.ox/core/folder/api', [
         bits: util.bits,
         is: util.is,
         can: util.can,
+        supports: util.supports,
         virtual: virtual,
         isVirtual: isVirtual,
         isExternalFileStorage: isExternalFileStorage,
