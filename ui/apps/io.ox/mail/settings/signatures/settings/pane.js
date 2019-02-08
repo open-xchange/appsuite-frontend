@@ -422,7 +422,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 }
 
                 var onChangeDefault = _.throttle(function () {
-                    var composeId = mailutil.getDefaultSignature('compose'),
+                    var composeId = mailutil.getDefaultSignature('new'),
                         replyForwardId = mailutil.getDefaultSignature('reply/forward');
                     this.$('.default').removeClass('default').find('>.default-label').remove();
                     this.$('[data-id="' + replyForwardId + '"]')
@@ -462,7 +462,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     .on('edit', clickEdit)
                     .on('delete', function (e) {
                         var id = $(e.currentTarget).closest('li').attr('data-id');
-                        if (mailutil.getDefaultSignature('compose') === id) settings.set('defaultSignature', '');
+                        if (mailutil.getDefaultSignature('new') === id) settings.set('defaultSignature', '');
                         if (mailutil.getDefaultSignature('reply/forward') === id) settings.set('defaultReplyForwardSignature', '');
                         snippets.destroy(id).fail(require('io.ox/core/notifications').yell);
                         e.preventDefault();
@@ -506,7 +506,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                             $('<option value="">').text(gt('No signature')),
                             this.map(makeOption)
                         )
-                        .val(mailutil.getDefaultSignature('compose'));
+                        .val(mailutil.getDefaultSignature('new'));
                     defaultReplyForwardView.$el.empty()
                         .append(
                             $('<option value="">').text(gt('No signature')),
