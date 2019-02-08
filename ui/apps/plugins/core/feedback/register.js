@@ -393,13 +393,13 @@ define('plugins/core/feedback/register', [
         },
 
         drawButton: function () {
-            var node,
+            var node, button,
                 position = settings.get('feedback/position', 'right');
             node = $('<div role="region" class="feedback-button">').attr('aria-label', gt('Feedback')).addClass('feedback-' + position).append(
-                $('<button type="button">').text(gt('Feedback')).on('click', this.show)
+                button = $('<button type="button">').text(gt('Feedback')).on('click', this.show)
             );
-            if (position === 'right') node.css('bottom', node.width() + 128 + 'px');
             $('#io-ox-core').append(node);
+            if (position === 'right') node.css('bottom', button.width() + 128 + 'px');
         }
     };
 
