@@ -258,7 +258,7 @@ define([], function () {
                 expect(result).to.be.an('object');
                 expect(result.folder_id).to.equal('1');
                 expect(result.id).to.equal('2');
-                expect(result.recurrenceId).to.equal(3);
+                expect(result.recurrenceId).to.equal('3');
             });
 
             it('should escape dots', function () {
