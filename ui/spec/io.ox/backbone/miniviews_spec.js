@@ -392,7 +392,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
             beforeEach(function () {
                 this.date = moment.utc({ year: 2012, month: 1, date: 5 });
                 this.model = new Backbone.Model({ test: this.date.valueOf() });
-                this.view = new date.DateSelectView({ name: 'test', model: this.model });
+                this.view = new date.DateSelectView({ name: 'test', model: this.model, label: $('<label>').text('label') });
                 this.view.render();
             });
 
