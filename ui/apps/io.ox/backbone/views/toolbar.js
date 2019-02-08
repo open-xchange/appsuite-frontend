@@ -112,6 +112,7 @@ define('io.ox/backbone/views/toolbar', [
             var $ul = util.createDropdownList().toggleClass('dropdown-menu-right', $hi.length > 1),
                 $dropdown = util.createListItem().addClass('dropdown more-dropdown').append(
                     util.createDropdownToggle()
+                        .attr('data-action', 'more')
                         .append('<i class="fa fa-bars" aria-hidden="true">')
                         .addActionTooltip(_.device('smartphone') ? gt('Actions') : gt('More actions')),
                     $ul

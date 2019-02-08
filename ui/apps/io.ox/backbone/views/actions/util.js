@@ -194,7 +194,7 @@ define('io.ox/backbone/views/actions/util', [
 
         renderDropdown: function ($el, baton, options) {
 
-            var $toggle = util.createDropdownToggle();
+            var $toggle = util.createDropdownToggle().attr('data-dropdown', options.point);
             if (options.title) $toggle.text(options.title);
             else if (options.icon) $toggle.append($('<i>').addClass(options.icon));
 

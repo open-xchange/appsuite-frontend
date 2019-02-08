@@ -26,7 +26,7 @@ Scenario('adds a unsaved contact', function (I) {
 
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
-    I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
+    I.waitForDetached('.classic-toolbar [data-dropdown="io.ox/contacts/toolbar/new"].disabled');
     I.clickToolbar('New');
     I.click('Add distribution list');
     I.waitForVisible('.io-ox-contacts-distrib-window');
@@ -38,7 +38,7 @@ Scenario('adds a unsaved contact', function (I) {
     I.click('a.halo-link');
 
     I.waitForVisible('.io-ox-sidepopup');
-    I.waitForVisible('.io-ox-sidepopup [data-action="add-to-contactlist"]');
+    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/contacts/actions/add-to-contactlist"]');
     I.see('Add to address book', '.io-ox-sidepopup');
     I.click('Add to address book', '.io-ox-sidepopup');
 

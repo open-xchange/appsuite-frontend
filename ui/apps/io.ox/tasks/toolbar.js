@@ -168,6 +168,11 @@ define('io.ox/tasks/toolbar', [
                     });
                 });
             };
+
+            app.forceUpdateToolbar = function (list) {
+                toolbarView.selection = null;
+                this.updateToolbar(list);
+            };
         }
     });
 
@@ -182,8 +187,7 @@ define('io.ox/tasks/toolbar', [
             });
             // update whenever a task changes
             api.on('update', function () {
-                var list = app.getGrid().selection.get();
-                app.updateToolbar(list);
+                app.forceUpdateToolbar(app.getGrid().selection.get());
             });
         }
     });

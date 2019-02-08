@@ -43,6 +43,7 @@ define('io.ox/tasks/actions/doneUndone', [
             function () {
                 _(data).each(function (item) {
                     api.trigger('update:' + _.ecid(item));
+                    api.trigger('update', item);
                 });
                 notifications.yell('success', message);
             },

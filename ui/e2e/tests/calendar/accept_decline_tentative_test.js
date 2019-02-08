@@ -90,8 +90,8 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
 
-    I.waitForVisible('[data-action="changestatus"]');
-    I.click('Status');
+    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/changestatus"]');
+    I.click('Change status');
     I.waitForElement('.modal-dialog');
 
     I.click('Accept', '.modal-dialog');
@@ -124,8 +124,8 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
 
-    I.waitForVisible('[data-action="changestatus"]');
-    I.click('Status');
+    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/changestatus"]');
+    I.click('Change status');
     I.waitForElement('.modal-dialog');
 
     I.click('Decline', '.modal-dialog');
@@ -159,8 +159,8 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.see('test invite accept/decline/accept tentative', '.list-view .appointment .title');
     I.click('test invite accept/decline/accept tentative', '.list-view .list-item .title');
 
-    I.waitForVisible('[data-action="changestatus"]');
-    I.click('Status');
+    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/changestatus"]');
+    I.click('Change status');
     I.waitForElement('.modal-dialog');
 
     I.click('Tentative', '.modal-dialog');

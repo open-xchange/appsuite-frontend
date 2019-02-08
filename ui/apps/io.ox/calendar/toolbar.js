@@ -69,7 +69,7 @@ define('io.ox/calendar/toolbar', [
         'changestatus': {
             prio: 'hi',
             mobile: 'lo',
-            title: gt('Status'),
+            title: gt('Change status'),
             tooltip: gt('Change status'),
             ref: 'io.ox/calendar/detail/actions/changestatus'
         },
@@ -207,12 +207,13 @@ define('io.ox/calendar/toolbar', [
                 toolbarView.$el
             );
 
-            // list is array of object (with id and folder_id)
-            app.updateToolbar = function (list) {
-                var options = { data: [], folder_id: this.folder.get(), app: this };
+            // selection is array of strings
+            app.updateToolbar = function (selection) {
+                var options = { data: [], models: [], folder_id: this.folder.get(), app: this },
+                    list = selection.map(_.cid);
                 toolbarView.setSelection(list, function () {
-                    if (!list.length) return options;
-                    return (list.length <= 100 ? api.getList(list) : $.when(list)).pipe(function (models) {
+                    if (!list.length || list.length > 100) return options;
+                    return api.getList(list).pipe(function (models) {
                         options.models = models;
                         options.data = _(models).invoke('toJSON');
                         return options;

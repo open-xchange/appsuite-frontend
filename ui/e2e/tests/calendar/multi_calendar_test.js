@@ -108,7 +108,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     // remove appointments
     I.click('test appointment one', '.workweek .appointment .title');
-    I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
+    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/delete"]');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
@@ -116,7 +116,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.waitForDetached('.io-ox-sidepopup');
 
     I.click('test appointment two', '.workweek .appointment .title');
-    I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
+    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/delete"]');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
@@ -178,7 +178,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     // remove
     I.click('test appointment one', '.weekview-container.week  .appointment .title');
-    I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
+    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/delete"]');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
@@ -186,7 +186,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.waitForDetached('.io-ox-sidepopup');
 
     I.click('test appointment two', '.weekview-container.week  .appointment .title');
-    I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
+    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/delete"]');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
@@ -247,7 +247,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     // remove
     I.click('test appointment one', '.month-container');
-    I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
+    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/delete"]');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
@@ -255,7 +255,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.waitForDetached('.io-ox-sidepopup');
 
     I.click('test appointment two', '.month-container');
-    I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
+    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/delete"]');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
@@ -317,7 +317,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
 
     // remove
     I.click('test appointment one', '.weekview-container.day .appointment .title');
-    I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
+    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/delete"]');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
@@ -325,7 +325,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.waitForDetached('.io-ox-sidepopup');
 
     I.click('test appointment two', '.weekview-container.day .appointment .title');
-    I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
+    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/delete"]');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');

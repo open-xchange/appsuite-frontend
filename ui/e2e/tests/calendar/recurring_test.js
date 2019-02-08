@@ -22,6 +22,7 @@ After(async function (users) {
 });
 
 Scenario('Create recurring appointments with one participant', async function (I, users) {
+
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//showCheckboxes', true);
@@ -117,9 +118,9 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.see('test recurring', '.rightside');
     I.see('invite location', '.rightside');
 
-    I.waitForVisible('[data-action="changestatus"]');
+    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/changestatus"]');
 
-    I.click('Status');
+    I.click('Change status');
 
     I.waitForElement('.modal-dialog');
     I.click('Series', '.modal-dialog');
@@ -153,12 +154,13 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.waitForElement('.rightside .participant a.accepted[title="' + users[1].userdata.primaryEmail + '"]');
 
     // edit
-    I.waitForVisible('[data-action="edit"]');
-    I.click('[data-action="edit"]');
+    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Cancel', '.io-ox-dialog-popup');
 
-    I.click('[data-action="edit"]');
+    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('All future appointments', '.io-ox-dialog-popup');
 
@@ -181,8 +183,8 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     I.click({ xpath: '//div[text()="test recurring edit"]' });
 
-    I.waitForVisible('[data-action="edit"]');
-    I.click('[data-action="edit"]');
+    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
 
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('This appointment', '.io-ox-dialog-popup');
@@ -197,8 +199,8 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.click('//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit new"]');
 
     //edit exeption
-    I.waitForVisible('[data-action="edit"]');
-    I.click('[data-action="edit"]');
+    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
 
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('This appointment', '.io-ox-dialog-popup');
@@ -265,8 +267,8 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.see('test recurring edit', '.rightside');
     I.see('invite location', '.rightside');
 
-    I.waitForVisible('[data-action="changestatus"]');
-    I.click('Status');
+    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/changestatus"]');
+    I.click('Change status');
 
     I.waitForVisible('.modal-dialog');
 
@@ -281,7 +283,7 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     I.click({ xpath: '//div[text()="test recurring edit"]' });
     I.waitForVisible('[data-action="changestatus"]');
-    I.click('Status');
+    I.click('Change status');
 
     I.waitForVisible('.modal-dialog');
     I.click('Appointment', '.modal-dialog');

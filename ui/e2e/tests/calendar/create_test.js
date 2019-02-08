@@ -85,7 +85,7 @@ Scenario('Create appointment with all fields', async function (I) {
 
     // // delete the appointment thus it does not create conflicts for upcoming appointments
     I.click(`.calendar-list-view li[data-cid^="${newAppointmentCID}"]`);
-    I.waitForVisible('[data-action="delete"]');
+    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/delete"]');
     I.click('Delete');
     I.waitForVisible('.io-ox-dialog-popup .modal-body');
     I.click('Delete', '.io-ox-dialog-popup');

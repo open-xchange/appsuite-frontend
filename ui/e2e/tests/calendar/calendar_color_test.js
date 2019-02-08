@@ -68,7 +68,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
 
     // change color
     I.click('test appointment one', '.workweek .appointment .title');
-    I.waitForVisible('.io-ox-sidepopup [data-action="edit"]');
+    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/edit"]');
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.click('Appointment color');
@@ -163,7 +163,7 @@ Scenario('Changing calendar color should change appointment color that uses cale
 
     // change color of first appointment
     I.click('test appointment one', '.workweek .appointment .title');
-    I.waitForVisible('.io-ox-sidepopup [data-action="edit"]');
+    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/edit"]');
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.click('Appointment color');
@@ -195,7 +195,7 @@ Scenario('Changing calendar color should change appointment color that uses cale
     // remove
     I.waitForText('test appointment one', 5, '.workweek');
     I.click('test appointment one', '.workweek .appointment .title');
-    I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
+    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/delete"]');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');
@@ -204,7 +204,7 @@ Scenario('Changing calendar color should change appointment color that uses cale
 
     I.waitForText('test appointment two', 5, '.workweek');
     I.click('test appointment two', '.workweek .appointment .title');
-    I.waitForVisible('.io-ox-sidepopup [data-action="delete"]');
+    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/delete"]');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Delete', '.io-ox-dialog-popup');

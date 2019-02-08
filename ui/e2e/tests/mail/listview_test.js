@@ -22,7 +22,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('remove mail from thread', async (I, users) => {
+Scenario.only('remove mail from thread', async (I, users) => {
     I.haveSetting('io.ox/mail//viewOptions', {
         'default0/INBOX': {
             order: 'desc',
@@ -80,7 +80,7 @@ Scenario('remove mail from thread', async (I, users) => {
     // make sure nothing is currently loading
     I.waitForElement('.fa-refresh.fa-spin-paused');
 
-    I.click('Delete', '.mail-detail.expanded .actions');
+    I.click('Delete', '.mail-detail.expanded [data-toolbar]');
 
     // wait for refresh here, because the middleware needs to send new data
     // should really happen within 1s

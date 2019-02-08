@@ -283,6 +283,7 @@ define('io.ox/mail/detail/view', [
         index: 100,
         draw: function (baton) {
             var toolbarView = new ToolbarView({ el: this[0], point: 'io.ox/mail/links/inline', inline: true });
+            toolbarView.$el.attr('data-toolbar', 'io.ox/mail/links/inline');
             toolbarView.setSelection([_.cid(baton.data)], { data: baton.data });
         }
     });
