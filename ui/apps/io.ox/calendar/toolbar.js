@@ -214,6 +214,12 @@ define('io.ox/calendar/toolbar', [
                 toolbarView.setSelection(list, function () {
                     if (!list.length || list.length > 100) return options;
                     return api.getList(list).pipe(function (models) {
+                        // reapply bad solution from the fix for bug 57305
+                        // we should never access the DOM to get fresh data
+                        _(models).each(function (model) {
+                            var flags = options.app.listView.selection.getNode(model.cid).attr('data-flags') || '';
+                            model.set('flags', flags.split(','));
+                        });
                         options.models = models;
                         options.data = _(models).invoke('toJSON');
                         return options;

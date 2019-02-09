@@ -21,7 +21,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Create recurring appointments with one participant', async function (I, users) {
+Scenario.only('Create recurring appointments with one participant', async function (I, users) {
 
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
@@ -119,7 +119,6 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.see('invite location', '.rightside');
 
     I.waitForVisible('[data-action="io.ox/calendar/detail/actions/changestatus"]');
-
     I.click('Change status');
 
     I.waitForElement('.modal-dialog');
@@ -159,13 +158,12 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Cancel', '.io-ox-dialog-popup');
 
-    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/edit"]');
+    // TODO: Needs a fix. "All future appointments" is wrong since apppointment has flag "first_occurence"
     I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('All future appointments', '.io-ox-dialog-popup');
 
     I.waitForVisible('.io-ox-calendar-edit-window');
-
     I.fillField('Subject', 'test recurring edit');
     I.fillField('Location', 'invite location edit');
     I.click('Save', '.io-ox-calendar-edit-window');
@@ -214,8 +212,8 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit new edit"]', 1);
     I.click('//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit new edit"]');
 
-    I.waitForVisible('[data-action="delete"]');
-    I.click('[data-action="delete"]');
+    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
 
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('This appointment', '.io-ox-dialog-popup');
@@ -282,7 +280,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.seeNumberOfElements('.list-view .appointment .declined', 3);
 
     I.click({ xpath: '//div[text()="test recurring edit"]' });
-    I.waitForVisible('[data-action="changestatus"]');
+    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/changestatus"]');
     I.click('Change status');
 
     I.waitForVisible('.modal-dialog');

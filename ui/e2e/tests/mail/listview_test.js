@@ -22,7 +22,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario.only('remove mail from thread', async (I, users) => {
+Scenario('remove mail from thread', async (I, users) => {
     I.haveSetting('io.ox/mail//viewOptions', {
         'default0/INBOX': {
             order: 'desc',

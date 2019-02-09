@@ -1168,9 +1168,7 @@ define('io.ox/calendar/util', [
                     dialog.text(gt('Do you want to edit this and all future appointments or just this appointment within the series?'));
                     dialog.addPrimaryButton('thisandfuture', gt('All future appointments'), 'thisandfuture');
                 }
-
                 if (!options.dontAllowExceptions) dialog.addButton('appointment', gt('This appointment'), 'appointment');
-
                 return dialog.addAlternativeButton('cancel', gt('Cancel'), 'cancel')
                     .show();
             }
