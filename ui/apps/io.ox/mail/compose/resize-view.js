@@ -24,8 +24,13 @@ define('io.ox/mail/compose/resize-view', [
 
     function resize(size, model) {
         var file = model.get('originalFile');
-        // no computation necessary for original size
-        if (size === 'original' || !file) return $.when();
+        // no computation necessary without a file
+        if (!file) return $.when();
+        // no computation necessary for original, but fileupload needs to be triggered
+        if (size === 'original') {
+            model.trigger('image:resized', file);
+            return $.when();
+        }
         if (!imageResize.matches('type', file)) return $.when();
         if (!imageResize.matches('size', file)) return $.when();
 
