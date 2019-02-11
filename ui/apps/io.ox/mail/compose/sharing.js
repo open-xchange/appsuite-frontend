@@ -203,7 +203,7 @@ define('io.ox/mail/compose/sharing', [
             if (mailSettings.get('compose/shareAttachments/requiredExpiration')) data.expiryDate = getTimeOption(mailSettings.get('compose/shareAttachments/defaultExpiryDate', '1w')).value;
 
             this.sharingModel = new Backbone.Model(data);
-            this.listenTo(this.model.get('attachments'), 'add remove reset', this.updateVisibility);
+            this.listenTo(this.model.get('attachments'), 'add remove reset change:size', this.updateVisibility);
             this.listenTo(this.sharingModel, 'change:enabled', this.updateVisibility);
             this.listenTo(this.sharingModel, 'change:enabled', this.syncToMailModel);
         },
