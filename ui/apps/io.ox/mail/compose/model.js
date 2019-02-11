@@ -272,6 +272,7 @@ define('io.ox/mail/compose/model', [
 
         destroy: function () {
             if (this.destroyed) return;
+            if (!this.get('id')) return;
             this.destroyed = true;
             return composeAPI.space.remove(this.get('id'));
         },
