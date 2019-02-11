@@ -176,6 +176,13 @@ define('io.ox/mail/compose/main', [
             }.bind(this));
         }
     }, {
+        id: 'initial-patch',
+        index: INDEX += 100,
+        perform: function () {
+            this.view.dirty(false);
+            return this.model.initialPatch();
+        }
+    }, {
         id: 'finally',
         index: INDEX += 100,
         perform: function (baton) {
@@ -188,7 +195,6 @@ define('io.ox/mail/compose/main', [
             win.idle();
             $(window).trigger('resize');  // Needed for proper initial resizing in editors
             win.setTitle(this.model.get('subject') || gt('Compose'));
-            this.view.dirty(false);
         }
     });
 

@@ -76,12 +76,17 @@ define('io.ox/mail/compose/model', [
                 return data;
             }.bind(this)).then(function (data) {
                 this.set(data);
-                this.prevAttributes = data;
-                this.on('change', this.requestSave);
+                if (!this.prevAttributes) this.prevAttributes = data;
                 this.listenTo(data.attachments, 'remove', this.onRemoveAttachment);
             }.bind(this));
+        },
 
+        initialPatch: function () {
             this.requestSave = _.throttle(this.save.bind(this), settings.get('autoSaveAfter', 15000));
+            this.on('change', this.requestSave);
+
+            // explicitedly call save here to push the initial changes of the ui (quoting/from/bcc) to the composition space
+            return this.save();
         },
 
         send: function () {
@@ -194,6 +199,7 @@ define('io.ox/mail/compose/model', [
             this.unset('type');
             this.unset('original');
             return composeAPI.space.add({ type: type, original: original }, opt).then(function (data) {
+                this.prevAttributes = data;
                 return data.content ? this.quoteMessage(data) : data;
             }.bind(this)).then(function (data) {
                 if (!this.get('attachments') || !this.get('attachments').length) return data;
