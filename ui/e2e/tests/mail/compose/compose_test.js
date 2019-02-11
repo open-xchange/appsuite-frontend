@@ -34,7 +34,7 @@ Scenario('Compose and discard with/without prompts', async function (I, users) {
         module: 'io.ox/mail',
         type: 'signature'
     });
-    await I.haveSetting('io.ox/mail//appendVcard', true);
+    await I.haveSetting('io.ox/mail//appendVcard', false);
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
 
     I.login('app=io.ox/mail');
@@ -51,7 +51,7 @@ Scenario('Compose and discard with/without prompts', async function (I, users) {
     I.selectFolder('Mail');
     I.waitForVisible('.rightside h1');
     I.selectFolder('Compose');
-    I.click('Append vCard');
+    I.retry(5).click('Append vCard');
 
     I.selectFolder('Signatures');
     I.waitForText('Default signature for new messages');
@@ -65,18 +65,18 @@ Scenario('Compose and discard with/without prompts', async function (I, users) {
 
     I.clickToolbar('Compose');
     I.waitForVisible({ css: 'textarea.plain-text' });
-    const text = await I.grabValueFrom({ css: 'textarea.plain-text' });
-    expect(text).to.contain('My unique signature content');
-    I.click('Options');
-    const ariaChecked = await I.grabAttributeFrom('.dropdown [data-name="vcard"]', 'aria-checked');
-    expect(ariaChecked).to.equal('true');
-    I.pressKey('Escape');
+    I.wait(0.2);
+    let text = await I.grabValueFrom({ css: 'textarea.plain-text' });
+    expect(text[0]).to.contain('My unique signature content');
+    I.see('1 attachment', '.io-ox-mail-compose');
+    I.see('VCF', '.io-ox-mail-compose .mail-attachment-list');
     I.click('Discard');
     I.dontSee('Do you really want to discard your message?');
 
     // workflow 4: Compose with subject, then discard
     I.clickToolbar('Compose');
     I.waitForText('Subject');
+    I.wait(0.2);
     I.fillField('Subject', 'Test');
     I.click('Discard');
     I.see('Do you really want to discard your message?');
@@ -105,11 +105,11 @@ Scenario('Compose and discard with/without prompts', async function (I, users) {
     I.click('Reply');
     I.waitForVisible('textarea.plain-text');
     const reply = await I.grabValueFrom({ css: 'textarea.plain-text' });
-    expect(reply).to.match(new RegExp(
+    expect(reply[0]).to.match(new RegExp(
         '\\n' +
-        '> On [^w]*wrote:\\n' + // e.g. "> On November 28, 2018 at 3:30 PM User f484eb <test.user-f484eb@ox-e2e-backend.novalocal> wrote:"
+        '> On .*wrote:\\n' + // e.g. "> On November 28, 2018 3:30 PM User f484eb <test.user-f484eb@ox-e2e-backend.novalocal> wrote:"
         '> \\n' +
-        '> \\n' +
+        '>  \\n' +
         '> Testcontent'
     ));
     I.click('Discard');
@@ -175,17 +175,14 @@ Scenario('Compose mail with different attachments', async function (I, users) {
     // upload local file via the hidden input in the toolbar
     I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
 
-    // TODO User selects "Add attachments from original email" in editor
-
-    I.click('Send');
+    I.retry(5).click('Send');
 
     I.waitForVisible({ css: 'li.unread' }); // wait for one unread mail
     I.click({ css: 'li.unread' });
     I.waitForVisible('.mail-detail-pane .subject');
     I.see('Testsubject', '.mail-detail-pane');
     I.waitForVisible('.attachments');
-    // TODO need to see attachments of original email
-    I.see('2 attachments'); // currently 2 attachments as the inline images gets forwarded
+    I.see('4 attachments'); // has 4 attachments as one of the attachments is inline
 
     I.logout();
 
@@ -200,6 +197,7 @@ Scenario('Compose with inline image, which is removed again', async function (I,
 
     // workflow 9: Compose, add and remove inline image
     I.clickToolbar('Compose');
+    I.waitForText('Subject');
 
     // attach inline image
     I.attachFile('.editor input[type="file"]', 'e2e/media/placeholder/800x600.png');
@@ -277,8 +275,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.click('Send');
     I.waitForInvisible('.floating-window');
     I.wait(1);
-    // TODO wait for visible items number should be one but is two to a bug/config problem on the test server
-    I.waitNumberOfVisibleElements('.io-ox-mail-window li.list-item', 2);
+    I.waitNumberOfVisibleElements('.io-ox-mail-window li.list-item', 1);
 
     // workflow 11: Compose mail, add Drive-Mail attachment, close compose, logout, login, edit Draft, remove Drive-Mail option, send Mail
     // workflow 16: Edit draft
@@ -296,8 +293,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.click('Send');
     I.waitForInvisible('.floating-window');
     I.wait(1);
-    // TODO this should be uncommented as it should work. Is the same issue as above where the draft is not removed
-    // I.dontSeeElement('.io-ox-mail-window li.list-item');
+    I.dontSeeElement('.io-ox-mail-window li.list-item');
 
     I.selectFolder('Inbox');
 
@@ -323,6 +319,7 @@ Scenario('Compose mail with vcard and read receipt', async function (I, users) {
     I.clickToolbar('Compose');
 
     I.waitForText('Subject');
+    I.wait(1); // wait until auto focus is done
     I.fillField('To', user2.get('primaryEmail'));
     I.fillField('Subject', 'Testsubject');
     I.click('Options');
@@ -361,6 +358,7 @@ Scenario('Compose mail, refresh and continue work at restore point', async funct
     const [user] = users;
 
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
+    await I.haveSetting('io.ox/mail//autoSaveAfter', 1000);
 
     I.login();
 
@@ -369,7 +367,7 @@ Scenario('Compose mail, refresh and continue work at restore point', async funct
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', 'Testsubject');
     I.fillField({ css: 'textarea.plain-text' }, 'Testcontent');
-    I.wait(11); // restore interval is 10 seconds
+    I.wait(3);
 
     I.refreshPage();
 
