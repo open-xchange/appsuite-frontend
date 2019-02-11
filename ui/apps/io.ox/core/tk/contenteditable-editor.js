@@ -474,6 +474,12 @@ define('io.ox/core/tk/contenteditable-editor', [
                     $(fixed_toolbar).find('.mce-btn-group').each(function () {
                         $(this).toggleClass('mce-btn-group-visible-xs', $(this).has('.mce-widget:not([data-hidden])').length > 0);
                     });
+
+                    ed.on('SetContent', function () {
+                        var selectedNode = this.selection.getNode();
+                        selectedNode.scrollIntoView();
+                    });
+
                 });
 
             }
