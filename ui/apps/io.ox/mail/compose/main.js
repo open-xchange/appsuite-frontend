@@ -263,7 +263,6 @@ define('io.ox/mail/compose/main', [
                     def.resolve({ app: app });
                     ox.trigger('mail:' + app.model.get('meta').type + ':ready', obj, app);
                 }, function fail(e) {
-                    app.notify(e);
                     if (app.view) {
                         app.view.dirty(false);
                         app.view.removeLogoutPoint();
@@ -274,21 +273,6 @@ define('io.ox/mail/compose/main', [
                 });
             });
             return def;
-        };
-
-        app.notify = function (e) {
-            var error = _.extend({}, e);
-            switch (e.code) {
-                // Maximum number of composition spaces is reached. Please terminate existing open spaces in order to open new ones.
-                case 'MSGCS-0011':
-                    error.message = gt('You have reached the maximum of simultaneously opened compose windows.');
-                    break;
-                default:
-                    break;
-            }
-            require(['io.ox/core/notifications'], function (notifications) {
-                notifications.yell(error);
-            });
         };
 
         // destroy

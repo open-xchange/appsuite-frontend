@@ -333,6 +333,26 @@ define('io.ox/mail/main', [
 
             });
 
+            ox.on('http:error:MSGCS-0007 http:error:MSGCS-0011', function (e) {
+                var error = _.extend({}, e);
+                switch (e.code) {
+                    // Found no such composition space for identifier: %s
+                    case 'MSGCS-0007':
+                        error.message = gt('The mail draft could not be found on the server. It was sent or deleted in the meantime.');
+                        break;
+                    // Maximum number of composition spaces is reached. Please terminate existing open spaces in order to open new ones.
+                    case 'MSGCS-0011':
+                        var num = error.error_params[0] || 20;
+                        error.message = gt('You cannot open more than %1$s drafts at the same time.', num);
+                        break;
+                    default:
+                        break;
+                }
+                require(['io.ox/core/notifications'], function (notifications) {
+                    notifications.yell(error);
+                });
+            });
+
             accountAPI.on('refresh:ssl', function (e, hostname) {
                 updateStatus(hostname);
             });
