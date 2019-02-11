@@ -142,9 +142,10 @@ Scenario('Create recurring appointments with one participant', async function (I
     // check in list view
     I.clickToolbar('View');
     I.click('List');
-    I.see('test recurring', '.list-view .appointment .title');
 
-    I.click('test recurring', '.list-view .list-item .title');
+    I.see('test recurring', '.list-view .appointment:nth-child(5) .title');
+
+    I.click('test recurring', '.list-view .list-item:nth-child(5) .title');
 
     // owner
     I.waitForElement('.rightside .participant a.accepted[title="' + users[0].userdata.primaryEmail + '"]');
@@ -177,7 +178,8 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     // edit
     I.see('test recurring edit', '.list-view .appointment .title');
-    I.click('test recurring edit', '.list-view .list-item .title');
+
+    I.click({ xpath: '//div[text()="test recurring edit"]' });
 
     I.waitForVisible('[data-action="edit"]');
     I.click('[data-action="edit"]');
@@ -218,7 +220,7 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     I.waitForDetached('.io-ox-dialog-popup');
 
-    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit"]', 4);
+    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit"]', 3);
 
     // check in Month view
     /*
@@ -227,19 +229,19 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.clickToolbar('View');
     I.click('Month');
 
-    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "monthview-container")]//div[@class="title" and text()="test recurring edit"]', 4);
+    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "monthview-container")]//div[@class="title" and text()="test recurring edit"]', 3);
 
     // check in Week view
     I.clickToolbar('View');
     I.click('Week');
 
-    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "weekview-container week")]//div[@class="title" and text()="test recurring edit"]', 4);
+    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "weekview-container week")]//div[@class="title" and text()="test recurring edit"]', 3);
 
     // check in Workweek view
     I.clickToolbar('View');
     I.click('Workweek');
 
-    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "workweek")]//div[@class="title" and text()="test recurring edit"]', 4);
+    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "workweek")]//div[@class="title" and text()="test recurring edit"]', 3);
 
     */
 
@@ -257,7 +259,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.see('test recurring edit', '.list-view .appointment .title');
     I.seeNumberOfElements('.list-view .appointment .title', 4);
 
-    I.click('test recurring edit', '.list-view .list-item .title');
+    I.click({ xpath: '//div[text()="test recurring edit"]' });
 
     I.waitForDetached('.rightside .multi-selection-message');
     I.see('test recurring edit', '.rightside');
@@ -275,9 +277,9 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.waitForDetached('.modal-dialog', 5);
 
     I.waitForElement('.rightside .participant a.declined[title="' + users[1].userdata.primaryEmail + '"]');
-    I.seeNumberOfElements('.list-view .appointment .declined', 4);
+    I.seeNumberOfElements('.list-view .appointment .declined', 3);
 
-    I.click('test recurring edit', '.list-view .list-item .title');
+    I.click({ xpath: '//div[text()="test recurring edit"]' });
     I.waitForVisible('[data-action="changestatus"]');
     I.click('Status');
 
@@ -289,7 +291,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.waitForDetached('.modal-dialog', 5);
 
     I.seeNumberOfElements('.list-view .appointment .tentative', 1);
-    I.seeNumberOfElements('.list-view .appointment .declined', 3);
+    I.seeNumberOfElements('.list-view .appointment .declined', 2);
 
     I.logout();
 
