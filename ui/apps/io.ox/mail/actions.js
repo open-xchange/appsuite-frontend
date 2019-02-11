@@ -61,33 +61,6 @@ define('io.ox/mail/actions', [
         }
     });
 
-    new Action('io.ox/mail/actions/inplace-reply', {
-        requires: function (e) {
-            // desktop only
-            if (!_.device('desktop')) return;
-            // feature toggle
-            if (!settings.get('features/inplaceReply', true)) return;
-            // must be top-level
-            if (!e.collection.has('toplevel', 'one')) return;
-            // get first mail
-            var data = e.baton.first();
-            // has sender? not a draft mail and not a decrypted mail
-            return util.hasFrom(data) && !isDraftMail(data) && !util.isDecrypted(data) && !isGuest();
-        },
-        action: function (baton) {
-
-            // also called by inplace-reply-recover extension
-            var cid = _.cid(baton.data),
-                // reply to all, so count, to, from, cc and bcc and subtract 1 (you don't sent the mail to yourself)
-                numberOfRecipients = _.union(baton.data.to, baton.data.from, baton.data.cc, baton.data.bcc).length - 1;
-
-            require(['io.ox/mail/inplace-reply'], function (quickreply) {
-                if (quickreply.reuse(cid)) return;
-                quickreply.getApp().launch({ cid: cid, from: baton.data.from, subject: baton.data.subject, numberOfRecipients: numberOfRecipients });
-            });
-        }
-    });
-
     function reply(mode) {
         return function (baton) {
             var data = baton.first();
@@ -624,18 +597,6 @@ define('io.ox/mail/actions', [
 
     // inline links
     var INDEX = 0;
-
-    // disabled quick reply for 7.10.0
-    /*ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: INDEX += 100,
-        prio: 'hi',
-        id: 'inplace-reply',
-        mobile: 'lo',
-        //#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
-        label: gt('Quick reply'),
-        ref: 'io.ox/mail/actions/inplace-reply',
-        section: 'standard'
-    }));*/
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
