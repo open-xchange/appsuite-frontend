@@ -21,9 +21,8 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
-    'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Dropdown, DisposableView, ToolbarView, Ext, actionsUtil, FilesAPI, DocConverterUtils, Util, Settings, CoreSettings, gt) {
+], function (Dropdown, DisposableView, ToolbarView, Ext, actionsUtil, FilesAPI, DocConverterUtils, Util, Settings, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -565,7 +564,14 @@ define('io.ox/core/viewer/views/toolbarview', [
             // listen to autoplay events
             this.listenTo(this.viewerEvents, 'viewer:autoplay:state:changed', this.onAutoplayRunningStateChanged);
             // listen to added/removed favorites
-            this.listenTo(FilesAPI, 'favorite:add favorite:remove', this.onFavoritesChange);
+            this.listenTo(FilesAPI, 'favorite:add favorite:remove', _.debounce(this.onFavoritesChange.bind(this), 10));
+
+
+            api.on('favorite:add favorite:remove', _.debounce(function () {
+                +                app.forceUpdateToolbar(app.listView.selection.get());
+                +            }), 10);
+
+
             // give toolbar a standalone class if its in one
             this.$el.toggleClass('standalone', this.standalone);
             // the current autoplay state
@@ -684,7 +690,7 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onFavoritesChange: function (file) {
             if (file.id === _.cid(this.model.toJSON())) {
-                this.onModelChange(FilesAPI.pool.get('detail').get(file.id));
+                this.forceUpdateToolbar();
             }
         },
 
@@ -697,7 +703,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             if (!state) { return; }
 
             this.autoplayStarted = state.autoplayStarted;
-            this.onModelChange(this.model);
+            this.forceUpdateToolbar();
         },
 
         /**
@@ -731,8 +737,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             }
 
             // update inner toolbar
-            var appName = appName = model.get('source'),
-                isDriveFile = model.isFile();
+            var appName = appName = model.get('source');
 
             // remove listener from previous model
             if (this.model) { this.stopListening(this.model, 'change'); }
@@ -746,21 +751,40 @@ define('io.ox/core/viewer/views/toolbarview', [
             // add CSS device class to $el for smartphones or tablets
             Util.setDeviceClass(this.$el);
 
-            this.toolbar
-                .setPoint(TOOLBAR_LINKS_ID + '/' + appName)
-                .setSelection([model.toJSON()], function () {
-                    return {
-                        context: this,
-                        data: isDriveFile ? model.toJSON() : model.get('origData'),
-                        model: model,
-                        models: isDriveFile ? [model] : null,
-                        openedBy: this.openedBy,
-                        // TODO: check if still needed, the actions 'io.ox/files/actions/favorites/add' and 'io.ox/files/actions/favorites/remove' don't use this parameter (anymore)
-                        favorites: CoreSettings.get('favorites/infostore', [])
-                    };
-                }.bind(this));
+            this.toolbar.setPoint(TOOLBAR_LINKS_ID + '/' + appName);
+            this.updateToolbar();
 
             return this;
+        },
+
+        /**
+         * Update inner toolbar.
+         */
+        updateToolbar: function () {
+            if (!this.model) { return; }
+
+            var isDriveFile = this.model.isFile();
+            var modelJson = this.model.toJSON();
+
+            this.toolbar
+                // .setPoint(TOOLBAR_LINKS_ID + '/' + appName)
+                .setSelection([modelJson], function () {
+                    return {
+                        context: this,
+                        data: isDriveFile ? modelJson : this.model.get('origData'),
+                        model: this.model,
+                        models: isDriveFile ? [this.model] : null,
+                        openedBy: this.openedBy
+                    };
+                }.bind(this));
+        },
+
+        /**
+         * Force update of inner toolbar.
+         */
+        forceUpdateToolbar: function () {
+            this.toolbar.selection = null;
+            this.updateToolbar();
         },
 
         /**

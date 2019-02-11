@@ -1163,7 +1163,9 @@ define('io.ox/files/actions', [
         action: function (baton) {
             var list = markFoldersAsFolder(getListForFavorites(baton));
             ox.load(['io.ox/files/actions/favorites']).done(function (action) {
-                removeFromList(baton.app.myFavoriteListView, list);
+                if (baton.app && baton.app.myFavoriteListView) {
+                    removeFromList(baton.app.myFavoriteListView, list);
+                }
                 action.remove(list);
             });
         }
