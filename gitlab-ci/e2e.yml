@@ -111,6 +111,10 @@ remove e2e report:
     name: reports/$CI_COMMIT_REF_SLUG
     action: stop
   when: manual
+  except:
+    - develop
+    - master
+    - master-*
 
 stop e2e testserver:
   stage: cleanup
