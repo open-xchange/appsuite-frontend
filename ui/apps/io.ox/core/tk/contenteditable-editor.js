@@ -43,7 +43,9 @@ define('io.ox/core/tk/contenteditable-editor', [
             ed.on('keydown', function (e) {
                 // pressed enter?
                 if (!e.shiftKey && e.which === 13) splitContent(ed, e);
+                if (e.which === 38) setTimeout(scrollOnCursorUp, 0, ed);
             });
+
         }
     });
 
@@ -295,13 +297,13 @@ define('io.ox/core/tk/contenteditable-editor', [
     // This is to keep the caret visible at all times, otherwise the fixed menubar may hide it.
     // See Bug #56677
     function scrollOnCursorUp(ed) {
-        var scrollable = $(ed).closest('.scrollable'),
-            bottom = scrollable.offset().top + 40,
-            selection = window.getSelection(),
+        var scrollable = $(ed.container).closest('.scrollable'),
+            selection = ed.contentWindow.getSelection(),
             range = selection.getRangeAt(0),
             rect = range.getBoundingClientRect(),
             top = rect.top,
-            container;
+            composeFieldsHeight = scrollable.find('.mail-compose-fields').height();
+
         // for empty lines we get no valid rect
         if (top === 0) {
             if (selection.modify) {
@@ -311,11 +313,15 @@ define('io.ox/core/tk/contenteditable-editor', [
                 range.collapse();
                 top = rect.top + rect.height;
             } else {
-                container = range.commonAncestorContainer;
+                var container = range.commonAncestorContainer;
                 top = $(container).offset().top + container.clientHeight;
             }
         }
-        if (top > 0 && top < bottom) scrollable[0].scrollTop += top - scrollable.offset().top - 40;
+        var pos = top - scrollable.scrollTop() + composeFieldsHeight;
+        // Scroll to cursor position (If you manually set this to something else, it doesn't feel native)
+        if (top > 0 && pos < 0) scrollable.scrollTop(top);
+        // Scroll whole window to the top, if cursor reaches top of the editable area
+        if (top < 16) scrollable.scrollTop(0);
     }
 
     function lookupTinyMCELanguage() {
@@ -468,8 +474,8 @@ define('io.ox/core/tk/contenteditable-editor', [
                     $(fixed_toolbar).find('.mce-btn-group').each(function () {
                         $(this).toggleClass('mce-btn-group-visible-xs', $(this).has('.mce-widget:not([data-hidden])').length > 0);
                     });
-
                 });
+
             }
         };
 
@@ -853,10 +859,6 @@ define('io.ox/core/tk/contenteditable-editor', [
         }
 
         editor.on('addInlineImage', function (e, id) { addKeepalive(id); });
-
-        // track cursor up; needs to be done via setTimeout otherwise the selection is not yet updated
-        editor.on('keydown.scrollOnCursorUp', function (e) { if (e.which === 38) setTimeout(scrollOnCursorUp, 0, this); });
-
     }
 
     return Editor;
