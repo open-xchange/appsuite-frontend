@@ -1344,7 +1344,7 @@ define('io.ox/calendar/util', [
             if (this.hasFlag(data, 'organizer') || this.hasFlag(data, 'organizer_on_behalf')) return true;
 
             // if user is neither organizer nor attendee editing is not allowed
-            if (this.hasFlag(data, 'attendee') || this.hasFlag(data, 'attendee_on_behalf')) return data.extendedProperties && data.extendedProperties.attendeePrivileges && data.extendedProperties.attendeePrivileges.value === 'modify';
+            if (this.hasFlag(data, 'attendee') || this.hasFlag(data, 'attendee_on_behalf')) return data.attendeePrivileges === 'MODIFY';
 
             return false;
         },

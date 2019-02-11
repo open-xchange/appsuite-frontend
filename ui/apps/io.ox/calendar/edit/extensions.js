@@ -661,18 +661,24 @@ define('io.ox/calendar/edit/extensions', [
         className: 'col-xs-12 col-sm-6 folder-selection',
         render: function () {
             if (settings.get('chronos/restrictAllowedAttendeeChanges', true)) return;
+
+            var checkboxView  = new mini.CustomCheckboxView({
+                label: gt('Allow participants to edit this appointment'),
+                name: 'attendeePrivileges',
+                model: this.model,
+                customValues: { 'false': 'DEFAULT', 'true': 'MODIFY' },
+                defaultVal: this.baton.mode === 'new' && this.model.settings.get('chronos/allowAttendeeEditsByDefault', false) ? 'MODIFY' : 'DEFAULT'
+            });
+
             this.$el.append(
                 $('<fieldset>').append(
                     $('<legend class="simple">').text(gt('Participant permissions')),
-                    new mini.CustomCheckboxView({
-                        label: gt('Allow participants to edit this appointment'),
-                        name: 'attendeePrivileges',
-                        model: this.model.getExtendedProperties(),
-                        customValues: { 'false': 'default', 'true': 'modify' },
-                        defaultVal: settings.get('chronos/allowAttendeeEditsByDefault', 'default')
-                    }).render().$el
+                    checkboxView.render().$el
                 )
             );
+
+            // trigger initial change so defaults are applied
+            checkboxView.onChange();
         }
     }, {
         nextTo: 'folder-selection',
