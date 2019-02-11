@@ -65,6 +65,12 @@ define('io.ox/mail/compose/util', [
                 });
                 var isResizableImage = resize.matches('type', origin.file) &&
                                        resize.matches('size', origin.file);
+
+                attachment.on('abort:upload', function () {
+                    if (throttled.cancel) throttled.cancel();
+                    if (def && def.state() === 'pending') def.abort();
+                });
+
                 if (isResizableImage) {
                     attachment.set('uploaded', 0);
 
@@ -80,11 +86,6 @@ define('io.ox/mail/compose/util', [
                         if (def) return;
                         throttled.cancel();
                         upload(origin);
-                    });
-
-                    attachment.on('abort:upload', function () {
-                        if (throttled.cancel) throttled.cancel();
-                        if (def && def.state() === 'pending') def.abort();
                     });
 
                     return throttled(origin);
