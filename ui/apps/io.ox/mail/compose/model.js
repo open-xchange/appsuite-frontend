@@ -190,8 +190,6 @@ define('io.ox/mail/compose/model', [
             var type = this.get('type') || 'new',
                 original = this.get('original'),
                 opt = {
-                    // add original attachments
-                    attachments: /(reply|replyall)/.test(type),
                     vcard: !/(edit|copy)/.test(type) && settings.get('appendVcard', false)
                 };
             // unset type and original since both are only used on creation of a model
