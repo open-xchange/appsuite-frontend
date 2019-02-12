@@ -75,6 +75,34 @@ define([
                 });
             });
 
+            it('should stop processing with propagation stopped', function () {
+                var extension;
+                ext.point('ext/core/stop-propagation').extend({
+                    id: 'first',
+                    perform: function (baton) {
+                        var def = new $.Deferred();
+                        setTimeout(function () {
+                            baton.stopPropagation();
+                            def.reject();
+                        }, 3);
+                        return def;
+                    }
+                }, extension = {
+                    id: 'second',
+                    perform: sinon.spy()
+                });
+
+                var baton = new ext.Baton({
+                    catchErrors: true
+                });
+
+                return ext.point('ext/core/stop-propagation').cascade(null, baton).then(function () {
+                    expect(baton.rejected).to.be.true;
+                    expect(baton.isPropagationStopped()).to.be.true;
+                    extension.perform.should.not.have.been.called;
+                });
+            });
+
         });
 
     });

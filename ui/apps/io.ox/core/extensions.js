@@ -391,6 +391,8 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
                     if (err && err.error) baton.error = err.error;
                     if (err && err.warnings) baton.warning = err.warnings;
                     baton.rejected = true;
+                    if (baton.isPropagationStopped()) return;
+                    if (baton.isDisabled(point.id, ext.id)) return;
                     return ext.perform.apply(context, [baton]);
                 });
             }, $.when());
