@@ -116,8 +116,8 @@ define('io.ox/mail/compose/model', [
         onRemoveAttachment: function (model) {
             if (this.destroyed) return;
 
+            model.trigger('destroy');
             if (model.get('id')) attachmentsAPI.remove(this.get('id'), model.get('id'));
-            else model.trigger('abort:upload');
         },
 
         quoteMessage: (function () {
@@ -274,6 +274,7 @@ define('io.ox/mail/compose/model', [
             if (this.destroyed) return;
             if (!this.get('id')) return;
             this.destroyed = true;
+            this.get('attachments').each(function (model) { model.trigger('destroy'); });
             return composeAPI.space.remove(this.get('id'));
         },
 

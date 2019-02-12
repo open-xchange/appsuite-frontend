@@ -66,7 +66,7 @@ define('io.ox/mail/compose/util', [
                 var isResizableImage = resize.matches('type', origin.file) &&
                                        resize.matches('size', origin.file);
 
-                attachment.on('abort:upload', function () {
+                attachment.on('destroy', function () {
                     if (throttled.cancel) throttled.cancel();
                     if (def && def.state() === 'pending') def.abort();
                 });
