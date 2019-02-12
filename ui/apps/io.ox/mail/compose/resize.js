@@ -87,7 +87,6 @@ define('io.ox/mail/compose/resize', [
                         return minSize <= file.size && file.size <= maxSize;
                     case 'dimensions':
                         // prevent upscaling
-                        if (opt.target && opt.target >= fileMaxDimension) console.log('dimensions', false);
                         if (opt.target && opt.target >= fileMaxDimension) return false;
                         return minDimension < fileMaxDimension;
                     default:
