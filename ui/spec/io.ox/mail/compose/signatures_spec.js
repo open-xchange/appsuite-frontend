@@ -42,7 +42,7 @@ define([
             });
             it('should use reply/forward on reply', function () {
                 var model = new ConfigModel({
-                    mode: 'reply'
+                    type: 'reply'
                 });
                 return signatureController.call({ view: { signaturesLoading: $.when() }, config: model }).then(function () {
                     expect(model.get('signatureId')).to.deep.equal(settings.get('defaultReplyForwardSignature'));
@@ -50,7 +50,7 @@ define([
             });
             it('should use reply/forward on reply', function () {
                 var model = new ConfigModel({
-                    mode: 'forward'
+                    type: 'forward'
                 });
                 return signatureController.call({ view: { signaturesLoading: $.when() }, config: model }).then(function () {
                     expect(model.get('signatureId')).to.deep.equal(settings.get('defaultReplyForwardSignature'));
@@ -58,7 +58,7 @@ define([
             });
             it('should use no signature on edit', function () {
                 var model = new ConfigModel({
-                    mode: 'edit'
+                    type: 'edit'
                 });
                 return signatureController.call({ view: { signaturesLoading: $.when() }, config: model }).then(function () {
                     expect(model.get('signatureId')).to.deep.equal('');
