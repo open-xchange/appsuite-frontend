@@ -57,7 +57,7 @@ define('io.ox/files/share/toolbar', [
     var Action = actionsUtil.Action;
     // TODO check action Kristof
     new Action('io.ox/files/share/edit', {
-        requires: 'one',
+        collection: 'one',
         action: function (baton) {
             require(['io.ox/files/share/permissions'], function (permissions) {
                 permissions.show(baton.model);

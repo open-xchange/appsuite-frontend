@@ -452,7 +452,7 @@ define('io.ox/backbone/views/actions/util', [
         // action.requires is DEPRECATED
         var ret = true;
         if (action.matches) ret = action.matches(baton);
-        else if (action.requires) ret = action.requires({ baton: baton, collection: baton.collection, data: baton.data, extension: action });
+        else if (_.isFunction(action.requires)) ret = action.requires({ baton: baton, collection: baton.collection, data: baton.data, extension: action });
         return $.when(ret).pipe(null, _.constant(false));
     }
 

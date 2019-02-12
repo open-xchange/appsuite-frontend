@@ -442,7 +442,6 @@ define('io.ox/mail/actions', [
     // Attachments
 
     new Action('io.ox/mail/attachment/actions/view', {
-        requires: 'some',
         collection: 'some',
         matches: function (baton) {
             return baton.array().some(function (data) {
@@ -484,7 +483,7 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/attachment/actions/save', {
         capabilities: 'infostore',
-        requires: 'some',
+        collection: 'some',
         action: function (baton) {
             require(['io.ox/mail/actions/attachmentSave'], function (action) {
                 action.multiple(baton.array());
@@ -690,7 +689,7 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/label', {
         id: 'label',
-        requires: 'toplevel some',
+        collection: 'toplevel some',
         action: $.noop
     });
 
