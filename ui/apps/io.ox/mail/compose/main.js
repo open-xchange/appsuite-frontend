@@ -180,7 +180,7 @@ define('io.ox/mail/compose/main', [
         index: INDEX += 100,
         perform: function () {
             this.view.dirty(false);
-            return this.model.initialPatch();
+            this.model.initialPatch();
         }
     }, {
         id: 'finally',
