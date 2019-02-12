@@ -13,12 +13,6 @@
 
 const { expect } = require('chai');
 
-Feature('A11y for Login page');
-
-Before(async function (users) {
-    await users.create();
-});
-
 Scenario('Login page is accessible', async function (I) {
     I.amOnPage('/');
 

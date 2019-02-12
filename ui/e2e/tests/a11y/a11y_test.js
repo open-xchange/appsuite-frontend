@@ -11,18 +11,20 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-const { expect } = require('chai');
+Feature('Accessibility');
 
-Feature('A11y for Mail App');
-
-Before(async function (users) {
+BeforeSuite(async function (users) {
     await users.create();
 });
 
-Scenario('Default List view w/o mail', async function (I) {
-    I.login('app=io.ox/mail');
-
-    I.waitForElement('.mail-detail-pane');
-    const currentView = await I.grabAxeReport();
-    expect(currentView).to.be.accessible;
+AfterSuite(async function (users) {
+    await users.removeAll();
 });
+
+require('./login');
+require('./mail');
+require('./contacts');
+require('./calendar');
+require('./portal');
+require('./tasks');
+require('./settings');

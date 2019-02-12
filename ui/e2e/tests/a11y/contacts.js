@@ -13,13 +13,7 @@
 
 const { expect } = require('chai');
 
-Feature('A11y for Contacts App');
-
-Before(async function (users) {
-    await users.create();
-});
-
-Scenario('Default List view w/o contact', async function (I) {
+Scenario('Contacts - Default List view w/o contact', async function (I) {
     I.login('app=io.ox/contacts');
 
     I.waitForElement('.contact-detail');
@@ -33,8 +27,7 @@ Scenario('Default List view w/o contact', async function (I) {
     expect(currentView).to.be.accessible;
 });
 
-
-Scenario('Default List view with contact detail view', async function (I) {
+Scenario('Contacts - Default List view with contact detail view', async function (I) {
     I.login('app=io.ox/contacts');
 
     I.waitForElement('.contact-detail');

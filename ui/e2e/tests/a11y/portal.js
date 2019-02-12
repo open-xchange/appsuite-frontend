@@ -13,27 +13,19 @@
 
 const { expect } = require('chai');
 
-Feature('A11y for Calendar App');
-
-Before(async function (users) {
-    await users.create();
-});
-
-Scenario('Default List view w/o appointments', async function (I) {
+Scenario.skip('Portal - View with empty standard tiles', async function (I) {
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//showCheckboxes', true);
 
-    I.login('app=io.ox/calendar');
-    I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
+    I.login('app=io.ox/portal');
+    I.waitForVisible('[data-app-name="io.ox/portal"]', 5);
 
-    // create in list view for invitation accept
-    I.selectFolder('Calendar');
-    I.clickToolbar('View');
-    I.click('List');
-    I.waitForVisible('.io-ox-center.multi-selection-message');
+    I.waitForText('Inbox');
+    I.waitForText('Appointments');
+    I.waitForText('My tasks');
+    I.waitForText('Birthdays');
+    I.waitForText('My latest files');
 
     const currentView = await I.grabAxeReport();
     expect(currentView).to.be.accessible;
 });
-
