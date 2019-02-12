@@ -565,13 +565,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             this.listenTo(this.viewerEvents, 'viewer:autoplay:state:changed', this.onAutoplayRunningStateChanged);
             // listen to added/removed favorites
             this.listenTo(FilesAPI, 'favorite:add favorite:remove', _.debounce(this.onFavoritesChange.bind(this), 10));
-
-
-            api.on('favorite:add favorite:remove', _.debounce(function () {
-                +                app.forceUpdateToolbar(app.listView.selection.get());
-                +            }), 10);
-
-
             // give toolbar a standalone class if its in one
             this.$el.toggleClass('standalone', this.standalone);
             // the current autoplay state
