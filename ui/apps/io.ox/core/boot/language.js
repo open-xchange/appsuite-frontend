@@ -61,8 +61,8 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
         },
 
         setDefaultLanguage: function () {
-            // use preferred language or browser language. Finally fall back to 'en_US'
-            var language = _.getCookie('language') || session.getBrowserLanguage() || 'en_US';
+            // use preferred language or browser language.
+            var language = _.getCookie('language') || session.getBrowserLanguage();
             return this.change(language);
         },
 
