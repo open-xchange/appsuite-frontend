@@ -64,7 +64,7 @@ class MyHelper extends Helper {
     }
 
     // This needs to be a helper, as actors are too verbose in this case
-    async grabAxeReport(options, context) {
+    async grabAxeReport(context, options) {
         let wdio = this.helpers['WebDriver'],
             browser = wdio.browser;
         if (typeof options === 'undefined') options = {};
