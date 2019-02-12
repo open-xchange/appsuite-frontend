@@ -21,7 +21,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario.only('Create recurring appointments with one participant', async function (I, users) {
+Scenario.skip('Create recurring appointments with one participant', async function (I, users) {
 
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
