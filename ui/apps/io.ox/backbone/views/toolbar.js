@@ -29,6 +29,7 @@ define('io.ox/backbone/views/toolbar', [
     // - dropdown (bool; default true): move "lo" prio items into dropdown (if more than 2 "hi")
     // - simple (bool; default false): defines whether simple collection checks should be used, i.e. no folder-specific stuff
     // - align (string; default "left"): defines default alignment (left or right)
+    // - strict (boolean; default "true"): update only if selection has changed
 
     var ToolbarView = DisposableView.extend({
 
@@ -40,7 +41,7 @@ define('io.ox/backbone/views/toolbar', [
         // we use the constructor here not to collide with initialize()
         constructor: function (options) {
             // add central extension point
-            this.options = _.extend({ inline: false, point: '', dropdown: true, simple: false, align: 'left' }, options);
+            this.options = _.extend({ inline: false, point: '', dropdown: true, simple: false, strict: false, align: 'left' }, options);
             this.setPoint(this.options.point);
             DisposableView.prototype.constructor.apply(this, arguments);
             this.$el
@@ -158,7 +159,7 @@ define('io.ox/backbone/views/toolbar', [
             // just join array; we could sort() as well but that's just a theoretical case
             var serialized = selection.map(util.cid).join(',');
             // not changed?
-            if (this.selection === serialized) return this.ready();
+            if (this.options.strict && this.selection === serialized) return this.ready();
             this.selection = serialized;
             this.disableButtons();
 

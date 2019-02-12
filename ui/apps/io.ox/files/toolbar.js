@@ -215,22 +215,17 @@ define('io.ox/files/toolbar', [
         index: 10000,
         setup: function (app) {
 
-            var toolbarView = new ToolbarView({ point: 'io.ox/files/toolbar/links', title: app.getTitle() });
+            var toolbarView = new ToolbarView({ point: 'io.ox/files/toolbar/links', title: app.getTitle(), strict: false });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbarView.$el
             );
 
-            app.updateToolbar = function (selection) {
+            app.updateToolbar = _.debounce(function (selection) {
                 toolbarView.setSelection(selection.map(_.cid), function () {
                     return this.getContextualData(selection, 'main');
                 }.bind(this));
-            };
-
-            app.forceUpdateToolbar = function (selection) {
-                toolbarView.selection = null;
-                this.updateToolbar(selection);
-            };
+            }, 10);
         }
     });
 
@@ -238,28 +233,23 @@ define('io.ox/files/toolbar', [
         id: 'update-toolbar',
         index: 10200,
         setup: function (app) {
-            app.updateToolbar(app.listView.selection.get());
+
+            // initial update
+            updateToolbar();
             // update toolbar on selection change
-            app.listView.on('selection:change', function () {
-                app.updateToolbar(app.listView.selection.get());
-            });
-
+            app.listView.on('selection:change', updateToolbar);
             // update toolbar on model changes
-            app.listView.on('change', _.debounce(function () {
-                app.forceUpdateToolbar(app.listView.selection.get());
-            }), 10);
+            app.listView.on('change', updateToolbar);
+            // files as favorites
+            api.on('favorite:add favorite:remove', updateToolbar);
+            // folders as favorites
+            folderApi.on('favorite:add favorite:remove', updateToolbar);
+            // change folder
+            app.on('folder:change', updateToolbar.bind(null, []));
 
-            api.on('favorite:add favorite:remove', _.debounce(function () {
-                app.forceUpdateToolbar(app.listView.selection.get());
-            }), 10);
-
-            folderApi.on('favorite:add favorite:remove', _.debounce(function () {
-                app.forceUpdateToolbar(app.listView.selection.get());
-            }), 10);
-
-            app.on('folder:change', function () {
-                app.forceUpdateToolbar([]);
-            });
+            function updateToolbar(array) {
+                app.updateToolbar(array || app.listView.selection.get());
+            }
         }
     });
 
