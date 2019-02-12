@@ -14,8 +14,9 @@
 define('io.ox/core/attachments/backbone', [
     'io.ox/core/folder/title',
     'io.ox/core/capabilities',
-    'io.ox/contacts/api'
-], function (shortTitle, capabilities, api) {
+    'io.ox/contacts/api',
+    'settings!io.ox/mail'
+], function (shortTitle, capabilities, api, settings) {
 
     'use strict';
 
@@ -172,7 +173,8 @@ define('io.ox/core/attachments/backbone', [
         previewUrl: function (options) {
             options = options || {};
             var supportsDocumentPreview = capabilities.has('document_preview'),
-                filename = this.get('filename') || this.get('name'), url;
+                filename = this.get('filename') || this.get('name'), url,
+                file = this.fileObj || this.get('originalFile');
 
             // special handling for psd and tiff; These can only be previewed by MW, not local (on upload)
             if (this.isLocalFile() && filename.match(/psd|tif/)) return null;
@@ -180,6 +182,8 @@ define('io.ox/core/attachments/backbone', [
             if (!regIsImage.test(filename) && !(supportsDocumentPreview && (regIsDocument.test(filename)) || this.isContact())) return null;
             // no support for localFile document preview
             if (this.get('group') === 'localFile' && supportsDocumentPreview && regIsDocument.test(filename)) return null;
+            // no support for large local files
+            if (this.get('group') === 'localFile' && file.size >= settings.get('features/imageResize/fileSizeMax', 10 * 1024 * 1024)) return null;
 
             url = this.get('meta') ? this.get('meta').previewUrl : false;
             if (url) return url;
