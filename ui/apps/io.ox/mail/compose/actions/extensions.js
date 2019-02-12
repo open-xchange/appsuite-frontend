@@ -64,7 +64,7 @@ define('io.ox/mail/compose/actions/extensions', [
     };
 
     api.attachmentMissingCheck = function (baton) {
-        if (baton.model.get('attachments').length > 1) return;
+        if (baton.model.get('attachments').length >= 1) return;
 
         // Native language via gt
         //#. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.

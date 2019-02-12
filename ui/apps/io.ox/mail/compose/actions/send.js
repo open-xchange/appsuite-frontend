@@ -83,28 +83,18 @@ define('io.ox/mail/compose/actions/send', [
             }
         },
         {
-            id: 'wait-for-pending-uploads',
-            index: 400,
-            perform: extensions.waitForPendingUploads
-        },
-        {
-            id: 'remove-unused-inline-images',
-            index: 500,
-            perform: extensions.removeUnusedInlineImages
-        },
-        {
             id: 'check:attachment-publishmailattachments',
-            index: 600,
+            index: 400,
             perform: extensions.publishMailAttachments
         },
         {
             id: 'check:attachment-missing',
-            index: 700,
+            index: 500,
             perform: extensions.attachmentMissingCheck
         },
         {
             id: 'busy:start',
-            index: 800,
+            index: 600,
             perform: function (baton) {
                 var win = baton.app.getWindow();
                 // start being busy
@@ -116,13 +106,14 @@ define('io.ox/mail/compose/actions/send', [
             }
         },
         {
-            id: 'disable-manual-close',
-            index: 900,
-            perform: function () {
-                // var app = ox.ui.apps.get(baton.app.id);
-                //baton.close = $(app.get('topbarNode').find('.closelink')).hide();
-                //baton.launcherClose = app.get('launcherNode').find('.closelink').hide();
-            }
+            id: 'wait-for-pending-uploads',
+            index: 700,
+            perform: extensions.waitForPendingUploads
+        },
+        {
+            id: 'remove-unused-inline-images',
+            index: 800,
+            perform: extensions.removeUnusedInlineImages
         },
         {
             id: 'send',
