@@ -589,7 +589,8 @@ define('io.ox/files/actions', [
         new Action('io.ox/files/actions/' + type, {
             // anonymous guests just have one folder so no valid target folder (see bug 42621)
             capabilities: '!guest && !anonymous',
-            collection: 'some && items && read' + (type === 'move' ? ' && delete' : ''),
+            // different collection checks for move and copy
+            collection: (type === 'move' ? 'some && delete' : 'some && items && read'),
             matches: function (baton) {
                 if (fromMailCompose(baton)) return false;
                 if (type === 'move' && baton.favorite) return false;
