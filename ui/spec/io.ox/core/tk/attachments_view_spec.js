@@ -156,7 +156,7 @@ define([
                         });
 
                     list.render();
-                    expect(list.$('header'), 'header elements in list').to.have.length(1);
+                    expect(list.$('.header'), 'header elements in list').to.have.length(1);
                 });
 
                 it('a custom header instead of default one', function () {
@@ -174,7 +174,7 @@ define([
                     //custom header rendered
                     expect(list.renderHeader.calledOnce, 'renderHeader method has been called once').to.be.true;
                     //default header not rendered
-                    expect(list.$('header').children(), 'header element should be empty').to.have.length(0);
+                    expect(list.$('.header').children(), 'header element should be empty').to.have.length(0);
                 });
 
                 it('a details toggle', function () {
@@ -187,7 +187,7 @@ define([
                         });
 
                     list.render();
-                    expect(list.$('header a.toggle-details').length === 1, 'found details toggle link').to.be.true;
+                    expect(list.$('.header a.toggle-details').length === 1, 'found details toggle link').to.be.true;
                 });
 
                 it('a preview mode toggle', function () {
@@ -200,7 +200,7 @@ define([
                         });
 
                     list.render();
-                    expect(list.$('header a.toggle-mode').length === 1, 'found preview toggle link').to.be.true;
+                    expect(list.$('.header a.toggle-mode').length === 1, 'found preview toggle link').to.be.true;
                 });
             });
 
@@ -254,7 +254,7 @@ define([
 
                     list.render().onToggleDetails({ preventDefault: sinon.stub() });
                     list.collection.add(new Model());
-                    expect(list.$('header').text(), 'header text').to.contain('3 Anhänge');
+                    expect(list.$('.header').text(), '.header text').to.contain('3 Anhänge');
                 });
             });
         });
