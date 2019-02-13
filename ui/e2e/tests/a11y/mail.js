@@ -13,7 +13,7 @@
 
 const { expect } = require('chai');
 
-Scenario('Mail - Default List view w/o mail', async (I) => {
+Scenario('Mail - List view w/o mail', async (I) => {
     I.login('app=io.ox/mail');
     I.waitForElement('.mail-detail-pane');
 

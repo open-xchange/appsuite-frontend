@@ -13,7 +13,7 @@
 
 const { expect } = require('chai');
 
-Scenario('Tasks - Default List view w/o tasks', async (I) => {
+Scenario('Tasks - List view w/o tasks', async (I) => {
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/tasks//showCheckboxes', true);

@@ -25,6 +25,7 @@ require('./login');
 require('./mail');
 require('./contacts');
 require('./calendar');
+require('./drive');
 require('./portal');
 require('./tasks');
 require('./settings');

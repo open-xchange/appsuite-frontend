@@ -13,21 +13,24 @@
 
 const { expect } = require('chai');
 
-Scenario('Contacts - List view w/o contact', async (I) => {
-    I.login('app=io.ox/contacts');
-    I.waitForElement('.contact-detail');
-    I.waitForElement('.vgrid-cell.selectable.contact.selected');
-    I.click('View');
-    I.click('Checkboxes');
-    I.click('.vgrid-cell.selectable.contact.selected .vgrid-cell-checkbox');
-    I.waitForElement('.summary.empty');
-
+Scenario('Drive - List view w/o files', async (I) => {
+    I.login('app=io.ox/files');
+    I.waitForElement('.file-list-view.complete');
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Contacts - List view with contact detail view', async (I) => {
-    I.login('app=io.ox/contacts');
-    I.waitForElement('.contact-detail');
+Scenario('Drive - Icon view w/o files', async (I) => {
+    I.login('app=io.ox/files');
+    I.clickToolbar('View');
+    I.click('Icons');
+    I.waitForElement('.file-list-view.complete.grid-layout');
+    expect(await I.grabAxeReport()).to.be.accessible;
+});
 
+Scenario('Drive - Tiles view w/o files', async (I) => {
+    I.login('app=io.ox/files');
+    I.clickToolbar('View');
+    I.click('Tiles');
+    I.waitForElement('.file-list-view.complete.tile-layout');
     expect(await I.grabAxeReport()).to.be.accessible;
 });
