@@ -145,14 +145,11 @@ define('io.ox/core/sub/model', [
                 });
             }
         },
-        Publications = PubSubCollection.factory(api.publications).extend({
-            model: Publication
-        }),
         Subscriptions = PubSubCollection.factory(api.subscriptions).extend({
             model: Subscription
         }),
         //singleton instances
-        publications, subscriptions;
+        subscriptions;
 
     function filterFolder(folder) {
         var filter = String(folder.folder_id || folder.folder || '');
@@ -193,12 +190,7 @@ define('io.ox/core/sub/model', [
     return {
         Publication: Publication,
         publications: function () {
-            if (!publications) {
-                publications = new Publications();
-            }
-            publications.fetch();
-
-            return publications;
+            return [];
         },
         subscriptions: function () {
             if (!subscriptions) {
