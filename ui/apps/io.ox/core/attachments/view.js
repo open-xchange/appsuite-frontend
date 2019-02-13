@@ -53,7 +53,7 @@ define('io.ox/core/attachments/view', [
 
             if (this.options.mode === 'preview') this.$el.addClass('show-preview');
 
-            this.$header = $('<header>');
+            this.$header = $('<div class="header">');
             this.$list = $('<ul class="inline-items">');
             this.$preview = $('<ul class="inline-items preview">');
             this.isListRendered = false;
