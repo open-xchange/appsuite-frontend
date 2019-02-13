@@ -1330,23 +1330,48 @@ define('io.ox/calendar/util', [
         },
 
         // checks if the user is allowed to edit an event
-        allowedToEdit: function (event) {
+        // can be used in synced or deferred mode(deferred is default) by setting options.synced
+        // If synced mode is used make sure to give the folder data in the options.folderData attribute
+        allowedToEdit: function (event, options) {
+            options = options || {};
+            var result = function (val) { return options.synced ? val : $.when(val); };
 
             // no event
-            if (!event) return false;
+            if (!event) return result(false);
 
             // support objects and models
-            var data = event.attributes || event;
+            var data = event.attributes || event,
+                folder = data.folder;
             // no id or folder
-            if (!data.id || !data.folder) return false;
+            if (!data.id || !data.folder) return result(false);
 
             // organizer is allowed to edit
-            if (this.hasFlag(data, 'organizer') || this.hasFlag(data, 'organizer_on_behalf')) return true;
+            if (this.hasFlag(data, 'organizer') || this.hasFlag(data, 'organizer_on_behalf')) return result(true);
 
             // if user is neither organizer nor attendee editing is not allowed
-            if (this.hasFlag(data, 'attendee') || this.hasFlag(data, 'attendee_on_behalf')) return data.attendeePrivileges === 'MODIFY';
+            if (!this.hasFlag(data, 'attendee') && !this.hasFlag(data, 'attendee_on_behalf')) return result(false);
+            // if user is attendee, check if modify privileges are granted
+            if ((this.hasFlag(data, 'attendee') || this.hasFlag(data, 'attendee_on_behalf') && data.attendeePrivileges === 'MODIFY')) return true;
 
-            return false;
+            // if both settings are the same, we don't need a folder check, all attendees are allowed to edit or not, no matter which folder the event is in
+            if (settings.get('chronos/restrictAllowedAttendeeChanges', true) === settings.get('chronos/restrictAllowedAttendeeChangesPublic', true)) return result(!settings.get('chronos/restrictAllowedAttendeeChanges', true));
+
+            // synced mode needs folderData at this point. Stop if not given
+            if (options.synced && !options.folderData) return result(false);
+            if (options.synced) {
+                // public folder
+                if (folderAPI.is('public', options.folderData)) return !settings.get('chronos/restrictAllowedAttendeeChangesPublic', true);
+                // no public folder
+                return !settings.get('chronos/restrictAllowedAttendeeChanges', true);
+            }
+
+            // check if this is a public or non public folder
+            return folderAPI.get(folder).then(function (folderData) {
+                // public folder
+                if (folderAPI.is('public', folderData)) return !settings.get('chronos/restrictAllowedAttendeeChangesPublic', true);
+                // no public folder
+                return !settings.get('chronos/restrictAllowedAttendeeChanges', true);
+            });
         },
 
         hasFlag: function (data, flag) {

@@ -660,7 +660,6 @@ define('io.ox/calendar/edit/extensions', [
         index: 970,
         className: 'col-xs-12 col-sm-6 folder-selection',
         render: function () {
-            if (settings.get('chronos/restrictAllowedAttendeeChanges', true)) return;
             // only the organizer is allowed to change this attribute
             if (this.baton.mode === 'edit' && !(calendarUtil.hasFlag(this.model, 'organizer') || calendarUtil.hasFlag(this.model, 'organizer_on_behalf'))) return;
             var checkboxView  = new mini.CustomCheckboxView({
