@@ -75,8 +75,7 @@ Scenario('Compose and discard with/without prompts', async function (I, users) {
 
     // workflow 4: Compose with subject, then discard
     I.clickToolbar('Compose');
-    I.waitForText('Subject');
-    I.wait(0.2);
+    I.waitForFocus('[placeholder="To"]');
     I.fillField('Subject', 'Test');
     I.click('Discard');
     I.see('Do you really want to discard your message?');
@@ -84,7 +83,7 @@ Scenario('Compose and discard with/without prompts', async function (I, users) {
 
     // workflow 5: Compose with to, subject, some text, then send
     I.clickToolbar('Compose');
-    I.waitForText('Subject');
+    I.waitForFocus('[placeholder="To"]');
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', 'Testsubject');
     I.fillField({ css: 'textarea.plain-text' }, 'Testcontent');
@@ -141,7 +140,7 @@ Scenario('Compose mail with different attachments', async function (I, users) {
     // workflow 7: Compose with file from Drive
     // workflow 8: Compose with inline images
     I.clickToolbar('Compose');
-    I.waitForText('Subject');
+    I.waitForFocus('[placeholder="To"]');
 
     // upload local file via the hidden input in the toolbar
     I.say('📢 add local file', 'blue');
@@ -187,7 +186,7 @@ Scenario('Compose mail with different attachments', async function (I, users) {
     I.waitForVisible('.mail-detail-pane .subject');
     I.see('Testsubject', '.mail-detail-pane');
     I.waitForVisible('.attachments');
-    I.see('4 attachments'); // has 4 attachments as one of the attachments is inline
+    I.see('2 attachments'); // has 2 attachments as one of the attachments is inline
 
     I.logout();
 
@@ -202,7 +201,7 @@ Scenario('Compose with inline image, which is removed again', async function (I,
 
     // workflow 9: Compose, add and remove inline image
     I.clickToolbar('Compose');
-    I.waitForText('Subject');
+    I.waitForFocus('[placeholder="To"]');
 
     // attach inline image
     I.attachFile('.editor input[type="file"]', 'e2e/media/placeholder/800x600.png');
@@ -324,7 +323,7 @@ Scenario('Compose mail with vcard and read receipt', async function (I, users) {
     I.clickToolbar('Compose');
 
     I.waitForText('Subject');
-    I.wait(1); // wait until auto focus is done
+    I.waitForFocus('[placeholder="To"]');
     I.fillField('To', user2.get('primaryEmail'));
     I.fillField('Subject', 'Testsubject');
     I.click('Options');
@@ -368,7 +367,7 @@ Scenario('Compose mail, refresh and continue work at restore point', async funct
     I.login();
 
     I.clickToolbar('Compose');
-    I.waitForText('Subject');
+    I.waitForFocus('[placeholder="To"]');
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', 'Testsubject');
     I.fillField({ css: 'textarea.plain-text' }, 'Testcontent');
