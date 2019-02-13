@@ -97,6 +97,13 @@ define('io.ox/mail/compose/actions/send', [
             index: 600,
             perform: function (baton) {
                 var win = baton.app.getWindow();
+                composeAPI.queue.add(baton.model, function () {
+                    baton.stopPropagation();
+                    notifications.yell(gt('error', 'The sending of the message has been canceled.'));
+                    composeAPI.queue.remove(baton.model.get('id'));
+                    baton.app.getWindow().idle().show();
+                });
+
                 // start being busy
                 if (win) {
                     win.busy();

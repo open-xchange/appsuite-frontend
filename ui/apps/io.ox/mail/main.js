@@ -1803,8 +1803,9 @@ define('io.ox/mail/main', [
                         $el.find('.progress-bar').css('width', pct + '%');
                         $el.find('.caption span').text(caption);
                         $el.find('[data-action="close"]').off();
-                        $el.find('[data-action="close"]').on('click', function () {
-                            if (_.isFunction(data.abort)) data.abort();
+                        $el.find('[data-action="close"]').on('click', function (e) {
+                            e.preventDefault();
+                            data.abort();
                         });
                         $el.show();
                     });

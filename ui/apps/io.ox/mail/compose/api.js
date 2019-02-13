@@ -13,11 +13,8 @@
 
 define('io.ox/mail/compose/api', [
     'io.ox/core/http',
-    'io.ox/core/api/account',
-    'io.ox/core/folder/api',
-    'io.ox/mail/api',
     'io.ox/contacts/api'
-], function (http, accountAPI, folderAPI, mailAPI, contactsAPI) {
+], function (http, contactsAPI) {
 
     'use strict';
 
@@ -35,17 +32,37 @@ define('io.ox/mail/compose/api', [
         return {
 
             collection: new Backbone.Collection().on('add remove change:pct', function () {
-                var loaded = 0, total = 0, abort;
+                var loaded = 0, total = 0, abortList = [];
                 this.each(function (model) {
                     loaded += model.get('loaded');
                     total += model.get('total');
-                    abort = model.get('abort');
+                    // only register abort function if upload is not yet done. Mail sending should not be canceled while the request is handled by the server
+                    if (model.get('loaded') < model.get('total')) abortList.push({ abort: model.get('abort') });
                 });
-                this.trigger('progress', { count: this.length, loaded: loaded, pct: pct(loaded, total), total: total, abort: abort });
+                this.trigger('progress', { count: this.length, loaded: loaded, pct: pct(loaded, total), total: total, abort: _.invoke.bind(_, abortList, 'abort') });
             }),
 
-            add: function (csid, abort) {
-                this.collection.add(new Backbone.Model({ id: csid, loaded: 0, pct: 0, total: 0, abort: abort }));
+            add: function (model, abort) {
+                if (this.collection.get(model.get('id'))) return;
+
+                var csid = model.get('id'),
+                    attachments = model.get('attachments'),
+                    pending = attachments.filter(function (attachment) {
+                        return attachment.get('uploaded') < 1;
+                    }),
+                    loaded = pending.reduce(function (memo, attachment) {
+                        return memo + attachment.get('uploaded');
+                    }, 0),
+                    total = pending.length + 1,
+                    uploadModel = new Backbone.Model({ id: csid, loaded: loaded, pct: pct(loaded, total), total: total, abort: abort });
+
+                attachments.on('change:uploaded', function (model) {
+                    var loaded = uploadModel.get('loaded');
+                    loaded += (model.get('uploaded') - model.previous('uploaded'));
+                    uploadModel.set({ loaded: loaded, pct: pct(loaded, total) });
+                });
+
+                this.collection.add(uploadModel);
             },
 
             remove: function (csid) {
@@ -53,10 +70,12 @@ define('io.ox/mail/compose/api', [
                 this.collection.remove(model);
             },
 
-            update: function (csid, loaded, total) {
+            update: function (csid, loaded, total, abort) {
                 var model = this.collection.get(csid);
                 if (!model) return;
-                model.set({ loaded: loaded, pct: pct(loaded, total), total: total });
+                var totalLoad = model.get('total') - 1 + loaded / total;
+                abort = abort || model.get('abort');
+                model.set({ loaded: totalLoad, pct: pct(totalLoad, model.get('total')), abort: abort });
             }
         };
     }());
@@ -128,7 +147,7 @@ define('io.ox/mail/compose/api', [
             });
 
             def.progress(function (e) {
-                api.queue.update(id, e.loaded, e.total);
+                api.queue.update(id, e.loaded, e.total, def.abort);
             }).fail(function () {
                 ox.trigger('mail:send:fail');
             }).always(function () {
@@ -139,8 +158,6 @@ define('io.ox/mail/compose/api', [
                 ox.trigger('mail:send:stop', data);
                 if (data.meta && data.meta.sharedAttachments && data.meta.sharedAttachments.enabled) ox.trigger('please:refresh refresh^');
             });
-
-            api.queue.add(id, def.abort);
 
             return def;
         },
