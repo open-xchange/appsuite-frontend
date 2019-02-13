@@ -141,11 +141,14 @@ Scenario('Compose mail with different attachments', async function (I, users) {
     // workflow 7: Compose with file from Drive
     // workflow 8: Compose with inline images
     I.clickToolbar('Compose');
+    I.waitForText('Subject');
 
     // upload local file via the hidden input in the toolbar
+    I.say('📢 add local file', 'blue');
     I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
 
     // attach from drive
+    I.say('📢 add drive file', 'blue');
     I.waitForInvisible('.window-blocker');
     I.retry(5).click('Attachments');
     I.click('Add from Drive');
@@ -153,6 +156,7 @@ Scenario('Compose mail with different attachments', async function (I, users) {
     I.click('Add');
 
     // attach inline image
+    I.say('📢 add inline image', 'blue');
     I.attachFile('.editor input[type="file"]', 'e2e/media/placeholder/800x600.png');
     I.wait(1);
 
@@ -173,6 +177,7 @@ Scenario('Compose mail with different attachments', async function (I, users) {
     I.click('Reply');
 
     // upload local file via the hidden input in the toolbar
+    I.say('📢 add another local image', 'blue');
     I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
 
     I.retry(5).click('Send');

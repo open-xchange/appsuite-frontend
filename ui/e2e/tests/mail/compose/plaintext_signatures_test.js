@@ -75,7 +75,7 @@ function getTestMail(user) {
     };
 }
 
-Scenario('compose new mail with signature above correctly placed and changed', async function (I) {
+Scenario('Compose new mail with signature above correctly placed and changed', async function (I) {
     for (let signature of signatures) {
         var response = await I.haveSnippet(signature);
         signature.id = response.data;
@@ -117,7 +117,7 @@ Scenario('compose new mail with signature above correctly placed and changed', a
     I.logout();
 });
 
-Scenario('compose new mail with signature below correctly placed initially', async function (I) {
+Scenario('Compose new mail with signature below correctly placed initially', async function (I) {
     for (let signature of signatures) {
         var response = await I.haveSnippet(signature);
         signature.id = response.data;
