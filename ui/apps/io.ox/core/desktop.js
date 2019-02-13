@@ -1108,11 +1108,14 @@ define('io.ox/core/desktop', [
         that.on('window.open window.show', function (e, win) {
             // show window manager
             this.show();
-
             // move/add window to top of stack
             windows = _(windows).without(win);
-            _(windows).each(function (w) { w.nodes.body.removeAttr('role'); });
-            win.nodes.body.attr('role', 'main');
+            if (!win.options.floating) {
+                _(windows).each(function (w) { w.nodes.body.removeAttr('role'); });
+                win.nodes.body.attr('role', 'main');
+            } else {
+                win.nodes.body.attr('role', 'region');
+            }
             windows.unshift(win);
             // add current windows to cache
             if (windows.length > 1) {
@@ -1582,7 +1585,7 @@ define('io.ox/core/desktop', [
                         // window SIDEPANEL
                         win.nodes.sidepanel = $('<div class="window-sidepanel collapsed">'),
                         // window BODY
-                        win.nodes.body = $('<div class="window-body" role="main">'),
+                        win.nodes.body = $('<div class="window-body">'),
 
                         win.nodes.footer = $('<div class="window-footer">')
                     )

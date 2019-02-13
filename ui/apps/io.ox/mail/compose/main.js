@@ -48,10 +48,6 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                 closable: true,
                 title: gt('Compose')
             }));
-
-            // use main role on 'outer' to include actions in header
-            win.nodes.body.removeAttr('role');
-            win.nodes.outer.attr('role', 'main');
         });
 
         app.failSave = function () {
