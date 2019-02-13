@@ -81,6 +81,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
             return function (obj) {
 
                 var def = $.Deferred();
+                obj = obj || {};
 
                 app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
 

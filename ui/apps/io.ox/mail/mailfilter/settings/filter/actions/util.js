@@ -35,7 +35,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
     }
 
     var Input = mini.InputView.extend({
-        events: { 'change': 'onChange', 'keyup': 'onKeyup' },
+        events: { 'change': 'onChange', 'keyup': 'onKeyup', 'paste': 'onPaste' },
         onChange: function () {
             if (this.name === 'flags') {
                 var value = ((/customflag_/g.test(this.id)) || (/removeflags_/g.test(this.id))) ? ['$' + this.$el.val().toString()] : [this.$el.val()];
@@ -45,6 +45,9 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
             } else {
                 this.model.set(this.name, this.$el.val());
             }
+
+            // force validation
+            this.onKeyup();
         },
         update: function () {
             if (/customflag_/g.test(this.id) || /removeflags_/g.test(this.id)) {

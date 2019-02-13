@@ -108,6 +108,10 @@ define.async('io.ox/mail/accounts/view-form', [
 
         defaultDisplayName = '',
 
+        // validation can be skipped when only this props are changed
+        novalidate = ['personal', 'name', 'unified_inbox_enabled',
+            'archive_fullname', 'confirmed-ham_fullname', 'confirmed-spam_fullname', 'drafts_fullname', 'sent_fullname', 'spam_fullname', 'trash_fullname'],
+
         AccountDetailView = Backbone.View.extend({
             tagName: 'div',
             initialize: function () {
@@ -264,7 +268,6 @@ define.async('io.ox/mail/accounts/view-form', [
             onSave: function () {
 
                 var self = this,
-                    list = ['name', 'personal', 'unified_inbox_enabled', 'password', 'transport_password'],
                     differences = returnDifferences(this.model.attributes, originalModel);
 
                 function returnDifferences(a, b) {
@@ -277,15 +280,11 @@ define.async('io.ox/mail/accounts/view-form', [
                     return array;
                 }
 
-                function needToValidate(list, differences) {
+                function needToValidate(differences) {
+                    // validate is bound to this capibility (see bug 36849)
                     if (!capabilities.has('multiple_mail_accounts')) return false;
-                    var result = false;
-                    _.each(differences, function (value) {
-                        if (_.indexOf(list, value) === -1) {
-                            result = true;
-                        }
-                    });
-                    return result;
+                    // relevant property changes for validation?
+                    return !!_.difference(differences, novalidate).length;
                 }
 
                 function saveAccount() {
@@ -328,8 +327,7 @@ define.async('io.ox/mail/accounts/view-form', [
                         }
                     );
                 }
-
-                if (needToValidate(list, differences)) {
+                if (needToValidate(differences)) {
                     this.model.validationCheck().done(function (response, error) {
                         //an undefined response variable implies an error (f.e. category 'USER_INPUT')
                         var hasError = _.isUndefined(response) || (error ? [].concat(error.categories || []).indexOf('ERROR') > -1 : false),
