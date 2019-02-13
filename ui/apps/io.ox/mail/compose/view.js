@@ -885,12 +885,16 @@ define('io.ox/mail/compose/view', [
             if (!isString) e.preventDefault();
             if (input.hasClass('hidden') || isString) {
                 input.removeClass('hidden');
-                button.addClass('active').attr('aria-checked', true);
+                button.addClass('active');
+                if (type === 'cc') button.attr('title', gt('Hide blind carbon copy input field'));
+                if (type === 'bcc') button.attr('title', gt('Hide carbon copy input field'));
             } else if (!this.model.has(type) || _.isEmpty(this.model.get(type))) {
                 //We don't want to close it automatically! Bug: 35730
                 this.model.set(type, []);
                 input.addClass('hidden');
-                button.removeClass('active').attr('aria-checked', false);
+                button.removeClass('active');
+                if (type === 'cc') button.attr('title', gt('Show blind carbon copy input field'));
+                if (type === 'bcc') button.attr('title', gt('Show carbon copy input field'));
             }
             $(window).trigger('resize');
             return input;

@@ -249,11 +249,11 @@ define('io.ox/mail/compose/extensions', [
 
         recipientActionLink: function (type) {
             return function () {
-                var node = $('<a href="#" data-action="add" role="checkbox" aria-checked="false">');
+                var node = $('<button type="button" class="btn btn-link" data-action="add">');
                 if (type === 'cc') {
-                    node.attr({ 'data-type': 'cc', 'aria-label': gt('Show carbon copy input field') }).text(gt('CC'));
+                    node.attr({ 'data-type': 'cc', 'title': gt('Show carbon copy input field') }).text(gt('CC'));
                 } else {
-                    node.attr({ 'data-type': 'bcc', 'aria-label': gt('Show blind carbon copy input field') }).text(gt('BCC'));
+                    node.attr({ 'data-type': 'bcc', 'title': gt('Show blind carbon copy input field') }).text(gt('BCC'));
                 }
                 this.append(node);
             };
