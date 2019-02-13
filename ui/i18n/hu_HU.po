@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-07-03 15:58+0200\n"
+"PO-Revision-Date: 2019-02-04 10:51+0100\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -3080,6 +3080,18 @@ msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
+#. '%1$s contact's display name
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "%1$s could not be added as the contact has no valid email field."
+msgstr ""
+"A(z) %1$s nem adható hozzá, mivel a partnernek nincs érvényes e-mail mezője."
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid "Some contacts could not be added as they have no valid email field."
+msgstr ""
+"Egyes névjegyeket nem lehetett hozzáadni, mivel nem rendelkeznek érvényes e-"
+"mail mezővel."
+
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
@@ -3333,6 +3345,11 @@ msgstr "A böngésző süti funkciója ki van kapcsolva. Kapcsolja azt vissza."
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Connection timed out. Please try reloading the page."
 msgstr "Időtúllépés. Kérjük, próbálja meg újratölteni az oldalt."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Something went wrong. Please close this browser tab and try again."
+msgstr ""
+"Valami elromlott. Kérjük, zárja be a böngészőlapot, és próbálja meg újra."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -4766,9 +4783,8 @@ msgstr ""
 "A beállítás életbe lépéséhez újratöltés vagy újra bejelentkezés szükséges."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/settings/main.js
-msgid "Basic settings"
-msgstr "Alapbeállítások"
+msgid "The setting requires a relogin to take effect."
+msgstr "A beállítás módosításához újra be kell jelentkezni."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
@@ -4777,6 +4793,17 @@ msgid ""
 msgstr ""
 "Néhány beállítás (language, timezone, theme) érvényrejutásához újra kell "
 "tölteni az oldalt vagy újra be kell lépni."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Some settings (language, timezone, theme) require a relogin to take effect."
+msgstr ""
+"Néhány beállítás (nyelv, időzóna, téma) módosításához újra be kell lépni."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/main.js
+msgid "Basic settings"
+msgstr "Alapbeállítások"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
@@ -8161,13 +8188,13 @@ msgstr "Levelezőlista"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is bigger than"
-msgstr "Nagyobb, mint"
+msgid "Is bigger than (Size: B/KB/MB/GB)"
+msgstr "Nagyobb, mint (méret: B/KB/MB/GB)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is smaller than"
-msgstr "Kisebb, mint"
+msgid "Is smaller than (Size: B/KB/MB/GB)"
+msgstr "Kisebb, mint (méret: B/KB/MB/GB)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -11265,6 +11292,12 @@ msgstr "Meghívás ide: %s"
 msgid "Add on %s"
 msgstr "Hozzáadás itt: %s"
 
+#~ msgid "Is bigger than"
+#~ msgstr "Nagyobb, mint"
+
+#~ msgid "Is smaller than"
+#~ msgstr "Kisebb, mint"
+
 #~ msgid "Notify %1$s before start."
 #~ msgstr "%1$s értesítése kezdés előtt."
 
@@ -11718,10 +11751,6 @@ msgstr "Hozzáadás itt: %s"
 
 #~ msgid "Last name must not be empty for internal users"
 #~ msgstr "A családnév nem lehet üres a belső felhasználóknak"
-
-#~ msgid "Something went wrong. Please close this browser tab and try again."
-#~ msgstr ""
-#~ "Valami elromlott. Kérjük, zárja be a böngészőlapot, és próbálja meg újra."
 
 #~ msgid "iCalendar"
 #~ msgstr "iCalendar"

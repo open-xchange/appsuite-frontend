@@ -28,8 +28,19 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         }
     });
 
+    var pasteHelper =  function (e) {
+        if (!e || e.type !== 'paste') return;
+        if (e.originalEvent.clipboardData.types.indexOf('text/plain') !== -1) {
+            var self = this;
+            // use a one time listener for the input Event, so we can trigger the changes after the input updated (onDrop is still to early)
+            this.$el.one('input', function () {
+                self.$el.trigger('change');
+            });
+        }
+    };
+
     var Input = mini.InputView.extend({
-        events: { 'change': 'onChange', 'keyup': 'onKeyup' },
+        events: { 'change': 'onChange', 'keyup': 'onKeyup', 'paste': 'onPaste' },
 
         validationForSize: function () {
             var listOfUnits = ['B', 'K', 'KB', 'M', 'MB', 'G', 'GB'],
@@ -58,6 +69,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                 this.model.set(this.name, this.$el.val());
             }
 
+            // force validation
+            this.onKeyup();
         },
         onKeyup: function () {
             var state;
@@ -71,7 +84,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
 
             this.model.trigger(state + this.name);
             this.$el.trigger('toggle:saveButton');
-        }
+        },
+        onPaste: pasteHelper
     });
 
     var drawDeleteButton = function (type) {
@@ -150,10 +164,10 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                     o.seconddropdownOptions ? $('<div>').addClass('col-sm-2').append(
                         new DropdownLinkView(o.seconddropdownOptions).render().$el
                     ) : [],
-                    $('<div>').addClass(o.seconddropdownOptions ? 'col-sm-2' : 'col-sm-4').append(
+                    $('<div>').addClass(o.inputOptions.name === 'size' ? 'col-sm-7' : 'col-sm-4').append(
                         o.dropdownOptions ? new DropdownLinkView(o.dropdownOptions).render().$el : []
                     ),
-                    $('<div class="col-sm-8">').append(
+                    $('<div>').addClass(o.inputOptions.name === 'size' ? 'col-sm-5' : 'col-sm-8').append(
                         $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
                         new Input(o.inputOptions).render().$el,
                         o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []
