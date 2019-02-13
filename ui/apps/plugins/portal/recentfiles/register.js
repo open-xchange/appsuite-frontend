@@ -96,7 +96,7 @@ define('plugins/portal/recentfiles/register', [
                     data = baton.data;
 
                 if (!data || data.length === 0) {
-                    content.text(gt('No files have been changed recently'));
+                    content.append($('<li class="item">').text(gt('No files have been changed recently')));
                     return;
                 }
 
