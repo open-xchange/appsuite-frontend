@@ -1,3 +1,15 @@
+open-xchange-appsuite-saml (7.6.3-42) stable; urgency=medium
+
+  * Build for patch 2019-02-11 (5104)
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 01 Feb 2019 15:41:47 +0000
+
+open-xchange-appsuite-saml (7.6.3-41) stable; urgency=medium
+
+  * revision increase to solve packaging issue
+ 
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Thu, 31 Jan 2019 14:51:29 +0100
+
 open-xchange-appsuite-saml (7.6.3-35) stable; urgency=medium
 
   * Build for patch 2018-11-19 (4895)

@@ -1,7 +1,7 @@
 Name:           open-xchange-appsuite-saml
 Version:        @OXVERSION@
-%define         ox_release 35
-Release:        %{ox_release}
+%define         ox_release 42
+Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Francisco Laguna <francisco.laguna@open-xchange.com>
 License:        CC-BY-NC-SA-3.0
@@ -45,6 +45,10 @@ if [ -x %{update} ]; then %{update}; fi
 /opt/open-xchange/appsuite
 
 %changelog
+* Fri Feb 01 2019 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2019-02-11 (5104)
+* Thu Jan 31 2019 Marcus Klein <marcus.klein@open-xchange.com>
+revision increase to solve packaging issue
 * Mon Nov 12 2018 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2018-11-19 (4895)
 * Tue Aug 14 2018 Marcus Klein <marcus.klein@open-xchange.com>
