@@ -13,9 +13,8 @@
 
 const { expect } = require('chai');
 
-Scenario('Contacts - Default List view w/o contact', async function (I) {
+Scenario('Contacts - Default List view w/o contact', async (I) => {
     I.login('app=io.ox/contacts');
-
     I.waitForElement('.contact-detail');
     I.waitForElement('.vgrid-cell.selectable.contact.selected');
     I.click('View');
@@ -23,14 +22,12 @@ Scenario('Contacts - Default List view w/o contact', async function (I) {
     I.click('.vgrid-cell.selectable.contact.selected .vgrid-cell-checkbox');
     I.waitForElement('.summary.empty');
 
-    const currentView = await I.grabAxeReport();
-    expect(currentView).to.be.accessible;
+    expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Contacts - Default List view with contact detail view', async function (I) {
+Scenario('Contacts - Default List view with contact detail view', async (I) => {
     I.login('app=io.ox/contacts');
-
     I.waitForElement('.contact-detail');
-    const currentView = await I.grabAxeReport();
-    expect(currentView).to.be.accessible;
+
+    expect(await I.grabAxeReport()).to.be.accessible;
 });

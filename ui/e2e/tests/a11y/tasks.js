@@ -13,16 +13,13 @@
 
 const { expect } = require('chai');
 
-Scenario('Tasks - Default List view w/o tasks', async function (I) {
+Scenario('Tasks - Default List view w/o tasks', async (I) => {
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/tasks//showCheckboxes', true);
-
     I.login('app=io.ox/tasks');
     I.waitForVisible('[data-app-name="io.ox/tasks"]', 5);
-
     I.waitForVisible('.summary.empty');
 
-    const currentView = await I.grabAxeReport();
-    expect(currentView).to.be.accessible;
+    expect(await I.grabAxeReport()).to.be.accessible;
 });

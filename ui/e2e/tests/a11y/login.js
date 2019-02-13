@@ -13,10 +13,13 @@
 
 const { expect } = require('chai');
 
-Scenario('Login page is accessible', async function (I) {
-    I.amOnPage('/');
+// Exceptions:
+// Login form does not have a visible label
+const excludes = { exclude: [['#io-ox-login-username'], ['#io-ox-login-password']] };
 
+Scenario('Login page (with exceptions)', async (I) => {
+    I.amOnPage('/');
     I.waitForInvisible('#background-loader');
-    const currentView = await I.grabAxeReport({ exclude: [['#io-ox-login-username'], ['#io-ox-login-password']] });
-    expect(currentView).to.be.accessible;
+
+    expect(await I.grabAxeReport(excludes)).to.be.accessible;
 });

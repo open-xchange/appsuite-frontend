@@ -20,74 +20,74 @@ function axeReport(folder, label) {
     return this.grabAxeReport();
 }
 
-Scenario('Settings - Basic settings', async function (I) {
+Scenario('Settings - Basic settings', async (I) => {
     expect(await axeReport.call(I, 'io.ox/core', 'Basic settings')).to.be.accessible;
 });
 
-Scenario('Settings - Account', async function (I) {
+Scenario('Settings - Account', async (I) => {
     expect(await axeReport.call(I, 'io.ox/settings/accounts', 'Accounts')).to.be.accessible;
 });
 
-Scenario('Settings - Security', async function (I) {
+Scenario('Settings - Security', async (I) => {
     expect(await axeReport.call(I, 'security', 'Security')).to.be.accessible;
 });
 
-Scenario.skip('Settings - Security - Active clients', async function (I) {
+Scenario('Settings - Security - Active clients', async (I) => {
     expect(await axeReport.call(I, 'sessions', 'You are currently signed in with the following devices')).to.be.accessible;
 });
 
-Scenario('Settings - Mail', async function (I) {
+Scenario('Settings - Mail', async (I) => {
     expect(await axeReport.call(I, 'io.ox/mail', 'Mail')).to.be.accessible;
 });
 
-Scenario('Settings - Mail - Compose', async function (I) {
+Scenario('Settings - Mail - Compose', async (I) => {
     expect(await axeReport.call(I, 'io.ox/mail/settings/compose', 'Mail Compose')).to.be.accessible;
 });
 
-Scenario('Settings - Mail - Signatures', async function (I) {
+Scenario('Settings - Mail - Signatures', async (I) => {
     expect(await axeReport.call(I, 'io.ox/mail/settings/signatures', 'Signatures')).to.be.accessible;
 });
 
-Scenario('Settings - Mail - Filter Rules', async function (I) {
+Scenario('Settings - Mail - Filter Rules', async (I) => {
     expect(await axeReport.call(I, 'io.ox/mailfilter', 'Mail Filter Rules')).to.be.accessible;
 });
 
-Scenario('Settings - Calendar', async function (I) {
+Scenario('Settings - Calendar', async (I) => {
     expect(await axeReport.call(I, 'io.ox/calendar', 'Calendar')).to.be.accessible;
 });
 
-Scenario('Settings - Calendar - Favorite timezones', async function (I) {
+Scenario('Settings - Calendar - Favorite timezones', async (I) => {
     expect(await axeReport.call(I, 'io.ox/timezones', 'Favorite timezones')).to.be.accessible;
 });
 
-Scenario('Settings - Address Book', async function (I) {
+Scenario('Settings - Address Book', async (I) => {
     expect(await axeReport.call(I, 'io.ox/contacts', 'Address Book')).to.be.accessible;
 });
 
-Scenario('Settings - Drive', async function (I) {
+Scenario('Settings - Drive', async (I) => {
     expect(await axeReport.call(I, 'io.ox/files', 'Drive')).to.be.accessible;
 });
 
-Scenario('Settings - Portal', async function (I) {
+Scenario('Settings - Portal', async (I) => {
     expect(await axeReport.call(I, 'io.ox/portal', 'Portal settings')).to.be.accessible;
 });
 
-Scenario('Settings - Tasks', async function (I) {
+Scenario('Settings - Tasks', async (I) => {
     expect(await axeReport.call(I, 'io.ox/tasks', 'Tasks')).to.be.accessible;
 });
 
-Scenario.skip('Settings - Subscriptions', async function (I) {
+Scenario('Settings - Subscriptions', async (I) => {
     expect(await axeReport.call(I, 'io.ox/core/sub', 'Subscriptions')).to.be.accessible;
 });
 
-Scenario('Settings - Error Log', async function (I) {
+Scenario('Settings - Error Log', async (I) => {
     expect(await axeReport.call(I, 'errorlog', 'Error log')).to.be.accessible;
 });
 
-Scenario('Settings - Downloads', async function (I) {
+Scenario('Settings - Downloads', async (I) => {
     expect(await axeReport.call(I, 'io.ox/core/downloads', 'Downloads')).to.be.accessible;
 });
 
-Scenario('Settings - External Apps', async function (I) {
+Scenario('Settings - External Apps', async (I) => {
     expect(await axeReport.call(I, 'external/apps', 'External Apps')).to.be.accessible;
 });

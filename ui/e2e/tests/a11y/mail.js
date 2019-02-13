@@ -13,10 +13,9 @@
 
 const { expect } = require('chai');
 
-Scenario('Mail - Default List view w/o mail', async function (I) {
+Scenario('Mail - Default List view w/o mail', async (I) => {
     I.login('app=io.ox/mail');
-
     I.waitForElement('.mail-detail-pane');
-    const currentView = await I.grabAxeReport();
-    expect(currentView).to.be.accessible;
+
+    expect(await I.grabAxeReport()).to.be.accessible;
 });
