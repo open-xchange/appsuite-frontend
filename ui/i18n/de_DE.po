@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-02-05 14:40+0100\n"
+"PO-Revision-Date: 2019-02-13 10:33+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -768,6 +768,7 @@ msgstr "Bild drehen"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-folder-alarms.js
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
@@ -805,12 +806,13 @@ msgstr "Schließen"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Download"
-msgstr "Download"
+msgstr "Herunterladen"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/change-alarms.js
+#: apps/io.ox/calendar/actions/change-folder-alarms.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -1092,6 +1094,7 @@ msgid "Change status"
 msgstr "Status ändern"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Change reminder"
 msgstr "Erinnerung ändern"
 
@@ -1189,8 +1192,24 @@ msgid "Tentative"
 msgstr "Vorläufig"
 
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-folder-alarms.js
 msgid "Change reminders"
 msgstr "Erinnerungen ändern"
+
+#. %1$s:  is the calendar's name
+#: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
+msgid "Edit all reminders for calendar: %1$s"
+msgstr "Alle Erinnerungen für folgenden Kalender bearbeiten: %1$s"
+
+#: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js
+msgid "Default reminder"
+msgstr "Standard-Erinnerung"
+
+#: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js
+msgid "Default reminder for all-day appointments"
+msgstr "Standarderinnerung für Ganztagestermine"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
@@ -1307,6 +1326,10 @@ msgstr "iCal-URL"
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Login"
 msgstr "Login"
+
+#: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
+msgid "Your default reminders will be applied to this calendar."
+msgstr "Ihre Standarderinnerungen werden auf diesen Kalender angewendet."
 
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 msgid "Subscribe to iCal feed"
@@ -2196,14 +2219,6 @@ msgid "New appointment"
 msgstr "Neuer Termin"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Default reminder"
-msgstr "Standard-Erinnerung"
-
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Default reminder for all-day appointments"
-msgstr "Standarderinnerung für Ganztagestermine"
-
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Default reminder for appointments in birthday calendar"
 msgstr "Standarderinnerung für Termine im Geburtstagskalender"
 
@@ -2282,6 +2297,12 @@ msgstr "Sprache"
 #: module:io.ox/contacts
 msgid "Country"
 msgstr "Land"
+
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+#, fuzzy
+msgid "Your default reminders will be applied to this calendars."
+msgstr "Ihre Standarderinnerungen werden auf diesen Kalender angewendet."
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -4176,7 +4197,6 @@ msgid "Download infected file"
 msgstr "Infizierte Datei herunterladen"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-#, fuzzy
 msgid "Download unscanned file"
 msgstr "Nicht geprüfte Datei herunterladen"
 
@@ -7296,6 +7316,40 @@ msgid "Show hidden files and folders"
 msgstr "Versteckte Dateien und Ordner anzeigen"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+msgid "File version history"
+msgstr "Dateiversionshistorie"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Timeframe"
+msgstr "Zeitrahmen"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "The timeframe is not limited"
+msgstr "Der Zeitrahmen ist nicht begrenzt"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "The timeframe is limited to 1 day."
+msgid_plural "The timeframe is limited to %1$d days."
+msgstr[0] "Der Zeitrahmen ist auf 1 Tag begrenzt."
+msgstr[1] "Der Zeitrahmen ist auf %1$d Tage begrenzt."
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+msgid "File version limit"
+msgstr "Dateiversionsbegrenzung"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "The number of versions is not limited"
+msgstr "Die Anzahl der Versionen ist nicht begrenzt"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "The number of versions is limited to 1 version."
+msgid_plural "The number of versions is limited to %1$d versions."
+msgstr[0] "Die Anzahl der Versionen ist auf 1 Version begrenzt."
+msgstr[1] "Die Anzahl der Versionen ist auf %1$d Versionen begrenzt."
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
@@ -7306,48 +7360,36 @@ msgid "All file versions are retained"
 msgstr "Alle Dateiversionen bleiben erhalten"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "All file versions older than 1 day will be deleted after next login"
-msgid_plural ""
-"All file versions older than %1$d days will be deleted after next login"
-msgstr[0] ""
-"Alle Dateiversionen, die älter als 1 Tag sind, werden nach der nächsten "
-"Anmeldung gelöscht"
-msgstr[1] ""
-"Alle Dateiversionen, die älter als %1$d Tage sind, werden nach der nächsten "
-"Anmeldung gelöscht"
+msgid "All file versions older than 1 day will be deleted"
+msgid_plural "All file versions older than %1$d days will be deleted"
+msgstr[0] "Alle Dateiversionen, die älter als 1 Tag sind, werden gelöscht"
+msgstr[1] "Alle Dateiversionen, die älter als %1$d Tag sind, werden gelöscht"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
 msgid ""
-"When a file has more than 1 version, older versions of the file will be "
-"deleted after next login"
+"When a file has more than 1 additional version, older versions of the file "
+"will be deleted"
 msgid_plural ""
-"When a file has more than %1$d versions, older versions of the file will be "
-"deleted after next login"
+"When a file has more than %1$d additional versions, older versions of the "
+"file will be deleted"
 msgstr[0] ""
-"Wenn eine Datei mehr als 1 Version hat, werden ältere Versionen der Datei "
-"nach der nächsten Anmeldung gelöscht"
+"Gibt es mehr als 1 zusätzliche Version einer Datei, werden ältere Versionen "
+"der Datei gelöscht"
 msgstr[1] ""
-"Wenn eine Datei mehr als %1$d Versionen hat, werden ältere Versionen der "
-"Datei nach der nächsten Anmeldung gelöscht"
+"Gibt es mehr als %1$d zusätzliche Versionen einer Datei, werden ältere "
+"Versionen der Datei gelöscht"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-msgid "File version history"
-msgstr "Datei-Versionshistorie"
-
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Timeframe"
-msgstr "Zeitrahmen"
+msgid ""
+"Older versions will be deleted after next login or when a new version is "
+"created"
+msgstr ""
+"Ältere Versionen werden nach der nächsten Anmeldung oder beim Anlegen einer "
+"neuen Version gelöscht"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Keep saved versions"
 msgstr "Gespeicherte Versionen behalten"
-
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-msgid "File version limit"
-msgstr "Datei-Versionsbegrenzung"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Keep number of recent versions"
@@ -10243,7 +10285,6 @@ msgid "My %1$s account (%2$d)"
 msgstr "Mein %1$s-Account (%2$d)"
 
 #: apps/io.ox/oauth/reauth_handler.js module:io.ox/core
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Reauthorize"
 msgstr "Erneut autorisieren"
 
@@ -12713,6 +12754,30 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "All file versions older than 1 day will be deleted after next login"
+#~ msgid_plural ""
+#~ "All file versions older than %1$d days will be deleted after next login"
+#~ msgstr[0] ""
+#~ "Alle Dateiversionen, die älter als 1 Tag sind, werden nach der nächsten "
+#~ "Anmeldung gelöscht"
+#~ msgstr[1] ""
+#~ "Alle Dateiversionen, die älter als %1$d Tage sind, werden nach der "
+#~ "nächsten Anmeldung gelöscht"
+
+#, fuzzy
+#~ msgid ""
+#~ "When a file has more than 1 version, older versions of the file will be "
+#~ "deleted after next login"
+#~ msgid_plural ""
+#~ "When a file has more than %1$d versions, older versions of the file will "
+#~ "be deleted after next login"
+#~ msgstr[0] ""
+#~ "Wenn eine Datei mehr als 1 Version hat, werden ältere Versionen der Datei "
+#~ "nach der nächsten Anmeldung gelöscht"
+#~ msgstr[1] ""
+#~ "Wenn eine Datei mehr als %1$d Versionen hat, werden ältere Versionen der "
+#~ "Datei nach der nächsten Anmeldung gelöscht"
 
 #~ msgid "Receive notification for appointment changes"
 #~ msgstr "Benachrichtigung bei Terminänderungen"
