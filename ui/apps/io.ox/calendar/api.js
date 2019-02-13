@@ -164,7 +164,7 @@ define('io.ox/calendar/api', [
                 if (useCache !== false) {
                     var model = api.pool.getModel(util.cid(obj));
                     // check if we have a full model with extended entities
-                    if (model && ((model.has('attendees') && hasExtendedEntities(model.get('attendees'))) || model.has('calendarUser'))) return $.when(model);
+                    if (model && hasExtendedEntities(model.get('attendees'))) return $.when(model);
                 }
                 // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
                 if (obj.eventId) {
@@ -246,10 +246,11 @@ define('io.ox/calendar/api', [
                     });
 
                     var def, reqList = list;
+
                     if (useCache !== false) {
                         reqList = list.filter(function (obj) {
                             var model = api.pool.getModel(util.cid(obj));
-                            return !model || (!model.has('attendees') && !model.has('calendarUser'));
+                            return model && model.has('attendees');
                         });
                     }
 
