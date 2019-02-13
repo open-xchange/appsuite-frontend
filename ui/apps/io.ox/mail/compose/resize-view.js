@@ -63,7 +63,7 @@ define('io.ox/mail/compose/resize-view', [
 
         initialize: function (opt) {
             // apply default imageResizeOption
-            var predefined = settings.get('features/imageResize/default', 'large');
+            var predefined = settings.get('features/imageResize/default', 'original');
             this.model.set('imageResizeOption', this.settings[predefined] || 'original');
 
             opt = _({ label: '', caret: true }).extend(opt);
