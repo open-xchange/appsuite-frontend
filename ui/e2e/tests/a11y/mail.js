@@ -19,3 +19,16 @@ Scenario('Mail - List view w/o mail', async (I) => {
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
+
+Scenario('Mail - Compose window (with exceptions)', async (I) => {
+    // Exceptions:
+    // Typeahead missing label (critical), TinyMCE toolbar invalid role (minor issue)
+    const excludes = { exclude: [['.to'], ['.mce-open'], ['.mce-toolbar']] };
+
+    I.login('app=io.ox/mail');
+    I.waitForElement('.mail-detail-pane');
+    I.clickToolbar('Compose');
+    I.waitForElement('.mce-tinymce');
+
+    expect(await I.grabAxeReport(excludes)).to.be.accessible;
+});
