@@ -41,7 +41,7 @@ define('io.ox/backbone/views/toolbar', [
         // we use the constructor here not to collide with initialize()
         constructor: function (options) {
             // add central extension point
-            this.options = _.extend({ inline: false, point: '', dropdown: true, simple: false, strict: false, align: 'left' }, options);
+            this.options = _.extend({ inline: false, point: '', dropdown: true, simple: false, strict: true, align: 'left' }, options);
             this.setPoint(this.options.point);
             DisposableView.prototype.constructor.apply(this, arguments);
             this.$el
