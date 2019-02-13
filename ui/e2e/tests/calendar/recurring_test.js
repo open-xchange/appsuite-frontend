@@ -21,7 +21,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario.skip('Create recurring appointments with one participant', async function (I, users) {
+Scenario('Create recurring appointments with one participant', async function (I, users) {
 
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
@@ -144,7 +144,6 @@ Scenario.skip('Create recurring appointments with one participant', async functi
     I.click('List');
 
     I.see('test recurring', '.list-view .appointment:nth-child(5) .title');
-
     I.click('test recurring', '.list-view .list-item:nth-child(5) .title');
 
     // owner
@@ -212,8 +211,8 @@ Scenario.skip('Create recurring appointments with one participant', async functi
     I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit new edit"]', 1);
     I.click('//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit new edit"]');
 
-    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/edit"]');
-    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.waitForVisible('[data-action="io.ox/calendar/detail/actions/delete"]');
+    I.click('[data-action="io.ox/calendar/detail/actions/delete"]');
 
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('This appointment', '.io-ox-dialog-popup');
