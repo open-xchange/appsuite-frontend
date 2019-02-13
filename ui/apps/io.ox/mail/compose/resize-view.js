@@ -26,6 +26,13 @@ define('io.ox/mail/compose/resize-view', [
         var file = model.get('originalFile');
         // no computation necessary without a file
         if (!file) return $.when();
+        // no computation if file has size 0, that means it has been deleted in the meantime
+        if (file.size === 0) {
+            require(['io.ox/core/notifications'], function (notifications) {
+                notifications.yell('warning', gt('The image cannot not be resized because it was not found on your hard drive.'));
+            });
+            return $.when();
+        }
         // no computation necessary for original, but fileupload needs to be triggered
         if (size === 'original') {
             model.trigger('image:resized', file);
