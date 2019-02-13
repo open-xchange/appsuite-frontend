@@ -83,18 +83,13 @@ define('io.ox/mail/compose/actions/send', [
             }
         },
         {
-            id: 'check:attachment-publishmailattachments',
-            index: 400,
-            perform: extensions.publishMailAttachments
-        },
-        {
             id: 'check:attachment-missing',
-            index: 500,
+            index: 400,
             perform: extensions.attachmentMissingCheck
         },
         {
             id: 'busy:start',
-            index: 600,
+            index: 500,
             perform: function (baton) {
                 var win = baton.app.getWindow();
                 composeAPI.queue.add(baton.model, function () {
@@ -114,13 +109,18 @@ define('io.ox/mail/compose/actions/send', [
         },
         {
             id: 'wait-for-pending-uploads',
-            index: 700,
+            index: 600,
             perform: extensions.waitForPendingUploads
         },
         {
             id: 'remove-unused-inline-images',
-            index: 800,
+            index: 700,
             perform: extensions.removeUnusedInlineImages
+        },
+        {
+            id: 'check:attachment-publishmailattachments',
+            index: 800,
+            perform: extensions.publishMailAttachments
         },
         {
             id: 'send',
