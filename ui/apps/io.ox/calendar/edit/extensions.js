@@ -661,13 +661,14 @@ define('io.ox/calendar/edit/extensions', [
         className: 'col-xs-12 col-sm-6 folder-selection',
         render: function () {
             if (settings.get('chronos/restrictAllowedAttendeeChanges', true)) return;
-
+            // only the organizer is allowed to change this attribute
+            if (this.baton.mode === 'edit' && !(calendarUtil.hasFlag(this.model, 'organizer') || calendarUtil.hasFlag(this.model, 'organizer_on_behalf'))) return;
             var checkboxView  = new mini.CustomCheckboxView({
                 label: gt('Allow participants to edit this appointment'),
                 name: 'attendeePrivileges',
                 model: this.model,
                 customValues: { 'false': 'DEFAULT', 'true': 'MODIFY' },
-                defaultVal: this.baton.mode === 'new' && this.model.settings.get('chronos/allowAttendeeEditsByDefault', false) ? 'MODIFY' : 'DEFAULT'
+                defaultVal: this.baton.mode === 'create' && settings.get('chronos/allowAttendeeEditsByDefault', false) ? 'MODIFY' : 'DEFAULT'
             });
 
             this.$el.append(
