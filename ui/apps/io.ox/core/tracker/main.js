@@ -10,7 +10,7 @@ define('io.ox/core/tracker/main', [
     api.add('browser');
     api.add('unique', { id: ox.context_id + '/' + ox.user_id });
 
-    if (settings.get('tracker/eyeballtime', false)) {
+    if (settings.get('tracker/eyeballtime', true)) {
         duration.start();
     }
 });
