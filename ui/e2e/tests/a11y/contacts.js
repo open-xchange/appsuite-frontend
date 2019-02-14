@@ -17,7 +17,7 @@ Scenario('Contacts - List view w/o contact', async (I) => {
     I.login('app=io.ox/contacts');
     I.waitForElement('.contact-detail');
     I.waitForElement('.vgrid-cell.selectable.contact.selected');
-    I.click('View');
+    I.clickToolbar('View');
     I.click('Checkboxes');
     I.click('.vgrid-cell.selectable.contact.selected .vgrid-cell-checkbox');
     I.waitForElement('.summary.empty');
