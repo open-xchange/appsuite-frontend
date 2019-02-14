@@ -406,9 +406,6 @@ Quality for the compression while resizing as float (default `0.75`)
 <config>io.ox/mail//features/imageResize/imageSizeThreshold=`<number>`</config>
 Threshold for the size in pixel of the longest edge after which a resize is recommended as integer (default `1024`)
 
-<config>io.ox/mail//features/imageResize/fileSizeThreshold=`<number>`</config>
-Threshold for the size in byte of the image after which a resize is recommended as integer (default `1048576`)
-
 <config>io.ox/mail//features/imageResize/fileSizeMax=`<number>`</config>
 Maximum size in bytes that will be resized as integer, if one image exceeds this threshold the resize dropdown will not be displayed (default `10485760`)
 
