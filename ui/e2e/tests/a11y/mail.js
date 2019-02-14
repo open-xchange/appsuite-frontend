@@ -58,7 +58,11 @@ Scenario('Mail - Compose window (with exceptions)', async (I) => {
     I.login('app=io.ox/mail');
     I.waitForElement('.mail-detail-pane');
     I.clickToolbar('Compose');
-    I.waitForElement('.mce-tinymce');
+    I.waitForVisible('.window-blocker.io-ox-busy');
+    I.waitForInvisible('.window-blocker.io-ox-busy');
+    // Cursor needs to be moved because of drecks tooltip.
+    I.moveCursorTo('.floating-header');
+    I.waitForDetached('.tooltip.bottom.in');
 
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
 });
@@ -119,3 +123,5 @@ Scenario('Mail - Modal Dialog - Permissions (with exceptions)', async (I) => {
 
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
 });
+
+
