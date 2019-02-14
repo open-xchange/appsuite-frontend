@@ -33,7 +33,7 @@ define('io.ox/core/tracker/duration', [
     }
 
     function track() {
-        if (document.visibilityState === 'hidden') return;
+        if (document.visibilityState === 'hidden' || !ox.ui.App.getCurrentApp()) return;
 
         var app = getApp();
         // counting seconds
