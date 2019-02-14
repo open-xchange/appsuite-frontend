@@ -236,19 +236,17 @@ define('io.ox/files/toolbar', [
 
             // initial update
             updateToolbar();
-            // update toolbar on selection change
-            app.listView.on('selection:change', updateToolbar);
-            // update toolbar on model changes
-            app.listView.on('change', updateToolbar);
+            // update toolbar on selection and model changes
+            app.listView.on('selection:change change', updateToolbar);
             // files as favorites
             api.on('favorite:add favorite:remove', updateToolbar);
             // folders as favorites
             folderApi.on('favorite:add favorite:remove', updateToolbar);
             // change folder
-            app.on('folder:change', updateToolbar.bind(null, []));
+            app.on('folder:change', app.updateToolbar.bind(app, []));
 
-            function updateToolbar(array) {
-                app.updateToolbar(array || app.listView.selection.get());
+            function updateToolbar() {
+                app.updateToolbar(app.listView.selection.get());
             }
         }
     });
