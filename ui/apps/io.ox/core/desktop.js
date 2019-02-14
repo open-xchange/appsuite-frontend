@@ -730,6 +730,14 @@ define('io.ox/core/desktop', [
             });
         },
 
+        // utility function to clean savepoints of unsupported versions in jslob (not localstorage)
+        cleanupSavepoints: function () {
+            if (coreSettings.get('savepointCleanup', false)) return;
+            coreSettings.set('savepoints', []).save().then(function () {
+                coreSettings.set('savepointCleanup', ox.version).save();
+            });
+        },
+
         getSavePoints: function () {
 
             if (!saveRestoreEnabled()) return $.when([]);
@@ -800,6 +808,9 @@ define('io.ox/core/desktop', [
 
         restore: function () {
             var self = this;
+
+            this.cleanupSavepoints();
+
             return this.getSavePoints().then(function (data) {
                 return $.when.apply($,
                     _(data).map(function (obj) {
