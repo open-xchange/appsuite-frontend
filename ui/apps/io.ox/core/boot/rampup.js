@@ -12,9 +12,46 @@
  */
 
 define('io.ox/core/boot/rampup', [
-], function () {
+    'io.ox/core/http',
+    'io.ox/core/extensions'
+], function (http, ext) {
     'use strict';
 
-    // placeholder to define extensions for rampup phase
-    // does nothing for now, since we still fetch rampup from MW during login
+    ext.point('io.ox/core/boot/rampup').extend([{
+        id: 'http_pause',
+        fetch: function () {
+            http.pause();
+        }
+    }, {
+        id: 'compositionSpaces',
+        fetch: function () {
+            ox.rampup.compositionSpaces = $.when(
+                http.GET({ module: 'mailcompose', params: { action: 'all', columns: 'subject' } }),
+                require(['gettext!io.ox/mail'])
+            ).then(function (data, gt) {
+                var list = _(data).first() || [];
+                return list.map(function (compositionSpace) {
+                    return {
+                        //#. $1$s is the subject of an email
+                        description: gt('Mail: %1$s', compositionSpace.subject || gt('No subject')),
+                        floating: true,
+                        id: compositionSpace.id + Math.random().toString(16),
+                        keepOnRestore: false,
+                        module: 'io.ox/mail/compose',
+                        point: compositionSpace.id,
+                        timestamp: new Date().valueOf(),
+                        ua: navigator.userAgent
+                    };
+                });
+            }).catch(function (e) {
+                // add a catch such that the boot process is not stopped due to errors
+                if (ox.debug) console.error(e);
+            });
+        }
+    }, {
+        id: 'http_resume',
+        fetch: function () {
+            return http.resume();
+        }
+    }]);
 });

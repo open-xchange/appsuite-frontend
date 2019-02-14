@@ -65,8 +65,6 @@ define([
 
             expect(node.find('select[id="defaultSendAddress"]').length).to.equal(1);
 
-            expect(node.find('select[id="autoSaveDraftsAfter"]').children().length).to.equal(5);
-
             expect(node.find('input[name="allowHtmlMessages"]').parent().text()).to.equal(gt('Allow html formatted emails'));
 
             expect(node.find('input[name="allowHtmlImages"]').parent().text()).to.equal(gt('Allow pre-loading of externally linked images'));

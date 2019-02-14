@@ -17,14 +17,14 @@ define('io.ox/mail/compose/checks', [
     'io.ox/core/tk/dialogs',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (api, util, dialogs, settings, gt) {
+], function (mailAPI, util, dialogs, settings, gt) {
 
     function getSender(data) {
         if (!data) return null;
         var replyTo = getReplyTo(data.headers);
         if (replyTo) return replyTo;
         if (_.isEmpty(data.from)) return null;
-        return data.from[0];
+        return data.from;
     }
 
     function getReplyTo(headers) {
@@ -57,7 +57,7 @@ define('io.ox/mail/compose/checks', [
             if (!settings.get('confirmReplyToMailingLists', true)) return $.when(mode);
 
             // we get the original mail to check its headers
-            var original = api.pool.get('detail').get(cid);
+            var original = mailAPI.pool.get('detail').get(cid);
             if (!original) return $.when(mode);
 
             // early return if it's not a mailing list

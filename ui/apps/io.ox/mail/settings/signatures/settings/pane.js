@@ -12,8 +12,9 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     'io.ox/backbone/mini-views/listutils',
     'io.ox/mail/util',
     'io.ox/backbone/mini-views/settings-list-view',
+    'io.ox/mail/compose/inline-images',
     'less!io.ox/mail/settings/signatures/style'
-], function (ext, ExtensibleView, gt, settings, util, ModalDialog, snippets, mini, config, notifications, listutils, mailutil, ListView) {
+], function (ext, ExtensibleView, gt, settings, util, ModalDialog, snippets, mini, config, notifications, listutils, mailutil, ListView, inline) {
 
     'use strict';
 
@@ -78,7 +79,15 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     class: 'io-ox-signature-edit',
                     keepalive: mailAPI.keepalive,
                     scrollpane: container,
-                    oxContext: { signature: true }
+                    oxContext: { signature: true },
+                    imageLoader: {
+                        upload: function (file) {
+                            return inline.api.inlineImage({ file: file });
+                        },
+                        getUrl: function (response) {
+                            return inline.api.getInsertedImageUrl(response);
+                        }
+                    }
                 }).done(function (editor) {
                     editor.show();
                     signature.content = signature.content || '';
@@ -98,10 +107,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         id: 'position',
         index: 400,
         render: function () {
-            var signature = this.getSignature(),
-                position = signature.misc.insertion ?
-                    signature.misc.insertion :
-                    settings.get('defaultSignaturePosition', 'below');
+            var signature = this.getSignature();
 
             this.$body.append(
                 $('<div class="form-group">').append(
@@ -110,7 +116,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                             $('<option value="above">').text(gt('Add signature above quoted text')),
                             $('<option value="below">').text(gt('Add signature below quoted text'))
                         )
-                        .val(position)
+                        .val(signature.misc.insertion)
                 )
             );
         }
@@ -173,10 +179,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     );
 
     function fnEditSignature(e, signature) {
-        signature = signature || { id: null, name: '', signature: '' };
-
-        // support for 'old' signatures
-        signature.misc = _.isString(signature.misc) ? JSON.parse(signature.misc) : signature.misc || {};
+        signature = signature || { id: null, name: '', signature: '', misc: {} };
 
         return new ModalDialog({
             width: 640,
@@ -419,7 +422,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 }
 
                 var onChangeDefault = _.throttle(function () {
-                    var composeId = mailutil.getDefaultSignature('compose'),
+                    var composeId = mailutil.getDefaultSignature('new'),
                         replyForwardId = mailutil.getDefaultSignature('reply/forward');
                     this.$('.default').removeClass('default').find('>.default-label').remove();
                     this.$('[data-id="' + replyForwardId + '"]')
@@ -459,8 +462,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     .on('edit', clickEdit)
                     .on('delete', function (e) {
                         var id = $(e.currentTarget).closest('li').attr('data-id');
-                        if (mailutil.getDefaultSignature('compose') === id) settings.set('defaultSignature', '');
-                        if (mailutil.getDefaultSignature('replay/forward') === id) settings.set('defaultReplyForwardSignature', '');
+                        if (mailutil.getDefaultSignature('new') === id) settings.set('defaultSignature', '');
+                        if (mailutil.getDefaultSignature('reply/forward') === id) settings.set('defaultReplyForwardSignature', '');
                         snippets.destroy(id).fail(require('io.ox/core/notifications').yell);
                         e.preventDefault();
                     })
@@ -503,7 +506,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                             $('<option value="">').text(gt('No signature')),
                             this.map(makeOption)
                         )
-                        .val(mailutil.getDefaultSignature('compose'));
+                        .val(mailutil.getDefaultSignature('new'));
                     defaultReplyForwardView.$el.empty()
                         .append(
                             $('<option value="">').text(gt('No signature')),

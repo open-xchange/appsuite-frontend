@@ -330,7 +330,15 @@ define('io.ox/files/actions', [
             api.getList(array).done(function (list) {
                 var filtered_list = _.filter(list, function (o) { return o.file_size !== 0; });
                 if (filtered_list.length === 0) return;
-                ox.registry.call('mail-compose', 'compose', { infostore_ids: filtered_list });
+                ox.registry.call('mail-compose', 'open', {
+                    attachments: filtered_list.map(function (file) {
+                        return {
+                            origin: 'drive',
+                            id: file.id,
+                            folder_id: file.folder_id
+                        };
+                    })
+                });
             });
         }
     });

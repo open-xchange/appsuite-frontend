@@ -785,9 +785,10 @@ define('io.ox/core/desktop', [
 
         restore: function () {
             var self = this;
-            return this.getSavePoints().then(function (list) {
+
+            return $.when(this.getSavePoints(), ox.rampup.compositionSpaces).then(function (list, compositionSpaces) {
                 return $.when.apply($,
-                    _(list).map(function (obj) {
+                    _([].concat(list, compositionSpaces || [])).map(function (obj) {
                         adaptiveLoader.stop();
                         var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
                         return ox.load(requirements).then(function (m) {
@@ -817,12 +818,12 @@ define('io.ox/core/desktop', [
                                             // replace restore point with old id with restore point with new id (prevents duplicates)
                                             self.removeRestorePoint(oldId).then(self.getSavePoints).then(function (sp) {
                                                 sp.push(obj);
-                                                self.setSavePoints(sp);
+                                                if (obj.keepOnRestore !== false) self.setSavePoints(sp);
                                                 if (model.get('quitAfterLaunch')) model.trigger('quit');
                                             });
                                         }).fail(function (e) {
                                             if (!e || e.code !== 'MSG-0032') return;
-                                            // restoreById-savepoint after draft got deleted
+                                            // restoreById-savepoint after draft/composition space got deleted
                                             _.delay(function () {
                                                 ox.ui.App.removeRestorePoint(oldId);
                                                 model.trigger('close');

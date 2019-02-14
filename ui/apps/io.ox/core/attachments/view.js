@@ -56,6 +56,7 @@ define('io.ox/core/attachments/view', [
             this.$header = $('<div class="header">');
             this.$list = $('<ul class="inline-items">');
             this.$preview = $('<ul class="inline-items preview">');
+            this.$footer = $('<footer>');
             this.isListRendered = false;
 
             // things to do whenever the collection changes:
@@ -93,7 +94,9 @@ define('io.ox/core/attachments/view', [
                     $('<button type="button" class="scroll-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
                     this.$preview,
                     $('<button type="button" class="scroll-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>')
-                )
+                ),
+                // footer
+                this.$footer
             );
 
             if (this.openByDefault) this.toggleDetails(true);
@@ -133,7 +136,7 @@ define('io.ox/core/attachments/view', [
             // use inner function cause we do this twice
             function render(list, target, mode) {
                 target.append(
-                    _(list).map(this.renderAttachment.bind(this, mode))
+                    list.map(this.renderAttachment.bind(this, mode))
                 );
             }
 
@@ -150,6 +153,7 @@ define('io.ox/core/attachments/view', [
 
         addAttachment: function (model) {
             if (!this.isListRendered) return;
+            if (!this.collection.isValidModel(model)) return;
             this.$list.append(this.renderAttachment('list', model));
             this.$preview.append(this.renderAttachment('preview', model));
         },
@@ -234,6 +238,11 @@ define('io.ox/core/attachments/view', [
             'keydown': 'onKeydown'
         },
 
+        initialize: function () {
+            this.listenTo(this.model, 'change:id', this.render);
+            this.$el.on('error.lazyload', this.fallback.bind(this));
+        },
+
         lazyload: function (previewUrl) {
             // use defer to make sure this view has already been added to the DOM
             _.defer(function () {
@@ -311,8 +320,10 @@ define('io.ox/core/attachments/view', [
 
             this.listenTo(this.model, {
                 'change:uploaded': function (model) {
-                    var w = model.get('uploaded') * this.$el.width();
-                    this.$('.progress').width(w);
+                    var w = model.get('uploaded') * 100;
+                    // special case. Has been reset to 0 and therefore needs to be rendered again
+                    if (w === 0) this.render();
+                    this.$('.progress').width(w + '%');
                 },
                 'change:file_size change:size': this.render,
                 'upload:complete': function () {
@@ -338,7 +349,7 @@ define('io.ox/core/attachments/view', [
                 $('<span class="file">'),
                 $('<span class="filesize">'),
                 // progress?
-                this.model.needsUpload() ? $('<div class="progress">') : $()
+                this.model.needsUpload() ? $('<div class="progress-container">').append($('<div class="progress">')) : $()
             );
 
             if (this.preview) this.preview.render();

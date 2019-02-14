@@ -89,31 +89,12 @@ define('io.ox/core/tk/contenteditable-editor', [
     });
 
     ext.point(POINT + '/setup').extend({
-        id: 'image-remove',
+        id: 'retrigger-change',
         index: INDEX += 100,
-        draw: (function () {
-            function getImageIds(content) {
-                // content can be just a string when e.g. pasting
-                var images = $('<div>' + content + '</div>').find('img');
-                return _(images.toArray()).chain().map(function (img) {
-                    return $(img).attr('id');
-                }).compact().value();
-            }
-            return function (ed) {
-                var oldsIds = [];
-                ed.on('BeforeSetContent change Focus Blur', function (e) {
-                    // use e.content for BeforeSetContent events
-                    // no events is important or the style nodes get the mce-bogus attribute. this causes the toolbar buttons to have the wrong state aver a couple of clicks, see Bug 59394
-                    var ids = getImageIds(e.content || ed.getContent({ no_events: true })),
-                        removed = _.difference(oldsIds, ids);
-                    removed.forEach(function (id) {
-                        var editorElement = $(ed.getElement());
-                        editorElement.trigger('removeInlineImage', id);
-                    });
-                    oldsIds = ids;
-                });
-            };
-        }())
+        draw: function (ed) {
+            ed.on('Change', this.trigger.bind(this, 'change'));
+            ed.on('keyup', _.throttle(this.trigger.bind(this, 'change'), 50));
+        }
     });
 
     /*
@@ -341,9 +322,11 @@ define('io.ox/core/tk/contenteditable-editor', [
 
     function Editor(el, opt) {
 
-        var $el, initialized = $.Deferred(), ed;
+        var $el, initialized = $.Deferred(), ed, self = this;
         var editor, editorId = el.data('editorId');
         var defaultStyle = mailUtil.getDefaultStyle();
+
+        _.extend(this, Backbone.Events);
 
         el.append(
             $el = $('<div class="contenteditable-editor">').attr('data-editor-id', editorId).on('keydown', function (e) { if (e.which === 27) e.preventDefault(); }).append(
@@ -361,7 +344,8 @@ define('io.ox/core/tk/contenteditable-editor', [
             toolbar3: '',
             plugins: 'autoresize autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
             theme: 'modern',
-            height: null
+            height: null,
+            imageLoader: null // is required to upload images. should have upload(file) and getUrl(response) methods
         }, opt);
 
         editor.addClass(opt.class);
@@ -460,7 +444,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             setup: function (ed) {
                 if (opt.oxContext) ed.oxContext = opt.oxContext;
-                ext.point(POINT + '/setup').invoke('draw', this, ed);
+                ext.point(POINT + '/setup').invoke('draw', self, ed);
                 ed.on('init', function () {
                     // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
                     $(fixed_toolbar).find('span.mce-txt').attr('tabindex', -1);
@@ -481,8 +465,9 @@ define('io.ox/core/tk/contenteditable-editor', [
                     });
 
                 });
+            },
 
-            }
+            oxImageLoader: opt.imageLoader
         };
 
         ext.point(POINT + '/options').invoke('config', options, opt.oxContext);
@@ -593,8 +578,8 @@ define('io.ox/core/tk/contenteditable-editor', [
                 return trimEnd(content);
             };
 
-        //special handling for alternative mode, send HTML to backend and it will create text/plain part of the mail automagically
-        this.content_type = opt.model && opt.model.get('preferredEditorMode') === 'alternative' ? 'ALTERNATIVE' : 'text/html';
+        // special handling for alternative mode, send HTML to backend and it will create text/plain part of the mail automagically
+        this.content_type = opt.config && opt.config.get('preferredEditorMode') === 'alternative' ? 'ALTERNATIVE' : 'text/html';
 
         // publish internal 'done'
         this.done = function (fn) {
@@ -702,9 +687,9 @@ define('io.ox/core/tk/contenteditable-editor', [
                 isForwardUnquoted = opt.view.model.get('mode') === 'forward' && mailSettings.get('forwardunquoted', false),
                 index = content.indexOf(isForwardUnquoted ? '----' : '<blockquote type="cite">');
             // special case: initially replied/forwarded text mail
-            if (content.substring(0, 15) === '<blockquote><div>') index = 0;
+            if (content.substring(0, 15) === '<blockquote type="cite"><div>') index = 0;
             // special case: switching between signatures in such a mail
-            if (content.substring(0, 23) === '<div><br></div><blockquote>') index = 0;
+            if (content.substring(0, 23) === '<div><br></div><blockquote type="cite">') index = 0;
             if (index < 0) return { content: content };
             return {
                 // content without trailing whitespace

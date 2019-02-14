@@ -89,7 +89,7 @@ define('io.ox/calendar/actions', [
                         return [rec.display_name, rec.mail];
                     })
                     .value();
-                ox.registry.call('mail-compose', 'compose', { to: recipients, subject: baton.data.summary });
+                ox.registry.call('mail-compose', 'open', { to: recipients, subject: baton.data.summary });
             });
         }
     });

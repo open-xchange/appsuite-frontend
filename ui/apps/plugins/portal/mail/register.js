@@ -76,7 +76,7 @@ define('plugins/portal/mail/register', [
                             }
                         })(),
                         $('<div class="date accent">').text(_.noI18n(received)),
-                        $('<div class="sender">').text(_.noI18n(util.getDisplayName(this.model.get('from')[0]))), $.txt(' ')
+                        $('<div class="sender">').text(_.noI18n(util.getDisplayName(this.model.get('from')))), $.txt(' ')
                     ),
                     $('<div class="row2">').append(
                         $('<div class="subject ellipsis">').text(subject),

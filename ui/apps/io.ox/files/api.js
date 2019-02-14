@@ -466,6 +466,10 @@ define('io.ox/files/api', [
 
         options = _.extend({ scaleType: 'contain' }, options);
 
+        if (file.space) {
+            return ox.apiRoot + '/mail/compose/' + file.space + '/attachments/' + file.id + '?session=' + ox.session;
+        }
+
         var url = '/files',
             folder = encodeURIComponent(file.folder_id),
             id = encodeURIComponent(file.id),

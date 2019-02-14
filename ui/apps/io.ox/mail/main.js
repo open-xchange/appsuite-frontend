@@ -15,6 +15,7 @@
 define('io.ox/mail/main', [
     'io.ox/mail/util',
     'io.ox/mail/api',
+    'io.ox/mail/compose/api',
     'io.ox/core/commons',
     'io.ox/mail/listview',
     'io.ox/core/tk/list-control',
@@ -45,7 +46,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings, coreSettings, certificateAPI, certUtils) {
+], function (util, api, composeAPI, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings, coreSettings, certificateAPI, certUtils) {
 
     'use strict';
 
@@ -1014,7 +1015,8 @@ define('io.ox/mail/main', [
                             isThread = this.collection.get(cid).get('threadSize') > 1;
 
                         if (isDraftFolder) {
-                            ox.registry.call('mail-compose', 'edit', _.cid(cid));
+                            var data = _.cid(cid);
+                            ox.registry.call('mail-compose', 'open', { type: 'copy', original: { folderId: data.folder_id, id: data.id } });
                         } else if (isThread) {
                             app.showThreadOverview(cid);
                             app.pages.changePage('threadView');
@@ -1729,9 +1731,11 @@ define('io.ox/mail/main', [
         },
 
         'save-draft': function (app) {
-            api.on('beforesend before:autosave', function (e, obj) {
-                if (!obj.data.msgref) return;
-                var cid = _.cid(util.parseMsgref(api.separator, obj.data.msgref)),
+            composeAPI.on('before:send before:save', function (id, data) {
+                var editFor = data.meta.editFor;
+                if (!editFor) return;
+
+                var cid = _.cid({ id: editFor.originalId, folder_id: editFor.originalFolderId }),
                     draftsId = account.getFoldersByType('drafts');
                 _(draftsId).each(function (id) {
                     _(api.pool.getByFolder(id)).each(function (collection) {
@@ -1739,11 +1743,12 @@ define('io.ox/mail/main', [
                     });
                 });
             });
-            api.on('autosave send', function () {
+            composeAPI.on('after:send after:save', function () {
                 var folder = app.folder.get();
                 if (account.is('drafts', folder)) app.listView.reload();
             });
         },
+
 
         'mail-progress': function () {
             if (_.device('smartphone')) return;
@@ -1765,7 +1770,7 @@ define('io.ox/mail/main', [
                                 )
                             )
                         );
-                    api.queue.collection.on('progress', function (data) {
+                    composeAPI.queue.collection.on('progress', function (data) {
                         if (!data.count) {
                             // Workaround for Safari flex layout issue (see bug 46496)
                             if (_.device('safari')) $el.closest('.window-sidepanel').find('.folder-tree')[0].scrollTop += 1;
@@ -1778,14 +1783,68 @@ define('io.ox/mail/main', [
                         $el.find('.progress-bar').css('width', pct + '%');
                         $el.find('.caption span').text(caption);
                         $el.find('[data-action="close"]').off();
-                        $el.find('[data-action="close"]').on('click', function () {
-                            if (_.isFunction(data.abort)) data.abort();
+                        $el.find('[data-action="close"]').on('click', function (e) {
+                            e.preventDefault();
+                            data.abort();
                         });
                         $el.show();
                     });
 
                     this.append($el);
                 }
+            });
+        },
+
+        'refresh-folders': function () {
+            var resetMailFolders = _.throttle(function () {
+                // reset collections and folder (to update total count)
+                var affectedFolders = _(['inbox', 'sent', 'drafts'])
+                    .chain()
+                    .map(function (type) {
+                        var folders = accountAPI.getFoldersByType(type);
+                        api.pool.resetFolder(folders);
+                        return folders;
+                    })
+                    .flatten()
+                    .value();
+                folderAPI.multiple(affectedFolders, { cache: false });
+                api.trigger('refresh.all');
+            }, 5000, { leading: false });
+
+            function refreshFolders(data, result) {
+                if (result.error) {
+                    return $.Deferred().reject(result).promise();
+                } else if (result.data) {
+                    var base = _(result.data.toString().split(api.separator)),
+                        id = base.last(),
+                        folder = base.without(id).join(api.separator);
+                    $.when(accountAPI.getUnifiedMailboxName(), accountAPI.getPrimaryAddress())
+                    .done(function (isUnified, senderAddress) {
+                        // check if mail was sent to self to update inbox counters correctly
+                        var sendToSelf = false;
+                        _.chain(_.union(data.to, data.cc, data.bcc)).each(function (item) {
+                            if (item[1] === senderAddress[1]) {
+                                sendToSelf = true;
+                                return;
+                            }
+                        });
+                        // wait a moment, then update folders as well
+                        setTimeout(function () {
+                            if (isUnified !== null) {
+                                folderAPI.refresh();
+                            } else if (sendToSelf) {
+                                folderAPI.reload(folder, accountAPI.getInbox());
+                            } else {
+                                folderAPI.reload(folder);
+                            }
+                        }, 5000);
+                    });
+                }
+            }
+
+            composeAPI.on('after:save after:send', function (data, result) {
+                resetMailFolders();
+                refreshFolders(data, result);
             });
         },
 
@@ -2066,7 +2125,7 @@ define('io.ox/mail/main', [
             find: capabilities.has('search')
         });
 
-        if (_.url.hash('mailto')) ox.registry.call('mail-compose', 'compose');
+        if (_.url.hash('mailto')) ox.registry.call('mail-compose', 'open');
 
         app.setWindow(win);
         app.settings = settings;

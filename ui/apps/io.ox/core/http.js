@@ -1065,6 +1065,17 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         },
 
         /**
+         * Send a PATCH request
+         * @param {Object} options Request options
+         * @param {string} options.module Module, e.g. folder, mail, calendar etc.
+         * @param {Object} options.params URL parameters
+         * @returns {Object} jQuery's Deferred
+         */
+        PATCH: function (options) {
+            return ajax(options, 'PATCH');
+        },
+
+        /**
          * Send a PUT request
          * @param {Object} options Request options
          * @param {string} options.module Module, e.g. folder, mail, calendar etc.

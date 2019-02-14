@@ -13,43 +13,58 @@
  */
 
 define('io.ox/mail/compose/actions/extensions', [
-    'io.ox/mail/actions/attachmentEmpty',
     'io.ox/mail/actions/attachmentQuota',
-    'settings!io.ox/mail',
+    'io.ox/mail/api',
+    'io.ox/mail/compose/api',
     'gettext!io.ox/mail'
-], function (attachmentEmpty, attachmentQuota, mailSettings, gt) {
+], function (attachmentQuota, mailAPI, composeAPI, gt) {
     'use strict';
 
     var api = {};
 
-    api.emptyAttachmentCheck = function (baton) {
-        return attachmentEmpty.emptinessCheck(baton.mail.files).then(_.identity, function () {
-            baton.stopPropagation();
-            throw arguments;
+    api.waitForPendingUploads = function (baton) {
+        var deferreds = baton.model.get('attachments')
+            .chain()
+            .map(function (model) {
+                if (model.get('uploaded') >= 1) return;
+                var def = new $.Deferred();
+                model.trigger('force:upload');
+                model.once('upload:complete', def.resolve);
+                return def;
+            })
+            .compact()
+            .value();
+        if (deferreds.length <= 0) return;
+        return $.when.apply($, deferreds).then(function () {
+            baton.view.syncMail();
         });
     };
 
-    api.waitForPendingImages = function (baton) {
-        if (!window.tinymce || !window.tinymce.activeEditor || !window.tinymce.activeEditor.plugins.oximage) return $.when();
+    api.removeUnusedInlineImages = function (baton) {
+        var inlineAttachments = baton.model.get('attachments').where({ contentDisposition: 'INLINE' }),
+            deferreds = _(inlineAttachments)
+                .chain()
+                .map(function (attachment) {
+                    var space = baton.model.get('id'),
+                        url = mailAPI.getUrl(_.extend({ space: space }, attachment), 'view').replace('?', '\\?');
+                    if (new RegExp('<img[^>]*src="' + url + '"[^>]*>').test(baton.model.get('content'))) return;
+                    if (new RegExp('<img[^>]*src="[^"]*' + attachment.get('id') + '"[^>]*>').test(baton.model.get('content'))) return;
 
-        var ids = $('img[data-pending="true"]', window.tinymce.activeEditor.getElement()).map(function () {
-                return $(this).attr('data-id');
-            }),
-            deferreds = window.tinymce.activeEditor.plugins.oximage.getPendingDeferreds(ids);
 
-        return $.when.apply($, deferreds).then(function () {
-            // use actual content since the image urls could have changed
-            baton.mail.attachments[0].content = baton.model.getMail().attachments[0].content;
-        });
+                    return composeAPI.space.attachments.remove(space, attachment.get('id'));
+                })
+                .compact()
+                .value();
+
+        return $.when.apply($, deferreds);
     };
 
     api.publishMailAttachments = function (baton) {
-        return attachmentQuota.publishMailAttachmentsNotification(baton.mail.files);
+        return attachmentQuota.publishMailAttachmentsNotification(baton.model.get('attachments').toJSON());
     };
 
     api.attachmentMissingCheck = function (baton) {
-
-        if (baton.mail.files || baton.mail.infostore_ids || (baton.mail.attachments && baton.mail.attachments.length > 1)) return;
+        if (baton.model.get('attachments').length >= 1) return;
 
         // Native language via gt
         //#. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.

@@ -47,8 +47,8 @@ define('io.ox/mail/actions', [
         requires: function () {
             return !isGuest();
         },
-        action: function (baton) {
-            ox.registry.call('mail-compose', 'compose', { folder_id: baton.app.folder.get() });
+        action: function () {
+            ox.registry.call('mail-compose', 'open');
         }
     });
 
@@ -61,39 +61,12 @@ define('io.ox/mail/actions', [
         }
     });
 
-    new Action('io.ox/mail/actions/inplace-reply', {
-        requires: function (e) {
-            // desktop only
-            if (!_.device('desktop')) return;
-            // feature toggle
-            if (!settings.get('features/inplaceReply', true)) return;
-            // must be top-level
-            if (!e.collection.has('toplevel', 'one')) return;
-            // get first mail
-            var data = e.baton.first();
-            // has sender? not a draft mail and not a decrypted mail
-            return util.hasFrom(data) && !isDraftMail(data) && !util.isDecrypted(data) && !isGuest();
-        },
-        action: function (baton) {
-
-            // also called by inplace-reply-recover extension
-            var cid = _.cid(baton.data),
-                // reply to all, so count, to, from, cc and bcc and subtract 1 (you don't sent the mail to yourself)
-                numberOfRecipients = _.union(baton.data.to, baton.data.from, baton.data.cc, baton.data.bcc).length - 1;
-
-            require(['io.ox/mail/inplace-reply'], function (quickreply) {
-                if (quickreply.reuse(cid)) return;
-                quickreply.getApp().launch({ cid: cid, from: baton.data.from, subject: baton.data.subject, numberOfRecipients: numberOfRecipients });
-            });
-        }
-    });
-
     function reply(mode) {
         return function (baton) {
             var data = baton.first();
             require(['io.ox/mail/compose/checks'], function (checks) {
                 checks.replyToMailingList(_.cid(data), mode, data).then(function (mode) {
-                    ox.registry.call('mail-compose', mode, data);
+                    ox.registry.call('mail-compose', 'open', { type: mode, original: { folderId: data.folder_id, id: data.id, security: data.security } });
                 });
             });
         };
@@ -147,7 +120,11 @@ define('io.ox/mail/actions', [
                 data = baton.first();
             }
 
-            ox.registry.call('mail-compose', 'forward', data);
+            data = [].concat(data).map(function (mail) {
+                return { id: mail.id, folderId: mail.folder_id, security: mail.security };
+            });
+
+            ox.registry.call('mail-compose', 'open', { type: 'forward', original: data });
         }
     });
 
@@ -166,15 +143,6 @@ define('io.ox/mail/actions', [
         return data && isDraftMail(data);
     };
 
-    var setEditorMode = function (settings, data) {
-        // Open Drafts in HTML mode if content type is html even if text-editor is default
-        if (data.content_type === 'text/html' && settings.get('messageFormat', 'html') === 'text') {
-            data.preferredEditorMode = 'html';
-            data.editorMode = 'html';
-        }
-        return data;
-    };
-
     new Action('io.ox/mail/actions/edit', {
         requires: validDraft,
         action: function (baton) {
@@ -186,9 +154,8 @@ define('io.ox/mail/actions', [
             // reuse open editor
             if (app) return app.launch();
 
-            require(['settings!io.ox/mail'], function (settings) {
-                data = setEditorMode(settings, data);
-                ox.registry.call('mail-compose', 'edit', data);
+            ox.registry.call('mail-compose', 'open', {
+                type: 'edit', original: { folderId: data.folder_id, id: data.id, security: data.security }
             });
         }
     });
@@ -196,20 +163,16 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/edit-copy', {
         requires: validDraft,
         action: function (baton) {
-            var data = _.extend({}, baton.first());
+            var data = baton.first();
 
-            api.copy(data, data.folder_id).done(function (list) {
-                api.refresh();
-                require(['settings!io.ox/mail'], function (settings) {
-                    data = setEditorMode(settings, _.extend(data, list[0]));
-                    ox.registry.call('mail-compose', 'edit', data).done(function (window) {
-                        var model = window.app.model;
-                        //#. If the user selects 'copy of' in the drafts folder, the subject of the email is prefixed with [Copy].
-                        //#. Please make sure that this is a prefix in every translation since it will be removed when the mail is sent.
-                        //#. %1$s the original subject of the mail
-                        model.set('subject', gt('[Copy] %1$s', model.get('subject')));
-                    });
-                });
+            ox.registry.call('mail-compose', 'open', {
+                type: 'copy', original: { folderId: data.folder_id, id: data.id }
+            }).done(function (window) {
+                var model = window.app.model;
+                //#. If the user selects 'copy of' in the drafts folder, the subject of the email is prefixed with [Copy].
+                //#. Please make sure that this is a prefix in every translation since it will be removed when the mail is sent.
+                //#. %1$s the original subject of the mail
+                model.set('subject', gt('[Copy] %1$s', model.get('subject')));
             });
         }
     });
@@ -595,7 +558,7 @@ define('io.ox/mail/actions', [
                             return addr[1];
                         });
 
-                        ox.registry.call('mail-compose', 'compose', { folder_id: data.folder_id, to: filtered });
+                        ox.registry.call('mail-compose', 'open', { to: filtered });
                     });
                 });
             });
@@ -634,18 +597,6 @@ define('io.ox/mail/actions', [
 
     // inline links
     var INDEX = 0;
-
-    // disabled quick reply for 7.10.0
-    /*ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: INDEX += 100,
-        prio: 'hi',
-        id: 'inplace-reply',
-        mobile: 'lo',
-        //#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
-        label: gt('Quick reply'),
-        ref: 'io.ox/mail/actions/inplace-reply',
-        section: 'standard'
-    }));*/
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,

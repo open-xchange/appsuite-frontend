@@ -362,6 +362,9 @@ Value `html` (default), `text` or `alternative`.
 <config>io.ox/mail//defaultSendAddress=`<string>`</config>
 Default sender address from available accounts. Default not set.
 
+<config>io.ox/mail//autoSaveAfter=`<number>`</config>
+Interval to update composition space during compose in milliseconds. Default: `15000` (15 seconds)
+
 <config>io.ox/mail//autoSaveDraftsAfter=`<string>`</config>
 Interval to safe drafts during compose. One of `disabled`, `1_minute`, `3_minutes`, `5_minutes` or `10_minutes`
 
@@ -391,6 +394,9 @@ Max size of returned characters for mail viewing in bytes. Default: `102400` (10
 <config>io.ox/mail//features/imageResize/enabled=`<bool>`</config>
 Feature toggle to enable resizing of images
 
+<config>io.ox/mail//features/imageResize/default=`<string>`</config>
+Feature toggle to enable resizing of images (default `320`)
+
 <config>io.ox/mail//features/imageResize/small=`<number>`</config>
 Size of the target image (longest edge) for a small image as integer (default `320`)
 
@@ -398,7 +404,7 @@ Size of the target image (longest edge) for a small image as integer (default `3
 Size of the target image (longest edge) for a medium image as integer (default `640`)
 
 <config>io.ox/mail//features/imageResize/large=`<number>`</config>
-Size of the target image (longest edge) for a large image as integer (default `1024`)
+Size of the target image (longest edge) for a large image as integer (default `1280`)
 
 <config>io.ox/mail//features/imageResize/quality=`<number>`</config>
 Quality for the compression while resizing as float (default `0.75`)

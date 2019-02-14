@@ -15,9 +15,9 @@ define('io.ox/mail/compose/actions/save', [
     'io.ox/core/extensions',
     'io.ox/mail/compose/actions/extensions',
     'io.ox/mail/api',
-    'io.ox/core/notifications',
-    'gettext!io.ox/mail'
-], function (ext, extensions, mailAPI, notifications, gt) {
+    'io.ox/mail/util',
+    'io.ox/core/notifications'
+], function (ext, extensions, mailAPI, mailUtil, notifications) {
 
     'use strict';
 
@@ -38,30 +38,30 @@ define('io.ox/mail/compose/actions/save', [
             }
         },
         {
-            id: 'check:attachment-empty',
+            id: 'wait-for-pending-uploads',
             index: 200,
-            perform: extensions.emptyAttachmentCheck
+            // important: does changes in 'content' in case of pending uploads
+            perform: extensions.waitForPendingUploads
         },
-        // Placeholder for Guard.  Guard actions for signature check at index 300
         {
-            id: 'wait-for-pending-images',
-            index: 400,
-            // important: replaces mail.attachments[0].content
-            perform: extensions.waitForPendingImages
+            id: 'remove-unused-inline-images',
+            index: 300,
+            perform: extensions.removeUnusedInlineImages
         },
         {
             id: 'check:attachment-publishmailattachments',
-            index: 500,
+            index: 400,
             perform: extensions.publishMailAttachments
         },
         {
             id: 'send',
             index: 1000,
             perform: function (baton) {
-                return mailAPI.send(baton.mail, baton.mail.files);
+                return baton.model.saveDraft().then(function (res) {
+                    baton.msgref = res.data;
+                });
             }
         },
-        // Placeholder for Guard auth check, index 1050
         {
             id: 'error',
             index: 1100,
@@ -77,8 +77,8 @@ define('io.ox/mail/compose/actions/save', [
             id: 'reload',
             index: 1200,
             perform: function (baton) {
-                var opt = baton.view.parseMsgref(baton.resultData);
-                switch (baton.mail.attachments[0].content_type) {
+                var opt = mailUtil.parseMsgref(mailAPI.separator, baton.msgref);
+                switch (baton.model.get('contentType')) {
                     case 'text/plain':
                         opt.view = 'raw';
                         break;
@@ -90,10 +90,9 @@ define('io.ox/mail/compose/actions/save', [
                         break;
                 }
 
-                return $.when(
-                    baton.resultData,
-                    mailAPI.get(opt)
-                );
+                return mailAPI.get(opt).then(function (data) {
+                    baton.mail = data;
+                });
             }
         },
         {
@@ -105,49 +104,6 @@ define('io.ox/mail/compose/actions/save', [
                     baton.stopPropagation();
                     return new $.Deferred().reject(baton.error);
                 }
-            }
-        },
-        {
-            id: 'replace',
-            index: 2000,
-            perform: function (baton) {
-                // Replace inline images in contenteditable with links from draft response
-                if (baton.model.get('editorMode') === 'html') {
-                    $('<div>').html(baton.newData.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
-                        var $el = $(el);
-                        $('img:not(.emoji):eq(' + index + ')', baton.view.editorContainer.find('.editable')).attr({
-                            src: $el.attr('src'),
-                            id: $el.attr('id')
-                        });
-                    });
-                }
-                var encrypted = baton.newData.security_info && baton.newData.security_info.encrypted;
-                if (!encrypted) {  // Don't update attachments for encrypted files
-                    baton.newData.attachments.forEach(function (a, index) {
-                        var m = baton.model.get('attachments').at(index);
-                        if (typeof m === 'undefined') {
-                            if (a.content_type !== 'application/pgp-signature') { // Don't add signature files
-                                baton.model.get('attachments').add(a);
-                            }
-                        } else if (m.id !== a.id) {
-                            // add correct group so previews work
-                            if (a.id && !m.id && m.get('group')) a.group = 'mail';
-                            m.clear({ silent: true });
-                            m.set(a);
-                        }
-                    });
-                }
-
-                baton.model.set('msgref', baton.resultData);
-                baton.model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT);
-                baton.model.set('autosavedAsDraft', false);
-                baton.model.dirty(baton.model.previous('sendtype') !== mailAPI.SENDTYPE.EDIT_DRAFT);
-                //#. %1$s is the time, the draft was saved
-                //#, c-format
-                baton.view.inlineYell(gt('Draft saved at %1$s', moment().format('LT')));
-                // make model not dirty after save
-                baton.view.model.dirty(false);
-                return baton.resultData;
             }
         }
     );
