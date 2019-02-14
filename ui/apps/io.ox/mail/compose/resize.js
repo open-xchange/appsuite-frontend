@@ -70,7 +70,6 @@ define('io.ox/mail/compose/resize', [
         matches: (function () {
             var reType = /^image\/(jpg|jpeg|png)/i,
                 minDimension = settings.get('features/imageResize/imageSizeThreshold', 1024),
-                minSize = settings.get('features/imageResize/fileSizeThreshold', 0),
                 maxSize = settings.get('features/imageResize/fileSizeMax', 10 * 1024 * 1024);
 
             return function (aspect, file, options) {
@@ -84,7 +83,7 @@ define('io.ox/mail/compose/resize', [
                     case 'type':
                         return reType.test(file.type);
                     case 'size':
-                        return minSize <= file.size && file.size <= maxSize;
+                        return file.size <= maxSize;
                     case 'dimensions':
                         // prevent upscaling
                         if (opt.target && opt.target >= fileMaxDimension) return false;

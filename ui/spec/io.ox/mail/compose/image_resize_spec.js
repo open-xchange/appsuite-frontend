@@ -15,8 +15,7 @@ define(['io.ox/mail/compose/resize', 'settings!io.ox/mail'], function (imageResi
 
     'use strict';
 
-    var minSize = settings.get('features/imageResize/fileSizeThreshold', 0),
-        maxSize = settings.get('features/imageResize/maxSize', 10 * 1024 * 1024),
+    var maxSize = settings.get('features/imageResize/maxSize', 10 * 1024 * 1024),
         minDimension = settings.get('features/imageResize/imageSizeThreshold', 1024);
 
     function getMockFile(obj) {
@@ -24,8 +23,8 @@ define(['io.ox/mail/compose/resize', 'settings!io.ox/mail'], function (imageResi
             type: obj.type || 'image/jpg',
             size: obj.size || maxSize - 1,
             _dimensions: {
-                width: obj.width || minSize + 1,
-                height: obj.height || minSize + 1
+                width: obj.width || 1024 + 1,
+                height: obj.height || 1024 + 1
             }
         };
     }
@@ -59,7 +58,6 @@ define(['io.ox/mail/compose/resize', 'settings!io.ox/mail'], function (imageResi
 
             it('should be false for images within the thresholds', function () {
                 var file = getMockFile({
-                    size: minSize,
                     width: minDimension,
                     height: minDimension
                 });
@@ -67,7 +65,6 @@ define(['io.ox/mail/compose/resize', 'settings!io.ox/mail'], function (imageResi
             });
             it('should be true for images with too big width', function () {
                 var file = getMockFile({
-                    size: minSize,
                     width: minDimension + 1,
                     height: minDimension
                 });
@@ -75,7 +72,6 @@ define(['io.ox/mail/compose/resize', 'settings!io.ox/mail'], function (imageResi
             });
             it('should be true for images with too big height', function () {
                 var file = getMockFile({
-                    size: minSize,
                     width: minDimension,
                     height: minDimension + 1
                 });
@@ -118,12 +114,8 @@ define(['io.ox/mail/compose/resize', 'settings!io.ox/mail'], function (imageResi
             });
 
             describe('size criteria properly', function () {
-                it('for small files', function () {
-                    expect(imageResize.matches('size', getMockFile({ size: minSize - 1 }))).to.be.false;
-                });
                 it('for medium files', function () {
-                    expect(imageResize.matches('size', getMockFile({ size: minSize }))).to.be.true;
-                    expect(imageResize.matches('size', getMockFile({ size: minSize + 1 }))).to.be.true;
+                    expect(imageResize.matches('size', getMockFile({ size: maxSize / 2 }))).to.be.true;
                     expect(imageResize.matches('size', getMockFile({ size: maxSize }))).to.be.true;
                 });
                 it('for large files', function () {
