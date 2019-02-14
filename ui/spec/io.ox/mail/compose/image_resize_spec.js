@@ -15,7 +15,7 @@ define(['io.ox/mail/compose/resize', 'settings!io.ox/mail'], function (imageResi
 
     'use strict';
 
-    var minSize = settings.get('features/imageResize/fileSizeThreshold', 1024 * 1024),
+    var minSize = settings.get('features/imageResize/fileSizeThreshold', 0),
         maxSize = settings.get('features/imageResize/maxSize', 10 * 1024 * 1024),
         minDimension = settings.get('features/imageResize/imageSizeThreshold', 1024);
 
