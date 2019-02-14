@@ -375,13 +375,6 @@ define('io.ox/core/main/stages', [
             return def;
         }
     }, {
-        id: 'tracker',
-        index: 800,
-        run: function () {
-            // load tracker, will check settings on it's own
-            require(['io.ox/core/tracker/main']);
-        }
-    }, {
         id: 'ready',
         index: 1000000000000,
         run: function () {
