@@ -329,8 +329,15 @@ define('io.ox/calendar/main', [
                 indent: false,
                 module: 'calendar'
             });
+
+            var cb = function () {
+                if (app.getWindow().currentPerspective !== 'month') {
+                    ox.ui.Perspective.show(app, 'month');
+                }
+            };
+
             // initialize folder view
-            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month' });
+            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month', respondCallback: cb });
             page.append(tree.render().$el);
             app.treeView = tree;
         },
