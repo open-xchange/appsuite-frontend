@@ -55,7 +55,7 @@ define('io.ox/settings/main', [
             _.extend(this, {
                 'virtual/settings/io.ox/vacation': 'ox.appsuite.user.sect.email.send.vacationnotice.html',
                 'virtual/settings/io.ox/autoforward': 'ox.appsuite.user.sect.email.send.autoforward.html',
-                'virtual/settings/io.ox/core': 'ox.appsuite.user.sect.firststeps.globalsettings.html',
+                'virtual/settings/io.ox/core': 'ox.appsuite.user.sect.settings.globalsettings.html',
                 'virtual/settings/io.ox/settings/accounts': 'ox.appsuite.user.sect.dataorganisation.accounts.html',
                 'virtual/settings/security': 'ox.appsuite.user.sect.dataorganisation.security.html',
                 'virtual/settings/sessions': 'ox.appsuite.user.sect.dataorganisation.security.sessions.html',
@@ -71,7 +71,7 @@ define('io.ox/settings/main', [
                 'virtual/settings/io.ox/tasks': 'ox.appsuite.user.sect.tasks.settings.html',
                 'virtual/settings/io.ox/office': 'ox.documents.user.sect.text.settings.html',
                 'virtual/settings/io.ox/core/sub': 'ox.appsuite.user.sect.dataorganisation.subscribe.html',
-                'virtual/settings/io.ox/core/downloads': 'ox.appsuite.user.sect.firststeps.clients.html',
+                'virtual/settings/io.ox/core/downloads': 'ox.appsuite.user.sect.settings.clients.html',
                 'virtual/settings/administration/groups': 'ox.appsuite.user.sect.calendar.groups.html',
                 'virtual/settings/administration/resources': 'ox.appsuite.user.sect.calendar.resources.html'
             });
