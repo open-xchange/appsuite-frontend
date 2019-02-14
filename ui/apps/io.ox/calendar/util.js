@@ -430,7 +430,7 @@ define('io.ox/calendar/util', [
             }
 
             function getTitle(data) {
-                return that.getTimeInterval(data, moment().tz()) + ' ' + moment().zoneAbbr();
+                return that.getTimeInterval(data, that.getMoment(data.startDate).tz()) + ' ' + that.getMoment(data.startDate).zoneAbbr();
             }
 
             function addA11ySupport(parent) {
