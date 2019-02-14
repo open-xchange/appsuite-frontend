@@ -232,8 +232,7 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     // check size validation
     I.seeElement('li[data-test-id="2"] .row.has-error');
     I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"][disabled]');
-
-    I.fillField('[data-test-id="2"] input[name="size"]', 'sdsds');
+    I.fillField('[data-test-id="2"] input[name="sizeValue"]', 'sdsds');
 
     // check size validation
     I.seeElement('li[data-test-id="2"] .row.has-error');
@@ -247,7 +246,7 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.seeElement('li[data-test-id="2"] .row.has-error');
     I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"][disabled]');
 
-    I.fillField('[data-test-id="2"] input[name="size"]', '22MB');
+    I.fillField('[data-test-id="2"] input[name="sizeValue"]', '22');
 
     // check size validation
     I.dontSeeElement('li[data-test-id="2"] .row.has-error');
@@ -407,6 +406,87 @@ Scenario('adds and removes Mail Filter Rules with modified config', function (I,
     I.seeElement('li[data-test-id="1"] input[name="values"]:disabled');
 
     I.click('Cancel');
+
+    I.logout();
+});
+
+Scenario('checks if the size test is correctly displayed', function (I) {
+
+    I.haveMailFilterRule({ rulename: 'rule with size b', active: true, flags: [], test: { id: 'size', comparison: 'over', size: '20' }, actioncmds: [{ id: 'keep' }, { id: 'stop' }] });
+    I.haveMailFilterRule({ rulename: 'rule with size kb', active: true, flags: [], test: { id: 'size', comparison: 'over', size: '20K' }, actioncmds: [{ id: 'keep' }, { id: 'stop' }] });
+    I.haveMailFilterRule({ rulename: 'rule with size mb', active: true, flags: [], test: { id: 'size', comparison: 'over', size: '20M' }, actioncmds: [{ id: 'keep' }, { id: 'stop' }] });
+    I.haveMailFilterRule({ rulename: 'rule with size gb', active: true, flags: [], test: { id: 'size', comparison: 'over', size: '1G' }, actioncmds: [{ id: 'keep' }, { id: 'stop' }] });
+
+    I.login('app=io.ox/settings');
+    I.waitForVisible('.io-ox-settings-main');
+    I.selectFolder('Mail');
+    I.waitForVisible('.rightside h1');
+
+    I.selectFolder('Filter Rules');
+    I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mailfilter-settings h1');
+    I.see('Mail Filter Rules');
+
+    I.seeElement('.io-ox-mailfilter-settings li[data-id="0"] [data-action="edit"]');
+
+    I.click('Edit', '.io-ox-mailfilter-settings li[data-id="0"]');
+    I.waitForElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] input[name="rulename"]', 'rule with size b');
+
+    I.see('Size', 'li[data-test-id="0"] .list-title');
+
+    I.see('Is bigger than', 'li[data-test-id="0"] :not(.no-padding-left) .dropdownlink span');
+    I.seeInField('[data-test-id="0"] input[name="sizeValue"]', '20');
+    I.see('B', 'li[data-test-id="0"] .no-padding-left .dropdownlink span');
+    I.dontSeeCheckboxIsChecked('Process subsequent rules');
+
+    I.click('Cancel', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+    I.waitForDetached('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+
+    I.seeElement('.io-ox-mailfilter-settings li[data-id="1"] [data-action="edit"]');
+
+    I.click('Edit', '.io-ox-mailfilter-settings li[data-id="1"]');
+    I.waitForElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] input[name="rulename"]', 'rule with size kb');
+
+    I.see('Is bigger than', 'li[data-test-id="0"] :not(.no-padding-left) .dropdownlink span');
+    I.seeInField('[data-test-id="0"] input[name="sizeValue"]', '20');
+    I.see('KB', 'li[data-test-id="0"] .no-padding-left .dropdownlink span');
+    I.dontSeeCheckboxIsChecked('Process subsequent rules');
+
+    I.click('Cancel', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+    I.waitForDetached('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+
+    I.seeElement('.io-ox-mailfilter-settings li[data-id="2"] [data-action="edit"]');
+
+    I.click('Edit', '.io-ox-mailfilter-settings li[data-id="2"]');
+    I.waitForElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] input[name="rulename"]', 'rule with size mb');
+
+    I.see('Size', 'li[data-test-id="0"] .list-title');
+
+    I.see('Is bigger than', 'li[data-test-id="0"] :not(.no-padding-left) .dropdownlink span');
+    I.seeInField('[data-test-id="0"] input[name="sizeValue"]', '20');
+    I.see('MB', 'li[data-test-id="0"] .no-padding-left .dropdownlink span');
+    I.dontSeeCheckboxIsChecked('Process subsequent rules');
+
+    I.click('Cancel', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+    I.waitForDetached('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+
+    I.seeElement('.io-ox-mailfilter-settings li[data-id="3"] [data-action="edit"]');
+
+    I.click('Edit', '.io-ox-mailfilter-settings li[data-id="3"]');
+    I.waitForElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] input[name="rulename"]', 'rule with size gb');
+
+    I.see('Size', 'li[data-test-id="0"] .list-title');
+
+    I.see('Is bigger than', 'li[data-test-id="0"] :not(.no-padding-left) .dropdownlink span');
+    I.seeInField('[data-test-id="0"] input[name="sizeValue"]', '1');
+    I.see('GB', 'li[data-test-id="0"] .no-padding-left .dropdownlink span');
+    I.dontSeeCheckboxIsChecked('Process subsequent rules');
+
+    I.click('Cancel', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+    I.waitForDetached('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
 
     I.logout();
 });

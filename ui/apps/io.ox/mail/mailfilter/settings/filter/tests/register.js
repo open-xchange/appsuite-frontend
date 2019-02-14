@@ -943,21 +943,59 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
                     var inputId = _.uniqueId('size_'),
                         sizeValues = {
-                            'over': gt('Is bigger than (Size: B/KB/MB/GB)'),
-                            'under': gt('Is smaller than (Size: B/KB/MB/GB)')
+                            'over': gt('Is bigger than'),
+                            'under': gt('Is smaller than')
                         }, li;
 
+                    var unitValues = {
+                        'B': 'B',
+                        'K': 'KB',
+                        'M': 'MB',
+                        'G': 'GB'
+                    };
+
+                    var splits = cmodel.get('size').split(''),
+                        number = '',
+                        unit = '',
+                        stop = false;
+
+                    _.each(splits, function (val) {
+                        if (/^[0-9]+$/.test(val) && !stop) {
+                            number = number + val;
+                        } else {
+                            stop = true;
+                            unit = unit + val;
+                        }
+                    });
+
+                    cmodel.set('unit', unit || 'B', { silent: true });
+                    cmodel.set('sizeValue', number, { silent: true });
+
+                    cmodel.on('change:sizeValue change:unit', function () {
+                        this.set('size', this.get('sizeValue') + this.get('unit'));
+                    });
+
                     this.append(
-                        li = util.drawCondition({
-                            conditionKey: conditionKey,
-                            inputId: inputId,
-                            title: baton.view.conditionsTranslation.size,
-                            dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, sizeValues) },
-                            inputLabel: baton.view.conditionsTranslation.size + ' ' + sizeValues[cmodel.get('comparison')],
-                            inputOptions: { name: 'size', model: cmodel, className: 'form-control', id: inputId },
-                            errorView: true,
-                            addClass: addClass
-                        })
+                        li = $('<li>').addClass('filter-settings-view row ' + addClass).attr({ 'data-test-id': conditionKey }).append(
+                            $('<div>').addClass('col-sm-3 singleline').append(
+                                $('<span>').addClass('list-title').text(baton.view.conditionsTranslation[condition.id])
+                            ),
+                            $('<div>').addClass('col-sm-9').append(
+                                $('<div>').addClass('row').append(
+                                    $('<div>').addClass('col-sm-7').append(
+                                        new util.DropdownLinkView({ name: 'comparison', model: cmodel, values: filterValues(condition.id, sizeValues) }).render().$el
+                                    ),
+                                    $('<div class="col-sm-4">').append(
+                                        new util.Input({ name: 'sizeValue', model: cmodel, className: 'form-control', id: inputId }).render().$el
+                                    ),
+                                    $('<div>').addClass('col-sm-1 no-padding-left').append(
+                                        new mini.DropdownLinkView({ name: 'unit', model: cmodel, values: unitValues }).render().$el,
+                                        new mini.ErrorView({ selector: '.row' }).render().$el
+                                    )
+                                )
+                            ),
+                            util.drawDeleteButton('test')
+                        )
                     );
 
                     util.handleUnsupportedComparisonValues({
