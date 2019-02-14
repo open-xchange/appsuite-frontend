@@ -627,7 +627,7 @@ define('io.ox/files/main', [
                             app: app
                         });
 
-                        var toolbar = new ToolbarView({ point: 'io.ox/files/toolbar/links', title: app.getTitle() });
+                        var toolbar = new ToolbarView({ point: 'io.ox/files/toolbar/links', title: app.getTitle(), strict: false });
 
                         app.getWindow().nodes.body.prepend(
                             app.myFavoritesListViewControl.render().$el
@@ -635,14 +635,14 @@ define('io.ox/files/main', [
                                 .prepend(toolbar.$el)
                         );
 
-                        app.updateMyFavoritesToolbar = function (selection) {
+                        app.updateMyFavoritesToolbar = _.debounce(function (selection) {
                             toolbar.setSelection(selection.map(_.cid), function () {
                                 var options = this.getContextualData(selection, 'favorites');
                                 options.folder_id = null;
                                 options.favorite = true;
                                 return options;
                             }.bind(this));
-                        };
+                        }, 10);
 
                         app.updateMyFavoritesToolbar([]);
 
