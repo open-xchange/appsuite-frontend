@@ -76,3 +76,46 @@ Scenario('Mail - Modal Dialog - Vacation notice (with exceptions)', async (I) =>
 
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
 });
+
+Scenario('Mail - Modal Dialog - Add mail account', async (I) => {
+    I.login('app=io.ox/mail');
+    I.waitForElement('.mail-detail-pane');
+    I.selectFolder('Inbox');
+    I.click('Add mail account');
+    I.waitForText('Your mail address');
+
+    expect(await I.grabAxeReport()).to.be.accessible;
+});
+
+Scenario('Mail - Modal Dialog - New folder (with exceptions)', async (I) => {
+    // Exceptions:
+    // Input has no visibel label (critical)
+    const excludes = { exclude: [['*[placeholder="New folder"]']] };
+
+    I.login('app=io.ox/mail');
+    I.waitForElement('.mail-detail-pane');
+    I.waitForText('Inbox');
+    I.click('*[title="Actions for Inbox"]');
+    I.waitForText('Add new folder');
+    I.click('Add new folder');
+    I.waitForElement('h1.modal-title');
+
+    expect(await I.grabAxeReport(excludes)).to.be.accessible;
+});
+
+Scenario('Mail - Modal Dialog - Permissions (with exceptions)', async (I) => {
+    // Exceptions:
+    // Typeahead missing label (critical)
+    // Personal message textarea has a missing label (critical)
+    const excludes = { exclude: [['.tt-hint'], ['.tt-input'], ['.message-text']] };
+
+    I.login('app=io.ox/mail');
+    I.waitForElement('.mail-detail-pane');
+    I.waitForText('Inbox');
+    I.click('*[title="Actions for Inbox"]');
+    I.waitForText('Permissions');
+    I.click('Permissions');
+    I.waitForElement('h1.modal-title');
+
+    expect(await I.grabAxeReport(excludes)).to.be.accessible;
+});
