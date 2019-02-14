@@ -23,11 +23,11 @@ define('io.ox/core/tk/dialogs', [
 
     // scaffolds
     function getUnderlay() {
-        return $('<div class="abs io-ox-dialog-underlay" tabindex="-1">').hide();
+        return $('<div class="modal-backdrop in" aria-hidden="true">').hide();
     }
 
     function getPopup() {
-        return $('<div class="io-ox-dialog-popup" tabindex="-1" role="dialog" aria-labelledby="dialog-title">').hide()
+        return $('<div class="io-ox-dialog-popup" role="dialog" aria-labelledby="dialog-title">').hide()
             .append(
                 $('<div role="document">').append(
                     $('<div class="modal-header" id="dialog-title">'),
@@ -236,7 +236,7 @@ define('io.ox/core/tk/dialogs', [
         // append all elements
         o.container.append(
             nodes.wrapper
-                .append(nodes.underlay, nodes.popup)
+                .append(nodes.popup, nodes.underlay)
         );
 
         _(['header', 'body', 'footer']).each(function (part) {
@@ -620,7 +620,7 @@ define('io.ox/core/tk/dialogs', [
 
         if (popups.length === 0) return;
         //check if we are inside a floating-window, amodal dialog or pressed a button in the footer (footer buttons usually close the dialog so check with .io-ox-dialog-popup would fail)
-        if (target.closest('.io-ox-dialog-popup, .io-ox-dialog-underlay, .modal-footer, .floating-window').length > 0) return;
+        if (target.closest('.io-ox-dialog-popup, .modal-backdrop.in, .modal-footer, .floating-window').length > 0) return;
         // see bug 41822
         if (target.closest('.io-ox-dialog-sidepopup-toggle').length > 0) return;
 
