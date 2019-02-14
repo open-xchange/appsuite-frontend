@@ -13,9 +13,39 @@
 
 const { expect } = require('chai');
 
+Scenario('Mail - Vertical view w/o mail', async (I) => {
+    I.login('app=io.ox/mail');
+    I.waitForElement('.mail-detail-pane');
+
+    expect(await I.grabAxeReport()).to.be.accessible;
+});
+
+Scenario('Mail - Compact view w/o mail', async (I) => {
+    I.login('app=io.ox/mail');
+    I.waitForElement('.mail-detail-pane');
+
+    I.clickToolbar('View');
+    I.click('Compact');
+
+    expect(await I.grabAxeReport()).to.be.accessible;
+});
+
+Scenario('Mail - Horizontal view w/o mail', async (I) => {
+    I.login('app=io.ox/mail');
+    I.waitForElement('.mail-detail-pane');
+
+    I.clickToolbar('View');
+    I.click('Horizontal');
+
+    expect(await I.grabAxeReport()).to.be.accessible;
+});
+
 Scenario('Mail - List view w/o mail', async (I) => {
     I.login('app=io.ox/mail');
     I.waitForElement('.mail-detail-pane');
+
+    I.clickToolbar('View');
+    I.click('List');
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
@@ -29,6 +59,20 @@ Scenario('Mail - Compose window (with exceptions)', async (I) => {
     I.waitForElement('.mail-detail-pane');
     I.clickToolbar('Compose');
     I.waitForElement('.mce-tinymce');
+
+    expect(await I.grabAxeReport(excludes)).to.be.accessible;
+});
+
+Scenario('Mail - Modal Dialog - Vacation notice (with exceptions)', async (I) => {
+    // Exceptions:
+    // Checkbox has no visibel label (critical)
+    const excludes = { exclude: [['.checkbox.switch.large']] };
+
+    I.login('app=io.ox/mail');
+    I.waitForElement('.mail-detail-pane');
+    I.clickToolbar('View');
+    I.click('Vacation notice');
+    I.waitForElement('h1.modal-title');
 
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
 });
