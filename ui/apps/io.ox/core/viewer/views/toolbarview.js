@@ -564,13 +564,13 @@ define('io.ox/core/viewer/views/toolbarview', [
             // listen to autoplay events
             this.listenTo(this.viewerEvents, 'viewer:autoplay:state:changed', this.onAutoplayRunningStateChanged);
             // listen to added/removed favorites
-            this.listenTo(FilesAPI, 'favorite:add favorite:remove', _.debounce(this.onFavoritesChange.bind(this), 10));
+            this.listenTo(FilesAPI, 'favorite:add favorite:remove', this.onFavoritesChange);
             // give toolbar a standalone class if its in one
             this.$el.toggleClass('standalone', this.standalone);
             // the current autoplay state
             this.autoplayStarted = false;
 
-            this.toolbar = new ToolbarView({ el: this.el, align: 'right' });
+            this.toolbar = new ToolbarView({ el: this.el, align: 'right', strict: false });
         },
 
         /**
@@ -683,7 +683,7 @@ define('io.ox/core/viewer/views/toolbarview', [
          */
         onFavoritesChange: function (file) {
             if (file.id === _.cid(this.model.toJSON())) {
-                this.forceUpdateToolbar();
+                this.updateToolbar();
             }
         },
 
@@ -696,7 +696,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             if (!state) { return; }
 
             this.autoplayStarted = state.autoplayStarted;
-            this.forceUpdateToolbar();
+            this.updateToolbar();
         },
 
         /**
@@ -753,7 +753,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         /**
          * Update inner toolbar.
          */
-        updateToolbar: function () {
+        updateToolbar: _.debounce(function () {
             if (!this.model) { return; }
 
             var isDriveFile = this.model.isFile();
@@ -770,15 +770,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                         openedBy: this.openedBy
                     };
                 }.bind(this));
-        },
-
-        /**
-         * Force update of inner toolbar.
-         */
-        forceUpdateToolbar: function () {
-            this.toolbar.selection = null;
-            this.updateToolbar();
-        },
+        }, 10),
 
         /**
          * Renders the document page navigation controls.
