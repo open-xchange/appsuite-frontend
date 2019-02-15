@@ -655,7 +655,7 @@ define('io.ox/mail/compose/extensions', [
                 resizeView.render().$el
             );
 
-            attachmentView.listenTo(attachmentView.collection, 'add remove reset', update);
+            attachmentView.listenTo(attachmentView.collection, 'add remove reset', _.debounce(update, 0));
             update();
 
             function update() {

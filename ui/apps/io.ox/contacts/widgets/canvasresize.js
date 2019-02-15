@@ -24,7 +24,7 @@
  *
  */
 
-define('io.ox/contacts/widgets/canvasresize', ['io.ox/contacts/widgets/exif'], function (exifread) {
+define('io.ox/contacts/widgets/canvasresize', ['io.ox/core/tk/image-util'], function (imageUtil) {
 
     'use strict';
 
@@ -239,84 +239,75 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/contacts/widgets/exif'], f
             var $this = this;
             var file = this.file;
 
-            var reader = new FileReader();
-            reader.onloadend = function (e) {
-                var dataURL = e.target.result;
-                var exif = exifread.getOrientation(dataURL);
+            return imageUtil.getImageFromFile(file, true).then(function (img) {
 
-                var img = new Image();
-                img.onload = function () {
+                var orientation = img.exif || 1;
+                orientation = methods.rotate(orientation, $this.options.rotate);
 
-                    var orientation = exif || 1;
-                    orientation = methods.rotate(orientation, $this.options.rotate);
+                // CW or CCW ? replace width and height
+                var size = (orientation >= 5 && orientation <= 8) ?
+                    methods.newsize(img.height, img.width, $this.options.width, $this.options.height, $this.options.crop) :
+                    methods.newsize(img.width, img.height, $this.options.width, $this.options.height, $this.options.crop);
 
-                    // CW or CCW ? replace width and height
-                    var size = (orientation >= 5 && orientation <= 8) ?
-                        methods.newsize(img.height, img.width, $this.options.width, $this.options.height, $this.options.crop) :
-                        methods.newsize(img.width, img.height, $this.options.width, $this.options.height, $this.options.crop);
+                var iw = img.width, ih = img.height;
+                var width = size.width, height = size.height;
 
-                    var iw = img.width, ih = img.height;
-                    var width = size.width, height = size.height;
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+                ctx.save();
+                methods.transformCoordinate(canvas, width, height, orientation);
 
-                    var canvas = document.createElement('canvas');
-                    var ctx = canvas.getContext('2d');
-                    ctx.save();
-                    methods.transformCoordinate(canvas, width, height, orientation);
-
-                    // over image size
-                    // only for safari
-                    if (_.device('safari') && methods.detectSubsampling(img)) {
-                        iw /= 2;
-                        ih /= 2;
+                // over image size
+                // only for safari
+                if (_.device('safari') && methods.detectSubsampling(img)) {
+                    iw /= 2;
+                    ih /= 2;
+                }
+                // size of tiling canvas
+                var d = 1024;
+                var tmpCanvas = document.createElement('canvas');
+                tmpCanvas.width = tmpCanvas.height = d;
+                var tmpCtx = tmpCanvas.getContext('2d');
+                var vertSquashRatio = methods.detectVerticalSquash(img, iw, ih);
+                var sy = 0;
+                while (sy < ih) {
+                    var sh = sy + d > ih ? ih - sy : d;
+                    var sx = 0;
+                    while (sx < iw) {
+                        var sw = sx + d > iw ? iw - sx : d;
+                        tmpCtx.clearRect(0, 0, d, d);
+                        tmpCtx.drawImage(img, -sx, -sy);
+                        var dx = Math.floor(sx * width / iw);
+                        var dw = Math.ceil(sw * width / iw);
+                        var dy = Math.floor(sy * height / ih / vertSquashRatio);
+                        var dh = Math.ceil(sh * height / ih / vertSquashRatio);
+                        ctx.drawImage(tmpCanvas, 0, 0, sw, sh, dx, dy, dw, dh);
+                        sx += d;
                     }
-                    // size of tiling canvas
-                    var d = 1024;
-                    var tmpCanvas = document.createElement('canvas');
-                    tmpCanvas.width = tmpCanvas.height = d;
-                    var tmpCtx = tmpCanvas.getContext('2d');
-                    var vertSquashRatio = methods.detectVerticalSquash(img, iw, ih);
-                    var sy = 0;
-                    while (sy < ih) {
-                        var sh = sy + d > ih ? ih - sy : d;
-                        var sx = 0;
-                        while (sx < iw) {
-                            var sw = sx + d > iw ? iw - sx : d;
-                            tmpCtx.clearRect(0, 0, d, d);
-                            tmpCtx.drawImage(img, -sx, -sy);
-                            var dx = Math.floor(sx * width / iw);
-                            var dw = Math.ceil(sw * width / iw);
-                            var dy = Math.floor(sy * height / ih / vertSquashRatio);
-                            var dh = Math.ceil(sh * height / ih / vertSquashRatio);
-                            ctx.drawImage(tmpCanvas, 0, 0, sw, sh, dx, dy, dw, dh);
-                            sx += d;
-                        }
-                        sy += d;
-                    }
-                    ctx.restore();
-                    tmpCanvas = tmpCtx = null;
+                    sy += d;
+                }
+                ctx.restore();
+                tmpCanvas = tmpCtx = null;
 
-                    // if rotated width and height data replacing issue
-                    var newcanvas = document.createElement('canvas');
-                    newcanvas.width = size.cropped === 'h' ? height : width;
-                    newcanvas.height = size.cropped === 'w' ? width : height;
-                    var x = size.cropped === 'h' ? (height - width) * 0.5 : 0;
-                    var y = size.cropped === 'w' ? (width - height) * 0.5 : 0;
-                    var newctx = newcanvas.getContext('2d');
-                    newctx.drawImage(canvas, x, y, width, height);
+                // if rotated width and height data replacing issue
+                var newcanvas = document.createElement('canvas');
+                newcanvas.width = size.cropped === 'h' ? height : width;
+                newcanvas.height = size.cropped === 'w' ? width : height;
+                var x = size.cropped === 'h' ? (height - width) * 0.5 : 0;
+                var y = size.cropped === 'w' ? (width - height) * 0.5 : 0;
+                var newctx = newcanvas.getContext('2d');
+                newctx.drawImage(canvas, x, y, width, height);
 
-                    var data;
-                    if (file.type === 'image/png') {
-                        data = newcanvas.toDataURL(file.type);
-                    } else {
-                        data = newcanvas.toDataURL('image/jpeg', ($this.options.quality * 0.01));
-                    }
+                var data;
+                if (file.type === 'image/png') {
+                    data = newcanvas.toDataURL(file.type);
+                } else {
+                    data = newcanvas.toDataURL('image/jpeg', ($this.options.quality * 0.01));
+                }
 
-                    $this.options.callback(data, newcanvas.width, newcanvas.height, newcanvas);
+                $this.options.callback(data, newcanvas.width, newcanvas.height, newcanvas);
 
-                };
-                img.src = dataURL;
-            };
-            reader.readAsDataURL(file);
+            });
         }
     };
 

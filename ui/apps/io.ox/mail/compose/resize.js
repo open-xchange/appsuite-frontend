@@ -13,29 +13,18 @@
 
 define('io.ox/mail/compose/resize', [
     'io.ox/contacts/widgets/canvasresize',
+    'io.ox/core/tk/image-util',
     'settings!io.ox/mail'
-], function (canvasResize, settings) {
+], function (canvasResize, imageUtil, settings) {
 
     'use strict';
 
     var api = {
 
         getDimensions: function (file) {
-            var def = $.Deferred(),
-                fileReader = new FileReader(),
-                img = new Image();
-
-            fileReader.onload = function () {
-                img.onload = function () {
-                    def.resolve({ width: img.width, height: img.height });
-                };
-                img.src = fileReader.result;
-            };
-
-            fileReader.onerror = def.reject;
-
-            fileReader.readAsDataURL(file);
-            return def.promise();
+            return imageUtil.getImageFromFile(file, true).then(function (img) {
+                return { width: img.width, height: img.height };
+            });
         },
 
         addDimensionsProperty: function (file) {
