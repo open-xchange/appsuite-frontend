@@ -613,14 +613,24 @@ define('io.ox/core/commons', [
             };
         }()),
 
-        help: function () {
+        help: function (baton) {
             if (_.device('smartphone')) return;
+
             var helpView = new HelpView({
-                href: 'ox.appsuite.user.sect.dataorganisation.folder.html'
+                href: getLink(baton && baton.app && baton.app.id)
             });
             this.find('.generic-toolbar.bottom').append(
                 helpView.render().$el
             );
+
+            function getLink(id) {
+                if (id === 'io.ox/mail') return 'ox.appsuite.user.sect.email.gui.foldertree.html';
+                if (id === 'io.ox/files') return 'ox.appsuite.user.sect.drive.gui.foldertree.html';
+                if (id === 'io.ox/contacts') return 'ox.appsuite.user.sect.contacts.gui.foldertree.html';
+                if (id === 'io.ox/calendar') return 'ox.appsuite.user.sect.calendar.gui.foldertree.html';
+                if (id === 'io.ox/tasks') return 'ox.appsuite.user.sect.tasks.gui.foldertree.html';
+                return 'ox.appsuite.user.sect.dataorganisation.folder.html';
+            }
         },
 
         mediateFolderView: function (app) {
