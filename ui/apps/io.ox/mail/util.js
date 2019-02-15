@@ -592,7 +592,9 @@ define('io.ox/mail/util', [
             whitelist = _.compact(whitelist);
             address = (address || '').trim().toLowerCase();
             return _.some(whitelist, function (whitelisted) {
-                return address.endsWith(whitelisted.trim());
+                // do not use endsWith because of IE11
+                var escaped = whitelisted.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                return address.match(new RegExp(escaped + '$'));
             });
         },
 
