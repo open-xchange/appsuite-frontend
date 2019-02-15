@@ -331,6 +331,7 @@ define('io.ox/mail/compose/extensions', [
                             msisdn: true,
                             emailAutoComplete: true
                         },
+                        keepInComposeWindow: true,
                         maxResults: settings.get('compose/autocompleteDrawLimit', 30),
                         placeholder: tokenfieldTranslations[attr], // for a11y and easy access for custom dev when they want to display placeholders (these are made transparent via less)
                         ariaLabel: tokenfieldTranslations['aria' + attr]

@@ -265,6 +265,16 @@ define('io.ox/core/tk/typeahead', [
                 }
             });
 
+            if (this.options.keepInComposeWindow) {
+                _.extend(dropdown, {
+                    _show: function () {
+                        this.$menu.css({ left: 0, display: 'block' });
+                        // correct position to prevent the dropdown from showing up outside the borders
+                        this.$menu.css('left', Math.min(0, (this.$menu.closest('.io-ox-mail-compose').offset().left + this.$menu.closest('.io-ox-mail-compose').outerWidth()) - (this.$menu.offset().left + this.$menu.outerWidth() + 15)));
+                    }
+                });
+            }
+
             dropdown.$menu.off('mouseenter.tt mouseleave.tt')
                 .on('mouseenter.tt mousemove.tt', '.tt-suggestion', dropdown._onSuggestionMouseEnter.bind(dropdown))
                 .on('mouseleave.tt', '.tt-suggestion', dropdown._onSuggestionMouseLeave.bind(dropdown));
