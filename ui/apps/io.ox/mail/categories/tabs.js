@@ -14,11 +14,11 @@
 define('io.ox/mail/categories/tabs', [
     'io.ox/mail/categories/api',
     'io.ox/mail/api',
+    'io.ox/backbone/mini-views/help',
     'io.ox/core/yell',
     'io.ox/core/tk/list-dnd',
-    'io.ox/core/a11y',
     'gettext!io.ox/mail'
-], function (api, mailAPI, yell, dnd, a11y, gt) {
+], function (api, mailAPI, HelpView, yell, dnd, gt) {
 
     'use strict';
 
@@ -84,10 +84,20 @@ define('io.ox/mail/categories/tabs', [
                     .toggleClass('selected', model.get('id') === current)
                     .attr({ 'data-id': model.get('id') });
                 }),
-                $('<li class="free-space" aria-hidden="true">')
+                $('<li class="free-space" aria-hidden="true">'),
+                this.getHelpViewIcon()
+
             );
             this.$el.find('li:first > button').removeAttr('tabindex');
             return this;
+        },
+
+        getHelpViewIcon: function () {
+            return $('<li class="help" aria-hidden="true">').append(
+                new HelpView({
+                    href: 'ox.appsuite.user.sect.email.manage.categories.html'
+                }).render().$el
+            );
         },
 
         onChangeTab: function (e) {
