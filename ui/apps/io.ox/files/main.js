@@ -1350,6 +1350,9 @@ define('io.ox/files/main', [
 
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
+                var folder = this.folder.get() || this.treeView.selection.get() || '';
+                if (folder.match(/^virtual\/myshares$/)) return 'ox.appsuite.user.sect.dataorganisation.sharing.drive.html';
+                if (folder.match(/^maildrive:\/\/0/)) return 'ox.appsuite.user.sect.drive.view.attachments.html';
                 return 'ox.appsuite.user.sect.drive.gui.html';
             };
         },
