@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-02-13 10:33+0100\n"
+"PO-Revision-Date: 2019-02-15 14:05+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -42,8 +42,6 @@ msgid "Audio"
 msgstr "Audio"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js
 msgid "Mail"
 msgstr "Mail"
 
@@ -841,13 +839,12 @@ msgstr "Herunterladen"
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
-#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/actions/delete.js module:io.ox/mail
+#: apps/io.ox/mail/actions/reminder.js apps/io.ox/mail/categories/edit.js
 #: apps/io.ox/mail/compose/actions/extensions.js
 #: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
+#: apps/io.ox/mail/compose/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
@@ -926,7 +923,6 @@ msgstr "Intervall"
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/notifications.js module:io.ox/core
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#: apps/io.ox/mail/settings/compose/settings/pane.js
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "Never"
 msgstr "Nie"
@@ -1208,6 +1204,11 @@ msgstr "Standard-Erinnerung"
 
 #: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
 #: apps/io.ox/calendar/settings/pane.js
+msgid "Default reminder for appointments in birthday calendar"
+msgstr "Standarderinnerung für Termine im Geburtstagskalender"
+
+#: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js
 msgid "Default reminder for all-day appointments"
 msgstr "Standarderinnerung für Ganztagestermine"
 
@@ -1473,8 +1474,7 @@ msgstr "Termin erstellen"
 #: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/compose/names.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
@@ -2217,10 +2217,6 @@ msgstr "Arbeitswochenlänge"
 #: apps/io.ox/calendar/toolbar.js
 msgid "New appointment"
 msgstr "Neuer Termin"
-
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Default reminder for appointments in birthday calendar"
-msgstr "Standarderinnerung für Termine im Geburtstagskalender"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Mark all day appointments as free"
@@ -5623,14 +5619,12 @@ msgid "Time-dependent"
 msgstr "Zeitabhängig"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-#: apps/io.ox/settings/security/settings/pane.js
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 Minuten"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-#: apps/io.ox/settings/security/settings/pane.js
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 Minuten"
 
@@ -8136,8 +8130,7 @@ msgid "Mail has been copied"
 msgstr "E-Mail wurde kopiert"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
-#: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
-#: module:plugins/portal
+#: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Reply"
 msgstr "Antworten"
 
@@ -8192,7 +8185,6 @@ msgstr "Zum Importieren der E-Mail hier ablegen"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
-#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/compose/view.js
 #: apps/io.ox/mail/util.js module:io.ox/core
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #: apps/plugins/portal/mail/register.js module:plugins/portal
@@ -8203,18 +8195,6 @@ msgstr "Kein Betreff"
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 msgid "This mail has been added to the portal"
 msgstr "Diese E-Mail wurde dem Portal hinzugefügt"
-
-#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
-msgid ""
-"You attached an empty file. It could be, that this file has been deleted on "
-"your hard drive. Send it anyway?"
-msgstr ""
-"Sie haben eine leere Datei angehängt. Diese Datei wurde möglicherweise von "
-"Ihrer Festplatte gelöscht. Wollen Sie sie dennoch versenden? "
-
-#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
-msgid "Yes, with empty attachment"
-msgstr "Ja, mit leerem Anhang"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -8579,13 +8559,6 @@ msgstr ""
 "Sie haben \"%s\" in Ihrer E-Mail erwähnt, aber es sind keine Dateien "
 "angehängt."
 
-#. %1$s is the time, the draft was saved
-#: apps/io.ox/mail/compose/actions/save.js module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js
-#, c-format
-msgid "Draft saved at %1$s"
-msgstr "Entwurf gespeichert um %1$s"
-
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "Die E-Mail hat keinen Empfänger."
@@ -8601,6 +8574,10 @@ msgstr "Ja, ohne Betreff senden"
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Add subject"
 msgstr "Betreff hinzufügen"
+
+#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
+msgid "error"
+msgstr "Fehler"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The sending of the message has been canceled."
@@ -8686,35 +8663,22 @@ msgstr ""
 "Name wird nicht verwendet."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js
 msgid "Show carbon copy input field"
 msgstr "Cc-Eingabefeld anzeigen"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js
 msgid "Show blind carbon copy input field"
 msgstr "Bcc-Eingabefeld anzeigen"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
-msgid "Signatures"
-msgstr "Signaturen"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
-msgid "No signature"
-msgstr "Keine Signatur"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Manage signatures"
-msgstr "Signaturen verwalten"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Drop attachments here"
 msgstr "Anhänge hier ablegen"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Image size:"
-msgstr "Bildgröße:"
+msgid "Mail size: %1$s"
+msgstr "E-Mail-Größe: %1$s"
 
 #. %s is a list of filenames separeted by commas
 #. it is used by screenreaders to indicate which files are currently added to the list of attachments
@@ -8745,11 +8709,60 @@ msgstr "Einfügen"
 msgid "Please select a valid image File to insert"
 msgstr "Wählen Sie bitte eine gültige Bild-Datei zum Einfügen."
 
+#. %s is the product name
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Sent from %s via mobile"
+msgstr "Gesendet von %s mit Mobilgerät"
+
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
 #: apps/io.ox/mail/settings/compose/register.js apps/io.ox/mail/toolbar.js
 msgid "Compose"
 msgstr "Verfassen"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid ""
+"The mail draft could not be found on the server. It was sent or deleted in "
+"the meantime."
+msgstr ""
+"Der E-Mail-Entwurf konnte nicht auf dem Server gefunden werden. Er wurde "
+"zwischenzeitlich verschickt oder gelöscht."
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "You cannot open more than %1$s drafts at the same time."
+msgstr "Sie können nicht mehr als %1$s Entwürfe gleichzeitig öffnen."
+
+#. %1$s A date
+#. %2$s An email address
+#. Example: On January 8, 2019 2:23 PM richard@open-xchange.com wrote:
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#, fuzzy
+msgid "On %1$s %2$s wrote:"
+msgstr "%3$s hat am %1$s geschrieben:"
+
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+msgid "---------- Original Message ----------"
+msgstr ""
+
+#. %1$s An email address
+#. Example: From: richard@open-xchange.com
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+msgid "From: %1$s"
+msgstr "Von: %1$s"
+
+#. %1$s An email address or a comma separated list of mail addresses
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+msgid "To: %1$s"
+msgstr "An: %1$s"
+
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+msgid "Date: %1$s"
+msgstr "Datum: %1$s"
+
+#. %1$s The subject of an email
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+msgid "Subject: %1$s"
+msgstr "Betreff: %1$s"
 
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
@@ -8774,42 +8787,45 @@ msgstr ""
 msgid "Edit real names"
 msgstr "Realnamen bearbeiten"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
+msgid "Image size"
+msgstr "Bildgröße"
+
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
+msgid ""
+"The image cannot not be resized because it was not found on your hard drive."
+msgstr ""
+"Die Bildgröße kann nicht verändert werden, da das Bild nicht auf Ihrer "
+"Festplatte gefunden wurde."
+
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
+msgid "Small (%1$s px)"
+msgstr "Klein (%1$s px)"
+
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
+msgid "Medium (%1$s px)"
+msgstr "Mittel (%1$s px)"
+
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
+msgid "Large (%1$s px)"
+msgstr "Groß (%1$s px)"
+
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
 msgid "Original"
 msgstr "Original"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
 msgid "Small"
 msgstr "Klein"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
 msgstr "Mittel"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
 msgid "Large"
 msgstr "Groß"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-msgid "Image size"
-msgstr "Bildgröße"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-msgid "Small (%1$s px)"
-msgstr "Klein (%1$s px)"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-msgid "Medium (%1$s px)"
-msgstr "Mittel (%1$s px)"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-msgid "Large (%1$s px)"
-msgstr "Groß (%1$s px)"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-msgid "Mail size:"
-msgstr "E-Mail-Größe:"
 
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d month"
@@ -8873,10 +8889,20 @@ msgstr "%1$s verwenden"
 msgid "%1$s options"
 msgstr "%1$s-Optionen"
 
-#. %s is the product name
 #: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
-msgid "Sent from %s via mobile"
-msgstr "Gesendet von %s mit Mobilgerät"
+#: apps/io.ox/mail/settings/signatures/register.js
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+msgid "Signatures"
+msgstr "Signaturen"
+
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+msgid "No signature"
+msgstr "Keine Signatur"
+
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
+msgid "Manage signatures"
+msgstr "Signaturen verwalten"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Plain Text"
@@ -8920,26 +8946,8 @@ msgid "Request read receipt"
 msgstr "Lesebestätigung anfordern"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-#: apps/io.ox/mail/detail/mobileView.js apps/io.ox/mail/detail/view.js
-msgid "This message has been truncated due to size limitations."
-msgstr "Diese Nachricht wurde wegen Größenbeschränkungen abgeschnitten."
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Loading the full mail might lead to performance problems."
-msgstr ""
-"Das Laden der vollständigen E-Mail könnte zu Performance-Problemen führen."
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Continue"
-msgstr "Fortfahren"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Load full mail"
-msgstr "Komplette E-Mail laden"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Add original message as attachment"
-msgstr "Ursprüngliche Nachricht als Anhang hinzufügen"
+msgid "Couldn't load editor"
+msgstr "Editor konnte nicht geladen werden"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -8975,8 +8983,14 @@ msgid "[Copy] "
 msgstr "[Kopie] "
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Couldn't load editor"
-msgstr "Editor konnte nicht geladen werden"
+#, fuzzy
+msgid "Hide carbon copy input field"
+msgstr "Cc-Eingabefeld ausblenden"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+msgid "Hide blind carbon copy input field"
+msgstr "Bcc-Eingabefeld anzeigen ausblenden"
 
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/contextmenu.js module:io.ox/mail apps/io.ox/mail/toolbar.js
@@ -9021,6 +9035,11 @@ msgstr "Link"
 
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
 #: apps/io.ox/mail/detail/view.js
+msgid "This message has been truncated due to size limitations."
+msgstr "Diese Nachricht wurde wegen Größenbeschränkungen abgeschnitten."
+
+#: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js
 msgid "Show entire message"
 msgstr "Gesamte Nachricht anzeigen"
 
@@ -9055,14 +9074,6 @@ msgstr "E-Mail wurde importiert"
 #: apps/io.ox/mail/import.js module:io.ox/mail
 msgid "Drop EML file here for import"
 msgstr "Zum Importieren EML-Datei hier ablegen"
-
-#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
-msgid "Reply to all"
-msgstr "Allen antworten"
-
-#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
-msgid "Quick reply: %1$s"
-msgstr "Schnellantwort: %1$s"
 
 #: apps/io.ox/mail/listview.js module:io.ox/mail
 msgid "Error: Failed to load messages"
@@ -9877,14 +9888,6 @@ msgid "HTML and plain text"
 msgstr "HTML und Text"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "1 minute"
-msgstr "1 Minute"
-
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "3 minutes"
-msgstr "3 Minuten"
-
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Use browser default"
 msgstr "Browser-Standard verwenden"
 
@@ -9924,10 +9927,6 @@ msgstr "Ursprünglichen E-Mail-Text in Antwort zitieren"
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Confirm recipients when replying to a mailing list"
 msgstr "Empfänger beim Antworten an eine Mailingliste bestätigen"
-
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "Auto-save email drafts"
-msgstr "E-Mail-Entwürfe automatisch speichern"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Default sender address"
@@ -12754,6 +12753,53 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid ""
+#~ "You attached an empty file. It could be, that this file has been deleted "
+#~ "on your hard drive. Send it anyway?"
+#~ msgstr ""
+#~ "Sie haben eine leere Datei angehängt. Diese Datei wurde möglicherweise "
+#~ "von Ihrer Festplatte gelöscht. Wollen Sie sie dennoch versenden? "
+
+#~ msgid "Yes, with empty attachment"
+#~ msgstr "Ja, mit leerem Anhang"
+
+#~ msgid "Draft saved at %1$s"
+#~ msgstr "Entwurf gespeichert um %1$s"
+
+#~ msgid "Image size:"
+#~ msgstr "Bildgröße:"
+
+#~ msgid "Mail size:"
+#~ msgstr "E-Mail-Größe:"
+
+#~ msgid "Loading the full mail might lead to performance problems."
+#~ msgstr ""
+#~ "Das Laden der vollständigen E-Mail könnte zu Performance-Problemen führen."
+
+#~ msgid "Continue"
+#~ msgstr "Fortfahren"
+
+#~ msgid "Load full mail"
+#~ msgstr "Komplette E-Mail laden"
+
+#~ msgid "Add original message as attachment"
+#~ msgstr "Ursprüngliche Nachricht als Anhang hinzufügen"
+
+#~ msgid "Reply to all"
+#~ msgstr "Allen antworten"
+
+#~ msgid "Quick reply: %1$s"
+#~ msgstr "Schnellantwort: %1$s"
+
+#~ msgid "1 minute"
+#~ msgstr "1 Minute"
+
+#~ msgid "3 minutes"
+#~ msgstr "3 Minuten"
+
+#~ msgid "Auto-save email drafts"
+#~ msgstr "E-Mail-Entwürfe automatisch speichern"
 
 #~ msgid "All file versions older than 1 day will be deleted after next login"
 #~ msgid_plural ""
