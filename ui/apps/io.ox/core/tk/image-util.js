@@ -31,8 +31,6 @@ define('io.ox/core/tk/image-util', [
             script = _(args).invoke('toString').join('\n') + '\n' + 'self.onmessage = ' + onMessage.toString(),
             blob;
 
-        console.log(script);
-
         try {
             blob = new Blob([script], { type: 'application/javascript' });
         } catch (e) {
@@ -93,26 +91,47 @@ define('io.ox/core/tk/image-util', [
                 });
             }
 
-            var worker = new PromiseWorker(getImage, readFile);
+            var worker = new PromiseWorker(getImage, readFile),
+                cache = [];
 
             return function getImageFromFile(file, exif) {
-                if (!exif && self.createImageBitmap) return worker.invoke('getImage', file);
-
-                return worker.invoke('readFile', file).then(function (result) {
-                    if (exif) exif = exifread.getOrientation(result);
-
-                    if (self.createImageBitmap) return worker.invoke('getImage', file);
-
-                    var def = new $.Deferred();
-                    getImageFallback(result, function (error, size) {
-                        if (error) def.reject(error);
-                        def.resolve(size);
-                    });
-                    return def;
-                }).then(function (img) {
-                    if (exif) img.exif = exif;
-                    return img;
+                var promise = _(cache).find(function (obj) {
+                    if (obj.file !== file) return;
+                    if (exif && !obj.exif) return;
+                    return true;
                 });
+
+                // early exit if image is in cache
+                if (promise) return promise.promise;
+
+                if (!exif && self.createImageBitmap) {
+                    promise = worker.invoke('getImage', file);
+                } else {
+                    promise = worker.invoke('readFile', file).then(function (result) {
+                        if (exif) exif = exifread.getOrientation(result);
+
+                        if (self.createImageBitmap) return worker.invoke('getImage', file);
+
+                        var def = new $.Deferred();
+                        getImageFallback(result, function (error, size) {
+                            if (error) def.reject(error);
+                            def.resolve(size);
+                        });
+                        return def;
+                    }).then(function (img) {
+                        if (exif) img.exif = exif;
+                        return img;
+                    });
+                }
+
+                // store in cache for 10 seconds
+                var obj = { file: file, exif: exif, promise: promise };
+                _.delay(function () {
+                    cache = _(cache).without(obj);
+                }, 10000);
+                cache.push(obj);
+
+                return promise;
             };
 
         }())
