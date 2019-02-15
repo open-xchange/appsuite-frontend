@@ -191,7 +191,7 @@ define('io.ox/mail/compose/main', [
             win.nodes.main.find('.tokenfield').css('padding-right', 14 + win.nodes.main.find('.recipient-actions').width() + win.nodes.main.find('[data-extension-id="to"] .has-picker').length * 20);
             // Set window and toolbars visible again
             win.nodes.header.removeClass('sr-only');
-            win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0);
+            win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0).trigger('scroll');
             win.idle();
             $(window).trigger('resize');  // Needed for proper initial resizing in editors
             win.setTitle(this.model.get('subject') || gt('Compose'));

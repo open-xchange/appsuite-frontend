@@ -796,8 +796,8 @@ define('io.ox/core/tk/contenteditable-editor', [
         (function () {
             if (_.device('smartphone')) return;
             var scrollPane = opt.scrollpane || opt.app && opt.app.getWindowNode(),
-                fixed = false,
-                top = 14;
+                composeFields = scrollPane.find('.mail-compose-fields'),
+                fixed = false;
 
             // keep fixed toolbar in window, when window is dragged
             if (opt.app && opt.app.get('floating') && opt.app.get('window').floating) {
@@ -809,24 +809,13 @@ define('io.ox/core/tk/contenteditable-editor', [
             }
 
             scrollPane.on('scroll', function () {
-                if (scrollPane.scrollTop() - scrollPane.find('.mail-compose-fields').height() > top) {
-                    // toolbar leaves viewport
-                    if (!fixed) {
-                        fixed = true;
-                        $(fixed_toolbar).css('top', opt.view.$el.parent().offset().top);
-                        $el.find('.mce-edit-area').css('margin-top', 40);
-                        $(window).trigger('resize.tinymce');
-                    }
-                    //editor.css('margin-top', $(fixed_toolbar).height());
-                } else if (fixed) {
-                    fixed = false;
-                    $(fixed_toolbar).css('top', 0);
-                    //editor.css('margin-top', 0);
-                    $el.find('.mce-edit-area').css('margin-top', 0);
-                }
+                var scrollTop = scrollPane.scrollTop() || 0;
+                fixed = scrollTop > (composeFields.height() + 14);
+                $(fixed_toolbar).css('top', fixed ? opt.view.$el.parent().offset().top : 0);
+                composeFields.css('margin-bottom', fixed ? 40 : 0);
                 $el.toggleClass('toolbar-fixed', fixed);
             });
-            scrollPane.on('scroll', _.debounce(function () { $('body').click(); }, 1000, true));
+
         }());
 
         this.destroy = function () {
