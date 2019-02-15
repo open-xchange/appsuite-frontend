@@ -127,7 +127,7 @@ define('io.ox/core/folder/util', [
                 if (data) id = data.id !== undefined ? data.id : data;
                 return account.isUnifiedFolder(id);
             case 'external':
-                return (/^default[1-9]/).test(String(data.id)) && !is('unifiedmail', data);
+                return (/^(default[1-9]|\w+:\/\/)/).test(String(data.id)) && !is('unifiedmail', data);
             case 'defaultfolder':
                 // standardfolders of external accounts are not in the settings, so use account api first
                 if (account.getType(data.id)) return true;
@@ -184,6 +184,9 @@ define('io.ox/core/folder/util', [
 
     function canMove(folder, target) {
 
+        // if the target folder is not known, check effectively reduces to 'remove:folder'
+        // except for external folders which can be removed but never "moved" elsewhere
+        if (_.isEmpty(target) && !is('external', folder)) return can('remove:folder', folder);
         // new target?
         if (folder.folder_id === target.id) return false;
         // Prevent moving into folder itself
