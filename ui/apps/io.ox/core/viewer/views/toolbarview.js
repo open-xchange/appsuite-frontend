@@ -18,11 +18,12 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/actions/util',
     'io.ox/files/api',
+    'io.ox/backbone/mini-views/helplink',
     'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
     'gettext!io.ox/core'
-], function (Dropdown, DisposableView, ToolbarView, Ext, actionsUtil, FilesAPI, DocConverterUtils, Util, Settings, gt) {
+], function (Dropdown, DisposableView, ToolbarView, Ext, actionsUtil, FilesAPI, HelpView, DocConverterUtils, Util, Settings, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -170,6 +171,18 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: TOOLBAR_ACTION_ID + '/popoutstandalone',
                 customize: function () {
                     this.addClass('viewer-toolbar-popoutstandalone');
+                }
+            },
+            'help': {
+                prio: 'hi',
+                icon: 'fa fa-question-circle',
+                title: gt('Help'),
+                ref: TOOLBAR_ACTION_ID + '/help',
+                customize: function () {
+                    var helpView = new HelpView({
+                        href: 'ox.appsuite.user.sect.drive.gui.viewer.html'
+                    });
+                    this.replaceWith(helpView.render().$el);
                 }
             },
             'close': {
@@ -463,6 +476,13 @@ define('io.ox/core/viewer/views/toolbarview', [
             var fileModel = baton.model.isFile() ? baton.model : { file: baton.data };
             ox.launch('io.ox/files/detail/main', fileModel);
         }
+    });
+
+    new Action(TOOLBAR_ACTION_ID + '/help', {
+        capabilities: 'infostore',
+        device: '!smartphone',
+        // handled by HelpView
+        action: $.noop
     });
 
     // tested: no
