@@ -17,10 +17,11 @@ define('io.ox/core/commons', [
     'gettext!io.ox/core',
     'io.ox/core/folder/api',
     'io.ox/core/api/account',
+    'io.ox/backbone/mini-views/help',
     'settings!io.ox/core',
     'io.ox/backbone/mini-views/upsell',
     'io.ox/core/capabilities'
-], function (ext, links, gt, folderAPI, accountAPI, coreSettings, UpsellView, capabilities) {
+], function (ext, links, gt, folderAPI, accountAPI, HelpView, coreSettings, UpsellView, capabilities) {
 
     'use strict';
 
@@ -612,6 +613,16 @@ define('io.ox/core/commons', [
             };
         }()),
 
+        help: function () {
+            if (_.device('smartphone')) return;
+            var helpView = new HelpView({
+                href: 'ox.appsuite.user.sect.dataorganisation.folder.html'
+            });
+            this.find('.generic-toolbar.bottom').append(
+                helpView.render().$el
+            );
+        },
+
         mediateFolderView: function (app) {
             function toggleFolderView(e) {
                 e.data.app.folderView.toggle(e.data.state);
@@ -658,6 +669,12 @@ define('io.ox/core/commons', [
                 }
             });
 
+            ext.point(app.get('name') + '/sidepanel').extend({
+                id: 'help',
+                index: 1100,
+                draw: commons.help
+            });
+
             app.on({
                 'folderview:open': onFolderViewOpen.bind(null, app),
                 'folderview:close': onFolderViewClose.bind(null, app)
@@ -694,6 +711,13 @@ define('io.ox/core/commons', [
                     );
                 }
             });
+
+            ext.point(app.get('name') + '/sidepanel').extend({
+                id: 'help',
+                index: 1100,
+                draw: commons.help
+            });
+
         },
 
         addPremiumFeatures: function (app, opt) {

@@ -371,6 +371,12 @@ define('io.ox/mail/view-options', [
     });
 
     ext.point('io.ox/mail/sidepanel').extend({
+        id: 'help',
+        index: 1100,
+        draw: commons.help
+    });
+
+    ext.point('io.ox/mail/sidepanel').extend({
         id: 'premium-area',
         index: 10000,
         draw: function (baton) {
