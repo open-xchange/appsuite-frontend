@@ -453,6 +453,7 @@ define('io.ox/files/main', [
 
         'getContextualData': function (app) {
             // get data required for toolbars and context menus
+            // selection is array of cids
             app.getContextualData = function (selection, type) {
                 // todo: check where and whether collection and allIds are needed
                 var options = { folder_id: app.folder.get(), app: app, allIds: [] };
@@ -937,24 +938,20 @@ define('io.ox/files/main', [
             app.listView.$el.on(ev, '.file-type-folder .list-item-content', function (e) {
                 // simple id check for folders, prevents errors if folder id contains '.'
                 var id = $(e.currentTarget).parent().attr('data-cid').replace(/^folder./, '');
-
                 app.folder.set(id);
             });
 
             app.listView.$el.on(ev, '.list-item:not(.file-type-folder) .list-item-content', function (e) {
                 var cid = $(e.currentTarget).parent().attr('data-cid'),
-                    selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
-                    baton = ext.Baton({ data: selectedModel[0], all: app.listView.collection, app: app, options: { eventname: 'selection-doubleclick' } });
-                // Tested: false
+                    baton = ext.Baton(app.getContextualData([cid]));
                 actionsUtil.invoke('io.ox/files/actions/default', baton);
             });
         },
 
-        //open on pressing enter / space
+        // open on pressing enter / space
         'selection-enter': function (app) {
-            if (_.device('smartphone')) {
-                return;
-            }
+
+            if (_.device('smartphone')) return;
 
             // folders
             app.listView.$el.on('keydown', '.file-type-folder', function (e) {
@@ -962,7 +959,6 @@ define('io.ox/files/main', [
                     e.preventDefault();
                     // simple id check for folders, prevents errors if folder id contains '.'
                     var id = $(e.currentTarget).attr('data-cid').replace(/^folder./, '');
-
                     app.listView.once('collection:load', function () {
                         app.listView.selection.select(0);
                     });
@@ -972,14 +968,10 @@ define('io.ox/files/main', [
 
             // files
             app.listView.$el.on('keydown', '.list-item:not(.file-type-folder)', function (e) {
-                if (/13|32/.test(e.which)) {
-                    e.preventDefault();
-                    var cid = app.listView.selection.get()[0],
-                        selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
-                        baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app, options: { eventname: 'selection-enter' } });
-                    // Tested: false
-                    actionsUtil.invoke('io.ox/files/actions/default', baton);
-                }
+                if (!/13|32/.test(e.which)) return;
+                e.preventDefault();
+                var baton = ext.Baton(app.getContextualData(app.listView.selection.get()));
+                actionsUtil.invoke('io.ox/files/actions/default', baton);
             });
         },
 
@@ -1587,27 +1579,14 @@ define('io.ox/files/main', [
 
         commons.wirePerspectiveEvents(app);
 
-        win.nodes.outer.on('selection:drop', function (e, baton) {
-            // convert composite keys to objects
-            baton.data = _(baton.data).map(function (item) {
-
-                // simple id check for folders, prevents errors if folder id contains '.'
-                if (_.isString(item)) {
-                    if (item.indexOf('folder.') === 0) {
-                        return { folder_id: 'folder', id: item.replace(/^folder./, '') };
-                    }
-                    return _.cid(item);
-                }
-
-                return item;
-            });
-            // empty?
-            if (!baton.data.length) return;
+        win.nodes.outer.on('selection:drop', function (e, _baton) {
+            // baton data is array of cid
+            // let's get a new baton through getContextualData
+            var baton = ext.Baton(app.getContextualData(_baton.data));
             // ensure proper type
             baton.dropType = 'infostore';
-            baton.target = baton.target.replace(/^folder\./, '');
+            baton.target = _baton.target.replace(/^folder\./, '');
             // call move action (instead of API) to have visual error handlers
-            // Tested: false
             actionsUtil.invoke('io.ox/files/actions/move', baton);
         });
 
