@@ -64,6 +64,7 @@ define('io.ox/backbone/views/toolbar', [
                 .map(util.createItem.bind(null, baton));
             var $toolbar = this.createToolbar().append(_(items).pluck('$li'));
             util.waitForMatches(items, function () {
+                if (this.disposed) return;
                 this.injectMoreDropdown($toolbar);
                 this.replaceToolbar($toolbar);
                 this.initButtons($toolbar);

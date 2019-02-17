@@ -110,7 +110,13 @@ define('io.ox/backbone/views/actions/util', [
             var $li = util.createListItem(), link = item.link, def;
             // nested dropdown?
             if (link.dropdown) {
-                def = util.renderDropdown($li, baton, { point: link.dropdown, title: link.title || link.label, icon: link.icon, caret: link.caret });
+                def = util.renderDropdown($li, baton, {
+                    caret: link.caret,
+                    drawDisabled: link.drawDisabled,
+                    icon: link.icon,
+                    point: link.dropdown,
+                    title: link.title || link.label
+                });
                 return { $li: $li, def: def };
             }
             // use own draw function?
@@ -219,7 +225,7 @@ define('io.ox/backbone/views/actions/util', [
                 util.injectSectionDividers($ul);
                 // disable empty or completely disabled drop-downs
                 var disabled = !$ul.find('[data-action]:not(.disabled)').length;
-                $el.find('.dropdown-toggle').toggleClass('disabled', disabled).attr('aria-disabled', disabled);
+                if (disabled) if (options.drawDisabled) $el.find('.dropdown-toggle').addClass('disabled').attr('aria-disabled', true); else $el.hide();
             });
         },
 

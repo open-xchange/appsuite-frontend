@@ -36,7 +36,8 @@ define('io.ox/contacts/toolbar', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('New'),
-            dropdown: 'io.ox/contacts/toolbar/new'
+            dropdown: 'io.ox/contacts/toolbar/new',
+            drawDisabled: true
         },
         'edit': {
             prio: 'hi',
