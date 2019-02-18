@@ -42,6 +42,7 @@ define('io.ox/mail/compose/main', [
             // already has a model. e.g. when opened via restorepoint
             if (baton.model) {
                 this.model = baton.model;
+                this.model.restored = true;
                 return this.model.initialized;
             }
 
@@ -179,7 +180,7 @@ define('io.ox/mail/compose/main', [
         id: 'initial-patch',
         index: INDEX += 100,
         perform: function () {
-            this.view.dirty(false);
+            this.view.dirty(!!this.model.restored);
             this.model.initialPatch();
         }
     }, {
