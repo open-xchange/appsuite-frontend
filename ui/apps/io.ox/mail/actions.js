@@ -99,11 +99,7 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/delete', {
         collection: 'toplevel && some && delete',
-        action: function (baton) {
-            require(['io.ox/mail/actions/delete'], function (action) {
-                action(baton);
-            });
-        }
+        action: 'io.ox/mail/actions/delete'
     });
 
     new Action('io.ox/mail/actions/edit', {

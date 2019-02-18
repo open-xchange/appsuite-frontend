@@ -377,8 +377,6 @@ define('io.ox/backbone/views/actions/util', [
             }
 
             function checkAction(action) {
-                // has action callback?
-                if (!_.isFunction(action.action || action.multiple)) return nextAction();
                 // avoid default behaviour?
                 if (action.id === 'default' && baton.isDefaultPrevented()) return nextAction();
                 // check for disabled extensions
@@ -411,8 +409,9 @@ define('io.ox/backbone/views/actions/util', [
             function callAction(action, baton) {
                 try {
                     if (!checkOnly) {
-                        if (action.action) action.action(baton);
-                        else if (action.multiple) action.multiple(baton.array(), baton);
+                        if (_.isFunction(action.action)) action.action(baton);
+                        else if (_.isString(action.action)) require([action.action], function (fn) { fn(baton); });
+                        else if (_.isFunction(action.multiple)) action.multiple(baton.array(), baton);
                     }
                 } catch (e) {
                     console.error('point("' + ref + '") > invoke()', e.message, {
