@@ -82,7 +82,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     oxContext: { signature: true },
                     imageLoader: {
                         upload: function (file) {
-                            return inline.api.inlineImage({ file: file });
+                            return inline.api.inlineImage({ file: file, editor: baton.view.editor.tinymce() });
                         },
                         getUrl: function (response) {
                             return inline.api.getInsertedImageUrl(response);
@@ -140,11 +140,12 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             id: 'wait-for-pending-images',
             index: 100,
             perform: function (baton) {
-                if (!window.tinymce || !window.tinymce.activeEditor || !window.tinymce.activeEditor.plugins.oximage) return $.when();
-                var ids = $('img[data-pending="true"]', window.tinymce.activeEditor.getElement()).map(function () {
+                var editor = baton.view.editor.tinymce();
+                if (!editor || !editor.plugins.oximage) return $.when();
+                var ids = $('img[data-pending="true"]', editor.getElement()).map(function () {
                         return $(this).attr('data-id');
                     }),
-                    deferreds = window.tinymce.activeEditor.plugins.oximage.getPendingDeferreds(ids);
+                    deferreds = editor.plugins.oximage.getPendingDeferreds(ids);
                 return $.when.apply($, deferreds).then(function () {
                     // maybe image references were updated
                     baton.data.content = baton.view.editor.getContent();

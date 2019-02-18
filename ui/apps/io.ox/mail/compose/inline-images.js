@@ -11,8 +11,6 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-/* global tinyMCE:true */
-
 define('io.ox/mail/compose/inline-images', [
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
@@ -27,6 +25,7 @@ define('io.ox/mail/compose/inline-images', [
     var api = {
         inlineImage: function (data) {
             try {
+                var editor = data.editor || (window.tinyMCE && window.tinyMCE.activeEditor);
                 if ('FormData' in window) {
                     // image broken, don't upload it and show error message
                     if (data.file.size === 0 && data.file.type === '' && !data.file.name) {
@@ -48,9 +47,8 @@ define('io.ox/mail/compose/inline-images', [
                         fixPost: true
                     }).done(function (response) {
                         // used to add the keepalive timers
-                        if (window.tinyMCE && window.tinyMCE.activeEditor) { // check tinyMCE (56182)
-                            $(tinyMCE.activeEditor.getElement()).trigger('addInlineImage', response.data[0]);
-                        }
+                        if (!editor) return;
+                        $(editor.getElement()).trigger('addInlineImage', response.data[0]);
                     });
                 }
                 return http.FORM({
@@ -59,9 +57,8 @@ define('io.ox/mail/compose/inline-images', [
                     params: { module: 'mail', type: 'image' }
                 }).done(function (response) {
                     // used to add the keepalive timers
-                    if (window.tinyMCE && window.tinyMCE.activeEditor) { // check tinyMCE (56182)
-                        $(tinyMCE.activeEditor.getElement()).trigger('addInlineImage', response.data[0]);
-                    }
+                    if (!editor) return;
+                    $(editor.getElement()).trigger('addInlineImage', response.data[0]);
                 });
             } catch (e) {
                 // print error to console for debugging
