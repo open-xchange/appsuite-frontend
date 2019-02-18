@@ -177,7 +177,7 @@ define('io.ox/mail/compose/api', [
         },
 
         update: function (id, data) {
-            return http.PATCH({
+            return http[_.browser.ie ? 'PUT' : 'PATCH']({
                 url: 'api/mail/compose/' + id,
                 data: $.extend({}, data)
             });
