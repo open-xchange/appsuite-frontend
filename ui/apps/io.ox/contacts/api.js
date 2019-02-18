@@ -242,13 +242,31 @@ define('io.ox/contacts/api', [
         pipe: {
             get: function (data) {
                 if (data.user_id) data.internal_userid = data.user_id;
+
+                // japanese sorting
+                if (data && data.distribution_list && data.distribution_list.length && ox.language === 'ja_JP') {
+
+                    // add some additional info for sorting
+                    _(data.distribution_list).each(function (obj) {
+                        obj.email = obj.mail;
+                        obj.sort_name_without_mail = obj.sort_name;
+                    });
+
+                    data.distribution_list.sort(collation.sorterWithMail);
+
+                    // remove info
+                    _(data.distribution_list).each(function (obj) {
+                        _(obj).omit('email', 'sort_name_without_mail');
+                    });
+                }
+
                 return convertResponseToGregorian(data);
             },
             all: function (response) {
                 // japanese sorting
                 if (ox.language === 'ja_JP') {
 
-                    // add som additional info for sorting
+                    // add some additional info for sorting
                     _(response).each(function (obj) {
                         obj.email = obj.email1 || obj.email2 || obj.email3 || '';
                         obj.sort_name_without_mail = obj.sort_name;
