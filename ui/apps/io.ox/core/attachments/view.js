@@ -13,12 +13,13 @@
  */
 
 define('io.ox/core/attachments/view', [
+    'io.ox/core/extensions',
     'io.ox/core/attachments/backbone',
     'io.ox/core/strings',
     'gettext!io.ox/core',
     'io.ox/backbone/views/extensible',
     'less!io.ox/core/attachments/style'
-], function (backbone, strings, gt, ExtensibleView) {
+], function (ext, backbone, strings, gt, ExtensibleView) {
 
     'use strict';
 
@@ -148,7 +149,7 @@ define('io.ox/core/attachments/view', [
         },
 
         renderAttachment: function (mode, model) {
-            return new this.options.AttachmentView({ mode: mode, model: model }).render().$el;
+            return new this.options.AttachmentView({ point: this.options.point, mode: mode, model: model }).render().$el;
         },
 
         addAttachment: function (model) {
@@ -331,6 +332,9 @@ define('io.ox/core/attachments/view', [
                 },
                 'remove': this.onRemoveModel
             });
+
+            var point = this.options.point ? this.options.point + '/view' : 'io.ox/core/attachment/view';
+            ext.point(point).invoke('initialize', this);
         },
 
         onRemove: function (e) {
