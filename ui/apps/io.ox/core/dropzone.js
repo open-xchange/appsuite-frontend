@@ -18,9 +18,7 @@ define('io.ox/core/dropzone', [], function () {
     var EVENTS = 'dragenter dragover dragleave drop';
 
     // iframe overlay during dnd
-    ox.on('drag:start', _.partial(toggleDndMask, true));
-    ox.on('drag:stop', _.partial(toggleDndMask, false));
-    function toggleDndMask(state) {
+    var toggleDndMask = _.throttle(function (state) {
         var active = $('html').hasClass('dndmask-enabled');
 
         if (active === state) return;
@@ -41,7 +39,9 @@ define('io.ox/core/dropzone', [], function () {
                         })
                     );
         });
-    }
+    }, 100);
+    ox.on('drag:start', _.partial(toggleDndMask, true));
+    ox.on('drag:stop', _.partial(toggleDndMask, false));
 
     // Backbone Dropzone
     var InplaceDropzone = Backbone.View.extend({
@@ -70,7 +70,6 @@ define('io.ox/core/dropzone', [], function () {
                     ox.trigger('drag:start', this.cid);
                     this.stop(e);
                     this.leaving = false;
-                    if (!this.isScope(e.target)) return this.hide();
                     if (!this.checked) this.checked = true; else return;
                     if (!this.isValid(e)) return;
                     if (!this.visible) this.show();
@@ -117,12 +116,7 @@ define('io.ox/core/dropzone', [], function () {
             this.visible = false;
             this.leaving = false;
             this.timeout = -1;
-            this.window = undefined;
             this.eventTarget = options.eventTarget;
-
-            // isScope is super slow due to these parental checks (especially when in iframe)
-            // memoize isScope based on the target element gives the ultimate speedup
-            this.isScope = _.memoize(this.isScope);
 
             this.onDrag = this.onDrag.bind(this);
             $(document).on(EVENTS, this.onDrag);
@@ -155,13 +149,6 @@ define('io.ox/core/dropzone', [], function () {
 
         isValid: function (e) {
             return this.isEnabled(e) && this.isFile(e);
-        },
-
-        isScope: function (target) {
-            if (_.isUndefined(this.window)) this.window = this.$el.closest('.window-container, .io-ox-viewer');
-            var inEventTargetScope = this.eventTarget && this.eventTargetDocument !== document && $.contains(this.eventTargetDocument, target);
-            var inWindowScope = $(target).closest('.window-container, .io-ox-viewer').is(this.window);
-            return inEventTargetScope || inWindowScope;
         },
 
         // overwrite for custom checks
