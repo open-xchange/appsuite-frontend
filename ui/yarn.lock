@@ -19,14 +19,27 @@
     js-tokens "^4.0.0"
 
 "@babel/parser@^7.0.0":
-  version "7.3.2"
-  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.3.2.tgz#95cdeddfc3992a6ca2a1315191c1679ca32c55cd"
-  integrity sha512-QzNUC2RO1gadg+fs21fi0Uu0OuGNzRKEmgCxoLNzbCdoprLwjfmZwzUrpUNfJPaVRwBpDY47A17yYEGWyRelnQ==
+  version "7.3.3"
+  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.3.3.tgz#092d450db02bdb6ccb1ca8ffd47d8774a91aef87"
+  integrity sha512-xsH1CJoln2r74hR+y7cg2B5JCPaTh+Hd+EbBRk9nWGSNspuo6krjhX0Om6RnRQuIvFq8wVXCLKH3kwKDYhanSg==
 
-"@open-xchange/appserver@^0.8.0-pre1", "@open-xchange/appserver@^0.8.0-pre3":
+"@open-xchange/appserver@^0.8.0-pre1":
   version "0.8.0-pre4"
   resolved "https://registry.yarnpkg.com/@open-xchange/appserver/-/appserver-0.8.0-pre4.tgz#dfb3c5f6e48591299f5a83446eb7aecdc67b0bd1"
   integrity sha512-XQ3dwj7aOglxi/aomUJCtSUNkQEJxoqCc2HM9ofRLmh5MwHnqSoc7P8foFG5rgho51WoPnZ7LDFvvWzPzFUjkA==
+  dependencies:
+    "@open-xchange/ui-middleware" "^7.10.0"
+    connect "^3.6.6"
+    express "^4.16.4"
+    http-proxy "^1.17.0"
+    nopt "^4.0.1"
+    serve-static "^1.13.2"
+    underscore "^1.9.1"
+
+"@open-xchange/appserver@^0.8.0-pre3":
+  version "0.8.0-pre5"
+  resolved "https://registry.yarnpkg.com/@open-xchange/appserver/-/appserver-0.8.0-pre5.tgz#939092ac59cd713d5f3727c6d3607653269ca618"
+  integrity sha512-CZp76Pie5EFt3sWbVVwRmv6AcSKXNUcNzvZcMe636Q8bn/TynCCZ5HoDnK4ApO5bm5o7CoWLYmJJ7bS7xk/JIg==
   dependencies:
     "@open-xchange/ui-middleware" "^7.10.0"
     connect "^3.6.6"
@@ -89,9 +102,9 @@
     tinymce "^4.8.0"
 
 "@open-xchange/ui-middleware@^7.10.0":
-  version "7.10.1"
-  resolved "https://registry.yarnpkg.com/@open-xchange/ui-middleware/-/ui-middleware-7.10.1.tgz#f2dc14944a669e5eab492fb4c91d319aa160160b"
-  integrity sha512-9FXLzpn9nDUtXOnWbOUDkAPbWSsmi3rR1L+9rCn/XNdtiZxuqIg73DRKx0OvKgUM+RdRXPv6XEUp3e4HHm2luw==
+  version "7.10.2"
+  resolved "https://registry.yarnpkg.com/@open-xchange/ui-middleware/-/ui-middleware-7.10.2.tgz#b092e7f15300bb305aec6d69a865e486b23ec128"
+  integrity sha512-gqLxUWcM3R3pXw1Njixavhg1H7y4+9Xq4p30bFBDjVRU5gsLy1Mba1KYG0PO4PW0z42caLHDGRJEVfaiEFc6CQ==
   dependencies:
     dotenv "^6.2.0"
     esprima "^4.0.0"
@@ -201,10 +214,20 @@ ajv@^5.0.0:
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.3.0"
 
-ajv@^6.5.3, ajv@^6.5.5, ajv@^6.6.1:
+ajv@^6.5.3, ajv@^6.6.1:
   version "6.8.1"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.8.1.tgz#0890b93742985ebf8973cd365c5b23920ce3cb20"
   integrity sha512-eqxCp82P+JfqL683wwsL73XmFs1eG6qjw+RD3YHx+Jll1r0jNd4dh8QG9NYAeNGA/hnZjeEDgtTskgJULbxpWQ==
+  dependencies:
+    fast-deep-equal "^2.0.1"
+    fast-json-stable-stringify "^2.0.0"
+    json-schema-traverse "^0.4.1"
+    uri-js "^4.2.2"
+
+ajv@^6.5.5:
+  version "6.9.1"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.9.1.tgz#a4d3683d74abc5670e75f0b16520f70a20ea8dc1"
+  integrity sha512-XDN92U311aINL77ieWHmqCcNlwjoP5cHXDxIxbf2MaPYuCXOHS7gHH8jktxeK5omgd52XbSTX6a4Piwd1pQmzA==
   dependencies:
     fast-deep-equal "^2.0.1"
     fast-json-stable-stringify "^2.0.0"
@@ -443,12 +466,19 @@ async@^1.5.2, async@~1.5.2, async@~1.5.x:
   resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
   integrity sha1-7GphrlZIDAw8skHJVhjiCJL5Zyo=
 
-async@^2.0.0, async@^2.4.1, async@^2.6.0, async@^2.6.1:
+async@^2.0.0, async@^2.4.1, async@^2.6.0:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/async/-/async-2.6.1.tgz#b245a23ca71930044ec53fa46aa00a3e87c6a610"
   integrity sha512-fNEiL2+AZt6AlAw/29Cr0UDe4sRAHCpEHh54WMz+Bb7QfNcFw4h3loofyJpLeQs4Yx7yuqu/2dLgM5hKOs6HlQ==
   dependencies:
     lodash "^4.17.10"
+
+async@^2.6.1:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/async/-/async-2.6.2.tgz#18330ea7e6e313887f5d2f2a904bac6fe4dd5381"
+  integrity sha512-H1qVYh1MYhEEFLsP97cVKqCGo7KfCyTt6uEWqsTBr9SO84oK9Uwbyd/yCW+6rKJLHksBNUVWZDAjfS+Ccx0Bbg==
+  dependencies:
+    lodash "^4.17.11"
 
 async@~0.2.9:
   version "0.2.10"
@@ -1329,7 +1359,7 @@ debug@3.1.0, debug@=3.1.0, debug@~3.1.0:
   dependencies:
     ms "2.0.0"
 
-debug@^3.1.0:
+debug@^3.1.0, debug@^3.2.6:
   version "3.2.6"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.2.6.tgz#e83d17de16d8a7efb7717edbe5fb10135eee629b"
   integrity sha512-mel+jf7nrtEl5Pn1Qx46zARXKDpBbvzezse7p7LqINmdoIk8PYP5SySaxEmYv6TZ0JyEKA1hsCId6DIhgITtWQ==
@@ -2214,7 +2244,14 @@ fn-args@^3.0.0:
   resolved "https://registry.yarnpkg.com/fn-args/-/fn-args-3.0.0.tgz#df5c3805ed41ec3b38a72aabe390cf9493ec084c"
   integrity sha1-31w4Be1B7Ds4pyqr45DPlJPsCEw=
 
-follow-redirects@^1.0.0, follow-redirects@^1.3.0:
+follow-redirects@^1.0.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.7.0.tgz#489ebc198dc0e7f64167bd23b03c4c19b5784c76"
+  integrity sha512-m/pZQy4Gj287eNy94nivy5wchN3Kp+Q5WgUPNy5lJSZ3sgkVKSYV/ZChMAQVIgx1SqfZ2zBZtPA2YlXIWxxJOQ==
+  dependencies:
+    debug "^3.2.6"
+
+follow-redirects@^1.3.0:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.6.1.tgz#514973c44b5757368bad8bddfe52f81f015c94cb"
   integrity sha512-t2JCjbzxQpWvbhts3l6SH1DKzSrx8a+SsaVf4h6bG4kOXUuPYS/kg2Lr4gQSb7eemaHqJkOThF1BGyjlUkO1GQ==
@@ -3718,7 +3755,19 @@ mime-db@~1.37.0:
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.37.0.tgz#0b6a0ce6fdbe9576e25f1f2d2fde8830dc0ad0d8"
   integrity sha512-R3C4db6bgQhlIhPU48fUtdVmKnflq+hRdad7IyKhtFj06VPNVdk2RhiYL3UjQIlso8L+YxAtFkobT0VK+S/ybg==
 
-mime-types@^2.1.12, mime-types@~2.1.17, mime-types@~2.1.18, mime-types@~2.1.19:
+mime-db@~1.38.0:
+  version "1.38.0"
+  resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.38.0.tgz#1a2aab16da9eb167b49c6e4df2d9c68d63d8e2ad"
+  integrity sha512-bqVioMFFzc2awcdJZIzR3HjZFX20QhilVS7hytkKrv7xFAn8bM1gzc/FOX2awLISvWe0PV8ptFKcon+wZ5qYkg==
+
+mime-types@^2.1.12, mime-types@~2.1.18, mime-types@~2.1.19:
+  version "2.1.22"
+  resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.22.tgz#fe6b355a190926ab7698c9a0556a11199b2199bd"
+  integrity sha512-aGl6TZGnhm/li6F7yx82bJiBZwgiEa4Hf6CNr8YO+r5UHr53tSTYZb102zyU50DOWWKeOv0uQLRL0/9EiKWCog==
+  dependencies:
+    mime-db "~1.38.0"
+
+mime-types@~2.1.17:
   version "2.1.21"
   resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.21.tgz#28995aa1ecb770742fe6ae7e58f9181c744b3f96"
   integrity sha512-3iL6DbwpyLzjR3xHSFNFeb9Nz/M8WDkX33t1GFQnFOllWk8pOrh/LSrB5OXlnlW5P9LH73X6loW/eogc+F5lJg==
