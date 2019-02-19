@@ -30,33 +30,34 @@ define('io.ox/files/mobile-toolbar-actions', [
             'create': {
                 prio: 'hi',
                 mobile: 'hi',
-                drawDisabled: true,
                 icon: 'fa fa-plus',
-                dropdown: 'io.ox/files/toolbar/new'
+                dropdown: 'io.ox/files/toolbar/new',
+                drawDisabled: true,
+                caret: false
             },
             'view-icon': {
                 prio: 'hi',
                 mobile: 'hi',
                 label: gt('Show icons'),
                 icon: 'fa fa-th',
-                drawDisabled: true,
-                ref: 'io.ox/files/actions/layout-icon'
+                ref: 'io.ox/files/actions/layout-icon',
+                drawDisabled: true
             },
             'view-tile': {
                 prio: 'hi',
                 mobile: 'hi',
                 label: gt('Show tiles'),
                 icon: 'fa fa-th-large',
-                drawDisabled: true,
-                ref: 'io.ox/files/actions/layout-tile'
+                ref: 'io.ox/files/actions/layout-tile',
+                drawDisabled: true
             },
             'view-list': {
                 prio: 'hi',
                 mobile: 'hi',
                 label: gt('Show list'),
                 icon: 'fa fa-align-justify',
-                drawDisabled: true,
-                ref: 'io.ox/files/actions/layout-list'
+                ref: 'io.ox/files/actions/layout-list',
+                drawDisabled: true
             }
         };
 
@@ -146,17 +147,11 @@ define('io.ox/files/mobile-toolbar-actions', [
                 });
             });
 
-            app.listView.on('selection:change', function (selection) {
-                if (!selection) {
-                    selection = app.listView.selection.get();
-                }
-                if (selection.length === 0) {
-                    app.pages.toggleSecondaryToolbar('main', false);
-                } else {
-                    app.pages.toggleSecondaryToolbar('main', true);
-                }
+            app.listView.on('selection:change', _.debounce(function (selection) {
+                selection = selection || app.listView.selection.get();
+                app.pages.toggleSecondaryToolbar('main', selection.length > 0);
                 app.updateToolbar(selection);
-            });
+            }, 10));
 
             app.pages.getPage('main').on('pageshow', function () {
                 app.pages.getToolbar('main').setBaton(new ext.Baton({ app: app }));
