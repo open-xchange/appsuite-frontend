@@ -1101,29 +1101,33 @@ define('io.ox/files/actions', [
             if (isTrash(baton)) return false;
             if (baton.favorite) return false;
 
-            var favorites = coreSettings.get('favorites/infostore', []),
+            var favoritesFolder = coreSettings.get('favorites/infostore', []),
                 favoriteFiles = coreSettings.get('favoriteFiles/infostore', []),
-                allFavorites = [].concat(favorites, _(favoriteFiles).pluck('id'));
+                allFavoriteIds = [].concat(favoritesFolder, _(favoriteFiles).pluck('id'));
 
-            // returns false if one file/folder of the selection is in favorites or a 'local file' (see below)
-            return !getListForFavorites(baton).some(function (element) {
+            // check whether all selected items can be added to favorites
+            var disabled = getSelectionOrTopFolder(baton).some(function (element) {
                 // check that we don't have a local file (upload file in mailcompose, view the file -> we have a local file)
                 if (element.group === 'localFile') return true;
                 if (folderAPI.is('trash', element)) return true;
-                return _(allFavorites).contains(element.id);
+                // virtual folder
+                if (element.id === null) return true;
+                return _(allFavoriteIds).contains(element.id);
             });
+
+            return !disabled;
         },
         action: function (baton) {
-            var list = markFoldersAsFolder(getListForFavorites(baton));
+            var list = markFoldersAsFolder(getSelectionOrTopFolder(baton));
             ox.load(['io.ox/files/actions/favorites']).done(function (action) {
                 action.add(list);
             });
         }
     });
 
-    function getListForFavorites(baton) {
+    function getSelectionOrTopFolder(baton) {
         var list = baton.array();
-        if (!list.length) list = [{ id: baton.app.folder.get(), folder_id: 'folder' }];
+        if (_.isEmpty(list)) list = [{ id: baton.app.folder.get(), folder_id: 'folder' }];
         return list;
     }
 
@@ -1139,17 +1143,17 @@ define('io.ox/files/actions', [
         capabilities: '!guest && !anonymous',
         matches: function (baton) {
 
-            var favorites = coreSettings.get('favorites/infostore', []),
+            var favoritesFolder = coreSettings.get('favorites/infostore', []),
                 favoriteFiles = coreSettings.get('favoriteFiles/infostore', []),
-                allFavorites = [].concat(favorites, _(favoriteFiles).pluck('id'));
+                allFavoriteIds = [].concat(favoritesFolder, _(favoriteFiles).pluck('id'));
 
             // returns true if one file/folder of the selection is in favorites
-            return getListForFavorites(baton).some(function (element) {
-                return _(allFavorites).contains(element.id);
+            return getSelectionOrTopFolder(baton).some(function (element) {
+                return _(allFavoriteIds).contains(element.id);
             });
         },
         action: function (baton) {
-            var list = markFoldersAsFolder(getListForFavorites(baton));
+            var list = markFoldersAsFolder(getSelectionOrTopFolder(baton));
             ox.load(['io.ox/files/actions/favorites']).done(function (action) {
                 if (baton.app && baton.app.myFavoriteListView) {
                     removeFromList(baton.app.myFavoriteListView, list);
