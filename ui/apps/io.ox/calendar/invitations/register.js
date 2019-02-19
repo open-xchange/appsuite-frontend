@@ -118,7 +118,8 @@ define('io.ox/calendar/invitations/register', [
                 new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
                     popup.busy();
                     self.getFullModel().done(function (fullModel) {
-                        popup.idle().append(viewDetail.draw(fullModel, { isExternalUser: parseInt(self.mailModel.get('account_id'), 10) !== 0, noFolderCheck: true, deeplink: !!self.showDeeplinks }));
+                        // no toolbar, clicking actions in an event preview is bound to cause errors.
+                        popup.idle().append(viewDetail.draw(fullModel, { hideToolbar: true, noFolderCheck: true, deeplink: !!self.showDeeplinks }));
                     });
                 });
             });
