@@ -6597,7 +6597,7 @@ msgstr "Diese Benachrichtigung schließen"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Title"
-msgstr "Anrede"
+msgstr "Titel"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Enter document title here"
