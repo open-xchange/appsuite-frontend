@@ -756,19 +756,6 @@ define('io.ox/files/actions', [
         if (model.is('trash')) return false;
         return type === 'invite' ? model.supportsInviteGuests() : true;
     }
-    // TODO check action Kristof
-    new Action('io.ox/files/dropdown/share', {
-        collection: '!multiple',
-        requires: function (baton) {
-            // usually this dropdown was always true and only removed in case the child actions are disabled.
-            // but this introduced jumping icons in the toolbar, therefore we check the dropdown/share too now to prevent this.
-            // note for the next one who is working in this area: a more elegant solution would be to wait until
-            // the child action from this dropdown are checked or something similar, so that we don't need
-            // to check it twice like now.
-            return isShareable('link', baton) || isShareable('invite', baton);
-        },
-        action: $.noop
-    });
 
     // Action for the editShare Dialog. Detects if the link or invitiation dialog is opened.
     // TODO check action Kristof
