@@ -48,25 +48,22 @@ define('io.ox/core/attachments/backbone', [
 
     var previewFetcher = {
         localFile: function (model) {
-            var def = $.Deferred();
             // consider retina displays
             // use double size in combination with background-size: cover
             var size = 2 * (_.device('retina') ? 240 : 120);
-            require(['io.ox/contacts/widgets/canvasresize'], function (canvasResize) {
-                canvasResize(model.fileObj || model.get('originalFile'), {
+            return require(['io.ox/contacts/widgets/canvasresize']).then(function (canvasResize) {
+                return canvasResize(model.fileObj || model.get('originalFile'), {
                     width: size,
                     height: size,
                     crop: false,
-                    quality: 80,
-                    callback: function (data) {
-                        var meta = _.clone(model.get('meta'));
-                        meta.previewUrl = data;
-                        def.resolve(meta.previewUrl);
-                        model.set('meta', meta);
-                    }
+                    quality: 80
                 });
+            }).then(function (data) {
+                var meta = _.clone(model.get('meta'));
+                meta.previewUrl = data;
+                model.set('meta', meta);
+                return data;
             });
-            return def;
         },
         contact: function (model) {
             var meta = _.clone(model.get('meta'));

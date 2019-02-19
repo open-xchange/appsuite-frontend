@@ -63,6 +63,8 @@ define('io.ox/core/tk/image-util', [
 
     return {
 
+        PromiseWorker: PromiseWorker,
+
         getImageFromFile: (function () {
 
             function readFile(file, callback) {
@@ -94,21 +96,23 @@ define('io.ox/core/tk/image-util', [
             var worker = new PromiseWorker(getImage, readFile),
                 cache = [];
 
-            return function getImageFromFile(file, exif) {
+            return function getImageFromFile(file, opt) {
+                opt = _.extend({ exif: false }, opt);
                 var promise = _(cache).find(function (obj) {
                     if (obj.file !== file) return;
-                    if (exif && !obj.exif) return;
+                    if (opt.exif && !obj.exif) return;
                     return true;
                 });
 
                 // early exit if image is in cache
                 if (promise) return promise.promise;
 
-                if (!exif && self.createImageBitmap) {
+                if (!opt.exif && self.createImageBitmap) {
                     promise = worker.invoke('getImage', file);
                 } else {
+                    var exif;
                     promise = worker.invoke('readFile', file).then(function (result) {
-                        if (exif) exif = exifread.getOrientation(result);
+                        if (opt.exif) exif = exifread.getOrientation(result);
 
                         if (self.createImageBitmap) return worker.invoke('getImage', file);
 
@@ -125,7 +129,7 @@ define('io.ox/core/tk/image-util', [
                 }
 
                 // store in cache for 10 seconds
-                var obj = { file: file, exif: exif, promise: promise };
+                var obj = { file: file, exif: opt.exif, promise: promise };
                 _.delay(function () {
                     cache = _(cache).without(obj);
                 }, 10000);

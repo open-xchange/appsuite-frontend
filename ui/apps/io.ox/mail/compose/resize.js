@@ -22,7 +22,7 @@ define('io.ox/mail/compose/resize', [
     var api = {
 
         getDimensions: function (file) {
-            return imageUtil.getImageFromFile(file, true).then(function (img) {
+            return imageUtil.getImageFromFile(file, { exif: true }).then(function (img) {
                 return { width: img.width, height: img.height };
             });
         },
@@ -111,29 +111,29 @@ define('io.ox/mail/compose/resize', [
                 width: targetDimensions.width,
                 height: targetDimensions.height,
                 crop: false,
-                quality: quality * 100,
-                callback: function (data) {
-                    // canvas.toBlob is not compatible with all browsers, using the dataUrl to build the blob
-                    var binStr = atob(data.split(',')[1]),
-                        len = binStr.length,
-                        arr = new window.Uint8Array(len),
-                        blob,
-                        type = file.type || 'image/png',
-                        typeSuffix = _(type.split('/')).last(),
-                        filenamePrefix = _(file.name.split('.')).initial();
+                quality: quality * 100
+            }).then(function (data) {
+                // canvas.toBlob is not compatible with all browsers, using the dataUrl to build the blob
+                var binStr = atob(data.split(',')[1]),
+                    len = binStr.length,
+                    arr = new window.Uint8Array(len),
+                    blob,
+                    type = file.type || 'image/png',
+                    typeSuffix = _(type.split('/')).last(),
+                    filenamePrefix = _(file.name.split('.')).initial();
 
-                    for (var i = 0; i < len; i++) {
-                        arr[i] = binStr.charCodeAt(i);
-                    }
-                    blob = new Blob([arr], { type: type, filename: filenamePrefix + '.' + typeSuffix });
-                    // blob = new File([blob], filenamePrefix + '.' + typeSuffix, { type: type });
-                    blob.lastModifiedDate = new Date();
-                    blob.name = filenamePrefix + '.' + typeSuffix;
-                    blob.filename = filenamePrefix + '.' + typeSuffix;
-                    blob.group = 'localFile';
-                    def.resolve(blob);
+                for (var i = 0; i < len; i++) {
+                    arr[i] = binStr.charCodeAt(i);
                 }
+                blob = new Blob([arr], { type: type, filename: filenamePrefix + '.' + typeSuffix });
+                // blob = new File([blob], filenamePrefix + '.' + typeSuffix, { type: type });
+                blob.lastModifiedDate = new Date();
+                blob.name = filenamePrefix + '.' + typeSuffix;
+                blob.filename = filenamePrefix + '.' + typeSuffix;
+                blob.group = 'localFile';
+                def.resolve(blob);
             });
+
             return def;
         }
     };

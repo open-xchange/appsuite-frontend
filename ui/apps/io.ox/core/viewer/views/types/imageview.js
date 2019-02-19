@@ -110,22 +110,12 @@ define('io.ox/core/viewer/views/types/imageview', [
             var size    = this.getImageSize();
 
             return require(['io.ox/contacts/widgets/canvasresize']).then(function (canvasResize) {
-
-                var def = $.Deferred();
-
                 var options = _.extend({
                     crop: false,
-                    quality: 80,
-                    callback: callback
+                    quality: 80
                 }, size);
 
-                function callback(data) {
-                    def.resolve(data);
-                }
-
-                canvasResize(fileObj, options);
-
-                return def;
+                return canvasResize(fileObj, options);
             });
         },
 
