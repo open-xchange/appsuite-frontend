@@ -272,7 +272,7 @@ define('io.ox/mail/compose/model', [
             if (this.destroyed) return;
             if (!this.get('id')) return;
             this.destroyed = true;
-            this.get('attachments').each(function (model) { model.trigger('destroy'); });
+            this.get('attachments').forEach(function (model) { model.trigger('destroy'); });
             return composeAPI.space.remove(this.get('id'));
         },
 
