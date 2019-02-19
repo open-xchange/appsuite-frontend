@@ -36,8 +36,7 @@ define('io.ox/files/toolbar', [
                 prio: 'hi',
                 mobile: 'hi',
                 title: gt('New'),
-                dropdown: 'io.ox/files/toolbar/new',
-                drawDisabled: true
+                dropdown: 'io.ox/files/toolbar/new'
             },
             'edit': {
                 prio: 'hi',
