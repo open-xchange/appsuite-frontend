@@ -82,11 +82,11 @@ define('io.ox/mail/compose/model', [
         },
 
         initialPatch: function () {
-            this.requestSave = _.throttle(this.save.bind(this), settings.get('autoSaveAfter', 15000), { leading: false });
+            this.requestSave = _.throttle(this.save.bind(this, false), settings.get('autoSaveAfter', 15000), { leading: false });
             this.on('change', this.requestSave);
 
             // explicitedly call save here to push the initial changes of the ui (quoting/from/bcc) to the composition space
-            return this.save();
+            return this.save(_.device('smartphone'));
         },
 
         send: function () {
@@ -243,7 +243,7 @@ define('io.ox/mail/compose/model', [
                 .value();
         },
 
-        save: function () {
+        save: function (silent) {
             if (this.destroyed) return $.when();
             var prevAttributes = this.prevAttributes,
                 attributes = this.toJSON();
@@ -258,13 +258,13 @@ define('io.ox/mail/compose/model', [
 
             this.prevAttributes = this.toJSON();
 
-            this.trigger('before:save');
+            if (!silent) this.trigger('before:save');
             return composeAPI.space.update(this.get('id'), diff).then(function success() {
-                this.trigger('success:save');
+                if (!silent) this.trigger('success:save');
             }.bind(this), function fail() {
                 this.prevAttributes = prevAttributes;
                 if (ox.debug) console.warn('Update composition space failed', this.get('id'));
-                this.trigger('fail:save');
+                if (!silent) this.trigger('fail:save');
             }.bind(this));
         },
 
