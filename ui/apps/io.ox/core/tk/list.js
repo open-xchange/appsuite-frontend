@@ -137,6 +137,8 @@ define('io.ox/core/tk/list', [
         }, 20),
 
         onLoad: function () {
+            // set busy to true, before calling idle. This way it correcly cleans up the busy indicator (yep busy indicator can be there although the view is not busy...)
+            this.isBusy = true;
             this.idle();
             // trigger scroll event after initial load
             // takes care of the edge-case that the initial list cannot fill the viewport (see bug 37728)
