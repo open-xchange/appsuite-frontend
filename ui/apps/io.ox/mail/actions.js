@@ -153,15 +153,12 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/source', {
         collection: 'some && toplevel',
         matches: function (baton) {
-            // multiple and not a thread?
+            // multiple selection
+            if (baton.selection && baton.selection.length > 1) return;
             if (baton.collection.has('multiple') && !baton.isThread) return false;
             return true;
         },
-        action: function (baton) {
-            require(['io.ox/mail/actions/source'], function (action) {
-                action(baton);
-            });
-        }
+        action: 'io.ox/mail/actions/source'
     });
 
     new Action('io.ox/mail/actions/filter', {

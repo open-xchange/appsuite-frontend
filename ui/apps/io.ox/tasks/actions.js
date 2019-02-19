@@ -60,7 +60,7 @@ define('io.ox/tasks/actions', [
         collection: 'some && modify',
         matches: function (baton) {
             // it's either multiple/array or just one and status not 'done'
-            return baton.data > 1 || baton.first().status !== 3;
+            return baton.collection.has('multiple') || baton.first().status !== 3;
         },
         action: function (baton) {
             ox.load(['io.ox/tasks/actions/doneUndone']).done(function (action) {
@@ -73,7 +73,7 @@ define('io.ox/tasks/actions', [
         collection: 'some && modify',
         matches: function (baton) {
             // it's either multiple/array or just one and status not 'done'
-            return baton.data > 1 || baton.first().status === 3;
+            return baton.collection.has('multiple') || baton.first().status === 3;
         },
         action: function (baton) {
             ox.load(['io.ox/tasks/actions/doneUndone']).done(function (action) {
