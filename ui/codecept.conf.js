@@ -40,7 +40,7 @@ module.exports.config = {
         I: './e2e/actor',
         users: './e2e/users',
         search: './e2e/actor_search',
-        contacts: './e2e/actor_contact',
+        contacts: './e2e/actor_contact'
     },
     bootstrap: function (done) {
         // setup chai

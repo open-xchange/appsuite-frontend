@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const Helper = require('@open-xchange/codecept-helper').helper,
     axe = require('axe-core');
 
@@ -8,13 +7,10 @@ function assertElementExists(res, locator, prefixMessage = 'Element', postfixMes
         throw new Error(`${prefixMessage} "${locator}" ${postfixMessage}`);
     }
 }
-=======
-const Helper = require('@open-xchange/codecept-helper').helper;
+
 const { util } = require('@open-xchange/codecept-helper');
 const fs = require('fs');
 const FormData = require('form-data');
-
->>>>>>> 475f1f5253... tests, helper, testfiles and more gimmicks
 class MyHelper extends Helper {
 
     // helper to create a fresh contact including an attachment with evil filename
@@ -126,7 +122,6 @@ class MyHelper extends Helper {
         });
     }
 
-<<<<<<< HEAD
     // will hopefully be removed when codecept 2.0 works as expected
     async grabHTMlFrom2(locator) {
 
@@ -179,7 +174,6 @@ class MyHelper extends Helper {
         if (typeof report === 'string') throw report;
         return report;
     }
-=======
     async getContact(options, first_name, last_name) {
         const { httpClient, session } = await util.getSessionForUser(options);
         console.log(session)
@@ -197,8 +191,6 @@ class MyHelper extends Helper {
             return {id:data[0], folder:data[1]};
         })
     }
-
->>>>>>> 475f1f5253... tests, helper, testfiles and more gimmicks
 }
 
 module.exports = MyHelper;
