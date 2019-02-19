@@ -47,8 +47,8 @@ define('io.ox/mail/actions', [
         requires: function () {
             return !isGuest();
         },
-        action: function () {
-            ox.registry.call('mail-compose', 'open');
+        action: function (baton) {
+            ox.registry.call('mail-compose', 'open', null, { folderId: baton.app.folder.get() });
         }
     });
 

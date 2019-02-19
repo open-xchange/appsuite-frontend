@@ -57,7 +57,7 @@ define('io.ox/mail/compose/main', [
         perform: function (baton) {
             var self = this;
             return require(['io.ox/mail/compose/config', 'io.ox/mail/compose/view']).then(function (MailComposeConfig, MailComposeView) {
-                self.config = new MailComposeConfig({ type: self.model.type });
+                self.config = new MailComposeConfig(_.extend({}, baton.config, { type: self.model.type }));
                 self.view = baton.view = new MailComposeView({ app: self, model: self.model, config: self.config });
             });
         }
@@ -67,7 +67,7 @@ define('io.ox/mail/compose/main', [
         perform: function () {
             var model = this.model;
             if (model.get('from')) return;
-            return accountAPI.getPrimaryAddressFromFolder(model.get('meta').originalFolderId).then(function (address) {
+            return accountAPI.getPrimaryAddressFromFolder(this.config.get('folderId')).then(function (address) {
                 // ensure defaultName is set (bug 56342)
                 settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
                 // custom display names
@@ -243,7 +243,7 @@ define('io.ox/mail/compose/main', [
                     data.priority = ['high', 'medium', 'low'][(data.priority || 1) - 1];
                 }
                 var model = new MailComposeModel(data);
-                return app.open({}, model);
+                return app.open(model);
             });
         };
 
@@ -251,16 +251,21 @@ define('io.ox/mail/compose/main', [
             return 'ox.appsuite.user.sect.email.gui.create.html';
         };
 
-        app.open = function (obj, model) {
-            var def = $.Deferred();
+        app.open = function (obj, config) {
+            var def = $.Deferred(), model;
             obj = _.extend({}, obj);
 
             // Set window and toolbars invisible initially
             win.nodes.header.addClass('sr-only');
             win.nodes.body.addClass('sr-only');
 
+            if (obj instanceof Backbone.Model) {
+                model = obj;
+                obj = {};
+            }
+
             win.busy().show(function () {
-                POINT.cascade(app, { data: obj || {}, model: model, win: win }).then(function success() {
+                POINT.cascade(app, { data: obj || {}, model: model, config: config, win: win }).then(function success() {
                     def.resolve({ app: app });
                     ox.trigger('mail:' + app.model.get('meta').type + ':ready', obj, app);
                 }, function fail(e) {
