@@ -1,5 +1,6 @@
 var fs = require('fs');
 var _ = require('underscore');
+var { util } = require('@open-xchange/codecept-helper');
 var localConf = {};
 
 if (fs.existsSync('grunt/local.conf.json')) {
@@ -62,7 +63,73 @@ module.exports.config = {
         }, 500);
     },
     plugins: {
-        allure: { enabled: true }
+        allure: { enabled: true },
+        autoLogin2: {
+            require: './e2e/lib/autologin',
+            enabled: true,
+            users: function (urlParams, options) {
+                if (typeof urlParams === 'object') {
+                    options = urlParams;
+                    urlParams = [];
+                }
+                urlParams = [].concat(urlParams || []);
+                options = Object.assign({ prefix: '' }, options);
+                let user = options.user || require('codeceptjs').container.support('users')[0];
+                const baseURL = util.getURLRoot(),
+                    prefix = options.prefix ? `${options.prefix}/` : '',
+                    url = `${baseURL}/${prefix}appsuite/ui`;
+
+                if (user.toJSON) user = user.toJSON();
+
+                return {
+                    login(I) {
+                        // this will be "I.login, with the next release of @ox/codecept-helper"
+                        I.amOnPage(url + '#!!' + (urlParams.length === 0 ? '' : '&' + urlParams.join('&')));
+                        I.executeAsyncScript(function ({ name, password }, done) {
+                            require(['io.ox/core/extensions', 'io.ox/core/session', 'io.ox/core/extPatterns/stage']).then(function (ext, session, Stage) {
+                                ext.point('io.ox/core/boot/login').extend({
+                                    id: 'e2e_directLogin',
+                                    before: 'autologin',
+                                    login: function () {
+                                        return session.login({ name, password, store: true }).then(function (data) {
+                                            ox.trigger('login:success', data);
+                                            done(data);
+                                        }, function (result) {
+                                            ox.trigger('login:fail', result);
+                                            $('#io-ox-login-container').empty().append(
+                                                $('<div class="alert alert-info">').text(result.error)
+                                            );
+                                            done({ msg: result.error });
+                                        });
+                                    }
+                                });
+                                if (!Stage.isRunning('io.ox/core/boot/login')) {
+                                    require('io.ox/core/boot/main').start();
+                                } else {
+                                    Stage.abortAll('io.ox/core/boot/login');
+                                    require('io.ox/core/boot/main').start();
+                                }
+                            });
+                        }, {
+                            name: `${user.name}${user.context ? '@' + user.context.id : ''}`,
+                            password: user.password
+                        });
+                        I.waitForElement('#io-ox-launcher', 20);
+                    },
+                    check(I) {
+                        I.seeElement('#io-ox-launcher');
+                    },
+                    fetch(I) {
+                        return I.grabCookie();
+                    },
+                    restore(I, cookie) {
+                        I.amOnPage(url + '#!!' + (urlParams.length === 0 ? '' : '&' + urlParams.join('&')));
+                        I.setCookie(cookie);
+                        I.waitToHide('.busy');
+                    }
+                };
+            }
+        }
     },
     name: 'App Suite Core UI'
 };
