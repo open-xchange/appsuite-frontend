@@ -13,37 +13,43 @@
 
 define('io.ox/core/tracker/duration', [
     'io.ox/core/tracker/api',
+    'io.ox/core/uuids',
     'settings!io.ox/core'
-], function (api, settings) {
+], function (api, uuids, settings) {
 
     'use strict';
 
     var interval = 1000,
         trackInterval = settings.get('tracker/eyeballInterval', 1) || 1,
-        temp = {},
         counts = {},
-        i;
+        uuid = uuids.randomUUID(),
+        i, first = true;
 
     function getApp() {
         return ox.ui.App.getCurrentApp().get('name');
     }
 
-    function send(app, duration) {
-        api.add('duration', { eyeballs: duration, app: app });
+    function send(app) {
+        api.add('duration', {
+            uuid: uuid,
+            app: app,
+            timestamp: ox.t0
+        });
     }
 
     function track() {
         if (document.visibilityState === 'hidden' || !ox.ui.App.getCurrentApp()) return;
-
         var app = getApp();
-        // counting seconds
-        temp[app] = (!!temp[app]) ? temp[app] + 1 : 1;
-
-        // only track full minutes
-        if (temp[app] % (60 * trackInterval) === 0) {
-            counts[app] = (!!counts[app]) ? counts[app] + 1 : 1;
-            send(app, counts[app]);
+        // track very first minute in any app. This
+        // helps tracking the first-start app
+        if (first) {
+            send(app);
+            first = false;
         }
+        // counting seconds
+        counts[app] = (!!counts[app]) ? counts[app] + 1 : 1;
+        // only track full minutes
+        if (counts[app] % (60 * trackInterval) === 0) send(app);
     }
 
     function getCount() {
