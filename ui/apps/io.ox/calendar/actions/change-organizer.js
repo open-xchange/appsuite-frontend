@@ -20,9 +20,9 @@ define('io.ox/calendar/actions/change-organizer', [
     'io.ox/core/tk/typeahead',
     'io.ox/participants/model',
     'io.ox/participants/chronos-views',
-    'less!io.ox/calendar/style',
-    'io.ox/participants/add'
-], function (calApi, ModalDialog, util, gt, mini, Typeahead, pModel, pViews) {
+    'io.ox/core/yell',
+    'less!io.ox/calendar/style'
+], function (calApi, ModalDialog, util, gt, mini, Typeahead, pModel, pViews, yell) {
 
     'use strict';
 
@@ -126,7 +126,10 @@ define('io.ox/calendar/actions/change-organizer', [
                     if (result === 'thisandfuture') {
                         params.recurrenceId = appointmentData.recurrenceId;
                     }
-                    calApi.changeOrganizer(params, _.extend(util.getCurrentRangeOptions(), { comment: this.model.get('comment'), recurrenceRange: (result === 'thisandfuture' ? 'THISANDFUTURE' : undefined) }));
+                    calApi.changeOrganizer(params, _.extend(util.getCurrentRangeOptions(), { comment: this.model.get('comment'), recurrenceRange: (result === 'thisandfuture' ? 'THISANDFUTURE' : undefined) }))
+                        .then(function () {
+                            yell('success', gt('Organizer changed'));
+                        }, yell);
                     this.model = null;
                 })
                 .open();

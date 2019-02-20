@@ -813,9 +813,10 @@ define('io.ox/calendar/api', [
                     action: 'changeOrganizer',
                     folder: obj.folder,
                     id: obj.id,
-                    timestamp: _.then(),
-                    recurrenceRange: options.recurrenceRange
+                    timestamp: _.then()
                 };
+
+                if (options.recurrenceRange) params.recurrenceRange = options.recurrenceRange;
 
                 if (ox.socketConnectionId) params.pushToken = ox.socketConnectionId;
 
