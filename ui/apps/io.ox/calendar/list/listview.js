@@ -309,6 +309,8 @@ define('io.ox/calendar/list/listview', [
         },
 
         drawTail: function () {
+            // make sure there is no leftover busy indicator, not needed in calendar besides showing the busy animation
+            if (this.getBusyIndicator().length) this.removeBusyIndicator();
             // only render if in listview. not in search
             if (this.collection.cid.indexOf('view=list') < 0) return;
             if (this.tail) this.tail.remove();
