@@ -150,16 +150,18 @@ define('io.ox/core/main/appcontrol', [
     });
 
     var api = {
-        getQuickLauncherLimit: function () {
+        quickLaunchLimit: 3,
+        /*getQuickLauncherLimit: function () {
             return settings.get('apps/quickLaunchLimit', 3);
-        },
+        },*/
         getQuickLauncherCount: function () {
             var n = settings.get('apps/quickLaunchCount', 3);
             if (!_.isNumber(n)) return 0;
-            return Math.min(this.getQuickLauncherLimit(), ox.ui.apps.forLauncher().length, n);
+            return Math.min(this.quickLaunchLimit, ox.ui.apps.forLauncher().length, n);
         },
         getQuickLauncherDefaults: function () {
-            return 'io.ox/mail/main,io.ox/contacts/main,io.ox/portal/main';
+            return 'io.ox/mail/main,io.ox/calendar/main,io.ox/files/main';
+
         },
         getQuickLauncherItems: function () {
             var count = this.getQuickLauncherCount(),
