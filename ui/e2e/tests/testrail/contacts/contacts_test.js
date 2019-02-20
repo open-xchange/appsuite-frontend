@@ -233,10 +233,12 @@ Scenario('C7366 - Delete multiple contacts', async function (I, search, users) {
     I.selectFolder('Contacts');
     I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
     search.doSearch(testrailID + ' ' + testrailID);
+    // eslint-disable-next-line no-undef
     //pause();
     I.click('[aria-label="' + testrailID + ', ' + testrailID + '"]');
     I.waitForElement('.fa-spin-paused');
-    I.pressKey(['Control', 'a']);
+    I.pressKey(['\uE009', 'a']);
+    //I.pressKey(['Control', 'a']);
     I.waitForElement('.fa-spin-paused');
     I.clickToolbar('Delete');
     I.waitForVisible('.io-ox-dialog-popup');
