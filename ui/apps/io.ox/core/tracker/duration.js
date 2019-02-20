@@ -19,8 +19,7 @@ define('io.ox/core/tracker/duration', [
 
     'use strict';
 
-    var interval = 1000,
-        trackInterval = settings.get('tracker/eyeballInterval', 1) || 1,
+    var trackInterval = settings.get('tracker/eyeballInterval', 1) || 1,
         counts = {},
         uuid = uuids.randomUUID(),
         i, first = true;
@@ -40,8 +39,7 @@ define('io.ox/core/tracker/duration', [
     function track() {
         if (document.visibilityState === 'hidden' || !ox.ui.App.getCurrentApp()) return;
         var app = getApp();
-        // track very first minute in any app. This
-        // helps tracking the first-start app
+        // track very first "running minute" to create a 0-1 minute interval server side.
         if (first) {
             send(app);
             first = false;
@@ -58,7 +56,7 @@ define('io.ox/core/tracker/duration', [
 
     function start() {
         if (i) return i;
-        i = setInterval(track, interval);
+        i = setInterval(track, 1000);
         return i;
     }
 
