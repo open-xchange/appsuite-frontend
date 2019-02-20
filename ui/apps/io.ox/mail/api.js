@@ -47,7 +47,8 @@ define('io.ox/mail/api', [
     var fixtoccbcc = settings.get('features/fixtoccbcc'),
         showDeleted = !settings.get('features/ignoreDeleted', false),
         sanitize = sanitizer.isEnabled(),
-        sandboxedCSS = settings.get('features/sandboxedCSS', true);
+        sandboxedCSS = settings.get('features/sandboxedCSS', true),
+        enablePdfPreconversion = coreSettings.get('pdf/enablePreconversionOnMailFetch', true);
 
     pool.map = function (data) {
         var cid = _.cid(data), model = this.get(cid);
@@ -305,6 +306,9 @@ define('io.ox/mail/api', [
 
         // do not process plain text if we prettify text client-side
         obj.process_plain_text = false;
+
+        // PDF pre-conversion for mail attachments
+        obj.pregenerate_previews = String(enablePdfPreconversion);
 
         // never use factory's internal cache, therefore always 'false' at this point
         return get.call(api, obj, false).done(function (data) {
