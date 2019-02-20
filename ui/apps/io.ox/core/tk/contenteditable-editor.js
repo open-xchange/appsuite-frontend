@@ -459,9 +459,9 @@ define('io.ox/core/tk/contenteditable-editor', [
                         $(this).toggleClass('mce-btn-group-visible-xs', $(this).has('.mce-widget:not([data-hidden])').length > 0);
                     });
 
-                    ed.on('SetContent', function () {
-                        var selectedNode = this.selection.getNode();
-                        selectedNode.scrollIntoView();
+                    ed.on('SetContent', function (o) {
+                        if (!o.paste) return;
+                        this.selection.getNode().scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
                     });
 
                 });
