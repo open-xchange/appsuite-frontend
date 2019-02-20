@@ -100,9 +100,16 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                     );
                 }
 
+                if (media.camera_make) {
+                    dl.append(
+                        $('<dt>').text(gt('Device make')),
+                        $('<dd class="camera_make">').text(media.camera_make)
+                    );
+                }
+
                 if (media.camera_model) {
                     dl.append(
-                        $('<dt>').text(gt('Camera')),
+                        $('<dt>').text(gt('Device model')),
                         $('<dd class="camera_model">').text(media.camera_model)
                     );
                 }
