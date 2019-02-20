@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-02-15 14:05+0100\n"
+"PO-Revision-Date: 2019-02-20 13:02+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -6248,6 +6248,33 @@ msgid "Size"
 msgstr "Größe"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "Resolution"
+msgstr "Auflösung"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "Camera"
+msgstr "Kamera"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+#, fuzzy
+msgid "Shot"
+msgstr "Aufgenommen"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "ISO"
+msgstr "ISO"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+#, fuzzy
+msgid "Capture date"
+msgstr "Aufnahmedatum"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
 #: module:io.ox/files apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/find/extensions-api.js apps/io.ox/mail/detail/links.js
@@ -6597,7 +6624,7 @@ msgstr "Diese Benachrichtigung schließen"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Title"
-msgstr "Titel"
+msgstr "Anrede"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Enter document title here"
@@ -7310,7 +7337,6 @@ msgid "Show hidden files and folders"
 msgstr "Versteckte Dateien und Ordner anzeigen"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
 msgid "File version history"
 msgstr "Dateiversionshistorie"
 
@@ -7329,7 +7355,6 @@ msgstr[0] "Der Zeitrahmen ist auf 1 Tag begrenzt."
 msgstr[1] "Der Zeitrahmen ist auf %1$d Tage begrenzt."
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
 msgid "File version limit"
 msgstr "Dateiversionsbegrenzung"
 
@@ -8736,7 +8761,6 @@ msgstr "Sie können nicht mehr als %1$s Entwürfe gleichzeitig öffnen."
 #. %2$s An email address
 #. Example: On January 8, 2019 2:23 PM richard@open-xchange.com wrote:
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#, fuzzy
 msgid "On %1$s %2$s wrote:"
 msgstr "%3$s hat am %1$s geschrieben:"
 
@@ -8983,14 +9007,12 @@ msgid "[Copy] "
 msgstr "[Kopie] "
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-#, fuzzy
 msgid "Hide carbon copy input field"
 msgstr "Cc-Eingabefeld ausblenden"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-#, fuzzy
 msgid "Hide blind carbon copy input field"
-msgstr "Bcc-Eingabefeld anzeigen ausblenden"
+msgstr "Bcc-Eingabefeld ausblenden"
 
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/contextmenu.js module:io.ox/mail apps/io.ox/mail/toolbar.js
