@@ -33,14 +33,14 @@ define('io.ox/files/share/toolbar', [
             mobile: 'lo',
             title: gt('Edit share'),
             ref: 'io.ox/files/actions/editShare',
-            drawDisabled: false
+            drawDisabled: true
         },
         'delete': {
             prio: 'hi',
             mobile: 'lo',
             title: gt('Revoke access'),
             ref: 'io.ox/files/share/revoke',
-            drawDisabled: false
+            drawDisabled: true
         }
     };
 
