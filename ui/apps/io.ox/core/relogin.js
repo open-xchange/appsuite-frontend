@@ -139,7 +139,7 @@ define('io.ox/core/relogin', [
                         name: ox.user,
                         password: this.$body.find('input').val(),
                         rampup: false,
-                        store: ox.secretCookie
+                        staySignedIn: ox.secretCookie
                     }).then(
                         function success() {
                             notifications.yell('close');

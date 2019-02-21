@@ -73,7 +73,7 @@ define('io.ox/core/boot/login/standard', [
         var options = {
             name: name,
             password: password,
-            store: $('#io-ox-login-store-box').prop('checked'),
+            staySignedIn: $('#io-ox-login-store-box').prop('checked'),
             // temporary locale for error messages
             locale: locale.getCurrentLocale(),
             // permanent locale change!?

@@ -17,10 +17,9 @@ define('io.ox/core/boot/form', [
     'io.ox/core/boot/locale',
     'io.ox/core/boot/support',
     'io.ox/core/boot/login/standard',
-    'io.ox/core/manifests',
-    'io.ox/core/capabilities'
+    'io.ox/core/manifests'
 
-], function (http, util, locale, support, login, manifests, capabilities) {
+], function (http, util, locale, support, login, manifests) {
 
     'use strict';
 
@@ -219,21 +218,16 @@ define('io.ox/core/boot/form', [
         footer += sc.buildDate ? '(' + sc.buildDate + ')' : '';
         $('#io-ox-copyright').text(footer.replace(/\(c\)/i, '\u00A9'));
 
-        // hide checkbox?
-        if (!capabilities.has('autologin')) {
-            $('#io-ox-login-store').remove();
-        } else {
-            // check/uncheck?
-            var box = $('#io-ox-login-store-box'), cookie = _.getCookie('staySignedIn');
-            if (cookie !== undefined) {
-                box.prop('checked', cookie === 'true');
-            } else if ('staySignedIn' in sc) {
-                box.prop('checked', !!sc.staySignedIn);
-            }
-            box.on('change', function () {
-                _.setCookie('staySignedIn', $(this).prop('checked'));
-            });
+        // check/uncheck?
+        var box = $('#io-ox-login-store-box'), cookie = _.getCookie('staySignedIn');
+        if (cookie !== undefined) {
+            box.prop('checked', cookie === 'true');
+        } else if ('staySignedIn' in sc) {
+            box.prop('checked', !!sc.staySignedIn);
         }
+        box.on('change', function () {
+            _.setCookie('staySignedIn', $(this).prop('checked'));
+        });
 
         if (_.device('IE')) {
             // cannot change type with jQuery's attr()

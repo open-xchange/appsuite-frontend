@@ -41,7 +41,8 @@ Scenario('[C7337] Unsuccessful Login', function (I, users) {
     I.waitForText('The user name or password is incorrect.');
 });
 
-Scenario('[C7339] Stay signed in checkbox @shaky', function (I) {
+// needs a recent backend that supports new way of autologin
+Scenario.skip('[C7339] Stay signed in checkbox @shaky', function (I) {
     I.amOnPage('/');
     I.wait(1);
     I.seeCheckboxIsChecked('Stay signed in');

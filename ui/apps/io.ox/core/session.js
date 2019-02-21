@@ -36,7 +36,6 @@ define('io.ox/core/session', [
         _.setCookie('locale', ox.locale);
         manifests.reset();
         $('html').attr('lang', ox.locale.split('_')[0]);
-        // should not hide store() request here; made debugging hard
         ox.trigger('change:session', ox.session);
     };
 
@@ -45,8 +44,6 @@ define('io.ox/core/session', [
         set: set,
 
         autoLogin: function () {
-            // store
-            var store = false;
 
             // Fetches the timeout value in parallel with the main HTTP request
             // if it takes too long. Falls back to values in TIMEOUTS if
@@ -143,7 +140,6 @@ define('io.ox/core/session', [
                         }
                     })
                     .then(function (response) {
-                        store = _.url.hash('store') === 'true';
                         // make sure we have rampupdata
                         if (response.data.rampup) {
                             return response.data;
@@ -161,15 +157,13 @@ define('io.ox/core/session', [
                 set(data);
                 // global event
                 ox.trigger('login', data);
-                // call store for token-based login / not for pure auto-login
-                return store ? that.store().then(function () { return data; }) : data;
+                return data;
             })
             .done(function () {
                 _.url.hash({
                     jsessionid: null,
                     serverToken: null,
                     clientToken: null,
-                    store: null,
                     'token.autologin': null
                 });
             });
@@ -189,7 +183,6 @@ define('io.ox/core/session', [
 
                 // pending?
                 if (pending !== null) return pending;
-
                 var params = _.extend(
                     {
                         action: 'login',
@@ -203,7 +196,7 @@ define('io.ox/core/session', [
                         rampup: true,
                         rampUpFor: 'open-xchange-appsuite'
                     },
-                    _(options).pick('action', 'name', 'password', 'locale', 'rampup', 'rampUpFor', 'share', 'target', 'secret_code')
+                    _(options).pick('action', 'name', 'password', 'locale', 'rampup', 'rampUpFor', 'share', 'target', 'secret_code', 'staySignedIn')
                 );
 
                 if (options.forceLocale) params.storeLocale = true;
@@ -226,10 +219,8 @@ define('io.ox/core/session', [
 
                             // global event
                             ox.trigger('login', data);
+                            ox.secretCookie = !!options.staySignedIn;
 
-                            if (options.store) {
-                                return that.store().then(function () { return data; });
-                            }
                             return data;
                         },
                         function fail(e) {
@@ -260,23 +251,6 @@ define('io.ox/core/session', [
             });
         },
 
-        store: function () {
-            var def = $.Deferred();
-            // change from GET to POST request, cause firefox has a
-            // problem otherwise if caches are empty
-            http.POST({
-                module: 'login',
-                appendColumns: false,
-                processResponse: false,
-                data: { action: 'store' }
-            })
-            .then(function () {
-                ox.secretCookie = true;
-            })
-            // makes store() always successful (should never block)
-            .always(def.resolve);
-            return def;
-        },
         /*
         redeemToken: function (token) {
             console.warn('WARNING: Redeem-token is deprecated and will be remove in the near future.');
