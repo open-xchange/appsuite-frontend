@@ -193,6 +193,9 @@ define('io.ox/files/toolbar', [
 
             if (_.device('smartphone')) return;
 
+            // view menu does not work in favorites, it's a special list implementation
+            if (baton.originFavorites) return;
+
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ el: this, model: baton.app.props, label: gt('View'), caret: true })
                 .group(gt('Layout'))

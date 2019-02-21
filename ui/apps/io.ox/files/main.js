@@ -455,13 +455,23 @@ define('io.ox/files/main', [
             // get data required for toolbars and context menus
             // selection is array of cids
             app.getContextualData = function (selection, type) {
+                // folder at the time the baton was created
+                var folder_id = app.folder.get();
+
                 // todo: check where and whether collection and allIds are needed
-                var options = { folder_id: app.folder.get(), app: app, allIds: [] };
+                var options = { folder_id: folder_id, app: app, allIds: [], isFavorites: false, isMyShares: false };
                 switch (type) {
-                    case 'favorites': options.all = this.myFavoriteListView.collection; break;
-                    case 'shares': options.all = this.mysharesListView.collection; break;
-                    default: options.all = this.listView.collection; break;
-                    // no default
+                    case 'favorites':
+                        options.all = this.myFavoriteListView.collection;
+                        options.originFavorites = true;
+                        break;
+                    case 'shares':
+                        options.all = this.mysharesListView.collection;
+                        options.originMyShares = true;
+                        break;
+                    default:
+                        options.all = this.listView.collection;
+                        break;
                 }
                 // turn cids into proper objects
                 if (type === 'shares') {
@@ -639,8 +649,6 @@ define('io.ox/files/main', [
                         app.updateMyFavoritesToolbar = _.debounce(function (selection) {
                             toolbar.setSelection(selection.map(_.cid), function () {
                                 var options = this.getContextualData(selection, 'favorites');
-                                options.folder_id = null;
-                                options.favorite = true;
                                 return options;
                             }.bind(this));
                         }, 10);

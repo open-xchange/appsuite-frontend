@@ -497,7 +497,7 @@ define('io.ox/files/actions', [
         collection: 'one && items',
         matches: function (baton) {
             if (isTrash(baton)) return false;
-            if (baton.favorite) return false;
+            if (baton.originFavorites) return false;
             if (fromMailCompose(baton)) return false;
             var model = baton.models[0];
             // preferred variant over >> return (model.isFile() && !model.isPDF()); <<
@@ -593,7 +593,7 @@ define('io.ox/files/actions', [
             collection: (type === 'move' ? 'some && delete' : 'some && items && read'),
             matches: function (baton) {
                 if (fromMailCompose(baton)) return false;
-                if (type === 'move' && baton.favorite) return false;
+                if (type === 'move' && baton.originFavorites) return false;
                 if (hasStatus('lockedByOthers', baton)) return false;
                 return true;
             },
@@ -1040,7 +1040,7 @@ define('io.ox/files/actions', [
         device: '!smartphone',
         collection: 'one',
         matches: function (baton) {
-            if (!baton.favorite && !baton.share && !baton.portal) return false;
+            if (!baton.originFavorites && !baton.originMyShares && !baton.portal) return false;
             var data = baton.first(),
                 id = baton.collection.has('folders') ? data.id : data.folder_id,
                 model = folderAPI.pool.getModel(id);
@@ -1099,7 +1099,7 @@ define('io.ox/files/actions', [
         matches: function (baton) {
 
             if (isTrash(baton)) return false;
-            if (baton.favorite) return false;
+            if (baton.originFavorites) return false;
 
             var favoritesFolder = coreSettings.get('favorites/infostore', []),
                 favoriteFiles = coreSettings.get('favoriteFiles/infostore', []),
@@ -1166,7 +1166,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/favorite/back', {
         toggle: _.device('smartphone'),
         matches: function (baton) {
-            return baton.favorite;
+            return baton.originFavorites;
         },
         action: function () {
             $('[data-page-id="io.ox/files/main"]').trigger('myfavorites-folder-back');

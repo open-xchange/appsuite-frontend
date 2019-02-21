@@ -325,7 +325,7 @@ define('io.ox/core/folder/contextmenu', [
                 if (!/^(infostore)$/.test(baton.module)) return;
                 if (_.device('smartphone')) return;
                 if (!api.can('move:folder', baton.data, {})) return;
-                if (baton.favorite) return false;
+                if (baton.originFavorites) return false;
 
                 contextUtils.addLink(this, {
                     action: 'move',
