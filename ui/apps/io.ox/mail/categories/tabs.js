@@ -14,11 +14,11 @@
 define('io.ox/mail/categories/tabs', [
     'io.ox/mail/categories/api',
     'io.ox/mail/api',
-    'io.ox/backbone/mini-views/help',
+    'io.ox/backbone/mini-views/helplink',
     'io.ox/core/yell',
     'io.ox/core/tk/list-dnd',
     'gettext!io.ox/mail'
-], function (api, mailAPI, HelpView, yell, dnd, gt) {
+], function (api, mailAPI, HelpLinkView, yell, dnd, gt) {
 
     'use strict';
 
@@ -94,7 +94,7 @@ define('io.ox/mail/categories/tabs', [
 
         getHelpViewIcon: function () {
             return $('<li class="help" aria-hidden="true">').append(
-                new HelpView({
+                new HelpLinkView({
                     href: 'ox.appsuite.user.sect.email.manage.categories.html'
                 }).render().$el
             );
