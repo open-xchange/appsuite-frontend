@@ -723,7 +723,8 @@ define('io.ox/calendar/api', [
                         folder: folderApi.getDefaultFolder('calendar'),
                         rangeStart: moment().subtract(2, 'hours').utc().format(util.ZULU_FORMAT),
                         rangeEnd: moment().add(1, 'years').utc().format(util.ZULU_FORMAT),
-                        fields: 'folder,id,recurrenceId,organizer,endDate,startDate,summary,location,rrule'
+                        fields: 'folder,id,recurrenceId,organizer,endDate,startDate,summary,location,rrule',
+                        sort: 'startDate'
                     }
                 }).then(function (data) {
                     // even if empty array is given it needs to be triggered to remove
