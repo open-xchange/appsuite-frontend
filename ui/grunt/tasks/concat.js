@@ -292,10 +292,7 @@ module.exports = function (grunt) {
                             '\n',
                     footer: '\n' +
                             '  define.amd = _amd;\n' +
-                            '});\n\n' +
-                            'define("static/3rd.party/typeahead.jquery.js", _.noop);\n' +
-                            'define("static/3rd.party/jquery-ui.min.js", _.noop);\n' +
-                            'define("static/3rd.party/bootstrap-tokenfield.js", _.noop);\n'
+                            '});\n\n'
                 },
                 files: [
                     {
@@ -316,10 +313,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/api/snippets.js',
                             'apps/io.ox/core/tk/contenteditable-editor.js',
                             'apps/io.ox/core/tk/textproc.js',
-                            'node_modules/tinymce/jquery.tinymce.min.js',
-                            'build/static/3rd.party/jquery-ui.min.js',
-                            'build/static/3rd.party/typeahead.jquery.js',
-                            'build/static/3rd.party/bootstrap-tokenfield.js'
+                            'node_modules/tinymce/jquery.tinymce.min.js'
                         ],
                         dest: 'build/apps/io.ox/mail/compose/bundle.js',
                         nonull: true
