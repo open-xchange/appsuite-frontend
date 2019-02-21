@@ -242,7 +242,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/backbone/mini-views/abstract.js',
                             'apps/io.ox/backbone/mini-views/dropdown.js',
                             'apps/io.ox/backbone/mini-views/toolbar.js',
-                            'apps/io.ox/backbone/mini-views/help.js',
+                            'apps/io.ox/backbone/mini-views/helplink.js',
                             'apps/io.ox/backbone/mini-views/upsell.js',
                             'apps/io.ox/backbone/mini-views/quota.js',
                             'apps/io.ox/core/tk/upload.js',

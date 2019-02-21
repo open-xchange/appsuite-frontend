@@ -69,7 +69,10 @@ define('io.ox/core/viewer/views/mainview', [
             this.listenTo(this.viewerEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
             // close viewer when other app is start or resumed, except in standalone mode
             if (!this.standalone) {
-                this.listenTo(ox, 'app:start app:resume', this.closeViewer);
+                this.listenTo(ox, 'app:start app:resume', function (app) {
+                    if (app.get('name') === 'io.ox/help') return;
+                    this.closeViewer();
+                });
             }
             // register app resume event for stand alone mode
             if (this.app) {

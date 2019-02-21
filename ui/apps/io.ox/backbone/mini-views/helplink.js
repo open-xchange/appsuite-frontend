@@ -11,7 +11,7 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views/help', [
+define('io.ox/backbone/mini-views/helplink', [
     'settings!io.ox/core',
     'gettext!io.ox/core'
 ], function (settings, gt) {
@@ -29,7 +29,7 @@ define('io.ox/backbone/mini-views/help', [
     //  iconClass       {string} These classes are added to the i-tag
     //  content         {object or string} The object to display. If unset, the help icon will be displayed
 
-    var HelpView = Backbone.View.extend({
+    var HelpLinkView = Backbone.View.extend({
 
         tagName: 'a',
 
@@ -44,17 +44,12 @@ define('io.ox/backbone/mini-views/help', [
             e.preventDefault();
 
             var href = this.options.href,
-                base = this.options.base;
+                opt = this.options;
 
-            // if target is dynamic, execute as function
-            if (_.isFunction(href)) href = this.options.href();
-
-            if (_.isObject(href)) {
-                base = href.base || base;
-                href = href.target || href;
-            }
-
-            window.open(base + '/l10n/' + ox.language + '/' + href);
+            require(['io.ox/help/main'], function (HelpApp) {
+                if (HelpApp.reuse(opt)) return;
+                HelpApp.getApp(opt).launch();
+            });
 
             // metrics
             require(['io.ox/metrics/main'], function (metrics) {
@@ -80,7 +75,8 @@ define('io.ox/backbone/mini-views/help', [
                 base: 'help',
                 content: $('<i class="fa" aria-hidden="true">').attr('title', gt('Online help')),
                 href: 'index.html',
-                iconClass: 'fa-question-circle'
+                iconClass: 'fa-question-circle',
+                modal: false
             }, options);
 
             if (!_.isString(this.options.content)) {
@@ -103,5 +99,5 @@ define('io.ox/backbone/mini-views/help', [
         }
     });
 
-    return HelpView;
+    return HelpLinkView;
 });

@@ -166,7 +166,7 @@ define('io.ox/core/extPatterns/actions', [
             }
 
             // is not deferred?
-            if (ret !== undefined && !ret.promise) {
+            if (ret && !ret.promise) {
                 ret = $.Deferred().resolve(ret);
             }
             return ret;

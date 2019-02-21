@@ -17,11 +17,11 @@ define('io.ox/core/commons', [
     'gettext!io.ox/core',
     'io.ox/core/folder/api',
     'io.ox/core/api/account',
-    'io.ox/backbone/mini-views/help',
+    'io.ox/backbone/mini-views/helplink',
     'settings!io.ox/core',
     'io.ox/backbone/mini-views/upsell',
     'io.ox/core/capabilities'
-], function (ext, links, gt, folderAPI, accountAPI, HelpView, coreSettings, UpsellView, capabilities) {
+], function (ext, links, gt, folderAPI, accountAPI, HelpLinkView, coreSettings, UpsellView, capabilities) {
 
     'use strict';
 
@@ -616,11 +616,11 @@ define('io.ox/core/commons', [
         help: function (baton) {
             if (_.device('smartphone')) return;
 
-            var helpView = new HelpView({
+            var helpLinkView = new HelpLinkView({
                 href: getLink(baton && baton.app && baton.app.id)
             });
             this.find('.generic-toolbar.bottom').append(
-                helpView.render().$el
+                helpLinkView.render().$el
             );
 
             function getLink(id) {

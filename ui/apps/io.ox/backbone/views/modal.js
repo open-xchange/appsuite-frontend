@@ -87,11 +87,11 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             if (options.help) {
                 var helpPlaceholder = $('<a class="io-ox-context-help">');
                 this.$header.append(helpPlaceholder);
-                require(['io.ox/backbone/mini-views/help'], function (HelpView) {
+                require(['io.ox/backbone/mini-views/helplink'], function (HelpLinkView) {
                     var parent = helpPlaceholder.parent();
                     parent.addClass('help');
                     helpPlaceholder.replaceWith(
-                        new HelpView({ href: options.help }).render().$el
+                        new HelpLinkView({ href: options.help, modal: true }).render().$el
                     );
                 });
             }

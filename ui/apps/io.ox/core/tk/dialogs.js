@@ -15,9 +15,9 @@ define('io.ox/core/tk/dialogs', [
     'io.ox/core/event',
     'io.ox/core/extensions',
     'io.ox/core/a11y',
-    'io.ox/backbone/mini-views/help',
+    'io.ox/backbone/mini-views/helplink',
     'gettext!io.ox/core'
-], function (Events, ext, a11y, HelpView, gt) {
+], function (Events, ext, a11y, HelpLinkView, gt) {
 
     'use strict';
 
@@ -433,7 +433,7 @@ define('io.ox/core/tk/dialogs', [
                 nodes.header.remove();
             }
 
-            if (o.help) nodes.header.addClass('help').append(new HelpView({ href: o.help }).render().$el);
+            if (o.help) nodes.header.addClass('help').append(new HelpLinkView({ href: o.help, modal: true }).render().$el);
 
             // show but keep invisible
             // this speeds up calculation of dimenstions

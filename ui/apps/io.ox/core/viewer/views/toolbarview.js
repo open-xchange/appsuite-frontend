@@ -18,13 +18,13 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
     'io.ox/files/api',
-    'io.ox/backbone/mini-views/help',
+    'io.ox/backbone/mini-views/helplink',
     'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, HelpView, DocConverterUtils, Util, Settings, CoreSettings, gt) {
+], function (Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, HelpLinkView, DocConverterUtils, Util, Settings, CoreSettings, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -855,11 +855,12 @@ define('io.ox/core/viewer/views/toolbarview', [
                     }
 
                     if (_.device('smartphone')) return;
-                    var helpView = new HelpView({
-                        href: 'ox.appsuite.user.sect.drive.gui.viewer.html'
+                    var helpLinkView = new HelpLinkView({
+                        href: 'ox.appsuite.user.sect.drive.gui.viewer.html',
+                        modal: true
                     });
                     toolbar.append(
-                        $('<li role="presentation">').append(helpView.render().$el)
+                        $('<li role="presentation">').append(helpLinkView.render().$el)
                     );
                 });
             }
