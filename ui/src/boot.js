@@ -92,6 +92,7 @@ $(window).load(function () {
     // See: https://mathiasbynens.github.io/rel-noopener/
     // and: https://github.com/danielstjules/blankshield
     $(document).on('click', 'a[rel="noopener"], area[target="_blank"]', function (e) {
+        if (_.browser.chrome >= 72 || _.browser.safari >= 13 || _.browser.EdgeChromium >= 72 || _.browser.firefox >= 66) return;
         e.preventDefault();
         blankshield.open($(this).attr('href'));
     });

@@ -390,6 +390,7 @@ define('io.ox/mail/detail/content',
         index: 1200,
         process: function () {
             $(this).on('submit', 'form', function (e) {
+                if (_.browser.chrome >= 72 || _.browser.safari >= 13 || _.browser.EdgeChromium >= 72 || _.browser.firefox >= 66) return;
                 e.preventDefault();
                 var name = _.uniqueId('blank');
                 /* eslint no-script-url: 2 */
