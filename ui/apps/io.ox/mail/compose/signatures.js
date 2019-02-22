@@ -80,6 +80,11 @@ define('io.ox/mail/compose/signatures', [
             return /(<\/?\w+(\s[^<>]*)?>)/.test(text);
         },
 
+        lookLikePlainTextWithHTML: function (text) {
+            // only plaintext with links
+            return /^([^<>]|<\/?a>|<a [^>]+>)*$/.test(text);
+        },
+
         cleanUpWhiteSpace: function (text) {
             return String(text || '')
                 // replace white-space and evil \r
@@ -96,18 +101,9 @@ define('io.ox/mail/compose/signatures', [
                 $el = $('<div>')[sourceLooksLikeHTML ? 'html' : 'text'](util.cleanUpWhiteSpace(str)),
                 html = $el.html();
 
-            if (isHTML) return html;
-
-            // process plain text
-            if (sourceLooksLikeHTML) {
-                html = html.replace(/(<pre>([^<]+)<\/pre>|>\s*|\r\n\s*|\n\s*|\r)/gi, function (all, match, pre) {
-                    if (/^<pre>/i.test(match)) return pre;
-                    if (match[0] === '>') return '>';
-                    return '';
-                });
-            }
-
-            return textproc.htmltotext(html);
+            if (util.lookLikePlainTextWithHTML(html)) html = '<pre>' + html + '</pre>';
+            if (!isHTML && sourceLooksLikeHTML) return textproc.htmltotext(html);
+            return html;
         }
     };
 
