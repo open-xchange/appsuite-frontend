@@ -11,6 +11,8 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+/* global blankshield */
+
 define('io.ox/mail/detail/view', [
     'io.ox/backbone/views/disposable',
     'io.ox/mail/common-extensions',
@@ -374,7 +376,12 @@ define('io.ox/mail/detail/view', [
         index: 100,
         draw: function (baton) {
             // "//:0" does not work for src as IE 11 goes crazy when loading the frame
-            var iframe = $('<iframe src="" class="mail-detail-frame">').attr('title', gt('Email content'));
+            var iframe = $('<iframe src="" class="mail-detail-frame">').attr('title', gt('Email content')).on('load', function () {
+                iframe.contents().on('click', 'a[rel="noopener"], area[target="_blank"]', function (e) {
+                    e.preventDefault();
+                    blankshield.open($(this).attr('href'));
+                });
+            });
             ext.point('io.ox/mail/detail/body/iframe').invoke('draw', iframe, baton);
             this.idle().append(iframe);
         }
