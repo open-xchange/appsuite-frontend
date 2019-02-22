@@ -163,7 +163,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             },
             'popoutstandalone': {
                 prio: 'hi',
-                mobile: false,
+                // mobile: false,
                 icon: 'fa fa-external-link-square',
                 title: gt('Pop out standalone viewer'),
                 ref: TOOLBAR_ACTION_ID + '/popoutstandalone',
@@ -449,6 +449,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     // tested: no
     new Action(TOOLBAR_ACTION_ID + '/popoutstandalone', {
         capabilities: 'infostore',
+        device: '!smartphone',
         matches: function (baton) {
             var model = baton.model;
             // no support for mail attachments and no popout for already popped out viewer
