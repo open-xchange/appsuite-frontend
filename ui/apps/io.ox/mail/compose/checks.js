@@ -24,7 +24,7 @@ define('io.ox/mail/compose/checks', [
         var replyTo = getReplyTo(data.headers);
         if (replyTo) return replyTo;
         if (_.isEmpty(data.from)) return null;
-        return data.from;
+        return data.from[0];
     }
 
     function getReplyTo(headers) {

@@ -17,8 +17,9 @@ define('io.ox/mail/compose/model', [
     'io.ox/core/attachments/backbone',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
-    'io.ox/mail/sanitizer'
-], function (composeAPI, mailAPI, Attachments, settings, gt, sanitizer) {
+    'io.ox/mail/sanitizer',
+    'io.ox/mail/util'
+], function (composeAPI, mailAPI, Attachments, settings, gt, sanitizer, mailUtil) {
 
     'use strict';
 
@@ -145,7 +146,9 @@ define('io.ox/mail/compose/model', [
                         //#. %1$s A date
                         //#. %2$s An email address
                         //#. Example: On January 8, 2019 2:23 PM richard@open-xchange.com wrote:
-                        header.push(gt('On %1$s %2$s wrote:', moment(data.meta.date).format('LLL'), mail.from.map(mailAddress).join(', ')));
+                        header.push(gt('On %1$s %2$s wrote:', moment(data.meta.date).format('LLL'), mail.from.map(function (sender) {
+                            return mailUtil.formatSender(sender, false);
+                        }).join(', ')));
                     } else if (/^FORWARD_INLINE$/.test(data.meta.type)) {
                         header.push(
                             gt('---------- Original Message ----------'),
