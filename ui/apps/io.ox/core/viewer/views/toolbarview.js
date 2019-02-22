@@ -199,7 +199,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 },
                 'download': {
                     prio: 'hi',
-                    mobile: _.device('ios') ? 'lo' : 'hi',
+                    mobile: _.device('ios && ios < 12') ? 'lo' : 'hi',      // download is active in toolbar for ios >= 12 and all other devices
                     icon: 'fa fa-download',
                     title: gt('Download'),
                     section: 'export',
@@ -217,8 +217,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                 },
                 'open': {
                     prio: 'lo',
-                    mobile: _.device('android') ? 'lo' : 'hi',
-                    //icon: _.device('android') ? '' : 'fa fa-download',
+                    mobile: _.device('!ios || ios >= 12') ? 'lo' : 'hi',    // 'window.open button' active in toolbar for ios < 12, for all other devices located in the burger menu
+                    icon: _.device('ios && ios < 12') ? 'fa fa-download' : '',
                     title: gt('Open attachment'),
                     section: 'export',
                     ref: 'io.ox/files/actions/open'
