@@ -1715,7 +1715,8 @@ define('io.ox/calendar/week/view', [
 
         // called when an appointment detail-view opens the according appointment
         selectAppointment: function (model) {
-            this.setStartDate(model.getMoment('startDate'));
+            // use start of appointment in calendar timezone
+            this.setStartDate(model.getMoment('startDate').clone().tz(this.model.get('startDate').tz()));
         },
 
         print: function () {
