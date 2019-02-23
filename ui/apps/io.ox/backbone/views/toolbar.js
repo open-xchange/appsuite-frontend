@@ -127,6 +127,11 @@ define('io.ox/backbone/views/toolbar', [
                 $ul.on('click', 'a', $.proxy(util.invokeByEvent, this));
             }
             $dropdown.insertAfter($lo.last());
+            // replace icons by text
+            $lo.find('> a > i.fa').each(function () {
+                var $a = $(this).parent(), title = $a.attr('title');
+                $a.text(title);
+            });
             $ul.append($lo);
             util.injectSectionDividers($ul);
         },

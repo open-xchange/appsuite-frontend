@@ -134,6 +134,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: _.device('desktop') ? 'hi' : 'lo',
                 mobile: 'lo',
                 icon: 'fa fa-play',
+                title: gt('Slideshow'),
                 tooltip: gt('Run slideshow'),
                 ref: TOOLBAR_ACTION_ID + '/autoplaystart',
                 customize: function () {

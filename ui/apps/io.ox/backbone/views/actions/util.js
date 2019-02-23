@@ -179,12 +179,12 @@ define('io.ox/backbone/views/actions/util', [
             .append(function () {
                 var icon = item.link.icon,
                     title = item.link.title || item.link.label,
-                    tooltip = item.link.tooltip || (icon && title),
+                    tooltip = (item.link.tooltip || (icon && title)) && _.device('!smartphone'),
                     $a = $('<a href="#" role="button" draggable="false" tabindex="-1">')
                     .data({ baton: baton })
                     .attr({ 'data-action': item.link.ref, 'title': title });
                 // icon vs title
-                if (icon) $a.append($('<i>').addClass(icon));
+                if (icon) $a.append($('<i aria-hidden="true">').addClass(icon));
                 else if (title) $a.text(title);
                 if (!item.enabled) {
                     // style as disabled
