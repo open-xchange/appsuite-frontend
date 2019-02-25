@@ -28,14 +28,6 @@ define('io.ox/contacts/api', [
 
     var // object to store contacts, that have attachments uploading atm
         uploadInProgress = {},
-        //columns ids mapped by keywords
-        mapping = {
-            email: ['555', '556', '557'],
-            telephone: ['542', '543', '545', '546', '548', '549', '551', '552', '553', '559', '560', '561', '562', '563', '564', '567', '568'],
-            cellular: ['551', '552'],
-            fax: ['544', '550', '554'],
-            addresses: '506 507 508 509 510 523 525 526 527 528 538 539 540 541'.split(' ')
-        },
         convertResponseToGregorian = function (response) {
             if (response.id) {
                 // single contact: convert birthdays with year 1 or earlier from julian to gregorian calendar
@@ -81,13 +73,9 @@ define('io.ox/contacts/api', [
             });
         };
 
-    // mapped ids for msisdn
-    mapping.msisdn = settings.get('msisdn/columns', mapping.cellular);
-
     // generate basic API
     var api = apiFactory({
         module: 'contacts',
-        mapping: mapping,
         requests: {
             all: {
                 action: 'all',
@@ -1157,8 +1145,8 @@ define('io.ox/contacts/api', [
             // always work with trimmed lower-case variant
             query = $.trim(query).toLowerCase();
 
-            // default: standard columns plus cell phone for MSISDN support
-            var columns = '1,2,5,20,101,500,501,502,505,519,520,524,555,556,557,569,592,602,606,607,551,552';
+            // default: standard columns
+            var columns = '1,2,5,20,101,500,501,502,505,519,520,524,555,556,557,569,592,602,606,607';
             options = _.extend({ admin: false, email: true, sort: '609', columns: columns, cache: true, limit: 0 }, options);
 
             // try local cache

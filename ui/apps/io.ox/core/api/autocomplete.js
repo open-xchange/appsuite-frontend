@@ -32,7 +32,6 @@ define('io.ox/core/api/autocomplete', [
             distributionlists: false,
             resources: false,
             groups: false,
-            msisdn: false,
             split: true,
             limit: 0
         }, options);
@@ -55,10 +54,6 @@ define('io.ox/core/api/autocomplete', [
 
         // create separate objects for each email value
         this.fields = this.options.split ? ['email1', 'email2', 'email3'] : ['email1'];
-        //msisdn support: request also msisdn columns (telephone columns; defined in http.js)
-        if (this.options.msisdn && (capabilities.has('msisdn'))) {
-            this.fields = this.fields.concat(contactsAPI.getMapping('msisdn', 'names'));
-        }
 
         if (options.extPoint) ext.point(options.extPoint + '/autocomplete/customize').invoke('customize', this);
         ext.point('io.ox/core/api/autocomplete/customize').invoke('customize', this);

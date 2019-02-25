@@ -89,31 +89,11 @@ define('io.ox/mail/settings/compose/settings/pane', [
                          *
                          * THIS COMMENT IS IMPORTANT, DON’T REMOVE
                          */
-                        var accounts = api.getSenderAddresses(0).then(function (addresses) {
+                        return api.getSenderAddresses(0).then(function (addresses) {
                             return _(addresses).map(function (address) {
                                 //use value also as label
                                 return { value: address[1], label: address[1] };
                             });
-                        });
-
-                        // get msisdn numbers
-                        var msisdns = !capabilities.has('msisdn') ? [] : userAPI.get().then(function (data) {
-                            return _(contactsAPI.getMapping('msisdn', 'names'))
-                                .chain()
-                                .map(function (field) {
-                                    if (data[field]) {
-                                        return {
-                                            label: data[field],
-                                            value: mailUtil.cleanupPhone(data[field]) + mailUtil.getChannelSuffixes().msisdn
-                                        };
-                                    }
-                                })
-                                .compact()
-                                .value();
-                        });
-
-                        return $.when(accounts, msisdns).then(function (addresses, numbers) {
-                            return [].concat(addresses, numbers);
                         });
                     },
                     // overwrite render to resolve async stuff first

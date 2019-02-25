@@ -328,7 +328,6 @@ define('io.ox/mail/compose/extensions', [
                             limit: settings.get('compose/autocompleteApiLimit', 20),
                             contacts: true,
                             distributionlists: true,
-                            msisdn: true,
                             emailAutoComplete: true
                         },
                         keepInComposeWindow: true,

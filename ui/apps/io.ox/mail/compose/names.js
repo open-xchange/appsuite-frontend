@@ -139,9 +139,9 @@ define('io.ox/mail/compose/names', [
 
         open: function () {
 
-            sender.getAddresses().done(function (addresses, numbers, primay) {
+            sender.getAddresses().done(function (addresses, primay) {
 
-                var list = _([].concat([primay], addresses, numbers))
+                var list = _([].concat([primay], addresses))
                     .chain()
                     .map(function (item) {
                         defaults[item[1]] = item[0];

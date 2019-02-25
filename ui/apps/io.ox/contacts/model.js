@@ -17,11 +17,10 @@ define('io.ox/contacts/model', [
     'io.ox/backbone/validation',
     'io.ox/core/extensions',
     'io.ox/contacts/api',
-    'io.ox/core/capabilities',
     'io.ox/settings/util',
     'io.ox/core/strings',
     'gettext!io.ox/contacts'
-], function (ModelFactory, Validators, ext, api, capabilities, settingsUtil, strings, gt) {
+], function (ModelFactory, Validators, ext, api, settingsUtil, strings, gt) {
 
     'use strict';
 
@@ -114,7 +113,7 @@ define('io.ox/contacts/model', [
             cellular_telephone2: { format: 'phone' },
             telephone_other: { format: 'phone' },
             fax_other: { format: 'phone' },
-            email1: { format: capabilities.has('msisdn') ? 'email/phone' : 'email' },
+            email1: { format: 'email' },
             email2: { format: 'email' },
             email3: { format: 'email' },
             url: { format: 'url' },
@@ -273,7 +272,7 @@ define('io.ox/contacts/model', [
         cellular_telephone2: gt('Cell phone (alt)'),
         telephone_other: gt('Phone (other)'),
         fax_other: gt('Fax (alt)'),
-        email1: capabilities.has('msisdn') ? gt('Email 1 / Phone number') : gt('Email 1'),
+        email1: gt('Email 1'),
         email2: gt('Email 2'),
         email3: gt('Email 3'),
         url: gt('URL'),

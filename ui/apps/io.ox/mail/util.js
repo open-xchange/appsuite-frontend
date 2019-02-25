@@ -101,11 +101,6 @@ define('io.ox/mail/util', [
         rRecipient = /^("(\\.|[^"])+"\s|[^<]+)(<[^>]+>)$/,
         // regex: remove < > from mail address
         rMailCleanup = /(^<|>$)/g,
-        // regex: remove special characters from telephone number
-        rTelephoneCleanup = /[^0-9+]/g,
-        // regex: used to identify phone numbers
-        rNotDigitAndAt = /[^A-Za-z@]/g,
-
         // mail addresses hash
         addresses = {};
 
@@ -124,110 +119,23 @@ define('io.ox/mail/util', [
             return data.replace(regImageSrc, replacement);
         },
 
-        /**
-         * currently registred types
-         * @example: { MSISND : '/TYPE=PLMN' }
-         * @return { array} list of types
-         */
-        getChannelSuffixes: (function () {
-            //important: used for global replacements so keep this value unique
-            var types = { msisdn: contactsSetting.get('msisdn/suffix', '/TYPE=PLMN') };
-            return function () {
-                return types;
-            };
-        }()),
-
-        /**
-         * identify channel (email or phone)
-         * @param  {string} value
-         * @param  {boolean} check for activated cap first (optional: default is true)
-         * @return { string} channel
-         */
-        getChannel: function (value, check) {
-            //default value
-            value = String(value || '');
-            check = check || typeof check === 'undefined';
-            var type = value.indexOf(that.getChannelSuffixes().msisdn) > -1,
-                //no check OR activated cap
-                setting = !(check) || capabilities.has('msisdn'),
-                //no '@' AND no alphabetic digit AND at least one numerical digit
-                phoneval = function () {
-                    return value.replace(rNotDigitAndAt, '').length === 0 &&
-                           value.replace(rTelephoneCleanup, '').length > 0;
-                };
-            return type || (setting && phoneval()) ? 'phone' : 'email';
-        },
-
-        cleanupPhone: function (phone) {
-            return phone.replace(rTelephoneCleanup, '');
-        },
-
         parseRecipient: function (s, o) {
             var recipient = $.trim(s), match, name, target,
                 options = _.extend({ localpart: true }, o);
             if ((match = recipient.match(rRecipient)) !== null) {
                 // case 1: display name plus email address / telephone number
-                if (that.getChannel(match[3]) === 'email') {
-                    target = match[3].replace(rMailCleanup, '').toLowerCase();
-                } else {
-                    target = that.cleanupPhone(match[3]);
-                }
+                target = match[3].replace(rMailCleanup, '').toLowerCase();
                 name = util.unescapeDisplayName(match[1]);
-            } else if (that.getChannel(recipient) === 'email') {
+            } else {
                 // case 2: assume plain email address / telephone number
                 target = recipient.replace(rMailCleanup, '').toLowerCase();
                 name = target.split(/@/)[0];
                 // If this is set to false, localpart will be set to null
                 // This is the expected behaviour for tokenfields
                 if (!options.localpart) name = null;
-            } else {
-                name = target = that.cleanupPhone(recipient);
             }
             return [name, target];
         },
-
-        /**
-         * remove typesuffix from sender/reciepients
-         * @param  {object|string} mail
-         * @return { undefined }
-         */
-        removeChannelSuffix: !capabilities.has('msisdn') ? _.identity :
-            function (mail) {
-                var types = that.getChannelSuffixes(),
-                    //remove typesuffx from string
-                    remove = function (value) {
-                        _.each(types, function (type) {
-                            value = value.replace(new RegExp(type, 'ig'), '');
-                        });
-                        return value;
-                    };
-                if (!_.isEmpty(types)) {
-                    if (_.isString(mail)) {
-                        mail = remove(mail);
-                    } else if (_.isArray(mail)) {
-                        //array of nested mails
-                        mail = mail.map(function (message) {
-                            return that.removeChannelSuffix(message);
-                        });
-                    } else if (_.isObject(mail)) {
-                        if (mail.from && _.isArray(mail.from[0]) && mail.from[0][1]) {
-                            mail.from[0][1] = remove(mail.from[0][1]);
-                        }
-                        if (_.isArray(mail.to)) {
-                            _.each(mail.to, function (recipient) {
-                                recipient[1] = remove(recipient[1]);
-                            });
-                        }
-                        ///nestedm mail
-                        if (_.isArray(mail.nested_msgs)) {
-                            mail.nested_msgs = mail.nested_msgs.map(function (message) {
-                                return that.removeChannelSuffix(message);
-                            });
-                        }
-                    }
-                }
-                return mail;
-            },
 
         /**
          * Parse comma or semicolon separated list of recipients
@@ -244,7 +152,7 @@ define('io.ox/mail/util', [
                 //stupid workarround so exchange draft emails without proper mail adresses get displayed correctly (Bug 23983)
                 var msExchange = recipient[0] === recipient[1];
                 // add to list? (stupid check but avoids trash)
-                if (msExchange || recipient[1].indexOf('@') > -1 || that.getChannel(recipient[1]) === 'phone') {
+                if (msExchange || recipient[1].indexOf('@') > -1) {
                     list.push(recipient);
                 }
             }

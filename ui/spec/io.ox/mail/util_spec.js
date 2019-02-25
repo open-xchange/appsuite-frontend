@@ -19,28 +19,6 @@ define([
 
     describe('Mail Utilities:', function () {
 
-        describe('has some capability independent msisdn methods and', function () {
-
-            it('should correctly identify channel "email" or "phone"', function () {
-
-                //without considering activated capability
-                expect(util.getChannel(util.getChannelSuffixes().msisdn)).to.equal('phone');
-                expect(util.getChannel('017012345678' + util.getChannelSuffixes().msisdn)).to.equal('phone');
-                expect(util.getChannel('horst.matuschek@' + util.getChannelSuffixes().msisdn)).to.equal('phone');
-
-                expect(util.getChannel('017012345678', false)).to.equal('phone');
-                expect(util.getChannel('+17012345678', false)).to.equal('phone');
-                expect(util.getChannel('(01701) 23456-78', false)).to.equal('phone');
-                expect(util.getChannel('office (01701) 23456-78', false)).to.equal('email');
-            });
-
-            it('should correctly remove inalid chars from phone numbers', function () {
-                expect(util.cleanupPhone('+17012345678')).to.equal('+17012345678');
-                expect(util.cleanupPhone('(01701) 23456-78')).to.equal('017012345678');
-                expect(util.cleanupPhone('01701/2345678')).to.equal('017012345678');
-            });
-        });
-
         describe('parse recepient', function () {
             it('should work with plain mail address strings', function () {
                 var result = util.parseRecipient('julian.baeume@open-xchange.com');

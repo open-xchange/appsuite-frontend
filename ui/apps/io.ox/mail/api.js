@@ -249,7 +249,6 @@ define('io.ox/mail/api', [
 
     var get = api.get,
         getAll = api.getAll,
-        getList = api.getList,
         search = api.search;
 
     // update thread model
@@ -354,21 +353,6 @@ define('io.ox/mail/api', [
         }
 
         return getAll.call(this, options, useCache);
-    };
-
-    /**
-     * pipes getList() to remove typesuffix from sender
-     * @param  {array} ids
-     * @param  {boolean} useCache (default is true)
-     * @param  {object} options
-     * @return { deferred }
-     */
-    api.getList = function (ids, useCache, options) {
-        //TOOD: use this until backend removes channel suffix
-        return getList.call(this, ids, useCache, options).then(function (data) {
-            _.each(data, util.removeChannelSuffix);
-            return data;
-        });
     };
 
     api.search = function (query, options) {
