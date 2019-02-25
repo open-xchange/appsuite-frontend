@@ -209,6 +209,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 // on smartphones the separate dropdown is broken up and the options are added to the actions dropdown
                 'share': {
                     prio: 'hi',
+                    mobile: 'none',
                     title: gt('Share'),
                     tooltip: gt('Share this file'),
                     dropdown: 'io.ox/files/toolbar/share',

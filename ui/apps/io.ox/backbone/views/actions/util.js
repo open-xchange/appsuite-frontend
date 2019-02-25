@@ -57,12 +57,12 @@ define('io.ox/backbone/views/actions/util', [
         },
 
         processItem: function (baton, link) {
+            // check priority (none)
+            if (!util.checkPriority(link)) return { link: link, available: false };
             // skip dropdowns
             if (link.dropdown || link.custom) return { link: link, available: true, enabled: true };
-            // check link
-            if (!util.checkLink(link)) return { link: link, available: false };
             // get actions
-            var actions = ext.point(link.ref).list();
+            var actions = link.ref ? ext.point(link.ref).list() : [];
             // check general availability
             var available = actions.filter(util.checkActionAvailability);
             if (!available.length) return { link: link, available: false };
@@ -74,10 +74,8 @@ define('io.ox/backbone/views/actions/util', [
             return { link: link, available: true, enabled: enabled.length > 0, actions: enabled };
         },
 
-        checkLink: function (link) {
-            if (!link.ref) return false;
-            if (link.mobile === 'none' && _.device('smartphone')) return false;
-            return true;
+        checkPriority: function (link) {
+            return link[_.device('smartphone') ? 'mobile' : 'prio'] !== 'none';
         },
 
         checkActionAvailability: function (action) {
