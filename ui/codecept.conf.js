@@ -65,7 +65,15 @@ module.exports.config = {
         }, 500);
     },
     plugins: {
-        allure: { enabled: true }
+        allure: { enabled: true },
+        testrail: {
+            host: process.env.TESTRAIL_HOST || 'https://testrail.local',
+            user: process.env.TESTRAIL_USERNAME || 'testuser',
+            password: process.env.TESTRAIL_API_KEY || 'testkey',
+            projectId: process.env.TESTRAIL_PROJECTID || '1',
+            runName: process.env.TESTRAIL_RUNNAME || 'test',
+            enabled: process.env.TESTRAIL_ENABLED || false
+        }
     },
     name: 'App Suite Core UI'
 };
