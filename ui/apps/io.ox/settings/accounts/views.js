@@ -130,11 +130,13 @@ define('io.ox/settings/accounts/views', [
                     .addButton({ action: 'delete', label: gt('Delete account') })
                     .on('delete', function () {
                         var popup = this,
-                            // require correct api
-                            req = account.accountType === 'mail' ? 'io.ox/keychain/api' : 'io.ox/core/folder/api';
+                            // use correct api, folder API if there's a folder and account is not a mail account,
+                            // keychain API otherwise
+                            useFolderAPI = typeof account.folder !== 'undefined' && account.accountType !== 'mail',
+                            req = useFolderAPI ? 'io.ox/core/folder/api' : 'io.ox/keychain/api';
                         settingsUtil.yellOnReject(
                             require([req]).then(function (api) {
-                                return api.remove(account.accountType === 'mail' ? account : account.folder);
+                                return api.remove(useFolderAPI ? account.folder : account);
                             }).then(
                                 function success() {
                                     if (self.disposed) {
