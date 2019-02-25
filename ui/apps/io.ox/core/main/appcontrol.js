@@ -291,6 +291,18 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
+    ext.point('io.ox/core/appcontrol').extend({
+        id: 'skiplinks',
+        index: 150,
+        draw: function () {
+            this.append(
+                $('<a class="skip-links sr-only sr-only-focusable" href="#">').append(
+                    $('<span class= "skippy-text">').text('Skip to main content')
+                )
+            );
+        }
+    });
+
     // ext.point('io.ox/core/appcontrol').extend({
     //     id: 'launcher',
     //     index: 200,
