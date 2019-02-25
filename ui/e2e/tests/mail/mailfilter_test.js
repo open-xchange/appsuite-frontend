@@ -436,7 +436,7 @@ Scenario('checks if the size test is correctly displayed', function (I) {
 
     I.see('Is bigger than', 'li[data-test-id="0"] :not(.no-padding-left) .dropdownlink span');
     I.seeInField('[data-test-id="0"] input[name="sizeValue"]', '20');
-    I.see('B', 'li[data-test-id="0"] .no-padding-left .dropdownlink span');
+    I.see('Byte', 'li[data-test-id="0"] .no-padding-left .dropdownlink span');
     I.dontSeeCheckboxIsChecked('Process subsequent rules');
 
     I.click('Cancel', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
@@ -450,7 +450,7 @@ Scenario('checks if the size test is correctly displayed', function (I) {
 
     I.see('Is bigger than', 'li[data-test-id="0"] :not(.no-padding-left) .dropdownlink span');
     I.seeInField('[data-test-id="0"] input[name="sizeValue"]', '20');
-    I.see('KB', 'li[data-test-id="0"] .no-padding-left .dropdownlink span');
+    I.see('kB', 'li[data-test-id="0"] .no-padding-left .dropdownlink span');
     I.dontSeeCheckboxIsChecked('Process subsequent rules');
 
     I.click('Cancel', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');

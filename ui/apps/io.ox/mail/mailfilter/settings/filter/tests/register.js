@@ -948,8 +948,8 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         }, li;
 
                     var unitValues = {
-                        'B': 'B',
-                        'K': 'KB',
+                        'B': 'Byte',
+                        'K': 'kB',
                         'M': 'MB',
                         'G': 'GB'
                     };
