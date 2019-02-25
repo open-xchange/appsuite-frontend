@@ -895,29 +895,29 @@ Scenario('C101615 - Emojis', async function (I, users) {
     I.logout();
 });
 
-Scenario('C101617 - Mail with <strike> element </strike>', async function (I, users) {
-    //define testrail ID
-    it('(C101617) Mail with <strike> element </strike>');
-    let [user] = users;
-    //var testrailID = 'C101617';
-    //var timestamp = Math.round(+new Date() / 1000);
-
-
-    I.importMail({ user: users[0] }, 'default0/INBOX', 'e2e/tests/testrail/files/mail/badmails/C101617/C101617.eml');
-    //console.log(data)
-
-    I.login('app=io.ox/mail', { user });
-    I.waitForVisible('.io-ox-mail-window');
-    I.selectFolder('Inbox');
-    I.doubleClick('//*[contains(text(), "mail with <strike> element </strike>")]', 'span.drag-title');
-    I.see('mail with <strike> element </strike>', '.floating-header .title');
-    I.see('mail with <strike> element </strike>', '.floating-window-content h1.subject');
-
-    within({ frame: '.floating-window-content iframe.mail-detail-frame' }, () => {
-        I.see('i use strike!!!!', '.mail-detail-content div strike');
-    });
-    I.logout();
-});
+//Scenario('C101617 - Mail with <strike> element </strike>', async function (I, users) {
+//    //define testrail ID
+//    it('(C101617) Mail with <strike> element </strike>');
+//    let [user] = users;
+//    //var testrailID = 'C101617';
+//    //var timestamp = Math.round(+new Date() / 1000);
+//
+//
+//    I.importMail({ user: users[0] }, 'default0/INBOX', 'e2e/tests/testrail/files/mail/badmails/C101617/C101617.eml');
+//    //console.log(data)
+//
+//    I.login('app=io.ox/mail', { user });
+//    I.waitForVisible('.io-ox-mail-window');
+//    I.selectFolder('Inbox');
+//    I.doubleClick('//*[contains(text(), "mail with <strike> element </strike>")]', 'span.drag-title');
+//    I.see('mail with <strike> element </strike>', '.floating-header .title');
+//    I.see('mail with <strike> element </strike>', '.floating-window-content h1.subject');
+//
+//    within({ frame: '.floating-window-content iframe.mail-detail-frame' }, () => {
+//        I.see('i use strike!!!!', '.mail-detail-content div strike');
+//    });
+//    I.logout();
+//});
 
 Scenario('C101620 - Very long TO field', async function (I, users) {
     //define testrail ID
@@ -938,7 +938,6 @@ Scenario('C101620 - Very long TO field', async function (I, users) {
     I.seeCssPropertiesOnElements('.mail-detail-pane .recipients', { 'overflow': 'hidden' });
     I.seeCssPropertiesOnElements('.mail-detail-pane .recipients', { 'text-overflow': 'ellipsis' });
     //TODO: Width is not 100% when get css property?
-
     I.doubleClick('//*[contains(text(), "Very long TO field")]', 'span.drag-title');
     I.seeCssPropertiesOnElements('.floating-window-content .recipients', { 'overflow': 'hidden' });
     I.seeCssPropertiesOnElements('.floating-window-content .recipients', { 'text-overflow': 'ellipsis' });
@@ -946,48 +945,48 @@ Scenario('C101620 - Very long TO field', async function (I, users) {
     I.logout();
 });
 
-Scenario('C101619 - CSS a:link test', async function (I, users) {
-    //define testrail ID
-    it('(C101619) CSS a:link test');
-    let [user] = users;
-    //var testrailID = 'C101619';
-    //var timestamp = Math.round(+new Date() / 1000);
+//Scenario('C101619 - CSS a:link test', async function (I, users) {
+//    //define testrail ID
+//    it('(C101619) CSS a:link test');
+//    let [user] = users;
+//    //var testrailID = 'C101619';
+//    //var timestamp = Math.round(+new Date() / 1000);
+//
+//
+//    I.importMail({ user: users[0] }, 'default0/INBOX', 'e2e/tests/testrail/files/mail/badmails/C101619/C101619.eml');
+//    //console.log(data)
+//
+//    I.login('app=io.ox/mail', { user });
+//    I.waitForVisible('.io-ox-mail-window');
+//    I.selectFolder('Inbox');
+//
+//    I.doubleClick('//*[contains(text(), "CSS a:link test")]', 'span.drag-title');
+//
+//    within({ frame: '.floating-window-content iframe.mail-detail-frame' }, () => {
+//        I.see(' a:link {   color:blue;   text-decoration:underline;  }', '.mail-detail-content p');
+//    });
+//    I.logout();
+//});
 
-
-    I.importMail({ user: users[0] }, 'default0/INBOX', 'e2e/tests/testrail/files/mail/badmails/C101619/C101619.eml');
-    //console.log(data)
-
-    I.login('app=io.ox/mail', { user });
-    I.waitForVisible('.io-ox-mail-window');
-    I.selectFolder('Inbox');
-
-    I.doubleClick('//*[contains(text(), "CSS a:link test")]', 'span.drag-title');
-
-    within({ frame: '.floating-window-content iframe.mail-detail-frame' }, () => {
-        I.see(' a:link {   color:blue;   text-decoration:underline;  }', '.mail-detail-content p');
-    });
-    I.logout();
-});
-
-Scenario('C273801 - Download infected file', async function (I, users) {
-    //define testrail ID
-    it('(C273801) Download infected file');
-    let [user] = users;
-    //var testrailID = 'C273801';
-    //var timestamp = Math.round(+new Date() / 1000);
-
-
-    I.importMail({ user: users[0] }, 'default0/INBOX', 'e2e/tests/testrail/files/mail/Virus_attached!.eml');
-    //console.log(data)
-
-    I.login('app=io.ox/mail', { user });
-    I.waitForVisible('.io-ox-mail-window');
-    I.selectFolder('Inbox');
-
-    I.doubleClick('//*[contains(text(), "Virus attached!")]', 'span.drag-title');
-    I.click('.detail-view-app [data-ref="io.ox/mail/actions/download-attachment"]');
-    I.seeElement('.detail-view-app [data-ref="io.ox/mail/actions/download-attachment"]');
-});
+//Scenario('C273801 - Download infected file', async function (I, users) {
+//    //define testrail ID
+//    it('(C273801) Download infected file');
+//    let [user] = users;
+//    //var testrailID = 'C273801';
+//    //var timestamp = Math.round(+new Date() / 1000);
+//
+//
+//    I.importMail({ user: users[0] }, 'default0/INBOX', 'e2e/tests/testrail/files/mail/Virus_attached!.eml');
+//    //console.log(data)
+//
+//    I.login('app=io.ox/mail', { user });
+//    I.waitForVisible('.io-ox-mail-window');
+//    I.selectFolder('Inbox');
+//
+//    I.doubleClick('//*[contains(text(), "Virus attached!")]', 'span.drag-title');
+//    I.click('.detail-view-app [data-ref="io.ox/mail/actions/download-attachment"]');
+//    I.seeElement('.detail-view-app [data-ref="io.ox/mail/actions/download-attachment"]');
+//});
 
 Scenario('C114958 - Delete draft when closing composer', async function (I, users) {
     //define testrail ID

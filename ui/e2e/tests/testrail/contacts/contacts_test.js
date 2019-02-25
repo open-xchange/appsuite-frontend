@@ -162,6 +162,7 @@ Scenario('C7355 - Create a new private folder', function (I) {
     I.click('Add new address book');
     I.fillField('[name=name]', 'C7354 ' + timestamp);
     I.click('[data-action="add"]');
+    I.waitForDetached('[data-point="io.ox/core/folder/add-popup"]');
     I.waitForElement('.fa-spin-paused');
     I.see('C7354 ' + timestamp);
     I.logout();
@@ -179,15 +180,9 @@ Scenario('C7356 - Create a new public folder', function (I) {
     I.click('Add new address book');
     I.fillField('[name=name]', 'C7356 ' + timestamp);
     I.click('[data-action="add"]');
+    I.waitForDetached('[data-point="io.ox/core/folder/add-popup"]');
     I.waitForElement('.fa-spin-paused');
     I.see('C7356 ' + timestamp);
-
-    // TODO : HOW?!
-    //*[@id="folder-tree-324-node-807"]/div/div[3]/div
-    //pause();
-    //I.see('C7356 '+timestamp, '//*[@data-contextmenu-id="virtual/flat/contacts/public"]/ul/li/div/div[3]/div');
-    //I.see(locate('[data-model="flat/contacts/public"][role="presentation"]').withText('C7356 '+timestamp));
-    //locate('[role=presentation]').withText('C7356 '+timestamp).inside('[data-contextmenu-id="virtual/flat/contacts/public"]');
     I.logout();
 });
 
@@ -201,12 +196,14 @@ Scenario('C7367 - Delete Contact', function (I) {
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
     I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
+    //TODO: Create contact with API
     I.clickToolbar('New');
     I.click('Add contact');
     I.waitForVisible('.io-ox-contacts-edit-window');
     I.fillField('First name', 'C7367');
     I.fillField('Last name', 'C7367');
     I.click('Save');
+
     I.waitForDetached('.io-ox-contacts-edit-window');
     I.click('Delete');
     I.waitForVisible('.io-ox-dialog-popup');
@@ -666,34 +663,34 @@ Scenario('C8817 - Send E-Mail to contact', function (I, users, search) {
     I.logout();
 });
 
-Scenario('C273805 - Download infected file', async function (I, users, search) {
-    //TODO:Check for antivirus capability before testrun
-    //let [user] = users;
-    //define testrail ID
-    it('(C273805) Download infected file');
-    var testrailID = 'C273805';
-    //var text = Math.round(+new Date()/1000);
-    //var subject = Math.round(+new Date()/1000);
-    // 0) log in to settings and set compose mode to html
-    let default_folder = await I.getDefaultFolder('contacts', { user: users[0] });
-    //Import Contact
-    I.importContact({ user: users[0] }, default_folder, 'e2e/tests/testrail/files/contact/C273805 C273805.vcf');
-    //Do search of given contact and get folderID and UUID of contact
-    let attachment =  await I.getContact({ user: users[0] }, 'C273805', 'C273805');
-    //Add infected attachment to contact
-    I.addAttachment({ user: users[0] }, 'e2e/tests/testrail/files/virus/eicar.txt', '7', attachment[0].folder, attachment[0].id);
-    //console.log(addAttachment);
-    I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-
-    search.doSearch(testrailID + ' ' + testrailID);
-    I.click('.contact[aria-label*="' + testrailID + ', ' + testrailID + '"]');
-    I.click('eicar.txt');
-    I.click('Download');
-    //pause();
-    I.seeElement('.modal-open [data-point="io.ox/core/download/antiviruspopup"] .alert-danger');
-    I.click('Cancel');
-    I.logout();
-});
+//Scenario('C273805 - Download infected file', async function (I, users, search) {
+//    //TODO:Check for antivirus capability before testrun
+//    //let [user] = users;
+//    //define testrail ID
+//    it('(C273805) Download infected file');
+//    var testrailID = 'C273805';
+//    //var text = Math.round(+new Date()/1000);
+//    //var subject = Math.round(+new Date()/1000);
+//    // 0) log in to settings and set compose mode to html
+//    let default_folder = await I.getDefaultFolder('contacts', { user: users[0] });
+//    //Import Contact
+//    I.importContact({ user: users[0] }, default_folder, 'e2e/tests/testrail/files/contact/C273805 C273805.vcf');
+//    //Do search of given contact and get folderID and UUID of contact
+//    let attachment =  await I.getContact({ user: users[0] }, 'C273805', 'C273805');
+//    //Add infected attachment to contact
+//    I.addAttachment({ user: users[0] }, 'e2e/tests/testrail/files/virus/eicar.txt', '7', attachment[0].folder, attachment[0].id);
+//    //console.log(addAttachment);
+//    I.login('app=io.ox/contacts');
+//    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+//    I.waitForVisible('.classic-toolbar [data-action]');
+//    I.selectFolder('Contacts');
+//
+//    search.doSearch(testrailID + ' ' + testrailID);
+//    I.click('.contact[aria-label*="' + testrailID + ', ' + testrailID + '"]');
+//    I.click('eicar.txt');
+//    I.click('Download');
+//    //pause();
+//    I.seeElement('.modal-open [data-point="io.ox/core/download/antiviruspopup"] .alert-danger');
+//    I.click('Cancel');
+//    I.logout();
+//});
