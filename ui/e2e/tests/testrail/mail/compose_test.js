@@ -36,47 +36,19 @@ Scenario('C7384 - Save draft', function (I, users) {
 
     // 0) log in to settings and set compose mode to html
     I.haveSetting('io.ox/mail//messageFormat', 'text');
-    I.login('app=io.ox/settings', { user });
-    I.waitForVisible('.io-ox-settings-main');
-    // open mail settings
-    I.selectFolder('Mail');
-    I.waitForVisible('.rightside h1');
-    I.selectFolder('Compose');
-
-    // set compose mode to html
-    I.waitForVisible('[name="messageFormat"][value="text"] + i');
-    I.checkOption({ css: '[name="messageFormat"][value="text"] + i' });
-
-    // 1) Switch to the mail app, select "Create mail"
-    I.openApp('Mail');
-
-    // 1.1) Mark all messages as read to identify the new message later on
-    I.selectFolder('Inbox');
-    I.waitForVisible('.selected .contextmenu-control');
-    I.click('.selected .contextmenu-control');
-    I.click('.dropdown.open a[data-action="markfolderread"]');
-
-
+    //I.haveSetting('io.ox/mail//autoSaveDraftsAfter', 'disabled');
+    I.login('app=io.ox/mail', { user });
     // 1.2) continue opening mail compose
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
-
-
-    // 3) Set a recipient, add a subject and mail text
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailid + ' - ' + subject);
     I.fillField({ css: 'textarea.plain-text' }, '' + text);
     I.seeInField({ css: 'textarea.plain-text' }, '' + text);
-
-
-    // 4) Send the E-Mail and check it as recipient
-    I.click('Save');
-    I.wait(3);
     I.click('Discard');
-
-    // Select draf frolder
-
+    I.waitForElement('.io-ox-dialog-wrapper .modal-backdrop');
+    I.click('Save as draft');
+    I.waitForDetached('.io-ox-dialog-wrapper .modal-backdrop');
     I.selectFolder('Drafts');
     I.waitForText('' + testrailid + ' - ' + subject, 5, '.subject');
     I.doubleClick('.list-item[aria-label*="' + testrailid + ' - ' + subject + '"]');
@@ -210,9 +182,10 @@ Scenario('C7380 - Send saved draft mail', function (I, users) {
 
 
     // 4) Send the E-Mail and check it as recipient
-    I.click('Save');
-    I.wait(3);
     I.click('Discard');
+    I.waitForElement('.io-ox-dialog-wrapper .modal-backdrop');
+    I.click('Save as draft');
+    I.waitForDetached('.io-ox-dialog-wrapper .modal-backdrop');
 
     // Select draf frolder
 
