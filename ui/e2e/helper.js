@@ -51,14 +51,14 @@ class MyHelper extends Helper {
                 });
             });
         });
-    };
+    }
     async createContact(contact, options) {
         const { httpClient, session } = await util.getSessionForUser(options);
         return httpClient.put('/appsuite/api/contacts', contact, {
             params: {
                 action: 'new',
                 session: session
-            },
+            }
         });
     }
     async getDefaultFolder(module, options) {
@@ -84,7 +84,7 @@ class MyHelper extends Helper {
                 action: 'import',
                 session: session,
                 folder: folder,
-                force: true,
+                force: true
             },
             headers: form.getHeaders()
         });
@@ -99,7 +99,7 @@ class MyHelper extends Helper {
                 action: 'VCARD',
                 session: session,
                 ignoreUIDs: '',
-                folder: folder,
+                folder: folder
             },
             headers: form.getHeaders()
         });
@@ -109,14 +109,14 @@ class MyHelper extends Helper {
         //The module type of the object: 1 (appointment), 4 (task), 7 (contact), 137 (infostore).
         let form = new FormData();
         form.append('json_0', JSON.stringify({ module: modulo, attached: id, folder: folder }));
-        form.append('file_0', fs.createReadStream(filepath))
+        form.append('file_0', fs.createReadStream(filepath));
 
         const { httpClient, session } = await util.getSessionForUser(options);
         return httpClient.post('/appsuite/api/attachment', form, {
             params: {
                 action: 'attach',
                 session: session,
-                force_json_response: true,
+                force_json_response: true
             },
             headers: form.getHeaders()
         });
@@ -176,20 +176,20 @@ class MyHelper extends Helper {
     }
     async getContact(options, first_name, last_name) {
         const { httpClient, session } = await util.getSessionForUser(options);
-        console.log(session)
-        let test = {first_name: first_name, last_name: last_name}
-        const response = await httpClient.put('/appsuite/api/contacts', test , {
+        console.log(session);
+        let test = { first_name: first_name, last_name: last_name };
+        const response = await httpClient.put('/appsuite/api/contacts', test, {
             params: {
                 action: 'search',
                 session: session,
-                columns: '1,20',
-            },
-          
+                columns: '1,20'
+            }
+
         });
         //Debug
-        return response.data.data.map(function(data){
-            return {id:data[0], folder:data[1]};
-        })
+        return response.data.data.map(function (data) {
+            return { id: data[0], folder: data[1] };
+        });
     }
 }
 
