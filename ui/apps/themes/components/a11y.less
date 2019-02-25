@@ -11,6 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+ .skip-links.sr-only.sr-only-focusable {
+    background-color: transparent;
+    outline: 0;
+    color: #fff;
+    padding: 8px;
+    margin: 12px 0px 12px 8px;
+ }
+
 .sr-only {
     // make a11y plugin contrast warning happy
     color: #000;
@@ -18,4 +26,17 @@
 
     // avoid selection/copy of sr-only elements
     .user-select(none);
+}
+
+// Imported from Bootstrap 4.3.1
+.sr-only-focusable {
+  &:active,
+  &:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
 }
