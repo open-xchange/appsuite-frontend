@@ -82,7 +82,10 @@ define('io.ox/contacts/edit/view-form', [
                 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
                 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'
             ],
-            attachments: ['attachments_list']
+
+            attachments: ['attachments_list'],
+
+            advanced: ['toggle']
         },
 
         rare: [
@@ -127,6 +130,7 @@ define('io.ox/contacts/edit/view-form', [
             other_address: gt('Other address'),
             job: gt('Job description'),
             comment: gt('Comment'),
+            advanced: gt('Advanced'),
             userfields: gt('User fields'),
             attachments: gt('Attachments')
         },
@@ -139,6 +143,9 @@ define('io.ox/contacts/edit/view-form', [
             5680: 'note'
         }
     };
+
+    // is part of footer otherwise
+    if (_.device('smartphone')) meta.alwaysVisible.push('toggle');
 
     // process maxlength
     _(meta.maxlength).keys().forEach(function (size) {
@@ -268,21 +275,32 @@ define('io.ox/contacts/edit/view-form', [
             }
         });
 
+        function toggleButton(baton) {
+            var guid = _.uniqueId('contacts-');
+            return $('<label class="checkbox-inline">').attr('for', guid).append(
+                $('<input type="checkbox" class="toggle-check">').attr('id', guid)
+                    .on('change', function (e) {
+                        e.preventDefault();
+                        toggle.call(baton.parentView.$el);
+                    }),
+                $.txt(gt('Show all fields'))
+            );
+        }
+
+        function drawToggleRow(options, model, baton) {
+            if (!_.device('smartphone')) return;
+            var group = $('<fieldset class="col-lg-12 form-group">');
+            this.append(
+                group.append(toggleButton(baton))
+            );
+        }
+
         ext.point(ref + '/edit/buttons').extend({
             index: 300,
             id: 'showall',
             draw: function (baton) {
-                var guid = _.uniqueId('contacts-');
-                this.append(
-                    $('<label class="checkbox-inline">').attr('for', guid).append(
-                        $('<input type="checkbox" class="toggle-check">').attr('id', guid)
-                            .on('change', function (e) {
-                                e.preventDefault();
-                                toggle.call(baton.parentView.$el);
-                            }),
-                        $.txt(gt('Show all fields'))
-                    )
-                );
+                if (_.device('smartphone')) return;
+                this.append(toggleButton(baton));
             }
         });
 
@@ -614,6 +632,7 @@ define('io.ox/contacts/edit/view-form', [
                 anniversary: drawDate,
                 note: drawTextarea,
                 private_flag: drawCheckbox,
+                toggle: drawToggleRow,
                 attachments_list: drawAttachments
             };
 
