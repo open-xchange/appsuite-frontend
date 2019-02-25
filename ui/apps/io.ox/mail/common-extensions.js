@@ -474,7 +474,7 @@ define('io.ox/mail/common-extensions', [
         },
 
         //#. empty message for list view
-        empty: function () { this.text(gt('Empty')); },
+        empty: function () { this.attr('role', 'option').text(gt('Empty')); },
 
         // add orignal folder as label to search result items
         folder: function (baton) {
