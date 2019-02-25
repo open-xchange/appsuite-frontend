@@ -35,6 +35,7 @@ Scenario('C7384 - Save draft', function (I, users) {
 
 
     // 0) log in to settings and set compose mode to html
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/settings', { user });
     I.waitForVisible('.io-ox-settings-main');
     // open mail settings
@@ -61,11 +62,6 @@ Scenario('C7384 - Save draft', function (I, users) {
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
 
-    // 2) Select "Plain Text" as text format under "Options"
-    I.click('Options');
-    I.click('Plain Text');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text');
-    I.waitForInvisible('.io-ox-mail-compose .editable-toolbar');
 
     // 3) Set a recipient, add a subject and mail text
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
@@ -96,14 +92,13 @@ Scenario('C7382 - Compose plain text mail', function (I, users) {
     var timestamp = Math.round(+new Date() / 1000);
 
     // 0) log in to settings and set compose mode to html
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
 
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.click('Options');
-    I.click('Plain Text');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
@@ -126,14 +121,13 @@ Scenario('C8816 - Cancel mail compose', function (I, users) {
     var timestamp = Math.round(+new Date() / 1000);
 
     // 0) log in to settings and set compose mode to html
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
 
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.click('Options');
-    I.click('Plain Text');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
@@ -150,7 +144,7 @@ Scenario('C7381 - Send email to multiple recipients', function (I, users) {
     let [user] = users;
     var testrailID = 'C7381';
     var timestamp = Math.round(+new Date() / 1000);
-
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
     // 0) log in to settings and set compose mode to html
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
@@ -158,8 +152,6 @@ Scenario('C7381 - Send email to multiple recipients', function (I, users) {
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.click('Options');
-    I.click('Plain Text');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.pressKey('Enter');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[2].userdata.primaryEmail);
@@ -202,18 +194,13 @@ Scenario('C7380 - Send saved draft mail', function (I, users) {
 
 
     // 0) log in to settings and set compose mode to html
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
 
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-
-    // 2) Select "Plain Text" as text format under "Options"
-    I.click('Options');
-    I.click('Plain Text');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text');
-    I.waitForInvisible('.io-ox-mail-compose .editable-toolbar');
 
     // 3) Set a recipient, add a subject and mail text
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail); // User2
@@ -276,14 +263,13 @@ Scenario('C7385 - Write mail to BCC recipients', function (I, users) {
     var timestamp = Math.round(+new Date() / 1000);
 
     // 0) log in to settings and set compose mode to html
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
 
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.click('Options');
-    I.click('Plain Text');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.click('BCC');
     I.fillField('.io-ox-mail-compose [placeholder="BCC"]', users[2].userdata.primaryEmail);
@@ -320,15 +306,13 @@ Scenario('C7386 - Write mail to CC recipients', function (I, users) {
     var testrailID = 'C7386';
     var timestamp = Math.round(+new Date() / 1000);
 
-    // 0) log in to settings and set compose mode to html
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
 
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.click('Options');
-    I.click('Plain Text');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.click('CC');
     I.fillField('.io-ox-mail-compose [placeholder="CC"]', users[2].userdata.primaryEmail);
@@ -387,14 +371,13 @@ Scenario('C7388 - Send mail with different priorities', function (I, users) {
     var timestamp = Math.round(+new Date() / 1000);
 
     // 0) log in to settings and set compose mode to html
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
 
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.click('Options');
-    I.click('Plain Text');
     I.click('Options');
     I.click('High');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
@@ -407,8 +390,6 @@ Scenario('C7388 - Send mail with different priorities', function (I, users) {
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
     I.click('Options');
-    I.click('Plain Text');
-    I.click('Options');
     I.click('Normal');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp + ' Priority: Normal');
@@ -419,8 +400,6 @@ Scenario('C7388 - Send mail with different priorities', function (I, users) {
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.click('Options');
-    I.click('Plain Text');
     I.click('Options');
     I.click('Low');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
@@ -468,7 +447,7 @@ Scenario('C7389 - Send mail with attached vCard', function (I, users) {
     let [user] = users;
     var testrailID = 'C7389';
     var timestamp = Math.round(+new Date() / 1000);
-
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
     // 0) log in to settings and set compose mode to html
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
@@ -476,8 +455,6 @@ Scenario('C7389 - Send mail with attached vCard', function (I, users) {
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.click('Options');
-    I.click('Plain Text');
     I.click('Options');
     I.click('Attach Vcard');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
@@ -517,14 +494,13 @@ Scenario('C7387 - Send mail with attachment from upload', function (I, users) {
     var timestamp = Math.round(+new Date() / 1000);
 
     // 0) log in to settings and set compose mode to html
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
 
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.click('Options');
-    I.click('Plain Text');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
@@ -620,14 +596,13 @@ Scenario('C7403 - Forward a single mail', function (I, users) {
     var timestamp = Math.round(+new Date() / 1000);
 
     // 0) log in to settings and set compose mode to html
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
 
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.click('Options');
-    I.click('Plain Text');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
@@ -663,14 +638,13 @@ Scenario('C7404 - Reply to single mail', function (I, users) {
     var timestamp = Math.round(+new Date() / 1000);
 
     // 0) log in to settings and set compose mode to html
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
 
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.click('Options');
-    I.click('Plain Text');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
@@ -705,14 +679,13 @@ Scenario('C8820 - Forward attachments', function (I, users) {
     var timestamp = Math.round(+new Date() / 1000);
 
     // 0) log in to settings and set compose mode to html
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
 
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.click('Options');
-    I.click('Plain Text');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
@@ -772,14 +745,13 @@ Scenario('C7405 - Delete E-Mail', function (I, users) {
     var timestamp = Math.round(+new Date() / 1000);
 
     // 0) log in to settings and set compose mode to html
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
 
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.click('Options');
-    I.click('Plain Text');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
@@ -807,14 +779,13 @@ Scenario('C7406 - Delete several E-Mails', function (I, users) {
     var timestamp = Math.round(+new Date() / 1000);
 
     // 0) log in to settings and set compose mode to html
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
 
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.click('Options');
-    I.click('Plain Text');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp + ' - 1');
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp + ' - 1');
@@ -824,8 +795,6 @@ Scenario('C7406 - Delete several E-Mails', function (I, users) {
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
-    I.click('Options');
-    I.click('Plain Text');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp + ' - 2');
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp + ' - 2');

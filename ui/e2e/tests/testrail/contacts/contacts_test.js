@@ -629,28 +629,16 @@ Scenario('C8817 - Send E-Mail to contact', function (I, users, search) {
     var testrailID = 'C8817';
     //var text = Math.round(+new Date() / 1000);
     var subject = Math.round(+new Date() / 1000);
-    // 0) log in to settings and set compose mode to html
-    I.login('app=io.ox/settings', { user });
-    I.waitForVisible('.io-ox-settings-main');
-    // open mail settings
-    I.selectFolder('Mail');
-    I.waitForVisible('.rightside h1');
-    I.selectFolder('Compose');
-    // set compose mode to html
-    I.waitForVisible('[name="messageFormat"][value="text"] + i');
-    I.checkOption({ css: '[name="messageFormat"][value="text"] + i' });
-    I.openApp('Address Book');
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
+    I.login('app=io.ox/contacts', { user });
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
     search.doSearch(users[1].userdata.primaryEmail);
+    I.waitForElement('[href="mailto:' + users[1].userdata.primaryEmail + '"]');
     I.click('[href="mailto:' + users[1].userdata.primaryEmail + '"]');
+    I.waitForVisible('.io-ox-mail-compose');
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + subject);
-    //I.wait(0.5)
-    //I.seeInField('.io-ox-mail-compose [name="subject"]', '' + testrailID + " - " + subject);
     I.fillField({ css: 'textarea.plain-text' }, testrailID);
-    //I.seeInField({ css: 'textarea.plain-text' }, testrailID);
+    I.seeInField({ css: 'textarea.plain-text' }, testrailID);
     I.click('Send');
     I.waitForElement('.fa-spin-paused');
     I.wait('1');
