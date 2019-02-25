@@ -11,7 +11,7 @@
  */
 /// <reference path="../../../steps.d.ts" />
 
-Feature('testrail - contacts');
+Feature('testrail - contacts').tag('2');
 
 Before(async function (users) {
     await users.create();

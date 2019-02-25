@@ -11,7 +11,7 @@
  */
 /// <reference path="../../../steps.d.ts" />
 
-Feature('testrail - distributionlists');
+Feature('testrail - distributionlists').tag('3');
 
 Before(async function (users) {
     await users.create();

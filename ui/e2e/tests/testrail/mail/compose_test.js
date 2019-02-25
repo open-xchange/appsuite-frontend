@@ -11,7 +11,7 @@
  */
 /// <reference path="../../../steps.d.ts" />
 
-Feature('testrail - mail - compose');
+Feature('testrail - mail - compose').tag('5');
 
 Before(async function (users) {
     await users.create();
