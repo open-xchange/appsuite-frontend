@@ -233,12 +233,14 @@ define('io.ox/core/viewer/views/toolbarview', [
                     ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
                 },
                 'invite': {
+                    prio: 'none',
                     mobile: 'lo',
                     title: gt('Invite people'),
                     section: 'share',
                     ref: 'io.ox/files/actions/invite'
                 },
                 'sharelink': {
+                    prio: 'none',
                     mobile: 'lo',
                     title: gt('Create sharing link'),
                     section: 'share',
