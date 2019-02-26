@@ -211,7 +211,7 @@ define('io.ox/mail/settings/pane', [
                 ox.on('mail:change:vacation-notice', updateToggle.bind(this));
 
                 function updateToggle(model) {
-                    this.find('[data-action="edit-vacation-notice"] .fa-toggle-on').toggle(model.isActive());
+                    this.find('[data-action="edit-vacation-notice"] .fa-toggle-on').toggle(model.get('active'));
                 }
 
                 function openDialog() {
