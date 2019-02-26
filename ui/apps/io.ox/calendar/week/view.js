@@ -96,11 +96,32 @@ define('io.ox/calendar/week/view', [
 
         update: function () {
             var startDate = this.model.get('startDate');
-            this.monthText.text(
-                this.model.get('numColumns') > 1
-                    ? startDate.format('MMMM YYYY')
-                    : startDate.format('ddd, l')
-            );
+            if (this.model.get('numColumns') > 1) {
+                var endDate = moment(startDate).add(this.model.get('numColumns'), 'days'),
+                    fromMonth = startDate.format('MMMM'),
+                    toMonth = endDate.format('MMMM'),
+                    fromYear = startDate.format('YYYY'),
+                    toYear = endDate.format('YYYY');
+
+                if (fromMonth === toMonth) {
+                    this.monthText.text(startDate.format('MMMM YYYY'));
+                } else if (fromYear === toYear) {
+                    //#. %1$s A month name
+                    //#. %2$s Another month name
+                    //#. %3$s A four digit year
+                    //#. Example: January - February 2019
+                    this.monthText.text(gt('%1$s - %2$s %3$s', fromMonth, toMonth, fromYear));
+                } else {
+                    //#. %1$s A month name
+                    //#. %2$s A four digit year
+                    //#. %3$s Another month name
+                    //#. %4$s Another year
+                    //#. Example: December 2019 - January 2020
+                    this.monthText.text(gt('%1$s %2$s - %3$s %4$s', fromMonth, fromYear, toMonth, toYear));
+                }
+            } else {
+                this.monthText.text(startDate.format('ddd, l'));
+            }
             this.cw.text(
                 //#. %1$d = Calendar week
                 gt('CW %1$d', startDate.format('w'))
