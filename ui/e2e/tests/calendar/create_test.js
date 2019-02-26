@@ -30,7 +30,7 @@ Scenario('Create appointment with all fields', async function (I) {
     I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
 
-    I.click('button[aria-label="Next Week"]');
+    I.click('.page .current button[aria-label="Next Week"]');
 
     I.clickToolbar('New');
     I.waitForVisible('.io-ox-calendar-edit-window');
