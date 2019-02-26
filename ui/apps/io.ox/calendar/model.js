@@ -87,6 +87,11 @@ define('io.ox/calendar/model', [
                         var users = model instanceof Backbone.Model ? model.get('members') : model.members,
                             entity = model instanceof Backbone.Model ? model.get('entity') : model.entity;
 
+                        // make sure id 0 works
+                        if (entity !== undefined) {
+                            self.usedGroups = _.uniq((self.usedGroups || []).concat(entity));
+                        }
+
                         if (users) {
                             // we have user ids
                             usersToResolve = _.uniq(usersToResolve.concat(users));

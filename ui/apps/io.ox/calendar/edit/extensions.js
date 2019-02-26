@@ -160,6 +160,7 @@ define('io.ox/calendar/edit/extensions', [
                                 recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
                                 attachments: attachments,
                                 checkConflicts: true,
+                                usedGroups: baton.model._attendees.usedGroups,
                                 sendInternalNotifications: sendNotifications
                             }),
                             delta = baton.app.getDelta();
@@ -167,7 +168,7 @@ define('io.ox/calendar/edit/extensions', [
                         return;
                     }
 
-                    api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { attachments: attachments, checkConflicts: true, sendInternalNotifications: sendNotifications })).then(save, fail);
+                    api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { usedGroups: baton.model._attendees.usedGroups, attachments: attachments, checkConflicts: true, sendInternalNotifications: sendNotifications })).then(save, fail);
                 })
             );
 
@@ -614,6 +615,8 @@ define('io.ox/calendar/edit/extensions', [
                 baton: baton,
                 hideInternalGroups: true
             }).render().$el);
+
+            if (baton.parentView.options.usedGroups) baton.model.getAttendees().usedGroups = _.uniq((baton.model.getAttendees().usedGroups || []).concat(baton.parentView.options.usedGroups));
         }
     });
 
