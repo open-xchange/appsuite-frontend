@@ -229,7 +229,8 @@ define('io.ox/calendar/settings/pane', [
                             new AlarmsView.linkView({ model: settings, attribute: 'birthdays/defaultAlarmDate' }).render().$el
                         ) : '',
                         // all day
-                        util.checkbox('markFulltimeAppointmentsAsFree', gt('Mark all day appointments as free'), settings)
+                        util.checkbox('markFulltimeAppointmentsAsFree', gt('Mark all day appointments as free'), settings),
+                        util.checkbox('chronos/allowAttendeeEditsByDefault', gt('Allow participants to change appointments by default'), settings)
                     )
                 );
             }

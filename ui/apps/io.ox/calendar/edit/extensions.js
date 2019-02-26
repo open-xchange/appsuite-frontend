@@ -646,13 +646,43 @@ define('io.ox/calendar/edit/extensions', [
     point.extend({
         id: 'folder-selection',
         index: 950,
-        className: 'col-xs-12 folder-selection',
+        className: 'col-xs-12 col-sm-6 folder-selection',
         render: function () {
             var view = new CalendarDropdownView({ model: this.model }).render().$el;
             this.$el.append(view).addClass('col-xs-12');
         }
     }, {
         rowClass: 'collapsed form-spacer'
+    });
+
+    point.extend({
+        id: 'allowAttendeeChanges',
+        index: 970,
+        className: 'col-xs-12 col-sm-6 folder-selection',
+        render: function () {
+            // only the organizer is allowed to change this attribute
+            if (this.baton.mode === 'edit' && !(calendarUtil.hasFlag(this.model, 'organizer') || calendarUtil.hasFlag(this.model, 'organizer_on_behalf'))) return;
+            var checkboxView  = new mini.CustomCheckboxView({
+                label: gt('Allow participants to edit this appointment'),
+                name: 'attendeePrivileges',
+                model: this.model,
+                customValues: { 'false': 'DEFAULT', 'true': 'MODIFY' },
+                defaultVal: this.baton.mode === 'create' && settings.get('chronos/allowAttendeeEditsByDefault', false) ? 'MODIFY' : 'DEFAULT'
+            });
+
+            this.$el.append(
+                $('<fieldset>').append(
+                    $('<legend class="simple">').text(gt('Participant permissions')),
+                    checkboxView.render().$el
+                )
+            );
+
+            // trigger initial change so defaults are applied
+            checkboxView.onChange();
+        }
+    }, {
+        nextTo: 'folder-selection',
+        rowClass: 'collapsed'
     });
 
     // alarms
