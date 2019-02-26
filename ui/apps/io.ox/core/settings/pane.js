@@ -109,7 +109,7 @@ define('io.ox/core/settings/pane', [
                                 ]
                             },
                             {
-                                //.# Option label for the automatic theme changer (changes theme depending on time)
+                                //#. Option label for the automatic theme changer (changes theme depending on time)
                                 label: gt('Automatic'),
                                 options: [
                                     { label: gt('Time-dependent'), value: 'time' }

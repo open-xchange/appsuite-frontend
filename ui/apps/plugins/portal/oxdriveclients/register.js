@@ -105,7 +105,7 @@ define('plugins/portal/oxdriveclients/register', [
 
     ext.point('io.ox/portal/widget/oxdriveclients').extend({
 
-        //.# Product name will be inserted to advertise the product. I.e. "Get OX Drive" but meant in terms of gettings a piece of software from a online store
+        //#. Product name will be inserted to advertise the product. I.e. "Get OX Drive" but meant in terms of gettings a piece of software from a online store
         title: gt.format(gt('Get %s'), settings.get('productName')),
 
         load: function (baton) {
@@ -137,7 +137,7 @@ define('plugins/portal/oxdriveclients/register', [
     });
 
     ext.point('io.ox/portal/widget/oxdriveclients/settings').extend({
-        //.# Product name will be inserted to adevertise the product. I.e. "Get OX Drive" but meant in terms of gettings a piece of software from a online store
+        //#. Product name will be inserted to adevertise the product. I.e. "Get OX Drive" but meant in terms of gettings a piece of software from a online store
         title: gt.format(gt('Get %s'), settings.get('productName')),
         type: 'oxdriveclients',
         editable: false,

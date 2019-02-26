@@ -128,7 +128,7 @@ define('io.ox/files/mobile-toolbar-actions', [
     pointMultiSelect.extend(new links.Dropdown({
         index: 100,
         label: $('<span>').text(
-            //.# Will be used as button label in the toolbar, allowing the user to choose some file actions like "copy" or "delete"
+            //#. Will be used as button label in the toolbar, allowing the user to choose some file actions like "copy" or "delete"
             gt('Actions')
         ),
         // don't draw the caret icon beside menu link

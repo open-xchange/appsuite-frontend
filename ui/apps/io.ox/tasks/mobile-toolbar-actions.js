@@ -112,7 +112,7 @@ define('io.ox/tasks/mobile-toolbar-actions', [
     pointDetailView.extend(new links.Dropdown({
         index: 50,
         label: $('<span>').text(
-            //.# Will be used as menu heading in tasks module which then show the actions which can be performed with a task like "mark as done"
+            //#. Will be used as menu heading in tasks module which then show the actions which can be performed with a task like "mark as done"
             gt('Actions')
         ),
         // don't draw the caret icon beside menu link

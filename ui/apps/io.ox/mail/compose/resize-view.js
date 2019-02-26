@@ -80,13 +80,13 @@ define('io.ox/mail/compose/resize-view', [
                 this.divider();
             }
 
-            //.# Small (number px) is used as an option for resizing images and refers to a small sized image
+            //#. Small (number px) is used as an option for resizing images and refers to a small sized image
             this.option('imageResizeOption', this.settings.small, gt('Small (%1$s px)', this.settings.small), { radio: true });
-            //.# Medium (number px) is used as an option for resizing images and refers to a medium sized image
+            //#. Medium (number px) is used as an option for resizing images and refers to a medium sized image
             this.option('imageResizeOption', this.settings.medium, gt('Medium (%1$s px)', this.settings.medium), { radio: true });
-            //.# Large (number px) is used as an option for resizing images and refers to a large sized image
+            //#. Large (number px) is used as an option for resizing images and refers to a large sized image
             this.option('imageResizeOption', this.settings.large, gt('Large (%1$s px)', this.settings.large), { radio: true });
-            //.# Original is used as an option for resizing images and refers to the original image size
+            //#. Original is used as an option for resizing images and refers to the original image size
             this.option('imageResizeOption', 'original', gt('Original'), { radio: true });
 
             this.listenTo(this.model, 'change:imageResizeOption', this.onChange);
@@ -105,24 +105,24 @@ define('io.ox/mail/compose/resize-view', [
 
 
         label: function () {
-            //.# In the context of resizing images before uploading them this text is used as a label for a dropdown
+            //#. In the context of resizing images before uploading them this text is used as a label for a dropdown
             var label = gt('Original');
 
             switch (this.model.get('imageResizeOption')) {
                 case this.settings.small :
-                    //.# In the context of resizing images before uploading them this text is used as a label for a dropdown
+                    //#. In the context of resizing images before uploading them this text is used as a label for a dropdown
                     label = gt('Small');
                     break;
                 case this.settings.medium :
-                    //.# In the context of resizing images before uploading them this text is used as a label for a dropdown
+                    //#. In the context of resizing images before uploading them this text is used as a label for a dropdown
                     label = gt('Medium');
                     break;
                 case this.settings.large :
-                    //.# In the context of resizing images before uploading them this text is used as a label for a dropdown
+                    //#. In the context of resizing images before uploading them this text is used as a label for a dropdown
                     label = gt('Large');
                     break;
                 default :
-                    //.# In the context of resizing images before uploading them this text is used as a label for a dropdown
+                    //#. In the context of resizing images before uploading them this text is used as a label for a dropdown
                     label = gt('Original');
             }
 

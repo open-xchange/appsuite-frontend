@@ -438,7 +438,7 @@ define('io.ox/core/tk/tokenfield', [
 
                         // mouse hover tooltip / a11y title
                         label.attr({ 'aria-hidden': true, 'title': title });
-                        //.# Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
+                        //#. Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
                         node.attr('aria-label', gt('%1$s. Press backspace to delete.', title));
 
                         // customize token

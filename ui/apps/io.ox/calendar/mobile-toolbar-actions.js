@@ -129,7 +129,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
     pDetail.extend(new links.Dropdown({
         index: 100,
         label: $('<span>').text(
-            //.# Will be used as button label in the toolbar, allowing the user to peform actions for the current appointment
+            //#. Will be used as button label in the toolbar, allowing the user to peform actions for the current appointment
             gt('Actions')
         ),
         // don't draw the caret icon beside menu link
