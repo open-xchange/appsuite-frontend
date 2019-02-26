@@ -47,17 +47,17 @@ define('io.ox/mail/compose/model', [
                         encrypt: false,
                         pgpInline: false,
                         sign: false
-                    },
-                    sharedAttachments: {
-                        language: '',
-                        enabled: false,
-                        autodelete: false,
-                        expiryDate: '',
-                        password: ''
                     }
                 },
                 requestReadReceipt: false,
-                priority: 'normal'
+                priority: 'normal',
+                sharedAttachments: {
+                    language: '',
+                    enabled: false,
+                    autodelete: false,
+                    expiryDate: '',
+                    password: ''
+                }
             };
         },
 

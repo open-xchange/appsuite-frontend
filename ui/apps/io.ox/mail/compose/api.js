@@ -130,12 +130,11 @@ define('io.ox/mail/compose/api', [
             api.trigger('before:send', id, data);
             ox.trigger('mail:send:start', data);
 
-            if (data.meta && data.meta.sharedAttachments && data.meta.sharedAttachments.expiryDate) {
+            if (data.sharedAttachments && data.sharedAttachments.expiryDate) {
                 // explicitedy clone share attachments before doing some computations
-                data.meta = _(data.meta).clone();
-                data.meta.sharedAttachments = _(data.meta.sharedAttachments).clone();
+                data.sharedAttachments = _(data.sharedAttachments).clone();
                 // expiry date should count from mail send
-                data.meta.sharedAttachments.expiryDate = _.now() + parseInt(data.meta.sharedAttachments.expiryDate, 10);
+                data.sharedAttachments.expiryDate = _.now() + parseInt(data.sharedAttachments.expiryDate, 10);
             }
 
             var formData = new FormData();
@@ -156,7 +155,7 @@ define('io.ox/mail/compose/api', [
                 contactsAPI.trigger('maybeNewContact');
                 api.trigger('after:send', data, result);
                 ox.trigger('mail:send:stop', data);
-                if (data.meta && data.meta.sharedAttachments && data.meta.sharedAttachments.enabled) ox.trigger('please:refresh refresh^');
+                if (data.sharedAttachments && data.sharedAttachments.enabled) ox.trigger('please:refresh refresh^');
             });
 
             return def;
