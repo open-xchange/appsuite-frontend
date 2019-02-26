@@ -483,52 +483,6 @@ define('io.ox/mail/detail/content', [
         }
     );
 
-
-    //
-    // Helper IIFEs
-    //
-
-    var fixAbsolutePositions = (function () {
-
-        function isBlockquoteToggle(elem) {
-            return $(elem).parent().hasClass('blockquote-toggle');
-        }
-
-        function findFarthestElement(memo, elem) {
-            if (getComputedStyle(elem).position !== 'absolute') return memo;
-            if (isBlockquoteToggle(elem)) return memo;
-            var pos = $(elem).position();
-            if (pos) {
-                memo.x = Math.max(memo.x, pos.left + elem.offsetWidth);
-                memo.y = Math.max(memo.y, pos.top + elem.offsetHeight);
-                memo.found = true;
-            }
-            return memo;
-        }
-
-        return function (elem, size) {
-            var farthest = { x: elem.scrollWidth, y: elem.scrollHeight, found: false },
-                width = elem.offsetWidth,
-                height = elem.offsetHeight;
-            // FF18 is behaving oddly correct, but impractical
-            // some early returns (allow 128KB for Chrome, 64KB for others)
-            if (_.device('chrome')) { if (size > 0x1FFFF) return; } else if (size > 0xFFFF) return;
-            // the following might change after a resize
-            if (farthest.x >= width || farthest.y >= height) {
-                farthest = _(elem.querySelectorAll('*')).reduce(findFarthestElement, farthest);
-            }
-            // only do this for absolute elements
-            if (farthest.found) {
-                $(elem).css('overflow-x', 'auto');
-                if (farthest.y > height) $(elem).css('height', Math.round(farthest.y) + 'px');
-            }
-            // look for resize event
-            $(elem).one('resize', function () {
-                fixAbsolutePositions(this, size);
-            });
-        };
-    })();
-
     //
     // Helpers
     //
@@ -663,12 +617,6 @@ define('io.ox/mail/detail/content', [
                 // process content
                 ext.point('io.ox/mail/detail/content-general').invoke('process', content, baton);
                 if (!baton.isLarge) ext.point('io.ox/mail/detail/content').invoke('process', content, baton);
-
-                // fix absolute positions
-                // heuristic: the source must at least contain the word "absolute" somewhere
-                if ((/absolute/i).test(baton.source)) {
-                    setTimeout(fixAbsolutePositions, 10, content, baton.source.length);
-                }
 
             } catch (e) {
                 console.error('mail.getContent', e.message, e, data);
