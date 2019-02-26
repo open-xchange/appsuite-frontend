@@ -430,6 +430,7 @@ define('io.ox/mail/compose/view', [
                             // flag to indicate that this savepoint is non default but uses cid to restore the application
                             restoreById: true,
                             id: self.app.get('uniqueID'),
+                            version: ox.version,
                             description: gt('Mail') + ': ' + (self.model.get('subject') || gt('No subject')),
                             // data that is send to restore function. Also include flag so it can detect the non default savepoint
                             point: { id: id, folder_id: folder, restoreById: true }
