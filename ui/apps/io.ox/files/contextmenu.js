@@ -20,24 +20,26 @@ define('io.ox/files/contextmenu', ['io.ox/core/extensions', 'gettext!io.ox/core'
         'io.ox/files/listview/contextmenu': [
             // #1
             ['viewer', '10', gt('View')],
-            ['download', '10', gt('Download')],
-            ['download-folder', '10', gt('Download entire folder')],
-            ['send', '10', gt('Send by email')],
-            ['save-as-pdf', '10', gt('Save as PDF')],
             // #2
             ['favorites/add', '20', gt('Add to favorites')],
             ['favorites/remove', '20', gt('Remove from favorites')],
             ['show-in-folder', '20', gt('Show in Drive')],
-            // #3
-            ['invite', '30', gt('Permissions / Invite people')],
-            ['getalink', '30', gt('Create sharing link')],
+            //#3
+            ['download', '30', gt('Download')],
+            ['download-folder', '30', gt('Download entire folder')],
             // #4
-            ['rename', '40', gt('Rename')],
-            ['move', '40', gt('Move')],
-            ['copy', '40', gt('Copy')],
+            ['invite', '40', gt('Permissions / Invite people')],
+            ['getalink', '40', gt('Create sharing link')],
             // #5
-            ['delete', '50', gt('Delete')],
-            ['restore', '50', gt('Restore')]
+            ['rename', '50', gt('Rename')],
+            ['move', '50', gt('Move')],
+            ['copy', '50', gt('Copy')],
+            // #6
+            ['send', '60', gt('Send by email')],
+            ['save-as-pdf', '60', gt('Save as PDF')],
+            // #7
+            ['delete', '70', gt('Delete')],
+            ['restore', '70', gt('Restore')]
         ],
         'io.ox/files/share/myshares/listview/contextmenu': [
             ['editShare', '10', gt('Edit Share')],
