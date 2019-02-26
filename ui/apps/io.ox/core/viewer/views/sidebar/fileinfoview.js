@@ -151,7 +151,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                     $('<dt>').text(gt('Modified')),
                     $('<dd class="modified">').append(
                         $('<span class="modifiedAt">').text(dateString),
-                        $('<span class="modifiedBy">').append(UserAPI.getTextNode(modifiedBy))
+                        $('<span class="modifiedBy">').append(document.createTextNode('\u200B')).append(UserAPI.getTextNode(modifiedBy))
                     )
                 );
 
