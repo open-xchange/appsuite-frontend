@@ -61,10 +61,10 @@
   resolved "https://registry.yarnpkg.com/@open-xchange/bootstrap-tokenfield/-/bootstrap-tokenfield-0.13.1.tgz#c4c1bddd360b2ef01c8d4d40514b92316fd257aa"
   integrity sha512-+W43i/lK24Tof53sQoygzhhvRORAScUzdYtPTMl6EEd1Pt+FutAGrBcE9dqWfHiuwzOyJZNAtGFPeSoGFj+CQA==
 
-"@open-xchange/codecept-helper@0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.8.tgz#3b90d560554123f255fe37fe43d985c06024dd64"
-  integrity sha512-KqpfApeJauUfuhK9O4daL+zjkX4YVI9iNj2GTNvgGo/aTRREI9YaY577QayWBlcCNMZvnwSAb6P2frXaEyb3XQ==
+"@open-xchange/codecept-helper@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.9.tgz#75bf104053e26b48dbaa908a079d771128a4bec5"
+  integrity sha512-xM9SyxsQF8CvSvRT0dyfW3qiDiCtK/RpULBATDJhbbSiRdrGuJ37S/96PGllGMTGI7V9/aLun0wXdrWRBbOXXA==
   dependencies:
     axios "^0.18.0"
     codeceptjs "^2.0.2"
