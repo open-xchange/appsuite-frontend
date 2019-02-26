@@ -388,6 +388,7 @@ Scenario('C7388 - Send mail with different priorities', function (I, users) {
     I.waitForVisible('.selected .contextmenu-control');
     I.wait(2);
     I.doubleClick('[title="' + testrailID + ' - ' + timestamp + ' Priority: High"]');
+    I.waitForElement('.floating-window-content .io-ox-mail-compose.container .mail-compose-fields');
     I.see(testrailID + ' - ' + timestamp);
     I.seeElement('.detail-view-app .detail-view-row [title="High priority"]');
     I.dontSeeElement('.detail-view-app .detail-view-row [title="Low priority"]');
@@ -398,6 +399,7 @@ Scenario('C7388 - Send mail with different priorities', function (I, users) {
     I.waitForVisible('.selected .contextmenu-control');
     I.wait(2);
     I.doubleClick('[title="' + testrailID + ' - ' + timestamp + ' Priority: Low"]');
+    I.waitForElement('.floating-window-content .io-ox-mail-compose.container .mail-compose-fields');
     I.see(testrailID + ' - ' + timestamp);
     I.dontSeeElement('.detail-view-app .detail-view-row [title="High priority"]');
     I.seeElement('.detail-view-app .detail-view-row [title="Low priority"]');
@@ -408,6 +410,7 @@ Scenario('C7388 - Send mail with different priorities', function (I, users) {
     I.waitForVisible('.selected .contextmenu-control');
     I.wait(2);
     I.doubleClick('[title="' + testrailID + ' - ' + timestamp + ' Priority: Normal"]');
+    I.waitForElement('.floating-window-content .io-ox-mail-compose.container .mail-compose-fields');
     I.see(testrailID + ' - ' + timestamp);
     I.dontSeeElement('.detail-view-app .detail-view-row [title="High priority"]');
     I.dontSeeElement('.detail-view-app .detail-view-row [title="Low priority"]');
@@ -930,27 +933,27 @@ Scenario('C101620 - Very long TO field', async function (I, users) {
 //    I.seeElement('.detail-view-app [data-ref="io.ox/mail/actions/download-attachment"]');
 //});
 
-Scenario('C114958 - Delete draft when closing composer', async function (I, users) {
-    //define testrail ID
-    it('(C114958) Delete draft when closing composer');
-    let [user] = users;
-    //var testrailID = 'C114958';
-    //var timestamp = Math.round(+new Date() / 1000);
-
-    const setting1 = await I.haveSetting('io.ox/mail//features/deleteDraftOnClose', true);
-    console.log(setting1);
-    I.importMail({ user: users[0] }, 'default0/INBOX/Drafts', 'e2e/tests/testrail/files/mail/Virus_attached!.eml');
-
-    I.login('app=io.ox/mail', { user });
-    I.waitForVisible('.io-ox-mail-window');
-    I.selectFolder('Drafts');
-    I.click('//*[contains(text(), "Virus attached!")]', 'span.drag-title');
-    I.clickToolbar('Edit draft');
-
-    //pause();
-    I.click('.detail-view-app [data-ref="io.ox/mail/actions/download-attachment"]');
-    I.seeElement('.detail-view-app [data-ref="io.ox/mail/actions/download-attachment"]');
-});
+//Scenario('C114958 - Delete draft when closing composer', async function (I, users) {
+//    //define testrail ID
+//    it('(C114958) Delete draft when closing composer');
+//    let [user] = users;
+//    //var testrailID = 'C114958';
+//    //var timestamp = Math.round(+new Date() / 1000);
+//
+//    const setting1 = await I.haveSetting('io.ox/mail//features/deleteDraftOnClose', true);
+//    console.log(setting1);
+//    I.importMail({ user: users[0] }, 'default0/INBOX/Drafts', 'e2e/tests/testrail/files/mail/Virus_attached!.eml');
+//
+//    I.login('app=io.ox/mail', { user });
+//    I.waitForVisible('.io-ox-mail-window');
+//    I.selectFolder('Drafts');
+//    I.click('//*[contains(text(), "Virus attached!")]', 'span.drag-title');
+//    I.clickToolbar('Edit draft');
+//
+//    //pause();
+//    I.click('.detail-view-app [data-ref="io.ox/mail/actions/download-attachment"]');
+//    I.seeElement('.detail-view-app [data-ref="io.ox/mail/actions/download-attachment"]');
+//});
 
 
 Scenario('OXUI-618', async function (I, users) {
