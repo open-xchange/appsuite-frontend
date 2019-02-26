@@ -162,6 +162,15 @@
     }
 }
 
+.change-organizer-dialog .tt-dropdown-menu {
+    // twitter plugin overides this so important must be used
+    // needed so dropdown opens over modal dialog
+    position: fixed !important;
+    top: auto !important;
+    left: auto !important;
+    width: ~"calc(100% - 32px)";
+}
+
 .io-ox-calendar-main {
     .folder-tree [data-id="cal://0/allPublic"] .folder-node .folder-label .color-label {
         background-color: @foldertree-sidepanel-background!important;

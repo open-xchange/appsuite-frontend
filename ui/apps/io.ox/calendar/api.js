@@ -804,6 +804,51 @@ define('io.ox/calendar/api', [
                 .then(processResponse);
             },
 
+            changeOrganizer: function (obj, options) {
+                options = options || {};
+
+                obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+
+                var params = {
+                    action: 'changeOrganizer',
+                    folder: obj.folder,
+                    id: obj.id,
+                    timestamp: _.then()
+                };
+
+                if (options.recurrenceRange) params.recurrenceRange = options.recurrenceRange;
+
+                if (ox.socketConnectionId) params.pushToken = ox.socketConnectionId;
+
+                if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
+
+                if (options.expand) {
+                    params.expand = true;
+                    params.rangeStart = options.rangeStart;
+                    params.rangeEnd = options.rangeEnd;
+                }
+
+                var data = {
+                    organizer: obj.organizer
+                };
+
+                if (options.comment) data.comment = options.comment;
+
+                return http.PUT({
+                    module: 'chronos',
+                    params: params,
+                    data: data
+                })
+                .then(processResponse)
+                .then(function (data) {
+
+                    var updated = data.updated ? data.updated[0] : undefined;
+                    if (!updated) return api.pool.getModel(util.cid(obj));
+                    if (isRecurrenceMaster(updated)) return api.pool.get('detail').add(data);
+                    return api.pool.getModel(updated);
+                });
+            },
+
             refresh: function () {
                 // check capabilities
                 if (capabilities.has('calendar')) {

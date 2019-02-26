@@ -1155,17 +1155,23 @@ define('io.ox/calendar/util', [
                 var dialog = new dialogs.ModalDialog();
                 // first occurence
                 if (model.hasFlag('first_occurrence')) {
+                    if (options.dontAllowExceptions) return $.when('series');
                     dialog.text(gt('Do you want to edit the whole series or just this appointment within the series?'));
                     dialog.addPrimaryButton('series', gt('Series'), 'series');
                 } else if (model.hasFlag('last_occurrence') && !options.allowEditOnLastOccurence) {
                     return $.when('appointment');
+                } else if (options.dontAllowExceptions) {
+                    dialog.text(gt('Do you want to edit this and all future appointments or the whole series?'));
+                    dialog.addPrimaryButton('thisandfuture', gt('All future appointments'), 'thisandfuture');
+                    dialog.addPrimaryButton('series', gt('Series'), 'series');
                 } else {
                     dialog.text(gt('Do you want to edit this and all future appointments or just this appointment within the series?'));
                     dialog.addPrimaryButton('thisandfuture', gt('All future appointments'), 'thisandfuture');
                 }
 
-                return dialog.addButton('appointment', gt('This appointment'), 'appointment')
-                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel')
+                if (!options.dontAllowExceptions) dialog.addButton('appointment', gt('This appointment'), 'appointment');
+
+                return dialog.addAlternativeButton('cancel', gt('Cancel'), 'cancel')
                     .show();
             }
             return $.when('appointment');
