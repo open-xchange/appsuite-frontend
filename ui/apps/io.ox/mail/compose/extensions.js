@@ -625,13 +625,16 @@ define('io.ox/mail/compose/extensions', [
 
             // set mail size
             attachmentView.listenTo(attachmentView.collection, 'add remove reset change:size', update);
+            attachmentView.listenTo(baton.model, 'change:sharedAttachments', update);
             update();
 
             function update() {
                 var hasUploadedAttachments = baton.model.get('attachments').some(function (model) {
-                    return model.get('group') === 'mail';
-                });
-                node.text(gt('Mail size: %1$s', getMailSize())).toggleClass('invisible', !hasUploadedAttachments);
+                        return model.get('group') === 'mail';
+                    }),
+                    isDriveMail = !!(baton.model.get('sharedAttachments') || {}).enabled,
+                    visible = hasUploadedAttachments && !isDriveMail;
+                node.text(gt('Mail size: %1$s', getMailSize())).toggleClass('invisible', !visible);
             }
 
             function getMailSize() {
