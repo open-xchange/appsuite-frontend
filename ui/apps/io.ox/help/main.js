@@ -36,7 +36,7 @@ define('io.ox/help/main', ['io.ox/backbone/views/modal', 'gettext!io.ox/help', '
                 modal: false
             }, options),
             // .# This is a concatenated string to build a window title like "OX Appsuite help"
-            windowTitle = gt('%1$s help', ox.serverConfig.productName || 'OX App Suite');
+            windowTitle = gt('%1$s Help', ox.serverConfig.productName || 'OX App Suite');
 
         var app = ox.ui.createApp({
             name: 'io.ox/help',
