@@ -52,7 +52,7 @@ define('io.ox/calendar/extensions', [
 
                 if (!folder.module) folderAPI.once('after:flat:event', addColors.bind(this, this, model));
 
-                if (util.isPrivate(model) && ox.user_id !== model.get('createdBy').entity && !folderAPI.is('private', folder)) {
+                if (util.isPrivate(model) && ox.user_id !== (model.get('createdBy') || {}).entity && !folderAPI.is('private', folder)) {
                     this.addClass('private disabled');
                 } else {
                     var canModifiy = folderAPI.can('write', folder, model.attributes) && util.allowedToEdit(model, { synced: true, folderData: folder }),
