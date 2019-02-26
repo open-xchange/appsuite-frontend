@@ -1351,7 +1351,7 @@ define('io.ox/calendar/util', [
             // if user is neither organizer nor attendee editing is not allowed
             if (!this.hasFlag(data, 'attendee') && !this.hasFlag(data, 'attendee_on_behalf')) return result(false);
             // if user is attendee, check if modify privileges are granted
-            if ((this.hasFlag(data, 'attendee') || this.hasFlag(data, 'attendee_on_behalf') && data.attendeePrivileges === 'MODIFY')) return true;
+            if ((this.hasFlag(data, 'attendee') || this.hasFlag(data, 'attendee_on_behalf')) && data.attendeePrivileges === 'MODIFY') return result(true);
 
             // if both settings are the same, we don't need a folder check, all attendees are allowed to edit or not, no matter which folder the event is in
             if (settings.get('chronos/restrictAllowedAttendeeChanges', true) === settings.get('chronos/restrictAllowedAttendeeChangesPublic', true)) return result(!settings.get('chronos/restrictAllowedAttendeeChanges', true));
