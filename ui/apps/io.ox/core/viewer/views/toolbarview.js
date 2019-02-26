@@ -854,7 +854,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                         self.renderQueued(temp);
                     }
 
-                    if (_.device('smartphone')) return;
+                    if (_.device('smartphone') || self.standalone) { return; }
                     var helpLinkView = new HelpLinkView({
                         href: 'ox.appsuite.user.sect.drive.gui.viewer.html',
                         modal: true

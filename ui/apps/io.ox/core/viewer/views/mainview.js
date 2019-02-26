@@ -63,16 +63,13 @@ define('io.ox/core/viewer/views/mainview', [
             this.displayerView = new DisplayerView(childViewParams);
             this.sidebarView = new SidebarView(childViewParams);
             // close viewer on events
-            this.listenTo(this.viewerEvents, 'viewer:close', this.closeViewer);
+            this.listenTo(this.viewerEvents, 'viewer:close', this.viewerCloseHandler);
             this.listenTo(this.viewerEvents, 'viewer:toggle:sidebar', this.onToggleSidebar);
             // bind toggle side bar handler
             this.listenTo(this.viewerEvents, 'viewer:sidebar:change:state', this.onSideBarToggled);
             // close viewer when other app is start or resumed, except in standalone mode
             if (!this.standalone) {
-                this.listenTo(ox, 'app:start app:resume', function (app) {
-                    if (app.get('name') === 'io.ox/help') return;
-                    this.closeViewer();
-                });
+                this.listenTo(ox, 'app:start app:resume', this.viewerCloseHandler);
             }
             // register app resume event for stand alone mode
             if (this.app) {
@@ -196,7 +193,7 @@ define('io.ox/core/viewer/views/mainview', [
                         isDropdownToggler = escTarget.attr('data-toggle') === 'dropdown' && escTarget.attr('aria-expanded') === 'true';
                     // close the viewer only if user is not on a dropdown menu, or a dropdown menu item
                     if (!isDropdownMenuItem && !isDropdownToggler) {
-                        this.closeViewer();
+                        this.viewerCloseHandler();
                     }
                     break;
                 case 37: // left arrow
@@ -275,9 +272,13 @@ define('io.ox/core/viewer/views/mainview', [
          * - save sidebar state into the Settings.
          * - Hides viewer DOM first and then do cleanup.
          */
-        closeViewer: function (app) {
+        viewerCloseHandler: function (app) {
             // check if the Viewer initiated an application start which triggered the app:start event
             if (app && app.options && app.options.mode === 'viewer-mode') {
+                return;
+            }
+            // don't close the Viewer when help is opened
+            if (app && app.get('name') === 'io.ox/help') {
                 return;
             }
 
