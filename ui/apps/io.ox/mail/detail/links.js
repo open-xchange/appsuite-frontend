@@ -90,7 +90,7 @@ define('io.ox/mail/detail/links', [
             },
             regDeepLink = /^([\s\S]*)(http[^#]+#!{0,2}&?app=([^&]+)((&(folder|id|item|perspective)=[^&\s]+)+))([\s\S]*)$/i,
             regDeepLinkAlt = /^([\s\S]*)(http[^#]+#m=(contacts|calendar|tasks|infostore)((&(f|i)=[^&\s]+)+))([\s\S]*)$/i,
-            regLink = /^([\s\S]*)(https?:\/\/.*?)([!?.,>()]\s|\s|[!?.,>()]$|$)([\s\S]*)$/i;
+            regLink = /^([\s\S]*)(https?:\/\/.*?)([!?.,>()]\s[\s\S]*|\s[\s\S]*|[!?.,>()]$|$)/i;
 
         isDeepLink = function (str) {
             return regDeepLink.test(str) || regDeepLinkAlt.test(str);
