@@ -24,16 +24,16 @@ Scenario('Open the help app in a floating window', async function (I) {
     I.login('app=io.ox/mail');
     I.waitForVisible({ css: '[data-app-name="io.ox/mail"]' }, 5);
 
-    I.click({ css: 'a[aria-label="Online help"]' });
+    I.click('~Online help');
     I.waitForVisible('.io-ox-help-window', 5);
-    I.see('OX App Suite help');
+    I.see('OX App Suite Help');
 
     // ensure that if you click help for the same active app only one window will open for that
-    I.click({ css: 'a[aria-label="Online help"]' });
+    I.click('~Online help');
     I.waitForVisible('.io-ox-help-window', 5);
     I.seeNumberOfElements('.io-ox-help-window', 1);
 
-    I.click({ css: 'button[data-action="close"]' }, '.io-ox-help-window');
+    I.click('~Close', '.io-ox-help-window');
     I.waitForDetached('.io-io-help-window', 5);
 
     I.logout();
@@ -48,19 +48,19 @@ Scenario('Open the help app in a modal', async function (I) {
     I.retry().waitForVisible('.io-ox-mail-compose-window', 5);
     I.see('Compose', '.io-ox-mail-compose-window');
 
-    I.waitForVisible({ css: 'div[data-extension-id="to"] a.open-addressbook-popup[aria-label="Select contacts"]' }, 5);
+    I.waitForVisible({ css: 'div[data-extension-id="to"]' }, 5);
     I.wait(1);
-    I.click({ css: 'div[data-extension-id="to"] a.open-addressbook-popup[aria-label="Select contacts"]' });
+    I.click('~Select contacts');
     I.waitForVisible('.modal.addressbook-popup', 5);
 
-    I.click({ css: 'a[aria-label="Online help"]' }, '.modal.addressbook-popup');
+    I.click('~Online help', '.modal.addressbook-popup');
     I.waitForVisible('.modal.inline-help', 5);
-    I.see('OX App Suite help', '.modal.inline-help');
+    I.see('OX App Suite Help', '.modal.inline-help');
 
-    I.click({ css: 'button[data-action="cancel"]' }, '.modal.inline-help');
+    I.click('Close', '.modal.inline-help');
     I.waitForDetached('.modal.inline-help', 5);
 
-    I.click({ css: 'button[data-action="cancel"]' }, '.modal.addressbook-popup');
+    I.click('Cancel', '.modal.addressbook-popup');
     I.waitForDetached('.modal.addressbook-popup', 5);
 
     I.logout();
