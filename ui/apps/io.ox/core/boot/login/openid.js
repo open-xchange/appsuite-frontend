@@ -47,6 +47,9 @@ define('io.ox/core/boot/login/openid', [
             after: 'autologin',
             login: function () {
                 return openIdConnectLogin({ flow: 'login' });
+            },
+            relogin: function () {
+                return openIdConnectLogin({ flow: 'login' });
             }
         });
     }
