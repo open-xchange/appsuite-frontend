@@ -34,7 +34,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     I.clickToolbar('View');
     I.click('Workweek');
 
-    I.click('.page .current button[aria-label="Next Week"]');
+    I.click('.page.current button[aria-label="Next Week"]');
 
     // create in Workweek view
     I.clickToolbar('New');
@@ -124,7 +124,7 @@ Scenario('Changing calendar color should change appointment color that uses cale
     I.clickToolbar('View');
     I.click('Workweek');
 
-    I.click('.page .current button[aria-label="Next Week"]');
+    I.click('.page.current button[aria-label="Next Week"]');
 
     // create first appointment
     I.selectFolder(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name);

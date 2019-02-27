@@ -32,7 +32,7 @@ Scenario('Create appointments in multiple calendars', function (I, users) {
     I.clickToolbar('View');
     I.click('Workweek');
 
-    I.click('.page .current button[aria-label="Next Week"]');
+    I.click('.page.current button[aria-label="Next Week"]');
 
     // create new Calendar
     I.waitForVisible('.window-sidepanel [data-action="add-subfolder"]');
