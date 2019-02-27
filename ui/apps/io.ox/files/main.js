@@ -459,7 +459,7 @@ define('io.ox/files/main', [
                 var folder_id = app.folder.get();
 
                 // todo: check where and whether collection and allIds are needed
-                var options = { folder_id: folder_id, app: app, allIds: [], isFavorites: false, isMyShares: false };
+                var options = { folder_id: folder_id, app: app, allIds: [], originFavorites: false, originMyShares: false };
                 switch (type) {
                     case 'favorites':
                         options.all = this.myFavoriteListView.collection;
