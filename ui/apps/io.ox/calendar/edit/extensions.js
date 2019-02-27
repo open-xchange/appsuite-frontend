@@ -666,7 +666,7 @@ define('io.ox/calendar/edit/extensions', [
             // only the organizer is allowed to change this attribute
             if (this.baton.mode === 'edit' && !(calendarUtil.hasFlag(this.model, 'organizer') || calendarUtil.hasFlag(this.model, 'organizer_on_behalf'))) return;
             var checkboxView  = new mini.CustomCheckboxView({
-                label: gt('Allow participants to edit this appointment'),
+                label: gt('Participants can edit the appointment'),
                 name: 'attendeePrivileges',
                 model: this.model,
                 customValues: { 'false': 'DEFAULT', 'true': 'MODIFY' },

@@ -230,7 +230,7 @@ define('io.ox/calendar/settings/pane', [
                         ) : '',
                         // all day
                         util.checkbox('markFulltimeAppointmentsAsFree', gt('Mark all day appointments as free'), settings),
-                        util.checkbox('chronos/allowAttendeeEditsByDefault', gt('Allow participants to change appointments by default'), settings)
+                        util.checkbox('chronos/allowAttendeeEditsByDefault', gt('Particpants can edit appointments'), settings)
                     )
                 );
             }
