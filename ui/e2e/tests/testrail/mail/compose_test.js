@@ -737,10 +737,9 @@ Scenario('[C7405] - Delete E-Mail', function (I, users) {
     I.login('app=io.ox/mail', { user: users[1] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.see(testrailID + ' - ' + timestamp);
-    I.click('.io-ox-mail-detail-window a[data-ref="io.ox/mail/actions/delete"]');
-    I.wait(2);
+    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.clickToolbar('Delete');
+    I.wait(1);
     I.dontSee(testrailID + ' - ' + timestamp);
     I.selectFolder('Trash');
     I.see(testrailID + ' - ' + timestamp);
@@ -782,6 +781,7 @@ Scenario('[C7406] - Delete several E-Mails', function (I, users) {
     I.waitForVisible('.selected .contextmenu-control');
     I.click('[title="' + testrailID + ' - ' + timestamp + ' - 1"]');
     I.clickToolbar('Delete');
+    I.wait(0.5);
     I.click('[title="' + testrailID + ' - ' + timestamp + ' - 2"]');
     I.clickToolbar('Delete');
     I.wait(3);
