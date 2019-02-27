@@ -562,7 +562,7 @@ define('io.ox/files/actions', [
                 var folderId = element.folder_id;
                 if ((/^folder\./).test(baton.first().cid)) {
                     // the folderId is the id of the parent folder if the item is a folder
-                    var folderModel = folderAPI.pool.getModel(baton.first().cid);
+                    var folderModel = folderAPI.pool.getModel(baton.first().id);
                     folderId = folderModel.get('folder_id');
                 }
                 // is an item is not located in the trash, disable the action
