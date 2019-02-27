@@ -776,25 +776,21 @@ Scenario('[C7406] - Delete several E-Mails', function (I, users) {
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp + ' - 2');
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose');
-
     I.logout();
     I.login('app=io.ox/mail', { user: users[1] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + ' - 1"]');
-    I.see(testrailID + ' - ' + timestamp + ' - 1');
-    I.click('.io-ox-mail-detail-window a[data-ref="io.ox/mail/actions/delete"]');
-    I.wait(2);
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + ' - 2"]');
-    I.see(testrailID + ' - ' + timestamp + ' - 2');
-    I.click('.io-ox-mail-detail-window a[data-ref="io.ox/mail/actions/delete"]');
-    I.wait(2);
-
+    I.click('[title="' + testrailID + ' - ' + timestamp + ' - 1"]');
+    I.clickToolbar('Delete');
+    I.click('[title="' + testrailID + ' - ' + timestamp + ' - 2"]');
+    I.clickToolbar('Delete');
+    I.wait(3);
     I.dontSee(testrailID + ' - ' + timestamp + ' - 1');
     I.dontSee(testrailID + ' - ' + timestamp + ' - 2');
-    I.selectFolder('Trash');
-    I.see(testrailID + ' - ' + timestamp + ' - 1');
-    I.see(testrailID + ' - ' + timestamp + ' - 2');
+    I.retry(5).selectFolder('Trash');
+    I.wait(0.2);
+    I.retry(10).seeElement('[title="' + testrailID + ' - ' + timestamp + ' - 1"]');
+    I.retry(10).seeElement('[title="' + testrailID + ' - ' + timestamp + ' - 2"]');
     I.logout();
 });
 

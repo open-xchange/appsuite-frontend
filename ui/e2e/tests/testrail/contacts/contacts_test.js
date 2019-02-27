@@ -180,23 +180,24 @@ Scenario('[C7356] - Create a new public folder', function (I) {
     I.logout();
 });
 
-Scenario('[C7367] - Delete Contact', function (I) {
+Scenario('[C7367] - Delete Contact', async function (I, users) {
+    let testrailID = 'C7367';
+    const contact = {
+        display_name: '' + testrailID + ', ' + testrailID + '',
+        folder_id: await I.getDefaultFolder('contacts', { user: users[0] }),
+        first_name: testrailID,
+        last_name: testrailID
+
+    };
+    I.createContact(contact, { user: users[0] });
+
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
 
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
-    I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
-    //TODO: Create contact with API
-    I.clickToolbar('New');
-    I.click('Add contact');
-    I.waitForVisible('.io-ox-contacts-edit-window');
-    I.fillField('First name', 'C7367');
-    I.fillField('Last name', 'C7367');
-    I.click('Save');
 
-    I.waitForDetached('.io-ox-contacts-edit-window');
-    I.click('Delete');
+    I.clickToolbar('Delete');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('div.modal-footer > button.btn.btn-primary');
     I.dontSee('C7367, C7367');
@@ -614,6 +615,8 @@ Scenario('[C8817] - Send E-Mail to contact', function (I, users, search) {
     I.click('[href="mailto:' + users[1].userdata.primaryEmail + '"]');
     I.waitForVisible('.io-ox-mail-compose');
     I.waitForElement('.floating-window-content .container.io-ox-mail-compose .mail-compose-fields');
+    I.waitForVisible({ css: 'textarea.plain-text' });
+    I.wait(0.2);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + subject);
     I.fillField({ css: 'textarea.plain-text' }, testrailID);
     I.seeInField({ css: 'textarea.plain-text' }, testrailID);

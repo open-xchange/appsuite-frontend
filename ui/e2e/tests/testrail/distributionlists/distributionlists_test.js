@@ -95,29 +95,13 @@ Scenario('[C7376] Send a mail to distribution list', async function (I, users) {
         ]
     };
     await I.createContact(contact2, { user: users[0] });
-
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
+    
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
 
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
-    //I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
-    //I.clickToolbar('New');
-    //
-    //I.click('Add distribution list');
-    //
-    //I.waitForVisible('.io-ox-contacts-distrib-window');
-    //I.fillField('Name', testrailID+' - '+timestamp);
-    //I.fillField('Add contact', users[0].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.fillField('Add contact', users[1].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.fillField('Add contact', users[2].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.fillField('Add contact', users[3].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.click('Create list');
-    //
     I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
     I.wait(1);
     I.doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
@@ -129,10 +113,9 @@ Scenario('[C7376] Send a mail to distribution list', async function (I, users) {
     I.see(users[3].userdata.primaryEmail);
 
     I.click('.detail-view-app [data-ref="io.ox/contacts/actions/send"]');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
-    I.click('Options');
-    I.click('Plain Text');
+    I.waitForVisible({ css: 'textarea.plain-text' });
+    I.wait(0.2);
+
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
     I.click('Send');
@@ -575,7 +558,7 @@ Scenario('[C7379] Delete distribution list', async function (I, users) {
     I.logout();
 });
 
-Scenario('[C7378] Delete multiple distribution lists', async function (I, users) {
+Scenario('[C7378] Delete multiple distribution lists', async function (I, users, search) {
     var testrailID = 'C7378';
     var timestamp = Math.round(+new Date() / 1000);
 
@@ -599,15 +582,8 @@ Scenario('[C7378] Delete multiple distribution lists', async function (I, users)
 
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
-
-    I.fillField('Search...', testrailID + ' - ' + timestamp);
-    I.pressKey('Enter');
-    I.waitForText(testrailID + ' - ' + timestamp + ' - 1');
-    I.waitForText(testrailID + ' - ' + timestamp + ' - 2');
-    I.see(testrailID + ' - ' + timestamp + ' - 1');
-    I.see(testrailID + ' - ' + timestamp + ' - 2');
-    I.click('[aria-label="' + testrailID + ' - ' + timestamp + ' - 1' + '"]');
-    I.pressKey(['\uE009', 'a']);
+    search.doSearch(testrailID + ' - ' + timestamp);
+    I.click('.select-all');
     I.clickToolbar('Delete');
     I.click('[role="alertdialog"] [type="button"][data-action="delete"]');
     I.wait(1);

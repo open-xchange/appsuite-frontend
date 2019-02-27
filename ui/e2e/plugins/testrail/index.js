@@ -69,7 +69,7 @@ module.exports = (config) => {
 	const runName = config.runName ? config.runName : `This is a new test run on ${getToday()}`;
 	let runId;
 	let caseId;
-	console.log(config)
+	//console.log(config)
 	const testrail = new Testrail(config);
  
 	event.dispatcher.on(event.suite.before, () => {
@@ -82,13 +82,13 @@ module.exports = (config) => {
 				//if run is emtpy with given name... create a new one
 				testrail.addRun(config.projectId, { name: runName }, (err, response, run) => {
 					if (err) throw new Error(`Something is wrong while adding new run. Please check ${JSON.stringify(err)}`);
-					console.log('could not find any TestRun with given name ' + runName + ' create a new Testrun :)')
+					//console.log('could not find any TestRun with given name ' + runName + ' create a new Testrun :)')
 					runId = run.id;
 					//console.log(response)
 				});
 			} else {
 				//else use run if from last run with same name
-				console.log('Testrun with name ' + runName + ' was found... Use RunID ' + searchedRun.id + ' for this testrun')
+				//console.log('Testrun with name ' + runName + ' was found... Use RunID ' + searchedRun.id + ' for this testrun')
 				runId = searchedRun.id
 			};
 		  });
@@ -96,25 +96,25 @@ module.exports = (config) => {
  
 	event.dispatcher.on(event.test.started, (test) => {
 		caseId = tcRegex.exec(test.title)[1];
-		console.log(caseId);
+		//console.log(caseId);
 	});
  
 	event.dispatcher.on(event.test.finished, (test) => {
 		caseId = tcRegex.exec(test.title)[1];
-		console.log(caseId);
+		//console.log(caseId);
 	});
  
 	event.dispatcher.on(event.test.passed, () => {
 		testrail.addResultForCase(runId, caseId, testCase.passed, (err) => {
 			if (err) throw new Error(`Something is wrong while adding result for a test case. Please check ${JSON.stringify(err)}`);
-			console.log(event);
+			//console.log(event);
 		});
 	});
  
 	event.dispatcher.on(event.test.failed, () => {
 		testrail.addResultForCase(runId, caseId, testCase.failed, (err) => {
 			if (err) throw new Error(`Something is wrong while adding result for a test case. Please check ${JSON.stringify(err)}`);
-			console.log(event);
+			//console.log(event);
 
 		});
 	});
