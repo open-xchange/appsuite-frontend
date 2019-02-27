@@ -5,12 +5,6 @@ define('io.ox.saml/register', ['io.ox/core/extensions', 'io.ox/core/session', 's
         if (ox.serverConfig.samlPath) {
             samlPath = '/saml/' + ox.serverConfig.samlPath;
         }
-        ox.on('relogin:required', function () {
-            return $.get(ox.apiRoot + samlPath + '/init?flow=relogin').done(function (data) {
-                var baton = new ext.Baton({ data: data });
-                ext.point('io.ox.saml/relogin').invoke('handle', baton, baton);
-            });
-        });
 
         if (caps.has('saml-single-logout') || ox.serverConfig.samlSingleLogout) {
             ext.point('io.ox/core/logout').extend({
