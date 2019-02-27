@@ -20,54 +20,50 @@ define('io.ox/mail/compose/util', [
 
     return {
 
-        getGroup: function (origin) {
-            if (origin.origin === 'drive') return 'file';
+        getGroup: function (data) {
+            if (data.origin === 'drive') return 'file';
             return 'mail';
         },
 
         uploadAttachment: function (opt) {
             var model = opt.model,
                 space = model.get('id'),
-                origin = opt.origin,
                 contentDisposition = (opt.contentDisposition || 'attachment').toLowerCase(),
                 attachment = opt.attachment,
-                throttled = _.throttle(upload, 5000, { leading: false }),
+                data = opt.origin,
                 def;
 
-            function upload(origin) {
-                // reset debouncedupload to upload to not postpone any future execution
-                throttled = upload;
+            function process() {
+                if (!data) return;
 
-                // if attachment is not in a collection, it has been removed before it has been uploaded
-                if (!attachment.collection) return;
+                def = composeAPI.space.attachments[attachment.has('id') ? 'update' : 'add'](space, data, contentDisposition, attachment.get('id'));
+                data = undefined;
 
                 attachment.set('uploaded', 0);
 
-                // need exactly this deferred to be able to abort
-                def = composeAPI.space.attachments[attachment.has('id') ? 'update' : 'add'](space, origin, contentDisposition, attachment.get('id'));
-                def.progress(function (e) {
+                return def.progress(function (e) {
                     attachment.set('uploaded', e.loaded / e.total);
                 }).then(function success(data) {
-                    data = _({ group: 'mail', space: space }).extend(data);
+                    data = _({ group: 'mail', space: space, uploaded: 1 }).extend(data);
                     attachment.set(data);
                     attachment.trigger('upload:complete', data);
                 }, function fail(error) {
                     if (error.error === 'abort') return;
                     attachment.destroy();
-                });
-                return def;
+                }).always(process);
             }
 
-            if (origin.file && contentDisposition === 'attachment') {
+
+            if (data.file && contentDisposition === 'attachment') {
                 attachment.set({
                     group: 'localFile',
-                    originalFile: origin.file
+                    originalFile: data.file
                 });
-                var isResizableImage = resize.matches('type', origin.file) &&
-                                       resize.matches('size', origin.file);
+                var isResizableImage = resize.matches('type', data.file) &&
+                                       resize.matches('size', data.file);
 
                 attachment.on('destroy', function () {
-                    if (throttled.cancel) throttled.cancel();
+                    data = undefined;
                     if (def && def.state() === 'pending') def.abort();
                 });
 
@@ -75,24 +71,24 @@ define('io.ox/mail/compose/util', [
                     attachment.set('uploaded', 0);
 
                     attachment.on('image:resized', function (image) {
-                        if (def && def.state() === 'pending') def.abort();
+                        // only abort when uploaded is less than 1. Otherwise, the MW might not receive the abort signal in time
+                        if (def && def.state() === 'pending' && attachment.get('uploaded') < 1) def.abort();
 
-                        origin = { file: image };
-                        throttled(origin);
+                        data = { file: image };
+                        if (!def) return;
+
+                        def.always(function () {
+                            _.defer(process);
+                        });
                     });
 
-                    attachment.on('force:upload', function () {
-                        // only trigger immediate upload
-                        if (def) return;
-                        throttled.cancel();
-                        upload(origin);
-                    });
+                    attachment.on('force:upload', process);
 
-                    return throttled(origin);
+                    return _.delay(process, 5000);
                 }
             }
 
-            return _.defer(upload, origin);
+            return _.defer(process);
         }
 
     };
