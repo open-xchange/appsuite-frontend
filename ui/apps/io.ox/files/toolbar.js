@@ -102,6 +102,13 @@ define('io.ox/files/toolbar', [
                 ref: 'io.ox/files/actions/favorites/remove',
                 section: 'favorites'
             },
+            'show-in-folder': {
+                prio: 'lo',
+                mobile: 'lo',
+                title: gt('Show in Drive'),
+                ref: 'io.ox/files/actions/show-in-folder',
+                section: 'favorites'
+            },
             'rename': {
                 prio: 'lo',
                 mobile: 'lo',
