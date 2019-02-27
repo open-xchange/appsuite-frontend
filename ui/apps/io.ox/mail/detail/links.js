@@ -63,7 +63,8 @@ define('io.ox/mail/detail/links', [
 
     (function () {
 
-        var keys = 'all prefix link app params param name suffix'.split(' '),
+        var deepLinkKeys = 'all prefix link app params param name suffix'.split(' '),
+            linkKeys = 'all prefix link suffix'.split(' '),
             app = {
                 'io.ox/contacts': 'contacts',
                 'io.ox/calendar': 'calendar',
@@ -88,7 +89,8 @@ define('io.ox/mail/detail/links', [
                 files: gt('Folder')
             },
             regDeepLink = /^([\s\S]*)(http[^#]+#!{0,2}&?app=([^&]+)((&(folder|id|item|perspective)=[^&\s]+)+))([\s\S]*)$/i,
-            regDeepLinkAlt = /^([\s\S]*)(http[^#]+#m=(contacts|calendar|tasks|infostore)((&(f|i)=[^&\s]+)+))([\s\S]*)$/i;
+            regDeepLinkAlt = /^([\s\S]*)(http[^#]+#m=(contacts|calendar|tasks|infostore)((&(f|i)=[^&\s]+)+))([\s\S]*)$/i,
+            regLink = /^([\s\S]*)(https?:\/\/.*?)([!?.,>()]\s|\s|[!?.,>()]$|$)([\s\S]*)$/i;
 
         isDeepLink = function (str) {
             return regDeepLink.test(str) || regDeepLinkAlt.test(str);
@@ -99,8 +101,8 @@ define('io.ox/mail/detail/links', [
         };
 
         parseDeepLink = function (str) {
-            var matches = String(str).match(regDeepLink.test(str) ? regDeepLink : regDeepLinkAlt),
-                data = _.object(keys, matches),
+            var deepLinkMatches = String(str).match(regDeepLink.test(str) ? regDeepLink : regDeepLinkAlt),
+                data = _.object(deepLinkKeys, deepLinkMatches),
                 params = _.deserialize(data.params, '&');
             // fix app
             data.app = app[data.app] || data.app;
@@ -112,10 +114,13 @@ define('io.ox/mail/detail/links', [
             } else if (deepLinkWhitelist.test(data.app)) {
                 data.className = 'deep-link-app';
             }
+            // compute prefix, link and suffix from link regex
+            var linkMatches = String(str).match(regLink),
+                linkData = _.object(linkKeys, linkMatches);
             // add folder, id, perspective (jQuery's extend to skip undefined)
             // share links use "item" instead of "id" (for whatever reason)
             var cid = params.folder && params.id && _.cid({ folder: params.folder, id: params.id });
-            return $.extend(data, { folder: params.f, id: params.i }, { cid: cid, folder: params.folder, id: params.id || params.item, perspective: params.perspective });
+            return $.extend(data, { folder: params.f, id: params.i }, { cid: cid, folder: params.folder, id: params.id || params.item, perspective: params.perspective }, linkData);
         };
 
         // node must be a plain text node or a string
