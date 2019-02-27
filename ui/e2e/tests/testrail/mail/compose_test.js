@@ -883,7 +883,11 @@ Scenario('[C101620] - Very long TO field', async function (I, users) {
     I.seeCssPropertiesOnElements('.mail-detail-pane .recipients', { 'overflow': 'hidden' });
     I.seeCssPropertiesOnElements('.mail-detail-pane .recipients', { 'text-overflow': 'ellipsis' });
     //TODO: Width is not 100% when get css property?
-    I.doubleClick('//*[contains(text(), "Very long TO field")]', 'span.drag-title');
+    //I.doubleClick('//*[contains(text(), "Very long TO field")]', 'span.drag-title');
+    I.doubleClick('[title="Very long TO field"]');
+    I.waitForElement('.window-container-center .detail-view-app .thread-view-list');
+    //pause();
+
     I.seeCssPropertiesOnElements('.floating-window-content .recipients', { 'overflow': 'hidden' });
     I.seeCssPropertiesOnElements('.floating-window-content .recipients', { 'text-overflow': 'ellipsis' });
 

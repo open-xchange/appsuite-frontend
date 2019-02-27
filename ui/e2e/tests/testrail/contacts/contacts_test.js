@@ -159,6 +159,7 @@ Scenario('[C7355] - Create a new private folder', function (I) {
     I.click('[data-action="add"]');
     I.waitForDetached('[data-point="io.ox/core/folder/add-popup"]');
     I.waitForElement('.fa-spin-paused');
+    I.selectFolder('C7354 ' + timestamp);
     I.see('C7354 ' + timestamp);
     I.logout();
 });
@@ -612,9 +613,11 @@ Scenario('[C8817] - Send E-Mail to contact', function (I, users, search) {
     I.waitForElement('[href="mailto:' + users[1].userdata.primaryEmail + '"]');
     I.click('[href="mailto:' + users[1].userdata.primaryEmail + '"]');
     I.waitForVisible('.io-ox-mail-compose');
+    I.waitForElement('.floating-window-content .container.io-ox-mail-compose .mail-compose-fields');
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + subject);
     I.fillField({ css: 'textarea.plain-text' }, testrailID);
     I.seeInField({ css: 'textarea.plain-text' }, testrailID);
+    
     I.click('Send');
     I.waitForElement('.fa-spin-paused');
     I.wait('1');

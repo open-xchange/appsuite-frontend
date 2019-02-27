@@ -235,24 +235,14 @@ Scenario('[C7377] Copy distribution list', async function (I, users) {
     I.waitForDetached('.modal-open [data-point="io.ox/core/folder/add-popup"]')
     I.doubleClick('[aria-label="'+testrailID+' - '+timestamp+'"]');
     I.click('.detail-view-app [data-action="more"]');
-    
     I.click('.dropdown.open [data-ref="io.ox/contacts/actions/copy"]');
-    
     I.click('.modal [data-id="virtual/flat/contacts/private"] div.folder-arrow');
-    
     I.click('.modal [aria-label="'+testrailID+'"]');
-    
     I.click('[type="button"][data-action="ok"]');
-    
-    //pause();
     I.click('.floating-window-content [aria-label="Close"][type="button"]');
-    
-
     I.selectFolder('Contacts');
-    
     I.waitForElement('[aria-label="'+testrailID+' - '+timestamp+'"]');
-    I.doubleClick('[aria-label="'+testrailID+' - '+timestamp+'"]');
-    
+    I.doubleClick('[aria-label="'+testrailID+' - '+timestamp+'"]'); 
     I.see(testrailID+' - '+timestamp);
     I.see('Distribution list with 4 entries');
     I.see(users[0].userdata.primaryEmail);
@@ -260,14 +250,10 @@ Scenario('[C7377] Copy distribution list', async function (I, users) {
     I.see(users[2].userdata.primaryEmail);
     I.see(users[3].userdata.primaryEmail);
     I.click('.floating-window-content [aria-label="Close"][type="button"]');
-    
-
 
     I.selectFolder(testrailID);
-    
     I.waitForElement('[aria-label="'+testrailID+' - '+timestamp+'"]');
     I.doubleClick('[aria-label="'+testrailID+' - '+timestamp+'"]');
-    
     I.see(testrailID+' - '+timestamp);
     I.see('Distribution list with 4 entries');
     I.see(users[0].userdata.primaryEmail);
