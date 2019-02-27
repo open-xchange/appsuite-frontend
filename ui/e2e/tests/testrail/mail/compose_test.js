@@ -25,7 +25,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('C7384 - Save draft', function (I, users) {
+Scenario('[C7384] - Save draft', function (I, users) {
     //define testrail ID
     it('(C7384) Save draft');
     const [user] = users;
@@ -56,7 +56,7 @@ Scenario('C7384 - Save draft', function (I, users) {
     I.see(text);
 });
 
-Scenario('C7382 - Compose plain text mail', function (I, users) {
+Scenario('[C7382] - Compose plain text mail', function (I, users) {
     //define testrail ID
     it('(C7382) Compose plain text mail');
     let [user] = users;
@@ -85,7 +85,7 @@ Scenario('C7382 - Compose plain text mail', function (I, users) {
     I.logout();
 });
 
-Scenario('C8816 - Cancel mail compose', function (I, users) {
+Scenario('[C8816] - Cancel mail compose', function (I, users) {
     //define testrail ID
     it('(C8816) Cancel mail compose');
     let [user] = users;
@@ -110,7 +110,7 @@ Scenario('C8816 - Cancel mail compose', function (I, users) {
     I.logout();
 });
 
-Scenario('C7381 - Send email to multiple recipients', function (I, users) {
+Scenario('[C7381] - Send email to multiple recipients', function (I, users) {
     //define testrail ID
     it('(C7381) Send email to multiple recipients');
     let [user] = users;
@@ -155,7 +155,7 @@ Scenario('C7381 - Send email to multiple recipients', function (I, users) {
     I.logout();
 });
 
-Scenario('C7380 - Send saved draft mail', function (I, users) {
+Scenario('[C7380] - Send saved draft mail', function (I, users) {
     //define testrail ID
     it('(C7380) Send saved draft mail');
     const [user] = users;
@@ -208,7 +208,7 @@ Scenario('C7380 - Send saved draft mail', function (I, users) {
     I.logout();
 });
 
-Scenario('C8816 - Cancel mail compose', function (I, users) {
+Scenario('[C8816] - Cancel mail compose', function (I, users) {
 
     const [user] = users;
     //define testrail ID
@@ -228,7 +228,7 @@ Scenario('C8816 - Cancel mail compose', function (I, users) {
     I.dontSeeElement('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
 });
 
-Scenario('C7385 - Write mail to BCC recipients', function (I, users) {
+Scenario('[C7385] - Write mail to BCC recipients', function (I, users) {
     //define testrail ID
     it('(C7385) Write mail to BCC recipients');
     let [user] = users;
@@ -272,7 +272,7 @@ Scenario('C7385 - Write mail to BCC recipients', function (I, users) {
     I.logout();
 });
 
-Scenario('C7386 - Write mail to CC recipients', function (I, users) {
+Scenario('[C7386] - Write mail to CC recipients', function (I, users) {
     //define testrail ID
     it('(C7386) Write mail to CC recipients');
     let [user] = users;
@@ -336,7 +336,7 @@ Scenario('C7386 - Write mail to CC recipients', function (I, users) {
 
 });
 
-Scenario('C7388 - Send mail with different priorities', function (I, users) {
+Scenario('[C7388] - Send mail with different priorities', function (I, users) {
     //define testrail ID
     it('(C7388) Send mail with different priorities');
     let [user] = users;
@@ -388,7 +388,7 @@ Scenario('C7388 - Send mail with different priorities', function (I, users) {
     I.waitForVisible('.selected .contextmenu-control');
     I.wait(2);
     I.doubleClick('[title="' + testrailID + ' - ' + timestamp + ' Priority: High"]');
-    I.waitForElement('.floating-window-content .io-ox-mail-compose.container .mail-compose-fields');
+    I.waitForElement('.floating-window-content .window-container-center .thread-view');
     I.see(testrailID + ' - ' + timestamp);
     I.seeElement('.detail-view-app .detail-view-row [title="High priority"]');
     I.dontSeeElement('.detail-view-app .detail-view-row [title="Low priority"]');
@@ -399,7 +399,7 @@ Scenario('C7388 - Send mail with different priorities', function (I, users) {
     I.waitForVisible('.selected .contextmenu-control');
     I.wait(2);
     I.doubleClick('[title="' + testrailID + ' - ' + timestamp + ' Priority: Low"]');
-    I.waitForElement('.floating-window-content .io-ox-mail-compose.container .mail-compose-fields');
+    I.waitForElement('.floating-window-content .window-container-center .thread-view');
     I.see(testrailID + ' - ' + timestamp);
     I.dontSeeElement('.detail-view-app .detail-view-row [title="High priority"]');
     I.seeElement('.detail-view-app .detail-view-row [title="Low priority"]');
@@ -410,14 +410,14 @@ Scenario('C7388 - Send mail with different priorities', function (I, users) {
     I.waitForVisible('.selected .contextmenu-control');
     I.wait(2);
     I.doubleClick('[title="' + testrailID + ' - ' + timestamp + ' Priority: Normal"]');
-    I.waitForElement('.floating-window-content .io-ox-mail-compose.container .mail-compose-fields');
+    I.waitForElement('.floating-window-content .window-container-center .thread-view');
     I.see(testrailID + ' - ' + timestamp);
     I.dontSeeElement('.detail-view-app .detail-view-row [title="High priority"]');
     I.dontSeeElement('.detail-view-app .detail-view-row [title="Low priority"]');
     I.logout();
 });
 
-Scenario('C7389 - Send mail with attached vCard', function (I, users) {
+Scenario('[C7389] - Send mail with attached vCard', function (I, users) {
     //define testrail ID
     it('(C7389) Send mail with attached vCard');
     let [user] = users;
@@ -462,7 +462,7 @@ Scenario('C7389 - Send mail with attached vCard', function (I, users) {
     I.logout();
 });
 
-Scenario('C7387 - Send mail with attachment from upload', function (I, users) {
+Scenario('[C7387] - Send mail with attachment from upload', function (I, users) {
     //define testrail ID
     it('(C7387) Send mail with attachment from upload');
     let [user] = users;
@@ -564,7 +564,7 @@ Scenario('C7387 - Send mail with attachment from upload', function (I, users) {
 
 
 //Reply / Forward
-Scenario('C7403 - Forward a single mail', function (I, users) {
+Scenario('[C7403] - Forward a single mail', function (I, users) {
     //define testrail ID
     it('(C7403) Forward a single mail');
     let [user] = users;
@@ -606,7 +606,7 @@ Scenario('C7403 - Forward a single mail', function (I, users) {
     I.logout();
 });
 
-Scenario('C7404 - Reply to single mail', function (I, users) {
+Scenario('[C7404] - Reply to single mail', function (I, users) {
     //define testrail ID
     it('(C7404) Reply to single mail');
     let [user] = users;
@@ -647,7 +647,7 @@ Scenario('C7404 - Reply to single mail', function (I, users) {
     I.logout();
 });
 
-Scenario('C8820 - Forward attachments', function (I, users) {
+Scenario('[C8820] - Forward attachments', function (I, users) {
     //define testrail ID
     it('(C8820) Forward attachments');
     let [user] = users;
@@ -713,7 +713,7 @@ Scenario('C8820 - Forward attachments', function (I, users) {
     I.see('Fwd: ' + testrailID + ' - ' + timestamp);
 });
 
-Scenario('C7405 - Delete E-Mail', function (I, users) {
+Scenario('[C7405] - Delete E-Mail', function (I, users) {
     //define testrail ID
     it('(C7405) Delete E-Mail');
     let [user] = users;
@@ -747,7 +747,7 @@ Scenario('C7405 - Delete E-Mail', function (I, users) {
     I.logout();
 });
 
-Scenario('C7406 - Delete several E-Mails', function (I, users) {
+Scenario('[C7406] - Delete several E-Mails', function (I, users) {
     //define testrail ID
     it('(C7406) Delete several E-Mails');
     let [user] = users;
@@ -817,7 +817,7 @@ Scenario('C1337 - import mail', async function (I, users) {
 
 });
 
-Scenario('C101615 - Emojis', async function (I, users) {
+Scenario('[C101615] - Emojis', async function (I, users) {
     //define testrail ID
     it('(C101615) Emojis');
     let [user] = users;
@@ -864,7 +864,7 @@ Scenario('C101615 - Emojis', async function (I, users) {
 //    I.logout();
 //});
 
-Scenario('C101620 - Very long TO field', async function (I, users) {
+Scenario('[C101620] - Very long TO field', async function (I, users) {
     //define testrail ID
     it('(C101620) Very long TO field');
     let [user] = users;

@@ -25,7 +25,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('C7372 Create new distribution list', function (I, users) {
+Scenario('[C7372] Create new distribution list', function (I, users) {
     let [user] = users;
     var testrailID = "C7372"
     var timestamp = Math.round(+new Date()/1000);
@@ -61,7 +61,7 @@ Scenario('C7372 Create new distribution list', function (I, users) {
     I.logout();
 });
 
-Scenario('C7376 Send a mail to distribution list', async function (I, users) {
+Scenario('[C7376] Send a mail to distribution list', async function (I, users) {
     let [user] = users;
     var testrailID = "C7376"
     var timestamp = Math.round(+new Date()/1000);
@@ -170,7 +170,7 @@ Scenario('C7376 Send a mail to distribution list', async function (I, users) {
     I.logout();
 });
 
-Scenario('C7377 Copy distribution list', async function (I, users) {
+Scenario('[C7377] Copy distribution list', async function (I, users) {
     let [user] = users;
     var testrailID = "C7377"
     var timestamp = Math.round(+new Date()/1000);
@@ -278,7 +278,7 @@ Scenario('C7377 Copy distribution list', async function (I, users) {
     I.logout();
 });
 
-Scenario('C7375 Move a distribution list', async function (I, users) {
+Scenario('[C7375] Move a distribution list', async function (I, users) {
     let [user] = users;
     var testrailID = "C7375"
     var timestamp = Math.round(+new Date()/1000);
@@ -380,7 +380,7 @@ Scenario('C7375 Move a distribution list', async function (I, users) {
     I.logout();
 });
 
-Scenario('C7374 Modify distribution list name', async function (I, users) {
+Scenario('[C7374] Modify distribution list name', async function (I, users) {
     let [user] = users;
     var testrailID = "C7374"
     var timestamp = Math.round(+new Date()/1000);
@@ -467,7 +467,7 @@ Scenario('C7374 Modify distribution list name', async function (I, users) {
     I.logout();
 });
 
-Scenario('C7373 Modify distribution list members', async function (I, users) {
+Scenario('[C7373] Modify distribution list members', async function (I, users) {
     let [user] = users;
     var testrailID = "C7373"
     var timestamp = Math.round(+new Date()/1000);
@@ -581,7 +581,7 @@ Scenario('C7373 Modify distribution list members', async function (I, users) {
     I.logout();
 });
 
-Scenario('C7379 Delete distribution list', async function (I, users) {
+Scenario('[C7379] Delete distribution list', async function (I, users) {
     let [user] = users;
     var testrailID = "C7379"
     var timestamp = Math.round(+new Date()/1000);
@@ -608,7 +608,7 @@ Scenario('C7379 Delete distribution list', async function (I, users) {
     I.logout();
 });
 
-Scenario('C7378 Delete multiple distribution lists', async function (I, users) {
+Scenario('[C7378] Delete multiple distribution lists', async function (I, users) {
     let [user] = users;
     var testrailID = "C7378"
     var timestamp = Math.round(+new Date()/1000);
@@ -636,17 +636,14 @@ Scenario('C7378 Delete multiple distribution lists', async function (I, users) {
 
     I.fillField('Search...', testrailID+' - '+timestamp)
     I.pressKey("Enter");
-    
-    I.see(testrailID+' - '+timestamp+' - 1')
-    I.see(testrailID+' - '+timestamp+' - 2')
+    I.waitForText(testrailID + ' - ' + timestamp + ' - 1');
+    I.waitForText(testrailID + ' - ' + timestamp + ' - 2');
+    I.see(testrailID + ' - ' + timestamp + ' - 1');
+    I.see(testrailID + ' - ' + timestamp + ' - 2');
     I.click('[aria-label="'+testrailID+' - '+timestamp+' - 1'+'"]');
-    
     I.pressKey(['\uE009', 'a']);
-    
     I.clickToolbar('Delete')
-    
     I.click('[role="alertdialog"] [type="button"][data-action="delete"]');
-    
     I.wait(1)
     I.dontSee(testrailID+' - '+timestamp+' - 1')
     I.dontSee(testrailID+' - '+timestamp+' - 2')

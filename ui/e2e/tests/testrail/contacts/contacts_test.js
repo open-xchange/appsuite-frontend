@@ -23,10 +23,7 @@ After(async function (users) {
 });
 
 
-Scenario('C7354 - Create new contact', function (I) {
-    //define testrail ID
-    it('(C7354) Create new contact');
-
+Scenario('[C7354] - Create new contact', function (I) {
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
     I.waitForVisible('.classic-toolbar [data-action]');
@@ -150,10 +147,8 @@ Scenario('C7354 - Create new contact', function (I) {
     I.logout();
 });
 
-Scenario('C7355 - Create a new private folder', function (I) {
+Scenario('[C7355] - Create a new private folder', function (I) {
     var timestamp = Math.round(+new Date() / 1000);
-    //define testrail ID
-    it('(C7355) Create a new private folder');
 
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
@@ -168,10 +163,8 @@ Scenario('C7355 - Create a new private folder', function (I) {
     I.logout();
 });
 
-Scenario('C7356 - Create a new public folder', function (I) {
+Scenario('[C7356] - Create a new public folder', function (I) {
     var timestamp = Math.round(+new Date() / 1000);
-    //define testrail ID
-    it('(C7356) Create a new public folder');
 
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
@@ -186,10 +179,7 @@ Scenario('C7356 - Create a new public folder', function (I) {
     I.logout();
 });
 
-Scenario('C7367 - Delete Contact', function (I) {
-    //define testrail ID
-    it('(C7367) Delete Contact');
-
+Scenario('[C7367] - Delete Contact', function (I) {
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
 
@@ -212,7 +202,7 @@ Scenario('C7367 - Delete Contact', function (I) {
     I.logout();
 });
 
-Scenario('C7366 - Delete multiple contacts', async function (I, search, users) {
+Scenario('[C7366] - Delete multiple contacts', async function (I, search, users) {
     let testrailID = 'C7366';
     const contact = {
         display_name: '' + testrailID + ', ' + testrailID + '',
@@ -221,7 +211,6 @@ Scenario('C7366 - Delete multiple contacts', async function (I, search, users) {
         last_name: testrailID
 
     };
-    it('(C7366) Delete multiple contacts');
     I.createContact(contact, { user: users[0] });
     I.createContact(contact, { user: users[0] });
     I.login('app=io.ox/contacts');
@@ -245,9 +234,7 @@ Scenario('C7366 - Delete multiple contacts', async function (I, search, users) {
     I.logout();
 });
 
-Scenario('C7369 - Search by Name', async function (I, search, users) {
-    //define testrail ID
-    it('(C7369) Search by Name');
+Scenario('[C7369] - Search by Name', async function (I, search, users) {
     //var firstname = "C7369"
     //var lastname = "C7369"
     let testrailID = 'C7369';
@@ -280,8 +267,7 @@ Scenario('C7369 - Search by Name', async function (I, search, users) {
     I.logout();
 });
 
-Scenario('C7370 - Search by Phone numbers', async function (I, search, users) {
-    it('(C7370) Search by Phone numbers');
+Scenario('[C7370] - Search by Phone numbers', async function (I, search, users) {
     let phone = '+4917113371337';
     let testrailID = 'C7370';
     //Create Contact
@@ -319,9 +305,7 @@ Scenario('C7370 - Search by Phone numbers', async function (I, search, users) {
     I.logout();
 });
 
-Scenario('C7371 - Search by Addresses', async function (I, search, users) {
-    //define testrail ID
-    it('(C7371) Search by Addresses');
+Scenario('[C7371] - Search by Addresses', async function (I, search, users) {
     let testrailID = 'C7371';
     let firstname = testrailID;
     let lastname = testrailID;
@@ -371,9 +355,7 @@ Scenario('C7371 - Search by Addresses', async function (I, search, users) {
     I.logout();
 });
 
-Scenario('C7359 - Expand/collapse all contact edit sections', function (I) {
-    //define testrail ID
-    it('(C7359) Expand/collapse all contact edit sections');
+Scenario('[C7359] - Expand/collapse all contact edit sections', function (I) {
 
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
@@ -503,9 +485,7 @@ Scenario('C7359 - Expand/collapse all contact edit sections', function (I) {
     I.logout();
 });
 
-Scenario('C7358 - Remove contact picture', function (I, search) {
-    //define testrail ID
-    it('(C7358) Remove contact picture');
+Scenario('[C7358] - Remove contact picture', function (I, search) {
     var firstname = 'C7358';
     var lastname = 'C7358';
     var phone = '+4917113371337';
@@ -545,9 +525,7 @@ Scenario('C7358 - Remove contact picture', function (I, search) {
     I.logout();
 });
 
-Scenario('C7363 - Add files to a contact', function (I, search) {
-    //define testrail ID
-    it('(C7363) Add files to a contact');
+Scenario('[C7363] - Add files to a contact', function (I, search) {
     var firstname = 'C7363';
     var lastname = 'C7363';
     var phone = '+4917113371337';
@@ -622,10 +600,8 @@ Scenario('C7363 - Add files to a contact', function (I, search) {
 //    I.logout();
 //});
 
-Scenario('C8817 - Send E-Mail to contact', function (I, users, search) {
+Scenario('[C8817] - Send E-Mail to contact', function (I, users, search) {
     let [user] = users;
-    //define testrail ID
-    it('(C8817) Send E-Mail to contact');
     var testrailID = 'C8817';
     //var text = Math.round(+new Date() / 1000);
     var subject = Math.round(+new Date() / 1000);
@@ -644,7 +620,7 @@ Scenario('C8817 - Send E-Mail to contact', function (I, users, search) {
     I.wait('1');
     I.logout();
     I.login('app=io.ox/mail', { user: users[1] });
-    I.waitForText('' + testrailID + ' - ' + subject, 5, '.subject');
+    I.waitForElement('.list-item[aria-label*="' + testrailID + ' - ' + subject + '"]');
     I.doubleClick('.list-item[aria-label*="' + testrailID + ' - ' + subject + '"]');
     I.see(testrailID + ' - ' + subject);
     I.see(testrailID);

@@ -2,7 +2,6 @@ var fs = require('fs');
 var _ = require('underscore');
 var localConf = {};
 
-
 if (fs.existsSync('grunt/local.conf.json')) {
     localConf = JSON.parse(fs.readFileSync('grunt/local.conf.json')) || {};
 }
@@ -67,9 +66,11 @@ module.exports.config = {
     plugins: {
         allure: { enabled: true },
         testrail: {
+            require: './e2e/plugins/testrail',
             host: process.env.TESTRAIL_HOST || 'https://testrail.local',
             user: process.env.TESTRAIL_USERNAME || 'testuser',
             password: process.env.TESTRAIL_API_KEY || 'testkey',
+            project_id: process.env.TESTRAIL_PROJECTID || '1',
             projectId: process.env.TESTRAIL_PROJECTID || '1',
             runName: process.env.TESTRAIL_RUNNAME || 'test',
             enabled: process.env.TESTRAIL_ENABLED || false
