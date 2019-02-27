@@ -431,8 +431,8 @@ define('io.ox/backbone/views/recurrence-view', [
 
                     if (selection === 'never') {
                         this.model.set({
-                            'until': undefined,
-                            'occurrences': undefined
+                            'until': null,
+                            'occurrences': null
                         });
                     } else if (selection === 'until') {
                         var date = moment(start).add(1, momentShorthands[this.model.get('recurrence_type') - 1]);
@@ -445,7 +445,7 @@ define('io.ox/backbone/views/recurrence-view', [
                             date = moment.max(start, date);
                         }
                         this.model.set({
-                            'occurrences': undefined,
+                            'occurrences': null,
                             'until': date.valueOf()
                         });
                     } else {
@@ -461,7 +461,7 @@ define('io.ox/backbone/views/recurrence-view', [
                             occurrences = Math.max(1, occurrences);
                         }
                         this.model.set({
-                            'until': undefined,
+                            'until': null,
                             'occurrences': occurrences
                         });
                     }
