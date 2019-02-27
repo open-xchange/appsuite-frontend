@@ -38,8 +38,7 @@ module.exports.config = {
     include: {
         I: './e2e/actor',
         users: './e2e/users',
-        search: './e2e/actor_search',
-        contacts: './e2e/actor_contact'
+        search: './e2e/actor_search'
     },
     bootstrap: function (done) {
         // setup chai

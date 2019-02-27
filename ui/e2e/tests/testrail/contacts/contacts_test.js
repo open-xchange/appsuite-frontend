@@ -617,7 +617,6 @@ Scenario('[C8817] - Send E-Mail to contact', function (I, users, search) {
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + subject);
     I.fillField({ css: 'textarea.plain-text' }, testrailID);
     I.seeInField({ css: 'textarea.plain-text' }, testrailID);
-    
     I.click('Send');
     I.waitForElement('.fa-spin-paused');
     I.wait('1');

@@ -1,11 +1,11 @@
 const users = [{
     name: 'dpondruff',
     password: 'secret',
-    primaryEmail: "dpondruff@local"
-},{
+    primaryEmail: 'dpondruff@local'
+}, {
     name: 'mwagner',
     password: 'secret',
-    primaryEmail: "mwagner@local"
+    primaryEmail: 'mwagner@local'
 }];
 
 (function () {
