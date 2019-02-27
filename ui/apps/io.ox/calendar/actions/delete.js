@@ -17,15 +17,14 @@ define('io.ox/calendar/actions/delete', [
     'io.ox/core/yell',
     'gettext!io.ox/calendar',
     'io.ox/core/tk/dialogs',
-    'io.ox/backbone/mini-views/common',
-    'settings!io.ox/calendar'
-], function (api, util, yell, gt, dialogs, mini, settings) {
+    'io.ox/backbone/mini-views/common'
+], function (api, util, yell, gt, dialogs, mini) {
 
     'use strict';
 
     return function (list) {
         api.getList(list).done(function (list) {
-            var displayComment = settings.get('notifyNewModifiedDeleted', true) && _(list).every(function (event) {
+            var displayComment = _(list).every(function (event) {
                     return (event.hasFlag('organizer') || (event.hasFlag('organizer_on_behalf') && !event.hasFlag('attendee'))) && event.get('attendees').length > 1;
                 }),
                 guid,
