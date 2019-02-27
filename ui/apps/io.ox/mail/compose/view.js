@@ -250,8 +250,10 @@ define('io.ox/mail/compose/view', [
             id: 'add_attachments',
             index: 100,
             draw: function (baton) {
-                var node = $('<div data-extension-id="add_attachments" class="mail-input col-xs-3">');
-                if (_.device('!smartphone')) node.addClass('col-xs-offset-2');
+                var node = $('<div data-extension-id="add_attachments" class="mail-input">');
+                // dont use col-xs and col-sm here, breaks style in landscape mode
+                node.addClass(_.device('smartphone') ? 'col-xs-5' : 'col-xs-offset-2 col-xs-3');
+
                 extensions.attachment.call(node, baton);
                 this.append(node);
             }
@@ -265,10 +267,7 @@ define('io.ox/mail/compose/view', [
                 ext.point(POINT + '/menu').invoke('draw', node, baton);
 
                 this.append(
-                    // $('<div data-extension-id="composetoolbar-menu" class="col-xs-7">').append(node)
-                    $('<div data-extension-id="composetoolbar-menu">')
-                        .addClass(_.device('smartphone') ? 'col-xs-9' : 'col-xs-7')
-                        .append(node)
+                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-7">').append(node)
                 );
             }
         }

@@ -458,8 +458,9 @@ define('io.ox/mail/compose/extensions', [
             var guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div data-extension-id="subject" class="row subject">').append(
-                    $('<label class="maillabel hidden-xs col-sm-2">').text(gt('Subject')).attr('for', guid),
-                    $('<div class="mail-input col-xs-12 col-sm-10">').append(
+                    // dont use col-xs and col-sm here, breaks style in landscape mode
+                    $('<label class="maillabel" >').addClass(_.device('smartphone') ? 'hidden-md hidden-sm hidden-xs' : 'col-xs-2').text(gt('Subject')).attr('for', guid),
+                    $('<div class="mail-input" >').addClass(_.device('smartphone') ? 'col-xs-12' : 'col-xs-10').append(
                         new mini.InputView({ model: baton.model, id: guid, name: 'subject', autocomplete: false }).render().$el.attr('placeholder', gt('Subject'))
                     )
                 )
