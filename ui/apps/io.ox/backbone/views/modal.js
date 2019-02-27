@@ -317,13 +317,21 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         // hide dialog without disposing it
         pause: function () {
             $(document).off('focusin', this.keepFocus);
-            this.$el.next().addBack().hide();
+            if (this.options.render !== false) {
+                this.$el.next('.modal-backdrop.in:visible').addBack().hide();
+            } else {
+                this.$el.prev('.modal-backdrop.in:visible').addBack().hide();
+            }
             this.toggleAriaHidden(false);
         },
 
         resume: function () {
             $(document).on('focusin', this.keepFocus);
-            this.$el.next().addBack().show();
+            if (this.options.render !== false) {
+                this.$el.next('.modal-backdrop.in:hidden').addBack().show();
+            } else {
+                this.$el.prev('.modal-backdrop.in:hidden').addBack().show();
+            }
             // add marker class again(needed by yells for example)
             $(document.body).addClass('modal-open');
             this.toggleAriaHidden(true);
