@@ -96,7 +96,7 @@ Scenario('[C7376] Send a mail to distribution list', async function (I, users) {
     };
     await I.createContact(contact2, { user: users[0] });
     I.haveSetting('io.ox/mail//messageFormat', 'text');
-    
+
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
 
@@ -385,24 +385,6 @@ Scenario('[C7374] Modify distribution list name', async function (I, users) {
 
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
-    //I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
-    //I.clickToolbar('New');
-    //
-    //I.click('Add distribution list');
-    //
-    //I.waitForVisible('.io-ox-contacts-distrib-window');
-    //I.fillField('Name', testrailID+' - '+timestamp);
-    //I.fillField('Add contact', users[0].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.fillField('Add contact', users[1].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.fillField('Add contact', users[2].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.fillField('Add contact', users[3].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.click('Create list');
-    //
-    I.wait(1);
     I.doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
 
     I.see(testrailID + ' - ' + timestamp);
