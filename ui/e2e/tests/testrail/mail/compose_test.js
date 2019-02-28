@@ -387,7 +387,7 @@ Scenario('[C7388] - Send mail with different priorities', function (I, users) {
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
     I.wait(2);
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + ' Priority: High"]');
+    I.retry(5).doubleClick('[title="' + testrailID + ' - ' + timestamp + ' Priority: High"]');
     I.waitForElement('.floating-window-content .window-container-center .thread-view');
     I.see(testrailID + ' - ' + timestamp);
     I.seeElement('.detail-view-app .detail-view-row [title="High priority"]');
@@ -398,7 +398,7 @@ Scenario('[C7388] - Send mail with different priorities', function (I, users) {
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
     I.wait(2);
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + ' Priority: Low"]');
+    I.retry(5).doubleClick('[title="' + testrailID + ' - ' + timestamp + ' Priority: Low"]');
     I.waitForElement('.floating-window-content .window-container-center .thread-view');
     I.see(testrailID + ' - ' + timestamp);
     I.dontSeeElement('.detail-view-app .detail-view-row [title="High priority"]');
@@ -409,7 +409,7 @@ Scenario('[C7388] - Send mail with different priorities', function (I, users) {
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
     I.wait(2);
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + ' Priority: Normal"]');
+    I.retry(5).doubleClick('[title="' + testrailID + ' - ' + timestamp + ' Priority: Normal"]');
     I.waitForElement('.floating-window-content .window-container-center .thread-view');
     I.see(testrailID + ' - ' + timestamp);
     I.dontSeeElement('.detail-view-app .detail-view-row [title="High priority"]');

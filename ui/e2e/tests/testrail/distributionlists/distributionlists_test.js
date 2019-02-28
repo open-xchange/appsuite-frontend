@@ -385,8 +385,9 @@ Scenario('[C7374] Modify distribution list name', async function (I, users) {
 
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
-    I.doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-
+    I.waitForElement('.contact-grid-container');
+    I.retry(5).click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    
     I.see(testrailID + ' - ' + timestamp);
     I.see('Distribution list with 4 entries');
     I.see(users[0].userdata.primaryEmail);
@@ -394,15 +395,13 @@ Scenario('[C7374] Modify distribution list name', async function (I, users) {
     I.see(users[2].userdata.primaryEmail);
     I.see(users[3].userdata.primaryEmail);
     //Edit
-    I.click('.detail-view-app [data-action="edit"]');
+    I.clickToolbar('Edit');
     I.waitForElement('[name="display_name"]');
     I.fillField('[name="display_name"]', testrailID + ' - ' + timestamp + ' - ' + testrailID);
     I.click('Save');
 
-    I.wait(1);
-    I.click('.floating-window-content [aria-label="Close"][type="button"]');
 
-    I.doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + ' - ' + testrailID + '"]');
+    I.retry(5).click('[aria-label="' + testrailID + ' - ' + timestamp + ' - ' + testrailID + '"]');
 
     I.see(testrailID + ' - ' + timestamp + ' - ' + testrailID);
     I.see('Distribution list with 4 entries');

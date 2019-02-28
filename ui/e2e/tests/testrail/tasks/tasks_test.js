@@ -11,7 +11,7 @@
  */
 
 
-Feature('Testrail - Tasks').tag('6');
+Feature('testrail - tasks').tag('6');
 
 Before(async function (users) {
     await users.create();
@@ -238,8 +238,7 @@ Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
             }
         ]
     };
-    const bla = await I.createFolder(folder, '2', { user: users[0] });
-    console.log(bla);
+    I.createFolder(folder, '2', { user: users[0] });
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.selectFolder(testrailID);
