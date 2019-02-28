@@ -726,8 +726,7 @@ Scenario('[C7405] - Delete E-Mail', function (I, users) {
     I.waitForVisible('.io-ox-mail-window');
 
     I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
+    I.retry(5).waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
@@ -737,12 +736,11 @@ Scenario('[C7405] - Delete E-Mail', function (I, users) {
     I.login('app=io.ox/mail', { user: users[1] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.retry(5).click('[title="' + testrailID + ' - ' + timestamp + '"]');
     I.clickToolbar('Delete');
-    I.wait(1);
-    I.dontSee(testrailID + ' - ' + timestamp);
+    I.retry(5).dontSee(testrailID + ' - ' + timestamp);
     I.selectFolder('Trash');
-    I.see(testrailID + ' - ' + timestamp);
+    I.retry(5).see(testrailID + ' - ' + timestamp);
     I.logout();
 });
 

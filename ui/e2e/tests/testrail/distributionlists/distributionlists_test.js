@@ -191,29 +191,12 @@ Scenario('[C7377] Copy distribution list', async function (I, users) {
 
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
-    //I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
-    //I.clickToolbar('New');
-    //
-    //I.click('Add distribution list');
-    //
-    //I.waitForVisible('.io-ox-contacts-distrib-window');
-    //I.fillField('Name', testrailID+' - '+timestamp);
-    //I.fillField('Add contact', users[0].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.fillField('Add contact', users[1].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.fillField('Add contact', users[2].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.fillField('Add contact', users[3].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.click('Create list');
-    //
     I.click('Add new address book');
     I.waitForElement('.modal-open [data-point="io.ox/core/folder/add-popup"]');
     I.fillField('[placeholder="New address book"][type="text"]', testrailID);
     I.click('Add');
     I.waitForDetached('.modal-open [data-point="io.ox/core/folder/add-popup"]');
-    I.doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.retry(5).doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
     I.click('.detail-view-app [data-action="more"]');
     I.click('.dropdown.open [data-ref="io.ox/contacts/actions/copy"]');
     I.click('.modal [data-id="virtual/flat/contacts/private"] div.folder-arrow');
@@ -221,19 +204,16 @@ Scenario('[C7377] Copy distribution list', async function (I, users) {
     I.click('[type="button"][data-action="ok"]');
     I.click('.floating-window-content [aria-label="Close"][type="button"]');
     I.selectFolder('Contacts');
-    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.retry(5).click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
     I.see(testrailID + ' - ' + timestamp);
     I.see('Distribution list with 4 entries');
     I.see(users[0].userdata.primaryEmail);
     I.see(users[1].userdata.primaryEmail);
     I.see(users[2].userdata.primaryEmail);
     I.see(users[3].userdata.primaryEmail);
-    I.click('.floating-window-content [aria-label="Close"][type="button"]');
 
     I.selectFolder(testrailID);
-    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.retry(5).click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
     I.see(testrailID + ' - ' + timestamp);
     I.see('Distribution list with 4 entries');
     I.see(users[0].userdata.primaryEmail);
