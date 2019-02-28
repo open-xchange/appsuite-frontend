@@ -217,3 +217,59 @@ Scenario('[C7730] Create a private Task with participant', async function (I, us
     I.see('Tasks with private flag cannot be delegated.');
     I.logout();
 });
+Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
+    let testrailID = 'C7731';
+    let testrailName = 'Create a Task in a shared folder';
+
+
+    const folder = {
+        module: 'tasks',
+        subscribed: 1,
+        title: testrailID,
+        permissions: [
+            {
+                bits: 403710016,
+                entity: users[0].userdata.id,
+                group: false
+            }, {
+                bits: 4227332,
+                entity: users[1].userdata.id,
+                group: false
+            }
+        ]
+    };
+    const bla = await I.createFolder(folder, '2', { user: users[0] });
+    console.log(bla);
+    I.login('app=io.ox/tasks');
+    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    I.selectFolder(testrailID);
+
+
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-tasks-edit-window');
+    I.fillField('Subject', testrailID);
+    I.fillField('Description', testrailName);
+    I.click('Expand form');
+    I.fillField('Add contact', users[1].userdata.primaryEmail);
+    I.pressKey('Enter');
+    I.click('Create');
+    I.seeElement('.tasks-detailview');
+
+    I.logout();
+
+    I.login('app=io.ox/tasks', { user: users[1] });
+    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    I.selectFolder(testrailID);
+
+    I.seeElement('.tasks-detailview');
+    I.see(testrailID);
+    I.see(testrailName);
+    I.dontSeeElement({ css: '[title="High priority"]' });
+    I.dontSeeElement({ css: '[title="Low priority"]' });
+    I.see('Not started');
+    I.seeElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');
+    
+    I.logout();
+});
+
+

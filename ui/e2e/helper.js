@@ -191,6 +191,18 @@ class MyHelper extends Helper {
             return { id: data[0], folder: data[1] };
         });
     }
+    async createFolder(folder, id, options) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        return httpClient.put('/appsuite/api/folders', folder, {
+            params: {
+                action: 'new',
+                autorename: true,
+                folder_id: id,
+                session: session,
+                tree: 1
+            }
+        });
+    }
 }
 
 module.exports = MyHelper;
