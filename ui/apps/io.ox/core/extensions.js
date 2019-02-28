@@ -183,11 +183,11 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
                 extension.invoke = createInvoke(this, extension);
 
-                var arg = replacements[id];
-                if (arg) {
+                // apply replacements
+                _(replacements[id]).each(function (arg) {
                     _.extend(extension, _.isFunction(arg) ? arg(_.extend({}, extension)) : arg);
-                    delete replacements[id];
-                }
+                });
+                delete replacements[id];
 
                 extensions.push(extension);
                 sort();
@@ -231,7 +231,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
                 return true;
             });
 
-            if (replaced) sort(); else replacements[id] = fn || arg;
+            if (replaced) sort(); else (replacements[id] = replacements[id] || []).push(fn || arg);
 
             return this;
         };

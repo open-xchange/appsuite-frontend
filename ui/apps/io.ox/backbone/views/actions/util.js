@@ -113,7 +113,7 @@ define('io.ox/backbone/views/actions/util', [
                     drawDisabled: link.drawDisabled,
                     icon: link.icon,
                     point: link.dropdown,
-                    title: link.title || link.label
+                    title: getTitle(link.title || link.label, baton)
                 });
                 return { $li: $li, def: def };
             }
@@ -176,7 +176,7 @@ define('io.ox/backbone/views/actions/util', [
             })
             .append(function () {
                 var icon = item.link.icon,
-                    title = item.link.title || item.link.label,
+                    title = getTitle(item.link.title || item.link.label, baton),
                     tooltip = (item.link.tooltip || (icon && title)) && _.device('!smartphone'),
                     $a = $('<a href="#" role="button" draggable="false" tabindex="-1">')
                     .data({ baton: baton })
@@ -199,7 +199,7 @@ define('io.ox/backbone/views/actions/util', [
         renderDropdown: function ($el, baton, options) {
 
             var $toggle = util.createDropdownToggle().attr('data-dropdown', options.point);
-            if (options.title) $toggle.text(options.title);
+            if (options.title) $toggle.text(getTitle(options.title, baton));
             else if (options.icon) $toggle.append($('<i>').addClass(options.icon));
 
             if (options.caret !== false) $toggle.append(util.createCaret());
@@ -457,6 +457,10 @@ define('io.ox/backbone/views/actions/util', [
         if (action.matches) ret = action.matches(baton);
         else if (_.isFunction(action.requires)) ret = action.requires({ baton: baton, collection: baton.collection, data: baton.data, extension: action });
         return $.when(ret).pipe(null, _.constant(false));
+    }
+
+    function getTitle(arg, baton) {
+        return _.isFunction(arg) ? arg(baton) : arg;
     }
 
     $.fn.addActionTooltip = function (title) {

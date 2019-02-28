@@ -76,7 +76,10 @@ define('io.ox/files/toolbar', [
                 prio: 'hi',
                 mobile: 'lo',
                 icon: 'fa fa-trash-o',
-                title: gt('Delete'),
+                title: function (baton) {
+                    var model = folderApi.pool.getModel(baton.folder_id);
+                    return model && folderApi.is('trash', model.toJSON()) ? gt('Delete forever') : gt('Delete');
+                },
                 ref: 'io.ox/files/actions/delete'
             },
             'back': {
