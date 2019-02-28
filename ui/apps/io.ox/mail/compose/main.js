@@ -225,26 +225,21 @@ define('io.ox/mail/compose/main', [
         });
 
         app.failRestore = function (point) {
-            return require(['io.ox/mail/compose/bundle']).then(function () {
-                return require(['io.ox/mail/compose/model']);
-            }).then(function (MailComposeModel) {
-                var data = { id: point };
-                if (_.isObject(point)) {
-                    // create composition space from old restore point
-                    data = _(point).pick('to', 'cc', 'bcc', 'subject');
-                    if (point.from && point.from[0]) data.from = point.from[0];
-                    if (point.attachments && point.attachments[0]) {
-                        data.content = point.attachments[0].content;
-                        data.contentType = point.attachments[0].content_type;
-                    }
-                    data.meta = {};
-                    data.meta.security = point.security;
-                    data.requestRqe = point.disp_notification_to;
-                    data.priority = ['high', 'medium', 'low'][(data.priority || 1) - 1];
+            var data = { id: point };
+            if (_.isObject(point)) {
+                // create composition space from old restore point
+                data = _(point).pick('to', 'cc', 'bcc', 'subject');
+                if (point.from && point.from[0]) data.from = point.from[0];
+                if (point.attachments && point.attachments[0]) {
+                    data.content = point.attachments[0].content;
+                    data.contentType = point.attachments[0].content_type;
                 }
-                var model = new MailComposeModel(data);
-                return app.open(model);
-            });
+                data.meta = {};
+                data.meta.security = point.security;
+                data.requestRqe = point.disp_notification_to;
+                data.priority = ['high', 'medium', 'low'][(data.priority || 1) - 1];
+            }
+            return app.open(data);
         };
 
         app.getContextualHelp = function () {
@@ -252,20 +247,15 @@ define('io.ox/mail/compose/main', [
         };
 
         app.open = function (obj, config) {
-            var def = $.Deferred(), model;
+            var def = $.Deferred();
             obj = _.extend({}, obj);
 
             // Set window and toolbars invisible initially
             win.nodes.header.addClass('sr-only');
             win.nodes.body.addClass('sr-only');
 
-            if (obj instanceof Backbone.Model) {
-                model = obj;
-                obj = {};
-            }
-
             win.busy().show(function () {
-                POINT.cascade(app, { data: obj || {}, model: model, config: config, win: win }).then(function success() {
+                POINT.cascade(app, { data: obj || {}, config: config, win: win }).then(function success() {
                     def.resolve({ app: app });
                     ox.trigger('mail:' + app.model.get('meta').type + ':ready', obj, app);
                 }, function fail(e) {
