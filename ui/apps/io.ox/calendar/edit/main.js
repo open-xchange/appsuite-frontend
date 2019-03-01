@@ -440,29 +440,28 @@ define('io.ox/calendar/edit/main', [
             // trigger blur inputfields so the model has current data and the dirty check is correct
             $(document.activeElement).filter('input').trigger('change');
             self.cleanUpModel();
-            //be gently
+            //be gentle
             if (self.getDirtyStatus()) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                     if (app.getWindow().floating) {
                         app.getWindow().floating.toggle(true);
                     } else if (_.device('smartphone')) {
                         app.getWindow().resume();
                     }
-                    new dialogs.ModalDialog()
-                        .text(gt('Do you really want to discard your changes?'))
+                    new ModalDialog({ title: gt('Do you really want to discard your changes?') })
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
-                        //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete')
-                        .addButton('cancel', gt('Cancel'), 'cancel')
-                        .show()
-                        .done(function (action) {
+                        //#. Translation must be distinguishable for the user
+                        .addCancelButton({ left: true })
+                        .addButton({ label: gt.pgettext('dialog', 'Discard changes'), action: 'delete' })
+                        .on('action', function (action) {
                             if (action === 'delete') {
                                 self.dispose();
                                 df.resolve();
                             } else {
                                 df.reject();
                             }
-                        });
+                        })
+                        .open();
                 });
             } else {
                 //just let it go

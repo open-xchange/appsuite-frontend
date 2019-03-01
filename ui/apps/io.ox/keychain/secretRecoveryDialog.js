@@ -13,34 +13,32 @@
 
 define('io.ox/keychain/secretRecoveryDialog', [
     'io.ox/keychain/api',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/notifications',
     'gettext!io.ox/keychain'
-], function (api, dialogs, notifications, gt) {
+], function (api, ModalDialog, notifications, gt) {
 
     'use strict';
 
     return {
         show: function () {
-            new dialogs.ModalDialog({ easyOut: false, async: true, width: 500, enter: 'migrate' })
+            new ModalDialog({
+                title: gt('Recover passwords'),
+                description: gt('Please provide the old password so the account passwords can be recovered.'),
+                easyOut: false, async: true, width: 500, enter: 'migrate'
+            })
                 .build(function () {
                     var guid = _.uniqueId('form-control-label-');
-                    this.getHeader().append(
-                        $('<h4>').text(gt('Recover passwords'))
-                    );
-                    this.getContentNode().append(
-                        $('<p>').text(gt('Please provide the old password so the account passwords can be recovered.')),
-                        $('<label>').attr('for', guid).append(
-                            $.txt(gt('Your old password')), $('<br>'),
-                            $('<input type="password" name"recovery-password" class="form-control">').attr('id', guid)
-                        )
+                    this.$body.append(
+                        $('<label>').attr('for', guid).text(gt('Your old password')),
+                        $('<input type="password" name"recovery-password" class="form-control">').attr('id', guid)
                     );
                 })
-                .addPrimaryButton('migrate', gt('Recover'), 'migrate')
-                .addButton('ignore', gt('Ignore'), 'ignore')
-                .addButton('cancel', gt('Cancel'), 'cancel')
+                .addCancelButton()
+                .addButton({ label: gt('Ignore'), action: 'ignore', className: 'btn-default' })
+                .addButton({ label: gt('Recover'), action: 'migrate' })
                 .on('cancel', function () {
-                    this.getContentNode().find('input').val('');
+                    this.$body.find('input').val('');
                 })
                 .on('ignore', function () {
                     var self = this.busy();
@@ -58,8 +56,8 @@ define('io.ox/keychain/secretRecoveryDialog', [
                 .on('migrate', function () {
                     var self = this.busy();
                     // recover accounts
-                    return api.migrateFromOldSecret(this.getContentNode().find('input').val()).done(function migrationSuccessful() {
-                        self.getContentNode().find('input').val('');
+                    return api.migrateFromOldSecret(this.$body.find('input').val()).done(function migrationSuccessful() {
+                        self.$body.find('input').val('');
                         self.close();
 
                         require(['io.ox/core/folder/api'], function (api) {
@@ -77,12 +75,10 @@ define('io.ox/keychain/secretRecoveryDialog', [
                             message: e.error
                         });
                         self.idle();
-                        self.getContentNode().find('input').focus().select();
+                        self.$body.find('input').focus().select();
                     });
                 })
-                .show(function () {
-                    this.find('input').focus();
-                });
+                .open();
         }
     };
 });

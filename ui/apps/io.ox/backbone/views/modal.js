@@ -16,7 +16,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
     'use strict';
 
     //
-    // Model Dialog View.
+    // Modal Dialog View
     //
     // options:
     // - async: call busy() instead of close() when invoking an action (except "cancel")
@@ -68,7 +68,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                     $('<div class="modal-dialog" role="document">').width(options.width).append(
                         $('<div class="modal-content">').append(
                             this.$header = $('<div class="modal-header">').append(
-                                $('<h1 class="modal-title">').attr('id', title_id).text(options.title || '\u00A0')
+                                this.$title = $('<h1 class="modal-title">').attr('id', title_id).text(options.title || '\u00A0')
                             ),
                             this.$body = $('<div class="modal-body">'),
                             this.$footer = $('<div class="modal-footer">')
@@ -95,6 +95,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                     );
                 });
             }
+
+            if (options.description) this.addDescription(options);
 
             // scroll inputs into view when smartphone keyboard shows up
             if (_.device('smartphone') && options.smartphoneInputFocus) {
@@ -160,16 +162,35 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.$el.modal({ backdrop: o.backdrop || 'static', keyboard: false }).modal('show');
             this.toggleAriaHidden(true);
             this.trigger('open');
-            // set initial focus
-            var elem = this.$(o.focus);
-            if (elem.length) {
-                // dialog might be busy, i.e. elements are invisible so focus() might not work
-                this.activeElement = elem[0];
-                elem[0].focus();
-            }
+            this.setInitialFocus(o);
             // track open instances
             open.add(this);
             return this;
+        },
+
+        setInitialFocus: function (o) {
+            var self = this;
+            // set initial focus
+            if (o.focus) {
+                var elem = this.$(o.focus);
+                if (elem.length) {
+                    // dialog might be busy, i.e. elements are invisible so focus() might not work
+                    this.activeElement = elem[0];
+                    elem[0].focus();
+                }
+            } else {
+                // Defer focus handling and then try to focus in following order:
+                // 1: First tababble element in modal body
+                // 2: Primary button in footer
+                // 3: First tababble element in footer
+                _.defer(function () {
+                    self.$el.toggleClass('compact', self.$body.is(':empty'));
+                    var focusNode = a11y.getTabbable(self.$body).first();
+                    if (focusNode.length === 0) focusNode = self.$footer.find('.btn-primary');
+                    if (focusNode.length === 0) focusNode = a11y.getTabbable(self.$footer).first();
+                    if (focusNode.length !== 0) focusNode.focus();
+                });
+            }
         },
 
         toggleAriaHidden: function (state) {
@@ -217,6 +238,17 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                     .attr('data-action', o.action)
                     .text(o.label)
             );
+            return this;
+        },
+
+        addDescription: function (options) {
+            if (!options.description) return this;
+            var id = _.uniqueId('modal-description-'),
+                node = $('<div>').attr('id', id);
+            if (typeof options.description === 'object') node.append(options.description);
+            else node.text(options.description);
+            this.$el.attr('aria-describedby', id);
+            this.$body.prepend(node);
             return this;
         },
 
@@ -373,7 +405,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         this.enableFormElements();
         this.$body.parent().idle();
         this.$body.removeClass('invisible').css('opacity', '');
-        if ($.contains(this.el, this.activeElement)) $(this.activeElement).focus();
+        //if ($.contains(this.el, this.activeElement)) $(this.activeElement).focus();
+        this.setInitialFocus(this.options);
         this.activeElement = null;
         return this;
     }

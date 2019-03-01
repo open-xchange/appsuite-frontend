@@ -23,9 +23,10 @@ define('io.ox/contacts/edit/main', [
     'io.ox/core/notifications',
     'io.ox/core/util',
     'io.ox/core/a11y',
+    'io.ox/backbone/views/modal',
     'settings!io.ox/core',
     'less!io.ox/contacts/edit/style'
-], function (view, model, gt, upload, userApi, ext, util, capabilities, notifications, coreUtil, a11y, settings) {
+], function (view, model, gt, upload, userApi, ext, util, capabilities, notifications, coreUtil, a11y, ModalDialog, settings) {
 
     'use strict';
 
@@ -268,28 +269,25 @@ define('io.ox/contacts/edit/main', [
                 type = isEdit ? 'edit' : 'default';
 
             if (getDirtyStatus()) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    if (app.getWindow().floating) {
-                        app.getWindow().floating.toggle(true);
-                    } else if (_.device('smartphone')) {
-                        app.getWindow().resume();
-                    }
-                    new dialogs.ModalDialog()
-                        .text(gt('Do you really want to discard your changes?'))
-                        //#. "Discard changes" appears in combination with "Cancel" (this action)
-                        //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete')
-                        .addButton('cancel', gt('Cancel'), 'cancel')
-                        .show()
-                        .done(function (action) {
-                            if (action === 'delete') {
-                                def.resolve();
-                                model.factory.realm(type).release();
-                            } else {
-                                def.reject();
-                            }
-                        });
-                });
+                if (app.getWindow().floating) {
+                    app.getWindow().floating.toggle(true);
+                } else if (_.device('smartphone')) {
+                    app.getWindow().resume();
+                }
+                //#. "Discard changes" appears in combination with "Cancel" (this action)
+                //#. Translation must be distinguishable for the user
+                new ModalDialog({ title: gt('Do you really want to discard your changes?') })
+                    .addCancelButton()
+                    .addButton({ label: gt.pgettext('dialog', 'Discard changes'), action: 'delete' })
+                    .on('action', function (action) {
+                        if (action === 'delete') {
+                            def.resolve();
+                            model.factory.realm(type).release();
+                        } else {
+                            def.reject();
+                        }
+                    })
+                    .open();
             } else {
                 def.resolve();
                 model.factory.realm(type).release();

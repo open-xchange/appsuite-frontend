@@ -154,13 +154,13 @@ Scenario('Create recurring appointments with one participant', async function (I
     // edit
     I.waitForVisible('[data-action="io.ox/calendar/detail/actions/edit"]');
     I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
-    I.waitForVisible('.io-ox-dialog-popup');
-    I.click('Cancel', '.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
+    I.click('Cancel', '.modal-dialog');
 
     // TODO: Needs a fix. "All future appointments" is wrong since apppointment has flag "first_occurence"
     I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
-    I.waitForVisible('.io-ox-dialog-popup');
-    I.click('All future appointments', '.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
+    I.click('All future appointments', '.modal-dialog');
 
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.fillField('Subject', 'test recurring edit');
@@ -183,8 +183,8 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.waitForVisible('[data-action="io.ox/calendar/detail/actions/edit"]');
     I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
 
-    I.waitForVisible('.io-ox-dialog-popup');
-    I.click('This appointment', '.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
+    I.click('This appointment', '.modal-dialog');
 
     I.waitForVisible('.io-ox-calendar-edit-window');
 
@@ -199,8 +199,8 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.waitForVisible('[data-action="io.ox/calendar/detail/actions/edit"]');
     I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
 
-    I.waitForVisible('.io-ox-dialog-popup');
-    I.click('This appointment', '.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
+    I.click('This appointment', '.modal-dialog');
 
     I.waitForVisible('.io-ox-calendar-edit-window');
 
@@ -214,10 +214,10 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.waitForVisible('[data-action="io.ox/calendar/detail/actions/delete"]');
     I.click('[data-action="io.ox/calendar/detail/actions/delete"]');
 
-    I.waitForVisible('.io-ox-dialog-popup');
-    I.click('This appointment', '.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
+    I.click('This appointment', '.modal-dialog');
 
-    I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.modal-dialog');
 
     I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "list-view-control")]//div[@class="title" and text()="test recurring edit"]', 3);
 

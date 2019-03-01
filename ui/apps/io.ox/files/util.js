@@ -13,12 +13,12 @@
 
 define('io.ox/files/util', [
     'io.ox/files/api',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'gettext!io.ox/files',
     'io.ox/core/capabilities',
     'io.ox/core/folder/api',
     'settings!io.ox/files'
-], function (api, dialogs, gt, capabilities, folderAPI, settings) {
+], function (api, ModalDialog, gt, capabilities, folderAPI, settings) {
 
     'use strict';
 
@@ -97,21 +97,20 @@ define('io.ox/files/util', [
                 return $.Deferred().resolveWith(data);
             }
             return function (type, baton) {
-                return getFolder(baton)
-                            .then(function (data) {
-                                // '!' type prefix as magical negation
-                                var inverse, result;
-                                if (type[0] === '!') {
-                                    type = type.substr(1);
-                                    inverse = true;
-                                }
-                                result = folderAPI.is(type, data);
-                                // reject/resolve
-                                if (inverse ? !result : result) {
-                                    return RESOLVE;
-                                }
-                                return REJECT;
-                            });
+                return getFolder(baton).then(function (data) {
+                    // '!' type prefix as magical negation
+                    var inverse, result;
+                    if (type[0] === '!') {
+                        type = type.substr(1);
+                        inverse = true;
+                    }
+                    result = folderAPI.is(type, data);
+                    // reject/resolve
+                    if (inverse ? !result : result) {
+                        return RESOLVE;
+                    }
+                    return REJECT;
+                });
             };
         })(),
 
@@ -234,10 +233,8 @@ define('io.ox/files/util', [
             var def = $.Deferred(),
                 extServer = serverFilename.indexOf('.') >= 0 ? _.last(serverFilename.split('.')) : '',
                 extForm = _.last(formFilename.split('.')),
-                $hint = $('<div class="muted inset">').append(
-                    $('<small style="padding-top: 8px">').text(
-                        gt('Please note, changing or removing the file extension will cause problems when viewing or editing.')
-                    )
+                $hint = $('<p style="padding-top: 16px;">').append(
+                    $('<em>').text(gt('Please note, changing or removing the file extension will cause problems when viewing or editing.'))
                 ),
                 message;
 
@@ -251,19 +248,14 @@ define('io.ox/files/util', [
             }
             // confirmation needed
             if (message) {
-                new dialogs.ModalDialog(opt)
-                            .header($('<h4>').text(gt('Confirmation')))
-                            .append(message, $hint)
-                            .addPrimaryButton('rename', gt('Yes'), 'rename')
-                            .addButton('change', gt('Adjust'), 'change')
-                            .show()
-                            .done(function (action) {
-                                if (action === 'rename') {
-                                    def.resolve();
-                                } else {
-                                    def.reject();
-                                }
-                            });
+                new ModalDialog(_.extend(opt, { title: gt('Confirmation'), description: [message, $hint] }))
+                    .addButton({ label: gt('Adjust'), action: 'change', className: 'btn-default' })
+                    .addButton({ label: gt('Yes'), action: 'rename' })
+                    .on('action', function (action) {
+                        if (action === 'rename') def.resolve();
+                        else def.reject();
+                    })
+                    .open();
             } else if (formFilename === '') {
                 // usually prevented from ui
                 def.reject();

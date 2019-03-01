@@ -420,6 +420,17 @@
     display: block;
     overflow: hidden;
 
+    // For modal dialogs without body
+    &.compact {
+        .modal-dialog {
+            .modal-header { border-bottom: 0; }
+            .modal-body {
+                min-height: 0;
+                padding: 0;
+            }
+        }
+    }
+
     .modal-dialog {
         margin: 0 auto;
         width: 500px;
@@ -464,6 +475,8 @@
         min-height: 60px;
         overflow-y: auto;
         flex-grow: 1;
+
+        h2 { font-size: 18px; }
     }
 
     .modal-footer {

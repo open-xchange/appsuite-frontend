@@ -103,9 +103,9 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     I.click('test appointment one', '.workweek .appointment .title');
     I.waitForText('Delete', 5, '.io-ox-sidepopup');
     I.click('Delete', '.io-ox-sidepopup');
-    I.waitForText('Delete', 5, '.io-ox-dialog-popup');
-    I.click('Delete', '.io-ox-dialog-popup');
-    I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForText('Delete', 5, '.modal-dialog');
+    I.click('Delete', '.modal-dialog');
+    I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-dialog-sidepopup');
 
     I.logout();
@@ -197,18 +197,18 @@ Scenario('Changing calendar color should change appointment color that uses cale
     I.click('test appointment one', '.workweek .appointment .title');
     I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/delete"]');
     I.click('Delete', '.io-ox-sidepopup');
-    I.waitForVisible('.io-ox-dialog-popup');
-    I.click('Delete', '.io-ox-dialog-popup');
-    I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
+    I.click('Delete', '.modal-dialog');
+    I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-dialog-sidepopup');
 
     I.waitForText('test appointment two', 5, '.workweek');
     I.click('test appointment two', '.workweek .appointment .title');
     I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/delete"]');
     I.click('Delete', '.io-ox-sidepopup');
-    I.waitForVisible('.io-ox-dialog-popup');
-    I.click('Delete', '.io-ox-dialog-popup');
-    I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
+    I.click('Delete', '.modal-dialog');
+    I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-dialog-sidepopup');
 
     I.logout();

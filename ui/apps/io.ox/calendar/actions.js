@@ -21,9 +21,9 @@ define('io.ox/calendar/actions', [
     'io.ox/core/capabilities',
     'io.ox/core/folder/api',
     'io.ox/core/yell',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'settings!io.ox/calendar'
-], function (ext, actionsUtil, api, util, print, gt, capabilities, folderAPI, yell, dialogs, settings) {
+], function (ext, actionsUtil, api, util, print, gt, capabilities, folderAPI, yell, ModalDialog, settings) {
 
     'use strict';
 
@@ -223,21 +223,18 @@ define('io.ox/calendar/actions', [
                 return;
             }
 
-            new dialogs.ModalDialog()
-                .append($('<h4>').text(gt('Do you want the appointments printed in detail or as a compact list?')))
+            new ModalDialog({
+                title: gt('Do you want the appointments printed in detail or as a compact list?'),
+                previousFocus: $('.io-ox-calendar-main .classic-toolbar [data-action="more"]')
+            })
+                .addCancelButton()
                 //#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
-                .addPrimaryButton('detailed', gt('Detailed'), 'detailed')
+                .addButton({ label: gt('Compact'), action: 'compact', className: 'btn-default' })
                 //#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
-                .addButton('compact', gt('Compact'), 'compact')
-                .addButton('cancel', gt('Cancel'), 'cancel')
-                .show()
-                .done(function (action) {
-                    if (action === 'detailed') {
-                        print.request('io.ox/calendar/print', list);
-                    } else if (action === 'compact') {
-                        print.request('io.ox/calendar/print-compact', list);
-                    }
-                });
+                .addButton({ label: gt('Detailed'), action: 'detailed' })
+                .on('detailed', function () { print.request('io.ox/calendar/print', list); })
+                .on('compact', function () { print.request('io.ox/calendar/print-compact', list); })
+                .open();
         }
     });
 
@@ -446,30 +443,28 @@ define('io.ox/calendar/actions', [
 
             // check if only one appointment or the whole series should be accepted
             // exceptions don't have the same id and seriesId
-            if (data.seriesId === data.id && appointment.recurrenceId) {
-                new dialogs.ModalDialog()
-                    .text(accept ? gt('Do you want to confirm the whole series or just one appointment within the series?') :
-                        gt('Do you want to decline the whole series or just one appointment within the series?'))
-                    .addPrimaryButton('series',
-                        //#. Use singular in this context
-                        gt('Series'), 'series')
-                    .addButton('appointment', gt('Appointment'), 'appointment')
-                    .addButton('cancel', gt('Cancel'), 'cancel')
-                    .show()
-                    .then(function (action) {
-                        if (action === 'cancel') {
-                            return;
-                        }
-                        if (action === 'series') {
-                            delete appointment.recurrenceId;
-                        }
-                        $(baton.e.target).addClass('disabled');
-                        // those links are for fast accept/decline, so don't check conflicts
-                        api.confirm(appointment, util.getCurrentRangeOptions()).fail(function (e) {
-                            yell(e);
-                            $(baton.e.target).removeClass('disabled');
-                        });
+            if (baton.data.seriesId === baton.data.id && appointment.recurrenceId) {
+                // TODO: IS THIS STILL USED?
+                new ModalDialog({
+                    title: accept
+                        ? gt('Do you want to confirm the whole series or just one appointment within the series?')
+                        : gt('Do you want to decline the whole series or just one appointment within the series?')
+                })
+                .addCancelButton()
+                .addButton({ label: gt('Appointment'), action: 'appointment', className: 'btn-default' })
+                //#. Use singular in this context
+                .addButton({ label: gt('Series'), action: 'series' })
+                .on('action', function (action) {
+                    if (action === 'cancel') return;
+                    if (action === 'series') delete appointment.recurrenceId;
+                    $(baton.e.target).addClass('disabled');
+                    // those links are for fast accept/decline, so don't check conflicts
+                    api.confirm(appointment, util.getCurrentRangeOptions()).fail(function (e) {
+                        yell(e);
+                        $(baton.e.target).removeClass('disabled');
                     });
+                })
+                .open();
                 return;
             }
             $(baton.e.target).addClass('disabled');

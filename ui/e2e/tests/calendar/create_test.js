@@ -90,8 +90,8 @@ Scenario('Create appointment with all fields', async function (I) {
     I.click(appointment);
     I.waitForText('Delete');
     I.click('Delete');
-    I.waitForVisible('.io-ox-dialog-popup .modal-body');
-    I.click('Delete', '.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog .modal-footer');
+    I.click('Delete', '.modal-dialog .modal-footer');
     I.waitForDetached(appointment);
 
     I.logout();
@@ -128,7 +128,7 @@ Scenario('fullday appointments', async function (I) {
     I.see('5 days', '.io-ox-sidepopup .calendar-detail');
 
     I.click('Delete', '.io-ox-sidepopup .calendar-detail');
-    I.click('Delete', '.io-ox-dialog-popup');
+    I.click('Delete', '.modal-dialog .modal-footer');
 
     I.logout();
 });

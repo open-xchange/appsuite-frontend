@@ -15,17 +15,15 @@ define('io.ox/settings/apps/settings/pane', [
     'io.ox/core/extensions',
     'gettext!io.ox/core',
     'io.ox/core/http',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/notifications',
     'io.ox/core/capabilities',
     'less!io.ox/settings/apps/settings/style'
-], function (ext, gt, http, dialogs, notifications, capabilities) {
+], function (ext, gt, http, ModalDialog, notifications, capabilities) {
 
     'use strict';
 
-    if (!capabilities.has('oauth-grants')) {
-        return;
-    }
+    if (!capabilities.has('oauth-grants')) return;
 
     ext.point('io.ox/settings/pane/external').extend({
         id: 'external/apps',
@@ -45,27 +43,21 @@ define('io.ox/settings/apps/settings/pane', [
             this.listenTo(this.collection, 'reset remove', this.render);
         },
         onRemove: function (e) {
+            e.preventDefault();
+
             var id = $(e.currentTarget).closest('li').attr('data-id');
 
-            new dialogs.ModalDialog()
-                .text(gt('Do you want to revoke the access of this application?'))
-                .addPrimaryButton('ok', gt('Revoke'), 'ok')
-                .addButton('cancel', gt('Cancel'), 'cancel')
-                .show()
-                .done(function (action) {
-                    if (action === 'cancel') return;
-
+            new ModalDialog({ title: gt('Do you want to revoke the access of this application?') })
+                .addCancelButton()
+                .addButton({ title: gt('Revoke'), action: 'ok' })
+                .on('ok', function () {
                     collection.remove(id);
                     return http.GET({
                         module: 'oauth/grants',
-                        params: {
-                            action: 'revoke',
-                            client: id
-                        }
+                        params: { action: 'revoke', client: id }
                     }).fail(notifications.yell);
-                });
-
-            e.preventDefault();
+                })
+                .open();
         },
         renderItem: function (model) {
             var client = model.get('client');
@@ -91,9 +83,8 @@ define('io.ox/settings/apps/settings/pane', [
                 ),
                 $('<div class="widget-controls">').append(
                     $('<a class="remove" href="#" role="button" data-action="delete" aria-label="remove">')
-                    .attr({
-                        'title': gt('Delete')
-                    }).append('<i class="fa fa-trash-o" aria-hidden="true">')
+                        .attr({ 'title': gt('Delete') })
+                        .append('<i class="fa fa-trash-o" aria-hidden="true">')
                 )
             );
         },

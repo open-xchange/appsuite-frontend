@@ -32,8 +32,8 @@ define('io.ox/calendar/actions/change-organizer', [
         openDialog: function (appointmentData) {
 
             if (!appointmentData) return;
-            util.showRecurrenceDialog(appointmentData, { dontAllowExceptions: true }).done(function (result) {
-                if (result === 'cancel') return;
+            util.showRecurrenceDialog(appointmentData, { dontAllowExceptions: true }).done(function (action) {
+                if (action === 'cancel') return;
 
                 new ModalDialog({
                     title: gt('Change organizer')
@@ -119,10 +119,10 @@ define('io.ox/calendar/actions/change-organizer', [
                     // new organizer is the same as the old organizer... nothing to do
                     if (params.organizer.entity === appointmentData.organizer.entity) return;
 
-                    if (result === 'thisandfuture') {
+                    if (action === 'thisandfuture') {
                         params.recurrenceId = appointmentData.recurrenceId;
                     }
-                    calApi.changeOrganizer(params, _.extend(util.getCurrentRangeOptions(), { comment: this.model.get('comment'), recurrenceRange: (result === 'thisandfuture' ? 'THISANDFUTURE' : undefined) }))
+                    calApi.changeOrganizer(params, _.extend(util.getCurrentRangeOptions(), { comment: this.model.get('comment'), recurrenceRange: (action === 'thisandfuture' ? 'THISANDFUTURE' : undefined) }))
                         .then(function () {
                             yell('success', gt('Organizer changed'));
                         }, yell);

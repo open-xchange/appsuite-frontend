@@ -15,10 +15,10 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
     'io.ox/backbone/mini-views/timezonepicker',
     'settings!io.ox/core',
     'gettext!io.ox/calendar',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/backbone/mini-views/settings-list-view',
     'io.ox/backbone/mini-views/listutils'
-], function (TimezonePicker, coreSettings, gt, dialogs, ListView, listutils) {
+], function (TimezonePicker, coreSettings, gt, ModalDialog, ListView, listutils) {
 
     'use strict';
 
@@ -95,12 +95,11 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
         openDialog: function () {
             var self = this,
                 model = new FavoriteTimezone();
-            new dialogs.ModalDialog()
-                .header($('<h4>').text(gt('Select favorite timezone')))
-                .addPrimaryButton('add', gt('Add'), 'add')
-                .addButton('cancel', gt('Cancel'), 'cancel')
+            new ModalDialog({ title: gt('Select favorite timezone') })
+                .addCancelButton()
+                .addButton({ label: gt('Add'), action: 'add' })
                 .build(function () {
-                    this.getContentNode().append(
+                    this.$body.append(
                         $('<label for="settings-timezone">').text(gt('Time zone')),
                         new TimezonePicker({
                             id: 'settings-timezone',
@@ -120,7 +119,7 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
                     }
                     self.collection.add(model);
                 })
-                .show();
+                .open();
         },
 
         removeFavorite: function (e) {

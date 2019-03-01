@@ -21,43 +21,28 @@ define('io.ox/core/upsell', [
 
     function showUpgradeDialog(options) {
         console.debug('upsell:requires-upgrade', options);
-        require(['io.ox/core/tk/dialogs'], function (dialogs) {
-            new dialogs.ModalDialog()
-                .build(function () {
-                    this.getHeader().append(
-                        $('<h4>').text(gt('Upgrade required'))
-                    );
-                    this.getContentNode().append(
-                        $.txt(gt('This feature is not available. In order to use it, you need to upgrade your account now.')),
-                        $.txt(' '),
-                        $.txt(gt('The first 90 days are free.'))
-                    );
-                    this.addPrimaryButton('upgrade', gt('Get free upgrade'));
-                    this.addButton('cancel', gt('Cancel'));
-                })
-                .setUnderlayStyle({
-                    opacity: 0.70,
-                    backgroundColor: '#08C'
-                })
-                .on('upgrade', function () {
-                    ox.trigger('upsell:upgrade', options);
-                })
-                .on('show', function () {
+        require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+            new ModalDialog({
+                title: gt('Upgrade required'),
+                description: gt('This feature is not available. In order to use it, you need to upgrade your account now.') + ' ' + gt('The first 90 days are free.')
+            })
+                .addCancelButton()
+                .addButton({ label: gt('Get free upgrade'), action: 'upgrade' })
+                .on('upgrade', function () { ox.trigger('upsell:upgrade', options); })
+                .on('open', function () {
                     ox.off('upsell:requires-upgrade', showUpgradeDialog);
+                    this.$el.next('.modal-backdrop.in:visible').css({ opacity: 0.70, backgroundColor: '#08C' });
                 })
-                .on('close', function () {
-                    ox.on('upsell:requires-upgrade', showUpgradeDialog);
-                })
-                .show();
+                .on('close', function () { ox.on('upsell:requires-upgrade', showUpgradeDialog); })
+                .open();
         });
     }
 
     function upgrade(options) {
         console.debug('upsell:upgrade', options);
         // needs no translation; just for demo purposes
-        /*eslint-disable no-alert*/
+        // eslint-disable-next-line no-alert
         alert('User decided to upgrade! (global event: upsell:upgrade)');
-        /*eslint-enable no-alert */
     }
 
     // local copy for speed
@@ -68,7 +53,6 @@ define('io.ox/core/upsell', [
     //enabled = { infostore: true }; //uncomment for debugging
 
     var that = {
-
         // convenience functions
         trigger: function (options) {
             ox.trigger('upsell:requires-upgrade', options || {});
@@ -147,7 +131,6 @@ define('io.ox/core/upsell', [
         // checks if upsell is enabled for a set of capabilities
         // true if at least one set matches
         enabled: (function () {
-
             // checks if upsell is enabled for a single capability
             function isEnabled(capability) {
                 if (!_.isString(capability)) return false;
@@ -165,7 +148,6 @@ define('io.ox/core/upsell', [
                     match = match.toLowerCase();
                     return isEnabled(match);
                 });
-                /*eslint no-new-func: 0*/
                 return new Function('return !!(' + condition + ')')();
             };
 
@@ -192,7 +174,7 @@ define('io.ox/core/upsell', [
         },
 
         // just for demo purposes
-        // flag helps during development of custom upsell wizard; just diables some capabilites but
+        // flag helps during development of custom upsell wizard; just disables some capabilites but
         // neither registers events nor adds portal plugin
         demo: function (debugCustomWizard) {
             var e = enabled, c = capabilityCache;
@@ -224,14 +206,9 @@ define('io.ox/core/upsell', [
     };
 
     (function () {
-
         var hash = _.url.hash('demo') || '';
-        if (hash.indexOf('upsell') > -1) {
-            that.demo();
-        }
-
+        if (hash.indexOf('upsell') > -1) that.demo();
     }());
 
     return that;
-
 });

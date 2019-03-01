@@ -16,9 +16,9 @@ define('io.ox/calendar/actions/delete', [
     'io.ox/calendar/util',
     'io.ox/core/yell',
     'gettext!io.ox/calendar',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/backbone/mini-views/common'
-], function (api, util, yell, gt, dialogs, mini) {
+], function (api, util, yell, gt, ModalDialog, mini) {
 
     'use strict';
 
@@ -66,62 +66,36 @@ define('io.ox/calendar/actions/delete', [
                     if (event.hasFlag('last_occurrence')) return false;
                     return event.has('recurrenceId');
                 }),
-                text, dialog;
+                text, dialog, hasFirstOccurence;
 
             if (hasSeries) {
-                var hasFirstOccurence = _(list).some(function (event) {
+                hasFirstOccurence = _(list).some(function (event) {
                     return event.hasFlag('first_occurrence') || !event.hasFlag('organizer');
                 });
-                dialog = new dialogs.ModalDialog({ addClass: 'delete-dialog' });
-
-                if (hasFirstOccurence) {
-                    text = gt('Do you want to delete the whole series or just this appointment within the series?');
-                    dialog
-                        .addPrimaryButton('series', gt('Series'), 'series')
-                        .addButton('appointment', gt('This appointment'), 'appointment');
-                } else {
-                    text = gt('Do you want to delete this and all future appointments or just this appointment within the series?');
-                    dialog
-                        .addPrimaryButton('thisandfuture', gt('All future appointments'), 'thisandfuture')
-                        .addButton('appointment', gt('This appointment'), 'appointment');
-                }
-
-                if (displayComment) {
-                    dialog.header($('<h1>').text(gt('Delete appointment')))
-                        .append($('<div>').text(text))
-                        .append(commentView);
-                } else {
-                    dialog.append($('<h1>').text(text));
-                }
-
-                dialog
-                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel')
-                    .show()
-                    .done(function (action) {
-                        if (action === 'cancel') return;
-                        cont(action);
-                    });
+                text = hasFirstOccurence
+                    ? gt('Do you want to delete the whole series or just this appointment within the series?')
+                    : gt('Do you want to delete this and all future appointments or just this appointment within the series?');
             } else {
-
-                dialog = new dialogs.ModalDialog({ addClass: 'delete-dialog' })
-                    .addPrimaryButton('ok', gt('Delete'), 'ok')
-                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel');
                 text = gt('Do you want to delete this appointment?');
-
-                if (displayComment) {
-                    dialog.header($('<h1>').text(gt('Delete appointment')))
-                        .append($('<div>').text(text))
-                        .append(commentView);
-                } else {
-                    dialog.append($('<h1>').text(text));
-                }
-
-                dialog.show()
-                    .done(function (action) {
-                        if (action === 'cancel') return;
-                        cont('appointment');
-                    });
             }
+            dialog = new ModalDialog({
+                title: displayComment ? gt('Delete appointment') : text,
+                description: displayComment ? [$('<div>').text(text), commentView] : false
+            })
+            .addCancelButton({ left: true })
+            .on('action', function (action) {
+                if (action === 'cancel') return;
+                cont(action);
+            });
+
+            if (hasSeries) {
+                dialog.addButton({ label: gt('This appointment'), action: 'appointment', className: 'btn-default' });
+                if (hasFirstOccurence) dialog.addButton({ label: gt('Series'), action: 'series' });
+                else dialog.addButton({ label: gt('All future appointments'), action: 'thisandfuture' });
+            } else {
+                dialog.addButton({ label: gt('Delete'), action: 'appointment' });
+            }
+            dialog.open();
         });
     };
 

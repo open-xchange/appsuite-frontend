@@ -13,11 +13,11 @@
 
 // this file contains helper methods for external file storages, such as a method for displaying conflicts
 define('io.ox/core/tk/filestorageUtil', [
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/yell',
     'gettext!io.ox/core',
     'less!io.ox/files/style'
-], function (dialogs, yell, gt) {
+], function (ModalDialog, yell, gt) {
 
     'use strict';
 
@@ -31,36 +31,31 @@ define('io.ox/core/tk/filestorageUtil', [
         */
         displayConflicts: function (conflicts, options) {
             options = options || {};
-            var popup = new dialogs.ModalDialog(),
-                warnings = [];
+            var dialog = new ModalDialog({ title: gt('Conflicts') });
             if (!options.callbackCancel && !options.callbackIgnoreConflicts) {
-                popup.addPrimaryButton('ok', gt('Ok'), 'changechange');
+                dialog.addButton({ label: gt('Ok'), action: 'ok' });
             } else {
-                popup.addButton('cancel', gt('Cancel'), 'cancel')
-                    .addPrimaryButton('ignorewarnings', gt('Ignore warnings'), 'changechange');
+                dialog.addCancelButton()
+                    .addButton({ label: gt('Ignore warnings'), action: 'ignorewarnings' });
             }
-            // build a list of warnings
-            _(conflicts.warnings).each(function (warning) {
-                warnings.push($('<div class="filestorage-conflict-warning">').text(warning));
-            });
-            popup.getBody().append(
-                $('<h4>').text(gt('Conflicts')),
-                $('<div>').text(conflicts.title),
-                warnings.length ? $('<div class="filestorage-conflict-container">').append($('<h4>').text(gt('Warnings:')), warnings) : ''
-            );
-            popup.show().done(function (action) {
-                if (action === 'ignorewarnings') {
-                    if (options.callbackIgnoreConflicts) {
-                        options.callbackIgnoreConflicts(conflicts);
-                    }
-                } else if (action === 'cancel') {
-                    if (options.callbackCancel) {
-                        options.callbackCancel(conflicts);
-                    } else {
-                        yell('info', gt('Canceled'));
-                    }
-                }
-            });
+            dialog.build(function () {
+                // build a list of warnings
+                var warnings = _(conflicts.warnings).map(function (warning) {
+                    return $('<div class="filestorage-conflict-warning">').text(warning);
+                });
+                this.$body.append(
+                    $('<div>').text(conflicts.title),
+                    warnings.length ? $('<div class="filestorage-conflict-container">').append($('<h4>').text(gt('Warnings:')), warnings) : ''
+                );
+            })
+            .on('ignorewarnings', function () {
+                if (options.callbackIgnoreConflicts) options.callbackIgnoreConflicts(conflicts);
+            })
+            .on('cancel', function () {
+                if (options.callbackCancel) options.callbackCancel(conflicts);
+                else yell('info', gt('Canceled'));
+            })
+            .open();
         }
     };
     return util;

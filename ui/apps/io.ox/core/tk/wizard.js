@@ -939,9 +939,8 @@ define('io.ox/core/tk/wizard', [
                 var pct = x / width * 100;
                 // paused?
                 if (self.isStepPaused() && pct < 0) return;
-                /*eslint-disable no-nested-ternary */
+                // eslint-disable-next-line no-nested-ternary
                 self.shift(pct < 0 ? (pct > -50 ? 0 : +1) : (pct < +50 ? 0 : -1));
-                /*eslint-enable no-nested-ternary */
             }
         });
     }

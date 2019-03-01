@@ -17,12 +17,12 @@ define('io.ox/calendar/util', [
     'io.ox/core/api/group',
     'io.ox/core/folder/api',
     'io.ox/core/util',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'gettext!io.ox/calendar',
     'io.ox/core/a11y'
-], function (userAPI, contactAPI, groupAPI, folderAPI, util, dialogs, settings, coreSettings, gt, a11y) {
+], function (userAPI, contactAPI, groupAPI, folderAPI, util, ModalDialog, settings, coreSettings, gt, a11y) {
 
     'use strict';
 
@@ -1140,37 +1140,33 @@ define('io.ox/calendar/util', [
             });
         },
 
-        getRecurrenceEditDialog: function () {
-            return new dialogs.ModalDialog()
-                    .text(gt('Do you want to edit the whole series or just this appointment within the series?'))
-                    .addPrimaryButton('series', gt('Series'), 'series')
-                    .addButton('appointment', gt('Appointment'), 'appointment')
-                    .addButton('cancel', gt('Cancel'), 'cancel');
-        },
-
         showRecurrenceDialog: function (model, options) {
             if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
             if (model.get('recurrenceId')) {
                 options = options || {};
-                var dialog = new dialogs.ModalDialog();
-                // first occurence
+                var text, dialog = new ModalDialog().addCancelButton({ left: true });
+                if (!options.dontAllowExceptions) dialog.addButton({ label: gt('This appointment'), action: 'appointment', className: 'btn-default' });
+
                 if (model.hasFlag('first_occurrence')) {
                     if (options.dontAllowExceptions) return $.when('series');
-                    dialog.text(gt('Do you want to edit the whole series or just this appointment within the series?'));
-                    dialog.addPrimaryButton('series', gt('Series'), 'series');
+                    text = gt('Do you want to edit the whole series or just this appointment within the series?');
+                    dialog.addButton({ label: gt('Series'), action: 'series' });
                 } else if (model.hasFlag('last_occurrence') && !options.allowEditOnLastOccurence) {
                     return $.when('appointment');
                 } else if (options.dontAllowExceptions) {
-                    dialog.text(gt('Do you want to edit this and all future appointments or the whole series?'));
-                    dialog.addPrimaryButton('thisandfuture', gt('All future appointments'), 'thisandfuture');
-                    dialog.addPrimaryButton('series', gt('Series'), 'series');
+                    text = gt('Do you want to edit this and all future appointments or the whole series?');
+                    dialog.addButton({ label: gt('Series'), action: 'series', className: 'btn-default' });
+                    dialog.addButton({ label: gt('All future appointments'), action: 'thisandfuture' });
                 } else {
-                    dialog.text(gt('Do you want to edit this and all future appointments or just this appointment within the series?'));
-                    dialog.addPrimaryButton('thisandfuture', gt('All future appointments'), 'thisandfuture');
+                    text = gt('Do you want to edit this and all future appointments or just this appointment within the series?');
+                    dialog.addButton({ label: gt('All future appointments'), action: 'thisandfuture' });
                 }
-                if (!options.dontAllowExceptions) dialog.addButton('appointment', gt('This appointment'), 'appointment');
-                return dialog.addAlternativeButton('cancel', gt('Cancel'), 'cancel')
-                    .show();
+                dialog.build(function () { this.$title.text(text); }).open();
+                var def = $.Deferred();
+                dialog.on('action', function (value) {
+                    def.resolve(value);
+                });
+                return def;
             }
             return $.when('appointment');
         },

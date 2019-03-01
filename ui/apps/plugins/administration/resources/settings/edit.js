@@ -14,12 +14,12 @@
 define('plugins/administration/resources/settings/edit', [
     'io.ox/backbone/views/disposable',
     'io.ox/backbone/mini-views/common',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/api/resource',
     'io.ox/core/notifications',
     'io.ox/contacts/util',
     'gettext!io.ox/core'
-], function (DisposableView, common, dialogs, resourceAPI, notifications, util, gt) {
+], function (DisposableView, common, ModalDialog, resourceAPI, notifications, util, gt) {
 
     'use strict';
 
@@ -77,17 +77,14 @@ define('plugins/administration/resources/settings/edit', [
             var model = resourceAPI.getModel(options.id).clone(),
                 edit = model.has('id');
 
-            new dialogs.ModalDialog({ async: true })
+            new ModalDialog({ title: edit ? gt('Edit resource') : gt('Create new resource'), async: true })
                 .build(function () {
-                    this.header(
-                        $('<h4>').text(edit ? gt('Edit resource') : gt('Create new resource'))
-                    );
-                    this.getContentNode().append(
+                    this.$body.append(
                         (this.view = new View({ model: model })).render().$el
                     );
                 })
-                .addPrimaryButton('save', edit ? gt('Save') : gt('Create'), 'save')
-                .addButton('cancel', gt('Cancel'), 'cancel')
+                .addCancelButton()
+                .addButton({ label: edit ? gt('Save') : gt('Create'), action: 'save' })
                 .on('save', function () {
                     var self = this;
                     resourceAPI[edit ? 'update' : 'create'](this.view.toJSON()).then(
@@ -103,9 +100,7 @@ define('plugins/administration/resources/settings/edit', [
                 .on('close', function () {
                     this.view = null;
                 })
-                .show(function () {
-                    this.find('input:first').focus();
-                });
+                .open();
 
             model = null;
         }

@@ -74,10 +74,10 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.waitForText('Add timezone', 5);
     I.click('Add timezone');
 
-    I.waitForVisible('.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
     I.selectOption('Time zone', '+09:00 JST Asia/Tokyo');
-    I.click('Add', '.io-ox-dialog-popup');
-    I.waitForDetached('.io-ox-dialog-popup');
+    I.click('Add', '.modal-dialog');
+    I.waitForDetached('.modal-dialog');
 
     I.waitForText('Asia/Tokyo', '.rightside li');
 
@@ -101,20 +101,20 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.floating-window-content [data-attribute="startDate"] .timezone');
     I.click('.floating-window-content [data-attribute="startDate"] .timezone');
-    I.waitForVisible('.io-ox-dialog-popup [name="startTimezone"]');
+    I.waitForVisible('.modal-dialog [name="startTimezone"]');
     I.selectOption('Start date timezone', '+09:00 JST Asia/Tokyo');
     I.selectOption('End date timezone', '+09:00 JST Asia/Tokyo');
     I.click('Change');
-    I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.modal-dialog');
 
     I.waitForText('Europe/Berlin: ');
     I.waitForText('Mon, ' + date);
     I.waitForText('4:00 – 5:00 PM');
 
     I.click('Discard', '.floating-window-content');
-    I.waitForVisible('.io-ox-dialog-popup');
-    I.click('Discard changes', '.io-ox-dialog-popup');
-    I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
+    I.click('Discard changes', '.modal-dialog');
+    I.waitForDetached('.modal-dialog');
     I.waitForDetached('.floating-window-content');
 
     I.waitForVisible('.io-ox-sidepopup [data-action="close"]');

@@ -15,9 +15,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/core/extensions',
     'io.ox/core/api/mailfilter',
     'io.ox/mail/mailfilter/settings/model',
-    'io.ox/core/tk/dialogs',
     'io.ox/backbone/views/modal',
-    'io.ox/core/notifications',
     'io.ox/settings/util',
     'io.ox/mail/mailfilter/settings/filter/view-form',
     'gettext!io.ox/mail',
@@ -29,7 +27,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'static/3rd.party/jquery-ui.min.js',
     'less!io.ox/mail/mailfilter/settings/style'
 
-], function (ext, api, mailfilterModel, dialogs, ModalDialog, notifications, settingsUtil, FilterDetailView, gt, listUtils, ListView, DisposableView, settings, DEFAULTS) {
+], function (ext, api, mailfilterModel, ModalDialog, settingsUtil, FilterDetailView, gt, listUtils, ListView, DisposableView, settings, DEFAULTS) {
 
     'use strict';
 
@@ -284,23 +282,20 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     },
 
                     render: function () {
+                        if (this.disposed) return;
+
                         var flag = (this.model.get('flags') || [])[0],
                             self = this,
                             actions = (this.model.get('actioncmds') || []),
                             testsPart = this.model.get('test'),
                             supportColorFlags = settings.get('features/flag/color');
 
-                        if (this.disposed) {
-                            return;
-                        }
-
                         function checkForUnknown() {
                             var unknown = false;
 
                             function checkForColorFlags(a) {
-                                if (a.flags) {
-                                    return !supportColorFlags && (/\$cl_/g.test(a.flags[0]));
-                                }
+                                if (!a.flags) return;
+                                return !supportColorFlags && (/\$cl_/g.test(a.flags[0]));
                             }
 
                             function collectIds(testsPart) {
@@ -352,21 +347,18 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         var title = self.model.get('rulename'),
                             titleNode;
 
-                        this.$el.attr({
-                            'data-id': self.model.get('id')
-                        })
-                        .addClass('draggable ' + getEditableState())
-                        .toggleClass('active', self.model.get('active'))
-                        .toggleClass('disabled', !self.model.get('active'))
-                        .empty().append(
-
-                            listUtils.dragHandle(gt('Drag to reorder filter rules'), this.model.collection.length <= 1 ? 'hidden' : ''),
-                            titleNode = listUtils.makeTitle(title),
-                            listUtils.makeControls().append(function () {
-                                var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (checkForUnknown() || flag || 'common'));
-                                point.invoke('draw', $(this), self.model);
-                            })
-                        );
+                        this.$el.attr('data-id', self.model.get('id'))
+                            .addClass('draggable ' + getEditableState())
+                            .toggleClass('active', self.model.get('active'))
+                            .toggleClass('disabled', !self.model.get('active'))
+                            .empty().append(
+                                listUtils.dragHandle(gt('Drag to reorder filter rules'), this.model.collection.length <= 1 ? 'hidden' : ''),
+                                titleNode = listUtils.makeTitle(title),
+                                listUtils.makeControls().append(function () {
+                                    var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (checkForUnknown() || flag || 'common'));
+                                    point.invoke('draw', $(this), self.model);
+                                })
+                            );
 
                         self.model.on('change:rulename', function (el, val) {
                             titleNode.text(val);
@@ -459,38 +451,29 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         var self = this,
                             id = self.model.get('id');
 
-                        new dialogs.ModalDialog()
-                        .text(gt('Do you really want to delete this filter rule?'))
-                        .addPrimaryButton('delete', gt('Delete'), 'delete')
-                        .addButton('cancel', gt('Cancel'), 'cancel')
-                        .show()
-                        .done(function (action) {
-                            if (action === 'delete') {
-                                if (id !== false) {
-                                    //yell on reject
-                                    self.model.collection.remove(id);
-                                    settingsUtil.yellOnReject(
-                                        api.deleteRule(id).done(function () {
-                                            var arrayOfFilters,
-                                                data;
-                                            $node.find('.controls [data-action="add"]').focus();
-
-                                            arrayOfFilters = $node.find('li[data-id]');
+                        new ModalDialog({ title: gt('Do you really want to delete this filter rule?') })
+                            .addCancelButton()
+                            .addButton({ label: gt('Delete'), action: 'delete' })
+                            .on('delete', function () {
+                                if (id === false) return;
+                                //yell on reject
+                                self.model.collection.remove(id);
+                                settingsUtil.yellOnReject(
+                                    api.deleteRule(id).done(function () {
+                                        $node.find('.controls [data-action="add"]').focus();
+                                        var arrayOfFilters = $node.find('li[data-id]'),
                                             data = _.map(arrayOfFilters, function (single) {
                                                 return parseInt($(single).attr('data-id'), 10);
                                             });
-                                            //yell on reject
-                                            settingsUtil.yellOnReject(
-                                                api.reorder(data)
-                                            );
-                                            updatePositionInCollection(collection, data);
-
-                                        })
-                                    );
-                                }
-                            }
-                        });
-
+                                        //yell on reject
+                                        settingsUtil.yellOnReject(
+                                            api.reorder(data)
+                                        );
+                                        updatePositionInCollection(collection, data);
+                                    })
+                                );
+                            })
+                            .open();
                     },
 
                     onEdit: function (e) {

@@ -13,20 +13,17 @@
 
 define('io.ox/files/actions/versions-delete', [
     'io.ox/files/api',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'gettext!io.ox/files'
-], function (api, dialogs, gt) {
+], function (api, ModalDialog, gt) {
 
     'use strict';
 
     return function (data) {
-        new dialogs.ModalDialog()
-            .text(gt.pgettext('One file only', 'Do you really want to delete this version?'))
-            .addPrimaryButton('delete', gt('Delete version'), 'delete')
-            .addButton('cancel', gt('Cancel'), 'cancel')
-            .on('delete', function () {
-                api.versions.remove(data);
-            })
-            .show();
+        new ModalDialog({ title: gt.pgettext('One file only', 'Do you really want to delete this version?') })
+            .addCancelButton()
+            .addButton({ label: gt('Delete version'), action: 'delete' })
+            .on('delete', function () { api.versions.remove(data); })
+            .open();
     };
 });

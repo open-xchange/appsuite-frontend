@@ -275,7 +275,8 @@ Scenario('add and removes Mail Filter Rules', async function (I) {
     I.click('Cancel');
 
     I.click('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"] a[data-action="delete"]');
-    I.click('.abs.io-ox-dialog-wrapper button[data-action="delete"]');
+    I.waitForVisible('.modal-dialog');
+    I.click('.modal-dialog button[data-action="delete"]');
 
     I.waitForVisible('.io-ox-settings-window .settings-detail-pane .hint');
 

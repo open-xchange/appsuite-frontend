@@ -226,9 +226,8 @@ define('io.ox/files/share/permissions', [
                 var snA = a.getSortName(),
                     snB = b.getSortName(), lexic;
 
-                /*eslint-disable no-nested-ternary */
+                // eslint-disable-next-line no-nested-ternary
                 lexic = snA === snB ? 0 : (snA > snB ? +1 : -1);
-                /*eslint-enable no-nested-ternary */
 
                 if (a.isGroup() && b.isGroup()) return lexic;
                 if (a.isGroup()) return -1;

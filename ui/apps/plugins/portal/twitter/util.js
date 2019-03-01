@@ -105,23 +105,18 @@ define('plugins/portal/twitter/util', [
     };
 
     var showRetweet = function (tweet, $myTweet) {
-        require(['io.ox/core/tk/dialogs'], function (dialogs) {
-            new dialogs.ModalDialog()
-            .header(
-                $('<h4>').text(gt('Retweet this to your followers?'))
-            )
-            .build(function () {
-                this.getContentNode().append(
-                    $('<div>').addClass('twitter').append(
-                        renderTweet(tweet, { hideLinks: true, hideFollowButton: true })
-                    )
-                );
-            })
-            .addPrimaryButton('retweet', gt('Retweet'))
-            .addButton('cancel', gt('Cancel'))
-            .show()
-            .done(function (action) {
-                if (action === 'retweet') {
+        require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+            new ModalDialog({ title: gt('Retweet this to your followers?') })
+                .build(function () {
+                    this.$body.append(
+                        $('<div class="twitter">').append(
+                            renderTweet(tweet, { hideLinks: true, hideFollowButton: true })
+                        )
+                    );
+                })
+                .addCancelButton()
+                .addButton({ label: gt('Retweet'), action: 'retweet' })
+                .on('retweet', function () {
                     $.when(network.retweet(tweet.id_str)).then(
                         function success(response) {
                             var jsonResponse = JSON.parse(response);
@@ -142,8 +137,8 @@ define('plugins/portal/twitter/util', [
                             notifications.yell('error', gt('An internal error occurred'));
                         }
                     );
-                }
-            });
+                })
+                .open();
         });
     };
 
@@ -351,23 +346,18 @@ define('plugins/portal/twitter/util', [
     };
 
     var deleteTweetDialog = function (tweet, $myTweet) {
-        require(['io.ox/core/tk/dialogs'], function (dialogs) {
-            new dialogs.ModalDialog()
-            .header(
-                $('<h4>').text(gt('Are you sure you want to delete this Tweet?'))
-            )
-            .build(function () {
-                this.getContentNode().append(
-                    $('<div class="twitter">').append(
-                        renderTweet(tweet, { hideLinks: true, hideFollowButton: true })
-                    )
-                );
-            })
-            .addPrimaryButton('delete', gt('Delete'))
-            .addButton('cancel', gt('Cancel'))
-            .show()
-            .done(function (action) {
-                if (action === 'delete') {
+        require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+            new ModalDialog({ title: gt('Are you sure you want to delete this Tweet?') })
+                .build(function () {
+                    this.$body.append(
+                        $('<div class="twitter">').append(
+                            renderTweet(tweet, { hideLinks: true, hideFollowButton: true })
+                        )
+                    );
+                })
+                .addCancelButton()
+                .addButton({ label: gt('Delete'), action: 'delete' })
+                .on('delete', function () {
                     $.when(network.deleteTweet(tweet.id_str)).then(
                         function success(response) {
                             var jsonResponse = JSON.parse(response);
@@ -384,8 +374,8 @@ define('plugins/portal/twitter/util', [
                         function fail() {
                             notifications.yell('error', gt('An internal error occurred'));
                         });
-                }
-            });
+                })
+                .open();
         });
     };
 

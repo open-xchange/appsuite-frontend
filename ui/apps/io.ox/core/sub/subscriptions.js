@@ -17,7 +17,7 @@ define.async('io.ox/core/sub/subscriptions', [
     'io.ox/core/api/sub',
     'io.ox/core/folder/api',
     'io.ox/core/notifications',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/keychain/api',
     'gettext!io.ox/core/sub',
     'io.ox/backbone/mini-views',
@@ -25,7 +25,7 @@ define.async('io.ox/core/sub/subscriptions', [
     'io.ox/oauth/keychain',
     'io.ox/core/a11y',
     'settings!io.ox/core'
-], function (ext, sub, api, folderAPI, notifications, dialogs, keychainAPI, gt, mini, OAuth, oauthAPI, a11y, settings) {
+], function (ext, sub, api, folderAPI, notifications, ModalDialog, keychainAPI, gt, mini, OAuth, oauthAPI, a11y, settings) {
 
     'use strict';
 
@@ -119,18 +119,18 @@ define.async('io.ox/core/sub/subscriptions', [
 
             render: function () {
                 var self = this,
-                    popup = new dialogs.ModalDialog({
-                        async: true,
-                        help: 'ox.appsuite.user.sect.contacts.folder.subscribe.html',
-                        // 130 * 4 + 8 * 3 + 30, Button.width * ButtonsPerRow + Button.rightMargin * (ButtonsPerRow - 1) + leftAndRightPaddingOfDialog
-                        width: 574
-                    }),
                     title = gt('Subscribe');
 
                 if (this.model.get('entityModule') === 'contacts') title = gt('Subscribe to address book');
                 if (this.model.get('entityModule') === 'calendar') title = gt('Subscribe to calendar');
 
-                popup.getHeader().append($('<h4>').text(title));
+                var popup = new ModalDialog({
+                    title: title,
+                    async: true,
+                    help: 'ox.appsuite.user.sect.contacts.folder.subscribe.html',
+                    // 130 * 4 + 8 * 3 + 30, Button.width * ButtonsPerRow + Button.rightMargin * (ButtonsPerRow - 1) + leftAndRightPaddingOfDialog
+                    width: 576
+                });
 
                 this.getServices().done(function (services) {
                     if (self.app.subscription && _.isArray(self.app.subscription.wantedOAuthScopes)) {
@@ -148,26 +148,20 @@ define.async('io.ox/core/sub/subscriptions', [
                             popup: popup,
                             app: self.app
                         });
-                        ext.point(POINT + '/dialog').invoke('draw', popup.getBody(), baton);
-                        popup
-                            .addPrimaryButton('add', gt('Add'), 'add')
-                            .addButton('cancel', gt('Cancel'))
-                            .show(function () {
-                                this.find('[data-action="add"]').hide();
-                                a11y.getTabbable(popup.getContentNode()).first().focus();
-                            });
-                        popup.getBody().css('padding', '15px 11px');
+                        ext.point(POINT + '/dialog').invoke('draw', popup.$body, baton);
+                        popup.addCancelButton()
+                            .addButton({ label: gt('Add'), action: 'add' })
+                            .build(function () { this.$footer.find('[data-action="add"]').hide(); });
                     } else {
-                        popup.getBody().append($('<p>').text(gt('No subscription services available for this module')));
-                        popup.addPrimaryButton('cancel', gt('Cancel')).show();
+                        popup.addDescription(gt('No subscription services available for this module'));
+                        popup.addButton({ label: gt('Cancel'), action: 'cancel' });
                     }
+                    popup.open();
 
-                    if (services.length < 4) popup.getPopup().css('width', '432px');
+                    if (services.length < 4) popup.$el.css('width', '440px');
 
-                    popup.on('cancel', function () {
-                        popup.close();
-                    }).on('add', function () {
-                        popup.getBody().find('div.alert').remove();
+                    popup.on('add', function () {
+                        popup.$body.find('div.alert').remove();
                         self.subscribe();
                     });
                 });
@@ -188,10 +182,9 @@ define.async('io.ox/core/sub/subscriptions', [
                 this.model.validate();
                 if (this.model.errors && this.model.errors.hasErrors()) {
                     this.model.errors.each(function (errors) {
-                        if (errors.length > 0) showErrorInline(popup.getBody(), gt('Error:'), errors);
+                        if (errors.length > 0) showErrorInline(popup.$body, gt('Error:'), errors);
                     });
                     popup.idle();
-                    popup.getContentNode().find('input').first().focus();
                     return;
                 }
 
@@ -207,7 +200,7 @@ define.async('io.ox/core/sub/subscriptions', [
                             },
                             function refreshFail(error) {
                                 popup.idle();
-                                showErrorInline(popup.getBody(), gt('Error:'), error.error_html || error.error);
+                                showErrorInline(popup.$body, gt('Error:'), error.error_html || error.error);
                                 api.subscriptions.destroy(id);
                                 self.model = self.model.clone();
                                 folderAPI.remove(self.model.get('folder'));
@@ -229,7 +222,7 @@ define.async('io.ox/core/sub/subscriptions', [
                     function saveFail(error) {
                         popup.idle();
                         if (error.error) {
-                            showErrorInline(popup.getBody(), gt('Error:'), error.error);
+                            showErrorInline(popup.$body, gt('Error:'), error.error);
                         } else {
                             notifications.yell({
                                 type: 'error',
@@ -302,7 +295,7 @@ define.async('io.ox/core/sub/subscriptions', [
                 var fd = model.get('formDescription'),
                     bat = ext.Baton({ view: baton.view, subModel: baton.model, model: model, services: baton.services, popup: baton.popup, app: baton.app });
                 baton.model.setSource(model.toJSON());
-                baton.popup.getBody().find('div.alert').remove();
+                baton.popup.$body.find('div.alert').remove();
                 if (fd.length === 1 && fd[0].widget === 'oauthAccount') {
                     ext.point(POINT + '/oauth').invoke('configure', this, bat);
                 } else {
@@ -331,7 +324,7 @@ define.async('io.ox/core/sub/subscriptions', [
                 baton.subModel.setSource(service, { 'account': parseInt(account.id, 10) });
                 baton.view.trigger('subscribe');
             }, function fail(error) {
-                showErrorInline(baton.view.popup.getBody(), gt('Error:'), error);
+                showErrorInline(baton.view.popup.$body, gt('Error:'), error);
             });
         }
     });
@@ -343,7 +336,7 @@ define.async('io.ox/core/sub/subscriptions', [
             var model = baton.model,
                 inputModel = new Backbone.Model(),
                 service = model.toJSON();
-            baton.popup.getBody().empty().append(
+            baton.popup.$body.empty().append(
                 $('<form class="form-horizontal">').append(
                     $('<h4>').text(gt.format(gt('Configure %s'), model.get('displayName'))),
                     _(model.get('formDescription')).map(function (fd) {
@@ -357,8 +350,7 @@ define.async('io.ox/core/sub/subscriptions', [
                     if (e.which === 10 || e.which === 13) baton.view.trigger('subscribe');
                 })
             );
-            a11y.getTabbable(baton.popup.getContentNode()).first().focus();
-            baton.popup.getFooter().find('[data-action="add"]').show();
+            baton.popup.$footer.find('[data-action="add"]').show();
             baton.view.listenTo(inputModel, 'change', function () {
                 baton.subModel.setSource(service, inputModel.toJSON());
             });

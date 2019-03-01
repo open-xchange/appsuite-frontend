@@ -16,9 +16,10 @@ define('io.ox/core/main/logout', [
     'io.ox/core/http',
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
+    'io.ox/backbone/views/modal',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (session, http, ext, capabilities, settings, gt) {
+], function (session, http, ext, capabilities, ModalDialog, settings, gt) {
 
     var DURATION = 250;
 
@@ -41,22 +42,16 @@ define('io.ox/core/main/logout', [
                     if (canRestore) {
                         $('#io-ox-core').show();
                         $('#background-loader').hide();
-                        require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                            new dialogs.ModalDialog()
-                                .text(gt('Unsaved documents will be lost. Do you want to sign out now?'))
-                                .addPrimaryButton('Yes', gt('Yes'))
-                                .addButton('No', gt('No'))
-                                .show()
-                                .then(function (action) {
-                                    if (action === 'No') {
-                                        def.reject();
-                                    } else {
-                                        $('#io-ox-core').hide();
-                                        $('#background-loader').show();
-                                        def.resolve();
-                                    }
-                                });
-                        });
+                        new ModalDialog({ title: gt('Unsaved documents will be lost. Do you want to sign out now?') })
+                            .addButton({ label: gt('No'), action: 'No' })
+                            .addButton({ label: gt('Yes'), action: 'Yes' })
+                            .on('No', function () { def.reject(); })
+                            .on('Yes', function () {
+                                $('#io-ox-core').hide();
+                                $('#background-loader').show();
+                                def.resolve();
+                            })
+                            .open();
                     } else {
                         def.resolve();
                     }

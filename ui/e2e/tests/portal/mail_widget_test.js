@@ -59,7 +59,7 @@ Scenario('adding a mail containing XSS code', async function (I, users) {
     expect(title).to.equal('Test subject <img src="x" onerror="alert(666);">');
 
     I.click(`.io-ox-portal-window .widgets li.widget[data-widget-id="${widgetId}"] .disable-widget`);
-    I.click('Delete', '.io-ox-dialog-popup');
+    I.click('Delete', '.modal-dialog');
     I.waitForDetached(`.io-ox-portal-window .widgets li.widget[data-widget-id="${widgetId}"]`);
     I.logout();
 });

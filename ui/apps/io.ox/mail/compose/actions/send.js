@@ -60,24 +60,17 @@ define('io.ox/mail/compose/actions/send', [
 
                 var def = $.Deferred();
                 // show dialog
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({ focus: false })
-                    .text(gt('Mail has empty subject. Send it anyway?'))
-                    .addPrimaryButton('send', gt('Yes, send without subject'), 'send')
-                    .addButton('subject', gt('Add subject'), 'subject')
-                    .show(function () {
-                        def.notify('empty subject');
-                    })
-                    .done(function (action) {
-                        if (action !== 'send') {
-                            this.remove();
-                            baton.view.$el.find('input[name="subject"]').focus();
+                require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+                    new ModalDialog({ title: gt('Mail has empty subject. Send it anyway?') })
+                        .addButton({ label: gt('Add subject'), action: 'subject', className: 'btn-default' })
+                        .addButton({ label: gt('Yes, send without subject'), action: 'send' })
+                        .on('send', function () { def.resolve(); })
+                        .on('subject', function () {
                             baton.stopPropagation();
+                            setTimeout(function () { baton.view.$el.find('input[name="subject"]').focus(); }, 200);
                             def.reject();
-                        } else {
-                            def.resolve();
-                        }
-                    });
+                        })
+                        .open();
                 });
                 return def;
             }

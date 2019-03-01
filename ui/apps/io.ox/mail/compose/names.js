@@ -13,11 +13,11 @@
 
 define('io.ox/mail/compose/names', [
     'io.ox/mail/sender',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/backbone/mini-views/common',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (sender, dialogs, mini, settings, gt) {
+], function (sender, ModalDialog, mini, settings, gt) {
 
     'use strict';
 
@@ -150,24 +150,17 @@ define('io.ox/mail/compose/names', [
                     .uniq()
                     .value();
 
-                new dialogs.ModalDialog().build(function () {
-
-                    this.getHeader().append(
-                        $('<h4>').text(gt('Edit real names'))
-                    );
-
-                    this.view = new EditRealNamesView({ collection: new Collection(list), el: this.getContentNode().get(0) });
+                new ModalDialog({ title: gt('Edit real names') }).build(function () {
+                    this.view = new EditRealNamesView({ collection: new Collection(list), el: this.$body.get(0) });
                     this.view.render();
                 })
-                .addPrimaryButton('save', gt('Save'), 'save')
-                .addButton('cancel', gt('Cancel'), 'cancel')
+                .addCancelButton()
+                .addButton({ label: gt('Save'), action: 'save' })
                 .on('save', function () {
                     this.view.save();
                     this.view = null;
                 })
-                .show(function () {
-                    this.find('input:enabled').focus();
-                });
+                .open();
             });
         }
     };

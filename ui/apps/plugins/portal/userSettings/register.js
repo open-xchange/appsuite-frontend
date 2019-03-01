@@ -44,7 +44,7 @@ define('plugins/portal/userSettings/register', [
 
     function changePassword() {
 
-        require(['io.ox/core/tk/dialogs', 'io.ox/core/http', 'io.ox/core/yell'], function (dialogs, http, yell) {
+        require(['io.ox/backbone/views/modal', 'io.ox/core/http', 'io.ox/core/yell'], function (ModalDialog, http, yell) {
 
             var isGuest = capabilities.has('guest'),
                 oldPass, oldScore, newPass, newPass2, strengthBar, strengthLabel, strengthBarWrapper,
@@ -64,8 +64,7 @@ define('plugins/portal/userSettings/register', [
                     { label: gt('Password strength: Legendary!'), color: 'bar-legendary', barLength: '100%' } //golden
                 ];
 
-            new dialogs.ModalDialog({ async: true, width: 500 })
-            .header($('<h4>').text(gt('Change password')))
+            new ModalDialog({ async: true, width: 500, title: gt('Change password') })
             .build(function () {
                 //#. %1$s are some example characters
                 //#, c-format
@@ -94,7 +93,7 @@ define('plugins/portal/userSettings/register', [
                 var currentPasswordString = gt('Your current password'),
                     guid = _.uniqueId('form-control-label-');
 
-                this.getContentNode().append(
+                this.$body.append(
                     $('<label class="password-change-label">').attr('for', guid).text(currentPasswordString).toggle(!(isGuest && settings.get('password/emptyCurrent'))),
                     oldPass = $('<input type="password" class="form-control current-password">').attr('id', guid).toggle(!(isGuest && settings.get('password/emptyCurrent'))),
                     $('<label class="password-change-label">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('New password')),
@@ -109,12 +108,12 @@ define('plugins/portal/userSettings/register', [
                 if (showStrength) newPass.on('keyup', updateStrength);
 
             })
-            .addPrimaryButton('change', isGuest ? gt('Change password') : gt('Change password and sign out'))
-            .addButton('cancel', gt('Cancel'))
+            .addCancelButton()
+            .addButton({ label: isGuest ? gt('Change password') : gt('Change password and sign out'), action: 'change' })
             .on('change', function (e, data, dialog) {
 
                 // we change empty string to null to be consistent
-                var node = dialog.getContentNode(),
+                var node = dialog.$body,
                     newPassword1 = newPass.val() === '' ? null : newPass.val(),
                     newPassword2 = newPass2.val() === '' ? null : newPass2.val(),
                     oldPassword = oldPass.val() === '' ? null : oldPass.val();
@@ -158,9 +157,9 @@ define('plugins/portal/userSettings/register', [
                     dialog = null;
                 }
             })
-            .show(function () {
+            .on('show', function () {
                 oldPass.focus();
-            });
+            }).open();
 
             //returns the strength of a password
             function strengthtest(pw) {

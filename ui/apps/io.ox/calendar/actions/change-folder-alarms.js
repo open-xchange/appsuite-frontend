@@ -26,7 +26,6 @@ define('io.ox/calendar/actions/change-folder-alarms', [
             alarmsviewDateTime = new AlarmsView.linkView({ model: new Backbone.Model({ alarms: folderData['com.openexchange.calendar.config'].defaultAlarmDateTime || [] }) });
 
         new ModalDialog({
-            focus: _.device('smartphone') ? '' : '[data-property="comment"]',
             title: gt('Change reminders')
         })
         .build(function () {

@@ -90,10 +90,10 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 btn.click();
                 expect(spy.called, 'mail API send has been called').to.be.false;
                 return waitsFor(function () {
-                    return $('.io-ox-dialog-popup').is(':visible');
+                    return $('.modal-dialog').is(':visible');
                 }).then(function () {
-                    expect($('.io-ox-dialog-popup').find('button[data-action="send"]'), 'number of buttons with action send').to.have.length(1);
-                    expect($('.io-ox-dialog-popup').find('button[data-action="subject"]'), 'number of buttons with action subject').to.have.length(1);
+                    expect($('.modal-dialog').find('button[data-action="send"]'), 'number of buttons with action send').to.have.length(1);
+                    expect($('.modal-dialog').find('button[data-action="subject"]'), 'number of buttons with action subject').to.have.length(1);
                     spy.restore();
                 });
             });

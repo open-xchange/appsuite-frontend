@@ -41,10 +41,9 @@ define('io.ox/calendar/actions/subscribe-shared', [
             .addButton({ label: gt('Save'), action: 'subscribe' })
             .build(function () {
                 this.$body.addClass('shared-calendars');
-            });
-
-        dialog.open();
-        dialog.busy(true);
+            })
+            .busy(true)
+            .open();
         return getData(dialog).then(loadLandingPage);
     }
 
@@ -68,9 +67,8 @@ define('io.ox/calendar/actions/subscribe-shared', [
             http.resume();
 
         });
-
-        data.dialog.idle();
         ext.point('io.ox/core/folder/subscribe-shared-calendar').invoke('render', data.dialog);
+        data.dialog.idle();
     }
 
     var ItemView = Backbone.View.extend({

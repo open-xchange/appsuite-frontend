@@ -205,11 +205,6 @@ define('io.ox/calendar/actions/acceptdeny', [
         // series?
         if (!options.taskmode && o.recurrenceId && o.seriesId) {
             return new ModalDialog({ title: gt('Do you want to confirm the whole series or just one appointment within the series?') })
-                .build(function () {
-                    // no need for a dialog body
-                    this.$body.hide();
-                    this.$header.css('border-bottom', 'none');
-                })
                 .addCancelButton({ left: true })
                 .addButton({ className: 'btn-default', label: gt('Appointment'), action: 'appointment' })
                 .addButton({ action: 'series',

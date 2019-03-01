@@ -13,11 +13,11 @@
 
 define('io.ox/core/folder/actions/rename', [
     'io.ox/core/folder/api',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/extensions',
     'io.ox/core/yell',
     'gettext!io.ox/core'
-], function (api, dialogs, ext, yell, gt) {
+], function (api, ModalDialog, ext, yell, gt) {
 
     'use strict';
 
@@ -49,24 +49,17 @@ define('io.ox/core/folder/actions/rename', [
             return;
         }
 
-        new dialogs.ModalDialog({ async: true, width: 400, enter: 'rename' })
-        .header(
-            $('<h4>').text(gt('Rename folder'))
-        )
-        .build(function () {
-            this.getContentNode().append(
-                $('<form>').append(
-                    $('<input class="form-control" type="text">').attr('placeholder', gt('Folder name')).val(model.get('title'))
-                )
-            );
-        })
-        .addPrimaryButton('rename', gt('Rename'))
-        .addButton('cancel', gt('Cancel'))
-        .on('rename', function () {
-            handler(id, { title: this.getContentNode().find('input').val() }).then(this.close, this.idle);
-        })
-        .show(function () {
-            this.find('input').focus();
-        });
+        new ModalDialog({ title: gt('Rename folder'), async: true, width: 400, enter: 'rename' })
+            .build(function () {
+                this.$body.append(
+                    this.$input = $('<input class="form-control" type="text">')
+                        .attr({ placeholder: gt('Folder name'), 'aria-labelledby': this.$title.attr('id') })
+                        .val(model.get('title'))
+                );
+            })
+            .addCancelButton()
+            .addButton({ label: gt('Rename'), action: 'rename' })
+            .on('rename', function () { handler(id, { title: this.$input.val() }).then(this.close, this.idle); })
+            .open();
     };
 });

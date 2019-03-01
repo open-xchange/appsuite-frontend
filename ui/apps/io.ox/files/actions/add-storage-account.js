@@ -14,16 +14,15 @@
  */
 
 define('io.ox/files/actions/add-storage-account', [
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/metrics/main',
     'io.ox/core/yell',
-    'io.ox/core/a11y',
     'gettext!io.ox/files',
     // must be required here or popupblocker blocks the window while we require files
     'io.ox/oauth/keychain',
     'io.ox/core/api/filestorage',
     'io.ox/oauth/backbone'
-], function (dialogs, metrics, yell, a11y, gt, oauthAPI, filestorageApi, OAuth) {
+], function (ModalDialog, metrics, yell, gt, oauthAPI, filestorageApi, OAuth) {
 
     'use strict';
 
@@ -94,18 +93,13 @@ define('io.ox/files/actions/add-storage-account', [
             });
         }
 
-        dialog.getContentNode().append(
-            view.render().$el
-        );
+        dialog.$body.append(view.render().$el);
     }
 
     return function () {
-        return new dialogs.ModalDialog({ width: 574 })
-            .header($('<h4>').text(gt('Add storage account')))
-            .addPrimaryButton('close', gt('Close'), 'close')
+        return new ModalDialog({ title: gt('Add storage account'), width: 576 })
+            .addButton({ label: gt('Close'), action: 'close' })
             .build(drawContent)
-            .show(function () {
-                a11y.getTabbable(this).first().focus();
-            });
+            .open();
     };
 });
