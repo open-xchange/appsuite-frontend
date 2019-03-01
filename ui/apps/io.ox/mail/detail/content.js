@@ -444,6 +444,12 @@ define('io.ox/mail/detail/content', [
 
     ext.point('io.ox/mail/detail/beautify').extend(
         {
+            id: 'no-ampersand',
+            process: function (baton) {
+                baton.data = baton.data.replace(/&/g, '&amp;');
+            }
+        },
+        {
             id: 'trim',
             process: function (baton) {
                 baton.data = baton.data.trim();
