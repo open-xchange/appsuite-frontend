@@ -43,9 +43,9 @@ define('io.ox/core/tk/contenteditable-editor', [
             ed.on('keydown', function (e) {
                 // pressed enter?
                 if (!e.shiftKey && e.which === 13) splitContent(ed, e);
-                if (e.which === 38) setTimeout(scrollOnCursorUp, 0, ed);
+                if (e.which === 13 || e.which === 40) setTimeout(throttledScrollOnEnter, 0, ed);
+                if (e.which === 38 || e.which === 8) setTimeout(throttledScrollOnCursorUp, 0, ed);
             });
-
         }
     });
 
@@ -177,13 +177,13 @@ define('io.ox/core/tk/contenteditable-editor', [
 
     function splitContent_W3C(ed) {
         // get current range
-        var range = ed.selection.getRng();
+        var range = ed.contentWindow.getSelection().getRangeAt(0);
         // range collapsed?
         if (!range.collapsed) {
             // delete selected content now
             ed.execCommand('Delete', false, null);
             // reselect new range
-            range = ed.selection.getRng();
+            range = ed.contentWindow.getSelection().getRangeAt(0);
         }
         // do magic
         var container = range.commonAncestorContainer;
@@ -250,7 +250,12 @@ define('io.ox/core/tk/contenteditable-editor', [
             }
         }
         // create new elements
-        range.insertNode(mailUtil.getDefaultStyle().node.get(0));
+        var newNode = mailUtil.getDefaultStyle().node.get(0);
+        range.insertNode(newNode);
+        range.setStart(newNode, 0);
+        range.setEnd(newNode, 0);
+        ed.contentWindow.getSelection().empty();
+        ed.contentWindow.getSelection().addRange(range);
     }
 
     function isInsideBlockquote(range) {
@@ -265,7 +270,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
     function splitContent(ed, e) {
         // get current range
-        var range = ed.selection.getRng();
+        var range = ed.contentWindow.getSelection().getRangeAt(0);
         // inside blockquote?
         if (!isInsideBlockquote(range)) return;
         if (!range.startContainer) return;
@@ -275,15 +280,17 @@ define('io.ox/core/tk/contenteditable-editor', [
         ed.focus();
     }
 
-    // This is to keep the caret visible at all times, otherwise the fixed menubar may hide it.
-    // See Bug #56677
-    function scrollOnCursorUp(ed) {
+    function getCursorPosition(ed) {
         var scrollable = $(ed.container).closest('.scrollable'),
             selection = ed.contentWindow.getSelection(),
             range = selection.getRangeAt(0),
-            rect = range.getBoundingClientRect(),
-            top = rect.top,
-            composeFieldsHeight = scrollable.find('.mail-compose-fields').height();
+            // Safari behaves strange here and gives a boundingClientRect with 0 for all properties
+            rect = _.device('safari') ? range.getClientRects()[0] : range.getBoundingClientRect(),
+            top = rect ? rect.top : 0,
+            composeFieldsHeight = scrollable.find('.mail-compose-fields').height(),
+            footerHeight = scrollable.parents('.window-container-center').find('.window-footer').outerHeight(),
+            editorBottomMargin = parseInt(scrollable.find('.contenteditable-editor').css('margin-bottom').replace('px', ''), 10),
+            bottom = scrollable.height() - footerHeight - editorBottomMargin * 2;
 
         // for empty lines we get no valid rect
         if (top === 0) {
@@ -293,16 +300,40 @@ define('io.ox/core/tk/contenteditable-editor', [
                 rect = range.getBoundingClientRect();
                 range.collapse();
                 top = rect.top + rect.height;
+                // Safari will keep the selection if we do not collapse it
+                selection.collapseToEnd();
             } else {
                 var container = range.commonAncestorContainer;
                 top = $(container).offset().top + container.clientHeight;
             }
         }
         var pos = top - scrollable.scrollTop() + composeFieldsHeight;
+
+        return { pos: pos, top: top, bottom: bottom, scrollable: scrollable };
+    }
+
+    var animationSpeed = 100,
+        throttledScrollOnCursorUp = _.throttle(scrollOnCursorUp, animationSpeed),
+        throttledScrollOnEnter = _.throttle(scrollOnEnter, animationSpeed);
+
+    // This is to keep the caret visible at all times, otherwise the fixed menubar may hide it.
+    // See Bug #56677
+    function scrollOnCursorUp(ed) {
+        var cursorPosition = getCursorPosition(ed);
+
         // Scroll to cursor position (If you manually set this to something else, it doesn't feel native)
-        if (top > 0 && pos < 0) scrollable.scrollTop(top);
+        if (cursorPosition.top > 0 && cursorPosition.pos < 0) cursorPosition.scrollable.animate({ scrollTop: cursorPosition.top }, animationSpeed);
         // Scroll whole window to the top, if cursor reaches top of the editable area
-        if (top < 16) scrollable.scrollTop(0);
+        if (cursorPosition.top < 16) cursorPosition.scrollable.animate({ scrollTop: 0 }, animationSpeed);
+    }
+
+    function scrollOnEnter(ed) {
+        var cursorPosition = getCursorPosition(ed);
+
+        if (cursorPosition.pos >= cursorPosition.bottom) {
+            console.log(cursorPosition);
+            cursorPosition.scrollable.animate({ scrollTop: cursorPosition.top }, animationSpeed);
+        }
     }
 
     function lookupTinyMCELanguage() {
@@ -461,7 +492,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
                     ed.on('SetContent', function (o) {
                         if (!o.paste) return;
-                        this.selection.getNode().scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+                        setTimeout(throttledScrollOnEnter, 0, ed);
                     });
 
                 });
