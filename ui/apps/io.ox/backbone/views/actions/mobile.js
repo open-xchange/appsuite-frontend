@@ -44,7 +44,8 @@ define('io.ox/backbone/views/actions/mobile', [
             this.append(
                 new ToolbarView({ point: point, inline: true })
                 .setSelection(baton.array(), function () {
-                    var options = _(baton).pick('data', 'models', 'collection', 'allIds');
+                    var options = _(baton).pick('models', 'collection', 'allIds');
+                    options.data = baton.array();
                     options.folder_id = null;
                     if (baton.app) {
                         options.app = baton.app;

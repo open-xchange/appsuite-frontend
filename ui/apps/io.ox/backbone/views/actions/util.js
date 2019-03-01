@@ -204,7 +204,9 @@ define('io.ox/backbone/views/actions/util', [
 
             if (options.caret !== false) $toggle.append(util.createCaret());
 
-            $el.addClass('dropdown').append($toggle, util.createDropdownList());
+            var $ul = util.createDropdownList();
+            $el.addClass('dropdown').append($toggle, $ul);
+            if (_.device('smartphone')) $ul.on('click', 'a[data-action]', util.invokeByEvent);
 
             return baton ? util.renderDropdownItems($el, baton, options) : $.when();
         },
