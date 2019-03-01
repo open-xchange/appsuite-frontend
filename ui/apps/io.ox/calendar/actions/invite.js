@@ -15,14 +15,13 @@ define('io.ox/calendar/actions/invite', ['settings!io.ox/calendar'], function (s
 
     'use strict';
 
-    return function (baton) {
+    return function (data) {
 
         // use ox.launch to have an indicator for slow connections
         ox.launch('io.ox/calendar/edit/main').done(function () {
 
             // include external organizer
-            var data = baton.data,
-                attendees = data.attendees;
+            var attendees = data.attendees;
             if (!data.organizer.entity && _.isString(data.organizer.cn)) {
                 data.organizer.partStat = 'NEEDS-ACTION';
                 attendees.unshift(data.organizer);

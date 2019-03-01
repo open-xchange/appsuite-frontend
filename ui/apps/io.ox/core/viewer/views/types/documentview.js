@@ -11,7 +11,6 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/types/documentview', [
-    'io.ox/core/extPatterns/actions',
     'io.ox/core/viewer/views/types/baseview',
     'io.ox/core/viewer/views/document/thumbnailview',
     'io.ox/core/pdf/pdfdocument',
@@ -22,7 +21,7 @@ define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/viewer/util',
     'gettext!io.ox/core',
     'less!io.ox/core/pdf/pdfstyle'
-], function (ActionsPattern, BaseView, ThumbnailView, PDFDocument, PDFView, DocConverterUtils, PageLoader, PDFViewerLinkService, Util, gt) {
+], function (BaseView, ThumbnailView, PDFDocument, PDFView, DocConverterUtils, PageLoader, PDFViewerLinkService, Util, gt) {
 
     'use strict';
 

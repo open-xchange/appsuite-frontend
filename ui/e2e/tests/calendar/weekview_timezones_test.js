@@ -97,7 +97,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.see(inTimezone, '.week-container-label.secondary-timezone .working-time-border:not(.in) .number');
 
     I.click('test timezones', '.workweek .appointment .title');
-    I.waitForVisible('.io-ox-sidepopup [data-action="edit"]');
+    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/edit"]');
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.floating-window-content [data-attribute="startDate"] .timezone');
     I.click('.floating-window-content [data-attribute="startDate"] .timezone');

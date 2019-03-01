@@ -13,7 +13,7 @@
 
 define('io.ox/calendar/list/view', [
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/views/actions/util',
     'io.ox/calendar/api',
     'io.ox/core/folder/api',
     'io.ox/calendar/perspective',
@@ -21,7 +21,7 @@ define('io.ox/calendar/list/view', [
     'io.ox/calendar/util',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/list/style'
-], function (ext, actions, api, folderAPI, PerspectiveView, viewDetail, util, gt) {
+], function (ext, actionsUtil, api, folderAPI, PerspectiveView, viewDetail, util, gt) {
 
     'use strict';
 
@@ -87,8 +87,8 @@ define('io.ox/calendar/list/view', [
             app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
                 var list = _.map(baton.data, util.cid);
                 api.getList(list).then(function (models) {
-                    baton.data = _(models).map(api.reduce);
-                    actions.invoke('io.ox/calendar/detail/actions/move', null, baton);
+                    baton.data = _(models).invoke('toJSON');
+                    actionsUtil.invoke('io.ox/calendar/detail/actions/move', baton);
                 });
             });
 

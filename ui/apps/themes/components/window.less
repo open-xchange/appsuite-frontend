@@ -401,33 +401,29 @@
         }
 
         &.premium-toolbar {
+
             height: auto;
             line-height: 16px;
             background-color: @premium-toolbar-background;
-            padding: 8px 16px;
-
-            ul {
-                margin: 0;
-                padding-top: 3px;
-                margin-bottom: 5px;
-
-                li {
-                    padding-top: 5px;
-                    margin-bottom: 3px;
-                }
-            }
-
-            ul a,
-            .header a { color: @premium-toolbar-link-color; }
+            padding: 0 0 8px 0;
 
             .header {
-                margin: -8px -16px 6px -16px;
-                padding: 10px 16px;
+                margin: 0 0 16px 0;
+                padding: 0 16px;
                 background-color: @premium-toolbar-header-background;
                 color: @premium-toolbar-header-color;
+                line-height: 40px;
             }
 
-            .io-ox-upsell-link { padding-top: 5px; }
+            p {
+                padding: 0 16px;
+                margin: 0 0 8px 0;
+            }
+            a {
+                color: @premium-toolbar-link-color;
+            }
+
+            .io-ox-upsell-link { padding-top: 4px; }
         }
     }
 }

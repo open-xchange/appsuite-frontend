@@ -21,8 +21,7 @@ define('io.ox/mail/main', [
     'io.ox/core/tk/list-control',
     'io.ox/mail/threadview',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/actions',
-    'io.ox/core/extPatterns/links',
+    'io.ox/backbone/views/actions/util',
     'io.ox/core/api/account',
     'io.ox/core/notifications',
     'io.ox/core/toolbars-mobile',
@@ -32,6 +31,7 @@ define('io.ox/mail/main', [
     'io.ox/core/folder/view',
     'io.ox/core/folder/api',
     'io.ox/backbone/mini-views/quota',
+    'io.ox/backbone/views/action-dropdown',
     'io.ox/mail/categories/mediator',
     'io.ox/core/api/account',
     'gettext!io.ox/mail',
@@ -46,7 +46,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, composeAPI, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings, coreSettings, certificateAPI, certUtils) {
+], function (util, api, composeAPI, commons, MailListView, ListViewControl, ThreadView, ext, actionsUtil, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, ActionDropdownView, categories, accountAPI, gt, settings, coreSettings, certificateAPI, certUtils) {
 
     'use strict';
 
@@ -625,6 +625,16 @@ define('io.ox/mail/main', [
             app.isThreaded = function () {
                 if (app.listView.loader.mode === 'search') return false;
                 return app.props.get('thread');
+            };
+        },
+
+        'getContextualData': function (app) {
+            // get data required for toolbars and context menus
+            // selection is array of strings (cid)
+            app.getContextualData = function (selection) {
+                var isThreaded = app.isThreaded(),
+                    data = api.resolve(selection, isThreaded);
+                return { app: app, data: data, folder_id: app.folder.get(), isThread: isThreaded };
             };
         },
 
@@ -1425,15 +1435,10 @@ define('io.ox/mail/main', [
          * Add support for drag & drop
          */
         'drag-drop': function () {
-            app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
-                // remember if this list is based on a single thread
-                baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
-                // resolve thread
-                baton.data = api.resolve(baton.data, app.isThreaded());
-                // call action
-                actions.check('io.ox/mail/actions/move', baton.data).done(function () {
-                    actions.invoke('io.ox/mail/actions/move', null, baton);
-                });
+            app.getWindow().nodes.outer.on('selection:drop', function (e, _baton) {
+                var baton = ext.Baton(app.getContextualData(_baton.data));
+                baton.target = _baton.target;
+                actionsUtil.invoke('io.ox/mail/actions/move', baton);
             });
         },
 
@@ -1441,16 +1446,10 @@ define('io.ox/mail/main', [
          * Handle archive event based on keyboard shortcut
          */
         'selection-archive': function () {
-            app.listView.on('selection:archive', function (list) {
-                var baton = ext.Baton({ data: list });
-                // remember if this list is based on a single thread
-                baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
-                // resolve thread
-                baton.data = api.resolve(baton.data, app.isThreaded());
-                // call action
-                actions.check('io.ox/mail/actions/archive', baton.data).done(function () {
-                    actions.invoke('io.ox/mail/actions/archive', null, baton);
-                });
+            // selection is array of strings (cid)
+            app.listView.on('selection:archive', function (selection) {
+                var baton = ext.Baton(app.getContextualData(selection));
+                actionsUtil.invoke('io.ox/mail/actions/archive', baton);
             });
         },
 
@@ -1458,17 +1457,10 @@ define('io.ox/mail/main', [
          * Handle delete event based on keyboard shortcut or swipe gesture
          */
         'selection-delete': function () {
-            app.listView.on('selection:delete', function (list, shiftDelete) {
-                var baton = ext.Baton({ data: list, options: { shiftDelete: shiftDelete } });
-                // remember if this list is based on a single thread
-                baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
-                // resolve thread
-                baton.data = api.resolve(baton.data, app.isThreaded());
-                // call action
-                // check if action can be called
-                actions.check('io.ox/mail/actions/delete', baton.data).done(function () {
-                    actions.invoke('io.ox/mail/actions/delete', null, baton);
-                });
+            app.listView.on('selection:delete', function (selection, shiftDelete) {
+                var baton = ext.Baton(app.getContextualData(selection));
+                baton.options.shiftDelete = shiftDelete;
+                actionsUtil.invoke('io.ox/mail/actions/delete', baton);
             });
         },
 
@@ -1486,7 +1478,7 @@ define('io.ox/mail/main', [
                     isDraft = account.is('drafts', obj.folder_id);
                 if (isDraft) {
                     api.get(obj).then(function (data) {
-                        actions.invoke('io.ox/mail/actions/edit', null, ext.Baton({ data: data }));
+                        actionsUtil.invoke('io.ox/mail/actions/edit', data);
                     });
                 } else {
                     ox.launch('io.ox/mail/detail/main', { cid: cid });
@@ -1498,18 +1490,15 @@ define('io.ox/mail/main', [
          * Add support for selection:
          */
         'selection-mobile-swipe': function (app) {
+
             if (_.device('!smartphone')) return;
 
-            ext.point('io.ox/mail/mobile/swipeButtonMore').extend(new links.Dropdown({
-                id: 'actions',
-                index: 1,
-                classes: '',
-                label: '',
-                ariaLabel: '',
-                icon: '',
-                noCaret: true,
-                ref: 'io.ox/mail/links/inline'
-            }));
+            ext.point('io.ox/mail/mobile/swipeButtonMore').extend({
+                draw: function (baton) {
+                    new ActionDropdownView({ el: this, point: 'io.ox/mail/links/inline' })
+                    .setSelection(baton.array(), { data: baton.array(), app: app, isThread: baton.isThread });
+                }
+            });
 
             app.listView.on('selection:more', function (list, node) {
                 var baton = ext.Baton({ data: list });
@@ -1520,7 +1509,7 @@ define('io.ox/mail/main', [
                 // call action
                 // we open a dropdown here with options.
                 ext.point('io.ox/mail/mobile/swipeButtonMore').invoke('draw', node, baton);
-                node.find('a').click();
+                node.find('a.dropdown-toggle').click();
             });
         },
 

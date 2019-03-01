@@ -13,22 +13,20 @@
 
 define('io.ox/files/toolbar', [
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
-    'io.ox/core/extPatterns/actions',
     'io.ox/backbone/mini-views/dropdown',
-    'io.ox/backbone/mini-views/toolbar',
+    'io.ox/backbone/views/toolbar',
     'io.ox/core/notifications',
     'gettext!io.ox/files',
     'io.ox/files/api',
     'io.ox/core/folder/api',
     'io.ox/files/actions',
     'less!io.ox/files/style'
-], function (ext, links, actions, Dropdown, Toolbar, notifications, gt, api, folderApi) {
+], function (ext, Dropdown, ToolbarView, notifications, gt, api, folderApi) {
 
     'use strict';
 
     // define links for classic toolbar
-    var point = ext.point('io.ox/files/classic-toolbar/links'),
+    var point = ext.point('io.ox/files/toolbar/links'),
 
         meta = {
             //
@@ -37,145 +35,58 @@ define('io.ox/files/toolbar', [
             'create': {
                 prio: 'hi',
                 mobile: 'hi',
-                label: gt('New'),
-                title: gt('New file'),
-                ref: 'io.ox/files/dropdown/new',
-                customize: function (baton) {
-                    var self = this,
-                        $ul = links.DropdownLinks({
-                            ref: 'io.ox/files/links/toolbar/default',
-                            wrap: false,
-                            //function to call when dropdown is empty
-                            emptyCallback: function () {
-                                self.addClass('disabled')
-                                    .attr({ 'aria-disabled': true })
-                                    .removeAttr('href');
-                            }
-                        }, baton);
-
-                    this.append('<i class="fa fa-caret-down" aria-hidden="true">');
-
-                    this.addClass('dropdown-toggle').attr({
-                        'aria-haspopup': 'true',
-                        'data-toggle': 'dropdown',
-                        'role': 'button'
-                    });
-
-                    this.parent().addClass('dropdown');
-
-                    new Dropdown({
-                        el: this.parent(),
-                        $toggle: this,
-                        $ul: $ul
-                    }).render();
-                }
+                title: gt('New'),
+                dropdown: 'io.ox/files/toolbar/new'
             },
             'edit': {
                 prio: 'hi',
                 mobile: 'lo',
-                label: gt('Edit'),
+                title: gt('Edit'),
                 ref: 'io.ox/files/actions/editor'
             },
             'share': {
                 prio: 'hi',
                 mobile: 'lo',
                 icon: 'fa fa-user-plus',
-                label: gt('Share'),
-                ref: 'io.ox/files/dropdown/share',
-                customize: function (baton) {
-                    var self = this,
-                        $ul = links.DropdownLinks({
-                            ref: 'io.ox/files/links/toolbar/share',
-                            wrap: false,
-                            //function to call when dropdown is empty
-                            emptyCallback: function () {
-                                self.remove();
-                            }
-                        }, baton);
-
-                    this.append('<i class="fa fa-caret-down" aria-hidden="true">');
-
-                    this.addClass('dropdown-toggle').attr({
-                        'aria-haspopup': 'true',
-                        'data-toggle': 'dropdown',
-                        'role': 'button'
-                    });
-
-                    this.parent().addClass('dropdown');
-
-                    new Dropdown({
-                        el: this.parent(),
-                        $toggle: this,
-                        $ul: $ul
-                    }).render();
-
-                    // set proper tooltip
-                    var folders = 0, files = 0;
-                    _(_.isArray(baton.data) ? baton.data : [baton.data]).each(function (item) {
-                        if (item.folder_id === 'folder') {
-                            folders++;
-                        } else {
-                            files++;
-                        }
-                    });
-
-                    var title = '';
-
-                    if (folders && files) {
-                        // mixed selection
-                        title = gt('Share selected objects');
-                    } else if (folders) {
-                        // folders only
-                        title = gt.ngettext('Share selected folder', 'Share selected folders', folders);
-                    } else if (files) {
-                        // files only
-                        title = gt.ngettext('Share selected file', 'Share selected files', files);
-                    } else {
-                        // empty selection
-                        title = gt('Share current folder');
-                    }
-
-                    this.attr({ 'aria-label': title, 'data-original-title': title });
-                }
+                title: gt('Share'),
+                dropdown: 'io.ox/files/toolbar/share'
             },
             'viewer': {
                 prio: 'hi',
                 mobile: 'lo',
                 icon: 'fa fa-eye',
-                label: gt('View'),
+                title: gt('View'),
                 ref: 'io.ox/files/actions/viewer'
             },
             'download': {
                 prio: 'hi',
                 mobile: 'lo',
                 icon: 'fa fa-download',
-                label: gt('Download'),
+                title: gt('Download'),
                 ref: 'io.ox/files/actions/download'
             },
             'download-folder': {
                 prio: 'hi',
                 mobile: 'lo',
                 icon: 'fa fa-download',
-                label: gt('Download'),
+                title: gt('Download'),
                 ref: 'io.ox/files/actions/download-folder'
             },
             'delete': {
                 prio: 'hi',
                 mobile: 'lo',
                 icon: 'fa fa-trash-o',
-                label: gt('Delete'),
-                ref: 'io.ox/files/actions/delete',
-                customize: function (baton) {
-                    var folderId = baton.app.folder.get(),
-                        model = folderApi.pool.getModel(folderId);
-
-                    if (folderApi.is('trash', model.toJSON())) {
-                        this.attr({
-                            'aria-label': gt('Delete forever'),
-                            'data-original-title': gt('Delete forever')
-                        });
-                    }
-                }
+                title: function (baton) {
+                    var model = folderApi.pool.getModel(baton.folder_id);
+                    return model && folderApi.is('trash', model.toJSON()) ? gt('Delete forever') : gt('Delete');
+                },
+                ref: 'io.ox/files/actions/delete'
+            },
+            'back': {
+                prio: 'lo',
+                mobile: 'hi',
+                label: gt('Folders'),
+                ref: 'io.ox/files/favorite/back'
             },
             //
             // --- LO ----
@@ -183,54 +94,61 @@ define('io.ox/files/toolbar', [
             'addToFavorites': {
                 prio: 'lo',
                 mobile: 'lo',
-                label: gt('Add to Favorites'),
-                ref: 'io.ox/files/favorites/add',
+                title: gt('Add to favorites'),
+                ref: 'io.ox/files/actions/favorites/add',
                 section: 'favorites'
             },
             'removeFromFavorites': {
                 prio: 'lo',
                 mobile: 'lo',
-                label: gt('Remove from favorites'),
-                ref: 'io.ox/files/favorites/remove',
+                title: gt('Remove from favorites'),
+                ref: 'io.ox/files/actions/favorites/remove',
+                section: 'favorites'
+            },
+            'show-in-folder': {
+                prio: 'lo',
+                mobile: 'lo',
+                title: gt('Show in Drive'),
+                ref: 'io.ox/files/actions/show-in-folder',
                 section: 'favorites'
             },
             'rename': {
                 prio: 'lo',
                 mobile: 'lo',
-                label: gt('Rename'),
+                title: gt('Rename'),
                 ref: 'io.ox/files/actions/rename',
                 section: 'edit'
             },
             'edit-description': {
                 prio: 'lo',
                 mobile: 'lo',
-                label: gt('Edit description'),
+                title: gt('Edit description'),
                 ref: 'io.ox/files/actions/edit-description',
                 section: 'edit'
             },
             'save-as-pdf': {
                 prio: 'lo',
                 mobile: 'lo',
-                label: gt('Save as PDF'),
+                title: gt('Save as PDF'),
                 ref: 'io.ox/files/actions/save-as-pdf',
                 section: 'save-as'
             },
             'send': {
                 prio: 'lo',
                 mobile: 'lo',
-                label: gt('Send by mail'),
+                title: gt('Send by email'),
                 ref: 'io.ox/files/actions/send',
                 section: 'share'
             },
             'add-to-portal': {
                 prio: 'lo',
                 mobile: 'lo',
-                label: gt('Add to portal'),
+                title: gt('Add to portal'),
                 ref: 'io.ox/files/actions/add-to-portal',
                 section: 'share'
             },
             'move': {
-                label: gt('Move'),
+                title: gt('Move'),
                 prio: 'lo',
                 mobile: 'lo',
                 ref: 'io.ox/files/actions/move',
@@ -239,66 +157,32 @@ define('io.ox/files/toolbar', [
             'copy': {
                 prio: 'lo',
                 mobile: 'lo',
-                label: gt('Copy'),
+                title: gt('Copy'),
                 ref: 'io.ox/files/actions/copy',
                 section: 'file-op'
             },
             'lock': {
                 prio: 'lo',
                 mobile: 'lo',
-                label: gt('Lock'),
+                title: gt('Lock'),
                 ref: 'io.ox/files/actions/lock',
                 section: 'file-op'
             },
             'unlock': {
                 prio: 'lo',
                 mobile: 'lo',
-                label: gt('Unlock'),
+                title: gt('Unlock'),
                 ref: 'io.ox/files/actions/unlock',
                 section: 'file-op'
             },
             'restore': {
                 prio: 'lo',
                 mobile: 'lo',
-                label: gt('Restore'),
+                title: gt('Restore'),
                 ref: 'io.ox/files/actions/restore',
                 section: 'file-op'
             }
         };
-
-    // local dummy action
-
-    new actions.Action('io.ox/files/dropdown/new', {
-        requires: function (e) {
-            var folderId = e.baton.app.folder.get(),
-                model = folderApi.pool.getModel(folderId);
-
-            return !folderApi.is('trash', model.toJSON());
-        },
-        action: $.noop
-    });
-
-    // new actions.Action('io.ox/files/dropdown/share', {
-    //     requires: function () {
-    //         return true;
-    //     },
-    //     action: $.noop
-    // });
-
-    new actions.Action('io.ox/files/dropdown/shareFavorites', {
-        requires: function (e) {
-            var elemId;
-            if (e.baton.data) {
-                if (!_.isArray(e.baton.data)) {
-                    elemId = e.baton.data.id;
-                } else if (e.baton.data.length) {
-                    elemId = _.first(e.baton.data).id;
-                }
-            }
-            return !!elemId;
-        },
-        action: $.noop
-    });
 
     // transform into extensions
 
@@ -307,29 +191,23 @@ define('io.ox/files/toolbar', [
     _(meta).each(function (extension, id) {
         extension.id = id;
         extension.index = (index += 100);
-        point.extend(new links.Link(extension));
+        point.extend(extension);
     });
 
-    ext.point('io.ox/files/classic-toolbar').extend(new links.InlineLinks({
-        attributes: {},
-        classes: '',
-        // always use drop-down
-        dropdown: true,
-        index: 200,
-        id: 'toolbar-links',
-        ref: 'io.ox/files/classic-toolbar/links'
-    }));
-
     // view dropdown
-    ext.point('io.ox/files/classic-toolbar').extend({
+    ext.point('io.ox/files/toolbar/links').extend({
         id: 'view-dropdown',
         index: 10000,
+        custom: true,
         draw: function (baton) {
 
             if (_.device('smartphone')) return;
 
+            // view menu does not work in favorites, it's a special list implementation
+            if (baton.originFavorites) return;
+
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li', caret: true })
+            var dropdown = new Dropdown({ el: this, model: baton.app.props, label: gt('View'), caret: true })
                 .group(gt('Layout'))
                 .option('layout', 'list', gt('List'), { group: true })
                 .option('layout', 'icon', gt('Icons'), { group: true })
@@ -341,9 +219,7 @@ define('io.ox/files/toolbar', [
 
             if (_.device('!touch')) dropdown.option('details', true, gt('File details'), { group: true });
 
-            this.append(
-                dropdown.render().$el.addClass('pull-right').attr({ 'role': 'presentation', 'data-dropdown': 'view' })
-            );
+            dropdown.render().$el.addClass('dropdown pull-right').attr('data-dropdown', 'view');
         }
     });
 
@@ -352,30 +228,16 @@ define('io.ox/files/toolbar', [
         index: 10000,
         setup: function (app) {
 
-            var toolbarView = new Toolbar({ title: app.getTitle() });
+            var toolbarView = new ToolbarView({ point: 'io.ox/files/toolbar/links', title: app.getTitle(), strict: false });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                toolbarView.render().$el
+                toolbarView.$el
             );
 
-            function updateCallback($toolbar) {
-                toolbarView.replaceToolbar($toolbar).initButtons();
-            }
-
-            app.updateToolbar = _.debounce(function (list) {
-                if (!list) return;
-                // turn cids into proper objects
-                var cids = list, models = api.resolve(cids, false);
-                list = _(models).invoke('toJSON');
-                // extract single object if length === 1
-                var data = list.length === 1 ? list[0] : list;
-                // disable visible buttons
-                toolbarView.disableButtons();
-                // draw toolbar
-                var $toolbar = toolbarView.createToolbar(),
-                    baton = ext.Baton({ $el: $toolbar, data: data, models: models, collection: app.listView.collection, app: this, allIds: [] }),
-                    ret = ext.point('io.ox/files/classic-toolbar').invoke('draw', $toolbar, baton);
-                $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
+            app.updateToolbar = _.debounce(function (selection) {
+                toolbarView.setSelection(selection.map(_.cid), function () {
+                    return this.getContextualData(selection, 'main');
+                }.bind(this));
             }, 10);
         }
     });
@@ -384,17 +246,21 @@ define('io.ox/files/toolbar', [
         id: 'update-toolbar',
         index: 10200,
         setup: function (app) {
-            app.updateToolbar([]);
-            // update toolbar on selection change as well as any model change
-            app.listView.on('selection:change change', function () {
+
+            // initial update
+            updateToolbar();
+            // update toolbar on selection and model changes
+            app.listView.on('selection:change change', updateToolbar);
+            // files as favorites
+            api.on('favorite:add favorite:remove', updateToolbar);
+            // folders as favorites
+            folderApi.on('favorite:add favorite:remove', updateToolbar);
+            // change folder
+            app.on('folder:change', app.updateToolbar.bind(app, []));
+
+            function updateToolbar() {
                 app.updateToolbar(app.listView.selection.get());
-            });
-            api.on('favorite:add favorite:remove', function () {
-                app.updateToolbar(app.listView.selection.get());
-            });
-            folderApi.on('favorite:add favorite:remove', function () {
-                app.updateToolbar(app.listView.selection.get());
-            });
+            }
         }
     });
 

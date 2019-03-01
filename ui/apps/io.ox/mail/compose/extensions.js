@@ -17,7 +17,7 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/backbone/mini-views/common',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/views/actions/util',
     'io.ox/core/tk/tokenfield',
     'io.ox/core/dropzone',
     'io.ox/core/capabilities',
@@ -34,7 +34,7 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/mail/compose/resize-view',
     'io.ox/mail/compose/resize',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, settingsContacts, Attachments, strings, ResizeView, imageResize) {
+], function (contactAPI, sender, mini, Dropdown, ext, actionsUtil, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, settingsContacts, Attachments, strings, ResizeView, imageResize) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -216,7 +216,7 @@ define('io.ox/mail/compose/extensions', [
 
         title: function () {
             this.append(
-                $('<h1 class="sr-only">').text(gt('Compose new mail'))
+                $('<h1 class="sr-only">').text(gt('Compose new email'))
             );
         },
 
@@ -591,9 +591,8 @@ define('io.ox/mail/compose/extensions', [
                     return obj;
                 });
 
-                baton = ext.Baton({ startItem: data, data: list, openedBy: 'io.ox/mail/compose', restoreFocus: $(e.target) });
-
-                actions.invoke('io.ox/mail/actions/view-attachment', null, baton);
+                baton = ext.Baton({ simple: true, startItem: data, data: list, openedBy: 'io.ox/mail/compose', restoreFocus: $(e.target) });
+                actionsUtil.invoke('io.ox/mail/attachment/actions/view', baton);
             });
 
             // needed when adding several contacts via 'send as vcard'

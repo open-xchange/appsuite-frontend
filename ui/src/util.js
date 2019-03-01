@@ -462,9 +462,11 @@
          */
         lfo: function () {
             // call counter
-            var curry = slice.call(arguments), sync = false, fn, count;
+            var curry = slice.call(arguments), sync = false, context, fn, count;
             // sync or async (default)
             if (curry[0] === true) { curry.shift(); sync = true; }
+            // context?
+            if (!_.isFunction(curry[0])) context = curry.shift();
             // get function and count
             fn = curry.shift() || $.noop;
             count = (fn.count = (fn.count || 0) + 1);
@@ -473,7 +475,7 @@
                 var args = slice.call(arguments);
                 function cont() {
                     if (count === fn.count) {
-                        fn.apply(fn, curry.concat(args));
+                        fn.apply(context || fn, curry.concat(args));
                     }
                 }
                 if (sync) cont(); else setTimeout(cont, 0);
@@ -886,12 +888,12 @@
             }
 
             return function (o) {
-                var tmp, r = 'recurrence_position', m, f;
+                var tmp, r = 'recurrenceId', m, f;
                 if (typeof o === 'string') {
-                    // integer based ids?
-                    if ((m = o.match(/^(\d*?)\.(\d+)(\.(\d+))?$/)) && m.length) {
-                        tmp = { folder_id: String(m[1]), id: String(m[2]) };
-                        if (m[4] !== undefined) { tmp[r] = parseInt(m[4], 10); }
+                    // Triples? (incl. new CalDAV ids)
+                    if ((m = o.match(/^(cal:\/\/\d+\/\d+|\d+)\.(\d+)(\.([\dTZ]+))?$/)) && m.length) {
+                        tmp = { folder_id: String(m[1]), folder: String(m[1]), id: String(m[2]) };
+                        if (m[4] !== undefined) tmp[r] = String(m[4]);
                         return tmp;
                     }
                     // character based? (double tuple)

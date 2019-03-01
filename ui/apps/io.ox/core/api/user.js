@@ -301,6 +301,11 @@ define('io.ox/core/api/user', [
         return getUser.apply(this, arguments);
     };
 
+    // make sure this is fast (then vs pipe)
+    api.me = function () {
+        return ox.rampup.user ? $.when(ox.rampup.user) : api.get();
+    };
+
     // reload account API if current user gets changed
     api.on('update:' + _.ecid({ folder_id: 6, id: ox.user_id }), function () {
         require(['io.ox/core/api/account'], function (accountAPI) {

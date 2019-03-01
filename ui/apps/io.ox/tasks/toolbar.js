@@ -13,10 +13,8 @@
 
 define('io.ox/tasks/toolbar', [
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
-    'io.ox/core/extPatterns/actions',
     'io.ox/backbone/mini-views/dropdown',
-    'io.ox/backbone/mini-views/toolbar',
+    'io.ox/backbone/views/toolbar',
     'io.ox/core/tk/upload',
     'io.ox/core/dropzone',
     'io.ox/core/notifications',
@@ -25,14 +23,14 @@ define('io.ox/tasks/toolbar', [
     'gettext!io.ox/tasks',
     'io.ox/tasks/actions',
     'less!io.ox/tasks/style'
-], function (ext, links, actions, Dropdown, Toolbar, upload, dropzone, notifications, extensions, api, gt) {
+], function (ext, Dropdown, ToolbarView, upload, dropzone, notifications, extensions, api, gt) {
 
     'use strict';
 
     if (_.device('smartphone')) return;
 
     // define links for classic toolbar
-    var point = ext.point('io.ox/tasks/classic-toolbar/links');
+    var point = ext.point('io.ox/tasks/toolbar/links');
 
     var meta = {
         //
@@ -41,16 +39,16 @@ define('io.ox/tasks/toolbar', [
         'create': {
             prio: 'hi',
             mobile: 'hi',
-            label: gt('New'),
-            title: gt('New task'),
+            title: gt('New'),
+            tooltip: gt('New task'),
             drawDisabled: true,
             ref: 'io.ox/tasks/actions/create'
         },
         'edit': {
             prio: 'hi',
             mobile: 'hi',
-            label: gt('Edit'),
-            title: gt('Edit task'),
+            title: gt('Edit'),
+            tooltip: gt('Edit task'),
             drawDisabled: true,
             ref: 'io.ox/tasks/actions/edit'
         },
@@ -58,8 +56,8 @@ define('io.ox/tasks/toolbar', [
             prio: 'hi',
             mobile: 'lo',
             //#. Task: "Due" like in "Change due date"
-            label: gt('Due'),
-            title: gt('Change due date'),
+            title: gt('Due'),
+            tooltip: gt('Change due date'),
             ref: 'io.ox/tasks/actions/placeholder',
             customize: extensions.dueDate
         },
@@ -67,23 +65,23 @@ define('io.ox/tasks/toolbar', [
             prio: 'hi',
             mobile: 'hi',
             //#. Task: Done like in "Mark as done"
-            label: gt('Done'),
-            title: gt('Mark as done'),
+            title: gt('Done'),
+            tooltip: gt('Mark as done'),
             ref: 'io.ox/tasks/actions/done'
         },
         'undone': {
             prio: 'hi',
             mobile: 'hi',
             //#. Task: Undone like in "Mark as undone"
-            label: gt('Undone'),
-            title: gt('Mark as undone'),
+            title: gt('Undone'),
+            tooltip: gt('Mark as undone'),
             ref: 'io.ox/tasks/actions/undone'
         },
         'delete': {
             prio: 'hi',
             mobile: 'hi',
-            label: gt('Delete'),
-            title: gt('Delete task'),
+            title: gt('Delete'),
+            tooltip: gt('Delete task'),
             ref: 'io.ox/tasks/actions/delete'
         },
         //
@@ -92,27 +90,27 @@ define('io.ox/tasks/toolbar', [
         'export': {
             prio: 'lo',
             mobile: 'lo',
-            label: gt('Export'),
+            title: gt('Export'),
             drawDisabled: true,
             ref: 'io.ox/tasks/actions/export'
         },
         'confirm': {
             prio: 'lo',
             mobile: 'lo',
-            label: gt('Change confirmation status'),
+            title: gt('Change confirmation status'),
             ref: 'io.ox/tasks/actions/confirm'
         },
         'print': {
             prio: 'lo',
             mobile: 'lo',
-            label: gt('Print'),
+            title: gt('Print'),
             drawDisabled: true,
             ref: 'io.ox/tasks/actions/print'
         },
         'move': {
             prio: 'lo',
             mobile: 'lo',
-            label: gt('Move'),
+            title: gt('Move'),
             ref: 'io.ox/tasks/actions/move',
             drawDisabled: true,
             section: 'file-op'
@@ -126,21 +124,11 @@ define('io.ox/tasks/toolbar', [
     _(meta).each(function (extension, id) {
         extension.id = id;
         extension.index = (index += 100);
-        point.extend(new links.Link(extension));
+        point.extend(extension);
     });
 
-    ext.point('io.ox/tasks/classic-toolbar').extend(new links.InlineLinks({
-        attributes: {},
-        classes: '',
-        // always use drop-down
-        dropdown: true,
-        index: 200,
-        id: 'toolbar-links',
-        ref: 'io.ox/tasks/classic-toolbar/links'
-    }));
-
     // view dropdown
-    ext.point('io.ox/tasks/classic-toolbar').extend({
+    ext.point('io.ox/tasks/toolbar/links').extend({
         id: 'view-dropdown',
         index: 10000,
         draw: function (baton) {
@@ -163,33 +151,28 @@ define('io.ox/tasks/toolbar', [
         index: 10000,
         setup: function (app) {
 
-            var toolbarView = new Toolbar({ title: app.getTitle() });
+            var toolbarView = new ToolbarView({ point: 'io.ox/tasks/toolbar/links', title: app.getTitle() });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                toolbarView.render().$el
+                toolbarView.$el
             );
 
-            function updateCallback($toolbar) {
-                toolbarView.replaceToolbar($toolbar).initButtons();
-            }
+            // list is array of object (with id and folder_id)
+            app.updateToolbar = function (list) {
+                var options = { data: [], folder_id: this.folder.get(), app: this };
+                toolbarView.setSelection(list, function () {
+                    if (!list.length) return options;
+                    return (list.length <= 100 ? api.getList(list) : $.when(list)).pipe(function (data) {
+                        options.data = data;
+                        return options;
+                    });
+                });
+            };
 
-            function render(list) {
-                // extract single object if length === 1
-                list = list.length === 1 ? list[0] : list;
-                // disable visible buttons
-                toolbarView.disableButtons();
-                // draw toolbar
-                var $toolbar = toolbarView.createToolbar(),
-                    baton = ext.Baton({ $el: $toolbar, data: list, app: app }),
-                    ret = ext.point('io.ox/tasks/classic-toolbar').invoke('draw', $toolbar, baton);
-                $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
-            }
-
-            app.updateToolbar = _.debounce(function (list) {
-                if (!list) return;
-                var callback = _.lfo(render);
-                if (list.length <= 100) api.getList(list).done(callback); else callback.call(this, list);
-            }, 10);
+            app.forceUpdateToolbar = function (list) {
+                toolbarView.selection = null;
+                this.updateToolbar(list);
+            };
         }
     });
 
@@ -197,15 +180,14 @@ define('io.ox/tasks/toolbar', [
         id: 'update-toolbar',
         index: 10200,
         setup: function (app) {
-            app.updateToolbar();
+            app.updateToolbar([]);
             // update toolbar on selection change as well as any model change (seen/unseen flag)
             app.getGrid().selection.on('change', function (e, list) {
                 app.updateToolbar(list);
             });
             // update whenever a task changes
             api.on('update', function () {
-                var list = app.getGrid().selection.get();
-                app.updateToolbar(list);
+                app.forceUpdateToolbar(app.getGrid().selection.get());
             });
         }
     });

@@ -13,26 +13,26 @@
 
 define('io.ox/calendar/toolbar', [
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
-    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/views/actions/util',
     'io.ox/backbone/mini-views/dropdown',
-    'io.ox/backbone/mini-views/toolbar',
+    'io.ox/backbone/views/toolbar',
     'io.ox/core/tk/upload',
     'io.ox/core/dropzone',
     'io.ox/core/notifications',
     'io.ox/core/capabilities',
+    'io.ox/calendar/api',
     'io.ox/calendar/util',
     'gettext!io.ox/calendar',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style'
-], function (ext, links, actions, Dropdown, Toolbar, upload, dropzone, notifications, capabilities, util, gt) {
+], function (ext, actionsUtil, Dropdown, ToolbarView, upload, dropzone, notifications, capabilities, api, util, gt) {
 
     'use strict';
 
     if (_.device('smartphone')) return;
 
     // define links for classic toolbar
-    var point = ext.point('io.ox/calendar/classic-toolbar/links');
+    var point = ext.point('io.ox/calendar/toolbar/links');
 
     var meta = {
         //
@@ -41,43 +41,43 @@ define('io.ox/calendar/toolbar', [
         'create': {
             prio: 'hi',
             mobile: 'hi',
-            label: gt('New'),
-            title: gt('New appointment'),
+            title: gt('New'),
+            tooltip: gt('New appointment'),
             drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/create'
         },
         'schedule': {
             prio: 'hi',
             mobile: 'hi',
-            label: gt.pgettext('app', 'Scheduling'),
-            title: gt('Find a free time'),
+            title: gt.pgettext('app', 'Scheduling'),
+            tooltip: gt('Find a free time'),
             ref: 'io.ox/calendar/actions/freebusy'
         },
         'today': {
             prio: 'hi',
             mobile: 'hi',
-            label: gt('Today'),
+            title: gt('Today'),
             ref: 'io.ox/calendar/actions/today'
         },
         'edit': {
             prio: 'hi',
             mobile: 'hi',
-            label: gt('Edit'),
-            title: gt('Edit appointment'),
+            title: gt('Edit'),
+            tooltip: gt('Edit appointment'),
             ref: 'io.ox/calendar/detail/actions/edit'
         },
         'changestatus': {
             prio: 'hi',
             mobile: 'lo',
-            label: gt('Status'),
             title: gt('Change status'),
+            tooltip: gt('Change status'),
             ref: 'io.ox/calendar/detail/actions/changestatus'
         },
         'delete': {
             prio: 'hi',
             mobile: 'hi',
-            label: gt('Delete'),
-            title: gt('Delete appointment'),
+            title: gt('Delete'),
+            tooltip: gt('Delete appointment'),
             ref: 'io.ox/calendar/detail/actions/delete'
         },
         //
@@ -86,21 +86,21 @@ define('io.ox/calendar/toolbar', [
         'export': {
             prio: 'lo',
             mobile: 'lo',
-            label: gt('Export'),
+            title: gt('Export'),
             drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/export'
         },
         'print': {
             prio: 'lo',
             mobile: 'lo',
-            label: gt('Print'),
+            title: gt('Print'),
             drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/print-appointment'
         },
         'move': {
             prio: 'lo',
             mobile: 'lo',
-            label: gt('Move'),
+            title: gt('Move'),
             ref: 'io.ox/calendar/detail/actions/move',
             drawDisabled: true,
             section: 'file-op'
@@ -114,18 +114,8 @@ define('io.ox/calendar/toolbar', [
     _(meta).each(function (extension, id) {
         extension.id = id;
         extension.index = (index += 100);
-        point.extend(new links.Link(extension));
+        point.extend(extension);
     });
-
-    ext.point('io.ox/calendar/classic-toolbar').extend(new links.InlineLinks({
-        attributes: {},
-        classes: '',
-        // always use drop-down
-        dropdown: true,
-        index: 200,
-        id: 'toolbar-links',
-        ref: 'io.ox/calendar/classic-toolbar/links'
-    }));
 
     // local mediator
     function updateCheckboxOption() {
@@ -143,28 +133,30 @@ define('io.ox/calendar/toolbar', [
     }
 
     function updatePrintLink(baton) {
-        if (baton.app.perspective.getName() !== 'list') return;
+        if (baton.app.perspective && baton.app.perspective.getName() !== 'list') return;
         var link = this.$el.find('[data-name="print"]');
         link.toggleClass('disabled', baton.data && _.isEmpty(baton.data));
     }
 
     function print(baton, e) {
         e.preventDefault();
-        if (baton.app.perspective.getName() === 'list') {
+        if (baton.app.perspective && baton.app.perspective.getName() === 'list') {
             if (!baton.data || _.isEmpty(baton.data)) return;
-            actions.invoke('io.ox/calendar/detail/actions/print-appointment', null, baton);
+            actionsUtil.invoke('io.ox/calendar/detail/actions/print-appointment', baton);
         } else {
-            actions.invoke('io.ox/calendar/detail/actions/print', null, ext.Baton({ app: baton.app, window: baton.app.getWindow() }));
+            actionsUtil.invoke('io.ox/calendar/detail/actions/print', ext.Baton({ app: baton.app, window: baton.app.getWindow() }));
         }
     }
 
     // view dropdown
-    ext.point('io.ox/calendar/classic-toolbar').extend({
+    ext.point('io.ox/calendar/toolbar/links').extend({
         id: 'view-dropdown',
         index: 10000,
+        custom: true,
         draw: function (baton) {
+
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li', attributes: { role: 'presentation' } })
+            var dropdown = new Dropdown({ el: this, caret: true, model: baton.app.props, label: gt('View') })
             .group(gt('Layout'))
             .option('layout', 'week:day', gt('Day'), { radio: true, group: true });
             if (_.device('!smartphone')) dropdown.option('layout', 'week:workweek', gt('Workweek'), { radio: true, group: true });
@@ -193,13 +185,13 @@ define('io.ox/calendar/toolbar', [
                 .link('print', gt('Print'), print.bind(null, baton));
             }
 
-            this.append(
-                dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
-            );
+            dropdown.render().$el.addClass('dropdown pull-right').attr('data-dropdown', 'view');
 
-            updatePrintLink.call(dropdown, baton);
-            updateCheckboxOption.call(dropdown);
-            updateColorOption.call(dropdown);
+            setTimeout(function () {
+                updatePrintLink.call(dropdown, baton);
+                updateCheckboxOption.call(dropdown);
+                updateColorOption.call(dropdown);
+            }, 0);
         }
     });
 
@@ -209,68 +201,61 @@ define('io.ox/calendar/toolbar', [
         index: 10000,
         setup: function (app) {
 
-            var toolbarView = new Toolbar({ title: app.getTitle(), tabindex: 0 });
+            var toolbarView = new ToolbarView({ point: 'io.ox/calendar/toolbar/links', title: app.getTitle() });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                toolbarView.render().$el
+                toolbarView.$el
             );
 
-            function updateCallback($toolbar) {
-                toolbarView.replaceToolbar($toolbar).initButtons();
-            }
-
-            app.updateToolbar = _.debounce(function (list) {
-                if (!list) return;
-                // extract single object if length === 1
-                if (list.length === 1) {
-                    list = list[0];
-                    // add flags to draw items correctly
-                    list.flags = this.listView.selection.getNode(this.listView.selection.get()).attr('data-flags') || '';
-                } else if (list.length > 1) {
-                    // add flags
-                    list = _(list).map(function (item) {
-                        return _.extend(item, { flags: app.listView.selection.getNode(util.cid(item)).attr('data-flags') || '' });
+            // selection is array of strings
+            app.updateToolbar = function (selection) {
+                var options = { data: [], models: [], folder_id: this.folder.get(), app: this },
+                    list = selection.map(_.cid);
+                toolbarView.setSelection(list, function () {
+                    if (!list.length || list.length > 100) return options;
+                    return api.getList(list).pipe(function (models) {
+                        // reapply bad solution from the fix for bug 57305
+                        // we should never access the DOM to get fresh data
+                        _(models).each(function (model) {
+                            var flags = options.app.listView.selection.getNode(model.cid).attr('data-flags') || '';
+                            model.set('flags', flags.split(','));
+                        });
+                        options.models = models;
+                        options.data = _(models).invoke('toJSON');
+                        return options;
                     });
-                }
-                // disable visible buttons
-                toolbarView.disableButtons();
-                // draw toolbar
-                var $toolbar = toolbarView.createToolbar(),
-                    baton = ext.Baton({ $el: $toolbar, data: list, app: app }),
-                    ret = ext.point('io.ox/calendar/classic-toolbar').invoke('draw', $toolbar, baton);
-                $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
-            }, 10);
+                });
+            };
+
+            app.forceUpdateToolbar = function (selection) {
+                toolbarView.selection = null;
+                this.updateToolbar(selection);
+            };
         }
     });
-
-    function prepareUpdateToolbar(app) {
-        var perspective = app.perspective,
-            list = perspective && perspective.getName() === 'list' ? app.listView.selection.get() : {};
-        list = _(list).map(function (item) {
-            if (_.isString(item)) return util.cid(item);
-            return item;
-        });
-        app.updateToolbar(list);
-    }
 
     ext.point('io.ox/calendar/mediator').extend({
         id: 'update-toolbar',
         index: 10200,
         setup: function (app) {
-            app.updateToolbar();
+            app.updateToolbar([]);
             // update toolbar on selection change
             app.listView.on('selection:change', function () {
-                prepareUpdateToolbar(app);
+                app.updateToolbar(getSelection(app));
             });
             // folder change
             app.on('folder:change', function () {
-                prepareUpdateToolbar(app);
+                app.updateToolbar(getSelection(app));
             });
             app.getWindow().on('change:perspective change:initialPerspective', function () {
-                _.defer(prepareUpdateToolbar, app);
+                _.defer(function () { app.forceUpdateToolbar(getSelection(app)); });
             });
         }
     });
+
+    function getSelection(app) {
+        return app.perspective && app.perspective.getName() === 'list' ? app.listView.selection.get() : [];
+    }
 
     // bottom toolbar
     ext.point('io.ox/calendar/mediator').extend({

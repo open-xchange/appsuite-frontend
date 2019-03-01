@@ -153,11 +153,20 @@
         }
     }
 
-    .dropdown {
-        display: inline-block;
-        position: static;
-        line-height: 45px;
-        margin-left: 5px;
+    .inline-toolbar {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row;
+        height: 48px;
+        > li > a {
+            padding: 4px 24px;
+        }
+        i.fa {
+            font-size: 22px;
+        }
+        .dropdown { line-height: auto; }
     }
 }
 
@@ -173,7 +182,7 @@
     height: @mobile-toolbar-height;
 }
 
-.classic-toolbar, .inline-toolbar, .mobile-navbar {
+.classic-toolbar, .mobile-navbar {
 
     position: absolute;
     top: 0;
@@ -224,6 +233,50 @@
     & > li.pull-right {
         float: right;
         & > .dropdown-menu { right: 4px; }
+    }
+
+    .align-right > & {
+        display: flex;
+        justify-content: flex-end;
+        li.align-left + li:not(.align-left) {
+            margin-left: auto;
+        }
+    }
+}
+
+/* introduce with 7.10.2 */
+.inline-toolbar {
+
+    padding: 0;
+    margin: 8px 8px 0 -8px;
+    // min height to avoid flicker
+    min-height: 32px;
+    clear: both;
+    .user-select(none);
+
+    & > li {
+        display: inline-block;
+        white-space: nowrap;
+        margin-right: 8px;
+        list-style-type: none;
+        > a {
+            padding: 4px 8px;
+            display: inline-block;
+            &:focus {
+                background: @brand-primary;
+                color: #fff;
+                outline: 0;
+                text-decoration: none;
+            }
+        }
+        a.disabled {
+            color: @toolbar-link-disabled-color;
+            cursor: not-allowed;
+        }
+    }
+
+    .fa-bars {
+        font-size: 14px;
     }
 }
 

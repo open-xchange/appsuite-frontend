@@ -103,8 +103,44 @@ define([
                 });
             });
 
+            it('should support multiple replacemets', function () {
+
+                var perform1 = sinon.spy(),
+                    perform2 = sinon.spy(),
+                    perform3 = sinon.spy();
+
+                ext.point('ext/core/replacements')
+                    // before original extension
+                    .replace('default', function (original) {
+                        return {
+                            bool: true,
+                            perform: function () {
+                                perform1();
+                                original.perform();
+                            }
+                        };
+                    })
+                    .extend({
+                        string: 'yep',
+                        perform: perform2
+                    })
+                    // after original extension
+                    .replace('default', function (original) {
+                        return {
+                            perform: function () {
+                                perform3();
+                                original.perform();
+                                expect(original.bool, 'bool').to.be.true;
+                                expect(original.string, 'string').to.equal('yep');
+                            }
+                        };
+                    })
+                    .invoke('perform');
+
+                expect(perform1, '#1').to.be.called;
+                expect(perform2, '#2').to.be.called;
+                expect(perform3, '#3').to.be.called;
+            });
         });
-
     });
-
 });

@@ -15,10 +15,8 @@ define('io.ox/core/collection', ['io.ox/core/folder/api', 'io.ox/core/api/user']
 
     'use strict';
 
-    var unresolved = {},
-
-        // helper
-        getRight = function (folder, owner, offset) {
+    // helper
+    var getRight = function (folder, owner, offset) {
             // no folder, no permissions
             if (!folder) return false;
 
@@ -102,7 +100,8 @@ define('io.ox/core/collection', ['io.ox/core/folder/api', 'io.ox/core/api/user']
             }
 
             // pipe/then
-            return $.when(api.multiple(folders), userAPI.get()).pipe(function (array, userData) {
+            return $.when(api.multiple(folders), userAPI.me()).pipe(function (array, userData) {
+
                 var i = 0, item = null, folder = null, hash = _.toHash(array, 'id'), folders = false, items = false, objectPermission;
 
                 for (; i < $l; i++) {
@@ -179,23 +178,34 @@ define('io.ox/core/collection', ['io.ox/core/folder/api', 'io.ox/core/api/user']
     function Collection(list) {
 
         var items = _.compact([].concat(list)),
-            properties = unresolved;
+            properties = {},
+            resolved = false;
 
         // resolve properties (async).
         // Must be done upfront before 'has' checks for example
         this.getProperties = function () {
             return getProperties(items).always(function (props) {
-                properties = props;
+                _.extend(properties, props);
+                resolved = true;
             });
         };
 
+        this.getPromise = function () {
+            return this.getProperties().then(_.identity.bind(null, this));
+        };
+
         this.isResolved = function () {
-            return properties !== unresolved;
+            return resolved;
         };
 
         // avoid too large selections (just freezes browsers)
         this.isLarge = function () {
             return items.length >= 100;
+        };
+
+        // for debugging
+        this.toJSON = function () {
+            return properties;
         };
 
         // check if collection satisfies a set of properties
@@ -208,6 +218,40 @@ define('io.ox/core/collection', ['io.ox/core/folder/api', 'io.ox/core/api/user']
                 return memo && properties[key] === true;
             }, true);
         };
+
+        this.matches = createMatches(properties);
+    }
+
+    Collection.Simple = function (items) {
+
+        var l = items.length,
+            properties = { none: l === 0, some: l > 0, one: l === 1, multiple: l > 1 };
+
+        this.matches = createMatches(properties);
+
+        this.getPromise = function () { return $.when(this); };
+
+        // backward compatibility
+        this.has = function () {
+            return _(arguments).inject(function (memo, key) {
+                return memo && properties[key] === true;
+            }, true);
+        };
+    };
+
+    function createMatches(properties) {
+        return _.memoize(function (str) {
+            var condition = String(str || '').replace(/[a-z:]+/ig, function (match) {
+                return !!properties[match.toLowerCase()];
+            });
+            try {
+                /*eslint no-new-func: 0*/
+                return new Function('return !!(' + condition + ')')();
+            } catch (e) {
+                console.error('Collection.matches', condition, e);
+                return false;
+            }
+        });
     }
 
     // publish class

@@ -13,7 +13,7 @@
 
 define('io.ox/files/listview', [
     'io.ox/core/tk/list',
-    'io.ox/backbone/mini-views/contextmenu-utils',
+    'io.ox/core/tk/list-contextmenu',
     'io.ox/core/extensions',
     'io.ox/files/common-extensions',
     'io.ox/files/api',
@@ -21,63 +21,33 @@ define('io.ox/files/listview', [
     'gettext!io.ox/files',
     'io.ox/files/view-options',
     'less!io.ox/files/style'
-], function (ListView, ContextMenuUtils, ext, extensions, filesAPI, settings, gt) {
+], function (ListView, ContextMenu, ext, extensions, filesAPI, settings, gt) {
 
     'use strict';
 
     var LISTVIEW = 'io.ox/files/listview', ITEM = LISTVIEW + '/item';
 
-    function onContextMenu(e) {
-        ContextMenuUtils.checkKeyboardEvent(e);
-        var view = this;
-        var app = view.app;
-        // the link to render the context menu with it's entries.
-        var link = 'io.ox/core/file/contextmenu/default';
-        // context menu when clicked below the list.
-        // var linkOutsideList = link + '/outsideList'; Disabled for now
-
-        // android sends context events on long tap, but currently we don't want a context menu on smartphones and tablets
-        if (_.device('smartphone') || _.device('android')) { return; }
-
-        var list = view.selection.get();
-        if (!list) return;
-        // turn cids into proper objects
-        var cids = list, models = filesAPI.resolve(cids, false);
-        list = _(models).invoke('toJSON');
-        // extract single object if length === 1
-        var data = list.length === 1 ? list[0] : list;
-
-        return require(['io.ox/core/folder/api']).then(function (folderApi) {
-            var folderId = app.folder.get(),
-                model = folderApi.pool.getModel(folderId);
-
-            var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link/*, linkContextMenuOutsideList: linkOutsideList*/, insideTrash: folderApi.is('trash', model.toJSON()) });
-
-            view.contextMenu.showContextMenu(e, baton);
-        });
-    }
-
     //
     // Extend ListView
     //
 
-    var FileListView = ListView.extend({
+    var FileListView = ListView.extend(ContextMenu).extend({
 
         ref: LISTVIEW,
 
-        initialize: function () {
+        initialize: function (options) {
+
             ListView.prototype.initialize.apply(this, arguments);
-            var view = this;
-            view.contextMenu = arguments[0].contextMenu;
+            this.contextMenu = options.contextMenu;
+            this.$el.addClass('file-list-view');
 
-            view.$el.addClass('file-list-view');
+            updateSettings.call(this);
+            settings.on('change:favorites/infostore', updateSettings.bind(this));
 
-            view.favorites = settings.get('favorites/infostore', []);
-            view.favoriteFiles = settings.get('favoriteFiles/infostore', []);
-            settings.on('change:favorites/infostore', function () {
-                view.favorites = settings.get('favorites/infostore', []);
-                view.favoriteFiles = settings.get('favoriteFiles/infostore', []);
-            });
+            function updateSettings() {
+                this.favorites = settings.get('favorites/infostore', []);
+                this.favoriteFiles = settings.get('favoriteFiles/infostore', []);
+            }
         },
 
         getCompositeKey: function (model) {
@@ -91,7 +61,9 @@ define('io.ox/files/listview', [
             ListView.prototype.onChange.apply(this, arguments);
         },
 
-        onContextMenu: onContextMenu
+        getContextMenuData: function (selection) {
+            return this.app.getContextualData(selection, 'main');
+        }
     });
 
     // we redraw only if a relevant attribute changes (to avoid flickering)

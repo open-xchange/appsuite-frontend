@@ -21,17 +21,13 @@ define('io.ox/contacts/actions/addToPortal', [
     'use strict';
 
     return function (baton) {
+        var data = baton.first();
         widgets.add('stickycontact', {
             plugin: 'contacts',
-            props: {
-                id: baton.data.id,
-                folder_id: baton.data.folder_id,
-                title: baton.data.display_name
-            }
+            props: { id: data.id, folder_id: data.folder_id, title: data.display_name }
         });
         // trigger update event to get redraw of detail views
-        api.trigger('update:' + _.ecid(baton.data), baton.data);
+        api.trigger('update:' + _.ecid(data), data);
         yell('success', gt('This distribution list has been added to the portal'));
     };
-
 });

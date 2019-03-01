@@ -14,24 +14,23 @@
 
 define('io.ox/mail/actions/addToPortal', [
     'io.ox/core/notifications',
+    'io.ox/portal/widgets',
     'gettext!io.ox/mail'
-], function (notifications, gt) {
+], function (notifications, widgets, gt) {
 
     'use strict';
 
     return function (baton) {
-        require(['io.ox/portal/widgets'], function (widgets) {
-            //using baton.data.parent if previewing during compose (forward mail as attachment)
-            widgets.add('stickymail', {
-                plugin: 'mail',
-                props: $.extend({
-                    id: baton.data.id,
-                    folder_id: baton.data.folder_id,
-                    title: baton.data.subject ? baton.data.subject : gt('No subject')
-                }, baton.data.parent || {})
-            });
-            notifications.yell('success', gt('This mail has been added to the portal'));
+        var data = baton.first();
+        // using baton.data.parent if previewing during compose (forward mail as attachment)
+        widgets.add('stickymail', {
+            plugin: 'mail',
+            props: $.extend({
+                id: data.id,
+                folder_id: data.folder_id,
+                title: data.subject ? data.subject : gt('No subject')
+            }, data.parent || {})
         });
+        notifications.yell('success', gt('This email has been added to the portal'));
     };
-
 });
