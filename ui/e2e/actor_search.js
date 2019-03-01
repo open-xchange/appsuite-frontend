@@ -12,11 +12,6 @@ module.exports = {
     // introducing methods
     doSearch(query) {
         I.click('.search-box');
-        //Workaround for clear searchbox
-        //pause();
-        //I.pressKey(['Control', 'a']);
-        //I.pressKey('Backspace');
-        //pause();
         I.waitForElement(this.fields.search);
         I.fillField(this.fields.search, query);
         I.pressKey('Enter');

@@ -203,6 +203,16 @@ class MyHelper extends Helper {
             }
         });
     }
+
+    async createTask(task, options) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        return httpClient.put('/appsuite/api/tasks', task, {
+            params: {
+                action: 'new',
+                session: session
+            }
+        });
+    }
 }
 
 module.exports = MyHelper;

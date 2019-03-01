@@ -37,7 +37,7 @@ Scenario('[C7372] Create new distribution list', function (I, users) {
     I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
     I.clickToolbar('New');
     I.click('Add distribution list');
-    I.waitForVisible('.io-ox-contacts-distrib-window');
+    I.waitForVisible('.floating-window-content .create-distributionlist.container');
     I.fillField('Name', testrailID + ' - ' + timestamp);
     I.fillField('Add contact', users[0].userdata.primaryEmail);
     I.pressKey('Enter');
@@ -50,7 +50,7 @@ Scenario('[C7372] Create new distribution list', function (I, users) {
     I.click('Create list');
     I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
     I.wait(3);
-    I.doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.retry(5).doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
     I.see(testrailID + ' - ' + timestamp);
     I.see('Distribution list with 4 entries');
     I.see(users[0].userdata.primaryEmail);
@@ -261,67 +261,33 @@ Scenario('[C7375] Move a distribution list', async function (I, users) {
     await I.createContact(contact2, { user: users[0] });
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
-    //I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
-    //I.clickToolbar('New');
-    //
-    //I.click('Add distribution list');
-    //
-    //I.waitForVisible('.io-ox-contacts-distrib-window');
-    //I.fillField('Name', testrailID+' - '+timestamp);
-    //I.fillField('Add contact', users[0].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.fillField('Add contact', users[1].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.fillField('Add contact', users[2].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.fillField('Add contact', users[3].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.click('Create list');
-    //
     I.click('Add new address book');
-
     I.waitForElement('.modal-open [data-point="io.ox/core/folder/add-popup"]');
     I.fillField('[placeholder="New address book"][type="text"]', testrailID);
     I.click('Add');
-
     I.waitForDetached('.modal-open [data-point="io.ox/core/folder/add-popup"]');
     I.doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-
     I.click('.detail-view-app [data-action="more"]');
-
-
     I.click('.dropdown.open [data-ref="io.ox/contacts/actions/move"]');
-
     I.click('.modal [data-id="virtual/flat/contacts/private"] div.folder-arrow');
-
     I.click('.modal [aria-label="' + testrailID + '"]');
-
     I.wait('1');
     I.click('div.modal-footer > button.btn.btn-primary');
-
     I.click('.floating-window-content [aria-label="Close"][type="button"]');
-
-
     I.selectFolder('Contacts');
     I.wait(5);
     I.dontSee('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-
     I.selectFolder(testrailID);
-
     I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-
+    I.retry(5).click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
     I.see(testrailID + ' - ' + timestamp);
     I.see('Distribution list with 4 entries');
     I.see(users[0].userdata.primaryEmail);
     I.see(users[1].userdata.primaryEmail);
     I.see(users[2].userdata.primaryEmail);
     I.see(users[3].userdata.primaryEmail);
-    I.click('.floating-window-content [aria-label="Close"][type="button"]');
-
     I.logout();
 });
 
@@ -433,23 +399,6 @@ Scenario('[C7373] Modify distribution list members', async function (I, users) {
 
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
-    //I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
-    //I.clickToolbar('New');
-    //
-    //I.click('Add distribution list');
-    //
-    //I.waitForVisible('.io-ox-contacts-distrib-window');
-    //I.fillField('Name', testrailID+' - '+timestamp);
-    //I.fillField('Add contact', users[0].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.fillField('Add contact', users[1].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.fillField('Add contact', users[2].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.fillField('Add contact', users[3].userdata.primaryEmail);
-    //I.pressKey('Enter');
-    //I.click('Create list');
-    //
     I.wait(2);
     I.doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
 
