@@ -394,7 +394,7 @@ define('io.ox/files/actions', [
             if (isTrash(baton)) return false;
             if (fromMailCompose(baton)) return false;
             if (isEmpty(baton)) return false;
-            if (hasStatus('locked', baton)) return false;
+            if (!hasStatus('!locked', baton)) return false;
             return lockMatches(baton);
         },
         action: function (baton) {
