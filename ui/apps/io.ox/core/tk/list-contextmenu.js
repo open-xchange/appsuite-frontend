@@ -49,7 +49,7 @@ define('io.ox/core/tk/list-contextmenu', [
             if (_.device('smartphone')) return;
             if (this.contextMenu && this.contextMenu.$el.hasClass('open')) return;
             this.renderContextMenu();
-            this.contextMenu.$menu.css({ top: pos.top, left: pos.left, bottom: 'auto' });
+            this.contextMenu.$menu.data({ top: pos.top, left: pos.left });
             return renderItems.call(this);
         },
 

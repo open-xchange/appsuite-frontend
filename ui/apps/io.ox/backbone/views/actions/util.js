@@ -429,6 +429,37 @@ define('io.ox/backbone/views/actions/util', [
             return util.invoke(action, baton, true).pipe(function (state) {
                 return state ? baton : $.Deferred().reject();
             });
+        },
+
+        addBackdrop: function ($el) {
+
+            var $toggle = $el.find('.dropdown-toggle'),
+                $menu = $el.find('.dropdown-menu'),
+                $backdrop = $('<div class="smart-dropdown-container dropdown open">').on('click contextmenu', toggle),
+                className = $el.attr('class');
+
+            // listen for click event directly on menu for proper backdrop support
+            $menu.on('click', 'a[data-action]', util.invokeByEvent);
+            $el.on({ 'show.bs.dropdown': show, 'hide.bs.dropdown': hide, 'dispose': dispose });
+
+            function show() {
+                $backdrop.append($menu).addClass(className).appendTo('body');
+                adjustPosition($toggle, $menu);
+            }
+
+            function hide() {
+                $backdrop.detach();
+                $menu.insertAfter($toggle);
+            }
+
+            function toggle() {
+                $toggle.dropdown('toggle');
+                return false;
+            }
+
+            function dispose() {
+                $toggle = $menu = $backdrop = null;
+            }
         }
     };
 
@@ -461,6 +492,28 @@ define('io.ox/backbone/views/actions/util', [
 
     function getTitle(arg, baton) {
         return _.isFunction(arg) ? arg(baton) : arg;
+    }
+
+    // simple but sufficient so far
+    function adjustPosition($toggle, $ul) {
+        var data = $ul.data(),
+            pos = { right: 'auto', bottom: 'auto' },
+            menu = $ul.get(0).getBoundingClientRect(),
+            vh = $(window).height() - 16,
+            vw = $(window).width() - 16;
+        if (data.top !== undefined) {
+            // use predefined position, e.g. originating from a right click
+            pos.top = data.top;
+            pos.left = data.left;
+        } else {
+            var box = $toggle.get(0).getBoundingClientRect();
+            pos.top = box.top + box.height;
+            pos.left = $ul.hasClass('dropdown-menu-right') ? box.right - menu.width : box.left;
+        }
+        // ensure proper position inside viewport
+        pos.top = Math.max(0, Math.min(pos.top, vh - menu.height));
+        pos.left = Math.max(0, Math.min(pos.left, vw - menu.width));
+        $ul.css(pos);
     }
 
     $.fn.addActionTooltip = function (title) {

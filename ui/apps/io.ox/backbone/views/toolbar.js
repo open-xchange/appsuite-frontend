@@ -121,10 +121,11 @@ define('io.ox/backbone/views/toolbar', [
                 );
             // close tooltip when opening the dropdown
             $dropdown.on('shown.bs.dropdown', function () { $(this).find('a').tooltip('hide'); });
-            // $ul is descendent of <body> for smartphones
-            // so events bubble differently
+            // $ul is descendent of <body> for smartphones, so events bubble differently
             if (_.device('smartphone')) {
                 $ul.on('click', 'a', $.proxy(util.invokeByEvent, this));
+            } else {
+                util.addBackdrop($dropdown);
             }
             $dropdown.insertAfter($lo.last());
             // replace icons by text

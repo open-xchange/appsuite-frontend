@@ -39,10 +39,13 @@ define('io.ox/backbone/views/action-dropdown', [
             util.renderDropdown(this.$el, null, this.options);
             this.$toggle = this.$('.dropdown-toggle');
             this.$menu = this.$('.dropdown-menu');
-            // listen for click event directly on menu for proper backdrop support
-            this.$menu.on('click', 'a[data-action]', util.invokeByEvent);
             if (this.options.data) this.setData(this.options.data);
-            if (this.options.backdrop) addBackdrop.call(this);
+            if (this.options.backdrop) {
+                util.addBackdrop(this.$el);
+            } else {
+                // listen for click event directly on menu for proper backdrop support
+                this.$menu.on('click', 'a[data-action]', util.invokeByEvent);
+            }
         },
 
         render: function (baton) {
@@ -69,43 +72,6 @@ define('io.ox/backbone/views/action-dropdown', [
 
         setData: util.setData
     });
-
-    function addBackdrop() {
-
-        this.$backdrop = $('<div class="smart-dropdown-container dropdown open">')
-            .on('click contextmenu', $.proxy(toggle, this));
-
-        this.$el.on({
-            'show.bs.dropdown': $.proxy(show, this),
-            'hide.bs.dropdown': $.proxy(hide, this)
-        });
-
-        function show() {
-            this.$backdrop.append(this.$menu).addClass(this.el.className).appendTo('body');
-            adjustPosition(this.$menu);
-        }
-
-        function hide() {
-            this.$backdrop.detach();
-            this.$menu.insertAfter(this.$toggle);
-        }
-
-        function toggle() {
-            this.$toggle.dropdown('toggle');
-            return false;
-        }
-    }
-
-    // simple but sufficient so far
-    function adjustPosition($ul) {
-        var bounds = $ul.get(0).getBoundingClientRect(),
-            vw = $(window).width() - 16,
-            vh = $(window).height() - 16,
-            pos = {};
-        pos.top = Math.min(bounds.top, vh - bounds.height);
-        pos.left = Math.min(bounds.left, vw - bounds.width);
-        $ul.css(pos);
-    }
 
     return ActionDropdownView;
 });
