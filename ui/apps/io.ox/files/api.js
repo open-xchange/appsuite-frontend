@@ -273,7 +273,7 @@ define('io.ox/files/api', [
         },
 
         types: {
-            image: (/^(gif|bmp|tif?f|jpe?g|gmp|png|psd)$/),
+            image: (/^(gif|bmp|tif?f|jpe?g|gmp|png|psd|heic?f?)$/),
             audio: (/^(aac|mp3|m4a|m4b|ogg|opus|wav)$/),
             video: (/^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm|wmv)$/),
             vcf:   (/^(vcf)$/),
@@ -340,6 +340,9 @@ define('io.ox/files/api', [
         'tif':  'image/tiff',
         'tiff': 'image/tiff',
         'bmp':  'image/bmp',
+        'heic': 'image/heic',
+        'heif': 'image/heif',
+
         // audio
         'mp3':  'audio/mpeg',
         'ogg':  'audio/ogg',

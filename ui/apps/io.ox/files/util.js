@@ -280,7 +280,7 @@ define('io.ox/files/util', [
          */
         previewMode: function (file) {
 
-            var image = '(gif|png|jpe?g|bmp|tiff)',
+            var image = '(gif|png|jpe?g|bmp|tiff|heic?f?)',
                 audio = '(mpeg|m4a|m4b|mp3|ogg|oga|opus|x-m4a)',
                 video = '(mp4|m4v|ogv|ogm|webm)',
                 office = '(csv|xls|xla|xlb|xlt|ppt|pps|doc|dot|xlsx|xlsm|xltx|xltm|xlam|pptx|pptm|ppsx|ppsm|ppa|ppam|pot|potx|potm|docx|docm|dotx|dotm|odc|odb|odf|odg|otg|odi|odp|otp|ods|ots|odt|odm|ott|oth|pdf|rtf)',

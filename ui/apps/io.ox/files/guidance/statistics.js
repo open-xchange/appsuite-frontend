@@ -26,6 +26,8 @@ define('io.ox/files/guidance/statistics', [
             'tif':  'Images',
             'tiff': 'Images',
             'bmp':  'Images',
+            'heic': 'Images',
+            'heif': 'Images',
 
             //audio
             'mp3':  'Audio',

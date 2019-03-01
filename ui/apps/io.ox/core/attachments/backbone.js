@@ -44,7 +44,7 @@ define('io.ox/core/attachments/backbone', [
     };
 
     var regIsDocument = /\.((?:doc|dot|pot|pps|ppt|xls|xlt)[mx]?|o[dt][cfgipst]|odm|pdf|ppam?|rtf|txt|xlam?|xlsb)$/i,
-        regIsImage = /\.(gif|bmp|jpe?g|gmp|png|psd|tif?f)$/i;
+        regIsImage = /\.(gif|bmp|jpe?g|gmp|png|psd|tif?f|heic?f?)$/i;
 
     var previewFetcher = {
         localFile: function (model) {

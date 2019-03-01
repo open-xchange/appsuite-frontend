@@ -140,7 +140,7 @@ define('io.ox/mail/compose/inline-images', [
 
                 popup.busy();
 
-                if (!(/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(file.val())) {
+                if (!(/\.(gif|bmp|tiff|jpe?g|gmp|png|heic?f?)$/i).test(file.val())) {
                     notifications.yell('error', gt('Please select a valid image File to insert'));
                     popup.idle();
                     def.reject();
