@@ -43,7 +43,6 @@ Scenario('Open the help app in a modal', async function (I) {
     I.login('app=io.ox/mail');
     I.waitForVisible({ css: '[data-app-name="io.ox/mail"]' }, 5);
 
-    I.waitForVisible({ css: 'a[aria-label="Compose new email"]' }, 5);
     I.click('Compose', '.classic-toolbar');
     I.retry().waitForVisible('.io-ox-mail-compose-window', 5);
     I.see('Compose', '.io-ox-mail-compose-window');
