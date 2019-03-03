@@ -177,7 +177,7 @@ define('io.ox/backbone/views/actions/util', [
             .append(function () {
                 var icon = item.link.icon,
                     title = getTitle(item.link.title || item.link.label, baton),
-                    tooltip = (item.link.tooltip || (icon && title)) && _.device('!smartphone'),
+                    tooltip = _.device('!smartphone') && (item.link.tooltip || (icon && title)),
                     $a = $('<a href="#" role="button" draggable="false" tabindex="-1">')
                     .data({ baton: baton })
                     .attr({ 'data-action': item.link.ref, 'title': title });
