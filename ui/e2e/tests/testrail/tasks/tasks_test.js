@@ -261,7 +261,7 @@ Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
     I.dontSeeElement({ css: '[title="High priority"]' });
     I.dontSeeElement({ css: '[title="Low priority"]' });
     I.see('Not started');
-    I.seeElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');    
+    I.seeElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');
     I.logout();
 });
 Scenario('[C7732] Create a Task in a shared folder without rights', async function (I, users) {
@@ -522,10 +522,13 @@ Scenario('[C7743] Move single Task', async function (I, users) {
     I.click('//*[@class="classic-toolbar"]/*[@class="dropdown"][2]');
     I.waitForElement('.smart-dropdown-container.open .dropdown-menu');
     I.clickToolbar('Move');
-    I.click('.modal [data-id="virtual/flat/tasks/private"] div.folder-arrow');
-    I.click('.modal [aria-label="' + testrailID + '"]');
-    I.wait('0.2');
-    I.click('div.modal-footer > button.btn.btn-primary');
+    I.waitForText('Move', 5, '.modal-open .modal-title');
+    I.retry(3).click('.modal [data-id="virtual/flat/tasks/private"] div.folder-arrow');
+    I.waitForElement('.modal-dialog .open.folder.section', 5);
+    I.retry(3).click('.modal [aria-label="' + testrailID + '"]');
+    I.waitForElement('.modal .selected[aria-label="' + testrailID + '"]');
+    I.waitForEnabled('.modal-footer button.btn-primary');
+    I.click('Move', 'div.modal-footer');
     I.waitForDetached('.modal');
     I.selectFolder(testrailID);
     I.retry(5).click('[aria-label="C7743, ."]');
@@ -635,18 +638,22 @@ Scenario('[C7746] Move several tasks to an other folder at the same time', async
     I.click('//*[@class="classic-toolbar"]/*[@class="dropdown"]');
     I.waitForElement('.smart-dropdown-container.open .dropdown-menu');
     I.clickToolbar('Move');
-    I.click('.modal [data-id="virtual/flat/tasks/private"] div.folder-arrow');
-    I.click('.modal [aria-label="' + testrailID + '"]');
-    I.wait('0.2');
-    I.click('div.modal-footer > button.btn.btn-primary');
+    I.waitForText('Move', 5, '.modal-open .modal-title');
+    I.retry(3).click('.modal [data-id="virtual/flat/tasks/private"] div.folder-arrow');
+    I.waitForElement('.modal-dialog .open.folder.section', 5);
+    I.retry(3).click('.modal [aria-label="' + testrailID + '"]');
+    I.waitForElement('.modal .selected[aria-label="' + testrailID + '"]');
+    I.waitForEnabled('.modal-footer button.btn-primary');
+    I.click('Move', 'div.modal-footer');
     I.waitForDetached('.modal');
     I.selectFolder(testrailID);
     //Dirty SHIT ! Need a helper for this
 
     for (let i = 0; i < numberOfTasks; i++) {
         let id = testrailID + ' - ' + i;
+        I.waitForElement('[role="navigation"][aria-label="Task list"] [aria-label="' + testrailID + ' - ' + i + ', ."]', 5);
         I.click('[role="navigation"][aria-label="Task list"] [aria-label="' + testrailID + ' - ' + i + ', ."]');
-        I.waitForElement('[role="navigation"][aria-label="Task list"] [aria-label="' + testrailID + ' - ' + i + ', ."].selected');
+        I.waitForElement('[role="navigation"][aria-label="Task list"] [aria-label="' + testrailID + ' - ' + i + ', ."].selected', 5);
         I.waitForElement('.tasks-detailview', 5);
         I.waitForText(id, 5, '.tasks-detailview .title');
     }
@@ -674,9 +681,44 @@ Scenario('[C7747] Add an attachment to a Task', async function (I, users) {
     I.waitForElement('.file.io-ox-core-tk-attachment', 5);
     I.seeNumberOfElements('.file.io-ox-core-tk-attachment', 1);
     I.click('Save');
-    I.waitForText(testrailID, 5, '.tasks-detailview .title');
-    I.waitForText('Attachments', 5, '.tasks-detailview .attachments');
-    I.waitForText('testdocument.odt', 5, '.tasks-detailview .attachment-item [role="button"]');
+    I.waitForText(testrailID, 10, '.tasks-detailview .title');
+    I.waitForText('Attachments', 10, '.tasks-detailview .attachments');
+    I.waitForText('testdocument.odt', 10, '.tasks-detailview .attachment-item [role="button"]');
+    I.logout();
+});
+Scenario('[C7748] Remove an attachment from a Task', async function (I, users) {
+    let testrailID = 'C7747';
+    let testrailName = 'Remove an attachment from a Task';
+    const taskDefaultFolder = await I.getDefaultFolder('tasks', { user: users[0] });
+    const task = {
+        title: testrailID,
+        folder_id: taskDefaultFolder,
+        note: testrailName
+
+    };
+    const createTask = await I.createTask(task, { user: users[0] });
+    let taskID = createTask.data.data.id
+    I.addAttachment({ user: users[0] }, 'e2e/tests/testrail/files/mail/compose/testdocument.odt', '4', taskDefaultFolder, taskID);
+    I.login('app=io.ox/tasks', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    I.waitForElement('.tasks-detailview', 5);
+    I.waitForText(testrailID, 10, '.tasks-detailview .title');
+    I.waitForText('Attachments', 10, '.tasks-detailview .attachments');
+    I.waitForText('testdocument.odt', 10, '.tasks-detailview .attachment-item [role="button"]');
+    I.clickToolbar('Edit');
+    I.waitForElement('[data-app-name="io.ox/tasks/edit"]', 5);
+    I.waitForElement('.floating-window-content .container.io-ox-tasks-edit', 5);
+    I.waitForElement('.file.io-ox-core-tk-attachment', 5);
+    I.seeNumberOfElements('.file.io-ox-core-tk-attachment', 1);
+    I.click('.io-ox-core-tk-attachment-list .remove');
+    I.waitForDetached('.file.io-ox-core-tk-attachment', 5);
+    I.seeNumberOfElements('.file.io-ox-core-tk-attachment', 0);
+    I.click('Save');
+    I.waitForDetached('.io-ox-tasks-edit', 5);
+    I.waitForElement('.tasks-detailview', 5);
+    I.waitForText(testrailID, 10, '.tasks-detailview .title');
+    I.dontSee('Attachments', '.tasks-detailview');
+    I.dontSee('testdocument.odt', '.tasks-detailview');
     I.logout();
 });
 Scenario('[C7749] Edit existing Task as participant', async function (I, users) {

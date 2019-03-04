@@ -207,27 +207,6 @@ Scenario('[C7380] - Send saved draft mail', function (I, users) {
     I.see(testrailId + ' - ' + timestamp);
     I.logout();
 });
-
-Scenario('[C8816] - Cancel mail compose', function (I, users) {
-
-    const [user] = users;
-    //define testrail ID
-    it('(C8816) Cancel mail compose');
-
-    // 0) log in to settings and set compose mode to html
-    I.login('app=io.ox/mail', { user });
-    I.waitForVisible('.io-ox-mail-window');
-    I.openApp('Mail');
-
-    // 1.2) continue opening mail compose
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
-
-    I.click('Discard');
-    I.dontSeeElement('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-});
-
 Scenario('[C7385] - Write mail to BCC recipients', function (I, users) {
     //define testrail ID
     it('(C7385) Write mail to BCC recipients');
@@ -792,24 +771,6 @@ Scenario('[C7406] - Delete several E-Mails', function (I, users) {
     I.logout();
 });
 
-Scenario('C1337 - import mail', async function (I, users) {
-    //define testrail ID
-    it('(C7406) Delete several E-Mails');
-    let [user] = users;
-    //var testrailID = 'C7406';
-    //var timestamp = Math.round(+new Date() / 1000);
-
-
-    I.importMail({ user: users[0] }, 'default0/INBOX', 'e2e/tests/testrail/files/mail/mail_testcases_C101616_C101616.eml');
-    //console.log(data)
-
-
-    // 0) log in to settings and set compose mode to html
-    I.login('app=io.ox/mail', { user });
-    I.waitForVisible('.io-ox-mail-window');
-
-
-});
 
 Scenario('[C101615] - Emojis', async function (I, users) {
     //define testrail ID
