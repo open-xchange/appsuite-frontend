@@ -331,7 +331,6 @@ define('io.ox/core/tk/contenteditable-editor', [
         var cursorPosition = getCursorPosition(ed);
 
         if (cursorPosition.pos >= cursorPosition.bottom) {
-            console.log(cursorPosition);
             cursorPosition.scrollable.animate({ scrollTop: cursorPosition.top }, animationSpeed);
         }
     }
