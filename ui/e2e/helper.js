@@ -213,6 +213,25 @@ class MyHelper extends Helper {
             }
         });
     }
+    async haveFile(options, path, folder_id) {
+        let form = new FormData();
+        form.append('file', fs.createReadStream(path));
+        form.append('json', JSON.stringify({
+            folder_id: folder_id,
+            description: ''
+        }));
+        const { httpClient, session } = await util.getSessionForUser(options);
+        return httpClient.post('/appsuite/api/files', form, {
+            params: {
+                action: 'new',
+                session: session,
+                extendedResponse: true,
+                force_json_response: true,
+                try_add_version: true
+            },
+            headers: form.getHeaders()
+        });
+    }
 }
 
 module.exports = MyHelper;

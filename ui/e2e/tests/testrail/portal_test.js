@@ -28,12 +28,14 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
     const moment = require('moment');
     let testrailID = 'C7471';
     let testrailName = 'Open items via portal-tile';
+    //Create Mail in Inbox
     await I.haveMail({
         from: [[users[0].userdata.display_name, users[0].userdata.primaryEmail]],
         sendtype: 0,
         subject: testrailID + ' - ' + testrailName,
         to: [[users[0].userdata.display_name, users[0].userdata.primaryEmail]]
     });
+    //Create Task
     const taskDefaultFolder = await I.getDefaultFolder('tasks', { user: users[0] });
     const task = {
         title: testrailID,
@@ -49,7 +51,7 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
     };
     I.createTask(task, { user: users[0] });
 
-
+    //Create Contact
     const contact = {
         display_name: '' + testrailID + ', ' + testrailID + '',
         folder_id: await I.getDefaultFolder('contacts', { user: users[0] }),
@@ -59,6 +61,9 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
 
     };
     I.createContact(contact, { user: users[0] });
+    //Upload File to Infostore
+    const infostoreFolderID = await I.getDefaultFolder('infostore', { user: users[0] });
+    I.haveFile({ user: users[0] }, 'e2e/tests/testrail/files/mail/compose/testdocument.odt', infostoreFolderID);
 
     I.login('app=io.ox/portal', { user: users[0] });
     I.waitForVisible('.io-ox-portal-window');
@@ -91,5 +96,14 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
     I.waitForText('In 2 days', 5, '.io-ox-sidepopup-pane .birthday .distance');
     I.click('.item', '.widget[aria-label="Birthdays"]');
     I.waitForDetached('.io-ox-sidepopup', 5);
+
+    //Verify latest files
+    I.waitForElement('.widget[aria-label="My latest files"] .item', 5);
+    I.click('.item', '.widget[aria-label="My latest files"]');
+    I.waitForElement('.io-ox-viewer');
+    I.waitForText('testdocument.odt', 5, '.io-ox-viewer .filename-label');
+    I.waitForText('testdocument.odt', 5, '.io-ox-viewer .viewer-sidebar-pane .file-name a');
+    I.click('.io-ox-viewer [data-ref="io.ox/core/viewer/actions/toolbar/close"]');
+    I.waitForDetached('.io-ox-viewer');
     I.logout();
 });
