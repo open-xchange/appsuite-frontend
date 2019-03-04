@@ -105,7 +105,7 @@ Scenario('[C7728] Create simple Task', async function (I) {
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
 
     I.clickToolbar('New');
-    I.waitForVisible('.io-ox-tasks-edit-window');
+    I.waitForVisible('.io-ox-tasks-edit-window', 5);
 
     I.fillField('Subject', testrailID);
     I.fillField('Description', testrailName);
@@ -261,8 +261,7 @@ Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
     I.dontSeeElement({ css: '[title="High priority"]' });
     I.dontSeeElement({ css: '[title="Low priority"]' });
     I.see('Not started');
-    I.seeElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');
-    
+    I.seeElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');    
     I.logout();
 });
 Scenario('[C7732] Create a Task in a shared folder without rights', async function (I, users) {
@@ -678,5 +677,240 @@ Scenario('[C7747] Add an attachment to a Task', async function (I, users) {
     I.waitForText(testrailID, 5, '.tasks-detailview .title');
     I.waitForText('Attachments', 5, '.tasks-detailview .attachments');
     I.waitForText('testdocument.odt', 5, '.tasks-detailview .attachment-item [role="button"]');
+    I.logout();
+});
+Scenario('[C7749] Edit existing Task as participant', async function (I, users) {
+    let testrailID = 'C7749';
+    let testrailName = 'Edit existing Task as participant';
+    const taskDefaultFolder = await I.getDefaultFolder('tasks', { user: users[0] });
+    const task = {
+        title: testrailID,
+        status: '1',
+        percent_completed: '0',
+        folder_id: taskDefaultFolder,
+        recurrence_type: '0',
+        full_time: true,
+        private_flag: false,
+        timezone: 'Europe/Berlin',
+        notification: true,
+        note: testrailName,
+        participants: [{
+            id: users[1].userdata.id,
+            type: 1
+        }]
+    };
+    I.createTask(task, { user: users[0] });
+    I.login('app=io.ox/tasks', { user: users[1] });
+    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    I.waitForText(testrailID, 5, '.window-body');
+    I.waitForText(testrailID, 5, '.tasks-detailview .title');
+    I.clickToolbar('Edit');
+    I.waitForElement('[data-app-name="io.ox/tasks/edit"]', 5);
+    I.waitForElement('.floating-window-content .container.io-ox-tasks-edit', 5);
+    I.fillField('Subject', testrailID + ' - 2');
+    I.fillField('Description', testrailName + ' - 2');
+    I.click('Save');
+    I.waitForText(testrailID + ' - 2', 5, '.window-body');
+    I.waitForText(testrailID + ' - 2', 5, '.tasks-detailview .title');
+    I.logout();
+
+    I.login('app=io.ox/tasks', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    I.waitForText(testrailID + ' - 2', 5, '.window-body');
+    I.waitForText(testrailID + ' - 2', 5, '.tasks-detailview .title');
+    I.logout();
+});
+Scenario('[C7750] Edit existing Task in a shared folder', async function (I, users) {
+    let testrailID = 'C7750';
+    let testrailName = 'Edit existing Task in a shared folder';
+    //const taskDefaultFolder = await I.getDefaultFolder('tasks', { user: users[0] });
+    const folder = {
+        module: 'tasks',
+        subscribed: 1,
+        title: testrailID,
+        permissions: [
+            {
+                bits: 403710016,
+                entity: users[0].userdata.id,
+                group: false
+            }, {
+                bits: 403710016,
+                entity: users[1].userdata.id,
+                group: false
+            }
+        ]
+    };
+    const createFolder = await I.createFolder(folder, '2', { user: users[0] });
+    let folderID = createFolder.data.data;
+
+    const task = {
+        title: testrailID,
+        status: '1',
+        percent_completed: '0',
+        folder_id: folderID,
+        recurrence_type: '0',
+        full_time: true,
+        private_flag: false,
+        timezone: 'Europe/Berlin',
+        notification: true,
+        note: testrailName
+    };
+    I.createTask(task, { user: users[0] });
+
+    I.login('app=io.ox/tasks', { user: users[1] });
+    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    I.selectFolder(testrailID);
+    I.waitForText(testrailID, 5, '.window-body');
+    I.waitForText(testrailID, 5, '.tasks-detailview .title');
+    I.clickToolbar('Edit');
+    I.waitForElement('[data-app-name="io.ox/tasks/edit"]', 5);
+    I.waitForElement('.floating-window-content .container.io-ox-tasks-edit', 5);
+    I.fillField('Subject', testrailID + ' - 2');
+    I.fillField('Description', testrailName + ' - 2');
+    I.click('Save');
+    I.waitForText(testrailID + ' - 2', 5, '.window-body');
+    I.waitForText(testrailID + ' - 2', 5, '.tasks-detailview .title');
+    I.logout();
+
+    I.login('app=io.ox/tasks', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    I.selectFolder(testrailID);
+    I.waitForText(testrailID + ' - 2', 5, '.window-body');
+    I.waitForText(testrailID + ' - 2', 5, '.tasks-detailview .title');
+    I.logout();
+});
+Scenario('[C7751] Close Task with the X', async function (I) {
+    let testrailID = 'C7751';
+    let testrailName = 'Close Task with the X';
+    I.login('app=io.ox/tasks');
+    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-tasks-edit-window');
+    I.waitForElement('.floating-window-content .btn-primary[disabled=""][data-action="save"]', 5);
+    I.waitForElement('.io-ox-tasks-edit-window[data-app-name="io.ox/tasks/edit"]', 5);
+    I.click('.floating-window-content button[data-action="close"]');
+    I.waitForDetached('.floating-window-content .btn-primary[disabled=""][data-action="save"]', 5);
+    I.waitForDetached('.io-ox-tasks-edit-window[data-app-name="io.ox/tasks/edit"]', 5);
+    I.logout();
+});
+Scenario('[C7752] Close Task with the X after adding some information', async function (I) {
+    let testrailID = 'C7752';
+    let testrailName = 'Close Task with the X after adding some information';
+    I.login('app=io.ox/tasks');
+    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-tasks-edit-window');
+    I.fillField('Subject', testrailID);
+    I.fillField('Description', testrailName);
+    I.click('.floating-window-content button[data-action="close"]');
+    I.waitForElement('.io-ox-dialog-wrapper [role="alertdialog"]', 5);
+    I.waitForText('Do you really want to discard your changes?', 5, '.io-ox-dialog-wrapper');
+    I.click('Cancel');
+    I.waitForDetached('.io-ox-dialog-wrapper [role="alertdialog"]', 5);
+    I.click('.floating-window-content button[data-action="close"]');
+    I.waitForElement('.io-ox-dialog-wrapper [role="alertdialog"]', 5);
+    I.waitForText('Do you really want to discard your changes?', 5, '.io-ox-dialog-wrapper');
+    I.click('Cancel');
+    I.waitForDetached('.io-ox-dialog-wrapper [role="alertdialog"]', 5);
+    I.click('.floating-window-content button[data-action="close"]');
+    I.waitForElement('.io-ox-dialog-wrapper [role="alertdialog"]', 5);
+    I.waitForText('Do you really want to discard your changes?', 5, '.io-ox-dialog-wrapper');
+    I.click('Discard changes');
+    I.waitForDetached('.io-ox-dialog-wrapper [role="alertdialog"]', 5);
+    I.waitForDetached('.floating-window-content .btn-primary[disabled=""][data-action="save"]', 5);
+    I.waitForDetached('.io-ox-tasks-edit-window[data-app-name="io.ox/tasks/edit"]', 5);
+    I.logout();
+
+});
+Scenario('[C7753] Delete single Task', async function (I, users) {
+    let testrailID = 'C7753';
+    let testrailName = 'Delete single Task';
+    const taskDefaultFolder = await I.getDefaultFolder('tasks', { user: users[0] });
+    const task = {
+        title: testrailID,
+        status: '1',
+        percent_completed: '0',
+        folder_id: taskDefaultFolder,
+        recurrence_type: '0',
+        full_time: true,
+        private_flag: false,
+        timezone: 'Europe/Berlin',
+        notification: true,
+        note: testrailName
+    };
+    I.createTask(task, { user: users[0] });
+    I.login('app=io.ox/tasks', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    I.waitForText(testrailID, 5, '.window-body');
+    I.waitForText(testrailID, 5, '.tasks-detailview .title');
+    I.clickToolbar('Delete');
+    I.waitForElement('.io-ox-dialog-wrapper [role="dialog"]', 5);
+    I.waitForText('Do you really want to delete this task?', 5, '.io-ox-dialog-wrapper');
+    I.click('Delete', '.io-ox-dialog-wrapper');
+    I.waitForDetached('.io-ox-dialog-wrapper [role="dialog"]', 5);
+    I.waitForText('No elements selected', 5, '.task-detail-container .summary.empty');
+    I.waitForText('Empty', 5, '[aria-label="Task list"] .io-ox-fail');
+    I.logout();
+});
+Scenario('[C7754] Delete several Task at the same time', async function (I, users) {
+    let testrailID = 'C7754';
+    let testrailName = 'Delete several Task at the same time';
+    const taskDefaultFolder = await I.getDefaultFolder('tasks', { user: users[0] });
+    let numberOfTasks = 3;
+    for (let i = 0; i < numberOfTasks; i++) {
+        let id = testrailID + ' - ' + i;
+        var task = {
+            title: id,
+            folder_id: taskDefaultFolder,
+            note: testrailName
+        };
+        I.createTask(task, { user: users[0] });
+    }
+    I.login('app=io.ox/tasks', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    I.waitForElement('.tasks-detailview', 5);
+    I.click('[aria-label="Tasks toolbar"] .btn[title="Select all"]');
+    I.seeNumberOfElements('li.selected.vgrid-cell', numberOfTasks);
+    I.waitForText(numberOfTasks + ' items selected', 5, '.task-detail-container .message');
+    I.clickToolbar('Delete');
+    I.waitForElement('.io-ox-dialog-wrapper [role="dialog"]', 5);
+    I.waitForText('Do you really want to delete these tasks?', 5, '.io-ox-dialog-wrapper');
+    I.click('Delete', '.io-ox-dialog-wrapper');
+    I.waitForDetached('.io-ox-dialog-wrapper [role="dialog"]', 5);
+    I.waitForText('No elements selected', 5, '.task-detail-container .summary.empty');
+    I.waitForText('Empty', 5, '[aria-label="Task list"] .io-ox-fail');
+    I.logout();
+});
+Scenario('[C7755] Delete recurring Task', async function (I, users) {
+    let testrailID = 'C7755';
+    let testrailName = 'Delete recurring Task';
+    const taskDefaultFolder = await I.getDefaultFolder('tasks', { user: users[0] });
+    const task = {
+        title: testrailID,
+        note: testrailName,
+        status: '1',
+        percent_completed: '0',
+        folder_id: taskDefaultFolder,
+        recurrence_type: 2,
+        full_time: true,
+        private_flag: false,
+        timezone: 'Europe/Berlin',
+        notification: true,
+        start_time: 1551657600000,
+        end_time: 1551744000000,
+        interval: 1,
+        days: 2
+    };
+    I.createTask(task, { user: users[0] });
+    I.login('app=io.ox/tasks', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    I.clickToolbar('Delete');
+    I.waitForElement('.io-ox-dialog-wrapper [role="dialog"]', 5);
+    I.waitForText('Do you really want to delete this task?', 5, '.io-ox-dialog-wrapper');
+    I.click('Delete', '.io-ox-dialog-wrapper');
+    I.waitForDetached('.io-ox-dialog-wrapper [role="dialog"]', 5);
+    I.waitForText('No elements selected', 5, '.task-detail-container .summary.empty');
+    I.waitForText('Empty', 5, '[aria-label="Task list"] .io-ox-fail');
     I.logout();
 });
