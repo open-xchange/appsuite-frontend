@@ -224,19 +224,12 @@ define('io.ox/mail/compose/model', [
         deepDiff: function (old, current) {
             if (_.isUndefined(old)) return current;
 
-            var self = this;
-
             current = current || this.attributes;
 
             return _(current)
                 .chain()
                 .mapObject(function (value, key) {
                     if (value instanceof Backbone.Model || value instanceof Backbone.Collection) value = value.toJSON();
-                    if (_.isObject(value) && !_.isArray(value)) {
-                        var sub = self.deepDiff(old[key], value);
-                        if (_.isEmpty(sub)) return;
-                        return sub;
-                    }
                     if (_.isEqual(old[key], value)) return;
                     return _.isUndefined(value) ? null : value;
                 })

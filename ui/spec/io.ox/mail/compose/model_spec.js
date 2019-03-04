@@ -55,7 +55,7 @@ define(['io.ox/mail/compose/model'], function (MailModel) {
                     { test: ['test', 'test1'], object: { test: { str: 'test', str2: 'change' } } },
                     { test: ['testNew', 'test1'], object: { test: { str: 'test', str2: 'changed!' } } }
                 );
-                diff.should.deep.equal({ test: ['testNew', 'test1'], object: { test: { str2: 'changed!' } } });
+                diff.should.deep.equal({ test: ['testNew', 'test1'], object: { test: { str: 'test', str2: 'changed!' } } });
             });
         });
     });
