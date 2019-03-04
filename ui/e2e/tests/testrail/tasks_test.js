@@ -9,7 +9,7 @@
  *
  * @author Daniel Pondruff <daniel.pondruff@open-xchange.com>
  */
-
+/// <reference path="../../steps.d.ts" />
 
 Feature('testrail - tasks').tag('6');
 
@@ -677,7 +677,7 @@ Scenario('[C7748] Remove an attachment from a Task', async function (I, users) {
 
     };
     const createTask = await I.createTask(task, { user: users[0] });
-    let taskID = createTask.data.data.id
+    let taskID = createTask.data.data.id;
     I.addAttachment({ user: users[0] }, 'e2e/tests/testrail/files/mail/compose/testdocument.odt', '4', taskDefaultFolder, taskID);
     I.login('app=io.ox/tasks', { user: users[0] });
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
