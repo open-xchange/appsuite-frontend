@@ -125,30 +125,21 @@ Scenario('[C7728] Create simple Task', async function (I) {
 Scenario('[C7729] Create Task with participants', async function (I, users) {
     let testrailID = 'C7729';
     let testrailName = 'Create Task with participants';
-
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-
     I.clickToolbar('New');
     I.waitForVisible('.io-ox-tasks-edit-window');
-
     I.fillField('Subject', testrailID);
     I.fillField('Description', testrailName);
-
     I.click('Expand form');
     I.fillField('Add contact', users[1].userdata.primaryEmail);
     I.pressKey('Enter');
-    //I.waitForElement({ css: '[href=' + users[1].userdata.primaryEmail + ']' });
     I.waitForText('Participants (1)');
     I.fillField('Add contact', users[2].userdata.primaryEmail);
     I.pressKey('Enter');
     I.waitForText('Participants (2)');
-    //I.waitForElement({ css: '[href=' + users[2].userdata.primaryEmail + ']' });
-
     I.click('Create');
-
     I.seeElement('.tasks-detailview');
-
     I.see(testrailID);
     I.see(testrailName);
     I.dontSeeElement({ css: '[title="High priority"]' });
@@ -156,30 +147,20 @@ Scenario('[C7729] Create Task with participants', async function (I, users) {
     I.see('Not started');
     I.seeElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');
     I.seeElement('.participant-list .participant [title="' + users[2].userdata.primaryEmail + '"]');
-
     I.logout();
-
     I.login('app=io.ox/tasks', { user: users[1] });
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-
     I.seeElement('.tasks-detailview');
     I.see(testrailID);
     I.see(testrailName);
     I.dontSeeElement({ css: '[title="High priority"]' });
     I.dontSeeElement({ css: '[title="Low priority"]' });
     I.see('Not started');
-    //console.log('User 0' + users[0].userdata.primaryEmail);
-    //console.log('User 1' + users[1].userdata.primaryEmail);
-    //console.log('User 2' + users[2].userdata.primaryEmail);
-
     I.seeElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');
     I.seeElement('.participant-list .participant [title="' + users[2].userdata.primaryEmail + '"]');
-
     I.logout();
-
     I.login('app=io.ox/tasks', { user: users[2] });
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-
     I.seeElement('.tasks-detailview');
     I.see(testrailID);
     I.see(testrailName);
@@ -188,7 +169,6 @@ Scenario('[C7729] Create Task with participants', async function (I, users) {
     I.see('Not started');
     I.seeElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');
     I.seeElement('.participant-list .participant [title="' + users[2].userdata.primaryEmail + '"]');
-
     I.logout();
 });
 Scenario('[C7730] Create a private Task with participant', async function (I, users) {
@@ -208,7 +188,7 @@ Scenario('[C7730] Create a private Task with participant', async function (I, us
     I.fillField('Add contact', users[1].userdata.primaryEmail);
     I.pressKey('Enter');
     I.click('Create');
-    I.waitForElement('div .message[role="alert"]');
+    I.waitForElement('div .message[role="alert"]', 5);
     I.see('Tasks with private flag cannot be delegated.');
     I.logout();
 });
@@ -359,7 +339,7 @@ Scenario('[C7738] Edit task with all fields filled', async function (I, users) {
     I.login('app=io.ox/tasks', { user: users[0] });
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
 
-    I.retry(5).waitForElement('.tasks-detailview');
+    I.waitForElement('.tasks-detailview', 5);
     I.see('Estimated duration in minutes');
     I.see('1337');
     I.see('Actual duration in minutes');
@@ -520,13 +500,13 @@ Scenario('[C7743] Move single Task', async function (I, users) {
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     //Dirty SHIT ! Need a helper for this
     I.click('//*[@class="classic-toolbar"]/*[@class="dropdown"][2]');
-    I.waitForElement('.smart-dropdown-container.open .dropdown-menu');
+    I.waitForElement('.smart-dropdown-container.open .dropdown-menu', 5);
     I.clickToolbar('Move');
     I.waitForText('Move', 5, '.modal-open .modal-title');
     I.retry(3).click('.modal [data-id="virtual/flat/tasks/private"] div.folder-arrow');
     I.waitForElement('.modal-dialog .open.folder.section', 5);
     I.retry(3).click('.modal [aria-label="' + testrailID + '"]');
-    I.waitForElement('.modal .selected[aria-label="' + testrailID + '"]');
+    I.waitForElement('.modal .selected[aria-label="' + testrailID + '"]', 5);
     I.waitForEnabled('.modal-footer button.btn-primary');
     I.click('Move', 'div.modal-footer');
     I.waitForDetached('.modal');
@@ -565,7 +545,7 @@ Scenario('[C7744] Mark several task as done at the same time', async function (I
     for (let i = 0; i < numberOfTasks; i++) {
         let id = testrailID + ' - ' + i;
         I.click('[role="navigation"][aria-label="Task list"] [aria-label="' + testrailID + ' - ' + i + ', Done."]');
-        I.waitForElement('[role="navigation"][aria-label="Task list"] [aria-label="' + testrailID + ' - ' + i + ', Done."].selected');
+        I.waitForElement('[role="navigation"][aria-label="Task list"] [aria-label="' + testrailID + ' - ' + i + ', Done."].selected', 5);
         I.waitForElement('.tasks-detailview', 5);
         I.waitForText(id, 5, '.tasks-detailview .title');
         I.waitForText('Progress 100 %', 5, '.tasks-detailview .task-progress');
@@ -601,7 +581,7 @@ Scenario('[C7745] Mark several Task as Undone at the same time', async function 
     for (let i = 0; i < numberOfTasks; i++) {
         let id = testrailID + ' - ' + i;
         I.click('[role="navigation"][aria-label="Task list"] [aria-label="' + testrailID + ' - ' + i + ', Not started."]');
-        I.waitForElement('[role="navigation"][aria-label="Task list"] [aria-label="' + testrailID + ' - ' + i + ', Not started."].selected');
+        I.waitForElement('[role="navigation"][aria-label="Task list"] [aria-label="' + testrailID + ' - ' + i + ', Not started."].selected', 5);
         I.waitForElement('.tasks-detailview', 5);
         I.waitForText('Not started', 5, '.tasks-detailview .badge-notstarted');
         I.waitForText(id, 5, '.tasks-detailview .title');
@@ -636,13 +616,13 @@ Scenario('[C7746] Move several tasks to an other folder at the same time', async
 
     //Dirty SHIT ! Need a helper for this
     I.click('//*[@class="classic-toolbar"]/*[@class="dropdown"]');
-    I.waitForElement('.smart-dropdown-container.open .dropdown-menu');
+    I.waitForElement('.smart-dropdown-container.open .dropdown-menu', 5);
     I.clickToolbar('Move');
     I.waitForText('Move', 5, '.modal-open .modal-title');
     I.retry(3).click('.modal [data-id="virtual/flat/tasks/private"] div.folder-arrow');
     I.waitForElement('.modal-dialog .open.folder.section', 5);
     I.retry(3).click('.modal [aria-label="' + testrailID + '"]');
-    I.waitForElement('.modal .selected[aria-label="' + testrailID + '"]');
+    I.waitForElement('.modal .selected[aria-label="' + testrailID + '"]', 5);
     I.waitForEnabled('.modal-footer button.btn-primary');
     I.click('Move', 'div.modal-footer');
     I.waitForDetached('.modal');
