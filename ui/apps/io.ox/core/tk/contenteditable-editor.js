@@ -312,9 +312,10 @@ define('io.ox/core/tk/contenteditable-editor', [
         return { pos: pos, top: top, bottom: bottom, scrollable: scrollable };
     }
 
-    var animationSpeed = 100,
-        throttledScrollOnCursorUp = _.throttle(scrollOnCursorUp, animationSpeed),
-        throttledScrollOnEnter = _.throttle(scrollOnEnter, animationSpeed);
+    var duration = 300,
+        easing = 'swing',
+        throttledScrollOnCursorUp = _.throttle(scrollOnCursorUp, duration),
+        throttledScrollOnEnter = _.throttle(scrollOnEnter, duration);
 
     // This is to keep the caret visible at all times, otherwise the fixed menubar may hide it.
     // See Bug #56677
@@ -322,16 +323,16 @@ define('io.ox/core/tk/contenteditable-editor', [
         var cursorPosition = getCursorPosition(ed);
 
         // Scroll to cursor position (If you manually set this to something else, it doesn't feel native)
-        if (cursorPosition.top > 0 && cursorPosition.pos < 0) cursorPosition.scrollable.animate({ scrollTop: cursorPosition.top }, animationSpeed);
+        if (cursorPosition.top > 0 && cursorPosition.pos < 0) cursorPosition.scrollable.animate({ scrollTop: cursorPosition.top }, duration, easing);
         // Scroll whole window to the top, if cursor reaches top of the editable area
-        if (cursorPosition.top < 16) cursorPosition.scrollable.animate({ scrollTop: 0 }, animationSpeed);
+        if (cursorPosition.top < 16) cursorPosition.scrollable.animate({ scrollTop: 0 }, duration, easing);
     }
 
     function scrollOnEnter(ed) {
         var cursorPosition = getCursorPosition(ed);
 
         if (cursorPosition.pos >= cursorPosition.bottom) {
-            cursorPosition.scrollable.animate({ scrollTop: cursorPosition.top }, animationSpeed);
+            cursorPosition.scrollable.animate({ scrollTop: cursorPosition.top }, duration, easing);
         }
     }
 
