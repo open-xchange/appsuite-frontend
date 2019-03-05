@@ -555,6 +555,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     function supportsAutoPlay(baton, started) {
+        if (baton.context.standalone) return false;
         if (baton.context.autoplayStarted !== started) return false;
         if (!baton.model.isImage()) return false;
         return imageCount(baton.model) >= 2;
