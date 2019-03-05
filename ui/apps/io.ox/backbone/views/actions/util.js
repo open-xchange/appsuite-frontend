@@ -69,7 +69,7 @@ define('io.ox/backbone/views/actions/util', [
             // check collection && matches
             var enabled = available.filter(util.checkActionEnabled.bind(null, baton));
             if (/\bactions/.test(_.url.hash('debug'))) {
-                console.debug('item', link.ref, 'available', available, 'enabled', enabled, actions, baton.data, baton);
+                console.debug('item', link.ref, 'available', available, 'enabled', enabled.length > 0, 'action', actions, 'baton', baton);
             }
             return { link: link, available: true, enabled: enabled.length > 0, actions: enabled };
         },
@@ -308,13 +308,13 @@ define('io.ox/backbone/views/actions/util', [
         setSelection: function (selection, options) {
 
             // inject finalize per instance
-            if (!this.setSelection.finalize) addFinalize(this.setSelection);
+            if (!this.setSelectionFinalize) addFinalize(this);
 
             if (!options) options = {};
             else if (_.isFunction(options)) options = options.call();
 
             // true = sync; this = thisArg for finalize
-            var cont = _.lfo(true, this, this.setSelection.finalize);
+            var cont = _.lfo(true, this, this.setSelectionFinalize);
 
             (options.promise ? options : $.when(options)).done(function (options) {
                 if (this.options.simple) {
@@ -466,7 +466,7 @@ define('io.ox/backbone/views/actions/util', [
     };
 
     function addFinalize(fn) {
-        fn.finalize = function (options, selection, collection) {
+        fn.setSelectionFinalize = function (options, selection, collection) {
             if (this.disposed) return;
             var baton = ext.Baton(_.extend(options, { selection: selection, collection: collection }));
             this.render(baton);
