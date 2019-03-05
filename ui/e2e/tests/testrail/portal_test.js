@@ -137,3 +137,69 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
 
     I.logout();
 });
+
+Scenario('[C7472] Check if the portalpage is up to date', async function (I, users) {
+    // TODO: Need to add Appointment, latest file(upload?)
+    //const moment = require('moment');
+    let testrailID = 'C7472';
+    let testrailName = 'Check if the portalpage is up to date';
+
+    I.login('app=io.ox/portal', { user: users[0] });
+    I.waitForVisible('.io-ox-portal-window');
+    await I.haveMail({
+        from: [[users[0].userdata.display_name, users[0].userdata.primaryEmail]],
+        sendtype: 0,
+        subject: testrailID + ' - ' + testrailName,
+        to: [[users[0].userdata.display_name, users[0].userdata.primaryEmail]]
+    });
+    let element = await I.grabNumberOfVisibleElements('[aria-label="Inbox"] .item .sender');
+    while (element === 0) {
+        console.log(element);
+        I.click('.launcher [aria-label="Refresh"]');
+        I.waitForElement('.launcher .fa-spin-paused');
+        element = await I.grabNumberOfVisibleElements('[aria-label="Inbox"] .item .sender');
+    }
+    //Verifiy Inbox Widget
+    I.waitForElement('.widget[aria-label="Inbox"] .item', 5);
+    I.click('.item', '.widget[aria-label="Inbox"]');
+    I.waitForElement('.io-ox-sidepopup', 5);
+    I.waitForText(testrailID + ' - ' + testrailName, 5, '.io-ox-sidepopup-pane .subject');
+    I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane .person-from');
+    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane .address');
+    I.click('.item', '.widget[aria-label="Inbox"]');
+    I.waitForDetached('.io-ox-sidepopup', 5);
+    I.logout();
+    //TODO: Same for appointments, tasks birthdays and latest files.
+});
+
+Scenario('[C7482] Add a mail to portal', async function (I, users) {
+    // TODO: Need to add Appointment, latest file(upload?)
+    //const moment = require('moment');
+    let testrailID = 'C7482';
+    let testrailName = 'Add a mail to portal';
+    await I.haveMail({
+        from: [[users[0].userdata.display_name, users[0].userdata.primaryEmail]],
+        sendtype: 0,
+        subject: testrailID + ' - ' + testrailName,
+        to: [[users[0].userdata.display_name, users[0].userdata.primaryEmail]]
+    });
+    I.login('app=io.ox/mail', { user: users[0] });
+    I.waitForVisible('.io-ox-mail-window');
+    I.click('C7482 - Add a mail to portal', { css: '.drag-title' });
+    I.waitForElement('article.mail-detail', 5);
+    I.click('.classic-toolbar [data-action="more"]');
+    I.waitForElement('.dropdown.open [data-ref="io.ox/mail/actions/add-to-portal"]', 5);
+    I.click('.dropdown.open [data-ref="io.ox/mail/actions/add-to-portal"]');
+    I.openApp('Portal');
+    I.waitForVisible('.io-ox-portal-window');
+    I.waitForElement('.io-ox-portal [aria-label="' + testrailID + ' - ' + testrailName + '"] .item', 5);
+    I.waitForText(testrailID + ' - ' + testrailName, 5, '.io-ox-portal [aria-label="' + testrailID + ' - ' + testrailName + '"] .title');
+    I.click('.item', '.io-ox-portal [aria-label="' + testrailID + ' - ' + testrailName + '"]');
+    I.waitForElement('.io-ox-sidepopup', 5);
+    I.waitForText(testrailID + ' - ' + testrailName, 5, '.io-ox-sidepopup-pane .subject');
+    I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane .person-from');
+    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane .address');
+    I.click('.item', '.io-ox-portal [aria-label="' + testrailID + ' - ' + testrailName + '"]');
+    I.waitForDetached('.io-ox-sidepopup', 5);
+    I.logout();
+});
