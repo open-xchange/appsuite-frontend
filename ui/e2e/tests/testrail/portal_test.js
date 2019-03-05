@@ -10,7 +10,6 @@
  * @author Daniel Pondruff <daniel.pondruff@open-xchange.com>
  */
 /// <reference path="../../steps.d.ts" />
-const expect = require('chai').expect;
 
 Feature('testrail - portal').tag('6');
 
@@ -61,7 +60,6 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
 
     };
     I.createContact(contact, { user: users[0] });
-    
     //Upload File to Infostore
     const infostoreFolderID = await I.getDefaultFolder('infostore', { user: users[0] });
     I.haveFile({ user: users[0] }, 'e2e/tests/testrail/files/mail/compose/testdocument.odt', infostoreFolderID);
@@ -98,7 +96,7 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
     I.click('.item', '.widget[aria-label="Inbox"]');
     I.waitForDetached('.io-ox-sidepopup', 5);
 
-    //Verify Tasks Widget 
+    //Verify Tasks Widget
     I.waitForElement('.widget[aria-label="My tasks"] .item', 5);
     I.click('.item', '.widget[aria-label="My tasks"]');
     I.waitForElement('.io-ox-sidepopup', 5);
@@ -137,7 +135,6 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
 
     I.logout();
 });
-
 Scenario('[C7472] Check if the portalpage is up to date', async function (I, users) {
     // TODO: Need to add Appointment, latest file(upload?)
     //const moment = require('moment');
@@ -158,6 +155,7 @@ Scenario('[C7472] Check if the portalpage is up to date', async function (I, use
         I.waitForElement('#io-ox-refresh-icon', 5, '.taskbar');
         I.click('#io-ox-refresh-icon', '.taskbar');
         I.waitForElement('.launcher .fa-spin-paused', 5);
+        I.wait(0.5);
         element = await I.grabNumberOfVisibleElements('[aria-label="Inbox"] .item .sender');
     }
     //Verifiy Inbox Widget
@@ -172,7 +170,6 @@ Scenario('[C7472] Check if the portalpage is up to date', async function (I, use
     I.logout();
     //TODO: Same for appointments, tasks birthdays and latest files.
 });
-
 Scenario('[C7482] Add a mail to portal', async function (I, users) {
     // TODO: Need to add Appointment, latest file(upload?)
     //const moment = require('moment');
@@ -202,5 +199,158 @@ Scenario('[C7482] Add a mail to portal', async function (I, users) {
     I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane .address');
     I.click('.item', '.io-ox-portal [aria-label="' + testrailID + ' - ' + testrailName + '"]');
     I.waitForDetached('.io-ox-sidepopup', 5);
+    I.logout();
+});
+Scenario('[C7475] Add inbox widget', async function (I, users) {
+    // TODO: Need to add Appointment, latest file(upload?)
+    //const moment = require('moment');
+    let testrailID = 'C7475';
+    let testrailName = 'Add inbox widget';
+    await I.haveMail({
+        from: [[users[0].userdata.display_name, users[0].userdata.primaryEmail]],
+        sendtype: 0,
+        subject: testrailID + ' - ' + testrailName,
+        to: [[users[0].userdata.display_name, users[0].userdata.primaryEmail]]
+    });
+    I.haveSetting('io.ox/portal//widgets/user', '{}');
+    I.login('app=io.ox/portal', { user: users[0] });
+    I.waitForElement('.io-ox-portal .header .add-widget', 5);
+    I.click({ css: '.add-widget' }, { css: '.io-ox-portal .header' });
+    I.waitForElement('.dropdown.open [data-type="mail"]', 5);
+    I.click({ css: '[data-type="mail"]' }, { css: '.dropdown.open' });
+    I.waitForElement({ css: '.io-ox-dialog-wrapper' }, 5);
+    I.click({ css: '[data-action="save"]' }, { css: '.io-ox-dialog-wrapper' });
+    I.waitForElement('.widget[aria-label="Inbox"] .item', 5);
+    I.click('.item', '.widget[aria-label="Inbox"]');
+    I.waitForElement('.io-ox-sidepopup', 5);
+    I.waitForText(testrailID + ' - ' + testrailName, 5, '.io-ox-sidepopup-pane .subject');
+    I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane .person-from');
+    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane .address');
+    I.click('.item', '.widget[aria-label="Inbox"]');
+    I.waitForDetached('.io-ox-sidepopup', 5);
+    I.logout();
+});
+
+Scenario('[C7476] Add task widget', async function (I, users) {
+    const moment = require('moment');
+    let testrailID = 'C7476';
+    let testrailName = 'Add task widget';
+    const taskDefaultFolder = await I.getDefaultFolder('tasks', { user: users[0] });
+    const task = {
+        title: testrailID,
+        folder_id: taskDefaultFolder,
+        note: testrailName,
+        full_time: true,
+        notification: true,
+        private_flag: false,
+        timezone: 'Europe/Berlin',
+        start_time: moment().valueOf(),
+        end_time: moment().add(2, 'days').valueOf(),
+        days: 2
+    };
+    I.createTask(task, { user: users[0] });
+    I.haveSetting('io.ox/portal//widgets/user', '{}');
+
+    I.login('app=io.ox/portal', { user: users[0] });
+    I.waitForElement('.io-ox-portal .header .add-widget', 5);
+    I.click({ css: '.add-widget' }, { css: '.io-ox-portal .header' });
+    I.waitForElement('.dropdown.open [data-type="tasks"]', 5);
+    I.click({ css: '[data-type="tasks"]' }, { css: '.dropdown.open' });
+
+
+    I.waitForElement('.widget[aria-label="My tasks"] .item', 5);
+    I.click('.item', '.widget[aria-label="My tasks"]');
+    I.waitForElement('.io-ox-sidepopup', 5);
+    I.waitForText(testrailID, 5, '.io-ox-sidepopup-pane .tasks-detailview .title');
+    I.waitForText(testrailName, 5, '.io-ox-sidepopup-pane .tasks-detailview .note');
+    I.click('.item', '.widget[aria-label="My tasks"]');
+    I.waitForDetached('.io-ox-sidepopup', 5);
+
+    I.logout();
+});
+
+Scenario('[C7477] Add appointment widget', async function (I, users) {
+    const moment = require('moment');
+    let testrailID = 'C7477';
+    let testrailName = 'Add appointment widget';
+
+    const appointmentDefaultFolder = await I.getDefaultFolder('calendar', { user: users[0] });
+    const appointment = {
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: testrailID,
+        location: testrailID,
+        description: testrailID,
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00')
+        }
+    };
+    I.haveAppointment({ user: users[0] }, 'cal://0/' + appointmentDefaultFolder, appointment);
+    I.haveSetting('io.ox/portal//widgets/user', '{}');
+    I.login('app=io.ox/portal', { user: users[0] });
+    I.waitForElement('.io-ox-portal .header .add-widget', 5);
+    I.click({ css: '.add-widget' }, { css: '.io-ox-portal .header' });
+    I.waitForElement('.dropdown.open [data-type="calendar"]', 5);
+    I.click({ css: '[data-type="calendar"]' }, { css: '.dropdown.open' });
+    I.waitForElement('.widget[aria-label="Appointments"] .item', 5);
+    I.click('.item', '.widget[aria-label="Appointments"]');
+    I.waitForElement('.io-ox-sidepopup', 5);
+    I.waitForText(testrailID, 5, '.io-ox-sidepopup-pane h1.subject');
+    I.waitForText(testrailID, 5, '.io-ox-sidepopup-pane div.location');
+    I.click('.item', '.widget[aria-label="Appointments"]');
+    I.waitForDetached('.io-ox-sidepopup', 5);
+    I.logout();
+});
+
+Scenario('[C7478] Add user data widget', async function (I, users) {
+    let testrailID = 'C7478';
+    let testrailName = 'Add user data widget';
+    I.haveSetting('io.ox/portal//widgets/user', '{}');
+    I.login('app=io.ox/portal', { user: users[0] });
+    I.waitForElement('.io-ox-portal .header .add-widget', 5);
+    I.click({ css: '.add-widget' }, { css: '.io-ox-portal .header' });
+    I.waitForElement('.dropdown.open [data-type="userSettings"]', 5);
+    I.click({ css: '[data-type="userSettings"]' }, { css: '.dropdown.open' });
+    I.waitForElement({ css: '.io-ox-portal [data-widget-type="userSettings"]' }, 5);
+    I.waitForText('User data', 5, { css: '.io-ox-portal [data-widget-type="userSettings"] .title' });    
+    I.click('My contact data', { css: '.io-ox-portal [data-widget-type="userSettings"] .action' });
+    I.waitForElement({ css: '.io-ox-contacts-edit-window.floating-window' }, 5);
+    I.waitForText(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, 5, { css: '.io-ox-contacts-edit-window.floating-window .name' });
+    I.click({ css: '.discard' }, { css: '.floating-window.io-ox-contacts-edit-window' });
+    I.waitForDetached({ css: '.io-ox-contacts-edit-window.floating-window' }, 5);
+    //Dirty ... I.click('My password', { css: '.io-ox-portal [data-widget-type="userSettings"] .action' }); is not working here
+    I.click({ css: '.io-ox-portal [data-widget-type="userSettings"] .action:nth-child(2)' });
+    I.waitForElement({ css: '.io-ox-dialog-wrapper' }, 5);
+    I.waitForText('Change password', 5, { css: '.io-ox-dialog-wrapper #dialog-title' });
+    I.waitForElement({ css: '.modal-body input.current-password' }, 5);
+    I.waitForElement({ css: '.modal-body input.new-password' }, 5);
+    I.waitForElement({ css: '.modal-body input.repeat-new-password' }, 5);
+    I.click('Cancel', { css: '.modal-footer button' });
+    I.waitForDetached({ css: '.io-ox-dialog-wrapper' }, 5);
+    I.logout();
+});
+
+Scenario('[C7480] Add recently changed files widget', async function (I, users) {
+    let testrailID = 'C7477';
+    let testrailName = 'Add recently changed files widget';
+    const infostoreFolderID = await I.getDefaultFolder('infostore', { user: users[0] });
+    I.haveFile({ user: users[0] }, 'e2e/tests/testrail/files/mail/compose/testdocument.odt', infostoreFolderID);
+    I.haveSetting('io.ox/portal//widgets/user', '{}');
+    I.login('app=io.ox/portal', { user: users[0] });
+    I.waitForElement('.io-ox-portal .header .add-widget', 5);
+    I.click({ css: '.add-widget' }, { css: '.io-ox-portal .header' });
+    I.waitForElement('.dropdown.open [data-type="myfiles"]', 5);
+    I.click({ css: '[data-type="myfiles"]' }, { css: '.dropdown.open' });
+    I.waitForElement('.widget[aria-label="My latest files"] .item', 5);
+    I.click('.item', '.widget[aria-label="My latest files"]');
+    I.waitForElement('.io-ox-viewer');
+    I.waitForText('testdocument.odt', 5, '.io-ox-viewer .filename-label');
+    I.waitForText('testdocument.odt', 5, '.io-ox-viewer .viewer-sidebar-pane .file-name a');
+    I.click('.io-ox-viewer [data-ref="io.ox/core/viewer/actions/toolbar/close"]');
+    I.waitForDetached('.io-ox-viewer');
     I.logout();
 });
