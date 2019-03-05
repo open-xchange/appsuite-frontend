@@ -9,7 +9,7 @@
  *
  * @author Daniel Pondruff <daniel.pondruff@open-xchange.com>
  */
-/// <reference path="../../../steps.d.ts" />
+/// <reference path="../../steps.d.ts" />
 
 Feature('testrail - quicklauncher');
 
@@ -27,7 +27,7 @@ After(async function (users) {
 //    I.haveSetting('io.ox/core//apps/quickLaunch', 'io.ox/mail/main,io.ox/calendar/main,io.ox/contacts/main,io.ox/portal/main,io.ox/files/main')
 //    I.login('app=io.ox/settings');
 //    I.waitForVisible('.io-ox-settings-main');
-//    //TODO verify order 
+//    //TODO verify order
 //    I.seeElement('#io-ox-quicklaunch button[data-app-name="io.ox/mail"]')
 //    I.seeElement('#io-ox-quicklaunch button[data-app-name="io.ox/calendar"]')
 //    I.seeElement('#io-ox-quicklaunch button[data-app-name="io.ox/contacts"]')

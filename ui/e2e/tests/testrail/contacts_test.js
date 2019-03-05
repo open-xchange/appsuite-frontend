@@ -9,7 +9,7 @@
  *
  * @author Daniel Pondruff <daniel.pondruff@open-xchange.com>
  */
-/// <reference path="../../../steps.d.ts" />
+/// <reference path="../../steps.d.ts" />
 
 Feature('testrail - contacts').tag('2');
 

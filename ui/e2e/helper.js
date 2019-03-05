@@ -232,6 +232,33 @@ class MyHelper extends Helper {
             headers: form.getHeaders()
         });
     }
+    //async haveAppointment(options, filepath, folder_id, appointment) {
+    //    let form = new FormData();
+    //    form.append('json_0', JSON.stringify(appointment));
+    //    if (filepath) form.append('file_0', fs.createReadStream(filepath));
+    //    else form.append('file_0', '');
+    //    console.log(form);
+    //    const { httpClient, session } = await util.getSessionForUser(options);
+    //    return httpClient.post('/appsuite/api/chronos', form, {
+    //        params: {
+    //            action: 'new',
+    //            session: session,
+    //            folder: folder_id
+    //        },
+    //        headers: form.getHeaders()
+    //    });
+    //}
+    async haveAppointment(options, folder_id, appointment) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        const response = await httpClient.put('/appsuite/api/chronos', appointment, {
+            params: {
+                action: 'new',
+                session: session,
+                folder: folder_id
+            }
+        });
+        return response.data.data;
+    }
 }
 
 module.exports = MyHelper;

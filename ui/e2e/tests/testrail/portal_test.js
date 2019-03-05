@@ -61,9 +61,29 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
 
     };
     I.createContact(contact, { user: users[0] });
+    
     //Upload File to Infostore
     const infostoreFolderID = await I.getDefaultFolder('infostore', { user: users[0] });
     I.haveFile({ user: users[0] }, 'e2e/tests/testrail/files/mail/compose/testdocument.odt', infostoreFolderID);
+
+    //Create Appointment
+    const appointmentDefaultFolder = await I.getDefaultFolder('calendar', { user: users[0] });
+    const appointment = {
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: testrailID,
+        location: testrailID,
+        description: testrailID,
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00')
+        }
+    };
+
+    I.haveAppointment({ user: users[0] }, 'cal://0/' + appointmentDefaultFolder, appointment);
 
     I.login('app=io.ox/portal', { user: users[0] });
     I.waitForVisible('.io-ox-portal-window');
@@ -105,5 +125,15 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
     I.waitForText('testdocument.odt', 5, '.io-ox-viewer .viewer-sidebar-pane .file-name a');
     I.click('.io-ox-viewer [data-ref="io.ox/core/viewer/actions/toolbar/close"]');
     I.waitForDetached('.io-ox-viewer');
+
+    I.waitForElement('.widget[aria-label="Appointments"] .item', 5);
+    I.click('.item', '.widget[aria-label="Appointments"]');
+    I.waitForElement('.io-ox-sidepopup', 5);
+    I.waitForText(testrailID, 5, '.io-ox-sidepopup-pane h1.subject');
+    I.waitForText(testrailID, 5, '.io-ox-sidepopup-pane div.location');
+    //TODO: Verifiy Date
+    I.click('.item', '.widget[aria-label="Appointments"]');
+    I.waitForDetached('.io-ox-sidepopup', 5);
+
     I.logout();
 });
