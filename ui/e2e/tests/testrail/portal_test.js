@@ -154,9 +154,10 @@ Scenario('[C7472] Check if the portalpage is up to date', async function (I, use
     });
     let element = await I.grabNumberOfVisibleElements('[aria-label="Inbox"] .item .sender');
     while (element === 0) {
-        console.log(element);
-        I.click('.launcher [aria-label="Refresh"]');
-        I.waitForElement('.launcher .fa-spin-paused');
+        //TODO: need a limiter to avoid an endless loop
+        I.waitForElement('#io-ox-refresh-icon', 5, '.taskbar');
+        I.click('#io-ox-refresh-icon', '.taskbar');
+        I.waitForElement('.launcher .fa-spin-paused', 5);
         element = await I.grabNumberOfVisibleElements('[aria-label="Inbox"] .item .sender');
     }
     //Verifiy Inbox Widget
