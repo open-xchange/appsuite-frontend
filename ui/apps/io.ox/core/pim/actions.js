@@ -57,6 +57,22 @@ define('io.ox/core/pim/actions', [
             }
         },
 
+        // download all PIM attachments as zip
+        downloadZip: {
+            requires: function (e) {
+                return e.collection.has('multiple');
+            },
+            multiple: function (list) {
+                var param = {
+                        folder: list[0].folder,
+                        module: list[0].module,
+                        attached: list[0].attached
+                    },
+                    mode = list[0].managedId ? 'chronos' : 'attachment';
+                downloadAPI.pimAttachements(list, param, mode);
+            }
+        },
+
         // save attachment
         save: {
             capabilities: 'infostore',
@@ -76,6 +92,7 @@ define('io.ox/core/pim/actions', [
     var titles = {
         view: gt('View'),
         download: gt('Download'),
+        downloadZip: gt('Download'),
         //#. %1$s is usually "Drive" (product name; might be customized)
         save: gt('Save to %1$s', gt.pgettext('app', 'Drive'))
     };

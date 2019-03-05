@@ -30,6 +30,10 @@ define('io.ox/core/download', [
         return { id: o.id, folder_id: o.folder || o.folder_id };
     }
 
+    function returnJSON(o, mode) {
+        return JSON.stringify(mode === 'chronos' ? _.map(o, function (o) { return o.managedId; }) : _.map(o, function (o) { return o.id; }));
+    }
+
     // simple iframe download (see bug 29276)
     // window.open(url); might leave open tabs or provoke popup-blocker
     // window.location.assign(url); has a weird impact on ongoing uploads (see Bug 27420)
@@ -256,6 +260,20 @@ define('io.ox/core/download', [
                 url: ox.apiRoot + '/files?action=zipdocuments&callback=antivirus&session=' + ox.session,
                 // this one wants folder_id
                 body: JSON.stringify(_.map(list, map))
+            });
+        },
+
+        // download multiple attachments as zip file
+        pimAttachements: function (list, paramValues, mode) {
+            var param = mode === 'chronos' ? '&id=' + paramValues.attached : '&attached=' + paramValues.attached + '&module=' + paramValues.module,
+                action = mode === 'chronos' ? 'zipAttachments' : 'zipDocuments',
+                url = ox.apiRoot + '/' + mode + '?action=' + action + '&callback=antivirus&session=' + ox.session + '&folder=' + paramValues.folder;
+
+            url = url + param;
+
+            form({
+                url: url,
+                body: returnJSON(list, mode)
             });
         },
 
