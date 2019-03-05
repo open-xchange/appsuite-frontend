@@ -68,7 +68,7 @@ define('io.ox/core/pim/actions', [
                     module: list[0].module,
                     attached: list[0].attached
                 };
-                downloadAPI.pimAttachements(list, param);
+                downloadAPI.pimAttachments(list, param);
             }
         },
 

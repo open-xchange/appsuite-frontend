@@ -264,7 +264,7 @@ define('io.ox/core/download', [
         },
 
         // download multiple attachments as zip file
-        pimAttachements: function (list, paramValues) {
+        pimAttachments: function (list, paramValues) {
             var url = ox.apiRoot + '/attachment?action=zipDocuments&callback=antivirus&session=' + ox.session + '&folder=' + paramValues.folder + '&attached=' + paramValues.attached + '&module=' + paramValues.module;
             form({
                 url: url,
