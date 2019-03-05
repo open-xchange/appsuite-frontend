@@ -255,7 +255,7 @@ define('io.ox/mail/detail/mobileView', [
         onChangeAttachments: function () {
 
             var data = this.model.toJSON(),
-                baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
+                baton = ext.Baton({ data: data, attachments: util.getAttachments(data), view: this }),
                 node = this.$el.find('section.attachments').empty();
 
             ext.point('io.ox/mail/mobile/detail/attachments').invoke('draw', node, baton);
