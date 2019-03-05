@@ -241,9 +241,10 @@ define('io.ox/core/tk/typeahead', [
                 }.bind(this.$el.data('ttTypeahead'));
             }
             // for debug purpose (keeps dropdown open)
-            // this.$el.data('ttTypeahead').dropdown.close = $.noop;
-            // this.$el.data('ttTypeahead').dropdown.empty = $.noop;
-
+            if (ox.debug && ox.debug_typeahead) {
+                this.$el.data('ttTypeahead').dropdown.close = $.noop;
+                this.$el.data('ttTypeahead').dropdown.empty = $.noop;
+            }
             // ignore mouse events when dropdown gets programatically scrolled (see bug 55757 and 62955)
 
             function hasMouseMoved(e) {
