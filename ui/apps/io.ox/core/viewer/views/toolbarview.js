@@ -481,6 +481,9 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/help', {
         capabilities: 'infostore',
         device: '!smartphone',
+        matches: function (baton) {
+            return !baton.context.standalone;
+        },
         // handled by HelpView
         action: $.noop
     });
