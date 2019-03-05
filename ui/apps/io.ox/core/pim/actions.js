@@ -64,12 +64,11 @@ define('io.ox/core/pim/actions', [
             },
             multiple: function (list) {
                 var param = {
-                        folder: list[0].folder,
-                        module: list[0].module,
-                        attached: list[0].attached
-                    },
-                    mode = list[0].managedId ? 'chronos' : 'attachment';
-                downloadAPI.pimAttachements(list, param, mode);
+                    folder: list[0].folder,
+                    module: list[0].module,
+                    attached: list[0].attached
+                };
+                downloadAPI.pimAttachements(list, param);
             }
         },
 

@@ -30,8 +30,8 @@ define('io.ox/core/download', [
         return { id: o.id, folder_id: o.folder || o.folder_id };
     }
 
-    function returnJSON(o, mode) {
-        return JSON.stringify(mode === 'chronos' ? _.map(o, function (o) { return o.managedId; }) : _.map(o, function (o) { return o.id; }));
+    function returnJSON(o) {
+        return JSON.stringify(_.map(o, function (o) { return o.managedId ? o.managedId : o.id; }));
     }
 
     // simple iframe download (see bug 29276)
@@ -264,16 +264,11 @@ define('io.ox/core/download', [
         },
 
         // download multiple attachments as zip file
-        pimAttachements: function (list, paramValues, mode) {
-            var param = mode === 'chronos' ? '&id=' + paramValues.attached : '&attached=' + paramValues.attached + '&module=' + paramValues.module,
-                action = mode === 'chronos' ? 'zipAttachments' : 'zipDocuments',
-                url = ox.apiRoot + '/' + mode + '?action=' + action + '&callback=antivirus&session=' + ox.session + '&folder=' + paramValues.folder;
-
-            url = url + param;
-
+        pimAttachements: function (list, paramValues) {
+            var url = ox.apiRoot + '/attachment?action=zipDocuments&callback=antivirus&session=' + ox.session + '&folder=' + paramValues.folder + '&attached=' + paramValues.attached + '&module=' + paramValues.module;
             form({
                 url: url,
-                body: returnJSON(list, mode)
+                body: returnJSON(list)
             });
         },
 
