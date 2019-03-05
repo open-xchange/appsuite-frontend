@@ -11,7 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/collection', ['io.ox/core/folder/api', 'io.ox/core/api/user'], function (api, userAPI) {
+define('io.ox/core/collection', [
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/util',
+    'io.ox/core/api/user'
+], function (api, util, userAPI) {
 
     'use strict';
 
@@ -145,6 +149,10 @@ define('io.ox/core/collection', ['io.ox/core/folder/api', 'io.ox/core/api/user']
                             props.create = props.create && (folder.own_rights & 127) >= 2;
                         }
 
+                        // no bidirectional sync for subscribed folders (Bug 62440, MW-1133)
+                        if (util.is('subscribed', folder)) {
+                            props.modify = props.delete = props.create = false;
+                        }
                     } else {
                         // folder unknown
                         props.unknown = true;
