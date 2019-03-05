@@ -48,7 +48,7 @@ define('io.ox/core/pim/actions', [
             // browser support for downloading more than one file at once is pretty bad (see Bug #36212)
             collection: 'one',
             action: function (baton) {
-                var url = attachmentAPI.getUrl(baton.data, 'download');
+                var url = attachmentAPI.getUrl(baton.first(), 'download');
                 if (_.device('ios >= 11')) {
                     downloadAPI.window(url, { antivirus: true });
                 } else {
