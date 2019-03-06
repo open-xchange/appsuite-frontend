@@ -106,6 +106,7 @@ define('io.ox/tours/get-started', [
             id: 'get-started',
             index: 250,
             extend: function () {
+                if (capabilities.has('guest')) return;
                 var getStartedView = new GetStartedView();
                 this.append(getStartedView.render().$el);
                 getStartedView.hide();
