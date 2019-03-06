@@ -406,6 +406,7 @@ define('io.ox/calendar/edit/main', [
                         module: 'io.ox/calendar/edit',
                         point:  {
                             data: this.model.attributes,
+                            action: this.model.mode,
                             meta: { usedGroups: this.model._attendees.usedGroups },
                             // save this so the dirty check works correctly after the restore
                             initialModelData: this.initialModelData
@@ -421,6 +422,7 @@ define('io.ox/calendar/edit/main', [
                 this.edit(data, {
                     mode: _.isUndefined(data.id) ? 'create' : 'edit',
                     initialModelData: point.initialModelData,
+                    action: point.action,
                     usedGroups: point.meta ? point.meta.usedGroups : []
                 });
                 return $.when();
