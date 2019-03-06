@@ -1441,12 +1441,14 @@ define('io.ox/files/main', [
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
-                    metrics.trackEvent({
-                        app: 'drive',
-                        target: 'folder/context-menu',
-                        type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
+                _.defer(function () {
+                    sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
+                        metrics.trackEvent({
+                            app: 'drive',
+                            target: 'folder/context-menu',
+                            type: 'click',
+                            action: $(e.currentTarget).attr('data-action')
+                        });
                     });
                 });
                 sidepanel.find('.bottom').on('mousedown', 'a[data-action]', function (e) {
