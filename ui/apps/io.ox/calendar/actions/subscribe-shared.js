@@ -56,26 +56,11 @@ define('io.ox/calendar/actions/subscribe-shared', [
     function openDialog(data) {
 
         data.dialog.on('subscribe', function () {
-
             data.dialog.close();
 
             http.pause();
 
-            var allClaendars = data.calendarData.public.concat(data.calendarData.shared);
             _.each(data.hash, function (obj, id) {
-
-                var folder = allClaendars[_.findIndex(allClaendars, { id: id })],
-                    ext = 'com.openexchange.calendar.extendedProperties';
-
-                if (obj[ext]) {
-                    if (obj[ext] === 'false') {
-                        folder[ext].usedForSync.value = obj[ext];
-                    } else {
-                        folder[ext].usedForSync.value = obj[ext].usedForSync.value;
-                    }
-
-                    obj[ext] = folder[ext];
-                }
                 api.update(id, obj);
             });
 
@@ -101,7 +86,7 @@ define('io.ox/calendar/actions/subscribe-shared', [
                 self.opt.dialog.hash[this.get('id')].subscribed = this.get('subscribed');
 
                 if (!val) {
-                    var falseValue = self.model.get('com.openexchange.calendar.extendedProperties');
+                    var falseValue = _.copy(self.model.get('com.openexchange.calendar.extendedProperties'), true);
                     falseValue.usedForSync.value = 'false';
                     self.model.set('com.openexchange.calendar.extendedProperties', falseValue);
                     self.model.trigger('change:com.openexchange.calendar.extendedProperties');
@@ -118,8 +103,10 @@ define('io.ox/calendar/actions/subscribe-shared', [
         render: function () {
 
             var preparedValueTrue =  _.copy(this.model.attributes['com.openexchange.calendar.extendedProperties'], true);
-
             preparedValueTrue.usedForSync.value = 'true';
+
+            var preparedValueFalse =  _.copy(this.model.attributes['com.openexchange.calendar.extendedProperties'], true);
+            preparedValueFalse.usedForSync.value = 'false';
 
             var Switch = mini.SwitchView.extend({
                 update: function () {
@@ -155,7 +142,7 @@ define('io.ox/calendar/actions/subscribe-shared', [
                         label: gt('Sync via DAV'),
                         customValues: {
                             'true': preparedValueTrue,
-                            'false': 'false'
+                            'false': preparedValueFalse
                         }
                     }).render().$el.attr('title', gt('sync via DAV'))
                 )
