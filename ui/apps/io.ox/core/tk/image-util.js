@@ -25,10 +25,10 @@ define('io.ox/core/tk/image-util', [
         }
     }
 
-    function PromiseWorker() {
+    function PromiseWorker(obj) {
         var URL = window.URL || window.webkitURL,
-            args = _(arguments).flatten(),
-            script = _(args).invoke('toString').join('\n') + '\n' + 'self.onmessage = ' + onMessage.toString(),
+            args = _(obj).map(function (value, key) { return 'var ' + key + ' = ' + value.toString(); }),
+            script = args.join('\n') + '\n' + 'self.onmessage = ' + onMessage.toString(),
             blob;
 
         try {
@@ -93,7 +93,7 @@ define('io.ox/core/tk/image-util', [
                 });
             }
 
-            var worker = new PromiseWorker(getImage, readFile),
+            var worker = new PromiseWorker({ getImage: getImage, readFile: readFile }),
                 cache = [];
 
             return function getImageFromFile(file, opt) {

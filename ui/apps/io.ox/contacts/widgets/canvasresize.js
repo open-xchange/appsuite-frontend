@@ -222,7 +222,15 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/core/tk/image-util'], func
         return target;
     }
 
-    var worker = new imageUtil.PromiseWorker(newsize, createCanvas, detectSubsampling, rotate, transformCoordinate, detectVerticalSquash, resize);
+    var worker = new imageUtil.PromiseWorker({
+        newsize: newsize,
+        createCanvas: createCanvas,
+        detectSubsampling: detectSubsampling,
+        rotate: rotate,
+        transformCoordinate: transformCoordinate,
+        detectVerticalSquash: detectVerticalSquash,
+        resize: resize
+    });
 
     function resize(opt, callback) {
         var img = opt.img, options =  opt.options, orientation = options.exif || 1;
