@@ -402,7 +402,7 @@ define('io.ox/calendar/edit/extensions', [
     point.extend({
         id: 'recurrence',
         className: 'col-xs-12',
-        index: 650,
+        index: 700,
         render: function () {
 
             // changes not allowed when editing or creating an exception
@@ -441,7 +441,7 @@ define('io.ox/calendar/edit/extensions', [
     // note
     point.extend({
         id: 'note',
-        index: 700,
+        index: 800,
         className: 'col-xs-12',
         render: function () {
             var guid = _.uniqueId('form-control-label-');
@@ -583,7 +583,7 @@ define('io.ox/calendar/edit/extensions', [
     // separator or toggle
     point.basicExtend({
         id: 'noteSeparator',
-        index: 750,
+        index: 850,
         draw: function (baton) {
             this.append(
                 $('<a href="#">')
@@ -607,7 +607,7 @@ define('io.ox/calendar/edit/extensions', [
     // participants container
     point.basicExtend({
         id: 'participants_list',
-        index: 800,
+        index: 900,
         rowClass: 'collapsed',
         draw: function (baton) {
             this.append(new pViews.UserContainer({
@@ -623,7 +623,7 @@ define('io.ox/calendar/edit/extensions', [
     // add participants view
     point.basicExtend({
         id: 'add-participant',
-        index: 900,
+        index: 1000,
         rowClass: 'collapsed',
         draw: function (baton) {
 
@@ -648,7 +648,7 @@ define('io.ox/calendar/edit/extensions', [
 
     point.extend({
         id: 'folder-selection',
-        index: 950,
+        index: 1100,
         className: 'col-xs-12 col-sm-6 folder-selection',
         render: function () {
             var view = new CalendarDropdownView({ model: this.model }).render().$el;
@@ -658,56 +658,10 @@ define('io.ox/calendar/edit/extensions', [
         rowClass: 'collapsed form-spacer'
     });
 
-    point.extend({
-        id: 'allowAttendeeChanges',
-        index: 970,
-        className: 'col-xs-12 col-sm-6 folder-selection',
-        render: function () {
-            // only the organizer is allowed to change this attribute
-            if (this.baton.mode === 'edit' && !(calendarUtil.hasFlag(this.model, 'organizer') || calendarUtil.hasFlag(this.model, 'organizer_on_behalf'))) return;
-            var checkboxView  = new mini.CustomCheckboxView({
-                label: gt('Participants can edit the appointment'),
-                name: 'attendeePrivileges',
-                model: this.model,
-                customValues: { 'false': 'DEFAULT', 'true': 'MODIFY' },
-                defaultVal: this.baton.mode === 'create' && settings.get('chronos/allowAttendeeEditsByDefault', false) ? 'MODIFY' : 'DEFAULT'
-            });
-
-            this.$el.append(
-                $('<fieldset>').append(
-                    $('<legend class="simple">').text(gt('Participant permissions')),
-                    checkboxView.render().$el
-                )
-            );
-
-            // trigger initial change so defaults are applied
-            checkboxView.onChange();
-        }
-    }, {
-        nextTo: 'folder-selection',
-        rowClass: 'collapsed'
-    });
-
-    // alarms
-    point.extend({
-        id: 'alarms',
-        index: 1000,
-        className: 'col-xs-12 col-sm-6',
-        render: function () {
-            this.baton.parentView.alarmsView = this.baton.parentView.alarmsView || new AlarmsView.linkView({ model: this.model });
-            this.$el.append(
-                $('<fieldset>').append(
-                    $('<legend class="simple">').text(gt('Reminder')),
-                    this.baton.parentView.alarmsView.render().$el
-                )
-            );
-        }
-    });
-
     // private checkbox
     point.extend({
         id: 'private_flag',
-        index: 1100,
+        index: 1200,
         className: 'col-sm-6 col-xs-12',
         render: function () {
 
@@ -751,15 +705,41 @@ define('io.ox/calendar/edit/extensions', [
 
         }
     }, {
-        nextTo: 'alarms',
+        nextTo: 'folder-selection',
         rowClass: 'collapsed'
     });
 
-    //color selection
+    // container for alarms and color
     point.extend({
+        id: 'alarms-container',
+        index: 1300,
+        className: 'col-xs-12 col-sm-6',
+        render: function () {
+            ext.point('io.ox/calendar/edit/section/alarms-container').invoke('render', this);
+        }
+    }, {
+        rowClass: 'collapsed'
+    });
+
+    // alarms
+    ext.point('io.ox/calendar/edit/section/alarms-container').extend({
+        id: 'alarms',
+        index: 100,
+        render: function () {
+            this.baton.parentView.alarmsView = this.baton.parentView.alarmsView || new AlarmsView.linkView({ model: this.model });
+            this.$el.append(
+                $('<fieldset>').append(
+                    $('<legend class="simple">').text(gt('Reminder')),
+                    this.baton.parentView.alarmsView.render().$el
+                )
+            );
+        }
+    });
+
+    //color selection
+    ext.point('io.ox/calendar/edit/section/alarms-container').extend({
         id: 'color',
-        index: 1200,
-        className: 'col-xs-12 col-sm-6 color-container',
+        index: 200,
         render: function () {
 
             var self = this,
@@ -812,15 +792,25 @@ define('io.ox/calendar/edit/extensions', [
             this.model.on('change:color change:folder', onChangeColor);
             onChangeColor();
         }
+    });
+
+    // container for alarms and color
+    point.extend({
+        id: 'visibility-container',
+        index: 1400,
+        className: 'col-xs-12 col-sm-6 visibility-container',
+        render: function () {
+            ext.point('io.ox/calendar/edit/section/visibility-container').invoke('render', this);
+        }
     }, {
+        nextTo: 'alarms-container',
         rowClass: 'collapsed'
     });
 
     // shown as
-    point.extend({
+    ext.point('io.ox/calendar/edit/section/visibility-container').extend({
         id: 'shown_as',
-        className: 'col-xs-12 col-md-6',
-        index: 1300,
+        index: 100,
         render: function () {
             this.$el.append(
                 new mini.CustomCheckboxView({
@@ -832,9 +822,29 @@ define('io.ox/calendar/edit/extensions', [
                 }).render().$el
             );
         }
-    }, {
-        nextTo: 'color',
-        rowClass: 'collapsed'
+    });
+
+    ext.point('io.ox/calendar/edit/section/visibility-container').extend({
+        id: 'allowAttendeeChanges',
+        index: 200,
+        render: function () {
+            // only the organizer is allowed to change this attribute
+            if (this.baton.mode === 'edit' && !(calendarUtil.hasFlag(this.model, 'organizer') || calendarUtil.hasFlag(this.model, 'organizer_on_behalf'))) return;
+            var checkboxView  = new mini.CustomCheckboxView({
+                label: gt('Participants can make changes'),
+                name: 'attendeePrivileges',
+                model: this.model,
+                customValues: { 'false': 'DEFAULT', 'true': 'MODIFY' },
+                defaultVal: this.baton.mode === 'create' && settings.get('chronos/allowAttendeeEditsByDefault', false) ? 'MODIFY' : 'DEFAULT'
+            });
+
+            this.$el.append(
+                checkboxView.render().$el.addClass('attendee-change-checkbox')
+            );
+
+            // trigger initial change so defaults are applied
+            checkboxView.onChange();
+        }
     });
 
     // Attachments
@@ -842,7 +852,7 @@ define('io.ox/calendar/edit/extensions', [
     // attachments label
     point.extend({
         id: 'attachments_legend',
-        index: 1400,
+        index: 1500,
         className: 'col-md-12',
         render: function () {
             this.$el.append(
@@ -859,7 +869,7 @@ define('io.ox/calendar/edit/extensions', [
         id: 'attachment_list',
         registerAs: 'attachmentList',
         className: 'div',
-        index: 1500,
+        index: 1600,
         noUploadOnSave: true,
         module: 1
     }), {
@@ -868,7 +878,7 @@ define('io.ox/calendar/edit/extensions', [
 
     point.basicExtend({
         id: 'attachments_upload',
-        index: 1600,
+        index: 1700,
         rowClass: 'collapsed',
         draw: function (baton) {
             var guid = _.uniqueId('form-control-label-'),
