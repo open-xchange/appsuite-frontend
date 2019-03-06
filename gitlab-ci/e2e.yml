@@ -65,6 +65,7 @@ generate e2e report:
   dependencies:
     - run e2e tests
   script:
+    - curl http://reports.ui.cloud.open-xchange.com/develop/history.tar -s | tar x &>/dev/null || echo "No history found"
     - allure generate ui/build/e2e/ -o ui/build/allure-report
   when: always
   artifacts:
@@ -87,6 +88,7 @@ publish e2e report:
   dependencies:
     - generate e2e report
   script:
+    - tar cf ui/build/allure-report/history.tar ui/build/allure-report/history &>/dev/null || echo "No history found"
     - docker exec reports rm -rf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG
     - docker cp ui/build/allure-report/ reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG/
   environment:
