@@ -207,6 +207,8 @@ define('io.ox/calendar/edit/main', [
                 data = data instanceof Backbone.Model ? data.toJSON() : data;
                 // apply defaults. Cannot be done in default of model, because then events in week/month view have class public by default
                 if (!data.class) data.class = 'PUBLIC';
+                data.attendeePrivileges = settings.get('chronos/allowAttendeeEditsByDefault', false) ? 'MODIFY' : 'DEFAULT';
+
                 this.edit(data, { mode: 'create' });
             },
 

@@ -834,16 +834,12 @@ define('io.ox/calendar/edit/extensions', [
                 label: gt('Participants can make changes'),
                 name: 'attendeePrivileges',
                 model: this.model,
-                customValues: { 'false': 'DEFAULT', 'true': 'MODIFY' },
-                defaultVal: this.baton.mode === 'create' && settings.get('chronos/allowAttendeeEditsByDefault', false) ? 'MODIFY' : 'DEFAULT'
+                customValues: { 'false': 'DEFAULT', 'true': 'MODIFY' }
             });
 
             this.$el.append(
                 checkboxView.render().$el.addClass('attendee-change-checkbox')
             );
-
-            // trigger initial change so defaults are applied
-            checkboxView.onChange();
         }
     });
 
