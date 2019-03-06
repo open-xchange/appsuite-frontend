@@ -13,11 +13,12 @@
 
 define('io.ox/tours/whats-new', [
     'io.ox/core/extensions',
+    'io.ox/core/capabilities',
     'settings!io.ox/tours',
     'io.ox/core/tk/wizard',
     'io.ox/backbone/views/modal',
     'gettext!io.ox/core'
-], function (ext, settings, Tour, ModalDialog, gt) {
+], function (ext, capabilities, settings, Tour, ModalDialog, gt) {
 
     'use strict';
 
@@ -180,6 +181,7 @@ define('io.ox/tours/whats-new', [
             id: 'whats-new',
             index: 260,
             extend: function () {
+                if (capabilities.has('guest')) return;
                 if (_.device('smartphone')) return;
                 this.append(
                     $('<a href="#" data-action="whats-new" role="menuitem">')
