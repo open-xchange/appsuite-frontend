@@ -131,6 +131,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
             // listen to full screen mode changes
             BigScreen.onchange = this.onChangeFullScreen.bind(this);
+            BigScreen.onerror = this.onFullScreenError.bind(this);
         },
 
         /**
@@ -1242,6 +1243,22 @@ define('io.ox/core/viewer/views/displayerview', [
             }
 
             return this.fullscreenPromise;
+        },
+
+        /**
+         * Handle full screen mode error event.
+         *
+         * @param {DOM|null} element
+         *  The element that is currently displaying in full screen or null.
+         *
+         * @param {String} reason
+         *  The reason string of the error, possible values for reason are:
+         *      not_supported: full screen is not supported at all or for this element
+         *      not_enabled: request was made from a frame that does not have the allowfullscreen attribute, or the user has disabled full screen in their browser (but it is supported)
+         *      not_allowed: the request failed, probably because it was not called from a user-initiated event
+         */
+        onFullScreenError: function (/*element, reason*/) {
+            this.fullscreenPromise.resolve();
         },
 
         /**

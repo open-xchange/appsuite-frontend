@@ -145,6 +145,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             'autoplaystop': {
                 prio: _.device('desktop') ? 'hi' : 'lo',
                 mobile: 'lo',
+                icon: 'fa fa-stop',
                 title: gt('Stop slideshow'),
                 ref: TOOLBAR_ACTION_ID + '/autoplaystop',
                 customize: function () {
@@ -165,7 +166,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             },
             'popoutstandalone': {
                 prio: 'hi',
-                // mobile: false,
                 icon: 'fa fa-external-link-square',
                 title: gt('Pop out standalone viewer'),
                 ref: TOOLBAR_ACTION_ID + '/popoutstandalone',
