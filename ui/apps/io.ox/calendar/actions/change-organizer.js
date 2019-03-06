@@ -21,7 +21,8 @@ define('io.ox/calendar/actions/change-organizer', [
     'io.ox/participants/model',
     'io.ox/participants/chronos-views',
     'io.ox/core/yell',
-    'less!io.ox/calendar/style'
+    'less!io.ox/calendar/style',
+    'io.ox/participants/add'
 ], function (calApi, ModalDialog, util, gt, mini, Typeahead, pModel, pViews, yell) {
 
     'use strict';
