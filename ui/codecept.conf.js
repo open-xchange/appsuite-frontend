@@ -27,6 +27,9 @@ module.exports.config = {
                 chromeOptions: {
                     args: ['no-sandbox']
                 }
+            },
+            timeouts: {
+                script: 5000
             }
         }, localConf.e2e.helpers.WebDriver || {}),
         OpenXchange: _.extend({}, {
