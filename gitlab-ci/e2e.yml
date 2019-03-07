@@ -65,8 +65,13 @@ generate e2e report:
   dependencies:
     - run e2e tests
   script:
+    # fetch current version of history
     - wget http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/history.tar -q -O - | tar x &>/dev/null && mv ui/build/allure-report/history ui/build/e2e/ || echo "No history found"
-    - allure generate ui/build/e2e/ -o ui/build/allure-report
+    - allure generate ui/build/e2e/ -o ui/build/allure-report/$CI_PIPELINE_ID
+    # preserve well-known location to bookmark/link to at latest
+    - cp -r ui/build/allure-report/$CI_PIPELINE_ID/history ui/build/allure-report/
+    - tar cf ui/build/allure-report/history.tar ui/build/allure-report/history &>/dev/null || echo "No history found"
+    - rm -rf ui/build/allure-report/history/
   when: always
   artifacts:
     when: always
@@ -88,12 +93,12 @@ publish e2e report:
   dependencies:
     - generate e2e report
   script:
-    - tar cf ui/build/allure-report/history.tar ui/build/allure-report/history &>/dev/null || echo "No history found"
-    - docker exec reports rm -rf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG
-    - docker cp ui/build/allure-report/ reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG/
+    - docker cp ui/build/allure-report/. reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG
+    - docker exec reports rm /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
+    - docker exec reports ln -sf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
   environment:
     name: reports/$CI_COMMIT_REF_SLUG
-    url: http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/
+    url: http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/
     on_stop: remove e2e report
   when: always
   only:
