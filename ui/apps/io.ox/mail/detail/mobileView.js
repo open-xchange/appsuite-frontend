@@ -170,12 +170,12 @@ define('io.ox/mail/detail/mobileView', [
         draw: function (baton) {
             if (baton.attachments.length === 0) return;
             // reuse existing view, to not duplicate event listeners
-            if (baton.view.attachmentView) {
-                baton.view.attachmentView.$header.empty();
-                this.append(baton.view.attachmentView.render());
-                baton.view.attachmentView.renderInlineLinks();
+            var view = this.data('view');
+            if (view) {
+                view.render();
+                view.renderInlineLinks();
             } else {
-                baton.view.attachmentView = extensions.attachmentList.call(this, baton);
+                extensions.attachmentList.call(this, baton);
             }
         }
     });
