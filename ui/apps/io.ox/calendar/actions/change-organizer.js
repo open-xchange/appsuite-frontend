@@ -95,19 +95,14 @@ define('io.ox/calendar/actions/change-organizer', [
                             $.txt(' '),
                             $.txt(strings.timeStr)
                         ),
+                        $('<label>').text(gt('New organizer')).attr({ for: guid = _.uniqueId('label-') }),
+                        organizerView.render().$el.attr({ id: guid }),
                         $('<label>').text(gt('Select new organizer')).attr({ for: guid = _.uniqueId('label-') }),
                         typeahead.$el.attr({ id: guid }),
-                        $('<label>').text(gt('Please leave a comment for other participants.')).attr({ for: guid = _.uniqueId('label-') }),
+                        $('<label>').text(gt('Add a message to the notification email for the other participants.')).attr({ for: guid = _.uniqueId('label-') }),
                         new mini.InputView({ name: 'comment', model: this.model, placeholder: gt('Password'), autocomplete: false }).render().$el.attr('id', guid)
                     );
                     typeahead.render();
-
-                    this.model.once('change:newOrganizer', function () {
-                        self.$body.find('label').first().before(
-                            $('<label>').text(gt('New organizer')).attr({ for: guid = _.uniqueId('label-') }),
-                            organizerView.render().$el.attr({ id: guid })
-                        );
-                    });
 
                     // for debugging (prevents closing of autocomplete)
                     // typeahead.$el.data('ttTypeahead').dropdown.close = $.noop;
