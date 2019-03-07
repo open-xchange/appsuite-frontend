@@ -65,7 +65,8 @@ generate e2e report:
   dependencies:
     - run e2e tests
   script:
-    - wget http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/history.tar -q -O - &>/dev/null| tar x &>/dev/null|| echo "No history found"
+    - wget http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/history.tar -q -O - &>/dev/null | tar x &>/dev/null || echo "No history found"
+    - mv ui/build/allure-report/history ui/build/e2e/
     - allure generate ui/build/e2e/ -o ui/build/allure-report
   when: always
   artifacts:
