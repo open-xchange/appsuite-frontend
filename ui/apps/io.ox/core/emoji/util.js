@@ -11,22 +11,21 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (settings) {
+define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji', 'io.ox/emoji/bundle'], function (settings, emoji) {
 
     'use strict';
 
-    var emoji,
-        convert = function (text) {
-            var allToUnified = emoji.converterFor({
-                from: 'all',
-                to: 'unified'
-            });
-            text = allToUnified(text);
-            text = emoji.unifiedToImageTag(text, {
-                forceEmojiIcons: settings.get('forceEmojiIcons', false)
-            });
-            return text;
-        };
+    var convert = function (text) {
+        var allToUnified = emoji.converterFor({
+            from: 'all',
+            to: 'unified'
+        });
+        text = allToUnified(text);
+        text = emoji.unifiedToImageTag(text, {
+            forceEmojiIcons: settings.get('forceEmojiIcons', false)
+        });
+        return text;
+    };
 
     return {
 
@@ -65,10 +64,6 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
             } else if (emoji) {
                 return cont(convert(str));
             }
-            require(['io.ox/emoji/bundle'], function (code) {
-                emoji = code;
-                cont(convert(str), true);
-            });
             return str;
         },
 

@@ -382,14 +382,6 @@ define('io.ox/mail/detail/view', [
             var data = content.get(baton.data),
                 node = data.content;
 
-            if (!data.isLarge && !data.processedEmoji && data.type === 'text/html') {
-                emoji.processEmoji(node.innerHTML, function (html, lib) {
-                    baton.processedEmoji = !lib.loaded;
-                    if (baton.processedEmoji) return;
-                    node.innerHTML = html;
-                });
-            }
-
             if (this.find('.shadow-style').length === 1 && /[\u203c\u2049\u20e3\u2123-\uffff]/.test(node.innerHTML)) {
                 var emojiStyles = ext.point('3rd.party/emoji/editor_css').map(function (point) {
                     return require('css!' + point.css).clone();

@@ -24,7 +24,8 @@ define('io.ox/mail/detail/content', [
     'io.ox/mail/detail/links',
     'io.ox/mail/sanitizer',
     'settings!io.ox/mail',
-    'gettext!io.ox/mail'
+    'gettext!io.ox/mail',
+    'io.ox/emoji/bundle'
 ], function (api, util, coreUtil, emoji, ext, capabilities, links, sanitizer, settings, gt) {
 
     'use strict';
