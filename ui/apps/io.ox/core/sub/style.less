@@ -36,6 +36,10 @@
                     a:hover { color: #555; }
                     clear: both;
                     padding-top: 6px;
+                    &.empty {
+                        padding-top: 0;
+                        a { text-decoration: none; }
+                    }
                 }
 
                 .breadcrumb-view {
@@ -55,7 +59,8 @@
 
             &.disabled {
                 .list-title {
-                    color: #aaa;
+                    color: #666;
+                    font-style: italic;
                     font-weight: normal;
                 }
                 .url i {
@@ -63,6 +68,13 @@
                     font-style: italic;
                 }
             }
+
+            &.broken {
+                .widget-controls .action {
+                    visibility: hidden;
+                }
+            }
+
         }
     }
 

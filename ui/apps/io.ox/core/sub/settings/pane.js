@@ -177,14 +177,17 @@ define('io.ox/core/sub/settings/pane', [
     ext.point('io.ox/core/sub/settings/list/itemview').extend({
         id: 'itemview',
         draw: function (baton) {
-
             var data = baton.model.toJSON(),
+                isBroken = data.source === 'com.openexchange.subscription.fallback',
                 enabled = data.enabled,
                 dynamicAction,
-                url,
+                url = getUrl(data),
+                shortUrl = getShortUrl(url),
                 displayName = getDisplayName(data) || '\u00A0';
 
             this[enabled ? 'removeClass' : 'addClass']('disabled');
+
+            if (isBroken) this.addClass('broken disabled');
 
             if (data.source && (baton.model.refreshState() === 'ready')) {
                 // this is a subscription
@@ -198,8 +201,6 @@ define('io.ox/core/sub/settings/pane', [
                 // this is a subscription and refresh should be disabled
                 dynamicAction = $('<span>');
             }
-
-            url = getUrl(data);
 
             this.addClass('widget-settings-view').append(
                 $('<div class="widget-controls">').append(
@@ -215,15 +216,16 @@ define('io.ox/core/sub/settings/pane', [
                 ),
                 $('<span class="content">').append(
                     $('<span data-property="displayName" class="list-title pull-left">')
-                    .text(displayName),
-                    $('<div class="url">').append(
-                        enabled ?
-                            $('<a target="_blank">').attr('href', url).text(getShortUrl(url) || '\u00A0') :
-                            $('<i>').text(getShortUrl(url))
-                    ),
+                        .text(displayName),
+                    $('<div class="url">')
+                        .addClass(shortUrl ? '' : 'empty')
+                        .append(
+                            enabled ?
+                                $('<a target="_blank">').attr('href', url).text(shortUrl) :
+                                $('<i>').text(shortUrl)
+                        ),
                     createPathInformation(baton.model),
                     refreshWarning(data)
-
                 )
             );
 
