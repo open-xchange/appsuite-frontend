@@ -944,5 +944,387 @@ Scenario('OXUI-618', async function (I, users) {
     I.dontSeeElement('[data-ref="io.ox/mail/listview"] [aria-selected="true"]');
     I.logout();
 });
+Scenario('[C8829] - Recipients autocomplete', async function (I, users) {
+    //define testrail ID
+    let [user] = users;
+    var testrailID = 'C7382';
+    let testrailName = 'Recipients autocomplete';
+    var timestamp = Math.round(+new Date() / 1000);
+    const contact = {
+        display_name: '' + testrailID + ', ' + testrailID + '',
+        folder_id: await I.getDefaultFolder('contacts', { user: users[0] }),
+        first_name: 'fname' + testrailID,
+        last_name: 'lname' + testrailID,
+        email1: 'mail1' + testrailID + '@e2e.de',
+        email2: 'mail2' + testrailID + '@e2e.de',
+        state_home: 'state' + timestamp,
+        street_home: 'street' + timestamp,
+        city_home: 'city' + timestamp
+    };
+    I.createContact(contact, { user: users[0] });
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
+    I.login('app=io.ox/mail', { user });
+    I.waitForVisible('.io-ox-mail-window');
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose.container', 5);
+    I.click({ css: '.recipient-actions button[data-type="cc"]' });
+    I.waitForElement({ css: '.io-ox-mail-compose .cc .tt-input' }, 5);
+    I.click({ css: '.recipient-actions button[data-type="bcc"]' });
+    I.waitForElement({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
+    const receivers = ['to', 'cc', 'bcc'];
+    const fields = [contact.email1.substring(0, 7), contact.email2.substring(0, 7), contact.first_name.substring(0, 7), contact.last_name.substring(0, 7)];
+    receivers.forEach(function (receiver) {
+        fields.forEach(function (field) {
+            I.click('.io-ox-mail-compose div[data-extension-id="' + receiver + '"] input.tt-input');
+            I.waitForFocus('.io-ox-mail-compose div[data-extension-id="' + receiver + '"] input.tt-input', 5);
+            I.pressKey(field);
+            I.waitForEnabled('.io-ox-mail-compose .' + receiver + ' .twitter-typeahead .tt-dropdown-menu', 5);
+            I.waitForElement({ css: '.io-ox-mail-compose .' + receiver + ' .autocomplete-item' });
+            I.waitForText(contact.email1, 5, { css: '.io-ox-mail-compose .tt-suggestions .tt-suggestion' });
+            I.waitForText(contact.email2, 5, { css: '.io-ox-mail-compose .tt-suggestions .tt-suggestion' });
+            I.waitForText(contact.first_name + ' ' + contact.last_name, 5, { css: '.io-ox-mail-compose .tt-suggestions .tt-suggestion' });
+            I.clearField({ css: '.io-ox-mail-compose div[data-extension-id="' + receiver + '"] input.tt-input' });
+        });
+    });
+    I.logout();
+});
+
+Scenario('[C8830] - Manually add multiple recipients via comma', async function (I, users) {
+    //define testrail ID
+    let [user] = users;
+    var testrailID = 'C8830';
+    let testrailName = 'Manually add multiple recipients via comma';
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
+    I.login('app=io.ox/mail', { user });
+    I.waitForVisible('.io-ox-mail-window');
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose.container', 5);
+    I.click({ css: '.io-ox-mail-compose div[data-extension-id="to"] input.tt-input' });
+    I.pressKey('foo@bar.de, lol@ox.io, bla@trash.com,');
+    I.waitForElement('.io-ox-mail-compose div.token', 5);
+    I.seeNumberOfElements('.io-ox-mail-compose div.token', 3);
+    I.logout();
+});
+
+Scenario('[C12119] - Edit recipients', async function (I, users) {
+    //define testrail ID
+    let [user] = users;
+    var testrailID = 'C12119';
+    let testrailName = 'Edit recipients';
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
+    I.login('app=io.ox/mail', { user });
+    I.waitForVisible('.io-ox-mail-window');
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose.container', 5);
+
+    I.click({ css: '.recipient-actions button[data-type="cc"]' });
+    I.waitForElement({ css: '.io-ox-mail-compose .cc .tt-input' }, 5);
+    I.click({ css: '.recipient-actions button[data-type="bcc"]' });
+    I.waitForElement({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
+
+    const fields = ['to', 'cc', 'bcc'];
+    
+    fields.forEach(function (field) {
+        I.click({ css: '.io-ox-mail-compose div[data-extension-id="' + field + '"] input.tt-input' });
+        I.pressKey('foo@bar.de, lol@ox.io, bla@trash.com,');
+        I.waitForElement('.io-ox-mail-compose div.token', 5);
+        I.seeNumberOfElements('.io-ox-mail-compose div.token', 3);
+        I.waitForText('foo@bar.de', 5, '.io-ox-mail-compose div.token');
+        I.waitForText('lol@ox.io', 5, '.io-ox-mail-compose div.token');
+        I.waitForText('bla@trash.com', 5, '.io-ox-mail-compose div.token');
+        I.doubleClick({ css: '.io-ox-mail-compose div.token:nth-of-type(3)' });
+        I.pressKey('super@ox.com,');
+        I.dontSee('bla@trash.com', '.io-ox-mail-compose div.token');
+        I.waitForText('foo@bar.de', 5, '.io-ox-mail-compose div.token');
+        I.waitForText('lol@ox.io', 5, '.io-ox-mail-compose div.token');
+        I.waitForText('super@ox.com', 5, '.io-ox-mail-compose div.token');
+        const recipients = ['foo@bar.de', 'lol@ox.io', 'super@ox.com'];
+        recipients.forEach(function (recipients) {
+            I.click({ css: '.io-ox-mail-compose [aria-label="' + recipients + '. Press backspace to delete."] .close' });
+        });
+        I.seeNumberOfElements('.io-ox-mail-compose div.token', 0);
+    });
+    I.logout();
+});
+
+Scenario('[C12120] - Recipient cartridge', async function (I, users) {
+    //define testrail ID
+    let [user] = users;
+    var testrailID = 'C12120';
+    let testrailName = 'Recipient cartridge';
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
+    I.login('app=io.ox/mail', { user });
+    I.waitForVisible('.io-ox-mail-window');
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose.container', 5);
+    I.click({ css: '.recipient-actions button[data-type="cc"]' });
+    I.waitForElement({ css: '.io-ox-mail-compose .cc .tt-input' }, 5);
+    I.click({ css: '.recipient-actions button[data-type="bcc"]' });
+    I.waitForElement({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
+    const fields = ['to', 'cc', 'bcc'];
+    fields.forEach(function (field) {
+        I.fillField('.io-ox-mail-compose div[data-extension-id="' + field + '"] input.tt-input', users[1].userdata.primaryEmail);
+        I.pressKey('Enter');
+        I.fillField('.io-ox-mail-compose div[data-extension-id="' + field + '"] input.tt-input', 'super@ox.com');
+        I.pressKey('Enter');
+        I.seeNumberOfElements('.io-ox-mail-compose div[data-extension-id="' + field + '"] div.token', 2);
+        I.waitForText(users[1].userdata.given_name + ' ' + users[1].userdata.sur_name, 5, '.io-ox-mail-compose div[data-extension-id="' + field + '"] div.token');
+        I.waitForText('super@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="' + field + '"] div.token');
+    });
+    I.logout();
+});
+
+Scenario('[C12118] - Remove recipients', async function (I, users) {
+    //define testrail ID
+    let [user] = users;
+    var testrailID = 'C12118';
+    let testrailName = 'Remove recipients';
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
+    I.login('app=io.ox/mail', { user });
+    I.waitForVisible('.io-ox-mail-window');
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose.container', 5);
+    I.click({ css: '.recipient-actions button[data-type="cc"]' });
+    I.waitForElement({ css: '.io-ox-mail-compose .cc .tt-input' }, 5);
+    I.click({ css: '.recipient-actions button[data-type="bcc"]' });
+    I.waitForElement({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
+    const fields = ['to', 'cc', 'bcc'];
+    fields.forEach(function (field) {
+        I.fillField('.io-ox-mail-compose div[data-extension-id="' + field + '"] input.tt-input', 'super01@ox.com');
+        I.pressKey('Enter');
+        I.fillField('.io-ox-mail-compose div[data-extension-id="' + field + '"] input.tt-input', 'super02@ox.com');
+        I.pressKey('Enter');
+        I.fillField('.io-ox-mail-compose div[data-extension-id="' + field + '"] input.tt-input', 'super03@ox.com');
+        I.pressKey('Enter');
+        I.seeNumberOfElements('.io-ox-mail-compose div[data-extension-id="' + field + '"] div.token', 3);
+        I.waitForText('super01@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="' + field + '"] div.token');
+        I.waitForText('super02@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="' + field + '"] div.token');
+        I.waitForText('super03@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="' + field + '"] div.token');
+        I.click({ css: '.io-ox-mail-compose [aria-label="super02@ox.com. Press backspace to delete."] .close' });
+        I.seeNumberOfElements('.io-ox-mail-compose div[data-extension-id="' + field + '"] div.token', 2);
+        I.waitForText('super01@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="' + field + '"] div.token');
+        I.waitForText('super03@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="' + field + '"] div.token');
+        I.dontSeeElement('.io-ox-mail-compose div[data-extension-id="' + field + '"] div.token [title="super02@ox.com"]');
+    });
+    I.logout();
+});
+
+Scenario('[C12121] - Display and hide recipient fields', async function (I, users) {
+    //define testrail ID
+    let [user] = users;
+    var testrailID = 'C12121';
+    let testrailName = 'Display and hide recipient fields';
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
+    I.login('app=io.ox/mail', { user });
+    I.waitForVisible('.io-ox-mail-window');
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose.container', 5);
+    I.click({ css: '.recipient-actions button[data-type="cc"]' });
+    I.waitForVisible({ css: '.io-ox-mail-compose .cc .tt-input' }, 5);
+    I.click({ css: '.recipient-actions button[data-type="bcc"]' });
+    I.waitForVisible({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
+    I.click({ css: '.recipient-actions button[data-type="cc"]' });
+    I.waitForInvisible({ css: '.io-ox-mail-compose .cc .tt-input' }, 5);
+    I.click({ css: '.recipient-actions button[data-type="bcc"]' });
+    I.waitForInvisible({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
+    I.logout();
+});
+
+Scenario('[C83384] - Automatically bcc all messages', async function (I, users) {
+    //define testrail ID
+    let [user] = users;
+    var testrailID = 'C83384';
+    let testrailName = 'Automatically bcc all messages';
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
+    I.haveSetting('io.ox/mail//autobcc', 'super01@ox.com');
+    I.login('app=io.ox/settings');
+    I.waitForVisible('.io-ox-settings-main');
+    I.waitForElement('[data-id="virtual/settings/io.ox/mail"]');
+    I.selectFolder('Compose');
+    I.waitForVisible('.io-ox-settings-window [data-point="io.ox/mail/settings/compose/settings/detail/view"]', 5);
+    I.seeInField('[data-point="io.ox/mail/settings/compose/settings/detail/view"] [name="autobcc"]', 'super01@ox.com');
+    I.openApp('Mail');
+    I.waitForVisible('.io-ox-mail-window');
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose.container', 5);
+    I.waitForVisible({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
+    I.waitForText('super01@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="bcc"] div.token');
+    //TODO: After consultation with Markus a mail should also be sent and verified here
+    I.logout();
+});
 
 
+Scenario('[C163026] - Change from display name when sending a mail', async function (I, users) {
+    //define testrail ID
+    let [user] = users;
+    var testrailID = 'C163026';
+    let testrailName = 'Change from display name when sending a mail';
+    var timestamp = Math.round(+new Date() / 1000);
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
+    I.login('app=io.ox/mail', { user });
+    I.waitForVisible('.io-ox-mail-window');
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose.container', 5);
+    I.waitForText(users[0].userdata.given_name + ' ' + users[0].userdata.sur_name, 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .name');
+    I.waitForText('<' + users[0].userdata.primaryEmail + '>', 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .address');
+    I.click('.io-ox-mail-compose [data-dropdown="from"] .fa-caret-down');
+    I.waitForVisible('.dropdown.open [data-name="edit-real-names"]', 5);
+    I.click('.dropdown.open [data-name="edit-real-names"]');
+    I.waitForVisible('.io-ox-dialog-wrapper .modal-body [title="Use custom name"]', 5);
+    I.click('.io-ox-dialog-wrapper .modal-body [title="Use custom name"]');
+    I.fillField('.modal-body [title="Custom name"]', timestamp);
+    I.click('Save', { css: '.modal-footer' });
+    I.waitForDetached('.io-ox-dialog-wrapper', 5);
+    I.waitForText(timestamp, 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .name');
+    I.waitForText('<' + users[0].userdata.primaryEmail + '>', 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .address');
+    I.click('.io-ox-mail-compose [data-dropdown="from"] .fa-caret-down');
+    I.waitForVisible('.dropdown.open [data-name="edit-real-names"]', 5);
+    I.click('.dropdown [data-name="sendDisplayName"]');
+    I.click('.dropdown [data-name="from"]');
+    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .address');
+    I.waitForText('This email just contains your email address as sender. Your real name is not used.', 5, '.io-ox-mail-compose .sender-realname .mail-input');
+    I.logout();
+});
+
+
+Scenario('[C207507] - Forgot mail attachment hint', async function (I, users) {
+    //define testrail ID
+    let [user] = users;
+    var testrailID = 'C207507';
+    let testrailName = 'Forgot mail attachment hint';
+    var timestamp = Math.round(+new Date() / 1000);
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
+    I.login('app=io.ox/mail', { user });
+    I.waitForVisible('.io-ox-mail-window');
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose.container', 5);
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 'super01@ox.de');
+    I.fillField('.io-ox-mail-compose [name="subject"]', testrailID);
+    I.fillField('.io-ox-mail-compose .plain-text', 'see attachment');
+    I.click('Send', '.floating-window-content');
+    I.waitForElement('.modal-open .modal-dialog', 5);
+    I.waitForText('Forgot attachment?', 5, '.modal-open .modal-dialog .modal-title');
+    I.click('Cancel', '.modal-footer');
+    I.waitForDetached('.modal-open .modal-dialog', 5);
+    I.fillField('.io-ox-mail-compose [name="subject"]', 'see attachment');
+    I.fillField('.io-ox-mail-compose .plain-text', testrailID);
+    I.click('Send', '.floating-window-content');
+    I.waitForElement('.modal-open .modal-dialog', 5);
+    I.waitForText('Forgot attachment?', 5, '.modal-open .modal-dialog .modal-title');
+    I.click('Cancel', '.modal-footer');
+    I.waitForDetached('.modal-open .modal-dialog', 5);
+    I.logout();
+});
+
+
+Scenario('[C8831] - Add recipient manually', async function (I, users) {
+    //define testrail ID
+    let [user] = users;
+    var testrailID = 'C8831';
+    let testrailName = 'Add recipient manually';
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
+    I.login('app=io.ox/mail', { user });
+    I.waitForVisible('.io-ox-mail-window');
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose.container', 5);
+    I.waitForVisible('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 'super01@ox.com');
+    I.seeInField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 'super01@ox.com');
+    I.click('.io-ox-mail-compose .plain-text');
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 'super02@ox.com');
+    I.seeInField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 'super02@ox.com');
+    I.click('.io-ox-mail-compose .plain-text');
+    I.seeNumberOfVisibleElements('.io-ox-mail-compose div[data-extension-id="to"] div.token', 2);
+    I.waitForText('super01@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="to"] div.token');
+    I.waitForText('super02@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="to"] div.token');
+    I.logout();
+});
+
+//Scenario('[C114353] - Mail address parsing supports multiple delimiters', async function (I, users) {
+//    //define testrail ID
+//    let [user] = users;
+//    var testrailID = 'C114353';
+//    let testrailName = 'Mail address parsing supports multiple delimiters';
+//    I.haveSetting('io.ox/mail//messageFormat', 'text');
+//    I.login('app=io.ox/mail', { user });
+//    I.waitForVisible('.io-ox-mail-window');
+//    I.clickToolbar('Compose');
+//    I.waitForVisible('.io-ox-mail-compose.container', 5);
+//    const bla = [
+//        {
+//            string: 'Foo Bar <foo@bar.com>, John Doe <john@doe.com>, Jane Doe <jane@doe.com>'
+//        },
+//        {
+//            string: 'Foo Bar <foo@bar.com>; John Doe <john@doe.com>; Jane Doe <jane@doe.com>'
+//        },
+//        {
+//            string: 'Foo Bar <foo@bar.com> John Doe <john@doe.com> Jane Doe <jane@doe.com>'
+//        },
+//        {
+//            string: 'Foo Bar <foo@bar.com> John Doe <john@doe.com>   Jane Doe <jane@doe.com>'
+//        },
+//        {
+//            string: 'Foo Bar <foo@bar.com> \
+//            John Doe <john@doe.com> \
+//            Jane Doe <jane@doe.com>' 
+//        },
+//        {
+//            string: 'Fóó Bær <foo@bar.com>'
+//        },
+//        {
+//            string: 'John Do-Do-Doe <john@doe.com>'
+//        }
+//    ];
+//    bla.forEach(async function (input, i) {
+//        I.waitForVisible('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 5);
+//        I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', input.string);
+//        I.pressKey('Enter');
+//        I.waitForElement('.io-ox-mail-compose div[data-extension-id="to"] div.token [title="Foo Bar <foo@bar.com>"]');
+//        I.waitForElement('.io-ox-mail-compose div[data-extension-id="to"] div.token [title="John Doe <john@doe.com>"]');
+//        I.waitForElement('.io-ox-mail-compose div[data-extension-id="to"] div.token [title="Jane Doe <jane@doe.com>"]');
+//        I.seeNumberOfElements('.io-ox-mail-compose div[data-extension-id="to"] div.token', 3);
+//        I.click({ css: '.io-ox-mail-compose .close' });
+//        I.click({ css: '.io-ox-mail-compose .close' });
+//        I.click({ css: '.io-ox-mail-compose .close' });
+//        I.seeNumberOfElements('.io-ox-mail-compose div[data-extension-id="to"] div.token', 0);
+//        pause();
+//    });
+//
+//    I.logout();
+//});
+
+//Scenario('[C8829] - Recipients autocomplete', async function (I, users) {
+//    //define testrail ID
+//    let [user] = users;
+//    var testrailID = 'C7382';
+//    let testrailName = 'Recipients autocomplete';
+//
+//    // 0) log in to settings and set compose mode to html
+//    I.haveSetting('io.ox/mail//messageFormat', 'text');
+//    I.login('app=io.ox/mail', { user });
+//    I.waitForVisible('.io-ox-mail-window');
+//    I.clickToolbar('Compose');
+//    I.waitForVisible('.io-ox-mail-compose.container', 5);
+//    I.click('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
+//    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 5);
+//    I.pressKey(users[1].userdata.sur_name.substring(0, 2));
+//    I.wait(2);
+//    I.waitForEnabled('.io-ox-mail-compose .to .twitter-typeahead .tt-dropdown-menu', 5);
+//    I.waitForElement({ css: '.io-ox-mail-compose .to .autocomplete-item' });
+//    const autoCompleteCount = await I.grabNumberOfVisibleElements({ css: '.io-ox-mail-compose .to .autocomplete-item' });
+//    console.log(autoCompleteCount);
+//    let i;
+//    let participants = [];
+//    for (i = 0; i < autoCompleteCount; i++) {
+//        I.waitForElement({ css: '.io-ox-mail-compose .tt-dataset-0 .tt-suggestions .tt-suggestion:nth-child(' + (i + 1) + ')' }, 5);
+//        let participantEmail = await I.grabTextFrom({ css: '.io-ox-mail-compose .tt-dataset-0 .tt-suggestions .tt-suggestion:nth-child(' + (i + 1) + ') .participant-email' });
+//        let participantName = await I.grabTextFrom({ css: '.io-ox-mail-compose .tt-dataset-0 .tt-suggestions .tt-suggestion:nth-child(' + (i + 1) + ') .participant-name' });
+//        console.log(participantEmail);
+//        console.log(participantName);
+//        participants.push({
+//            name: participantName,
+//            mail: participantEmail
+//        });
+//    }
+//    I.logout();
+//});
