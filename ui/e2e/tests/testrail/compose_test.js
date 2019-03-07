@@ -327,72 +327,35 @@ Scenario('[C7388] - Send mail with different priorities', function (I, users) {
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
 
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
-    I.click('Options');
-    I.click('High');
-    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
-    I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp + ' Priority: High');
-    I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
-    I.click('Send');
-    I.waitForDetached('.io-ox-mail-compose');
-
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
-    I.click('Options');
-    I.click('Normal');
-    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
-    I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp + ' Priority: Normal');
-    I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
-    I.click('Send');
-    I.waitForDetached('.io-ox-mail-compose');
-
-    I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
-    I.click('Options');
-    I.click('Low');
-    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
-    I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp + ' Priority: Low');
-    I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
-    I.click('Send');
-    I.waitForDetached('.io-ox-mail-compose');
-
+    let priorities = ['High', 'Normal', 'Low'];
+    priorities.forEach(function (priorities, i) {
+        I.clickToolbar('Compose');
+        I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+        I.click('Options');
+        I.waitForElement('.dropdown.open .dropdown-menu', 5);
+        if (i === 0) I.click('High');
+        else if (i === 1) I.click('Normal');
+        else if (i === 2) I.click('Low');
+        I.waitForDetached('.dropdown.open .dropdown-menu', 5);
+        I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
+        I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp + ' Priority: ' + priorities + '');
+        I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
+        I.click('Send');
+        I.waitForDetached('.io-ox-mail-compose');
+    });
     I.logout();
-
     I.login('app=io.ox/mail', { user: users[1] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.wait(2);
-    I.retry(5).doubleClick('[title="' + testrailID + ' - ' + timestamp + ' Priority: High"]');
-    I.waitForElement('.floating-window-content .window-container-center .thread-view');
-    I.see(testrailID + ' - ' + timestamp);
-    I.seeElement('.detail-view-app .detail-view-row [title="High priority"]');
-    I.dontSeeElement('.detail-view-app .detail-view-row [title="Low priority"]');
-    I.logout();
-
-    I.login('app=io.ox/mail', { user: users[1] });
-    I.selectFolder('Inbox');
-    I.waitForVisible('.selected .contextmenu-control');
-    I.wait(2);
-    I.retry(5).doubleClick('[title="' + testrailID + ' - ' + timestamp + ' Priority: Low"]');
-    I.waitForElement('.floating-window-content .window-container-center .thread-view');
-    I.see(testrailID + ' - ' + timestamp);
-    I.dontSeeElement('.detail-view-app .detail-view-row [title="High priority"]');
-    I.seeElement('.detail-view-app .detail-view-row [title="Low priority"]');
-    I.logout();
-
-    I.login('app=io.ox/mail', { user: users[1] });
-    I.selectFolder('Inbox');
-    I.waitForVisible('.selected .contextmenu-control');
-    I.wait(2);
-    I.retry(5).doubleClick('[title="' + testrailID + ' - ' + timestamp + ' Priority: Normal"]');
-    I.waitForElement('.floating-window-content .window-container-center .thread-view');
-    I.see(testrailID + ' - ' + timestamp);
-    I.dontSeeElement('.detail-view-app .detail-view-row [title="High priority"]');
-    I.dontSeeElement('.detail-view-app .detail-view-row [title="Low priority"]');
+    I.waitForVisible('.leftside .list-view', 5);
+    priorities.forEach(function (priorities, i) {
+        I.waitForText('' + testrailID + ' - ' + timestamp + ' Priority: ' + priorities + '', 5, '.io-ox-mail-window .subject .drag-title');
+        I.click({ css: '[title="' + testrailID + ' - ' + timestamp + ' Priority: ' + priorities + '"]' });
+        I.waitForElement('.mail-detail-pane.selection-one', 5);
+        I.waitForText('' + testrailID + ' - ' + timestamp + ' Priority: ' + priorities + '', 5, '.thread-view-header .subject');
+        if (i === 0) I.waitForElement('.mail-detail-pane.selection-one .priority .high', 5);
+        else if (i === 2) I.waitForElement('.mail-detail-pane.selection-one .priority .low', 5);
+    });
     I.logout();
 });
 
@@ -834,7 +797,8 @@ Scenario('[C101620] - Very long TO field', async function (I, users) {
     I.waitForVisible('.io-ox-mail-window');
     I.selectFolder('Inbox');
 
-    I.click('//*[contains(text(), "Very long TO field")]', 'span.drag-title');
+    I.waitForText('Very long TO field', 5, { css: '.drag-title' });
+    I.click('Very long TO field', { css: '.drag-title' });
     I.seeCssPropertiesOnElements('.mail-detail-pane .recipients', { 'overflow': 'hidden' });
     I.seeCssPropertiesOnElements('.mail-detail-pane .recipients', { 'text-overflow': 'ellipsis' });
     //TODO: Width is not 100% when get css property?
@@ -1229,10 +1193,8 @@ Scenario('[C8831] - Add recipient manually', async function (I, users) {
     I.waitForVisible('.io-ox-mail-compose.container', 5);
     I.waitForVisible('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 'super01@ox.com');
-    I.seeInField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 'super01@ox.com');
     I.click('.io-ox-mail-compose .plain-text');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 'super02@ox.com');
-    I.seeInField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 'super02@ox.com');
     I.click('.io-ox-mail-compose .plain-text');
     I.seeNumberOfVisibleElements('.io-ox-mail-compose div[data-extension-id="to"] div.token', 2);
     I.waitForText('super01@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="to"] div.token');

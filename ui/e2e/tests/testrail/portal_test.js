@@ -183,6 +183,7 @@ Scenario('[C7482] Add a mail to portal', async function (I, users) {
     });
     I.login('app=io.ox/mail', { user: users[0] });
     I.waitForVisible('.io-ox-mail-window');
+    I.waitForText('C7482 - Add a mail to portal', 5, { css: '.drag-title' });
     I.click('C7482 - Add a mail to portal', { css: '.drag-title' });
     I.waitForElement('article.mail-detail', 5);
     I.click('.classic-toolbar [data-action="more"]');
