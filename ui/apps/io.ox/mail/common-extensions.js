@@ -568,6 +568,7 @@ define('io.ox/mail/common-extensions', [
                     var data = this.model.toJSON(), url, contentType;
 
                     new ActionDropdownView({
+                        backdrop: true,
                         caret: false,
                         data: data,
                         el: this.$('.file'),
