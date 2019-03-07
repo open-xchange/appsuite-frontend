@@ -1048,8 +1048,16 @@ html.ios .io-ox-viewer {
     .viewer-sidebar, .swiper-slide.swiper-slide-active { -webkit-overflow-scrolling: touch; }
 }
 
-.viewer-sidebar .description-button { outline:0; padding:0; border:0; font-size: 13px; color: @brand-primary; }
-.viewer-dark-theme .viewer-sidebar .description-button { color: #7ba6d1; }
+.viewer-sidebar .description-button {
+    outline: 0;
+    padding: 0;
+    border: 0;
+    font-size: 13px;
+    color: @link-color;
+}
+.viewer-dark-theme .viewer-sidebar .description-button {
+    color: lighten(@link-color, 20%);
+}
 
 @media print {
     .io-ox-viewer {
