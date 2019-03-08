@@ -131,7 +131,7 @@ Scenario('Compose mail with different attachments', async function (I, users) {
     I.fillField('Title', 'Testdocument.txt');
     I.fillField('Note', 'Some content');
     I.click('Save');
-    I.waitForText('Save', 5, '.floating-window');
+    I.waitForText('Save', 5, '.window-footer');
     I.click('Close');
 
     I.openApp('Mail');
@@ -242,7 +242,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.fillField('Title', 'Testdocument.txt');
     I.fillField('Note', 'Some content');
     I.click('Save');
-    I.waitForText('Save', 5, '.floating-window');
+    I.waitForText('Save', 5, '.window-footer');
     I.click('Close');
 
     I.openApp('Mail');
@@ -276,6 +276,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.waitForText('Subject');
 
     I.fillField('To', user2.get('primaryEmail'));
+    I.pressKey('Enter');
     I.click('Send');
     I.waitForInvisible('.floating-window');
     I.wait(1);
