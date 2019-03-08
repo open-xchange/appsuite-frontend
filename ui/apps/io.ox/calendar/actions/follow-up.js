@@ -45,17 +45,7 @@ define('io.ox/calendar/actions/follow-up', [
         });
 
         // clean up attendees (remove confirmation status comments etc)
-        copy.attendees = _(copy.attendees).map(function (attendee) {
-            var temp = _(attendee).pick('cn', 'cuType', 'email', 'uri', 'entity', 'contact');
-            // resources are always set to accepted
-            if (temp.cn === 'RESOURCE') {
-                temp.partStat = 'ACCEPTED';
-                if (attendee.comment) temp.comment = attendee.comment;
-            } else {
-                temp.partStat = 'NEEDS-ACTION';
-            }
-            return temp;
-        });
+        copy.attendees = util.cleanupAttendees(copy.attendees);
 
         // use ox.launch to have an indicator for slow connections
         ox.load(['io.ox/calendar/edit/main']).done(function (edit) {

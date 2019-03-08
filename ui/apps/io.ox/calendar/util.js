@@ -1383,6 +1383,21 @@ define('io.ox/calendar/util', [
                 moment.tz(moment(result.startDate.value).valueOf() + moment(master.endDate.value).valueOf() - moment(master.startDate.value).valueOf(), result.startDate.tzid).format('YYYYMMDD[T]HHmmss');
 
             return result;
+        },
+        // cleans attendee confrmations and comments, used when data from existing appointments should be used to create a new one (invite, follow up)
+        cleanupAttendees: function (attendees) {
+            // clean up attendees (remove confirmation status comments etc)
+            return _(attendees).map(function (attendee) {
+                var temp = _(attendee).pick('cn', 'cuType', 'email', 'uri', 'entity', 'contact');
+                // resources are always set to accepted
+                if (temp.cn === 'RESOURCE') {
+                    temp.partStat = 'ACCEPTED';
+                    if (attendee.comment) temp.comment = attendee.comment;
+                } else {
+                    temp.partStat = 'NEEDS-ACTION';
+                }
+                return temp;
+            });
         }
     };
 

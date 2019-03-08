@@ -11,7 +11,10 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/calendar/actions/invite', ['settings!io.ox/calendar'], function (settings) {
+define('io.ox/calendar/actions/invite', [
+    'settings!io.ox/calendar',
+    'io.ox/calendar/util'
+], function (settings, util) {
 
     'use strict';
 
@@ -26,6 +29,10 @@ define('io.ox/calendar/actions/invite', ['settings!io.ox/calendar'], function (s
                 data.organizer.partStat = 'NEEDS-ACTION';
                 attendees.unshift(data.organizer);
             }
+
+            // clean up attendees (remove confirmation status comments etc)
+            attendees = util.cleanupAttendees(attendees);
+
             // open create dialog with same participants
             data = {
                 folder: settings.get('chronos/defaultFolderId'),
