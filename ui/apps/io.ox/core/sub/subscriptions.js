@@ -11,7 +11,7 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/core/sub/subscriptions', [
+define.async('io.ox/core/sub/subscriptions', [
     'io.ox/core/extensions',
     'io.ox/core/sub/model',
     'io.ox/core/api/sub',
@@ -423,8 +423,21 @@ define('io.ox/core/sub/subscriptions', [
     //     }
     // });
 
-    return {
-        availableServices: availableServices,
-        buildSubscribeDialog: buildSubscribeDialog
-    };
+    var def = $.Deferred();
+    // try api/sub sources
+    if (!availableServices.contacts || !availableServices.calendar) {
+        api.sources.getAll().then(function (sources) {
+            availableServices.contacts = availableServices.contacts || _(sources).any({ module: 'contacts' });
+            availableServices.calendar = availableServices.calendar || _(sources).any({ module: 'calendar' });
+        }).always(def.resolve);
+    } else {
+        def.resolve();
+    }
+
+    return def.then(function () {
+        return {
+            availableServices: availableServices,
+            buildSubscribeDialog: buildSubscribeDialog
+        };
+    });
 });
