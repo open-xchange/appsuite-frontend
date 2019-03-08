@@ -250,8 +250,8 @@
     }
 
     function onResize(e) {
-        // do not clear menus when the resize event has been triggered
-        if (!e.originalEvent) return;
+        // do not clear menus when the resize event has been triggered or on android
+        if (!e.originalEvent || _.device('smartphone && android')) return;
         clearMenus(e);
     }
 
