@@ -364,12 +364,16 @@ define('io.ox/backbone/views/actions/util', [
 
             baton = ensureBaton(baton);
 
-            new (baton.simple ? Collection.Simple : Collection)(baton.array())
-                .getPromise()
-                .pipe(function (collection) {
-                    baton.collection = collection;
-                    nextAction();
-                });
+            if (!baton.collection) {
+                new (baton.simple ? Collection.Simple : Collection)(baton.array())
+                    .getPromise()
+                    .pipe(function (collection) {
+                        baton.collection = collection;
+                        nextAction();
+                    });
+            } else {
+                nextAction();
+            }
 
             function nextAction() {
                 var action = list.shift();
