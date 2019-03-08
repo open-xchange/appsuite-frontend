@@ -1260,7 +1260,7 @@ define('io.ox/mail/main', [
         'auto-select': function (app) {
 
             // no auto-selection needed on smartphones
-            if (_.device('smartphone')) return;
+            if (!settings.get('autoselectMailOnStart', true) || _.device('smartphone')) return;
 
             var select = function () {
                 app.listView.collection.find(function (model, index) {
