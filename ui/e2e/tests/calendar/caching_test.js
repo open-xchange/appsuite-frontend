@@ -11,7 +11,7 @@
  */
 
 
-Feature('Calendar: Create appointment').tag('2');
+Feature('Calendar: Create appointment');
 
 Before(async function (users) {
     await users.create();
@@ -21,7 +21,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario.skip('Create never ending appointment and check display in several views', async function (I) {
+Scenario('Create never ending appointment and check display in several views', async function (I) {
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
