@@ -95,7 +95,7 @@ publish e2e report:
     - generate e2e report
   script:
     - docker cp ui/build/allure-report/. reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG
-    - docker exec reports rm /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
+    - docker exec reports rm -f /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
     - docker exec reports ln -sf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
   environment:
     name: reports/$CI_COMMIT_REF_SLUG
