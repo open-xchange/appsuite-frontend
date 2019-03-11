@@ -72,7 +72,7 @@ define('io.ox/backbone/mini-views/copy-to-clipboard', [
         },
 
         dispose: function () {
-            // remove tooltip of copy to clipboard is removed
+            // remove tooltip if copy to clipboard is disposed
             this.$el.tooltip('destroy');
             Abstract.prototype.dispose.call(this, arguments);
         }
