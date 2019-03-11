@@ -81,8 +81,8 @@ generate e2e report:
   only:
     - develop
     - master
-    - master-*
-    - release-*
+    - /^master-/
+    - /^release-/
     - /^feature\//
     - /^bug\//
 
@@ -105,8 +105,8 @@ publish e2e report:
   only:
     - develop
     - master
-    - master-*
-    - release-*
+    - /^master-/
+    - /^release-/
     - /^feature\//
     - /^bug\//
 
