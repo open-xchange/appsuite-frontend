@@ -139,7 +139,7 @@
                 var menu = $parent.data('menu');
                 if (!menu.find('[data-action="close-menu"]').parent().is(':last-child')) {
                     menu.find('[data-action="close-menu"]').parent().appendTo(menu);
-                } else if (!menu.find('[data-action="close-menu"]')) {
+                } if (menu.find('[data-action="close-menu"]').length === 0) {
                     // for programmatic invoked menu we have to append a new closer as menus may be cleared
                     setTimeout(function () {
                         menu.append(getCloseElement());
