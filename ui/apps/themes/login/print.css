@@ -398,3 +398,10 @@ h1.calendar-title {
 .week-view .event.absolute {
     position: absolute;
 }
+
+.recovery-code {
+    font-size: 3em;
+    font-weight: bold;
+    padding: 10px;
+    line-height: 50px;
+}

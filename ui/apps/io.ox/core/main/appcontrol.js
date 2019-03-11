@@ -256,8 +256,10 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
-        ext.point('io.ox/core/notifications/badge').invoke('register', self, {});
+    ox.once('core:load', function () {
+        ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
+            ext.point('io.ox/core/notifications/badge').invoke('register', self, {});
+        });
     });
 
     ext.point('io.ox/core/appcontrol').extend({

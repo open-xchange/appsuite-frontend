@@ -65,6 +65,18 @@ define('io.ox/core/boot/load', [
             });
         }
     }, {
+        id: 'theme',
+        run: function () {
+            return $.when(loadUserTheme());
+        }
+    }, {
+        id: 'multifactor',
+        run: function (baton) {
+            if (baton.sessionData && baton.sessionData.requires_multifactor) {
+                return doMultifactor();
+            }
+        }
+    }, {
         id: 'compositionSpaces',
         run: function () {
             ox.rampup.compositionSpaces = $.when(
@@ -105,7 +117,7 @@ define('io.ox/core/boot/load', [
             var loadCore = manifests.manager.loadPluginsFor('core').then(function () {
                 return require(['io.ox/core/main']);
             });
-            return $.when(loadCore, loadUserTheme()).then(function success(core) {
+            return $.when(loadCore).then(function success(core) {
                 util.debug('DONE!');
                 ox.trigger('boot:done');
 
@@ -149,6 +161,27 @@ define('io.ox/core/boot/load', [
         // otherwise try to load default theme now
         console.error('Could not load custom theme', theme);
         return themes.set('default').catch(fail);
+    }
+
+    // Do multifactor authentication.  If successful, load full rampup data
+    function doMultifactor() {
+        var def = $.Deferred();
+        require(['io.ox/multifactor/auth', 'io.ox/multifactor/login/loginScreen'], function (auth, loginScreen) {  // Couldn't be loaded until themes loaded
+            loginScreen.create();
+            auth.doAuthentication().then(function () {
+                loginScreen.destroy();
+                session.rampup().then(function (data) {
+                    if (data) session.set(data);
+                    def.resolve();
+                });
+            }, function () {
+                session.logout().always(function () {
+                    window.location.reload(true);  // Hard fail here.  Reload
+                    def.reject();
+                });
+            });
+        });
+        return def;
     }
 
     // greedy prefetch for mail app

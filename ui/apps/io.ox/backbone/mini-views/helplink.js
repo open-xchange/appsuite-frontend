@@ -51,22 +51,24 @@ define('io.ox/backbone/mini-views/helplink', [
                 HelpApp.getApp(opt).launch();
             });
 
-            // metrics
-            require(['io.ox/metrics/main'], function (metrics) {
-                if (!metrics.isEnabled()) return;
-                // track help as separate app/page
-                metrics.trackPage({
-                    id: 'io.ox/help'
+            if (this.options.metrics) {
+                // metrics
+                require(['io.ox/metrics/main'], function (metrics) {
+                    if (!metrics.isEnabled()) return;
+                    // track help as separate app/page
+                    metrics.trackPage({
+                        id: 'io.ox/help'
+                    });
+                    // track what page/anchor of help is requested
+                    metrics.trackEvent({
+                        app: 'core',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: 'help',
+                        detail: href.substr(href.lastIndexOf('#') + 1)
+                    });
                 });
-                // track what page/anchor of help is requested
-                metrics.trackEvent({
-                    app: 'core',
-                    target: 'toolbar',
-                    type: 'click',
-                    action: 'help',
-                    detail: href.substr(href.lastIndexOf('#') + 1)
-                });
-            });
+            }
         },
 
         initialize: function (options) {
@@ -76,7 +78,9 @@ define('io.ox/backbone/mini-views/helplink', [
                 content: $('<i class="fa" aria-hidden="true">').attr('title', gt('Online help')),
                 href: 'index.html',
                 iconClass: 'fa-question-circle',
-                modal: false
+                modal: false,
+                metrics: true
+
             }, options);
 
             if (!_.isString(this.options.content)) {

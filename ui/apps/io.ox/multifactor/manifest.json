@@ -1,0 +1,7 @@
+[
+    {
+        "title": "Multifactor",
+        "path": "io.ox/multifactor/settings",
+        "namespace": "io.ox/settings/main"
+    }
+]
