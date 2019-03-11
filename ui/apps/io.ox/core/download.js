@@ -26,6 +26,13 @@ define('io.ox/core/download', [
     // export global callback; used by server response
     window.callback_antivirus = showAntiVirusPopup;
 
+    /* errors related to scanning
+        FILE_DOES_NOT_EXIST - 8
+        FILE_TOO_BIG - 9
+        FILE_INFECTED - 11
+    */
+    var scanErrors = _(['0008', '0009', '0011']).map(function (value) { return 'ANTI-VIRUS-SERVICE-' + value; });
+
     function map(o) {
         return { id: o.id, folder_id: o.folder || o.folder_id };
     }
@@ -107,8 +114,14 @@ define('io.ox/core/download', [
         index: 300,
         id: 'message',
         render: function (baton) {
+            var text = baton.model.get('error');
+            // generic error message for internal errors (I/O error, service unreachable, service not running etc)
+            if (scanErrors.indexOf(baton.model.get('code')) === -1) {
+                text = 'File could not be scanned for malicious content.';
+            }
+
             this.$body.append($('<div class="alert">')
-                .text(baton.model.get('error'))
+                .text(text)
                 .css('margin-bottom', '0')
                 // error code 11 is virus found
                 .addClass(baton.model.get('code') === 'ANTI-VIRUS-SERVICE-0011' ? 'alert-danger' : 'alert-warning'));
