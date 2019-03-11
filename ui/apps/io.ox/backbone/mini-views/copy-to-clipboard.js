@@ -69,6 +69,12 @@ define('io.ox/backbone/mini-views/copy-to-clipboard', [
             this.$el
                 .attr('data-original-title', gt('Copied')).tooltip('show')
                 .attr('data-original-title', originalTitle);
+        },
+
+        dispose: function () {
+            // remove tooltip of copy to clipboard is removed
+            this.$el.tooltip('destroy');
+            Abstract.prototype.dispose.call(this, arguments);
         }
 
     });
