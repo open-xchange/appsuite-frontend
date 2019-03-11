@@ -50,7 +50,7 @@ Scenario('adding a mail containing XSS code', async function (I, users) {
 
     I.openApp('Portal');
     I.waitForElement({ css: '[data-app-name="io.ox/portal"] .widgets' }, 20);
-    I.waitForDetached({ css: '.widgets .widget.io-ox-busy' }, 20);
+    I.waitForDetached('#io-ox-refresh-icon .fa-refresh.fa-spin');
 
     let [widgetId] = await I.grabAttributeFrom('.io-ox-portal-window .widgets li.widget:first-child', 'data-widget-id');
     let [type] = await I.grabAttributeFrom('.io-ox-portal-window .widgets li.widget:first-child', 'data-widget-type');
