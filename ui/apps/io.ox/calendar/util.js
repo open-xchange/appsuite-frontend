@@ -1204,7 +1204,7 @@ define('io.ox/calendar/util', [
             var app = ox.ui.apps.get('io.ox/calendar');
             if (!app) return {};
             var perspective = app.perspective;
-            if (!perspective) return;
+            if (!perspective) return {};
 
             var rangeStart, rangeEnd, model = perspective.model;
             switch (perspective.getName()) {
