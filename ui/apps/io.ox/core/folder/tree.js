@@ -215,7 +215,6 @@ define('io.ox/core/folder/tree', [
                 top = offset.top - 7,
                 left = offset.left + target.outerWidth() + 7;
 
-            target.data('preventFocus', true);
             this.toggleContextMenu({ target: target, top: top, left: left });
         },
 

@@ -13,13 +13,10 @@
  */
 
 define('io.ox/core/tk/list-contextmenu', [
-    'io.ox/core/extensions',
     'io.ox/backbone/views/action-dropdown',
-    'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/contextmenu-utils',
-    'io.ox/core/collection',
     'gettext!io.ox/core'
-], function (ext, ActionDropdownView, Dropdown, ContextMenuUtils, Collection, gt) {
+], function (ActionDropdownView, ContextMenuUtils, gt) {
 
     'use strict';
 
@@ -33,6 +30,14 @@ define('io.ox/core/tk/list-contextmenu', [
             if (!this.contextMenu.hasActions()) return;
             this.contextMenu.$toggle.dropdown('toggle');
 
+            // Keyboardsupport for cursor up/down on toggle
+            this.contextMenu.$toggle.on('keydown', function (e) {
+                if (!/^(38|40)$/.test(e.which)) return;
+                if (e.which === 38) this.contextMenu.$menu.find('li:last a').focus();
+                if (e.which === 40) this.contextMenu.$menu.find('li:first a').focus();
+            }.bind(this));
+            if (this.isKeyboardEvent) this.contextMenu.$menu.find('li:first a').focus();
+
         }.bind(this));
     }
 
@@ -42,7 +47,8 @@ define('io.ox/core/tk/list-contextmenu', [
             // clicks bubbles. right-click not
             // DO NOT ADD e.preventDefault() HERE (see bug 42409)
             e.stopPropagation();
-            this.toggleContextMenu(ContextMenuUtils.positionForEvent(e));
+            this.isKeyboardEvent = e.isKeyboardEvent;
+            this.toggleContextMenu(ContextMenuUtils.positionForEvent(e), e);
         },
 
         toggleContextMenu: function (pos) {

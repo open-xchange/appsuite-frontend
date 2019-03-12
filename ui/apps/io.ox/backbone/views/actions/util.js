@@ -441,7 +441,7 @@ define('io.ox/backbone/views/actions/util', [
 
             var $toggle = $el.find('.dropdown-toggle'),
                 $menu = $el.find('.dropdown-menu'),
-                $backdrop = $('<div class="smart-dropdown-container dropdown open">').on('click contextmenu', toggle),
+                $backdrop = $('<div class="smart-dropdown-container dropdown open" role="navigation">').on('click contextmenu', toggle),
                 className = $el.attr('class');
 
             // listen for click event directly on menu for proper backdrop support
