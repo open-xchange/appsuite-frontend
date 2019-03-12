@@ -18,7 +18,7 @@ define('io.ox/multifactor/views/totpProvider', [
     'io.ox/backbone/views/modal',
     'gettext!io.ox/core/boot',
     'io.ox/multifactor/views/constants',
-    'io.ox/backbone/mini-views/help'
+    'io.ox/backbone/mini-views/helplink'
 ], function (views, ext, mini, ModalView, gt, constants, HelpLink) {
 
     'use strict';
@@ -101,7 +101,8 @@ define('io.ox/multifactor/views/totpProvider', [
                     iconClass: 'mfHelp fa-question-circle fa',
                     href: 'ox.appsuite.user.sect.multifactor.totp.html',
                     tabindex: '-1',
-                    metrics: false  // For now, metrics not possible before full authentication done
+                    simple: !ox.ui.createApp,  // If ui not fully loaded, simple help only
+                    metrics: ox.ui.createApp !== undefined
                 }).render().$el;
                 this.$header.append(help);
             }

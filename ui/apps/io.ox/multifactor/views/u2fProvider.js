@@ -19,9 +19,8 @@ define('io.ox/multifactor/views/u2fProvider', [
     'io.ox/multifactor/api',
     'gettext!io.ox/core/boot',
     'io.ox/multifactor/views/constants',
-    'io.ox/backbone/mini-views/help',
-    'io.ox/core/notifications',
-    'io.ox/multifactor/lib/u2f-api'
+    'io.ox/backbone/mini-views/helplink',
+    'io.ox/core/notifications'
 ], function (views, ext, mini, ModalView, api, gt, constants, HelpLink, notify) {
 
     'use strict';
@@ -83,7 +82,8 @@ define('io.ox/multifactor/views/u2fProvider', [
                     iconClass: 'mfHelp fa-question-circle fa',
                     href: 'ox.appsuite.user.sect.multifactor.u2f.html',
                     tabindex: '-1',
-                    metrics: false  // For now, metrics not possible before full authentication done
+                    simple: !ox.ui.createApp,  // If ui not fully loaded, simple help only
+                    metrics: ox.ui.createApp !== undefined
                 }).render().$el;
                 this.$header.append(help);
             }

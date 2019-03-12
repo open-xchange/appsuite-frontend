@@ -153,6 +153,7 @@ define('io.ox/help/main', ['io.ox/backbone/views/modal', 'gettext!io.ox/help', '
         getApp: createInstance,
         reuse: function (opt) {
             return ox.ui.App.reuse('io.ox/help:' + getAddress(opt));
-        }
+        },
+        getAddress: getAddress
     };
 });

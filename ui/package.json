@@ -82,6 +82,7 @@
     "swiper": "4.3.3",
     "tinymce": "4.9.2",
     "typeahead.js": "0.10.5",
+    "u2f-api": "1.0.10",
     "underscore": "1.9.1",
     "unorm": "1.4.1",
     "velocity-animate": "1.5.2"

@@ -97,6 +97,7 @@ define('io.ox/multifactor/settings/pane', [
             } else {
                 $('.addBackupDevice').show();
             }
+            statusDiv.addClass('mfLoaded');
         })
         .always(function () {
             ox.idle();

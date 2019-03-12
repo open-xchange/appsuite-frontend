@@ -21,7 +21,7 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
     'io.ox/multifactor/views/constants',
     'gettext!io.ox/core/boot',
     'less!io.ox/multifactor/style',
-    'io.ox/multifactor/lib/u2f-api'
+    'io.ox/multifactor/auth'
 ], function (views, ext, mini, ModalView, yell, api, constants, gt) {
 
     'use strict';

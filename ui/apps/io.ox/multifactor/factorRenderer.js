@@ -14,8 +14,7 @@ define('io.ox/multifactor/factorRenderer', [
     'io.ox/core/extensions',
     'io.ox/multifactor/views/constants',
     'less!io.ox/multifactor/style',
-    'less!io.ox/backbone/mini-views/settings-list-view',
-    'io.ox/multifactor/lib/u2f-api'
+    'less!io.ox/backbone/mini-views/settings-list-view'
 ], function (gt, ext, constants) {
     'use strict';
 

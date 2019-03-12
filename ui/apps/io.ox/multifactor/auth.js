@@ -16,11 +16,15 @@ define('io.ox/multifactor/auth', [
     'io.ox/multifactor/views/selectDeviceView',
     'io.ox/multifactor/deviceAuthenticator',
     'io.ox/multifactor/bundle'
-], function (api, selectDeviceView, deviceAuthenticator) {
+], function (api, selectDeviceView, deviceAuthenticator, modules) {
 
     'use strict';
 
     var authenticating = false;
+
+    if (modules.exports && !window.u2f) {
+        window.u2f = modules.exports;
+    }
 
     var auth = {
 

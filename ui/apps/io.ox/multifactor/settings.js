@@ -25,4 +25,17 @@ define('io.ox/multifactor/settings', [
         });
     }
 
+    ext.point('io.ox/settings/help/mapping').extend({
+        id: 'SecondFactorHelp',
+        index: 300,
+        list: function () {
+            _.extend(this, {
+                'virtual/settings/io.ox/multifactor': {
+                    base: 'help',
+                    target: 'ox.appsuite.user.sect.multifactor.settings.html'
+                }
+            });
+        }
+    });
+
 });

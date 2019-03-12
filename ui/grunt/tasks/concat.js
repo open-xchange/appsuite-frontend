@@ -359,8 +359,8 @@ module.exports = function (grunt) {
             multifactor: {
                 options: {
                     banner: 'define("io.ox/multifactor/bundle", [], function () {\n\n' +
-                                '"use strict";\n\n',
-                    footer: '});\n'
+                                '"use strict";\n\nvar module = {};\n',
+                    footer: '\nreturn module; \n});\n'
                 },
                 files: [
                     {
@@ -373,7 +373,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/multifactor/views/smsProvider.js',
                             'apps/io.ox/multifactor/views/totpProvider.js',
                             'apps/io.ox/multifactor/views/u2fProvider.js',
-                            'apps/io.ox/multifactor/lib/u2f-api.js'
+                            'node_modules/u2f-api/dist/lib/generated-google-u2f-api.js'
                         ],
                         dest: 'build/apps/io.ox/multifactor/bundle.js',
                         nonull: true
