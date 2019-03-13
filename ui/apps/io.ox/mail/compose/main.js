@@ -173,7 +173,7 @@ define('io.ox/mail/compose/main', [
         index: INDEX += 100,
         perform: function () {
             return this.view.signaturesLoading.then(function () {
-                this.config.setInitialSignature();
+                this.config.setInitialSignature(this.model.get('content'));
             }.bind(this));
         }
     }, {
