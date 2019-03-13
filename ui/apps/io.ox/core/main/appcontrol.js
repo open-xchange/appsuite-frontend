@@ -117,7 +117,7 @@ define('io.ox/core/main/appcontrol', [
             var cell = $('<div class="lcell" aria-hidden="true">').append(
                 // important: do not add circle element via append (https://stackoverflow.com/a/3642265)
                 this.badge = $('<svg height="8" width="8" class="indicator"><circle cx="4" cy="4" r="4"></svg>')
-                    .toggle(this.model.get('hasBadge')),
+                    .toggleClass('hidden', !this.model.get('hasBadge')),
                 $('<div class="icon">').append(this.$icon),
                 $('<div class="title">').text(this.model.get('title'))
             );
@@ -126,7 +126,7 @@ define('io.ox/core/main/appcontrol', [
             return cell;
         },
         toggleBadge: function () {
-            this.badge.toggle(this.model.get('hasBadge'));
+            this.badge.toggleClass('hidden', !this.model.get('hasBadge'));
         },
         updateTooltip: function () {
             var tooltipAttribute = this.quicklaunch ? 'title' : 'aria-label';
