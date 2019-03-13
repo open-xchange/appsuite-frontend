@@ -196,7 +196,7 @@ define('io.ox/calendar/actions/subscribe-shared', [
     });
 
     function getData(dialog) {
-        return $.when(api.flat({ module: 'calendar' })).then(function (pageData) {
+        return $.when(api.flat({ module: 'calendar', all: true })).then(function (pageData) {
             var calendarData = {};
 
             // cleanup
