@@ -11,8 +11,6 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-const expect = require('chai').expect;
-
 Feature('Calendar: Create new appointment').tag('3');
 
 Before(async function (users) {
@@ -53,9 +51,9 @@ Scenario('Create appointment with all fields', async function (I) {
         appointmentSelector = locate(`.appointment[data-cid="${cid}"]`);
     let appointment = appointmentSelector.inside('.weekview-container.day')
         .as('appointment element in day view');
-    I.waitForVisible(appointment);
-    expect(await I.grabTextFrom(appointment.find('.title'))).to.equal('test title');
-    expect(await I.grabTextFrom(appointment.find('.location'))).to.equal('test location');
+
+    I.see('test title', appointment);
+    I.see('test location', appointment);
     I.seeElement(appointment.find('.confidential-flag'));
 
     // // 2) week view
@@ -63,9 +61,9 @@ Scenario('Create appointment with all fields', async function (I) {
     I.click('Week');
     appointment = appointmentSelector.inside('.weekview-container.week')
         .as('appointment element in week view');
-    I.waitForVisible(appointment);
-    expect(await I.grabTextFrom(appointment.find('.title'))).to.equal('test title');
-    expect(await I.grabTextFrom(appointment.find('.location'))).to.equal('test location');
+
+    I.see('test title', appointment);
+    I.see('test location', appointment);
     I.seeElement(appointment.find('.confidential-flag'));
 
     // // 3) month view
@@ -73,9 +71,9 @@ Scenario('Create appointment with all fields', async function (I) {
     I.click('Month');
     appointment = appointmentSelector.inside('.monthview-container')
         .as('appointment element in month view');
-    I.waitForVisible(appointment);
-    expect(await I.grabTextFrom(appointment.find('.title'))).to.equal('test title');
-    expect(await I.grabTextFrom(appointment.find('.location'))).to.equal('test location');
+
+    I.see('test title', appointment);
+    I.see('test location', appointment);
     I.seeElement(appointment.find('.confidential-flag'));
 
     // // 4) list view
@@ -83,9 +81,9 @@ Scenario('Create appointment with all fields', async function (I) {
     I.click('List');
     appointment = appointmentSelector.inside('.calendar-list-view')
         .as('appointment element in list view');
-    I.waitForVisible(appointment);
-    expect(await I.grabTextFrom(appointment.find('.title'))).to.equal('test title');
-    expect(await I.grabTextFrom(appointment.find('.location'))).to.equal('test location');
+
+    I.see('test title', appointment);
+    I.see('test location', appointment);
     I.seeElement(appointment.find('.private-flag'));
 
     // // delete the appointment thus it does not create conflicts for upcoming appointments
