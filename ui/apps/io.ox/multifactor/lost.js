@@ -28,8 +28,7 @@ define('io.ox/multifactor/lost', [
 
     function notifyFailure(message) {
         require(['io.ox/core/notifications'], function (notify) {
-            notify.yell('error', message);
-            $('#io-ox-core').show();  // May be hidden in login
+            $(document.body).append(notify.yell('error', message));  // append to document body rather than core
         });
     }
 
