@@ -321,7 +321,7 @@ define('io.ox/mail/compose/extensions', [
                     tokenfieldView = new Tokenfield({
                         id: guid,
                         className: attr,
-                        extPoint: POINT,
+                        extPoint: POINT + '/' + attr,
                         isMail: true,
                         apiOptions: {
                             users: true,
