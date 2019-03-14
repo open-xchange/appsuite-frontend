@@ -17,7 +17,8 @@ define('io.ox/calendar/actions/subscribe-shared', [
     'io.ox/core/folder/api',
     'io.ox/backbone/views/modal',
     'io.ox/backbone/mini-views',
-    'io.ox/core/http'
+    'io.ox/core/http',
+    'less!io.ox/calendar/actions/subscribe-shared'
 ], function (ext, gt, api, ModalDialog, mini, http) {
 
     'use strict';
@@ -114,7 +115,7 @@ define('io.ox/calendar/actions/subscribe-shared', [
                         input = el.find('input[name="com.openexchange.calendar.extendedProperties"]');
 
                     if (!this.model.get('subscribed')) {
-                        input.prop('disabled', true);
+                        input.prop('disabled', true).attr('data-state', 'manual');
                         el.addClass('disabled');
                     } else {
                         input.prop('disabled', false);
@@ -150,23 +151,29 @@ define('io.ox/calendar/actions/subscribe-shared', [
 
             if (!this.model.get('subscribed')) {
                 this.$el.addClass('disabled');
-                this.$el.find('input[name="com.openexchange.calendar.extendedProperties"]').prop('disabled', true);
+                this.$el.find('input[name="com.openexchange.calendar.extendedProperties"]').prop('disabled', true).attr('data-state', 'manual');
 
             }
             return this;
         }
     });
 
-    function returnListItems(section, dialog) {
+    function returnListItems(section, dialog, sectionTitle) {
         var elements = [],
             ItemModel = Backbone.Model.extend({});
 
         _.each(section, function (item) {
             if (!item['com.openexchange.calendar.extendedProperties']) return;
-            elements.push(new ItemView({
+
+            var newItem = new ItemView({
                 model: new ItemModel(item),
                 dialog: dialog
-            }).render().$el);
+            }).render().$el;
+
+            if (sectionTitle === 'private') {
+                newItem.find('[name="subscribed"]').prop('disabled', true).attr('data-state', 'manual');
+            }
+            elements.push(newItem);
         });
 
         return elements;
@@ -179,7 +186,8 @@ define('io.ox/calendar/actions/subscribe-shared', [
             var self = this,
                 sections = {
                     public: gt('Public calendars'),
-                    shared: gt('Shared calendars')
+                    shared: gt('Shared calendars'),
+                    private: gt('Private')
                 };
 
             _.each(this.calendarData, function (section, title) {
@@ -187,7 +195,7 @@ define('io.ox/calendar/actions/subscribe-shared', [
                     $('<div class="item-block">').append(
                         $('<h4>').text(sections[title]),
                         $('<ol class="list-group">').append(
-                            returnListItems(section, self)
+                            returnListItems(section, self, title)
                         )
                     )
                 );
@@ -196,12 +204,23 @@ define('io.ox/calendar/actions/subscribe-shared', [
     });
 
     function getData(dialog) {
-        return $.when(api.flat({ module: 'calendar' })).then(function (pageData) {
+        return $.when(api.flat({ module: 'calendar', all: true })).then(function (pageData) {
             var calendarData = {};
+
+            function filter(array) {
+                var filtered = [];
+                _.each(array, function (folder) {
+                    if (/(birthdays)/.test(folder['com.openexchange.calendar.provider'])) {
+                        filtered.push(folder);
+                    }
+                });
+                return filtered;
+            }
 
             // cleanup
             calendarData.public = pageData.public;
             calendarData.shared = pageData.shared;
+            calendarData.private = filter(pageData.private);
 
             return {
                 dialog: dialog,
@@ -213,7 +232,7 @@ define('io.ox/calendar/actions/subscribe-shared', [
             dialog.$body.append(
                 $('<div class="alert alert-warning">').text(data.error_desc)
             );
-            dialog.$footer.find('button[data-action="subscribe"]').attr('disabled', 'disabled');
+            dialog.$footer.find('button[data-action="subscribe"]').prop('disabled', true);
 
         });
     }

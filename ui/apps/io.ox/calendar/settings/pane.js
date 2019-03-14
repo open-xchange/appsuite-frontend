@@ -90,6 +90,18 @@ define('io.ox/calendar/settings/pane', [
             }
         },
         //
+        // Buttons
+        //
+        {
+            id: 'buttons',
+            index: INDEX += 100,
+            render: function (baton) {
+                this.$el.append(
+                    baton.branch('buttons', null, $('<div class="form-group buttons">'))
+                );
+            }
+        },
+        //
         // View
         //
         {
@@ -251,6 +263,31 @@ define('io.ox/calendar/settings/pane', [
                             util.checkbox('deleteInvitationMailAfterAction', gt('Automatically delete the invitation email after the appointment has been accepted or declined'), settings)
                         )
                     )
+                );
+            }
+        }
+    );
+
+    //
+    // Buttons
+    //
+    ext.point('io.ox/calendar/settings/detail/view/buttons').extend(
+        {
+            id: 'shared-calendars',
+            index: 100,
+            render: function () {
+                function openDialog() {
+                    require(['io.ox/calendar/actions/subscribe-shared'], function (subscribe) {
+                        subscribe.open();
+                    });
+                }
+
+                this.append(
+                    $('<button type="button" class="btn btn-default" data-action="subscribe-shared-calendars">')
+                    .append(
+                        $.txt(gt('Subscribe shared calendars'))
+                    )
+                    .on('click', openDialog)
                 );
             }
         }

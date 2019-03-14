@@ -223,15 +223,12 @@
         min-width: @quicklaunch-width;
         min-height: auto;
 
-        .indicator {
-            width: 8px;
-            height: 8px;
-            background-color: #eb4400;
-            border-radius: 50%;
+        svg.indicator {
             position: absolute;
             z-index: 1;
             top: 18px;
             left: 33px;
+            circle { fill: #eb4400 }
         }
 
         .title {
@@ -377,6 +374,8 @@
         margin: @launcher-spacing;
         height: @launcher-size;
         width: @launcher-size;
+
+        svg.indicator { display: none; }
 
         .closer {
             font-size: 15px;

@@ -234,11 +234,10 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         focus: function (index, items, focus) {
             items = items || this.getItems();
             var node = items.eq(index).attr('tabindex', '0');
-            // call focus deferred due to some issues in internet explorer
             if (focus !== false) {
-                _.defer(function () {
-                    node.focus();
-                });
+                // call focus deferred due to some issues in internet explorer
+                if (_.device('ie')) _.defer(function () { node.focus(); });
+                else node.focus();
             }
             // workaround for chrome's CSS bug:
             // styles of "selected" class are not applied if focus triggers scrolling.
