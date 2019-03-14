@@ -17,7 +17,7 @@ BuildRequires:  npm6
 BuildRequires:  nodejs >= 0.10.0
 %endif
 Version:        @OXVERSION@
-%define         ox_release 25
+%define         ox_release 26
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -262,6 +262,8 @@ done
 %{docroot}/appsuite/help/l10n/zh_TW
 
 %changelog
+* Mon Mar 04 2019 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2019-03-11 (5148)
 * Mon Feb 18 2019 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2019-02-25 (5132)
 * Mon Feb 04 2019 Marcus Klein <marcus.klein@open-xchange.com>
