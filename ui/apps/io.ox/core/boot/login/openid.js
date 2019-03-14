@@ -65,7 +65,7 @@ define('io.ox/core/boot/login/openid', [
             client: session.client(),
             version: session.version()
         };
-        if (!_.empty(location.hash)) params.hash = location.hash;
+        if (!_.isEmpty(location.hash)) params.hash = location.hash;
 
         location.href = [
             ox.apiRoot,
