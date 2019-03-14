@@ -16,8 +16,9 @@ define('io.ox/tours/mail', [
     'io.ox/core/tk/wizard',
     'io.ox/core/notifications',
     'io.ox/tours/utils',
+    'settings!io.ox/core',
     'gettext!io.ox/tours'
-], function (Tour, notifications, utils, gt) {
+], function (Tour, notifications, utils, settings, gt) {
 
     'use strict';
 
@@ -28,29 +29,25 @@ define('io.ox/tours/mail', [
         app: 'io.ox/mail',
         priority: 1
     }, function () {
-        new Tour()
+        var mailTour = new Tour()
         .step()
             .title(gt('Composing a new E-Mail'))
             .content(gt('To compose a new E-Mail, click on Compose in the toolbar.'))
-            .hotspot('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar .io-ox-action-link:visible:first')
+            .hotspot('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar [data-action="io.ox/mail/actions/compose"]:visible')
             .on('next', function () {
                 if (composeApp) {
                     if (composeApp.getWindow().floating.model.get('minimized')) composeApp.getWindow().floating.model.set('minimized', false);
                     return;
                 }
-                ox.registry.call('mail-compose', 'compose').then(function (result) {
+                ox.registry.call('mail-compose', 'open').then(function (result) {
                     composeApp = result.app;
-                });
-                ox.once('mail:compose:ready', function () {
-                    //HACK: add ready class, to have some class to waitFor
-                    $('.io-ox-mail-compose-window').addClass('ready');
                 });
             })
             .end()
         .step()
             .title(gt('Entering the recipient\'s name'))
             .content(gt('Enter the recipient\'s name into the recipients field. As soon as you typed the first letters, suggestions from the address books are displayed. To accept a recipient suggestion, click on it.'))
-            .waitFor('.io-ox-mail-compose-window.ready')
+            .waitFor('.io-ox-mail-compose-window:visible:last .subject:visible')
             .hotspot('.active [data-extension-id=to] .tokenfield.to')
             .on('back', function () {
                 if (composeApp && !composeApp.getWindow().floating.model.get('minimized')) {
@@ -123,21 +120,24 @@ define('io.ox/tours/mail', [
             .title(gt('Halo view'))
             .content(gt('To receive information about the sender or other recipients, open the Halo view by clicking on a name.'))
             .hotspot('.halo-link')
-            .end()
-        .step()
-            .title(gt('Editing multiple E-Mails'))
-            .content(gt('In order to edit multiple E-Mails at once, enable the checkboxes on the left side of the E-Mails. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar.'))
-            .hotspot('.classic-toolbar [data-dropdown="view"] ul a[data-name="checkboxes"]')
-            .referTo('.classic-toolbar [data-dropdown="view"] ul')
-            .waitFor('.classic-toolbar [data-dropdown="view"] ul a[data-name="checkboxes"]')
-            .on('wait', function () {
-                $('.classic-toolbar [data-dropdown="view"] ul').css('display', 'block');
-            })
-            .on('hide', function () {
-                $('.classic-toolbar [data-dropdown="view"] ul').css('display', '');
-            })
-            .end()
-        .step()
+            .end();
+
+        if (settings.get('selectionMode') !== 'alternative') {
+            mailTour.step()
+                .title(gt('Editing multiple E-Mails'))
+                .content(gt('In order to edit multiple E-Mails at once, enable the checkboxes on the left side of the E-Mails. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar.'))
+                .hotspot('.classic-toolbar [data-dropdown="view"] ul a[data-name="checkboxes"]')
+                .referTo('.classic-toolbar [data-dropdown="view"] ul')
+                .waitFor('.classic-toolbar [data-dropdown="view"] ul a[data-name="checkboxes"]')
+                .on('wait', function () {
+                    $('.classic-toolbar [data-dropdown="view"] ul').css('display', 'block');
+                })
+                .on('hide', function () {
+                    $('.classic-toolbar [data-dropdown="view"] ul').css('display', '');
+                })
+                .end();
+        }
+        mailTour.step()
             .title(gt('Opening the E-Mail settings'))
             .content(gt('To open the E-Mail settings, click the System menu icon on the upper right side of the menu bar. Select Settings. Click on E-Mail on the left side.'))
             .referTo('#io-ox-topbar-dropdown-icon')
@@ -146,7 +146,7 @@ define('io.ox/tours/mail', [
         .on('stop', function () {
             if (composeApp) {
                 //prevent app from asking about changed content
-                composeApp.model.dirty(false);
+                composeApp.view.dirty(false);
                 composeApp.quit();
                 composeApp = null;
             }
