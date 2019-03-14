@@ -329,8 +329,10 @@ define('io.ox/calendar/actions', [
             if (!data || !data.flags) return false;
             // not allowed if there are external participants (update handling doesnt work correctly + single user contexts doesnt need this)
             if (_(data.attendees).some(function (attendee) { return !_(attendee).has('entity'); })) return false;
-            // must have permission, must be organizer and it must be a group scheduled event (at least 2 participants. For one or zero participants you can just move the event, to achieve the same result)
-            return (util.hasFlag(data, 'organizer') || util.hasFlag(data, 'organizer_on_behalf')) && util.hasFlag(data, 'scheduled');
+            // must have permission, must be organizer (or attendee with change rights) and it must be a group scheduled event (at least 2 participants. For one or zero participants you can just move the event, to achieve the same result)
+            return ((util.hasFlag(data, 'organizer') || util.hasFlag(data, 'organizer_on_behalf'))
+                    || ((util.hasFlag(data, 'attendee') || util.hasFlag(data, 'attendee_on_behalf')) && data.attendeePrivileges === 'MODIFY'))
+                    && util.hasFlag(data, 'scheduled');
         },
         action: function (baton) {
             require(['io.ox/calendar/actions/change-organizer'], function (changeOrganizer) {
