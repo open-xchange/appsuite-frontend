@@ -137,11 +137,10 @@ define('io.ox/mail/compose/model', [
                 }
 
                 original = [].concat(original)[0];
-                if (!original) return data;
+                if (!original || meta.editFor) return data;
 
                 return mailAPI.get({ id: original.originalId, folder: original.originalFolderId }, { cache: !settings.get('features/fixContentType', false) }).then(function (mail) {
                     var header = [];
-                    if (meta.replyFor) return data;
                     if (/^(REPLY|REPLY_ALL)$/.test(data.meta.type)) {
                         //#. %1$s A date
                         //#. %2$s An email address
