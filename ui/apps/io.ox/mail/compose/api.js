@@ -229,7 +229,7 @@ define('io.ox/mail/compose/api', [
             return upload(url, data, type);
         },
         get: function (space, attachment) {
-            return http.POST({
+            return http.GET({
                 url: ox.apiRoot + '/mail/compose/' + space + '/attachments/' + attachment
             });
         },
