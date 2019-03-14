@@ -90,17 +90,6 @@ define('io.ox/core/tk/typeahead', [
             // use a clone instead of shared default-options-object
             o = this.options = $.extend({}, this.options, o || {});
 
-            /*
-             * extension point for autocomplete item
-             */
-            ext.point(o.extPoint + '/autoCompleteItem').extend({
-                id: 'view',
-                index: 100,
-                draw: function (data) {
-                    this.text(data);
-                }
-            });
-
             this.api = new AutocompleteAPI(_.extend({
                 // only pass to autocomplete api if non default extPoint
                 extPoint: /^io\.ox\/core\/tk\/(typeahead|tokenfield)$/.test(o.extPoint) ? undefined : o.extPoint
