@@ -93,29 +93,23 @@ module.exports = (config) => {
 			};
 		  });
 	});
- 
 	event.dispatcher.on(event.test.started, (test) => {
 		caseId = tcRegex.exec(test.title)[1];
 		//console.log(caseId);
 	});
- 
 	event.dispatcher.on(event.test.finished, (test) => {
 		caseId = tcRegex.exec(test.title)[1];
 		//console.log(caseId);
 	});
- 
 	event.dispatcher.on(event.test.passed, () => {
 		testrail.addResultForCase(runId, caseId, testCase.passed, (err) => {
 			if (err) throw new Error(`Something is wrong while adding result for a test case. Please check ${JSON.stringify(err)}`);
 			//console.log(event);
 		});
 	});
- 
 	event.dispatcher.on(event.test.failed, () => {
 		testrail.addResultForCase(runId, caseId, testCase.failed, (err) => {
 			if (err) throw new Error(`Something is wrong while adding result for a test case. Please check ${JSON.stringify(err)}`);
-			//console.log(event);
-
 		});
 	});
  

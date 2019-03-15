@@ -149,34 +149,33 @@ Scenario('[C7354] - Create new contact', function (I) {
 
 Scenario('[C7355] - Create a new private folder', function (I) {
     var timestamp = Math.round(+new Date() / 1000);
-
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
     I.waitForVisible('.classic-toolbar [data-action]');
     I.click('Add new address book');
-    I.fillField('[name=name]', 'C7354 ' + timestamp);
+    I.waitForElement('.modal-open [data-point="io.ox/core/folder/add-popup"]');
+    I.fillField('[name="name"]', 'C7354 ' + timestamp);
     I.click('[data-action="add"]');
     I.waitForDetached('[data-point="io.ox/core/folder/add-popup"]');
-    I.waitForElement('.fa-spin-paused');
     I.selectFolder('C7354 ' + timestamp);
-    I.see('C7354 ' + timestamp);
+    I.waitForText('C7354 ' + timestamp, '.folder-name');
     I.logout();
 });
 
 Scenario('[C7356] - Create a new public folder', function (I) {
     var timestamp = Math.round(+new Date() / 1000);
-
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
     I.waitForVisible('.classic-toolbar [data-action]');
     I.click('Add new address book');
-    I.fillField('[name=name]', 'C7356 ' + timestamp);
+    I.waitForElement('.modal-open [data-point="io.ox/core/folder/add-popup"]');
+    I.fillField('[name="name"]', 'C7356 ' + timestamp);
+    I.click('.modal-open .checkbox label');
     I.click('[data-action="add"]');
     I.waitForDetached('[data-point="io.ox/core/folder/add-popup"]');
-    I.waitForElement('.fa-spin-paused');
-    I.see('C7356 ' + timestamp);
+    I.selectFolder('C7356 ' + timestamp);
+    I.waitForText('C7356 ' + timestamp, '.folder-name');
+    I.waitForText('C7356 ' + timestamp, '[data-id="virtual/flat/contacts/public"] .folder-node');
     I.logout();
 });
 
@@ -190,17 +189,19 @@ Scenario('[C7367] - Delete Contact', async function (I, users) {
 
     };
     I.createContact(contact, { user: users[0] });
-
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
-
+    I.waitForElement('[aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.click('[aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForElement('.contact-header');
+    I.waitForText(testrailID + ', ' + testrailID, '.contact-header .header-name');
     I.clickToolbar('Delete');
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('div.modal-footer > button.btn.btn-primary');
-    I.dontSee('C7367, C7367');
+    I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('[aria-label="' + testrailID + ', ' + testrailID + '"]');
     I.logout();
 });
 
@@ -232,7 +233,6 @@ Scenario('[C7366] - Delete multiple contacts', async function (I, search, users)
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('div.modal-footer > button.btn.btn-primary');
     I.dontSee('C7367, C7367');
-
     I.logout();
 });
 
@@ -491,6 +491,7 @@ Scenario('[C7358] - Remove contact picture', function (I, search) {
     var firstname = 'C7358';
     var lastname = 'C7358';
     var phone = '+4917113371337';
+    var testrailID = 'C7358';
 
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
@@ -504,26 +505,27 @@ Scenario('[C7358] - Remove contact picture', function (I, search) {
     I.fillField('First name', firstname);
     I.fillField('Last name', lastname);
     I.fillField('Cell phone', phone);
-    I.see('Upload image');
+    I.waitForElement('.contact-picture-upload');
     I.click('.contact-picture-upload');
     I.waitForText('Edit image');
     I.attachFile('.picture-upload-view input[type=file]', 'contact_picture.png');
+    //Wait for UI feedback
     I.click('Ok');
     I.waitForDetached('.modal-dialog');
+    //wait for element detached
     I.dontSee('Upload image');
     I.click('Save');
     I.waitForDetached('.io-ox-contacts-edit-window');
     search.doSearch(lastname + ' ' + firstname);
-    I.see(lastname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
-    I.see(firstname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
-    I.doubleClick('[aria-label="' + lastname + ', ' + firstname + '"]');
-    I.dontSee('Upload image');
-    I.click('.detail-view-app [data-action="edit"]');
-    I.dontSee('Upload image');
+    // I.see(lastname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
+    // I.see(firstname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
+    I.click('[aria-label="' + lastname + ', ' + firstname + '"]');
+    I.waitForElement('.contact-header');
+    I.waitForText(lastname + ', ' + firstname, '.contact-header .header-name');
+    I.clickToolbar('Edit');
     I.click(".edit-contact [title='Remove']");
-    I.see('Upload image');
     I.click('Save');
-    I.see('Upload image');
+    //Verify that picture is removed
     I.logout();
 });
 
