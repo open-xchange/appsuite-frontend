@@ -47,7 +47,6 @@ define('io.ox/files/toolbar', [
             'share': {
                 prio: 'hi',
                 mobile: 'lo',
-                icon: 'fa fa-user-plus',
                 title: gt('Share'),
                 dropdown: 'io.ox/files/toolbar/share'
             },
