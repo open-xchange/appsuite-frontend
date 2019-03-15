@@ -191,7 +191,7 @@ define('io.ox/core/collection', ['io.ox/core/folder/api', 'io.ox/core/api/user']
         };
 
         this.getPromise = function () {
-            return this.getProperties().then(_.identity.bind(null, this));
+            return this.getProperties().pipe(_.identity.bind(null, this));
         };
 
         this.isResolved = function () {
