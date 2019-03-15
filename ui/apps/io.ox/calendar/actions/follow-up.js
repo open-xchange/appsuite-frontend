@@ -41,6 +41,11 @@ define('io.ox/calendar/actions/follow-up', [
                 target.add(1, 'w');
                 needsShift = true;
             }
+
+            // if this is the endDate and the appointment is an all day appointment we need to subtract 1 day
+            // (see bug 63806)
+            if (field === 'endDate' && isAllday) target.subtract(1, 'day');
+
             copy[field] = { value: target.format(format), tzid: model.get(field).tzid };
         });
 

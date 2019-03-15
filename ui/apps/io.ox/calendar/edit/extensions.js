@@ -105,13 +105,6 @@ define('io.ox/calendar/edit/extensions', [
                         // actual moving is done in the app.onSave method, because this method is also called after confirming conflicts, so we don't need duplicated code
                         baton.app.moveAfterSave = folder;
                     }
-                    // correct time for allday appointments (remove timezone and add 1 day to enddate)
-                    if (calendarUtil.isAllday(baton.model)) {
-                        // save unchanged dates, so they can be restored on error or when handling conflicts
-                        baton.parentView.tempEndDate = baton.model.get('endDate');
-                        baton.model.set('endDate', { value: moment(baton.model.get('endDate').value).add(1, 'days').format('YYYYMMDD') }, { silent: true });
-                    }
-
 
                     // check if participants inputfield contains a valid email address
                     if (!_.isEmpty(inputfieldVal.replace(/\s*/, '')) && coreUtil.isValidMailAddress(inputfieldVal)) {
@@ -127,6 +120,13 @@ define('io.ox/calendar/edit/extensions', [
                     }
 
                     if (!baton.model.isValid({ isSave: true })) return;
+
+                    // correct time for allday appointments (remove timezone and add 1 day to enddate)
+                    if (calendarUtil.isAllday(baton.model)) {
+                        // save unchanged dates, so they can be restored on error or when handling conflicts
+                        baton.parentView.tempEndDate = baton.model.get('endDate');
+                        baton.model.set('endDate', { value: moment(baton.model.get('endDate').value).add(1, 'days').format('YYYYMMDD') }, { silent: true });
+                    }
 
                     // save attachment data to model
                     if (attachments.length) {
