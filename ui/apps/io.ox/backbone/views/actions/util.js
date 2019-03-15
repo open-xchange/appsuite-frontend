@@ -449,11 +449,15 @@ define('io.ox/backbone/views/actions/util', [
             }
 
             function toggle() {
+                // check if already disposed (as part of a toolbar redraw or sth)
+                if (!$toggle) return false;
                 $toggle.dropdown('toggle');
                 return false;
             }
 
             function dispose() {
+                // close menu before dispose
+                if ($menu.is(':visible'))$toggle.dropdown('toggle');
                 $toggle = $menu = $backdrop = null;
             }
         }
