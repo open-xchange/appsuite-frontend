@@ -47,7 +47,6 @@ define('io.ox/core/viewer/views/types/typesregistry', [
          *  the file type string.
          */
         getTypeString: function (model) {
-
             if (!model) { return 'defaultview'; }
 
             var modelType = typesMap[(model.isEncrypted() ? model.getGuardType() : model.getFileType())] || 'defaultview';

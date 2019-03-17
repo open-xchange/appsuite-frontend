@@ -17,7 +17,8 @@ define('io.ox/mail/compose/main', [
     'io.ox/core/api/account',
     'io.ox/mail/util',
     'settings!io.ox/mail',
-    'gettext!io.ox/mail'
+    'gettext!io.ox/mail',
+    'io.ox/mail/compose/actions'
 ], function (ext, mailAPI, accountAPI, mailUtil, settings, gt) {
 
     'use strict';

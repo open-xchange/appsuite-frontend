@@ -54,7 +54,7 @@ define('io.ox/core/tk/doc-converter-utils', [
      *  The final URL of the server request; or undefined,
      *  if the current session is invalid.
      */
-    Utils.getConverterUrl = function (params, options) {
+    Utils.getConverterUrl = function (params) {
 
         // return nothing if no session is present
         if (!ox.session || !ox.ui.App.getCurrentApp()) {
@@ -62,14 +62,13 @@ define('io.ox/core/tk/doc-converter-utils', [
         }
 
         var currentAppUniqueID = ox.ui.App.getCurrentApp().get('uniqueID'),
-            encodeUrl = options && options.encodeUrl,
             module = Utils.CONVERTER_MODULE_NAME;
 
         // add default parameters (session and UID), and file parameters
         params = _.extend({ session: ox.session, uid: currentAppUniqueID }, params);
 
         // build and return the resulting URL
-        return ox.apiRoot + '/' + module + '?' + _.map(params, function (value, name) { return name + '=' + (encodeUrl ? encodeURIComponent(value) : value); }).join('&');
+        return ox.apiRoot + '/' + module + '?' + $.param(_.omit(params, _.isUndefined));
     };
 
     /**
@@ -242,7 +241,14 @@ define('io.ox/core/tk/doc-converter-utils', [
         // the resulting params
         var params = null;
 
-        if (model.isMailAttachment()) {
+        if (model.isComposeAttachment()) {
+            // check for mail compose models
+            params = {
+                source: 'compose',
+                id: model.get('spaceId'),
+                attachmentId: model.get('id')
+            };
+        } else if (model.isMailAttachment()) {
             // the Guard parameters for mail
             file_options = (originalModel && originalModel.file_options);
             file_options_params = file_options ? file_options.params : null;

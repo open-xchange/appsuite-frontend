@@ -1108,6 +1108,7 @@ define('io.ox/files/actions', [
             // check whether all selected items can be added to favorites
             var disabled = getSelectionOrTopFolder(baton).some(function (element) {
                 // check that we don't have a local file (upload file in mailcompose, view the file -> we have a local file)
+                if (element.space) return true;
                 if (element.group === 'localFile') return true;
                 if (folderAPI.is('trash', element)) return true;
                 // virtual folder

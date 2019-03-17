@@ -324,6 +324,14 @@ define('io.ox/core/viewer/views/toolbarview', [
                     ref: 'io.ox/mail/attachment/actions/save'
                 }
             },
+            compose: {
+                'downloadcomposeattachment': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    title: gt('Download'),
+                    ref: Util.getRefByModelSource('compose')
+                }
+            },
             pim: {
                 'print': {
                     prio: 'lo',

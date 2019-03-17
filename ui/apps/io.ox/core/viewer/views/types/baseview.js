@@ -94,7 +94,7 @@ define('io.ox/core/viewer/views/types/baseview', [
                 var model = e.data.model,
                     data = model.isFile() ? model.toJSON() : model.get('origData');
                 // Tested: No
-                actionsUtil.invoke(Util.getRefByModelSource(self.model.get('source')), ext.Baton({ model: model, data: data }));
+                actionsUtil.invoke(Util.getRefByModelSource(model.get('source')), ext.Baton({ model: model, data: data }));
             });
         },
 
@@ -118,7 +118,7 @@ define('io.ox/core/viewer/views/types/baseview', [
                 }
                 return FilesAPI.getUrl(modelJSON, 'thumbnail', options);
 
-            } else if (this.model.isMailAttachment()) {
+            } else if (this.model.isMailAttachment() || this.model.isComposeAttachment()) {
                 return MailAPI.getUrl(this.model.get('origData'), 'view', options);
 
             } else if (this.model.isPIMAttachment()) {

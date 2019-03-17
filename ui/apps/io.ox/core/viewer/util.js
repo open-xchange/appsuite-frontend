@@ -210,6 +210,7 @@ define('io.ox/core/viewer/util', [
     var ModelSourceRefMap = {
         drive: 'io.ox/files/actions/download',
         mail: 'io.ox/mail/actions/download-attachment',
+        compose: 'io.ox/mail/compose/actions/download',
         pim: 'io.ox/core/tk/actions/download-attachment',
         guardDrive: 'oxguard/download'
     };
