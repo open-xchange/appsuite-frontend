@@ -121,7 +121,7 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
     I.waitForElement('.io-ox-viewer');
     I.waitForText('testdocument.odt', 5, '.io-ox-viewer .filename-label');
     I.waitForText('testdocument.odt', 5, '.io-ox-viewer .viewer-sidebar-pane .file-name a');
-    I.click('.io-ox-viewer [data-ref="io.ox/core/viewer/actions/toolbar/close"]');
+    I.click('.io-ox-viewer [data-action="io.ox/core/viewer/actions/toolbar/close"]');
     I.waitForDetached('.io-ox-viewer');
 
     I.waitForElement('.widget[aria-label="Appointments"] .item', 5);
@@ -186,9 +186,9 @@ Scenario('[C7482] Add a mail to portal', async function (I, users) {
     I.waitForText('C7482 - Add a mail to portal', 5, { css: '.drag-title' });
     I.click('C7482 - Add a mail to portal', { css: '.drag-title' });
     I.waitForElement('article.mail-detail', 5);
-    I.click('.classic-toolbar [data-action="more"]');
-    I.waitForElement('.dropdown.open [data-ref="io.ox/mail/actions/add-to-portal"]', 5);
-    I.click('.dropdown.open [data-ref="io.ox/mail/actions/add-to-portal"]');
+    I.click('[aria-label="Mail Toolbar"] [data-action="more"]');
+    I.waitForElement('.dropdown.open [data-action="io.ox/mail/actions/add-to-portal"]', 5);
+    I.click('.dropdown.open [data-action="io.ox/mail/actions/add-to-portal"]');
     I.openApp('Portal');
     I.waitForVisible('.io-ox-portal-window');
     I.waitForElement('.io-ox-portal [aria-label="' + testrailID + ' - ' + testrailName + '"] .item', 5);
@@ -351,7 +351,7 @@ Scenario('[C7480] Add recently changed files widget', async function (I, users) 
     I.waitForElement('.io-ox-viewer');
     I.waitForText('testdocument.odt', 5, '.io-ox-viewer .filename-label');
     I.waitForText('testdocument.odt', 5, '.io-ox-viewer .viewer-sidebar-pane .file-name a');
-    I.click('.io-ox-viewer [data-ref="io.ox/core/viewer/actions/toolbar/close"]');
+    I.click('.io-ox-viewer [data-action="io.ox/core/viewer/actions/toolbar/close"]');
     I.waitForDetached('.io-ox-viewer');
     I.logout();
 });

@@ -26,10 +26,10 @@ Scenario('[C274484] Attendees can change the appointment', async function (I, us
     const moment = require('moment');
     let testrailID = 'C274484';
     var timestamp = Math.round(+new Date() / 1000);
-    I.haveSetting('io.ox/core//autoOpenNotification', false);
-    I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//chronos/allowAttendeeEditsByDefault', true);
-
+    I.haveSetting('io.ox/core//autoOpenNotification', false, { user: users[1] });
+    I.haveSetting('io.ox/core//showDesktopNotifications', false, { user: users[1] });
+    I.haveSetting('io.ox/calendar//chronos/allowAttendeeEditsByDefault', true, { user: users[1] });
+    I.haveSetting('io.ox/calendar//viewView', 'week:week', { user: users[1] });
     //Create Appointment
     const appointmentDefaultFolder = await I.getDefaultFolder('calendar', { user: users[0] });
     const appointment = {
@@ -77,6 +77,7 @@ Scenario('[C274484] Attendees can change the appointment', async function (I, us
     I.haveAppointment({ user: users[0] }, 'cal://0/' + appointmentDefaultFolder, appointment);
     I.login('app=io.ox/calendar', { user: users[1] });
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2019-05-01"))');
     I.clickToolbar('Today');
     I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
     I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
@@ -102,7 +103,7 @@ Scenario('[C274515] Attendees are not allowed to change their own permission sta
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//chronos/allowAttendeeEditsByDefault', true);
-
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
     //Create Appointment
     const appointmentDefaultFolder = await I.getDefaultFolder('calendar', { user: users[0] });
     const appointment = {
@@ -244,6 +245,7 @@ Scenario('[C7462] Remove a participant', async function (I, users) {
     var timestamp = Math.round(+new Date() / 1000);
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
 
     //Create Appointment
     const appointmentDefaultFolder = await I.getDefaultFolder('calendar', { user: users[0] });

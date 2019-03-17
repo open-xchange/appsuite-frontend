@@ -36,7 +36,9 @@ Scenario('[C7372] Create new distribution list', function (I, users) {
     I.selectFolder('Contacts');
     I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
     I.clickToolbar('New');
-    I.click('Add distribution list');
+    I.waitForElement('.open.dropdown [data-action="io.ox/contacts/actions/distrib"]');
+    //I.click('Add distribution list');
+    I.click('.open.dropdown [data-action="io.ox/contacts/actions/distrib"]');
     I.waitForVisible('.floating-window-content .create-distributionlist.container');
     I.fillField('Name', testrailID + ' - ' + timestamp);
     I.fillField('Add contact', users[0].userdata.primaryEmail);
@@ -103,19 +105,16 @@ Scenario('[C7376] Send a mail to distribution list', async function (I, users) {
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
     I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.wait(1);
-    I.doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.see(testrailID + ' - ' + timestamp);
-    I.see('Distribution list with 4 entries');
-    I.see(users[0].userdata.primaryEmail);
-    I.see(users[1].userdata.primaryEmail);
-    I.see(users[2].userdata.primaryEmail);
-    I.see(users[3].userdata.primaryEmail);
-
-    I.click('.detail-view-app [data-ref="io.ox/contacts/actions/send"]');
+    I.click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForText(testrailID + ' - ' + timestamp, '.contact-detail .display_name');
+    I.waitForText('Distribution list with 4 entries', '.contact-detail .header-job span');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[0].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[1].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[2].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[3].userdata.primaryEmail + '"]');
+    I.clickToolbar('Send email');
     I.waitForVisible({ css: 'textarea.plain-text' });
-    I.wait(0.2);
-
+    I.waitForElement('.io-ox-mail-compose [name="subject"]');
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
     I.click('Send');
@@ -125,29 +124,33 @@ Scenario('[C7376] Send a mail to distribution list', async function (I, users) {
     I.login('app=io.ox/mail', { user: users[0] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.see(testrailID + ' - ' + timestamp);
+    I.waitForElement('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForText(testrailID + ' - ' + timestamp, '.mail-detail-pane .subject');
     I.logout();
 
     I.login('app=io.ox/mail', { user: users[1] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.see(testrailID + ' - ' + timestamp);
+    I.waitForElement('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForText(testrailID + ' - ' + timestamp, '.mail-detail-pane .subject');
     I.logout();
 
     I.login('app=io.ox/mail', { user: users[2] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.see(testrailID + ' - ' + timestamp);
+    I.waitForElement('[title="' + testrailID + ' - ' + timestamp + '"]')
+    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForText(testrailID + ' - ' + timestamp, '.mail-detail-pane .subject');
     I.logout();
 
     I.login('app=io.ox/mail', { user: users[3] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.see(testrailID + ' - ' + timestamp);
+    I.waitForElement('[title="' + testrailID + ' - ' + timestamp + '"]')
+    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForText(testrailID + ' - ' + timestamp, '.mail-detail-pane .subject');
     I.logout();
 });
 
@@ -193,34 +196,44 @@ Scenario('[C7377] Copy distribution list', async function (I, users) {
     I.selectFolder('Contacts');
     I.click('Add new address book');
     I.waitForElement('.modal-open [data-point="io.ox/core/folder/add-popup"]');
+    I.waitForElement('[placeholder="New address book"][type="text"]');
     I.fillField('[placeholder="New address book"][type="text"]', testrailID);
     I.click('Add');
     I.waitForDetached('.modal-open [data-point="io.ox/core/folder/add-popup"]');
-    I.retry(5).doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.click('.detail-view-app [data-action="more"]');
-    I.click('.dropdown.open [data-ref="io.ox/contacts/actions/copy"]');
+    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForText(testrailID + ' - ' + timestamp, '.contact-detail .display_name');
+    I.waitForText('Distribution list with 4 entries', '.contact-detail .header-job span');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[0].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[1].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[2].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[3].userdata.primaryEmail + '"]');
+    I.click('[aria-label="Address Book Toolbar"] .more-dropdown a');
+    I.click('.dropdown.open [data-action="io.ox/contacts/actions/copy"]');
+    I.waitForElement('.modal [data-id="virtual/flat/contacts/private"] div.folder-arrow');
     I.click('.modal [data-id="virtual/flat/contacts/private"] div.folder-arrow');
+    I.waitForElement('.modal [aria-label="' + testrailID + '"]');
     I.click('.modal [aria-label="' + testrailID + '"]');
     I.click('[type="button"][data-action="ok"]');
-    I.click('.floating-window-content [aria-label="Close"][type="button"]');
     I.selectFolder('Contacts');
-    I.retry(5).click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.see(testrailID + ' - ' + timestamp);
-    I.see('Distribution list with 4 entries');
-    I.see(users[0].userdata.primaryEmail);
-    I.see(users[1].userdata.primaryEmail);
-    I.see(users[2].userdata.primaryEmail);
-    I.see(users[3].userdata.primaryEmail);
-
+    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForText(testrailID + ' - ' + timestamp, '.contact-detail .display_name');
+    I.waitForText('Distribution list with 4 entries', '.contact-detail .header-job span');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[0].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[1].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[2].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[3].userdata.primaryEmail + '"]');
     I.selectFolder(testrailID);
-    I.retry(5).click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.see(testrailID + ' - ' + timestamp);
-    I.see('Distribution list with 4 entries');
-    I.see(users[0].userdata.primaryEmail);
-    I.see(users[1].userdata.primaryEmail);
-    I.see(users[2].userdata.primaryEmail);
-    I.see(users[3].userdata.primaryEmail);
-
+    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.retry(3).click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForText(testrailID + ' - ' + timestamp, '.contact-detail .display_name');
+    I.waitForText('Distribution list with 4 entries', '.contact-detail .header-job span');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[0].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[1].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[2].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[3].userdata.primaryEmail + '"]');
     I.logout();
 });
 
@@ -268,26 +281,27 @@ Scenario('[C7375] Move a distribution list', async function (I, users) {
     I.fillField('[placeholder="New address book"][type="text"]', testrailID);
     I.click('Add');
     I.waitForDetached('.modal-open [data-point="io.ox/core/folder/add-popup"]');
-    I.doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.click('.detail-view-app [data-action="more"]');
-    I.click('.dropdown.open [data-ref="io.ox/contacts/actions/move"]');
+    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.click('[aria-label="Address Book Toolbar"] .more-dropdown a');
+    I.click('.dropdown.open [data-action="io.ox/contacts/actions/move"]');
+    I.waitForElement('.modal [data-id="virtual/flat/contacts/private"] div.folder-arrow');
     I.click('.modal [data-id="virtual/flat/contacts/private"] div.folder-arrow');
+    I.waitForElement('.modal [aria-label="' + testrailID + '"]');
     I.click('.modal [aria-label="' + testrailID + '"]');
-    I.wait('1');
-    I.click('div.modal-footer > button.btn.btn-primary');
-    I.click('.floating-window-content [aria-label="Close"][type="button"]');
+    I.waitForDetached('.btn-primary[disabled=""]');
+    I.click('[type="button"][data-action="ok"]');
     I.selectFolder('Contacts');
-    I.wait(5);
-    I.dontSee('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForDetached('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
     I.selectFolder(testrailID);
     I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.retry(5).click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.see(testrailID + ' - ' + timestamp);
-    I.see('Distribution list with 4 entries');
-    I.see(users[0].userdata.primaryEmail);
-    I.see(users[1].userdata.primaryEmail);
-    I.see(users[2].userdata.primaryEmail);
-    I.see(users[3].userdata.primaryEmail);
+    I.retry(3).click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForText(testrailID + ' - ' + timestamp, '.contact-detail .display_name');
+    I.waitForText('Distribution list with 4 entries', '.contact-detail .header-job span');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[0].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[1].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[2].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[3].userdata.primaryEmail + '"]');
     I.logout();
 });
 
@@ -392,45 +406,39 @@ Scenario('[C7373] Modify distribution list members', async function (I, users) {
     await I.createContact(contact2, { user: users[0] });
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
-    I.wait(2);
-    I.doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-
-    I.see(testrailID + ' - ' + timestamp);
-    I.see('Distribution list with 4 entries');
-    I.see(users[0].userdata.primaryEmail);
-    I.see(users[1].userdata.primaryEmail);
-    I.see(users[2].userdata.primaryEmail);
-    I.see(users[3].userdata.primaryEmail);
-    //Edit füge hinzu
-    //I.clickToolbar('Edit')
-    I.click('.detail-view-app [data-action="edit"]');
+    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForText(testrailID + ' - ' + timestamp, '.contact-detail .display_name');
+    I.waitForText('Distribution list with 4 entries', '.contact-detail .header-job span');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[0].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[1].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[2].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[3].userdata.primaryEmail + '"]');
+    I.clickToolbar('Edit');
     I.waitForElement('.form-control.add-participant.tt-input');
     I.fillField('.form-control.add-participant.tt-input', 'john.doe@open-xchange.com');
     I.pressKey('Enter');
-
     I.click('Save');
-    I.wait(1);
-
-    I.see(users[0].userdata.primaryEmail);
-    I.see(users[1].userdata.primaryEmail);
-    I.see(users[2].userdata.primaryEmail);
-    I.see(users[3].userdata.primaryEmail);
-    I.see('john.doe@open-xchange.com');
-    I.see('Distribution list with 5 entries');
-    //Remove
-    //I.clickToolbar('Edit')
-    I.click('.detail-view-app [data-action="edit"]');
-
+    I.waitForText(testrailID + ' - ' + timestamp, '.contact-detail .display_name');
+    I.waitForText('Distribution list with 5 entries', '.contact-detail .header-job span');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[0].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[1].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[2].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[3].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:john.doe@open-xchange.com"]');
+    I.clickToolbar('Edit');
+    I.waitForElement('//*[contains(@class, "create-distributionlist container")]//a[contains(text(), "' + users[0].userdata.primaryEmail + '")]/../..//a[contains(@class, "remove")]');
     I.click('//*[contains(@class, "create-distributionlist container")]//a[contains(text(), "' + users[0].userdata.primaryEmail + '")]/../..//a[contains(@class, "remove")]');
-
+    I.waitForElement('//*[contains(@class, "create-distributionlist container")]//a[contains(text(), "' + users[1].userdata.primaryEmail + '")]/../..//a[contains(@class, "remove")]');
     I.click('//*[contains(@class, "create-distributionlist container")]//a[contains(text(), "' + users[1].userdata.primaryEmail + '")]/../..//a[contains(@class, "remove")]');
-
     I.click('Save');
-    I.wait(1);
-
+    I.waitForText(testrailID + ' - ' + timestamp, '.contact-detail .display_name');
+    I.waitForText('Distribution list with 3 entries', '.contact-detail .header-job span');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[2].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[3].userdata.primaryEmail + '"]');
+    I.waitForElement('.contact-detail .participant-email [href="mailto:john.doe@open-xchange.com"]');
     I.see('Distribution list with 3 entries');
     I.see(users[2].userdata.primaryEmail);
     I.see(users[3].userdata.primaryEmail);

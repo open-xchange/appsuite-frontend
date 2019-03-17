@@ -193,6 +193,7 @@ Scenario('[C7730] Create a private Task with participant', async function (I, us
     I.logout();
 });
 Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
+    // Bug:#63879
     let testrailID = 'C7731';
     let testrailName = 'Create a Task in a shared folder';
 
@@ -217,8 +218,7 @@ Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.selectFolder(testrailID);
-
-
+    I.waitForText(testrailID, '[aria-label="Tasks toolbar"] .folder-name');
     I.clickToolbar('New');
     I.waitForVisible('.io-ox-tasks-edit-window');
     I.fillField('Subject', testrailID);
@@ -227,21 +227,18 @@ Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
     I.fillField('Add contact', users[1].userdata.primaryEmail);
     I.pressKey('Enter');
     I.click('Create');
-    I.seeElement('.tasks-detailview');
-
+    I.waitForElement('.tasks-detailview');
     I.logout();
-
     I.login('app=io.ox/tasks', { user: users[1] });
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.selectFolder(testrailID);
-
-    I.seeElement('.tasks-detailview');
-    I.see(testrailID);
-    I.see(testrailName);
+    I.waitForElement('.tasks-detailview');
+    I.waitForText(testrailID);
+    I.waitForText(testrailName);
     I.dontSeeElement({ css: '[title="High priority"]' });
     I.dontSeeElement({ css: '[title="Low priority"]' });
-    I.see('Not started');
-    I.seeElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');
+    I.waitForText('Not started');
+    I.waitForElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');
     I.logout();
 });
 Scenario('[C7732] Create a Task in a shared folder without rights', async function (I, users) {
@@ -269,8 +266,8 @@ Scenario('[C7732] Create a Task in a shared folder without rights', async functi
     I.login('app=io.ox/tasks', { user: users[1] });
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.selectFolder(testrailID);
-    I.seeTextEquals(testrailID, '.folder-name');
-    I.seeElement('.classic-toolbar .disabled[data-action="create"]');
+    I.waitForText(testrailID, '.folder-name');
+    I.waitForElement('[aria-label="Tasks Toolbar"] .disabled[data-action="io.ox/tasks/actions/create"]');
     I.logout();
 });
 Scenario('[C7733] Set Task startdate behind due date', async function (I) {
@@ -499,7 +496,8 @@ Scenario('[C7743] Move single Task', async function (I, users) {
     I.login('app=io.ox/tasks', { user: users[0] });
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     //Dirty SHIT ! Need a helper for this
-    I.click('//*[@class="classic-toolbar"]/*[@class="dropdown"][2]');
+    I.waitForElement('[aria-label="Tasks Toolbar"] .more-dropdown [data-action="more"]');
+    I.click('[aria-label="Tasks Toolbar"] .more-dropdown [data-action="more"]');
     I.waitForElement('.smart-dropdown-container.open .dropdown-menu', 5);
     I.clickToolbar('Move');
     I.waitForText('Move', 5, '.modal-open .modal-title');
@@ -511,7 +509,8 @@ Scenario('[C7743] Move single Task', async function (I, users) {
     I.click('Move', 'div.modal-footer');
     I.waitForDetached('.modal');
     I.selectFolder(testrailID);
-    I.retry(5).click('[aria-label="C7743, ."]');
+    I.waitForElement('[aria-label="C7743, ."]');
+    I.click('[aria-label="C7743, ."]');
     //Dirty SHIT ! Need a helper for this
     I.waitForElement('.tasks-detailview', 5);
     I.waitForText(testrailID, 5, '.tasks-detailview .title');
@@ -615,7 +614,8 @@ Scenario('[C7746] Move several tasks to an other folder at the same time', async
     I.waitForText(numberOfTasks + ' items selected', 5, '.task-detail-container .message');
 
     //Dirty SHIT ! Need a helper for this
-    I.click('//*[@class="classic-toolbar"]/*[@class="dropdown"]');
+    I.waitForElement('[aria-label="Tasks Toolbar"] .more-dropdown [data-action="more"]');
+    I.click('[aria-label="Tasks Toolbar"] .more-dropdown [data-action="more"]');
     I.waitForElement('.smart-dropdown-container.open .dropdown-menu', 5);
     I.clickToolbar('Move');
     I.waitForText('Move', 5, '.modal-open .modal-title');
@@ -663,7 +663,7 @@ Scenario('[C7747] Add an attachment to a Task', async function (I, users) {
     I.click('Save');
     I.waitForText(testrailID, 10, '.tasks-detailview .title');
     I.waitForText('Attachments', 10, '.tasks-detailview .attachments');
-    I.waitForText('testdocument.odt', 10, '.tasks-detailview .attachment-item [role="button"]');
+    I.waitForText('testdocument.odt', 10, '.tasks-detailview [data-dropdown="io.ox/core/tk/attachment/links"]');
     I.logout();
 });
 Scenario('[C7748] Remove an attachment from a Task', async function (I, users) {
@@ -684,7 +684,7 @@ Scenario('[C7748] Remove an attachment from a Task', async function (I, users) {
     I.waitForElement('.tasks-detailview', 5);
     I.waitForText(testrailID, 10, '.tasks-detailview .title');
     I.waitForText('Attachments', 10, '.tasks-detailview .attachments');
-    I.waitForText('testdocument.odt', 10, '.tasks-detailview .attachment-item [role="button"]');
+    I.waitForText('testdocument.odt', 10, '.tasks-detailview [data-dropdown="io.ox/core/tk/attachment/links"]');
     I.clickToolbar('Edit');
     I.waitForElement('[data-app-name="io.ox/tasks/edit"]', 5);
     I.waitForElement('.floating-window-content .container.io-ox-tasks-edit', 5);
@@ -697,8 +697,7 @@ Scenario('[C7748] Remove an attachment from a Task', async function (I, users) {
     I.waitForDetached('.io-ox-tasks-edit', 5);
     I.waitForElement('.tasks-detailview', 5);
     I.waitForText(testrailID, 10, '.tasks-detailview .title');
-    I.dontSee('Attachments', '.tasks-detailview');
-    I.dontSee('testdocument.odt', '.tasks-detailview');
+    I.waitForDetached('.tasks-detailview .attachments-container');
     I.logout();
 });
 Scenario('[C7749] Edit existing Task as participant', async function (I, users) {
