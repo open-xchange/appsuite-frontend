@@ -607,12 +607,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             isError = 'error' in response && !isWarning;
 
         if (isError) {
-            // Check for multifactor error
-            var isMultifactorError = (/^MFA-/i).test(response.code);
-            if (isMultifactorError) {
-                handleMultifactorError(response, o, deferred);
-                return;
-            }
             // forward all errors to respond to special codes
             ox.trigger('http:error:' + response.code, response, o);
             ox.trigger('http:error', response, o);
@@ -627,6 +621,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 ox.trigger('relogin:required', o, deferred, response);
                 return;
             }
+            if (that.isDisconnected() && !o.force) {
+                disconnectedQueue.push({ deferred: deferred, options: o });
+                return;
+            }
+
             // genereal error
             deferred.reject(response);
             return;
@@ -699,31 +698,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             deferred.resolve(response);
         }
     };
-
-    function handleMultifactorError(response, o, deferred) {
-        if ((/(MFA-0001|MFA-0015)/i).test(response.code)) {  // Session error, pause all pending and authenticate
-            that.disconnect(deferred, o);
-            require(['io.ox/multifactor/auth'], function (auth) {
-                auth.reAuthenticate().then(function () {
-                    that.reConnect();
-                }, function () {
-                    if ((/^MFA-0001/i).test(response.code)) {
-                        console.error('MF login failed, reload required');
-                        ox.session = '';
-                        that.resetDisconnect(response);
-                        ox.relogin();
-                        location.reload();
-                    } else {
-                        deferred.reject(); // reject this call
-                        that.reConnect();
-                    }
-                });
-            });
-            return;
-        }
-        // General Multifactor Error
-        deferred.reject(response);
-    }
 
     // internal queue
     var paused = false,
@@ -1318,11 +1292,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         },
 
         // Shut down http service due to some other required action.  Queue requests
-        disconnect: function (deferred, o) {
-            require.config({ waitSeconds: 0 });  // Requires will time out if sitting in queue
-            if (deferred && o) {
-                disconnectedQueue.push({ deferred: deferred, options: o });
-            }
+        disconnect: function () {
+            that.trigger('disconnect');
             disconnected = true;
         },
 
@@ -1331,42 +1302,29 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         },
 
         // Resume http service, executing pending requests as individual requests
-        reConnect: function () {
+        reconnect: function () {
             disconnected = false;
-            var count = 0; // eslint-disable-line no-unused-vars
-            var pending = disconnectedQueue.slice();
-
-            function checkDone() {
-                count++;
-                if (count = pending.length) {  // Once all outstanding calls done, reset the require timeout
-                    window.setTimeout(function () {
-                        require.config({ waitSeconds: document.cookie.indexOf('selenium=true') !== -1 ? (60 * 10) : (_.url.hash('waitSeconds') || 15) });
-                    }, 100);
-                    return true;
-                }
-                return false;
-            }
-
-            // Loop through each pending request
-            for (var i = 0; i < pending.length; i++) {
-                var req = pending[i];
+            var pending = disconnectedQueue.slice().map(function (req) {
                 req.options.consolidate = false;
-                ajax(req.options, req.options.type).then(req.deferred.resolve, req.deferred.reject)
-                .always(checkDone);
-            }
+                return ajax(req.options, req.options.type)
+                    .then(req.deferred.resolve, req.deferred.reject);
+            });
+
+            $.when.apply(null, pending).always(function () {
+                that.trigger('reconnect');
+            });
+
             disconnectedQueue = [];
-            ox.trigger('http:reconnected');
         },
         // Wipe the disconnect queue and resume
         resetDisconnect: function (resp) {
-            var pending = disconnectedQueue.slice();
-            // Loop through each pending request
-            for (var i = 0; i < pending.length; i++) {
-                var req = pending[i];
+            var pending = disconnectedQueue.slice().map(function (req) {
                 req.deferred.reject(resp);
-            }
-            disconnected = false;
+                return req.deferred;
+            });
+
             disconnectedQueue = [];
+            $.when.apply(null, pending).always(that.reconnect);
         },
 
         /**
@@ -1500,6 +1458,21 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
     };
 
     Events.extend(that);
+
+    (function (http) {
+        var waitSeconds;
+
+        http.on('disconnect', function () {
+            if (typeof waitSeconds === 'undefined') waitSeconds = require.s.contexts._.config.waitSeconds;
+            require.config({ waitSeconds: 0 });  // Requires will time out if sitting in queue
+        });
+        http.on('reconnect', function () {
+            window.setTimeout(function () {
+                require.config({ waitSeconds: waitSeconds });
+                waitSeconds = undefined;
+            }, 100);
+        });
+    }(that));
 
     return that;
 });

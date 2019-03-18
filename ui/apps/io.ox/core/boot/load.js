@@ -65,15 +65,10 @@ define('io.ox/core/boot/load', [
             });
         }
     }, {
-        id: 'theme',
-        run: function () {
-            return $.when(loadUserTheme());
-        }
-    }, {
         id: 'multifactor',
         run: function (baton) {
             if (baton.sessionData && baton.sessionData.requires_multifactor) {
-                return doMultifactor();
+                return loadUserTheme().then(doMultifactor);
             }
         }
     }, {
@@ -117,7 +112,7 @@ define('io.ox/core/boot/load', [
             var loadCore = manifests.manager.loadPluginsFor('core').then(function () {
                 return require(['io.ox/core/main']);
             });
-            return $.when(loadCore).then(function success(core) {
+            return $.when(loadCore, loadUserTheme()).then(function success(core) {
                 util.debug('DONE!');
                 ox.trigger('boot:done');
 

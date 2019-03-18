@@ -20,7 +20,8 @@ define('io.ox/multifactor/auth', [
 
     'use strict';
 
-    var authenticating = false;
+    var authenticating = false,
+        authProcess;
 
     if (modules.exports && !window.u2f) {
         window.u2f = modules.exports;
@@ -30,10 +31,10 @@ define('io.ox/multifactor/auth', [
 
         getAuthentication: function (authInfo) {
             if (authenticating) {
-                return $.when();
+                return authProcess;
             }
             authenticating = true;
-            var def = $.Deferred();
+            var def = authProcess = $.Deferred();
             authInfo.def = def;
             if (authInfo.error && authInfo.error.backup) {
                 require(['io.ox/multifactor/lost'], function (lost) {
