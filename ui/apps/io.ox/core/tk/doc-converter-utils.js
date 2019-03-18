@@ -106,7 +106,10 @@ define('io.ox/core/tk/doc-converter-utils', [
             convert_action: 'beginconvert'
         };
 
-        return Utils.sendConverterRequest(model, params);
+        return Utils.sendConverterRequest(model, params).then(function (response) {
+            // only resolve if response contains page count, otherwise reject
+            return (response && _.isNumber(response.pageCount)) ? $.Deferred().resolve(response) : $.Deferred().reject(response);
+        });
     };
 
     /**
@@ -167,7 +170,7 @@ define('io.ox/core/tk/doc-converter-utils', [
         // reject, if the response contains an error; otherwise resolve.
         // e.g. the document endconvert request does not return a response in case of success.
         promise = ajaxRequest.then(function (response) {
-            return (response && response.error) ? $.Deferred().reject(response) : $.Deferred().resolve(response);
+            return (response && response.cause) ? $.Deferred().reject(response) : $.Deferred().resolve(response);
         });
 
         // add an abort() method, forward invocation to AJAX request
