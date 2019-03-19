@@ -58,7 +58,8 @@ define([
             });
             it('should use no signature on edit', function () {
                 var model = new ConfigModel({
-                    type: 'edit'
+                    type: 'edit',
+                    signatures: new Backbone.Collection()
                 });
                 return signatureController.call({ view: { signaturesLoading: $.when() }, config: model, model: new Backbone.Model() }).then(function () {
                     expect(model.get('signatureId')).to.deep.equal('');
