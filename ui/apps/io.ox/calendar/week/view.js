@@ -1641,7 +1641,7 @@ define('io.ox/calendar/week/view', [
                 obj = this.getRequestParam(),
                 collection = api.getCollection(obj);
 
-            // // set manually to expired to trigger reload on next opening
+            // set manually to expired to trigger reload on next opening
             if (useCache === false) {
                 api.pool.grep('view=week').forEach(function (c) {
                     c.expired = true;
@@ -1738,6 +1738,12 @@ define('io.ox/calendar/week/view', [
         selectAppointment: function (model) {
             // use start of appointment in calendar timezone
             this.setStartDate(model.getMoment('startDate').clone().tz(this.model.get('startDate').tz()));
+            // check if there is a node drawn yet. If yes click it. if not, draw without arrow
+            if (this.$el.find('.appointment[data-cid="' + util.cid(model) + '"] .appointment-content').length) {
+                this.$el.find('.appointment[data-cid="' + util.cid(model) + '"] .appointment-content').trigger('click');
+                return;
+            }
+            this.showAppointment($.Event('click', { target: this.$el }), model, { arrow: false });
         },
 
         print: function () {
