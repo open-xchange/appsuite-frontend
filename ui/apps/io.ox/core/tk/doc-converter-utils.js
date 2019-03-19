@@ -54,7 +54,7 @@ define('io.ox/core/tk/doc-converter-utils', [
      *  The final URL of the server request; or undefined,
      *  if the current session is invalid.
      */
-    Utils.getConverterUrl = function (params, options) {
+    Utils.getConverterUrl = function (params) {
 
         // return nothing if no session is present
         if (!ox.session || !ox.ui.App.getCurrentApp()) {
@@ -62,14 +62,13 @@ define('io.ox/core/tk/doc-converter-utils', [
         }
 
         var currentAppUniqueID = ox.ui.App.getCurrentApp().get('uniqueID'),
-            encodeUrl = options && options.encodeUrl,
             module = Utils.CONVERTER_MODULE_NAME;
 
         // add default parameters (session and UID), and file parameters
         params = _.extend({ session: ox.session, uid: currentAppUniqueID }, params);
 
         // build and return the resulting URL
-        return ox.apiRoot + '/' + module + '?' + _.map(params, function (value, name) { return name + '=' + (encodeUrl ? encodeURIComponent(value) : value); }).join('&');
+        return ox.apiRoot + '/' + module + '?' + $.param(_.omit(params, _.isUndefined));
     };
 
     /**
@@ -107,7 +106,10 @@ define('io.ox/core/tk/doc-converter-utils', [
             convert_action: 'beginconvert'
         };
 
-        return Utils.sendConverterRequest(model, params);
+        return Utils.sendConverterRequest(model, params).then(function (response) {
+            // only resolve if response contains page count, otherwise reject
+            return (response && _.isNumber(response.pageCount)) ? $.Deferred().resolve(response) : $.Deferred().reject(response);
+        });
     };
 
     /**
@@ -168,7 +170,7 @@ define('io.ox/core/tk/doc-converter-utils', [
         // reject, if the response contains an error; otherwise resolve.
         // e.g. the document endconvert request does not return a response in case of success.
         promise = ajaxRequest.then(function (response) {
-            return (response && response.error) ? $.Deferred().reject(response) : $.Deferred().resolve(response);
+            return (response && response.cause) ? $.Deferred().reject(response) : $.Deferred().resolve(response);
         });
 
         // add an abort() method, forward invocation to AJAX request
@@ -242,7 +244,14 @@ define('io.ox/core/tk/doc-converter-utils', [
         // the resulting params
         var params = null;
 
-        if (model.isMailAttachment()) {
+        if (model.isComposeAttachment()) {
+            // check for mail compose models
+            params = {
+                source: 'compose',
+                id: model.get('spaceId'),
+                attachmentId: model.get('id')
+            };
+        } else if (model.isMailAttachment()) {
             // the Guard parameters for mail
             file_options = (originalModel && originalModel.file_options);
             file_options_params = file_options ? file_options.params : null;

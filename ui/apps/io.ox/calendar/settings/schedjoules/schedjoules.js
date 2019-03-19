@@ -371,7 +371,7 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
         index: 300,
         render: function () {
             this.$body.prepend(
-                $('<div class="alert alert-info">').text(gt('Your default reminders will be applied to this calendars.'))
+                $('<div class="alert alert-info">').text(gt('Your default reminders will be applied to these calendars.'))
             );
         }
     });

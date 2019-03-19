@@ -51,7 +51,17 @@ define('io.ox/files/api', [
             attributes = attributes || {};
             var normalizedAttrs;
             // check if model is initialized with mail, pim or drive model attributes
-            if (_.isObject(attributes.mail)) {
+            if (attributes.space) {
+                normalizedAttrs = {
+                    filename: attributes.name,
+                    file_size: attributes.size,
+                    file_mimetype: attributes.mimeType,
+                    spaceId: attributes.space,
+                    id: attributes.id,
+                    origData: attributes,
+                    source: 'compose'
+                };
+            } else if (_.isObject(attributes.mail)) {
                 // mail attachment
                 normalizedAttrs = {
                     filename: attributes.filename,
@@ -185,6 +195,10 @@ define('io.ox/files/api', [
 
         isMailAttachment: function () {
             return (this.get('source') === 'mail' || this.get('source') === 'guardMail');
+        },
+
+        isComposeAttachment: function () {
+            return this.get('source') === 'compose';
         },
 
         isPIMAttachment: function () {

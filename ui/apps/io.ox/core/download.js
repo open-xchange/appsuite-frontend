@@ -291,6 +291,13 @@ define('io.ox/core/download', [
             iframe(url);
         },
 
+        composeAttachment: function (options) {
+            var spaceId = options.space,
+                attachmentId = options.id,
+                url = ox.apiRoot + '/mail/compose/' + spaceId + '/attachments/' + attachmentId + '?session=' + ox.session;
+            iframe(url);
+        },
+
         // download multiple emails (EML) as zip file
         mails: function (list) {
             form({

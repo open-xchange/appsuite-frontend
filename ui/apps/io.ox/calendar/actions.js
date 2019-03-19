@@ -162,9 +162,9 @@ define('io.ox/calendar/actions', [
         collection: 'one',
         matches: function (baton) {
             var data = baton.first(), f = generateFlagHash(data);
-            // cannot confirm appointments without proper id (happens when detail view was opened from mail invitation from external calendar)
+            // cannot confirm appointments without proper id or folder (happens when detail view was opened from mail invitation from external calendar)
             // must use buttons in invitation mail instead
-            if (!data.id) return false;
+            if (!data.id || !data.folder) return false;
             // we don't show the action if the attendee flag is present (change status is shown instead)
             if (f.attendee || f.attendee_on_behalf || f.organizer || f.organizer_on_behalf) return false;
             // folder must support alarms

@@ -17,7 +17,8 @@ define('io.ox/mail/compose/main', [
     'io.ox/core/api/account',
     'io.ox/mail/util',
     'settings!io.ox/mail',
-    'gettext!io.ox/mail'
+    'gettext!io.ox/mail',
+    'io.ox/mail/compose/actions'
 ], function (ext, mailAPI, accountAPI, mailUtil, settings, gt) {
 
     'use strict';
@@ -39,15 +40,10 @@ define('io.ox/mail/compose/main', [
         perform: function (baton) {
             var self = this;
 
-            // already has a model. e.g. when opened via restorepoint
-            if (baton.model) {
-                this.model = baton.model;
-                this.model.restored = true;
-                return this.model.initialized;
-            }
 
             return require(['io.ox/mail/compose/model']).then(function (MailComposeModel) {
                 self.model = baton.model = new MailComposeModel(baton.data);
+                if (baton.data && baton.data.id) baton.model.restored = true;
                 return self.model.initialized;
             });
         }
@@ -173,7 +169,7 @@ define('io.ox/mail/compose/main', [
         index: INDEX += 100,
         perform: function () {
             return this.view.signaturesLoading.then(function () {
-                this.config.setInitialSignature();
+                this.config.setInitialSignature(this.model.get('content'));
             }.bind(this));
         }
     }, {

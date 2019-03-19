@@ -110,10 +110,12 @@ define('io.ox/backbone/views/actions/util', [
             if (link.dropdown) {
                 def = util.renderDropdown($li, baton, {
                     caret: link.caret,
+                    customize: link.customize,
                     drawDisabled: link.drawDisabled,
                     icon: link.icon,
                     point: link.dropdown,
-                    title: getTitle(link.title || link.label, baton)
+                    title: getTitle(link.title || link.label, baton),
+                    tooltip: link.tooltip
                 });
                 return { $li: $li, def: def };
             }
@@ -175,23 +177,11 @@ define('io.ox/backbone/views/actions/util', [
                 $(this).children('a').tooltip('destroy');
             })
             .append(function () {
-                var icon = item.link.icon,
-                    title = getTitle(item.link.title || item.link.label, baton),
-                    tooltip = _.device('!smartphone') && (item.link.tooltip || (icon && title)),
-                    $a = $('<a href="#" role="button" draggable="false" tabindex="-1">')
+                var $a = $('<a href="#" role="button" draggable="false" tabindex="-1">')
                     .data({ baton: baton })
-                    .attr({ 'data-action': item.link.ref, 'title': title });
-                // icon vs title
-                if (icon) $a.append($('<i aria-hidden="true">').addClass(icon));
-                else if (title) $a.text(title);
-                if (!item.enabled) {
-                    // style as disabled
-                    $a.addClass('disabled').attr('aria-disabled', true);
-                } else if (tooltip) {
-                    $a.addActionTooltip(tooltip);
-                }
-                // customize (setTimeout so that the node is already added)
-                if (item.link.customize) setTimeout(item.link.customize.bind($a, baton));
+                    .attr({ 'data-action': item.link.ref });
+                applyIconTitleTooltip($a, item.link, baton, item.enabled);
+                if (!item.enabled) $a.addClass('disabled').attr('aria-disabled', true);
                 return $a;
             });
         },
@@ -199,13 +189,13 @@ define('io.ox/backbone/views/actions/util', [
         renderDropdown: function ($el, baton, options) {
 
             var $toggle = util.createDropdownToggle().attr('data-dropdown', options.point);
-            if (options.title) $toggle.text(getTitle(options.title, baton));
-            else if (options.icon) $toggle.append($('<i>').addClass(options.icon));
-
+            applyIconTitleTooltip($toggle, options, baton);
             if (options.caret !== false) $toggle.append(util.createCaret());
 
             var $ul = util.createDropdownList();
             $el.addClass('dropdown').append($toggle, $ul);
+            // close tooltip when opening the dropdown
+            $el.on('shown.bs.dropdown', function () { $(this).children('a').tooltip('hide'); });
             if (_.device('smartphone')) $ul.on('click', 'a[data-action]', util.invokeByEvent);
 
             return baton ? util.renderDropdownItems($el, baton, options) : $.when();
@@ -459,11 +449,15 @@ define('io.ox/backbone/views/actions/util', [
             }
 
             function toggle() {
+                // check if already disposed (as part of a toolbar redraw or sth)
+                if (!$toggle) return false;
                 $toggle.dropdown('toggle');
                 return false;
             }
 
             function dispose() {
+                // close menu before dispose
+                if ($menu.is(':visible'))$toggle.dropdown('toggle');
                 $toggle = $menu = $backdrop = null;
             }
         }
@@ -496,6 +490,18 @@ define('io.ox/backbone/views/actions/util', [
         return $.when(ret).pipe(null, _.constant(false));
     }
 
+    function applyIconTitleTooltip($el, link, baton, enabled) {
+        var icon = link.icon,
+            title = getTitle(link.title || link.label, baton),
+            tooltip = enabled !== false && (link.tooltip || (icon && title));
+        // icon vs title
+        if (icon) $el.attr('title', title).append($('<i aria-hidden="true">').addClass(icon));
+        else if (title) $el.text(title);
+        if (tooltip) $el.addActionTooltip(tooltip);
+        // setTimeout so that the node is already added
+        if (link.customize) setTimeout(link.customize.bind($el, baton));
+    }
+
     function getTitle(arg, baton) {
         return _.isFunction(arg) ? arg(baton) : arg;
     }
@@ -523,6 +529,7 @@ define('io.ox/backbone/views/actions/util', [
     }
 
     $.fn.addActionTooltip = function (title) {
+        if (_.device('smartphone')) return $(this);
         return $(this)
             .attr({
                 'data-original-title': title,

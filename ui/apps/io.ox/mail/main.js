@@ -1771,11 +1771,10 @@ define('io.ox/mail/main', [
                             caption = gt.ngettext('Sending 1 message ... %2$d%', 'Sending %1$d messages ... %2$d%', n, n, pct);
                         $el.find('.progress-bar').css('width', pct + '%');
                         $el.find('.caption span').text(caption);
-                        $el.find('[data-action="close"]').off();
-                        $el.find('[data-action="close"]').on('click', function (e) {
+                        $el.find('[data-action="close"]').off().on('click', function (e) {
                             e.preventDefault();
                             data.abort();
-                        });
+                        }).toggle(data.pct < 1);
                         $el.show();
                     });
 

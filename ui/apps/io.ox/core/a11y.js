@@ -18,12 +18,25 @@ define('io.ox/core/a11y', [], function () {
     //
     // Focus management
     //
+    function focusFolderTreeOrList() {
+        var focusableFolder = $('.folder-tree:visible .folder.selected');
+        if (focusableFolder.is(':visible')) {
+            focusableFolder.focus();
+        } else if ($('.window-container:visible').length > 0) {
+            focusListSelection($('.window-container:visible'));
+        }
+    }
 
     // fix for role="button"
     $(document).on('keydown.role.button', 'a[role="button"]', function (e) {
         if (!/32/.test(e.which) || e.which === 13 && e.isDefaultPrevented()) return;
         e.preventDefault();
         $(this).click();
+    });
+
+    $(document).on('click', '.skip-links', function (e) {
+        e.preventDefault();
+        focusFolderTreeOrList();
     });
 
     // focus folder tree from quicklauncher on <enter>
@@ -33,12 +46,7 @@ define('io.ox/core/a11y', [], function () {
             e.which === 13 &&
             app.get('name') === $(this).attr('data-app-name')
         ) {
-            var focusableFolder = $('.folder-tree:visible .folder.selected');
-            if (focusableFolder.is(':visible')) {
-                focusableFolder.focus();
-            } else if ($('.window-container:visible').length > 0) {
-                focusListSelection($('.window-container:visible'));
-            }
+            focusFolderTreeOrList();
         }
     });
 

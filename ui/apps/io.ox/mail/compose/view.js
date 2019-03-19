@@ -360,6 +360,7 @@ define('io.ox/mail/compose/view', [
             var view = baton.view;
             if (view.editor) view.stopListening(view.editor);
             view.listenTo(baton.editor, 'change', view.syncMail);
+            view.listenTo(baton.config, 'change:signature', view.syncMail);
         }
     }, {
         id: 'content',

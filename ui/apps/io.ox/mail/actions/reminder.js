@@ -22,7 +22,7 @@ define('io.ox/mail/actions/reminder', [
     'use strict';
 
     return function (baton) {
-        var data = baton.data;
+        var data = [].concat(baton.data)[0];
         require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'], function (dialogs, taskAPI, tasksUtil) {
             //create popup dialog
 

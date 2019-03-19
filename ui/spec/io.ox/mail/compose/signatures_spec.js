@@ -36,7 +36,7 @@ define([
                 var model = new ConfigModel({
                     mode: 'compose'
                 });
-                return signatureController.call({ view: { signaturesLoading: $.when() }, config: model }).then(function () {
+                return signatureController.call({ view: { signaturesLoading: $.when() }, config: model, model: new Backbone.Model() }).then(function () {
                     expect(model.get('signatureId')).to.deep.equal(settings.get('defaultSignature'));
                 });
             });
@@ -44,7 +44,7 @@ define([
                 var model = new ConfigModel({
                     type: 'reply'
                 });
-                return signatureController.call({ view: { signaturesLoading: $.when() }, config: model }).then(function () {
+                return signatureController.call({ view: { signaturesLoading: $.when() }, config: model, model: new Backbone.Model() }).then(function () {
                     expect(model.get('signatureId')).to.deep.equal(settings.get('defaultReplyForwardSignature'));
                 });
             });
@@ -52,7 +52,7 @@ define([
                 var model = new ConfigModel({
                     type: 'forward'
                 });
-                return signatureController.call({ view: { signaturesLoading: $.when() }, config: model }).then(function () {
+                return signatureController.call({ view: { signaturesLoading: $.when() }, config: model, model: new Backbone.Model() }).then(function () {
                     expect(model.get('signatureId')).to.deep.equal(settings.get('defaultReplyForwardSignature'));
                 });
             });
@@ -60,7 +60,7 @@ define([
                 var model = new ConfigModel({
                     type: 'edit'
                 });
-                return signatureController.call({ view: { signaturesLoading: $.when() }, config: model }).then(function () {
+                return signatureController.call({ view: { signaturesLoading: $.when() }, config: model, model: new Backbone.Model() }).then(function () {
                     expect(model.get('signatureId')).to.deep.equal('');
                 });
             });
