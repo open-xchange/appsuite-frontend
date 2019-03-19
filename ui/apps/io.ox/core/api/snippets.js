@@ -28,7 +28,7 @@ define('io.ox/core/api/snippets', [
 
     'use strict';
 
-    var api = {}, cache = null;
+    var api = {}, cache = null, collection = new Backbone.Collection();
 
     Events.extend(api);
 
@@ -43,6 +43,10 @@ define('io.ox/core/api/snippets', [
         sig.misc = $.extend({ insertion: settings.get('defaultSignaturePosition', 'below') }, sig.misc || {});
         return sig;
     }
+
+    api.getCollection = function () {
+        return collection;
+    };
 
     api.getAll = function () {
 
@@ -59,6 +63,7 @@ define('io.ox/core/api/snippets', [
         .then(
             function success(data) {
                 cache = _(data).map(fixOutdated);
+                collection.reset(cache);
                 return cache;
             },
             function fail() {
@@ -82,8 +87,9 @@ define('io.ox/core/api/snippets', [
             },
             data: snippet
         })
-        .done(function () {
+        .done(function (id) {
             cache = null;
+            collection.add(_({}, snippet, { id: id }));
             api.trigger('refresh.all');
         });
     };
@@ -105,6 +111,7 @@ define('io.ox/core/api/snippets', [
         })
         .done(function () {
             cache = null;
+            collection.add(snippet, { merge: true });
             api.trigger('refresh.all');
         });
     };
@@ -157,6 +164,7 @@ define('io.ox/core/api/snippets', [
         })
         .done(function () {
             cache = null;
+            collection.remove(id);
             api.trigger('refresh.all');
         });
     };

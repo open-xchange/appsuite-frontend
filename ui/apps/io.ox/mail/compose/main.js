@@ -103,18 +103,16 @@ define('io.ox/mail/compose/main', [
 
             if (_.device('smartphone')) {
                 //#. %s is the product name
-                var value = settings.get('mobileSignature', gt('Sent from %s via mobile', ox.serverConfig.productName));
-                def.resolve([{ id: '0', content: value, misc: { insertion: 'below' } }]);
+                var value = settings.get('mobileSignature', gt('Sent from %s via mobile', ox.serverConfig.productName)),
+                    collection = new Backbone.Collection([{ id: '0', content: value, misc: { insertion: 'below' } }]);
+                this.config.set('signatures', collection);
+                def.resolve(collection);
             } else {
                 require(['io.ox/core/api/snippets'], function (snippetAPI) {
-                    snippetAPI.getAll('signature').always(function (signatures) {
-                        var oldSignatures = self.config.get('signatures') || [],
-                            allSignatures = _.uniq(signatures.concat(oldSignatures), false, function (o) { return o.id; });
-                        // update model
-                        self.config.set('signatures', allSignatures);
-                        // add options to dropdown (empty signature already set)
-                        // TODO: mobile signatures
-                        def.resolve(allSignatures);
+                    var collection = new Backbone.Collection();
+                    self.config.set('signatures', collection);
+                    snippetAPI.getAll().always(function () {
+                        def.resolve(collection);
                     });
                 });
             }
