@@ -61,7 +61,7 @@ define('io.ox/mail/compose/main', [
         id: 'fix-custom-displayname',
         index: INDEX += 100,
         perform: function () {
-            if (settings.get('customDisplayNames')) return console.log('already has custom display names');
+            if (settings.get('customDisplayNames')) return;
             return accountAPI.getPrimaryAddressFromFolder(this.config.get('folderId')).then(function (address) {
                 // ensure defaultName is set (bug 56342 and 63891)
                 settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
