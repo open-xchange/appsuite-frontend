@@ -66,6 +66,13 @@ How many quick launch icons should appear in the Topbar by default (default: `3`
 Default Apps for quick launcher. Comma-separated string of App IDs
 Default: `'io.ox/mail/main,io.ox/calendar/main,io.ox/files/main'`
 
+<config>io.ox/core//apps/logoFileName=`<string>`</config>
+Change the default file name for the logo in the topbar. Default (`logo.png`)
+
+<config>io.ox/core//apps/logoAction=`<string>`</config>
+Change the action when clicking on the topbar logo. Either a URI to open in a new tab
+or an App ID. I.e. `https://sample.com` or `io.ox/mail/main`. Default is unset.
+
 ## Notifications
 
 <config>io.ox/core//autoOpenNotificationarea=`<bool>`</config>

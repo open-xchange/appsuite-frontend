@@ -327,12 +327,14 @@ define('io.ox/core/main/appcontrol', [
         id: 'logo',
         index: 300,
         draw: function () {
-            var logo, action = settings.get('logoAction', false);
+            var logo,
+                logoFileName = settings.get('logoFileName', 'logo.png'),
+                action = settings.get('logoAction', false);
             this.append(
                 logo = $('<div id="io-ox-top-logo">').append(
                     $('<img>').attr({
                         alt: ox.serverConfig.productName,
-                        src: ox.base + '/apps/themes/' + ox.theme + '/logo.png'
+                        src: ox.base + '/apps/themes/' + ox.theme + '/' + logoFileName
                     })
                 )
             );
