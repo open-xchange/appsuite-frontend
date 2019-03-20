@@ -109,7 +109,7 @@ define('io.ox/mail/compose/main', [
                 def.resolve(collection);
             } else {
                 require(['io.ox/core/api/snippets'], function (snippetAPI) {
-                    var collection = new Backbone.Collection();
+                    var collection = snippetAPI.getCollection();
                     self.config.set('signatures', collection);
                     snippetAPI.getAll().always(function () {
                         def.resolve(collection);

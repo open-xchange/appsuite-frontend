@@ -205,7 +205,7 @@ define('io.ox/mail/compose/signatures', [
 
             // edit-case: signature already in DOM
             // compose-case: signature not in DOM
-            this.config.set('signature', signature.toJSON(), { silent: !!this.config.get('signatureIsRendered') });
+            this.config.set('signature', signature ? signature.toJSON() : null, { silent: !!this.config.get('signatureIsRendered') });
             this.config.unset('signatureIsRendered');
         },
 
