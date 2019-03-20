@@ -1739,8 +1739,11 @@ define('io.ox/calendar/week/view', [
             // use start of appointment in calendar timezone
             this.setStartDate(model.getMoment('startDate').clone().tz(this.model.get('startDate').tz()));
             // check if there is a node drawn yet. If yes click it. if not, draw without arrow
-            if (this.$el.find('.appointment[data-cid="' + util.cid(model) + '"] .appointment-content').length) {
-                this.$el.find('.appointment[data-cid="' + util.cid(model) + '"] .appointment-content').trigger('click');
+            var target = this.$el.find('.appointment[data-cid="' + util.cid(model) + '"] .appointment-content');
+            if (target.length) {
+                var e = new jQuery.Event('click');
+                e.pageX = target.offset().left + target.width() / 2;
+                target.trigger(e);
                 return;
             }
             this.showAppointment($.Event('click', { target: this.$el }), model, { arrow: false });
