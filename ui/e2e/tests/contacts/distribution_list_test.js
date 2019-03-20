@@ -43,12 +43,16 @@ Scenario('Add a distribution list to an existing distribution list', function (I
     I.waitForVisible('.io-ox-contacts-distrib-window', 5);
     I.fillField('Name', 'test distribution list one');
     I.fillField('Add contact', 'testdude1@test.case');
+    I.wait(0.5);
     I.pressKey('Enter');
     I.fillField('Add contact', 'testdude2@test.case');
+    I.wait(0.5);
     I.pressKey('Enter');
     I.fillField('Add contact', 'testdude3@test.case');
+    I.wait(0.5);
     I.pressKey('Enter');
     I.fillField('Add contact', 'testdude4@test.case');
+    I.wait(0.5);
     I.pressKey('Enter');
     I.click('Create list');
     I.waitForDetached('.io-ox-contacts-distrib-window', 5);
@@ -77,6 +81,7 @@ Scenario('Add a distribution list to an existing distribution list', function (I
 
     // add another address just for good measurement
     I.fillField('Add contact', 'testdude5@test.case');
+    I.wait(0.5);
     I.pressKey('Enter');
     I.waitNumberOfVisibleElements('li.participant-wrapper.removable', 5);
 
