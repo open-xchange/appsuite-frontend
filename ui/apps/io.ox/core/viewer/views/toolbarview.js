@@ -225,10 +225,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'none',
                     title: gt('Share'),
                     tooltip: gt('Share this file'),
-                    dropdown: 'io.ox/files/toolbar/share',
-                    customize: function () {
-                        this.next().addclass('dropdown-menu-right');
-                    }
+                    dropdown: 'io.ox/files/toolbar/share'
                 },
                 'open': {
                     prio: 'lo',
