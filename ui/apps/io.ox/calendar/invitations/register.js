@@ -360,14 +360,19 @@ define('io.ox/calendar/invitations/register', [
                 imip = this.imip;
 
             function performConfirm() {
+
+                var params = {
+                    action: action,
+                    dataSource: 'com.openexchange.mail.ical',
+                    descriptionFormat: 'html'
+                };
+
+                if (!_.isEmpty(self.getUserComment())) {
+                    params.message = self.getUserComment();
+                }
                 http.PUT({
                     module: 'chronos/itip',
-                    params: {
-                        action: action,
-                        dataSource: 'com.openexchange.mail.ical',
-                        descriptionFormat: 'html',
-                        message: self.getUserComment()
-                    },
+                    params: params,
                     data: {
                         'com.openexchange.mail.conversion.fullname': imip.mail.folder_id,
                         'com.openexchange.mail.conversion.mailid': imip.mail.id,

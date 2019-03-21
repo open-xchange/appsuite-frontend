@@ -65,6 +65,13 @@ define('io.ox/core/boot/load', [
             });
         }
     }, {
+        id: 'multifactor',
+        run: function (baton) {
+            if (baton.sessionData && baton.sessionData.requires_multifactor) {
+                return loadUserTheme().then(doMultifactor);
+            }
+        }
+    }, {
         id: 'compositionSpaces',
         run: function () {
             ox.rampup.compositionSpaces = $.when(
@@ -149,6 +156,27 @@ define('io.ox/core/boot/load', [
         // otherwise try to load default theme now
         console.error('Could not load custom theme', theme);
         return themes.set('default').catch(fail);
+    }
+
+    // Do multifactor authentication.  If successful, load full rampup data
+    function doMultifactor() {
+        var def = $.Deferred();
+        require(['io.ox/multifactor/auth', 'io.ox/multifactor/login/loginScreen'], function (auth, loginScreen) {  // Couldn't be loaded until themes loaded
+            loginScreen.create();
+            auth.doAuthentication().then(function () {
+                loginScreen.destroy();
+                session.rampup().then(function (data) {
+                    if (data) session.set(data);
+                    def.resolve();
+                });
+            }, function () {
+                session.logout().always(function () {
+                    window.location.reload(true);  // Hard fail here.  Reload
+                    def.reject();
+                });
+            });
+        });
+        return def;
     }
 
     // greedy prefetch for mail app

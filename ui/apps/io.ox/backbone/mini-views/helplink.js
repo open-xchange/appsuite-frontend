@@ -47,10 +47,15 @@ define('io.ox/backbone/mini-views/helplink', [
                 opt = this.options;
 
             require(['io.ox/help/main'], function (HelpApp) {
+                if (opt.simple) {
+                    window.open(HelpApp.getAddress(opt), '_blank');
+                    return;
+                }
                 if (HelpApp.reuse(opt)) return;
                 HelpApp.getApp(opt).launch();
             });
 
+            if (opt.metrics === false) return;
             // metrics
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;

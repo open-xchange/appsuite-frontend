@@ -359,8 +359,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         },
         // extended permissions
         idMappingExcludes = ['3060', '7010'],
+
         // list of error codes, which are not logged (see bug 46098)
-        errorBlacklist = ['SVL-0003', 'SVL-0015', 'LGI-0006'];
+        errorBlacklist = ['SVL-0003', 'SVL-0015', 'LGI-0006', 'MFA-0001'];
 
     // extend with commons (not all modules use common columns, e.g. folders)
     $.extend(idMapping.contacts, idMapping.common);
@@ -609,6 +610,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             // forward all errors to respond to special codes
             ox.trigger('http:error:' + response.code, response, o);
             ox.trigger('http:error', response, o);
+
             // session expired?
             var isSessionError = (/^SES-/i).test(response.code),
                 isLogin = o.module === 'login' && o.data && /^(login|autologin|store|tokens)$/.test(o.data.action);
@@ -619,6 +621,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 ox.trigger('relogin:required', o, deferred, response);
                 return;
             }
+            if (that.isDisconnected() && !o.force) {
+                disconnectedQueue.push({ deferred: deferred, options: o });
+                return;
+            }
+
             // genereal error
             deferred.reject(response);
             return;
@@ -699,6 +706,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         slow = _.url.hash('slow') !== undefined,
         // fail mode
         fail = _.url.hash('fail') !== undefined || ox.fail !== undefined;
+
+    var disconnected = false,
+        disconnectedQueue = [];
 
     var ajax = (function () {
 
@@ -957,6 +967,13 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     return def;
                 }
             }
+
+            // If http disconnected and the call isn't being forced, add to queue
+            if (disconnected === true && !o.force) {
+                disconnectedQueue.push({ deferred: def, options: o });
+                return def;
+            }
+
             // build request object
             r = {
                 def: def,
@@ -1274,6 +1291,42 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             return paused;
         },
 
+        // Shut down http service due to some other required action.  Queue requests
+        disconnect: function () {
+            that.trigger('disconnect');
+            disconnected = true;
+        },
+
+        isDisconnected: function () {
+            return disconnected;
+        },
+
+        // Resume http service, executing pending requests as individual requests
+        reconnect: function () {
+            disconnected = false;
+            var pending = disconnectedQueue.slice().map(function (req) {
+                req.options.consolidate = false;
+                return ajax(req.options, req.options.type)
+                    .then(req.deferred.resolve, req.deferred.reject);
+            });
+
+            $.when.apply(null, pending).always(function () {
+                that.trigger('reconnect');
+            });
+
+            disconnectedQueue = [];
+        },
+        // Wipe the disconnect queue and resume
+        resetDisconnect: function (resp) {
+            var pending = disconnectedQueue.slice().map(function (req) {
+                req.deferred.reject(resp);
+                return req.deferred;
+            });
+
+            disconnectedQueue = [];
+            $.when.apply(null, pending).always(that.reconnect);
+        },
+
         /**
          * Resume HTTP API. Send all queued requests as one multiple
          */
@@ -1405,6 +1458,21 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
     };
 
     Events.extend(that);
+
+    (function (http) {
+        var waitSeconds;
+
+        http.on('disconnect', function () {
+            if (typeof waitSeconds === 'undefined') waitSeconds = require.s.contexts._.config.waitSeconds;
+            require.config({ waitSeconds: 0 });  // Requires will time out if sitting in queue
+        });
+        http.on('reconnect', function () {
+            window.setTimeout(function () {
+                require.config({ waitSeconds: waitSeconds });
+                waitSeconds = undefined;
+            }, 100);
+        });
+    }(that));
 
     return that;
 });

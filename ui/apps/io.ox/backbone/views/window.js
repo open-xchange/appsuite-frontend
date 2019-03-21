@@ -224,6 +224,7 @@ define('io.ox/backbone/views/window', [
 
             // add backdrop to prevent iframe drag issues
             $(container).append(backdrop);
+            this.$el.addClass('dragging');
         },
 
         drag: function (e) {
@@ -250,6 +251,7 @@ define('io.ox/backbone/views/window', [
                 this.lastActiveElement = null;
             }
             backdrop.remove();
+            this.$el.removeClass('dragging');
         },
 
         onQuit: function () {

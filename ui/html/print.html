@@ -277,6 +277,16 @@
         <% }); %>
         </script>
 
+        <script type="text/template" class="recovery">
+        <% _.each(data, function(element) { %>
+            <section class="item-compact">
+                <h1><%- i18n.code %></h1>
+                <br>
+                <span class="recovery-code"><%- element.code %></span>
+            </section>
+        <% }); %>
+        </script>
+
         <script type="text/template" class="calendar-month-view">
             <h1 class="calendar-title"><%= meta.title %></h1>
         <% _.each(data, function (month) { %>

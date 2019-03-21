@@ -94,7 +94,7 @@ define('io.ox/files/common-extensions', [
              * Update the data source attribute only, if the tooltip has been created for this element already.
              * The Tooltip object uses the value provided through the options or the data-original-title attribute value.
              * The only alternative is an explicit Tooltip object destruction before recreation (including cumbersome timeout because of async function).
-             * See Bug-62650 for further information.
+             * See bug 62650 for further information.
              */
             if (parent.attr('data-original-title') === undefined) {
                 parent.tooltip({ // http://getbootstrap.com/javascript/#tooltips // https://codepen.io/jasondavis/pen/mlnEe
@@ -113,7 +113,7 @@ define('io.ox/files/common-extensions', [
                     $(this).parent().tooltip('destroy');
                 });
             } else {
-                parent.attr('data-original-title', title).tooltip('show');
+                parent.attr('data-original-title', title).tooltip('hide');
             }
         },
 

@@ -63,10 +63,15 @@ define('io.ox/mail/compose/model', [
 
         initialize: function () {
             this.initialized = this.create().then(function (data) {
-                // adjust data
-                data.to = (data.to || []).concat(this.get('to'));
-                data.cc = (data.cc || []).concat(this.get('cc'));
-                data.bcc = (data.bcc || []).concat(this.get('bcc'));
+                // merge to, cc and bcc with server response
+                ['to', 'cc', 'bcc'].forEach(function (str) {
+                    data[str] = _.chain()
+                        .union(this.get(str), data[str])
+                        .uniq(function (address) {
+                            return address.length > 1 ? address[1] : address[0];
+                        })
+                        .value();
+                }.bind(this));
 
                 var collection = new Attachments.Collection();
                 collection.space = data.id;

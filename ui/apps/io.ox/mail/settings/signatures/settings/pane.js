@@ -278,8 +278,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 )
             );
         })
-        .addButton({ action: 'import', label: gt('Import') })
         .addCancelButton()
+        .addButton({ action: 'import', label: gt('Import') })
         .on('import', function () {
             var view = this,
                 button = $(e.target);

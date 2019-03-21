@@ -60,7 +60,7 @@ define('io.ox/core/tk/tokenfield', [
             if (this._delimiters.length) {
                 // Split at delimiter; ignore delimiters in quotes
                 // delimiters are: comma, semi-colon, tab, newline
-                tokens = _(tokens.split(new RegExp('[' + this._delimiters.join('|') + ']', 'g'))).map(function (str) { return str.trim(); });
+                tokens = util.getAddresses(tokens);
             } else {
                 tokens = [tokens];
             }

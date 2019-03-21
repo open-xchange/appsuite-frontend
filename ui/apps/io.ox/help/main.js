@@ -128,6 +128,8 @@ define('io.ox/help/main', ['io.ox/backbone/views/modal', 'gettext!io.ox/help', '
                     firstTabbable.focus();
                 });
 
+                $(this.contentWindow).on('dragover drop', false);
+
                 this.contentWindow.addEventListener('beforeunload', function () {
                     iframe.addClass('hidden');
                     contents.find('body').off('keydown', onEscape);
@@ -151,6 +153,7 @@ define('io.ox/help/main', ['io.ox/backbone/views/modal', 'gettext!io.ox/help', '
         getApp: createInstance,
         reuse: function (opt) {
             return ox.ui.App.reuse('io.ox/help:' + getAddress(opt));
-        }
+        },
+        getAddress: getAddress
     };
 });

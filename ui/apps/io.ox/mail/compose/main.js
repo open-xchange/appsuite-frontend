@@ -58,14 +58,22 @@ define('io.ox/mail/compose/main', [
             });
         }
     }, {
+        id: 'fix-custom-displayname',
+        index: INDEX += 100,
+        perform: function () {
+            if (settings.get('customDisplayNames')) return;
+            return accountAPI.getPrimaryAddressFromFolder(this.config.get('folderId')).then(function (address) {
+                // ensure defaultName is set (bug 56342 and 63891)
+                settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
+            });
+        }
+    }, {
         id: 'fix-from',
         index: INDEX += 100,
         perform: function () {
             var model = this.model;
             if (model.get('from')) return;
             return accountAPI.getPrimaryAddressFromFolder(this.config.get('folderId')).then(function (address) {
-                // ensure defaultName is set (bug 56342)
-                settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
                 // custom display names
                 if (settings.get(['customDisplayNames', address[1], 'overwrite'])) {
                     address[0] = settings.get(['customDisplayNames', address[1], 'name'], '');
@@ -103,18 +111,16 @@ define('io.ox/mail/compose/main', [
 
             if (_.device('smartphone')) {
                 //#. %s is the product name
-                var value = settings.get('mobileSignature', gt('Sent from %s via mobile', ox.serverConfig.productName));
-                def.resolve([{ id: '0', content: value, misc: { insertion: 'below' } }]);
+                var value = settings.get('mobileSignature', gt('Sent from %s via mobile', ox.serverConfig.productName)),
+                    collection = new Backbone.Collection([{ id: '0', content: value, misc: { insertion: 'below' } }]);
+                this.config.set('signatures', collection);
+                def.resolve(collection);
             } else {
                 require(['io.ox/core/api/snippets'], function (snippetAPI) {
-                    snippetAPI.getAll('signature').always(function (signatures) {
-                        var oldSignatures = self.config.get('signatures') || [],
-                            allSignatures = _.uniq(signatures.concat(oldSignatures), false, function (o) { return o.id; });
-                        // update model
-                        self.config.set('signatures', allSignatures);
-                        // add options to dropdown (empty signature already set)
-                        // TODO: mobile signatures
-                        def.resolve(allSignatures);
+                    var collection = snippetAPI.getCollection();
+                    self.config.set('signatures', collection);
+                    snippetAPI.getAll().always(function () {
+                        def.resolve(collection);
                     });
                 });
             }

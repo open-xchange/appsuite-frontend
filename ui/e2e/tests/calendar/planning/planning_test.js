@@ -72,6 +72,7 @@ Scenario('use planning view as Standalone app', async function (I) {
 
     //add a participant
     I.fillField('Add contact/resource', 'testdude1@test.test');
+    I.wait(0.5);
     I.pressKey('Enter');
     I.see('testdude1');
 
@@ -139,6 +140,7 @@ Scenario('create distributionlist from planning view', async function (I) {
 
     //add a participant
     I.fillField('Add contact/resource', 'testdude1@test.test');
+    I.wait(0.5);
     I.pressKey('Enter');
     I.see('testdude1');
 

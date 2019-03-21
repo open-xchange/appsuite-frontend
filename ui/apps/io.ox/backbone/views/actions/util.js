@@ -479,13 +479,15 @@ define('io.ox/backbone/views/actions/util', [
 
     function hasMatches(action) {
         // action.requires is DEPRECATED
-        return _.isFunction(action.matches || action.requires);
+        return _.isFunction(action.quick || action.matches || action.requires);
     }
 
     function matches(baton, action) {
         // action.requires is DEPRECATED
+        // action.quick is a workaround (similar to former "filter") to do a "quick" check which is not async (e.g. popup blocker problem)
         var ret = true;
-        if (action.matches) ret = action.matches(baton);
+        if (action.quick) ret = action.quick(baton);
+        else if (action.matches) ret = action.matches(baton);
         else if (_.isFunction(action.requires)) ret = action.requires({ baton: baton, collection: baton.collection, data: baton.data, extension: action });
         return $.when(ret).pipe(null, _.constant(false));
     }

@@ -225,7 +225,7 @@ define('io.ox/core/session', [
                         rampup: true,
                         rampUpFor: 'open-xchange-appsuite'
                     },
-                    _(options).pick('action', 'name', 'password', 'language', 'rampup', 'rampUpFor', 'share', 'target')
+                    _(options).pick('action', 'name', 'password', 'language', 'rampup', 'rampUpFor', 'share', 'target', 'secret_code')
                 );
 
                 if (options.forceLanguage) params.storeLanguage = true;

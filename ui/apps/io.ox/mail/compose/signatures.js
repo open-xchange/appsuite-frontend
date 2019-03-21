@@ -30,34 +30,31 @@ define('io.ox/mail/compose/signatures', [
             var self = this,
                 dropdown = new Dropdown({ model: baton.config, label: gt('Signatures'), caret: true });
 
-            function draw() {
+            function draw(collection) {
                 dropdown.prepareReuse();
                 dropdown.option('signatureId', '', gt('No signature'));
                 dropdown.$ul.addClass('pull-right');
 
-                baton.view.signaturesLoading.done(function (signatures) {
-                    _.each(signatures, function (o) {
-                        dropdown.option('signatureId', o.id, o.displayname);
-                    });
-                    dropdown.divider();
-                    dropdown.link('settings', gt('Manage signatures'), function () {
-                        var options = { id: 'io.ox/mail/settings/signatures' };
-                        ox.launch('io.ox/settings/main', options).done(function () {
-                            // minimize this window, so it doesn't overlap the setting the user wants to manage now
-                            if (baton.view.app.getWindow().floating) baton.view.app.getWindow().floating.onMinimize();
-                            this.setSettingsPane(options);
-                        });
-                    });
-                    dropdown.$ul.addClass('pull-right');
-                    dropdown.render();
+                collection.each(function (model) {
+                    dropdown.option('signatureId', model.get('id'), model.get('displayname'));
                 });
+                dropdown.divider();
+                dropdown.link('settings', gt('Manage signatures'), function () {
+                    var options = { id: 'io.ox/mail/settings/signatures' };
+                    ox.launch('io.ox/settings/main', options).done(function () {
+                        // minimize this window, so it doesn't overlap the setting the user wants to manage now
+                        if (baton.view.app.getWindow().floating) baton.view.app.getWindow().floating.onMinimize();
+                        this.setSettingsPane(options);
+                    });
+                });
+                dropdown.$ul.addClass('pull-right');
+                dropdown.render();
             }
 
-            require(['io.ox/core/api/snippets'], function (snippetAPI) {
-                // use normal event listeners since view.listenTo does not trigger correctly.
-                snippetAPI.on('refresh.all', draw);
-                baton.view.$el.one('dispose', function () { snippetAPI.off('refresh.all', draw); });
-                draw();
+            baton.view.signaturesLoading.done(function (collection) {
+                var refresh = draw.bind(null, collection);
+                baton.view.listenTo(collection, 'add remove reset', refresh);
+                refresh();
             });
 
             self.append(dropdown.$el.addClass('signatures text-left'));
@@ -117,8 +114,8 @@ define('io.ox/mail/compose/signatures', [
             // when editing a draft we might have a signature
             if (this.is('edit|copy')) {
                 // get id of currently drawn signature
-                signature = _.find(signatures, function (signature) {
-                    var raw = util.getRaw(signature);
+                signature = signatures.find(function (model) {
+                    var raw = util.getRaw(model.toJSON());
                     // ignore empty signatures (match empty content)
                     if (_.isEmpty(raw)) return;
                     // HTML: node content matches signature
@@ -153,8 +150,8 @@ define('io.ox/mail/compose/signatures', [
         // getter
         getSignatureById: function (id) {
             id = String(id);
-            return _.find(this.get('signatures'), function (data) {
-                return data.id === id;
+            return this.get('signatures').find(function (model) {
+                return model.get('id') === id;
             });
         }
     };
@@ -201,14 +198,14 @@ define('io.ox/mail/compose/signatures', [
         // handler -> change:signatureId
         setSignature: function (model, id) {
             var signatures = this.config.get('signatures'),
-                signature = _(signatures).where({ id: id })[0],
+                signature = signatures.findWhere({ id: id }),
                 isEmptySignature = (id === '');
             // invalid signature
             if (!signature && !isEmptySignature) return;
 
             // edit-case: signature already in DOM
             // compose-case: signature not in DOM
-            this.config.set('signature', signature, { silent: !!this.config.get('signatureIsRendered') });
+            this.config.set('signature', signature ? signature.toJSON() : null, { silent: !!this.config.get('signatureIsRendered') });
             this.config.unset('signatureIsRendered');
         },
 
@@ -241,8 +238,8 @@ define('io.ox/mail/compose/signatures', [
 
                     var node = $(this),
                         text = node.text(),
-                        unchanged = _(self.config.get('signatures')).find(function (signature) {
-                            return util.getRaw(signature) === util.stripWhitespace(text);
+                        unchanged = self.config.get('signatures').find(function (model) {
+                            return util.getRaw(model.toJSON()) === util.stripWhitespace(text);
                         });
 
                     // remove entire block unless it seems edited

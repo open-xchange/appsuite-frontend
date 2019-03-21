@@ -118,8 +118,25 @@ define('io.ox/tours/whats-new', [
     });
 
     ext.point('io.ox/tours/whats_new').extend({
-        id: 'help',
+        id: 'multifactor',
         index: 500,
+        steps: function (baton) {
+            if (!baton.tour || !capabilities.has('multifactor')) return;
+            baton.tour.step()
+                .title(gt('Second Factor Authentication'))
+                .waitFor('.multifactorStatusDiv.mfLoaded')
+                .on('wait', function () {
+                    ox.launch('io.ox/settings/main', { id: 'io.ox/multifactor' });
+                })
+                .content(gt('You can now add additional verification options to enhance the security of your account.'))
+                .spotlight('.io-ox-multifactor-settings #addDevice')
+            .end();
+        }
+    });
+
+    ext.point('io.ox/tours/whats_new').extend({
+        id: 'help',
+        index: 600,
         steps: function (baton) {
             if (!baton.tour) return;
             baton.tour.step()
