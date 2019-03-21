@@ -145,7 +145,7 @@ define('io.ox/backbone/views/actions/util', [
             }
 
             function checkAction(action) {
-                matches(baton, action)
+                matches(baton, action, false)
                     .done(function (state) {
                         if (state) result.resolve(true); else nextAction();
                     })
@@ -389,7 +389,7 @@ define('io.ox/backbone/views/actions/util', [
 
             function checkMatches(action, baton) {
                 try {
-                    matches(baton, action)
+                    matches(baton, action, true)
                         .done(function (state) {
                             if (state) callAction(action, baton); else nextAction();
                         })
@@ -482,11 +482,11 @@ define('io.ox/backbone/views/actions/util', [
         return _.isFunction(action.quick || action.matches || action.requires);
     }
 
-    function matches(baton, action) {
+    function matches(baton, action, allowQuick) {
         // action.requires is DEPRECATED
         // action.quick is a workaround (similar to former "filter") to do a "quick" check which is not async (e.g. popup blocker problem)
         var ret = true;
-        if (action.quick) ret = action.quick(baton);
+        if (allowQuick && action.quick) ret = action.quick(baton);
         else if (action.matches) ret = action.matches(baton);
         else if (_.isFunction(action.requires)) ret = action.requires({ baton: baton, collection: baton.collection, data: baton.data, extension: action });
         return $.when(ret).pipe(null, _.constant(false));
