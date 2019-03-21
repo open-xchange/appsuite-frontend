@@ -23,7 +23,7 @@ define('io.ox/multifactor/views/constants', [
         OKButton: gt('Next'),
         CancelButton: gt('Cancel'),
         AuthenticationTitle: gt('2-Step Verification'),
-        ReAuthenticationTitle: gt('Re-Authentication required for this action'),
+        ReAuthenticationTitle: gt('Reauthentication required for this action'),
         SelectDeviceTitle: gt('Select 2-Step Verification Method'),
         AuthDialogClass: _.device('small') ? 'multifactorAuthMobile' : 'multifactorAuth',
         // MF Devices
