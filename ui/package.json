@@ -57,6 +57,7 @@
   },
   "dependencies": {
     "@open-xchange/tinymce": "4.6.3-7",
-    "tinymce": "4.6.7"
+    "tinymce": "4.6.7",
+    "@open-xchange/moment-interval": "0.0.2"
   }
 }
