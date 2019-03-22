@@ -10,6 +10,8 @@
  * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
  */
 
+const moment = require('moment');
+
 Feature('Calendar: Create appointment').tag('3');
 
 Before(async function (users) {
@@ -40,16 +42,10 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.fillField('Subject', 'test recurring');
     I.fillField('Location', 'invite location');
 
-    const { start, isNextMonth } = await I.executeAsyncScript(function (done) {
-        done({
-            start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('8', 'day').format('l')}"]`,
-            isNextMonth: moment().month() !== moment().add('8', 'days').month()
-        });
-    });
-
     I.click('~Date (M/D/YYYY)');
-    if (isNextMonth) I.click('~Go to next month', '.date-picker.open');
-    I.click(start);
+    I.pressKey(['Control', 'a']);
+    I.pressKey(moment().startOf('week').add('8', 'day').format('l'));
+    I.pressKey('Enter');
 
     I.click('~Start time');
     I.click('4:00 PM');

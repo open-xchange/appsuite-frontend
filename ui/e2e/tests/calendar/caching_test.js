@@ -10,6 +10,7 @@
  * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
  */
 
+const moment = require('moment');
 
 Feature('Calendar: Create appointment');
 
@@ -59,15 +60,10 @@ Scenario('Create never ending appointment and check display in several views', a
     I.fillField('Subject', 'test caching');
     I.fillField('Location', 'caching location');
 
-    const { start, dayCountNextMonth } = await I.executeAsyncScript(function (done) {
-        done({
-            start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('1', 'day').format('l')}"]`,
-            dayCountNextMonth: moment().add(2, 'months').daysInMonth()
-        });
-    });
-
     I.click('~Date (M/D/YYYY)');
-    I.click(start);
+    I.pressKey(['Control', 'a']);
+    I.pressKey(moment().startOf('week').add('1', 'day').format('l'));
+    I.pressKey('Enter');
 
     I.click('All day', '.io-ox-calendar-edit-window');
 
@@ -115,7 +111,7 @@ Scenario('Create never ending appointment and check display in several views', a
     I.dontSeeElement('.monthview-container td.day.today:not(.out)');
 
     I.see('test caching', '.monthview-container .appointment .title');
-    I.seeNumberOfElements('.monthview-container .day:not(.out) .appointment .title', dayCountNextMonth);
+    I.seeNumberOfElements('.monthview-container .day:not(.out) .appointment .title', moment().add(2, 'months').daysInMonth());
 
     I.logout();
 
