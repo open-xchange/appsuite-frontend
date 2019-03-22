@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-02-04 10:48+0100\n"
+"PO-Revision-Date: 2019-03-22 10:35+0100\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -2510,8 +2510,8 @@ msgstr "Uživatelská pole"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js apps/plugins/halo/xing/register.js
-#: module:plugins/portal
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/view-detail.js
+#: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "%1$s\n"
 "%2$s %3$s\n"
@@ -4806,6 +4806,10 @@ msgstr "Základní nastavení"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
 msgstr "Znovu načíst"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Relogin"
+msgstr "Opětovné přihlášení"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/xing/register.js module:plugins/portal

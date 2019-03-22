@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-02-04 10:57+0100\n"
+"PO-Revision-Date: 2019-03-22 10:40+0100\n"
 "Last-Translator: Luiz Fernando Ranghetti <luiz@workshop-chapina.com>\n"
 "Language-Team: Portuguese <br@workshop-chapina.com>\n"
 "Language: pt_BR\n"
@@ -2517,8 +2517,8 @@ msgstr "Campos do usuário"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js apps/plugins/halo/xing/register.js
-#: module:plugins/portal
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/view-detail.js
+#: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "%1$s\n"
 "%2$s %3$s\n"
@@ -4805,6 +4805,10 @@ msgstr "Configurações básicas"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
 msgstr "Recarregar página"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Relogin"
+msgstr "Logar novamente"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/xing/register.js module:plugins/portal
