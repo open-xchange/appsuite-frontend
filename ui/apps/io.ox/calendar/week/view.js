@@ -370,13 +370,14 @@ define('io.ox/calendar/week/view', [
         renderAppointment: function (model) {
             // do not use a button here even if it's correct from a11y perspective. This breaks resize handles (you cannot make appointments longer/shorter) and hover styles on firefox.
             // it is fine in month perspective as there are no resize handles there.
-            var node = $('<div role="button" class="appointment">')
-                .attr({
-                    'data-cid': model.cid,
-                    'data-master-id': util.cid({ id: model.get('id'), folder: model.get('folder') }),
-                    'data-extension-point': 'io.ox/calendar/appointment',
-                    'data-composite-id': model.cid
-                });
+            var node = this.$('[data-cid="' + model.cid + '"]').empty();
+            if (node.length === 0) node = $('<div role="button" class="appointment">');
+            node.attr({
+                'data-cid': model.cid,
+                'data-master-id': util.cid({ id: model.get('id'), folder: model.get('folder') }),
+                'data-extension-point': 'io.ox/calendar/appointment',
+                'data-composite-id': model.cid
+            });
 
             ext.point('io.ox/calendar/appointment')
                 .invoke('draw', node, ext.Baton(_.extend({}, this.opt, { model: model, folders: this.opt.app.folders.list() })));
@@ -396,7 +397,6 @@ define('io.ox/calendar/week/view', [
 
         onChangeAppointment: function (model) {
             this.onReset = true;
-            this.onRemoveAppointment(model);
             this.onAddAppointment(model);
             this.onReset = false;
             this.adjustPlacement();
