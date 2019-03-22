@@ -13,6 +13,12 @@ module.exports.config = {
     timeout: 10000,
     output: './build/e2e/',
     helpers: {
+        ResembleHelper: {
+            require: 'codeceptjs-resemblehelper',
+            screenshotFolder: './e2e/tests/output/',
+            baseFolder: './e2e/tests/screenshots/base/',
+            diffFolder: './e2e/tests/screenshots/diff/'
+        },
         WebDriver: _.extend({}, {
             url: process.env.LAUNCH_URL || 'http://localhost:8337/appsuite/',
             host: process.env.SELENIUM_HOST || '10.50.0.94',
@@ -70,7 +76,6 @@ module.exports.config = {
             user: process.env.TESTRAIL_USERNAME || 'testuser',
             password: process.env.TESTRAIL_API_KEY || 'testkey',
             project_id: process.env.TESTRAIL_PROJECTID || '1',
-            projectId: process.env.TESTRAIL_PROJECTID || '1',
             runName: process.env.TESTRAIL_RUNNAME || 'test',
             enabled: process.env.TESTRAIL_ENABLED || false
         }

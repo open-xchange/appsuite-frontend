@@ -259,6 +259,36 @@ class MyHelper extends Helper {
         });
         return response.data.data;
     }
+
+    //async grabSetting(obj, options) {
+    //    if (typeof obj === 'string') {
+    //        const input = obj.split('//');
+    //        const moduleName = input[0];
+    //        const key = input[1];
+    //        const value = options;
+    //        obj = { [moduleName]: { [key]: value } };
+    //        options = arguments[2];
+    //    }
+    //    options = options || {};
+    //    const { httpClient, session } = await util.getSessionForUser(options);
+    //    return httpClient.get('/appsuite/api/jslob', [name], {
+    //        params: {
+    //            action: 'list',
+    //            session: session
+    //        }
+    //    });
+    //}
+
+    async haveGroup(options, group) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        const response = await httpClient.put('/appsuite/api/group', group, {
+            params: {
+                action: 'new',
+                session: session
+            }
+        });
+        return response.data.data;
+    }
 }
 
 module.exports = MyHelper;

@@ -440,7 +440,6 @@ Scenario('[C7404] - Reply to single mail', function (I, users) {
     I.waitForText('Re: ' + testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
     I.logout();
 });
-
 Scenario('[C8820] - Forward attachments', function (I, users) {
     let [user] = users;
     var testrailID = 'C8820';

@@ -566,3 +566,94 @@ Scenario('[C7469] Delete a whole-day appointment', async function (I, users) {
     I.dontSeeElement('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]');
     I.logout();
 });
+Scenario('[C7433] Create appointment by marking some timeframe', async function (I, users) {
+    const
+        Moment = require('moment'),
+        MomentRange = require('moment-range'),
+        moment = MomentRange.extendMoment(Moment);
+    let testrailID = 'C7433';
+    //var timestamp = Math.round(+new Date() / 1000);
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+
+    I.login('app=io.ox/calendar', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.clickToolbar('Today');
+    I.dragAndDrop('.today div.timeslot:nth-child(25)', '.today div.timeslot:nth-child(28)');
+    I.waitForElement('.io-ox-calendar-edit [name="summary"]');
+    I.fillField('.io-ox-calendar-edit [name="summary"]', testrailID);
+    I.click('Create');
+    I.waitForElement('.appointment-container [aria-label="' + testrailID + '"]', 5);
+    I.click('.appointment-container [aria-label="' + testrailID + '"]');
+    I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
+    //TODO: Verify timeframe
+    I.logout();
+});
+
+Scenario('[C274537] Support use-count calculation on Appointment create with Groups', async function (I, users) {
+    const
+        Moment = require('moment'),
+        MomentRange = require('moment-range'),
+        moment = MomentRange.extendMoment(Moment);
+    let testrailID = 'C274537';
+    var timestamp = Math.round(+new Date() / 1000);
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+    let numberOfGroups = 3;
+    for (let i = 0; i < numberOfGroups; i++) {
+        const group = {
+            name: timestamp + '-00' + (i + 1),
+            display_name: timestamp + '-00' + (i + 1),
+            members: [
+                users[0].userdata.id,
+                users[1].userdata.id
+            ]
+        };
+        I.haveGroup({ user: users[0] }, group);
+    }
+    I.login('app=io.ox/calendar', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.clickToolbar('Today');
+    I.clickToolbar('New');
+    I.waitForElement('.io-ox-calendar-edit [name="summary"]');
+    I.fillField('.io-ox-calendar-edit [name="summary"]', testrailID);
+    I.fillField('.add-participant.tt-input', timestamp + '-00');
+    I.waitForElement('.twitter-typeahead');
+    let result1 = [];
+    I.waitForElement('.tt-suggestions .participant-name');
+    for (let i = 0; i < numberOfGroups; i++) {
+        result1.push(await I.executeScript(function (i, result1) {
+            return $('.tt-suggestions .participant-name').eq(i).text().toString();
+        }, i, result1));
+    }
+    console.log(result1);
+    expect(result1[0]).to.equal(timestamp + '-001');
+    expect(result1[1]).to.equal(timestamp + '-002');
+    expect(result1[2]).to.equal(timestamp + '-003');
+    I.clearField('.add-participant.tt-input');
+    I.fillField('.add-participant.tt-input', timestamp + '-003');
+    I.waitForElement('//div[@class="participant-name"]//strong[@class="tt-highlight"][contains(text(),"' + timestamp + '-003")]');
+    I.click('//div[@class="participant-name"]//strong[@class="tt-highlight"][contains(text(),"' + timestamp + '-003")]');
+    I.click('Create');
+    I.waitForDetached('.io-ox-calendar-edit [name="summary"]');
+    I.waitForElement('.appointment-container [aria-label="' + testrailID + '"]', 5);
+    I.clickToolbar('New');
+    I.waitForElement('.io-ox-calendar-edit [name="summary"]');
+    I.fillField('.io-ox-calendar-edit [name="summary"]', testrailID);
+    I.fillField('.add-participant.tt-input', timestamp + '-00');
+    I.waitForElement('.twitter-typeahead');
+    let result2 = [];
+    I.waitForElement('.tt-suggestions .participant-name');
+    for (let i = 0; i < numberOfGroups; i++) {
+        result2.push(await I.executeScript(function (i, result2) {
+            return $('.tt-suggestions .participant-name').eq(i).text().toString();
+        }, i, result2));
+    }
+    console.log(result2);
+    expect(result2[0]).to.equal(timestamp + '-003');
+    expect(result2[1]).to.equal(timestamp + '-001');
+    expect(result2[2]).to.equal(timestamp + '-002');
+    I.logout();
+});
