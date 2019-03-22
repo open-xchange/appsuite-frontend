@@ -71,6 +71,9 @@ define('io.ox/core/attachments/view', [
                 this.renderSummary(length);
                 if (this.openByDefault) this.toggleDetails(true);
             });
+            this.listenTo(this.collection, 'remove', function () {
+                this.$preview.trigger('scroll');
+            });
 
             // initial toggle if empty
             this.$el.toggleClass('empty', this.getValidModels().length === 0);
