@@ -25,8 +25,9 @@ Scenario('adds an malicious attachment to a contact', function (I) {
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
 
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
+    I.waitForText('My address books');
+    I.doubleClick('~My address books');
+    I.click('~Contacts');
 
     I.createContactWithEvilAttachment();
 
