@@ -376,7 +376,8 @@ define('io.ox/calendar/week/view', [
                 'data-cid': model.cid,
                 'data-master-id': util.cid({ id: model.get('id'), folder: model.get('folder') }),
                 'data-extension-point': 'io.ox/calendar/appointment',
-                'data-composite-id': model.cid
+                'data-composite-id': model.cid,
+                'data-folder': null // reset folder in case of reuse
             });
 
             ext.point('io.ox/calendar/appointment')
