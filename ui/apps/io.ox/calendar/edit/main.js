@@ -102,6 +102,11 @@ define('io.ox/calendar/edit/main', [
                     self.setWindow(win);
 
                     self.model.setDefaultAttendees({ create: opt.mode === 'create' }).done(function () {
+
+                        if (opt.mode === 'create') {
+                            self.model.set('attendeePrivileges', settings.get('chronos/allowAttendeeEditsByDefault', false) && !folderAPI.pool.getModel(self.model.get('folder')).is('public') ? 'MODIFY' : 'DEFAULT');
+                        }
+
                         if (opt.mode === 'edit' && util.isAllday(self.model)) {
                             // allday apointments do not include the last day. To not misslead the user we subtract a day (so one day appointments only show one date for example)
                             // this day will be added again on save
@@ -192,8 +197,6 @@ define('io.ox/calendar/edit/main', [
                 data = data instanceof Backbone.Model ? data.toJSON() : data;
                 // apply defaults. Cannot be done in default of model, because then events in week/month view have class public by default
                 if (!data.class) data.class = 'PUBLIC';
-                data.attendeePrivileges = settings.get('chronos/allowAttendeeEditsByDefault', false) ? 'MODIFY' : 'DEFAULT';
-
                 this.edit(data, { mode: 'create' });
             },
 

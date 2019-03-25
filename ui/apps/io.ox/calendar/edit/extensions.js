@@ -842,8 +842,9 @@ define('io.ox/calendar/edit/extensions', [
         index: 200,
         render: function () {
             // only the organizer is allowed to change this attribute
-            // also not allowed for extensions
-            var disabled = (this.baton.mode === 'edit' && !(calendarUtil.hasFlag(this.model, 'organizer') || calendarUtil.hasFlag(this.model, 'organizer_on_behalf'))) ||
+            // also not allowed for exceptions or in public folders
+            var disabled = folderAPI.pool.getModel(this.model.get('folder')).is('public') ||
+                           (this.baton.mode === 'edit' && !(calendarUtil.hasFlag(this.model, 'organizer') || calendarUtil.hasFlag(this.model, 'organizer_on_behalf'))) ||
                            (this.model.get('recurrenceId') && this.model.mode === 'appointment');
 
             var checkboxView  = new mini.CustomCheckboxView({
