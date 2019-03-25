@@ -108,11 +108,11 @@ define('io.ox/mail/compose/signatures', [
     var model = {
 
         // use defaultSignature or reference already used one (edit-case)
-        setInitialSignature: function (content) {
-            var signatures = this.get('signatures'), signature;
+        setInitialSignature: function (model) {
+            var signatures = this.get('signatures'), signature, content = model.get('content');
 
             // when editing a draft we might have a signature
-            if (this.is('edit|copy')) {
+            if (this.is('edit|copy') || model.restored) {
                 // get id of currently drawn signature
                 signature = signatures.find(function (model) {
                     var raw = util.getRaw(model.toJSON());
