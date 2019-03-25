@@ -98,6 +98,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/boot/login/openid.js',
                             'apps/io.ox/core/boot/login/saml.js',
                             'apps/io.ox/core/boot/login/standard.js',
+                            'apps/io.ox/core/boot/login/tabSession.js',
                             'apps/io.ox/core/boot/login/token.js',
                             'apps/io.ox/core/boot/warning.js',
                             'apps/io.ox/core/boot/main.js',
@@ -106,6 +107,95 @@ module.exports = function (grunt) {
                             'src/boot.js'
                         ],
                         dest: 'build/boot.js',
+                        nonull: true
+                    }
+                ]
+            },
+            strippedbootjs: {
+                options: {
+                    banner: 'if (typeof dependencies === "undefined") dependencies = {};\n'
+                },
+                files: [
+                    {
+                        src: [
+                            'node_modules/jquery/dist/jquery.js',
+                            //'node_modules/jquery-migrate/dist/jquery-migrate.js',
+                            'node_modules/@open-xchange/jquery-touch-events/src/jquery.mobile-events.min.js',
+                            'node_modules/underscore/underscore.js', // load this before require.js to keep global object
+                            'build/ox.js',
+                            // add backbone and dot.js may be a AMD-variant would be better
+                            'node_modules/backbone/backbone.js',
+                            'node_modules/backbone-validation/dist/backbone-validation.js',
+                            // load moment before require, because of anonymous define
+                            'build/static/3rd.party/moment/moment.js',
+                            'build/static/3rd.party/moment/moment-timezone-with-data.js',
+                            'build/static/3rd.party/moment/moment-interval.js',
+                            'node_modules/velocity-animate/velocity.min.js',
+                            'src/util.js',
+                            'node_modules/requirejs/require.js',
+                            'src/require-fix.js',
+                            'lib/modernizr.js',
+                            'src/lazyload.js',
+                            'src/browser.js',
+                            'src/plugins.js',
+                            'src/jquery.plugins.js',
+
+                            'node_modules/blankshield/blankshield.js',
+                            // add bootstrap JavaScript
+                            'node_modules/bootstrap/js/transition.js',
+                            'node_modules/bootstrap/js/alert.js',
+                            'node_modules/bootstrap/js/button.js',
+                            'node_modules/bootstrap/js/carousel.js',
+                            'node_modules/bootstrap/js/collapse.js',
+                            'node_modules/bootstrap/js/modal.js',
+                            'node_modules/bootstrap/js/tooltip.js',
+                            'node_modules/bootstrap/js/popover.js',
+                            'node_modules/bootstrap/js/scrollspy.js',
+                            'node_modules/bootstrap/js/tab.js',
+                            'node_modules/bootstrap/js/affix.js',
+                            // add custom bootstrap code
+                            'apps/io.ox/core/tk/dropdown.js',
+                            'lib/bootstrap-a11y.js',
+                            // add mandatory UI sources
+                            'apps/io.ox/core/http.js',
+                            'apps/io.ox/core/http_errors.js',
+                            'apps/io.ox/core/uuids.js',
+                            'apps/io.ox/core/session.js',
+                            'apps/io.ox/core/cache.js',
+                            'apps/io.ox/core/extensions.js',
+                            'apps/io.ox/core/manifests.js',
+                            'apps/io.ox/core/capabilities.js',
+                            'apps/io.ox/core/settings.js',
+                            'apps/io.ox/core/gettext.js',
+                            'apps/io.ox/core/event.js',
+                            'apps/io.ox/core/cache/indexeddb.js',
+                            'apps/io.ox/core/cache/localstorage.js',
+                            'apps/io.ox/core/cache/simple.js',
+                            'apps/plugins/halo/register.js',
+                            'apps/io.ox/core/settings/defaults.js',
+                            'apps/io.ox/core/moment.js',
+                            'apps/io.ox/core/viewer/main.js',
+                            'apps/io.ox/core/main/icons.js',
+                            'apps/io.ox/core/extPatterns/stage.js',
+                            'apps/io.ox/core/sockets.js',
+                            // missing for signin
+                            'apps/io.ox/core/boot/config.js',
+                            'apps/io.ox/core/boot/fixes.js',
+                            'apps/io.ox/core/boot/form.js',
+                            'apps/io.ox/core/boot/i18n.js',
+                            'apps/io.ox/core/boot/language.js',
+                            'apps/io.ox/core/boot/load.js',
+                            'apps/io.ox/core/boot/util.js',
+                            'apps/io.ox/core/boot/support.js',
+                            'apps/io.ox/core/boot/login/auto.js',
+                            'apps/io.ox/core/boot/login/openid.js',
+                            'apps/io.ox/core/boot/login/standard.js',
+                            'apps/io.ox/core/boot/login/token.js',
+                            'apps/io.ox/core/boot/warning.js',
+                            'build/apps/io.ox/core/boot.en_US.js',
+                            'build/apps/io.ox/core/boot.de_DE.js'
+                        ],
+                        dest: 'build/boot-stripped.js',
                         nonull: true
                     }
                 ]

@@ -98,6 +98,10 @@ define.async('io.ox/core/boot/main', [
             require('io.ox/core/boot/login/token')();
         },
 
+        useLocalStorage: function () {
+            require('io.ox/core/boot/login/localStorage')();
+        },
+
         useCookie: function () {
             return require('io.ox/core/boot/login/auto')();
         }
@@ -163,6 +167,12 @@ define.async('io.ox/core/boot/main', [
                 baton = ext.Baton(_.extend({}, baton, ox.rampup));
                 util.debug('running boot/load phase');
                 return Stage.run('io.ox/core/boot/load', baton);
+            }).then(function () {
+                if (!util.checkTabHandlingSupport()) return;
+
+                require(['io.ox/core/api/tab'], function (TabAPI) {
+                    TabAPI.TabSession.propagateLogin();
+                });
             });
         },
 

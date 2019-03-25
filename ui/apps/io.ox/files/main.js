@@ -76,6 +76,20 @@ define('io.ox/files/main', [
 
         },
 
+        /**
+         * Add listener for browser tab communication. Event needs a
+         * 'propagate' string for propagation
+         */
+        'refresh-from-broadcast': function () {
+            if (!ox.tabHandlingEnabled) return;
+            require(['io.ox/core/api/tab'], function (TabAPI) {
+                var events = TabAPI.TabCommunication.events;
+                events.listenTo(events, 'refresh-file', function (parameters) {
+                    api.propagate('refresh:file', _.pick(parameters, 'folder_id', 'id'));
+                });
+            });
+        },
+
         /*
          * Init pages for mobile use
          * Each View will get a single page with own

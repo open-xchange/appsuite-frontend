@@ -215,6 +215,7 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
                     // (4) note: When the key doesn't exists in localStorage, 'getItem' returns 'null' (see w3c spec)
                     // (5) note: The allocated data for this var is quite big, so it should be assured that the js GC can delete it later
                     var permanentCache = localStorage.getItem('appsuite.office-fonts'),
+                        permanentWindowHandling = localStorage.getItem('appsuite.window-handling'),
                         savepointId = _(['appsuite.cache', ox.user, ox.language, 'app-cache.index.savepoints']).compact().join('.'),
                         // keep savepoints after version update too.
                         savepoints = localStorage.getItem(savepointId),
@@ -233,6 +234,14 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
                     if (permanentCache !== null) {
                         try {
                             localStorage.setItem('appsuite.office-fonts', permanentCache);
+                        } catch (e) {
+                            console.warn('localStorage: could not restore permanentCache:', e);
+                        }
+                    }
+
+                    if (permanentWindowHandling !== null) {
+                        try {
+                            localStorage.setItem('appsuite.window-handling', permanentWindowHandling);
                         } catch (e) {
                             console.warn('localStorage: could not restore permanentCache:', e);
                         }
@@ -266,6 +275,7 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
             // This key should never be deleted out of the localStorage when possible
             // (e.g. do not delete them at logout).
             fileList.push('appsuite.office-fonts');
+            fileList.push('appsuite.window-handling');
 
             toDelete = _.difference(allKeys, fileList);
 

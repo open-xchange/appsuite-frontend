@@ -1822,6 +1822,11 @@ define('io.ox/files/api', [
                         api.trigger('add:version', file);
                     });
 
+                case 'refresh:file':
+                    return reloadVersions(file).done(function () {
+                        api.trigger('add:version', file);
+                    });
+
                 case 'change:file':
                     // we trigger both change and update for backwards-compatibility
                     api.trigger('change:file update change:file:' + _.ecid(file) + ' update:' + _.ecid(file));

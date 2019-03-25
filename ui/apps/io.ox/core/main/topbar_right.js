@@ -295,7 +295,7 @@ define('io.ox/core/main/topbar_right', [
         extend: function () {
             this.link('logout', gt('Sign out'), function (e) {
                 e.preventDefault();
-                logout();
+                logout({ manualLogout: true });
             });
         }
     });
@@ -305,7 +305,7 @@ define('io.ox/core/main/topbar_right', [
         index: 1000,
         draw: function () {
             var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
-                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('title', gt('Settings')),
+                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">'),
                 dropdown = new Dropdown({
                     attributes: { role: 'presentation' },
                     tagName: 'li',
@@ -345,7 +345,7 @@ define('io.ox/core/main/topbar_right', [
             index: 2000,
             draw: function () {
                 var logoutButton = addLauncher('right', $('<i class="fa fa-sign-out launcher-icon" aria-hidden="true">'), function () {
-                    logout();
+                    logout({ manualLogout: true });
                 }, gt('Sign out'));
                 logoutButton.find('a')
                 .attr('data-action', 'sign-out')

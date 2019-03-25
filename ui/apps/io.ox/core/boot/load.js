@@ -65,6 +65,15 @@ define('io.ox/core/boot/load', [
             });
         }
     }, {
+        id: 'tabHandling',
+        run: function () {
+            util.debug('Load "tabHandling"');
+
+            if (!util.checkTabHandlingSupport()) return;
+
+            require(['io.ox/core/api/tab']);
+        }
+    }, {
         id: 'multifactor',
         run: function (baton) {
             if (baton.sessionData && baton.sessionData.requires_multifactor) {

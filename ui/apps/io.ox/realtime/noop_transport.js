@@ -16,7 +16,8 @@ define('io.ox/realtime/noop_transport', ['io.ox/core/event'], function (Events) 
         send: $.noop,
         sendWithoutSequence: $.noop,
         query: function () { return $.when(); },
-        protocol: 'noop'
+        protocol: 'noop',
+        hasPendingAcks: function () { return false; }
     };
     Events.extend(dummy);
     return dummy;

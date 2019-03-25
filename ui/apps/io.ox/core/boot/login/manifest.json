@@ -10,4 +10,7 @@
 }, {
     "namespace": "login",
     "path": "io.ox/core/boot/login/token"
+}, {
+    "namespace": "login",
+    "path": "io.ox/core/boot/login/tabSession"
 }]

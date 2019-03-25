@@ -65,6 +65,8 @@ define('io.ox/core/desktop', [
             this.id = this.id || (this.options.refreshable ? this.options.name : '') || 'app-' + this.guid;
             this.set('path', this.options.path ? this.options.path : this.getName() + '/main');
             this.set('id', this.id);
+            this.set('openInTab', options.openInTab);
+            this.set('tabUrl', options.tabUrl);
             this.getInstance = function () {
                 return self;
             };
@@ -682,7 +684,7 @@ define('io.ox/core/desktop', [
 
         removeRestorePoint: function () {
             var uniqueID = this.get('uniqueID');
-            ox.ui.App.removeRestorePoint(uniqueID);
+            return ox.ui.App.removeRestorePoint(uniqueID);
         }
 
     });

@@ -43,14 +43,24 @@ define('io.ox/core/main/autologout', [
             return parseInt(settings.get('autoLogout', 0), 10);
         };
 
+        var doLogout = function (options) {
+            if (ox.tabHandlingEnabled && dialog) { dialog.close(); }
+            logout(options);
+        };
+
         // clear current timeout and reset activity status
-        var resetTimeout = function () {
+        var resetTimeout = function (silent) {
             clearTimeout(timeout);
             timeout = setTimeout(function () {
-                logout({ autologout: true });
+                doLogout({ autologout: true });
             }, interval);
             timeoutStart = _.now();
             changed = false;
+            if (ox.tabHandlingEnabled) {
+                if (silent) { timeoutStart = _.now() + 1000; }
+                if (!silent) { ox.trigger('autologout:resetTimeout'); }
+            }
+
         };
 
         // check activity status
@@ -78,8 +88,7 @@ define('io.ox/core/main/autologout', [
                                 if (countdown <= 0) {
                                     //make sure, this does not run again in a second
                                     clearInterval(countdownTimer);
-
-                                    logout({ autologout: true });
+                                    doLogout({ autologout: true });
                                 } else {
                                     countdown--;
                                     node.text(getString(countdown));
@@ -133,18 +142,18 @@ define('io.ox/core/main/autologout', [
                                     dialog.resume();
                                 });
                                 sure.on('force', function () {
-                                    logout({ force: true });
+                                    doLogout({ force: true });
                                     dialog.close();
                                     this.close();
                                 });
                             } else {
-                                logout();
+                                doLogout();
                             }
                         });
                         dialog.on('retry', function () {
                             resetTimeout();
                             clearInterval(countdownTimer);
-                            logout();
+                            doLogout();
                         });
 
                         dialog.logoutFailed = function (error) {
@@ -177,7 +186,6 @@ define('io.ox/core/main/autologout', [
         var start = function () {
 
             interval = getInterval();
-
             if (interval > 0 && timeout === null) {
 
                 // bind mouse, keyboard and touch events to monitor user activity
@@ -210,6 +218,68 @@ define('io.ox/core/main/autologout', [
             getInterval = function () { return 12000; };
             restart();
         };
+
+        if (ox.tabHandlingEnabled) {
+            require(['io.ox/core/api/tab'], function (TabApi) {
+
+                function propagateResetTimeout() {
+                    TabApi.TabCommunication.propagateToAllExceptWindow('propagateResetAutoLogoutTimeout', TabApi.TabHandling.windowName, {});
+                }
+
+                function localTabResetTimeout() {
+                    // call silent to prevent propagation to other tabs (be careful with endless-loop here)
+                    resetTimeout(true);
+
+                    // resetTimeout doesn't cancel the logout when the dialog is open
+                    if (dialog) {
+                        dialog.close();
+                    }
+                }
+
+                function propagateSettingsAutoLogout(val) {
+                    TabApi.TabCommunication.propagateToAllExceptWindow('propagateSettingsAutoLogout', TabApi.TabHandling.windowName, { val: val });
+                }
+
+                function localTabSetAutoLogout(propagateData) {
+                    // call settings.set 'silent' to prevent propagation to other tabs (be careful with endless-loop here)
+                    settings.off('change:autoLogout', propagateSettingsAutoLogout);
+                    settings.set('autoLogout', parseInt(propagateData.val, 10));
+                    settings.on('change:autoLogout', propagateSettingsAutoLogout);
+                }
+
+                function newLeader() {
+                    propagateResetTimeout();
+                }
+
+                ox.on('autologout:resetTimeout', propagateResetTimeout);
+                settings.on('change:autoLogout', propagateSettingsAutoLogout);
+                TabApi.TabCommunication.events.listenTo(TabApi.TabCommunication.events, 'propagateResetAutoLogoutTimeout', localTabResetTimeout);
+                TabApi.TabCommunication.events.listenTo(TabApi.TabCommunication.events, 'propagateSettingsAutoLogout', localTabSetAutoLogout);
+                // set new leader...
+                TabApi.TabCommunication.events.listenTo(TabApi.TabCommunication.events, 'nextWindowActive', newLeader);
+
+                require(['io.ox/core/tk/visibility-api-util']).done(function (visibilityApi) {
+                    $(visibilityApi).on('visibility-changed', function (e, data) {
+                        if (data.currentHiddenState === false) {
+                            propagateResetTimeout();
+                        }
+                    });
+                });
+
+                function getNextWindowName() {
+                    //nextCandidate
+                    var nextCandidate = _.first(_.filter(_.map(TabApi.TabHandling.getWindowList(), function (obj, key) { return { key: key, obj: obj }; }), function (obj) { return obj.key !== TabApi.TabHandling.windowName && obj.obj.loggedIn === true; }));
+                    return nextCandidate ? nextCandidate.key : '';
+                }
+
+                ox.on('beforeunload', function (unsavedChanges) {
+                    if (!unsavedChanges) {
+                        var next = getNextWindowName();
+                        if (next) { TabApi.TabCommunication.propagateToWindow('nextWindowActive', next); }
+                    }
+                });
+            });
+        }
 
         ox.autoLogout = {
             start: start,
