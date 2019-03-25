@@ -10,6 +10,8 @@
  * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
  */
 
+const moment = require('moment-timezone');
+
 Feature('Calendar: Switch timezones').tag('3');
 
 Before(async function (users) {
@@ -35,18 +37,12 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.fillField('Subject', 'test timezones');
     I.fillField('Location', 'invite location');
 
-    const { isNextMonth, start, inTimezone, date } = await I.executeAsyncScript(function (done) {
-        done({
-            start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('8', 'day').format('l')}"]`,
-            inTimezone: moment().hour(7).tz('Asia/Tokyo').format('h A'),
-            isNextMonth: moment().month() !== moment().add('8', 'days').month(),
-            date: moment().startOf('week').add('8', 'day').format('l')
-        });
-    });
+    const now = moment();
 
     I.click('~Date (M/D/YYYY)');
-    if (isNextMonth) I.click('~Go to next month', '.date-picker.open');
-    I.click(start);
+    I.pressKey(['Control', 'a']);
+    I.pressKey(moment(now).startOf('week').add('8', 'day').format('l'));
+    I.pressKey('Enter');
 
     I.click('~Start time');
 
@@ -94,7 +90,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.seeNumberOfElements('.workweek .week-container-label', 2);
     I.see('JST', '.workweek .timezone');
     I.see('7 AM', '.week-container-label:not(.secondary-timezone) .working-time-border:not(.in) .number');
-    I.see(inTimezone, '.week-container-label.secondary-timezone .working-time-border:not(.in) .number');
+    I.see(moment(now).hour(7).tz('Asia/Tokyo').format('h A'), '.week-container-label.secondary-timezone .working-time-border:not(.in) .number');
 
     I.click('test timezones', '.workweek .appointment .title');
     I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/edit"]');
@@ -108,7 +104,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.waitForDetached('.io-ox-dialog-popup');
 
     I.waitForText('Europe/Berlin: ');
-    I.waitForText('Mon, ' + date);
+    I.waitForText('Mon, ' + moment(now).startOf('week').add('8', 'day').format('l'));
     I.waitForText('4:00 – 5:00 PM');
 
     I.click('Discard', '.floating-window-content');
