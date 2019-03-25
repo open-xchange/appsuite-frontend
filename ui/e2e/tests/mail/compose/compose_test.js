@@ -273,8 +273,9 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
 
     // workflow 17: Edit copy
     I.clickToolbar('Edit copy');
+    I.waitForText('Subject');
+    I.wait(0.2); // add a short wait period until the ui has eventually focused the editor
 
-    I.waitForFocus('[placeholder="To"]');
     I.fillField('To', user2.get('primaryEmail'));
     I.pressKey('Enter');
     I.click('Send');
