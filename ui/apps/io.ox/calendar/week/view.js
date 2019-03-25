@@ -97,7 +97,8 @@ define('io.ox/calendar/week/view', [
         update: function () {
             var startDate = this.model.get('startDate');
             if (this.model.get('numColumns') > 1) {
-                var endDate = moment(startDate).add(this.model.get('numColumns'), 'days'),
+                // one day less than number of columns or the end date is actually the first day of next week instead of last day of this week
+                var endDate = moment(startDate).add(this.model.get('numColumns') - 1, 'days'),
                     fromMonth = startDate.format('MMMM'),
                     toMonth = endDate.format('MMMM'),
                     fromYear = startDate.format('YYYY'),
