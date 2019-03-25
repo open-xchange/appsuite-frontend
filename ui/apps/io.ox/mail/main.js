@@ -1919,7 +1919,6 @@ define('io.ox/mail/main', [
                     track('list/toolbar', e.currentTarget);
                 });
 
-
                 // folder tree action
                 _.defer(function () {
                     sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
