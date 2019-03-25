@@ -330,13 +330,17 @@ define('io.ox/calendar/freetime/timeView', [
                                 )
                             );
                         }
+                        eventNode.attr('aria-label', event.summary);
+                    }
 
+                    if (event.summary || event.location || (event.createdBy && settings.get('freeBusyStrict', true) === false)) {
                         eventNode.attr({
-                            title: event.summary + (event.location ? ' ' + event.location : ''),
-                            'aria-label': event.summary,
+                            //#. %1$s = apppointment creator name
+                            title: ((event.summary || '') + (event.location ? ' ' + event.location : '') + (event.createdBy && settings.get('freeBusyStrict', true) === false ? ' ' + gt('Created by: %1$s', event.createdBy.cn) : '')).trim(),
                             'data-toggle': 'tooltip'
                         }).tooltip({ container: tooltipContainer });
                     }
+
                     if (event.location && event.location !== '') {
                         eventNode.addClass('has-location').append($('<div class="location">').text(event.location));
                     }
