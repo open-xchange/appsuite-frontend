@@ -245,25 +245,46 @@
         </div>
         <script>
             /* inject correct language here at the very start manually*/
-            (function () {
-                var language = (navigator.language || navigator.userLanguage).substr(0, 2),
-                    messages = {
-                        timeout: {
-                            'en': ['Connection timed out. Please try reloading the page.', 'Reload'],
-                            'de': ['Zeitüberschreitung bei der Verbindung. Bitte laden Sie die Seite erneut.', 'Neu laden'],
-                            'it': ['Connessione scaduta. Prova a ricaricare la pagina.', 'Ricarica la pagina']
-                        },
-                        session: {
-                            'en': ['Something went wrong. Please close this browser tab and try again.'],
-                            'de': ['Es gab einen Fehler. Bitte schließen Sie dieses Browser-Tab und versuchen es erneut.']
-                        }
-                    };
-                for (var type in messages) {
-                    var msg = messages[type][language] || messages[type].en;
-                    document.querySelector('#showstopper .' + type).innerHTML = '<span>' + msg[0] +'</span>' +
-                        (msg[1] ? '<br><a href="#" class="reload">' + msg[1] + '</a>' : '');
-                }
+            var staticGt = (function () {
+                var messages = {
+                    'Connection error': {
+                        de: 'Verbindungsfehler'
+                    },
+                    'The service is not available right now.': {
+                        de: 'Der Dienst ist zurzeit nicht verfügbar.'
+                    },
+                    'Retry': {
+                        de: 'Erneut versuchen',
+                        es: 'Reintentar',
+                        fr: 'Réessayer',
+                        it: 'Ritenta'
+                    },
+                    'Connection timed out. Please try reloading the page.': {
+                        de: 'Zeitüberschreitung bei der Verbindung. Bitte laden Sie die Seite erneut.',
+                        es: 'Conexión caducada. Por favor, pruebe a cargar de nuevo la página.',
+                        fr: 'Délai de la connexion dépassé. Veuillez recharger la page.',
+                        it: 'Connessione scaduta. Prova a ricaricare la pagina.'
+                    },
+                    'Reload': {
+                        de: 'Neu laden',
+                        it: 'Ricarica la pagina'
+                    },
+                    'Something went wrong. Please close this browser tab and try again.': {
+                        de: 'Es gab einen Fehler. Bitte schließen Sie dieses Browser-Tab und versuchen es erneut.',
+                        es: 'Algo ha ido mal. Por favor, cierre esta pestaña del navegador e inténtelo de nuevo.',
+                        fr: 'Quelque chose s\'est mal passé. Veuillez fermer votre onglet de navigateur et réessayer.',
+                        it: 'Qualcosa è andato storto. Chiudi questa scheda del browser e prova ancora.'
+                    }
+                };
+                return function gt(str) {
+                    var language = (ox.language || navigator.language || navigator.userLanguage).substr(0, 2);
+                    if (!messages[str]) return str;
+                    return messages[str][language] || str;
+                };
             }());
+
+            document.querySelector('#showstopper .timeout').innerHTML = '<span>' + staticGt('Connection timed out. Please try reloading the page.') + '</span><br><a href="#" class="reload">' + staticGt('Reload') + '</a>';
+            document.querySelector('#showstopper .session').innerHTML = '<span>' + staticGt('Something went wrong. Please close this browser tab and try again.') +'</span>';
         </script>
         <script src="<%= base %>/boot.js"></script>
         <noscript>
