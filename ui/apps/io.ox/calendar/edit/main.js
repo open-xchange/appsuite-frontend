@@ -183,21 +183,6 @@ define('io.ox/calendar/edit/main', [
                     }
                 }
 
-                // if we restore alarms, check if they differ from the defaults
-                var isDefault = JSON.stringify(_(data.alarms).pluck('action', 'trigger')) === JSON.stringify(_(util.getDefaultAlarms(data)).pluck('action', 'trigger'));
-
-                // change default alarm when allDay changes and the user did not change the alarm before (we don't want data loss)
-                if (isDefault) {
-                    self.model.on('change:startDate change:endDate', _.debounce(function () {
-                        if (util.isAllday(this.previousAttributes()) === util.isAllday(this)) return;
-                        if (!this.userChangedAlarms) {
-                            this.set('alarms', util.getDefaultAlarms(this));
-                        }
-                    }, 0));
-                    self.model.on('userChangedAlarms', function () {
-                        this.userChangedAlarms = true;
-                    });
-                }
                 loadFolder();
             },
 

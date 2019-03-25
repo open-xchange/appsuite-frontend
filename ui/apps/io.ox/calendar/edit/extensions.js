@@ -361,7 +361,6 @@ define('io.ox/calendar/edit/extensions', [
                 originalModel = this.model,
                 model = this.baton.parentView.fullTimeToggleModel || new Backbone.Model({ allDay: calendarUtil.isAllday(this.model) }),
                 view = new mini.CustomCheckboxView({ id: guid, name: 'allDay', label: gt('All day'), model: model });
-            this.baton.parentView.fullTimeToggleModel = model;
 
             view.listenTo(model, 'change:allDay', function () {
                 if (this.model.get('allDay')) {
@@ -378,6 +377,20 @@ define('io.ox/calendar/edit/extensions', [
                 }
             });
             this.$el.append(view.render().$el);
+
+            if (!this.baton.parentView.fullTimeToggleModel && this.baton.mode === 'create') {
+                // if we restore alarms, check if they differ from the defaults
+                var isDefault = JSON.stringify(_(originalModel.attributes.alarms).pluck('action', 'trigger')) === JSON.stringify(_(calendarUtil.getDefaultAlarms(originalModel)).pluck('action', 'trigger'));
+
+                // automatically change default alarm in creae mode when allDay changes and the user did not change the alarm before (we don't want data loss)
+                if (isDefault) {
+                    var applyDefaultAlarms = function () { originalModel.set('alarms', calendarUtil.getDefaultAlarms(originalModel)); };
+                    model.on('change:allDay', applyDefaultAlarms);
+                    originalModel.once('userChangedAlarms', function () { model.off('change:allDay', applyDefaultAlarms); });
+                }
+            }
+
+            this.baton.parentView.fullTimeToggleModel = model;
         }
     });
 
