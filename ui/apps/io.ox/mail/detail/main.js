@@ -47,6 +47,30 @@ define('io.ox/mail/detail/main', [
                     });
                 }
             };
+        },
+
+        'metrics': function (app) {
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+                var body = app.getWindow().nodes.body;
+
+                function track(target, node) {
+                    node = $(node);
+                    var isSelect = !!node.attr('data-name');
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: target,
+                        type: 'click',
+                        action: isSelect ? node.attr('data-name') : node.attr('data-action'),
+                        detail: isSelect ? node.attr('data-value') : ''
+                    });
+                }
+
+                // toolbar actions
+                body.on('track', function (e, node) {
+                    track('detail-standalone/toolbar', node);
+                });
+            });
         }
     });
 
