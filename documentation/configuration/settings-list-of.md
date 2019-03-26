@@ -313,6 +313,9 @@ Prettify plain text emails.
 <config>io.ox/mail//sendDispositionNotification=`<bool>`</config>
 Show requests for read receipts.
 
+<config>io.ox/mail//autoselectMailOnStart=`<bool>`</config>
+Automatically select first read mail on mail app start. (Default true)
+
 
 ## User Preferences:
 
