@@ -572,7 +572,6 @@ define('io.ox/core/api/tab', [
      * Send a message to other tabs to logout these tabs
      */
     TabSession.propagateLogout = function () {
-        TabHandling.setLoggedOut();
         TabSession.propagate('propagateLogout', {});
     };
 
