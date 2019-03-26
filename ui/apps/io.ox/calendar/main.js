@@ -461,6 +461,8 @@ define('io.ox/calendar/main', [
                     if (!views[item]) return;
                     views[item].trigger('show');
                     app.perspective = views[item];
+                    // trigger change perspective so toolbar is redrawn (no more lost today button)
+                    app.getWindow().trigger('change:perspective', views[item]);
                     if (_.device('smartphone')) settings.set('viewView', item);
                 });
             });
