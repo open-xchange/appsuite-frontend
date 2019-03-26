@@ -352,7 +352,7 @@ define('io.ox/core/main/appcontrol', [
                         target: '_blank'
                     })
                 );
-            } else if (action && !ox.office) {
+            } else if (action && ox.isCoreTab) {
                 var autoStart = settings.get('autoStart');
                 if (action === 'autoStart') {
                     if (autoStart === 'none') return;
