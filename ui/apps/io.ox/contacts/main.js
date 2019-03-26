@@ -825,12 +825,29 @@ define('io.ox/contacts/main', [
 
         'metrics': function (app) {
 
-            // hint: toolbar metrics are registery by extension 'metrics-toolbar'
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
 
                 var nodes = app.getWindow().nodes,
                     sidepanel = nodes.sidepanel;
+
+                function track(target, node) {
+                    node = $(node);
+                    var isSelect = !!node.attr('data-name'),
+                        action = (node.attr('data-action') || '').replace(/^io\.ox\/contacts\/(detail\/)?/, '');
+                    metrics.trackEvent({
+                        app: 'contacts',
+                        target: target,
+                        type: 'click',
+                        action: isSelect ? node.attr('data-name') : action,
+                        detail: isSelect ? node.attr('data-value') : ''
+                    });
+                }
+
+                // main toolbar: actions, view dropdown
+                nodes.body.on('track', '.classic-toolbar-container', function (e, node) {
+                    track('toolbar', node);
+                });
 
                 // vgrid toolbar
                 nodes.main.find('.vgrid-toolbar').on('mousedown', 'a[data-name], a[data-action]', function (e) {
