@@ -247,37 +247,11 @@ define('io.ox/core/main/autologout', [
                     settings.on('change:autoLogout', propagateSettingsAutoLogout);
                 }
 
-                function newLeader() {
-                    propagateResetTimeout();
-                }
-
                 ox.on('autologout:resetTimeout', propagateResetTimeout);
                 settings.on('change:autoLogout', propagateSettingsAutoLogout);
                 TabApi.TabCommunication.events.listenTo(TabApi.TabCommunication.events, 'propagateResetAutoLogoutTimeout', localTabResetTimeout);
                 TabApi.TabCommunication.events.listenTo(TabApi.TabCommunication.events, 'propagateSettingsAutoLogout', localTabSetAutoLogout);
-                // set new leader...
-                TabApi.TabCommunication.events.listenTo(TabApi.TabCommunication.events, 'nextWindowActive', newLeader);
 
-                require(['io.ox/core/tk/visibility-api-util']).done(function (visibilityApi) {
-                    $(visibilityApi).on('visibility-changed', function (e, data) {
-                        if (data.currentHiddenState === false) {
-                            propagateResetTimeout();
-                        }
-                    });
-                });
-
-                function getNextWindowName() {
-                    //nextCandidate
-                    var nextCandidate = _.first(_.filter(_.map(TabApi.TabHandling.getWindowList(), function (obj, key) { return { key: key, obj: obj }; }), function (obj) { return obj.key !== TabApi.TabHandling.windowName && obj.obj.loggedIn === true; }));
-                    return nextCandidate ? nextCandidate.key : '';
-                }
-
-                ox.on('beforeunload', function (unsavedChanges) {
-                    if (!unsavedChanges) {
-                        var next = getNextWindowName();
-                        if (next) { TabApi.TabCommunication.propagateToWindow('nextWindowActive', next); }
-                    }
-                });
             });
         }
 
