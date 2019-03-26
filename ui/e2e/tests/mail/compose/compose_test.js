@@ -177,6 +177,7 @@ Scenario('Compose mail with different attachments', async function (I, users) {
 
     // upload local file via the hidden input in the toolbar
     I.say('📢 add another local image', 'blue');
+    I.waitForVisible('.composetoolbar input[type="file"]');
     I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
 
     I.retry(5).click('Send');
