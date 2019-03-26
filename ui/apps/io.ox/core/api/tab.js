@@ -20,7 +20,7 @@ define('io.ox/core/api/tab', [
     var TabHandling = {};
 
     // all opened windows in localStorage
-    TabHandling.currentWindows = {};
+    TabHandling.currentWindows = [];
 
     // current window.name
     TabHandling.windowName = '';
@@ -51,12 +51,12 @@ define('io.ox/core/api/tab', [
      * update opened windows from localStorage
      */
     TabHandling.fetch = function () {
-        var data = localStorage.getItem(TabHandling.key) || JSON.stringify({});
+        var data = localStorage.getItem(TabHandling.key) || JSON.stringify([]);
 
         try {
             TabHandling.currentWindows = JSON.parse(data);
         } catch (e) {
-            TabHandling.currentWindows = {};
+            TabHandling.currentWindows = [];
             if (ox.debug) console.warn('TabHandling.fetch', e);
         }
     };
@@ -65,27 +65,21 @@ define('io.ox/core/api/tab', [
      * update opened windows from localStorage
      */
     TabHandling.getWindowList = function () {
-
-        try {
-            var data = localStorage.getItem(TabHandling.key) || JSON.stringify({});
-            return JSON.parse(data);
-        } catch (e) {
-            TabHandling.currentWindows = {};
-            if (ox.debug) console.warn('TabHandling.getWindowList', e);
-        }
+        TabHandling.fetch();
+        return TabHandling.currentWindows;
     };
 
     /**
      * save windows from object to localStorage
      */
     TabHandling.store = function () {
-        var currentWindows = TabHandling.currentWindows || {},
+        var currentWindows = TabHandling.currentWindows || [],
             data;
 
         try {
             data = JSON.stringify(currentWindows);
         } catch (e) {
-            data = JSON.stringify({});
+            data = JSON.stringify([]);
             if (ox.debug) console.warn('TabHandling.store', e);
         } finally {
             localStorage.setItem(TabHandling.key, data);
@@ -100,11 +94,13 @@ define('io.ox/core/api/tab', [
     TabHandling.add = function (windowNameObject) {
         if (!windowNameObject || _.isEmpty(windowNameObject)) return;
         if (!windowNameObject.windowName) return;
-        TabHandling.fetch();
-        var windowObject = { loggedIn: windowNameObject.loggedIn };
+
+        var windowObject = _.pick(windowNameObject, 'windowName', 'windowType');
         if (windowNameObject.windowType === 'child') _.extend(windowObject, { parent: windowNameObject.parentName });
-        if (TabHandling.currentWindows[windowNameObject.windowName] === windowObject) return;
-        TabHandling.currentWindows[windowNameObject.windowName] = windowObject;
+
+        if (TabHandling.getFromStore(windowNameObject.windowName)) return;
+
+        TabHandling.currentWindows.push(windowObject);
         TabHandling.store();
     };
 
@@ -116,7 +112,9 @@ define('io.ox/core/api/tab', [
      */
     TabHandling.remove = function (windowName) {
         TabHandling.fetch();
-        delete TabHandling.currentWindows[windowName];
+        TabHandling.currentWindows = _.without(TabHandling.currentWindows, _.findWhere(TabHandling.currentWindows, {
+            windowName: windowName
+        }));
         TabHandling.store();
     };
 
@@ -155,8 +153,6 @@ define('io.ox/core/api/tab', [
                 windowType: 'parent'
             };
         }
-
-        windowNameObject.loggedIn = !!ox.session;
 
         return windowNameObject;
     };
@@ -252,9 +248,11 @@ define('io.ox/core/api/tab', [
      * @returns {boolean} found
      *  returns true if the windowName is found
      */
-    TabHandling.checkStore = function (windowName) {
+    TabHandling.getFromStore = function (windowName) {
         TabHandling.fetch();
-        return TabHandling.currentWindows.hasOwnProperty(windowName);
+        return _.find(TabHandling.currentWindows, function (obj) {
+            return obj.windowName === windowName;
+        });
     };
 
     /**
@@ -268,11 +266,14 @@ define('io.ox/core/api/tab', [
      */
     TabHandling.getParent = function (windowName) {
         TabHandling.fetch();
-        return TabHandling.currentWindows[windowName].parent;
+        var current = _.find(TabHandling.currentWindows, function (obj) {
+            return obj.windowName === windowName;
+        });
+        return current.parent;
     };
 
     /**
-     * add a new window to the localStorage with a new name#
+     * add a new window to the localStorage with a new name
      *
      * @param {String} type
      *  'parent or 'child'
@@ -405,18 +406,6 @@ define('io.ox/core/api/tab', [
         return !TabHandling.parentName;
     };
 
-    TabHandling.setLoggedIn = function () {
-        TabHandling.add(_.extend(_.pick(TabHandling, 'windowName', 'windowType', 'parentName'), { loggedIn: true }));
-    };
-    TabHandling.setLoggedOut = function () {
-        TabHandling.fetch();
-        _.each(TabHandling.currentWindows, function (currentWindow, key, obj) {
-            currentWindow.loggedIn = false;
-            obj[key] = currentWindow;
-        });
-        TabHandling.store();
-    };
-
     /**
      * An Object for Session Handling
      * @type {{}}
@@ -467,7 +456,6 @@ define('io.ox/core/api/tab', [
                     break;
                 case 'propagateLogin':
                     if (ox.session) return;
-                    TabHandling.setLoggedIn();
                     TabSession.events.trigger(data.propagate, data.parameters);
                     break;
                 default:
@@ -482,13 +470,8 @@ define('io.ox/core/api/tab', [
         TabSession.events.listenTo(TabSession.events, 'propagateLogin', function (parameters) {
             if (!ox.signin) return;
             require(['io.ox/core/boot/login/tabSession'], function (tabSessionLogin) {
-                TabHandling.setLoggedIn();
                 tabSessionLogin(parameters);
             });
-        });
-
-        TabSession.events.listenTo(ox, 'login:success', function () {
-            TabHandling.setLoggedIn();
         });
     };
 
