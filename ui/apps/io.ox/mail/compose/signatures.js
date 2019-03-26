@@ -258,20 +258,20 @@ define('io.ox/mail/compose/signatures', [
                 isEmpty = !textproc.htmltotext(signature.content).trim();
 
             // add signature?
-            if (!isEmpty && this.config.get('signatures').length > 0) {
-                text = util.cleanUp(signature.content, isHTML);
-                if (isHTML) text = this.getParagraph(text, util.looksLikeHTML(text));
-                // signature wrapper
-                if (signature.misc.insertion === 'below') {
-                    proc = _.bind(this.editor.insertPostCite || this.editor.appendContent, this.editor);
-                    proc(text);
-                    this.editor.scrollTop('bottom');
-                } else {
-                    // backward compatibility
-                    proc = _.bind(this.editor.insertPrevCite || this.editor.prependContent, this.editor);
-                    proc(text);
-                    this.editor.scrollTop('top');
-                }
+            if (isEmpty || !this.config.get('signatures').length) return;
+
+            text = util.cleanUp(signature.content, isHTML);
+            if (isHTML) text = this.getParagraph(text, util.looksLikeHTML(text));
+            // signature wrapper
+            if (signature.misc.insertion === 'below') {
+                proc = _.bind(this.editor.insertPostCite || this.editor.appendContent, this.editor);
+                proc(text);
+                this.editor.scrollTop('bottom');
+            } else {
+                // backward compatibility
+                proc = _.bind(this.editor.insertPrevCite || this.editor.prependContent, this.editor);
+                proc(text);
+                this.editor.scrollTop('top');
             }
         }
     };
