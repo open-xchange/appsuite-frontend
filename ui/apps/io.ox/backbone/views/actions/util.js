@@ -196,7 +196,7 @@ define('io.ox/backbone/views/actions/util', [
             $el.addClass('dropdown').append($toggle, $ul);
             // close tooltip when opening the dropdown
             $el.on('shown.bs.dropdown', function () { $(this).children('a').tooltip('hide'); });
-            if (_.device('smartphone')) $ul.on('click', 'a[data-action]', util.invokeByEvent);
+            if (_.device('smartphone')) util.bindActionEvent($ul);
 
             return baton ? util.renderDropdownItems($el, baton, options) : $.when();
         },
@@ -437,7 +437,7 @@ define('io.ox/backbone/views/actions/util', [
                 className = $el.attr('class');
 
             // listen for click event directly on menu for proper backdrop support
-            $menu.on('click', 'a[data-action]', util.invokeByEvent);
+            util.bindActionEvent($menu);
             $el.on({ 'show.bs.dropdown': show, 'hide.bs.dropdown': hide, 'dispose': dispose });
 
             function show() {
@@ -451,17 +451,19 @@ define('io.ox/backbone/views/actions/util', [
             }
 
             function toggle() {
-                // check if already disposed (as part of a toolbar redraw or sth)
-                if (!$toggle) return false;
-                $toggle.dropdown('toggle');
+                if ($toggle) $toggle.dropdown('toggle');
                 return false;
             }
 
             function dispose() {
-                // close menu before dispose
-                if ($menu.is(':visible'))$toggle.dropdown('toggle');
+                // make sure backdrop and menu are removed (might be open during dispose)
+                $backdrop.remove();
                 $toggle = $menu = $backdrop = null;
             }
+        },
+
+        bindActionEvent: function ($el) {
+            $el.on('click', 'a[data-action]', util.invokeByEvent);
         }
     };
 

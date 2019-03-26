@@ -123,7 +123,7 @@ define('io.ox/backbone/views/toolbar', [
             $dropdown.on('shown.bs.dropdown', function () { $(this).find('a').tooltip('hide'); });
             // $ul is descendent of <body> for smartphones, so events bubble differently
             if (_.device('smartphone')) {
-                $ul.on('click', 'a', $.proxy(util.invokeByEvent, this));
+                util.bindActionEvent($ul);
             } else {
                 util.addBackdrop($dropdown);
             }

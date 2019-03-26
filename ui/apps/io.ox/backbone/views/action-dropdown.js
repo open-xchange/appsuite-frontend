@@ -44,7 +44,7 @@ define('io.ox/backbone/views/action-dropdown', [
                 util.addBackdrop(this.$el);
             } else {
                 // listen for click event directly on menu for proper backdrop support
-                this.$menu.on('click', 'a[data-action]', util.invokeByEvent);
+                util.bindActionEvent(this.$menu);
             }
         },
 
