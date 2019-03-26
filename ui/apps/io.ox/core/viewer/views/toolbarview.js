@@ -358,7 +358,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'edit',
                     ref: 'io.ox/files/actions/rename'
                 },
-                'eidt': {
+                'edit': {
                     prio: 'hi',
                     mobile: 'lo',
                     title: gt('Edit'),
@@ -382,8 +382,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'open': {
                     prio: 'lo',
                     mobile: 'hi',
-                    icon: 'fa fa-download',
                     title: gt('Open attachment'),
+                    icon: _.device('ios && ios < 12') ? 'fa fa-download' : '',
                     section: 'export',
                     ref: 'oxguard/open'
                 },
