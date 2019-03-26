@@ -24,6 +24,8 @@ After(async function (users) {
 
 Scenario('Create appointment and switch timezones', async function (I) {
 
+    await I.haveSetting('io.ox/core//timezone', 'Europe/Berlin');
+
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
 
@@ -37,7 +39,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.fillField('Subject', 'test timezones');
     I.fillField('Location', 'invite location');
 
-    const nextMonday = moment().startOf('week').add('8', 'day');
+    const nextMonday = moment().tz('Europe/Berlin').startOf('week').add('8', 'day');
 
     I.click('~Date (M/D/YYYY)');
     I.pressKey(['Control', 'a']);
