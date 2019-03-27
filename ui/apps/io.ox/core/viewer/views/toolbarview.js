@@ -495,7 +495,9 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     // tested: no
     new Action(TOOLBAR_ACTION_ID + '/close', {
-        action: _.noop
+        action: function (baton) {
+            return baton.context.onClose(baton.e);
+        }
     });
 
     // tested: no
@@ -581,7 +583,6 @@ define('io.ox/core/viewer/views/toolbarview', [
         className: 'viewer-toolbar',
 
         events: {
-            'click a[data-action="io.ox/core/viewer/actions/toolbar/close"]': 'onClose',
             'click a[data-action="io.ox/core/viewer/actions/toolbar/rename"]': 'onRename',
             'keydown a[data-action="io.ox/core/viewer/actions/toolbar/rename"]': 'onRename'
         },
