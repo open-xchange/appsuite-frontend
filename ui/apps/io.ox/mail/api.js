@@ -12,13 +12,12 @@
  */
 
 define('io.ox/mail/api', [
+    'io.ox/mail/api-legacy',
     'io.ox/core/http',
-    'io.ox/core/cache',
     'settings!io.ox/core',
     'io.ox/core/api/factory',
     'io.ox/core/folder/api',
     'io.ox/core/api/account',
-    'io.ox/core/notifications',
     'io.ox/mail/util',
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
@@ -27,7 +26,7 @@ define('io.ox/mail/api', [
     'gettext!io.ox/mail',
     'io.ox/core/capabilities',
     'io.ox/mail/sanitizer'
-], function (http, cache, coreSettings, apiFactory, folderAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities, sanitizer) {
+], function (legacyAPI, http, coreSettings, apiFactory, folderAPI, accountAPI, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities, sanitizer) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -187,6 +186,9 @@ define('io.ox/mail/api', [
             return options.simplified;
         }
     });
+
+    // support old compose api endpoints backward compatibility
+    _.extend(api, legacyAPI);
 
     /**
      * updates the view used for get requests, used on mail settings save to be responsive

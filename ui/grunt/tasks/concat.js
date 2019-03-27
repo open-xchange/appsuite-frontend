@@ -295,6 +295,7 @@ module.exports = function (grunt) {
                             // mail app
                             'apps/io.ox/mail/util.js',
                             'apps/io.ox/mail/api.js',
+                            'apps/io.ox/mail/api-legacy.js',
                             'apps/io.ox/mail/listview.js',
                             'apps/io.ox/core/tk/list-control.js',
                             'apps/io.ox/mail/threadview.js',
