@@ -352,7 +352,8 @@ define('io.ox/core/main/appcontrol', [
                         target: '_blank'
                     })
                 );
-            } else if (action && ox.isCoreTab) {
+            } else if (action && !ox.openedInBrowserTab) {
+                // ox.openedInBrowserTab is only true, when ox.tabHandlingEnabled is true and the window is no a core tab
                 var autoStart = settings.get('autoStart');
                 if (action === 'autoStart') {
                     if (autoStart === 'none') return;

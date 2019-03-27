@@ -1623,7 +1623,8 @@ define('io.ox/mail/api', [
      * @return { deferred} done returns { unseen: [], recent: [] }
      */
     api.checkInbox = function () {
-        if (ox.tabHandlingEnabled && !ox.isCoreTab) return;
+        // ox.openedInBrowserTab is only true, when ox.tabHandlingEnabled is true and the window is no a core tab
+        if (ox.openedInBrowserTab) return;
         // look for new unseen mails in INBOX
         return http.GET({
             module: 'mail',
@@ -1678,7 +1679,8 @@ define('io.ox/mail/api', [
      */
     api.refresh = function () {
         // do not react on events when user has no mail (e.g. drive only)
-        if (!ox.online || !capabilities.has('webmail') || (ox.tabHandlingEnabled && !ox.isCoreTab)) return;
+        // ox.openedInBrowserTab is only true, when ox.tabHandlingEnabled is true and the window is no a core tab
+        if (!ox.online || !capabilities.has('webmail') || ox.openedInBrowserTab) return;
         return api.checkInbox().always(function () {
             api.trigger('refresh.all');
         });
