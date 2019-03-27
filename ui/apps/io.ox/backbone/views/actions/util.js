@@ -428,8 +428,6 @@ define('io.ox/backbone/views/actions/util', [
 
         addBackdrop: function ($el) {
 
-            if (_.device('smartphone')) return;
-
             var $toggle = $el.find('.dropdown-toggle'),
                 $menu = $el.find('.dropdown-menu'),
                 $backdrop = $('<div class="smart-dropdown-container dropdown open" role="navigation">').on('click contextmenu', toggle),
