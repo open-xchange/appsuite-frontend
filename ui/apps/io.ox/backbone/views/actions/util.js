@@ -196,7 +196,6 @@ define('io.ox/backbone/views/actions/util', [
             $el.addClass('dropdown').append($toggle, $ul);
             // close tooltip when opening the dropdown
             $el.on('shown.bs.dropdown', function () { $(this).children('a').tooltip('hide'); });
-            if (_.device('smartphone')) util.bindActionEvent($ul);
 
             return baton ? util.renderDropdownItems($el, baton, options) : $.when();
         },
