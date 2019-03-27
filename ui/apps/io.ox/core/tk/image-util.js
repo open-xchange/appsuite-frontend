@@ -27,7 +27,12 @@ define('io.ox/core/tk/image-util', [
 
     function PromiseWorker(obj) {
         var URL = window.URL || window.webkitURL,
-            args = _(obj).map(function (value, key) { return 'var ' + key + ' = ' + value.toString(); }),
+            args = _(obj).map(function (value, key) {
+                var content = value.toString(),
+                    name = value.name || content.match(/^function\s*([^\s(]+)/)[1];
+                if (!name || name === key) return 'var ' + key + ' = ' + content;
+                return 'var ' + key + ' = ' + name + ' = ' + content;
+            }),
             script = args.join('\n') + '\n' + 'self.onmessage = ' + onMessage.toString(),
             blob;
 
