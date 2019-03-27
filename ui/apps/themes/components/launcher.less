@@ -151,6 +151,9 @@
             position: relative;
             z-index: 2;
             height: @appcontrol-height - 2;
+            .ie11 & {
+                height: @appcontrol-height;
+            }
             display: inline-block;
             border: 0;
             svg .fill-c1 { fill: #fff; }
