@@ -55,6 +55,7 @@ define('io.ox/core/api/tab', [
 
         try {
             TabHandling.currentWindows = JSON.parse(data);
+            if (_.isObject(TabHandling.currentWindows)) TabHandling.currentWindows = [];
         } catch (e) {
             TabHandling.currentWindows = [];
             if (ox.debug) console.warn('TabHandling.fetch', e);
