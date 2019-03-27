@@ -114,9 +114,6 @@ define('io.ox/core/attachments/view', [
 
         renderHeader: function () {
 
-            // do not redraw header if already attached to prevent duplication
-            if (!this.$header.is(':empty')) return;
-
             this.$header.append(
                 $('<a href="#" class="toggle-details" aria-expanded="false" role="button">').append(
                     $('<i class="fa fa-paperclip" aria-hidden="true">'),

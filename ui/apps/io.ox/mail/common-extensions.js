@@ -614,7 +614,8 @@ define('io.ox/mail/common-extensions', [
                         return m;
                     }),
                     collection = new attachment.Collection(list),
-                    view = new attachment.List({
+                    reuse = !!$el.data('view'),
+                    view = $el.data('view') || new attachment.List({
                         AttachmentView: CustomAttachmentView,
                         collection: collection,
                         el: $el,
@@ -622,7 +623,8 @@ define('io.ox/mail/common-extensions', [
                     });
                 view.openByDefault = settings.get('attachments/layout/detail/open', view.openByDefault);
 
-                $el.append(view.render().$el);
+                view.$header.empty();
+                view.render();
 
                 // add attachment actions
                 var toolbarView = new ToolbarView({ el: view.$header.find('.links')[0], inline: true, simple: true, dropdown: false, point: 'io.ox/mail/attachment/links' });
@@ -637,25 +639,28 @@ define('io.ox/mail/common-extensions', [
                 view.listenTo(baton.model, 'change:imipMail', view.renderInlineLinks);
                 view.renderInlineLinks();
 
-                view.$el.on('click', 'li.item', function (e) {
-                    var node = $(e.currentTarget),
-                        clickTarget = $(e.target), id, data, baton;
+                if (!reuse) {
+                    view.$el.on('click', 'li.item', function (e) {
+                        var node = $(e.currentTarget),
+                            clickTarget = $(e.target), id, data, baton;
 
-                    // skip if click was on the dropdown
-                    if (!clickTarget.attr('data-original')) return;
+                        // skip if click was on the dropdown
+                        if (!clickTarget.attr('data-original')) return;
 
-                    // skip attachments without preview
-                    if (!node.attr('data-original')) return;
+                        // skip attachments without preview
+                        if (!node.attr('data-original')) return;
 
-                    id = node.attr('data-id');
-                    data = collection.get(id).toJSON();
-                    baton = ext.Baton({ simple: true, startItem: data, data: list, restoreFocus: clickTarget });
-                    actionsUtil.invoke('io.ox/mail/attachment/actions/view', baton);
-                });
+                        id = node.attr('data-id');
+                        data = collection.get(id).toJSON();
+                        baton = ext.Baton({ simple: true, startItem: data, data: list, restoreFocus: clickTarget });
+                        actionsUtil.invoke('io.ox/mail/attachment/actions/view', baton);
+                    });
 
-                view.on('change:layout', function (mode) {
-                    settings.set('attachments/layout/detail/' + _.display(), mode).save();
-                });
+                    view.on('change:layout', function (mode) {
+                        settings.set('attachments/layout/detail/' + _.display(), mode).save();
+                    });
+                }
+
                 // A11y: Fixup roles
                 view.$el.find('[role="toolbar"]').find('a[role="menuitem"]').attr('role', 'button');
                 return view;
