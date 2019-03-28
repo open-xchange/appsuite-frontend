@@ -61,14 +61,15 @@
   resolved "https://registry.yarnpkg.com/@open-xchange/bootstrap-tokenfield/-/bootstrap-tokenfield-0.13.1.tgz#c4c1bddd360b2ef01c8d4d40514b92316fd257aa"
   integrity sha512-+W43i/lK24Tof53sQoygzhhvRORAScUzdYtPTMl6EEd1Pt+FutAGrBcE9dqWfHiuwzOyJZNAtGFPeSoGFj+CQA==
 
-"@open-xchange/codecept-helper@^0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.9.tgz#75bf104053e26b48dbaa908a079d771128a4bec5"
-  integrity sha512-xM9SyxsQF8CvSvRT0dyfW3qiDiCtK/RpULBATDJhbbSiRdrGuJ37S/96PGllGMTGI7V9/aLun0wXdrWRBbOXXA==
+"@open-xchange/codecept-helper@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.10.tgz#c0832d2637cdc9a610db559cc7e4a7f5e6cc0b29"
+  integrity sha512-yRHlULXTEhOVVZrrzrjgvHZGd2p8pAegd0Jx8cEyew6Hmt+mu3Bd8UMbZYP9lcZbHQJlGtzPuW4V4JwzT+uNmg==
   dependencies:
     axios "^0.18.0"
     codeceptjs "^2.0.2"
     form-data "^2.3.3"
+    moment "^2.24.0"
     soap "^0.25.0"
     underscore "^1.9.1"
 
@@ -3896,7 +3897,7 @@ moment-timezone@0.5.23:
   dependencies:
     moment ">= 2.9.0"
 
-moment@2.24.0, "moment@>= 2.9.0", moment@^2.10.2:
+moment@2.24.0, "moment@>= 2.9.0", moment@^2.10.2, moment@^2.24.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
