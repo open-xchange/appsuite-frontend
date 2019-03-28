@@ -68,8 +68,8 @@ define('io.ox/files/settings/pane', [
                             return { value: i, label: gt('%1$d seconds', i) };
                         });
                     },
-                    getRetentionDaysOptions: function () {
-                        return [
+                    getRetentionDaysOptions: function (retentionDays) {
+                        var entries = [
                             { label: gt('Forever'), value: 0 },
                             { label: gt('1 day'), value: 1 },
                             { label: gt('7 days'), value: 7 },
@@ -78,9 +78,16 @@ define('io.ox/files/settings/pane', [
                             { label: gt('90 days'), value: 90 },
                             { label: gt('1 year'), value: 365 }
                         ];
+                        var entry = _.findWhere(entries, { value: retentionDays });
+                        if (!entry) {
+                            entries.unshift({
+                                label: gt.format(gt.ngettext('%1$d day', '%1$d days', retentionDays), retentionDays), value: retentionDays
+                            });
+                        }
+                        return entries;
                     },
-                    getMaxVersionsOptions: function () {
-                        return [
+                    getMaxVersionsOptions: function (maxVersions) {
+                        var entries = [
                             { label: gt('Keep all versions'), value: 0 },
                             { label: gt('1 version'), value: 2 },
                             { label: gt('5 versions'), value: 6 },
@@ -95,6 +102,13 @@ define('io.ox/files/settings/pane', [
                             { label: gt('90 versions'), value: 91 },
                             { label: gt('100 versions'), value: 101 }
                         ];
+                        var entry = _.findWhere(entries, { value: maxVersions });
+                        if (!entry) {
+                            entries.unshift({
+                                label: gt.format(gt.ngettext('%1$d version', '%1$d versions', maxVersions - 1), maxVersions - 1), value: maxVersions
+                            });
+                        }
+                        return entries;
                     }
                 })
                 .render().$el
@@ -177,10 +191,11 @@ define('io.ox/files/settings/pane', [
             index: INDEX += 100,
             render: function () {
 
+                var retentionDays = settings.get('features/autodelete/retentionDays'),
+                    maxVersions = settings.get('features/autodelete/maxVersions');
+
                 // disabled
                 if (!capabilities.has('autodelete_file_versions')) {
-                    var retentionDays = settings.get('features/autodelete/retentionDays'),
-                        maxVersions = settings.get('features/autodelete/maxVersions');
 
                     // nothing configured
                     if (!retentionDays && !maxVersions) return;
@@ -204,9 +219,7 @@ define('io.ox/files/settings/pane', [
                 this.getSummary = function () {
                     // appends legend list for explanation
                     var summaryList = $('<ul>'),
-                        summary = $('<span>').text(gt('Summary')).append(summaryList),
-                        retentionDays = settings.get('features/autodelete/retentionDays'),
-                        maxVersions = settings.get('features/autodelete/maxVersions');
+                        summary = $('<span>').text(gt('Summary')).append(summaryList);
 
                     if (maxVersions <= 0 && retentionDays <= 0) {
                         summaryList.append($('<li>').text(gt('All file versions are retained')));
@@ -224,9 +237,9 @@ define('io.ox/files/settings/pane', [
                     util.fieldset(
                         gt('File version history'),
                         $('<span>').append(gt('Timeframe')),
-                        util.compactSelect('features/autodelete/retentionDays', gt('Keep saved versions'), settings, this.getRetentionDaysOptions(), { width: 4, integer: true }),
+                        util.compactSelect('features/autodelete/retentionDays', gt('Keep saved versions'), settings, this.getRetentionDaysOptions(retentionDays), { width: 4, integer: true }),
                         $('<span>').append(gt('File version limit')),
-                        util.compactSelect('features/autodelete/maxVersions', gt('Keep number of recent versions'), settings, this.getMaxVersionsOptions(), { width: 4, integer: true }),
+                        util.compactSelect('features/autodelete/maxVersions', gt('Keep number of recent versions'), settings, this.getMaxVersionsOptions(maxVersions), { width: 4, integer: true }),
                         summaryContainer.append(this.getSummary())
                     )
                 );
