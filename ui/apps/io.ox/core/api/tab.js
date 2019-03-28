@@ -660,7 +660,10 @@ define('io.ox/core/api/tab', [
     };
 
     /**
-     * Propagate to all windows by the localStorage
+     * Propagate to all windows by the localStorage.
+     *
+     * Note: Due to different browser behaviour in handling localStorage events in the current tab, this function uses
+     * the localStorage only for all other browser tabs and triggers the event for the current tab directly.
      *
      * @param {String} propagate
      *  the key to trigger event
@@ -670,7 +673,8 @@ define('io.ox/core/api/tab', [
      *  parameters that should be passed to the trigger
      */
     TabCommunication.propagateToAll = function (propagate, parameters) {
-        TabCommunication.propagate(propagate, { parameters: parameters });
+        TabCommunication.propagate(propagate, { parameters: parameters, exceptWindow: TabHandling.windowName });
+        TabCommunication.events.trigger(propagate, parameters);
     };
 
     /**
@@ -741,6 +745,7 @@ define('io.ox/core/api/tab', [
             if (data.targetWindow && data.targetWindow !== TabHandling.windowName) return;
             if (data.exceptWindow && data.exceptWindow === TabHandling.windowName) return;
 
+            if (!data.propagate) return;
             if (data.propagate === 'show-in-drive') return TabCommunication.showInDrive(data.parameters);
             if (data.propagate === 'get-active-windows') return TabCommunication.getActiveWindows(data.exceptWindow);
 
