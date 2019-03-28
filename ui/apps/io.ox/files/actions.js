@@ -414,6 +414,7 @@ define('io.ox/files/actions', [
             return !folderAPI.isExternalFileStorage(fileModel);
         });
     }
+
     // TODO check action Kristof
     new Action('io.ox/files/actions/add-to-portal', {
         capabilities: 'portal',
