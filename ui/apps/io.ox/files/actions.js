@@ -11,8 +11,6 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-/* global blankshield */
-
 define('io.ox/files/actions', [
     'io.ox/core/folder/api',
     'io.ox/files/api',
@@ -300,24 +298,7 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Mario
-    new Action('io.ox/files/actions/open', {
-        collection: 'one && items',
-        matches: function (baton) {
-            var data = baton.first();
-            if (isContact(baton)) return false;
-            // no 'open' menu entry for office documents, PDF and plain text
-            if (api.isOffice(data)) return false;
-            if (api.isPDF(data)) return false;
-            if (api.isText(data)) return false;
-            return isDriveFile(data);
-        },
-        action: function (baton) {
-            _(baton.array()).each(function (file) {
-                blankshield.open(api.getUrl(file, 'open'));
-            });
-        }
-    });
+
     // TODO check action Kristof
     new Action('io.ox/files/actions/send', {
         collection: 'some && items',
