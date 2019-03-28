@@ -42,7 +42,11 @@ define('io.ox/core/api/tab', [
         TabHandling.fetch();
         TabHandling.setCurrentWindow();
         _.extend(ox, { tabHandlingEnabled: true });
-        if (TabHandling.parentName) _.extend(ox, { openedInBrowserTab: true });
+
+        if (TabHandling.parentName) {
+            _.extend(ox, { openedInBrowserTab: true });
+            document.documentElement.classList.add('child-tab');
+        }
 
         TabHandling.initialized = true;
     };
