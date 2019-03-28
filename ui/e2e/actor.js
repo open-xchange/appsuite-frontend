@@ -20,5 +20,49 @@ module.exports = actor({
         if (skipRefresh === true) return;
         this.click('#io-ox-refresh-icon');
         this.waitForDetached('#io-ox-refresh-icon .fa-spin');
+    },
+
+    createAppointment({ subject, location, folder, startDate, startTime, endDate, endTime }) {
+        // select calendar
+        this.selectFolder(folder);
+        this.waitForElement('li.selected[aria-label="' + folder + '"] .color-label');
+
+        this.clickToolbar('New');
+        this.waitForVisible('.io-ox-calendar-edit-window');
+
+        this.fillField('Subject', subject);
+        this.see(folder, '.io-ox-calendar-edit-window .folder-selection');
+
+        if (location) {
+            this.fillField('Location', location);
+        }
+
+        if (startDate) {
+            this.click('~Date (M/D/YYYY)');
+            this.pressKey(['Control', 'a']);
+            this.pressKey(startDate);
+            this.pressKey('Enter');
+        }
+
+        if (startTime) {
+            this.click('~Start time');
+            this.click(startTime);
+        }
+
+        if (endDate) {
+            this.click('~Date (M/D/YYYY)', '.dateinput[data-attribute="endDate"]');
+            this.pressKey(['Control', 'a']);
+            this.pressKey(startDate);
+            this.pressKey('Enter');
+        }
+
+        if (endTime) {
+            this.click('~End time');
+            this.click(endTime);
+        }
+
+        // save
+        this.click('Create', '.io-ox-calendar-edit-window');
+        this.waitForDetached('.io-ox-calendar-edit-window', 5);
     }
 });

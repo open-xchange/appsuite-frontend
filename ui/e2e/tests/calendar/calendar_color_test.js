@@ -23,33 +23,21 @@ After(async function (users) {
 });
 
 Scenario('Create appointment and check if the color is correctly applied and removed', async function (I, users) {
-    I.haveSetting('io.ox/core//autoOpenNotification', false);
-    I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//showCheckboxes', true);
+    I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
 
-    I.selectFolder(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name);
     I.clickToolbar('View');
     I.click('Workweek');
 
-    I.click('.page.current button[aria-label="Next Week"]');
+    I.click('~Next Week');
 
     // create in Workweek view
-    I.clickToolbar('New');
-    I.waitForVisible('.io-ox-calendar-edit-window');
-
-    I.fillField('Subject', 'test appointment one');
-    I.fillField('Location', 'invite location');
-    I.see(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
-
-    I.click('~Start time');
-    I.click('4:00 PM');
-
-    // save
-    I.click('Create', '.io-ox-calendar-edit-window');
-    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+    I.createAppointment({ subject: 'test appointment one', location: 'invite location', folder: users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, startTime: '4:00 PM' });
 
     // check in Workweek view
     I.clickToolbar('View');
@@ -113,48 +101,21 @@ Scenario('Create appointment and check if the color is correctly applied and rem
 });
 
 Scenario('Changing calendar color should change appointment color that uses calendar color', async function (I, users) {
-    I.haveSetting('io.ox/core//autoOpenNotification', false);
-    I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//showCheckboxes', true);
+    I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
 
-    I.selectFolder(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name);
     I.clickToolbar('View');
     I.click('Workweek');
 
-    I.click('.page.current button[aria-label="Next Week"]');
+    I.click('~Next Week');
 
-    // create first appointment
-    I.selectFolder(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name);
-    I.waitForElement('li.selected[aria-label="' + users[0].userdata.sur_name + ', ' + users[0].userdata.given_name + '"] .color-label');
-    I.clickToolbar('New');
-    I.waitForVisible('.io-ox-calendar-edit-window');
-
-    I.fillField('Subject', 'test appointment one');
-    I.fillField('Location', 'invite location');
-    I.see(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
-    I.click('~Start time');
-    I.click('4:00 PM');
-
-    // save
-    I.click('Create', '.io-ox-calendar-edit-window');
-
-    // create second appointment
-    I.clickToolbar('New');
-    I.waitForVisible('.io-ox-calendar-edit-window');
-
-    I.fillField('Subject', 'test appointment two');
-    I.fillField('Location', 'invite location');
-    I.see(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, '.io-ox-calendar-edit-window .window-body .folder-selection .dropdown-toggle');
-
-    I.click('~Start time');
-    I.click('5:00 PM');
-
-    // save
-    I.click('Create', '.io-ox-calendar-edit-window');
-    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+    I.createAppointment({ subject: 'test appointment one', location: 'invite location', folder: users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, startTime: '4:00 PM' });
+    I.createAppointment({ subject: 'test appointment two', location: 'invite location', folder: users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, startTime: '5:00 PM' });
 
     // check
     I.see('test appointment one', '.workweek .appointment .title');
@@ -191,25 +152,6 @@ Scenario('Changing calendar color should change appointment color that uses cale
     expect(folderColor, 'folderColor equals darkGreen').equal(darkGreen);
     expect(appointmentOneColor, 'appointment one color equals darkRed').equal(darkRed);
     expect(appointmentTwoColor, 'appointment two color equals darkGreen').equal(darkGreen);
-
-    // remove
-    I.waitForText('test appointment one', 5, '.workweek');
-    I.click('test appointment one', '.workweek .appointment .title');
-    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/delete"]');
-    I.click('Delete', '.io-ox-sidepopup');
-    I.waitForVisible('.io-ox-dialog-popup');
-    I.click('Delete', '.io-ox-dialog-popup');
-    I.waitForDetached('.io-ox-dialog-popup');
-    I.waitForDetached('.io-ox-dialog-sidepopup');
-
-    I.waitForText('test appointment two', 5, '.workweek');
-    I.click('test appointment two', '.workweek .appointment .title');
-    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/delete"]');
-    I.click('Delete', '.io-ox-sidepopup');
-    I.waitForVisible('.io-ox-dialog-popup');
-    I.click('Delete', '.io-ox-dialog-popup');
-    I.waitForDetached('.io-ox-dialog-popup');
-    I.waitForDetached('.io-ox-dialog-sidepopup');
 
     I.logout();
 

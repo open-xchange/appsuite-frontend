@@ -24,9 +24,10 @@ After(async function (users) {
 });
 
 Scenario('Create appointments with participants who will accept/decline/accept tentative', function (I, users) {
-    I.haveSetting('io.ox/core//autoOpenNotification', false);
-    I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//showCheckboxes', true);
+    I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
@@ -77,9 +78,10 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.logout();
 
     // user 1
-    I.haveSetting('io.ox/core//autoOpenNotification', false, { user: users[1] });
-    I.haveSetting('io.ox/core//showDesktopNotifications', false, { user: users[1] });
-    I.haveSetting('io.ox/calendar//showCheckboxes', true, { user: users[1] });
+    I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    }, { user: users[1] });
 
     // login new user1 for accept
     I.login('app=io.ox/calendar', { user: users[1] });
@@ -105,15 +107,11 @@ Scenario('Create appointments with participants who will accept/decline/accept t
 
     I.logout();
 
-    // reset settings
-    I.haveSetting('io.ox/core//autoOpenNotification', true, { user: users[1] });
-    I.haveSetting('io.ox/core//showDesktopNotifications', false, { user: users[1] });
-    I.haveSetting('io.ox/calendar//showCheckboxes', false, { user: users[1] });
-
     // user 2
-    I.haveSetting('io.ox/core//autoOpenNotification', false, { user: users[2] });
-    I.haveSetting('io.ox/core//showDesktopNotifications', false, { user: users[2] });
-    I.haveSetting('io.ox/calendar//showCheckboxes', true, { user: users[2] });
+    I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    }, { user: users[2] });
 
     // login new user2 for decline
     I.login('app=io.ox/calendar', { user: users[2] });
@@ -139,16 +137,11 @@ Scenario('Create appointments with participants who will accept/decline/accept t
 
     I.logout();
 
-    // reset settings
-    I.haveSetting('io.ox/core//autoOpenNotification', true, { user: users[2] });
-    I.haveSetting('io.ox/core//showDesktopNotifications', false, { user: users[2] });
-    I.haveSetting('io.ox/calendar//showCheckboxes', false, { user: users[2] });
-
-
     // user 3
-    I.haveSetting('io.ox/core//autoOpenNotification', false, { user: users[3] });
-    I.haveSetting('io.ox/core//showDesktopNotifications', false, { user: users[3] });
-    I.haveSetting('io.ox/calendar//showCheckboxes', true, { user: users[3] });
+    I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    }, { user: users[3] });
 
     // login new user3 for accept tentative
     I.login('app=io.ox/calendar', { user: users[3] });
@@ -173,11 +166,6 @@ Scenario('Create appointments with participants who will accept/decline/accept t
     I.waitForElement('.rightside .participant a.tentative[title="' + users[3].userdata.primaryEmail + '"]');
 
     I.logout();
-
-    // reset settings
-    I.haveSetting('io.ox/core//autoOpenNotification', true, { user: users[3] });
-    I.haveSetting('io.ox/core//showDesktopNotifications', false, { user: users[3] });
-    I.haveSetting('io.ox/calendar//showCheckboxes', false, { user: users[3] });
 
     // login owner
     I.login('app=io.ox/calendar');

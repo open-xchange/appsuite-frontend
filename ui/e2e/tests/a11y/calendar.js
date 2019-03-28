@@ -14,9 +14,10 @@
 const { expect } = require('chai');
 
 function openPerspective(I, perspective) {
-    I.haveSetting('io.ox/core//autoOpenNotification', false);
-    I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//showCheckboxes', true);
+    I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
 
     I.login(['app=io.ox/calendar', 'perspective=' + perspective]);
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);

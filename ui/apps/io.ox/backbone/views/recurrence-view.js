@@ -481,7 +481,7 @@ define('io.ox/backbone/views/recurrence-view', [
                     input = new EndsSelectView({
                         model: this.model,
                         id: guid,
-                        name: 'until change:occurrences',
+                        name: 'until',
                         list: [{
                             label: gt('Never'),
                             value: 'never'

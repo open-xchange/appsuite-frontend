@@ -22,7 +22,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Create appointment and switch timezones', async function (I) {
+Scenario('Create appointment and switch timezones', async function (I, users) {
 
     await I.haveSetting('io.ox/core//timezone', 'Europe/Berlin');
 
@@ -30,30 +30,8 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
 
     // create in Workweek view
-    I.selectFolder('Calendar');
-    I.clickToolbar('View');
-    I.click('Workweek');
-    I.clickToolbar('New');
-    I.waitForVisible('.io-ox-calendar-edit-window');
-
-    I.fillField('Subject', 'test timezones');
-    I.fillField('Location', 'invite location');
-
     const nextMonday = moment().tz('Europe/Berlin').startOf('week').add('8', 'day');
-
-    I.click('~Date (M/D/YYYY)');
-    I.pressKey(['Control', 'a']);
-    I.pressKey(nextMonday.format('l'));
-    I.pressKey('Enter');
-
-    I.click('~Start time');
-
-    I.click('4:00 PM');
-
-    // save
-    I.click('Create', '.io-ox-calendar-edit-window');
-
-    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+    I.createAppointment({ subject: 'test timezones', location: 'invite location', folder: users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, startDate: nextMonday.format('l'), startTime: '4:00 PM' });
 
     // check in view
     I.waitForVisible('.workweek .title');
