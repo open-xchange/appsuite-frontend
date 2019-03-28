@@ -11,6 +11,7 @@
  */
 
 const expect = require('chai').expect;
+const moment = require('moment');
 
 Feature('Calendar: Colors');
 
@@ -27,17 +28,21 @@ Scenario('Create appointment and check if the color is correctly applied and rem
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
     });
+    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    const time = moment().startOf('week').add(1, 'day').add(16, 'hours');
+    const format = 'YYYYMMDD[T]HHmmss';
+    await I.haveAppointment({
+        folder: folder,
+        summary: 'test appointment one',
+        startDate: { value: time.format(format), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format(format), tzid: 'Europe/Berlin' }
+    });
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
 
     I.clickToolbar('View');
     I.click('Workweek');
-
-    I.click('~Next Week');
-
-    // create in Workweek view
-    I.createAppointment({ subject: 'test appointment one', location: 'invite location', folder: users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, startTime: '4:00 PM' });
 
     // check in Workweek view
     I.clickToolbar('View');
@@ -105,17 +110,27 @@ Scenario('Changing calendar color should change appointment color that uses cale
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
     });
+    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    const time = moment().startOf('week').add(1, 'day').add(16, 'hours');
+    const format = 'YYYYMMDD[T]HHmmss';
+    await I.haveAppointment({
+        folder: folder,
+        summary: 'test appointment one',
+        startDate: { value: time.format(format), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format(format), tzid: 'Europe/Berlin' }
+    });
+    await I.haveAppointment({
+        folder: folder,
+        summary: 'test appointment two',
+        startDate: { value: time.format(format), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format(format), tzid: 'Europe/Berlin' }
+    });
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
 
     I.clickToolbar('View');
     I.click('Workweek');
-
-    I.click('~Next Week');
-
-    I.createAppointment({ subject: 'test appointment one', location: 'invite location', folder: users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, startTime: '4:00 PM' });
-    I.createAppointment({ subject: 'test appointment two', location: 'invite location', folder: users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, startTime: '5:00 PM' });
 
     // check
     I.see('test appointment one', '.workweek .appointment .title');
