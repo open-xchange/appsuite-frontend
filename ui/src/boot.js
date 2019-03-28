@@ -61,9 +61,13 @@ $(window).on('load', function () {
             $('body').addClass('down');
             $('#io-ox-login-container').empty().append(
                 $('<div class="alert alert-info">').append(
-                    $('<div><b>Connection error</b></div> The service is not available right now. <a href="#">Retry</a>')
+                    $('<div>').append(
+                        $('<b>').text(staticGt('Connection error'))
+                    ),
+                    staticGt('The service is not available right now.') + ' ',
+                    $('<br>'),
+                    $('<a href="#">').text(staticGt('Retry')).on('click', function (e) { e.preventDefault(); location.reload(); })
                 )
-                .on('click', function (e) { e.preventDefault(); location.reload(); })
             );
             $('#background-loader').fadeOut(250);
             console.warn('Server is down.');

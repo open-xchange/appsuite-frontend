@@ -10,6 +10,8 @@
  * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
  */
 
+const moment = require('moment-timezone');
+
 Feature('Calendar: Switch timezones').tag('3');
 
 Before(async function (users) {
@@ -21,6 +23,8 @@ After(async function (users) {
 });
 
 Scenario('Create appointment and switch timezones', async function (I) {
+
+    await I.haveSetting('io.ox/core//timezone', 'Europe/Berlin');
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
@@ -35,18 +39,12 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.fillField('Subject', 'test timezones');
     I.fillField('Location', 'invite location');
 
-    const { isNextMonth, start, inTimezone, date } = await I.executeAsyncScript(function (done) {
-        done({
-            start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('8', 'day').format('l')}"]`,
-            inTimezone: moment().hour(7).tz('Asia/Tokyo').format('h A'),
-            isNextMonth: moment().month() !== moment().add('8', 'days').month(),
-            date: moment().startOf('week').add('8', 'day').format('l')
-        });
-    });
+    const nextMonday = moment().tz('Europe/Berlin').startOf('week').add('8', 'day');
 
     I.click('~Date (M/D/YYYY)');
-    if (isNextMonth) I.click('~Go to next month', '.date-picker.open');
-    I.click(start);
+    I.pressKey(['Control', 'a']);
+    I.pressKey(nextMonday.format('l'));
+    I.pressKey('Enter');
 
     I.click('~Start time');
 
@@ -94,7 +92,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.seeNumberOfElements('.workweek .week-container-label', 2);
     I.see('JST', '.workweek .timezone');
     I.see('7 AM', '.week-container-label:not(.secondary-timezone) .working-time-border:not(.in) .number');
-    I.see(inTimezone, '.week-container-label.secondary-timezone .working-time-border:not(.in) .number');
+    I.see(moment(nextMonday).hour(7).tz('Asia/Tokyo').format('h A'), '.week-container-label.secondary-timezone .working-time-border:not(.in) .number');
 
     I.click('test timezones', '.workweek .appointment .title');
     I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/edit"]');
@@ -108,7 +106,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.waitForDetached('.modal-dialog');
 
     I.waitForText('Europe/Berlin: ');
-    I.waitForText('Mon, ' + date);
+    I.waitForText('Mon, ' + nextMonday.format('l'));
     I.waitForText('4:00 – 5:00 PM');
 
     I.click('Discard', '.floating-window-content');

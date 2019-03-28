@@ -123,7 +123,8 @@ define('io.ox/tours/whats-new', [
         steps: function (baton) {
             if (!baton.tour || !capabilities.has('multifactor')) return;
             baton.tour.step()
-                .title(gt('Second Factor Authentication'))
+                //#. Title of tour step, demonstrating options available for 2-step verification
+                .title(gt('2-step Verification Options'))
                 .waitFor('.multifactorStatusDiv.mfLoaded')
                 .on('wait', function () {
                     ox.launch('io.ox/settings/main', { id: 'io.ox/multifactor' });

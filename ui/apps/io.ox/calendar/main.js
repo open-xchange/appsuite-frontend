@@ -461,6 +461,8 @@ define('io.ox/calendar/main', [
                     if (!views[item]) return;
                     views[item].trigger('show');
                     app.perspective = views[item];
+                    // trigger change perspective so toolbar is redrawn (no more lost today button)
+                    app.getWindow().trigger('change:perspective', views[item]);
                     if (_.device('smartphone')) settings.set('viewView', item);
                 });
             });
@@ -794,7 +796,6 @@ define('io.ox/calendar/main', [
 
         'metrics': function (app) {
 
-            // hint: toolbar metrics are registery by extension 'metrics-toolbar'
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
 
@@ -812,24 +813,29 @@ define('io.ox/calendar/main', [
                         action: action
                     });
                 });
-                // detail view
-                nodes.outer.on('mousedown', '.participants-view .io-ox-action-link', function (e) {
+
+                function track(target, node) {
+                    node = $(node);
+                    var isSelect = !!node.attr('data-name'),
+                        action = (node.attr('data-action') || '').replace(/^io\.ox\/calendar\/(detail\/)?/, '');
                     metrics.trackEvent({
                         app: 'calendar',
-                        target: 'detail/toolbar',
+                        target: target,
                         type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
+                        action: isSelect ? node.attr('data-name') : action,
+                        detail: isSelect ? node.attr('data-value') : ''
                     });
+                }
+
+                // main toolbar: actions, view dropdown
+                nodes.body.on('track', '.classic-toolbar-container', function (e, node) {
+                    track('toolbar', node);
                 });
                 // detail view as sidepopup
-                nodes.outer.on('mousedown', '.io-ox-sidepopup .io-ox-action-link', function (e) {
-                    metrics.trackEvent({
-                        app: 'calendar',
-                        target: 'detail/toolbar',
-                        type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
-                    });
+                nodes.outer.on('track', '.io-ox-sidepopup', function (e, node) {
+                    track('detail/toolbar', node);
                 });
+
                 // folder tree action
                 _.defer(function () {
                     sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {

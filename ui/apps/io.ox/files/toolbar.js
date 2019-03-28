@@ -262,41 +262,4 @@ define('io.ox/files/toolbar', [
             }
         }
     });
-
-    ext.point('io.ox/files/mediator').extend({
-        id: 'metrics-toolbar',
-        index: 10300,
-        setup: function (app) {
-
-            require(['io.ox/metrics/main'], function (metrics) {
-                if (!metrics.isEnabled()) return;
-
-                var nodes = app.getWindow().nodes,
-                    toolbar = nodes.body.find('.classic-toolbar-container');
-
-                // toolbar actions
-                toolbar.on('mousedown', '.io-ox-action-link:not(.dropdown-toggle)', function (e) {
-                    metrics.trackEvent({
-                        app: 'drive',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
-                    });
-                });
-                // toolbar options dropdown
-                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
-                    var node =  $(e.target).closest('a'),
-                        isToggle = node.attr('data-toggle') === 'true';
-                    if (!node.attr('data-name')) return;
-                    metrics.trackEvent({
-                        app: 'drive',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: node.attr('data-tracking-id') || node.attr('data-name') || node.attr('data-action'),
-                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
-                    });
-                });
-            });
-        }
-    });
 });

@@ -102,6 +102,11 @@ define('io.ox/calendar/edit/main', [
                     self.setWindow(win);
 
                     self.model.setDefaultAttendees({ create: opt.mode === 'create' }).done(function () {
+
+                        if (opt.mode === 'create') {
+                            self.model.set('attendeePrivileges', settings.get('chronos/allowAttendeeEditsByDefault', false) && !folderAPI.pool.getModel(self.model.get('folder')).is('public') ? 'MODIFY' : 'DEFAULT');
+                        }
+
                         if (opt.mode === 'edit' && util.isAllday(self.model)) {
                             // allday apointments do not include the last day. To not misslead the user we subtract a day (so one day appointments only show one date for example)
                             // this day will be added again on save
@@ -183,21 +188,6 @@ define('io.ox/calendar/edit/main', [
                     }
                 }
 
-                // if we restore alarms, check if they differ from the defaults
-                var isDefault = JSON.stringify(_(data.alarms).pluck('action', 'trigger')) === JSON.stringify(_(util.getDefaultAlarms(data)).pluck('action', 'trigger'));
-
-                // change default alarm when allDay changes and the user did not change the alarm before (we don't want data loss)
-                if (isDefault) {
-                    self.model.on('change:startDate change:endDate', _.debounce(function () {
-                        if (util.isAllday(this.previousAttributes()) === util.isAllday(this)) return;
-                        if (!this.userChangedAlarms) {
-                            this.set('alarms', util.getDefaultAlarms(this));
-                        }
-                    }, 0));
-                    self.model.on('userChangedAlarms', function () {
-                        this.userChangedAlarms = true;
-                    });
-                }
                 loadFolder();
             },
 
@@ -207,8 +197,6 @@ define('io.ox/calendar/edit/main', [
                 data = data instanceof Backbone.Model ? data.toJSON() : data;
                 // apply defaults. Cannot be done in default of model, because then events in week/month view have class public by default
                 if (!data.class) data.class = 'PUBLIC';
-                data.attendeePrivileges = settings.get('chronos/allowAttendeeEditsByDefault', false) ? 'MODIFY' : 'DEFAULT';
-
                 this.edit(data, { mode: 'create' });
             },
 

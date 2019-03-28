@@ -188,7 +188,8 @@ define('io.ox/multifactor/settings/pane', [
                     });
                 });
             } else {
-                yell('error', gt('Problem getting and multifactor providers'));
+                //#. Error message when trying to get available providers from middleware
+                yell('error', gt('Problem getting 2-step verification providers'));
             }
 
         });

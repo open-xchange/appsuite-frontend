@@ -703,6 +703,25 @@ define('io.ox/tasks/main', [
 
                 var nodes = app.getWindow().nodes,
                     sidepanel = nodes.sidepanel;
+
+                function track(target, node) {
+                    node = $(node);
+                    var isSelect = !!node.attr('data-name'),
+                        action = (node.attr('data-action') || '').replace(/^io\.ox\/tasks\/(detail\/)?/, '');
+                    metrics.trackEvent({
+                        app: 'tasks',
+                        target: target,
+                        type: 'click',
+                        action: isSelect ? node.attr('data-name') : action,
+                        detail: isSelect ? node.attr('data-value') : ''
+                    });
+                }
+
+                // main toolbar: actions, view dropdown
+                nodes.body.on('track', '.classic-toolbar-container', function (e, node) {
+                    track('toolbar', node);
+                });
+
                 // vgrid toolbar
                 nodes.main.find('.vgrid-toolbar').on('mousedown', 'a[data-name], a[data-action]', function (e) {
                     var node = $(e.currentTarget);

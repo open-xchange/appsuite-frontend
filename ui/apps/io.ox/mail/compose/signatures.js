@@ -108,11 +108,11 @@ define('io.ox/mail/compose/signatures', [
     var model = {
 
         // use defaultSignature or reference already used one (edit-case)
-        setInitialSignature: function (content) {
-            var signatures = this.get('signatures'), signature;
+        setInitialSignature: function (model) {
+            var signatures = this.get('signatures'), signature, content = model.get('content');
 
             // when editing a draft we might have a signature
-            if (this.is('edit|copy')) {
+            if (this.is('edit|copy') || model.restored) {
                 // get id of currently drawn signature
                 signature = signatures.find(function (model) {
                     var raw = util.getRaw(model.toJSON());
@@ -254,23 +254,24 @@ define('io.ox/mail/compose/signatures', [
 
         appendSignature: function (signature) {
             var text, proc,
-                isHTML = !!this.editor.find;
+                isHTML = !!this.editor.find,
+                isEmpty = !textproc.htmltotext(signature.content).trim();
 
             // add signature?
-            if (this.config.get('signatures').length > 0) {
-                text = util.cleanUp(signature.content, isHTML);
-                if (isHTML) text = this.getParagraph(text, util.looksLikeHTML(text));
-                // signature wrapper
-                if (signature.misc.insertion === 'below') {
-                    proc = _.bind(this.editor.insertPostCite || this.editor.appendContent, this.editor);
-                    proc(text);
-                    this.editor.scrollTop('bottom');
-                } else {
-                    // backward compatibility
-                    proc = _.bind(this.editor.insertPrevCite || this.editor.prependContent, this.editor);
-                    proc(text);
-                    this.editor.scrollTop('top');
-                }
+            if (isEmpty || !this.config.get('signatures').length) return;
+
+            text = util.cleanUp(signature.content, isHTML);
+            if (isHTML) text = this.getParagraph(text, util.looksLikeHTML(text));
+            // signature wrapper
+            if (signature.misc.insertion === 'below') {
+                proc = _.bind(this.editor.insertPostCite || this.editor.appendContent, this.editor);
+                proc(text);
+                this.editor.scrollTop('bottom');
+            } else {
+                // backward compatibility
+                proc = _.bind(this.editor.insertPrevCite || this.editor.prependContent, this.editor);
+                proc(text);
+                this.editor.scrollTop('top');
             }
         }
     };

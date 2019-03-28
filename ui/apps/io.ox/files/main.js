@@ -76,6 +76,20 @@ define('io.ox/files/main', [
 
         },
 
+        /**
+         * Add listener for browser tab communication. Event needs a
+         * 'propagate' string for propagation
+         */
+        'refresh-from-broadcast': function () {
+            if (!ox.tabHandlingEnabled) return;
+            require(['io.ox/core/api/tab'], function (TabAPI) {
+                var events = TabAPI.TabCommunication.events;
+                events.listenTo(events, 'refresh-file', function (parameters) {
+                    api.propagate('refresh:file', _.pick(parameters, 'folder_id', 'id'));
+                });
+            });
+        },
+
         /*
          * Init pages for mobile use
          * Each View will get a single page with own
@@ -1405,7 +1419,6 @@ define('io.ox/files/main', [
 
         'metrics': function (app) {
 
-            // hint: toolbar metrics are registery by extension 'metrics-toolbar'
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
                 var nodes = app.getWindow().nodes,
@@ -1422,24 +1435,27 @@ define('io.ox/files/main', [
                     action: 'add'
                 });
 
-                // list view control toolbar dropdown
-                control.on('mousedown', 'a[data-name], a[data-action]', function (e) {
-                    var node =  $(e.target).closest('a'),
-                        action = node.attr('data-name'),
-                        detail = node.attr('data-value');
-                    // special handling for select 'links'
-                    if (['all', 'files', 'none'].indexOf(action) > -1) {
-                        detail = action;
-                        action = 'select';
-                    }
+                function track(target, node) {
+                    node = $(node);
+                    var isSelect = !!node.attr('data-name'),
+                        action = (node.attr('data-action') || '').replace(/^io\.ox\/files\/(detail\/)?/, '');
                     metrics.trackEvent({
                         app: 'drive',
-                        target: 'list/toolbar',
+                        target: target,
                         type: 'click',
-                        action: action,
-                        detail: detail
+                        action: isSelect ? node.attr('data-name') : action,
+                        detail: isSelect ? node.attr('data-value') : ''
                     });
+                }
+
+                // main toolbar: actions, view dropdown
+                nodes.body.on('track', '.classic-toolbar-container', function (e, node) {
+                    track('toolbar', node);
                 });
+                control.on('track', function (e, node) {
+                    track('list/toolbar', node);
+                });
+
                 // folder tree action
                 _.defer(function () {
                     sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {

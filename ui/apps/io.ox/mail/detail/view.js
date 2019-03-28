@@ -545,14 +545,7 @@ define('io.ox/mail/detail/view', [
         index: 200,
         draw: function (baton) {
             if (baton.attachments.length === 0) return;
-            // reuse existing view, to not duplicate event listeners
-            var view = this.data('view');
-            if (view) {
-                view.render();
-                view.renderInlineLinks();
-            } else {
-                extensions.attachmentList.call(this, baton);
-            }
+            extensions.attachmentList.call(this, baton);
         }
     });
 

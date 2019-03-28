@@ -358,7 +358,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'edit',
                     ref: 'io.ox/files/actions/rename'
                 },
-                'eidt': {
+                'edit': {
                     prio: 'hi',
                     mobile: 'lo',
                     title: gt('Edit'),
@@ -382,8 +382,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'open': {
                     prio: 'lo',
                     mobile: 'hi',
-                    icon: 'fa fa-download',
                     title: gt('Open attachment'),
+                    icon: _.device('ios && ios < 12') ? 'fa fa-download' : '',
                     section: 'export',
                     ref: 'oxguard/open'
                 },
@@ -495,7 +495,9 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     // tested: no
     new Action(TOOLBAR_ACTION_ID + '/close', {
-        action: _.noop
+        action: function (baton) {
+            return baton.context.onClose(baton.e);
+        }
     });
 
     // tested: no
@@ -581,7 +583,6 @@ define('io.ox/core/viewer/views/toolbarview', [
         className: 'viewer-toolbar',
 
         events: {
-            'click a[data-action="io.ox/core/viewer/actions/toolbar/close"]': 'onClose',
             'click a[data-action="io.ox/core/viewer/actions/toolbar/rename"]': 'onRename',
             'keydown a[data-action="io.ox/core/viewer/actions/toolbar/rename"]': 'onRename'
         },

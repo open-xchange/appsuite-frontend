@@ -137,6 +137,7 @@ define('io.ox/realtime/groups', [
             var stanza = {
                 element: 'message',
                 trace: options.trace,
+                force: options.force,
                 payloads: _([
                     {
                         element: 'command',
@@ -149,6 +150,15 @@ define('io.ox/realtime/groups', [
                 return this.query(stanza);
             }
             this.send(stanza);
+        };
+
+        this.isForceLeavePossible = function () {
+            return !rt.hasPendingAcks();
+        };
+
+        this.forceLeave = function (options) {
+            options = _.extend({}, options, { force: true });
+            return this.leave(options);
         };
 
         this.sendWithoutSequence = function (message) {

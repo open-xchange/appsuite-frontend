@@ -581,7 +581,7 @@ define('io.ox/mail/detail/content', [
                     if (attachment.content_type === baton.type) {
                         // add content parts
                         baton.source += attachment.content;
-                    } else if (baton.type === 'text/plain' && isImage.test(attachment.content_type)) {
+                    } else if (baton.type === 'text/plain' && isImage.test(attachment.content_type) && settings.get('allowHtmlMessages', true)) {
                         // add images if text
                         baton.source += '\n!(api/image/mail/picture?' +
                             $.param({ folder: data.folder_id, id: data.id, uid: attachment.filename, scaleType: 'contain', width: 1024 }) +

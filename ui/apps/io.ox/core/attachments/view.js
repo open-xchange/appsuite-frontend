@@ -71,6 +71,9 @@ define('io.ox/core/attachments/view', [
                 this.renderSummary(length);
                 if (this.openByDefault) this.toggleDetails(true);
             });
+            this.listenTo(this.collection, 'remove', function () {
+                this.$preview.trigger('scroll');
+            });
 
             // initial toggle if empty
             this.$el.toggleClass('empty', this.getValidModels().length === 0);
@@ -110,9 +113,6 @@ define('io.ox/core/attachments/view', [
         },
 
         renderHeader: function () {
-
-            // do not redraw header if already attached to prevent duplication
-            if (!this.$header.is(':empty')) return;
 
             this.$header.append(
                 $('<a href="#" class="toggle-details" aria-expanded="false" role="button">').append(

@@ -95,7 +95,7 @@ define('io.ox/multifactor/views/u2fProvider', [
                 var label;
                 if (window.u2f) {
                     label = $('<label>').append(
-                        gt('You secured your account with 2-Step Verification.  Please use your use your authentication token to complete verification.'));
+                        gt('You secured your account with 2-Step Verification.  Please use your authentication token to complete verification.'));
                 } else {
                     label = $('<p>').append(gt('This browser is not compatible with your configured authentication device.  Please use Chrome browser, or Firefox with U2F enabled.'));
                 }
@@ -127,14 +127,17 @@ define('io.ox/multifactor/views/u2fProvider', [
                     var error, recoverable;
                     switch (response.errorCode) {
                         case 2:
-                            error = gt('Bad parameters for signing.  Possibly wrong URL domain for this key.');
+                            //#. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
+                            error = gt('Bad parameters for authenticating with this key.  Possibly wrong URL domain for this key.');
                             recoverable = false;
                             break;
                         case 3:
+                            //#. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
                             error = gt('Configuration not supported');
                             recoverable = false;
                             break;
                         case 4:
+                            //#. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
                             error = gt('This device is not eligible for this request.  Wrong hardware key?');
                             recoverable = true;
                             break;
@@ -143,6 +146,7 @@ define('io.ox/multifactor/views/u2fProvider', [
                             recoverable = true;
                             break;
                         default:
+                            //#. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
                             error = gt('Error authenticating.  Please reload browser and try again.');
                             recoverable = false;
                             break;

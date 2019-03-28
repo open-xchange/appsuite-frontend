@@ -59,19 +59,24 @@ define('io.ox/files/actions/save-as-pdf', [
         //console.log('+++ io.ox/files/actions/save-as-pdf :: isAccessWrite : ', isAccessWrite);
 
         function save(name) {
-            return ConverterUtils.sendConverterRequest(model, {
-
+            var fileOptions = {
                 documentformat: 'pdf',
                 saveas_filename: name + '.pdf',
-                //saveas_folder_id: model.get('folder_id')
                 saveas_folder_id: (isAccessWrite ? model.get('folder_id') : require('settings!io.ox/files').get('folder/documents'))
-
-            }).done(function (response) {
+            };
+            return ConverterUtils.sendConverterRequest(model, fileOptions).done(function (response) {
                 //console.log('+++ save as pdf :: done - response : ', response);
 
                 if (('id' in response) && ('filename' in response)) {
-
-                    FilesApi.trigger('add:file');
+                    /**
+                     *  fixing Bug #63558 ... "Save as pdf:=> JQuery exception"
+                     *
+                     *  - rejected promise was due to not providing `FilesApi.trigger`
+                     *    with a minimal viable file descriptor which was expected with
+                     *    introducing `api.on('add:file add:version', preconvertPDF);`
+                     *    as of "ui/apps/io.ox/files/main.js"
+                     */
+                    FilesApi.trigger('add:file', { id: response.id, folder_id: fileOptions.saveas_folder_id });
 
                     if (!isAccessWrite) {
                         notify('info', 'The PDF has been saved to "/drive/myfiles/documents" due to not having write access for the current folder.');

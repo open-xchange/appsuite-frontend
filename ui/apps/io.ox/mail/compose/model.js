@@ -160,7 +160,16 @@ define('io.ox/mail/compose/model', [
                             //#. Example: From: richard@open-xchange.com
                             gt('From: %1$s', mail.from.map(mailAddress).join(', ')),
                             //#. %1$s An email address or a comma separated list of mail addresses
-                            gt('To: %1$s', mail.to.map(mailAddress).join(', ')),
+                            gt('To: %1$s', mail.to.map(mailAddress).join(', '))
+                        );
+                        if (mail.cc && mail.cc.length > 0) {
+                            header.push(
+                                //#. Used to quote the addresses of an address in carbon copy
+                                //#. %1$s An email address or a comma separated list of mail addresses
+                                gt('Cc: %1$s', mail.cc.map(mailAddress).join(', '))
+                            );
+                        }
+                        header.push(
                             gt('Date: %1$s', moment(data.meta.date).format('LLL')),
                             //#. %1$s The subject of an email
                             gt('Subject: %1$s', mail.subject)

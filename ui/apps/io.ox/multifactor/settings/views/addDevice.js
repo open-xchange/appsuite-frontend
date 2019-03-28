@@ -170,7 +170,8 @@ define('io.ox/multifactor/settings/views/addDevice', [
                 });
             }
         } else {
-            showError(gt('Bad response from backend.  Please try again later.'));
+            //#. Catch all error when trying to set up a new 2step device
+            showError(gt('Something went wrong.  Please try again later.'));
         }
     }
 

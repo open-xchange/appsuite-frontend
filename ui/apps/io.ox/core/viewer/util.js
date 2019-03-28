@@ -194,7 +194,7 @@ define('io.ox/core/viewer/util', [
         var fileSize, itemCount, resultString;
 
         // for files
-        if (model.isFile() || model.isMailAttachment() || model.isPIMAttachment()) {
+        if (model.isFile() || model.isComposeAttachment() || model.isMailAttachment() || model.isPIMAttachment()) {
             fileSize = model.get('file_size');
             resultString = (_.isNumber(fileSize)) ? _.filesize(fileSize) : '-';
 

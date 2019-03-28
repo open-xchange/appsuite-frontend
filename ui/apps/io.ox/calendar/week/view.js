@@ -97,7 +97,8 @@ define('io.ox/calendar/week/view', [
         update: function () {
             var startDate = this.model.get('startDate');
             if (this.model.get('numColumns') > 1) {
-                var endDate = moment(startDate).add(this.model.get('numColumns'), 'days'),
+                // one day less than number of columns or the end date is actually the first day of next week instead of last day of this week
+                var endDate = moment(startDate).add(this.model.get('numColumns') - 1, 'days'),
                     fromMonth = startDate.format('MMMM'),
                     toMonth = endDate.format('MMMM'),
                     fromYear = startDate.format('YYYY'),
@@ -370,13 +371,15 @@ define('io.ox/calendar/week/view', [
         renderAppointment: function (model) {
             // do not use a button here even if it's correct from a11y perspective. This breaks resize handles (you cannot make appointments longer/shorter) and hover styles on firefox.
             // it is fine in month perspective as there are no resize handles there.
-            var node = $('<div role="button" class="appointment">')
-                .attr({
-                    'data-cid': model.cid,
-                    'data-master-id': util.cid({ id: model.get('id'), folder: model.get('folder') }),
-                    'data-extension-point': 'io.ox/calendar/appointment',
-                    'data-composite-id': model.cid
-                });
+            var node = this.$('[data-cid="' + model.cid + '"]').empty();
+            if (node.length === 0) node = $('<div role="button" class="appointment">');
+            node.attr({
+                'data-cid': model.cid,
+                'data-master-id': util.cid({ id: model.get('id'), folder: model.get('folder') }),
+                'data-extension-point': 'io.ox/calendar/appointment',
+                'data-composite-id': model.cid,
+                'data-folder': null // reset folder in case of reuse
+            });
 
             ext.point('io.ox/calendar/appointment')
                 .invoke('draw', node, ext.Baton(_.extend({}, this.opt, { model: model, folders: this.opt.app.folders.list() })));
@@ -396,7 +399,6 @@ define('io.ox/calendar/week/view', [
 
         onChangeAppointment: function (model) {
             this.onReset = true;
-            this.onRemoveAppointment(model);
             this.onAddAppointment(model);
             this.onReset = false;
             this.adjustPlacement();
@@ -1078,6 +1080,9 @@ define('io.ox/calendar/week/view', [
                     break;
                 }
 
+                // check if we have a node for this day, if not create one (we need one node for each day when an appointment spans multiple days)
+                node = node.get(maxCount) ? $(node.get(maxCount)) : node.clone();
+
                 node
                     .addClass(endLocal.diff(startLocal, 'minutes') < 120 / this.model.get('gridSize') ? 'no-wrap' : '')
                     .css({
@@ -1372,7 +1377,7 @@ define('io.ox/calendar/week/view', [
         }()),
 
         onDrag: function (e) {
-            var target = $(e.target), model, node, offsetSlots, offsetDays, startDate, endDate, days, mousedownOrigin, cellHeight, sameDay, startOffset, numTimeslots;
+            var target = $(e.target), model, node, offsetSlots, startDate, endDate, days, mousedownOrigin, cellHeight, sameDay, startOffset, numTimeslots;
             if (target.is('.resizable-handle')) return;
 
             this.mouseDragHelper({
@@ -1400,9 +1405,6 @@ define('io.ox/calendar/week/view', [
                     startOffset = model.getMoment('startDate').local().minutes() % (60 / this.model.get('gridSize'));
                     numTimeslots = this.getNumTimeslots();
                     offsetSlots = Math.floor((e.pageY - $(e.currentTarget).offset().top) / cellHeight);
-                    var index = days.index($(e.currentTarget).parent()),
-                        startIndex = model.getMoment('startDate').diff(this.model.get('startDate'), 'days');
-                    offsetDays = index - startIndex;
 
                     this.$('[data-cid="' + model.cid + '"]').addClass('resizing').removeClass('current hover');
                 },
@@ -1419,18 +1421,16 @@ define('io.ox/calendar/week/view', [
 
                     var index = days.index(target.parent()),
                         startIndex = model.getMoment('startDate').diff(this.model.get('startDate'), 'days'),
-                        diffDays = index - startIndex - offsetDays,
+                        diffDays = index - startIndex,
                         diffMinutes = 0, i;
 
                     if (this.model.get('mergeView')) diffDays = 0;
 
-                    if (sameDay) {
-                        var top = target.index() - offsetSlots,
-                            minutes = top / numTimeslots * 24 * 60 + startOffset,
-                            // yeah this tz construct looks strange but works (local() will not work in some edge cases)
-                            startMinutes = model.getMoment('startDate').diff(model.getMoment('startDate').tz(moment().tz()).startOf('day'), 'minutes');
-                        diffMinutes = minutes - startMinutes;
-                    }
+                    var top = target.index() - offsetSlots,
+                        minutes = top / numTimeslots * 24 * 60 + startOffset,
+                        // yeah this tz construct looks strange but works (local() will not work in some edge cases)
+                        startMinutes = model.getMoment('startDate').diff(model.getMoment('startDate').tz(moment().tz()).startOf('day'), 'minutes');
+                    diffMinutes = minutes - startMinutes;
 
                     startDate = model.getMoment('startDate').tz(moment().tz()).add(diffDays, 'days').add(diffMinutes, 'minutes');
                     endDate = model.getMoment('endDate').tz(moment().tz()).add(diffDays, 'days').add(diffMinutes, 'minutes');
@@ -1438,11 +1438,16 @@ define('io.ox/calendar/week/view', [
                     startIndex = Math.max(0, startDate.diff(this.model.get('startDate'), 'days'));
                     var endIndex = Math.min(this.model.get('numColumns'), endDate.diff(this.model.get('startDate'), 'days'));
 
+                    // if the end date falls exactly on the start of a day we need to decrease the index by one
+                    // otherwise we would draw a node on the next day when the appointment ends on midnight
+                    var endsOnMidnight = endDate.isSame(endDate.clone().startOf('day'));
+                    if (endsOnMidnight) endIndex--;
+
                     // loop over the days
                     for (i = startIndex; i <= endIndex; i++) {
                         var day = days.eq(i),
                             pos = i === startIndex ? startDate.diff(startDate.clone().startOf('day'), 'minutes') : 0,
-                            bottom = i === endIndex ? endDate.diff(endDate.clone().startOf('day'), 'minutes') : 24 * 60,
+                            bottom = i === endIndex && !endsOnMidnight ? endDate.diff(endDate.clone().startOf('day'), 'minutes') : 24 * 60,
                             slot = day.find('.resizing');
 
                         if (slot.length === 0) slot = node.clone().appendTo(day);

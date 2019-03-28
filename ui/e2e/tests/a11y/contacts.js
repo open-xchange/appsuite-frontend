@@ -38,8 +38,9 @@ Scenario('Contacts - Modal Dialog - New address book (with exceptions)', async (
     const excludes = { exclude: [['input[name="name"]']] };
 
     I.login('app=io.ox/contacts');
-    I.waitForElement('.contact-detail');
-    I.selectFolder('Contacts');
+    I.waitForText('My address books');
+    I.doubleClick('~My address books');
+    I.click('~Contacts');
     I.click('Add new address book');
     I.waitForText('Add as public folder');
 

@@ -11,6 +11,8 @@
  */
 /// <reference path="../../steps.d.ts" />
 
+const moment = require('moment');
+
 Feature('Calendar: Create new appointment').tag('3');
 
 Before(async function (users) {
@@ -111,15 +113,14 @@ Scenario('fullday appointments', async function (I) {
     I.click('All day', '.checkbox > label');
 
     I.click('~Date (M/D/YYYY)');
-    const { start, end } = await I.executeAsyncScript(function (done) {
-        done({
-            start: `.date-picker[data-attribute="startDate"] .date[id$="_${moment().startOf('week').add('1', 'day').format('l')}"]`,
-            end: `.date-picker[data-attribute="endDate"] .date[id$="_${moment().endOf('week').subtract('1', 'day').format('l')}"]`
-        });
-    });
-    I.click(start);
+    I.pressKey(['Control', 'a']);
+    I.pressKey(moment().startOf('week').add('1', 'day').format('l'));
+    I.pressKey('Enter');
+
     I.click('~Date (M/D/YYYY)', '.dateinput[data-attribute="endDate"]');
-    I.click(end);
+    I.pressKey(['Control', 'a']);
+    I.pressKey(moment().endOf('week').subtract('1', 'day').format('l'));
+    I.pressKey('Enter');
 
     I.click('Create');
 

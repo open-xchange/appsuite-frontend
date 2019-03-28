@@ -237,7 +237,11 @@ define('io.ox/files/actions', [
             return isDriveFile(baton.first());
         },
         action: function (baton) {
-            download(baton.array());
+            download(baton.array().map(function (fileDescriptor) {
+                var newElem = _.clone(fileDescriptor);
+                newElem.version = undefined;
+                return newElem;
+            }));
         }
     });
 

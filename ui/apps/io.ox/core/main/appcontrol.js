@@ -71,6 +71,13 @@ define('io.ox/core/main/appcontrol', [
                     this.model.launch();
                     return;
                 }
+                if (ox.tabHandlingEnabled && this.model.get('openInTab')) {
+                    var tabUrl = this.model.get('tabUrl');
+                    require(['io.ox/core/api/tab'], function (TabAPI) {
+                        TabAPI.TabHandling.openChild(tabUrl);
+                    });
+                    return;
+                }
                 ox.launch(this.model.get('path'));
             } else {
                 var requires = this.model.get('requires');
@@ -345,7 +352,8 @@ define('io.ox/core/main/appcontrol', [
                         target: '_blank'
                     })
                 );
-            } else if (action) {
+            } else if (action && !ox.openedInBrowserTab) {
+                // ox.openedInBrowserTab is only true, when ox.tabHandlingEnabled is true and the window is no a core tab
                 var autoStart = settings.get('autoStart');
                 if (action === 'autoStart') {
                     if (autoStart === 'none') return;
@@ -394,7 +402,6 @@ define('io.ox/core/main/appcontrol', [
             //ext.point('io.ox/core/appcontrol/search').invoke('draw', search);
         }
     });
-
 
     ext.point('io.ox/core/appcontrol').extend({
         id: 'right',

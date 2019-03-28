@@ -145,7 +145,7 @@ define('io.ox/backbone/views/actions/util', [
             }
 
             function checkAction(action) {
-                matches(baton, action)
+                matches(baton, action, false)
                     .done(function (state) {
                         if (state) result.resolve(true); else nextAction();
                     })
@@ -196,7 +196,6 @@ define('io.ox/backbone/views/actions/util', [
             $el.addClass('dropdown').append($toggle, $ul);
             // close tooltip when opening the dropdown
             $el.on('shown.bs.dropdown', function () { $(this).children('a').tooltip('hide'); });
-            if (_.device('smartphone')) $ul.on('click', 'a[data-action]', util.invokeByEvent);
 
             return baton ? util.renderDropdownItems($el, baton, options) : $.when();
         },
@@ -389,7 +388,7 @@ define('io.ox/backbone/views/actions/util', [
 
             function checkMatches(action, baton) {
                 try {
-                    matches(baton, action)
+                    matches(baton, action, true)
                         .done(function (state) {
                             if (state) callAction(action, baton); else nextAction();
                         })
@@ -435,7 +434,7 @@ define('io.ox/backbone/views/actions/util', [
                 className = $el.attr('class');
 
             // listen for click event directly on menu for proper backdrop support
-            $menu.on('click', 'a[data-action]', util.invokeByEvent);
+            util.bindActionEvent($menu);
             $el.on({ 'show.bs.dropdown': show, 'hide.bs.dropdown': hide, 'dispose': dispose });
 
             function show() {
@@ -449,17 +448,19 @@ define('io.ox/backbone/views/actions/util', [
             }
 
             function toggle() {
-                // check if already disposed (as part of a toolbar redraw or sth)
-                if (!$toggle) return false;
-                $toggle.dropdown('toggle');
+                if ($toggle) $toggle.dropdown('toggle');
                 return false;
             }
 
             function dispose() {
-                // close menu before dispose
-                if ($menu.is(':visible'))$toggle.dropdown('toggle');
+                // make sure backdrop and menu are removed (might be open during dispose)
+                $backdrop.remove();
                 $toggle = $menu = $backdrop = null;
             }
+        },
+
+        bindActionEvent: function ($el) {
+            $el.on('click', 'a[data-action]', util.invokeByEvent);
         }
     };
 
@@ -482,11 +483,11 @@ define('io.ox/backbone/views/actions/util', [
         return _.isFunction(action.quick || action.matches || action.requires);
     }
 
-    function matches(baton, action) {
+    function matches(baton, action, allowQuick) {
         // action.requires is DEPRECATED
         // action.quick is a workaround (similar to former "filter") to do a "quick" check which is not async (e.g. popup blocker problem)
         var ret = true;
-        if (action.quick) ret = action.quick(baton);
+        if (allowQuick && action.quick) ret = action.quick(baton);
         else if (action.matches) ret = action.matches(baton);
         else if (_.isFunction(action.requires)) ret = action.requires({ baton: baton, collection: baton.collection, data: baton.data, extension: action });
         return $.when(ret).pipe(null, _.constant(false));

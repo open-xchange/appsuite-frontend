@@ -25,9 +25,10 @@ Scenario('adds a contact with all fields', function (I) {
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
 
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
+    I.waitForText('My address books');
+    I.doubleClick('~My address books');
+    I.click('~Contacts');
+    I.waitForDetached('.classic-toolbar [data-dropdown="io.ox/contacts/toolbar/new"].disabled');
     I.clickToolbar('New');
     I.click('Add contact');
     I.waitForVisible('.io-ox-contacts-edit-window');

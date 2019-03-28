@@ -290,7 +290,9 @@
                     //return v.replace(/\=/g, '%3D').replace(/\&/g, '%26');
                 });
                 // be persistent
-                document.location.hash = hashStr;
+                if (document && document.location) {
+                    document.location.hash = hashStr;
+                }
             };
 
             function decode() {
@@ -940,7 +942,30 @@
             return !_.url.hash('debug-i18n') ? _.identity : function (text) {
                 return '\u200b' + String(text).replace(/[\u200b\u200c]/g, '') + '\u200c';
             };
-        }())
+        }()),
+
+        updateFavicons: function (path) {
+            path = path || ox.base + '/apps/themes/' + ox.theme + '/';
+            var icons = {
+                icon57: 'icon57.png',
+                icon72: 'icon72.png',
+                icon76: 'icon76.png',
+                icon114: 'icon114.png',
+                icon120: 'icon120.png',
+                icon144: 'icon144.png',
+                icon152: 'icon152.png',
+                icon167: 'icon167.png',
+                icon180: 'icon180.png',
+                icon192: 'icon192.png',
+                win8Icon: 'icon144_win.png',
+                // update favicon last; latest chrome (~64) runs into issues (see bug 57324)
+                favicon: 'favicon.ico'
+            };
+            _(icons).each(function (file, id) {
+                // firefox needs detach/append (see bug 25287);
+                $('head #' + id).attr({ href: path + file }).detach().appendTo('head');
+            });
+        }
     });
 
     _.noI18n.fix = !_.url.hash('debug-i18n') ? _.identity : function (text) {

@@ -123,10 +123,14 @@ define('io.ox/backbone/views/toolbar', [
             $dropdown.on('shown.bs.dropdown', function () { $(this).find('a').tooltip('hide'); });
             // $ul is descendent of <body> for smartphones, so events bubble differently
             if (_.device('smartphone')) {
-                $ul.on('click', 'a', $.proxy(util.invokeByEvent, this));
+                util.bindActionEvent($ul);
             } else {
                 util.addBackdrop($dropdown);
             }
+
+            // metrics support
+            $ul.on('click', 'a', this.track.bind(this));
+
             $dropdown.insertAfter($lo.last());
             // replace icons by text
             $lo.find('> a > i.fa').each(function () {
@@ -190,7 +194,18 @@ define('io.ox/backbone/views/toolbar', [
             $(e.currentTarget).attr('tabindex', 0);
         },
 
-        onClick: util.invokeByEvent
+        onClick: function (e) {
+            this.track(e);
+            util.invokeByEvent(e);
+        },
+
+        track: function (e) {
+            // toolbar child vs. smart-dropdown childs
+            var action = $(e.delegateTarget ? e.currentTarget : e.target),
+                isDropDownClose = action.hasClass('dropdown-toggle') && action.parent().hasClass('open');
+            if (isDropDownClose) return;
+            this.$el.trigger('track', action);
+        }
     });
 
     return ToolbarView;

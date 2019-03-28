@@ -104,7 +104,7 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
          * the Spreadsheet app window is shown along with the Preview app window.
          */
         onPreviewWindowShow: function () {
-            if (this.spreadsheetApp && !this.disposed) {
+            if (this.spreadsheetApp && !this.disposed && _.isFunction(this.spreadsheetApp.isInQuit) && !this.spreadsheetApp.isInQuit()) {
                 this.spreadsheetApp.getWindow().show(null, true);
             }
         },

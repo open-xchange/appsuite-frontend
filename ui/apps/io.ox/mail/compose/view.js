@@ -429,7 +429,8 @@ define('io.ox/mail/compose/view', [
             this.baton = ext.Baton({
                 model: this.model,
                 config: this.config,
-                view: this
+                view: this,
+                app: this.app
             });
 
             // register for 'dispose' event (using inline function to make this testable via spyOn)

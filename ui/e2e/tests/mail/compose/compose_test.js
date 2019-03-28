@@ -177,6 +177,7 @@ Scenario('Compose mail with different attachments', async function (I, users) {
 
     // upload local file via the hidden input in the toolbar
     I.say('📢 add another local image', 'blue');
+    I.waitForElement('.composetoolbar input[type="file"]');
     I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
 
     I.retry(5).click('Send');
@@ -274,6 +275,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     // workflow 17: Edit copy
     I.clickToolbar('Edit copy');
     I.waitForText('Subject');
+    I.wait(0.2); // add a short wait period until the ui has eventually focused the editor
 
     I.fillField('To', user2.get('primaryEmail'));
     I.pressKey('Enter');

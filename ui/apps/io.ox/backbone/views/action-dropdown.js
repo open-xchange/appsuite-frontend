@@ -40,11 +40,11 @@ define('io.ox/backbone/views/action-dropdown', [
             this.$toggle = this.$('.dropdown-toggle');
             this.$menu = this.$('.dropdown-menu');
             if (this.options.data) this.setData(this.options.data);
-            if (this.options.backdrop) {
+            if (this.options.backdrop && _.device('!smartphone')) {
                 util.addBackdrop(this.$el);
             } else {
                 // listen for click event directly on menu for proper backdrop support
-                this.$menu.on('click', 'a[data-action]', util.invokeByEvent);
+                util.bindActionEvent(this.$menu);
             }
         },
 

@@ -259,9 +259,6 @@ define('io.ox/calendar/actions', [
         collection: 'some && delete',
         // moving recurring events is not supported
         every: 'recurrenceId === undefined',
-        matches: function (baton) {
-            return util.hasFlag(baton.first(), 'organizer');
-        },
         action: function (baton) {
 
             var list = baton.array();
@@ -306,11 +303,12 @@ define('io.ox/calendar/actions', [
                                 isPublic = folderAPI.is('public', data),
                                 sourceFolderIsPublic = folderAPI.is('public', folderData),
                                 noOtherAttendees = list[0].attendees.length < 2,
-                                create = folderAPI.can('create', data);
+                                create = folderAPI.can('create', data),
+                                isOrganizer = util.hasFlag(list[0], 'organizer') || util.hasFlag(list[0], 'organizer_on_behalf');
 
                             // totally awesome check
-                            // not same folder, must be folder of same user, public folder or there must only be one attendee(the organizer), if the source folder is not public, must have create permission in that folder, folder must not be virtual
-                            return sameFolder || !((!sourceFolderIsPublic && noOtherAttendees) || sameOwner || isPublic) || !create || (options && /^virtual/.test(options.folder));
+                            // not same folder, must be folder of same user, public folder(if organizer) or there must only be one attendee(the organizer), if the source folder is not public, must have create permission in that folder, folder must not be virtual
+                            return sameFolder || !((!sourceFolderIsPublic && noOtherAttendees) || sameOwner || (isPublic && isOrganizer)) || !create || (options && /^virtual/.test(options.folder));
                         }
                     });
                 });

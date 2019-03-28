@@ -107,7 +107,7 @@ define('io.ox/multifactor/settings/views/totpRegistrationView', [
             index: INDEX += 100,
             id: 'code',
             render: function (baton) {
-                var label = $('<label for="code">').append(gt('If scanning doesn\'t work, you may be able to enter the folowing setup code.'));
+                var label = $('<label for="code">').append(gt('If scanning doesn\'t work, you may be able to enter the following setup code.'));
                 var code = $('<span id="code" class="totpShared">').append(
                     formatSharedSecret(baton.model.get('device').challenge.sharedSecret));
                 this.$body.append(label).append(code);

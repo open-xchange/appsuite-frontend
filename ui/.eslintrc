@@ -1,4 +1,7 @@
 {
     "root": true,
-    "extends": ["open-xchange-appsuite"]
+    "extends": ["open-xchange-appsuite"],
+    "globals": {
+        "staticGt": true
+    }
 }

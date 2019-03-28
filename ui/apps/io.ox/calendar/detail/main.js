@@ -52,26 +52,23 @@ define('io.ox/calendar/detail/main', [
                 if (!metrics.isEnabled()) return;
                 var body = app.getWindow().nodes.body;
                 // toolbar actions
-                body.on('mousedown', '.io-ox-action-link:not(.dropdown, [data-toggle="dropdown"])', function (e) {
+                function track(target, node) {
+                    node = $(node);
+                    var isSelect = !!node.attr('data-name'),
+                        action = (node.attr('data-action') || '').replace(/^io\.ox\/calendar\/(detail\/)?/, '');
                     metrics.trackEvent({
                         app: 'calendar',
-                        target: 'detail/toolbar',
+                        target: target,
                         type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
+                        action: isSelect ? node.attr('data-name') : action,
+                        detail: isSelect ? node.attr('data-value') : ''
                     });
-                });
-                // toolbar options dropdown
-                body.on('mousedown', '.io-ox-inline-links .dropdown a:not([data-toggle])', function (e) {
-                    var action = $(e.target).closest('.dropdown').find('> a');
-                    metrics.trackEvent({
-                        app: 'calendar',
-                        target: 'detail/toolbar',
-                        type: 'click',
-                        action: action.attr('data-action'),
-                        detail: $(e.target).val()
-                    });
-                });
+                }
 
+                // toolbar actions
+                body.on('track', function (e, node) {
+                    track('detail-standalone/toolbar', node);
+                });
             });
         }
     });

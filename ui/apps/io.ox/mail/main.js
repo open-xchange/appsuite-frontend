@@ -1864,7 +1864,6 @@ define('io.ox/mail/main', [
 
         'metrics': function (app) {
 
-            // hint: toolbar metrics are registery by extension 'metrics-toolbar'
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
 
@@ -1883,28 +1882,43 @@ define('io.ox/mail/main', [
                     type: 'click',
                     action: 'add'
                 });
-                // detail view actions
-                app.right.on('mousedown', '.detail-view-header .io-ox-action-link', function (e) {
+
+                function track(target, node) {
+                    node = $(node);
+                    var isSelect = !!node.attr('data-name');
                     metrics.trackEvent({
                         app: 'mail',
-                        target: 'detail/toolbar',
+                        target: target,
                         type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
+                        action: isSelect ? node.attr('data-name') : node.attr('data-action'),
+                        detail: isSelect ? node.attr('data-value') : ''
                     });
+                }
+
+                // categories
+                nodes.body.on('mousedown', '.categories-toolbar-container .category', function (e) {
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: 'select-tab',
+                        detail: $(e.currentTarget).attr('data-id')
+                    });
+                });
+
+                // main toolbar: actions, view dropdown
+                nodes.body.on('track', '.classic-toolbar-container', function (e, node) {
+                    track('toolbar', node);
+                });
+                // detail view: actions
+                nodes.body.on('track', '.thread-view-control', function (e, node) {
+                    track('detail/toolbar', node);
                 });
                 // listview toolbar
                 nodes.main.find('.list-view-control .toolbar').on('mousedown', 'a[data-name], a[data-action]', function (e) {
-                    var node = $(e.currentTarget);
-                    var action = node.attr('data-name') || node.attr('data-action');
-                    if (!action) return;
-                    metrics.trackEvent({
-                        app: 'mail',
-                        target: 'list/toolbar',
-                        type: 'click',
-                        action: action,
-                        detail: node.attr('data-value')
-                    });
+                    track('list/toolbar', e.currentTarget);
                 });
+
                 // folder tree action
                 _.defer(function () {
                     sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {

@@ -175,7 +175,7 @@ define('io.ox/mail/compose/main', [
         index: INDEX += 100,
         perform: function () {
             return this.view.signaturesLoading.then(function () {
-                this.config.setInitialSignature(this.model.get('content'));
+                this.config.setInitialSignature(this.model);
             }.bind(this));
         }
     }, {
@@ -198,6 +198,7 @@ define('io.ox/mail/compose/main', [
             win.idle();
             $(window).trigger('resize');  // Needed for proper initial resizing in editors
             win.setTitle(this.model.get('subject') || gt('Compose'));
+            this.trigger('ready');
         }
     });
 
