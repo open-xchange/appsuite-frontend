@@ -14,7 +14,7 @@
 const { expect } = require('chai');
 
 Scenario('Portal - View with empty standard tiles', async (I) => {
-    I.haveSetting({ 'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false } });
+    await I.haveSetting({ 'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false } });
     I.login('app=io.ox/portal');
     I.waitForVisible('[data-app-name="io.ox/portal"]', 5);
     I.waitForText('Inbox');

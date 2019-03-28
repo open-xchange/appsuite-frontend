@@ -23,7 +23,7 @@ After(async function (users) {
 });
 
 Scenario('Create appointment and check if the color is correctly applied and removed', async function (I, users) {
-    I.haveSetting({
+    await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
     });
@@ -101,7 +101,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
 });
 
 Scenario('Changing calendar color should change appointment color that uses calendar color', async function (I, users) {
-    I.haveSetting({
+    await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
     });

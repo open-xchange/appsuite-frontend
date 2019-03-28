@@ -24,7 +24,7 @@ After(async function (users) {
 });
 
 Scenario('Create appointment with all fields', async function (I) {
-    I.haveSetting({
+    await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
     });

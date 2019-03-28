@@ -25,7 +25,7 @@ After(async function (users) {
 
 Scenario('Create recurring appointments with one participant', async function (I, users) {
 
-    I.haveSetting({
+    await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
     });
@@ -85,7 +85,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.logout();
 
     // user 1
-    I.haveSetting({
+    await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
     }, { user: users[1] });

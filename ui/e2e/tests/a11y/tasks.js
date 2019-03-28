@@ -14,7 +14,7 @@
 const { expect } = require('chai');
 
 Scenario('Tasks - List view w/o tasks', async (I) => {
-    I.haveSetting({
+    await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
     });

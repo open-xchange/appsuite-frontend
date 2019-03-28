@@ -13,8 +13,8 @@
 
 const { expect } = require('chai');
 
-function openPerspective(I, perspective) {
-    I.haveSetting({
+async function openPerspective(I, perspective) {
+    await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
     });
