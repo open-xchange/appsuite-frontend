@@ -1,3 +1,9 @@
+open-xchange-appsuite-help (7.10.2-1) stable; urgency=medium
+
+  * First preview of 7.10.2 release
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Thu, 28 Mar 2019 14:21:07 +0000
+
 open-xchange-appsuite-help (7.10.2-0) unstable; urgency=medium
 
   * prepare for 7.10.2
