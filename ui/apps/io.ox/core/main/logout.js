@@ -31,42 +31,41 @@ define('io.ox/core/main/logout', [
             if (!ox.tabHandlingEnabled || !baton.manualLogout) return $.when();
 
             var def = $.Deferred();
-            var TabAPI = require('io.ox/core/api/tab');
+            require(['io.ox/core/api/tab'], function (TabApi) {
 
+                TabApi.TabCommunication.otherTabsLiving().then(
+                    // when other tabs exists, user must confirm logout
+                    function () {
+                        require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+                            var dialog = new ModalDialog({
+                                async: true,
+                                title: gt('Sign out'),
+                                backdrop: true
+                            })
+                            .build(function () {
+                                this.$body.append(
+                                    $('<div>').text(gt('Are you sure you want to sign out from all related browser tabs?'))
+                                );
+                            })
+                            .addCancelButton()
+                            .addButton({ action: 'force', label: gt('Sign out') })
+                            .open();
 
-            TabAPI.TabCommunication.otherTabsLiving().then(
-                // when other tabs exists, user must confirm logout
-                function () {
-                    require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-                        var dialog = new ModalDialog({
-                            async: true,
-                            title: gt('Sign out'),
-                            backdrop: true
-                        })
-                        .build(function () {
-                            this.$body.append(
-                                $('<div>').text(gt('Are you sure you want to sign out from all related browser tabs?'))
-                            );
-                        })
-                        .addCancelButton()
-                        .addButton({ action: 'force', label: gt('Sign out') })
-                        .open();
+                            dialog.on('close', function () {
+                                dialog = null;
+                                def.reject();
+                            });
 
-                        dialog.on('close', function () {
-                            dialog = null;
-                            def.reject();
+                            dialog.on('force', function () {
+                                def.resolve();
+                            });
                         });
 
-                        dialog.on('force', function () {
-                            def.resolve();
-                        });
+                    // no other tabs exists, just continue quitting
+                    }, function () {
+                        def.resolve();
                     });
-
-                // no other tabs exists, just continue quitting
-                }, function () {
-                    def.resolve();
-                });
-
+            });
             return def.promise();
         }
     });
@@ -89,34 +88,34 @@ define('io.ox/core/main/logout', [
                 }
             }
 
-            var TabAPI = require('io.ox/core/api/tab');
+            require(['io.ox/core/api/tab'], function (TabAPI) {
 
-            TabAPI.TabHandling.setLoggingOutState();
+                TabAPI.TabHandling.setLoggingOutState();
 
-            // when logged out by other tab, just redirect to logout location and clear
-            if (baton.skipSessionLogout) {
-                try {
-                    // session can already be destroyed here by the active tab, better be safe than sorry
-                    ox.cache.clear().always(function () {
-                        // note: code in inside always is not secured
+                // when logged out by other tab, just redirect to logout location and clear
+                if (baton.skipSessionLogout) {
+                    try {
+                        // session can already be destroyed here by the active tab, better be safe than sorry
+                        ox.cache.clear().always(function () {
+                            // note: code in inside always is not secured
+                            redirectAndRejectSafely(def, baton);
+                        });
+                    } catch (e) {
+                        if (ox.debug) console.warn('clear storage at logout did not work', e);
                         redirectAndRejectSafely(def, baton);
-                    });
-                } catch (e) {
-                    if (ox.debug) console.warn('clear storage at logout did not work', e);
-                    redirectAndRejectSafely(def, baton);
+                    }
+                } else {
+                    // require does catch errors, so we handle them to ensure a resolved deferred
+                    try {
+                        // notify other tabs that a logout happend
+                        TabAPI.TabSession.propagateLogout();
+                    } catch (e) {
+                        if (ox.debug) console.warn('propagate logout did not work', e);
+                    } finally {
+                        def.resolve();
+                    }
                 }
-            } else {
-                // require does catch errors, so we handle them to ensure a resolved deferred
-                try {
-                    // notify other tabs that a logout happend
-                    TabAPI.TabSession.propagateLogout();
-                } catch (e) {
-                    if (ox.debug) console.warn('propagate logout did not work', e);
-                } finally {
-                    def.resolve();
-                }
-            }
-
+            });
             return def;
         }
     });
