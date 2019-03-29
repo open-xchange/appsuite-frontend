@@ -179,6 +179,10 @@ define('io.ox/core/api/tab', [
             returnValue = undefined;
             if (ox.debug) console.warn('TabHandling.parseWindowName', e);
         }
+
+        // if location is switched to logoutLocation, initialize current window as a new parent tab
+        if (returnValue.windowType === 'child' && location.hash.indexOf('office?app') < 0) return;
+
         return returnValue;
     };
 
