@@ -103,11 +103,17 @@ define('io.ox/core/settings', [
             }
         };
 
-        this.set = function (path, value) {
+        this.set = function (path, value, options) {
+
+            // options
+            var opt = $.extend({
+                silent: false
+            }, options);
+
             // overwrite entire tree?
             if (arguments.length === 1 && _.isObject(path)) {
                 tree = path;
-                self.trigger('reset', tree);
+                if (!opt.silent) self.trigger('reset', tree);
             } else {
                 resolve(path, function (tmp, key) {
                     var previous = tmp[key],
@@ -118,7 +124,7 @@ define('io.ox/core/settings', [
                         tmp[key] = value;
                     }
                     if (!isChange) return;
-                    self.trigger('change:' + path, value, previous).trigger('change', path, value, previous);
+                    if (!opt.silent) self.trigger('change:' + path, value, previous).trigger('change', path, value, previous);
                 }, true);
             }
             return this;
