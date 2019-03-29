@@ -85,7 +85,9 @@ define('io.ox/tasks/view-detail', [
                     $.txt(task.title)
                 );
             this.append(
-                _.device('smartphone') ? [title, infoPanel] : [infoPanel, title]
+                $('<div class="task-header">').append(
+                    _.device('smartphone') ? [title, infoPanel] : [infoPanel, title]
+                )
             );
             ext.point('io.ox/tasks/detail-view/infopanel').invoke('draw', infoPanel, task);
         }
