@@ -393,7 +393,8 @@ define('io.ox/core/api/tab', [
         window.addEventListener('storage', function (e) {
             if (e.key !== TabHandling.key) return;
         });
-        ox.on('beforeunload', function () {
+        ox.on('beforeunload', function (unsavedChanges) {
+            TabCommunication.events.trigger('beforeunload', unsavedChanges);
             TabSession.clearStorage();
             TabCommunication.clearStorage();
             TabHandling.remove(TabHandling.windowName);
@@ -466,6 +467,7 @@ define('io.ox/core/api/tab', [
                     break;
                 case 'propagateLogout':
                     if (ox.signin) return;
+                    TabSession.events.trigger('before:propagatedLogout');
                     require('io.ox/core/main').logout({ force: true, skipSessionLogout: true });
                     break;
                 case 'propagateLogin':
