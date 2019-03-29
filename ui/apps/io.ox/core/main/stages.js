@@ -255,8 +255,9 @@ define('io.ox/core/main/stages', [
 
             // restore apps
             if (!ox.tabHandlingEnabled) return ox.ui.App.restore();
-            var TabAPI = require('io.ox/core/api/tab');
-            return TabAPI.TabHandling.isParent() ? ox.ui.App.restore() : true;
+            require(['io.ox/core/api/tab'], function (TabAPI) {
+                return TabAPI.TabHandling.isParent() ? ox.ui.App.restore() : true;
+            });
         }
     }, {
         id: 'restoreLaunch',

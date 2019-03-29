@@ -170,8 +170,9 @@ define.async('io.ox/core/boot/main', [
             }).then(function () {
                 if (!util.checkTabHandlingSupport()) return;
 
-                var TabAPI = require('io.ox/core/api/tab');
-                TabAPI.TabSession.propagateLogin();
+                require(['io.ox/core/api/tab'], function (TabAPI) {
+                    TabAPI.TabSession.propagateLogin();
+                });
             });
         },
 
