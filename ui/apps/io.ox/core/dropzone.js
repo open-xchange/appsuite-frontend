@@ -67,7 +67,6 @@ define('io.ox/core/dropzone', [], function () {
             switch (e.type) {
                 case 'dragenter':
                 case 'dragover':
-                    if (true) return;
                     ox.trigger('drag:start', this.cid);
                     this.stop(e);
                     this.leaving = false;
