@@ -132,7 +132,6 @@ define('io.ox/core/api/tab', [
         window.name = JSON.stringify(windowNameObject);
         _.extend(TabHandling, _.pick(windowNameObject, 'windowName', 'windowType', 'parentName'));
 
-        TabHandling.add(windowNameObject);
         TabHandling.initListener();
     };
 
@@ -393,6 +392,12 @@ define('io.ox/core/api/tab', [
         ox.on('beforeunload', function () {
             TabSession.clearStorage();
             TabCommunication.clearStorage();
+            TabHandling.remove(TabHandling.windowName);
+        });
+        ox.on('login:success', function () {
+            TabHandling.add(_.pick(TabHandling, 'windowName', 'windowType', 'parentName'));
+        });
+        ox.on('logout:success', function () {
             TabHandling.remove(TabHandling.windowName);
         });
     };
