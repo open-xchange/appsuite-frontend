@@ -22,7 +22,7 @@ define('io.ox/core/tk/sessionrestore', function () {
     /**
      * Names of properties in the `window.name` object to be processed here.
      */
-    var ALL_DATA_PROP_NAMES = ['windowName', 'windowType', 'parentName', 'loggingOut'];
+    var ALL_DATA_PROP_NAMES = ['windowName', 'windowType', 'parentName', 'loggingOut', 'documents.rtid'];
 
     /**
      * Grabs all sessionrestore options from the window.name

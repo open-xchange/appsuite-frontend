@@ -59,7 +59,7 @@ define('io.ox/core/api/tab', [
 
         try {
             TabHandling.currentWindows = JSON.parse(data);
-            if (_.isObject(TabHandling.currentWindows)) TabHandling.currentWindows = [];
+            if (!_.isArray(TabHandling.currentWindows)) TabHandling.currentWindows = [];
         } catch (e) {
             TabHandling.currentWindows = [];
             if (ox.debug) console.warn('TabHandling.fetch', e);
@@ -132,7 +132,6 @@ define('io.ox/core/api/tab', [
         window.name = JSON.stringify(windowNameObject);
         _.extend(TabHandling, _.pick(windowNameObject, 'windowName', 'windowType', 'parentName'));
 
-        TabHandling.add(windowNameObject);
         TabHandling.initListener();
     };
 
@@ -180,6 +179,10 @@ define('io.ox/core/api/tab', [
             returnValue = undefined;
             if (ox.debug) console.warn('TabHandling.parseWindowName', e);
         }
+
+        // if location is switched to logoutLocation, initialize current window as a new parent tab
+        if (returnValue.windowType === 'child' && location.hash.indexOf('office?app') < 0) return;
+
         return returnValue;
     };
 
@@ -390,9 +393,16 @@ define('io.ox/core/api/tab', [
         window.addEventListener('storage', function (e) {
             if (e.key !== TabHandling.key) return;
         });
-        ox.on('beforeunload', function () {
+        ox.on('beforeunload', function (unsavedChanges) {
+            TabCommunication.events.trigger('beforeunload', unsavedChanges);
             TabSession.clearStorage();
             TabCommunication.clearStorage();
+            TabHandling.remove(TabHandling.windowName);
+        });
+        ox.on('login:success', function () {
+            TabHandling.add(_.pick(TabHandling, 'windowName', 'windowType', 'parentName'));
+        });
+        ox.on('logout:success', function () {
             TabHandling.remove(TabHandling.windowName);
         });
     };
@@ -457,6 +467,7 @@ define('io.ox/core/api/tab', [
                     break;
                 case 'propagateLogout':
                     if (ox.signin) return;
+                    TabSession.events.trigger('before:propagatedLogout');
                     require('io.ox/core/main').logout({ force: true, skipSessionLogout: true });
                     break;
                 case 'propagateLogin':

@@ -25,7 +25,6 @@ Scenario('Change working time and check in weekview', async function (I) {
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
 
-    // create in Workweek view
     I.selectFolder('Calendar');
     I.clickToolbar('View');
     I.click('Workweek');

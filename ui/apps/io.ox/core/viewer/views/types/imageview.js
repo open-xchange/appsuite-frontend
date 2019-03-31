@@ -106,7 +106,7 @@ define('io.ox/core/viewer/views/types/imageview', [
          *  A Promise that if resolved contains the Base64 preview URL.
          */
         getLocalFilePreviewUrl: function () {
-            var fileObj = this.model.get('fileObj');
+            var fileObj = this.model.get('fileObj') || this.model.get('originalFile');
             var size    = this.getImageSize();
 
             return require(['io.ox/contacts/widgets/canvasresize']).then(function (canvasResize) {

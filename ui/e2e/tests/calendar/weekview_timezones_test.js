@@ -25,35 +25,18 @@ After(async function (users) {
 Scenario('Create appointment and switch timezones', async function (I) {
 
     await I.haveSetting('io.ox/core//timezone', 'Europe/Berlin');
+    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    const time = moment().tz('Europe/Berlin').startOf('week').add(1, 'day').add('16', 'hours');
+    const format = 'YYYYMMDD[T]HHmmss';
+    await I.haveAppointment({
+        folder: folder,
+        summary: 'test timezones',
+        startDate: { value: time.format(format), tzid: 'Europe/Berlin' },
+        endDate: { value: moment(time).add(1, 'hour').format(format), tzid: 'Europe/Berlin' }
+    });
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
-
-    // create in Workweek view
-    I.selectFolder('Calendar');
-    I.clickToolbar('View');
-    I.click('Workweek');
-    I.clickToolbar('New');
-    I.waitForVisible('.io-ox-calendar-edit-window');
-
-    I.fillField('Subject', 'test timezones');
-    I.fillField('Location', 'invite location');
-
-    const nextMonday = moment().tz('Europe/Berlin').startOf('week').add('8', 'day');
-
-    I.click('~Date (M/D/YYYY)');
-    I.pressKey(['Control', 'a']);
-    I.pressKey(nextMonday.format('l'));
-    I.pressKey('Enter');
-
-    I.click('~Start time');
-
-    I.click('4:00 PM');
-
-    // save
-    I.click('Create', '.io-ox-calendar-edit-window');
-
-    I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
     // check in view
     I.waitForVisible('.workweek .title');
@@ -92,7 +75,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.seeNumberOfElements('.workweek .week-container-label', 2);
     I.see('JST', '.workweek .timezone');
     I.see('7 AM', '.week-container-label:not(.secondary-timezone) .working-time-border:not(.in) .number');
-    I.see(moment(nextMonday).hour(7).tz('Asia/Tokyo').format('h A'), '.week-container-label.secondary-timezone .working-time-border:not(.in) .number');
+    I.see(moment(time).hour(7).tz('Asia/Tokyo').format('h A'), '.week-container-label.secondary-timezone .working-time-border:not(.in) .number');
 
     I.click('test timezones', '.workweek .appointment .title');
     I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/calendar/detail/actions/edit"]');
@@ -106,7 +89,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.waitForDetached('.modal-dialog');
 
     I.waitForText('Europe/Berlin: ');
-    I.waitForText('Mon, ' + nextMonday.format('l'));
+    I.waitForText('Mon, ' + time.format('l'));
     I.waitForText('4:00 – 5:00 PM');
 
     I.click('Discard', '.floating-window-content');
@@ -157,7 +140,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.openApp('Calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
 
-    I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "workweek")]//button[@class="weekday"]', 3);
+    I.seeNumberOfElements('.workweek .weekday', 3);
     I.wait(1);
 
     I.logout();

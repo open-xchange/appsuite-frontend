@@ -25,9 +25,10 @@ After(async function (users) {
 
 Scenario('Create recurring appointments with one participant', async function (I, users) {
 
-    I.haveSetting('io.ox/core//autoOpenNotification', false);
-    I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//showCheckboxes', true);
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
@@ -51,17 +52,14 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.click('4:00 PM');
 
     I.click('Repeat', '.io-ox-calendar-edit-window');
-    I.click('.btn.btn-link.summary');
+    I.click('Every Monday.');
 
     I.waitForElement('.modal-dialog');
 
-    I.click('.modal-dialog [name="recurrence_type"]');
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Daily');
-
-    I.selectOption('.modal-dialog [name="until change:occurrences"]', 'After a number of occurrences');
-
+    I.selectOption('.modal-dialog [name="until"]', 'After a number of occurrences');
     I.waitForElement('.modal-dialog [name="occurrences"]');
-    I.fillField('[name="occurrences"]', '5');
+    I.fillField('.modal-dialog [name="occurrences"]', '5');
 
     I.click('Apply', '.modal-dialog');
     I.click('Apply', '.modal-dialog');
@@ -86,15 +84,11 @@ Scenario('Create recurring appointments with one participant', async function (I
 
     I.logout();
 
-    // reset settings
-    I.haveSetting('io.ox/core//autoOpenNotification', true);
-    I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//showCheckboxes', false);
-
     // user 1
-    I.haveSetting('io.ox/core//autoOpenNotification', false, { user: users[1] });
-    I.haveSetting('io.ox/core//showDesktopNotifications', false, { user: users[1] });
-    I.haveSetting('io.ox/calendar//showCheckboxes', true, { user: users[1] });
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    }, { user: users[1] });
 
     // login new user1 for accept
     I.login('app=io.ox/calendar', { user: users[1] });

@@ -24,19 +24,19 @@ define('io.ox/core/tk/list-contextmenu', [
         // load relevant code on demand
         return ox.manifests.loadPluginsFor(this.contextMenuRef).done(function () {
 
+            this.contextMenu.on('ready', function () {
+                if (!this.contextMenu.hasActions()) return;
+                this.contextMenu.$toggle.dropdown('toggle');
+                // Keyboardsupport for cursor up/down on toggle
+                this.contextMenu.$toggle.on('keydown', function (e) {
+                    if (!/^(38|40)$/.test(e.which)) return;
+                    this.contextMenu.$menu.find('li:' + (e.which === 38 ? 'last' : 'first') + ' a').focus();
+                }.bind(this));
+                if (this.isKeyboardEvent) this.contextMenu.$menu.find('li:first a').focus();
+            }.bind(this));
+
             var selection = this.selection.get();
             this.contextMenu.setSelection(selection.map(_.cid), this.getContextMenuData.bind(this, selection));
-
-            if (!this.contextMenu.hasActions()) return;
-            this.contextMenu.$toggle.dropdown('toggle');
-
-            // Keyboardsupport for cursor up/down on toggle
-            this.contextMenu.$toggle.on('keydown', function (e) {
-                if (!/^(38|40)$/.test(e.which)) return;
-                if (e.which === 38) this.contextMenu.$menu.find('li:last a').focus();
-                if (e.which === 40) this.contextMenu.$menu.find('li:first a').focus();
-            }.bind(this));
-            if (this.isKeyboardEvent) this.contextMenu.$menu.find('li:first a').focus();
 
         }.bind(this));
     }

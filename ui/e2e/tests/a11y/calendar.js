@@ -13,45 +13,46 @@
 
 const { expect } = require('chai');
 
-function openPerspective(I, perspective) {
-    I.haveSetting('io.ox/core//autoOpenNotification', false);
-    I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//showCheckboxes', true);
+async function openPerspective(I, perspective) {
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
 
     I.login(['app=io.ox/calendar', 'perspective=' + perspective]);
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
 }
 
 Scenario('Calendar - Day view w/o appointments', async (I) => {
-    openPerspective(I, 'week:day');
+    await openPerspective(I, 'week:day');
     I.waitForVisible('.current-time-indicator');
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
 Scenario('Calendar - Workweek view w/o appointments', async (I) => {
-    openPerspective(I, 'week:workweek');
+    await openPerspective(I, 'week:workweek');
     I.waitForVisible('.week-container-label');
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
 Scenario('Calendar - Week view w/o appointments', async (I) => {
-    openPerspective(I, 'week:week');
+    await openPerspective(I, 'week:week');
     I.waitForVisible('.week-container-label');
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
 Scenario('Calendar - Month view w/o appointments', async function (I) {
-    openPerspective(I, 'month');
+    await openPerspective(I, 'month');
     I.waitForVisible('.month-container');
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
 Scenario('Calendar - Year', async (I) => {
-    openPerspective(I, 'year');
+    await openPerspective(I, 'year');
     I.waitForVisible('.year-view-container');
 
     // The excluded td.out are a visual representation of the days of the previous month
@@ -61,7 +62,7 @@ Scenario('Calendar - Year', async (I) => {
 });
 
 Scenario('Calendar - List view w/o appointments', async (I) => {
-    openPerspective(I, 'list');
+    await openPerspective(I, 'list');
     I.waitForVisible('.io-ox-center.multi-selection-message');
 
     expect(await I.grabAxeReport()).to.be.accessible;
