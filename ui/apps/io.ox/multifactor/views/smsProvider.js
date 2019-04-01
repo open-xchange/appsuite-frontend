@@ -101,7 +101,7 @@ define('io.ox/multifactor/views/smsProvider', [
                 var help = new HelpLink({
                     base: 'help',
                     iconClass: 'mfHelp fa-question-circle fa',
-                    href: 'ox.appsuite.user.sect.multifactor.sms.html',
+                    href: 'ox.appsuite.user.sect.security.multifactor.sms.html',
                     tabindex: '-1',
                     simple: !ox.ui.createApp,  // If ui not fully loaded, simple help only
                     metrics: ox.ui.createApp !== undefined
