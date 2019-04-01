@@ -26,6 +26,27 @@ After(async (users) => {
     await users.removeAll();
 });
 
+Scenario('[C7464] Change appointment in shared folder as guest', async function (I, users) {
+    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    const time = moment().startOf('week').add(3, 'days').add(10, 'hours');
+    await I.haveAppointment({
+        folder:  folder,
+        summary: 'Testappointment',
+        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        attendees: [{ entity: users[0].userdata.id }, { entity: users[1].userdata.id }]
+    });
+
+    I.login('app=io.ox/calendar', { user: users[1] });
+    I.waitForText('Testappointment');
+
+    I.doubleClick('.appointment');
+    I.wait(1);
+    I.dontSeeElement('.io-ox-calendar-edit-window');
+
+    I.logout();
+});
+
 Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, users) {
     const
         Moment = require('moment'),
@@ -95,7 +116,6 @@ Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, use
 Scenario('[C7462] Remove a participant', async function (I, users) {
     const moment = require('moment');
     let testrailID = 'C7462';
-    var timestamp = Math.round(+new Date() / 1000);
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
