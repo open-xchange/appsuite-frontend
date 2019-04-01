@@ -24,6 +24,60 @@ After(async (users) => {
     await users.removeAll();
 });
 
+Scenario('[C7401] Mark multiple mails as read or unread', async (I, users) => {
+    // We need six mails in the Inbox, but then we'll work with five of them
+    var i = 0, mails = [];
+    for (i = 0; i < 5; i++) {
+        mails.push(I.haveMail({
+            from: [[users[0].get('display_name'), users[0].get('primaryEmail')]],
+            sendtype: 0,
+            subject: 'Hail Eris ' + i,
+            to: [[users[0].get('display_name'), users[0].get('primaryEmail')]]
+        }));
+    }
+
+    mails.push(I.haveMail({
+        from: [[users[0].get('display_name'), users[0].get('primaryEmail')]],
+        sendtype: 0,
+        subject: 'All Hail Discordia',
+        to: [[users[0].get('display_name'), users[0].get('primaryEmail')]]
+    }));
+    await Promise.all(mails);
+
+    // Test
+    // Sign in as user_a and switch to inbox
+    I.login('app=io.ox/mail');
+
+    // Select several (not threaded) mails in the inbox.
+    for (i = 0; i < 5; i++) {
+        I.waitForElement(locate('.list-item').withText('Hail Eris ' + i));
+        I.click('.list-item-checkmark', locate('.list-item').withText('Hail Eris ' + i));
+    }
+
+    // Click on "Mark Unread"
+    I.click('~More actions');
+    I.waitForElement('.dropdown-menu');
+    I.click('Mark as read');
+    for (i = 0; i < 5; i++) {
+        I.dontSeeElement(locate('.seen-unseen-indicator')
+            .inside(locate('.list-item')
+                .withText('Hail Eris ' + i)
+            )
+        ); // List
+    }
+
+    I.click('~More actions');
+    I.waitForElement('.dropdown-menu');
+    I.click('Mark as unread');
+    for (i = 0; i < 5; i++) {
+        I.seeElement(locate('.seen-unseen-indicator')
+            .inside(locate('.list-item')
+                .withText('Hail Eris ' + i)
+            )
+        ); // List
+    }
+});
+
 Scenario('[C8818] Reply all', async (I, users) => {
     const [recipient, sender, cc] = users;
 
