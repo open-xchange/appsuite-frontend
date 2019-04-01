@@ -78,6 +78,43 @@ Scenario('[C7401] Mark multiple mails as read or unread', async (I, users) => {
     }
 });
 
+Scenario('[C7402] Mark one single mail as read or unread', async (I, users) => {
+    // Preparation
+
+    // We need one mail in the Inbox
+    await I.haveMail({
+        from: [[users[0].get('display_name'), users[0].get('primaryEmail')]],
+        sendtype: 0,
+        subject: 'Hail Eris',
+        to: [[users[0].get('display_name'), users[0].get('primaryEmail')]]
+    });
+
+    // Test
+    // Sign in as user_a and switch to inbox
+    I.login('app=io.ox/mail');
+    // Select single (not threaded) mail.
+    I.waitForElement(locate('li.list-item').withText('Hail Eris'));
+    I.click(locate('li.list-item').withText('Hail Eris'));
+    // -> Mail is displayed as read.
+    I.dontSeeElement('article.mail-item.unread'); // Detail View
+    I.dontSeeElement(locate('.seen-unseen-indicator').inside(
+        locate('.list-item').withText('Hail Eris')
+    )); // List
+    // Click on "Mark Unread"
+    I.click('a.unread-toggle', 'article.mail-item');
+    // -> Mail is displayed as unread.
+    I.seeElement('article.mail-item.unread'); // Detail View
+    I.seeElement(locate('.seen-unseen-indicator')
+        .inside(locate('.list-item').withText('Hail Eris')));  // List
+    // Click on "Mark read"
+    I.click('a.unread-toggle', 'article.mail-item');
+    // -> Mail is displayed as read.
+    I.dontSeeElement('article.mail-item.unread'); // Detail View
+    I.dontSeeElement(locate('.seen-unseen-indicator').inside(
+        locate('.list-item').withText('Hail Eris'))); // List
+    I.logout();
+});
+
 Scenario('[C8818] Reply all', async (I, users) => {
     const [recipient, sender, cc] = users;
 
