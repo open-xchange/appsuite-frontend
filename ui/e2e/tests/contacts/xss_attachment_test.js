@@ -21,7 +21,8 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('adds an malicious attachment to a contact', async function (I) {
+// TODO wait for changes to the codecept helper for generic file attachments
+Scenario.skip('adds an malicious attachment to a contact', async function (I) {
     const folder = await I.grabDefaultFolder('contacts');
     const { id } = await I.haveContact({ folder_id: folder, first_name: 'Evil', last_name: 'Knivel' });
     await I.haveAttachment('contacts', { id, folder }, 'e2e/media/files/><img src=x onerror=alert(123)>');
