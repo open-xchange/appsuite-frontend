@@ -23,3 +23,11 @@ After(async (users) => {
     await users.removeAll();
 });
 
+Scenario('[C7336] Successful Login', function (I, users) {
+    I.amOnPage('/');
+    I.wait(1);
+    I.fillField('User name', `${users[0].get('name')}@${users[0].context.id}`);
+    I.fillField('Password', users[0].get('password'));
+    I.click('Sign in');
+    I.waitForText('No message selected');
+});
