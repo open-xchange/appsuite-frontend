@@ -47,6 +47,81 @@ Scenario('[C7464] Change appointment in shared folder as guest', async function 
     I.logout();
 });
 
+// TODO Skip this as the double click does not work. See Bug 64313
+Scenario.skip('[C7465] Edit appointment in shared folder as author', async function (I, users) {
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
+    const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    const folder = await I.haveFolder('New calendar', 'event', defaultFolderId);
+    const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
+    await I.haveAppointment({
+        folder:  folder.data,
+        summary: 'Testappointment',
+        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
+    });
+
+    // share folder for preconditions
+    // TODO should be part of the haveFolder helper
+    I.login('app=io.ox/calendar');
+
+    I.waitForText('New calendar');
+    I.rightClick('~New calendar');
+    I.waitForText('Permissions / Invite people');
+    I.wait(0.2); // Just wait a little extra for all event listeners
+    I.click('Permissions / Invite people');
+    I.waitForText('Permissions for folder "New calendar"');
+    I.pressKey(users[1].userdata.primaryEmail);
+    I.waitForText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, undefined, '.tt-dropdown-menu');
+    I.pressKey('ArrowDown');
+    I.pressKey('Enter');
+    I.click('Save');
+    I.waitForDetached('.share-permissions-dialog');
+
+    I.logout();
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    }, { user: users[1] });
+    I.login('app=io.ox/calendar', { user: users[1] });
+
+    // switch on New calendar
+    I.doubleClick('~Shared calendars');
+    I.click(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New calendar"] .color-label`);
+    I.click('~Next Week', '.page.current');
+
+    I.waitForText('Testappointment');
+
+    // 1. Double click to the appointment
+    I.doubleClick('.appointment');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    // 2. Change Subject, Location and Description.
+    I.fillField('Subject', 'Changedappointment');
+    I.fillField('Location', 'Changedlocation');
+    I.fillField('Description', 'Changeddescription');
+
+    // 3. Click "Save"
+    I.click('Save');
+    I.waitForDetached('.io-ox-calendar-edit-window');
+
+    // 4. Check this appointment in all views.
+    ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.click('.appointment', '.page.current');
+        I.see('Changedappointment');
+        I.see('Changedlocation');
+        I.see('Changeddescription');
+    });
+
+    I.logout();
+});
+
 Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, users) {
     const
         Moment = require('moment'),
