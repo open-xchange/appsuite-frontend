@@ -15,12 +15,15 @@
 
 
 /// <reference path="../../steps.d.ts" />
- 
-const moment = require('moment');
 
-Feature('Calendar create');
- 
+const moment = require('moment');
+const expect = require('chai').expect;
+const waitForExpect = require('wait-for-expect');
+
+Feature('Calendar > Create');
+
 Before(async (users) => {
+    await users.create();
     await users.create();
 });
 After(async (users) => {
@@ -90,4 +93,212 @@ Scenario('[C7411] Discard appointment during the creation', function (I) {
     I.click('Discard');
     I.click('Discard changes');
     I.waitToHide('.io-ox-calendar-edit');
+});
+
+Scenario('[C274537] Support use-count calculation on Appointment create with Groups', async function (I, users) {
+    let testrailID = 'C274537';
+    var timestamp = Math.round(+new Date() / 1000);
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+    let numberOfGroups = 3;
+    for (let i = 0; i < numberOfGroups; i++) {
+        const group = {
+            name: timestamp + '-00' + (i + 1),
+            display_name: timestamp + '-00' + (i + 1),
+            members: [
+                users[0].userdata.id,
+                users[1].userdata.id
+            ]
+        };
+        await I.haveGroup(group, { user: users[0] });
+    }
+    I.login('app=io.ox/calendar', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.clickToolbar('Today');
+    I.clickToolbar('New');
+    I.waitForElement('.io-ox-calendar-edit [name="summary"]');
+    I.fillField('.io-ox-calendar-edit [name="summary"]', testrailID);
+    I.fillField('.add-participant.tt-input', timestamp + '-00');
+    I.waitForElement('.twitter-typeahead');
+    let result1 = [];
+    I.waitForElement('.tt-suggestions .participant-name');
+    for (let i = 0; i < numberOfGroups; i++) {
+        result1.push(await I.executeScript(function (i) {
+            return $('.tt-suggestions .participant-name').eq(i).text().toString();
+        }, i, result1));
+    }
+    expect(result1[0]).to.equal(timestamp + '-001');
+    expect(result1[1]).to.equal(timestamp + '-002');
+    expect(result1[2]).to.equal(timestamp + '-003');
+    I.clearField('.add-participant.tt-input');
+    I.fillField('.add-participant.tt-input', timestamp + '-003');
+    I.waitForElement('//div[@class="participant-name"]//strong[@class="tt-highlight"][contains(text(),"' + timestamp + '-003")]');
+    I.click('//div[@class="participant-name"]//strong[@class="tt-highlight"][contains(text(),"' + timestamp + '-003")]');
+    I.click('Create');
+    I.waitForDetached('.io-ox-calendar-edit [name="summary"]');
+    I.waitForElement('.appointment-container [aria-label="' + testrailID + '"]', 5);
+    I.clickToolbar('New');
+    I.waitForElement('.io-ox-calendar-edit [name="summary"]');
+    I.fillField('.io-ox-calendar-edit [name="summary"]', testrailID);
+    I.fillField('.add-participant.tt-input', timestamp + '-00');
+    I.waitForElement('.twitter-typeahead');
+    let result2 = [];
+    I.waitForElement('.tt-suggestions .participant-name');
+    for (let i = 0; i < numberOfGroups; i++) {
+        result2.push(await I.executeScript(function (i) {
+            return $('.tt-suggestions .participant-name').eq(i).text().toString();
+        }, i, result2));
+    }
+    expect(result2[0]).to.equal(timestamp + '-003');
+    expect(result2[1]).to.equal(timestamp + '-001');
+    expect(result2[2]).to.equal(timestamp + '-002');
+    await I.dontHaveGroup(/\d+-\d{3}/);
+});
+
+Scenario('[C274516] Follow up should also propose a future date for appointments in the future', async function (I, users) {
+    const moment = require('moment');
+    let testrailID = 'C274516';
+    //var timestamp = Math.round(+new Date() / 1000);
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+
+    //Create Appointment
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+    I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: testrailID,
+        location: testrailID,
+        description: testrailID,
+        attendeePrivileges: 'DEFAULT',
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().add(1, 'week').add(1, 'day').format('YYYYMMDD')
+        },
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().add(1, 'week').format('YYYYMMDD')
+        },
+        attendees: [
+        ]
+    }, { user: users[0] });
+    I.login('app=io.ox/calendar', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.clickToolbar('Today');
+    I.waitForElement('.next');
+    I.waitForVisible('.next');
+    I.click('.next');
+    I.waitForElement('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.click('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
+    I.click('[data-action="io.ox/calendar/detail/actions/follow-up"]');
+    I.waitForElement('[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit', 5);
+    I.waitForVisible('[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit', 5);
+    let startDate = await I.grabAttributeFrom('[data-attribute="startDate"] .datepicker-day-field', 'value');
+    let endDate = await I.grabAttributeFrom('[data-attribute="endDate"] .datepicker-day-field', 'value');
+    expect(startDate.toString()).to.equal(moment().add(2, 'week').format('M/D/YYYY'));
+    expect(endDate.toString()).to.equal(moment().add(2, 'week').format('M/D/YYYY'));
+    I.click('Create');
+    I.waitForElement('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.click('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
+    expect(await I.grabTextFrom('.io-ox-sidepopup-pane .date-time')).to.equal(moment().add(2, 'week').format('ddd') + ', ' + moment().add(2, 'week').format('M/D/YYYY') + '   Whole day');
+    I.logout();
+});
+
+Scenario('[C274515] Attendees are not allowed to change their own permission status', async function (I, users) {
+    const moment = require('moment');
+    let testrailID = 'C274515';
+    //var timestamp = Math.round(+new Date() / 1000);
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
+    I.haveSetting('io.ox/calendar//chronos/allowAttendeeEditsByDefault', true);
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+    //Create Appointment
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+    I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: testrailID,
+        location: testrailID,
+        description: testrailID,
+        attendeePrivileges: 'MODIFY',
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        attendees: [
+            {
+                partStat: 'ACCEPTED',
+                entity: users[1].userdata.id
+            }
+        ]
+    }, { user: users[0] });
+    I.login('app=io.ox/calendar', { user: users[1] });
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.clickToolbar('Today');
+    I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
+    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.waitForElement('.io-ox-calendar-edit.container');
+    I.waitForVisible('.io-ox-calendar-edit.container');
+    I.waitForElement('.disabled.attendee-change-checkbox', 5);
+    I.logout();
+});
+
+Scenario('[C274484] Attendees can change the appointment', async function (I, users) {
+    const moment = require('moment');
+    let testrailID = 'C274484';
+    var timestamp = Math.round(+new Date() / 1000);
+    I.haveSetting('io.ox/core//autoOpenNotification', false, { user: users[1] });
+    I.haveSetting('io.ox/core//showDesktopNotifications', false, { user: users[1] });
+    I.haveSetting('io.ox/calendar//chronos/allowAttendeeEditsByDefault', true, { user: users[1] });
+    I.haveSetting('io.ox/calendar//viewView', 'week:week', { user: users[1] });
+    //Create Appointment
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+    I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: testrailID,
+        location: testrailID,
+        description: testrailID,
+        attendeePrivileges: 'MODIFY',
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        attendees: [
+            {
+                partStat: 'ACCEPTED',
+                entity: users[1].userdata.id
+            }
+        ]
+    }, { user: users[0] });
+    I.login('app=io.ox/calendar', { user: users[1] });
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.clickToolbar('Today');
+    I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
+    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.waitForElement('.io-ox-calendar-edit.container');
+    I.waitForVisible('.io-ox-calendar-edit.container');
+    I.fillField('.io-ox-calendar-edit [name="description"]', timestamp);
+    I.click('Save');
+    I.logout();
+    I.login('app=io.ox/calendar', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.clickToolbar('Today');
+    I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
+    I.waitForText(timestamp, 5, '.io-ox-sidepopup-pane .calendar-detail .note');
 });
