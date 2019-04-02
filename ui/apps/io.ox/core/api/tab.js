@@ -468,7 +468,7 @@ define('io.ox/core/api/tab', [
                 case 'propagateLogout':
                     if (ox.signin) return;
                     TabSession.events.trigger('before:propagatedLogout');
-                    require('io.ox/core/main').logout({ force: true, skipSessionLogout: true });
+                    require('io.ox/core/main').logout({ force: true, skipSessionLogout: true, autologout: data.parameters && data.parameters.autologout });
                     break;
                 case 'propagateLogin':
                     if (ox.session) return;
@@ -587,8 +587,8 @@ define('io.ox/core/api/tab', [
     /**
      * Send a message to other tabs to logout these tabs
      */
-    TabSession.propagateLogout = function () {
-        TabSession.propagate('propagateLogout', {});
+    TabSession.propagateLogout = function (options) {
+        TabSession.propagate('propagateLogout', options);
     };
 
     /**
