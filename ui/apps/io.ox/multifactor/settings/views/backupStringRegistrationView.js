@@ -84,7 +84,7 @@ define('io.ox/multifactor/settings/views/backupStringRegistrationView', [
             index: INDEX += 100,
             id: 'selection',
             render: function (baton) {
-                var div = $('<div class="multifactorRecoveryCodeDiv">');
+                var div = $('<div class="multifactorRecoveryCodeDiv selectable-text">');
                 var resp = format(baton.model.get('resp').sharedSecret);
                 div.append(resp);
                 this.$body.append(div);
