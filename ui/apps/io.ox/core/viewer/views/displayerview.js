@@ -267,6 +267,9 @@ define('io.ox/core/viewer/views/displayerview', [
                 console.warn('DisplayerView.createSlides() - some errors occured:', arguments);
             });
 
+            // append bottom toolbar (used to diplay upload progress bars)
+            this.$el.append($('<div class="bottom toolbar">'));
+
             return this;
         },
 
