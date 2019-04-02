@@ -909,3 +909,48 @@ Scenario('[C7430] Create appointment via Icon', async function (I) {
 
     await checkInAllViews(I, 'Einkaufen', 'Wursttheke');
 });
+
+Scenario('[C7431] Create appointment via doubleclick', async function (I) {
+
+    I.login('app=io.ox/calendar');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    var createInPerspective = async function (perspective) {
+
+        I.clickToolbar('View');
+        I.click(perspective, '.smart-dropdown-container');
+        I.wait(1);
+        // there are 48 timeslots use 25th here so we can check for 50% top position later on. Makes this test way easier
+        I.doubleClick('.io-ox-pagecontroller.current .day .timeslot:nth-child(25)');
+        I.waitForVisible('.io-ox-calendar-edit-window');
+
+        I.fillField('Subject', 'Todesstern testen');
+        I.fillField('Location', 'Alderaan');
+
+        I.click('Create');
+        I.waitForVisible('.appointment');
+        var value = await I.grabAttributeFrom('.io-ox-pagecontroller.current .appointment', 'style');
+        expect(value[0]).to.include('top: 50%');
+        await I.removeAllAppointments();
+    };
+
+    await createInPerspective('Day');
+    await createInPerspective('Workweek');
+    await createInPerspective('Week');
+
+    //month is special, there are no timeslots etc
+    I.clickToolbar('View');
+    I.click('Month', '.smart-dropdown-container');
+    I.wait(1);
+    // there are 48 timeslots use 25th here so we can check for 50% top position later on. Makes this test way easier
+    I.doubleClick('.io-ox-pagecontroller.current .day .list');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.fillField('Subject', 'Todesstern testen');
+    I.fillField('Location', 'Alderaan');
+
+    I.click('Create');
+    I.waitForVisible('.appointment');
+
+    I.logout();
+});
