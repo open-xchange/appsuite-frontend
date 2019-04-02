@@ -33,3 +33,22 @@ Scenario('[C237267] Check if specific apps open as floating windows @contentRevi
         I.click('[data-action=close]');
     });
 });
+
+Scenario('[C237269] Toggle display styles of floating windows @contentReview', function (I) {
+    I.login(['app=io.ox/tasks']);
+    I.waitForVisible('.io-ox-tasks-window');
+
+    I.clickToolbar('New');
+    I.waitForVisible('.floating-window');
+
+    I.click('[data-action=maximize]');
+    I.waitForVisible('.floating-window.maximized');
+
+    I.click('[data-action=normalize]');
+    I.waitForVisible('.floating-window.normal');
+
+    I.click('[data-action=minimize]');
+    I.wait(1);
+    I.dontSeeElement('.floating-window');
+    I.waitForVisible('[data-action=restore]');
+});
