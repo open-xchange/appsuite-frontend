@@ -885,3 +885,27 @@ Scenario('[C7428] Create appointment with internal participants', async function
     I.openApp('Mail');
     I.waitForText('New appointment: Einkaufen');
 });
+
+Scenario('[C7430] Create appointment via Icon', async function (I) {
+
+    I.login('app=io.ox/calendar&perspective="week:day"');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.fillField('Subject', 'Einkaufen');
+    I.fillField('Location', 'Wursttheke');
+
+    I.click('[data-attribute="startDate"] .datepicker-day-field');
+    I.pressKey(['Control', 'a']);
+    I.pressKey(moment().add(1, 'day').format('M/D/YYYY'));
+    I.pressKey('Enter');
+
+    I.click('~Start time');
+    I.click('12:00 PM', 'fieldset[data-attribute="startDate"]');
+
+    I.click('Create');
+
+    await checkInAllViews(I, 'Einkaufen', 'Wursttheke');
+});
