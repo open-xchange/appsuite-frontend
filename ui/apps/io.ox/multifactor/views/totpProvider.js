@@ -99,7 +99,7 @@ define('io.ox/multifactor/views/totpProvider', [
                 var help = new HelpLink({
                     base: 'help',
                     iconClass: 'mfHelp fa-question-circle fa',
-                    href: 'ox.appsuite.user.sect.multifactor.totp.html',
+                    href: 'ox.appsuite.user.sect.security.multifactor.authenticator.html ',
                     tabindex: '-1',
                     simple: !ox.ui.createApp,  // If ui not fully loaded, simple help only
                     metrics: ox.ui.createApp !== undefined

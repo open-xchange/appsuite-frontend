@@ -192,7 +192,8 @@ define('io.ox/files/settings/pane', [
             render: function () {
 
                 var retentionDays = settings.get('features/autodelete/retentionDays'),
-                    maxVersions = settings.get('features/autodelete/maxVersions');
+                    maxVersions = settings.get('features/autodelete/maxVersions'),
+                    editable = settings.get('features/autodelete/editable');
 
                 // disabled
                 if (!capabilities.has('autodelete_file_versions')) {
@@ -243,7 +244,10 @@ define('io.ox/files/settings/pane', [
                         summaryContainer.append(this.getSummary())
                     )
                 );
-
+                if (!editable) {
+                    this.$el.find('#settings-features\\/autodelete\\/retentionDays').attr('disabled', true);
+                    this.$el.find('#settings-features\\/autodelete\\/maxVersions').attr('disabled', true);
+                }
                 this.listenTo(settings, 'change:features/autodelete/maxVersions change:features/autodelete/retentionDays', function () {
                     summaryContainer.empty().append(this.getSummary());
                 }).bind(this);

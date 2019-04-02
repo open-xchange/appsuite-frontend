@@ -96,10 +96,12 @@ define('io.ox/files/actions', [
         if (!_.intersection(cids, selection.get()).length) return;
         // set the direction for dodge function
         selection.getPosition();
+        // save selected items before change the selection (dodge)
+        var selectionItems = selection.getItems().filter('.selected');
         // change selection
         selection.dodge();
         // remove all DOM elements of previous selection
-        _(selection.getItems().filter('.selected')).invoke('remove');
+        _(selectionItems).invoke('remove');
     }
 
     var Action = actionsUtil.Action;

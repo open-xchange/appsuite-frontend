@@ -32,7 +32,7 @@ define('io.ox/multifactor/settings', [
             _.extend(this, {
                 'virtual/settings/io.ox/multifactor': {
                     base: 'help',
-                    target: 'ox.appsuite.user.sect.multifactor.settings.html'
+                    target: 'ox.appsuite.user.sect.security.multifactor.settings.html'
                 }
             });
         }

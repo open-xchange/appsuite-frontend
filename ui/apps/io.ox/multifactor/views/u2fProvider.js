@@ -80,7 +80,7 @@ define('io.ox/multifactor/views/u2fProvider', [
                 var help = new HelpLink({
                     base: 'help',
                     iconClass: 'mfHelp fa-question-circle fa',
-                    href: 'ox.appsuite.user.sect.multifactor.u2f.html',
+                    href: 'ox.appsuite.user.sect.security.multifactor.securitykey.html',
                     tabindex: '-1',
                     simple: !ox.ui.createApp,  // If ui not fully loaded, simple help only
                     metrics: ox.ui.createApp !== undefined
