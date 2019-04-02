@@ -38,3 +38,33 @@ Scenario('[C45021] Generate simple link for sharing', async function (I) {
     I.dontSee('Documents', '.list-view');
     I.see('Music', '.folder-tree .selected');
 });
+
+Scenario('[C252159] Generate link for sharing including subfolders', async function (I) {
+    I.login('app=io.ox/files');
+    I.click('My files', '.folder-tree');
+    I.selectFolder('Music');
+    I.clickToolbar('New');
+    I.click('Add new folder');
+    I.waitForText('Add new folder');
+    I.fillField('Folder name', 'A subfolder');
+    I.click('Add');
+    I.waitToHide('.modal');
+    I.click('New');
+    I.click('Add new folder');
+    I.waitForText('Add new folder');
+    I.fillField('Folder name', 'Second subfolder');
+    I.click('Add');
+    I.selectFolder('My files');
+    I.click('[aria-label^="Music"]', '.list-view');
+    I.clickToolbar('Share');
+    I.click('Create sharing link');
+    I.waitForText('Sharing link created for folder');
+    I.seeCheckboxIsChecked('Share with subfolders');
+    const [url] = await I.grabValueFrom('.share-wizard input[type="text"]');
+    I.click('Close');
+    I.logout();
+    I.amOnPage(url);
+    I.waitForText('A subfolder', 5, '.list-view');
+    I.seeNumberOfVisibleElements('.list-view li.list-item', 2);
+    I.see('Second subfolder');
+});
