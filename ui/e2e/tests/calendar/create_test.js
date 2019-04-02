@@ -850,3 +850,38 @@ Scenario('[C274484] Attendees can change the appointment', async function (I, us
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
     I.waitForText(timestamp, 5, '.io-ox-sidepopup-pane .calendar-detail .note');
 });
+
+Scenario('[C7428] Create appointment with internal participants', async function (I, users) {
+
+    I.login('app=io.ox/calendar&perspective="week:day"');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.fillField('Subject', 'Einkaufen');
+    I.fillField('Location', 'Wursttheke');
+
+    I.click('~Select contacts');
+    I.waitForVisible('.addressbook-popup', 5);
+    I.waitForFocus('.addressbook-popup .search-field');
+    I.fillField('.addressbook-popup .search-field', users[1].get('name'));
+    I.wait(2);
+    I.click('.addressbook-popup li:first-child');
+    I.wait(2);
+    I.click('Select');
+    I.waitToHide('.addressbook-popup');
+    I.waitForText(users[1].get('name'), 5, '.participant-email');
+    I.click('Create');
+
+    await checkInAllViews(I, 'Einkaufen', 'Wursttheke');
+    I.logout();
+
+    I.login('app=io.ox/calendar&perspective="week:day"', { user: users[1] });
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    await checkInAllViews(I, 'Einkaufen', 'Wursttheke');
+
+    I.openApp('Mail');
+    I.waitForText('New appointment: Einkaufen');
+});
