@@ -114,8 +114,8 @@ define('io.ox/multifactor/settings/views/addDevice', [
                         .attr('list', 'addresses');
                     var lang = navigator.languages ? navigator.languages[0] : navigator.language;
                     if (lang.indexOf('-') > 0) lang = lang.substring(lang.indexOf('-') + 1);
-                    if (codes.hash[lang]) {
-                        input.val(codes.hash[lang].code).trigger('change');
+                    if (codes.get(lang)) {
+                        select.$el.find('option:contains("' + codes.get(lang).label + '")').prop('selected', 'selected');
                     }
                     div.append(input);
                 });
@@ -169,7 +169,9 @@ define('io.ox/multifactor/settings/views/addDevice', [
                     regView.open(provider, resp, def);
                 });
             }
-        } else {
+        }
+
+        if (!resp) {
             //#. Catch all error when trying to set up a new 2step device
             showError(gt('Something went wrong.  Please try again later.'));
         }
