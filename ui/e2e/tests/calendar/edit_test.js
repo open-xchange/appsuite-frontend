@@ -333,6 +333,55 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author', asyn
 
 });
 
+Scenario('[C7470] Delete a recurring appointment', async function (I) {
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
+    const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    const folder = await I.haveFolder('New calendar', 'event', defaultFolderId);
+    const time = moment().startOf('week').add(1, 'days').add(10, 'hours');
+    await I.haveAppointment({
+        folder:  folder.data,
+        summary: 'Testappointment',
+        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        rrule: 'FREQ=DAILY'
+    });
+
+    I.login('app=io.ox/calendar');
+    I.waitForText('Testappointment');
+    I.wait(0.2); // gentle wait for event listeners
+
+    // open all views and load the appointments there
+    ['Week', 'Day', 'Month', 'List', 'Workweek'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForVisible('.appointment', undefined, '.page.current');
+    });
+
+    I.click('.appointment', '.page.current');
+    I.waitForVisible('.io-ox-sidepopup');
+
+    I.retry(5).click('Delete');
+
+    I.waitForText('Do you want to delete the whole series or just this appointment within the series?');
+    I.click('Series');
+
+    I.waitForDetached('.io-ox-sidepopup');
+
+    I.waitForInvisible('.appointment', undefined, '.page.current');
+    ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.dontSee('.appointment', '.page.current');
+    });
+
+    I.logout();
+
+});
+
 Scenario('[C274402] Change organizer of appointment with internal attendees', async function (I, users) {
 
     await I.haveSetting({
