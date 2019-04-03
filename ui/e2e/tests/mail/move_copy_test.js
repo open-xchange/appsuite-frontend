@@ -45,6 +45,10 @@ const A = {
         I.waitForDetached('[data-point="io.ox/core/folder/add-popup"]');
         I.seeTextEquals(folder, '.folder-picker-dialog .selected .folder-label');
     },
+    isEmpty: function (I, folder) {
+        I.selectFolder(folder);
+        I.seeTextEquals('Empty', '.list-view .notification');
+    },
     select: function (I, mode) {
         I.click('.io-ox-mail-window .leftside ul li.list-item');
         I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
@@ -83,6 +87,7 @@ Scenario('[C114349] Create folder within move dialog', async function (I, users)
     A.createFolderInDialog(I, folder);
     I.click('Move', '.folder-picker-dialog');
 
+    A.isEmpty(I, 'Inbox');
     A.check(I, folder, folder);
 
     I.logout();
