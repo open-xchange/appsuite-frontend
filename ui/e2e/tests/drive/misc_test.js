@@ -70,3 +70,71 @@ Scenario('[C114352] Create folder in copy/move dialog', async (I, users) => {
     I.see('testdocument.odt');
 
 });
+
+Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', async (I, users) => {
+
+    /*
+     * Preconditions:
+     *
+     * The following folder structure is available in Drive
+     *
+     * └─ My files
+     * ---└─ A
+     * ------└─ B
+     * ---------└─ C
+     *
+     */
+
+    const myFiles = await I.grabDefaultFolder('infostore', { user: users[0] });
+
+    const folderA = await I.haveFolder('folderA', 'infostore', myFiles);
+    const folderB = await I.haveFolder('folderB', 'infostore', folderA.data);
+    await I.haveFolder('folderC', 'infostore', folderB.data);
+
+    // 1. Login
+
+    I.login();
+
+    // 2. Go to Drive
+
+    I.openApp('Drive');
+
+    // 3. Create a sharing link for folder 'C'
+
+    I.doubleClick('.list-item[aria-label*="folderA"]');
+    I.waitForText('folderB');
+
+    I.doubleClick('.list-item[aria-label*="folderB"]');
+    I.waitForText('folderC');
+
+    I.click('.list-item[aria-label*="folderC"]');
+
+    I.click('Share');
+    I.waitForVisible('.dropdown-menu');
+
+    I.click('Create sharing link');
+    I.waitForText('Sharing link created for folder');
+
+    const [url] = await I.grabValueFrom('.share-wizard input[type="text"]');
+
+    I.click('Close');
+
+    I.logout();
+
+    // 4. Open the sharing link in another browser tab
+
+    I.amOnPage(url);
+
+    I.waitForVisible('.breadcrumb-view');
+
+    I.dontSee('folderA', '.breadcrumb-view');
+    I.dontSee('folderB', '.breadcrumb-view');
+    I.see('folderC', '.breadcrumb-view');
+
+    I.waitForVisible('.folder-tree');
+
+    I.dontSee('folderA', '.folder-tree');
+    I.dontSee('folderB', '.folder-tree');
+    I.see('folderC', '.folder-tree');
+
+});
