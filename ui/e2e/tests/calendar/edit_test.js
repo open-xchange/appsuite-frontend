@@ -137,7 +137,7 @@ Scenario('[C234659] Split appointment series', async function (I, users) {
 
     I.click('~Date (M/D/YYYY)');
     I.pressKey(['Control', 'a']);
-    I.pressKey(moment().startOf('week').add('8', 'day').format('l'));
+    I.pressKey(moment().startOf('week').add(1, 'day').format('l'));
     I.pressKey('Enter');
 
     I.click('~Start time');
@@ -158,7 +158,6 @@ Scenario('[C234659] Split appointment series', async function (I, users) {
     I.click('Create', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
-    I.click('~Next Week');
     I.waitForText('Testsubject');
     I.seeNumberOfElements('.appointment', 5);
 
@@ -187,6 +186,86 @@ Scenario('[C234659] Split appointment series', async function (I, users) {
     I.click('(//div[@class="appointment-content"])[2]');
     I.waitForVisible('.io-ox-sidepopup');
     I.see(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, '.io-ox-sidepopup');
+});
+
+Scenario('[C234679] Exceptions changes on series modification', async function (I) {
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
+    I.login('app=io.ox/calendar');
+
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.fillField('Subject', 'Testsubject');
+
+    I.click('~Date (M/D/YYYY)');
+    I.pressKey(['Control', 'a']);
+    I.pressKey(moment().startOf('week').add(1, 'day').format('l'));
+    I.pressKey('Enter');
+
+    I.click('~Start time');
+    I.click('4:00 PM');
+
+    I.click('Repeat', '.io-ox-calendar-edit-window');
+    I.click('Every Monday.');
+
+    I.waitForElement('.modal-dialog');
+
+    I.selectOption('.modal-dialog [name="recurrence_type"]', 'Daily');
+
+    I.click('Apply', '.modal-dialog');
+    I.waitForDetached('.modal-dialog');
+
+    I.click('Create', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+
+    // assert existance
+    I.waitForText('Testsubject');
+    I.seeNumberOfElements('.appointment', 5);
+
+    // click on the second .appointment and edit it
+    I.click('(//div[@class="appointment-content"])[2]');
+    I.waitForVisible('.io-ox-sidepopup');
+
+    I.click('Edit');
+    I.waitForText('Do you want to edit this and all future appointments or just this appointment within the series?');
+    I.click('This appointment');
+
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.click('~Start time');
+    I.click('5:00 PM');
+
+    I.click('Save', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+
+    // click on the first .appointment and edit it
+    I.click('.appointment');
+    I.waitForVisible('.io-ox-sidepopup');
+
+    I.click('Edit');
+    I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
+    I.click('Series');
+
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.fillField('Subject', 'Changedsubject');
+
+    I.click('Save', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+
+    I.click('.appointment');
+    I.waitForVisible('.io-ox-sidepopup');
+    I.see('Changedsubject', '.io-ox-sidepopup');
+    I.click('~Close', '.io-ox-sidepopup');
+
+    I.click('(//div[@class="appointment-content"])[2]');
+    I.waitForVisible('.io-ox-sidepopup');
+    I.see('Changedsubject', '.io-ox-sidepopup');
+
 });
 
 Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, users) {
