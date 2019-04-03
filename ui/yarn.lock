@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@open-xchange/moment-interval@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@open-xchange/moment-interval/-/moment-interval-0.0.2.tgz#22e404dbaa31925b1e7c32e8c1b3b27f9e0359b2"
+  integrity sha512-ZtlYjPVY/4hk5D8I0mmTb2rw0cgg3mT/H6tMFyFgKsm14+8/cbKZ8/MSpGJtsBNyqH7DnSYjyWl/f6HVRRK5yw==
+
 "@open-xchange/tinymce@4.6.3-7":
   version "4.6.3-7"
   resolved "https://registry.yarnpkg.com/@open-xchange/tinymce/-/tinymce-4.6.3-7.tgz#e91c957d9957d27833307de9290200c1fabb918f"

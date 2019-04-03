@@ -89,7 +89,11 @@ define('io.ox/core/settings/pane', [
                 .text(reloadHint + ' ')
                 .css('margin-bottom', '24px')
                 .append(
-                    $('<a href="#" role="button" data-action="reload">').text(gt('Reload page')).on('click', reload)
+                    $('<a href="#" role="button" data-action="reload">').text(
+                        AUTOLOGIN ?
+                            gt('Reload page') :
+                            gt('Relogin')
+                    ).on('click', reload)
                 )
             );
 

@@ -1,6 +1,6 @@
 {
   "name": "open-xchange-appsuite",
-  "version": "7.8.4-49",
+  "version": "7.8.4-50",
   "repository": {
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
@@ -57,6 +57,7 @@
   },
   "dependencies": {
     "@open-xchange/tinymce": "4.6.3-7",
-    "tinymce": "4.6.7"
+    "tinymce": "4.6.7",
+    "@open-xchange/moment-interval": "0.0.2"
   }
 }
