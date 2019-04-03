@@ -990,3 +990,16 @@ Scenario('[C256455] Create all-day appointment via date label', async function (
 
     I.logout();
 });
+
+Scenario('[C7436] Create appointment without any infos', async function (I) {
+
+    I.login('app=io.ox/calendar');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.click('Create');
+
+    I.see('Please enter a value');
+});
