@@ -380,6 +380,62 @@ Scenario('[C274402] Change organizer of appointment with internal attendees', as
     I.waitForText(`Organizer ${users[1].userdata.display_name}`, '.io-ox-sidepopup');
 });
 
+Scenario('[274409] Change organizer of series with internal attendees', async function (I, users) {
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true, 'chronos/allowChangeOfOrganizer': true }
+    });
+    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    const time = moment().startOf('week').add(1, 'day').add(10, 'hours');
+    await I.haveAppointment({
+        folder:  folder,
+        summary: 'Testsubject',
+        location: 'Testlocation',
+        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        attendees: [{ entity: users[0].userdata.id }, { entity: users[1].userdata.id }],
+        rrule: 'FREQ=DAILY;COUNT=5'
+    });
+    I.login('app=io.ox/calendar');
+
+    I.waitForText('Testsubject');
+    I.click('(//div[@class="appointment-content"])[2]');
+    I.waitForVisible('.io-ox-sidepopup');
+    I.retry(5).click('Details');
+    I.see(`Organizer ${users[0].userdata.display_name}`, '.io-ox-sidepopup');
+
+    I.wait(0.2); // gently wait for event listeners
+    I.click('~More actions', '.io-ox-sidepopup');
+    I.click('Change organizer');
+
+    I.waitForText('Do you want to edit this and all future appointments or the whole series?');
+    I.click('All future appointments');
+
+    I.waitForVisible('.modal-dialog');
+    I.fillField('Select new organizer', users[1].userdata.primaryEmail);
+    I.waitForText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, undefined, '.tt-dropdown-menu');
+    I.pressKey('ArrowDown');
+    I.pressKey('Enter');
+
+    I.fillField('Add a message to the notification email for the other participants.', 'Testcomment');
+    I.click('Ok');
+    I.waitForDetached('.modal-dialog');
+
+    I.click('~Close', '.io-ox-sidepopup');
+    I.waitForDetached('.io-ox-sidepopup');
+
+    I.click('(//div[@class="appointment-content"])[2]');
+    I.waitForVisible('.io-ox-sidepopup');
+    I.click('Details');
+    I.waitForText(`Organizer ${users[1].userdata.display_name}`, '.io-ox-sidepopup');
+    I.click('~Close', '.io-ox-sidepopup');
+
+    I.click('.appointment');
+    I.waitForVisible('.io-ox-sidepopup');
+    I.retry(5).click('Details');
+    I.waitForText(`Organizer ${users[0].userdata.display_name}`, '.io-ox-sidepopup');
+});
+
 Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, users) {
     const
         Moment = require('moment'),
