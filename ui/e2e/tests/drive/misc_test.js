@@ -138,3 +138,84 @@ Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', a
     I.see('folderC', '.folder-tree');
 
 });
+
+Scenario('[C257247] Restore deleted items', async (I, users) => {
+
+    // Preconditions: At least one file and one folder in Drive
+
+    const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
+
+    I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');
+    I.haveFolder('testfolder', 'infostore', infostoreFolderID);
+
+    I.login('app=io.ox/files');
+
+    // 1. Delete the folder
+
+    I.click('.list-item[aria-label*="testfolder"]');
+    I.waitForVisible('~Delete');
+
+    I.click('~Delete');
+    I.waitForVisible('.io-ox-dialog-popup');
+
+    I.click('Delete');
+    I.waitForInvisible('.io-ox-dialog-popup');
+    I.dontSee('testfolder');
+
+    // 2. Switch to Trash, select the previously deleted folder and use "restore" from the toolbar Expected Result
+
+    I.selectFolder('Trash');
+    I.wait(1); // Wait for thre list view to refresh
+    I.see('testfolder');
+
+    I.click('.list-item[aria-label*="testfolder"]');
+    I.waitForVisible('~Details');
+
+    I.click('[data-original-title="More actions"]');
+    I.waitForVisible('.smart-dropdown-container');
+    I.see('Restore');
+
+    I.click('Restore');
+    I.waitForVisible('.io-ox-alert-info');
+    I.see('Restored into folder:');
+    I.see('Drive/My files');
+    I.waitForInvisible('.io-ox-alert-info');
+
+    I.selectFolder('My files');
+    I.wait(1); // Wait for thre list view to refresh
+    I.see('testfolder');
+
+    // 3. Repeat Step 1 and 2 with a file.
+
+    I.click('.list-item[aria-label*="testdocument.odt"]');
+    I.waitForVisible('~Delete');
+
+    I.click('~Delete');
+    I.waitForVisible('.io-ox-dialog-popup');
+
+    I.click('Delete');
+    I.waitForInvisible('.io-ox-dialog-popup');
+    I.dontSee('testdocument.odt');
+
+    I.selectFolder('Trash');
+    I.wait(1); // Wait for thre list view to refresh
+    I.see('testdocument.odt');
+
+    I.click('.list-item[aria-label*="testdocument.odt"]');
+    I.waitForVisible('~Details');
+
+    I.click('[data-original-title="More actions"]');
+    I.waitForVisible('.smart-dropdown-container');
+    I.see('Restore');
+
+    I.click('Restore');
+    I.waitForVisible('.io-ox-alert-info');
+    I.see('Restored into folder:');
+    I.see('Drive/My files');
+    I.waitForInvisible('.io-ox-alert-info');
+
+    I.selectFolder('My files');
+    I.wait(1); // Wait for thre list view to refresh
+    I.see('testdocument.odt');
+
+});
