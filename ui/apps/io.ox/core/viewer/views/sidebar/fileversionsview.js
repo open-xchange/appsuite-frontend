@@ -120,7 +120,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 Util.setClippedLabel($toggle, baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename);
             });
 
-            dropdown.setSelection([baton.data], _(baton).pick('data', 'isViewer', 'viewerEvents'));
+            dropdown.setSelection([baton.data], _(baton).pick('data', 'isViewer', 'viewerEvents', 'latestVersion'));
 
             this.append(
                 $('<td class="version-content">').append(dropdown.$el)
