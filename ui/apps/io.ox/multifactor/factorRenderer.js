@@ -51,7 +51,6 @@ define('io.ox/multifactor/factorRenderer', [
                     console.log('U2F not compatible with this browser');
                     return;  //  If browser not compatible, and being used for auth, then don't display
                 }
-                if (!selectable) device.name = '';  //  U2F devices grouped together.  We don't want to specify device names unless deleting/etc
                 if (!selectable && duplicates.u2f) return;  // Only display one u2f device when authenticating
                 duplicates.u2f = true;
                 return createLi(constants.U2F_ICON, gt('Security Token'), device, selectable);
