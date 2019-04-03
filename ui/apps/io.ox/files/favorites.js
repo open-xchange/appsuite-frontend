@@ -117,7 +117,7 @@ define('io.ox/files/favorites', [
                 returnList.push(file);
             });
 
-            collection.add(returnList);
+            collection.reset(returnList);
             collection.fetched = true;
             collection.expired = false;
 
