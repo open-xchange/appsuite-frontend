@@ -110,6 +110,72 @@ Scenario('[C207509] Year view', async (I) => {
     // Expected Result: The respective month will be opened in month view
     I.waitForVisible('.monthview-container');
     I.see('January', '.monthview-container');
+});
 
-    I.logout();
+Scenario('[C236795] Visibility Flags', (I) => {
+    let createAppointment = (subject, startDate, startTime, visibility) => {
+
+        I.clickToolbar('New');
+        I.waitForVisible('.io-ox-calendar-edit-window');
+
+        I.fillField('Subject', subject);
+
+        I.click('~Date (M/D/YYYY)');
+        I.pressKey(['Control', 'a']);
+        I.pressKey(startDate);
+        I.pressKey('Enter');
+
+        I.click('~Start time');
+        I.click(startTime);
+
+        I.scrollTo('.io-ox-calendar-edit select');
+        // PUBLIC => Standard
+        // CONFIDENTIAL => Private
+        // PRIVATE => Secret
+        I.selectOption('.io-ox-calendar-edit select', visibility);
+
+        // save
+        I.click('Create', '.io-ox-calendar-edit-window');
+        I.waitForDetached('.io-ox-calendar-edit-window', 5);
+        I.waitForVisible('.io-ox-sidepopup');
+        I.click('~Close', '.io-ox-sidepopup');
+        I.waitForDetached('.io-ox-sidepopup');
+
+    };
+
+    let getAppointmentLocator = function (subject, visibilityLabel) {
+        let appointmentLocator = locate('.appointment')
+            .withDescendant(
+                locate('div.title')
+                    .withText(subject))
+            .inside('.io-ox-pagecontroller.current .scrollpane');
+        if (!visibilityLabel) {
+            return appointmentLocator;
+        }
+        return appointmentLocator.withDescendant(locate('span').withAttr({ title: visibilityLabel }));
+    };
+
+    let checkAppointment = (subject, visibility, time) => {
+        createAppointment(subject, moment().startOf('isoWeek').format('M/D/YYYY'), time, visibility);
+        // PRIVATE => Private
+        // CONFIDENTIAL => Secret
+        let visibilityLabel;
+        if (visibility === 'PRIVATE') {
+            visibilityLabel = 'Private';
+        } else if (visibility === 'CONFIDENTIAL') visibilityLabel = 'Confidential';
+        // Expected Result: You created 3 appointsments with visivilities of Public, Private, Secret
+        // Each visibility is displayed as in the example
+        I.seeElement(getAppointmentLocator(subject, visibilityLabel));
+    };
+
+    I.login(['app=io.ox/calendar']);
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.clickToolbar('View');
+    I.click('Week', '.smart-dropdown-container');
+
+    // 1. Create 3 appointments:
+    // Set 1 of the 3 different visibilities to each appointment
+    checkAppointment('Standard visibility', 'PUBLIC', '12:00 PM');
+    checkAppointment('Private visibility', 'CONFIDENTIAL', '1:00 PM');
+    checkAppointment('Secret visibility', 'PRIVATE', '2:00 PM');
 });
