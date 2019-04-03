@@ -1003,3 +1003,62 @@ Scenario('[C7436] Create appointment without any infos', async function (I) {
 
     I.see('Please enter a value');
 });
+
+
+Scenario('[C7440] Start/End date autoadjustment', async function (I) {
+
+    I.login('app=io.ox/calendar');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    I.clickToolbar('View');
+    I.click('Day', '.smart-dropdown-container');
+    I.wait(1);
+
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    // strings are usually the same, but if this test is run arround midnight, we may get a one day difference, so we must calculate that
+    var [startString] = await I.grabValueFrom('[data-attribute="startDate"] .datepicker-day-field'),
+        [endString] = await I.grabValueFrom('[data-attribute="endDate"] .datepicker-day-field'),
+        startDate = moment(startString, 'M/D/YYYY'),
+        diff = startDate.diff(moment(endString, 'M/D/YYYY'), 'days'),
+        check = async function (direction, toChange) {
+            // start today
+            I.click('[data-attribute="' + toChange + '"] .datepicker-day-field');
+            I.click('.date-picker.open .btn-today');
+            // change month
+            I.click('[data-attribute="' + toChange + '"] .datepicker-day-field');
+            I.click('.date-picker.open .btn-' + direction);
+            // quite funny selector but this makes sure we don't click on one of the greyed out days of last month (:not selector does not work...)
+            I.click('.date-picker.open tr:first-child .date:last-child');
+
+            I.wait(1);
+
+            //check if the fields are updated to the expected values
+            [startString] = await I.grabValueFrom('[data-attribute="startDate"] .datepicker-day-field');
+            [endString] = await I.grabValueFrom('[data-attribute="endDate"] .datepicker-day-field');
+            expect(moment(startString, 'M/D/YYYY').add(diff, 'days').format('M/D/YYYY')).to.equal(endString);
+        };
+
+
+    await check('next', 'startDate');
+    await check('prev', 'startDate');
+    await check('prev', 'endDate');
+
+    // end date next is special, startDate must stay the same endDate must be updated
+
+    // start today
+    I.click('[data-attribute="endDate"] .datepicker-day-field');
+    I.click('.date-picker.open .btn-today');
+    // change month
+    I.click('[data-attribute="endDate"] .datepicker-day-field');
+    I.click('.date-picker.open .btn-next');
+    // quite funny selector but this makes sure we don't click on one of the greyed out days of last month (:not selector does not work...)
+    I.click('.date-picker.open tr:first-child .date:last-child');
+
+    I.wait(1);
+    var [newStartString] = await I.grabValueFrom('[data-attribute="startDate"] .datepicker-day-field'),
+        [newEndString] = await I.grabValueFrom('[data-attribute="endDate"] .datepicker-day-field');
+    expect(newStartString).to.equal(startString);
+    expect(newEndString).to.not.equal(endString);
+});
