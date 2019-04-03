@@ -68,3 +68,24 @@ Scenario('[C252159] Generate link for sharing including subfolders', async funct
     I.seeNumberOfVisibleElements('.list-view li.list-item', 2);
     I.see('Second subfolder');
 });
+
+Scenario('[C45022] Generate simple link for sharing with password', async function (I) {
+    I.login('app=io.ox/files');
+    I.click('My files', '.folder-tree');
+    I.selectFolder('Music');
+    I.clickToolbar('Share');
+    I.click('Create sharing link');
+    I.waitForText('Sharing link created for folder');
+    I.click('Password required');
+    I.seeCheckboxIsChecked('Password required');
+    I.fillField('Enter Password', 'CorrectHorseBatteryStaple');
+    const [url] = await I.grabValueFrom('.share-wizard input[type="text"]');
+    I.click('Close');
+    I.logout();
+    I.amOnPage(url);
+    I.waitForFocus('input[name="password"]');
+    I.fillField('Password', 'CorrectHorseBatteryStaple');
+    I.click('Sign in');
+    I.waitForElement('.list-view');
+    I.see('Music', '.folder-tree .selected');
+});
