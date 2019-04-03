@@ -1,7 +1,19 @@
+/**
+* This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+* LICENSE. This work is protected by copyright and/or other applicable
+* law. Any use of the work other than as authorized under this license
+* or copyright law is prohibited.
+*
+* http://creativecommons.org/licenses/by-nc-sa/2.5/
+* © 2019 OX Software GmbH, Germany. info@open-xchange.com
+*
+* @author Olena Stute <olena.stute@open-xchange.com>
+*/
+
 /// <reference path="../../steps.d.ts" />
 
 Feature('Portal');
- 
+
 Before(async (users) => {
     await users.create();
 });
@@ -9,7 +21,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7484] Remove a widget', async (I, users) => {
+Scenario('[C7488] [C7484] Add/Remove Inbox widget', async (I, users) => {
     let [user] = users;
     await I.haveMail({
         attachments: [{
@@ -26,7 +38,7 @@ Scenario('[C7484] Remove a widget', async (I, users) => {
 
     // clear the portal settings
     await I.haveSetting('io.ox/portal//widgets/user', '{}');
- 
+
     //Add Inbox widget to Portal
     I.login('app=io.ox/portal');
     I.waitForVisible('.io-ox-portal');
@@ -36,12 +48,16 @@ Scenario('[C7484] Remove a widget', async (I, users) => {
     I.waitForVisible('.io-ox-dialog-popup');
     I.click('Save');
 
-    // remove Inbox widget from portal
+    //Verify mail is shown in the list
     I.waitForElement('~Inbox');
+    I.waitForElement('.widget[aria-label="Inbox"] .subject');
+    I.see('Test subject', '.widget[aria-label="Inbox"]');
+
+    // remove Inbox widget from portal
     I.click('~Inbox, Disable widget');
-    I.waitForVisible({css: '.io-ox-dialog-popup'});
+    I.waitForVisible({ css: '.io-ox-dialog-popup' });
     I.click('Delete', '.io-ox-dialog-popup');
-    
+
     // verify that the widget is removed
     I.dontSee('~Inbox');
 
