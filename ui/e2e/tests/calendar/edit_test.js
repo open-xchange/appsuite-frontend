@@ -122,6 +122,73 @@ Scenario.skip('[C7465] Edit appointment in shared folder as author', async funct
     I.logout();
 });
 
+Scenario('[C234659] Split appointment series', async function (I, users) {
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
+    I.login('app=io.ox/calendar');
+
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.fillField('Subject', 'Testsubject');
+
+    I.click('~Date (M/D/YYYY)');
+    I.pressKey(['Control', 'a']);
+    I.pressKey(moment().startOf('week').add('8', 'day').format('l'));
+    I.pressKey('Enter');
+
+    I.click('~Start time');
+    I.click('4:00 PM');
+
+    I.click('Repeat', '.io-ox-calendar-edit-window');
+    I.click('Every Monday.');
+
+    I.waitForElement('.modal-dialog');
+
+    I.selectOption('.modal-dialog [name="recurrence_type"]', 'Daily');
+
+    I.click('Apply', '.modal-dialog');
+
+    I.waitForDetached('.modal-dialog');
+
+    // create
+    I.click('Create', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+
+    I.click('~Next Week');
+    I.waitForText('Testsubject');
+    I.seeNumberOfElements('.appointment', 5);
+
+    // click on the second .appointment
+    I.click('(//div[@class="appointment-content"])[2]');
+    I.waitForVisible('.io-ox-sidepopup');
+
+    I.click('Edit');
+    I.waitForText('Do you want to edit this and all future appointments or just this appointment within the series?');
+    I.click('All future appointments');
+
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.fillField('input.add-participant.tt-input', users[1].userdata.primaryEmail);
+    I.pressKey('Enter');
+
+    // save
+    I.click('Save', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+
+    I.click('.appointment');
+    I.waitForVisible('.io-ox-sidepopup');
+    I.dontSee(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, '.io-ox-sidepopup');
+    I.click('~Close', '.io-ox-sidepopup');
+
+    I.click('(//div[@class="appointment-content"])[2]');
+    I.waitForVisible('.io-ox-sidepopup');
+    I.see(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, '.io-ox-sidepopup');
+});
+
 Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, users) {
     const
         Moment = require('moment'),
