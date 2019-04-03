@@ -109,6 +109,7 @@ define('io.ox/tours/multifactor', [
             })
             .on('show', function () {
                 $('.modal-backdrop.in').css('opacity', '0.9');
+                $('.multifactorAuth').css('z-index', 10000); // Auth normally very top page.  Move below this dialog
             })
             .on('next', function () {
                 cancel();

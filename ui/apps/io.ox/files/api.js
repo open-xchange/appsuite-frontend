@@ -1681,11 +1681,7 @@ define('io.ox/files/api', [
                 appendColumns: false
             })
             .then(function () {
-                versions.filter(function (item) { return !item.current_version && parseInt(item.version, 10) < parseInt(file.version, 10); }).map(
-                    function (version) {
-                        return api.propagate('remove:version', _.extend(_.pick(file, 'id', 'folder_id'), { version: version.version }));
-                    }
-                );
+                api.propagate('refresh:file', _.pick(file, 'id', 'folder_id'));
             });
         },
 
@@ -1784,7 +1780,7 @@ define('io.ox/files/api', [
             api.versions.load(file, { cache: false });
             return http.resume().then(function (response) {
                 // explicitly return the file data
-                return response[0].data;
+                return _.isArray(response) ? response[0].data : false;
             });
         }
 

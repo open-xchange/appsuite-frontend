@@ -82,7 +82,6 @@ define('io.ox/core/main/logout', [
 
             function redirectAndRejectSafely(def, baton) {
                 try {
-                    // TODO propagate autologout parameter from other tabs
                     logoutRedirect(baton);
                 } finally {
                     def.reject();
@@ -90,9 +89,7 @@ define('io.ox/core/main/logout', [
             }
 
             require(['io.ox/core/api/tab'], function (TabAPI) {
-
                 TabAPI.TabHandling.setLoggingOutState();
-
                 // when logged out by other tab, just redirect to logout location and clear
                 if (baton.skipSessionLogout) {
                     try {
@@ -108,8 +105,8 @@ define('io.ox/core/main/logout', [
                 } else {
                     // require does catch errors, so we handle them to ensure a resolved deferred
                     try {
-                        // notify other tabs that a logout happend
-                        TabAPI.TabSession.propagateLogout();
+                        // notify other tabs that a logout happened
+                        TabAPI.TabSession.propagateLogout({ autologout: baton.autologout });
                     } catch (e) {
                         if (ox.debug) console.warn('propagate logout did not work', e);
                     } finally {
@@ -117,6 +114,7 @@ define('io.ox/core/main/logout', [
                     }
                 }
             });
+
             return def;
         }
     });
