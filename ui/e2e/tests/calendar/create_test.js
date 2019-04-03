@@ -951,6 +951,42 @@ Scenario('[C7431] Create appointment via doubleclick', async function (I) {
 
     I.click('Create');
     I.waitForVisible('.appointment');
+});
+
+Scenario('[C256455] Create all-day appointment via date label', async function (I) {
+
+    I.login('app=io.ox/calendar&perspective=week:week');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    // today is visible on calendar start, so we can just use the start of the current week to get the apps currently displayed time.
+    var startDate = moment().startOf('week');
+
+    var createOnfirstDay = async function () {
+        I.click('.io-ox-pagecontroller.current .weekday:first-child');
+        I.waitForVisible('.io-ox-calendar-edit-window');
+
+        I.fillField('Subject', 'Grillen');
+        I.fillField('Location', 'Olpe');
+
+        I.seeCheckboxIsChecked('[name="allDay"]');
+        I.seeInField('[data-attribute="startDate"] .datepicker-day-field', startDate.format('M/D/YYYY'));
+
+        I.click('Create');
+        I.waitForVisible('.appointment');
+        I.see('Grillen', '.io-ox-pagecontroller.current .appointment-panel');
+        I.seeCssPropertiesOnElements('.io-ox-pagecontroller.current .appointment-panel .appointment', { 'left': '0px' });
+
+        await I.removeAllAppointments();
+    };
+
+    await createOnfirstDay();
+
+    startDate.add(1, 'days');
+    I.clickToolbar('View');
+    I.click('Workweek', '.smart-dropdown-container');
+    I.wait(1);
+
+    await createOnfirstDay();
 
     I.logout();
 });
