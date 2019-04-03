@@ -268,6 +268,71 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
 
 });
 
+Scenario('[C7467] Delete recurring appointment in shared folder as author', async function (I, users) {
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
+    const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    const folder = await I.haveFolder('New calendar', 'event', defaultFolderId);
+    const time = moment().startOf('week').add(1, 'days').add(10, 'hours');
+    await I.haveAppointment({
+        folder:  folder.data,
+        summary: 'Testappointment',
+        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        rrule: 'FREQ=DAILY;COUNT=5'
+    });
+
+    // share folder for preconditions
+    // TODO should be part of the haveFolder helper
+    I.login('app=io.ox/calendar');
+
+    I.waitForText('New calendar');
+    I.rightClick('~New calendar');
+    I.waitForText('Permissions / Invite people');
+    I.wait(0.2); // Just wait a little extra for all event listeners
+    I.click('Permissions / Invite people');
+    I.waitForText('Permissions for folder "New calendar"');
+    I.pressKey(users[1].userdata.primaryEmail);
+    I.waitForText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, undefined, '.tt-dropdown-menu');
+    I.pressKey('ArrowDown');
+    I.pressKey('Enter');
+    I.click('Save');
+    I.waitForDetached('.share-permissions-dialog');
+
+    I.logout();
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    }, { user: users[1] });
+    I.login('app=io.ox/calendar', { user: users[1] });
+
+    // switch on New calendar
+    I.doubleClick('~Shared calendars');
+    I.click(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New calendar"] .color-label`);
+
+    I.waitForText('Testappointment');
+
+    // delete appointment
+    I.click('.appointment');
+    I.waitForVisible('.io-ox-sidepopup');
+
+    I.click('Delete');
+
+    I.waitForText('Do you want to delete the whole series or just this appointment within the series?');
+    I.click('Series');
+
+    I.waitForDetached('.io-ox-sidepopup');
+
+    I.waitForInvisible('.appointment');
+
+    I.logout();
+
+});
+
 Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, users) {
     const
         Moment = require('moment'),
