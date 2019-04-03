@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-01 09:51+0200\n"
+"PO-Revision-Date: 2019-04-03 11:17+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -10262,7 +10262,6 @@ msgid "Security Token"
 msgstr "Sicherheits-Token"
 
 #: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
-#, fuzzy
 msgid "Yubikey"
 msgstr "Yubikey"
 
@@ -10271,7 +10270,6 @@ msgid "Google Authenticator"
 msgstr "Google Authenticator"
 
 #: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
-#, fuzzy
 msgid "Recovery code"
 msgstr "Wiederherstellungscode"
 
@@ -10309,7 +10307,6 @@ msgid "Verification Options"
 msgstr "Verifizierungsoptionen"
 
 #: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
-#, fuzzy
 msgid "Recovery Options"
 msgstr "Wiederherstellungsoptionen"
 
@@ -10384,7 +10381,6 @@ msgstr "Code per SMS"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
-#, fuzzy
 msgid "Use a FIDO2 compatible device to authenticate your identity."
 msgstr ""
 "Verwenden Sie ein FIDO2-kompatibles Gerät, um Ihre Identität zu "
@@ -10392,9 +10388,8 @@ msgstr ""
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
-#, fuzzy
 msgid "Yubikey, Google Security Keys, or compatible FIDO device"
-msgstr "Yubikey, Google Security Keys oder kompatibles FIDO-Gerät"
+msgstr "Yubikey, Google-Sicherheitsschlüssel oder kompatibles FIDO-Gerät"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
@@ -10420,7 +10415,6 @@ msgstr "Unbekanntes System"
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
 #: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/printBackupString.js
-#, fuzzy
 msgid "Recovery Code"
 msgstr "Wiederherstellungscode"
 
@@ -10551,7 +10545,7 @@ msgstr "Ich habe mein Gerät verloren"
 
 #: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
 msgid "Reauthentication required for this action"
-msgstr ""
+msgstr "Diese Aktion erfordert eine erneute Authentifizierung"
 
 #: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
 msgid "Select 2-Step Verification Method"
@@ -10574,7 +10568,6 @@ msgstr ""
 "ein."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
-#, fuzzy
 msgid ""
 "You secured your account with 2-Step Verification.  Please enter the "
 "verification code we sent to the phone *****%s."
@@ -10589,8 +10582,8 @@ msgid ""
 "You secured your account with 2-Step Verification.  Please enter the "
 "verification code from the Authenticator App."
 msgstr ""
-"Sie haben Ihr Konto mit Zwei-Faktor-Authentifizierung gesichert. Bitte geben "
-"Sie den Bestätigungs-Code der Authentifizierungs-App ein."
+"Sie haben Ihren Account mit Zwei-Faktor-Authentifizierung gesichert. Bitte "
+"geben Sie den Bestätigungs-Code der Authentifizierungs-App ein."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
@@ -10605,8 +10598,8 @@ msgid ""
 "Please use Chrome browser, or Firefox with U2F enabled."
 msgstr ""
 "Dieser Browser ist nicht mit Ihrem konfigurierten Authentifizierungsgerät "
-"kompatibel. Bitte verwenden Sie den Chrome-Browser oder Firefox mit U2F "
-"aktiviert."
+"kompatibel. Bitte verwenden Sie den Chrome-Browser oder Firefox mit "
+"aktiviertem U2F."
 
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
