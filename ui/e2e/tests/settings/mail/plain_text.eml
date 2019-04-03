@@ -1,0 +1,75 @@
+Return-Path: <test@foo.com>
+Delivered-To: test@foo.com
+Received: from mx2.open-xchange.com ([10.20.30.2])
+	by imap.open-xchange.com with LMTP
+	id MLH1FGdfpFxtUgAA3c6Kzw
+	(envelope-from <test@foo.com>)
+	for <test@foo.com>; Wed, 03 Apr 2019 09:23:19 +0200
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mx2.open-xchange.com (Postfix) with ESMTP id 3D2D26A20D
+	for <test@foo.com>; Wed,  3 Apr 2019 09:23:19 +0200 (CEST)
+Authentication-Results: open-xchange.com;
+	dkim=pass (2048-bit key; unprotected) header.d=open-xchange.com header.i=@open-xchange.com header.b="eAJ/sVoz";
+	dkim-atps=neutral
+Received: from [127.0.0.1] (helo=localhost)
+	by localhost with ESMTP (eXpurgate 4.9.1)
+	(envelope-from <test@foo.com>)
+	id 5ca45f64-387e-7f000001272a-7f000001d2fc-2
+	for <test@foo.com>; Wed, 03 Apr 2019 09:23:18 +0200
+X-Virus-Scanned: Debian amavisd-new at
+Received: from mx2.open-xchange.com ([127.0.0.1])
+	by localhost (mx2.open-xchange.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MhtjCvhILCXU for <test@foo.com>;
+	Wed,  3 Apr 2019 09:23:17 +0200 (CEST)
+Received: from mx4.open-xchange.com (mx4.open-xchange.com [10.20.30.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(Client did not present a certificate)
+	by mx2.open-xchange.com (Postfix) with ESMTPS id 349556A239
+	for <test@foo.com>; Wed,  3 Apr 2019 09:23:17 +0200 (CEST)
+Authentication-Results: open-xchange.com; dmarc=pass (p=none dis=none) header.from=open-xchange.com
+Authentication-Results: open-xchange.com; spf=pass smtp.mailfrom=test@foo.com
+Received: from open-xchange.com (imap.open-xchange.com [10.20.30.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx4.open-xchange.com (Postfix) with ESMTPS id 7F6246A24B
+	for <test@foo.com>; Wed,  3 Apr 2019 09:23:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=open-xchange.com;
+	s=201705; t=1554276196;
+	bh=ecNctwusNbdo49Xn221nngGMyFC0TQ+n/1YymeZwPVk=;
+	h=Date:From:Reply-To:To:Subject:From;
+	b=eAJ/sVozqJFcLjNgy+EKYaZNKO0MFaefn+NhayXY7AHeKJtuzOqUaBYNuDh8gqzcI
+	 Nd/0FpCZrlmWAxWgMZcrmXzm1vMktCXE2cK0PQSbpxEUjMWZJZMhp4dqWCYGgKdPbJ
+	 Ut/pTuD2/fMQ/uBAr7o8Lm9W907jnFhYPAMNavsXhMYM0a9RpZD5pQooBZ/nvMUGI3
+	 0zA95icYwfMSpLt/g/2+pnOtIK4+hchuL+99FO+/9DSTyGWwL41Ix32dVs/ueuxw8b
+	 LEZMmTY2Py9iQUB7LAwwAZ3gjNQ9con+pGNz82UTdNX/OlYTQjEV8HFjJBlGSsNxAH
+	 oUC4BL41wqCgQ==
+Received: from appsuite-dev-gw2.open-xchange.com (appsuite-dev-gw2.open-xchange.com [10.20.30.222])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
+	(No client certificate requested)
+	by open-xchange.com (Postfix) with ESMTPSA id 71D6B3C03E3
+	for <test@foo.com>; Wed,  3 Apr 2019 09:23:16 +0200 (CEST)
+Date: Wed, 3 Apr 2019 09:23:16 +0200 (CEST)
+From: Test Foo <test@foo.com>
+Reply-To: Test Foo <test@foo.com>
+To: Test Foo <test@foo.com>
+Message-ID: <1836077183.336.1554276196397@appsuite-dev-gw2.open-xchange.com>
+Subject: plain text
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Medium
+X-Mailer: Open-Xchange Mailer v7.10.2-Rev1
+X-Originating-Client: open-xchange-appsuite
+X-purgate-ID: 151428::1554276198-0000387E-79A427A4/0/0
+X-purgate-type: clean
+X-purgate-size: 51
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-Notice: Whitelisted
+X-Notice: Whitelisted
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
+
+This is simple plain text!
+
+No HTML around here
