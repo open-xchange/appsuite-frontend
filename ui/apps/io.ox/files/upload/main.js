@@ -181,7 +181,9 @@ define('io.ox/files/upload/main', [
         this.abort = function (cid) {
             uploadCollection
                 .filter(function (model) {
-                    return typeof model !== 'undefined' && typeof cid !== 'undefined' && model.cid === cid;
+                    if (model === undefined) return false;
+                    if (cid === undefined) return true;
+                    return model.cid === cid;
                 })
                 .forEach(function (model) {
                     var request = model.get('request');

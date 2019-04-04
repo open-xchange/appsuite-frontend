@@ -83,6 +83,15 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
             }
 
             function parseTest(test) {
+
+                function utcOffset(t) {
+                    return moment(t).format('Z').replace(':', '');
+                }
+
+                if (test.zone === undefined) {
+                    test.zone = utcOffset(test.datevalue[0]);
+                }
+
                 // we start with timestamp t and stay in UTC, therefore moment.utc(t)
                 // now we set the timezone offset while keeping the same time (true)
                 // finally we switch into local time without keeping the time (false).
