@@ -242,3 +242,53 @@ Scenario('[C45041] Select files', async (I, users) => {
     I.click('None');
     I.dontSeeElementInDOM('.file-list-view .list-item.selected');
 });
+
+Scenario('[C45042] Filter files', async (I, users) => {
+    // BUG: This menu should be grouped as it has 2 sets of menuitemradios
+    // to make matters worse there are two "All" menuitems without a relation
+    // to a group.
+
+    const testFolder = await I.haveFolder('Filtertest', 'infostore', await I.grabDefaultFolder('infostore'), { user: users[0] }),
+        filePath = 'e2e/media/files/0kb/',
+        files = await readdir(filePath);
+
+    files.forEach((name) => {
+        if (name !== '.DS_Store') I.haveFile(testFolder.data, filePath + name);
+    });
+    prepare(I);
+    I.selectFolder('Filtertest');
+    I.clickToolbar('Select');
+    I.click('PDFs');
+    I.waitForText('document.pdf', 1, '.file-list-view');
+    I.waitNumberOfVisibleElements('.file-list-view .list-item', 1);
+    I.clickToolbar('Select');
+    I.click('Text documents');
+    I.waitForText('document.doc', 1, '.file-list-view');
+    I.waitNumberOfVisibleElements('.file-list-view .list-item', 5);
+    I.clickToolbar('Select');
+    I.click('Spreadsheets');
+    I.waitForText('spreadsheet.xls', 1, '.file-list-view');
+    I.waitNumberOfVisibleElements('.file-list-view .list-item', 2);
+    I.clickToolbar('Select');
+    I.click('Presentations');
+    I.waitForText('presentation.ppsm', 1, '.file-list-view');
+    I.waitNumberOfVisibleElements('.file-list-view .list-item', 2);
+    I.clickToolbar('Select');
+    I.click('Images');
+    I.waitForText('image.gif', 1, '.file-list-view');
+    I.waitNumberOfVisibleElements('.file-list-view .list-item', 3);
+    I.clickToolbar('Select');
+    I.click('Music');
+    I.waitForText('music.mp3', 1, '.file-list-view');
+    I.waitNumberOfVisibleElements('.file-list-view .list-item', 5);
+    I.clickToolbar('Select');
+    I.click('Videos');
+    I.waitForText('video.avi', 1, '.file-list-view');
+    I.waitNumberOfVisibleElements('.file-list-view .list-item', 4);
+    I.clickToolbar('Select');
+    // Read comment at the beginning of the scenario to find out why
+    // the following selector is so clunky
+    I.click('a[data-name="filter"][data-value="all"]');
+    I.waitForText('document.doc', 1, '.file-list-view');
+    I.waitNumberOfVisibleElements('.file-list-view .list-item', 22);
+});
