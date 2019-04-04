@@ -31,3 +31,13 @@ Scenario('[C7336] Successful Login', function (I, users) {
     I.click('Sign in');
     I.waitForText('No message selected');
 });
+
+Scenario('[C7337] Unsuccessful Login', function (I, users) {
+    I.amOnPage('/');
+    I.wait(1);
+    I.fillField('User name', `${users[0].get('name')}@${users[0].context.id}`);
+    I.fillField('Password', 'wrong password');
+    I.click('Sign in');
+    I.waitForText('The user name or password is incorrect.');
+});
+
