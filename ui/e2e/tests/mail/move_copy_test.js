@@ -110,6 +110,29 @@ Scenario('[C7407] Move mail from inbox to a sub-folder', async function (I, user
     I.logout();
 });
 
+Scenario('[C7408] Move several mails from inbox to a sub-folder', async function (I, users) {
+    let [user] = users,
+        folder = 'C7408',
+        subjects = ['C7408-1', 'C7408-2', 'C7408-3'];
+
+    I.haveSetting('io.ox/mail//showCheckboxes', true);
+    await H.fillInbox(I, user, subjects);
+    await I.haveFolder(folder, 'mail', 'default0/INBOX');
+
+    I.login('app=io.ox/mail');
+    I.waitForVisible('.io-ox-mail-window');
+
+    A.select(I, 3);
+    A.clickMoreAction(I, '.classic-toolbar-container', 'io.ox/mail/actions/move');
+    A.selectFolderInDialog(I, folder);
+    I.click('Move', '.folder-picker-dialog');
+    I.waitForDetached('.folder-picker-dialog');
+
+    A.isEmpty(I, 'Inbox');
+    A.check(I, subjects, folder);
+
+    I.logout();
+});
 
 Scenario('[C7409] Copy mail from inbox to a sub-folder', async function (I, users) {
     let [user] = users,
