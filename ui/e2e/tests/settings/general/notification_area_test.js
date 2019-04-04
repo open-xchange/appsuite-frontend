@@ -25,7 +25,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario.only('[C7763] Configure notification area', async (I, users) => {
+Scenario('[C7763] Configure notification area', async (I, users) => {
 
     var userA = users[0], userB = users[1];
 
