@@ -71,3 +71,9 @@ Scenario('[C7340] Successful logout', function (I) {
     I.logout();
     I.waitForVisible('#io-ox-login-screen');
 });
+
+Scenario('[C163025] Screen gets blured when session times out', function (I) {
+    I.login();
+    I.clearCookie();
+    I.seeElement('.abs.unselectable.blur');
+});
