@@ -11,7 +11,7 @@
  *
  */
 /// <reference path="../../steps.d.ts" />
-
+const { expect } = require('chai');
 Feature('Multi search');
 
 Before(async (users) => {
@@ -22,6 +22,7 @@ Before(async (users) => {
 After(async (users) => {
     await users.removeAll();
 });
+const searchField = 'input[type=search]';
 
 function getTestMail(from, to, opt) {
     opt = opt || {};
@@ -51,7 +52,7 @@ Scenario('[C8407] Perform a multi search', async function (I, users) {
         subject: 'test',
         content: ''
     }));
-    let searchField = 'input[type=search]';
+    //let searchField = 'input[type=search]';
 
     I.login('app=io.ox/mail', { user: user2 });
     I.click('.search-box');
@@ -79,7 +80,7 @@ Scenario('[C8406] Delete a string from multi search', async function (I, users) 
         subject: 'test',
         content: ''
     }));
-    let searchField = 'input[type=search]';
+    //let searchField = 'input[type=search]';
 
     I.login('app=io.ox/mail', { user: user2 });
     I.click('.search-box');
@@ -98,4 +99,15 @@ Scenario('[C8406] Delete a string from multi search', async function (I, users) 
     I.waitForVisible('.list-view [data-index="1"]');
 
 
+});
+
+Scenario('[C8408] Try to run a script in search', async function (I) {
+
+    I.login();
+    I.click('.search-box');
+    I.waitForFocus(searchField);
+    I.fillField(searchField, '<script>alert(1)</script>');
+    I.pressKey('Enter');
+    let text = await I.grabPopupText();
+    expect(!!text).to.be.false;
 });
