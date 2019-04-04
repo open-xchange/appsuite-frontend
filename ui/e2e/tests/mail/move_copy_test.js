@@ -45,6 +45,14 @@ const A = {
         I.waitForDetached('[data-point="io.ox/core/folder/add-popup"]');
         I.seeTextEquals(folder, '.folder-picker-dialog .selected .folder-label');
     },
+    selectFolderInDialog: function (I, folder) {
+        // toogle 'myfolders'
+        I.click('[data-id="virtual/myfolders"] .folder-arrow', '.folder-picker-dialog');
+        I.waitForElement(`[data-id="default0/INBOX/${folder}"]`, '.folder-picker-dialog');
+        I.click(`[data-id="default0/INBOX/${folder}"]`, '.folder-picker-dialog');
+        I.waitForElement(`[data-id="default0/INBOX/${folder}"].selected`, '.folder-picker-dialog');
+        I.wait(1);
+    },
     isEmpty: function (I, folder) {
         I.selectFolder(folder);
         I.seeTextEquals('Empty', '.list-view .notification');
@@ -73,6 +81,30 @@ const H = {
         });
     }
 };
+
+Scenario('[C7407] Move mail from inbox to a sub-folder', async function (I, users) {
+    let [user] = users,
+        folder = 'C7407',
+        subject = 'C7407';
+
+    await H.fillInbox(I, user, [subject]);
+    await I.haveFolder(folder, 'mail', 'default0/INBOX');
+
+    I.login('app=io.ox/mail');
+    I.waitForVisible('.io-ox-mail-window');
+
+    A.select(I, 'first');
+    A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/move');
+    A.selectFolderInDialog(I, folder);
+    I.click('Move', '.folder-picker-dialog');
+    I.waitForDetached('.folder-picker-dialog');
+
+    A.isEmpty(I, 'Inbox');
+    A.check(I, subject, folder);
+
+    I.logout();
+});
+
 
 Scenario('[C114349] Create folder within move dialog', async function (I, users) {
     let [user] = users,
