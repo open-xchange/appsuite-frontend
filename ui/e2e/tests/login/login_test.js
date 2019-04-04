@@ -65,3 +65,9 @@ Scenario('[C7339] Stay signed in checkbox', function (I) {
     I.refreshPage();
     I.waitForVisible('#io-ox-login-screen');
 });
+
+Scenario('[C7340] Successful logout', function (I) {
+    I.login();
+    I.logout();
+    I.waitForVisible('#io-ox-login-screen');
+});
