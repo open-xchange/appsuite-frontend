@@ -154,3 +154,9 @@ Scenario('[C8371] Delete file', async (I) => {
     I.click('Delete');
     I.waitForDetached(locate('li.list-item').withText('document.txt'));
 });
+
+Scenario.skip('[C8372] Upload a 0KB file', () => {
+    // Bug: see C8364
+    // TODO: Evaluate if this is needed, see C8364
+    // Also drag and drop testing is quite complicated and not sure if at all possible atm
+});
