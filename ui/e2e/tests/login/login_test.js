@@ -49,3 +49,19 @@ Scenario('[C7338] Change language', function (I) {
     I.click('Italiano');
     I.waitForText('Nome utente');
 });
+
+Scenario('[C7339] Stay signed in checkbox', function (I) {
+    I.amOnPage('/');
+    I.wait(1);
+    I.seeCheckboxIsChecked('Stay signed in');
+    I.login();
+    I.refreshPage();
+    I.waitForVisible('#io-ox-core');
+    I.logout();
+
+    I.waitForVisible('#io-ox-login-screen');
+    I.uncheckOption('Stay signed in');
+    I.login();
+    I.refreshPage();
+    I.waitForVisible('#io-ox-login-screen');
+});
