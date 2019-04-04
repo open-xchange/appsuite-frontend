@@ -13,6 +13,10 @@
 
 /// <reference path="../../steps.d.ts" />
 
+const fs = require('fs'),
+    util = require('util'),
+    readdir = util.promisify(fs.readdir);
+
 Feature('Drive > General');
 
 const prepare = (I, folder) => {
@@ -210,4 +214,31 @@ Scenario('[C45040] Sort files', async (I, users) => {
     I.clickToolbar('Sort by');
     I.click('Descending');
     checkFileOrder(I, ['testdocument.rtf', 'testpresentation.ppsm', 'testdocument.odt', 'document.txt']);
+});
+
+Scenario('[C45041] Select files', async (I, users) => {
+    const testFolder = await I.haveFolder('Selecttest', 'infostore', await I.grabDefaultFolder('infostore'), { user: users[0] }),
+        filePath = 'e2e/media/files/0kb/',
+        files = await readdir(filePath);
+
+    await I.haveFolder('Subfolder', 'infostore', testFolder.data);
+
+    files.forEach((name) => {
+        if (name !== '.DS_Store') I.haveFile(testFolder.data, filePath + name);
+    });
+    prepare(I);
+    I.selectFolder('Selecttest');
+
+    I.clickToolbar('Select');
+    I.click('All');
+    I.waitNumberOfVisibleElements('.file-list-view .list-item.selected', 23);
+
+    I.clickToolbar('Select');
+    I.click('All files');
+    I.waitNumberOfVisibleElements('.file-list-view .list-item.selected', 22);
+
+
+    I.clickToolbar('Select');
+    I.click('None');
+    I.dontSeeElementInDOM('.file-list-view .list-item.selected');
 });
