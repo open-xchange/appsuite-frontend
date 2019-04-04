@@ -46,7 +46,6 @@ define('io.ox/tours/multifactor', [
                 .content(gt('You can now add additional verification options to enhance the security of your account.'))
                 .spotlight('.io-ox-multifactor-settings #addDevice')
             .end();
-
             baton.tour.step()
             .title(gt('Adding verification option'))
             .waitFor('.mfAddDevice')
@@ -56,6 +55,7 @@ define('io.ox/tours/multifactor', [
             .content(gt('Various options for additional verification depends on your installation.'))
             .spotlight('.modal-content')
             .hotspot('.modal-body .fa-mobile', { top: 20, left: 20 })
+            .referTo('.btn-primary[data-action="cancel"]')
             .on('show', function () {
                 baton.hasSMS = ($('.fa-mobile').length > 0);
             })
