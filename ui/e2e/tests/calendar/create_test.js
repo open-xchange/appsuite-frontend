@@ -95,6 +95,73 @@ Scenario('[C7411] Discard appointment during the creation', function (I) {
     I.waitToHide('.io-ox-calendar-edit');
 });
 
+Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December, no end', async function (I) {
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
+    const date = moment('1216', 'MMDD');
+
+    I.login('app=io.ox/calendar');
+    I.clickToolbar('New');
+    I.waitForText('Subject');
+    I.fillField('Subject', 'Testappointment');
+
+    I.click('~Date (M/D/YYYY)');
+    I.pressKey(['Control', 'a']);
+    I.pressKey(date.format('l'));
+    I.pressKey('Enter');
+
+    I.click('Repeat', '.io-ox-calendar-edit-window');
+    I.click(`Every ${date.format('dddd')}.`);
+
+    I.waitForElement('.modal-dialog');
+
+    I.selectOption('.modal-dialog [name="recurrence_type"]', 'Yearly');
+    I.see('Every year in December on day 16.');
+
+    I.click('Apply', '.modal-dialog');
+
+    I.waitForDetached('.modal-dialog');
+    I.see('Every year in December on day 16.');
+
+    // create
+    I.click('Create', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+
+    if (moment().isSame(date, 'week')) {
+        I.waitForVisible('.io-ox-sidepopup');
+        I.click('~Close', '.io-ox-sidepopup');
+    }
+
+    // select the next 16.th december via the mini calendar
+    const diffMonth = date.diff(moment(), 'months');
+    for (let i = 0; i < diffMonth; i++) I.click('~Go to next month', '.window-sidepanel');
+
+    // and select the correct date
+    I.click(`~${date.format('l, dddd')}, CW ${date.week()}`, '.window-sidepanel');
+
+    // open all views and load the appointments there
+    ['Workweek', 'Week', 'Day', 'Month'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.see('Testappointment');
+    });
+
+    for (let i = 0; i < 12; i++) I.click('~Go to next month', '.window-sidepanel');
+    // and select the following year
+    I.click(`~${date.add(1, 'year').format('l, dddd')}, CW ${date.week()}`, '.window-sidepanel');
+
+    // open all views and load the appointments there
+    ['Workweek', 'Week', 'Day', 'Month'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.see('Testappointment');
+    });
+});
+
 Scenario('[C274537] Support use-count calculation on Appointment create with Groups', async function (I, users) {
     let testrailID = 'C274537';
     var timestamp = Math.round(+new Date() / 1000);
