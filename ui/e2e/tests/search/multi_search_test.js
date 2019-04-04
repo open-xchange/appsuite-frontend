@@ -66,3 +66,36 @@ Scenario('[C8407] Perform a multi search', async function (I, users) {
     I.waitForElement('.list-view [data-index="0"]');
     I.waitForInvisible('.list-view [data-index="1"]');
 });
+
+
+Scenario('[C8406] Delete a string from multi search', async function (I, users) {
+    const [user1, user2] = users;
+
+    await I.haveMail(getTestMail(user1, user2, {
+        subject: 'test 123',
+        content: ''
+    }));
+    await I.haveMail(getTestMail(user1, user2, {
+        subject: 'test',
+        content: ''
+    }));
+    let searchField = 'input[type=search]';
+
+    I.login('app=io.ox/mail', { user: user2 });
+    I.click('.search-box');
+    I.waitForFocus(searchField);
+    I.fillField(searchField, 'test');
+    I.pressKey('Enter');
+    I.waitForVisible('.list-view [data-index="0"]');
+    I.waitForVisible('.list-view [data-index="1"]');
+    I.wait(1);
+    I.fillField(searchField, '123');
+    I.pressKey('Enter');
+    I.waitForElement('.list-view [data-index="0"]');
+    I.waitForInvisible('.list-view [data-index="1"]');
+    I.click('span[title="123"] + a ');
+    I.waitForVisible('.list-view [data-index="0"]');
+    I.waitForVisible('.list-view [data-index="1"]');
+
+
+});
