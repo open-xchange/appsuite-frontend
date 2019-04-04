@@ -160,3 +160,20 @@ Scenario.skip('[C8372] Upload a 0KB file', () => {
     // TODO: Evaluate if this is needed, see C8364
     // Also drag and drop testing is quite complicated and not sure if at all possible atm
 });
+
+Scenario('[C45039] Breadcrumb navigation', async (I, users) => {
+    const folder = await I.haveFolder('Folders', 'infostore', await I.grabDefaultFolder('infostore'), { user: users[0] });
+    await I.haveFolder('subfolder_1', 'infostore', folder.data, { user: users[0] });
+    await I.haveFolder('subfolder_2', 'infostore', folder.data, { user: users[0] });
+    const subFolder = await I.haveFolder('subfolder_3', 'infostore', folder.data, { user: users[0] });
+    const subsubFolder = await I.haveFolder('subsubfolder_1', 'infostore', subFolder.data, { user: users[0] });
+    await I.haveFolder('subsubfolder_2', 'infostore', subFolder.data, { user: users[0] });
+    prepare(I, subsubFolder.data);
+    I.click('subfolder_3', '.breadcrumb-view');
+    I.waitForText('subsubfolder_1', 1, '.list-view');
+    I.waitForText('subsubfolder_2', 1, '.list-view');
+    I.click('Drive', '.breadcrumb-view');
+    I.waitForText('Drive', 1, '.breadcrumb-view');
+    I.waitForText('Public files', 1, '.list-view');
+    I.doubleClick('Public files', '.list-view');
+});
