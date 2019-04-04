@@ -25,9 +25,12 @@ After(async function (I, users) {
 
 // TODO: introduce global actors?
 const A = {
-    check: function (I, subject, folder) {
+    check: function (I, subjects, folder) {
+        subjects = [].concat(subjects);
         I.selectFolder(folder);
-        I.seeTextEquals(subject, '.leftside .list-view .subject .drag-title');
+        subjects.forEach(function (subject) {
+            I.waitForText(subject, 1, '.leftside .list-view .subject .drag-title');
+        });
     },
     clickMoreAction: function (I, toolbar, action) {
         I.click('~More actions', toolbar);
@@ -57,9 +60,11 @@ const A = {
         I.selectFolder(folder);
         I.seeTextEquals('Empty', '.list-view .notification');
     },
-    select: function (I, mode) {
-        I.click('.io-ox-mail-window .leftside ul li.list-item');
-        I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
+    select: function (I, number) {
+        number = number || 1;
+        for (var i = 0; i < number; i++) {
+            I.click(locate('.list-view').find('.selectable:not(.selected) .list-item-checkmark'));
+        }
     }
 };
 
@@ -93,7 +98,7 @@ Scenario('[C7407] Move mail from inbox to a sub-folder', async function (I, user
     I.login('app=io.ox/mail');
     I.waitForVisible('.io-ox-mail-window');
 
-    A.select(I, 'first');
+    A.select(I, 1);
     A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/move');
     A.selectFolderInDialog(I, folder);
     I.click('Move', '.folder-picker-dialog');
@@ -117,7 +122,7 @@ Scenario('[C7409] Copy mail from inbox to a sub-folder', async function (I, user
     I.login('app=io.ox/mail');
     I.waitForVisible('.io-ox-mail-window');
 
-    A.select(I, 'first');
+    A.select(I, 1);
     A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/copy');
     A.selectFolderInDialog(I, folder);
     I.click('Copy', '.folder-picker-dialog');
@@ -131,38 +136,40 @@ Scenario('[C7409] Copy mail from inbox to a sub-folder', async function (I, user
 
 Scenario('[C114349] Create folder within move dialog', async function (I, users) {
     let [user] = users,
-        folder = 'C114349-move';
+        folder = 'C114349-move',
+        subject = 'C114349-move';
 
-    await H.fillInbox(I, user, [folder]);
+    await H.fillInbox(I, user, [subject]);
     I.login('app=io.ox/mail');
     I.waitForVisible('.io-ox-mail-window');
 
-    A.select(I, 'first');
+    A.select(I, 1);
     A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/move');
-    A.createFolderInDialog(I, folder);
+    A.createFolderInDialog(I, subject);
     I.click('Move', '.folder-picker-dialog');
 
     A.isEmpty(I, 'Inbox');
-    A.check(I, folder, folder);
+    A.check(I, folder, subject);
 
     I.logout();
 });
 
 Scenario('[C114349] Create folder within copy dialog', async function (I, users) {
     let [user] = users,
-        folder = 'C114349-copy';
+        folder = 'C114349-copy',
+        subject = 'C114349-copy';
 
-    await H.fillInbox(I, user, [folder]);
+    await H.fillInbox(I, user, [subject]);
     I.login('app=io.ox/mail');
     I.waitForVisible('.io-ox-mail-window');
 
-    A.select(I, 'first');
+    A.select(I, 1);
     A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/copy');
-    A.createFolderInDialog(I, folder);
+    A.createFolderInDialog(I, subject);
     I.click('Copy', '.folder-picker-dialog');
 
     A.check(I, folder, 'Inbox');
-    A.check(I, folder, folder);
+    A.check(I, folder, subject);
 
     I.logout();
 });
