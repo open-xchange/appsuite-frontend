@@ -77,7 +77,7 @@ define('io.ox/tours/multifactor', [
                     return '#addDevice';
                 }
                 $('.modal-body .fa-mobile').click();
-                return '#deviceNumber';
+                return '.select.countryCodes';
 
             })
             .on('show', function () {
