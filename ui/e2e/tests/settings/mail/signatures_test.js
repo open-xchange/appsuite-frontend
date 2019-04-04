@@ -198,3 +198,71 @@ Scenario('[C7769] Delete signature', async function (I) {
     I.dontSee('Testsignaturecontent');
 
 });
+
+Scenario('[C7770] Set default signature', async function (I, users) {
+    const [user] = users;
+    await I.haveMail({
+        attachments: [{
+            content: '<div>Test content</div>',
+            content_type: 'text/html',
+            disp: 'inline'
+        }],
+        from: [[user.get('displayname'), user.get('primaryEmail')]],
+        sendtype: 0,
+        subject: 'Test subject',
+        to: [[user.get('displayname'), user.get('primaryEmail')]]
+    });
+    const snippets = [];
+    for (let i = 0; i < 3; i++) {
+        snippets.push(await I.haveSnippet({
+            content: `<p>Testsignaturecontent${i}</p>`,
+            displayname: `Testsignaturename${i}`,
+            misc: { insertion: 'above', 'content-type': 'text/html' },
+            module: 'io.ox/mail',
+            type: 'signature'
+        }));
+    }
+
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/signatures']);
+    I.waitForText('Testsignaturename0');
+    I.see('Testsignaturecontent0');
+    I.see('Testsignaturename1');
+    I.see('Testsignaturecontent1');
+    I.see('Testsignaturename2');
+    I.see('Testsignaturecontent2');
+
+    // select default signature
+    I.selectOption('Default signature for new messages', 'Testsignaturename1');
+    I.selectOption('Default signature for replies or forwards', 'Testsignaturename2');
+
+    I.see('Default signature for new messages', `.settings-list-item[data-id="${snippets[1].data}"`);
+    I.see('Default signature for replies or forwardings', `.settings-list-item[data-id="${snippets[2].data}"`);
+
+    I.openApp('Mail');
+
+    // compose a mail
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose-window .editor iframe');
+    within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
+        I.waitForVisible('body');
+        I.wait(0.5);
+        I.see('Testsignaturecontent1');
+    });
+    I.click('Discard');
+    I.waitForDetached('.io-ox-mail-compose-window');
+
+    // reply to mail
+    I.click('.io-ox-mail-window .leftside ul li.list-item');
+    I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
+
+    I.click('Reply');
+    I.waitForVisible('.io-ox-mail-compose-window .editor iframe');
+    within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
+        I.waitForVisible('body');
+        I.wait(0.5);
+        expect((await I.grabHTMlFrom2('body > *')).join('')).to.match(
+            new RegExp(`^${emptyLine}<div class="io-ox-signature"><p>Testsignaturecontent2</p></div><blockquote type="cite">.*</blockquote>$`)
+        );
+    });
+
+});
