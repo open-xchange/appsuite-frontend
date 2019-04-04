@@ -177,3 +177,24 @@ Scenario('[C7768] Edit signature', async function (I) {
     });
 
 });
+
+Scenario('[C7769] Delete signature', async function (I) {
+    await I.haveSnippet({
+        content: '<p>Testsignaturecontent</p>',
+        displayname: 'Testsignaturename',
+        misc: { insertion: 'below', 'content-type': 'text/html' },
+        module: 'io.ox/mail',
+        type: 'signature'
+    });
+
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/signatures']);
+    I.waitForText('Testsignaturename');
+    I.see('Testsignaturecontent');
+
+    I.click('a[title="Delete"]');
+    I.waitForDetached('.settings-list-item');
+
+    I.dontSee('Testsignaturename');
+    I.dontSee('Testsignaturecontent');
+
+});
