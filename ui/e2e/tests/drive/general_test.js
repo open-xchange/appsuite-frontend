@@ -52,3 +52,28 @@ Scenario.skip('[C8364] Upload new file', (I) => {
     I.attachFile('.dropdown.open input[name=file]', 'e2e/media/files/0kb/document.txt');
     // TODO: Continue when Bug is fixed
 });
+
+// Note: This is not accessible H4 and textarea does not have a label
+Scenario('[C8366] Edit description', async (I) => {
+    const folder = await I.grabDefaultFolder('infostore');
+    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    prepare(I);
+    I.waitForText('document.txt', 1, '.file-list-view');
+    I.click(locate('li.list-item').withText('document.txt'));
+    I.waitForText('Add a description');
+    I.click('Add a description');
+    I.waitForElement('.modal-body textarea.form-control');
+    I.fillField('.modal-body textarea.form-control', 'Test description');
+    I.click('Save');
+    I.waitForDetached('.modal-body');
+    I.seeTextEquals('Test description', 'div.description');
+    I.waitForText('document.txt', '.file-list-view');
+    I.click(locate('li.list-item').withText('document.txt'));
+    I.waitForText('Edit description');
+    I.click('button.description-button');
+    I.waitForElement('.modal-body textarea.form-control');
+    I.fillField('.modal-body textarea.form-control', 'Test description changed');
+    I.click('Save');
+    I.waitForDetached('.modal-body');
+    I.seeTextEquals('Test description changed', 'div.description');
+});
