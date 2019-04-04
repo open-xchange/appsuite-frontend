@@ -485,6 +485,88 @@ Scenario('[274409] Change organizer of series with internal attendees', async fu
     I.waitForText(`Organizer ${users[0].userdata.display_name}`, '.io-ox-sidepopup');
 });
 
+Scenario('[C265149] As event organizer I can add a textual reason why an event was canceled', async function (I, users) {
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
+    });
+    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    const time = moment().startOf('week').add(1, 'day').add(10, 'hours');
+    // single appointment without additional participants
+    await I.haveAppointment({
+        folder:  folder,
+        summary: 'Appointment1',
+        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
+    });
+    // recurring appointment without additional participants
+    await I.haveAppointment({
+        folder:  folder,
+        summary: 'Appointment2',
+        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        rrule: 'FREQ=DAILY;COUNT=5'
+    });
+    // single appointment with additional participants
+    await I.haveAppointment({
+        folder:  folder,
+        summary: 'Appointment3',
+        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        attendees: [{ entity: users[0].userdata.id }, { entity: users[1].userdata.id }]
+    });
+    // recurring appointment with additional participants
+    await I.haveAppointment({
+        folder:  folder,
+        summary: 'Appointment4',
+        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        attendees: [{ entity: users[0].userdata.id }, { entity: users[1].userdata.id }],
+        rrule: 'FREQ=DAILY;COUNT=5'
+    });
+
+    I.login('app=io.ox/calendar');
+
+    // Delete single appointment without additional participants => no comment field
+    I.click(locate('.appointment').withText('Appointment1'));
+    I.waitForVisible('.io-ox-sidepopup');
+    I.retry(5).click('Delete');
+    I.waitForText('Do you want to delete this appointment');
+    I.click('Delete', '.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
+
+    // Delete recurring appointment without additional participants => no comment field
+    I.click(locate('.appointment').withText('Appointment2'));
+    I.waitForVisible('.io-ox-sidepopup');
+    I.retry(5).click('Delete');
+    I.waitForText('Do you want to delete the whole series or just this appointment within the series?');
+    I.click('Series', '.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
+
+    // Delete single appointment with additional participants => comment field
+    I.click(locate('.appointment').withText('Appointment3'));
+    I.waitForVisible('.io-ox-sidepopup');
+    I.retry(5).click('Delete');
+    I.waitForText('Delete appointment');
+    I.see('Add a message to the notification email for the other participants.');
+    I.click('Delete', '.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
+
+    // Delete recurring appointment with additional participants => comment field
+    I.click(locate('.appointment').withText('Appointment4'));
+    I.waitForVisible('.io-ox-sidepopup');
+    I.retry(5).click('Delete');
+    I.waitForText('Delete appointment');
+    I.see('Add a message to the notification email for the other participants.');
+    I.click('Series', '.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.io-ox-sidepopup');
+
+});
+
 Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, users) {
     const
         Moment = require('moment'),
