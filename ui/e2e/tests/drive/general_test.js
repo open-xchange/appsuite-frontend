@@ -109,3 +109,30 @@ Scenario('[C8368] View change', async (I) => {
     checkIfFoldersExist(I);
     I.see('document.txt');
 });
+
+const searchFor = (I, query) => {
+    I.click('.search-field');
+    I.waitForElement('.token-input');
+    I.fillField('.token-input', query);
+    I.pressKey('Enter');
+};
+
+Scenario('[C8369] Search', async (I, users) => {
+    const folder = await I.grabDefaultFolder('infostore');
+    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    const testFolder = await I.haveFolder('Testfolder', 'infostore', folder, { user: users[0] });
+    await I.haveFile(testFolder.data, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testdocument.rtf');
+    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testdocument.odt');
+    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testpresentation.ppsm');
+    prepare(I);
+    I.selectFolder('Testfolder');
+    searchFor(I, 'document.txt');
+    I.waitNumberOfVisibleElements('.file-list-view .list-item', 1);
+    I.click('~Cancel search');
+    searchFor(I, 'noneexisting');
+    I.waitForText('No matching items found.');
+    I.click('~Cancel search');
+    searchFor(I, 'd');
+    I.waitNumberOfVisibleElements('.file-list-view .list-item', 4);
+});
