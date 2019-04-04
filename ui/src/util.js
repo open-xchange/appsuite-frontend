@@ -290,7 +290,9 @@
                     //return v.replace(/\=/g, '%3D').replace(/\&/g, '%26');
                 });
                 // be persistent
-                document.location.hash = hashStr;
+                if (document && document.location) {
+                    document.location.hash = hashStr;
+                }
             };
 
             function decode() {
@@ -462,9 +464,11 @@
          */
         lfo: function () {
             // call counter
-            var curry = slice.call(arguments), sync = false, fn, count;
+            var curry = slice.call(arguments), sync = false, context, fn, count;
             // sync or async (default)
             if (curry[0] === true) { curry.shift(); sync = true; }
+            // context?
+            if (!_.isFunction(curry[0])) context = curry.shift();
             // get function and count
             fn = curry.shift() || $.noop;
             count = (fn.count = (fn.count || 0) + 1);
@@ -473,7 +477,7 @@
                 var args = slice.call(arguments);
                 function cont() {
                     if (count === fn.count) {
-                        fn.apply(fn, curry.concat(args));
+                        fn.apply(context || fn, curry.concat(args));
                     }
                 }
                 if (sync) cont(); else setTimeout(cont, 0);
@@ -886,12 +890,12 @@
             }
 
             return function (o) {
-                var tmp, r = 'recurrence_position', m, f;
+                var tmp, r = 'recurrenceId', m, f;
                 if (typeof o === 'string') {
-                    // integer based ids?
-                    if ((m = o.match(/^(\d*?)\.(\d+)(\.(\d+))?$/)) && m.length) {
-                        tmp = { folder_id: String(m[1]), id: String(m[2]) };
-                        if (m[4] !== undefined) { tmp[r] = parseInt(m[4], 10); }
+                    // Triples? (incl. new CalDAV ids)
+                    if ((m = o.match(/^(cal:\/\/\d+\/\d+|\d+)\.(\d+)(\.([\dTZ]+))?$/)) && m.length) {
+                        tmp = { folder_id: String(m[1]), folder: String(m[1]), id: String(m[2]) };
+                        if (m[4] !== undefined) tmp[r] = String(m[4]);
                         return tmp;
                     }
                     // character based? (double tuple)
@@ -938,7 +942,30 @@
             return !_.url.hash('debug-i18n') ? _.identity : function (text) {
                 return '\u200b' + String(text).replace(/[\u200b\u200c]/g, '') + '\u200c';
             };
-        }())
+        }()),
+
+        updateFavicons: function (path) {
+            path = path || ox.base + '/apps/themes/' + ox.theme + '/';
+            var icons = {
+                icon57: 'icon57.png',
+                icon72: 'icon72.png',
+                icon76: 'icon76.png',
+                icon114: 'icon114.png',
+                icon120: 'icon120.png',
+                icon144: 'icon144.png',
+                icon152: 'icon152.png',
+                icon167: 'icon167.png',
+                icon180: 'icon180.png',
+                icon192: 'icon192.png',
+                win8Icon: 'icon144_win.png',
+                // update favicon last; latest chrome (~64) runs into issues (see bug 57324)
+                favicon: 'favicon.ico'
+            };
+            _(icons).each(function (file, id) {
+                // firefox needs detach/append (see bug 25287);
+                $('head #' + id).attr({ href: path + file }).detach().appendTo('head');
+            });
+        }
     });
 
     _.noI18n.fix = !_.url.hash('debug-i18n') ? _.identity : function (text) {

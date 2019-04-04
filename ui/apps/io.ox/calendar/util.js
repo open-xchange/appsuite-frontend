@@ -17,12 +17,12 @@ define('io.ox/calendar/util', [
     'io.ox/core/api/group',
     'io.ox/core/folder/api',
     'io.ox/core/util',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'gettext!io.ox/calendar',
     'io.ox/core/a11y'
-], function (userAPI, contactAPI, groupAPI, folderAPI, util, dialogs, settings, coreSettings, gt, a11y) {
+], function (userAPI, contactAPI, groupAPI, folderAPI, util, ModalDialog, settings, coreSettings, gt, a11y) {
 
     'use strict';
 
@@ -430,7 +430,7 @@ define('io.ox/calendar/util', [
             }
 
             function getTitle(data) {
-                return that.getTimeInterval(data, moment().tz()) + ' ' + moment().zoneAbbr();
+                return that.getTimeInterval(data, that.getMoment(data.startDate).tz()) + ' ' + that.getMoment(data.startDate).zoneAbbr();
             }
 
             function addA11ySupport(parent) {
@@ -1140,33 +1140,33 @@ define('io.ox/calendar/util', [
             });
         },
 
-        getRecurrenceEditDialog: function () {
-            return new dialogs.ModalDialog()
-                    .text(gt('Do you want to edit the whole series or just this appointment within the series?'))
-                    .addPrimaryButton('series', gt('Series'), 'series')
-                    .addButton('appointment', gt('Appointment'), 'appointment')
-                    .addButton('cancel', gt('Cancel'), 'cancel');
-        },
-
         showRecurrenceDialog: function (model, options) {
             if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
             if (model.get('recurrenceId')) {
                 options = options || {};
-                var dialog = new dialogs.ModalDialog();
-                // first occurence
+                var text, dialog = new ModalDialog().addCancelButton({ left: true });
+                if (!options.dontAllowExceptions) dialog.addButton({ label: gt('This appointment'), action: 'appointment', className: 'btn-default' });
+
                 if (model.hasFlag('first_occurrence')) {
-                    dialog.text(gt('Do you want to edit the whole series or just this appointment within the series?'));
-                    dialog.addPrimaryButton('series', gt('Series'), 'series');
+                    if (options.dontAllowExceptions) return $.when('series');
+                    text = gt('Do you want to edit the whole series or just this appointment within the series?');
+                    dialog.addButton({ label: gt('Series'), action: 'series' });
                 } else if (model.hasFlag('last_occurrence') && !options.allowEditOnLastOccurence) {
                     return $.when('appointment');
+                } else if (options.dontAllowExceptions) {
+                    text = gt('Do you want to edit this and all future appointments or the whole series?');
+                    dialog.addButton({ label: gt('Series'), action: 'series', className: 'btn-default' });
+                    dialog.addButton({ label: gt('All future appointments'), action: 'thisandfuture' });
                 } else {
-                    dialog.text(gt('Do you want to edit this and all future appointments or just this appointment within the series?'));
-                    dialog.addPrimaryButton('thisandfuture', gt('All future appointments'), 'thisandfuture');
+                    text = gt('Do you want to edit this and all future appointments or just this appointment within the series?');
+                    dialog.addButton({ label: gt('All future appointments'), action: 'thisandfuture' });
                 }
-
-                return dialog.addButton('appointment', gt('This appointment'), 'appointment')
-                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel')
-                    .show();
+                dialog.build(function () { this.$title.text(text); }).open();
+                var def = $.Deferred();
+                dialog.on('action', function (value) {
+                    def.resolve(value);
+                });
+                return def;
             }
             return $.when('appointment');
         },
@@ -1194,7 +1194,7 @@ define('io.ox/calendar/util', [
             var app = ox.ui.apps.get('io.ox/calendar');
             if (!app) return {};
             var perspective = app.perspective;
-            if (!perspective) return;
+            if (!perspective) return {};
 
             var rangeStart, rangeEnd, model = perspective.model;
             switch (perspective.getName()) {
@@ -1267,7 +1267,8 @@ define('io.ox/calendar/util', [
             };
 
             if (attendee.cuType !== 'RESOURCE') {
-                if ((user.user_id !== undefined || user.contact_id) && user.type !== 5) attendee.entity = user.user_id || user.id;
+                // guests have a user id but are still considered external, so dont add an entity here (normal users have guest_created_by === 0)
+                if (!user.guest_created_by && (user.user_id !== undefined || user.contact_id) && user.type !== 5) attendee.entity = user.user_id || user.id;
                 attendee.email = user.field && user[user.field] ? user[user.field] : (user.email1 || user.mail);
                 if (!attendee.cn) attendee.cn = attendee.email;
                 attendee.uri = 'mailto:' + attendee.email;
@@ -1329,52 +1330,32 @@ define('io.ox/calendar/util', [
         },
 
         // checks if the user is allowed to edit an event
-        // can be used in synced or deferred mode(deferred is default) by setting options.synced
-        // If synced mode is used make sure to give the folder data in the options.folderData attribute
-        allowedToEdit: function (event, options) {
-            options = options || {};
-            var result = function (val) { return options.synced ? val : $.when(val); };
+        // data is plain object, folder is folderModel (e.g. via app.folder.getModel())
+        allowedToEdit: function (data, folder) {
 
-            // no event
-            if (!event) return result(false);
-
-            // support objects and models
-            var data = event.attributes || event,
-                folder = data.folder;
-            // no id or folder
-            if (!data.id || !data.folder) return result(false);
+            if (!data || !folder) return false;
+            if (!data.id || !data.folder) return false;
 
             // organizer is allowed to edit
-            if (this.hasFlag(data, 'organizer') || this.hasFlag(data, 'organizer_on_behalf')) return result(true);
-
+            if (this.hasFlag(data, 'organizer') || this.hasFlag(data, 'organizer_on_behalf')) return true;
             // if user is neither organizer nor attendee editing is not allowed
-            if (!this.hasFlag(data, 'attendee') && !this.hasFlag(data, 'attendee_on_behalf')) return result(false);
+            if (!this.hasFlag(data, 'attendee') && !this.hasFlag(data, 'attendee_on_behalf')) return true;
+            // if user is attendee, check if modify privileges are granted
+            if ((this.hasFlag(data, 'attendee') || this.hasFlag(data, 'attendee_on_behalf')) && data.attendeePrivileges === 'MODIFY') return true;
 
-            // if both settings are the same, we don't need a folder check, all attendees are allowed to edit or not, no matter which folder the event is in
-            if (settings.get('chronos/restrictAllowedAttendeeChanges', true) === settings.get('chronos/restrictAllowedAttendeeChangesPublic', true)) return result(!settings.get('chronos/restrictAllowedAttendeeChanges', true));
+            var restrictChanges = settings.get('chronos/restrictAllowedAttendeeChanges', true),
+                restrictChangesPublic = settings.get('chronos/restrictAllowedAttendeeChangesPublic', true);
 
-            // synced mode needs folderData at this point. Stop if not given
-            if (options.synced && !options.folderData) return result(false);
-            if (options.synced) {
-                // public folder
-                if (folderAPI.is('public', options.folderData)) return !settings.get('chronos/restrictAllowedAttendeeChangesPublic', true);
-                // no public folder
-                return !settings.get('chronos/restrictAllowedAttendeeChanges', true);
-            }
+            // if both settings are the same, we don't need a folder check
+            // all attendees are allowed to edit or not, no matter which folder the event is in
+            if (restrictChanges === restrictChangesPublic) return !restrictChanges;
 
-            // check if this is a public or non public folder
-            return folderAPI.get(folder).then(function (folderData) {
-                // public folder
-                if (folderAPI.is('public', folderData)) return !settings.get('chronos/restrictAllowedAttendeeChangesPublic', true);
-                // no public folder
-                return !settings.get('chronos/restrictAllowedAttendeeChanges', true);
-            });
+            return folder.is('public') ? !restrictChangesPublic : !restrictChanges;
         },
 
         hasFlag: function (data, flag) {
             // support for arrays (used in multiple selection). returns true if all items in the array have the flag
             if (_.isArray(data) && data.length > 0) return _(data).reduce(function (oldVal, item) { return oldVal && that.hasFlag(item, flag); }, true);
-
             if (data instanceof Backbone.Model) return data.hasFlag(flag);
             if (!data.flags || !data.flags.length) return false;
             return data.flags.indexOf(flag) >= 0;
@@ -1398,6 +1379,21 @@ define('io.ox/calendar/util', [
                 moment.tz(moment(result.startDate.value).valueOf() + moment(master.endDate.value).valueOf() - moment(master.startDate.value).valueOf(), result.startDate.tzid).format('YYYYMMDD[T]HHmmss');
 
             return result;
+        },
+        // cleans attendee confrmations and comments, used when data from existing appointments should be used to create a new one (invite, follow up)
+        cleanupAttendees: function (attendees) {
+            // clean up attendees (remove confirmation status comments etc)
+            return _(attendees).map(function (attendee) {
+                var temp = _(attendee).pick('cn', 'cuType', 'email', 'uri', 'entity', 'contact');
+                // resources are always set to accepted
+                if (temp.cn === 'RESOURCE') {
+                    temp.partStat = 'ACCEPTED';
+                    if (attendee.comment) temp.comment = attendee.comment;
+                } else {
+                    temp.partStat = 'NEEDS-ACTION';
+                }
+                return temp;
+            });
         }
     };
 

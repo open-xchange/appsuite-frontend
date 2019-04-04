@@ -44,22 +44,7 @@ define('io.ox/core/sub/model', [
         };
     }
 
-    var Publication = BasicModel.extend({
-            ref: 'io.ox/core/sub/publication/',
-            defaults: function () {
-                return {
-                    entity: {},
-                    entityModule: '',
-                    target: ''
-                };
-            },
-
-            url: function () {
-                return this.attributes[this.attributes.target].url;
-            },
-            syncer: createSyncer(api.publications)
-        }),
-        Subscription = BasicModel.extend({
+    var Subscription = BasicModel.extend({
             ref: 'io.ox/core/sub/subscription/',
             url: function () {
                 return this.attributes[this.attributes.source].url;
@@ -145,14 +130,11 @@ define('io.ox/core/sub/model', [
                 });
             }
         },
-        Publications = PubSubCollection.factory(api.publications).extend({
-            model: Publication
-        }),
         Subscriptions = PubSubCollection.factory(api.subscriptions).extend({
             model: Subscription
         }),
         //singleton instances
-        publications, subscriptions;
+        subscriptions;
 
     function filterFolder(folder) {
         var filter = String(folder.folder_id || folder.folder || '');
@@ -163,18 +145,6 @@ define('io.ox/core/sub/model', [
             return (e.get('entity') || { folder: e.get('folder') }).folder === filter;
         });
     }
-
-    ext.point('io.ox/core/sub/publication/validation').extend({
-        validate: function (obj, errors) {
-            if (!obj.target) {
-                errors.add('target', gt('Publication must have a target.'));
-                return;
-            }
-            if ((obj[obj.target] || {}).siteName === '') {
-                errors.add('siteName', gt('Publication must have a site.'));
-            }
-        }
-    });
 
     ext.point('io.ox/core/sub/subscription/validation').extend({
         validate: function (obj, errors) {
@@ -191,15 +161,6 @@ define('io.ox/core/sub/model', [
     });
 
     return {
-        Publication: Publication,
-        publications: function () {
-            if (!publications) {
-                publications = new Publications();
-            }
-            publications.fetch();
-
-            return publications;
-        },
         subscriptions: function () {
             if (!subscriptions) {
                 subscriptions = new Subscriptions();

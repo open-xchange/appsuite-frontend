@@ -242,6 +242,9 @@ define('io.ox/contacts/addressbook/popup', [
                 } else {
                     // get sort name
                     names.forEach(function (name) {
+                        // use diplay name as fallback only, to avoid inconsistencies
+                        // example if we would not do this: yomiLastname: a => sort_name: a, lastname: a => sortname: a_a, reason behind this is that for yomis no display name is created
+                        if (name === 'display_name' && sort_name.length) return;
                         if (item[name]) sort_name.push(item[name]);
                     });
                     if (opt.useGABOnly) addresses = ['email1'];
@@ -827,6 +830,8 @@ define('io.ox/contacts/addressbook/popup', [
         .build(options.build)
         .on({
             'close': function () {
+                // reset folder to default
+                folder = 'all';
                 isOpen = false;
             },
             'error': function (e) {

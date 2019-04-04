@@ -29,6 +29,8 @@ define('io.ox/core/extPatterns/links', [
 
     var Link = function (options) {
 
+        if (ox.debug) console.warn('Link is DEPRECATED with 7.10.2 (io.ox/core/extPatterns/links.js)', options);
+
         _.extend(this, options);
 
         var self = this,
@@ -55,7 +57,7 @@ define('io.ox/core/extPatterns/links', [
                     'draggable': options.draggable || false,
                     'role': self.role || 'menuitem',
                     'data-section': self.section || 'default',
-                    'data-section-description': self.sectionDescription,
+                    'data-section-description': self.sectionDescription || self.sectionTitle,
                     'data-prio': _.device('smartphone') ? (self.mobile || 'none') : (self.prio || 'lo'),
                     'data-ref': self.ref,
                     'tabindex': -1
@@ -71,25 +73,24 @@ define('io.ox/core/extPatterns/links', [
                 if (icons && prio === 'hi') {
                     // add icon and title attribut
                     a.append(preRendered.i.clone().addClass(self.icon).attr('aria-hidden', 'true'));
-                    attr.title = self.title || self.label || '';
-                } else if (self.label) {
+                } else if (title) {
                     // add text. add title unless it matches content
-                    a.append($.txt(self.label));
-                    if (self.label !== title) attr.title = title;
+                    a.append($.txt(title));
                 }
                 // has icon?
                 if (icons) a.addClass('no-underline');
                 // use tooltip?
-                var addTooltip = !_.device('smartphone') && (icons && self.label) || self.title;
+                var addTooltip = self.toolTip && prio === 'hi' && _.device('!smartphone');
                 if (addTooltip) {
                     _.extend(attr, {
+                        'title': self.toolTip,
                         'data-toggle': 'tooltip',
                         'data-placement': 'bottom',
                         'data-animation': 'false',
                         'data-container': 'body',
                         // tooltip removes title attribute
-                        // therefore we always add arial-label to maintain screen reader support
-                        'aria-label': self.title || self.label || null
+                        // therefore we always add aria-label to maintain screen reader support
+                        'aria-label': self.toolTip
                     });
                 }
                 // apply attributes now in a single run
@@ -384,6 +385,8 @@ define('io.ox/core/extPatterns/links', [
      */
     var InlineLinks = function (options) {
 
+        if (ox.debug) console.warn('InlineLinks is DEPRECATED with 7.10.2 (io.ox/core/extPatterns/links.js)', options);
+
         // don't use options inside this class; only "this" gets replaced properties
         var extension = _.extend(this, {
             classes: 'io-ox-inline-links',
@@ -585,6 +588,7 @@ define('io.ox/core/extPatterns/links', [
 
     // full dropdown; <div> <a> + <ul> + inks </div>
     var Dropdown = function (options) {
+        if (ox.debug) console.warn('Dropdown is DEPRECATED with 7.10.2 (io.ox/core/extPatterns/links.js)', options);
         var o = _.extend(this, options);
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
@@ -594,6 +598,7 @@ define('io.ox/core/extPatterns/links', [
 
     // just the dropdown - <ul> + links; not the container
     var DropdownLinks = function (options, baton, wrap) {
+        if (ox.debug) console.warn('DropdownLinks is DEPRECATED with 7.10.2 (io.ox/core/extPatterns/links.js)', options);
         options = options || {};
         baton.$el = $('<ul class="dropdown-menu" role="menu">');
         wrap = !!_.defaultValue(options.wrap, true);

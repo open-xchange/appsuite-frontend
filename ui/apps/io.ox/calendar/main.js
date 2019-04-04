@@ -392,28 +392,7 @@ define('io.ox/calendar/main', [
         },
 
         'toggle-folder-view': function (app) {
-            app.toggleFolderView = function (e) {
-                e.preventDefault();
-                app.trigger('before:change:folderview');
-                app.folderView.toggle(e.data.state);
-            };
-
-            ext.point('io.ox/calendar/sidepanel').extend({
-                id: 'toggle-folderview',
-                index: 1000,
-                draw: function () {
-                    if (_.device('smartphone')) return;
-                    this.addClass('bottom-toolbar').append(
-                        $('<div class="generic-toolbar bottom visual-focus">').append(
-                            $('<a href="#" class="toolbar-item" role="button" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
-                            .append(
-                                $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
-                            )
-                            .on('click', { state: false }, app.toggleFolderView)
-                        )
-                    );
-                }
-            });
+            commons.addFolderViewToggle(app);
         },
 
         'account-errors': function (app) {
@@ -482,6 +461,8 @@ define('io.ox/calendar/main', [
                     if (!views[item]) return;
                     views[item].trigger('show');
                     app.perspective = views[item];
+                    // trigger change perspective so toolbar is redrawn (no more lost today button)
+                    app.getWindow().trigger('change:perspective', views[item]);
                     if (_.device('smartphone')) settings.set('viewView', item);
                 });
             });
@@ -490,6 +471,8 @@ define('io.ox/calendar/main', [
         'listview': function (app) {
             app.listView = new CalendarListView({ app: app, draggable: false, pagination: false, labels: true, ignoreFocus: true, noPullToRefresh: true });
             app.listView.model.set({ view: 'list' }, { silent: true });
+            // for debugging
+            if (!window.list) window.list = app.listView;
         },
 
         'list-view-control': function (app) {
@@ -813,7 +796,6 @@ define('io.ox/calendar/main', [
 
         'metrics': function (app) {
 
-            // hint: toolbar metrics are registery by extension 'metrics-toolbar'
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
 
@@ -831,31 +813,38 @@ define('io.ox/calendar/main', [
                         action: action
                     });
                 });
-                // detail view
-                nodes.outer.on('mousedown', '.participants-view .io-ox-action-link', function (e) {
+
+                function track(target, node) {
+                    node = $(node);
+                    var isSelect = !!node.attr('data-name'),
+                        action = (node.attr('data-action') || '').replace(/^io\.ox\/calendar\/(detail\/)?/, '');
                     metrics.trackEvent({
                         app: 'calendar',
-                        target: 'detail/toolbar',
+                        target: target,
                         type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
+                        action: isSelect ? node.attr('data-name') : action,
+                        detail: isSelect ? node.attr('data-value') : ''
                     });
+                }
+
+                // main toolbar: actions, view dropdown
+                nodes.body.on('track', '.classic-toolbar-container', function (e, node) {
+                    track('toolbar', node);
                 });
                 // detail view as sidepopup
-                nodes.outer.on('mousedown', '.io-ox-sidepopup .io-ox-action-link', function (e) {
-                    metrics.trackEvent({
-                        app: 'calendar',
-                        target: 'detail/toolbar',
-                        type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
-                    });
+                nodes.outer.on('track', '.io-ox-sidepopup', function (e, node) {
+                    track('detail/toolbar', node);
                 });
+
                 // folder tree action
-                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
-                    metrics.trackEvent({
-                        app: 'calendar',
-                        target: 'folder/context-menu',
-                        type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
+                _.defer(function () {
+                    sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
+                        metrics.trackEvent({
+                            app: 'calendar',
+                            target: 'folder/context-menu',
+                            type: 'click',
+                            action: $(e.currentTarget).attr('data-action')
+                        });
                     });
                 });
                 sidepanel.find('.bottom').on('mousedown', 'a[data-action]', function (e) {

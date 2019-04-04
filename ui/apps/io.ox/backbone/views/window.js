@@ -224,6 +224,7 @@ define('io.ox/backbone/views/window', [
 
             // add backdrop to prevent iframe drag issues
             $(container).append(backdrop);
+            this.$el.addClass('dragging');
         },
 
         drag: function (e) {
@@ -250,6 +251,7 @@ define('io.ox/backbone/views/window', [
                 this.lastActiveElement = null;
             }
             backdrop.remove();
+            this.$el.removeClass('dragging');
         },
 
         onQuit: function () {
@@ -311,14 +313,14 @@ define('io.ox/backbone/views/window', [
             this.model.set('mode', this.model.get('mode') === 'maximized' ? 'normal' : 'maximized');
         },
 
-        activate: function () {
+        activate: function (e) {
             if (this.$el.hasClass('active')) return;
             collection.each(function (windowModel) { windowModel.trigger('deactivate'); });
             this.$el.addClass('active');
             this.model.set('active', true);
 
             // if this window does not have the focus, focus it now
-            if (this.$el.has(document.activeElement).length === 0) {
+            if (this.$el.has(document.activeElement).length === 0 && !e) {
                 a11y.getTabbable(this.$body).first().focus();
             }
 

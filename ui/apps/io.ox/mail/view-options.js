@@ -317,7 +317,6 @@ define('io.ox/mail/view-options', [
     });
 
     function toggleFolderView(e) {
-        e.preventDefault();
         var state = !!e.data.state;
         e.data.app.folderView.forceOpen = state;
         e.data.app.props.set('folderview', state);
@@ -343,7 +342,7 @@ define('io.ox/mail/view-options', [
         draw: function (baton) {
 
             this.append(
-                $('<a href="#" role="button" class="toolbar-item pull-left" data-action="open-folder-view">').attr('aria-label', gt('Open folder view')).append(
+                $('<button type="button" class="btn btn-link toolbar-item pull-left" data-action="open-folder-view">').attr('aria-label', gt('Open folder view')).append(
                     $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view'))
                 ).on('click', { app: baton.app, state: true }, toggleFolderView)
             );
@@ -362,13 +361,19 @@ define('io.ox/mail/view-options', [
         index: 1000,
         draw: function (baton) {
             this.addClass('bottom-toolbar').append(
-                $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" role="button" class="toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view')).append(
+                $('<div class="generic-toolbar bottom visual-focus" role="region">').append(
+                    $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view')).append(
                         $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                     ).on('click', { app: baton.app, state: false }, toggleFolderView)
                 )
             );
         }
+    });
+
+    ext.point('io.ox/mail/sidepanel').extend({
+        id: 'help',
+        index: 1100,
+        draw: commons.help
     });
 
     ext.point('io.ox/mail/sidepanel').extend({

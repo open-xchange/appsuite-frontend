@@ -15,44 +15,21 @@ define('io.ox/files/favorite/listview', [
     'io.ox/core/extensions',
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/tk/list',
+    'io.ox/core/tk/list-contextmenu',
     'io.ox/files/common-extensions',
     'settings!io.ox/core',
     'io.ox/core/folder/api',
     'io.ox/files/api',
-    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/views/actions/util',
     'less!io.ox/files/favorite/style',
     'io.ox/files/favorite/view-options'
-], function (ext, BreadcrumbView, ListView, extensions, settings, FolderAPI, FilesAPI, actions) {
+], function (ext, BreadcrumbView, ListView, ContextMenu, extensions, settings, FolderAPI, FilesAPI, actionsUtil) {
 
     'use strict';
 
     var LISTVIEW = 'io.ox/files/favorite/myfavorites/listview', ITEM = LISTVIEW + '/item';
 
-    function onContextMenu(e) {
-        var view = this;
-        var app = view.app;
-        // the link to render the context menu with it's entries.
-        var link = 'io.ox/core/file/contextmenu/default';
-        // context menu when clicked below the list.
-        // var linkOutsideList = link + '/outsideList'; Disabled for now
-
-        // android sends context events on long tap, but currently we don't want a context menu on smartphones and tablets
-        if (_.device('smartphone') || _.device('android')) { return; }
-
-        var list = view.selection.get();
-        if (!list) return;
-        // turn cids into proper objects
-        var cids = list,
-            models = FilesAPI.resolve(cids, false);
-        list = _(models).invoke('toJSON');
-        // extract single object if length === 1
-        var data = list.length === 1 ? list[0] : list;
-        var baton = new ext.Baton({ data: data, models: models, collection: app.myFavoriteListView.collection, app: app, allIds: [], view: view, linkContextMenu: link/*, linkContextMenuOutsideList: linkOutsideList*/, favorite: true, insideTrash: false });
-
-        view.contextMenu.showContextMenu(e, baton);
-    }
-
-    var MyFavoriteListView = ListView.extend({
+    var MyFavoriteListView = ListView.extend(ContextMenu).extend({
 
         ref: LISTVIEW,
 
@@ -60,7 +37,8 @@ define('io.ox/files/favorite/listview', [
 
             options.collection = this.collection = FolderAPI.pool.getCollection('virtual/favorites/infostore');
 
-            this.contextMenu = options.contextMenu;
+            // use same context menu as main list view
+            this.contextMenuRef = 'io.ox/files/listview/contextmenu';
 
             this.folderID = settings.get('favorites/infostore', []);
 
@@ -86,9 +64,9 @@ define('io.ox/files/favorite/listview', [
                     if ($(element.currentTarget).parent().attr('data-is-file') !== 'false') {
                         var app = options.app,
                             selectedModel = _(FilesAPI.resolve([cid], false)).invoke('toJSON'),
-                            baton = ext.Baton({ data: selectedModel[0], collection: app.myFavoriteListView.collection, app: app, options: { eventname: 'selection-doubleclick' } });
-
-                        actions.invoke('io.ox/files/actions/default', null, baton);
+                            baton = ext.Baton({ data: selectedModel[0], all: app.myFavoriteListView.collection, app: app, options: { eventname: 'selection-doubleclick' } });
+                        // Tested: false
+                        actionsUtil.invoke('io.ox/files/actions/default', baton);
                     } else {
                         options.app.folder.set(cid.replace(/^folder./, ''), true);
                     }
@@ -166,7 +144,10 @@ define('io.ox/files/favorite/listview', [
             this.collection.trigger('sort');
             this.app.props.set(this.model.attributes);
         },
-        onContextMenu: onContextMenu
+
+        getContextMenuData: function (selection) {
+            return this.app.getContextualData(selection, 'favorites');
+        }
     });
 
     //

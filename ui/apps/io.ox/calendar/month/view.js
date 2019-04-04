@@ -382,8 +382,8 @@ define('io.ox/calendar/month/view', [
             var startMoment = moment.max(model.getMoment('startDate'), this.model.get('startDate')).clone(),
                 endMoment = moment.min(model.getMoment('endDate'), this.model.get('endDate')).clone();
 
-            // fix full-time values
-            if (util.isAllday(model)) endMoment.subtract(1, 'millisecond');
+            // subtract 1ms. This will not be visible and will fix appointments till 12am to not be drawn on the next day (e.g. allday appointments)
+            endMoment.subtract(1, 'millisecond');
 
             if (_.device('smartphone')) {
                 var node = $('#' + startMoment.format('YYYY-M-D') + ' .list', this.$el).empty();
@@ -521,6 +521,12 @@ define('io.ox/calendar/month/view', [
             return this;
         },
 
+        rerender: function () {
+            this.toolbarView.update();
+            this.monthView.render();
+            return this;
+        },
+
         getRequestParam: function () {
             var params = {
                 start: this.model.get('startDate').valueOf(),
@@ -544,7 +550,10 @@ define('io.ox/calendar/month/view', [
             }
 
             // Rerender the view when the date changes (e.g. keep appsuite open overnight)
-            if (!this.model.get('currentDate').isSame(moment(), 'day')) this.render();
+            if (!this.model.get('currentDate').isSame(moment(), 'day')) {
+                this.model.set('currentDate', moment());
+                this.rerender();
+            }
 
             this.setCollection(collection);
             $.when(this.app.folder.getData(), this.app.folders.getData()).done(function (folder, folders) {

@@ -13,12 +13,11 @@
 
 define('io.ox/calendar/edit/timezone-dialog', [
     'io.ox/core/extensions',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'gettext!io.ox/calendar/edit/main',
-    'settings!io.ox/core',
     'io.ox/backbone/mini-views/timezonepicker',
     'io.ox/calendar/util'
-], function (ext, dialogs, gt, coreSettings, TimezonePicker, util) {
+], function (ext, ModalDialog, gt, TimezonePicker, util) {
 
     'use strict';
 
@@ -68,14 +67,13 @@ define('io.ox/calendar/edit/timezone-dialog', [
             endTimezone: opt.model.getMoment('endDate').tz()
         });
 
-        new dialogs.ModalDialog()
-            .header($('<h4>').text(gt('Change timezone')))
-            .addPrimaryButton('change', gt('Change'), 'change')
-            .addButton('cancel', gt('Cancel'), 'cancel')
+        new ModalDialog({ title: gt('Change timezone') })
+            .addCancelButton({ left: true })
+            .addButton({ label: gt('Change'), action: 'changeTZ' })
             .build(function () {
-                ext.point('io.ox/calendar/edit/timezone-dialog').invoke('draw', this.getContentNode(), { model: model });
+                ext.point('io.ox/calendar/edit/timezone-dialog').invoke('draw', this.$body, { model: model });
             })
-            .on('change', function () {
+            .on('changeTZ', function () {
                 var startDate = opt.model.getMoment('startDate').tz(model.get('startTimezone')),
                     endDate = opt.model.getMoment('endDate').tz(model.get('endTimezone'));
                 opt.model.set({
@@ -83,7 +81,7 @@ define('io.ox/calendar/edit/timezone-dialog', [
                     endDate: { value: endDate.clone().utc().format(util.ZULU_FORMAT), tzid: endDate.tz() }
                 });
             })
-            .show();
+            .open();
     }
 
     return { open: open };

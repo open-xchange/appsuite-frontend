@@ -222,6 +222,9 @@
             font-weight: normal;
             cursor: default;
             clear: both;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
         }
 
         dd {
@@ -256,7 +259,7 @@
                 padding: 0 0 8px 0;
 
                 .createdby, .last_modified, .size {
-                    padding: 2px;
+                    padding: 2px 0;
                 }
 
                 .last_modified { float: right; }
@@ -309,33 +312,26 @@
         position: absolute;
         top: 0;
         width: 100%;
-        height: @viewer-toolbar-height;
-        line-height: @viewer-toolbar-height;
-        background: @viewer-toolbar-bgcolor;
-        list-style: none;
-        padding-left: 0;
-        text-align: right;
         z-index: 2;
-        border-bottom: 1px solid @viewer-toolbar-border-color;
         .user-select(none);
 
         i.fa { font-size: 14px; }
 
-        > li {
+        .classic-toolbar {
+            height: @viewer-toolbar-height;
+            line-height: @viewer-toolbar-height;
+            background: @viewer-toolbar-bgcolor;
+            border-bottom: 1px solid @viewer-toolbar-border-color;
+        }
+
+        .classic-toolbar > li {
             display: inline-block;
             height: @viewer-toolbar-height;
             text-align: center;
 
             > a {
-                display: inline-block;
-                height: @viewer-toolbar-height;
                 min-width: @viewer-toolbar-link-width;
-                padding: 0 16px;
-                outline: 0;
-                text-align: center;
-                text-decoration: none;
                 color: @viewer-toolbar-color;
-                border-bottom: 1px solid @viewer-toolbar-border-color;
                 &:not(.disabled) {
                     &:hover {
                         color: @viewer-toolbar-hover-color;
@@ -354,11 +350,9 @@
                 background-color: @viewer-toolbar-active-bgcolor;
             }
 
-            &.dropdown {
+            &.more-dropdown {
                 margin-right: @viewer-toolbar-link-width;
-
                 &.open { background-color: @viewer-toolbar-active-bgcolor; }
-
                 @media (max-width: 1023px) { margin-right: 0; }
             }
 
@@ -366,6 +360,7 @@
         }
 
         .viewer-toolbar-filename {
+            line-height: 40px;
             max-width: @viewer-toolbar-filename-width;
             padding: 0 16px;
             text-align: left;

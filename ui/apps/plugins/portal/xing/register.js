@@ -29,11 +29,11 @@ define('plugins/portal/xing/register', [
     'io.ox/xing/api',
     'io.ox/core/api/user',
     'io.ox/core/notifications',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/keychain/api',
     'gettext!plugins/portal',
     'less!plugins/portal/xing/xing'
-], function (ext, eventActions, activityParsers, api, userApi, notifications, dialogs, keychain, gt) {
+], function (ext, eventActions, activityParsers, api, userApi, notifications, ModalDialog, keychain, gt) {
 
     'use strict';
 
@@ -61,30 +61,26 @@ define('plugins/portal/xing/register', [
     createXingAccount = function (e) {
         e.preventDefault();
 
-        var email, firstname, lastname, language;
-
-        new dialogs.ModalDialog()
+        new ModalDialog()
             .build(function () {
-                var availableLangs, guid;
+                var availableLangs = 'de en es fr it nl pl pt ru tr zh'.split(' '), self = this, guid;
 
-                availableLangs = 'de en es fr it nl pl pt ru tr zh'.split(' ');
-
-                this.append(
+                this.$body.append(
                     $('<div class="io-ox-xing submitted-data">').append(
                         $('<p>').text(
                             gt('Please select which of the following data we may use to create your %s account:', XING_NAME)
                         ),
                         $('<label>').text(gt('Mail address')).attr('for', guid = _.uniqueId('form-control-label-')).append(
-                            email = $('<input type="text" name="email">').attr('id', guid)
+                            this.$email = $('<input type="text" name="email">').attr('id', guid)
                         ),
                         $('<label>').text(gt('First name')).attr('for', guid = _.uniqueId('form-control-label-')).append(
-                            firstname = $('<input type="text" name="firstname">').attr('id', guid)
+                            this.$firstname = $('<input type="text" name="firstname">').attr('id', guid)
                         ),
                         $('<label>').text(gt('Last name')).attr('for', guid = _.uniqueId('form-control-label-')).append(
-                            lastname = $('<input type="text" name="lastname">').attr('id', guid)
+                            this.$lastname = $('<input type="text" name="lastname">').attr('id', guid)
                         ),
                         $('<label>').text(gt('Language')).attr('for', guid = _.uniqueId('form-control-label-')).append(
-                            language = $('<select name="language">').attr('id', guid).append(
+                            this.$language = $('<select name="language">').attr('id', guid).append(
                                 _(availableLangs).map(function (elem) { return $('<option>').val(elem).text(elem); })
                             )
                         )
@@ -92,29 +88,22 @@ define('plugins/portal/xing/register', [
                 );
 
                 userApi.getCurrentUser().done(function (userData) {
-                    var locale = userData.attributes.locale,
-                        lang = locale.indexOf('_') > -1 ? locale.split('_')[0] : locale;
-
-                    email.val(userData.attributes.email1 || userData.attributes.email2 || userData.attributes.email3);
-                    firstname.val(userData.attributes.first_name);
-                    lastname.val(userData.attributes.last_name);
-                    language.val(lang);
+                    var locale = userData.attributes.locale;
+                    self.$email.val(userData.attributes.email1 || userData.attributes.email2 || userData.attributes.email3);
+                    self.$firstname.val(userData.attributes.first_name);
+                    self.$lastname.val(userData.attributes.last_name);
+                    self.$language.val(locale.indexOf('_') > -1 ? locale.split('_')[0] : locale);
                 });
             })
-
-            .addAlternativeButton('cancel', gt('Cancel'), 'cancel')
-            .addSuccessButton('accepted', gt('Accept'), 'accepted')
-
-            .show()
-
-            .done(function (action) {
-                if (action === 'cancel') return;
+            .addCancelButton()
+            .addButton({ label: gt('Accept'), action: 'accepted' })
+            .on('accepted', function () {
                 api.createProfile({
                     tandc_check: true,
-                    email: email.val(),
-                    first_name: firstname.val(),
-                    last_name: lastname.val(),
-                    language: language.val()
+                    email: this.$email.val(),
+                    first_name: this.$firstname.val(),
+                    last_name: this.$lastname.val(),
+                    language: this.$language.val()
                 })
                 .fail(function (response) {
                     notifications.yell('error', gt('There was a problem with %s. The error message was: "%s"', XING_NAME, response.error));
@@ -126,7 +115,8 @@ define('plugins/portal/xing/register', [
                         message: gt('Please check your inbox for a confirmation email.\n\nFollow the instructions in the email and then return to the widget to complete account setup.')
                     });
                 });
-            });
+            })
+            .open();
     };
 
     // addXingAccount = function (event) {

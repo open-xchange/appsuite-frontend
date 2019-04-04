@@ -159,9 +159,9 @@ define('io.ox/mail/accounts/settings', [
                     })), list = new OAuth.Views.ServicesListView({ collection: mailServices });
 
                 if (mailServices.length === 0) {
-                    baton.popup.getFooter().find('[data-action="add"]').show();
+                    baton.popup.$footer.find('[data-action="add"]').show();
                     // invoke wizard, there are no OAuth options to choose from
-                    ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
+                    ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.$body.empty());
                     return;
                 }
                 // Invoke extension point for custom predefined non-oauth accounts
@@ -211,11 +211,11 @@ define('io.ox/mail/accounts/settings', [
                 });
 
                 list.listenTo(list, 'select:wizard', function () {
-                    baton.popup.getFooter().find('[data-action="add"]').show();
+                    baton.popup.$footer.find('[data-action="add"]').show();
                     // invoke wizard
                     var data = {};
                     data.unified_inbox_enabled = $el.find('input[name="unified_inbox_enabled"]').prop('checked') === true;
-                    ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty(), data);
+                    ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.$body.empty(), data);
                 });
             });
         }
@@ -299,7 +299,7 @@ define('io.ox/mail/accounts/settings', [
         },
 
         getAlertPlaceholder = function (popup) {
-            return popup.getContentNode().find('.alert-placeholder');
+            return popup.$body.find('.alert-placeholder');
         },
 
         drawAlert = function (alertPlaceholder, message, options) {
@@ -334,7 +334,7 @@ define('io.ox/mail/accounts/settings', [
         },
 
         validateMailaccount = function (data, popup, def, options) {
-            var node = popup.getContentNode().find('input[name="unified_inbox_enabled"]');
+            var node = popup.$body.find('input[name="unified_inbox_enabled"]');
 
             if (node.length > 0 && node.prop('checked')) {
                 data.unified_inbox_enabled = true;
@@ -349,9 +349,7 @@ define('io.ox/mail/accounts/settings', [
                                     failDialog(response.error);
                                 } else {
                                     popup.close();
-                                    if (collection) {
-                                        collection.add([response]);
-                                    }
+                                    if (collection) collection.add([response]);
                                     successDialog();
                                     def.resolve(response);
                                 }
@@ -456,63 +454,41 @@ define('io.ox/mail/accounts/settings', [
                 collection = o.collection;
             }
 
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                var baton = ext.Baton({});
+            var baton = ext.Baton({});
 
-                new dialogs.ModalDialog({
-                    width: 432,
-                    async: true,
+            require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+                new ModalDialog({
+                    model: new Backbone.Model(),
+                    title: gt('Add mail account'),
                     enter: 'add'
                 })
-                .header(
-                    $('<h2>').text(gt('Add mail account'))
-                )
-                .build(function () {
-                    baton.popup = this;
-                    // invoke extensions
-                    ext.point('io.ox/mail/add-account/preselect').invoke('draw', this.getContentNode(), baton);
-                })
-                .addPrimaryButton('add', gt('Add'), 'add')
-                .addButton('cancel', gt('Cancel'), 'cancel')
-                //.addAlternativeButton('skip', gt('Manual'), 'skip')
-                .on('add', function () {
+                    .build(function () {
+                        baton.popup = this;
+                        // invoke extensions
+                        ext.point('io.ox/mail/add-account/preselect').invoke('draw', this.$body, baton);
+                    })
+                    .addCancelButton()
+                    .addButton({ label: gt('Add'), action: 'add' })
+                    .on('add', function () {
+                        var alertPlaceholder = this.$body.find('.alert-placeholder'),
+                            newMailaddress = this.$body.find('.add-mail-account-address').val(),
+                            newPassword = this.$body.find('.add-mail-account-password').val();
 
-                    var content = this.getContentNode(),
-                        alertPlaceholder = content.find('.alert-placeholder'),
-                        newMailaddress = content.find('.add-mail-account-address').val(),
-                        newPassword = content.find('.add-mail-account-password').val();
-
-                    if (myModel.isMailAddress(newMailaddress) === undefined) {
-                        drawBusy(alertPlaceholder);
-                        autoconfigApiCall(args, newMailaddress, newPassword, this, def, true);
-                    } else {
-                        var message = gt('This is not a valid mail address');
-                        drawAlert(alertPlaceholder, message, { errorAttributes: 'address' });
-                        content.find('.add-mail-account-password').focus();
-                        this.idle();
-                    }
-                })
-                // .on('skip', function () {
-                //     // primary address needs to be provided, why? fails without
-                //     args.data = { primary_address: this.getContentNode().find('.add-mail-account-address').val() };
-
-                //     if (this.getContentNode().find('input[name="unified_inbox_enabled"]').length > 0) {
-                //         args.data.unified_inbox_enabled = this.getContentNode().find('input[name="unified_inbox_enabled"]').prop('checked');
-                //     }
-                //     // close
-                //     this.close();
-                //     def.reject();
-                //     // jump to manual configuration
-                //     createExtpointForNewAccount(args);
-                // })
-                .show(function () {
-                    // hide add button for now
-                    this.find('[data-action="add"]').hide();
-                    a11y.getTabbable(this).first().focus();
-                });
-
+                        if (myModel.isMailAddress(newMailaddress) === undefined) {
+                            drawBusy(alertPlaceholder);
+                            autoconfigApiCall(args, newMailaddress, newPassword, this, def, true);
+                        } else {
+                            var message = gt('This is not a valid mail address');
+                            drawAlert(alertPlaceholder, message, { errorAttributes: 'address' });
+                            this.$body.find('.add-mail-account-password').focus();
+                            this.idle();
+                        }
+                    })
+                    .on('show', function () {
+                        this.$footer.find('[data-action="add"]').hide();
+                    })
+                    .open();
             });
-
             return def;
         },
 
@@ -524,20 +500,19 @@ define('io.ox/mail/accounts/settings', [
 
             var alertPlaceholder = $('<div>');
 
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                var failDialogbox = new dialogs.ModalDialog({
+            require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+                new ModalDialog({
+                    title: gt('Error'),
                     width: 400,
                     async: true
-                });
-                failDialogbox.header()
-                .append(
-                    alertPlaceholder
-                )
-                .addButton('cancel', gt('Close'), 'cancel')
-                .show(function () {
-                    failDialogbox.getFooter().find('.btn').addClass('closebutton');
+                })
+                .addButton({ label: gt('Close'), action: 'cancel' })
+                .build(function () {
+                    this.$body.append(alertPlaceholder);
+                    this.$footer.find('.btn').addClass('closebutton');
                     drawMessageWarning(alertPlaceholder, message);
-                });
+                })
+                .open();
             });
         };
 

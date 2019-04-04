@@ -11,8 +11,6 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-/*eslint-disable */
-
 define('l10n/ja_JP/io.ox/register', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
@@ -48,7 +46,7 @@ define('l10n/ja_JP/io.ox/register', [
                 var value = $.trim(baton.data[yomiField]);
 
                 // no need to add yomi if they are the same as the actual name
-                if ((yomiField === 'yomiLastName' || yomiField === 'yomiFirstName' ) && self.find(selector).text() === value)  {
+                if ((yomiField === 'yomiLastName' || yomiField === 'yomiFirstName') && self.find(selector).text() === value) {
                     return;
                 }
                 if (yomiField === 'yomiCompany') {
@@ -131,12 +129,18 @@ define('l10n/ja_JP/io.ox/register', [
             draw: function () {
                 // auto-complete for furigana fields?
                 if (settings.get('features/furiganaAutoComplete', false) === true) {
-                    watchKana(this.find('input[name="last_name"]'),
-                              this.find('input[name="yomiLastName"]'));
-                    watchKana(this.find('input[name="first_name"]'),
-                              this.find('input[name="yomiFirstName"]'));
-                    watchKana(this.find('input[name="company"]'),
-                              this.find('input[name="yomiCompany"]'));
+                    watchKana(
+                        this.find('input[name="last_name"]'),
+                        this.find('input[name="yomiLastName"]')
+                    );
+                    watchKana(
+                        this.find('input[name="first_name"]'),
+                        this.find('input[name="yomiFirstName"]')
+                    );
+                    watchKana(
+                        this.find('input[name="company"]'),
+                        this.find('input[name="yomiCompany"]')
+                    );
                 }
             }
         });
@@ -189,10 +193,12 @@ define('l10n/ja_JP/io.ox/register', [
 
             // compute length of unchanged prefix in p
             var p = 0, l = v.length, ll = lv.length;
+            // eslint-disable-next-line no-empty
             for (; p < l && p < ll && v.charAt(p) === lv.charAt(p); p++) {}
 
             // compute length of unchanged suffix in s
             var s = 0, a = l, b = ll;
+            // eslint-disable-next-line no-empty
             for (; a > p && b > p && v.charAt(--a) === lv.charAt(--b); s++) {}
 
             if (p + s === ll) { // if inserting (i. e. typing)

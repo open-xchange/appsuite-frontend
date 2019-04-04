@@ -47,6 +47,9 @@ define('io.ox/core/boot/login/openid', [
             after: 'autologin',
             login: function () {
                 return openIdConnectLogin({ flow: 'login' });
+            },
+            relogin: function () {
+                return openIdConnectLogin({ flow: 'login' });
             }
         });
     }
@@ -56,18 +59,19 @@ define('io.ox/core/boot/login/openid', [
         options = _.extend({
             flow: 'login'
         }, options);
+        var params = {
+            flow: options.flow,
+            redirect: true,
+            client: session.client(),
+            version: session.version()
+        };
+        if (!_.isEmpty(location.hash)) params.hash = location.hash;
 
         location.href = [
             ox.apiRoot,
             ox.serverConfig.oidcPath,
             '/init?',
-            $.param({
-                flow: options.flow,
-                redirect: true,
-                hash: location.hash,
-                client: session.client(),
-                version: session.version()
-            })
+            $.param(params)
         ].join('');
         // defer "forever", since we are redirecting
         return $.Deferred();

@@ -51,7 +51,17 @@ define('io.ox/files/api', [
             attributes = attributes || {};
             var normalizedAttrs;
             // check if model is initialized with mail, pim or drive model attributes
-            if (_.isObject(attributes.mail)) {
+            if (attributes.space) {
+                normalizedAttrs = {
+                    filename: attributes.name,
+                    file_size: attributes.size,
+                    file_mimetype: attributes.mimeType,
+                    spaceId: attributes.space,
+                    id: attributes.id,
+                    origData: attributes,
+                    source: 'compose'
+                };
+            } else if (_.isObject(attributes.mail)) {
                 // mail attachment
                 normalizedAttrs = {
                     filename: attributes.filename,
@@ -187,6 +197,10 @@ define('io.ox/files/api', [
             return (this.get('source') === 'mail' || this.get('source') === 'guardMail');
         },
 
+        isComposeAttachment: function () {
+            return this.get('source') === 'compose';
+        },
+
         isPIMAttachment: function () {
             return this.get('source') === 'pim';
         },
@@ -273,7 +287,7 @@ define('io.ox/files/api', [
         },
 
         types: {
-            image: (/^(gif|bmp|tif?f|jpe?g|gmp|png|psd)$/),
+            image: (/^(gif|bmp|tif?f|jpe?g|gmp|png|psd|heic?f?)$/),
             audio: (/^(aac|mp3|m4a|m4b|ogg|opus|wav)$/),
             video: (/^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm|wmv)$/),
             vcf:   (/^(vcf)$/),
@@ -340,6 +354,9 @@ define('io.ox/files/api', [
         'tif':  'image/tiff',
         'tiff': 'image/tiff',
         'bmp':  'image/bmp',
+        'heic': 'image/heic',
+        'heif': 'image/heif',
+
         // audio
         'mp3':  'audio/mpeg',
         'ogg':  'audio/ogg',
@@ -465,6 +482,10 @@ define('io.ox/files/api', [
     api.getUrl = function (file, type, options) {
 
         options = _.extend({ scaleType: 'contain' }, options);
+
+        if (file.space) {
+            return ox.apiRoot + '/mail/compose/' + file.space + '/attachments/' + file.id + '?session=' + ox.session;
+        }
 
         var url = '/files',
             folder = encodeURIComponent(file.folder_id),
@@ -1630,18 +1651,18 @@ define('io.ox/files/api', [
         },
 
         /**
-         * All versions were deleted that are older than the passed version file.
+         * All versions were deleted that are older than the passed version file except the current one.
          * @param {FileDescriptor} file version descriptor
          *
          * @returns {Deferred}
          */
-        removeOlderVersions: function (file) {
+        removePreviousVersions: function (file) {
 
             // update model instantly
             var model = pool.get('detail').get(_.cid(file)), versions = model.get('versions');
             if (model && _.isArray(versions)) {
                 model.set('versions', versions.filter(function (item) {
-                    return item.version >= file.version;
+                    return item.current_version || parseInt(item.version, 10) >= parseInt(file.version, 10);
                 }));
             }
 
@@ -1654,17 +1675,13 @@ define('io.ox/files/api', [
                     folder: file.folder_id,
                     timestamp: _.then()
                 },
-                data: versions.filter(function (item) { return item.version < file.version; }).map(
+                data: versions.filter(function (item) { return !item.current_version && parseInt(item.version, 10) < parseInt(file.version, 10); }).map(
                     function (version) { return version.version; }
                 ),
                 appendColumns: false
             })
             .then(function () {
-                versions.filter(function (item) { return item.version < file.version; }).map(
-                    function (version) {
-                        return api.propagate('remove:version', _.extend(_.pick(file, 'id', 'folder_id'), { version: version.version }));
-                    }
-                );
+                api.propagate('refresh:file', _.pick(file, 'id', 'folder_id'));
             });
         },
 
@@ -1763,7 +1780,7 @@ define('io.ox/files/api', [
             api.versions.load(file, { cache: false });
             return http.resume().then(function (response) {
                 // explicitly return the file data
-                return response[0].data;
+                return _.isArray(response) ? response[0].data : false;
             });
         }
 
@@ -1798,6 +1815,11 @@ define('io.ox/files/api', [
                     // reload versions list
                     return reloadVersions(file).done(function () {
                         // the mediator will reload the current collection
+                        api.trigger('add:version', file);
+                    });
+
+                case 'refresh:file':
+                    return reloadVersions(file).done(function () {
                         api.trigger('add:version', file);
                     });
 

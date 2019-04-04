@@ -21,7 +21,7 @@ define('io.ox/mail/actions/source', [
 
     function setAuthentification(data, dialog) {
         // ensure full auth data is available
-        return api.get(_.cid(data)).done(function (data) {
+        return api.get(_.pick(data, 'id', 'folder_id'), { cache: false }).done(function (data) {
             data = data.authenticity;
             if (!data || !(data.spf || data.dkim || data.dmarc)) return;
 
@@ -49,29 +49,26 @@ define('io.ox/mail/actions/source', [
 
     return function (baton) {
         var data = baton.first();
-        require(['io.ox/core/tk/dialogs'], function (dialogs) {
-            new dialogs.ModalDialog({ width: 700, addClass: 'mail-source-dialog' })
-                .addPrimaryButton('close', gt('Close'), 'close')
-                .header(
-                    $('<h1 class="modal-title" id="mail-source">').text(gt('Mail source') + ': ' + (data.subject || ''))
-                )
-                .append(
-                    $('<textarea class="form-control mail-source-view" readonly="readonly" aria-labelledby="mail-source">')
-                    .on('keydown', function (e) {
-                        if (e.which !== 27) e.stopPropagation();
-                    })
-                )
-                .append([
-                    $('<h2 id="mail-authenticity-headline" class="hidden">').text(gt('Authentication details')),
-                    $('<textarea class="form-control mail-authenticity-view hidden" readonly="readonly" aria-labelledby="mail-authenticity-headline">')
-                ])
-                .show(function () {
-                    this.busy();
+        require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+            new ModalDialog({ title: gt('Mail source') + ': ' + (data.subject || ''), width: 700, addClass: 'mail-source-dialog' })
+                .addButton({ label: gt('Close'), action: 'close' })
+                .build(function () {
+                    this.$el.addClass('mail-source-dialog');
+                    this.$body.append(
+                        this.$source = $('<textarea class="form-control mail-source-view" readonly="readonly" aria-labelledby="mail-source">')
+                        .on('keydown', function (e) {
+                            if (e.which !== 27) e.stopPropagation();
+                        }),
+                        $('<h2 id="mail-authenticity-headline" class="hidden">').text(gt('Authentication details')),
+                        this.$auth = $('<textarea class="form-control mail-authenticity-view hidden" readonly="readonly" aria-labelledby="mail-authenticity-headline">')
+                    );
                     $.when(
-                        setSource(data, this),
-                        setAuthentification(data, this)
+                        setSource(data, this.$el),
+                        setAuthentification(data, this.$el)
                     ).done(this.idle.bind(this));
-                });
+                })
+                .busy(true)
+                .open();
         });
     };
 });

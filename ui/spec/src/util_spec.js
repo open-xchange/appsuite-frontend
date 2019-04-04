@@ -253,12 +253,12 @@ define([], function () {
                 expect(result.id).to.equals('2');
             });
 
-            it('should return identify recurrence_position', function () {
+            it('should return recurrenceId', function () {
                 var result = _.cid(str);
                 expect(result).to.be.an('object');
                 expect(result.folder_id).to.equal('1');
                 expect(result.id).to.equal('2');
-                expect(result.recurrence_position).to.equal(3);
+                expect(result.recurrenceId).to.equal('3');
             });
 
             it('should escape dots', function () {

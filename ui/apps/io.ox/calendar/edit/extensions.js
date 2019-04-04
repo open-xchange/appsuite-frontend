@@ -105,13 +105,6 @@ define('io.ox/calendar/edit/extensions', [
                         // actual moving is done in the app.onSave method, because this method is also called after confirming conflicts, so we don't need duplicated code
                         baton.app.moveAfterSave = folder;
                     }
-                    // correct time for allday appointments (remove timezone and add 1 day to enddate)
-                    if (calendarUtil.isAllday(baton.model)) {
-                        // save unchanged dates, so they can be restored on error or when handling conflicts
-                        baton.parentView.tempEndDate = baton.model.get('endDate');
-                        baton.model.set('endDate', { value: moment(baton.model.get('endDate').value).add(1, 'days').format('YYYYMMDD') }, { silent: true });
-                    }
-
 
                     // check if participants inputfield contains a valid email address
                     if (!_.isEmpty(inputfieldVal.replace(/\s*/, '')) && coreUtil.isValidMailAddress(inputfieldVal)) {
@@ -127,6 +120,13 @@ define('io.ox/calendar/edit/extensions', [
                     }
 
                     if (!baton.model.isValid({ isSave: true })) return;
+
+                    // correct time for allday appointments (remove timezone and add 1 day to enddate)
+                    if (calendarUtil.isAllday(baton.model)) {
+                        // save unchanged dates, so they can be restored on error or when handling conflicts
+                        baton.parentView.tempEndDate = baton.model.get('endDate');
+                        baton.model.set('endDate', { value: moment(baton.model.get('endDate').value).add(1, 'days').format('YYYYMMDD') }, { silent: true });
+                    }
 
                     // save attachment data to model
                     if (attachments.length) {
@@ -160,6 +160,7 @@ define('io.ox/calendar/edit/extensions', [
                                 recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
                                 attachments: attachments,
                                 checkConflicts: true,
+                                usedGroups: baton.model._attendees.usedGroups,
                                 sendInternalNotifications: sendNotifications
                             }),
                             delta = baton.app.getDelta();
@@ -167,7 +168,7 @@ define('io.ox/calendar/edit/extensions', [
                         return;
                     }
 
-                    api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { attachments: attachments, checkConflicts: true, sendInternalNotifications: sendNotifications })).then(save, fail);
+                    api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { usedGroups: baton.model._attendees.usedGroups, attachments: attachments, checkConflicts: true, sendInternalNotifications: sendNotifications })).then(save, fail);
                 })
             );
 
@@ -360,7 +361,6 @@ define('io.ox/calendar/edit/extensions', [
                 originalModel = this.model,
                 model = this.baton.parentView.fullTimeToggleModel || new Backbone.Model({ allDay: calendarUtil.isAllday(this.model) }),
                 view = new mini.CustomCheckboxView({ id: guid, name: 'allDay', label: gt('All day'), model: model });
-            this.baton.parentView.fullTimeToggleModel = model;
 
             view.listenTo(model, 'change:allDay', function () {
                 if (this.model.get('allDay')) {
@@ -377,6 +377,20 @@ define('io.ox/calendar/edit/extensions', [
                 }
             });
             this.$el.append(view.render().$el);
+
+            if (!this.baton.parentView.fullTimeToggleModel && this.baton.mode === 'create') {
+                // if we restore alarms, check if they differ from the defaults
+                var isDefault = JSON.stringify(_(originalModel.attributes.alarms).pluck('action', 'trigger')) === JSON.stringify(_(calendarUtil.getDefaultAlarms(originalModel)).pluck('action', 'trigger'));
+
+                // automatically change default alarm in creae mode when allDay changes and the user did not change the alarm before (we don't want data loss)
+                if (isDefault) {
+                    var applyDefaultAlarms = function () { originalModel.set('alarms', calendarUtil.getDefaultAlarms(originalModel)); };
+                    model.on('change:allDay', applyDefaultAlarms);
+                    originalModel.once('userChangedAlarms', function () { model.off('change:allDay', applyDefaultAlarms); });
+                }
+            }
+
+            this.baton.parentView.fullTimeToggleModel = model;
         }
     });
 
@@ -401,7 +415,7 @@ define('io.ox/calendar/edit/extensions', [
     point.extend({
         id: 'recurrence',
         className: 'col-xs-12',
-        index: 650,
+        index: 700,
         render: function () {
 
             // changes not allowed when editing or creating an exception
@@ -440,7 +454,7 @@ define('io.ox/calendar/edit/extensions', [
     // note
     point.extend({
         id: 'note',
-        index: 700,
+        index: 800,
         className: 'col-xs-12',
         render: function () {
             var guid = _.uniqueId('form-control-label-');
@@ -582,7 +596,7 @@ define('io.ox/calendar/edit/extensions', [
     // separator or toggle
     point.basicExtend({
         id: 'noteSeparator',
-        index: 750,
+        index: 850,
         draw: function (baton) {
             this.append(
                 $('<a href="#">')
@@ -606,7 +620,7 @@ define('io.ox/calendar/edit/extensions', [
     // participants container
     point.basicExtend({
         id: 'participants_list',
-        index: 800,
+        index: 900,
         rowClass: 'collapsed',
         draw: function (baton) {
             this.append(new pViews.UserContainer({
@@ -614,13 +628,15 @@ define('io.ox/calendar/edit/extensions', [
                 baton: baton,
                 hideInternalGroups: true
             }).render().$el);
+
+            if (baton.parentView.options.usedGroups) baton.model.getAttendees().usedGroups = _.uniq((baton.model.getAttendees().usedGroups || []).concat(baton.parentView.options.usedGroups));
         }
     });
 
     // add participants view
     point.basicExtend({
         id: 'add-participant',
-        index: 900,
+        index: 1000,
         rowClass: 'collapsed',
         draw: function (baton) {
 
@@ -645,8 +661,8 @@ define('io.ox/calendar/edit/extensions', [
 
     point.extend({
         id: 'folder-selection',
-        index: 950,
-        className: 'col-xs-12 folder-selection',
+        index: 1100,
+        className: 'col-xs-12 col-sm-6 folder-selection',
         render: function () {
             var view = new CalendarDropdownView({ model: this.model }).render().$el;
             this.$el.append(view).addClass('col-xs-12');
@@ -655,26 +671,10 @@ define('io.ox/calendar/edit/extensions', [
         rowClass: 'collapsed form-spacer'
     });
 
-    // alarms
-    point.extend({
-        id: 'alarms',
-        index: 1000,
-        className: 'col-xs-12 col-sm-6',
-        render: function () {
-            this.baton.parentView.alarmsView = this.baton.parentView.alarmsView || new AlarmsView.linkView({ model: this.model });
-            this.$el.append(
-                $('<fieldset>').append(
-                    $('<legend class="simple">').text(gt('Reminder')),
-                    this.baton.parentView.alarmsView.render().$el
-                )
-            );
-        }
-    });
-
     // private checkbox
     point.extend({
         id: 'private_flag',
-        index: 1100,
+        index: 1200,
         className: 'col-sm-6 col-xs-12',
         render: function () {
 
@@ -718,15 +718,41 @@ define('io.ox/calendar/edit/extensions', [
 
         }
     }, {
-        nextTo: 'alarms',
+        nextTo: 'folder-selection',
         rowClass: 'collapsed'
     });
 
-    //color selection
+    // container for alarms and color
     point.extend({
+        id: 'alarms-container',
+        index: 1300,
+        className: 'col-xs-12 col-sm-6',
+        render: function () {
+            ext.point('io.ox/calendar/edit/section/alarms-container').invoke('render', this);
+        }
+    }, {
+        rowClass: 'collapsed'
+    });
+
+    // alarms
+    ext.point('io.ox/calendar/edit/section/alarms-container').extend({
+        id: 'alarms',
+        index: 100,
+        render: function () {
+            this.baton.parentView.alarmsView = this.baton.parentView.alarmsView || new AlarmsView.linkView({ model: this.model });
+            this.$el.append(
+                $('<fieldset>').append(
+                    $('<legend class="simple">').text(gt('Reminder')),
+                    this.baton.parentView.alarmsView.render().$el
+                )
+            );
+        }
+    });
+
+    //color selection
+    ext.point('io.ox/calendar/edit/section/alarms-container').extend({
         id: 'color',
-        index: 1200,
-        className: 'col-xs-12 col-sm-6 color-container',
+        index: 200,
         render: function () {
 
             var self = this,
@@ -779,15 +805,25 @@ define('io.ox/calendar/edit/extensions', [
             this.model.on('change:color change:folder', onChangeColor);
             onChangeColor();
         }
+    });
+
+    // container for alarms and color
+    point.extend({
+        id: 'visibility-container',
+        index: 1400,
+        className: 'col-xs-12 col-sm-6 visibility-container',
+        render: function () {
+            ext.point('io.ox/calendar/edit/section/visibility-container').invoke('render', this);
+        }
     }, {
+        nextTo: 'alarms-container',
         rowClass: 'collapsed'
     });
 
     // shown as
-    point.extend({
+    ext.point('io.ox/calendar/edit/section/visibility-container').extend({
         id: 'shown_as',
-        className: 'col-xs-12 col-md-6',
-        index: 1300,
+        index: 100,
         render: function () {
             this.$el.append(
                 new mini.CustomCheckboxView({
@@ -799,9 +835,33 @@ define('io.ox/calendar/edit/extensions', [
                 }).render().$el
             );
         }
-    }, {
-        nextTo: 'color',
-        rowClass: 'collapsed'
+    });
+
+    ext.point('io.ox/calendar/edit/section/visibility-container').extend({
+        id: 'allowAttendeeChanges',
+        index: 200,
+        render: function () {
+            // only the organizer is allowed to change this attribute
+            // also not allowed for exceptions or in public folders
+            var disabled = folderAPI.pool.getModel(this.model.get('folder')).is('public') ||
+                           (this.baton.mode === 'edit' && !(calendarUtil.hasFlag(this.model, 'organizer') || calendarUtil.hasFlag(this.model, 'organizer_on_behalf'))) ||
+                           (this.model.get('recurrenceId') && this.model.mode === 'appointment');
+
+            var checkboxView  = new mini.CustomCheckboxView({
+                label: gt('Participants can make changes'),
+                name: 'attendeePrivileges',
+                model: this.model,
+                customValues: { 'false': 'DEFAULT', 'true': 'MODIFY' }
+            });
+
+            this.$el.append(
+                checkboxView.render().$el.addClass('attendee-change-checkbox')
+            );
+
+            if (disabled) {
+                checkboxView.$el.addClass('disabled').find('input').attr('aria-disabled', true).prop('disabled', 'disabled');
+            }
+        }
     });
 
     // Attachments
@@ -809,7 +869,7 @@ define('io.ox/calendar/edit/extensions', [
     // attachments label
     point.extend({
         id: 'attachments_legend',
-        index: 1400,
+        index: 1500,
         className: 'col-md-12',
         render: function () {
             this.$el.append(
@@ -826,7 +886,7 @@ define('io.ox/calendar/edit/extensions', [
         id: 'attachment_list',
         registerAs: 'attachmentList',
         className: 'div',
-        index: 1500,
+        index: 1600,
         noUploadOnSave: true,
         module: 1
     }), {
@@ -835,7 +895,7 @@ define('io.ox/calendar/edit/extensions', [
 
     point.basicExtend({
         id: 'attachments_upload',
-        index: 1600,
+        index: 1700,
         rowClass: 'collapsed',
         draw: function (baton) {
             var guid = _.uniqueId('form-control-label-'),

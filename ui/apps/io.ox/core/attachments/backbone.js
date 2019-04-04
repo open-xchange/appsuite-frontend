@@ -14,8 +14,9 @@
 define('io.ox/core/attachments/backbone', [
     'io.ox/core/folder/title',
     'io.ox/core/capabilities',
-    'io.ox/contacts/api'
-], function (shortTitle, capabilities, api) {
+    'io.ox/contacts/api',
+    'settings!io.ox/mail'
+], function (shortTitle, capabilities, api, settings) {
 
     'use strict';
 
@@ -43,29 +44,26 @@ define('io.ox/core/attachments/backbone', [
     };
 
     var regIsDocument = /\.((?:doc|dot|pot|pps|ppt|xls|xlt)[mx]?|o[dt][cfgipst]|odm|pdf|ppam?|rtf|txt|xlam?|xlsb)$/i,
-        regIsImage = /\.(gif|bmp|jpe?g|gmp|png|psd|tif?f)$/i;
+        regIsImage = /\.(gif|bmp|jpe?g|gmp|png|psd|tif?f|heic?f?)$/i;
 
     var previewFetcher = {
         localFile: function (model) {
-            var def = $.Deferred();
             // consider retina displays
             // use double size in combination with background-size: cover
             var size = 2 * (_.device('retina') ? 240 : 120);
-            require(['io.ox/contacts/widgets/canvasresize'], function (canvasResize) {
-                canvasResize(model.fileObj, {
+            return require(['io.ox/contacts/widgets/canvasresize']).then(function (canvasResize) {
+                return canvasResize(model.fileObj || model.get('originalFile'), {
                     width: size,
                     height: size,
                     crop: false,
-                    quality: 80,
-                    callback: function (data) {
-                        var meta = _.clone(model.get('meta'));
-                        meta.previewUrl = data;
-                        def.resolve(meta.previewUrl);
-                        model.set('meta', meta);
-                    }
+                    quality: 80
                 });
+            }).then(function (data) {
+                var meta = _.clone(model.get('meta'));
+                meta.previewUrl = data;
+                model.set('meta', meta);
+                return data;
             });
-            return def;
         },
         contact: function (model) {
             var meta = _.clone(model.get('meta'));
@@ -99,7 +97,7 @@ define('io.ox/core/attachments/backbone', [
                 var security = model.get('security');
                 if (security && security.authentication) meta.previewUrl += '&decrypt=true&cryptoAuth=' + encodeURIComponent(security.authentication);
                 // non-image files need special format parameter
-                if (!regIsImage.test(model.get('filename'))) meta.previewUrl += '&format=preview_image&session=' + ox.session;
+                if (!regIsImage.test(model.get('filename') || model.get('name'))) meta.previewUrl += '&format=preview_image&session=' + ox.session;
                 def.resolve(meta.previewUrl);
                 model.set('meta', meta);
             }, def.reject);
@@ -136,7 +134,7 @@ define('io.ox/core/attachments/backbone', [
 
         getTitle: function () {
             // attachments from drive may have a sanitized filename
-            return this.get('com.openexchange.file.sanitizedFilename') || this.get('filename');
+            return this.get('com.openexchange.file.sanitizedFilename') || this.get('filename') || this.get('name');
         },
 
         getShortTitle: function (length) {
@@ -148,21 +146,17 @@ define('io.ox/core/attachments/backbone', [
         },
 
         getExtension: function () {
-            var parts = String(this.get('filename') || '').split('.');
+            var parts = String(this.get('filename') || this.get('name') || '').split('.');
             return parts.length === 1 ? '' : parts.pop().toLowerCase();
         },
 
         isFileAttachment: function () {
-            return this.get('disp') === 'attachment' ||
-                this.get('disp') === 'inline' && this.get('filename');
+            return (this.get('disp') === 'attachment' || this.get('contentDisposition') === 'ATTACHMENT' || this.get('disp') === 'inline')
+                && this.get('contentDisposition') !== 'INLINE' && !!this.getTitle();
         },
 
         isContact: function () {
             return this.get('group') === 'contact';
-        },
-
-        isDriveFile: function () {
-            return this.get('group') === 'file';
         },
 
         isLocalFile: function () {
@@ -176,7 +170,8 @@ define('io.ox/core/attachments/backbone', [
         previewUrl: function (options) {
             options = options || {};
             var supportsDocumentPreview = capabilities.has('document_preview'),
-                filename = this.get('filename'), url;
+                filename = this.get('filename') || this.get('name'), url,
+                file = this.fileObj || this.get('originalFile');
 
             // special handling for psd and tiff; These can only be previewed by MW, not local (on upload)
             if (this.isLocalFile() && filename.match(/psd|tif/)) return null;
@@ -184,6 +179,8 @@ define('io.ox/core/attachments/backbone', [
             if (!regIsImage.test(filename) && !(supportsDocumentPreview && (regIsDocument.test(filename)) || this.isContact())) return null;
             // no support for localFile document preview
             if (this.get('group') === 'localFile' && supportsDocumentPreview && regIsDocument.test(filename)) return null;
+            // no support for large local files
+            if (this.get('group') === 'localFile' && file.size >= settings.get('features/imageResize/fileSizeMax', 10 * 1024 * 1024)) return null;
 
             url = this.get('meta') ? this.get('meta').previewUrl : false;
             if (url) return url;
@@ -243,23 +240,6 @@ define('io.ox/core/attachments/backbone', [
                 }
                 return attr;
             });
-        },
-        contactsIds: function () {
-            return this.filter(function (model) {
-                return model.isContact();
-            }).map(function (o) {
-                return o.pick('folder_id', 'id');
-            });
-        },
-        driveFiles: function () {
-            return _(this.filter(function (model) {
-                return model.isDriveFile();
-            })).pluck('id');
-        },
-        localFiles: function () {
-            return _(this.filter(function (model) {
-                return model.isLocalFile();
-            })).pluck('fileObj');
         },
         getSize: function () {
             return this.reduce(function (memo, model) { return memo + model.getSize(); }, 0);

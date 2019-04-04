@@ -13,7 +13,7 @@
 
 const expect = require('chai').expect;
 
-Feature('Portal widgets');
+Feature('Portal widgets').tag('5');
 
 Before(async function (users) {
     await users.create();
@@ -26,17 +26,18 @@ After(async function (users) {
 Scenario('add and remove Inbox widget', async function (I) {
     I.login('app=io.ox/portal');
     I.waitForElement('[data-app-name="io.ox/portal"] .header', 20);
+    I.waitForDetached('#io-ox-refresh-icon .fa-refresh.fa-spin');
     let [oldWidgetId] = await I.grabAttributeFrom('.io-ox-portal-window .widgets li:first-child', 'data-widget-id');
     I.click('Add widget');
     I.waitForText('Inbox', 5, '.dropdown.open');
     I.click('Inbox', '.dropdown.open');
-    I.click('Save', '.io-ox-dialog-popup');
+    I.click('Save', '.modal-dialog');
     let [widgetId] = await I.grabAttributeFrom('.io-ox-portal-window .widgets li:first-child', 'data-widget-id');
     expect(oldWidgetId).not.equal(widgetId);
     let title = await I.grabTextFrom(`.io-ox-portal-window .widgets li[data-widget-id="${widgetId}"] .title`);
     expect(title).to.contain('Inbox');
     I.click(`.io-ox-portal-window .widgets li[data-widget-id="${widgetId}"] .disable-widget`);
-    I.click('Delete', '.io-ox-dialog-popup');
+    I.click('Delete', '.modal-dialog');
     I.waitForDetached(`.io-ox-portal-window .widgets li[data-widget-id="${widgetId}"]`);
     I.logout();
 });

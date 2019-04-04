@@ -397,9 +397,11 @@ define('io.ox/backbone/views/datepicker', [
                 default: date[fn](1, 'month'); break;
             }
             this.setDate(date, true);
+            if (this.$el.hasClass('open')) e.stopPropagation();
         },
 
-        onToday: function () {
+        onToday: function (e) {
+            if (this.$el.hasClass('open')) e.stopPropagation();
             if (this.mode !== 'month') {
                 // switch to current date in month view
                 this.mode = 'month';
@@ -426,12 +428,14 @@ define('io.ox/backbone/views/datepicker', [
         onSwitchMode: function (e) {
             var node = $(e.currentTarget), value = node.data('value');
             this.switchMode(node.attr('data-mode'), value);
+            if (this.$el.hasClass('open')) e.stopPropagation();
         },
 
         onSelectDate: function (e) {
             var target = $(e.currentTarget),
                 date = moment(target.data('date'));
             if (target.hasClass('cw')) return;
+            if (this.$el.hasClass('open')) e.stopPropagation();
             this.trigger('select', date);
         },
 

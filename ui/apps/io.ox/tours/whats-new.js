@@ -13,11 +13,12 @@
 
 define('io.ox/tours/whats-new', [
     'io.ox/core/extensions',
+    'io.ox/core/capabilities',
     'settings!io.ox/tours',
     'io.ox/core/tk/wizard',
     'io.ox/backbone/views/modal',
     'gettext!io.ox/core'
-], function (ext, settings, Tour, ModalDialog, gt) {
+], function (ext, capabilities, settings, Tour, ModalDialog, gt) {
 
     'use strict';
 
@@ -79,7 +80,7 @@ define('io.ox/tours/whats-new', [
                         return;
                     }
                     ox.launch('io.ox/mail/main').done(function () {
-                        ox.registry.call('mail-compose', 'compose').then(function (result) {
+                        ox.registry.call('mail-compose', 'open').then(function (result) {
                             composeApp = result.app;
                         });
                     });
@@ -108,7 +109,7 @@ define('io.ox/tours/whats-new', [
             .on('stop', function () {
                 if (composeApp) {
                     //prevent app from asking about changed content
-                    composeApp.model.dirty(false);
+                    composeApp.view.dirty(false);
                     composeApp.quit();
                     composeApp = null;
                 }
@@ -117,8 +118,26 @@ define('io.ox/tours/whats-new', [
     });
 
     ext.point('io.ox/tours/whats_new').extend({
-        id: 'help',
+        id: 'multifactor',
         index: 500,
+        steps: function (baton) {
+            if (!baton.tour || !capabilities.has('multifactor')) return;
+            baton.tour.step()
+                //#. Title of tour step, demonstrating options available for 2-step verification
+                .title(gt('2-step Verification Options'))
+                .waitFor('.multifactorStatusDiv.mfLoaded')
+                .on('wait', function () {
+                    ox.launch('io.ox/settings/main', { id: 'io.ox/multifactor' });
+                })
+                .content(gt('You can now add additional verification options to enhance the security of your account.'))
+                .spotlight('.io-ox-multifactor-settings #addDevice')
+            .end();
+        }
+    });
+
+    ext.point('io.ox/tours/whats_new').extend({
+        id: 'help',
+        index: 600,
         steps: function (baton) {
             if (!baton.tour) return;
             baton.tour.step()
@@ -180,6 +199,7 @@ define('io.ox/tours/whats-new', [
             id: 'whats-new',
             index: 260,
             extend: function () {
+                if (capabilities.has('guest')) return;
                 if (_.device('smartphone')) return;
                 this.append(
                     $('<a href="#" data-action="whats-new" role="menuitem">')

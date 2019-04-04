@@ -175,7 +175,7 @@ define('io.ox/calendar/api', [
                 if (useCache !== false) {
                     var model = api.pool.getModel(util.cid(obj));
                     // check if we have a full model with extended entities
-                    if (model && ((model.has('attendees') && hasExtendedEntities(model.get('attendees'))) || model.has('calendarUser'))) return $.when(model);
+                    if (model && hasExtendedEntities(model.get('attendees'))) return $.when(model);
                 }
                 // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
                 if (obj.eventId) {
@@ -257,10 +257,11 @@ define('io.ox/calendar/api', [
                     });
 
                     var def, reqList = list;
+
                     if (useCache !== false) {
                         reqList = list.filter(function (obj) {
                             var model = api.pool.getModel(util.cid(obj));
-                            return !model || (!model.has('attendees') && !model.has('calendarUser'));
+                            return model && model.has('attendees');
                         });
                     }
 
@@ -340,6 +341,12 @@ define('io.ox/calendar/api', [
                     params.rangeStart = options.rangeStart;
                     params.rangeEnd = options.rangeEnd;
                 }
+
+                // backend uses this to calculate the usecount of groups (frontend resolves them that's why we tell the backend manually which groups were used)
+                if (options.usedGroups) {
+                    params.usedGroups = _(options.usedGroups).isArray() ? options.usedGroups.join(',') : options.usedGroups;
+                }
+
                 if (options.attachments && options.attachments.length) {
                     var formData = new FormData();
 
@@ -405,6 +412,11 @@ define('io.ox/calendar/api', [
                     params.rangeEnd = options.rangeEnd;
                 }
 
+                // backend uses this to calculate the usecount of groups (frontend resolves them that's why we tell the backend manually which groups were used)
+                if (options.usedGroups) {
+                    params.usedGroups = _(options.usedGroups).isArray() ? options.usedGroups.join(',') : options.usedGroups;
+                }
+
                 var data = {
                     event: obj
                 };
@@ -451,6 +463,7 @@ define('io.ox/calendar/api', [
             },
 
             remove: function (list, options) {
+                options = _.extend({}, options);
                 api.trigger('beforedelete', list);
                 list = _.isArray(list) ? list : [list];
 
@@ -722,7 +735,8 @@ define('io.ox/calendar/api', [
                         folder: folderApi.getDefaultFolder('calendar'),
                         rangeStart: moment().subtract(2, 'hours').utc().format(util.ZULU_FORMAT),
                         rangeEnd: moment().add(1, 'years').utc().format(util.ZULU_FORMAT),
-                        fields: 'folder,id,recurrenceId,organizer,endDate,startDate,summary,location,rrule'
+                        fields: 'folder,id,recurrenceId,organizer,endDate,startDate,summary,location,rrule',
+                        sort: 'startDate'
                     }
                 }).then(function (data) {
                     // even if empty array is given it needs to be triggered to remove
@@ -800,6 +814,51 @@ define('io.ox/calendar/api', [
                     params: params
                 })
                 .then(processResponse);
+            },
+
+            changeOrganizer: function (obj, options) {
+                options = options || {};
+
+                obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+
+                var params = {
+                    action: 'changeOrganizer',
+                    folder: obj.folder,
+                    id: obj.id,
+                    timestamp: _.then()
+                };
+
+                if (options.recurrenceRange) params.recurrenceRange = options.recurrenceRange;
+
+                if (ox.socketConnectionId) params.pushToken = ox.socketConnectionId;
+
+                if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
+
+                if (options.expand) {
+                    params.expand = true;
+                    params.rangeStart = options.rangeStart;
+                    params.rangeEnd = options.rangeEnd;
+                }
+
+                var data = {
+                    organizer: obj.organizer
+                };
+
+                if (options.comment) data.comment = options.comment;
+
+                return http.PUT({
+                    module: 'chronos',
+                    params: params,
+                    data: data
+                })
+                .then(processResponse)
+                .then(function (data) {
+
+                    var updated = data.updated ? data.updated[0] : undefined;
+                    if (!updated) return api.pool.getModel(util.cid(obj));
+                    if (isRecurrenceMaster(updated)) return api.pool.get('detail').add(data);
+                    return api.pool.getModel(updated);
+                });
             },
 
             refresh: function () {

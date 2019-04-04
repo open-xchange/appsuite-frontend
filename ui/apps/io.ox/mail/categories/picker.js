@@ -14,9 +14,9 @@
 define('io.ox/mail/categories/picker', [
     'io.ox/mail/categories/api',
     'io.ox/backbone/mini-views/dropdown',
-    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/views/actions/util',
     'gettext!io.ox/mail'
-], function (api, Dropdown, actions, gt) {
+], function (api, Dropdown, actionsUtil, gt) {
 
     var PickerDropdown = Dropdown.extend({
 
@@ -66,9 +66,8 @@ define('io.ox/mail/categories/picker', [
         },
 
         onLink: function (data) {
-            actions.check('io.ox/mail/actions/move', data).done(function () {
-                actions.invoke('io.ox/mail/actions/move', null, { data: data });
-            });
+            // Tested: false
+            actionsUtil.invoke('io.ox/mail/actions/move', data);
         }
     });
 

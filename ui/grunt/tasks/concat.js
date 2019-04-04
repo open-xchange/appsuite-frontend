@@ -98,6 +98,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/boot/login/openid.js',
                             'apps/io.ox/core/boot/login/saml.js',
                             'apps/io.ox/core/boot/login/standard.js',
+                            'apps/io.ox/core/boot/login/tabSession.js',
                             'apps/io.ox/core/boot/login/token.js',
                             'apps/io.ox/core/boot/warning.js',
                             'apps/io.ox/core/boot/main.js',
@@ -106,6 +107,95 @@ module.exports = function (grunt) {
                             'src/boot.js'
                         ],
                         dest: 'build/boot.js',
+                        nonull: true
+                    }
+                ]
+            },
+            strippedbootjs: {
+                options: {
+                    banner: 'if (typeof dependencies === "undefined") dependencies = {};\n'
+                },
+                files: [
+                    {
+                        src: [
+                            'node_modules/jquery/dist/jquery.js',
+                            //'node_modules/jquery-migrate/dist/jquery-migrate.js',
+                            'node_modules/@open-xchange/jquery-touch-events/src/jquery.mobile-events.min.js',
+                            'node_modules/underscore/underscore.js', // load this before require.js to keep global object
+                            'build/ox.js',
+                            // add backbone and dot.js may be a AMD-variant would be better
+                            'node_modules/backbone/backbone.js',
+                            'node_modules/backbone-validation/dist/backbone-validation.js',
+                            // load moment before require, because of anonymous define
+                            'build/static/3rd.party/moment/moment.js',
+                            'build/static/3rd.party/moment/moment-timezone-with-data.js',
+                            'build/static/3rd.party/moment/moment-interval.js',
+                            'node_modules/velocity-animate/velocity.min.js',
+                            'src/util.js',
+                            'node_modules/requirejs/require.js',
+                            'src/require-fix.js',
+                            'lib/modernizr.js',
+                            'src/lazyload.js',
+                            'src/browser.js',
+                            'src/plugins.js',
+                            'src/jquery.plugins.js',
+
+                            'node_modules/blankshield/blankshield.js',
+                            // add bootstrap JavaScript
+                            'node_modules/bootstrap/js/transition.js',
+                            'node_modules/bootstrap/js/alert.js',
+                            'node_modules/bootstrap/js/button.js',
+                            'node_modules/bootstrap/js/carousel.js',
+                            'node_modules/bootstrap/js/collapse.js',
+                            'node_modules/bootstrap/js/modal.js',
+                            'node_modules/bootstrap/js/tooltip.js',
+                            'node_modules/bootstrap/js/popover.js',
+                            'node_modules/bootstrap/js/scrollspy.js',
+                            'node_modules/bootstrap/js/tab.js',
+                            'node_modules/bootstrap/js/affix.js',
+                            // add custom bootstrap code
+                            'apps/io.ox/core/tk/dropdown.js',
+                            'lib/bootstrap-a11y.js',
+                            // add mandatory UI sources
+                            'apps/io.ox/core/http.js',
+                            'apps/io.ox/core/http_errors.js',
+                            'apps/io.ox/core/uuids.js',
+                            'apps/io.ox/core/session.js',
+                            'apps/io.ox/core/cache.js',
+                            'apps/io.ox/core/extensions.js',
+                            'apps/io.ox/core/manifests.js',
+                            'apps/io.ox/core/capabilities.js',
+                            'apps/io.ox/core/settings.js',
+                            'apps/io.ox/core/gettext.js',
+                            'apps/io.ox/core/event.js',
+                            'apps/io.ox/core/cache/indexeddb.js',
+                            'apps/io.ox/core/cache/localstorage.js',
+                            'apps/io.ox/core/cache/simple.js',
+                            'apps/plugins/halo/register.js',
+                            'apps/io.ox/core/settings/defaults.js',
+                            'apps/io.ox/core/moment.js',
+                            'apps/io.ox/core/viewer/main.js',
+                            'apps/io.ox/core/main/icons.js',
+                            'apps/io.ox/core/extPatterns/stage.js',
+                            'apps/io.ox/core/sockets.js',
+                            // missing for signin
+                            'apps/io.ox/core/boot/config.js',
+                            'apps/io.ox/core/boot/fixes.js',
+                            'apps/io.ox/core/boot/form.js',
+                            'apps/io.ox/core/boot/i18n.js',
+                            'apps/io.ox/core/boot/language.js',
+                            'apps/io.ox/core/boot/load.js',
+                            'apps/io.ox/core/boot/util.js',
+                            'apps/io.ox/core/boot/support.js',
+                            'apps/io.ox/core/boot/login/auto.js',
+                            'apps/io.ox/core/boot/login/openid.js',
+                            'apps/io.ox/core/boot/login/standard.js',
+                            'apps/io.ox/core/boot/login/token.js',
+                            'apps/io.ox/core/boot/warning.js',
+                            'build/apps/io.ox/core/boot.en_US.js',
+                            'build/apps/io.ox/core/boot.de_DE.js'
+                        ],
+                        dest: 'build/boot-stripped.js',
                         nonull: true
                     }
                 ]
@@ -143,7 +233,6 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/tk/wizard.js',
                             'apps/io.ox/tours/get-started.js',
                             // 3rd wave
-                            'apps/io.ox/core/extPatterns/links.js',
                             'apps/io.ox/core/adaptiveLoader.js',
                             'apps/io.ox/core/a11y.js',
                             'apps/io.ox/core/tk/dialogs.js',
@@ -180,7 +269,6 @@ module.exports = function (grunt) {
                             'apps/io.ox/metrics/adapters/console.js',
                             // 4th wave
                             'apps/io.ox/core/collection.js',
-                            'apps/io.ox/core/extPatterns/actions.js',
                             'apps/io.ox/core/api/account.js',
                             'apps/io.ox/core/tk/selection.js',
                             'apps/io.ox/core/tk/visibility-api-util.js',
@@ -200,16 +288,20 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/main/warning.js',
                             'apps/io.ox/core/main.js',
                             'apps/io.ox/core/links.js',
+                            // tracker
+                            'apps/io.ox/core/tracker/api.js',
+                            'apps/io.ox/core/tracker/duration.js',
+                            'apps/io.ox/core/tracker/main.js',
                             // mail app
                             'apps/io.ox/mail/util.js',
                             'apps/io.ox/mail/api.js',
+                            'apps/io.ox/mail/api-legacy.js',
                             'apps/io.ox/mail/listview.js',
                             'apps/io.ox/core/tk/list-control.js',
                             'apps/io.ox/mail/threadview.js',
                             'apps/io.ox/core/toolbars-mobile.js',
                             'apps/io.ox/core/page-controller.js',
                             'apps/io.ox/mail/actions.js',
-                            'apps/io.ox/mail/actions/attachmentEmpty.js',
                             'apps/io.ox/mail/actions/attachmentQuota.js',
                             'apps/io.ox/mail/toolbar.js',
                             'apps/io.ox/mail/import.js',
@@ -239,7 +331,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/backbone/mini-views/abstract.js',
                             'apps/io.ox/backbone/mini-views/dropdown.js',
                             'apps/io.ox/backbone/mini-views/toolbar.js',
-                            'apps/io.ox/backbone/mini-views/help.js',
+                            'apps/io.ox/backbone/mini-views/helplink.js',
                             'apps/io.ox/backbone/mini-views/upsell.js',
                             'apps/io.ox/backbone/mini-views/quota.js',
                             'apps/io.ox/core/tk/upload.js',
@@ -293,10 +385,7 @@ module.exports = function (grunt) {
                             '\n',
                     footer: '\n' +
                             '  define.amd = _amd;\n' +
-                            '});\n\n' +
-                            'define("static/3rd.party/typeahead.jquery.js", _.noop);\n' +
-                            'define("static/3rd.party/jquery-ui.min.js", _.noop);\n' +
-                            'define("static/3rd.party/bootstrap-tokenfield.js", _.noop);\n'
+                            '});\n\n'
                 },
                 files: [
                     {
@@ -317,10 +406,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/api/snippets.js',
                             'apps/io.ox/core/tk/contenteditable-editor.js',
                             'apps/io.ox/core/tk/textproc.js',
-                            'node_modules/tinymce/jquery.tinymce.min.js',
-                            'build/static/3rd.party/jquery-ui.min.js',
-                            'build/static/3rd.party/typeahead.jquery.js',
-                            'build/static/3rd.party/bootstrap-tokenfield.js'
+                            'node_modules/tinymce/jquery.tinymce.min.js'
                         ],
                         dest: 'build/apps/io.ox/mail/compose/bundle.js',
                         nonull: true
@@ -357,6 +443,30 @@ module.exports = function (grunt) {
                             'apps/io.ox/find/view.js'
                         ],
                         dest: 'build/apps/io.ox/find/bundle.js',
+                        nonull: true
+                    }
+                ]
+            },
+            multifactor: {
+                options: {
+                    banner: 'define("io.ox/multifactor/bundle", [], function () {\n\n' +
+                                '"use strict";\n\nvar module = {};\n',
+                    footer: '\nreturn module; \n});\n'
+                },
+                files: [
+                    {
+                        src: [
+                            'apps/io.ox/multifactor/api.js',
+                            'apps/io.ox/multifactor/deviceAuthenticator.js',
+                            'apps/io.ox/multifactor/factorRenderer.js',
+                            'apps/io.ox/multifactor/views/constants.js',
+                            'apps/io.ox/multifactor/views/selectDeviceView.js',
+                            'apps/io.ox/multifactor/views/smsProvider.js',
+                            'apps/io.ox/multifactor/views/totpProvider.js',
+                            'apps/io.ox/multifactor/views/u2fProvider.js',
+                            'node_modules/u2f-api/dist/lib/generated-google-u2f-api.js'
+                        ],
+                        dest: 'build/apps/io.ox/multifactor/bundle.js',
                         nonull: true
                     }
                 ]

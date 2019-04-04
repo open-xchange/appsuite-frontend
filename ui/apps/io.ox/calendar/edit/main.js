@@ -102,6 +102,11 @@ define('io.ox/calendar/edit/main', [
                     self.setWindow(win);
 
                     self.model.setDefaultAttendees({ create: opt.mode === 'create' }).done(function () {
+
+                        if (opt.mode === 'create') {
+                            self.model.set('attendeePrivileges', settings.get('chronos/allowAttendeeEditsByDefault', false) && !folderAPI.pool.getModel(self.model.get('folder')).is('public') ? 'MODIFY' : 'DEFAULT');
+                        }
+
                         if (opt.mode === 'edit' && util.isAllday(self.model)) {
                             // allday apointments do not include the last day. To not misslead the user we subtract a day (so one day appointments only show one date for example)
                             // this day will be added again on save
@@ -113,7 +118,9 @@ define('io.ox/calendar/edit/main', [
                             app: self,
                             callbacks: {
                                 extendDescription: app.extendDescription
-                            }
+                            },
+                            // restore meta data for used groups if given
+                            usedGroups: opt.usedGroups || []
                         });
 
                         self.model.on({
@@ -181,21 +188,6 @@ define('io.ox/calendar/edit/main', [
                     }
                 }
 
-                // if we restore alarms, check if they differ from the defaults
-                var isDefault = JSON.stringify(_(data.alarms).pluck('action', 'trigger')) === JSON.stringify(_(util.getDefaultAlarms(data)).pluck('action', 'trigger'));
-
-                // change default alarm when allDay changes and the user did not change the alarm before (we don't want data loss)
-                if (isDefault) {
-                    self.model.on('change:startDate change:endDate', _.debounce(function () {
-                        if (util.isAllday(this.previousAttributes()) === util.isAllday(this)) return;
-                        if (!this.userChangedAlarms) {
-                            this.set('alarms', util.getDefaultAlarms(this));
-                        }
-                    }, 0));
-                    self.model.on('userChangedAlarms', function () {
-                        this.userChangedAlarms = true;
-                    });
-                }
                 loadFolder();
             },
 
@@ -325,7 +317,11 @@ define('io.ox/calendar/edit/main', [
                                 if (self.view.options.mode === 'create') {
                                     api.create(
                                         self.model,
-                                        _.extend(util.getCurrentRangeOptions(), { attachments: self.attachmentsFormData || [], sendInternalNotifications: sendNotifications, checkConflicts: false })
+                                        _.extend(util.getCurrentRangeOptions(), {
+                                            usedGroups: self.model._attendees.usedGroups,
+                                            attachments: self.attachmentsFormData || [],
+                                            sendInternalNotifications: sendNotifications,
+                                            checkConflicts: false })
                                     ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 } else {
                                     api.update(
@@ -334,7 +330,8 @@ define('io.ox/calendar/edit/main', [
                                             attachments: self.attachmentsFormData || [],
                                             sendInternalNotifications: sendNotifications,
                                             checkConflicts: false,
-                                            recurrenceRange: self.view.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined
+                                            recurrenceRange: self.view.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
+                                            usedGroups: self.model._attendees.usedGroups
                                         })
                                     ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 }
@@ -397,6 +394,8 @@ define('io.ox/calendar/edit/main', [
                         module: 'io.ox/calendar/edit',
                         point:  {
                             data: this.model.attributes,
+                            action: this.model.mode,
+                            meta: { usedGroups: this.model._attendees.usedGroups },
                             // save this so the dirty check works correctly after the restore
                             initialModelData: this.initialModelData
                         }
@@ -410,7 +409,9 @@ define('io.ox/calendar/edit/main', [
                 var data = point.data || point;
                 this.edit(data, {
                     mode: _.isUndefined(data.id) ? 'create' : 'edit',
-                    initialModelData: point.initialModelData
+                    initialModelData: point.initialModelData,
+                    action: point.action,
+                    usedGroups: point.meta ? point.meta.usedGroups : []
                 });
                 return $.when();
             },
@@ -427,29 +428,28 @@ define('io.ox/calendar/edit/main', [
             // trigger blur inputfields so the model has current data and the dirty check is correct
             $(document.activeElement).filter('input').trigger('change');
             self.cleanUpModel();
-            //be gently
+            //be gentle
             if (self.getDirtyStatus()) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                     if (app.getWindow().floating) {
                         app.getWindow().floating.toggle(true);
                     } else if (_.device('smartphone')) {
                         app.getWindow().resume();
                     }
-                    new dialogs.ModalDialog()
-                        .text(gt('Do you really want to discard your changes?'))
+                    new ModalDialog({ title: gt('Do you really want to discard your changes?') })
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
-                        //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete')
-                        .addButton('cancel', gt('Cancel'), 'cancel')
-                        .show()
-                        .done(function (action) {
+                        //#. Translation must be distinguishable for the user
+                        .addCancelButton({ left: true })
+                        .addButton({ label: gt.pgettext('dialog', 'Discard changes'), action: 'delete' })
+                        .on('action', function (action) {
                             if (action === 'delete') {
                                 self.dispose();
                                 df.resolve();
                             } else {
                                 df.reject();
                             }
-                        });
+                        })
+                        .open();
                 });
             } else {
                 //just let it go

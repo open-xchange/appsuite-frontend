@@ -12,12 +12,10 @@
 define('io.ox/core/viewer/views/types/spreadsheetview', [
     'io.ox/core/viewer/views/types/baseview',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/actions',
-    'io.ox/core/capabilities',
     'io.ox/files/api',
     'settings!io.ox/files',
     'gettext!io.ox/core'
-], function (BaseView, Ext, ActionsPattern, Capabilities, FilesAPI, Settings, gt) {
+], function (BaseView, Ext, FilesAPI, Settings, gt) {
 
     'use strict';
 
@@ -51,76 +49,19 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
             this.appLaunchDelayId = null;
             this.spreadsheetApp = null;
             this.tempFileModel = null;
-
-            // bind resize and zoom handler
-            this.listenTo(this.viewerEvents, 'viewer:resize', this.onResize);
-            this.listenTo(this.viewerEvents, 'viewer:zoom:in', this.onZoomIn);
-            this.listenTo(this.viewerEvents, 'viewer:zoom:out', this.onZoomOut);
-
-            // bind stand alone mode handlers
-            if (this.app) {
-                this.app.getWindow().on('show', this.onPreviewWindowShow.bind(this));
-            }
         },
 
         /**
-         * Resize handler of the spreadsheet view.
-         */
-        onResize: function () {
-            if (!this.spreadsheetApp || !_.isFunction(this.spreadsheetApp.getImportFinishPromise) || !this.isVisible()) { return; }
-
-            this.spreadsheetApp.getImportFinishPromise().done(function () {
-                this.spreadsheetApp.getView().refreshPaneLayout();
-            }.bind(this));
-        },
-
-        /**
-         * Handles zoom-in event.
-         */
-        onZoomIn: function () {
-            if (!this.spreadsheetApp || !this.isVisible()) { return; }
-
-            this.spreadsheetApp.getImportFinishPromise().done(function () {
-                this.spreadsheetApp.getController().executeItem('view/zoom/inc');
-            }.bind(this));
-        },
-
-        /**
-         * Handles zoom-out event.
-         */
-        onZoomOut: function () {
-            if (!this.spreadsheetApp || !this.isVisible()) { return; }
-
-            this.spreadsheetApp.getImportFinishPromise().done(function () {
-                this.spreadsheetApp.getController().executeItem('view/zoom/dec');
-            }.bind(this));
-        },
-
-        /**
-         * Handles the Preview App window show event.
+         * Invokes the passed callback immediately, if the wrapped spreadsheet
+         * application is valid (exists, and is not shutting down).
          *
-         * OX App Suite handles one active application and one active window.
-         * In case of stand alone pcOpt SpreadsheetView consists of two active applications.
-         * The preview app and the plugged spreadsheet app. It needs to be assured that
-         * the Spreadsheet app window is shown along with the Preview app window.
+         * @param {(this: SpreadsheetView, app: SpreadsheetApplication) => void} callback
+         *  The callback to be invoked with the valid spreadsheet application
+         *  instance as first parameter.
          */
-        onPreviewWindowShow: function () {
-            if (this.spreadsheetApp && !this.disposed) {
-                this.spreadsheetApp.getWindow().show(null, true);
-            }
-        },
-
-        /**
-         * Handles the Spreadsheet App window hide event.
-         *
-         * OX App Suite handles one active application and one active window.
-         * In case of stand alone mode SpreadsheetView consists of two active applications.
-         * The preview app and the plugged spreadsheet app. It needs to be assured that
-         * the Preview app window is hidden along with the Spreadsheet app window.
-         */
-        onSpreadsheetWindowHide: function () {
-            if (this.app && !this.disposed) {
-                this.app.getWindow().hide();
+        withValidApp: function (callback) {
+            if (!this.disposed && this.spreadsheetApp && this.spreadsheetApp.isInQuit && !this.spreadsheetApp.isInQuit()) {
+                callback.call(this, this.spreadsheetApp);
             }
         },
 
@@ -136,7 +77,7 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
          *  A Promise that will resolve with the resulting Drive model.
          */
         assureDriveFile: function (model) {
-            return (model.isFile() ? $.when(model) : this.saveAttachmentToTempFolder(model));
+            return model.isFile() ? $.when(model) : this.saveAttachmentToTempFolder(model);
         },
 
         /**
@@ -238,13 +179,13 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
          * "Prefetches" the spreadsheet slide.
          * In order to save memory and network bandwidth only documents with highest prefetch priority are prefetched.
          *
-         * @param {Object} options
-         *  Additional options
-         *  @param {Number} options.priority
+         * @param {Object} [options]
+         *  Optional parameters:
+         *  - {Number} [options.priority]
          *      The prefetch priority.
          *
          * @returns {SpreadsheetView}
-         *  the SpreadsheetView instance.
+         *  A reference to this instance.
          */
         prefetch: function (options) {
             // check for highest priority and Drive files only
@@ -310,33 +251,44 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
                 return promise;
             }
 
-            function onLoadSuccess() {
-                // call counter to avoid endless looping
-                var callCounter = 0;
-                // the Spreadsheet app instance is returned as context
-                self.spreadsheetApp = this;
-                // bind Spreadsheet app window hide handler
-                self.spreadsheetApp.getWindow().on('hide', self.onSpreadsheetWindowHide.bind(self));
+            function listenToWithValidApp(source, type, callback) {
+                self.spreadsheetApp.waitForImportSuccess(function () {
+                    self.listenTo(source, type, self.withValidApp.bind(self, callback));
+                });
+            }
+
+            function onLaunchSuccess() {
+
+                // the spreadsheet application instance is passed as calling context
+                var docsApp = self.spreadsheetApp = this;
                 // hide busy spinner
                 if (!self.disposed) { self.$el.idle(); }
 
-                // wait until the Documents part is added to the app
-                function lazySetDocumentImportFailHandler() {
-                    if (_.isFunction(self.spreadsheetApp.getImportFinishPromise)) {
-                        self.spreadsheetApp.getImportFinishPromise().fail(function (error) {
-                            self.showLoadError(error.message);
+                // wait until the Documents part (class `BaseApplication` and beyond) is added to the app
+                docsApp.on('docs:constructed', function () {
+
+                    // register event handlers
+                    listenToWithValidApp(self.viewerEvents, 'viewer:resize', function () { docsApp.getView().refreshPaneLayout(); });
+                    listenToWithValidApp(self.viewerEvents, 'viewer:zoom:in', function () { docsApp.getController().executeItem('view/zoom/inc'); });
+                    listenToWithValidApp(self.viewerEvents, 'viewer:zoom:out', function () { docsApp.getController().executeItem('view/zoom/dec'); });
+
+                    // ensure that the wrapped spreadsheet application window is shown along with the Preview app window
+                    if (self.app) {
+                        listenToWithValidApp(self.app.getWindow(), 'show', function () {
+                            docsApp.getWindow().show(null, true);
                         });
-
-                    } else if (!_.isFunction(self.spreadsheetApp.getImportFinishPromise) && (callCounter < 100)) {
-                        callCounter++;
-                        _.delay(lazySetDocumentImportFailHandler, 100);
-
-                    } else {
-                        self.showLoadError();
                     }
-                }
 
-                lazySetDocumentImportFailHandler();
+                    // ensure that the Preview app window is hidden along with the wrapped spreadsheet application window
+                    docsApp.getWindow().on('hide', function () {
+                        if (self.app && !self.disposed) { self.app.getWindow().hide(); }
+                    });
+
+                    // show error message if importing the document fails
+                    docsApp.waitForImportFailure(function (_finished, error) {
+                        self.showLoadError(error.message);
+                    });
+                });
             }
 
             // show busy spinner
@@ -347,7 +299,7 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
             this.appLaunchDelayId = window.setTimeout(function () {
                 self.appLaunchDelayId = null;
 
-                launchApplication(self.model).then(onLoadSuccess, self.showLoadError.bind(self));
+                launchApplication(self.model).then(onLaunchSuccess, self.showLoadError.bind(self));
 
             }, APP_LAUNCH_DELAY);
 
@@ -371,13 +323,11 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
             }
 
             // quit app if running
-            if (this.spreadsheetApp && _.isFunction(this.spreadsheetApp.isInQuit) && !this.spreadsheetApp.isInQuit()) {
-
-                this.spreadsheetApp.quit().then(function () {
+            this.withValidApp(function (app) {
+                app.quit().then(function () {
                     self.spreadsheetApp = null;
                 });
-
-            }
+            });
 
             // delete temp file if one has been created
             this.deleteTempFile();

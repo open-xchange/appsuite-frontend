@@ -107,11 +107,11 @@
     .recipient-actions {
 
         position: absolute;
-        top: 5px;
+        top: 2px;
         right: 16px;
 
-        a {
-            margin-right: 4px;
+        button {
+            margin-right: 3px;
             padding: 2px;
             color: @hc-gray;
             text-decoration: none;
@@ -218,8 +218,8 @@
         }
     }
 
-    .attachments {
-        header {
+    .attachments.row {
+        .header {
             display: flex;
             align-items: center;
             min-height: 30px;
@@ -227,18 +227,8 @@
         .toggle-details { white-space: nowrap; }
         // pull right
         .toggle-mode { margin-left: auto; }
-        .dropdown {
-            padding-left: 32px;
-            margin-top: 6px;
-            .image-resize-lable {
-                margin-right: 8px;
-                @media (max-width: @smartphone-breakpoint) { display: none; }
-            }
-        }
-        .mail-size{
-            margin-top: 8px;
-            display: block;
-        }
+        .resize-options.dropdown { margin-bottom: 0; }
+        .mail-size { flex-grow: 1; }
     }
 
     .attachments .share-attachments {
@@ -269,74 +259,6 @@
     .password-wrapper, fieldset {
         margin-top: 24px;
     }
-}
-
-.io-ox-mail-compose span#autocomplete {
-    color: black;
-    background-color: @grey-light;
-}
-
-.mentions-autocomplete {
-    position: absolute;
-    top:0;
-    left:0;
-    display: block;
-    z-index: 1000;
-    float: left;
-    min-width: 160px;
-    padding: 5px 0;
-    margin: 2px 0 0;
-    list-style: none;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border: 1px solid rgba(0,0,0,0.2);
-    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-    background-clip: padding-box;
-    height: initial;
-    border-radius: 0;
-
-    .list-item {
-        padding: 11px 15px;
-        border-bottom: 1px transparent;
-    }
-
-    .list-item:hover {
-        background: #f7f7f7;
-    }
-
-    & > .list-item:last-child {
-        margin-bottom: 0;
-    }
-
-    & > .active {
-        color: #fff;
-        text-decoration: none;
-        background-color: #0081c2;
-    }
-
-    &:before {
-        content: '';
-        display: inline-block;
-        border-left: 7px solid transparent;
-        border-right: 7px solid transparent;
-        border-bottom: 7px solid #ccc;
-        border-bottom-color: rgba(0, 0, 0, 0.2);
-        position: absolute;
-        top: -7px;
-        left: 9px;
-    }
-
-    &:after {
-        content: '';
-        display: inline-block;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-bottom: 6px solid white;
-        position: absolute;
-        top: -6px;
-        left: 10px;
-    }
-
 }
 
 .smartphone {

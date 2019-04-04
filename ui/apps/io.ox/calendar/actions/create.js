@@ -13,13 +13,13 @@
 
 define('io.ox/calendar/actions/create', [
     'io.ox/core/folder/api',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/api/user',
     'io.ox/contacts/util',
     'io.ox/calendar/util',
     'gettext!io.ox/calendar',
     'settings!io.ox/calendar'
-], function (api, dialogs, userAPI, util, calendarUtil, gt, settings) {
+], function (api, ModalDialog, userAPI, util, calendarUtil, gt, settings) {
 
     'use strict';
 
@@ -34,53 +34,40 @@ define('io.ox/calendar/actions/create', [
     function showDialog(params, folder) {
 
         userAPI.get({ id: folder.created_by }).done(function (user) {
-
-            var fullname = util.getFullName(user);
-            // standard 500px is too small in some languages (e.g. german)
-            new dialogs.ModalDialog({ width: '550' })
-            .header(
-                $('<h4>').text(gt('Appointments in shared calendars'))
-            )
-            .build(function () {
-                this.getContentNode().append(
-                    $('<p>').text(gt('The selected calendar is shared by %1$s. Appointments in shared calendars will generally be created on behalf of the owner.', fullname) + ' '),
+            new ModalDialog({
+                title: gt('Appointments in shared calendars'),
+                width: '550', // standard 500px is too small in some languages (e.g. german)
+                description: [
+                    $('<p>').text(gt('The selected calendar is shared by %1$s. Appointments in shared calendars will generally be created on behalf of the owner.', util.getFullName(user)) + ' '),
                     $('<p>').html(gt('Do you really want to create an appointment <b>on behalf of the folder owner</b> or do you want to create an appointment <b>with the folder owner</b> in your own calendar?'))
-                );
+                ]
             })
-            .addPrimaryButton('behalf', gt('On behalf of the owner'))
-            .addButton('invite', gt('Invite owner'))
-            .addAlternativeButton('cancel', gt('Cancel'))
-            .on('behalf', function () {
-                openEditDialog(params);
-            })
+            .addCancelButton({ left: true })
+            .addButton({ label: gt('Invite owner'), action: 'invite', className: 'btn-default' })
+            .addButton({ label: gt('On behalf of the owner'), action: 'behalf' })
+            .on('behalf', function () { openEditDialog(params); })
             .on('invite', function () {
                 params.attendees = calendarUtil.createAttendee(user);
                 params.folder = settings.get('chronos/defaultFolderId');
                 openEditDialog(params);
             })
-            .show();
+            .open();
         });
     }
 
     function showDialogPublic(params) {
         var folderTitle = api.pool.getModel(params.folder).get('title');
         // standard 500px is too small in some languages (e.g. german)
-        new dialogs.ModalDialog({ width: '550' })
-        .header(
-            $('<h4>').text(gt('Appointments in public calendars'))
-        )
-        .build(function () {
-            this.getContentNode().append(
-                // .# Variable will be replaced with the name of the public calendar
-                $('<p>').text(gt('The selected calendar "%1$s" is public. Do you really want to create an appointment in this calendar?', folderTitle))
-            );
-        })
-        .addPrimaryButton('create', gt('Create in public calendar'))
-        .addAlternativeButton('cancel', gt('Cancel'))
+        new ModalDialog({
+            title: gt('Appointments in public calendars'),
+            description: gt('The selected calendar "%1$s" is public. Do you really want to create an appointment in this calendar?', folderTitle),
+            width: '550' })
+        .addCancelButton({ left: true })
+        .addButton({ label: gt('Create in public calendar'), action: 'create' })
         .on('create', function () {
             openEditDialog(params);
         })
-        .show();
+        .open();
     }
 
     return function (baton, obj) {

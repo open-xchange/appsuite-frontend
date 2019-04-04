@@ -11,7 +11,7 @@
  */
 
 
-Feature('Tasks list view');
+Feature('Tasks list view').tag('6');
 
 Before(async function (users) {
     await users.create();
@@ -65,7 +65,7 @@ Scenario('check actions', async function (I) {
     I.clickToolbar('Delete');
     I.click('Delete', '.modal-footer');
     I.waitForVisible('.summary.empty');
-    I.waitForDetached('.io-ox-dialog-underlay');
+    I.waitForDetached('.modal-backdrop.in');
 
     I.logout();
 });

@@ -191,6 +191,30 @@ define('io.ox/core/folder/contextmenu', [
         }()),
 
         //
+        // Edit default alarms
+        //
+        alarms: (function () {
+
+            function handler(e) {
+                ox.load(['io.ox/calendar/actions/change-folder-alarms']).done(function (alarms) {
+                    alarms(e.data);
+                });
+            }
+
+            return function (baton) {
+                if (!api.supports('alarms', baton.data)) return;
+
+                contextUtils.addLink(this, {
+                    action: 'alarms',
+                    data: baton.data,
+                    enabled: true,
+                    handler: handler,
+                    text: gt('Change reminder')
+                });
+            };
+        }()),
+
+        //
         // Remove folder
         //
         removeFolder: (function () {
@@ -284,14 +308,12 @@ define('io.ox/core/folder/contextmenu', [
             function handler(e) {
                 e.preventDefault();
                 var id = e.data.id;
-                ox.load(['io.ox/files/api', 'io.ox/core/extPatterns/actions']).done(function (filesApi, action) {
+                ox.load(['io.ox/files/api', 'io.ox/backbone/views/actions/util']).done(function (filesApi, actionsUtil) {
                     var model = new filesApi.Model(api.pool.getModel(id).toJSON());
-
                     // id from the model must be a compositeKey
-                    var key = e.data.listView.getCompositeKey(model);
-                    var convertedModel = filesApi.resolve([key]);
-
-                    action.invoke('io.ox/files/actions/move', null, ext.Baton({
+                    var key = e.data.listView.getCompositeKey(model),
+                        convertedModel = filesApi.resolve([key]);
+                    actionsUtil.invoke('io.ox/files/actions/move', ext.Baton({
                         models: convertedModel,
                         data: convertedModel[0]
                     }));
@@ -303,7 +325,7 @@ define('io.ox/core/folder/contextmenu', [
                 if (!/^(infostore)$/.test(baton.module)) return;
                 if (_.device('smartphone')) return;
                 if (!api.can('move:folder', baton.data, {})) return;
-                if (baton.favorite) return false;
+                if (baton.originFavorites) return false;
 
                 contextUtils.addLink(this, {
                     action: 'move',
@@ -676,6 +698,11 @@ define('io.ox/core/folder/contextmenu', [
             id: 'rename',
             index: 1100,
             draw: extensions.rename
+        },
+        {
+            id: 'change-alarms',
+            index: 1100,
+            draw: extensions.alarms
         },
         {
             id: 'move',

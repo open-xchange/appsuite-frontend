@@ -71,7 +71,11 @@ define('io.ox/backbone/mini-views/date', [
     var DateSelectView = AbstractView.extend({
 
         className: 'native-date-picker row',
-        events: { 'change select': 'onChange' },
+        events: {
+            'change select': 'onChange',
+            'focus select': 'onFocus',
+            'blur select': 'onBlur'
+        },
 
         onChange: function () {
             var d = this.getDate();
@@ -92,6 +96,14 @@ define('io.ox/backbone/mini-views/date', [
                 //enable all
                 this.$el.find('.date').children().prop('disabled', false);
             }
+        },
+
+        onFocus: function (e) {
+            this.label.text(this.originalLabel + ' - ' + $(e.target).attr('title'));
+        },
+
+        onBlur: function () {
+            this.label.text(this.originalLabel);
         },
 
         getDate: function () {
@@ -153,6 +165,8 @@ define('io.ox/backbone/mini-views/date', [
         },
 
         setup: function (options) {
+            this.label = options.label;
+            this.originalLabel = this.label.text();
             this.name = options.name;
             this.future = options.future || 0; // use positive integers to allow years in the future
             this.past = options.past || 150; // use positive integers to allow years in the past
@@ -160,7 +174,8 @@ define('io.ox/backbone/mini-views/date', [
         },
 
         render: function () {
-            var self = this;
+            var self = this,
+                id = this.label.attr('id');
             moment.localeData().longDateFormat('LL').replace(
                 /(Y+)|(M+)|(D+)|(?:''|'(?:[^']|'')*'|[^A-Za-z'])+/g,
                 function (match, y, m, d) {
@@ -168,15 +183,16 @@ define('io.ox/backbone/mini-views/date', [
                     if (y) {
                         year = moment().year();
                         node = $('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">').append(
-                            createSelect('year', year + self.future, year - self.past, proto.year, y).addClass('year')
+                            createSelect('year', year + self.future, year - self.past, proto.year, y).addClass('year').attr('aria-labelledby', id)
                         );
                     } else if (m) {
                         node = $('<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">').append(
-                            createSelect('month', 0, 11, proto.month, 'MMMM').addClass('month')
+                            createSelect('month', 0, 11, proto.month, 'MMMM').addClass('month').attr('aria-labelledby', id)
                         );
                     } else if (d) {
                         node = $('<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">').append(
-                            createSelect('date', 1, 31, proto.date, match).addClass('date')
+                            createSelect('date', 1, 31, proto.date, match).addClass('date').attr('aria-labelledby', id)
+
                         );
                     }
                     self.$el.append(node);

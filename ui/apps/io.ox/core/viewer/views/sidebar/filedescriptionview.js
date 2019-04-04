@@ -13,9 +13,9 @@
 define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
     'io.ox/core/viewer/views/sidebar/panelbaseview',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/views/actions/util',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, ActionsPattern, gt) {
+], function (PanelBaseView, Ext, actionsUtil, gt) {
 
     'use strict';
 
@@ -96,16 +96,15 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
          * Invoke action to edit description
          */
         editDescription: function () {
-            if (!this.model) return;
-            var baton = Ext.Baton({ data: this.model.toJSON() });
-            this.hasWritePermissions().done(function () {
-                ActionsPattern.invoke('io.ox/files/actions/edit-description', null, baton);
+            this.hasWritePermissions().done(function (baton) {
+                // Tested: false
+                actionsUtil.invoke('io.ox/files/actions/edit-description', baton);
             });
         },
 
         hasWritePermissions: function () {
-            if (!this.model) return;
-            return ActionsPattern.check('io.ox/files/actions/edit-description', [this.model.toJSON()]);
+            if (!this.model) return $.Deferred().reject();
+            return actionsUtil.checkAction('io.ox/files/actions/edit-description', this.model.toJSON());
         },
 
         /**

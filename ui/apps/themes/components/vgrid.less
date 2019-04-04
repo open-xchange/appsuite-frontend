@@ -94,8 +94,9 @@
         }
 
         .grid-info {
+            flex: 1;
             text-align: center;
-            margin: 0 30px;
+            margin-right: 16px;
             .ellipsis();
 
             .folder-count {
@@ -121,18 +122,15 @@
         }
 
         .select-all {
-            float: left;
-            width: 46px;
-            height: 44px;
-            line-height: 40px;
-            padding-left: 16px;
-            display: none;
+            display: inline-block;
             i {
                 color: #767676;
-                width: 16px;
                 font-size: 18px;
                 position: relative;
-                top: 4px;
+                top: 2px;
+                left: 3px;
+                padding-right: 5px;
+                &.fa-check-square-o { padding-right: 2px; }
             }
             &:focus, &:focus i {
                 color: @selected-color;
@@ -150,7 +148,7 @@
     &.editable .select-all { display: inline-block; }
 
     &.top-toolbar .vgrid-toolbar.top,
-    &.bottom-toolbar .vgrid-toolbar.bottom { display: block; }
+    &.bottom-toolbar .vgrid-toolbar.bottom { display: flex; }
 
     &.top-toolbar .vgrid-scrollpane { top: @toolbar-height; }
 

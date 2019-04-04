@@ -19,7 +19,24 @@ define('io.ox/core/tk/sessionrestore', function () {
         return true;
     }
 
-    function getAllData() {
+    /**
+     * Names of properties in the `window.name` object to be processed here.
+     */
+    var ALL_DATA_PROP_NAMES = ['windowName', 'windowType', 'parentName', 'loggingOut', 'documents.rtid'];
+
+    /**
+     * Grabs all sessionrestore options from the window.name
+     *
+     * @param {Object} [options]
+     *  Optional parameters:
+     *  @param {Boolean} [options.withoutWindow]
+     *      get options without the window object variables
+     *
+     * @returns {Object} windowName data
+     */
+    function getAllData(options) {
+        if (!_.isObject(options)) { options = {}; }
+
         var allData = null;
         if (window.name) {
             try {
@@ -30,19 +47,22 @@ define('io.ox/core/tk/sessionrestore', function () {
         } else {
             allData = {};
         }
-        return allData;
+        if (!options.withoutWindow) return allData;
+        return _.omit(allData, ALL_DATA_PROP_NAMES);
     }
 
     function setAllData(data) {
+        var allData = getAllData({ withoutWindow: false });
         if (_.isEmpty(data)) {
-            window.name = '';
+            window.name = JSON.stringify(_.pick(allData, ALL_DATA_PROP_NAMES));
         } else {
-            window.name = JSON.stringify(data);
+            window.name = JSON.stringify(_.extend(_.pick(allData, ALL_DATA_PROP_NAMES), data));
         }
     }
 
     function resetAllData() {
-        window.name = '';
+        var allData = getAllData({ withoutWindow: false });
+        window.name = JSON.stringify(_.pick(allData, ALL_DATA_PROP_NAMES));
     }
 
     // class SessionRestore ================================================
@@ -92,7 +112,7 @@ define('io.ox/core/tk/sessionrestore', function () {
             }
             //console.warn('state', id, state);
 
-            var allData = getAllData();
+            var allData = getAllData({ withoutWindow: true });
             var result = allData[id];
 
             if (_.isUndefined(state)) {
@@ -116,7 +136,7 @@ define('io.ox/core/tk/sessionrestore', function () {
     // initialization -----------------------------------------------------
 
     if (isActive()) {
-        var lastStates = getAllData();
+        var lastStates = getAllData({ withoutWindow: true });
 
         require(['io.ox/core/extensions', 'io.ox/core/extPatterns/stage']).done(function (ext, Stage) {
             new Stage('io.ox/core/stages', {

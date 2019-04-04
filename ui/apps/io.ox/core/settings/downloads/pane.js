@@ -115,7 +115,7 @@ define('io.ox/core/settings/downloads/pane', [
                 var standaloneClient = driveClientsSettings.get('standaloneWindowsClient') === true,
                     hasWindowsClient = standaloneClient || products['com.openexchange.updater.drive'],
                     windowsClientUrl = ox.apiRoot + linkTo.Windows + '?session=' + ox.session,
-                    //.# String will include the product name, i.e. "OX Drive for Windows"
+                    //#. String will include the product name, i.e. "OX Drive for Windows"
                     windowsClientLabel = gt.format(gt('%s client for Windows'), productName);
 
                 this.append(
@@ -129,17 +129,17 @@ define('io.ox/core/settings/downloads/pane', [
                                 $('<a class="action" target="_blank">', { href: windowsClientUrl, download: '' }).text(gt('Download installation file'))
                             ) : [],
                             $('<div class="shop-link-container">').append(
-                                //.# String will include the product name, "OX Drive for Mac OS"
+                                //#. String will include the product name, "OX Drive for Mac OS"
                                 gt.format(gt('%s client for Mac OS'), productName),
                                 getShopLinkWithImage('mac_os', linkTo['Mac OS'])
                             ),
                             $('<div class="shop-link-container">').append(
-                                //.# String will include the product name, i.e. "OX Drive for iOS"
+                                //#. String will include the product name, i.e. "OX Drive for iOS"
                                 gt.format(gt('%s client for iOS'), productName),
                                 getShopLinkWithImage('iOS', linkTo.iOS)
                             ),
                             $('<div class="shop-link-container">').append(
-                                //.# String will include the product name, i.e. "OX Drive for Android"
+                                //#. String will include the product name, i.e. "OX Drive for Android"
                                 gt.format(gt('%s client for Android'), productName),
                                 getShopLinkWithImage('Android', linkTo.Android)
                             )

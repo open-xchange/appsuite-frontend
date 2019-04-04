@@ -219,8 +219,8 @@ msgstr[1] "жил бүр"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js apps/plugins/halo/xing/register.js
-#: module:plugins/portal
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/view-detail.js
+#: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "%1$s\n"
 "%2$s %3$s\n"
@@ -475,6 +475,11 @@ msgstr ""
 msgid ", "
 msgstr ""
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+msgid "1 day"
+msgstr "Бүтэн өдөр"
+
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr ""
@@ -491,11 +496,34 @@ msgstr[1] ""
 msgid "1 minute"
 msgstr ""
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "1 version"
+msgstr "Хэрэглэгчийн интерфейсийн хувилбар"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+msgid "1 year"
+msgstr "жил бүр"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "10 minutes"
 msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "10 versions"
+msgstr "Хэрэглэгчийн интерфейсийн хувилбар"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "100 versions"
+msgstr "Хэрэглэгчийн интерфейсийн хувилбар"
 
 #. Quota maxed out; 100%
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -511,6 +539,12 @@ msgstr ""
 msgid "15 minutes"
 msgstr ""
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "20 versions"
+msgstr "Хэрэглэгчийн интерфейсийн хувилбар"
+
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 msgid "24 hours"
 msgstr ""
@@ -519,16 +553,84 @@ msgstr ""
 msgid "3 minutes"
 msgstr ""
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+msgid "30 days"
+msgstr "Бүтэн өдөр"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "30 minutes"
 msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "30 versions"
+msgstr "Хэрэглэгчийн интерфейсийн хувилбар"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "40 versions"
+msgstr "Хэрэглэгчийн интерфейсийн хувилбар"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "5 minutes"
 msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "5 versions"
+msgstr "Хэрэглэгчийн интерфейсийн хувилбар"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "50 versions"
+msgstr "Хэрэглэгчийн интерфейсийн хувилбар"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+msgid "60 days"
+msgstr "Бүтэн өдөр"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "60 versions"
+msgstr "Хэрэглэгчийн интерфейсийн хувилбар"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+msgid "7 days"
+msgstr "Бүтэн өдөр"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "70 versions"
+msgstr "Хэрэглэгчийн интерфейсийн хувилбар"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "80 versions"
+msgstr "Хэрэглэгчийн интерфейсийн хувилбар"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+msgid "90 days"
+msgstr "Бүтэн өдөр"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "90 versions"
+msgstr "Хэрэглэгчийн интерфейсийн хувилбар"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved into itself"
@@ -1101,6 +1203,17 @@ msgstr ""
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "All emails"
 msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "All file versions are retained"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "All file versions older than 1 day will be deleted after next login"
+msgid_plural ""
+"All file versions older than %1$d days will be deleted after next login"
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -1805,7 +1918,7 @@ msgstr ""
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 #: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
@@ -2108,9 +2221,8 @@ msgstr ""
 msgid "Close description panel"
 msgstr "Тайлбар руу хуулах"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr ""
@@ -2835,7 +2947,7 @@ msgstr ""
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/actions/delete-older-versions.js
+#: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
@@ -2874,7 +2986,7 @@ msgstr ""
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 #, fuzzy
-msgid "Delete all older versions"
+msgid "Delete all previous versions"
 msgstr "Контактыг устгах"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
@@ -2986,6 +3098,10 @@ msgstr "Тайлбаруудыг хуулбарлалаа"
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Description text"
+msgstr ""
+
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+msgid "Deselect all"
 msgstr ""
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
@@ -3155,9 +3271,11 @@ msgid ""
 "b> in your own calendar?"
 msgstr ""
 
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 #, fuzzy
-msgid "Do you really want to delete all older versions?"
+msgid ""
+"Do you really want to delete all previous versions except the current "
+"version?"
 msgstr "Энэхүү уулзалтыг устгах уу?"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
@@ -4301,6 +4419,14 @@ msgstr ""
 msgid "File quota"
 msgstr ""
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "File version history"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "File version limit"
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
@@ -4537,6 +4663,10 @@ msgstr ""
 
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Forever"
 msgstr ""
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
@@ -5331,6 +5461,11 @@ msgstr ""
 msgid "Keep a copy of the message"
 msgstr ""
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+msgid "Keep all versions"
+msgstr "Контактыг устгах"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Keep draft"
 msgstr ""
@@ -5352,6 +5487,16 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Keep mails with subject %1$s"
 msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Keep number of recent versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Server version"
+msgid "Keep saved versions"
+msgstr "Серверийн хувилбар"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
@@ -6819,6 +6964,16 @@ msgstr ""
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
 msgstr ""
+
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#, fuzzy
+#| msgid "every %1$d week"
+#| msgid_plural "every %1$d weeks"
+msgid "Open %1$s in %2$s"
+msgstr "%1$d долоо хоног тутам%1$d долоо хоногууд тутам"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -9613,6 +9768,7 @@ msgstr ""
 msgid "Suffix"
 msgstr ""
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
@@ -10490,6 +10646,12 @@ msgstr ""
 msgid "Time-dependent"
 msgstr ""
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Time"
+msgid "Timeframe"
+msgstr "Цаг"
+
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Title"
 msgstr ""
@@ -11262,6 +11424,16 @@ msgstr ""
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid ""
+"When a file has more than 1 version, older versions of the file will be "
+"deleted after next login"
+msgid_plural ""
+"When a file has more than %1$d versions, older versions of the file will be "
+"deleted after next login"
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -12426,10 +12598,6 @@ msgid "your platform"
 msgstr ""
 
 #, fuzzy
-#~ msgid "1 day"
-#~ msgstr "Бүтэн өдөр"
-
-#, fuzzy
 #~ msgid "1 week"
 #~ msgstr "7 хоног бүр"
 
@@ -12463,12 +12631,6 @@ msgstr ""
 #~| msgid "Series"
 #~ msgid "Categories"
 #~ msgstr "Цувралууд"
-
-#, fuzzy
-#~| msgid "every %1$d week"
-#~| msgid_plural "every %1$d weeks"
-#~ msgid "Chrome %1$s on %2$s"
-#~ msgstr "%1$d долоо хоног тутам%1$d долоо хоногууд тутам"
 
 #~ msgid "Click on a sentence to choose when to repeat the appointment."
 #~ msgstr "Уулзалтыг дахин хэзээ давтахыг өгүүлбэр дээр дарж өөрчилнө үү."

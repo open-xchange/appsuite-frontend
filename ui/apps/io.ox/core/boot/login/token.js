@@ -26,9 +26,9 @@ define('io.ox/core/boot/login/token', [
         index: 200,
         login: function (baton) {
             if (!baton.hash.tokenSession && !baton.hash.session) return;
-            return tokenLogin().then(function () {
+            return tokenLogin().then(function (data) {
                 baton.stopPropagation();
-                ox.trigger('login:success');
+                ox.trigger('login:success', data);
             }, function () {
                 util.debug('Session-based login FAILED', hash.session);
                 ox.trigger('login:fail:session-based', baton);
@@ -126,6 +126,7 @@ define('io.ox/core/boot/login/token', [
             user: null,
             user_id: null
         });
+        return data;
     }
 
     return tokenLogin;

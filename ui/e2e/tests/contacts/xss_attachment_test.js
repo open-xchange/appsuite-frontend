@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Contacts: Check for XSS in PIM attachment in contacts');
+Feature('Contacts: Check for XSS in PIM attachment in contacts').tag('6');
 
 Before(async function (users) {
     await users.create();
@@ -21,14 +21,18 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('adds an malicious attachment to a contact', function (I) {
+// TODO wait for changes to the codecept helper for generic file attachments
+Scenario.skip('adds an malicious attachment to a contact', async function (I) {
+    const folder = await I.grabDefaultFolder('contacts');
+    const { id } = await I.haveContact({ folder_id: folder, first_name: 'Evil', last_name: 'Knivel' });
+    await I.haveAttachment('contacts', { id, folder }, 'e2e/media/files/><img src=x onerror=alert(123)>');
+
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
 
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-
-    I.createContactWithEvilAttachment();
+    I.waitForText('My address books');
+    I.doubleClick('~My address books');
+    I.click('~Contacts, 1 total'); // need to add "1 total" as this is part of the aria-label
 
     I.click('#io-ox-refresh-icon');
     I.waitForVisible('.attachments-container');

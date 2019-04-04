@@ -11,22 +11,28 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/calendar/actions/invite', ['settings!io.ox/calendar'], function (settings) {
+define('io.ox/calendar/actions/invite', [
+    'settings!io.ox/calendar',
+    'io.ox/calendar/util'
+], function (settings, util) {
 
     'use strict';
 
-    return function (baton) {
+    return function (data) {
 
         // use ox.launch to have an indicator for slow connections
         ox.launch('io.ox/calendar/edit/main').done(function () {
 
             // include external organizer
-            var data = baton.data,
-                attendees = data.attendees;
+            var attendees = data.attendees;
             if (!data.organizer.entity && _.isString(data.organizer.cn)) {
                 data.organizer.partStat = 'NEEDS-ACTION';
                 attendees.unshift(data.organizer);
             }
+
+            // clean up attendees (remove confirmation status comments etc)
+            attendees = util.cleanupAttendees(attendees);
+
             // open create dialog with same participants
             data = {
                 folder: settings.get('chronos/defaultFolderId'),

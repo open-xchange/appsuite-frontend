@@ -31,6 +31,10 @@
         color: @black;
         font-size: 14px;
         font-weight: bold;
+
+        &.IE11 {
+            width: 320px;
+        }
     }
 }
 
@@ -107,34 +111,32 @@
 }
 
 .feedback-button {
-
-    color: white;
-    background-color: @brand-primary;
-    z-index: 50;
-    font-size: 13px;
-    line-height: 32px;
-    padding: 0 16px;
-    text-align: center;
-    white-space: nowrap;
     position: absolute;
-    cursor: pointer;
-    border-radius: @border-radius-base @border-radius-base 0 0;
-    border: 0;
-}
+    z-index: 50;
 
-.rightside-button {
-    right: 0px;
-    -webkit-transform: rotate(-90deg); /* Safari and Chrome */
-    transform: rotate(-90deg);
-    -webkit-transform-origin: bottom right;
-    transform-origin: bottom right;
-}
+    &.feedback-right {
+        right: 0;
+        transform: rotate(-90deg);
+        transform-origin: bottom right;
+    }
 
-.leftside-button {
-    right: 100%;
-    -webkit-transform: rotate(90deg); /* Safari and Chrome */
-    transform: rotate(90deg);
-    -webkit-transform-origin: bottom right;
-    transform-origin: bottom right;
-    bottom: 56px;
+    &.feedback-left {
+        left: 0;
+        transform: rotate(90deg);
+        transform-origin: bottom left;
+        bottom: 56px;
+    }
+
+    button {
+        color: white;
+        background-color: @brand-primary;
+        font-size: 13px;
+        line-height: 32px;
+        padding: 0 16px;
+        text-align: center;
+        white-space: nowrap;
+        cursor: pointer;
+        border-radius: @border-radius-base @border-radius-base 0 0;
+        border: 0;
+    }
 }

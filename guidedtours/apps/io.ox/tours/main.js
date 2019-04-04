@@ -48,6 +48,10 @@ define('io.ox/tours/main', [
                 });
             } else if (!tourSettings.get('whatsNew/neverShowAgain', false) && tourSettings.get('whatsNew/autoShow', 1) > 0) {
                 whatsNewTour.run();
+            } else if (!disableTour && !tourSettings.get('multifactor/shownTour', false)) {
+                require(['io.ox/tours/multifactor'], function (tour) {
+                    tour.run();
+                });
             }
 
             return $.when();

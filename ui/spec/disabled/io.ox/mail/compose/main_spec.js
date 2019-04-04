@@ -144,7 +144,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     expect(app.view.$el.find('a[data-name="vcard"] i').hasClass('fa-check'), ' option is unchecked in menu options').to.be.false;
                 });
                 it('should change editor mode from text to html', function () {
-                    app.view.model.set('editorMode', 'html');
+                    app.view.config.set('editorMode', 'html');
                     return waitsFor(function () {
                         //need to wait, until it is painted, because we started in text mode (.editor is not busy any longer)
                         return app.view.$el.find('.editable.mce-content-body').is(':visible') && app.view.$el.find('.editor:not(.io-ox-busy)').length === 1;
@@ -155,7 +155,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     });
                 });
                 it('should change editor mode from html to text', function () {
-                    app.view.model.set('editorMode', 'text');
+                    app.view.config.set('editorMode', 'text');
                     return waitsFor(function () {
                         return app.view.$el.find('textarea.plain-text').is(':visible') && app.view.$el.find('.editor:not(.io-ox-busy)').length === 1;
                     }).then(function () {
@@ -165,7 +165,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     });
                 });
                 it('should change editor mode from text to html', function () {
-                    app.view.model.set('editorMode', 'html');
+                    app.view.config.set('editorMode', 'html');
                     return waitsFor(function () {
                         return app.view.$el.find('.editable.mce-content-body').is(':visible') && app.view.$el.find('.editor:not(.io-ox-busy)').length === 1;
                     }).then(function () {

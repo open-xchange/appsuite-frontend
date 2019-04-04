@@ -219,8 +219,8 @@ msgstr[1] "%1$d år"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js apps/plugins/halo/xing/register.js
-#: module:plugins/portal
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/view-detail.js
+#: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "%1$s\n"
 "%2$s %3$s\n"
@@ -479,6 +479,10 @@ msgstr "(Läs, skriv och radera)"
 msgid ", "
 msgstr ", "
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "1 day"
+msgstr "1 dag"
+
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "1 fil har ändrats nyligen"
@@ -495,11 +499,36 @@ msgstr[1] "%1$d objekt"
 msgid "1 minute"
 msgstr "1 minut"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "1 version"
+msgstr "UI-version"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "%1$d year"
+#| msgid_plural "%1$d years"
+msgid "1 year"
+msgstr "%1$d år"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "10 minutes"
 msgstr "10 minuter"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "10 versions"
+msgstr "UI-version"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "100 versions"
+msgstr "UI-version"
 
 #. Quota maxed out; 100%
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -515,6 +544,12 @@ msgstr "12 timmar"
 msgid "15 minutes"
 msgstr "15 minuter"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "20 versions"
+msgstr "UI-version"
+
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 msgid "24 hours"
 msgstr "24 timmar"
@@ -523,16 +558,88 @@ msgstr "24 timmar"
 msgid "3 minutes"
 msgstr "3 minuter"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "30 days"
+msgstr "2 dagar"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "30 minutes"
 msgstr "30 minuter"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "30 versions"
+msgstr "UI-version"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "40 versions"
+msgstr "UI-version"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "5 minutes"
 msgstr "5 minuter"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "5 versions"
+msgstr "UI-version"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "50 versions"
+msgstr "UI-version"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "6 days"
+msgid "60 days"
+msgstr "6 dagar"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "60 versions"
+msgstr "UI-version"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "7 days"
+msgstr "2 dagar"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "70 versions"
+msgstr "UI-version"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "80 versions"
+msgstr "UI-version"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "90 days"
+msgstr "2 dagar"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "90 versions"
+msgstr "UI-version"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved into itself"
@@ -1108,6 +1215,24 @@ msgstr "Alla sändlistor"
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "All emails"
 msgstr "Alla meddelanden"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All file versions are retained"
+msgstr "Alla filer har tagits bort"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid ""
+#| "All messages older than %1$d days will be moved to the archive folder"
+msgid "All file versions older than 1 day will be deleted after next login"
+msgid_plural ""
+"All file versions older than %1$d days will be deleted after next login"
+msgstr[0] ""
+"Alla meddelanden äldre än %1$d dagar kommer flyttas till arkivmappen"
+msgstr[1] ""
+"Alla meddelanden äldre än %1$d dagar kommer flyttas till arkivmappen"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -1814,7 +1939,7 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 #: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
@@ -2112,9 +2237,8 @@ msgstr "Stäng alla meddelanden"
 msgid "Close description panel"
 msgstr "Stäng beskrivningspanel"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Stäng mappvy"
@@ -2827,7 +2951,7 @@ msgstr "Uppskjutet"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/actions/delete-older-versions.js
+#: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
@@ -2866,7 +2990,7 @@ msgstr "Ta bort alla objekt"
 #: apps/io.ox/files/actions.js module:io.ox/files
 #, fuzzy
 #| msgid "Delete version"
-msgid "Delete all older versions"
+msgid "Delete all previous versions"
 msgstr "Ta bort version"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
@@ -2977,6 +3101,12 @@ msgstr "Beskrivningen har kopierats"
 #: module:io.ox/core/viewer
 msgid "Description text"
 msgstr "Beskrivande text"
+
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#, fuzzy
+#| msgid "select all"
+msgid "Deselect all"
+msgstr "markera alla"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Design"
@@ -3145,12 +3275,13 @@ msgstr ""
 "Vill du verkligen skapa ett möte <b>åt mappens ägare</b> eller vill du skapa "
 "ett möte <b>med mappens ägare</b> i din egen kalender?"
 
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 #, fuzzy
-#| msgctxt "One file only"
-#| msgid "Do you really want to delete this version?"
-msgid "Do you really want to delete all older versions?"
-msgstr "Vill du verkligen ta bort den här versionen?"
+#| msgid "Do you really want to delete this account?"
+msgid ""
+"Do you really want to delete all previous versions except the current "
+"version?"
+msgstr "Vill du verkligen ta bort kontot?"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete calendar \"%s\"?"
@@ -4304,6 +4435,18 @@ msgstr "Filnamn"
 msgid "File quota"
 msgstr "Filkvot"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Show version history"
+msgid "File version history"
+msgstr "Visa versionshistorik"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "File version limit"
+msgstr "Ta bort version"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
@@ -4547,6 +4690,12 @@ msgstr "Framtvinga utloggning"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
 msgstr "Framtvingad utloggning kan orsaka dataförlust."
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Never"
+msgid "Forever"
+msgstr "Aldrig"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Forgot attachment?"
@@ -5342,6 +5491,12 @@ msgstr "Behåll"
 msgid "Keep a copy of the message"
 msgstr "Behåll kopia av meddelandet"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Keep all versions"
+msgstr "Ta bort version"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Keep draft"
 msgstr "Behåll utkast"
@@ -5363,6 +5518,16 @@ msgstr "Behåll meddelanden till %1$s"
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Keep mails with subject %1$s"
 msgstr "Behåll meddelanden med ämnet %1$s"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Keep number of recent versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Keep saved versions"
+msgstr "Ta bort version"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
@@ -6811,6 +6976,15 @@ msgstr "Visar bara objekt som är relevanta för mappen \"%1$s\""
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
 msgstr "Öppna"
+
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#, fuzzy
+#| msgid "Open in %1$s"
+msgid "Open %1$s in %2$s"
+msgstr "Öppna i %1$s"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -9613,6 +9787,7 @@ msgstr "Uppdaterade kalender"
 msgid "Suffix"
 msgstr "Suffix"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
@@ -10556,6 +10731,12 @@ msgstr "Tidszon"
 msgid "Time-dependent"
 msgstr "Tidsberoende"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "timeframe"
+msgid "Timeframe"
+msgstr "tidsintervall"
+
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Title"
 msgstr "Titel"
@@ -11334,6 +11515,16 @@ msgstr "Vilken typ av enhet vill du anpassa?"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "Nyheter"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid ""
+"When a file has more than 1 version, older versions of the file will be "
+"deleted after next login"
+msgid_plural ""
+"When a file has more than %1$d versions, older versions of the file will be "
+"deleted after next login"
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -12715,9 +12906,6 @@ msgstr "din plattform"
 #~ msgid "0 minutes"
 #~ msgstr "0 minuter"
 
-#~ msgid "1 day"
-#~ msgstr "1 dag"
-
 #~ msgid "1 hour"
 #~ msgstr "1 timme"
 
@@ -12726,9 +12914,6 @@ msgstr "din plattform"
 
 #~ msgid "150%"
 #~ msgstr "150%"
-
-#~ msgid "2 days"
-#~ msgstr "2 dagar"
 
 #~ msgid "2 hour"
 #~ msgstr "2 timmar"
@@ -12750,9 +12935,6 @@ msgstr "din plattform"
 
 #~ msgid "50%"
 #~ msgstr "50%"
-
-#~ msgid "6 days"
-#~ msgstr "6 dagar"
 
 #~ msgid "6 hour"
 #~ msgstr "6 timmar"
@@ -14433,19 +14615,18 @@ msgstr "din plattform"
 #~ msgid "Do you already have a %s account?"
 #~ msgstr "Har du redan ett %s-konto?"
 
+#, fuzzy
+#~| msgctxt "One file only"
+#~| msgid "Do you really want to delete this version?"
+#~ msgid "Do you really want to delete all older versions?"
+#~ msgstr "Vill du verkligen ta bort den här versionen?"
+
 #~ msgctxt "One file only"
 #~ msgid "Do you really want to delete this file?"
 #~ msgstr "Vill du verkligen ta bort den här filen?"
 
 #~ msgid "Do you really want to discard this mail?"
 #~ msgstr "Vill du verkligen kasta brevet?"
-
-#, fuzzy
-#~| msgid "Do you really want to delete this account?"
-#~ msgid ""
-#~ "Do you really want to terminate all active sessions except the current "
-#~ "one?"
-#~ msgstr "Vill du verkligen ta bort kontot?"
 
 #, fuzzy
 #~| msgctxt "One file only"
@@ -17326,9 +17507,6 @@ msgstr "din plattform"
 
 #~ msgid "Show side panel"
 #~ msgstr "Visa sidopanelen"
-
-#~ msgid "Show version history"
-#~ msgstr "Visa versionshistorik"
 
 #, fuzzy
 #~ msgid "Show/hide folder"
@@ -20308,9 +20486,6 @@ msgstr "din plattform"
 
 #~ msgid "seconds"
 #~ msgstr "sekunder"
-
-#~ msgid "select all"
-#~ msgstr "markera alla"
 
 #, fuzzy
 #~| msgid "show image"

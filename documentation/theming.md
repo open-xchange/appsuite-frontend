@@ -18,36 +18,16 @@ Please read [LESS.JS](http://lesscss.org/#docs) documentation first.
 If your theme depends on less.js, you will need one more step to make it work.
 Why? To accelerate the login, compilation of LessCSS files was moved from the login process in the browser to the installation process on the backend.
 
-Backend packages for themes and any apps which ship .less files require the following changes:
-
-1. Add "skipLess=1" to the build command in \*.spec and in debian/rules:
-
-   ```bash
-     sh /opt/open-xchange-appsuite-dev/bin/build-appsuite app skipLess=1
-   ```
-
-2. Add %post and %postun sections to \*.spec:
-
-```bash
-  %post
-  if [ "$1" = 1 ]; then
-  UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
-  [ -x $UPDATE ] && $UPDATE
-  fi
-  %postun
-  UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
-  [ -x $UPDATE ] && $UPDATE
-```
-
-For multiple binary packages, the %post and %postun sections should apply only to backend packages which contain .less files.
-
-3. Add debian/postinst and debian/postrm containing the same content:
-
-   \#!/bin/sh
-   UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
-   [ -x $UPDATE ] && $UPDATE
-
-For multiple binary packages, the postinst and postrm files should apply only to backend packages which contain .less files.
+So all packages just ship their .less files as sources within the package that is due to be installed
+on the middleware nodes.
+Every change to the less files on a middleware node must be announced by calling
+`/opt/open-xchange/share/update-themes.sh --later`.
+This should be called from postinst/postun sections of packages shipping less files.
+This will force the init script of the middleware to compile the less files during start of
+the middleware using update-themes.sh as well.
+This can be forced manually by running the script without any option.
+This means operators *must* run the script manually or restart the open-xchange service after
+changing packages which do contain less files.
 
 Note: Since 7.2.1, LessCSS files must have the file extension .less to be usable with the 'less' RequireJS plugin (module dependencies of the form 'less!filename.less'). Previously we were more lenient and dealt with .css, too.
 
@@ -70,6 +50,20 @@ This file can be used to define any CSS you like. Before doing this, check, if t
 Since 7.2.1, all URLs are relative to the source .less file in which they are contained. This means that unless a theme changes an image it does not need to include that image anymore.
 
 Old themes must be updated if they change an image from the default theme: All styles from the default theme which refer to a changed image must be overwritten in the custom theme. This way the URLs resolve to the new image.
+
+### Static assets
+
+While most JavaScript code as well as CSS files compiled from less files are being requested from the
+middleware via the “apps/load” servlet, it's also possible to bundle static assets which are served
+directly from the web server.
+
+If a plugin contains static assets (this also counts for JavaScript files which are not delivered using
+the “apps/load” servlet but requested directly), packaging needs to be provided for web server nodes as
+well as middleware nodes.
+There are grunt tasks in pace to handle these cases:
+
+* `grunt install:dynamic --prefix=/opt/open-xchange/` will copy relevant files for middleware nodes to the directory provided in the prefix option.
+* `grunt install:static --htdoc=/var/www/html` will copy relevant files for web server nodes to the directory provided in the htdoc option.
 
 ## Replacing the logo
 

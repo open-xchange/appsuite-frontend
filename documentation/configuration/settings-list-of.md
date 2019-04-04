@@ -51,6 +51,9 @@ Disable one or more settings panes vie extension point ids of _io.ox/settings/pa
 <config>io.ox/core//pdf/enablePreconversionOnUpload=`<bool>`</config>
 Enable/disable PDF preconversion of office documents on file upload and when a new file version is added. Default is `true`.
 
+<config>io.ox/core//pdf/enablePreconversionOnMailFetch=`<bool>`</config>
+Enable/disable PDF preconversion of office documents for mail attachments. Default is `true`.
+
 <config>io.ox/core//pdf/enableRangeRequests=`<bool>`</config>
 Enable/disable range requests support to fetch PDF rendering data in chunks. Default is 'true'.
 
@@ -59,12 +62,16 @@ Enable/disable range requests support to fetch PDF rendering data in chunks. Def
 <config>io.ox/core//apps/quickLaunchCount=`<number>`</config>
 How many quick launch icons should appear in the Topbar by default (default: `3`)
 
-<config>io.ox/core//apps/quickLauncherLimit=`<number>`</config>
-How many quick launch icons should be allowed as maximum (default: `3`)
-
 <config>io.ox/core//apps/quickLaunch=`<string>`</config>
 Default Apps for quick launcher. Comma-separated string of App IDs
-Default: `'io.ox/mail/main,io.ox/contacts/main,io.ox/portal/main'`
+Default: `'io.ox/mail/main,io.ox/calendar/main,io.ox/files/main'`
+
+<config>io.ox/core//apps/logoFileName=`<string>`</config>
+Change the default file name for the logo in the topbar. Default (`logo.png`)
+
+<config>io.ox/core//apps/logoAction=`<string>`</config>
+Change the action when clicking on the topbar logo. Either a URI to open in a new tab
+or an App ID. I.e. `https://sample.com` or `io.ox/mail/main`. Default is unset.
 
 ## Notifications
 
@@ -306,6 +313,8 @@ Prettify plain text emails.
 <config>io.ox/mail//sendDispositionNotification=`<bool>`</config>
 Show requests for read receipts.
 
+<config>io.ox/mail//autoselectMailOnStart=`<bool>`</config>
+Automatically select first read mail on mail app start. (Default `true`)
 
 ## User Preferences:
 
@@ -362,6 +371,9 @@ Value `html` (default), `text` or `alternative`.
 <config>io.ox/mail//defaultSendAddress=`<string>`</config>
 Default sender address from available accounts. Default not set.
 
+<config>io.ox/mail//autoSaveAfter=`<number>`</config>
+Interval to update composition space during compose in milliseconds. Default: `15000` (15 seconds)
+
 <config>io.ox/mail//autoSaveDraftsAfter=`<string>`</config>
 Interval to safe drafts during compose. One of `disabled`, `1_minute`, `3_minutes`, `5_minutes` or `10_minutes`
 
@@ -391,6 +403,9 @@ Max size of returned characters for mail viewing in bytes. Default: `102400` (10
 <config>io.ox/mail//features/imageResize/enabled=`<bool>`</config>
 Feature toggle to enable resizing of images
 
+<config>io.ox/mail//features/imageResize/default=`<string>`</config>
+Feature toggle to enable resizing of images (default `320`)
+
 <config>io.ox/mail//features/imageResize/small=`<number>`</config>
 Size of the target image (longest edge) for a small image as integer (default `320`)
 
@@ -398,16 +413,13 @@ Size of the target image (longest edge) for a small image as integer (default `3
 Size of the target image (longest edge) for a medium image as integer (default `640`)
 
 <config>io.ox/mail//features/imageResize/large=`<number>`</config>
-Size of the target image (longest edge) for a large image as integer (default `1024`)
+Size of the target image (longest edge) for a large image as integer (default `1280`)
 
 <config>io.ox/mail//features/imageResize/quality=`<number>`</config>
 Quality for the compression while resizing as float (default `0.75`)
 
 <config>io.ox/mail//features/imageResize/imageSizeThreshold=`<number>`</config>
 Threshold for the size in pixel of the longest edge after which a resize is recommended as integer (default `1024`)
-
-<config>io.ox/mail//features/imageResize/fileSizeThreshold=`<number>`</config>
-Threshold for the size in byte of the image after which a resize is recommended as integer (default `1048576`)
 
 <config>io.ox/mail//features/imageResize/fileSizeMax=`<number>`</config>
 Maximum size in bytes that will be resized as integer, if one image exceeds this threshold the resize dropdown will not be displayed (default `10485760`)
@@ -438,9 +450,14 @@ Attach original message on touch devices
 <config>io.ox/mail//features/accounts/configureUnifiedInboxOnCreate=`<bool>`</config>
 Allow enabling unified inbox for an account at the "Add Mail account" dialog
 
+<config>io.ox/mail//features/authenticity=`<bool>`</config>
+Enables the authenticity feature. Please note that `com.openexchange.mail.authenticity.enabled` on MW has to be turned on as well. (default: false)
+
+<-- currently hardcoded as 'fail_neutral_trusted' and 'protected' by MW and not adjustable by any property file change or user interaction.
 <config>io.ox/mail//authenticity/level=`<string>`</config>
-If `com.openexchange.mail.authenticity.enabled` is turnend on MW side, the user can select a level which
+If authenticity is enabled on MW and UI (see `features/authenticity`) and this value is not marked as proteced, the user can select a level which
 controls how strict the authenticty results are shown at UI side. (default: `none`, values: `none`, `fail_neutral_trusted` and `all`)
+-->
 
 <config>io.ox/mail//features/autoCollapseBlockquotes=`<bool>`</config>
 If enabled, blockquotes larger than 300 chars will be collapsed.

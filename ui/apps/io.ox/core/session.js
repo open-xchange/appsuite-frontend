@@ -27,11 +27,18 @@ define('io.ox/core/session', [
     var getBrowserLanguage = function () {
         var language = (navigator.language || navigator.userLanguage).substr(0, 2),
             languages = ox.serverConfig.languages || {};
+
         // special treatment for 'en' (return en_US instead of en_UK which comes first in the list)
         if (language === 'en') return 'en_US';
-        return _.chain(languages).keys().find(function (id) {
+        var result = _.chain(languages).keys().find(function (id) {
             return id.substr(0, 2) === language;
         }).value();
+
+        // never ever return undefined!!!111eleven
+        // This causes a js error which prevents the display of the login page. Thus preventing users from login in.
+        result = result || (languages.en_US ? 'en_US' : _(languages).keys()[0] || 'en_US');
+
+        return result;
     };
 
     var check = function (language) {
@@ -218,7 +225,7 @@ define('io.ox/core/session', [
                         rampup: true,
                         rampUpFor: 'open-xchange-appsuite'
                     },
-                    _(options).pick('action', 'name', 'password', 'language', 'rampup', 'rampUpFor', 'share', 'target')
+                    _(options).pick('action', 'name', 'password', 'language', 'rampup', 'rampUpFor', 'share', 'target', 'secret_code')
                 );
 
                 if (options.forceLanguage) params.storeLanguage = true;

@@ -25,7 +25,6 @@ define('io.ox/calendar/actions/change-alarms', [
     return function (appointmentData) {
         var alarmsview = new AlarmsView.linkView({ model: new Backbone.Model(appointmentData) });
         new ModalDialog({
-            focus: _.device('smartphone') ? '' : '[data-property="comment"]',
             title: gt('Change reminders')
         })
         .build(function () {

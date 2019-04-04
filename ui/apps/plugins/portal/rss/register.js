@@ -19,10 +19,10 @@ define('plugins/portal/rss/register', [
     'io.ox/messaging/messages/api',
     'io.ox/keychain/api',
     'io.ox/rss/api',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/mail/sanitizer',
     'gettext!io.ox/portal'
-], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, dialogs, sanitizer, gt) {
+], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, ModalDialog, sanitizer, gt) {
 
     'use strict';
 
@@ -143,40 +143,31 @@ define('plugins/portal/rss/register', [
         // disable widget till data is set by user
         model.set('candidate', true, { silent: true, validate: true });
 
-        var dialog = new dialogs.ModalDialog({ async: true }),
+        var dialog = new ModalDialog({ title: gt('RSS Feeds'), async: true }),
             $url = $('<textarea id="rss_url" class="form-control" rows="5" placeholder="http://">'),
             $description = $('<input id="rss_desc" type="text" class="form-control">'),
             $error = $('<div class="alert alert-danger">').css('margin-top', '15px').hide(),
             props = model.get('props') || {};
 
-        dialog.header($('<h4>').text(gt('RSS Feeds')))
-            .build(function () {
-                this.getContentNode().append(
-                    $('<div class="form-group">').append(
-                        $('<label for="rss_url">').text(gt('URL')),
-                        $url.val((props.url || []).join('\n'))
-                    ),
-                    $('<div class="form-group">').append(
-                        $('<label for="rss_desc">').text(gt('Description')),
-                        $description.val(props.description),
-                        $error
-                    )
-                );
-            })
-            .addPrimaryButton('save', gt('Save'), 'save')
-            .addButton('cancel', gt('Cancel'), 'cancel')
-            .show(function () {
-                $url.focus();
-            });
-
-        dialog.on('cancel', function () {
-            if (model.has('candidate') && _.isEmpty(model.attributes.props)) {
-                view.removeWidget();
-            }
-        });
-
-        dialog.on('save', function () {
-
+        dialog.build(function () {
+            this.$body.append(
+                $('<div class="form-group">').append(
+                    $('<label for="rss_url">').text(gt('URL')),
+                    $url.val((props.url || []).join('\n'))
+                ),
+                $('<div class="form-group">').append(
+                    $('<label for="rss_desc">').text(gt('Description')),
+                    $description.val(props.description),
+                    $error
+                )
+            );
+        })
+        .addCancelButton()
+        .addButton({ label: gt('Save'), action: 'save' })
+        .on('cancel', function () {
+            if (model.has('candidate') && _.isEmpty(model.attributes.props)) view.removeWidget();
+        })
+        .on('save', function () {
             var url = $.trim($url.val()),
                 description = $.trim($description.val()),
                 deferred = $.Deferred();
@@ -207,7 +198,8 @@ define('plugins/portal/rss/register', [
                 $error.show();
                 dialog.idle();
             });
-        });
+        })
+        .open();
     }
 
     ext.point('io.ox/portal/widget/rss/settings').extend({

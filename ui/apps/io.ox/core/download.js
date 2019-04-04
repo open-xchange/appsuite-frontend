@@ -26,8 +26,19 @@ define('io.ox/core/download', [
     // export global callback; used by server response
     window.callback_antivirus = showAntiVirusPopup;
 
+    /* errors related to scanning
+        FILE_DOES_NOT_EXIST - 8
+        FILE_TOO_BIG - 9
+        FILE_INFECTED - 11
+    */
+    var scanErrors = _(['0008', '0009', '0011']).map(function (value) { return 'ANTI-VIRUS-SERVICE-' + value; });
+
     function map(o) {
         return { id: o.id, folder_id: o.folder || o.folder_id };
+    }
+
+    function returnJSON(o) {
+        return JSON.stringify(_.map(o, function (o) { return o.managedId ? o.managedId : o.id; }));
     }
 
     // simple iframe download (see bug 29276)
@@ -103,8 +114,14 @@ define('io.ox/core/download', [
         index: 300,
         id: 'message',
         render: function (baton) {
+            var text = baton.model.get('error');
+            // generic error message for internal errors (I/O error, service unreachable, service not running etc)
+            if (scanErrors.indexOf(baton.model.get('code')) === -1) {
+                text = 'File could not be scanned for malicious content.';
+            }
+
             this.$body.append($('<div class="alert">')
-                .text(baton.model.get('error'))
+                .text(text)
                 .css('margin-bottom', '0')
                 // error code 11 is virus found
                 .addClass(baton.model.get('code') === 'ANTI-VIRUS-SERVICE-0011' ? 'alert-danger' : 'alert-warning'));
@@ -181,7 +198,23 @@ define('io.ox/core/download', [
         multiple: form,
 
         // actually only for ios
-        window: function (url) {
+        window: function (url, options) {
+            options = options || {};
+            // check if url attributes and antivirus callback should be added (needed for attachments)
+            if (options.antivirus) {
+                url += (url.indexOf('?') === -1 ? '?' : '&') + 'callback=antivirus';
+                if (capabilities.has('antivirus')) {
+                    url += '&scan=true';
+                }
+                var win = blankshield.open(url, '_blank');
+
+                win.callback_antivirus = function (error) {
+                    error.url = url;
+                    showAntiVirusPopup(error);
+                    win.close();
+                };
+                return win;
+            }
             return blankshield.open(url, '_blank');
         },
 
@@ -243,9 +276,25 @@ define('io.ox/core/download', [
             });
         },
 
+        // download multiple attachments as zip file
+        pimAttachments: function (list, paramValues) {
+            var url = ox.apiRoot + '/attachment?action=zipDocuments&callback=antivirus&session=' + ox.session + '&folder=' + paramValues.folder + '&attached=' + paramValues.attached + '&module=' + paramValues.module;
+            form({
+                url: url,
+                body: returnJSON(list)
+            });
+        },
+
         // download single email as EML
         mail: function (options) {
             var url = mailAPI.getUrl(options, 'eml');
+            iframe(url);
+        },
+
+        composeAttachment: function (options) {
+            var spaceId = options.space,
+                attachmentId = options.id,
+                url = ox.apiRoot + '/mail/compose/' + spaceId + '/attachments/' + attachmentId + '?session=' + ox.session;
             iframe(url);
         },
 

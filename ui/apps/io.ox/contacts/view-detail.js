@@ -21,16 +21,17 @@ define('io.ox/contacts/view-detail', [
     'io.ox/participants/views',
     'io.ox/participants/model',
     'io.ox/core/folder/breadcrumb',
-    'io.ox/core/extPatterns/links',
     'io.ox/core/util',
     'io.ox/core/capabilities',
     'gettext!io.ox/contacts',
     'settings!io.ox/contacts',
     'io.ox/core/tk/attachments',
     'io.ox/core/http',
+    'io.ox/backbone/views/toolbar',
+    'io.ox/backbone/views/action-dropdown',
     'static/3rd.party/purify.min.js',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt, settings, attachments, http, DOMPurify) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, coreUtil, capabilities, gt, settings, attachments, http, ToolbarView, ActionDropdownView, DOMPurify) {
 
     'use strict';
 
@@ -93,12 +94,9 @@ define('io.ox/contacts/view-detail', [
         );
     }
 
-    function buildDropdown(container, label, data) {
-        return new links.Dropdown({
-            label: label,
-            classes: 'attachment-item',
-            ref: 'io.ox/core/tk/attachment/links'
-        }).draw.call(container, data);
+    function buildDropdown(container, title, data) {
+        var dropdown = new ActionDropdownView({ point: 'io.ox/core/tk/attachment/links', data: data, title: title });
+        container.append(dropdown.$el);
     }
 
     /*
@@ -113,7 +111,11 @@ define('io.ox/contacts/view-detail', [
         draw: function (baton) {
             if (api.looksLikeResource(baton.data)) return;
             if (hideAddressBook()) return;
-            ext.point('io.ox/contacts/detail/actions').invoke('draw', this, baton);
+            this.append(
+                new ToolbarView({ point: 'io.ox/contacts/links/inline', inline: true })
+                .setSelection(baton.array(), { data: baton.array() })
+                .$el
+            );
         }
     });
 
@@ -123,7 +125,7 @@ define('io.ox/contacts/view-detail', [
         draw: function (baton) {
             var node;
             this.append(
-                node = $('<header class="contact-header">')
+                node = $('<div class="contact-header">')
             );
             ext.point('io.ox/contacts/detail/head').invoke('draw', node, baton);
         }
@@ -199,10 +201,10 @@ define('io.ox/contacts/view-detail', [
                         section.empty();
                         _(data).each(function (a) {
                             // draw
-                            buildDropdown(section, $.txt(a.filename), a);
+                            buildDropdown(section, a.filename, a);
                         });
                         if (data.length > 1) {
-                            buildDropdown(section, gt('All attachments'), data).find('a').removeClass('attachment-item');
+                            buildDropdown(section, gt('All attachments'), data);
                         }
                         section.on('a', 'click', function (e) { e.preventDefault(); });
                     },
@@ -337,7 +339,7 @@ define('io.ox/contacts/view-detail', [
         if (capabilities.has('webmail')) {
             e.preventDefault();
             // set recipient and open compose
-            ox.registry.call('mail-compose', 'compose', { to: [[e.data.display_name, e.data.email]] });
+            ox.registry.call('mail-compose', 'open', { to: [[e.data.display_name, e.data.email]] });
         }
     }
 

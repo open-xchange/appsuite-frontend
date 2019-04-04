@@ -127,7 +127,7 @@ define('io.ox/core/folder/util', [
                 if (data) id = data.id !== undefined ? data.id : data;
                 return account.isUnifiedFolder(id);
             case 'external':
-                return (/^default[1-9]/).test(String(data.id)) && !is('unifiedmail', data);
+                return (/^(default[1-9]|\w+:\/\/)/).test(String(data.id)) && !is('unifiedmail', data);
             case 'defaultfolder':
                 // standardfolders of external accounts are not in the settings, so use account api first
                 if (account.getType(data.id)) return true;
@@ -184,6 +184,9 @@ define('io.ox/core/folder/util', [
 
     function canMove(folder, target) {
 
+        // if the target folder is not known, check effectively reduces to 'remove:folder'
+        // except for external folders which can be removed but never "moved" elsewhere
+        if (_.isEmpty(target) && !is('external', folder)) return can('remove:folder', folder);
         // new target?
         if (folder.folder_id === target.id) return false;
         // Prevent moving into folder itself
@@ -239,15 +242,21 @@ define('io.ox/core/folder/util', [
                 // only folder creation is allowed in system folders
                 // don't use the isSystem variable because it is also true for standard folders
                 if (is('system', data)) return false;
+                // no bidirectional sync for subscribed folders (Bug 62440, MW-1133)
+                if (is('subscribed', data)) return false;
                 // mail is special (no-select folder; see bug 44957)
                 if (isMail && !can('read', data)) return false;
                 // even if permission bit is 4 "create objects and subfolders" because
                 // there is no bit for only create subfolders, see Bug 39598
                 return perm(rights, 0) > 1;
             case 'write':
+                // no bidirectional sync for subscribed folders (Bug 62440, MW-1133)
+                if (is('subscribed', data)) return false;
                 // can write objects
                 return perm(rights, 14) > compareValue;
             case 'delete':
+                // no bidirectional sync for subscribed folders (Bug 62440, MW-1133)
+                if (is('subscribed', data)) return false;
                 // can delete objects
                 return perm(rights, 21) > compareValue;
             case 'rename':

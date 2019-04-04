@@ -18,10 +18,9 @@ define('io.ox/contacts/main', [
     'io.ox/core/util',
     'io.ox/contacts/api',
     'io.ox/core/tk/vgrid',
-    'io.ox/help/hints',
     'io.ox/contacts/view-detail',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/views/actions/util',
     'io.ox/core/commons',
     'io.ox/core/capabilities',
     'io.ox/contacts/toolbar',
@@ -35,7 +34,7 @@ define('io.ox/contacts/main', [
     'io.ox/contacts/mobile-navbar-extensions',
     'io.ox/contacts/mobile-toolbar-actions',
     'less!io.ox/contacts/style'
-], function (util, coreUtil, api, VGrid, hints, viewDetail, ext, actions, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView) {
+], function (util, coreUtil, api, VGrid, viewDetail, ext, actionsUtil, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView) {
 
     'use strict';
 
@@ -446,71 +445,6 @@ define('io.ox/contacts/main', [
         },
 
         'swipe-mobile': function () {
-            // helper to remove button from grid
-
-            /*var removeButton = function () {
-                if (showSwipeButton) {
-                    var g = grid.getContainer();
-                    $('.swipeDelete', g).remove();
-                    showSwipeButton = false;
-                }
-            };
-
-            app.grid.selection.on('change', removeButton);
-
-            app.grid.selection.on('change', function () {
-                if (showSwipeButton) {
-                    removeButton();
-                }
-            });
-
-            ext.point('io.ox/contacts/swipeDelete').extend({
-                index: 666,
-                id: 'deleteButton',
-                draw: function (baton) {
-                    // remove old buttons first
-                    if (showSwipeButton) {
-                        removeButton();
-                    }
-                    this.append(
-                        $('<div class="mail cell-button swipeDelete fadein fast">')
-                            .text(gt('Delete'))
-                            .on('mousedown', function (e) {
-                                // we have to use mousedown as the selection listens to this, too
-                                // otherwise we are to late to get the event
-                                e.stopImmediatePropagation();
-                            }).on('tap', function (e) {
-                                e.preventDefault();
-                                removeButton();
-                                showSwipeButton = false;
-                                actions.invoke('io.ox/contacts/actions/delete', null, baton);
-                            })
-                    );
-                    showSwipeButton = true;
-                }
-            });
-
-            // swipe handler
-            var swipeRightHandler = function (e, id, cell) {
-                var obj = _.cid(id);
-
-                if (hasDeletePermission === undefined) {
-                    folderAPI.get({ folder: obj.folder_id, cache: true }).done(function (data) {
-                        if (folderAPI.can('delete', data)) {
-                            hasDeletePermission = true;
-                            api.getList([obj]).done(function (list) {
-                                ext.point('io.ox/contacts/swipeDelete').invoke('draw', cell, list[0]);
-                            });
-                        }
-                    });
-                } else if (hasDeletePermission) {
-                    api.getList([obj]).done(function (list) {
-                        ext.point('io.ox/contacts/swipeDelete').invoke('draw', cell, list[0]);
-                    });
-                }
-            };
-            */
-
         },
 
         'show-contact': function (app) {
@@ -582,7 +516,6 @@ define('io.ox/contacts/main', [
             drawContact = function (data) {
                 var baton = ext.Baton({ data: data, app: app });
                 baton.disable('io.ox/contacts/detail', 'inline-actions');
-
                 app.right.idle().empty().append(viewDetail.draw(baton));
             };
 
@@ -790,7 +723,7 @@ define('io.ox/contacts/main', [
         },
 
         /*
-         * Folerview toolbar
+         * Folderview toolbar
          */
         'folderview-toolbar': function (app) {
             if (_.device('smartphone')) return;
@@ -848,7 +781,7 @@ define('io.ox/contacts/main', [
         'drag-and-drop': function (app) {
             // drag & drop
             app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
-                actions.invoke('io.ox/contacts/actions/move', null, baton);
+                actionsUtil.invoke('io.ox/contacts/actions/move', baton);
             });
         },
 
@@ -892,12 +825,29 @@ define('io.ox/contacts/main', [
 
         'metrics': function (app) {
 
-            // hint: toolbar metrics are registery by extension 'metrics-toolbar'
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
 
                 var nodes = app.getWindow().nodes,
                     sidepanel = nodes.sidepanel;
+
+                function track(target, node) {
+                    node = $(node);
+                    var isSelect = !!node.attr('data-name'),
+                        action = (node.attr('data-action') || '').replace(/^io\.ox\/contacts\/(detail\/)?/, '');
+                    metrics.trackEvent({
+                        app: 'contacts',
+                        target: target,
+                        type: 'click',
+                        action: isSelect ? node.attr('data-name') : action,
+                        detail: isSelect ? node.attr('data-value') : ''
+                    });
+                }
+
+                // main toolbar: actions, view dropdown
+                nodes.body.on('track', '.classic-toolbar-container', function (e, node) {
+                    track('toolbar', node);
+                });
 
                 // vgrid toolbar
                 nodes.main.find('.vgrid-toolbar').on('mousedown', 'a[data-name], a[data-action]', function (e) {
@@ -912,12 +862,14 @@ define('io.ox/contacts/main', [
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
-                    metrics.trackEvent({
-                        app: 'contacts',
-                        target: 'folder/context-menu',
-                        type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
+                _.defer(function () {
+                    sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
+                        metrics.trackEvent({
+                            app: 'contacts',
+                            target: 'folder/context-menu',
+                            type: 'click',
+                            action: $(e.currentTarget).attr('data-action')
+                        });
                     });
                 });
                 sidepanel.find('.bottom').on('mousedown', 'a[data-action]', function (e) {

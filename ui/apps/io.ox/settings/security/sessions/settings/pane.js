@@ -202,7 +202,8 @@ define('io.ox/settings/security/sessions/settings/pane', [
         fetch: function () {
             var self = this;
             return http.GET({
-                url: ox.apiRoot + '/sessionmanagement?action=all'
+                url: ox.apiRoot + '/sessionmanagement',
+                params: { action: 'all' }
             }).then(function success(data) {
                 self.set(data);
             });
@@ -252,10 +253,8 @@ define('io.ox/settings/security/sessions/settings/pane', [
             buildConfirmationDialog(gt('Do you really want to sign out from that device?'), gt('Sign out')).done(function () {
                 var dialog = this;
                 http.PUT({
-                    url: '/ajax/sessionmanagement',
-                    params: {
-                        action: 'delete'
-                    },
+                    url: ox.apiRoot + '/sessionmanagement',
+                    params: { action: 'delete' },
                     data: [self.model.get('sessionId')]
                 }).fail(function (error) {
                     require(['io.ox/core/yell'], function (yell) {
@@ -365,7 +364,7 @@ define('io.ox/settings/security/sessions/settings/pane', [
                         var dialog = this;
                         this.busy();
                         http.GET({
-                            url: '/ajax/sessionmanagement',
+                            url: ox.apiRoot + '/sessionmanagement',
                             params: { action: 'clear' }
                         }).fail(function (error) {
                             require(['io.ox/core/yell'], function (yell) {

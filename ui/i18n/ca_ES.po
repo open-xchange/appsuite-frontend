@@ -231,8 +231,8 @@ msgstr[1] "un any"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js apps/plugins/halo/xing/register.js
-#: module:plugins/portal
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/view-detail.js
+#: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "%1$s\n"
 "%2$s %3$s\n"
@@ -500,6 +500,10 @@ msgstr ""
 msgid ", "
 msgstr ""
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "1 day"
+msgstr "1 dia"
+
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "Heu modificat 1 fitxer recentment"
@@ -516,11 +520,34 @@ msgstr[1] "%1$s elements"
 msgid "1 minute"
 msgstr "1 minut"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "1 version"
+msgstr "Versió de la interfície d'usuari"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+msgid "1 year"
+msgstr "un any"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "10 minutes"
 msgstr "10 minuts"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "10 versions"
+msgstr "Versió de la interfície d'usuari"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "100 versions"
+msgstr "Versió de la interfície d'usuari"
 
 #. Quota maxed out; 100%
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -537,6 +564,12 @@ msgstr "12 hores"
 msgid "15 minutes"
 msgstr "15 minuts"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "20 versions"
+msgstr "Versió de la interfície d'usuari"
+
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #, fuzzy
 msgid "24 hours"
@@ -546,16 +579,88 @@ msgstr "4 hores"
 msgid "3 minutes"
 msgstr "3 minuts"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "3 days"
+msgid "30 days"
+msgstr "3 dies"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "30 minutes"
 msgstr "30 minuts"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "30 versions"
+msgstr "Versió de la interfície d'usuari"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "40 versions"
+msgstr "Versió de la interfície d'usuari"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "5 minutes"
 msgstr "5 minuts"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "5 versions"
+msgstr "Versió de la interfície d'usuari"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "50 versions"
+msgstr "Versió de la interfície d'usuari"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "6 days"
+msgid "60 days"
+msgstr "6 dies"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "60 versions"
+msgstr "Versió de la interfície d'usuari"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "7 days"
+msgstr "2 dies"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "70 versions"
+msgstr "Versió de la interfície d'usuari"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "80 versions"
+msgstr "Versió de la interfície d'usuari"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "90 days"
+msgstr "2 dies"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "90 versions"
+msgstr "Versió de la interfície d'usuari"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved into itself"
@@ -1155,6 +1260,24 @@ msgstr "Afegeix llista de distribució"
 #, fuzzy
 msgid "All emails"
 msgstr "Totes les carpetes"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "All file versions are retained"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid ""
+#| "All messages older than %1$d days will be moved to the archive folder"
+msgid "All file versions older than 1 day will be deleted after next login"
+msgid_plural ""
+"All file versions older than %1$d days will be deleted after next login"
+msgstr[0] ""
+"Tots els missatges de més de %1$d dies d'antiguitat seran moguts a la "
+"carpeta d'arxiu"
+msgstr[1] ""
+"Tots els missatges de més de %1$d dies d'antiguitat seran moguts a la "
+"carpeta d'arxiu"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #, fuzzy
@@ -1892,7 +2015,7 @@ msgstr ""
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 #: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
@@ -2206,9 +2329,8 @@ msgstr "Obre/tanca tots els missatges"
 msgid "Close description panel"
 msgstr "Descripció del treball"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Tanca la vista de carpeta"
@@ -2955,7 +3077,7 @@ msgstr "Ajornada"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/actions/delete-older-versions.js
+#: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
@@ -2996,7 +3118,7 @@ msgstr ""
 #: apps/io.ox/files/actions.js module:io.ox/files
 #, fuzzy
 #| msgid "Delete version"
-msgid "Delete all older versions"
+msgid "Delete all previous versions"
 msgstr "Suprimeix la versió"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
@@ -3116,6 +3238,11 @@ msgstr "La descripció ha estat copiada"
 #, fuzzy
 msgid "Description text"
 msgstr "Descripció"
+
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#, fuzzy
+msgid "Deselect all"
+msgstr "Selecciona-ho tot"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Design"
@@ -3289,10 +3416,13 @@ msgid ""
 "b> in your own calendar?"
 msgstr ""
 
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 #, fuzzy
-msgid "Do you really want to delete all older versions?"
-msgstr "Realment voleu suprimir aquest fitxer?"
+#| msgid "Do you really want to delete this account?"
+msgid ""
+"Do you really want to delete all previous versions except the current "
+"version?"
+msgstr "Segur que voleu suprimir aquest compte?"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 #, fuzzy
@@ -4483,6 +4613,18 @@ msgstr "Segon nom"
 msgid "File quota"
 msgstr "Quota de fitxers"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Show version history"
+msgid "File version history"
+msgstr "Mostra l'historial de versions"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "File version limit"
+msgstr "Suprimeix la versió"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
@@ -4734,6 +4876,12 @@ msgstr "Desconnexió automàtica"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
 msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Never"
+msgid "Forever"
+msgstr "Mai"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Forgot attachment?"
@@ -5567,6 +5715,12 @@ msgstr "Mantén"
 msgid "Keep a copy of the message"
 msgstr "Mantén una còpia del missatge"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Keep all versions"
+msgstr "Suprimeix la versió"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 #, fuzzy
 msgid "Keep draft"
@@ -5592,6 +5746,16 @@ msgstr "Correu de %1$s: %2$s"
 #, fuzzy
 msgid "Keep mails with subject %1$s"
 msgstr "Sí, envia-ho sense assumpte"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Keep number of recent versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Keep saved versions"
+msgstr "Suprimeix la versió"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
@@ -7132,6 +7296,14 @@ msgstr "Es mostren només els elements relacionats amb la carpeta \"%1$s\""
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
 msgstr "Obre"
+
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#, fuzzy
+msgid "Open %1$s in %2$s"
+msgstr "Venç el %1$s"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -10048,6 +10220,7 @@ msgstr ""
 msgid "Suffix"
 msgstr "Sufix"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
@@ -10985,6 +11158,11 @@ msgstr "Zona horària"
 msgid "Time-dependent"
 msgstr ""
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+msgid "Timeframe"
+msgstr "Escala de temps en minuts"
+
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #, fuzzy
 msgid "Title"
@@ -11787,6 +11965,16 @@ msgstr ""
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid ""
+"When a file has more than 1 version, older versions of the file will be "
+"deleted after next login"
+msgid_plural ""
+"When a file has more than %1$d versions, older versions of the file will be "
+"deleted after next login"
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -13179,23 +13367,14 @@ msgstr "la vostra plataforma"
 #~ msgid "0 minutes"
 #~ msgstr "0 minuts"
 
-#~ msgid "1 day"
-#~ msgstr "1 dia"
-
 #~ msgid "1 hour"
 #~ msgstr "1 hora"
 
 #~ msgid "1 week"
 #~ msgstr "1 setmana"
 
-#~ msgid "2 days"
-#~ msgstr "2 dies"
-
 #~ msgid "2 hour"
 #~ msgstr "2 hores"
-
-#~ msgid "3 days"
-#~ msgstr "3 dies"
 
 #~ msgid "3 weeks"
 #~ msgstr "3 setmanes"
@@ -13211,9 +13390,6 @@ msgstr "la vostra plataforma"
 
 #~ msgid "5 days"
 #~ msgstr "5 dies"
-
-#~ msgid "6 days"
-#~ msgstr "6 dies"
 
 #~ msgid "6 hour"
 #~ msgstr "6 hores"
@@ -13536,17 +13712,14 @@ msgstr "la vostra plataforma"
 #~ msgid "Display emoticons as graphics in text emails"
 #~ msgstr "Mostra emoticones com a gràfics en correus de text"
 
+#, fuzzy
+#~ msgid "Do you really want to delete all older versions?"
+#~ msgstr "Realment voleu suprimir aquest fitxer?"
+
 #~ msgid "Do you really want to delete this file?"
 #~ msgid_plural "Do you really want to delete these files?"
 #~ msgstr[0] "Realment voleu suprimir aquest fitxer?"
 #~ msgstr[1] "Realment voleu suprimir aquests fitxers?"
-
-#, fuzzy
-#~| msgid "Do you really want to delete this account?"
-#~ msgid ""
-#~ "Do you really want to terminate all active sessions except the current "
-#~ "one?"
-#~ msgstr "Segur que voleu suprimir aquest compte?"
 
 #, fuzzy
 #~ msgid "Do you really want to terminate that session?"
@@ -14228,9 +14401,6 @@ msgstr "la vostra plataforma"
 #~ msgid "Show previous day"
 #~ msgstr "Mostra el dia anterior"
 
-#~ msgid "Show version history"
-#~ msgstr "Mostra l'historial de versions"
-
 #~ msgid "Signature position"
 #~ msgstr "Posició de la firma"
 
@@ -14865,10 +15035,6 @@ msgstr "la vostra plataforma"
 #, fuzzy
 #~ msgid "seconds"
 #~ msgstr "segon"
-
-#, fuzzy
-#~ msgid "select all"
-#~ msgstr "Selecciona-ho tot"
 
 #~ msgid "show image"
 #~ msgstr "mostra imatge"

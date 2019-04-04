@@ -32,25 +32,28 @@ define('io.ox/contacts/actions/print', [
             var $preview, def = new $.Deferred();
             this.$body.append(
                 $('<div class="col-xs-offset-1 col-xs-6">').append(
-                    $preview = $('<iframe>')
+                    $preview = $('<iframe aria-hidden="true">')
                     .attr({
                         title: gt('Print preview'),
                         src: ox.base + '/print.html'
                     }).on('load', def.resolve)
                 ),
                 $('<div class="col-xs-5">').append(
-                    new mini.CustomRadioView({
-                        model: this.model,
-                        name: 'list-type',
-                        list: [{
-                            value: 'simple',
-                            label: gt('Phone list')
-                        }, {
-                            value: 'details',
-                            //#. the user selects, whether to print a simple phonelist or a detailed contact list.
-                            label: gt.pgettext('contact-print-dialog', 'Details')
-                        }]
-                    }).render().$el
+                    $('<fieldset>').append(
+                        $('<legend class="sr-only">').attr('aria-labelledby', this.$el.attr('aria-labelledby')),
+                        new mini.CustomRadioView({
+                            model: this.model,
+                            name: 'list-type',
+                            list: [{
+                                value: 'simple',
+                                label: gt('Phone list')
+                            }, {
+                                value: 'details',
+                                //#. the user selects, whether to print a simple phonelist or a detailed contact list.
+                                label: gt.pgettext('contact-print-dialog', 'Details')
+                            }]
+                        }).render().$el
+                    )
                 )
             );
 

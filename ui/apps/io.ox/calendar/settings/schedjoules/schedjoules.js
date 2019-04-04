@@ -115,13 +115,13 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
     function openSchedjoulesDialog(data) {
 
         data.dialog.on('subscribe', function () {
-            var subscritions = _.values(this.data.subscriptionsModel.attributes),
+            var subscriptions = _.values(this.data.subscriptionsModel.attributes),
                 currentSubscriptions = _.copy(this.data.currentSubscriptions);
             data.dialog.close();
             notifications.yell('success', gt('The integration of the subscribed calendars might take a while.'));
             http.pause();
             // subscribe
-            _.each(subscritions, function (sub) {
+            _.each(subscriptions, function (sub) {
                 if (!currentSubscriptions[sub.itemId] || (currentSubscriptions[sub.itemId] && currentSubscriptions[sub.itemId].locale !== sub.locale)) {
                     api.subscribeCalendar(sub);
                 } else {
@@ -356,13 +356,23 @@ define('io.ox/calendar/settings/schedjoules/schedjoules', [
             _.each(this.data.data.page_sections, function (section) {
                 self.$body.append(
                     $('<div class="item-block">').append(
-                        $('<h4>').text(section.name),
+                        $('<h2>').text(section.name),
                         $('<ol class="list-group">').append(
                             returnListItems(section, self)
                         )
                     )
                 );
             });
+        }
+    });
+
+    ext.point('io.ox/core/folder/add-schedjoules-calendar').extend({
+        id: 'alarms',
+        index: 300,
+        render: function () {
+            this.$body.prepend(
+                $('<div class="alert alert-info">').text(gt('Your default reminders will be applied to these calendars.'))
+            );
         }
     });
 

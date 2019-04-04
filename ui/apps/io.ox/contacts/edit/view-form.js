@@ -15,8 +15,7 @@
 define('io.ox/contacts/edit/view-form', [
     'io.ox/contacts/model',
     'io.ox/backbone/views',
-    'io.ox/core/extPatterns/actions',
-    'io.ox/core/extPatterns/links',
+    'io.ox/backbone/views/actions/util',
     'io.ox/contacts/widgets/pictureUpload',
     'io.ox/contacts/api',
     'io.ox/contacts/util',
@@ -29,7 +28,7 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/core/folder/util',
     'settings!io.ox/core',
     'less!io.ox/contacts/edit/style'
-], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt, folderApi, folderUtils, settings) {
+], function (model, views, actionsUtil, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt, folderApi, folderUtils, settings) {
 
     'use strict';
 
@@ -82,7 +81,10 @@ define('io.ox/contacts/edit/view-form', [
                 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
                 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'
             ],
-            attachments: ['attachments_list']
+
+            attachments: ['attachments_list'],
+
+            advanced: ['toggle']
         },
 
         rare: [
@@ -127,6 +129,7 @@ define('io.ox/contacts/edit/view-form', [
             other_address: gt('Other address'),
             job: gt('Job description'),
             comment: gt('Comment'),
+            advanced: gt('Advanced'),
             userfields: gt('User fields'),
             attachments: gt('Attachments')
         },
@@ -139,6 +142,9 @@ define('io.ox/contacts/edit/view-form', [
             5680: 'note'
         }
     };
+
+    // is part of footer otherwise
+    if (_.device('smartphone')) meta.alwaysVisible.push('toggle');
 
     // process maxlength
     _(meta.maxlength).keys().forEach(function (size) {
@@ -248,7 +254,7 @@ define('io.ox/contacts/edit/view-form', [
                 this.append($('<button type="button" class="btn btn-primary save" data-action="save">')
                     .text(gt('Save'))
                     .on('click', function () {
-                        actions.invoke(ref + '/actions/edit/save', this, baton);
+                        actionsUtil.invoke(ref + '/actions/edit/save', baton);
                     })
                 );
 
@@ -262,27 +268,39 @@ define('io.ox/contacts/edit/view-form', [
                 this.append($('<button type="button" class="btn btn-default discard" data-action="discard">')
                     .text(gt('Discard'))
                     .on('click', function () {
-                        actions.invoke(ref + '/actions/edit/discard', this, baton);
+                        baton.$discardButton = $(this);
+                        actionsUtil.invoke(ref + '/actions/edit/discard', baton);
                     })
                 );
             }
         });
 
+        function toggleButton(baton) {
+            var guid = _.uniqueId('contacts-');
+            return $('<label class="checkbox-inline">').attr('for', guid).append(
+                $('<input type="checkbox" class="toggle-check">').attr('id', guid)
+                    .on('change', function (e) {
+                        e.preventDefault();
+                        toggle.call(baton.parentView.$el);
+                    }),
+                $.txt(gt('Show all fields'))
+            );
+        }
+
+        function drawToggleRow(options, model, baton) {
+            if (!_.device('smartphone')) return;
+            var group = $('<fieldset class="col-lg-12 form-group">');
+            this.append(
+                group.append(toggleButton(baton))
+            );
+        }
+
         ext.point(ref + '/edit/buttons').extend({
             index: 300,
             id: 'showall',
             draw: function (baton) {
-                var guid = _.uniqueId('contacts-');
-                this.append(
-                    $('<label class="checkbox-inline">').attr('for', guid).append(
-                        $('<input type="checkbox" class="toggle-check">').attr('id', guid)
-                            .on('change', function (e) {
-                                e.preventDefault();
-                                toggle.call(baton.parentView.$el);
-                            }),
-                        $.txt(gt('Show all fields'))
-                    )
-                );
+                if (_.device('smartphone')) return;
+                this.append(toggleButton(baton));
             }
         });
 
@@ -377,7 +395,8 @@ define('io.ox/contacts/edit/view-form', [
                 // This should be considered for refactoring
                 this.$el.attr('id', 'dialog-title');
 
-                this.$el.text(util.getFullName(mod) || '\u00A0');
+                var text = util.getFullName(mod);
+                this.$el.toggle(!!text).text(text);
                 //fix top margin if picture upload was removed
                 if (isMyContactData && !capabilities.has('gab')) {
                     this.$el.css('margin-top', '0px');
@@ -393,7 +412,8 @@ define('io.ox/contacts/edit/view-form', [
                 this.listenTo(this.model, 'change:position change:department change:company', this.render);
             },
             render: function () {
-                this.$el.text(util.getJob(this.model.toJSON()) || '\u00A0');
+                var text = util.getJob(this.model.toJSON());
+                this.$el.toggle(!!text).text(text);
                 return this;
             }
         });
@@ -462,8 +482,10 @@ define('io.ox/contacts/edit/view-form', [
             }
         });
 
+        var Action = actionsUtil.Action;
+
         // Edit Actions
-        new actions.Action(ref + '/actions/edit/save', {
+        new Action(ref + '/actions/edit/save', {
             action: function (baton) {
 
                 // check if attachments are changed
@@ -486,13 +508,13 @@ define('io.ox/contacts/edit/view-form', [
             }
         });
 
-        new actions.Action(ref + '/actions/edit/discard', {
-            action: function () {
-                $(this).trigger('controller:quit');
+        new Action(ref + '/actions/edit/discard', {
+            action: function (baton) {
+                baton.$discardButton.trigger('controller:quit');
             }
         });
 
-        new actions.Action(ref + '/actions/edit/reset-image', {
+        new Action(ref + '/actions/edit/reset-image', {
             action: function (baton) {
                 baton.model.set('image1', '', { validate: true });
                 var imageUrl = api.getFallbackImage();
@@ -533,11 +555,13 @@ define('io.ox/contacts/edit/view-form', [
         }
 
         function drawDate(options, model) {
+            var label,
+                guid = _.uniqueId('contacts-' + options.field + '-');
             this.append(
                 $('<fieldset class="col-lg-12 form-group birthdate">').append(
-                    $('<legend class="simple">').text(options.label),
+                    label = $('<legend class="simple">').attr('id', guid).text(options.label),
                     // don't wrap the date control with a label (see bug #27559)
-                    new mini.DateSelectView({ name: options.field, model: model }).render().$el
+                    new mini.DateSelectView({ name: options.field, model: model, label: label }).render().$el
                 )
             );
         }
@@ -610,6 +634,7 @@ define('io.ox/contacts/edit/view-form', [
                 anniversary: drawDate,
                 note: drawTextarea,
                 private_flag: drawCheckbox,
+                toggle: drawToggleRow,
                 attachments_list: drawAttachments
             };
 

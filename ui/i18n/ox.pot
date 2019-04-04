@@ -653,7 +653,7 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
-#: apps/io.ox/files/actions/delete-older-versions.js
+#: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js
@@ -1062,7 +1062,7 @@ msgstr ""
 #: module:io.ox/core/viewer
 #: apps/io.ox/editor/main.js
 #: module:io.ox/editor
-#: apps/io.ox/files/actions/delete-older-versions.js
+#: apps/io.ox/files/actions/delete-previous-versions.js
 #: module:io.ox/files
 #: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
@@ -2557,18 +2557,6 @@ msgstr ""
 #: apps/io.ox/calendar/main.js
 #: module:io.ox/calendar
 msgid "Calendars"
-msgstr ""
-
-#: apps/io.ox/calendar/main.js
-#: module:io.ox/calendar
-#: apps/io.ox/core/commons.js
-#: module:io.ox/core
-#: apps/io.ox/files/main.js
-#: module:io.ox/files
-#: apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
-msgid "Close folder view"
 msgstr ""
 
 #: apps/io.ox/calendar/main.js
@@ -4149,6 +4137,7 @@ msgstr ""
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js
 #: module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js
 #: apps/io.ox/contacts/view-detail.js
 #: apps/plugins/halo/xing/register.js
 #: module:plugins/portal
@@ -5191,6 +5180,15 @@ msgstr ""
 #: apps/io.ox/core/commons.js
 #: module:io.ox/core
 msgid "Item list"
+msgstr ""
+
+#: apps/io.ox/core/commons.js
+#: module:io.ox/core
+#: apps/io.ox/files/view-options.js
+#: module:io.ox/files
+#: apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
+msgid "Close folder view"
 msgstr ""
 
 #: apps/io.ox/core/commons.js
@@ -7530,6 +7528,11 @@ msgstr ""
 msgid "Multiselect"
 msgstr ""
 
+#: apps/io.ox/core/tk/vgrid.js
+#: module:io.ox/core
+msgid "Deselect all"
+msgstr ""
+
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/core/tk/vgrid.js
 #: module:io.ox/core
@@ -8320,7 +8323,7 @@ msgstr ""
 
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
-msgid "Delete all older versions"
+msgid "Delete all previous versions"
 msgstr ""
 
 #: apps/io.ox/files/actions.js
@@ -8361,9 +8364,9 @@ msgstr ""
 msgid "This file has been added to the portal"
 msgstr ""
 
-#: apps/io.ox/files/actions/delete-older-versions.js
+#: apps/io.ox/files/actions/delete-previous-versions.js
 #: module:io.ox/files
-msgid "Do you really want to delete all older versions?"
+msgid "Do you really want to delete all previous versions except the current version?"
 msgstr ""
 
 #: apps/io.ox/files/actions/delete.js
@@ -8791,6 +8794,106 @@ msgstr ""
 
 #: apps/io.ox/files/settings/pane.js
 #: module:io.ox/files
+msgid "Forever"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "1 day"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "7 days"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "30 days"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "60 days"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "90 days"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "1 year"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "Keep all versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "1 version"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "5 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "10 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "20 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "30 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "40 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "50 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "60 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "70 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "80 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "90 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "100 versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
 msgid "Adding files with identical names"
 msgstr ""
 
@@ -8814,6 +8917,58 @@ msgstr ""
 #: apps/io.ox/files/settings/pane.js
 #: module:io.ox/files
 msgid "Show hidden files and folders"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+#: apps/io.ox/participants/chronos-detail.js
+#: module:io.ox/core
+#: apps/io.ox/participants/detail.js
+msgid "Summary"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "All file versions are retained"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "All file versions older than 1 day will be deleted after next login"
+msgid_plural "All file versions older than %1$d days will be deleted after next login"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "When a file has more than 1 version, older versions of the file will be deleted after next login"
+msgid_plural "When a file has more than %1$d versions, older versions of the file will be deleted after next login"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "File version history"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "Timeframe"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "Keep saved versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "File version limit"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "Keep number of recent versions"
 msgstr ""
 
 #: apps/io.ox/files/share/listview.js
@@ -12096,6 +12251,14 @@ msgstr ""
 msgid "Reauthorize"
 msgstr ""
 
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+#: apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
+msgid "Open %1$s in %2$s"
+msgstr ""
+
 #: apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
 msgid "Account Name"
@@ -12370,12 +12533,6 @@ msgstr ""
 #: apps/plugins/administration/resources/register.js
 #: apps/plugins/administration/resources/settings/pane.js
 msgid "Resources"
-msgstr ""
-
-#: apps/io.ox/participants/chronos-detail.js
-#: module:io.ox/core
-#: apps/io.ox/participants/detail.js
-msgid "Summary"
 msgstr ""
 
 #: apps/io.ox/participants/chronos-views.js

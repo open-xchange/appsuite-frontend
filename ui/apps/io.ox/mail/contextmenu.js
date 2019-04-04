@@ -46,9 +46,9 @@ define('io.ox/mail/contextmenu', ['io.ox/core/extensions', 'gettext!io.ox/mail']
             return {
                 id: item[0],
                 index: 100 + index * 100,
+                title: item[2],
                 ref: 'io.ox/mail/actions/' + item[0],
-                section: item[1],
-                label: item[2]
+                section: item[1]
             };
         })
     );

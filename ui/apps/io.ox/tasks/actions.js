@@ -13,118 +13,105 @@
 
 define('io.ox/tasks/actions', [
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
+    'io.ox/backbone/views/actions/util',
     'gettext!io.ox/tasks',
     'io.ox/core/notifications',
     'io.ox/core/print',
-    'io.ox/core/extPatterns/actions',
     'io.ox/tasks/common-extensions',
     'io.ox/core/folder/api',
     'io.ox/core/pim/actions'
-], function (ext, links, gt, notifications, print, actions, extensions, folderAPI) {
+], function (ext, actionsUtil, gt, notifications, print, extensions, folderAPI) {
 
     'use strict';
 
     //  actions
-    var Action = links.Action;
+    var Action = actionsUtil.Action;
 
     new Action('io.ox/tasks/actions/create', {
-        requires: function (e) {
-            return e.baton.app.folder.can('create');
-        },
+        folder: 'create',
         action: function (baton) {
             ox.load(['io.ox/tasks/edit/main']).done(function (edit) {
-                edit.getApp().launch({ folderid: baton.app.folder.get() });
+                edit.getApp().launch({ folderid: baton.folder_id });
             });
         }
     });
 
     new Action('io.ox/tasks/actions/edit', {
-        requires: 'one modify',
+        collection: 'one && modify',
         action: function (baton) {
+            var data = baton.first();
             ox.load(['io.ox/tasks/edit/main']).done(function (m) {
-                if (m.reuse('edit', baton.data)) return;
-                m.getApp().launch({ taskData: baton.data });
+                if (m.reuse('edit', data)) return;
+                m.getApp().launch({ taskData: data });
             });
         }
     });
 
     new Action('io.ox/tasks/actions/delete', {
-        requires: 'some delete',
+        collection: 'some && delete',
         action: function (baton) {
             ox.load(['io.ox/tasks/actions/delete']).done(function (action) {
-                action(baton);
+                action(baton.array());
             });
         }
     });
 
     new Action('io.ox/tasks/actions/done', {
-        requires: function (e) {
-            if (!(e.collection.has('some') && e.collection.has('modify'))) {
-                return false;
-            }
-            return (e.baton.data.length !== undefined || e.baton.data.status !== 3);
+        collection: 'some && modify',
+        matches: function (baton) {
+            // it's either multiple/array or just one and status not 'done'
+            return baton.collection.has('multiple') || baton.first().status !== 3;
         },
         action: function (baton) {
             ox.load(['io.ox/tasks/actions/doneUndone']).done(function (action) {
-                action(baton, 1);
+                action(baton.array(), 1);
             });
         }
     });
 
     new Action('io.ox/tasks/actions/undone', {
-        requires: function (e) {
-            if (!(e.collection.has('some') && e.collection.has('modify'))) {
-                return false;
-            }
-            return (e.baton.data.length !== undefined || e.baton.data.status === 3);
+        collection: 'some && modify',
+        matches: function (baton) {
+            // it's either multiple/array or just one and status not 'done'
+            return baton.collection.has('multiple') || baton.first().status === 3;
         },
         action: function (baton) {
             ox.load(['io.ox/tasks/actions/doneUndone']).done(function (action) {
-                action(baton, 3);
+                action(baton.array(), 3);
             });
         }
     });
 
-    // helper
+    new Action('io.ox/tasks/actions/move', {
+        collection: 'some && delete',
+        matches: function (baton) {
+            // we cannot move tasks in shared folders
+            return !baton.array().some(function (item) {
+                return isShared(item.folder_id);
+            });
+        },
+        action: function (baton) {
+            ox.load(['io.ox/tasks/actions/move']).done(function (action) {
+                action(baton);
+            });
+        }
+    });
+
     function isShared(id) {
         var data = folderAPI.pool.getModel(id).toJSON();
         return folderAPI.is('shared', data);
     }
 
-    new Action('io.ox/tasks/actions/move', {
-        requires: function (e) {
-            if (!e.collection.has('some')) return false;
-            if (!e.collection.has('delete')) return false;
-            // app object is not available when opened from notification area
-            if (e.baton.app && isShared(e.baton.app.folder.get())) return false;
-            // look for folder_id in task data
-            if (e.baton.data.folder_id && isShared(e.baton.data.folder_id)) return false;
-            return true;
-        },
-        multiple: function (list, baton) {
-            ox.load(['io.ox/tasks/actions/move']).done(function (action) {
-                action.multiple(list, baton);
-            });
-        }
-    });
-
+    // Tested: No
     new Action('io.ox/tasks/actions/confirm', {
-        requires: function (args) {
-            var result = false;
-            if (args.baton.data.users) {
-                var userId = ox.user_id;
-                _(args.baton.data.users).each(function (user) {
-                    if (user.id === userId) {
-                        result = true;
-                    }
-                });
-                return result;
-            }
-            return result;
+        collection: 'one',
+        matches: function (baton) {
+            return _(baton.first().users).some(function (user) {
+                return user.id === ox.user_id;
+            });
         },
         action: function (baton) {
-            var data = baton.data;
+            var data = baton.first();
             ox.load(['io.ox/calendar/actions/acceptdeny', 'io.ox/tasks/api']).done(function (acceptdeny, api) {
                 acceptdeny(data, {
                     taskmode: true,
@@ -139,217 +126,103 @@ define('io.ox/tasks/actions', [
     });
 
     new Action('io.ox/tasks/actions/export', {
-        requires: 'some read',
-        multiple: function (list) {
+        collection: 'some && read',
+        action: function (baton) {
             require(['io.ox/core/export'], function (exportDialog) {
-                exportDialog.open('tasks', { list: list });
+                exportDialog.open('tasks', { list: baton.array() });
             });
         }
     });
 
     new Action('io.ox/tasks/actions/print', {
-        requires: function (e) {
-            return e.collection.has('some', 'read') && _.device('!smartphone');
-        },
-        multiple: function (list) {
-            print.request('io.ox/tasks/print', list);
+        device: '!smartphone',
+        collection: 'some && read',
+        action: function (baton) {
+            print.request('io.ox/tasks/print', baton.array());
         }
     });
 
-    new Action('io.ox/tasks/actions/print-disabled', {
-        requires: function () {
-            return _.device('!smartphone');
-        },
-        multiple: function (list) {
-            ox.load(['io.ox/tasks/actions/printDisabled']).done(function (action) {
-                action.multiple(list);
-            });
-        }
-    });
-
-    //inline
-    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
-        id: 'edit',
-        index: 100,
-        prio: 'hi',
-        mobile: 'hi',
-        label: gt('Edit'),
-        ref: 'io.ox/tasks/actions/edit'
-    }));
-
-    //strange workaround because extend only takes new links instead of plain objects with draw method
     new Action('io.ox/tasks/actions/placeholder', {
-        requires: 'one modify',
-        action: $.noop
+        collection: 'one && modify',
+        action: _.noop
     });
 
-    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
-        id: 'change-due-date',
-        index: 200,
-        prio: 'hi',
-        mobile: 'lo',
-        ref: 'io.ox/tasks/actions/placeholder',
-        draw: function (baton) {
-            var link = $('<a href="#">').text(gt('Change due date'));
-
-            this.append(
-                $('<span class="io-ox-action-link">').append(link)
-            );
-
-            extensions.dueDate.call(link, baton);
+    ext.point('io.ox/tasks/links/inline').extend(
+        {
+            id: 'edit',
+            index: 100,
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Edit'),
+            ref: 'io.ox/tasks/actions/edit'
+        },
+        {
+            id: 'change-due-date',
+            index: 200,
+            prio: 'hi',
+            mobile: 'lo',
+            title: gt('Due'),
+            tooltip: gt('Change due date'),
+            ref: 'io.ox/tasks/actions/placeholder',
+            customize: extensions.dueDate
+        },
+        {
+            id: 'done',
+            index: 300,
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Done'),
+            tooltip: gt('Mark as done'),
+            ref: 'io.ox/tasks/actions/done'
+        },
+        {
+            id: 'undone',
+            index: 310,
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Undone'),
+            tooltip: gt('Mark as undone'),
+            ref: 'io.ox/tasks/actions/undone'
+        },
+        {
+            id: 'delete',
+            index: 400,
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Delete'),
+            ref: 'io.ox/tasks/actions/delete'
+        },
+        {
+            id: 'move',
+            index: 500,
+            prio: 'lo',
+            mobile: 'lo',
+            title: gt('Move'),
+            ref: 'io.ox/tasks/actions/move'
+        },
+        {
+            id: 'confirm',
+            index: 600,
+            prio: 'lo',
+            mobile: 'lo',
+            title: gt('Change confirmation status'),
+            ref: 'io.ox/tasks/actions/confirm'
+        },
+        {
+            id: 'export',
+            index: 650,
+            prio: 'lo',
+            mobile: 'lo',
+            title: gt('Export'),
+            ref: 'io.ox/tasks/actions/export'
+        },
+        {
+            id: 'print',
+            index: 700,
+            prio: 'lo',
+            mobile: 'lo',
+            title: gt('Print'),
+            ref: 'io.ox/tasks/actions/print'
         }
-    }));
-
-    // delete tasks
-    ext.point('io.ox/tasks/mobileMultiSelect/toolbar').extend({
-        id: 'delete',
-        index: 10,
-        draw: function (data) {
-            var baton = new ext.Baton({ data: data.data });
-            $(this).append($('<div class="toolbar-button">')
-                .append($('<a href="#">')
-                    .append(
-                        $('<i class="fa fa-trash-o" aria-hidden="true">')
-                            .on('click', { grid: data.grid }, function (e) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                actions.invoke('io.ox/tasks/actions/delete', null, baton);
-                                e.data.grid.selection.clear();
-                            })
-                    )
-                )
-            );
-        }
-    });
-
-    // tasks done
-    ext.point('io.ox/tasks/mobileMultiSelect/toolbar').extend({
-        id: 'done',
-        index: 20,
-        draw: function (data) {
-            var baton = new ext.Baton({ data: data.data });
-            $(this).append($('<div class="toolbar-button">')
-                .append($('<a href="#">')
-                    .append(
-                        $('<i class="fa fa-check-square-o" aria-hidden="true">')
-                            .on('click', { grid: data.grid }, function (e) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                actions.invoke('io.ox/tasks/actions/done', null, baton);
-                                e.data.grid.selection.clear();
-                            })
-                    )
-                )
-            );
-        }
-    });
-
-    // tasks undone
-    ext.point('io.ox/tasks/mobileMultiSelect/toolbar').extend({
-        id: 'unDone',
-        index: 30,
-        draw: function (data) {
-            var baton = new ext.Baton({ data: data.data });
-            $(this).append($('<div class="toolbar-button">')
-                .append($('<a href="#">')
-                    .append(
-                        $('<i class="fa fa-square-o" aria-hidden="true">')
-                            .on('click', { grid: data.grid }, function (e) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                actions.invoke('io.ox/tasks/actions/undone', null, baton);
-                                e.data.grid.selection.clear();
-                            })
-                    )
-                )
-            );
-        }
-    });
-
-    // tasks move
-    ext.point('io.ox/tasks/mobileMultiSelect/toolbar').extend({
-        id: 'move',
-        index: 40,
-        draw: function (data) {
-            var baton = new ext.Baton({ data: data.data });
-            $(this).append($('<div class="toolbar-button">')
-                .append($('<a href="#">')
-                    .append(
-                        $('<i class="fa fa-sign-in" aria-hidden="true">')
-                            .on('click', { grid: data.grid }, function (e) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                actions.invoke('io.ox/tasks/actions/move', null, baton);
-                                e.data.grid.selection.clear();
-                            })
-                    )
-                )
-            );
-        }
-    });
-
-    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
-        id: 'done',
-        index: 300,
-        prio: 'hi',
-        mobile: 'hi',
-        icon: 'fa fa-check-square-o',
-        label: gt('Mark as done'),
-        ref: 'io.ox/tasks/actions/done'
-    }));
-
-    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
-        id: 'unDone',
-        index: 310,
-        prio: 'hi',
-        mobile: 'hi',
-        label: gt('Mark as undone'),
-        ref: 'io.ox/tasks/actions/undone'
-    }));
-
-    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
-        id: 'delete',
-        index: 400,
-        prio: 'hi',
-        mobile: 'hi',
-        icon: 'fa fa-trash-o',
-        label: gt('Delete'),
-        ref: 'io.ox/tasks/actions/delete'
-    }));
-
-    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
-        id: 'move',
-        index: 500,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Move'),
-        ref: 'io.ox/tasks/actions/move'
-    }));
-
-    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
-        id: 'confirm',
-        index: 600,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Change confirmation status'),
-        ref: 'io.ox/tasks/actions/confirm'
-    }));
-
-    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
-        id: 'export',
-        index: 650,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Export'),
-        ref: 'io.ox/tasks/actions/export'
-    }));
-
-    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
-        id: 'print',
-        index: 700,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Print'),
-        ref: 'io.ox/tasks/actions/print'
-    }));
+    );
 });

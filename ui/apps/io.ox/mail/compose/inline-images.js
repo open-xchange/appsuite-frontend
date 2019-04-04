@@ -11,22 +11,21 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-/* global tinyMCE:true */
-
 define('io.ox/mail/compose/inline-images', [
     'io.ox/core/extensions',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/tk/attachments',
     'io.ox/core/notifications',
     'io.ox/core/http',
     'gettext!io.ox/mail'
-], function (ext, dialogs, attachments, notifications, http, gt) {
+], function (ext, ModalDialog, attachments, notifications, http, gt) {
 
     'use strict';
 
     var api = {
         inlineImage: function (data) {
             try {
+                var editor = data.editor || (window.tinyMCE && window.tinyMCE.activeEditor);
                 if ('FormData' in window) {
                     // image broken, don't upload it and show error message
                     if (data.file.size === 0 && data.file.type === '' && !data.file.name) {
@@ -48,9 +47,8 @@ define('io.ox/mail/compose/inline-images', [
                         fixPost: true
                     }).done(function (response) {
                         // used to add the keepalive timers
-                        if (window.tinyMCE && window.tinyMCE.activeEditor) { // check tinyMCE (56182)
-                            $(tinyMCE.activeEditor.getElement()).trigger('addInlineImage', response.data[0]);
-                        }
+                        if (!editor) return;
+                        $(editor.getElement()).trigger('addInlineImage', response.data[0]);
                     });
                 }
                 return http.FORM({
@@ -59,9 +57,8 @@ define('io.ox/mail/compose/inline-images', [
                     params: { module: 'mail', type: 'image' }
                 }).done(function (response) {
                     // used to add the keepalive timers
-                    if (window.tinyMCE && window.tinyMCE.activeEditor) { // check tinyMCE (56182)
-                        $(tinyMCE.activeEditor.getElement()).trigger('addInlineImage', response.data[0]);
-                    }
+                    if (!editor) return;
+                    $(editor.getElement()).trigger('addInlineImage', response.data[0]);
                 });
             } catch (e) {
                 // print error to console for debugging
@@ -86,9 +83,7 @@ define('io.ox/mail/compose/inline-images', [
     ext.point(POINT + 'title').extend({
         id: 'default',
         draw: function () {
-            this.append(
-                $('<h4>').text(gt('Insert inline image'))
-            );
+            this.$title.text(gt('Insert inline image'));
         }
     });
 
@@ -105,30 +100,28 @@ define('io.ox/mail/compose/inline-images', [
     ext.point(POINT + 'buttons').extend({
         id: 'default',
         draw: function () {
-            this.addPrimaryButton('insert', gt('Insert'), 'insert')
-                .addButton('cancel', gt('Cancel'), 'cancel');
+            this.addCancelButton()
+                .addButton({ label: gt('Insert'), action: 'insert' });
         }
     });
 
     return {
         api: api,
         show: function () {
-            var dialog = new dialogs.ModalDialog({ async: true }),
+            var dialog = new ModalDialog({ async: true }),
                 baton =  new ext.Baton({ $: {} }),
                 def = $.Deferred(),
                 form;
 
             dialog.build(function () {
-                form = $('<form>', { 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' });
-                this.getContentNode().append(form);
+                form = $('<form accept-charset="UTF-8" enctype="multipart/form-data" method="POST">');
+                this.$body.append(form);
 
-                ext.point(POINT + 'title').invoke('draw', this.getHeader(), baton);
-
+                ext.point(POINT + 'title').invoke('draw', this.$title, baton);
                 ext.point(POINT + 'file_upload').invoke('draw', form, baton);
-
                 ext.point(POINT + 'buttons').invoke('draw', this, baton);
 
-                this.getPopup().addClass('inline-images').parent().css('z-index', 999999); // Get high!;
+                this.$el.addClass('inline-images').parent().css('z-index', 999999); // Get high!;
             });
             dialog.on('insert', function () {
 
@@ -143,7 +136,7 @@ define('io.ox/mail/compose/inline-images', [
 
                 popup.busy();
 
-                if (!(/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(file.val())) {
+                if (!(/\.(gif|bmp|tiff|jpe?g|gmp|png|heic?f?)$/i).test(file.val())) {
                     notifications.yell('error', gt('Please select a valid image File to insert'));
                     popup.idle();
                     def.reject();
@@ -157,7 +150,7 @@ define('io.ox/mail/compose/inline-images', [
                     }).fail(failHandler);
                 }
             })
-            .show();
+            .open();
             return def;
         }
     };

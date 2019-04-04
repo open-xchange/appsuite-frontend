@@ -176,7 +176,7 @@
             //width: @appcontrol-height - 16;
             position: relative;
             z-index: 2;
-            height: @appcontrol-height - 1;
+            height: @appcontrol-height - 2;
             display: inline-block;
             border: 0;
             svg .fill-c1 { fill: #fff; }
@@ -223,15 +223,12 @@
         min-width: @quicklaunch-width;
         min-height: auto;
 
-        .indicator {
-            width: 8px;
-            height: 8px;
-            background-color: #eb4400;
-            border-radius: 50%;
+        svg.indicator {
             position: absolute;
             z-index: 1;
             top: 18px;
             left: 33px;
+            circle { fill: #eb4400 }
         }
 
         .title {
@@ -354,6 +351,10 @@
     .smartphone & {
         padding: 5px 0;
         width: 100%;
+
+        .standalone& {
+            padding: 20px 0;
+        }
     }
 
     li {
@@ -373,10 +374,13 @@
         flex-direction: column;
         align-items: center;
         position: relative;
+        white-space: normal;
 
         margin: @launcher-spacing;
         height: @launcher-size;
         width: @launcher-size;
+
+        svg.indicator { display: none; }
 
         .closer {
             font-size: 15px;

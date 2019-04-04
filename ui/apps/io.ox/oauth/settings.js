@@ -32,18 +32,24 @@ define('io.ox/oauth/settings', [
         contacts: gt.pgettext('app', 'Address Book')
     };
 
+    function mapModuleLaunch(m) {
+        return m === 'infostore' ? 'files' : m;
+    }
+
     function OAuthAccountDetailExtension(serviceId) {
         this.id = serviceId;
 
         this.draw = function (args) {
             var account = oauthKeychain.accounts.get(args.data.id),
-                collection = new Backbone.Collection();
-
-            account.fetchRelatedAccounts().then(function (accounts) {
-                collection.push(accounts);
-            });
+                collection = new Backbone.Collection([].concat(account.get('associations')).map(function (as) {
+                    return _.extend({
+                        serviceId: account.get('serviceId'),
+                        accountType: as.module
+                    }, as);
+                }));
 
             new ModalDialog({
+                focus: 'input',
                 async: true,
                 title: account.get('displayName'),
                 point: 'io.ox/settings/accounts/' + serviceId + '/settings/detail/dialog',
@@ -68,13 +74,39 @@ define('io.ox/oauth/settings', [
                 },
                 text: function () {
                     var guid,
+                        dialog = this,
                         relatedAccountsView = new ListView({
                             tagName: 'ul',
                             childView: AccountViews.ListItem.extend({
+                                events: function () {
+                                    return _.extend({
+                                        'click .deeplink': 'openModule'
+                                    }, AccountViews.ListItem.prototype.events);
+                                },
                                 getTitle: function () {
-                                    var customTitle = accountTypeAppMapping[this.model.get('accountType')];
+                                    var customTitle = this.model.get('name') || accountTypeAppMapping[this.model.get('module')];
                                     // fall back to default implementation if we can not figure out a custom title
                                     return customTitle || AccountViews.ListItem.prototype.getTitle.apply(this);
+                                },
+                                renderTitle: function (title) {
+                                    return $('<div class="list-item-title">').append(
+                                        $('<button type="button" class="btn btn-link deeplink">').attr({
+                                            //#. link title for related accounts into the corresponding folder
+                                            //#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+                                            //#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+                                            title: gt('Open %1$s in %2$s', title, accountTypeAppMapping[this.model.get('module')])
+                                        }).append(title)
+                                    );
+                                },
+                                openModule: function () {
+                                    var model = this.model;
+                                    ox.launch(
+                                        'io.ox/' + mapModuleLaunch(this.model.get('module')) + '/main',
+                                        { folder: model.get('folder') }
+                                    ).done(function () {
+                                        this.folder.set(model.get('folder'));
+                                        dialog.close();
+                                    });
                                 }
                             }),
                             collection: this.options.relatedAccountsCollection
@@ -94,16 +126,6 @@ define('io.ox/oauth/settings', [
             .addButton({
                 action: 'save',
                 label: gt('Save')
-            })
-            .addAlternativeButton({
-                action: 'reauthorize',
-                label: gt('Reauthorize')
-            })
-            .on('reauthorize', function () {
-                this.options.account.reauthorize();
-                // reauthorization is always independent, because it kicks of an external process and we don't always get a response
-                // however, there might be unsaved changes to the model, so do not close the dialog, yet.
-                this.idle();
             })
             .on('save', function () {
                 var dialog = this,

@@ -12,8 +12,8 @@
 
 .settings-list-view > li {
 
-    .flex-display(flex);
-    .flex-wrap(wrap);
+    display: flex;
+    flex-wrap: wrap;
 
     align-items: center;
     margin-bottom: 8px;
@@ -22,7 +22,7 @@
     border-radius: 3px;
 
     & > * {
-        .flex(0 0 auto);
+        flex: 0 0 auto;
         padding: 16px;
     }
 
@@ -31,11 +31,11 @@
     }
 
     .list-item-title {
-        .flex(1);
+        flex: 1;
         .ellipsis();
     }
     .list-item-subtitle {
-        color: #aaa;
+        color: #767676;
         .ellipsis();
 
         label {
@@ -118,14 +118,14 @@
         .list-item-title {
             font-style: italic;
             font-weight: normal;
-            color: #707070;
+            color: #696969;
         }
     }
 
     .error-wrapper {
         color: #333;
-        .flex(100%);
-        .flex-display(flex);
+        flex: 100%;
+        display: flex;
         align-items: center;
         padding: 0 0 13px 0;
 

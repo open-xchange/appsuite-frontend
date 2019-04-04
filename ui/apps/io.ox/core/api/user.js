@@ -66,7 +66,7 @@ define('io.ox/core/api/user', [
             },
             list: {
                 action: 'list',
-                columns: '1,20,500,501,502,505,524,555,606,614',
+                columns: '1,20,500,501,502,505,524,555,606,614,616',
                 extendColumns: 'io.ox/core/api/user/list'
             },
             get: {
@@ -299,6 +299,11 @@ define('io.ox/core/api/user', [
     api.get = function () {
         if (!arguments.length) return getUser({ id: ox.user_id });
         return getUser.apply(this, arguments);
+    };
+
+    // make sure this is fast (then vs pipe)
+    api.me = function () {
+        return ox.rampup.user ? $.when(ox.rampup.user) : api.get();
     };
 
     // reload account API if current user gets changed

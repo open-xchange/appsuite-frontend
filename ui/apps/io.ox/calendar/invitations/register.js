@@ -118,7 +118,8 @@ define('io.ox/calendar/invitations/register', [
                 new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
                     popup.busy();
                     self.getFullModel().done(function (fullModel) {
-                        popup.idle().append(viewDetail.draw(fullModel, { isExternalUser: parseInt(self.mailModel.get('account_id'), 10) !== 0, noFolderCheck: true, deeplink: !!self.showDeeplinks }));
+                        // no toolbar, clicking actions in an event preview is bound to cause errors.
+                        popup.idle().append(viewDetail.draw(fullModel, { hideToolbar: true, noFolderCheck: true, deeplink: !!self.showDeeplinks }));
                     });
                 });
             });
@@ -359,14 +360,19 @@ define('io.ox/calendar/invitations/register', [
                 imip = this.imip;
 
             function performConfirm() {
+
+                var params = {
+                    action: action,
+                    dataSource: 'com.openexchange.mail.ical',
+                    descriptionFormat: 'html'
+                };
+
+                if (!_.isEmpty(self.getUserComment())) {
+                    params.message = self.getUserComment();
+                }
                 http.PUT({
                     module: 'chronos/itip',
-                    params: {
-                        action: action,
-                        dataSource: 'com.openexchange.mail.ical',
-                        descriptionFormat: 'html',
-                        message: self.getUserComment()
-                    },
+                    params: params,
                     data: {
                         'com.openexchange.mail.conversion.fullname': imip.mail.folder_id,
                         'com.openexchange.mail.conversion.mailid': imip.mail.id,
@@ -532,9 +538,9 @@ define('io.ox/calendar/invitations/register', [
                         // remove mail
                         if (self.options.yell !== false) {
                             var message;
-                            if (action === 'accept') message = this.getAcceptedMessage();
-                            else if (action === 'tentative') message = this.getTentativeMessage();
-                            else if (action === 'decline') message = this.getRejectedMessage();
+                            if (action === 'accept') message = self.getAcceptedMessage();
+                            else if (action === 'tentative') message = self.getTentativeMessage();
+                            else if (action === 'decline') message = self.getRejectedMessage();
                             notifications.yell('success', message);
                         }
                         require(['io.ox/mail/api'], function (api) {

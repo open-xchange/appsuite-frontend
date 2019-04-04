@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Contacts: Create new contact');
+Feature('Contacts: Create new contact').tag('6');
 
 Before(async function (users) {
     await users.create();
@@ -25,9 +25,10 @@ Scenario('adds a contact with all fields', function (I) {
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
 
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
+    I.waitForText('My address books');
+    I.doubleClick('~My address books');
+    I.click('~Contacts');
+    I.waitForDetached('.classic-toolbar [data-dropdown="io.ox/contacts/toolbar/new"].disabled');
     I.clickToolbar('New');
     I.click('Add contact');
     I.waitForVisible('.io-ox-contacts-edit-window');

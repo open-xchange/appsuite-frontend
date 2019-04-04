@@ -10,7 +10,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-Feature('Contacts: Create new distributionlist');
+Feature('Contacts: Create new distributionlist').tag('6');
 
 Before(async function (users) {
     await users.create();
@@ -24,21 +24,23 @@ Scenario('adds a unsaved contact', function (I) {
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
 
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
+    I.waitForText('My address books');
+    I.doubleClick('~My address books');
+    I.click('~Contacts');
+    I.waitForDetached('.classic-toolbar [data-dropdown="io.ox/contacts/toolbar/new"].disabled');
     I.clickToolbar('New');
     I.click('Add distribution list');
     I.waitForVisible('.io-ox-contacts-distrib-window');
     I.fillField('Name', 'Testlist');
     I.fillField('Add contact', 'test@tester.com');
+    I.wait(0.5);
     I.pressKey('Enter');
 
     I.waitForVisible('a.halo-link');
     I.click('a.halo-link');
 
     I.waitForVisible('.io-ox-sidepopup');
-    I.waitForVisible('.io-ox-sidepopup [data-action="add-to-contactlist"]');
+    I.waitForVisible('.io-ox-sidepopup [data-action="io.ox/contacts/actions/add-to-contactlist"]');
     I.see('Add to address book', '.io-ox-sidepopup');
     I.click('Add to address book', '.io-ox-sidepopup');
 

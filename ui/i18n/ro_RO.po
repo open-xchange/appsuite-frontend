@@ -236,8 +236,8 @@ msgstr[2] "%1$d de ani"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js apps/plugins/halo/xing/register.js
-#: module:plugins/portal
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/view-detail.js
+#: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "%1$s\n"
 "%2$s %3$s\n"
@@ -498,6 +498,10 @@ msgstr "(Citire, scriere și ștergere)"
 msgid ", "
 msgstr ", "
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "1 day"
+msgstr "1 zi"
+
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "Un fișier a fost modificat recent"
@@ -515,11 +519,36 @@ msgstr[2] "%1$d de elemente"
 msgid "1 minute"
 msgstr "1 minut"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "1 version"
+msgstr "Versiune IU"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "%1$d year"
+#| msgid_plural "%1$d years"
+msgid "1 year"
+msgstr "1 ani"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "10 minutes"
 msgstr "10 minute"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "10 versions"
+msgstr "Versiune IU"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "100 versions"
+msgstr "Versiune IU"
 
 #. Quota maxed out; 100%
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -535,6 +564,12 @@ msgstr "12 ore"
 msgid "15 minutes"
 msgstr "15 minute"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "20 versions"
+msgstr "Versiune IU"
+
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 msgid "24 hours"
 msgstr "24 de ore"
@@ -543,16 +578,88 @@ msgstr "24 de ore"
 msgid "3 minutes"
 msgstr "3 minute"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "30 days"
+msgstr "2 zile"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "30 minutes"
 msgstr "30 de minute"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "30 versions"
+msgstr "Versiune IU"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "40 versions"
+msgstr "Versiune IU"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "5 minutes"
 msgstr "5 minute"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "5 versions"
+msgstr "Versiune IU"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "50 versions"
+msgstr "Versiune IU"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "6 days"
+msgid "60 days"
+msgstr "6 zile"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "60 versions"
+msgstr "Versiune IU"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "7 days"
+msgstr "2 zile"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "70 versions"
+msgstr "Versiune IU"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "80 versions"
+msgstr "Versiune IU"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "2 days"
+msgid "90 days"
+msgstr "2 zile"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "90 versions"
+msgstr "Versiune IU"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved into itself"
@@ -1127,6 +1234,26 @@ msgstr "Toate listele de distribuție"
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "All emails"
 msgstr "Toate e-mailurile"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All file versions are retained"
+msgstr "Toate fișierele au fost șterse"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid ""
+#| "All messages older than %1$d days will be moved to the archive folder"
+msgid "All file versions older than 1 day will be deleted after next login"
+msgid_plural ""
+"All file versions older than %1$d days will be deleted after next login"
+msgstr[0] ""
+"Toate mesajele mai vechi de %1$d zile vor fi mutate în dosarul de arhive"
+msgstr[1] ""
+"Toate mesajele mai vechi de %1$d zile vor fi mutate în dosarul de arhive"
+msgstr[2] ""
+"Toate mesajele mai vechi de %1$d zile vor fi mutate în dosarul de arhive"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -1837,7 +1964,7 @@ msgstr "Camera %1$s"
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 #: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
@@ -2139,9 +2266,8 @@ msgstr "Închide toate mesajele"
 msgid "Close description panel"
 msgstr "Închide panoul descriere"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Închide vederea dosar"
@@ -2855,7 +2981,7 @@ msgstr "Amânat"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/actions/delete-older-versions.js
+#: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
@@ -2894,7 +3020,7 @@ msgstr "Șterge toate obiectele"
 #: apps/io.ox/files/actions.js module:io.ox/files
 #, fuzzy
 #| msgid "Delete version"
-msgid "Delete all older versions"
+msgid "Delete all previous versions"
 msgstr "Șterge versiunea"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
@@ -3006,6 +3132,12 @@ msgstr "Descrierea a fost copiată"
 #: module:io.ox/core/viewer
 msgid "Description text"
 msgstr "Text descriere"
+
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#, fuzzy
+#| msgid "select all"
+msgid "Deselect all"
+msgstr "Selectează tot"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Design"
@@ -3176,12 +3308,13 @@ msgstr ""
 "sau doriți să creați o întâlnire <b>cu proprietarul dosarului</b> în "
 "calendarul dumneavoastră propriu?"
 
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 #, fuzzy
-#| msgctxt "One file only"
-#| msgid "Do you really want to delete this version?"
-msgid "Do you really want to delete all older versions?"
-msgstr "Sigur doriți să ștergeți această versiune?"
+#| msgid "Do you really want to delete this account?"
+msgid ""
+"Do you really want to delete all previous versions except the current "
+"version?"
+msgstr "Sigur doriți să ștergeți acest cont?"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete calendar \"%s\"?"
@@ -4356,6 +4489,18 @@ msgstr "Nume fișier"
 msgid "File quota"
 msgstr "Cotă de fișier"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Show version history"
+msgid "File version history"
+msgstr "Afișează istoricul de versiuni"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "File versions"
+msgid "File version limit"
+msgstr "Versiuni fișier"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
@@ -4599,6 +4744,12 @@ msgstr "Forțează deconectarea"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
 msgstr "Dacă forțați deconexiunea, puteți pierde date."
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Never"
+msgid "Forever"
+msgstr "Niciodată"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Forgot attachment?"
@@ -5397,6 +5548,12 @@ msgstr "Păstrează"
 msgid "Keep a copy of the message"
 msgstr "Păstrează o copie a mesajului"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Keep all versions"
+msgstr "Șterge versiunea"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Keep draft"
 msgstr "Păstrează schița"
@@ -5418,6 +5575,16 @@ msgstr "Păstrează mesajele către %1$s"
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Keep mails with subject %1$s"
 msgstr "Păstrează mesajele cu subiectul %1$s"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Keep number of recent versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "Keep saved versions"
+msgstr "Șterge versiunea"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
@@ -6877,6 +7044,15 @@ msgstr "Se afișează doar elementele legate de dosarul \"%1$s\""
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
 msgstr "Deschide"
+
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#, fuzzy
+#| msgid "Open in %1$s"
+msgid "Open %1$s in %2$s"
+msgstr "Deschide cu %1$s"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -9695,6 +9871,7 @@ msgstr "Calendarul a fost reîmprospătat cu succes"
 msgid "Suffix"
 msgstr "Sufix"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
@@ -10662,6 +10839,12 @@ msgstr "Fus orar"
 msgid "Time-dependent"
 msgstr "Dependent de timp"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "timeframe"
+msgid "Timeframe"
+msgstr "interval de timp"
+
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Title"
 msgstr "Titlu"
@@ -11449,6 +11632,17 @@ msgstr "Ce tip de dispozitiv doriți să configurați?"
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
 msgstr "Noutăți"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid ""
+"When a file has more than 1 version, older versions of the file will be "
+"deleted after next login"
+msgid_plural ""
+"When a file has more than %1$d versions, older versions of the file will be "
+"deleted after next login"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
@@ -12925,9 +13119,6 @@ msgstr "platforma dumneavoastră"
 #~ msgid "0 minutes"
 #~ msgstr "0 minute"
 
-#~ msgid "1 day"
-#~ msgstr "1 zi"
-
 #~ msgid "1 hour"
 #~ msgstr "1 oră"
 
@@ -12942,9 +13133,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "150%"
 #~ msgstr "150%"
-
-#~ msgid "2 days"
-#~ msgstr "2 zile"
 
 #~ msgid "2 hour"
 #~ msgstr "2 ore"
@@ -12975,9 +13163,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "50%"
 #~ msgstr "50%"
-
-#~ msgid "6 days"
-#~ msgstr "6 zile"
 
 #~ msgid "6 hour"
 #~ msgstr "6 ore"
@@ -14568,6 +14753,12 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Do you already have a %s account?"
 #~ msgstr "Aveți deja un cont %s?"
 
+#, fuzzy
+#~| msgctxt "One file only"
+#~| msgid "Do you really want to delete this version?"
+#~ msgid "Do you really want to delete all older versions?"
+#~ msgstr "Sigur doriți să ștergeți această versiune?"
+
 #~ msgid "Do you really want to delete the following blog?"
 #~ msgstr "Sigur doriți să ștergeți următorul blog?"
 
@@ -14589,13 +14780,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Do you really want to discard this mail?"
 #~ msgstr "Sigur doriți să renunțați la acest mail?"
-
-#, fuzzy
-#~| msgid "Do you really want to delete this account?"
-#~ msgid ""
-#~ "Do you really want to terminate all active sessions except the current "
-#~ "one?"
-#~ msgstr "Sigur doriți să ștergeți acest cont?"
 
 #, fuzzy
 #~| msgctxt "One file only"
@@ -15233,9 +15417,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "File type:"
 #~ msgstr "Tip fișier:"
-
-#~ msgid "File versions"
-#~ msgstr "Versiuni fișier"
 
 #~ msgid "File..."
 #~ msgstr "Fișier..."
@@ -18046,9 +18227,6 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Show task"
 #~ msgstr "Afișează sarcina"
 
-#~ msgid "Show version history"
-#~ msgstr "Afișează istoricul de versiuni"
-
 #, fuzzy
 #~ msgid "Show/hide folder"
 #~ msgstr "Mută dosarul"
@@ -20587,9 +20765,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "seconds"
 #~ msgstr "secunde"
-
-#~ msgid "select all"
-#~ msgstr "Selectează tot"
 
 #~ msgid "september"
 #~ msgstr "septembrie"

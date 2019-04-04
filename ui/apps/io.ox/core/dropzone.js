@@ -18,9 +18,7 @@ define('io.ox/core/dropzone', [], function () {
     var EVENTS = 'dragenter dragover dragleave drop';
 
     // iframe overlay during dnd
-    ox.on('drag:start', _.partial(toggleDndMask, true));
-    ox.on('drag:stop', _.partial(toggleDndMask, false));
-    function toggleDndMask(state) {
+    var toggleDndMask = _.throttle(function (state) {
         var active = $('html').hasClass('dndmask-enabled');
 
         if (active === state) return;
@@ -41,7 +39,9 @@ define('io.ox/core/dropzone', [], function () {
                         })
                     );
         });
-    }
+    }, 100);
+    ox.on('drag:start', _.partial(toggleDndMask, true));
+    ox.on('drag:stop', _.partial(toggleDndMask, false));
 
     // Backbone Dropzone
     var InplaceDropzone = Backbone.View.extend({
@@ -70,7 +70,6 @@ define('io.ox/core/dropzone', [], function () {
                     ox.trigger('drag:start', this.cid);
                     this.stop(e);
                     this.leaving = false;
-                    if (!this.isScope(e)) return this.hide();
                     if (!this.checked) this.checked = true; else return;
                     if (!this.isValid(e)) return;
                     if (!this.visible) this.show();
@@ -117,14 +116,32 @@ define('io.ox/core/dropzone', [], function () {
             this.visible = false;
             this.leaving = false;
             this.timeout = -1;
-            this.window = undefined;
+            this.eventTarget = options.eventTarget;
 
-            $(document).on(EVENTS, this.onDrag.bind(this));
+            this.onDrag = this.onDrag.bind(this);
+            $(document).on(EVENTS, this.onDrag);
             // firefox does not fire dragleave correct when leaving the window.
             // it also does not fire mouseevents while dragging (so mouseout does not work either)
             // use mouseenter to remove the dropzones when eintering the window wiand nothing is dragged
             if (_.device('firefox')) {
-                $(document).on('mouseenter', this.onMouseenter.bind(this));
+                this.onMouseenter = this.onMouseenter.bind(this);
+                $(document).on('mouseenter', this.onMouseenter);
+            }
+
+            if (this.eventTarget) {
+                // check if event target is inside a different document (e.g. iframe)
+                this.eventTargetDocument = this.eventTarget.prop('nodeName') === '#document' ? this.eventTarget.get(0) : this.eventTarget.prop('ownerDocument');
+                if (this.eventTargetDocument !== document) $(this.eventTargetDocument).on(EVENTS, this.onDrag);
+
+                this.onDrop = this.onDrop.bind(this);
+                this.onDragenter = this.onDragenter.bind(this);
+                this.onDragover = this.onDragover.bind(this);
+                this.onDragleave = this.onDragleave.bind(this);
+                this.eventTarget
+                    .on('drop', this.onDrop)
+                    .on('dragenter', this.onDragenter)
+                    .on('dragover', this.onDragover)
+                    .on('dragleave', this.onDragleave);
             }
 
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
@@ -132,11 +149,6 @@ define('io.ox/core/dropzone', [], function () {
 
         isValid: function (e) {
             return this.isEnabled(e) && this.isFile(e);
-        },
-
-        isScope: function (e) {
-            if (_.isUndefined(this.window)) this.window = this.$el.closest('.window-container, .io-ox-viewer');
-            return $(e.target).closest('.window-container, .io-ox-viewer').is(this.window);
         },
 
         // overwrite for custom checks
@@ -198,7 +210,8 @@ define('io.ox/core/dropzone', [], function () {
 
             return this.filterDirectories(dataTransfer).then(function (files) {
 
-                if (!files.length || numFiles !== files.length) {
+                // numFiles !== null detects, when an image from inside appsuite (e.g. compose window) is dragged onto the dropzone
+                if ((!files.length || numFiles !== files.length) && numFiles !== 0) {
                     require(['io.ox/core/yell', 'gettext!io.ox/core'], function (yell, gt) {
                         yell('error', gt('Uploading folders is not supported.'));
                     });
@@ -272,6 +285,15 @@ define('io.ox/core/dropzone', [], function () {
             $(document).off(EVENTS, this.onDrag);
             if (_.device('firefox')) {
                 $(document).off('mouseenter', this.onMouseenter);
+            }
+            if (this.eventTarget) {
+                if (this.eventTargetDocument !== document) $(this.eventTargetDocument).off(EVENTS, this.onDrag);
+
+                this.eventTarget
+                    .off('drop', this.onDrop)
+                    .off('dragenter', this.onDragenter)
+                    .off('dragover', this.onDragover)
+                    .off('dragleave', this.onDragleave);
             }
         }
     });

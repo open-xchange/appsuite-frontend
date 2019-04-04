@@ -48,22 +48,6 @@ define('io.ox/editor/main', [
         },
 
         onContentKeydown: function (e) {
-            // chrome has some problems with page up and down keys (https://groups.google.com/a/chromium.org/forum/#!topic/chromium-bugs/AqNbWLzzIW8 https://bugs.webkit.org/show_bug.cgi?id=64143)
-            // use a workaround to fake the page up and down behaviour
-            if (_.device('chrome') && (e.which === 33 || e.which === 34)) {
-                e.preventDefault();
-                if (e.which === 33) {
-                    // cursor to first position
-                    e.target.setSelectionRange(0, 0);
-                    e.target.scrollTop = 0;
-                } else {
-                    // cursor to last position
-                    var v = e.target.value;
-                    e.target.value = '';
-                    e.target.value = v;
-                    e.target.scrollTop = e.target.scrollHeight;
-                }
-            }
             if (e.which === 13 && e.ctrlKey) {
                 e.preventDefault();
                 this.app.save();
@@ -197,7 +181,7 @@ define('io.ox/editor/main', [
             name: 'io.ox/editor',
             title: 'Editor',
             closable: true,
-            floating: _.device('!smartphone')
+            floating: false
         });
 
         // launcher
@@ -355,6 +339,8 @@ define('io.ox/editor/main', [
                     win.idle();
                     _.extend(data, _(o).pick('id', 'folder_id'), { content: text[0] });
                     app.setData(previous = data);
+                    // avoid scrolling on initial focus, so set cursor to start
+                    view.$el.find('textarea').prop('selectionEnd', 0);
                     if (_.device('!smartphone')) view.focus();
                     def.resolve();
                 })
@@ -377,21 +363,20 @@ define('io.ox/editor/main', [
         app.setQuit(function () {
             var def = $.Deferred();
             if (app.isDirty()) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                     if (app.getWindow().floating) {
                         app.getWindow().floating.toggle(true);
                     } else if (_.device('smartphone')) {
                         app.getWindow().resume();
                     }
-                    new dialogs.ModalDialog()
-                    .text(gt('Do you really want to discard your changes?'))
-                    //#. "Discard changes" appears in combination with "Cancel" (this action)
-                    //#. Translation should be distinguishable for the user
-                    .addPrimaryButton('quit', gt.pgettext('dialog', 'Discard changes'))
-                    .addButton('cancel', gt('Cancel'))
-                    .on('quit', def.resolve)
-                    .on('cancel', def.reject)
-                    .show();
+                    new ModalDialog({ title: gt('Do you really want to discard your changes?') })
+                        .addCancelButton()
+                        //#. "Discard changes" appears in combination with "Cancel" (this action)
+                        //#. Translation should be distinguishable for the user
+                        .addButton({ label: gt.pgettext('dialog', 'Discard changes'), action: 'quit' })
+                        .on('quit', def.resolve)
+                        .on('cancel', def.reject)
+                        .open();
                 });
             } else {
                 def.resolve();

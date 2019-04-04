@@ -12,7 +12,7 @@
 
 const expect = require('chai').expect;
 
-Feature('Contact/User Picture');
+Feature('Contact/User Picture').tag('6');
 
 Before(async function (users) {
     await users.create();
@@ -33,7 +33,7 @@ Scenario('User start with no picture', async function (I, users) {
     prepare(user, I);
 
     // toolbar
-    let image = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
+    let [image] = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
     expect(image).is.equal('none');
     // edit contact data
     W.myContactData('open');
@@ -54,7 +54,7 @@ Scenario('User can upload and remove a picture', async function (I, users) {
     prepare(user, I);
 
     // user image in toolbar?
-    let image1 = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
+    let [image1] = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
     expect(image1).is.equal('none');
 
     // open and check empty-state
@@ -67,7 +67,7 @@ Scenario('User can upload and remove a picture', async function (I, users) {
     // picture-uploader
     W.myContactData('check:not:empty-state');
     W.myContactData('save');
-    let image2 = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
+    let [image2] = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
     expect(image2).to.not.be.empty;
 
 
@@ -75,7 +75,7 @@ Scenario('User can upload and remove a picture', async function (I, users) {
     W.myContactData('remove-image');
     W.myContactData('save');
     // user image in toolbar?
-    let image3 = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
+    let [image3] = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
     expect(image3).is.equal('none');
 
     // check again
@@ -95,7 +95,7 @@ Scenario('User can rotate a picture', async function (I, users) {
     prepare(user, I);
 
     // user image in toolbar?
-    let image = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
+    let [image] = await I.grabCssPropertyFrom('#io-ox-topbar-dropdown-icon .contact-picture', 'background-image');
     expect(image).is.equal('none');
 
     // open and check empty-state
@@ -105,9 +105,9 @@ Scenario('User can rotate a picture', async function (I, users) {
     W.EditPicture('check:not:empty-state');
 
     // rotate (portrait to landscape)
-    let height = await I.grabAttributeFrom('.cr-image', 'height');
+    let [height] = await I.grabAttributeFrom('.cr-image', 'height');
     I.click('[data-action="rotate"]');
-    let width = await I.grabAttributeFrom('.cr-image', 'width');
+    let [width] = await I.grabAttributeFrom('.cr-image', 'width');
     expect(height).to.be.equal(width);
     W.EditPicture('check:empty-state');
     W.EditPicture('ok');

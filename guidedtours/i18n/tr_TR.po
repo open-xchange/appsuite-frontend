@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-guidedtours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-09-26 21:04+0300\n"
+"PO-Revision-Date: 2018-11-20 19:40+0300\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: tr_TR\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.2\n"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Add another account"
@@ -573,8 +573,7 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
-"Yeni bir e-posta oluşturmak için araç çubuğundaki \"Yeni e-postayı oluştur"
-"\"a tıklayın."
+"Yeni bir e-posta oluşturmak için araç çubuğundaki \"E-posta yaz\"a tıklayın."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
@@ -736,7 +735,7 @@ msgstr ""
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
-msgstr "Ayrıntıları okumak için karelerde girdilerden birine tıklayın."
+msgstr "Ayrıntıları okumak için karelerdeki girdilerden birine tıklayın."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""

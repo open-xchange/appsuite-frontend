@@ -32,6 +32,7 @@ define('io.ox/core/print', [
     function escapeTitle(str) {
         return (str || '').replace(/[#%&§/$*!`´'"=:@+^\\.+?{}|]/g, '_');
     }
+    //'
 
     function addCallback(options, it) {
         var id = 'print_' + _.now();
@@ -93,39 +94,20 @@ define('io.ox/core/print', [
             } else {
 
                 // use iframe in modal dialog on mobile devices
-                ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
+                ox.load(['io.ox/backbone/views/modal']).done(function (ModalDialog) {
 
-                    var iframe = $('<iframe>', { src: ox.base + '/busy.html', frameborder: 0 }).css({
-                        width: '100%',
-                        height: '100%'
-                    });
+                    var iframe = $('<iframe frameborder="0" style="width:100%;height:100%;">').attr('src', ox.base + '/busy.html'),
+                        dHeight = window.innerHeight * 0.9;
 
-                    // create new dialog
-                    var dHeight = window.innerHeight * 0.9,
-                        dialog = new dialogs.ModalDialog({
-                            width: window.innerWidth * 0.9,
-                            height: dHeight
+                    new ModalDialog({ title: gt('Print'), width: window.innerWidth * 0.9, height: dHeight })
+                        .addCancelButton()
+                        .addButton({ label: gt('Print'), action: 'print' })
+                        .build(function () {
+                            dHeight -= 100;
+                            this.$body.css({ height: dHeight, maxHeight: dHeight }).append(iframe);
                         })
-                        .addPrimaryButton('print', gt('Print'), null, {
-                            click: function () {
-                                win.print();
-                            }
-                        })
-                        .addButton('cancel', gt('Cancel'));
-                    dHeight -= 100;
-                    dialog.getBody().css({
-                        height: dHeight,
-                        maxHeight: dHeight
-                    });
-
-                    dialog
-                        .append(iframe)
-                        .show()
-                        .done(function (action) {
-                            if (action === 'print') {
-                                win.print();
-                            }
-                        });
+                        .on('print', function () { win.print(); })
+                        .open();
 
                     // set win for callbacks
                     win = iframe[0].contentWindow;
@@ -167,13 +149,9 @@ define('io.ox/core/print', [
             .done(function () {
                 var args = _.chain(arguments).toArray(), all = args.value().length;
                 // filter?
-                if (options.filter) {
-                    args = args.filter(options.filter);
-                }
+                if (options.filter) args = args.filter(options.filter);
                 // sort?
-                if (options.sortBy) {
-                    args = args.sortBy(options.sortBy);
-                }
+                if (options.sortBy) args = args.sortBy(options.sortBy);
                 // stop chaining
                 args = args.value();
                 // create new callback & open print window
@@ -192,9 +170,8 @@ define('io.ox/core/print', [
                 });
             })
             .fail(function () {
-                if (options.window) {
-                    options.window.close();
-                }
+                if (options.window) options.window.close();
+
                 notifications.yell({
                     type: 'error',
                     headline: gt('Error'),

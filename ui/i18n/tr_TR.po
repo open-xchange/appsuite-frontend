@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-01-09 10:12+0100\n"
+"PO-Revision-Date: 2018-11-26 15:28+0100\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: tr_TR\n"
@@ -10,15 +10,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.2\n"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid ""
 "\n"
 " Alternatively you can download the file."
 msgstr ""
-"\n"
-" İsterseniz dosyayı indirebilirsiniz."
 
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
 msgid ""
@@ -215,8 +213,8 @@ msgstr[1] "%1$d yıl"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js apps/plugins/halo/xing/register.js
-#: module:plugins/portal
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/view-detail.js
+#: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "%1$s\n"
 "%2$s %3$s\n"
@@ -474,6 +472,13 @@ msgstr "(Okuma, yazma ve silme)"
 msgid ", "
 msgstr ", "
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "%1$d day"
+#| msgid_plural "%1$d days"
+msgid "1 day"
+msgstr "%1$d gün"
+
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "1 dosya son zamanlarda değiştirildi"
@@ -490,11 +495,36 @@ msgstr[1] "%1$d öğe"
 msgid "1 minute"
 msgstr "1 dakika"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "1 version"
+msgstr "Arayüz sürümü"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "%1$d year"
+#| msgid_plural "%1$d years"
+msgid "1 year"
+msgstr "%1$d yıl"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "10 minutes"
 msgstr "10 dakika"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "10 versions"
+msgstr "Arayüz sürümü"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "100 versions"
+msgstr "Arayüz sürümü"
 
 #. Quota maxed out; 100%
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
@@ -510,6 +540,12 @@ msgstr "12 saat"
 msgid "15 minutes"
 msgstr "15 dakika"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "20 versions"
+msgstr "Arayüz sürümü"
+
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 msgid "24 hours"
 msgstr "23 saat"
@@ -518,16 +554,88 @@ msgstr "23 saat"
 msgid "3 minutes"
 msgstr "3 dakika"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Last 30 days"
+msgid "30 days"
+msgstr "Son 30 gün"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "30 minutes"
 msgstr "30 dakika"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "30 versions"
+msgstr "Arayüz sürümü"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "40 versions"
+msgstr "Arayüz sürümü"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "5 minutes"
 msgstr "5 dakika"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "5 versions"
+msgstr "Arayüz sürümü"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "50 versions"
+msgstr "Arayüz sürümü"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Last 30 days"
+msgid "60 days"
+msgstr "Son 30 gün"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "60 versions"
+msgstr "Arayüz sürümü"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Last 7 days"
+msgid "7 days"
+msgstr "Son 7 gün"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "70 versions"
+msgstr "Arayüz sürümü"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "80 versions"
+msgstr "Arayüz sürümü"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Last 30 days"
+msgid "90 days"
+msgstr "Son 30 gün"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "90 versions"
+msgstr "Arayüz sürümü"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved into itself"
@@ -1097,6 +1205,22 @@ msgstr "Tüm dağıtım listesileri"
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "All emails"
 msgstr "Tüm e-postalar"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "All files have been deleted"
+msgid "All file versions are retained"
+msgstr "Tüm dosyalar silindi"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid ""
+#| "All messages older than %1$d days will be moved to the archive folder"
+msgid "All file versions older than 1 day will be deleted after next login"
+msgid_plural ""
+"All file versions older than %1$d days will be deleted after next login"
+msgstr[0] "%1$d günden eski tüm mesajlar arşiv klasörüne taşınacak"
+msgstr[1] "%1$d günden eski tüm mesajlar arşiv klasörüne taşınacak"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -1799,7 +1923,7 @@ msgstr "Kamera %1$s"
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 #: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
@@ -2096,9 +2220,8 @@ msgstr "Tüm iletileri kapat"
 msgid "Close description panel"
 msgstr "Açıklama panelini kapat"
 
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Klasör görünümünü kapat"
@@ -2812,7 +2935,7 @@ msgstr "Ertelendi"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/actions/delete-older-versions.js
+#: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
@@ -2850,9 +2973,9 @@ msgstr "Tüm nesneleri silme"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 #, fuzzy
-#| msgid "Delete version"
-msgid "Delete all older versions"
-msgstr "Sürümü sil"
+#| msgid "Delete permissions"
+msgid "Delete all previous versions"
+msgstr "Silme izinleri"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -2962,6 +3085,12 @@ msgstr "Açıklama kopyalandı"
 #: module:io.ox/core/viewer
 msgid "Description text"
 msgstr "Açıklama metni"
+
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+#, fuzzy
+#| msgid "Select all"
+msgid "Deselect all"
+msgstr "Tümünü seç"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Design"
@@ -3133,12 +3262,15 @@ msgstr ""
 "yoksa kendi takviminizde<b>klasör sahibiyle </b> bir randevu oluşturmak mı "
 "istiyorsunuz?"
 
-#: apps/io.ox/files/actions/delete-older-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
 #, fuzzy
-#| msgctxt "One file only"
-#| msgid "Do you really want to delete this version?"
-msgid "Do you really want to delete all older versions?"
-msgstr "Gerçekten bu sürümü silmek istiyor musunuz?"
+#| msgid ""
+#| "Do you really want to sign out from all clients except the current one?"
+msgid ""
+"Do you really want to delete all previous versions except the current "
+"version?"
+msgstr ""
+"Şu an kullandığınız dışındaki tüm istemcilerden çıkış yapmak istiyor musunuz?"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete calendar \"%s\"?"
@@ -4306,6 +4438,18 @@ msgstr "Dosya adı"
 msgid "File quota"
 msgstr "Dosya kotası"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "File into"
+msgid "File version history"
+msgstr "Klasöre taşı"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Delete version"
+msgid "File version limit"
+msgstr "Sürümü sil"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
@@ -4546,6 +4690,12 @@ msgstr "Çıkışa zorla"
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Forcing logout may cause data loss."
 msgstr "Çıkışa zorlamanız veri kaybına yol açabilir."
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Never"
+msgid "Forever"
+msgstr "Asla"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Forgot attachment?"
@@ -5339,6 +5489,12 @@ msgstr "Sakla"
 msgid "Keep a copy of the message"
 msgstr "İletinin kopyasını sakla"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Server version"
+msgid "Keep all versions"
+msgstr "Sunucu sürümü"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Keep draft"
 msgstr "Taslağı sakla"
@@ -5361,6 +5517,16 @@ msgstr "%1$s adresine giden-postaları sakla"
 msgid "Keep mails with subject %1$s"
 msgstr "%1$s konulu e-postaları sakla"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Keep number of recent versions"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Server version"
+msgid "Keep saved versions"
+msgstr "Sunucu sürümü"
+
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
 #: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
@@ -5373,8 +5539,10 @@ msgid "Language-specific default"
 msgstr "Dile özel varsayılan"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Language"
 msgid "Language:"
-msgstr "Dil:"
+msgstr "Dil"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
@@ -6274,7 +6442,7 @@ msgstr "Yeni e-posta"
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "New Windows"
-msgstr "Yeni pencereler"
+msgstr "Yeni penceler"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "New address book"
@@ -6669,41 +6837,41 @@ msgstr "Bildirimler"
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notify %1$s after end."
-msgstr "Bittikten %1$s sonra hatırlat."
+msgstr "Bittikten %1$s sonra anımsat."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notify %1$s after start."
-msgstr "Başladıktan %1$s sonra hatırlat."
+msgstr "Başladıktan %1$s sonra anımsat."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notify %1$s before end."
-msgstr "Bitmeden %1$s önce hatırlat."
+msgstr "Bitmeden %1$s önce anımsat."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notify %1$s before start."
-msgstr "Başlamadan %1$s önce hatırlat."
+msgstr "Başlamadan %1$s önce anımsat."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notify at %1$s."
-msgstr "%1$s tarihinde hatırlat."
+msgstr "%1$s tarihinde anımsat."
 
 #. Used to display reminders for appointments
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notify at end."
-msgstr "Biterken hatırlat."
+msgstr "Biterken anımsat."
 
 #. Used to display reminders for appointments
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notify at start."
-msgstr "Başlarken hatırlat."
+msgstr "Başlarken anımsat."
 
 #. Hides all current notifications (invitations, reminder etc.) for half an hour.
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -6810,6 +6978,15 @@ msgstr "Yalnızca \"%1$s\" klasörüyle ilgili öğeler gösteriliyor"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Open"
 msgstr "Aç"
+
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#, fuzzy
+#| msgid "Open in %1$s"
+msgid "Open %1$s in %2$s"
+msgstr "%1$s ile aç"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -7059,8 +7236,10 @@ msgstr "Bölüm"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
+#, fuzzy
+#| msgid "Participant related actions"
 msgid "Participant not found"
-msgstr "Katılımcı bulunamadı"
+msgstr "Katılımcıyı ilgilendiren eylemler"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Participant related actions"
@@ -7151,7 +7330,7 @@ msgstr "İzinler"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js
 msgid "Permissions / Invite people"
-msgstr "İzinler / kişileri davet et"
+msgstr "İzinler / Kişileri davet et"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Permissions for %1$s \"%2$s\""
@@ -7833,7 +8012,7 @@ msgstr "Yayınlar"
 
 #: apps/io.ox/core/sub/settings/register.js module:io.ox/core/sub
 msgid "Publications and Subscriptions"
-msgstr "Yayınlar ve Abonelikler"
+msgstr "Yayınlar ve abonelikler"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Purchase confirmation"
@@ -7869,7 +8048,7 @@ msgstr "Kota"
 
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feed"
-msgstr "RSS Akışı"
+msgstr "RSS akışı"
 
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
@@ -7911,7 +8090,7 @@ msgid ""
 "Receive notification as appointment participant when other participants "
 "accept or decline"
 msgstr ""
-"Randevu katılımcısıysam diğer katılımlar kabul veya reddettiğinde bildirim "
+"Randevu katılımcısıysam diğer katılımcılar kabul veya reddettiğinde bildirim "
 "gönder"
 
 #. There is a label "Nofification" before this text
@@ -8142,8 +8321,10 @@ msgid "Reload statistics"
 msgstr "İstatistikleri yenile"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Login"
 msgid "Relogin"
-msgstr "Yeniden giriş yap"
+msgstr "Kullanıcı adı"
 
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
@@ -8903,7 +9084,7 @@ msgstr "Seri numarası"
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
 msgid "Series"
-msgstr "Diziler"
+msgstr "Dizi"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Server Name"
@@ -9332,11 +9513,15 @@ msgstr ""
 "yenilemeniz veya yeniden giriş yapmanız gerekir."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Some settings (language, timezone, theme) require a page reload or "
+#| "relogin to take effect."
 msgid ""
 "Some settings (language, timezone, theme) require a relogin to take effect."
 msgstr ""
-"Bazı ayarların (dil, saat dilimi, tema) etkinleşmesi için yeniden giriş "
-"yapmanız gerekir."
+"Bazı ayarların (dil, saat dilimi, tema) etkinleşmesi için sayfayı "
+"yenilemeniz veya yeniden giriş yapmanız gerekir."
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
@@ -9615,6 +9800,7 @@ msgstr "Takvim başarıyla yenilendi"
 msgid "Suffix"
 msgstr "Son ek"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
@@ -10100,8 +10286,12 @@ msgstr ""
 "yapmalısınız."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "The setting requires a reload or relogin to take effect."
 msgid "The setting requires a relogin to take effect."
-msgstr "bu ayarın etkili olması için bir yeniden giriş yapmanız gerekir."
+msgstr ""
+"Ayalarların etkili olması için sayfayı yeniden yüklemeli veya yeniden giriş "
+"yapmalısınız."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -10545,6 +10735,12 @@ msgstr "Saat dilimi"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Time-dependent"
 msgstr "Zamana bağlı"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "timeframe"
+msgid "Timeframe"
+msgstr "zaman aralığı"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Title"
@@ -11324,6 +11520,16 @@ msgstr "Ne tür bir cihazı yapılandırmak istiyorsunuz?"
 msgid "What's new"
 msgstr "Yeni neler var?"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid ""
+"When a file has more than 1 version, older versions of the file will be "
+"deleted after next login"
+msgid_plural ""
+"When a file has more than %1$d versions, older versions of the file will be "
+"deleted after next login"
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
 msgid "Whole day"
@@ -11771,7 +11977,7 @@ msgstr "Platformunuz desklenmiyor!"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 msgid "Your preview is being generated."
-msgstr "Ön izlemeniz oluşturuluyor."
+msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Your recurrence rule does not fit to your start date."
@@ -11889,6 +12095,8 @@ msgid "at %1$s"
 msgstr "konum: %1$s"
 
 #: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Auto forward"
 msgid "autoforward"
 msgstr "Otomatik ilet"
 

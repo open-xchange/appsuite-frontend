@@ -81,7 +81,7 @@ define('io.ox/core/folder/actions/imap-subscription', [
             module: 'mail',
             selection: false,
             title: gt('Subscribe to IMAP folders'),
-            help: 'ox.appsuite.user.sect.email.teamwork.subscribe.html',
+            help: 'ox.appsuite.user.sect.dataorganisation.sharing.subscribe.html',
             createFolderButton: false,
 
             always: function (dialog) {
@@ -95,12 +95,11 @@ define('io.ox/core/folder/actions/imap-subscription', [
                     var id = list[i], state = changes[id];
                     if (state) continue;
                     var model = api.pool.getModel(id);
-                    /* eslint-disable no-loop-func */
+                    // eslint-disable-next-line no-loop-func
                     _.each(getSubscribedSubfolders(model), function (id) {
                         changes[id] = false;
                         list.push(id);
                     });
-                    /* eslint-enable no-loop-func */
                 }
 
                 var affectedFolders = _(changes).map(function (state, id) {

@@ -13,35 +13,24 @@
 
 define('io.ox/contacts/actions/delete', [
     'io.ox/contacts/api',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'gettext!io.ox/contacts'
-], function (api, dialogs, gt) {
+], function (api, ModalDialog, gt) {
 
     'use strict';
 
     return function (baton) {
-
-        var data = baton.data, question;
-
-        // get proper question
-        if (_.isArray(data) && data.length > 1) {
-            question = gt('Do you really want to delete these items?');
-        } else if (data.mark_as_distributionlist) {
-            question = gt('Do you really want to delete this distribution list?');
-        } else {
-            question = gt('Do you really want to delete this contact?');
-        }
-
-        new dialogs.ModalDialog()
-            .text(question)
-            .addPrimaryButton('delete', gt('Delete'), 'delete')
-            .addButton('cancel', gt('Cancel'), 'cancel')
-            .show()
-            .done(function (action) {
-                if (action === 'delete') {
-                    api.remove(data);
-                }
-            });
+        var data = baton.data;
+        new ModalDialog({ title: getQuestion(data) })
+            .addCancelButton()
+            .addButton({ label: gt('Delete'), action: 'delete' })
+            .on('delete', function () { api.remove(data); })
+            .open();
     };
 
+    function getQuestion(data) {
+        if (data.length > 1) return gt('Do you really want to delete these items?');
+        if (data[0].mark_as_distributionlist) return gt('Do you really want to delete this distribution list?');
+        return gt('Do you really want to delete this contact?');
+    }
 });

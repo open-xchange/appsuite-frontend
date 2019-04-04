@@ -13,33 +13,25 @@
 
 define('io.ox/files/actions/edit-description', [
     'io.ox/files/api',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/notifications',
     'gettext!io.ox/files'
-], function (api, dialogs, notifications, gt) {
+], function (api, ModalDialog, notifications, gt) {
 
     'use strict';
 
     return function (data) {
-
-        function save() {
-            var changes = { description: this.getContentNode().find('textarea').val() };
-            return api.update(data, changes).fail(notifications.yell);
-        }
-
-        new dialogs.ModalDialog()
-            .header($('<h4>').text(gt('Description')))
-            .append(
-                $('<textarea rows="10" class="form-control">')
-            )
-            .addPrimaryButton('save', gt('Save'), 'save')
-            .addButton('cancel', gt('Cancel'), 'cancel')
-            .on('save', save)
-            .show(function () {
-                var node = this.find('textarea').val(data.description);
-                // WORKAROUND: ios8 focus bug
-                if (_.device('ios')) return;
-                node.focus();
-            });
+        new ModalDialog({ title: gt('Description') })
+            .build(function () {
+                this.$body.append(
+                    this.$textarea = $('<textarea rows="10" class="form-control">').val(data.description)
+                );
+            })
+            .addCancelButton()
+            .addButton({ label: gt('Save'), action: 'save' })
+            .on('save', function () {
+                return api.update(data, { description: this.$textarea.val() }).fail(notifications.yell);
+            })
+            .open();
     };
 });

@@ -13,20 +13,26 @@
 
 define([
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/views/actions/util',
     'io.ox/core/tk/list',
     'io.ox/core/tk/list-contextmenu'
-], function (ext, actions, Listview, Contextmenu) {
+], function (ext, actionsUtil, Listview, Contextmenu) {
+
+    var Action = actionsUtil.Action;
+
     describe('Core ListView Contextmenu', function () {
+
         it('should define toggleContextMenu function', function () {
             const view = new (Listview.extend(Contextmenu))({ });
             expect(view.toggleContextMenu).to.be.a('function');
         });
 
         describe('used with a basic extension', function () {
+
             let view;
+
             beforeEach(function () {
-                new actions.Action('io.ox/test/actions/testAction', {
+                new Action('io.ox/test/actions/testAction', {
                     action: _.noop
                 });
                 ext.point('io.ox/test/contextmenu').extend({
@@ -45,6 +51,7 @@ define([
                 $('body').append(view.render().$el);
                 view.selection.select(0);
             });
+
             afterEach(function () {
                 view.remove();
                 //cleanup
@@ -53,16 +60,19 @@ define([
                 exts = ext.point('io.ox/test/actions/testAction').all();
                 while (exts.length) exts.pop();
             });
+
             it('should populate dropdown with items from "io.ox/test/contextmenu" extension point', function () {
-                return view.toggleContextMenu({ target: $('body') }).then(function () {
-                    expect(view.$dropdownMenu.find('li'), 'menu items').to.have.length(1);
-                    expect(view.$dropdownMenu.is('[role="menu"]')).to.be.true;
+                return view.toggleContextMenu({ target: $('body') }).done(function () {
+                    expect(view.contextMenu.$menu.find('li'), 'menu items').to.have.length(1);
+                    expect(view.contextMenu.$menu.is('[role="menu"]')).to.be.true;
                 });
             });
         });
 
         describe('used without any extensions', function () {
+
             let view;
+
             beforeEach(function () {
                 view = new (Listview.extend(Contextmenu))({
                     ref: 'io.ox/test',
@@ -73,26 +83,31 @@ define([
                 $('body').append(view.render().$el);
                 view.selection.select(0);
             });
+
             afterEach(function () {
                 view.remove();
             });
+
             it('should not render anything', function () {
-                return view.toggleContextMenu({ target: $('body') }).then(function () {
-                    expect(view.$dropdownMenu.find('li'), 'menu items').to.have.length(0);
-                    // check a11y stuff, empty menus should not have a role menu
-                    expect(view.$dropdownMenu.is('[role="menu"]')).to.be.false;
+                return view.toggleContextMenu({ target: $('body') }).done(function () {
+                    expect(view.contextMenu.$menu.find('li'), 'menu items').to.have.length(0);
+                    expect(view.contextMenu.$el.hasClass('open')).to.be.false;
                 });
             });
         });
 
         describe('used in a more advanced context', function () {
+
             let view;
+
             beforeEach(function () {
-                new actions.Action('io.ox/test/actions/testAction', {
+
+                new Action('io.ox/test/actions/testAction', {
                     action: _.noop
                 });
-                new actions.Action('io.ox/test/actions/testActionDisabled', {
-                    requires: () => false,
+
+                new Action('io.ox/test/actions/testActionDisabled', {
+                    matches: () => false,
                     action: _.noop
                 });
 
@@ -100,41 +115,46 @@ define([
                     id: 'test',
                     ref: 'io.ox/test/actions/testAction',
                     section: 'testsection',
-                    label: 'test label'
+                    title: 'test label'
                 }, {
                     id: 'disabledTest',
                     ref: 'io.ox/test/actions/testActionDisabled',
                     section: 'testsection',
-                    label: 'test label of disabled action'
+                    title: 'test label of disabled action'
                 });
 
                 ext.point('io.ox/test/custom/contextmenu').extend({
                     id: 'test',
                     ref: 'io.ox/test/actions/testAction',
                     section: 'testsection',
-                    label: 'test label'
+                    title: 'test label'
                 }, {
                     id: 'test2',
                     ref: 'io.ox/test/actions/testAction',
                     section: 'testsection',
-                    label: 'second test label'
+                    title: 'second test label'
                 }, {
                     id: 'disabledTest',
                     ref: 'io.ox/test/actions/testActionDisabled',
                     section: 'testsection',
-                    label: 'test label of disabled action'
+                    title: 'test label of disabled action'
                 });
+
+
+                var model = new Backbone.Model({ id: 'testItem' });
+                model.cid = 'testItem';
 
                 view = new (Listview.extend(Contextmenu))({
                     ref: 'io.ox/test',
                     pagination: false,
-                    collection: new Backbone.Collection([{ id: 'testItem' }]),
+                    collection: new Backbone.Collection([model]),
                     app: { id: 'testApp' }
                 });
                 view.collection.complete = true;
                 $('body').append(view.render().$el);
                 view.selection.select(0);
             });
+
             afterEach(function () {
                 view.remove();
                 //cleanup
@@ -146,56 +166,47 @@ define([
                 while (exts.length) exts.pop();
             });
 
-            it('should not render for actions disabled via "requires"', function () {
+            it('should not render for actions disabled via "matches"', function () {
                 return view.toggleContextMenu({ target: $('body') }).then(function () {
-                    expect(view.$dropdownMenu.find('li'), 'menu items').to.have.length(1);
-                    expect(view.$dropdownMenu.text()).to.equal('test label');
-                    // check a11y stuff, empty menus should not have a role menu
-                    expect(view.$dropdownMenu.is('[role="menu"]')).to.be.true;
+                    expect(view.contextMenu.$menu.find('li'), 'menu items').to.have.length(1);
+                    expect(view.contextMenu.$menu.text()).to.equal('test label');
                 });
             });
 
             it('should render custom extension point if specified', function () {
                 view.contextMenuRef = 'io.ox/test/custom/contextmenu';
                 return view.toggleContextMenu({ target: $('body') }).then(function () {
-                    expect(view.$dropdownMenu.find('li'), 'menu items').to.have.length(2);
-                    expect(view.$dropdownMenu.text()).to.equal('test labelsecond test label');
-                    // check a11y stuff, empty menus should not have a role menu
-                    expect(view.$dropdownMenu.is('[role="menu"]')).to.be.true;
+                    expect(view.contextMenu.$menu.find('li'), 'menu items').to.have.length(2);
+                    expect(view.contextMenu.$menu.text()).to.equal('test labelsecond test label');
                 });
             });
 
             it('should respect dynamically disabled extensions', function () {
                 ext.point('io.ox/test/contextmenu').disable('test');
                 return view.toggleContextMenu({ target: $('body') }).then(function () {
-                    expect(view.$dropdownMenu.find('li'), 'menu items').to.have.length(0);
+                    expect(view.contextMenu.$menu.find('li'), 'menu items').to.have.length(0);
                     ext.point('io.ox/test/contextmenu').enable('test');
                 });
             });
 
-            it('should call actions "requires" function with well known info about the view', function () {
-                const requiresSpy = sinon.spy();
-                new actions.Action('io.ox/test/actions/testSpy', {
-                    requires: requiresSpy,
+            it('should call actions "matches" function with well known info about the view', function () {
+                const matchesSpy = sinon.spy();
+                new Action('io.ox/test/actions/testSpy', {
+                    matches: matchesSpy,
                     action: _.noop
                 });
                 ext.point('io.ox/test/contextmenu').extend({
                     id: 'testspy',
                     ref: 'io.ox/test/actions/testSpy',
-                    label: ''
+                    title: ''
                 });
                 return view.toggleContextMenu({ target: $('body') }).then(function () {
-                    expect(requiresSpy.calledOnce).to.be.true;
-                    const e = requiresSpy.firstCall.args[0],
-                        baton = e.baton;
-
-                    expect(e.collection).to.exist;
-                    expect(e.collection.has, 'quacks like a Collection').to.be.a('function');
-
-                    expect(baton.data.id).to.equal('testItem');
-                    expect(baton.collection).to.have.length(1);
-                    expect(baton.collection.at(0).get('id')).to.equal('testItem');
-                    expect(baton.app).to.equal(view.app);
+                    expect(matchesSpy.calledOnce, 'called').to.be.true;
+                    const baton = matchesSpy.firstCall.args[0];
+                    expect(baton.collection, 'exists').to.exist;
+                    expect(baton.collection.has, 'quacks like a Collection').to.be.a('function');
+                    expect(baton.array(), 'array').to.have.length(1);
+                    expect(baton.first().id, 'id').to.equal('testItem');
                 });
             });
         });
@@ -220,10 +231,10 @@ define([
                 while (exts.length) exts.pop();
             });
 
-            it('should not render the menu on app change', function () {
+            it.skip('should not render the menu on app change', function () {
                 const testactionSpy = sinon.spy();
-                new actions.Action('io.ox/test/actions/test', {
-                    requires: function () {
+                new Action('io.ox/test/actions/test', {
+                    matches: function () {
                         ox.ui.apps.trigger('resume', ox.ui.apps);
                         testactionSpy();
                         return true;
@@ -233,10 +244,10 @@ define([
                 ext.point('io.ox/test/contextmenu').extend({
                     id: 'test',
                     ref: 'io.ox/test/actions/test',
-                    label: 'testing'
+                    title: 'testing'
                 });
                 return view.toggleContextMenu({ target: $('body') }).then(function () {
-                    expect(view.$dropdownMenu.find('li'), 'menu items').to.have.length(0);
+                    expect(view.contextMenu.$menu.find('li'), 'menu items').to.have.length(0);
                     expect(testactionSpy.calledOnce).to.be.true;
                 });
             });

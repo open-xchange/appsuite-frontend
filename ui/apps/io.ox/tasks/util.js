@@ -103,23 +103,26 @@ define('io.ox/tasks/util', [
                 };
             },
 
-            //builds dropdownmenu nodes, if o.bootstrapDropdown is set listnodes are created else option nodes
+            // builds dropdownmenu nodes, if o.bootstrapDropdown is set listnodes are created else option nodes
             buildDropdownMenu: function (o) {
                 o = o || {};
-                //get the values
+                // get the values
                 var options = this.buildOptionArray(o),
                     result = [];
 
-                //put the values in nodes
-                if (o.bootstrapDropdown) {
-                    _(options).each(function (obj) {
-                        result.push($('<li>').append($('<a href="#" role="menuitem">').val(obj[0]).text(obj[1])));
-                    });
-                } else {
-                    _(options).each(function (obj) {
-                        result.push($('<option>').val(obj[0]).text(obj[1]));
-                    });
-                }
+                // put the values in nodes
+                _(options).each(function (obj) {
+                    var label = obj[1], value = obj[0],
+                        data = { 'data-name': 'change-due-date', 'data-value': label.toLowerCase() };
+
+                    result.push(
+                        o.bootstrapDropdown ?
+                            $('<li>').append(
+                                $('<a href="#" role="menuitem">').attr(data).val(value).text(label)
+                            ) :
+                            $('<option>').val(value).text(label)
+                    );
+                });
 
                 return result;
             },

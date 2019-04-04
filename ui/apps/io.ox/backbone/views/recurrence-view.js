@@ -36,13 +36,15 @@ define('io.ox/backbone/views/recurrence-view', [
             // calendar model
             if (model.has('startDate')) return util.getMoment(model.get('startDate'));
             // tasks model
-            return moment(model.get('start_time') || model.get('start_date')).utc();
+            var timezone = model.get('timezone') || moment().tz();
+            return moment.tz(model.get('start_time') || model.get('start_date'), timezone);
         },
         previousStart: function (model) {
             // calendar model
             if (model.has('startDate')) return util.getMoment(model.previous('startDate'));
             // tasks model
-            return moment(model.previous('start_time') || model.previous('start_date')).utc();
+            var timezone = model.get('timezone') || moment().tz();
+            return moment.tz(model.previous('start_time') || model.previous('start_date'), timezone);
         }
     };
 
@@ -429,8 +431,8 @@ define('io.ox/backbone/views/recurrence-view', [
 
                     if (selection === 'never') {
                         this.model.set({
-                            'until': undefined,
-                            'occurrences': undefined
+                            'until': null,
+                            'occurrences': null
                         });
                     } else if (selection === 'until') {
                         var date = moment(start).add(1, momentShorthands[this.model.get('recurrence_type') - 1]);
@@ -443,7 +445,7 @@ define('io.ox/backbone/views/recurrence-view', [
                             date = moment.max(start, date);
                         }
                         this.model.set({
-                            'occurrences': undefined,
+                            'occurrences': null,
                             'until': date.valueOf()
                         });
                     } else {
@@ -459,7 +461,7 @@ define('io.ox/backbone/views/recurrence-view', [
                             occurrences = Math.max(1, occurrences);
                         }
                         this.model.set({
-                            'until': undefined,
+                            'until': null,
                             'occurrences': occurrences
                         });
                     }
@@ -479,7 +481,7 @@ define('io.ox/backbone/views/recurrence-view', [
                     input = new EndsSelectView({
                         model: this.model,
                         id: guid,
-                        name: 'until change:occurrences',
+                        name: 'until',
                         list: [{
                             label: gt('Never'),
                             value: 'never'

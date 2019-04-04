@@ -60,7 +60,7 @@ define('io.ox/core/tk/tokenfield', [
             if (this._delimiters.length) {
                 // Split at delimiter; ignore delimiters in quotes
                 // delimiters are: comma, semi-colon, tab, newline
-                tokens = _(tokens.split(new RegExp('[' + this._delimiters.join('|') + ']', 'g'))).map(function (str) { return str.trim(); });
+                tokens = util.getAddresses(tokens);
             } else {
                 tokens = [tokens];
             }
@@ -333,6 +333,13 @@ define('io.ox/core/tk/tokenfield', [
                         return;
                     }
 
+                    // if we dont have a model already, check if the topmost suggestion fits to our current input
+                    var topSuggestion = self.hiddenapi.dropdown.getDatumForTopSuggestion();
+                    if (!e.attrs.model && topSuggestion && e.attrs.value === topSuggestion.value && topSuggestion.raw && topSuggestion.raw.model) {
+                        e.attrs.model = topSuggestion.raw.model;
+                        e.attrs.label = e.attrs.model.getDisplayName({ isMail: self.options.isMail });
+                    }
+
                     // create model for unknown participants
                     if (!e.attrs.model) {
                         newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
@@ -438,7 +445,7 @@ define('io.ox/core/tk/tokenfield', [
 
                         // mouse hover tooltip / a11y title
                         label.attr({ 'aria-hidden': true, 'title': title });
-                        //.# Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
+                        //#. Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
                         node.attr('aria-label', gt('%1$s. Press backspace to delete.', title));
 
                         // customize token
@@ -542,23 +549,7 @@ define('io.ox/core/tk/tokenfield', [
             // this.hiddenapi.dropdown.close = $.noop;
             // this.hiddenapi.dropdown.empty = $.noop;
 
-            // ignore mouse events when dropdown gets programatically scrolled (see bug 55757)
-            function hasMouseMoved(e) {
-                if (!e || !e.originalEvent) return true;
-                var x = e.originalEvent.movementX,
-                    y = e.originalEvent.movementY;
-                if (x !== 0 || y !== 0) return true;
-            }
             var dropdown = _.extend(this.hiddenapi.dropdown, {
-                _onSuggestionMouseEnter: function (e) {
-                    if (!hasMouseMoved(e)) return;
-                    this._removeCursor();
-                    this._setCursor($(e.currentTarget), true);
-                },
-                _onSuggestionMouseLeave: function (e) {
-                    if (!hasMouseMoved(e)) return;
-                    this._removeCursor();
-                },
                 onDropdownMouseEnter: function () {
                     mouseIsInDropdown = true;
                 },
@@ -566,10 +557,6 @@ define('io.ox/core/tk/tokenfield', [
                     mouseIsInDropdown = false;
                 }
             });
-
-            dropdown.$menu.off('mouseenter.tt mouseleave.tt')
-                .on('mouseenter.tt mousemove.tt', '.tt-suggestion', dropdown._onSuggestionMouseEnter.bind(dropdown))
-                .on('mouseleave.tt', '.tt-suggestion', dropdown._onSuggestionMouseLeave.bind(dropdown));
 
             if (_.browser.IE || _.browser.Edge) {
 

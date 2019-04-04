@@ -11,7 +11,7 @@
  */
 
 
-Feature('Tasks');
+Feature('Tasks').tag('6');
 
 Before(async function (users) {
     await users.create();

@@ -278,9 +278,10 @@ define('io.ox/calendar/perspective', [
 
                                 updateModel.set({
                                     startDate: model.get('startDate'),
-                                    endDate: model.get('endDate')
+                                    endDate: model.get('endDate'),
+                                    rrule: model.get('rrule')
                                 });
-                                util.updateRecurrenceDate(model, oldStartDate);
+                                util.updateRecurrenceDate(updateModel, oldStartDate);
                                 apiUpdate(updateModel, _.extend(util.getCurrentRangeOptions(), {
                                     checkConflicts: true,
                                     recurrenceRange: 'THISANDFUTURE'

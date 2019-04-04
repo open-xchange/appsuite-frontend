@@ -13,11 +13,10 @@
 
 define('io.ox/core/folder/view', [
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/actions',
     'io.ox/core/folder/api',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (ext, actions, api, settings, gt) {
+], function (ext, api, settings, gt) {
 
     'use strict';
 

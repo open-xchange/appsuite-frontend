@@ -20,6 +20,7 @@ package-lock.json
 /bower_components
 /nightwatch-reports
 selenium-debug.log
+ssl/
 /.externalToolBuilders
 /.settings
 .project

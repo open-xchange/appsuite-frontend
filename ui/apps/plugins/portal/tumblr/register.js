@@ -16,9 +16,9 @@ define('plugins/portal/tumblr/register', [
     'io.ox/core/extensions',
     'io.ox/portal/feed',
     'gettext!io.ox/portal',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'settings!io.ox/portal'
-], function (ext, Feed, gt, dialogs, settings) {
+], function (ext, Feed, gt, ModalDialog, settings) {
 
     'use strict';
 
@@ -226,44 +226,35 @@ define('plugins/portal/tumblr/register', [
         //disable widget till data is set by user
         model.set('candidate', true, { silent: true, validate: true });
 
-        var dialog = new dialogs.ModalDialog({ async: true, width: 400 }),
-            $url = $('<input id="tumblr_url" type="text" class="form-control" placeholder=".tumblr.com" tabindex="0">'),
-            $description = $('<input id="tumblr_desc" type="text" class="form-control" tabindex="0">'),
-            $error = $('<div>').addClass('alert alert-danger').css('margin-top', '15px').hide(),
+        var dialog = new ModalDialog({ title: gt('Edit Tumblr feed'), async: true, width: 400 }),
+            $url = $('<input id="tumblr_url" type="text" class="form-control" placeholder=".tumblr.com">'),
+            $description = $('<input id="tumblr_desc" type="text" class="form-control">'),
+            $error = $('<div class="alert alert-danger" style="margin-top:15px;">').hide(),
             props = model.get('props') || {};
 
-        dialog.header($('<h4>').text(gt('Edit Tumblr feed')))
-            .build(function () {
-                this.getContentNode().append(
-                    $('<div class="row">').append(
-                        $('<div class="col-sm-12">').append(
-                            $('<label for="tumblr_url">').text(gt('Feed URL')),
-                            $url.val(props.url)
-                        )
-                    ),
-                    $('<div class="row">').append(
-                        $('<div class="col-sm-12">').append(
-                            $('<label for="tumblr_desc">').text(gt('Description')),
-                            $description.val(props.description)
-                        )
-                    ),
-                    $error
-                );
-            })
-            .addPrimaryButton('save', gt('Save'))
-            .addButton('cancel', gt('Cancel'))
-            .show(function () {
-                $url.focus();
-            });
-
-        dialog.on('cancel', function () {
-            if (model.has('candidate') && _.isEmpty(model.attributes.props)) {
-                view.removeWidget();
-            }
-        });
-
-        dialog.on('save', function () {
-
+        dialog.build(function () {
+            this.$body.append(
+                $('<div class="row">').append(
+                    $('<div class="col-sm-12">').append(
+                        $('<label for="tumblr_url">').text(gt('Feed URL')),
+                        $url.val(props.url)
+                    )
+                ),
+                $('<div class="row">').append(
+                    $('<div class="col-sm-12">').append(
+                        $('<label for="tumblr_desc">').text(gt('Description')),
+                        $description.val(props.description)
+                    )
+                ),
+                $error
+            );
+        })
+        .addCancelButton()
+        .addButton({ label: gt('Save'), action: 'save' })
+        .on('cancel', function () {
+            if (model.has('candidate') && _.isEmpty(model.attributes.props)) view.removeWidget();
+        })
+        .on('save', function () {
             $error.hide();
 
             var url = $.trim($url.val()),
@@ -320,7 +311,7 @@ define('plugins/portal/tumblr/register', [
             });
 
             return deferred;
-        });
+        }).open();
     }
 
     ext.point('io.ox/portal/widget/tumblr/settings').extend({

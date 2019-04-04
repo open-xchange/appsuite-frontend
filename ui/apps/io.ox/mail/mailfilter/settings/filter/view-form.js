@@ -262,8 +262,14 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     if (testsPart.id === 'header' && testsPart.values[0].trim() === '' && !_.contains(emptyValuesAllowed, testsPart.comparison)) {
                         this.model.set('test', { id: 'true' });
                     }
-                    if (testsPart.id === 'size' && testsPart.size.toString().trim() === '') {
-                        this.model.set('test', { id: 'true' });
+                    if (testsPart.id === 'size') {
+                        if (testsPart.size.toString().trim() === '') {
+                            this.model.set('test', { id: 'true' });
+                        } else {
+                            // clean up size model
+                            delete testsPart.sizeValue;
+                            delete testsPart.unit;
+                        }
                     }
 
                     // set zone option in currentdate condition for single test if "original" is set
@@ -284,6 +290,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             _.each(test.tests, function (nestedTest, nestedKey) {
                                 if (nestedTest.zone === 'original' && nestedTest.id === 'currentdate') self.model.attributes.test.tests[key].tests[nestedKey].zone = returnTzOffset(nestedTest.datevalue[0]);
                             });
+                        }
+
+                        // clean up size model
+                        if (test.id === 'size') {
+                            delete test.sizeValue;
+                            delete test.unit;
                         }
                     });
 
@@ -454,30 +466,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 ConditionModel = Backbone.Model.extend({
                     validate: function (attrs) {
                         function sizeValidation(size) {
-                            var listOfUnits = ['B', 'K', 'KB', 'M', 'MB', 'G', 'GB'],
-                                splits = size.split(''),
-                                number = '',
-                                unit = '',
-                                stop = false;
-
-                            _.each(splits, function (val) {
-                                if (/^[0-9]+$/.test(val) && !stop) {
-                                    number = number + val;
-                                } else {
-                                    stop = true;
-                                    unit = unit + val;
-                                }
-                            });
-
-                            return /^[0-9]+$/.test(number) && parseInt(number, 10) < 2147483648 && parseInt(number, 10) >= 0 && (unit === '' || _.contains(listOfUnits, unit.toUpperCase()));
+                            return /^[0-9]+$/.test(size) && parseInt(size, 10) < 2147483648 && parseInt(size, 10) >= 0;
                         }
 
                         var emptyValuesAllowed = ['exists', 'not exists'];
                         if (_.has(attrs, 'size')) {
 
-                            if (!sizeValidation(attrs.size)) {
-                                this.trigger('invalid:size');
-                                return 'size';
+                            if (!sizeValidation(attrs.sizeValue)) {
+                                this.trigger('invalid:sizeValue');
+                                return 'sizeValue';
                             }
                             this.trigger('valid:size');
                         }

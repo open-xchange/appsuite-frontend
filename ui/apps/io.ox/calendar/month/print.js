@@ -22,12 +22,12 @@ define('io.ox/calendar/month/print', [
 
     function getFilter(start, end) {
         return function (event) {
-            var eventStart = util.getMoment(event.get('startDate')).valueOf(),
-                eventEnd = util.getMoment(event.get('endDate')).valueOf();
-
+            var eventStart = event.getMoment('startDate'),
+                eventEnd = event.getMoment('endDate');
+            if (util.isAllday(event)) eventEnd.subtract(1, 'day');
             // check if appointment is on that day
-            if (eventEnd < start) return false;
-            if (eventStart > end) return false;
+            if (start.isAfter(eventEnd)) return false;
+            if (end.isSameOrBefore(eventStart)) return false;
             return true;
         };
     }
@@ -39,7 +39,7 @@ define('io.ox/calendar/month/print', [
     function map(event) {
         // if declined use base grey color
         var folder = folderAPI.pool.models[event.get('folder')],
-            color = util.getAppointmentColor(folder, event) || '#e8e8e8';
+            color = util.getAppointmentColor(folder.attributes, event) || '#e8e8e8';
 
         return {
             time: util.isAllday(event) ? undefined : util.getMoment(event.get('startDate')).format('LT'),
@@ -77,13 +77,12 @@ define('io.ox/calendar/month/print', [
 
                             // loop over days
                             for (;weekEnd.diff(start) > 0; start.add(1, 'day')) {
-                                var dayStart = start.valueOf(),
-                                    dayEnd = start.clone().add(1, 'day').valueOf();
+                                var dayEnd = start.clone().add(1, 'day');
                                 days.push({
                                     date: start.date(),
                                     events: collection
                                         .chain()
-                                        .filter(getFilter(dayStart, dayEnd))
+                                        .filter(getFilter(start, dayEnd))
                                         .sortBy(sortBy)
                                         .map(function (event) {
                                             return map(event);

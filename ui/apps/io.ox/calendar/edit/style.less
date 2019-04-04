@@ -42,10 +42,16 @@
         display: inline-block;
     }
 
-    .color-container {
-        display: flex;
-        margin-top: 7px;
-        align-items: center;
+    .visibility-container {
+        padding-top: 21px;
+
+        .attendee-change-checkbox {
+            margin-top: 8px;
+            &.disabled label{
+                color: @link-disabled-color;
+                cursor: not-allowed;
+            }
+        }
     }
 
     .picked-color {

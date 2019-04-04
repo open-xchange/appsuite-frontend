@@ -90,17 +90,6 @@ define('io.ox/core/tk/typeahead', [
             // use a clone instead of shared default-options-object
             o = this.options = $.extend({}, this.options, o || {});
 
-            /*
-             * extension point for autocomplete item
-             */
-            ext.point(o.extPoint + '/autoCompleteItem').extend({
-                id: 'view',
-                index: 100,
-                draw: function (data) {
-                    this.text(data);
-                }
-            });
-
             this.api = new AutocompleteAPI(_.extend({
                 // only pass to autocomplete api if non default extPoint
                 extPoint: /^io\.ox\/core\/tk\/(typeahead|tokenfield)$/.test(o.extPoint) ? undefined : o.extPoint
@@ -240,7 +229,45 @@ define('io.ox/core/tk/typeahead', [
                     }
                 }.bind(this.$el.data('ttTypeahead'));
             }
+            // for debug purpose (keeps dropdown open)
+            if (ox.debug && ox.debug_typeahead) {
+                this.$el.data('ttTypeahead').dropdown.close = $.noop;
+                this.$el.data('ttTypeahead').dropdown.empty = $.noop;
+            }
+            // ignore mouse events when dropdown gets programatically scrolled (see bug 55757 and 62955)
 
+            function hasMouseMoved(e) {
+                if (!e || !e.originalEvent) return true;
+                var x = e.originalEvent.movementX,
+                    y = e.originalEvent.movementY;
+                if (x !== 0 || y !== 0) return true;
+            }
+
+            var dropdown = _.extend(this.$el.data('ttTypeahead').dropdown, {
+                _onSuggestionMouseEnter: function (e) {
+                    if (!hasMouseMoved(e)) return;
+                    this._removeCursor();
+                    this._setCursor($(e.currentTarget), true);
+                },
+                _onSuggestionMouseLeave: function (e) {
+                    if (!hasMouseMoved(e)) return;
+                    this._removeCursor();
+                }
+            });
+
+            if (this.options.keepInComposeWindow) {
+                _.extend(dropdown, {
+                    _show: function () {
+                        this.$menu.css({ left: 0, display: 'block' });
+                        // correct position to prevent the dropdown from showing up outside the borders
+                        this.$menu.css('left', Math.min(0, (this.$menu.closest('.io-ox-mail-compose').offset().left + this.$menu.closest('.io-ox-mail-compose').outerWidth()) - (this.$menu.offset().left + this.$menu.outerWidth() + 15)));
+                    }
+                });
+            }
+
+            dropdown.$menu.off('mouseenter.tt mouseleave.tt')
+                .on('mouseenter.tt mousemove.tt', '.tt-suggestion', dropdown._onSuggestionMouseEnter.bind(dropdown))
+                .on('mouseleave.tt', '.tt-suggestion', dropdown._onSuggestionMouseLeave.bind(dropdown));
             return this;
         }
 

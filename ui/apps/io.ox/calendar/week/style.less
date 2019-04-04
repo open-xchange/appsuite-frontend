@@ -18,8 +18,8 @@
     * { -webkit-tap-highlight-color: rgba(0,0,0,0); }
 
     height: 100%;
-    .flex-display(flex);
-    .flex-direction(column);
+    display: flex;
+    flex-direction: column;
 
     .header {
 
@@ -38,11 +38,11 @@
         height: 50px;
         padding-top: 10px;
         margin-left: @weekview-time-width;
-        .flex-display(flex);
-        .align-items(center);
+        display: flex;
+        align-items: center;
 
         .weekday {
-            .flex(1);
+            flex: 1;
 
             color: #767676;
             text-align: left;
@@ -86,15 +86,15 @@
 
     .fulltime-container {
         min-height: 21px;
-        .flex-display(flex);
+        display: flex;
         margin-top: 5px;
 
 
         .time-label-bar {
-            .flex(0 0 auto);
-            .flex-display(flex);
-            .align-items(flex-end);
-            .justify-content(flex-end);
+            flex: 0 0 auto;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
 
             height: 100%;
             width: @weekview-time-width;
@@ -106,7 +106,7 @@
         }
 
         .appointment-panel {
-            .flex(1);
+            flex: 1;
             position: relative;
             .overflow-y(scroll);
             .overflow-x(hidden);
@@ -138,7 +138,7 @@
     }
 
     .appointment-container {
-        .flex(1);
+        flex: 1;
         position: relative;
         margin-top: 16px;
 
@@ -165,20 +165,20 @@
             .overflow-x(hidden);
             border-top: 1px solid @weekview-border;
             outline: 0;
-            .flex-display(flex);
+            display: flex;
 
             > .current-time-indicator {
                 left: @weekview-time-width;
             }
 
             .week-container-label {
-                .flex(0 0 auto);
-                .flex-display(flex);
-                .flex-direction(column);
+                flex: 0 0 auto;
+                display: flex;
+                flex-direction: column;
                 width: @weekview-time-width;
 
                 .time {
-                    .flex(1);
+                    flex: 1;
                     position: relative;
                     margin-left: 1em;
                     border-bottom: 1px solid @weekview-border;
@@ -210,16 +210,16 @@
         }
 
         .day {
-            .flex(1);
-            .flex-display(flex);
-            .flex-direction(column);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
 
             border-left: 1px solid @weekview-border;
             position: relative;
             .user-select(none);
 
             .timeslot {
-                .flex(1);
+                flex: 1;
                 -webkit-touch-callout: none !important;
                 border-bottom: 1px solid @weekview-border-light;
                 height: 24px;
@@ -285,6 +285,7 @@
             border-bottom: 2px solid @calendar-today;
             z-index: 10;
             .user-select(none);
+            pointer-events: none;
         }
 
         .hidden-appointment-indicator-container {
@@ -330,12 +331,11 @@
 
         &.no-wrap {
             .appointment-content {
-                * {
-                    display: inline;
-                    text-overflow: clip;
+                display: flex;
+                & > .location {
+                    flex: 2 1;
+                    margin-left: 4px;
                 }
-
-                .location { margin-left: 5px; }
             }
         }
 

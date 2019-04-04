@@ -18,7 +18,6 @@ define('io.ox/core/desktop', [
     'io.ox/core/event',
     'io.ox/backbone/views/window',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
     'io.ox/core/cache',
     'io.ox/core/notifications',
     'io.ox/core/upsell',
@@ -29,7 +28,7 @@ define('io.ox/core/desktop', [
     'io.ox/core/main/icons',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Events, FloatingWindow, ext, links, cache, notifications, upsell, adaptiveLoader, folderAPI, apps, findFactory, icons, coreSettings, gt) {
+], function (Events, FloatingWindow, ext, cache, notifications, upsell, adaptiveLoader, folderAPI, apps, findFactory, icons, coreSettings, gt) {
 
     'use strict';
 
@@ -66,6 +65,8 @@ define('io.ox/core/desktop', [
             this.id = this.id || (this.options.refreshable ? this.options.name : '') || 'app-' + this.guid;
             this.set('path', this.options.path ? this.options.path : this.getName() + '/main');
             this.set('id', this.id);
+            this.set('openInTab', this.options.openInTab);
+            this.set('tabUrl', this.options.tabUrl);
             this.getInstance = function () {
                 return self;
             };
@@ -279,11 +280,15 @@ define('io.ox/core/desktop', [
                     },
 
                     getData: function () {
-
                         if (folder === null) return $.Deferred().resolve({});
-
                         var model = folderAPI.pool.getModel(folder);
                         return $.Deferred().resolve(model.toJSON());
+                    },
+
+                    // getData() became internally sync over time, but it kept its async return value
+                    // getModel() is sync; return undefined if model doesn't exist (yet)
+                    getModel: function () {
+                        return folderAPI.pool.getModel(folder);
                     },
 
                     can: function (action) {
@@ -679,7 +684,7 @@ define('io.ox/core/desktop', [
 
         removeRestorePoint: function () {
             var uniqueID = this.get('uniqueID');
-            ox.ui.App.removeRestorePoint(uniqueID);
+            return ox.ui.App.removeRestorePoint(uniqueID);
         }
 
     });
@@ -713,6 +718,14 @@ define('io.ox/core/desktop', [
             // use get instead of contains since it might exist as empty list
             return this.getSavePoints().then(function (list) {
                 return list && list.length > 0;
+            });
+        },
+
+        // utility function to clean savepoints of unsupported versions in jslob (not localstorage)
+        cleanupSavepoints: function () {
+            if (coreSettings.get('savepointCleanup', false)) return;
+            coreSettings.set('savepoints', []).save().then(function () {
+                coreSettings.set('savepointCleanup', ox.version).save();
             });
         },
 
@@ -785,9 +798,12 @@ define('io.ox/core/desktop', [
 
         restore: function () {
             var self = this;
-            return this.getSavePoints().then(function (list) {
+
+            this.cleanupSavepoints();
+
+            return $.when(this.getSavePoints(), ox.rampup.compositionSpaces).then(function (list, compositionSpaces) {
                 return $.when.apply($,
-                    _(list).map(function (obj) {
+                    _([].concat(list, compositionSpaces || [])).map(function (obj) {
                         adaptiveLoader.stop();
                         var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
                         return ox.load(requirements).then(function (m) {
@@ -817,12 +833,12 @@ define('io.ox/core/desktop', [
                                             // replace restore point with old id with restore point with new id (prevents duplicates)
                                             self.removeRestorePoint(oldId).then(self.getSavePoints).then(function (sp) {
                                                 sp.push(obj);
-                                                self.setSavePoints(sp);
+                                                if (obj.keepOnRestore !== false) self.setSavePoints(sp);
                                                 if (model.get('quitAfterLaunch')) model.trigger('quit');
                                             });
                                         }).fail(function (e) {
                                             if (!e || e.code !== 'MSG-0032') return;
-                                            // restoreById-savepoint after draft got deleted
+                                            // restoreById-savepoint after draft/composition space got deleted
                                             _.delay(function () {
                                                 ox.ui.App.removeRestorePoint(oldId);
                                                 model.trigger('close');
@@ -898,6 +914,7 @@ define('io.ox/core/desktop', [
         getCurrentFloatingApp: function () {
             return _.chain(ox.ui.apps.pluck('window')).compact()
                 .map(function (win) {
+                    if (win.app.get('name') === 'io.ox/help') return undefined;
                     return win.floating && win.floating.model && win.floating.model.get('active') ? win.app : undefined;
                 }).compact().first().value();
         },
@@ -1108,11 +1125,14 @@ define('io.ox/core/desktop', [
         that.on('window.open window.show', function (e, win) {
             // show window manager
             this.show();
-
             // move/add window to top of stack
             windows = _(windows).without(win);
-            _(windows).each(function (w) { w.nodes.body.removeAttr('role'); });
-            win.nodes.body.attr('role', 'main');
+            if (!win.options.floating) {
+                _(windows).each(function (w) { w.nodes.body.removeAttr('role'); });
+                win.nodes.body.attr('role', 'main');
+            } else {
+                win.nodes.body.attr('role', 'region');
+            }
             windows.unshift(win);
             // add current windows to cache
             if (windows.length > 1) {
@@ -1582,7 +1602,7 @@ define('io.ox/core/desktop', [
                         // window SIDEPANEL
                         win.nodes.sidepanel = $('<div class="window-sidepanel collapsed">'),
                         // window BODY
-                        win.nodes.body = $('<div class="window-body" role="main">'),
+                        win.nodes.body = $('<div class="window-body">'),
 
                         win.nodes.footer = $('<div class="window-footer">')
                     )
@@ -1647,17 +1667,15 @@ define('io.ox/core/desktop', [
                     draw: function (baton) {
                         // share data
                         _.extend(baton.data, {
-                            label: gt('Search')
-                            // id:  _.uniqueId(win.name + '-search-field'),
+                            label: gt('Search'),
+                            id: _.uniqueId('search')
                             // guid:  _.uniqueId('form-control-description-')
                         });
                         // search box form
                         baton.$.group = $('<div class="form-group has-feedback">').append(
                             $('<input type="text" class="form-control has-feedback search-field tokenfield-placeholder f6-target">').attr({
-                                //  id: baton.data.id,
-                                placeholder: baton.data.label + '...',
-                                // 'aria-describedby': baton.data.guid
-                                title: baton.data.label
+                                'aria-labelledby': baton.data.id,
+                                placeholder: baton.data.label + '...'
                             })
                         );
                         // add to searchbox area
@@ -1676,7 +1694,8 @@ define('io.ox/core/desktop', [
                             $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
                                 .attr({
                                     'data-original-title': gt('Start search'),
-                                    'aria-label': gt('Start search')
+                                    'aria-label': gt('Start search'),
+                                    'id': baton.data.id
                                 }).append($('<i class="fa fa-search" aria-hidden="true">'))
                                 .tooltip(),
                             // cancel/reset
@@ -1720,18 +1739,8 @@ define('io.ox/core/desktop', [
             }
 
             // fix height/position/appearance
-            if (opt.chromeless) {
+            if (opt.chromeless) win.setChromeless(true);
 
-                win.setChromeless(true);
-
-            } else if (opt.name) {
-
-                // toolbar
-                ext.point(opt.name + '/toolbar').extend(new links.ToolbarLinks({
-                    id: 'links',
-                    ref: opt.name + '/links/toolbar'
-                }));
-            }
             // inc
             guid++;
 

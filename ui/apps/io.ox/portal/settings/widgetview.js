@@ -14,13 +14,13 @@
 
 define('io.ox/portal/settings/widgetview', [
     'io.ox/core/extensions',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/manifests',
     'io.ox/core/upsell',
     'gettext!io.ox/portal',
     'io.ox/backbone/views/disposable',
     'less!io.ox/portal/style'
-], function (ext, dialogs, manifests, upsell, gt, DisposableView) {
+], function (ext, ModalDialog, manifests, upsell, gt, DisposableView) {
 
     'use strict';
 
@@ -111,27 +111,18 @@ define('io.ox/portal/settings/widgetview', [
             var self = this;
             // do we have custom data that might be lost?
             if (!_.isEmpty(this.model.get('props'))) {
-                var dialog = new dialogs.ModalDialog()
-                .header($('<h4>').text(gt('Delete widget')))
-                .append($('<span>').text(gt('Do you really want to delete this widget?')))
-                .addPrimaryButton('delete',
-                    //#. Really delete portal widget - in contrast to "just disable"
-                    gt('Delete'), 'delete'
-                )
-                .addButton('cancel', gt('Cancel'), 'cancel');
+                var dialog = new ModalDialog({ title: gt('Delete widget'), description: gt('Do you really want to delete this widget?') })
+                .addCancelButton()
+                .on('delete', function () { self.removeWidget(); })
+                //#. Really delete portal widget - in contrast to "just disable"
+                .addButton({ label: gt('Delete'), action: 'delete' });
+
                 if (this.model.get('enabled')) {
-                    dialog.addAlternativeButton('disable',
-                        //#. Just disable portal widget - in contrast to delete
-                        gt('Just disable widget'), 'disable'
-                    );
+                    //#. Just disable portal widget - in contrast to delete
+                    dialog.on('disable', function () { self.onToggle(e); })
+                        .addButton({ label: gt('Just disable widget'), action: 'disable', placement: 'left', className: 'btn-default' });
                 }
-                dialog.show().done(function (action) {
-                    if (action === 'delete') {
-                        self.removeWidget();
-                    } else if (action === 'disable') {
-                        self.onToggle(e);
-                    }
-                });
+                dialog.open();
             } else {
                 this.removeWidget();
             }

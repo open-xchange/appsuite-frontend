@@ -11,22 +11,199 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'gettext!io.ox/mail'], function (mailAPI, settings, gt) {
+define('io.ox/mail/compose/main', [
+    'io.ox/core/extensions',
+    'io.ox/mail/api',
+    'io.ox/core/api/account',
+    'io.ox/mail/util',
+    'settings!io.ox/mail',
+    'gettext!io.ox/mail',
+    'io.ox/mail/compose/actions'
+], function (ext, mailAPI, accountAPI, mailUtil, settings, gt) {
 
     'use strict';
 
-    var blocked = {};
+    // via point.cascade
 
-    function keepData(obj) {
-        return /(compose|edit)/.test(obj.mode) ||
-               // forwarding muliple messages
-               /(forward)/.test(obj.mode) && !obj.id ||
-               obj.restored;
-    }
+    var POINT = ext.point('io.ox/mail/compose/boot'),
+        INDEX = 0;
+
+    POINT.extend({
+        id: 'bundle',
+        index: INDEX += 100,
+        perform: function () {
+            return require(['io.ox/mail/compose/bundle']);
+        }
+    }, {
+        id: 'compose-model',
+        index: INDEX += 100,
+        perform: function (baton) {
+            var self = this;
+
+
+            return require(['io.ox/mail/compose/model']).then(function (MailComposeModel) {
+                self.model = baton.model = new MailComposeModel(baton.data);
+                if (baton.data && baton.data.id) baton.model.restored = true;
+                return self.model.initialized;
+            });
+        }
+    }, {
+        id: 'compose-view',
+        index: INDEX += 100,
+        perform: function (baton) {
+            var self = this;
+            return require(['io.ox/mail/compose/config', 'io.ox/mail/compose/view']).then(function (MailComposeConfig, MailComposeView) {
+                self.config = new MailComposeConfig(_.extend({}, baton.config, { type: self.model.type }));
+                self.view = baton.view = new MailComposeView({ app: self, model: self.model, config: self.config });
+            });
+        }
+    }, {
+        id: 'fix-custom-displayname',
+        index: INDEX += 100,
+        perform: function () {
+            if (settings.get('customDisplayNames')) return;
+            return accountAPI.getPrimaryAddressFromFolder(this.config.get('folderId')).then(function (address) {
+                // ensure defaultName is set (bug 56342 and 63891)
+                settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
+            });
+        }
+    }, {
+        id: 'fix-from',
+        index: INDEX += 100,
+        perform: function () {
+            var model = this.model;
+            if (model.get('from')) return;
+            return accountAPI.getPrimaryAddressFromFolder(this.config.get('folderId')).then(function (address) {
+                // custom display names
+                if (settings.get(['customDisplayNames', address[1], 'overwrite'])) {
+                    address[0] = settings.get(['customDisplayNames', address[1], 'name'], '');
+                }
+                if (!settings.get('sendDisplayName', true)) {
+                    address[0] = null;
+                }
+                model.set('from', address);
+            });
+        }
+    }, {
+        id: 'fix-displayname',
+        index: INDEX += 100,
+        perform: function () {
+            var model = this.model,
+                config = this.config;
+
+            updateDisplayName();
+            this.view.listenTo(config, 'change:sendDisplayName', updateDisplayName);
+            this.view.listenTo(ox, 'change:customDisplayNames', updateDisplayName);
+
+            // fix current value
+            function updateDisplayName() {
+                var from = model.get('from');
+                if (!from) return;
+                model.set('from', mailUtil.getSender(from, config.get('sendDisplayName')));
+            }
+        }
+    }, {
+        id: 'load-signature',
+        index: INDEX += 100,
+        perform: function () {
+            var self = this,
+                def = this.view.signaturesLoading = $.Deferred();
+
+            if (_.device('smartphone')) {
+                //#. %s is the product name
+                var value = settings.get('mobileSignature', gt('Sent from %s via mobile', ox.serverConfig.productName)),
+                    collection = new Backbone.Collection([{ id: '0', content: value, misc: { insertion: 'below' } }]);
+                this.config.set('signatures', collection);
+                def.resolve(collection);
+            } else {
+                require(['io.ox/core/api/snippets'], function (snippetAPI) {
+                    var collection = snippetAPI.getCollection();
+                    self.config.set('signatures', collection);
+                    snippetAPI.getAll().always(function () {
+                        def.resolve(collection);
+                    });
+                });
+            }
+            return def.then(function (list) {
+                this.config.set('signatures', list);
+                return list;
+            }.bind(this));
+        }
+    }, {
+        id: 'render-view',
+        index: INDEX += 100,
+        perform: function (baton) {
+            var win = baton.win;
+            win.nodes.main.addClass('scrollable').append(this.view.render().$el);
+        }
+    }, {
+        id: 'editor-mode',
+        index: INDEX += 100,
+        perform: function () {
+            // if draft, force editor in the same mode as the draft
+            if (this.model.get('meta').editFor) {
+                this.config.set('editorMode', this.model.get('contentType') === 'text/plain' ? 'text' : 'html');
+            }
+
+            // map 'alternative'
+            var isAlternative = this.config.get('preferredEditorMode') === 'alternative' || this.config.get('editorMode') === 'alternative';
+            if (!isAlternative) return;
+            this.config.set('editorMode', this.model.get('contentType') === 'text/plain' ? 'text' : 'html');
+        }
+    }, {
+        id: 'auto-bcc',
+        index: INDEX += 100,
+        perform: function () {
+            if (!settings.get('autobcc') || this.config.is('edit')) return;
+            this.model.set('bcc', mailUtil.parseRecipients(settings.get('autobcc'), { localpart: false }));
+        }
+    }, {
+        id: 'auto-discard',
+        index: INDEX += 100,
+        perform: function () {
+            // disable auto remove on discard for draft mails
+            this.config.set('autoDiscard', !this.config.is('edit'));
+        }
+    }, {
+        id: 'set-mail',
+        index: INDEX += 100,
+        perform: function () {
+            return this.view.setMail();
+        }
+    }, {
+        id: 'initial-signature',
+        index: INDEX += 100,
+        perform: function () {
+            return this.view.signaturesLoading.then(function () {
+                this.config.setInitialSignature(this.model);
+            }.bind(this));
+        }
+    }, {
+        id: 'initial-patch',
+        index: INDEX += 100,
+        perform: function () {
+            this.view.dirty(!!this.model.restored);
+            this.model.initialPatch();
+        }
+    }, {
+        id: 'finally',
+        index: INDEX += 100,
+        perform: function (baton) {
+            var win = baton.win;
+            // calculate right margin for to field (some languages like chinese need extra space for cc bcc fields)
+            win.nodes.main.find('.tokenfield').css('padding-right', 14 + win.nodes.main.find('.recipient-actions').width() + win.nodes.main.find('[data-extension-id="to"] .has-picker').length * 20);
+            // Set window and toolbars visible again
+            win.nodes.header.removeClass('sr-only');
+            win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0).trigger('scroll');
+            win.idle();
+            $(window).trigger('resize');  // Needed for proper initial resizing in editors
+            win.setTitle(this.model.get('subject') || gt('Compose'));
+            this.trigger('ready');
+        }
+    });
 
     // multi instance pattern
     function createInstance() {
-
         // application object
         var app = ox.ui.createApp({
                 name: 'io.ox/mail/compose',
@@ -48,111 +225,64 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                 closable: true,
                 title: gt('Compose')
             }));
-
-            // use main role on 'outer' to include actions in header
-            win.nodes.body.removeAttr('role');
-            win.nodes.outer.attr('role', 'main');
         });
 
-        app.failSave = function () {
-            if (!app.view) return;
-            var failSaveData = app.model.getFailSave();
-            return failSaveData ? _.extend({ module: 'io.ox/mail/compose' }, failSaveData) : false;
-        };
-
         app.failRestore = function (point) {
-            if (point.restoreById || !point.mode) {
-                delete point.restoreById;
-                return compose('edit')(point);
+            var data = { id: point };
+            if (_.isObject(point)) {
+                // create composition space from old restore point
+                data = _(point).pick('to', 'cc', 'bcc', 'subject');
+                if (point.from && point.from[0]) data.from = point.from[0];
+                if (point.attachments && point.attachments[0]) {
+                    data.content = point.attachments[0].content;
+                    data.contentType = point.attachments[0].content_type;
+                }
+                data.meta = {};
+                data.meta.security = point.security;
+                data.requestRqe = point.disp_notification_to;
+                data.priority = ['high', 'medium', 'low'][(data.priority || 1) - 1];
             }
-            point.initial = false;
-            // special flag/handling for 'replace' cause we want
-            // to keep the attachments that will be removed otherwise
-            if (/(reply|replyall|forward)/.test(point.mode)) point.restored = true;
-            return compose(point.mode)(point);
+            return app.open(data);
         };
 
         app.getContextualHelp = function () {
             return 'ox.appsuite.user.sect.email.gui.create.html';
         };
 
-        function compose(type) {
+        app.open = function (obj, config) {
+            var def = $.Deferred();
+            obj = _.extend({}, obj);
 
-            return function (obj) {
+            // Set window and toolbars invisible initially
+            win.nodes.header.addClass('sr-only');
+            win.nodes.body.addClass('sr-only');
 
-                var def = $.Deferred();
+            win.busy().show(function () {
+                POINT.cascade(app, { data: obj || {}, config: config, win: win }).then(function success() {
+                    def.resolve({ app: app });
+                    ox.trigger('mail:' + app.model.get('meta').type + ':ready', obj, app);
+                }, function fail(e) {
+                    if (app.view) {
+                        app.view.dirty(false);
+                        app.view.removeLogoutPoint();
+                    }
+                    app.quit();
 
-                app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
-
-                // Set window and toolbars invisible initially
-                win.nodes.header.addClass('sr-only');
-                win.nodes.body.addClass('sr-only');
-
-                win.busy().show(function () {
-                    require(['io.ox/mail/compose/bundle']).then(function () {
-                        if (settings.get('features/fixContentType', false) && type !== 'compose' && !_.isArray(obj)) {
-                            // mitigate Bug#56496, force a get request to make sure content_type is correctly set
-                            // in most cases, this should return the mail from pool ('detail')
-                            // need circumvent caching, here, because all requests always break data again and we can
-                            // never be sure about data being correct
-                            return mailAPI.get(_.extend(_.pick(obj, 'id', 'folder_id'), { view: 'raw' }), { cache: false });
-                        }
-                        return obj;
-                    }).then(function (latestMail) {
-                        if (!_.isArray(latestMail)) latestMail.security = obj.security;  // Fix for Bug 56496 above breaking Guard.  Security lost with reload
-                        else latestMail.forEach(function (m, i) { m.security = obj[i].security; });
-
-                        obj = _.extend({ mode: type }, latestMail);
-                        return require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model']);
-                    })
-                    .then(function (MailComposeView, MailComposeModel) {
-                        var data = keepData(obj) ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type', 'security');
-                        app.model = new MailComposeModel(data);
-                        app.view = new MailComposeView({ app: app, model: app.model });
-                        return app.view.fetchMail(data);
-                    })
-                    .then(function () {
-                        win.nodes.main.addClass('scrollable').append(app.view.render().$el);
-                        return app.view.setMail();
-                    })
-                    .done(function () {
-                        // calculate right margin for to field (some languages like chinese need extra space for cc bcc fields)
-                        win.nodes.main.find('.tokenfield').css('padding-right', 14 + win.nodes.main.find('.recipient-actions').width() + win.nodes.main.find('[data-extension-id="to"] .has-picker').length * 20);
-                        // Set window and toolbars visible again
-                        win.nodes.header.removeClass('sr-only');
-                        win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0);
-                        win.idle();
-                        $(window).trigger('resize');  // Needed for proper initial resizing in editors
-                        win.setTitle(obj.subject || gt('Compose'));
-                        def.resolve({ app: app });
-                        ox.trigger('mail:' + type + ':ready', obj, app);
-                    })
-                    .fail(function (e) {
-                        require(['io.ox/core/notifications'], function (notifications) {
-                            notifications.yell(e);
-                            // makes no sense to show discard changes popup here
-                            app.model.dirty(false);
-                            app.view.removeLogoutPoint();
-                            app.quit();
-                            def.reject(e);
-                        });
-                    });
+                    def.reject(e);
                 });
-
-                return def;
-            };
-        }
+            });
+            return def;
+        };
 
         // destroy
         app.setQuit(function () {
             if (app.view) return app.view.discard();
         });
 
-        app.compose = compose('compose');
-        app.forward = compose('forward');
-        app.reply = compose('reply');
-        app.replyall = compose('replyall');
-        app.edit = compose('edit');
+        // after view is detroyed
+        app.on('quit', function () {
+            if (app.model) app.model.destroy();
+        });
 
         // for debugging purposes
         window.compose = app;
@@ -160,33 +290,33 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
         return app;
     }
 
+    ox.on('http:error:MSGCS-0007 http:error:MSGCS-0011', function (e) {
+        var error = _.extend({}, e);
+        switch (e.code) {
+            // Found no such composition space for identifier: %s
+            case 'MSGCS-0007':
+                error.message = gt('The mail draft could not be found on the server. It was sent or deleted in the meantime.');
+                break;
+            // Maximum number of composition spaces is reached. Please terminate existing open spaces in order to open new ones.
+            case 'MSGCS-0011':
+                var num = error.error_params[0] || 20;
+                error.message = gt('You cannot open more than %1$s drafts at the same time.', num);
+                break;
+            default:
+                break;
+        }
+        require(['io.ox/core/notifications'], function (notifications) {
+            notifications.yell(error);
+        });
+    });
+
     return {
 
         getApp: createInstance,
 
-        reuse: function (type, data) {
-            // disable reuse if at least one app is sending (depends on type)
-            var unblocked = function (sendtype) {
-                return blocked[sendtype] === undefined || blocked[sendtype] <= 0;
-            };
-            if (type === 'reply' && unblocked(mailAPI.SENDTYPE.REPLY)) {
-                return ox.ui.App.reuse('io.ox/mail:reply.' + _.cid(data));
-            }
-            if (type === 'replyall' && unblocked(mailAPI.SENDTYPE.REPLY)) {
-                return ox.ui.App.reuse('io.ox/mail:replyall.' + _.cid(data));
-            }
-            if (type === 'forward' && unblocked(mailAPI.SENDTYPE.FORWARD)) {
-                var cid;
-                if (_.isArray(data)) {
-                    cid = _(data).map(function (o) { return _.cid(o); }).join();
-                } else {
-                    cid = _.cid(data);
-                }
-                return ox.ui.App.reuse('io.ox/mail:forward.' + cid);
-            }
-            if (type === 'edit' && unblocked(mailAPI.SENDTYPE.DRAFT)) {
-                return ox.ui.App.reuse('io.ox/mail:edit.' + _.cid(data));
-            }
+        reuse: function () {
+            // disable reuse since a floating window is never reused
+            return false;
         }
     };
 });

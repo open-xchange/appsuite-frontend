@@ -18,12 +18,25 @@ define('io.ox/core/a11y', [], function () {
     //
     // Focus management
     //
+    function focusFolderTreeOrList() {
+        var focusableFolder = $('.folder-tree:visible .folder.selected');
+        if (focusableFolder.is(':visible')) {
+            focusableFolder.focus();
+        } else if ($('.window-container:visible').length > 0) {
+            focusListSelection($('.window-container:visible'));
+        }
+    }
 
     // fix for role="button"
     $(document).on('keydown.role.button', 'a[role="button"]', function (e) {
         if (!/32/.test(e.which) || e.which === 13 && e.isDefaultPrevented()) return;
         e.preventDefault();
         $(this).click();
+    });
+
+    $(document).on('click', '.skip-links', function (e) {
+        e.preventDefault();
+        focusFolderTreeOrList();
     });
 
     // focus folder tree from quicklauncher on <enter>
@@ -33,12 +46,7 @@ define('io.ox/core/a11y', [], function () {
             e.which === 13 &&
             app.get('name') === $(this).attr('data-app-name')
         ) {
-            var focusableFolder = $('.folder-tree:visible .folder.selected');
-            if (focusableFolder.is(':visible')) {
-                focusableFolder.focus();
-            } else if ($('.window-container:visible').length > 0) {
-                focusListSelection($('.window-container:visible'));
-            }
+            focusFolderTreeOrList();
         }
     });
 
@@ -220,10 +228,9 @@ define('io.ox/core/a11y', [], function () {
 
     function getTabbable(el) {
         var skip = {},
-            items = $(el).find('input, select, textarea, button, a[href], [tabindex]');
-        return items
+            items = $(el).find('input, select, textarea, button, a[href], [tabindex], iframe'),
             // radio groups are special
-            .filter(function () {
+            filteredItems = items.filter(function () {
                 // just take care of radio buttons
                 if (!$(this).is(':radio')) return true;
                 // we only need one radio per group
@@ -241,6 +248,10 @@ define('io.ox/core/a11y', [], function () {
                 return !$(this).closest('[contenteditable="true"]').length;
             })
             .filter(':visible');
+        return $($.map(filteredItems, function (item) {
+            // if tabbable element is actually an iframe we need to expand it to its tabbable contents
+            return $(item).is('iframe') ? getTabbable($(item).contents().find('html')).toArray() : item;
+        }));
     }
 
     function getPreviousTabbable(el) {
@@ -266,7 +277,8 @@ define('io.ox/core/a11y', [], function () {
     function trapFocus(el, e) {
         var items = getTabbable(el);
         if (!items.length) return;
-        var index = items.index(document.activeElement),
+        // if the element that sended the event is an iframe then we need to get the index of the active element inside of that iframe
+        var index = $(document.activeElement).is('iframe') ? items.index($(document.activeElement).contents()[0].activeElement) : items.index(document.activeElement),
             catchFirst = e.shiftKey && index === 0,
             catchLast = index === items.length - 1;
         // only jump in if first or last item; radio groups are a problem otherwise
@@ -341,7 +353,7 @@ define('io.ox/core/a11y', [], function () {
 
         if (e.which === 9 || e.which === 16 && e.shiftKey) return;
         // space on role="button" is already handled
-        if (e.which === 32 && $(e.target).attr('role') !== 'button') $(e.target).click(); // space
+        // if (e.which === 32 && $(e.target).attr('role') !== 'button') $(e.target).click(); // space
 
         var isList = $(e.currentTarget).is('ul');
         var links = $(e.currentTarget).find(isList ? '> li > a, > li > button:not([disabled])' : '> a, > button:not([disabled])').filter(':visible');

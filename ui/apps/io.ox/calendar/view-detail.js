@@ -18,11 +18,12 @@ define('io.ox/calendar/view-detail', [
     'io.ox/calendar/api',
     'io.ox/core/tk/attachments',
     'io.ox/participants/chronos-detail',
+    'io.ox/backbone/views/toolbar',
     'gettext!io.ox/calendar',
     'io.ox/calendar/model',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style'
-], function (ext, extensions, util, calAPI, attachments, ParticipantsView, gt, ChronosModel) {
+], function (ext, extensions, util, calAPI, attachments, ParticipantsView, ToolbarView, gt, ChronosModel) {
 
     'use strict';
 
@@ -32,9 +33,13 @@ define('io.ox/calendar/view-detail', [
         index: 100,
         id: 'inline-actions',
         draw: function (baton, options) {
-            // if this is opened via invitation mail from an external user account we dont show actions => not supported
-            if (options.isExternalUser) return;
-            ext.point('io.ox/calendar/detail/actions').invoke('draw', this, baton);
+            // if this is opened via invitation mail we dont show actions, event might not be created etc
+            if (options.hideToolbar) return;
+            this.append(
+                new ToolbarView({ point: 'io.ox/calendar/links/inline', inline: true })
+                .setSelection(baton.array(), { data: baton.array(), model: baton.model })
+                .$el
+            );
         }
     });
 
@@ -112,17 +117,8 @@ define('io.ox/calendar/view-detail', [
         index: 600,
         id: 'participants',
         draw: function (baton) {
-            var pView = new ParticipantsView(baton, { summary: true, inlineLinks: 'io.ox/calendar/detail/inline-actions-participantrelated' });
+            var pView = new ParticipantsView(baton, { summary: true });
             this.append(pView.draw());
-        }
-    });
-
-    ext.point('io.ox/calendar/detail/inline-actions-participantrelated').extend({
-        index: 700,
-        id: 'inline-actions-participantrelated',
-        draw: function (baton) {
-            if (!baton.model.get('attendees') || baton.model.get('attendees').length <= 1) return;
-            ext.point('io.ox/calendar/detail/actions-participantrelated').invoke('draw', this, baton);
         }
     });
 
@@ -246,7 +242,7 @@ define('io.ox/calendar/view-detail', [
 
             options = _.extend({ minimaldata: !baton.data.folder }, options);
             if (_.device('smartphone') && !options.deeplink) {
-                baton.disable('io.ox/calendar/detail/actions', 'inline-links');
+                baton.disable('io.ox/calendar/detail', 'inline-actions');
             }
             try {
                 var node = $.createViewContainer(baton, calAPI, calAPI.get, { cidGetter: calAPI.cid }).on('redraw', { view: this }, redraw);

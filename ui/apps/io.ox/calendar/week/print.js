@@ -44,6 +44,8 @@ define('io.ox/calendar/week/print', [
                 bStart = util.getMoment(ev.get('startDate')).valueOf(),
                 // make sure an appointment lasts at least 30 minutes
                 bEnd = moment.max(moment(bStart).add(30, 'minutes'), util.getMoment(ev.get('endDate'))).valueOf();
+            if (util.isAllday(event)) return false;
+            if (util.isAllday(ev)) return false;
             if (aEnd <= bStart) return false;
             if (aStart >= bEnd) return false;
             return true;
@@ -72,7 +74,7 @@ define('io.ox/calendar/week/print', [
                 var top = startDate.minutes() + (startRange - hour) * 60,
                     folder = folderAPI.pool.models[event.get('folder')],
                     // if declined use base grey color
-                    color = util.getAppointmentColor(folder, event) || '#e8e8e8';
+                    color = util.getAppointmentColor(folder.attributes, event) || '#e8e8e8';
 
                 parts.push({
                     isAllday: isAllday,

@@ -87,23 +87,34 @@ define('io.ox/files/common-extensions', [
         },
         filenameTooltip: function (baton) {
             var filename = baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename || baton.data.title || '';
-
             var parent = this.parent();
-            parent.tooltip({ // http://getbootstrap.com/javascript/#tooltips // https://codepen.io/jasondavis/pen/mlnEe
-                title: _.breakWord(filename),
-                trigger: 'hover',                       // click | hover | focus | manual. You may pass multiple triggers; separate them with a space.
-                //placement: 'right auto',                // top | bottom | left | right | auto.
-                placement: 'bottom auto',               // top | bottom | left | right | auto.
-                animation: true,                        // false
-                //delay: { 'show': 400, 'hide': 50000 },
-                delay: { 'show': 400 },
-                container: parent,
+            var title = _.breakWord(filename);
 
-                // Bug-55575: Dropdown indicator shown when hovering over folder symbol
-                viewport: { selector: '.io-ox-files-main .list-view-control.toolbar-top-visible', padding: 16 } // viewport: '#viewport' or { "selector": "#viewport", "padding": 0 } // or callback function
-            }).on('dispose', function () {
-                $(this).parent().tooltip('destroy');
-            });
+            /*
+             * Update the data source attribute only, if the tooltip has been created for this element already.
+             * The Tooltip object uses the value provided through the options or the data-original-title attribute value.
+             * The only alternative is an explicit Tooltip object destruction before recreation (including cumbersome timeout because of async function).
+             * See bug 62650 for further information.
+             */
+            if (parent.attr('data-original-title') === undefined) {
+                parent.tooltip({ // http://getbootstrap.com/javascript/#tooltips // https://codepen.io/jasondavis/pen/mlnEe
+                    title: title,
+                    trigger: 'hover',                       // click | hover | focus | manual. You may pass multiple triggers; separate them with a space.
+                    //placement: 'right auto',                // top | bottom | left | right | auto.
+                    placement: 'bottom auto',               // top | bottom | left | right | auto.
+                    animation: true,                        // false
+                    //delay: { 'show': 400, 'hide': 50000 },
+                    delay: { 'show': 400 },
+                    container: parent,
+
+                    // Bug-55575: Dropdown indicator shown when hovering over folder symbol
+                    viewport: { selector: '.io-ox-files-main .list-view-control.toolbar-top-visible', padding: 16 } // viewport: '#viewport' or { "selector": "#viewport", "padding": 0 } // or callback function
+                }).on('dispose', function () {
+                    $(this).parent().tooltip('destroy');
+                });
+            } else {
+                parent.attr('data-original-title', title).tooltip('hide');
+            }
         },
 
         mailSubject: function (baton, ellipsis) {

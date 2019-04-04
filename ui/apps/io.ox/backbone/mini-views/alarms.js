@@ -181,9 +181,6 @@ define('io.ox/backbone/mini-views/alarms', [
             this.changedByUser = true;
             this.model.set(this.attribute, this.getAlarmsArray());
             this.changedByUser = false;
-            // trigger event, so we know the user changed the alarm
-            // used by edit view, to determine, if the default alarms should be applied on allday change
-            this.model.trigger('userChangedAlarms');
         },
         updateView: function () {
             // user induced changes don't need a redraw, the view is already in the correct state (redraw would also cause a focus loss)
@@ -341,6 +338,9 @@ define('io.ox/backbone/mini-views/alarms', [
                 .addCancelButton({ left: true })
                 .addButton({ action: 'apply', label: gt('Apply') })
                 .on('apply', function () {
+                    // trigger event, so we know the user set the alarms manually
+                    // used by edit view, to determine, if the default alarms should be applied on allday change
+                    self.model.trigger('userChangedAlarms');
                     // if the length of the array doesn't change the model doesn't trigger a change event,so we trigger it manually
                     self.model.set(self.attribute, alarmView.getAlarmsArray()).trigger('change:' + self.attribute);
                 })

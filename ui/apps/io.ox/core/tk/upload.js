@@ -60,6 +60,8 @@ define('io.ox/core/tk/upload', [
         toggleOverlay: function (state, e) {
             // always hide when mouse leaves browser
             if (e.type !== 'mouseout' && this.$el.hasClass('locked')) return;
+            // remove jittering cursor when dragging text for example
+            if (!isFileDND(e) && !this.$el.hasClass('visible')) return;
             this.$el.toggleClass('visible', state).css(this.getDimensions());
         },
 
@@ -107,6 +109,7 @@ define('io.ox/core/tk/upload', [
             var target = $(e.target).hasClass('dndignore') ? $(e.target).parent() : $(e.target);
             target.addClass('hover');
             if ($(e.target).hasClass('dropzone-overlay')) {
+                if (!isFileDND(e)) return;
                 $(e.target).addClass('locked');
                 return this.show();
             }

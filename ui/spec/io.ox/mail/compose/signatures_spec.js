@@ -11,13 +11,18 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 define([
-    'io.ox/mail/compose/model',
-    'settings!io.ox/mail'
-], function (MailModel, settings) {
+    'io.ox/core/extensions',
+    'io.ox/mail/compose/config',
+    'settings!io.ox/mail',
+    'io.ox/mail/compose/main'
+], function (ext, ConfigModel, settings) {
     'use strict';
 
     describe('Mail Compose', function () {
         describe('signatures', function () {
+
+            var signatureController = ext.point('io.ox/mail/compose/boot').get('initial-signature').perform;
+
             beforeEach(function () {
                 settings.set('defaultSignature', { value: 42, label: 'Default Signature' });
                 settings.set('defaultReplyForwardSignature', { value: 24, label: 'Default reply/forward signature' });
@@ -28,29 +33,37 @@ define([
                 settings.set('defaultReplyForwardSignature', false);
             });
             it('should use default signature on compose', function () {
-                var model = new MailModel({
+                var model = new ConfigModel({
                     mode: 'compose'
                 });
-                expect(model.get('defaultSignatureId')).to.deep.equal(settings.get('defaultSignature'));
-            });
-            //FIXME: do we still need reply/forward signatures?
-            it.skip('should use reply/forward on reply', function () {
-                var model = new MailModel({
-                    mode: 'reply'
+                return signatureController.call({ view: { signaturesLoading: $.when() }, config: model, model: new Backbone.Model() }).then(function () {
+                    expect(model.get('signatureId')).to.deep.equal(settings.get('defaultSignature'));
                 });
-                expect(model.get('defaultSignatureId')).to.deep.equal(settings.get('defaultReplyForwardSignature'));
             });
-            it.skip('should use reply/forward on reply', function () {
-                var model = new MailModel({
-                    mode: 'forward'
+            it('should use reply/forward on reply', function () {
+                var model = new ConfigModel({
+                    type: 'reply'
                 });
-                expect(model.get('defaultSignatureId')).to.deep.equal(settings.get('defaultReplyForwardSignature'));
+                return signatureController.call({ view: { signaturesLoading: $.when() }, config: model, model: new Backbone.Model() }).then(function () {
+                    expect(model.get('signatureId')).to.deep.equal(settings.get('defaultReplyForwardSignature'));
+                });
             });
-            it.skip('should use no signature on edit', function () {
-                var model = new MailModel({
-                    mode: 'edit'
+            it('should use reply/forward on reply', function () {
+                var model = new ConfigModel({
+                    type: 'forward'
                 });
-                expect(model.get('defaultSignatureId')).to.deep.equal('');
+                return signatureController.call({ view: { signaturesLoading: $.when() }, config: model, model: new Backbone.Model() }).then(function () {
+                    expect(model.get('signatureId')).to.deep.equal(settings.get('defaultReplyForwardSignature'));
+                });
+            });
+            it('should use no signature on edit', function () {
+                var model = new ConfigModel({
+                    type: 'edit',
+                    signatures: new Backbone.Collection()
+                });
+                return signatureController.call({ view: { signaturesLoading: $.when() }, config: model, model: new Backbone.Model() }).then(function () {
+                    expect(model.get('signatureId')).to.deep.equal('');
+                });
             });
         });
     });

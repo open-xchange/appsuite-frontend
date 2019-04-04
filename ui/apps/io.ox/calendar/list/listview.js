@@ -28,9 +28,8 @@ define('io.ox/calendar/list/listview', [
     ext.point('io.ox/chronos/listview/item').extend({
         id: 'appointment-class',
         index: 100,
-        draw: function (baton) {
-            // also add flags attribute, which is needed by some toolbar extensions (edit needs the isOrganizer flag for example)
-            this.closest('li').addClass('appointment').attr('data-flags', baton.model.get('flags'));
+        draw: function () {
+            this.closest('li').addClass('appointment');
         }
     });
     ext.point('io.ox/chronos/listview/item').extend({
@@ -190,7 +189,7 @@ define('io.ox/calendar/list/listview', [
 
             var i;
             this.append(
-                $('<a href="#" class="toolbar-item select-all" data-name="select-all" role="checkbox" aria-checked="false">').append(
+                $('<button type="button" class="btn btn-link select-all" data-name="select-all">').append(
                     i = $('<i class="fa fa-square-o" aria-hidden="true">'),
                     $.txt(gt('Select all'))
                 )
@@ -309,6 +308,8 @@ define('io.ox/calendar/list/listview', [
         },
 
         drawTail: function () {
+            // make sure there is no leftover busy indicator, not needed in calendar besides showing the busy animation
+            if (this.getBusyIndicator().length) this.removeBusyIndicator();
             // only render if in listview. not in search
             if (this.collection.cid.indexOf('view=list') < 0) return;
             if (this.tail) this.tail.remove();
