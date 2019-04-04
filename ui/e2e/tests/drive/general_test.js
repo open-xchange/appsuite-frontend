@@ -177,3 +177,37 @@ Scenario('[C45039] Breadcrumb navigation', async (I, users) => {
     I.waitForText('Public files', 1, '.list-view');
     I.doubleClick('Public files', '.list-view');
 });
+
+const checkFileOrder = (I, files) => {
+    files.forEach((name, index) => { I.see(name, '.list-item:nth-child(' + (index + 2) + ')'); });
+};
+
+Scenario('[C45040] Sort files', async (I, users) => {
+    const folder = await I.grabDefaultFolder('infostore');
+    const testFolder = await I.haveFolder('Testfolder', 'infostore', folder, { user: users[0] });
+    await I.haveFile(testFolder.data, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testdocument.rtf');
+    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testdocument.odt');
+    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testpresentation.ppsm');
+    prepare(I);
+    I.selectFolder('Testfolder');
+    // Begins with Name ascending order
+    checkFileOrder(I, ['document.txt', 'testdocument.odt', 'testdocument.rtf', 'testpresentation.ppsm']);
+    I.clickToolbar('Sort by');
+    I.click('Descending');
+    checkFileOrder(I, ['testpresentation.ppsm', 'testdocument.rtf', 'testdocument.odt', 'document.txt']);
+
+    I.clickToolbar('Sort by');
+    I.click('Date');
+    checkFileOrder(I, ['testpresentation.ppsm', 'testdocument.odt', 'testdocument.rtf', 'document.txt']);
+    I.clickToolbar('Sort by');
+    I.click('Ascending');
+    checkFileOrder(I, ['document.txt', 'testdocument.rtf', 'testdocument.odt', 'testpresentation.ppsm']);
+
+    I.clickToolbar('Sort by');
+    I.click('Size');
+    checkFileOrder(I, ['document.txt', 'testdocument.odt', 'testpresentation.ppsm', 'testdocument.rtf']);
+    I.clickToolbar('Sort by');
+    I.click('Descending');
+    checkFileOrder(I, ['testdocument.rtf', 'testpresentation.ppsm', 'testdocument.odt', 'document.txt']);
+});
