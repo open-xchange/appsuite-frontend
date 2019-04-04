@@ -174,3 +174,34 @@ Scenario('[C7795] Filter mail on subject', async function (I, users) {
     I.waitForElement('~Inbox, 1 unread, 1 total');
     I.seeElement('.vsplit .flag_1');
 });
+
+Scenario('[C7796] Filter mail on cc-field', async function (I, users) {
+    let [user] = users;
+    await I.haveSetting({
+        'io.ox/mail': { messageFormat: 'text' }
+    });
+
+    createFilterRule(I, 'TestCase0375', 'Cc', user.get('primaryEmail'), 'Red');
+    // save the form
+    I.click('Save');
+    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+
+    I.openApp('Mail');
+
+    // compose mail
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
+    I.click('CC');
+    I.fillField('.io-ox-mail-compose div[data-extension-id="cc"] input.tt-input', user.get('primaryEmail'));
+
+    I.fillField('.io-ox-mail-compose [name="subject"]', 'TestCase0375');
+    I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
+    I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
+
+    I.click('Send');
+    I.waitForElement('~Sent, 1 total');
+    I.waitForElement('~Inbox, 1 unread, 1 total');
+    I.seeElement('.vsplit .flag_1');
+});
