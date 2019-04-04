@@ -42,3 +42,13 @@ Scenario('[C8362] Add note', (I) => {
     I.waitForDetached('textarea.content');
     I.see('Test title.txt');
 });
+
+// Bug: File input is not selectable (display: none), which is also a pot. a11y bug
+Scenario.skip('[C8364] Upload new file', (I) => {
+    prepare(I);
+    I.clickToolbar('New');
+    I.waitForText('Upload files');
+    I.click('Upload files');
+    I.attachFile('.dropdown.open input[name=file]', 'e2e/media/files/0kb/document.txt');
+    // TODO: Continue when Bug is fixed
+});
