@@ -227,9 +227,8 @@ define('io.ox/files/settings/pane', [
                         return summary;
                     }
 
-                    if (retentionDays > 0) summaryList.append($('<li>').append(gt.format(gt.ngettext('All file versions older than 1 day will be deleted', 'All file versions older than %1$d days will be deleted', retentionDays), retentionDays)));
-                    if (maxVersions > 0) summaryList.append($('<li>').append(gt.format(gt.ngettext('When a file has more than 1 additional version, older versions of the file will be deleted', 'When a file has more than %1$d additional versions, older versions of the file will be deleted', maxVersions - 1), maxVersions - 1)));
-                    summaryList.append($('<li>').append(gt('Older versions will be deleted after next login or when a new version is created')));
+                    if (retentionDays > 0) summaryList.append($('<li>').append(gt.format(gt.ngettext('All file versions older than 1 day will be deleted after next login', 'All file versions older than %1$d days will be deleted after next login', retentionDays), retentionDays)));
+                    if (maxVersions > 0) summaryList.append($('<li>').append(gt.format(gt.ngettext('When a file has more than 1 additional version, older versions will be deleted when a new version is created', 'When a file has more than %1$d additional versions, older versions will be deleted when a new version is created', maxVersions - 1), maxVersions - 1)));
 
                     return summary;
                 };
