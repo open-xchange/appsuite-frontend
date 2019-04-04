@@ -132,3 +132,48 @@ Scenario('[C7767] Define signature position', async function (I, users) {
     });
 
 });
+
+Scenario('[C7768] Edit signature', async function (I) {
+    await I.haveSnippet({
+        content: '<p>Testsignaturecontent</p>',
+        displayname: 'Testsignaturename',
+        misc: { insertion: 'below', 'content-type': 'text/html' },
+        module: 'io.ox/mail',
+        type: 'signature'
+    });
+
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/signatures']);
+    I.waitForText('Testsignaturename');
+    I.see('Testsignaturecontent');
+
+    I.click('Edit');
+    I.waitForVisible('.contenteditable-editor iframe');
+    I.fillField('Signature name', 'Newsignaturename');
+    within({ frame: '.contenteditable-editor iframe' }, () => {
+        I.fillField('body', 'Newsignaturecontent');
+    });
+
+    I.click('Save');
+    I.waitForDetached('.modal-dialog');
+
+    // assert existance of signature
+    I.waitForText('Newsignaturename');
+    I.see('Newsignaturecontent');
+
+    // disable default siganture
+    I.selectOption('Default signature for new messages', 'No signature');
+    I.selectOption('Default signature for replies or forwards', 'No signature');
+
+    I.openApp('Mail');
+
+    I.clickToolbar('Compose');
+    I.waitForText('Signatures');
+
+    I.retry(5).click('Signatures');
+    I.click('Newsignaturename');
+
+    within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
+        I.see('Newsignaturecontent');
+    });
+
+});
