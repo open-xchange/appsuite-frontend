@@ -77,3 +77,35 @@ Scenario('[C8366] Edit description', async (I) => {
     I.waitForDetached('.modal-body');
     I.seeTextEquals('Test description changed', 'div.description');
 });
+
+const checkIfFoldersExist = (I, layout) => {
+    I.see('Documents', layout);
+    I.see('Music', layout);
+    I.see('Pictures', layout);
+    I.see('Videos', layout);
+};
+
+Scenario('[C8368] View change', async (I) => {
+    const folder = await I.grabDefaultFolder('infostore');
+    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    prepare(I);
+    checkIfFoldersExist(I);
+    I.see('document.txt');
+
+    I.clickToolbar('View');
+    I.click('Icons');
+    I.waitForElement('.file-list-view.complete.grid-layout');
+    checkIfFoldersExist(I, '.grid-layout');
+    I.see('document');
+
+    I.clickToolbar('View');
+    I.click('Tiles');
+    I.waitForElement('.file-list-view.complete.tile-layout');
+    checkIfFoldersExist(I, '.tile-layout');
+
+    I.clickToolbar('View');
+    I.click('List');
+    I.waitForElement('.file-list-view.complete');
+    checkIfFoldersExist(I);
+    I.see('document.txt');
+});
