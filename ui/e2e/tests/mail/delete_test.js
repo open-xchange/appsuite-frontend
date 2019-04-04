@@ -92,3 +92,42 @@ Scenario('[C7406] - Delete several E-Mails', async function (I, users) {
     I.waitForElement('[title="' + testrailID + ' - ' + timestamp + ' - 1"]');
     I.waitForElement('[title="' + testrailID + ' - ' + timestamp + ' - 2"]');
 });
+
+Scenario('[C265146] Delete with setting selectBeforeDelete=false', async function (I, users) {
+
+    function getTestMail(from, to, opt) {
+        opt = opt || {};
+        return {
+            attachments: [{
+                content: opt.content,
+                content_type: 'text/html',
+                disp: 'inline'
+            }],
+            from: [[from.get('displayname'), from.get('primaryEmail')]],
+            sendtype: 0,
+            subject: opt.subject,
+            to: [[to.get('displayname'), to.get('primaryEmail')]],
+            folder_id: opt.folder,
+            flags: opt.flags
+        };
+    }
+
+    const [user1, user2] = users;
+
+    await I.haveSetting(
+        'io.ox/mail//features/selectBeforeDelete', false, { user: user2 });
+    await I.haveMail(getTestMail(user1, user2, {
+        subject: 'Test Mail 1',
+        content: 'Testing is still fun'
+    }));
+    await I.haveMail(getTestMail(user1, user2, {
+        subject: 'Test Mail 2',
+        content: 'Testing is still awesome'
+    }));
+
+    I.login('app=io.ox/mail', { user: user2 });
+    let loc = locate('li.list-item.selectable').withAttr({ 'data-index': '0' });
+    I.click(loc);
+    I.clickToolbar('Delete');
+    I.waitForText('No message selected');
+});
