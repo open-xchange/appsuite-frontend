@@ -62,36 +62,106 @@ Scenario('Feature can be enabled/disabled', function (I) {
     I.seeElement('.classic-toolbar.categories');
 });
 
-Scenario('User can enable/disable/adjust feature', function (I, users) {
-    const [user] = users;
+Scenario('[C85626] Mail categories can be renamed', function (I) {
+    if (DISABLED) return;
 
-    // capabiliy enabled
-    I.login('app=io.ox/mail&cap=mail_categories', { user });
+    I.haveSetting('io.ox/mail//categories/enabled', true);
+
+    I.login('app=io.ox/mail');
     I.waitForVisible('.io-ox-mail-window');
 
-    I.selectFolder('Inbox');
-    I.clickToolbar('View');
+    A.openConfiguration(I);
+    I.seeElement(SELECTORS.dialog);
+    within(SELECTORS.dialog, async () => {
+        I.say('Rename categories', 'blue');
+        I.fillField('[data-id="uc1"] input[type="text"]', 'C85626-01');
+        I.fillField('[data-id="uc2"] input[type="text"]', 'C85626-02');
 
-    I.seeElementInDOM('.dropdown.open a[data-name="categories"]');
-    I.seeElementInDOM('.dropdown.open a[data-name="categories-config"]');
+        I.click('Save');
+    });
+    I.waitForDetached(SELECTORS.dialog);
 
-    I.click('.dropdown.open a[data-name="categories-config"]');
-    I.waitForVisible('.modal[data-point="io.ox/mail/categories/edit"]');
-    I.click('Cancel');
+    I.seeTextEquals('C85626-01', SELECTORS.toolbar + ' [data-id="uc1"] .category-name');
+    I.seeTextEquals('C85626-02', SELECTORS.toolbar + ' [data-id="uc2"] .category-name');
+});
 
-    I.logout();
+Scenario('[C85626] Categories can be enabled or disabled', function (I) {
+    if (DISABLED) return;
 
-    // capabiliy disabled
-    I.login('app=io.ox/mail&cap=-mail_categories', { user });
+    I.haveSetting('io.ox/mail//categories/enabled', true);
+
+    I.login('app=io.ox/mail');
     I.waitForVisible('.io-ox-mail-window');
 
-    I.selectFolder('Inbox');
-    I.clickToolbar('View');
+    I.say('Disable all categories except "General"', 'blue');
+    A.openConfiguration(I);
+    I.seeElement(SELECTORS.dialog);
+    within(SELECTORS.dialog, async () => {
+        // custom checkboxes so we use labels for toggling
+        I.click(SELECTORS.checkbox2);
+        I.click(SELECTORS.checkbox3);
+        I.click(SELECTORS.checkbox4);
+        I.click(SELECTORS.checkbox5);
+        I.click(SELECTORS.checkbox6);
 
-    I.dontSeeElementInDOM('.dropdown.open a[data-name="categories"]');
-    I.dontSeeElementInDOM('.dropdown.open a[data-name="categories-config"]');
+        I.click('Save');
+    });
+    I.waitForDetached(SELECTORS.dialog);
 
-    I.pressKey('Escape');
+    I.say('Ensure all tabss except "General" are hidden', 'blue');
+    I.seeElement('[data-id="general"]', SELECTORS.toolbar);
+    I.dontSeeElement('[data-id="promotion"]', SELECTORS.toolbar);
+    I.dontSeeElement('[data-id="social"]', SELECTORS.toolbar);
+    I.dontSeeElement('[data-id="purchases"]', SELECTORS.toolbar);
+    I.dontSeeElement('[data-id="uc1"]', SELECTORS.toolbar);
+    I.dontSeeElement('[data-id="uc2"]', SELECTORS.toolbar);
 
-    I.logout();
+    I.say('Enable all categories except "General"', 'blue');
+    A.openConfiguration(I);
+    I.seeElement(SELECTORS.dialog);
+    within(SELECTORS.dialog, async () => {
+        I.click(SELECTORS.checkbox2);
+        I.click(SELECTORS.checkbox3);
+        I.click(SELECTORS.checkbox4);
+        I.click(SELECTORS.checkbox5);
+        I.click(SELECTORS.checkbox6);
+
+        I.click('Save');
+    });
+    I.waitForDetached(SELECTORS.dialog);
+
+    I.say('Check names of custom categories', 'blue');
+    I.seeElement('[data-id="general"]', SELECTORS.toolbar);
+    I.seeElement('[data-id="promotion"]', SELECTORS.toolbar);
+    I.seeElement('[data-id="social"]', SELECTORS.toolbar);
+    I.seeElement('[data-id="purchases"]', SELECTORS.toolbar);
+    I.seeElement('[data-id="uc1"]', SELECTORS.toolbar);
+    I.seeElement('[data-id="uc2"]', SELECTORS.toolbar);
+});
+
+Scenario('[C85626] Support different aspects of categories', function (I) {
+    if (DISABLED) return;
+
+    I.haveSetting('io.ox/mail//categories/enabled', true);
+
+    I.login('app=io.ox/mail');
+    I.waitForVisible('.io-ox-mail-window');
+
+    A.openConfiguration(I);
+    I.seeElement(SELECTORS.dialog);
+    within(SELECTORS.dialog, async () => {
+
+        I.say('First category is active', 'blue');
+        I.seeCheckboxIsChecked(locate('input').first('[type="checkbox"]'));
+
+        I.say('First category is readonly', 'blue');
+        var classlist = await I.grabAttributeFrom(SELECTORS.checkbox1, 'class');
+        expect(classlist.toString()).to.contain('disabled');
+
+        I.say('Shows category description', 'blue');
+        I.seeTextEquals('Promotion Description', '.description');
+
+        I.click('Cancel');
+    });
+    I.waitForDetached(SELECTORS.dialog);
 });
