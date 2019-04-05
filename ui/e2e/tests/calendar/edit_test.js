@@ -140,6 +140,53 @@ Scenario.skip('[C7450] Edit private appointment', async function (I) {
 
 });
 
+Scenario('[C7451] Edit yearly series via dubbleclick', async function (I) {
+    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    const time = moment('1612', 'DDMM').add(10, 'hours');
+    await I.haveAppointment({
+        folder:  folder,
+        summary: 'Testappointment',
+        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        rrule: 'FREQ=YEARLY;BYMONTH=12;BYMONTHDAY=16'
+    });
+
+    I.login('app=io.ox/calendar');
+    I.waitForElement('~Go to next month');
+
+    // select the next 16.th december via the mini calendar
+    const diffMonth = time.diff(moment().startOf('month'), 'months');
+    for (let i = 0; i < diffMonth; i++) I.click('~Go to next month', '.window-sidepanel');
+    I.click(`~${time.format('l, dddd')}, CW ${time.week()}`, '.window-sidepanel');
+
+    I.clickToolbar('View');
+    I.click('Week');
+
+    I.waitForVisible(locate('.appointment').inside(`.day:nth-child(${time.weekday() + 2})`).inside('.page.current'));
+    I.click('.appointment', '.page.current');
+    I.click('Edit', '.io-ox-sidepopup');
+    I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
+    I.click('Series');
+
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.click('~Date (M/D/YYYY)');
+    I.pressKey(['Control', 'a']);
+    I.pressKey(time.add(1, 'day').format('l'));
+    I.pressKey('Enter');
+
+    I.click('Save');
+    I.waitForDetached('.io-ox-calendar-edit-window');
+
+    I.waitForVisible(locate('.appointment').inside(`.day:nth-child(${time.weekday() + 2})`).inside('.page.current'));
+
+    time.add(1, 'year');
+    for (let i = 0; i < 12; i++) I.click('~Go to next month', '.window-sidepanel');
+    I.click(`~${time.format('l, dddd')}, CW ${time.week()}`, '.window-sidepanel');
+
+    I.waitForVisible(locate('.appointment').inside(`.day:nth-child(${time.weekday() + 2})`).inside('.page.current'));
+});
+
 Scenario('[C7464] Change appointment in shared folder as guest', async function (I, users) {
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
     const time = moment().startOf('week').add(3, 'days').add(10, 'hours');
