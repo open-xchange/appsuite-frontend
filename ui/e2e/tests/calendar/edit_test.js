@@ -26,6 +26,75 @@ After(async (users) => {
     await users.removeAll();
 });
 
+Scenario('[C7449] Move appointment to folder', async function (I) {
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
+    const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    await I.haveFolder('New calendar', 'event', defaultFolderId);
+    const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
+    await I.haveAppointment({
+        folder:  defaultFolderId,
+        summary: 'Testappointment',
+        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
+    });
+
+    I.login('app=io.ox/calendar');
+
+    if (!moment().isSame(time, 'month')) I.retry(5).click('~Go to next month', '.window-sidepanel');
+    I.retry(5).click(`~${time.format('l, dddd')}, CW ${time.week()}`, '.window-sidepanel');
+
+    // disable the other folder
+    I.waitForElement('~New calendar');
+    I.click('[title="New calendar"] .color-label');
+
+    // open all views and load the appointment there
+    ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForElement('.page.current .appointment');
+        I.see('Testappointment');
+    });
+
+    I.click('.appointment', '.page.current');
+    I.waitForVisible('.io-ox-sidepopup');
+
+    I.waitForVisible(locate('~More actions').inside('.io-ox-sidepopup'));
+    I.click('~More actions', '.io-ox-sidepopup');
+    I.click('Move');
+
+    I.waitForVisible('.modal-dialog');
+    within('.modal-dialog', function () {
+        I.click('.folder-arrow', '~My calendars');
+        I.waitForVisible('~New calendar');
+        I.click('~New calendar');
+        I.wait(0.5); // wait until disabled is removed
+        I.click('Move');
+    });
+    I.waitForDetached('.modal-dialog');
+
+    // open all views and verify that the appointment is gone
+    ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForInvisible('.page.current .appointment');
+        I.dontSee('Testappointment');
+    });
+
+    // enable the other folder
+    I.click('[title="New calendar"] .color-label');
+
+    // open all views and verify that the appointment is there again
+    ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForElement('.page.current .appointment');
+        I.see('Testappointment');
+    });
+});
+
 // TODO Skip this as the double click does not work. See Bug 64313
 Scenario.skip('[C7450] Edit private appointment', async function (I) {
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
