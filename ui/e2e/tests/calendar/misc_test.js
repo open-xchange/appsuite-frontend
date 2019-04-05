@@ -142,8 +142,6 @@ Scenario('[C207509] Year view', async (I) => {
     // Expected Result: The respective month will be opened in month view
     I.waitForVisible('.monthview-container');
     I.see('January', '.monthview-container');
-
-    I.logout();
 });
 
 Scenario('[C236795] Visibility Flags', (I) => {
@@ -178,30 +176,28 @@ Scenario('[C236795] Visibility Flags', (I) => {
 
     };
 
-    const getAppointmentLocator = function (subject, visibilityLabel) {
-        const appointmentLocator = locate('.appointment')
-            .withDescendant(
-                locate('div.title')
-                    .withText(subject))
-            .inside('.io-ox-pagecontroller.current .scrollpane');
-        if (!visibilityLabel) {
+    const getAppointmentLocator = function (subject, labelAndIcon) {
+        const appointmentLocator = `.appointment div[title="${subject}"]`;
+
+        if (!labelAndIcon) {
             return appointmentLocator;
         }
-        return appointmentLocator.withDescendant(locate('span').withAttr({ title: visibilityLabel }));
+        const [label, iconClass] = labelAndIcon;
+        return `${appointmentLocator} span[title="${label}"] i${iconClass}`;
     };
 
     const checkAppointment = (subject, visibility, time) => {
         createAppointment(subject, moment().startOf('isoWeek').format('M/D/YYYY'), time, visibility);
         // PRIVATE => Private
         // CONFIDENTIAL => Secret
-        let visibilityLabel;
+        let labelAndIcon;
         if (visibility === 'PRIVATE') {
-            visibilityLabel = 'Private';
-        } else if (visibility === 'CONFIDENTIAL') visibilityLabel = 'Confidential';
+            labelAndIcon = ['Private', '.fa-user-circle'];
+        } else if (visibility === 'CONFIDENTIAL') labelAndIcon = ['Confidential', '.fa-lock'];
 
         // Expected Result: You created 3 appointsments with visivilities of Public, Private, Secret
         // Each visibility is displayed as in the example
-        I.seeElement(getAppointmentLocator(subject, visibilityLabel));
+        I.waitForVisible(getAppointmentLocator(subject, labelAndIcon));
     };
 
     I.login(['app=io.ox/calendar&perspective=week:week']);
@@ -212,8 +208,6 @@ Scenario('[C236795] Visibility Flags', (I) => {
     checkAppointment('Standard visibility', 'PUBLIC', '12:00 PM');
     checkAppointment('Private visibility', 'CONFIDENTIAL', '1:00 PM');
     checkAppointment('Secret visibility', 'PRIVATE', '2:00 PM');
-
-    I.logout();
 });
 
 Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (I) => {
@@ -284,8 +278,6 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
     // Expected Result: The selected year, month and day is shown in the view on the right
     I.see(`July ${minYear + 8}`, '.weekview-container .info');
     I.see('17', '.weekview-container .weekview-toolbar .weekday');
-
-    I.logout();
 });
 
 Scenario('[C244785] Open event from invite notification in calendar', async (I, users) => {
@@ -345,6 +337,12 @@ Scenario('[C244785] Open event from invite notification in calendar', async (I, 
     I.see(`${startTime.format('h:mm')} – ${endTime.format('h:mm')} ${startTime.format('A')}CEST`, '.io-ox-sidepopup .time');
     I.see(`${userA.userdata.sur_name}, ${userA.userdata.given_name}`, '.io-ox-sidepopup');
     I.see(`${userB.userdata.sur_name}, ${userB.userdata.given_name}`, '.io-ox-sidepopup');
+});
 
-    I.logout();
+Scenario('[C252158] All my public appointments', (I, users) => {
+    const [userA, userB] = users;
+
+    I.login(['app=io.ox/calendar&perspective=week:week'], { user: userA });
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
 });
