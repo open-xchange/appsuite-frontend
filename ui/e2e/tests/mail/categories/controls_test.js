@@ -10,6 +10,10 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
+const expect = require('chai').expect;
+// depends on https://gitlab.open-xchange.com/frontend/Infrastructure/preview_apps/issues/5
+const DISABLED = true;
+
 Feature('Mail categories');
 
 Before(async function (users) {
@@ -20,23 +24,35 @@ After(async function (users) {
     await users.removeAll();
 });
 
+const SELECTORS = {
+    toolbar: '.classic-toolbar.categories',
+    dialog: 'body > .modal[data-point="io.ox/mail/categories/edit"',
+    checkbox1: { xpath: "(.//input[./@type = 'checkbox'])[1]" },
+    checkbox2: { xpath: '(.//label)[2]' },
+    checkbox3: { xpath: '(.//label)[3]' },
+    checkbox4: { xpath: '(.//label)[4]' },
+    checkbox5: '.category-item[data-id="uc1"] > .checkbox.custom .toggle',
+    checkbox6: '.category-item[data-id="uc2"] > .checkbox.custom .toggle'
+};
+
 const A = {
     toggle: function (I) {
         I.clickToolbar('View');
         I.waitForVisible('a[data-name="categories"]', 'body > .dropdown');
         I.click('a[data-name="categories"]', 'body > .dropdown');
+    },
+    openConfiguration: function (I) {
+        I.clickToolbar('View');
+        I.waitForVisible('a[data-name="categories-config"]', 'body > .dropdown');
+        I.click('a[data-name="categories-config"]', 'body > .dropdown');
     }
 };
 
-// depends on https://gitlab.open-xchange.com/frontend/Infrastructure/preview_apps/issues/5
-const DISABLED = true;
-
-Scenario('can be enabled and disabled', function (I, users) {
+Scenario('Feature can be enabled/disabled', function (I) {
     if (DISABLED) return;
-    const [user] = users;
     I.haveSetting('io.ox/mail//categories/enabled', true);
 
-    I.login('app=io.ox/mail&cap=mail_categories', { user });
+    I.login('app=io.ox/mail');
     I.waitForVisible('.io-ox-mail-window');
 
     I.seeElement('.classic-toolbar.categories');
@@ -44,8 +60,6 @@ Scenario('can be enabled and disabled', function (I, users) {
     I.dontSeeElement('.classic-toolbar.categories');
     A.toggle(I);
     I.seeElement('.classic-toolbar.categories');
-
-    I.logout();
 });
 
 Scenario('User can enable/disable/adjust feature', function (I, users) {
