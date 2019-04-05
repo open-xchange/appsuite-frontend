@@ -57,3 +57,13 @@ Scenario('[C8375] Public files: Move a file', async (I) => {
     I.click('~Public files', '.folder-picker-dialog');
     I.seeElement('.btn[data-action="ok"][disabled]');
 });
+
+Scenario('[C8376] Add a subfolder', async (I) => {
+    prepare(I);
+    I.click('[title="Actions for My files"]');
+    I.click('Add new folder', '.smart-dropdown-container');
+    I.waitForText('Add new folder', 1, '.modal-dialog');
+    I.fillField('Folder name', 'Testfolder');
+    I.click('Add');
+    I.waitForText('Testfolder', 1, '.file-list-view');
+});
