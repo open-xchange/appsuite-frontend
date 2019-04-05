@@ -567,6 +567,82 @@ Scenario('[C7423] Create daily recurring appointment every day ends after 5', as
 
 });
 
+Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12', async function (I) {
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
+    // pick the second monday in the following month
+    const date = moment().add(1, 'month').startOf('month').weekday(1);
+    if (date.isSame(moment(), 'month')) date.add(1, 'week');
+
+    I.login('app=io.ox/calendar');
+
+    // and select the correct date
+    I.retry(5).click('~Go to next month', '.window-sidepanel');
+    I.click(`~${date.format('l, dddd')}, CW ${date.week()}`, '.window-sidepanel');
+
+    I.clickToolbar('New');
+    I.waitForText('Subject');
+    I.fillField('Subject', 'Testappointment');
+
+    I.click('~Date (M/D/YYYY)');
+    I.pressKey(['Control', 'a']);
+    I.pressKey(date.format('l'));
+    I.pressKey('Enter');
+
+    I.click('Repeat', '.io-ox-calendar-edit-window');
+    I.click('Every Monday.');
+
+    I.waitForElement('.modal-dialog');
+
+    I.selectOption('.modal-dialog [name="recurrence_type"]', 'Daily');
+    I.fillField('Interval', 2);
+    I.selectOption('.modal-dialog [name="until change:occurrences"]', 'After a number of occurrences');
+    I.waitForElement('.modal-dialog [name="occurrences"]');
+    I.fillField('.modal-dialog [name="occurrences"]', '8'); // just repeat 8 times to stay in the current month
+    I.pressKey('Enter');
+
+    I.see('Every 2 days.');
+
+    I.click('Apply', '.modal-dialog');
+
+    I.waitForDetached('.modal-dialog');
+    I.see('Every 2 days.');
+
+    // create
+    I.click('Create', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+
+    // open all views and load the appointments there
+    I.clickToolbar('View');
+    I.click('Month');
+    I.waitForVisible('.appointment', undefined, '.page.current');
+    I.see('Testappointment');
+    I.seeNumberOfVisibleElements('.page.current .appointment', 8);
+
+    // first week
+    I.clickToolbar('View');
+    I.click('Week');
+    I.waitForVisible('.appointment', undefined, '.page.current');
+    I.see('Testappointment');
+    I.seeNumberOfVisibleElements('.page.current .appointment', 3);
+
+    // second week
+    I.click('~Next Week', '.page.current');
+    I.waitForVisible('.appointment', undefined, '.page.current');
+    I.see('Testappointment');
+    I.seeNumberOfVisibleElements('.page.current .appointment', 4);
+
+    // third week
+    I.click('~Next Week', '.page.current');
+    I.waitForVisible('.appointment', undefined, '.page.current');
+    I.see('Testappointment');
+    I.seeNumberOfVisibleElements('.page.current .appointment', 1);
+
+});
+
 Scenario('[C274537] Support use-count calculation on Appointment create with Groups', async function (I, users) {
     let testrailID = 'C274537';
     var timestamp = Math.round(+new Date() / 1000);
