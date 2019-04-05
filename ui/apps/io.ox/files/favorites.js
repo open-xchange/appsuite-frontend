@@ -19,70 +19,208 @@ define('io.ox/files/favorites', [
     'io.ox/core/upsell',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (TreeNodeView, api, filesAPI, ext, upsell, settings, gt) {
+], function (TreeNodeView, folderAPI, filesAPI, ext, upsell, settings, gt) {
 
     'use strict';
 
     var module = 'infostore';
 
+    var FOLDERS_INFOSTORE_PATH = 'favorites/infostore';
+    var FILESS_INFOSTORE_PATH = 'favoriteFiles/infostore';
+
     // skip if no capability (use capabilities from upsell to work in demo mode)
     if (!upsell.has('infostore')) return;
 
     var // register collection
-        id = 'virtual/favorites/infostore',
-        model = api.pool.getModel(id),
-        collection = api.pool.getCollection(id),
+        collectionId = 'virtual/favorites/infostore',
+        model = folderAPI.pool.getModel(collectionId),
+        collection = folderAPI.pool.getCollection(collectionId),
         // track folders without permission or that no longer exist
         invalid = {};
 
+    // Add infos for the filesview
+    model.set('title', gt('Favorites'));
+    model.set('folder_id', '9');
+    model.set('own_rights', 1);
+    model.set('standard_folder', true);
+
     function storeFolders(elements) {
-        settings.set('favorites/infostore', elements).save();
+        settings.set(FOLDERS_INFOSTORE_PATH, elements).save();
     }
 
     function storeFiles(elements) {
-        settings.set('favoriteFiles/infostore', elements).save();
+        settings.set(FILESS_INFOSTORE_PATH, elements).save();
+    }
+
+    function addFavoriteIndex(model) {
+        var fileModel = new filesAPI.Model(model.toJSON());
+        fileModel.set('index/' + collectionId, true, { silent: true });
+        return fileModel;
     }
 
     /**
-     * Reads all models from folder collection (virtual/favorties/infostore)
-     * and pushes them into store function
+     * Adds folder to the collection
+     * @param {Integer} id
+     *
+     * Additional parameters
+     * @param {Folder|File|false} model
+     *  Folder model
      */
-    function storeCollection() {
+    function addFavorite(id, model) {
+
+        model = model || folderAPI.pool.getModel(id);
+
+        addFavorites([model]);
+    }
+
+    function addFavorites(models) {
+
+        if (!models || models.length === 0) return;
+
+        var folderSettings = settings.get(FOLDERS_INFOSTORE_PATH, []);
+        var fileSettings = settings.get(FILESS_INFOSTORE_PATH, []);
+
+        var updateFolders = false;
+        var updateFiles = false;
+        var collectionModels = [];
+
+        models.forEach(function (model) {
+            if (model && model.attributes && model.attributes.id) {
+                if (model.attributes.folder_name) {
+
+                    if (folderSettings.indexOf(model.attributes.id) < 0) {
+                        folderSettings.push(model.attributes.id);
+                        collectionModels.push(addFavoriteIndex(model));
+                        updateFolders = true;
+                    }
+
+                } else {
+
+                    var file = {
+                        id: model.attributes.id,
+                        folder_id: model.attributes.folder_id
+                    };
+
+                    if (!containsFile(fileSettings, file)) {
+                        fileSettings.push(file);
+                        collectionModels.push(addFavoriteIndex(model));
+                        updateFiles = true;
+                    }
+                }
+            }
+        });
+
+        if (updateFolders) {
+            storeFolders(folderSettings);
+        }
+        if (updateFiles) {
+            storeFiles(fileSettings);
+        }
+
+        if (collectionModels.length > 0) {
+            collection.add(collectionModels);
+            triggerCollectionUpdate();
+        }
+
+    }
+
+    function removeFavorites(models) {
+
+        if (!models || models.length === 0) return;
+
         var folders = [];
         var files = [];
 
-        _.each(collection.models, function (model) {
-            if (model.attributes && model.attributes.id) {
-                if (model.attributes.folder_name) {
-                    folders.push(model.attributes.id);
-                } else {
+        models.forEach(function (obj) {
+            var id = obj;
+            if (typeof obj === 'object' && obj.attributes && obj.attributes.id) {
+                if (obj.attributes.folder_name) {
+                    folders.push(obj.id);
+                } else if (obj.attributes.folder_id) {
+                    files.push({
+                        id: obj.attributes.id,
+                        folder_id: obj.attributes.folder_id
+                    });
+                }
+            } else if (typeof obj === 'object' && obj.id && obj.folder_id) {
+                files.push({
+                    id: obj.id,
+                    folder_id: obj.folder_id
+                });
+            } else {
+
+                var model = filesAPI.pool.get('detail').get(id);
+                if (model && model.attributes && model.attributes.folder_id) {
                     files.push({
                         id: model.attributes.id,
                         folder_id: model.attributes.folder_id
                     });
+                } else {
+                    model = folderAPI.pool.getModel(id);
+                    if (model && model.attributes && model.attributes.folder_name) {
+                        folders.push(id);
+                    }
                 }
             }
         });
-        // trigger to update sorting in myFavoriteListView (drive)
-        collection.trigger('update:collection');
-        storeFolders(folders);
-        storeFiles(files);
+        var updateCollection = false;
+        if (folders.length > 0) {
+
+            var folderSettings = settings.get(FOLDERS_INFOSTORE_PATH, []);
+
+            var newFolderSettings = folderSettings.filter(function (folder) {
+                return folders.indexOf(folder) < 0;
+            });
+            if (folderSettings.length !== newFolderSettings.length) {
+                updateCollection = true;
+                storeFolders(newFolderSettings);
+            }
+        }
+
+        if (files.length > 0) {
+
+            var fileSettings = settings.get(FILESS_INFOSTORE_PATH, []);
+
+            var newFileSettings = fileSettings.filter(function (file) {
+                return !containsFile(files, file);
+            });
+            if (fileSettings.length !== newFileSettings.length) {
+                updateCollection = true;
+                storeFiles(newFileSettings);
+            }
+
+        }
+
+        if (updateCollection) {
+            collection.remove(models);
+            triggerCollectionUpdate();
+        }
+    }
+
+    function containsFile(files, file) {
+        return _.find(files, function (removeFile) {
+            return removeFile.id === file.id && removeFile.folder_id === file.folder_id;
+        });
     }
 
     /**
-     * Definition for virtual folder
+     * Trigger to update sorting in myFavoriteListView (drive).
      */
-    api.virtual.add(id, function () {
+    function triggerCollectionUpdate() {
+        collection.trigger('update:collection');
+    }
+
+    function refreshCollection() {
         var cache = !collection.expired && collection.fetched;
 
         // get saved favorites from setting
-        var folderSettings = settings.get('favorites/infostore', []);
-        var fileSettings = settings.get('favoriteFiles/infostore', []);
+        var folderSettings = settings.get(FOLDERS_INFOSTORE_PATH, []);
+        var fileSettings = settings.get(FILESS_INFOSTORE_PATH, []);
 
         var folderDef = $.Deferred();
         var fileDef = $.Deferred();
 
-        api.multiple(folderSettings, { errors: true, cache: cache }).then(function (response) {
+        folderAPI.multiple(folderSettings, { errors: true, cache: cache }).then(function (response) {
             // remove non-existent entries
             var responseList = _(response).filter(function (item) {
                 if (item.error && /^(FLD-0008|FLD-0003|ACC-0002|FLD-1004|IMAP-1002|FILE_STORAGE-0004)$/.test(item.code)) {
@@ -102,69 +240,70 @@ define('io.ox/files/favorites', [
 
         return $.when(folderDef, fileDef).then(function (favoriteFolders, favoriteFiles) {
             var returnList = [];
-
+            var folders = [];
+            var files = [];
             _.each(favoriteFolders, function (folder) {
-                api.injectIndex.bind(api, folder);
-                var folderModel = api.pool.getModel(folder.id);
-                // convert folder model into file model
-                folderModel = new filesAPI.Model(folderModel.toJSON());
-                filesAPI.pool.add('detail', folderModel.toJSON());
-                returnList.push(folderModel);
+                if (folder) {
+                    folderAPI.injectIndex.bind(folderAPI, folder);
+                    var folderModel = folderAPI.pool.getModel(folder.id);
+                    // convert folder model into file model
+                    folderModel = new filesAPI.Model(folderModel.toJSON());
+                    filesAPI.pool.add('detail', folderModel.toJSON());
+                    returnList.push(folderModel);
+
+                    folders.push(folder.id);
+                }
             });
 
             _.each(favoriteFiles, function (file) {
-                api.injectIndex.bind(api, file);
-                returnList.push(file);
+                if (file) {
+                    folderAPI.injectIndex.bind(folderAPI, file);
+                    returnList.push(file);
+
+                    files.push({
+                        id: file.attributes.id,
+                        folder_id: file.attributes.folder_id
+                    });
+                }
             });
+
+            storeFolders(folders);
+            storeFiles(files);
 
             collection.reset(returnList);
             collection.fetched = true;
             collection.expired = false;
 
             model.set('subscr_subflds', favoriteFolders.length > 0);
-            // _.defer(storeCollection);
-            storeCollection();
+            triggerCollectionUpdate();
 
             return returnList;
         });
+    }
+
+    /**
+     * Definition for virtual folder
+     */
+    folderAPI.virtual.add(collectionId, function () {
+        return refreshCollection();
     });
 
-    // respond to change events
-    collection.on('add', function (model) {
-        delete invalid[model.id];
-    });
+    // Folder API listener ----------------------------------------------------
 
-    collection.on('add remove change:id', storeCollection);
-
-    // Add infos for the filesview
-    model.set('title', gt('Favorites'));
-    model.set('folder_id', '9');
-    model.set('own_rights', 1);
-    model.set('standard_folder', true);
-
-    // Register listener for folder changes
-    api.on('rename', function (id, data) {
+    folderAPI.on('rename', function (id, data) {
         var changedModel = collection.get(_.cid(data));
         if (changedModel) {
             changedModel.set('title', data.title);
-            storeCollection();
+            triggerCollectionUpdate();
         }
     });
-    api.on('remove', function (id, data) {
-        collection.remove(_.cid(data));
-        storeCollection();
+
+    folderAPI.on('remove move collection:remove', function (id, data) {
+        removeFavorites([data]);
     });
 
-    // Register listener for file changes
-    filesAPI.on('move', function (objects) {
-        _.each(objects, function (obj) {
-            var id = obj;
-            if (typeof obj === 'object') {
-                id = (obj.folder_id !== undefined) ? _.cid(obj) : obj.id;
-            }
-            collection.remove(id);
-        });
-    });
+    // Files API listener -----------------------------------------------------
+
     filesAPI.on('rename description add:version remove:version change:version', function (obj) {
         var id = obj;
         if (typeof obj === 'object') {
@@ -176,18 +315,22 @@ define('io.ox/files/favorites', [
         filesAPI.get(obj).done(function (file) {
             var changedModel = collection.get(id);
             if (changedModel) {
-                changedModel.set('com.openexchange.file.sanitizedFilename', file.filename);
+                changedModel.set('com.openexchange.file.sanitizedFilename', file['com.openexchange.file.sanitizedFilename']);
                 changedModel.set('title', file.filename);
-                storeCollection();
+                triggerCollectionUpdate();
             }
         });
     });
-    filesAPI.on('remove:file', function (list) {
-        _.each(list, function (model) {
-            collection.remove(model.id);
-        });
-        storeCollection();
+
+    filesAPI.on('remove:file favorites:remove move', function (list) {
+        removeFavorites(list);
     });
+
+    filesAPI.on('favorites:add', function (files) {
+        addFavorites(files);
+    });
+
+    // Folder tree view extensions --------------------------------------------
 
     var extension = {
         id: 'favorites',
@@ -197,8 +340,8 @@ define('io.ox/files/favorites', [
             this.append(
                 new TreeNodeView({
                     empty: false,
-                    folder: id,
-                    indent: !api.isFlat(module),
+                    folder: collectionId,
+                    indent: !folderAPI.isFlat(module),
                     open: false,
                     parent: tree,
                     sortable: true,
@@ -208,106 +351,53 @@ define('io.ox/files/favorites', [
                 })
                     .render().$el.addClass('favorites')
             );
-
-            // store new order
-            tree.on('sort:' + id, function () {
-                storeCollection();
-            });
         }
     };
 
+    // Add folder tree view to drive app
     ext.point('io.ox/core/foldertree/infostore/app').extend(_.extend({}, extension));
+    // Add foler tree view to popup dialog e.g. Portal 'Open Docuemnt' dialog
     ext.point('io.ox/core/foldertree/infostore/popup').extend(_.extend({}, extension));
 
-    /**
-     * Removes specified model from collection
-     * @param {Integer} id
-     *  folder id or file cid
-     * @param {Boolean} isFile
-     *  if the element is a file
-     *
-     * Additional parameters
-     * @param {File|Folder|false} model
-     *  Folder or File model
-     */
-    function remove(id, model) {
-        var collectionId,
-            collection;
+    //
+    // Folder View ------------------------------------------------------------
+    //
 
-        // Load file/folder model from pool
-        if (!model) {
-            model = filesAPI.pool.get('detail').get(id);
-            if (!model) {
-                model = api.pool.getModel(id);
-            }
-            collectionId = 'virtual/favorites/infostore';
+    /**
+     * Add contextmenu entry 'Add to Favorites' or 'Remove from favorites'
+     *
+     * @param {Element} node to add the context menu entry
+     * @param {Object} options
+     */
+    function addContextMenuEntry(node, options) {
+
+        if (options.data.module !== 'infostore') return;
+
+        var link = $('<a href="#" role="menuitem">').attr('data-action', options.action).text(options.text).on('click', $.preventDefault); // always prevent default
+
+        if (options.enabled) {
+            link.on('click', options.data, options.handler);
+        } else {
+            link.attr('aria-disabled', true).removeAttr('tabindex').addClass('disabled');
         }
 
-        collection = api.pool.getCollection(collectionId);
-        collection.remove(model);
+        node.append($('<li role="presentation">').append(link));
     }
-
-    /**
-     * Adds folder to the collection
-     * @param {Integer} id
-     *
-     * Additional parameters
-     * @param {Folder|false} model
-     *  Folder model
-     */
-    function add(id, model) {
-        model = model || api.pool.getModel(id);
-        if (!model.get('module')) return;
-        var collectionId = 'virtual/favorites/infostore',
-            collection = api.pool.getCollection(collectionId);
-        // convert folder model into file model
-        model = new filesAPI.Model(model.toJSON());
-        model.set('index/' + collectionId, true, { silent: true });
-        collection.add(model);
-        collection.sort();
-    }
-
-    //
-    // Folder API listeners
-    //
-
-    api.on('collection:remove', function (id, model) {
-        remove(id, model);
-    });
 
     /**
      * Function for add listener
      * @param {Event} e
      */
-    function onAdd(e) {
-        add(e.data.id);
+    function onClickAdd(e) {
+        addFavorite(e.data.id);
     }
 
     /**
      * Function for remove listener
      * @param {Event} e
      */
-    function onRemove(e) {
-        remove(e.data.id, e.data.isFile);
-    }
-
-    function a(action, text) {
-        return $('<a href="#" role="menuitem">')
-            .attr('data-action', action).text(text)
-            // always prevent default
-            .on('click', $.preventDefault);
-    }
-
-    function disable(node) {
-        return node.attr('aria-disabled', true).removeAttr('tabindex').addClass('disabled');
-    }
-
-    function addLink(node, options) {
-        if (options.data.module !== 'infostore') return;
-        var link = a(options.action, options.text);
-        if (options.enabled) link.on('click', options.data, options.handler); else disable(link);
-        node.append($('<li role="presentation">').append(link));
-        return link;
+    function onClickRemove(e) {
+        removeFavorites([e.data.id]);
     }
 
     ext.point('io.ox/core/foldertree/contextmenu/default').extend({
@@ -320,8 +410,8 @@ define('io.ox/files/favorites', [
                 module = baton.module,
 
                 // stored favorites from settings
-                favorites = settings.get('favorites/infostore', []),
-                favoriteFiles = settings.get('favoriteFiles/infostore', []);
+                favorites = settings.get(FOLDERS_INFOSTORE_PATH, []),
+                favoriteFiles = settings.get(FILESS_INFOSTORE_PATH, []);
 
             _.each(favoriteFiles, function (file) {
                 favorites.push(file.id);
@@ -334,22 +424,21 @@ define('io.ox/files/favorites', [
                 }
             });
 
-
             // don't offer for trash folders
-            if (api.is('trash', baton.data)) return;
+            if (folderAPI.is('trash', baton.data)) return;
 
-            addLink(this, {
+            addContextMenuEntry(this, {
                 action: 'toggle-infostore-favorite',
                 data: { id: id, module: module },
                 enabled: true,
-                handler: isFavorite ? onRemove : onAdd,
+                handler: isFavorite ? onClickRemove : onClickAdd,
                 text: isFavorite ? gt('Remove from favorites') : gt('Add to favorites')
             });
         }
     });
 
     return {
-        add: add,
-        remove: remove
+        add: addFavorite,
+        remove: removeFavorites
     };
 });
