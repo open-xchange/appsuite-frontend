@@ -181,7 +181,7 @@ define('io.ox/core/api/tab', [
         }
 
         // if location is switched to logoutLocation, initialize current window as a new parent tab
-        if (returnValue.windowType === 'child' && location.hash.indexOf('office?app') < 0) return;
+        if (returnValue.windowType === 'child' && location.href.indexOf('office?app') < 0) return;
 
         return returnValue;
     };
@@ -302,8 +302,15 @@ define('io.ox/core/api/tab', [
      * @returns {Window} newly created window
      */
     TabHandling.openTab = function (url, windowObject) {
+        var urlToOpen = url || ox.abs + ox.root + '/busy.html', windowName;
+
         if (_.isEmpty(windowObject)) windowObject = _.pick(TabHandling, 'windowName', 'windowType', 'parentName');
-        return window.open(url || ox.abs + ox.root + '/busy.html', JSON.stringify(_.pick(windowObject, 'windowName', 'windowType', 'parentName')));
+        windowName = JSON.stringify(_.pick(windowObject, 'windowName', 'windowType', 'parentName'));
+
+        // try to open via window.opener property
+        if (windowObject.windowType === 'parent' && window.opener && window.opener.name) windowName = window.opener.name;
+
+        return window.open(urlToOpen, windowName);
     };
 
     /**
@@ -356,10 +363,11 @@ define('io.ox/core/api/tab', [
      */
     TabHandling.openParent = function (urlOrParams, options) {
         var url = _.isString(urlOrParams) ? urlOrParams : TabHandling.createURL(urlOrParams, options);
-        TabHandling.openTab(url, {
+        var newWindow = TabHandling.openTab(url, {
             windowName: TabHandling.parentName,
             windowType: 'parent'
         });
+        if (!window.opener) window.opener = newWindow;
     };
 
     /**
