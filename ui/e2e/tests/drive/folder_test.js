@@ -41,3 +41,19 @@ Scenario('[C8374] Public files: Add a file', (I) => {
     I.dontSee('New presentation');
     I.dontSee('Add note');
 });
+
+// Note: The title of this test, does not really reflect what is tested here (again)
+// A better title would be something like: Public files: Moving files to root folder not possible
+Scenario('[C8375] Public files: Move a file', async (I) => {
+    const folder = await I.grabDefaultFolder('infostore');
+    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    prepare(I);
+    I.waitForText('document.txt', 1, '.file-list-view');
+    I.click(locate('li.list-item').withText('document.txt'));
+    I.clickToolbar('~More actions');
+    I.waitForText('Move');
+    I.click('Move', '.smart-dropdown-container');
+    I.waitForText('Public files', 1, '.folder-picker-dialog');
+    I.click('~Public files', '.folder-picker-dialog');
+    I.seeElement('.btn[data-action="ok"][disabled]');
+});
