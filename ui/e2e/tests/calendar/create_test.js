@@ -5,7 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * © 2017 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2019 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Jorin Laatsch <jorin.laatsch@open-xchange.com>
  * @author Daniel Pondruff <daniel.pondruff@open-xchange.com>
@@ -1010,14 +1010,10 @@ Scenario('[C7440] Start/End date autoadjustment', async function (I) {
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
-    I.clickToolbar('View');
-    I.click('Day', '.smart-dropdown-container');
-    I.wait(1);
-
     I.clickToolbar('New');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
-    // strings are usually the same, but if this test is run arround midnight, we may get a one day difference, so we must calculate that
+    // strings are usually the same, but if this test is run around midnight, we may get a one day difference, so we must calculate that
     var [startString] = await I.grabValueFrom('[data-attribute="startDate"] .datepicker-day-field'),
         [endString] = await I.grabValueFrom('[data-attribute="endDate"] .datepicker-day-field'),
         startDate = moment(startString, 'M/D/YYYY'),
@@ -1061,4 +1057,31 @@ Scenario('[C7440] Start/End date autoadjustment', async function (I) {
         [newEndString] = await I.grabValueFrom('[data-attribute="endDate"] .datepicker-day-field');
     expect(newStartString).to.equal(startString);
     expect(newEndString).to.not.equal(endString);
+});
+
+Scenario('[C7441] Start/End time autocompletion', async function (I) {
+
+    I.login('app=io.ox/calendar');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.click('[data-attribute="startDate"] .time-field');
+    I.click('12:00 PM');
+
+    var check = async function (time, toChange, expectedStartTime, expectedEndTime) {
+        // start today
+        I.click('[data-attribute="' + toChange + '"] .time-field');
+        I.click(time, '[data-attribute="' + toChange + '"]');
+
+        //check if the fields are updated to the expected values
+        expect((await I.grabValueFrom('[data-attribute="startDate"] .time-field'))[0]).to.equal(expectedStartTime);
+        expect((await I.grabValueFrom('[data-attribute="endDate"] .time-field'))[0]).to.equal(expectedEndTime);
+    };
+
+    await check('1:00 PM', 'startDate', '1:00 PM', '2:00 PM');
+    await check('12:00 PM', 'startDate', '12:00 PM', '1:00 PM');
+    await check('11:00 AM', 'endDate', '10:00 AM', '11:00 AM');
+    await check('1:00 PM', 'endDate', '10:00 AM', '1:00 PM');
 });
