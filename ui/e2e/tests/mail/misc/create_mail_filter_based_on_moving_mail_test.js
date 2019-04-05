@@ -1,0 +1,117 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2017 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Philipp Schumacher <philipp.schumacher@open-xchange.com>
+ *
+ */
+
+/// <reference path="../../../steps.d.ts" />
+
+Feature('Mail > Misc');
+
+Before(async (users) => {
+    await users.create();
+    await users.create();
+});
+
+After(async (users) => {
+    await users.removeAll();
+});
+
+Scenario('[C83387] Create mail filter based on moving mail', async (I, users) => {
+
+    // 1. Login User#A
+    // 2. Go to Mail and send a mail to User#B
+
+    await I.haveMail({
+        attachments: [{
+            content: 'Content#1',
+            content_type: 'text/html',
+            disp: 'inline'
+        }],
+        from: [[users[1].get('display_name'), users[1].get('primaryEmail')]],
+        sendtype: 0,
+        subject: 'Subject#1',
+        to: [[users[0].get('display_name'), users[0].get('primaryEmail')]]
+    }, { user: users[1] });
+
+    // 3. Login User#B
+    // 4. Go to Mail module and select the previous send mail
+
+    I.login('app=io.ox/mail');
+    I.waitForVisible('[data-ref="io.ox/mail/listview"]');
+    I.click('.list-item[aria-label*="Subject#1"]');
+
+    // 5. Open context menu either in detailed view or in top bar
+
+    I.click('~More actions');
+    I.waitForVisible('.smart-dropdown-container');
+
+    // 6. Click "Move"
+
+    I.click('Move', '.smart-dropdown-container');
+    I.waitForText('Move');
+
+    // 7. Select "Create filter rule" checkbox
+
+    I.click(locate('label').withText('Create filter rule'));
+
+    // 8. Choose destination folder (e.g. TRASH)
+
+    I.click(
+        locate('.folder-label')
+            .withText('Trash')
+            .inside('.folder-picker-dialog'));
+
+    I.waitForEnabled('[data-action="ok"]');
+
+    // 9. Hit "Move"
+
+    I.click('[data-action="ok"]');
+    I.waitForText('Create new rule');
+
+    // 10. Set a name for the filter
+    // Filter name is already set. Check if it prefilled.
+
+    I.seeInField('#rulename', 'Move mails from ' + users[1].get('primaryEmail') + ' into folder Trash');
+
+    I.see('Address', '.tests');
+    I.see('Is exactly', '.tests');
+    I.seeInField('[id*="address"]', users[1].get('primaryEmail'));
+
+    I.see('File into', '.actions');
+    I.seeInField('[id*="move"]', 'Trash');
+
+    // 11. Save filter
+
+    I.click('Save');
+
+    // 12. As User#A send again a mail to User#B
+
+    await I.haveMail({
+        attachments: [{
+            content: 'Content#2',
+            content_type: 'text/html',
+            disp: 'inline'
+        }],
+        from: [[users[1].get('display_name'), users[1].get('primaryEmail')]],
+        sendtype: 0,
+        subject: 'Subject#2',
+        to: [[users[0].get('display_name'), users[0].get('primaryEmail')]]
+    }, { user: users[1] });
+
+    I.selectFolder('Trash');
+
+    I.waitForText('Subject#1', 5, '.list-view');
+    I.waitForText('Content#1', 5, '.list-view');
+
+    I.waitForText('Subject#2', 5, '.list-view');
+    I.waitForText('Content#2', 5, '.list-view');
+
+});
