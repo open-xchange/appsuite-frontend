@@ -500,18 +500,70 @@ Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thu
         if (view === 'week') I.seeNumberOfVisibleElements('.page.current .appointment', 2);
     });
 
-    if (!date.isSame(moment(date).add(1, 'week'), 'month')) I.click('~Go to next month', '.window-sidepanel');
-    date.add(1, 'weeks');
+});
+
+Scenario('[C7423] Create daily recurring appointment every day ends after 5', async function (I) {
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
+    // pick the second monday in the following month
+    const date = moment().add(1, 'month').startOf('month').weekday(1);
+    if (date.isSame(moment(), 'month')) date.add(1, 'week');
+
+    I.login('app=io.ox/calendar');
+
+    // and select the correct date
+    I.retry(5).click('~Go to next month', '.window-sidepanel');
     I.click(`~${date.format('l, dddd')}, CW ${date.week()}`, '.window-sidepanel');
 
+    I.clickToolbar('New');
+    I.waitForText('Subject');
+    I.fillField('Subject', 'Testappointment');
+
+    I.click('~Date (M/D/YYYY)');
+    I.pressKey(['Control', 'a']);
+    I.pressKey(date.format('l'));
+    I.pressKey('Enter');
+
+    I.click('Repeat', '.io-ox-calendar-edit-window');
+    I.click('Every Monday.');
+
+    I.waitForElement('.modal-dialog');
+
+    I.selectOption('.modal-dialog [name="recurrence_type"]', 'Daily');
+    I.selectOption('.modal-dialog [name="until change:occurrences"]', 'After a number of occurrences');
+    I.waitForElement('.modal-dialog [name="occurrences"]');
+    I.fillField('.modal-dialog [name="occurrences"]', '5');
+    I.pressKey('Enter');
+
+    I.see('Every day.');
+
+    I.click('Apply', '.modal-dialog');
+
+    I.waitForDetached('.modal-dialog');
+    I.see('Every day.');
+
+    // create
+    I.click('Create', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+
     // open all views and load the appointments there
-    ['Week', 'Month'].forEach((view) => {
+    ['Month', 'Week'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
         I.waitForVisible('.appointment', undefined, '.page.current');
         I.see('Testappointment');
-        if (view === 'week') I.seeNumberOfVisibleElements('.page.current .appointment', 2);
+        I.seeNumberOfVisibleElements('.page.current .appointment', 5);
     });
+
+    I.click('~Next Week', '.page.current');
+
+    // open all views and dont see the appointments there
+    I.clickToolbar('View');
+    I.click('Week');
+    I.dontSeeElement('Testappointment');
 
 });
 
