@@ -1085,3 +1085,103 @@ Scenario('[C7441] Start/End time autocompletion', async function (I) {
     await check('11:00 AM', 'endDate', '10:00 AM', '11:00 AM');
     await check('1:00 PM', 'endDate', '10:00 AM', '1:00 PM');
 });
+
+Scenario('[C7442] Set date from date-picker', async function (I) {
+
+    I.login('app=io.ox/calendar&perspective=week:day');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.fillField('Subject', '2. Weihnachten');
+    I.fillField('Location', 'Nordpol');
+
+    // same starting point everytime, today would make this too difficult
+    I.click('[data-attribute="startDate"] .datepicker-day-field');
+    I.pressKey(['Control', 'a']);
+    I.pressKey('3/3/2019');
+    I.pressKey('Enter');
+
+    I.click('[data-attribute="startDate"] .datepicker-day-field');
+    I.seeElement('.date-picker.open');
+
+    // month
+    I.see('March 2019', '.date-picker.open');
+    // 42 days shown, 11 of them outside of march
+    I.seeNumberOfVisibleElements('.date-picker.open td.date', 42);
+    I.seeNumberOfVisibleElements('.date-picker.open td.date.outside', 11);
+
+    I.click('.date-picker.open .btn-next');
+
+    I.see('April 2019', '.date-picker.open');
+    // 35 days shown, 5 of them outside of April
+    I.seeNumberOfVisibleElements('.date-picker.open td.date', 35);
+    I.seeNumberOfVisibleElements('.date-picker.open td.date.outside', 5);
+
+    I.click('.date-picker.open .btn-prev');
+    I.click('.date-picker.open .btn-prev');
+
+    I.see('February 2019', '.date-picker.open');
+    // 35 days shown, 7 of them outside of february
+    I.seeNumberOfVisibleElements('.date-picker.open td.date', 35);
+    I.seeNumberOfVisibleElements('.date-picker.open td.date.outside', 7);
+
+    I.click('.date-picker.open .navigation .switch-mode');
+
+    // year
+    I.see('2019', '.date-picker.open');
+    I.seeNumberOfVisibleElements('.date-picker.open .month', 12);
+
+    I.click('.date-picker.open .btn-next');
+
+    I.see('2020', '.date-picker.open');
+    I.seeNumberOfVisibleElements('.date-picker.open .month', 12);
+
+    I.click('.date-picker.open .btn-prev');
+    I.click('.date-picker.open .btn-prev');
+
+    I.see('2018', '.date-picker.open');
+    I.seeNumberOfVisibleElements('.date-picker.open .month', 12);
+
+    I.click('.date-picker.open .navigation .switch-mode');
+
+    // decades ...kind of, it's actually 12 years but pressing next only advances 10...*shrug*
+    I.see('2010 - 2022', '.date-picker.open');
+    I.seeNumberOfVisibleElements('.date-picker.open .year', 12);
+
+    I.click('.date-picker.open .btn-next');
+
+    I.see('2020 - 2032', '.date-picker.open');
+    I.seeNumberOfVisibleElements('.date-picker.open .year', 12);
+
+    I.click('.date-picker.open .btn-prev');
+    I.click('.date-picker.open .btn-prev');
+
+    I.see('2000 - 2012', '.date-picker.open');
+    I.seeNumberOfVisibleElements('.date-picker.open .year', 12);
+
+    // select a date. just use 12/26/1999 for convenience (always click the first date)
+    I.click('.date-picker.open tr:first-child td:first-child');
+    I.click('.date-picker.open tr:first-child td:first-child');
+    I.click('.date-picker.open tr:first-child td:nth-child(2)');
+
+    I.seeInField('[data-attribute="startDate"] .datepicker-day-field', '12/26/1999');
+
+    I.click('Create');
+
+    // use script to jump to the correct date
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("1999-12-26"))');
+
+    //check in calendar
+    const cid = await I.grabAttributeFrom('.appointment', 'data-cid'),
+        appointmentSelector = locate(`.appointment[data-cid="${cid}"]`);
+    let appointment = appointmentSelector.inside('.weekview-container.day')
+        .as('appointment element in day view');
+
+    I.waitForText('2. Weihnachten', appointment);
+    I.waitForText('Nordpol', appointment);
+
+    I.see('Sun, 12/26/1999', '.weekview-container.day');
+
+});
