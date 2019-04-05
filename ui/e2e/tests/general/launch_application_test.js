@@ -30,3 +30,14 @@ Scenario('[C7343] Launch "Portal" application', async function (I) {
     I.waitForElement('.greeting-phrase');
     I.logout();
 });
+
+Scenario('[C7345] Launch "Address Book" application', async function (I) {
+    I.login('app=io.ox/portal');
+    I.waitForElement('#io-ox-launcher');
+    I.click('#io-ox-launcher');
+    I.waitForElement('.launcher-dropdown');
+    I.click('Address Book', '.launcher-dropdown');
+    I.waitForElement('.classic-toolbar[aria-label="Address Book Toolbar"]');
+    I.seeElement('.classic-toolbar[aria-label="Address Book Toolbar"]');
+    I.logout();
+});
