@@ -26,6 +26,51 @@ After(async (users) => {
     await users.removeAll();
 });
 
+// TODO Skip this as the double click does not work. See Bug 64313
+Scenario.skip('[C7450] Edit private appointment', async function (I) {
+    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
+    await I.haveAppointment({
+        folder:  folder,
+        summary: 'Testappointment',
+        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        class: 'CONFIDENTIAL'
+    });
+
+    I.login('app=io.ox/calendar');
+
+    if (!moment().isSame(time, 'month')) I.retry(5).click('~Go to next month', '.window-sidepanel');
+    I.retry(5).click(`~${time.format('l, dddd')}, CW ${time.week()}`, '.window-sidepanel');
+
+    // open all views and load the appointments there
+    ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForElement('.page.current .appointment');
+        I.see('Testappointment');
+        I.seeElement('.fa-lock', '~Testappointment');
+    });
+
+    // edit the appointment
+    I.doubleClick('.appointment');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+    I.selectOption('Visibility', 'Standard');
+
+    I.click('Save');
+    I.waitForDetached('.io-ox-calendar-edit-window');
+
+    // Check all views
+    ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForElement('.page.current .appointment');
+        I.see('Testappointment');
+        I.waitForInvisible(locate('.fa-lock').inside('~Testappointment').inside('.page.current'));
+    });
+
+});
+
 Scenario('[C7464] Change appointment in shared folder as guest', async function (I, users) {
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
     const time = moment().startOf('week').add(3, 'days').add(10, 'hours');
