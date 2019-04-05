@@ -1,0 +1,13 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Hans Wurst
+N:Wurst;Hans;;;
+EMAIL;TYPE=INTERNET;TYPE=HOME:foo@example.com
+EMAIL;TYPE=INTERNET;TYPE=WORK:bar@example.com
+TEL:+11 1111 1111
+ADR;TYPE=HOME:;;Homeaddress 23\, 12345 Sometown;;;;
+ADR;TYPE=WORK:;;Work 52\, Workabily 23;;;;
+ORG:Open-Xchange GmbH
+TITLE:Boss
+NOTE:Some notes for\n\nHans Würst!
+END:VCARD
