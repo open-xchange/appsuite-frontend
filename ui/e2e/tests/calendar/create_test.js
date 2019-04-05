@@ -449,6 +449,72 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
 
 });
 
+Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thursday never ends', async function (I) {
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
+    const date = moment().startOf('day').weekday(2);
+
+    I.login('app=io.ox/calendar');
+
+    // and select the correct date
+    I.retry(5).click(`~${date.format('l, dddd')}, CW ${date.week()}`, '.window-sidepanel');
+
+    I.clickToolbar('New');
+    I.waitForText('Subject');
+    I.fillField('Subject', 'Testappointment');
+
+    I.click('~Date (M/D/YYYY)');
+    I.pressKey(['Control', 'a']);
+    I.pressKey(date.format('l'));
+    I.wait(0.2); // gently wait for some UI updates
+    I.pressKey('Enter');
+
+    I.click('Repeat', '.io-ox-calendar-edit-window');
+    I.click('Every Tuesday.');
+
+    I.waitForElement('.modal-dialog');
+
+    I.selectOption('.modal-dialog [name="recurrence_type"]', 'Weekly');
+    I.click('Th', '.modal-dialog');
+
+    I.see('Every Tuesday and Thursday.');
+
+    I.click('Apply', '.modal-dialog');
+
+    I.waitForDetached('.modal-dialog');
+    I.see('Every Tuesday and Thursday.');
+
+    // create
+    I.click('Create', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+
+    // open all views and load the appointments there
+    ['Week', 'Day', 'Month'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.see('Testappointment');
+        if (view === 'week') I.seeNumberOfVisibleElements('.page.current .appointment', 2);
+    });
+
+    if (!date.isSame(moment(date).add(1, 'week'), 'month')) I.click('~Go to next month', '.window-sidepanel');
+    date.add(1, 'weeks');
+    I.click(`~${date.format('l, dddd')}, CW ${date.week()}`, '.window-sidepanel');
+
+    // open all views and load the appointments there
+    ['Week', 'Month'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.see('Testappointment');
+        if (view === 'week') I.seeNumberOfVisibleElements('.page.current .appointment', 2);
+    });
+
+});
+
 Scenario('[C274537] Support use-count calculation on Appointment create with Groups', async function (I, users) {
     let testrailID = 'C274537';
     var timestamp = Math.round(+new Date() / 1000);
