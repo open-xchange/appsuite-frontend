@@ -165,3 +165,57 @@ Scenario('[C85626] Support different aspects of categories', function (I) {
     });
     I.waitForDetached(SELECTORS.dialog);
 });
+
+function getTestMail(from, to, opt) {
+    opt = opt || {};
+    return {
+        attachments: [{
+            content: opt.content,
+            content_type: 'text/html',
+            disp: 'inline'
+        }],
+        from: [[from.get('displayname'), from.get('primaryEmail')]],
+        sendtype: 0,
+        subject: opt.subject,
+        to: [[to.get('displayname'), to.get('primaryEmail')]],
+        folder_id: opt.folder,
+        flags: opt.flags
+    };
+}
+
+// mail sending broken in test server when categories are enabled. Therefore currently disabled
+
+/*
+Scenario('[C85632] Move mails to another category', async function (I, users) {
+    if (DISABLED) return;
+    await users.create();
+    await users.create();
+    await users.create();
+
+    const user1 = users[0];
+    const user2 = users[1];
+    const user3 = users[2];
+
+    I.haveSetting('io.ox/mail//categories/enabled', true, { user: user3 });
+
+    await I.haveMail(getTestMail(user1, user3, {
+        subject: 'Test Mail 1',
+        content: 'Testing is still fun'
+    }));
+    await I.haveMail(getTestMail(user1, user3, {
+        subject: 'Test Mail 2',
+        content: 'Testing is still fun'
+    }));
+    await I.haveMail(getTestMail(user2, user3, {
+        subject: 'Test Mail 3',
+        content: 'Testing is still awesome'
+    }), { user: user2 });
+    await I.haveMail(getTestMail(user2, user3, {
+        subject: 'Test Mail 4',
+        content: 'Testing is still awesome'
+    }), { user: user2 });
+
+    I.login('app=io.ox/mail', { user: user3 });
+    I.waitForVisible('.io-ox-mail-window');
+});
+*/
