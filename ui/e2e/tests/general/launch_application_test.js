@@ -52,3 +52,14 @@ Scenario('[C7346] Launch "Calendar" application', async function (I) {
     I.seeElement('.classic-toolbar[aria-label="Calendar Toolbar"]');
     I.logout();
 });
+
+Scenario('[C7347] Launch "Drive" application', async function (I) {
+    I.login('app=io.ox/portal');
+    I.waitForElement('#io-ox-launcher');
+    I.click('#io-ox-launcher');
+    I.waitForElement('.launcher-dropdown');
+    I.click('Drive', '.launcher-dropdown');
+    I.waitForElement('.classic-toolbar[aria-label="Drive Toolbar"]');
+    I.seeElement('.classic-toolbar[aria-label="Drive Toolbar"]');
+    I.logout();
+});
