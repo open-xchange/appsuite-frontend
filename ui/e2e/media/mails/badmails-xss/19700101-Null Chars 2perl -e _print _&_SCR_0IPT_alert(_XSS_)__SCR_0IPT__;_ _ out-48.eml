@@ -1,0 +1,16 @@
+Return-Path: <mwagner@qa.open-xchange.com>
+Received: from cyrus.qa.open-xchange.com ([unix socket])
+	 by cyrus (Cyrus v2.4.16-Debian-2.4.16-4+deb7u1) with LMTPA;
+	 Tue, 05 Nov 2013 08:12:24 +0100
+X-Sieve: CMU Sieve 2.4
+Received: from localhost.localdomain (martinbraun-test24.oxoe.int [192.168.32.190])
+	by cyrus.qa.open-xchange.com (Postfix) with ESMTP id DD4EB63FFA
+	for <mbraun@qa.open-xchange.com>; Tue,  5 Nov 2013 08:12:03 +0100 (CET)
+From: perl -e 'print "&<SCR\0IPT>alert("XSS")</SCR\0IPT>";' > out
+To: perl -e 'print "&<SCR\0IPT>alert("XSS")</SCR\0IPT>";' > out
+Date: _DATE_
+Subject: Null Chars 2perl -e 'print "&<SCR\0IPT>alert("XSS")</SCR\0IPT>";' > out
+Content-type: text/html
+Message-ID: <cmu-lmtpd-27376-1383635544-23@cyrus>
+
+Null Chars 2perl -e 'print "&<SCR\0IPT>alert("XSS")</SCR\0IPT>";' > out
