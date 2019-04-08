@@ -41,3 +41,14 @@ Scenario('[C7345] Launch "Address Book" application', async function (I) {
     I.seeElement('.classic-toolbar[aria-label="Address Book Toolbar"]');
     I.logout();
 });
+
+Scenario('[C7346] Launch "Calendar" application', async function (I) {
+    I.login('app=io.ox/portal');
+    I.waitForElement('#io-ox-launcher');
+    I.click('#io-ox-launcher');
+    I.waitForElement('.launcher-dropdown');
+    I.click('Calendar', '.launcher-dropdown');
+    I.waitForElement('.classic-toolbar[aria-label="Calendar Toolbar"]');
+    I.seeElement('.classic-toolbar[aria-label="Calendar Toolbar"]');
+    I.logout();
+});
