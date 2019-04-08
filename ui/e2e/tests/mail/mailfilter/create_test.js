@@ -373,6 +373,42 @@ Scenario('[C7814] Filter mail using IsBiggerThan', async function (I, users) {
     I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0400'));
 });
 
+Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users) {
+    let [user] = users;
+    await I.haveSetting({
+        'io.ox/mail': { messageFormat: 'text' }
+    });
+
+    createFilterRule(I, 'TestCase0401', 'Size', null, null, 'Red', true);
+
+    I.click('Is bigger than');
+    I.waitForElement('.dropdown.open');
+    I.see('Is smaller than', '.dropdown.open');
+    I.click('Is smaller than', '.dropdown.open');
+
+    I.fillField('sizeValue', '930');
+    // save the form
+    I.click('Save');
+
+    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.openApp('Mail');
+
+    // compose mail
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
+    I.fillField('.io-ox-mail-compose [name="subject"]', 'TestCase0401');
+    I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
+    I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
+
+    I.click('Send');
+
+    I.waitForElement('~Sent, 1 total');
+    I.waitForElement('~Inbox, 1 unread, 1 total');
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0401'));
+});
+
 Scenario('[C83386] Create mail filter based on mail', async function (I, users) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
