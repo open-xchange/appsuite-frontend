@@ -416,3 +416,55 @@ Scenario('[C252158] All my public appointments', (I, users) => {
     I.seeNumberOfElements(`.appointment[aria-label="${subject}"]`, 0);
     I.dontSee(subject);
 });
+
+Scenario('[C265147] Appointment organizer should be marked in attendee list', async (I, users) => {
+    const [userA, userB] = users;
+
+    await I.haveSetting({ 'io.ox/core': { autoOpenNotification: false } }, { user: userB });
+
+    // 1. Login as User#A
+    // 2. Go to Calendar
+    I.login(['app=io.ox/calendar&perspective=week:week'], { user: userA });
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    // 3. Create new appointment
+    const subject = `${userA.userdata.name}s awesome appointment`;
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+    I.fillField('Subject', subject);
+    const startTime = moment().add(10, 'minutes');
+    I.click('~Start time');
+    I.pressKey('Enter');
+    I.pressKey(['Control', 'a']);
+    I.pressKey(startTime.format('hh:mm P'));
+    I.pressKey('Enter');
+
+    // 4. add User#B as participant
+    I.fillField('Add contact/resource', userB.userdata.primaryEmail);
+    I.wait(0.5);
+    I.pressKey('Enter');
+    I.click('Create', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+    I.logout();
+
+    // 5. Login with User#B
+    // 6. Go to Calendar
+    I.login(['app=io.ox/calendar&perspective=week:week'], { user: userB });
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    // 7. Open Appointment
+    I.click(subject, '.appointment');
+    I.waitForElement('.io-ox-sidepopup');
+    I.seeNumberOfElements('.calendar-detail.view', 1);
+
+    // 8. Check if User#A is set as organizer
+    I.see(subject, '.io-ox-sidepopup');
+    I.see(`${userA.userdata.sur_name}, ${userA.userdata.given_name}`, '.io-ox-sidepopup');
+    I.see(`${userB.userdata.sur_name}, ${userB.userdata.given_name}`, '.io-ox-sidepopup');
+
+    // Expected Result: User#A is set as Organizer
+    const organizerLocator = locate('li.participant')
+        .withDescendant(`a[title="${userA.userdata.primaryEmail}"]`)
+        .withDescendant('span.organizer-container');
+    I.seeElement(organizerLocator);
+});
