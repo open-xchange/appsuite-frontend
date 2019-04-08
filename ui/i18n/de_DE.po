@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-03 11:17+0200\n"
+"PO-Revision-Date: 2019-04-04 15:05+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1889,6 +1889,12 @@ msgstr "Nichtarbeitszeiten ausblenden"
 msgid "Blocked time frame"
 msgstr "Blockierter Zeitrahmen"
 
+#. %1$s = apppointment creator name
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#, fuzzy
+msgid "Created by: %1$s"
+msgstr "Erstellt von: %1$s"
+
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Could not get appointment information"
 msgstr "Termininformationen konnten nicht abgerufen werden"
@@ -2014,6 +2020,7 @@ msgid "Error: Failed to load appointments"
 msgstr "Fehler: Termine konnten nicht geladen werden"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
 #: module:io.ox/files apps/io.ox/mail/detail/view.js module:io.ox/mail
@@ -2211,8 +2218,9 @@ msgstr "%1$d Minuten"
 
 #. estimated upload duration
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js apps/io.ox/files/upload/main.js
-#: module:io.ox/files apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#: apps/io.ox/calendar/util.js apps/io.ox/files/settings/pane.js
+#: module:io.ox/files apps/io.ox/files/upload/main.js
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d day"
 msgid_plural "%1$d days"
 msgstr[0] "%1$d Tag"
@@ -4169,6 +4177,18 @@ msgstr ""
 "Es trat ein Fehler auf. Bitte schließen Sie diesen Browser-Tab und versuchen "
 "Sie es erneut."
 
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Connection error"
+msgstr "Verbindungsfehler"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "The service is not available right now."
+msgstr "Der Dienst ist derzeit nicht verfügbar."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Reload"
+msgstr "Neu laden"
+
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
 msgstr "Warnhinweis"
@@ -5084,6 +5104,19 @@ msgid "Logout failed."
 msgstr "Abmelden fehlgeschlagen."
 
 #: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/main/topbar_right.js
+#: apps/io.ox/settings/security/sessions/settings/pane.js
+msgid "Sign out"
+msgstr "Abmelden"
+
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+#, fuzzy
+msgid "Are you sure you want to sign out from all related browser tabs?"
+msgstr ""
+"Sind Sie sicher, dass Sie sich von allen damit verbundenen Browser-Tabs "
+"abmelden möchten?"
+
+#: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr ""
 "Ungesicherte Dokumente werden verloren gehen. Wollen Sie sich nun abmelden?"
@@ -5173,11 +5206,6 @@ msgstr "Hilfe"
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 msgid "About"
 msgstr "Über"
-
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/settings/security/sessions/settings/pane.js
-msgid "Sign out"
-msgstr "Abmelden"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 msgid ""
@@ -7271,6 +7299,13 @@ msgstr "90 Versionen"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "100 versions"
 msgstr "100 Versionen"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+msgid "%1$d version"
+msgid_plural "%1$d versions"
+msgstr[0] "%1$d Version"
+msgstr[1] "%1$d Versionen"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Adding files with identical names"
@@ -10254,8 +10289,9 @@ msgid "SMS Code"
 msgstr "SMS-Code"
 
 #: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+#, fuzzy
 msgid "Web auth"
-msgstr ""
+msgstr "WebAuthn"
 
 #: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
 msgid "Security Token"
@@ -10325,8 +10361,9 @@ msgstr "Verifizierungsoption hinzufügen"
 
 #. Error message when trying to get available providers from middleware
 #: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+#, fuzzy
 msgid "Problem getting 2-step verification providers"
-msgstr ""
+msgstr "Problem beim Abrufen von Zwei-Faktor-Authentifizierungs-Anbietern"
 
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
 msgid "Add Multifactor Device"
@@ -10394,7 +10431,7 @@ msgstr "Yubikey, Google-Sicherheitsschlüssel oder kompatibles FIDO-Gerät"
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
 msgid "Use Yubikey's One Time Password System"
-msgstr ""
+msgstr "Einmalpasswort-System von Yubikey verwenden"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
@@ -10427,7 +10464,7 @@ msgstr "Wiederherstellung"
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: module:io.ox/core/boot
 msgid "Delete Multifactor Device"
-msgstr "Multifaktorgerät löschen"
+msgstr "Multifaktor-Gerät löschen"
 
 #. Devices are named.  This is the text for the deleting a multifactor device
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
@@ -10539,7 +10576,6 @@ msgid "Next 4 characters of the backup string"
 msgstr "Die nächsten 4 Zeichen des Backup-Strings"
 
 #: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
-#, fuzzy
 msgid "I lost my device"
 msgstr "Ich habe mein Gerät verloren"
 
@@ -10577,19 +10613,21 @@ msgstr ""
 "haben."
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
-#, fuzzy
 msgid ""
 "You secured your account with 2-Step Verification.  Please enter the "
 "verification code from the Authenticator App."
 msgstr ""
-"Sie haben Ihren Account mit Zwei-Faktor-Authentifizierung gesichert. Bitte "
-"geben Sie den Bestätigungs-Code der Authentifizierungs-App ein."
+"Sie haben Ihren Account mit der Zwei-Faktor-Authentifizierung gesichert. "
+"Bitte geben Sie den Bestätigungs-Code der Authentifizierungs-App ein."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification.  Please use your "
 "authentication token to complete verification."
 msgstr ""
+"Sie haben Ihren Account mit der Zwei-Faktor-Authentifizierung gesichert. "
+"Bitte verwenden Sie Ihren Authentifizierungs-Token, um die Verifizierung "
+"abzuschließen."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 #, fuzzy

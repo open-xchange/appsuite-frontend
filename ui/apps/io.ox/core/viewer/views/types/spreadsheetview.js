@@ -251,12 +251,6 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
                 return promise;
             }
 
-            function listenToWithValidApp(source, type, callback) {
-                self.spreadsheetApp.waitForImportSuccess(function () {
-                    self.listenTo(source, type, self.withValidApp.bind(self, callback));
-                });
-            }
-
             function onLaunchSuccess() {
 
                 // the spreadsheet application instance is passed as calling context
@@ -266,6 +260,12 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
 
                 // wait until the Documents part (class `BaseApplication` and beyond) is added to the app
                 docsApp.on('docs:constructed', function () {
+
+                    function listenToWithValidApp(source, type, callback) {
+                        docsApp.waitForImportSuccess(function () {
+                            self.listenTo(source, type, self.withValidApp.bind(self, callback));
+                        });
+                    }
 
                     // register event handlers
                     listenToWithValidApp(self.viewerEvents, 'viewer:resize', function () { docsApp.getView().refreshPaneLayout(); });

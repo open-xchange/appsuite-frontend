@@ -116,6 +116,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
                     if (lang.indexOf('-') > 0) lang = lang.substring(lang.indexOf('-') + 1);
                     if (codes.get(lang)) {
                         select.$el.find('option:contains("' + codes.get(lang).label + '")').prop('selected', 'selected');
+                        baton.model.set('code', codes.get(lang).value, { silent: true });  // Must be silent.  Otherwise, duplicate values (Canada/US for example), first will be chosen
                     }
                     div.append(input);
                 });
