@@ -236,6 +236,48 @@ Scenario('[C7811] Filter mail using is exactly', async function (I, users) {
 
 });
 
+Scenario('[C7812] Filter mail using matches', async function (I, users) {
+    let [user] = users;
+    await I.haveSetting({
+        'io.ox/mail': { messageFormat: 'text' }
+    });
+
+    createFilterRule(I, 'TestCase0397', 'Subject', 'Matches', '*Case0397*', 'Red');
+    // save the form
+    I.click('Save');
+    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.openApp('Mail');
+
+    // compose mail
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
+    I.fillField('.io-ox-mail-compose [name="subject"]', 'xxxTestCase0397xxx');
+    I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
+    I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
+
+    I.click('Send');
+
+    // second mail
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
+    I.fillField('.io-ox-mail-compose [name="subject"]', 'xxx0397xxx');
+    I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
+    I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
+
+    I.click('Send');
+
+    I.waitForElement('~Sent, 2 total');
+    I.waitForElement('~Inbox, 2 unread, 2 total');
+
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('xxxTestCase0397xxx'));
+    I.waitForElement(locate('.list-item-row').withChild(':not(.flag_1)').withText('xxx0397xxx'));
+
+});
+
 Scenario('[C83386] Create mail filter based on mail', async function (I, users) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
