@@ -45,11 +45,11 @@ define('io.ox/files/favorites', [
     model.set('standard_folder', true);
 
     function storeFolders(elements) {
-        settings.set(FOLDERS_INFOSTORE_PATH, elements).save();
+        settings.set(FOLDERS_INFOSTORE_PATH, elements);
     }
 
     function storeFiles(elements) {
-        settings.set(FILESS_INFOSTORE_PATH, elements).save();
+        settings.set(FILESS_INFOSTORE_PATH, elements);
     }
 
     function addFavoriteIndex(model) {
@@ -59,7 +59,7 @@ define('io.ox/files/favorites', [
     }
 
     /**
-     * Adds folder to the collection
+     * Add a folder to the collection
      * @param {Integer} id
      *
      * Additional parameters
@@ -118,6 +118,7 @@ define('io.ox/files/favorites', [
         }
 
         if (collectionModels.length > 0) {
+            settings.save();
             collection.add(collectionModels);
             triggerCollectionUpdate();
         }
@@ -192,6 +193,7 @@ define('io.ox/files/favorites', [
         }
 
         if (updateCollection) {
+            settings.save();
             collection.remove(models);
             triggerCollectionUpdate();
         }
@@ -269,6 +271,7 @@ define('io.ox/files/favorites', [
 
             storeFolders(folders);
             storeFiles(files);
+            settings.save();
 
             collection.reset(returnList);
             collection.fetched = true;
