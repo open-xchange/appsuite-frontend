@@ -267,3 +267,34 @@ Scenario('[C7806] Mark mail as filtered mail', async function (I, users) {
     I.waitForElement('~Inbox, 1 total');
 
 });
+
+Scenario('[C7807] Tag mail with filtered mail', async function (I, users) {
+
+    await I.haveSetting({
+        'io.ox/mail': { messageFormat: 'text' }
+    });
+
+    createFilterRule(I, 'TestCase0392', 'Set color flag');
+
+    // save the form
+    I.click('Save');
+    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+
+    I.openApp('Mail');
+
+    // compose mail
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[0].get('primaryEmail'));
+    I.fillField('.io-ox-mail-compose [name="subject"]', 'TestCase0392');
+    I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
+    I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
+
+    I.click('Send');
+
+    I.waitForElement('~Sent, 1 total');
+    I.waitForElement('~Inbox, 1 unread, 1 total');
+    I.seeElement('.vsplit .flag_1');
+
+});
