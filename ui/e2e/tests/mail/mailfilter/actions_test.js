@@ -236,3 +236,34 @@ Scenario.skip('[C7805] Reject with reason filtered mail', async function (I, use
     I.see('The following reason was given: TestCase0390', '.text-preview');
 
 });
+
+Scenario('[C7806] Mark mail as filtered mail', async function (I, users) {
+
+    await I.haveSetting({
+        'io.ox/mail': { messageFormat: 'text' }
+    });
+
+    createFilterRule(I, 'TestCase0391', 'Mark mail as');
+
+    // save the form
+    I.click('Save');
+    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+
+    I.openApp('Mail');
+
+    // compose mail
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[0].get('primaryEmail'));
+    I.fillField('.io-ox-mail-compose [name="subject"]', 'TestCase0391');
+    I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
+    I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
+
+    I.click('Send');
+
+    I.waitForElement('~Sent, 1 total');
+    I.wait(1);
+    I.waitForElement('~Inbox, 1 total');
+
+});
