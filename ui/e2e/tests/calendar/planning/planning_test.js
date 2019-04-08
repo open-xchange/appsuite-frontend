@@ -61,3 +61,48 @@ Scenario('[C7443] Check availability of participants', async function (I, users)
     I.waitForVisible({ css: '.freetime-popup' });
     I.seeNumberOfVisibleElements('~Abdancen', 3);
 });
+
+Scenario('[C7444] Check availability of resources', async function (I, users) {
+
+    I.login('app=io.ox/calendar');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    // just to be sure, cleanup artefacts
+    await I.dontHaveResource('Evil Lair', { user: users[0] });
+    await I.dontHaveResource('Laser Sharks', { user: users[0] });
+
+    await I.haveResource({ description: 'Evil lair under an active volcano', display_name: 'Evil Lair', name: 'Evil Lair', mailaddress: 'lair@evil.inc' }, { user: users[0] });
+    await I.haveResource({ description: 'Evil sharks equipped with lazers', display_name: 'Laser Sharks', name: 'Laser Sharks', mailaddress: 'lasersharks@evil.inc' }, { user: users[0] });
+
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.fillField('Subject', 'How to conquer the world');
+    I.fillField('Location', 'Secret volcano lair');
+
+    var addResource = function (name) {
+        I.fillField('.add-participant.tt-input', name);
+        I.waitForVisible('.tt-dropdown-menu');
+        I.pressKey('Enter');
+    };
+
+    addResource('Evil Lair');
+    addResource('Laser Sharks');
+
+    I.click('Create');
+
+
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    addResource('Evil Lair');
+    addResource('Laser Sharks');
+
+    I.click('Find a free time');
+    I.waitForVisible({ css: '.freetime-popup' });
+
+    I.seeNumberOfVisibleElements('.freetime-table .appointment', 3);
+
+    await I.dontHaveResource('Evil Lair', { user: users[0] });
+    await I.dontHaveResource('Laser Sharks', { user: users[0] });
+});
