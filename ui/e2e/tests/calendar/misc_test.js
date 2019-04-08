@@ -148,17 +148,15 @@ Scenario('[C236795] Visibility Flags', (I) => {
     const createAppointment = (subject, startDate, startTime, visibility) => {
         I.clickToolbar('New');
         I.waitForVisible('.io-ox-calendar-edit-window');
-
         I.fillField('Subject', subject);
         I.click('~Date (M/D/YYYY)');
         I.pressKey(['Control', 'a']);
         I.pressKey(startDate);
         I.pressKey('Enter');
-
         I.click('~Start time');
         I.click(startTime);
-
         I.scrollTo('.io-ox-calendar-edit select');
+
         // PUBLIC => Standard
         // CONFIDENTIAL => Private
         // PRIVATE => Secret
@@ -178,7 +176,6 @@ Scenario('[C236795] Visibility Flags', (I) => {
 
     const getAppointmentLocator = function (subject, labelAndIcon) {
         const appointmentLocator = `.appointment div[title="${subject}"]`;
-
         if (!labelAndIcon) {
             return appointmentLocator;
         }
@@ -223,10 +220,8 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
         previousMonth = moment().subtract(1, 'month').format('MMMM YYYY');
 
     I.see(currentMonth, '.window-sidepanel .date-picker');
-
     I.click('~Go to next month');
     I.see(nextMonth, '.window-sidepanel .date-picker');
-
     I.click('~Go to previous month');
     I.click('~Go to previous month');
     I.see(previousMonth, '.window-sidepanel .date-picker');
@@ -264,15 +259,16 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
     I.click(`#month_${minYear + 8}-07`, '.window-sidepanel .date-picker .grid');
     I.seeElement(locate('span').withText(`July ${minYear + 8}`).inside('.window-sidepanel .date-picker'));
 
+    // Expected Result: The whole month is displayed
     const daysLocator = locate('td').after('.cw').inside('.window-sidepanel .date-picker .grid'),
         days = new Set(await I.grabTextFrom(daysLocator));
 
-    // Expected Result: The whole month is displayed
     expect(days.size).to.equal(31);
     _.range(1, 32).forEach(day => expect(days.has(`${day}`)).to.be.true);
 
     // 7. Select a day
     const seventeenLocator = locate('td.date').withText('17').inside('.window-sidepanel .date-picker .grid .date');
+
     I.click(seventeenLocator);
 
     // Expected Result: The selected year, month and day is shown in the view on the right
@@ -288,12 +284,9 @@ Scenario('[C244785] Open event from invite notification in calendar', async (I, 
     // 1. User#A: Create an appointment which starts in less than 15 minutes and invite User#B
     I.login(['app=io.ox/calendar&perspective=week:week'], { user: userA });
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
-
     I.clickToolbar('New');
     I.waitForVisible('.io-ox-calendar-edit-window');
-
     I.fillField('Subject', 'Totally nerdy event');
-
     const startTime = moment().add(10, 'minutes'),
         endTime = moment().add(70, 'minutes');
     I.click('~Start time');
@@ -301,7 +294,6 @@ Scenario('[C244785] Open event from invite notification in calendar', async (I, 
     I.pressKey(['Control', 'a']);
     I.pressKey(startTime.format('hh:mm P'));
     I.pressKey('Enter');
-
     I.fillField('Add contact/resource', userB.userdata.primaryEmail);
     I.wait(0.5);
     I.pressKey('Enter');
@@ -309,7 +301,6 @@ Scenario('[C244785] Open event from invite notification in calendar', async (I, 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
-
     I.logout();
 
     // 2. User#B: Login and go to any app except Calendar
@@ -342,7 +333,86 @@ Scenario('[C244785] Open event from invite notification in calendar', async (I, 
 Scenario('[C252158] All my public appointments', (I, users) => {
     const [userA, userB] = users;
 
+    // 1. User#A: Login and go to Calendar
     I.login(['app=io.ox/calendar&perspective=week:week'], { user: userA });
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
+    // 2. User#A: Create a public calendar (Cal#A)
+    I.waitForText('Add new calendar');
+    I.click('Add new calendar');
+    I.waitForText('Personal calendar');
+    I.click('Personal calendar');
+    I.waitForVisible('.modal-body');
+    I.fillField('Calendar name', 'Cal#A');
+    I.checkOption('Add as public calendar');
+    I.click('Add');
+    I.waitForVisible('#io-ox-core');
+
+    // 3. User#A: Share the newly created calendar to all other users
+    I.wait(1);
+    I.click('.fa.fa-caret-right', '~Public calendars');
+    I.selectFolder('Cal#A');
+    I.waitForVisible('a[title="Actions for Cal#A"]');
+    I.click('a[title="Actions for Cal#A"]');
+    I.waitForText('Permissions');
+    I.click('Permissions');
+    I.waitForFocus('.form-control.tt-input');
+    I.fillField('.form-control.tt-input', userB.get('primaryEmail'));
+    I.pressKey('Enter');
+    I.click('Save');
+
+    // 4. User#A: Create a new appointment in that calendar and invite User#B
+    const subject = `${userA.userdata.name}s awesome appointment`;
+    I.clickToolbar('New');
+    I.waitForText('Appointments in public calendar');
+    I.click('Create in public calendar');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+    I.fillField('Subject', subject);
+    I.see('Cal#A', '.io-ox-calendar-edit-window .folder-selection');
+    I.click('~Start time');
+    I.pressKey('Enter');
+    I.pressKey(['Control', 'a']);
+    I.pressKey(moment().format('hh:mm P'));
+    I.pressKey('Enter');
+    I.fillField('Add contact/resource', userB.userdata.primaryEmail);
+    I.wait(0.5);
+    I.pressKey('Enter');
+    I.click('Create', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+
+    // 5. User#B: Login and go to Calendar
+    I.logout();
+    I.login(['app=io.ox/calendar&perspective=week:week'], { user: userB });
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    // 6. User#B: Enable "All my public appointments" view and disable Cal#A
+    I.click('.fa.fa-caret-right', '~Public calendars');
+    I.seeElement('div[title="All my public appointments"] .color-label.selected');
+    I.dontSeeElement('div[title="Cal#A"] .color-label.selected');
+
+    // Expected Result: The appointment from step 4 is shown
+    I.waitForText(subject, 5, '.appointment');
+
+    // 7. User#B: Enable "All my public appointments" view and enable Cal#A
+    I.click('.color-label', 'div[title="Cal#A"]');
+    I.seeElement('div[title="Cal#A"] .color-label.selected');
+
+    // Expected Result: The appointment from step 4 is shown only once.
+    I.waitForText(subject, 5, '.appointment');
+    I.seeNumberOfElements(`.appointment[aria-label="${subject}"]`, 1);
+
+    // 8. User#B: Disable "All my public appointments" view and enable Cal#A
+    I.click('.color-label', 'div[title="All my public appointments"]');
+    I.dontSeeElement('div[title="All my public appointments"] .color-label.selected');
+
+    // Expected Result: The appointment from step 4 is shown
+    I.waitForText(subject, 5, '.appointment');
+
+    // 9. User#B: Disable "All my public appointments" view and disbale Cal#A
+    I.click('.color-label', 'div[title="Cal#A"]');
+    I.dontSeeElement('div[title="Cal#A"] .color-label.selected');
+
+    // Expected Result: The appointment from step 4 is not shown
+    I.seeNumberOfElements(`.appointment[aria-label="${subject}"]`, 0);
+    I.dontSee(subject);
 });
