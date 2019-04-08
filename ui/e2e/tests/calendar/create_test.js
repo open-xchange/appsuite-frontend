@@ -886,6 +886,80 @@ Scenario('[C7428] Create appointment with internal participants', async function
     I.waitForText('New appointment: Einkaufen');
 });
 
+Scenario('[C7429] Create appointment via Contact', async function (I, users) {
+
+    I.login('app=io.ox/contacts');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/contacts"]' });
+
+    // use search to find our second user
+    I.click('.search-box input');
+    I.waitForVisible('.io-ox-contacts-window.io-ox-find-active');
+    I.pressKey(users[1].get('sur_name'));
+    I.pressKey('Enter');
+    I.wait(1);
+
+    I.clickToolbar('Invite');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.fillField('Subject', 'Wichtige Dinge tun');
+    I.fillField('Location', 'Kneipe');
+
+    I.click('Create');
+
+    I.openApp('Calendar');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    // cannot use check in all views here because i click toolbar is broken after appchange
+    I.click('View', '.io-ox-calendar-main .classic-toolbar');
+    I.click('Day', '.smart-dropdown-container');
+
+    var cid = await I.grabAttributeFrom('.appointment', 'data-cid'),
+        appointmentSelector = locate(`.appointment[data-cid="${cid}"]`);
+    let appointment = appointmentSelector.inside('.weekview-container.day')
+        .as('appointment element in day view');
+
+    I.waitForText('Wichtige Dinge tun', appointment);
+    I.waitForText('Kneipe', appointment);
+
+    // // 2) week view
+    I.click('View', '.io-ox-calendar-main .classic-toolbar');
+    I.click('Week', '.smart-dropdown-container');
+    I.wait(1);
+    appointment = appointmentSelector.inside('.weekview-container.week')
+        .as('appointment element in week view');
+
+    I.waitForText('Wichtige Dinge tun', appointment);
+    I.waitForText('Kneipe', appointment);
+
+    // // 3) month view
+    I.click('View', '.io-ox-calendar-main .classic-toolbar');
+    I.click('Month', '.smart-dropdown-container');
+    I.wait(1);
+    appointment = appointmentSelector.inside('.monthview-container')
+        .as('appointment element in month view');
+
+    I.waitForText('Wichtige Dinge tun', appointment);
+
+    // // 4) list view
+    I.click('View', '.io-ox-calendar-main .classic-toolbar');
+    I.click('List', '.smart-dropdown-container');
+    I.wait(1);
+    appointment = appointmentSelector.inside('.calendar-list-view')
+        .as('appointment element in list view');
+
+    I.waitForText('Wichtige Dinge tun', appointment);
+    I.waitForText('Kneipe', appointment);
+
+    I.logout();
+
+    I.login('app=io.ox/calendar&perspective=week:day', { user: users[1] });
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"] .appointment' });
+
+    await checkInAllViews(I, 'Wichtige Dinge tun', 'Kneipe');
+
+});
+
+
 Scenario('[C7430] Create appointment via Icon', async function (I) {
 
     I.login('app=io.ox/calendar&perspective="week:day"');
@@ -900,6 +974,7 @@ Scenario('[C7430] Create appointment via Icon', async function (I) {
     I.click('[data-attribute="startDate"] .datepicker-day-field');
     I.pressKey(['Control', 'a']);
     I.pressKey(moment().add(1, 'day').format('M/D/YYYY'));
+
     I.pressKey('Enter');
 
     I.click('~Start time');
