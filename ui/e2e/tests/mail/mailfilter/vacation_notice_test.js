@@ -112,3 +112,21 @@ Scenario('[C7785] Set vacation notice', async function (I, users) {
     I.see('Vacation subject', '.mail-detail-pane');
 
 });
+
+Scenario('[C163027] User gets notified if a vacation notice is avtive (banner in inbox)', async function (I, users) {
+    let [user] = users;
+
+    I.haveMailFilterRule({
+        rulename: 'vacation notice',
+        active: true,
+        flags: ['vacation'],
+        test: { 'id': 'true' },
+        actioncmds: [
+            { days: '7', subject: 'Test Subject', text: 'Test Text', id: 'vacation', addresses: [user.get('primaryEmail')] }
+        ]
+    });
+
+    I.login('app=io.ox/mail');
+    I.waitForElement('[data-action="edit-vacation-notice"]');
+    I.see('Your vacation notice is active');
+});
