@@ -320,6 +320,59 @@ Scenario('[C7813] Filter mail using regex', async function (I, users) {
 
 });
 
+Scenario('[C7814] Filter mail using IsBiggerThan', async function (I, users) {
+    let [user] = users;
+    await I.haveSetting({
+        'io.ox/mail': { messageFormat: 'text' }
+    });
+
+    createFilterRule(I, 'TestCase0400', 'Size', 'Is bigger than', null, 'Red', true);
+
+    I.fillField('sizeValue', '512');
+    // save the form
+    I.click('Save');
+
+    await I.executeAsyncScript(function (done) {
+        require(['settings!io.ox/core', 'io.ox/files/api'], function (settings, filesAPI) {
+            var blob = new window.Blob(['fnord'], { type: 'text/plain' });
+            filesAPI.upload({
+                folder: settings.get('folder/infostore'), file: blob, filename: 'Principia.txt', params: {} }
+            ).done(done);
+        });
+    });
+
+    I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    I.openApp('Mail');
+
+    // compose mail
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
+    I.fillField('.io-ox-mail-compose [name="subject"]', 'TestCase0400');
+    I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
+    I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
+
+    // Open Filepicker
+    I.click('Attachments');
+    I.click('Add from Drive');
+
+    I.waitForText('Principia.txt');
+    I.click(locate('div.name').withText('Principia.txt').inside('.io-ox-fileselection'));
+    // Add the file
+    I.click('Add');
+
+    // Wait for the filepicker to close
+    I.waitForDetached('.io-ox-fileselection');
+
+    I.click('Send');
+
+    I.waitForElement('~Sent, 1 total');
+    I.waitForElement('~Inbox, 1 unread, 1 total');
+
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0400'));
+});
+
 Scenario('[C83386] Create mail filter based on mail', async function (I, users) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
