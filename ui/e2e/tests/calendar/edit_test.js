@@ -736,7 +736,7 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users) {
         folder:  folder,
         summary: subject,
         startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
-        endDate: { value: endTime.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
+        endDate: { value: endTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
     }, { user: userA });
 
     // 1. Switch to Calendar
@@ -779,7 +779,7 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users) {
 
     // Expected Result: The appointment has been modified and all resources, groups, participants are displayed at the appointment popup.
     // Their confirmation status is indicated as well and they're ordered by their type (internal, external, resource).
-    ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
+    ['Week', 'Day', 'Month', 'List'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
         I.waitForText(subject, 5, '.page.current .appointment');
@@ -883,4 +883,70 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
 
     I.see('11:00 AM');
     I.see('2:00 PM');
+});
+
+Scenario('[C7460] Add attachments', async function (I) {
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
+    });
+
+    // Precondition: An appointment already exists
+    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`,
+        startTime = moment().add(1, 'hour'),
+        endTime = moment().add(2, 'hour'),
+        subject = `Tiny Tinas ${startTime.format('h a')}s Tea Party`;
+    await I.haveAppointment({
+        folder:  folder,
+        summary: subject,
+        startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: endTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
+    });
+
+    // 1. Switch to Calendar
+    I.login(['app=io.ox/calendar&perspective=week:week']);
+
+    // Expected Result: The calendar app is shown with the existing appointment
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.see(subject, '.appointment');
+
+    // 2. Select the existing appointment, click "Edit"
+    I.click(subject, '.appointment');
+    I.waitForElement('.io-ox-sidepopup');
+    I.click('Edit');
+
+    // Expected Result: The appointment edit dialog is shown
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    // 3. Locate the "Attachments" area and add files as attachments either by the browsers upload dialog or drag&drop from the file manager or desktop
+    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'e2e/media/files/generic/testdocument.odt');
+    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
+
+    // Expected Result: Attachments get added to the edit dialog
+    I.see('testdocument.odt');
+    I.see('testdocument.rtf');
+
+    // 4. Save the appointment and check it in all calendar views
+    I.click('Save', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+
+    // Expected Result: The appointment now contains the added files as attachments. These attachments can be downloaded and correspond to the files that have been uploaded.
+    const seeAttachments = (context) => {
+        I.waitForElement(context);
+        I.see(subject, context);
+        I.see('testdocument.odt', context);
+        I.see('testdocument.rtf', context);
+    };
+    ['Week', 'Day', 'Month', 'List'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForText(subject, 5, '.page.current .appointment');
+        I.click(subject, '.page.current .appointment');
+        if (view === 'List') {
+            seeAttachments('.calendar-detail-pane');
+        } else {
+            seeAttachments('.io-ox-sidepopup');
+        }
+    });
+    // TODO: check if attachments can be downloaded and compared with the original files
 });
