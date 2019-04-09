@@ -175,7 +175,7 @@ function getTestMail(from, to, opt) {
     };
 }
 
-// TODO: add missing steps that involves drag and drop
+// PARTIAL: missing drag and drop steps
 Scenario.skip('[C85632] Move mails to another category', async function (I, users) {
     await users.create();
     await users.create();
@@ -221,6 +221,62 @@ Scenario.skip('[C85632] Move mails to another category', async function (I, user
     // TODO: add missing steps that involves drag and drop
     await I.dragAndDrop(item, target);
     I.wait(2);
+
+    I.logout();
+});
+
+function reply(I, user) {
+    I.login('app=io.ox/mail', { user: user });
+    I.waitForVisible('.io-ox-mail-window');
+    I.waitForVisible('.io-ox-mail-window .list-view');
+    I.click('.list-item[data-index="0"]', '.list-view');
+    I.wait(1);
+    I.click('a[data-action="io.ox/mail/actions/reply"]');
+    I.wait(2);
+    I.click('Send');
+    I.wait(1);
+    I.logout({ user: user });
+    I.wait(1);
+}
+
+// PARTIAL: missing drag and drop steps
+Scenario.skip('[C96951] Conversations', async function (I, users) {
+    await users.create();
+    await users.create();
+
+    const user1 = users[0];
+    const user2 = users[1];
+
+    await I.haveMail(getTestMail(user1, user2, {
+        subject: 'Test Mail 1',
+        content: 'Testing is still fun'
+    }));
+
+    reply(I, user2);
+    reply(I, user1);
+    reply(I, user2);
+    reply(I, user1);
+    reply(I, user2);
+
+    I.haveSetting('io.ox/mail//categories/enabled', true, { user: user1 });
+    I.login('app=io.ox/mail', { user: user1 });
+    I.waitForVisible('.io-ox-mail-window');
+    I.waitForVisible('.io-ox-mail-window .list-view');
+
+    // TODO: add missing step: "Move <message-3> from tab "General" to "Promotions"
+
+    I.say('Enable Conversations/Threads', 'blue');
+    I.click('Sort', '.list-view-control');
+    I.waitForVisible('[data-name="thread"]', 'body > .dropdown');
+    I.click('[data-name="thread"]', 'body > .dropdown');
+    I.wait(2);
+
+    I.say('Check Thread in "inbox"', 'blue');
+    I.see('6', '.list-view .thread-size');
+
+    I.say('Check Thread in "promotion"', 'blue');
+    I.click('[data-id="promotion"]', SELECTORS.toolbar);
+    I.see('6', '.list-view .thread-size');
 
     I.logout();
 });
