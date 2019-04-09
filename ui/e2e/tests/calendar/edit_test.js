@@ -836,3 +836,51 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users) {
     await I.dontHaveResource(resourceName);
     await I.dontHaveGroup(groupName);
 });
+
+Scenario('[C7455] Edit appointment by changing the timeframe', async function (I, users) {
+
+    //Create Appointment
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Dinner for one',
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().startOf('day').add(13, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().startOf('day').add(12, 'hours').format('YYYYMMDD[T]HHmm00')
+        }
+    });
+
+    I.login('app=io.ox/calendar&perspective=week:day');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    I.waitForVisible('.appointment');
+    I.dragAndDrop('.appointment .resizable-n', '.day .timeslot:nth-child(23)');
+
+    I.see('11:00 AM – 1:00 PMCEST');
+    I.dragAndDrop('.appointment .resizable-s', '.day .timeslot:nth-child(28)');
+
+    I.see('11:00 AM – 2:00 PMCEST');
+
+    I.clickToolbar('View');
+    I.click('Week', '.smart-dropdown-container');
+
+    I.click('.io-ox-pagecontroller.current .appointment');
+    I.see('11:00 AM – 2:00 PMCEST');
+
+    I.clickToolbar('View');
+    I.click('Month', '.smart-dropdown-container');
+
+    I.click('.io-ox-pagecontroller.current .appointment');
+    I.see('11:00 AM – 2:00 PMCEST');
+
+    I.clickToolbar('View');
+    I.click('List', '.smart-dropdown-container');
+    I.wait(1);
+
+    I.see('11:00 AM');
+    I.see('2:00 PM');
+});
