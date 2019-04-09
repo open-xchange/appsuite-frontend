@@ -12,7 +12,6 @@
 
 const expect = require('chai').expect;
 // depends on https://gitlab.open-xchange.com/frontend/Infrastructure/preview_apps/issues/5
-const DISABLED = true;
 
 Feature('Mail categories');
 
@@ -49,7 +48,6 @@ const A = {
 };
 
 Scenario('Feature can be enabled/disabled', function (I) {
-    if (DISABLED) return;
     I.haveSetting('io.ox/mail//categories/enabled', true);
 
     I.login('app=io.ox/mail');
@@ -63,8 +61,6 @@ Scenario('Feature can be enabled/disabled', function (I) {
 });
 
 Scenario('[C85626] Mail categories can be renamed', function (I) {
-    if (DISABLED) return;
-
     I.haveSetting('io.ox/mail//categories/enabled', true);
 
     I.login('app=io.ox/mail');
@@ -86,8 +82,6 @@ Scenario('[C85626] Mail categories can be renamed', function (I) {
 });
 
 Scenario('[C85626] Categories can be enabled or disabled', function (I) {
-    if (DISABLED) return;
-
     I.haveSetting('io.ox/mail//categories/enabled', true);
 
     I.login('app=io.ox/mail');
@@ -140,8 +134,6 @@ Scenario('[C85626] Categories can be enabled or disabled', function (I) {
 });
 
 Scenario('[C85626] Support different aspects of categories', function (I) {
-    if (DISABLED) return;
-
     I.haveSetting('io.ox/mail//categories/enabled', true);
 
     I.login('app=io.ox/mail');
@@ -183,11 +175,7 @@ function getTestMail(from, to, opt) {
     };
 }
 
-// mail sending broken in test server when categories are enabled. Therefore currently disabled
-
-/*
 Scenario('[C85632] Move mails to another category', async function (I, users) {
-    if (DISABLED) return;
     await users.create();
     await users.create();
     await users.create();
@@ -218,4 +206,3 @@ Scenario('[C85632] Move mails to another category', async function (I, users) {
     I.login('app=io.ox/mail', { user: user3 });
     I.waitForVisible('.io-ox-mail-window');
 });
-*/
