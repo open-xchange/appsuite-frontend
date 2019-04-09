@@ -84,14 +84,21 @@ define('io.ox/core/download', [
         index: 100,
         id: 'buttonThreatFound',
         render: function (baton) {
-            // error code 11 is virus found
+            // error code 0011: virus found
             if (baton.model.get('code') !== 'ANTI-VIRUS-SERVICE-0011') return;
+            var opt = {
+                action: 'ignore',
+                label: gt('Download infected file'),
+                className: 'btn-default'
+            };
+
             // special treatment for desktop safari to avoid frame load interrupted error
             if (_.device('!ios && safari')) {
-                this.addDownloadButton({ href: baton.model.get('dlFrame').src.replace('&scan=true', ''), action: 'ignore', label: gt('Download infected file'), className: 'btn-default' });
+                this.addDownloadButton(_.extend(opt, { href: baton.model.get('dlFrame').src.replace('&scan=true', '') }));
                 return;
             }
-            this.addButton({ action: 'ignore', label: gt('Download infected file'), className: 'btn-default' });
+            this.addButton(opt);
+            this.addButton({ action: 'cancel', label: gt('Cancel'), className: 'btn-primary' });
         }
     });
 
@@ -101,12 +108,18 @@ define('io.ox/core/download', [
         render: function (baton) {
             // error code 11 is virus found
             if (baton.model.get('code') === 'ANTI-VIRUS-SERVICE-0011') return;
+            var opt = {
+                action: 'ignore',
+                label: gt('Download unscanned file'),
+                className: 'btn-default'
+            };
             // special treatment for desktop safari to avoid frame load interrupted error
             if (_.device('!ios && safari')) {
-                this.addDownloadButton({ href: baton.model.get('dlFrame').src.replace('&scan=true', ''), action: 'ignore', label: gt('Download unscanned file'), className: 'btn-default' });
+                this.addDownloadButton(_.extend(opt, { href: baton.model.get('dlFrame').src.replace('&scan=true', '') }));
                 return;
             }
-            this.addButton({ action: 'ignore', label: gt('Download unscanned file'), className: 'btn-default' });
+            this.addButton({ action: 'cancel', label: gt('Cancel'), className: 'btn-default' });
+            this.addButton(opt);
         }
     });
 
@@ -114,25 +127,19 @@ define('io.ox/core/download', [
         index: 300,
         id: 'message',
         render: function (baton) {
-            var text = baton.model.get('error');
+            var text = baton.model.get('error'),
+                type = baton.model.get('code') === 'ANTI-VIRUS-SERVICE-0011' ? 'av-danger' : 'av-warning';
             // generic error message for internal errors (I/O error, service unreachable, service not running etc)
-            if (scanErrors.indexOf(baton.model.get('code')) === -1) {
-                text = 'File could not be scanned for malicious content.';
+            if (true || scanErrors.indexOf(baton.model.get('code')) === -1) {
+                text = gt('Unable to perform Anti-Virus check for the requested file(s)');
             }
 
-            this.$body.append($('<div class="alert">')
-                .text(text)
-                .css('margin-bottom', '0')
-                // error code 11 is virus found
-                .addClass(baton.model.get('code') === 'ANTI-VIRUS-SERVICE-0011' ? 'alert-danger' : 'alert-warning'));
-        }
-    });
-
-    ext.point('io.ox/core/download/antiviruspopup').extend({
-        index: 400,
-        id: 'buttonCancel',
-        render: function () {
-            this.addButton({ action: 'cancel', label: gt('Cancel') });
+            this.$body
+                .addClass('av-dialog')
+                .addClass(type)
+                .append($('<i class="fa fa-warning" aria-hidden="true">'),
+                    $('<div>').text(text)
+                );
         }
     });
 
@@ -154,7 +161,7 @@ define('io.ox/core/download', [
         });
 
         new ModalDialog({
-            title: gt('Anti-Virus Warning'),
+            title: error.code.match(/0011/) ? gt('Malicious file detected') : gt('Anti-Virus warning'),
             point: 'io.ox/core/download/antiviruspopup',
             model: new Backbone.Model(error)
         })
