@@ -15,12 +15,16 @@ define('io.ox/guard/auth/authorizer', ['io.ox/core/capabilities'], function (cap
     var auth = {};
 
     // If Guard enabled, creates prompt with optional prompt
+    // options may contain { optPrompt: "Prompt", forceRelogin: true/false, callback: function }
     // If optPrompt undefined, uses standard wording "Enter Guard password"
-    auth.authorize = function authorize(optPrompt) {
+    // forceRelogin requires password prompt regardless if stored
+    // minSingleUse requires the authentication be stored in the session until used
+    // callback function is called when the user clicks OK after entering password
+    auth.authorize = function authorize(baton, options) {
         var def = $.Deferred();
         if (capabilities.has('guard')) {
             require(['oxguard/auth'], function (auth_core) {
-                auth_core.authorize(optPrompt).then(function (auth) {
+                auth_core.authorize(baton, options).then(function (auth) {
                     def.resolve(auth);
                 }, function (reject) {
                     def.reject(reject);
