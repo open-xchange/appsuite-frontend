@@ -728,6 +728,65 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
 
 });
 
+Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async function (I) {
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
+    });
+    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    const time = moment().startOf('week').add(1, 'day').add(10, 'hours');
+    // recurring appointment without additional participants
+    await I.haveAppointment({
+        folder:  folder,
+        summary: 'Testappointment',
+        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        rrule: 'FREQ=WEEKLY;BYDAY=MO;INTERVAL=2;COUNT=3'
+    });
+
+    I.login('app=io.ox/calendar');
+
+    I.waitForText('Testappointment');
+    I.see('Testappointment', locate('.day').at(1));
+    // use 3rd child here as the container has another child before the first .day
+    I.dragAndDrop('.page.current .appointment', locate('.timeslot').at(21).inside('.day:nth-child(3)'));
+    I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
+    I.click('Series');
+
+    I.waitForInvisible('.page.current .appointment.io-ox-busy');
+    I.see('Testappointment', locate('.day').at(2));
+
+    I.clickToolbar('View');
+    I.click('Week');
+
+    I.waitForVisible('.appointment');
+    I.see('Testappointment', locate('.day').at(3));
+
+    // use 5th child here as the container has another child before the first .day
+    I.dragAndDrop(locate('.appointment').inside('.page.current'), locate('.timeslot').at(21).inside('.day:nth-child(5)').inside('.page.current'));
+    I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
+    I.click('Series');
+
+    I.waitForInvisible('.page.current .appointment.io-ox-busy');
+    I.see('Testappointment', locate('.day').at(4));
+
+    I.clickToolbar('View');
+    I.click('Month');
+
+    I.waitForVisible('.page.current .appointment');
+    time.add(2, 'days');
+    I.see('Testappointment', `[id="${time.format('YYYY-M-D')}"]`);
+
+    time.add(1, 'day');
+    I.dragAndDrop(locate('.appointment').inside('.page.current'), `[id="${time.format('YYYY-M-D')}"]`);
+    I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
+    I.click('Series');
+
+    I.waitForInvisible('.page.current .appointment.io-ox-busy');
+    I.see('Testappointment', `[id="${time.format('YYYY-M-D')}"]`);
+});
+
 Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, users) {
     const
         Moment = require('moment'),
