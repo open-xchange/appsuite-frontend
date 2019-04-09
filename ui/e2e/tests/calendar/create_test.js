@@ -145,7 +145,7 @@ Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December
     ['Workweek', 'Week', 'Day', 'Month'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
-        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.waitForVisible(locate('.appointment').inside('.page.current'));
         I.see('Testappointment');
     });
 
@@ -157,7 +157,7 @@ Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December
     ['Workweek', 'Week', 'Day', 'Month'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
-        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.waitForVisible(locate('.appointment').inside('.page.current'));
         I.see('Testappointment');
     });
 });
@@ -214,7 +214,7 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
     ['Week', 'Day', 'Month'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
-        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.waitForVisible(locate('.appointment').inside('.page.current'));
         I.see('Testappointment');
     });
 
@@ -228,7 +228,7 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
     ['Week', 'Day', 'Month'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
-        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.waitForVisible(locate('.appointment').inside('.page.current'));
         I.see('Testappointment');
     });
 });
@@ -262,7 +262,7 @@ Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/20
 
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Monthly');
     I.selectOption('.modal-dialog [name="until"]', 'On specific date');
-    I.waitForElement('~Date (M/D/YYYY)', undefined, '.modal-dialog');
+    I.waitForElement(locate('~Date (M/D/YYYY)').inside('.modal-dialog'));
     I.click('~Date (M/D/YYYY)', '.modal-dialog');
     I.pressKey(['Control', 'a']);
     I.pressKey(moment(date).add(6, 'years').format('l'));
@@ -282,7 +282,7 @@ Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/20
     ['Week', 'Day', 'Month', 'List'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
-        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.waitForVisible(locate('.appointment').inside('.page.current'));
         I.see('Testappointment');
     });
 
@@ -294,7 +294,7 @@ Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/20
     ['Week', 'Day', 'Month'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
-        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.waitForVisible(locate('.appointment').inside('.page.current'));
         I.see('Testappointment');
     });
 
@@ -343,10 +343,10 @@ Scenario('[C7420] Create a monthly recurring appointment every second Monday eve
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
     // open all views and load the appointments there
-    ['Week', 'Day', 'Month', 'List'].forEach((view) => {
+    ['Week', 'Day', 'Month'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
-        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.waitForVisible(locate('.appointment').inside('.page.current'));
         I.see('Testappointment');
     });
 
@@ -360,7 +360,7 @@ Scenario('[C7420] Create a monthly recurring appointment every second Monday eve
     ['Week', 'Day', 'Month'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
-        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.waitForVisible(locate('.appointment').inside('.page.current'));
         I.see('Testappointment');
     });
 
@@ -415,7 +415,7 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
     ['Week', 'Day', 'Month', 'List'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
-        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.waitForVisible(locate('.appointment').inside('.page.current'));
         I.see('Testappointment');
     });
 
@@ -429,7 +429,7 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
         ['Week', 'Day', 'Month'].forEach((view) => {
             I.clickToolbar('View');
             I.click(view);
-            I.waitForVisible('.appointment', undefined, '.page.current');
+            I.waitForVisible(locate('.appointment').inside('.page.current'));
             I.see('Testappointment');
         });
     }
@@ -443,7 +443,7 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
     ['Week', 'Day'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
-        I.waitForInvisible('.appointment', undefined, '.page.current');
+        I.waitForInvisible(locate('.appointment').inside('.page.current'));
         I.dontSee('Testappointment');
     });
 
@@ -495,7 +495,7 @@ Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thu
     ['Week', 'Day', 'Month'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
-        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.waitForVisible(locate('.appointment').inside('.page.current'));
         I.see('Testappointment');
         if (view === 'week') I.seeNumberOfVisibleElements('.page.current .appointment', 2);
     });
@@ -553,7 +553,7 @@ Scenario('[C7423] Create daily recurring appointment every day ends after 5', as
     ['Month', 'Week'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
-        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.waitForVisible(locate('.appointment').inside('.page.current'));
         I.see('Testappointment');
         I.seeNumberOfVisibleElements('.page.current .appointment', 5);
     });
@@ -618,26 +618,26 @@ Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12',
     // open all views and load the appointments there
     I.clickToolbar('View');
     I.click('Month');
-    I.waitForVisible('.appointment', undefined, '.page.current');
+    I.waitForVisible(locate('.appointment').inside('.page.current'));
     I.see('Testappointment');
     I.seeNumberOfVisibleElements('.page.current .appointment', 8);
 
     // first week
     I.clickToolbar('View');
     I.click('Week');
-    I.waitForVisible('.appointment', undefined, '.page.current');
+    I.waitForVisible(locate('.appointment').inside('.page.current'));
     I.see('Testappointment');
     I.seeNumberOfVisibleElements('.page.current .appointment', 3);
 
     // second week
     I.click('~Next Week', '.page.current');
-    I.waitForVisible('.appointment', undefined, '.page.current');
+    I.waitForVisible(locate('.appointment').inside('.page.current'));
     I.see('Testappointment');
     I.seeNumberOfVisibleElements('.page.current .appointment', 4);
 
     // third week
     I.click('~Next Week', '.page.current');
-    I.waitForVisible('.appointment', undefined, '.page.current');
+    I.waitForVisible(locate('.appointment').inside('.page.current'));
     I.see('Testappointment');
     I.seeNumberOfVisibleElements('.page.current .appointment', 1);
 

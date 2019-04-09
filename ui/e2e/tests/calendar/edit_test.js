@@ -74,7 +74,7 @@ Scenario.skip('[C7465] Edit appointment in shared folder as author', async funct
     I.click('Permissions / Invite people');
     I.waitForText('Permissions for folder "New calendar"');
     I.pressKey(users[1].userdata.primaryEmail);
-    I.waitForText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, undefined, '.tt-dropdown-menu');
+    I.waitForVisible(locate(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
     I.click('Save');
@@ -112,7 +112,7 @@ Scenario.skip('[C7465] Edit appointment in shared folder as author', async funct
     ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
-        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.waitForVisible(locate('.appointment').inside('.page.current'));
         I.click('.appointment', '.page.current');
         I.see('Changedappointment');
         I.see('Changedlocation');
@@ -296,7 +296,7 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author', asyn
     I.click('Permissions / Invite people');
     I.waitForText('Permissions for folder "New calendar"');
     I.pressKey(users[1].userdata.primaryEmail);
-    I.waitForText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, undefined, '.tt-dropdown-menu');
+    I.waitForText(locate(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
     I.click('Save');
@@ -358,7 +358,7 @@ Scenario('[C7470] Delete a recurring appointment', async function (I) {
     ['Week', 'Day', 'Month', 'List', 'Workweek'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
-        I.waitForVisible('.appointment', undefined, '.page.current');
+        I.waitForVisible(locate('.appointment').inside('.page.current'));
     });
 
     I.click('.appointment', '.page.current');
@@ -371,7 +371,7 @@ Scenario('[C7470] Delete a recurring appointment', async function (I) {
 
     I.waitForDetached('.io-ox-sidepopup');
 
-    I.waitForInvisible('.appointment', undefined, '.page.current');
+    I.waitForInvisible(locate('.appointment').inside('.page.current'));
     ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
@@ -413,7 +413,7 @@ Scenario('[C274402] Change organizer of appointment with internal attendees', as
 
     I.waitForVisible('.modal-dialog');
     I.fillField('Select new organizer', users[1].userdata.primaryEmail);
-    I.waitForText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, undefined, '.tt-dropdown-menu');
+    I.waitForText(locate(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
 
@@ -462,7 +462,7 @@ Scenario('[274409] Change organizer of series with internal attendees', async fu
 
     I.waitForVisible('.modal-dialog');
     I.fillField('Select new organizer', users[1].userdata.primaryEmail);
-    I.waitForText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, undefined, '.tt-dropdown-menu');
+    I.waitForText(locate(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
 
