@@ -756,25 +756,21 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users) {
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     // 3. Locate the "Participants" section and add some OX users, groups and resources as participants. This may include external mail accounts which are not handled by OX
-    I.fillField('Add contact/resource', userB.userdata.primaryEmail);
-    I.wait(0.5);
-    I.pressKey('Enter');
-    I.fillField('Add contact/resource', groupName);
-    I.wait(0.5);
-    I.pressKey('Enter');
-    I.fillField('Add contact/resource', resourceName);
-    I.wait(0.5);
-    I.pressKey('Enter');
-    I.fillField('Add contact/resource', 'foo@bar');
-    I.wait(0.5);
-    I.pressKey('Enter');
-    I.wait(0.5);
+    const addParticipant = (name) => {
+        I.fillField('Add contact/resource', name);
+        I.wait(0.5);
+        I.pressKey('Enter');
+    };
+    [userB.userdata.primaryEmail, groupName, resourceName, 'foo@bar'].forEach(addParticipant);
+
     // Expected Result: The participants area is populating with people that got added to the appointment.
-    I.see(userA.userdata.primaryEmail, '.participant-wrapper');
-    I.see(userB.userdata.primaryEmail, '.participant-wrapper');
-    I.see(weebl.userdata.primaryEmail, '.participant-wrapper');
-    I.see(bob.userdata.primaryEmail, '.participant-wrapper');
-    I.see('foo@bar', '.participant-wrapper');
+    [
+        userA.userdata.primaryEmail,
+        userB.userdata.primaryEmail,
+        weebl.userdata.primaryEmail,
+        bob.userdata.primaryEmail,
+        'foo@bar'
+    ].forEach(mail => I.see(mail, '.participant-wrapper'));
 
     // 4. Save the appointment and check it in all calendar views
     const getSectionLocator = (sectionName) => locate('fieldset').withDescendant(locate('h2').withText(sectionName));
@@ -797,14 +793,13 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users) {
         }
         I.seeElement('a[aria-label="unconfirmed 4"]');
         I.seeElement('a[aria-label="accepted 1"]');
-        I.see(`${userA.userdata.sur_name}, ${userA.userdata.given_name}`, getSectionLocator('Participants'));
+        [
+            `${userA.userdata.sur_name}, ${userA.userdata.given_name}`,
+            `${userB.userdata.sur_name}, ${userB.userdata.given_name}`,
+            `${weebl.userdata.sur_name}, ${weebl.userdata.given_name}`,
+            `${bob.userdata.sur_name}, ${bob.userdata.given_name}`
+        ].forEach(name => I.see(name, getSectionLocator('Participants')));
         I.seeElement(locate(`a.accepted[title="${userA.userdata.primaryEmail}"]`).inside(getSectionLocator('Participants')));
-        I.see(`${userB.userdata.sur_name}, ${userB.userdata.given_name}`, getSectionLocator('Participants'));
-        I.dontSeeElement(locate(`a.accepted[title="${userB.userdata.primaryEmail}"]`).inside(getSectionLocator('Participants')));
-        I.see(`${weebl.userdata.sur_name}, ${weebl.userdata.given_name}`, getSectionLocator('Participants'));
-        I.dontSeeElement(locate(`a.accepted[title="${weebl.userdata.primaryEmail}"]`).inside(getSectionLocator('Participants')));
-        I.see(`${bob.userdata.sur_name}, ${bob.userdata.given_name}`, getSectionLocator('Participants'));
-        I.dontSeeElement(locate(`a.accepted[title="${bob.userdata.primaryEmail}"]`).inside(getSectionLocator('Participants')));
         I.see('foo', getSectionLocator('External participants'));
         I.see(resourceName, getSectionLocator('Resources'));
     });
