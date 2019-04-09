@@ -47,7 +47,8 @@ const A = {
     }
 };
 
-Scenario('Feature can be enabled/disabled', function (I) {
+// PARTIAL: missing drag and drop steps
+Scenario.skip('[C85634] Enable/disable tabbed inbox', function (I) {
     I.haveSetting('io.ox/mail//categories/enabled', true);
 
     I.login('app=io.ox/mail');
@@ -55,6 +56,9 @@ Scenario('Feature can be enabled/disabled', function (I) {
 
     I.seeElement('.classic-toolbar.categories');
     A.toggle(I);
+
+    // TODO: add missing steps that involves drag and drop
+
     I.dontSeeElement('.classic-toolbar.categories');
     A.toggle(I);
     I.seeElement('.classic-toolbar.categories');
