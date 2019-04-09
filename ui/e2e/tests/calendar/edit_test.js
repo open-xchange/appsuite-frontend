@@ -706,3 +706,138 @@ Scenario('[C7462] Remove a participant', async function (I, users) {
     I.waitForDetached('.io-ox-sidepopup-pane a[title="' + users[1].userdata.primaryEmail + '"]');
     I.logout();
 });
+
+Scenario('[C7461] Add a participant/ressource', async function (I, users) {
+    await users.create();
+    await users.create();
+    const [userA, userB, weebl, bob] = users;
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
+    });
+
+    const timestamp = Math.round(+new Date() / 1000);
+    const resourceName = `C7461 ${timestamp}`,
+        resourceMail = `C7461@${timestamp}.de`;
+    await I.dontHaveResource(resourceName);
+    await I.haveResource({ description: 'Evil sharks equipped with lazers', display_name: resourceName, name: resourceName, mailaddress: resourceMail });
+
+    const groupName = `C7461 ${timestamp} Group`;
+    await I.dontHaveGroup(groupName);
+    await I.haveGroup({ name: groupName, display_name: groupName, members: [weebl.userdata.id, bob.userdata.id] });
+
+    // Precondition: A simple appointment already exists
+    const folder = `cal://0/${await I.grabDefaultFolder('calendar', { user: userA })}`,
+        startTime = moment().add(1, 'hour'),
+        endTime = moment().add(2, 'hour'),
+        subject = `${userA.userdata.name}s awesome appointment`;
+    await I.haveAppointment({
+        folder:  folder,
+        summary: subject,
+        startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: endTime.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
+    }, { user: userA });
+
+    // 1. Switch to Calendar
+    I.login(['app=io.ox/calendar&perspective=week:week'], { user: userA });
+
+    // Expected Result: The calendar app is shown, including the existing appointment
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.see(subject, '.appointment');
+
+    // 2. Select the appointment and click "Edit"
+    I.click(subject, '.appointment');
+    I.waitForElement('.io-ox-sidepopup');
+    I.waitForText('Edit', 5, '.io-ox-sidepopup');
+    I.click('Edit');
+
+    // Expected Result: The edit dialog is shown
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    // 3. Locate the "Participants" section and add some OX users, groups and resources as participants. This may include external mail accounts which are not handled by OX
+    I.fillField('Add contact/resource', userB.userdata.primaryEmail);
+    I.wait(0.5);
+    I.pressKey('Enter');
+    I.fillField('Add contact/resource', groupName);
+    I.wait(0.5);
+    I.pressKey('Enter');
+    I.fillField('Add contact/resource', resourceName);
+    I.wait(0.5);
+    I.pressKey('Enter');
+    I.fillField('Add contact/resource', 'foo@bar');
+    I.wait(0.5);
+    I.pressKey('Enter');
+    I.wait(0.5);
+    // Expected Result: The participants area is populating with people that got added to the appointment.
+    I.see(userA.userdata.primaryEmail, '.participant-wrapper');
+    I.see(userB.userdata.primaryEmail, '.participant-wrapper');
+    I.see(weebl.userdata.primaryEmail, '.participant-wrapper');
+    I.see(bob.userdata.primaryEmail, '.participant-wrapper');
+    I.see('foo@bar', '.participant-wrapper');
+
+    // 4. Save the appointment and check it in all calendar views
+    const getSectionLocator = (sectionName) => locate('fieldset').withDescendant(locate('h2').withText(sectionName));
+    I.click('Save', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+
+    // Expected Result: The appointment has been modified and all resources, groups, participants are displayed at the appointment popup.
+    // Their confirmation status is indicated as well and they're ordered by their type (internal, external, resource).
+    ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForText(subject, 5, '.page.current .appointment');
+        I.click(subject, '.page.current .appointment');
+        if (view === 'List') {
+            I.waitForElement('.calendar-detail-pane');
+            I.see(subject, '.calendar-detail-pane');
+        } else {
+            I.waitForElement('.io-ox-sidepopup');
+            I.see(subject, '.io-ox-sidepopup');
+        }
+        I.seeElement('a[aria-label="unconfirmed 4"]');
+        I.seeElement('a[aria-label="accepted 1"]');
+        I.see(`${userA.userdata.sur_name}, ${userA.userdata.given_name}`, getSectionLocator('Participants'));
+        I.seeElement(locate(`a.accepted[title="${userA.userdata.primaryEmail}"]`).inside(getSectionLocator('Participants')));
+        I.see(`${userB.userdata.sur_name}, ${userB.userdata.given_name}`, getSectionLocator('Participants'));
+        I.dontSeeElement(locate(`a.accepted[title="${userB.userdata.primaryEmail}"]`).inside(getSectionLocator('Participants')));
+        I.see(`${weebl.userdata.sur_name}, ${weebl.userdata.given_name}`, getSectionLocator('Participants'));
+        I.dontSeeElement(locate(`a.accepted[title="${weebl.userdata.primaryEmail}"]`).inside(getSectionLocator('Participants')));
+        I.see(`${bob.userdata.sur_name}, ${bob.userdata.given_name}`, getSectionLocator('Participants'));
+        I.dontSeeElement(locate(`a.accepted[title="${bob.userdata.primaryEmail}"]`).inside(getSectionLocator('Participants')));
+        I.see('foo', getSectionLocator('External participants'));
+        I.see(resourceName, getSectionLocator('Resources'));
+    });
+
+    // 5. Check the mail inbox of one of the participants.
+    I.logout();
+    I.login(['app=io.ox/mail'], { user: userB });
+
+    // Expected Result: A mail has been received, informing about the new appointment.
+    let mailCount = await I.grabNumberOfVisibleElements('.list-item');
+    let retries = 10;
+
+    while (mailCount < 1) {
+        if (retries > 0) {
+            I.waitForElement('#io-ox-refresh-icon', 5, '.taskbar');
+            I.click('#io-ox-refresh-icon', '.taskbar');
+            I.waitForElement('.launcher .fa-spin-paused', 5);
+            I.wait(60);
+            console.log('No mail(s) found. Waiting 1 minute ...');
+            mailCount = await I.grabNumberOfVisibleElements('.list-item');
+            retries--;
+        } else {
+            console.log('Timeout exceeded. No mails found.');
+            break;
+        }
+    }
+
+    I.click('#io-ox-refresh-icon');
+    I.waitForElement('#io-ox-refresh-icon .fa-spin');
+    I.waitForDetached('#io-ox-refresh-icon .fa-spin');
+    I.retry().waitForElement(`span[title="New appointment: ${subject}"]`);
+
+    // clean up groups and resources
+    await I.dontHaveResource(resourceName);
+    await I.dontHaveGroup(groupName);
+});
