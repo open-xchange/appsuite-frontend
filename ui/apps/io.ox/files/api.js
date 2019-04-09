@@ -1802,7 +1802,7 @@ define('io.ox/files/api', [
             api.versions.load(file, { cache: false });
             return http.resume().then(function (response) {
                 // explicitly return the file data
-                return _.isArray(response) ? response[0].data : false;
+                return _.isArray(response) && response.length ? response[0].data : false;
             });
         }
 
