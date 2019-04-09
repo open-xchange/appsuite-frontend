@@ -643,6 +643,32 @@ Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12',
 
 });
 
+Scenario('[C271749] Show prompt on event creation in public calendar', async function (I) {
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
+
+    // Create a public calendar (Cal#A)
+    I.login('app=io.ox/calendar');
+    I.waitForText('Add new calendar');
+    I.click('Add new calendar');
+    I.waitForText('Personal calendar');
+    I.click('Personal calendar');
+    I.waitForVisible('.modal-body');
+    I.fillField('Calendar name', 'Cal#A');
+    I.checkOption('Add as public calendar');
+    I.click('Add');
+    I.waitForVisible('#io-ox-core');
+
+    // Open create new appointment dialog
+    I.doubleClick(locate('~Public calendars'));
+    I.clickToolbar('New');
+
+    // Check dialog on event creation in public calendars'
+    I.waitForText('Appointments in public calendars');
+});
+
 Scenario('[C274537] Support use-count calculation on Appointment create with Groups', async function (I, users) {
     let testrailID = 'C274537';
     var timestamp = Math.round(+new Date() / 1000);
