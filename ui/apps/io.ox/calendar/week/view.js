@@ -1413,7 +1413,7 @@ define('io.ox/calendar/week/view', [
                         var deltaX = mousedownOrigin.x - e.pageX,
                             deltaY = mousedownOrigin.y - e.pageY;
                         if (deltaX * deltaX + deltaY * deltaY < cellHeight * cellHeight / 2) return;
-                        return this.$el.addClass('no-select');
+                        this.$el.addClass('no-select');
                     }
 
                     var target = $(e.target);
