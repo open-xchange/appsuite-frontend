@@ -89,3 +89,27 @@ Scenario('[C45022] Generate simple link for sharing with password', async functi
     I.waitForElement('.list-view');
     I.see('Music', '.folder-tree .selected');
 });
+
+Scenario('[C83385] Copy to clipboard', async function (I) {
+    I.login('app=io.ox/files');
+    I.click('My files', '.folder-tree');
+    I.selectFolder('Music');
+    I.clickToolbar('Share');
+    I.click('Create sharing link');
+    I.waitForElement('.clippy');
+    const [url] = await I.grabValueFrom('.share-wizard input[type="text"]');
+    I.click('~Copy to clipboard');
+    I.see('Copied');
+
+    // write something, so the field gets the focus
+    I.fillField('Message (optional)', 'The url: ');
+    // now paste what we have in clipboard
+    I.pressKey(['Control', 'v']);
+
+    I.seeInField({ css: 'textarea[name="message"]' }, `The url: ${url}`);
+
+    I.click('Close');
+    I.logout();
+    I.amOnPage(url);
+    I.waitForText('Music');
+});
