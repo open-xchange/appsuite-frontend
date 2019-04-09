@@ -175,7 +175,8 @@ function getTestMail(from, to, opt) {
     };
 }
 
-Scenario('[C85632] Move mails to another category', async function (I, users) {
+// TODO: add missing steps that involves drag and drop
+Scenario.skip('[C85632] Move mails to another category', async function (I, users) {
     await users.create();
     await users.create();
     await users.create();
@@ -204,5 +205,22 @@ Scenario('[C85632] Move mails to another category', async function (I, users) {
     }), { user: user2 });
 
     I.login('app=io.ox/mail', { user: user3 });
+
+    await I.executeScript(function () {
+        return $('body').addClass('dragging');
+    });
+
     I.waitForVisible('.io-ox-mail-window');
+    I.waitForVisible('.io-ox-mail-window .list-view');
+
+    let item = locate('.list-item[data-index="0"]').inside(locate('.list-view'));
+    let target = locate('[data-id="social"] .category-drop-helper').inside(locate('.classic-toolbar.categories'));
+    I.seeElement(item);
+    I.seeElement(item);
+
+    // TODO: add missing steps that involves drag and drop
+    await I.dragAndDrop(item, target);
+    I.wait(2);
+
+    I.logout();
 });
