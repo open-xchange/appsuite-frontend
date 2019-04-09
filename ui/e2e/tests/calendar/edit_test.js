@@ -74,7 +74,7 @@ Scenario.skip('[C7465] Edit appointment in shared folder as author', async funct
     I.click('Permissions / Invite people');
     I.waitForText('Permissions for folder "New calendar"');
     I.pressKey(users[1].userdata.primaryEmail);
-    I.waitForVisible(locate(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
+    I.waitForVisible(locate('*').withText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
     I.click('Save');
@@ -296,7 +296,7 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author', asyn
     I.click('Permissions / Invite people');
     I.waitForText('Permissions for folder "New calendar"');
     I.pressKey(users[1].userdata.primaryEmail);
-    I.waitForText(locate(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
+    I.waitForVisible(locate('*').withText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
     I.click('Save');
@@ -413,7 +413,7 @@ Scenario('[C274402] Change organizer of appointment with internal attendees', as
 
     I.waitForVisible('.modal-dialog');
     I.fillField('Select new organizer', users[1].userdata.primaryEmail);
-    I.waitForText(locate(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
+    I.waitForVisible(locate('*').withText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
 
@@ -462,7 +462,7 @@ Scenario('[274409] Change organizer of series with internal attendees', async fu
 
     I.waitForVisible('.modal-dialog');
     I.fillField('Select new organizer', users[1].userdata.primaryEmail);
-    I.waitForText(locate(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
+    I.waitForVisible(locate('*').withText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
 
