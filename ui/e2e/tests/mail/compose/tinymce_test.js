@@ -917,6 +917,14 @@ Scenario('[C7398] Send mail with different text sizes', async function (I, users
     });
 });
 
+function getRGBValue(toConvert) {
+    // converts rgba(255, 0, 0, 1) --> 255,0,0,1
+    toConvert.forEach(function (element, index) {
+        toConvert[index] = element.match(/\d+/g).map(function (a) { return parseInt(a, 10); }).join();
+    });
+    return toConvert;
+}
+
 Scenario('[C7399] Send mail with different text colours', async function (I, users) {
 
     const selectColor = (action) => {
@@ -925,13 +933,6 @@ Scenario('[C7399] Send mail with different text colours', async function (I, use
         I.click('div[title="' + action + '"]');
         I.waitForInvisible('.mce-floatpanel .mce-colorbutton-grid');
     };
-    function getRGBValue(toConvert) {
-        // converts rgba(255, 0, 0, 1) --> 255,0,0,1
-        toConvert.forEach(function (element, index) {
-            toConvert[index] = element.match(/\d+/g).map(function (a) { return parseInt(a, 10); }).join();
-        });
-        return toConvert;
-    }
     let [sender, recipient] = users;
 
     const mailSubject = 'C7399 Different text colors';
@@ -1028,5 +1029,221 @@ Scenario('[C7399] Send mail with different text colours', async function (I, use
         expect(valueAqua).to.include(rgbAqua);
         expect(valueLime).to.include(rgbLime);
         expect(valueBlack).to.include(rgbBlack);
+    });
+});
+
+const selectHeading = (I, heading) => {
+    I.click(locate('button').withChild(locate('span').withText('Formats')));
+    I.waitForElement((locate('span').withText('Headings')).inside('.mce-floatpanel'));
+    I.click(locate('span.mce-text').withText('Headings'));
+    I.click(locate('span.mce-text').withText(heading));
+    I.waitForInvisible('.mce-floatpanel');
+};
+
+const selectInline = (I, inline) => {
+    I.click(locate('button').withChild(locate('span').withText('Formats')));
+    I.waitForElement((locate('span').withText('Inline')).inside('.mce-floatpanel'));
+    I.click(locate('span.mce-text').withText('Inline'));
+    I.click(locate('span.mce-text').withText(inline));
+    I.waitForInvisible('.mce-floatpanel');
+};
+
+const selectFont = (I, font) => {
+    I.click(locate('button').inside('~Font Family'));
+    I.waitForElement((locate('span').withText('Arial')).inside('.mce-floatpanel'));
+    I.click(locate('span.mce-text').withText(font));
+    I.waitForInvisible('.mce-floatpanel');
+};
+
+const selectColor = (I, color) => {
+    I.click(locate('.mce-open').inside('~Text color'));
+    I.waitForElement('.mce-floatpanel .mce-colorbutton-grid');
+    I.click('div[title="' + color + '"]');
+    I.waitForInvisible('.mce-floatpanel .mce-colorbutton-grid');
+};
+
+const selectBackgroundColor = (I, color) => {
+    I.click(locate('.mce-open').inside('~Background color'));
+    I.waitForElement('.mce-floatpanel .mce-colorbutton-grid');
+    I.click(locate('div[title="' + color + '"]').inside('.//div[contains(@class, "mce-floatpanel") and not(contains(@style, "none"))]'));
+    I.waitForInvisible('.mce-floatpanel .mce-colorbutton-grid');
+};
+
+const selectAlignment = (I, align) => {
+    I.click(locate('button').withChild(locate('span').withText('Formats')));
+    I.waitForElement((locate('span').withText('Alignment')).inside('.mce-floatpanel'));
+    I.click(locate('span.mce-text').withText('Alignment'));
+    I.click(locate('span.mce-text').withText(align));
+    I.waitForInvisible('.mce-floatpanel');
+};
+
+const selectFontSize = (I, fontSize) => {
+    I.click(locate('button').inside('~Font Sizes'));
+    I.waitForElement((locate('span').withText('12pt')).inside('.mce-floatpanel'));
+    I.click(locate('span.mce-text').withText(fontSize));
+    I.waitForInvisible('.mce-floatpanel');
+};
+Scenario('[C7400] Send mail with multiple different text formatting - set before writting', async function (I, users) {
+
+    let [sender, recipient] = users;
+
+    const mailSubject = 'C7400 Different text formatting - set before writting';
+    const defaultText = 'This text has no color.';
+    const textFormatted = 'This text is formatted!';
+
+    const iframeLocator = '.io-ox-mail-compose-window .editor iframe';
+
+    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
+
+    I.login('app=io.ox/mail', { user: sender });
+
+    // Open the mail composer
+    I.retry(5).click('Compose');
+    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    I.click('~Maximize');
+
+    // Fill out to and subject
+    I.waitForFocus('input[placeholder="To"]');
+    I.fillField('To', recipient.get('primaryEmail'));
+    I.fillField('Subject', mailSubject);
+
+    // Write some text with the default settings
+    await within({ frame: iframeLocator }, async () => {
+        I.click('.default-style');
+        I.pressKey(defaultText);
+        I.pressKey('Enter');
+        I.pressKey('Enter');
+    });
+
+    selectHeading(I, 'Heading 1');
+    selectInline(I, 'Strikethrough');
+    selectFont(I, 'Courier New');
+    selectColor(I, 'Red');
+    selectBackgroundColor(I, 'Yellow');
+    selectAlignment(I, 'Center');
+    selectFontSize(I, '10pt');
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textFormatted);
+        I.pressKey('Enter');
+    });
+
+    // Send the mail
+    I.click('Send');
+
+    // Let's stick around a bit for sending to finish
+    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.logout();
+
+    // Log in as second user and navigate to mail app
+    I.login('app=io.ox/mail', { user: recipient });
+
+    // Open the mail
+    I.waitForText(mailSubject, 2);
+    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
+    I.waitForVisible('iframe.mail-detail-frame');
+
+    await within({ frame: '.mail-detail-frame' }, async () => {
+
+        expect(await I.grabAttributeFrom(locate('div').withText(defaultText), 'style')).to.have.lengthOf(0);
+
+        const span = locate('span').withText(textFormatted).inside('h1');
+
+        //const rgbBlack = '0,0,0,1';
+        const rgbRed = '255,0,0,1';
+        const rgbYellow = '255,255,0,1';
+
+        expect((await I.grabCssPropertyFrom(span, 'text-decoration')).join()).to.include('line-through');
+        expect((await I.grabCssPropertyFrom(span, 'font-family')).join()).to.include('courier new');
+        expect(getRGBValue(await I.grabCssPropertyFrom(span, 'color'))).to.include(rgbRed);
+        expect(getRGBValue(await I.grabCssPropertyFrom(span, 'background-color'))).to.include(rgbYellow);
+        expect(await I.grabCssPropertyFrom(span, 'text-align')).to.include('center');
+        expect((await I.grabAttributeFrom(span, 'style')).join()).to.include('10pt');
+    });
+});
+
+Scenario('[C7400] Send mail with multiple different text formatting - set after writting', async function (I, users) {
+
+    let [sender, recipient] = users;
+
+    const mailSubject = 'C7400 Different text formatting - set after writting';
+    const defaultText = 'This text has no color.';
+    const textFormatted = 'This text is formatted!';
+
+    const iframeLocator = '.io-ox-mail-compose-window .editor iframe';
+
+    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
+
+    I.login('app=io.ox/mail', { user: sender });
+
+    // Open the mail composer
+    I.retry(5).click('Compose');
+    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    I.click('~Maximize');
+
+    // Fill out to and subject
+    I.waitForFocus('input[placeholder="To"]');
+    I.fillField('To', recipient.get('primaryEmail'));
+    I.fillField('Subject', mailSubject);
+
+    // Write some text with the default settings
+    await within({ frame: iframeLocator }, async () => {
+        I.click('.default-style');
+        I.pressKey(defaultText);
+        I.pressKey('Enter');
+        I.pressKey('Enter');
+    });
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textFormatted);
+        I.pressKey(['Shift', 'Home']); // Select the just written text
+    });
+
+    selectHeading(I, 'Heading 1');
+    selectInline(I, 'Strikethrough');
+    selectFont(I, 'Courier New');
+    selectColor(I, 'Red');
+    selectBackgroundColor(I, 'Yellow');
+    selectAlignment(I, 'Center');
+    selectFontSize(I, '10pt');
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey('End');
+        I.pressKey('Enter');
+    });
+
+    // Send the mail
+    I.click('Send');
+
+    // Let's stick around a bit for sending to finish
+    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.logout();
+
+    // Log in as second user and navigate to mail app
+    I.login('app=io.ox/mail', { user: recipient });
+
+    // Open the mail
+    I.waitForText(mailSubject, 2);
+    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
+    I.waitForVisible('iframe.mail-detail-frame');
+
+    await within({ frame: '.mail-detail-frame' }, async () => {
+
+        expect(await I.grabAttributeFrom(locate('div').withText(defaultText), 'style')).to.have.lengthOf(0);
+
+        const span = locate('span').withText(textFormatted).inside('h1');
+
+        //const rgbBlack = '0,0,0,1';
+        const rgbRed = '255,0,0,1';
+        const rgbYellow = '255,255,0,1';
+
+        expect((await I.grabCssPropertyFrom(span, 'text-decoration')).join()).to.include('line-through');
+        expect((await I.grabCssPropertyFrom(span, 'font-family')).join()).to.include('courier new');
+        expect(getRGBValue(await I.grabCssPropertyFrom(span, 'color'))).to.include(rgbRed);
+        expect(getRGBValue(await I.grabCssPropertyFrom(span, 'background-color'))).to.include(rgbYellow);
+        expect(await I.grabCssPropertyFrom(span, 'text-align')).to.include('center');
+        expect((await I.grabAttributeFrom(span, 'style')).join()).to.include('10pt');
     });
 });
