@@ -1,0 +1,15 @@
+X-Account-Key: account2
+From: Test User <user@example.com>
+To: Another User <anotheruser@example.com>
+Subject: Aggressive image replacements
+MIME-Version: 1.0
+Content-Type: text/html
+
+<html>
+	<head></head>
+	<body>
+		This mail contains an image which wasn't displayed due to our emoji replacement subroutines. See Bug #36796 for details.
+		<br><br>
+		<img src="https://s-media-cache-ak0.pinimg.com/236x/45/3a/e5/453ae5eb64a2af6a07ff3879f5bbdb19.jpg" alt="fnordÂ®">
+	</body>
+</html>
