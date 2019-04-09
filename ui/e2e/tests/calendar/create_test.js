@@ -261,7 +261,7 @@ Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/20
     I.waitForElement('.modal-dialog');
 
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Monthly');
-    I.selectOption('.modal-dialog [name="until change:occurrences"]', 'On specific date');
+    I.selectOption('.modal-dialog [name="until"]', 'On specific date');
     I.waitForElement('~Date (M/D/YYYY)', undefined, '.modal-dialog');
     I.click('~Date (M/D/YYYY)', '.modal-dialog');
     I.pressKey(['Control', 'a']);
@@ -395,7 +395,7 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
 
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Weekly');
     I.fillField('Interval', 2);
-    I.selectOption('.modal-dialog [name="until change:occurrences"]', 'After a number of occurrences');
+    I.selectOption('.modal-dialog [name="until"]', 'After a number of occurrences');
     I.waitForElement('.modal-dialog [name="occurrences"]');
     I.fillField('.modal-dialog [name="occurrences"]', '3');
     I.pressKey('Enter');
@@ -533,7 +533,7 @@ Scenario('[C7423] Create daily recurring appointment every day ends after 5', as
     I.waitForElement('.modal-dialog');
 
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Daily');
-    I.selectOption('.modal-dialog [name="until change:occurrences"]', 'After a number of occurrences');
+    I.selectOption('.modal-dialog [name="until"]', 'After a number of occurrences');
     I.waitForElement('.modal-dialog [name="occurrences"]');
     I.fillField('.modal-dialog [name="occurrences"]', '5');
     I.pressKey('Enter');
@@ -599,7 +599,7 @@ Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12',
 
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Daily');
     I.fillField('Interval', 2);
-    I.selectOption('.modal-dialog [name="until change:occurrences"]', 'After a number of occurrences');
+    I.selectOption('.modal-dialog [name="until"]', 'After a number of occurrences');
     I.waitForElement('.modal-dialog [name="occurrences"]');
     I.fillField('.modal-dialog [name="occurrences"]', '8'); // just repeat 8 times to stay in the current month
     I.pressKey('Enter');
