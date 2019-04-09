@@ -12,7 +12,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Settings');
+Feature('Mail > Detail > Bad mails');
 
 Before(async (users) => {
     await users.create();
@@ -22,14 +22,14 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[101617] Mail with <strike> element </strike>', async (I, users) => {
+Scenario('[C101617] Mail with <strike> element </strike>', async (I, users) => {
     const user = users[0];
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
 
     await I.haveMail({
         folder: 'default0/INBOX',
-        path: 'e2e/tests/mail/bad_mails/mail_101617.eml'
+        path: 'e2e/media/mails/c101617.eml'
     }, { user });
 
     I.login('app=io.ox/mail');
