@@ -16,6 +16,8 @@
 
 /// <reference path="../../../steps.d.ts" />
 
+const expect = require('chai').expect;
+
 Feature('Calendar > Planning');
 
 Before(async (users) => {
@@ -144,4 +146,56 @@ Scenario('[C7445] Check availability of resources and participants', async funct
 
     await I.dontHaveResource('Eggs');
     await I.dontHaveResource('Colors');
+});
+
+Scenario('[C252157] Fine grid for high zoom levels', async function (I, users) {
+
+    I.login('app=io.ox/calendar');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    // just to be sure, cleanup artefacts
+    await I.dontHaveResource('Zebra');
+    await I.dontHaveResource('Tiger');
+
+    await I.haveResource({ description: 'Zebra with awesome stripes', display_name: 'Zebra', name: 'Zebra', mailaddress: 'zebra@zoo.zoo' });
+    await I.haveResource({ description: 'Tiger with awesome stripes', display_name: 'Tiger', name: 'Tiger', mailaddress: 'tiger@zoo.zoo' });
+
+    I.clickToolbar('Scheduling');
+
+    I.waitForVisible('.io-ox-calendar-scheduling-window');
+
+    addAttendee(I, 'Zebra', '.freetime-view-header');
+    addAttendee(I, 'Tiger', '.freetime-view-header');
+
+    addAttendee(I, users[1].get('name'), '.freetime-view-header');
+    addAttendee(I, users[2].get('name'), '.freetime-view-header');
+
+    I.click('Options');
+    I.click('Show fine grid');
+    I.pressKey('Escape');
+
+    // 100%
+    var [backgroudImage] = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
+    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, transparent 1px)');
+
+    // 200%
+    I.click('.fa-plus');
+
+    [backgroudImage] = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
+    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, transparent 1px)');
+
+    // 400%
+    I.click('.fa-plus');
+
+    [backgroudImage] = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
+    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, transparent 1px)');
+
+    // 1000%
+    I.click('.fa-plus');
+
+    [backgroudImage] = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
+    expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(51, 51, 51) 0px, transparent 1px, transparent 50px, rgb(136, 136, 136) 51px, transparent 51px, transparent 99px, rgb(136, 136, 136) 100px, transparent 100px, transparent 149px)');
+
+    await I.dontHaveResource('Zebra');
+    await I.dontHaveResource('Tiger');
 });
