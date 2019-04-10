@@ -950,3 +950,48 @@ Scenario('[C7460] Add attachments', async function (I) {
     });
     // TODO: check if attachments can be downloaded and compared with the original files
 });
+
+Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
+
+    //Create Appointment
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: 'Brexit',
+        description: 'Ooordeeeer! This appointment is moved constantly.',
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().startOf('day').add(13, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().startOf('day').add(12, 'hours').format('YYYYMMDD[T]HHmm00')
+        }
+    });
+
+    I.login('app=io.ox/calendar&perspective=week:day');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    I.dragAndDrop('.appointment .appointment-content', '.day .timeslot:nth-child(27)');
+
+    I.see('1:00 – 2:00 PMCEST');
+
+    I.clickToolbar('View');
+    I.click('Week', '.smart-dropdown-container');
+
+    I.click('.io-ox-pagecontroller.current .appointment');
+    I.see('1:00 – 2:00 PMCEST');
+
+    I.clickToolbar('View');
+    I.click('Month', '.smart-dropdown-container');
+
+    I.click('.io-ox-pagecontroller.current .appointment');
+    I.see('1:00 – 2:00 PMCEST');
+
+    I.clickToolbar('View');
+    I.click('List', '.smart-dropdown-container');
+    I.wait(1);
+
+    I.see('1:00 PM');
+    I.see('2:00 PM');
+});
