@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-04 15:05+0200\n"
+"PO-Revision-Date: 2019-04-10 10:23+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1891,7 +1891,6 @@ msgstr "Blockierter Zeitrahmen"
 
 #. %1$s = apppointment creator name
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#, fuzzy
 msgid "Created by: %1$s"
 msgstr "Erstellt von: %1$s"
 
@@ -5110,7 +5109,6 @@ msgid "Sign out"
 msgstr "Abmelden"
 
 #: apps/io.ox/core/main/logout.js module:io.ox/core
-#, fuzzy
 msgid "Are you sure you want to sign out from all related browser tabs?"
 msgstr ""
 "Sind Sie sicher, dass Sie sich von allen damit verbundenen Browser-Tabs "
@@ -7301,7 +7299,6 @@ msgid "100 versions"
 msgstr "100 Versionen"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
 msgid "%1$d version"
 msgid_plural "%1$d versions"
 msgstr[0] "%1$d Version"
@@ -7371,32 +7368,29 @@ msgid "All file versions are retained"
 msgstr "Alle Dateiversionen bleiben erhalten"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "All file versions older than 1 day will be deleted"
-msgid_plural "All file versions older than %1$d days will be deleted"
-msgstr[0] "Alle Dateiversionen, die älter als 1 Tag sind, werden gelöscht"
-msgstr[1] "Alle Dateiversionen, die älter als %1$d Tag sind, werden gelöscht"
+msgid "All file versions older than 1 day will be deleted after next login"
+msgid_plural ""
+"All file versions older than %1$d days will be deleted after next login"
+msgstr[0] ""
+"Alle Dateiversionen, die älter als 1 Tag sind, werden nach der nächsten "
+"Anmeldung gelöscht"
+msgstr[1] ""
+"Alle Dateiversionen, die älter als %1$d Tage sind, werden nach der nächsten "
+"Anmeldung gelöscht"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid ""
-"When a file has more than 1 additional version, older versions of the file "
-"will be deleted"
+"When a file has more than 1 additional version, older versions will be "
+"deleted when a new version is created"
 msgid_plural ""
-"When a file has more than %1$d additional versions, older versions of the "
-"file will be deleted"
+"When a file has more than %1$d additional versions, older versions will be "
+"deleted when a new version is created"
 msgstr[0] ""
 "Gibt es mehr als 1 zusätzliche Version einer Datei, werden ältere Versionen "
-"der Datei gelöscht"
+"beim Anlegen einer neuen Version gelöscht."
 msgstr[1] ""
 "Gibt es mehr als %1$d zusätzliche Versionen einer Datei, werden ältere "
-"Versionen der Datei gelöscht"
-
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid ""
-"Older versions will be deleted after next login or when a new version is "
-"created"
-msgstr ""
-"Ältere Versionen werden nach der nächsten Anmeldung oder beim Anlegen einer "
-"neuen Version gelöscht"
+"Versionen beim Anlegen einer neuen Version gelöscht."
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Keep saved versions"
@@ -10314,13 +10308,12 @@ msgid "UNKNOWN"
 msgstr "UNBEKANNT"
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
-#, fuzzy
 msgid ""
 "There are no backup devices available for this account.  Please notify "
 "support for help."
 msgstr ""
-"Für diesen Account sind keine Backup-Geräte verfügbar. Bitte informieren Sie "
-"den Support für Hilfe."
+"Für diesen Account sind keine Backup-Geräte verfügbar. Bitte wenden Sie sich "
+"an den Support."
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
 msgid "Authentication failure.  Please reload browser and try again."
@@ -10361,9 +10354,9 @@ msgstr "Verifizierungsoption hinzufügen"
 
 #. Error message when trying to get available providers from middleware
 #: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
-#, fuzzy
 msgid "Problem getting 2-step verification providers"
-msgstr "Problem beim Abrufen von Zwei-Faktor-Authentifizierungs-Anbietern"
+msgstr ""
+"Problem beim Abrufen von verfügbaren Zwei-Faktor-Authentifizierungs-Anbietern"
 
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
 msgid "Add Multifactor Device"
@@ -10375,7 +10368,6 @@ msgstr "Bitte geben Sie die Telefonnummer für das Gerät ein."
 
 #. Catch all error when trying to set up a new 2step device
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-#, fuzzy
 msgid "Something went wrong.  Please try again later."
 msgstr ""
 "Da ist etwas schief gelaufen. Bitte versuchen Sie es später noch einmal."
@@ -10469,7 +10461,6 @@ msgstr "Multifaktor-Gerät löschen"
 #. Devices are named.  This is the text for the deleting a multifactor device
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: module:io.ox/core/boot
-#, fuzzy
 msgid "This will delete the device named %s."
 msgstr "Hiermit wird das Gerät namens %s gelöscht."
 
@@ -10485,13 +10476,11 @@ msgstr "Multifaktor-Gerät bearbeiten"
 
 #: apps/io.ox/multifactor/settings/views/editMultifactorView.js
 #: module:io.ox/core/boot
-#, fuzzy
 msgid "This will edit the name for device (%s)"
 msgstr "Hiermit wird der Name für das Gerät (%s) bearbeitet"
 
 #: apps/io.ox/multifactor/settings/views/editMultifactorView.js
 #: module:io.ox/core/boot
-#, fuzzy
 msgid "This will assign a name to the device"
 msgstr "Hiermit wird dem Gerät ein Name zugewiesen"
 
@@ -10534,8 +10523,8 @@ msgstr "Klicken Sie, um die URL in die Zwischenablage zu kopieren"
 msgid ""
 "If scanning doesn't work, you may be able to enter the following setup code."
 msgstr ""
-"Wenn das Scannen nicht funktioniert, können Sie den folgenden Setup-Code "
-"eingeben."
+"Wenn das Scannen nicht funktioniert, können Sie den folgenden Konfigurations-"
+"Code eingeben."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
@@ -10573,7 +10562,7 @@ msgstr "Wiederherstellungsdatei hochloaden"
 #: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
 #, fuzzy
 msgid "Next 4 characters of the backup string"
-msgstr "Die nächsten 4 Zeichen des Backup-Strings"
+msgstr "Die nächsten 4 Zeichen des Backup-Codes"
 
 #: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
 msgid "I lost my device"
@@ -10630,7 +10619,6 @@ msgstr ""
 "abzuschließen."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-#, fuzzy
 msgid ""
 "This browser is not compatible with your configured authentication device.  "
 "Please use Chrome browser, or Firefox with U2F enabled."
@@ -13180,6 +13168,32 @@ msgstr "Einladen zu %s"
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
 
+#~ msgid "All file versions older than 1 day will be deleted"
+#~ msgid_plural "All file versions older than %1$d days will be deleted"
+#~ msgstr[0] "Alle Dateiversionen, die älter als 1 Tag sind, werden gelöscht"
+#~ msgstr[1] ""
+#~ "Alle Dateiversionen, die älter als %1$d Tag sind, werden gelöscht"
+
+#~ msgid ""
+#~ "When a file has more than 1 additional version, older versions of the "
+#~ "file will be deleted"
+#~ msgid_plural ""
+#~ "When a file has more than %1$d additional versions, older versions of the "
+#~ "file will be deleted"
+#~ msgstr[0] ""
+#~ "Gibt es mehr als 1 zusätzliche Version einer Datei, werden ältere "
+#~ "Versionen der Datei gelöscht"
+#~ msgstr[1] ""
+#~ "Gibt es mehr als %1$d zusätzliche Versionen einer Datei, werden ältere "
+#~ "Versionen der Datei gelöscht"
+
+#~ msgid ""
+#~ "Older versions will be deleted after next login or when a new version is "
+#~ "created"
+#~ msgstr ""
+#~ "Ältere Versionen werden nach der nächsten Anmeldung oder beim Anlegen "
+#~ "einer neuen Version gelöscht"
+
 #, fuzzy
 #~ msgid "Bad response from backend.  Please try again later."
 #~ msgstr "Fehlermeldung vom Backend. Bitte versuchen Sie es später erneut."
@@ -13421,16 +13435,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Auto-save email drafts"
 #~ msgstr "E-Mail-Entwürfe automatisch speichern"
-
-#~ msgid "All file versions older than 1 day will be deleted after next login"
-#~ msgid_plural ""
-#~ "All file versions older than %1$d days will be deleted after next login"
-#~ msgstr[0] ""
-#~ "Alle Dateiversionen, die älter als 1 Tag sind, werden nach der nächsten "
-#~ "Anmeldung gelöscht"
-#~ msgstr[1] ""
-#~ "Alle Dateiversionen, die älter als %1$d Tage sind, werden nach der "
-#~ "nächsten Anmeldung gelöscht"
 
 #, fuzzy
 #~ msgid ""
