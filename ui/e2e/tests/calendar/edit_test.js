@@ -1070,3 +1070,62 @@ Scenario('[C7459] Remove attachments', async function (I) {
         }
     });
 });
+
+// Bug: Double-clicking causes appointment to open and close again
+Scenario('[C7458] Edit appointment by doubleclick @bug', async function (I) {
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
+    });
+
+    // You already had created a non all-day appointment
+    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`,
+        startTime = moment().add(1, 'hour'),
+        endTime = moment().add(2, 'hour'),
+        subject = `Mr. Torques ${startTime.format('h a')} explosions`;
+    await I.haveAppointment({
+        folder:  folder,
+        summary: subject,
+        startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: endTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
+    });
+
+    // 1. Double click to an appointment
+    I.login(['app=io.ox/calendar&perspective=week:week']);
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.see(subject, '.appointment');
+    I.doubleClick(subject, '.appointment');
+
+    // Expected Result: Edit tab is opened.
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    // 2. Change Subject, Location and Description.
+    const explosions = 'EXPLOSIONS',
+        explosionSubject = `${explosions} at ${startTime.format('h a')}`,
+        description = `Lorem ${explosions} sit dolor!`;
+    I.fillField('Subject', explosionSubject);
+    I.fillField('Location', 'Pandora');
+    I.fillField('Description', description);
+
+    // 3. Click "Save"
+    I.click('Save', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+
+    // 4. Check this appointment in all views.
+    // Expected Result: The appointment has been changed successfully.
+    ['Week', 'Day', 'Month', 'List'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForText(explosionSubject, 5, '.page.current .appointment');
+        I.click(explosionSubject, '.page.current .appointment');
+        if (view === 'List') {
+            I.see(explosionSubject, '.calendar-detail-pane');
+            I.see('Pandora', '.calendar-detail-pane');
+            I.see(description, '.calendar-detail-pane');
+        } else {
+            I.see(explosionSubject, '.io-ox-sidepopup');
+            I.see('Pandora', '.io-ox-sidepopup');
+            I.see(description, '.io-ox-sidepopup');
+        }
+    });
+});
