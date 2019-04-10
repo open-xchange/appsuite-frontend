@@ -1157,29 +1157,29 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
     I.waitForVisible('.appointment');
     I.dragAndDrop('.appointment .resizable-n', '.day .timeslot:nth-child(23)');
 
-    I.see('11:00 AM – 1:00 PMCEST');
+    I.waitForText('11:00 AM – 1:00 PMCEST');
     I.dragAndDrop('.appointment .resizable-s', '.day .timeslot:nth-child(28)');
 
-    I.see('11:00 AM – 2:00 PMCEST');
+    I.waitForText('11:00 AM – 2:00 PMCEST');
 
     I.clickToolbar('View');
     I.click('Week', '.smart-dropdown-container');
 
     I.click('.io-ox-pagecontroller.current .appointment');
-    I.see('11:00 AM – 2:00 PMCEST');
+    I.waitForText('11:00 AM – 2:00 PMCEST');
 
     I.clickToolbar('View');
     I.click('Month', '.smart-dropdown-container');
 
     I.click('.io-ox-pagecontroller.current .appointment');
-    I.see('11:00 AM – 2:00 PMCEST');
+    I.waitForText('11:00 AM – 2:00 PMCEST');
 
     I.clickToolbar('View');
     I.click('List', '.smart-dropdown-container');
     I.wait(1);
 
-    I.see('11:00 AM');
-    I.see('2:00 PM');
+    I.waitForText('11:00 AM');
+    I.waitForText('2:00 PM');
 });
 
 Scenario('[C7460] Add attachments', async function (I) {
@@ -1273,26 +1273,26 @@ Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
 
     I.dragAndDrop('.appointment .appointment-content', '.day .timeslot:nth-child(27)');
 
-    I.see('1:00 – 2:00 PMCEST');
+    I.waitForText('1:00 – 2:00 PMCEST');
 
     I.clickToolbar('View');
     I.click('Week', '.smart-dropdown-container');
 
     I.click('.io-ox-pagecontroller.current .appointment');
-    I.see('1:00 – 2:00 PMCEST');
+    I.waitForText('1:00 – 2:00 PMCEST');
 
     I.clickToolbar('View');
     I.click('Month', '.smart-dropdown-container');
 
     I.click('.io-ox-pagecontroller.current .appointment');
-    I.see('1:00 – 2:00 PMCEST');
+    I.waitForText('1:00 – 2:00 PMCEST');
 
     I.clickToolbar('View');
     I.click('List', '.smart-dropdown-container');
     I.wait(1);
 
-    I.see('1:00 PM');
-    I.see('2:00 PM');
+    I.waitForText('1:00 PM');
+    I.waitForText('2:00 PM');
 });
 
 Scenario('[C7459] Remove attachments', async function (I) {
