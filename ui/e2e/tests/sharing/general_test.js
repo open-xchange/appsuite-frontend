@@ -113,3 +113,39 @@ Scenario('[C83385] Copy to clipboard', async function (I) {
     I.amOnPage(url);
     I.waitForText('Music');
 });
+
+Scenario('[C85625] My Shares default sort order', async function (I, users) {
+    function share(I, item) {
+        I.click(locate('li.list-item').withText(item));
+        I.clickToolbar('Share');
+        I.click('Create sharing link');
+        I.waitForText('Sharing link created for');
+        I.click('Close');
+
+    }
+    const { expect } = require('chai');
+    const folder = await I.grabDefaultFolder('infostore');
+    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    const testFolder = await I.haveFolder('Testfolder', 'infostore', folder, { user: users[0] });
+    await I.haveFile(testFolder.data, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testdocument.rtf');
+    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testdocument.odt');
+    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testpresentation.ppsm');
+    I.login('app=io.ox/files&folder=' + folder);
+    I.waitForElement('.file-list-view.complete');
+
+    share(I, 'document.txt');
+    I.selectFolder('Testfolder');
+    share(I, 'testdocument.rtf');
+    share(I, 'testpresentation.ppsm');
+    I.selectFolder('My files');
+    share(I, 'Testfolder');
+
+    I.selectFolder('My shares');
+    const itemNames = (await I.grabTextFrom(locate('li.list-item'))).map((line) => line.split('\n')[0]);
+    expect(itemNames).to.deep.equal(['Testfolder', 'testpresentation.ppsm', 'testdocument.rtf', 'document.txt']);
+    I.click('Sort by');
+    I.seeElement(locate('i.fa-check').inside(locate('.dropdown a').withText('Date')));
+    I.seeElement(locate('i.fa-check').inside(locate('.dropdown a').withText('Descending')));
+    I.pressKey('ESC');
+});
