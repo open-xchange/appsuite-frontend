@@ -8,6 +8,7 @@
  * © 2019 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Ejaz Ahmed <ejaz.ahmed@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  *
  */
 
@@ -15,6 +16,7 @@
 Feature('General > User feedback');
 
 Before(async (users) => {
+    await users.create();
     await users.create();
 });
 
@@ -105,4 +107,26 @@ Scenario('[C125005] Provide user feedback', function (I) {
     I.fillField('.feedback-note', 'Its ok');
     I.click('Send');
     I.waitForText('Thank you for your feedback');
+});
+
+Scenario('[C125003] Disable user feedback dialog', async function (I) {
+
+    // var userA = users[0], userB = users[1];
+    // await I.haveCapability('feedback', userA);
+    // await I.dontHaveCapability('feedback', userB);
+
+    I.login('app=io.ox/mail');
+    I.openApp('Mail');
+    I.waitForText('No message selected');
+    I.waitForText('Feedback');
+    I.logout();
+
+    I.amOnPage('/');
+    // dirty hack until dontHaveCapability works
+    I.executeScript(function () { document.cookie = 'cap=-feedback; path=/'; });
+    I.login('app=io.ox/mail');
+    I.waitForText('No message selected');
+    I.wait(1);
+    I.dontSee('Feedback');
+    I.logout();
 });
