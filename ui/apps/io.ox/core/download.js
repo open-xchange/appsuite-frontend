@@ -130,7 +130,7 @@ define('io.ox/core/download', [
             var text = baton.model.get('error'),
                 type = baton.model.get('code') === 'ANTI-VIRUS-SERVICE-0011' ? 'av-danger' : 'av-warning';
             // generic error message for internal errors (I/O error, service unreachable, service not running etc)
-            if (true || scanErrors.indexOf(baton.model.get('code')) === -1) {
+            if (scanErrors.indexOf(baton.model.get('code')) === -1) {
                 text = gt('Unable to perform Anti-Virus check for the requested file(s)');
             }
 
