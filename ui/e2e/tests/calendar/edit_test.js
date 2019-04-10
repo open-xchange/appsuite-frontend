@@ -919,6 +919,8 @@ Scenario('[C7460] Add attachments', async function (I) {
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     // 3. Locate the "Attachments" area and add files as attachments either by the browsers upload dialog or drag&drop from the file manager or desktop
+    I.pressKey('Pagedown');
+    I.see('Attachments', '.io-ox-calendar-edit-window');
     I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'e2e/media/files/generic/testdocument.odt');
     I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
 
@@ -994,4 +996,77 @@ Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
 
     I.see('1:00 PM');
     I.see('2:00 PM');
+});
+
+Scenario('[C7459] Remove attachments', async function (I) {
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
+    });
+
+    // Precondition: An appointment with file attachment exists
+    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`,
+        startTime = moment().add(1, 'hour'),
+        endTime = moment().add(2, 'hour'),
+        subject = `Allhands ${startTime.format('h A')} Meeting`,
+        appointment = await I.haveAppointment({
+            folder:  folder,
+            summary: subject,
+            startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+            endDate: { value: endTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
+        }),
+        updatedAppointment = await I.haveAttachment('calendar', appointment.data.data.created[0], 'e2e/media/files/generic/testdocument.odt');
+    await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testdocument.rtf');
+
+    // 1. Switch to Calendar
+    I.login('app=io.ox/calendar&perspective=week:week');
+
+    // Expected Result: The calendar app shows up, including the existing appointment
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.see(subject, '.appointment');
+
+    // 2. Select the existing appointment, click "Edit"
+    I.click(subject, '.appointment');
+    I.waitForElement('.io-ox-sidepopup');
+    I.waitForText('Edit');
+    I.click('Edit');
+
+    // Expected Result: The edit dialog is shown
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    // 3. At the edit dialog, locate the Attachments area and remove one or more attachments from the appointment
+    I.pressKey('Pagedown');
+    I.see('Attachments', '.io-ox-calendar-edit-window');
+
+    // Expected Result: The attachments are not longer shown at the edit dialog
+    I.click('a[title="Remove attachment"]', locate('div.file').withDescendant(locate('div').withText('testdocument.odt')));
+    I.dontSee('testdocument.odt', '.io-ox-calendar-edit-window');
+    I.see('testdocument.rtf', '.io-ox-calendar-edit-window');
+    I.click('a[title="Remove attachment"]', locate('div.file').withDescendant(locate('div').withText('testdocument.rtf')));
+    I.dontSee('testdocument.odt', '.io-ox-calendar-edit-window');
+    I.dontSee('testdocument.rtf', '.io-ox-calendar-edit-window');
+
+    // 4. Save the appointment and verify it in all calendar views
+    I.click('Save', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+
+    // Expected Result: The appointment does not contain the attachment anymore
+    const dontSeeAttachments = (context) => {
+        I.waitForElement(context);
+        I.see(subject, context);
+        I.dontSee('testdocument.odt', context);
+        I.dontSee('testdocument.rtf', context);
+    };
+    ['Week', 'Day', 'Month', 'List'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForText(subject, 5, '.page.current .appointment');
+        I.click(subject, '.page.current .appointment');
+        if (view === 'List') {
+            dontSeeAttachments('.calendar-detail-pane');
+        } else {
+            dontSeeAttachments('.io-ox-sidepopup');
+        }
+    });
 });
