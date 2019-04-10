@@ -787,6 +787,33 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
     I.see('Testappointment', `[id="${time.format('YYYY-M-D')}"]`);
 });
 
+// TODO Skip this as the double click does not work. See Bug 64313
+Scenario.skip('[C7453] Edit appointment, set the all day checkmark', async function (I) {
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true, 'chronos/allowChangeOfOrganizer': true }
+    });
+    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    const time = moment().startOf('week').add(1, 'day').add(10, 'hours');
+    await I.haveAppointment({
+        folder:  folder,
+        summary: 'Testsubject',
+        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
+    });
+
+    I.login('app=io.ox/calendar');
+    I.waitForVisible(locate('*').withText('Testsubject').inside('.appointment-container'));
+
+    I.doubleClick('.appointment');
+    I.retry(5).click('All day');
+    I.click('Save');
+
+    I.waitForInvisible(locate('*').withText('Testsubject').inside('.appointment-container'));
+    I.waitForVisible(locate('*').withText('Testsubject').inside('.fulltime-container'));
+
+});
+
 Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, users) {
     const
         Moment = require('moment'),
