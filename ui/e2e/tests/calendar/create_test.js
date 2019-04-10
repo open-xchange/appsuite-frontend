@@ -912,6 +912,56 @@ Scenario('[C7428] Create appointment with internal participants', async function
     I.waitForText('New appointment: Einkaufen');
 });
 
+Scenario('[C7425] Create appointment with a group', async function (I, users) {
+
+    const group = {
+        name: 'Awesome guys',
+        display_name: 'Awesome guys',
+        members: [
+            users[0].userdata.id,
+            users[1].userdata.id
+        ]
+    };
+
+    await I.dontHaveGroup('Awesome guys');
+    await I.haveGroup(group);
+
+    I.login('app=io.ox/calendar&perspective=week:day');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.fillField('Subject', 'Ich war hier');
+    I.fillField('Location', 'Wer das liest ist doof');
+
+    I.fillField('input.add-participant.tt-input', 'Awesome guys');
+
+    I.waitForVisible('.tt-dropdown-menu');
+    I.pressKey('Enter');
+
+    console.log(users[0].get('name'), users[1].get('name'));
+    I.waitForText(users[0].get('name'), 5);
+    I.waitForText(users[1].get('name'), 5);
+
+    I.click('Create');
+
+    await checkInAllViews(I, 'Ich war hier', 'Wer das liest ist doof');
+
+    I.logout();
+
+    I.login('app=io.ox/calendar&perspective=week:day', { user: users[1] });
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    await checkInAllViews(I, 'Ich war hier', 'Wer das liest ist doof');
+
+    I.openApp('Mail');
+    I.waitForText('New appointment: Ich war hier');
+
+    await I.dontHaveGroup('Awesome guys');
+
+});
+
 Scenario('[C7429] Create appointment via Contact', async function (I, users) {
 
     I.login('app=io.ox/contacts');
