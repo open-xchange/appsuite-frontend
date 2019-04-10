@@ -1336,3 +1336,63 @@ Scenario('[C7442] Set date from date-picker', async function (I) {
     I.see('Sun, 12/26/1999', '.weekview-container.day');
 
 });
+
+Scenario('[C7413] Create appointment with an attachment', async function (I) {
+    // Preconditions: You are at the Calendar-tab
+    I.login(['app=io.ox/calendar&perspective=week:week']);
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    // 1. Click to the "New" icon at the top left
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    // 2. Enter a title and location
+    const startTime = moment().add(1, 'hour'),
+        endTime = moment().add(2, 'hour'),
+        subject = `The Long Dark ${startTime.format('h A')} Tea-Time of the Soul`,
+        location = 'London';
+    I.fillField('Subject', subject);
+    I.fillField('Location', location);
+
+    // 3. Add start- and endtime (Starts on: now+1 hour)
+    I.click('~Start time');
+    I.pressKey('Enter');
+    I.pressKey(['Control', 'a']);
+    I.pressKey(startTime.format('hh:mm P'));
+    I.pressKey('Enter');
+    I.click('~End time');
+    I.pressKey('Enter');
+    I.pressKey(['Control', 'a']);
+    I.pressKey(endTime.format('hh:mm P'));
+    I.pressKey('Enter');
+
+    // 4. Click to "Add attachments", then Add
+    I.pressKey('Pagedown');
+    I.see('Attachments', '.io-ox-calendar-edit-window');
+    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'e2e/media/files/generic/testdocument.odt');
+    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
+
+    // 5. Click "Create".
+    I.click('Create', '.io-ox-calendar-edit-window');
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+
+    // 6. Check this appointment in all views.
+    // Expected Results: The appointment is added correctly, with the attachment.
+    const seeAttachments = (context) => {
+        I.waitForElement(context);
+        I.see(subject, context);
+        I.see('testdocument.odt', context);
+        I.see('testdocument.rtf', context);
+    };
+    ['Week', 'Day', 'Month', 'List'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForText(subject, 5, '.page.current .appointment');
+        I.click(subject, '.page.current .appointment');
+        if (view === 'List') {
+            seeAttachments('.calendar-detail-pane');
+        } else {
+            seeAttachments('.io-ox-sidepopup');
+        }
+    });
+});
