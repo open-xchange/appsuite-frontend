@@ -814,6 +814,56 @@ Scenario.skip('[C7453] Edit appointment, set the all day checkmark', async funct
 
 });
 
+Scenario('[C7457] Edit appointment via toolbar', async function (I) {
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true, 'chronos/allowChangeOfOrganizer': true }
+    });
+    const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
+    await I.haveAppointment({
+        folder:  folder,
+        summary: 'Testsubject',
+        location: 'Testlocation',
+        description: 'Testdescription',
+        startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
+        endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
+    });
+
+    I.login('app=io.ox/calendar');
+
+    // select the according day in the mini datepicker
+    if (!moment().isSame(time, 'month')) I.retry(5).click('~Go to next month', '.window-sidepanel');
+    I.retry(5).click(`~${time.format('l, dddd')}, CW ${time.week()}`, '.window-sidepanel');
+
+    // open all views and load the appointment there
+    ['Day', 'Month', 'List', 'Week', 'Workweek'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForVisible(locate('*').withText('Testsubject').inside('.page.current'));
+    });
+
+    I.click('.appointment', '.page.current');
+    I.retry(5).click('Edit');
+
+    I.retry(5).fillField('Subject', 'Newsubject');
+    I.fillField('Location', 'Newlocation');
+    I.fillField('Description', 'Newdescription');
+    I.click('Save');
+
+    // open all views and check the appointment there
+    ['Day', 'Month', 'List', 'Week', 'Workweek'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+
+        I.retry(5).click('.appointment', '.page.current');
+        I.retry(5).see('Newsubject', '.calendar-detail');
+        I.see('Newlocation', '.calendar-detail');
+        I.see('Newdescription', '.calendar-detail');
+        if (view !== 'List') I.click('~Close', '.io-ox-sidepopup');
+    });
+});
+
 Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, users) {
     const
         Moment = require('moment'),
