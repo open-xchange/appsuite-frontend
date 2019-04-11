@@ -84,3 +84,27 @@ Scenario('[C8822] Send Mail with Hyperlink from existing text', function (I) {
     I.click('li[data-index="0"]');
     I.waitForText('testlink', '.rightside.mail-detail-pane .body.user-select-text');
 });
+
+Scenario('[C8823] Send Mail with Hyperlink by typing the link', function (I) {
+    // test String has to contain whitespace at the end for URL converting to work
+    const testText = 'Some test text https://foo.bar  ';
+    I.login('app=io.ox/mail');
+    I.clickToolbar('Compose');
+    I.waitForFocus('input[type="email"].token-input.tt-input');
+    I.fillField('input[type="email"].token-input.tt-input', 'foo@bar');
+    I.wait(1);
+    I.fillField('input[name="subject"]', 'test subject');
+    within({ frame: '#mce_0_ifr' }, () => {
+        I.fillField('.mce-content-body', testText);
+        I.seeElement('a');
+    });
+    I.click('Send');
+    I.wait(1);
+    I.selectFolder('Sent');
+    I.waitForText('test subject');
+    I.click('li[data-index="0"]');
+    within({ frame: '.mail-detail-frame' }, () => {
+        I.waitForText(testText);
+        I.seeElement('a[href="https://foo.bar"]');
+    });
+});
