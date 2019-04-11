@@ -8,6 +8,7 @@
  * © 2019 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Maik Schäfer <maik.schaefer@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
  *
  */
 
@@ -106,5 +107,39 @@ Scenario('[C8823] Send Mail with Hyperlink by typing the link', function (I) {
     within({ frame: '.mail-detail-frame' }, () => {
         I.waitForText(testText);
         I.seeElement('a[href="https://foo.bar"]');
+    });
+});
+
+Scenario('[C8824] Remove hyperlinks', async function (I) {
+    const iframeLocator = '.io-ox-mail-compose-window .editor iframe';
+    const defaultText = 'Dies ist ein testlink http://example.com.';
+
+    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
+
+    I.login('app=io.ox/mail');
+
+    I.retry(5).click('Compose');
+    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    I.click('~Maximize');
+
+    I.waitForFocus('input[placeholder="To"]');
+    // Write some text with the default settings
+    await within({ frame: iframeLocator }, async () => {
+        I.click('.default-style');
+        I.pressKey(defaultText);
+        I.pressKey('Enter');
+        I.see('http://example.com', 'a');
+        I.pressKey('ArrowLeft');
+        I.pressKey('ArrowLeft');
+        I.pressKey('ArrowLeft');
+    });
+
+    I.click('.mce-btn[data-name="link"]');
+    I.pressKey(['Control', 'a']);
+    I.pressKey('Delete');
+    I.pressKey('Enter');
+
+    await within({ frame: iframeLocator }, async () => {
+        I.dontSeeElement('a');
     });
 });
