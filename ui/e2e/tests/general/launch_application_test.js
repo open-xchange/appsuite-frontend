@@ -84,3 +84,14 @@ Scenario('[C7350] Launch "Settings" application', async function (I) {
     I.seeElement('.settings-detail-pane');
     I.logout();
 });
+
+Scenario('[C234516] Launch "Tasks" application', async function (I) {
+    I.login('app=io.ox/mail');
+    I.waitForElement('#io-ox-launcher');
+    I.click('#io-ox-launcher');
+    I.waitForElement('.launcher-dropdown');
+    I.click('Tasks', '.launcher-dropdown');
+    I.waitForElement('.classic-toolbar[aria-label="Tasks Toolbar"]');
+    I.seeElement('.classic-toolbar[aria-label="Tasks Toolbar"]');
+    I.logout();
+});
