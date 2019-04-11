@@ -266,3 +266,44 @@ Scenario('[C7770] Set default signature', async function (I, users) {
     });
 
 });
+
+Scenario('[C85619] Edit signature with HTML markup', async function (I) {
+
+    await I.haveSnippet({
+        content: '<p>Testsignaturecontent</p>',
+        displayname: 'Testsignaturename',
+        misc: { insertion: 'below', 'content-type': 'text/html' },
+        module: 'io.ox/mail',
+        type: 'signature'
+    });
+
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/signatures']);
+    I.waitForText('Testsignaturename');
+    I.see('Testsignaturecontent');
+
+    I.click('Edit');
+    I.waitForVisible('.contenteditable-editor iframe');
+    I.fillField('Signature name', 'Newsignaturename');
+    within({ frame: '.contenteditable-editor iframe' }, () => {
+        I.fillField('body', 'Newsignaturecontent');
+        I.retry(5).click('body');
+        I.pressKey(['Control', 'a']);
+    });
+    I.click('.mce-i-bold');
+    I.click('Save');
+    I.waitForDetached('.modal-dialog');
+
+    // assert changes
+    I.see('Newsignaturename');
+    I.see('Newsignaturecontent');
+
+    I.openApp('Mail');
+
+    // compose a mail
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose-window .editor iframe');
+    within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
+        I.retry(5).seeElement(locate('strong').withText('Newsignaturecontent'));
+    });
+
+});
