@@ -282,3 +282,28 @@ Scenario('[C8382] Delete a file', async (I, users) => {
     I.waitForElement('.file-list-view.complete');
     I.dontSee('document.txt');
 });
+
+Scenario('[C8383] Unlock a file', async (I, users) => {
+    // Testrail description:
+    // 1. Choose a locked file
+    // 2. "More"-- > "Unlock" (File is unlocked)
+    // 3. Verify with another user
+    var defaultFolder = await I.grabDefaultFolder('infostore');
+    var newFolder = await I.createFolder(sharedFolder('C8383', users), defaultFolder, { user: users[0] });
+    var data = await I.haveFile(newFolder.data.data, 'e2e/media/files/0kb/document.txt');
+    await I.haveLockedFile(data);
+    I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[0] });
+    I.waitForElement(locate('.filename').withText('document.txt (Locked)').inside('.list-view'));
+    I.click(locate('.filename').withText('document.txt').inside('.list-view'));
+    I.clickToolbar('~More actions');
+    I.waitForText('Unlock');
+    I.click('Unlock', '.smart-dropdown-container');
+    I.waitForText('document.txt');
+    I.dontSee('Locked');
+    I.logout();
+
+    I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[1] });
+    I.waitForElement('.file-list-view.complete');
+    I.waitForText('document.txt');
+    I.dontSee('Locked');
+});
