@@ -468,3 +468,80 @@ Scenario('[C265147] Appointment organizer should be marked in attendee list', as
         .withDescendant('span.organizer-container');
     I.seeElement(organizerLocator);
 });
+
+Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared Calendar', async function (I, users) {
+
+    const sharedCalendarName = `${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New calendar`;
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
+
+    const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
+    await I.haveFolder('New calendar', 'event', defaultFolderId);
+
+    // share folder for preconditions
+    // TODO should be part of the haveFolder helper
+    I.login('app=io.ox/calendar');
+
+    I.waitForText('New calendar');
+    I.rightClick('~New calendar');
+    I.waitForText('Permissions / Invite people');
+    I.wait(0.2); // Just wait a little extra for all event listeners
+    I.click('Permissions / Invite people');
+    I.waitForText('Permissions for folder "New calendar"');
+    I.pressKey(users[1].userdata.primaryEmail);
+    I.waitForText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, undefined, '.tt-dropdown-menu');
+    I.pressKey('ArrowDown');
+    I.pressKey('Enter');
+    I.click('Save');
+    I.waitToHide('.share-permissions-dialog');
+
+    I.logout();
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    }, { user: users[1] });
+    I.login('app=io.ox/calendar', { user: users[1] });
+
+    I.retry(5).doubleClick('~Shared calendars');
+    I.waitForText(sharedCalendarName);
+
+    I.retry(5).click('Add new calendar');
+    I.click('Subscribe shared Calendar');
+
+    I.waitForText('Subscribe shared calendars');
+
+    I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('input[name="subscribed"]'));
+    I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('input[name="com.openexchange.calendar.extendedProperties"]'));
+
+    I.click(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('.checkbox'));
+    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('input[name="subscribed"]'));
+    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('input[name="com.openexchange.calendar.extendedProperties"]'));
+
+    I.click('Save');
+    I.waitForDetached('.modal-dialog');
+
+    I.waitForInvisible(locate('*').withText(sharedCalendarName));
+
+    I.click('Add new calendar');
+    I.click('Subscribe shared Calendar');
+
+    I.waitForText('Subscribe shared calendars');
+
+    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('input[name="subscribed"]'));
+    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('input[name="com.openexchange.calendar.extendedProperties"]'));
+
+    I.click(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('.checkbox'));
+    I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('input[name="subscribed"]'));
+    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('input[name="com.openexchange.calendar.extendedProperties"]'));
+
+    I.click(locate('li').withChild(locate('*').withText(sharedCalendarName)).find('label').withText('Sync via DAV'));
+
+    I.click('Save');
+    I.waitForDetached('.modal-dialog');
+
+    I.waitForText(sharedCalendarName);
+});
