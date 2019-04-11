@@ -25,6 +25,7 @@ After(async function (users) {
 
 Scenario('[C110279] Primary mail account name can be changed', function (I) {
     const name = 'Räuber Hotzenplotz';
+    I.haveFolder('Personal', 'mail', 'default0/INBOX');
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/settings/accounts');
 
     I.say(`rename to "${name}"`, 'blue');
