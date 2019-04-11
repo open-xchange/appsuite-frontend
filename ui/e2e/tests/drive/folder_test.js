@@ -20,6 +20,26 @@ const prepare = (I, folder) => {
     I.waitForElement('.file-list-view.complete');
 };
 
+// Returns permission bitmasks for shared folder (user 1 is owner, user 2 is viewer)
+const sharedFolder = (folderName, users) => {
+    return {
+        module: 'infostore',
+        subscribed: 1,
+        title: folderName,
+        permissions: [
+            {
+                bits: 403710016,
+                entity: users[0].userdata.id,
+                group: false
+            }, {
+                bits: 257,
+                entity: users[1].userdata.id,
+                group: false
+            }
+        ]
+    };
+};
+
 Before(async (I, users) => {
     await users.create();
     await users.create();
@@ -155,4 +175,17 @@ Scenario('[C8377] Invite a person', (I, users) => {
         I.see('Viewer', '.permissions-view .row .role');
     });
 
+});
+Scenario('[C8379] Add a file', async (I, users) => {
+    // Testrail description:
+    // No rights to upload a file, "Viewer" role
+    // 1. Try to upload a file (Denied of missing permission)
+
+    const folderName = 'C8379';
+    const folder = sharedFolder(folderName, users);
+    var defaultFolder = await I.grabDefaultFolder('infostore');
+    var newFolder = await I.createFolder(folder, defaultFolder, { user: users[0] });
+    I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[1] });
+    I.waitForElement('.file-list-view.complete');
+    I.dontSee('New', '.classic-toolbar');
 });
