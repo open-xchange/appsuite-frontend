@@ -40,7 +40,8 @@ module.exports.config = {
     },
     include: {
         I: './e2e/actor',
-        users: './e2e/users'
+        users: './e2e/users',
+        contexts: './e2e/contexts'
     },
     bootstrap: function (done) {
         // setup chai
