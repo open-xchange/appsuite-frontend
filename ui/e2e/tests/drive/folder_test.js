@@ -344,3 +344,70 @@ Scenario('[C8385] Uninvite a person', async (I, users) => {
         I.dontSee('Shared files', '.folder-tree');
     });
 });
+
+Scenario('[C8386] Uninvite a group', async (I, users) => {
+    // Testrail description
+    // A group has permission in the folder
+    // 1. Choose a folder
+    // 2. Click the gear button (context menu)
+    // 3. Choose Permission (Popup)
+    // 4. Delete a group (Group is removed from list)
+    // 5. Verify with group member
+    const folderName = 'C8378';
+    const groupName = 'C8378-group';
+    const group = {
+        name: groupName,
+        display_name: groupName,
+        members: [users[1].userdata.id, users[2].userdata.id]
+    };
+
+    await I.dontHaveGroup(groupName);
+    await I.haveGroup(group);
+
+    const folder = await I.haveFolder(folderName, 'infostore', await I.grabDefaultFolder('infostore'), { user: users[0] });
+    session('Alice', () => {
+        I.login('app=io.ox/files&folder=' + folder.data, { user: users[0] });
+        I.waitForElement('.file-list-view.complete');
+        I.clickToolbar('Share');
+        I.waitForText('Invite people');
+        I.click('Invite people', '.dropdown.open');
+        I.waitForText('Send notification by email');
+        I.click('Send notification by email');
+        I.fillField('input.tt-input', groupName);
+        I.waitForVisible('.tt-dropdown-menu');
+        I.pressKey('Enter');
+        I.waitForText('Group', 5);
+        I.click('Share', '.modal-dialog');
+    });
+
+    session('Bob', () => {
+        I.login('app=io.ox/files&folder=' + folder.data, { user: users[1] });
+        I.waitForElement('.file-list-view.complete');
+        I.waitForText(folderName, 2, '.folder-tree');
+        I.see(folderName, '.folder-tree');
+        I.click('[title="Actions for ' + folderName + '"]');
+        I.click('[data-action="invite"]', '.smart-dropdown-container');
+        I.waitForElement(locate('.permissions-view .row').at(2));
+        I.see('Author', '.permissions-view .row .role');
+        I.click('Close', '.modal-dialog');
+    });
+
+    session('Alice', () => {
+        I.clickToolbar('Share');
+        I.waitForText('Invite people');
+        I.click('Invite people', '.dropdown.open');
+        I.click('button[title=Actions]', '.modal-dialog');
+        I.waitForText('Revoke access');
+        I.click('Revoke access');
+        I.click('Share', '.modal-dialog');
+    });
+
+    session('Bob', () => {
+        I.click('#io-ox-refresh-icon');
+        I.waitForElement('#io-ox-refresh-icon .fa-spin');
+        I.waitForDetached('#io-ox-refresh-icon .fa-spin');
+        I.waitForText('You do not have appropriate permissions to view the folder.');
+        I.dontSee(folderName, '.folder-tree');
+    });
+
+});
