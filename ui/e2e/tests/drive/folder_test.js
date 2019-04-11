@@ -443,3 +443,31 @@ Scenario('[C8387] Rename a folder', async (I, users) => {
     });
 
 });
+
+Scenario('[C8388] Delete a folder', async (I, users) => {
+    // Testrail description:
+    // A custom folder exists in Drive
+    // 1. Choose a custom folder
+    // 2. Click the context - menu button (A context menu shows up)
+    // 3. Choose "Delete" (A confirmation dialog to delete is shown)
+    // 4. Confirm your action (Folder is deleted)
+    // 5. Choose a standard folder(documents, music, pictures or videos) and click the context menu (No "Delete" option is available)
+    const folderName = 'C8388';
+    const folder = await I.haveFolder(folderName, 'infostore', await I.grabDefaultFolder('infostore'), { user: users[0] });
+    prepare(I, folder.data);
+    I.click('[title="Actions for ' + folderName + '"]');
+    I.click('Delete', '.smart-dropdown-container');
+    I.waitForText('Do you really want to delete folder "' + folderName + '"?');
+    I.click('Delete', '.modal-footer');
+    I.waitForDetached('.modal-footer');
+    I.waitForInvisible(folderName);
+    ['Documents', 'Music', 'Pictures', 'Videos'].forEach(function (f) {
+        I.selectFolder(f);
+        I.waitForElement('.file-list-view.complete');
+        I.waitForElement('[title="Actions for ' + f + '"]');
+        I.click('[title="Actions for ' + f + '"]');
+        I.waitForText('Add new folder', '.smart-dropdown-container');
+        I.dontSee('Delete', '.smart-dropdown-container');
+        I.pressKey('Escape');
+    });
+});
