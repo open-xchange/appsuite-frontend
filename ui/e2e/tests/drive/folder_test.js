@@ -189,3 +189,25 @@ Scenario('[C8379] Add a file', async (I, users) => {
     I.waitForElement('.file-list-view.complete');
     I.dontSee('New', '.classic-toolbar');
 });
+
+Scenario('[C8381] Lock a file', async (I, users) => {
+    // Testrail description:
+    // Shared or public folder with other member
+    // 1. Choose a file (Popup window)
+    // 2. "More"-->"Lock" (File is locked for you)
+    // 3. Verify with other user
+    var defaultFolder = await I.grabDefaultFolder('infostore');
+    var newFolder = await I.createFolder(sharedFolder('C8381', users), defaultFolder, { user: users[0] });
+    await I.haveFile(newFolder.data.data, 'e2e/media/files/0kb/document.txt');
+    I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[0] });
+    I.waitForElement(locate('.filename').withText('document.txt').inside('.list-view'));
+    I.click(locate('.filename').withText('document.txt').inside('.list-view'));
+    I.clickToolbar('~More actions');
+    I.waitForText('Lock');
+    I.click('Lock', '.smart-dropdown-container');
+    I.waitForText('document.txt (Locked)');
+    I.logout();
+
+    I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[1] });
+    I.waitForText('document.txt (Locked)');
+});
