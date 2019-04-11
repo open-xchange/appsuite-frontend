@@ -63,3 +63,14 @@ Scenario('[C7347] Launch "Drive" application', async function (I) {
     I.seeElement('.classic-toolbar[aria-label="Drive Toolbar"]');
     I.logout();
 });
+
+Scenario('[C7350] Launch "Settings" application', async function (I) {
+    I.login('app=io.ox/mail');
+    I.waitForElement('.contact-picture');
+    I.click('.contact-picture');
+    I.waitForElement('#topbar-settings-dropdown');
+    I.click('Settings', '#topbar-settings-dropdown');
+    I.waitForElement('.settings-detail-pane');
+    I.seeElement('.settings-detail-pane');
+    I.logout();
+});
