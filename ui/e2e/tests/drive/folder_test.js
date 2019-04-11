@@ -509,3 +509,65 @@ Scenario('[C8389] Move a folder', async (I, users) => {
         I.pressKey('Escape');
     });
 });
+
+Scenario('[C8390] Folder tree', async (I, users) => {
+    // Testrail description:
+    // A folder tree with some items in it
+    // 1. Go to My files (Subfolders including virtual folders are displayed in the drive main view)
+    // 2. Open every subfolder
+    // 3. Close every subfolder
+    const folder = await I.haveFolder('Folders', 'infostore', await I.grabDefaultFolder('infostore'), { user: users[0] });
+    await I.haveFolder('subfolder_1', 'infostore', folder.data, { user: users[0] });
+    await I.haveFolder('subfolder_2', 'infostore', folder.data, { user: users[0] });
+    const subFolder = await I.haveFolder('subfolder_3', 'infostore', folder.data, { user: users[0] });
+    const subsubFolder = await I.haveFolder('subsubfolder_1', 'infostore', subFolder.data, { user: users[0] });
+    await I.haveFolder('subsubfolder_2', 'infostore', subFolder.data, { user: users[0] });
+    prepare(I);
+    I.click('My files', '.folder-tree');
+    I.pressKey('Tab');
+    I.pressKey('ArrowRight');
+    I.see('Documents', '.folder-tree');
+    I.see('Music', '.folder-tree');
+    I.see('Pictures', '.folder-tree');
+    I.see('Videos', '.folder-tree');
+    I.see('Folders', '.folder-tree');
+    I.pressKey('ArrowDown');
+    I.pressKey('ArrowRight');
+    I.waitForText('Templates', 2, '.folder-tree');
+    for (let i = 0; i <= 4; i++) { I.pressKey('ArrowDown'); }
+    I.pressKey('ArrowRight');
+    I.waitForElement('.file-list-view.complete');
+    I.waitForText('subfolder_1', 2, '.folder-tree');
+    I.waitForText('subfolder_2', 2, '.folder-tree');
+    I.waitForText('subfolder_3', 2, '.folder-tree');
+    I.pressKey('ArrowDown');
+    I.pressKey('ArrowDown');
+    I.pressKey('ArrowDown');
+    I.pressKey('ArrowRight');
+    I.waitForText('subsubfolder_1', 2, '.folder-tree');
+    I.waitForText('subsubfolder_2', 2, '.folder-tree');
+    I.pressKey('ArrowLeft');
+    I.dontSee('subsubfolder_1', '.folder-tree');
+    I.dontSee('subsubfolder_2', '.folder-tree');
+    I.pressKey('ArrowUp');
+    I.pressKey('ArrowUp');
+    I.pressKey('ArrowUp');
+    I.pressKey('ArrowLeft');
+    I.dontSee('subfolder_1', '.folder-tree');
+    I.dontSee('subfolder_2', '.folder-tree');
+    I.dontSee('subfolder_3', '.folder-tree');
+    I.pressKey('ArrowUp');
+    I.pressKey('ArrowUp');
+    I.pressKey('ArrowUp');
+    I.pressKey('ArrowUp');
+    I.pressKey('ArrowUp');
+    I.pressKey('ArrowLeft');
+    I.dontSee('Templates', '.folder-tree');
+    I.pressKey('ArrowUp');
+    I.pressKey('ArrowLeft');
+    I.dontSee('Documents', '.folder-tree');
+    I.dontSee('Music', '.folder-tree');
+    I.dontSee('Pictures', '.folder-tree');
+    I.dontSee('Videos', '.folder-tree');
+    I.dontSee('Folders', '.folder-tree');
+});
