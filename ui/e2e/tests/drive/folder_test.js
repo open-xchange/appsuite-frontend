@@ -261,3 +261,24 @@ Scenario('[C8381] Lock a file', async (I, users) => {
     I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[1] });
     I.waitForText('document.txt (Locked)');
 });
+
+Scenario('[C8382] Delete a file', async (I, users) => {
+    // Testrail description:
+    // Shared or public folder with other member
+    // 1. Select a file
+    // 2. Delete it (File removed)
+    var defaultFolder = await I.grabDefaultFolder('infostore');
+    var newFolder = await I.createFolder(sharedFolder('C8382', users), defaultFolder, { user: users[0] });
+    await I.haveFile(newFolder.data.data, 'e2e/media/files/0kb/document.txt');
+    I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[0] });
+    I.waitForElement('.file-list-view.complete');
+    I.waitForText('document.txt', 1, '.file-list-view');
+    I.click(locate('li.list-item').withText('document.txt'));
+    I.clickToolbar('~Delete');
+    I.waitForText('Do you really want to delete this item?');
+    I.click('Delete');
+    I.logout();
+    I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[1] });
+    I.waitForElement('.file-list-view.complete');
+    I.dontSee('document.txt');
+});
