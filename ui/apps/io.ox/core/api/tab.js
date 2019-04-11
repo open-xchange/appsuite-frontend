@@ -127,7 +127,9 @@ define('io.ox/core/api/tab', [
      * checks if current window is a parent or a child window
      */
     TabHandling.setCurrentWindow = function () {
-        var windowNameObject = TabHandling.createWindowNameObject();
+        // TODO check if isChild information does already exists to use a existing variable
+        var isChild = _.url.hash('app') && _.url.hash('app').indexOf('office') >= 0;
+        var windowNameObject = TabHandling.getSanitizeWindowNameObject(isChild);
 
         window.name = JSON.stringify(windowNameObject);
         _.extend(TabHandling, _.pick(windowNameObject, 'windowName', 'windowType', 'parentName'));
@@ -136,28 +138,35 @@ define('io.ox/core/api/tab', [
     };
 
     /**
-     * parse the JSON window.name and extract window informations like name, type and parent
+     *  Returns a sanitized windowNameObject for a given windowType (parent/child).
+     *
+     * @param {Boolean} isChild
+     *  Whether it's a child or a parent window.
+     *
+     * @returns {Object} windowNameObject
      */
-    TabHandling.createWindowNameObject = function () {
+    TabHandling.getSanitizeWindowNameObject = function (isChild) {
+
         var windowNameObject = TabHandling.parseWindowName(window.name);
 
-        // opened officeTab directly via url
-        if ((!windowNameObject || _.isEmpty(windowNameObject)) && _.url.hash('app') && _.url.hash('app').indexOf('office') >= 0) {
-            windowNameObject = {
-                windowName: TabHandling.createIdentifier('child'),
+        if (isChild) {
+            windowNameObject = _.extend(windowNameObject, {
+                // specified child window data, re-use existing data
+                windowName: windowNameObject.windowName || TabHandling.createIdentifier('child'),
                 windowType: 'child',
-                parentName: TabHandling.createIdentifier('parent')
-            };
+                parentName: windowNameObject.parentName || TabHandling.createIdentifier('parent')
+            });
         }
 
-        // open parent first time
-        if (!windowNameObject || _.isEmpty(windowNameObject)) {
-            windowNameObject = {
-                windowName: TabHandling.createIdentifier('parent'),
+        if (!isChild) {
+            // parentName does not exists for parent windows so delete
+            delete windowNameObject.parentName;
+            windowNameObject = _.extend(windowNameObject, {
+                // specified parent window data, re-use existing data
+                windowName: windowNameObject.windowName || TabHandling.createIdentifier('parent'),
                 windowType: 'parent'
-            };
+            });
         }
-
         return windowNameObject;
     };
 
@@ -167,7 +176,7 @@ define('io.ox/core/api/tab', [
      * @param {String} windowName
      *  JSON String from window name
      *
-     * @returns {Object|undefined} windowNameObject
+     * @returns {Object} windowNameObject
      */
     TabHandling.parseWindowName = function (windowName) {
         windowName = windowName || JSON.stringify({});
@@ -179,9 +188,6 @@ define('io.ox/core/api/tab', [
             returnValue = undefined;
             if (ox.debug) console.warn('TabHandling.parseWindowName', e);
         }
-
-        // if location is switched to logoutLocation, initialize current window as a new parent tab
-        if (returnValue.windowType === 'child' && location.href.indexOf('office?app') < 0) return;
 
         return returnValue;
     };
