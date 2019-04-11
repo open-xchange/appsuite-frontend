@@ -411,3 +411,35 @@ Scenario('[C8386] Uninvite a group', async (I, users) => {
     });
 
 });
+
+Scenario('[C8387] Rename a folder', async (I, users) => {
+    // Testrail description:
+    // A custom folder in Drive exists.
+    // 1. Switch to drive, select a non -default folder
+    // 2. Click the context menu button (A context menu shows up)
+    // 3. Choose "Rename" (A popup shows up which asks for the folders new name)
+    // 4. Enter a new name and save, check the folder tree (The folder is now renamed and re - sorted.)
+    // 5. Choose a standard folder(documents, music, pictures or videos) (no context menu available in top bar, only in folder tree)
+    // 6. Click the gear button in folder tree (No "Rename" option is available)
+    // 7. Rename a folder on the same level as the standard folders with a name of a standard folder.For example: Rename the folder "foo" to "Documents" (Error: "A folder named "Documents" already exists")
+    const folderName = 'C8387';
+    const folder = await I.haveFolder(folderName, 'infostore', await I.grabDefaultFolder('infostore'), { user: users[0] });
+    prepare(I, folder.data);
+    I.click('[title="Actions for ' + folderName + '"]');
+    I.click('Rename', '.smart-dropdown-container');
+    I.waitForText('Rename folder');
+    // A11y issue here: There is no label for this input present
+    I.fillField('.modal-body input[type="text"]', 'C8387-renamed');
+    I.click('Rename', '.modal-footer');
+    I.waitForDetached('.modal-footer');
+    ['Documents', 'Music', 'Pictures', 'Videos'].forEach(function (f) {
+        I.selectFolder(f);
+        I.waitForElement('.file-list-view.complete');
+        I.waitForElement('[title="Actions for ' + f + '"]');
+        I.click('[title="Actions for ' + f + '"]');
+        I.waitForText('Add new folder', '.smart-dopdown-container');
+        I.dontSee('Rename', '.smart-dropdown-container');
+        I.pressKey('Escape');
+    });
+
+});
