@@ -307,3 +307,40 @@ Scenario('[C8383] Unlock a file', async (I, users) => {
     I.waitForText('document.txt');
     I.dontSee('Locked');
 });
+
+Scenario('[C8385] Uninvite a person', async (I, users) => {
+    // Testrail description:
+    // Person is invited to the folder
+    // 1. Choose a folder
+    // 2. Click the gear button (context menu)
+    // 3. Choose "Permissions/Invite People" (A new pop up window opens with an overview of the invited people and their permissions.)
+    // 4. Click the gear button next to Person B that needs to be deleted from the folder. (Context menue opens.)
+    // 5. Click on "Revoke access" (The person disappears from the list.)
+    // 6. Log in with Person B. (Person B is logged in.)
+    // 7. Go to Drive. (The folder from Person A is not longer visible in the left section in Drive.)
+    var defaultFolder = await I.grabDefaultFolder('infostore');
+    var newFolder = await I.createFolder(sharedFolder('C8385', users), defaultFolder, { user: users[0] });
+
+    session('Bob', () => {
+        I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[0] });
+    });
+
+    session('Alice', () => {
+        I.login('app=io.ox/files', { user: users[0] });
+        I.waitForElement('.file-list-view.complete');
+        I.selectFolder('My shares');
+        I.waitForElement(locate('.displayname').withText('C8385').inside('.list-view'));
+        I.seeNumberOfElements('.list-view li.list-item', 1);
+        I.click('C8385', '.list-view .displayname');
+        I.clickToolbar('Revoke access');
+        I.waitForText('Revoked access.');
+    });
+
+    session('Bob', () => {
+        I.click('#io-ox-refresh-icon');
+        I.waitForElement('#io-ox-refresh-icon .fa-spin');
+        I.waitForDetached('#io-ox-refresh-icon .fa-spin');
+
+        I.dontSee('Shared files', '.folder-tree');
+    });
+});
