@@ -935,12 +935,8 @@ Scenario('[C7425] Create appointment with a group', async function (I, users) {
     I.fillField('Subject', 'Ich war hier');
     I.fillField('Location', 'Wer das liest ist doof');
 
-    I.fillField('input.add-participant.tt-input', 'Awesome guys');
+    addAttendee(I, 'Awesome guys');
 
-    I.waitForVisible('.tt-dropdown-menu');
-    I.pressKey('Enter');
-
-    console.log(users[0].get('name'), users[1].get('name'));
     I.waitForText(users[0].get('name'), 5);
     I.waitForText(users[1].get('name'), 5);
 
@@ -1093,7 +1089,7 @@ Scenario('[C7431] Create appointment via doubleclick', async function (I) {
     I.clickToolbar('View');
     I.click('Month', '.smart-dropdown-container');
     I.wait(1);
-    // there are 48 timeslots use 25th here so we can check for 50% top position later on. Makes this test way easier
+
     I.doubleClick('.io-ox-pagecontroller.current .day .list');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
@@ -1395,4 +1391,43 @@ Scenario('[C7413] Create appointment with an attachment', async function (I) {
             seeAttachments('.io-ox-sidepopup');
         }
     });
+});
+
+Scenario('[C274406] Change organizer of appointment with external attendees', async function (I, users) {
+    const subject = 'To be or not to be Organizor';
+    I.login('app=io.ox/calendar');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.fillField('Subject', subject);
+    I.fillField('Location', 'Globe Theatre');
+
+    addAttendee(I, users[1].get('name'));
+    I.fillField('.add-participant.tt-input', 'ExcellentExternalExterminator@Extraterrestrial.ex');
+    I.pressKey('Enter');
+
+    I.click('Create');
+
+    I.waitForText(subject, undefined, '.appointment');
+    I.click(subject, '.appointment');
+    I.click('.calendar-detail .more-dropdown');
+    I.waitForVisible('.dropdown-menu');
+    I.dontSee('Change organizer');
+
+    I.click('.smart-dropdown-container');
+
+    I.click('Edit');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.click('Repeat');
+
+    I.click('Save');
+
+    I.waitForText(subject, undefined, '.appointment');
+    I.click(subject, '.appointment');
+    I.click('.calendar-detail .more-dropdown');
+    I.waitForVisible('.dropdown-menu');
+    I.dontSee('Change organizer');
 });
