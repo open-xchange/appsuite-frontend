@@ -43,6 +43,7 @@ const sharedFolder = (folderName, users) => {
 Before(async (I, users) => {
     await users.create();
     await users.create();
+    await users.create();
 });
 
 After(async (users) => {
@@ -176,6 +177,55 @@ Scenario('[C8377] Invite a person', (I, users) => {
     });
 
 });
+
+Scenario('[C8378] Invite a group', async (I, users) => {
+    // Testrail description:
+    // 1. Go to Drive
+    // 2. Choose a folder and click the gear button (Context Menu)
+    // 3. Choose Invite
+    // 4. Invite a group and save (Group has given rights in folder)
+    // 5. Verify with two of the group members
+    // 6. Repeat for public folder
+    const folderName = 'C8378';
+    const groupName = 'C8378-group';
+    const group = {
+        name: groupName,
+        display_name: groupName,
+        members: [users[1].userdata.id, users[2].userdata.id]
+    };
+
+    await I.dontHaveGroup(groupName);
+    await I.haveGroup(group);
+
+    const folder = await I.haveFolder(folderName, 'infostore', await I.grabDefaultFolder('infostore'), { user: users[0] });
+    I.login('app=io.ox/files&folder=' + folder.data, { user: users[0] });
+    I.waitForElement('.file-list-view.complete');
+    I.clickToolbar('Share');
+    I.waitForText('Invite people');
+    I.click('Invite people', '.dropdown.open');
+    I.waitForText('Send notification by email');
+    I.click('Send notification by email');
+    I.fillField('input.tt-input', groupName);
+    I.waitForVisible('.tt-dropdown-menu');
+    I.pressKey('Enter');
+    I.waitForText('Group', 5);
+    I.click('Share', '.modal-dialog');
+    I.logout();
+
+    for(let i = 1; i <= 2; i++) {
+        I.login('app=io.ox/files&folder=' + folder.data, { user: users[i] });
+        I.waitForElement('.file-list-view.complete');
+        I.waitForText(folderName, 2, '.folder-tree');
+        I.see(folderName, '.folder-tree');
+        I.click('[title="Actions for ' + folderName + '"]');
+        I.click('[data-action="invite"]', '.smart-dropdown-container');
+        I.waitForElement(locate('.permissions-view .row').at(2));
+        I.see('Author', '.permissions-view .row .role');
+        I.click('Close', '.modal-dialog');
+        if (i === 1) I.logout();
+    }
+});
+
 Scenario('[C8379] Add a file', async (I, users) => {
     // Testrail description:
     // No rights to upload a file, "Viewer" role
