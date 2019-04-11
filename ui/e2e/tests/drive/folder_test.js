@@ -471,3 +471,41 @@ Scenario('[C8388] Delete a folder', async (I, users) => {
         I.pressKey('Escape');
     });
 });
+
+Scenario('[C8389] Move a folder', async (I, users) => {
+    // Testrail description:
+    // A folder hierarchy e.g.: My files Subfolder a SubSubFolder 1 Subfolder b
+    // 1. Choose a folder
+    // 2. Click the gear button (context menu)
+    // 3. Choose "Move" (Move popup)
+    // 4. Choose a new folder
+    // 5. Confirm (Folder moved)
+    // 6. Choose a standard folder (documents, music, pictures or videos) (no context menu available in top bar, only in folder tree)
+    // 7. Click the gear button in folder tree (No "Move" option is available)
+    const folderName = 'C8389';
+    const myfiles = await I.grabDefaultFolder('infostore');
+    const folder = await I.haveFolder('Subfolder a', 'infostore', myfiles, { user: users[0] });
+    await I.haveFolder('Subfolder b', 'infostore', myfiles, { user: users[0] });
+    await I.haveFolder('SubSubFolder 1', 'infostore', folder.data, { user: users[0] });
+    prepare(I, folder.data);
+    I.waitForElement(locate('.filename').withText('SubSubFolder 1').inside('.list-view'));
+    I.click(locate('.filename').withText('SubSubFolder 1').inside('.list-view'));
+    I.clickToolbar('~More actions');
+    I.waitForText('Move', 2, '.smart-dropdown-container');
+    I.click('Move', '.smart-dropdown-container');
+    I.click('~Subfolder b', '.modal-dialog .tree-container');
+    I.click('Move', '.modal-dialog');
+    I.waitForText('File has been moved');
+    I.waitForInvisible('File has been moved');
+    I.selectFolder('Subfolder b');
+    I.waitForElement(locate('.filename').withText('SubSubFolder 1').inside('.list-view'));
+    ['Documents', 'Music', 'Pictures', 'Videos'].forEach(function (f) {
+        I.selectFolder(f);
+        I.waitForElement('.file-list-view.complete');
+        I.waitForElement('[title="Actions for ' + f + '"]');
+        I.click('[title="Actions for ' + f + '"]');
+        I.waitForText('Add new folder');
+        I.dontSee('Move', '.smart-dropdown-container');
+        I.pressKey('Escape');
+    });
+});
