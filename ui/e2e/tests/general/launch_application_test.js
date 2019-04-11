@@ -85,6 +85,16 @@ Scenario('[C7350] Launch "Settings" application', async function (I) {
     I.logout();
 });
 
+Scenario('[C7351] Trigger refresh', async function (I) {
+    I.login('app=io.ox/mail');
+    I.waitForElement('#io-ox-refresh-icon');
+    I.waitForDetached('#io-ox-refresh-icon .fa-spin');
+    I.click('#io-ox-refresh-icon');
+    I.waitForElement('#io-ox-refresh-icon .fa-spin');
+    I.waitForDetached('#io-ox-refresh-icon .fa-spin');
+    I.logout();
+});
+
 Scenario('[C234516] Launch "Tasks" application', async function (I) {
     I.login('app=io.ox/mail');
     I.waitForElement('#io-ox-launcher');
