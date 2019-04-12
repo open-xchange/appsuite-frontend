@@ -22,6 +22,50 @@ define('io.ox/core/main/logout', [
 
     var DURATION = 250;
 
+    // logout for the not focused browser tab must not send requests
+    // because of possible races with tab that destroys the session,
+    // therefore be really the first point and do this quick logout
+    ext.point('io.ox/core/logout').extend({
+        id: 'tabLogoutFollower',
+        index: 'first',
+        logout: function (baton) {
+            // early-out
+            if (!ox.tabHandlingEnabled) return $.when();
+
+            var def = $.Deferred();
+
+            function redirectAndRejectSafely(def, baton) {
+                try {
+                    logoutRedirect(baton);
+                } finally {
+                    def.reject();
+                }
+            }
+
+            // when logged out by other tab, just redirect to logout location and clear
+            if (baton.skipSessionLogout) {
+                require(['io.ox/core/api/tab'], function (TabAPI) {
+                    try {
+                        TabAPI.TabHandling.setLoggingOutState('follower');
+                        // session can already be destroyed here by the active tab, better be safe than sorry
+                        ox.cache.clear().always(function () {
+                            // note: code in inside always is not secured
+                            redirectAndRejectSafely(def, baton);
+                        });
+                    } catch (e) {
+                        if (ox.debug) console.warn('clear storage at logout did not work', e);
+                        redirectAndRejectSafely(def, baton);
+                    }
+                });
+            } else {
+                def.resolve();
+            }
+
+            return def;
+        }
+
+    });
+
     ext.point('io.ox/core/logout').extend({
         id: 'confirmLogout',
         index: 100,
@@ -71,7 +115,7 @@ define('io.ox/core/main/logout', [
     });
 
     ext.point('io.ox/core/logout').extend({
-        id: 'tabLogout',
+        id: 'tabLogoutLeader',
         index: 150,
         logout: function (baton) {
             // early-out
@@ -79,38 +123,16 @@ define('io.ox/core/main/logout', [
 
             var def = $.Deferred();
 
-            function redirectAndRejectSafely(def, baton) {
-                try {
-                    logoutRedirect(baton);
-                } finally {
-                    def.reject();
-                }
-            }
-
             require(['io.ox/core/api/tab'], function (TabAPI) {
-                TabAPI.TabHandling.setLoggingOutState();
-                // when logged out by other tab, just redirect to logout location and clear
-                if (baton.skipSessionLogout) {
-                    try {
-                        // session can already be destroyed here by the active tab, better be safe than sorry
-                        ox.cache.clear().always(function () {
-                            // note: code in inside always is not secured
-                            redirectAndRejectSafely(def, baton);
-                        });
-                    } catch (e) {
-                        if (ox.debug) console.warn('clear storage at logout did not work', e);
-                        redirectAndRejectSafely(def, baton);
-                    }
-                } else {
-                    // require does catch errors, so we handle them to ensure a resolved deferred
-                    try {
-                        // notify other tabs that a logout happened
-                        TabAPI.TabSession.propagateLogout({ autologout: baton.autologout });
-                    } catch (e) {
-                        if (ox.debug) console.warn('propagate logout did not work', e);
-                    } finally {
-                        def.resolve();
-                    }
+                // require does catch errors, so we handle them to ensure a resolved deferred
+                try {
+                    TabAPI.TabHandling.setLoggingOutState('leader');
+                    // notify other tabs that a logout happened
+                    TabAPI.TabSession.propagateLogout({ autologout: baton.autologout });
+                } catch (e) {
+                    if (ox.debug) console.warn('propagate logout did not work', e);
+                } finally {
+                    def.resolve();
                 }
             });
 

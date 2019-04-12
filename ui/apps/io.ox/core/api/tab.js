@@ -226,7 +226,7 @@ define('io.ox/core/api/tab', [
     /**
      * Set the logout state that is retained even after a page reload.
      */
-    TabHandling.setLoggingOutState = function () {
+    TabHandling.setLoggingOutState = function (reason) {
         // save logout reason
         var windowName = window.name || JSON.stringify({}),
             windowNameObject;
@@ -236,7 +236,7 @@ define('io.ox/core/api/tab', [
             windowNameObject = {};
             if (ox.debug) console.warn('setLoggingOutState', e);
         } finally {
-            windowNameObject.loggingOut = true;
+            windowNameObject.loggingOut = reason;
             window.name = JSON.stringify(windowNameObject);
         }
     };
@@ -257,7 +257,8 @@ define('io.ox/core/api/tab', [
             windowNameObject = {};
             if (ox.debug) console.warn('getLoggingOutState', e);
         }
-        return !!windowNameObject.loggingOut;
+
+        return windowNameObject.loggingOut;
     };
 
     /**
