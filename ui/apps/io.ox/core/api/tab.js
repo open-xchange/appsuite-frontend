@@ -128,7 +128,7 @@ define('io.ox/core/api/tab', [
      */
     TabHandling.setCurrentWindow = function () {
         // TODO check if isChild information does already exists to use a existing variable
-        var isChild = _.url.hash('app') && _.url.hash('app').indexOf('office') >= 0;
+        var isChild = location.href.indexOf('office?app') >= 0;
         var windowNameObject = TabHandling.getSanitizeWindowNameObject(isChild);
 
         window.name = JSON.stringify(windowNameObject);
@@ -151,7 +151,7 @@ define('io.ox/core/api/tab', [
 
         if (isChild) {
             windowNameObject = _.extend(windowNameObject, {
-                // specified child window data, re-use existing data
+                // specified child window data, re-use existing data (e.g. reload, child tab creation)
                 windowName: windowNameObject.windowName || TabHandling.createIdentifier('child'),
                 windowType: 'child',
                 parentName: windowNameObject.parentName || TabHandling.createIdentifier('parent')
@@ -159,14 +159,21 @@ define('io.ox/core/api/tab', [
         }
 
         if (!isChild) {
-            // parentName does not exists for parent windows so delete
-            delete windowNameObject.parentName;
+            // clean up previous child data to get a clean state
+            if (windowNameObject.windowType === 'child') {
+                delete windowNameObject.parentName;
+                // delete the windowName so that a new parent name is created later
+                delete windowNameObject.windowName;
+            }
+
             windowNameObject = _.extend(windowNameObject, {
-                // specified parent window data, re-use existing data
+                // specified parent window data, re-use existing data (e.g. reload)
+                // note: parent windowName must be retained after re-login for 'show in drive' action
                 windowName: windowNameObject.windowName || TabHandling.createIdentifier('parent'),
                 windowType: 'parent'
             });
         }
+
         return windowNameObject;
     };
 
