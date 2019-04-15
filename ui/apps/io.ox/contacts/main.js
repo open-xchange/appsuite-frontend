@@ -366,7 +366,7 @@ define('io.ox/contacts/main', [
                     // get labels
                     baton.labels = app.grid.getLabels().textIndex || {};
 
-                    // update thumb listf
+                    // update thumb list
                     ext.point('io.ox/contacts/thumbIndex').invoke('getIndex', app.thumbs, baton);
 
                     app.thumbs.empty();
@@ -379,7 +379,7 @@ define('io.ox/contacts/main', [
                     var keys = _(baton.labels).keys();
                     baton.data = _.map(fullIndex, baton.Thumb);
 
-                    // add omaga thumb for any other leading chars
+                    // add omega thumb for any other leading chars
                     if (!_(keys).any(function (char) { return char === 'Ω'; })) return;
                     baton.data.push(new baton.Thumb({
                         label: 'Ω',
@@ -954,11 +954,15 @@ define('io.ox/contacts/main', [
         if (capabilities.has('gab !alone') && !options.folder && app.settings.get('startInGlobalAddressbook', true)) options.folder = '6';
 
         // go!
+        var def = $.Deferred();
         commons.addFolderSupport(app, app.grid, 'contacts', options.folder)
             .always(function () {
                 app.mediate();
+                // only resolve once mediate was called otherwise we get ugly runtime issues
+                def.resolve();
                 win.show();
             });
+        return def;
     });
 
     // set what to do if the app is started again
