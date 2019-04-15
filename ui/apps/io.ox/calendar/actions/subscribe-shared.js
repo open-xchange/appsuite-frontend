@@ -207,20 +207,10 @@ define('io.ox/calendar/actions/subscribe-shared', [
         return $.when(api.flat({ module: 'calendar', all: true })).then(function (pageData) {
             var calendarData = {};
 
-            function filter(array) {
-                var filtered = [];
-                _.each(array, function (folder) {
-                    if (/(birthdays)/.test(folder['com.openexchange.calendar.provider'])) {
-                        filtered.push(folder);
-                    }
-                });
-                return filtered;
-            }
-
             // cleanup
             calendarData.public = pageData.public;
             calendarData.shared = pageData.shared;
-            calendarData.private = filter(pageData.private);
+            calendarData.private = pageData.private;
 
             return {
                 dialog: dialog,
