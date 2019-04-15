@@ -45,9 +45,14 @@ define('io.ox/core/main/logout', [
             // when logged out by other tab, just redirect to logout location and clear
             if (baton.skipSessionLogout) {
                 require(['io.ox/core/api/tab'], function (TabAPI) {
+                    // session can already be destroyed here by the active tab, better be safe than sorry
                     try {
                         TabAPI.TabHandling.setLoggingOutState('follower');
-                        // session can already be destroyed here by the active tab, better be safe than sorry
+                        // stop websockets
+                        ox.trigger('logout');
+                        // stop requests/rt polling
+                        http.disconnect();
+                        // better clear in every tab, races a theoretically possible (i.e. tab1 has finished logout (clear) and tab2 is still in progress/writing)
                         ox.cache.clear().always(function () {
                             // note: code in inside always is not secured
                             redirectAndRejectSafely(def, baton);
