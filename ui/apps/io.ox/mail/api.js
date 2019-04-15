@@ -1201,7 +1201,7 @@ define('io.ox/mail/api', [
      */
     api.getUrl = function (data, mode, options) {
 
-        var opt = _.extend({ scaleType: 'contain' }, options),
+        var opt = _.extend({ scaleType: 'contain', session: true }, options),
             url = ox.apiRoot + '/mail', first;
         if (mode === 'zip') {
             first = _(data).first();
@@ -1243,7 +1243,9 @@ define('io.ox/mail/api', [
         }
 
         if (data.space) {
-            return ox.apiRoot + '/mail/compose/' + data.space + '/attachments/' + data.id + '?session=' + ox.session;
+            url = ox.apiRoot + '/mail/compose/' + data.space + '/attachments/' + data.id;
+            if (open.session) url += '?session=' + ox.session;
+            return url;
         }
         // inject filename for more convenient file downloads
         var filename = data.filename ? data.filename.replace(/[\\:/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined,
