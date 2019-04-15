@@ -127,3 +127,45 @@ Scenario('[C85685] Send drive-mail to internal recipient', async (I, users) => {
     // TODO: check if a download helper is feasible
 });
 
+Scenario('[C85690] Expire date can be forced', async function (I, users) {
+
+    I.login('app=io.ox/mail');
+    I.waitForElement('.io-ox-mail-window');
+
+    I.clickToolbar('Compose');
+    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+
+    I.executeScript(function () {
+        require('settings!io.ox/mail').set('compose/shareAttachments/requiredExpiration', true);
+    });
+
+    I.waitForFocus('input[placeholder="To"]');
+    I.fillField('To', users[1].get('primaryEmail'));
+    I.fillField('Subject', 'Plus Ultra!');
+
+    I.attachFile('.io-ox-mail-compose-window input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
+
+    I.click('Use Drive Mail');
+    I.click('Options', '.mail-attachment-list');
+    ['1 day', '1 week', '1 month', '3 months', '6 months', '1 year'].forEach((val) => {
+        I.see(val);
+    });
+
+    I.dontSee('Never');
+    I.selectOption('#expiration-select-box', '1 day');
+    I.click('Apply');
+    I.click('Send');
+    I.dontSee('.io-ox-mail-compose .contenteditable-editor');
+
+    await I.openApp('Drive');
+    const locateClickableFolder = (text) => locate('li.list-item.selectable').withDescendant(locate('div').withText(text));
+    I.openApp('Drive');
+    I.waitForText('Drive Mail', undefined, '.file-list-view');
+    I.doubleClick(locateClickableFolder('Drive Mail'), '.file-list-view');
+    I.waitForText('Plus Ultra!');
+
+    I.logout();
+    I.login('app=io.ox/mail', { user: users[1] });
+    I.waitForElement('.io-ox-mail-window');
+    I.see('Plus Ultra!');
+});
