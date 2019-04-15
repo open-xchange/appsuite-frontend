@@ -353,8 +353,7 @@ define('io.ox/calendar/perspective', [
             if (!/^io.ox\/calendar/.test(current)) return;
             if (obj.seriesId && obj.seriesId === obj.id) return;
             if (!this.selectAppointment) return;
-
-            this.selectAppointment(new calendarModel.Model(obj));
+            //this.selectAppointment(new calendarModel.Model(obj));
         }
 
     });
