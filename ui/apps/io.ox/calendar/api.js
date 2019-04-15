@@ -261,7 +261,7 @@ define('io.ox/calendar/api', [
                     if (useCache !== false) {
                         reqList = list.filter(function (obj) {
                             var model = api.pool.getModel(util.cid(obj));
-                            return model && model.has('attendees');
+                            return !(model && model.has('attendees'));
                         });
                     }
 
