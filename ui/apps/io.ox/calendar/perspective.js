@@ -187,7 +187,7 @@ define('io.ox/calendar/perspective', [
                     api.get(obj).done(function (model) {
                         if (self.dialog) self.dialog.close();
                         ext.point('io.ox/calendar/detail/actions/edit')
-                            .invoke('action', self, { data: model.toJSON() });
+                            .invoke('action', self, new ext.Baton({ data: model.toJSON() }));
                     });
                 }
             }
