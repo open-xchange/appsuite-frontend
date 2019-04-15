@@ -254,10 +254,12 @@ define('io.ox/core/main/autologout', [
 
                 function receivedResetTimeout() {
                     leader = false;
-                    resetTimeout();
-
                     // resetTimeout doesn't cancel the logout when the dialog is open
+                    // better to close the dialog first
                     if (dialog) { dialog.close(); }
+
+                    if (isAutoLogoutRunning()) { resetTimeout(); }
+
                 }
 
                 function receivedChangedAutoLogoutSetting(propagateData) {
@@ -289,7 +291,8 @@ define('io.ox/core/main/autologout', [
                 }
 
                 function receivedBeforeLogout() {
-                    // stop everything
+                    // important to close the dialog first before calling stop,
+                    // because closing the dialog calls a reset and stop set interval to 0
                     if (dialog) { dialog.close(); }
                     stop();
                 }
@@ -309,6 +312,8 @@ define('io.ox/core/main/autologout', [
 
                 resetTimeout = function () {
                     clearTimeout(timeout);
+                    // just for safety
+                    if (interval <= 0) { return; }
                     timeout = setTimeout(function () {
                         logout({ autologout: true });
                     }, interval);
