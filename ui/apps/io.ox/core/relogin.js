@@ -62,7 +62,7 @@ define('io.ox/core/relogin', [
         _.url.redirect(getLogoutLocation());
     }
 
-    ext.point('io.ox/core/boot/login').extend({
+    ext.point('io.ox/core/boot/login').replace({
         id: 'default',
         relogin: function () {
             gotoLoginLocation();
