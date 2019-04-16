@@ -617,6 +617,13 @@ define('io.ox/contacts/main', [
             });
         },
 
+        'prop-mapService': function (app) {
+            // redraw contact if mapService changes
+            settings.on('change:mapService', function () {
+                app.showContact(app.currentContact);
+            });
+        },
+
         /*
          * Set folderview property
          */
