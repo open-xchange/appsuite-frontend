@@ -39,7 +39,8 @@ define('plugins/portal/calendar/register', [
             this.collection
                 .chain()
                 .filter(function (model) {
-                    return model.getTimestamp('startDate') > _.now();
+                    // use endDate instead of startDate so current appointments are shown too
+                    return model.getTimestamp('endDate') > _.now();
                 })
                 .first(numOfItems)
                 .each(function (model) {
@@ -148,7 +149,8 @@ define('plugins/portal/calendar/register', [
         },
 
         preview: function (baton) {
-            var collection = baton.collection.filter(function (model) { return model.getTimestamp('startDate') > _.now(); });
+            // use endDate instead of startDate so current appointments are shown too
+            var collection = baton.collection.filter(function (model) { return model.getTimestamp('endDate') > _.now(); });
 
             if (collection.length === 0) {
                 this.append(
