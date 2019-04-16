@@ -88,8 +88,7 @@ define('io.ox/calendar/edit/extensions', [
                         fail = _.bind(baton.app.onError || _.noop, baton.app),
                         folder = baton.model.get('folder'),
                         attachments = [],
-                        inputfieldVal = baton.parentView.$el.find('.add-participant.tt-input').val(),
-                        sendNotifications = baton.app.get('sendInternalNotifications');
+                        inputfieldVal = baton.parentView.$el.find('.add-participant.tt-input').val();
 
                     // check if attachments have changed
                     if (baton.attachmentList.attachmentsToDelete.length > 0) {
@@ -160,15 +159,14 @@ define('io.ox/calendar/edit/extensions', [
                                 recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
                                 attachments: attachments,
                                 checkConflicts: true,
-                                usedGroups: baton.model._attendees.usedGroups,
-                                sendInternalNotifications: sendNotifications
+                                usedGroups: baton.model._attendees.usedGroups
                             }),
                             delta = baton.app.getDelta();
                         api.update(delta, options).then(save, fail);
                         return;
                     }
 
-                    api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { usedGroups: baton.model._attendees.usedGroups, attachments: attachments, checkConflicts: true, sendInternalNotifications: sendNotifications })).then(save, fail);
+                    api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { usedGroups: baton.model._attendees.usedGroups, attachments: attachments, checkConflicts: true })).then(save, fail);
                 })
             );
 
