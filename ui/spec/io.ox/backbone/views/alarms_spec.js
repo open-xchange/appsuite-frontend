@@ -15,7 +15,7 @@ define(['io.ox/backbone/mini-views/alarms', 'io.ox/core/moment'], function (Alar
 
     'use strict';
 
-    describe.only('AlarmsView', function () {
+    describe('AlarmsView', function () {
         beforeEach(function () {
             this.model = new Backbone.Model({
                 summary: 'Pizza Essen',
