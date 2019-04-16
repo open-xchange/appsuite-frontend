@@ -230,7 +230,12 @@ define('io.ox/backbone/mini-views/alarms', [
 
                 // add custom option so we can show non standard times
                 if (_(_(util.getReminderOptions()).keys()).indexOf(alarm.trigger.duration.replace('-', '')) === -1) {
-                    selectbox.append($('<option>').val(alarm.trigger.duration.replace('-', '')).text(new moment.duration(alarm.trigger.duration).humanize()));
+                    // test if we just have a special 0 value
+                    if (/^[-+]?PT0[SHDW]$/.test(alarm.trigger.duration)) {
+                        selectbox.find('[value="PT0M"]').val(alarm.trigger.duration.replace('-', ''));
+                    } else {
+                        selectbox.append($('<option>').val(alarm.trigger.duration.replace('-', '')).text(new moment.duration(alarm.trigger.duration).humanize()));
+                    }
                 }
 
                 relatedbox.val((alarm.trigger.related || 'START') + alarm.trigger.duration.replace(/\w*/g, ''));
@@ -264,8 +269,9 @@ define('io.ox/backbone/mini-views/alarms', [
                 switch (alarm.action) {
                     // don't use empty string as summary or description if not available. Produces problems with ical
                     // with mail or audio alarms everything is optional and handled by the backend (we could add attendees, description, attachments etc but we want to keep things simple until needed)
+                    // do not overwrite existing descriptions
                     case 'DISPLAY':
-                        alarm.description = self.model ? self.model.get('summary') || 'reminder' : 'reminder';
+                        if (!alarm.description) alarm.description = self.model ? self.model.get('summary') || 'reminder' : 'reminder';
                         break;
                     // no default
                 }
