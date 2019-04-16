@@ -292,8 +292,22 @@ define('io.ox/mail/api', [
         return preferred;
     }
 
-    api.get = function (obj, options) {
+    function sanitizeAttachments(attachments) {
+        if (!_.isArray(attachments)) {
+            // make sure we always have data.attachments (see bug 58631)
+            return [{ content: '', content_type: 'text/plain', disp: 'inline', id: '1', sanitized: true, size: 0, truncated: false }];
+        }
+        // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
+        // split by ; because this field might contain further unwanted data
+        return attachments.map(function (data) {
+            if (!/^text\/(plain|html)/i.test(data.content_type)) return data;
+            // only clean-up text and html; otherwise we lose data (see bug 43727)
+            data.content_type = String(data.content_type).toLowerCase().split(';')[0];
+            return sanitizer.sanitize(data);
+        });
+    }
 
+    api.get = function (obj, options) {
         var cid = _.isObject(obj) ? _.cid(obj) : obj,
             model = pool.get('detail').get(cid),
             useCache = options && (options.cache !== undefined) ? options.cache : true,
@@ -321,20 +335,16 @@ define('io.ox/mail/api', [
             if (obj.src || obj.view === 'raw') return;
             // delete potential 'cid' attribute (see bug 40136); otherwise the mail gets lost
             delete data.cid;
-            if (_.isArray(data.attachments)) {
-                // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
-                // split by ; because this field might contain further unwanted data
-                data.attachments.forEach(function (attachment) {
-                    if (/^text\/(plain|html)/i.test(attachment.content_type)) {
-                        // only clean-up text and html; otherwise we lose data (see bug 43727)
-                        attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
-                        if (sanitize) attachment = sanitizer.sanitize(attachment);
-                    }
+
+            data.attachments = sanitizeAttachments(data.attachments);
+
+            if (_.isArray(data.nested_msgs)) {
+                data.nested_msgs = data.nested_msgs.map(function (nested_msg) {
+                    nested_msg.attachments = sanitizeAttachments(nested_msg.attachments);
+                    return nested_msg;
                 });
-            } else {
-                // make sure we always have data.attachments (see bug 58631)
-                data.attachments = [{ content: '', content_type: 'text/plain', disp: 'inline', id: '1', sanitized: true, size: 0, truncated: false }];
             }
+
             // either update or add model
             if (model) {
                 // if we already have a model we promote changes for threads
