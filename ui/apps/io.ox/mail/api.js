@@ -1257,11 +1257,16 @@ define('io.ox/mail/api', [
                 attachment: data.id,
                 user: ox.user_id,
                 context: ox.context_id,
-                decrypt: (data.security && data.security.decrypted), // All actions must be decrypted if Guard emails
                 // mails don't have a last modified attribute, just use 1
                 sequence: 1,
                 session: ox.session
             });
+        if (data.security && data.security.decrypted) {
+            url += '&decrypt=true';
+            if (data.security.authentication) {
+                url += '&cryptoAuth=' + encodeURIComponent(data.security.authentication);
+            }
+        }
         switch (mode) {
             case 'view':
             case 'open':
