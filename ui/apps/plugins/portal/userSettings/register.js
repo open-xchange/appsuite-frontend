@@ -97,10 +97,13 @@ define('plugins/portal/userSettings/register', [
                 this.getContentNode().append(
                     $('<label class="password-change-label">').attr('for', guid).text(currentPasswordString).toggle(!(isGuest && settings.get('password/emptyCurrent'))),
                     oldPass = $('<input type="password" class="form-control current-password">').attr('id', guid).toggle(!(isGuest && settings.get('password/emptyCurrent'))),
+
                     $('<label class="password-change-label">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('New password')),
-                    newPass = $('<input type="password" class="form-control new-password">').attr('id', guid),
+                    newPass = $('<input type="password" class="form-control new-password">').attr({ 'id': guid, autocomplete: 'new-password' }),
+
                     $('<label class="password-change-label">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Repeat new password')),
-                    newPass2 = $('<input type="password" class="form-control repeat-new-password">').attr('id', guid),
+                    newPass2 = $('<input type="password" class="form-control repeat-new-password">').attr({ 'id': guid, autocomplete: 'new-password' }),
+
                     pwContainer,
                     $('<div class="alert alert-info">').css('margin', '14px 0').css('max-height', '500px').text(
                         gt('If you change the password, you will be signed out. Please ensure that everything is closed and saved.')
@@ -115,48 +118,51 @@ define('plugins/portal/userSettings/register', [
 
                 // we change empty string to null to be consistent
                 var node = dialog.getContentNode(),
-                    newPassword1 = newPass.val() === '' ? null : newPass.val(),
-                    newPassword2 = newPass2.val() === '' ? null : newPass2.val(),
-                    oldPassword = oldPass.val() === '' ? null : oldPass.val();
+                    newPassword1 = newPass.val().trim() === '' ? null : newPass.val(),
+                    newPassword2 = newPass2.val().trim() === '' ? null : newPass2.val(),
+                    oldPassword = oldPass.val().trim() === '' ? null : oldPass.val();
 
-                if (isGuest && newPassword1 === null) {
+                // current state: middlware allows empty passwords for guests ONLY
+                if (!isGuest && newPassword1 === null) {
                     yell('warning', gt('Your new password may not be empty.'));
                     dialog.idle();
                     newPass.focus();
                     dialog = null;
                     return;
                 }
-                if (newPassword1 === newPassword2) {
-                    http.PUT({
-                        module: 'passwordchange',
-                        params: { action: 'update' },
-                        appendColumns: false,
-                        data: {
-                            old_password: oldPassword,
-                            new_password: newPassword1
-                        }
-                    })
-                    .done(function () {
-                        node.find('input[type="password"]').val('');
-                        dialog.close();
-                        dialog = null;
-                        //no need to logut guests
-                        if (!isGuest) {
-                            main.logout();
-                        }
-                    })
-                    .fail(function (error) {
-                        yell(error);
-                        dialog.idle();
-                        oldPass.focus();
-                        dialog = null;
-                    });
-                } else {
+
+                if (newPassword1 !== newPassword2) {
                     yell('warning', gt('The two newly entered passwords do not match.'));
                     dialog.idle();
                     newPass2.focus();
                     dialog = null;
+                    return;
                 }
+
+                http.PUT({
+                    module: 'passwordchange',
+                    params: { action: 'update' },
+                    appendColumns: false,
+                    data: {
+                        old_password: oldPassword,
+                        new_password: newPassword1
+                    }
+                })
+                .done(function () {
+                    node.find('input[type="password"]').val('');
+                    dialog.close();
+                    dialog = null;
+                    //no need to logut guests
+                    if (!isGuest) {
+                        main.logout();
+                    }
+                })
+                .fail(function (error) {
+                    yell(error);
+                    dialog.idle();
+                    oldPass.focus();
+                    dialog = null;
+                });
             })
             .show(function () {
                 oldPass.focus();
