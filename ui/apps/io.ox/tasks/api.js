@@ -75,7 +75,8 @@ define('io.ox/tasks/api', [
 
                 //check overdue
                 if (modifications.status || (modifications.end_time !== undefined)) {
-                    if (currentValues.status !== 3 && currentValues.end_time < _.utc()) {
+
+                    if (currentValues.status !== 3 && currentValues.end_time < _.now()) {
                         api.trigger('mark:overdue', [currentValues]);
                     } else {
                         api.trigger('unmark:overdue', [currentValues]);
