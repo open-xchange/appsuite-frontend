@@ -117,7 +117,7 @@ define('plugins/portal/mail/register', [
                     })
                 );
             } else {
-                this.$el.empty().append($('<li class="item">').text(gt('No mails in your inbox')));
+                this.$el.empty().append($('<li>').text(gt('No mails in your inbox')));
             }
             return this;
         }
