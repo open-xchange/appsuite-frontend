@@ -66,7 +66,7 @@ define('io.ox/multifactor/settings/views/smsRegistrationView', [
             index: INDEX += 100,
             id: 'header',
             render: function () {
-                var label = $('<label for="verification">').append('Please enter the validation code we just sent to your device.')
+                var label = $('<label for="verification">').append(gt('Please enter the validation code we just sent to your device.'))
                 .append('<br>');
                 this.$body.append(
                     label

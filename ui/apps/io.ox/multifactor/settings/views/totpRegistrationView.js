@@ -69,7 +69,7 @@ define('io.ox/multifactor/settings/views/totpRegistrationView', [
             index: INDEX += 100,
             id: 'header',
             render: function () {
-                var label = $('<label for="qrcode">').append('Scan the QR code with your authenticator.')
+                var label = $('<label for="qrcode">').append(gt('Scan the QR code with your authenticator.'))
                 .append('<br>');
                 this.$body.append(
                     label

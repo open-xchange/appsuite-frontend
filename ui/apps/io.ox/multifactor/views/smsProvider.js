@@ -119,8 +119,8 @@ define('io.ox/multifactor/views/smsProvider', [
                     newDiv = $('<dev class="newSMS">').append(gt('New code sent.') + ' ');
                 }
                 var label = $('<label for="verification">').append(
-                    newCode ? gt('A new code was sent to your SMS device.  Please enter the code.') :
-                        gt('You secured your account with 2-Step Verification.  Please enter the verification code we sent to the phone *****%s.',
+                    newCode ? gt('A new code was sent to your SMS device. Please enter the code.') :
+                        gt('You secured your account with 2-Step Verification. Please enter the verification code we sent to the phone *****%s.',
                             baton.model.get('challenge').phoneNumberTail))
                 .append('<br>');
                 this.$body.append(
