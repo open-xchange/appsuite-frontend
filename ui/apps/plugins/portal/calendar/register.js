@@ -30,7 +30,7 @@ define('plugins/portal/calendar/register', [
         className: 'content list-unstyled',
 
         initialize: function () {
-            this.listenTo(this.collection, 'add remove change reset', this.render);
+            this.listenTo(this.collection, 'add remove change', this.render);
         },
 
         render: function () {
@@ -87,6 +87,14 @@ define('plugins/portal/calendar/register', [
         };
     }
 
+    function reload(baton) {
+        require(['io.ox/portal/main'], function (portal) {
+            // force refresh
+            baton.collection.expired = true;
+            portal.getApp().refreshWidget(baton.model, 0);
+        });
+    }
+
     ext.point('io.ox/portal/widget/calendar').extend({
 
         title: gt('Appointments'),
@@ -102,7 +110,7 @@ define('plugins/portal/calendar/register', [
                         portalApp.refreshWidget(portalModel, 0);
                     }
                 });
-
+                api.on('refresh.all update create delete move', reload(baton));
             });
         },
 
