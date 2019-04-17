@@ -1106,7 +1106,7 @@ define('io.ox/calendar/util', [
             var window = app.getWindow();
             if (!window) return {};
             var perspective = window.getPerspective();
-            if (!perspective) return {};
+            if (!perspective) return;
 
             var rangeStart, rangeEnd;
             switch (perspective.name) {
