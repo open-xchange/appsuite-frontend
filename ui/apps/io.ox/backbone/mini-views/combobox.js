@@ -175,7 +175,7 @@ define('io.ox/backbone/mini-views/combobox', [
         },
 
         select: function () {
-            if (!_.isUndefined(this.index)) {
+            if (!_.isUndefined(this.index) && this.index !== -1) {
                 var target = this.$dropdown.children().eq(this.index);
                 this.$input.val(target.attr('data-value'));
             }
