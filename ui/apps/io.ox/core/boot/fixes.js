@@ -92,6 +92,21 @@ define('io.ox/core/boot/fixes', [], function () {
         Modernizr.touch = true;
     } else {
         Modernizr.touch = false;
+        // make sure tooltips vanish if the reference node gets removed
+        // same for popovers
+        ['tooltip', 'popover'].forEach(function (name) {
+            var original = $.fn[name];
+            $.fn[name] = function () {
+                $(this).on('dispose', onDispose(name));
+                return original.apply($(this), arguments);
+            };
+        });
+    }
+
+    function onDispose(name) {
+        return function () {
+            $(this)[name]('destroy');
+        };
     }
 
     // add some device properties to <html>

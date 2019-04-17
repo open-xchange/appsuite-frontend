@@ -173,9 +173,7 @@ define('io.ox/backbone/views/actions/util', [
                 sectionTitle: item.link.sectionTitle,
                 caption: item.link.caption
             })
-            .on('shown.bs.dropdown dispose', function () {
-                $(this).children('a').tooltip('destroy');
-            })
+            .on('shown.bs.dropdown', hideTooltip)
             .append(function () {
                 var $a = $('<a href="#" role="button" draggable="false" tabindex="-1">')
                     .data({ baton: baton })
@@ -195,7 +193,7 @@ define('io.ox/backbone/views/actions/util', [
             var $ul = util.createDropdownList();
             $el.addClass('dropdown').append($toggle, $ul);
             // close tooltip when opening the dropdown
-            $el.on('shown.bs.dropdown', function () { $(this).children('a').tooltip('hide'); });
+            $el.on('shown.bs.dropdown', hideTooltip);
 
             return baton ? util.renderDropdownItems($el, baton, options) : $.when();
         },
@@ -544,6 +542,10 @@ define('io.ox/backbone/views/actions/util', [
             })
             .tooltip({ trigger: 'hover' });
     };
+
+    function hideTooltip() {
+        $(this).children('a').tooltip('hide');
+    }
 
     return util;
 });
