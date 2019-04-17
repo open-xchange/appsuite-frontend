@@ -114,7 +114,7 @@ define('io.ox/multifactor/settings/views/smsRegistrationView', [
             }
             var error;
             if (data && data.error) {  // Bad code
-                error = gt('Bad input or server error.  Please try again.') + ' ' + data.error;
+                error = gt('Bad input or server error. Please try again.') + ' ' + data.error;
             }
             showError(error);
             dialog.idle();
@@ -122,12 +122,12 @@ define('io.ox/multifactor/settings/views/smsRegistrationView', [
             return;
         }, function (data) {
             if (data && data.code === 'MFA-0021') {
-                showError(gt('Bad verification code.  Please try again'));
+                showError(gt('Bad verification code. Please try again'));
                 dialog.idle();
                 $('#verification').focus();
                 return;
             }
-            showError(gt('Bad input or server error.  Please try again.') + ' ' + (data ? data.error : ''));
+            showError(gt('Bad input or server error. Please try again.') + ' ' + (data ? data.error : ''));
             dialog.close();
             def.reject();
         });

@@ -174,7 +174,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
 
         if (!resp) {
             //#. Catch all error when trying to set up a new 2step device
-            showError(gt('Something went wrong.  Please try again later.'));
+            showError(gt('Something went wrong. Please try again later.'));
         }
     }
 
