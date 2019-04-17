@@ -1119,7 +1119,11 @@ define('io.ox/calendar/util', [
                     perspective = opt.perspective || _.url.hash('perspective') || app.props.get('layout');
 
                 function cont(perspective) {
-                    if (perspective.selectAppointment) perspective.selectAppointment(model);
+                    if (perspective.selectAppointment) {
+                        perspective.selectAppointment(model);
+                        // early return to avoud doubled detail view
+                        return;
+                    }
                     if (opt.showDetails) {
                         var e = $.Event('click', { target: app.perspective.$el });
                         perspective.showAppointment(e, model.toJSON(), { arrow: false });
