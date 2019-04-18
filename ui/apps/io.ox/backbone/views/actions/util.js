@@ -403,6 +403,7 @@ define('io.ox/backbone/views/actions/util', [
                         if (_.isFunction(action.action)) action.action(baton);
                         else if (_.isString(action.action)) require([action.action], function (fn) { fn(baton); });
                         else if (_.isFunction(action.multiple)) action.multiple(baton.array(), baton);
+                        ox.trigger('action:invoke action:invoke:' + ref, baton, action, ref);
                     }
                 } catch (e) {
                     console.error('point("' + ref + '") > invoke()', e.message, {
