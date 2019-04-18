@@ -522,7 +522,7 @@ define('io.ox/core/desktop', [
         },
 
         setState: function (obj) {
-            if (this.options.floating) return;
+            if (this.options.floating || this.options.plugged) return;
             for (var id in obj) {
                 _.url.hash(id, ((obj[id] !== null) ? String(obj[id]) : null));
             }
@@ -537,12 +537,14 @@ define('io.ox/core/desktop', [
                 self = this,
                 name = this.getName();
 
-            // update hash
-            if (!this.options.floating && name !== _.url.hash('app')) {
-                _.url.hash({ folder: null, perspective: null, id: null });
-            }
-            if (!this.options.floating && name) {
-                _.url.hash('app', name);
+            // update hash (not for floating apps, e.g. mail editor; or plugged apps, e.g. spreadsheet viewer)
+            if (!this.options.floating && !this.options.plugged) {
+                if (name !== _.url.hash('app')) {
+                    _.url.hash({ folder: null, perspective: null, id: null });
+                }
+                if (name) {
+                    _.url.hash('app', name);
+                }
             }
 
             if (this.get('state') === 'ready') {
@@ -1293,9 +1295,10 @@ define('io.ox/core/desktop', [
 
                 this.show = function (cont, resume) {
                     var appchange = false;
+                    var appPlugged = this.app && this.app.options.plugged;
                     //todo URL changes on app change? direct links?
                     //use the url app string before the first ':' to exclude parameter additions (see how mail write adds the current mode here)
-                    if (!this.floating && currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
+                    if (!this.floating && !appPlugged && currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
                         appchange = true;
                     }
                     ox.trigger('change:document:title', this.app.get('title'));
@@ -1321,7 +1324,7 @@ define('io.ox/core/desktop', [
                         this.trigger('beforeshow');
                         this.updateToolbar();
                         //set current appname in url, was lost on returning from edit app
-                        if (!this.floating && (!_.url.hash('app') || self.app.getName() !== _.url.hash('app').split(':', 1)[0])) {
+                        if (!this.floating && !appPlugged && (!_.url.hash('app') || self.app.getName() !== _.url.hash('app').split(':', 1)[0])) {
                             //just get everything before the first ':' to exclude parameter additions
                             _.url.hash('app', self.app.getName());
                         }
