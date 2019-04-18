@@ -104,9 +104,8 @@ define('io.ox/core/boot/fixes', [], function () {
     }
 
     function onDispose(name) {
-        return function () {
-            $(this)[name]('destroy');
-        };
+        // we use "hide" here; "destroy" sometimes provoke exceptions
+        return function () { $(this)[name]('hide'); };
     }
 
     // add some device properties to <html>

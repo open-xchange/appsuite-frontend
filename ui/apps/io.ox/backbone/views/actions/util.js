@@ -452,7 +452,7 @@ define('io.ox/backbone/views/actions/util', [
 
             function dispose() {
                 // make sure backdrop and menu are removed (might be open during dispose)
-                $backdrop.remove();
+                if ($backdrop) $backdrop.remove();
                 $toggle = $menu = $backdrop = null;
             }
         },
