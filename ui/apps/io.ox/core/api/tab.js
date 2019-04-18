@@ -417,15 +417,15 @@ define('io.ox/core/api/tab', [
         });
         ox.on('beforeunload', function (unsavedChanges) {
             TabCommunication.events.trigger('beforeunload', unsavedChanges);
+        });
+        // be early, event listener on ox are initialized too late
+        window.addEventListener('beforeunload', function () {
             TabSession.clearStorage();
             TabCommunication.clearStorage();
             TabHandling.remove(TabHandling.windowName);
         });
         ox.on('login:success', function () {
             TabHandling.add(_.pick(TabHandling, 'windowName', 'windowType', 'parentName'));
-        });
-        ox.on('logout:success', function () {
-            TabHandling.remove(TabHandling.windowName);
         });
     };
 
