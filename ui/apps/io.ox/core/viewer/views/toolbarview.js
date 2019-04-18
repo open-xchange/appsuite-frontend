@@ -323,8 +323,9 @@ define('io.ox/core/viewer/views/toolbarview', [
             },
             compose: {
                 'downloadcomposeattachment': {
-                    prio: 'lo',
+                    prio: 'hi',
                     mobile: 'lo',
+                    icon: 'fa fa-download',
                     title: gt('Download'),
                     ref: Util.getRefByModelSource('compose')
                 }
@@ -337,8 +338,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                     ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
                 },
                 'downloadmailattachment': {
-                    prio: 'lo',
+                    prio: 'hi',
                     mobile: 'lo',
+                    icon: 'fa fa-download',
                     title: gt('Download'),
                     ref: Util.getRefByModelSource('pim')
                 },
