@@ -76,6 +76,17 @@ class MyHelper extends Helper {
         });
     }
 
+    async haveGroup(group, options) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        const response = await httpClient.put('/appsuite/api/group', group, {
+            params: {
+                action: 'new',
+                session: session
+            }
+        });
+        return response.data.data;
+    }
+
 }
 
 module.exports = MyHelper;
