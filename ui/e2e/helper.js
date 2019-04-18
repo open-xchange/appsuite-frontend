@@ -1,5 +1,6 @@
 const Helper = require('@open-xchange/codecept-helper').helper,
     axe = require('axe-core');
+const { util } = require('@open-xchange/codecept-helper');
 
 function assertElementExists(res, locator, prefixMessage = 'Element', postfixMessage = 'was not found by text|CSS|XPath') {
     if (!res || res.length === 0) {
@@ -61,6 +62,20 @@ class MyHelper extends Helper {
         if (typeof report === 'string') throw report;
         return report;
     }
+
+    async createFolder(folder, id, options) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        return httpClient.put('/appsuite/api/folders', folder, {
+            params: {
+                action: 'new',
+                autorename: true,
+                folder_id: id,
+                session: session,
+                tree: 1
+            }
+        });
+    }
+
 }
 
 module.exports = MyHelper;
