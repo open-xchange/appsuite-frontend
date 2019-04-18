@@ -225,27 +225,24 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
             // ignore already loaded documents
             if (this.documentContainer.children().length > 0) { return; }
 
-            function getPromiseFromInvokeResult(invokeResult) {
-                return (invokeResult && _.isArray(invokeResult._wrapped)) ? invokeResult._wrapped[0] : $.Deferred().reject();
-            }
-
             function launchApplication(model) {
+
                 // make sure mail and PIM attachments are saved into a Drive temp folder
                 var promise = self.assureDriveFile(model);
 
                 // launch Spreadsheet application
                 promise = promise.then(function (model) {
 
-                    var baton = new Ext.Baton({
-                        data: model,
-                        viewnode: self.documentContainer
-                    });
-
+                    // fail safety: check for early exit of the viewer
                     if (self.disposed) { return $.Deferred().reject(); }
 
-                    // Ext.point.invoke returns an array of promises
-                    var invokeResult = Ext.point('spreadsheet/viewer-mode/load/drive').invoke('launchApplication', self, baton);
-                    return getPromiseFromInvokeResult(invokeResult);
+                    // invoke the extension point to launch the embedded spreadsheet application
+                    var point = Ext.point('io.ox/office/spreadsheet/viewer/load/drive');
+                    var baton = new Ext.Baton({ data: model, page: self.documentContainer });
+                    var result = point.invoke('launch', self, baton);
+
+                    // `point.invoke()` returns an array of promises
+                    return (result && _.isArray(result._wrapped)) ? result._wrapped[0] : $.Deferred().reject();
                 });
 
                 return promise;
@@ -259,7 +256,7 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
                 if (!self.disposed) { self.$el.idle(); }
 
                 // wait until the Documents part (class `BaseApplication` and beyond) is added to the app
-                docsApp.on('docs:constructed', function () {
+                docsApp.onInit(function () {
 
                     function listenToWithValidApp(source, type, callback) {
                         docsApp.waitForImportSuccess(function () {
