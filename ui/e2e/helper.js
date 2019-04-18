@@ -87,6 +87,31 @@ class MyHelper extends Helper {
         return response.data.data;
     }
 
+    async dontHaveGroup(name, options) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        const { data: { data } } = await httpClient.put('/appsuite/api/group', '', {
+            params: {
+                action: 'all',
+                columns: '1,701',
+                session
+            }
+        });
+        const timestamp = require('moment')().add(30, 'years').format('x');
+        const test = typeof name.test === 'function' ? g => name.test(g[1]) : g => name === g[1];
+
+        const ids = data.filter(test).map(g => g[0]);
+        return Promise.all(ids.map(async (id) => {
+            await httpClient.put('/appsuite/api/group', { id }, {
+                params: {
+                    action: 'delete',
+                    session,
+                    timestamp
+                }
+            });
+            return { id, name };
+        }));
+    }
+
 }
 
 module.exports = MyHelper;
