@@ -112,6 +112,17 @@ class MyHelper extends Helper {
         }));
     }
 
+    async haveResource(data, options) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        const response = await httpClient.put('/appsuite/api/resource', data, {
+            params: {
+                action: 'new',
+                session: session
+            }
+        });
+        return response.data.data.id;
+    }
+
 }
 
 module.exports = MyHelper;
