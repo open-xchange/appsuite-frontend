@@ -157,6 +157,19 @@ class MyHelper extends Helper {
         return response;
     }
 
+    async haveLockedFile(data, options) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        const response = await httpClient.put('/appsuite/api/files', data, {
+            params: {
+                action: 'lock',
+                id: data.id,
+                folder: data.folder_id,
+                session
+            }
+        });
+        return response.data;
+    }
+
 }
 
 module.exports = MyHelper;
