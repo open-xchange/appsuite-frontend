@@ -1503,7 +1503,7 @@ define('io.ox/files/main', [
                     }, 100, { trailing: false })
                 });
                 // default action
-                ext.point('io.ox/files/actions/default').extend({
+                /*    ext.point('io.ox/files/actions/default').extend({
                     id: 'default_preprocess',
                     index: 50,
                     action: function (baton) {
@@ -1514,7 +1514,7 @@ define('io.ox/files/main', [
                             action: baton.options.eventname
                         });
                     }
-                });
+                }); */
             });
         },
 
