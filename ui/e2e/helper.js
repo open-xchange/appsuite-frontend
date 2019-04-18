@@ -123,6 +123,29 @@ class MyHelper extends Helper {
         return response.data.data.id;
     }
 
+    async dontHaveResource(pattern, options) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        const { data: { data } } = await httpClient.put('/appsuite/api/resource', { pattern }, {
+            params: {
+                action: 'search',
+                session
+            }
+        });
+
+        const timestamp = require('moment')().add(30, 'years').format('x');
+        return Promise.all(data.map(async ({ id }) => {
+
+            await httpClient.put('/appsuite/api/resource', { id }, {
+                params: {
+                    action: 'delete',
+                    session,
+                    timestamp
+                }
+            });
+            return { id, pattern };
+        }));
+    }
+
 }
 
 module.exports = MyHelper;
