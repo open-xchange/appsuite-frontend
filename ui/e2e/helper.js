@@ -1,6 +1,7 @@
 const Helper = require('@open-xchange/codecept-helper').helper,
     axe = require('axe-core');
 const { util } = require('@open-xchange/codecept-helper');
+const assert = require('assert');
 
 function assertElementExists(res, locator, prefixMessage = 'Element', postfixMessage = 'was not found by text|CSS|XPath') {
     if (!res || res.length === 0) {
@@ -168,6 +169,19 @@ class MyHelper extends Helper {
             }
         });
         return response.data;
+    }
+
+    async haveAppointment(appointment, options) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        const response = await httpClient.put('/appsuite/api/chronos', appointment, {
+            params: {
+                action: 'new',
+                session: session,
+                folder: appointment.folder
+            }
+        });
+        assert.strictEqual(response.data.error, undefined, JSON.stringify(response.data));
+        return response;
     }
 
 }
