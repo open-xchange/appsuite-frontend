@@ -84,7 +84,7 @@ define('io.ox/core/boot/load', [
         id: 'compositionSpaces',
         run: function () {
             ox.rampup.compositionSpaces = $.when(
-                http.GET({ module: 'mailcompose', params: { action: 'all', columns: 'subject' } }),
+                http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject' } }),
                 require(['gettext!io.ox/mail'])
             ).then(function (data, gt) {
                 var list = _(data).first() || [];
