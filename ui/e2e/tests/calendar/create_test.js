@@ -95,6 +95,62 @@ Scenario('[C7411] Discard appointment during the creation', function (I) {
     I.waitToHide('.io-ox-calendar-edit');
 });
 
+// Check: There actually may be a legitimate bug here or is it intended that shared private appointments don't appear in list view?
+Scenario.skip('[C7412] Create private appointment @contentReview @bug', async function (I, users) {
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+
+    const testrailID = 'C7412';
+    const timestamp = Math.round(+new Date() / 1000);
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+    const folder = {
+        module: 'event',
+        subscribed: 1,
+        title: testrailID,
+        permissions: [
+            {
+                bits: 403710016,
+                entity: users[0].userdata.id,
+                group: false
+            }, {
+                bits: 4227332,
+                entity: users[1].userdata.id,
+                group: false
+            }
+        ]
+    };
+    const sharedFolderID = await I.createFolder(folder, 'cal://0/' + appointmentDefaultFolder, { user: users[0] });
+    await I.haveAppointment({
+        folder: sharedFolderID.data.data,
+        summary: timestamp,
+        location: timestamp,
+        description: timestamp,
+        attendeePrivileges: 'MODIFY',
+        class: 'CONFIDENTIAL',
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().startOf('isoWeek').add(10, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().startOf('isoWeek').add(8, 'hours').format('YYYYMMDD[T]HHmm00')
+        }
+    }, { user: users[0] });
+
+    I.login('app=io.ox/calendar', { user: users[1] });
+    I.doubleClick('~Shared calendars');
+    I.waitForVisible(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${testrailID}"]`);
+    I.doubleClick(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${testrailID}"]`);
+    ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForText('Private');
+        I.dontSee(timestamp);
+        I.dontSee(timestamp);
+    });
+});
+
 Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December, no end', async function (I) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
