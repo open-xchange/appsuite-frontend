@@ -13,7 +13,6 @@
 
 define('io.ox/calendar/actions/acceptdeny', [
     'io.ox/calendar/api',
-    'io.ox/backbone/mini-views/alarms',
     'io.ox/backbone/views/modal',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
@@ -21,7 +20,7 @@ define('io.ox/calendar/actions/acceptdeny', [
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/style'
-], function (calApi, AlarmsView, ModalDialog, folderAPI, util, notifications, settings, gt) {
+], function (calApi, ModalDialog, folderAPI, util, notifications, settings, gt) {
 
     'use strict';
 
@@ -35,7 +34,6 @@ define('io.ox/calendar/actions/acceptdeny', [
                 //use different api if provided (tasks use this)
                 api = options.api || calApi,
                 folder,
-                alarmsView,
                 reminderSelect = $(),
                 inputid = _.uniqueId('dialog'),
                 apiData = { folder: o.folder || o.folder_id, id: o.id },
@@ -64,22 +62,6 @@ define('io.ox/calendar/actions/acceptdeny', [
                     var confirmId = !o.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id;
 
                     message = util.getConfirmationMessage(o, confirmId);
-
-                    var alarmsModel,
-                        previousConfirmation = options.taskmode ? _(appointmentData.users).findWhere({ id: ox.user_id }) : _(appointmentData.attendees).findWhere({ entity: confirmId });
-
-                    if (!options.taskmode) {
-                        if (!previousConfirmation || previousConfirmation.partStat === 'NEEDS-ACTION') {
-                            appointmentData.alarms = util.getDefaultAlarms(appointmentData);
-                        }
-                        // backbone model is fine. No need to require chronos model
-                        alarmsModel = new Backbone.Model(appointmentData);
-                        alarmsView = new AlarmsView.linkView({ model: alarmsModel });
-                        reminderSelect = $('<fieldset>').append(
-                            $('<legend class="confirm-dialog-legend">').text(gt('Reminder')),
-                            alarmsView.render().$el
-                        );
-                    }
 
                     return new ModalDialog({
                         async: true,
@@ -174,12 +156,17 @@ define('io.ox/calendar/actions/acceptdeny', [
                                 };
                                 checkConflicts = false;
                             } else {
+                                var previousConfirmation = _(appointmentData.attendees).findWhere({ entity: confirmId });
                                 requestData = {
                                     attendee: previousConfirmation,
                                     id: appointmentData.id,
                                     folder: appointmentData.folder
                                 };
-                                if (alarmsModel) requestData.alarms = alarmsModel.get('alarms');
+
+                                if (!previousConfirmation || previousConfirmation.partStat === 'NEEDS-ACTION') {
+                                    requestData.alarms = util.getDefaultAlarms(appointmentData);
+                                }
+
                                 requestData.attendee.partStat = action.toUpperCase();
                                 if (message) {
                                     requestData.attendee.comment = message;
