@@ -260,3 +260,50 @@ Scenario('[C7733] Set Task startdate behind due date', async function (I) {
     I.retry(5).seeTextEquals('The due date must not be before the start date.', '[data-attribute="end_time"] div.error');
     I.logout();
 });
+
+Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
+    const id = 'C7731',
+        desc = 'Create a Task in a shared folder',
+        defaultFolder = await I.grabDefaultFolder('tasks'),
+        sharedFolder = await I.createFolder({
+            module: 'tasks',
+            subscribed: 1,
+            title: id,
+            permissions: [
+                {
+                    bits: 403710016,
+                    entity: users[0].userdata.id,
+                    group: false
+                }, {
+                    bits: 4227332,
+                    entity: users[1].userdata.id,
+                    group: false
+                }
+            ]
+        }, defaultFolder, { user: users[0] }),
+        sharedFolderId = sharedFolder.data.data;
+
+    const checkTask = () => {
+        I.waitForText(id, 5, '.vgrid-cell');
+        I.click(id, '.vgrid-cell');
+        I.waitForText(id, 2, 'h1');
+        I.see('Not started', '.vgrid-cell');
+        I.dontSee('Due', '.info-panel');
+        ['Low', 'Medium', 'High'].forEach(priority => {
+            I.dontSeeElement('[title="' + priority + ' priority"]');
+        });
+    };
+
+    I.login('app=io.ox/tasks&folder=' + sharedFolderId, { user: users[1] });
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-tasks-edit-window');
+    I.fillField('Subject', id);
+    I.fillField('Description', desc);
+    I.pressKey('Enter');
+    I.click('Create');
+    checkTask();
+    I.logout();
+
+    I.login('app=io.ox/tasks&folder=' + sharedFolderId, { user: users[0] });
+    checkTask();
+});
