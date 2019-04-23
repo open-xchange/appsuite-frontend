@@ -1431,3 +1431,357 @@ Scenario('[C274406] Change organizer of appointment with external attendees', as
     I.waitForVisible('.dropdown-menu');
     I.dontSee('Change organizer');
 });
+
+Scenario('[C274651] Create secret appointment', async function (I, users) {
+    let testrailID = 'C274651';
+    var timestamp = Math.round(+new Date() / 1000);
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+    const folder = {
+        module: 'event',
+        subscribed: 1,
+        title: testrailID,
+        permissions: [
+            {
+                bits: 403710016,
+                entity: users[0].userdata.id,
+                group: false
+            }, {
+                bits: 4227332,
+                entity: users[1].userdata.id,
+                group: false
+            }
+        ]
+    };
+    const sharedFolderID = await I.createFolder(folder, 'cal://0/' + appointmentDefaultFolder, { user: users[0] });
+    await I.haveAppointment({
+        folder: sharedFolderID.data.data,
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().startOf('isoWeek').add(10, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().startOf('isoWeek').add(8, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        attendees: [
+            {
+                partStat: 'ACCEPTED',
+                entity: users[0].userdata.id
+            }
+        ],
+        class: 'PRIVATE',
+        visibility: 'PRIVATE',
+        alarms: [],
+        transp: 'OPAQUE',
+        attendeePrivileges: 'DEFAULT',
+        summary: timestamp,
+        location: timestamp,
+        description: timestamp
+
+    }, { user: users[0] });
+    I.login('app=io.ox/calendar', { user: users[1] });
+    I.doubleClick('~Shared calendars');
+    I.waitForVisible(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${testrailID}"]`);
+    I.doubleClick(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${testrailID}"]`);
+    ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        I.waitForText('Private');
+        I.dontSee(timestamp);
+        I.dontSee(timestamp);
+    });
+});
+
+Scenario('[C7414] Create two appointments at the same time (one is shown as free)', async function (I, users) {
+    const moment = require('moment');
+    let testrailID = 'C7414';
+    //var timestamp = Math.round(+new Date() / 1000);
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+    //Create Appointment
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+    I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: testrailID,
+        location: testrailID,
+        description: testrailID,
+        attendeePrivileges: 'MODIFY',
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().format('YYYYMMDD[T]HHmm00')
+        },
+        attendees: [
+            {
+                partStat: 'ACCEPTED',
+                entity: users[1].userdata.id
+            }
+        ]
+    }, { user: users[0] });
+    I.login('app=io.ox/calendar', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.clickToolbar('Today');
+    I.clickToolbar('New');
+    I.waitForElement('.io-ox-calendar-edit [name="summary"]');
+    I.fillField('.io-ox-calendar-edit [name="summary"]', testrailID);
+    I.fillField('.io-ox-calendar-edit [name="location"]', testrailID);
+    I.click('Show as free');
+    I.click('Create');
+    I.waitForDetached(locate('.modal-open .modal-title').withText('Conflicts detected'));
+});
+
+Scenario('[C7415] Create two reserved appointments at the same time', async function (I, users) {
+    const moment = require('moment');
+    let testrailID = 'C7415';
+    //var timestamp = Math.round(+new Date() / 1000);
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+    //Create Appointment
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+    I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: testrailID,
+        location: testrailID,
+        description: testrailID,
+        attendeePrivileges: 'MODIFY',
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().format('YYYYMMDD[T]HHmm00')
+        },
+        attendees: [
+            {
+                partStat: 'ACCEPTED',
+                entity: users[1].userdata.id
+            }
+        ]
+    }, { user: users[0] });
+    I.login('app=io.ox/calendar', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.clickToolbar('Today');
+    expect(await I.grabNumberOfVisibleElements('.appointment-container [aria-label="C7415, C7415"]')).to.equal(1);
+    I.clickToolbar('New');
+    I.waitForElement('.io-ox-calendar-edit [name="summary"]');
+    I.fillField('.io-ox-calendar-edit [name="summary"]', testrailID);
+    I.fillField('.io-ox-calendar-edit [name="location"]', testrailID);
+    I.click('Create');
+    I.waitForElement(locate('.modal-open .modal-title').withText('Conflicts detected'));
+    I.click('Ignore conflicts');
+    I.waitForDetached('.modal-open');
+    expect(await I.grabNumberOfVisibleElements('.appointment-container [aria-label="C7415, C7415"]')).to.equal(2);
+});
+
+Scenario('[C7446] Create recurring whole-day appointment', async function (I, users) {
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+    I.login('app=io.ox/calendar', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.clickToolbar('Today');
+    I.clickToolbar('New');
+    I.waitForElement('.io-ox-calendar-edit [name="summary"]');
+    I.fillField('.io-ox-calendar-edit [name="summary"]', 'Birthday of Linus Torvalds');
+    I.fillField('.io-ox-calendar-edit [name="location"]', 'Helsinki Imbiss');
+    I.fillField('.io-ox-calendar-edit [name="description"]', 'Buy some gifts');
+    I.click('All day');
+    I.click('[data-attribute="startDate"] .datepicker-day-field');
+    I.pressKey(['Control', 'a']);
+    I.pressKey(['Backspace']);
+    I.fillField('[data-attribute="startDate"] .datepicker-day-field', '12/28/1969');
+    I.pressKey('Enter');
+    //recurrence
+    I.click('Repeat');
+    I.click('.recurrence-view button');
+    I.waitForVisible('.recurrence-view-dialog');
+    I.selectOption('.recurrence-view-dialog [name="recurrence_type"]', 'Yearly');
+    I.click('Apply');
+    I.waitForDetached('.recurrence-view-dialog');
+    //recurrence
+    I.click('Create');
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("1969-12-28"))');
+    I.waitForVisible('.appointment-panel [aria-label="Birthday of Linus Torvalds, Helsinki Imbiss"]');
+    expect(await I.grabNumberOfVisibleElements('.appointment-panel [aria-label="Birthday of Linus Torvalds, Helsinki Imbiss"]')).to.equal(1);
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("1968-12-28"))');
+    expect(await I.grabNumberOfVisibleElements('.appointment-panel [aria-label="Birthday of Linus Torvalds, Helsinki Imbiss"]')).to.equal(0);
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("1967-12-28"))');
+    expect(await I.grabNumberOfVisibleElements('.appointment-panel [aria-label="Birthday of Linus Torvalds, Helsinki Imbiss"]')).to.equal(0);
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("1975-12-28"))');
+    I.waitForVisible('.appointment-panel [aria-label="Birthday of Linus Torvalds, Helsinki Imbiss"]');
+    expect(await I.grabNumberOfVisibleElements('.appointment-panel [aria-label="Birthday of Linus Torvalds, Helsinki Imbiss"]')).to.equal(1);
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("1995-12-28"))');
+    I.waitForVisible('.appointment-panel [aria-label="Birthday of Linus Torvalds, Helsinki Imbiss"]');
+    expect(await I.grabNumberOfVisibleElements('.appointment-panel [aria-label="Birthday of Linus Torvalds, Helsinki Imbiss"]')).to.equal(1);
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2025-12-28"))');
+    I.waitForVisible('.appointment-panel [aria-label="Birthday of Linus Torvalds, Helsinki Imbiss"]');
+    expect(await I.grabNumberOfVisibleElements('.appointment-panel [aria-label="Birthday of Linus Torvalds, Helsinki Imbiss"]')).to.equal(1);
+});
+
+
+Scenario('[C7447] Private appointment with participants', async function (I, users) {
+    //var timestamp = Math.round(+new Date() / 1000);
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+    I.login('app=io.ox/calendar', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.clickToolbar('Today');
+    I.clickToolbar('New');
+    I.waitForElement('.io-ox-calendar-edit [name="summary"]');
+    I.fillField('.io-ox-calendar-edit [name="summary"]', 'Private appointment with participants');
+    I.fillField('.io-ox-calendar-edit [name="location"]', 'PrivateRoom');
+    I.fillField('input.add-participant.tt-input', users[1].userdata.primaryEmail);
+    I.pressKey('Enter');
+    I.selectOption('[data-extension-id="private_flag"] select', 'Private');
+    I.click('Create');
+    ['Week', 'Day', 'Month', 'List'].forEach((view) => {
+        I.clickToolbar('View');
+        I.click(view);
+        if (view === 'Week') {
+            I.waitForVisible('[data-page-id="io.ox/calendar/week:week');
+            I.waitForVisible('.reserved.private[aria-label="Private appointment with participants, PrivateRoom"] .appointment-content');
+        } else if (view === 'Day') {
+            I.waitForVisible('[data-page-id="io.ox/calendar/week:day');
+            I.waitForVisible('.reserved.private[aria-label="Private appointment with participants, PrivateRoom"] .appointment-content');
+        } else if (view === 'Month') {
+            I.waitForVisible('[data-page-id="io.ox/calendar/month"]');
+            I.waitForVisible('.reserved.private[aria-label="Private appointment with participants, PrivateRoom"] .appointment-content');
+        } else if (view === 'List') {
+            I.waitForVisible('[data-page-id="io.ox/calendar/list"]');
+            I.waitForVisible(locate('.reserved.list-item-content').withText('Private appointment with participants'));
+        }
+    });
+});
+
+Scenario('[C7448] Cannot create private appointment', async function (I, users) {
+    let testrailID = 'C7448';
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+    const folder = {
+        module: 'event',
+        subscribed: 1,
+        title: testrailID,
+        permissions: [
+            {
+                bits: 403710016,
+                entity: users[0].userdata.id,
+                group: false
+            }, {
+                bits: 4227332,
+                entity: users[1].userdata.id,
+                group: false
+            }
+        ]
+    };
+    I.createFolder(folder, 'cal://0/' + appointmentDefaultFolder, { user: users[0] });
+    I.login('app=io.ox/calendar', { user: users[1] });
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.clickToolbar('Today');
+    I.selectFolder(testrailID);
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-dialog-popup');
+    I.click('On behalf of the owner');
+    I.waitForElement('.io-ox-calendar-edit [name="summary"]');
+    expect(await I.grabNumberOfVisibleElements('option[value="CONFIDENTIAL"]')).to.equal(0);
+});
+
+Scenario('[C234658] Create appointments and show this in cumulatively view', async function (I, users) {
+    const
+        Moment = require('moment'),
+        MomentRange = require('moment-range'),
+        moment = MomentRange.extendMoment(Moment);
+    let testrailID = 'C234658';
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+    I.haveSetting('io.ox/calendar//selectedFolders', {});
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+    const numberOfRuns = 2;
+    for (let i = 0; i < numberOfRuns; i++) {
+        var folder = {
+            module: 'event',
+            subscribed: 1,
+            title: testrailID + ' - ' + i
+        };
+        var folderID = await I.createFolder(folder, 'cal://0/' + appointmentDefaultFolder, { user: users[0] });
+        var appointment = {
+            folder: folderID.data.data,
+            summary: testrailID,
+            location: testrailID,
+            description: testrailID,
+            endDate: {
+                tzid: 'Europe/Berlin',
+                value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00')
+            },
+            startDate: {
+                tzid: 'Europe/Berlin',
+                value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00')
+            }
+        };
+        await I.haveAppointment(appointment, { user: users[0] });
+    }
+    I.login('app=io.ox/calendar', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.clickToolbar('Today');
+    await waitForExpect(async () => {
+        expect(await I.grabNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]')).to.equal(0);
+    }, 5000);
+    I.click('[data-id="virtual/flat/event/private"] [title="' + testrailID + ' - 0' + '"] .color-label');
+    await waitForExpect(async () => {
+        expect(await I.grabNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]')).to.equal(1);
+    }, 5000);
+    I.click('[data-id="virtual/flat/event/private"] [title="' + testrailID + ' - 1' + '"] .color-label');
+    await waitForExpect(async () => {
+        expect(await I.grabNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]')).to.equal(2);
+    }, 5000);
+});
+
+Scenario('[C265153] Create appointment with a link in the description', async function (I, users) {
+    const
+        Moment = require('moment'),
+        MomentRange = require('moment-range'),
+        moment = MomentRange.extendMoment(Moment);
+    let testrailID = 'C265153';
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+    var appointment = {
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: testrailID,
+        location: testrailID,
+        description: 'https://www.google.de',
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00')
+        }
+    };
+    await I.haveAppointment(appointment, { user: users[0] });
+    I.login('app=io.ox/calendar', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.clickToolbar('Today');
+    I.waitForElement('.appointment-container [aria-label="C265153, C265153"]');
+    I.click('.appointment-container [aria-label="C265153, C265153"]');
+    I.waitForElement('.calendar-detail [href="https://www.google.de"]');
+    I.click('.calendar-detail [href="https://www.google.de"]');
+    I.switchToNextTab();
+    await waitForExpect(async () => {
+        expect(await I.grabCurrentUrl()).to.equal('https://www.google.de/');
+    }, 5000);
+});
