@@ -1426,3 +1426,60 @@ Scenario('[C7458] Edit appointment by doubleclick @bug', async function (I) {
         }
     });
 });
+
+Scenario('[C7463] Remove a resource', async function (I, users) {
+    var timestamp = Math.round(+new Date() / 1000);
+    let testrailID = 'C7463';
+    I.haveSetting('io.ox/core//autoOpenNotification', false);
+    I.haveSetting('io.ox/core//showDesktopNotifications', false);
+    I.haveSetting('io.ox/calendar//viewView', 'week:week');
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+    const resource = {
+        'description': timestamp,
+        'display_name': timestamp,
+        'name': timestamp,
+        'mailaddress': timestamp + '@bla.de'
+    };
+    const resourceID = await I.haveResource(resource, { user: users[0] });
+    await I.haveAppointment({
+        folder: 'cal://0/' + appointmentDefaultFolder,
+        summary: testrailID,
+        location: testrailID,
+        description: testrailID,
+        attendeePrivileges: 'DEFAULT',
+        endDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        startDate: {
+            tzid: 'Europe/Berlin',
+            value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00')
+        },
+        attendees: [
+            {
+                cuType: 'RESOURCE',
+                comment: resource.description,
+                cn: resourceID.display_name,
+                email: resource.mailaddress,
+                entity: resourceID
+            }
+        ]
+    }, { user: users[0] });
+    I.login('app=io.ox/calendar', { user: users[0] });
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+    I.clickToolbar('Today');
+    I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
+    I.waitForElement('[data-action="io.ox/calendar/detail/actions/edit"]', 5);
+    expect(await I.grabNumberOfVisibleElements(locate('.halo-resource-link').inside('.participant-list').withText(JSON.stringify(resource.display_name)))).to.equal(1);
+    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.waitForElement(locate('.participant-name').withText(JSON.stringify(resource.display_name)));
+    expect(await I.grabNumberOfVisibleElements(locate('.participant-name').withText(JSON.stringify(resource.display_name)))).to.equal(1);
+    I.click(locate('.removable .remove').inside('.participant-wrapper').withText(JSON.stringify(resource.display_name)));
+    expect(await I.grabNumberOfVisibleElements(locate('.participant-name').withText(JSON.stringify(resource.display_name)))).to.equal(0);
+    I.click('Save');
+    I.waitForDetached('.io-ox-calendar-edit.container', 5);
+    expect(await I.grabNumberOfVisibleElements(locate('.halo-resource-link').inside('.participant-list').withText(JSON.stringify(resource.display_name)))).to.equal(0);
+    I.deleteResource({ id: resourceID }, { user: users[0] });
+});
