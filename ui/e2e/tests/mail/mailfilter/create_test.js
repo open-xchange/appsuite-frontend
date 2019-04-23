@@ -187,3 +187,135 @@ Scenario('[C83386] Create mail filter based on mail', async function (I, users) 
     I.waitForElement('~Trash, 1 unread, 1 total');
 
 });
+
+Scenario('[C274412] Filter mail by size', async function (I, users) {
+    function createOrEditFilterRule(I, name, oldSize, newSize, edit) {
+        I.click('[title=Settings]');
+        I.waitForVisible('#topbar-settings-dropdown');
+        I.click('Settings');
+
+        I.waitForVisible('.io-ox-settings-main');
+        I.selectFolder('Mail');
+        I.waitForVisible('.rightside h1');
+
+        // open mailfilter settings
+        I.selectFolder('Filter Rules');
+
+        // checks the h1 and the empty message
+        I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mailfilter-settings h1');
+        I.see('Mail Filter Rules');
+
+        if (edit) {
+            I.click('Edit', '.settings-list-view');
+            I.waitForElement('.modal-dialog');
+        } else {
+            I.click('Add new rule');
+            I.see('Create new rule');
+            I.fillField('rulename', name);
+
+            // add condition
+            I.click('Add condition');
+            I.click('[data-value="size"');
+
+            // add action
+            I.click('Add action');
+            I.click('Set color flag');
+        }
+
+        I.click(oldSize);
+        I.waitForElement('.dropdown.open');
+        I.see(newSize, '.dropdown.open');
+        I.click(newSize, '.dropdown.open');
+
+        I.fillField('sizeValue', '1');
+
+        I.click('Save');
+        I.waitForDetached('.modal-dialog');
+        I.waitForVisible('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]');
+    }
+
+    let [user] = users;
+    await I.haveSetting({
+        'io.ox/mail': { messageFormat: 'text' }
+    });
+
+    I.login();
+
+    createOrEditFilterRule(I, 'C274412', 'Byte', 'Byte');
+
+    I.openApp('Mail');
+
+    // compose mail
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
+    I.fillField('.io-ox-mail-compose [name="subject"]', 'C274412');
+    I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
+    I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
+    I.attachFile('.mail-input [name="file"]', 'e2e/media/files/generic/2MB.dat');
+
+    I.click('Send');
+    I.wait(1);
+    I.waitForElement('~Sent, 1 total');
+    I.waitForElement('~Inbox, 1 unread, 1 total');
+    I.see('C274412', '.subject');
+
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('C274412'));
+    I.click(locate('.list-item-row').withChild('.flag_1').withText('C274412'));
+
+    I.waitForElement('.inline-toolbar-container [data-action="io.ox/mail/actions/delete"]');
+    I.click('Delete', '.inline-toolbar-container');
+    I.waitForElement('~Inbox');
+
+    createOrEditFilterRule(I, null, 'Byte', 'kB', true);
+
+    I.openApp('Mail');
+    I.waitForElement('.io-ox-mail-window');
+
+    // compose mail
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
+    I.fillField('.io-ox-mail-compose [name="subject"]', 'C274412');
+    I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
+    I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
+    I.attachFile('.mail-input [name="file"]', 'e2e/media/files/generic/2MB.dat');
+
+    I.click('Send');
+    I.wait(1);
+    I.waitForElement('~Sent, 2 total');
+    I.waitForElement('~Inbox, 1 unread, 1 total');
+    I.see('C274412', '.subject');
+
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('C274412'));
+    I.click(locate('.list-item-row').withChild('.flag_1').withText('C274412'));
+
+    I.waitForElement('.inline-toolbar-container [data-action="io.ox/mail/actions/delete"]');
+    I.click('Delete', '.inline-toolbar-container');
+    I.waitForElement('~Inbox');
+
+    createOrEditFilterRule(I, null, 'kB', 'MB', true);
+
+    I.openApp('Mail');
+    I.waitForElement('.io-ox-mail-window');
+
+    // compose mail
+    I.clickToolbar('Compose');
+    I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user.get('primaryEmail'));
+    I.fillField('.io-ox-mail-compose [name="subject"]', 'C274412');
+    I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
+    I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
+    I.attachFile('.mail-input [name="file"]', 'e2e/media/files/generic/2MB.dat');
+
+    I.click('Send');
+    I.wait(1);
+    I.waitForElement('~Sent, 3 total');
+    I.waitForElement('~Inbox, 1 unread, 1 total');
+    I.see('C274412', '.subject');
+
+    I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('C274412'));
+});
