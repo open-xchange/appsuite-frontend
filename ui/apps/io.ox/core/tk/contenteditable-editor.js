@@ -289,7 +289,8 @@ define('io.ox/core/tk/contenteditable-editor', [
             top = rect ? rect.top : 0,
             composeFieldsHeight = scrollable.find('.mail-compose-fields').height(),
             footerHeight = scrollable.parents('.window-container-center').find('.window-footer').outerHeight(),
-            editorBottomMargin = parseInt(scrollable.find('.contenteditable-editor').css('margin-bottom').replace('px', ''), 10),
+            marginBottom = scrollable.find('.contenteditable-editor').css('margin-bottom') || '0px',
+            editorBottomMargin = parseInt(marginBottom.replace('px', ''), 10) || 0,
             bottom = scrollable.height() - footerHeight - editorBottomMargin * 2;
 
         // for empty lines we get no valid rect
