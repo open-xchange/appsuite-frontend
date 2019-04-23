@@ -1,0 +1,94 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2019 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Daniel Pondruff <daniel.pondruff@open-xchange.com>
+ */
+
+/// <reference path="../../steps.d.ts" />
+
+Feature('Mail > Delete');
+
+Before(async (users) => {
+    await users.create();
+    await users.create();
+});
+After(async (users) => {
+    await users.removeAll();
+});
+
+Scenario('[C7405] - Delete E-Mail', function (I, users) {
+    const [user] = users,
+        testrailID = 'C7405',
+        timestamp = Math.round(+new Date() / 1000);
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
+    I.login('app=io.ox/mail', { user });
+    I.waitForVisible('.io-ox-mail-window');
+    I.clickToolbar('Compose');
+    I.retry(5).waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
+    I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
+    I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
+    I.click('Send');
+    I.waitForDetached('.io-ox-mail-compose');
+    I.logout();
+    I.login('app=io.ox/mail', { user: users[1] });
+    I.selectFolder('Inbox');
+    I.waitForVisible('.selected .contextmenu-control');
+    I.retry(5).click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.clickToolbar('Delete');
+    I.retry(5).dontSee(testrailID + ' - ' + timestamp);
+    I.selectFolder('Trash');
+    I.retry(5).see(testrailID + ' - ' + timestamp);
+    I.logout();
+});
+Scenario('[C7406] - Delete several E-Mails', async function (I, users) {
+    const [user] = users,
+        testrailID = 'C7406',
+        timestamp = Math.round(+new Date() / 1000);
+    I.haveSetting('io.ox/mail//messageFormat', 'text');
+    let mailcount = 2;
+    let i;
+    for (i = 0; i < mailcount; i++) {
+        await I.haveMail({
+            attachments: [{
+                content: 'C7406\r\n',
+                content_type: 'text/plain',
+                raw: true,
+                disp: 'inline'
+            }],
+            from: [[user.get('displayname'), user.get('primaryEmail')]],
+            sendtype: 0,
+            subject: testrailID + ' - ' + timestamp + ' - ' + [i + 1],
+            to: [[user.get('displayname'), user.get('primaryEmail')]]
+        });
+    }
+    I.login('app=io.ox/mail', { user: users[0] });
+    I.selectFolder('Inbox');
+    I.waitForVisible('.selected .contextmenu-control');
+    for (i = 0; i < mailcount; i++) {
+        I.waitForElement('[title="' + testrailID + ' - ' + timestamp + ' - ' + [i + 1] + '"]');
+        I.click('[title="' + testrailID + ' - ' + timestamp + ' - ' + [i + 1] + '"]');
+        I.clickToolbar('Delete');
+        I.waitForDetached('[title="' + testrailID + ' - ' + timestamp + ' - ' + [i + 1] + '"]');
+    }
+    I.selectFolder('Trash');
+    let loopcounter = 0;
+    while (await I.grabNumberOfVisibleElements('.mail-item .list-item') !== 2) {
+        I.waitForElement('.fa-spin-paused.fa-refresh');
+        I.click('#io-ox-refresh-icon');
+        I.waitForElement('.fa-spin-paused.fa-refresh');
+        I.wait(1);
+        loopcounter++;
+        if (loopcounter === 15) {
+            break;
+        }
+    }
+    I.waitForElement('[title="' + testrailID + ' - ' + timestamp + ' - 1"]');
+    I.waitForElement('[title="' + testrailID + ' - ' + timestamp + ' - 2"]');
+});
