@@ -168,3 +168,31 @@ Scenario('[C7825] Add quota widget', async function (I) {
     I.waitForText('File quota');
     I.waitForText('Mail quota');
 });
+
+Scenario('[C7826] Add RSS Feed widget', async function (I) {
+
+    let rssFeedURL = 'http://rss.kicker.de/team/borussiadortmund';
+    let rssFeedDescription = 'Kicker RSS Feed';
+
+    // clear the portal settings
+    await I.haveSetting('io.ox/portal//widgets/user', '{}');
+
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/portal']);
+    I.waitForText('Portal settings');
+
+    // Add the portal widget
+    I.click('Add widget');
+    I.click('RSS Feed', '.io-ox-portal-settings-dropdown');
+
+    // Fill out the RSS feed popup
+    I.fillField('#rss_url', rssFeedURL);
+    I.fillField('#rss_desc', rssFeedDescription);
+    I.click('Save');
+
+    // Verify that the widget is shown in the list
+    I.waitForElement('~Color ' + rssFeedDescription);
+
+    // Switch to portal an check the widget
+    I.openApp('Portal');
+    I.waitForText(rssFeedDescription);
+});
