@@ -196,3 +196,43 @@ Scenario('[C7826] Add RSS Feed widget', async function (I) {
     I.openApp('Portal');
     I.waitForText(rssFeedDescription);
 });
+
+Scenario('[C7827] Add task widget', async function (I) {
+
+    const moment = require('moment');
+
+    const taskSummary = 'Summary7823';
+    const taskDescription = 'Description7823';
+
+    // create a task which is shown in the portal widget
+    await I.haveTask({
+        folder_id: `${await I.grabDefaultFolder('tasks')}`,
+        title: taskSummary,
+        note: taskDescription,
+        end_time: moment().add(2, 'days').valueOf()
+    });
+
+    // clear the portal settings
+    await I.haveSetting('io.ox/portal//widgets/user', '{}');
+
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/portal']);
+    I.waitForText('Portal settings');
+
+    // Add the portal widget
+    I.click('Add widget');
+    I.click('My tasks', '.io-ox-portal-settings-dropdown');
+
+    // Verify that the widget is shown in the list
+    I.waitForElement('~Color My tasks');
+
+    // Switch to portal an check the widget
+    I.openApp('Portal');
+    I.waitForText('My tasks');
+    I.waitForText(taskSummary);
+
+    // open the side popup
+    I.click('.item', '~My tasks');
+    I.waitForElement('.io-ox-sidepopup');
+    I.waitForText(taskSummary, 10, '.io-ox-sidepopup');
+    I.waitForText(taskDescription, 10, '.io-ox-sidepopup');
+});
