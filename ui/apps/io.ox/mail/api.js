@@ -1244,7 +1244,7 @@ define('io.ox/mail/api', [
 
         if (data.space) {
             url = ox.apiRoot + '/mail/compose/' + data.space + '/attachments/' + data.id;
-            if (open.session) url += '?session=' + ox.session;
+            if (opt.session) url += '?session=' + ox.session;
             return url;
         }
         // inject filename for more convenient file downloads
