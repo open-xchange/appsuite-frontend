@@ -22,3 +22,45 @@ Before(async (users) => {
 After(async (users) => {
     await users.removeAll();
 });
+
+Scenario('[C7822] Add Birthday widget', async function (I) {
+
+    const moment = require('moment');
+
+    const contactDisplayName = 'Dr. Doo, Scoobie';
+
+    // create a contact with birthday
+    await I.haveContact({
+        folder_id: `${await I.grabDefaultFolder('contacts')}`,
+        title: 'Dr.',
+        first_name: 'Scoobie',
+        last_name: 'Doo',
+        display_name: contactDisplayName,
+        birthday: moment().add(2, 'days').valueOf()
+    });
+
+    // clear the portal settings
+    await I.haveSetting('io.ox/portal//widgets/user', '{}');
+
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/portal']);
+    I.waitForText('Portal settings');
+
+    // Add the portal widget
+    I.click('Add widget');
+    I.click('Birthdays', '.io-ox-portal-settings-dropdown');
+
+    // Verify that the widget is shown in the list
+    I.waitForElement('~Color Birthdays');
+
+    // Switch to portal an check the widget
+    I.openApp('Portal');
+    I.waitForText('Birthdays');
+    I.waitForText(contactDisplayName);
+
+    // open the side popup
+    I.click('.item', '~Birthdays');
+    I.waitForElement('.io-ox-sidepopup');
+    I.waitForText('Birthdays', 10, '.io-ox-sidepopup');
+    I.waitForText(contactDisplayName, 10, '.io-ox-sidepopup');
+    I.waitForText('Buy a gift', 10, '.io-ox-sidepopup');
+});
