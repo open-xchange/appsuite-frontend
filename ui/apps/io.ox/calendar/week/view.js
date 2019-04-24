@@ -1016,7 +1016,10 @@ define('io.ox/calendar/week/view', [
 
                 container.empty();
                 columns.each(function (i) {
-                    var appointments = $(this).find(' > .appointment'),
+                    // node height 0 means the page is not visible yet. Prevent wrong calculations
+                    var appointments = $(this).find(' > .appointment').filter(function (index, node) {
+                            return $(node).height() > 0;
+                        }),
                         earlier = appointments.filter(function (index, el) {
                             el = $(el);
                             return el.position().top + el.height() - threshold < min;
