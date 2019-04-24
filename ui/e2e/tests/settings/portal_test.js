@@ -323,3 +323,39 @@ Scenario('[C7834] Modify widget color', async function (I) {
     I.waitForElement((locate('span').withText('Appointments')).inside('li.widget-color-green'));
     I.waitForElement((locate('span').withText('My latest files')).inside('li.widget-color-blue'));
 });
+
+Scenario('[C7832] Remove widgets', async function (I) {
+
+    I.login(['app=io.ox/portal']);
+
+    const widget1 = 'Inbox';
+    const widget2 = 'Appointments';
+    const widget3 = 'My latest files';
+
+    // Verify the portal widgets are shown
+    I.waitForText(widget1, 10, '.widgets');
+    I.waitForText(widget2, '.widgets');
+    I.waitForText(widget3, '.widgets');
+
+    // Switch to settings
+    I.click('Customize this page');
+    I.waitForText('Portal settings');
+
+    // Remove the first widget
+    I.click('a[title="Remove ' + widget1 + '"]');
+    I.waitForElement('.io-ox-dialog-popup');
+    I.click('Delete');
+
+    // Remove the second widget
+    I.click('a[title="Remove ' + widget2 + '"]');
+
+    // Remove the third widget
+    I.click('a[title="Remove ' + widget3 + '"]');
+
+    // Switch to portal an check that the widgets are removed
+    I.openApp('Portal');
+    I.waitForText('Customize this page');
+    I.dontSee(widget1, '.widgets');
+    I.dontSee(widget2, '.widgets');
+    I.dontSee(widget3, '.widgets');
+});
