@@ -359,3 +359,32 @@ Scenario('[C7832] Remove widgets', async function (I) {
     I.dontSee(widget2, '.widgets');
     I.dontSee(widget3, '.widgets');
 });
+
+Scenario.skip('[C7835] Re-order widgets', async function (I) {
+
+    I.login(['app=io.ox/portal']);
+
+    const widget1 = 'Inbox';
+    const widget2 = 'Appointments';
+    const widget3 = 'My latest files';
+
+    // Verify the portal widgets are shown
+    I.waitForText(widget1, 10, '.widgets');
+    I.waitForText(widget2, '.widgets');
+    I.waitForText(widget3, '.widgets');
+
+    let originalPosition = await I.grabAttributeFrom('li.widget', 'aria-label');
+    I.say(originalPosition); // Inbox,Appointments,My tasks,Birthdays,My latest files
+
+    // Switch to settings
+    I.click('Customize this page');
+
+    I.waitForText('Portal settings');
+
+    let widget1Handle = locate('a.drag-handle').inside(locate('li.settings-list-item.draggable').withChild(locate('span').withText('Inbox')));
+    let container = locate('li.settings-list-item.draggable').withChild(locate('span').withText('My latest files'));
+
+    await I.dragAndDrop(widget1Handle, container);
+
+    I.wait(10);
+});
