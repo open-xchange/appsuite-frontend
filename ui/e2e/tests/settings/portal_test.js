@@ -148,3 +148,23 @@ Scenario('[C7823] Add calendar widget', async function (I) {
 
 });
 
+Scenario('[C7825] Add quota widget', async function (I) {
+
+    // clear the portal settings
+    await I.haveSetting('io.ox/portal//widgets/user', '{}');
+
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/portal']);
+    I.waitForText('Portal settings');
+
+    // Add the portal widget
+    I.click('Add widget');
+    I.click('Quota', '.io-ox-portal-settings-dropdown');
+
+    // Verify that the widget is shown in the list
+    I.waitForElement('~Color Quota');
+
+    // Switch to portal an check the widget
+    I.openApp('Portal');
+    I.waitForText('File quota');
+    I.waitForText('Mail quota');
+});
