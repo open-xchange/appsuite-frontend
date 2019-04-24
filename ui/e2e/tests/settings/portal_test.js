@@ -23,6 +23,41 @@ After(async (users) => {
     await users.removeAll();
 });
 
+Scenario('[C7821] Add inbox widget', async function (I, users) {
+
+    const mailSubject = 'Mail7821';
+    const widgetName = 'Inbox Widget 7821';
+
+    // clear the portal settings
+    await I.haveSetting('io.ox/portal//widgets/user', '{}');
+
+    await I.haveMail({
+        from: [[users[0].userdata.display_name, users[0].userdata.primaryEmail]],
+        sendtype: 0,
+        subject: mailSubject,
+        to: [[users[0].userdata.display_name, users[0].userdata.primaryEmail]]
+    });
+
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/portal']);
+    I.waitForText('Portal settings');
+
+    // Add the portal widget
+    I.click('Add widget');
+    I.click('Inbox', '.io-ox-portal-settings-dropdown');
+
+    // Verify that the widget is shown in the list
+    I.waitForElement('~Color Inbox');
+
+    // Fill out the inbox widget popup
+    I.fillField('input[class="form-control"]', widgetName);
+    I.click('Save');
+
+    // Switch to portal an check the widget
+    I.openApp('Portal');
+    I.waitForText(widgetName);
+    I.waitForText(mailSubject);
+});
+
 Scenario('[C7822] Add Birthday widget', async function (I) {
 
     const moment = require('moment');
@@ -112,3 +147,4 @@ Scenario('[C7823] Add calendar widget', async function (I) {
     I.waitForText(appointmentLocation, '.io-ox-sidepopup');
 
 });
+
