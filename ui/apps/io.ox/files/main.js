@@ -1503,18 +1503,14 @@ define('io.ox/files/main', [
                     }, 100, { trailing: false })
                 });
                 // default action
-                /*    ext.point('io.ox/files/actions/default').extend({
-                    id: 'default_preprocess',
-                    index: 50,
-                    action: function (baton) {
-                        metrics.trackEvent({
-                            app: 'drive',
-                            target: 'list/' + app.props.get('layout'),
-                            type: 'click',
-                            action: baton.options.eventname
-                        });
-                    }
-                }); */
+                ox.on('action:invoke:io.ox/files/actions/default', function () {
+                    metrics.trackEvent({
+                        app: 'drive',
+                        target: 'list/' + app.props.get('layout'),
+                        type: 'click',
+                        action: 'selection-doubleclick'
+                    });
+                });
             });
         },
 
