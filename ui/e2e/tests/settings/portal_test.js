@@ -262,3 +262,37 @@ Scenario('[C7830] Add User data widget', async function (I, users) {
     I.waitForText('My password');
 
 });
+
+Scenario('[C7833] Disable widgets', async function (I) {
+
+    I.login(['app=io.ox/portal']);
+
+    const widget1 = 'Inbox';
+    const widget2 = 'Appointments';
+    const widget3 = 'My tasks';
+
+    // Verify the portal widgets are shown
+    I.waitForText(widget1, 10, '.widgets');
+    I.waitForText(widget2, '.widgets');
+    I.waitForText(widget3, '.widgets');
+
+    // Switch to settings
+    I.click('Customize this page');
+    I.waitForText('Portal settings');
+
+    // Disable the first widget
+    I.click('~Disable ' + widget1);
+
+    // Disable the second widget
+    I.click('~Disable ' + widget2);
+
+    // Disable the third widget
+    I.click('~Disable ' + widget3);
+
+    // Switch to portal and check that the widgets are removed
+    I.openApp('Portal');
+    I.waitForText('Customize this page');
+    I.dontSee(widget1, '.widgets');
+    I.dontSee(widget2, '.widgets');
+    I.dontSee(widget3, '.widgets');
+});
