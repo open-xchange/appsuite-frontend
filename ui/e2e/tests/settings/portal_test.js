@@ -296,3 +296,30 @@ Scenario('[C7833] Disable widgets', async function (I) {
     I.dontSee(widget2, '.widgets');
     I.dontSee(widget3, '.widgets');
 });
+
+Scenario('[C7834] Modify widget color', async function (I) {
+
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/portal']);
+    I.waitForText('Portal settings');
+
+    // Change the Inbox widget color to red
+    I.click('~Color Inbox');
+    I.click('a[data-color="red"]', '.dropdown.open');
+    I.waitForElement(locate('span.widget-color-red').withText('Inbox'));
+
+    // Change the Appointments widget color to green
+    I.click('~Color Appointments');
+    I.click('a[data-color="green"]', '.dropdown.open');
+    I.waitForElement(locate('span.widget-color-green').withText('Appointments'));
+
+    // Change the My latest files widget color to blue
+    I.click('~Color My latest files');
+    I.click('a[data-color="blue"]', '.dropdown.open');
+    I.waitForElement(locate('span.widget-color-blue').withText('My latest files'));
+
+    // Switch to portal an check the widgets
+    I.openApp('Portal');
+    I.waitForElement((locate('span').withText('Inbox')).inside('li.widget-color-red'));
+    I.waitForElement((locate('span').withText('Appointments')).inside('li.widget-color-green'));
+    I.waitForElement((locate('span').withText('My latest files')).inside('li.widget-color-blue'));
+});
