@@ -236,3 +236,29 @@ Scenario('[C7827] Add task widget', async function (I) {
     I.waitForText(taskSummary, 10, '.io-ox-sidepopup');
     I.waitForText(taskDescription, 10, '.io-ox-sidepopup');
 });
+
+Scenario('[C7830] Add User data widget', async function (I, users) {
+
+    // clear the portal settings
+    await I.haveSetting('io.ox/portal//widgets/user', '{}');
+
+    // ensure the user has the capability to edit his password
+    await users[0].hasCapability('edit_password');
+
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/portal']);
+    I.waitForText('Portal settings');
+
+    // Add the portal widget
+    I.click('Add widget');
+    I.click('User data', '.io-ox-portal-settings-dropdown');
+
+    // Verify that the widget is shown in the list
+    I.waitForElement('~Color User data');
+
+    // Switch to portal an check the widget
+    I.openApp('Portal');
+    I.waitForText('User data');
+    I.waitForText('My contact data');
+    I.waitForText('My password');
+
+});
