@@ -695,3 +695,122 @@ Scenario('[C7396] Send mail with different text fonts', async function (I, users
         expect(styleWebdings.join()).to.include('webdings');
     });
 });
+
+// combined with [C7383] Compose HTML mail
+Scenario('[C7397] Send mail with different text styles', async function (I, users) {
+
+    const selectHeading = (action) => {
+        I.click(locate('button').withChild(locate('span').withText('Formats')));
+        I.waitForElement((locate('span').withText('Headings')).inside('.mce-floatpanel'));
+        I.click(locate('span.mce-text').withText('Headings'));
+        I.click(locate('span.mce-text').withText(action));
+        I.waitForInvisible('.mce-floatpanel');
+    };
+    let [sender, recipient] = users;
+
+    const mailSubject = 'C7397 Different text styles';
+
+    const defaultText = 'This text has no style.';
+    const textH3 = 'This is H3 text.';
+    const textH5 = 'This is H5 text:';
+    const textH1 = 'This is H1 text,';
+    const textH2 = 'This is H2 text;';
+
+    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
+
+    I.login('app=io.ox/mail', { user: sender });
+
+    // Open the mail composer
+    I.retry(5).click('Compose');
+    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    I.click('~Maximize');
+
+    // Fill out to and subject
+    I.waitForFocus('input[placeholder="To"]');
+    I.fillField('To', recipient.get('primaryEmail'));
+    I.fillField('Subject', mailSubject);
+
+    // Write some text with the default settings
+    await within({ frame: iframeLocator }, async () => {
+        I.click('.default-style');
+        I.pressKey(defaultText);
+        I.pressKey('Enter');
+    });
+
+    // Write some text with H3
+    selectHeading('Heading 3');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textH3);
+        I.pressKey('Enter');
+    });
+
+    // Write some text with H5
+    selectHeading('Heading 5');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textH5);
+        I.pressKey('Enter');
+    });
+
+    // Write some text with H6, but change it to H1
+    selectHeading('Heading 6');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textH1);
+        I.pressKey(['Shift', 'Home']); // Select the just written text
+    });
+    selectHeading('Heading 1');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey('End');
+        I.pressKey('Enter');
+    });
+
+    // Write some text with H2
+    selectHeading('Heading 2');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textH2);
+        I.pressKey('Enter');
+    });
+
+    // Send the mail
+    I.click('Send');
+
+    // Let's stick around a bit for sending to finish
+    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+
+    // move to to 'sent' folder (First of C7383)
+    I.selectFolder('Sent');
+    I.waitForText(mailSubject);
+    I.click(mailSubject, '.list-item.selectable');
+
+    // open mail source dialog
+    I.click('~More actions', '.detail-view-header');
+    I.waitForVisible('[data-action="io.ox/mail/actions/source"]', 'body > .dropdown');
+    I.click('[data-action="io.ox/mail/actions/source"]', 'body > .dropdown');
+    I.waitForVisible('body .mail-source-dialog');
+
+    // check mail source of recently sent mail (Last of C7383)
+    let [source] = await I.grabValueFrom('body .mail-source-view');
+    expect(source).to.contain(`>${textH3}</h3>`);
+    expect(source).to.contain(`>${textH5}</h5>`);
+    expect(source).to.contain(`>${textH1}</h1>`);
+    expect(source).to.contain(`>${textH2}</h2>`);
+    I.pressKey('Escape');
+
+    I.logout();
+
+    // Log in as second user and navigate to mail app
+    I.login('app=io.ox/mail', { user: recipient });
+
+    // Open the mail
+    I.waitForText(mailSubject, 2);
+    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
+    I.waitForVisible('iframe.mail-detail-frame');
+
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        I.waitForElement(locate('div').withText(defaultText));
+        I.waitForElement(locate('h3').withText(textH3));
+        I.waitForElement(locate('h5').withText(textH5));
+        I.waitForElement(locate('h1').withText(textH1));
+        I.waitForElement(locate('h2').withText(textH2));
+    });
+});
