@@ -355,3 +355,102 @@ Scenario('[C7393] Send mail with bullet point and numbering - numbering', async 
         I.waitForElement((locate('li').inside('ol')).at(3).withText(textNumber1_1));
     });
 });
+
+Scenario('[C7394] Send mail with different text alignments', async function (I, users) {
+
+    const selectAlignment = (action) => {
+        I.click(locate('button').withChild(locate('span').withText('Formats')));
+        I.waitForElement((locate('span').withText('Alignment')).inside('.mce-floatpanel'));
+        I.click(locate('span.mce-text').withText('Alignment'));
+        I.click(locate('span.mce-text').withText(action));
+        I.waitForInvisible('.mce-floatpanel');
+    };
+    let [sender, recipient] = users;
+
+    const mailSubject = 'C7394 Different text alignments';
+
+    const defaultText = 'This text has no alignment.';
+    const textLeftAligned = 'This text is left aligned';
+    const textCentered = 'This text is centered';
+    const textRightAligned = 'This text is right aligned';
+    const textJustify = 'This text should be aligned justifyed';
+
+    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
+
+    I.login('app=io.ox/mail', { user: sender });
+
+    // Open the mail composer
+    I.retry(5).click('Compose');
+    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    I.click('~Maximize');
+
+    // Fill out to and subject
+    I.waitForFocus('input[placeholder="To"]');
+    I.fillField('To', recipient.get('primaryEmail'));
+    I.fillField('Subject', mailSubject);
+
+    // Write some text with the default settings
+    await within({ frame: iframeLocator }, async () => {
+        I.click('.default-style');
+        I.pressKey(defaultText);
+        I.pressKey('Enter');
+    });
+
+    // Write some right aligned text
+    selectAlignment('Right');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textRightAligned);
+        I.pressKey('Enter');
+    });
+
+    // Write some left aligned text
+    selectAlignment('Left');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textLeftAligned);
+        I.pressKey('Enter');
+    });
+
+    // Write some centered text
+    selectAlignment('Right');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textCentered);
+        I.pressKey(['Shift', 'Home']); // Select the just written text
+    });
+    selectAlignment('Center');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey('End');
+        I.pressKey('Enter');
+    });
+
+    // Write some justifyed text
+    selectAlignment('Justify');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textJustify);
+        I.pressKey('Enter');
+    });
+
+    // Send the mail
+    I.click('Send');
+
+    // Let's stick around a bit for sending to finish
+    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.logout();
+
+    // Log in as second user and navigate to mail app
+    I.login('app=io.ox/mail', { user: recipient });
+
+    // Open the mail
+    I.waitForText(mailSubject, 2);
+    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
+    I.waitForVisible('iframe.mail-detail-frame');
+
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        I.waitForElement(locate('div').withText(defaultText));
+        expect(await I.grabCssPropertyFrom(locate('div').withText(defaultText), 'text-align')).to.include('start');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textRightAligned), 'text-align')).to.include('right');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textLeftAligned), 'text-align')).to.include('left');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textCentered), 'text-align')).to.include('center');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textJustify), 'text-align')).to.include('justify');
+    });
+});
