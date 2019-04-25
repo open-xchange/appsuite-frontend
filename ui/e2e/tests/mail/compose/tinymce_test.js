@@ -916,3 +916,117 @@ Scenario('[C7398] Send mail with different text sizes', async function (I, users
         expect(style8.join()).to.include('8pt');
     });
 });
+
+Scenario('[C7399] Send mail with different text colours', async function (I, users) {
+
+    const selectColor = (action) => {
+        I.click(locate('.mce-open').inside('~Text color'));
+        I.waitForElement('.mce-floatpanel .mce-colorbutton-grid');
+        I.click('div[title="' + action + '"]');
+        I.waitForInvisible('.mce-floatpanel .mce-colorbutton-grid');
+    };
+    function getRGBValue(toConvert) {
+        // converts rgba(255, 0, 0, 1) --> 255,0,0,1
+        toConvert.forEach(function (element, index) {
+            toConvert[index] = element.match(/\d+/g).map(function (a) { return parseInt(a, 10); }).join();
+        });
+        return toConvert;
+    }
+    let [sender, recipient] = users;
+
+    const mailSubject = 'C7399 Different text colors';
+    const defaultText = 'This text has no color.';
+    const redText = 'This is a text in red.';
+    const aquaText = 'This text should be display with aqua.';
+    const limeText = 'And now a lime text!';
+    const blackText = 'This text is black...';
+
+    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
+
+    I.login('app=io.ox/mail', { user: sender });
+
+    // Open the mail composer
+    I.retry(5).click('Compose');
+    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+
+    // Fill out to and subject
+    I.waitForFocus('input[placeholder="To"]');
+    I.fillField('To', recipient.get('primaryEmail'));
+    I.fillField('Subject', mailSubject);
+
+    // Write some text with the default settings
+    await within({ frame: iframeLocator }, async () => {
+        I.click('.default-style');
+        I.pressKey(defaultText);
+        I.pressKey('Enter');
+        I.pressKey('Enter');
+    });
+
+    // Write some text in red
+    selectColor('Red');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(redText);
+        I.pressKey('Enter');
+    });
+
+    // Write some text in aqua
+    selectColor('Aqua');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(aquaText);
+        I.pressKey('Enter');
+        I.pressKey('Enter');
+    });
+
+    // Write some text in yellow, but change it to lime
+    selectColor('Yellow');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(limeText);
+        I.pressKey(['Shift', 'Home']); // Select the just written text
+    });
+    selectColor('Lime');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey('End');
+        I.pressKey('Enter');
+    });
+
+    // Write some text in black
+    selectColor('Black');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(blackText);
+    });
+
+    // Send the mail
+    I.click('Send');
+
+    // Let's stick around a bit for sending to finish
+    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.logout();
+
+    // Log in as second user and navigate to mail app
+    I.login('app=io.ox/mail', { user: recipient });
+
+    // Open the mail
+    I.waitForText(mailSubject, 2);
+    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
+    I.waitForVisible('iframe.mail-detail-frame');
+
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        const rgbBlack = '0,0,0,1';
+        const rgbRed = '255,0,0,1';
+        const rgbAqua = '0,255,255,1';
+        const rgbLime = '0,255,0,1';
+
+        const valueDefault = getRGBValue(await I.grabCssPropertyFrom(locate('div').withText(defaultText), 'color'));
+        const valueRed = getRGBValue(await I.grabCssPropertyFrom(locate('span').withText(redText), 'color'));
+        const valueAqua = getRGBValue(await I.grabCssPropertyFrom(locate('span').withText(aquaText), 'color'));
+        const valueLime = getRGBValue(await I.grabCssPropertyFrom(locate('span').withText(limeText), 'color'));
+        const valueBlack = getRGBValue(await I.grabCssPropertyFrom(locate('span').withText(blackText), 'color'));
+
+        expect(valueDefault).to.include(rgbBlack);
+        expect(valueRed).to.include(rgbRed);
+        expect(valueAqua).to.include(rgbAqua);
+        expect(valueLime).to.include(rgbLime);
+        expect(valueBlack).to.include(rgbBlack);
+    });
+});
