@@ -814,3 +814,105 @@ Scenario('[C7397] Send mail with different text styles', async function (I, user
         I.waitForElement(locate('h2').withText(textH2));
     });
 });
+
+Scenario('[C7398] Send mail with different text sizes', async function (I, users) {
+
+    const selectFontSize = (action) => {
+        I.click(locate('button').inside('~Font Sizes'));
+        I.waitForElement((locate('span').withText('12pt')).inside('.mce-floatpanel'));
+        I.click(locate('span.mce-text').withText(action));
+        I.waitForInvisible('.mce-floatpanel');
+    };
+    let [sender, recipient] = users;
+
+    const mailSubject = 'C7398 Different text sizes';
+    const defaultText = 'This text has the default text size.';
+    const text13pt = 'We switched to 13pt for this text!';
+    const text16pt = 'Text in 16pt should also work, right?';
+    const text36pt = 'And a little BIGGER with 36pt...';
+    const text8pt = 'And last a small text with 8pt.';
+
+    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
+
+    I.login('app=io.ox/mail', { user: sender });
+
+    // Open the mail composer
+    I.retry(5).click('Compose');
+    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+
+    // Fill out to and subject
+    I.waitForFocus('input[placeholder="To"]');
+    I.fillField('To', recipient.get('primaryEmail'));
+    I.fillField('Subject', mailSubject);
+
+    // Write some text with the default settings
+    await within({ frame: iframeLocator }, async () => {
+        I.click('.default-style');
+        I.pressKey(defaultText);
+        I.pressKey('Enter');
+        I.pressKey('Enter');
+    });
+
+    // Write some text in 13pt
+    selectFontSize('13pt');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(text13pt);
+        I.pressKey('Enter');
+    });
+
+    // Write some text in 16pt
+    selectFontSize('16pt');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(text16pt);
+        I.pressKey('Enter');
+        I.pressKey('Enter');
+    });
+
+    // Write some text in 10pt, but change it to 36pt
+    selectFontSize('10pt');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(text36pt);
+        I.pressKey(['Shift', 'Home']); // Select the just written text
+    });
+    selectFontSize('36pt');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey('End');
+        I.pressKey('Enter');
+    });
+
+    // Write some text in 8pt
+    selectFontSize('8pt');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(text8pt);
+    });
+
+    // Send the mail
+    I.click('Send');
+
+    // Let's stick around a bit for sending to finish
+    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.logout();
+
+    // Log in as second user and navigate to mail app
+    I.login('app=io.ox/mail', { user: recipient });
+
+    // Open the mail
+    I.waitForText(mailSubject, 2);
+    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
+    I.waitForVisible('iframe.mail-detail-frame');
+
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        const styleDefault = await I.grabAttributeFrom(locate('div').withText(defaultText), 'style');
+        const style13 = await I.grabAttributeFrom(locate('span').withText(text13pt), 'style');
+        const style16 = await I.grabAttributeFrom(locate('span').withText(text16pt), 'style');
+        const style36 = await I.grabAttributeFrom(locate('span').withText(text36pt), 'style');
+        const style8 = await I.grabAttributeFrom(locate('span').withText(text8pt), 'style');
+
+        expect(styleDefault).to.have.lengthOf(0);
+        expect(style13.join()).to.include('13pt');
+        expect(style16.join()).to.include('16pt');
+        expect(style36.join()).to.include('36pt');
+        expect(style8.join()).to.include('8pt');
+    });
+});
