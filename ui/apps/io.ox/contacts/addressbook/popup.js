@@ -890,13 +890,39 @@ define('io.ox/contacts/addressbook/popup', [
         appeared[$(e.target).attr('data-original')] = true;
     }
 
+    // keeps order
+    function groupBy(list, iteratee) {
+        var result = [];
+        _(list).each(function (item, index) {
+            var cid = iteratee(item, index),
+                group = this[cid] = this[cid] || [];
+            // when empty it was not added to result list yet
+            if (!group.length) result.push(group);
+            group.push(item);
+        }, {});
+        return result;
+    }
+
+    function flattenBy(list, iteratee) {
+        return _(list).map(function (group) {
+            return _.chain(group)
+                    .sortBy(iteratee)
+                    .first()
+                    .value();
+        });
+    }
+
     function renderItems(list, options) {
         // avoid duplicates (name + email address; see bug 56040)
-        list = _(list).filter(function (item) {
-            if (item.label) return true;
-            var cid = item.full_name + ' ' + item.email;
-            if (this[cid]) return false; return (this[cid] = true);
-        }, {});
+        list = groupBy(list, function (item) {
+            // returns cid as grouping criteria
+            return item.label ? _.uniqueId(item.keywords) : item.full_name + ' ' + item.email;
+        });
+        list = flattenBy(list, function (item) {
+            // returns sort order to prefer users to contacts
+            return item.user_id ? -1 : 1;
+        });
+
         // get defaults
         options = _.extend({
             limit: options.isSearch ? LIMITS.search : LIMITS.render,
