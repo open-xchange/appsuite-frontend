@@ -183,3 +183,175 @@ Scenario('[C7392] Send mail with different text highlighting', async function (I
         I.waitForElement((locate('strong').withText(textBoldItalicSuperscript)).inside('em').inside('sup'));
     });
 });
+
+Scenario('[C7393] Send mail with bullet point and numbering - bullet points', async function (I, users) {
+
+    let [sender, recipient] = users;
+
+    const mailSubject = 'C7393 Different bullet points';
+
+    const defaultText = 'This text has no alignment.';
+    const textBullet1 = 'This is bullet point one.';
+    const textBullet2 = 'This is bullet point two.';
+    const textBullet21 = 'This bullet point is indented under point two!';
+    const textBullet1_1 = 'And this is again on level one.';
+
+    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
+
+    I.login('app=io.ox/mail', { user: sender });
+
+    // Open the mail composer
+    I.retry(5).click('Compose');
+    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    I.click('~Maximize');
+
+    // Fill out to and subject
+    I.waitForFocus('input[placeholder="To"]');
+    I.fillField('To', recipient.get('primaryEmail'));
+    I.fillField('Subject', mailSubject);
+
+    // Write some text with the default settings
+    await within({ frame: iframeLocator }, async () => {
+        I.click('.default-style');
+        I.pressKey(defaultText);
+        I.pressKey('Enter');
+    });
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textBullet1);
+    });
+
+    I.click(locate('button').inside('~Bullet list'));
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey('Enter');
+        I.pressKey(textBullet2);
+        I.pressKey('Enter');
+    });
+
+    I.click(locate('button').inside('~Increase indent'));
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textBullet21);
+        I.pressKey('Enter');
+    });
+
+    I.click(locate('button').inside('~Decrease indent'));
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textBullet1_1);
+        I.pressKey('Enter');
+        I.pressKey('Enter');
+        I.pressKey('Enter');
+    });
+
+    // Send the mail
+    I.click('Send');
+
+    // Let's stick around a bit for sending to finish
+    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.logout();
+
+    // Log in as second user and navigate to mail app
+    I.login('app=io.ox/mail', { user: recipient });
+
+    // Open the mail
+    I.waitForText(mailSubject, 2);
+    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
+    I.waitForVisible('iframe.mail-detail-frame');
+
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        I.waitForElement(locate('div').withText(defaultText));
+        I.waitForElement((locate('li').inside('ul')).at(1).withText(textBullet1));
+        I.waitForElement((locate('li').inside('ul')).at(2).withText(textBullet2));
+        I.waitForElement((locate('li').withText(textBullet21)).inside('ul').inside('li').inside('ul'));
+        I.waitForElement((locate('li').inside('ul')).at(3).withText(textBullet1_1));
+    });
+});
+
+Scenario('[C7393] Send mail with bullet point and numbering - numbering', async function (I, users) {
+
+    let [sender, recipient] = users;
+
+    const mailSubject = 'C7393 Different numbering';
+
+    const defaultText = 'This text has no alignment.';
+    const textNumber1 = 'This is number one.';
+    const textNumber2 = 'This is number two.';
+    const textNumber21 = 'This number is indented under number two!';
+    const textNumber1_1 = 'And this is again on level one with number 3.';
+
+    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
+
+    I.login('app=io.ox/mail', { user: sender });
+
+    // Open the mail composer
+    I.retry(5).click('Compose');
+    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    I.click('~Maximize');
+
+    // Fill out to and subject
+    I.waitForFocus('input[placeholder="To"]');
+    I.fillField('To', recipient.get('primaryEmail'));
+    I.fillField('Subject', mailSubject);
+
+    // Write some text with the default settings
+    await within({ frame: iframeLocator }, async () => {
+        I.click('.default-style');
+        I.pressKey(defaultText);
+        I.pressKey('Enter');
+    });
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textNumber1);
+    });
+
+    I.click(locate('button').inside('~Numbered list'));
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey('Enter');
+        I.pressKey(textNumber2);
+        I.pressKey('Enter');
+    });
+
+    I.click(locate('button').inside('~Increase indent'));
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textNumber21);
+        I.pressKey('Enter');
+    });
+
+    I.click(locate('button').inside('~Decrease indent'));
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textNumber1_1);
+        I.pressKey('Enter');
+        I.pressKey('Enter');
+        I.pressKey('Enter');
+    });
+
+    // Send the mail
+    I.click('Send');
+
+    // Let's stick around a bit for sending to finish
+    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.logout();
+
+    // Log in as second user and navigate to mail app
+    I.login('app=io.ox/mail', { user: recipient });
+
+    // Open the mail
+    I.waitForText(mailSubject, 2);
+    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
+    I.waitForVisible('iframe.mail-detail-frame');
+
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        I.waitForElement(locate('div').withText(defaultText));
+        I.waitForElement((locate('li').inside('ol')).at(1).withText(textNumber1));
+        I.waitForElement((locate('li').inside('ol')).at(2).withText(textNumber2));
+        I.waitForElement((locate('li').withText(textNumber21)).inside('ol').inside('li').inside('ol'));
+        I.waitForElement((locate('li').inside('ol')).at(3).withText(textNumber1_1));
+    });
+});
