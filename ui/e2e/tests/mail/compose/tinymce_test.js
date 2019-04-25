@@ -556,3 +556,142 @@ Scenario('[C7395] Send mail with text indentations', async function (I, users) {
         expect(await I.grabCssPropertyFrom(locate('div').withText(textIndent0), 'padding-left')).to.include('0px');
     });
 });
+
+Scenario('[C7396] Send mail with different text fonts', async function (I, users) {
+
+    const selectFont = (action) => {
+        I.click(locate('button').inside('~Font Family'));
+        I.waitForElement((locate('span').withText('Arial')).inside('.mce-floatpanel'));
+        I.click(locate('span.mce-text').withText(action));
+        I.waitForInvisible('.mce-floatpanel');
+    };
+    let [sender, recipient] = users;
+
+    const mailSubject = 'C7396 Different text fonts';
+
+    const defaultText = 'This text has no changed font.';
+    const textArial = 'This is text written in Arial.';
+    const textArialBlack = 'And this one with Arial Black!';
+    const textComicSansMS = 'Ohh, ugly Comic Sans MS:';
+    const textCourierNew = 'Yeah, Courier New 1337;';
+    const textHelvetica = 'And now some text in Helvetica.';
+    const textTerminal = 'And how does Terminal looks like?';
+    const textVerdana = 'Verdana, oho, Verdana, ohohoho...';
+    const textWebdings = 'This one looks ugly with Webdings!';
+
+    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
+
+    I.login('app=io.ox/mail', { user: sender });
+
+    // Open the mail composer
+    I.retry(5).click('Compose');
+    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    I.click('~Maximize');
+
+    // Fill out to and subject
+    I.waitForFocus('input[placeholder="To"]');
+    I.fillField('To', recipient.get('primaryEmail'));
+    I.fillField('Subject', mailSubject);
+
+    // Write some text with the default settings
+    await within({ frame: iframeLocator }, async () => {
+        I.click('.default-style');
+        I.pressKey(defaultText);
+        I.pressKey('Enter');
+    });
+
+    // Write some text with H3
+    selectFont('Arial');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textArial);
+        I.pressKey('Enter');
+    });
+
+    // Write some text with H5
+    selectFont('Arial Black');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textArialBlack);
+        I.pressKey('Enter');
+    });
+
+    // Write some text with H6, but change it to H1
+    selectFont('Georgia');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textComicSansMS);
+        I.pressKey(['Shift', 'Home']); // Select the just written text
+    });
+    selectFont('Comic Sans MS');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey('End');
+        I.pressKey('Enter');
+    });
+
+    selectFont('Courier New');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textCourierNew);
+        I.pressKey('Enter');
+    });
+
+    // Write some text with H2
+    selectFont('Helvetica');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textHelvetica);
+        I.pressKey('Enter');
+    });
+
+    selectFont('Terminal');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textTerminal);
+        I.pressKey('Enter');
+    });
+
+    selectFont('Verdana');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textVerdana);
+        I.pressKey('Enter');
+    });
+
+    selectFont('Webdings');
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textWebdings);
+        I.pressKey('Enter');
+    });
+
+    // Send the mail
+    I.click('Send');
+
+    // Let's stick around a bit for sending to finish
+    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.logout();
+
+    // Log in as second user and navigate to mail app
+    I.login('app=io.ox/mail', { user: recipient });
+
+    // Open the mail
+    I.waitForText(mailSubject, 2);
+    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
+    I.waitForVisible('iframe.mail-detail-frame');
+
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        const styleDefault = await I.grabAttributeFrom(locate('div').withText(defaultText), 'style');
+        const styleArial = await I.grabCssPropertyFrom(locate('span').withText(textArial), 'font-family');
+        const styleArialBlack = await I.grabCssPropertyFrom(locate('span').withText(textArialBlack), 'font-family');
+        const styleComicSansMS = await I.grabCssPropertyFrom(locate('span').withText(textComicSansMS), 'font-family');
+        const styleCourierNew = await I.grabCssPropertyFrom(locate('span').withText(textCourierNew), 'font-family');
+        const styleHelvetica = await I.grabCssPropertyFrom(locate('span').withText(textHelvetica), 'font-family');
+        const styleTerminal = await I.grabCssPropertyFrom(locate('span').withText(textTerminal), 'font-family');
+        const styleVerdana = await I.grabCssPropertyFrom(locate('span').withText(textVerdana), 'font-family');
+        const styleWebdings = await I.grabCssPropertyFrom(locate('span').withText(textWebdings), 'font-family');
+
+        expect(styleDefault).to.have.lengthOf(0);
+        expect(styleArial.join()).to.include('arial');
+        expect(styleArialBlack.join()).to.include('arial black');
+        expect(styleComicSansMS.join()).to.include('comic sans ms');
+        expect(styleCourierNew.join()).to.include('courier new');
+        expect(styleHelvetica.join()).to.include('helvetica');
+        expect(styleTerminal.join()).to.include('terminal');
+        expect(styleVerdana.join()).to.include('verdana');
+        expect(styleWebdings.join()).to.include('webdings');
+    });
+});
