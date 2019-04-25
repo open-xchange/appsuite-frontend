@@ -454,3 +454,105 @@ Scenario('[C7394] Send mail with different text alignments', async function (I, 
         expect(await I.grabCssPropertyFrom(locate('div').withText(textJustify), 'text-align')).to.include('justify');
     });
 });
+
+Scenario('[C7395] Send mail with text indentations', async function (I, users) {
+
+    let [sender, recipient] = users;
+
+    const mailSubject = 'C7395 Different text indentations';
+    const defaultText = 'This text has the default text size.';
+    const textIndent1 = 'Text with indention 1.';
+    const textIndent2 = 'Text with indention level 2.';
+    const textIndent3 = 'Text with indention 3.';
+    const textIndent11 = 'Text with indention level one, again.';
+    const textIndent0 = 'And some not indented text at the end';
+
+    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
+
+    I.login('app=io.ox/mail', { user: sender });
+
+    // Open the mail composer
+    I.retry(5).click('Compose');
+    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+
+    // Fill out to and subject
+    I.waitForFocus('input[placeholder="To"]');
+    I.fillField('To', recipient.get('primaryEmail'));
+    I.fillField('Subject', mailSubject);
+
+    // Write some text with the default settings
+    await within({ frame: iframeLocator }, async () => {
+        I.click('.default-style');
+        I.pressKey(defaultText);
+        I.pressKey('Enter');
+        I.pressKey('Enter');
+    });
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textIndent1);
+    });
+
+    I.click(locate('button').inside('~Increase indent'));
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey('Enter');
+    });
+
+    I.click(locate('button').inside('~Increase indent'));
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textIndent2);
+        I.pressKey('Enter');
+    });
+
+    I.click(locate('button').inside('~Increase indent'));
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textIndent3);
+        I.pressKey('Enter');
+    });
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textIndent11);
+    });
+    I.click(locate('button').inside('~Increase indent'));
+    I.click(locate('button').inside('~Decrease indent'));
+    I.click(locate('button').inside('~Decrease indent'));
+    I.click(locate('button').inside('~Decrease indent'));
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey('Enter');
+    });
+
+    I.click(locate('button').inside('~Decrease indent'));
+
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(textIndent0);
+        I.pressKey('Enter');
+    });
+
+    // Send the mail
+    I.click('Send');
+
+    // Let's stick around a bit for sending to finish
+    I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+    I.wait(1);
+    I.logout();
+
+    // Log in as second user and navigate to mail app
+    I.login('app=io.ox/mail', { user: recipient });
+
+    // Open the mail
+    I.waitForText(mailSubject, 2);
+    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
+    I.waitForVisible('iframe.mail-detail-frame');
+
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        expect(await I.grabCssPropertyFrom(locate('div').withText(defaultText), 'padding-left')).to.include('0px');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textIndent1), 'padding-left')).to.include('40px');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textIndent2), 'padding-left')).to.include('80px');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textIndent3), 'padding-left')).to.include('120px');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textIndent11), 'padding-left')).to.include('40px');
+        expect(await I.grabCssPropertyFrom(locate('div').withText(textIndent0), 'padding-left')).to.include('0px');
+    });
+});
