@@ -49,7 +49,6 @@ define('io.ox/calendar/perspective', [
         initialize: function (options) {
             this.listenTo(this.model, 'change:date', this.onChangeDate);
             this.listenTo(api, 'refresh.all', this.refresh.bind(this, true));
-            this.listenTo(api, 'create update', this.onCreateUpdateAppointment);
             this.listenTo(this.app, 'folders:change', this.refresh);
             this.listenTo(this.app.props, 'change:date', this.getCallback('onChangeDate'));
             this.app.getWindow().on('show', this.onWindowShow.bind(this));
@@ -346,14 +345,6 @@ define('io.ox/calendar/perspective', [
                     self.showAppointment(e, util.cid(cid), { arrow: false });
                 }
             });
-        },
-
-        onCreateUpdateAppointment: function (obj) {
-            var current = ox.ui.App.getCurrentApp().getName();
-            if (!/^io.ox\/calendar/.test(current)) return;
-            if (obj.seriesId && obj.seriesId === obj.id) return;
-            if (!this.selectAppointment) return;
-            //this.selectAppointment(new calendarModel.Model(obj));
         }
 
     });
