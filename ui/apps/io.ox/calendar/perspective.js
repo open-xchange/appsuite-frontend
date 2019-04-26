@@ -337,7 +337,9 @@ define('io.ox/calendar/perspective', [
             var e, self = this;
 
             api.get(api.cid(cid)).done(function (model) {
-                self.setStartDate(model.getMoment('startDate'));
+                // list perspective doesn't have a setStartDate function
+                if (self.setStartDate) self.setStartDate(model.getMoment('startDate'));
+
                 if (_.device('smartphone')) {
                     ox.launch('io.ox/calendar/detail/main', { cid: cid });
                 } else {
