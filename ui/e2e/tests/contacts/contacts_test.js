@@ -149,15 +149,15 @@ Scenario('[C7354] - Create new contact', function (I) {
 Scenario('[C7355] - Create a new private folder', function (I) {
     var timestamp = Math.round(+new Date() / 1000);
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-    I.waitForVisible('.classic-toolbar [data-action]');
+    // wait for any contact to be rendered, this is the last thing happening on load.
+    I.waitForElement('.vgrid-cell.contact');
     I.click('Add new address book');
     I.waitForElement('.modal-open [data-point="io.ox/core/folder/add-popup"]');
-    I.fillField('[name="name"]', 'C7354 ' + timestamp);
+    I.fillField('[name="name"]', 'C7355 ' + timestamp);
     I.click('[data-action="add"]');
     I.waitForDetached('[data-point="io.ox/core/folder/add-popup"]');
-    I.selectFolder('C7354 ' + timestamp);
-    I.waitForText('C7354 ' + timestamp, '.folder-name');
+    I.selectFolder('C7355 ' + timestamp);
+    I.waitForText('C7355 ' + timestamp, '.folder-name');
 });
 
 Scenario('[C7356] - Create a new public folder', function (I) {
