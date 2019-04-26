@@ -865,19 +865,14 @@ Scenario('[C7457] Edit appointment via toolbar', async function (I) {
 });
 
 Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, users) {
-    const
-        Moment = require('moment'),
-        MomentRange = require('moment-range'),
-        moment = MomentRange.extendMoment(Moment);
-    let testrailID = 'C7454';
-    //var timestamp = Math.round(+new Date() / 1000);
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
-    I.haveSetting('io.ox/calendar//viewView', 'week:week');
 
-    //Create Appointment
+    const momentRange = require('moment-range').extendMoment(moment);
+    const testrailID = 'C7454';
+    const appointmentSelector = `~${testrailID}, ${testrailID}`;
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
-    I.haveAppointment({
+    await I.haveAppointment({
         folder: 'cal://0/' + appointmentDefaultFolder,
         summary: testrailID,
         location: testrailID,
@@ -885,11 +880,11 @@ Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, use
         attendeePrivileges: 'DEFAULT',
         endDate: {
             tzid: 'Europe/Berlin',
-            value: moment().format('YYYYMMDD')
+            value: momentRange().format('YYYYMMDD')
         },
         startDate: {
             tzid: 'Europe/Berlin',
-            value: moment().format('YYYYMMDD')
+            value: momentRange().format('YYYYMMDD')
         },
         attendees: [
             {
@@ -907,27 +902,28 @@ Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, use
             }
         ]
     }, { user: users[0] });
-    I.login('app=io.ox/calendar', { user: users[0] });
+
+    I.login('app=io.ox/calendar&perspective=week:week');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
     I.clickToolbar('Today');
-    I.waitForElement('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
-    I.click('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]');
-    I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
-    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.waitForElement(appointmentSelector, 5);
+    I.click(appointmentSelector);
+    I.waitForElement('.io-ox-sidepopup', 5);
+    I.waitForText('Edit', 5, '.io-ox-sidepopup');
+    I.click('Edit');
     I.waitForElement('[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit', 5);
     I.waitForVisible('[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit', 5);
     I.click('All day');
-    I.click('.floating-window-content [aria-label="Start time"]');
-    I.click('.io-ox-calendar-edit [data-attribute="startDate"] .typeahead [data-value="12:00 PM"]');
-    I.click('.floating-window-content [aria-label="End time"]');
-    I.click('.io-ox-calendar-edit [data-attribute="endDate"] .typeahead [data-value="1:00 PM"]');
+    I.click('~Start time');
+    I.click('[data-attribute="startDate"] [data-value="12:00 PM"]');
+    I.click('~End time');
+    I.click('[data-attribute="endDate"] [data-value="1:00 PM"]');
     I.click('Save');
     I.waitForDetached('[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit');
-    I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
-    I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForElement(appointmentSelector, 5);
+    I.click(appointmentSelector);
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
-    expect(await I.grabTextFrom('.io-ox-sidepopup-pane .date-time')).to.equal(moment().add(1, 'hours').format('ddd') + ', ' + moment().add(1, 'hours').format('M/D/YYYY') + '   12:00 – 1:00 PMCEST');
-    I.logout();
+    expect(await I.grabTextFrom('.io-ox-sidepopup-pane .date-time')).to.equal(momentRange().add(1, 'hours').format('ddd') + ', ' + momentRange().add(1, 'hours').format('M/D/YYYY') + '   12:00 – 1:00 PMCEST');
 });
 
 Scenario('[C7462] Remove a participant', async function (I, users) {
