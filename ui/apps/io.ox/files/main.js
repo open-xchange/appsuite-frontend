@@ -975,8 +975,10 @@ define('io.ox/files/main', [
 
             if (_.device('smartphone')) return;
 
+            var ev = ox.tabHandlingEnabled ? 'keypress' : 'keydown';
+
             // folders
-            app.listView.$el.on('keydown', '.file-type-folder', function (e) {
+            app.listView.$el.on(ev, '.file-type-folder', function (e) {
                 if (/13|32/.test(e.which)) {
                     e.preventDefault();
                     // simple id check for folders, prevents errors if folder id contains '.'
@@ -989,7 +991,7 @@ define('io.ox/files/main', [
             });
 
             // files
-            app.listView.$el.on('keydown', '.list-item:not(.file-type-folder)', function (e) {
+            app.listView.$el.on(ev, '.list-item:not(.file-type-folder)', function (e) {
                 if (!/13|32/.test(e.which)) return;
                 e.preventDefault();
                 var baton = ext.Baton(app.getContextualData(app.listView.selection.get()));
