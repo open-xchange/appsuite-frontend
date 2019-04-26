@@ -1607,15 +1607,15 @@ Scenario('[C7414] Create two appointments at the same time (one is shown as free
 });
 
 Scenario('[C7415] Create two reserved appointments at the same time', async function (I, users) {
-    const moment = require('moment');
-    let testrailID = 'C7415';
-    //var timestamp = Math.round(+new Date() / 1000);
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
+
+    const moment = require('moment');
+    const testrailID = 'C7415';
     //Create Appointment
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
-    I.haveAppointment({
+    await I.haveAppointment({
         folder: 'cal://0/' + appointmentDefaultFolder,
         summary: testrailID,
         location: testrailID,
@@ -1636,10 +1636,11 @@ Scenario('[C7415] Create two reserved appointments at the same time', async func
             }
         ]
     }, { user: users[0] });
+
     I.login('app=io.ox/calendar', { user: users[0] });
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
     I.clickToolbar('Today');
-    expect(await I.grabNumberOfVisibleElements('.appointment-container [aria-label="C7415, C7415"]')).to.equal(1);
+    expect(await I.grabNumberOfVisibleElements(`.appointment-container [aria-label="${testrailID}, ${testrailID}"]`)).to.equal(1);
     I.clickToolbar('New');
     I.waitForElement('.io-ox-calendar-edit [name="summary"]');
     I.fillField('.io-ox-calendar-edit [name="summary"]', testrailID);
@@ -1648,7 +1649,11 @@ Scenario('[C7415] Create two reserved appointments at the same time', async func
     I.waitForElement(locate('.modal-open .modal-title').withText('Conflicts detected'));
     I.click('Ignore conflicts');
     I.waitForDetached('.modal-open');
-    expect(await I.grabNumberOfVisibleElements('.appointment-container [aria-label="C7415, C7415"]')).to.equal(2);
+    I.click('~Refresh');
+    I.waitForElement('#io-ox-refresh-icon .fa-spin');
+    I.waitForDetached('#io-ox-refresh-icon .fa-spin');
+
+    expect(await I.grabNumberOfVisibleElements(`.appointment-container [aria-label="${testrailID}, ${testrailID}"]`)).to.equal(2);
 });
 
 Scenario('[C7446] Create recurring whole-day appointment', async function (I, users) {
