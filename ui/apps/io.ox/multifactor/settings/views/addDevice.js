@@ -112,11 +112,16 @@ define('io.ox/multifactor/settings/views/addDevice', [
                         .addClass('select form-control countryCodes')
                         .attr('title', 'Country Codes')
                         .attr('list', 'addresses');
-                    var lang = navigator.languages ? navigator.languages[0] : navigator.language;
-                    if (lang.indexOf('-') > 0) lang = lang.substring(lang.indexOf('-') + 1);
-                    if (codes.get(lang)) {
-                        select.$el.find('option:contains("' + codes.get(lang).label + '")').prop('selected', 'selected');
-                        baton.model.set('code', codes.get(lang).value, { silent: true });  // Must be silent.  Otherwise, duplicate values (Canada/US for example), first will be chosen
+                    var lang = ox.language;
+                    if (lang.indexOf('_') > 0) lang = lang.substring(lang.indexOf('_') + 1);
+                    try {
+                        if (codes.get(lang)) {
+                            select.$el.find('option:contains("' + codes.get(lang).label + '")').prop('selected', 'selected');
+                            baton.model.set('code', codes.get(lang).value, { silent: true });  // Must be silent.  Otherwise, duplicate values (Canada/US for example), first will be chosen
+                        }
+                    } catch (e) {
+                        console.error('Unable to find country code from language ' + ox.language);
+                        console.error(e);
                     }
                     div.append(input);
                 });
