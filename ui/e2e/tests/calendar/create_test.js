@@ -788,7 +788,8 @@ Scenario('[C274537] Support use-count calculation on Appointment create with Gro
 
 Scenario('[C274516] Follow up should also propose a future date for appointments in the future', async function (I, users) {
     const moment = require('moment');
-    let testrailID = 'C274516';
+    const testrailID = 'C274516';
+    const appointmentSelector = `~${testrailID}, ${testrailID}`;
     //var timestamp = Math.round(+new Date() / 1000);
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
@@ -813,25 +814,35 @@ Scenario('[C274516] Follow up should also propose a future date for appointments
         attendees: [
         ]
     }, { user: users[0] });
+
     I.login('app=io.ox/calendar', { user: users[0] });
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
     I.clickToolbar('Today');
     I.waitForElement('.next');
     I.waitForVisible('.next');
     I.click('.next');
-    I.waitForElement('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
-    I.click('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitForElement(appointmentSelector, 5, '.appointment-panel');
+    I.click(appointmentSelector, '.appointment-panel');
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
-    I.click('[data-action="io.ox/calendar/detail/actions/follow-up"]');
-    I.waitForElement('[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit', 5);
-    I.waitForVisible('[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit', 5);
+    I.waitForText('Follow-up');
+    I.click('Follow-up');
+    I.waitForElement('.io-ox-calendar-edit', 5);
+    I.waitForVisible('.io-ox-calendar-edit', 5);
     let startDate = await I.grabAttributeFrom('[data-attribute="startDate"] .datepicker-day-field', 'value');
     let endDate = await I.grabAttributeFrom('[data-attribute="endDate"] .datepicker-day-field', 'value');
     expect(startDate.toString()).to.equal(moment().add(2, 'week').format('M/D/YYYY'));
     expect(endDate.toString()).to.equal(moment().add(2, 'week').format('M/D/YYYY'));
     I.click('Create');
-    I.waitForElement('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
-    I.click('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]');
+    I.waitToHide('.io-ox-calendar-edit');
+
+    // Workaround for sidepopup, may be removed in the future
+    I.click('~Close');
+    I.waitToHide('.io-ox-sidepopup');
+
+    I.waitForVisible('.next');
+    I.click('.next');
+    I.waitForElement(appointmentSelector, 5, '.appointment-panel');
+    I.click(appointmentSelector, '.appointment-panel');
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
     expect(await I.grabTextFrom('.io-ox-sidepopup-pane .date-time')).to.equal(moment().add(2, 'week').format('ddd') + ', ' + moment().add(2, 'week').format('M/D/YYYY') + '   Whole day');
     I.logout();
