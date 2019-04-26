@@ -1252,12 +1252,12 @@ Scenario('[C7460] Add attachments', async function (I) {
 });
 
 Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
-
+    const summary = 'Brexit';
     //Create Appointment
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
     await I.haveAppointment({
         folder: 'cal://0/' + appointmentDefaultFolder,
-        summary: 'Brexit',
+        summary: summary,
         description: 'Ooordeeeer! This appointment is moved constantly.',
         endDate: {
             tzid: 'Europe/Berlin',
@@ -1272,8 +1272,12 @@ Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
     I.login('app=io.ox/calendar&perspective=week:day');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
+    I.waitForElement('.appointment');
+
     I.dragAndDrop('.appointment .appointment-content', '.day .timeslot:nth-child(27)');
 
+    I.click(summary, '.appointment');
+    I.waitForVisible('.io-ox-sidepopup');
     I.waitForText('1:00 – 2:00 PMCEST');
 
     I.clickToolbar('View');
