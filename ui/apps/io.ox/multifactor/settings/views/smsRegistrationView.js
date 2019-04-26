@@ -46,7 +46,7 @@ define('io.ox/multifactor/settings/views/smsRegistrationView', [
         .build(function () {
         })
         .addCancelButton()
-        .addButton({ label: gt('OK'), action: 'OK' })
+        .addButton({ label: gt('Ok'), action: 'OK' })
         .on('OK', function () {
             var response = $('#verification').val().replace(/\s/g, '');
             if (response && response !== '') {

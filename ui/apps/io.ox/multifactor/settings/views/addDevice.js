@@ -60,7 +60,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
         .build(function () {
         })
         .addCancelButton()
-        .addButton({ label: gt('OK'), action: 'OK' })
+        .addButton({ label: gt('Ok'), action: 'OK' })
         .on('cancel', function () {
             def.reject();
         })

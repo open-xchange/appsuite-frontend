@@ -66,7 +66,9 @@ define('io.ox/multifactor/factorRenderer', [
                 if (baton.data.text) {
                     return createLi(baton.data.icon, baton.data.text, device, selectable);
                 }
-                return $('<span>').append(gt('UNKNOWN'));
+                // what's the purpose of this string? removed gt call for
+                // this
+                return $('<span>').append('UNKOWN');
         }
     }
 

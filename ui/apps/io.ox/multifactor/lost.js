@@ -49,7 +49,7 @@ define('io.ox/multifactor/lost', [
                     authInfo.def.resolve(data);
                     return;
                 }
-                failBackup(authInfo.def, gt('Authentication failure. Please reload browser and try again.'));
+                failBackup(authInfo.def, gt('Authentication failure. Please try reloading the page.'));
             }, function (fail) {
                 failBackup(authInfo.def, fail);
             });

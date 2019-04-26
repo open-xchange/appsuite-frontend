@@ -46,7 +46,7 @@ define('io.ox/multifactor/settings/views/totpRegistrationView', [
         .build(function () {
         })
         .addCancelButton()
-        .addButton({ label: gt('OK'), action: 'OK' })
+        .addButton({ label: gt('Ok'), action: 'OK' })
         .on('OK', function () {
             var response = $('#verification').val().replace(/\s/g, ''); // get value removing any padding
             if (response && response !== '') {
@@ -107,7 +107,7 @@ define('io.ox/multifactor/settings/views/totpRegistrationView', [
             index: INDEX += 100,
             id: 'code',
             render: function (baton) {
-                var label = $('<label for="code">').append(gt('If scanning doesn\'t work, you may be able to enter the following setup code.'));
+                var label = $('<label for="code">').append(gt('If scanning does not work, you may be able to enter the following setup code.'));
                 var code = $('<span id="code" class="totpShared selectable-text">').append(
                     formatSharedSecret(baton.model.get('device').challenge.sharedSecret));
                 this.$body.append(label).append(code);
