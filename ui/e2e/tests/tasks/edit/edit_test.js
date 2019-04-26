@@ -173,6 +173,7 @@ Scenario('[C7743] Move single Task', async function (I) {
 
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+
     I.clickToolbar('~More actions');
     I.click('Move');
     I.waitForText('Move', 5, '.modal-open .modal-title');
@@ -258,56 +259,47 @@ Scenario('[C7745] Mark several Task as Undone at the same time', async function 
     }
 });
 
-Scenario('[C7746] Move several tasks to an other folder at the same time', async function (I, users) {
-    let testrailID = 'C7746';
-    let testrailName = 'Move several tasks to an other folder at the same time';
-    const taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] });
-    let numberOfTasks = 3;
-    for (let i = 0; i < numberOfTasks; i++) {
-        let id = testrailID + ' - ' + i;
-        var task = {
-            title: id,
-            folder_id: taskDefaultFolder,
-            note: testrailName
-        };
-        I.haveTask(task, { user: users[0] });
+Scenario('[C7746] Move several tasks to an other folder at the same time', async function (I) {
+    const testrailID = 'C7746',
+        testrailName = 'Move several tasks to an other folder at the same time',
+        numberOfTasks = 3,
+        taskDefaultFolder = await I.grabDefaultFolder('tasks'),
+        tasks = [];
+
+    for (let i = 1; i <= numberOfTasks; i++) {
+        tasks.push(
+            I.haveTask({ title: `${testrailID} - ${i}`, folder_id: taskDefaultFolder, note: testrailName })
+        );
     }
-    const folder = {
-        module: 'tasks',
-        title: testrailID
-    };
-    I.createFolder(folder, taskDefaultFolder, { user: users[0] });
-    I.login('app=io.ox/tasks', { user: users[0] });
+    await Promise.all(tasks);
+    await I.createFolder({ module: 'tasks', title: testrailID }, taskDefaultFolder);
+
+    I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.waitForElement('.tasks-detailview', 5);
     I.click('[aria-label="Tasks toolbar"] .btn[title="Select all"]');
     I.seeNumberOfElements('li.selected.vgrid-cell', numberOfTasks);
     I.waitForText(numberOfTasks + ' items selected', 5, '.task-detail-container .message');
-    //Dirty SHIT ! Need a helper for this
-    I.waitForElement('[aria-label="Tasks Toolbar"] .more-dropdown [data-action="more"]');
-    I.click('[aria-label="Tasks Toolbar"] .more-dropdown [data-action="more"]');
-    I.waitForElement('.smart-dropdown-container.open .dropdown-menu', 5);
-    I.clickToolbar('Move');
+
+    I.clickToolbar('~More actions');
+    I.click('Move');
     I.waitForText('Move', 5, '.modal-open .modal-title');
-    I.retry(3).click('.modal [data-id="virtual/flat/tasks/private"] div.folder-arrow');
-    I.waitForElement('.modal-dialog .open.folder.section', 5);
-    I.retry(3).click('.modal [aria-label="' + testrailID + '"]');
-    I.waitForElement('.modal .selected[aria-label="' + testrailID + '"]', 5);
-    I.waitForEnabled('.modal-footer button.btn-primary');
-    I.click('Move', 'div.modal-footer');
-    I.waitForDetached('.modal');
+    I.waitForElement('.modal .section .folder-arrow');
+    I.click('.modal .section .folder-arrow');
+    I.waitForElement(`.modal .section.open [aria-label="${testrailID}"]`, 5);
+    I.click(`.modal [aria-label="${testrailID}"]`);
+    I.waitForEnabled('.modal button.btn-primary');
+    I.click('Move', '.modal');
+    I.waitForDetached('.modal,.launcher-icon.fa-refresh.fa-spin');
     I.selectFolder(testrailID);
-    //Dirty SHIT ! Need a helper for this
-    for (let i = 0; i < numberOfTasks; i++) {
-        let id = testrailID + ' - ' + i;
-        I.waitForElement('[role="navigation"][aria-label="Task list"] [aria-label="' + testrailID + ' - ' + i + ', ."]', 5);
-        I.click('[role="navigation"][aria-label="Task list"] [aria-label="' + testrailID + ' - ' + i + ', ."]');
-        I.waitForElement('[role="navigation"][aria-label="Task list"] [aria-label="' + testrailID + ' - ' + i + ', ."].selected', 5);
-        I.waitForElement('.tasks-detailview', 5);
+    for (let i = 1; i <= numberOfTasks; i++) {
+        const id = `${testrailID} - ${i}`;
+        I.waitForText(id, 5, '.vgrid-cell');
+        I.click(locate('.vgrid-cell').withText(id));
         I.waitForText(id, 5, '.tasks-detailview .title');
     }
-    I.logout();
 });
+
 Scenario('[C7747] Add an attachment to a Task', async function (I, users) {
     let testrailID = 'C7747';
     let testrailName = 'Add an attachment to a Task';
