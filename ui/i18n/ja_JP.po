@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-18 12:52+0200\n"
+"PO-Revision-Date: 2019-04-26 08:27+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -8832,13 +8832,13 @@ msgstr "メーリングリスト"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is bigger than"
-msgstr "次のサイズより大きい"
+msgid "Is bigger than (Size: B/KB/MB/GB)"
+msgstr "次のサイズより大きい(単位：B/KB/MB/GB)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is smaller than"
-msgstr "次のサイズより小さい"
+msgid "Is smaller than (Size: B/KB/MB/GB)"
+msgstr "次のサイズより小さい(単位：B/KB/MB/GB)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -12208,6 +12208,12 @@ msgstr "%s に招待"
 msgid "Add on %s"
 msgstr "%s に追加"
 
+#~ msgid "Is bigger than"
+#~ msgstr "次のサイズより大きい"
+
+#~ msgid "Is smaller than"
+#~ msgstr "次のサイズより小さい"
+
 #~ msgid "Send mail %1$s before start."
 #~ msgstr "開始前に%1$sのメールを送信"
 
@@ -12752,12 +12758,6 @@ msgstr "%s に追加"
 
 #~ msgid "Mail size:"
 #~ msgstr "メールサイズ："
-
-#~ msgid "Is bigger than (Size: B/KB/MB/GB)"
-#~ msgstr "次のサイズより大きい(単位：B/KB/MB/GB)"
-
-#~ msgid "Is smaller than (Size: B/KB/MB/GB)"
-#~ msgstr "次のサイズより小さい(単位：B/KB/MB/GB)"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
