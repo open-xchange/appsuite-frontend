@@ -882,9 +882,8 @@ Scenario('[C274515] Attendees are not allowed to change their own permission sta
 });
 
 Scenario('[C274484] Attendees can change the appointment', async function (I, users) {
-    const moment = require('moment');
-    let testrailID = 'C274484';
-    var timestamp = Math.round(+new Date() / 1000);
+    const testrailID = 'C274484';
+    const timestamp = Math.round(+new Date() / 1000);
     I.haveSetting('io.ox/core//autoOpenNotification', false, { user: users[1] });
     I.haveSetting('io.ox/core//showDesktopNotifications', false, { user: users[1] });
     I.haveSetting('io.ox/calendar//chronos/allowAttendeeEditsByDefault', true, { user: users[1] });
@@ -918,10 +917,11 @@ Scenario('[C274484] Attendees can change the appointment', async function (I, us
     I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
     I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
-    I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.waitForText('Edit', 5);
+    I.click('Edit');
     I.waitForElement('.io-ox-calendar-edit.container');
     I.waitForVisible('.io-ox-calendar-edit.container');
-    I.fillField('.io-ox-calendar-edit [name="description"]', timestamp);
+    I.fillField('description', timestamp);
     I.click('Save');
     I.logout();
     I.login('app=io.ox/calendar', { user: users[0] });
