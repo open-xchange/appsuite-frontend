@@ -561,7 +561,7 @@ Scenario('[C8817] - Send E-Mail to contact', function (I, users, search) {
     I.see(testrailID);
 });
 
-Scenario('[C273805] - Download infected file', async function (I, users) {
+Scenario.skip('[C273805] - Download infected file', async function (I, users) {
     let testrailID = 'C273805';
     const contact = {
         display_name: '' + testrailID + ', ' + testrailID + '',
@@ -573,11 +573,10 @@ Scenario('[C273805] - Download infected file', async function (I, users) {
     const contactResponse = await I.haveContact(contact, { user: users[0] });
     await I.haveAttachment('contacts', { id: contactResponse.id, folder: contact.folder_id }, 'e2e/media/mails/Virus_attached!.eml', { user: users[0] });
     I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-    I.waitForVisible('.classic-toolbar [data-action]');
+    I.waitForElement('.vgrid-cell.contact');
     I.selectFolder('Contacts');
-    I.waitForElement(locate('.contact').withText('C273805, C273805').inside('.vgrid-scrollpane-container'));
-    I.click(locate('.contact').withText('C273805, C273805').inside('.vgrid-scrollpane-container'));
+    I.waitForElement(locate('.contact').withText(contact.display_name).inside('.vgrid-scrollpane-container'));
+    I.click(locate('.contact').withText(contact.display_name).inside('.vgrid-scrollpane-container'));
     I.waitForElement(locate('.dropdown').withText('Virus_attached!.eml').inside('.contact-header'));
     I.click(locate('.dropdown').withText('Virus_attached!.eml').inside('.contact-header'));
     I.waitForElement(locate('[data-action="io.ox/core/tk/actions/download-attachment"]').withText('Download').inside('.dropdown.open'));
