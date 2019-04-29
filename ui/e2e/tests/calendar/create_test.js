@@ -135,3 +135,20 @@ Scenario('fullday appointments', async function (I) {
 
     I.logout();
 });
+
+//See Bug 64409
+Scenario('Enter start time and press enter key', function (I) {
+    I.login('app=io.ox/calendar');
+    I.waitForVisible('*[data-app-name="io.ox/calendar"]');
+
+    I.clickToolbar('New');
+    I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
+
+    I.click('~Start time');
+    I.clearField('~Start time');
+    I.fillField('~Start time', '09:52');
+    I.pressKey('Enter');
+
+    I.waitForValue('~Start time', '9:52 AM');
+    I.logout();
+});
