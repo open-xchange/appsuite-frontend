@@ -943,8 +943,8 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
                     var inputId = _.uniqueId('size_'),
                         sizeValues = {
-                            'over': gt('Is bigger than'),
-                            'under': gt('Is smaller than')
+                            'over': gt('Is bigger than (Size: B/KB/MB/GB)'),
+                            'under': gt('Is smaller than (Size: B/KB/MB/GB)')
                         }, li;
 
                     this.append(
@@ -959,6 +959,10 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             addClass: addClass
                         })
                     );
+
+                    // backport of fix for bug 61017
+                    li.find('> div.col-sm-4').removeClass('col-sm-4').addClass('col-sm-3');
+                    li.find('> div.col-sm-8').removeClass('col-sm-8').addClass('col-sm-9');
 
                     util.handleUnsupportedComparisonValues({
                         $li: li,

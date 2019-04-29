@@ -151,10 +151,10 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                     o.seconddropdownOptions ? $('<div class="col-sm-2">').append(
                         new DropdownLinkView(o.seconddropdownOptions).render().$el
                     ) : [],
-                    $('<div>').addClass(o.seconddropdownOptions ? 'col-sm-2' : 'col-sm-4').append(
+                    $('<div>').addClass(o.inputOptions.name === 'size' ? 'col-sm-7' : 'col-sm-4').append(
                         o.dropdownOptions ? new DropdownLinkView(o.dropdownOptions).render().$el : []
                     ),
-                    $('<div class="col-sm-8">').append(
+                    $('<div>').addClass(o.inputOptions.name === 'size' ? 'col-sm-5' : 'col-sm-8').append(
                         $('<label class="sr-only">').attr('for', o.inputId).text(o.inputLabel),
                         new Input(o.inputOptions).render().$el,
                         o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []
