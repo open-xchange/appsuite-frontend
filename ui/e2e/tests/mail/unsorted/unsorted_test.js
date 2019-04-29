@@ -747,7 +747,7 @@ Scenario('[C101620] Very long TO field', async function (I, users) {
     I.seeCssPropertiesOnElements('.floating-window-content .recipients', { 'text-overflow': 'ellipsis' });
 });
 
-Scenario('[C163026] - Change from display name when sending a mail', async function (I, users) {
+Scenario('[C163026] Change from display name when sending a mail', async function (I, users) {
     let [user] = users;
     var timestamp = Math.round(+new Date() / 1000);
     I.haveSetting('io.ox/mail//messageFormat', 'text');
