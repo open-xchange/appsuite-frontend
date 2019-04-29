@@ -556,13 +556,13 @@ Scenario('[C8829] Recipients autocomplete', async function (I, users) {
     });
 });
 
-Scenario('[C8830] - Manually add multiple recipients via comma', async function (I, users) {
+Scenario('[C8830] Manually add multiple recipients via comma', async function (I, users) {
     let [user] = users;
     I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
     I.clickToolbar('Compose');
-    I.waitForVisible('.io-ox-mail-compose.container', 5);
+    I.waitForFocus('.token-input.tt-input');
     I.click({ css: '.io-ox-mail-compose div[data-extension-id="to"] input.tt-input' });
     I.pressKey('foo@bar.de, lol@ox.io, bla@trash.com,');
     I.waitForElement('.io-ox-mail-compose div.token', 5);
