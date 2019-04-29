@@ -57,7 +57,6 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users) {
         I.selectFolder('My shares');
         I.waitForElement(locate('.displayname').withText('Music').inside('.list-view'));
         I.seeNumberOfElements('.list-view li.list-item', 1);
-        I.see('Music', '.list-view');
 
         I.click('Music', '.list-view .displayname');
     });
