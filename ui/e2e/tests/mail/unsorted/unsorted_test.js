@@ -182,7 +182,7 @@ Scenario('[C7385] Write mail to BCC recipients', function (I, users) {
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
 });
 
-Scenario('[C7386] - Write mail to CC recipients', function (I, users) {
+Scenario('[C7386] Write mail to CC recipients', function (I, users) {
     let [user] = users;
     var testrailID = 'C7386';
     var timestamp = Math.round(+new Date() / 1000);
