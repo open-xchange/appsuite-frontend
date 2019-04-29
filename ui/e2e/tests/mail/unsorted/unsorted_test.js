@@ -816,7 +816,8 @@ Scenario.skip('[C273801] Download infected file', async function (I, users) {
     I.waitForElement(locate('.modal-open button').withText('Cancel'));
 });
 
-Scenario('[C273802] - Download multiple files (one infected)', async function (I, users) {
+// TODO: skipped until backend server with feautre support is available
+Scenario.skip('[C273802] Download multiple files (one infected)', async function (I, users) {
     let [user] = users;
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/C273802.eml' }, { user: users[0] });
     I.haveSetting('io.ox/mail//layout', 'vertical');
