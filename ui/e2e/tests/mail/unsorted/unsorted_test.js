@@ -569,7 +569,7 @@ Scenario('[C8830] Manually add multiple recipients via comma', async function (I
     I.seeNumberOfElements('.io-ox-mail-compose div.token', 3);
 });
 
-Scenario('[C8831] - Add recipient manually', async function (I, users) {
+Scenario('[C8831] Add recipient manually', async function (I, users) {
     let [user] = users;
     I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
