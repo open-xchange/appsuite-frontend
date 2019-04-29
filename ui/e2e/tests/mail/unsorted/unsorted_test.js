@@ -774,7 +774,7 @@ Scenario('[C163026] Change from display name when sending a mail', async functio
     I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .address');
     I.waitForText('This email just contains your email address as sender. Your real name is not used.', 5, '.io-ox-mail-compose .sender-realname .mail-input');
 });
-Scenario('[C207507] - Forgot mail attachment hint', async function (I, users) {
+Scenario('[C207507] Forgot mail attachment hint', async function (I, users) {
     let [user] = users;
     var testrailID = 'C207507';
     I.haveSetting('io.ox/mail//messageFormat', 'text');
