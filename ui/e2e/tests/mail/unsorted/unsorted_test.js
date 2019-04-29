@@ -641,7 +641,7 @@ Scenario('[C12119] - Edit recipients', async function (I, users) {
     });
 });
 
-Scenario('[C12120] - Recipient cartridge', async function (I, users) {
+Scenario('[C12120] Recipient cartridge', async function (I, users) {
     let [user] = users;
     I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
@@ -655,13 +655,16 @@ Scenario('[C12120] - Recipient cartridge', async function (I, users) {
     I.waitForElement({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
     const fields = ['to', 'cc', 'bcc'];
     fields.forEach(function (field) {
-        I.fillField('.io-ox-mail-compose div[data-extension-id="' + field + '"] input.tt-input', users[1].userdata.primaryEmail);
-        I.pressKey('Enter');
-        I.fillField('.io-ox-mail-compose div[data-extension-id="' + field + '"] input.tt-input', 'super@ox.com');
-        I.pressKey('Enter');
-        I.seeNumberOfElements('.io-ox-mail-compose div[data-extension-id="' + field + '"] div.token', 2);
-        I.waitForText(users[1].userdata.given_name + ' ' + users[1].userdata.sur_name, 5, '.io-ox-mail-compose div[data-extension-id="' + field + '"] div.token');
-        I.waitForText('super@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="' + field + '"] div.token');
+        within('.io-ox-mail-compose div[data-extension-id="' + field + '"]', function () {
+            I.fillField(' input.tt-input', users[1].userdata.primaryEmail);
+            I.waitForElement('.tt-dropdown-menu .tt-suggestions');
+            I.pressKey('Enter');
+            I.fillField('input.tt-input', 'super@ox.com');
+            I.pressKey('Enter');
+            I.seeNumberOfElements('div.token', 2);
+            I.waitForText(users[1].userdata.given_name + ' ' + users[1].userdata.sur_name, 5, 'div.token');
+            I.waitForText('super@ox.com', 5, 'div.token');
+        });
     });
 });
 
