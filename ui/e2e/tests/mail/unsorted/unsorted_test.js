@@ -59,7 +59,7 @@ Scenario('[C7380] Send saved draft mail', function (I, users) {
     I.see(testrailId + ' - ' + timestamp);
 });
 
-Scenario('[C7381] - Send email to multiple recipients', function (I, users) {
+Scenario('[C7381] Send email to multiple recipients', function (I, users) {
     let [user] = users;
     var testrailID = 'C7381';
     var timestamp = Math.round(+new Date() / 1000);
