@@ -582,12 +582,8 @@ Scenario('[C274402] Change organizer of appointment with internal attendees', as
     I.click('Ok');
     I.waitForDetached('.modal-dialog');
 
-    I.waitForDetached('.io-ox-sidepopup');
-    I.click('.appointment');
-
-    I.waitForVisible('.io-ox-sidepopup');
     I.click('Details');
-    I.waitForText(`Organizer ${users[1].userdata.display_name}`, '.io-ox-sidepopup');
+    I.waitForText(`Organizer ${users[1].userdata.display_name}`, undefined, '.io-ox-sidepopup');
 });
 
 Scenario('[274409] Change organizer of series with internal attendees', async function (I, users) {
