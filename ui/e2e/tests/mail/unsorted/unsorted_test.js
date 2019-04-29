@@ -99,7 +99,7 @@ Scenario('[C7381] Send email to multiple recipients', function (I, users) {
     I.see(testrailID + ' - ' + timestamp);
 });
 
-Scenario('[C7382] - Compose plain text mail', function (I, users) {
+Scenario('[C7382] Compose plain text mail', function (I, users) {
     let [user] = users;
     var testrailID = 'C7382';
     var timestamp = Math.round(+new Date() / 1000);
