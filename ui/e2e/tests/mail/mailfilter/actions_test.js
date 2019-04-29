@@ -189,7 +189,7 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent objects, 1 total');
+    I.waitForElement('~Sent, 1 total');
     I.wait(1);
     I.waitForElement('~Inbox');
     I.click('[data-id="virtual/myfolders"] .folder-arrow', '.io-ox-mail-window .window-sidepanel');
