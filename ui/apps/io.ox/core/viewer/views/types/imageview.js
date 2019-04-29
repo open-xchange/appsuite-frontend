@@ -93,7 +93,8 @@ define('io.ox/core/viewer/views/types/imageview', [
             // on retina screen request larger previews to render sharp images
             var width    = retina ? carousel.width() * RETINA_FACTOR : carousel.width();
             var height   = retina ? carousel.height() * RETINA_FACTOR : carousel.height();
-            var size     = { width: width, height: height };
+            // use floor to make sure that the image size will never be bigger than the reported values (scrollbar)
+            var size     = { width: Math.floor(width), height: Math.floor(height) };
 
             return size;
         },
