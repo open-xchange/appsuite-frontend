@@ -455,7 +455,7 @@ Scenario('[C8816] Cancel mail compose', function (I, users) {
     I.click('Discard message');
 });
 
-Scenario('[C8820] - Forward attachments', function (I, users) {
+Scenario('[C8820] Forward attachments', function (I, users) {
     let [user] = users;
     var testrailID = 'C8820';
     var timestamp = Math.round(+new Date() / 1000);
