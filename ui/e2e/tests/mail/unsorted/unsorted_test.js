@@ -146,7 +146,7 @@ Scenario('[C7384] Save draft', function (I, users) {
     I.see(text);
 });
 
-Scenario('[C7385] - Write mail to BCC recipients', function (I, users) {
+Scenario('[C7385] Write mail to BCC recipients', function (I, users) {
     let [user] = users;
     var testrailID = 'C7385';
     var timestamp = Math.round(+new Date() / 1000);
