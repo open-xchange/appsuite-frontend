@@ -1129,7 +1129,8 @@ Scenario('[C7461] Add a participant/ressource', async function (I, users) {
 Scenario('[C7455] Edit appointment by changing the timeframe', async function (I, users) {
 
     //Create Appointment
-    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] }),
+        summary = 'Dinner for one';
     await I.haveAppointment({
         folder: 'cal://0/' + appointmentDefaultFolder,
         summary: 'Dinner for one',
@@ -1149,10 +1150,18 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
     I.waitForVisible('.appointment');
     I.dragAndDrop('.appointment .resizable-n', '.day .timeslot:nth-child(23)');
 
+    I.click(summary, '.appointment');
+    I.waitForVisible('.io-ox-sidepopup');
     I.waitForText('11:00 AM – 1:00 PMCEST');
+    I.click('~Close', '.io-ox-sidepopup');
+    I.waitForDetached('.io-ox-sidepopup');
     I.dragAndDrop('.appointment .resizable-s', '.day .timeslot:nth-child(28)');
 
+    I.click(summary, '.appointment');
+    I.waitForVisible('.io-ox-sidepopup');
     I.waitForText('11:00 AM – 2:00 PMCEST');
+    I.click('~Close', '.io-ox-sidepopup');
+    I.waitForDetached('.io-ox-sidepopup');
 
     I.clickToolbar('View');
     I.click('Week', '.smart-dropdown-container');
