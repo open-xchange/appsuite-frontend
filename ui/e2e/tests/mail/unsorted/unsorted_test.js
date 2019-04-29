@@ -367,7 +367,7 @@ Scenario('[C7389] Send mail with attached vCard', function (I, users) {
     I.waitForText(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, 5, '.io-ox-contacts-window .header-name');
 });
 
-Scenario('[C7403] - Forward a single mail', function (I, users) {
+Scenario('[C7403] Forward a single mail', function (I, users) {
     let [user] = users;
     var testrailID = 'C7403';
     var timestamp = Math.round(+new Date() / 1000);
