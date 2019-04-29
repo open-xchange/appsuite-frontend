@@ -586,7 +586,7 @@ Scenario('[C8831] Add recipient manually', async function (I, users) {
     I.waitForText('super02@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="to"] div.token');
 });
 
-Scenario('[C12118] - Remove recipients', async function (I, users) {
+Scenario('[C12118] Remove recipients', async function (I, users) {
     let [user] = users;
     I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
