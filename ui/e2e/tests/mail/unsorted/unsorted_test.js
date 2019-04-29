@@ -122,7 +122,7 @@ Scenario('[C7382] Compose plain text mail', function (I, users) {
     I.see(testrailID + ' - ' + timestamp);
 });
 
-Scenario('[C7384] - Save draft', function (I, users) {
+Scenario('[C7384] Save draft', function (I, users) {
     const [user] = users;
     var testrailid = 'C7384';
     var text = Math.round(+new Date() / 1000);
