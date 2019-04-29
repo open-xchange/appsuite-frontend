@@ -401,7 +401,7 @@ Scenario('[C7403] Forward a single mail', function (I, users) {
     I.waitForText('Fwd: ' + testrailID + ' - ' + timestamp, 5, '.thread-view-header .subject');
 });
 
-Scenario('[C7404] - Reply to single mail', function (I, users) {
+Scenario('[C7404] Reply to single mail', function (I, users) {
     let [user] = users;
     var testrailID = 'C7404';
     var timestamp = Math.round(+new Date() / 1000);
