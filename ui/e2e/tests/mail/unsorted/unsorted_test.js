@@ -287,7 +287,7 @@ Scenario('[C7387] Send mail with attachment from upload', function (I, users) {
     });
 });
 
-Scenario('[C7388] - Send mail with different priorities', function (I, users) {
+Scenario('[C7388] Send mail with different priorities', function (I, users) {
     let [user] = users;
     var testrailID = 'C7388';
     var timestamp = Math.round(+new Date() / 1000);
