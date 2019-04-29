@@ -165,13 +165,6 @@ Scenario('[C236795] Visibility Flags', (I) => {
         // save
         I.click('Create', '.io-ox-calendar-edit-window');
         I.waitForDetached('.io-ox-calendar-edit-window', 5);
-
-        // TODO: check if this is wanted behavior
-        // for now close the sidepopup
-        I.waitForVisible('.io-ox-sidepopup');
-        I.click('~Close', '.io-ox-sidepopup');
-        I.waitForDetached('.io-ox-sidepopup');
-
     };
 
     const getAppointmentLocator = function (subject, labelAndIcon) {
