@@ -234,7 +234,13 @@ Scenario('[C7386] Write mail to CC recipients', function (I, users) {
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
 });
 
-Scenario('[C7387] - Send mail with attachment from upload', function (I, users) {
+function addFile(I, path) {
+    var ext = path.match(/\.(.{3,4})$/)[1];
+    I.attachFile('input[type=file]', path);
+    I.waitForText(ext.toUpperCase(), 5, '.inline-items.preview');
+}
+
+Scenario('[C7387] Send mail with attachment from upload', function (I, users) {
     let [user] = users;
     var testrailID = 'C7387';
     var timestamp = Math.round(+new Date() / 1000);
@@ -243,36 +249,42 @@ Scenario('[C7387] - Send mail with attachment from upload', function (I, users) 
     I.waitForVisible('.io-ox-mail-window');
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.wait(1);
-    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
-    I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
-    I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
-    I.attachFile('.io-ox-mail-compose-window input[type=file]', 'e2e/media/files/generic/testdocument.odt');
-    I.waitForElement('//div[contains(@class, "mail-attachment-list")]//div[contains(@class, "preview-container")]//span[contains(@class, "file")]/../div[contains(text(), "odt")]');
-    //I.see('Mail size: 4.6 KB');
-    I.attachFile('.io-ox-mail-compose-window input[type=file]', 'e2e/media/files/generic/testdocument.rtf');
-    I.waitForElement('//div[contains(@class, "mail-attachment-list")]//div[contains(@class, "preview-container")]//span[contains(@class, "file")]/../div[contains(text(), "rtf")]');
-    //I.see('Mail size: 43.5 KB');
-    I.attachFile('.io-ox-mail-compose-window input[type=file]', 'e2e/media/files/generic/testpresentation.ppsm');
-    I.waitForElement('//div[contains(@class, "mail-attachment-list")]//div[contains(@class, "preview-container")]//span[contains(@class, "file")]/../div[contains(text(), "ppsm")]');
-    //I.see('Mail size: 77.2 KB');
-    I.attachFile('.io-ox-mail-compose-window input[type=file]', 'e2e/media/files/generic/testspreadsheed.xlsm');
-    I.waitForElement('//div[contains(@class, "mail-attachment-list")]//div[contains(@class, "preview-container")]//span[contains(@class, "file")]/../div[contains(text(), "xlsm")]');
-    //I.see('Mail size: 86.9 KB');
-    I.click('Send');
+
+    within('.io-ox-mail-compose-window', function () {
+        I.say('Fill TO and SUBJECT', 'blue');
+        I.fillField('div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
+        I.fillField('[name="subject"]', '' + testrailID + ' - ' + timestamp);
+        I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
+        I.say('Add attachments', 'blue');
+        addFile(I, 'e2e/media/files/generic/testdocument.odt');
+        addFile(I, 'e2e/media/files/generic/testdocument.rtf');
+        addFile(I, 'e2e/media/files/generic/testpresentation.ppsm');
+        addFile(I, 'e2e/media/files/generic/testspreadsheed.xlsm');
+        I.say('Send mail and logout', 'blue');
+        I.click('Send');
+    });
+
     I.waitForDetached('.io-ox-mail-compose');
     I.logout();
+
+    I.say('relogin', 'blue');
     I.login('app=io.ox/mail', { user: users[1] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.click('//div[contains(@class, "io-ox-mail-detail-window")]//section[contains(@class, "attachments mail-attachment-list")]//a[contains(@class, "toggle-details")]');
-    I.wait(2);
-    I.seeElement('//div[contains(@class, "io-ox-mail-detail-window")]//section[contains(@class, "mail-attachment-list open")]//div[contains(@class, "list-container")]//li[contains(@title, "testdocument.odt")]');
-    I.seeElement('//div[contains(@class, "io-ox-mail-detail-window")]//section[contains(@class, "mail-attachment-list open")]//div[contains(@class, "list-container")]//li[contains(@title, "testdocument.rtf")]');
-    I.seeElement('//div[contains(@class, "io-ox-mail-detail-window")]//section[contains(@class, "mail-attachment-list open")]//div[contains(@class, "list-container")]//li[contains(@title, "testpresentation.ppsm")]');
-    I.seeElement('//div[contains(@class, "io-ox-mail-detail-window")]//section[contains(@class, "mail-attachment-list open")]//div[contains(@class, "list-container")]//li[contains(@title, "testspreadsheed.xlsm")]');
+
+    I.say('Open mail as floating window', 'blue');
     I.see(testrailID + ' - ' + timestamp);
+    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForVisible('.floating-window-content');
+    within('.floating-window-content .attachments.mail-attachment-list', function () {
+        I.say('Show attachments as list', 'blue');
+        I.click('.toggle-details[aria-expanded="false"]');
+        I.waitForVisible('.list-container');
+        I.see('testdocument.odt');
+        I.see('testdocument.rtf');
+        I.see('testpresentation.ppsm');
+        I.see('testspreadsheed.xlsm');
+    });
 });
 
 Scenario('[C7388] - Send mail with different priorities', function (I, users) {
