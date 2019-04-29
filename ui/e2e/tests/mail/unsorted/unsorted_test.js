@@ -698,7 +698,7 @@ Scenario('[C12121] Display and hide recipient fields', async function (I, users)
     I.waitForInvisible({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
 });
 
-Scenario('[C83384] - Automatically bcc all messages', async function (I) {
+Scenario('[C83384] Automatically bcc all messages', async function (I) {
     I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.haveSetting('io.ox/mail//autobcc', 'super01@ox.com');
     I.login('app=io.ox/settings');
