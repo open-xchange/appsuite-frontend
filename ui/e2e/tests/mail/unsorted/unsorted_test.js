@@ -326,7 +326,7 @@ Scenario('[C7388] Send mail with different priorities', function (I, users) {
     });
 });
 
-Scenario('[C7389] - Send mail with attached vCard', function (I, users) {
+Scenario('[C7389] Send mail with attached vCard', function (I, users) {
     let [user] = users;
     var testrailID = 'C7389';
     var timestamp = Math.round(+new Date() / 1000);
