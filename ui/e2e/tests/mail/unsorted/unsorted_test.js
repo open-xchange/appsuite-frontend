@@ -680,7 +680,7 @@ Scenario('[C12120] Recipient cartridge', async function (I, users) {
     });
 });
 
-Scenario('[C12121] - Display and hide recipient fields', async function (I, users) {
+Scenario('[C12121] Display and hide recipient fields', async function (I, users) {
     let [user] = users;
     I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
