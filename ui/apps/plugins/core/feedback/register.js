@@ -88,7 +88,7 @@ define('plugins/core/feedback/register', [
                         $('<i class="fa fa-star star" aria-hidden="true">')
                     );
                 }),
-                $('<caption aria-hidden="true">').text('\u00a0')
+                $('<caption aria-hidden="true">').text('\u00a0').addClass(_.browser.IE ? 'IE11' : '')
             );
 
             return this;

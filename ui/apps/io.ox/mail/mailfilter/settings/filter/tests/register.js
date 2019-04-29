@@ -959,6 +959,10 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         })
                     );
 
+                    // backport of fix for bug 61017
+                    li.find('> div.col-sm-4').removeClass('col-sm-4').addClass('col-sm-3');
+                    li.find('> div.col-sm-8').removeClass('col-sm-8').addClass('col-sm-9');
+
                     util.handleUnsupportedComparisonValues({
                         $li: li,
                         values: filterValues(condition.id, sizeValues),
