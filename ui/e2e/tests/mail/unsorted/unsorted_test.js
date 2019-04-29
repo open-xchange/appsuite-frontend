@@ -513,7 +513,7 @@ Scenario('[C8820] Forward attachments', function (I, users) {
     I.waitForText('Fwd: ' + testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
 });
 
-Scenario('[C8829] - Recipients autocomplete', async function (I, users) {
+Scenario('[C8829] Recipients autocomplete', async function (I, users) {
     let [user] = users;
     var testrailID = 'C7382';
     var timestamp = Math.round(+new Date() / 1000);
