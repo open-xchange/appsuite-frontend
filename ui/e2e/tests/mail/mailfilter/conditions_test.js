@@ -83,7 +83,7 @@ Scenario('[C7792] Filter mail on sender', async function (I, users) {
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
 
     I.click('Send');
-    I.waitForElement('~Sent objects, 1 total');
+    I.waitForElement('~Sent, 1 total');
     I.waitForElement('~Inbox, 1 unread, 1 total');
     I.seeElement('.vsplit .flag_2');
 
