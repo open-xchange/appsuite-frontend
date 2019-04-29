@@ -618,7 +618,7 @@ Scenario('[C12118] Remove recipients', async function (I, users) {
     });
 });
 
-Scenario('[C12119] - Edit recipients', async function (I, users) {
+Scenario('[C12119] Edit recipients', async function (I, users) {
     let [user] = users;
     I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
