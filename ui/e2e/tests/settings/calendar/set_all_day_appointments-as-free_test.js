@@ -46,7 +46,8 @@ Scenario('[C7866] Set all-day appointments to be marked as free', async function
     I.click('All day');
     I.fillField('description', description);
     I.click('Create');
-    I.waitForElement('.inline-toolbar-container');
+    I.waitForText('Automation of', '.appointment-content');
+    //I.waitForElement('.inline-toolbar-container');
     I.doubleClick('.weekday.today');
     I.waitForText('Participants can make changes');
     I.seeCheckboxIsChecked('transp');
@@ -67,7 +68,6 @@ Scenario('[C7866] Set all-day appointments to be marked as free', async function
     I.click('Create');
     I.waitForText('Conflicts detected');
     I.click('Ignore conflicts');
-    I.click(locate('.io-ox-sidepopup .close'));
     I.waitForDetached('.io-ox-sidepopup');
     I.doubleClick('.weekday.today');
     I.waitForText('Participants can make changes');
