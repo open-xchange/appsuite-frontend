@@ -78,7 +78,7 @@ Scenario('[C7789] Delete filter rule @contentReview', async function (I, users) 
     I.seeInField({ css: 'textarea.plain-text' }, 'Test text');
 
     I.click('Send');
-    I.waitForElement('~Sent objects, 1 total');
+    I.waitForElement('~Sent, 1 total');
 
     I.logout();
 
