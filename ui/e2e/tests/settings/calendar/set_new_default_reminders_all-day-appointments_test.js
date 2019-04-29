@@ -55,8 +55,12 @@ Scenario('[C244799] Set new default reminder for all-day appointments', async fu
     I.click('All day');
     I.fillField('description', 'description');
     I.click('Create');
-    I.waitForElement('.inline-toolbar-container');
+
+    I.waitForText('subject', '.appointment-content');
+    I.click('subject', '.appointment-content');
+
+    I.waitForVisible('.io-ox-sidepopup');
     I.click('Edit');
     I.waitForElement('.io-ox-calendar-edit');
-    I.see('Notify 1 day before start.');
+    I.waitForText('Notify 1 day before start.');
 });
