@@ -799,7 +799,8 @@ Scenario('[C207507] Forgot mail attachment hint', async function (I, users) {
     I.waitForDetached('.modal-open .modal-dialog', 5);
 });
 
-Scenario('[C273801] - Download infected file', async function (I, users) {
+// TODO: skipped until backend server with feautre support is available
+Scenario.skip('[C273801] Download infected file', async function (I, users) {
     let [user] = users;
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/Virus_attached!.eml' }, { user: users[0] });
     I.haveSetting('io.ox/mail//layout', 'vertical');
