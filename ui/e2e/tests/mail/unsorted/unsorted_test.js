@@ -716,7 +716,7 @@ Scenario('[C83384] Automatically bcc all messages', async function (I) {
     //TODO: After consultation with Markus a mail should also be sent and verified here
 });
 
-Scenario('[C101615] - Emojis', async function (I, users) {
+Scenario('[C101615] Emojis', async function (I, users) {
     let [user] = users;
     I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/C101615.eml' }, { user: users[0] });
     I.login('app=io.ox/mail', { user });
