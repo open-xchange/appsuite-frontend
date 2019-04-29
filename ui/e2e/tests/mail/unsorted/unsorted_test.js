@@ -730,7 +730,7 @@ Scenario('[C101615] Emojis', async function (I, users) {
     });
 });
 
-Scenario('[C101620] - Very long TO field', async function (I, users) {
+Scenario('[C101620] Very long TO field', async function (I, users) {
     let [user] = users;
     I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/C101620.eml' }, { user: users[0] });
     I.login('app=io.ox/mail', { user });
