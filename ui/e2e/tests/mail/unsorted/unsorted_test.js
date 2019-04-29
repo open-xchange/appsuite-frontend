@@ -436,7 +436,7 @@ Scenario('[C7404] Reply to single mail', function (I, users) {
     I.waitForText('Re: ' + testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
 });
 
-Scenario('[C8816] - Cancel mail compose', function (I, users) {
+Scenario('[C8816] Cancel mail compose', function (I, users) {
     let [user] = users;
     var testrailID = 'C8816';
     var timestamp = Math.round(+new Date() / 1000);
