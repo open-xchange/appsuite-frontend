@@ -57,6 +57,12 @@ module.exports.config = {
         } else {
             done();
         }
+
+        // set moment defaults
+        // note: no need to require moment-timezone later on. requiring moment is enough
+        var moment = require('moment');
+        require('moment-timezone');
+        moment.tz.setDefault('Europe/Berlin');
     },
     teardown: function () {
         //HACK: defer killing selenium, because it's still needed for a few ms
