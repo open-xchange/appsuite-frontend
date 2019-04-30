@@ -78,16 +78,16 @@ Scenario('[C7754] Delete several Task at the same time', async function (I, user
     I.waitForText('Empty', 5, '.vgrid');
 });
 
-Scenario('[C7755] Delete recurring Task', async function (I, users) {
-    let testrailID = 'C7755';
-    let testrailName = 'Delete recurring Task';
-    const taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] });
-    const task = {
+Scenario('[C7755] Delete recurring Task', async function (I) {
+    const testrailID = 'C7755',
+        testrailName = 'Delete recurring Task';
+
+    await I.haveTask({
         title: testrailID,
         note: testrailName,
         status: '1',
         percent_completed: '0',
-        folder_id: taskDefaultFolder,
+        folder_id: await I.grabDefaultFolder('tasks'),
         recurrence_type: 2,
         full_time: true,
         private_flag: false,
@@ -97,16 +97,15 @@ Scenario('[C7755] Delete recurring Task', async function (I, users) {
         end_time: 1551744000000,
         interval: 1,
         days: 2
-    };
-    I.haveTask(task, { user: users[0] });
-    I.login('app=io.ox/tasks', { user: users[0] });
+    });
+
+    I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.clickToolbar('Delete');
-    I.waitForElement('.io-ox-dialog-wrapper [role="dialog"]', 5);
-    I.waitForText('Do you really want to delete this task?', 5, '.io-ox-dialog-wrapper');
-    I.click('Delete', '.io-ox-dialog-wrapper');
-    I.waitForDetached('.io-ox-dialog-wrapper [role="dialog"]', 5);
-    I.waitForText('No elements selected', 5, '.task-detail-container .summary.empty');
-    I.waitForText('Empty', 5, '[aria-label="Task list"] .io-ox-fail');
-    I.logout();
+    I.waitForElement('.modal-body');
+    I.waitForText('Do you really want to delete this task?');
+    I.click('Delete', '.modal-footer');
+    I.waitForDetached('.modal-body');
+    I.waitForText('No elements selected');
+    I.waitForText('Empty', 5, '.vgrid');
 });
