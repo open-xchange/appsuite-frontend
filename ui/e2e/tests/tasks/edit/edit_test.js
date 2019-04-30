@@ -447,31 +447,24 @@ Scenario('[C7751] Close Task with the X', function (I) {
     I.click('~Close');
     I.waitForDetached('.io-ox-tasks-edit-window');
 });
-Scenario('[C7752] Close Task with the X after adding some information', async function (I) {
-    let testrailID = 'C7752';
-    let testrailName = 'Close Task with the X after adding some information';
+
+Scenario('[C7752] Close Task with the X after adding some information', function (I) {
+    const testrailID = 'C7752',
+        testrailName = 'Close Task with the X after adding some information';
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.clickToolbar('New');
     I.waitForVisible('.io-ox-tasks-edit-window');
     I.fillField('Subject', testrailID);
     I.fillField('Description', testrailName);
-    I.click('.floating-window-content button[data-action="close"]');
-    I.waitForElement('.io-ox-dialog-wrapper [role="alertdialog"]', 5);
-    I.waitForText('Do you really want to discard your changes?', 5, '.io-ox-dialog-wrapper');
+    I.click('Discard');
+    I.waitForText('Do you really want to discard your changes?');
     I.click('Cancel');
-    I.waitForDetached('.io-ox-dialog-wrapper [role="alertdialog"]', 5);
-    I.click('.floating-window-content button[data-action="close"]');
-    I.waitForElement('.io-ox-dialog-wrapper [role="alertdialog"]', 5);
-    I.waitForText('Do you really want to discard your changes?', 5, '.io-ox-dialog-wrapper');
+    I.click('~Close');
+    I.waitForText('Do you really want to discard your changes?');
     I.click('Cancel');
-    I.waitForDetached('.io-ox-dialog-wrapper [role="alertdialog"]', 5);
-    I.click('.floating-window-content button[data-action="close"]');
-    I.waitForElement('.io-ox-dialog-wrapper [role="alertdialog"]', 5);
-    I.waitForText('Do you really want to discard your changes?', 5, '.io-ox-dialog-wrapper');
+    I.click('~Close');
+    I.waitForText('Do you really want to discard your changes?');
     I.click('Discard changes');
-    I.waitForDetached('.io-ox-dialog-wrapper [role="alertdialog"]', 5);
-    I.waitForDetached('.floating-window-content .btn-primary[disabled=""][data-action="save"]', 5);
-    I.waitForDetached('.io-ox-tasks-edit-window[data-app-name="io.ox/tasks/edit"]', 5);
-    I.logout();
+    I.waitForDetached('.io-ox-tasks-edit-window');
 });
