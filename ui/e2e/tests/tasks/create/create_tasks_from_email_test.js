@@ -12,7 +12,7 @@
  */
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Tasks - Create');
+Feature('Tasks > Create');
 
 Before(async (users) => {
     await users.create();
@@ -52,7 +52,7 @@ Scenario('[C7737] Create Task from email', async (I, users) => {
             I.click('#io-ox-refresh-icon', '.taskbar');
             I.waitForElement('.launcher .fa-spin-paused', 5);
             I.wait(60);
-            console.log('No mail(s) found. Waiting 1 minute ...')
+            console.log('No mail(s) found. Waiting 1 minute ...');
             mailCount = await I.grabNumberOfVisibleElements('.list-item');
             retries--;
         } else {
@@ -87,7 +87,4 @@ Scenario('[C7737] Create Task from email', async (I, users) => {
 
     I.waitForVisible('~Task Details');
     I.see('Deutscher Meister 1.FC Köln', '.tasks-detailview');
-
-    I.logout();
-
 });
