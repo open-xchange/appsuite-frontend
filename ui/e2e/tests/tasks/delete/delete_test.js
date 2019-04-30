@@ -54,34 +54,30 @@ Scenario('[C7753] Delete single Task', async function (I, users) {
 });
 
 Scenario('[C7754] Delete several Task at the same time', async function (I, users) {
-    let testrailID = 'C7754';
-    let testrailName = 'Delete several Task at the same time';
-    const taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] });
-    let numberOfTasks = 3;
-    for (let i = 0; i < numberOfTasks; i++) {
-        let id = testrailID + ' - ' + i;
-        var task = {
-            title: id,
-            folder_id: taskDefaultFolder,
-            note: testrailName
-        };
-        I.haveTask(task, { user: users[0] });
+    const testrailID = 'C7754',
+        testrailName = 'Delete several Task at the same time',
+        taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] }),
+        numberOfTasks = 3;
+
+    for (let i = 1; i <= numberOfTasks; i++) {
+        I.haveTask({ title: `${testrailID} - ${i}`, folder_id: taskDefaultFolder, note: testrailName });
     }
-    I.login('app=io.ox/tasks', { user: users[0] });
+
+    I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.waitForElement('.tasks-detailview', 5);
-    I.click('[aria-label="Tasks toolbar"] .btn[title="Select all"]');
+    I.clickToolbar('.btn[title="Select all"]');
     I.seeNumberOfElements('li.selected.vgrid-cell', numberOfTasks);
-    I.waitForText(numberOfTasks + ' items selected', 5, '.task-detail-container .message');
+    I.waitForText(numberOfTasks + ' items selected', 5, '.task-detail-container');
     I.clickToolbar('Delete');
-    I.waitForElement('.io-ox-dialog-wrapper [role="dialog"]', 5);
-    I.waitForText('Do you really want to delete these tasks?', 5, '.io-ox-dialog-wrapper');
-    I.click('Delete', '.io-ox-dialog-wrapper');
-    I.waitForDetached('.io-ox-dialog-wrapper [role="dialog"]', 5);
-    I.waitForText('No elements selected', 5, '.task-detail-container .summary.empty');
-    I.waitForText('Empty', 5, '[aria-label="Task list"] .io-ox-fail');
-    I.logout();
+    I.waitForElement('.modal-body');
+    I.waitForText('Do you really want to delete these tasks?');
+    I.click('Delete', '.modal-footer');
+    I.waitForDetached('.modal-body');
+    I.waitForText('No elements selected');
+    I.waitForText('Empty', 5, '.vgrid');
 });
+
 Scenario('[C7755] Delete recurring Task', async function (I, users) {
     let testrailID = 'C7755';
     let testrailName = 'Delete recurring Task';
