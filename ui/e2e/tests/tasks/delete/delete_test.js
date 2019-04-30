@@ -24,35 +24,35 @@ After(async (users) => {
 });
 
 Scenario('[C7753] Delete single Task', async function (I, users) {
-    let testrailID = 'C7753';
-    let testrailName = 'Delete single Task';
-    const taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] });
-    const task = {
+    const testrailID = 'C7753';
+    const testrailName = 'Delete single Task';
+
+    await I.haveTask({
         title: testrailID,
         status: '1',
         percent_completed: '0',
-        folder_id: taskDefaultFolder,
+        folder_id: await I.grabDefaultFolder('tasks', { user: users[0] }),
         recurrence_type: '0',
         full_time: true,
         private_flag: false,
         timezone: 'Europe/Berlin',
         notification: true,
         note: testrailName
-    };
-    I.haveTask(task, { user: users[0] });
-    I.login('app=io.ox/tasks', { user: users[0] });
+    });
+
+    I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.waitForText(testrailID, 5, '.window-body');
     I.waitForText(testrailID, 5, '.tasks-detailview .title');
     I.clickToolbar('Delete');
-    I.waitForElement('.io-ox-dialog-wrapper [role="dialog"]', 5);
-    I.waitForText('Do you really want to delete this task?', 5, '.io-ox-dialog-wrapper');
-    I.click('Delete', '.io-ox-dialog-wrapper');
-    I.waitForDetached('.io-ox-dialog-wrapper [role="dialog"]', 5);
-    I.waitForText('No elements selected', 5, '.task-detail-container .summary.empty');
-    I.waitForText('Empty', 5, '[aria-label="Task list"] .io-ox-fail');
-    I.logout();
+    I.waitForElement('.modal-body', 5);
+    I.waitForText('Do you really want to delete this task?');
+    I.click('Delete', '.modal-footer');
+    I.waitForDetached('.modal-body', 5);
+    I.waitForText('No elements selected');
+    I.waitForText('Empty', 5, '.vgrid');
 });
+
 Scenario('[C7754] Delete several Task at the same time', async function (I, users) {
     let testrailID = 'C7754';
     let testrailName = 'Delete several Task at the same time';
