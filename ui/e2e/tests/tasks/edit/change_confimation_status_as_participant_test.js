@@ -13,7 +13,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Tasks - Edit');
+Feature('Tasks > Edit');
 
 Before(async (users) => {
     await users.create();
@@ -100,7 +100,4 @@ Scenario('[C125311] Change confimation status as participant', async function (I
         if (action === 'Accept') I.seeElement('.fa-check');
 
     });
-
-    I.logout();
-
 });
