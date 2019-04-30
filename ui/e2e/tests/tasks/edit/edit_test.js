@@ -23,43 +23,43 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7738] Edit task with all fields filled', async function (I, users) {
-    let testrailID = 'C7738';
-    let testrailName = 'Edit task with all fields filled';
-    const taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] });
-    const task = {
+Scenario('[C7738] Edit task with all fields filled', async function (I) {
+    const testrailID = 'C7738',
+        testrailName = 'Edit task with all fields filled';
+
+    I.haveTask({
         title: testrailID,
         status: '1',
         percent_completed: '0',
-        folder_id: taskDefaultFolder,
+        folder_id: await I.grabDefaultFolder('tasks'),
         recurrence_type: '0',
         full_time: true,
         private_flag: false,
         timezone: 'Europe/Berlin',
         notification: true,
         target_duration: '1337',
-        actual_duration: '1337',
-        target_costs: '1337',
-        actual_costs: '1337',
+        actual_duration: '1336',
+        target_costs: '1335',
+        actual_costs: '1334',
         trip_meter: '1337mm',
         billing_information: 'Don not know any Bill',
         companies: 'Open-Xchange GmbH',
         note: testrailName,
         currency: 'EUR'
-    };
-    I.haveTask(task, { user: users[0] });
-    I.login('app=io.ox/tasks', { user: users[0] });
+    });
+
+    I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
 
     I.waitForElement('.tasks-detailview', 5);
     I.see('Estimated duration in minutes');
     I.see('1337');
     I.see('Actual duration in minutes');
-    I.see('1337');
+    I.see('1336');
     I.see('Estimated costs');
-    I.see('1337 EUR');
+    I.see('1335 EUR');
     I.see('Actual costs');
-    I.see('1337 EUR');
+    I.see('1334 EUR');
     I.see('Distance');
     I.see('1337mm');
     I.see('Billing information');
@@ -69,33 +69,31 @@ Scenario('[C7738] Edit task with all fields filled', async function (I, users) {
 
     I.clickToolbar('Edit');
     I.waitForElement('.io-ox-tasks-edit', 5);
-    I.fillField({ css: '[name="target_duration"]' }, '1338');
-    I.fillField({ css: '[name="actual_duration"]' }, '1338');
-    I.fillField({ css: '[name="target_costs"]' }, '1338');
-    I.fillField({ css: '[name="actual_costs"]' }, '1338');
-    I.selectOption({ css: '[name="currency"]' }, 'RUB');
-    I.fillField({ css: '[name="trip_meter"]' }, '1338mm');
-    I.fillField({ css: '[name="billing_information"]' }, 'Yes, i know any Bill');
-    I.fillField({ css: '[name="companies"]' }, 'Open-Xchange Inc.');
+    I.fillField('Estimated duration in minutes', '1339');
+    I.fillField('Actual duration in minutes', '1338');
+    I.fillField('Estimated costs', '1339');
+    I.fillField('Actual costs', '1338');
+    I.selectOption('Currency', 'RUB');
+    I.fillField('Distance', '1338mm');
+    I.fillField('Billing information', 'Yes, i know any Bill');
+    I.fillField('Companies', 'Open-Xchange Inc.');
     I.click('Save');
 
     I.waitForDetached('.io-ox-tasks-edit', 5);
     I.dontSee('1337');
-    I.dontSee('1337');
-    I.dontSee('1337 EUR');
-    I.dontSee('1337 EUR');
+    I.dontSee('1336');
+    I.dontSee('1335 EUR');
+    I.dontSee('1334 EUR');
     I.dontSee('1337mm');
     I.dontSee('Don not know any Bill');
     I.dontSee('Open-Xchange GmbH');
+    I.see('1339');
     I.see('1338');
-    I.see('1338');
-    I.see('1338 RUB');
+    I.see('1339 RUB');
     I.see('1338 RUB');
     I.see('1338mm');
     I.see('Yes, i know any Bill');
     I.see('Open-Xchange Inc.');
-
-    I.logout();
 });
 
 Scenario('[C7739] Change tasks due date in dropdown', async function (I, users) {
