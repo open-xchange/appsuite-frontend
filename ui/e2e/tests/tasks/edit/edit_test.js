@@ -163,47 +163,31 @@ Scenario('[C7742] Mark Task as Undone', async function (I) {
     I.waitForText('Not started', 5, '.tasks-detailview .badge-notstarted');
 });
 
-Scenario('[C7743] Move single Task', async function (I, users) {
-    let testrailID = 'C7743';
-    let testrailName = 'Move single Task';
-    const taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] });
-    const task = {
-        title: testrailID,
-        folder_id: taskDefaultFolder,
-        note: testrailName
+Scenario('[C7743] Move single Task', async function (I) {
+    const testrailID = 'C7743',
+        testrailName = 'Move single Task',
+        taskDefaultFolder = await I.grabDefaultFolder('tasks');
 
-    };
-    I.haveTask(task, { user: users[0] });
-    const folder = {
-        module: 'tasks',
-        title: testrailID
-    };
-    I.createFolder(folder, taskDefaultFolder, { user: users[0] });
-    I.login('app=io.ox/tasks', { user: users[0] });
+    await I.createFolder({ module: 'tasks', title: testrailID }, taskDefaultFolder);
+    await I.haveTask({ title: testrailID, folder_id: taskDefaultFolder, note: testrailName });
+
+    I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-    //Dirty SHIT ! Need a helper for this
-    I.waitForElement('[aria-label="Tasks Toolbar"] .more-dropdown [data-action="more"]');
-    I.click('[aria-label="Tasks Toolbar"] .more-dropdown [data-action="more"]');
-    I.waitForElement('.smart-dropdown-container.open .dropdown-menu', 5);
-    I.clickToolbar('Move');
+    I.clickToolbar('~More actions');
+    I.click('Move');
     I.waitForText('Move', 5, '.modal-open .modal-title');
-    I.retry(3).click('.modal [data-id="virtual/flat/tasks/private"] div.folder-arrow');
-    I.waitForElement('.modal-dialog .open.folder.section', 5);
-    I.retry(3).click('.modal [aria-label="' + testrailID + '"]');
-    I.waitForElement('.modal .selected[aria-label="' + testrailID + '"]', 5);
-    I.waitForEnabled('.modal-footer button.btn-primary');
-    I.click('Move', 'div.modal-footer');
-    I.waitForDetached('.modal');
+    I.waitForElement('.modal .section .folder-arrow');
+    I.click('.modal .section .folder-arrow');
+    I.waitForElement(`.modal .section.open [aria-label="${testrailID}"]`, 5);
+    I.click(`.modal [aria-label="${testrailID}"]`);
+    I.waitForEnabled('.modal button.btn-primary');
+    I.click('Move', '.modal');
+    I.waitForDetached('.modal,.launcher-icon.fa-refresh.fa-spin');
     I.selectFolder(testrailID);
-    I.waitForElement('[aria-label="C7743, ."]');
-    I.click('[aria-label="C7743, ."]');
-    //Dirty SHIT ! Need a helper for this
-    I.waitForElement('.tasks-detailview', 5);
+    I.waitForElement(locate('.vgrid-cell').withText(testrailID));
+    I.click(locate('.vgrid-cell').withText(testrailID));
     I.waitForText(testrailID, 5, '.tasks-detailview .title');
     I.waitForText(testrailID, 5, '[role="navigation"] .title');
-
-
-    I.logout();
 });
 Scenario('[C7744] Mark several task as done at the same time', async function (I, users) {
     let testrailID = 'C7744';
