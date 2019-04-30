@@ -350,33 +350,29 @@ Scenario('[C7748] Remove an attachment from a Task', async function (I) {
 });
 
 Scenario('[C7749] Edit existing Task as participant', async function (I, users) {
-    let testrailID = 'C7749';
-    let testrailName = 'Edit existing Task as participant';
-    const taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] });
-    const task = {
+    const testrailID = 'C7749',
+        testrailName = 'Edit existing Task as participant';
+    I.haveTask({
         title: testrailID,
         status: '1',
         percent_completed: '0',
-        folder_id: taskDefaultFolder,
+        folder_id: await I.grabDefaultFolder('tasks'),
         recurrence_type: '0',
         full_time: true,
         private_flag: false,
         timezone: 'Europe/Berlin',
         notification: true,
         note: testrailName,
-        participants: [{
-            id: users[1].userdata.id,
-            type: 1
-        }]
-    };
-    I.haveTask(task, { user: users[0] });
+        participants: [{ id: users[1].userdata.id, type: 1 }]
+    });
+
     I.login('app=io.ox/tasks', { user: users[1] });
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.waitForText(testrailID, 5, '.window-body');
     I.waitForText(testrailID, 5, '.tasks-detailview .title');
     I.clickToolbar('Edit');
     I.waitForElement('[data-app-name="io.ox/tasks/edit"]', 5);
-    I.waitForElement('.floating-window-content .container.io-ox-tasks-edit', 5);
+    I.waitForElement('.io-ox-tasks-edit', 5);
     I.fillField('Subject', testrailID + ' - 2');
     I.fillField('Description', testrailName + ' - 2');
     I.click('Save');
@@ -384,11 +380,10 @@ Scenario('[C7749] Edit existing Task as participant', async function (I, users) 
     I.waitForText(testrailID + ' - 2', 5, '.tasks-detailview .title');
     I.logout();
 
-    I.login('app=io.ox/tasks', { user: users[0] });
+    I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.waitForText(testrailID + ' - 2', 5, '.window-body');
     I.waitForText(testrailID + ' - 2', 5, '.tasks-detailview .title');
-    I.logout();
 });
 Scenario('[C7750] Edit existing Task in a shared folder', async function (I, users) {
     let testrailID = 'C7750';
