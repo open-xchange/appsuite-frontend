@@ -300,18 +300,12 @@ Scenario('[C7746] Move several tasks to an other folder at the same time', async
     }
 });
 
-Scenario('[C7747] Add an attachment to a Task', async function (I, users) {
-    let testrailID = 'C7747';
-    let testrailName = 'Add an attachment to a Task';
-    const taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] });
-    const task = {
-        title: testrailID,
-        folder_id: taskDefaultFolder,
-        note: testrailName
+Scenario('[C7747] Add an attachment to a Task', async function (I) {
+    const testrailID = 'C7747',
+        testrailName = 'Add an attachment to a Task';
+    await I.haveTask({ title: testrailID, folder_id: await I.grabDefaultFolder('tasks'), note: testrailName });
 
-    };
-    I.haveTask(task, { user: users[0] });
-    I.login('app=io.ox/tasks', { user: users[0] });
+    I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.waitForElement('.tasks-detailview', 5);
     I.clickToolbar('Edit');
@@ -325,8 +319,8 @@ Scenario('[C7747] Add an attachment to a Task', async function (I, users) {
     I.waitForText(testrailID, 10, '.tasks-detailview .title');
     I.waitForText('Attachments', 10, '.tasks-detailview .attachments');
     I.waitForText('testdocument.odt', 10, '.tasks-detailview [data-dropdown="io.ox/core/tk/attachment/links"]');
-    I.logout();
 });
+
 Scenario('[C7748] Remove an attachment from a Task', async function (I, users) {
     let testrailID = 'C7747';
     let testrailName = 'Remove an attachment from a Task';
