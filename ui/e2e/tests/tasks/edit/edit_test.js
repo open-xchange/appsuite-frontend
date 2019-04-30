@@ -115,18 +115,10 @@ Scenario('[C7739] Change tasks due date in dropdown', async function (I) {
     });
 });
 
-Scenario('[C7740] Edit Task', async function (I, users) {
-    let testrailID = 'C7740';
-    let testrailName = 'Edit Task';
-    const taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] });
-    const task = {
-        title: testrailID,
-        folder_id: taskDefaultFolder,
-        note: testrailName
-
-    };
-    I.haveTask(task, { user: users[0] });
-    I.login('app=io.ox/tasks', { user: users[0] });
+Scenario('[C7740] Edit Task', async function (I) {
+    const testrailID = 'C7740';
+    await I.haveTask({ title: testrailID, folder_id: await I.grabDefaultFolder('tasks'), note: 'Edit Task' });
+    I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.waitForElement('.tasks-detailview', 5);
     I.clickToolbar('Edit');
@@ -138,7 +130,6 @@ Scenario('[C7740] Edit Task', async function (I, users) {
     I.waitForDetached('.io-ox-tasks-edit', 5);
     I.waitForText(testrailID + ' - 2', 5, '.tasks-detailview .title');
     I.waitForText(testrailID + ' - 2', 5, '[role="navigation"] .title');
-    I.logout();
 });
 
 Scenario('[C7741] Mark Task as Done', async function (I, users) {
