@@ -8,10 +8,11 @@
  * © 2017 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Daniel Pondruff <daniel.pondruff@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('testrail - distributionlists @codeReview');
+Feature('Contacts > Distributionlists');
 
 Before(async function (users) {
     await users.create();
@@ -24,475 +25,244 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7372] Create new distribution list', function (I, users) {
-    var testrailID = 'C7372';
-    var timestamp = Math.round(+new Date() / 1000);
-
+function prepare(I) {
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
     I.waitForVisible('.classic-toolbar [data-action]');
-    I.doubleClick('~My address books');
+    // I.doubleClick('~My address books');
     I.selectFolder('Contacts');
     I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
+    I.waitForElement('.contact-grid-container');
+}
+
+function uniqueName(testrailID) {
+    const timestamp = Math.round(+new Date() / 1000);
+    return `${testrailID} - ${timestamp}`;
+}
+
+async function createDistributionListExample(I, users, testrailID) {
+    const display_name = uniqueName(testrailID),
+        distribution_list = [];
+    for (let i = 0; i <= 3; i++) {
+        distribution_list.push({
+            display_name: users[i].userdata.display_name,
+            folder_id: 6,
+            id: users[i].userdata.id,
+            mail: users[i].userdata.primaryEmail,
+            mail_field: 1
+        });
+    }
+    await I.haveContact({
+        display_name: display_name,
+        folder_id: await I.grabDefaultFolder('contacts'),
+        mark_as_distributionlist: true,
+        distribution_list: distribution_list
+    });
+    return display_name;
+}
+
+Scenario('[C7372] Create new distribution list', function (I, users) {
+    const display_name = uniqueName('C7372');
+    prepare(I);
+
     I.clickToolbar('New');
-    I.waitForElement('.open.dropdown [data-action="io.ox/contacts/actions/distrib"]');
-    //I.click('Add distribution list');
-    I.click('.open.dropdown [data-action="io.ox/contacts/actions/distrib"]');
-    I.waitForVisible('.floating-window-content .create-distributionlist.container');
-    I.fillField('Name', testrailID + ' - ' + timestamp);
-    I.fillField('Add contact', users[0].userdata.primaryEmail);
-    I.pressKey('Enter');
-    I.fillField('Add contact', users[1].userdata.primaryEmail);
-    I.pressKey('Enter');
-    I.fillField('Add contact', users[2].userdata.primaryEmail);
-    I.pressKey('Enter');
-    I.fillField('Add contact', users[3].userdata.primaryEmail);
-    I.pressKey('Enter');
+    I.click('Add distribution list');
+    I.waitForVisible('.floating-window-content');
+    I.fillField('Name', display_name);
+    for (let i = 0; i <= 3; i++) {
+        I.fillField('Add contact', users[i].userdata.primaryEmail);
+        I.pressKey('Enter');
+    }
     I.click('Create list');
-    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.wait(3);
-    I.retry(5).doubleClick('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.see(testrailID + ' - ' + timestamp);
+    I.waitForDetached('.floating-window-content');
+    I.waitForElement(`~${display_name}`);
+    I.doubleClick(`~${display_name}`);
+    I.waitForText(display_name);
     I.see('Distribution list with 4 entries');
-    I.see(users[0].userdata.primaryEmail);
-    I.see(users[1].userdata.primaryEmail);
-    I.see(users[2].userdata.primaryEmail);
-    I.see(users[3].userdata.primaryEmail);
+    for (let i = 0; i <= 3; i++) I.see(users[i].userdata.primaryEmail);
 });
 
 Scenario('[C7373] Modify distribution list members', async function (I, users) {
-    var testrailID = 'C7373';
-    var timestamp = Math.round(+new Date() / 1000);
+    const display_name = await createDistributionListExample(I, users, 'C7373');
+    prepare(I);
 
-    const contact2 = {
-        display_name: '' + testrailID + ' - ' + timestamp + '',
-        folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
-        mark_as_distributionlist: true,
-        distribution_list: [{
-            display_name: users[0].userdata.display_name,
-            folder_id: 6,
-            id: users[0].userdata.id,
-            mail: users[0].userdata.primaryEmail,
-            mail_field: 1
-        }, {
-            display_name: users[1].userdata.display_name,
-            folder_id: 6,
-            id: users[1].userdata.id,
-            mail: users[1].userdata.primaryEmail,
-            mail_field: 1
-        }, {
-            display_name: users[2].userdata.display_name,
-            folder_id: 6,
-            id: users[2].userdata.id,
-            mail: users[2].userdata.primaryEmail,
-            mail_field: 1
-        }, {
-            display_name: users[3].userdata.display_name,
-            folder_id: 6,
-            id: users[3].userdata.id,
-            mail: users[3].userdata.primaryEmail,
-            mail_field: 1
-        }
-        ]
-    };
-    await I.haveContact(contact2, { user: users[0] });
-    I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.waitForText(testrailID + ' - ' + timestamp, 5, '.contact-detail .display_name');
-    I.waitForText('Distribution list with 4 entries', 5, '.contact-detail .header-job span');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[0].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[1].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[2].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[3].userdata.primaryEmail + '"]');
+    I.waitForElement(`~${display_name}`);
+    I.click(`~${display_name}`);
+    I.waitForText(display_name, 5, '.contact-detail .display_name');
+    I.waitForText('Distribution list with 4 entries');
+    for (let i = 0; i <= 3; i++) I.seeElement(locate('.participant-email a').withText(users[i].userdata.primaryEmail));
     I.clickToolbar('Edit');
     I.waitForElement('.form-control.add-participant.tt-input');
     I.fillField('.form-control.add-participant.tt-input', 'john.doe@open-xchange.com');
     I.pressKey('Enter');
     I.click('Save');
-    I.waitForText(testrailID + ' - ' + timestamp, 5, '.contact-detail .display_name');
+    I.waitForDetached('.floating-window');
+    I.waitForText(display_name, 5, '.contact-detail .display_name');
     I.waitForText('Distribution list with 5 entries', 5, '.contact-detail .header-job span');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[0].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[1].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[2].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[3].userdata.primaryEmail + '"]');
+    for (let i = 0; i <= 3; i++) I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[i].userdata.primaryEmail + '"]');
     I.waitForElement('.contact-detail .participant-email [href="mailto:john.doe@open-xchange.com"]');
     I.clickToolbar('Edit');
-    I.waitForElement('//*[contains(@class, "create-distributionlist container")]//a[contains(text(), "' + users[0].userdata.primaryEmail + '")]/../..//a[contains(@class, "remove")]');
-    I.click('//*[contains(@class, "create-distributionlist container")]//a[contains(text(), "' + users[0].userdata.primaryEmail + '")]/../..//a[contains(@class, "remove")]');
-    I.waitForElement('//*[contains(@class, "create-distributionlist container")]//a[contains(text(), "' + users[1].userdata.primaryEmail + '")]/../..//a[contains(@class, "remove")]');
-    I.click('//*[contains(@class, "create-distributionlist container")]//a[contains(text(), "' + users[1].userdata.primaryEmail + '")]/../..//a[contains(@class, "remove")]');
+    for (let i = 0; i <= 1; i++) {
+        const removeButton = locate('.remove').after(locate('.participant-email a').withText(users[i].userdata.primaryEmail).inside('.removable')).as('remove button');
+        I.waitForElement(removeButton);
+        I.click(removeButton);
+    }
     I.click('Save');
-    I.waitForText(testrailID + ' - ' + timestamp, 5, '.contact-detail .display_name');
+    I.waitForDetached('.floating-window');
+    I.waitForText(display_name, 5, '.contact-detail .display_name');
     I.waitForText('Distribution list with 3 entries', 5, '.contact-detail .header-job span');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[2].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[3].userdata.primaryEmail + '"]');
+    for (let i = 2; i <= 3; i++) I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[i].userdata.primaryEmail + '"]');
     I.waitForElement('.contact-detail .participant-email [href="mailto:john.doe@open-xchange.com"]');
     I.see('Distribution list with 3 entries');
-    I.see(users[2].userdata.primaryEmail);
-    I.see(users[3].userdata.primaryEmail);
+    for (let i = 2; i <= 3; i++) I.see(users[i].userdata.primaryEmail);
     I.see('john.doe@open-xchange.com');
 });
 
 Scenario('[C7374] Modify distribution list name', async function (I, users) {
-    var testrailID = 'C7374';
-    var timestamp = Math.round(+new Date() / 1000);
-    const contact2 = {
-        display_name: '' + testrailID + ' - ' + timestamp + '',
-        folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
-        mark_as_distributionlist: true,
-        distribution_list: [{
-            display_name: users[0].userdata.display_name,
-            folder_id: 6,
-            id: users[0].userdata.id,
-            mail: users[0].userdata.primaryEmail,
-            mail_field: 1
-        }, {
-            display_name: users[1].userdata.display_name,
-            folder_id: 6,
-            id: users[1].userdata.id,
-            mail: users[1].userdata.primaryEmail,
-            mail_field: 1
-        }, {
-            display_name: users[2].userdata.display_name,
-            folder_id: 6,
-            id: users[2].userdata.id,
-            mail: users[2].userdata.primaryEmail,
-            mail_field: 1
-        }, {
-            display_name: users[3].userdata.display_name,
-            folder_id: 6,
-            id: users[3].userdata.id,
-            mail: users[3].userdata.primaryEmail,
-            mail_field: 1
-        }
-        ]
-    };
-    await I.haveContact(contact2, { user: users[0] });
-    I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+    const testrailID = 'C7374',
+        display_name = await createDistributionListExample(I, users, testrailID),
+        new_name = `${display_name} - ${testrailID}`;
+    prepare(I);
 
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    I.waitForElement('.contact-grid-container');
-    I.retry(5).click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.waitForText(testrailID + ' - ' + timestamp);
+    I.waitForElement(`~${display_name}`);
+    I.click(`~${display_name}`);
     I.waitForText('Distribution list with 4 entries');
-    I.see(users[0].userdata.primaryEmail);
-    I.see(users[1].userdata.primaryEmail);
-    I.see(users[2].userdata.primaryEmail);
-    I.see(users[3].userdata.primaryEmail);
-    //Edit
+    for (let i = 0; i <= 3; i++) I.see(users[i].userdata.primaryEmail);
     I.clickToolbar('Edit');
     I.waitForElement('[name="display_name"]');
-    I.fillField('[name="display_name"]', testrailID + ' - ' + timestamp + ' - ' + testrailID);
+    I.fillField('[name="display_name"]', new_name);
     I.click('Save');
-    I.retry(5).click('[aria-label="' + testrailID + ' - ' + timestamp + ' - ' + testrailID + '"]');
-    I.see(testrailID + ' - ' + timestamp + ' - ' + testrailID);
+    I.retry(5).click(`~${new_name}`);
+    I.see(new_name);
     I.see('Distribution list with 4 entries');
-    I.see(users[0].userdata.primaryEmail);
-    I.see(users[1].userdata.primaryEmail);
-    I.see(users[2].userdata.primaryEmail);
-    I.see(users[3].userdata.primaryEmail);
+    for (let i = 0; i <= 3; i++) I.see(users[i].userdata.primaryEmail);
 });
 
 Scenario('[C7375] Move a distribution list', async function (I, users) {
-    var testrailID = 'C7375';
-    var timestamp = Math.round(+new Date() / 1000);
-    const contact2 = {
-        display_name: '' + testrailID + ' - ' + timestamp + '',
-        folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
-        mark_as_distributionlist: true,
-        distribution_list: [{
-            display_name: users[0].userdata.display_name,
-            folder_id: 6,
-            id: users[0].userdata.id,
-            mail: users[0].userdata.primaryEmail,
-            mail_field: 1
-        }, {
-            display_name: users[1].userdata.display_name,
-            folder_id: 6,
-            id: users[1].userdata.id,
-            mail: users[1].userdata.primaryEmail,
-            mail_field: 1
-        }, {
-            display_name: users[2].userdata.display_name,
-            folder_id: 6,
-            id: users[2].userdata.id,
-            mail: users[2].userdata.primaryEmail,
-            mail_field: 1
-        }, {
-            display_name: users[3].userdata.display_name,
-            folder_id: 6,
-            id: users[3].userdata.id,
-            mail: users[3].userdata.primaryEmail,
-            mail_field: 1
-        }
-        ]
-    };
-    await I.haveContact(contact2, { user: users[0] });
-    I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
+    const testrailID = 'C7375',
+        display_name = await createDistributionListExample(I, users, testrailID);
+    prepare(I);
+
     I.click('Add new address book');
-    I.waitForElement('.modal-open [data-point="io.ox/core/folder/add-popup"]');
+    I.waitForElement('.modal-body');
     I.fillField('[placeholder="New address book"][type="text"]', testrailID);
     I.click('Add');
-    I.waitForDetached('.modal-open [data-point="io.ox/core/folder/add-popup"]');
-    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.click('[aria-label="Address Book Toolbar"] .more-dropdown a');
-    I.click('.dropdown.open [data-action="io.ox/contacts/actions/move"]');
-    I.waitForElement('.modal [data-id="virtual/flat/contacts/private"] div.folder-arrow');
-    I.click('.modal [data-id="virtual/flat/contacts/private"] div.folder-arrow');
-    I.waitForElement('.modal [aria-label="' + testrailID + '"]');
-    I.click('.modal [aria-label="' + testrailID + '"]');
-    I.waitForDetached('.btn-primary[disabled=""]');
-    I.click('[type="button"][data-action="ok"]');
+    I.waitForDetached('.modal-body');
+    I.waitForElement(`~${display_name}`);
+    I.retry(3).click(`~${display_name}`);
+
+    I.clickToolbar('~More actions');
+    I.click('Move');
+    I.waitForText('Move', 5, '.modal-open .modal-title');
+    I.waitForElement('.modal .section .folder-arrow');
+    I.click('.modal .section .folder-arrow');
+    I.waitForElement(`.modal .section.open [aria-label="${testrailID}"]`, 5);
+    I.click(`.modal [aria-label="${testrailID}"]`);
+    I.waitForEnabled('.modal button.btn-primary');
+    I.click('Move', '.modal');
+    I.waitForDetached('.modal,.launcher-icon.fa-refresh.fa-spin');
     I.selectFolder('Contacts');
-    I.waitForDetached('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForDetached(`~${display_name}`);
     I.selectFolder(testrailID);
-    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.retry(3).click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.waitForText(testrailID + ' - ' + timestamp, 5, '.contact-detail .display_name');
+    I.waitForElement(`~${display_name}`);
+    I.retry(3).click(`~${display_name}`);
+    I.waitForText(display_name, 5, '.contact-detail .display_name');
     I.waitForText('Distribution list with 4 entries', 5, '.contact-detail .header-job span');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[0].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[1].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[2].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[3].userdata.primaryEmail + '"]');
+    for (let i = 0; i <= 3; i++) I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[i].userdata.primaryEmail + '"]');
 });
 
 Scenario('[C7376] Send a mail to distribution list', async function (I, users) {
-    var testrailID = 'C7376';
-    var timestamp = Math.round(+new Date() / 1000);
-    const contact2 = {
-        display_name: '' + testrailID + ' - ' + timestamp + '',
-        folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
-        mark_as_distributionlist: true,
-        distribution_list: [{
-            display_name: users[0].userdata.display_name,
-            folder_id: 6,
-            id: users[0].userdata.id,
-            mail: users[0].userdata.primaryEmail,
-            mail_field: 1
-        }, {
-            display_name: users[1].userdata.display_name,
-            folder_id: 6,
-            id: users[1].userdata.id,
-            mail: users[1].userdata.primaryEmail,
-            mail_field: 1
-        }, {
-            display_name: users[2].userdata.display_name,
-            folder_id: 6,
-            id: users[2].userdata.id,
-            mail: users[2].userdata.primaryEmail,
-            mail_field: 1
-        }, {
-            display_name: users[3].userdata.display_name,
-            folder_id: 6,
-            id: users[3].userdata.id,
-            mail: users[3].userdata.primaryEmail,
-            mail_field: 1
-        }
-        ]
-    };
-    await I.haveContact(contact2, { user: users[0] });
-    I.haveSetting('io.ox/mail//messageFormat', 'text');
+    await I.haveSetting('io.ox/mail//messageFormat', 'text');
+    const testrailID = 'C7376',
+        display_name = await createDistributionListExample(I, users, testrailID);
+    prepare(I);
 
-    I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.waitForText(testrailID + ' - ' + timestamp, 5, '.contact-detail .display_name');
+    I.waitForElement(`~${display_name}`);
+    I.retry(3).click(`~${display_name}`);
+    I.waitForText(display_name, 5, '.contact-detail .display_name');
     I.waitForText('Distribution list with 4 entries', 5, '.contact-detail .header-job span');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[0].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[1].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[2].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[3].userdata.primaryEmail + '"]');
+    for (let i = 0; i <= 3; i++) I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[i].userdata.primaryEmail + '"]');
     I.clickToolbar('Send email');
-    I.waitForVisible({ css: 'textarea.plain-text' });
+    I.waitForVisible('.plain-text');
     I.waitForElement('.io-ox-mail-compose [name="subject"]');
-    I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
-    I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
+    I.fillField('.io-ox-mail-compose [name="subject"]', '' + display_name);
+    I.fillField({ css: 'textarea.plain-text' }, '' + display_name);
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.logout();
 
-    I.login('app=io.ox/mail', { user: users[0] });
-    I.selectFolder('Inbox');
-    I.waitForVisible('.selected .contextmenu-control');
-    I.waitForElement('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
-    I.logout();
-
-    I.login('app=io.ox/mail', { user: users[1] });
-    I.selectFolder('Inbox');
-    I.waitForVisible('.selected .contextmenu-control');
-    I.waitForElement('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
-    I.logout();
-
-    I.login('app=io.ox/mail', { user: users[2] });
-    I.selectFolder('Inbox');
-    I.waitForVisible('.selected .contextmenu-control');
-    I.waitForElement('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
-    I.logout();
-
-    I.login('app=io.ox/mail', { user: users[3] });
-    I.selectFolder('Inbox');
-    I.waitForVisible('.selected .contextmenu-control');
-    I.waitForElement('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
+    for (let i = 0; i <= 3; i++) {
+        I.login('app=io.ox/mail', { user: users[i] });
+        I.selectFolder('Inbox');
+        I.waitForVisible('.selected .contextmenu-control');
+        I.waitForElement('[title="' + display_name + '"]');
+        I.click('[title="' + display_name + '"]');
+        I.waitForText(display_name, 5, '.mail-detail-pane .subject');
+        if (i < 3) I.logout();
+    }
 });
 
 Scenario('[C7377] Copy distribution list', async function (I, users) {
-    var testrailID = 'C7377';
-    var timestamp = Math.round(+new Date() / 1000);
-    const contact2 = {
-        display_name: '' + testrailID + ' - ' + timestamp + '',
-        folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
-        mark_as_distributionlist: true,
-        distribution_list: [{
-            display_name: users[0].userdata.display_name,
-            folder_id: 6,
-            id: users[0].userdata.id,
-            mail: users[0].userdata.primaryEmail,
-            mail_field: 1
-        }, {
-            display_name: users[1].userdata.display_name,
-            folder_id: 6,
-            id: users[1].userdata.id,
-            mail: users[1].userdata.primaryEmail,
-            mail_field: 1
-        }, {
-            display_name: users[2].userdata.display_name,
-            folder_id: 6,
-            id: users[2].userdata.id,
-            mail: users[2].userdata.primaryEmail,
-            mail_field: 1
-        }, {
-            display_name: users[3].userdata.display_name,
-            folder_id: 6,
-            id: users[3].userdata.id,
-            mail: users[3].userdata.primaryEmail,
-            mail_field: 1
-        }
-        ]
-    };
-    await I.haveContact(contact2, { user: users[0] });
-    I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+    const testrailID = 'C7377',
+        display_name =  await createDistributionListExample(I, users, testrailID);
+    prepare(I);
 
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
     I.click('Add new address book');
-    I.waitForElement('.modal-open [data-point="io.ox/core/folder/add-popup"]');
-    I.waitForElement('[placeholder="New address book"][type="text"]');
-    I.fillField('[placeholder="New address book"][type="text"]', testrailID);
+    I.waitForElement('.modal-body');
+    I.fillField('Address book name', testrailID);
     I.click('Add');
-    I.waitForDetached('.modal-open [data-point="io.ox/core/folder/add-popup"]');
-    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.waitForText(testrailID + ' - ' + timestamp, 5, '.contact-detail .display_name');
+    I.waitForDetached('.modal-body');
+    I.waitForElement(`~${display_name}`);
+    I.click(`~${display_name}`);
+    I.waitForText(display_name, 5, '.contact-detail .display_name');
     I.waitForText('Distribution list with 4 entries', 5, '.contact-detail .header-job span');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[0].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[1].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[2].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[3].userdata.primaryEmail + '"]');
-    I.click('[aria-label="Address Book Toolbar"] .more-dropdown a');
-    I.click('.dropdown.open [data-action="io.ox/contacts/actions/copy"]');
-    I.waitForElement('.modal [data-id="virtual/flat/contacts/private"] div.folder-arrow');
-    I.click('.modal [data-id="virtual/flat/contacts/private"] div.folder-arrow');
-    I.waitForElement('.modal [aria-label="' + testrailID + '"]');
-    I.click('.modal [aria-label="' + testrailID + '"]');
-    I.click('[type="button"][data-action="ok"]');
-    I.selectFolder('Contacts');
-    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.waitForText(testrailID + ' - ' + timestamp, 5, '.contact-detail .display_name');
-    I.waitForText('Distribution list with 4 entries', 5, '.contact-detail .header-job span');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[0].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[1].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[2].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[3].userdata.primaryEmail + '"]');
-    I.selectFolder(testrailID);
-    I.waitForElement('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.retry(3).click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
-    I.waitForText(testrailID + ' - ' + timestamp, 5, '.contact-detail .display_name');
-    I.waitForText('Distribution list with 4 entries', 5, '.contact-detail .header-job span');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[0].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[1].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[2].userdata.primaryEmail + '"]');
-    I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[3].userdata.primaryEmail + '"]');
+    for (let i = 0; i <= 3; i++) I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[i].userdata.primaryEmail + '"]');
+
+    I.clickToolbar('~More actions');
+    I.click('Copy');
+    I.waitForText('Copy', 5, '.modal-open .modal-title');
+    I.waitForElement('.modal .section .folder-arrow');
+    I.click('.modal .section .folder-arrow');
+    I.waitForElement(`.modal .section.open [aria-label="${testrailID}"]`, 5);
+    I.click(`.modal [aria-label="${testrailID}"]`);
+    I.click('Copy', '.modal-footer');
+    I.waitForDetached('.modal-body');
+
+    ['Contacts', testrailID].forEach(function (folderName) {
+        I.selectFolder(folderName);
+        I.waitForElement(`~${display_name}`);
+        I.retry(3).click(`~${display_name}`);
+        I.waitForText(display_name, 5, '.contact-detail .display_name');
+        I.waitForText('Distribution list with 4 entries', 5, '.contact-detail .header-job span');
+        for (let i = 0; i <= 3; i++) I.waitForElement('.contact-detail .participant-email [href="mailto:' + users[i].userdata.primaryEmail + '"]');
+    });
 });
 
-Scenario('[C7378] Delete multiple distribution lists', async function (I, users, search) {
-    var testrailID = 'C7378';
-    var timestamp = Math.round(+new Date() / 1000);
+Scenario('[C7378] Delete multiple distribution lists', async function (I, search) {
+    const display_name = uniqueName('C7378'),
+        defaultFolder = await I.grabDefaultFolder('contacts'),
+        distributionLists = [];
+    for (let i = 1; i <= 2; i++) distributionLists.push(I.haveContact({ display_name: display_name + ' - ' + i, folder_id: defaultFolder, mark_as_distributionlist: true }));
+    await Promise.all(distributionLists);
+    prepare(I);
 
-    const contact1 = {
-        display_name: '' + testrailID + ' - ' + timestamp + ' - 1',
-        folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
-        mark_as_distributionlist: true
-
-    };
-    const contact2 = {
-        display_name: '' + testrailID + ' - ' + timestamp + ' - 2',
-        folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
-        mark_as_distributionlist: true
-
-    };
-    I.haveContact(contact1, { user: users[0] });
-    I.haveContact(contact2, { user: users[0] });
-
-    I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    search.doSearch(testrailID + ' - ' + timestamp);
+    search.doSearch(display_name);
     I.click('.select-all');
     I.clickToolbar('Delete');
-    I.click('[role="alertdialog"] [type="button"][data-action="delete"]');
-    I.wait(1);
-    I.dontSee(testrailID + ' - ' + timestamp + ' - 1');
-    I.dontSee(testrailID + ' - ' + timestamp + ' - 2');
+    I.click('Delete', '.modal-footer');
+    I.waitForDetached('.modal-body');
+    I.waitForText('No matching items found.');
+    for (let i = 1; i <= 2; i++) I.dontSee(`${display_name} - ${i}`);
 });
 
-Scenario('[C7379] Delete distribution list', async function (I, users) {
-    var testrailID = 'C7379';
-    var timestamp = Math.round(+new Date() / 1000);
+Scenario('[C7379] Delete distribution list', async function (I) {
+    const display_name = uniqueName('C7379');
+    await I.haveContact({ display_name: display_name, folder_id: await I.grabDefaultFolder('contacts'), mark_as_distributionlist: true });
+    prepare(I);
 
-    const contact = {
-        display_name: '' + testrailID + ' - ' + timestamp + '',
-        folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
-        mark_as_distributionlist: true
-
-    };
-    I.haveContact(contact, { user: users[0] });
-    I.login('app=io.ox/contacts');
-    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
-    I.waitForVisible('.classic-toolbar [data-action]');
-    I.selectFolder('Contacts');
-    I.wait(1);
-    I.click('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.click(`~${display_name}`);
     I.clickToolbar('Delete');
-    I.click('.btn-primary');
-
-    I.dontSee('[aria-label="' + testrailID + ' - ' + timestamp + '"]');
+    I.click('Delete', '.modal-footer');
+    I.waitForDetached('.modal-body');
+    I.dontSee(`~${display_name}`);
 });
