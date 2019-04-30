@@ -67,9 +67,9 @@ define('io.ox/settings/main', [
                 'virtual/settings/io.ox/timezones': 'ox.appsuite.user.sect.calendar.manage.timezones.html',
                 'virtual/settings/io.ox/contacts': 'ox.appsuite.user.sect.contacts.settings.html',
                 'virtual/settings/io.ox/files': 'ox.appsuite.user.sect.drive.settings.html',
-                'virtual/settings/io.ox/portal': 'ox.appsuite.user.sect.portal.customize.settings.html',
+                'virtual/settings/io.ox/portal': 'ox.appsuite.user.sect.portal.settings.html',
                 'virtual/settings/io.ox/tasks': 'ox.appsuite.user.sect.tasks.settings.html',
-                'virtual/settings/io.ox/office': 'ox.documents.user.sect.text.settings.html',
+                'virtual/settings/io.ox/office': 'ox.documents.user.sect.documents.settings.html',
                 'virtual/settings/io.ox/core/sub': 'ox.appsuite.user.sect.dataorganisation.subscribe.html',
                 'virtual/settings/io.ox/core/downloads': 'ox.appsuite.user.sect.settings.clients.html',
                 'virtual/settings/administration/groups': 'ox.appsuite.user.sect.calendar.groups.html',
@@ -84,7 +84,7 @@ define('io.ox/settings/main', [
 
         ext.point('io.ox/settings/help/mapping').invoke('list', data);
 
-        return data[id] ? data[id] : 'ox.appsuite.user.sect.firststeps.globalsettings.html';
+        return data[id] ? data[id] : 'ox.appsuite.user.chap.settings.html';
     };
 
     app.setLauncher(function (options) {
