@@ -189,21 +189,20 @@ Scenario('[C7743] Move single Task', async function (I) {
     I.waitForText(testrailID, 5, '.tasks-detailview .title');
     I.waitForText(testrailID, 5, '[role="navigation"] .title');
 });
-Scenario('[C7744] Mark several task as done at the same time', async function (I, users) {
-    let testrailID = 'C7744';
-    let testrailName = 'Mark several task as done at the same time';
-    const taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] });
-    let numberOfTasks = 3;
-    for (let i = 0; i < numberOfTasks; i++) {
-        let id = testrailID + ' - ' + i;
-        var task = {
-            title: id,
-            folder_id: taskDefaultFolder,
-            note: testrailName
-        };
-        I.haveTask(task, { user: users[0] });
+
+Scenario('[C7744] Mark several task as done at the same time', async function (I) {
+    const testrailID = 'C7744',
+        testrailName = 'Mark several task as done at the same time',
+        numberOfTasks = 3,
+        folder_id = await I.grabDefaultFolder('tasks'),
+        tasks = [];
+
+    for (let i = 1; i <= numberOfTasks; i++) {
+        tasks.push(I.haveTask({ title: `${testrailID} - ${i}`, folder_id: folder_id, note: testrailName }));
     }
-    I.login('app=io.ox/tasks', { user: users[0] });
+    await Promise.all(tasks);
+
+    I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.waitForElement('.tasks-detailview', 5);
     I.click('[aria-label="Tasks toolbar"] .btn[title="Select all"]');
@@ -211,18 +210,18 @@ Scenario('[C7744] Mark several task as done at the same time', async function (I
     I.waitForText(numberOfTasks + ' items selected', 5, '.task-detail-container .message');
     I.clickToolbar('Done');
     I.retry(5).seeNumberOfElements('[aria-label="Task list"][role="navigation"] .badge-done.status', numberOfTasks);
-    for (let i = 0; i < numberOfTasks; i++) {
+    for (let i = 1; i <= numberOfTasks; i++) {
         let id = testrailID + ' - ' + i;
-        I.click('[role="navigation"][aria-label="Task list"] [aria-label="' + testrailID + ' - ' + i + ', Done."]');
-        I.waitForElement('[role="navigation"][aria-label="Task list"] [aria-label="' + testrailID + ' - ' + i + ', Done."].selected', 5);
+        I.click('[role="navigation"][aria-label="Task list"] [aria-label="' + id + ', Done."]');
+        I.waitForElement('[role="navigation"][aria-label="Task list"] [aria-label="' + id + ', Done."].selected', 5);
         I.waitForElement('.tasks-detailview', 5);
         I.waitForText(id, 5, '.tasks-detailview .title');
         I.waitForText('Progress 100 %', 5, '.tasks-detailview .task-progress');
         I.waitForText('Done', 5, '.tasks-detailview .badge-done.state');
         I.waitForText('Date completed', 5);
     }
-    I.logout();
 });
+
 Scenario('[C7745] Mark several Task as Undone at the same time', async function (I, users) {
     let testrailID = 'C7745';
     let testrailName = 'Mark several Task as Undone at the same time';
