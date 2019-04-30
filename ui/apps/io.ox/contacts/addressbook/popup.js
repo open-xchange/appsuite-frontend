@@ -824,6 +824,8 @@ define('io.ox/contacts/addressbook/popup', [
         .build(options.build)
         .on({
             'close': function () {
+                // reset folder to default
+                folder = 'all';
                 isOpen = false;
             },
             'error': function (e) {

@@ -441,6 +441,7 @@ define('io.ox/calendar/api', [
             },
 
             remove: function (list, options) {
+                options = _.extend({}, options);
                 api.trigger('beforedelete', list);
                 list = _.isArray(list) ? list : [list];
 

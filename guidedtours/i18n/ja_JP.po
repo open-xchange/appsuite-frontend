@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-11-06 21:26+0100\n"
+"PO-Revision-Date: 2019-04-18 12:46+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -98,14 +98,15 @@ msgstr ""
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The calendar views"
-msgstr "予定表ビュー"
+msgstr "カレンダービュー"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
 "The calendar views display a calendar sheet with the appointments for the "
 "selected time range."
 msgstr ""
-"予定表ビューでは、選択された時間軸で、予定表シートに予定が表示されます。"
+"カレンダービューでは、選択された時間軸で、カレンダーシートに予定が表示されま"
+"す。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The List view"
@@ -117,8 +118,8 @@ msgid ""
 "clicking on an appointment, the appointment's data and some functions are "
 "displayed in the Detail view."
 msgstr ""
-"リストビューには、現在のフォルダにある予定の一覧が表示されます。予定をクリッ"
-"クすると、その予定のデータと機能が詳細ビューに表示されます。"
+"リストビューには、現在のフォルダーにある予定の一覧が表示されます。予定をク"
+"リックすると、その予定のデータと機能が詳細ビューに表示されます。"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "Creating a new contact"
@@ -186,7 +187,7 @@ msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Folder tree"
-msgstr "フォルダツリー"
+msgstr "フォルダーツリー"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -195,21 +196,22 @@ msgid ""
 "life easier, we have already included folders for your Documents, Music, "
 "Pictures and Videos."
 msgstr ""
-"左側にフォルダツリーが表示されます。フォルダ構造が表示され、特定のフォルダや"
-"サブフォルダ間を移動することができます。ドキュメントフォルダ、音楽フォルダ、"
-"画像フォルダおよびビデオフォルダを含めれば、より簡単に行えます。"
+"左側にフォルダーツリーが表示されます。フォルダー構造が表示され、特定のフォル"
+"ダーやサブフォルダー間を移動することができます。ドキュメントフォルダー、音楽"
+"フォルダー、画像フォルダーおよびビデオフォルダーを含めれば、より簡単に行えま"
+"す。"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Folder content"
-msgstr "フォルダ内容"
+msgstr "フォルダー内容"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "Clicking on a folder displays all the subfolders, documents, media and other "
 "files that it contains."
 msgstr ""
-"フォルダをクリックすると、サブフォルダ、ドキュメント、メディア、その他のファ"
-"イルのすべてが表示されます。"
+"フォルダーをクリックすると、サブフォルダー、ドキュメント、メディア、その他の"
+"ファイルのすべてが表示されます。"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Select a view"
@@ -228,7 +230,7 @@ msgid ""
 "At the top you can find the toolbar with many functions and additional "
 "options. You can easily create new folders, new files and much more."
 msgstr ""
-"機能や追加のオプションのツールバーが上側に表示されます。新規フォルダや新規"
+"機能や追加のオプションのツールバーが上側に表示されます。新規フォルダーや新規"
 "ファイルなどが簡単に作成できます。"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -290,10 +292,10 @@ msgid ""
 "and edit files. Or just get a link to let others view and download your "
 "files. You can use an expiration date and password protection if you like."
 msgstr ""
-"ファイルやフォルダの共有方法を２つの方法から選びます。アクセス権限を管理し、"
-"宛先がファイルの作成や編集をできるようにしたい場合は、招待を使用します。また"
-"は、リンクで他の人にファイルを表示したり、ダウンロードできるようにします。利"
-"用期限やパスワード保護を使用することもできます。"
+"ファイルやフォルダーの共有方法を２つの方法から選びます。アクセス権限を管理"
+"し、宛先がファイルの作成や編集をできるようにしたい場合は、招待を使用します。"
+"または、リンクで他の人にファイルを表示したり、ダウンロードできるようにしま"
+"す。利用期限やパスワード保護を使用することもできます。"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Collaborating"
@@ -401,15 +403,15 @@ msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Opening or closing the folder tree"
-msgstr "フォルダツリーを開く、閉じる"
+msgstr "フォルダーツリーを開閉する"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
 msgstr ""
-"フォルダツリーを開いたり閉じるには、ツールバーの右側にある [ビュー] → [フォル"
-"ダ ビュー] の順にクリックします。"
+"フォルダーツリーを開いたり閉じるには、ツールバーの右側にある [ビュー] → [フォ"
+"ルダ ビュー] の順にクリックします。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -434,15 +436,15 @@ msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
-msgstr "フォルダツリー"
+msgstr "フォルダーツリー"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
 msgstr ""
-"目的のオブジェクトを一覧に表示するには、フォルダツリーでそのオブジェクトが保"
-"存されているフォルダを開きます。"
+"目的のオブジェクトを一覧に表示するには、フォルダーツリーでそのオブジェクトが"
+"保存されているフォルダーを開きます。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
@@ -683,8 +685,8 @@ msgid ""
 "To open the settings, click the user image on the upper right side of the "
 "menu bar. Select Settings."
 msgstr ""
-"設定を表示するには、メニューバーの右上のユーザイメージをクリックします。設定 "
-"を選択します。"
+"設定を表示するには、メニューバーの右上のユーザーイメージをクリックします。設"
+"定 を選択します。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
@@ -719,41 +721,41 @@ msgid ""
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"ヘルプを表示するには、メニューバーの右上のユーザイメージをクリックします。ヘ"
-"ルプを選択します。現在選択されているアプリケーションのヘルプを表示します。ヘ"
-"ルプをすべて参照するには、ウィンドウの上にあるスタートページまたは目次をク"
+"ヘルプを表示するには、メニューバーの右上のユーザーイメージをクリックします。"
+"ヘルプを選択します。現在選択されているアプリケーションのヘルプを表示します。"
+"ヘルプをすべて参照するには、ウィンドウの上にあるスタートページまたは目次をク"
 "リックします。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
-msgstr "サインアウト"
+msgstr "ログアウト"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
 msgstr ""
-"サインアウトするには、メニューバーの右上のシステムメニューアイコンをクリック"
-"します。サインアウトを選択します。"
+"ログアウトするには、メニューバーの右上のシステムメニューアイコンをクリックし"
+"ます。ログアウトを選択します。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
-"サインアウトするには、メニューバーの右上のサインアウトアイコンをクリックしま"
-"す。サインアウトを選択します。"
+"ログアウトするには、メニューバーの右上のログアウトアイコンをクリックします。"
+"ログアウトを選択します。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating a new task"
-msgstr "新規の仕事の作成"
+msgstr "新規のタスクの作成"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To create a new task, click on New in the toolbar."
-msgstr "新規の仕事を作成するには、ツールバーで、[新規] をクリックします。"
+msgstr "新規のタスクを作成するには、ツールバーで、[新規] をクリックします。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Entering the task's data"
-msgstr "仕事のデータの入力"
+msgstr "タスクのデータの入力"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Enter the subject, the start date, and a description."
@@ -769,19 +771,19 @@ msgstr "詳細情報を追加するには、[フォームを展開] をクリッ
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating recurring tasks"
-msgstr "繰り返しの仕事の作成"
+msgstr "繰り返しのタスクの作成"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid ""
 "To create recurring tasks, enable Repeat. Functions for setting the "
 "recurrence parameters are shown."
 msgstr ""
-"繰り返しの仕事を作成するには、[繰り返しの予定] を有効にします。繰り返しのパラ"
-"メータを設定するための機能が表示されます。"
+"繰り返しのタスクを作成するには、[繰り返しの予定] を有効にします。繰り返しのパ"
+"ラメータを設定するための機能が表示されます。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To not miss the task, use the reminder function."
-msgstr "仕事を見逃さないようにするには、アラーム機能を使用します。"
+msgstr "タスクを見逃さないようにするには、アラーム機能を使用します。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Tracking the editing status"
@@ -797,7 +799,7 @@ msgid ""
 "Participants. You can add documents as attachment to the task."
 msgstr ""
 "他の人に予定への招待するには、[参加者] の下にあるフィールドに招待する人の名前"
-"を入力します。仕事にドキュメントを追加すれば、添付ファイルを作成できます。"
+"を入力します。タスクにドキュメントを追加すれば、添付ファイルを作成できます。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Entering billing information"
@@ -809,24 +811,24 @@ msgstr "支払条件を入力するには、[詳細を表示] をクリックし
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating the task"
-msgstr "仕事の作成"
+msgstr "タスクの作成"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To create the task, click on Create."
-msgstr "仕事の作成には、作成をクリックします。"
+msgstr "タスクの作成には、作成をクリックします。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Sorting tasks"
-msgstr "仕事のソート"
+msgstr "タスクのソート"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To sort the tasks, click on Sort by. Select a sort criteria."
 msgstr ""
-"仕事をソートするには、ソート条件をクリックします。ソート条件を選択します。"
+"タスクをソートするには、ソート条件をクリックします。ソート条件を選択します。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
-msgstr "複数の仕事の編集"
+msgstr "複数のタスクの編集"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid ""
@@ -834,8 +836,8 @@ msgid ""
 "the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
 "on the right side of the toolbar."
 msgstr ""
-"複数の仕事を一度に編集するには、メールの左側にあるチェックボックスを有効にし"
-"ます。チェックボックスが表示されていない場合は、ツールバーの右側にある "
+"複数のタスクを一度に編集するには、メールの左側にあるチェックボックスを有効に"
+"します。チェックボックスが表示されていない場合は、ツールバーの右側にある "
 "[ビュー] → [チェックボックス] の順にクリックします。"
 
 #~ msgid " %1$s (%2$s) "
@@ -1018,8 +1020,8 @@ msgstr ""
 
 #~ msgid "%d task"
 #~ msgid_plural "%d tasks"
-#~ msgstr[0] "%d 件の仕事 "
-#~ msgstr[1] "%d 件の仕事 "
+#~ msgstr[0] "%d 件のタスク "
+#~ msgstr[1] "%d 件のタスク "
 
 #~ msgid "%d week"
 #~ msgid_plural "%d weeks"
@@ -1043,10 +1045,10 @@ msgstr ""
 #~ msgstr "&添付ファイル"
 
 #~ msgid "&Distribution List"
-#~ msgstr "&配布リスト"
+#~ msgstr "&予定"
 
 #~ msgid "&Distributionlist"
-#~ msgstr "&配布リスト"
+#~ msgstr "&予定"
 
 #~ msgid "&E-Mail"
 #~ msgstr "&メール"
@@ -1058,7 +1060,7 @@ msgstr ""
 #~ msgstr "&フラグ"
 
 #~ msgid "&Folder permissions"
-#~ msgstr "&フォルダ権限"
+#~ msgstr "&フォルダー権限"
 
 #~ msgid "&Messaging"
 #~ msgstr "&メッセージング"
@@ -1067,7 +1069,7 @@ msgstr ""
 #~ msgstr "&新規"
 
 #~ msgid "&New Task"
-#~ msgstr "&新規の仕事"
+#~ msgstr "&新規のタスク"
 
 #~ msgid "&Save"
 #~ msgstr "&保存"
@@ -1285,7 +1287,7 @@ msgstr ""
 #~ msgstr "承諾/辞退"
 
 #~ msgid "Accept Party-Crasher"
-#~ msgstr "出席者以外の人を許可"
+#~ msgstr "参加者以外の人を許可"
 
 #~ msgid "Accept and replace exception"
 #~ msgstr "例外を承諾して置換"
@@ -1294,10 +1296,10 @@ msgstr ""
 #~ msgstr "変更を承諾"
 
 #~ msgid "Accept extra participant"
-#~ msgstr "追加の出席者を承諾"
+#~ msgstr "追加の参加者を承諾"
 
 #~ msgid "Accept invitation"
-#~ msgstr "出席依頼を承諾"
+#~ msgstr "招待を承諾"
 
 #~ msgid "Accept/Decline"
 #~ msgstr "承諾/辞退"
@@ -1409,7 +1411,7 @@ msgstr ""
 #~ msgstr "連絡先を追加"
 
 #~ msgid "Add distribution list"
-#~ msgstr "配布リストを追加"
+#~ msgstr "予定を追加"
 
 #~ msgid "Add feed"
 #~ msgstr "フィードを追加"
@@ -1418,10 +1420,10 @@ msgstr ""
 #~ msgstr "ファイルを追加"
 
 #~ msgid "Add folder"
-#~ msgstr "フォルダを追加"
+#~ msgstr "フォルダーを追加"
 
 #~ msgid "Add folder menu"
-#~ msgstr "フォルダ追加メニュー"
+#~ msgstr "フォルダー追加メニュー"
 
 #~ msgid "Add from addressbook"
 #~ msgstr "アドレス帳から追加"
@@ -1439,13 +1441,13 @@ msgstr ""
 #~ msgstr "新規連絡先を追加"
 
 #~ msgid "Add new folder"
-#~ msgstr "新規フォルダを追加"
+#~ msgstr "新規フォルダーを追加"
 
 #~ msgid "Add new folder for this subscription"
-#~ msgstr "この登録用に新規フォルダを追加"
+#~ msgstr "この登録用に新規フォルダーを追加"
 
 #~ msgid "Add new participant"
-#~ msgstr "新規出席者を追加"
+#~ msgstr "新規参加者を追加"
 
 #~ msgid "Add new rule"
 #~ msgstr "新規のルールを追加"
@@ -1454,16 +1456,16 @@ msgstr ""
 #~ msgstr "新規の署名を追加"
 
 #~ msgid "Add new subfolder"
-#~ msgstr "新規サブフォルダを追加"
+#~ msgstr "新規サブフォルダーを追加"
 
 #~ msgid "Add note"
 #~ msgstr "メモを追加"
 
 #~ msgid "Add participant"
-#~ msgstr "出席者を追加"
+#~ msgstr "参加者を追加"
 
 #~ msgid "Add participant/resource"
-#~ msgstr "出席者/設備を追加"
+#~ msgstr "参加者/設備を追加"
 
 #~ msgid "Add picture"
 #~ msgstr "写真を追加"
@@ -1478,7 +1480,7 @@ msgstr ""
 #~ msgstr "署名を追加"
 
 #~ msgid "Add subfolder"
-#~ msgstr "サブフォルダを追加"
+#~ msgstr "サブフォルダーを追加"
 
 #~ msgid "Add subject"
 #~ msgstr "件名を追加"
@@ -1487,13 +1489,13 @@ msgstr ""
 #~ msgstr "アドレス帳に追加"
 
 #~ msgid "Add to calendar"
-#~ msgstr "予定表に追加"
+#~ msgstr "カレンダーに追加"
 
 #~ msgid "Add to portal"
 #~ msgstr "ポータルに追加"
 
 #~ msgid "Add user"
-#~ msgstr "ユーザを追加"
+#~ msgstr "ユーザーを追加"
 
 #~ msgid "Add widget"
 #~ msgstr "ウィジェットを追加"
@@ -1502,7 +1504,7 @@ msgstr ""
 #~ msgstr "アカウントを追加"
 
 #~ msgid "Added the new participant"
-#~ msgstr "新規出席者が追加されました。"
+#~ msgstr "新規参加者が追加されました。"
 
 #~ msgid "Adding subscription. This may take some seconds..."
 #~ msgstr "登録を追加しています。この処理には数秒かかる場合があります。"
@@ -1739,10 +1741,10 @@ msgstr ""
 
 #~| msgid "Add folder"
 #~ msgid "All folders"
-#~ msgstr "フォルダを追加"
+#~ msgstr "フォルダーを追加"
 
 #~ msgid "All users"
-#~ msgstr "すべてのユーザ"
+#~ msgstr "すべてのユーザー"
 
 #~ msgid "Allow html formatted emails"
 #~ msgstr "HTML フォーマットのメールを許可"
@@ -2027,7 +2029,7 @@ msgstr ""
 #~ msgstr "記念日:"
 
 #~ msgid "Another user"
-#~ msgstr "他のユーザ"
+#~ msgstr "他のユーザー"
 
 #~ msgid "Answered"
 #~ msgstr "回答済み"
@@ -2098,11 +2100,10 @@ msgstr ""
 
 #~ msgid ""
 #~ "Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open"
-#~ msgstr ""
-#~ "アポイントへの出席依頼: %1$s %2$s %3$s %4$s %5$s Enter キーで開きます。"
+#~ msgstr "アポイントへの招待: %1$s %2$s %3$s %4$s %5$s Enter キーで開きます。"
 
 #~ msgid "Appointment invitations"
-#~ msgstr "アポイントへの出席依頼"
+#~ msgstr "アポイントへの招待"
 
 #~ msgid "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
 #~ msgstr "アポイントのアラーム: %1$s %2$s %3$s %4$s Enter キーで開きます。"
@@ -2114,10 +2115,10 @@ msgstr ""
 #~ msgstr "アポイント"
 
 #~ msgid "Appointments in personal calendars: set status to"
-#~ msgstr "個人予定表のアポイント: ステータスを次に設定"
+#~ msgstr "個人カレンダーのアポイント: ステータスを次に設定"
 
 #~ msgid "Appointments in public calendars: set status to"
-#~ msgstr "パブリック予定表のアポイント: ステータスを次に設定"
+#~ msgstr "パブリックカレンダーのアポイント: ステータスを次に設定"
 
 #~ msgid "Appointments:"
 #~ msgstr "アポイント:"
@@ -2135,8 +2136,8 @@ msgstr ""
 #~ "Are you sure you want to delete all E-Mails from this folder? The deleted "
 #~ "E-Mails will be moved to the Trash folder."
 #~ msgstr ""
-#~ "このフォルダからすべてのメールを削除しますか？削除されたメールはごみ箱フォ"
-#~ "ルダに移動されます。"
+#~ "このフォルダーからすべてのメールを削除しますか？削除されたメールはごみ箱"
+#~ "フォルダに移動されます。"
 
 #~ msgid "Are you sure you want to delete selected item?"
 #~ msgstr "選択されたアイテムを削除しますか？"
@@ -2161,7 +2162,7 @@ msgstr ""
 #~ msgstr[1] "選択された連絡先を削除しますか？"
 
 #~ msgid "Are you sure you want to delete the selected folder?"
-#~ msgstr "選択されたフォルダを削除しますか？"
+#~ msgstr "選択されたフォルダーを削除しますか？"
 
 #~ msgid "Are you sure you want to delete the selected items?"
 #~ msgstr "選択されたアイテムを削除しますか？"
@@ -2198,8 +2199,8 @@ msgstr ""
 #~ "Are you sure you want to permanently delete all E-Mails from this folder? "
 #~ "The deleted E-Mails will be irrevocably lost."
 #~ msgstr ""
-#~ "このフォルダからすべてのメールを完全に削除しますか？削除されたメールは復元"
-#~ "できなくなります。"
+#~ "このフォルダーからすべてのメールを完全に削除しますか？削除されたメールは復"
+#~ "元できなくなります。"
 
 #~ msgid "Are you sure?"
 #~ msgstr "続行しますか？"
@@ -2406,7 +2407,7 @@ msgstr ""
 #~ msgstr "アジア/エレヴァン"
 
 #~ msgid "Ask for new invitation"
-#~ msgstr "新規の出席依頼を要求"
+#~ msgstr "新規の招待を要求"
 
 #~ msgid "Ask for return receipt"
 #~ msgstr "開封通知を要求"
@@ -2421,8 +2422,8 @@ msgstr ""
 #~ "At the top of the display area the path to the selected folder is shown. "
 #~ "Click on the path to switch to another folder."
 #~ msgstr ""
-#~ "選択したフォルダのパスは、表示エリアの最上部に表示されます。このパスをク"
-#~ "リックすると、該当するフォルダに切り替わります。"
+#~ "選択したフォルダーのパスは、表示エリアの最上部に表示されます。このパスをク"
+#~ "リックすると、該当するフォルダーに切り替わります。"
 
 #~ msgid "Atlantic/Azores"
 #~ msgstr "アトランティック/アソーレス諸島"
@@ -2567,25 +2568,25 @@ msgstr ""
 #~ "Automatically collect contacts in the folder \"Collected addresses\" "
 #~ "while reading"
 #~ msgstr ""
-#~ "メールの表示時に \"収集済みアドレス\" フォルダに連絡先を自動的に収集"
+#~ "メールの表示時に \"収集済みアドレス\" フォルダーに連絡先を自動的に収集"
 
 #~ msgid ""
 #~ "Automatically collect contacts in the folder \"Collected addresses\" "
 #~ "while reading?"
 #~ msgstr ""
-#~ "メールの表示時に \"収集済みアドレス\" フォルダに連絡先を自動的に収集"
+#~ "メールの表示時に \"収集済みアドレス\" フォルダーに連絡先を自動的に収集"
 
 #~ msgid ""
 #~ "Automatically collect contacts in the folder \"Collected addresses\" "
 #~ "while sending"
 #~ msgstr ""
-#~ "メールの送信時に \"収集済みアドレス\" フォルダに連絡先を自動的に収集"
+#~ "メールの送信時に \"収集済みアドレス\" フォルダーに連絡先を自動的に収集"
 
 #~ msgid ""
 #~ "Automatically collect contacts in the folder \"Collected addresses\" "
 #~ "while sending?"
 #~ msgstr ""
-#~ "メールの送信時に \"収集済みアドレス\" フォルダに連絡先を自動的に収集"
+#~ "メールの送信時に \"収集済みアドレス\" フォルダーに連絡先を自動的に収集"
 
 #~ msgid ""
 #~ "Automatically delete a notification mail after it has been accepted or "
@@ -2838,29 +2839,29 @@ msgstr ""
 #~ msgstr "CalDAV URL"
 
 #~ msgid "Calendar"
-#~ msgstr "予定表"
+#~ msgstr "カレンダー"
 
 #~ msgctxt "app"
 #~ msgid "Calendar"
-#~ msgstr "予定表"
+#~ msgstr "カレンダー"
 
 #~ msgid "Calendar custom view"
-#~ msgstr "予定表のカスタム ビュー"
+#~ msgstr "カレンダーのカスタム ビュー"
 
 #~ msgid "Calendar day view"
-#~ msgstr "予定表の日ビュー"
+#~ msgstr "カレンダーの日ビュー"
 
 #~ msgid "Calendar month view"
-#~ msgstr "予定表 月ビュー"
+#~ msgstr "カレンダー 月ビュー"
 
 #~ msgid "Calendar views"
-#~ msgstr "予定表ビュー"
+#~ msgstr "カレンダービュー"
 
 #~ msgid "Calendar week view"
-#~ msgstr "予定表週ビュー"
+#~ msgstr "カレンダー週ビュー"
 
 #~ msgid "Calendar workweek view"
-#~ msgstr "予定表の稼働日ビュー"
+#~ msgstr "カレンダーの稼働日ビュー"
 
 #~ msgid "Cambodia"
 #~ msgstr "カンボジア"
@@ -2869,7 +2870,8 @@ msgstr ""
 #~ msgstr "カメルーン"
 
 #~ msgid "Can not create appointment in a folder other than appointment folder"
-#~ msgstr "アポイント フォルダ以外のフォルダには、アポイントを作成できません。"
+#~ msgstr ""
+#~ "アポイント フォルダー以外のフォルダーには、アポイントを作成できません。"
 
 #~ msgid "Canada"
 #~ msgstr "カナダ"
@@ -2893,19 +2895,19 @@ msgstr ""
 #~ msgstr "この連絡先に送信したメッセージが見つかりません。"
 
 #~ msgid "Cannot find user with given name."
-#~ msgstr "指定した名前のユーザが見つかりません。"
+#~ msgstr "指定した名前のユーザーが見つかりません。"
 
 #~ msgid "Cannot move default folders."
-#~ msgstr "既定のフォルダは移動できません。"
+#~ msgstr "既定のフォルダーは移動できません。"
 
 #~ msgid "Cannot move folder into itself."
-#~ msgstr "フォルダをそのフォルダ自身に移動することはできません。"
+#~ msgstr "フォルダーをそのフォルダー自身に移動することはできません。"
 
 #~ msgid "Cannot move shared folder."
-#~ msgstr "共有フォルダは移動できません。"
+#~ msgstr "共有フォルダーは移動できません。"
 
 #~ msgid "Cannot move system folder."
-#~ msgstr "システム フォルダを移動できません。"
+#~ msgstr "システム フォルダーを移動できません。"
 
 #~ msgid "Cannot print this item"
 #~ msgid_plural "Cannot print these items"
@@ -2993,13 +2995,13 @@ msgstr ""
 #~ msgstr "期限を変更"
 
 #~ msgid "Change folder"
-#~ msgstr "フォルダを変更"
+#~ msgstr "フォルダーを変更"
 
 #~ msgid "Change password"
 #~ msgstr "パスワードを変更"
 
 #~ msgid "Change password and sign out"
-#~ msgstr "パスワードを変更し、サインアウトしてください。"
+#~ msgstr "パスワードを変更し、ログアウトしてください。"
 
 #~ msgid "Change state"
 #~ msgstr "ステータスを変更"
@@ -3183,7 +3185,7 @@ msgstr ""
 
 #~| msgid "Folder view"
 #~ msgid "Close folder view"
-#~ msgstr "フォルダ ビュー"
+#~ msgstr "フォルダー ビュー"
 
 #~ msgid "Close quick config"
 #~ msgstr "クイック構成を閉じる"
@@ -3292,7 +3294,7 @@ msgstr ""
 #~ msgstr "確認ステータス"
 
 #~ msgid "Confirmation status for new appointments in a personal folder"
-#~ msgstr "個人用フォルダにある新規アポイントの確認ステータス"
+#~ msgstr "個人用フォルダーにある新規アポイントの確認ステータス"
 
 #~ msgid "Confirmed"
 #~ msgstr "確認"
@@ -3322,13 +3324,13 @@ msgstr ""
 #~ msgstr "連絡先の詳細"
 
 #~ msgid "Contact folder..."
-#~ msgstr "連絡先フォルダ..."
+#~ msgstr "連絡先フォルダー..."
 
 #~ msgid "Contact overview"
 #~ msgstr "連絡先の概要"
 
 #~ msgid "Contact pictures"
-#~ msgstr "メンバ"
+#~ msgstr "メンバー"
 
 #~ msgid "Contact: %1$s"
 #~ msgstr "連絡先: %1$s"
@@ -3391,16 +3393,16 @@ msgstr ""
 #~ msgstr "コートジボアール"
 
 #~ msgid "Could not get a default folder for this application."
-#~ msgstr "このアプリケーションの既定のフォルダを取得できませんでした。"
+#~ msgstr "このアプリケーションの既定のフォルダーを取得できませんでした。"
 
 #~ msgid "Could not load all participants for this task."
-#~ msgstr "この仕事の出席者を一部読み込めませんでした。"
+#~ msgstr "このタスクの参加者を一部読み込めませんでした。"
 
 #~ msgid "Could not load attachments for this contact."
 #~ msgstr "この連絡先の添付ファイルを読み込めませんでした。"
 
 #~ msgid "Could not load attachments for this task."
-#~ msgstr "この仕事の添付ファイルを読み込めませんでした。"
+#~ msgstr "このタスクの添付ファイルを読み込めませんでした。"
 
 #~ msgid "Could not load data"
 #~ msgstr "データを読み込めませんでした。"
@@ -3424,7 +3426,7 @@ msgstr ""
 #~ "Could not save settings. There have to be at least one user with "
 #~ "administration rights."
 #~ msgstr ""
-#~ "設定を保存できません。管理者権限のあるユーザが少なくとも 1 人必要です。"
+#~ "設定を保存できません。管理者権限のあるユーザーが少なくとも 1 人必要です。"
 
 #~ msgid "Could not save vacation notice"
 #~ msgstr "休暇通知を保存できませんでした。"
@@ -3442,16 +3444,16 @@ msgstr ""
 #~ msgstr "ファイル データを読み込めませんでした。"
 
 #~ msgid "Couldn't load folders."
-#~ msgstr "フォルダを読み込めませんでした。"
+#~ msgstr "フォルダーを読み込めませんでした。"
 
 #~ msgid "Couldn't load subfolders."
-#~ msgstr "サブフォルダを読み込めませんでした。"
+#~ msgstr "サブフォルダーを読み込めませんでした。"
 
 #~ msgid "Couldn't load that email."
 #~ msgstr "このメールを読み込めませんでした。"
 
 #~ msgid "Couldn't load that task."
-#~ msgstr "その仕事を読み込めませんでした。"
+#~ msgstr "そのタスクを読み込めませんでした。"
 
 #~ msgid "Couldn't load your auto forward."
 #~ msgstr "自動転送を読み込めませんでした。"
@@ -3460,7 +3462,7 @@ msgstr ""
 #~ msgstr "連絡先のデータを読み込めませんでした。"
 
 #~ msgid "Couldn't load your mail filters."
-#~ msgstr "メール フィルタを読み込めませんでした。"
+#~ msgstr "メール フィルターを読み込めませんでした。"
 
 #~ msgid "Couldn't load your vacation notice."
 #~ msgstr "休暇通知を読み込めませんでした。"
@@ -3487,7 +3489,7 @@ msgstr ""
 #~ msgstr "オブジェクトを作成"
 
 #~ msgid "Create a filter"
-#~ msgstr "フィルタを作成"
+#~ msgstr "フィルターを作成"
 
 #~ msgid "Create a new E-Mail"
 #~ msgstr "新規メールを作成"
@@ -3508,7 +3510,7 @@ msgstr ""
 #~ msgstr "連絡先を作成"
 
 #~ msgid "Create distribution list"
-#~ msgstr "配布リストを作成"
+#~ msgstr "予定を作成"
 
 #~ msgid "Create list"
 #~ msgstr "リストを作成"
@@ -3517,7 +3519,7 @@ msgstr ""
 #~ msgstr "新規のルールを作成"
 
 #~ msgid "Create new task"
-#~ msgstr "新規の仕事を作成"
+#~ msgstr "新規のタスクを作成"
 
 #~ msgid "Create public appointments"
 #~ msgstr "パブリック アポイントを作成"
@@ -3526,7 +3528,7 @@ msgstr ""
 #~ msgstr "アラームを作成"
 
 #~ msgid "Create task"
-#~ msgstr "仕事を作成"
+#~ msgstr "タスクを作成"
 
 #~ msgid "Created"
 #~ msgstr "作成日"
@@ -3559,8 +3561,8 @@ msgstr ""
 #~ "Created private folder '%1$s' in %2$s and subscribed successfully to "
 #~ "shared folder"
 #~ msgstr ""
-#~ "プライベート フォルダ '%1$s' を %2$s に作成しました。共有フォルダが正しく"
-#~ "登録されました。"
+#~ "プライベート フォルダー '%1$s' を %2$s に作成しました。共有フォルダーが正"
+#~ "しく登録されました。"
 
 #~ msgctxt "help"
 #~ msgid "Creating Files"
@@ -3721,7 +3723,7 @@ msgstr ""
 #~ msgstr "サイン イン後に表示する既定のアプリケーション"
 
 #~ msgid "Default calendar view"
-#~ msgstr "予定表の既定のビュー"
+#~ msgstr "カレンダーの既定のビュー"
 
 #~ msgid "Default for Quick settings"
 #~ msgstr "クイック設定についての既定値"
@@ -3739,7 +3741,7 @@ msgstr ""
 #~ msgstr "既定のビュー"
 
 #~ msgid "Default view for Spam folder:"
-#~ msgstr "スパム フォルダの既定のビュー:"
+#~ msgstr "迷惑メール フォルダーの既定のビュー:"
 
 #~ msgid "Deferred"
 #~ msgstr "延期"
@@ -3769,7 +3771,7 @@ msgstr ""
 #~ msgstr "メールを削除"
 
 #~ msgid "Delete Folder"
-#~ msgstr "フォルダを削除"
+#~ msgstr "フォルダーを削除"
 
 #~ msgid "Delete Publication"
 #~ msgid_plural "Delete Publications"
@@ -3790,7 +3792,7 @@ msgstr ""
 #~ msgstr[1] "ルールを削除"
 
 #~ msgid "Delete Task"
-#~ msgstr "仕事を削除"
+#~ msgstr "タスクを削除"
 
 #~ msgid "Delete UWA Modules"
 #~ msgstr "UWA モジュールを削除"
@@ -3855,7 +3857,7 @@ msgstr ""
 #~ msgstr "エントリを削除"
 
 #~ msgid "Deleting messages on local storage also deletes them on server"
-#~ msgstr "ローカル ストレージとサーバ上のメッセージを削除"
+#~ msgstr "ローカル ストレージとサーバー上のメッセージを削除"
 
 #~ msgid "Demote One Level"
 #~ msgstr "1 レベル下げる"
@@ -3864,7 +3866,7 @@ msgstr ""
 #~ msgstr "否定"
 
 #~ msgid "Deny access to other users"
-#~ msgstr "他のユーザへのアクセスを拒否"
+#~ msgstr "他のユーザーへのアクセスを拒否"
 
 #~ msgid "Department"
 #~ msgstr "部署"
@@ -3888,7 +3890,7 @@ msgstr ""
 #~ msgstr "送付先"
 
 #~ msgid "Destination folder:"
-#~ msgstr "送付先フォルダ:"
+#~ msgstr "送付先フォルダー:"
 
 #~ msgid "Detach file"
 #~ msgstr "ファイルを接続解除"
@@ -3913,14 +3915,14 @@ msgstr ""
 #~ "Detailed information can be found in the Import section of the online "
 #~ "help or the user manual."
 #~ msgstr ""
-#~ "詳細情報は、オンライン ヘルプやユーザ マニュアルのインポート セクションで"
-#~ "確認できます。"
+#~ "詳細情報は、オンライン ヘルプやユーザー マニュアルのインポート セクション"
+#~ "で確認できます。"
 
 #~ msgid "Details"
 #~ msgstr "詳細"
 
 #~ msgid "Details of task"
-#~ msgstr "仕事の詳細"
+#~ msgstr "タスクの詳細"
 
 #~ msgid "Details:"
 #~ msgstr "詳細:"
@@ -4001,16 +4003,16 @@ msgstr ""
 #~ msgstr "距離"
 
 #~ msgid "Distribution List"
-#~ msgstr "配布リスト"
+#~ msgstr "予定"
 
 #~ msgid "Distribution list"
-#~ msgstr "配布リスト"
+#~ msgstr "予定"
 
 #~ msgid "Distribution list has been saved"
-#~ msgstr "配布リストが保存されました。"
+#~ msgstr "予定が保存されました。"
 
 #~ msgid "Distributionlist"
-#~ msgstr "配布リスト"
+#~ msgstr "予定"
 
 #~ msgid "Djibouti"
 #~ msgstr "ジブチ"
@@ -4024,7 +4026,7 @@ msgstr ""
 #~ msgstr "ファイル拡張子を \".%1$s\" から \".%2$s\" に変更しますか？"
 
 #~ msgid "Do you really want to delete folder \"%s\"?"
-#~ msgstr "フォルダ \"%s\" を削除しますか？"
+#~ msgstr "フォルダー \"%s\" を削除しますか？"
 
 #~ msgid "Do you really want to delete the following blog?"
 #~ msgstr "次のブログを削除しますか？"
@@ -4051,7 +4053,7 @@ msgstr ""
 #~ msgstr "この連絡先を削除しますか？"
 
 #~ msgid "Do you really want to delete this distribution list?"
-#~ msgstr "この配布リストを削除しますか？"
+#~ msgstr "この予定を削除しますか？"
 
 #~ msgid "Do you really want to delete this file?"
 #~ msgid_plural "Do you really want to delete these files?"
@@ -4059,7 +4061,7 @@ msgstr ""
 
 #~ msgid "Do you really want to delete this task?"
 #~ msgid_plural "Do you really want to delete this tasks?"
-#~ msgstr[0] "この仕事を削除しますか？"
+#~ msgstr[0] "このタスクを削除しますか？"
 
 #~ msgid "Do you really want to delete this widget?"
 #~ msgstr "このウィジェットを削除しますか？"
@@ -4071,7 +4073,7 @@ msgstr ""
 #~ msgstr "変更を破棄しますか？"
 
 #~ msgid "Do you really want to empty folder \"%s\"?"
-#~ msgstr "フォルダ \"%s\" の中身を削除しますか？"
+#~ msgstr "フォルダー \"%s\" の中身を削除しますか？"
 
 #~ msgid ""
 #~ "Do you really want to remove the extension \".%1$s\" from your filename?"
@@ -4154,7 +4156,7 @@ msgstr ""
 #~ msgstr "ドキュメント名"
 
 #~ msgid "Document saved in folder \"%1$s\"."
-#~ msgstr "ドキュメントをフォルダ \"%1$s\"に保存しました。"
+#~ msgstr "ドキュメントをフォルダー \"%1$s\"に保存しました。"
 
 #~ msgid ""
 #~ "Document sharing, storage & management - The centralisation of documents "
@@ -4212,7 +4214,7 @@ msgstr ""
 #~ msgstr "ダウンロード"
 
 #~ msgid "Drafts folder"
-#~ msgstr "下書きフォルダ"
+#~ msgstr "下書きフォルダー"
 
 #~ msgid "Drag to reorder widget"
 #~ msgstr "ドラッグしてウィジェットの順番を変更できます。"
@@ -4366,7 +4368,7 @@ msgstr ""
 #~ msgstr "連絡先を編集"
 
 #~ msgid "Edit Distribution List"
-#~ msgstr "配布リストを編集"
+#~ msgstr "予定を編集"
 
 #~ msgid "Edit Draft"
 #~ msgstr "下書きを編集"
@@ -4417,7 +4419,7 @@ msgstr ""
 #~ msgstr "署名を編集"
 
 #~ msgid "Edit task"
-#~ msgstr "仕事を編集"
+#~ msgstr "タスクを編集"
 
 #~ msgid "Edit to set a name."
 #~ msgstr "編集して名前を設定"
@@ -4474,21 +4476,21 @@ msgstr ""
 #~ msgstr "作成者にメールで通知"
 
 #~ msgid "Email notification for appointment participant?"
-#~ msgstr "出席者にメールで通知"
+#~ msgstr "参加者にメールで通知"
 
 #~ msgid "Email notification for task"
-#~ msgstr "仕事をメールで通知"
+#~ msgstr "タスクをメールで通知"
 
 #~ msgid "Email notification for task creator?"
 #~ msgstr "作成者にメールで通知"
 
 #~ msgid "Email notification for task participant?"
-#~ msgstr "出席者にメールで通知"
+#~ msgstr "参加者にメールで通知"
 
 #~ msgid ""
 #~ "Emails cannot be put into trash folder while your mail quota is exceeded."
 #~ msgstr ""
-#~ "メールの割当量を超えたため、メールをごみ箱フォルダに移動できません。"
+#~ "メールの割当量を超えたため、メールをごみ箱フォルダーに移動できません。"
 
 #~ msgid "Embedded windows"
 #~ msgstr "エンべデッド ウィンドウ"
@@ -4507,19 +4509,19 @@ msgstr ""
 #~ msgstr "(空)"
 
 #~ msgid "Empty folder"
-#~ msgstr "フォルダを空にする"
+#~ msgstr "フォルダーを空にする"
 
 #~ msgid "Empty name and description found."
 #~ msgstr "名前と説明が未入力です。"
 
 #~ msgid "Emptying folder... This may take a few seconds."
-#~ msgstr "フォルダを空にしています... 数秒かかる場合があります。"
+#~ msgstr "フォルダーを空にしています... 数秒かかる場合があります。"
 
 #~ msgid "Enable"
 #~ msgstr "有効"
 
 #~ msgid "Enable Calendar Hover"
-#~ msgstr "予定表のホバー表示を有効化"
+#~ msgstr "カレンダーのホバー表示を有効化"
 
 #~ msgid "Enable Contacts Hover"
 #~ msgstr "連絡先のホバー表示を有効化"
@@ -4537,13 +4539,13 @@ msgstr ""
 #~ msgstr "プラグインを有効化"
 
 #~ msgid "Enable Tasks Hover"
-#~ msgstr "仕事のホバー表示を有効化"
+#~ msgstr "タスクのホバー表示を有効化"
 
 #~ msgid "Enable auto completion of E-Mail addresses?"
 #~ msgstr "メール アドレスのオート コンプリート機能を有効化"
 
 #~ msgid "Enable calendar hovers"
-#~ msgstr "予定表のホバー表示を有効化"
+#~ msgstr "カレンダーのホバー表示を有効化"
 
 #~ msgid "Enable start page hovers"
 #~ msgstr "スタート ページのホバー表示を有効化"
@@ -4555,10 +4557,10 @@ msgstr ""
 #~ msgstr "有効"
 
 #~ msgid "Enabled for all mail folders"
-#~ msgstr "すべてのメール フォルダ"
+#~ msgstr "すべてのメール フォルダー"
 
 #~ msgid "Enabled for inbox only"
-#~ msgstr "受信フォルダのみ"
+#~ msgstr "受信フォルダーのみ"
 
 #~ msgid "Enabled for the following addresses"
 #~ msgstr "次のアドレスに適用"
@@ -4568,9 +4570,9 @@ msgstr ""
 #~ "Any changes that are made using Microsoft Outlook offline will be "
 #~ "automatically synchronized the next time you go online:"
 #~ msgstr ""
-#~ "メール、予定表、仕事、連絡先フォルダへのオフライン アクセスを有効にする。"
-#~ "Microsoft Outlookオフラインを使用して加えられたすべての変更は、次回オンラ"
-#~ "インになった際に自動的に同期されます:"
+#~ "メール、カレンダー、タスク、連絡先フォルダーへのオフライン アクセスを有効"
+#~ "にする。Microsoft Outlookオフラインを使用して加えられたすべての変更は、次"
+#~ "回オンラインになった際に自動的に同期されます:"
 
 #~ msgid "End"
 #~ msgstr "終了"
@@ -4890,7 +4892,7 @@ msgstr ""
 #~ msgstr "エクスポート"
 
 #~ msgid "Export folder"
-#~ msgstr "フォルダをエクスポート"
+#~ msgstr "フォルダーをエクスポート"
 
 #~ msgid "Extended view"
 #~ msgstr "拡張ビュー"
@@ -4905,16 +4907,16 @@ msgstr ""
 #~ msgid ""
 #~ "External images have been blocked to protect you against potential spam!"
 #~ msgstr ""
-#~ "スパムの危険性を回避するため、画像のダウンロードをブロックしました。"
+#~ "迷惑メールの危険性を回避するため、画像のダウンロードをブロックしました。"
 
 #~ msgid "External link"
 #~ msgstr "外部リンク"
 
 #~ msgid "External participants"
-#~ msgstr "外部出席者"
+#~ msgstr "外部参加者"
 
 #~ msgid "External user"
-#~ msgstr "外部ユーザ"
+#~ msgstr "外部ユーザー"
 
 #
 #~ msgctxt "friday"
@@ -4944,7 +4946,7 @@ msgstr ""
 #~ msgstr "アカウントの復元に失敗しました。"
 
 #~ msgid "Failed to save distribution list."
-#~ msgstr "配布リストの保存に失敗しました。"
+#~ msgstr "予定の保存に失敗しました。"
 
 #~ msgid "Failed to sign in"
 #~ msgstr "再サイン インに失敗しました。"
@@ -4967,7 +4969,8 @@ msgstr ""
 #~ "Failed to update confirmation status; most probably the task has been "
 #~ "deleted."
 #~ msgstr ""
-#~ "確認ステータスの更新に失敗しました。仕事が削除されている可能性があります。"
+#~ "確認ステータスの更新に失敗しました。タスクが削除されている可能性がありま"
+#~ "す。"
 
 #~ msgid "Failure! Please refresh."
 #~ msgstr "エラーが発生しました。最新の状態に更新してください。"
@@ -5082,7 +5085,7 @@ msgstr ""
 #~ msgstr "ファイルを移動しました。"
 
 #~ msgid "Filter"
-#~ msgstr "フィルタ"
+#~ msgstr "フィルター"
 
 #~ msgid "Find a free time"
 #~ msgstr "空き時間を検索"
@@ -5133,60 +5136,60 @@ msgstr ""
 #~ msgstr "右寄せ"
 
 #~ msgid "Folder"
-#~ msgstr "フォルダ"
+#~ msgstr "フォルダー"
 
 #~ msgid "Folder Name"
-#~ msgstr "フォルダ名"
+#~ msgstr "フォルダー名"
 
 #~ msgid "Folder Properties"
-#~ msgstr "フォルダ プロパティ"
+#~ msgstr "フォルダー プロパティ"
 
 #~ msgid "Folder Properties: %s"
-#~ msgstr "フォルダ プロパティ: %s"
+#~ msgstr "フォルダー プロパティ: %s"
 
 #~ msgid "Folder actions"
-#~ msgstr "フォルダ アクション"
+#~ msgstr "フォルダー アクション"
 
 #~ msgid "Folder name"
-#~ msgstr "フォルダ名"
+#~ msgstr "フォルダー名"
 
 #~ msgid "Folder names must not be empty"
-#~ msgstr "フォルダ名は空にできません。"
+#~ msgstr "フォルダー名は空にできません。"
 
 #~ msgid "Folder names must not contain slashes"
-#~ msgstr "フォルダ名にはスラッシュを使用できません。"
+#~ msgstr "フォルダー名にはスラッシュを使用できません。"
 
 #~ msgid "Folder path"
-#~ msgstr "フォルダ パス"
+#~ msgstr "フォルダー パス"
 
 #~ msgid "Folder permissions"
-#~ msgstr "フォルダ権限"
+#~ msgstr "フォルダー権限"
 
 #~ msgid "Folder type"
-#~ msgstr "フォルダ タイプ"
+#~ msgstr "フォルダー タイプ"
 
 #~ msgid "Folder view"
-#~ msgstr "フォルダ ビュー"
+#~ msgstr "フォルダー ビュー"
 
 #~ msgid ""
 #~ "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden "
 #~ "files and folders\" to access this folder again."
 #~ msgstr ""
-#~ "\"%1$s\" の名前のフォルダは隠しフォルダになっています。\"隠しフォルダと隠"
-#~ "しファイルを表示\" を有効にすると、このフォルダにアクセスできるようになり"
-#~ "ます。"
+#~ "\"%1$s\" の名前のフォルダーは隠しフォルダーになっています。\"隠しフォル"
+#~ "ダーと隠しファイルを表示\" を有効にすると、このフォルダーにアクセスできる"
+#~ "ようになります。"
 
 #~ msgid "Folder-specific actions"
-#~ msgstr "フォルダ アクション"
+#~ msgstr "フォルダー アクション"
 
 #~ msgid "Folder..."
-#~ msgstr "フォルダ..."
+#~ msgstr "フォルダー..."
 
 #~ msgid "Folder:"
-#~ msgstr "フォルダ:"
+#~ msgstr "フォルダー:"
 
 #~ msgid "Folders"
-#~ msgstr "フォルダ"
+#~ msgstr "フォルダー"
 
 #~ msgid "Follow"
 #~ msgstr "フォロー"
@@ -5382,10 +5385,10 @@ msgstr ""
 #~ msgstr "グループ管理"
 
 #~ msgid "Group Member"
-#~ msgstr "グループ メンバ"
+#~ msgstr "グループ メンバー"
 
 #~ msgid "Group Members"
-#~ msgstr "グループ メンバ"
+#~ msgstr "グループ メンバー"
 
 #~ msgid "Group appointment"
 #~ msgstr "グループのアポイント"
@@ -5394,7 +5397,7 @@ msgstr ""
 #~ msgstr "グループ名"
 
 #~ msgid "Group task"
-#~ msgstr "グループの仕事"
+#~ msgstr "グループのタスク"
 
 #~ msgid "Groups"
 #~ msgstr "グループ"
@@ -5487,20 +5490,20 @@ msgstr ""
 #~ "Here you can import tasks, appointments or contacts from iCal, vCard or "
 #~ "CSV files."
 #~ msgstr ""
-#~ "ここで、仕事、アポイント、連絡先を iCal、vCard、CSV ファイルからインポート"
-#~ "できます。"
+#~ "ここで、タスク、アポイント、連絡先を iCal、vCard、CSV ファイルからインポー"
+#~ "トできます。"
 
 #~ msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 #~ msgstr "お知らせ<br><br>あなたは %1$s と次の公開を共有しています。<br>%2$s"
 
 #~ msgid "Hidden folders"
-#~ msgstr "フォルダを追加"
+#~ msgstr "フォルダーを追加"
 
 #~ msgid "Hide"
-#~ msgstr "隠す"
+#~ msgstr "非表示"
 
 #~ msgid "Hide QR code"
-#~ msgstr "QR コードを隠す"
+#~ msgstr "QR コードを非表示"
 
 #~ msgctxt "plural"
 #~ msgid "Hide attachment"
@@ -5508,34 +5511,34 @@ msgstr ""
 #~ msgstr[0] "添付非表示"
 
 #~ msgid "Hide comments"
-#~ msgstr "コメントを隠す"
+#~ msgstr "コメントを非表示"
 
 #~ msgid "Hide conflicts"
-#~ msgstr "競合を隠す"
+#~ msgstr "競合を非表示"
 
 #~ msgid "Hide details"
-#~ msgstr "詳細を隠す"
+#~ msgstr "詳細を非表示"
 
 #~ msgid "Hide later elements"
-#~ msgstr "以降の用件を隠す"
+#~ msgstr "以降の用件を非表示"
 
 #~ msgid "Hide module window"
-#~ msgstr "モジュール ウィンドウを隠す"
+#~ msgstr "モジュール ウィンドウを非表示"
 
 #~ msgid "Hide non-working time"
-#~ msgstr "稼働時間以外を隠す"
+#~ msgstr "稼働時間以外を非表示"
 
 #~ msgid "Hide non-working time in teamview"
-#~ msgstr "チーム表示では稼働時間以外を隠す"
+#~ msgstr "チーム表示では稼働時間以外を非表示"
 
 #~ msgid "Hide request body"
-#~ msgstr "リクエストの本文を隠す"
+#~ msgstr "リクエストの本文を非表示"
 
 #~ msgid "Hide side panel"
-#~ msgstr "サイド パネルを隠す"
+#~ msgstr "サイド パネルを非表示"
 
 #~ msgid "Hide stack trace"
-#~ msgstr "スタック トレースを隠す"
+#~ msgstr "スタック トレースを非表示"
 
 #~ msgid "High"
 #~ msgstr "高"
@@ -5611,10 +5614,10 @@ msgstr ""
 #~ msgstr "メッセンジャー (プライベート):"
 
 #~ msgid "IMAP Mail Server"
-#~ msgstr "IMAP メール サーバ"
+#~ msgstr "IMAP メール サーバー"
 
 #~ msgid "IMAP folder subscription"
-#~ msgstr "IMAP フォルダの登録"
+#~ msgstr "IMAP フォルダーの登録"
 
 #~ msgid "IP phone"
 #~ msgstr "IP 電話"
@@ -5638,8 +5641,8 @@ msgstr ""
 #~ "If a folder contains images, you can display a slideshow. To do so click "
 #~ "the View slideshow icon in the toolbar."
 #~ msgstr ""
-#~ "フォルダに画像が含まれている場合、スライドショーを表示できます。これを行う"
-#~ "には、ツールバーで、[スライドショーを表示] アイコンをクリックします。"
+#~ "フォルダーに画像が含まれている場合、スライドショーを表示できます。これを行"
+#~ "うには、ツールバーで、[スライドショーを表示] アイコンをクリックします。"
 
 #~ msgid ""
 #~ "If the authorization expired or was revoked, you can repeat the "
@@ -5653,8 +5656,8 @@ msgstr ""
 #~ "If you change the password, you will be signed out. Please ensure that "
 #~ "everything is closed and saved."
 #~ msgstr ""
-#~ "パスワードを変更すると、サインアウトされます。作業中のすべてのファイルを保"
-#~ "存し、閉じてください。"
+#~ "パスワードを変更すると、ログアウトされます。作業中のすべてのファイルを保存"
+#~ "し、閉じてください。"
 
 #~ msgid ""
 #~ "If you no longer want to display a square, click the cross on the upper "
@@ -5732,14 +5735,14 @@ msgstr ""
 #~ msgstr "%s 週間後に開始:"
 
 #~ msgid "In a public folder there must be at least one participant."
-#~ msgstr "パブリック フォルダには、1 名以上の出席者が必要です。"
+#~ msgstr "パブリック フォルダーには、1 名以上の参加者が必要です。"
 
 #~ msgid ""
 #~ "In case of new notifications, e.g. appointment invitations, the info area "
 #~ "is opened on the right side."
 #~ msgstr ""
-#~ "アポイントの出席依頼など、新規の通知があると、画面右側に情報エリアが表示さ"
-#~ "れます。"
+#~ "アポイントの招待など、新規の通知があると、画面右側に情報エリアが表示されま"
+#~ "す。"
 
 #~ msgid ""
 #~ "In case of new notifications, e.g. appointment invitations, the info area "
@@ -5767,8 +5770,8 @@ msgstr ""
 #~ "In the Icons view you can see the files of the selected folder in the "
 #~ "display area."
 #~ msgstr ""
-#~ "アイコン ビューでは、選択したフォルダにあるファイルが表示エリアに表示され"
-#~ "ます。"
+#~ "アイコン ビューでは、選択したフォルダーにあるファイルが表示エリアに表示さ"
+#~ "れます。"
 
 #~ msgid "Inbox"
 #~ msgstr "受信トレイ"
@@ -5840,7 +5843,7 @@ msgstr ""
 #~ msgstr "インフォストア アイテム"
 
 #~ msgid "InfoStore folder %s"
-#~ msgstr "インフォストア フォルダ %s"
+#~ msgstr "インフォストア フォルダー %s"
 
 #~ msgid "InfoStore:"
 #~ msgstr "インフォストア:"
@@ -5861,7 +5864,7 @@ msgstr ""
 #~ msgstr "インラインにテキストを表示"
 
 #~ msgid "Inline menu %1$s"
-#~ msgstr "サイン イン ユーザ: %1$s"
+#~ msgstr "サイン イン ユーザー: %1$s"
 
 #~ msgid "Inline with text"
 #~ msgstr "インラインにテキストを表示"
@@ -5922,7 +5925,7 @@ msgstr ""
 #~ msgstr "内部エラー"
 
 #~ msgid "Internal Error: The server didn't provide any data."
-#~ msgstr "内部エラー: サーバからデータが送信されませんでした。"
+#~ msgstr "内部エラー: サーバーからデータが送信されませんでした。"
 
 #~ msgid "Internal Error: Unable to open the Attachment (%s)."
 #~ msgstr "内部エラー: 添付ファイルを開けません (%s)"
@@ -5975,7 +5978,7 @@ msgstr ""
 #~ msgstr "時刻が無効です。"
 
 #~ msgid "Invitations"
-#~ msgstr "出席依頼"
+#~ msgstr "招待"
 
 #~ msgid "Invite to appointment"
 #~ msgstr "アポイントへの出席を依頼"
@@ -6155,7 +6158,7 @@ msgstr ""
 #~ msgstr "姓:"
 
 #~ msgid "Later tasks:"
-#~ msgstr "明日以降の仕事:"
+#~ msgstr "明日以降のタスク:"
 
 #~ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 #~ msgstr ""
@@ -6165,7 +6168,7 @@ msgstr ""
 #~ msgstr "レイアウト"
 
 #~ msgid "Leave messages on server"
-#~ msgstr "サーバにメッセージを残す"
+#~ msgstr "サーバーにメッセージを残す"
 
 #~ msgid "Lebanon"
 #~ msgstr "レバノン"
@@ -6309,8 +6312,8 @@ msgstr ""
 #~ msgid ""
 #~ "Login failed. Please check your user name and password and try again."
 #~ msgstr ""
-#~ "ログインに失敗しました。ユーザ名とパスワードをチェックして、もう一度試して"
-#~ "ください。"
+#~ "ログインに失敗しました。ユーザー名とパスワードをチェックして、もう一度試し"
+#~ "てください。"
 
 #~ msgid "Login must not be empty."
 #~ msgstr "ログインには値が必要です。"
@@ -6382,7 +6385,7 @@ msgstr ""
 #~ msgstr "メールの詳細"
 
 #~ msgid "Mail Filter"
-#~ msgstr "メール フィルタ"
+#~ msgstr "メール フィルター"
 
 #~ msgid "Mail Thread Details"
 #~ msgstr "メール スレッドの詳細"
@@ -6444,10 +6447,10 @@ msgstr ""
 #~ "メールはインポートされませんでした。.eml ファイルのみがサポートされます。"
 
 #~ msgid "Mailfilter created"
-#~ msgstr "メール フィルタが作成されました。"
+#~ msgstr "メール フィルターが作成されました。"
 
 #~ msgid "Mailfilter updated"
-#~ msgstr "メール フィルタが更新されました。"
+#~ msgstr "メール フィルターが更新されました。"
 
 #~ msgid "Mailing list"
 #~ msgstr "メーリング リスト"
@@ -6530,7 +6533,7 @@ msgstr ""
 #~ msgstr "すべてのメールを既読にする"
 
 #~ msgid "Mark as distributionlist"
-#~ msgstr "配布リストにする"
+#~ msgstr "予定にする"
 
 #~ msgid "Mark as done"
 #~ msgstr "完了の印を付ける"
@@ -6539,13 +6542,13 @@ msgstr ""
 #~ msgstr "既読にする"
 
 #~ msgid "Mark as spam"
-#~ msgstr "スパム メールの印を付ける"
+#~ msgstr "迷惑メール メールの印を付ける"
 
 #~ msgid "Mark as unread"
 #~ msgstr "未読にする"
 
 #~ msgid "Mark folder read"
-#~ msgstr "フォルダに既読の印を付ける"
+#~ msgstr "フォルダーに既読の印を付ける"
 
 #~ msgid "Mark mail as"
 #~ msgstr "次の印をメールに付ける"
@@ -6596,13 +6599,13 @@ msgstr ""
 #~ msgstr "優先度 (高)"
 
 #~ msgid "Member"
-#~ msgstr "メンバ"
+#~ msgstr "メンバー"
 
 #~ msgid "Members of group"
-#~ msgstr "グループのメンバ"
+#~ msgstr "グループのメンバー"
 
 #~ msgid "Members:"
-#~ msgstr "メンバ:"
+#~ msgstr "メンバー:"
 
 #~ msgid "Messaging"
 #~ msgstr "メッセージング"
@@ -6653,7 +6656,7 @@ msgstr ""
 #~ msgstr "携帯電話 (プライベート):"
 
 #~ msgid "Mobile device settings:"
-#~ msgstr "フォルダ設定"
+#~ msgstr "フォルダー設定"
 
 #~ msgid "Mobile:"
 #~ msgstr "携帯電話:"
@@ -6734,10 +6737,10 @@ msgstr ""
 #~ msgstr "移動"
 
 #~ msgid "Move folder"
-#~ msgstr "フォルダを移動"
+#~ msgstr "フォルダーを移動"
 
 #~ msgid "Move to folder"
-#~ msgstr "フォルダに移動"
+#~ msgstr "フォルダーに移動"
 
 #~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "メールを移動しています... 数秒かかる場合があります。"
@@ -6782,7 +6785,7 @@ msgstr ""
 #~ msgstr "フィード名"
 
 #~ msgid "Name of the Distribution List:"
-#~ msgstr "配布リストの名前:"
+#~ msgstr "予定の名前:"
 
 #~ msgid "Name:"
 #~ msgstr "名前:"
@@ -6818,10 +6821,10 @@ msgstr ""
 #~ msgstr "ニューカレドニア"
 
 #~ msgid "New Distribution List"
-#~ msgstr "新しい配布リスト"
+#~ msgstr "新しい予定"
 
 #~ msgid "New Folder"
-#~ msgstr "新規フォルダ"
+#~ msgstr "新規フォルダー"
 
 #~ msgid "New InfoItem"
 #~ msgstr "新規インフォアイテム"
@@ -6842,7 +6845,7 @@ msgstr ""
 #~ msgstr "新規タグ:"
 
 #~ msgid "New Task"
-#~ msgstr "新規の仕事"
+#~ msgstr "新規のタスク"
 
 #~ msgid "New Team"
 #~ msgstr "新規チーム"
@@ -6860,7 +6863,7 @@ msgstr ""
 #~ msgstr "新規連絡先"
 
 #~ msgid "New folder"
-#~ msgstr "新規フォルダ"
+#~ msgstr "新規フォルダー"
 
 #~ msgid "New message"
 #~ msgstr "新規メッセージ"
@@ -6875,10 +6878,10 @@ msgstr ""
 #~ msgstr "新しいパスワード"
 
 #~ msgid "New private folder"
-#~ msgstr "新規プライベート フォルダ"
+#~ msgstr "新規プライベート フォルダー"
 
 #~ msgid "New public folder"
-#~ msgstr "新規パブリック フォルダ"
+#~ msgstr "新規パブリック フォルダー"
 
 #~ msgid "New publication"
 #~ msgstr "新規の公開"
@@ -6887,13 +6890,13 @@ msgstr ""
 #~ msgstr "新しいルール"
 
 #~ msgid "New subfolder"
-#~ msgstr "新規サブフォルダ"
+#~ msgstr "新規サブフォルダー"
 
 #~ msgid "New subscription"
 #~ msgstr "新規の登録"
 
 #~ msgid "New task"
-#~ msgstr "新規の仕事"
+#~ msgstr "新規のタスク"
 
 #~ msgid "New..."
 #~ msgstr "新規作成..."
@@ -6941,16 +6944,16 @@ msgstr ""
 #~ msgstr "利用可能な添付ファイルはありません。"
 
 #~ msgid "No Folder rights"
-#~ msgstr "フォルダ権限がありません。"
+#~ msgstr "フォルダー権限がありません。"
 
 #~ msgid "No Info Items in this folder"
-#~ msgstr "このフォルダには、新しいインフォアイテムはありません。"
+#~ msgstr "このフォルダーには、新しいインフォアイテムはありません。"
 
 #~ msgid "No Items available"
 #~ msgstr "利用できるアイテムはありません"
 
 #~ msgid "No Members"
-#~ msgstr "メンバは登録されていません。"
+#~ msgstr "メンバーは登録されていません。"
 
 #~ msgid "No Messaging accounts configured."
 #~ msgstr "メッセージング アカウントが構成されていません。"
@@ -6988,8 +6991,8 @@ msgstr ""
 #~ msgid ""
 #~ "No connection to server. Please check your internet connection and retry."
 #~ msgstr ""
-#~ "サーバへの接続がありません。インターネット接続をチェックして、もう一度やり"
-#~ "直してください。"
+#~ "サーバーへの接続がありません。インターネット接続をチェックして、もう一度や"
+#~ "り直してください。"
 
 #~ msgid "No downloads available"
 #~ msgstr "ダウンロードはありません。"
@@ -7026,13 +7029,13 @@ msgstr ""
 #~ msgstr "\"%s\" のメールは見つかりませんでした。"
 
 #~ msgid "No mails in this folder"
-#~ msgstr "このフォルダにメールはありません。"
+#~ msgstr "このフォルダーにメールはありません。"
 
 #~ msgid "No mails in your inbox"
 #~ msgstr "受信トレイにメールがありません。"
 
 #~ msgid "No matching templates on this Server"
-#~ msgstr "このサーバには、一致するテンプレートがありません。"
+#~ msgstr "このサーバーには、一致するテンプレートがありません。"
 
 #~ msgid "No message selected"
 #~ msgstr "項目が選択されていません。"
@@ -7041,7 +7044,7 @@ msgstr ""
 #~ msgstr "通知はありません。"
 
 #~ msgid "No participants available"
-#~ msgstr "出席者はいません。"
+#~ msgstr "参加者はいません。"
 
 #~ msgid "No preview available"
 #~ msgstr "表示できるプレビューがありません。"
@@ -7074,7 +7077,7 @@ msgstr ""
 #~ msgstr "繰り返しなし"
 
 #~ msgid "No server connection"
-#~ msgstr "サーバに接続できません。"
+#~ msgstr "サーバーに接続できません。"
 
 #~ msgid "No signature"
 #~ msgstr "署名なし"
@@ -7095,7 +7098,7 @@ msgstr ""
 #~ msgstr "登録が構成されていません。"
 
 #~ msgid "No tasks today"
-#~ msgstr "今日は仕事がありません。"
+#~ msgstr "今日はタスクがありません。"
 
 #~ msgid "No text"
 #~ msgstr "テキストではありません。"
@@ -7131,7 +7134,7 @@ msgstr ""
 #~ msgstr "ノルウェー"
 
 #~ msgid "Not Spam"
-#~ msgstr "スパムではありません。"
+#~ msgstr "迷惑メールではありません。"
 
 #~ msgid "Not enough rights"
 #~ msgstr "十分な権限がありません。"
@@ -7140,7 +7143,7 @@ msgstr ""
 #~ msgstr "未設定"
 
 #~ msgid "Not spam"
-#~ msgstr "スパムではありません。"
+#~ msgstr "迷惑メールではありません。"
 
 #~ msgid "Not started"
 #~ msgstr "未開始"
@@ -7164,19 +7167,19 @@ msgstr ""
 #~ "the external content. Changes you have made inside appsuite will be "
 #~ "overwritten"
 #~ msgstr ""
-#~ "注: この登録を更新すると、予定表の内容が外部の予定表に入れ替わります。OX "
-#~ "App Suite で変更した内容は上書きされます。 "
+#~ "注: この登録を更新すると、カレンダーの内容が外部のカレンダーに入れ替わりま"
+#~ "す。OX App Suite で変更した内容は上書きされます。 "
 
 #~ msgid "Note: The vCard format cannot contain distribution lists"
-#~ msgstr "注: vCard フォーマットには配布リストを含めることができません。"
+#~ msgstr "注: vCard フォーマットには予定を含めることができません。"
 
 #~ msgid ""
 #~ "Note: This subscription will replace the calendar content with the "
 #~ "external content. Therefore you must create a new folder for this "
 #~ "subscription."
 #~ msgstr ""
-#~ "注: この登録を行うと、予定表の内容が外部の予定表と入れ替わります。この登録"
-#~ "用に新規フォルダを作成してください。 "
+#~ "注: この登録を行うと、カレンダーの内容が外部のカレンダーと入れ替わります。"
+#~ "この登録用に新規フォルダーを作成してください。 "
 
 #~ msgid "Notifier"
 #~ msgstr "Notifier"
@@ -7185,17 +7188,17 @@ msgstr ""
 #~ "Notifier informs the user about the current status of emails and "
 #~ "appointments without having to display the user interface."
 #~ msgstr ""
-#~ "Notifierは、メールとアポイントの現在のステータスをユーザに通知します。ユー"
-#~ "ザ インターフェースを表示する必要はありません。"
+#~ "Notifierは、メールとアポイントの現在のステータスをユーザーに通知します。"
+#~ "ユーザ インターフェースを表示する必要はありません。"
 
 #~ msgid "Notify all participants by email."
-#~ msgstr "メールですべての出席者に通知"
+#~ msgstr "メールですべての参加者に通知"
 
 #~ msgid "Notify on delivery receipt?"
 #~ msgstr "開封通知で通知"
 
 #~ msgid "Notify participants by E-Mail"
-#~ msgstr "メールで出席者に通知"
+#~ msgstr "メールで参加者に通知"
 
 #~ msgid "Nov"
 #~ msgstr "11 月"
@@ -7305,10 +7308,10 @@ msgstr ""
 #~ "you have sent just contains links to download these files."
 #~ msgstr ""
 #~ "1 つ以上の添付ファイルがメールのサイズ制限を越えているため、添付ファイルと"
-#~ "して送信されませんでした。ファイルはサーバに保存されました。"
+#~ "して送信されませんでした。ファイルはサーバーに保存されました。"
 
 #~ msgid "Only showing items related to folder \"%1$s\""
-#~ msgstr "フォルダ \"%1$s\" に関連するアイテムのみを表示しています。"
+#~ msgstr "フォルダー \"%1$s\" に関連するアイテムのみを表示しています。"
 
 #~ msgid ""
 #~ "Only use this option if this computer is used solely by you. Your "
@@ -7316,8 +7319,8 @@ msgstr ""
 #~ "several browser windows for working with the groupware. Do not use this "
 #~ "option when working on a 3rd party computer (e.g., in an Internet cafe)"
 #~ msgstr ""
-#~ "このコンピュータを使用するユーザが他にいない場合にのみ、このオプションを使"
-#~ "用してください。認証情報は当日中に限り、ローカルに保存されます。グループ"
+#~ "このコンピュータを使用するユーザーが他にいない場合にのみ、このオプションを"
+#~ "使用してください。認証情報は当日中に限り、ローカルに保存されます。グループ"
 #~ "ウェアを使用する際、いくつかのブラウザ ウィンドウを利用できます。また、外"
 #~ "部のコンピュータ (例えば、インターネットカフェ内) を使用している場合には、"
 #~ "このオプションを使用しないでください。"
@@ -7333,7 +7336,7 @@ msgstr ""
 
 #~| msgid "Folder view"
 #~ msgid "Open folder view"
-#~ msgstr "フォルダ ビュー"
+#~ msgstr "フォルダー ビュー"
 
 #~ msgid "Open in browser"
 #~ msgstr "ブラウザで開く"
@@ -7451,8 +7454,8 @@ msgstr ""
 #~ "Other InfoStore folders contain shared subfolders from parent folders "
 #~ "that are not accessible to you."
 #~ msgstr ""
-#~ "また、他の例として、アクセスが許可されていない、親フォルダの配下にある共有"
-#~ "サブフォルダもあります。"
+#~ "また、他の例として、アクセスが許可されていない、親フォルダーの配下にある共"
+#~ "有サブフォルダーもあります。"
 
 #~ msgid "Other address"
 #~ msgstr "その他の住所"
@@ -7461,7 +7464,7 @@ msgstr ""
 #~ msgstr "その他"
 
 #~ msgid "Outgoing server settings (SMTP)"
-#~ msgstr "送信サーバ設定 (SMTP)"
+#~ msgstr "送信サーバー設定 (SMTP)"
 
 #~ msgid "Outlook OXtender"
 #~ msgstr "Outlook OXtender"
@@ -7473,10 +7476,10 @@ msgstr ""
 #~ msgstr "期限切れ"
 
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
-#~ msgstr "期限が過ぎた仕事: %1$s %2$s Enter キーで開きます。"
+#~ msgstr "期限が過ぎたタスク: %1$s %2$s Enter キーで開きます。"
 
 #~ msgid "Overdue Tasks"
-#~ msgstr "期限が過ぎた仕事"
+#~ msgstr "期限が過ぎたタスク"
 
 #~ msgid "Overdue by %d day."
 #~ msgid_plural "Overdue by %d days."
@@ -7484,7 +7487,7 @@ msgstr ""
 #~ msgstr[1] "%d 日期限を過ぎています。"
 
 #~ msgid "Overdue by yesterday."
-#~ msgstr "昨日に期限が過ぎる仕事"
+#~ msgstr "昨日に期限が過ぎるタスク"
 
 #~ msgid "Overview Subscribtions"
 #~ msgstr "登録の概要"
@@ -7505,7 +7508,7 @@ msgstr ""
 #~ msgstr "午後"
 
 #~ msgid "POP3 Mail Server"
-#~ msgstr "POP3 メール サーバ"
+#~ msgstr "POP3 メール サーバー"
 
 #~ msgid "POP3:"
 #~ msgstr "POP3:"
@@ -7661,16 +7664,16 @@ msgstr ""
 #~ msgstr "パラメータ:"
 
 #~ msgid "Participant"
-#~ msgstr "出席者"
+#~ msgstr "参加者"
 
 #~ msgid "Participant:"
-#~ msgstr "出席者:"
+#~ msgstr "参加者:"
 
 #~ msgid "Participants"
-#~ msgstr "出席者"
+#~ msgstr "参加者"
 
 #~ msgid "Participants:"
-#~ msgstr "出席者:"
+#~ msgstr "参加者:"
 
 #~ msgid "Password"
 #~ msgstr "パスワード:"
@@ -7931,14 +7934,14 @@ msgstr ""
 #~ "to a folder on your local IMAP account."
 #~ msgstr ""
 #~ "注意: POP3 アカウントで受信したすべてのメッセージは、ローカルの IMAP アカ"
-#~ "ウントのフォルダに保存されます。"
+#~ "ウントのフォルダーに保存されます。"
 
 #~ msgid ""
 #~ "Please note: You are the creator of this appointment. If you delete this "
 #~ "appointment it will be removed for all participants."
 #~ msgstr ""
 #~ "注意: このアポイントの作成者であるため、このアポイントを削除すると、すべて"
-#~ "の出席者から削除されます。"
+#~ "の参加者から削除されます。"
 
 #~ msgid ""
 #~ "Please only use HTML signatures if you are familiar with HTML. Using "
@@ -7981,7 +7984,7 @@ msgstr ""
 #~ msgstr "少なくとも一つ以上のメール アドレスを選択してください。"
 
 #~ msgid "Please select at least one task!"
-#~ msgstr "少なくとも一つの仕事を選択してください。"
+#~ msgstr "少なくとも一つのタスクを選択してください。"
 
 #~ msgid "Please select only one Publication"
 #~ msgstr "公開を一つだけ選択してください。"
@@ -7990,7 +7993,7 @@ msgstr ""
 #~ msgstr "登録を一つだけ選択してください。"
 
 #~ msgid "Please set valid folder!"
-#~ msgstr "利用可能なフォルダを設定してください。"
+#~ msgstr "利用可能なフォルダーを設定してください。"
 
 #~ msgid "Please sign in again to continue"
 #~ msgstr "続行するには、再度サイン インしてください。"
@@ -8093,22 +8096,22 @@ msgstr ""
 #~ msgstr "Enter キーを押すと、再通知の時間を選択できます。"
 
 #~ msgid "Press to hide all appointment invitations."
-#~ msgstr "アポイントへの出席依頼をすべて隠す"
+#~ msgstr "アポイントへの招待をすべて非表示"
 
 #~ msgid "Press to hide all appointment reminders."
-#~ msgstr "アポイントのアラームをすべて隠す"
+#~ msgstr "アポイントのアラームをすべて非表示"
 
 #~ msgid "Press to hide all notifications for new mails."
-#~ msgstr "新規メールの通知をすべて隠す"
+#~ msgstr "新規メールの通知をすべて非表示"
 
 #~ msgid "Press to hide all notifications for overdue tasks."
-#~ msgstr "期限が過ぎた仕事の通知をすべて隠す"
+#~ msgstr "期限が過ぎたタスクの通知をすべて非表示"
 
 #~ msgid "Press to hide all task invitations."
-#~ msgstr "仕事への出席依頼をすべて隠す"
+#~ msgstr "タスクへの招待をすべて非表示"
 
 #~ msgid "Press to hide all task reminders."
-#~ msgstr "仕事のアラームをすべて隠す"
+#~ msgstr "タスクのアラームをすべて非表示"
 
 #~ msgid "Preview"
 #~ msgstr "プレビュー"
@@ -8153,7 +8156,7 @@ msgstr ""
 #~ msgstr "選択されたオブジェクトを印刷"
 
 #~ msgid "Print the selected tasks"
-#~ msgstr "選択された仕事を印刷"
+#~ msgstr "選択されたタスクを印刷"
 
 #~ msgid "Printout"
 #~ msgstr "印刷"
@@ -8171,7 +8174,7 @@ msgstr ""
 #~ msgstr "プライベート"
 
 #~ msgid "Private calendars"
-#~ msgstr "プライベート予定表"
+#~ msgstr "プライベートカレンダー"
 
 #~ msgid "Private computer"
 #~ msgstr "プライベート コンピュータ"
@@ -8185,23 +8188,24 @@ msgstr ""
 #~ "others look at your private folders. In case you grant other users "
 #~ "modification permission, such changes will be done under your name."
 #~ msgstr ""
-#~ "プライベート フォルダを管理する権限が割り当てられています。既定では、他の"
-#~ "ユーザにアクセスされることはありません。プライベート フォルダを他のユーザ"
-#~ "と共有し、プライベート フォルダを公開することができます。その場合、その"
-#~ "ユーザに変更権限を付与してください。この変更は、自身の名前で行われます。"
+#~ "プライベート フォルダーを管理する権限が割り当てられています。既定では、他"
+#~ "のユーザーにアクセスされることはありません。プライベート フォルダーを他の"
+#~ "ユーザーと共有し、プライベート フォルダーを公開することができます。その場"
+#~ "合、そのユーザーに変更権限を付与してください。この変更は、自身の名前で行わ"
+#~ "れます。"
 
 #~ msgid ""
 #~ "Private folders are under your control and no other user has access to "
 #~ "your private folders."
 #~ msgstr ""
-#~ "プライベート フォルダを管理する権限が割り当てられています。他のユーザにア"
-#~ "クセスされることはありません。"
+#~ "プライベート フォルダーを管理する権限が割り当てられています。他のユーザー"
+#~ "にアクセスされることはありません。"
 
 #~ msgid "Private machine"
 #~ msgstr "プライベート マシン"
 
 #~ msgid "Private task"
-#~ msgstr "プライベート仕事"
+#~ msgstr "プライベートタスク"
 
 #~ msgid "Private:"
 #~ msgstr "プライベート:"
@@ -8237,13 +8241,13 @@ msgstr ""
 #~ msgstr "パブリック"
 
 #~ msgid "Public calendars"
-#~ msgstr "パブリック予定表"
+#~ msgstr "パブリックカレンダー"
 
 #~ msgid "Public contacts"
 #~ msgstr "パブリック連絡先"
 
 #~ msgid "Public folder %s"
-#~ msgstr "パブリック フォルダ %s"
+#~ msgstr "パブリック フォルダー %s"
 
 #~ msgid ""
 #~ "Public folders are available for all users or selected user groups as "
@@ -8252,23 +8256,24 @@ msgstr ""
 #~ "folder, he acts on behalf of himself, and the object will be created "
 #~ "under his name."
 #~ msgstr ""
-#~ "パブリック フォルダは、管理者が指定したすべてのユーザ グループまたはユーザ"
-#~ "が使用できます。ユーザまたはユーザ グループごとにアクセス権限を拒否できま"
-#~ "す。ユーザがパブリック フォルダにオブジェクトを作成した場合、作成者として"
-#~ "そのオブジェクトを作成します。オブジェクトは作成者の名前で作成されます。"
+#~ "パブリック フォルダーは、管理者が指定したすべてのユーザー グループまたは"
+#~ "ユーザーが使用できます。ユーザーまたはユーザー グループごとにアクセス権限"
+#~ "を拒否できます。ユーザーがパブリック フォルダーにオブジェクトを作成した場"
+#~ "合、作成者としてそのオブジェクトを作成します。オブジェクトは作成者の名前で"
+#~ "作成されます。"
 
 #~ msgid ""
 #~ "Public folders are readable for all users or selected user groups as "
 #~ "determined by the administrator."
 #~ msgstr ""
-#~ "パブリック フォルダは、管理者が指定したすべてのユーザ グループまたはユーザ"
-#~ "が閲覧できます。"
+#~ "パブリック フォルダーは、管理者が指定したすべてのユーザー グループまたは"
+#~ "ユーザーが閲覧できます。"
 
 #~ msgid "Public or shared computer"
 #~ msgstr "パブリック、または、共有コンピュータ"
 
 #~ msgid "Public tasks"
-#~ msgstr "パブリック仕事"
+#~ msgstr "パブリックタスク"
 
 #~ msgid "Publication"
 #~ msgstr "公開"
@@ -8298,7 +8303,7 @@ msgstr ""
 #~ msgstr "公開"
 
 #~ msgid "Publish folder"
-#~ msgstr "フォルダを公開"
+#~ msgstr "フォルダーを公開"
 
 #~ msgid "Publish item"
 #~ msgstr "アイテムを公開"
@@ -8424,16 +8429,16 @@ msgstr ""
 #~ msgstr "定期的なアポイント"
 
 #~ msgid "Recurring task"
-#~ msgstr "定期的な仕事"
+#~ msgstr "定期的なタスク"
 
 #~ msgid "Recurring tasks need a valid due date."
-#~ msgstr "定期的な仕事には、有効な終了日が必要です。"
+#~ msgstr "定期的なタスクには、有効な終了日が必要です。"
 
 #~ msgid "Recurring tasks need a valid end date."
-#~ msgstr "定期的な仕事には、有効な終了日が必要です。"
+#~ msgstr "定期的なタスクには、有効な終了日が必要です。"
 
 #~ msgid "Recurring tasks need a valid start date."
-#~ msgstr "定期的な仕事には、有効な開始日が必要です。"
+#~ msgstr "定期的なタスクには、有効な開始日が必要です。"
 
 #~ msgid "Red"
 #~ msgstr "赤"
@@ -8499,13 +8504,13 @@ msgstr ""
 #~ msgstr "アラーム:"
 
 #~ msgid "Remove Member"
-#~ msgstr "メンバを削除"
+#~ msgstr "メンバーを削除"
 
 #~ msgid "Remove attachment"
 #~ msgstr "添付ファイルを削除する"
 
 #~ msgid "Remove copy from server after retrieving a message"
-#~ msgstr "メッセージの取得後にサーバからコピーを削除"
+#~ msgstr "メッセージの取得後にサーバーからコピーを削除"
 
 #~ msgid "Remove flag"
 #~ msgstr "フラグを削除"
@@ -8514,7 +8519,7 @@ msgstr ""
 #~ msgstr "宛先のリストから削除"
 
 #~ msgid "Remove participant"
-#~ msgstr "出席者を削除"
+#~ msgstr "参加者を削除"
 
 #~ msgid "Remove picture"
 #~ msgstr "写真を削除"
@@ -8526,7 +8531,7 @@ msgstr ""
 #~ msgstr "ドキュメントの名前を変更"
 
 #~ msgid "Rename folder"
-#~ msgstr "フォルダ名を変更"
+#~ msgstr "フォルダー名を変更"
 
 #~ msgid "Renminbi"
 #~ msgstr "人民元"
@@ -8734,7 +8739,7 @@ msgstr ""
 #~ msgstr "下書きを保存"
 
 #~ msgid "Save as distribution list"
-#~ msgstr "配布リストとして保存"
+#~ msgstr "予定として保存"
 
 #~ msgid "Save as draft"
 #~ msgstr "下書きを保存"
@@ -8802,7 +8807,7 @@ msgstr ""
 #~ msgstr "検索先:"
 
 #~ msgid "Searched in all folders"
-#~ msgstr "すべてのフォルダを検索しました。"
+#~ msgstr "すべてのフォルダーを検索しました。"
 
 #~ msgid "Second name"
 #~ msgstr "姓"
@@ -8820,16 +8825,16 @@ msgstr ""
 #~ msgstr "画像ファイルを選択"
 
 #~ msgid "Select Members"
-#~ msgstr "メンバを選択してください。"
+#~ msgstr "メンバーを選択してください。"
 
 #~ msgid "Select Participants and Resources"
-#~ msgstr "出席者と設備を選択してください。"
+#~ msgstr "参加者と設備を選択してください。"
 
 #~ msgid "Select Recipients"
 #~ msgstr "宛先を選択してください。"
 
 #~ msgid "Select Users"
-#~ msgstr "ユーザを選択してください。"
+#~ msgstr "ユーザーを選択してください。"
 
 #~ msgid "Select a contact"
 #~ msgstr "連絡先を選択してください。"
@@ -8838,10 +8843,10 @@ msgstr ""
 #~ msgstr "連絡先のカテゴリを選択してください。"
 
 #~ msgid "Select a folder for import"
-#~ msgstr "インポート用のフォルダを選択してください。"
+#~ msgstr "インポート用のフォルダーを選択してください。"
 
 #~ msgid "Select a task category"
-#~ msgstr "仕事のカテゴリを選択してください。"
+#~ msgstr "タスクのカテゴリを選択してください。"
 
 #~ msgid "Select a type"
 #~ msgstr "タイプを選択してください。"
@@ -8856,28 +8861,28 @@ msgstr ""
 #~ msgstr "アポイントの表示タイプを選択してください。"
 
 #~ msgid "Select contact folder"
-#~ msgstr "連絡先フォルダを選択"
+#~ msgstr "連絡先フォルダーを選択"
 
 #~ msgid "Select file"
 #~ msgstr "ファイルを選択"
 
 #~ msgid "Select folder"
-#~ msgstr "フォルダを選択"
+#~ msgstr "フォルダーを選択"
 
 #~ msgid "Select from the list and add selected as members"
-#~ msgstr "メンバをリストから選択し、追加してください。"
+#~ msgstr "メンバーをリストから選択し、追加してください。"
 
 #~ msgid "Select from the list and add selected as participants"
-#~ msgstr "出席者をリストから選択し、追加してください。"
+#~ msgstr "参加者をリストから選択し、追加してください。"
 
 #~ msgid "Select from the list and add selected as participants or resources"
-#~ msgstr "出席者と設備をリストから選択し、追加してください。"
+#~ msgstr "参加者と設備をリストから選択し、追加してください。"
 
 #~ msgid "Select from the list and add selected as recipients"
 #~ msgstr "宛先をリストから選択し、追加してください。"
 
 #~ msgid "Select from the list and add selected as users"
-#~ msgstr "ユーザをリストから選択し、追加してください。"
+#~ msgstr "ユーザーをリストから選択し、追加してください。"
 
 #~ msgid "Select none"
 #~ msgstr "何も選択しない"
@@ -8937,7 +8942,7 @@ msgstr ""
 #~ msgstr "メールを送信"
 
 #~ msgid "Send mail to all participants"
-#~ msgstr "すべての出席者にメールを送信"
+#~ msgstr "すべての参加者にメールを送信"
 
 #~ msgid "Send new mail"
 #~ msgstr "新規メールを送信"
@@ -8958,7 +8963,7 @@ msgstr ""
 #~ msgstr "送信日時"
 
 #~ msgid "Sent folder"
-#~ msgstr "送信済みフォルダ"
+#~ msgstr "送信済みフォルダー"
 
 #~ msgid "Sent from %s via mobile"
 #~ msgstr "%s からモバイル経由で送信されました。"
@@ -8993,31 +8998,31 @@ msgstr ""
 
 #~ msgctxt "tasks"
 #~ msgid "Series..."
-#~ msgstr "定期的な仕事..."
+#~ msgstr "定期的なタスク..."
 
 #~ msgid "Series:"
 #~ msgstr "定期的なアポイント:"
 
 #~ msgid "Server Error"
-#~ msgstr "サーバ エラー"
+#~ msgstr "サーバー エラー"
 
 #~ msgid "Server name"
-#~ msgstr "サーバ名"
+#~ msgstr "サーバー名"
 
 #~ msgid "Server port"
-#~ msgstr "サーバ ポート"
+#~ msgstr "サーバー ポート"
 
 #~ msgid "Server settings"
-#~ msgstr "サーバ設定"
+#~ msgstr "サーバー設定"
 
 #~ msgid "Server type"
-#~ msgstr "サーバ タイプ"
+#~ msgstr "サーバー タイプ"
 
 #~ msgid "Server unreachable"
-#~ msgstr "サーバに到達できません。"
+#~ msgstr "サーバーに到達できません。"
 
 #~ msgid "Server version"
-#~ msgstr "サーバ バージョン"
+#~ msgstr "サーバー バージョン"
 
 #~ msgid "Service"
 #~ msgstr "サービス"
@@ -9042,16 +9047,16 @@ msgstr ""
 #~ msgstr "共有"
 
 #~ msgid "Share calendar"
-#~ msgstr "予定表を共有"
+#~ msgstr "カレンダーを共有"
 
 #~ msgid "Share link by email"
 #~ msgstr "メールでリンクを共有"
 
 #~ msgid "Share tasks"
-#~ msgstr "仕事を共有"
+#~ msgstr "タスクを共有"
 
 #~ msgid "Share this folder"
-#~ msgstr "このフォルダを共有"
+#~ msgstr "このフォルダーを共有"
 
 #~ msgid "Share your contacts"
 #~ msgstr "連絡先を共有"
@@ -9070,9 +9075,9 @@ msgstr ""
 #~ "case you are allowed to modify items in a shared folder, you make these "
 #~ "changes on behalf of the folder's owner."
 #~ msgstr ""
-#~ "共有フォルダは、他のユーザからアクセス権が与えられたフォルダです。共有フォ"
-#~ "ルダにあるアイテムの編集が許可されている場合、フォルダの所有者の代理として"
-#~ "変更を行います。"
+#~ "共有フォルダーは、他のユーザーからアクセス権が与えられたフォルダーです。共"
+#~ "有フォルダにあるアイテムの編集が許可されている場合、フォルダーの所有者の代"
+#~ "理として変更を行います。"
 
 #~ msgid "Shopping cart"
 #~ msgstr "ショッピング カート"
@@ -9096,7 +9101,7 @@ msgstr ""
 #~ msgstr "5 件を表示"
 
 #~ msgid "Show Group Members"
-#~ msgstr "グループ メンバを表示"
+#~ msgstr "グループ メンバーを表示"
 
 #~ msgid "Show InfoBox after Login"
 #~ msgstr "ログイン後にインフォボックスを表示"
@@ -9131,7 +9136,7 @@ msgstr ""
 #~ "ん。"
 
 #~ msgid "Show all my appointments from all calendars"
-#~ msgstr "予定表全体から自分のアポイントすべてを表示"
+#~ msgstr "カレンダー全体から自分のアポイントすべてを表示"
 
 #~ msgid "Show appointment details"
 #~ msgstr "アポイントを表示"
@@ -9163,7 +9168,7 @@ msgstr ""
 #~ msgstr "詳細を表示"
 
 #~ msgid "Show done tasks"
-#~ msgstr "完了した仕事を表示"
+#~ msgstr "完了したタスクを表示"
 
 #~ msgid "Show file"
 #~ msgstr "ファイルを表示"
@@ -9172,19 +9177,19 @@ msgstr ""
 #~ msgstr "最初のページを表示"
 
 #~ msgid "Show hidden files and folders"
-#~ msgstr "隠しフォルダと隠しファイルを表示"
+#~ msgstr "隠しフォルダーと隠しファイルを表示"
 
 #~ msgid "Show images"
 #~ msgstr "画像を表示"
 
 #~ msgid "Show in Calendar"
-#~ msgstr "予定表に表示"
+#~ msgstr "カレンダーに表示"
 
 #~ msgid "Show in calendar"
-#~ msgstr "予定表に表示"
+#~ msgstr "カレンダーに表示"
 
 #~ msgid "Show inbox"
-#~ msgstr "受信フォルダを表示"
+#~ msgstr "受信フォルダーを表示"
 
 #~ msgid "Show internal link"
 #~ msgstr "内部リンクを表示"
@@ -9235,7 +9240,7 @@ msgstr ""
 #~ msgstr "スタック トレースを表示"
 
 #~ msgid "Show task"
-#~ msgstr "仕事を表示"
+#~ msgstr "タスクを表示"
 
 #~ msgid "Show task details"
 #~ msgstr "詳細を表示"
@@ -9244,7 +9249,7 @@ msgstr ""
 #~ msgstr "バージョン履歴を表示"
 
 #~ msgid "Show/hide folder"
-#~ msgstr "フォルダを移動"
+#~ msgstr "フォルダーを移動"
 
 #~ msgid "Shown as"
 #~ msgstr "公開方法"
@@ -9283,7 +9288,7 @@ msgstr ""
 #~ msgstr "署名"
 
 #~ msgid "Signed in as %1$s"
-#~ msgstr "サイン イン ユーザ: %1$s"
+#~ msgstr "サイン イン ユーザー: %1$s"
 
 #~ msgid "Simple Pad"
 #~ msgstr "簡易パッド"
@@ -9327,8 +9332,8 @@ msgstr ""
 #~ msgid ""
 #~ "Social accounts are only used to download contact and/or calendar data"
 #~ msgstr ""
-#~ "ソーシャル アカウントは、連絡先データや予定表データのダウンロードのみに使"
-#~ "用されます。"
+#~ "ソーシャル アカウントは、連絡先データやカレンダーデータのダウンロードのみ"
+#~ "に使用されます。"
 
 #~ msgid "SoftBank"
 #~ msgstr "SoftBank"
@@ -9343,11 +9348,11 @@ msgstr ""
 #~ msgstr "無効なデータが一部のフィールドに入力されています。"
 
 #~ msgid "Someone shared a file with you"
-#~ msgstr "他のユーザとファイルを共有しています。"
+#~ msgstr "他のユーザーとファイルを共有しています。"
 
 #~ msgid ""
 #~ "Someone shared a folder with you. Would you like to subscribe those %1$s?"
-#~ msgstr "他のユーザとフォルダを共有しています。%1$s を登録しますか？"
+#~ msgstr "他のユーザーとフォルダーを共有しています。%1$s を登録しますか？"
 
 #~ msgid "Something went wrong reauthorizing the %s account."
 #~ msgstr "%s アカウントの再承認中にエラーが発生しました。"
@@ -9381,10 +9386,10 @@ msgstr ""
 #~ msgstr "サウスジョージアとサウスサンドイッチ諸島"
 
 #~ msgid "Spam"
-#~ msgstr "スパム"
+#~ msgstr "迷惑メール"
 
 #~ msgid "Spam folder"
-#~ msgstr "スパム フォルダ"
+#~ msgstr "迷惑メール フォルダー"
 
 #~ msgid "Spanish"
 #~ msgstr "スペイン語"
@@ -9552,10 +9557,10 @@ msgstr ""
 #~ msgstr "登録"
 
 #~ msgid "Subscribe Folder"
-#~ msgstr "フォルダを登録"
+#~ msgstr "フォルダーを登録"
 
 #~ msgid "Subscribe IMAP folders"
-#~ msgstr "IMAP フォルダを登録"
+#~ msgstr "IMAP フォルダーを登録"
 
 #~ msgid "Subscribe contacts from LinkedIn, Facebook, Google..."
 #~ msgstr "LinkedIn、Facebook、Google...から連絡先を登録"
@@ -9669,7 +9674,7 @@ msgstr ""
 #~ msgstr "同期"
 
 #~ msgid "Synchronization to the server has been lost."
-#~ msgstr "サーバとの同期が失われました。"
+#~ msgstr "サーバーとの同期が失われました。"
 
 #~ msgid "Synchronize with Outlook"
 #~ msgstr "Outlook と同期"
@@ -9685,11 +9690,11 @@ msgstr ""
 #~ "Syntax error in server reply:\n"
 #~ "%s"
 #~ msgstr ""
-#~ "サーバの応答で次の構文エラーが発生しました: \n"
+#~ "サーバーの応答で次の構文エラーが発生しました: \n"
 #~ "%s"
 
 #~ msgid "Syntax error in server reply: no error provided"
-#~ msgstr "サーバの応答に構文エラーが発生しました: エラー情報はありません。"
+#~ msgstr "サーバーの応答に構文エラーが発生しました: エラー情報はありません。"
 
 #~ msgid ""
 #~ "Syntax error in server response (%s): \"%s\"\n"
@@ -9700,7 +9705,7 @@ msgstr ""
 #~ "\n"
 #~ "Response: %s"
 #~ msgstr ""
-#~ "サーバの応答に次の構文エラーがあります (%s): \"%s\"\n"
+#~ "サーバーの応答に次の構文エラーがあります (%s): \"%s\"\n"
 #~ "\n"
 #~ "URL: %s\n"
 #~ "\n"
@@ -9780,64 +9785,64 @@ msgstr ""
 #~ msgstr "対象"
 
 #~ msgid "Task"
-#~ msgstr "仕事"
+#~ msgstr "タスク"
 
 #~ msgid "Task Details"
-#~ msgstr "仕事の詳細"
+#~ msgstr "タスクの詳細"
 
 #~ msgid "Task has been deleted!"
 #~ msgid_plural "Tasks have been deleted!"
-#~ msgstr[0] "仕事を削除しました。"
+#~ msgstr[0] "タスクを削除しました。"
 
 #~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
-#~ msgstr "アポイントへの出席依頼: %1$s %2$s %3$s Enter キーで開きます。"
+#~ msgstr "アポイントへの招待: %1$s %2$s %3$s Enter キーで開きます。"
 
 #~ msgid "Task invitations"
-#~ msgstr "仕事への出席依頼"
+#~ msgstr "タスクへの招待"
 
 #~ msgid "Task moved."
 #~ msgid_plural "Tasks moved."
-#~ msgstr[0] "仕事を移動しました。"
+#~ msgstr[0] "タスクを移動しました。"
 
 #~ msgid "Task reminder. %1$s %2$s %3$s. Press [enter] to open"
-#~ msgstr "仕事のアラーム: %1$s %2$s %3$s Enter キーで開きます。"
+#~ msgstr "タスクのアラーム: %1$s %2$s %3$s Enter キーで開きます。"
 
 #~ msgid "Task reminders"
-#~ msgstr "仕事のアラーム"
+#~ msgstr "タスクのアラーム"
 
 #~ msgid "Task was already deleted!"
-#~ msgstr "仕事は既に削除されています。"
+#~ msgstr "タスクは既に削除されています。"
 
 #~ msgid "Task was modified before, please reload"
-#~ msgstr "この仕事は既に変更されています。再読み込みしてください。"
+#~ msgstr "このタスクは既に変更されています。再読み込みしてください。"
 
 #~ msgid "Tasks"
-#~ msgstr "仕事"
+#~ msgstr "タスク"
 
 #~ msgctxt "app"
 #~ msgid "Tasks"
-#~ msgstr "仕事"
+#~ msgstr "タスク"
 
 #~ msgid "Tasks have been moved"
-#~ msgstr "仕事を移動しました。"
+#~ msgstr "タスクを移動しました。"
 
 #~ msgid "Tasks:"
-#~ msgstr "仕事:"
+#~ msgstr "タスク:"
 
 #~ msgid "Team"
 #~ msgstr "チーム"
 
 #~ msgid "Team Member"
-#~ msgstr "チーム メンバ"
+#~ msgstr "チーム メンバー"
 
 #~ msgid "Team Members"
-#~ msgstr "チーム メンバ"
+#~ msgstr "チーム メンバー"
 
 #~ msgid "Team day view"
 #~ msgstr "チーム日ビュー"
 
 #~ msgid "Team member"
-#~ msgstr "チーム メンバ"
+#~ msgstr "チーム メンバー"
 
 #~ msgid "Team workweek view"
 #~ msgstr "チーム稼働日ビュー"
@@ -9870,7 +9875,7 @@ msgstr ""
 #~ msgstr "テンプレート"
 
 #~ msgid "Temporary"
-#~ msgstr "仮の予定"
+#~ msgstr "仮承諾"
 
 #~ msgid "Tentative"
 #~ msgstr "仮承諾"
@@ -9964,8 +9969,8 @@ msgstr ""
 #~ "The My InfoStore folder is a copy of the personal UserStore folder at the "
 #~ "InfoStore section."
 #~ msgstr ""
-#~ "マイ インフォストア フォルダは、インフォストア セクションの個人用の "
-#~ "UserStore フォルダのコピーです。"
+#~ "マイ インフォストア フォルダーは、インフォストア セクションの個人用の "
+#~ "UserStore フォルダーのコピーです。"
 
 #~ msgid "The New objects icon"
 #~ msgstr "新規オブジェクト アイコン"
@@ -9999,9 +10004,10 @@ msgstr ""
 #~ "users. This means, if an user shared his InfoStore folder or the "
 #~ "subfolder structure, the user can see the objects."
 #~ msgstr ""
-#~ "ユーザ ストアの一例として、他のユーザと共有する個人用の共有インフォ スト"
-#~ "ア フォルダがあります。ユーザがインフォストア フォルダまたはそのサブ フォ"
-#~ "ルダを共有すると、それらのフォルダにあるオブジェクトを閲覧できます。"
+#~ "ユーザー ストアの一例として、他のユーザーと共有する個人用の共有インフォ ス"
+#~ "トア フォルダーがあります。ユーザーがインフォストア フォルダーまたはそのサ"
+#~ "ブ フォルダを共有すると、それらのフォルダーにあるオブジェクトを閲覧できま"
+#~ "す。"
 
 #~ msgid "The account must be named"
 #~ msgstr "アカウントの名前を指定する必要があります。"
@@ -10010,7 +10016,7 @@ msgstr ""
 #~ msgstr "許可された割当量に達しました。"
 
 #~ msgid "The appointment has been added to your calendar"
-#~ msgstr "このアポイントが予定表に追加されました。"
+#~ msgstr "このアポイントがカレンダーに追加されました。"
 
 #~ msgid "The appointment has been deleted"
 #~ msgstr "アポイントが削除されました。"
@@ -10155,19 +10161,19 @@ msgstr ""
 #~ msgstr "最初の 90 日間は無償です。"
 
 #~ msgid "The folder has been cleaned up."
-#~ msgstr "フォルダのクリーン アップが完了しました。"
+#~ msgstr "フォルダーのクリーン アップが完了しました。"
 
 #~ msgid "The folder has been emptied."
-#~ msgstr "フォルダを空にしました。"
+#~ msgstr "フォルダーを空にしました。"
 
 #~ msgid "The folder is available at %1$s"
-#~ msgstr "このフォルダは %1$s にあります。"
+#~ msgstr "このフォルダーは %1$s にあります。"
 
 #~ msgid ""
 #~ "The following addresses are already on the list of participants and "
 #~ "therefore not been added: %s"
 #~ msgstr ""
-#~ "次のアドレスは出席者のリストに既に存在しているため、追加されませんでした:"
+#~ "次のアドレスは参加者のリストに既に存在しているため、追加されませんでした:"
 #~ "%s"
 
 #~ msgid ""
@@ -10184,7 +10190,7 @@ msgstr ""
 #~ msgstr "次の製品が有効になりました。"
 
 #~ msgid "The following task is already past due:"
-#~ msgstr "次の仕事は既に締切日を過ぎています:"
+#~ msgstr "次のタスクは既に締切日を過ぎています:"
 
 #~ msgid ""
 #~ "The graph shows performance frequencies in percent. Grey line shows ideal "
@@ -10197,7 +10203,7 @@ msgstr ""
 #~ "The icon at the bottom right side helps you sort your tasks. Click the "
 #~ "icon to get a list of sort criteria."
 #~ msgstr ""
-#~ "右下にあるアイコンで仕事をソートできます。このアイコンをクリックすると、"
+#~ "右下にあるアイコンでタスクをソートできます。このアイコンをクリックすると、"
 #~ "ソート条件の一覧が表示されます。"
 
 #~ msgid ""
@@ -10214,7 +10220,7 @@ msgstr ""
 #~ msgstr "必須フィールド %1$s が入力されていません。"
 
 #~ msgid "The new folder tree setting will take effect after a new login."
-#~ msgstr "新しいフォルダ ツリーの設定は次のログオン以降に有効になります。"
+#~ msgstr "新しいフォルダー ツリーの設定は次のログオン以降に有効になります。"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "一つのフィールド内の宛先の数は %1$s 件に制限されます。"
@@ -10248,7 +10254,8 @@ msgstr ""
 #~ msgstr "検索パターンには少なくとも %s 文字が必要です。"
 
 #~ msgid "The selected filter rule refers to an unknown folder '%s'."
-#~ msgstr "選択されたフィルタ ルールは不明なフォルダ '%s' を参照しています。"
+#~ msgstr ""
+#~ "選択されたフィルター ルールは不明なフォルダー '%s' を参照しています。"
 
 #~ msgid "The sender wants to get notified when you have read this email"
 #~ msgstr ""
@@ -10282,7 +10289,7 @@ msgstr ""
 #~ "widget=\"options\">期限なし</a> に設定されています。"
 
 #~ msgid "The server didn't respond!"
-#~ msgstr "サーバは応答していません。"
+#~ msgstr "サーバーは応答していません。"
 
 #~ msgid ""
 #~ "The setting has been saved and will become active when you enter the "
@@ -10306,8 +10313,8 @@ msgstr ""
 #~ "The settings for collecting contacts in this folder will become disabled "
 #~ "when you enter the application the next time."
 #~ msgstr ""
-#~ "次回アプリケーションを起動すると、このフォルダへの連絡先の収集設定が無効に"
-#~ "なります。"
+#~ "次回アプリケーションを起動すると、このフォルダーへの連絡先の収集設定が無効"
+#~ "になります。"
 
 #~ msgid ""
 #~ "The shared data will be accessible to everyone on the Internet. Please "
@@ -10333,7 +10340,7 @@ msgstr ""
 
 #~ msgid "The task could not be deleted."
 #~ msgid_plural "The tasks could not be deleted."
-#~ msgstr[0] "仕事を削除できませんでした。"
+#~ msgstr[0] "タスクを削除できませんでした。"
 
 #~ msgid "The two newly entered passwords do not match."
 #~ msgstr "入力した 2 つの新しいパスワードが一致しません。"
@@ -10398,7 +10405,7 @@ msgstr ""
 #~ msgid ""
 #~ "There was no suitable server found for this mail/password combination"
 #~ msgstr ""
-#~ "このメールとパスワードの組み合わせが保存されているサーバがありません。"
+#~ "このメールとパスワードの組み合わせが保存されているサーバーがありません。"
 
 #~ msgid "There were not activities in your network"
 #~ msgstr "ご利用のネットワークでは、アクティビティがありません。"
@@ -10407,8 +10414,8 @@ msgstr ""
 #~ "These statistics only include folders, which have a depth less than four "
 #~ "in the folder structure from the folder \"%1$s\"."
 #~ msgstr ""
-#~ "これらの統計情報には、フォルダ \"%1$s\" から 4 階層未満のフォルダのみが含"
-#~ "まれます。"
+#~ "これらの統計情報には、フォルダー \"%1$s\" から 4 階層未満のフォルダーのみ"
+#~ "が含まれます。"
 
 #~ msgid "This Signature name already exists"
 #~ msgstr "この署名は既に存在します"
@@ -10427,7 +10434,7 @@ msgstr ""
 #~ "この連絡先はプライベートの連絡先として設定されているため、共有できません。"
 
 #~ msgid "This distribution list has been added to the portal"
-#~ msgstr "この配布リストをポータルに追加しました。"
+#~ msgstr "この予定をポータルに追加しました。"
 
 #~ msgid "This document contains unsaved changes. Do you really want to close?"
 #~ msgstr ""
@@ -10437,7 +10444,7 @@ msgstr ""
 #~ msgstr "このメール アドレスは、アポイントに使用できません。"
 
 #~ msgid "This email contains a task"
-#~ msgstr "このメールには仕事が含まれています。"
+#~ msgstr "このメールにはタスクが含まれています。"
 
 #~ msgid "This email contains an appointment"
 #~ msgstr "このメールにはアポイントが含まれています。"
@@ -10502,28 +10509,30 @@ msgstr ""
 
 #~ msgid "This file will be written in your default folder to allow editing"
 #~ msgstr ""
-#~ "このファイルは既定のフォルダに書き込まれるため、このファイルを編集できま"
+#~ "このファイルは既定のフォルダーに書き込まれるため、このファイルを編集できま"
 #~ "す。"
 
 #~ msgid "This folder has no publications"
-#~ msgstr "このフォルダは公開されていません。"
+#~ msgstr "このフォルダーは公開されていません。"
 
 #~ msgid "This folder has no subscriptions"
-#~ msgstr "このフォルダは登録されていません。"
+#~ msgstr "このフォルダーは登録されていません。"
 
 #~ msgid "This folder has publications and/or subscriptions"
-#~ msgstr "このフォルダは公開または登録されています。"
+#~ msgstr "このフォルダーは公開または登録されています。"
 
 #~ msgid ""
 #~ "This folder has publications but you are not allowed to view or edit them"
-#~ msgstr "このフォルダは公開されていますが、表示や編集は許可されていません。"
+#~ msgstr ""
+#~ "このフォルダーは公開されていますが、表示や編集は許可されていません。"
 
 #~ msgid ""
 #~ "This folder has subscriptions but you are not allowed to view or edit them"
-#~ msgstr "このフォルダは登録されていますが、表示や編集は許可されていません。"
+#~ msgstr ""
+#~ "このフォルダーは登録されていますが、表示や編集は許可されていません。"
 
 #~ msgid "This is a standard folder, which can't be renamed."
-#~ msgstr "これは標準フォルダです。フォルダ名は変更できません。"
+#~ msgstr "これは標準フォルダーです。フォルダー名は変更できません。"
 
 #~ msgid "This is not a valid email address"
 #~ msgstr "このメール アドレスは無効です。"
@@ -10532,13 +10541,13 @@ msgstr ""
 #~ msgstr "このメール アドレスは無効です。"
 
 #~ msgid "This is not a valid user or group."
-#~ msgstr "これは、有効なユーザ/グループではありません。"
+#~ msgstr "これは、有効なユーザー/グループではありません。"
 
 #~ msgid "This list has no contacts yet"
-#~ msgstr "このリストにはメンバが今のところ追加されていません。"
+#~ msgstr "このリストにはメンバーが今のところ追加されていません。"
 
 #~ msgid "This mail contains a reply to an invitation."
-#~ msgstr "このメールには出席依頼への回答が含まれています。"
+#~ msgstr "このメールには招待への回答が含まれています。"
 
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "このメールには公開への URL があります。"
@@ -10569,7 +10578,7 @@ msgstr ""
 #~ msgstr[1] "このセッションは、%d 秒後に終了します。"
 
 #~ msgid "This task recurs"
-#~ msgstr "この仕事は、繰り返しの設定になっています。"
+#~ msgstr "このタスクは、繰り返しの設定になっています。"
 
 #~ msgid ""
 #~ "This widget is currently offline because the twitter rate limit exceeded."
@@ -10609,7 +10618,7 @@ msgstr ""
 #~ msgstr "時間軸"
 
 #~ msgid "Time range for the calender view"
-#~ msgstr "予定表ビューの時間軸"
+#~ msgstr "カレンダービューの時間軸"
 
 #~ msgid "Time range for the list view"
 #~ msgstr "リスト ビューの時間軸"
@@ -10662,7 +10671,7 @@ msgstr ""
 #~ "To add contacts manually, just provide a valid email address (e.g john."
 #~ "doe@example.com or \"John Doe\" <jd@example.com>)"
 #~ msgstr ""
-#~ "出席者を手動で追加するには、有効なメール アドレスを入力してください (例:"
+#~ "参加者を手動で追加するには、有効なメール アドレスを入力してください (例:"
 #~ "john.doe@example.com または \"John Doe\" <jd@example.com>)。"
 
 #~ msgid "To create a note, click on New > Add note in the toolbar."
@@ -10680,7 +10689,7 @@ msgstr ""
 #~ "す。"
 
 #~ msgid "To create the task, click on Create on the upper right side."
-#~ msgstr "仕事を作成するには、右上にある [作成] をクリックします。"
+#~ msgstr "タスクを作成するには、右上にある [作成] をクリックします。"
 
 #~ msgid "To launch an app, click on a tile's headline."
 #~ msgstr ""
@@ -10768,7 +10777,7 @@ msgstr ""
 #~ msgstr "チェックボックスを表示"
 
 #~ msgid "Toggle folder"
-#~ msgstr "フォルダを表示"
+#~ msgstr "フォルダーを表示"
 
 #~ msgid "Toggle search"
 #~ msgstr "検索フィールドを表示"
@@ -10795,13 +10804,13 @@ msgstr ""
 #~ msgstr "上位 10 個のファイル タイプ"
 
 #~ msgid "Top 10 folder size"
-#~ msgstr "上位 10 件のフォルダ サイズ"
+#~ msgstr "上位 10 件のフォルダー サイズ"
 
 #~ msgid "Top 10 you got mail from"
-#~ msgstr "次のユーザから受信した上位 10 通のメール"
+#~ msgstr "次のユーザーから受信した上位 10 通のメール"
 
 #~ msgid "Top 10 you sent mail to"
-#~ msgstr "次のユーザに送信した上位 10 通のメール"
+#~ msgstr "次のユーザーに送信した上位 10 通のメール"
 
 #~ msgid "Total cost"
 #~ msgstr "総コスト"
@@ -10819,7 +10828,7 @@ msgstr ""
 #~ msgstr "市区町村"
 
 #~ msgid "Trash folder"
-#~ msgstr "ごみ箱フォルダ"
+#~ msgstr "ごみ箱フォルダー"
 
 #~ msgid "Trinidad and Tobago"
 #~ msgstr "トリニダードトバゴ"
@@ -10903,7 +10912,7 @@ msgstr ""
 #~ msgstr "ウクライナ"
 
 #~ msgid "Unable to create a new subscription folder."
-#~ msgstr "新しい登録フォルダを作成できません。"
+#~ msgstr "新しい登録フォルダーを作成できません。"
 
 #~ msgid "Unable to display E-Mail source."
 #~ msgstr "メール ソースを表示できません。"
@@ -10914,13 +10923,13 @@ msgstr ""
 #~ "problems. To prevent further errors the module has been disabled. Please "
 #~ "contact your administrator."
 #~ msgstr ""
-#~ "メール サーバへの接続を確立できません。考えられる理由: メールサーバが (一"
-#~ "時的に) ダウンしているか、ネットワーク接続に問題があります。再度エラーが発"
-#~ "生するのを防ぐため、このモジュールは無効になりました。システム管理者に連絡"
-#~ "してください。"
+#~ "メール サーバーへの接続を確立できません。考えられる理由: メールサーバーが "
+#~ "(一時的に) ダウンしているか、ネットワーク接続に問題があります。再度エラー"
+#~ "が発生するのを防ぐため、このモジュールは無効になりました。システム管理者に"
+#~ "連絡してください。"
 
 #~ msgid "Unable to load mail filter settings."
-#~ msgstr "メール フィルタ バックエンドに接続できません。"
+#~ msgstr "メール フィルター バックエンドに接続できません。"
 
 #~ msgid "Unanswered"
 #~ msgstr "未回答"
@@ -10941,8 +10950,8 @@ msgstr ""
 #~ "Unexpected: Unable to load data because the server response was empty! "
 #~ "Please try again later or contact the system administrator!"
 #~ msgstr ""
-#~ "次の予期しないエラーが発生しました: サーバの応答がないため、データを読み込"
-#~ "めません。後でもう一度試すか、システム管理者に連絡してください。"
+#~ "次の予期しないエラーが発生しました: サーバーの応答がないため、データを読み"
+#~ "込めません。後でもう一度試すか、システム管理者に連絡してください。"
 
 #~ msgid "Unfollow"
 #~ msgstr "アンフォロー"
@@ -11063,7 +11072,7 @@ msgstr ""
 #~ msgstr "ファイルのアップロード"
 
 #~ msgid "Uploading folders is not supported."
-#~ msgstr "フォルダのアップロードはサポートされていません。"
+#~ msgstr "フォルダーのアップロードはサポートされていません。"
 
 #~ msgid "Uploading..."
 #~ msgstr "アップロードしています..."
@@ -11107,8 +11116,8 @@ msgstr ""
 #~ "toolbar."
 #~ msgstr ""
 #~ "自身のファイル、パブリック ファイル、共有ファイルにアクセスするには、フォ"
-#~ "ルダ ツリーを使用します。フォルダ ツリーが隠れている場合は、ツールバーの右"
-#~ "側にある [ビュー] → [フォルダ ビュー] の順にクリックします。"
+#~ "ルダ ツリーを使用します。フォルダー ツリーが隠れている場合は、ツールバーの"
+#~ "右側にある [ビュー] → [フォルダー ビュー] の順にクリックします。"
 
 #~ msgid ""
 #~ "Use this option when logging in to the server from a public or shared "
@@ -11118,40 +11127,40 @@ msgstr ""
 #~ "out from the server. Close the browser window. This prevents unauthorized "
 #~ "access to your groupware data."
 #~ msgstr ""
-#~ "パブリック コンピュータや共有コンピュータからサーバにログインする場合、こ"
-#~ "のオプションを使用してください。ご利用の認証情報はローカルに保存されていま"
-#~ "せん。グループウェアでの作業は 1 つのブラウザ ウィンドウでしかできません。"
-#~ "ブラウザ ウィンドウは再読み込みしないでください。 グループウェアでの作業を"
-#~ "終了するには、サーバからログアウトし、ブラウザ ウィンドウを閉じてくださ"
-#~ "い。これで、ご利用のグループウェア データへの不正アクセスを防ぐことができ"
-#~ "ます。"
+#~ "パブリック コンピュータや共有コンピュータからサーバーにログインする場合、"
+#~ "このオプションを使用してください。ご利用の認証情報はローカルに保存されてい"
+#~ "ません。グループウェアでの作業は 1 つのブラウザ ウィンドウでしかできませ"
+#~ "ん。ブラウザ ウィンドウは再読み込みしないでください。 グループウェアでの作"
+#~ "業を終了するには、サーバーからログアウトし、ブラウザ ウィンドウを閉じてく"
+#~ "ださい。これで、ご利用のグループウェア データへの不正アクセスを防ぐことが"
+#~ "できます。"
 
 #~ msgid "Use unified mail for this account"
 #~ msgstr "このアカウントに統合メールを使用"
 
 #~ msgid "Use username and password"
-#~ msgstr "ユーザ名とパスワードを使用"
+#~ msgstr "ユーザー名とパスワードを使用"
 
 #~ msgid "User"
-#~ msgstr "ユーザ"
+#~ msgstr "ユーザー"
 
 #~ msgid "User data"
-#~ msgstr "ユーザ データ"
+#~ msgstr "ユーザー データ"
 
 #~ msgid "User fields"
-#~ msgstr "ユーザ フィールド"
+#~ msgstr "ユーザー フィールド"
 
 #~ msgid "User name"
-#~ msgstr "ユーザ名"
+#~ msgstr "ユーザー名"
 
 #~ msgid "Username"
-#~ msgstr "ユーザ名"
+#~ msgstr "ユーザー名"
 
 #~ msgid "Username must not be empty."
-#~ msgstr "ユーザ名は空にできません。"
+#~ msgstr "ユーザー名は空にできません。"
 
 #~ msgid "Users"
-#~ msgstr "ユーザ"
+#~ msgstr "ユーザー"
 
 #~ msgid "Using the reminder functions"
 #~ msgstr "アラーム機能の使用"
@@ -11214,7 +11223,7 @@ msgstr ""
 #~ msgstr "スライドショーを表示"
 
 #~ msgid "View all appointments from all available calendars"
-#~ msgstr "利用可能なすべての予定表のすべてのアポイントを表示"
+#~ msgstr "利用可能なすべてのカレンダーのすべてのアポイントを表示"
 
 #~ msgid "View all attachments"
 #~ msgstr "すべての添付ファイルを表示"
@@ -11232,7 +11241,7 @@ msgstr ""
 #~ msgstr "月ビューでアポイントを表示"
 
 #~ msgid "View appointments in one of the calendar views"
-#~ msgstr "予定表ビューでアポイントを表示"
+#~ msgstr "カレンダービューでアポイントを表示"
 
 #~ msgid "View appointments in one of the team views"
 #~ msgstr "チーム ビューでアポイントを表示"
@@ -11271,7 +11280,7 @@ msgstr ""
 #~ msgstr "可視性"
 
 #~ msgid "Visible folder"
-#~ msgstr "可視フォルダ"
+#~ msgstr "可視フォルダー"
 
 #~ msgid "Visual effects"
 #~ msgstr "視覚効果"
@@ -11358,14 +11367,14 @@ msgstr ""
 #~ "公開機能を使用する際は、その時点でのデータの所有者として、プライバシー規則"
 #~ "に注意を払うこと、および法的義務 (著作権法およびプライバシー法) を順守する"
 #~ "ことへの責任を負います。特に個人データを公開する場合は、連邦データ保護法 "
-#~ "(BDSG、ドイツ) や、製品を実際に使用する国のプライバシー法に基づき、ユーザ"
-#~ "はそのデータの公開についての責任を負う当事者となります。ユーザはそのデータ"
-#~ "の責任を負う当事者として、欧州やその他の国の法律に従い、データを効率的に運"
-#~ "用することについても責任を負います。個人データは、その個人の同意なしに公開"
-#~ "や転送することは禁止されています。Open-Xchange 社は、法的義務の対象外の個"
-#~ "人情報の取り扱いにも細心の注意を払うようお勧めします。個人データの保管場所"
-#~ "や転送する相手についても十分に検討をし、パスワードによる確実な保護を施すな"
-#~ "ど、適切なアクセス保護を行ってください。"
+#~ "(BDSG、ドイツ) や、製品を実際に使用する国のプライバシー法に基づき、ユー"
+#~ "ザーはそのデータの公開についての責任を負う当事者となります。ユーザーはその"
+#~ "データの責任を負う当事者として、欧州やその他の国の法律に従い、データを効率"
+#~ "的に運用することについても責任を負います。個人データは、その個人の同意なし"
+#~ "に公開や転送することは禁止されています。Open-Xchange 社は、法的義務の対象"
+#~ "外の個人情報の取り扱いにも細心の注意を払うようお勧めします。個人データの保"
+#~ "管場所や転送する相手についても十分に検討をし、パスワードによる確実な保護を"
+#~ "施すなど、適切なアクセス保護を行ってください。"
 
 #~ msgid "Whole day"
 #~ msgstr "終日"
@@ -11426,13 +11435,13 @@ msgstr ""
 #~ msgstr "昨日"
 
 #~ msgid "You already accepted this invitation"
-#~ msgstr "この出席依頼は既に承諾されています。"
+#~ msgstr "この招待は既に承諾されています。"
 
 #~ msgid ""
 #~ "You are about to change your confirmation status. Please leave a comment "
 #~ "for other participants."
 #~ msgstr ""
-#~ "確認ステータスを変更しようとしています。変更する場合は、他の出席者にコメン"
+#~ "確認ステータスを変更しようとしています。変更する場合は、他の参加者にコメン"
 #~ "トを送信してください。"
 
 #~ msgid ""
@@ -11447,14 +11456,14 @@ msgstr ""
 #~ "Appointments will therefore be created in your private calendar."
 #~ msgstr ""
 #~ "%2$s が所有者となっている \"%1$s\" にアポイントを作成することは許可されて"
-#~ "いません。アポイントは自身のプライベートの予定表に作成されます。"
+#~ "いません。アポイントは自身のプライベートのカレンダーに作成されます。"
 
 #~ msgid ""
 #~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
 #~ "therefore be created in your private calendar."
 #~ msgstr ""
 #~ "\"%1$s\" にアポイントを作成することは許可されていません。アポイントは、自"
-#~ "身のプライベートの予定表に作成されます。"
+#~ "身のプライベートのカレンダーに作成されます。"
 
 #~ msgid "You are the organizer"
 #~ msgstr "あなたはこのアポイントの開催者です。"
@@ -11483,7 +11492,8 @@ msgstr ""
 
 #~ msgid ""
 #~ "You cannot remove the owner of the shared folder from this appointment."
-#~ msgstr "このアポイントから共有フォルダの所有者を削除することはできません。"
+#~ msgstr ""
+#~ "このアポイントから共有フォルダーの所有者を削除することはできません。"
 
 #~ msgid "You cannot remove yourself from this appointment."
 #~ msgstr "このアポイントから自身を削除できません。"
@@ -11492,13 +11502,13 @@ msgstr ""
 #~ "You create a new subfolder, do you want to add rights of the superior "
 #~ "folder?"
 #~ msgstr ""
-#~ "新規サブフォルダが作成されましたが、上位フォルダの権限を追加しますか？"
+#~ "新規サブフォルダーが作成されましたが、上位フォルダーの権限を追加しますか？"
 
 #~ msgid "You declined this appointment"
 #~ msgstr "このアポイントを辞退しました。"
 
 #~ msgid "You declined this task"
-#~ msgstr "この仕事を辞退しました。"
+#~ msgstr "このタスクを辞退しました。"
 
 #~ msgid "You did not enter a subject. Would you like to enter a subject now?"
 #~ msgstr "件名が入力されていません。今、件名を入力しますか？"
@@ -11507,8 +11517,8 @@ msgstr ""
 #~ "You do not have write permission for this folder. The new contact will be "
 #~ "saved in your personal contacts folder. "
 #~ msgstr ""
-#~ "このフォルダの書き込み権限がありません。新しい連絡先は、個人用の連絡先フォ"
-#~ "ルダに保存されます。"
+#~ "このフォルダーの書き込み権限がありません。新しい連絡先は、個人用の連絡先"
+#~ "フォルダに保存されます。"
 
 #~ msgid "You don't have any appointments in the near future."
 #~ msgstr "アポイントは当面ありません。"
@@ -11520,14 +11530,14 @@ msgstr ""
 #~ msgstr "何も登録していません。"
 
 #~ msgid "You don't have any tasks that are either due soon or overdue."
-#~ msgstr "期限が近い仕事や期限が過ぎた仕事はありません。"
+#~ msgstr "期限が近いタスクや期限が過ぎたタスクはありません。"
 
 #~ msgid ""
 #~ "You don't have enough rights to create objects in this folder. Do you "
 #~ "want to create the object in your default folder?"
 #~ msgstr ""
-#~ "このフォルダにオブジェクトを作成する十分な権限がありません。既定のフォルダ"
-#~ "にオブジェクトを作成しますか？"
+#~ "このフォルダーにオブジェクトを作成する十分な権限がありません。既定のフォル"
+#~ "ダーにオブジェクトを作成しますか？"
 
 #~ msgid "You don't have permissions to change this document"
 #~ msgstr "このドキュメントを変更する権限がありません。"
@@ -11573,10 +11583,10 @@ msgstr ""
 #~ msgstr "このアポイントを承諾しました。"
 
 #~ msgid "You have accepted this task"
-#~ msgstr "この仕事を承諾しました。"
+#~ msgstr "このタスクを承諾しました。"
 
 #~ msgid "You have an unconfirmed task"
-#~ msgstr "未確認の仕事があります。"
+#~ msgstr "未確認のタスクがあります。"
 
 #~ msgid "You have been automatically signed out"
 #~ msgstr "自動的にサイン アウトされます。"
@@ -11614,7 +11624,7 @@ msgstr ""
 #~ msgstr "%s に次のアポイントがあります:"
 
 #~ msgid "You have to enter a username and password to subscribe."
-#~ msgstr "登録するには、ユーザ名とパスワードを入力してください。"
+#~ msgstr "登録するには、ユーザー名とパスワードを入力してください。"
 
 #~ msgid "You must specify an E-Mail address for redirection."
 #~ msgstr "リダイレクトするには、メール アドレスを指定してください。"
@@ -11634,17 +11644,17 @@ msgstr ""
 
 #~ msgid "You seem to have been inactive for %d minute."
 #~ msgid_plural "You seem to have been inactive for %d minutes."
-#~ msgstr[0] "%d 分間、ユーザとして稼動していません。"
-#~ msgstr[1] "%d 分間、ユーザとして稼動していません。"
+#~ msgstr[0] "%d 分間、ユーザーとして稼動していません。"
+#~ msgstr[1] "%d 分間、ユーザーとして稼動していません。"
 
 #~ msgid "You share this folder with other users"
-#~ msgstr "他のユーザとこのフォルダを共有しています。"
+#~ msgstr "他のユーザーとこのフォルダーを共有しています。"
 
 #~ msgid "You tentatively accepted this invitation"
-#~ msgstr "この出席依頼を仮承諾しました"
+#~ msgstr "この招待を仮承諾しました"
 
 #~ msgid "You tentatively accepted this task"
-#~ msgstr "この仕事を仮承諾しました"
+#~ msgstr "このタスクを仮承諾しました"
 
 #~ msgid "You wanted to be reminded about the following InfoItem:"
 #~ msgstr "次のインフォアイテムについて通知を受ける:"
@@ -11655,7 +11665,7 @@ msgstr ""
 #~ "applied."
 #~ msgstr ""
 #~ "この後、自動的にアポイント ダイアログに戻ります。選択された開始時間と終了"
-#~ "時間、および現在の出席者リストが適用されます。"
+#~ "時間、および現在の参加者リストが適用されます。"
 
 #~ msgid "You will be automatically signed out in %1$d second"
 #~ msgid_plural "You will be automatically signed out in %1$d seconds"
@@ -11700,8 +11710,8 @@ msgstr ""
 #~ "currently using %1$s of its %2$s available disk space. The amount of free "
 #~ "space is %3$s."
 #~ msgstr ""
-#~ "容量は、グループ内のすべてのメンバで共有されています。現在グループでは、合"
-#~ "計サイズ %2$s 中の %1$s の容量を使用しています。空き容量は、 %3$s です。"
+#~ "容量は、グループ内のすべてのメンバーで共有されています。現在グループでは、"
+#~ "合計サイズ %2$s 中の %1$s の容量を使用しています。空き容量は、 %3$s です。"
 
 #~ msgid "Your contact information have been saved."
 #~ msgstr "連絡先情報が保存されました。"
@@ -11905,7 +11915,7 @@ msgstr ""
 #~ msgstr "オブジェクトを作成"
 
 #~ msgid "create objects and subfolders"
-#~ msgstr "オブジェクトとサブフォルダを作成"
+#~ msgstr "オブジェクトとサブフォルダーを作成"
 
 #~ msgid "created by %s"
 #~ msgstr "%s により作成"
@@ -12081,7 +12091,7 @@ msgstr ""
 #~ msgstr "1 週間後"
 
 #~ msgid "is not a valid user or group."
-#~ msgstr " は、有効なユーザ/グループではありません。"
+#~ msgstr " は、有効なユーザー/グループではありません。"
 
 #~ msgid "is on"
 #~ msgstr "日付指定"
@@ -12229,7 +12239,7 @@ msgstr ""
 #~ msgstr "すべてを表示"
 
 #~ msgid "show all my appointments from all calendars"
-#~ msgstr "予定表全体から自分のアポイントをすべて表示"
+#~ msgstr "カレンダー全体から自分のアポイントをすべて表示"
 
 #~ msgid "show image"
 #~ msgstr "画像を表示"
@@ -12259,13 +12269,13 @@ msgstr ""
 #~ msgstr "postal_code/state,city,street,country"
 
 #~ msgid "subfolders of %s"
-#~ msgstr "%sのメンバ"
+#~ msgstr "%sのメンバー"
 
 #~ msgid "tasks"
-#~ msgstr "仕事"
+#~ msgstr "タスク"
 
 #~ msgid "temporary"
-#~ msgstr "仮の予定"
+#~ msgstr "仮承諾"
 
 #~ msgid "tentative"
 #~ msgstr "仮承諾"
@@ -12313,7 +12323,7 @@ msgstr ""
 #~ msgstr "経由メール:"
 
 #~ msgid "view the folder"
-#~ msgstr "フォルダを表示"
+#~ msgstr "フォルダーを表示"
 
 #~ msgid "waiting"
 #~ msgstr "待機中"
