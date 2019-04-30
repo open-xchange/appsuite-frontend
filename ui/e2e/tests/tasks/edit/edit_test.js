@@ -436,17 +436,16 @@ Scenario('[C7750] Edit existing Task in a shared folder', async function (I, use
     waitAndCheck(testrailID, ' - 2');
 });
 
-Scenario('[C7751] Close Task with the X', async function (I) {
+Scenario('[C7751] Close Task with the X', function (I) {
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.clickToolbar('New');
     I.waitForVisible('.io-ox-tasks-edit-window');
-    I.waitForElement('.floating-window-content .btn-primary[disabled=""][data-action="save"]', 5);
-    I.waitForElement('.io-ox-tasks-edit-window[data-app-name="io.ox/tasks/edit"]', 5);
-    I.click('.floating-window-content button[data-action="close"]');
-    I.waitForDetached('.floating-window-content .btn-primary[disabled=""][data-action="save"]', 5);
-    I.waitForDetached('.io-ox-tasks-edit-window[data-app-name="io.ox/tasks/edit"]', 5);
-    I.logout();
+    I.see('Create');
+    I.see('Discard');
+    I.seeElement('~Close');
+    I.click('~Close');
+    I.waitForDetached('.io-ox-tasks-edit-window');
 });
 Scenario('[C7752] Close Task with the X after adding some information', async function (I) {
     let testrailID = 'C7752';
