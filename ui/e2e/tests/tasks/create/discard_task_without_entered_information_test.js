@@ -13,7 +13,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Tasks - Create');
+Feature('Tasks > Create');
 
 Before(async (users) => {
     await users.create();
@@ -34,10 +34,7 @@ Scenario('[C7735] Discard Task without entered information', async (I) => {
     I.waitForVisible('[data-app-name="io.ox/tasks/edit"]');
 
     I.click('Discard');
-    I.wait(1);
+    I.waitForDetached('.io-ox-tasks-edit');
     I.dontSee('Discard changes');
     I.dontSeeElement('[data-page-id="undefined/listView"] .selectable');
-
-    I.logout();
-
 });
