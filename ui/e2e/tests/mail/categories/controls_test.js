@@ -106,6 +106,7 @@ Scenario('[C85626] Categories can be enabled or disabled', function (I) {
         I.click('Save');
     });
     I.waitForDetached(SELECTORS.dialog);
+    I.wait(1);
 
     I.say('Ensure all tabss except "General" are hidden', 'blue');
     I.seeElement('[data-id="general"]', SELECTORS.toolbar);
@@ -128,6 +129,7 @@ Scenario('[C85626] Categories can be enabled or disabled', function (I) {
         I.click('Save');
     });
     I.waitForDetached(SELECTORS.dialog);
+    I.wait(1);
 
     I.say('Check names of custom categories', 'blue');
     I.seeElement('[data-id="general"]', SELECTORS.toolbar);
