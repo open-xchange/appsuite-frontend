@@ -96,24 +96,16 @@ Scenario('[C7738] Edit task with all fields filled', async function (I) {
     I.see('Open-Xchange Inc.');
 });
 
-Scenario('[C7739] Change tasks due date in dropdown', async function (I, users) {
+Scenario('[C7739] Change tasks due date in dropdown', async function (I) {
     const moment = require('moment');
 
-    let testrailID = 'C7739';
-    let testrailName = 'Change tasks due date in dropdown';
-    const taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] });
-    const task = {
-        title: testrailID,
-        folder_id: taskDefaultFolder,
-        note: testrailName
+    await I.haveTask({ title: 'C7739', folder_id: await I.grabDefaultFolder('tasks'), note: 'Change tasks due date in dropdown' });
 
-    };
-    I.haveTask(task, { user: users[0] });
-    I.login('app=io.ox/tasks', { user: users[0] });
+    I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.waitForElement('.tasks-detailview', 5);
-    const days = ['tomorrow', 2, 3, 4, 5, 6, 'in one week'];
-    days.forEach(function (day, i) {
+
+    ['tomorrow', 2, 3, 4, 5, 6, 'in one week'].forEach(function (day, i) {
         I.clickToolbar('Due');
         if (i === 0) I.clickToolbar(day);
         else if (i === 6) I.clickToolbar(day);
@@ -121,7 +113,6 @@ Scenario('[C7739] Change tasks due date in dropdown', async function (I, users) 
         I.waitForText('Due ' + moment().add(i + 1, 'days').format('M/D/YYYY'), 5, '.tasks-detailview .end-date');
         I.waitForText(moment().add(i + 1, 'days').format('M/D/YYYY'), 5, '.vgrid .end_date');
     });
-    I.logout();
 });
 
 Scenario('[C7740] Edit Task', async function (I, users) {
@@ -149,33 +140,7 @@ Scenario('[C7740] Edit Task', async function (I, users) {
     I.waitForText(testrailID + ' - 2', 5, '[role="navigation"] .title');
     I.logout();
 });
-Scenario.skip('[C7739] Change tasks due date in dropdown', async function (I, users) {
-    const moment = require('moment');
 
-    let testrailID = 'C7739';
-    let testrailName = 'Change tasks due date in dropdown';
-    const taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] });
-    const task = {
-        title: testrailID,
-        folder_id: taskDefaultFolder,
-        note: testrailName
-
-    };
-    I.haveTask(task, { user: users[0] });
-    I.login('app=io.ox/tasks', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-    I.waitForElement('.tasks-detailview', 5);
-    const days = ['tomorrow', 2, 3, 4, 5, 6, 'in one week'];
-    days.forEach(function (day, i) {
-        I.clickToolbar('Due');
-        if (i === 0) I.clickToolbar(day);
-        else if (i === 6) I.clickToolbar(day);
-        else I.clickToolbar(moment().add(i + 1, 'days').format('dddd'));
-        I.waitForText('Due ' + moment().add(i + 1, 'days').format('M/D/YYYY'), 5, '.tasks-detailview .end-date');
-        I.waitForText(moment().add(i + 1, 'days').format('M/D/YYYY'), 5, '.vgrid .end_date');
-    });
-    I.logout();
-});
 Scenario('[C7741] Mark Task as Done', async function (I, users) {
     let testrailID = 'C7741';
     let testrailName = 'Mark Task as Done';
