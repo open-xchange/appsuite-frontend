@@ -325,13 +325,16 @@ define('io.ox/calendar/edit/extensions', [
         nextTo: 'end-date',
         render: function () {
             var helpBlock = $('<div class="col-xs-12 help-block">').hide(),
+                // compare by offset, not timezone name or we would show the hint oo often (eyample: Europe/Paris and Europe/Berlin)
+                userOffset = moment().utcOffset(),
                 userTimezone = moment().tz(),
                 self = this;
 
             function setHint() {
-                var startTimezone = self.baton.model.getMoment('startDate').tz(),
-                    endTimezone = self.baton.model.getMoment('endDate').tz(),
-                    isVisible = startTimezone !== userTimezone || endTimezone !== userTimezone;
+                var startOffset = self.baton.model.getMoment('startDate').utcOffset(),
+                    endOffset = self.baton.model.getMoment('endDate').utcOffset(),
+                    isVisible = startOffset !== userOffset || endOffset !== userOffset;
+
                 helpBlock.toggle(isVisible);
                 if (isVisible) {
                     var interval = calendarUtil.getDateTimeIntervalMarkup(self.baton.model.attributes, { zone: moment().tz(), noTimezoneLabel: true });
