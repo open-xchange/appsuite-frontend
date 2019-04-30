@@ -13,7 +13,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Tasks - Create');
+Feature('Tasks > Create');
 
 Before(async (users) => {
     await users.create();
@@ -43,7 +43,4 @@ Scenario('[C7736] Discard Task after entered some information', async (I) => {
 
     I.click('Discard changes');
     I.dontSeeElement('[data-page-id="undefined/listView"] .selectable');
-
-    I.logout();
-
 });
