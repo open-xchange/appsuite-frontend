@@ -80,6 +80,7 @@ Scenario('[C85626] Mail categories can be renamed', function (I) {
         I.click('Save');
     });
     I.waitForDetached(SELECTORS.dialog);
+    I.wait(1);
 
     I.seeTextEquals('C85626-01', SELECTORS.toolbar + ' [data-id="uc1"] .category-name');
     I.seeTextEquals('C85626-02', SELECTORS.toolbar + ' [data-id="uc2"] .category-name');
