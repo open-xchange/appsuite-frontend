@@ -145,28 +145,24 @@ Scenario('[C7741] Mark Task as Done', async function (I) {
     I.waitForText('Date completed', 5);
 });
 
-Scenario('[C7742] Mark Task as Undone', async function (I, users) {
-    let testrailID = 'C7742';
-    let testrailName = 'Mark Task as Undone';
-    const taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] });
-    const task = {
-        title: testrailID,
-        folder_id: taskDefaultFolder,
-        note: testrailName,
+Scenario('[C7742] Mark Task as Undone', async function (I) {
+    await I.haveTask({
+        title: 'C7742',
+        folder_id: await I.grabDefaultFolder('tasks'),
+        note: 'Mark Task as Undone',
         percent_completed: 100,
         status: 3
+    });
 
-    };
-    I.haveTask(task, { user: users[0] });
-    I.login('app=io.ox/tasks', { user: users[0] });
+    I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
     I.waitForElement('.tasks-detailview', 5);
     I.clickToolbar('Undone');
     I.waitForText('Not started', 5, '[aria-label="Task list"] .status.badge-notstarted');
     I.dontSee('Progress 100 %');
     I.waitForText('Not started', 5, '.tasks-detailview .badge-notstarted');
-    I.logout();
 });
+
 Scenario('[C7743] Move single Task', async function (I, users) {
     let testrailID = 'C7743';
     let testrailName = 'Move single Task';
