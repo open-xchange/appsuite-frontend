@@ -385,65 +385,57 @@ Scenario('[C7749] Edit existing Task as participant', async function (I, users) 
     I.waitForText(testrailID + ' - 2', 5, '.window-body');
     I.waitForText(testrailID + ' - 2', 5, '.tasks-detailview .title');
 });
-Scenario('[C7750] Edit existing Task in a shared folder', async function (I, users) {
-    let testrailID = 'C7750';
-    let testrailName = 'Edit existing Task in a shared folder';
-    //const taskDefaultFolder = await I.getDefaultFolder('tasks', { user: users[0] });
-    const folder = {
-        module: 'tasks',
-        subscribed: 1,
-        title: testrailID,
-        permissions: [
-            {
-                bits: 403710016,
-                entity: users[0].userdata.id,
-                group: false
-            }, {
-                bits: 403710016,
-                entity: users[1].userdata.id,
-                group: false
-            }
-        ]
-    };
-    const createFolder = await I.createFolder(folder, '2', { user: users[0] });
-    let folderID = createFolder.data.data;
 
-    const task = {
+Scenario('[C7750] Edit existing Task in a shared folder', async function (I, users) {
+    const testrailID = 'C7750',
+        testrailName = 'Edit existing Task in a shared folder',
+        createFolder = await I.createFolder({
+            module: 'tasks',
+            subscribed: 1,
+            title: testrailID,
+            permissions: [
+                { bits: 403710016, entity: users[0].userdata.id, group: false },
+                { bits: 403710016, entity: users[1].userdata.id, group: false }
+            ]
+        }, '2');
+
+    await I.haveTask({
         title: testrailID,
         status: '1',
         percent_completed: '0',
-        folder_id: folderID,
+        folder_id: createFolder.data.data,
         recurrence_type: '0',
         full_time: true,
         private_flag: false,
         timezone: 'Europe/Berlin',
         notification: true,
         note: testrailName
-    };
-    I.haveTask(task, { user: users[0] });
+    });
+
+    function waitAndCheck(id, text) {
+        text = text ? id + text : id;
+        I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+        I.selectFolder(id);
+        I.waitForText(text, 15, '.window-body');
+        I.waitForText(text, 15, '.tasks-detailview .title');
+    }
 
     I.login('app=io.ox/tasks', { user: users[1] });
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-    I.selectFolder(testrailID);
-    I.waitForText(testrailID, 5, '.window-body');
-    I.waitForText(testrailID, 5, '.tasks-detailview .title');
+    waitAndCheck(testrailID);
     I.clickToolbar('Edit');
     I.waitForElement('[data-app-name="io.ox/tasks/edit"]', 5);
     I.waitForElement('.floating-window-content .container.io-ox-tasks-edit', 5);
     I.fillField('Subject', testrailID + ' - 2');
     I.fillField('Description', testrailName + ' - 2');
     I.click('Save');
-    I.waitForText(testrailID + ' - 2', 5, '.window-body');
-    I.waitForText(testrailID + ' - 2', 5, '.tasks-detailview .title');
+    I.waitForDetached('.io-ox-tasks-edit,.launcher-icon.fa-refresh.fa-spin');
+    waitAndCheck(testrailID, ' - 2');
     I.logout();
 
-    I.login('app=io.ox/tasks', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-    I.selectFolder(testrailID);
-    I.waitForText(testrailID + ' - 2', 5, '.window-body');
-    I.waitForText(testrailID + ' - 2', 5, '.tasks-detailview .title');
-    I.logout();
+    I.login('app=io.ox/tasks');
+    waitAndCheck(testrailID, ' - 2');
 });
+
 Scenario('[C7751] Close Task with the X', async function (I) {
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
