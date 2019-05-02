@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-03-12 23:41+0300\n"
+"PO-Revision-Date: 2019-04-16 16:51+0300\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: tr_TR\n"
@@ -534,6 +534,8 @@ msgstr "Çevrimiçi yardım"
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js
 #: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
@@ -557,6 +559,7 @@ msgstr "Sil"
 #: module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/main.js
@@ -788,9 +791,10 @@ msgstr "Kapat"
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
-#: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Download"
 msgstr "İndir"
 
@@ -835,6 +839,8 @@ msgstr "İndir"
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot apps/io.ox/multifactor/views/constants.js
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
 #: apps/io.ox/settings/apps/settings/pane.js
@@ -1116,7 +1122,9 @@ msgstr "Dışarı aktar"
 #: module:io.ox/contacts apps/io.ox/contacts/actions/print.js
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js
 msgid "Print"
 msgstr "Yazdır"
@@ -1220,12 +1228,18 @@ msgid "Default reminder for all-day appointments"
 msgstr "Tam günlük randevular için varsayılan anımsatıcı"
 
 #: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
+msgid "New organizer"
+msgstr "Yeni organizatör"
+
+#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
 msgid "Select new organizer"
 msgstr "Yeni organizatörü seçin"
 
 #: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
-msgid "Please leave a comment for other participants."
-msgstr "Lütfen diğer katılımcılar için yorum bırakın."
+#: apps/io.ox/calendar/actions/delete.js
+msgid "Add a message to the notification email for the other participants."
+msgstr ""
+"Diğer katılımcılara giderek bildirim e-postasına mesajınızı ekleyebilirsiniz."
 
 #: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/delete.js
@@ -1236,10 +1250,6 @@ msgstr "Lütfen diğer katılımcılar için yorum bırakın."
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Password"
 msgstr "Parola"
-
-#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
-msgid "New organizer"
-msgstr "Yeni organizatör"
 
 #: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
 msgid "Organizer changed"
@@ -1290,11 +1300,6 @@ msgstr ""
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Create in public calendar"
 msgstr "Ortak takvimde oluştur"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Add a message to the notification email for the other participants."
-msgstr ""
-"Diğer katılımcılara giderek bildirim e-postasına mesajınızı ekleyebilirsiniz."
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid ""
@@ -1370,6 +1375,7 @@ msgid "iCal feed has been imported successfully"
 msgstr "iCal akışı başarıyla alındı"
 
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js
 msgid "Subscribe shared calendars"
 msgstr "Paylaşılan takvimlere abone ol"
 
@@ -1389,7 +1395,8 @@ msgstr "Paylaşılan takvimlere abone ol"
 #: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot apps/io.ox/oauth/settings.js module:io.ox/settings
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/plugins/administration/groups/settings/edit.js
 #: apps/plugins/administration/resources/settings/edit.js
@@ -1425,12 +1432,9 @@ msgstr "Ortak takvimler"
 msgid "Shared calendars"
 msgstr "Paylaşılan takvimler"
 
-#: apps/io.ox/calendar/color-picker.js module:io.ox/calendar
-msgid "no color"
-msgstr "renk yok"
-
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
-#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
@@ -1438,6 +1442,10 @@ msgstr "renk yok"
 #: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Özel"
+
+#: apps/io.ox/calendar/color-picker.js module:io.ox/calendar
+msgid "no color"
+msgstr "renk yok"
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -1666,14 +1674,6 @@ msgid "Collapse form"
 msgstr "Formu daralt"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Participants can edit the appointment"
-msgstr "Katılımcılar randevuyu düzenleyebilir"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Participant permissions"
-msgstr "Katılımcı izinleri"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility Help"
 msgstr "Görünürlük yardımı"
 
@@ -1724,6 +1724,10 @@ msgstr "hiçbiri"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Show as free"
 msgstr "Serbest olarak göster"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Participants can make changes"
+msgstr "Katılımcılar değişiklik yapabilir"
 
 #. Sort by messages that have attachments
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1872,6 +1876,11 @@ msgstr "İş saati olmayan saatleri gizle"
 msgid "Blocked time frame"
 msgstr "Bloke zaman aralığı"
 
+#. %1$s = apppointment creator name
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Created by: %1$s"
+msgstr "Oluşturan: %1$s"
+
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Could not get appointment information"
 msgstr "Randevu bilgileri alamadı"
@@ -1993,6 +2002,7 @@ msgid "Error: Failed to load appointments"
 msgstr "Hata: Randevular yüklenemedi"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
 #: module:io.ox/files apps/io.ox/mail/detail/view.js module:io.ox/mail
@@ -2183,8 +2193,9 @@ msgstr "%1$d dakika"
 
 #. estimated upload duration
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js apps/io.ox/files/upload/main.js
-#: module:io.ox/files apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#: apps/io.ox/calendar/util.js apps/io.ox/files/settings/pane.js
+#: module:io.ox/files apps/io.ox/files/upload/main.js
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d day"
 msgid_plural "%1$d days"
 msgstr[0] "%1$d gün"
@@ -2324,7 +2335,7 @@ msgstr "Ülke"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
-msgid "Your default reminders will be applied to this calendars."
+msgid "Your default reminders will be applied to these calendars."
 msgstr "Varsayılan anımsatıcılarınız bu takvimlere uygulanacak."
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
@@ -4128,6 +4139,18 @@ msgstr ""
 "Bir şeyler ters gitti. Lütfen bu tarayıcı sekmesini kapatın ve yeniden "
 "deneyin."
 
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Connection error"
+msgstr "Bağlantı hatası"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "The service is not available right now."
+msgstr "Hizmet şu anda kullanılamıyor."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Reload"
+msgstr "Yeniden yükle"
+
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
 msgstr "Uyarı!"
@@ -4946,8 +4969,12 @@ msgid "Navigate to:"
 msgstr "Git:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "Skip to main content"
+msgstr "Ana içeriğe geç"
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 #: apps/io.ox/core/main/topbar_right.js apps/io.ox/core/sub/settings/pane.js
-#: module:io.ox/core/sub
+#: module:io.ox/core/sub apps/io.ox/multifactor/login/loginScreen.js
 msgid "Refresh"
 msgstr "Yenile"
 
@@ -5032,6 +5059,17 @@ msgid "Logout failed."
 msgstr "Çıkış yapılamadı."
 
 #: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/main/topbar_right.js
+#: apps/io.ox/settings/security/sessions/settings/pane.js
+msgid "Sign out"
+msgstr "Çıkış"
+
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+msgid "Are you sure you want to sign out from all related browser tabs?"
+msgstr ""
+"İlgili tüm tarayıcı sekmelerinden çıkış yapmak istediğinizden emin misiniz?"
+
+#: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Kaydedilmeyen belgeler kaybolacaktır. Çıkış yapmak istiyor musunuz?"
 
@@ -5080,7 +5118,7 @@ msgid "Upgrade your account"
 msgstr "Hesabınızı yükseltin"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/settings/main.js
+#: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Ayarlar"
 
@@ -5113,11 +5151,6 @@ msgstr "Yardım"
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 msgid "About"
 msgstr "Hakkında"
-
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/settings/security/sessions/settings/pane.js
-msgid "Sign out"
-msgstr "Çıkış"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 msgid ""
@@ -5995,6 +6028,10 @@ msgid "Don't remind me again"
 msgstr "Bir daha anımsatma"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 msgid "OK"
 msgstr "Tamam"
 
@@ -6147,6 +6184,7 @@ msgstr "Turu başlat"
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
 #: apps/io.ox/tours/whats-new.js apps/io.ox/wizards/upsell.js
 #: module:io.ox/wizards
 msgid "Next"
@@ -7110,8 +7148,6 @@ msgid "Forever"
 msgstr "Sonsuza dek"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "%1$d day"
-#| msgid_plural "%1$d days"
 msgid "1 day"
 msgstr "1 gün"
 
@@ -7140,7 +7176,6 @@ msgid "Keep all versions"
 msgstr "Tüm sürümleri koru"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "1 version"
 msgstr "1 sürüm"
 
@@ -7187,6 +7222,12 @@ msgstr "90 sürüm"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "100 versions"
 msgstr "100 sürüm"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "%1$d version"
+msgid_plural "%1$d versions"
+msgstr[0] "%1$d sürüm"
+msgstr[1] "%1$d sürüm"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Adding files with identical names"
@@ -7252,29 +7293,25 @@ msgid "All file versions are retained"
 msgstr "Tüm dosya sürümleri korundu"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "All file versions older than 1 day will be deleted"
-msgid_plural "All file versions older than %1$d days will be deleted"
-msgstr[0] "1 günden daha eski tüm dosya sürümleri silinecektir"
-msgstr[1] "%1$d günden daha eski tüm dosya sürümleri silinecektir"
-
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid ""
-"When a file has more than 1 additional version, older versions of the file "
-"will be deleted"
+msgid "All file versions older than 1 day will be deleted after next login"
 msgid_plural ""
-"When a file has more than %1$d additional versions, older versions of the "
-"file will be deleted"
-msgstr[0] "Dosyanın birden fazla ek sürümü varsa eski sürümleri silinecektir"
-msgstr[1] ""
-"Dosyanın en az %1$d ek sürümü varsa daha eski sürümleri silinecektir"
+"All file versions older than %1$d days will be deleted after next login"
+msgstr[0] "%1$d günden eski tüm mesajlar sonraki girişinizde silinecek"
+msgstr[1] "%1$d günden eski tüm mesajlar sonraki girişinizde silinecek"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid ""
-"Older versions will be deleted after next login or when a new version is "
-"created"
-msgstr ""
-"Eski sürümler bir sonraki girişinizde veya yeni bir sürüm oluşturulduğunda "
-"silinecektir"
+"When a file has more than 1 additional version, older versions will be "
+"deleted when a new version is created"
+msgid_plural ""
+"When a file has more than %1$d additional versions, older versions will be "
+"deleted when a new version is created"
+msgstr[0] ""
+"Bir dosyanın 1'den fazla ek sürümü varsa yeni bir sürüm oluşturulduğunda "
+"eski sürümler silinecektir"
+msgstr[1] ""
+"Bir dosyanın en az %1$d ek sürümü varsa yeni bir sürüm oluşturulduğunda eski "
+"sürümler silinecektir"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Keep saved versions"
@@ -8617,6 +8654,12 @@ msgstr "Kimden: %1$s"
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "To: %1$s"
 msgstr "Kime: %1$s"
+
+#. Used to quote the addresses of an address in carbon copy
+#. %1$s An email address or a comma separated list of mail addresses
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+msgid "Cc: %1$s"
+msgstr "Cc: %1$s"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Date: %1$s"
@@ -10111,6 +10154,364 @@ msgctxt "dropdown"
 msgid "All"
 msgstr "Tümü"
 
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "SMS Code"
+msgstr "SMS kodu"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Web auth"
+msgstr "Web auth"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Security Token"
+msgstr "Güvenlik jetonu"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Yubikey"
+msgstr "Yubikey"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Google Authenticator"
+msgstr "Google Authenticator"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Recovery code"
+msgstr "Kurtarmayı kodu"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "UNKNOWN"
+msgstr "BİLİNMİYOR"
+
+#: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
+msgid ""
+"There are no backup devices available for this account.  Please notify "
+"support for help."
+msgstr ""
+"Bu hesap için kullanılabilir yedekleme cihazı yok.  Yardım almak isterseniz "
+"destek ekibimizle iletişime geçebilirsiniz."
+
+#: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
+msgid "Authentication failure.  Please reload browser and try again."
+msgstr "Kimlik doğrulama hatası.  Lütfen tarayıcıyı yenileyip tekrar deneyin."
+
+#: apps/io.ox/multifactor/settings.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/views/constants.js
+msgid "2-Step Verification"
+msgstr "2 Adımlı Doğrulama"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgctxt "app"
+msgid "2-Step Verification"
+msgstr "2 Adımlı Doğrulama"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Verification Options"
+msgstr "Doğrulama seçenekleri"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Recovery Options"
+msgstr "Kurtarma Seçenekleri"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "No 2-Step verification options configured yet."
+msgstr "2 adımlı doğrulama seçenekleri henüz yapılandırılmadı."
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Add recovery option"
+msgstr "Kurtarma seçeneği ekle"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Add verification option"
+msgstr "Doğrulama seçeneği ekle"
+
+#. Error message when trying to get available providers from middleware
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Problem getting 2-step verification providers"
+msgstr "2 adımlı doğrulama sağlayıcıları alınırken sorun oluştu"
+
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Add Multifactor Device"
+msgstr "Çok faktörlü doğrulama cihazı ekle"
+
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Please enter the phone number for the device."
+msgstr "Lütfen cihazın telefon numarasını yazın."
+
+#. Catch all error when trying to set up a new 2step device
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Something went wrong.  Please try again later."
+msgstr "Bir hata oluştu.  Lütfen daha sonra yeniden deneyin."
+
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Please only use numeric characters for phone number"
+msgstr "Telefon numarasında yalnızca sayısal karakterler kullanın"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Add Recovery Option"
+msgstr "Kurtarma seçeneği ekle"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Add Verification Option"
+msgstr "Doğrulama seçeneği ekle"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid ""
+"In the event you lose or are unable to use your authentication device, your "
+"account will be locked out unless you set up a recovery method.  We strongly "
+"recommend that you do so now."
+msgstr ""
+"Kurtarma yöntemini ayarlamazsanız, kimlik doğrulama cihazınızı kaybetmeniz "
+"veya kullanamamanız durumunda hesabınız kilitli kalır.  Kurtarma yöntemini "
+"şimdi ayarlamanızı şiddetle öneririz."
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "No providers available"
+msgstr "Kullanılabilir sağlayıcı yok"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Code via text message"
+msgstr "Kısa mesaj kodu"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Use a FIDO2 compatible device to authenticate your identity."
+msgstr "Kimliğinizi doğrulamak için FIDO2 uyumlu bir cihaz kullanın."
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Yubikey, Google Security Keys, or compatible FIDO device"
+msgstr "Yubikey, Google Güvenlik Anahtarı veya uyumlu bir FIDO cihazı"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Use Yubikey's One Time Password System"
+msgstr "Yubikey'in tek seferlik parola (OTP) sistemini kullan"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Google Authenticator or compatible"
+msgstr "Google Authenticator veya uyumlu bir uygulama"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Backup code to access your account."
+msgstr "Hesabınıza erişmeniz için yedek kodu."
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Unknown system"
+msgstr "Bilinmeyen sistem"
+
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/printBackupString.js
+msgid "Recovery Code"
+msgstr "Kurtarma kodu"
+
+#. this is a file name that stores the a long recovery code
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+msgid "recovery"
+msgstr "kurtarma"
+
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Delete Multifactor Device"
+msgstr "Çok faktörlü doğrulama cihazını sil"
+
+#. Devices are named.  This is the text for the deleting a multifactor device
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot
+msgid "This will delete the device named %s."
+msgstr "%s adlı cihaz silinecektir."
+
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Unable to delete"
+msgstr "Silinemedi"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Edit Multifactor Device"
+msgstr "Çok faktörlü doğrulama cihazını düzenle"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "This will edit the name for device (%s)"
+msgstr "Bu işlem, %s adlı cihazın adını düzenleyecektir"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "This will assign a name to the device"
+msgstr "Bu işlem, cihaza bir ad atayacaktır"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Unable to edit name."
+msgstr "Ad düzenlenemedi."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+msgid "Confirm Code"
+msgstr "Kodu doğrulayın"
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+msgid "Bad input or server error.  Please try again."
+msgstr "Hatalı girdi veya sunucu hatası.  Lütfen yeniden deneyin."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+msgid "Bad verification code.  Please try again"
+msgstr "Hatalı doğrulama kodu.  Lütfen yeniden deneyin"
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Authenticator Registration"
+msgstr "Kimlik doğrulayıcı kaydı"
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Click to copy URL to clipboard"
+msgstr "Adresi panoya kopyalamak için tıklayın"
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"If scanning doesn't work, you may be able to enter the following setup code."
+msgstr "Tarama işe yaramazsa aşağıdaki kurulum kodunu girebilirsiniz."
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"Once complete, please enter an authentication code to verify everything is "
+"configured properly."
+msgstr ""
+"İşlem bittikten sonra her şeyin düzgün yapılandırıldığını onaylamak için "
+"lütfen doğrulama kodunu yazın."
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Device is already registered"
+msgstr "Cihaz zaten kayıtlı"
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Problem registering device"
+msgstr "Cihaz kaydetme sorunu"
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Failed to register device"
+msgstr "Cihaz kaydedilemedi"
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Failed to register device."
+msgstr "Cihaz kaydedilemedi."
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Upload Recovery File"
+msgstr "Kurtarma dosyasını yükle"
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Next 4 characters of the backup string"
+msgstr "Yedek kodunun sonraki 4 karakteri"
+
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
+msgid "I lost my device"
+msgstr "Cihazımı kaybettim"
+
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
+msgid "Reauthentication required for this action"
+msgstr "Bu eylem için kimlik doğrulaması gerekiyor"
+
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
+msgid "Select 2-Step Verification Method"
+msgstr "2 adımlı doğrulama yöntemini seçin"
+
+#: apps/io.ox/multifactor/views/selectDeviceView.js module:io.ox/core/boot
+msgid "Please select a device to use for additional authentication"
+msgstr "Ek doğrulama amacıyla kullanacağınız cihazı seçin"
+
+#: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
+msgid "New code sent."
+msgstr "Yeni kod gönderildi."
+
+#: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
+msgid "A new code was sent to your SMS device.  Please enter the code."
+msgstr "SMS cihazınıza yeni bir kod gönderildi.  Lütfen kodu yazın."
+
+#: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
+msgid ""
+"You secured your account with 2-Step Verification.  Please enter the "
+"verification code we sent to the phone *****%s."
+msgstr ""
+"Hesabınızda 2 adımlı doğrulamayı etkinleştirdiniz.  Lütfen *****%s numaralı "
+"telefona gönderdiğimiz doğrulama kodunu yazın."
+
+#: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
+msgid ""
+"You secured your account with 2-Step Verification.  Please enter the "
+"verification code from the Authenticator App."
+msgstr ""
+"Hesabınızda 2 adımlı doğrulamayı etkinleştirdiniz.  Lütfen Authenticator "
+"uygulamasında görünen doğrulama kodunu yazın."
+
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid ""
+"You secured your account with 2-Step Verification.  Please use your "
+"authentication token to complete verification."
+msgstr ""
+"Hesabınızda 2 adımlı doğrulamayı etkinleştirdiniz.  Doğrulamayı tamamlamak "
+"için lütfen kimlik doğrulama cihazınızı kullanın."
+
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid ""
+"This browser is not compatible with your configured authentication device.  "
+"Please use Chrome browser, or Firefox with U2F enabled."
+msgstr ""
+"Bu tarayıcı, yapılandırılmış kimlik doğrulama cihazınızla uyumlu değil.  "
+"Lütfen U2F özelliğine sahip Chrome veya Firefox'u kullanın."
+
+#. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid ""
+"Bad parameters for authenticating with this key.  Possibly wrong URL domain "
+"for this key."
+msgstr ""
+"Bu anahtarla kimlik doğrulaması için parametreler hatalı.  Muhtemelen "
+"anahtarın URL alan adı yanlış."
+
+#. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "Configuration not supported"
+msgstr "Yapılandırma desteklenmiyor"
+
+#. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "This device is not eligible for this request.  Wrong hardware key?"
+msgstr ""
+"Bu cihaz bu istekte bulunmaya yetkili değil.  Yanlış donanımsal anahtarı "
+"takmış olabilir misiniz?"
+
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "Timeout"
+msgstr "Zaman aşımı"
+
+#. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "Error authenticating.  Please reload browser and try again."
+msgstr "Kimlik doğrulama hatası.  Lütfen tarayıcıyı yenileyip tekrar deneyin."
+
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
 msgid "Topics"
 msgstr "Konular"
@@ -11446,6 +11847,19 @@ msgstr ""
 "Küçülttüğünüz pencereler kolay erişim için tüm uygulamalarda görünür. Bir "
 "pencereyi tekrar üzerine tıklayarak büyütebilirsiniz."
 
+#. Title of tour step, demonstrating options available for 2-step verification
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid "2-step Verification Options"
+msgstr "2 adımlı doğrulama seçenekleri"
+
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Hesap güvenliğinizi artırmak amacıyla artık ikinci bir kimlik doğrulama "
+"seçeneği ekleyebilirsiniz."
+
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
@@ -12582,6 +12996,41 @@ msgstr "%s etkinliğine davet et"
 msgid "Add on %s"
 msgstr "%s üzerine ekle"
 
+#~ msgid "Please leave a comment for other participants."
+#~ msgstr "Lütfen diğer katılımcılar için yorum bırakın."
+
+#~ msgid "Participants can edit the appointment"
+#~ msgstr "Katılımcılar randevuyu düzenleyebilir"
+
+#~ msgid "Participant permissions"
+#~ msgstr "Katılımcı izinleri"
+
+#~ msgid "Your default reminders will be applied to this calendars."
+#~ msgstr "Varsayılan anımsatıcılarınız bu takvimlere uygulanacak."
+
+#~ msgid "All file versions older than 1 day will be deleted"
+#~ msgid_plural "All file versions older than %1$d days will be deleted"
+#~ msgstr[0] "1 günden daha eski tüm dosya sürümleri silinecektir"
+#~ msgstr[1] "%1$d günden daha eski tüm dosya sürümleri silinecektir"
+
+#~ msgid ""
+#~ "When a file has more than 1 additional version, older versions of the "
+#~ "file will be deleted"
+#~ msgid_plural ""
+#~ "When a file has more than %1$d additional versions, older versions of the "
+#~ "file will be deleted"
+#~ msgstr[0] ""
+#~ "Dosyanın birden fazla ek sürümü varsa eski sürümleri silinecektir"
+#~ msgstr[1] ""
+#~ "Dosyanın en az %1$d ek sürümü varsa daha eski sürümleri silinecektir"
+
+#~ msgid ""
+#~ "Older versions will be deleted after next login or when a new version is "
+#~ "created"
+#~ msgstr ""
+#~ "Eski sürümler bir sonraki girişinizde veya yeni bir sürüm "
+#~ "oluşturulduğunda silinecektir"
+
 #~ msgid "1 minute"
 #~ msgstr "1 dakika"
 
@@ -12603,15 +13052,6 @@ msgstr "%s üzerine ekle"
 
 #~ msgid "Add to Favorites"
 #~ msgstr "Favorilere ekle"
-
-#, fuzzy
-#~| msgid ""
-#~| "All messages older than %1$d days will be moved to the archive folder"
-#~ msgid "All file versions older than 1 day will be deleted after next login"
-#~ msgid_plural ""
-#~ "All file versions older than %1$d days will be deleted after next login"
-#~ msgstr[0] "%1$d günden eski tüm mesajlar arşiv klasörüne taşınacak"
-#~ msgstr[1] "%1$d günden eski tüm mesajlar arşiv klasörüne taşınacak"
 
 #~ msgid "Auto-save email drafts"
 #~ msgstr "E-posta taslaklarını otomatik kaydet"

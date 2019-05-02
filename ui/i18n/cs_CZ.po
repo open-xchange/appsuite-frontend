@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-04 11:32+0200\n"
+"PO-Revision-Date: 2019-04-09 09:24+0200\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Lokalize 18.12.2\n"
+"X-Generator: Poedit 2.1.1\n"
 "X-Language: cs\n"
 "X-Source-Language: en\n"
 
@@ -67,35 +67,30 @@ msgstr "po konci"
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Notify %1$s before start."
 msgstr "Upozornit %1$s před začátkem."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Notify %1$s after start."
 msgstr "Upozornit %1$s po začátku."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Notify %1$s before end."
 msgstr "Upozornit %1$s před koncem."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Notify %1$s after end."
 msgstr "Upozornit %1$s po konci."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Notify at %1$s."
 msgstr "Upozornit v %1$s."
 
@@ -112,35 +107,30 @@ msgstr "Upozornit na konci."
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Play sound %1$s before start."
 msgstr "Přehrát zvuk %1$s před začátkem."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Play sound %1$s after start."
 msgstr "Přehrát zvuk %1$s po začátku."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Play sound %1$s before end."
 msgstr "Přehrát zvuk %1$s před koncem."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Play sound %1$s after end."
 msgstr "Přehrát zvuk %1$s po konci."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Play sound at %1$s."
 msgstr "Přehrát zvuk v %1$s."
 
@@ -157,35 +147,30 @@ msgstr "Přehrát zvuk na konci."
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Send mail %1$s before start."
 msgstr "Poslat zprávu %1$s před začátkem."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Send mail %1$s after start."
 msgstr "Poslat zprávu %1$s po začátku."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Send mail %1$s before end."
 msgstr "Poslat zprávu %1$s před koncem."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Send mail %1$s after end."
 msgstr "Poslat zprávu %1$s po konci."
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Send mail at %1$s."
 msgstr "Poslat zprávu %1$s."
 
@@ -203,7 +188,6 @@ msgstr "Poslat zprávu na konci."
 #. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "%1$s %2$s before start."
 msgstr "%1$s %2$s před začátkem."
 
@@ -211,7 +195,6 @@ msgstr "%1$s %2$s před začátkem."
 #. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "%1$s %2$s after start."
 msgstr "%1$s %2$s po začátku."
 
@@ -219,7 +202,6 @@ msgstr "%1$s %2$s po začátku."
 #. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "%1$s %2$s before end."
 msgstr "%1$s %2$s před koncem."
 
@@ -227,7 +209,6 @@ msgstr "%1$s %2$s před koncem."
 #. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "%1$s %2$s after end."
 msgstr "%1$s %2$s po konci."
 
@@ -235,21 +216,18 @@ msgstr "%1$s %2$s po konci."
 #. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "%1$s at %2$s."
 msgstr "%1$s, %2$s"
 
 #. Used to display reminders for appointments
 #. %1$s: the reminder type, SMS etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "%1$s at start."
 msgstr "%1$s na začátku."
 
 #. Used to display reminders for appointments
 #. %1$s: the reminder type, SMS etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "%1$s at end."
 msgstr "%1$s na konci."
 
@@ -259,7 +237,6 @@ msgstr "Přidat upomínku"
 
 #. %1$d: is the number of the reminder
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Reminder %1$d"
 msgstr "Upomínka %1$s"
 
@@ -563,6 +540,8 @@ msgstr "Nápověda online"
 #: apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js
 #: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
@@ -586,6 +565,7 @@ msgstr "Smazat"
 #: module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/main.js
@@ -633,7 +613,6 @@ msgid "Use cursor keys to reorder items"
 msgstr "Pro přeřazení položek použijte kurzorové klávesy"
 
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
-#, qt-format
 msgid "%1$s moved to position %2$s of %3$s"
 msgstr "%1$s přesunuto na pozici %2$s v rámci %3$s"
 
@@ -656,7 +635,6 @@ msgstr "Všechna časová pásma"
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 #: apps/io.ox/backbone/views/toolbar.js
-#, qt-format
 msgid "%1$s Toolbar"
 msgstr "%1$s Nástrojová lišta"
 
@@ -679,7 +657,6 @@ msgid "Please enter a valid email address"
 msgstr "Zadejte, prosím, platnou e-mailovou adresu"
 
 #: apps/io.ox/backbone/validation.js module:io.ox/core
-#, qt-format
 msgid "Please enter a valid phone number. Allowed characters are: %1$s"
 msgstr "Zadejte, prosím, platné telefonní číslo. Povolené znaky jsou: %1$s"
 
@@ -721,7 +698,6 @@ msgid "Use cursor keys to navigate, press enter to select a date"
 msgstr "K navigaci použijte kurzorové klávesy, pro výběr data stiskněte Enter"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
-#, qt-format
 msgid "Today: %1$s"
 msgstr "Dnes: %1$s"
 
@@ -743,7 +719,6 @@ msgstr "Týd."
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
-#, qt-format
 msgid "CW %1$d"
 msgstr "CW %1$d"
 
@@ -822,9 +797,10 @@ msgstr "Zavřít"
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
-#: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Stáhnout"
 
@@ -869,6 +845,8 @@ msgstr "Stáhnout"
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot apps/io.ox/multifactor/views/constants.js
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
 #: apps/io.ox/settings/apps/settings/pane.js
@@ -1148,7 +1126,9 @@ msgstr "Export"
 #: module:io.ox/contacts apps/io.ox/contacts/actions/print.js
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js
 msgid "Print"
 msgstr "Tisk"
@@ -1233,7 +1213,6 @@ msgstr "Změnit upomínky"
 
 #. %1$s:  is the calendar's name
 #: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
-#, qt-format
 msgid "Edit all reminders for calendar: %1$s"
 msgstr "Upravit všechny upomínky kalendáře %1$s"
 
@@ -1253,12 +1232,17 @@ msgid "Default reminder for all-day appointments"
 msgstr "Výchozí upomínka pro celodenní schůzky"
 
 #: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
+msgid "New organizer"
+msgstr "Nový organizátor"
+
+#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
 msgid "Select new organizer"
 msgstr "Vybrat nového organizátora"
 
 #: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
-msgid "Please leave a comment for other participants."
-msgstr "Zanechte, prosím, komentář pro ostatní účastníky."
+#: apps/io.ox/calendar/actions/delete.js
+msgid "Add a message to the notification email for the other participants."
+msgstr "Přidat do upozornění zprávu pro ostatní účastníky."
 
 #: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/delete.js
@@ -1271,10 +1255,6 @@ msgid "Password"
 msgstr "Heslo"
 
 #: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
-msgid "New organizer"
-msgstr "Nový organizátor"
-
-#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
 msgid "Organizer changed"
 msgstr "Změna organizátora"
 
@@ -1283,7 +1263,6 @@ msgid "Appointments in shared calendars"
 msgstr "Schůzky ve sdílených kalendářích"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-#, qt-format
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
 "will generally be created on behalf of the owner."
@@ -1313,7 +1292,6 @@ msgid "Appointments in public calendars"
 msgstr "Schůzky ve veřejných kalendářích"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
-#, qt-format
 msgid ""
 "The selected calendar \"%1$s\" is public. Do you really want to create an "
 "appointment in this calendar?"
@@ -1323,10 +1301,6 @@ msgstr ""
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Create in public calendar"
 msgstr "Vytvořit ve veřejném kalendáři"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Add a message to the notification email for the other participants."
-msgstr "Přidat do upozornění zprávu pro ostatní účastníky."
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid ""
@@ -1400,6 +1374,7 @@ msgid "iCal feed has been imported successfully"
 msgstr "Zdroj iCal úspěšně importován"
 
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js
 msgid "Subscribe shared calendars"
 msgstr "Přihlásit sdílené kalendáře"
 
@@ -1419,7 +1394,8 @@ msgstr "Přihlásit sdílené kalendáře"
 #: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot apps/io.ox/oauth/settings.js module:io.ox/settings
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/plugins/administration/groups/settings/edit.js
 #: apps/plugins/administration/resources/settings/edit.js
@@ -1455,12 +1431,9 @@ msgstr "Veřejné kalendáře"
 msgid "Shared calendars"
 msgstr "Sdílené kalendáře"
 
-#: apps/io.ox/calendar/color-picker.js module:io.ox/calendar
-msgid "no color"
-msgstr "žádná barva"
-
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
-#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/view-grid-template.js
@@ -1469,6 +1442,10 @@ msgstr "žádná barva"
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Soukromé"
+
+#: apps/io.ox/calendar/color-picker.js module:io.ox/calendar
+msgid "no color"
+msgstr "žádná barva"
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -1695,14 +1672,6 @@ msgid "Collapse form"
 msgstr "Skrýt formulář"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Participants can edit the appointment"
-msgstr "Účastníci mohou schůzku upravovat"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Participant permissions"
-msgstr "Práva účastníků"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility Help"
 msgstr "Nápověda pro viditelnost"
 
@@ -1754,6 +1723,10 @@ msgstr "nikdo"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Show as free"
 msgstr "Zobrazit jako volný"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Participants can make changes"
+msgstr "Účastníci mohou provádět úpravy"
 
 #. Sort by messages that have attachments
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1900,6 +1873,11 @@ msgstr "Skrýt nepracovní čas"
 msgid "Blocked time frame"
 msgstr "Blokovaný interval"
 
+#. %1$s = apppointment creator name
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Created by: %1$s"
+msgstr "Vytvořil(a): %1$s"
+
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Could not get appointment information"
 msgstr "Nepodařilo se získat informace o schůzce"
@@ -2008,7 +1986,6 @@ msgstr "Nepodařilo se aktualizovat potvrzení; úkol byl nejspíš smazán."
 #. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
 #. This fragment appears within a long string for screen readers
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
-#, qt-format
 msgctxt "a11y"
 msgid "location %1$s"
 msgstr "místo %1$s"
@@ -2022,6 +1999,7 @@ msgid "Error: Failed to load appointments"
 msgstr "Chyba: Nepodařilo se načíst schůzky"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
 #: module:io.ox/files apps/io.ox/mail/detail/view.js module:io.ox/mail
@@ -2036,7 +2014,6 @@ msgid "Select all"
 msgstr "Vybrat vše"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
-#, qt-format
 msgid "Load appointments until %1$s"
 msgstr "Načíst schůzky až do %1$s"
 
@@ -2054,7 +2031,6 @@ msgid "No appointment selected"
 msgstr "Není vybraná žádná schůzka"
 
 #: apps/io.ox/calendar/list/view.js module:io.ox/calendar
-#, qt-format
 msgid "%1$s appointments selected"
 msgstr "%1$s vybraných schůzek"
 
@@ -2162,7 +2138,6 @@ msgstr "Datum konce musí být po datu začátku."
 #: apps/io.ox/calendar/model.js module:io.ox/calendar
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
-#, qt-format
 msgid "Files can not be uploaded, because upload limit of %1$s is exceeded."
 msgstr "Soubory nelze nahrát, protože je přesahují limit %1$s."
 
@@ -2181,7 +2156,6 @@ msgstr "Příští měsíc"
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#, qt-format
 msgid "Selected - %1$s"
 msgstr "Vybráno - %1$s"
 
@@ -2212,15 +2186,14 @@ msgid "Unconfirmed"
 msgstr "Nepotvrzeno"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#, qt-format
 msgid "%1$d minutes"
 msgstr "%1%d minut"
 
 #. estimated upload duration
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js apps/io.ox/files/upload/main.js
-#: module:io.ox/files apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#, qt-format
+#: apps/io.ox/calendar/util.js apps/io.ox/files/settings/pane.js
+#: module:io.ox/files apps/io.ox/files/upload/main.js
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d day"
 msgid_plural "%1$d days"
 msgstr[0] "%1$d den"
@@ -2299,9 +2272,6 @@ msgid "Email notifications"
 msgstr "E-mailová oznámení"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#| msgid ""
-#| "Receive notifications when a task in which you participate is created, "
-#| "modified or deleted"
 msgid ""
 "Receive notifications when an appointment in which you participate is "
 "created, modified or deleted"
@@ -2362,8 +2332,8 @@ msgstr "Země"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
-msgid "Your default reminders will be applied to this calendars."
-msgstr "Pro tento kalendář budou nastaveny vaše výchozí upomínky."
+msgid "Your default reminders will be applied to these calendars."
+msgstr "Pro tyto kalendáře budou nastaveny vaše výchozí upomínky."
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -2745,7 +2715,6 @@ msgstr[2] "%d dní"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#, qt-format
 msgid "%1$d minute"
 msgid_plural "%1$d minutes"
 msgstr[0] "%1$d minuta"
@@ -2756,7 +2725,6 @@ msgstr[2] "%1$d minut"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#, qt-format
 msgid "%1$d hour"
 msgid_plural "%1$d hours"
 msgstr[0] "%1$d hodina"
@@ -2767,7 +2735,6 @@ msgstr[2] "%1$d hodin"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#, qt-format
 msgid "%1$d week"
 msgid_plural "%1$d weeks"
 msgstr[0] "%1$d týden"
@@ -2874,7 +2841,6 @@ msgstr[2] "Každý %1$d. měsíc v %2$s %3$s."
 #. %2$d: Date, numeric, e.g. 29
 #. Example: Every year in December on day 3
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, qt-format
 msgid "Every year in %1$s on day %2$d."
 msgstr "Každý rok, každý %2$d. den v %1$s."
 
@@ -2884,12 +2850,10 @@ msgstr "Každý rok, každý %2$d. den v %1$s."
 #. %3$s: month nane, e.g. January
 #. Example: Every year on the first Tuesday in December
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, qt-format
 msgid "Every year on the %1$s %2$s in %3$d."
 msgstr "Každý rok, každé %1$s %2$s v %3$d."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, qt-format
 msgid "The series ends on %1$s."
 msgstr "Série končí %1$s."
 
@@ -2946,7 +2910,6 @@ msgstr "Přímý odkaz"
 #. This fragment appears within a long string for screen readers.
 #. Some languages (e.g. German) might need to translate "location:".
 #: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
-#, qt-format
 msgctxt "a11y"
 msgid "at %1$s"
 msgstr "v %1$s"
@@ -2956,7 +2919,6 @@ msgstr "v %1$s"
 #. %3$s A four digit year
 #. Example: January - February 2019
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-#, qt-format
 msgid "%1$s - %2$s %3$s"
 msgstr "%1$s - %2$s %3$s"
 
@@ -2966,7 +2928,6 @@ msgstr "%1$s - %2$s %3$s"
 #. %4$s Another year
 #. Example: December 2019 - January 2020
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-#, qt-format
 msgid "%1$s %2$s - %3$s %4$s"
 msgstr "%1$s %2$s - %3$s %4$s"
 
@@ -3202,7 +3163,6 @@ msgstr "Odstranit"
 
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, qt-format
 msgid "%1$d item selected"
 msgid_plural "%1$d items selected"
 msgstr[0] "%1$d položka vybrána"
@@ -3215,7 +3175,6 @@ msgstr "Stiskněte Backspace nebo Delete pro odstranění vybraných položek."
 
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, qt-format
 msgid "%1$d address selected"
 msgid_plural "%1$d addresses selected"
 msgstr[0] "%1$d adresa vybrána"
@@ -3372,7 +3331,6 @@ msgstr "Uživatelská pole"
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/view-detail.js
 #: apps/plugins/halo/xing/register.js module:plugins/portal
-#, qt-format
 msgid ""
 "%1$s\n"
 "%2$s %3$s\n"
@@ -3916,7 +3874,6 @@ msgstr "Smazat kontakt"
 #. %2$s is the last name
 #. %3$s is the title
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
-#, qt-format
 msgid "%3$s %2$s, %1$s"
 msgstr "%3$s %2$s, %1$s"
 
@@ -3924,7 +3881,6 @@ msgstr "%3$s %2$s, %1$s"
 #. %1$s is the first name
 #. %2$s is the last name
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
-#, qt-format
 msgid "%2$s, %1$s"
 msgstr "%2$s, %1$s"
 
@@ -3932,14 +3888,12 @@ msgstr "%2$s, %1$s"
 #. %1$s is the first name
 #. %2$s is the last name
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
-#, qt-format
 msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
 #. '%1$s contact's display name
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
-#, qt-format
 msgid "%1$s could not be added as the contact has no valid email field."
 msgstr ""
 "%1$s nebylo možné přidat, protože kontakt nemá platnou e-mailovou adresu."
@@ -3976,7 +3930,6 @@ msgstr "Nepodařilo se nahrát přílohy tohoto kontaktu."
 
 #. %1$s is a map service, like "Google Maps"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-#, qt-format
 msgid "Open in %1$s"
 msgstr "Otevřít v %1$s"
 
@@ -4019,7 +3972,6 @@ msgstr ""
 
 #. %1$s maximum file size
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-#, qt-format
 msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
 msgstr "Vybraný obrázek přesahuje maximální povolenou velikost %1$s"
 
@@ -4054,7 +4006,6 @@ msgid "Toggle preview"
 msgstr "Přepnout náhled"
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
-#, qt-format
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
 msgstr[0] "%1$d příloha"
@@ -4122,13 +4073,11 @@ msgstr "Tento prohlížeč není na vaší stávající platformě podporovaný.
 
 #. %n in the lowest version of Android
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, qt-format
 msgid "You need to use Android %n or higher."
 msgstr "Musíte používat Android %n nebo novější."
 
 #. %n is the lowest version of iOS
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, qt-format
 msgid "You need to use iOS %n or higher."
 msgstr "Musíte používat iOS %n nebo novější."
 
@@ -4142,7 +4091,6 @@ msgstr "Tento systém není v tuto chvíli podporovaný."
 
 #. all variables are version strings of the browsers, like 52 in Chrome 52
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, qt-format
 msgid ""
 "Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
 msgstr "Podpora začíná s Chrome %1$d, Firefox %2$d, IE %3$d a Safari %4$d."
@@ -4205,6 +4153,18 @@ msgid "Something went wrong. Please close this browser tab and try again."
 msgstr ""
 "Došlo k chybě. Zavřete tento panel prohlížeče a zkuste to, prosím, znovu."
 
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Connection error"
+msgstr "Chyba spojení"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "The service is not available right now."
+msgstr "Služba nyní není k dispozici."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Reload"
+msgstr "Znovu načíst"
+
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
 msgstr "Varování!"
@@ -4222,7 +4182,6 @@ msgstr ""
 #. number of selected item
 #. %1$s is the number surrounded by a tag
 #: apps/io.ox/core/commons.js module:io.ox/core
-#, qt-format
 msgid "%1$s item selected"
 msgid_plural "%1$s items selected"
 msgstr[0] "%1$d položka vybrána"
@@ -4297,17 +4256,14 @@ msgstr ""
 "prosím, znovu."
 
 #: apps/io.ox/core/download.js module:io.ox/core
-#| msgid "Download entire folder"
 msgid "Download infected file"
 msgstr "Stáhnout napadený soubor"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-#| msgid "Download installation file"
 msgid "Download unscanned file"
 msgstr "Stáhnout nezkontrolovaný soubor"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-#| msgid "Ignore Warnings"
 msgid "Anti-Virus Warning"
 msgstr "Anti-vir varování"
 
@@ -4375,7 +4331,6 @@ msgstr "Exportovat vybrané"
 #. Warning dialog
 #. %1$s is file format for data export
 #: apps/io.ox/core/export.js module:io.ox/core
-#, qt-format
 msgid "Format: %1$s"
 msgstr "Formát: %1$s"
 
@@ -4394,7 +4349,6 @@ msgstr "Zahrnout distribuční seznamy"
 
 #. %1$s inline menu title for better accessibility
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
-#, qt-format
 msgid "Inline menu %1$s"
 msgstr "Vložené menu %1$s"
 
@@ -4467,7 +4421,6 @@ msgid "Archive messages"
 msgstr "Archivovat zprávy"
 
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
-#, qt-format
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr ""
 "Všechny zprávy starší než %1$d dní budou přesunuty do archivační složky"
@@ -4638,7 +4591,6 @@ msgstr "Výchozí kalendář"
 #. %1$s is the folder owner
 #. %2$s is the folder title
 #: apps/io.ox/core/folder/api.js module:io.ox/core
-#, qt-format
 msgid "%1$s: %2$s"
 msgstr "%1$s: %2$s"
 
@@ -4875,25 +4827,21 @@ msgstr "Přidat do oblíbených"
 
 #. Used for the total count of objects or mails in a folder
 #: apps/io.ox/core/folder/node.js module:io.ox/core
-#, qt-format
 msgid "Total: %1$d"
 msgstr "Celkem: %1$d"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
-#, qt-format
 msgid "%1$d total"
 msgstr "%1$d celkem"
 
 #. Used for the count of unread mails in a folder
 #: apps/io.ox/core/folder/node.js module:io.ox/core
-#, qt-format
 msgid "Unread: %1$d"
 msgstr "Nepřečtených: %1$d"
 
 #. %1$d number of unread mails
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
-#, qt-format
 msgid "%1$d unread"
 msgstr "%1$d nepřečtených"
 
@@ -4903,7 +4851,6 @@ msgstr "Činnosti týkající se složky"
 
 #. %1$s is the name of the folder
 #: apps/io.ox/core/folder/node.js module:io.ox/core
-#, qt-format
 msgid "Actions for %1$s"
 msgstr "Operace pro %1$s"
 
@@ -5027,7 +4974,6 @@ msgid "Failed to import any data"
 msgstr "Nepodařilo se importovat žádné údaje"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
-#, qt-format
 msgid "Data only partially imported (%1$s of %2$s records)"
 msgstr "Data byla importována pouze částečně (%1$s z %2$s záznamů)"
 
@@ -5036,8 +4982,12 @@ msgid "Navigate to:"
 msgstr "Přejít do:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "Skip to main content"
+msgstr "Přeskočit na hlavní obsah"
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 #: apps/io.ox/core/main/topbar_right.js apps/io.ox/core/sub/settings/pane.js
-#: module:io.ox/core/sub
+#: module:io.ox/core/sub apps/io.ox/multifactor/login/loginScreen.js
 msgid "Refresh"
 msgstr "Obnovit"
 
@@ -5091,7 +5041,6 @@ msgid "Editor"
 msgstr "Upravit"
 
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
-#, qt-format
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "Za %1$d sekundu budete automaticky odhlášeni"
@@ -5124,6 +5073,16 @@ msgid "Logout failed."
 msgstr "Odhlášení selhalo."
 
 #: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/main/topbar_right.js
+#: apps/io.ox/settings/security/sessions/settings/pane.js
+msgid "Sign out"
+msgstr "Odhlásit se"
+
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+msgid "Are you sure you want to sign out from all related browser tabs?"
+msgstr "Opravdu se chcete odhlásit ze všech příbuzných tabů prohlížeče?"
+
+#: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Neuložené dokumenty budou ztraceny. Chcete se přesto odhlásit?"
 
@@ -5150,7 +5109,6 @@ msgstr "Požadovaná aplikace není momentálně dostupná."
 
 #. %1$s is placeholder for the product name like "App Suite"
 #: apps/io.ox/core/main/stages.js module:io.ox/core
-#, qt-format
 msgid "The below item was open last time you exited %1$s."
 msgid_plural "The below items were open last time you exited %1$s."
 msgstr[0] "Položka níže byla otevřená, když jste naposledy opustili %1$s."
@@ -5175,7 +5133,7 @@ msgid "Upgrade your account"
 msgstr "Upgradovat účet"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/settings/main.js
+#: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Nastavení"
 
@@ -5210,11 +5168,6 @@ msgid "About"
 msgstr "O programu"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/settings/security/sessions/settings/pane.js
-msgid "Sign out"
-msgstr "Odhlásit se"
-
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 msgid ""
 "You forgot to sign out last time. Always use the sign-out button when you "
 "finished your work."
@@ -5234,7 +5187,6 @@ msgstr ""
 
 #. %1$s is the filename
 #: apps/io.ox/core/main/warning.js module:io.ox/core
-#, qt-format
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -5261,20 +5213,17 @@ msgstr "Tato funkce není k dispozici pro nezabezpečená spojení."
 
 #. %1$s a natural number
 #: apps/io.ox/core/media-devices.js module:io.ox/core
-#, qt-format
 msgid "Microphone %1$s"
 msgstr "Mikrofon %1$s"
 
 #. %1$s a natural number
 #: apps/io.ox/core/media-devices.js module:io.ox/core
-#, qt-format
 msgid "Camera %1$s"
 msgstr "Kamera %1$s"
 
 #. %1$s a natural number
 #. This text is used to describe an unknown device (camera / microphone etc)
 #: apps/io.ox/core/media-devices.js module:io.ox/core
-#, qt-format
 msgid "Unknown %1$s"
 msgstr "Neznámé %1$s"
 
@@ -5469,7 +5418,6 @@ msgstr "Přílohy byly uloženy."
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/mail/actions.js
 #: module:io.ox/mail
-#, qt-format
 msgid "Save to %1$s"
 msgstr "Uložit do %1$s"
 
@@ -5625,22 +5573,18 @@ msgid "Browser"
 msgstr "Prohlížeč"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
-#, qt-format
 msgid "Total: %1$s requests"
 msgstr "Celkem: %1$s požadavků"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
-#, qt-format
 msgid "Average time: %1$s ms"
 msgstr "Průměrná doba: %1$s ms"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
-#, qt-format
 msgid "Loss: %1$s %"
 msgstr "Ztráta: %1$s %"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
-#, qt-format
 msgid "Uptime: %1$s minutes"
 msgstr "Spuštěné: %1$s minut"
 
@@ -5868,7 +5812,6 @@ msgstr "YB"
 #. %1$d is the number
 #. %2$s is the unit (B, KB, MB etc.)
 #: apps/io.ox/core/strings.js module:io.ox/core
-#, qt-format
 msgid "%1$d %2$s"
 msgstr "%1$d %2$s"
 
@@ -5883,7 +5826,6 @@ msgid "%1$s must not be empty."
 msgstr "%1$s nesmí být prázdné."
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
-#, qt-format
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Zobrazují se pouze položky související se složkou „%1$s“"
 
@@ -5986,12 +5928,10 @@ msgid "The subscription could not be created."
 msgstr "Přihlášení k odběru se nepodařilo vytvořit."
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-#, qt-format
 msgid "My %1$s calendar"
 msgstr "Můj kalendář %1$s"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-#, qt-format
 msgid "My %1$s contacts"
 msgstr "Moje kontakty %1$s"
 
@@ -6103,6 +6043,10 @@ msgid "Don't remind me again"
 msgstr "Již mi to nepřipomínej"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 msgid "OK"
 msgstr "OK"
 
@@ -6175,20 +6119,17 @@ msgstr ""
 #. %1$s is the added search query
 #. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, qt-format
 msgid "Added %1$s, %2$s."
 msgstr "Přidán %1$s, %2$s."
 
 #. %1$s is the display name of an added user or mail recipient
 #. %1$s is the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, qt-format
 msgid "Added %1$s."
 msgstr "Přidáno %1$s."
 
 #. Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, qt-format
 msgid "%1$s. Press backspace to delete."
 msgstr "%1$s. Stiskněte Backspace pro odstranění."
 
@@ -6197,14 +6138,12 @@ msgstr "%1$s. Stiskněte Backspace pro odstranění."
 #. %1$s is the removed search query
 #. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, qt-format
 msgid "Removed %1$s, %2$s."
 msgstr "Odstraněn %1$s, %2$s."
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %1$s is the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, qt-format
 msgid "Removed %1$s."
 msgstr "Odebráno %1$s."
 
@@ -6236,7 +6175,6 @@ msgid "Multiselect"
 msgstr "Výběr více položek"
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-#| msgid "select all"
 msgid "Deselect all"
 msgstr "Odznačit vše"
 
@@ -6268,6 +6206,7 @@ msgstr "Začít prohlídku"
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
 #: apps/io.ox/tours/whats-new.js apps/io.ox/wizards/upsell.js
 #: module:io.ox/wizards
 msgid "Next"
@@ -6320,14 +6259,12 @@ msgstr ""
 "prohlížeče."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-#, qt-format
 msgid "Cannot require a view type for %1$s"
 msgstr "Pro %1$s nelze vyžadovat způsob prohlížení"
 
 #. information about the currently displayed file version in viewer
 #. %1$d - version date
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-#, qt-format
 msgid "Version of %1$s"
 msgstr "Verze %1$s"
 
@@ -6336,7 +6273,6 @@ msgstr "Verze %1$s"
 #. %1$d - position of current item
 #. %2$d - total amount of items
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-#, qt-format
 msgid "%1$d of %2$d item"
 msgid_plural "%1$d of %2$d items"
 msgstr[0] "%1$s z %2$s položek"
@@ -6482,7 +6418,6 @@ msgstr "Zobrazit tuto verzi"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
-#, qt-format
 msgid "Versions (%1$d)"
 msgstr "Verze (%1$d)"
 
@@ -6525,7 +6460,6 @@ msgstr "Náhledy"
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
-#, qt-format
 msgid "Drop new version of \"%1$s\" here"
 msgstr "Přetáhněte sem novou verzi „%1$s“"
 
@@ -6611,7 +6545,6 @@ msgid "Send by email"
 msgstr "Poslat ve zprávě"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-#, qt-format
 msgid "of %1$d"
 msgstr "z %1$d"
 
@@ -6641,7 +6574,6 @@ msgstr ""
 
 #. %1$s is the file size "Download 2mb" for example
 #: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
-#, qt-format
 msgid "Download %1$s"
 msgstr "Stáhnout %1%s"
 
@@ -6669,7 +6601,6 @@ msgstr "Tento dokument je chráněný heslem a nelze jej zobrazit."
 #. %1$d is the current page index
 #. %2$d is the total number of pages
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
-#, qt-format
 msgid "Page %1$d of %2$d"
 msgstr "Strana %1$d z %2$d"
 
@@ -6928,7 +6859,6 @@ msgid "Delete version"
 msgstr "Smazat verzi"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
-#| msgid "Delete version"
 msgid "Delete all previous versions"
 msgstr "Smazat všechny předchozí verze"
 
@@ -6937,7 +6867,6 @@ msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr "Upusťte zde pro nahrání <b class=\"dndignore\">nového souboru</b>"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
-#, qt-format
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr "Upusťte zde pro nahrání <b class=\"dndignore\">nové verze</b> „%1$s“"
@@ -6965,7 +6894,6 @@ msgid "This file has been added to the portal"
 msgstr "Soubor byl přidán do portálu"
 
 #: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
-#| msgid "Do you really want to delete this account?"
 msgid ""
 "Do you really want to delete all previous versions except the current "
 "version?"
@@ -7164,7 +7092,6 @@ msgid "Upload local file"
 msgstr "Nahrát místní soubor"
 
 #: apps/io.ox/files/listview.js module:io.ox/files
-#| msgid "Error: Failed to load messages"
 msgid "Error: Failed to load files"
 msgstr "Chyba: Nepodařilo se nahrát soubory"
 
@@ -7238,12 +7165,10 @@ msgid "Repeat slideshow"
 msgstr "Zopakovat slideshow"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, qt-format
 msgid "%1$d seconds"
 msgstr "%1$d sekund"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "Never"
 msgid "Forever"
 msgstr "Stále"
 
@@ -7252,95 +7177,83 @@ msgid "1 day"
 msgstr "1 den"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "2 days"
 msgid "7 days"
 msgstr "7 dní"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "2 days"
 msgid "30 days"
 msgstr "30 dní"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "6 days"
 msgid "60 days"
 msgstr "60 dní"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "2 days"
 msgid "90 days"
 msgstr "90 dní"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "%1$d year"
-#| msgid_plural "%1$d years"
 msgid "1 year"
 msgstr "1 rok"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "Delete version"
 msgid "Keep all versions"
 msgstr "Ponechat všechny verze"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "1 version"
 msgstr "1 verze"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "5 versions"
 msgstr "5 verzí"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "10 versions"
 msgstr "10 verzí"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "20 versions"
 msgstr "20 verzí"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "30 versions"
 msgstr "30 verzí"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "40 versions"
 msgstr "40 verzí"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "50 versions"
 msgstr "50 verzí"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "60 versions"
 msgstr "60 verzí"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "70 versions"
 msgstr "70 verzí"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "80 versions"
 msgstr "80 verzí"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "90 versions"
 msgstr "90 verzí"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "100 versions"
 msgstr "100 verzí"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "%1$d version"
+msgid_plural "%1$d versions"
+msgstr[0] "%1$d verze"
+msgstr[1] "%1$d verze"
+msgstr[2] "%1$d verzí"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Adding files with identical names"
@@ -7364,12 +7277,10 @@ msgid "Show hidden files and folders"
 msgstr "Zobrazit skryté soubory a složky"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "Show version history"
 msgid "File version history"
 msgstr "Historii verzí souboru"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "timeframe"
 msgid "Timeframe"
 msgstr "Časový interval"
 
@@ -7385,7 +7296,6 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "File versions"
 msgid "File version limit"
 msgstr "Omezení verzí souborů"
 
@@ -7407,39 +7317,40 @@ msgid "Summary"
 msgstr "Shrnutí"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "All files have been deleted"
 msgid "All file versions are retained"
 msgstr "Všechny verze souboru byly zachovány"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "All file versions older than 1 day will be deleted"
-msgid_plural "All file versions older than %1$d days will be deleted"
-msgstr[0] "Všechny verze souboru starší než %1$d dní budou smazány"
-msgstr[1] ""
-msgstr[2] ""
-
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid ""
-"When a file has more than 1 additional version, older versions of the file "
-"will be deleted"
+#| msgid ""
+#| "All messages older than %1$d days will be moved to the archive folder"
+msgid "All file versions older than 1 day will be deleted after next login"
 msgid_plural ""
-"When a file has more than %1$d additional versions, older versions of the "
-"file will be deleted"
+"All file versions older than %1$d days will be deleted after next login"
 msgstr[0] ""
-"Má-li soubor více než %1$d dalších verzí, starší verze budou smazány"
+"Všechny zprávy starší než %1$d den budou přesunuty do archivační složky"
 msgstr[1] ""
+"Všechny zprávy starší než %1$d dny budou přesunuty do archivační složky"
 msgstr[2] ""
+"Všechny zprávy starší než %1$d dní budou přesunuty do archivační složky"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid ""
-"Older versions will be deleted after next login or when a new version is "
-"created"
-msgstr ""
-"Starší verze budou smazány po příštím přihlášení nebo při vytvoření nové "
-"verze"
+"When a file has more than 1 additional version, older versions will be "
+"deleted when a new version is created"
+msgid_plural ""
+"When a file has more than %1$d additional versions, older versions will be "
+"deleted when a new version is created"
+msgstr[0] ""
+"Má-li soubor více než %1$d další verzi, starší verze bude smazána, jakmile "
+"vznikne nová verze"
+msgstr[1] ""
+"Má-li soubor více než %1$d další verze, starší verze bude smazány, jakmile "
+"vznikne nová verze"
+msgstr[2] ""
+"Má-li soubor více než %1$d dalších verzí, starší verze bude smazány, jakmile "
+"vznikne nová verze"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "Delete version"
 msgid "Keep saved versions"
 msgstr "Ponechat uložené verze"
 
@@ -7586,7 +7497,6 @@ msgstr "Znovu poslat pozvánku"
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, qt-format
 msgid "Share %1$s \"%2$s\""
 msgstr "Sdílet %1$s „%2$s“"
 
@@ -7603,7 +7513,6 @@ msgid "folder"
 msgstr "složka"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, qt-format
 msgid "Permissions for %1$s \"%2$s\""
 msgstr "Oprávnění k %1$s „%2$s“"
 
@@ -7713,7 +7622,6 @@ msgstr "Soubory k nahrání přetáhněte sem"
 
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
-#, qt-format
 msgid "%1$d second"
 msgid_plural "%1$d seconds"
 msgstr[0] "%1$d sekunda"
@@ -7721,26 +7629,22 @@ msgstr[1] "%1$d sekundy"
 msgstr[2] "%1$d sekund"
 
 #: apps/io.ox/files/upload/main.js module:io.ox/files
-#, qt-format
 msgid "A new version for \"%1$s\" has been added."
 msgstr "Byla přidána nová verze „%1$s“."
 
 #. %1$s progress of currently uploaded files in percent
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #: apps/io.ox/files/upload/view.js
-#, qt-format
 msgid "%1$s completed"
 msgstr "%1$s dokončeno"
 
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
-#, qt-format
 msgid "Remaining time: %1$s"
 msgstr "Zbývající čas: %1$s"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/upload/main.js module:io.ox/files
-#, qt-format
 msgid "Uploading \"%1$s\""
 msgstr "Nahrávám „%1$s“"
 
@@ -7757,13 +7661,11 @@ msgstr ""
 "potíže při prohlížení a upravování."
 
 #: apps/io.ox/files/util.js module:io.ox/files
-#, qt-format
 msgid ""
 "Do you really want to remove the extension \".%1$s\" from your filename?"
 msgstr "Opravdu chcete z názvu souboru odstranit příponu „.%1$s“?"
 
 #: apps/io.ox/files/util.js module:io.ox/files
-#, qt-format
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s\" "
 "?"
@@ -7897,7 +7799,6 @@ msgid "Search facets"
 msgstr "Vyhledávat kritéria"
 
 #: apps/io.ox/help/main.js module:io.ox/help
-#, qt-format
 msgid "%1$s Help"
 msgstr "%1$s Nápověda"
 
@@ -8160,7 +8061,6 @@ msgstr "E-mailová adresa"
 #. Please make sure that this is a prefix in every translation since it will be removed when the mail is sent.
 #. %1$s the original subject of the mail
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-#, qt-format
 msgid "[Copy] %1$s"
 msgstr "[Kopie] %1$s"
 
@@ -8248,7 +8148,6 @@ msgid "This email has been added to the portal"
 msgstr "Tato zpráva byla přidána do portálu"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-#, qt-format
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the total attachment "
 "size limit of %2$s"
@@ -8257,7 +8156,6 @@ msgstr ""
 "%2$s"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-#, qt-format
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
@@ -8266,7 +8164,6 @@ msgstr ""
 "souboru %2$s"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-#, qt-format
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
 "publication maximum file size of %2$s"
@@ -8275,7 +8172,6 @@ msgstr ""
 "souboru přílohy %2$s"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-#, qt-format
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
@@ -8467,7 +8363,6 @@ msgstr "Upusťte zde!"
 #. successfully moved a message via drag&drop to another mail category (tab)
 #. %1$s represents the name if the target category (non-essential information: can be left out)
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
-#, qt-format
 msgid "Message moved to category \"%1$s\"."
 msgid_plural "Messages moved to category \"%1$s\"."
 msgstr[0] "Zpráva přesunuta do kategorie „%1$s“."
@@ -8482,11 +8377,11 @@ msgid_plural ""
 "Do you want to move all messages from selected senders to that category?"
 msgstr[0] "Přejete si přesunout všechny zprávy od %1$s do této kategorie?"
 msgstr[1] ""
-"Přejete si přesunout všechny zprávy od vybraných odesilatelů do této"
-" kategorie?"
+"Přejete si přesunout všechny zprávy od vybraných odesilatelů do této "
+"kategorie?"
 msgstr[2] ""
-"Přejete si přesunout všechny zprávy od vybraných odesilatelů do této"
-" kategorie?"
+"Přejete si přesunout všechny zprávy od vybraných odesilatelů do této "
+"kategorie?"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
@@ -8525,7 +8420,6 @@ msgstr "Slepá kopie"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#, qt-format
 msgid "and %1$d others"
 msgstr "a %1$d dalších"
 
@@ -8650,7 +8544,6 @@ msgstr "Odpovědět do poštovní konference"
 
 #. %1$d is an email addresses
 #: apps/io.ox/mail/compose/checks.js module:io.ox/mail
-#, qt-format
 msgid "This message was sent via the mailing list %1$s."
 msgstr "Tato zpráva byla poslána prostřednictvím poštovní konference %1$s."
 
@@ -8661,7 +8554,6 @@ msgstr "Tato zpráva byla poslána prostřednictvím poštovní konference."
 
 #. %1$d is an email addresses
 #: apps/io.ox/mail/compose/checks.js module:io.ox/mail
-#, qt-format
 msgid "Do you really want to reply all or just %1$s?"
 msgstr "Opravdu chcete odpovědět všem, nebo jen %1$s?"
 
@@ -8672,7 +8564,6 @@ msgstr "Odpovědět odesílateli"
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#, qt-format
 msgid ""
 "%1$s autocomplete token field. Use left and right Arrowkeys to navigate "
 "between the tokens"
@@ -8738,7 +8629,6 @@ msgid "Drop attachments here"
 msgstr "Přetáhněte přílohy sem"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#, qt-format
 msgid "Mail size: %1$s"
 msgstr "Velikost zprávy: %1$s"
 
@@ -8795,7 +8685,6 @@ msgstr ""
 "nebo smazána."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
-#, qt-format
 msgid "You cannot open more than %1$s drafts at the same time."
 msgstr "Nemůžete otevřít více než %1$s rozepsaných zpráv najednou."
 
@@ -8803,7 +8692,6 @@ msgstr "Nemůžete otevřít více než %1$s rozepsaných zpráv najednou."
 #. %2$s An email address
 #. Example: On January 8, 2019 2:23 PM richard@open-xchange.com wrote:
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#, qt-format
 msgid "On %1$s %2$s wrote:"
 msgstr "%1$s %2$s napsal(a):"
 
@@ -8814,24 +8702,26 @@ msgstr "---------- Původní zpráva ----------"
 #. %1$s An email address
 #. Example: From: richard@open-xchange.com
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#, qt-format
 msgid "From: %1$s"
 msgstr "Od: %1$s"
 
 #. %1$s An email address or a comma separated list of mail addresses
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#, qt-format
 msgid "To: %1$s"
 msgstr "Pro: %1$s"
 
+#. Used to quote the addresses of an address in carbon copy
+#. %1$s An email address or a comma separated list of mail addresses
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#, qt-format
+msgid "Cc: %1$s"
+msgstr "Cc: %1$s"
+
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Date: %1$s"
 msgstr "Datum: %1$s"
 
 #. %1$s The subject of an email
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#, qt-format
 msgid "Subject: %1$s"
 msgstr "Předmět: %1$s"
 
@@ -8868,19 +8758,16 @@ msgstr "Velikost obrázku nelze změnit, protože na vašem disku nebyl nalezen.
 
 #. Small (number px) is used as an option for resizing images and refers to a small sized image
 #: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
-#, qt-format
 msgid "Small (%1$s px)"
 msgstr "Malý (%1$s px)"
 
 #. Medium (number px) is used as an option for resizing images and refers to a medium sized image
 #: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
-#, qt-format
 msgid "Medium (%1$s px)"
 msgstr "Střední (%1$s px)"
 
 #. Large (number px) is used as an option for resizing images and refers to a large sized image
 #: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
-#, qt-format
 msgid "Large (%1$s px)"
 msgstr "Velký (%1$s px)"
 
@@ -8907,7 +8794,6 @@ msgid "Large"
 msgstr "Velký"
 
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#, qt-format
 msgid "%1$d month"
 msgid_plural "%1$d months"
 msgstr[0] "%1$d měsíc"
@@ -8915,7 +8801,6 @@ msgstr[1] "%1$d měsíce"
 msgstr[2] "%1$d měsíců"
 
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#, qt-format
 msgid "%1$d year"
 msgid_plural "%1$d years"
 msgstr[0] "%1$d rok"
@@ -8954,7 +8839,6 @@ msgstr "Dostávat oznámení, když někdo k souboru přistoupí"
 
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#, qt-format
 msgid ""
 "Attachment file size too large. You have to use %1$s or reduce the "
 "attachment file size."
@@ -8963,13 +8847,11 @@ msgstr ""
 
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#, qt-format
 msgid "Use %1$s"
 msgstr "Použít %1$s"
 
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#, qt-format
 msgid "%1$s options"
 msgstr "Možnosti %1$s"
 
@@ -9129,7 +9011,6 @@ msgstr "Zobrazit celou zprávu"
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
 #: apps/io.ox/mail/detail/view.js
-#, qt-format
 msgid "Email from %1$s: %2$s"
 msgstr "E-mail od %1$s: %2$s"
 
@@ -9209,12 +9090,10 @@ msgstr "Upravit pravidlo"
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
-#, qt-format
 msgid "Edit %1$s"
 msgstr "Upravit %1$s"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, qt-format
 msgid "Process subsequent rules of %1$s"
 msgstr "Zpracuj následující pravidla %1$s"
 
@@ -9222,7 +9101,6 @@ msgstr "Zpracuj následující pravidla %1$s"
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
-#, qt-format
 msgid "Remove %1$s"
 msgstr "Odstranit %1$s"
 
@@ -9644,14 +9522,12 @@ msgstr "Nepodařilo se načíst vaše pravidla pro filtry zpráv."
 #. This is a summary for a mail filter rule
 #. Example: Keep mails from test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Keep mails from %1$s"
 msgstr "Ponechat e-maily od %1$s"
 
 #. This is a summary for a mail filter rule
 #. Example: Discard mails from test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Discard mails from %1$s"
 msgstr "Zahodit e-maily od %1$s"
 
@@ -9660,7 +9536,6 @@ msgstr "Zahodit e-maily od %1$s"
 #. %2$s A folder selected by the user
 #. Example: Move mails from test@invalid into folder INBOX
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Move mails from %1$s into folder %2$s"
 msgstr "Přesunout zprávy od %1$s do složky %2$s"
 
@@ -9669,7 +9544,6 @@ msgstr "Přesunout zprávy od %1$s do složky %2$s"
 #. %2$s user input (expected a mail address) where the messages are redirected to
 #. Example: Redirect mails from test@invalid to another@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Redirect mails from %1$s to %2$s"
 msgstr "Přesměrovat zprávy od %1$s na %2$s"
 
@@ -9678,28 +9552,24 @@ msgstr "Přesměrovat zprávy od %1$s na %2$s"
 #. %2$s A reason which is entered by the user
 #. Example: Reject mails from test@invalid with reason Invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Reject mails from %1$s with reason %2$s"
 msgstr "Odmítnout zprávy od %1$s kvůli %2$s"
 
 #. This is a summary for a mail filter rule
 #. Example: Mark mails from test@invalid as seen
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Mark mails from %1$s as seen"
 msgstr "Označit zprávy od %1$s jako přečtené"
 
 #. This is a summary for a mail filter rule
 #. Example: Mark mails from test@invalid as deleted
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Mark mails from %1$s as deleted"
 msgstr "Označit zprávy od %1$s jako smazané"
 
 #. This is a summary for a mail filter rule
 #. Example: Flag mails from test@invalid with a color
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Flag mails from %1$s with a color"
 msgstr "Barevně označit zprávy od %1$s"
 
@@ -9708,21 +9578,18 @@ msgstr "Barevně označit zprávy od %1$s"
 #. %2$s A tag, which is entered by the user via a text input
 #. Example: Tag mails from test@invalid with SoccerTeam
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Tag mails from %1$s with %2$s"
 msgstr "Označit zprávy od %1$s štítkem %2$s"
 
 #. This is a summary for a mail filter rule
 #. Example: Keep mails to test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Keep mails to %1$s"
 msgstr "Ponechat zprávy pro %1$s"
 
 #. This is a summary for a mail filter rule
 #. Example: Discard mails to test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Discard mails to %1$s"
 msgstr "Odstranit zprávy pro %1$s"
 
@@ -9731,7 +9598,6 @@ msgstr "Odstranit zprávy pro %1$s"
 #. %2$s A folder selected by the user
 #. Example: Move mails to test@invalid into folder INBOX
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Move mails to %1$s into folder %2$s"
 msgstr "Přesunout zprávy pro %1$s do složky %2$s"
 
@@ -9740,7 +9606,6 @@ msgstr "Přesunout zprávy pro %1$s do složky %2$s"
 #. %2$s user input (expected a mail address) where the messages are redirected to
 #. Example: Redirect mails to test@invalid to another@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Redirect mails to %1$s to %2$s"
 msgstr "Přesměrovat zprávy pro %1$s na %2$s"
 
@@ -9749,28 +9614,24 @@ msgstr "Přesměrovat zprávy pro %1$s na %2$s"
 #. %2$s A reason which is entered by the user
 #. Example: Reject mails to test@invalid with reason Invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Reject mails to %1$s with reason %2$s"
 msgstr "Odmítnout zprávy pro %1$s kvůli %2$s"
 
 #. This is a summary for a mail filter rule
 #. Example: Mark mails to test@invalid as seen
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Mark mails to %1$s as seen"
 msgstr "Označit zprávy pro %1$s jako přečtené"
 
 #. This is a summary for a mail filter rule
 #. Example: Mark mails to test@invalid as deleted
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Mark mails to %1$s as deleted"
 msgstr "Označit zprávy pro %1$s jako smazané"
 
 #. This is a summary for a mail filter rule
 #. Example: Flag mails to test@invalid with a color
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Flag mails to %1$s with a color"
 msgstr "Barevně označit zprávy pro %1$s"
 
@@ -9779,21 +9640,18 @@ msgstr "Barevně označit zprávy pro %1$s"
 #. %2$s A tag, which is entered by the user via a text input
 #. Example: Tag mails to test@invalid with SoccerTeam
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Tag mails to %1$s with %2$s"
 msgstr "Označit zprávy pro %1$s štítkem %2$s"
 
 #. This is a summary for a mail filter rule
 #. Example: Keep mails with subject Some subject
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Keep mails with subject %1$s"
 msgstr "Ponechat zprávy s předmětem %1$s"
 
 #. This is a summary for a mail filter rule
 #. Example: Discard mails with subject Some subject
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Discard mails with subject %1$s"
 msgstr "Odstrani zprávy s předmětem %1$s"
 
@@ -9802,7 +9660,6 @@ msgstr "Odstrani zprávy s předmětem %1$s"
 #. %2$s A folder selected by the user
 #. Example: Move mails with subject Some subject into folder INBOX
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Move mails with subject %1$s into folder %2$s"
 msgstr "Přesunout zprávy s předmětem %1$s do šložky %2$s"
 
@@ -9811,7 +9668,6 @@ msgstr "Přesunout zprávy s předmětem %1$s do šložky %2$s"
 #. %2$s user input (expected a mail address) where the messages are redirected to
 #. Example: Redirect mails with subject Some subject to another@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Redirect mails with subject %1$s to %2$s"
 msgstr "Přesměrovat zprávy s předmětem %1$s na %2$s"
 
@@ -9820,28 +9676,24 @@ msgstr "Přesměrovat zprávy s předmětem %1$s na %2$s"
 #. %2$s A reason which is entered by the user
 #. Example: Reject mails with subject Some subject with reason Invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Reject mails with subject %1$s with reason %2$s"
 msgstr "Odmítnout zprávy s předmětem %1$s kvůli %2$s"
 
 #. This is a summary for a mail filter rule
 #. Example: Mark mails with subject Some subject as seen
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Mark mails with subject %1$s as seen"
 msgstr "Označit zprávy s předmětem %1$s jako přečtené"
 
 #. This is a summary for a mail filter rule
 #. Example: Mark mails with subject Some subject as deleted
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Mark mails with subject %1$s as deleted"
 msgstr "Označit zprávy s předmětem %1$s jako smazané"
 
 #. This is a summary for a mail filter rule
 #. Example: Flag mails with subject Some subject with a color
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Flag mails with subject %1$s with a color"
 msgstr "Barevně označit zprávy s předmětem %1$s"
 
@@ -9850,7 +9702,6 @@ msgstr "Barevně označit zprávy s předmětem %1$s"
 #. %2$s A tag, which is entered by the user via a text input
 #. Example: Tag mails with subject Some subject with SoccerTeam
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, qt-format
 msgid "Tag mails with subject %1$s with %2$s"
 msgstr "Označit zprávy s předmětem %1$s štítkem %2$s"
 
@@ -9910,7 +9761,6 @@ msgid "Send from"
 msgstr "Odeslat od"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
-#, qt-format
 msgid ""
 "The Notice is sent out for messages received by %1$s. You may choose to send "
 "it out for other recipient addresses too:"
@@ -9943,7 +9793,6 @@ msgstr "Nebyla vybrána žádná zpráva"
 
 #. %1$d is the number of selected messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
-#, qt-format
 msgid "%1$d message selected"
 msgid_plural "%1$d messages selected"
 msgstr[0] "%1$d zpráva vybrána"
@@ -9951,7 +9800,6 @@ msgstr[1] "%1$d zprávy vybrány"
 msgstr[2] "%1$d zpráv vybráno"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
-#, qt-format
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
 "the list currently."
@@ -9961,7 +9809,6 @@ msgstr ""
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
-#, qt-format
 msgid "%1$d selected"
 msgstr "%1$d vybráno"
 
@@ -10305,7 +10152,6 @@ msgid "Primary account"
 msgstr "Primární účet"
 
 #: apps/io.ox/mail/util.js module:io.ox/core
-#, qt-format
 msgid ""
 "This is a suspicious email because we could not verify that it is really "
 "from %1$s."
@@ -10314,12 +10160,10 @@ msgstr ""
 "byla od %1$s."
 
 #: apps/io.ox/mail/util.js module:io.ox/core
-#, qt-format
 msgid "We could not verify that this email is from %1$s."
 msgstr "Nepodařilo se nám ověřit, že by tato zpráva skutečně byla od %1$s."
 
 #: apps/io.ox/mail/util.js module:io.ox/core
-#, qt-format
 msgid "We could verify that this email is from %1$s."
 msgstr "Podařilo se nám ověřit, že tato zpráva je skutečně od %1$s."
 
@@ -10370,6 +10214,362 @@ msgctxt "dropdown"
 msgid "All"
 msgstr "Vše"
 
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "SMS Code"
+msgstr "SMS kód"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Web auth"
+msgstr "Web auth"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Security Token"
+msgstr "Bezpečnostní token"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Yubikey"
+msgstr "Yubikey"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Google Authenticator"
+msgstr "Google Authenticator"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Recovery code"
+msgstr "Kód pro obnovení"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "UNKNOWN"
+msgstr "NEZNÁMÝ"
+
+#: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
+msgid ""
+"There are no backup devices available for this account.  Please notify "
+"support for help."
+msgstr ""
+"Pro tento účet nejsou k dispozici zálohovací zařízení. Kontaktujte "
+"technickou podporu."
+
+#: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
+msgid "Authentication failure.  Please reload browser and try again."
+msgstr "Chyba autentizace. Znovu načtěte stránku, prosím."
+
+#: apps/io.ox/multifactor/settings.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/views/constants.js
+msgid "2-Step Verification"
+msgstr "Dvoufázové ověření"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgctxt "app"
+msgid "2-Step Verification"
+msgstr "Dvoufázové ověření"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Verification Options"
+msgstr "Možnosti ověřování"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Recovery Options"
+msgstr "Možnosti obnovy"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "No 2-Step verification options configured yet."
+msgstr "Není nastaveno žádné dvoufázové ověření."
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Add recovery option"
+msgstr "Přidat možnost obnovy"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Add verification option"
+msgstr "Přidat možnost ověření"
+
+#. Error message when trying to get available providers from middleware
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Problem getting 2-step verification providers"
+msgstr "Problém při získávání poskytovatelů dvoufázového ověření"
+
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Add Multifactor Device"
+msgstr "Přidat vícefaktorové zařízení"
+
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Please enter the phone number for the device."
+msgstr "Zadejte, prosím, telefonní číslo zařízení."
+
+#. Catch all error when trying to set up a new 2step device
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Something went wrong.  Please try again later."
+msgstr "Něco se nezdařilo. Zkuste to, prosím, znovu později."
+
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Please only use numeric characters for phone number"
+msgstr "Pro telefonní číslo použijte jen čísla"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Add Recovery Option"
+msgstr "Přidat možnost obnovení"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Add Verification Option"
+msgstr "Přidat možnost ověření"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid ""
+"In the event you lose or are unable to use your authentication device, your "
+"account will be locked out unless you set up a recovery method.  We strongly "
+"recommend that you do so now."
+msgstr ""
+"Pokud ztratíte nebo nebudete moci použít své autentizační zařízení, a "
+"nebudete mít nastavenou metodu pro obnovení, váš účet bude uzamčen."
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "No providers available"
+msgstr "Žádný poskytovatel k dispozici"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Code via text message"
+msgstr "Kód v textové zprávě"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Use a FIDO2 compatible device to authenticate your identity."
+msgstr "Použijte zařízení kompatibilní s FIDO2 k ověření své identity."
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Yubikey, Google Security Keys, or compatible FIDO device"
+msgstr "Yubikey, Google Security Keys nebo kompatibilní zařízení FIDO"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Use Yubikey's One Time Password System"
+msgstr "Použijte systém jednorázového hesla Yubikey"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Google Authenticator or compatible"
+msgstr "Google Authenticator nebo kompatibilní"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Backup code to access your account."
+msgstr "Záložní kód pro přístup k účtu."
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Unknown system"
+msgstr "Neznámý systém"
+
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/printBackupString.js
+msgid "Recovery Code"
+msgstr "Kód pro obnovení"
+
+#. this is a file name that stores the a long recovery code
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+msgid "recovery"
+msgstr "obnova"
+
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Delete Multifactor Device"
+msgstr "Smazat vícefaktorové zařízení"
+
+#. Devices are named.  This is the text for the deleting a multifactor device
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot
+msgid "This will delete the device named %s."
+msgstr "Zařízení %s bude smazáno."
+
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Unable to delete"
+msgstr "Nelze smazat"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Edit Multifactor Device"
+msgstr "Upravit vícefaktorové zařízení"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "This will edit the name for device (%s)"
+msgstr "Název zařízení %s bude upraven"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "This will assign a name to the device"
+msgstr "Zařízení bude pojmenováno"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Unable to edit name."
+msgstr "Nelze upravit název."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+msgid "Confirm Code"
+msgstr "Potvrzovací kód"
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+msgid "Bad input or server error.  Please try again."
+msgstr "Chybné zadání nebo chyba serveru. Zkuste to, prosím, znovu."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+msgid "Bad verification code.  Please try again"
+msgstr "Chybný ověřovací kód. Zkuste to, prosím, znovu."
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Authenticator Registration"
+msgstr "Registrace autentizačního zařízení"
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Click to copy URL to clipboard"
+msgstr "Kliknutím zkopírovat do schránky"
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"If scanning doesn't work, you may be able to enter the following setup code."
+msgstr "Pokud nefunguje skenování, možná budete moci zadat následující nastavovací kód."
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"Once complete, please enter an authentication code to verify everything is "
+"configured properly."
+msgstr ""
+"Po dokončení zadejte autentizační kód pro ověření, že je vše nastaveno "
+"správně."
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Device is already registered"
+msgstr "Zařízení je již registrováno"
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Problem registering device"
+msgstr "Problém s registrací zařízení"
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Failed to register device"
+msgstr "Registrace zařízení selhala"
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Failed to register device."
+msgstr "Registrace zařízení selhala."
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Upload Recovery File"
+msgstr "Nahrát soubor pro obnovu"
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Next 4 characters of the backup string"
+msgstr "Další čtyři znaky zálohovacího řetězce"
+
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
+msgid "I lost my device"
+msgstr "Ztratil(a) jsem své zařízení"
+
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
+msgid "Reauthentication required for this action"
+msgstr "K provedení této operace je potřeba opětovná autentizace"
+
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
+msgid "Select 2-Step Verification Method"
+msgstr "Zvolte metodu dvoufázového ověření"
+
+#: apps/io.ox/multifactor/views/selectDeviceView.js module:io.ox/core/boot
+msgid "Please select a device to use for additional authentication"
+msgstr "Vyberte zařízení pro doplňující autentizaci"
+
+#: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
+msgid "New code sent."
+msgstr "Odeslán nový kód."
+
+#: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
+msgid "A new code was sent to your SMS device.  Please enter the code."
+msgstr "Na vaše SMS zařízení byl odeslán nový kód. Zadejte jej, prosím."
+
+#: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
+msgid ""
+"You secured your account with 2-Step Verification.  Please enter the "
+"verification code we sent to the phone *****%s."
+msgstr ""
+"Zabezpečil(a) jste svůj účet pomocí dvoufázového ověření. Zadejte, prosím, "
+"kód poslaný na váš telefon: *****%s."
+
+#: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
+msgid ""
+"You secured your account with 2-Step Verification.  Please enter the "
+"verification code from the Authenticator App."
+msgstr ""
+"Zabezpečil(a) jste svůj účet pomocí dvoufázového ověření. Zadejte, prosím, "
+"kód z autentizační aplikace."
+
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid ""
+"You secured your account with 2-Step Verification.  Please use your "
+"authentication token to complete verification."
+msgstr ""
+"Zabezpečil(a) jste svůj účet pomocí dvoufázového ověření. Pro dokončení "
+"ověření použijte autentizační token."
+
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid ""
+"This browser is not compatible with your configured authentication device.  "
+"Please use Chrome browser, or Firefox with U2F enabled."
+msgstr ""
+"Tento prohlížeč není kompatibilní s vaším autentizačním zařízením. Použijte, "
+"prosím, Chrome, nebo Firefox s povoleným U2F."
+
+#. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid ""
+"Bad parameters for authenticating with this key.  Possibly wrong URL domain "
+"for this key."
+msgstr ""
+"Chybné parametry pro autentizaci s tímto klíčem. Možná chybé URL domény pro "
+"daný klíč."
+
+#. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "Configuration not supported"
+msgstr "Konfigurace není podporována"
+
+#. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "This device is not eligible for this request.  Wrong hardware key?"
+msgstr ""
+"Toto zařízení není pro daný požadavek k dispozici. Špatný hardwarový klíč?"
+
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "Timeout"
+msgstr "Čas vypršel"
+
+#. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "Error authenticating.  Please reload browser and try again."
+msgstr "Chyba autentizace. Znovu načtěte stránku, prosím."
+
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
 msgid "Topics"
 msgstr "Témata"
@@ -10389,7 +10589,6 @@ msgstr "Poslat ve zprávě"
 #. %1$s is the display name of the account
 #. e.g. My Xing account
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
-#, qt-format
 msgid "My %1$s account"
 msgstr "Můj účet %1$s"
 
@@ -10397,7 +10596,6 @@ msgstr "Můj účet %1$s"
 #. %2$d number, if more than one account of the same service
 #. e.g. My Xing account
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
-#, qt-format
 msgid "My %1$s account (%2$d)"
 msgstr "Můj účet %1$s (%2$s)"
 
@@ -10409,8 +10607,6 @@ msgstr "Znovu autorizovat"
 #. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
 #. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
-#, qt-format
-#| msgid "Open in %1$s"
 msgid "Open %1$s in %2$s"
 msgstr "Otevřít %1$s v %2$s"
 
@@ -10425,7 +10621,6 @@ msgstr "Mac App Store"
 
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-#, qt-format
 msgid "Get the App from %1$s."
 msgstr "Získat aplikaci z %1$s."
 
@@ -10441,7 +10636,6 @@ msgstr "Google Play"
 
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-#, qt-format
 msgid "Get the App from %1$s"
 msgstr "Získat aplikaci z %1$s"
 
@@ -10633,7 +10827,6 @@ msgstr "Přidat kontakt/zdroj"
 
 #. %1$s is an email address
 #: apps/io.ox/participants/add.js module:io.ox/core
-#, qt-format
 msgid "Cannot add contact with an invalid mail address: %1$s"
 msgstr "Nelze přidat kontakt s neplatnou e-mailovou adresou: %1$s"
 
@@ -10666,13 +10859,11 @@ msgstr "Tento seznam zatím nemá žádné účastníky"
 
 #: apps/io.ox/participants/chronos-views.js module:io.ox/core
 #: apps/io.ox/participants/views.js
-#, qt-format
 msgid "Members (%1$d)"
 msgstr "Členové (%1$d)"
 
 #: apps/io.ox/participants/chronos-views.js module:io.ox/core
 #: apps/io.ox/participants/views.js
-#, qt-format
 msgid "Participants (%1$d)"
 msgstr "Účastníci (%1$d)"
 
@@ -10735,13 +10926,11 @@ msgstr "Začněte zde"
 
 #. %1$s is social media name, e.g. Facebook
 #: apps/io.ox/portal/main.js module:io.ox/portal
-#, qt-format
 msgid "Welcome to %1$s"
 msgstr "Vítejte v %1$s"
 
 #. %1$s is social media name, e.g. Facebook
 #: apps/io.ox/portal/main.js module:io.ox/portal
-#, qt-format
 msgid "Add your %1$s account"
 msgstr "Přidat váš účet %1$s"
 
@@ -10794,7 +10983,6 @@ msgstr "Přidat widget"
 
 #. %1$s is the title of the item, which should be colored
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-#, qt-format
 msgid "Color %1$s"
 msgstr "Obarvit %1$s"
 
@@ -10803,12 +10991,10 @@ msgid "Drag to reorder widget"
 msgstr "Táhnutím přeskupíte widgety"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-#, qt-format
 msgid "Disable %1$s"
 msgstr "Zakázat %1$s"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-#, qt-format
 msgid "Enable %1$s"
 msgstr "Povolit %1$s"
 
@@ -10849,7 +11035,6 @@ msgid "Clear field"
 msgstr "Vyprázdnit pole"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
-#, qt-format
 msgid "More than the currently displayed %1$s items were found"
 msgstr "Bylo nalezeno více než právě zobrazených %1$s položek"
 
@@ -10880,7 +11065,6 @@ msgstr ""
 "obnovení všech hesel účtů:"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
-#, qt-format
 msgid "Delete %1$s"
 msgstr "Vymazat %1$s"
 
@@ -10937,7 +11121,6 @@ msgid "Certificates"
 msgstr "Certifikáty"
 
 #: apps/io.ox/settings/main.js module:io.ox/core
-#, qt-format
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
@@ -10964,7 +11147,6 @@ msgstr "Otisk"
 
 #: apps/io.ox/settings/security/certificates/settings/pane.js
 #: module:io.ox/settings/certificates
-#, qt-format
 msgid "Untrust certificate %1$s"
 msgstr "Přestat důvěřovat certifikátu %1$s"
 
@@ -10975,7 +11157,6 @@ msgstr "Přestat důvěřovat"
 
 #: apps/io.ox/settings/security/certificates/settings/pane.js
 #: module:io.ox/settings/certificates
-#, qt-format
 msgid "Trust certificate %1$s"
 msgstr "Začít certifikátu %1$s"
 
@@ -10986,7 +11167,6 @@ msgstr "Důvěřovat"
 
 #: apps/io.ox/settings/security/certificates/settings/pane.js
 #: module:io.ox/settings/certificates
-#, qt-format
 msgid "Remove certificate %1$s"
 msgstr "Odstranit certifikát %1$s"
 
@@ -11489,7 +11669,6 @@ msgid "The due date must not be before the start date."
 msgstr "Datum dokončení nemůže být před datem začátku."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
-#, qt-format
 msgid "Costs must be between -%1$d and %1$d."
 msgstr "Náklady musí být od  -%1$d do %1$d."
 
@@ -11626,7 +11805,6 @@ msgid "High priority"
 msgstr "Vysoká priorita"
 
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, qt-format
 msgid "%1$d Minute"
 msgid_plural "%1$d Minutes"
 msgstr[0] "%1$d minuta"
@@ -11634,7 +11812,6 @@ msgstr[1] "%1$d minuty"
 msgstr[2] "%1$d minut"
 
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, qt-format
 msgid "%1$d Hour"
 msgid_plural "%1$d Hours"
 msgstr[0] "%1$d hodina"
@@ -11642,7 +11819,6 @@ msgstr[1] "%1$d hodiny"
 msgstr[2] "%1$d hodin"
 
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, qt-format
 msgid "%1$d Day"
 msgid_plural "%1$d Days"
 msgstr[0] "%1$d den"
@@ -11650,7 +11826,6 @@ msgstr[1] "%1$d dny"
 msgstr[2] "%1$d dní"
 
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
-#, qt-format
 msgid "%1$d Week"
 msgid_plural "%1$d Weeks"
 msgstr[0] "%1$d týden"
@@ -11704,7 +11879,6 @@ msgstr "App Launcher"
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
-#, qt-format
 msgid ""
 "To navigate between the %1$s applications, just click on the new App "
 "Launcher icon."
@@ -11736,6 +11910,18 @@ msgstr ""
 "Okna, která máte minimalizována, se pro snadný přístup objeví ve všech "
 "aplikacích. Okno můžete opět maximalizovat kliknutím."
 
+#. Title of tour step, demonstrating options available for 2-step verification
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid "2-step Verification Options"
+msgstr "Možnosti dvoufázového ověření"
+
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Pro zvýšení bezpečnosti svého účtu můžete přidat další možnosti ověření."
+
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
@@ -11747,7 +11933,6 @@ msgstr "Chcete-li se o nových a vylepšených funkcích dozvědět více, navš
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
-#, qt-format
 msgid ""
 "Welcome to %1$s.\n"
 "We've made some exciting changes to %1$s. This quick tour will guide you "
@@ -11836,7 +12021,6 @@ msgstr "Odstranit člena"
 
 #. %1$d is the number of members
 #: apps/plugins/administration/groups/settings/pane.js module:io.ox/core
-#, qt-format
 msgid "%1$d member"
 msgid_plural "%1$d members"
 msgstr[0] "%1$d člen"
@@ -11845,7 +12029,6 @@ msgstr[2] "%1$d členů"
 
 #. %1$s is the group name
 #: apps/plugins/administration/groups/settings/toolbar.js module:io.ox/core
-#, qt-format
 msgid ""
 "Do you really want to delete the group \"%1$s\"? This action cannot be "
 "undone!"
@@ -11874,7 +12057,6 @@ msgstr "Vytvořit nový zdroj"
 
 #. %1$s is the resource name
 #: apps/plugins/administration/resources/settings/toolbar.js module:io.ox/core
-#, qt-format
 msgid ""
 "Do you really want to delete the resource \"%1$s\"? This action cannot be "
 "undone!"
@@ -11915,7 +12097,6 @@ msgid "It's awesome"
 msgstr "Úžasné"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-#, qt-format
 msgid "%1$d of 5 stars"
 msgstr "%1$d z 5 hvězd"
 
@@ -11924,7 +12105,6 @@ msgid "Not likely at all"
 msgstr "Velmi nepravděpodobné"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-#, qt-format
 msgid "%1$d of 10 points."
 msgstr "%1$d z 10 bodů."
 
@@ -11934,7 +12114,6 @@ msgstr "Velmi pravděpodobné"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-#, qt-format
 msgid "How likely is it that you would recommend %1$s to a friend?"
 msgstr "Jak pravděpodobné je, že byste doporučili %1$s svým přátelům?"
 
@@ -12067,7 +12246,6 @@ msgstr "Soukromá adresa"
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
 #: apps/plugins/halo/xing/register.js module:plugins/portal
-#, qt-format
 msgid "%1$s at %2$s"
 msgstr "%1$s, %2$s"
 
@@ -12272,7 +12450,6 @@ msgid "Birthdays"
 msgstr "Narozeniny"
 
 #: apps/plugins/portal/birthdays/register.js module:plugins/portal
-#, qt-format
 msgid "No birthdays within the next %1$d weeks"
 msgstr "Žádné narozeniny v průběhu příštích %1$d týdnů"
 
@@ -12289,7 +12466,6 @@ msgid "Buy a gift"
 msgstr "Koupit dárek"
 
 #: apps/plugins/portal/birthdays/register.js module:plugins/portal
-#, qt-format
 msgid "In %1$d days"
 msgstr "Za %1$d dní"
 
@@ -12429,7 +12605,6 @@ msgid "1 file has been changed recently"
 msgstr "V nedávné době byl změněn jeden soubor"
 
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
-#, qt-format
 msgid "%1$d files has been changed recently"
 msgstr "Počet nedávno změněných souborů: %1$d"
 
@@ -12468,7 +12643,6 @@ msgstr ""
 
 #. Due on date
 #: apps/plugins/portal/tasks/register.js module:plugins/portal
-#, qt-format
 msgid "Due on %1$s"
 msgstr "Dokončit do %1$s"
 
@@ -12745,12 +12919,10 @@ msgid "Shared activity"
 msgstr "Sdílená aktivita"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
-#, qt-format
 msgid "%1$s recommends this link:"
 msgstr "%1$s doporučuje tento odkaz:"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
-#, qt-format
 msgid "%1$s posted a link:"
 msgstr "%1$s sdílel(a) odkaz:"
 
@@ -12758,22 +12930,18 @@ msgstr "%1$s sdílel(a) odkaz:"
 #. But you could use '%1$s changes his/her status' depending on the language.
 #. %1$s the name of the user which changed his/her status
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
-#, qt-format
 msgid "%1$s changed the status:"
 msgstr "%1$s změnil(a) stav:"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
-#, qt-format
 msgid "%1$s has a new contact:"
 msgstr "%1$s má nový kontakt:"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
-#, qt-format
 msgid "%1$s has new contacts:"
 msgstr "%1$s má nové kontakty:"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
-#, qt-format
 msgid "%1$s posted a new activity:"
 msgstr "%1$s sdílel(a) novou činnost:"
 
@@ -12781,7 +12949,6 @@ msgstr "%1$s sdílel(a) novou činnost:"
 #. But you could use '%1$s changes his/her profile:' depending on the language.
 #. %1$s the name of the user which changed his/her profile
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
-#, qt-format
 msgid "%1$s updated the profile:"
 msgstr "%1$s aktualizoval(a) profil:"
 
@@ -12845,7 +13012,6 @@ msgstr ""
 
 #. %1$s is social media name, e.g. Facebook
 #: apps/plugins/portal/xing/register.js module:plugins/portal
-#, qt-format
 msgid "Create new %1$s account"
 msgstr "Vytvořit nový účet %1$s"
 
@@ -12894,6 +13060,42 @@ msgstr "Pozvat na %s"
 msgid "Add on %s"
 msgstr "Přidat do %s"
 
+#~ msgid "Please leave a comment for other participants."
+#~ msgstr "Zanechte, prosím, komentář pro ostatní účastníky."
+
+#~ msgid "Participants can edit the appointment"
+#~ msgstr "Účastníci mohou schůzku upravovat"
+
+#~ msgid "Participant permissions"
+#~ msgstr "Práva účastníků"
+
+#~ msgid "Your default reminders will be applied to this calendars."
+#~ msgstr "Pro tento kalendář budou nastaveny vaše výchozí upomínky."
+
+#~ msgid "All file versions older than 1 day will be deleted"
+#~ msgid_plural "All file versions older than %1$d days will be deleted"
+#~ msgstr[0] "Všechny verze souboru starší než %1$d dní budou smazány"
+#~ msgstr[1] ""
+#~ msgstr[2] ""
+
+#~ msgid ""
+#~ "When a file has more than 1 additional version, older versions of the "
+#~ "file will be deleted"
+#~ msgid_plural ""
+#~ "When a file has more than %1$d additional versions, older versions of the "
+#~ "file will be deleted"
+#~ msgstr[0] ""
+#~ "Má-li soubor více než %1$d dalších verzí, starší verze budou smazány"
+#~ msgstr[1] ""
+#~ msgstr[2] ""
+
+#~ msgid ""
+#~ "Older versions will be deleted after next login or when a new version is "
+#~ "created"
+#~ msgstr ""
+#~ "Starší verze budou smazány po příštím přihlášení nebo při vytvoření nové "
+#~ "verze"
+
 #~ msgid "1 minute"
 #~ msgstr "1 minuta"
 
@@ -12916,19 +13118,6 @@ msgstr "Přidat do %s"
 #~ msgid "Add to Favorites"
 #~ msgstr "Přidat do oblíbených"
 
-#, fuzzy
-#~| msgid ""
-#~| "All messages older than %1$d days will be moved to the archive folder"
-#~ msgid "All file versions older than 1 day will be deleted after next login"
-#~ msgid_plural ""
-#~ "All file versions older than %1$d days will be deleted after next login"
-#~ msgstr[0] ""
-#~ "Všechny zprávy starší než %1$d dní budou přesunuty do archivační složky"
-#~ msgstr[1] ""
-#~ "Všechny zprávy starší než %1$d dní budou přesunuty do archivační složky"
-#~ msgstr[2] ""
-#~ "Všechny zprávy starší než %1$d dní budou přesunuty do archivační složky"
-
 #~ msgid "Auto-save email drafts"
 #~ msgstr "Automaticky ukládat koncepty zpráv"
 
@@ -12948,7 +13137,6 @@ msgstr "Přidat do %s"
 #~ msgid "Creating Files"
 #~ msgstr "Vytváření souborů"
 
-#, qt-format
 #~ msgid "Draft saved at %1$s"
 #~ msgstr "Koncept uložen v %1$s"
 
@@ -13020,7 +13208,6 @@ msgstr "Přidat do %s"
 #~ msgid "Publications and Subscriptions"
 #~ msgstr "Publikace a přihlášení k odběru"
 
-#, qt-format
 #~ msgid "Quick reply: %1$s"
 #~ msgstr "Rychlá odpověď: %1$s"
 
@@ -13064,7 +13251,6 @@ msgstr "Přidat do %s"
 #~ msgid "The Drive App"
 #~ msgstr "Aplikace Drive"
 
-#, qt-format
 #~ msgid ""
 #~ "These statistics only include folders, which have a depth less than four "
 #~ "in the folder structure from the folder \"%1$s\"."
@@ -13090,7 +13276,6 @@ msgstr "Přidat do %s"
 #~ msgid "Yes, with empty attachment"
 #~ msgstr "Ano, s prázdnou přílohou"
 
-#, qt-format
 #~ msgid ""
 #~ "You are currently using %1$s of your %2$s available disk space. You have "
 #~ "%3$s left. "
@@ -13105,7 +13290,6 @@ msgstr "Přidat do %s"
 #~ "Připojil(a) jste prázdný soubor. Je možné, že byl tento soubor smazán z "
 #~ "vašeho disku. Přesto poslat?"
 
-#, qt-format
 #~ msgid ""
 #~ "Your capacity is shared with all members of your group. Your group is "
 #~ "currently using %1$s of its %2$s available disk space. The amount of free "
@@ -13115,15 +13299,12 @@ msgstr "Přidat do %s"
 #~ "chvíli používá %1$s z %2$s dostupného diskového prostoru. Volného místa "
 #~ "je %3$s. "
 
-#, qt-format
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
 
-#, qt-format
 #~ msgid " %1$s (%2$s); "
 #~ msgstr " %1$s (%2$s); "
 
-#, qt-format
 #~ msgid " %1$s; "
 #~ msgstr " %1$s; "
 
@@ -13144,29 +13325,24 @@ msgstr "Přidat do %s"
 #~ msgid "% finished"
 #~ msgstr "% dokončeno"
 
-#, qt-format
 #~ msgid "%1$d %"
 #~ msgstr "%1$d %"
 
-#, qt-format
 #~ msgid "%1$d column"
 #~ msgid_plural "%1$d columns"
 #~ msgstr[0] "%1$d sloupec"
 #~ msgstr[1] "%1$d sloupce"
 #~ msgstr[2] "%1$d sloupců"
 
-#, qt-format
 #~ msgid "%1$d contacts found. This list is limited to %2$d items."
 #~ msgstr "Nalezeno %1$d kontaktů. Tento seznam je omezen na %2$d položek."
 
-#, qt-format
 #~ msgid "%1$d day, %2$s"
 #~ msgid_plural "%1$d days, %2$s"
 #~ msgstr[0] "%1$d den, %2$s"
 #~ msgstr[1] "%1$d dny, %2$s"
 #~ msgstr[2] "%1$d dní, %2$s"
 
-#, qt-format
 #~ msgctxt "in"
 #~ msgid "%1$d day, %2$s"
 #~ msgid_plural "%1$d days, %2$s"
@@ -13174,14 +13350,12 @@ msgstr "Přidat do %s"
 #~ msgstr[1] "%1$d dny, %2$s"
 #~ msgstr[2] "%1$d dní, %2$s"
 
-#, qt-format
 #~ msgid "%1$d hour and %2$s"
 #~ msgid_plural "%1$d hours and %2$s"
 #~ msgstr[0] "%1$d hodina a %2$s"
 #~ msgstr[1] "%1$d hodiny a %2$s"
 #~ msgstr[2] "%1$d hodin a %2$s"
 
-#, qt-format
 #~ msgctxt "in"
 #~ msgid "%1$d hour and %2$s"
 #~ msgid_plural "%1$d hours and %2$s"
@@ -13189,137 +13363,107 @@ msgstr "Přidat do %s"
 #~ msgstr[1] "%1$d hodiny a %2$s"
 #~ msgstr[2] "%1$d hodin a %2$s"
 
-#, qt-format
 #~ msgid "%1$d messages in this conversation"
 #~ msgstr "%1$d zpráv v této konverzaci"
 
-#, qt-format
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$s z %2$s"
 
-#, qt-format
 #~ msgid "%1$d row"
 #~ msgid_plural "%1$d rows"
 #~ msgstr[0] "%1$d řada"
 #~ msgstr[1] "%1$d řady"
 #~ msgstr[2] "%1$d řad"
 
-#, qt-format
 #~ msgid "%1$d unread mails"
 #~ msgstr "%1$d nepřečtených zpráv"
 
-#, qt-format
 #~ msgctxt "datetime"
 #~ msgid "%1$s %2$s"
 #~ msgstr "%1$s %2$s"
 
-#, qt-format
 #~ msgctxt "window title"
 #~ msgid "%1$s %2$s"
 #~ msgstr "%1$s %2$s"
 
-#, qt-format
 #~ msgid "%1$s %2$s %3$s %4$s %5$s."
 #~ msgstr "%1$s %2$s %3$s %4$s %5$s."
 
-#, qt-format
 #~ msgid "%1$s %2$s %3$s %4$s."
 #~ msgstr "%1$s %2$s %3$s %4$s."
 
-#, qt-format
 #~ msgid "%1$s %2$s %3$s."
 #~ msgstr "%1$s %2$s %3$s."
 
-#, qt-format
 #~ msgid "%1$s %2$s the invitation: %3$s"
 #~ msgstr "%1$s %2$s pozvánku: %3$s"
 
-#, qt-format
 #~ msgid "%1$s %2$s."
 #~ msgstr "%1$s %2$s."
 
-#, qt-format
 #~ msgid "%1$s (Tentative)"
 #~ msgstr "%1$s (předběžně)"
 
-#, qt-format
 #~ msgid "%1$s Options"
 #~ msgstr "Možnosti %1$s"
 
-#, qt-format
 #~ msgid "%1$s created a recurrence exception. Original date: %2$s:"
 #~ msgstr "%1$s vytvořil(a) výjimku opakování. Původní datum: %2$s:"
 
-#, fuzzy, qt-format
 #~| msgid "%1$s of %2$s"
 #~ msgid "%1$s for %2$s"
 #~ msgstr "%1$s z %2$s"
 
-#, fuzzy, qt-format
 #~| msgid "%s client for Android"
 #~ msgid "%1$s for Android"
 #~ msgstr "%s klient pro Android"
 
-#, fuzzy, qt-format
 #~| msgid "%s client for Mac OS"
 #~ msgid "%1$s for MacOS"
 #~ msgstr "%s klient pro Mac OS"
 
-#, fuzzy, qt-format
 #~| msgid "%s client for Windows"
 #~ msgid "%1$s for Windows"
 #~ msgstr "%s klient pro Windows"
 
-#, fuzzy, qt-format
 #~| msgid "%1$s of %2$s"
 #~ msgid "%1$s for iOS"
 #~ msgstr "%1$s z %2$s"
 
-#, qt-format
 #~ msgid ""
 #~ "%1$s has %2$s the appointment, but would like to make a counter proposal: "
 #~ msgstr "%1$s schůzku %2$s, ale chtěl by vznést protinávrh:"
 
-#, qt-format
 #~ msgid "%1$s has %2$s the appointment."
 #~ msgstr "%1$s schůzku %2$s."
 
-#, qt-format
 #~ msgid "%1$s has %2$s the invitation on behalf of %3$s:"
 #~ msgstr "%1$s jménem %3$s %2$s pozvánku:"
 
-#, qt-format
 #~ msgid "%1$s has %2$s the invitation on your behalf:"
 #~ msgstr "%1$s vaším jménem %2$s pozvánku:"
 
-#, qt-format
 #~ msgid "%1$s has asked %2$s to change the event:"
 #~ msgstr "%1$s požádal(a) %2$s, aby změnil(a) schůzku:"
 
-#, qt-format
 #~ msgid "%1$s has been removed from the appointment."
 #~ msgstr "%1$s byl(a) odebrán(a) ze schůzky."
 
-#, qt-format
 #~ msgid "%1$s has changed an event on behalf of %2$s:"
 #~ msgstr "%1$s změnil(a) jménem %2$s událost:"
 
-#, qt-format
 #~ msgid "%1$s has changed an event on your behalf:"
 #~ msgstr "%1$s změnil(a) vaším jménem událost:"
 
-#, qt-format
 #~ msgid "%1$s has declined your proposed changes for the appointment %2$s."
 #~ msgstr "%1$s odmítl(a) vámi navrhované změny ohledně schůzky %2$s."
 
-#, qt-format
 #~ msgid ""
 #~ "%1$s has declined your proposed changes on behalf of %2$s for the "
 #~ "appointment %3$s."
 #~ msgstr ""
 #~ "%1$s odmítl(a) jménem %2$s vámi navrhované změny ohledně schůzky %3$s."
 
-#, qt-format
 #~ msgid ""
 #~ "%1$s has deleted an appointment on behalf of %2$s, or you have been "
 #~ "removed as a participant:"
@@ -13327,11 +13471,9 @@ msgstr "Přidat do %s"
 #~ "%1$s smazal(a) jménem %2$s schůzku, nebo jste byl(a) odstraněn(a) ze "
 #~ "seznamů účastníků:"
 
-#, qt-format
 #~ msgid "%1$s has deleted an appointment on your behalf:"
 #~ msgstr "%1$s smazal(a) vaším jménem schůzku:"
 
-#, qt-format
 #~ msgid ""
 #~ "%1$s has deleted an appointment, or you have been removed as a "
 #~ "participant:"
@@ -13339,66 +13481,52 @@ msgstr "Přidat do %s"
 #~ "%1$s smazal(a) schůzku, nebo jste byl(a) odstraněn(a) ze seznamů "
 #~ "účastníků:"
 
-#, qt-format
 #~ msgid "%1$s has ended the presentation."
 #~ msgstr "%1$s ukončil(a) prezentaci."
 
-#, qt-format
 #~ msgid "%1$s has started the presentation."
 #~ msgstr "%1$s začal(a) prezentaci."
 
-#, qt-format
 #~ msgid "%1$s is a new contact"
 #~ msgstr "%1$s je nový kontakt"
 
-#, qt-format
 #~ msgid "%1$s is now connected with %2$s"
 #~ msgstr "%1$s je nyní spojené s %2$s"
 
-#, qt-format
 #~ msgid "%1$s is organizing an event on your behalf."
 #~ msgstr "%1$s organizuje vaším jménem událost."
 
-#, qt-format
 #~ msgid "%1$s mail"
 #~ msgid_plural "%1$s mails"
 #~ msgstr[0] "%1$d zpráva"
 #~ msgstr[1] "%1$d zprávy"
 #~ msgstr[2] "%1$d zpráv"
 
-#, qt-format
 #~ msgid "%1$s mail, %2$s unread"
 #~ msgid_plural "%1$s mails, %2$s unread"
 #~ msgstr[0] "%1$s z %2$s nepřečtená"
 #~ msgstr[1] "%1$s z %2$s nepřečtené"
 #~ msgstr[2] "%1$s z %2$s nepřečtených"
 
-#, fuzzy, qt-format
 #~| msgid "%1$s of %2$s"
 #~ msgid "%1$s on %2$s"
 #~ msgstr "%1$s z %2$s"
 
-#, qt-format
 #~ msgid "%1$s set your status to %2$s on your behalf for this appointment:"
 #~ msgstr "%1$s nastavil(a) vaším jménem stav na %2$s pro tuto schůzku:"
 
-#, qt-format
 #~ msgid "%1$s sets the status to %2$s for this appointment:"
 #~ msgstr "%1$s nastavil(a) stav na %2$s pro tuto schůzku:"
 
-#, qt-format
 #~ msgid "%1$s sets the status to %2$s on behalf of %3$s for this appointment:"
 #~ msgstr "%1$s nastavil(a) jménem %3$s stav na %2$s pro tuto schůzku:"
 
-#, qt-format
 #~ msgid "%1$s sets the status to 'none' for: %1$s"
 #~ msgstr "%1$s nastavil(a) stav ‚žádné‘ pro: %1$s"
 
-#, qt-format
 #~ msgid "%1$s updated their profile:"
 #~ msgstr "%1$s aktualizoval(a) svůj profil:"
 
-#, qt-format
 #~ msgid ""
 #~ "%1$s would like to be brought up to date about the appointment %2$s. "
 #~ "Please send another invitation."
@@ -13406,11 +13534,9 @@ msgstr "Přidat do %s"
 #~ "%1$s si přeje aktuální informace o schůzce %2$s. Pošlete, prosím, další "
 #~ "pozvánku."
 
-#, qt-format
 #~ msgid "%1$s, %2$s"
 #~ msgstr "%1$s, %2$s"
 
-#, qt-format
 #~ msgid "%2$s (%1$s, %3$s)"
 #~ msgstr "%2$s (%1$s, %3$s)"
 
@@ -13532,7 +13658,6 @@ msgstr "Přidat do %s"
 #~ msgid "(may be slow on old machines)"
 #~ msgstr "(může být pomalé na starých počítačích)"
 
-#, qt-format
 #~ msgid ", ends after %1$s task(s)"
 #~ msgstr ", končí po %1$s úkolu/úkolech"
 
@@ -13621,7 +13746,6 @@ msgstr "Přidat do %s"
 #~ msgid "8 hour"
 #~ msgstr "8 hodin"
 
-#, qt-format
 #~ msgid "<b>%1$d</b> elements selected"
 #~ msgstr "<b>%1$d</b> prvků vybráno"
 
@@ -14012,7 +14136,6 @@ msgstr "Přidat do %s"
 #~ msgid "Activate or deactivate the start page hovers."
 #~ msgstr "Zapnout nebo vypnout vyskakovací okna na stránce Start."
 
-#, qt-format
 #~ msgid "Add %1$s to the appointment."
 #~ msgstr "Přidejte %1$s ke schůzce."
 
@@ -14334,7 +14457,6 @@ msgstr "Přidat do %s"
 #~ msgid "All contacts"
 #~ msgstr "Všechny mé kontakty"
 
-#, qt-format
 #~ msgid "All future messages from %1$s will be moved to the selected folder."
 #~ msgid_plural ""
 #~ "All future messages from the senders of the selected mails will be moved "
@@ -14358,7 +14480,6 @@ msgstr "Přidat do %s"
 #~ msgid "All my appointments"
 #~ msgstr "Všechny mé schůzky"
 
-#, qt-format
 #~ msgid "All times will be shown in the timezone %1$s"
 #~ msgstr "Všechny časy budou zobrazeny v časové zóně %1$s"
 
@@ -14864,11 +14985,9 @@ msgstr "Přidat do %s"
 #~ msgid "An error occurred"
 #~ msgstr "Došlo k chybě"
 
-#, qt-format
 #~ msgid "An error occurred while loading page %1$d."
 #~ msgstr "Při načítání strany %1$d došlo k chybě."
 
-#, qt-format
 #~ msgid "An error occurred. (%1$s, %3$s)"
 #~ msgstr "Došlo k chybě. (%1$s, %3$s)"
 
@@ -14959,11 +15078,9 @@ msgstr "Přidat do %s"
 #~ msgid "Appointment (none)"
 #~ msgstr "Schůzka (žádná)"
 
-#, qt-format
 #~ msgid "Appointment cancelled: %1$s"
 #~ msgstr "Schůzka zrušena: %1$s"
 
-#, qt-format
 #~ msgid "Appointment changed: %1$s"
 #~ msgstr "Schůzka změněna: %1$s"
 
@@ -14982,7 +15099,6 @@ msgstr "Přidat do %s"
 #~ msgstr[1] "Schůzky byly přesunuty"
 #~ msgstr[2] "Schůzek bylo přesunuto"
 
-#, qt-format
 #~ msgid ""
 #~ "Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open"
 #~ msgstr ""
@@ -14991,7 +15107,6 @@ msgstr "Přidat do %s"
 #~ msgid "Appointment list"
 #~ msgstr "Seznam schůzek"
 
-#, qt-format
 #~ msgid "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
 #~ msgstr ""
 #~ "Připomenutí schůzky. %1$s %2$s %3$s %4$s. Otevřete stisknutím [enter]"
@@ -15435,7 +15550,6 @@ msgstr "Přidat do %s"
 #~ "Internet Explorer 9 nepodporuje nahrávání příloh. Přejděte, prosím, na "
 #~ "Internet Explorer 10."
 
-#, qt-format
 #~ msgid "Attachments (%1$s)"
 #~ msgstr "Přílohy (%1$s)"
 
@@ -15912,11 +16026,9 @@ msgstr "Přidat do %s"
 #~ msgid "Change color"
 #~ msgstr "Změnit barvu"
 
-#, qt-format
 #~ msgid "Change exception of %1$s on %2$s"
 #~ msgstr "Výjimka změny %1$s v %2$s"
 
-#, qt-format
 #~ msgid "Change exceptions: %1$s"
 #~ msgstr "Výjimky změn: %1$s"
 
@@ -15929,11 +16041,9 @@ msgstr "Přidat do %s"
 #~ msgid "Change subscription"
 #~ msgstr "Změnit přihlášení k odběru"
 
-#, qt-format
 #~ msgid "Change the description to %1$s."
 #~ msgstr "Změňte popis na %1$s."
 
-#, qt-format
 #~ msgid "Change the location to %1$s."
 #~ msgstr "Změňte místo konání na: %1$s"
 
@@ -15982,7 +16092,6 @@ msgstr "Přidat do %s"
 #~ msgid "Christmas Island"
 #~ msgstr "Vánoční ostrov"
 
-#, fuzzy, qt-format
 #~| msgid "Share %1$s \"%2$s\""
 #~ msgid "Chrome %1$s on %2$s"
 #~ msgstr "Sdílet %1$s „%2$s“"
@@ -16071,7 +16180,6 @@ msgstr "Přidat do %s"
 #~ msgid "Close document"
 #~ msgstr "Zavřít dokument"
 
-#, fuzzy, qt-format
 #~| msgid "close for %1$s"
 #~ msgid "Close for %1$s"
 #~ msgstr "zavřít kvůli %1$s"
@@ -16084,7 +16192,6 @@ msgstr "Přidat do %s"
 #~ msgid "Close recurrence view"
 #~ msgstr "Klikněte pro zavření pohledu na opakování"
 
-#, qt-format
 #~ msgid "Close reminder for %1$s"
 #~ msgstr "Zavřít upomínku pro %1$s"
 
@@ -16129,7 +16236,6 @@ msgstr "Přidat do %s"
 #~ msgid "Comments:"
 #~ msgstr "Komentáře:"
 
-#, qt-format
 #~ msgid ""
 #~ "Comments:\n"
 #~ "%1$s"
@@ -16168,7 +16274,6 @@ msgstr "Přidat do %s"
 #~ msgid "Configuration damaged, please inform the administrator."
 #~ msgstr "Nastavení se změnilo, informujte, prosím, administrátora."
 
-#, qt-format
 #~ msgid "Configure %1$s"
 #~ msgstr "Nastavit %1$s"
 
@@ -16321,11 +16426,9 @@ msgstr "Přidat do %s"
 #~ msgid "Created on"
 #~ msgstr "Vytvořeno"
 
-#, qt-format
 #~ msgid "Created on %1$s by %2$s"
 #~ msgstr "Vytvořeno %1$s uživatelem %2$s"
 
-#, qt-format
 #~ msgid "Created on %1$s by %2$s, last changed on %3$s by %4$s"
 #~ msgstr ""
 #~ "Vytvořeno %1$s uživatelem %2$s, naposled změněno %3$s uživatelem %4$s"
@@ -16333,7 +16436,6 @@ msgstr "Přidat do %s"
 #~ msgid "Created on:"
 #~ msgstr "Vytvořeno:"
 
-#, qt-format
 #~ msgid ""
 #~ "Created private folder '%1$s' in %2$s and subscribed successfully to "
 #~ "shared folder"
@@ -16568,7 +16670,6 @@ msgstr "Přidat do %s"
 #~ msgid "Delete a stream"
 #~ msgstr "Smazat proud"
 
-#, fuzzy, qt-format
 #~| msgctxt "folder"
 #~| msgid "Deleted messages"
 #~ msgid "Delete all %1$d messages"
@@ -16580,7 +16681,6 @@ msgstr "Přidat do %s"
 #~ msgid "Delete drawing object"
 #~ msgstr "Smazat objekt kresby"
 
-#, qt-format
 #~ msgid "Delete exceptions: %1$s"
 #~ msgstr "Výjimky mazání: %1$s"
 
@@ -16618,7 +16718,6 @@ msgstr "Přidat do %s"
 #~ msgid "Description:"
 #~ msgstr "Popis:"
 
-#, qt-format
 #~ msgid "Description: %1$s"
 #~ msgstr "Popis: %1$s"
 
@@ -16662,7 +16761,6 @@ msgstr "Přidat do %s"
 #~ "Věděli jste, že si OX App Suite můžete vzít s sebou? Prostě klikněte na "
 #~ "tuto ikonku a zvolte v menu ‚Připojit zařízení‘."
 
-#, qt-format
 #~ msgid "Direct link: %1$s"
 #~ msgstr "Přímý odkaz: %1$s"
 
@@ -16795,7 +16893,6 @@ msgstr "Přidat do %s"
 #~ msgid "Document name"
 #~ msgstr "Název dokumentu"
 
-#, qt-format
 #~ msgid "Document saved in folder \"%1$s\"."
 #~ msgstr "Dokument uložen do složky „%1$s“."
 
@@ -16938,7 +17035,6 @@ msgstr "Přidat do %s"
 #~ msgid "Each day"
 #~ msgstr "Každý den"
 
-#, qt-format
 #~ msgid "Each week on %1$s"
 #~ msgstr "Každý týden v %1$s"
 
@@ -16950,7 +17046,6 @@ msgstr "Přidat do %s"
 #~ msgid "Ecuador"
 #~ msgstr "Ekvádor"
 
-#, fuzzy, qt-format
 #~| msgid "Due on %1$s"
 #~ msgid "Edge on %1$s"
 #~ msgstr "Dokončit do %1$s"
@@ -17227,23 +17322,18 @@ msgstr "Přidat do %s"
 #~ msgid "Equatorial Guinea"
 #~ msgstr "Rovníková Guinea"
 
-#, qt-format
 #~ msgid "Error-ID: %1$s"
 #~ msgstr "Chyba ID: %1$s"
 
-#, qt-format
 #~ msgid "Error: %1$s - %2$s"
 #~ msgstr "Chyba: %1$s - %2$s"
 
-#, qt-format
 #~ msgid "Error: %1$s doesn't support routing from %2$s"
 #~ msgstr "Chyba: %1$s nepodporuje směrování z %2$s"
 
-#, qt-format
 #~ msgid "Error: %1$s doesn't support routing to %2$s"
 #~ msgstr "Chyba: %1$s nepodporuje směrování na %2$s"
 
-#, qt-format
 #~ msgid "Error: %2$s"
 #~ msgstr "Chyba: %2$s"
 
@@ -17433,39 +17523,30 @@ msgstr "Přidat do %s"
 #~ msgid "Every"
 #~ msgstr "Každý"
 
-#, qt-format
 #~ msgid "Every %1$d days."
 #~ msgstr "Každé %1$d dny."
 
-#, qt-format
 #~ msgid "Every %1$d months on day %2$d."
 #~ msgstr "Každý %1$d. měsíc, %2$d. den."
 
-#, qt-format
 #~ msgid "Every %1$d months on the %2$s %3$s."
 #~ msgstr "Každý %1$d. měsíc, %2$s %3$s."
 
-#, qt-format
 #~ msgid "Every %1$d weeks on %2$s."
 #~ msgstr "Každý %1$d. týden v %2$s."
 
-#, qt-format
 #~ msgid "Every %1$d weeks on all days."
 #~ msgstr "Každý %1$d. týden ve všechny dny."
 
-#, qt-format
 #~ msgid "Every %1$d weeks on weekends."
 #~ msgstr "Každý %1$d. týden o víkendech."
 
-#, qt-format
 #~ msgid "Every %1$d weeks on workdays."
 #~ msgstr "Každý %1$d. týden v pracovních dnech."
 
-#, qt-format
 #~ msgid "Every %1$d years on %2$s %3$d"
 #~ msgstr "Každý  %1$d. rok v %3$d. %2$s "
 
-#, qt-format
 #~ msgid "Every Week on %1$s"
 #~ msgstr "Každý týden v %1$s"
 
@@ -17484,7 +17565,6 @@ msgstr "Přidat do %s"
 #~ msgid "Expand timeframe by one month"
 #~ msgstr "Rozšířit časový rámec o jeden měsíc"
 
-#, qt-format
 #~ msgid "Expiration: %1$d"
 #~ msgstr "Platnost: %1$d"
 
@@ -17586,7 +17666,6 @@ msgstr "Přidat do %s"
 #~ msgid "File:"
 #~ msgstr "Soubor:"
 
-#, qt-format
 #~ msgid "File: %1$s"
 #~ msgstr "Soubor: %1$s"
 
@@ -17615,7 +17694,6 @@ msgstr "Přidat do %s"
 #~ msgid "Finland"
 #~ msgstr "Finsko"
 
-#, fuzzy, qt-format
 #~| msgid "%1$s of %2$s"
 #~ msgid "Firefox %1$s on %2$s"
 #~ msgstr "%1$s z %2$s"
@@ -17673,7 +17751,6 @@ msgstr "Přidat do %s"
 #~ msgid "Folder type"
 #~ msgstr "Druh složky"
 
-#, qt-format
 #~ msgid "Folder-specific actions for %1$s"
 #~ msgstr "Činnosti týkající se složky %1$s"
 
@@ -17925,7 +18002,6 @@ msgstr "Přidat do %s"
 #~ "Zde můžete importovat úkoly, schůzky nebo kontakty z iCal, vCard nebo CSV "
 #~ "souborů."
 
-#, qt-format
 #~ msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 #~ msgstr "Dobrý den,<br><br>%1$s s vámi sdílel(a) publikaci:<br>%2$s"
 
@@ -18036,7 +18112,6 @@ msgstr "Přidat do %s"
 #~ msgid "IMAP server"
 #~ msgstr "IMAP server"
 
-#, fuzzy, qt-format
 #~| msgid "Added %1$s."
 #~ msgid "IP Address: %1$s"
 #~ msgstr "Přidáno %1$s."
@@ -18189,7 +18264,6 @@ msgstr "Přidat do %s"
 #~ msgstr ""
 #~ "V Ikonovém pohledu vidíte v zobrazovací oblasti soubory ve vybrané složce."
 
-#, qt-format
 #~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
 #~ msgstr "Ve vašem časovém pásmu (%1$s): %2$s (trvání: %3$s)"
 
@@ -18305,7 +18379,6 @@ msgstr "Přidat do %s"
 #~ msgid "Insert/Edit Hyperlink"
 #~ msgstr "Vložit/upravit hypertextový odkaz"
 
-#, qt-format
 #~ msgid ""
 #~ "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 #~ "Screen'%4$s"
@@ -18382,7 +18455,6 @@ msgstr "Přidat do %s"
 #~ "Pozvat lidi e-mailem. Každý příjemce obdrží osobní odkaz pro přístup ke "
 #~ "sdíleným souborům."
 
-#, qt-format
 #~ msgid "Invite the group %1$s to the appointment."
 #~ msgstr "Pozvěte skupinu %1$s na schůzku."
 
@@ -18454,7 +18526,6 @@ msgstr "Přidat do %s"
 #~ msgid "Join the presentation"
 #~ msgstr "Sledovat prezentaci"
 
-#, qt-format
 #~ msgid "Joining the presentation of %1$s."
 #~ msgstr "Sledovat prezentaci %1$s."
 
@@ -18476,7 +18547,6 @@ msgstr "Přidat do %s"
 #~ msgid "June"
 #~ msgstr "Červen"
 
-#, fuzzy, qt-format
 #~| msgid "Due on %1$s"
 #~ msgid "Just open %1$s"
 #~ msgstr "Dokončit do %1$s"
@@ -18520,7 +18590,6 @@ msgstr "Přidat do %s"
 #~ msgid "Last Modified:"
 #~ msgstr "Poslední úprava:"
 
-#, qt-format
 #~ msgid "Last changed on %1$s by %2$s"
 #~ msgstr "Poslední změna %1$s uživatelem %2$s"
 
@@ -18588,7 +18657,6 @@ msgstr "Přidat do %s"
 #~ msgid "Liked a link: %s"
 #~ msgstr "Líbil se vám odkaz: %s"
 
-#, qt-format
 #~ msgid "Line %1$d: %2$s"
 #~ msgstr "Řádek %1$d: %2$s"
 
@@ -18639,7 +18707,6 @@ msgstr "Přidat do %s"
 #~ msgid "Location:"
 #~ msgstr "Místo:"
 
-#, qt-format
 #~ msgid "Location: %1$s"
 #~ msgstr "Místo: %1$s"
 
@@ -18721,7 +18788,6 @@ msgstr "Přidat do %s"
 #~ msgid "Mail text"
 #~ msgstr "Text zprávy"
 
-#, qt-format
 #~ msgid "Mail to resource %1$s"
 #~ msgstr "Poslat zdroji %1$s"
 
@@ -18925,11 +18991,9 @@ msgstr "Přidat do %s"
 #~ msgid "Month View"
 #~ msgstr "Pohled: měsíc"
 
-#, qt-format
 #~ msgid "Monthly on day %1$d"
 #~ msgstr "Měsíčně každý %1$d. den"
 
-#, qt-format
 #~ msgid "Monthly on the %1$s %2$s"
 #~ msgstr "Měsíčně %1$s %2$s"
 
@@ -19020,7 +19084,6 @@ msgstr "Přidat do %s"
 #~ msgid "New Appointment"
 #~ msgstr "Nová schůzka"
 
-#, qt-format
 #~ msgid "New Appointment: %1$s"
 #~ msgstr "Nová schůzka: %1$s"
 
@@ -19033,7 +19096,6 @@ msgstr "Přidat do %s"
 #~ msgid "New Infoitem"
 #~ msgstr "Nová informační položka"
 
-#, qt-format
 #~ msgid "New Mail from %1$s %2$s. Press [enter] to open"
 #~ msgstr "Nová zpráva od %1$s %2$s. Otevřete stisknutím [enter]"
 
@@ -19300,7 +19362,6 @@ msgstr "Přidat do %s"
 #~ msgid "OXMF Infostore"
 #~ msgstr "OXMF úložiště informací"
 
-#, qt-format
 #~ msgid "Occurs %1$s times"
 #~ msgstr "%1$skrát"
 
@@ -19325,19 +19386,15 @@ msgstr "Přidat do %s"
 #~ msgid "On #DATE# at #TIME# #SENDER# wrote:"
 #~ msgstr "#DATE# v #TIME# #SENDER# napsal(a):"
 
-#, qt-format
 #~ msgid "On %1$s %2$s each %3$s month"
 #~ msgstr "V %1$s %2$s každý %3$s. měsíc"
 
-#, qt-format
 #~ msgid "On %1$s %2$s each month"
 #~ msgstr "V %1$s %2$s každý měsíc"
 
-#, qt-format
 #~ msgid "On %1$s %2$s every %3$s. month"
 #~ msgstr "%1$s %2$s každého %3$s. měsíce"
 
-#, qt-format
 #~ msgid "On %1$s day every %2$s month"
 #~ msgstr "%1$s. den každý %2$s. měsíc"
 
@@ -19444,7 +19501,6 @@ msgstr "Přidat do %s"
 #~ msgid "Outlook file"
 #~ msgstr "Soubor Outlooku"
 
-#, qt-format
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Zpožděný úkol. %1$s %2$s. Otevřete stisknutím [enter]"
 
@@ -19680,7 +19736,6 @@ msgstr "Přidat do %s"
 #~ msgid "Permissions for"
 #~ msgstr "Oprávnění"
 
-#, fuzzy, qt-format
 #~| msgid "Permissions"
 #~ msgid "Permissions: %1$s"
 #~ msgstr "Oprávnění"
@@ -19789,11 +19844,9 @@ msgstr "Přidat do %s"
 #~ "Podívejte se, prosím, na stránku %sZajímavé UWA moduly%s. Najdete tam "
 #~ "seznam widgetů a jejich data."
 
-#, qt-format
 #~ msgid "Please invite %1$s to the appointment."
 #~ msgstr "Pozvěte, prosím, %1$s na schůzku."
 
-#, qt-format
 #~ msgid "Please invite the group %1$s to the appointment."
 #~ msgstr "Pozvěte, prosím, skupinu %1$s na schůzku."
 
@@ -19832,25 +19885,20 @@ msgstr "Přidat do %s"
 #~ msgid "Please provide a site name."
 #~ msgstr "Zadejte, prosím, název stránky."
 
-#, qt-format
 #~ msgid "Please remove the group %1$s from the appointment."
 #~ msgstr "Odeberte, prosím, skupinu %1$s ze schůzky."
 
-#, qt-format
 #~ msgid "Please remove the resource %1$s from the appointment."
 #~ msgstr "Odeberte, prosím, zdroj %1$s od schůzky."
 
-#, qt-format
 #~ msgid "Please reschedule the event. Original date: %1$s. New date: %2$s"
 #~ msgstr ""
 #~ "Naplánujte, prosím, událost na jindy. Původní datum: %1$s. Nové datum: "
 #~ "%2$s"
 
-#, qt-format
 #~ msgid "Please resend the invitation for: %1$s"
 #~ msgstr "Pšlete, prosím, znovu pozvánku pro: %1$s"
 
-#, qt-format
 #~ msgid "Please reserve the resource %1$s for the appointment."
 #~ msgstr "Rezervujte, prosím, zdroj %1$s pro schůzku."
 
@@ -20036,7 +20084,6 @@ msgstr "Přidat do %s"
 #~ msgid "Promote One Level"
 #~ msgstr "O úroveň výše"
 
-#, qt-format
 #~ msgid "Proposed changes for appointment: %1$s"
 #~ msgstr "Navrhované změny schůzky: %1$s"
 
@@ -20114,7 +20161,6 @@ msgstr "Přidat do %s"
 #~ msgid "RUB"
 #~ msgstr "RUB"
 
-#, qt-format
 #~ msgid ""
 #~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
 #~ "arrowkeys to adjust your rating."
@@ -20122,7 +20168,6 @@ msgstr "Přidat do %s"
 #~ "Hodnocení %1$d z %2$d. Stiskněte Enter pro potvrzení, nebo použijte šipku "
 #~ "doleva či doprava pro změnu svého hodnocení."
 
-#, fuzzy, qt-format
 #~| msgid "Page %1$d of %2$d"
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "Strana %1$d z %2$d"
@@ -20193,14 +20238,12 @@ msgstr "Přidat do %s"
 #~ msgid "Reload current view every:"
 #~ msgstr "Obnovit stávající pohled každých:"
 
-#, qt-format
 #~ msgid "Remind me again %1$s"
 #~ msgstr "Připomenout znovu za %1$s"
 
 #~ msgid "Reminder:"
 #~ msgstr "Upomínka:"
 
-#, qt-format
 #~ msgid "Remove %1$s from the appointment."
 #~ msgstr "Odeberte %1$s ze schůzky."
 
@@ -20213,16 +20256,13 @@ msgstr "Přidat do %s"
 #~ msgid "Remove picture"
 #~ msgstr "Odstranit obrázek"
 
-#, fuzzy, qt-format
 #~| msgid "Remove from recipient list"
 #~ msgid "Remove restore point: \"%1$s\""
 #~ msgstr "Odstranit ze seznamů adresátů"
 
-#, qt-format
 #~ msgid "Remove the group %1$s from the appointment."
 #~ msgstr "Odeberte skupinu %1$s ze schůzky."
 
-#, qt-format
 #~ msgid "Remove the resource %1$s from the appointment."
 #~ msgstr "Odeberte zdroj %1$s od schůzky."
 
@@ -20241,15 +20281,12 @@ msgstr "Přidat do %s"
 #~ msgid "Reply-to Address"
 #~ msgstr "Odpovědní adresa"
 
-#, qt-format
 #~ msgid "Reschedule the event. Original date: %1$s. New date: %2$s"
 #~ msgstr "Naplánujte událost na jindy. Původní datum: %1$s. Nové datum: %2$s"
 
-#, qt-format
 #~ msgid "Reserve the resource %1$s for the appointment"
 #~ msgstr "Rezervujte, prosím, zdroj %1$s pro schůzku"
 
-#, qt-format
 #~ msgid "Reserve the resource %1$s for the appointment."
 #~ msgstr "Rezervujte, prosím, zdroj %1$s pro schůzku."
 
@@ -20390,7 +20427,6 @@ msgstr "Přidat do %s"
 #~ msgid "SMTP server"
 #~ msgstr "SMTP server"
 
-#, fuzzy, qt-format
 #~| msgid "Share %1$s \"%2$s\""
 #~ msgid "Safari %1$s on %2$s"
 #~ msgstr "Sdílet %1$s „%2$s“"
@@ -20668,7 +20704,6 @@ msgstr "Přidat do %s"
 #~ msgid "Share link by email"
 #~ msgstr "Sdílet odkaz e-mailem"
 
-#, qt-format
 #~ msgid "Share the folder \"%1$d\""
 #~ msgid_plural "Share %1$d items"
 #~ msgstr[0] "Sdílet složku „%1$d“"
@@ -20678,26 +20713,22 @@ msgstr "Přidat do %s"
 #~ msgid "Shared"
 #~ msgstr "Sdílené"
 
-#, fuzzy, qt-format
 #~ msgctxt "owner"
 #~ msgid "Shared by: %1$s"
 #~ msgstr "Vyhledáváno: %1$s"
 
-#, qt-format
 #~ msgid "Sharing link created for file \"%1$d\""
 #~ msgid_plural "Sharing link created for %1$d items"
 #~ msgstr[0] "Odkaz pro sdílení souboru „%1$d“ vytvořen"
 #~ msgstr[1] "Odkaz pro sdílení %1$d souborů vytvořen"
 #~ msgstr[2] "Odkaz pro sdílení %1$d souborů vytvořen"
 
-#, qt-format
 #~ msgid "Sharing link created for folder \"%1$d\""
 #~ msgid_plural "Sharing link created for %1$d items"
 #~ msgstr[0] "Odkaz pro sdílení složky „%1$d“ vytvořen"
 #~ msgstr[1] "Odkaz pro sdílení %1$d položek vytvořen"
 #~ msgstr[2] "Odkaz pro sdílení %1$d položek vytvořen"
 
-#, qt-format
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"
 #~ msgstr ""
@@ -20851,7 +20882,6 @@ msgstr "Přidat do %s"
 #~ msgid "Signature:"
 #~ msgstr "Podpis:"
 
-#, qt-format
 #~ msgid "Signed in as %1$s"
 #~ msgstr "Přihlášený(á) jako %1$s"
 
@@ -20928,7 +20958,6 @@ msgstr "Přidat do %s"
 #~ msgid "Somalia"
 #~ msgstr "Somálsko"
 
-#, qt-format
 #~ msgid ""
 #~ "Some files cannot be uploaded because they exceed the maximum file size "
 #~ "of %1$s"
@@ -20939,7 +20968,6 @@ msgstr "Přidat do %s"
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Někdo s vámi sdílel soubor"
 
-#, qt-format
 #~ msgid ""
 #~ "Someone shared a folder with you. Would you like to subscribe those %1$s?"
 #~ msgstr "Někdo s vámi sdílel složku. Přejete si přihlásit dané %1$s?"
@@ -21015,7 +21043,6 @@ msgstr "Přidat do %s"
 #~ msgid "Start date:"
 #~ msgstr "Datum začátku:"
 
-#, qt-format
 #~ msgid "Start date: %1$s"
 #~ msgstr "Počáteční datum: %1$s"
 
@@ -21061,7 +21088,6 @@ msgstr "Přidat do %s"
 #~ msgid "Starts at:"
 #~ msgstr "Začíná v:"
 
-#, qt-format
 #~ msgid "Starts on %1$s, due on %2$s."
 #~ msgstr "Začátek: %1$s, dokončení: %2$s."
 
@@ -21089,7 +21115,6 @@ msgstr "Přidat do %s"
 #~ msgid "Status:"
 #~ msgstr "Stav:"
 
-#, qt-format
 #~ msgid "Status: %1$s"
 #~ msgstr "Stav: %1$s"
 
@@ -21318,7 +21343,6 @@ msgstr "Přidat do %s"
 #~ msgid "Task (tentative)"
 #~ msgstr "Úkol (předběžně)"
 
-#, qt-format
 #~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr "Pozvánka k úkolu. %1$s %2$s %3$s. Otevřete stisknutím [enter]"
 
@@ -21328,7 +21352,6 @@ msgstr "Přidat do %s"
 #~ msgstr[1] "Úkoly přesunuty."
 #~ msgstr[2] "Úkoly přesunuty."
 
-#, qt-format
 #~ msgid "Task reminder. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr "Připomenutí úkolu. %1$s %2$s %3$s. Otevřete stisknutím [enter]"
 
@@ -21442,7 +21465,6 @@ msgstr "Přidat do %s"
 #~ "Portál vás informuje o nových zprávách, schůzkách nebo novinkách ze "
 #~ "sociálních sítí."
 
-#, qt-format
 #~ msgid "The appointment has a new description: %1$s."
 #~ msgstr "Schůzka má nový popis: %1$s."
 
@@ -21533,20 +21555,16 @@ msgstr "Přidat do %s"
 #~ msgid "The appointment is visible for all users in shared folders."
 #~ msgstr "Schůzka je viditelná pro všechny uživatele ve sdílených složkách."
 
-#, qt-format
 #~ msgid "The appointment takes place in a new location: %1$s."
 #~ msgstr "Schůzka proběhne na jiném místě: %1$s."
 
-#, qt-format
 #~ msgid "The appointment timezone was changed to: %1$s"
 #~ msgstr "Časové pásmo schůzky bylo změněno na: %1$s"
 
-#, qt-format
 #~ msgid "The appointment was rescheduled. Original date: %1$s. New date: %2$s"
 #~ msgstr ""
 #~ "Schůzka byla naplánována na jindy. Původní datum: %1$s. Nové datum: %2$s"
 
-#, qt-format
 #~ msgid "The appointment will now be shown as: \"%1$s\"."
 #~ msgstr "Schůzka bude nyní zobrazena jako: „%1$s“."
 
@@ -21583,7 +21601,6 @@ msgstr "Přidat do %s"
 #~ msgid "The document is protected by a password."
 #~ msgstr "Dokument je chráněn heslem."
 
-#, qt-format
 #~ msgid "The email address %1$s is already in the list"
 #~ msgstr "E-mailová adresa %1$s už na seznamu je"
 
@@ -21597,11 +21614,9 @@ msgstr "Přidat do %s"
 #~ msgid "The entire day"
 #~ msgstr "Celý den"
 
-#, qt-format
 #~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 #~ msgstr "Pole „%1$s“ obsahuje více znaků než povolených %2$d."
 
-#, qt-format
 #~ msgid ""
 #~ "The file cannot be uploaded because it exceeds the quota limit of %1$s"
 #~ msgid_plural ""
@@ -21610,11 +21625,9 @@ msgstr "Přidat do %s"
 #~ msgstr[1] "Soubory nelze nahrát, protože je přesahují limit %1$s"
 #~ msgstr[2] "Soubory nelze nahrát, protože je přesahují limit %1$s"
 
-#, qt-format
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Soubor je k dispozici na %1$s"
 
-#, qt-format
 #~ msgid ""
 #~ "The files cannot be uploaded because each file exceeds the maximum file "
 #~ "size of %1$s"
@@ -21622,14 +21635,12 @@ msgstr "Přidat do %s"
 #~ "Soubory nelze nahrát, protože je každý z nich větší než maximální "
 #~ "povolená velikost souboru %1$s"
 
-#, qt-format
 #~ msgid "The folder is available at %1$s"
 #~ msgstr "Složka je dispozici na %1$s"
 
 #~ msgid "The folder path"
 #~ msgstr "Cesta ke složce"
 
-#, qt-format
 #~ msgid "The following actions apply to all messages (%1$d) in this folder:"
 #~ msgstr ""
 #~ "Následující činnosti se vztahují na všechny zprávy (%1$d) v této složce:"
@@ -21658,11 +21669,9 @@ msgstr "Přidat do %s"
 #~ "Graf zobrazuje frekvence výkonu v procentech. Šedá linka značí ideální "
 #~ "výkon a modrá měřený výkon."
 
-#, qt-format
 #~ msgid "The group %1$s has been invited to the appointment"
 #~ msgstr "Skupina %1$s byla pozvána na schůzku"
 
-#, qt-format
 #~ msgid "The group %1$s has been removed from the appointment"
 #~ msgstr "Skupina %1$s byla odebrána ze schůzky."
 
@@ -21680,7 +21689,6 @@ msgstr "Přidat do %s"
 #~ "Ikona vpravo dole vám pomůže zprávy seřadit. Kliknutím na ni získáte "
 #~ "seznam kritérií řazení."
 
-#, qt-format
 #~ msgid ""
 #~ "The limit of participants has been reached. Please contact the presenter "
 #~ "%1$s."
@@ -21690,7 +21698,6 @@ msgstr "Přidat do %s"
 #~ msgid "The links will be deleted by #DATE#"
 #~ msgstr "Odkazy budou smazány #DATE#"
 
-#, qt-format
 #~ msgid "The mandatory field %1$s is not defined."
 #~ msgstr "Povinné pole %1$s není definované."
 
@@ -21705,7 +21712,6 @@ msgstr "Přidat do %s"
 #~ msgid "The notification area is closed"
 #~ msgstr "Oznamovací oblast je zavřená"
 
-#, qt-format
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Počet příjemců je omezen na %1$s  pro jedno políčko"
 
@@ -21750,7 +21756,6 @@ msgstr "Přidat do %s"
 #~ msgid "The panel setting will take effect after a new login."
 #~ msgstr "Nastavení panelu bude uplatněno při příštím přihlášení."
 
-#, qt-format
 #~ msgid "The person %1$s is already in the list"
 #~ msgstr "Osoba %1$s už na seznamu je"
 
@@ -21765,7 +21770,6 @@ msgstr "Přidat do %s"
 #~ "Prezentaci nelze spustit. Zkontrolujte, prosím, adresu nebo kontaktujte "
 #~ "prezentujícího."
 
-#, qt-format
 #~ msgid "The presentation document %1$s was deleted."
 #~ msgstr "Dokument s prezentací %1$s byl smazán."
 
@@ -21787,11 +21791,9 @@ msgstr "Přidat do %s"
 #~ msgid "The requested email no longer exists"
 #~ msgstr "Požadovaná zpráva již neexistuje"
 
-#, qt-format
 #~ msgid "The resource %1$s has been reserved for the appointment"
 #~ msgstr "Zdroj %1$s byl pro schůzku rezervován"
 
-#, qt-format
 #~ msgid "The resource %1$s is no longer reserved for the appointment"
 #~ msgstr "Zdroj %1$s již pro schůzku není rezervován"
 
@@ -21870,7 +21872,6 @@ msgstr "Přidat do %s"
 #~ msgid "The tabbed inbox can be completely disabled in the mail settings."
 #~ msgstr "Karta příchozí pošty může být úplně odstraněna v nastaveních pošty."
 
-#, qt-format
 #~ msgid ""
 #~ "The timezone of this appointment (%1$s) differs from your default "
 #~ "timezone (%2$s)."
@@ -21904,7 +21905,6 @@ msgstr "Přidat do %s"
 #~ msgid "There are currently no participants."
 #~ msgstr "Žádní účastníci."
 
-#, qt-format
 #~ msgid ""
 #~ "There are more than %n appointments in the current calendar. Some "
 #~ "features are disabled due to performance reasons."
@@ -21912,7 +21912,6 @@ msgstr "Přidat do %s"
 #~ "V aktuálním kalendářije více než %n schůzek. Některé funkce jsou vypnuté "
 #~ "kvůli výkonu."
 
-#, qt-format
 #~ msgid "There is already %1$d appointment in this timeframe."
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
 #~ msgstr[0] "V tuto dobu již máte %1$d schůzku."
@@ -21982,7 +21981,6 @@ msgstr "Přidat do %s"
 #~ "\n"
 #~ "========================================== "
 
-#, qt-format
 #~ msgid ""
 #~ "This appointment has attachments, please see the appointment at %1$s to "
 #~ "retrieve them."
@@ -22201,7 +22199,6 @@ msgstr "Přidat do %s"
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Tato zpráva obsahuje URL publikace."
 
-#, qt-format
 #~ msgid "This mail has been sent from %1$s."
 #~ msgstr "Tuto zprávu odeslal(a) %1$s."
 
@@ -22233,7 +22230,6 @@ msgstr "Přidat do %s"
 #~ "Tato zpráva není přečtená. Kliknutím na toto tlačítko ji označíte jako "
 #~ "přečtenou."
 
-#, qt-format
 #~ msgid ""
 #~ "This might be a phishing email because we could not verify that it is "
 #~ "really from %1$s."
@@ -22241,7 +22237,6 @@ msgstr "Přidat do %s"
 #~ "Tato zpráva je možná e-mailový podvod, protože se nám nepodařilo ověřit, "
 #~ "že by skutečně byla od %1$s."
 
-#, qt-format
 #~ msgid ""
 #~ "This might be a phishing mail because we could not verify that this email "
 #~ "is really from %1$s."
@@ -23112,11 +23107,9 @@ msgstr "Přidat do %s"
 #~ msgid "Wallis and Futuna"
 #~ msgstr "Wallis a Futuna"
 
-#, qt-format
 #~ msgid "Warning: %2$s"
 #~ msgstr "Varování: %2$s"
 
-#, qt-format
 #~ msgid "We could not verify that this email is really from %1$s."
 #~ msgstr "Nepodařilo se nám ověřit, že by tato zpráva skutečně byla od %1$s."
 
@@ -23135,7 +23128,6 @@ msgstr "Přidat do %s"
 #~ msgid "Weekend day"
 #~ msgstr "Víkendový den"
 
-#, qt-format
 #~ msgid "Weekly on %1$s"
 #~ msgstr "Týdně v %1$s "
 
@@ -23180,7 +23172,6 @@ msgstr "Přidat do %s"
 #~ msgid "What to you want to use on your smartphone?"
 #~ msgstr "Přejete si uložit nastavení?"
 
-#, qt-format
 #~ msgid "What‘s New in %1$s 7.10.0"
 #~ msgstr "Co je nového v %1$s 7.10.0"
 
@@ -23253,11 +23244,9 @@ msgstr "Přidat do %s"
 #~ msgid "Would you like to create the following birthday series appointment?"
 #~ msgstr "Přejete si vytvořit následující sériovou narozeninovou schůzku?"
 
-#, qt-format
 #~ msgid "Yearly on %1$s %2$d"
 #~ msgstr "Ročně  %2$d. %1$s"
 
-#, qt-format
 #~ msgid "Yearly on the %1$s %2$s of %3$d"
 #~ msgstr "Ročně %1$s %2$s v %3$d"
 
@@ -23276,7 +23265,6 @@ msgstr "Přidat do %s"
 #~ msgid "You already accepted this invitation"
 #~ msgstr "Toto pozvání jste už přijal(a)"
 
-#, qt-format
 #~ msgid ""
 #~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
 #~ "Appointments will therefore be created in your private calendar."
@@ -23284,7 +23272,6 @@ msgstr "Přidat do %s"
 #~ "Nemáte právo vytvářet schůzky v „%1$s“ s vlastníkem %2$s. Schůzky budou "
 #~ "proto vytvořeny ve vašem soukromém kalendáři."
 
-#, qt-format
 #~ msgid ""
 #~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
 #~ "therefore be created in your private calendar."
@@ -23359,7 +23346,6 @@ msgstr "Přidat do %s"
 #~ "IDN domény nefungují tak, jak se od nich očekává. Přejete si ji přesto "
 #~ "přidat?"
 
-#, qt-format
 #~ msgid ""
 #~ "You have %1$d notifications. Press [enter] to jump to the notification "
 #~ "area and [escape] to close it again."
@@ -23379,11 +23365,9 @@ msgstr "Přidat do %s"
 #~ msgid "You have 1 unread message"
 #~ msgstr "Máte jednu nepřečtenou zprávu"
 
-#, qt-format
 #~ msgid "You have been invited to an event by %1$s:"
 #~ msgstr "%1$s vás pozval(a) na událost:"
 
-#, qt-format
 #~ msgid ""
 #~ "You have been invited to an event organized by %1$s on behalf of %2$s"
 #~ msgstr "Byli jste pozváni na událost, kterou organizuje %1$s jménem %2$s"
@@ -23397,7 +23381,6 @@ msgstr "Přidat do %s"
 #~ msgid "You have reauthorized this account."
 #~ msgstr "Znovu jste autorizovali tento účet."
 
-#, qt-format
 #~ msgid ""
 #~ "You have received this mail because this appointment contains the "
 #~ "resource %1$s, that you manage."
@@ -23433,7 +23416,6 @@ msgstr "Přidat do %s"
 #~ msgid "You must specify an E-Mail address for redirection."
 #~ msgstr "Musíte určit e-mailovou adresu pro přesměrování."
 
-#, qt-format
 #~ msgid ""
 #~ "You need to authorize %1$s to use your account. Please click on the "
 #~ "button below and the authorization will proceed in a separate window."
@@ -23530,7 +23512,6 @@ msgstr "Přidat do %s"
 #~ "Vaše plánovaná schůzka koliduje s jednou nebo více již dříve "
 #~ "naplánovanými schůzkami."
 
-#, fuzzy, qt-format
 #~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"
 #~ msgstr ""
 #~ "Soubor „%1$s“ nelze nahrát, protože je větší než maximální povolená "
@@ -23569,7 +23550,6 @@ msgstr "Přidat do %s"
 #~ msgid "Zloty"
 #~ msgstr "Złoty"
 
-#, qt-format
 #~ msgid "Zoom: %1$d%"
 #~ msgstr "Přiblížení: %1$d%"
 
@@ -23789,7 +23769,6 @@ msgstr "Přidat do %s"
 #~ msgid "absent on business"
 #~ msgstr "nepřítomnost kvůli pracovním povinnostem"
 
-#, qt-format
 #~ msgid "after %1$d appointment"
 #~ msgid_plural "after %1$d appointments"
 #~ msgstr[0] "po %1$d schůzce"
@@ -23802,7 +23781,6 @@ msgstr "Přidat do %s"
 #~ msgid "and"
 #~ msgstr "a"
 
-#, qt-format
 #~ msgid "and %1$d others ..."
 #~ msgstr "a %1$d dalších..."
 
@@ -23935,21 +23913,18 @@ msgstr "Přidat do %s"
 #~ msgid "estimated costs"
 #~ msgstr "odhadované náklady"
 
-#, qt-format
 #~ msgid "every %1$d day"
 #~ msgid_plural "every %1$d days"
 #~ msgstr[0] "každý den"
 #~ msgstr[1] "každé %1$d dny"
 #~ msgstr[2] "každých %1$s dní"
 
-#, qt-format
 #~ msgid "every %1$d month"
 #~ msgid_plural "every %1$d months"
 #~ msgstr[0] "každý měsíc"
 #~ msgstr[1] "každé %1$d měsíce"
 #~ msgstr[2] "každých %1$d měsíců"
 
-#, qt-format
 #~ msgid "every %1$d week"
 #~ msgid_plural "every %1$d weeks"
 #~ msgstr[0] "každý týden"
@@ -24061,7 +24036,6 @@ msgstr "Přidat do %s"
 #~ msgid "new"
 #~ msgstr "nové"
 
-#, qt-format
 #~ msgid "next %1$s"
 #~ msgstr "příští %1$s"
 

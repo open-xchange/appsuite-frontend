@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-03-20 08:27-0700\n"
+"PO-Revision-Date: 2019-04-22 19:38-0700\n"
 "Last-Translator: \n"
 "Language-Team: Spanish <ox7doc@workshop-chapina.com>\n"
 "Language: es_MX\n"
@@ -536,6 +536,8 @@ msgstr "Ayuda en línea"
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js
 #: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
@@ -559,6 +561,7 @@ msgstr "Borrar"
 #: module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/main.js
@@ -794,9 +797,10 @@ msgstr "Cerrar"
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
-#: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Descargar"
 
@@ -841,6 +845,8 @@ msgstr "Descargar"
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot apps/io.ox/multifactor/views/constants.js
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
 #: apps/io.ox/settings/apps/settings/pane.js
@@ -1119,7 +1125,9 @@ msgstr "Exportar"
 #: module:io.ox/contacts apps/io.ox/contacts/actions/print.js
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js
 msgid "Print"
 msgstr "Imprimir"
@@ -1223,12 +1231,19 @@ msgid "Default reminder for all-day appointments"
 msgstr "Recordatorio predeterminado para citas de día completo"
 
 #: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
+msgid "New organizer"
+msgstr "Nuevo organizador"
+
+#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
 msgid "Select new organizer"
 msgstr "Seleccionar nuevo organizador"
 
 #: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
-msgid "Please leave a comment for other participants."
-msgstr "Por favor, deje un comentario para otros participantes."
+#: apps/io.ox/calendar/actions/delete.js
+msgid "Add a message to the notification email for the other participants."
+msgstr ""
+"Añadir un mensaje al correo electrónico de notificación para los demás "
+"participantes."
 
 #: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/delete.js
@@ -1239,10 +1254,6 @@ msgstr "Por favor, deje un comentario para otros participantes."
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Password"
 msgstr "Contraseña"
-
-#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
-msgid "New organizer"
-msgstr "Nuevo organizador"
 
 #: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
 msgid "Organizer changed"
@@ -1293,12 +1304,6 @@ msgstr ""
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Create in public calendar"
 msgstr "Crear en calendario público"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Add a message to the notification email for the other participants."
-msgstr ""
-"Añadir un mensaje al correo electrónico de notificación para los demás "
-"participantes."
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid ""
@@ -1372,6 +1377,7 @@ msgid "iCal feed has been imported successfully"
 msgstr "El feed iCal se importó con éxito"
 
 #: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js
 msgid "Subscribe shared calendars"
 msgstr "Suscribirse a calendarios compartidos"
 
@@ -1391,7 +1397,8 @@ msgstr "Suscribirse a calendarios compartidos"
 #: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot apps/io.ox/oauth/settings.js module:io.ox/settings
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/plugins/administration/groups/settings/edit.js
 #: apps/plugins/administration/resources/settings/edit.js
@@ -1427,12 +1434,9 @@ msgstr "Calendarios públicos"
 msgid "Shared calendars"
 msgstr "Calendarios compartidos"
 
-#: apps/io.ox/calendar/color-picker.js module:io.ox/calendar
-msgid "no color"
-msgstr "sin color"
-
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
-#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
@@ -1440,6 +1444,10 @@ msgstr "sin color"
 #: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Privada"
+
+#: apps/io.ox/calendar/color-picker.js module:io.ox/calendar
+msgid "no color"
+msgstr "sin color"
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -1669,14 +1677,6 @@ msgid "Collapse form"
 msgstr "Plegar formulario"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Participants can edit the appointment"
-msgstr "Los participantes pueden editar la cita"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-msgid "Participant permissions"
-msgstr "Permisos de los participantes"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility Help"
 msgstr "Ayuda de visibilidad"
 
@@ -1728,6 +1728,10 @@ msgstr "ninguno"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Show as free"
 msgstr "Mostrar como libre"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Participants can make changes"
+msgstr "Los participantes pueden hacer cambios"
 
 #. Sort by messages that have attachments
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1874,6 +1878,11 @@ msgstr "Ocultar tiempo no laborable"
 msgid "Blocked time frame"
 msgstr "Período de tiempo bloqueado"
 
+#. %1$s = apppointment creator name
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Created by: %1$s"
+msgstr "Creada por: %1$s"
+
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Could not get appointment information"
 msgstr "No se pudo obtener información de la cita"
@@ -1999,6 +2008,7 @@ msgid "Error: Failed to load appointments"
 msgstr "Error: Fallo al cargar citas"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
 #: module:io.ox/files apps/io.ox/mail/detail/view.js module:io.ox/mail
@@ -2193,8 +2203,9 @@ msgstr "%1$d minutos"
 
 #. estimated upload duration
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js apps/io.ox/files/upload/main.js
-#: module:io.ox/files apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#: apps/io.ox/calendar/util.js apps/io.ox/files/settings/pane.js
+#: module:io.ox/files apps/io.ox/files/upload/main.js
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d day"
 msgid_plural "%1$d days"
 msgstr[0] "%1$d día"
@@ -2272,15 +2283,12 @@ msgid "Email notifications"
 msgstr "Notificaciones por correo"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#| msgid ""
-#| "Receive notifications when a task in which you participate is created, "
-#| "modified or deleted"
 msgid ""
 "Receive notifications when an appointment in which you participate is "
 "created, modified or deleted"
 msgstr ""
-"Recibir notificaciones cuando una cita en la que participa se cree, se"
-" modifique o se elimine."
+"Recibir notificaciones cuando una cita en la que participa se cree, se "
+"modifique o se elimine."
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid ""
@@ -2338,8 +2346,8 @@ msgstr "País"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
-msgid "Your default reminders will be applied to this calendars."
-msgstr "Sus recordatorios predeterminados se aplicarán a este calendario."
+msgid "Your default reminders will be applied to these calendars."
+msgstr "Sus recordatorios predeterminados se aplicarán a estos calendarios."
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -2869,8 +2877,7 @@ msgstr "¿Quiere editar toda la serie o solo esta cita de la serie?"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
 "Do you want to edit this and all future appointments or the whole series?"
-msgstr ""
-"¿Quiere editar esta cita y todas las citas futuras o la serie completa?"
+msgstr "¿Quiere editar esta cita y todas las citas futuras o la serie completa?"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
@@ -4079,8 +4086,7 @@ msgstr "Esta plataforma no está admitida actualmente."
 
 #. all variables are version strings of the browsers, like 52 in Chrome 52
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid ""
-"Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
+msgid "Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
 msgstr ""
 "Se admiten a partir de Chrome %1$d, Firefox %2$d, IE %3$d, y Safari %4$d."
 
@@ -4145,6 +4151,18 @@ msgid "Something went wrong. Please close this browser tab and try again."
 msgstr ""
 "Algo ha ido mal. Por favor, cierre esta pestaña del navegador e inténtelo de "
 "nuevo."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Connection error"
+msgstr "Error de conexión"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "The service is not available right now."
+msgstr "El servicio no está disponible en estos momentos."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Reload"
+msgstr "Recargar"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -4237,17 +4255,14 @@ msgstr ""
 "favor, inténtelo de nuevo."
 
 #: apps/io.ox/core/download.js module:io.ox/core
-#| msgid "Download entire folder"
 msgid "Download infected file"
 msgstr "Descargar fichero infectado"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-#| msgid "Download installation file"
 msgid "Download unscanned file"
 msgstr "Descargar fichero no escaneado"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-#| msgid "Ignore Warnings"
 msgid "Anti-Virus Warning"
 msgstr "Advertencia del antivirus"
 
@@ -4973,8 +4988,12 @@ msgid "Navigate to:"
 msgstr "Navegar a:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "Skip to main content"
+msgstr "Saltar al contenido principal"
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 #: apps/io.ox/core/main/topbar_right.js apps/io.ox/core/sub/settings/pane.js
-#: module:io.ox/core/sub
+#: module:io.ox/core/sub apps/io.ox/multifactor/login/loginScreen.js
 msgid "Refresh"
 msgstr "Actualizar"
 
@@ -5059,6 +5078,18 @@ msgid "Logout failed."
 msgstr "Desconexión fallida."
 
 #: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/main/topbar_right.js
+#: apps/io.ox/settings/security/sessions/settings/pane.js
+msgid "Sign out"
+msgstr "Cerrar sesión"
+
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+msgid "Are you sure you want to sign out from all related browser tabs?"
+msgstr ""
+"¿Está seguro de querer cerrar la sesión en todas las pestañas del navegador"
+" relacionadas?"
+
+#: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Los documentos no guardados se perderán. ¿Desea salir ahora?"
 
@@ -5113,7 +5144,7 @@ msgid "Upgrade your account"
 msgstr "Actualice su cuenta"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/settings/main.js
+#: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Configuración"
 
@@ -5146,11 +5177,6 @@ msgstr "Ayuda"
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 msgid "About"
 msgstr "Acerca de"
-
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/settings/security/sessions/settings/pane.js
-msgid "Sign out"
-msgstr "Cerrar sesión"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 msgid ""
@@ -6030,6 +6056,10 @@ msgid "Don't remind me again"
 msgstr "No recordármelo de nuevo"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 msgid "OK"
 msgstr "Aceptar"
 
@@ -6155,7 +6185,6 @@ msgid "Multiselect"
 msgstr "Multiselección"
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-#| msgid "select all"
 msgid "Deselect all"
 msgstr "Deseleccionar todo"
 
@@ -6187,6 +6216,7 @@ msgstr "Comenzar visita"
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
 #: apps/io.ox/tours/whats-new.js apps/io.ox/wizards/upsell.js
 #: module:io.ox/wizards
 msgid "Next"
@@ -6231,8 +6261,7 @@ msgid "Previous"
 msgstr "Anterior"
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid ""
-"Use left/right arrow keys to navigate and escape key to exit the viewer."
+msgid "Use left/right arrow keys to navigate and escape key to exit the viewer."
 msgstr ""
 "Utilice las teclas de movimiento del cursor izquierda/derecha para navegar y "
 "la tecla Esc para salir del visor."
@@ -6606,8 +6635,7 @@ msgstr "Lo sentimos, no hay vista previa disponible para esta imagen."
 #: apps/io.ox/core/viewer/views/types/spreadsheetview.js module:io.ox/core
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 msgid "An error occurred loading the document so it cannot be displayed."
-msgstr ""
-"Ocurrió un error al cargar el documento por lo que no se puede mostrar."
+msgstr "Ocurrió un error al cargar el documento por lo que no se puede mostrar."
 
 #: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this file."
@@ -6840,7 +6868,6 @@ msgid "Delete version"
 msgstr "Borrar versión"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
-#| msgid "Delete version"
 msgid "Delete all previous versions"
 msgstr "Borrar todas las versiones previas"
 
@@ -6849,8 +6876,7 @@ msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr "Soltar aquí para subir un <b class=\"dndignore\">nuevo fichero</b>"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
-msgid ""
-"Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
+msgid "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr ""
 "Soltar aquí para subir una <b class=\"dndignore\">nueva versión</b> de \"%1$s"
 "\""
@@ -6878,12 +6904,10 @@ msgid "This file has been added to the portal"
 msgstr "Este fichero se ha añadido al portal"
 
 #: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
-#| msgid "Do you really want to delete this account?"
 msgid ""
 "Do you really want to delete all previous versions except the current "
 "version?"
-msgstr ""
-"¿De verdad quiere borrar todas las versiones previas excepto la actual?"
+msgstr "¿De verdad quiere borrar todas las versiones previas excepto la actual?"
 
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 msgid "This file has not been deleted, as it is locked by its owner."
@@ -7075,7 +7099,6 @@ msgid "Upload local file"
 msgstr "Subir fichero local"
 
 #: apps/io.ox/files/listview.js module:io.ox/files
-#| msgid "Error: Failed to load messages"
 msgid "Error: Failed to load files"
 msgstr "Error: Hubo un error al cargar ficheros"
 
@@ -7153,7 +7176,6 @@ msgid "%1$d seconds"
 msgstr "%1$d segundos"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "Never"
 msgid "Forever"
 msgstr "Para siempre"
 
@@ -7162,95 +7184,82 @@ msgid "1 day"
 msgstr "1 día"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "2 days"
 msgid "7 days"
 msgstr "7 días"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "2 days"
 msgid "30 days"
 msgstr "30 días"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "6 days"
 msgid "60 days"
 msgstr "60 días"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "2 days"
 msgid "90 days"
 msgstr "90 días"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "%1$d year"
-#| msgid_plural "%1$d years"
 msgid "1 year"
 msgstr "1 año"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "Delete version"
 msgid "Keep all versions"
 msgstr "Conservar todas las versiones"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "1 version"
 msgstr "1 versión"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "5 versions"
 msgstr "5 versiones"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "10 versions"
 msgstr "10 versiones"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "20 versions"
 msgstr "20 versiones"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "30 versions"
 msgstr "30 versiones"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "40 versions"
 msgstr "40 versiones"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "50 versions"
 msgstr "50 versiones"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "60 versions"
 msgstr "60 versiones"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "70 versions"
 msgstr "70 versiones"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "80 versions"
 msgstr "80 versiones"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "90 versions"
 msgstr "90 versiones"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "UI version"
 msgid "100 versions"
 msgstr "100 versiones"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "%1$d version"
+msgid_plural "%1$d versions"
+msgstr[0] "%1$d versión"
+msgstr[1] "%1$d versiones"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Adding files with identical names"
@@ -7274,12 +7283,10 @@ msgid "Show hidden files and folders"
 msgstr "Mostrar ficheros y carpetas ocultos"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "Show version history"
 msgid "File version history"
 msgstr "Histórico de versiones del fichero"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "timeframe"
 msgid "Timeframe"
 msgstr "Período de tiempo"
 
@@ -7294,7 +7301,6 @@ msgstr[0] "El período de tiempo está limitado a 1 día."
 msgstr[1] "El período de tiempo está limitado a %1$d días."
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "File versions"
 msgid "File version limit"
 msgstr "Límite de versiones de ficheros"
 
@@ -7315,40 +7321,37 @@ msgid "Summary"
 msgstr "Resumen"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "All files have been deleted"
 msgid "All file versions are retained"
 msgstr "Todas las versiones de ficheros se retienen"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "All file versions older than 1 day will be deleted"
-msgid_plural "All file versions older than %1$d days will be deleted"
-msgstr[0] "Todas las versiones de hace más de 1 día se borrarán"
-msgstr[1] "Todas las versiones de hace más de %1$d días se borrarán"
-
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid ""
-"When a file has more than 1 additional version, older versions of the file "
-"will be deleted"
+#| msgid ""
+#| "All messages older than %1$d days will be moved to the archive folder"
+msgid "All file versions older than 1 day will be deleted after next login"
 msgid_plural ""
-"When a file has more than %1$d additional versions, older versions of the "
-"file will be deleted"
+"All file versions older than %1$d days will be deleted after next login"
 msgstr[0] ""
-"Cuando un fichero tiene más de 1 versión adicional, las versiones más"
-" antiguas se borrarán"
+"Todas las versiones del fichero anteriores a 1 día se borrarán tras el"
+" próximo inicio de sesión"
 msgstr[1] ""
-"Cuando un fichero tiene más de %1$d versiones adicionales, las versiones más"
-" antiguas se borrarán"
+"Todas las versiones del fichero anteriores a %1$d días se borrarán tras el"
+" próximo inicio de sesión"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid ""
-"Older versions will be deleted after next login or when a new version is "
-"created"
-msgstr ""
-"Las versiones más antiguas se borrarán tras el próximo inicio de sesión o"
-" cuando se cree una versión nueva."
+"When a file has more than 1 additional version, older versions will be "
+"deleted when a new version is created"
+msgid_plural ""
+"When a file has more than %1$d additional versions, older versions will be "
+"deleted when a new version is created"
+msgstr[0] ""
+"Cuando un fichero tiene más de 1 versión adicional, las versiones anteriores"
+" se borrarán al crear una nueva versión"
+msgstr[1] ""
+"Cuando un fichero tiene más de %1$d versiones adicionales, las versiones"
+" anteriores se borrarán al crear una nueva versión"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid "Delete version"
 msgid "Keep saved versions"
 msgstr "Conservar las versiones guardadas"
 
@@ -7660,8 +7663,7 @@ msgstr ""
 "causará problemas al visualizar o editar."
 
 #: apps/io.ox/files/util.js module:io.ox/files
-msgid ""
-"Do you really want to remove the extension \".%1$s\" from your filename?"
+msgid "Do you really want to remove the extension \".%1$s\" from your filename?"
 msgstr ""
 "¿Realmente desea eliminar la extensión \".%1$s\" del nombre del fichero?"
 
@@ -8456,8 +8458,7 @@ msgid "Show images"
 msgstr "Mostrar imágenes"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid ""
-"External images have been blocked to protect you against potential spam!"
+msgid "External images have been blocked to protect you against potential spam!"
 msgstr ""
 "Las imágenes externas han sido bloqueadas para protegerle contra un posible "
 "spam"
@@ -8686,8 +8687,8 @@ msgid ""
 "The mail draft could not be found on the server. It was sent or deleted in "
 "the meantime."
 msgstr ""
-"El borrador del correo no se pudo encontrar en el servidor. Ha debido"
-" enviarse o borrarse."
+"El borrador del correo no se pudo encontrar en el servidor. Ha debido "
+"enviarse o borrarse."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -8714,6 +8715,12 @@ msgstr "De: %1$s"
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "To: %1$s"
 msgstr "Para: %1$s"
+
+#. Used to quote the addresses of an address in carbon copy
+#. %1$s An email address or a comma separated list of mail addresses
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+msgid "Cc: %1$s"
+msgstr "Cc: %1$s"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Date: %1$s"
@@ -9722,8 +9729,7 @@ msgstr "El rango de tiempo está en el pasado."
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Unable to load your vacation notice. Please retry later."
-msgstr ""
-"No se pudo cargar su aviso de ausencia. Por favor, inténtelo más tarde."
+msgstr "No se pudo cargar su aviso de ausencia. Por favor, inténtelo más tarde."
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 #: apps/io.ox/mail/settings/pane.js apps/io.ox/mail/toolbar.js
@@ -10219,6 +10225,371 @@ msgctxt "dropdown"
 msgid "All"
 msgstr "Todos"
 
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "SMS Code"
+msgstr "Código SMS"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Web auth"
+msgstr "Autenticación web"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Security Token"
+msgstr "Token se seguridad"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Yubikey"
+msgstr "Yubikey"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Google Authenticator"
+msgstr "Google Authenticator"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Recovery code"
+msgstr "Código de recuperación"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "UNKNOWN"
+msgstr "DESCONOCIDO"
+
+#: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
+msgid ""
+"There are no backup devices available for this account.  Please notify "
+"support for help."
+msgstr ""
+"No hay dispositivos de copia de seguridad disponibles para esta cuenta. Por"
+" favor, avise a soporte para recibir ayuda."
+
+#: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
+msgid "Authentication failure.  Please reload browser and try again."
+msgstr ""
+"Fallo de autenticación. Por favor, recargue el navegador e inténtelo de nuevo."
+
+#: apps/io.ox/multifactor/settings.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/views/constants.js
+msgid "2-Step Verification"
+msgstr "Verificación en 2 pasos"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgctxt "app"
+msgid "2-Step Verification"
+msgstr "Verificación en 2 pasos"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Verification Options"
+msgstr "Opciones de verificación"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Recovery Options"
+msgstr "Opciones de recuperación"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "No 2-Step verification options configured yet."
+msgstr "Aún no se ha configurado ninguna opción de verificación en 2 pasos."
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Add recovery option"
+msgstr "Añadir opción de recuperación"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Add verification option"
+msgstr "Añadir opción de verificación"
+
+#. Error message when trying to get available providers from middleware
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Problem getting 2-step verification providers"
+msgstr "Problema al obtener proveedores de verificación en 2 pasos"
+
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Add Multifactor Device"
+msgstr "Añadir dispositivo multifactor"
+
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Please enter the phone number for the device."
+msgstr "Por favor, indique el número de teléfono del dispositivo."
+
+#. Catch all error when trying to set up a new 2step device
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Something went wrong.  Please try again later."
+msgstr "Algo ha ido mal. Por favor, inténtelo de nuevo."
+
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Please only use numeric characters for phone number"
+msgstr "Por favor, use sólo caracteres numéricos en el número de teléfono"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Add Recovery Option"
+msgstr "Añadir opción de recuperación"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Add Verification Option"
+msgstr "Añadir opción de verificación"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid ""
+"In the event you lose or are unable to use your authentication device, your "
+"account will be locked out unless you set up a recovery method.  We strongly "
+"recommend that you do so now."
+msgstr ""
+"En caso de que pierda o no pueda usar su dispositivo de autenticación, su"
+" cuenta se bloqueará a menos que configure un método de recuperación. Le"
+" recomendamos encarecidamente que lo haga ya."
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "No providers available"
+msgstr "No hay proveedores disponibles"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Code via text message"
+msgstr "Código mediante mensaje de texto"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Use a FIDO2 compatible device to authenticate your identity."
+msgstr "Usar un dispositivo compatible con FIDO2 para autenticar su identidad."
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Yubikey, Google Security Keys, or compatible FIDO device"
+msgstr "Yubikey, claves de Google Security, o dispositivo compatible con FIDO"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Use Yubikey's One Time Password System"
+msgstr "Usar el sistema de contraseñas de un solo uso de Yubikey"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Google Authenticator or compatible"
+msgstr "Google Authenticator o compatible"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Backup code to access your account."
+msgstr "Código de copia de seguridad para acceder a su cuenta."
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Unknown system"
+msgstr "Sistema desconocido"
+
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/printBackupString.js
+msgid "Recovery Code"
+msgstr "Código de recuperación"
+
+#. this is a file name that stores the a long recovery code
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+msgid "recovery"
+msgstr "recuperación"
+
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Delete Multifactor Device"
+msgstr "Borrar dispositivo multifactor"
+
+#. Devices are named.  This is the text for the deleting a multifactor device
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot
+msgid "This will delete the device named %s."
+msgstr "Esto borrará el dispositivo denominado %s."
+
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Unable to delete"
+msgstr "Desactivar para borrar"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Edit Multifactor Device"
+msgstr "Editar dispositivo multifactor"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "This will edit the name for device (%s)"
+msgstr "Esto modificará el nombre del dispositivo (%s)"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "This will assign a name to the device"
+msgstr "Esto asignará un nombre al dispositivo"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Unable to edit name."
+msgstr "No se pudo editar el nombre."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+msgid "Confirm Code"
+msgstr "Confirmar código"
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+msgid "Bad input or server error.  Please try again."
+msgstr "Entrada errónea o error del servidor. Por favor, inténtelo de nuevo."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+msgid "Bad verification code.  Please try again"
+msgstr "Código de verificación erróneo. Por favor, inténtelo de nuevo"
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Authenticator Registration"
+msgstr "Registro de autenticador"
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Click to copy URL to clipboard"
+msgstr "Pulse para copiar la URL al portapapeles"
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"If scanning doesn't work, you may be able to enter the following setup code."
+msgstr ""
+"Si la comprobación no funciona, puede tener que introducir el siguiente"
+" código de configuración."
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"Once complete, please enter an authentication code to verify everything is "
+"configured properly."
+msgstr ""
+"Una vez completado, por favor introduzca un código de autenticación para"
+" comprobar que todo está configurado adecuadamente."
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Device is already registered"
+msgstr "El dispositivo ya está registrado"
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Problem registering device"
+msgstr "Problema al registrar dispositivo"
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Failed to register device"
+msgstr "Error al registrar el dispositivo"
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Failed to register device."
+msgstr "Error al registrar el dispositivo."
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Upload Recovery File"
+msgstr "Subir fichero de recuperación"
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Next 4 characters of the backup string"
+msgstr "4 caracteres siguientes de la cadena de copia de seguridad"
+
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
+msgid "I lost my device"
+msgstr "He perdido mi dispositivo"
+
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
+msgid "Reauthentication required for this action"
+msgstr "Se necesita volver a autenticarse para esta acción"
+
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
+msgid "Select 2-Step Verification Method"
+msgstr "Seleccione método de verificación en 2 pasos"
+
+#: apps/io.ox/multifactor/views/selectDeviceView.js module:io.ox/core/boot
+msgid "Please select a device to use for additional authentication"
+msgstr ""
+"Por favor, seleccione un dispositivo a usar para autenticación adicional"
+
+#: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
+msgid "New code sent."
+msgstr "Nuevo código enviado."
+
+#: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
+msgid "A new code was sent to your SMS device.  Please enter the code."
+msgstr ""
+"Se ha enviado un nuevo código a su dispositivo SMS. Por favor, introduzca el"
+" código."
+
+#: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
+msgid ""
+"You secured your account with 2-Step Verification.  Please enter the "
+"verification code we sent to the phone *****%s."
+msgstr ""
+"Ha asegurado su cuenta con verificación en 2 pasos. Por favor, introduzca el"
+" código de verificación que hemos enviado al teléfono *****%s."
+
+#: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
+msgid ""
+"You secured your account with 2-Step Verification.  Please enter the "
+"verification code from the Authenticator App."
+msgstr ""
+"Ha asegurado su cuenta con verificación en 2 pasos. Por favor, introduzca el"
+" código de verificación de la aplicación Authenticator."
+
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid ""
+"You secured your account with 2-Step Verification.  Please use your "
+"authentication token to complete verification."
+msgstr ""
+"Ha asegurado su cuenta con verificación en 2 pasos. Por favor, use su token"
+" de autenticación para completar la verificación."
+
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid ""
+"This browser is not compatible with your configured authentication device.  "
+"Please use Chrome browser, or Firefox with U2F enabled."
+msgstr ""
+"Este navegador no es compatible con su dispositivo de autenticación"
+" configurado. Por favor, use un navegador Chrome, o Firefox con U2F activado."
+
+#. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid ""
+"Bad parameters for authenticating with this key.  Possibly wrong URL domain "
+"for this key."
+msgstr ""
+"Parámetros erróneos para la autenticación con esta clave. Posiblemente,"
+" dominio de URL erróneo para esta clave."
+
+#. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "Configuration not supported"
+msgstr "Configuración no permitida"
+
+#. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "This device is not eligible for this request.  Wrong hardware key?"
+msgstr ""
+"Este dispositivo no es seleccionable para esta petición. ¿Clave de hardware"
+" errónea?"
+
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "Timeout"
+msgstr "Tiempo agotado"
+
+#. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "Error authenticating.  Please reload browser and try again."
+msgstr ""
+"Error al autenticar. Por favor, recargue el navegador e inténtelo de nuevo."
+
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
 msgid "Topics"
 msgstr "Temas"
@@ -10256,7 +10627,6 @@ msgstr "Volver a autorizar"
 #. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
 #. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
-#| msgid "Open in %1$s"
 msgid "Open %1$s in %2$s"
 msgstr "Abrir %1$s en %2$s"
 
@@ -10298,8 +10668,7 @@ msgid "Get your device configured by email."
 msgstr "Configure su dispositivo por correo."
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid ""
-"Let´s automatically configure your device, by clicking the button below."
+msgid "Let´s automatically configure your device, by clicking the button below."
 msgstr "Configure automáticamente su dispositivo pulsando el botón inferior."
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -11557,6 +11926,19 @@ msgstr ""
 "Las ventanas que haya minimizado aparecerán en todas las aplicaciones para "
 "facilitar el acceso. Puede maximizar una ventana nuevamente pulsando en ella."
 
+#. Title of tour step, demonstrating options available for 2-step verification
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid "2-step Verification Options"
+msgstr "Opciones de verificación en 2 pasos"
+
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Ahora puede añadir opciones de verificación adicionales para incrementar la"
+" seguridad de su cuenta."
+
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "What's new"
@@ -11872,8 +12254,7 @@ msgid "Retired"
 msgstr "Jubilado"
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
-msgid ""
-"You are not directly linked to %s. Here are people who are linked to %s:"
+msgid "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr ""
 "Usted no está directamente conectado a %s. Estas son las personas que están "
 "conectadas a %s:"
@@ -12704,6 +13085,43 @@ msgstr "Invitar a %s"
 msgid "Add on %s"
 msgstr "Añadir a %s"
 
+#~ msgid "Please leave a comment for other participants."
+#~ msgstr "Por favor, deje un comentario para otros participantes."
+
+#~ msgid "Participants can edit the appointment"
+#~ msgstr "Los participantes pueden editar la cita"
+
+#~ msgid "Participant permissions"
+#~ msgstr "Permisos de los participantes"
+
+#~ msgid "Your default reminders will be applied to this calendars."
+#~ msgstr "Sus recordatorios predeterminados se aplicarán a este calendario."
+
+#~ msgid "All file versions older than 1 day will be deleted"
+#~ msgid_plural "All file versions older than %1$d days will be deleted"
+#~ msgstr[0] "Todas las versiones de hace más de 1 día se borrarán"
+#~ msgstr[1] "Todas las versiones de hace más de %1$d días se borrarán"
+
+#~ msgid ""
+#~ "When a file has more than 1 additional version, older versions of the "
+#~ "file will be deleted"
+#~ msgid_plural ""
+#~ "When a file has more than %1$d additional versions, older versions of the "
+#~ "file will be deleted"
+#~ msgstr[0] ""
+#~ "Cuando un fichero tiene más de 1 versión adicional, las versiones más "
+#~ "antiguas se borrarán"
+#~ msgstr[1] ""
+#~ "Cuando un fichero tiene más de %1$d versiones adicionales, las versiones "
+#~ "más antiguas se borrarán"
+
+#~ msgid ""
+#~ "Older versions will be deleted after next login or when a new version is "
+#~ "created"
+#~ msgstr ""
+#~ "Las versiones más antiguas se borrarán tras el próximo inicio de sesión o "
+#~ "cuando se cree una versión nueva."
+
 #~ msgid "1 minute"
 #~ msgstr "1 minuto"
 
@@ -12725,19 +13143,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Add to Favorites"
 #~ msgstr "Añadir a Favoritos"
-
-#, fuzzy
-#~| msgid ""
-#~| "All messages older than %1$d days will be moved to the archive folder"
-#~ msgid "All file versions older than 1 day will be deleted after next login"
-#~ msgid_plural ""
-#~ "All file versions older than %1$d days will be deleted after next login"
-#~ msgstr[0] ""
-#~ "Todos los mensajes con una antigüedad mayor de %1$s días serán "
-#~ "trasladados a la carpeta de fichero"
-#~ msgstr[1] ""
-#~ "Todos los mensajes con una antigüedad mayor de %1$s días serán "
-#~ "trasladados a la carpeta de fichero"
 
 #~ msgid "Auto-save email drafts"
 #~ msgstr "Guardar automáticamente borradores de correo electrónico"
