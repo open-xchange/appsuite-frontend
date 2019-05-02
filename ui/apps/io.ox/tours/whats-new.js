@@ -85,7 +85,7 @@ define('io.ox/tours/whats-new', [
                         });
                     });
                 })
-                .content(gt('Emails will appear in a new window. These windows can be maximized, minimized and closed.'))
+                .content(gt('E-Mails will appear in a new window. These windows can be maximized, minimized and closed.'))
                 .spotlight('.io-ox-mail-compose-window:visible:last')
             .end();
         }
