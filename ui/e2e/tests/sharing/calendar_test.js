@@ -84,6 +84,7 @@ Scenario.skip('[C104305] using “Permisions” dialog and sharing link', async 
         });
 
         // FIXME: this is currently broken, needs manual intervention
+        // eslint-disable-next-line no-undef
         pause();
         // </FIXME>
         I.waitForText('simple appointment 1', 30, '.io-ox-calendar-main');

@@ -15,13 +15,13 @@
 
 Feature('Drive > Folder');
 
-const prepare = (I, folder) => {
+function prepare(I, folder) {
     I.login('app=io.ox/files' + (folder ? '&folder=' + folder : ''));
     I.waitForElement('.file-list-view.complete');
-};
+}
 
 // Returns permission bitmasks for shared folder (user 1 is owner, user 2 is viewer)
-const sharedFolder = (folderName, users) => {
+function sharedFolder(folderName, users) {
     return {
         module: 'infostore',
         subscribed: 1,
@@ -38,7 +38,7 @@ const sharedFolder = (folderName, users) => {
             }
         ]
     };
-};
+}
 
 Before(async (I, users) => {
     await users.create();
@@ -212,7 +212,7 @@ Scenario('[C8378] Invite a group', async (I, users) => {
     I.click('Share', '.modal-dialog');
     I.logout();
 
-    for(let i = 1; i <= 2; i++) {
+    for (let i = 1; i <= 2; i++) {
         I.login('app=io.ox/files&folder=' + folder.data, { user: users[i] });
         I.waitForElement('.file-list-view.complete');
         I.waitForText(folderName, 2, '.folder-tree');
@@ -482,7 +482,6 @@ Scenario('[C8389] Move a folder', async (I, users) => {
     // 5. Confirm (Folder moved)
     // 6. Choose a standard folder (documents, music, pictures or videos) (no context menu available in top bar, only in folder tree)
     // 7. Click the gear button in folder tree (No "Move" option is available)
-    const folderName = 'C8389';
     const myfiles = await I.grabDefaultFolder('infostore');
     const folder = await I.haveFolder('Subfolder a', 'infostore', myfiles, { user: users[0] });
     await I.haveFolder('Subfolder b', 'infostore', myfiles, { user: users[0] });
@@ -520,7 +519,7 @@ Scenario('[C8390] Folder tree', async (I, users) => {
     await I.haveFolder('subfolder_1', 'infostore', folder.data, { user: users[0] });
     await I.haveFolder('subfolder_2', 'infostore', folder.data, { user: users[0] });
     const subFolder = await I.haveFolder('subfolder_3', 'infostore', folder.data, { user: users[0] });
-    const subsubFolder = await I.haveFolder('subsubfolder_1', 'infostore', subFolder.data, { user: users[0] });
+    await I.haveFolder('subsubfolder_1', 'infostore', subFolder.data, { user: users[0] });
     await I.haveFolder('subsubfolder_2', 'infostore', subFolder.data, { user: users[0] });
     prepare(I);
     I.click('My files', '.folder-tree');

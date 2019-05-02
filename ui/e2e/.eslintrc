@@ -16,7 +16,8 @@
         "ecmaVersion": 8
     },
     "globals": {
-        "locate": false
+        "locate": false,
+        "session": false
     },
 
     "rules": {

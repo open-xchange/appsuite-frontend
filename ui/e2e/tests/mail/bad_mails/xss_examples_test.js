@@ -27,7 +27,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-const importMails = async (I, path, start, end) => {
+async function importMails(I, path, start, end) {
     const files = await readdir(path);
     let size = 0;
     // forEach does not handle await correctly
@@ -39,14 +39,14 @@ const importMails = async (I, path, start, end) => {
         }
     }
     return size;
-};
+}
 
-const run = async (I, start, end, path) => {
+async function run(I, start, end) {
     var size = await importMails(I, 'e2e/media/mails/badmails-xss', start, end);
     I.login('app=io.ox/mail');
     I.waitForVisible('.io-ox-mail-window .list-view');
     for (let i = (size - 1); i >= 0; i--) {
-        I.seeElement(`.list-view .list-item[data-index="${i}"] .drag-title`)
+        I.seeElement(`.list-view .list-item[data-index="${i}"] .drag-title`);
     }
     I.logout();
 }
