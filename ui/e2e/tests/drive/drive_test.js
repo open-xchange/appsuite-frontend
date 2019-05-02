@@ -13,8 +13,7 @@
 
 /// <reference path="../../steps.d.ts" />
 var fs = require('fs');
-const expect = require('chai').expect;
-const waitForExpect = require('wait-for-expect');
+const { expect } = require('chai');
 
 Feature('Drive');
 
@@ -26,60 +25,52 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7886] Enable hidden folders and files', async function (I, users) {
-    I.haveSetting('io.ox/files//showHidden', true);
-    const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
-    I.haveFile(infostoreFolderID, 'e2e/media/files/generic/.hiddenfile.dat', { user: users[0] });
-    I.haveFolder('.hiddenfolder', 'infostore', infostoreFolderID, { user: users[0] });
-    I.login('app=io.ox/files', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/files"]');
+Scenario('[C7886] Enable hidden folders and files', async function (I) {
+    await I.haveSetting('io.ox/files//showHidden', true);
+    const infostoreFolderID = await I.grabDefaultFolder('infostore');
+    await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/.hiddenfile.dat');
+    await I.haveFolder('.hiddenfolder', 'infostore', infostoreFolderID);
+    I.login('app=io.ox/files');
+    I.waitForVisible('.list-view.complete');
     //check for hidden file and folder
-    await waitForExpect(async () => {
-        I.wait(0.5);
-        I.click('~Refresh');
-        expect(await I.grabNumberOfVisibleElements(locate('.filename').withText('.hiddenfolder'))).to.equal(1);
-        expect(await I.grabNumberOfVisibleElements(locate('.filename').withText('.hiddenfile.dat'))).to.equal(1);
-    }, 15000);
+    I.see('.hiddenfolder', '.list-view');
+    I.see('.hiddenfile.dat', '.list-view');
     I.click('#io-ox-topbar-dropdown-icon');
     I.click('.open [data-name="io.ox/settings"]');
     I.click('.folder-node[title="Drive"]');
     I.waitForVisible('[data-point="io.ox/files/settings/detail/view"]');
     I.click('Show hidden files and folders');
     I.openApp('Drive');
-    await waitForExpect(async () => {
-        I.wait(0.5);
-        I.click('~Refresh');
-        expect(await I.grabNumberOfVisibleElements(locate('.filename').withText('.hiddenfolder'))).to.equal(0);
-        expect(await I.grabNumberOfVisibleElements(locate('.filename').withText('.hiddenfile.dat'))).to.equal(0);
-    }, 15000);
+    I.waitForElement('.list-view.complete');
+    I.click('~Refresh');
+    I.waitForElement('#io-ox-appcontrol .fa-spin.fa-refresh');
+    I.waitForElement('#io-ox-appcontrol .fa-spin-paused.fa-refresh');
+    I.waitForDetached(locate('.filename').withText('.hiddenfolder').inside('.list-view'));
+    I.dontSeeElement(locate('.filename').withText('.hiddenfile.dat').inside('.list-view'));
 });
 
-Scenario('[C7887] Disable hidden folders and files', async function (I, users) {
-    I.haveSetting('io.ox/files//showHidden', false);
-    const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
-    I.haveFile(infostoreFolderID, 'e2e/media/files/generic/.hiddenfile.dat', { user: users[0] });
-    I.haveFolder('.hiddenfolder', 'infostore', infostoreFolderID, { user: users[0] });
-    I.login('app=io.ox/files', { user: users[0] });
-    I.waitForVisible('*[data-app-name="io.ox/files"]');
+Scenario('[C7887] Disable hidden folders and files', async function (I) {
+    await I.haveSetting('io.ox/files//showHidden', false);
+    const infostoreFolderID = await I.grabDefaultFolder('infostore');
+    await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/.hiddenfile.dat');
+    await I.haveFolder('.hiddenfolder', 'infostore', infostoreFolderID);
+    I.login('app=io.ox/files');
+    I.waitForVisible('.list-view.complete');
     //check for hidden file and folder
-    await waitForExpect(async () => {
-        I.wait(0.5);
-        I.click('~Refresh');
-        expect(await I.grabNumberOfVisibleElements(locate('.filename').withText('.hiddenfolder'))).to.equal(0);
-        expect(await I.grabNumberOfVisibleElements(locate('.filename').withText('.hiddenfile.dat'))).to.equal(0);
-    }, 15000);
+    I.dontSee('.hiddenfolder', '.list-view');
+    I.dontSee('.hiddenfile.dat', '.list-view');
     I.click('#io-ox-topbar-dropdown-icon');
     I.click('.open [data-name="io.ox/settings"]');
     I.click('.folder-node[title="Drive"]');
     I.waitForVisible('[data-point="io.ox/files/settings/detail/view"]');
     I.click('Show hidden files and folders');
     I.openApp('Drive');
-    await waitForExpect(async () => {
-        I.wait(0.5);
-        I.click('~Refresh');
-        expect(await I.grabNumberOfVisibleElements(locate('.filename').withText('.hiddenfolder'))).to.equal(1);
-        expect(await I.grabNumberOfVisibleElements(locate('.filename').withText('.hiddenfile.dat'))).to.equal(1);
-    }, 15000);
+    I.waitForElement('.list-view.complete');
+    I.click('~Refresh');
+    I.waitForElement('#io-ox-appcontrol .fa-spin.fa-refresh');
+    I.waitForElement('#io-ox-appcontrol .fa-spin-paused.fa-refresh');
+    I.waitForElement(locate('.filename').withText('.hiddenfolder').inside('.list-view'));
+    I.seeElement(locate('.filename').withText('.hiddenfile.dat').inside('.list-view'));
 });
 
 Scenario.skip('[C45046] Upload new version', async function (I, users) {

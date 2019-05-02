@@ -18,7 +18,6 @@
 
 const moment = require('moment');
 const expect = require('chai').expect;
-const waitForExpect = require('wait-for-expect');
 
 Feature('Calendar > Create');
 
@@ -1939,17 +1938,11 @@ Scenario('[C234658] Create appointments and show this in cumulatively view', asy
     I.login('app=io.ox/calendar', { user: users[0] });
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
     I.clickToolbar('Today');
-    await waitForExpect(async () => {
-        expect(await I.grabNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]')).to.equal(0);
-    }, 5000);
+    I.waitNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]', 0, 5);
     I.click('[data-id="virtual/flat/event/private"] [title="' + testrailID + ' - 0' + '"] .color-label');
-    await waitForExpect(async () => {
-        expect(await I.grabNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]')).to.equal(1);
-    }, 5000);
+    I.waitNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]', 1, 5);
     I.click('[data-id="virtual/flat/event/private"] [title="' + testrailID + ' - 1' + '"] .color-label');
-    await waitForExpect(async () => {
-        expect(await I.grabNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]')).to.equal(2);
-    }, 5000);
+    I.waitNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]', 2, 5);
 });
 
 Scenario('[C265153] Create appointment with a link in the description', async function (I, users) {
@@ -1985,7 +1978,5 @@ Scenario('[C265153] Create appointment with a link in the description', async fu
     I.waitForElement('.calendar-detail [href="https://www.google.de"]');
     I.click('.calendar-detail [href="https://www.google.de"]');
     I.switchToNextTab();
-    await waitForExpect(async () => {
-        expect(await I.grabCurrentUrl()).to.equal('https://www.google.de/');
-    }, 5000);
+    I.waitInUrl('https://www.google.de/', 5);
 });
