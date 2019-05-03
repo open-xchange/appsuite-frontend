@@ -285,7 +285,7 @@ Scenario('[C244785] Open event from invite notification in calendar', async (I, 
     I.click('~Start time');
     I.pressKey('Enter');
     I.pressKey(['Control', 'a']);
-    I.pressKey(startTime.format('hh:mm P'));
+    I.pressKey(startTime.format('hh:mm A'));
     I.pressKey('Enter');
     I.fillField('Add contact/resource', userB.userdata.primaryEmail);
     I.wait(0.5);
