@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('testrail - contacts').tag('2');
+Feature('Contacts > Misc @contentReview');
 
 Before(async function (users) {
     await users.create();
@@ -46,7 +46,7 @@ Scenario('[C7354] - Create new contact', function (I) {
     // job description
     I.fillField('Profession', 'Developer');
     I.fillField('Position', 'Senior Developer');
-    I.fillField('Department', 'Frontent');
+    I.fillField('Department', 'Frontend');
     I.fillField('Company', 'Open-Xchange');
     I.fillField('Room number', '101');
     // messaging
@@ -105,7 +105,7 @@ Scenario('[C7354] - Create new contact', function (I) {
     // job description
     I.see('Developer');
     I.see('Senior Developer');
-    I.see('Frontent');
+    I.see('Frontend');
     I.see('Open-Xchange');
     I.see('101');
     // mail and messaging
@@ -147,7 +147,7 @@ Scenario('[C7354] - Create new contact', function (I) {
 });
 
 Scenario('[C7355] - Create a new private folder', function (I) {
-    var timestamp = Math.round(+new Date() / 1000);
+    const timestamp = Math.round(+new Date() / 1000);
     I.login('app=io.ox/contacts');
     // wait for any contact to be rendered, this is the last thing happening on load.
     I.waitForElement('.vgrid-cell.contact');
@@ -161,7 +161,7 @@ Scenario('[C7355] - Create a new private folder', function (I) {
 });
 
 Scenario('[C7356] - Create a new public folder', function (I) {
-    var timestamp = Math.round(+new Date() / 1000);
+    const timestamp = Math.round(+new Date() / 1000);
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
     I.waitForVisible('.classic-toolbar [data-action]');
@@ -177,39 +177,33 @@ Scenario('[C7356] - Create a new public folder', function (I) {
 });
 
 Scenario('[C7358] - Remove contact picture', function (I, search) {
-    var firstname = 'C7358';
-    var lastname = 'C7358';
-    var phone = '+4917113371337';
+    const testrailID = 'C7358';
+    const phone = '+4917113371337';
 
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
-
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
     I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
     I.clickToolbar('New');
     I.click('Add contact');
     I.waitForVisible('.io-ox-contacts-edit-window');
-    I.fillField('First name', firstname);
-    I.fillField('Last name', lastname);
+    I.fillField('First name', testrailID);
+    I.fillField('Last name', testrailID);
     I.fillField('Cell phone', phone);
     I.waitForElement('.contact-picture-upload');
     I.click('.contact-picture-upload');
     I.waitForText('Edit image');
     I.attachFile('.picture-upload-view input[type=file]', 'e2e/media/files/generic/contact_picture.png');
-    //Wait for UI feedback
     I.click('Ok');
     I.waitForDetached('.modal-dialog');
-    //wait for element detached
     I.dontSee('Upload image');
     I.click('Save');
     I.waitForDetached('.io-ox-contacts-edit-window');
-    search.doSearch(lastname + ' ' + firstname);
-    // I.see(lastname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
-    // I.see(firstname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
-    I.click('[aria-label="' + lastname + ', ' + firstname + '"]');
+    search.doSearch(testrailID + ' ' + testrailID);
+    I.click('[aria-label="' + testrailID + ', ' + testrailID + '"]');
     I.waitForElement('.contact-header');
-    I.waitForText(lastname + ', ' + firstname, '.contact-header .header-name');
+    I.waitForText(testrailID + ', ' + testrailID, '.contact-header .header-name');
     I.clickToolbar('Edit');
     I.click(".edit-contact [title='Remove']");
     I.click('Save');
@@ -242,7 +236,7 @@ Scenario('[C7359] - Expand/collapse all contact edit sections', function (I) {
     // job description
     I.fillField('Profession', 'Developer');
     I.fillField('Position', 'Senior Developer');
-    I.fillField('Department', 'Frontent');
+    I.fillField('Department', 'Frontend');
     I.fillField('Company', 'Open-Xchange');
     I.fillField('Room number', '101');
     // messaging
@@ -302,7 +296,7 @@ Scenario('[C7359] - Expand/collapse all contact edit sections', function (I) {
     // job description
     I.see('Developer');
     I.see('Senior Developer');
-    I.see('Frontent');
+    I.see('Frontend');
     I.see('Open-Xchange');
     I.see('101');
     // mail and messaging
@@ -343,15 +337,15 @@ Scenario('[C7359] - Expand/collapse all contact edit sections', function (I) {
     I.see('a comment in the comment field');
 });
 
-Scenario('[C7363] - Add files to a contact', async function (I, users) {
-    var testrailID = 'C7363';
+Scenario('[C7363] - Add files to a contact', async function (I) {
+    const testrailID = 'C7363';
     const contact = {
         display_name: '' + testrailID + ', ' + testrailID + '',
-        folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
+        folder_id: await I.grabDefaultFolder('contacts'),
         first_name: testrailID,
         last_name: testrailID
     };
-    await I.haveContact(contact, { user: users[0] });
+    await I.haveContact(contact);
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
     I.selectFolder('Contacts');
@@ -365,17 +359,17 @@ Scenario('[C7363] - Add files to a contact', async function (I, users) {
     I.waitForElement(locate().withText('contact_picture.png').inside('.attachments-container .dropdown-toggle'));
 });
 
-Scenario('[C7366] - Delete multiple contacts', async function (I, search, users) {
-    let testrailID = 'C7366';
+Scenario('[C7366] - Delete multiple contacts', async function (I, search) {
+    const testrailID = 'C7366';
     const contact = {
         display_name: '' + testrailID + ', ' + testrailID + '',
-        folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
+        folder_id: await I.grabDefaultFolder('contacts'),
         first_name: testrailID,
         last_name: testrailID
 
     };
-    I.haveContact(contact, { user: users[0] });
-    I.haveContact(contact, { user: users[0] });
+    await I.haveContact(contact);
+    await I.haveContact(contact);
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
     I.waitForVisible('.classic-toolbar [data-action]');
@@ -393,16 +387,16 @@ Scenario('[C7366] - Delete multiple contacts', async function (I, search, users)
     I.dontSee('C7367, C7367');
 });
 
-Scenario('[C7367] - Delete Contact', async function (I, users) {
-    let testrailID = 'C7367';
+Scenario('[C7367] - Delete Contact', async function (I) {
+    const testrailID = 'C7367';
     const contact = {
-        display_name: '' + testrailID + ', ' + testrailID + '',
-        folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
+        display_name: testrailID + ', ' + testrailID,
+        folder_id: await I.grabDefaultFolder('contacts'),
         first_name: testrailID,
         last_name: testrailID
 
     };
-    I.haveContact(contact, { user: users[0] });
+    await I.haveContact(contact);
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
     I.waitForVisible('.classic-toolbar [data-action]');
@@ -418,16 +412,16 @@ Scenario('[C7367] - Delete Contact', async function (I, users) {
     I.waitForDetached('[aria-label="' + testrailID + ', ' + testrailID + '"]');
 });
 
-Scenario('[C7369] - Search by Name', async function (I, search, users) {
+Scenario('[C7369] - Search by Name', async function (I, search) {
     const testrailID = 'C7369';
     //Create Contact
     const contact = {
         display_name: '' + testrailID + ', ' + testrailID + '',
-        folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
+        folder_id: await I.grabDefaultFolder('contacts'),
         first_name: testrailID,
         last_name: testrailID
     };
-    I.haveContact(contact, { user: users[0] });
+    I.haveContact(contact);
 
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
@@ -435,30 +429,24 @@ Scenario('[C7369] - Search by Name', async function (I, search, users) {
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
     I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
-    //I.clickToolbar('New');
-    //I.click('Add contact');
-    //I.waitForVisible('.io-ox-contacts-edit-window');
-    //I.fillField('First name', firstname);
-    //I.fillField('Last name', lastname);
-    //I.click('Save');
-    //I.waitForDetached('.io-ox-contacts-edit-window');
+
     search.doSearch(testrailID + ' ' + testrailID);
     I.see(testrailID, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
     I.see(testrailID, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
 });
 
-Scenario('[C7370] - Search by Phone numbers', async function (I, search, users) {
-    let phone = '+4917113371337';
-    let testrailID = 'C7370';
+Scenario('[C7370] - Search by Phone numbers', async function (I, search) {
+    const phone = '+4917113371337';
+    const testrailID = 'C7370';
     //Create Contact
     const contact = {
         display_name: '' + testrailID + ', ' + testrailID + '',
-        folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
+        folder_id: await I.grabDefaultFolder('contacts'),
         first_name: testrailID,
         last_name: testrailID,
         cellular_telephone1: phone
     };
-    I.haveContact(contact, { user: users[0] });
+    await I.haveContact(contact);
 
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
@@ -466,48 +454,32 @@ Scenario('[C7370] - Search by Phone numbers', async function (I, search, users) 
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
     I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
-    //I.clickToolbar('New');
-    //I.click('Add contact');
-    //I.waitForVisible('.io-ox-contacts-edit-window');
-    //I.fillField('First name', firstname);
-    //I.fillField('Last name', lastname);
-    //I.fillField('Cell phone', phone);
-    //I.click('Save');
-    //I.waitForDetached('.io-ox-contacts-edit-window');
 
-    //I.fillField('Search...', phone)
     search.doSearch(phone);
-    //I.pressKey("Enter");
-    //I.waitForElement('.fa-spin-paused');
+
     I.see(testrailID, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
     I.see(testrailID, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
 });
 
-Scenario('[C7371] - Search by Addresses', async function (I, search, users) {
-    let testrailID = 'C7371';
-    let firstname = testrailID;
-    let lastname = testrailID;
-    let phone = '+4917113371337';
-    let street_home = 'street_home';
-    let post_code_home = '1337';
-    let city_home = 'city_home';
-    let state_home = 'state_home';
-    let country_home = 'country_home';
+Scenario('[C7371] - Search by Addresses', async function (I, search) {
+    const testrailID = 'C7371';
+    const firstname = testrailID;
+    const lastname = testrailID;
 
     //Create Contact
     const contact = {
         display_name: '' + testrailID + ', ' + testrailID + '',
-        folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
+        folder_id: await I.grabDefaultFolder('contacts'),
         first_name: testrailID,
         last_name: testrailID,
-        cellular_telephone1: phone,
-        street_home: street_home,
-        post_code_home: post_code_home,
-        city_home: city_home,
-        state_home: state_home,
-        country_home: country_home
+        cellular_telephone1: '+4917113371337',
+        street_home: 'street_home',
+        post_code_home: '1337',
+        city_home: 'city_home',
+        state_home: 'state_home',
+        country_home: 'country_home'
     };
-    I.haveContact(contact, { user: users[0] });
+    await I.haveContact(contact);
 
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
@@ -515,30 +487,28 @@ Scenario('[C7371] - Search by Addresses', async function (I, search, users) {
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
     I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
-    search.doSearch(street_home);
+    search.doSearch(contact.street_home);
     I.see(lastname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
     I.see(firstname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
-    search.doSearch(post_code_home);
+    search.doSearch(contact.post_code_home);
     I.see(lastname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
     I.see(firstname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
-    search.doSearch(city_home);
+    search.doSearch(contact.city_home);
     I.see(lastname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
     I.see(firstname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
-    search.doSearch(state_home);
+    search.doSearch(contact.state_home);
     I.see(lastname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
     I.see(firstname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
-    search.doSearch(country_home);
+    search.doSearch(contact.country_home);
     I.see(lastname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > strong');
     I.see(firstname, 'div.vgrid-cell.selectable.contact.even.selected > div.fullname > span > span');
 });
 
 Scenario('[C8817] - Send E-Mail to contact', function (I, users, search) {
-    let [user] = users;
-    var testrailID = 'C8817';
-    //var text = Math.round(+new Date() / 1000);
-    var subject = Math.round(+new Date() / 1000);
+    const testrailID = 'C8817';
+    const subject = Math.round(+new Date() / 1000);
     I.haveSetting('io.ox/mail//messageFormat', 'text');
-    I.login('app=io.ox/contacts', { user });
+    I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
     search.doSearch(users[1].userdata.primaryEmail);
     I.waitForElement('[href="mailto:' + users[1].userdata.primaryEmail + '"]');
@@ -561,17 +531,17 @@ Scenario('[C8817] - Send E-Mail to contact', function (I, users, search) {
     I.see(testrailID);
 });
 
-Scenario.skip('[C273805] - Download infected file', async function (I, users) {
-    let testrailID = 'C273805';
+Scenario.skip('[C273805] - Download infected file', async function (I) {
+    const testrailID = 'C273805';
     const contact = {
         display_name: '' + testrailID + ', ' + testrailID + '',
-        folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
+        folder_id: await I.grabDefaultFolder('contacts'),
         first_name: testrailID,
         last_name: testrailID
 
     };
-    const contactResponse = await I.haveContact(contact, { user: users[0] });
-    await I.haveAttachment('contacts', { id: contactResponse.id, folder: contact.folder_id }, 'e2e/media/mails/Virus_attached!.eml', { user: users[0] });
+    const contactResponse = await I.haveContact(contact);
+    await I.haveAttachment('contacts', { id: contactResponse.id, folder: contact.folder_id }, 'e2e/media/mails/Virus_attached!.eml');
     I.login('app=io.ox/contacts');
     I.waitForElement('.vgrid-cell.contact');
     I.selectFolder('Contacts');
