@@ -781,8 +781,7 @@ define('io.ox/core/api/tab', [
             if (!data.propagate) return;
             if (data.propagate === 'show-in-drive') return TabCommunication.showInDrive(data.parameters);
             if (data.propagate === 'get-active-windows') return TabCommunication.getActiveWindows(data.exceptWindow);
-            if (data.propagate === 'propagate-settings-language') return TabCommunication.setOxObjectParameter('language', data.parameters.language);
-            if (data.propagate === 'propagate-settings-theme') return TabCommunication.setOxObjectParameter('theme', data.parameters.theme);
+            if (data.propagate === 'update-ox-object') return TabCommunication.updateOxObject(data.parameters);
 
             TabCommunication.events.trigger(data.propagate, data.parameters);
         });
@@ -824,10 +823,10 @@ define('io.ox/core/api/tab', [
      *
      * @returns {boolean}
      */
-    TabCommunication.setOxObjectParameter = function (key, parameter) {
-        if (!key) return false;
+    TabCommunication.updateOxObject = function (parameters) {
+        if (!parameters) return false;
 
-        ox[key] = parameter;
+        _.extend(ox, parameters);
         return true;
     };
 

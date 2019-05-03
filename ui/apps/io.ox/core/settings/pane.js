@@ -138,19 +138,19 @@ define('io.ox/core/settings/pane', [
                     },
 
                     propagateSettingsLanguage: function (val) {
-                        this.propagateSettings('propagate-settings-language', { language: val });
+                        require(['io.ox/core/api/tab'], function (TabApi) {
+                            TabApi.TabCommunication.propagateToAllExceptWindow('update-ox-object', TabApi.TabHandling.windowName, { language: val });
+                            TabApi.TabCommunication.updateOxObject({ language: val });
+                        });
+
                     },
 
                     propagateSettingsTheme: function (val) {
-                        this.propagateSettings('propagate-settings-theme', { theme: val });
-                    },
+                        require(['io.ox/core/api/tab'], function (TabApi) {
+                            TabApi.TabCommunication.propagateToAllExceptWindow('update-ox-object', TabApi.TabHandling.windowName, { theme: val });
+                            TabApi.TabCommunication.updateOxObject({ theme: val });
+                        });
 
-                    propagateSettings: function (key, parameters) {
-                        if (ox.tabHandlingEnabled) {
-                            require(['io.ox/core/api/tab'], function (TabApi) {
-                                TabApi.TabCommunication.propagateToAllExceptWindow(key, TabApi.TabHandling.windowName, parameters);
-                            });
-                        }
                     }
                 })
                 .render().$el
@@ -179,8 +179,8 @@ define('io.ox/core/settings/pane', [
             index: INDEX += 100,
             render: function () {
                 this.listenTo(settings, 'change', function (attr, value) {
-                    if (attr === 'theme') this.propagateSettingsTheme(value);
-                    if (attr === 'language') this.propagateSettingsLanguage(value);
+                    if (ox.tabHandlingEnabled && attr === 'theme') this.propagateSettingsTheme(value);
+                    if (ox.tabHandlingEnabled && attr === 'language') this.propagateSettingsLanguage(value);
                     var showNotice = this.showNotice(attr);
                     settings.saveAndYell(undefined, { force: !!showNotice }).then(
                         function success() {
