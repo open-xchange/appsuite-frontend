@@ -1229,7 +1229,6 @@ Scenario('[C7429] Create appointment via Contact', async function (I, users) {
 
 
 Scenario('[C7430] Create appointment via Icon', async function (I) {
-
     I.login('app=io.ox/calendar&perspective="week:day"');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
@@ -1241,7 +1240,7 @@ Scenario('[C7430] Create appointment via Icon', async function (I) {
 
     I.click('[data-attribute="startDate"] .datepicker-day-field');
     I.pressKey(['Control', 'a']);
-    I.pressKey(moment().add(1, 'day').format('M/D/YYYY'));
+    I.pressKey(moment().format('M/D/YYYY'));
 
     I.pressKey('Enter');
 
