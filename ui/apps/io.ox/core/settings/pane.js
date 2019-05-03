@@ -135,6 +135,22 @@ define('io.ox/core/settings/pane', [
                         require(['io.ox/core/settings/user'], function (settingsUser) {
                             settingsUser.openModalDialog();
                         });
+                    },
+
+                    propagateSettingsLanguage: function (val) {
+                        this.propagateSettings('propagate-settings-language', { language: val });
+                    },
+
+                    propagateSettingsTheme: function (val) {
+                        this.propagateSettings('propagate-settings-theme', { theme: val });
+                    },
+
+                    propagateSettings: function (key, parameters) {
+                        if (ox.tabHandlingEnabled) {
+                            require(['io.ox/core/api/tab'], function (TabApi) {
+                                TabApi.TabCommunication.propagateToAllExceptWindow(key, TabApi.TabHandling.windowName, parameters);
+                            });
+                        }
                     }
                 })
                 .render().$el
@@ -162,7 +178,9 @@ define('io.ox/core/settings/pane', [
             id: 'onchange',
             index: INDEX += 100,
             render: function () {
-                this.listenTo(settings, 'change', function (attr) {
+                this.listenTo(settings, 'change', function (attr, value) {
+                    if (attr === 'theme') this.propagateSettingsTheme(value);
+                    if (attr === 'language') this.propagateSettingsLanguage(value);
                     var showNotice = this.showNotice(attr);
                     settings.saveAndYell(undefined, { force: !!showNotice }).then(
                         function success() {
