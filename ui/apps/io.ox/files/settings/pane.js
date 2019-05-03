@@ -248,6 +248,8 @@ define('io.ox/files/settings/pane', [
                     this.$el.find('#settings-features\\/autodelete\\/maxVersions').attr('disabled', true);
                 }
                 this.listenTo(settings, 'change:features/autodelete/maxVersions change:features/autodelete/retentionDays', function () {
+                    retentionDays = settings.get('features/autodelete/retentionDays');
+                    maxVersions = settings.get('features/autodelete/maxVersions');
                     summaryContainer.empty().append(this.getSummary());
                 }).bind(this);
             }
