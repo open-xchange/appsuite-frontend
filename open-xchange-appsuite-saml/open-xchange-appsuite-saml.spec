@@ -20,8 +20,12 @@ BuildRequires: java7-devel
 %else
 BuildRequires: java-devel >= 1.7.0
 %endif
+%if 0%{?suse_version}
+BuildRequires:  nodejs6
+BuildRequires:  npm6
+%else
 BuildRequires:  nodejs >= 0.10.0
-
+%endif
 Requires(post): open-xchange-appsuite-manifest
 
 %description

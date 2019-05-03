@@ -10,7 +10,12 @@ BuildRequires: java7-devel
 %else
 BuildRequires: java-devel >= 1.7.0
 %endif
+%if 0%{?suse_version}
+BuildRequires:  nodejs6
+BuildRequires:  npm6
+%else
 BuildRequires:  nodejs >= 0.10.0
+%endif
 Version:        @OXVERSION@
 %define         ox_release 45
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
