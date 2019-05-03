@@ -577,6 +577,7 @@ Scenario('[C8831] Add recipient manually', async function (I, users) {
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose.container', 5);
     I.waitForVisible('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
+    I.click('button[data-action="maximize"]');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 'super01@ox.com');
     I.click('.io-ox-mail-compose .plain-text');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 'super02@ox.com');
