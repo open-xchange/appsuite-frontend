@@ -10,7 +10,7 @@ module.exports = function (grunt) {
         // contains certificate content already
         if (value.indexOf('-----') === 0) return;
         // read file content
-        if (!grunt.file.exists(value)) grunt.fail.warn('Missing certificate file: "' + value + '"');
+        if (!grunt.file.exists(value)) return grunt.log.warn('Missing certificate file: "' + value + '"');
         conf[key] = grunt.file.read(value);
     });
 
