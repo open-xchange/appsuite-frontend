@@ -61,8 +61,8 @@ define('io.ox/mail/compose/actions/send', [
                 var def = $.Deferred();
                 // show dialog
                 require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-                    new ModalDialog({ title: gt('Mail has empty subject. Send it anyway?') })
-                        .addButton({ label: gt('Yes, send without subject'), className: 'btn-default', action: 'send' })
+                    new ModalDialog({ title: gt('Empty subject'), description: gt('This email has no subject. Do you want to send it anyway?') })
+                        .addAlternativeButton({ label: gt('Send without subject'), className: 'btn-default', action: 'send' })
                         .addButton({ label: gt('Add subject'), action: 'subject' })
                         .on('send', function () { def.resolve(); })
                         .on('subject', function () {
