@@ -34,6 +34,10 @@ define('io.ox/contacts/widgets/pictureUpload', [
         return def;
     }
 
+    function maxSizeViolation(file) {
+        return file && settings.get('maxImageSize') && file.size > settings.get('maxImageSize');
+    }
+
     function PictureUpload(options) {
         _.extend(this, {
 
@@ -101,6 +105,14 @@ define('io.ox/contacts/widgets/pictureUpload', [
             // preview prefers edited
             onChangeFile: function () {
                 var file = this.model.get('pictureFileEdited');
+                //check if the edited picture is small enough
+                if (maxSizeViolation(file)) {
+                    this.model.unset('pictureFileEdited', { silent: true });
+                    return require(['io.ox/core/strings'], function (strings) {
+                        //#. %1$s maximum file size
+                        notifications.yell('error', gt('Your selected picture exceeds the maximum allowed file size of %1$s', strings.fileSize(settings.get('maxImageSize'), 2)));
+                    });
+                }
                 if (!file || !(file.lastModified || file.lastModifiedDate)) return;
                 this.imgCon.css('background-image', 'initial').busy();
                 this.addImgText.hide();
@@ -118,23 +130,18 @@ define('io.ox/contacts/widgets/pictureUpload', [
                 if (file && !/(jpg|jpeg|gif|bmp|png)/i.test(file.type)) {
                     return notifications.yell('error', gt('This filetype is not supported as contact picture. Only image types (JPG, GIF, BMP or PNG) are supported.'));
                 }
-                // check if the picture is small enough
-                if (file && settings.get('maxImageSize') && file.size > settings.get('maxImageSize')) {
-                    return require(['io.ox/core/strings'], function (strings) {
-                        //#. %1$s maximum file size
-                        notifications.yell('error', gt('Your selected picture exceeds the maximum allowed file size of %1$s', strings.fileSize(settings.get('maxImageSize'), 2)));
-                    });
-                }
                 // may happen if a user first selects a picture and then when trying to choose a new one presses cancel
                 if (!file) return;
-                // reset cause otherwise we have to remember the original file for case (upload > crop view > cancel)
-                this.reset();
 
                 // no-edit: trigger onChangeFile
                 if (disableEditPicture) {
                     this.model.unset('pictureFileEdited', { silent: true });
                     return this.model.set('pictureFileEdited', file);
                 }
+
+                // reset cause otherwise we have to remember the original file for case (upload > crop view > cancel)
+                this.reset();
+
                 // edit: trigger proper change event
                 this.model.unset('pictureFile', { silent: true });
                 this.model.set('pictureFile', file);

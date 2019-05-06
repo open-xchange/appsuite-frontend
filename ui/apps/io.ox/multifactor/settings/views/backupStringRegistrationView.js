@@ -50,7 +50,7 @@ define('io.ox/multifactor/settings/views/backupStringRegistrationView', [
         })
         .build(function () {
         })
-        .addButton({ label: gt('OK'), action: 'OK' })
+        .addButton({ label: gt('Ok'), action: 'OK' })
         .addAlternativeButton({ label: gt('Download'), action: 'Download' })
         .addAlternativeButton({ label: gt('Print'), action: 'Print' })
         .on('OK', function () {
@@ -73,7 +73,7 @@ define('io.ox/multifactor/settings/views/backupStringRegistrationView', [
             index: INDEX += 100,
             id: 'header',
             render: function () {
-                var label = $('<p>').append('This is your recovery code.  Please write it down, print it, or save the file.  Be sure to save this in a secure location.')
+                var label = $('<p>').append(gt('This is your recovery code. Please write it down, print it, or save the file. Be sure to save this in a secure location.'))
                 .append('<br>');
                 this.$body.append(
                     label

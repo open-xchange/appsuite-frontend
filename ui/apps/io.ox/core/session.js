@@ -301,6 +301,7 @@ define('io.ox/core/session', [
         },
 
         redeemToken: function (token) {
+            console.warn('WARNING: Redeem-token is deprecated and will be remove in the near future.');
             return http.POST({
                 processResponse: false,
                 appendSession: false,

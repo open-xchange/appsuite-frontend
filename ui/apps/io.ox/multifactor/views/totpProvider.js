@@ -112,7 +112,7 @@ define('io.ox/multifactor/views/totpProvider', [
             id: 'help',
             render: function () {
                 var label = $('<p style="multifactor-help">')
-                .append(gt('You secured your account with 2-Step Verification.  Please enter the verification code from the Authenticator App.'))
+                .append(gt('You secured your account with 2-Step Verification. Please enter the verification code from the Authenticator App.'))
                 .append('<br>');
                 this.$body.append(
                     label

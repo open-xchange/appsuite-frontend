@@ -102,6 +102,11 @@ define('io.ox/help/main', ['io.ox/backbone/views/modal', 'gettext!io.ox/help', '
                 $('.io-ox-help-window').find('[data-action="minimize"]').focus();
             }
 
+            var activate = function () {
+                if (opt.modal) return;
+                this.getWindow().floating.activate();
+            }.bind(this);
+
             iframe.on('load', function () {
                 // mark the iframes html as embedded class and modal to override the styles in the help less files
                 var classesToAdd = opt.modal ? 'embedded in-modal' : 'embedded',
@@ -109,9 +114,10 @@ define('io.ox/help/main', ['io.ox/backbone/views/modal', 'gettext!io.ox/help', '
                     firstTabbable = contents.find('.navbar-nav > li > a:first'),
                     lastTabbable = contents.find('body a:last');
 
-                $.noop(lastTabbable);
                 contents.find('html')
                     .addClass(classesToAdd)
+                    // attach handler to bring the app to front when clicking into the iframe
+                    .on('mousedown', activate)
                     // remove brand link because this is most likely an empty link
                     .find('.navbar-brand').remove();
 
@@ -132,6 +138,7 @@ define('io.ox/help/main', ['io.ox/backbone/views/modal', 'gettext!io.ox/help', '
 
                 this.contentWindow.addEventListener('beforeunload', function () {
                     iframe.addClass('hidden');
+                    contents.find('html').off('mousedown', activate);
                     contents.find('body').off('keydown', onEscape);
                     firstTabbable.off('keydown', onShiftTab);
                     lastTabbable.off('keydown', onTab);
@@ -145,7 +152,12 @@ define('io.ox/help/main', ['io.ox/backbone/views/modal', 'gettext!io.ox/help', '
             if (opt.modal) return app.showModal(iframe);
             app.showFloatingWindow(iframe);
         });
-        app.launch();
+        app.launch().then(function () {
+            if (opt.modal) return;
+            // activate this app after launch to prevent it staying in background
+            // when opened from a modal inside another floating app
+            this.getWindow().floating.activate();
+        });
         return app;
     }
 

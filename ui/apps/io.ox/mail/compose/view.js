@@ -325,7 +325,7 @@ define('io.ox/mail/compose/view', [
                     return def;
                 },
                 getUrl: function (response) {
-                    return mailAPI.getUrl(_.extend({ space: self.model.get('id') }, response), 'view');
+                    return mailAPI.getUrl(_.extend({ space: self.model.get('id') }, response), 'view', { session: false });
                 }
             };
         }

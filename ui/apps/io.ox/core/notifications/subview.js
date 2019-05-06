@@ -87,9 +87,10 @@ define('io.ox/core/notifications/subview', [
                     });
                     // no cache here, or we might show reminders for deleted requests
                     api.getList(requestData, false).then(function (data) {
-                        for (i = 0; i < max && items[i]; i++) {
+                        for (i = 0; i < max && requestData[i]; i++) {
                             // some list requests return null for items that were deleted meanwhile (request doesn't fail so the other data can still be used). Dont show these
-                            if (data[i]) drawItem(data[i], items[i]);
+                            // also check if the models are still in our collection
+                            if (data[i] && view.collection.get(requestData[i])) drawItem(data[i], view.collection.get(requestData[i]));
                         }
                         itemNode.idle();
                     }, function () {

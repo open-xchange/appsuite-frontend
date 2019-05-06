@@ -13,11 +13,12 @@
 
 define('plugins/portal/files/register', [
     'io.ox/core/extensions',
+    'io.ox/backbone/views/actions/util',
     'io.ox/files/api',
     'io.ox/preview/main',
     'io.ox/portal/widgets',
     'gettext!plugins/portal'
-], function (ext, api, preview, portalWidgets, gt) {
+], function (ext, actionsUtil, api, preview, portalWidgets, gt) {
 
     'use strict';
 
@@ -107,8 +108,8 @@ define('plugins/portal/files/register', [
                     api.get(e.data.file).then(function (file) {
                         var model = api.pool.get('detail').get(_.cid(file));
                         var collection = new Backbone.Collection(model);
-                        var baton = new ext.Baton({ data: e.data.file, model: model, collection: collection });
-                        ext.point('io.ox/files/actions/viewer').invoke('action', this, baton);
+                        var baton = new ext.Baton({ data: e.data.file, model: model, all: collection });
+                        actionsUtil.invoke('io.ox/files/actions/viewer', baton);
                     });
                 });
 

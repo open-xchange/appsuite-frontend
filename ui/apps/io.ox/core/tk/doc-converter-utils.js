@@ -253,21 +253,20 @@ define('io.ox/core/tk/doc-converter-utils', [
             };
         } else if (model.isMailAttachment()) {
             // the Guard parameters for mail
-            file_options = (originalModel && originalModel.file_options);
-            file_options_params = file_options ? file_options.params : null;
+
+            file_options_params = model.get('file_options') ? model.get('file_options').params : null;
 
             params = {
                 id: originalModel.mail.id,
                 source: 'mail',
                 attached: model.get('id')
             };
-
-            if (model.isEncrypted()) {
+            // Office call, check for crypto data in model
+            if (model.isEncrypted() || (file_options_params && file_options_params.cryptoAuth)) {
                 params.decrypt = true;
                 params.cryptoAuth = file_options_params ? file_options_params.cryptoAuth : '';
                 params.cryptoAction = file_options_params ? file_options_params.cryptoAction : '';
-
-            } else {
+            } else { // Call for viewer, crypto info will be in originalModel
                 params.cryptoAuth = originalModel.auth ? originalModel.auth : '';
                 params.decrypt = Boolean(originalModel && originalModel.security && originalModel.security.decrypted);
             }

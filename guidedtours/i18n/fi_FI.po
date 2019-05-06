@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-11-05 16:01+0200\n"
+"PO-Revision-Date: 2019-04-18 11:49+0300\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -13,203 +13,18 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.0.5\n"
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Add another account"
-msgstr "Lisää uusi tili"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Adding attachments"
-msgstr "Liitteiden lisääminen"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Adding further details"
-msgstr "Muiden tietojen lisääminen"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"At the top you can find the toolbar with many functions and additional "
-"options. You can easily create new folders, new files and much more."
-msgstr ""
-"Monia toimintoja ja lisäoptioita sisältävä työkalupakki löytyy ylhäältä. "
-"Voit helposti luoda uusia kansioita, tiedostoja ja paljon muuta."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Choose from two alternatives to share your files and folders. Use Invite "
-"people if you want to manage access rights and allow recipients to create "
-"and edit files. Or just get a link to let others view and download your "
-"files. You can use an expiration date and password protection if you like."
-msgstr ""
-"Valitse tiedostojesi ja kansioidesi jakaminen kahdesta vaihtoehdosta. "
-"Valitse 'Kutsu osallistujia' jos haluat hallinnoida käyttöoikeuksia ja "
-"sallia vastaanottajien luoda ja muokata tiedostoja. Tai hanki linkki, jotta "
-"muut voivat katsella ja ladata tiedostosi. Voit halutessasi käyttää "
-"umpeutumisaikaa ja salasanasuojausta."
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"Click on a letter on the left side of the navigation bar in order to display "
-"the corresponding contacts from the selected address book."
-msgstr ""
-"Napsauta kirjainta vasemmasta reunasta näyttääksesi vastaavat yhteystiedot "
-"valitusta osoitekirjasta."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Clicking on a folder displays all the subfolders, documents, media and other "
-"files that it contains."
-msgstr ""
-"Saat kaikki kansion sisältämät alakansiot, asiakirjat, media- ja muut "
-"tiedostot näkyviin klikkaamalla kansiota."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Clicking on the view icon leads you to a preview of the selected file."
-msgstr "Klikkaamalla näkymäkuvaketta pääset valitun tiedoston esikatseluun."
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Closing a square"
-msgstr "Sovellusikkunan sulkeminen"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Collaborating"
-msgstr "Yhteistyöskentely"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
-msgstr "Uuden sähköpostin laatiminen"
-
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
 msgstr "Uuden tapaamisen luominen"
 
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Creating a new contact"
-msgstr "Uuden yhteystiedon luominen"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating a new task"
-msgstr "Uuden tehtävän luominen"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Creating new items"
-msgstr "Uusien kohteiden luonti"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create a new appointment, click on New in the toolbar."
+msgstr ""
+"Napsauta työkalupalkin Uusi tapaaminen kuvaketta uuden tapaamisen luomiseksi."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Creating recurring appointments"
-msgstr "Toistuvan tapaamisen luominen"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating recurring tasks"
-msgstr "Toistuvien tehtävien luominen"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Creating the appointment"
-msgstr "Tapaamisen luominen"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating the task"
-msgstr "Tehtävän luominen"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Customizing the Portal"
-msgstr "Mukauttaminen"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Depending on the app, the toolbar contains various functions for creating, "
-"editing and organizing objects."
-msgstr ""
-"Sovelluksesta riippuen, työkalupalkki sisältää erilaisia toimintoja "
-"kohteiden luomiseen, muokkaamiseen ja järjestelyyn."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Detailed instructions for the single apps are located in System menu > Help."
-msgstr ""
-"Yksittäisten sovellusten tarkemmat ohjeet löytyvät järjestelmävalikon "
-"kohdasta ohje."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Did you know that you can edit text documents and spreadsheets online? Drive "
-"will automatically update your edited file, but thanks to versioning the "
-"original file stays available."
-msgstr ""
-"Tiesitkö, että voit muokata tekstiasiakirjoja ja laskentataulukkoja "
-"verkossa? Drive päivittää muokatun tiedostosi automaattisesti, mutta "
-"versioinnin ansiosta alkuperäinenkin tiedosto säilyy käyttökelpoisena."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Different views are available. Just select the one you like best."
-msgstr "Eri näkymiä on saatavilla. Valitse mieluisesi."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Displaying the help or the settings"
-msgstr "Ohjeen tai asetusten katselu"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Drag and drop"
-msgstr "Siirrä ja tiputa"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Drive allows you to connect to other storage solutions if you already have a "
-"cloud storage account you use to save and sync your files. Simply click on "
-"the appropriate logo to access your existing data."
-msgstr ""
-"Drive sallii yhteyden muihin säilytysratkaisuihin jos sinulla on jo "
-"pilvisäilytystili tiedostojesi tallentamiseen ja synkronointiin. Klikkaa "
-"asianomaista logoa päästäksesi käyttämään olemassaolevia tietojasi."
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"Edit a setting on the right side. In most of the cases, the changes are "
-"activated immediately."
-msgstr "Muokkaa asetuksia oikealla. Useimmiten muutokset astuvat voimaan heti."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Edit documents"
-msgstr "Muokkaa asiakirjoja"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
-msgstr "Useamman sähköpostin muokkaus"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Editing multiple contacts"
-msgstr "Useamman yhteystiedon muokkaus"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Editing multiple tasks"
-msgstr "Useamman tehtävän muokkaus"
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Editing settings"
-msgstr "Asetusten muokkaaminen"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTML "
-"in the options, you can format the E-Mail text. To do so select a text part "
-"and then click an icon in the formatting bar."
-msgstr ""
-"Kirjoita sähköpostin teksti pääalueeseen. Jos tekstiformaatiksi on asetettu "
-"valikosta HTML, voit muotoilla sähköpostin tekstiä. Muotoile tekstiä "
-"valitsemalla osa tekstiä ja klikkaamalla kuvaketta muotoilupalkissa."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"Enter the recipient's name into the recipients field. As soon as you typed "
-"the first letters, suggestions from the address books are displayed. To "
-"accept a recipient suggestion, click on it."
-msgstr ""
-"Kirjoita vastaanottajan nimi vastaanottajakenttään. Kirjoitettuasi "
-"ensimmäiset kirjaimet saat näkyviin ehdotuksia osoitekirjasta. Hyväksy "
-"ehdotus napsauttamalla sitä."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Enter the subject into the subject field."
-msgstr "Kirjoita aihe aihekenttään."
+msgid "Entering the appointment's data"
+msgstr "Tapaamisen tietojen syöttäminen"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
@@ -219,245 +34,79 @@ msgstr ""
 "Syötä aihe sekä tapaamisen alku- ja loppupäivämäärä. Muut yksityiskohdat "
 "ovat vapaaehtoisia."
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Enter the subject, the start date, and a description."
-msgstr "Syötä aihe, alkamispäivämäärä ja kuvaus."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Entering billing information"
-msgstr "Laskutustietojen syöttäminen"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
-msgstr "Sähköpostin tekstin syöttäminen"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating recurring appointments"
+msgstr "Toistuvan tapaamisen luominen"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Entering the appointment's data"
-msgstr "Tapaamisen tietojen syöttäminen"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the recipient's name"
-msgstr "Vastaanottajan nimen syöttäminen"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the subject"
-msgstr "Aiheen syöttäminen"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Entering the task's data"
-msgstr "Tehtävän tietojen syöttäminen"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "File details"
-msgstr "Tiedoston yksityiskohdat"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Folder content"
-msgstr "Kansion sisältö"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Folder tree"
-msgstr "Kansiopuu"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"From preview you can also select other options to help you manage and work "
-"on your files."
+"To create recurring appointments, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
 msgstr ""
-"Esikatselusta voit valita myös muita vaihtoehtoja tiedostojesi hallintaan ja "
-"työstämiseen."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Further down you can add documents as attachments to the appointment."
-msgstr "Alempaa voit lisätä dokumentteja tapaamisen liitteiksi."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Further functions"
-msgstr "Muut toiminnot"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Further information"
-msgstr "Lisätietoja"
-
-#. Tour name; general introduction
-#: apps/io.ox/tours/main.js module:io.ox/tours
-msgid "Getting started"
-msgstr "Aluksi"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Halo view"
-msgstr "Leijuva näkymä"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Here you can share files with your colleagues and external contacts. You can "
-"also collaborate on a document and set different access rights."
-msgstr ""
-"Voit jakaa tiedostojasi kollegojesi ja ulkoisten kontaktiesi kanssa tätä "
-"kautta. Voit myös tehdä asiakirjayhteistyötä ja määrittää erilaisia "
-"käyttöoikeuksia."
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "How the settings are organized"
-msgstr "Asetusten järjestys"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
-"separate window."
-msgstr ""
-"Sähköpostin tuplaklikkaaminen listanäkymässä avaa sen erilliseen ikkunaan."
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "If you no longer want to display a square, click the delete icon."
-msgstr "Jos et halua neliön näkyvän, napsauta poistokuvaketta."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"In order to edit multiple E-Mails at once, enable the checkboxes on the left "
-"side of the E-Mails. If the checkboxes are not displayed, click on View > "
-"Checkboxes on the right side of the toolbar."
-msgstr ""
-"Useamman sähköpostin muokkaamiseksi, aktivoi valintaruudut sähköpostien "
-"vasemmalla puolella. Mikäli valintaruudut eivät näy, napsauta Näytä > "
-"Valintaruudut työkalupalkin oikeasta reunasta."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"In this area you can find further functions, e.g. for adding attachments."
-msgstr "Täältä löydät lisää toimintoja esim. liitteiden lisäämiseksi."
+"Luodaksesi toistuva tapaaminen, valitse Toista. Näytetään toiminnot "
+"toistumisen määrittelemiseen."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr "Muiden osallistujien kutsuminen"
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Launching an app"
-msgstr "Sovelluksen käynnistäminen"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Navigation bar"
-msgstr "Navigointipalkki"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
-"On the left you can see the folder tree. It displays your folder structure "
-"and allows you to navigate to specific folders and subfolders. To make your "
-"life easier, we have already included folders for your Documents, Music, "
-"Pictures and Videos."
+"To invite other participants, enter their names in the field below "
+"Participants. To avoid appointment conflicts, click on Find a free time at "
+"the upper right side."
 msgstr ""
-"Vasemmalla näet kansiopuun. Se näyttää kansiorakenteesi ja sen avulla voit "
-"navigoida yksittäisiin kansioihin ja alikansioihin. Helpottaakseni elämääsi "
-"olemme jo tehneet sinulle kansiot asiakirjoja, musiikkia, kuvia ja videoita "
-"varten."
+"Muita osallistujia kutsuaksesi, syötä heidän nimensä kenttään Osallistujat "
+"osiossa. Välttääksesi päällekkäisiä tapaamisia, napsauta oikealta Löydä "
+"vapaa aika."
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
-msgstr "Sähköpostin avaaminen erilliseen ikkunaan"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Muistutustoiminnon käyttäminen"
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Opening or closing the folder tree"
-msgstr "Kansiopuun avaaminen ja sulkeminen"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "Jottet unohtaisi tapaamista, käytä muistutustoimintoa."
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
-msgstr "Sähköpostiasetusten avaaminen"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Adding attachments"
+msgstr "Liitteiden lisääminen"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Opening the help"
-msgstr "Ohjeen avaaminen"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Further down you can add documents as attachments to the appointment."
+msgstr "Alempaa voit lisätä dokumentteja tapaamisen liitteiksi."
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Opening the settings"
-msgstr "Asetusten avaaminen"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating the appointment"
+msgstr "Tapaamisen luominen"
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Preview files"
-msgstr "Tiedostojen esikatselu"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Preview mode"
-msgstr "Esikatselu"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
-msgstr "Sähköpostikeskustelun lukeminen"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Reading the details"
-msgstr "Yksityiskohtien katselu"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Searching for objects"
-msgstr "Kohteiden etsiminen"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Select a view"
-msgstr "Näkymän valitseminen"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create the appointment, click on Create at the lower left side."
+msgstr "Napsauta Luo vasemmassa alakulmassa luodaksesi tapaamisen."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
 msgid "Selecting a view"
 msgstr "Näkymän valitseminen"
 
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
-msgstr "Sähköpostin lähettäminen yhteystietoa käyttäen"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
-msgstr "Sähköpostin lähettäminen"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Share files"
-msgstr "Jaa tiedostoja"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
-"Sharing files by inviting people does not only offer your recipients the "
-"option to create and edit files. Internal and external participants are also "
-"able to collaborate with you on text documents and spreadsheets at the same "
-"time."
+"To select one of the views like Day, Month or List, click on View in the "
+"toolbar. Select a menu entry from the Layout section."
 msgstr ""
-"Tiedostojen jakaminen kutsumalla osallistujia ei ainoastaan tarjoa "
-"vastaanottajille mahdollisuutta luoda ja muokata tiedostoja. Sisäiset ja "
-"ulkoiset osallistujat voivat myös tehdä yhteistyötä kanssasi "
-"tekstitiedostojen ja taulukko-ohjelmien kanssa samanaikaisesti."
+"Valitse näkymä napsauttamalla työkalupalkin Näytä-kuvaketta. Valitse näkymä "
+"sommitteluosiosta. Näkymiä ovat esimerkiksi päivä, kuukausi ja listanäkymä."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Sharing options"
-msgstr "Jakamisvaihtoehdot"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "The calendar views"
+msgstr "Kalenterinäkymät"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Signing out"
-msgstr "Uloskirjautuminen"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Sorting tasks"
-msgstr "Tehtävien lajittelu"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
-msgstr "Sähköpostien lajittelu"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The Detail view"
-msgstr "Tarkastelunäkymä"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
-"The Detail view displays an object's content. Depending on the app, further "
-"functions for organizing objects can be found in the Detail view."
+"The calendar views display a calendar sheet with the appointments for the "
+"selected time range."
 msgstr ""
-"Tarkastelunäkymässä näytetään kohteen sisältö. Sovelluksesta riippuen, "
-"tarkastelunäkymä sisältää lisää toimintoja kohteen käsittelemiseen."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "The Drive app"
-msgstr "Drive App"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "The Drive app tour.txt"
-msgstr "Drive App tour.txt"
+"Kalenterinäkymät näyttävät tapaamiset valitulta aikaväliltä "
+"kalenterimuodossa."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The List view"
@@ -473,6 +122,584 @@ msgstr ""
 "tapaamista listassa, tapaamisen tiedot ja joitakin toimintoja näytetään "
 "tarkastelunäkymässä."
 
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Creating a new contact"
+msgstr "Uuden yhteystiedon luominen"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "To create a new contact, click on New > Add contact in the toolbar."
+msgstr ""
+"Luodaksesi uuden yhteystiedon napsauta työkalupalkista Uusi > Lisää "
+"yhteystieto."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Navigation bar"
+msgstr "Navigointipalkki"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"Click on a letter on the left side of the navigation bar in order to display "
+"the corresponding contacts from the selected address book."
+msgstr ""
+"Napsauta kirjainta vasemmasta reunasta näyttääksesi vastaavat yhteystiedot "
+"valitusta osoitekirjasta."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Sending an E-Mail to a contact"
+msgstr "Sähköpostin lähettäminen yhteystietoa käyttäen"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"To send an E-Mail to the contact, click on an E-Mail address or on Send "
+"email in the toolbar."
+msgstr ""
+"Lähettääksesi sähköpostin käyttäen yhteystietoa, napsauta "
+"sähköpostiosoitetta tai työkalupalkista Lähetä sähköposti."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Editing multiple contacts"
+msgstr "Useamman yhteystiedon muokkaus"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"To edit multiple contacts at once, enable the checkboxes on the left side of "
+"the contacts. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"Useamman yhteystiedon muokkaamiseksi, aktivoi valintaruudut yhteystietojen "
+"vasemmalla puolella. Jos valintaruudut eivät näy, napsauta Näytä > "
+"Valintaruudut työkalupalkin oikeasta reunasta."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app"
+msgstr "Drive App"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
+msgstr ""
+"Tervetuloa pilvipalvelusovellukseesi. Tämä opastus esittelee sinulle uuden "
+"online-tallennusratkaisun - yhden reitin kaikilta tileiltäsi verkkoon "
+"tallennettuihin tiedostoihin. Tässä voit ladata, tallentaa ja jakaa "
+"tiedostojasi sekä synkronoida ne muiden laitteidesi kanssa. "
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder tree"
+msgstr "Kansiopuu"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
+msgstr ""
+"Vasemmalla näet kansiopuun. Se näyttää kansiorakenteesi ja sen avulla voit "
+"navigoida yksittäisiin kansioihin ja alikansioihin. Helpottaakseni elämääsi "
+"olemme jo tehneet sinulle kansiot asiakirjoja, musiikkia, kuvia ja videoita "
+"varten."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder content"
+msgstr "Kansion sisältö"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+"Saat kaikki kansion sisältämät alakansiot, asiakirjat, media- ja muut "
+"tiedostot näkyviin klikkaamalla kansiota."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Select a view"
+msgstr "Näkymän valitseminen"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Different views are available. Just select the one you like best."
+msgstr "Eri näkymiä on saatavilla. Valitse mieluisesi."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Toolbar"
+msgstr "Työkalupalkki"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"At the top you can find the toolbar with many functions and additional "
+"options. You can easily create new folders, new files and much more."
+msgstr ""
+"Monia toimintoja ja lisäoptioita sisältävä työkalupakki löytyy ylhäältä. "
+"Voit helposti luoda uusia kansioita, tiedostoja ja paljon muuta."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Upload a new file"
+msgstr "Lataa uusi tiedosto"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"To upload a new file from your local device, simply click on Add local file "
+"and select the file you would like to upload. It is even easier if you just "
+"drag and drop files from your local device into Drive. The uploaded file is "
+"now available in Drive on all your devices."
+msgstr ""
+"Ladataksesi uuden tiedoston paikalliselta laitteeltasi klikkaa 'Lisää "
+"paikallinen tiedosto' ja valitse tiedosto, jonka haluat ladata. On vieläkin "
+"helpompaa vetää ja pudottaa tiedostoja paikalliselta laitteeltasi Drivelle. "
+"Ladattu tiedosto on nyt saatavilla Drivellä kaikilla laitteillasi."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview files"
+msgstr "Tiedostojen esikatselu"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr "Klikkaamalla näkymäkuvaketta pääset valitun tiedoston esikatseluun."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview mode"
+msgstr "Esikatselu"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"From preview you can also select other options to help you manage and work "
+"on your files."
+msgstr ""
+"Esikatselusta voit valita myös muita vaihtoehtoja tiedostojesi hallintaan ja "
+"työstämiseen."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Share files"
+msgstr "Jaa tiedostoja"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
+msgstr ""
+"Voit jakaa tiedostojasi kollegojesi ja ulkoisten kontaktiesi kanssa tätä "
+"kautta. Voit myös tehdä asiakirjayhteistyötä ja määrittää erilaisia "
+"käyttöoikeuksia."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Sharing options"
+msgstr "Jakamisvaihtoehdot"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Choose from two alternatives to share your files and folders. Use Invite "
+"people if you want to manage access rights and allow recipients to create "
+"and edit files. Or just get a link to let others view and download your "
+"files. You can use an expiration date and password protection if you like."
+msgstr ""
+"Valitse tiedostojesi ja kansioidesi jakaminen kahdesta vaihtoehdosta. "
+"Valitse 'Kutsu osallistujia' jos haluat hallinnoida käyttöoikeuksia ja "
+"sallia vastaanottajien luoda ja muokata tiedostoja. Tai hanki linkki, jotta "
+"muut voivat katsella ja ladata tiedostosi. Voit halutessasi käyttää "
+"umpeutumisaikaa ja salasanasuojausta."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Collaborating"
+msgstr "Yhteistyöskentely"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
+msgstr ""
+"Tiedostojen jakaminen kutsumalla osallistujia ei ainoastaan tarjoa "
+"vastaanottajille mahdollisuutta luoda ja muokata tiedostoja. Sisäiset ja "
+"ulkoiset osallistujat voivat myös tehdä yhteistyötä kanssasi "
+"tekstitiedostojen ja taulukko-ohjelmien kanssa samanaikaisesti."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Edit documents"
+msgstr "Muokkaa asiakirjoja"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Did you know that you can edit text documents and spreadsheets online? Drive "
+"will automatically update your edited file, but thanks to versioning the "
+"original file stays available."
+msgstr ""
+"Tiesitkö, että voit muokata tekstiasiakirjoja ja laskentataulukkoja "
+"verkossa? Drive päivittää muokatun tiedostosi automaattisesti, mutta "
+"versioinnin ansiosta alkuperäinenkin tiedosto säilyy käyttökelpoisena."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "File details"
+msgstr "Tiedoston yksityiskohdat"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
+msgstr ""
+"Tiedostoa koskeva sivupalkki tarjoaa lisätietoa tiedostoistasi. Kytke "
+"Tiedostotiedot päälle Näkymän pudotusvalikosta ja valitse tiedosto "
+"nähdäksesi sen tiedot."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Add another account"
+msgstr "Lisää uusi tili"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Drive allows you to connect to other storage solutions if you already have a "
+"cloud storage account you use to save and sync your files. Simply click on "
+"the appropriate logo to access your existing data."
+msgstr ""
+"Drive sallii yhteyden muihin säilytysratkaisuihin jos sinulla on jo "
+"pilvisäilytystili tiedostojesi tallentamiseen ja synkronointiin. Klikkaa "
+"asianomaista logoa päästäksesi käyttämään olemassaolevia tietojasi."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app tour.txt"
+msgstr "Drive App tour.txt"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Welcome to %s"
+msgstr "Tervetuloa %s järjestelmään"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"This guided tour will briefly introduce you to the product. Get more "
+"detailed information in the tours for the single apps or in the online help."
+msgstr ""
+"Tämä ohjattu esittely perehdyttää sinut pikaisesti tuotteeseen. Tarkempaa "
+"tietoa saat yksittäisten sovellusten esittelyistä ja ohjetoiminnosta."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Launching an app"
+msgstr "Sovelluksen käynnistäminen"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To launch an app click on an entry inside the app launcher menu."
+msgstr ""
+"Sovelluksen käynnistämiseksi napsauta sovelluksen käynnistysvalikon sisällä "
+"olevaa merkintää."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Displaying the help or the settings"
+msgstr "Ohjeen tai asetusten katselu"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"To display the help or the settings, click the System menu icon in the menu "
+"bar."
+msgstr ""
+"Ohjeen tai asetusten näyttämiseksi, napsauta järjestelmävalikon kuvaketta "
+"valikkopalkissa."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Creating new items"
+msgstr "Uusien kohteiden luonti"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgstr ""
+"Luodaksesi uuden sähköpostin, napsauta yläreunan Uusi viesti kuvaketta."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Opening or closing the folder tree"
+msgstr "Kansiopuun avaaminen ja sulkeminen"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"To open or close the folder tree, click on View >  Folder view on the right "
+"side of the toolbar."
+msgstr ""
+"Avataksesi tai sulkeaksesi kansiopuun, napsauta Näytä > Kansionäkymä "
+"työkalupalkin oikeasta reunasta."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Searching for objects"
+msgstr "Kohteiden etsiminen"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To search for objects, click the Search icon in the menu bar."
+msgstr "Etsiäksesi kohteita, napsauta valikkopalkin hakuakuvaketta."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The toolbar"
+msgstr "Työkalupalkki"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Depending on the app, the toolbar contains various functions for creating, "
+"editing and organizing objects."
+msgstr ""
+"Sovelluksesta riippuen, työkalupalkki sisältää erilaisia toimintoja "
+"kohteiden luomiseen, muokkaamiseen ja järjestelyyn."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The folder tree"
+msgstr "Kansiopuu"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Use the folder tree to open the folder containing the objects that you want "
+"to view in the list."
+msgstr ""
+"Avaa kansiopuusta kansio, jonka kohteita haluat tarkastella listanäkymässä."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The list"
+msgstr "Lista"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Use the list to select an object, show its contents or activate functions."
+msgstr ""
+"Valitse laitanäkymästä kohde jota haluat katsella tai johon haluat kohdentaa "
+"toimintoja."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The Detail view"
+msgstr "Tarkastelunäkymä"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"The Detail view displays an object's content. Depending on the app, further "
+"functions for organizing objects can be found in the Detail view."
+msgstr ""
+"Tarkastelunäkymässä näytetään kohteen sisältö. Sovelluksesta riippuen, "
+"tarkastelunäkymä sisältää lisää toimintoja kohteen käsittelemiseen."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Further information"
+msgstr "Lisätietoja"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Detailed instructions for the single apps are located in System menu > Help."
+msgstr ""
+"Yksittäisten sovellusten tarkemmat ohjeet löytyvät järjestelmävalikon "
+"kohdasta ohje."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Composing a new E-Mail"
+msgstr "Uuden sähköpostin laatiminen"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgstr ""
+"Uuden sähköpostin laatimiseksi, napsauta työkalupalkin Uusi viesti kuvaketta."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the recipient's name"
+msgstr "Vastaanottajan nimen syöttäminen"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"Enter the recipient's name into the recipients field. As soon as you typed "
+"the first letters, suggestions from the address books are displayed. To "
+"accept a recipient suggestion, click on it."
+msgstr ""
+"Kirjoita vastaanottajan nimi vastaanottajakenttään. Kirjoitettuasi "
+"ensimmäiset kirjaimet saat näkyviin ehdotuksia osoitekirjasta. Hyväksy "
+"ehdotus napsauttamalla sitä."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the subject"
+msgstr "Aiheen syöttäminen"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Enter the subject into the subject field."
+msgstr "Kirjoita aihe aihekenttään."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Further functions"
+msgstr "Muut toiminnot"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"In this area you can find further functions, e.g. for adding attachments."
+msgstr "Täältä löydät lisää toimintoja esim. liitteiden lisäämiseksi."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the E-Mail text"
+msgstr "Sähköpostin tekstin syöttäminen"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
+"in the options, you can format the E-Mail text. To do so select a text part "
+"and then click an icon in the formatting bar."
+msgstr ""
+"Kirjoita sähköpostin teksti pääalueeseen. Jos tekstiformaatiksi on asetettu "
+"valikosta HTML, voit muotoilla sähköpostin tekstiä. Muotoile tekstiä "
+"valitsemalla osa tekstiä ja klikkaamalla kuvaketta muotoilupalkissa."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sending the E-Mail"
+msgstr "Sähköpostin lähettäminen"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To send the E-Mail, click on Send"
+msgstr "Lähetä sähköposti napsauttamalla Lähetä"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sorting your E-Mails"
+msgstr "Sähköpostien lajittelu"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgstr "Lajitellaksesi viestejä, napsauta lajittele. Valitse lajitteluperuste."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To choose between the different views. click on View in the toolbar. Select "
+"a menu entry in the layout."
+msgstr ""
+"Valitse näkymä painamalla työkalupalkin silmäkuvaketta. Valitse haluamasi "
+"näkymä."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Opening an E-Mail in a separate window"
+msgstr "Sähköpostin avaaminen erilliseen ikkunaan"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+"separate window."
+msgstr ""
+"Sähköpostin tuplaklikkaaminen listanäkymässä avaa sen erilliseen ikkunaan."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Reading E-Mail conversations"
+msgstr "Sähköpostikeskustelun lukeminen"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open or close an E-Mail in a conversation, click on a free area in the "
+"header."
+msgstr ""
+"Keskustelun viestin avataksesi tai sulkeaksesi, paina tyhjää kohtaa "
+"otsakkeesta."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Halo view"
+msgstr "Leijuva näkymä"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To receive information about the sender or other recipients, open the Halo "
+"view by clicking on a name."
+msgstr ""
+"Nähdäksesi tietoa lähettäjästä tai muista vastaanottajista, avaa leijuva "
+"näkymä napsauttamalla nimeä."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Editing multiple E-Mails"
+msgstr "Useamman sähköpostin muokkaus"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"In order to edit multiple E-Mails at once, enable the checkboxes on the left "
+"side of the E-Mails. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"Useamman sähköpostin muokkaamiseksi, aktivoi valintaruudut sähköpostien "
+"vasemmalla puolella. Mikäli valintaruudut eivät näy, napsauta Näytä > "
+"Valintaruudut työkalupalkin oikeasta reunasta."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Opening the E-Mail settings"
+msgstr "Sähköpostiasetusten avaaminen"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the E-Mail settings, click the System menu icon on the upper right "
+"side of the menu bar. Select Settings. Click on E-Mail on the left side."
+msgstr ""
+"Avaa sähköpostiasetukset napsauttamalla järjestelmävalikon kuvaketta "
+"valikkopalkin oikeassa yläreunassa. Valitse Asetukset. Napsauta Sähköposti "
+"vasemmalla."
+
+#. Tour name; general introduction
+#: apps/io.ox/tours/main.js module:io.ox/tours
+msgid "Getting started"
+msgstr "Aluksi"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr "Toinen tekijän todennus"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Voit nyt lisätä lisää varmennusvaihtoehtoja tilisi turvallisuuden "
+"parantamiseksi."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "Vahvistusvaihtoehdon lisääminen"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr "Erilaiset lisävahvistusvaihtoehdot riippuvat asennuksesta."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "Koodin lisääminen tekstiviestillä"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr ""
+"Jos valitset esimerkiksi tekstiviestin avulla lähetettävän koodin, sinulta "
+"kysytään puhelinnumeroa."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "Todennuspyynnöt"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr ""
+"Kirjautuessasi sisään seuraavan kerran, sinun on todistettava "
+"henkilöllisyytesi antamalla puhelimeesi lähetetty numero."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "Poistetaan"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr "Lisätyt laitteet voidaan poistaa. Katso lisätietoja lisäohjeista."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "Seuraava"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+"Lisäturvaominaisuutena voit nyt vaatia toisen tunnistustavan, kuten "
+"tekstiviestin, ennen kuin kirjaudut sisään tilillesi. Haluatko lisää tietoa "
+"aiheesta?"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr "Aloita opastus"
+
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "Portaali"
@@ -485,59 +712,19 @@ msgstr ""
 "Portaali ilmoittaa sinulle ajankohtaisista sähköposteista, tapaamisista ja "
 "some-uutisista."
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "The calendar views"
-msgstr "Kalenterinäkymät"
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Reading the details"
+msgstr "Yksityiskohtien katselu"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"The calendar views display a calendar sheet with the appointments for the "
-"selected time range."
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "To read the details, click on an entry in a square."
 msgstr ""
-"Kalenterinäkymät näyttävät tapaamiset valitulta aikaväliltä "
-"kalenterimuodossa."
+"Nähdäksesi yksityiskohtaiset tiedot, napsauta kyseistä kohtaa "
+"sovellusikkunassa."
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"The file details side bar offers additional information about your files. "
-"Just enable the File details option from the View drop down menu and select "
-"a file to see the details."
-msgstr ""
-"Tiedostoa koskeva sivupalkki tarjoaa lisätietoa tiedostoistasi. Kytke "
-"Tiedostotiedot päälle Näkymän pudotusvalikosta ja valitse tiedosto "
-"nähdäksesi sen tiedot."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The folder tree"
-msgstr "Kansiopuu"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The list"
-msgstr "Lista"
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"The settings are organized in topics. Select the topic on the left side, e.g "
-"Basic settings or E-Mail."
-msgstr ""
-"Asetukset on järjestetty aiheittain. Valitse aihe vasemmalta, esim. "
-"Perusasetukset tai Sähköposti."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The toolbar"
-msgstr "Työkalupalkki"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"This guided tour will briefly introduce you to the product. Get more "
-"detailed information in the tours for the single apps or in the online help."
-msgstr ""
-"Tämä ohjattu esittely perehdyttää sinut pikaisesti tuotteeseen. Tarkempaa "
-"tietoa saat yksittäisten sovellusten esittelyistä ja ohjetoiminnosta."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To add further details, click on Expand form."
-msgstr "Lisätäksei muita yksityiskohtia, napsauta Laajenna lomake."
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Drag and drop"
+msgstr "Siirrä ja tiputa"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid ""
@@ -547,63 +734,17 @@ msgstr ""
 "Muuttaaksesi sovellusikkunoiden sijaintia, siirrä ikkuna otsikosta "
 "raahaamalla toiseen kohtaan ja tiputa se siihen."
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To choose between the different views. click on View in the toolbar. Select "
-"a menu entry in the layout."
-msgstr ""
-"Valitse näkymä painamalla työkalupalkin silmäkuvaketta. Valitse haluamasi "
-"näkymä."
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Closing a square"
+msgstr "Sovellusikkunan sulkeminen"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
-msgstr ""
-"Uuden sähköpostin laatimiseksi, napsauta työkalupalkin Uusi viesti kuvaketta."
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr "Jos et halua neliön näkyvän, napsauta poistokuvaketta."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
-msgstr ""
-"Luodaksesi uuden sähköpostin, napsauta yläreunan Uusi viesti kuvaketta."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr ""
-"Napsauta työkalupalkin Uusi tapaaminen kuvaketta uuden tapaamisen luomiseksi."
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "To create a new contact, click on New > Add contact in the toolbar."
-msgstr ""
-"Luodaksesi uuden yhteystiedon napsauta työkalupalkista Uusi > Lisää "
-"yhteystieto."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr ""
-"Luodaksesi uusi tehtävä, napsauta työkalupalkista Uusi > Luo uusi tehtävä."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"To create recurring appointments, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
-msgstr ""
-"Luodaksesi toistuva tapaaminen, valitse Toista. Näytetään toiminnot "
-"toistumisen määrittelemiseen."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid ""
-"To create recurring tasks, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
-msgstr ""
-"Luodaksesi toistuva tehtävä, valitse Toista. Näytetään toiminnot toistumisen "
-"määrittelemiseen."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create the appointment, click on Create at the lower left side."
-msgstr "Napsauta Luo vasemmassa alakulmassa luodaksesi tapaamisen."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create the task, click on Create."
-msgstr "Luo tehtävä napsauttamalla Luo."
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Customizing the Portal"
+msgstr "Mukauttaminen"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid ""
@@ -613,94 +754,43 @@ msgstr ""
 "Avataksesi sovellusikkunan uudelleen tai lisätäksesi muita tietolähteitä, "
 "napsauta Mukauta tätä sivua."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the settings"
+msgstr "Asetusten avaaminen"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To display the help or the settings, click the System menu icon in the menu "
-"bar."
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
 msgstr ""
-"Ohjeen tai asetusten näyttämiseksi, napsauta järjestelmävalikon kuvaketta "
-"valikkopalkissa."
+"Avaa asetukset klikkaamalla käyttäjäkuvaa valintapalkin oikeassa yläosassa. "
+"Valitse Asetukset."
 
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "How the settings are organized"
+msgstr "Asetusten järjestys"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To edit multiple contacts at once, enable the checkboxes on the left side of "
-"the contacts. If the checkboxes are not displayed, click on View > "
-"Checkboxes on the right side of the toolbar."
+"The settings are organized in topics. Select the topic on the left side, e.g "
+"Basic settings or E-Mail."
 msgstr ""
-"Useamman yhteystiedon muokkaamiseksi, aktivoi valintaruudut yhteystietojen "
-"vasemmalla puolella. Jos valintaruudut eivät näy, napsauta Näytä > "
-"Valintaruudut työkalupalkin oikeasta reunasta."
+"Asetukset on järjestetty aiheittain. Valitse aihe vasemmalta, esim. "
+"Perusasetukset tai Sähköposti."
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Editing settings"
+msgstr "Asetusten muokkaaminen"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To edit multiple tasks at once, enable the checkboxes at the left side of "
-"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
-"on the right side of the toolbar."
-msgstr ""
-"Useamman tehtävän muokkaamiseksi, aktivoi valintaruutuja tehtävien "
-"vasemmalla puolella. Jos valintaruudut eivät näy, napsauta Näytä > "
-"Valintaruudut työkalupalkin oikeasta reunasta."
+"Edit a setting on the right side. In most of the cases, the changes are "
+"activated immediately."
+msgstr "Muokkaa asetuksia oikealla. Useimmiten muutokset astuvat voimaan heti."
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To enter billing information, click on Show details."
-msgstr "Lisätäksesi laskutustietoja, napsauta Näytä yksityiskohdat."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. To avoid appointment conflicts, click on Find a free time at "
-"the upper right side."
-msgstr ""
-"Muita osallistujia kutsuaksesi, syötä heidän nimensä kenttään Osallistujat "
-"osiossa. Välttääksesi päällekkäisiä tapaamisia, napsauta oikealta Löydä "
-"vapaa aika."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. You can add documents as attachment to the task."
-msgstr ""
-"Muita osallistujia kutsuaksesi, syötä heidän nimensä kenttään Osallistujat "
-"osiossa. Voit lisätä asiakirjoja tehtävän liitteiksi."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app click on an entry inside the app launcher menu."
-msgstr ""
-"Sovelluksen käynnistämiseksi napsauta sovelluksen käynnistysvalikon sisällä "
-"olevaa merkintää."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Jottet unohtaisi tapaamista, käytä muistutustoimintoa."
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To not miss the task, use the reminder function."
-msgstr "Jottet unohda tehtävää, käytä muistutustoimintoa."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To open or close an E-Mail in a conversation, click on a free area in the "
-"header."
-msgstr ""
-"Keskustelun viestin avataksesi tai sulkeaksesi, paina tyhjää kohtaa "
-"otsakkeesta."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To open or close the folder tree, click on View >  Folder view on the right "
-"side of the toolbar."
-msgstr ""
-"Avataksesi tai sulkeaksesi kansiopuun, napsauta Näytä > Kansionäkymä "
-"työkalupalkin oikeasta reunasta."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To open the E-Mail settings, click the System menu icon on the upper right "
-"side of the menu bar. Select Settings. Click on E-Mail on the left side."
-msgstr ""
-"Avaa sähköpostiasetukset napsauttamalla järjestelmävalikon kuvaketta "
-"valikkopalkin oikeassa yläreunassa. Valitse Asetukset. Napsauta Sähköposti "
-"vasemmalla."
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the help"
+msgstr "Ohjeen avaaminen"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -715,50 +805,8 @@ msgstr ""
 "sisällysluetteloa ikkunan yläosassa."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"To open the settings, click the user image on the upper right side of the "
-"menu bar. Select Settings."
-msgstr ""
-"Avaa asetukset klikkaamalla käyttäjäkuvaa valintapalkin oikeassa yläosassa. "
-"Valitse Asetukset."
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "To read the details, click on an entry in a square."
-msgstr ""
-"Nähdäksesi yksityiskohtaiset tiedot, napsauta kyseistä kohtaa "
-"sovellusikkunassa."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To receive information about the sender or other recipients, open the Halo "
-"view by clicking on a name."
-msgstr ""
-"Nähdäksesi tietoa lähettäjästä tai muista vastaanottajista, avaa leijuva "
-"näkymä napsauttamalla nimeä."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To search for objects, click the Search icon in the menu bar."
-msgstr "Etsiäksesi kohteita, napsauta valikkopalkin hakuakuvaketta."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"To select one of the views like Day, Month or List, click on View in the "
-"toolbar. Select a menu entry from the Layout section."
-msgstr ""
-"Valitse näkymä napsauttamalla työkalupalkin Näytä-kuvaketta. Valitse näkymä "
-"sommitteluosiosta. Näkymiä ovat esimerkiksi päivä, kuukausi ja listanäkymä."
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"To send an E-Mail to the contact, click on an E-Mail address or on Send "
-"email in the toolbar."
-msgstr ""
-"Lähettääksesi sähköpostin käyttäen yhteystietoa, napsauta "
-"sähköpostiosoitetta tai työkalupalkista Lähetä sähköposti."
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
-msgstr "Lähetä sähköposti napsauttamalla Lähetä"
+msgid "Signing out"
+msgstr "Uloskirjautuminen"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -775,75 +823,100 @@ msgstr ""
 "Kirjaudu ulos klikkaamalla uloskirjautumiskuvaketta valintapalkin oikeassa "
 "yläreunassa."
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
-msgstr "Lajitellaksesi viestejä, napsauta lajittele. Valitse lajitteluperuste."
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating a new task"
+msgstr "Uuden tehtävän luominen"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create a new task, click on New in the toolbar."
+msgstr ""
+"Luodaksesi uusi tehtävä, napsauta työkalupalkista Uusi > Luo uusi tehtävä."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering the task's data"
+msgstr "Tehtävän tietojen syöttäminen"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Enter the subject, the start date, and a description."
+msgstr "Syötä aihe, alkamispäivämäärä ja kuvaus."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Adding further details"
+msgstr "Muiden tietojen lisääminen"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To add further details, click on Expand form."
+msgstr "Lisätäksei muita yksityiskohtia, napsauta Laajenna lomake."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating recurring tasks"
+msgstr "Toistuvien tehtävien luominen"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To create recurring tasks, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"Luodaksesi toistuva tehtävä, valitse Toista. Näytetään toiminnot toistumisen "
+"määrittelemiseen."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To not miss the task, use the reminder function."
+msgstr "Jottet unohda tehtävää, käytä muistutustoimintoa."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Tracking the editing status"
+msgstr "Muokkaustilanteen seuraaminen"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To track the editing status, enter the current progress."
+msgstr "Seurataksesi muokkaustilannetta, syötä tämänhetkinen edistyminen."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. You can add documents as attachment to the task."
+msgstr ""
+"Muita osallistujia kutsuaksesi, syötä heidän nimensä kenttään Osallistujat "
+"osiossa. Voit lisätä asiakirjoja tehtävän liitteiksi."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering billing information"
+msgstr "Laskutustietojen syöttäminen"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To enter billing information, click on Show details."
+msgstr "Lisätäksesi laskutustietoja, napsauta Näytä yksityiskohdat."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating the task"
+msgstr "Tehtävän luominen"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create the task, click on Create."
+msgstr "Luo tehtävä napsauttamalla Luo."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Sorting tasks"
+msgstr "Tehtävien lajittelu"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To sort the tasks, click on Sort by. Select a sort criteria."
 msgstr "Lajitellaksesi tehtäviä napsauta Lajittele. Valitse lajitteluperuste."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To track the editing status, enter the current progress."
-msgstr "Seurataksesi muokkaustilannetta, syötä tämänhetkinen edistyminen."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
-msgstr ""
-"Ladataksesi uuden tiedoston paikalliselta laitteeltasi klikkaa 'Lisää "
-"paikallinen tiedosto' ja valitse tiedosto, jonka haluat ladata. On vieläkin "
-"helpompaa vetää ja pudottaa tiedostoja paikalliselta laitteeltasi Drivelle. "
-"Ladattu tiedosto on nyt saatavilla Drivellä kaikilla laitteillasi."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Toolbar"
-msgstr "Työkalupalkki"
+msgid "Editing multiple tasks"
+msgstr "Useamman tehtävän muokkaus"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Tracking the editing status"
-msgstr "Muokkaustilanteen seuraaminen"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Upload a new file"
-msgstr "Lataa uusi tiedosto"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"Use the folder tree to open the folder containing the objects that you want "
-"to view in the list."
+"To edit multiple tasks at once, enable the checkboxes at the left side of "
+"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
+"on the right side of the toolbar."
 msgstr ""
-"Avaa kansiopuusta kansio, jonka kohteita haluat tarkastella listanäkymässä."
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Use the list to select an object, show its contents or activate functions."
-msgstr ""
-"Valitse laitanäkymästä kohde jota haluat katsella tai johon haluat kohdentaa "
-"toimintoja."
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Muistutustoiminnon käyttäminen"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Welcome to %s"
-msgstr "Tervetuloa %s järjestelmään"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Welcome to your cloud storage app. This Guided Tour will introduce you to "
-"your new online storage solution - your one point to access online stored "
-"files from all your accounts. This is where you can upload and save your "
-"files, share them and synchronize them with different devices.  "
-msgstr ""
-"Tervetuloa pilvipalvelusovellukseesi. Tämä opastus esittelee sinulle uuden "
-"online-tallennusratkaisun - yhden reitin kaikilta tileiltäsi verkkoon "
-"tallennettuihin tiedostoihin. Tässä voit ladata, tallentaa ja jakaa "
-"tiedostojasi sekä synkronoida ne muiden laitteidesi kanssa. "
+"Useamman tehtävän muokkaamiseksi, aktivoi valintaruutuja tehtävien "
+"vasemmalla puolella. Jos valintaruudut eivät näy, napsauta Näytä > "
+"Valintaruudut työkalupalkin oikeasta reunasta."
 
 #~ msgid " characters"
 #~ msgstr " merkin jälkeen"
@@ -3395,9 +3468,6 @@ msgstr ""
 
 #~ msgid "New subscription"
 #~ msgstr "Uusi tilaus"
-
-#~ msgid "Next"
-#~ msgstr "Seuraava"
 
 #~ msgid "Next Day"
 #~ msgstr "Seuraava päivä"

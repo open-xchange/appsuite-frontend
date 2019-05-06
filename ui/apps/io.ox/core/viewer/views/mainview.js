@@ -273,10 +273,12 @@ define('io.ox/core/viewer/views/mainview', [
          * - Hides viewer DOM first and then do cleanup.
          */
         viewerCloseHandler: function (app) {
-            // check if the Viewer initiated an application start which triggered the app:start event
-            if (app && app.options && app.options.mode === 'viewer-mode') {
+
+            // ignore startup of applications plugged by the Viewer (triggers the "app:start" event)
+            if (app && app.options && app.options.plugged) {
                 return;
             }
+
             // don't close the Viewer when help is opened
             if (app && app.get('name') === 'io.ox/help') {
                 return;

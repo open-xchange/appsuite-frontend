@@ -465,6 +465,11 @@ define('io.ox/calendar/main', [
                     app.getWindow().trigger('change:perspective', views[item]);
                     if (_.device('smartphone')) settings.set('viewView', item);
                 });
+                node.on('pageshow', function () {
+                    // update the indicator arrows after the page is visible, otherwise we get wrong calculations
+                    if (!app || !app.perspective || !app.perspective.appointmentView || !app.perspective.appointmentView.updateHiddenIndicators) return;
+                    app.perspective.appointmentView.updateHiddenIndicators();
+                });
             });
         },
 

@@ -95,7 +95,11 @@ define('io.ox/files/upload/main', [
         this.changed = function (item, position, files) {
             var uploadFiles = files.slice(uploadCollection.length, files.length)
                 .map(function (fileContainer) {
-                    return new UploadFile({ file: fileContainer.file, progress: 0 });
+                    var data = { file: fileContainer.file, progress: 0 };
+                    if (fileContainer.options && fileContainer.options.id) {
+                        data.id = fileContainer.options.id;
+                    }
+                    return new UploadFile(data);
                 });
 
             //setup initial time, if uploadCollection was empty

@@ -135,6 +135,22 @@ define('io.ox/core/settings/pane', [
                         require(['io.ox/core/settings/user'], function (settingsUser) {
                             settingsUser.openModalDialog();
                         });
+                    },
+
+                    propagateSettingsLanguage: function (val) {
+                        require(['io.ox/core/api/tab'], function (TabApi) {
+                            TabApi.TabCommunication.propagateToAllExceptWindow('update-ox-object', TabApi.TabHandling.windowName, { language: val });
+                            TabApi.TabCommunication.updateOxObject({ language: val });
+                        });
+
+                    },
+
+                    propagateSettingsTheme: function (val) {
+                        require(['io.ox/core/api/tab'], function (TabApi) {
+                            TabApi.TabCommunication.propagateToAllExceptWindow('update-ox-object', TabApi.TabHandling.windowName, { theme: val });
+                            TabApi.TabCommunication.updateOxObject({ theme: val });
+                        });
+
                     }
                 })
                 .render().$el
@@ -162,7 +178,9 @@ define('io.ox/core/settings/pane', [
             id: 'onchange',
             index: INDEX += 100,
             render: function () {
-                this.listenTo(settings, 'change', function (attr) {
+                this.listenTo(settings, 'change', function (attr, value) {
+                    if (ox.tabHandlingEnabled && attr === 'theme') this.propagateSettingsTheme(value);
+                    if (ox.tabHandlingEnabled && attr === 'language') this.propagateSettingsLanguage(value);
                     var showNotice = this.showNotice(attr);
                     settings.saveAndYell(undefined, { force: !!showNotice }).then(
                         function success() {

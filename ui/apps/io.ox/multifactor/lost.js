@@ -35,7 +35,7 @@ define('io.ox/multifactor/lost', [
     function handleLost(authInfo) {
         api.getDevices('BACKUP').then(function (devices) {
             if (devices.length === 0) {
-                failBackup(authInfo.def, gt('There are no backup devices available for this account.  Please notify support for help.'));
+                failBackup(authInfo.def, gt('There are no backup devices available for this account. Please notify support for help.'));
                 return;
             }
             var device = devices[0];
@@ -49,7 +49,7 @@ define('io.ox/multifactor/lost', [
                     authInfo.def.resolve(data);
                     return;
                 }
-                failBackup(authInfo.def, gt('Authentication failure.  Please reload browser and try again.'));
+                failBackup(authInfo.def, gt('Authentication failure. Please try reloading the page.'));
             }, function (fail) {
                 failBackup(authInfo.def, fail);
             });

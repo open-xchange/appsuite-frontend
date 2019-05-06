@@ -95,13 +95,14 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
     new Action('io.ox/files/actions/viewer/display-version', {
         capabilities: 'infostore',
         matches: function (baton) {
-            var isText = FilesAPI.isText(baton.data),
-                isPDF = FilesAPI.isPDF(baton.data),
-                isOffice = FilesAPI.isOffice(baton.data);
-            return baton.isViewer && (isText || isPDF || isOffice);
+            var versionSpec = baton.first();
+            if (!baton.isViewer) { return false; }
+            // Spreadsheet supports display of current version only
+            if (!versionSpec.current_version && FilesAPI.isSpreadsheet(versionSpec)) { return false; }
+            return true;
         },
         action: function (baton) {
-            if (!baton.viewerEvents) return;
+            if (!baton.viewerEvents) { return; }
             baton.viewerEvents.trigger('viewer:display:version', baton.data);
         }
     });
@@ -120,7 +121,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 Util.setClippedLabel($toggle, baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename);
             });
 
-            dropdown.setSelection([baton.data], _(baton).pick('data', 'isViewer', 'viewerEvents'));
+            dropdown.setSelection([baton.data], _(baton).pick('data', 'isViewer', 'viewerEvents', 'latestVersion'));
 
             this.append(
                 $('<td class="version-content">').append(dropdown.$el)

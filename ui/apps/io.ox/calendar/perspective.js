@@ -49,7 +49,6 @@ define('io.ox/calendar/perspective', [
         initialize: function (options) {
             this.listenTo(this.model, 'change:date', this.onChangeDate);
             this.listenTo(api, 'refresh.all', this.refresh.bind(this, true));
-            this.listenTo(api, 'create update', this.onCreateUpdateAppointment);
             this.listenTo(this.app, 'folders:change', this.refresh);
             this.listenTo(this.app.props, 'change:date', this.getCallback('onChangeDate'));
             this.app.getWindow().on('show', this.onWindowShow.bind(this));
@@ -187,7 +186,7 @@ define('io.ox/calendar/perspective', [
                     api.get(obj).done(function (model) {
                         if (self.dialog) self.dialog.close();
                         ext.point('io.ox/calendar/detail/actions/edit')
-                            .invoke('action', self, { data: model.toJSON() });
+                            .invoke('action', self, new ext.Baton({ data: model.toJSON() }));
                     });
                 }
             }
@@ -338,7 +337,9 @@ define('io.ox/calendar/perspective', [
             var e, self = this;
 
             api.get(api.cid(cid)).done(function (model) {
-                self.setStartDate(model.getMoment('startDate'));
+                // list perspective doesn't have a setStartDate function
+                if (self.setStartDate) self.setStartDate(model.getMoment('startDate'));
+
                 if (_.device('smartphone')) {
                     ox.launch('io.ox/calendar/detail/main', { cid: cid });
                 } else {
@@ -346,15 +347,6 @@ define('io.ox/calendar/perspective', [
                     self.showAppointment(e, util.cid(cid), { arrow: false });
                 }
             });
-        },
-
-        onCreateUpdateAppointment: function (obj) {
-            var current = ox.ui.App.getCurrentApp().getName();
-            if (!/^io.ox\/calendar/.test(current)) return;
-            if (obj.seriesId && obj.seriesId === obj.id) return;
-            if (!this.selectAppointment) return;
-
-            this.selectAppointment(new calendarModel.Model(obj));
         }
 
     });

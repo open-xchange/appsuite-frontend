@@ -125,6 +125,10 @@ define('io.ox/multifactor/views/selectDeviceView', [
                 if (!grouped[device.providerName]) {
                     newList.push(device);
                     grouped[device.providerName] = true;
+                } else {
+                    newList.forEach(function (dev) {
+                        if (dev.providerName === device.providerName) dev.name = '';  // Wipe grouped names
+                    });
                 }
             } else {
                 newList.push(device);

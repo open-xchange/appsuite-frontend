@@ -1657,12 +1657,34 @@ define('io.ox/files/api', [
          * @returns {Deferred}
          */
         removePreviousVersions: function (file) {
+            function versionSorter(version1, version2) {
+                if (version1.current_version) {
+                    return -versions.length;
+                } else if (version2.current_version) {
+                    return versions.length;
+                }
+                return version2.last_modified - version1.last_modified;
+            }
 
             // update model instantly
-            var model = pool.get('detail').get(_.cid(file)), versions = model.get('versions');
+            var model = pool.get('detail').get(_.cid(file)),
+                versions = model.get('versions'),
+                skipNextVersions;
+
+            versions.sort(versionSorter);
+
             if (model && _.isArray(versions)) {
                 model.set('versions', versions.filter(function (item) {
-                    return item.current_version || parseInt(item.version, 10) >= parseInt(file.version, 10);
+                    if (item.version === file.version) {
+                        skipNextVersions = true;
+                        return true;
+                    }
+
+                    if (item.current_version) return true;
+                    if (parseInt(item.version, 10) < parseInt(file.version, 10)) return false;
+                    if (skipNextVersions) return false;
+
+                    return true;
                 }));
             }
 
@@ -1675,7 +1697,7 @@ define('io.ox/files/api', [
                     folder: file.folder_id,
                     timestamp: _.then()
                 },
-                data: versions.filter(function (item) { return !item.current_version && parseInt(item.version, 10) < parseInt(file.version, 10); }).map(
+                data: _.difference(versions, model.get('versions')).map(
                     function (version) { return version.version; }
                 ),
                 appendColumns: false
@@ -1780,7 +1802,7 @@ define('io.ox/files/api', [
             api.versions.load(file, { cache: false });
             return http.resume().then(function (response) {
                 // explicitly return the file data
-                return _.isArray(response) ? response[0].data : false;
+                return _.isArray(response) && response.length ? response[0].data : false;
             });
         }
 

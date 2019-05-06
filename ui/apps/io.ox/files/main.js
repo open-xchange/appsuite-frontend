@@ -989,8 +989,10 @@ define('io.ox/files/main', [
 
             if (_.device('smartphone')) return;
 
+            var ev = ox.tabHandlingEnabled ? 'keypress' : 'keydown';
+
             // folders
-            app.listView.$el.on('keydown', '.file-type-folder', function (e) {
+            app.listView.$el.on(ev, '.file-type-folder', function (e) {
                 if (/13|32/.test(e.which)) {
                     e.preventDefault();
                     // simple id check for folders, prevents errors if folder id contains '.'
@@ -1003,7 +1005,7 @@ define('io.ox/files/main', [
             });
 
             // files
-            app.listView.$el.on('keydown', '.list-item:not(.file-type-folder)', function (e) {
+            app.listView.$el.on(ev, '.list-item:not(.file-type-folder)', function (e) {
                 if (!/13|32/.test(e.which)) return;
                 e.preventDefault();
                 var baton = ext.Baton(app.getContextualData(app.listView.selection.get()));
@@ -1517,17 +1519,13 @@ define('io.ox/files/main', [
                     }, 100, { trailing: false })
                 });
                 // default action
-                ext.point('io.ox/files/actions/default').extend({
-                    id: 'default_preprocess',
-                    index: 50,
-                    action: function (baton) {
-                        metrics.trackEvent({
-                            app: 'drive',
-                            target: 'list/' + app.props.get('layout'),
-                            type: 'click',
-                            action: baton.options.eventname
-                        });
-                    }
+                ox.on('action:invoke:io.ox/files/actions/default', function () {
+                    metrics.trackEvent({
+                        app: 'drive',
+                        target: 'list/' + app.props.get('layout'),
+                        type: 'click',
+                        action: 'selection-doubleclick'
+                    });
                 });
             });
         },

@@ -22,7 +22,7 @@ define('io.ox/onboarding/clients/codes', [], function () {
             // single
             if (id) {
                 return {
-                    label: hash[id].name + ' (' + hash[id] + ')',
+                    label: hash[id].name + ' (' + hash[id].code + ')',
                     value: hash[id].code
                 };
             }

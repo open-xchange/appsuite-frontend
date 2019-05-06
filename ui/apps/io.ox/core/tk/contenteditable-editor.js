@@ -92,8 +92,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         id: 'retrigger-change',
         index: INDEX += 100,
         draw: function (ed) {
-            ed.on('Change', this.trigger.bind(this, 'change'));
-            ed.on('keyup', _.throttle(this.trigger.bind(this, 'change'), 50));
+            ed.on('keyup SetContent Change', _.throttle(this.trigger.bind(this, 'change'), 50));
         }
     });
 
@@ -289,7 +288,8 @@ define('io.ox/core/tk/contenteditable-editor', [
             top = rect ? rect.top : 0,
             composeFieldsHeight = scrollable.find('.mail-compose-fields').height(),
             footerHeight = scrollable.parents('.window-container-center').find('.window-footer').outerHeight(),
-            editorBottomMargin = parseInt(scrollable.find('.contenteditable-editor').css('margin-bottom').replace('px', ''), 10),
+            marginBottom = scrollable.find('.contenteditable-editor').css('margin-bottom') || '0px',
+            editorBottomMargin = parseInt(marginBottom.replace('px', ''), 10) || 0,
             bottom = scrollable.height() - footerHeight - editorBottomMargin * 2;
 
         // for empty lines we get no valid rect

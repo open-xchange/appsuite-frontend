@@ -178,7 +178,7 @@ define('io.ox/multifactor/views/backupProvider', [
             index: INDEX += 100,
             id: 'header',
             render: function () {
-                var label = $('<label>').append('Please enter the recovery code')
+                var label = $('<label>').append(gt('Please enter the recovery code'))
                 .append('<br>');
                 this.$body.append(
                     label

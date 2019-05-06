@@ -1032,6 +1032,15 @@
         .viewer-light-colors();
         .viewer-styles();
     }
+
+    /*
+     * Bug 64427: The upload details do not offer additional value in the viewer.
+     * Hiding the button prevents the elementary problem of incompatible stacking contexts.
+     * And it is much more viable than digging a baton across the whole core to pass an option.
+     */
+    .bottom.toolbar .upload-details {
+        display: none;
+    }
 }
 
 /* enable iOS momentum scrolling */
