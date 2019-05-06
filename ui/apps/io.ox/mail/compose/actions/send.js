@@ -62,8 +62,8 @@ define('io.ox/mail/compose/actions/send', [
                 // show dialog
                 require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                     new ModalDialog({ title: gt('Mail has empty subject. Send it anyway?') })
-                        .addButton({ label: gt('Add subject'), action: 'subject', className: 'btn-default' })
-                        .addButton({ label: gt('Yes, send without subject'), action: 'send' })
+                        .addButton({ label: gt('Yes, send without subject'), className: 'btn-default', action: 'send' })
+                        .addButton({ label: gt('Add subject'), action: 'subject' })
                         .on('send', function () { def.resolve(); })
                         .on('subject', function () {
                             baton.stopPropagation();
