@@ -14,7 +14,7 @@
 
 const moment = require('moment');
 
-Feature('Settings / Basic');
+Feature('Settings > Basic');
 
 Before(async (users) => {
     await users.create();

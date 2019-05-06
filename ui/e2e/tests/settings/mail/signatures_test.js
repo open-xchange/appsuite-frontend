@@ -23,7 +23,7 @@ const emptyLine = '(' +
     '<div class="default-style"><br>&nbsp;</div>' +
 ')';
 
-Feature('Settings > Mail > Signatures');
+Feature('Settings > Mail');
 
 Before(async (users) => {
     await users.create();

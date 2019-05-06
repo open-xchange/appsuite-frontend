@@ -13,7 +13,7 @@
 
 /// <reference path="../../steps.d.ts" />
 
-Feature('Sharing permissions');
+Feature('Sharing');
 
 Before(async (users) => {
     await users.create();

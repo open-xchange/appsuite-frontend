@@ -10,7 +10,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-Feature('Autoforward').tag('4');
+Feature('Mailfilter');
 
 Before(async function (users) {
     await users.create();

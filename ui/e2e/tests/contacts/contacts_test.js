@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Contacts > Misc @contentReview');
+Feature('Contacts @contentReview');
 
 Before(async function (users) {
     await users.create();

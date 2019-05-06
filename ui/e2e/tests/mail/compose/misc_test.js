@@ -12,7 +12,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Mail > Compose');
+Feature('Mail Compose');
 
 const expect = require('chai').expect;
 

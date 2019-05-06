@@ -14,7 +14,7 @@
 
 const expect = require('chai').expect;
 
-Feature('Mail > View');
+Feature('Mail > Detail');
 
 Before(async (users) => {
     await users.create();

@@ -13,7 +13,7 @@
 const expect = require('chai').expect;
 // depends on https://gitlab.open-xchange.com/frontend/Infrastructure/preview_apps/issues/5
 
-Feature('Mail categories');
+Feature('Mail > Categories');
 
 Before(async function (users) {
     await users.create();

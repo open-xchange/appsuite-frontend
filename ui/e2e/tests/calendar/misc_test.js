@@ -18,7 +18,7 @@ const expect = require('chai').expect,
     moment = require('moment'),
     _ = require('underscore');
 
-Feature('Calendar > Misc');
+Feature('Calendar');
 
 Before(async (users) => {
     await users.create();

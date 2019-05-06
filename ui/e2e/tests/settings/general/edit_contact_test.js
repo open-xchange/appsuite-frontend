@@ -14,7 +14,7 @@
 
 const expect = require('chai').expect;
 
-Feature('Settings / Basic');
+Feature('Settings > Basic');
 
 Before(async (users) => {
     await users.create();

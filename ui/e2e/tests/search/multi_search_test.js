@@ -12,7 +12,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 const { expect } = require('chai');
-Feature('Multi search');
+Feature('Mail > Search');
 
 Before(async (users) => {
     await users.create();

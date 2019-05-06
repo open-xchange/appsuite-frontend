@@ -37,7 +37,7 @@ const openMail = (I, subject) => {
     I.waitForDetached('.fa-refresh.fa-spin');
 };
 
-Feature('Settings');
+Feature('Settings > Mail');
 
 Before(async (users) => {
     await users.create();

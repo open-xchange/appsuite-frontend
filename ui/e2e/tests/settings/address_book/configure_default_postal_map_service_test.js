@@ -16,7 +16,7 @@
 
 const expect = require('chai').expect;
 
-Feature('Settings Address Book');
+Feature('Settings > Address Book');
 
 Before(async (users) => {
     await users.create();

@@ -12,7 +12,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Settings > Basic > Quicklauncher');
+Feature('Settings > Basic');
 
 Before(async (users) => {
     await users.create();

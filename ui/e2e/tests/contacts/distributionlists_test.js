@@ -12,7 +12,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Contacts > Distributionlists');
+Feature('Contacts > Distributionlist');
 
 Before(async function (users) {
     await users.create();

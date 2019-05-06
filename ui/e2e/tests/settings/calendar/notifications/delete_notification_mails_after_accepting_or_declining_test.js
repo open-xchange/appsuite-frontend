@@ -16,7 +16,7 @@ const crypto = require('crypto');
 const util = require('util');
 const fs = require('fs');
 
-Feature('Settings > Calendar > Notifications');
+Feature('Settings > Calendar');
 
 Before(async function (users) {
     await users.create();
@@ -40,11 +40,11 @@ Scenario('[C7873] Configure incoming invitation mails to be deleted after accept
 To: "${options.recipient[0]}" <${options.recipient[1]}>
 Subject: ${options.title}
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
+Content-Type: multipart/mixed;
     boundary="----=_Part_129_1662523581.1554810431933"
 
 ------=_Part_129_1662523581.1554810431933
-Content-Type: multipart/alternative; 
+Content-Type: multipart/alternative;
     boundary="----=_Part_130_1152172383.1554810431977"
 
 ------=_Part_130_1152172383.1554810431977

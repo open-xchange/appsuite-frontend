@@ -13,7 +13,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Mail > Compose > Signatures');
+Feature('Mail Compose > Signatures');
 
 Before(async (users) => {
     await users.create();

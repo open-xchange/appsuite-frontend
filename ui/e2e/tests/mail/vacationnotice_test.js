@@ -10,7 +10,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-Feature('Vacation notice').tag('3');
+Feature('Mailfilter > Vacation notice');
 
 Before(async function (users) {
     await users.create();
@@ -93,6 +93,4 @@ Scenario('adds and removes a vacation notice', function (I) {
     I.seeElement('input[name="dateUntil"]:not([disabled])');
 
     I.click('Cancel', '.modal-footer');
-
-    I.logout();
 });

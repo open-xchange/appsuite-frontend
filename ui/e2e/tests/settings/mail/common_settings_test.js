@@ -13,7 +13,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Settings > Mail > Common settings');
+Feature('Settings > Mail');
 
 Before(async function (users) {
     await users.create();

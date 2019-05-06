@@ -11,7 +11,7 @@
  */
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Mail > Compose');
+Feature('Mail Compose');
 
 Before(async function (users) {
     await users.create();

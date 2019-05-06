@@ -15,7 +15,7 @@
 
 const { expect } = require('chai');
 
-Feature('Mail > Compose');
+Feature('Mail Compose');
 
 Before(async (users) => {
     await users.create(); // Sender

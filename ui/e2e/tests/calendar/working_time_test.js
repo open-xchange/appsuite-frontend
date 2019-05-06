@@ -10,7 +10,7 @@
  * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
  */
 
-Feature('Calendar: Working time');
+Feature('Calendar');
 
 Before(async function (users) {
     await users.create();
@@ -49,7 +49,4 @@ Scenario('Change working time and check in weekview', async function (I) {
 
     I.see('5 AM', '.week-container-label .working-time-border:not(.in) .number');
     I.see('5 PM', '.week-container-label .working-time-border.in .number');
-
-    I.logout();
-
 });

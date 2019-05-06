@@ -13,7 +13,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Tasks > Misc');
+Feature('Tasks');
 
 Before(async (users) => {
     await users.create();

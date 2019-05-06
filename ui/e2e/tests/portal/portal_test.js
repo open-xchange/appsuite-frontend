@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Portal').tag('6');
+Feature('Portal');
 
 Before(async function (users) {
     await users.create();

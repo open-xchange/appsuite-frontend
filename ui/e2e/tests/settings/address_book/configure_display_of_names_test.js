@@ -13,7 +13,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Settings Address Book');
+Feature('Settings > Address Book');
 
 Before(async (users) => {
     await users.create();

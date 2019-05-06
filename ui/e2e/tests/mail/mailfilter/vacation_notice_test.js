@@ -12,7 +12,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Mail > Mailfilter');
+Feature('Mailfilter > Vacation notice');
 
 Before(async function (users) {
     await users.create();

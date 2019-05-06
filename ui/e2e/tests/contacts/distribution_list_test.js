@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Contacts: Distribution lists').tag('6');
+Feature('Contacts > Distributionlist');
 
 Before(async function (users) {
     await users.create();

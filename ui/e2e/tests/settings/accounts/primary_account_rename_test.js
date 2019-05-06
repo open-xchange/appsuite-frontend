@@ -13,7 +13,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Account Settings');
+Feature('Settings');
 
 Before(async function (users) {
     await users.create();

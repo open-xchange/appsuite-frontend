@@ -13,7 +13,7 @@
 
 /// <reference path="../../steps.d.ts" />
 
-Feature('Sharing tasks');
+Feature('Sharing');
 
 Before(async (users) => {
     await users.create();
@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C104304] using “Permisions” dialog and sharing link', async (I, users) => {
+Scenario('[C104304] tasks using “Permisions” dialog and sharing link', async (I, users) => {
     let url;
     // Alice shares a folder with 2 tasks
     session('Alice', async () => {

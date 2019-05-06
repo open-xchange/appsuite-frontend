@@ -15,7 +15,7 @@
 
 const moment = require('moment');
 
-Feature('Sharing calendars');
+Feature('Sharing');
 
 Before(async (users) => {
     await users.create();
@@ -26,7 +26,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario.skip('[C104305] using “Permisions” dialog and sharing link', async (I, users) => {
+Scenario.skip('[C104305] calendar folders using “Permisions” dialog and sharing link', async (I, users) => {
     let url;
     // Alice shares a folder with 2 appointments
     session('Alice', async () => {

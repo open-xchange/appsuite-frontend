@@ -13,7 +13,7 @@
 
 const expect = require('chai').expect;
 
-Feature('Mail Portal widgets').tag('5');
+Feature('Portal');
 
 Before(async function (users) {
     await users.create();

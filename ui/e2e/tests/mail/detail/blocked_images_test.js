@@ -15,7 +15,7 @@
 
 const expect = require('chai').expect;
 
-Feature('Mail > Detail > Blocked Images');
+Feature('Mail > Detail');
 
 Before(async function (users) {
     await users.create();

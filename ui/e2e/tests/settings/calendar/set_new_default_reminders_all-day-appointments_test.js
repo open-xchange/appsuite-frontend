@@ -12,7 +12,7 @@
  */
 
 /// <reference path="../../../steps.d.ts" />
-Feature('Settings - Calendar');
+Feature('Settings > Calendar');
 
 Before(async (users) => {
     await users.create();

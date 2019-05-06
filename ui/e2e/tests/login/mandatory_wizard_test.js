@@ -13,7 +13,7 @@
 
 /// <reference path="../../steps.d.ts" />
 
-Feature('Login > Mandatory Wizard');
+Feature('General > Mandatory Wizard');
 
 Before(async (users) => {
     await users.create();

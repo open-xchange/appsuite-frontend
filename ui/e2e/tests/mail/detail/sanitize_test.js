@@ -13,7 +13,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Mail > Detail > Sanitize');
+Feature('Mail > Detail');
 
 Before(async function (users) {
     await users.create();

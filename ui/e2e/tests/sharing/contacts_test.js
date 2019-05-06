@@ -13,7 +13,7 @@
 
 /// <reference path="../../steps.d.ts" />
 
-Feature('Sharing contacts folders');
+Feature('Sharing');
 
 Before(async (users) => {
     await users.create();
@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C104306] using “Permisions” dialog and sharing link', async (I, users) => {
+Scenario('[C104306] contact folders using “Permisions” dialog and sharing link', async (I, users) => {
     let url;
     // Alice shares a folder with 2 contacts
     session('Alice', async () => {
