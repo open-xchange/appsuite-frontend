@@ -240,7 +240,7 @@ define('io.ox/core/main/appcontrol', [
         id: 'io-ox-launcher',
         $ul: $('<ul class="launcher-dropdown dropdown-menu dropdown-menu-right" role="menu">'),
         // this should be a link. Otherwise, this can cause strange focus issues on iOS when having the cursor inside an iframe before clicking this (see Bug 63441)
-        $toggle: $('<a href="#" class="launcher-btn btn btn-link dropdown-toggle">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
+        $toggle: $('<a href="#" class="launcher-btn btn btn-link dropdown-toggle">').attr('aria-label', gt('Navigate to:')).append($(icons.launcher).attr('title', gt('All Applications'))),
         initialize: function () {
             Dropdown.prototype.initialize.apply(this, arguments);
             this.listenTo(this.collection, 'add remove', this.update);

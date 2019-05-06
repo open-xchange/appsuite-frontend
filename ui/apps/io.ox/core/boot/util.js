@@ -170,7 +170,8 @@ define('io.ox/core/boot/util', [
     //
 
     ox.relogin = function () {
-        exports.gotoSignin('login_type=useForm');
+        var Stage = require('io.ox/core/extPatterns/stage');
+        Stage.run('io.ox/core/boot/login', {}, { methodName: 'relogin' });
     };
 
     ox.on('relogin:required', ox.relogin);

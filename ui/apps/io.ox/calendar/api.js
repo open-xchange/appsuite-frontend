@@ -261,7 +261,7 @@ define('io.ox/calendar/api', [
                     if (useCache !== false) {
                         reqList = list.filter(function (obj) {
                             var model = api.pool.getModel(util.cid(obj));
-                            return model && model.has('attendees');
+                            return !(model && model.has('attendees'));
                         });
                     }
 
@@ -329,7 +329,7 @@ define('io.ox/calendar/api', [
                         folder: obj.folder,
                         // convert to true boolean
                         checkConflicts: !!options.checkConflicts,
-                        sendInternalNotifications: !!options.sendInternalNotifications,
+                        sendInternalNotifications: true,
                         fields: api.defaultFields
                     },
                     def;
@@ -397,7 +397,7 @@ define('io.ox/calendar/api', [
                         timestamp: _.then(),
                         // convert to true boolean
                         checkConflicts: !!options.checkConflicts,
-                        sendInternalNotifications: !!options.sendInternalNotifications,
+                        sendInternalNotifications: true,
                         recurrenceRange: options.recurrenceRange,
                         fields: api.defaultFields
                     };
@@ -525,6 +525,7 @@ define('io.ox/calendar/api', [
                         id: obj.id,
                         folder: obj.folder,
                         checkConflicts: options.checkConflicts,
+                        sendInternalNotifications: true,
                         timestamp: _.then(),
                         fields: api.defaultFields
                     },
@@ -685,6 +686,7 @@ define('io.ox/calendar/api', [
                         folder: model.get('folder'),
                         targetFolder: targetFolderId,
                         recurrenceId: model.get('recurrenceId'),
+                        sendInternalNotifications: true,
                         timestamp: _.then(),
                         fields: api.defaultFields
                     };

@@ -51,7 +51,6 @@ define('io.ox/multifactor/factorRenderer', [
                     console.log('U2F not compatible with this browser');
                     return;  //  If browser not compatible, and being used for auth, then don't display
                 }
-                if (!selectable) device.name = '';  //  U2F devices grouped together.  We don't want to specify device names unless deleting/etc
                 if (!selectable && duplicates.u2f) return;  // Only display one u2f device when authenticating
                 duplicates.u2f = true;
                 return createLi(constants.U2F_ICON, gt('Security Token'), device, selectable);
@@ -67,7 +66,9 @@ define('io.ox/multifactor/factorRenderer', [
                 if (baton.data.text) {
                     return createLi(baton.data.icon, baton.data.text, device, selectable);
                 }
-                return $('<span>').append(gt('UNKNOWN'));
+                // what's the purpose of this string? removed gt call for
+                // this
+                return $('<span>').append('UNKOWN');
         }
     }
 

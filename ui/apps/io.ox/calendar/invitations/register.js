@@ -674,7 +674,7 @@ define('io.ox/calendar/invitations/register', [
                     tempdata.recurrence_position = this.model.get('recurrence_position');
                 }
                 //tasks use absolute timestamps
-                tempdata.alarm = _.utc() + tempdata.alarm;
+                tempdata.alarm = _.now() + tempdata.alarm;
                 this.api.update(tempdata);
             }
 

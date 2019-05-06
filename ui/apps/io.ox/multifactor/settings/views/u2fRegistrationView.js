@@ -59,7 +59,7 @@ define('io.ox/multifactor/settings/views/u2fRegistrationView', [
             index: INDEX += 100,
             id: 'header',
             render: function (baton) {
-                var label = $('<label>').append('Please touch/activate your device')
+                var label = $('<label>').append(gt('Please touch/activate your device'))
                 .append('<br>');
                 var data = baton.model.get('challenge');
                 var registrationData = {

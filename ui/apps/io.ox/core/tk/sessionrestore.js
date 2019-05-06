@@ -22,47 +22,47 @@ define('io.ox/core/tk/sessionrestore', function () {
     /**
      * Names of properties in the `window.name` object to be processed here.
      */
-    var ALL_DATA_PROP_NAMES = ['windowName', 'windowType', 'parentName', 'loggingOut', 'documents.rtid'];
+    var TAB_HANDLING_PROPS = ['windowName', 'windowType', 'parentName', 'loggingOut'];
 
-    /**
-     * Grabs all sessionrestore options from the window.name
-     *
-     * @param {Object} [options]
-     *  Optional parameters:
-     *  @param {Boolean} [options.withoutWindow]
-     *      get options without the window object variables
-     *
-     * @returns {Object} windowName data
-     */
-    function getAllData(options) {
-        if (!_.isObject(options)) { options = {}; }
+    function getWindowNameObj() {
 
-        var allData = null;
+        var windowNameObj = null;
         if (window.name) {
             try {
-                allData = JSON.parse(window.name);
+                windowNameObj = JSON.parse(window.name);
             } catch (e) {
-                allData = {};
+                windowNameObj = {};
             }
         } else {
-            allData = {};
+            windowNameObj = {};
         }
-        if (!options.withoutWindow) return allData;
-        return _.omit(allData, ALL_DATA_PROP_NAMES);
+        return windowNameObj;
+    }
+
+    /**
+    * Grabs all session restore properties from the window.name.
+    *
+    * note: For legacy reasons we retain the 'old' getAllData function, that
+    * means window.name filtered by information that are just used for the tab handling
+    *
+    * @returns {Object}
+    *  Return session restore object.
+    */
+    function getAllData() {
+        return _.omit(getWindowNameObj(), TAB_HANDLING_PROPS);
     }
 
     function setAllData(data) {
-        var allData = getAllData({ withoutWindow: false });
+        var windowNameObj = getWindowNameObj();
         if (_.isEmpty(data)) {
-            window.name = JSON.stringify(_.pick(allData, ALL_DATA_PROP_NAMES));
+            window.name = JSON.stringify(_.pick(windowNameObj, TAB_HANDLING_PROPS));
         } else {
-            window.name = JSON.stringify(_.extend(_.pick(allData, ALL_DATA_PROP_NAMES), data));
+            window.name = JSON.stringify(_.extend(_.pick(windowNameObj, TAB_HANDLING_PROPS), data));
         }
     }
 
     function resetAllData() {
-        var allData = getAllData({ withoutWindow: false });
-        window.name = JSON.stringify(_.pick(allData, ALL_DATA_PROP_NAMES));
+        window.name = JSON.stringify(_.pick(getWindowNameObj(), TAB_HANDLING_PROPS));
     }
 
     // class SessionRestore ================================================
@@ -110,9 +110,8 @@ define('io.ox/core/tk/sessionrestore', function () {
                 resetAllData();
                 return null;
             }
-            //console.warn('state', id, state);
 
-            var allData = getAllData({ withoutWindow: true });
+            var allData = getAllData();
             var result = allData[id];
 
             if (_.isUndefined(state)) {
@@ -129,6 +128,7 @@ define('io.ox/core/tk/sessionrestore', function () {
             if (_.isUndefined(result)) {
                 result = null;
             }
+
             return result;
         }
     }; // class SessionRestore
@@ -136,7 +136,7 @@ define('io.ox/core/tk/sessionrestore', function () {
     // initialization -----------------------------------------------------
 
     if (isActive()) {
-        var lastStates = getAllData({ withoutWindow: true });
+        var lastStates = getAllData();
 
         require(['io.ox/core/extensions', 'io.ox/core/extPatterns/stage']).done(function (ext, Stage) {
             new Stage('io.ox/core/stages', {

@@ -465,29 +465,23 @@ define('io.ox/core/viewer/views/types/documentview', [
          * "Prefetches" the document slide.
          * In order to save memory and network bandwidth only documents with highest prefetch priority are prefetched.
          *
-         * @param {Object} options
-         *  @param {Object} options.version
-         *      an alternate version than the current version.
-         *  @param {Number} options.priority
-         *      the prefetch priority.
+         * @param {Object} [options]
+         *  Optional parameters:
+         *  - {Number} [options.priority]
+         *      The prefetch priority.
          *
          * @returns {DocumentView}
-         *  the DocumentView instance.
+         *  A reference to this instance.
          */
         prefetch: function (options) {
-            var params = { async: true };
-
             // check for highest priority
             if (options && options.priority === 1) {
-                // check for alternate version
-                if (options && !_.isEmpty(options.version)) {
-                    _.extend(params, { version: options.version });
-                }
 
                 $.ajax({
-                    url: DocConverterUtils.getEncodedConverterUrl(this.model, params),
+                    url: DocConverterUtils.getEncodedConverterUrl(this.model, { async: true }),
                     dataType: 'text'
                 });
+
                 this.isPrefetched = true;
             }
 
@@ -591,16 +585,17 @@ define('io.ox/core/viewer/views/types/documentview', [
         /**
          * "Shows" the document (Office, PDF) with the PDF.js library.
          *
-         * @param {Object} options
-         *  @param {Object} options.version
-         *      An alternate version than the current version.
-         *
          * @returns {DocumentView}
          *  the DocumentView instance.
          */
-        show: function (options) {
+        show: function () {
 
             Util.logPerformanceTimer('DocumentView:show');
+
+            // do nothing and quit if a document is already disposed.
+            if (this.disposed) {
+                return;
+            }
 
             // ignore already loaded documents
             if (this.$el.find('.document-page').length > 0) {
@@ -720,9 +715,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 return this;
             }
 
-            // additional document URL parameters
-            var params = (options && options.version) ? { version: options.version } : null;
-            var documentUrl = DocConverterUtils.getEncodedConverterUrl(this.model, params);
+            var documentUrl = DocConverterUtils.getEncodedConverterUrl(this.model);
 
             // clear the slide content
             this.$el.empty();
@@ -993,6 +986,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             // save disposed status
             this.disposed = true;
             this.$el.off();
+            this.$el.removeClass('swiper-slide-document');
             if (this.thumbnailsView) {
                 this.thumbnailsView.onDispose();
             }

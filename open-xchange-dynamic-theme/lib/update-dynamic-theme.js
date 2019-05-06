@@ -43,12 +43,7 @@ var ignoredClasses = set(['Comment']);
 
 var src = path.join(path.dirname(process.argv[1]), 'src');
 
-var defFiles = [
-    'apps/3rd.party/bootstrap/less/variables.less',
-    'apps/3rd.party/bootstrap/less/mixins.less',
-    'apps/themes/mixins.less',
-    'apps/themes/definitions.less',
-    src + '/definitions.less'];
+var defFiles = [src + '/definitions.less'];
 
 function readFile(file) { return fs.readFileSync(file, 'utf8'); }
 
@@ -59,10 +54,21 @@ function mkdirp(dir) {
 }
 
 var themes = [];
-processDynamicTheme(['apps/themes/style.less', src + '/style.dyn.less'],
-                    src + '/style.static.less');
-processDynamicTheme(['apps/themes/login/login.less', src + '/login.dyn.less'],
-                    src + '/login.static.less');
+
+processDynamicTheme('apps/themes/style.less',
+    [
+        'apps/3rd.party/bootstrap/less/bootstrap.less',
+        'apps/3rd.party/bootstrap-datepicker/less/datepicker3.less',
+        'apps/3rd.party/font-awesome/less/font-awesome.less',
+        'apps/themes/style.less',
+        src + '/style.dyn.less'
+    ],
+    src + '/style.static.less');
+
+processDynamicTheme('apps/themes/login/login.less',
+    ['apps/themes/login/login.less', src + '/login.dyn.less'],
+    src + '/login.static.less');
+
 var excludes = set(['apps/themes', 'apps/io.ox/dynamic-theme']);
 recurse('apps');
 function recurse(file) {
@@ -73,17 +79,15 @@ function recurse(file) {
             if (!(fileInDir in excludes)) recurse(fileInDir);
         }
     } else if (file.slice(-5) === '.less') {
-        processDynamicTheme([file]);
+        processDynamicTheme(file, [file]);
     }
 }
+
 fs.writeFileSync('apps/io.ox/dynamic-theme/files.js',
     'define(\'io.ox/dynamic-theme/files\', [' + themes.join() + ']);\n');
 
-function processDynamicTheme(files, staticContent) {
-    processFile(files[0], defFiles.concat(files), staticContent);
-}
-
-function processFile(name, files, staticContent) {
+function processDynamicTheme(name, files, staticContent) {
+    files = defFiles.concat(files);
     if (verbosity > 1) console.log('processing', name);
     var dynamicVariables = set([
             // login screen: set in as-config.yml
@@ -117,8 +121,13 @@ function parse(input, file, callback) {
             relativeUrls: true,
             filename: file,
             syncImport: true,
-            paths: [path.dirname(file), 'apps/3rd.party/bootstrap/less/',
-                    'apps/3rd.party/']
+            paths: [
+                path.dirname(file),
+                'apps/3rd.party/bootstrap/less/',
+                'apps/3rd.party/font-awesome/less',
+                'apps/3rd.party/',
+                'apps/themes'
+            ]
         }).parse(input, function (e, css) { e ? die(e) : callback(css); });
     } catch (e) {
         die(e);

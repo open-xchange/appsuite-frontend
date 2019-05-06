@@ -1016,7 +1016,10 @@ define('io.ox/calendar/week/view', [
 
                 container.empty();
                 columns.each(function (i) {
-                    var appointments = $(this).find(' > .appointment'),
+                    // node height 0 means the page is not visible yet. Prevent wrong calculations
+                    var appointments = $(this).find(' > .appointment').filter(function (index, node) {
+                            return $(node).height() > 0;
+                        }),
                         earlier = appointments.filter(function (index, el) {
                             el = $(el);
                             return el.position().top + el.height() - threshold < min;
@@ -1413,7 +1416,7 @@ define('io.ox/calendar/week/view', [
                         var deltaX = mousedownOrigin.x - e.pageX,
                             deltaY = mousedownOrigin.y - e.pageY;
                         if (deltaX * deltaX + deltaY * deltaY < cellHeight * cellHeight / 2) return;
-                        return this.$el.addClass('no-select');
+                        this.$el.addClass('no-select');
                     }
 
                     var target = $(e.target);

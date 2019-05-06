@@ -17,7 +17,12 @@ define('io.ox/oauth/reauth_handler', [
 
     'use strict';
 
-    ox.on('http:error:OAUTH-0040', function (err) {
+    function columnForError(code) {
+        var map = { 'OAUTH-0040': 1, 'MSG-0114': 5 };
+        return map[code];
+    }
+
+    ox.on('http:error:OAUTH-0040 http:error:MSG-0114', function (err) {
         //do not yell
         err.handled = true;
         if ($('.modal.oauth-reauthorize').length > 0) return;
@@ -26,8 +31,8 @@ define('io.ox/oauth/reauth_handler', [
             'io.ox/backbone/views/modal',
             'io.ox/oauth/keychain'
         ]).then(function (ModalDialog, keychain) {
-            var account = keychain.accounts.get(err.error_params[1]);
-            if (account.has('reauthCooldown') && _.now() < account.get('reauthCooldown')) return;
+            var account = keychain.accounts.get(err.error_params[columnForError(err.code)]);
+            if (!account || account.has('reauthCooldown') && _.now() < account.get('reauthCooldown')) return;
 
             // don't bother me about this account for the next 10 minutes (or relogin)
             account.set('reauthCooldown', _.now() + 10 * 60 * 1000);

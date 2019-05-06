@@ -129,6 +129,8 @@ define('io.ox/core/viewer/views/displayerview', [
             // handle zoom when double clicking on an image
             this.$el.on('dblclick', '.viewer-displayer-item-container', this.onToggleZoom.bind(this));
 
+            this.updateModelAndDisplayVersionDebounced = _.debounce(this.updateModelAndDisplayVersion.bind(this), 100);
+
             // listen to full screen mode changes
             BigScreen.onchange = this.onChangeFullScreen.bind(this);
             BigScreen.onerror = this.onFullScreenError.bind(this);
@@ -518,13 +520,28 @@ define('io.ox/core/viewer/views/displayerview', [
 
         /**
          * Handles file version change events.
-         * Loads the type model and renders the new slide content.
          *
-         * @param {Object} model
+         * @param {FilesAPI.Model} model
          *   The changed model.
          */
         onModelChangeVersion: function (model) {
-            this.displayVersion(model);
+            this.updateModelAndDisplayVersionDebounced(model);
+        },
+
+        /**
+         * Updates the file model data and renders the slide content.
+         *
+         * @param {FilesAPI.Model} model
+         *   The file model object.
+         *
+         * @param {Object} [versionData]
+         *  The JSON representation of the version to display (optional).
+         */
+        updateModelAndDisplayVersion: function (model) {
+            // reload model data bypassing the cache
+            FilesAPI.get(model.toJSON(), { cache: false }).then(function () {
+                this.displayVersion(model);
+            }.bind(this));
         },
 
         /**
@@ -532,7 +549,7 @@ define('io.ox/core/viewer/views/displayerview', [
          * Loads the type model and renders the new slide content.
          *
          * @param {Object} versionData
-         *   The version data.
+         *   The JSON representation of the version.
          */
         onDisplayVersion: function (versionData) {
             if (!versionData) {
@@ -548,7 +565,7 @@ define('io.ox/core/viewer/views/displayerview', [
             });
             var dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-';
 
-            this.displayVersion(model, versionData.version);
+            this.displayVersion(model, versionData);
 
             //#. information about the currently displayed file version in viewer
             //#. %1$d - version date
@@ -557,15 +574,15 @@ define('io.ox/core/viewer/views/displayerview', [
 
         /**
          * Renders the slide content for the given file version.
-         * Uses the given version if present, otherwise the version defined within the model.
+         * Uses the given version data if present, otherwise the version defined within the model.
          *
-         * @param {Object} model
+         * @param {FilesAPI.Model} model
          *   The file model object.
          *
-         * @param {String} [version]
-         *  The file version to display (optional).
+         * @param {Object} [versionData]
+         *  The JSON representation of the version to display (optional).
          */
-        displayVersion: function (model, version) {
+        displayVersion: function (model, versionData) {
             if (!model) {
                 return;
             }
@@ -583,29 +600,36 @@ define('io.ox/core/viewer/views/displayerview', [
             var self = this;
 
             var index = this.collection.indexOf(model);
-            var slideView = this.slideViews[index];
 
+            // the slide view
+            var slideView = this.slideViews[index];
+            var isSlideViewPrefetched = slideView.isPrefetched;
             var slideNode = slideView.el;
+            var slideNodeAttrs = slideNode && slideNode.attributes;
             var slidePromise;
+
+            // a possible duplicate slide view
             var duplicateView = this.slideDuplicateViews[index];
-            var duplicateNode = duplicateView && duplicateView.el;
-            var isActiveDuplicate = !!duplicateView && this.isActiveSlideDuplicate();
+            var isDuplicateViewPrefetched = Boolean(duplicateView && duplicateView.isPrefetched);
+            var duplicateNode = (duplicateView && duplicateView.el) || null;
+            var duplicateNodeAttrs = duplicateNode && duplicateNode.attributes;
+            var isActiveDuplicate = Boolean(duplicateView && this.isActiveSlideDuplicate());
             var duplicatePromise;
 
-            var versionParam = _.isEmpty(version) ? null : { version: version };
-            var prefetchParam = _.extend({ priority: 1 }, versionParam);
+            // the model to create the new view type from
+            var versionModel = (versionData) ? new FilesAPI.Model(versionData) : model;
 
-            slidePromise = this.createView(model, { el: slideNode }).then(function (view) {
+            // unload current slide content and dispose the view instance
+            slideView.unload().dispose();
+
+            slidePromise = this.createView(versionModel, { el: slideNode }).then(function (view) {
                 // transfer attributes to new view
-                setAttributes(view.el, slideNode.attributes);
+                setAttributes(view.el, slideNodeAttrs);
 
-                // prefetch new view, if old view was
-                if (slideView.isPrefetched) {
-                    view.prefetch(prefetchParam);
+                // prefetch new view, if old one was prefetched
+                if (isSlideViewPrefetched) {
+                    view.prefetch({ priority: 1 });
                 }
-
-                // unload current slide content and dispose the view instance
-                slideView.unload().dispose();
 
                 // set new view instance
                 self.slideViews[index] = view;
@@ -613,17 +637,17 @@ define('io.ox/core/viewer/views/displayerview', [
 
             if (duplicateView) {
 
-                duplicatePromise = this.createView(model, { el: duplicateNode }).then(function (view) {
+                // unload current duplicate slide content and dispose the view instance
+                duplicateView.unload().dispose();
+
+                duplicatePromise = this.createView(versionModel, { el: duplicateNode }).then(function (view) {
                     // transfer attributes to new view
-                    setAttributes(view.el, duplicateNode.attributes);
+                    setAttributes(view.el, duplicateNodeAttrs);
 
-                    // prefetch new view, if old view was
-                    if (duplicateView.isPrefetched) {
-                        view.prefetch(prefetchParam);
+                    // prefetch new duplicate view, if old one was prefetched
+                    if (isDuplicateViewPrefetched) {
+                        view.prefetch({ priority: 1 });
                     }
-
-                    // unload current duplicate slide content and dispose the view instance
-                    duplicateView.unload().dispose();
 
                     // set new view instance
                     self.slideDuplicateViews[index] = view;
@@ -636,9 +660,9 @@ define('io.ox/core/viewer/views/displayerview', [
             $.when(slidePromise, duplicatePromise).then(function () {
                 // show the duplicate if it is present and active, or the original slide
                 if (isActiveDuplicate) {
-                    self.slideDuplicateViews[index].show(versionParam);
+                    self.slideDuplicateViews[index].show();
                 } else {
-                    self.slideViews[index].show(versionParam);
+                    self.slideViews[index].show();
                 }
             });
         },

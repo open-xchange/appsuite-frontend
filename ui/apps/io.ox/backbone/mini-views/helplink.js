@@ -55,6 +55,7 @@ define('io.ox/backbone/mini-views/helplink', [
                 HelpApp.getApp(opt).launch();
             });
 
+            // would otherwise break guards multifactor scenario
             if (opt.metrics === false) return;
             // metrics
             require(['io.ox/metrics/main'], function (metrics) {

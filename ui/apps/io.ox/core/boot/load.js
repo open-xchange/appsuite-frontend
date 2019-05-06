@@ -84,7 +84,7 @@ define('io.ox/core/boot/load', [
         id: 'compositionSpaces',
         run: function () {
             ox.rampup.compositionSpaces = $.when(
-                http.GET({ module: 'mailcompose', params: { action: 'all', columns: 'subject' } }),
+                http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject' } }),
                 require(['gettext!io.ox/mail'])
             ).then(function (data, gt) {
                 var list = _(data).first() || [];
@@ -174,11 +174,12 @@ define('io.ox/core/boot/load', [
             loginScreen.create();
             auth.doAuthentication().then(function () {
                 loginScreen.destroy();
-                session.rampup().then(function (data) {
-                    if (data) session.set(data);
+                session.rampup().then(function () {
                     def.resolve();
                 });
-            }, function () {
+            }, function (e) {
+                console.error(e);
+                console.error('Failed multifactor login. Reloading');
                 session.logout().always(function () {
                     window.location.reload(true);  // Hard fail here.  Reload
                     def.reject();

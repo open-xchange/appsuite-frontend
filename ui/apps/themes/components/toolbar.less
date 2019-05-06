@@ -160,8 +160,22 @@
         justify-content: space-between;
         flex-direction: row;
         height: 48px;
-        > li > a {
-            padding: 4px 24px;
+        > li {
+            width: 20%;
+            height: 100%;
+            margin: 0;
+
+            > a {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+
+                &:focus {
+                    background: transparent;
+                    color: @link-color;
+                }
+            }
         }
         i.fa {
             font-size: 22px;

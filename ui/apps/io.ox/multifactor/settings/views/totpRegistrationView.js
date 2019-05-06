@@ -46,7 +46,7 @@ define('io.ox/multifactor/settings/views/totpRegistrationView', [
         .build(function () {
         })
         .addCancelButton()
-        .addButton({ label: gt('OK'), action: 'OK' })
+        .addButton({ label: gt('Ok'), action: 'OK' })
         .on('OK', function () {
             var response = $('#verification').val().replace(/\s/g, ''); // get value removing any padding
             if (response && response !== '') {
@@ -69,7 +69,7 @@ define('io.ox/multifactor/settings/views/totpRegistrationView', [
             index: INDEX += 100,
             id: 'header',
             render: function () {
-                var label = $('<label for="qrcode">').append('Scan the QR code with your authenticator.')
+                var label = $('<label for="qrcode">').append(gt('Scan the QR code with your authenticator.'))
                 .append('<br>');
                 this.$body.append(
                     label
@@ -107,7 +107,7 @@ define('io.ox/multifactor/settings/views/totpRegistrationView', [
             index: INDEX += 100,
             id: 'code',
             render: function (baton) {
-                var label = $('<label for="code">').append(gt('If scanning doesn\'t work, you may be able to enter the following setup code.'));
+                var label = $('<label for="code">').append(gt('If scanning does not work, you may be able to enter the following setup code.'));
                 var code = $('<span id="code" class="totpShared selectable-text">').append(
                     formatSharedSecret(baton.model.get('device').challenge.sharedSecret));
                 this.$body.append(label).append(code);
@@ -166,7 +166,7 @@ define('io.ox/multifactor/settings/views/totpRegistrationView', [
             }
             var error;
             if (data && data.error) {  // Bad code
-                error = gt('Bad input or server error.  Please try again.') + ' ' + data.error;
+                error = gt('Bad input or server error. Please try again.') + ' ' + data.error;
             }
             showError(error);
             dialog.idle();
@@ -174,12 +174,12 @@ define('io.ox/multifactor/settings/views/totpRegistrationView', [
             return;
         }, function (data) {
             if (data && data.code === 'MFA-0021') {
-                showError(gt('Bad verification code.  Please try again'));
+                showError(gt('Bad verification code. Please try again'));
                 dialog.idle();
                 $('#verification').focus();
                 return;
             }
-            showError(gt('Bad input or server error.  Please try again.') + ' ' + data.error);
+            showError(gt('Bad input or server error. Please try again.') + ' ' + data.error);
             dialog.close();
             def.reject();
             console.error(data);
