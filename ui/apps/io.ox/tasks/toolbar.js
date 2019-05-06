@@ -131,17 +131,16 @@ define('io.ox/tasks/toolbar', [
     ext.point('io.ox/tasks/toolbar/links').extend({
         id: 'view-dropdown',
         index: 10000,
+        custom: true,
         draw: function (baton) {
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li', attributes: { role: 'presentation' } })
+            var dropdown = new Dropdown({ el: this, caret: true, model: baton.app.props, label: gt('View') })
                 .group(gt('Options'))
                 .option('folderview', true, gt('Folder view'), { group: true })
                 .option('checkboxes', true, gt('Checkboxes'), { group: true });
 
-            this.append(
-                dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
-            );
+            dropdown.render().$el.addClass('pull-right dropdown').attr('data-dropdown', 'view');
         }
     });
 
