@@ -215,6 +215,8 @@ var addAttendee = function (I, name, context) {
 
 Scenario('[C7443] Check availability of participants', async function (I, users) {
 
+    await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
+
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
@@ -228,7 +230,6 @@ Scenario('[C7443] Check availability of participants', async function (I, users)
     addAttendee(I, users[2].get('name'));
 
     I.click('Create');
-
 
     I.clickToolbar('New');
     I.waitForVisible('.io-ox-calendar-edit-window');
