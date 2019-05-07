@@ -18,6 +18,10 @@ msgstr ""
 msgid "Add another account"
 msgstr "Uue konto lisamine"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr ""
+
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
 msgstr "Manuste lisamine"
@@ -25,6 +29,17 @@ msgstr "Manuste lisamine"
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Adding further details"
 msgstr "Täiendavate andmete lisamine"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr ""
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -34,6 +49,10 @@ msgstr ""
 "Tööriistariba üleval pakub hulgaliselt funktsioone ja lisavalikuid. Uute "
 "kaustade ja failide lihtne loomine ning palju muid võimalusi on teie "
 "käsutuses."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -130,6 +149,12 @@ msgid ""
 msgstr ""
 "Üksikasjalikud juhised konkreetsete rakenduste kohta leiate Süsteemi menüü > "
 "Abi alt."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -343,6 +368,10 @@ msgstr "Rakenduse käivitamine"
 msgid "Navigation bar"
 msgstr "Navigeerimisriba"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr ""
+
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "On the left you can see the folder tree. It displays your folder structure "
@@ -391,9 +420,17 @@ msgstr "E-kirjavahetuste lugemine"
 msgid "Reading the details"
 msgstr "Üksikasjade lugemine"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr ""
+
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Objektide otsing"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Select a view"
@@ -402,6 +439,12 @@ msgstr "Vaate valimine"
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
 msgid "Selecting a view"
 msgstr "Vaate valimine"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr ""
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "Sending an E-Mail to a contact"
@@ -442,6 +485,10 @@ msgstr "Ülesannete sorteerimine"
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Sorting your E-Mails"
 msgstr "E-kirjade sorteerimine"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The Detail view"
@@ -529,6 +576,12 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The toolbar"
 msgstr "Tööriistariba"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
@@ -825,6 +878,11 @@ msgstr ""
 msgid "Using the reminder function"
 msgstr "Meeldetuletusfunktsiooni kasutamine"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr ""
+
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "Tere tulemast %s-i"
@@ -840,6 +898,12 @@ msgstr ""
 "uuest võrgupõhisest mälulahendusest, mis võimaldab juurdepääsu salvestatud "
 "failidele teie kõigilt kontodelt. Siitkaudu saate oma faile üles laadida ja "
 "salvestada, jagada ning erinevate seadmetega sünkroniseerida.  "
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
 
 #~ msgid ""
 #~ "Hint: you can always restart guided tours, any time you need them, from "
