@@ -18,6 +18,7 @@ define('io.ox/mail/compose/main', [
     'io.ox/mail/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
+    'io.ox/mail/actions',
     'io.ox/mail/compose/actions'
 ], function (ext, mailAPI, accountAPI, mailUtil, settings, gt) {
 
