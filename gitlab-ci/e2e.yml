@@ -43,7 +43,7 @@ run e2e tests:
   variables:
     LAUNCH_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/appsuite/
     SELENIUM_HOST: selenium-standalone-chrome
-    PARTITIONS: '@shaky ^Accessibility ^Contacts ^Login ^Mail\sCompose ^Calendar ^Mail\s> ^Drive ^Portal ^Sharing ^General ^Settings ^Tasks ^Mailfilter'
+    PARTITIONS: '@shaky ^Accessibility ^Contacts ^Login ^Mail\sCompose ^Calendar(:|\s>) ^Calendar\s[^>] ^Mail\s> ^Drive ^Portal ^Sharing ^General ^Settings ^Tasks ^Mailfilter'
   script:
     # make PARTITIONS an array
     - PARTITIONS=(${PARTITIONS})
@@ -58,7 +58,7 @@ run e2e tests:
     - yarn e2e -g "$PATTERN" || [ "$CI_NODE_INDEX" -eq "1" ];
   tags:
     - e2e
-  parallel: 14
+  parallel: 15
   artifacts:
     when: always
     paths:
