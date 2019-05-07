@@ -302,7 +302,7 @@ define('io.ox/calendar/actions', [
                                 sameOwner = data.created_by === myId,
                                 isPublic = folderAPI.is('public', data),
                                 sourceFolderIsPublic = folderAPI.is('public', folderData),
-                                noOtherAttendees = list[0].attendees.length < 2,
+                                noOtherAttendees = util.hasFlag(list[0], 'scheduled'),
                                 create = folderAPI.can('create', data),
                                 isOrganizer = util.hasFlag(list[0], 'organizer') || util.hasFlag(list[0], 'organizer_on_behalf');
 

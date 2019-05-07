@@ -25,7 +25,7 @@ define('io.ox/calendar/actions/delete', [
     return function (list) {
         api.getList(list).done(function (list) {
             var displayComment = _(list).every(function (event) {
-                    return (event.hasFlag('organizer') || (event.hasFlag('organizer_on_behalf') && !event.hasFlag('attendee'))) && event.get('attendees').length > 1;
+                    return (event.hasFlag('organizer') || (event.hasFlag('organizer_on_behalf') && !event.hasFlag('attendee'))) && event.hasFlag('scheduled');
                 }),
                 guid,
                 model = new Backbone.Model({ comment: '' }),
