@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Contacts: Distribution lists').tag('6');
+Feature('Contacts > Distributionlist');
 
 Before(async function (users) {
     await users.create();
@@ -37,30 +37,24 @@ Scenario('Add a distribution list to an existing distribution list', function (I
     I.selectFolder('test address book');
     I.waitForText('Empty'); // Empty in list view
     I.waitForText('New');
-    I.click('New');
-    I.wait(0.5);
+    I.clickToolbar('New');
     I.click('Add distribution list');
     I.waitForVisible('.io-ox-contacts-distrib-window', 5);
     I.fillField('Name', 'test distribution list one');
     I.fillField('Add contact', 'testdude1@test.case');
-    I.wait(0.5);
     I.pressKey('Enter');
     I.fillField('Add contact', 'testdude2@test.case');
-    I.wait(0.5);
     I.pressKey('Enter');
     I.fillField('Add contact', 'testdude3@test.case');
-    I.wait(0.5);
     I.pressKey('Enter');
     I.fillField('Add contact', 'testdude4@test.case');
-    I.wait(0.5);
     I.pressKey('Enter');
     I.click('Create list');
     I.waitForDetached('.io-ox-contacts-distrib-window', 5);
     I.waitForText('test distribution list one', 5, '.vgrid-cell');
 
     // create second list
-    I.click('New');
-    I.wait(0.5);
+    I.clickToolbar('New');
     I.click('Add distribution list');
     I.waitForVisible('.io-ox-contacts-distrib-window', 5);
     I.fillField('Name', 'test distribution list two');
@@ -70,7 +64,7 @@ Scenario('Add a distribution list to an existing distribution list', function (I
     I.waitForVisible('.modal-header input.search-field', 5);
     I.waitForEnabled('.modal-header input.search-field', 5);
     I.fillField('~Search', 'test distribution list one');
-    I.waitNumberOfVisibleElements('.address-picker li.list-item', 1);
+    I.waitForText('test distribution list one', 5, '.modal li.list-item');
     I.pressKey('Enter');
 
     I.waitForText('4 addresses selected', 5);

@@ -1,0 +1,5 @@
+﻿First Name,Middle Name,Last Name,E-mail Address,E-mail 2 Address,E-mail 3 Address,Home Phone,Home Phone 2,Business Phone,Business Phone 2,Mobile Phone,Other Phone,Primary Phone,Home Street,Home City,Home State,Home Postal Code,Home Country/Region,Other Street,Other City,Other State,Other Postal Code,Other Country/Region,Business Street,Business City,Business State,Business Postal Code,Business Country/Region,Notes
+Another,,Person,foo@bar.example.com,,,,,,,,,,,,,,,,,,,,,,,,,
+Hans,,Wurst,hans@example.com,,,,,,,+11 111 1111,,,Homestreet 23,Hometown,NRW,44135,Dortmund,,,,,,Business St. 23,Berlin,Berlin,13370,Germany,"Some notes
+
+For Hans"

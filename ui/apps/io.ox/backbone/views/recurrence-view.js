@@ -445,7 +445,7 @@ define('io.ox/backbone/views/recurrence-view', [
                             date = moment.max(start, date);
                         }
                         this.model.set({
-                            'occurrences': null,
+                            'occurrences': undefined,
                             'until': date.valueOf()
                         });
                     } else {
@@ -461,7 +461,7 @@ define('io.ox/backbone/views/recurrence-view', [
                             occurrences = Math.max(1, occurrences);
                         }
                         this.model.set({
-                            'until': null,
+                            'until': undefined,
                             'occurrences': occurrences
                         });
                     }

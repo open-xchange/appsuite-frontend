@@ -43,14 +43,22 @@ run e2e tests:
   variables:
     LAUNCH_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/appsuite/
     SELENIUM_HOST: selenium-standalone-chrome
+    PARTITIONS: '@shaky ^Accessibility ^Contacts ^Login ^Mail\sCompose ^Calendar(:|\s>) ^Calendar\s[^>] ^Mail\s> ^Drive ^Portal ^Sharing ^General ^Settings ^Tasks ^Mailfilter'
   script:
+    # make PARTITIONS an array
+    - PARTITIONS=(${PARTITIONS})
     - cd ui
     - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
-    - '[ "$CI_NODE_INDEX" -eq "1" ] && yarn e2e -f @ -i || true'
-    - '[ "$CI_NODE_INDEX" -ne "1" ] && yarn e2e -f @$CI_NODE_INDEX || [ "$CI_NODE_INDEX" -eq "1" ]'
+    # on node 1 run shaky tests. Never fail the pipeline
+    # - '[ "$CI_NODE_INDEX" -eq "1" ] && yarn e2e -g "${PARTITION[${CI_NODE_INDEX} - 1]}" || true'
+    # read this like: this is node x (with x not being 1) -- run tests selected for this node -- return the result of testrun only for the current node
+    # RegEx: Starts with one of the trigger words of the list, but does not contain @shaky anywhere
+    - PATTERN=${PARTITIONS[$CI_NODE_INDEX - 1]}
+    - if [ ${CI_NODE_INDEX} -ne "1" ]; then PATTERN+="\s?((?!"; PATTERN+=${PARTITIONS[0]}; PATTERN+=").)*$"; fi;
+    - yarn e2e -g "$PATTERN" || [ "$CI_NODE_INDEX" -eq "1" ];
   tags:
     - e2e
-  parallel: 6
+  parallel: 15
   artifacts:
     when: always
     paths:

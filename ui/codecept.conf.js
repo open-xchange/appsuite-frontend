@@ -40,7 +40,9 @@ module.exports.config = {
     },
     include: {
         I: './e2e/actor',
-        users: './e2e/users'
+        users: './e2e/users',
+        contexts: './e2e/contexts',
+        search: './e2e/actor_search'
     },
     bootstrap: function (done) {
         // setup chai
@@ -57,6 +59,12 @@ module.exports.config = {
         } else {
             done();
         }
+
+        // set moment defaults
+        // note: no need to require moment-timezone later on. requiring moment is enough
+        var moment = require('moment');
+        require('moment-timezone');
+        moment.tz.setDefault('Europe/Berlin');
     },
     teardown: function () {
         //HACK: defer killing selenium, because it's still needed for a few ms

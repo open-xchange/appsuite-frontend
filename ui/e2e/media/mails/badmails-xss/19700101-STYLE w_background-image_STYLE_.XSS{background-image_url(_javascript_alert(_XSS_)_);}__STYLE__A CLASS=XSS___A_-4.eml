@@ -1,0 +1,16 @@
+Return-Path: <mwagner@qa.open-xchange.com>
+Received: from cyrus.qa.open-xchange.com ([unix socket])
+	 by cyrus (Cyrus v2.4.16-Debian-2.4.16-4+deb7u1) with LMTPA;
+	 Tue, 05 Nov 2013 08:11:57 +0100
+X-Sieve: CMU Sieve 2.4
+Received: from localhost.localdomain (martinbraun-test24.oxoe.int [192.168.32.190])
+	by cyrus.qa.open-xchange.com (Postfix) with ESMTP id 6E99563FD6
+	for <mbraun@qa.open-xchange.com>; Tue,  5 Nov 2013 08:11:56 +0100 (CET)
+From: <STYLE>.XSS{background-image:url("javascript:alert('XSS')");}</STYLE><A CLASS=XSS></A>
+To: <STYLE>.XSS{background-image:url("javascript:alert('XSS')");}</STYLE><A CLASS=XSS></A>
+Date: _DATE_
+Subject: STYLE w/background-image<STYLE>.XSS{background-image:url("javascript:alert('XSS')");}</STYLE><A CLASS=XSS></A>
+Content-type: text/html
+Message-ID: <cmu-lmtpd-27376-1383635517-1@cyrus>
+
+STYLE w/background-image<STYLE>.XSS{background-image:url("javascript:alert('XSS')");}</STYLE><A CLASS=XSS></A>

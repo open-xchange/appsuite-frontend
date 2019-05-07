@@ -1,0 +1,36 @@
+Return-Path: <martin@heiland.io>
+Delivered-To: martin@heiland.io
+Received: from mail.heiland.io (localhost [127.0.0.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
+	(No client certificate requested)
+	by mail.heiland.io (Postfix) with ESMTPSA id AEB20E1
+	for <martin@heiland.io>; Tue,  3 Jan 2017 13:00:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=heiland.io; s=mail;
+	t=1483448433; bh=51iyld1vFPlh0pWzY8UYA7vcxm8UfUPkjQQhh0Ppyz0=;
+	h=Date:From:Reply-To:To:Subject:From;
+	b=cLSKFdUWmAT32xbfQPaAR/np5ngM1j2/xJxmEUxp5PaxBVjx7XB3XfzcXENK+mAN9
+	 brotGERqd/jDqY45S4DkRMWq6F9Qe7rvRqB9tDipodB2/iV6arUcTX0MVUn03mFugi
+	 zsewZhfN7HbiiWwfSo5GzAy+g0iyTpyNwOlipI18=
+Date: Tue, 3 Jan 2017 14:00:33 +0100 (CET)
+From: Martin Heiland <martin@heiland.io>
+Reply-To: Martin Heiland <martin@heiland.io>
+To: Martin Heiland <martin@heiland.io>
+Message-ID: <770642472.40.1483448433641@192.168.1.15>
+Subject: XSS
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Medium
+X-Mailer: Open-Xchange Mailer v7.8.3-Rev5
+X-Originating-Client: open-xchange-appsuite
+X-OX-Marker: 4827b349-05b3-4aad-bc2f-234538594d25
+
+<!DOCTYPE html>
+<html><head>
+    <meta charset="UTF-8">
+</head><body>
+
+<br><img src="foo.jpg/../../../../../../../../../../onerror=alert`1`//">
+
+</body></html>

@@ -13,7 +13,7 @@
 
 const expect = require('chai').expect;
 
-Feature('Mail compose: HTML signatures').tag('4');
+Feature('Mail Compose > HTML signatures');
 
 Before(async function (users) {
     await users.create();

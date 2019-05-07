@@ -1,0 +1,18 @@
+BEGIN:VCARD
+VERSION:3.0
+ADR;TYPE=home:;;Street Home;Town Home;State Home;12345;Country Home
+BDAY:2016-01-01
+EMAIL;TYPE=work,pref:mail1@example.com
+EMAIL;TYPE=home:mail2@example.com
+FN:First Basic Last Basic
+IMPP;TYPE=work,pref:im1
+NOTE:Comment\nwith\n\nsome\nlines!
+ORG:Company;Department
+PRODID:-//Open-Xchange//7.8.3-Rev5//EN
+REV:20161201T131202Z
+N:Last Basic;First Basic;;Title;
+TEL;TYPE=cell,pref:123 cell
+TEL;TYPE=voice,home,pref:123 phone-home
+TITLE:Position
+UID:fc779676-be62-4c9a-b302-df9c0318896b
+END:VCARD

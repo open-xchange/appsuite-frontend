@@ -10,7 +10,7 @@
  * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
  */
 
-Feature('Portal: Create widget').tag('5');
+Feature('Portal');
 
 Before(async function (users) {
     await users.create();

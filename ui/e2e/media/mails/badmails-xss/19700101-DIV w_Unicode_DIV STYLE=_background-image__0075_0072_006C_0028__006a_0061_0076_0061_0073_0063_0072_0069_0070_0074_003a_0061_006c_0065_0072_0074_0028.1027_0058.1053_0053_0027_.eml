@@ -1,0 +1,16 @@
+Return-Path: <mwagner@qa.open-xchange.com>
+Received: from cyrus.qa.open-xchange.com ([unix socket])
+	 by cyrus (Cyrus v2.4.16-Debian-2.4.16-4+deb7u1) with LMTPA;
+	 Tue, 05 Nov 2013 08:12:29 +0100
+X-Sieve: CMU Sieve 2.4
+Received: from localhost.localdomain (martinbraun-test24.oxoe.int [192.168.32.190])
+	by cyrus.qa.open-xchange.com (Postfix) with ESMTP id 44A1664000
+	for <mbraun@qa.open-xchange.com>; Tue,  5 Nov 2013 08:12:05 +0100 (CET)
+From: <DIV STYLE="background-image:\0075\0072\006C\0028'\006a\0061\0076\0061\0073\0063\0072\0069\0070\0074\003a\0061\006c\0065\0072\0074\0028.1027\0058.1053\0053\0027\0029'\0029">
+To: <DIV STYLE="background-image:\0075\0072\006C\0028'\006a\0061\0076\0061\0073\0063\0072\0069\0070\0074\003a\0061\006c\0065\0072\0074\0028.1027\0058.1053\0053\0027\0029'\0029">
+Date: _DATE_
+Subject: DIV w/Unicode<DIV STYLE="background-image:\0075\0072\006C\0028'\006a\0061\0076\0061\0073\0063\0072\0069\0070\0074\003a\0061\006c\0065\0072\0074\0028.1027\0058.1053\0053\0027\0029'\0029">
+Content-type: text/html
+Message-ID: <cmu-lmtpd-27376-1383635549-27@cyrus>
+
+DIV w/Unicode<DIV STYLE="background-image:\0075\0072\006C\0028'\006a\0061\0076\0061\0073\0063\0072\0069\0070\0074\003a\0061\006c\0065\0072\0074\0028.1027\0058.1053\0053\0027\0029'\0029">

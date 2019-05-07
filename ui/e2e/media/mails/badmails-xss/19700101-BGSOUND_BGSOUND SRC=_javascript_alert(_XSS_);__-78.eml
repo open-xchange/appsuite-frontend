@@ -1,0 +1,16 @@
+Return-Path: <mwagner@qa.open-xchange.com>
+Received: from cyrus.qa.open-xchange.com ([unix socket])
+	 by cyrus (Cyrus v2.4.16-Debian-2.4.16-4+deb7u1) with LMTPA;
+	 Tue, 05 Nov 2013 08:12:39 +0100
+X-Sieve: CMU Sieve 2.4
+Received: from localhost.localdomain (martinbraun-test24.oxoe.int [192.168.32.190])
+	by cyrus.qa.open-xchange.com (Postfix) with ESMTP id 1D4BF63FD6
+	for <mbraun@qa.open-xchange.com>; Tue,  5 Nov 2013 08:12:09 +0100 (CET)
+From: <BGSOUND SRC="javascript:alert('XSS');">
+To: <BGSOUND SRC="javascript:alert('XSS');">
+Date: _DATE_
+Subject: BGSOUND<BGSOUND SRC="javascript:alert('XSS');">
+Content-type: text/html
+Message-ID: <cmu-lmtpd-27376-1383635559-38@cyrus>
+
+BGSOUND<BGSOUND SRC="javascript:alert('XSS');">

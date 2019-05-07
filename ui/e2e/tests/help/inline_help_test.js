@@ -10,7 +10,7 @@
  * @author Björn Köster <bjoern.koester@open-xchange.com>
  */
 
-Feature('Inline help');
+Feature('General > Inline help');
 
 Before(async function (users) {
     await users.create();

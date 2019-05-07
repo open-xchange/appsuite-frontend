@@ -1,0 +1,11 @@
+begin:vcard
+fn:Hans Wurst
+n:Wurst;Hans
+org:Orga;IT
+email;internet:hans@example.com
+title:Boss
+tel;work:+49 111 1111
+tel;home:+49 222 2222
+version:2.1
+end:vcard
+

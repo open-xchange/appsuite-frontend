@@ -1,0 +1,22 @@
+Return-Path: <mwagner@qa.open-xchange.com>
+Received: from cyrus.qa.open-xchange.com ([unix socket])
+	 by cyrus (Cyrus v2.4.16-Debian-2.4.16-4+deb7u1) with LMTPA;
+	 Tue, 05 Nov 2013 08:12:27 +0100
+X-Sieve: CMU Sieve 2.4
+Received: from localhost.localdomain (martinbraun-test24.oxoe.int [192.168.32.190])
+	by cyrus.qa.open-xchange.com (Postfix) with ESMTP id BC61D63FFD
+	for <mbraun@qa.open-xchange.com>; Tue,  5 Nov 2013 08:12:04 +0100 (CET)
+From: <A HREF="h
+Message-ID: <cmu-lmtpd-27376-1383635547-25@cyrus>
+Date: Tue, 05 Nov 2013 08:12:27 +0100
+
+tt	p://6&#09;6.000146.0x7.147/">XSS</A>
+To: <A HREF="h
+tt	p://6&#09;6.000146.0x7.147/">XSS</A>
+Date: _DATE_
+Subject: Mixed Encoding<A HREF="h
+tt	p://6&#09;6.000146.0x7.147/">XSS</A>
+Content-type: text/html
+
+Mixed Encoding<A HREF="h
+tt	p://6&#09;6.000146.0x7.147/">XSS</A>
