@@ -80,7 +80,8 @@ define('io.ox/calendar/actions/delete', [
             }
             dialog = new ModalDialog({
                 title: displayComment ? gt('Delete appointment') : text,
-                description: displayComment ? [$('<div>').text(text), commentView] : false
+                // we need a flat array to avoid object object text here
+                description: displayComment ? _([$('<div>').text(text), commentView]).flatten() : false
             })
             .addCancelButton({ left: true })
             .on('action', function (action) {
