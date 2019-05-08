@@ -147,8 +147,9 @@ define('io.ox/participants/chronos-views', [
                 if (appointment.id && this.model.get('entity') === ox.user_id && !calendarUtil.hasFlag(appointment, 'organizer_on_behalf')) return false;
                 return true;
             }
-            // special case: organizer can be removed from public folders
-            return folderAPI.pool.getModel(appointment.folder).is('public');
+            // special case: organizer can be removed from public folders, disabled for now, backend doesn't support that yet
+            // return folderAPI.pool.getModel(appointment.folder).is('public');
+            return false;
         },
 
         setTypeStyle: function () {
