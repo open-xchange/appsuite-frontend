@@ -115,9 +115,9 @@ build documentation:
 
 build ui docker image:
   script:
-    - docker build --pull -t ${CI_REGISTRY_IMAGE}:ui_${CI_COMMIT_REF_SLUG} ui/
+    - docker build --pull -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG} ui/
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.open-xchange.com:4567
-    - docker push gitlab.open-xchange.com:4567/frontend/core:ui_${CI_COMMIT_REF_SLUG}
+    - docker push gitlab.open-xchange.com:4567/frontend/core:${CI_COMMIT_REF_SLUG}
   stage: test
   dependencies:
     - install_deps_ui
@@ -143,8 +143,8 @@ test_ui:
   script:
     - "[ -z $TAG_NAME ] && export TAG_NAME=$(echo $CI_JOB_NAME | sed 's/tag //') || true"
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.open-xchange.com:4567
-    - docker pull ${CI_REGISTRY_IMAGE}:ui_${CI_COMMIT_REF_SLUG}
-    - docker tag ${CI_REGISTRY_IMAGE}:ui_${CI_COMMIT_REF_SLUG} ${CI_REGISTRY_IMAGE}:${TAG_NAME}
+    - docker pull ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG}
+    - docker tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG} ${CI_REGISTRY_IMAGE}:${TAG_NAME}
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.open-xchange.com:4567
     - docker push ${CI_REGISTRY_IMAGE}:${TAG_NAME}
 
