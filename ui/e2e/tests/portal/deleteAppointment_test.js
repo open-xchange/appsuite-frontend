@@ -74,20 +74,20 @@ Scenario('[C7491] Delete an appointment', async (I) => {
 
     // Delete first appointment
     I.waitForElement('~Appointments');
-    I.waitForElement('.widget[aria-label="Appointments"] ul li:nth-child(2)', 5);
+    I.waitForElement('.widget[aria-label="Appointments"] ul li:nth-child(2)');
     I.see('C7491-1', '.widget[aria-label="Appointments"] ul li:nth-child(1)');
     I.see('C7491-2', '.widget[aria-label="Appointments"] ul li:nth-child(2)');
     I.click('.widget[aria-label="Appointments"] ul li:nth-child(1)');
-    I.waitForText('Delete', 5, '.io-ox-sidepopup');
+    I.waitForText('Delete', undefined, '.io-ox-sidepopup');
 
     I.click('Delete', '.io-ox-sidepopup');
-    I.waitForVisible('.io-ox-dialog-popup.delete-dialog', 5);
-    I.waitForElement('.io-ox-dialog-popup.delete-dialog [data-action="ok"]', 5);
+    I.waitForVisible('.io-ox-dialog-popup.delete-dialog');
+    I.waitForElement('.io-ox-dialog-popup.delete-dialog [data-action="ok"]');
     I.click('Delete', '.io-ox-dialog-popup.delete-dialog');
 
     // Verify the popup closes itself and the widget updates its list of appointments
-    I.waitForDetached('.io-ox-dialog-popup.delete-dialog', 5);
-    I.waitForDetached('.io-ox-sidepopup', 5);
+    I.waitForDetached('.io-ox-dialog-popup.delete-dialog');
+    I.waitForDetached('.io-ox-sidepopup');
     I.waitNumberOfVisibleElements('~Appointments', 1, 300);
     I.dontSee('C7491-1', '.widget[aria-label="Appointments"]');
     I.see('C7491-2', '.widget[aria-label="Appointments"]');
