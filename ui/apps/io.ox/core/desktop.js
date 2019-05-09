@@ -467,9 +467,10 @@ define('io.ox/core/desktop', [
                 }
             });
         },
+
         /**
          * Registers an event handler at a global browser object (e.g. the
-         * window, the document, or the <body> element) that listens to the
+         * window, the document, or the `<body>` element) that listens to the
          * specified event or events. The event handler will only be active
          * while the application window is visible, and will be inactive while
          * the application window is hidden.
@@ -482,43 +483,35 @@ define('io.ox/core/desktop', [
          *  The event name(s) the handler function will be registered for.
          *
          * @param {Function} eventHandler
-         *  The event handler function bound to the specified events. Will be
-         *  triggered once automatically when the application window becomes
-         *  visible.
-         *
-         * @returns {ox.io.App}
-         *  A reference to this application instance.
+         *  The event handler function bound to the specified events.
          */
         registerGlobalEventHandler: function (target, eventType, eventHandler) {
-            var handlers = {
-                show: function () {
-                    $(target).on(eventType, eventHandler);
-                    eventHandler();
-                },
-                hide: function () {
-                    $(target).off(eventType, eventHandler);
-                }
-            };
-            if (this.getWindow().on(handlers).state.visible) handlers.show();
-            return this;
+            var $target = $(target), win = this.getWindow();
+            function startListening() { $target.on(eventType, eventHandler); }
+            function stopListening() { $target.off(eventType, eventHandler); }
+            win.on({ show: startListening, hide: stopListening, quit: stopListening });
+            if (win.state.visible) { startListening(); }
         },
 
         /**
          * Registers an event handler at the browser window that listens to
-         * 'resize' events. The event handler will only be active while the
+         * `resize` events. The event handler will only be active while the
          * application window is visible, and will be inactive while the
          * application window is hidden.
          *
          * @param {Function} resizeHandler
-         *  The resize handler function bound to 'resize' events of the browser
-         *  window. Will be triggered once automatically when the application
-         *  window becomes visible.
-         *
-         * @returns {ox.io.App}
-         *  A reference to this application instance.
+         *  The resize handler function bound to `resize` events of the browser
+         *  window. Will be called when:
+         *  - the application is visible, and the browser window triggers a
+         *    `resize` event,
+         *  - the application window becomes visible,
+         *  - immediately on registration if the application window is visible.
          */
         registerWindowResizeHandler: function (resizeHandler) {
-            return this.registerGlobalEventHandler(window, 'resize', resizeHandler);
+            var win = this.getWindow();
+            this.registerGlobalEventHandler(window, 'resize', resizeHandler);
+            win.on('show', resizeHandler);
+            if (win.state.visible) { resizeHandler(); }
         },
 
         setState: function (obj) {
