@@ -244,6 +244,8 @@ Scenario('[C7443] Check availability of participants', async function (I, users)
 
 Scenario('[C7444] Check availability of resources', async function (I) {
 
+    await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
+
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
@@ -281,6 +283,8 @@ Scenario('[C7444] Check availability of resources', async function (I) {
 });
 
 Scenario('[C7445] Check availability of resources and participants', async function (I, users) {
+
+    await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
