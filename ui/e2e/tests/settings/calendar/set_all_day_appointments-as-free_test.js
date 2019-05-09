@@ -24,40 +24,23 @@ After(async (users) => {
 
 Scenario('[C7866] Set all-day appointments to be marked as free', async function (I) {
 
-    const freeappointmentsubject = 'Automation of all-day appointments to be marked as free ';
-    const reservedappointmentsubject = 'Automation of all-day appointments to be marked as reserved';
-    const location = 'Dortmund';
-    const description = 'Set all-day appointments to be marked as free';
-    I.login();
+    const freeappointmentsubject = 'Free Appt',
+        reservedappointmentsubject = 'Reserved Appt',
+        location = 'Dortmund',
+        description = 'Set all-day appointments to be marked as free';
 
-    /////////Default reminder
+    await I.haveSetting('io.ox/calendar//markFulltimeAppointmentsAsFree', false);
+    I.login(['app=io.ox/calendar&perspective=week:week']);
+
+    // Make sure setting is set correctly
     I.click('#io-ox-topbar-dropdown-icon');
     I.click('Settings');
+    I.waitForVisible('div[data-point="io.ox/core/settings/detail/view"]');
     I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
     I.waitForElement('.alarms-link-view .btn-link');
-    I.click('Mark all day appointments as free');
+    I.dontSeeCheckboxIsChecked('Mark all day appointments as free');
 
-    /////// Verify that appointments "Shown as" is set to Free.
-    I.openApp('Calendar');
-    I.clickToolbar('New');
-    I.waitForText('Subject');
-    I.fillField('summary', freeappointmentsubject);
-    I.fillField('location', location);
-    I.click('All day');
-    I.fillField('description', description);
-    I.click('Create');
-    I.waitForText('Automation of', '.appointment-content');
-    //I.waitForElement('.inline-toolbar-container');
-    I.doubleClick('.weekday.today');
-    I.waitForText('Participants can make changes');
-    I.seeCheckboxIsChecked('transp');
-
-    ////// Verify that appointments are "shown as" reserved
-    I.click('Discard');
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings');
-    I.click(locate('.folder-label').withText('Calendar'));
-    I.click('Mark all day appointments as free');
+    // Create all day appointment and dont mark as free
     I.openApp('Calendar');
     I.clickToolbar('New');
     I.waitForText('Subject');
@@ -65,12 +48,28 @@ Scenario('[C7866] Set all-day appointments to be marked as free', async function
     I.fillField('location', location);
     I.click('All day');
     I.fillField('description', description);
-    I.click('Create');
-    I.waitForText('Conflicts detected');
-    I.click('Ignore conflicts');
-    I.waitForDetached('.io-ox-sidepopup');
-    I.doubleClick('.weekday.today');
-    I.waitForText('Participants can make changes');
     I.dontSeeCheckboxIsChecked('transp');
+    I.click('Create');
+    I.waitForElement('div.appointment.reserved');
 
+    // Change setting
+    I.click('#io-ox-topbar-dropdown-icon');
+    I.click('Settings');
+    I.waitForVisible('div[data-point="io.ox/calendar/settings/detail/view"]');
+    I.waitForElement('.alarms-link-view .btn-link');
+    I.click('Mark all day appointments as free');
+
+    // Create new all day appointment and see if it is marked as free
+    I.openApp('Calendar');
+    I.waitForVisible('.weekview-toolbar');
+    // Have to click on today button for setting to work
+    I.click('button.weekday.today');
+    I.waitForText('Subject');
+    I.fillField('summary', freeappointmentsubject);
+    I.fillField('location', location);
+    I.fillField('description', description);
+    I.seeCheckboxIsChecked('allDay');
+    I.seeCheckboxIsChecked('transp');
+    I.click('Create');
+    I.waitForElement('div.appointment.free');
 });
