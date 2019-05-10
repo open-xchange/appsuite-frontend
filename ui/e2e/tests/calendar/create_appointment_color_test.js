@@ -90,6 +90,7 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
     //login user b
     I.waitForVisible('#io-ox-login-screen');
     I.login('app=io.ox/calendar', { user: user_b });
+    I.waitForVisible('.fa.fa-caret-right');
     I.click('.fa.fa-caret-right');
     I.selectFolder('New calendar');
     I.click(selectInsideFolder('div.color-label'));
