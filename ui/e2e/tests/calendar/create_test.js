@@ -372,7 +372,9 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
 
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Yearly');
     I.waitForText('Weekday');
-    I.checkOption('Weekday');
+    // check option doesnt work, not sure why
+    //I.checkOption('Weekday');
+    I.click('input[value="weekday"]');
     I.see('Every year on the first Sunday in December.');
 
     I.click('Apply', '.modal-dialog');
