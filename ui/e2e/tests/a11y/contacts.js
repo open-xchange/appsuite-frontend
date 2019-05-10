@@ -13,14 +13,20 @@
 
 const { expect } = require('chai');
 
-Scenario('Contacts - List view w/o contact', async (I) => {
+function prepare(I) {
     I.login('app=io.ox/contacts');
-    I.waitForElement('.contact-detail');
-    I.waitForElement('.vgrid-cell.selectable.contact.selected');
-    I.clickToolbar('View');
-    I.click('Checkboxes');
-    I.click('.vgrid-cell.selectable.contact.selected .vgrid-cell-checkbox');
+    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+
+    I.waitForText('My address books');
+    I.doubleClick('~My address books');
+    I.click('~Contacts');
+    I.waitForDetached('.classic-toolbar [data-dropdown="io.ox/contacts/toolbar/new"].disabled');
+}
+
+Scenario('Contacts - List view w/o contact', async (I) => {
+    prepare(I);
     I.waitForElement('.summary.empty');
+    I.waitForText('Empty');
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
@@ -37,10 +43,7 @@ Scenario('Contacts - Modal Dialog - New address book (with exceptions)', async (
     // Input field has a missing label (critical)
     const excludes = { exclude: [['input[name="name"]']] };
 
-    I.login('app=io.ox/contacts');
-    I.waitForText('My address books');
-    I.doubleClick('~My address books');
-    I.click('~Contacts');
+    prepare(I);
     I.click('Add new address book');
     I.waitForText('Add as public folder');
 
@@ -49,10 +52,7 @@ Scenario('Contacts - Modal Dialog - New address book (with exceptions)', async (
 
 Scenario('Contacts - Modal Dialog - Import', async (I) => {
 
-    I.login('app=io.ox/contacts');
-    I.waitForText('My address books');
-    I.doubleClick('~My address books');
-    I.click('~Contacts');
+    prepare(I);
     I.waitForElement('[title="Actions for Contacts"]');
     I.click('*[title="Actions for Contacts"]');
     I.waitForText('Import');
@@ -74,10 +74,7 @@ Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', asyn
         ['input[type="text"].form-control']
     ] };
 
-    I.login('app=io.ox/contacts');
-    I.waitForText('My address books');
-    I.doubleClick('~My address books');
-    I.click('~Contacts');
+    prepare(I);
     I.waitForElement('[title="Actions for Contacts"]');
     I.click('*[title="Actions for Contacts"]');
     I.waitForText('Create sharing link');
@@ -90,13 +87,9 @@ Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', asyn
 
 Scenario('Contacts - New contact window', async (I) => {
 
-    I.login('app=io.ox/contacts');
-    I.waitForText('My address books');
-    I.doubleClick('~My address books');
-    I.click('~Contacts');
-    I.waitForElement('[title="Actions for Contacts"]');
+    prepare(I);
+    I.waitForDetached('.classic-toolbar [data-dropdown="io.ox/contacts/toolbar/new"].disabled');
     I.clickToolbar('New');
-    I.waitForText('Add contact');
     I.click('Add contact');
     I.waitForText('Personal information');
 
@@ -108,10 +101,7 @@ Scenario('Contacts - New distribution list window (with exceptions)', async (I) 
     // Typeahead missing label (critical)
     const excludes = { exclude: [['.tt-hint'], ['.tt-input']] };
 
-    I.login('app=io.ox/contacts');
-    I.waitForText('My address books');
-    I.doubleClick('~My address books');
-    I.click('~Contacts');
+    prepare(I);
     I.waitForElement('[title="Actions for Contacts"]');
     I.clickToolbar('New');
     I.waitForText('Add distribution list');
