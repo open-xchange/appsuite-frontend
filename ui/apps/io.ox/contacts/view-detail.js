@@ -794,7 +794,7 @@ define('io.ox/contacts/view-detail', [
                     .on('redraw', { view: this, data: baton.data, baton: baton }, redraw)
                     .addClass('contact-detail view')
                     .attr({
-                        'role': 'complementary',
+                        'role': 'region',
                         'aria-label': gt('Contact Details')
                     });
                 ext.point('io.ox/contacts/detail').invoke('draw', node, baton);

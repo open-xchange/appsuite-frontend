@@ -1125,7 +1125,7 @@ define('io.ox/core/desktop', [
             windows = _(windows).without(win);
             if (!win.options.floating) {
                 _(windows).each(function (w) { w.nodes.body.removeAttr('role'); });
-                win.nodes.body.attr('role', 'main');
+                if (win.options.name !== 'io.ox/settings') win.nodes.body.attr('role', 'main');
             } else {
                 win.nodes.body.attr('role', 'region');
             }
