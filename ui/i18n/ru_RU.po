@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-09 09:26+0200\n"
+"PO-Revision-Date: 2019-05-02 14:18+0200\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -761,6 +761,10 @@ msgstr "Повернуть изображение"
 #: apps/io.ox/calendar/actions/change-organizer.js
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "ОК"
@@ -3955,6 +3959,11 @@ msgstr "Копировать в описание"
 msgid "Saved in:"
 msgstr "Сохранено:"
 
+#. %1$s maximum file size
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+msgstr "Изображение превышает максимально допустимый размер %1$s"
+
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid ""
 "This filetype is not supported as contact picture. Only image types (JPG, "
@@ -3962,11 +3971,6 @@ msgid ""
 msgstr ""
 "Файлы этого типа не могут использоваться в качестве фотографии контакта. "
 "Используйте файлы JPG, GIF, BMP или PNG."
-
-#. %1$s maximum file size
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-msgstr "Изображение превышает максимально допустимый размер %1$s"
 
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
@@ -4254,7 +4258,15 @@ msgid "Download unscanned file"
 msgstr "Скачать непроверенный файл"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-msgid "Anti-Virus Warning"
+msgid "Unable to perform Anti-Virus check for the requested file(s)"
+msgstr "Не удалось проверить указанные файлы на вирусы"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Malicious file detected"
+msgstr "Обнаружен вредоносный файл"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Anti-Virus warning"
 msgstr "Предупреждение антивируса"
 
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -4970,6 +4982,10 @@ msgstr "Импорт выполнен частично (%1$s из %2$s запи�
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Navigate to:"
 msgstr "Перейти:"
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "Apps"
+msgstr "Приложения"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -6033,10 +6049,6 @@ msgid "Don't remind me again"
 msgstr "Больше не напоминать"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 msgid "OK"
 msgstr "OK"
 
@@ -6086,9 +6098,7 @@ msgid "One autocomplete entry found"
 msgid_plural "%1$d autocomplete entries found"
 msgstr[0] "найден %1$d вариант автозаполнения"
 msgstr[1] "найдено %1$d варианта автозаполнения"
-msgstr[2] ""
-""
-"найдено %1$d вариантов автозаполнения"
+msgstr[2] "найдено %1$d вариантов автозаполнения"
 
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid ""
@@ -6354,6 +6364,7 @@ msgid "To"
 msgstr "Кому"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+
 #: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
@@ -6874,6 +6885,7 @@ msgstr "Аккаунт уже существует"
 
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
+
 msgid "Account could not be added"
 msgstr "Не удалось добавить учетную запись"
 
@@ -7242,6 +7254,7 @@ msgid "%1$d version"
 msgid_plural "%1$d versions"
 msgstr[0] "%1$d версия"
 msgstr[1] "%1$d версии"
+msgstr[2] "%1$d версий"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Adding files with identical names"
@@ -7309,8 +7322,6 @@ msgid "All file versions are retained"
 msgstr "Все версии файла были сохранены"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid ""
-#| "All messages older than %1$d days will be moved to the archive folder"
 msgid "All file versions older than 1 day will be deleted after next login"
 msgid_plural "All file versions older than %1$d days will be deleted after next login"
 msgstr[0] "Все версии файлов, созданные более 24 часов назад, будут удалены"
@@ -7324,8 +7335,14 @@ msgid ""
 msgid_plural ""
 "When a file has more than %1$d additional versions, older versions will be "
 "deleted when a new version is created"
-msgstr[0] "При наличии одной дополнительной версии файла во время создания новой версии старые версии будут удалены."
-msgstr[1] "При наличии %1$d дополнительных версий файла во время создания новой версии старые версии будут удалены."
+msgstr[0] ""
+"старые версии будут удалены."
+msgstr[1] ""
+"При наличии %1$d дополнительных версий файла во время создания новой версии "
+"старые версии будут удалены."
+msgstr[2] ""
+"При наличии %1$d дополнительных версий файла во время создания новой версии "
+"старые версии будут удалены."
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Keep saved versions"
@@ -7619,7 +7636,6 @@ msgstr "%1$s завершено"
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
 msgstr "Осталось: %1$s"
-
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/upload/main.js module:io.ox/files
@@ -10183,19 +10199,15 @@ msgstr "Google Authenticator"
 msgid "Recovery code"
 msgstr "Код восстановления"
 
-#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
-msgid "UNKNOWN"
-msgstr "НЕИЗВЕСТНО"
-
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
 msgid ""
-"There are no backup devices available for this account.  Please notify "
+"There are no backup devices available for this account. Please notify "
 "support for help."
 msgstr "Для этого аккаунта не настроено ни одного резервного устройства. За помощью обратитесь к службе поддержки."
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
-msgid "Authentication failure.  Please reload browser and try again."
-msgstr "Сбой аутентификации. Обновите окно браузера и повторите попытку."
+msgid "Authentication failure. Please try reloading the page."
+msgstr "Ошибка аутентификации. Попробуйте перезагрузить страницу."
 
 #: apps/io.ox/multifactor/settings.js module:io.ox/core/boot
 #: apps/io.ox/multifactor/views/constants.js
@@ -10242,7 +10254,7 @@ msgstr "Введите номер телефона устройства."
 
 #. Catch all error when trying to set up a new 2step device
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-msgid "Something went wrong.  Please try again later."
+msgid "Something went wrong. Please try again later."
 msgstr "Что-то пошло не так. Повторите попытку позже."
 
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
@@ -10263,7 +10275,7 @@ msgstr "Добавить параметр верификации"
 #: module:io.ox/core/boot
 msgid ""
 "In the event you lose or are unable to use your authentication device, your "
-"account will be locked out unless you set up a recovery method.  We strongly "
+"account will be locked out unless you set up a recovery method. We strongly "
 "recommend that you do so now."
 msgstr "В случае утери устройства аутентификации или невозможности его использования ваш аккаунт будет заблокирован. Чтобы этого не произошло, рекомендуется настроить метод восстановления доступа."
 
@@ -10312,6 +10324,13 @@ msgstr "Неизвестная система"
 #: apps/io.ox/multifactor/settings/views/printBackupString.js
 msgid "Recovery Code"
 msgstr "Код восстановления"
+
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"This is your recovery code. Please write it down, print it, or save the "
+"file. Be sure to save this in a secure location."
+msgstr "Это ваш код восстановления. Запишите или распечатайте его и храните в безопасном месте."
 
 #. this is a file name that stores the a long recovery code
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
@@ -10363,14 +10382,19 @@ msgstr "Подтверждение кода"
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
+msgid "Please enter the validation code we just sent to your device."
+msgstr "Введите код проверки, полученный на вашем устройстве."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad input or server error.  Please try again."
+msgid "Bad input or server error. Please try again."
 msgstr "Неверный ввод или ошибка сервера. Повторите попытку."
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad verification code.  Please try again"
+msgid "Bad verification code. Please try again"
 msgstr "Недействительный код верификации. Повторите попытку"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
@@ -10380,12 +10404,17 @@ msgstr "Регистрация аутентификатора"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
+msgid "Scan the QR code with your authenticator."
+msgstr "Отсканируйте QR-код с помощью своего аутентификатора."
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
 msgid "Click to copy URL to clipboard"
 msgstr "Нажмите, чтобы скопировать URL в буфер обмена"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
-msgid "If scanning doesn't work, you may be able to enter the following setup code."
+msgid "If scanning does not work, you may be able to enter the following setup code."
 msgstr "Если сканирование не работает, попробуйте вручную ввести код настройки."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
@@ -10394,6 +10423,11 @@ msgid ""
 "Once complete, please enter an authentication code to verify everything is "
 "configured properly."
 msgstr "После завершения введите код аутентификации для подтверждения конфигурации."
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Please touch/activate your device"
+msgstr "Активируйте свое устройство"
 
 #: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
 #: module:io.ox/core/boot
@@ -10420,6 +10454,10 @@ msgid "Upload Recovery File"
 msgstr "Загрузить файл восстановления"
 
 #: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Please enter the recovery code"
+msgstr "Введите код восстановления"
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
 msgid "Next 4 characters of the backup string"
 msgstr "Следующие 4 символа в резервной строке"
 
@@ -10444,39 +10482,39 @@ msgid "New code sent."
 msgstr "Новый код отправлен"
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
-msgid "A new code was sent to your SMS device.  Please enter the code."
-msgstr "Мы отправили вам новый код SMS-сообщением. Введите полученный код."
+msgid "A new code was sent to your SMS device. Please enter the code."
+msgstr "Мы отправили вам SMS-сообщение. Введите полученный код."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code we sent to the phone *****%s."
 msgstr "Вы включили двухфакторную верификацию аккаунта. Введите код, полученный на номер *****%s."
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
 msgstr "Вы включили двухфакторную верификацию аккаунта. Введите код, сгенерированный приложением-аутентификатором."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please use your "
+"You secured your account with 2-Step Verification. Please use your "
 "authentication token to complete verification."
-msgstr "Вы включили двухфакторную верификацию аккаунта. Для завершения проверки используйте свой маркер аутентификации."
+msgstr "Вы включили двухфакторную верификацию аккаунта. Для завершения проверки используйте маркер аутентификации."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"This browser is not compatible with your configured authentication device.  "
+"This browser is not compatible with your configured authentication device. "
 "Please use Chrome browser, or Firefox with U2F enabled."
 msgstr "Ваш браузер несовместим с устройством аутентификации. Используйте Chrome или Firefox с U2F."
 
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"Bad parameters for authenticating with this key.  Possibly wrong URL domain "
+"Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
-msgstr "Недопустимые параметры для аутентификации с этим ключом. Возможно, используется неверный домен URL для ключа."
+msgstr "Недопустимые параметры для аутентификации с этим ключом. Возможно, используется неверный URL для ключа."
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10485,8 +10523,8 @@ msgstr "Эта конфигурация не поддерживается"
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "This device is not eligible for this request.  Wrong hardware key?"
-msgstr "Устройство не может обработать запрос. Возможно, используется неверный ключ оборудования?"
+msgid "This device is not eligible for this request. Wrong hardware key?"
+msgstr "Устройство не может обработать запрос. Возможно, используется неверный ключ оборудования."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid "Timeout"
@@ -10494,8 +10532,8 @@ msgstr "Время ожидания"
 
 #. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "Error authenticating.  Please reload browser and try again."
-msgstr "Ошибка аутентификации. Обновите окно браузера и повторите попытку."
+msgid "Error authenticating. Please reload browser and try again."
+msgstr "Ошибка аутентификации. Обновите окно и повторите попытку."
 
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
 msgid "Topics"
@@ -10745,9 +10783,9 @@ msgstr "Неполная конфигурация."
 #| msgid_plural "The following email addresses cannot be used: %1$d"
 msgid "This email address cannot be used"
 msgid_plural "The following email addresses cannot be used: %1$d"
-msgstr[0] "Этот электронный адрес не может использоваться"
-msgstr[1] "Следующие почтовые адреса нельзя использовать: %1$d"
-msgstr[2] "Следующие почтовые адреса нельзя использовать: %1$d"
+msgstr[0] "Этот адрес не может использоваться"
+msgstr[1] "Следующие адреса нельзя использовать: %1$d"
+msgstr[2] "Следующие адреса нельзя использовать: %1$d"
 
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add contact/resource"
@@ -11840,7 +11878,9 @@ msgstr "Параметры двухфакторной верификации"
 msgid ""
 "You can now add additional verification options to enhance the security of "
 "your account."
-msgstr "Теперь вы можете усилить безопасность своего аккаунта, включив дополнительные опции аутентификации."
+msgstr ""
+"Теперь вы можете усилить безопасность своего аккаунта, включив "
+"дополнительные опции аутентификации."
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
@@ -12229,7 +12269,6 @@ msgid "Appointment reminders"
 msgstr "Напоминания о встречах"
 
 #. Title of generic desktop notification about new reminders for appointments
-
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 msgid "New appointment reminders"
 msgstr "Новые напоминания о встречах"
@@ -12973,6 +13012,92 @@ msgstr "Пригласить на %s"
 msgid "Add on %s"
 msgstr "Добавить в %s"
 
+#~ msgid "Anti-Virus Warning"
+#~ msgstr "Предупреждение антивируса"
+
+#~ msgid "UNKNOWN"
+#~ msgstr "НЕИЗВЕСТНО"
+
+#~ msgid ""
+#~ "There are no backup devices available for this account.  Please notify "
+#~ "support for help."
+#~ msgstr ""
+#~ "Для этого аккаунта не настроено ни одного резервного устройства. За "
+#~ "помощью обратитесь к службе поддержки."
+
+#~ msgid "Authentication failure.  Please reload browser and try again."
+#~ msgstr "Сбой аутентификации. Обновите окно браузера и повторите попытку."
+
+#~ msgid "Something went wrong.  Please try again later."
+#~ msgstr "Что-то пошло не так. Повторите попытку позже."
+
+#~ msgid ""
+#~ "In the event you lose or are unable to use your authentication device, "
+#~ "your account will be locked out unless you set up a recovery method.  We "
+#~ "strongly recommend that you do so now."
+#~ msgstr ""
+#~ "В случае утери устройства аутентификации или невозможности его "
+#~ "использования ваш аккаунт будет заблокирован. Чтобы этого не произошло, "
+#~ "рекомендуется настроить метод восстановления доступа."
+
+#~ msgid "Bad input or server error.  Please try again."
+#~ msgstr "Неверный ввод или ошибка сервера. Повторите попытку."
+
+#~ msgid "Bad verification code.  Please try again"
+#~ msgstr "Недействительный код верификации. Повторите попытку"
+
+#~ msgid ""
+#~ "If scanning doesn't work, you may be able to enter the following setup "
+#~ "code."
+#~ msgstr ""
+#~ "Если сканирование не работает, попробуйте вручную ввести код настройки."
+
+#~ msgid "A new code was sent to your SMS device.  Please enter the code."
+#~ msgstr "Мы отправили вам новый код SMS-сообщением. Введите полученный код."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code we sent to the phone *****%s."
+#~ msgstr ""
+#~ "Вы включили двухфакторную верификацию аккаунта. Введите код, полученный "
+#~ "на номер *****%s."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code from the Authenticator App."
+#~ msgstr ""
+#~ "Вы включили двухфакторную верификацию аккаунта. Введите код, "
+#~ "сгенерированный приложением-аутентификатором."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please use your "
+#~ "authentication token to complete verification."
+#~ msgstr ""
+#~ "Вы включили двухфакторную верификацию аккаунта. Для завершения проверки "
+#~ "используйте свой маркер аутентификации."
+
+#~ msgid ""
+#~ "This browser is not compatible with your configured authentication "
+#~ "device.  Please use Chrome browser, or Firefox with U2F enabled."
+#~ msgstr ""
+#~ "Ваш браузер несовместим с устройством аутентификации. Используйте Chrome "
+#~ "или Firefox с U2F."
+
+#~ msgid ""
+#~ "Bad parameters for authenticating with this key.  Possibly wrong URL "
+#~ "domain for this key."
+#~ msgstr ""
+#~ "Недопустимые параметры для аутентификации с этим ключом. Возможно, "
+#~ "используется неверный домен URL для ключа."
+
+#~ msgid "This device is not eligible for this request.  Wrong hardware key?"
+#~ msgstr ""
+#~ "Устройство не может обработать запрос. Возможно, используется неверный "
+#~ "ключ оборудования?"
+
+#~ msgid "Error authenticating.  Please reload browser and try again."
+#~ msgstr "Ошибка аутентификации. Обновите окно браузера и повторите попытку."
+
 #~ msgid "Please leave a comment for other participants."
 #~ msgstr "Пожалуйста, оставьте комментарий для других участников."
 
@@ -13556,7 +13681,6 @@ msgstr "Добавить в %s"
 #~ msgid "Advanced user?"
 #~ msgstr "Дополнительно"
 
-
 #, fuzzy
 #~| msgid "Assistant"
 #~ msgid "Afghanistan"
@@ -13648,9 +13772,6 @@ msgstr "Добавить в %s"
 
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "Примерная продолжительность подписки"
-
-#~ msgid "Apps"
-#~ msgstr "Приложения"
 
 #~ msgid "April"
 #~ msgstr "Апрель"
@@ -14504,6 +14625,7 @@ msgstr "Добавить в %s"
 #~ msgid "Filename, double click to rename"
 #~ msgstr "Имя файла, чтобы переименовать, щелкните дважды"
 
+
 #~ msgctxt "app"
 #~ msgid "Files"
 #~ msgstr "Файлы"
@@ -14789,6 +14911,7 @@ msgstr "Добавить в %s"
 
 #~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
 #~ msgstr "В вашем часовом поясе (%1$s): %2$s (продолжительность: %3$s)"
+
 
 #~ msgid "Inbox Tabs"
 #~ msgstr "Вкладки входящих"
@@ -15275,6 +15398,7 @@ msgstr "Добавить в %s"
 
 #~ msgid "Phone alt"
 #~ msgstr "Телефон (доп.)"
+
 
 #~ msgid "Pick a time here"
 #~ msgstr "Выберите время"

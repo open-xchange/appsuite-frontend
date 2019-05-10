@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-12 23:58+0800\n"
+"PO-Revision-Date: 2019-05-04 17:53+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -760,6 +760,10 @@ msgstr "旋轉圖片"
 #: apps/io.ox/calendar/actions/change-organizer.js
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "確定"
@@ -3907,17 +3911,17 @@ msgstr "複製至描述"
 msgid "Saved in:"
 msgstr "儲存於:"
 
+#. %1$s maximum file size
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+msgstr "您選擇的圖片超過最大允許的檔案大小 %1$s"
+
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid ""
 "This filetype is not supported as contact picture. Only image types (JPG, "
 "GIF, BMP or PNG) are supported."
 msgstr ""
 "此類型的檔案不被支援成為連絡人圖片。僅接受圖片（JPG、GIF、BMP 或 PNG）檔案。"
-
-#. %1$s maximum file size
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-msgstr "您選擇的圖片超過最大允許的檔案大小 %1$s"
 
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
@@ -4196,8 +4200,16 @@ msgid "Download unscanned file"
 msgstr "下載未掃描的檔案"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-msgid "Anti-Virus Warning"
-msgstr "防毒軟體警告"
+msgid "Unable to perform Anti-Virus check for the requested file(s)"
+msgstr "無法針對要求的檔案進行掃毒"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Malicious file detected"
+msgstr "偵測到有害檔案"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Anti-Virus warning"
+msgstr "防毒警告"
 
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
 msgid "Reset this list"
@@ -4902,6 +4914,10 @@ msgstr "只匯入部分資料〈%1$s 筆記錄，共 %2$s 筆〉"
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Navigate to:"
 msgstr "導航至:"
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "Apps"
+msgstr "應用程式"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5939,10 +5955,6 @@ msgid "Don't remind me again"
 msgstr "不要再提醒我"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 msgid "OK"
 msgstr "確認"
 
@@ -10019,19 +10031,15 @@ msgstr "Google Authenticator"
 msgid "Recovery code"
 msgstr "救援碼"
 
-#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
-msgid "UNKNOWN"
-msgstr "未知"
-
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
 msgid ""
-"There are no backup devices available for this account.  Please notify "
+"There are no backup devices available for this account. Please notify "
 "support for help."
-msgstr "此帳號沒有備份裝置可用，請通知技術支援。"
+msgstr "此帳號沒有備份裝置，請通知技術支援團隊取得協助。"
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
-msgid "Authentication failure.  Please reload browser and try again."
-msgstr "驗證失敗。請重新載入瀏覽器後再試一次。"
+msgid "Authentication failure. Please try reloading the page."
+msgstr "驗證失敗，請重新載入頁面。"
 
 #: apps/io.ox/multifactor/settings.js module:io.ox/core/boot
 #: apps/io.ox/multifactor/views/constants.js
@@ -10078,8 +10086,8 @@ msgstr "請輸入裝置的手機號碼。"
 
 #. Catch all error when trying to set up a new 2step device
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-msgid "Something went wrong.  Please try again later."
-msgstr "有些東西怪怪的。請稍候再試。"
+msgid "Something went wrong. Please try again later."
+msgstr "出了些問題。 請稍後再試。"
 
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
 msgid "Please only use numeric characters for phone number"
@@ -10099,7 +10107,7 @@ msgstr "新增驗證選項"
 #: module:io.ox/core/boot
 msgid ""
 "In the event you lose or are unable to use your authentication device, your "
-"account will be locked out unless you set up a recovery method.  We strongly "
+"account will be locked out unless you set up a recovery method. We strongly "
 "recommend that you do so now."
 msgstr ""
 "若未設定救援方式，遺失或無法使用驗證裝置時，帳號將被鎖定。我們強烈建議您立即"
@@ -10151,6 +10159,15 @@ msgstr "未知系統"
 msgid "Recovery Code"
 msgstr "救援碼"
 
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"This is your recovery code. Please write it down, print it, or save the "
+"file. Be sure to save this in a secure location."
+msgstr ""
+"這是您的救援碼。請把它抄下來、印出來，或把檔案儲存起來，並且留存在安全的地"
+"方。"
+
 #. this is a file name that stores the a long recovery code
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
 #: module:io.ox/core/boot
@@ -10201,14 +10218,19 @@ msgstr "確認代碼。"
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
+msgid "Please enter the validation code we just sent to your device."
+msgstr "請輸入我們剛傳送到您的裝置上的驗證碼。"
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad input or server error.  Please try again."
+msgid "Bad input or server error. Please try again."
 msgstr "輸入資料無效或伺服器發生錯誤，請再試一次。"
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad verification code.  Please try again"
+msgid "Bad verification code. Please try again"
 msgstr "驗證碼無效，請再試一次"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
@@ -10218,13 +10240,18 @@ msgstr "註冊驗證器"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
+msgid "Scan the QR code with your authenticator."
+msgstr "請使用驗證器掃描 QR Code。"
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
 msgid "Click to copy URL to clipboard"
 msgstr "點擊即可複製網址到剪貼簿"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
 msgid ""
-"If scanning doesn't work, you may be able to enter the following setup code."
+"If scanning does not work, you may be able to enter the following setup code."
 msgstr "若無法掃描，可以輸入下列設定代碼。"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
@@ -10233,6 +10260,11 @@ msgid ""
 "Once complete, please enter an authentication code to verify everything is "
 "configured properly."
 msgstr "完成後，請輸入驗證代碼，以確定正確設定完成。"
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Please touch/activate your device"
+msgstr "請觸摸/開啟您的驗證裝置"
 
 #: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
 #: module:io.ox/core/boot
@@ -10259,6 +10291,10 @@ msgid "Upload Recovery File"
 msgstr "上傳救援檔案"
 
 #: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Please enter the recovery code"
+msgstr "請輸入救援碼"
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
 msgid "Next 4 characters of the backup string"
 msgstr "備份字串的下四個字元"
 
@@ -10283,40 +10319,40 @@ msgid "New code sent."
 msgstr "已發送新代碼。"
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
-msgid "A new code was sent to your SMS device.  Please enter the code."
+msgid "A new code was sent to your SMS device. Please enter the code."
 msgstr "已發送新代碼到您的簡訊裝置。請輸入代碼。"
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code we sent to the phone *****%s."
 msgstr "您已使用兩階段驗證方式保護帳號。請輸入已傳送到 *****%s 的驗證碼。"
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
 msgstr "您已使用兩階段驗證方式保護帳號。請輸入驗證程式中的驗證碼。"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please use your "
+"You secured your account with 2-Step Verification. Please use your "
 "authentication token to complete verification."
 msgstr "您已使用兩階段驗證方式保護帳號。請使用驗證 token 來完成驗證。"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"This browser is not compatible with your configured authentication device.  "
+"This browser is not compatible with your configured authentication device. "
 "Please use Chrome browser, or Firefox with U2F enabled."
 msgstr ""
-"此瀏覽器與您的驗證裝置不相容，請改用 Chrome 或開啟 Firefox 的 U2F 功能。"
+"此瀏覽器與您設定的驗證裝置不相容，請改用 Chrome 或開啟 Firefox 的 U2F 功能。"
 
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"Bad parameters for authenticating with this key.  Possibly wrong URL domain "
+"Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
-msgstr "使用此金鑰的驗證參數錯誤，可能是此金鑰的網址有誤。"
+msgstr "此金鑰的驗證參數錯誤，可能是此金鑰的網址有誤。"
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10325,8 +10361,8 @@ msgstr "不支援設定"
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "This device is not eligible for this request.  Wrong hardware key?"
-msgstr "此裝置無法發出此請求，插錯硬體金鑰了？"
+msgid "This device is not eligible for this request. Wrong hardware key?"
+msgstr "此裝置無法發出此請求，是不是插錯硬體金鑰了？"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid "Timeout"
@@ -10334,7 +10370,7 @@ msgstr "逾時"
 
 #. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "Error authenticating.  Please reload browser and try again."
+msgid "Error authenticating. Please reload browser and try again."
 msgstr "驗證錯誤，請重新載入瀏覽器後再試一次。"
 
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
@@ -12780,6 +12816,77 @@ msgstr "邀請至 %s"
 msgid "Add on %s"
 msgstr "新增至 %s"
 
+#~ msgid "Anti-Virus Warning"
+#~ msgstr "防毒軟體警告"
+
+#~ msgid "UNKNOWN"
+#~ msgstr "未知"
+
+#~ msgid ""
+#~ "There are no backup devices available for this account.  Please notify "
+#~ "support for help."
+#~ msgstr "此帳號沒有備份裝置可用，請通知技術支援。"
+
+#~ msgid "Authentication failure.  Please reload browser and try again."
+#~ msgstr "驗證失敗。請重新載入瀏覽器後再試一次。"
+
+#~ msgid "Something went wrong.  Please try again later."
+#~ msgstr "有些東西怪怪的。請稍候再試。"
+
+#~ msgid ""
+#~ "In the event you lose or are unable to use your authentication device, "
+#~ "your account will be locked out unless you set up a recovery method.  We "
+#~ "strongly recommend that you do so now."
+#~ msgstr ""
+#~ "若未設定救援方式，遺失或無法使用驗證裝置時，帳號將被鎖定。我們強烈建議您立"
+#~ "即設定救援方式。"
+
+#~ msgid "Bad input or server error.  Please try again."
+#~ msgstr "輸入資料無效或伺服器發生錯誤，請再試一次。"
+
+#~ msgid "Bad verification code.  Please try again"
+#~ msgstr "驗證碼無效，請再試一次"
+
+#~ msgid ""
+#~ "If scanning doesn't work, you may be able to enter the following setup "
+#~ "code."
+#~ msgstr "若無法掃描，可以輸入下列設定代碼。"
+
+#~ msgid "A new code was sent to your SMS device.  Please enter the code."
+#~ msgstr "已發送新代碼到您的簡訊裝置。請輸入代碼。"
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code we sent to the phone *****%s."
+#~ msgstr "您已使用兩階段驗證方式保護帳號。請輸入已傳送到 *****%s 的驗證碼。"
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code from the Authenticator App."
+#~ msgstr "您已使用兩階段驗證方式保護帳號。請輸入驗證程式中的驗證碼。"
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please use your "
+#~ "authentication token to complete verification."
+#~ msgstr "您已使用兩階段驗證方式保護帳號。請使用驗證 token 來完成驗證。"
+
+#~ msgid ""
+#~ "This browser is not compatible with your configured authentication "
+#~ "device.  Please use Chrome browser, or Firefox with U2F enabled."
+#~ msgstr ""
+#~ "此瀏覽器與您的驗證裝置不相容，請改用 Chrome 或開啟 Firefox 的 U2F 功能。"
+
+#~ msgid ""
+#~ "Bad parameters for authenticating with this key.  Possibly wrong URL "
+#~ "domain for this key."
+#~ msgstr "使用此金鑰的驗證參數錯誤，可能是此金鑰的網址有誤。"
+
+#~ msgid "This device is not eligible for this request.  Wrong hardware key?"
+#~ msgstr "此裝置無法發出此請求，插錯硬體金鑰了？"
+
+#~ msgid "Error authenticating.  Please reload browser and try again."
+#~ msgstr "驗證錯誤，請重新載入瀏覽器後再試一次。"
+
 #~ msgid "Please leave a comment for other participants."
 #~ msgstr "請留言給其他參與者。"
 
@@ -13761,9 +13868,6 @@ msgstr "新增至 %s"
 
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "訂閱的預估持續時間"
-
-#~ msgid "Apps"
-#~ msgstr "應用程式"
 
 #~ msgid "Apr"
 #~ msgstr "四月"

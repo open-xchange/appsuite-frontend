@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-09 09:25+0200\n"
+"PO-Revision-Date: 2019-05-02 14:17+0200\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -759,6 +759,10 @@ msgstr "Kép forogatása"
 #: apps/io.ox/calendar/actions/change-organizer.js
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "OK"
@@ -3896,16 +3900,16 @@ msgstr "Másolás a leírásba"
 msgid "Saved in:"
 msgstr "Mentés itt:"
 
+#. %1$s maximum file size
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+msgstr "A kiválasztott kép mérete meghaladja a engedélyezett maximumot: %1$s"
+
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid ""
 "This filetype is not supported as contact picture. Only image types (JPG, "
 "GIF, BMP or PNG) are supported."
 msgstr "Ez a fájltípus nem támogatott. Csak képtípusokat (JPG, GIF, BMP vagy PNG) lehet használni."
-
-#. %1$s maximum file size
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-msgstr "A kiválasztott kép mérete meghaladja a engedélyezett maximumot: %1$s"
 
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
@@ -4180,7 +4184,15 @@ msgid "Download unscanned file"
 msgstr "Ellenőrizetlen fájl letöltése"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-msgid "Anti-Virus Warning"
+msgid "Unable to perform Anti-Virus check for the requested file(s)"
+msgstr "A kért fájl (ok) ellenőrzése nem sikerült"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Malicious file detected"
+msgstr "Rosszindulatú fájl található"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Anti-Virus warning"
 msgstr "Anti-virus figyelmeztetés"
 
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -4882,6 +4894,10 @@ msgstr "Csak részben importált adatok (%1$s / %2$s rekord)"
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Navigate to:"
 msgstr "Ugrás ide:"
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "Apps"
+msgstr "Alkalmazások"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -5910,10 +5926,6 @@ msgid "Don't remind me again"
 msgstr "Ne emlékeztessen újra"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 msgid "OK"
 msgstr "OK"
 
@@ -7143,8 +7155,6 @@ msgid "All file versions are retained"
 msgstr "Minden fájlverzió megmarad"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid ""
-#| "All messages older than %1$d days will be moved to the archive folder"
 msgid "All file versions older than 1 day will be deleted after next login"
 msgid_plural ""
 "All file versions older than %1$d days will be deleted after next login"
@@ -9965,19 +9975,15 @@ msgstr "Google Authenticator"
 msgid "Recovery code"
 msgstr "Helyreállítási kód"
 
-#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
-msgid "UNKNOWN"
-msgstr "ISMERETLEN"
-
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
 msgid ""
-"There are no backup devices available for this account.  Please notify "
+"There are no backup devices available for this account. Please notify "
 "support for help."
-msgstr "Ehhez a fiókhoz nincsenek biztonsági mentési eszközök. Kérjen értesítse a támogatói munkatársakat. "
+msgstr "Ehhez a fiókhoz nincsenek biztonsági mentési eszközök. Kérjen értesítse a támogatói munkatársakat."
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
-msgid "Authentication failure.  Please reload browser and try again."
-msgstr "Hitelesítési hiba. Kérjük, töltse be újra a böngészőt, és próbálja újra."
+msgid "Authentication failure. Please try reloading the page."
+msgstr "Hitelesítési hiba. Kérjük, próbálja meg újratölteni az oldalt."
 
 #: apps/io.ox/multifactor/settings.js module:io.ox/core/boot
 #: apps/io.ox/multifactor/views/constants.js
@@ -10024,7 +10030,7 @@ msgstr "Kérjük, adja meg az eszköz telefonszámát."
 
 #. Catch all error when trying to set up a new 2step device
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-msgid "Something went wrong.  Please try again later."
+msgid "Something went wrong. Please try again later."
 msgstr "Hiba történt. Próbálja meg később."
 
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
@@ -10045,7 +10051,7 @@ msgstr "Ellenőrzési lehetőség beállítása"
 #: module:io.ox/core/boot
 msgid ""
 "In the event you lose or are unable to use your authentication device, your "
-"account will be locked out unless you set up a recovery method.  We strongly "
+"account will be locked out unless you set up a recovery method. We strongly "
 "recommend that you do so now."
 msgstr "Ha elveszíti vagy nem tudja használni a hitelesítő eszközt, akkor a fiókja zárolva lesz, kivéve, ha helyreállítási módot állít be. Azt javasoljuk, hogy ezt tegye meg most."
 
@@ -10094,6 +10100,13 @@ msgstr "Ismeretlen rendszer"
 #: apps/io.ox/multifactor/settings/views/printBackupString.js
 msgid "Recovery Code"
 msgstr "Helyreállítási kód"
+
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"This is your recovery code. Please write it down, print it, or save the "
+"file. Be sure to save this in a secure location."
+msgstr "Ez a helyreállítási kód. Kérjük, írja le, nyomtassa ki, vagy mentse el a fájlt. Győződjön meg róla, hogy ezt biztonságos helyen tárolja."
 
 #. this is a file name that stores the a long recovery code
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
@@ -10145,20 +10158,30 @@ msgstr "Kód megerősítése"
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
+msgid "Please enter the validation code we just sent to your device."
+msgstr "Kérjük, adja meg az eszközre küldött érvényesítési kódot."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad input or server error.  Please try again."
+msgid "Bad input or server error. Please try again."
 msgstr "Hibás bemeneti érték vagy kiszolgálóhiba. Próbálja meg újra."
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad verification code.  Please try again"
-msgstr "Hibás ellenőrző kód. Próbálja meg újra"
+msgid "Bad verification code. Please try again"
+msgstr "Hibás ellenőrző kód. Próbálja meg újra."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
 msgid "Authenticator Registration"
 msgstr "Hitelesítő regisztrálása"
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Scan the QR code with your authenticator."
+msgstr "Szkennelje be a QR-kódot hitelesítő alkalmazással."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
@@ -10168,7 +10191,7 @@ msgstr "Kattintson a URL-cím vágólapra történő másolásához"
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
 msgid ""
-"If scanning doesn't work, you may be able to enter the following setup code."
+"If scanning does not work, you may be able to enter the following setup code."
 msgstr "Ha a szkennelés nem működik, előfordulhat, hogy beírhatja a következő telepítési kódot."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
@@ -10177,6 +10200,11 @@ msgid ""
 "Once complete, please enter an authentication code to verify everything is "
 "configured properly."
 msgstr "Ha elkészült, írjon be egy hitelesítési kódot, amellyel ellenőrizheti, hogy minden megfelelően van-e beállítva."
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Please touch/activate your device"
+msgstr "Érintse meg/aktiválja a készüléket"
 
 #: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
 #: module:io.ox/core/boot
@@ -10203,6 +10231,10 @@ msgid "Upload Recovery File"
 msgstr "Helyreállítási fájl feltöltése"
 
 #: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Please enter the recovery code"
+msgstr "Adja meg a helyreállítási kódot"
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
 msgid "Next 4 characters of the backup string"
 msgstr "A biztonsági másolat következő 4 karaktere"
 
@@ -10227,37 +10259,37 @@ msgid "New code sent."
 msgstr "Az új kód elküldve."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
-msgid "A new code was sent to your SMS device.  Please enter the code."
+msgid "A new code was sent to your SMS device. Please enter the code."
 msgstr "Új kódot küldtünk az SMS-eszközre. Kérjük, adja meg a kódot."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code we sent to the phone *****%s."
 msgstr "A felhasználói fiókot kétlépcsős ellenőrzéssel biztosította. Kérjük, adja meg a telefonra elküldött ellenőrző kódot *****%s."
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
 msgstr "A felhasználói fiókot kétlépcsős ellenőrzéssel biztosította. Kérjük, adja meg az Authenticator App által adott ellenőrző kódot."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please use your "
+"You secured your account with 2-Step Verification. Please use your "
 "authentication token to complete verification."
 msgstr "A felhasználói fiókot kétlépcsős ellenőrzéssel biztosította. Kérjük, használja a z ellenőrzéshez használt hitelesítési tokent."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"This browser is not compatible with your configured authentication device.  "
+"This browser is not compatible with your configured authentication device. "
 "Please use Chrome browser, or Firefox with U2F enabled."
 msgstr "Ez a böngésző nem kompatibilis a beállított hitelesítő eszközzel. Használja a Chrome böngészőt, vagy a Firefoxot, amelyen az U2F engedélyezve van."
 
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"Bad parameters for authenticating with this key.  Possibly wrong URL domain "
+"Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
 msgstr "Hibás paraméterek ezzel a kulccsal való hitelesítéshez. Lehetséges, hogy ennek a kulcsnak helytelen az URL-címe."
 
@@ -10268,7 +10300,7 @@ msgstr "A konfiguráció nem támogatott."
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "This device is not eligible for this request.  Wrong hardware key?"
+msgid "This device is not eligible for this request. Wrong hardware key?"
 msgstr "Ez az eszköz nem jogosult erre a kérésre. Rossz a hardverkulcs?"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10277,7 +10309,7 @@ msgstr "Időtúllépés"
 
 #. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "Error authenticating.  Please reload browser and try again."
+msgid "Error authenticating. Please reload browser and try again."
 msgstr "Hitelesítési hiba. Töltse újra a böngésző tartalmát, és próbálja újra."
 
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
@@ -12707,6 +12739,94 @@ msgstr "Meghívás ide: %s"
 msgid "Add on %s"
 msgstr "Hozzáadás itt: %s"
 
+#~ msgid "Anti-Virus Warning"
+#~ msgstr "Anti-virus figyelmeztetés"
+
+#~ msgid "UNKNOWN"
+#~ msgstr "ISMERETLEN"
+
+#~ msgid ""
+#~ "There are no backup devices available for this account.  Please notify "
+#~ "support for help."
+#~ msgstr ""
+#~ "Ehhez a fiókhoz nincsenek biztonsági mentési eszközök. Kérjen értesítse a "
+#~ "támogatói munkatársakat. "
+
+#~ msgid "Authentication failure.  Please reload browser and try again."
+#~ msgstr ""
+#~ "Hitelesítési hiba. Kérjük, töltse be újra a böngészőt, és próbálja újra."
+
+#~ msgid "Something went wrong.  Please try again later."
+#~ msgstr "Hiba történt. Próbálja meg később."
+
+#~ msgid ""
+#~ "In the event you lose or are unable to use your authentication device, "
+#~ "your account will be locked out unless you set up a recovery method.  We "
+#~ "strongly recommend that you do so now."
+#~ msgstr ""
+#~ "Ha elveszíti vagy nem tudja használni a hitelesítő eszközt, akkor a "
+#~ "fiókja zárolva lesz, kivéve, ha helyreállítási módot állít be. Azt "
+#~ "javasoljuk, hogy ezt tegye meg most."
+
+#~ msgid "Bad input or server error.  Please try again."
+#~ msgstr "Hibás bemeneti érték vagy kiszolgálóhiba. Próbálja meg újra."
+
+#~ msgid "Bad verification code.  Please try again"
+#~ msgstr "Hibás ellenőrző kód. Próbálja meg újra"
+
+#~ msgid ""
+#~ "If scanning doesn't work, you may be able to enter the following setup "
+#~ "code."
+#~ msgstr ""
+#~ "Ha a szkennelés nem működik, előfordulhat, hogy beírhatja a következő "
+#~ "telepítési kódot."
+
+#~ msgid "A new code was sent to your SMS device.  Please enter the code."
+#~ msgstr "Új kódot küldtünk az SMS-eszközre. Kérjük, adja meg a kódot."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code we sent to the phone *****%s."
+#~ msgstr ""
+#~ "A felhasználói fiókot kétlépcsős ellenőrzéssel biztosította. Kérjük, adja "
+#~ "meg a telefonra elküldött ellenőrző kódot *****%s."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code from the Authenticator App."
+#~ msgstr ""
+#~ "A felhasználói fiókot kétlépcsős ellenőrzéssel biztosította. Kérjük, adja "
+#~ "meg az Authenticator App által adott ellenőrző kódot."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please use your "
+#~ "authentication token to complete verification."
+#~ msgstr ""
+#~ "A felhasználói fiókot kétlépcsős ellenőrzéssel biztosította. Kérjük, "
+#~ "használja a z ellenőrzéshez használt hitelesítési tokent."
+
+#~ msgid ""
+#~ "This browser is not compatible with your configured authentication "
+#~ "device.  Please use Chrome browser, or Firefox with U2F enabled."
+#~ msgstr ""
+#~ "Ez a böngésző nem kompatibilis a beállított hitelesítő eszközzel. "
+#~ "Használja a Chrome böngészőt, vagy a Firefoxot, amelyen az U2F "
+#~ "engedélyezve van."
+
+#~ msgid ""
+#~ "Bad parameters for authenticating with this key.  Possibly wrong URL "
+#~ "domain for this key."
+#~ msgstr ""
+#~ "Hibás paraméterek ezzel a kulccsal való hitelesítéshez. Lehetséges, hogy "
+#~ "ennek a kulcsnak helytelen az URL-címe."
+
+#~ msgid "This device is not eligible for this request.  Wrong hardware key?"
+#~ msgstr "Ez az eszköz nem jogosult erre a kérésre. Rossz a hardverkulcs?"
+
+#~ msgid "Error authenticating.  Please reload browser and try again."
+#~ msgstr ""
+#~ "Hitelesítési hiba. Töltse újra a böngésző tartalmát, és próbálja újra."
+
 #~ msgid "Please leave a comment for other participants."
 #~ msgstr "Hagyjon egy megjegyzést a többi résztvevőnek."
 
@@ -13210,9 +13330,6 @@ msgstr "Hozzáadás itt: %s"
 
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "Feliratkozások hozzávetőleges időtartama"
-
-#~ msgid "Apps"
-#~ msgstr "Alkalmazások"
 
 #~ msgid "April"
 #~ msgstr "Április"

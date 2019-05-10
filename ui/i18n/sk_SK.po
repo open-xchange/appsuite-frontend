@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-11 22:40+0200\n"
+"PO-Revision-Date: 2019-05-03 22:39+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -768,6 +768,10 @@ msgstr "Otočiť obrázok"
 #: apps/io.ox/calendar/actions/change-organizer.js
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "OK"
@@ -3973,6 +3977,12 @@ msgstr "Skopírovať do popisu"
 msgid "Saved in:"
 msgstr "Uložené v:"
 
+#. %1$s maximum file size
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+msgstr ""
+"Obrázok, ktorý ste zvolili, prekračuje maximálnu povolenú veľkosť súboru %1$s"
+
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid ""
 "This filetype is not supported as contact picture. Only image types (JPG, "
@@ -3980,12 +3990,6 @@ msgid ""
 msgstr ""
 "Tento typ súboru nie je podporovaný ako obrázok kontaktu. Sú podporované len "
 "obrázky (JPG, GIF, BMP alebo PNG)."
-
-#. %1$s maximum file size
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-msgstr ""
-"Obrázok, ktorý ste zvolili, prekračuje maximálnu povolenú veľkosť súboru %1$s"
 
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
@@ -4280,7 +4284,15 @@ msgid "Download unscanned file"
 msgstr "Stiahnuť neskontrolovaný súbor"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-msgid "Anti-Virus Warning"
+msgid "Unable to perform Anti-Virus check for the requested file(s)"
+msgstr "Nie je možné vykonať antivírusovú kontrolu požadovaných súborov"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Malicious file detected"
+msgstr "Bol nájdený súbor obsahujúci škodlivý kód"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Anti-Virus warning"
 msgstr "Upozornenie antivírusu"
 
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -4999,6 +5011,10 @@ msgstr "Údaje boli naimportované iba čiastočne (%1$s z %2$s záznamov)"
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Navigate to:"
 msgstr "Prejsť na:"
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "Apps"
+msgstr "Aplikácie"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -6067,10 +6083,6 @@ msgid "Don't remind me again"
 msgstr "Už mi nepripomínať"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 msgid "OK"
 msgstr "OK"
 
@@ -7351,14 +7363,15 @@ msgid "All file versions are retained"
 msgstr "Všetky verzie súboru boli zachované"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid ""
-#| "All messages older than %1$d days will be moved to the archive folder"
 msgid "All file versions older than 1 day will be deleted after next login"
 msgid_plural ""
 "All file versions older than %1$d days will be deleted after next login"
-msgstr[0] "Všetky správy staršie ako %1$d dní budú po ďalšom prihlásení zmazané"
-msgstr[1] "Všetky správy staršie ako %1$d dní budú po ďalšom prihlásení zmazané"
-msgstr[2] "Všetky správy staršie ako %1$d dní budú po ďalšom prihlásení zmazané"
+msgstr[0] ""
+"Všetky správy staršie ako %1$d dní budú po ďalšom prihlásení zmazané"
+msgstr[1] ""
+"Všetky správy staršie ako %1$d dní budú po ďalšom prihlásení zmazané"
+msgstr[2] ""
+"Všetky správy staršie ako %1$d dní budú po ďalšom prihlásení zmazané"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid ""
@@ -10267,23 +10280,17 @@ msgstr "Google Authenticator"
 msgid "Recovery code"
 msgstr "Kód na obnovenie"
 
-#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
-msgid "UNKNOWN"
-msgstr "NEZNÁMY"
-
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
 msgid ""
-"There are no backup devices available for this account.  Please notify "
+"There are no backup devices available for this account. Please notify "
 "support for help."
 msgstr ""
 "Pre tento účet nie sú nastavené žiadne záložné zariadenia. Prosím, obráťte "
 "sa na podporu ak potrebujete pomoc."
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
-msgid "Authentication failure.  Please reload browser and try again."
-msgstr ""
-"Zlyhala autentifikácia. Prosím, znovu načítajte prehliadač a skúste to "
-"znova."
+msgid "Authentication failure. Please try reloading the page."
+msgstr "Zlyhalo overenie totožnosti. Prosím, skúste stránku načítať znova."
 
 #: apps/io.ox/multifactor/settings.js module:io.ox/core/boot
 #: apps/io.ox/multifactor/views/constants.js
@@ -10330,7 +10337,7 @@ msgstr "Zadajte telefónne číslo zariadenia."
 
 #. Catch all error when trying to set up a new 2step device
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-msgid "Something went wrong.  Please try again later."
+msgid "Something went wrong. Please try again later."
 msgstr "Niečo sa pokazilo. Prosím, skúste to neskôr znova."
 
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
@@ -10351,7 +10358,7 @@ msgstr "Pridať možnosť overenia"
 #: module:io.ox/core/boot
 msgid ""
 "In the event you lose or are unable to use your authentication device, your "
-"account will be locked out unless you set up a recovery method.  We strongly "
+"account will be locked out unless you set up a recovery method. We strongly "
 "recommend that you do so now."
 msgstr ""
 "V prípade, že stratíte alebo nebudete mať možnosť použiť svoje overovacie "
@@ -10405,6 +10412,15 @@ msgstr "Neznámy systém"
 msgid "Recovery Code"
 msgstr "Kód na obnovenie"
 
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"This is your recovery code. Please write it down, print it, or save the "
+"file. Be sure to save this in a secure location."
+msgstr ""
+"Toto je váš obnovovací kód. Zapíšte si ho, vytlačte si ho alebo si súbor "
+"uložte. Uchovajte kód na bezpečnom mieste."
+
 #. this is a file name that stores the a long recovery code
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
 #: module:io.ox/core/boot
@@ -10455,14 +10471,20 @@ msgstr "Potvrdzovací kód"
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
+msgid "Please enter the validation code we just sent to your device."
+msgstr ""
+"Prosím, zadajte overovací kód, ktorý sme práve poslali do vášho zariadenia."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad input or server error.  Please try again."
+msgid "Bad input or server error. Please try again."
 msgstr "Chyba vstupu alebo chyba servera. Prosím, skúste to znova."
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad verification code.  Please try again"
+msgid "Bad verification code. Please try again"
 msgstr "Chybný overovací kód. Prosím, skúste to znova."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
@@ -10472,13 +10494,18 @@ msgstr "Registrácia autentifikátora"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
+msgid "Scan the QR code with your authenticator."
+msgstr "Naskenujte QR kód pomocou vašej aplikácie na overovanie."
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
 msgid "Click to copy URL to clipboard"
 msgstr "Kliknutím skopírujete URL do schránky"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
 msgid ""
-"If scanning doesn't work, you may be able to enter the following setup code."
+"If scanning does not work, you may be able to enter the following setup code."
 msgstr ""
 "Ak naskenovanie nefunguje, možno sa vám podarí zadať nasledujúci kód na "
 "nastavenie."
@@ -10491,6 +10518,11 @@ msgid ""
 msgstr ""
 "Po dokončení zadajte overovací kód, aby ste potvrdili, že je všetko správne "
 "nastavené."
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Please touch/activate your device"
+msgstr "Prosím dotknite sa vášho zariadenia / aktivujte vaše zariadenie"
 
 #: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
 #: module:io.ox/core/boot
@@ -10517,6 +10549,10 @@ msgid "Upload Recovery File"
 msgstr "Nahrať obnovovací súbor"
 
 #: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Please enter the recovery code"
+msgstr "Prosím, zadajte obnovovací kód"
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
 msgid "Next 4 characters of the backup string"
 msgstr "Ďalšie 4 znaky záložného kódu"
 
@@ -10541,13 +10577,13 @@ msgid "New code sent."
 msgstr "Zaslaný nový kód."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
-msgid "A new code was sent to your SMS device.  Please enter the code."
+msgid "A new code was sent to your SMS device. Please enter the code."
 msgstr ""
 "Na vaše zariadenie bol zaslaný nový kód pomocou SMS.  Prosím, zadajte ho."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code we sent to the phone *****%s."
 msgstr ""
 "Zabezpečili ste svoj účet dvojkrokovým overením. Prosím, zadajte overovací "
@@ -10555,7 +10591,7 @@ msgstr ""
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
 msgstr ""
 "Zabezpečili ste svoj účet dvojkrokovým overením. Prosím, zadajte overovací "
@@ -10563,7 +10599,7 @@ msgstr ""
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please use your "
+"You secured your account with 2-Step Verification. Please use your "
 "authentication token to complete verification."
 msgstr ""
 "Zabezpečili ste svoj účet dvojkrokovým overením. Prosím, zadajte použite "
@@ -10571,7 +10607,7 @@ msgstr ""
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"This browser is not compatible with your configured authentication device.  "
+"This browser is not compatible with your configured authentication device. "
 "Please use Chrome browser, or Firefox with U2F enabled."
 msgstr ""
 "Tento prehliadač nie je kompatibilný s autentifikačným zariadením, ktoré "
@@ -10581,7 +10617,7 @@ msgstr ""
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"Bad parameters for authenticating with this key.  Possibly wrong URL domain "
+"Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
 msgstr ""
 "Nesprávne parametre na overovanie pomocou tohto kľúča. Možno chybná doména v "
@@ -10594,7 +10630,7 @@ msgstr "Nepodporovaná konfigurácia"
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "This device is not eligible for this request.  Wrong hardware key?"
+msgid "This device is not eligible for this request. Wrong hardware key?"
 msgstr ""
 "Toto zariadenie nie je oprávnené vykonať túto požiadavku. Chybný hardvérový "
 "kľúč?"
@@ -10605,7 +10641,7 @@ msgstr "Časový limit"
 
 #. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "Error authenticating.  Please reload browser and try again."
+msgid "Error authenticating. Please reload browser and try again."
 msgstr ""
 "Zlyhala autentifikácia. Prosím, znovu načítajte prehliadač a skúste to "
 "znova."
@@ -13110,6 +13146,99 @@ msgstr "Pozvať na %s"
 msgid "Add on %s"
 msgstr "Pridať na %s"
 
+#~ msgid "Anti-Virus Warning"
+#~ msgstr "Upozornenie antivírusu"
+
+#~ msgid "UNKNOWN"
+#~ msgstr "NEZNÁMY"
+
+#~ msgid ""
+#~ "There are no backup devices available for this account.  Please notify "
+#~ "support for help."
+#~ msgstr ""
+#~ "Pre tento účet nie sú nastavené žiadne záložné zariadenia. Prosím, "
+#~ "obráťte sa na podporu ak potrebujete pomoc."
+
+#~ msgid "Authentication failure.  Please reload browser and try again."
+#~ msgstr ""
+#~ "Zlyhala autentifikácia. Prosím, znovu načítajte prehliadač a skúste to "
+#~ "znova."
+
+#~ msgid "Something went wrong.  Please try again later."
+#~ msgstr "Niečo sa pokazilo. Prosím, skúste to neskôr znova."
+
+#~ msgid ""
+#~ "In the event you lose or are unable to use your authentication device, "
+#~ "your account will be locked out unless you set up a recovery method.  We "
+#~ "strongly recommend that you do so now."
+#~ msgstr ""
+#~ "V prípade, že stratíte alebo nebudete mať možnosť použiť svoje overovacie "
+#~ "zariadenie, váš účet bude uzamknutý ak nenastavíte metódu obnovenia. "
+#~ "Dôrazne odporúčame, aby ste tak urobili teraz."
+
+#~ msgid "Bad input or server error.  Please try again."
+#~ msgstr "Chyba vstupu alebo chyba servera. Prosím, skúste to znova."
+
+#~ msgid "Bad verification code.  Please try again"
+#~ msgstr "Chybný overovací kód. Prosím, skúste to znova."
+
+#~ msgid ""
+#~ "If scanning doesn't work, you may be able to enter the following setup "
+#~ "code."
+#~ msgstr ""
+#~ "Ak naskenovanie nefunguje, možno sa vám podarí zadať nasledujúci kód na "
+#~ "nastavenie."
+
+#~ msgid "A new code was sent to your SMS device.  Please enter the code."
+#~ msgstr ""
+#~ "Na vaše zariadenie bol zaslaný nový kód pomocou SMS.  Prosím, zadajte ho."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code we sent to the phone *****%s."
+#~ msgstr ""
+#~ "Zabezpečili ste svoj účet dvojkrokovým overením. Prosím, zadajte "
+#~ "overovací kód, ktorý sme poslali na telefón *****%s."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code from the Authenticator App."
+#~ msgstr ""
+#~ "Zabezpečili ste svoj účet dvojkrokovým overením. Prosím, zadajte "
+#~ "overovací kód z aplikácie Authenticator."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please use your "
+#~ "authentication token to complete verification."
+#~ msgstr ""
+#~ "Zabezpečili ste svoj účet dvojkrokovým overením. Prosím, zadajte použite "
+#~ "svoj overovací token na dokončenie overenia."
+
+#~ msgid ""
+#~ "This browser is not compatible with your configured authentication "
+#~ "device.  Please use Chrome browser, or Firefox with U2F enabled."
+#~ msgstr ""
+#~ "Tento prehliadač nie je kompatibilný s autentifikačným zariadením, ktoré "
+#~ "máte nastavené. Prosím, použite prehliadač Chrome alebo Firefox s U2F "
+#~ "podporou."
+
+#~ msgid ""
+#~ "Bad parameters for authenticating with this key.  Possibly wrong URL "
+#~ "domain for this key."
+#~ msgstr ""
+#~ "Nesprávne parametre na overovanie pomocou tohto kľúča. Možno chybná "
+#~ "doména v URL tohto kľúča."
+
+#~ msgid "This device is not eligible for this request.  Wrong hardware key?"
+#~ msgstr ""
+#~ "Toto zariadenie nie je oprávnené vykonať túto požiadavku. Chybný "
+#~ "hardvérový kľúč?"
+
+#~ msgid "Error authenticating.  Please reload browser and try again."
+#~ msgstr ""
+#~ "Zlyhala autentifikácia. Prosím, znovu načítajte prehliadač a skúste to "
+#~ "znova."
+
 #~ msgid "Please leave a comment for other participants."
 #~ msgstr "Prosím, zanechajte komentár pre ostatných účastníkov."
 
@@ -14056,9 +14185,6 @@ msgstr "Pridať na %s"
 
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "Približné trvanie odberov"
-
-#~ msgid "Apps"
-#~ msgstr "Aplikácie"
 
 #~ msgid "Apr"
 #~ msgstr "Apr"

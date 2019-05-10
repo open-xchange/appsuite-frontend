@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-18 14:21+0200\n"
+"PO-Revision-Date: 2019-05-08 15:05+0200\n"
 "Last-Translator: Nicky Thomassen <nicky@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -767,6 +767,10 @@ msgstr "Rotér billede"
 #: apps/io.ox/calendar/actions/change-organizer.js
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "OK"
@@ -3948,6 +3952,12 @@ msgstr "Kopiér til beskrivelse"
 msgid "Saved in:"
 msgstr "Gemt i:"
 
+#. %1$s maximum file size
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+msgstr ""
+"Dit valgte billede er større end den størst tilladte filstørrelse, %1$s"
+
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid ""
 "This filetype is not supported as contact picture. Only image types (JPG, "
@@ -3955,12 +3965,6 @@ msgid ""
 msgstr ""
 "Denne filtype kan ikke bruges som kontaktbillede.  Kun billedtyper (JPG, "
 "GIF, BMP og PNG) kan bruges."
-
-#. %1$s maximum file size
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-msgstr ""
-"Dit valgte billede er større end den størst tilladte filstørrelse, %1$s"
 
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
@@ -4249,8 +4253,16 @@ msgid "Download unscanned file"
 msgstr "Hent fil som ikke er blevet skannet"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-msgid "Anti-Virus Warning"
-msgstr "Advarsel fra antivirus"
+msgid "Unable to perform Anti-Virus check for the requested file(s)"
+msgstr "En eller flere filer kunne ikke antivirus-skannes"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Malicious file detected"
+msgstr "Skadelig fil fundet"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Anti-Virus warning"
+msgstr "Antivirus advarsel"
 
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
 msgid "Reset this list"
@@ -4967,6 +4979,10 @@ msgstr "Oplysninger kun delvist importeret (%1$s af %2$s poster)"
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Navigate to:"
 msgstr "Navigér til:"
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "Apps"
+msgstr "Apps"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -6033,10 +6049,6 @@ msgid "Don't remind me again"
 msgstr "Påmind mig ikke igen"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 msgid "OK"
 msgstr "OK"
 
@@ -10182,27 +10194,23 @@ msgstr "Yubikey"
 
 #: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
 msgid "Google Authenticator"
-msgstr "Google Authenticator Google totrinsbekræftelse"
+msgstr "Google totrinsbekræftelse"
 
 #: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
 msgid "Recovery code"
 msgstr "Kode til gendannelse"
 
-#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
-msgid "UNKNOWN"
-msgstr "UKENDT"
-
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
 msgid ""
-"There are no backup devices available for this account.  Please notify "
+"There are no backup devices available for this account. Please notify "
 "support for help."
 msgstr ""
-"Der er ikke nogen reserveenheder til denne konto. Kontakt venligst support "
-"for hjælp."
+"Der er ikke nogen backup enheder tilknyttet denne konto. Kontakt venligst "
+"support for hjælp."
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
-msgid "Authentication failure.  Please reload browser and try again."
-msgstr "Godkendelse fejlede. Genindlæs venligst siden og prøv igen."
+msgid "Authentication failure. Please try reloading the page."
+msgstr "Gdkendelse fejlede. Prøv venligst og genindlæs siden."
 
 #: apps/io.ox/multifactor/settings.js module:io.ox/core/boot
 #: apps/io.ox/multifactor/views/constants.js
@@ -10249,8 +10257,8 @@ msgstr "Indtast enhedens telefonnummer."
 
 #. Catch all error when trying to set up a new 2step device
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-msgid "Something went wrong.  Please try again later."
-msgstr "Der gik noget galt. Prøv venligst igen senere."
+msgid "Something went wrong. Please try again later."
+msgstr "Der er noget som er gået galt. Prøv venligst igen senere."
 
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
 msgid "Please only use numeric characters for phone number"
@@ -10270,12 +10278,12 @@ msgstr "Tilføj mulighed for verifikation"
 #: module:io.ox/core/boot
 msgid ""
 "In the event you lose or are unable to use your authentication device, your "
-"account will be locked out unless you set up a recovery method.  We strongly "
+"account will be locked out unless you set up a recovery method. We strongly "
 "recommend that you do so now."
 msgstr ""
-"Hvis du mister, eller ikke kan bruge, din enhed til godkendelse, bliver du "
-"låst ude af din konto, hvis ikke du har angivet en metode til gendannelse. "
-"Vi anbefaler på det kraftigste, at du sætter sådan en metode op nu."
+"Hvis du mister adgang til din enhed for godkendelse, bliver din konto låst "
+"medmindre du har sat en gendannelsesmetode op. Vi anbefaler at du sætter "
+"sådan en op nu."
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
@@ -10322,6 +10330,15 @@ msgstr "Ukendt system"
 #: apps/io.ox/multifactor/settings/views/printBackupString.js
 msgid "Recovery Code"
 msgstr "Kode til gendannelse"
+
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"This is your recovery code. Please write it down, print it, or save the "
+"file. Be sure to save this in a secure location."
+msgstr ""
+"Det her er din gendannelseskode. Skriv den venligst den, eller gem den i en "
+"fil, på et sikkert sted."
 
 #. this is a file name that stores the a long recovery code
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
@@ -10373,20 +10390,30 @@ msgstr "Bekræftelseskode"
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
-#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad input or server error.  Please try again."
-msgstr "Forkert input eller serverfejl. Prøv venligst igen."
+msgid "Please enter the validation code we just sent to your device."
+msgstr "Indtast venligst koden som vi lige har sendt til din enhed."
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad verification code.  Please try again"
-msgstr "Forkert verifikationskode. Prøv venligst igen."
+msgid "Bad input or server error. Please try again."
+msgstr "Forkert indput eller serverfejl. Prøv venligst igen."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+msgid "Bad verification code. Please try again"
+msgstr "Verifikationskoden er ikke gyldig. Prøv venligst igen."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
 msgid "Authenticator Registration"
 msgstr "Registrering af totrinsbekræftelse"
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Scan the QR code with your authenticator."
+msgstr "Skan QR-koden med din totrinsbekræfter"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
@@ -10396,9 +10423,9 @@ msgstr "Klik for kopiere URL'en til udklipsholderen"
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
 msgid ""
-"If scanning doesn't work, you may be able to enter the following setup code."
+"If scanning does not work, you may be able to enter the following setup code."
 msgstr ""
-"Hvis ikke det virker at skanne, kan du muligvis indtaste den følgende "
+"Hvis skanningen ikke virker, kan du muligvis indtaste den følgende "
 "opsætningskode."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
@@ -10409,6 +10436,11 @@ msgid ""
 msgstr ""
 "Når færdig, indtast venligst en kode til godkendelse, for at tjekke om alt "
 "er indstillet korrekt."
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Please touch/activate your device"
+msgstr "Vær venlig og aktivér din enhed"
 
 #: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
 #: module:io.ox/core/boot
@@ -10435,6 +10467,10 @@ msgid "Upload Recovery File"
 msgstr "Overfør fil til gendannelse"
 
 #: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Please enter the recovery code"
+msgstr "Indtast venligst koden til gendannelse."
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
 msgid "Next 4 characters of the backup string"
 msgstr "Næste 4 karaktere af reservestrengen"
 
@@ -10459,49 +10495,49 @@ msgid "New code sent."
 msgstr "Ny kode sent."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
-msgid "A new code was sent to your SMS device.  Please enter the code."
-msgstr "En nye kode blev sendt til din SMS enhed. Indtast venligst koden."
+msgid "A new code was sent to your SMS device. Please enter the code."
+msgstr "En ny kode blev sendt til din SMS-enhed. Indtast venligst koden."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code we sent to the phone *****%s."
 msgstr ""
-"Du har sikret din konto med tofaktorgodkendelse. Indtast venligst koden til "
-"verifikation som blev sendt til *****%s."
+"Du har sikret din konto med totrinsbekræftelse. Indtast venligst den "
+"verifikationskode, vi har sendt til telefonen *****%s."
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
 msgstr ""
-"Du har sikret din konto med tofaktorgodkendelse. Indtast venligst "
-"verifikationskoden fra app'en til godkendelse."
+"Du har sikret din konto med totrinsbekræftelse. Indtast venligst den "
+"verifikationskode, som totrins-app'en viser."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please use your "
+"You secured your account with 2-Step Verification. Please use your "
 "authentication token to complete verification."
 msgstr ""
-"Du har sikret din konto med tofaktorgodkendelse. Indtast venligst din token "
-"til godkendelse for at færdiggøre verifikationen."
+"Du har sikret din konto med totrinsbekræftelse. Indtast venligst din token "
+"til godkendelse for at gennemføre verifikationen."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"This browser is not compatible with your configured authentication device.  "
+"This browser is not compatible with your configured authentication device. "
 "Please use Chrome browser, or Firefox with U2F enabled."
 msgstr ""
-"Denne browser er ikke kompatibel med di indstillede enhed til godkendelse. "
-"Brug venligst Chrome browseren, eller Firefox med U2F slået til."
+"Denne browser er ikke kompatibel med din indstillede enhed til godkendelse. "
+"Brug venligst Chrome, eller Firefox med U2F aktiveret."
 
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"Bad parameters for authenticating with this key.  Possibly wrong URL domain "
+"Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
 msgstr ""
-"Forkerte parametre for godkendelse med denne nøgle. Mulige årsager er "
-"forkert URL domæne."
+"Forkerte parametre for godkendelse med denne nøgle. URL-domænet er muligvis "
+"forkert for nøglen."
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10510,10 +10546,8 @@ msgstr "Konfigurationen er ikke understøttet"
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "This device is not eligible for this request.  Wrong hardware key?"
-msgstr ""
-"Denne enhed kan ikke modtage denne type af forespørgsel. Er hardware-nøglen "
-"forkert?"
+msgid "This device is not eligible for this request. Wrong hardware key?"
+msgstr "Denne enhed kan ikke lave denne forespørgsel. Forkert hardware nøgle?"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid "Timeout"
@@ -10521,8 +10555,8 @@ msgstr "Tidsudløb"
 
 #. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "Error authenticating.  Please reload browser and try again."
-msgstr "Fejl ved godkendelse. Genstart browseren og prøv venligst igen."
+msgid "Error authenticating. Please reload browser and try again."
+msgstr "Fejl ved godkendelse. Genindlæs venligst browseren og prøv igen."
 
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
 msgid "Topics"
@@ -13007,6 +13041,95 @@ msgstr "Invitér til %s"
 msgid "Add on %s"
 msgstr "Tilføj på %s"
 
+#~ msgid "Anti-Virus Warning"
+#~ msgstr "Advarsel fra antivirus"
+
+#~ msgid "UNKNOWN"
+#~ msgstr "UKENDT"
+
+#~ msgid ""
+#~ "There are no backup devices available for this account.  Please notify "
+#~ "support for help."
+#~ msgstr ""
+#~ "Der er ikke nogen reserveenheder til denne konto. Kontakt venligst "
+#~ "support for hjælp."
+
+#~ msgid "Authentication failure.  Please reload browser and try again."
+#~ msgstr "Godkendelse fejlede. Genindlæs venligst siden og prøv igen."
+
+#~ msgid "Something went wrong.  Please try again later."
+#~ msgstr "Der gik noget galt. Prøv venligst igen senere."
+
+#~ msgid ""
+#~ "In the event you lose or are unable to use your authentication device, "
+#~ "your account will be locked out unless you set up a recovery method.  We "
+#~ "strongly recommend that you do so now."
+#~ msgstr ""
+#~ "Hvis du mister, eller ikke kan bruge, din enhed til godkendelse, bliver "
+#~ "du låst ude af din konto, hvis ikke du har angivet en metode til "
+#~ "gendannelse. Vi anbefaler på det kraftigste, at du sætter sådan en metode "
+#~ "op nu."
+
+#~ msgid "Bad input or server error.  Please try again."
+#~ msgstr "Forkert input eller serverfejl. Prøv venligst igen."
+
+#~ msgid "Bad verification code.  Please try again"
+#~ msgstr "Forkert verifikationskode. Prøv venligst igen."
+
+#~ msgid ""
+#~ "If scanning doesn't work, you may be able to enter the following setup "
+#~ "code."
+#~ msgstr ""
+#~ "Hvis ikke det virker at skanne, kan du muligvis indtaste den følgende "
+#~ "opsætningskode."
+
+#~ msgid "A new code was sent to your SMS device.  Please enter the code."
+#~ msgstr "En nye kode blev sendt til din SMS enhed. Indtast venligst koden."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code we sent to the phone *****%s."
+#~ msgstr ""
+#~ "Du har sikret din konto med tofaktorgodkendelse. Indtast venligst koden "
+#~ "til verifikation som blev sendt til *****%s."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code from the Authenticator App."
+#~ msgstr ""
+#~ "Du har sikret din konto med tofaktorgodkendelse. Indtast venligst "
+#~ "verifikationskoden fra app'en til godkendelse."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please use your "
+#~ "authentication token to complete verification."
+#~ msgstr ""
+#~ "Du har sikret din konto med tofaktorgodkendelse. Indtast venligst din "
+#~ "token til godkendelse for at færdiggøre verifikationen."
+
+#~ msgid ""
+#~ "This browser is not compatible with your configured authentication "
+#~ "device.  Please use Chrome browser, or Firefox with U2F enabled."
+#~ msgstr ""
+#~ "Denne browser er ikke kompatibel med di indstillede enhed til "
+#~ "godkendelse. Brug venligst Chrome browseren, eller Firefox med U2F slået "
+#~ "til."
+
+#~ msgid ""
+#~ "Bad parameters for authenticating with this key.  Possibly wrong URL "
+#~ "domain for this key."
+#~ msgstr ""
+#~ "Forkerte parametre for godkendelse med denne nøgle. Mulige årsager er "
+#~ "forkert URL domæne."
+
+#~ msgid "This device is not eligible for this request.  Wrong hardware key?"
+#~ msgstr ""
+#~ "Denne enhed kan ikke modtage denne type af forespørgsel. Er hardware-"
+#~ "nøglen forkert?"
+
+#~ msgid "Error authenticating.  Please reload browser and try again."
+#~ msgstr "Fejl ved godkendelse. Genstart browseren og prøv venligst igen."
+
 #~ msgid "Please leave a comment for other participants."
 #~ msgstr "Efterlad en kommentar til de andre deltagere."
 
@@ -13245,11 +13368,6 @@ msgstr "Tilføj på %s"
 #~ "i øjeblikket %1$s af sin %2$s tilgængelige diskplads. Mængden af fri "
 #~ "plads er %3$s."
 
-#, fuzzy
-#~| msgid "is not a valid user or group."
-#~ msgid " is not a valid user or group."
-#~ msgstr "er ikke en gyldig bruger eller gruppe."
-
 #~ msgid "%1$d %"
 #~ msgstr "%1$d %"
 
@@ -13321,31 +13439,6 @@ msgstr "Tilføj på %s"
 #~ msgid "%1$s Options"
 #~ msgstr "%1$s valg"
 
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s for %2$s"
-#~ msgstr "%1$s af %2$s"
-
-#, fuzzy
-#~| msgid "%s client for Android"
-#~ msgid "%1$s for Android"
-#~ msgstr "%s klient for Android"
-
-#, fuzzy
-#~| msgid "%s client for Mac OS"
-#~ msgid "%1$s for MacOS"
-#~ msgstr "%s klient for Mac OS"
-
-#, fuzzy
-#~| msgid "%s client for Windows"
-#~ msgid "%1$s for Windows"
-#~ msgstr "%s klient for Windows"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s for iOS"
-#~ msgstr "%1$s af %2$s"
-
 #~ msgid "%1$s has ended the presentation."
 #~ msgstr "%1$s har afsluttet præsentationen."
 
@@ -13367,11 +13460,6 @@ msgstr "Tilføj på %s"
 #~ msgid_plural "%1$s mails, %2$s unread"
 #~ msgstr[0] "%1$s e-mail, %2$s ulæst"
 #~ msgstr[1] "%1$s e-mails, %2$s ulæste"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s on %2$s"
-#~ msgstr "%1$s af %2$s"
 
 #~ msgid "%1$s updated their profile:"
 #~ msgstr "%1$s ændrede deres profil:"
@@ -13563,21 +13651,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Advanced facets block was opened."
 #~ msgstr "Blokken avancerede kategorier blev åbnet."
 
-#, fuzzy
-#~| msgid "Advanced Facets"
-#~ msgid "Advanced user?"
-#~ msgstr "Avancerede kategorier"
-
-#, fuzzy
-#~| msgid "Assistant"
-#~ msgid "Afghanistan"
-#~ msgstr "Assistent"
-
-#, fuzzy
-#~| msgid "Add contact"
-#~ msgid "All contacts"
-#~ msgstr "Tilføj kontakt"
-
 #~ msgid "All future messages from %1$s will be moved to the selected folder."
 #~ msgid_plural ""
 #~ "All future messages from the senders of the selected mails will be moved "
@@ -13642,9 +13715,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "Cirka længde af abonnementer"
-
-#~ msgid "Apps"
-#~ msgstr "Apps"
 
 #~ msgid "April"
 #~ msgstr "April"
@@ -13720,21 +13790,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Back to appointment"
 #~ msgstr "Tilbage til aftale"
 
-#, fuzzy
-#~| msgid "Back to sign in"
-#~ msgid "Back to devices"
-#~ msgstr "Tilbage til log-ind"
-
-#, fuzzy
-#~| msgid "Back to sign in"
-#~ msgid "Back to modules"
-#~ msgstr "Tilbage til log-ind"
-
-#, fuzzy
-#~| msgid "your platform"
-#~ msgid "Back to platforms"
-#~ msgstr "din platform"
-
 #~ msgid ""
 #~ "Below the recipient you will find further functions, e.g. for sending "
 #~ "copies to other recipients or for adding attachments."
@@ -13787,11 +13842,6 @@ msgstr "Tilføj på %s"
 #~ msgid "CardDAV Login"
 #~ msgstr "CardDAV-brugernavn"
 
-#, fuzzy
-#~| msgid "Mail address"
-#~ msgid "Categories"
-#~ msgstr "E-mail-adresse"
-
 #~ msgid "Change View"
 #~ msgstr "Skift visning"
 
@@ -13815,16 +13865,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Checking credentials ..."
 #~ msgstr "Tjekker loginoplysninger..."
-
-#, fuzzy
-#~| msgid "Children"
-#~ msgid "Chile"
-#~ msgstr "Børn"
-
-#, fuzzy
-#~| msgid "Share %1$s \"%2$s\""
-#~ msgid "Chrome %1$s on %2$s"
-#~ msgstr "Del %1$s »%2$s«"
 
 #~ msgid "Classic colors"
 #~ msgstr "Klassiske farver"
@@ -13875,16 +13915,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Close document"
 #~ msgstr "Luk dokument"
 
-#, fuzzy
-#~| msgid "close for %1$s"
-#~ msgid "Close for %1$s"
-#~ msgstr "luk for %1$s"
-
-#, fuzzy
-#~| msgid "Click to close the recurrence view"
-#~ msgid "Close recurrence view"
-#~ msgstr "Klik for at lukke gentagelsesvinduet"
-
 #~ msgid "Close reminder for %1$s"
 #~ msgstr "Luk påmindelse om %1$s"
 
@@ -13894,11 +13924,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Closing a tile"
 #~ msgstr "Lukker en flise"
 
-#, fuzzy
-#~| msgid "Color"
-#~ msgid "Colombia"
-#~ msgstr "Farve"
-
 #~ msgid "Color scheme"
 #~ msgstr "Farveskema"
 
@@ -13907,16 +13932,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Common Facets"
 #~ msgstr "Almindelige kategorier"
-
-#, fuzzy
-#~| msgid "Tomorrow"
-#~ msgid "Comoros"
-#~ msgstr "I morgen"
-
-#, fuzzy
-#~| msgid "Compact view"
-#~ msgid "Compact rows"
-#~ msgstr "Kompakt visning"
 
 #~ msgid "Composing a new E-Mail"
 #~ msgstr "Skriver en ny e-mail"
@@ -13938,10 +13953,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Content"
 #~ msgstr "Indhold"
-
-#, fuzzy
-#~ msgid "Continue Presentation"
-#~ msgstr "Opgaveinvitationer"
 
 #~ msgid "Continue presentation"
 #~ msgstr "Fortsæt præsentation"
@@ -14038,11 +14049,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Current Date"
 #~ msgstr "Dags dato"
 
-#, fuzzy
-#~| msgid "Currently refreshing"
-#~ msgid "Current session"
-#~ msgstr "I gang med at opdatere"
-
 #~ msgid "Custom colors"
 #~ msgstr "Tilpassede farve"
 
@@ -14089,12 +14095,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Default sender for vacation notice"
 #~ msgstr "Standardafsender for feriesvar"
 
-#, fuzzy
-#~| msgctxt "folder"
-#~| msgid "Deleted messages"
-#~ msgid "Delete all %1$d messages"
-#~ msgstr "Slettet beskeder"
-
 #~ msgid "Delete all accounts"
 #~ msgstr "Slet alle konti"
 
@@ -14104,11 +14104,6 @@ msgstr "Tilføj på %s"
 #~| msgid "Return Receipt"
 #~ msgid "Delivery Receipt"
 #~ msgstr "Leveringskvittering"
-
-#, fuzzy
-#~| msgid "Delete contact"
-#~ msgid "Detailed contact list"
-#~ msgstr "Slet kontakt"
 
 #~ msgid ""
 #~ "Detailed guides for all modules are located in the help section of the "
@@ -14145,19 +14140,8 @@ msgstr "Tilføj på %s"
 #~ msgid "Displaying the help or the settings"
 #~ msgstr "Vis hjælp eller indstillinger"
 
-#, fuzzy
-#~| msgid "About"
-#~ msgid "Djibouti"
-#~ msgstr "Om"
-
 #~ msgid "Do you already have a %s account?"
 #~ msgstr "Har du allerede en %s-konto?"
-
-#, fuzzy
-#~| msgctxt "One file only"
-#~| msgid "Do you really want to delete this version?"
-#~ msgid "Do you really want to delete all older versions?"
-#~ msgstr "Vil du virkelig slette denne udgave?"
 
 #~ msgctxt "One file only"
 #~ msgid "Do you really want to delete this file?"
@@ -14165,12 +14149,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Do you really want to discard this mail?"
 #~ msgstr "Vil du virkelig kassere denne e-mail?"
-
-#, fuzzy
-#~| msgctxt "One file only"
-#~| msgid "Do you really want to delete this version?"
-#~ msgid "Do you really want to terminate that session?"
-#~ msgstr "Vil du virkelig slette denne udgave?"
 
 #~ msgid "Do you want to create a %s account?"
 #~ msgstr "Ønsker du at oprette en %s-konto?"
@@ -14223,11 +14201,6 @@ msgstr "Tilføj på %s"
 #~ msgid "EAS Login"
 #~ msgstr "EAS-brugernavn"
 
-#, fuzzy
-#~| msgid "Mail"
-#~ msgid "EMail"
-#~ msgstr "E-mail"
-
 #~ msgid "Each %s Day"
 #~ msgstr "Hver %s dag"
 
@@ -14236,16 +14209,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Each %s. %s"
 #~ msgstr "Hver %s. %s"
-
-#, fuzzy
-#~| msgid "Last month"
-#~ msgid "East Timor"
-#~ msgstr "Sidste måned"
-
-#, fuzzy
-#~| msgid "Due on %1$s"
-#~ msgid "Edge on %1$s"
-#~ msgstr "Forfalder d. %1$s"
 
 #~ msgid "Edit Tabs"
 #~ msgstr "Redigér faner"
@@ -14256,11 +14219,6 @@ msgstr "Tilføj på %s"
 #~ msgstr ""
 #~ "Redigér en indstilling i højre side. I de fleste tilfælde bliver "
 #~ "ændringer aktiveret med det samme."
-
-#, fuzzy
-#~| msgid "Mail address"
-#~ msgid "Edit categories"
-#~ msgstr "E-mail-adresse"
 
 #~ msgid "Editing multiple E-Mails"
 #~ msgstr "Redigering af flere e-mails"
@@ -14298,16 +14256,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Emptying folder... This may take a few seconds."
 #~ msgstr "Tømmer mappe... Dette kan tage nogle sekunder."
 
-#, fuzzy
-#~| msgid "Disable"
-#~ msgid "Enable / Disable"
-#~ msgstr "Deaktivér"
-
-#, fuzzy
-#~| msgid "Mail address"
-#~ msgid "Enable categories"
-#~ msgstr "E-mail-adresse"
-
 #~ msgid "Enable for the following addresses"
 #~ msgstr "Aktivér for de følgende adresser"
 
@@ -14322,10 +14270,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Encrypt"
 #~ msgstr "Kryptér"
-
-#, fuzzy
-#~ msgid "End Presentation"
-#~ msgstr "Opgaveinvitationer"
 
 #~ msgid "End of Slides"
 #~ msgstr "Slut på slides"
@@ -14430,11 +14374,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Expiration: %1$d"
 #~ msgstr "Udløbstid: %1$d"
 
-#, fuzzy
-#~| msgid "Send as vCard"
-#~ msgid "Export as vCard"
-#~ msgstr "Send som vCard"
-
 #~ msgid "Extended view"
 #~ msgstr "Udvidet visning"
 
@@ -14498,16 +14437,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Finish tour"
 #~ msgstr "Afslut tur"
 
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "Firefox %1$s on %2$s"
-#~ msgstr "%1$s af %2$s"
-
-#, fuzzy
-#~| msgid "Fit to screen width"
-#~ msgid "Fit to screen height"
-#~ msgstr "Tilpas til skærmbredde"
-
 #~ msgid "Flag mail with"
 #~ msgstr "Flag e-mail med"
 
@@ -14543,11 +14472,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Forward emails as:"
 #~ msgstr "Videresend e-mails som:"
 
-#, fuzzy
-#~| msgid "Freelancer"
-#~ msgid "France"
-#~ msgstr "Freelancer"
-
 #~ msgid "Fullscreen"
 #~ msgstr "Fuldskærm"
 
@@ -14578,23 +14502,8 @@ msgstr "Tilføj på %s"
 #~ msgid "Google Drive"
 #~ msgstr "Google Drive"
 
-#, fuzzy
-#~| msgid "Green"
-#~ msgid "Greece"
-#~ msgstr "Grøn"
-
-#, fuzzy
-#~| msgid "Green"
-#~ msgid "Greenland"
-#~ msgstr "Grøn"
-
 #~ msgid "Guidance"
 #~ msgstr "Vejledning"
-
-#, fuzzy
-#~| msgid "Waiting"
-#~ msgid "Haiti"
-#~ msgstr "Venter"
 
 #~ msgid "Halo view"
 #~ msgstr "Samlet visning"
@@ -14670,11 +14579,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "IMAP server"
 #~ msgstr "IMAP-server"
-
-#, fuzzy
-#~| msgid "Added %1$s."
-#~ msgid "IP Address: %1$s"
-#~ msgstr "Tilføjede %1$s."
 
 #~ msgid ""
 #~ "If a folder contains images, you can display a slideshow. To do so click "
@@ -14776,11 +14680,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Incoming Notification Mails"
 #~ msgstr "Indkomne e-mailunderretninger"
 
-#, fuzzy
-#~| msgid "Undone"
-#~ msgid "Indonesia"
-#~ msgstr "Fortryd"
-
 #~ msgid "Info area"
 #~ msgstr "Informationsområde"
 
@@ -14850,11 +14749,6 @@ msgstr "Tilføj på %s"
 #~ msgid "June"
 #~ msgstr "Juni"
 
-#, fuzzy
-#~| msgid "Due on %1$s"
-#~ msgid "Just open %1$s"
-#~ msgstr "Forfalder d. %1$s"
-
 #~ msgid "Keep looping endlessly"
 #~ msgstr "Bliv ved med at gentage"
 
@@ -14887,14 +14781,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Line %1$d: %2$s"
 #~ msgstr "Linje %1$d: %2$s"
-
-#, fuzzy
-#~ msgid "Line wrap when sending text mails after"
-#~ msgstr "Linieombryd når tekst e-mails sendes efter "
-
-#, fuzzy
-#~ msgid "Line wrap when sending text mails after how much characters"
-#~ msgstr "Linieombryd når tekst e-mails sendes efter "
 
 #~ msgid "Line wrap when sending text mails after: "
 #~ msgstr "Linieombryd når tekst e-mails sendes efter: "
@@ -15003,11 +14889,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Months"
 #~ msgstr "Måneder"
 
-#, fuzzy
-#~| msgid "Months"
-#~ msgid "Montserrat"
-#~ msgstr "Måneder"
-
 #~ msgid "More zoom settings"
 #~ msgstr "Flere indstillinger for zoom"
 
@@ -15020,29 +14901,14 @@ msgstr "Tilføj på %s"
 #~ msgid "Names and email addresses"
 #~ msgstr "Navne og e-mail-adresser"
 
-#, fuzzy
-#~| msgid "Drive Client"
-#~ msgid "Native clients"
-#~ msgstr "Drive-klient"
-
 #~ msgid "Navigation bar"
 #~ msgstr "Navigationslinje"
 
 #~ msgid "Never."
 #~ msgstr "Aldrig."
 
-#, fuzzy
-#~| msgid "New calendar"
-#~ msgid "New Caledonia"
-#~ msgstr "Ny kalender"
-
 #~ msgid "New Mail from %1$s %2$s. Press [enter] to open"
 #~ msgstr "Ny e-mail fra %1$s %2$s. Tryk [enter] for at åbne"
-
-#, fuzzy
-#~| msgid "New calendar"
-#~ msgid "New Zealand"
-#~ msgstr "Ny kalender"
 
 #~ msgid "New objects icon"
 #~ msgstr "Nyt objektikon"
@@ -15094,11 +14960,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Normal"
 #~ msgstr "Normal"
-
-#, fuzzy
-#~| msgid "Forward"
-#~ msgid "Norway"
-#~ msgstr "Videresend"
 
 #~ msgid "Not yet confirmed"
 #~ msgstr "Endnu ikke bekræftet"
@@ -15194,28 +15055,14 @@ msgstr "Tilføj på %s"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Åbner E-mail-indstillingerne"
 
-#, fuzzy
-#~| msgid "Other Address"
-#~ msgid "Other clients"
-#~ msgstr "Anden adresse"
-
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Opgave som er over tid. %1$s %2$s. Tryk [enter] for at åbne"
 
 #~ msgid "Page number"
 #~ msgstr "Sidenummer"
 
-#, fuzzy
-#~| msgid "Distance"
-#~ msgid "Pakistan"
-#~ msgstr "Distance"
-
 #~ msgid "Pause"
 #~ msgstr "Pause"
-
-#, fuzzy
-#~ msgid "Pause Presentation"
-#~ msgstr "Opgaveinvitationer"
 
 #~ msgid "Pause auto-play mode"
 #~ msgstr "Pause auto-spil-modus"
@@ -15228,16 +15075,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Permanently remove deleted emails?"
 #~ msgstr "Fjern slettede e-mails permanent?"
-
-#, fuzzy
-#~| msgid "Permissions"
-#~ msgid "Permissions for"
-#~ msgstr "Tilladelser"
-
-#, fuzzy
-#~| msgid "Permissions"
-#~ msgid "Permissions: %1$s"
-#~ msgstr "Tilladelser"
 
 #~ msgid "Phone (private)"
 #~ msgstr "Telefon (privat)"
@@ -15295,11 +15132,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Angiv venligst disse manglende variable: "
 
-#, fuzzy
-#~| msgid "Portal"
-#~ msgid "Portugal"
-#~ msgstr "Portal"
-
 #~ msgid "Present"
 #~ msgstr "Præsentér"
 
@@ -15321,10 +15153,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Presenter"
 #~ msgstr "Taler"
-
-#, fuzzy
-#~ msgid "Presenter Navigation"
-#~ msgstr "Opgaveinvitationer"
 
 #~ msgid "Presenter navigation bar"
 #~ msgstr "Talernavigationslinje"
@@ -15353,17 +15181,8 @@ msgstr "Tilføj på %s"
 #~ msgid "Prev"
 #~ msgstr "Forrige"
 
-#, fuzzy
-#~ msgid "Preview pane"
-#~ msgstr "Forhåndsvisning"
-
 #~ msgid "Previous slide"
 #~ msgstr "Forrige slide"
-
-#, fuzzy
-#~| msgid "Edit contact"
-#~ msgid "Printout of contacts"
-#~ msgstr "Redigér kontakt"
 
 #~ msgid "Privacy Notice"
 #~ msgstr "Persondatapolitik"
@@ -15412,11 +15231,6 @@ msgstr "Tilføj på %s"
 #~ "din vurdering eller brug venstre- og højre-pil til at justere din "
 #~ "vurdering."
 
-#, fuzzy
-#~| msgid "Page %1$d of %2$d"
-#~ msgid "Rating %1$d of 5"
-#~ msgstr "Side %1$d af %2$d"
-
 #~ msgid "Read"
 #~ msgstr "Læs"
 
@@ -15441,11 +15255,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Remove facet"
 #~ msgstr "Fjern kategori"
 
-#, fuzzy
-#~| msgid "Remove from recipient list"
-#~ msgid "Remove restore point: \"%1$s\""
-#~ msgstr "Fjern fra modtagerliste"
-
 #~ msgid "Reply All"
 #~ msgstr "Svar alle"
 
@@ -15461,18 +15270,9 @@ msgstr "Tilføj på %s"
 #~ msgid "Restore applications"
 #~ msgstr "Gendan programmer"
 
-#, fuzzy
-#~| msgid "Never"
-#~ msgid "Revert"
-#~ msgstr "Aldrig"
-
 #~| msgid "Text"
 #~ msgid "Rich Text"
 #~ msgstr "Tekst"
-
-#, fuzzy
-#~ msgid "Right"
-#~ msgstr "i aften"
 
 #~ msgid "Rule applies from"
 #~ msgstr "Regel gælder fra"
@@ -15521,11 +15321,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "SMTP server"
 #~ msgstr "SMTP-server"
-
-#, fuzzy
-#~| msgid "Share %1$s \"%2$s\""
-#~ msgid "Safari %1$s on %2$s"
-#~ msgstr "Del %1$s »%2$s«"
 
 #~ msgid "Save in file store"
 #~ msgstr "Gem i fillager"
@@ -15619,11 +15414,6 @@ msgstr "Tilføj på %s"
 #~ msgid_plural "Share %1$d items"
 #~ msgstr[0] "Del mappen »%1$d«"
 #~ msgstr[1] "Del %1$d elementer"
-
-#, fuzzy
-#~ msgctxt "owner"
-#~ msgid "Shared by: %1$s"
-#~ msgstr "Søgte efter: %1$s"
 
 #~ msgid "Sharing link created for file \"%1$d\""
 #~ msgid_plural "Sharing link created for %1$d items"
@@ -15723,10 +15513,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Show strack trace"
 #~ msgstr "Vis strack sporing"
 
-#, fuzzy
-#~ msgid "Show/hide folder"
-#~ msgstr "Flyt mappe"
-
 #~ msgid "Sidebar"
 #~ msgstr "Sidelinje"
 
@@ -15745,11 +15531,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Signing out"
 #~ msgstr "Logger ud"
 
-#, fuzzy
-#~| msgid "Phone list"
-#~ msgid "Simple phone list"
-#~ msgstr "Telefonliste"
-
 #~ msgid "Size (bytes)"
 #~ msgstr "Størrelse (bytes)"
 
@@ -15758,11 +15539,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Slideshow / Autoplay mode"
 #~ msgstr "Diasshow / spil-selv-modus"
-
-#, fuzzy
-#~| msgid "Smartphone settings:"
-#~ msgid "Smartphone"
-#~ msgstr "Smartphone-indstillinger:"
 
 #~ msgid ""
 #~ "Social accounts are only used to download contact and/or calendar data"
@@ -15792,14 +15568,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Sorry, common mails couldn't be assigned automatically."
 #~ msgstr "Beklager.  Almindelige e-mails kunne ikke fordeles automatisk."
 
-#, fuzzy
-#~ msgid "Sorry, the audio file could not be played."
-#~ msgstr "Denne fil kunne ikke overføre."
-
-#, fuzzy
-#~ msgid "Sorry, the video could not be played."
-#~ msgstr "Denne fil kunne ikke overføre."
-
 #~ msgid ""
 #~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
 #~ "LinkedIn with the permission to do read messages."
@@ -15815,10 +15583,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Spam folder"
 #~ msgstr "Spam mappe"
-
-#, fuzzy
-#~ msgid "Start Presentation"
-#~ msgstr "Opgaveinvitationer"
 
 #~ msgid "Start local presentation"
 #~ msgstr "Påbegynd lokal præsentation"
@@ -15856,11 +15620,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Such data will never be uploaded"
 #~ msgstr "Data af den type vil aldrig blive overført"
 
-#, fuzzy
-#~| msgid "Your name"
-#~ msgid "Suriname"
-#~ msgstr "Dit navn"
-
 #~ msgid ""
 #~ "Synchronization of Emails, Calendar, Contacts and Tasks, along with "
 #~ "Public, Shared and System Folders to Microsoft Outlook® clients."
@@ -15870,11 +15629,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Synchronize with Outlook"
 #~ msgstr "Synkronisér med Outlook"
-
-#, fuzzy
-#~| msgid "Enable"
-#~ msgid "Tablet"
-#~ msgstr "Aktivér"
 
 #~ msgid "Tag mail with"
 #~ msgstr "Mærk e-mail med"
@@ -16610,16 +16364,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Under construction"
 #~ msgstr "Under opbygning"
 
-#, fuzzy
-#~| msgid "Unknown sender"
-#~ msgid "Unknown client"
-#~ msgstr "Ukendt afsender"
-
-#, fuzzy
-#~| msgid "Unknown sender"
-#~ msgid "Unkown client"
-#~ msgstr "Ukendt afsender"
-
 #~ msgid "Unnamed"
 #~ msgstr "Unavngiven"
 
@@ -16641,11 +16385,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Upgrade to premium"
 #~ msgstr "Opgradér til præmium"
-
-#, fuzzy
-#~| msgid "Upload local file"
-#~ msgid "Upload handling"
-#~ msgstr "Overfør lokal fil"
 
 #~ msgid "Upload new files"
 #~ msgstr "Overfør nye filer"
@@ -16671,15 +16410,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Use cursor keys to navigate"
 #~ msgstr "Brug piltaster for at navigere"
-
-#, fuzzy
-#~| msgid ""
-#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
-#~| "adjust your rating."
-#~ msgid "Use left and right cursor keys to adjust your rating."
-#~ msgstr ""
-#~ "Vurdering bekræftet: %1$d point ud af %2$d mulige.  Brug venstre- og "
-#~ "højre-pil til at justere din vurdering."
 
 #~ msgid ""
 #~ "Use the folder tree to open the folder containing the objects that you "
@@ -16711,16 +16441,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Vacation Notice"
 #~ msgstr "Feriesvar"
 
-#, fuzzy
-#~| msgid "Manual"
-#~ msgid "Vanuatu"
-#~ msgstr "Manuelt"
-
-#, fuzzy
-#~| msgid "Vertical"
-#~ msgid "Vatican"
-#~ msgstr "Lodret"
-
 #~ msgid "Version history"
 #~ msgstr "Versionshistorik"
 
@@ -16747,11 +16467,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Welcome. Please provide your feedback about this product"
 #~ msgstr "Velkommen.  Giv venligst din respons om dette produkt"
-
-#, fuzzy
-#~| msgid "Do you really want to discard your changes?"
-#~ msgid "What do you want to use on your iPhone?"
-#~ msgstr "Vil du virkelig kassere dine ændringer?"
 
 #~ msgid "What‘s New in %1$s 7.10.0"
 #~ msgstr "Hvad er nyt i %1$s 7.10.0"
@@ -16793,11 +16508,6 @@ msgstr "Tilføj på %s"
 #~ "personlige data omgås, gemmes og videresendes. Sørg altid for at beskytte "
 #~ "personlige data forsvarligt, fx ved at forhindre uautoriserede adgang. "
 #~ "Dette kan for eksempel gøres ved at bruge en stærk adgangskode."
-
-#, fuzzy
-#~| msgid "Do you really want to discard your changes?"
-#~ msgid "Which app do you want to use on your device?"
-#~ msgstr "Vil du virkelig kassere dine ændringer?"
 
 #~ msgid "Which device do you want to configure?"
 #~ msgstr "Hvilken enhed vil du sætte op?"
@@ -16930,12 +16640,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Your reply has been sent"
 #~ msgstr "Dit svar er blevet sendt"
 
-#, fuzzy
-#~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"
-#~ msgstr ""
-#~ "Filen \"%1$s\" kan ikke overføres, da dens størrelse er over loftet på "
-#~ "%2$s"
-
 #~ msgid "Your selected picture will be displayed after saving"
 #~ msgstr "Dit valgte billede bliver vist når der er blevet gemt"
 
@@ -16952,10 +16656,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "and %1$d others ..."
 #~ msgstr "og %1$d andre ..."
-
-#, fuzzy
-#~ msgid "characters"
-#~ msgstr " karaktere"
 
 #~ msgid "close"
 #~ msgstr "luk"
@@ -16989,11 +16689,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "disabled"
 #~ msgstr "deaktiveret"
-
-#, fuzzy
-#~| msgid "Edit signature"
-#~ msgid "edit share"
-#~ msgstr "Redigér signatur"
 
 #~ msgid "end date "
 #~ msgstr "slutdato "
@@ -17051,11 +16746,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "iCal-feed has been imported successfully"
 #~ msgstr "ICal-kilde er blevet importeret"
-
-#, fuzzy
-#~| msgid "Phone"
-#~ msgid "iPhone"
-#~ msgstr "Telefon"
 
 #~ msgid "in"
 #~ msgstr "i"
@@ -17126,23 +16816,8 @@ msgstr "Tilføj på %s"
 #~ msgid "remove"
 #~ msgstr "fjern"
 
-#, fuzzy
-#~| msgid "Folder permissions"
-#~ msgid "remove permission"
-#~ msgstr "Mappetilladelser"
-
-#, fuzzy
-#~| msgid "remove"
-#~ msgid "remove share"
-#~ msgstr "fjern"
-
 #~ msgid "seconds"
 #~ msgstr "sekunder"
-
-#, fuzzy
-#~| msgid "show image"
-#~ msgid "show mail"
-#~ msgstr "vis billede"
 
 #~ msgid "status "
 #~ msgstr "status "
@@ -17179,11 +16854,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "when the receivers have finished downloading the files"
 #~ msgstr "når modtagerne er færdige med at hente filerne"
-
-#, fuzzy
-#~| msgid "Main window"
-#~ msgid "windows"
-#~ msgstr "Hovedvindue"
 
 #~ msgid "work days"
 #~ msgstr "arbejdsdage"

@@ -4,15 +4,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-22 19:38-0700\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2019-05-07 23:38+0100\n"
+"Last-Translator: Andrés Herrera <andres@workshop-chapina.com>\n"
 "Language-Team: Spanish <ox7doc@workshop-chapina.com>\n"
 "Language: es_MX\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.1\n"
+"X-Generator: Lokalize 2.0\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -766,6 +766,10 @@ msgstr "Rotar imagen"
 #: apps/io.ox/calendar/actions/change-organizer.js
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "Aceptar"
@@ -2877,7 +2881,8 @@ msgstr "¿Quiere editar toda la serie o solo esta cita de la serie?"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
 "Do you want to edit this and all future appointments or the whole series?"
-msgstr "¿Quiere editar esta cita y todas las citas futuras o la serie completa?"
+msgstr ""
+"¿Quiere editar esta cita y todas las citas futuras o la serie completa?"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
@@ -3958,6 +3963,11 @@ msgstr "Copiar a la descripción"
 msgid "Saved in:"
 msgstr "Guardado en:"
 
+#. %1$s maximum file size
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+msgstr "Su imagen seleccionada supera el tamaño máximo permitido de %1$s"
+
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid ""
 "This filetype is not supported as contact picture. Only image types (JPG, "
@@ -3965,11 +3975,6 @@ msgid ""
 msgstr ""
 "Este tipo de fichero no está admitido como imagen de contacto. Sólo se "
 "admiten los tipos de imagen (JPG, GIF, BMP o PNG)."
-
-#. %1$s maximum file size
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-msgstr "Su imagen seleccionada supera el tamaño máximo permitido de %1$s"
 
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
@@ -4086,7 +4091,8 @@ msgstr "Esta plataforma no está admitida actualmente."
 
 #. all variables are version strings of the browsers, like 52 in Chrome 52
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
+msgid ""
+"Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
 msgstr ""
 "Se admiten a partir de Chrome %1$d, Firefox %2$d, IE %3$d, y Safari %4$d."
 
@@ -4263,7 +4269,17 @@ msgid "Download unscanned file"
 msgstr "Descargar fichero no escaneado"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-msgid "Anti-Virus Warning"
+msgid "Unable to perform Anti-Virus check for the requested file(s)"
+msgstr ""
+"No se pudo realizar la comprobación antivirus del fichero o ficheros"
+" solicitados"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Malicious file detected"
+msgstr "Detectado fichero malicioso"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Anti-Virus warning"
 msgstr "Advertencia del antivirus"
 
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
@@ -4988,6 +5004,10 @@ msgid "Navigate to:"
 msgstr "Navegar a:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "Apps"
+msgstr "Aplicaciones"
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
 msgstr "Saltar al contenido principal"
 
@@ -5086,8 +5106,8 @@ msgstr "Cerrar sesión"
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Are you sure you want to sign out from all related browser tabs?"
 msgstr ""
-"¿Está seguro de querer cerrar la sesión en todas las pestañas del navegador"
-" relacionadas?"
+"¿Está seguro de querer cerrar la sesión en todas las pestañas del navegador "
+"relacionadas?"
 
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
@@ -6056,10 +6076,6 @@ msgid "Don't remind me again"
 msgstr "No recordármelo de nuevo"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 msgid "OK"
 msgstr "Aceptar"
 
@@ -6261,7 +6277,8 @@ msgid "Previous"
 msgstr "Anterior"
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-msgid "Use left/right arrow keys to navigate and escape key to exit the viewer."
+msgid ""
+"Use left/right arrow keys to navigate and escape key to exit the viewer."
 msgstr ""
 "Utilice las teclas de movimiento del cursor izquierda/derecha para navegar y "
 "la tecla Esc para salir del visor."
@@ -6635,7 +6652,8 @@ msgstr "Lo sentimos, no hay vista previa disponible para esta imagen."
 #: apps/io.ox/core/viewer/views/types/spreadsheetview.js module:io.ox/core
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 msgid "An error occurred loading the document so it cannot be displayed."
-msgstr "Ocurrió un error al cargar el documento por lo que no se puede mostrar."
+msgstr ""
+"Ocurrió un error al cargar el documento por lo que no se puede mostrar."
 
 #: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this file."
@@ -6876,7 +6894,8 @@ msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr "Soltar aquí para subir un <b class=\"dndignore\">nuevo fichero</b>"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
-msgid "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
+msgid ""
+"Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr ""
 "Soltar aquí para subir una <b class=\"dndignore\">nueva versión</b> de \"%1$s"
 "\""
@@ -6907,7 +6926,8 @@ msgstr "Este fichero se ha añadido al portal"
 msgid ""
 "Do you really want to delete all previous versions except the current "
 "version?"
-msgstr "¿De verdad quiere borrar todas las versiones previas excepto la actual?"
+msgstr ""
+"¿De verdad quiere borrar todas las versiones previas excepto la actual?"
 
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 msgid "This file has not been deleted, as it is locked by its owner."
@@ -7325,17 +7345,15 @@ msgid "All file versions are retained"
 msgstr "Todas las versiones de ficheros se retienen"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid ""
-#| "All messages older than %1$d days will be moved to the archive folder"
 msgid "All file versions older than 1 day will be deleted after next login"
 msgid_plural ""
 "All file versions older than %1$d days will be deleted after next login"
 msgstr[0] ""
-"Todas las versiones del fichero anteriores a 1 día se borrarán tras el"
-" próximo inicio de sesión"
+"Todas las versiones del fichero anteriores a 1 día se borrarán tras el "
+"próximo inicio de sesión"
 msgstr[1] ""
-"Todas las versiones del fichero anteriores a %1$d días se borrarán tras el"
-" próximo inicio de sesión"
+"Todas las versiones del fichero anteriores a %1$d días se borrarán tras el "
+"próximo inicio de sesión"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid ""
@@ -7345,11 +7363,11 @@ msgid_plural ""
 "When a file has more than %1$d additional versions, older versions will be "
 "deleted when a new version is created"
 msgstr[0] ""
-"Cuando un fichero tiene más de 1 versión adicional, las versiones anteriores"
-" se borrarán al crear una nueva versión"
+"Cuando un fichero tiene más de 1 versión adicional, las versiones anteriores "
+"se borrarán al crear una nueva versión"
 msgstr[1] ""
-"Cuando un fichero tiene más de %1$d versiones adicionales, las versiones"
-" anteriores se borrarán al crear una nueva versión"
+"Cuando un fichero tiene más de %1$d versiones adicionales, las versiones "
+"anteriores se borrarán al crear una nueva versión"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Keep saved versions"
@@ -7663,7 +7681,8 @@ msgstr ""
 "causará problemas al visualizar o editar."
 
 #: apps/io.ox/files/util.js module:io.ox/files
-msgid "Do you really want to remove the extension \".%1$s\" from your filename?"
+msgid ""
+"Do you really want to remove the extension \".%1$s\" from your filename?"
 msgstr ""
 "¿Realmente desea eliminar la extensión \".%1$s\" del nombre del fichero?"
 
@@ -8458,7 +8477,8 @@ msgid "Show images"
 msgstr "Mostrar imágenes"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "External images have been blocked to protect you against potential spam!"
+msgid ""
+"External images have been blocked to protect you against potential spam!"
 msgstr ""
 "Las imágenes externas han sido bloqueadas para protegerle contra un posible "
 "spam"
@@ -9729,7 +9749,8 @@ msgstr "El rango de tiempo está en el pasado."
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Unable to load your vacation notice. Please retry later."
-msgstr "No se pudo cargar su aviso de ausencia. Por favor, inténtelo más tarde."
+msgstr ""
+"No se pudo cargar su aviso de ausencia. Por favor, inténtelo más tarde."
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 #: apps/io.ox/mail/settings/pane.js apps/io.ox/mail/toolbar.js
@@ -10249,22 +10270,17 @@ msgstr "Google Authenticator"
 msgid "Recovery code"
 msgstr "Código de recuperación"
 
-#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
-msgid "UNKNOWN"
-msgstr "DESCONOCIDO"
-
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
 msgid ""
-"There are no backup devices available for this account.  Please notify "
+"There are no backup devices available for this account. Please notify "
 "support for help."
 msgstr ""
 "No hay dispositivos de copia de seguridad disponibles para esta cuenta. Por"
-" favor, avise a soporte para recibir ayuda."
+" favor, notifíquelo al soporte para conseguir ayuda."
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
-msgid "Authentication failure.  Please reload browser and try again."
-msgstr ""
-"Fallo de autenticación. Por favor, recargue el navegador e inténtelo de nuevo."
+msgid "Authentication failure. Please try reloading the page."
+msgstr "Fallo de autenticación. Por favor, intente volver a cargar la página."
 
 #: apps/io.ox/multifactor/settings.js module:io.ox/core/boot
 #: apps/io.ox/multifactor/views/constants.js
@@ -10311,8 +10327,8 @@ msgstr "Por favor, indique el número de teléfono del dispositivo."
 
 #. Catch all error when trying to set up a new 2step device
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-msgid "Something went wrong.  Please try again later."
-msgstr "Algo ha ido mal. Por favor, inténtelo de nuevo."
+msgid "Something went wrong. Please try again later."
+msgstr "Algo salió mal. Por favor, inténtelo de nuevo más tarde."
 
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
 msgid "Please only use numeric characters for phone number"
@@ -10332,12 +10348,12 @@ msgstr "Añadir opción de verificación"
 #: module:io.ox/core/boot
 msgid ""
 "In the event you lose or are unable to use your authentication device, your "
-"account will be locked out unless you set up a recovery method.  We strongly "
+"account will be locked out unless you set up a recovery method. We strongly "
 "recommend that you do so now."
 msgstr ""
-"En caso de que pierda o no pueda usar su dispositivo de autenticación, su"
+"En caso de que pierda o no pueda utilizar su dispositivo de autenticación, su"
 " cuenta se bloqueará a menos que configure un método de recuperación. Le"
-" recomendamos encarecidamente que lo haga ya."
+" recomendamos encarecidamente que lo haga ahora."
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
@@ -10384,6 +10400,15 @@ msgstr "Sistema desconocido"
 #: apps/io.ox/multifactor/settings/views/printBackupString.js
 msgid "Recovery Code"
 msgstr "Código de recuperación"
+
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"This is your recovery code. Please write it down, print it, or save the "
+"file. Be sure to save this in a secure location."
+msgstr ""
+"Este es su código de recuperación. Por favor escríbalo, imprímalo o guarde el"
+" fichero. Asegúrese de guardarlo en un lugar seguro."
 
 #. this is a file name that stores the a long recovery code
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
@@ -10435,14 +10460,21 @@ msgstr "Confirmar código"
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
-#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad input or server error.  Please try again."
-msgstr "Entrada errónea o error del servidor. Por favor, inténtelo de nuevo."
+msgid "Please enter the validation code we just sent to your device."
+msgstr ""
+"Por favor, introduzca el código de validación que acabamos de enviar a su"
+" dispositivo."
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad verification code.  Please try again"
+msgid "Bad input or server error. Please try again."
+msgstr "Error de entrada o del servidor. Por favor, inténtelo de nuevo."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+msgid "Bad verification code. Please try again"
 msgstr "Código de verificación erróneo. Por favor, inténtelo de nuevo"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
@@ -10452,16 +10484,21 @@ msgstr "Registro de autenticador"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
+msgid "Scan the QR code with your authenticator."
+msgstr "Escanee el código QR con su authenticator."
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
 msgid "Click to copy URL to clipboard"
 msgstr "Pulse para copiar la URL al portapapeles"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
 msgid ""
-"If scanning doesn't work, you may be able to enter the following setup code."
+"If scanning does not work, you may be able to enter the following setup code."
 msgstr ""
-"Si la comprobación no funciona, puede tener que introducir el siguiente"
-" código de configuración."
+"Si el escaneo no funciona, puede introducir el siguiente código de"
+" configuración."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
@@ -10469,8 +10506,13 @@ msgid ""
 "Once complete, please enter an authentication code to verify everything is "
 "configured properly."
 msgstr ""
-"Una vez completado, por favor introduzca un código de autenticación para"
-" comprobar que todo está configurado adecuadamente."
+"Una vez completado, por favor introduzca un código de autenticación para "
+"comprobar que todo está configurado adecuadamente."
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Please touch/activate your device"
+msgstr "Por favor, toque/active su dispositivo"
 
 #: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
 #: module:io.ox/core/boot
@@ -10495,6 +10537,10 @@ msgstr "Error al registrar el dispositivo."
 #: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
 msgid "Upload Recovery File"
 msgstr "Subir fichero de recuperación"
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Please enter the recovery code"
+msgstr "Por favor, introduzca el código de recuperación"
 
 #: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
 msgid "Next 4 characters of the backup string"
@@ -10522,51 +10568,51 @@ msgid "New code sent."
 msgstr "Nuevo código enviado."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
-msgid "A new code was sent to your SMS device.  Please enter the code."
+msgid "A new code was sent to your SMS device. Please enter the code."
 msgstr ""
-"Se ha enviado un nuevo código a su dispositivo SMS. Por favor, introduzca el"
+"Se envió un nuevo código a su dispositivo SMS. Por favor, introduzca el"
 " código."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code we sent to the phone *****%s."
 msgstr ""
-"Ha asegurado su cuenta con verificación en 2 pasos. Por favor, introduzca el"
-" código de verificación que hemos enviado al teléfono *****%s."
+"Su cuenta está asegurada con la verificación en 2 pasos. Por favor,"
+" introduzca el código de verificación que enviamos al teléfono *****%s."
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
 msgstr ""
-"Ha asegurado su cuenta con verificación en 2 pasos. Por favor, introduzca el"
-" código de verificación de la aplicación Authenticator."
+"Su cuenta está asegurada con la verificación en 2 pasos. Por favor,"
+" introduzca el código de verificación de la aplicación Authenticator."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please use your "
+"You secured your account with 2-Step Verification. Please use your "
 "authentication token to complete verification."
 msgstr ""
-"Ha asegurado su cuenta con verificación en 2 pasos. Por favor, use su token"
-" de autenticación para completar la verificación."
+"Su cuenta está asegurada con la verificación en 2 pasos. Por favor, use su"
+" token de autenticación para completar la verificación."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"This browser is not compatible with your configured authentication device.  "
+"This browser is not compatible with your configured authentication device. "
 "Please use Chrome browser, or Firefox with U2F enabled."
 msgstr ""
 "Este navegador no es compatible con su dispositivo de autenticación"
-" configurado. Por favor, use un navegador Chrome, o Firefox con U2F activado."
+" configurado. Utilice el navegador Chrome, o Firefox con U2F habilitado."
 
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"Bad parameters for authenticating with this key.  Possibly wrong URL domain "
+"Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
 msgstr ""
-"Parámetros erróneos para la autenticación con esta clave. Posiblemente,"
-" dominio de URL erróneo para esta clave."
+"Parámetros incorrectos para autenticar con esta clave. Posiblemente el"
+" dominio de la URL es incorrecto para esta clave."
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10575,10 +10621,10 @@ msgstr "Configuración no permitida"
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "This device is not eligible for this request.  Wrong hardware key?"
+msgid "This device is not eligible for this request. Wrong hardware key?"
 msgstr ""
-"Este dispositivo no es seleccionable para esta petición. ¿Clave de hardware"
-" errónea?"
+"Este dispositivo no es seleccionable para esta solicitud. ¿Clave de hardware"
+" incorrecta?"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid "Timeout"
@@ -10586,9 +10632,10 @@ msgstr "Tiempo agotado"
 
 #. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "Error authenticating.  Please reload browser and try again."
+msgid "Error authenticating. Please reload browser and try again."
 msgstr ""
-"Error al autenticar. Por favor, recargue el navegador e inténtelo de nuevo."
+"Error de autenticación. Por favor, vuelva a cargar el navegador e inténtelo"
+" de nuevo."
 
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
 msgid "Topics"
@@ -10668,7 +10715,8 @@ msgid "Get your device configured by email."
 msgstr "Configure su dispositivo por correo."
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "Let´s automatically configure your device, by clicking the button below."
+msgid ""
+"Let´s automatically configure your device, by clicking the button below."
 msgstr "Configure automáticamente su dispositivo pulsando el botón inferior."
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -11936,8 +11984,8 @@ msgid ""
 "You can now add additional verification options to enhance the security of "
 "your account."
 msgstr ""
-"Ahora puede añadir opciones de verificación adicionales para incrementar la"
-" seguridad de su cuenta."
+"Ahora puede añadir opciones de verificación adicionales para incrementar la "
+"seguridad de su cuenta."
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
@@ -12254,7 +12302,8 @@ msgid "Retired"
 msgstr "Jubilado"
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
-msgid "You are not directly linked to %s. Here are people who are linked to %s:"
+msgid ""
+"You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr ""
 "Usted no está directamente conectado a %s. Estas son las personas que están "
 "conectadas a %s:"
@@ -13084,6 +13133,101 @@ msgstr "Invitar a %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Añadir a %s"
+
+#~ msgid "Anti-Virus Warning"
+#~ msgstr "Advertencia del antivirus"
+
+#~ msgid "UNKNOWN"
+#~ msgstr "DESCONOCIDO"
+
+#~ msgid ""
+#~ "There are no backup devices available for this account.  Please notify "
+#~ "support for help."
+#~ msgstr ""
+#~ "No hay dispositivos de copia de seguridad disponibles para esta cuenta. "
+#~ "Por favor, avise a soporte para recibir ayuda."
+
+#~ msgid "Authentication failure.  Please reload browser and try again."
+#~ msgstr ""
+#~ "Fallo de autenticación. Por favor, recargue el navegador e inténtelo de "
+#~ "nuevo."
+
+#~ msgid "Something went wrong.  Please try again later."
+#~ msgstr "Algo ha ido mal. Por favor, inténtelo de nuevo."
+
+#~ msgid ""
+#~ "In the event you lose or are unable to use your authentication device, "
+#~ "your account will be locked out unless you set up a recovery method.  We "
+#~ "strongly recommend that you do so now."
+#~ msgstr ""
+#~ "En caso de que pierda o no pueda usar su dispositivo de autenticación, su "
+#~ "cuenta se bloqueará a menos que configure un método de recuperación. Le "
+#~ "recomendamos encarecidamente que lo haga ya."
+
+#~ msgid "Bad input or server error.  Please try again."
+#~ msgstr ""
+#~ "Entrada errónea o error del servidor. Por favor, inténtelo de nuevo."
+
+#~ msgid "Bad verification code.  Please try again"
+#~ msgstr "Código de verificación erróneo. Por favor, inténtelo de nuevo"
+
+#~ msgid ""
+#~ "If scanning doesn't work, you may be able to enter the following setup "
+#~ "code."
+#~ msgstr ""
+#~ "Si la comprobación no funciona, puede tener que introducir el siguiente "
+#~ "código de configuración."
+
+#~ msgid "A new code was sent to your SMS device.  Please enter the code."
+#~ msgstr ""
+#~ "Se ha enviado un nuevo código a su dispositivo SMS. Por favor, introduzca "
+#~ "el código."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code we sent to the phone *****%s."
+#~ msgstr ""
+#~ "Ha asegurado su cuenta con verificación en 2 pasos. Por favor, introduzca "
+#~ "el código de verificación que hemos enviado al teléfono *****%s."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code from the Authenticator App."
+#~ msgstr ""
+#~ "Ha asegurado su cuenta con verificación en 2 pasos. Por favor, introduzca "
+#~ "el código de verificación de la aplicación Authenticator."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please use your "
+#~ "authentication token to complete verification."
+#~ msgstr ""
+#~ "Ha asegurado su cuenta con verificación en 2 pasos. Por favor, use su "
+#~ "token de autenticación para completar la verificación."
+
+#~ msgid ""
+#~ "This browser is not compatible with your configured authentication "
+#~ "device.  Please use Chrome browser, or Firefox with U2F enabled."
+#~ msgstr ""
+#~ "Este navegador no es compatible con su dispositivo de autenticación "
+#~ "configurado. Por favor, use un navegador Chrome, o Firefox con U2F "
+#~ "activado."
+
+#~ msgid ""
+#~ "Bad parameters for authenticating with this key.  Possibly wrong URL "
+#~ "domain for this key."
+#~ msgstr ""
+#~ "Parámetros erróneos para la autenticación con esta clave. Posiblemente, "
+#~ "dominio de URL erróneo para esta clave."
+
+#~ msgid "This device is not eligible for this request.  Wrong hardware key?"
+#~ msgstr ""
+#~ "Este dispositivo no es seleccionable para esta petición. ¿Clave de "
+#~ "hardware errónea?"
+
+#~ msgid "Error authenticating.  Please reload browser and try again."
+#~ msgstr ""
+#~ "Error al autenticar. Por favor, recargue el navegador e inténtelo de "
+#~ "nuevo."
 
 #~ msgid "Please leave a comment for other participants."
 #~ msgstr "Por favor, deje un comentario para otros participantes."
@@ -15141,9 +15285,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "Duración aproximada de las suscripciones"
-
-#~ msgid "Apps"
-#~ msgstr "Aplicaciones"
 
 #~ msgid "Apr"
 #~ msgstr "abr"

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-20 16:40+0900\n"
+"PO-Revision-Date: 2019-05-03 19:09+0200\n"
 "Last-Translator: Adi David <adi@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -765,6 +765,10 @@ msgstr "Rotește imaginea"
 #: apps/io.ox/calendar/actions/change-organizer.js
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "Ok"
@@ -3973,6 +3977,12 @@ msgstr "Copiază în descriere"
 msgid "Saved in:"
 msgstr "Salvat în:"
 
+#. %1$s maximum file size
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+msgstr ""
+"Imaginea selectată depășește dimensiunea maximă permisă pentru fișiere, %1$s"
+
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid ""
 "This filetype is not supported as contact picture. Only image types (JPG, "
@@ -3980,12 +3990,6 @@ msgid ""
 msgstr ""
 "Acest tip de fișier nu este suportat ca imagine de contact. Sunt suportate "
 "doar tipurile imagini (JPG, GIF, BMP or PNG)."
-
-#. %1$s maximum file size
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-msgstr ""
-"Imaginea selectată depășește dimensiunea maximă permisă pentru fișiere, %1$s"
 
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
@@ -4283,8 +4287,18 @@ msgid "Download unscanned file"
 msgstr "Descarcă fișierul de instalare"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-msgid "Anti-Virus Warning"
-msgstr "Ignoră avertismentele"
+msgid "Unable to perform Anti-Virus check for the requested file(s)"
+msgstr ""
+"Imposibil de efectuat verificarea anti-virus pentru fișierul(ele) "
+"solicitat(e)"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Malicious file detected"
+msgstr "Fișier rău intenționat detectat"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Anti-Virus warning"
+msgstr "Avertizare anti-virus"
 
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
 msgid "Reset this list"
@@ -5002,6 +5016,10 @@ msgstr "Datele au fost importate doar parțial (%1$s din %2$s înregistrări)"
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Navigate to:"
 msgstr "Navighează la:"
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "Apps"
+msgstr "Aplicații"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -6073,10 +6091,6 @@ msgid "Don't remind me again"
 msgstr "Nu-mi mai aminti"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 msgid "OK"
 msgstr "OK"
 
@@ -10287,23 +10301,17 @@ msgstr "Autentificator Google"
 msgid "Recovery code"
 msgstr "Cod de recuperare"
 
-#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
-msgid "UNKNOWN"
-msgstr "NECUNOSCUT"
-
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
 msgid ""
-"There are no backup devices available for this account.  Please notify "
+"There are no backup devices available for this account. Please notify "
 "support for help."
 msgstr ""
-"Nu există dispozitive de rezervă disponibile pentru acest cont.  Vă rugăm să "
+"Nu există dispozitive de rezervă disponibile pentru acest cont. Vă rugăm să "
 "anunțați asistența pentru ajutor."
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
-msgid "Authentication failure.  Please reload browser and try again."
-msgstr ""
-"Eroare de autentificare.  Vă rugăm să reîncărcați browser-ul și încercați "
-"din nou."
+msgid "Authentication failure. Please try reloading the page."
+msgstr "Eroare de autentificare. Vă rugăm să reîncărcați pagina."
 
 #: apps/io.ox/multifactor/settings.js module:io.ox/core/boot
 #: apps/io.ox/multifactor/views/constants.js
@@ -10350,9 +10358,8 @@ msgstr "Vă rugăm să introduceți numărul de telefon pentru dispozitiv."
 
 #. Catch all error when trying to set up a new 2step device
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-msgid "Something went wrong.  Please try again later."
-msgstr ""
-"Ceva nu a funcționat corect.  Vă rugăm să încercați din nou mai târziu."
+msgid "Something went wrong. Please try again later."
+msgstr "Ceva nu a funcționat corect. Vă rugăm să încercați din nou mai târziu."
 
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
 msgid "Please only use numeric characters for phone number"
@@ -10373,12 +10380,12 @@ msgstr "Adăugare opțiune de autentificare"
 #: module:io.ox/core/boot
 msgid ""
 "In the event you lose or are unable to use your authentication device, your "
-"account will be locked out unless you set up a recovery method.  We strongly "
+"account will be locked out unless you set up a recovery method. We strongly "
 "recommend that you do so now."
 msgstr ""
 "În cazul în care pierdeți sau nu reușiți să utilizați dispozitivul de "
 "autentificare, contul va fi blocat dacă nu configurați o metodă de "
-"recuperare.  Vă recomandăm insistent să faceți acest lucru acum."
+"recuperare. Vă recomandăm insistent să faceți acest lucru acum."
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
@@ -10426,6 +10433,16 @@ msgstr "Sistem necunoscut"
 #: apps/io.ox/multifactor/settings/views/printBackupString.js
 msgid "Recovery Code"
 msgstr "Cod de recuperare"
+
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"This is your recovery code. Please write it down, print it, or save the "
+"file. Be sure to save this in a secure location."
+msgstr ""
+"Acesta este codul dvs. de recuperare. Vă rugăm să îl scrieți, să îl "
+"imprimați sau să salvați fișierul. Asigurați-vă că salvați acest cod într-un "
+"loc securizată."
 
 #. this is a file name that stores the a long recovery code
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
@@ -10477,20 +10494,32 @@ msgstr "Confirmare cod"
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
-#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad input or server error.  Please try again."
-msgstr "Eroare de intrare sau de server.  Vă rugăm să încercați din nou."
+msgid "Please enter the validation code we just sent to your device."
+msgstr ""
+"Vă rugăm să introduceți codul de validare pe care tocmai l-am trimis "
+"dispozitivului dvs."
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad verification code.  Please try again"
-msgstr "Eroare cod de verificare.  Vă rugăm să încercați din nou"
+msgid "Bad input or server error. Please try again."
+msgstr "Eroare de intrare sau de server. Vă rugăm să încercați din nou."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+msgid "Bad verification code. Please try again"
+msgstr "Eroare cod de verificare. Vă rugăm să încercați din nou"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
 msgid "Authenticator Registration"
 msgstr "Înregistrarea autentificatorului"
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Scan the QR code with your authenticator."
+msgstr "Scanați codul QR cu autentificatorul."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
@@ -10500,9 +10529,9 @@ msgstr "Clic pentru a copia URL-ul în clipboard"
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
 msgid ""
-"If scanning doesn't work, you may be able to enter the following setup code."
+"If scanning does not work, you may be able to enter the following setup code."
 msgstr ""
-"Dacă scanarea nu funcționează, puteți să introduceți următorul cod de "
+"Dacă scanarea nu funcționează, este posibil să introduceți următorul cod de "
 "instalare."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
@@ -10513,6 +10542,11 @@ msgid ""
 msgstr ""
 "După finalizare, introduceți un cod de autentificare pentru a verifica dacă "
 "totul este configurat corect."
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Please touch/activate your device"
+msgstr "Vă rugăm să atingeți/activați dispozitivul"
 
 #: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
 #: module:io.ox/core/boot
@@ -10539,6 +10573,10 @@ msgid "Upload Recovery File"
 msgstr "Încărcați fișierul de recuperare"
 
 #: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Please enter the recovery code"
+msgstr "Vă rugăm să introduceți codul de recuperare"
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
 msgid "Next 4 characters of the backup string"
 msgstr "Următoarele 4 caractere ale șirului de rezervă"
 
@@ -10563,51 +10601,51 @@ msgid "New code sent."
 msgstr "Cod nou trimis."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
-msgid "A new code was sent to your SMS device.  Please enter the code."
+msgid "A new code was sent to your SMS device. Please enter the code."
 msgstr ""
-"Un nou cod a fost trimis dispozitivului dvs. prin SMS.  Vă rugăm să "
+"Un nou cod a fost trimis dispozitivului dvs. prin SMS. Vă rugăm să "
 "introduceți codul."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code we sent to the phone *****%s."
 msgstr ""
-"V-ați securizat contul cu verificarea în doi pași.  Vă rugăm să introduceți "
+"V-ați securizat contul cu verificarea în doi pași. Vă rugăm să introduceți "
 "codul de verificare care a fost trimis numărului de telefon *****%s."
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
 msgstr ""
-"V-ați securizat contul cu verificarea în doi pași.  Vă rugăm să introduceți "
+"V-ați securizat contul cu verificarea în doi pași. Vă rugăm să introduceți "
 "codul de verificare din aplicația Autentificator."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please use your "
+"You secured your account with 2-Step Verification. Please use your "
 "authentication token to complete verification."
 msgstr ""
-"V-ați securizat contul cu verificarea în doi pași.  Vă rugăm să folosiți "
-"tokenul de autentificare pentru finaliza verificarea."
+"V-ați securizat contul cu verificarea în doi pași. Vă rugăm să folosiți "
+"tokenul de autentificare pentru a finaliza verificarea."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"This browser is not compatible with your configured authentication device.  "
+"This browser is not compatible with your configured authentication device. "
 "Please use Chrome browser, or Firefox with U2F enabled."
 msgstr ""
 "Acest browser nu este compatibil cu dispozitivul de autentificare "
-"configurat.  Vă rugăm să utilizați browserul Chrome, sau Firefox cu U2F "
+"configurat. Vă rugăm să utilizați browserul Chrome, sau Firefox cu U2F "
 "activat."
 
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"Bad parameters for authenticating with this key.  Possibly wrong URL domain "
+"Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
 msgstr ""
-"Parametri greșiți pentru autentificarea cu această cheie.  Este posibil ca "
+"Parametri greșiți pentru autentificarea cu această cheie. Este posibil ca "
 "adresa URL pentru această cheie să fie greșită."
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
@@ -10617,9 +10655,9 @@ msgstr "Configurația nu este acceptată"
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "This device is not eligible for this request.  Wrong hardware key?"
+msgid "This device is not eligible for this request. Wrong hardware key?"
 msgstr ""
-"Acest dispozitiv nu este eligibil pentru această solicitare.  Cheie hardware "
+"Acest dispozitiv nu este eligibil pentru această solicitare. Cheie hardware "
 "greșită?"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10628,10 +10666,10 @@ msgstr "Timpul a expirat"
 
 #. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "Error authenticating.  Please reload browser and try again."
+msgid "Error authenticating. Please reload browser and try again."
 msgstr ""
-"Eroare la autentificare.  Vă rugăm să reîncărcați browser-ul și încercați "
-"din nou."
+"Eroare la autentificare. Vă rugăm să reîncărcați browser-ul și încercați din "
+"nou."
 
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
 msgid "Topics"
@@ -13144,6 +13182,102 @@ msgstr "Invită la %s"
 msgid "Add on %s"
 msgstr "Adaugă pe %s"
 
+#~ msgid "Anti-Virus Warning"
+#~ msgstr "Ignoră avertismentele"
+
+#~ msgid "UNKNOWN"
+#~ msgstr "NECUNOSCUT"
+
+#~ msgid ""
+#~ "There are no backup devices available for this account.  Please notify "
+#~ "support for help."
+#~ msgstr ""
+#~ "Nu există dispozitive de rezervă disponibile pentru acest cont.  Vă rugăm "
+#~ "să anunțați asistența pentru ajutor."
+
+#~ msgid "Authentication failure.  Please reload browser and try again."
+#~ msgstr ""
+#~ "Eroare de autentificare.  Vă rugăm să reîncărcați browser-ul și încercați "
+#~ "din nou."
+
+#~ msgid "Something went wrong.  Please try again later."
+#~ msgstr ""
+#~ "Ceva nu a funcționat corect.  Vă rugăm să încercați din nou mai târziu."
+
+#~ msgid ""
+#~ "In the event you lose or are unable to use your authentication device, "
+#~ "your account will be locked out unless you set up a recovery method.  We "
+#~ "strongly recommend that you do so now."
+#~ msgstr ""
+#~ "În cazul în care pierdeți sau nu reușiți să utilizați dispozitivul de "
+#~ "autentificare, contul va fi blocat dacă nu configurați o metodă de "
+#~ "recuperare.  Vă recomandăm insistent să faceți acest lucru acum."
+
+#~ msgid "Bad input or server error.  Please try again."
+#~ msgstr "Eroare de intrare sau de server.  Vă rugăm să încercați din nou."
+
+#~ msgid "Bad verification code.  Please try again"
+#~ msgstr "Eroare cod de verificare.  Vă rugăm să încercați din nou"
+
+#~ msgid ""
+#~ "If scanning doesn't work, you may be able to enter the following setup "
+#~ "code."
+#~ msgstr ""
+#~ "Dacă scanarea nu funcționează, puteți să introduceți următorul cod de "
+#~ "instalare."
+
+#~ msgid "A new code was sent to your SMS device.  Please enter the code."
+#~ msgstr ""
+#~ "Un nou cod a fost trimis dispozitivului dvs. prin SMS.  Vă rugăm să "
+#~ "introduceți codul."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code we sent to the phone *****%s."
+#~ msgstr ""
+#~ "V-ați securizat contul cu verificarea în doi pași.  Vă rugăm să "
+#~ "introduceți codul de verificare care a fost trimis numărului de telefon "
+#~ "*****%s."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code from the Authenticator App."
+#~ msgstr ""
+#~ "V-ați securizat contul cu verificarea în doi pași.  Vă rugăm să "
+#~ "introduceți codul de verificare din aplicația Autentificator."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please use your "
+#~ "authentication token to complete verification."
+#~ msgstr ""
+#~ "V-ați securizat contul cu verificarea în doi pași.  Vă rugăm să folosiți "
+#~ "tokenul de autentificare pentru finaliza verificarea."
+
+#~ msgid ""
+#~ "This browser is not compatible with your configured authentication "
+#~ "device.  Please use Chrome browser, or Firefox with U2F enabled."
+#~ msgstr ""
+#~ "Acest browser nu este compatibil cu dispozitivul de autentificare "
+#~ "configurat.  Vă rugăm să utilizați browserul Chrome, sau Firefox cu U2F "
+#~ "activat."
+
+#~ msgid ""
+#~ "Bad parameters for authenticating with this key.  Possibly wrong URL "
+#~ "domain for this key."
+#~ msgstr ""
+#~ "Parametri greșiți pentru autentificarea cu această cheie.  Este posibil "
+#~ "ca adresa URL pentru această cheie să fie greșită."
+
+#~ msgid "This device is not eligible for this request.  Wrong hardware key?"
+#~ msgstr ""
+#~ "Acest dispozitiv nu este eligibil pentru această solicitare.  Cheie "
+#~ "hardware greșită?"
+
+#~ msgid "Error authenticating.  Please reload browser and try again."
+#~ msgstr ""
+#~ "Eroare la autentificare.  Vă rugăm să reîncărcați browser-ul și încercați "
+#~ "din nou."
+
 #~ msgid "Please leave a comment for other participants."
 #~ msgstr "Vă rugăm să lăsați un comentariu pentru alți participanți."
 
@@ -14108,9 +14242,6 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "Durata aproximativă de abonare"
-
-#~ msgid "Apps"
-#~ msgstr "Aplicații"
 
 #~ msgid "Apr"
 #~ msgstr "Apr"

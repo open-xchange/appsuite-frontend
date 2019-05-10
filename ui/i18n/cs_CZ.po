@@ -1,18 +1,18 @@
-# Antje Faber, 2011, 2012, 2013.
 # Robert Krátký <robert@workshop-chapina.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019.
+# Antje Faber, 2011, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-09 09:24+0200\n"
+"PO-Revision-Date: 2019-05-07 10:33+0200\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
-"Language-Team: Czech <>\n"
+"Language-Team: Czech <cs@workshop-chapina.com>\n"
 "Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Lokalize 18.12.2\n"
 "X-Language: cs\n"
 "X-Source-Language: en\n"
 
@@ -766,6 +766,10 @@ msgstr "Otočit obrázek"
 #: apps/io.ox/calendar/actions/change-organizer.js
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "OK"
@@ -3962,6 +3966,11 @@ msgstr "Zkopírovat do popisu"
 msgid "Saved in:"
 msgstr "Uloženo v:"
 
+#. %1$s maximum file size
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
+msgstr "Vybraný obrázek přesahuje maximální povolenou velikost %1$s"
+
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid ""
 "This filetype is not supported as contact picture. Only image types (JPG, "
@@ -3969,11 +3978,6 @@ msgid ""
 msgstr ""
 "Tento druh souboru není podporován pro kontaktní obrázky. Jsou podporovány "
 "pouze obrázky JPG, GIF, BMP nebo PNG."
-
-#. %1$s maximum file size
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
-msgstr "Vybraný obrázek přesahuje maximální povolenou velikost %1$s"
 
 #: apps/io.ox/core/about/about.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
@@ -4264,8 +4268,16 @@ msgid "Download unscanned file"
 msgstr "Stáhnout nezkontrolovaný soubor"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-msgid "Anti-Virus Warning"
-msgstr "Anti-vir varování"
+msgid "Unable to perform Anti-Virus check for the requested file(s)"
+msgstr "Na požadovaných souborech nelze provést antivirovou kontrolu."
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Malicious file detected"
+msgstr "Nalezen škodlivý soubor"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Anti-Virus warning"
+msgstr "Antivirové varování"
 
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
 msgid "Reset this list"
@@ -4980,6 +4992,10 @@ msgstr "Data byla importována pouze částečně (%1$s z %2$s záznamů)"
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Navigate to:"
 msgstr "Přejít do:"
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "Apps"
+msgstr "Aplikace"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 msgid "Skip to main content"
@@ -6043,10 +6059,6 @@ msgid "Don't remind me again"
 msgstr "Již mi to nepřipomínej"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
-#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 msgid "OK"
 msgstr "OK"
 
@@ -7291,9 +7303,9 @@ msgstr "Časový interval není omezený"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "The timeframe is limited to 1 day."
 msgid_plural "The timeframe is limited to %1$d days."
-msgstr[0] "Časový interval je omezený na %1$d dní."
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Časový interval je omezený na jeden den."
+msgstr[1] "Časový interval je omezený na %1$d dny."
+msgstr[2] "Časový interval je omezený na %1$d dní."
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "File version limit"
@@ -7306,9 +7318,9 @@ msgstr "Počet verzí není omezený"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "The number of versions is limited to 1 version."
 msgid_plural "The number of versions is limited to %1$d versions."
-msgstr[0] "Počet verzí je omezený na %1$d."
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Počet verzí je omezený na jednu."
+msgstr[1] "Počet verzí je omezený na %1$d."
+msgstr[2] "Počet verzí je omezený na %1$d."
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/participants/chronos-detail.js module:io.ox/core
@@ -7321,8 +7333,6 @@ msgid "All file versions are retained"
 msgstr "Všechny verze souboru byly zachovány"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#| msgid ""
-#| "All messages older than %1$d days will be moved to the archive folder"
 msgid "All file versions older than 1 day will be deleted after next login"
 msgid_plural ""
 "All file versions older than %1$d days will be deleted after next login"
@@ -10238,20 +10248,16 @@ msgstr "Google Authenticator"
 msgid "Recovery code"
 msgstr "Kód pro obnovení"
 
-#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
-msgid "UNKNOWN"
-msgstr "NEZNÁMÝ"
-
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
 msgid ""
-"There are no backup devices available for this account.  Please notify "
+"There are no backup devices available for this account. Please notify "
 "support for help."
 msgstr ""
 "Pro tento účet nejsou k dispozici zálohovací zařízení. Kontaktujte "
 "technickou podporu."
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
-msgid "Authentication failure.  Please reload browser and try again."
+msgid "Authentication failure. Please try reloading the page."
 msgstr "Chyba autentizace. Znovu načtěte stránku, prosím."
 
 #: apps/io.ox/multifactor/settings.js module:io.ox/core/boot
@@ -10299,7 +10305,7 @@ msgstr "Zadejte, prosím, telefonní číslo zařízení."
 
 #. Catch all error when trying to set up a new 2step device
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-msgid "Something went wrong.  Please try again later."
+msgid "Something went wrong. Please try again later."
 msgstr "Něco se nezdařilo. Zkuste to, prosím, znovu později."
 
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
@@ -10320,11 +10326,12 @@ msgstr "Přidat možnost ověření"
 #: module:io.ox/core/boot
 msgid ""
 "In the event you lose or are unable to use your authentication device, your "
-"account will be locked out unless you set up a recovery method.  We strongly "
+"account will be locked out unless you set up a recovery method. We strongly "
 "recommend that you do so now."
 msgstr ""
 "Pokud ztratíte nebo nebudete moci použít své autentizační zařízení, a "
-"nebudete mít nastavenou metodu pro obnovení, váš účet bude uzamčen."
+"nebudete mít nastavenou metodu pro obnovení, váš účet bude uzamčen. "
+"Doporučujeme toto nastavení nyní provést."
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
@@ -10371,6 +10378,15 @@ msgstr "Neznámý systém"
 #: apps/io.ox/multifactor/settings/views/printBackupString.js
 msgid "Recovery Code"
 msgstr "Kód pro obnovení"
+
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"This is your recovery code. Please write it down, print it, or save the "
+"file. Be sure to save this in a secure location."
+msgstr ""
+"Toto je váš kód pro obnovení. Zapište si jej, vytiskněte, nebo uložte do "
+"souboru. Přechovávejte jej na bezpečném místě."
 
 #. this is a file name that stores the a long recovery code
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
@@ -10422,14 +10438,19 @@ msgstr "Potvrzovací kód"
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
+msgid "Please enter the validation code we just sent to your device."
+msgstr "Zadejte, prosím, validační kód, který byl odeslán na vaše zařízení."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad input or server error.  Please try again."
+msgid "Bad input or server error. Please try again."
 msgstr "Chybné zadání nebo chyba serveru. Zkuste to, prosím, znovu."
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-msgid "Bad verification code.  Please try again"
+msgid "Bad verification code. Please try again"
 msgstr "Chybný ověřovací kód. Zkuste to, prosím, znovu."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
@@ -10439,14 +10460,21 @@ msgstr "Registrace autentizačního zařízení"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
+msgid "Scan the QR code with your authenticator."
+msgstr "Načtěte QR kód autentizační aplikací."
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
 msgid "Click to copy URL to clipboard"
 msgstr "Kliknutím zkopírovat do schránky"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
 msgid ""
-"If scanning doesn't work, you may be able to enter the following setup code."
-msgstr "Pokud nefunguje skenování, možná budete moci zadat následující nastavovací kód."
+"If scanning does not work, you may be able to enter the following setup code."
+msgstr ""
+"Pokud nefunguje skenování, možná budete moci zadat následující nastavovací "
+"kód."
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
@@ -10456,6 +10484,11 @@ msgid ""
 msgstr ""
 "Po dokončení zadejte autentizační kód pro ověření, že je vše nastaveno "
 "správně."
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Please touch/activate your device"
+msgstr "Aktivujte své zařízení, prosím."
 
 #: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
 #: module:io.ox/core/boot
@@ -10482,6 +10515,10 @@ msgid "Upload Recovery File"
 msgstr "Nahrát soubor pro obnovu"
 
 #: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Please enter the recovery code"
+msgstr "Zadejte, prosím, kód pro obnovení"
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
 msgid "Next 4 characters of the backup string"
 msgstr "Další čtyři znaky zálohovacího řetězce"
 
@@ -10506,12 +10543,12 @@ msgid "New code sent."
 msgstr "Odeslán nový kód."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
-msgid "A new code was sent to your SMS device.  Please enter the code."
+msgid "A new code was sent to your SMS device. Please enter the code."
 msgstr "Na vaše SMS zařízení byl odeslán nový kód. Zadejte jej, prosím."
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code we sent to the phone *****%s."
 msgstr ""
 "Zabezpečil(a) jste svůj účet pomocí dvoufázového ověření. Zadejte, prosím, "
@@ -10519,7 +10556,7 @@ msgstr ""
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please enter the "
+"You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
 msgstr ""
 "Zabezpečil(a) jste svůj účet pomocí dvoufázového ověření. Zadejte, prosím, "
@@ -10527,7 +10564,7 @@ msgstr ""
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"You secured your account with 2-Step Verification.  Please use your "
+"You secured your account with 2-Step Verification. Please use your "
 "authentication token to complete verification."
 msgstr ""
 "Zabezpečil(a) jste svůj účet pomocí dvoufázového ověření. Pro dokončení "
@@ -10535,7 +10572,7 @@ msgstr ""
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"This browser is not compatible with your configured authentication device.  "
+"This browser is not compatible with your configured authentication device. "
 "Please use Chrome browser, or Firefox with U2F enabled."
 msgstr ""
 "Tento prohlížeč není kompatibilní s vaším autentizačním zařízením. Použijte, "
@@ -10544,10 +10581,10 @@ msgstr ""
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
-"Bad parameters for authenticating with this key.  Possibly wrong URL domain "
+"Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
 msgstr ""
-"Chybné parametry pro autentizaci s tímto klíčem. Možná chybé URL domény pro "
+"Chybné parametry pro autentizaci s tímto klíčem. Možná chybné URL domény pro "
 "daný klíč."
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
@@ -10557,7 +10594,7 @@ msgstr "Konfigurace není podporována"
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "This device is not eligible for this request.  Wrong hardware key?"
+msgid "This device is not eligible for this request. Wrong hardware key?"
 msgstr ""
 "Toto zařízení není pro daný požadavek k dispozici. Špatný hardwarový klíč?"
 
@@ -10567,7 +10604,7 @@ msgstr "Čas vypršel"
 
 #. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-msgid "Error authenticating.  Please reload browser and try again."
+msgid "Error authenticating. Please reload browser and try again."
 msgstr "Chyba autentizace. Znovu načtěte stránku, prosím."
 
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
@@ -13060,6 +13097,91 @@ msgstr "Pozvat na %s"
 msgid "Add on %s"
 msgstr "Přidat do %s"
 
+#~ msgid "Anti-Virus Warning"
+#~ msgstr "Anti-vir varování"
+
+#~ msgid "UNKNOWN"
+#~ msgstr "NEZNÁMÝ"
+
+#~ msgid ""
+#~ "There are no backup devices available for this account.  Please notify "
+#~ "support for help."
+#~ msgstr ""
+#~ "Pro tento účet nejsou k dispozici zálohovací zařízení. Kontaktujte "
+#~ "technickou podporu."
+
+#~ msgid "Authentication failure.  Please reload browser and try again."
+#~ msgstr "Chyba autentizace. Znovu načtěte stránku, prosím."
+
+#~ msgid "Something went wrong.  Please try again later."
+#~ msgstr "Něco se nezdařilo. Zkuste to, prosím, znovu později."
+
+#~ msgid ""
+#~ "In the event you lose or are unable to use your authentication device, "
+#~ "your account will be locked out unless you set up a recovery method.  We "
+#~ "strongly recommend that you do so now."
+#~ msgstr ""
+#~ "Pokud ztratíte nebo nebudete moci použít své autentizační zařízení, a "
+#~ "nebudete mít nastavenou metodu pro obnovení, váš účet bude uzamčen."
+
+#~ msgid "Bad input or server error.  Please try again."
+#~ msgstr "Chybné zadání nebo chyba serveru. Zkuste to, prosím, znovu."
+
+#~ msgid "Bad verification code.  Please try again"
+#~ msgstr "Chybný ověřovací kód. Zkuste to, prosím, znovu."
+
+#~ msgid ""
+#~ "If scanning doesn't work, you may be able to enter the following setup "
+#~ "code."
+#~ msgstr ""
+#~ "Pokud nefunguje skenování, možná budete moci zadat následující "
+#~ "nastavovací kód."
+
+#~ msgid "A new code was sent to your SMS device.  Please enter the code."
+#~ msgstr "Na vaše SMS zařízení byl odeslán nový kód. Zadejte jej, prosím."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code we sent to the phone *****%s."
+#~ msgstr ""
+#~ "Zabezpečil(a) jste svůj účet pomocí dvoufázového ověření. Zadejte, "
+#~ "prosím, kód poslaný na váš telefon: *****%s."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code from the Authenticator App."
+#~ msgstr ""
+#~ "Zabezpečil(a) jste svůj účet pomocí dvoufázového ověření. Zadejte, "
+#~ "prosím, kód z autentizační aplikace."
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please use your "
+#~ "authentication token to complete verification."
+#~ msgstr ""
+#~ "Zabezpečil(a) jste svůj účet pomocí dvoufázového ověření. Pro dokončení "
+#~ "ověření použijte autentizační token."
+
+#~ msgid ""
+#~ "This browser is not compatible with your configured authentication "
+#~ "device.  Please use Chrome browser, or Firefox with U2F enabled."
+#~ msgstr ""
+#~ "Tento prohlížeč není kompatibilní s vaším autentizačním zařízením. "
+#~ "Použijte, prosím, Chrome, nebo Firefox s povoleným U2F."
+
+#~ msgid ""
+#~ "Bad parameters for authenticating with this key.  Possibly wrong URL "
+#~ "domain for this key."
+#~ msgstr ""
+#~ "Chybné parametry pro autentizaci s tímto klíčem. Možná chybé URL domény "
+#~ "pro daný klíč."
+
+#~ msgid "This device is not eligible for this request.  Wrong hardware key?"
+#~ msgstr ""
+#~ "Toto zařízení není pro daný požadavek k dispozici. Špatný hardwarový klíč?"
+
+#~ msgid "Error authenticating.  Please reload browser and try again."
+#~ msgstr "Chyba autentizace. Znovu načtěte stránku, prosím."
+
 #~ msgid "Please leave a comment for other participants."
 #~ msgstr "Zanechte, prosím, komentář pro ostatní účastníky."
 
@@ -13310,11 +13432,6 @@ msgstr "Přidat do %s"
 
 #~ msgid " is currently editing this document."
 #~ msgstr " právě upravuje tento dokument."
-
-#, fuzzy
-#~| msgid "is not a valid user or group."
-#~ msgid " is not a valid user or group."
-#~ msgstr "není platný uživatel nebo skupina."
 
 #~ msgid "!!!This file has not been added"
 #~ msgstr "!!! Tento soubor nebyl přidán"
@@ -14193,11 +14310,6 @@ msgstr "Přidat do %s"
 #~ msgid "Add feed"
 #~ msgstr "Přidat kanál"
 
-#, fuzzy
-#~| msgid "Add files"
-#~ msgid "Add file"
-#~ msgstr "Přidat soubory"
-
 #~ msgid "Add folder menu"
 #~ msgstr "Přidat menu složky"
 
@@ -14257,11 +14369,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Advanced facets block was opened."
 #~ msgstr "Blok pokročilých kritérií byl otevřen."
-
-#, fuzzy
-#~| msgid "Advanced Facets"
-#~ msgid "Advanced user?"
-#~ msgstr "Pokročilá kritéria"
 
 #~ msgid "Afghanistan"
 #~ msgstr "Afghánistán"
@@ -14432,11 +14539,6 @@ msgstr "Přidat do %s"
 #~ "Po stisknutí OK se otevře nové okno, kde budete moci autorizovat %s pro "
 #~ "přístup ke svému účtu."
 
-#, fuzzy
-#~| msgid "Åland Islands"
-#~ msgid "Aland Islands"
-#~ msgstr "Ålandy"
-
 #~ msgid "Albania"
 #~ msgstr "Albánie"
 
@@ -14451,11 +14553,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "All changes saved"
 #~ msgstr "Všechny změny uloženy"
-
-#, fuzzy
-#~| msgid "All my contacts"
-#~ msgid "All contacts"
-#~ msgstr "Všechny mé kontakty"
 
 #~ msgid "All future messages from %1$s will be moved to the selected folder."
 #~ msgid_plural ""
@@ -15123,9 +15220,6 @@ msgstr "Přidat do %s"
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "Přibližná doba trvání u odběrů"
 
-#~ msgid "Apps"
-#~ msgstr "Aplikace"
-
 #~ msgid "Apr"
 #~ msgstr "Dub"
 
@@ -15701,21 +15795,6 @@ msgstr "Přidat do %s"
 #~ msgid "Back to appointment"
 #~ msgstr "Zpět na schůzku"
 
-#, fuzzy
-#~| msgid "Back to sign in"
-#~ msgid "Back to devices"
-#~ msgstr "Zpět na přihlášení"
-
-#, fuzzy
-#~| msgid "Back to sign in"
-#~ msgid "Back to modules"
-#~ msgstr "Zpět na přihlášení"
-
-#, fuzzy
-#~| msgid "your platform"
-#~ msgid "Back to platforms"
-#~ msgstr "vaše platforma"
-
 #~ msgid "Background 1"
 #~ msgstr "Pozadí 1"
 
@@ -15754,11 +15833,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Belarus"
 #~ msgstr "Bělorusko"
-
-#, fuzzy
-#~| msgid "America/Belize"
-#~ msgid "Belize"
-#~ msgstr "Amerika/Belize"
 
 #~ msgid ""
 #~ "Below the recipient you will find further functions, e.g. for sending "
@@ -15830,10 +15904,6 @@ msgstr "Přidat do %s"
 #~ msgid "Botswana"
 #~ msgstr "Botswana"
 
-#, fuzzy
-#~ msgid "Bottom"
-#~ msgstr "Ohraničení dole"
-
 #~ msgid "Bouvet Island"
 #~ msgstr "Bouvet Island"
 
@@ -15861,18 +15931,8 @@ msgstr "Přidat do %s"
 #~ msgid "British Indian Ocean Territory"
 #~ msgstr "Britské teritorium v Indickém oceánu"
 
-#, fuzzy
-#~| msgid "Virgin Islands, U.S."
-#~ msgid "British Virgin Islands"
-#~ msgstr "Americké Panenské ostrovy"
-
 #~ msgid "Broadcast your presentation over the Web."
 #~ msgstr "Vysílat prezentaci po webu."
-
-#, fuzzy
-#~| msgid "Asia/Brunei"
-#~ msgid "Brunei"
-#~ msgstr "Asie/Brunej"
 
 #~ msgid "Brunei Darussalam"
 #~ msgstr "Brunei Darussalam"
@@ -16187,11 +16247,6 @@ msgstr "Přidat do %s"
 #~ msgid "Close quick config"
 #~ msgstr "Zavřít rychlé nastavení"
 
-#, fuzzy
-#~| msgid "Click to close the recurrence view"
-#~ msgid "Close recurrence view"
-#~ msgstr "Klikněte pro zavření pohledu na opakování"
-
 #~ msgid "Close reminder for %1$s"
 #~ msgstr "Zavřít upomínku pro %1$s"
 
@@ -16206,11 +16261,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Cocos (Keeling) Islands"
 #~ msgstr "Kokosové (Keelingovy) ostrovy"
-
-#, fuzzy
-#~| msgid "Cook Islands"
-#~ msgid "Cocos Islands"
-#~ msgstr "Cookovy ostrovy"
 
 #~ msgid "Collect while reading E-Mails?"
 #~ msgstr "Sbírat při čtení zpráv?"
@@ -16251,16 +16301,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Common Facets"
 #~ msgstr "Běžná kritéria"
-
-#, fuzzy
-#~| msgid "Tomorrow"
-#~ msgid "Comoros"
-#~ msgstr "Zítra"
-
-#, fuzzy
-#~| msgid "Compact view"
-#~ msgid "Compact rows"
-#~ msgstr "Kompaktní pohled"
 
 #~ msgid "Company (business)"
 #~ msgstr "Firma (obchod)"
@@ -16318,10 +16358,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Content-Type:"
 #~ msgstr "Druh obsahu:"
-
-#, fuzzy
-#~ msgid "Continue Presentation"
-#~ msgstr "Cíl"
 
 #~ msgid "Continue presentation"
 #~ msgstr "Pokračovat v prezentaci"
@@ -16482,11 +16518,6 @@ msgstr "Přidat do %s"
 #~ msgid "Cuba"
 #~ msgstr "Kuba"
 
-#, fuzzy
-#~| msgid "Macao"
-#~ msgid "Curacao"
-#~ msgstr "Macau"
-
 #~ msgid "Current Date"
 #~ msgstr "Aktuální datum"
 
@@ -16498,11 +16529,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Current page and total page count"
 #~ msgstr "Aktuální strana a celkový počet stran"
-
-#, fuzzy
-#~| msgid "Current Costs:"
-#~ msgid "Current session"
-#~ msgstr "Aktuální náklady:"
 
 #~ msgid "Current week, next week"
 #~ msgstr "Aktuální týden, následující týden"
@@ -16699,16 +16725,6 @@ msgstr "Přidat do %s"
 #~ msgid "Delete whole series"
 #~ msgstr "Smazat celou sérii"
 
-#, fuzzy
-#~| msgid "Return Receipt"
-#~ msgid "Delivery Receipt"
-#~ msgstr "Potvrzení o doručení"
-
-#, fuzzy
-#~| msgid "Korea, Democratic People's Republic of"
-#~ msgid "Democratic Republic of the Congo"
-#~ msgstr "Severní Korea"
-
 #~ msgid "Demote One Level"
 #~ msgstr "O úroveň níže"
 
@@ -16732,11 +16748,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Detail information for publication"
 #~ msgstr "Podrobné informace o publikaci"
-
-#, fuzzy
-#~| msgid "Delete contact"
-#~ msgid "Detailed contact list"
-#~ msgstr "Smazat kontakt"
 
 #~ msgid ""
 #~ "Detailed guides for all modules are located in the help section of the "
@@ -16803,12 +16814,6 @@ msgstr "Přidat do %s"
 #~ msgid "Do you already have a %s account?"
 #~ msgstr "Již máte účet %s?"
 
-#, fuzzy
-#~| msgctxt "One file only"
-#~| msgid "Do you really want to delete this version?"
-#~ msgid "Do you really want to delete all older versions?"
-#~ msgstr "Opravdu chcete smazat tuto verzi?"
-
 #~ msgid "Do you really want to delete the following blog?"
 #~ msgstr "Opravdu chcete smazat tento blog?"
 
@@ -16830,12 +16835,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Do you really want to discard this mail?"
 #~ msgstr "Opravdu chcete tuto zprávu zahodit?"
-
-#, fuzzy
-#~| msgctxt "One file only"
-#~| msgid "Do you really want to delete this version?"
-#~ msgid "Do you really want to terminate that session?"
-#~ msgstr "Opravdu chcete smazat tuto verzi?"
 
 #~ msgid "Do you want to create a %s account?"
 #~ msgstr "Chcete vytvořit účet %s?"
@@ -17009,11 +17008,6 @@ msgstr "Přidat do %s"
 #~ msgid "EEEE, %s"
 #~ msgstr "EEEE, %s"
 
-#, fuzzy
-#~| msgid "E-Mail"
-#~ msgid "EMail"
-#~ msgstr "E-mail"
-
 #~ msgid "EUR"
 #~ msgstr "EUR"
 
@@ -17037,11 +17031,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Each week on %1$s"
 #~ msgstr "Každý týden v %1$s"
-
-#, fuzzy
-#~| msgid "Last month"
-#~ msgid "East Timor"
-#~ msgstr "Minulý měsíc"
 
 #~ msgid "Ecuador"
 #~ msgstr "Ekvádor"
@@ -17080,11 +17069,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Edit as new"
 #~ msgstr "Upravit jako nové"
-
-#, fuzzy
-#~| msgid "Available Categories:"
-#~ msgid "Edit categories"
-#~ msgstr "Dostupné kategorie:"
 
 #~ msgid "Edit feed"
 #~ msgstr "Upravit kanál"
@@ -17140,11 +17124,6 @@ msgstr "Přidat do %s"
 #~ msgid "Emptying folder... This may take a few seconds."
 #~ msgstr "Vyprazdňuji složku... To může několik sekund trvat."
 
-#, fuzzy
-#~| msgid "Enable visual effects"
-#~ msgid "Enable / Disable"
-#~ msgstr "Povolit vzhledové efekty"
-
 #~ msgid "Enable Calendar Hover"
 #~ msgstr "Povolit vyskakovací okno kalendáře"
 
@@ -17172,11 +17151,6 @@ msgstr "Přidat do %s"
 #~ msgid "Enable calendar hovers"
 #~ msgstr "Povolit vyskakovací okna kalendáře"
 
-#, fuzzy
-#~| msgid "Available Categories:"
-#~ msgid "Enable categories"
-#~ msgstr "Dostupné kategorie:"
-
 #~ msgid "Enable for the following addresses"
 #~ msgstr "Povolit pro následující adresy"
 
@@ -17203,10 +17177,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Encrypt"
 #~ msgstr "Zašifrovat"
-
-#, fuzzy
-#~ msgid "End Presentation"
-#~ msgstr "Cíl"
 
 #~ msgid "End date is before start date"
 #~ msgstr "Datum konce je před datem začátku"
@@ -17568,11 +17538,6 @@ msgstr "Přidat do %s"
 #~ msgid "Expiration: %1$d"
 #~ msgstr "Platnost: %1$d"
 
-#, fuzzy
-#~| msgid "Send as vCard"
-#~ msgid "Export as vCard"
-#~ msgstr "Poslat jako vCard"
-
 #~ msgid "Extended view"
 #~ msgstr "Rozšířený pohled"
 
@@ -17583,7 +17548,6 @@ msgstr "Přidat do %s"
 #~ msgid "External guests"
 #~ msgstr "Externí hosté"
 
-#
 #~ msgctxt "friday"
 #~ msgid "F"
 #~ msgstr "Pá"
@@ -17599,11 +17563,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Failure! Please refresh."
 #~ msgstr "Selhání! Obnovte, prosím."
-
-#, fuzzy
-#~| msgid "Åland Islands"
-#~ msgid "Falkland Islands"
-#~ msgstr "Ålandy"
 
 #~ msgid "Falkland Islands (Malvinas)"
 #~ msgstr "Falklandy (Malvíny)"
@@ -17707,11 +17666,6 @@ msgstr "Přidat do %s"
 #~ msgid "First name:"
 #~ msgstr "Křestní jméno:"
 
-#, fuzzy
-#~| msgid "Fit to screen width"
-#~ msgid "Fit to screen height"
-#~ msgstr "Přizpůsobit šířce obrazovky"
-
 #~ msgid "Flag #%d"
 #~ msgstr "Příznak #%d"
 
@@ -17783,11 +17737,6 @@ msgstr "Přidat do %s"
 #~ msgid "Forward emails as:"
 #~ msgstr "Přeposílat zprávy jako:"
 
-#, fuzzy
-#~| msgid "Freelancer"
-#~ msgid "France"
-#~ msgstr "Na volné noze"
-
 #~ msgid "Free trial..."
 #~ msgstr "Zkušební verze zdarma..."
 
@@ -17845,11 +17794,6 @@ msgstr "Přidat do %s"
 #~ msgid "Georgia"
 #~ msgstr "Gruzie"
 
-#, fuzzy
-#~| msgid "German"
-#~ msgid "Germany"
-#~ msgstr "němčina"
-
 #~ msgid "Get directions"
 #~ msgstr "Vyžádat pokyny"
 
@@ -17882,11 +17826,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Google Drive"
 #~ msgstr "Google Disk"
-
-#, fuzzy
-#~| msgid "Green"
-#~ msgid "Greece"
-#~ msgstr "Zelená"
 
 #~ msgid "Greek"
 #~ msgstr "řečtina"
@@ -17929,11 +17868,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Guatemala"
 #~ msgstr "Guatemala"
-
-#, fuzzy
-#~| msgid "Europe/Guernsey"
-#~ msgid "Guernsey"
-#~ msgstr "Evropa/Guernsey"
 
 #~ msgid "Guidance"
 #~ msgstr "Nápověda"
@@ -18064,11 +17998,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "How the settings are organized"
 #~ msgstr "Jak je Nastavení organizované"
-
-#, fuzzy
-#~| msgid "Hungarian"
-#~ msgid "Hungary"
-#~ msgstr "maďarština"
 
 #~ msgid "IM"
 #~ msgstr "IM"
@@ -18485,11 +18414,6 @@ msgstr "Přidat do %s"
 #~ msgid "Italian (Italy)"
 #~ msgstr "italština (Itálie)"
 
-#, fuzzy
-#~| msgid "Italic"
-#~ msgid "Italy"
-#~ msgstr "Kurzíva"
-
 #~ msgid "Item List"
 #~ msgstr "Seznam položek"
 
@@ -18611,10 +18535,6 @@ msgstr "Přidat do %s"
 #~ msgid "Leave"
 #~ msgstr "Přestat sledovat"
 
-#, fuzzy
-#~ msgid "Leave Presentation"
-#~ msgstr "Cíl"
-
 #~ msgid "Leave empty if you have none"
 #~ msgstr "Nemáte-li žádný, ponechte prázdné"
 
@@ -18662,14 +18582,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Line Spacing"
 #~ msgstr "Řádkování"
-
-#, fuzzy
-#~ msgid "Line wrap when sending text mails after"
-#~ msgstr "Lámání řádků při posílání textových zpráv po"
-
-#, fuzzy
-#~ msgid "Line wrap when sending text mails after how much characters"
-#~ msgstr "Lámání řádků při posílání textových zpráv po"
 
 #~ msgid "Line wrap when sending text mails after: "
 #~ msgstr "Lámání slov při posílání textových zpráv po: "
@@ -19000,11 +18912,6 @@ msgstr "Přidat do %s"
 #~ msgid "Months"
 #~ msgstr "Měsíce"
 
-#, fuzzy
-#~| msgid "America/Montserrat"
-#~ msgid "Montserrat"
-#~ msgstr "Amerika/Montserrat"
-
 #~ msgid "More zoom settings"
 #~ msgstr "Další nastavení přiblížení"
 
@@ -19050,11 +18957,6 @@ msgstr "Přidat do %s"
 #~ msgid "Namibia"
 #~ msgstr "Namibie"
 
-#, fuzzy
-#~| msgid "Drive Client"
-#~ msgid "Native clients"
-#~ msgstr "Klient Drive"
-
 #~ msgid "Nauru"
 #~ msgstr "Nauru"
 
@@ -19066,11 +18968,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Nepal"
 #~ msgstr "Nepál"
-
-#, fuzzy
-#~| msgid "Dutch (Netherlands)"
-#~ msgid "Netherlands"
-#~ msgstr "holandština (Nizozemí)"
 
 #~ msgid "Netherlands Antilles"
 #~ msgstr "Nizozemské Antily"
@@ -19484,11 +19381,6 @@ msgstr "Přidat do %s"
 #~ msgid "Organizer:"
 #~ msgstr "Organizátor:"
 
-#, fuzzy
-#~| msgid "Others"
-#~ msgid "Other clients"
-#~ msgstr "Další"
-
 #~ msgid "Other contact folders"
 #~ msgstr "Další kontaktové složky"
 
@@ -19660,11 +19552,6 @@ msgstr "Přidat do %s"
 #~ msgid "Palau"
 #~ msgstr "Palau"
 
-#, fuzzy
-#~| msgid "Palestinian Territory, Occupied"
-#~ msgid "Palestinian Territory"
-#~ msgstr "Palestina"
-
 #~ msgid "Panama"
 #~ msgstr "Panama"
 
@@ -19685,11 +19572,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Paragraph style"
 #~ msgstr "Styl odstavce"
-
-#, fuzzy
-#~| msgid "Nicaragua"
-#~ msgid "Paraguay"
-#~ msgstr "Nikaragua"
 
 #~ msgid "Parameter:"
 #~ msgstr "Parametr:"
@@ -19712,10 +19594,6 @@ msgstr "Přidat do %s"
 #~ msgid "Pause"
 #~ msgstr "Pozastavit"
 
-#, fuzzy
-#~ msgid "Pause Presentation"
-#~ msgstr "Cíl"
-
 #~ msgid "Pause auto-play mode"
 #~ msgstr "Pozastavit režim automatického přehrávání"
 
@@ -19730,11 +19608,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Permanently remove your deleted E-Mails?"
 #~ msgstr "Natrvalo odstranit vaše smazané zprávy?"
-
-#, fuzzy
-#~| msgid "Permissions"
-#~ msgid "Permissions for"
-#~ msgstr "Oprávnění"
 
 #~| msgid "Permissions"
 #~ msgid "Permissions: %1$s"
@@ -19989,10 +19862,6 @@ msgstr "Přidat do %s"
 #~ msgid "Presenter"
 #~ msgstr "Prezentující"
 
-#, fuzzy
-#~ msgid "Presenter Navigation"
-#~ msgstr "Cíl"
-
 #~ msgid "Presenter navigation bar"
 #~ msgstr "Navigační lišta pro prezentujícího"
 
@@ -20020,20 +19889,11 @@ msgstr "Přidat do %s"
 #~ msgid "Prev"
 #~ msgstr "Předchozí"
 
-#, fuzzy
-#~ msgid "Preview pane"
-#~ msgstr "Náhled"
-
 #~ msgid "Previous slide"
 #~ msgstr "Předchozí snímek"
 
 #~ msgid "Principal:"
 #~ msgstr "Hlavní:"
-
-#, fuzzy
-#~| msgid "Private contacts"
-#~ msgid "Printout of contacts"
-#~ msgstr "Soukromé kontakty"
 
 #~ msgid "Priority:"
 #~ msgstr "Priorita:"
@@ -20128,11 +19988,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Pull To Refresh"
 #~ msgstr "Tažením obnovte"
-
-#, fuzzy
-#~| msgid "Asia/Qatar"
-#~ msgid "Qatar"
-#~ msgstr "Asie/Katar"
 
 #~ msgid "Quick config"
 #~ msgstr "Rychlé nastavení"
@@ -20314,29 +20169,14 @@ msgstr "Přidat do %s"
 #~ msgid "Reunion"
 #~ msgstr "Reunion"
 
-#, fuzzy
-#~| msgid "Never"
-#~ msgid "Revert"
-#~ msgstr "Nikdy"
-
 #~ msgid "Revert Last Operation"
 #~ msgstr "Vrátit poslední operaci"
-
-#, fuzzy
-#~| msgid "Text"
-#~ msgid "Rich Text"
-#~ msgstr "Text"
 
 #~ msgid "Right"
 #~ msgstr "Vpravo"
 
 #~ msgid "Right aligned, text wraps at left side"
 #~ msgstr "Zarovnané vpravo, text obtéká zleva"
-
-#, fuzzy
-#~| msgid "Romanian"
-#~ msgid "Romania"
-#~ msgstr "rumunština"
 
 #~ msgid "Room number:"
 #~ msgstr "Číslo místnosti:"
@@ -20374,11 +20214,6 @@ msgstr "Přidat do %s"
 #~ msgid "Running applications"
 #~ msgstr "Spuštěné aplikace"
 
-#, fuzzy
-#~| msgid "Russian"
-#~ msgid "Russia"
-#~ msgstr "ruština"
-
 #~ msgid "Russian Federation"
 #~ msgstr "Rusko"
 
@@ -20397,11 +20232,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "SEK"
 #~ msgstr "SEK"
-
-#, fuzzy
-#~| msgid "RSS"
-#~ msgid "SMS"
-#~ msgstr "RSS"
 
 #~ msgid "SMTP Login"
 #~ msgstr "Přihlášovací jméno pro SMTP"
@@ -20431,11 +20261,6 @@ msgstr "Přidat do %s"
 #~ msgid "Safari %1$s on %2$s"
 #~ msgstr "Sdílet %1$s „%2$s“"
 
-#, fuzzy
-#~| msgid "Saint Barthélemy"
-#~ msgid "Saint Barthelemy"
-#~ msgstr "Saint Barthélemy"
-
 #~ msgid "Saint Helena"
 #~ msgstr "Svatá Helena"
 
@@ -20444,11 +20269,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Saint Lucia"
 #~ msgstr "Svatá Lucie"
-
-#, fuzzy
-#~| msgid "San Marino"
-#~ msgid "Saint Martin"
-#~ msgstr "San Marino"
 
 #~ msgid "Saint Martin (French part)"
 #~ msgstr "Saint-Martin"
@@ -20789,11 +20609,6 @@ msgstr "Přidat do %s"
 #~ msgstr[1] "Zobrazit přílohy"
 #~ msgstr[2] "Zobrazit přílohy"
 
-#, fuzzy
-#~| msgid "Show in calendar"
-#~ msgid "Show chevron day"
-#~ msgstr "Zobrazit v kalendáři"
-
 #~ msgid "Show comments"
 #~ msgstr "Zobrazit komentáře"
 
@@ -20863,10 +20678,6 @@ msgstr "Přidat do %s"
 #~ msgid "Show task"
 #~ msgstr "Ukázat úkol"
 
-#, fuzzy
-#~ msgid "Show/hide folder"
-#~ msgstr "Přesunout složku"
-
 #~ msgid "Sidebar"
 #~ msgstr "Postranní lišta"
 
@@ -20894,26 +20705,11 @@ msgstr "Přidat do %s"
 #~ msgid "Simple Pad"
 #~ msgstr "Poznámkový blok"
 
-#, fuzzy
-#~| msgid "Phone list"
-#~ msgid "Simple phone list"
-#~ msgstr "Seznam telefonů"
-
 #~ msgid "Since the appointment is recurring, it may cause further conflicts."
 #~ msgstr "Protože jde o opakovanou schůzku, může způsobit další konflikty."
 
-#, fuzzy
-#~| msgid "Asia/Singapore"
-#~ msgid "Singapore"
-#~ msgstr "Singapur"
-
 #~ msgid "Single"
 #~ msgstr "Jednoduché"
-
-#, fuzzy
-#~| msgid "Saint Barthélemy"
-#~ msgid "Sint Maarten"
-#~ msgstr "Saint Barthélemy"
 
 #~ msgid "Site"
 #~ msgstr "Stránka"
@@ -20935,11 +20731,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Slovenia"
 #~ msgstr "Slovinsko"
-
-#, fuzzy
-#~| msgid "Smartphone settings:"
-#~ msgid "Smartphone"
-#~ msgstr "Nastavení chytrého telefonu:"
 
 #~ msgid "Social"
 #~ msgstr "Sociální"
@@ -20984,14 +20775,6 @@ msgstr "Přidat do %s"
 #~ msgid "Sorry, failed to load the document successfully."
 #~ msgstr "Je mi líto, dokument se nepodařilo načíst."
 
-#, fuzzy
-#~ msgid "Sorry, the audio file could not be played."
-#~ msgstr "Soubor se nepodařilo nahrát"
-
-#, fuzzy
-#~ msgid "Sorry, the video could not be played."
-#~ msgstr "Soubor se nepodařilo nahrát"
-
 #~ msgid ""
 #~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
 #~ "LinkedIn with the permission to do read messages."
@@ -21011,16 +20794,6 @@ msgstr "Přidat do %s"
 #~ msgid "South Georgia and the South Sandwich Islands"
 #~ msgstr "Jižní Georgie a Jižní Sandwichovy ostrovy"
 
-#, fuzzy
-#~| msgid "South Africa"
-#~ msgid "South Korea"
-#~ msgstr "Jihoafrická republika"
-
-#, fuzzy
-#~| msgid "Sudan"
-#~ msgid "South Sudan"
-#~ msgstr "Súdán"
-
 #~ msgid "Spam folder"
 #~ msgstr "Složka Spam"
 
@@ -21035,10 +20808,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Start Page"
 #~ msgstr "Stránka start"
-
-#, fuzzy
-#~ msgid "Start Presentation"
-#~ msgstr "Cíl"
 
 #~ msgid "Start date:"
 #~ msgstr "Datum začátku:"
@@ -21307,11 +21076,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Tab-based panel"
 #~ msgstr "Panel s kartami"
-
-#, fuzzy
-#~| msgid "Table"
-#~ msgid "Tablet"
-#~ msgstr "Tabulka"
 
 #~ msgid "Tabs example"
 #~ msgstr "Příklad karet"
@@ -22755,11 +22519,6 @@ msgstr "Přidat do %s"
 #~ msgid "Type:"
 #~ msgstr "Druh:"
 
-#, fuzzy
-#~| msgid "Virgin Islands, U.S."
-#~ msgid "U.S. Virgin Islands"
-#~ msgstr "Americké Panenské ostrovy"
-
 #~ msgid "URI"
 #~ msgstr "URI"
 
@@ -22874,18 +22633,8 @@ msgstr "Přidat do %s"
 #~ msgid "United States Minor Outlying Islands"
 #~ msgstr "Menší odlehlé ostrovy Spojených států amerických"
 
-#, fuzzy
-#~| msgid "Unknown sender"
-#~ msgid "Unknown client"
-#~ msgstr "Neznámý odesílatel"
-
 #~ msgid "Unknown error while checking subreddit."
 #~ msgstr "Neznámá chyba při načítání subreddit."
-
-#, fuzzy
-#~| msgid "Unknown sender"
-#~ msgid "Unkown client"
-#~ msgstr "Neznámý odesílatel"
 
 #~ msgid "Unnamed"
 #~ msgstr "Bez názvu"
@@ -22927,11 +22676,6 @@ msgstr "Přidat do %s"
 #~ msgid "Upload a picture"
 #~ msgstr "Nahrát obrázek"
 
-#, fuzzy
-#~| msgid "Upload local file"
-#~ msgid "Upload handling"
-#~ msgstr "Nahrát místní soubor"
-
 #~ msgid "Upload new file"
 #~ msgstr "Nahrát nový soubor"
 
@@ -22968,15 +22712,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Use for appointment"
 #~ msgstr "Použít pro schůzku"
-
-#, fuzzy
-#~| msgid ""
-#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
-#~| "adjust your rating."
-#~ msgid "Use left and right cursor keys to adjust your rating."
-#~ msgstr ""
-#~ "Potvrzeno hodnocení %1$d z %2$d. Použijte šipku doleva či doprava pro "
-#~ "změnu svého hodnocení."
 
 #~ msgid "Use the comments below."
 #~ msgstr "Využijte komentáře níže."
@@ -23047,11 +22782,6 @@ msgstr "Přidat do %s"
 #~ msgid "Vanuatu"
 #~ msgstr "Vanuatu"
 
-#, fuzzy
-#~| msgid "Europe/Vatican"
-#~ msgid "Vatican"
-#~ msgstr "Evropa/Vatikán"
-
 #~ msgid "Venezuela"
 #~ msgstr "Venezuela"
 
@@ -23072,11 +22802,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Video enabled"
 #~ msgstr "Video zapnuto"
-
-#, fuzzy
-#~| msgid "Viet Nam"
-#~ msgid "Vietnam"
-#~ msgstr "Vietnam"
 
 #~ msgid "View Slideshow"
 #~ msgstr "Zobrazit slideshow"
@@ -23137,41 +22862,6 @@ msgstr "Přidat do %s"
 #~ msgid "Western Sahara"
 #~ msgstr "Západní Sahara"
 
-#, fuzzy
-#~| msgid "Do you want to save your configuration?"
-#~ msgid "What do you want to use on your Mac?"
-#~ msgstr "Přejete si uložit nastavení?"
-
-#, fuzzy
-#~| msgid "Do you want to save your configuration?"
-#~ msgid "What do you want to use on your Windows PC?"
-#~ msgstr "Přejete si uložit nastavení?"
-
-#, fuzzy
-#~| msgid "Do you want to save your configuration?"
-#~ msgid "What do you want to use on your Windows Phone?"
-#~ msgstr "Přejete si uložit nastavení?"
-
-#, fuzzy
-#~| msgid "Do you want to save your configuration?"
-#~ msgid "What do you want to use on your iPad?"
-#~ msgstr "Přejete si uložit nastavení?"
-
-#, fuzzy
-#~| msgid "Do you want to save your configuration?"
-#~ msgid "What do you want to use on your iPhone?"
-#~ msgstr "Přejete si uložit nastavení?"
-
-#, fuzzy
-#~| msgid "Do you want to save your configuration?"
-#~ msgid "What do you want to use on your tablet?"
-#~ msgstr "Přejete si uložit nastavení?"
-
-#, fuzzy
-#~| msgid "Do you want to save your configuration?"
-#~ msgid "What to you want to use on your smartphone?"
-#~ msgstr "Přejete si uložit nastavení?"
-
 #~ msgid "What‘s New in %1$s 7.10.0"
 #~ msgstr "Co je nového v %1$s 7.10.0"
 
@@ -23228,11 +22918,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Where:"
 #~ msgstr "Kde:"
-
-#, fuzzy
-#~| msgid "Do you want to save your configuration?"
-#~ msgid "Which app do you want to use on your device?"
-#~ msgstr "Přejete si uložit nastavení?"
 
 #~ msgid "Which device do you want to configure?"
 #~ msgstr "Které zařízení chcete nastavit?"
@@ -23811,10 +23496,6 @@ msgstr "Přidat do %s"
 #~ msgid "bytes"
 #~ msgstr "bajtů"
 
-#, fuzzy
-#~ msgid "characters"
-#~ msgstr " znaky"
-
 #~ msgid "close"
 #~ msgstr "zavřít"
 
@@ -23889,11 +23570,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "disabled"
 #~ msgstr "zakázáno"
-
-#, fuzzy
-#~| msgid "Edit signature"
-#~ msgid "edit share"
-#~ msgstr "Upravit podpis"
 
 #~ msgid "end date "
 #~ msgstr "koncové datum "
@@ -23975,11 +23651,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "iCal-feed has been imported successfully"
 #~ msgstr "iCal úspěšně importován"
-
-#, fuzzy
-#~| msgid "Phone"
-#~ msgid "iPhone"
-#~ msgstr "Telefon"
 
 #~ msgid "in"
 #~ msgstr "v"
@@ -24099,16 +23770,6 @@ msgstr "Přidat do %s"
 #~ msgid "remove"
 #~ msgstr "odstranit"
 
-#, fuzzy
-#~| msgid "Folder permissions"
-#~ msgid "remove permission"
-#~ msgstr "Oprávnění složky"
-
-#, fuzzy
-#~| msgid "remove"
-#~ msgid "remove share"
-#~ msgstr "odstranit"
-
 #~ msgid "reserved"
 #~ msgstr "rezervované"
 
@@ -24123,11 +23784,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "set the last used time range of the new view"
 #~ msgstr "nastavit poslední časový rozsah nového zobrazení"
-
-#, fuzzy
-#~| msgid "show image"
-#~ msgid "show mail"
-#~ msgstr "zobrazit obrázek"
 
 #~ msgid "st"
 #~ msgstr "."
@@ -24212,11 +23868,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "when the receivers have finished downloading the files"
 #~ msgstr "když příjemci dokončili stahování souborů"
-
-#, fuzzy
-#~| msgid "Main window"
-#~ msgid "windows"
-#~ msgstr "Hlavní okno"
 
 #~ msgid "work days"
 #~ msgstr "pracovní dny"
