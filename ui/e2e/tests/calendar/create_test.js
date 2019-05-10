@@ -372,7 +372,7 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
 
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Yearly');
     I.waitForText('Weekday');
-    // check option doesnt work, not sure why
+    // check option doesn't work, not sure why
     //I.checkOption('Weekday');
     I.click('input[value="weekday"]');
     I.see('Every year on the first Sunday in December.');
@@ -519,7 +519,9 @@ Scenario('[C7420] Create a monthly recurring appointment every second Monday eve
 
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Monthly');
     I.waitForText('Weekday');
-    I.checkOption('Weekday');
+    // check option doesn't work, not sure why
+    //I.checkOption('Weekday');
+    I.click('input[value="weekday"]');
     I.see('Every month on the second Monday.');
 
     I.click('Apply', '.modal-dialog');
