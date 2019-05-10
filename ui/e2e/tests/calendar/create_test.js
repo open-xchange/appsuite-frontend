@@ -371,6 +371,7 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
     I.waitForElement('.modal-dialog');
 
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Yearly');
+    I.waitForText('Weekday');
     I.checkOption('Weekday');
     I.see('Every year on the first Sunday in December.');
 
@@ -515,6 +516,7 @@ Scenario('[C7420] Create a monthly recurring appointment every second Monday eve
     I.waitForElement('.modal-dialog');
 
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Monthly');
+    I.waitForText('Weekday');
     I.checkOption('Weekday');
     I.see('Every month on the second Monday.');
 
@@ -1893,7 +1895,7 @@ Scenario('[C7448] Cannot create private appointment', async function (I, users) 
     I.clickToolbar('Today');
     I.selectFolder(testrailID);
     I.clickToolbar('New');
-    I.waitForVisible('.io-ox-dialog-popup');
+    I.waitForText('Appointments in shared calendars');
     I.click('On behalf of the owner');
     I.waitForElement('.io-ox-calendar-edit [name="summary"]');
     expect(await I.grabNumberOfVisibleElements('option[value="CONFIDENTIAL"]')).to.equal(0);
@@ -1937,11 +1939,11 @@ Scenario('[C234658] Create appointments and show this in cumulatively view', asy
     I.login('app=io.ox/calendar', { user: users[0] });
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
     I.clickToolbar('Today');
-    I.waitNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]', 0, 5);
+    I.seeNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]', 0);
     I.click('[data-id="virtual/flat/event/private"] [title="' + testrailID + ' - 0' + '"] .color-label');
-    I.waitNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]', 1, 5);
+    I.waitNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]', 1);
     I.click('[data-id="virtual/flat/event/private"] [title="' + testrailID + ' - 1' + '"] .color-label');
-    I.waitNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]', 2, 5);
+    I.waitNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]', 2);
 });
 
 Scenario('[C265153] Create appointment with a link in the description', async function (I, users) {
