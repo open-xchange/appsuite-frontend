@@ -80,7 +80,7 @@ define('io.ox/backbone/mini-views/listutils', [
             return $('<a href="#" role="button" data-action="toggle" class="action">').text(label);
         },
         dragHandle: function (title, statusClass) {
-            return $('<a href="#" role="button" aria-hidden="true" aria-pressed="false">').addClass('drag-handle ' + statusClass).attr('title', title).append(
+            return $('<a href="#" role="button" aria-pressed="false">').addClass('drag-handle ' + statusClass).attr('title', title).append(
                 $('<i class="fa fa-bars" aria-hidden="true">')
             ).on('click', $.preventDefault);
         },
