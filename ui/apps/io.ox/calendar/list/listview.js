@@ -174,7 +174,7 @@ define('io.ox/calendar/list/listview', [
         index: 100,
         draw: function (baton) {
             function toggleControl(i, state) {
-                i.attr('class', state ? 'fa fa-check-square-o' : 'fa fa-square-o').parent().attr('aria-checked', state);
+                i.attr('class', state ? 'fa fa-check-square-o' : 'fa fa-square-o').parent().attr('aria-pressed', state);
             }
 
             function toggleSelection(e) {
