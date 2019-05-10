@@ -45,7 +45,7 @@ Scenario('[C85691] Cloud icon is used for drive-mail', async function (I, users)
     I.logout();
     I.login('app=io.ox/mail', { user: users[1] });
     I.waitForElement('.io-ox-mail-window');
-    I.see('Git Gud');
+    I.waitForText('Git Gud');
     I.seeElement('.fa-cloud-download.is-shared-attachement');
 });
 
