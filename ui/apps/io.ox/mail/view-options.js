@@ -230,6 +230,7 @@ define('io.ox/mail/view-options', [
             var dropdown = new Dropdown({
                 tagName: 'li',
                 className: 'dropdown grid-options toolbar-item margin-auto',
+                attributes: { role: 'presentation' },
                 caret: true,
                 //#. Sort options drop-down
                 label: gt.pgettext('dropdown', 'Sort'),
@@ -290,6 +291,7 @@ define('io.ox/mail/view-options', [
 
             var dropdown = new Dropdown({
                 tagName: 'li',
+                attributes: { role: 'presentation' },
                 className: 'dropdown grid-options toolbar-item',
                 caret: true,
                 //#. 'All' options drop-down (lead to 'Delete ALL messages', 'Mark ALL messages as read', etc.)
