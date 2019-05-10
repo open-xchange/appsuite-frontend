@@ -23,7 +23,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7380] Send saved draft mail', function (I, users) {
+Scenario('[C7380] Send saved draft mail @shaky', function (I, users) {
     const [user] = users;
     var testrailId = 'C7380';
     var text = Math.round(+new Date() / 1000);
@@ -240,7 +240,7 @@ function addFile(I, path) {
     I.waitForText(ext.toUpperCase(), 5, '.inline-items.preview');
 }
 
-Scenario('[C7387] Send mail with attachment from upload', function (I, users) {
+Scenario('[C7387] Send mail with attachment from upload @shaky', function (I, users) {
     let [user] = users;
     var testrailID = 'C7387';
     var timestamp = Math.round(+new Date() / 1000);

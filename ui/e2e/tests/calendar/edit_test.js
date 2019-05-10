@@ -429,7 +429,7 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
 
 });
 
-Scenario('[C7467] Delete recurring appointment in shared folder as author', async function (I, users) {
+Scenario('[C7467] Delete recurring appointment in shared folder as author @shaky', async function (I, users) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },

@@ -51,7 +51,7 @@ let uncurriedCreateAppointment = (I) => ({ subject, folder, startTime, color }) 
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 };
 
-Scenario('[C264519] Create appointments with colors in public folder', async function (I, users) {
+Scenario('[C264519] Create appointments with colors in public folder @shaky', async function (I, users) {
 
     let [user_a, user_b] = users;
     let selectInsideFolder = (node) => locate(node)

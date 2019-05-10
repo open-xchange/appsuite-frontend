@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C101622] Aggressive image replacements', async (I) => {
+Scenario('[C101622] Aggressive image replacements @shaky', async (I) => {
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
     await I.haveSetting('io.ox/mail//allowHtmlImages', true);

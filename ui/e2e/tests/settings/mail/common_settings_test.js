@@ -23,7 +23,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7779] Mail formatting', async function (I, users) {
+Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
 
     const [user] = users;
 

@@ -20,7 +20,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7497] Daytime within Greeting', async (I) => {
+Scenario('[C7497] Daytime within Greeting @shaky', async (I) => {
 
     const expect = require('chai').expect;
     const moment = require('moment');
