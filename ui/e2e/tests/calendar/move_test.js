@@ -47,8 +47,9 @@ Scenario('Move event to different folder', async function (I) {
 
     // unselect folder
     I.click(locate('~New calendar').find('.color-label'));
-
+    I.waitForVisible('.weekview-container.workweek .appointment');
     I.click('.weekview-container.workweek .appointment');
+    I.waitForVisible('.io-ox-sidepopup');
     I.click('.io-ox-sidepopup .inline-toolbar .more-dropdown');
     I.waitForElement('.smart-dropdown-container.dropdown.open');
 
@@ -67,7 +68,7 @@ Scenario('Move event to different folder', async function (I) {
     I.click('Move');
 
     I.waitForDetached('.folder-picker-dialog');
-
+    I.waitForVisible('.weekview-container.workweek .appointment');
     I.seeElement('.weekview-container.workweek .appointment');
     I.seeElement('[aria-label="New calendar"][aria-checked="true"]');
 
