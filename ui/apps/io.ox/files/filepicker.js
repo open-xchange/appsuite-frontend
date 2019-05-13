@@ -79,11 +79,9 @@ define('io.ox/files/filepicker', [
     // }
 
     function isFileTypeDoc(mimeType, fileModel) {
-        // ... with Dec.2016 implemented into Files-API similar to `isPresentation` that already did exist.
         return filesAPI.Model.prototype.isWordprocessing.call((fileModel || null), mimeType);
     }
     function isFileTypeXls(mimeType, fileModel) {
-        // ... with Dec.2016 implemented into Files-API similar to `isPresentation` that already did exist.
         return filesAPI.Model.prototype.isSpreadsheet.call((fileModel || null), mimeType);
     }
     function isFileTypePpt(mimeType, fileModel) {
@@ -98,7 +96,6 @@ define('io.ox/files/filepicker', [
     }
 
     function isFileTypeZip(mimeType, fileModel) {
-        // ... with Dec.2016 implemented into Files-API similar to `isPDF` that already did exist.
         return filesAPI.Model.prototype.isZIP.call((fileModel || null), mimeType);
     }
 
