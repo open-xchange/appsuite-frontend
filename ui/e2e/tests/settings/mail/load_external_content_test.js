@@ -50,8 +50,5 @@ Scenario('[7817] Pre-loading external content', async (I, users) => {
     I.waitForText('Richtig gutes Zeug');
     I.click('Richtig gutes Zeug', '.list-item.selectable');
     I.waitForVisible('h1.subject');
-    within({ frame: '.mail-detail-frame' }, async () => {
-        I.see('External images have been blocked to protect you against potential spam!');
-    });
-
+    I.see('External images have been blocked to protect you against potential spam!');
 });
