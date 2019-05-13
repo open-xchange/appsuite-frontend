@@ -30,6 +30,8 @@ Scenario('[C85616] Progress bar for sending mail', async (I, users) => {
     I.login('app=io.ox/mail');
     I.clickToolbar('Compose');
     I.waitForElement('.io-ox-mail-compose');
+    I.waitForVisible('.window-blocker.io-ox-busy');
+    I.waitForInvisible('.window-blocker.io-ox-busy');
 
     // 2. Send a mail with big attachments to yourself.
 
