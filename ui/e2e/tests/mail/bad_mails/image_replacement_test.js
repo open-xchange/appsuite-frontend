@@ -40,7 +40,7 @@ Scenario('[C101622] Aggressive image replacements', async (I) => {
 
     await within({ frame: '.mail-detail-frame' }, async () => {
 
-        I.waitForElement('.mail-detail-content img');
+        I.retry().waitForVisible('.mail-detail-content img');
         I.wait(1);
 
         let height = await I.executeScript(function () {
