@@ -58,10 +58,10 @@ Scenario('[C7789] Delete filter rule @contentReview', async function (I, users) 
     I.see('Mail Filter Rules');
     I.seeElement('[title="Remove Redirect mails with subject Test subject to ' + users[2].get('primaryEmail') + '"]', '.settings-list-view');
     I.click('[title="Remove Redirect mails with subject Test subject to ' + users[2].get('primaryEmail') + '"]', '.settings-list-view');
-    I.waitForElement('.io-ox-dialog-popup');
+    I.waitForElement('.modal-dialog');
     I.see('Do you really want to delete this filter rule?');
     I.click('Delete');
-    I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.modal-dialog');
     I.see('There is no rule defined');
 
     I.logout();

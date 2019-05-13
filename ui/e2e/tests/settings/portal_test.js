@@ -343,7 +343,7 @@ Scenario('[C7832] Remove widgets', async function (I) {
 
     // Remove the first widget
     I.click('a[title="Remove ' + widget1 + '"]');
-    I.waitForElement('.io-ox-dialog-popup');
+    I.waitForElement('.modal-dialog');
     I.click('Delete');
 
     // Remove the second widget

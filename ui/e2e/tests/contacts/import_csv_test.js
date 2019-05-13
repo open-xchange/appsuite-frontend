@@ -280,8 +280,8 @@ Scenario('[C104269] Import App Suite CSV', async (I) => {
 
     function deleteSelectedContacts() {
         clickToolbarAction('io.ox/contacts/actions/delete');
-        I.waitForElement('.io-ox-dialog-popup');
-        I.click('Delete', '.io-ox-dialog-popup');
+        I.waitForElement('.modal-dialog');
+        I.click('Delete', '.modal-dialog');
         I.waitForDetached('.vgrid-cell');
     }
 
