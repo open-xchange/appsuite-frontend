@@ -166,6 +166,7 @@ Scenario('[C7451] Edit yearly series via dubbleclick', async function (I) {
 
     I.waitForVisible(locate('.appointment').inside(`.day:nth-child(${time.weekday() + 2})`).inside('.page.current'));
     I.click('.appointment', '.page.current');
+    I.waitForVisible('.io-ox-sidepopup .inline-toolbar-container');
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
     I.click('Series');
