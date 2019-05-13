@@ -394,6 +394,7 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
     I.click('(//div[@class="appointment-content"])[2]');
     I.waitForVisible('.io-ox-sidepopup');
 
+    I.waitForText('Edit', undefined, '.io-ox-sidepopup');
     I.click('Edit');
     I.waitForText('Do you want to edit this and all future appointments or just this appointment within the series?');
     I.click('This appointment');
@@ -410,6 +411,7 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
     I.click('.appointment');
     I.waitForVisible('.io-ox-sidepopup');
 
+    I.waitForText('Edit', undefined, '.io-ox-sidepopup');
     I.click('Edit');
     I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
     I.click('Series');
