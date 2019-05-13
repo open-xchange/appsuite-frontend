@@ -327,7 +327,7 @@ Scenario('[C234659] Split appointment series', async function (I, users) {
 
     // click on the second .appointment
     I.click('(//div[@class="appointment-content"])[2]');
-    I.waitForVisible('.io-ox-sidepopup');
+    I.waitForVisible('.io-ox-sidepopup .inline-toolbar-container');
 
     I.click('Edit');
     I.waitForText('Do you want to edit this and all future appointments or just this appointment within the series?');
