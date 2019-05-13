@@ -421,9 +421,7 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
     I.click('Save', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
-    I.click('.appointment');
-    I.waitForVisible('.io-ox-sidepopup');
-    I.see('Changedsubject', '.io-ox-sidepopup');
+    I.waitForText('Changedsubject', undefined, '.io-ox-sidepopup');
     I.click('~Close', '.io-ox-sidepopup');
 
     I.click('(//div[@class="appointment-content"])[2]');
