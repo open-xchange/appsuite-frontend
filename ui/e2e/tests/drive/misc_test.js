@@ -156,10 +156,10 @@ Scenario('[C257247] Restore deleted items', async (I, users) => {
     I.waitForVisible('~Delete');
 
     I.click('~Delete');
-    I.waitForVisible('.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
 
     I.click('Delete');
-    I.waitForInvisible('.io-ox-dialog-popup');
+    I.waitForInvisible('.modal-dialog');
     I.dontSee('testfolder');
 
     // 2. Switch to Trash, select the previously deleted folder and use "restore" from the toolbar Expected Result
@@ -191,10 +191,10 @@ Scenario('[C257247] Restore deleted items', async (I, users) => {
     I.waitForVisible('~Delete');
 
     I.click('~Delete');
-    I.waitForVisible('.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
 
     I.click('Delete');
-    I.waitForInvisible('.io-ox-dialog-popup');
+    I.waitForInvisible('.modal-dialog');
     I.dontSee('testdocument.odt');
 
     I.selectFolder('Trash');

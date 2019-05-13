@@ -77,7 +77,7 @@ Scenario('[C7494] Refresh widgets', async (I, users) => {
     I.click('Add widget');
     I.waitForVisible('.io-ox-portal-settings-dropdown');
     I.click('Inbox');
-    I.waitForVisible('.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
     I.click('Save');
     I.waitForElement('~Inbox');
     I.waitNumberOfVisibleElements('~Inbox', 1, 5);

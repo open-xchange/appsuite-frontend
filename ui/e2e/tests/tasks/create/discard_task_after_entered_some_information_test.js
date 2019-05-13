@@ -36,7 +36,7 @@ Scenario('[C7736] Discard Task after entered some information', async (I) => {
     I.fillField('.title-field', 'Foobar');
 
     I.click('Discard');
-    I.waitForVisible('.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
     I.see('Discard changes');
 
     // 2. Click "Discard changes"

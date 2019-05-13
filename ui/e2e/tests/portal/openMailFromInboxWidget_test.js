@@ -45,7 +45,7 @@ Scenario('[C7489] Inbox widget: open mails', async (I, users) => {
     I.click('Add widget');
     I.waitForVisible('.io-ox-portal-settings-dropdown');
     I.click('Inbox');
-    I.waitForVisible('.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
     I.click('Save');
 
     //Open mail from Inbox widget

@@ -382,7 +382,7 @@ Scenario('[C7366] - Delete multiple contacts', async function (I, search) {
     //I.pressKey(['Control', 'a']);
     I.waitForElement('.fa-spin-paused');
     I.clickToolbar('Delete');
-    I.waitForVisible('.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
     I.click('div.modal-footer > button.btn.btn-primary');
     I.dontSee('C7367, C7367');
 });
@@ -406,9 +406,9 @@ Scenario('[C7367] - Delete Contact', async function (I) {
     I.waitForElement('.contact-header');
     I.waitForText(testrailID + ', ' + testrailID, '.contact-header .header-name');
     I.clickToolbar('Delete');
-    I.waitForVisible('.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
     I.click('div.modal-footer > button.btn.btn-primary');
-    I.waitForDetached('.io-ox-dialog-popup');
+    I.waitForDetached('.modal-dialog');
     I.waitForDetached('[aria-label="' + testrailID + ', ' + testrailID + '"]');
 });
 

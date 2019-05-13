@@ -45,7 +45,7 @@ Scenario('[C7488] [C7484] Add/Remove Inbox widget', async (I, users) => {
     I.click('Add widget');
     I.waitForVisible('.io-ox-portal-settings-dropdown');
     I.click('Inbox');
-    I.waitForVisible('.io-ox-dialog-popup');
+    I.waitForVisible('.modal-dialog');
     I.click('Save');
 
     //Verify mail is shown in the list
@@ -55,8 +55,8 @@ Scenario('[C7488] [C7484] Add/Remove Inbox widget', async (I, users) => {
 
     // remove Inbox widget from portal
     I.click('~Inbox, Disable widget');
-    I.waitForVisible({ css: '.io-ox-dialog-popup' });
-    I.click('Delete', '.io-ox-dialog-popup');
+    I.waitForVisible({ css: '.modal-dialog' });
+    I.click('Delete', '.modal-dialog');
 
     // verify that the widget is removed
     I.dontSee('~Inbox');
