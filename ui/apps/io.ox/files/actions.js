@@ -155,6 +155,9 @@ define('io.ox/files/actions', [
             if (fromMailCompose(baton)) return false;
             if (hasStatus('lockedByOthers', baton)) return false;
 
+            var file = baton.first();
+            if (!file.folder_id || !file.id) return false;
+
             var model = _.first(baton.models),
                 isEncrypted = model && model.isEncrypted(),
                 encryptionPart = isEncrypted ? '\\.pgp' : '',
@@ -163,9 +166,9 @@ define('io.ox/files/actions', [
                 // build regex from list, pgp is added if guard is available
                 regex = new RegExp('\\.(' + fileExtensions.join('|') + '?)' + encryptionPart + '$', 'i');
 
-            if (!regex.test(baton.first().filename)) return false;
+            if (!regex.test(file.filename)) return false;
 
-            return api.versions.getCurrentState(baton.first()).then(function (currentVersion) {
+            return api.versions.getCurrentState(file).then(function (currentVersion) {
                 return currentVersion;
             });
         },

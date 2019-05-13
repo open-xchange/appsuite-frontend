@@ -89,6 +89,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                     };
                 }())
             },
+            'editplaintext': {
+                prio: 'hi',
+                mobile: 'lo',
+                title: gt('Edit'),
+                section: 'edit',
+                ref: 'io.ox/files/actions/editor'
+            },
             'zoomout': {
                 prio: 'hi',
                 mobile: 'lo',
@@ -359,12 +366,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     title: gt('Rename'),
                     section: 'edit',
                     ref: 'io.ox/files/actions/rename'
-                },
-                'edit': {
-                    prio: 'hi',
-                    mobile: 'lo',
-                    title: gt('Edit'),
-                    ref: 'io.ox/files/actions/editor'
                 },
                 'editdescription': {
                     prio: 'lo',
