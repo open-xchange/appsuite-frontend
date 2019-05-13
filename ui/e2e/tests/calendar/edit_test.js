@@ -689,8 +689,8 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.waitForVisible('.io-ox-sidepopup');
     I.retry(5).click('Delete');
     I.waitForText('Do you want to delete this appointment');
-    I.click('Delete', '.io-ox-dialog-popup');
-    I.waitForDetached('.io-ox-dialog-popup');
+    I.click('Delete', '.modal-dialog');
+    I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
 
     // Delete recurring appointment without additional participants => no comment field
@@ -698,8 +698,8 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.waitForVisible('.io-ox-sidepopup');
     I.retry(5).click('Delete');
     I.waitForText('Do you want to delete the whole series or just this appointment within the series?');
-    I.click('Series', '.io-ox-dialog-popup');
-    I.waitForDetached('.io-ox-dialog-popup');
+    I.click('Series', '.modal-dialog');
+    I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
 
     // Delete single appointment with additional participants => comment field
@@ -708,8 +708,8 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.retry(5).click('Delete');
     I.waitForText('Delete appointment');
     I.see('Add a message to the notification email for the other participants.');
-    I.click('Delete', '.io-ox-dialog-popup');
-    I.waitForDetached('.io-ox-dialog-popup');
+    I.click('Delete', '.modal-dialog');
+    I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
 
     // Delete recurring appointment with additional participants => comment field
@@ -718,8 +718,8 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.retry(5).click('Delete');
     I.waitForText('Delete appointment');
     I.see('Add a message to the notification email for the other participants.');
-    I.click('Series', '.io-ox-dialog-popup');
-    I.waitForDetached('.io-ox-dialog-popup');
+    I.click('Series', '.modal-dialog');
+    I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
 
 });

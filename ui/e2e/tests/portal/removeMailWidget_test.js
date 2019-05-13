@@ -52,8 +52,8 @@ Scenario('[C7487] Remove a mail', async (I, users) => {
     I.waitForElement('~Test subject');
     I.waitForElement('~Test subject, Disable widget');
     I.click('~Test subject, Disable widget');
-    I.waitForVisible({ css: '.io-ox-dialog-popup' });
-    I.click('Delete', '.io-ox-dialog-popup');
+    I.waitForVisible({ css: '.modal-dialog' });
+    I.click('Delete', '.modal-dialog');
 
     // verify that the widget is removed
     I.dontSee('~Test subject');

@@ -761,8 +761,8 @@ Scenario('[C163026] Change from display name when sending a mail', async functio
     I.click('.io-ox-mail-compose [data-dropdown="from"] .fa-caret-down');
     I.waitForVisible('.dropdown.open [data-name="edit-real-names"]', 5);
     I.click('.dropdown.open [data-name="edit-real-names"]');
-    I.waitForVisible('.io-ox-dialog-wrapper .modal-body [title="Use custom name"]', 5);
-    I.click('.io-ox-dialog-wrapper .modal-body [title="Use custom name"]');
+    I.waitForVisible('.modal-dialog [title="Use custom name"]', 5);
+    I.click('.modal-dialog [title="Use custom name"]');
     I.fillField('.modal-body [title="Custom name"]', timestamp);
     I.click('Save', { css: '.modal-footer' });
     I.waitForDetached('.io-ox-dialog-wrapper', 5);
