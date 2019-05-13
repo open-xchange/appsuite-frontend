@@ -54,7 +54,7 @@ Scenario('[7776] Insert the original email text to a reply', async (I, users) =>
     I.waitForVisible('h1.subject');
     I.click('Reply');
     I.waitForText('Re: plain text');
-
+    I.waitForVisible('.editor');
     await within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
         I.dontSee('This is simple plain text!');
     });
