@@ -46,10 +46,6 @@ Scenario('[C7449] Move appointment to folder', async function (I) {
     if (!moment().isSame(time, 'month')) I.retry(5).click('~Go to next month', '.window-sidepanel');
     I.retry(5).click(`~${time.format('l, dddd')}, CW ${time.week()}`, '.window-sidepanel');
 
-    // disable the other folder
-    I.waitForElement('~New calendar');
-    I.click('[title="New calendar"] .color-label');
-
     // open all views and load the appointment there
     ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
         I.clickToolbar('View');
@@ -75,6 +71,11 @@ Scenario('[C7449] Move appointment to folder', async function (I) {
     });
     I.waitForDetached('.modal-dialog');
 
+    // disable the other folder
+    I.waitForElement('~New calendar');
+    I.click('[title="New calendar"] .color-label');
+    I.waitForElement('[aria-label="New calendar"][aria-checked="false"]');
+
     // open all views and verify that the appointment is gone
     ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
         I.clickToolbar('View');
@@ -85,6 +86,7 @@ Scenario('[C7449] Move appointment to folder', async function (I) {
 
     // enable the other folder
     I.click('[title="New calendar"] .color-label');
+    I.waitForElement('[aria-label="New calendar"][aria-checked="true"]');
 
     // open all views and verify that the appointment is there again
     ['Workweek', 'Day', 'Month', 'List', 'Week'].forEach((view) => {
