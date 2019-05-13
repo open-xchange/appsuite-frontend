@@ -93,6 +93,13 @@ define('io.ox/core/boot/login/saml', [
                         '#&' + _.serialize({ language: ox.language, statusCode: jqXHR.status || 'undefined', statusText: textStatus, error: errorThrown }));
                 }
             });
+        },
+        relogin: function () {
+            return $.get(ox.apiRoot + samlPath + '/init?flow=relogin').then(function (data) {
+                var baton = new ext.Baton({ data: data });
+                ext.point('io.ox.saml/relogin').invoke('handle', baton, baton);
+                return $.Deferred();
+            });
         }
     });
 
@@ -101,13 +108,6 @@ define('io.ox/core/boot/login/saml', [
     def.then(function () {
         return require(['io.ox/core/capabilities']);
     }).then(function (capabilities) {
-        ox.on('relogin:required', function () {
-            return $.get(ox.apiRoot + samlPath + '/init?flow=relogin').done(function (data) {
-                var baton = new ext.Baton({ data: data });
-                ext.point('io.ox.saml/relogin').invoke('handle', baton, baton);
-            });
-        });
-
         if (capabilities.has('saml-single-logout') || ox.serverConfig.samlSingleLogout) {
             ext.point('io.ox/core/logout').extend({
                 id: 'saml_logout',

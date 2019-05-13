@@ -139,7 +139,19 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core', 'stat
                 return node.prop('outerHTML') + fix.suffix;
             }.bind(this));
 
-            return DOMPurify.sanitize(text, { ALLOW_TAGS: ['a', 'wbr'], ALLOWED_ATTR: ['target', 'rel', 'href'], SAFE_FOR_JQUERY: true });
+            text = DOMPurify.sanitize(text, { ALLOW_TAGS: ['a', 'wbr'], ALLOWED_ATTR: ['target', 'rel', 'href'], SAFE_FOR_JQUERY: true });
+            text = that.injectAttribute(text, 'a', 'rel', 'noopener');
+            return text;
+
+        },
+
+        injectAttribute: function (text, tagName, attr, value) {
+            var tmp = document.createElement('div');
+            tmp.innerHTML = text;
+            _(tmp.getElementsByTagName(tagName)).each(function (node) {
+                node.setAttribute(attr, value);
+            });
+            return tmp.innerHTML;
         },
 
         // split long character sequences

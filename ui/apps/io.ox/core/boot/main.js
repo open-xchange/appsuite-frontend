@@ -132,6 +132,9 @@ define.async('io.ox/core/boot/main', [
             index: 1000000000000,
             login: function (baton) {
                 baton.logins.useForm();
+            },
+            relogin: function () {
+                util.gotoSignin('login_type=useForm');
             }
         }
     );

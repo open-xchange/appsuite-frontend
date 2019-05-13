@@ -62,6 +62,13 @@ define('io.ox/core/relogin', [
         _.url.redirect(getLogoutLocation());
     }
 
+    ext.point('io.ox/core/boot/login').replace({
+        id: 'default',
+        relogin: function () {
+            gotoLoginLocation();
+        }
+    });
+
     function showSessionLostDialog(error) {
         new ModalDialog({ width: 400, async: true, title: getReason(error) })
             .build(function () {
@@ -73,7 +80,9 @@ define('io.ox/core/relogin', [
             .addButton({ action: 'ok', label: gt('Ok') })
             .on('ok', function () {
                 ox.trigger('relogin:cancel');
-                gotoLoginLocation();
+                require(['io.ox/core/extPatterns/stage']).then(function (Stage) {
+                    Stage.run('io.ox/core/boot/login', {}, { methodName: 'relogin' });
+                });
             })
             .on('open', function () {
                 $('html').addClass('relogin-required');
@@ -186,7 +195,9 @@ define('io.ox/core/relogin', [
 
     ox.off('relogin:required', ox.relogin);
 
-    if (settings.get('features/reloginPopup', true)) {
+    // default should be false if oidc or saml login are enabled
+    // this prevents password dialog being shown if admin did not configure it explicitly but enabled saml or oidc workflows
+    if (settings.get('features/reloginPopup', !ox.serverConfig.oidcLogin && !ox.serverConfig.samlLogin)) {
         ox.on('relogin:required', relogin);
     } else {
         ox.on('relogin:required', onSessionLost);
