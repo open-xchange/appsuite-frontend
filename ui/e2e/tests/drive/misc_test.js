@@ -100,13 +100,13 @@ Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', a
     I.openApp('Drive');
 
     // 3. Create a sharing link for folder 'C'
-
+    I.waitForText('folderA');
     I.doubleClick('.list-item[aria-label*="folderA"]');
+
     I.waitForText('folderB');
-
     I.doubleClick('.list-item[aria-label*="folderB"]');
-    I.waitForText('folderC');
 
+    I.waitForText('folderC');
     I.click('.list-item[aria-label*="folderC"]');
 
     I.click('Share');
