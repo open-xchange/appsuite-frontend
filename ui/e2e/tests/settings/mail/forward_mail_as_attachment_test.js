@@ -60,9 +60,8 @@ Scenario('[7778] Forwarding mail inline/attachment', async (I, users) => {
     I.waitForFocus('[placeholder="To"]');
     I.fillField('To', user.get('primaryEmail'));
     I.click('Send');
-
+    I.waitForDetached('.io-ox-mail-compose-window');
     I.wait(1);
-
     I.waitForText('Fwd: Richtig gutes Zeug');
     I.click('Fwd: Richtig gutes Zeug', '.list-item.selectable');
     I.waitForVisible('h1.subject');
