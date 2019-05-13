@@ -88,6 +88,7 @@ define('io.ox/calendar/actions/delete', [
                 if (action === 'cancel') return;
                 cont(action);
             });
+            dialog.$el.addClass('delete-dialog');
 
             if (hasSeries) {
                 dialog.addButton({ label: gt('This appointment'), action: 'appointment', className: 'btn-default' });
