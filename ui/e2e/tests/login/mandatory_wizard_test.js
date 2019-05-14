@@ -43,6 +43,7 @@ Scenario('[C7341] Use first run mandatory wizard', async function (I, users) {
     I.click('Next');
     I.click('Finish');
     I.waitForVisible('#io-ox-launcher');
+    I.waitForVisible('.contact-picture');
     I.click('.contact-picture');
     I.waitForText('My contact data');
     I.click('My contact data');
