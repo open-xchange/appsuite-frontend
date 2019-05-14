@@ -34,9 +34,9 @@ Scenario('[C274425] Month label in Calendar week view', async function (I, users
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
     I.login('app=io.ox/calendar', { user: users[0] });
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
-    await I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2019-05-01"))');
+    I.retry(5).executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2019-05-01"))');
     expect(await I.grabTextFrom('.weekview-container .header .info')).to.equal('April - May 2019 CW 18');
-    await I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2020-01-01"))');
+    I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2020-01-01"))');
     expect(await I.grabTextFrom('.weekview-container .header .info')).to.equal('December 2019 - January 2020 CW 1');
     I.logout();
 });
