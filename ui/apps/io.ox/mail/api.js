@@ -1107,6 +1107,7 @@ define('io.ox/mail/api', [
             data.csid = csid;
             // transform pseudo-plain text to real text
             if (data.attachments && data.attachments.length) {
+                data.attachments = data.attachments.map(sanitizer.sanitize);
                 if (data.attachments[0].content === '') {
                     // nothing to do - nothing to break
                 } else if (data.attachments[0].content_type === 'text/html') {

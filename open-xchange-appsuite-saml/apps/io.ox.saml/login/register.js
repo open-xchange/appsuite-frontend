@@ -44,6 +44,13 @@ define('io.ox.saml/login/register', ['io.ox/core/extensions', 'io.ox.saml/handle
                     }, 250);
                 }
                 return def;
+            },
+            relogin: function () {
+                return $.get(ox.apiRoot + samlPath + '/init?flow=relogin').then(function (data) {
+                    var baton = new ext.Baton({ data: data });
+                    ext.point('io.ox.saml/relogin').invoke('handle', baton, baton);
+                    return $.Deferred();
+                });
             }
         });
     }
