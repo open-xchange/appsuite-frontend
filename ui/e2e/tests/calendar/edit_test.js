@@ -1428,13 +1428,13 @@ Scenario('[C7458] Edit appointment by doubleclick @bug', async function (I) {
         I.waitForText(explosionSubject, 5, '.page.current .appointment');
         I.click(explosionSubject, '.page.current .appointment');
         if (view === 'List') {
-            I.see(explosionSubject, '.calendar-detail-pane');
-            I.see('Pandora', '.calendar-detail-pane');
-            I.see(description, '.calendar-detail-pane');
+            I.waitForText(explosionSubject, 5, '.calendar-detail-pane');
+            I.waitForText('Pandora', 5, '.calendar-detail-pane');
+            I.waitForText(description, 5, '.calendar-detail-pane');
         } else {
-            I.see(explosionSubject, '.io-ox-sidepopup');
-            I.see('Pandora', '.io-ox-sidepopup');
-            I.see(description, '.io-ox-sidepopup');
+            I.waitForText(explosionSubject, 5, '.io-ox-sidepopup');
+            I.waitForText('Pandora', 5, '.io-ox-sidepopup');
+            I.waitForText(description, 5, '.io-ox-sidepopup');
         }
     });
 });
