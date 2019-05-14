@@ -430,7 +430,7 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
 
     I.click('(//div[@class="appointment-content"])[2]');
     I.waitForVisible('.io-ox-sidepopup');
-    I.see('Changedsubject', '.io-ox-sidepopup');
+    I.waitForText('Changedsubject', undefined, '.io-ox-sidepopup');
 
 });
 
