@@ -24,8 +24,10 @@ After(async (users) => {
 });
 
 Scenario('[C7862] Configure display name representation', async (I) => {
-    const folder = await I.grabDefaultFolder('contacts');
-    await I.haveContact({ folder_id: folder, first_name: 'Foo', last_name: 'Bar' });
+    const folder = await I.grabDefaultFolder('contacts'),
+        firstName = 'Foo',
+        lastName = 'Bar';
+    await I.haveContact({ folder_id: folder, first_name: firstName, last_name: lastName });
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/contacts']);
     I.waitForVisible({ css: 'div[data-point="io.ox/contacts/settings/detail/view"]' });
@@ -38,11 +40,15 @@ Scenario('[C7862] Configure display name representation', async (I) => {
     // Verify the displayed style
     I.openApp('Address Book');
     I.waitForVisible('[data-app-name="io.ox/contacts"]');
+    I.waitForText('My address books');
     I.selectFolder('Contacts');
 
     I.waitForElement('.contact-grid-container');
-    I.waitForText('Foo Bar');
-    I.click('Foo Bar', '.fullname');
+    const firstNameLocator = locate('.first_name').withText(firstName),
+        lastNameLocator = locate('.last_name').withText(lastName),
+        nameLocator = firstNameLocator.before(lastNameLocator);
+    I.waitForVisible(nameLocator, 5, '.fullname');
+    I.click(nameLocator, '.fullname');
 
     // Go back to settings and switch to other display style
     I.click('#io-ox-topbar-dropdown-icon');
