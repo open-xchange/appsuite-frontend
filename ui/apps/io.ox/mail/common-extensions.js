@@ -645,11 +645,13 @@ define('io.ox/mail/common-extensions', [
                             clickTarget = $(e.target), id, data, baton;
 
                         // skip if click was on the dropdown
-                        if (!clickTarget.attr('data-original')) return;
+                        if (clickTarget.hasClass('dropdown-toggle')) return;
 
-                        // skip attachments without preview
-                        if (!node.attr('data-original')) return;
+                        // get data
+                        id = node.attr('data-id');
+                        data = collection.get(id).toJSON();
 
+                        // start viewer in general (see bug 65016)
                         id = node.attr('data-id');
                         data = collection.get(id).toJSON();
                         baton = ext.Baton({ simple: true, startItem: data, data: list, restoreFocus: clickTarget });
