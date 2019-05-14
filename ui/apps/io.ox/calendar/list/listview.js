@@ -241,6 +241,8 @@ define('io.ox/calendar/list/listview', [
         },
 
         setCollection: function (collection) {
+            // disable sorting for search results
+            var options = this.loader.mode === 'search' ? { comparator: false } : {};
             function filter(model) {
                 if (util.getConfirmationStatus(model) !== 'DECLINED') return true;
                 return settings.get('showDeclinedAppointments', false);
@@ -249,7 +251,7 @@ define('io.ox/calendar/list/listview', [
             // use intermediate collection to filter declined appointments if necessary
             if (this.originalCollection) this.stopListening(this.originalCollection);
             this.originalCollection = collection;
-            collection = new models.Collection(collection.filter(filter));
+            collection = new models.Collection(collection.filter(filter), options);
             collection.cid = this.originalCollection.cid;
 
             // apply intermediate collection to ListView
