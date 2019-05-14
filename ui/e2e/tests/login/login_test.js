@@ -60,6 +60,7 @@ Scenario('[C7339] Stay signed in checkbox', function (I) {
     I.logout();
 
     I.waitForVisible('#io-ox-login-screen');
+    I.waitForInvisible('#background-loader');
     I.uncheckOption('Stay signed in');
     I.login();
     I.refreshPage();
