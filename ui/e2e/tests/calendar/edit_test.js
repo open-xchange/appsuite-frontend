@@ -1363,7 +1363,7 @@ Scenario('[C7459] Remove attachments', async function (I) {
     // Expected Result: The appointment does not contain the attachment anymore
     const dontSeeAttachments = (context) => {
         I.waitForElement(context);
-        I.see(subject, context);
+        I.waitForText(subject, 5, context);
         I.dontSee('testdocument.odt', context);
         I.dontSee('testdocument.rtf', context);
     };
