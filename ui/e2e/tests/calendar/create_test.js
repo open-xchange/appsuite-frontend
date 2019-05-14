@@ -1577,7 +1577,7 @@ Scenario('[C7413] Create appointment with an attachment', async function (I) {
     // Expected Results: The appointment is added correctly, with the attachment.
     const seeAttachments = (context) => {
         I.waitForElement(context);
-        I.see(subject, context);
+        I.waitForText(subject, undefined, context);
         I.see('testdocument.odt', context);
         I.see('testdocument.rtf', context);
     };
@@ -1585,12 +1585,15 @@ Scenario('[C7413] Create appointment with an attachment', async function (I) {
         I.clickToolbar('View');
         I.click(view);
         I.waitForText(subject, 5, '.page.current .appointment');
+        // open sidepopup
         I.click(subject, '.page.current .appointment');
         if (view === 'List') {
             seeAttachments('.calendar-detail-pane');
         } else {
             seeAttachments('.io-ox-sidepopup');
         }
+        // close sidepopup
+        I.pressKey('Escape');
     });
 });
 
