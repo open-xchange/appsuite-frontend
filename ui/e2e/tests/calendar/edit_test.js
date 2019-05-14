@@ -1402,7 +1402,7 @@ Scenario('[C7458] Edit appointment by doubleclick @bug', async function (I) {
     // 1. Double click to an appointment
     I.login(['app=io.ox/calendar&perspective=week:week']);
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
-    I.see(subject, '.appointment');
+    I.waitForText(subject, 5, '.appointment');
     I.doubleClick(subject, '.appointment');
 
     // Expected Result: Edit tab is opened.
