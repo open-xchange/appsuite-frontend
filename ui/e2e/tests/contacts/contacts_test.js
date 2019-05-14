@@ -165,6 +165,7 @@ Scenario('[C7356] - Create a new public folder', function (I) {
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
     I.waitForVisible('.classic-toolbar [data-action]');
+    I.waitForText('Add new address book');
     I.click('Add new address book');
     I.waitForElement('.modal-open [data-point="io.ox/core/folder/add-popup"]');
     I.fillField('[name="name"]', 'C7356 ' + timestamp);
