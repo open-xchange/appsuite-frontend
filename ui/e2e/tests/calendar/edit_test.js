@@ -72,7 +72,9 @@ Scenario('[C7449] Move appointment to folder', async function (I) {
     I.waitForDetached('.modal-dialog');
 
     // disable the other folder
-    I.waitForElement('~New calendar');
+    I.wait(1);
+    I.waitForElement('[aria-label="New calendar"][aria-checked="true"]');
+    I.waitForElement('~New calendar', '.selected');
     I.click('[title="New calendar"] .color-label');
     I.waitForElement('[aria-label="New calendar"][aria-checked="false"]');
 
