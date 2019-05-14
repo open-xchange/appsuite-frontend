@@ -447,7 +447,7 @@ Scenario('[C265147] Appointment organizer should be marked in attendee list', as
 
     // 7. Open Appointment
     I.click(subject, '.appointment');
-    I.waitForElement('.io-ox-sidepopup');
+    I.waitForElement('.calendar-detail.view');
     I.seeNumberOfElements('.calendar-detail.view', 1);
 
     // 8. Check if User#A is set as organizer
