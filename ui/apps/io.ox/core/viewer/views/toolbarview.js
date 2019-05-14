@@ -329,6 +329,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             },
             compose: {
+                /*
+                #64470 - no download when Viewer ist started from mail compose
+
                 'downloadcomposeattachment': {
                     prio: 'hi',
                     mobile: 'lo',
@@ -336,6 +339,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     title: gt('Download'),
                     ref: Util.getRefByModelSource('compose')
                 }
+                */
             },
             pim: {
                 'print': {
