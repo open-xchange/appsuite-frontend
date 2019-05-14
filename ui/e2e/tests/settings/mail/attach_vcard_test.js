@@ -66,6 +66,8 @@ Scenario('[C7775] Append vCard when sending mail', async (I, users) => {
 
     checkSetting(I);
     goToMailAndSendMail(I, user, 'Katalog von Pearl');
+    I.click('~Refresh');
+    I.wait(3);
     openMail(I, 'Katalog von Pearl');
     I.dontSee('1 attachment');
 
