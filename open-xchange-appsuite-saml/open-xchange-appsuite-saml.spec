@@ -1,6 +1,6 @@
 Name:           open-xchange-appsuite-saml
 Version:        @OXVERSION@
-%define         ox_release 45
+%define         ox_release 46
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Francisco Laguna <francisco.laguna@open-xchange.com>
@@ -20,8 +20,12 @@ BuildRequires: java7-devel
 %else
 BuildRequires: java-devel >= 1.7.0
 %endif
+%if 0%{?suse_version}
+BuildRequires:  nodejs6
+BuildRequires:  npm6
+%else
 BuildRequires:  nodejs >= 0.10.0
-
+%endif
 Requires(post): open-xchange-appsuite-manifest
 
 %description
@@ -53,6 +57,8 @@ if [ -x %{update} ]; then %{update} --later; fi
 /opt/open-xchange/appsuite
 
 %changelog
+* Fri May 03 2019 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2019-05-13 (5232)
 * Mon Nov 12 2018 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2018-11-19 (4964)
 * Mon Aug 13 2018 Markus Wagner <markus.wagner@open-xchange.com>

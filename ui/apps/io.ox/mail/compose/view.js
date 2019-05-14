@@ -379,25 +379,7 @@ define('io.ox/mail/compose/view', [
                 id: this.logoutPointId,
                 index: 1000 + this.app.guid,
                 logout: function () {
-                    return self.autoSaveDraft({ isLogout: true }).then(function (result) {
-                        var base = _(result.split(mailAPI.separator)),
-                            id = base.last(),
-                            folder = base.without(id).join(mailAPI.separator),
-                            // use JSlob to save the draft ID so it can be used as a restore point.
-                            idSavePoints =  coreSettings.get('savepoints', []);
-
-                        idSavePoints.push({
-                            module: 'io.ox/mail/compose',
-                            // flag to indicate that this savepoint is non default but uses cid to restore the application
-                            restoreById: true,
-                            id: self.app.get('uniqueID'),
-                            description: gt('Mail') + ': ' + (self.model.get('subject') || gt('No subject')),
-                            // data that is send to restore function. Also include flag so it can detect the non default savepoint
-                            point: { id: id, folder_id: folder, restoreById: true }
-                        });
-
-                        return coreSettings.set('savepoints', idSavePoints).save();
-                    });
+                    return self.autoSaveDraft({ isLogout: true });
                 }
             });
         },
