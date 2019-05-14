@@ -113,10 +113,11 @@ define('plugins/portal/userSettings/register', [
             })
             .addCancelButton()
             .addButton({ label: isGuest ? gt('Change password') : gt('Change password and sign out'), action: 'change' })
-            .on('change', function (e, data, dialog) {
+            .on('change', function () {
 
                 // we change empty string to null to be consistent
-                var node = dialog.$body,
+                var dialog = this,
+                    node = dialog.$body,
                     newPassword1 = newPass.val() === '' ? null : newPass.val(),
                     newPassword2 = newPass2.val() === '' ? null : newPass2.val(),
                     oldPassword = oldPass.val() === '' ? null : oldPass.val();
