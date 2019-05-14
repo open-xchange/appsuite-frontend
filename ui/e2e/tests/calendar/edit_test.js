@@ -474,6 +474,7 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author', asyn
     }, { user: users[1] });
     I.login('app=io.ox/calendar', { user: users[1] });
 
+    I.waitForElement('[data-id="virtual/flat/event/shared"]');
     // switch on New calendar
     I.doubleClick('~Shared calendars');
     I.click(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New calendar"] .color-label`);
@@ -482,9 +483,10 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author', asyn
 
     // delete appointment
     I.click('.appointment');
-    I.waitForVisible('.io-ox-sidepopup');
+    I.wait(1);
 
-    I.click('Delete');
+    I.waitForText('Delete', '.io-ox-sidepopup .inline-toolbar');
+    I.click('Delete', '.io-ox-sidepopup .inline-toolbar-container');
 
     I.waitForText('Do you want to delete the whole series or just this appointment within the series?');
     I.click('Series');
