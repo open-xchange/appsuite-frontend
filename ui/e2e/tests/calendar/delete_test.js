@@ -70,7 +70,8 @@ Scenario('[C7466] Delete one appointment of an series', async function (I, users
     I.click('.next');
     I.waitForElement('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
     I.click('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]');
-    I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
+    I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup');
+    I.waitForText('Delete', undefined, '.io-ox-sidepopup');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.modal');
     I.click('This appointment', '.modal');
