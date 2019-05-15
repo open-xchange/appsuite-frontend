@@ -1900,6 +1900,13 @@ Scenario('[C7448] Cannot create private appointment', async function (I, users) 
     I.login('app=io.ox/calendar', { user: users[1] });
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
     I.clickToolbar('Today');
+
+    // do a refresh, might mitigate a situation where the folder is not yet there
+    I.click('#io-ox-refresh-icon');
+    I.waitForElement('#io-ox-refresh-icon .fa-spin');
+    I.waitForDetached('#io-ox-refresh-icon .fa-spin');
+
+    I.waitForText('Shared calendars');
     I.selectFolder(testrailID);
     I.clickToolbar('New');
     I.waitForText('Appointments in shared calendars');
