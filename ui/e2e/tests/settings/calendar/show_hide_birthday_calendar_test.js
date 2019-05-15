@@ -40,5 +40,8 @@ Scenario('[C248441] Configure to show/hide birthday calendar', async function (I
     I.click('Show birthday calendar');
     I.openApp('Calendar');
     I.waitForText('My calendars');
+    I.click('~Refresh');
+    I.waitForElement('#io-ox-refresh-icon .fa-spin');
+    I.waitForDetached('#io-ox-refresh-icon .fa-spin');
     I.dontSee('Birthdays');
 });
