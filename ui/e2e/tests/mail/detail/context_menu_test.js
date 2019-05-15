@@ -74,7 +74,7 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users)
     I.seeInField('subject', 'Re: ' + subject);
     // no better approach yet. I.waitForMailCompose() might be a good one
     I.wait(1);
-    I.click('Discard');
+    I.click('Close');
 
     // // Shift-F10 (view source again)
     // --- DOES NOT WORK YET -----
