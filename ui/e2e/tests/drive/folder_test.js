@@ -84,10 +84,10 @@ Scenario('[C8376] Add a subfolder', async (I) => {
     prepare(I);
     I.click('[title="Actions for My files"]');
     I.click('Add new folder', '.smart-dropdown-container');
-    I.waitForText('Add new folder', 1, '.modal-dialog');
+    I.waitForText('Add new folder', 5, '.modal-dialog');
     I.fillField('Folder name', 'Testfolder');
     I.click('Add');
-    I.waitForText('Testfolder', 1, '.file-list-view');
+    I.waitForText('Testfolder', 5, '.file-list-view');
 });
 
 Scenario('[C8377] Invite a person', (I, users) => {
