@@ -369,6 +369,8 @@ define('io.ox/tasks/main', [
             showTask = function (obj) {
                 // be busy
                 app.right.busy(true);
+                // cids should also work
+                if (_.isString(obj)) obj = _.cid(obj);
                 //remove unnecessary information
                 obj = { folder: obj.folder || obj.folder_id, id: obj.id };
                 api.get(obj)
