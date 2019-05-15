@@ -35,6 +35,7 @@ define('io.ox/core/folder/selection', [], function () {
             });
 
         this.selectableVirtualFolders = {};
+        this.unselectableFolders = {};
     }
 
     _.extend(Selection.prototype, {
@@ -260,6 +261,10 @@ define('io.ox/core/folder/selection', [], function () {
             this.selectableVirtualFolders[id] = true;
         },
 
+        addUnselectableFolder: function (id) {
+            this.unselectableFolders[id] = true;
+        },
+
         triggerEvent: _.debounce(function (event) {
             if (event === 'change') this.triggerChange.apply(this, _(arguments).toArray().splice(1));
             else this.view.trigger.apply(this.view, arguments);
@@ -282,7 +287,7 @@ define('io.ox/core/folder/selection', [], function () {
                         alwaysChange: true
                     }));
                 });
-            } else if (self.view) {
+            } else if (self.view && !self.unselectableFolders[id]) {
                 self.view.trigger(isVirtual && !self.selectableVirtualFolders[id] ? 'virtual' : 'change', id, item);
             }
         }

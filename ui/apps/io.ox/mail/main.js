@@ -481,6 +481,16 @@ define('io.ox/mail/main', [
         },
 
         /*
+        * make some special folders not selectable
+        */
+        'unselectable-folders': function () {
+            // make shared root folder unclickable (not virtual but still not a true selectable folder)
+            if (!accountAPI.cache[0]) return;
+            var id = accountAPI.cache[0].root_folder + '/Shared';
+            app.folderView.tree.selection.addUnselectableFolder(id);
+        },
+
+        /*
          * Split into left and right pane
          */
         'vsplit': function (app) {
