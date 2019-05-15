@@ -202,7 +202,9 @@ define('io.ox/core/folder/contextmenu', [
             }
 
             return function (baton) {
-                if (!api.supports('alarms', baton.data)) return;
+                // return if provider is chronos (no per calendar support because they share one calendar account), use settings instead
+                // must support alarms
+                if (!api.supports('alarms', baton.data) || baton.data['com.openexchange.calendar.provider'] === 'chronos') return;
 
                 contextUtils.addLink(this, {
                     action: 'alarms',

@@ -5,21 +5,96 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * © 2018 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2017 OX Software GmbH, Germany. info@open-xchange.com
  *
+ * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  * @author Julian Bäume <julian.baeume@open-xchange.com>
+ *
  */
+
 /// <reference path="../../steps.d.ts" />
 
-Feature('Mail Listview').tag('4');
+const expect = require('chai').expect;
 
-Before(async function (users) {
+Feature('Mail > Listview');
+
+Before(async function (I, users) {
     await users.create();
     await users.create();
 });
 
-After(async function (users) {
+After(async function (I, users) {
     await users.removeAll();
+});
+
+function getTestMail(from, to, opt) {
+    opt = opt || {};
+    return {
+        attachments: [{
+            content: opt.content,
+            content_type: 'text/html',
+            disp: 'inline'
+        }],
+        from: [[from.get('displayname'), from.get('primaryEmail')]],
+        sendtype: 0,
+        subject: opt.subject,
+        to: [[to.get('displayname'), to.get('primaryEmail')]],
+        folder_id: opt.folder,
+        flags: opt.flags
+    };
+}
+
+async function getTooltipValue(I, opt) {
+    let tooltips = await I.grabAttributeFrom(opt.locator, opt.attribute);
+    return [].concat(tooltips)[0];
+}
+
+Scenario('[C114381] Sender address is shown in tooltip', async function (I, users) {
+    const user1 = users[0];
+    const user2 = users[1];
+
+    // USER1
+    I.say('Send mail and create draft', 'blue');
+    I.login('app=io.ox/mail');
+    console.log('>' + user1.get('primaryEmail'));
+    await I.haveMail(getTestMail(user1, user2, {
+        subject: 'C114381:sent',
+        content: '<p style="background-color:#ccc">[C114381] Sender address is shown in draft tooltip</p>'
+    }));
+    await I.haveMail(getTestMail(user1, user2, {
+        subject: 'C114381:draft',
+        content: '<p style="background-color:#ccc">[C114381] Sender address is shown in draft tooltip</p>',
+        flags: 4
+    }));
+
+    I.say('Check to in "send objects"', 'blue');
+    I.selectFolder('Sent');
+    I.seeElement('.leftside .list-view .list-item .from');
+    I.see('C114381:sent');
+    let to = await getTooltipValue(I, { locator: '.leftside .list-view .list-item .from', attribute: 'title' });
+    expect(to).to.be.equal(user2.get('primaryEmail'));
+
+    I.say('Check to in "drafts"', 'blue');
+    I.selectFolder('Drafts');
+    I.seeElement('.leftside .list-view .list-item .from');
+    I.see('C114381:draft');
+    let to2 = await getTooltipValue(I, { locator: '.leftside .list-view .list-item .from', attribute: 'title' });
+    expect(to2).to.be.equal(user2.get('primaryEmail'));
+
+    I.say(`logout "${user1.get('primaryEmail')}"`, 'blue');
+    I.logout();
+
+    // USER2
+    I.say(`login "${user2.get('primaryEmail')}"`, 'blue');
+    I.login('app=io.ox/mail', { user: user2 });
+    I.waitForVisible('.io-ox-mail-window');
+    I.seeElement('.leftside .list-view .list-item .from');
+
+    I.see('C114381:sent');
+    let from = await getTooltipValue(I, { locator: '.leftside .list-view .list-item .from', attribute: 'title' });
+    expect(from).to.be.equal(user1.get('primaryEmail'));
+
+    I.logout();
 });
 
 Scenario('remove mail from thread', async (I, users) => {
@@ -55,9 +130,9 @@ Scenario('remove mail from thread', async (I, users) => {
 
     I.login('', { user });
 
-    I.waitForText('Sent objects', 5, '.folder-node');
+    I.waitForText('Sent', 5, '.folder-node');
 
-    I.selectFolder('Sent objects');
+    I.selectFolder('Sent');
     I.waitForText('Test subject', 5, '.subject');
     I.click('.list-item[aria-label*="Test subject"]');
 

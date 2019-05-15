@@ -18,6 +18,10 @@ msgstr ""
 msgid "Add another account"
 msgstr "Legg til en annen konto"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr ""
+
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
 msgstr "Legge til vedlegg"
@@ -26,6 +30,17 @@ msgstr "Legge til vedlegg"
 msgid "Adding further details"
 msgstr "Legge til flere detaljer"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr ""
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "At the top you can find the toolbar with many functions and additional "
@@ -33,6 +48,10 @@ msgid ""
 msgstr ""
 "På toppen finner du verktøylinjen med mange funksjoner og "
 "tilleggsalternativer. Du kan enkelt opprette nye mapper, filer og mer."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -130,6 +149,12 @@ msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr ""
 "Detaljerte veiledninger for hver enkelt app finnes i systemmenyen > Hjelp. "
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -344,6 +369,10 @@ msgstr "Starte en app"
 msgid "Navigation bar"
 msgstr "Navigeringslinje"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr ""
+
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "On the left you can see the folder tree. It displays your folder structure "
@@ -392,9 +421,17 @@ msgstr "Lese epostsamtaler"
 msgid "Reading the details"
 msgstr "Se flere detaljer"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr ""
+
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Søke etter elementer"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Select a view"
@@ -403,6 +440,12 @@ msgstr "Velge en visning"
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
 msgid "Selecting a view"
 msgstr "Velge en visning"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr ""
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "Sending an E-Mail to a contact"
@@ -442,6 +485,10 @@ msgstr "Sortere oppgaver"
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Sorting your E-Mails"
 msgstr "Sortere eposter"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The Detail view"
@@ -529,6 +576,12 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The toolbar"
 msgstr "Verktøylinjen"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
@@ -831,6 +884,11 @@ msgstr ""
 msgid "Using the reminder function"
 msgstr "Motta påminnelser"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr ""
+
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "Velkommen til %s"
@@ -846,6 +904,12 @@ msgstr ""
 "din nye online lagringsløsning - en felles løsning for alle filene dine! Her "
 "kan du laste opp og lagre filene dine, samt dele og synkronisere dem med "
 "forskjellige enheter."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
 
 #~ msgid "Creating a note"
 #~ msgstr "Opprette et notat"

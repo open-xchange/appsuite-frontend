@@ -13,7 +13,7 @@
 const expect = require('chai').expect;
 const moment = require('moment');
 
-Feature('Calendar: Colors');
+Feature('Calendar');
 
 Before(async function (users) {
     await users.create();

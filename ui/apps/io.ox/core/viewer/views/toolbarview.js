@@ -89,6 +89,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                     };
                 }())
             },
+            'editplaintext': {
+                prio: 'hi',
+                mobile: 'lo',
+                title: gt('Edit'),
+                section: 'edit',
+                ref: 'io.ox/files/actions/editor'
+            },
             'zoomout': {
                 prio: 'hi',
                 mobile: 'lo',
@@ -322,6 +329,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             },
             compose: {
+                /*
+                #64470 - no download when Viewer ist started from mail compose
+
                 'downloadcomposeattachment': {
                     prio: 'hi',
                     mobile: 'lo',
@@ -329,6 +339,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     title: gt('Download'),
                     ref: Util.getRefByModelSource('compose')
                 }
+                */
             },
             pim: {
                 'print': {
@@ -359,12 +370,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     title: gt('Rename'),
                     section: 'edit',
                     ref: 'io.ox/files/actions/rename'
-                },
-                'edit': {
-                    prio: 'hi',
-                    mobile: 'lo',
-                    title: gt('Edit'),
-                    ref: 'io.ox/files/actions/editor'
                 },
                 'editdescription': {
                     prio: 'lo',
@@ -454,7 +459,11 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
         action: function (baton) {
             var documentPDFUrl = DocConverterUtils.getEncodedConverterUrl(baton.context.model);
-            blankshield.open(documentPDFUrl, '_blank');
+            if (_.browser.chrome >= 72) {
+                window.open(documentPDFUrl, '_blank', 'noopener');
+            } else {
+                blankshield.open(documentPDFUrl, '_blank');
+            }
         }
     });
 

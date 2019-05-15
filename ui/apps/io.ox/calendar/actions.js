@@ -165,11 +165,11 @@ define('io.ox/calendar/actions', [
             // cannot confirm appointments without proper id or folder (happens when detail view was opened from mail invitation from external calendar)
             // must use buttons in invitation mail instead
             if (!data.id || !data.folder) return false;
-            // we don't show the action if the attendee flag is present (change status is shown instead)
-            if (f.attendee || f.attendee_on_behalf || f.organizer || f.organizer_on_behalf) return false;
             // folder must support alarms
             var folder = folderAPI.pool.getModel(data.folder).toJSON();
             if (folder.supported_capabilities.indexOf('alarms') === -1) return false;
+            // In public folders we must be organizer or attende, not on behalf
+            if (folderAPI.is('public', folder) && !(f.attendee || f.organizer)) return false;
             return true;
         },
         action: function (baton) {
@@ -302,7 +302,7 @@ define('io.ox/calendar/actions', [
                                 sameOwner = data.created_by === myId,
                                 isPublic = folderAPI.is('public', data),
                                 sourceFolderIsPublic = folderAPI.is('public', folderData),
-                                noOtherAttendees = list[0].attendees.length < 2,
+                                noOtherAttendees = util.hasFlag(list[0], 'scheduled'),
                                 create = folderAPI.can('create', data),
                                 isOrganizer = util.hasFlag(list[0], 'organizer') || util.hasFlag(list[0], 'organizer_on_behalf');
 

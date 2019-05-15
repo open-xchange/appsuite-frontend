@@ -192,7 +192,7 @@ define('io.ox/core/api/tab', [
         try {
             returnValue = JSON.parse(windowName);
         } catch (e) {
-            returnValue = undefined;
+            returnValue = {};
             if (ox.debug) console.warn('TabHandling.parseWindowName', e);
         }
 

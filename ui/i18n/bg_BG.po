@@ -79,8 +79,9 @@ msgstr[1] "%1$d прикачен файлове"
 
 #. estimated upload duration
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js apps/io.ox/files/upload/main.js
-#: module:io.ox/files apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#: apps/io.ox/calendar/util.js apps/io.ox/files/settings/pane.js
+#: module:io.ox/files apps/io.ox/files/upload/main.js
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d day"
 msgid_plural "%1$d days"
 msgstr[0] "%1$d ден"
@@ -191,6 +192,14 @@ msgstr "%1$d общо"
 msgid "%1$d unread"
 msgstr "%1$d непрочетени"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "UI version"
+msgid "%1$d version"
+msgid_plural "%1$d versions"
+msgstr[0] "Версия на интерфейса"
+msgstr[1] "Версия на интерфейса"
+
 #. estimated upload duration
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
@@ -238,6 +247,17 @@ msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
+#. %1$s A month name
+#. %2$s A four digit year
+#. %3$s Another month name
+#. %4$s Another year
+#. Example: December 2019 - January 2020
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s %2$s %3$s %4$s."
+msgid "%1$s %2$s - %3$s %4$s"
+msgstr "%1$s %2$s %3$s %4$s."
+
 #. Used to display reminders for appointments
 #. %1$s: the reminder type, SMS etc
 #. %2$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
@@ -270,8 +290,25 @@ msgstr "%1$s %2$s."
 msgid "%1$s %2$s before start."
 msgstr "%1$s %2$s."
 
+#. %1$s A month name
+#. %2$s Another month name
+#. %3$s A four digit year
+#. Example: January - February 2019
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$s %2$s %3$s %4$s."
+msgid "%1$s - %2$s %3$s"
+msgstr "%1$s %2$s %3$s %4$s."
+
+#: apps/io.ox/help/main.js module:io.ox/help
+#, fuzzy
+#| msgid "Help"
+msgid "%1$s Help"
+msgstr "Помощ"
+
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#: apps/io.ox/backbone/views/toolbar.js
 msgid "%1$s Toolbar"
 msgstr "Лента инструменти %1$s"
 
@@ -402,6 +439,7 @@ msgstr "%1$s до %2$s"
 msgid "%1$s updated the profile:"
 msgstr "%1$s актуализира профила:"
 
+#. Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "%1$s. Press backspace to delete."
 msgstr "%1$s . Натиснете Backspace за изтриване."
@@ -443,18 +481,22 @@ msgstr[1] "%d ден"
 msgid "%s %s, create all-day appointment"
 msgstr "Създайте целодневна среща"
 
+#. String will include the product name, i.e. "OX Drive for Android"
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Android"
 msgstr "%s клиент за Андроид"
 
+#. String will include the product name, "OX Drive for Mac OS"
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Mac OS"
 msgstr "%s клиент за Mac OS"
 
+#. String will include the product name, i.e. "OX Drive for Windows"
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Windows"
 msgstr "%s клиент за Windows"
 
+#. String will include the product name, i.e. "OX Drive for iOS"
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for iOS"
 msgstr "%s клиент за iOS"
@@ -482,6 +524,10 @@ msgstr "(Четене, писане и триене)"
 msgid ", "
 msgstr ", "
 
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+msgid "---------- Original Message ----------"
+msgstr ""
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #, fuzzy
 #| msgid "%1$d day"
@@ -501,10 +547,6 @@ msgid_plural "%1$d items"
 msgstr[0] "1 елемент"
 msgstr[1] "%1$d елемента"
 
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "1 minute"
-msgstr "1 минута"
-
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #, fuzzy
 #| msgid "UI version"
@@ -519,8 +561,7 @@ msgid "1 year"
 msgstr "%1$d година"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-#: apps/io.ox/settings/security/settings/pane.js
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 минути"
 
@@ -551,6 +592,27 @@ msgstr "%1$d час"
 msgid "15 minutes"
 msgstr "15 минути"
 
+#: apps/io.ox/multifactor/settings.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/views/constants.js
+#, fuzzy
+#| msgid "Notification"
+msgid "2-Step Verification"
+msgstr "Уведомление"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Notification"
+msgctxt "app"
+msgid "2-Step Verification"
+msgstr "Уведомление"
+
+#. Title of tour step, demonstrating options available for 2-step verification
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+#, fuzzy
+#| msgid "Notification sounds"
+msgid "2-step Verification Options"
+msgstr "Известяването звучи"
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #, fuzzy
 #| msgid "UI version"
@@ -561,10 +623,6 @@ msgstr "Версия на интерфейса"
 #, fuzzy
 msgid "24 hours"
 msgstr "%d час"
-
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "3 minutes"
-msgstr "3 минути"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #, fuzzy
@@ -590,8 +648,7 @@ msgid "40 versions"
 msgstr "Версия на интерфейса"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-#: apps/io.ox/settings/security/settings/pane.js
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 минути"
 
@@ -657,6 +714,10 @@ msgstr ""
 msgid "A folder cannot be moved to one of its subfolders"
 msgstr ""
 
+#: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
+msgid "A new code was sent to your SMS device. Please enter the code."
+msgstr ""
+
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "A new version for \"%1$s\" has been added."
 msgstr "Бе добавена нова версия за \\ \" %1$s \"."
@@ -684,10 +745,6 @@ msgstr ""
 "Опресняването отнема известно време, така че бъдете търпеливи, докато "
 "опресняването се изпълнява във фонов режим. Възможно е само едно опресняване "
 "за абонамент и за сесия."
-
-#: apps/io.ox/tasks/actions/doneUndone.js module:io.ox/tasks
-msgid "A severe error occurred!"
-msgstr "Възникна тежка грешка!"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 msgid "About"
@@ -731,11 +788,6 @@ msgid ""
 msgstr ""
 "Достъпът до медийните ви устройства е отказан. Моля, обърнете се към "
 "помощните страници на вашия браузър как да нулирате оторизацията."
-
-#: apps/io.ox/files/guidance/main.js module:io.ox/files
-msgctxt "help"
-msgid "Accessing Files with WebDAV"
-msgstr "Достъп до файлове през WebDAV"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 msgid "Accessing global address book is not permitted"
@@ -795,14 +847,10 @@ msgstr "Профилът бе актуализиран"
 msgid "Accounts"
 msgstr "Акаунти"
 
-#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
-#: apps/io.ox/files/mobile-toolbar-actions.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
+#: apps/io.ox/backbone/views/toolbar.js module:io.ox/core
+#: apps/io.ox/core/extPatterns/links.js apps/io.ox/files/share/permissions.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
+#: module:io.ox/settings
 msgid "Actions"
 msgstr "Действия"
 
@@ -813,6 +861,7 @@ msgstr "Действия за %1$s"
 
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#: apps/io.ox/backbone/views/toolbar.js
 msgid "Actions. Use cursor keys to navigate."
 msgstr "Действия. Използвайте курсора за навигация."
 
@@ -846,12 +895,31 @@ msgstr "Добави"
 msgid "Add IMAP keyword"
 msgstr "Добавяне на IMAP ключова дума"
 
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Add Multifactor Device"
+msgstr ""
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+#, fuzzy
+#| msgid "Add a description"
+msgid "Add Recovery Option"
+msgstr "Добави описание"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+#, fuzzy
+#| msgid "Add condition"
+msgid "Add Verification Option"
+msgstr "Добави условие"
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
 msgstr "Добави описание"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/delete.js
 msgid "Add a message to the notification email for the other participants."
 msgstr ""
 
@@ -903,16 +971,11 @@ msgstr "Добавяне на списъка за разпространение
 msgid "Add files"
 msgstr "Добави файлове"
 
-#: apps/io.ox/files/contextmenu.js module:io.ox/core
-msgid "Add folder"
-msgstr "Добави папка"
-
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add from Drive"
 msgstr "Добави от Драйв"
 
-#: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add local file"
 msgstr "Добави от компютър"
@@ -969,10 +1032,6 @@ msgstr "Добави бележка"
 msgid "Add on %s"
 msgstr "Добавяне на %s"
 
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Add original message as attachment"
-msgstr "Добавете оригиналното съобщение като прикачен файл"
-
 #: apps/io.ox/calendar/freetime/participantsView.js module:io.ox/calendar
 msgid "Add participant"
 msgstr "Добавете участник"
@@ -984,6 +1043,12 @@ msgstr "Добави хора"
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Add recipients ..."
 msgstr "Добавяне на получатели ..."
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Add a description"
+msgid "Add recovery option"
+msgstr "Добави описание"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #, fuzzy
@@ -1020,10 +1085,6 @@ msgstr "Добави тема"
 msgid "Add timezone"
 msgstr "Добави времева зона"
 
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Add to Favorites"
-msgstr "Добави към любими"
-
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Add to address book"
@@ -1036,21 +1097,27 @@ msgstr "Добави в календара"
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorites.js
+#: apps/io.ox/files/favorites.js apps/io.ox/files/toolbar.js
 msgid "Add to favorites"
 msgstr "Добави в любими"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/viewer/views/toolbarview.js
 #: module:io.ox/core apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js
 msgid "Add to portal"
 msgstr "Добави в портала"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Add user/group"
 msgstr "Добавяне на потребител / група"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Add condition"
+msgid "Add verification option"
+msgstr "Добави условие"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Add widget"
@@ -1166,6 +1233,12 @@ msgstr "Административна роля"
 msgid "Administrator"
 msgstr "Администратор"
 
+#: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Advanced settings"
+msgid "Advanced"
+msgstr "Разширени настройки"
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Advanced settings"
@@ -1194,6 +1267,12 @@ msgstr "Цял ден"
 msgctxt "dropdown"
 msgid "All"
 msgstr "Цял ден"
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+#, fuzzy
+#| msgid "Applications"
+msgid "All Applications"
+msgstr "Приложения"
 
 #. Emojis of SoftBank set.
 #. Japanese: 全絵文字
@@ -1375,7 +1454,7 @@ msgstr "Юбилей"
 #: apps/io.ox/core/download.js module:io.ox/core
 #, fuzzy
 #| msgid "Ignore Warnings"
-msgid "Anti-Virus Warning"
+msgid "Anti-Virus warning"
 msgstr "Игнорирайте предупрежденията"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
@@ -1450,8 +1529,8 @@ msgstr "Прилагане към всички подпапки"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/view.js
-#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
-#: apps/io.ox/mail/detail/links.js module:io.ox/mail
+#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail
 msgid "Appointment"
 msgstr "Среща"
 
@@ -1546,6 +1625,12 @@ msgstr "Архивиране на съобщенията ..."
 msgid "Are you sure you want to delete this Tweet?"
 msgstr "Наистина ли искате да изтриете тази Tweet?"
 
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to sign out from that device?"
+msgid "Are you sure you want to sign out from all related browser tabs?"
+msgstr "Наистина ли искате да излезете от това устройство?"
+
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Are you sure?"
 msgstr "Сигурен ли си?"
@@ -1620,6 +1705,19 @@ msgstr "Аутентикация"
 msgid "Authentication details"
 msgstr "Данни за автентичността"
 
+#: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Connection timed out. Please try reloading the page."
+msgid "Authentication failure. Please try reloading the page."
+msgstr "Връзката изтече. Моля, опитайте да презаредите страницата."
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+#, fuzzy
+#| msgid "Authentication details"
+msgid "Authenticator Registration"
+msgstr "Данни за автентичността"
+
 #. Role: create folder + read/write/delete all
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -1646,10 +1744,7 @@ msgstr ""
 "Неуспешна автоматична конфигурация. Искате ли да конфигурирате профила си "
 "ръчно?"
 
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "Auto-save email drafts"
-msgstr "Авто-записване на мейл чернови"
-
+#. Option label for the automatic theme changer (changes theme depending on time)
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Automatic"
 msgstr "Автоматичен"
@@ -1726,6 +1821,34 @@ msgstr "Обратно към списъка"
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid "Back to sign in"
 msgstr "Върнете се, за да влезете"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Backup code to access your account."
+msgstr ""
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#, fuzzy
+#| msgid "An error occurred. Please try again."
+msgid "Bad input or server error. Please try again."
+msgstr "Възникна грешка. Моля, опитайте отново."
+
+#. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid ""
+"Bad parameters for authenticating with this key. Possibly wrong URL domain "
+"for this key."
+msgstr ""
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#, fuzzy
+#| msgid "An error occurred. Please try again."
+msgid "Bad verification code. Please try again"
+msgstr "Възникна грешка. Моля, опитайте отново."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/main.js
@@ -1943,61 +2066,24 @@ msgid "Camera %1$s"
 msgstr "Камера %1$s"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-alarms.js
-#: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
-#: apps/io.ox/calendar/settings/timezones/favorite-view.js
-#: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
-#: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
-#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
+#: apps/io.ox/calendar/actions/change-folder-alarms.js
+#: apps/io.ox/calendar/actions/change-organizer.js apps/io.ox/calendar/main.js
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
 #: apps/io.ox/core/desktop.js apps/io.ox/core/download.js
-#: apps/io.ox/core/folder/actions/archive.js
-#: apps/io.ox/core/folder/actions/common.js
-#: apps/io.ox/core/folder/actions/remove.js
-#: apps/io.ox/core/folder/actions/rename.js
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
-#: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
-#: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/core/upsell.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/relogin.js
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
-#: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
-#: apps/io.ox/files/actions/delete.js
-#: apps/io.ox/files/actions/edit-description.js
-#: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/upload-new-version.js
-#: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
+#: module:io.ox/core/viewer apps/io.ox/files/main.js module:io.ox/files
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
-#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
-#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 #: apps/io.ox/mail/compose/actions/extensions.js
-#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
-#: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
-#: apps/io.ox/portal/main.js module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/apps/settings/pane.js
-#: apps/io.ox/settings/security/certificates/settings/certificate-view.js
-#: module:io.ox/settings/certificates apps/io.ox/tasks/actions/delete.js
-#: module:io.ox/tasks apps/io.ox/tasks/common-extensions.js
-#: apps/io.ox/tasks/edit/main.js apps/io.ox/tasks/main.js
-#: apps/plugins/administration/groups/settings/edit.js
-#: apps/plugins/administration/groups/settings/toolbar.js
-#: apps/plugins/administration/resources/settings/edit.js
-#: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-#: apps/plugins/portal/mail/register.js apps/plugins/portal/rss/register.js
-#: apps/plugins/portal/tumblr/register.js apps/plugins/portal/twitter/util.js
-#: apps/plugins/portal/userSettings/register.js
-#: apps/plugins/portal/xing/register.js
+#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/compose/view.js
+#: apps/io.ox/mail/main.js
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot apps/io.ox/multifactor/views/constants.js
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Cancel"
 msgstr "Откажи"
 
@@ -2046,9 +2132,12 @@ msgstr[1] "Тези елементи не могат да бъдат отпеч�
 msgid "Cannot require a view type for %1$s"
 msgstr "Не може да се изисква вид на изглед за %1$s"
 
-#: apps/io.ox/files/guidance/statistics.js module:io.ox/files
-msgid "Capacity"
-msgstr "Капацитет"
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+#, fuzzy
+#| msgid "Current date"
+msgid "Capture date"
+msgstr "Текуща дата"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CardDAV"
@@ -2070,6 +2159,14 @@ msgstr "Име на категория"
 #: module:io.ox/mailfilter
 msgid "Cc"
 msgstr "Як"
+
+#. Used to quote the addresses of an address in carbon copy
+#. %1$s An email address or a comma separated list of mail addresses
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Color %1$s"
+msgid "Cc: %1$s"
+msgstr "Цвят %1$s"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -2111,6 +2208,13 @@ msgstr "Промяна на състоянието на потвърждение
 msgid "Change due date"
 msgstr "Промяна на датата на падежа"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-organizer.js
+#, fuzzy
+#| msgid "Create reminder"
+msgid "Change organizer"
+msgstr "Създай напомняне"
+
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 #: apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
@@ -2122,12 +2226,14 @@ msgid "Change password and sign out"
 msgstr "Променете паролата и излезте"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #, fuzzy
 #| msgid "Create reminder"
 msgid "Change reminder"
 msgstr "Създай напомняне"
 
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-folder-alarms.js
 #, fuzzy
 #| msgid "Create reminder"
 msgid "Change reminders"
@@ -2205,10 +2311,6 @@ msgstr "Изчисти полето"
 msgid "Clear selection"
 msgstr "Изчистете селекцията"
 
-#: apps/io.ox/help/center.js module:io.ox/help
-msgid "Click here to quit the help center"
-msgstr "Кликнете тук, за да излезете от Помощния център"
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
@@ -2218,6 +2320,13 @@ msgstr ""
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Click on the application that you would like to use."
 msgstr ""
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+#, fuzzy
+#| msgid "Copy to clipboard"
+msgid "Click to copy URL to clipboard"
+msgstr "Копиране в клипборда"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Click to merge all folders into one column"
@@ -2288,6 +2397,13 @@ msgstr "Затваряне на това известие"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
 msgstr "Затвори зрителя"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+#, fuzzy
+#| msgid "Next message"
+msgid "Code via text message"
+msgstr "Следващо съобщение"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -2373,13 +2489,10 @@ msgstr "Компания"
 msgid "Compose"
 msgstr "Създай"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js
 msgid "Compose new email"
 msgstr "Създайте нов емейл"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Compose new mail"
-msgstr "Създайте нов мейл"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -2393,6 +2506,13 @@ msgstr "Поверителен"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configuration Email"
 msgstr "Конфигурационен имейл"
+
+#. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Your platform is not supported!"
+msgid "Configuration not supported"
+msgstr "Платформата ви не се поддържа!"
 
 #. term is followed by a space and three dots (' …')
 #. the dots refer to the term 'Categories' right above this dropdown entry
@@ -2412,6 +2532,14 @@ msgstr "Конфигуриране на категории"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
 msgstr "Редактирай имената"
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#, fuzzy
+#| msgid "Confirmation"
+msgid "Confirm Code"
+msgstr "Потвърждение"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Confirm recipients when replying to a mailing list"
@@ -2467,6 +2595,12 @@ msgstr "Свържете устройството си"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Connection"
+msgstr "Връзка"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Connection"
+msgid "Connection error"
 msgstr "Връзка"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -2538,10 +2672,6 @@ msgstr "Не съдържа"
 msgid "Contains words"
 msgstr "Съдържа думи"
 
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Continue"
-msgstr "Продължи"
-
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Conversation"
 msgstr "Разговори"
@@ -2558,9 +2688,9 @@ msgstr "Копирани"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/contextmenu.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js apps/io.ox/mail/contextmenu.js
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
 msgid "Copy"
 msgstr "Копирай"
 
@@ -2766,10 +2896,12 @@ msgstr "Създаване на задача"
 msgid "Created"
 msgstr "Създаден"
 
-#: apps/io.ox/files/guidance/main.js module:io.ox/files
-msgctxt "help"
-msgid "Creating Files"
-msgstr "Създаване на файлове"
+#. %1$s = apppointment creator name
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Retweeted by %s"
+msgid "Created by: %1$s"
+msgstr "Retweeted by %s"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Currency"
@@ -2876,6 +3008,13 @@ msgstr "Дата на раждане"
 msgid "Date range"
 msgstr "Период от време"
 
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "a11y"
+#| msgid "at %1$s"
+msgid "Date: %1$s"
+msgstr "в %1$s"
+
 #: apps/io.ox/backbone/mini-views/date.js module:io.ox/core
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Day"
@@ -2929,15 +3068,18 @@ msgstr "Календар по подразбиране"
 msgid "Default font style"
 msgstr "Стандартен шрифт"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js
 msgid "Default reminder"
 msgstr "Напомняне по подразбиране"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js
 msgid "Default reminder for all-day appointments"
 msgstr "Стандартно напомняне за целодневни срещи"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js
 msgid "Default reminder for appointments in birthday calendar"
 msgstr "По подразбиране напомняне за срещи в рождения ден"
 
@@ -2985,11 +3127,13 @@ msgstr "Разсрочено"
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
-#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/contextmenu.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
+#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js
 #: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
@@ -3005,6 +3149,12 @@ msgstr "Изтрий"
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Delete %1$s"
 msgstr "Изтриване на %1$s"
+
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot
+#, fuzzy
+msgid "Delete Multifactor Device"
+msgstr "Изтрий задача"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Delete account"
@@ -3046,8 +3196,7 @@ msgid "Delete files after expiration"
 msgstr "Изтрий старите подписи след импорт"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
-#: module:io.ox/files
+#: apps/io.ox/files/toolbar.js module:io.ox/files
 #, fuzzy
 msgid "Delete forever"
 msgstr "Изтрий задача"
@@ -3173,6 +3322,21 @@ msgstr "Детайли"
 msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr "Детайли"
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Device is already registered"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "Device make"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "Device model"
+msgstr ""
 
 #. %1$s is the product name
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
@@ -3393,6 +3557,8 @@ msgstr "Искате ли да изтриете тази среща?"
 msgid "Do you really want to delete this widget?"
 msgstr "Наистина ли искате да изтриете тази джаджа?"
 
+#. "Discard changes" appears in combination with "Cancel" (this action)
+#. Translation must be distinguishable for the user
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/editor/main.js
@@ -3487,6 +3653,17 @@ msgstr ""
 "Искате ли да редактирате това и всички бъдещи срещи или само тази среща в "
 "сериите?"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to edit this and all future appointments or just this "
+#| "appointment within the series?"
+msgid ""
+"Do you want to edit this and all future appointments or the whole series?"
+msgstr ""
+"Искате ли да редактирате това и всички бъдещи срещи или само тази среща в "
+"сериите?"
+
 #. ask user to move all messages from the same sender to the mail category (tab)
 #. %1$s represents a single email address (non-essential information: can be left out)
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
@@ -3528,11 +3705,11 @@ msgstr ""
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
-#: apps/io.ox/core/yell.js module:io.ox/core
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: apps/io.ox/tasks/util.js apps/plugins/notifications/tasks/register.js
-#: module:plugins/notifications
+#: apps/io.ox/core/yell.js module:io.ox/core apps/io.ox/tasks/actions.js
+#: module:io.ox/tasks apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/print.js
+#: apps/io.ox/tasks/toolbar.js apps/io.ox/tasks/util.js
+#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Done"
 msgstr "Свършен"
 
@@ -3544,9 +3721,10 @@ msgstr "Свали"
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
-#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot apps/io.ox/notes/toolbar.js module:io.ox/notes
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Download"
 msgstr "Свали"
@@ -3598,13 +3776,6 @@ msgstr "Изтеглете инсталационния файл"
 msgid "Downloads"
 msgstr "Изтегляния"
 
-#. %1$s is the time, the draft was saved
-#: apps/io.ox/mail/compose/actions/save.js module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js
-#, c-format
-msgid "Draft saved at %1$s"
-msgstr "Черновата е запазена в %1$s"
-
 #. Drafts folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -3633,11 +3804,6 @@ msgctxt "app"
 msgid "Drive"
 msgstr "Драйв"
 
-#: apps/io.ox/files/guidance/main.js module:io.ox/files
-msgctxt "help"
-msgid "Drive Settings"
-msgstr "Настройки на Драйв"
-
 #: apps/io.ox/mail/import.js module:io.ox/mail
 msgid "Drop EML file here for import"
 msgstr "Поставете тук EML файла за импортиране"
@@ -3651,7 +3817,9 @@ msgid "Drop files here to upload"
 msgstr "Извадете файловете тук, за да ги качите"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Drop here to import this mail"
+#, fuzzy
+#| msgid "Drop here to import this mail"
+msgid "Drop here to import this email"
 msgstr "Пуснете тук за да импортирате този мейл"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -3696,7 +3864,8 @@ msgid "Drop only a single file as new version."
 msgstr "Оставяйте само един файл като нова версия."
 
 #. Task: "Due" like in "Change due date"
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/print.js
+#: apps/io.ox/tasks/toolbar.js
 msgid "Due"
 msgstr "Падеж"
 
@@ -3720,6 +3889,12 @@ msgstr "Давност на %1$s"
 msgid "Duration per image"
 msgstr "Продължителност на изображението"
 
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid ""
+"E-Mails will appear in a new window. These windows can be maximized, "
+"minimized and closed."
+msgstr ""
+
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "EAS"
 msgstr "EAS"
@@ -3741,13 +3916,13 @@ msgstr "Edge"
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/favorite/toolbar.js
-#: apps/io.ox/files/main.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/main.js apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal apps/io.ox/settings/accounts/views.js
-#: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/main.js
+#: module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/main.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/toolbar.js
@@ -3772,6 +3947,11 @@ msgstr "Редактирайте контакта"
 msgid "Edit Flickr photo stream"
 msgstr "Edit Flickr photo stream"
 
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Edit Multifactor Device"
+msgstr ""
+
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
 msgid "Edit Share"
 msgstr "Редактирайте споделяне"
@@ -3784,6 +3964,13 @@ msgstr "Редактиране на емисията за Tumblr"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Edit all objects"
 msgstr "Редактирайте всички обекти"
+
+#. %1$s:  is the calendar's name
+#: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Close reminder for %1$s"
+msgid "Edit all reminders for calendar: %1$s"
+msgstr "Затваряне на напомняне за %1$s"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/toolbar.js
@@ -3803,7 +3990,7 @@ msgstr "Редактиране на копие"
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
 #: module:io.ox/core apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/toolbar.js
 msgid "Edit description"
 msgstr "Редактиране на описанието"
 
@@ -3812,8 +3999,7 @@ msgstr "Редактиране на описанието"
 msgid "Edit distribution list"
 msgstr "Редактиране на списъка за разпространение"
 
-#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Edit draft"
 msgstr "Редактирай чернова"
 
@@ -3894,10 +4080,6 @@ msgid "Email 1"
 msgstr "Емейл 1"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Email 1 / Phone number"
-msgstr "Имейл 1 / Телефонен номер"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Email 2"
 msgstr "Емейл 2"
 
@@ -3920,6 +4102,18 @@ msgstr "Имейл съдържание"
 msgid "Email from %1$s: %2$s"
 msgstr "Мейл от %1$s: %2$s"
 
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail has been copied"
+msgid "Email has been copied"
+msgstr "Мейлът беше копиран"
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail has been moved"
+msgid "Email has been moved"
+msgstr "Мейлът беше преместен"
+
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
@@ -3933,11 +4127,17 @@ msgstr ""
 "Имейлите не могат да се поставят в папката на кошчето, докато квотата ви за "
 "поща е превишена."
 
-#: apps/io.ox/tours/whats-new.js module:io.ox/core
-msgid ""
-"Emails will appear in a new window. These windows can be maximized, "
-"minimized and closed."
-msgstr ""
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mails have been copied"
+msgid "Emails have been copied"
+msgstr "Мейловете бяха копирани"
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mails have been moved"
+msgid "Emails have been moved"
+msgstr "Мейловете бяха преместени"
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Employee"
@@ -3975,6 +4175,12 @@ msgstr "Празна папка"
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Empty name and description found."
 msgstr "Получено е празно име и описание."
+
+#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
+#, fuzzy
+#| msgid "No subject"
+msgid "Empty subject"
+msgstr "Без тема"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Empty trash"
@@ -4071,6 +4277,11 @@ msgstr "Плик"
 #: module:io.ox/mail/accounts/settings apps/io.ox/oauth/reauth_handler.js
 msgid "Error"
 msgstr "Грешка"
+
+#. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "Error authenticating. Please reload browser and try again."
+msgstr ""
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Error log"
@@ -4279,7 +4490,8 @@ msgstr "Изтича на"
 #: module:io.ox/contacts apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js apps/io.ox/core/export.js
 #: module:io.ox/core apps/io.ox/core/folder/contextmenu.js
-#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 msgid "Export"
 msgstr "Износ"
 
@@ -4355,6 +4567,20 @@ msgstr "Неуспешно импортиране на данни"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Failed to recover accounts"
+msgstr "Неуспешно възстановяване на профилите"
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+#, fuzzy
+#| msgid "Failed to recover accounts"
+msgid "Failed to register device"
+msgstr "Неуспешно възстановяване на профилите"
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+#, fuzzy
+#| msgid "Failed to recover accounts"
+msgid "Failed to register device."
 msgstr "Неуспешно възстановяване на профилите"
 
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
@@ -4682,10 +4908,11 @@ msgstr "Действия, специфични за папките"
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
-#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
-#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/files/share/toolbar.js apps/io.ox/mail/main.js module:io.ox/mail
-#: apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
+#: module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/files/share/toolbar.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Папки"
 
@@ -4815,6 +5042,14 @@ msgstr "Петък"
 msgid "From"
 msgstr "От"
 
+#. %1$s An email address
+#. Example: From: richard@open-xchange.com
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Format: %1$s"
+msgid "From: %1$s"
+msgstr "Формат: %1$s"
+
 #. Placeholder in furigana field
 #: apps/l10n/ja_JP/io.ox/register.js module:l10n/ja_JP
 msgid "Furigana for company"
@@ -4842,6 +5077,8 @@ msgstr "ГБ"
 msgid "General"
 msgstr "Общи"
 
+#. Product name will be inserted to advertise the product. I.e. "Get OX Drive" but meant in terms of gettings a piece of software from a online store
+#. Product name will be inserted to adevertise the product. I.e. "Get OX Drive" but meant in terms of gettings a piece of software from a online store
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Get %s"
 msgstr "Вземете %s"
@@ -4920,6 +5157,17 @@ msgstr "Добър вечер, %s"
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Good morning, %s"
 msgstr "Добро утро, %s"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Authentication"
+msgid "Google Authenticator"
+msgstr "Аутентикация"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Google Authenticator or compatible"
+msgstr ""
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -5025,7 +5273,7 @@ msgid "Hello World"
 msgstr "Здравей свят"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/help/center.js module:io.ox/help
+#: apps/io.ox/core/viewer/views/toolbarview.js
 msgid "Help"
 msgstr "Помощ"
 
@@ -5071,6 +5319,18 @@ msgstr "Скриване на всички покани за задачи."
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all task reminders."
 msgstr "Скриване на всички напомняния за задачи."
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show blind carbon copy input field"
+msgid "Hide blind carbon copy input field"
+msgstr "Покажи полето за скрити копия"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show carbon copy input field"
+msgid "Hide carbon copy input field"
+msgstr "Покажи полето за копия"
 
 #. button: show collapsed content
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -5176,6 +5436,10 @@ msgctxt "rating"
 msgid "I like it"
 msgstr "Харесва ми"
 
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
+msgid "I lost my device"
+msgstr ""
+
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP"
 msgstr "IMAP"
@@ -5184,9 +5448,20 @@ msgstr "IMAP"
 msgid "IP phone"
 msgstr "IP телефон"
 
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "ISO"
+msgstr ""
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Icons"
 msgstr "Икони"
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"If scanning does not work, you may be able to enter the following setup code."
+msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid ""
@@ -5241,16 +5516,10 @@ msgstr ""
 msgid "Image 1"
 msgstr "Изображение 1"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
 #, fuzzy
 #| msgid "Images"
 msgid "Image size"
-msgstr "Снимки"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#, fuzzy
-#| msgid "Images"
-msgid "Image size:"
 msgstr "Снимки"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
@@ -5293,6 +5562,14 @@ msgstr "В ход"
 msgid ""
 "In shared calendars, the appointment is displayed as a simple time slot for "
 "non-attending users."
+msgstr ""
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid ""
+"In the event you lose or are unable to use your authentication device, your "
+"account will be locked out unless you set up a recovery method. We strongly "
+"recommend that you do so now."
 msgstr ""
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail apps/io.ox/portal/widgets.js
@@ -5414,7 +5691,8 @@ msgstr "Покана за %1$s ."
 msgid "Invitation sent"
 msgstr "Поканата е изпратена"
 
-#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#: apps/io.ox/contacts/toolbar.js
 msgid "Invite"
 msgstr "Покани"
 
@@ -5443,8 +5721,8 @@ msgstr "Покани към нова среща"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is bigger than (Size: B/KB/MB/GB)"
-msgstr ""
+msgid "Is bigger than"
+msgstr "Е по-голям от"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -5461,9 +5739,9 @@ msgstr "Не е точно"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Is smaller than"
-msgid "Is smaller than (Size: B/KB/MB/GB)"
-msgstr "Е по-малък от"
+#| msgid "Is bigger than"
+msgid "Is smaller than"
+msgstr "Е по-голям от"
 
 #: apps/io.ox/settings/security/certificates/settings/utils.js
 #: module:io.ox/settings/certificates
@@ -5611,11 +5889,13 @@ msgstr "Език"
 msgid "Languages"
 msgstr "Езици"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#. In the context of resizing images before uploading them this text is used as a label for a dropdown
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
 msgid "Large"
 msgstr ""
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#. Large (number px) is used as an option for resizing images and refers to a large sized image
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
 #, fuzzy
 #| msgid "Progress %1$s %"
 msgid "Large (%1$s px)"
@@ -5768,15 +6048,6 @@ msgstr "ListView"
 msgid "Load appointments until %1$s"
 msgstr "Заредете срещи до %1$s"
 
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Load full mail"
-msgstr "Заредете цялата поща"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Loading the full mail might lead to performance problems."
-msgstr ""
-"Зареждането на цялата поща може да доведе до проблеми с производителността."
-
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Localpart"
@@ -5788,9 +6059,7 @@ msgstr "Localpart"
 msgid "Location"
 msgstr "Място"
 
-#: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Lock"
 msgstr "Заключи"
 
@@ -5871,8 +6140,6 @@ msgid "Magenta"
 msgstr "Пурпурен цвят"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js
 msgid "Mail"
 msgstr "Мейл"
 
@@ -5920,21 +6187,9 @@ msgstr "Квота за отчитане на пощата"
 msgid "Mail from %1$s, %2$s"
 msgstr "Мейл от %1$s, %2$s"
 
-#: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Mail has been copied"
-msgstr "Мейлът беше копиран"
-
 #: apps/io.ox/mail/import.js module:io.ox/mail
 msgid "Mail has been imported"
 msgstr "Мейлът беше импортиран"
-
-#: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Mail has been moved"
-msgstr "Мейлът беше преместен"
-
-#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
-msgid "Mail has empty subject. Send it anyway?"
-msgstr "Мейлът няма тема. Изпратете въпреки това?"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Mail has no recipient."
@@ -5958,10 +6213,10 @@ msgstr "Пом"
 msgid "Mail reminder for"
 msgstr "Напомняне по пощата за"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #, fuzzy
 #| msgid "Mail source"
-msgid "Mail size:"
+msgid "Mail size: %1$s"
 msgstr "Източник на поща"
 
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail
@@ -5978,14 +6233,6 @@ msgstr "Пощата не бе импортирана. Поддържат се �
 msgid "Mailing list"
 msgstr "Пощенски списък"
 
-#: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Mails have been copied"
-msgstr "Мейловете бяха копирани"
-
-#: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Mails have been moved"
-msgstr "Мейловете бяха преместени"
-
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Mails per hour (%)"
 msgstr "Мейлове на час (%)"
@@ -5998,6 +6245,12 @@ msgstr "Мейлове на работен ден (%)"
 msgid "Make this the current version"
 msgstr "Направете тази актуална версия"
 
+#: apps/io.ox/core/download.js module:io.ox/core
+#, fuzzy
+#| msgid "Conflicts detected"
+msgid "Malicious file detected"
+msgstr "Засечени са конфликти"
+
 #. Opens a native browser popup to decide if this applications/website is allowed to show notifications
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage browser permissions now"
@@ -6007,18 +6260,13 @@ msgstr "Управлявайте разрешенията на браузъра 
 msgid "Manage favorites"
 msgstr "Управление на любимите"
 
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
 msgid "Manage signatures"
 msgstr "Управлявай подписите"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Manager"
 msgstr "Мениджър"
-
-#: apps/io.ox/files/guidance/main.js module:io.ox/files
-msgctxt "help"
-msgid "Managing Files"
-msgstr "Управление на файлове"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Manual"
@@ -6141,7 +6389,8 @@ msgstr "Не съвпада"
 msgid "Maximize"
 msgstr ""
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#. In the context of resizing images before uploading them this text is used as a label for a dropdown
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
 msgstr "Среден"
@@ -6151,7 +6400,8 @@ msgctxt "Tasks priority"
 msgid "Medium"
 msgstr "Среден"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#. Medium (number px) is used as an option for resizing images and refers to a medium sized image
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
 #, fuzzy
 #| msgid "Members (%1$d)"
 msgid "Medium (%1$s px)"
@@ -6293,7 +6543,8 @@ msgstr "Месечно"
 msgid "More"
 msgstr "Повече"
 
-#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
+#: apps/io.ox/backbone/views/toolbar.js module:io.ox/core
+#: apps/io.ox/core/extPatterns/links.js
 msgid "More actions"
 msgstr "Повече действия"
 
@@ -6308,10 +6559,10 @@ msgstr "Намерени са повече от текущо показвани�
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
-#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/contextmenu.js
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/actions/move.js apps/io.ox/tasks/mobile-toolbar-actions.js
 #: apps/io.ox/tasks/toolbar.js
 msgid "Move"
@@ -6486,7 +6737,6 @@ msgstr "Добави условие"
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main apps/io.ox/core/notifications.js
 #: module:io.ox/core apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#: apps/io.ox/mail/settings/compose/settings/pane.js
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "Never"
 msgstr "Никога"
@@ -6508,10 +6758,6 @@ msgstr "Нов"
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "New Folder"
 msgstr "Нова папка"
-
-#: apps/io.ox/mail/api.js module:io.ox/mail
-msgid "New Mail"
-msgstr "Нов Мейл"
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 #, fuzzy
@@ -6555,18 +6801,21 @@ msgstr "Нов календар"
 msgid "New calendar name"
 msgstr "Календар"
 
+#: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "New contact"
+msgid "New code sent."
+msgstr "Нов контакт"
+
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "New contact"
 msgstr "Нов контакт"
-
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "New file"
-msgstr "Нов файл"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "New folder"
 msgstr "Нова папка"
 
+#: apps/io.ox/mail/api.js module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New mail"
 msgstr "Нов мейл"
@@ -6582,6 +6831,12 @@ msgstr "Нова бележка"
 #: apps/io.ox/core/notifications/subview.js module:io.ox/core
 msgid "New notifications"
 msgstr "Нови известия"
+
+#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Organizer"
+msgid "New organizer"
+msgstr "Организатор"
 
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "New overdue task"
@@ -6631,10 +6886,15 @@ msgstr "Нови напомняния за задачи"
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
 #: apps/io.ox/tours/whats-new.js apps/io.ox/wizards/upsell.js
 #: module:io.ox/wizards
 msgid "Next"
 msgstr "Следващ"
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Next 4 characters of the backup string"
+msgstr ""
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Next Day"
@@ -6679,6 +6939,10 @@ msgstr "Прякор"
 #: apps/io.ox/core/permissions/permissions.js
 msgid "No"
 msgstr "Не"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "No 2-Step verification options configured yet."
+msgstr ""
 
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "No RSS feeds found."
@@ -6775,6 +7039,13 @@ msgstr "Няма налична визуализация"
 msgid "No priority"
 msgstr "Няма приоритет"
 
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+#, fuzzy
+#| msgid "No preview available"
+msgid "No providers available"
+msgstr "Няма налична визуализация"
+
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "No recipients"
 msgstr "Няма получатели"
@@ -6785,7 +7056,7 @@ msgstr "Няма получатели"
 msgid "No reminder"
 msgstr "Няма напомняне"
 
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 msgid "No signature"
 msgstr "Без подпис"
@@ -6797,7 +7068,6 @@ msgstr "Няма бавни заявки"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
-#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/compose/view.js
 #: apps/io.ox/mail/util.js module:io.ox/core
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #: apps/plugins/portal/mail/register.js module:plugins/portal
@@ -6999,8 +7269,14 @@ msgstr "Офлайн режим"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-folder-alarms.js
+#: apps/io.ox/calendar/actions/change-organizer.js
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "Ок"
@@ -7008,6 +7284,15 @@ msgstr "Ок"
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Olive"
 msgstr "Маслинено"
+
+#. %1$s A date
+#. %2$s An email address
+#. Example: On January 8, 2019 2:23 PM richard@open-xchange.com wrote:
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Open in %1$s"
+msgid "On %1$s %2$s wrote:"
+msgstr "Отваряне в %1$s"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "On behalf of the owner"
@@ -7026,6 +7311,13 @@ msgid "On workdays."
 msgid_plural "Every %1$d weeks on workdays."
 msgstr[0] "Всеки работни дни"
 msgstr[1] "Всяка %1$d седмица на всички дни"
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"Once complete, please enter an authentication code to verify everything is "
+"configured properly."
+msgstr ""
 
 #. %1$d is the number of search results in the autocomplete field
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
@@ -7051,17 +7343,14 @@ msgstr ""
 "съхраняват на сървъра. Изпратеният от вас имейл съдържа само връзки за "
 "изтегляне на тези файлове."
 
-#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#: apps/io.ox/backbone/mini-views/helplink.js module:io.ox/core
+#: apps/io.ox/help/main.js module:io.ox/help
 msgid "Online help"
 msgstr "Онлайн помощ"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Показват се само елементи, свързани с папка \\ \" %1$s \""
-
-#: apps/io.ox/files/actions.js module:io.ox/files
-msgid "Open"
-msgstr "Отвори"
 
 #. link title for related accounts into the corresponding folder
 #. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
@@ -7244,7 +7533,15 @@ msgstr "Подреждане"
 msgid "Organizer"
 msgstr "Организатор"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Organizer"
+msgid "Organizer changed"
+msgstr "Организатор"
+
+#. Original is used as an option for resizing images and refers to the original image size
+#. In the context of resizing images before uploading them this text is used as a label for a dropdown
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
 #, fuzzy
 #| msgid "Original mail"
 msgid "Original"
@@ -7342,7 +7639,20 @@ msgstr "Участници"
 msgid "Participants (%1$d)"
 msgstr "Участници ( %1$d )"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Participant related actions"
+msgid "Participants can edit appointments"
+msgstr "Действия, свързани с участниците"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Participant related actions"
+msgid "Participants can make changes"
+msgstr "Действия, свързани с участниците"
+
+#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/core/boot/i18n.js
 #: module:io.ox/core/boot apps/io.ox/core/relogin.js module:io.ox/core
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
@@ -7634,10 +7944,6 @@ msgstr "Моля въведете валидна дата"
 msgid "Please enter a valid email address"
 msgstr "Моля въведете валиден мейл адрес"
 
-#: apps/io.ox/backbone/validation.js module:io.ox/core
-msgid "Please enter a valid email address or phone number"
-msgstr "Моля въведете валиден адрес или телефонен номер"
-
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Please enter a valid name"
 msgstr "Моля въведете валидно име"
@@ -7671,6 +7977,25 @@ msgstr "Моля, въведете правилната парола"
 #, c-format
 msgid "Please enter the following data: %1$s"
 msgstr "Моля, въведете следните данни: %1$s"
+
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Please select the platform of your device."
+msgid "Please enter the phone number for the device."
+msgstr "Моля, изберете платформата на устройството си."
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Please enter a search query"
+msgid "Please enter the recovery code"
+msgstr "Моля, въведете заявка за търсене"
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#, fuzzy
+#| msgid "Please select the platform of your device."
+msgid "Please enter the validation code we just sent to your device."
+msgstr "Моля, изберете платформата на устройството си."
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Please enter value between 0 and 100."
@@ -7738,6 +8063,12 @@ msgstr ""
 "Моля, поставяйте само изображения тук. Ако искате да изпратите други "
 "файлове, можете да ги изпратите като прикачени файлове."
 
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Please enter a valid email address or phone number"
+msgid "Please only use numeric characters for phone number"
+msgstr "Моля въведете валиден адрес или телефонен номер"
+
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
 "Please provide the old password so the account passwords can be recovered."
@@ -7752,6 +8083,12 @@ msgstr "Моля, оценете следното приложение:"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Please rate this product"
 msgstr "Моля, оценете този продукт"
+
+#: apps/io.ox/multifactor/views/selectDeviceView.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Please select a time for the appointment"
+msgid "Please select a device to use for additional authentication"
+msgstr "Моля, изберете час за срещата"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -7808,6 +8145,13 @@ msgstr "Моля, задайте парола"
 msgid "Please sign in again to continue"
 msgstr "Моля, влезте отново, за да продължите"
 
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+#, fuzzy
+#| msgid "Please select the platform of your device."
+msgid "Please touch/activate your device"
+msgstr "Моля, изберете платформата на устройството си."
+
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please update your browser."
 msgstr "Моля, актуализирайте браузъра си"
@@ -7827,10 +8171,6 @@ msgstr "Слива"
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
 msgstr "Плюс"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Pop out"
-msgstr "Изкача"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Pop out standalone viewer"
@@ -7973,7 +8313,9 @@ msgstr "Главен акаунт"
 #: module:io.ox/contacts apps/io.ox/contacts/actions/print.js
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js
 msgid "Print"
 msgstr "Принт"
@@ -8010,7 +8352,8 @@ msgid "Priority"
 msgstr "Приоритет"
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
-#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/view-grid-template.js
@@ -8023,6 +8366,16 @@ msgstr "Частен"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Private address"
 msgstr "Частен адрес"
+
+#. Error message when trying to get available providers from middleware
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Problem getting 2-step verification providers"
+msgstr ""
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Problem registering device"
+msgstr ""
 
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
@@ -8069,6 +8422,7 @@ msgstr "Properties"
 msgid "Public address books"
 msgstr "Публичена адресна книга"
 
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Public calendars"
@@ -8087,22 +8441,9 @@ msgstr "Държавен служител"
 msgid "Public tasks"
 msgstr "Публични задачи"
 
-#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "Publication must have a site."
-msgstr "Публикуването трябва да има сайт."
-
-#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "Publication must have a target."
-msgstr "Публикуването трябва да има цел."
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
-#: apps/io.ox/core/sub/settings/register.js
 msgid "Publications"
 msgstr "Публикации"
-
-#: apps/io.ox/core/sub/settings/register.js module:io.ox/core/sub
-msgid "Publications and Subscriptions"
-msgstr "Публикации и абонаменти"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Purchase confirmation"
@@ -8124,10 +8465,6 @@ msgstr "Purple / Magenta"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Quick launch %s"
 msgstr ""
-
-#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
-msgid "Quick reply: %1$s"
-msgstr "Бърз отговор: %1$s"
 
 #. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
@@ -8162,8 +8499,11 @@ msgstr "Прочетете собствени обекти"
 msgid "Read permissions"
 msgstr "Четете разрешения"
 
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
+msgid "Reauthentication required for this action"
+msgstr ""
+
 #: apps/io.ox/oauth/reauth_handler.js module:io.ox/core
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Reauthorize"
 msgstr "Ново упълномощаване"
 
@@ -8267,6 +8607,26 @@ msgstr "възвръщам"
 msgid "Recover passwords"
 msgstr "Възстановяване на пароли"
 
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/printBackupString.js
+#, fuzzy
+#| msgid "Recover"
+msgid "Recovery Code"
+msgstr "възвръщам"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Recover passwords"
+msgid "Recovery Options"
+msgstr "Възстановяване на пароли"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Recover"
+msgid "Recovery code"
+msgstr "възвръщам"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Recruiter"
 msgstr "Recruiter"
@@ -8330,7 +8690,7 @@ msgstr "Намалете обобщението на джаджата"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 #: apps/io.ox/core/main/topbar_right.js apps/io.ox/core/sub/settings/pane.js
-#: module:io.ox/core/sub
+#: module:io.ox/core/sub apps/io.ox/multifactor/login/loginScreen.js
 msgid "Refresh"
 msgstr "Презареди"
 
@@ -8398,16 +8758,17 @@ msgstr "Отхвърляне на писма с тема %1$s с причина 
 msgid "Reject with reason"
 msgstr "Отхвърлете с причина"
 
-#: apps/io.ox/files/guidance/main.js module:io.ox/files
-msgid "Related articles"
-msgstr "Свързани статии"
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Reload page"
+msgid "Reload"
+msgstr "Презареждане на страницата"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Reload page"
 msgstr "Презареждане на страницата"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
-#: apps/io.ox/files/guidance/main.js module:io.ox/files
 msgid "Reload statistics"
 msgstr "Презареждане на статистическите данни"
 
@@ -8430,8 +8791,7 @@ msgstr "Напомни ми"
 msgid "Remind me again"
 msgstr "Напомни ми отново"
 
-#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/change-alarms.js
+#: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
@@ -8527,8 +8887,7 @@ msgstr "Премахнете копието от сървъра, след кат
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/favorites.js apps/io.ox/files/toolbar.js
 msgid "Remove from favorites"
 msgstr "Премахни от любими"
 
@@ -8563,8 +8922,7 @@ msgstr "Премахнат %1$s ."
 #: apps/io.ox/core/folder/contextmenu.js
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/actions/rename.js
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
-#: apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 msgid "Rename"
 msgstr "Преименуване"
 
@@ -8597,8 +8955,7 @@ msgid "Repeat slideshow"
 msgstr "Повтаряйте слайдшоуто"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
-#: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
-#: module:plugins/portal
+#: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Reply"
 msgstr "Отговори"
 
@@ -8612,10 +8969,6 @@ msgstr "Отговори всички"
 msgctxt "compose"
 msgid "Reply to"
 msgstr "Отг. до"
-
-#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
-msgid "Reply to all"
-msgstr "Отговори на всички"
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
@@ -8662,6 +9015,13 @@ msgstr "Резервирано"
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
 msgid "Reset this list"
 msgstr "Повторете този списък"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+#, fuzzy
+#| msgid "Files options"
+msgid "Resolution"
+msgstr "Опции за файлове"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/participants/chronos-views.js module:io.ox/core
@@ -8713,6 +9073,7 @@ msgid "Retired"
 msgstr "Пенсиониран"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
 #: module:io.ox/files apps/io.ox/mail/detail/view.js module:io.ox/mail
@@ -8795,6 +9156,10 @@ msgstr "Име на правилото"
 msgid "Run slideshow"
 msgstr "Повтаряйте слайдшоуто"
 
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "SMS Code"
+msgstr ""
+
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP"
 msgstr "SMTP"
@@ -8819,6 +9184,7 @@ msgctxt "superessive"
 msgid "Saturday"
 msgstr "Събота"
 
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
@@ -8831,11 +9197,11 @@ msgstr "Събота"
 #: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/compose/names.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot apps/io.ox/oauth/settings.js module:io.ox/settings
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/plugins/administration/groups/settings/edit.js
 #: apps/plugins/administration/resources/settings/edit.js
@@ -8847,7 +9213,7 @@ msgstr "Запази"
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/toolbar.js
 msgid "Save as PDF"
 msgstr "Запазване като PDF"
 
@@ -8907,6 +9273,11 @@ msgid_plural "Saving attachments ..."
 msgstr[0] "Записване на прикачен файл ..."
 msgstr[1] "Записване на прикачен файл ..."
 
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Scan the QR code with your authenticator."
+msgstr ""
+
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
 msgctxt "app"
@@ -8955,6 +9326,12 @@ msgstr "Тайна"
 msgid "Security"
 msgstr "Сигурност"
 
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Security"
+msgid "Security Token"
+msgstr "Сигурност"
+
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Select"
@@ -8971,6 +9348,10 @@ msgstr "Изберете"
 msgctxt "select-contacts"
 msgid "Select"
 msgstr "Изберете"
+
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
+msgid "Select 2-Step Verification Method"
+msgstr ""
 
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid ""
@@ -9014,6 +9395,12 @@ msgstr "Избери файл"
 msgid "Select folder"
 msgstr "Избери папка"
 
+#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
+#, fuzzy
+#| msgid "You are the organizer"
+msgid "Select new organizer"
+msgstr "Вие сте организаторът"
+
 #: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 msgid "Select print layout"
 msgstr "Изберете оформление за печат"
@@ -9046,10 +9433,29 @@ msgstr "Изпрати като vCard"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
-#: apps/io.ox/files/toolbar.js apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
+#, fuzzy
+#| msgid "Send by mail"
+msgid "Send by email"
+msgstr "Изпрати по мейл"
+
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Изпрати по мейл"
+
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
+#: apps/io.ox/contacts/toolbar.js
+#, fuzzy
+#| msgid "Send mail"
+msgid "Send email"
+msgstr "Изпрати мейл"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Send mail to all participants"
+msgid "Send email to all participants"
+msgstr "Изпрати мейл до всички участници"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Send from"
@@ -9058,12 +9464,6 @@ msgstr "Изпращане от"
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Send link"
 msgstr "Изпрати линк"
-
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js
-msgid "Send mail"
-msgstr "Изпрати мейл"
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
@@ -9114,12 +9514,10 @@ msgstr "Изпрати мейл"
 msgid "Send mail at start."
 msgstr "Записан прикачен файл"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-msgid "Send mail to all participants"
-msgstr "Изпрати мейл до всички участници"
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Send new mail"
+#, fuzzy
+#| msgid "Send new mail"
+msgid "Send new email"
 msgstr "Изпрати нов мейл"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -9133,6 +9531,12 @@ msgstr "Изпратете известие за почивка само по т
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Send without attachment"
 msgstr "Изпратете без прикачен файл"
+
+#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
+#, fuzzy
+#| msgid "Yes, send without subject"
+msgid "Send without subject"
+msgstr "Да, изпрати без тема"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -9161,7 +9565,7 @@ msgid "Sent date"
 msgstr "Изпратена дата"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Изпратено от %s чрез мобилни устройство"
 
@@ -9228,14 +9632,14 @@ msgid "Set color flag"
 msgstr "Задаване на цвят за маркиране"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/settings/main.js
+#: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Настройки"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/plugins/portal/xing/actions.js module:plugins/portal
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
+#: module:io.ox/files apps/plugins/portal/xing/actions.js
+#: module:plugins/portal
 msgid "Share"
 msgstr "Сподели"
 
@@ -9244,30 +9648,6 @@ msgstr "Сподели"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Share %1$s \"%2$s\""
 msgstr "Сподели \"%1$s\""
-
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Share current folder"
-msgstr "Споделяне на текущата папка"
-
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Share selected file"
-msgid_plural "Share selected files"
-msgstr[0] "Сподели избрания файл"
-msgstr[1] "Сподели избраните файлове"
-
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Share selected folder"
-msgid_plural "Share selected folders"
-msgstr[0] "Сподели избраната папка"
-msgstr[1] "Сподели избраните папки"
-
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Share selected objects"
-msgstr "Споделете избраните обекти"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Share this file"
@@ -9303,6 +9683,7 @@ msgstr "Споделени адресни книги"
 msgid "Shared by other users"
 msgstr "Сподели с други потребители"
 
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Shared calendars"
@@ -9346,6 +9727,11 @@ msgstr[1] ""
 msgid "Shopping cart"
 msgstr "Карта за пазаруване"
 
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "Shot"
+msgstr ""
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "Покажи"
@@ -9386,10 +9772,12 @@ msgid "Show birthday calendar"
 msgstr "Покажете календара за рожденни ден"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js
 msgid "Show blind carbon copy input field"
 msgstr "Покажи полето за скрити копия"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js
 msgid "Show carbon copy input field"
 msgstr "Покажи полето за копия"
 
@@ -9445,7 +9833,8 @@ msgid "Show images"
 msgstr "Покажи изображенията"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
+#: module:io.ox/files
 msgid "Show in Drive"
 msgstr "Показване в Диск"
 
@@ -9524,7 +9913,8 @@ msgctxt "word"
 msgid "Sign in"
 msgstr "Впиши се"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/main/topbar_right.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Sign out"
 msgstr "Излез"
@@ -9546,7 +9936,7 @@ msgstr "Подпис"
 msgid "Signature name"
 msgstr "Име на подписа"
 
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 msgid "Signatures"
@@ -9566,6 +9956,12 @@ msgstr "Влезли сте като"
 msgid "Size"
 msgstr "Размер"
 
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+#, fuzzy
+#| msgid "Email content"
+msgid "Skip to main content"
+msgstr "Имейл съдържание"
+
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Sky blue"
 msgstr "Небесно синьо"
@@ -9584,11 +9980,13 @@ msgstr "Режим \"Слайдшоу / Автоматично възпроиз�
 msgid "Slow requests"
 msgstr "Бавни заявки"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#. In the context of resizing images before uploading them this text is used as a label for a dropdown
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
 msgid "Small"
 msgstr ""
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#. Small (number px) is used as an option for resizing images and refers to a small sized image
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
 msgid "Small (%1$s px)"
 msgstr ""
 
@@ -9635,6 +10033,13 @@ msgstr "Нещо се обърка, като повторната оториза
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Something went wrong. Please close this browser tab and try again."
 msgstr ""
+
+#. Catch all error when trying to set up a new 2step device
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Something went wrong reauthorizing the %s account."
+msgid "Something went wrong. Please try again later."
+msgstr "Нещо се обърка, като повторната оторизация на %s  акаунт."
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
@@ -9800,11 +10205,10 @@ msgstr "Започва с"
 msgid "State"
 msgstr "Област"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#: apps/io.ox/mail/statistics.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgid "Statistics"
 msgstr "Статистики"
 
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Status"
@@ -9846,6 +10250,13 @@ msgstr "Студент"
 msgid "Subject"
 msgstr "Тема"
 
+#. %1$s The subject of an email
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Subject"
+msgid "Subject: %1$s"
+msgstr "Тема"
+
 #: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Submit comment"
 msgstr "Изпратете коментара"
@@ -9854,6 +10265,17 @@ msgstr "Изпратете коментара"
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Subscribe"
 msgstr "Абонирай се"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+msgid "Subscribe shared Calendar"
+msgstr "Добави нов календар"
+
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js
+#, fuzzy
+msgid "Subscribe shared calendars"
+msgstr "Добави нов календар"
 
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 msgid "Subscribe to IMAP folders"
@@ -9949,6 +10371,10 @@ msgstr "Превключете в основната папка"
 #: apps/io.ox/emoji/categories.js
 msgid "Symbols"
 msgstr "Символи"
+
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+msgid "Sync via DAV"
+msgstr ""
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Synchronize calendar"
@@ -10053,10 +10479,6 @@ msgstr "Напомняния за задачи"
 msgid "Task was already deleted!"
 msgstr "Задачата вече бе изтрита!"
 
-#: apps/io.ox/tasks/actions/doneUndone.js module:io.ox/tasks
-msgid "Task was modified before, please reload"
-msgstr "Заданието бе променена преди, моля, презаредете"
-
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Tasks"
 msgstr "Задачи"
@@ -10132,11 +10554,6 @@ msgstr ""
 "Клиентът %s ви позволява да съхранявате и споделяте вашите снимки, файлове, "
 "документи и видеоклипове, по всяко време и навсякъде. Достъпът до файла %s "
 "запазва от всичките ви компютри, iPhone, iPad или от самия %s ."
-
-#: apps/io.ox/files/guidance/main.js module:io.ox/files
-msgctxt "help"
-msgid "The Drive App"
-msgstr "Приложението \"Драйв\""
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid ""
@@ -10299,6 +10716,11 @@ msgstr ""
 msgid "The following products will be activated now:"
 msgstr "Следните продукти ще бъдат активирани сега:"
 
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
+msgid ""
+"The image cannot not be resized because it was not found on your hard drive."
+msgstr ""
+
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
 msgid "The integration of the subscribed calendars might take a while."
@@ -10308,6 +10730,12 @@ msgstr "Интеграцията на абонираните календари 
 msgid "The link has been removed"
 msgstr "Връзката е премахната"
 
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid ""
+"The mail draft could not be found on the server. It was sent or deleted in "
+"the meantime."
+msgstr ""
+
 #: apps/io.ox/calendar/conflicts/conflictList.js
 #: module:io.ox/calendar/conflicts/conflicts
 msgid "The new appointment conflicts with existing appointments."
@@ -10316,6 +10744,18 @@ msgstr "Новото назначаване е в конфликт с същес
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "The notification has been resent"
 msgstr "Уведомлението бе изпратено"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "The number of versions is limited to 1 version."
+msgid_plural "The number of versions is limited to %1$d versions."
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Your browser version is not supported!"
+msgid "The number of versions is not limited"
+msgstr "Вашата версия на браузъра не се поддържа"
 
 #: apps/io.ox/files/api.js module:io.ox/files
 msgid "The provided filename exceeds the allowed length."
@@ -10383,6 +10823,12 @@ msgstr "Серията завършва на %1$s ."
 msgid "The series never ends."
 msgstr "Серията никога не свършва."
 
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "The requested application is not available at this moment."
+msgid "The service is not available right now."
+msgstr "Поисканото заявление в момента не е налице."
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
@@ -10411,6 +10857,20 @@ msgstr[1] "Задачите не могат да бъдат изтрити."
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "The time frame is in the past."
+msgstr "Времето е в миналото."
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "The time frame is in the past."
+msgid "The timeframe is limited to 1 day."
+msgid_plural "The timeframe is limited to %1$d days."
+msgstr[0] "Времето е в миналото."
+msgstr[1] "Времето е в миналото."
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "The time frame is in the past."
+msgid "The timeframe is not limited"
 msgstr "Времето е в миналото."
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
@@ -10461,6 +10921,12 @@ msgid ""
 msgstr ""
 "Понастоящем няма налични съвместими мултимедийни устройства на устройството "
 "ви."
+
+#: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
+msgid ""
+"There are no backup devices available for this account. Please notify "
+"support for help."
+msgstr ""
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
@@ -10515,15 +10981,6 @@ msgstr "Нямаше подходящ сървър за тази комбина�
 msgid "There was no task data to import"
 msgstr "Няма данни за задача за импортиране"
 
-#. %1$s name of the current folder
-#: apps/io.ox/files/guidance/statistics.js module:io.ox/files
-msgid ""
-"These statistics only include folders, which have a depth less than four in "
-"the folder structure from the folder \"%1$s\"."
-msgstr ""
-"Тези статистически данни включват само папки, които имат дълбочина по-малка "
-"от четири в структурата на папките от папката \\ \" %1$s \"."
-
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #: apps/io.ox/calendar/util.js
 msgid "This appointment"
@@ -10539,6 +10996,12 @@ msgid ""
 "series."
 msgstr "Тази среща е изключение. Промяната на сериите не засяга изключенията."
 
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid ""
+"This browser is not compatible with your configured authentication device. "
+"Please use Chrome browser, or Firefox with U2F enabled."
+msgstr ""
+
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "This browser is not supported on your current platform."
 msgstr "Този браузър не се поддържа на текущата ви платформа."
@@ -10551,6 +11014,11 @@ msgstr ""
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "This contact is private and cannot be shared"
 msgstr "Този контакт е личен и не може да бъде споделен"
+
+#. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "This device is not eligible for this request. Wrong hardware key?"
+msgstr ""
 
 #: apps/io.ox/contacts/actions/addToPortal.js module:io.ox/mail
 msgid "This distribution list has been added to the portal"
@@ -10576,6 +11044,18 @@ msgstr "Този имейл съдържа задача"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
 msgstr "Този имейл съдържа среща"
+
+#: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
+#, fuzzy
+#| msgid "This mail has been added to the portal"
+msgid "This email has been added to the portal"
+msgstr "Тази поща е добавена към портала"
+
+#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail has empty subject. Send it anyway?"
+msgid "This email has no subject. Do you want to send it anyway?"
+msgstr "Мейлът няма тема. Изпратете въпреки това?"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
@@ -10665,10 +11145,6 @@ msgstr "Тази папка няма публикации"
 msgid "This folder has no subscriptions"
 msgstr "Тази папка няма абонаменти"
 
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "This folder has publications and/or subscriptions"
-msgstr "Тази папка има публикации и / или абонаменти"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid ""
 "This folder has publications but you are not allowed to view or edit them"
@@ -10733,6 +11209,13 @@ msgstr "Това не е валиден пощенски адрес"
 msgid "This is not a valid user or group."
 msgstr "Това не е валиден потребител или група."
 
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"This is your recovery code. Please write it down, print it, or save the "
+"file. Be sure to save this in a secure location."
+msgstr ""
+
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "This list has no members yet"
@@ -10743,16 +11226,12 @@ msgstr "Този списък все още няма членове"
 msgid "This list has no participants yet"
 msgstr "Този списък все още няма участници"
 
-#: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
-msgid "This mail has been added to the portal"
-msgstr "Тази поща е добавена към портала"
-
 #: apps/io.ox/mail/detail/content.js module:io.ox/mail
 msgid "This mail has no content"
 msgstr "Този мейл няма съдържание"
 
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-#: apps/io.ox/mail/detail/mobileView.js apps/io.ox/mail/detail/view.js
+#: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "Това съобщение е било отрязано поради ограничения на размера."
 
@@ -10803,6 +11282,22 @@ msgstr ""
 "Това приспособление е в момента офлайн, защото е превишен лимитът за "
 "скоростта на Twitter."
 
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "This will assign a name to the device"
+msgstr ""
+
+#. Devices are named.  This is the text for the deleting a multifactor device
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot
+msgid "This will delete the device named %s."
+msgstr ""
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "This will edit the name for device (%s)"
+msgstr ""
+
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Thread"
 msgstr "Тема"
@@ -10851,6 +11346,12 @@ msgstr "Зависимо от времето"
 msgid "Timeframe"
 msgstr "Скала за време"
 
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Time"
+msgid "Timeout"
+msgstr "Време"
+
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Title"
 msgstr "Заглавие"
@@ -10893,6 +11394,13 @@ msgstr ""
 msgid "To print this file, please use \"Print as PDF\" in the viewer."
 msgstr ""
 
+#. %1$s An email address or a comma separated list of mail addresses
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Today: %1$s"
+msgid "To: %1$s"
+msgstr "Днес: %1$s"
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
@@ -10928,14 +11436,6 @@ msgstr "Утре"
 msgid "Tool"
 msgstr "Tool"
 
-#: apps/io.ox/files/guidance/statistics.js module:io.ox/files
-msgid "Top 10 file types"
-msgstr "Топ 10 файлови типове"
-
-#: apps/io.ox/files/guidance/statistics.js module:io.ox/files
-msgid "Top 10 folder size"
-msgstr "Топ 10 на папката (размер)"
-
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Top 10 you got mail from"
 msgstr "Топ 10 получени съобщенип от"
@@ -10952,6 +11452,7 @@ msgstr "Теми"
 msgid "Total cost"
 msgstr "Крайна цена"
 
+#. Used for the total count of objects or mails in a folder
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Total: %1$d"
 msgstr "Всички: %1$d"
@@ -11056,6 +11557,20 @@ msgstr ""
 "е (временно) надолу или има проблеми с мрежовата връзка. Моля опитайте "
 "отново след няколко минути."
 
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot
+#, fuzzy
+#| msgid "Upload file"
+msgid "Unable to delete"
+msgstr "Качи файл"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+#, fuzzy
+#| msgid "Upload file"
+msgid "Unable to edit name."
+msgstr "Качи файл"
+
 #: apps/io.ox/mail/mailfilter/settings/register.js module:io.ox/mail
 msgid "Unable to load mail filter rules settings."
 msgstr ""
@@ -11079,6 +11594,10 @@ msgstr ""
 "Вашата бележка за ваканция не може да се зареди. Моля, опитайте отново по-"
 "късно."
 
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Unable to perform Anti-Virus check for the requested file(s)"
+msgstr ""
+
 #: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
 #, fuzzy
 #| msgid "Upload file"
@@ -11093,7 +11612,7 @@ msgid "Unconfirmed"
 msgstr "Непотвърдени"
 
 #. Task: Undone like in "Mark as undone"
-#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Undone"
 msgstr "Не приключена"
 
@@ -11155,9 +11674,14 @@ msgstr "Неизвестна грешка при проверката на бл�
 msgid "Unknown sender"
 msgstr "Незнаен подател"
 
-#: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+#, fuzzy
+#| msgid "Unknown sender"
+msgid "Unknown system"
+msgstr "Незнаен подател"
+
+#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Unlock"
 msgstr "Отключи"
 
@@ -11175,6 +11699,7 @@ msgstr "Непрочетен"
 msgid "Unread messages"
 msgstr "Непрочетени съобщения"
 
+#. Used for the count of unread mails in a folder
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Непрочетени: %1$d"
@@ -11220,9 +11745,21 @@ msgstr "Надстройте профила си"
 msgid "Upload"
 msgstr "Качи"
 
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Upload local file"
+msgid "Upload Recovery File"
+msgstr "Качване на локален файл"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "Upload file"
+msgstr "Качи файл"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#, fuzzy
+#| msgid "Upload file"
+msgid "Upload files"
 msgstr "Качи файл"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
@@ -11271,6 +11808,16 @@ msgstr "Спешност"
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Use %1$s"
 msgstr "Използвайте %1$s"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Use Yubikey's One Time Password System"
+msgstr ""
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Use a FIDO2 compatible device to authenticate your identity."
+msgstr ""
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Use browser default"
@@ -11381,6 +11928,12 @@ msgstr "Потребителското име не трябва да е праз
 msgid "Vacation notice"
 msgstr "Известие за почивка"
 
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Notification sounds"
+msgid "Verification Options"
+msgstr "Известяването звучи"
+
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer
 msgid "Version Comment"
@@ -11419,11 +11972,10 @@ msgstr "Видео"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
-#: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
-#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "View"
 msgstr "Изглед"
 
@@ -11458,14 +12010,17 @@ msgstr "Виж кода"
 msgid "View the folder"
 msgstr "Прегледайте папката"
 
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
+#: module:io.ox/core/viewer
+#, fuzzy
+#| msgid "Delete version"
+msgid "View this version"
+msgstr "Изтриване на версията"
+
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Viewer"
 msgstr "Viewer"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Viewer Toolbar"
-msgstr "Лента с инструменти на Viewer"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Visibility"
@@ -11529,6 +12084,10 @@ msgstr[1] ""
 #: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "Weather • Season"
 msgstr "Weather • Season"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Web auth"
+msgstr ""
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "WebDAV"
@@ -11637,11 +12196,11 @@ msgstr ""
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid ""
-"When a file has more than 1 version, older versions of the file will be "
-"deleted after next login"
+"When a file has more than 1 additional version, older versions will be "
+"deleted when a new version is created"
 msgid_plural ""
-"When a file has more than %1$d versions, older versions of the file will be "
-"deleted after next login"
+"When a file has more than %1$d additional versions, older versions will be "
+"deleted when a new version is created"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -11722,14 +12281,6 @@ msgstr "Жълто зелен"
 msgid "Yes"
 msgstr "Да"
 
-#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
-msgid "Yes, send without subject"
-msgstr "Да, изпрати без тема"
-
-#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
-msgid "Yes, with empty attachment"
-msgstr "Да, с празен прикачен файл"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/find/date/patterns.js module:io.ox/core apps/io.ox/mail/util.js
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
@@ -11753,17 +12304,6 @@ msgstr ""
 msgid "You are currently signed in with the following devices"
 msgstr "В момента сте влезли в профила си от следните устройства"
 
-#. %1$s used disk space
-#. %2$s total disk space
-#. %3$s free disk space
-#: apps/io.ox/files/guidance/statistics.js module:io.ox/files
-msgid ""
-"You are currently using %1$s of your %2$s available disk space. You have "
-"%3$s left. "
-msgstr ""
-"Понастоящем използвате %1$s от вашето %2$s свободно дисково пространство. "
-"Имате останали %3$s . "
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "You are no longer using a shared calendar. You were added as organizer."
 msgstr ""
@@ -11781,14 +12321,6 @@ msgstr "Вие сте организаторът"
 msgid ""
 "You are using a shared calendar. The calendar owner was added as organizer."
 msgstr ""
-
-#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
-msgid ""
-"You attached an empty file. It could be, that this file has been deleted on "
-"your hard drive. Send it anyway?"
-msgstr ""
-"Прикрепихте празен файл. Възможно е този файл да е изтрит на твърдия ви "
-"диск. Изпрати го така или иначе?"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid ""
@@ -11818,6 +12350,12 @@ msgstr ""
 "Можете да управлявате известията на работния плот по всяко време, като "
 "посетите настройките си"
 
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Можете бързо да запазите промените си чрез Ctrl + Enter."
@@ -11834,6 +12372,10 @@ msgstr "Не можете да премествате елементи в таз
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to virtual folders"
 msgstr "Не можете да премествате елементи във виртуални папки"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "You cannot open more than %1$s drafts at the same time."
+msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You declined this appointment"
@@ -11966,6 +12508,24 @@ msgstr "Трябва да използвате Android %n или по-нова �
 msgid "You need to use iOS %n or higher."
 msgstr "Трябва да използвате iOS %n или по-нова версия."
 
+#: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
+msgid ""
+"You secured your account with 2-Step Verification. Please enter the "
+"verification code from the Authenticator App."
+msgstr ""
+
+#: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
+msgid ""
+"You secured your account with 2-Step Verification. Please enter the "
+"verification code we sent to the phone *****%s."
+msgstr ""
+
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid ""
+"You secured your account with 2-Step Verification. Please use your "
+"authentication token to complete verification."
+msgstr ""
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "You share this folder with other users"
 msgstr "Споделяте тази папка с други потребители"
@@ -12013,19 +12573,6 @@ msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr ""
 "Функцията \"бисквитка\" на браузъра ви е деактивирана Моля, включете го."
 
-#. %1$s used disk space
-#. %2$s total disk space
-#. %3$s free disk space
-#: apps/io.ox/files/guidance/statistics.js module:io.ox/files
-msgid ""
-"Your capacity is shared with all members of your group. Your group is "
-"currently using %1$s of its %2$s available disk space. The amount of free "
-"space is %3$s. "
-msgstr ""
-"Капацитетът ви е споделен с всички членове на вашата група. В момента вашата "
-"група използва %1$s от своето налично дисково пространство %2$s . Размерът "
-"на свободното пространство е %3$s . "
-
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your credentials will be sent over a secure connection only"
 msgstr "Вашите акредитиви ще бъдат изпратени само по сигурна връзка"
@@ -12033,6 +12580,19 @@ msgstr "Вашите акредитиви ще бъдат изпратени с�
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Текущата ви парола"
+
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+#, fuzzy
+#| msgid "Default reminder for appointments in birthday calendar"
+msgid "Your default reminders will be applied to these calendars."
+msgstr "По подразбиране напомняне за срещи в рождения ден"
+
+#: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Default reminder for appointments in birthday calendar"
+msgid "Your default reminders will be applied to this calendar."
+msgstr "По подразбиране напомняне за срещи в рождения ден"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Your feedback"
@@ -12127,6 +12687,15 @@ msgstr "Вашата часова зона"
 #: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js module:io.ox/mail
 msgid "Your vacation notice is active"
 msgstr "Вашата бележка за ваканцията е активна"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Yubikey"
+msgstr ""
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Yubikey, Google Security Keys, or compatible FIDO device"
+msgstr ""
 
 #. Zettabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
@@ -12383,6 +12952,12 @@ msgstr "редактиране на собствени обекти"
 msgid "ends:"
 msgstr "завършва:"
 
+#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
+#, fuzzy
+#| msgid "Error"
+msgid "error"
+msgstr "Грешка"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "fifth / last"
 msgstr "пети / последен"
@@ -12561,6 +13136,12 @@ msgstr "списък на наличните устройства"
 msgid "list of available platforms"
 msgstr "списък на наличните платформи"
 
+#: apps/io.ox/help/main.js module:io.ox/help
+#, fuzzy
+#| msgid "Upload file"
+msgid "loading"
+msgstr "Качи файл"
+
 #. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
 #. This fragment appears within a long string for screen readers
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
@@ -12678,6 +13259,14 @@ msgstr "четене на всички обекти"
 msgid "read own objects"
 msgstr "четене на собствени обекти"
 
+#. this is a file name that stores the a long recovery code
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+#, fuzzy
+#| msgid "Recover"
+msgid "recovery"
+msgstr "възвръщам"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
 msgstr "червен"
@@ -12719,10 +13308,15 @@ msgstr "шест месеца"
 msgid "size"
 msgstr "размер"
 
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
 msgid "subscribe to calendar"
 msgstr "абонирайте се за календар"
+
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+msgid "sync via DAV"
+msgstr ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "tentative"
@@ -12871,9 +13465,6 @@ msgstr "вашата платформа"
 #~ msgid "%1$s %2$s %3$s %4$s %5$s."
 #~ msgstr "%1$s %2$s %3$s %4$s %5$s."
 
-#~ msgid "%1$s %2$s %3$s %4$s."
-#~ msgstr "%1$s %2$s %3$s %4$s."
-
 #~ msgid "%1$s (Tentative)"
 #~ msgstr "%1$s (Tentative)"
 
@@ -12957,19 +13548,38 @@ msgstr "вашата платформа"
 #~ msgid "(current app)"
 #~ msgstr "Сегашна дата"
 
+#~ msgid "1 minute"
+#~ msgstr "1 минута"
+
+#~ msgid "3 minutes"
+#~ msgstr "3 минути"
+
+#~ msgid "A severe error occurred!"
+#~ msgstr "Възникна тежка грешка!"
+
 #~ msgid "Absent"
 #~ msgstr "Отсъстващ"
+
+#~ msgctxt "help"
+#~ msgid "Accessing Files with WebDAV"
+#~ msgstr "Достъп до файлове през WebDAV"
 
 #, fuzzy
 #~ msgid "Account Settings"
 #~ msgstr "Акаунт настройки"
 
+#~ msgid "Add folder"
+#~ msgstr "Добави папка"
+
 #, fuzzy
 #~ msgid "Add new account"
 #~ msgstr "Добави мейл акаунт"
 
-#~ msgid "Applications"
-#~ msgstr "Приложения"
+#~ msgid "Add original message as attachment"
+#~ msgstr "Добавете оригиналното съобщение като прикачен файл"
+
+#~ msgid "Add to Favorites"
+#~ msgstr "Добави към любими"
 
 #~ msgid "Appointment list"
 #~ msgstr "Списък със срещи"
@@ -12979,6 +13589,9 @@ msgstr "вашата платформа"
 
 #~ msgid "August"
 #~ msgstr "Август"
+
+#~ msgid "Auto-save email drafts"
+#~ msgstr "Авто-записване на мейл чернови"
 
 #~ msgid "Back to appointment"
 #~ msgstr "Обратно към срещата"
@@ -12998,6 +13611,9 @@ msgstr "вашата платформа"
 #~ msgid "Calendar:"
 #~ msgstr "Календар:"
 
+#~ msgid "Capacity"
+#~ msgstr "Капацитет"
+
 #, fuzzy
 #~ msgid "Changes have been saved."
 #~ msgstr "Промените са запазени"
@@ -13005,6 +13621,9 @@ msgstr "вашата платформа"
 #, fuzzy
 #~ msgid "Chrome %1$s on %2$s"
 #~ msgstr "Сподели \"%1$s\""
+
+#~ msgid "Click here to quit the help center"
+#~ msgstr "Кликнете тук, за да излезете от Помощния център"
 
 #, fuzzy
 #~ msgid "Close for %1$s"
@@ -13015,9 +13634,6 @@ msgstr "вашата платформа"
 #~ msgid "Close recurrence view"
 #~ msgstr "Редактирай правило"
 
-#~ msgid "Close reminder for %1$s"
-#~ msgstr "Затваряне на напомняне за %1$s"
-
 #~ msgid "Common"
 #~ msgstr "Общи"
 
@@ -13026,8 +13642,14 @@ msgstr "вашата платформа"
 #~ msgid "Compact rows"
 #~ msgstr "Създай"
 
+#~ msgid "Compose new mail"
+#~ msgstr "Създайте нов мейл"
+
 #~ msgid "Content"
 #~ msgstr "Съдържание"
+
+#~ msgid "Continue"
+#~ msgstr "Продължи"
 
 #, fuzzy
 #~ msgid "Continue the presentation"
@@ -13043,6 +13665,10 @@ msgstr "вашата платформа"
 #, fuzzy
 #~ msgid "Create exception"
 #~ msgstr "Създай контакт"
+
+#~ msgctxt "help"
+#~ msgid "Creating Files"
+#~ msgstr "Създаване на файлове"
 
 #, fuzzy
 #~ msgid "Current session"
@@ -13077,6 +13703,13 @@ msgstr "вашата платформа"
 #~ msgid "Documents"
 #~ msgstr "Документ"
 
+#~ msgid "Draft saved at %1$s"
+#~ msgstr "Черновата е запазена в %1$s"
+
+#~ msgctxt "help"
+#~ msgid "Drive Settings"
+#~ msgstr "Настройки на Драйв"
+
 #, fuzzy
 #~| msgid "Signed in as %1$s"
 #~ msgid "Edge on %1$s"
@@ -13086,6 +13719,9 @@ msgstr "вашата платформа"
 #~| msgid "Edit names"
 #~ msgid "Edit categories"
 #~ msgstr "Редактирай имената"
+
+#~ msgid "Email 1 / Phone number"
+#~ msgstr "Имейл 1 / Телефонен номер"
 
 #~ msgid "Email addresses"
 #~ msgstr "Емейл адреси"
@@ -13151,11 +13787,18 @@ msgstr "вашата платформа"
 #~ msgid "IP Address: %1$s"
 #~ msgstr "Контакти"
 
+#, fuzzy
+#~| msgid "Images"
+#~ msgid "Image size:"
+#~ msgstr "Снимки"
+
 #~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
 #~ msgstr "Във часовата зона ( %1$s ): %2$s (Продължителност: %3$s )"
 
-#~ msgid "Is bigger than"
-#~ msgstr "Е по-голям от"
+#, fuzzy
+#~| msgid "Is smaller than"
+#~ msgid "Is smaller than (Size: B/KB/MB/GB)"
+#~ msgstr "Е по-малък от"
 
 #~ msgid "January"
 #~ msgstr "Януари"
@@ -13186,11 +13829,23 @@ msgstr "вашата платформа"
 #~ msgid "Line %1$d: %2$s"
 #~ msgstr "%1$d %2$s"
 
+#~ msgid "Load full mail"
+#~ msgstr "Заредете цялата поща"
+
+#~ msgid "Loading the full mail might lead to performance problems."
+#~ msgstr ""
+#~ "Зареждането на цялата поща може да доведе до проблеми с "
+#~ "производителността."
+
 #~ msgid "Mail Details"
 #~ msgstr "Мейл Детайли"
 
 #~ msgid "Mail saved as draft"
 #~ msgstr "Мейл записан като чернова"
+
+#~ msgctxt "help"
+#~ msgid "Managing Files"
+#~ msgstr "Управление на файлове"
 
 #~ msgid "March"
 #~ msgstr "Март"
@@ -13221,6 +13876,12 @@ msgstr "вашата платформа"
 #~ msgid "Never."
 #~ msgstr "Никога"
 
+#~ msgid "New Mail"
+#~ msgstr "Нов Мейл"
+
+#~ msgid "New file"
+#~ msgstr "Нов файл"
+
 #~ msgid "Normal"
 #~ msgstr "Нормален"
 
@@ -13229,6 +13890,9 @@ msgstr "вашата платформа"
 
 #~ msgid "October"
 #~ msgstr "Октомври"
+
+#~ msgid "Open"
+#~ msgstr "Отвори"
 
 #~ msgid "Open in browser"
 #~ msgstr "Отвори в браузъра"
@@ -13254,8 +13918,23 @@ msgstr "вашата платформа"
 #~ msgid "Please select at least one participant"
 #~ msgstr "Моля, изберете поне един участник"
 
+#~ msgid "Pop out"
+#~ msgstr "Изкача"
+
+#~ msgid "Publication must have a site."
+#~ msgstr "Публикуването трябва да има сайт."
+
+#~ msgid "Publication must have a target."
+#~ msgstr "Публикуването трябва да има цел."
+
+#~ msgid "Publications and Subscriptions"
+#~ msgstr "Публикации и абонаменти"
+
 #~ msgid "Quick reply"
 #~ msgstr "Бърз отговор"
+
+#~ msgid "Quick reply: %1$s"
+#~ msgstr "Бърз отговор: %1$s"
 
 #~ msgid "Quit"
 #~ msgstr "Изход"
@@ -13266,12 +13945,18 @@ msgstr "вашата платформа"
 #~ msgid "Receive notification for appointment changes"
 #~ msgstr "Получаване на известие за промени в назначенията"
 
+#~ msgid "Related articles"
+#~ msgstr "Свързани статии"
+
 #, fuzzy
 #~ msgid "Remove restore point: \"%1$s\""
 #~ msgstr "Покани към нова среща"
 
 #~ msgid "Reply All"
 #~ msgstr "Отговори всички"
+
+#~ msgid "Reply to all"
+#~ msgstr "Отговори на всички"
 
 #~ msgid "Run auto-play mode"
 #~ msgstr "Изпълнете режима на автоматично възпроизвеждане"
@@ -13313,6 +13998,22 @@ msgstr "вашата платформа"
 #~ msgctxt "app"
 #~ msgid "Settings"
 #~ msgstr "Настройки"
+
+#~ msgid "Share current folder"
+#~ msgstr "Споделяне на текущата папка"
+
+#~ msgid "Share selected file"
+#~ msgid_plural "Share selected files"
+#~ msgstr[0] "Сподели избрания файл"
+#~ msgstr[1] "Сподели избраните файлове"
+
+#~ msgid "Share selected folder"
+#~ msgid_plural "Share selected folders"
+#~ msgstr[0] "Сподели избраната папка"
+#~ msgstr[1] "Сподели избраните папки"
+
+#~ msgid "Share selected objects"
+#~ msgstr "Споделете избраните обекти"
 
 #, fuzzy
 #~ msgid "Show all images for"
@@ -13358,12 +14059,15 @@ msgstr "вашата платформа"
 #~ msgid "Subscribe address book"
 #~ msgstr "Скрити контакти"
 
-#, fuzzy
-#~ msgid "Subscribe calendar"
-#~ msgstr "Добави нов календар"
+#~ msgid "Task was modified before, please reload"
+#~ msgstr "Заданието бе променена преди, моля, презаредете"
 
 #~ msgid "Text"
 #~ msgstr "Текст"
+
+#~ msgctxt "help"
+#~ msgid "The Drive App"
+#~ msgstr "Приложението \"Драйв\""
 
 #~ msgid ""
 #~ "There are more than %n appointments in the current calendar. Some "
@@ -13371,6 +14075,22 @@ msgstr "вашата платформа"
 #~ msgstr ""
 #~ "Има повече от %n срещи в текущия календар. Някои функции са деактивирани "
 #~ "поради причини, свързани с ефективността."
+
+#~ msgid ""
+#~ "These statistics only include folders, which have a depth less than four "
+#~ "in the folder structure from the folder \"%1$s\"."
+#~ msgstr ""
+#~ "Тези статистически данни включват само папки, които имат дълбочина по-"
+#~ "малка от четири в структурата на папките от папката \\ \" %1$s \"."
+
+#~ msgid "This folder has publications and/or subscriptions"
+#~ msgstr "Тази папка има публикации и / или абонаменти"
+
+#~ msgid "Top 10 file types"
+#~ msgstr "Топ 10 файлови типове"
+
+#~ msgid "Top 10 folder size"
+#~ msgstr "Топ 10 на папката (размер)"
 
 #~ msgid "Town"
 #~ msgstr "Град"
@@ -13381,16 +14101,40 @@ msgstr "вашата платформа"
 #~ msgstr "Незнаен подател"
 
 #, fuzzy
-#~| msgid "Upload file"
-#~ msgid "Upload handling"
-#~ msgstr "Качи файл"
-
-#, fuzzy
 #~ msgid "View attachment"
 #~ msgstr "Преглед на прикачен файл"
 
+#~ msgid "Viewer Toolbar"
+#~ msgstr "Лента с инструменти на Viewer"
+
 #~ msgid "Years"
 #~ msgstr "Години"
+
+#~ msgid "Yes, with empty attachment"
+#~ msgstr "Да, с празен прикачен файл"
+
+#~ msgid ""
+#~ "You are currently using %1$s of your %2$s available disk space. You have "
+#~ "%3$s left. "
+#~ msgstr ""
+#~ "Понастоящем използвате %1$s от вашето %2$s свободно дисково пространство. "
+#~ "Имате останали %3$s . "
+
+#~ msgid ""
+#~ "You attached an empty file. It could be, that this file has been deleted "
+#~ "on your hard drive. Send it anyway?"
+#~ msgstr ""
+#~ "Прикрепихте празен файл. Възможно е този файл да е изтрит на твърдия ви "
+#~ "диск. Изпрати го така или иначе?"
+
+#~ msgid ""
+#~ "Your capacity is shared with all members of your group. Your group is "
+#~ "currently using %1$s of its %2$s available disk space. The amount of free "
+#~ "space is %3$s. "
+#~ msgstr ""
+#~ "Капацитетът ви е споделен с всички членове на вашата група. В момента "
+#~ "вашата група използва %1$s от своето налично дисково пространство %2$s . "
+#~ "Размерът на свободното пространство е %3$s . "
 
 #~ msgid "and"
 #~ msgstr "и"

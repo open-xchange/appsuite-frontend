@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Contacts: Check for XSS in PIM attachment in contacts').tag('6');
+Feature('Contacts');
 
 Before(async function (users) {
     await users.create();
@@ -36,6 +36,4 @@ Scenario.skip('adds an malicious attachment to a contact', async function (I) {
 
     I.click('#io-ox-refresh-icon');
     I.waitForVisible('.attachments-container');
-
-    I.logout();
 });

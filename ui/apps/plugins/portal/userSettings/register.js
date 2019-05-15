@@ -113,10 +113,11 @@ define('plugins/portal/userSettings/register', [
             })
             .addCancelButton()
             .addButton({ label: isGuest ? gt('Change password') : gt('Change password and sign out'), action: 'change' })
-            .on('change', function (e, data, dialog) {
+            .on('change', function () {
 
                 // we change empty string to null to be consistent
-                var node = dialog.$body,
+                var dialog = this,
+                    node = dialog.$body,
                     newPassword1 = newPass.val() === '' ? null : newPass.val(),
                     newPassword2 = newPass2.val() === '' ? null : newPass2.val(),
                     oldPassword = oldPass.val() === '' ? null : oldPass.val();
@@ -229,7 +230,7 @@ define('plugins/portal/userSettings/register', [
             if (internalUserEdit) {
                 content.append(
                     // user data
-                    $('<div class="action" role="button" tabindex="0">').text(gt('My contact data'))
+                    $('<button class="action" type="button">').text(gt('My contact data'))
                     .on('click keypress', { fn: changeUserData }, keyClickFilter)
 
                 );
@@ -238,7 +239,7 @@ define('plugins/portal/userSettings/register', [
             // check for capability
             if (passwordEdit) {
                 content.append(
-                    $('<div class="action" role="button" tabindex="0">').text(gt('My password'))
+                    $('<button class="action" type="button">').text(gt('My password'))
                     .on('click keypress', { fn: changePassword }, keyClickFilter)
                 );
             }

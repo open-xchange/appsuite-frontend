@@ -12,7 +12,7 @@
 
 const moment = require('moment-timezone');
 
-Feature('Calendar: Switch timezones').tag('3');
+Feature('Calendar Create');
 
 Before(async function (users) {
     await users.create();
@@ -141,8 +141,4 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
 
     I.seeNumberOfElements('.workweek .weekday', 3);
-    I.wait(1);
-
-    I.logout();
-
 });

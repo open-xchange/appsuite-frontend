@@ -1409,7 +1409,7 @@ define('io.ox/calendar/week/view', [
                     numTimeslots = this.getNumTimeslots();
                     offsetSlots = Math.floor((e.pageY - $(e.currentTarget).offset().top) / cellHeight);
 
-                    this.$('[data-cid="' + model.cid + '"]').addClass('resizing').removeClass('current hover');
+                    this.$('[data-cid="' + model.cid + '"]').addClass('resizing').removeClass('hover');
                 },
                 update: function (e) {
                     if (!this.$el.hasClass('no-select')) {

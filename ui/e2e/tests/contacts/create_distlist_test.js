@@ -10,7 +10,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-Feature('Contacts: Create new distributionlist').tag('6');
+Feature('Contacts > Distributionlist');
 
 Before(async function (users) {
     await users.create();
@@ -59,6 +59,4 @@ Scenario('adds a unsaved contact', function (I) {
     I.click('Create list', '.io-ox-contacts-distrib-window');
 
     I.waitForDetached('.io-ox-contacts-distrib-window');
-
-    I.logout();
 });

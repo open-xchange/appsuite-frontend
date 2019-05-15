@@ -30,7 +30,7 @@ define('io.ox/core/folder/tree', [
 
     var TreeView = DisposableView.extend({
 
-        attributes: { role: 'complementary' },
+        attributes: { role: 'navigation' },
 
         className: 'folder-tree',
 

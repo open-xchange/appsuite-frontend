@@ -17,6 +17,10 @@ msgstr ""
 msgid "Add another account"
 msgstr ""
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr ""
+
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
 msgstr ""
@@ -25,10 +29,25 @@ msgstr ""
 msgid "Adding further details"
 msgstr ""
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr ""
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "At the top you can find the toolbar with many functions and additional "
 "options. You can easily create new folders, new files and much more."
+msgstr ""
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
 msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -112,6 +131,12 @@ msgstr ""
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
+msgstr ""
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
 msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -301,6 +326,10 @@ msgstr ""
 msgid "Navigation bar"
 msgstr ""
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr ""
+
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "On the left you can see the folder tree. It displays your folder structure "
@@ -345,8 +374,16 @@ msgstr ""
 msgid "Reading the details"
 msgstr ""
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr ""
+
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
+msgstr ""
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
 msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -355,6 +392,12 @@ msgstr ""
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
 msgid "Selecting a view"
+msgstr ""
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
 msgstr ""
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -391,6 +434,10 @@ msgstr ""
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Sorting your E-Mails"
+msgstr ""
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
 msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -465,6 +512,12 @@ msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The toolbar"
+msgstr ""
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
 msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -704,6 +757,11 @@ msgstr ""
 msgid "Using the reminder function"
 msgstr ""
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr ""
+
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Welcome to %s"
 msgstr ""
@@ -714,4 +772,10 @@ msgid ""
 "your new online storage solution - your one point to access online stored "
 "files from all your accounts. This is where you can upload and save your "
 "files, share them and synchronize them with different devices.  "
+msgstr ""
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
 msgstr ""

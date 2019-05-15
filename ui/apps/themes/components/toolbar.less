@@ -171,10 +171,19 @@
                 align-items: center;
                 height: 100%;
 
-                &:focus {
+                &:focus:not(.disabled) {
                     background: transparent;
                     color: @link-color;
                 }
+
+                &.disabled {
+                    text-decoration: none;
+
+                    &:focus {
+                        background: transparent;
+                    }
+                }
+
             }
         }
         i.fa {

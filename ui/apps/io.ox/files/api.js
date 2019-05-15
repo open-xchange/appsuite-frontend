@@ -156,7 +156,7 @@ define('io.ox/files/api', [
             return (/^application\/pdf$/).test(type || this.getMimeType());
         },
 
-        isZIP: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPDF` that already did exist.
+        isZIP: function (type) {
             return (/^application\/zip$/).test(type || this.getMimeType());
         },
 
@@ -164,17 +164,17 @@ define('io.ox/files/api', [
             return /^(text\/plain|application\/rtf|text\/rtf)$/.test(type || this.getMimeType());
         },
 
-        isWordprocessing: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPresentation` that already did exist.
+        isWordprocessing: function (type) {
             return (/^application\/(?:msword|vnd\.(?:ms-word|openxmlformats-officedocument\.wordprocessingml|oasis\.opendocument\.text))/).test(type || this.getMimeType());
         },
-        isSpreadsheet: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPresentation` that already did exist.
+        isSpreadsheet: function (type) {
             return (/^application\/(?:excel|vnd\.(?:ms-excel|openxmlformats-officedocument\.spreadsheetml|oasis\.opendocument\.spreadsheet))/).test(type || this.getMimeType());
         },
         isPresentation: function (type) {
             return (/^application\/(?:powerpoint|vnd\.(?:ms-powerpoint|openxmlformats-officedocument\.presentationml|oasis\.opendocument\.presentation))/).test(type || this.getMimeType());
         },
 
-        isPgp: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPDF` that already did exist.
+        isPgp: function (type) {
             return (/^application\/pgp(?:-encrypted)*$/).test(type) || this.isGuard();
         },
         isGuard: function () {

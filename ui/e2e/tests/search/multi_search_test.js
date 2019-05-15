@@ -1,0 +1,113 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2019 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Ejaz Ahmed <ejaz.ahmed@open-xchange.com>
+ *
+ */
+/// <reference path="../../steps.d.ts" />
+const { expect } = require('chai');
+Feature('Mail > Search');
+
+Before(async (users) => {
+    await users.create();
+    await users.create();
+});
+
+After(async (users) => {
+    await users.removeAll();
+});
+const searchField = 'input[type=search]';
+
+function getTestMail(from, to, opt) {
+    opt = opt || {};
+    return {
+        attachments: [{
+            content: opt.content,
+            content_type: 'text/html',
+            disp: 'inline'
+        }],
+        from: [[from.get('displayname'), from.get('primaryEmail')]],
+        sendtype: 0,
+        subject: opt.subject,
+        to: [[to.get('displayname'), to.get('primaryEmail')]],
+        folder_id: opt.folder,
+        flags: opt.flags
+    };
+}
+
+Scenario('[C8407] Perform a multi search', async function (I, users) {
+    const [user1, user2] = users;
+
+    await I.haveMail(getTestMail(user1, user2, {
+        subject: 'test 123',
+        content: ''
+    }));
+    await I.haveMail(getTestMail(user1, user2, {
+        subject: 'test',
+        content: ''
+    }));
+    //let searchField = 'input[type=search]';
+
+    I.login('app=io.ox/mail', { user: user2 });
+    I.click('.search-box');
+    I.waitForFocus(searchField);
+    I.fillField(searchField, 'test');
+    I.pressKey('Enter');
+    I.waitForVisible('.list-view [data-index="0"]');
+    I.waitForVisible('.list-view [data-index="1"]');
+    I.wait(1);
+    I.fillField(searchField, '123');
+    I.pressKey('Enter');
+    I.waitForElement('.list-view [data-index="0"]');
+    I.waitForInvisible('.list-view [data-index="1"]');
+});
+
+
+Scenario('[C8406] Delete a string from multi search', async function (I, users) {
+    const [user1, user2] = users;
+
+    await I.haveMail(getTestMail(user1, user2, {
+        subject: 'test 123',
+        content: ''
+    }));
+    await I.haveMail(getTestMail(user1, user2, {
+        subject: 'test',
+        content: ''
+    }));
+    //let searchField = 'input[type=search]';
+
+    I.login('app=io.ox/mail', { user: user2 });
+    I.click('.search-box');
+    I.waitForFocus(searchField);
+    I.fillField(searchField, 'test');
+    I.pressKey('Enter');
+    I.waitForVisible('.list-view [data-index="0"]');
+    I.waitForVisible('.list-view [data-index="1"]');
+    I.wait(1);
+    I.fillField(searchField, '123');
+    I.pressKey('Enter');
+    I.waitForElement('.list-view [data-index="0"]');
+    I.waitForInvisible('.list-view [data-index="1"]');
+    I.click('span[title="123"] + a ');
+    I.waitForVisible('.list-view [data-index="0"]');
+    I.waitForVisible('.list-view [data-index="1"]');
+
+
+});
+
+Scenario('[C8408] Try to run a script in search', async function (I) {
+
+    I.login();
+    I.click('.search-box');
+    I.waitForFocus(searchField);
+    I.fillField(searchField, '<script>alert(1)</script>');
+    I.pressKey('Enter');
+    let text = await I.grabPopupText();
+    expect(!!text).to.be.false;
+});

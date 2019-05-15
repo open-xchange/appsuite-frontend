@@ -63,7 +63,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             var title_id = _.uniqueId('title');
             this.$el
                 .toggleClass('maximize', !!options.maximize)
-                .attr({ role: 'dialog', 'aria-labelledby': title_id })
+                .attr({ role: 'dialog', 'aria-modal': true, 'aria-labelledby': title_id })
                 .append(
                     $('<div class="modal-dialog" role="document">').width(options.width).append(
                         $('<div class="modal-content">').append(
@@ -193,9 +193,13 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             }
         },
 
-        toggleAriaHidden: function (state) {
-            // require for proper screen reader use
-            this.$el.siblings(':not(script,noscript)').attr('aria-hidden', !!state);
+        toggleAriaHidden: function () {
+            // A11y: This function may be removed in the future (needs more testing)
+            //
+            // New:
+            // Uses new WCAG 1.1 aria-modal on role="dialog" element
+            // Old:
+            // this.$el.siblings(':not(script,noscript)').attr('aria-hidden', !!state);
         },
 
         disableFormElements: function () {

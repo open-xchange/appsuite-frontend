@@ -25,7 +25,7 @@ define('io.ox/calendar/actions/delete', [
     return function (list) {
         api.getList(list).done(function (list) {
             var displayComment = _(list).every(function (event) {
-                    return (event.hasFlag('organizer') || (event.hasFlag('organizer_on_behalf') && !event.hasFlag('attendee'))) && event.get('attendees').length > 1;
+                    return (event.hasFlag('organizer') || (event.hasFlag('organizer_on_behalf') && !event.hasFlag('attendee'))) && event.hasFlag('scheduled');
                 }),
                 guid,
                 model = new Backbone.Model({ comment: '' }),
@@ -80,13 +80,15 @@ define('io.ox/calendar/actions/delete', [
             }
             dialog = new ModalDialog({
                 title: displayComment ? gt('Delete appointment') : text,
-                description: displayComment ? [$('<div>').text(text), commentView] : false
+                // we need a flat array to avoid object object text here
+                description: displayComment ? _([$('<div>').text(text), commentView]).flatten() : false
             })
             .addCancelButton({ left: true })
             .on('action', function (action) {
                 if (action === 'cancel') return;
                 cont(action);
             });
+            dialog.$el.addClass('delete-dialog');
 
             if (hasSeries) {
                 dialog.addButton({ label: gt('This appointment'), action: 'appointment', className: 'btn-default' });

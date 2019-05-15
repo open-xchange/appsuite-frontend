@@ -1,0 +1,51 @@
+Return-Path: <dpondruff@debian>
+Delivered-To: mwagner@debian
+Received: from debian (localhost [127.0.0.1])
+	by debian.localdomain (Postfix) with ESMTPS id B6BAE40684
+	for <mwagner@debian>; Thu, 11 Apr 2019 14:24:15 +0200 (CEST)
+Date: Thu, 11 Apr 2019 14:24:15 +0200 (CEST)
+From: Daniel Pondruff <dpondruff@debian>
+Reply-To: Daniel Pondruff <dpondruff@debian>
+To: Markus Wagner <mwagner@debian>
+Message-ID: <1801792081.1.1554985455661@192.168.69.152>
+Subject: C273802
+MIME-Version: 1.0
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_0_1717149829.1554985455612"
+X-Priority: 3
+Importance: Medium
+X-Mailer: Open-Xchange Mailer v7.10.2-Rev1
+X-Originating-Client: open-xchange-appsuite
+
+------=_Part_0_1717149829.1554985455612
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<!doctype html>
+<html>
+ <head> 
+  <meta charset="UTF-8"> 
+ </head>
+ <body>
+  <div class="default-style">
+   ...
+  </div> 
+ </body>
+</html>
+------=_Part_0_1717149829.1554985455612
+Content-Type: text/plain; charset=ISO-8859-1; name=no_virus.txt
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename=no_virus.txt
+X-Part-Id: 675deb78c0a64b4ea286eace3ca1f862
+
+
+------=_Part_0_1717149829.1554985455612
+Content-Type: text/plain; charset=ISO-8859-1; name="eicar (11).txt"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="eicar (11).txt"
+X-Part-Id: 04b63ff73202406bb3db5a8ce8ff7b57
+
+WDVPIVAlQEFQWzRcUFpYNTQoUF4pN0NDKTd9JEVJQ0FSLVNUQU5EQVJELUFOVElWSVJVUy1URVNU
+LUZJTEUhJEgrSCo=
+------=_Part_0_1717149829.1554985455612--

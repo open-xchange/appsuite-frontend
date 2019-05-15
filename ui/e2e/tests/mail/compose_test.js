@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Mail compose').tag('3');
+Feature('Mail Compose');
 
 Before(async function (users) {
     await users.create();
@@ -34,8 +34,8 @@ Scenario('Compose plain text mail', function (I, users) {
     I.selectFolder('Compose');
 
     // set compose mode to html
-    I.waitForVisible('[name="messageFormat"][value="html"] + i');
-    I.checkOption({ css: '[name="messageFormat"][value="html"] + i' });
+    I.wait(2);
+    I.checkOption('HTML');
 
     // 1) Switch to the mail app, select "Create mail"
     I.openApp('Mail');

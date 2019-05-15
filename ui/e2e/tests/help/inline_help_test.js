@@ -10,7 +10,7 @@
  * @author Björn Köster <bjoern.koester@open-xchange.com>
  */
 
-Feature('Inline help');
+Feature('General > Inline help');
 
 Before(async function (users) {
     await users.create();
@@ -43,7 +43,7 @@ Scenario('Open the help app in a modal', async function (I) {
     I.login('app=io.ox/mail');
     I.waitForVisible({ css: '[data-app-name="io.ox/mail"]' }, 5);
 
-    I.click('Compose', '.classic-toolbar');
+    I.click('Compose');
     I.retry().waitForVisible('.io-ox-mail-compose-window', 5);
     I.see('Compose', '.io-ox-mail-compose-window');
 

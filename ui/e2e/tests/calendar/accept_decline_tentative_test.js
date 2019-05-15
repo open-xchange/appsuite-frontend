@@ -12,7 +12,7 @@
 
 const moment = require('moment');
 
-Feature('Calendar: Create appointment').tag('2');
+Feature('Calendar Create');
 
 Before(async function (users) {
     await users.create();
