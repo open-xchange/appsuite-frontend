@@ -692,7 +692,8 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.login('app=io.ox/calendar');
 
     // Delete single appointment without additional participants => no comment field
-    I.click(locate('.appointment').withText('Appointment1'));
+    I.waitForVisible('.appointment');
+    I.click('Appointment1', '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
     I.retry(5).click('Delete');
     I.waitForText('Do you want to delete this appointment');
@@ -701,7 +702,7 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.waitForDetached('.io-ox-sidepopup');
 
     // Delete recurring appointment without additional participants => no comment field
-    I.click(locate('.appointment').withText('Appointment2'));
+    I.click('Appointment2', '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
     I.retry(5).click('Delete');
     I.waitForText('Do you want to delete the whole series or just this appointment within the series?');
@@ -710,7 +711,7 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.waitForDetached('.io-ox-sidepopup');
 
     // Delete single appointment with additional participants => comment field
-    I.click(locate('.appointment').withText('Appointment3'));
+    I.click('Appointment3', '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
     I.retry(5).click('Delete');
     I.waitForText('Delete appointment');
@@ -720,7 +721,7 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.waitForDetached('.io-ox-sidepopup');
 
     // Delete recurring appointment with additional participants => comment field
-    I.click(locate('.appointment').withText('Appointment4'));
+    I.click('Appointment4', '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
     I.retry(5).click('Delete');
     I.waitForText('Delete appointment');
