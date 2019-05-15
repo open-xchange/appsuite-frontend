@@ -59,7 +59,7 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users)
     rightClick();
     clickAction('io.ox/mail/actions/source');
     I.waitForElement('.mail-source-dialog');
-    I.click('Close');
+    I.click('Close', '.modal-footer');
 
     // Move
     rightClick();
@@ -74,7 +74,7 @@ Scenario('[C248438] Context menu can be opened by right click', async (I, users)
     I.seeInField('subject', 'Re: ' + subject);
     // no better approach yet. I.waitForMailCompose() might be a good one
     I.wait(1);
-    I.click('Close');
+    I.click('Discard');
 
     // // Shift-F10 (view source again)
     // --- DOES NOT WORK YET -----
