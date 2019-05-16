@@ -1,3 +1,4 @@
+/* eslint-env node, es6  */
 var fs = require('fs');
 var _ = require('underscore');
 var localConf = {};
@@ -15,7 +16,7 @@ module.exports.config = {
     helpers: {
         WebDriver: _.extend({}, {
             url: process.env.LAUNCH_URL || 'http://localhost:8337/appsuite/',
-            host: process.env.SELENIUM_HOST || '10.50.0.94',
+            host: process.env.SELENIUM_HOST || 'localhost',
             smartWait: 1000,
             waitForTimeout: 30000,
             browser: 'chrome',
