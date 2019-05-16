@@ -379,6 +379,7 @@ Scenario('[C252158] All my public appointments', (I, users) => {
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
     // 6. User#B: Enable "All my public appointments" view and disable Cal#A
+    I.waitForVisible('~Public calendars');
     I.click('.fa.fa-caret-right', '~Public calendars');
     I.seeElement('div[title="All my public appointments"] .color-label.selected');
     I.dontSeeElement('div[title="Cal#A"] .color-label.selected');
