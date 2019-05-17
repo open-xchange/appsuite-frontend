@@ -48,7 +48,7 @@ After(async (users) => {
 });
 
 
-Scenario('[C7775] Append vCard when sending mail', async (I, users) => {
+Scenario('[C7775] Append vCard when sending mail @shaky', async (I, users) => {
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
     const user = users[0];
 

@@ -347,7 +347,7 @@ Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December
     });
 });
 
-Scenario('[C7418] Create a Yearly recurring appointment last day of week in december, ends after 5', async function (I) {
+Scenario('[C7418] Create a Yearly recurring appointment last day of week in december, ends after 5 @shaky', async function (I) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -488,7 +488,7 @@ Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/20
 
 });
 
-Scenario('[C7420] Create a monthly recurring appointment every second Monday every month never ends', async function (I) {
+Scenario('[C7420] Create a monthly recurring appointment every second Monday every month never ends @shaky', async function (I) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -1915,7 +1915,7 @@ Scenario('[C7448] Cannot create private appointment', async function (I, users) 
     expect(await I.grabNumberOfVisibleElements('option[value="CONFIDENTIAL"]')).to.equal(0);
 });
 
-Scenario('[C234658] Create appointments and show this in cumulatively view', async function (I, users) {
+Scenario('[C234658] Create appointments and show this in cumulatively view @shaky', async function (I, users) {
     const
         Moment = require('moment'),
         MomentRange = require('moment-range'),

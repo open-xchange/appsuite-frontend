@@ -116,7 +116,7 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users) {
     });
 });
 
-Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users) {
+Scenario('[C107063] Revoke Permissions at "My shares" @shaky', async function (I, users) {
     session('Alice', () => {
         I.login('app=io.ox/files');
 

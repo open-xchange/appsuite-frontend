@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C244801] Set design', async (I) => {
+Scenario('[C244801] Set design @shaky', async (I) => {
 
     // dusk
     await I.haveSetting({ 'io.ox/core': { design: 'dusk' } });

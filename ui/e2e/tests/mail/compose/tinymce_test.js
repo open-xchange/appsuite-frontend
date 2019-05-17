@@ -1083,7 +1083,7 @@ const selectFontSize = (I, fontSize) => {
     I.click(locate('span.mce-text').withText(fontSize));
     I.waitForInvisible('.mce-floatpanel');
 };
-Scenario('[C7400] Send mail with multiple different text formatting - set before writting', async function (I, users) {
+Scenario('[C7400] Send mail with multiple different text formatting - set before writting @shaky', async function (I, users) {
 
     let [sender, recipient] = users;
 

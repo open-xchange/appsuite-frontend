@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C208269] Edit contact information', async (I, users) => {
+Scenario('[C208269] Edit contact information @shaky', async (I, users) => {
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
     // wait for form (the button we're interesting in has no meta data)
