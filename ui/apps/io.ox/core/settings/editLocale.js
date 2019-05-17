@@ -34,7 +34,7 @@ define('io.ox/core/settings/editLocale', [
             focus: '#settings-time',
             model: new Backbone.Model(),
             point: POINT,
-            title: gt('Customize regional settings'),
+            title: gt('Regional settings'),
             width: 480
         })
         .inject({
@@ -56,18 +56,6 @@ define('io.ox/core/settings/editLocale', [
                 return locale.getNumberFormats().map(function (format) {
                     return { label: format, value: format };
                 });
-            },
-            getFirstDayOfWeekOptions: function () {
-                return [
-                    { label: gt('Sunday'), value: 0 },
-                    { label: gt('Monday'), value: 1 }
-                ];
-            },
-            getFirstDayOfYearOptions: function () {
-                return [
-                    { label: gt('Week that contains January 1st'), value: 1 },
-                    { label: gt('Week that contains the first Thursday'), value: 4 }
-                ];
             }
         })
         .build(function () {
@@ -75,15 +63,10 @@ define('io.ox/core/settings/editLocale', [
         .addCancelButton()
         .addButton({ label: gt('Apply changes'), action: 'save' })
         .on('open', function () {
-            this.model.set(locale.getSettings());
+            this.model.set(locale.getLocaleData());
         })
         .on('save', function () {
-            // reset locale first to get proper change event everywhere
-            settings
-                .set('locale', undefined, { silent: true })
-                .set('locale', this.model.toJSON())
-                .set('region', locale.getLocale() + '-custom')
-                .save();
+            locale.setLocaleData(this.model.toJSON());
         })
         .open();
     }
@@ -97,7 +80,7 @@ define('io.ox/core/settings/editLocale', [
             id: 'time',
             render: function () {
                 this.$body.append(
-                    util.compactSelect('time', gt('Time'), this.model, this.getTimeOptions(), { width: 12 })
+                    util.compactSelect('time', gt('Time format'), this.model, this.getTimeOptions(), { width: 12 })
                 );
             }
         },
@@ -109,7 +92,7 @@ define('io.ox/core/settings/editLocale', [
             id: 'date',
             render: function () {
                 this.$body.append(
-                    util.compactSelect('date', gt('Date'), this.model, this.getDateOptions(), { width: 12 })
+                    util.compactSelect('date', gt('Date format'), this.model, this.getDateOptions(), { width: 12 })
                 );
             }
         },
@@ -121,31 +104,7 @@ define('io.ox/core/settings/editLocale', [
             id: 'number',
             render: function () {
                 this.$body.append(
-                    util.compactSelect('number', gt('Numbers'), this.model, this.getNumberOptions(), { width: 12 })
-                );
-            }
-        },
-        //
-        // First day of week
-        //
-        {
-            index: INDEX += 100,
-            id: 'first-day-week',
-            render: function () {
-                this.$body.append(
-                    util.compactSelect('firstDayOfWeek', gt('First day of week'), this.model, this.getFirstDayOfWeekOptions(), { width: 12 })
-                );
-            }
-        },
-        //
-        // First day of year
-        //
-        {
-            index: INDEX += 100,
-            id: 'first-day-year',
-            render: function () {
-                this.$body.append(
-                    util.compactSelect('firstDayOfYear', gt('First week of year'), this.model, this.getFirstDayOfYearOptions(), { width: 12 })
+                    util.compactSelect('number', gt('Number format'), this.model, this.getNumberOptions(), { width: 12 })
                 );
             }
         }

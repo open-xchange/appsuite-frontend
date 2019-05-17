@@ -23,7 +23,6 @@ define('io.ox/core/boot/load', [
     'io.ox/core/capabilities',
     'io.ox/core/manifests',
     'io.ox/core/sockets',
-    'io.ox/core/locale',
     'io.ox/core/moment'
 ], function (themes, gettext, ext, config, util, session, http, coreSettings, capabilities, manifests, socket) {
 
@@ -56,6 +55,12 @@ define('io.ox/core/boot/load', [
                 util.debug('Load UI > current language and i18n plugins DONE.');
                 gettext.enable();
             });
+        }
+    }, {
+        id: 'locale',
+        run: function () {
+            // run after language is set
+            return require(['io.ox/core/locale']);
         }
     }, {
         id: 'warnings',

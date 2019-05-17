@@ -375,11 +375,16 @@ define('io.ox/backbone/mini-views/common', [
             return this;
         },
         renderOptionGroups: function (items) {
-            return _(items).map(function (item) {
-                return $('<optgroup>').attr('label', item.label).append(
-                    this.renderOptions(item.options)
-                );
-            }, this);
+            return _(items)
+                .chain()
+                .map(function (item) {
+                    if (item.label === false) return this.renderOptions(item.options);
+                    return $('<optgroup>').attr('label', item.label).append(
+                        this.renderOptions(item.options)
+                    );
+                }, this)
+                .flatten(true)
+                .value();
         },
         renderOptions: function (items) {
             return _(items).map(function (item) {

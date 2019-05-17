@@ -56,7 +56,7 @@ define('io.ox/core/settings/pane', [
                 new ExtensibleView({ point: 'io.ox/core/settings/detail/view', model: settings })
                 .inject({
 
-                    showNoticeFields: ['language', 'region', 'locale', 'timezone', 'theme'],
+                    showNoticeFields: ['language', 'timezone', 'theme'],
 
                     showNotice: function (attr) {
                         return _(this.showNoticeFields).some(function (id) {
@@ -65,22 +65,11 @@ define('io.ox/core/settings/pane', [
                     },
 
                     reloadHint: AUTOLOGIN ?
-                        gt('Some settings (e.g. language and region) require a page reload or relogin to take effect.') :
-                        gt('Some settings (e.g. language and region) require a relogin to take effect.'),
+                        gt('Some settings (e.g. language and timezone) require a page reload or relogin to take effect.') :
+                        gt('Some settings (e.g. language and timezone) require a relogin to take effect.'),
 
                     getLanguageOptions: function () {
-                        return _(ox.serverConfig.languages).map(function (key, val) {
-                            return { label: key, value: val };
-                        });
-                    },
-
-                    getRegionOptions: function () {
-                        var options = [{ label: gt('Based on language'), value: '' }];
-                        if (locale.isCustomized()) {
-                            //#. %1$s is region/locale name, e.g. "Germany (customized)"
-                            options.push({ label: gt('%1$s (customized)', locale.getLocaleName()), value: locale.getLocale() + '-custom' });
-                        }
-                        return options.concat(locale.getLocaleOptions());
+                        return locale.getOptions();
                     },
 
                     getThemeOptions: function () {
@@ -313,41 +302,32 @@ define('io.ox/core/settings/pane', [
 
                 if (!settings.isConfigurable('language')) return;
 
-                baton.$el.append(
-                    util.compactSelect('language', gt('Language'), this.model, this.getLanguageOptions())
+                var getOptions = this.getLanguageOptions.bind(this),
+                    select = util.compactSelect('language', gt('Language'), this.model, getOptions());
+
+                select.find('.col-md-6').append(
+                    $('<div class="help-block locale-example" style="white-space: pre">').text(getExample()),
+                    $('<div class="help-block">').append(
+                        $('<button role="button" class="btn btn-default" data-action="reload">')
+                        .text(gt('More regional settings') + ' ...').on('click', editLocale)
+                    )
                 );
 
                 this.listenTo(this.model, 'change:language', function (language) {
                     _.setCookie('language', language);
                 });
-            }
-        },
-        //
-        // Region
-        //
-        {
-            id: 'region',
-            index: INDEX += 100,
-            render: function (baton) {
 
-                if (!settings.isConfigurable('region')) return;
-
-                var getRegionOptions = this.getRegionOptions.bind(this),
-                    select = util.compactSelect('region', gt('Region'), this.model, getRegionOptions());
-
-                select.find('.col-md-6').append(
-                    $('<div class="help-block text-right">').append(
-                        $('<a href="#" role="button" data-action="reload">')
-                        .text(gt('Customize regional settings')).on('click', editLocale)
-                    )
-                );
-
-                var view = select.find('select').data('view');
-                view.listenTo(this.model, 'change:locale', function () {
-                    this.$el.empty().append(this.renderOptions(getRegionOptions()));
+                this.listenTo(ox, 'change:locale', function () {
+                    this.$('.locale-example').text(getExample());
                 });
 
                 baton.$el.append(select);
+
+                function getExample() {
+                    return moment().format('dddd, L LT') + '   ' +
+                        locale.currency(1234.56, 'EUR') + '\n' +
+                        gt('First day of week: %1$s', locale.getFirstDayOfWeek());
+                }
 
                 function editLocale(e) {
                     e.preventDefault();

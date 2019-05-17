@@ -16,148 +16,218 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
 
     'use strict';
 
-    var locale,
-        time, date, number, firstDayOfWeek, firstDayOfYear,
-        //localeBackups = {},
-        definedLocales = ['en'];
+    var currentLocaleId = settings.get('language', 'en_US'),
+        localeData = settings.get('localeData', {}),
+        localeDefinitions = {};
 
-    // locale names
-    // more or less manually added
-    // need a better way to get at least names for everything that moment.js supports
     var supportedLocales = {
-        'sq': 'Shqipëria',
-        'ar-dz': 'ﺮﺌﺎﺰﺠﻠﺍ',
-        'ar': 'ﺔﻴﺐﺮﻌﻠﺍ',
-        'es': 'España',
-        'en-au': 'Australia',
-        'de-at': 'Österreich',
-        'be': 'Беларусь',
-        'nl-be': 'België',
-        'fr': 'France',
-        'pt-br': 'Brasil',
-        'bg': 'България',
-        'en-ca': 'Canada',
-        'fr-ca': 'Canada',
-        'hr': 'Hrvatska',
-        'cs': 'Česko',
-        'da': 'Danmark',
-        'es-do': 'República Dominicana',
-        'et': 'Eesti',
-        'mk': 'Macedonia',
-        'fi': 'Suomi',
-        'sv': 'Finland',
-        'de': 'Deutschland',
-        'el': 'Ελλάδα',
-        'zh-hk': '香港',
-        'hu': 'Magyarország',
-        'is': 'Ísland',
-        'fa': 'Iran',
-        'en-ie': 'Ireland',
-        'he': 'לארשי',
-        'it': 'Italia',
-        'ja': '日本',
-        'ko': '대한민국',
-        'ar-kw': 'ﺖﻴﻮﻜﻠﺍ',
-        'lv': 'Latvija',
-        'lt': 'Lietuva',
-        'ar-ma': 'ﺔﻴﺐﺮﻐﻤﻠﺍ ﺔﻜﻠﻤﻤﻠﺍ',
-        'nl': 'Nederland',
-        'en-nz': 'New Zealand',
-        'zh-cn': '中华人民共和国',
-        'pl': 'Polska',
-        'pt': 'Portugal',
-        'ro': 'România',
-        'ru': 'Россия',
-        'ar-sa': 'ﺔﻴﺪﻮﻌﺴﻠﺍ ﺔﻴﺐﺮﻌﻠﺍ ﺔﻜﻠﻤﻤﻠﺍ',
-        'sr': 'Југославија',
-        'sk': 'Slovensko',
-        'sl': 'Slovenija',
-        'eu': 'Espainia',
-        'ca': 'Espanya',
-        'fr-ch': 'Suisse',
-        'de-ch': 'Schweiz',
-        'zh-tw': '中華民國',
-        'th': 'ไทย',
-        'ar-tn': 'ﺲﻨﻮﺗ',
-        'tr': 'Türkiye',
-        'uk': 'Україна',
-        'en-gb': 'United Kingdom',
-        'en': 'United States',
-        'vi': 'Việt Nam'
+        ca_ES: 'Català (Espanya)',
+        cs_CZ: 'Čeština (Česko)',
+        da_DK: 'Dansk (Danmark)',
+        de_DE: 'Deutsch (Deutschland)',
+        de_AT: 'Deutsch (Österreich)',
+        de_CH: 'Deutsch (Schweiz)',
+        en_US: 'English (United States)',
+        en_GB: 'English (United Kingdom)',
+        en_AU: 'English (Australia)',
+        en_CA: 'English (Canada)',
+        en_DE: 'English (Germany)',
+        en_IE: 'English (Ireland)',
+        en_NZ: 'English (New Zealand)',
+        en_SG: 'English (Singapore)',
+        en_ZA: 'English (South Africa)',
+        es_ES: 'Español (Espana)',
+        es_MX: 'Español (México)',
+        es_AR: 'Español (Argentina)',
+        es_BO: 'Español (Bolivia)',
+        es_CL: 'Español (Chile)',
+        es_CO: 'Español (Colombia)',
+        es_CR: 'Español (Costa Rica)',
+        es_DO: 'Español (Républica Dominicana)',
+        es_EC: 'Español (Ecuador)',
+        es_SV: 'Español (El Salvador)',
+        es_GT: 'Español (Guatemala)',
+        es_HN: 'Español (Honduras)',
+        es_NI: 'Español (Nicaragua)',
+        es_PA: 'Español (Panamá)',
+        es_PY: 'Español (Paraguay)',
+        es_PE: 'Español (Perú)',
+        es_PR: 'Español (Puerto Rico)',
+        es_US: 'Español (United States)',
+        fi_FI: 'Suomi (Suomi)',
+        fr_FR: 'Français (France)',
+        fr_CA: 'Français (Canada)',
+        fr_CH: 'Français (Suisse)',
+        fr_BE: 'Français (Belgique)',
+        hu_HU: 'Magyar (Magyarorszag)',
+        it_IT: 'Italiano (Italia)',
+        it_CH: 'Italiano (Svizzera)',
+        lv_LV: 'Latviešu (Latvija)',
+        nl_NL: 'Nederlands (Nederland)',
+        nl_BE: 'Nederlands (België)',
+        nb_NO: 'Norsk (Norge)',
+        pl_PL: 'Polski (Polska)',
+        pt_BR: 'Português (Brasil)',
+        ru_RU: 'Pусский (Россия)',
+        ro_RO: 'Română (România)',
+        sk_SK: 'Slovenčina (Slovensko)',
+        sv_SE: 'Svenska (Sverige)',
+        ja_JP: '日本語 (日本)',
+        zh_CN: '中文 (简体)',
+        zh_TW: '中文 (繁體)'
     };
 
-    function getSettings() {
-        var data = moment.localeData();
-        return _.extend({
-            time: data.longDateFormat('LT'),
-            date: data.longDateFormat('L'),
-            number: getDefaultNumberFormat(),
-            firstDayOfWeek: data.firstDayOfWeek(),
-            firstDayOfYear: data.firstDayOfYear()
-        }, settings.get('locale'));
+    // map locales to moment's locale
+    var mapToMoment = {
+        ca_ES: 'ca',
+        cs_CZ: 'cs',
+        da_DK: 'da',
+        de_DE: 'de',
+        de_AT: 'de-at',
+        de_CH: 'de-ch',
+        en_US: 'en',
+        en_GB: 'en-gb',
+        en_AU: 'en-au',
+        en_CA: 'en-ca',
+        en_DE: 'en-gb',
+        en_IE: 'en-ie',
+        en_NZ: 'en-nz',
+        en_SG: 'en-SG',
+        en_ZA: 'en-gb',
+        es_ES: 'es',
+        es_MX: 'es-do',
+        es_AR: 'es-do',
+        es_BO: 'es-do',
+        es_CL: 'es-do',
+        es_CO: 'es-do',
+        es_CR: 'es-do',
+        es_DO: 'es-do',
+        es_EC: 'es-do',
+        es_SV: 'es-do',
+        es_GT: 'es-do',
+        es_HN: 'es-do',
+        es_NI: 'es-do',
+        es_PA: 'es-do',
+        es_PY: 'es-do',
+        es_PE: 'es-do',
+        es_PR: 'es-do',
+        es_US: 'es-us',
+        fi_FI: 'fi',
+        fr_FR: 'fr',
+        fr_CA: 'fr-ca',
+        fr_CH: 'fr-ch',
+        fr_BE: 'fr',
+        hu_HU: 'hu',
+        it_IT: 'it',
+        it_CH: 'it-ch',
+        lv_LV: 'lv',
+        nl_NL: 'nl',
+        nl_BE: 'nl-be',
+        nb_NO: 'nb',
+        pl_PL: 'pl',
+        pt_BR: 'pt-br',
+        ru_RU: 'ru',
+        ro_RO: 'ro',
+        sk_SK: 'sk',
+        sv_SE: 'sv',
+        ja_JP: 'ja',
+        zh_CN: 'zh-cn',
+        zh_TW: 'zh-tw'
+    };
+
+    function deriveMomentLocale(localeId) {
+        return mapToMoment[localeId] || 'en';
     }
 
-    function getLocale() {
-        var id = String(settings.get('region') || '').replace(/-custom$/, '');
-        if (supportedLocales[id]) return id;
-        return deriveLocale(settings.get('language', 'en_US'));
-    }
+    function getSupportedLocales() {
+        // check against server-side list of available translations
+        var languages = ox.serverConfig.languages, result = {};
+        for (var id in languages) {
+            switch (id) {
+                case 'de_DE':
+                    add('de_DE de_AT de_CH');
+                    break;
+                case 'en_GB':
+                    add('en_GB en_AU en_CA en_DE en_IE en_NZ en_SG en_ZA');
+                    break;
+                case 'es_MX':
+                    add('es_MX es_AR es_BO es_CL es_CO es_CR es_DO es_EC es_SV es_GT es_HN es_NI es_PA es_PE es_PR es_US');
+                    break;
+                case 'fr_FR':
+                    add('fr_FR fr_CH fr_BE');
+                    break;
+                case 'it_IT':
+                    add('it_IT it_CH');
+                    break;
+                case 'nl_NL':
+                    add('nl_NL nl_BE');
+                    break;
+                default:
+                    add(id);
+                    break;
+            }
+        }
+        return result;
 
-    function getLocaleName() {
-        return supportedLocales[getLocale()] || '';
-    }
-
-    function deriveLocale(language) {
-        language = language.toLowerCase().replace(/_/, '-');
-        if (supportedLocales[language]) return language;
-        language = language.split(/-/)[0];
-        if (supportedLocales[language]) return language;
-        return 'en-us';
-    }
-
-    function setMomentLocale(id) {
-        if (definedLocales.indexOf(id) > -1) {
-            updateMomentLocale(id);
-        } else {
-            // load the file that contains the define, then load the define itself
-            // we need do it this way to avoid the use of anonymous defines
-            require(['static/3rd.party/moment/locale/' + id + '.js'], function () {
-                require(['moment/locale/' + id], function () {
-                    updateMomentLocale(id);
-                    definedLocales.push(id);
-                });
+        function add(ids) {
+            String(ids).split(' ').forEach(function (id) {
+                result[id] = supportedLocales[id];
             });
         }
     }
 
-    function updateMomentLocale(id) {
-        if (definedLocales.indexOf(id) === -1) return;
-        // time and date format
-        var longDateFormat = { LT: time, L: date };
-        // dow = first day of week (Sunday or Monday)
-        // doy = first day of year. this has an impact how calendar week is calculated
-        var week = { dow: firstDayOfWeek, doy: firstDayOfYear };
-        // drop custom locale
-        moment.locale(id + '-custom', null);
-        // define custom locale
-        moment.defineLocale(id + '-custom', { parentLocale: id, longDateFormat: longDateFormat, week: week });
-        // finally set custom locale
-        moment.locale(id + '-custom');
+    function getLocaleData(localeId) {
+        return _.extend({}, localeDefinitions[localeId || currentLocaleId], settings.get('localeData'));
     }
 
-    function onChangeRegion(value) {
-        // reset custom settings when changing to any preset
-        if (!/-custom$/.test(value)) settings.set('locale', undefined).save(); else onChangeLocale();
+    function setMomentLocale(localeId) {
+        var id = deriveMomentLocale(localeId);
+        if (localeDefinitions[localeId]) {
+            updateLocale(localeId);
+            return $.when();
+        }
+        // load the file that contains the define, then load the define itself
+        // we need do it this way to avoid the use of anonymous defines
+        return require(['static/3rd.party/moment/locale/' + id + '.js'], function () {
+            return require(['moment/locale/' + id], function () {
+                // create backup on first definition
+                backupLocale(localeId);
+                updateLocale(localeId);
+            });
+        });
     }
 
-    function onChangeLocale() {
-        var localeSettings = getSettings();
-        time = localeSettings.time;
-        date = localeSettings.date;
-        number = localeSettings.number;
-        firstDayOfWeek = localeSettings.firstDayOfWeek;
-        firstDayOfYear = localeSettings.firstDayOfYear;
-        updateMomentLocale(locale);
+    function backupLocale(localeId) {
+        // avoid overrides
+        if (localeDefinitions[localeId]) return;
+        var id = deriveMomentLocale(localeId),
+            data = moment.localeData(id);
+        localeDefinitions[localeId] = {
+            time: data.longDateFormat('LT'),
+            date: data.longDateFormat('L'),
+            number: getDefaultNumberFormat(localeId)
+        };
+    }
+
+    function updateLocale(localeId) {
+        localeData = getLocaleData(localeId);
+        if (_.isEmpty(localeData)) return;
+        var id = deriveMomentLocale(localeId);
+        moment.updateLocale(id, {
+            // time and date format
+            longDateFormat: { LT: localeData.time, L: localeData.date }
+        });
+        ox.trigger('change:locale');
+    }
+
+    function onChangeLanguage(value) {
+        currentLocaleId = value;
+        settings.set('localeData', undefined).save();
+        setMomentLocale(currentLocaleId);
+    }
+
+    function onChangeLocaleData() {
+        updateLocale(currentLocaleId);
     }
 
     // Number formatting
@@ -175,31 +245,18 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
 
     function getNumber(n, options) {
         if (isNaN(n)) return n;
-        if (grouping[number] === false) options.useGrouping = false;
-        return Number(n).toLocaleString(numberFormats[number] || locale, options);
+        if (grouping[localeData.number] === false) options.useGrouping = false;
+        return Number(n).toLocaleString(numberFormats[localeData.number], options);
     }
 
-    function getDefaultNumberFormat() {
-        var n = api.number(1234.56);
-        return numberFormats[n] || '1,234.56';
+    function getDefaultNumberFormat(localeId) {
+        var locale = localeId.toLowerCase().replace(/_/, '-');
+        return Number(1234.56).toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     var dateFormats = ['MM/DD/YYYY', 'M/D/YYYY', 'MM/DD/YY', 'M/D/YY', 'DD.MM.YYYY', 'D.M.YYYY', 'DD.MM.YY', 'D.M.YY', 'DD/MM/YYYY', 'DD/MM/YY', 'D/M/YY', 'YYYY-MM-DD'];
 
     var api = {
-
-        // getter/setter
-
-        getLocale: function () {
-            return locale;
-        },
-
-        getLocaleName: getLocaleName,
-
-        setLocale: function (id) {
-            locale = id;
-            setMomentLocale(locale);
-        },
 
         // formatting
 
@@ -217,19 +274,32 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
 
         // utility functions
 
-        getSettings: getSettings,
-
-        isCustomized: function () {
-            return settings.get('region') && !_.isEmpty(settings.get('locale'));
+        getLocale: function () {
+            return currentLocaleId;
         },
 
-        getLocaleOptions: function () {
-            return _(supportedLocales)
-                .pairs()
-                .map(function (item) {
-                    return { label: item[1], value: item[0] };
+        getLocaleData: getLocaleData,
+        localeDefinitions: localeDefinitions,
+
+        setLocaleData: function (data) {
+            // reset locale first to get proper change event everywhere
+            settings.set('localeData', undefined, { silent: true }).set('localeData', data).save();
+        },
+
+        getOptions: function () {
+            return _(getSupportedLocales())
+                .map(function (label, value) {
+                    return { label: label, value: value };
                 })
-                .sort(function (a, b) { return a.label.localeCompare(b.label); });
+                .sort(function (a, b) {
+                    return a.label.localeCompare(b.label);
+                });
+        },
+
+        getSupportedLocales: getSupportedLocales,
+
+        isCustomized: function () {
+            return !_.isEmpty(settings.get('localeData'));
         },
 
         getNumberFormats: function () {
@@ -240,18 +310,17 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
             return dateFormats.slice();
         },
 
-        getSupportedLocales: function () {
-            return supportedLocales;
+        getFirstDayOfWeek: function () {
+            return moment().startOf('week').format('dddd');
         }
     };
 
-    // get current locale
-    locale = getLocale();
-    //backupLocale('en');
-    setMomentLocale(locale);
-    settings.on('change:region', onChangeRegion);
-    settings.on('change:locale', onChangeLocale);
-    onChangeLocale();
+    backupLocale('en_US');
+    localeData = getLocaleData();
+    setMomentLocale(currentLocaleId).always(function () {
+        settings.on('change:language', onChangeLanguage);
+        settings.on('change:localeData', onChangeLocaleData);
+    });
 
     // debug
     window.locale = api;
