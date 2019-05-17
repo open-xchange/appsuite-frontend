@@ -679,6 +679,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
     };
 
     api.query = function (options) {
+        var force = options.force || false;
         var def = $.Deferred();
         var previousOperation = null;
         if (options.trace || traceAll) {
@@ -687,47 +688,72 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
         }
         options.seq = seq;
         seq++;
+
         previousOperation = resendDeferreds[Number(options.seq - 1)] || $.when();
+
         // Wait for an ACK for the previous operation, so the stanza gates
         // don't get mixed up
+        if (force) {
+            if (previousOperation.state() === 'pending') {
+                def.reject({ cause: 'sync_send_not_possible' });
+            } else {
+                var url = ox.apiRoot + '/rt' + '?action=query&session=' + ox.session + '&resource=' + tabId;
+                var payload = JSON.stringify(options);
+                // special case: use sendBeacon to send a final last messages
+                // TODO: sendBeacon - use same structure as synchronizedHTTP.PUT!!!
+                try {
+                    var header = { type: 'text/plain; charset=utf-8' };
+                    payload = new Blob([payload], header);
 
-        previousOperation.done(function () {
-            lastSend = _.now();
-            synchronizedHTTP.PUT({
-                module: 'rt',
-                params: {
-                    action: 'query',
-                    resource: tabId
-                },
-                timeout: TIMEOUT,
-                data: options,
-                silent: true
-            }).done(function (resp) {
-                var stanzas = resp.stanzas;
-                resp.stanzas = [];
-                // Handle the regular stanzas later
-                setTimeout(function () {
-                    handleResponse({ stanzas: stanzas });
-                }, 0);
-                if (resp.error) {
-                    handleError(resp.error);
-                    def.reject(resp);
-                } else {
-                    def.resolve(handleResponse(resp));
+                    navigator.sendBeacon(url, payload);
+
+                } catch (e) {
+                    //TODO remove, at the moment only used for debugging
                 }
-            }).fail(function (resp) {
-                handleError(resp);
-                // Send a dummy message to consume the sequence number
-                api.send({
-                    to: 'devnull://sequenceDiscard',
-                    seq: options.seq,
-                    element: 'message'
+            }
+        } else {
+            previousOperation.done(function () {
+                lastSend = _.now();
+                synchronizedHTTP.PUT({
+                    module: 'rt',
+                    params: {
+                        action: 'query',
+                        resource: tabId
+                    },
+                    timeout: TIMEOUT,
+                    data: options,
+                    silent: true
+                }).done(function (resp) {
+                    var stanzas = resp.stanzas;
+                    resp.stanzas = [];
+                    // Handle the regular stanzas later
+                    setTimeout(function () {
+                        handleResponse({ stanzas: stanzas });
+                    }, 0);
+                    if (resp.error) {
+                        handleError(resp.error);
+                        def.reject(resp);
+                    } else {
+                        def.resolve(handleResponse(resp));
+                    }
+                }).fail(function (resp) {
+                    handleError(resp);
+                    // Send a dummy message to consume the sequence number
+                    api.send({
+                        to: 'devnull://sequenceDiscard',
+                        seq: options.seq,
+                        element: 'message'
+                    });
+                    def.reject(resp);
                 });
-                def.reject(resp);
             });
-        });
-
+        }
         return def;
+    };
+
+    api.hasPendingAcks = function () {
+        var def = resendDeferreds[seq];
+        return (_.isObject(def) && def.getState() === 'pending');
     };
 
     api.send = function (options) {

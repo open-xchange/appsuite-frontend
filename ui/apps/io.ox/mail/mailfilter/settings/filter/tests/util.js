@@ -32,22 +32,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         events: { 'change': 'onChange', 'keyup': 'onKeyup', 'paste': 'onPaste' },
 
         validationForSize: function () {
-            var listOfUnits = ['B', 'K', 'KB', 'M', 'MB', 'G', 'GB'],
-                splits = this.$el.val().split(''),
-                number = '',
-                unit = '',
-                stop = false;
-
-            _.each(splits, function (val) {
-                if (/^[0-9]+$/.test(val) && !stop) {
-                    number = number + val;
-                } else {
-                    stop = true;
-                    unit = unit + val;
-                }
-            });
-
-            return /^[0-9]+$/.test(number) && parseInt(number, 10) < 2147483648 && parseInt(number, 10) >= 0 && (unit === '' || _.contains(listOfUnits, unit.toUpperCase()));
+            return /^[0-9]+$/.test(this.$el.val()) && parseInt(this.$el.val(), 10) < 2147483648 && parseInt(this.$el.val(), 10) >= 0;
         },
         onChange: function () {
             if (this.name === 'size' && this.validationForSize()) {
@@ -63,7 +48,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         onKeyup: function () {
             var state;
 
-            if (this.name === 'size') {
+            if (this.name === 'sizeValue') {
                 state = this.validationForSize() ? 'valid:' : 'invalid:';
 
             } else {

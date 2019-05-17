@@ -33,7 +33,7 @@ define('io.ox/core/main', [
     'io.ox/core/relogin',
     'io.ox/core/links',
     'io.ox/core/http_errors',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/tours/get-started',
     'io.ox/core/main/icons',
     'io.ox/core/main/appcontrol',

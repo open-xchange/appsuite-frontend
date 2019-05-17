@@ -196,7 +196,13 @@ define('io.ox/mail/detail/content', [
                     link.addClass(data.className).data(data);
                     // if this is a sharing link add the generic deep link class so event handlers work properly and it doesn't get opened in a new tab
                     if (shareLinkUrl && link.attr('href') === shareLinkUrl) link.addClass('deep-link-app');
-                } else if (href.search(/^\s*mailto:/i) > -1) {
+                    return;
+                }
+
+                // important: if this is not an internal deeplink (not in valid hosts), we must remove deeplink markup. Otherwise our event listeners are triggered instead of opening in a new tab.
+                link.removeClass('deep-link-files', 'deep-link-contacts', 'deep-link-calendar', 'deep-link-tasks', 'deep-link-app');
+
+                if (href.search(/^\s*mailto:/i) > -1) {
                     // mailto:
                     link.addClass('mailto-link').attr('target', '_blank');
                     text = link.text();
@@ -229,8 +235,8 @@ define('io.ox/mail/detail/content', [
             each(this, 'blockquote', function (node) {
                 // ignore nested blockquotes
                 if (hasParent(node, 'blockquote')) return;
-                var text = getText(node);
-                if (text.length > 300) text = text.substr(0, 300) + '\u2026'; else return;
+                var fulltext = getText(node);
+                if (fulltext.length < 500) return;
                 var blockquoteId = _.uniqueId('collapsed-blockquote-');
                 var ellipsisButton = $('<button type="button" class="bqt">').attr('title', gt('Show quoted text')).append(
                     $('<span aria-hidden="true">').text('...')
@@ -241,17 +247,22 @@ define('io.ox/mail/detail/content', [
                         'aria-expanded': false
                     });
                 }
+                // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
+                var parts = [ellipsisButton];
+                // some text optimizations
+                var text = getText(node, true).replace(/<\s/g, '<').replace(/\s>/g, '>')
+                    .replace(/("'\s?|\s?'")/g, '').replace(/[-_]{3,}/g, '');
+                if (text.length > 500) {
+                    parts.push(
+                        $.txt(text.substr(0, 210).replace(/\s\S{1,10}$/, ' ') + '\u2026'),
+                        $('<br>'),
+                        $.txt('\u2026' + text.substr(-210).replace(/^\S{1,10}\s/, ' '))
+                    );
+                } else {
+                    parts.push($.txt(text));
+                }
                 $(node).addClass('collapsed-blockquote').hide().attr('id', blockquoteId).after(
-                    $('<div class="blockquote-toggle">').append(
-                        // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
-                        ellipsisButton,
-                        $.txt(
-                            text.replace(/<\s/g, '<')
-                                .replace(/\s>/g, '>')
-                                .replace(/("'\s?|\s?'")/g, '')
-                                .replace(/[-_]{3,}/g, '')
-                        )
-                    )
+                    $('<div class="blockquote-toggle">').append(parts)
                 );
             });
             // delegate
@@ -433,6 +444,12 @@ define('io.ox/mail/detail/content', [
 
     ext.point('io.ox/mail/detail/beautify').extend(
         {
+            id: 'no-ampersand',
+            process: function (baton) {
+                baton.data = baton.data.replace(/&/g, '&amp;');
+            }
+        },
+        {
             id: 'trim',
             process: function (baton) {
                 baton.data = baton.data.trim();
@@ -472,52 +489,6 @@ define('io.ox/mail/detail/content', [
         }
     );
 
-
-    //
-    // Helper IIFEs
-    //
-
-    var fixAbsolutePositions = (function () {
-
-        function isBlockquoteToggle(elem) {
-            return $(elem).parent().hasClass('blockquote-toggle');
-        }
-
-        function findFarthestElement(memo, elem) {
-            if (getComputedStyle(elem).position !== 'absolute') return memo;
-            if (isBlockquoteToggle(elem)) return memo;
-            var pos = $(elem).position();
-            if (pos) {
-                memo.x = Math.max(memo.x, pos.left + elem.offsetWidth);
-                memo.y = Math.max(memo.y, pos.top + elem.offsetHeight);
-                memo.found = true;
-            }
-            return memo;
-        }
-
-        return function (elem, size) {
-            var farthest = { x: elem.scrollWidth, y: elem.scrollHeight, found: false },
-                width = elem.offsetWidth,
-                height = elem.offsetHeight;
-            // FF18 is behaving oddly correct, but impractical
-            // some early returns (allow 128KB for Chrome, 64KB for others)
-            if (_.device('chrome')) { if (size > 0x1FFFF) return; } else if (size > 0xFFFF) return;
-            // the following might change after a resize
-            if (farthest.x >= width || farthest.y >= height) {
-                farthest = _(elem.querySelectorAll('*')).reduce(findFarthestElement, farthest);
-            }
-            // only do this for absolute elements
-            if (farthest.found) {
-                $(elem).css('overflow-x', 'auto');
-                if (farthest.y > height) $(elem).css('height', Math.round(farthest.y) + 'px');
-            }
-            // look for resize event
-            $(elem).one('resize', function () {
-                fixAbsolutePositions(this, size);
-            });
-        };
-    })();
-
     //
     // Helpers
     //
@@ -550,7 +521,7 @@ define('io.ox/mail/detail/content', [
         return false;
     }
 
-    function getText(node) {
+    function getText(node, skipBlockquote) {
         // get text content for current node if it's a text node
         var value = (node.nodeType === 3 && String(node.nodeValue).trim()) || '',
             // ignore white-space
@@ -558,7 +529,8 @@ define('io.ox/mail/detail/content', [
         // loop over child nodes for recursion
         _(node.childNodes).each(function (child) {
             if (child.tagName === 'STYLE') return;
-            str += getText(child);
+            if (skipBlockquote && child.tagName === 'BLOCKQUOTE') return;
+            str += getText(child, skipBlockquote);
         });
         return str;
     }
@@ -588,7 +560,7 @@ define('io.ox/mail/detail/content', [
                 return { content: $(), isLarge: false, type: 'text/plain' };
             }
 
-            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain', flow: flow }), content,
+            var baton = new ext.Baton(_({ data: data, options: options || {}, source: '', type: 'text/plain', flow: flow }).omit(function (val) { return val === undefined; })), content,
                 isTextOrHTML = /^text\/(plain|html)$/i,
                 isImage = /^image\//i;
 
@@ -609,7 +581,7 @@ define('io.ox/mail/detail/content', [
                     if (attachment.content_type === baton.type) {
                         // add content parts
                         baton.source += attachment.content;
-                    } else if (baton.type === 'text/plain' && isImage.test(attachment.content_type)) {
+                    } else if (baton.type === 'text/plain' && isImage.test(attachment.content_type) && settings.get('allowHtmlMessages', true)) {
                         // add images if text
                         baton.source += '\n!(api/image/mail/picture?' +
                             $.param({ folder: data.folder_id, id: data.id, uid: attachment.filename, scaleType: 'contain', width: 1024 }) +
@@ -651,12 +623,6 @@ define('io.ox/mail/detail/content', [
                 // process content
                 ext.point('io.ox/mail/detail/content-general').invoke('process', content, baton);
                 if (!baton.isLarge) ext.point('io.ox/mail/detail/content').invoke('process', content, baton);
-
-                // fix absolute positions
-                // heuristic: the source must at least contain the word "absolute" somewhere
-                if ((/absolute/i).test(baton.source)) {
-                    setTimeout(fixAbsolutePositions, 10, content, baton.source.length);
-                }
 
             } catch (e) {
                 console.error('mail.getContent', e.message, e, data);

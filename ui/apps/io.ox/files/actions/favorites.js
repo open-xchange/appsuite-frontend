@@ -18,120 +18,74 @@ define('io.ox/files/actions/favorites', [
 
     'use strict';
 
-    /**
-     * Add specified element to favorites collection
-     * @param {Descriptor} element
-     *  Descriptor for File/Folder
-     *
-     * Additional parameters
-     * @param {File|Folder|false} model
-     *  Model to add to collection
-     */
-    function add(element, model) {
-        var collectionId,
-            collection,
-            module = 'infostore';
+    function getModel(element) {
+        var module = 'infostore';
+        var model;
 
         if (element.folder_id === 'folder') {
-            model = model || folderAPI.pool.getModel(element.id);
+            model = folderAPI.pool.getModel(element.id);
             module = model.get('module');
             if (!module) {
-                return;
+                model = null;
             }
         } else {
-            model = model || api.pool.get('detail').get(element.cid);
+            model = api.pool.get('detail').get(element.cid);
         }
 
-        collectionId = 'virtual/favorites/' + module;
-        collection = folderAPI.pool.getCollection(collectionId);
-        // convert folder model into file model
-        model = new api.Model(model.toJSON());
-
-        if (!collection.fetched || collection.expired) {
-            require(['settings!io.ox/core'], function (Settings) {
-                var settingsId = 'favorites/infostore',
-                    setting = model.id;
-                if (model.isFile()) {
-                    settingsId = 'favoriteFiles/infostore';
-                    setting = {
-                        id: model.attributes.id,
-                        folder_id: model.attributes.folder_id
-                    };
-                }
-                var favoriteSettings = Settings.get(settingsId, []);
-                favoriteSettings.push(setting);
-                Settings.set(settingsId, favoriteSettings);
-            });
-        } else {
-            model.set('index/' + collectionId, true, { silent: false });
-            collection.add(model);
-            collection.sort();
-        }
-        api.propagate('favorite:add', model);
+        return model;
     }
 
     /**
-     * Remove specified element from favorites collection
+     * Add specified elements to favorites list.
      * @param {Descriptor} element
      *  Descriptor for File/Folder
-     *
-     * Additional parameters
-     * @param {File|Folder|false} model
-     *  Model to remove from collection
      */
-    function remove(element, model) {
-        var collectionId,
-            collection,
-            module = 'infostore';
+    function add(elements) {
 
-        if (element.folder_id === 'folder') {
-            model = model || folderAPI.pool.getModel(element.id);
-            module = model.get('module');
-            if (!module) {
-                return;
+        var models = [];
+
+        elements.forEach(function (element) {
+
+            var model = getModel(element);
+
+            if (model) {
+                models.push(model);
+                api.propagate('favorite:add', model);
             }
-        } else {
-            model = model || api.pool.get('detail').get(element.cid);
-        }
+        });
 
-        collectionId = 'virtual/favorites/' + module;
-        collection = folderAPI.pool.getCollection(collectionId);
+        api.trigger('favorites:add', models);
+    }
 
-        if (!collection.fetched || collection.expired) {
-            require(['settings!io.ox/core'], function (Settings) {
-                var favoriteSettings;
+    /**
+     * Remove specified elements from favorites list.
+     *
+     * @param {Descriptor} element
+     *  Descriptor for File/Folder
+     */
+    function remove(elements) {
 
-                if (model.isFile()) {
-                    favoriteSettings = Settings.get('favoriteFiles/infostore', []);
-                    favoriteSettings = _(favoriteSettings).filter(function (favorite) {
-                        return favorite.id !== model.get('id');
-                    });
-                } else {
-                    favoriteSettings = Settings.get('favorites/infostore', []);
-                    favoriteSettings = _(favoriteSettings).filter(function (favoriteId) {
-                        return favoriteId !== model.get('id');
-                    });
-                }
+        var models = [];
 
-                Settings.set('favorites/infostore', favoriteSettings);
-            });
-        } else {
-            model.set('index/' + collectionId, true, { silent: false });
-            collection.remove(model);
-        }
-        api.propagate('favorite:remove', model);
+        elements.forEach(function (element) {
+
+            var model = getModel(element);
+
+            if (model) {
+                models.push(model);
+                api.propagate('favorite:remove', model);
+            }
+        });
+
+        api.trigger('favorites:remove', models);
     }
 
     return {
         add: function (list) {
-            _.each(list, function (element) {
-                add(element);
-            });
+            add(list);
         },
         remove: function (list) {
-            _.each(list, function (element) {
-                remove(element);
-            });
+            remove(list);
         }
     };
 });

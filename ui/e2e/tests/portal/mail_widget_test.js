@@ -13,7 +13,7 @@
 
 const expect = require('chai').expect;
 
-Feature('Mail Portal widgets');
+Feature('Portal');
 
 Before(async function (users) {
     await users.create();
@@ -50,10 +50,10 @@ Scenario('adding a mail containing XSS code', async function (I, users) {
 
     I.openApp('Portal');
     I.waitForElement({ css: '[data-app-name="io.ox/portal"] .widgets' }, 20);
-    I.waitForDetached({ css: '.widgets .widget.io-ox-busy' }, 20);
+    I.waitForDetached('#io-ox-refresh-icon .fa-refresh.fa-spin');
 
-    let widgetId = await I.grabAttributeFrom('.io-ox-portal-window .widgets li.widget:first-child', 'data-widget-id');
-    let type = await I.grabAttributeFrom('.io-ox-portal-window .widgets li.widget:first-child', 'data-widget-type');
+    let [widgetId] = await I.grabAttributeFrom('.io-ox-portal-window .widgets li.widget:first-child', 'data-widget-id');
+    let [type] = await I.grabAttributeFrom('.io-ox-portal-window .widgets li.widget:first-child', 'data-widget-type');
     expect(type).to.equal('stickymail');
     let title = await I.grabTextFrom(`.io-ox-portal-window .widgets li.widget[data-widget-id="${widgetId}"] .title`);
     expect(title).to.equal('Test subject <img src="x" onerror="alert(666);">');

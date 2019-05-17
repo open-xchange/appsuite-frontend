@@ -11,7 +11,7 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/sidebarview', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/viewer/util',
     'io.ox/files/api',
     'io.ox/core/folder/api',
@@ -26,10 +26,9 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/viewer/views/sidebar/uploadnewversionview',
     'io.ox/core/extensions',
     'gettext!io.ox/core/viewer',
-    'io.ox/core/extPatterns/links',
     // prefetch cause all views need the base view
     'io.ox/core/viewer/views/sidebar/panelbaseview'
-], function (DisposableView, Util, FilesAPI, folderApi, Dropzone, Capabilities, ViewerSettings, TypesRegistry, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt, links) {
+], function (DisposableView, Util, FilesAPI, folderApi, Dropzone, Capabilities, ViewerSettings, TypesRegistry, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt) {
 
     'use strict';
 
@@ -68,7 +67,7 @@ define('io.ox/core/viewer/views/sidebarview', [
         }
     });
 
-    ext.point('io.ox/core/viewer/views/sidebarview/detail').extend(new links.Link({
+    ext.point('io.ox/core/viewer/views/sidebarview/detail').extend({
         id: 'upload-new-version',
         index: 400,
         draw: function (baton) {
@@ -76,7 +75,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             if (!(baton.model.isFile() && folderApi.pool.models[baton.data.folder_id] && folderApi.pool.models[baton.data.folder_id].can('add:version'))) return;
             this.append(new UploadNewVersionView({ model: baton.model, app: baton.app }).render().el);
         }
-    }));
+    });
 
     /**
      * notifications lazy load
@@ -125,7 +124,6 @@ define('io.ox/core/viewer/views/sidebarview', [
 
             // bind scroll handler
             this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
-            this.on('dispose', this.disposeView.bind(this));
             this.initTabNavigation();
         },
 
@@ -404,7 +402,7 @@ define('io.ox/core/viewer/views/sidebarview', [
         /**
          * Destructor function of this view.
          */
-        disposeView: function () {
+        onDispose: function () {
             this.$el.disableTouch();
             if (this.zone) {
                 this.zone.off();

@@ -14,14 +14,11 @@
 
 define('io.ox/settings/accounts/views', [
     'io.ox/core/extensions',
-    'io.ox/core/api/account',
-    'io.ox/core/api/filestorage',
-    'io.ox/core/folder/api',
     'io.ox/settings/util',
     'io.ox/backbone/mini-views/listutils',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'gettext!io.ox/settings/accounts'
-], function (ext, accounts, filestorageApi, folderAPI, settingsUtil, listUtils, DisposableView, gt) {
+], function (ext, settingsUtil, listUtils, DisposableView, gt) {
     'use strict';
 
     var createExtpointForSelectedAccount = function (args) {
@@ -31,7 +28,7 @@ define('io.ox/settings/accounts/views', [
         },
         drawIcon = (function () {
             return function (model) {
-                var type = model.get('accountType'),
+                var type = model.get('accountType') || model.get('module'),
                     shortId = String(model.get('serviceId') || model.id).match(/\.?([a-zA-Z]*)(\d*)$/)[1] || 'fallback';
                 return $('<i class="account-icon fa" aria-hidden="true">')
                     .addClass(type.toLowerCase())
@@ -81,9 +78,15 @@ define('io.ox/settings/accounts/views', [
                 return el;
             },
 
+            renderTitle: function (title) {
+                return listUtils.makeTitle(title);
+            },
+
             render: function () {
                 var self = this,
-                    title = self.getTitle();
+                    title = self.getTitle(),
+                    canEdit = ext.point('io.ox/settings/accounts/' + self.model.get('accountType') + '/settings/detail').pluck('draw').length > 0,
+                    canDelete = self.model.get('id') !== 0;
                 self.$el.attr({
                     'data-id': self.model.get('id'),
                     'data-accounttype': self.model.get('accountType')
@@ -91,16 +94,16 @@ define('io.ox/settings/accounts/views', [
 
                 self.$el.empty().append(
                     drawIcon(self.model),
-                    listUtils.makeTitle(title).append(
+                    this.renderTitle(title).append(
                         this.renderSubTitle()
                     ),
                     listUtils.makeControls().append(
-                        listUtils.appendIconText(
+                        canEdit ? listUtils.appendIconText(
                             listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', title) }),
                             gt('Edit'),
                             'edit'
-                        ),
-                        self.model.get('id') !== 0 ? listUtils.controlsDelete({ title: gt('Delete %1$s', title) }) : $('<div class="remove-placeholder">')
+                        ) : '',
+                        canDelete ? listUtils.controlsDelete({ title: gt('Delete %1$s', title) }) : $('<div class="remove-placeholder">')
                     ),
                     drawAccountState(this.model) // show a possible account error
                 );
@@ -112,12 +115,8 @@ define('io.ox/settings/accounts/views', [
 
                 e.preventDefault();
 
-                var account = { id: this.model.get('id'), accountType: this.model.get('accountType') },
+                var account = this.model.pick('id', 'accountType', 'folder'),
                     self = this;
-
-                if (account.accountType === 'fileStorage') {
-                    account.filestorageService = this.model.get('filestorageService');
-                }
 
                 require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                     new ModalDialog({
@@ -131,14 +130,15 @@ define('io.ox/settings/accounts/views', [
                     .addButton({ action: 'delete', label: gt('Delete account') })
                     .on('delete', function () {
                         var popup = this,
-                            // require correct api
-                            req = account.accountType === 'fileStorage' ? 'io.ox/core/api/filestorage' : 'io.ox/keychain/api';
+                            // use correct api, folder API if there's a folder and account is not a mail account,
+                            // keychain API otherwise
+                            useFolderAPI = typeof account.folder !== 'undefined' && account.accountType !== 'mail',
+                            req = useFolderAPI ? 'io.ox/core/folder/api' : 'io.ox/keychain/api';
                         settingsUtil.yellOnReject(
                             require([req]).then(function (api) {
-                                return api.remove(account);
+                                return api.remove(useFolderAPI ? account.folder : account);
                             }).then(
                                 function success() {
-                                    folderAPI.list('1', { cache: false });
                                     if (self.disposed) {
                                         popup.close();
                                         return;
@@ -156,7 +156,7 @@ define('io.ox/settings/accounts/views', [
                                 // update folder tree
                                 require(['io.ox/core/api/account', 'io.ox/core/folder/api'], function (accountAPI, folderAPI) {
                                     accountAPI.getUnifiedInbox().done(function (unifiedInbox) {
-                                        if (!unifiedInbox) return;
+                                        if (!unifiedInbox) return folderAPI.refresh();
                                         var prefix = unifiedInbox.split('/')[0];
                                         folderAPI.pool.unfetch(prefix);
                                         folderAPI.refresh();

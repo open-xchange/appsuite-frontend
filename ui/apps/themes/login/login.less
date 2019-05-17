@@ -171,6 +171,9 @@ html.baseline {
 }
 
 #io-ox-login-container-scrollpane {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     position: absolute;
     top: 0; right: 0; bottom: 0; left: 0;
     height: 100%;
@@ -181,7 +184,8 @@ html.baseline {
 #io-ox-login-container {
 
     position: relative;
-    max-width: 400px;
+    width: 400px;
+    max-width: 100%;
     top: 50%;
     .translate(0; -50%);
 
@@ -265,9 +269,6 @@ html.baseline {
 }
 
 #io-ox-login-footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
     width: 100%;
     margin: 1em 0;
     text-align: center;

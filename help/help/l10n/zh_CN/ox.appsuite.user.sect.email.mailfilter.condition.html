@@ -1,7 +1,7 @@
 <html lang="zh_cn">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>5.7.2. 添加条件</title>
+<title>5.7.2. 添加一个条件</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="用户向导&gt;">
@@ -32,14 +32,14 @@
   <h1 class="sr-only"><span class="phrase">电子邮件</span></h1>
 <h2 class="sr-only">使用电子邮件过滤器</h2>
 <div class="sect2" id="ox.appsuite.user.sect.email.mailfilter.condition">
-<div class="titlepage"><div><div><h3 class="title">5.7.2. 添加条件</h3></div></div></div>
-<a class="indexterm" name="id-1.6.13.10.2"></a><a class="indexterm" name="id-1.6.13.10.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.condition">一个条件帮助定义电子邮件要套用哪个动作。您能够设置一个或多个条件。</p>
+<div class="titlepage"><div><div><h3 class="title">5.7.2. 添加一个条件</h3></div></div></div>
+<a class="indexterm" name="id-1.6.13.11.2"></a><a class="indexterm" name="id-1.6.13.11.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.condition">一个条件帮助您定义哪一个电子邮件应该套用动作。您能够设定一个或多个条件。</p>
 <div class="task" id="ox.appsuite.user.task.email.mailfilter.condition">
-<p class="title">如何在<span class="guilabel"><strong>创建新规则</strong></span>窗口添加一个条件：</p>
+<p class="title">如何在 <span class="guilabel"><strong>创建新规则</strong></span> 窗口里添加一个条件：</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p role="presentation">单击<span class="guibutton"><strong>添加条件</strong></span>。从下拉菜单作出一个选择。请注意以下事项：<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">为了使用不在列表包含的电子邮件部分，选择<span class="guibutton"><strong>标头</strong></span>。在 名称 输入字段中输入一个<span class="guilabel"><strong>名称</strong></span>。您可以以显示源数据读取一个电子邮件标头。</p></li>
-<li class="listitem"><p role="presentation">为了考虑<span class="guilabel"><strong>暗送</strong></span>部分，选择<span class="guibutton"><strong>信封 - 发送至</strong></span>。信封包括输入在<span class="guilabel"><strong>送到</strong></span>、<span class="guilabel"><strong>抄送</strong></span>、或<span class="guilabel"><strong>暗送</strong></span>字段里的电子邮件收件人。</p></li>
+<li class="listitem"><p role="presentation">为了使用不在列表包含的电子邮件部分，选择<span class="guibutton"><strong>标头</strong></span>。在 名称 输入字段中输入一个名称。您可以以显示源数据读取一个电子邮件标头。</p></li>
+<li class="listitem"><p role="presentation">为了考虑<span class="guibutton"><strong>暗送</strong></span>部分，选择<span class="guibutton"><strong>信封 - 发送至</strong></span>。信封包括输入在<span class="guibutton"><strong>送到</strong></span>、<span class="guibutton"><strong>抄送</strong></span>、或<span class="guibutton"><strong>暗送</strong></span>字段里的电子邮件收件人。</p></li>
 <li class="listitem"><p role="presentation">为了在条件里使用一部分电子邮件内容，选择<span class="guibutton"><strong>内容</strong></span>。</p></li>
 <li class="listitem"><p role="presentation">为了在条件里使用收件日期，选择<span class="guibutton"><strong>当前日期</strong></span>。</p></li>
 </ul>
@@ -54,11 +54,11 @@
 </div>
 <p id="ox.appsuite.user.example.email.mailfilter.condition">示例：以下详情用作条件：</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">电子邮件 "主题" 部分</p></li>
-<li class="listitem"><p role="presentation">标准 "完全一样"</p></li>
+<li class="listitem"><p role="presentation">电子邮件部分 "主题"</p></li>
+<li class="listitem"><p role="presentation">准则 "完全相同"</p></li>
 <li class="listitem"><p role="presentation">变量 "分钟"</p></li>
 </ul>
-<p>如是者电子邮件的主题会被验证是否与变量 ("minutes") 完全一样。更多如何使用主题过滤电子邮件的示例：</p>
+<p>如是者电子邮件的主题会被验证是否与变量 ("分钟") 完全相同。如何使用主题过滤电子邮件的更多示例：</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p role="presentation">标准：“包含”如果主题包含变量中的字符，则符合条件。示例：变量为”minutes“。</p>
@@ -89,12 +89,17 @@
 </ul>
 <p>
       </p>
-<p class="title">也请参阅：</p>
-<ul class="itemizedlist" id="ox.appsuite.user.related.email.mailfilter.condition" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html">创建新规则</a></p></li>
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.action.html">添加一个动作</a></p></li>
-</ul>
-<p id="ox.appsuite.user.parent.email.mailfilter.condition">Parent topic: <a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html">使用电子邮件过滤器</a></p>
+<p id="ox.appsuite.user.related.email.mailfilter.condition">
+        </p>
+<p class="title">上义词动作：</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html">创建新规则</a></p></li></ul>
+<p>
+        </p>
+<p class="title">类似动作：</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.action.html">添加一个动作</a></p></li></ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.email.mailfilter.condition">母主题：<a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html">使用电子邮件过滤器</a></p>
 </div>
           </div>
         </body>

@@ -12,16 +12,18 @@
 define('io.ox/core/viewer/views/sidebar/fileversionsview', [
     'io.ox/core/viewer/views/sidebar/panelbaseview',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
+    'io.ox/backbone/views/action-dropdown',
+    'io.ox/backbone/views/actions/util',
     'io.ox/files/api',
     'io.ox/core/api/user',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, LinksPattern, FilesAPI, UserAPI, Util, gt) {
+], function (PanelBaseView, Ext, ActionDropdownView, actionsUtil, FilesAPI, UserAPI, Util, gt) {
 
     'use strict';
 
-    var POINT = 'io.ox/core/viewer/sidebar/versions';
+    var POINT = 'io.ox/core/viewer/sidebar/versions',
+        Action = actionsUtil.Action;
 
     // Extensions for the file versions list
     Ext.point(POINT + '/list').extend({
@@ -34,6 +36,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 versions = model && model.get('versions'),
                 panelHeading = this.find('.sidebar-panel-heading'),
                 panelBody = this.find('.sidebar-panel-body'),
+                versionCounter = 1,
                 table;
 
             function drawAllVersions(allVersions) {
@@ -43,9 +46,9 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 .sort(versionSorter)
                 .each(function (version) {
                     var entryRow = $('<tr class="version">');
-
-                    Ext.point(POINT + '/version').invoke('draw', entryRow, Ext.Baton({ data: version, viewerEvents: viewerEvents, isViewer: isViewer }));
+                    Ext.point(POINT + '/version').invoke('draw', entryRow, Ext.Baton({ data: version, viewerEvents: viewerEvents, isViewer: isViewer, latestVersion: versionCounter === allVersions.length }));
                     table.append(entryRow);
+                    versionCounter++;
                 });
             }
 
@@ -78,37 +81,29 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         }
     });
 
-    // Version drop-down
-    Ext.point(POINT + '/version/dropdown').extend(new LinksPattern.Dropdown({
-        index: 10,
-        label: '',
-        ref: 'io.ox/files/versions/links/inline'
-    }));
-
     // View a specific version
-    Ext.point('io.ox/files/versions/links/inline').extend(new LinksPattern.Link({
+    Ext.point('io.ox/files/versions/links/inline').extend({
         id: 'display-version',
         index: 100,
         prio: 'lo',
         mobile: 'lo',
-        label: gt('View'),
+        title: gt('View this version'),
         section: 'view',
         ref: 'io.ox/files/actions/viewer/display-version'
-    }));
+    });
 
-    new LinksPattern.Action('io.ox/files/actions/viewer/display-version', {
+    new Action('io.ox/files/actions/viewer/display-version', {
         capabilities: 'infostore',
-        requires: function (e) {
-            var isText = FilesAPI.isText(e.baton.data);
-            var isPDF = FilesAPI.isPDF(e.baton.data);
-            var isOffice = FilesAPI.isOffice(e.baton.data);
-
-            return (e.baton.isViewer && (isText || isPDF || isOffice));
+        matches: function (baton) {
+            var versionSpec = baton.first();
+            if (!baton.isViewer) { return false; }
+            // Spreadsheet supports display of current version only
+            if (!versionSpec.current_version && FilesAPI.isSpreadsheet(versionSpec)) { return false; }
+            return true;
         },
         action: function (baton) {
-            if (baton.viewerEvents) {
-                baton.viewerEvents.trigger('viewer:display:version', baton.data);
-            }
+            if (!baton.viewerEvents) { return; }
+            baton.viewerEvents.trigger('viewer:display:version', baton.data);
         }
     });
 
@@ -117,20 +112,20 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         index: 10,
         id: 'filename',
         draw: function (baton) {
-            baton.label = '';   // the label is set via CSS
-            var row,
-                $node;
+
+            var dropdown = new ActionDropdownView({ point: 'io.ox/files/versions/links/inline' });
+
+            dropdown.once('rendered', function () {
+                var $toggle = this.$('> .dropdown-toggle');
+                if (baton.data.current_version) $toggle.addClass('current');
+                Util.setClippedLabel($toggle, baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename);
+            });
+
+            dropdown.setSelection([baton.data], _(baton).pick('data', 'isViewer', 'viewerEvents', 'latestVersion'));
 
             this.append(
-                row = $('<td>').addClass('version-content')
+                $('<td class="version-content">').append(dropdown.$el)
             );
-
-            Ext.point(POINT + '/version/dropdown').invoke('draw', row, baton);
-            $node = row.find('div.dropdown > a');
-            if (baton.data.current_version) {
-                $node.addClass('current');
-            }
-            Util.setClippedLabel($node, baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename);
         }
     });
 
@@ -217,7 +212,6 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             // initially hide the panel
             this.$el.hide();
             // attach event handlers
-            this.on('dispose', this.disposeView.bind(this));
             this.$el.on({
                 open: this.onOpen.bind(this),
                 close: this.onClose.bind(this)
@@ -283,7 +277,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         /**
          * Destructor function of this view.
          */
-        disposeView: function () {
+        onDispose: function () {
             this.model = null;
         }
     });

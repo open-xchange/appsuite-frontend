@@ -11,7 +11,9 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/boot/util', [], function () {
+define('io.ox/core/boot/util', [
+    'io.ox/core/capabilities'
+], function (capabilities) {
 
     'use strict';
 
@@ -155,6 +157,10 @@ define('io.ox/core/boot/util', [], function () {
                 .find('input').prop('disabled', true);
             $('#io-ox-login-blocker').show();
             //$('#io-ox-login-feedback').busy().empty();
+        },
+
+        checkTabHandlingSupport: function () {
+            return !ox.serverConfig.openInSingleTab && (capabilities.has('text') || capabilities.has('spreadsheet') || capabilities.has('presentation')) && !_.device('ie && ie <= 11') && !_.device('smartphone') && !_.device('tablet');
         }
 
     };

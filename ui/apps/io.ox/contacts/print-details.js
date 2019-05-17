@@ -22,11 +22,18 @@ define('io.ox/contacts/print-details', [
     'use strict';
 
     function getCity(data, type) {
-        var zipCode = data['postal_code_' + type],
-            city = data['city_' + type];
+        data = _(['street', 'postal_code', 'city', 'state', 'country']).map(function (field) {
+            return data[field + '_' + type] || '';
+        });
 
-        if (!zipCode && !city) return;
-        return _([zipCode, city]).compact().join(' ');
+        //#. Format of addresses
+        //#. %1$s is the street
+        //#. %2$s is the postal code
+        //#. %3$s is the city
+        //#. %4$s is the state
+        //#. %5$s is the country
+        var text = gt('%1$s\n%2$s %3$s\n%4$s\n%5$s', data[0], data[1], data[2], data[3], data[4]).trim();
+        return $.trim(text);
     }
 
     function process(data) {
@@ -34,9 +41,9 @@ define('io.ox/contacts/print-details', [
             original: data,
             name: util.getFullName(data) || '-',
             birthday: _.isNumber(data.birthday) ? util.getBirthday(data.birthday) : undefined,
-            'city_business': getCity(data, 'business'),
-            'city_home': getCity(data, 'home'),
-            'city_other': getCity(data, 'other')
+            businessAddress: getCity(data, 'business'),
+            homeAddress: getCity(data, 'home'),
+            otherAdress: getCity(data, 'other')
         };
     }
 

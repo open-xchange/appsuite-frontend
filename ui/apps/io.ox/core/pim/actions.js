@@ -17,11 +17,10 @@ define('io.ox/core/pim/actions', [
     'io.ox/files/api',
     'io.ox/core/yell',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/actions',
-    'io.ox/core/extPatterns/links',
+    'io.ox/backbone/views/actions/util',
     'io.ox/core/viewer/views/types/typesregistry',
     'gettext!io.ox/core'
-], function (attachmentAPI, downloadAPI, filesAPI, yell, ext, actions, links, viewerTypes, gt) {
+], function (attachmentAPI, downloadAPI, filesAPI, yell, ext, actionsUtil, viewerTypes, gt) {
 
     'use strict';
 
@@ -29,48 +28,57 @@ define('io.ox/core/pim/actions', [
 
         // view attachment
         view: {
-            requires: function (e) {
-                if (!e.collection.has('some')) { return false; }
-
-                var attachments = _.isArray(e.baton.data) ? e.baton.data : [e.baton.data];
-                var canView = _.some(attachments, function (data) {
+            collection: 'some',
+            matches: function (baton) {
+                return baton.array().some(function (data) {
                     var model = new filesAPI.Model(data);
                     return viewerTypes.canView(model);
                 });
-
-                return canView;
             },
-            multiple: function (baton) {
+            action: function (baton) {
                 require(['io.ox/core/viewer/main'], function (Viewer) {
                     var viewer = new Viewer();
-                    viewer.launch({ files: baton, opt: { disableFolderInfo: true, disableFileDetail: true } });
+                    viewer.launch({ files: baton.array(), opt: { disableFolderInfo: true, disableFileDetail: true } });
                 });
             }
         },
 
         // download attachment
         download: {
-            requires: function (e) {
-                // browser support for downloading more than one file at once is pretty bad (see Bug #36212)
-                return e.collection.has('one');
-            },
+            // browser support for downloading more than one file at once is pretty bad (see Bug #36212)
+            collection: 'one',
             action: function (baton) {
-                var url = attachmentAPI.getUrl(baton.data, 'download');
-                if (_.device('ios >= 11') || _.device('android')) {
-                    downloadAPI.window(url);
+                var url = attachmentAPI.getUrl(baton.first(), 'download');
+                if (_.device('ios >= 11')) {
+                    downloadAPI.window(url, { antivirus: true });
                 } else {
                     downloadAPI.url(url);
                 }
             }
         },
 
+        // download all PIM attachments as zip
+        downloadZip: {
+            requires: function (e) {
+                return e.collection.has('multiple');
+            },
+            multiple: function (list) {
+                var param = {
+                    folder: list[0].folder,
+                    module: list[0].module,
+                    attached: list[0].attached
+                };
+                downloadAPI.pimAttachments(list, param);
+            }
+        },
+
         // save attachment
         save: {
             capabilities: 'infostore',
-            requires: 'some',
-            multiple: function (list) {
+            collection: 'some',
+            action: function (baton) {
                 // cannot be converted to multiple request because of backend bug (module overides params.module)
-                _(list).each(function (data) {
+                baton.array().forEach(function (data) {
                     attachmentAPI.save(data);
                 });
                 setTimeout(function () {
@@ -80,29 +88,28 @@ define('io.ox/core/pim/actions', [
         }
     };
 
-    var labels = {
+    var titles = {
         view: gt('View'),
         download: gt('Download'),
+        downloadZip: gt('Download'),
         //#. %1$s is usually "Drive" (product name; might be customized)
         save: gt('Save to %1$s', gt.pgettext('app', 'Drive'))
     };
 
     // and let's define all points right now
-    var index = 0;
+    var index = 0, Action = actionsUtil.Action;
     _(extensions).each(function (extension, id) {
-
         // define action
         var ref = 'io.ox/core/tk/actions/' + id + '-attachment';
-        new actions.Action(ref, extension);
-
+        new Action(ref, extension);
         // define default link
-        ext.point('io.ox/core/tk/attachment/links').extend(new links.Link({
+        ext.point('io.ox/core/tk/attachment/links').extend({
             id: id,
             index: index += 100,
-            label: labels[id],
+            title: titles[id],
             mobile: 'hi',
             ref: ref
-        }));
+        });
     });
 
     return extensions;

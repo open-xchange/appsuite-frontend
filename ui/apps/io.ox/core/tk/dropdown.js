@@ -137,9 +137,12 @@
                 // may be not the case if a menu point is added after menu was
                 // initial moved to the body by the code above
                 var menu = $parent.data('menu');
+                console.log(menu);
                 if (!menu.find('[data-action="close-menu"]').parent().is(':last-child')) {
                     menu.find('[data-action="close-menu"]').parent().appendTo(menu);
-                } else if (!menu.find('[data-action="close-menu"]')) {
+                }
+
+                if (menu.find('[data-action="close-menu"]').length === 0) {
                     // for programmatic invoked menu we have to append a new closer as menus may be cleared
                     setTimeout(function () {
                         menu.append(getCloseElement());
@@ -250,8 +253,8 @@
     }
 
     function onResize(e) {
-        // do not clear menus when the resize event has been triggered
-        if (!e.originalEvent) return;
+        // do not clear menus when the resize event has been triggered or on android
+        if (!e.originalEvent || _.device('smartphone && android')) return;
         clearMenus(e);
     }
 

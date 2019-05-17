@@ -11,7 +11,7 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'io.ox/core/a11y', 'gettext!io.ox/core'], function (DisposableView, a11y, gt) {
+define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/views/disposable', 'io.ox/core/a11y', 'gettext!io.ox/core'], function (DisposableView, a11y, gt) {
 
     'use strict';
 

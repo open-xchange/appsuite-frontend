@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/folder/tree', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/core/folder/selection',
@@ -215,7 +215,6 @@ define('io.ox/core/folder/tree', [
                 top = offset.top - 7,
                 left = offset.left + target.outerWidth() + 7;
 
-            target.data('preventFocus', true);
             this.toggleContextMenu({ target: target, top: top, left: left });
         },
 
@@ -269,7 +268,7 @@ define('io.ox/core/folder/tree', [
                 favorite = this.selection.get('data-favorite');
             // get folder data and redraw
             api.get(id).done(function (data) {
-                var baton = new ext.Baton({ app: app, data: data, view: view, module: module, favorite: favorite });
+                var baton = new ext.Baton({ app: app, data: data, view: view, module: module, originFavorites: favorite });
                 ext.point(point).invoke('draw', ul, baton);
                 if (_.device('smartphone')) {
                     ul.append(

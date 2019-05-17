@@ -472,6 +472,8 @@
         .checkbox.custom { margin-bottom: 0; margin-top: 3px; }
     }
 
+    .modal-footer .help-block { text-align: left; }
+
     &.mobile-dialog {
         .modal-dialog {
             width: 96%;
@@ -516,4 +518,23 @@
             line-height: 24px;
         }
     }
+
+    .modal-body.av-dialog {
+        &>div { padding-left: 24px; }
+        i {
+            float: left;
+            padding-top: 3px;
+            color: #676767;
+        }
+
+        &.av-danger {
+            &>div { padding-left: 40px; }
+            i {
+                padding-top: 5px;
+                color: @red;
+                font-size: 30px;
+            }
+        }
+    }
+
 }

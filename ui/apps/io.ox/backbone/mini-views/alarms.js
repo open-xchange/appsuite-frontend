@@ -181,9 +181,6 @@ define('io.ox/backbone/mini-views/alarms', [
             this.changedByUser = true;
             this.model.set(this.attribute, this.getAlarmsArray());
             this.changedByUser = false;
-            // trigger event, so we know the user changed the alarm
-            // used by edit view, to determine, if the default alarms should be applied on allday change
-            this.model.trigger('userChangedAlarms');
         },
         updateView: function () {
             // user induced changes don't need a redraw, the view is already in the correct state (redraw would also cause a focus loss)
@@ -233,7 +230,12 @@ define('io.ox/backbone/mini-views/alarms', [
 
                 // add custom option so we can show non standard times
                 if (_(_(util.getReminderOptions()).keys()).indexOf(alarm.trigger.duration.replace('-', '')) === -1) {
-                    selectbox.append($('<option>').val(alarm.trigger.duration.replace('-', '')).text(new moment.duration(alarm.trigger.duration).humanize()));
+                    // test if we just have a special 0 value
+                    if (/^[-+]?PT0[SHDW]$/.test(alarm.trigger.duration)) {
+                        selectbox.find('[value="PT0M"]').val(alarm.trigger.duration.replace('-', ''));
+                    } else {
+                        selectbox.append($('<option>').val(alarm.trigger.duration.replace('-', '')).text(new moment.duration(alarm.trigger.duration).humanize()));
+                    }
                 }
 
                 relatedbox.val((alarm.trigger.related || 'START') + alarm.trigger.duration.replace(/\w*/g, ''));
@@ -267,8 +269,9 @@ define('io.ox/backbone/mini-views/alarms', [
                 switch (alarm.action) {
                     // don't use empty string as summary or description if not available. Produces problems with ical
                     // with mail or audio alarms everything is optional and handled by the backend (we could add attendees, description, attachments etc but we want to keep things simple until needed)
+                    // do not overwrite existing descriptions
                     case 'DISPLAY':
-                        alarm.description = self.model ? self.model.get('summary') || 'reminder' : 'reminder';
+                        if (!alarm.description) alarm.description = self.model ? self.model.get('summary') || 'reminder' : 'reminder';
                         break;
                     // no default
                 }
@@ -327,7 +330,8 @@ define('io.ox/backbone/mini-views/alarms', [
 
             require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                 var model = {}, alarmView;
-                model[self.attribute] = self.model.get(self.attribute);
+                // deepclone is needed here or the models are not detached and the attribute is bound by reference
+                model[self.attribute] = _.deepClone(self.model.get(self.attribute));
                 alarmView = new alarmsView({ model: new Backbone.Model(model), attribute: self.attribute });
                 new ModalDialog({
                     title: gt('Edit reminders'),
@@ -340,6 +344,9 @@ define('io.ox/backbone/mini-views/alarms', [
                 .addCancelButton({ left: true })
                 .addButton({ action: 'apply', label: gt('Apply') })
                 .on('apply', function () {
+                    // trigger event, so we know the user set the alarms manually
+                    // used by edit view, to determine, if the default alarms should be applied on allday change
+                    self.model.trigger('userChangedAlarms');
                     // if the length of the array doesn't change the model doesn't trigger a change event,so we trigger it manually
                     self.model.set(self.attribute, alarmView.getAlarmsArray()).trigger('change:' + self.attribute);
                 })

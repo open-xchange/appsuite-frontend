@@ -79,7 +79,7 @@ define('io.ox/core/moment', [
             this._isUTC = false;
             this._z = moment.defaultZone || null;
             if (keepLocalTime) {
-                this.subtract((this._z ? this._z.offset(this) : Math.round(this._d.getTimezoneOffset() / 15) * 15) * -1, 'm');
+                this.subtract((this._z ? this._z.utcOffset(this) : Math.round(this._d.getTimezoneOffset() / 15) * 15) * -1, 'm');
             }
         }
         return this;

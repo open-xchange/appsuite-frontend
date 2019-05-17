@@ -40,6 +40,7 @@ define('io.ox/backbone/views/disposable', [], function () {
             if (!automatic) this.$el.off().removeData();
             // trigger event for sub-classes
             this.trigger('dispose');
+            this.onDispose();
             // now we remove all handlers maintained by the view;
             // we need both off() and stopListening()
             this.off().stopListening();
@@ -51,6 +52,16 @@ define('io.ox/backbone/views/disposable', [], function () {
             }
             // finally, mark as disposed
             this.disposed = true;
+        },
+
+        // overwrite this to clean up without using the dispose event; timing is identical
+        onDispose: function () { },
+
+        listenToDOM: function (element, event, handler) {
+            $(element).on(event, $.proxy(handler, this));
+            this.on('dispose', function () {
+                $(element).off(event, handler);
+            });
         }
     });
 

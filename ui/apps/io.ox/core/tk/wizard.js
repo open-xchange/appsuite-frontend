@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/tk/wizard', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/tk/hotspot',
     'gettext!io.ox/core'
 ], function (DisposableView, hotspot, gt) {

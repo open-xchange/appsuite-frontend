@@ -158,49 +158,53 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
                     throw new Error('Extensions must not have their own invoke method');
                 }
 
-                if (!extension.id) {
-                    extension.id = 'default';
+                var id = extension.id;
+
+                if (!id) {
+                    extension.id = id = 'default';
                     extension.index = extension.index || 100;
                 } else {
                     extension.index = extension.index || 1000000000;
                 }
 
                 // skip duplicates (= same id)
-                if (!has(extension.id)) {
-
-                    if ('enabled' in extension) {
-                        if (_.isObject(extension.enabled)) {
-                            return console.error("Extending of '" + this.id + "' with '" + extension.id + "' failed. Ensure extensions 'enabled' property is a primitive.");
-                        }
-                        if (!extension.enabled) this.disable(extension.id);
-                        delete extension.enabled;
-                    }
-
-                    extension.invoke = createInvoke(this, extension);
-
-                    if (replacements[extension.id]) {
-                        _.extend(extension, replacements[extension.id]);
-                        delete replacements[extension.id];
-                    }
-
-                    extensions.push(extension);
-                    sort();
-
-
-                    if (!extension.metadata) {
-                        extension.metadata = function (name, args) {
-                            if (this[name]) {
-                                if (_.isFunction(this[name])) {
-                                    return this[name].apply(this, args);
-                                }
-                                return this[name];
-                            }
-                            return undefined;
-                        };
-                    }
-
-                    this.trigger('extended', extension);
+                if (has(id)) {
+                    if (ox.debug) console.warn('Extensions MUST HAVE unique identifiers! Point: %s ID: %s', this.id, extension.id);
+                    return;
                 }
+
+                if ('enabled' in extension) {
+                    if (_.isObject(extension.enabled)) {
+                        return console.error("Extending of '" + this.id + "' with '" + id + "' failed. Ensure extensions 'enabled' property is a primitive.");
+                    }
+                    if (!extension.enabled) this.disable(id);
+                    delete extension.enabled;
+                }
+
+                extension.invoke = createInvoke(this, extension);
+
+                // apply replacements
+                _(replacements[id]).each(function (arg) {
+                    _.extend(extension, _.isFunction(arg) ? arg(_.extend({}, extension)) : arg);
+                });
+                delete replacements[id];
+
+                extensions.push(extension);
+                sort();
+
+                if (!extension.metadata) {
+                    extension.metadata = function (name, args) {
+                        if (this[name]) {
+                            if (_.isFunction(this[name])) {
+                                return this[name].apply(this, args);
+                            }
+                            return this[name];
+                        }
+                        return undefined;
+                    };
+                }
+
+                this.trigger('extended', extension);
 
             }, this);
 
@@ -210,36 +214,31 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
         /**
          * extends existing extension OR registers extension if id is not taken yet
          * registers extension (for point) if id is not taken yet
+         * replace(replacement) or replace(id, function (original) { ... });
          * @chainable
          * @param  {extension }
          * @return { point }
          */
-        this.replace = function (extension) {
+        this.replace = function (arg, fn) {
 
-            if (!extension.id) {
-                throw new Error('Replacements must have an id!');
-            }
+            var id = arguments.length === 2 ? arg : arg.id;
 
-            var replaced = false;
+            if (!id) throw new Error('Replacements must have an id!');
 
-            _(extensions).map(function (e) {
-                if (e.id === extension.id) {
-                    _.extend(e, extension);
-                    replaced = true;
-                }
+            var replaced = _(extensions).find(function (extension) {
+                if (extension.id !== id) return false;
+                _.extend(extension, fn ? fn(_.extend({}, extension)) : arg);
+                return true;
             });
 
-            if (replaced) {
-                sort();
-            } else {
-                replacements[extension.id] = extension;
-            }
+            if (replaced) sort(); else (replacements[id] = replacements[id] || []).push(fn || arg);
 
             return this;
         };
 
         this.clear = function () {
-            extensions = replacements = [];
+            extensions = {};
+            replacements = {};
         };
 
         /**
@@ -382,7 +381,15 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             var point = this;
             return point.reduce(function (def, ext) {
                 if (!def || !def.then) def = $.when(def);
-                return def.then(function () {
+                return def.then(function success() {
+                    if (baton.isPropagationStopped()) return;
+                    if (baton.isDisabled(point.id, ext.id)) return;
+                    return ext.perform.apply(context, [baton]);
+                }, function failure(err) {
+                    if (!baton.catchErrors) throw err;
+                    if (err && err.error) baton.error = err.error;
+                    if (err && err.warnings) baton.warning = err.warnings;
+                    baton.rejected = true;
                     if (baton.isPropagationStopped()) return;
                     if (baton.isDisabled(point.id, ext.id)) return;
                     return ext.perform.apply(context, [baton]);
@@ -456,7 +463,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             this.flow = { disable: {} };
             this.$ = {};
             // just copy given object
-            _.extend(this, obj);
+            _.extend(this, _(obj).omit('isDefaultPrevented', 'isPropagationStopped'));
         } else {
             // for the lazy way: b = Baton() instead of b = new Baton()
             return new Baton(obj);

@@ -987,8 +987,6 @@ define('io.ox/core/folder/api', [
                 if (!options.silent) {
                     api.trigger('update update:' + id, id, newId, model.toJSON());
                     if ('permissions' in changes) api.trigger('change:permissions', id);
-                    // used by drive to respond to updated foldernames in icon/list view
-                    if ('title' in changes) api.trigger('rename', id, model.toJSON());
                 }
                 // fetch subfolders of parent folder to ensure proper order after rename/move
                 if (id !== newId || changes.title || changes.folder_id) {
@@ -996,15 +994,12 @@ define('io.ox/core/folder/api', [
                             .then(function () {
                                 pool.getCollection(model.get('folder_id')).sort();
 
-                                if ('title' in changes) {
+                                // used by drive to respond to updated foldernames in icon/list view
+                                // note: this is moved inside the 'list' deferred chain, otherwise the drive list reload
+                                // could refresh with old data when having high latency/slow connections see #62552 and #56749
+                                if ('title' in changes) api.trigger('rename', id, model.toJSON());
 
-                                    // it's possible that external storage adapter rename a folder again after a user-rename (e.g. #56749), depending on the result update drive icon/list view
-                                    var renamedByResponse = _.propertyOf(changes)('title') !== model.get('title');
-                                    if (renamedByResponse) api.trigger('rename', id, model.toJSON());
-
-                                    api.trigger('after:rename', id, model.toJSON());
-                                }
-
+                                if ('title' in changes) api.trigger('after:rename', id, model.toJSON());
                                 return newId;
                             });
                 }
@@ -1628,6 +1623,7 @@ define('io.ox/core/folder/api', [
         bits: util.bits,
         is: util.is,
         can: util.can,
+        supports: util.supports,
         virtual: virtual,
         isVirtual: isVirtual,
         isExternalFileStorage: isExternalFileStorage,

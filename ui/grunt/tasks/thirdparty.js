@@ -23,7 +23,6 @@ module.exports = function (grunt) {
                         expand: true,
                         src: [
                             'bootstrap/less/**/*.less',
-                            'bootstrap-datepicker/less/datepicker3.less',
                             'font-awesome/{less,fonts}/*',
                             'open-sans-fontface/fonts/Light/*',
                             '!**/*.otf'
@@ -53,6 +52,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: [
+                            'bootstrap-datepicker/less/datepicker3.less',
                             'tinymce/{langs,plugins,skins,themes}/**/*',
                             '{hopscotch,emoji}/*.{js,css,png}'
                         ],
@@ -70,14 +70,13 @@ module.exports = function (grunt) {
                         flatten: true,
                         expand: true,
                         src: [
+                            '@open-xchange/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            '@open-xchange/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'socket.io-client/dist/socket.io.slim.js',
                             'bigscreen/bigscreen.min.js',
-                            'bootstrap-datepicker/js/bootstrap-datepicker.js',
-                            'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'chart.js/dist/Chart.min.js',
                             'clipboard/dist/clipboard.min.js',
                             'croppie/croppie.min.js',
-                            'marked/lib/marked.js',
                             'resize-polyfill/lib/polyfill-resize.js',
                             'swiper/dist/js/swiper.js',
                             'typeahead.js/dist/typeahead.jquery.js',
@@ -114,7 +113,8 @@ module.exports = function (grunt) {
                         src: [
                             'build/pdf.min.js',
                             'build/pdf.worker.min.js',
-                            'web/images/*'
+                            'web/images/*',
+                            'cmaps/*'
                         ],
                         cwd: 'node_modules/pdfjs-dist',
                         dest: 'build/apps/pdfjs-dist/',
@@ -165,7 +165,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     ext: '.css',
-                    cwd: 'node_modules/bootstrap-tokenfield/less/',
+                    cwd: 'node_modules/@open-xchange/bootstrap-tokenfield/less/',
                     src: ['*.less'],
                     dest: 'build/apps/3rd.party/bootstrap-tokenfield/css/'
                 }]

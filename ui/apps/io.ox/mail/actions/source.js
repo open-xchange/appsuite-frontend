@@ -21,7 +21,7 @@ define('io.ox/mail/actions/source', [
 
     function setAuthentification(data, dialog) {
         // ensure full auth data is available
-        return api.get(_.cid(data)).done(function (data) {
+        return api.get(_.pick(data, 'id', 'folder_id'), { cache: false }).done(function (data) {
             data = data.authenticity;
             if (!data || !(data.spf || data.dkim || data.dmarc)) return;
 

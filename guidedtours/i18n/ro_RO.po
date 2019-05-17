@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-10-13 15:07+0200\n"
-"Last-Translator: Daiana Heinrich <daiana@workshop-chapina.com>\n"
+"PO-Revision-Date: 2019-04-20 10:57+0900\n"
+"Last-Translator: Adi David <adi@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -50,7 +50,7 @@ msgstr ""
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
-msgstr "Invitarea altor participanți "
+msgstr "Invitarea altor participanți"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
@@ -186,10 +186,10 @@ msgid ""
 "files, share them and synchronize them with different devices.  "
 msgstr ""
 "Bine ați venit la aplicația de stocare în cloud. Această vizită ghidată vă "
-"oferă o introducere în utilizarea noii soluții de stocare online - un puonct "
+"oferă o introducere în utilizarea noii soluții de stocare online - un punct "
 "unic de acces pentru fișierele stocate online din toate aplicațiile "
 "dumneavoastră. Aici vă puteți încărca și salva fișierele, le puteți partaja "
-"și sincroniza cu diferite dispozitive."
+"și sincroniza cu diferite dispozitive.  "
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Folder tree"
@@ -427,7 +427,7 @@ msgid ""
 "side of the toolbar."
 msgstr ""
 "Pentru a deschide sau a închide arborele de dosare, apăsați pe Vedere > "
-"Vedere dosar în partea dreaptă a barei de unelte. "
+"Vedere dosar în partea dreaptă a barei de unelte."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
@@ -648,6 +648,83 @@ msgstr ""
 #: apps/io.ox/tours/main.js module:io.ox/tours
 msgid "Getting started"
 msgstr "Introducere"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr "Autentificare în doi pași"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Acum puteți adăuga opțiuni suplimentare de autentificare pentru a îmbunătăți "
+"securitatea contului dvs."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "Adăugare opțiuni de autentificare"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr ""
+"Diferite opțiuni de autentificare suplimentară depind de instalarea dvs."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "Adăugarea unui cod prin mesaj SMS"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr ""
+"Selectarea opțiunii de cod prin mesaj SMS, de exemplu, vă va cere un număr "
+"de telefon mobil."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "Solicitări de autentificare"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr ""
+"Data viitoare când vă conectați, va trebui să vă verificați identitatea "
+"introducând codul trimis telefonului dvs."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "Se eliminează"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr ""
+"Dispozitivele pot fi eliminate o dată adăugate, dacă doriți acest lucru.  "
+"Consultați meniul de ajutor pentru detalii suplimentare."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "Următorul"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+"Ca o caracteristică suplimentară de securitate, acum aveți posibilitatea să "
+"solicitați o a doua metodă de autentificare, cum ar fi un mesaj SMS, înainte "
+"de a vă autentifica în cont.  Doriți să vedeți câteva informații despre "
+"această opțiune acum?"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr "Începe vizita ghidată"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
@@ -6051,9 +6128,6 @@ msgstr ""
 
 #~ msgid "New..."
 #~ msgstr "Nou..."
-
-#~ msgid "Next"
-#~ msgstr "Următorul"
 
 #~ msgid "Next Day"
 #~ msgstr "Ziua următoare"

@@ -1,0 +1,11 @@
+X-Account-Key: account2
+From: Test User <user@example.com>
+To: 
+	=?UTF-8?Q?Wielkoszcz=C4=99ko=C5=9Bciskowiczkiewi?= =?UTF-8?Q?cz=C3=B3wnaOm=C3=B3jbo=C5=BCejestemno=C5=BCemwie?= =?UTF-8?Q?leznacz=C4=85cychznak=C3=B3wsi=C4=99znaczyb?= =?UTF-8?Q?oprzecie=C5=BCniemo=C5=BCeby=C4=87zbyt=C5=82atwo!?= <test@kgorynski.home.pl>
+Subject: Very long TO field 
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+This mail has a very long UTF-8 encoded TO field. There should be no white space in the TO field.
+

@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="podręcznik użytkownika">
 <link rel="up" href="ox.appsuite.user.sect.email.send.html" title="5.4. Wysyłanie wiadomości e-mail">
 <link rel="prev" href="ox.appsuite.user.sect.email.send.sender.html" title="5.4.3. Wybieranie adresu nadawcy">
-<link rel="next" href="ox.appsuite.user.sect.email.send.attachmentlink.html" title="5.4.5. Wysyłanie załączników jako łączy">
+<link rel="next" href="ox.appsuite.user.sect.email.send.attachmentlink.html" title="5.4.5. Wysyłanie załączników jako linków">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Informacja Prawna">
 <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -29,20 +29,24 @@
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <h1 class="sr-only"><span class="phrase">E-mail</span></h1>
+  <h1 class="sr-only">
+    <span class="phrase">E-mail</span>
+    
+    
+  </h1>
 <h2 class="sr-only">Wysyłanie wiadomości e-mail</h2>
 <div class="sect2" id="ox.appsuite.user.sect.email.send.attachments">
 <div class="titlepage"><div><div><h3 class="title">5.4.4. Dodawanie załączników</h3></div></div></div>
-<a class="indexterm" name="id-1.6.10.7.2"></a><div class="task" id="ox.appsuite.user.task.email.send.attachments">
+<a class="indexterm" name="id-1.6.10.8.2"></a><div class="task" id="ox.appsuite.user.task.email.send.attachments">
 <p class="title">Jak dodać załączniki do wiadomości e-mail w oknie edycji wiadomości e-mail:</p>
-<a class="indexterm" name="id-1.6.10.7.3.1"></a><div class="procedure"><ol class="procedure" type="1">
+<a class="indexterm" name="id-1.6.10.8.3.1"></a><div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p role="presentation">Wybierz pliki, które chcesz wysłać jako załącznik.<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p role="presentation">Aby wysłać plik lokalny jako załącznik, kliknij przycisk <span class="guibutton"><strong>Załączniki</strong></span>. Kliknij przycisk <span class="guibutton"><strong>Dodaj plik lokalny</strong></span>. Wybierz odpowiednie pliki.</p>
 <p role="presentation">Aby dodać załącznik, możesz też przeciągnąć wybrane pliki z przeglądarki plików lub pulpitu do okna wiadomości e-mail i upuścić je pod przyciskiem <span class="guibutton"><strong>Załączniki</strong></span>.</p>
 </li>
 <li class="listitem">
-<p role="presentation">Aby jako załącznika użyć bieżącej wersji pliku z aplikacji <span class="phrase"><span class="guilabel"><strong>Pliki</strong></span></span>, kliknij przycisk <span class="guibutton"><strong>Załączniki</strong></span>. Kliknij pozycję <span class="phrase"><span class="guibutton"><strong>Dodaj z Pliki</strong></span></span>.</p>
+<p role="presentation">Aby jako załącznika użyć bieżącej wersji pliku z aplikacji <span class="phrase">Pliki</span>, kliknij przycisk <span class="guibutton"><strong>Załączniki</strong></span>. Kliknij pozycję <span class="phrase"><span class="guibutton"><strong>Dodaj z Pliki</strong></span></span>.</p>
 <p role="presentation">Otwórz folder w oknie <span class="guilabel"><strong>Dodaj załączniki</strong></span>. Wybierz dowolną liczbę plików. Kliknij przycisk <span class="guibutton"><strong>Dodaj</strong></span>.</p>
 </li>
 </ul>
@@ -54,21 +58,27 @@
             </p></li>
 </ol></div>
 </div>
-<p id="ox.appsuite.user.functions.email.send.attachments">Inne funkcje:</p>
+<p id="ox.appsuite.user.hint.email.send.attachments">Uwaga: załącznik wiadomości e-mail może zajmować ponad 25% więcej miejsca niż ten sam plik zapisany lokalnie.</p>
+<p id="ox.appsuite.user.options.email.send.attachments">Opcje:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p role="presentation">W pewnych konfiguracjach w przypadku załączenia obrazu przekraczającego określoną liczbę pikseli lub określony rozmiar pliku jest wyświetlany przycisk <span class="guibutton"><strong>Rozmiar obrazu</strong></span>.</p>
-<p role="presentation">Kliknięcie tego przycisku powoduje otwarcie menu umożliwiającego wybranie rozmiaru obrazu.</p>
+<p role="presentation">W pewnych konfiguracjach załączone obrazy można minimalizować, jeśli przekraczają określoną liczbę pikseli lub określony rozmiar pliku. W tym celu wybierz wartość obok pola <span class="guibutton"><strong>Rozmiar obrazu</strong></span> w prawym dolnym rogu okienka załączników.</p>
+<p role="presentation">Uwaga: obrazy można minimalizować tylko bezpośrednio po ich załadowaniu. Jeśli otworzysz wersję roboczą wiadomości e-mail lub odświeżysz okno edycji wiadomości, załączonych obrazów już nie będzie można zminimalizować.</p>
 </li>
-<li class="listitem"><p role="presentation">W pewnych konfiguracjach załączniki nie będą wysyłane, jeśli przekroczą określony limit rozmiaru. W takich przypadkach załącznik zostanie zapisany w folderze <span class="guilabel"><strong>Załączniki e-mail</strong></span> w aplikacji <span class="phrase"><span class="guilabel"><strong>Pliki</strong></span></span>. Wiadomość e-mail będzie zawierała łącze do załącznika.</p></li>
+<li class="listitem"><p role="presentation">W pewnych konfiguracjach załączniki nie będą wysyłane, jeśli przekroczą określony limit rozmiaru. W takich przypadkach załącznik zostanie zapisany w folderze Załączniki e-mail w aplikacji <span class="phrase">Pliki</span>. Wiadomość e-mail będzie zawierała link do załącznika.</p></li>
 </ul>
 <p>
       </p>
-<p class="title">Zobacz też:</p>
-<ul class="itemizedlist" id="ox.appsuite.user.related.email.send.attachments" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.send.new.html">Wysyłanie nowej wiadomości e-mail</a></p></li>
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.send.attachmentlink.html">Wysyłanie załączników jako łączy</a></p></li>
-</ul>
+<p id="ox.appsuite.user.related.email.send.attachments">
+        </p>
+<p class="title">Działanie nadrzędne:</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.send.new.html">Wysyłanie nowej wiadomości e-mail</a></p></li></ul>
+<p>
+        </p>
+<p class="title">Podobne działania:</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.send.attachmentlink.html">Wysyłanie załączników jako linków</a></p></li></ul>
+<p>
+      </p>
 <p id="ox.appsuite.user.parent.email.send.attachments">Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.email.send.html">Wysyłanie wiadomości e-mail</a></p>
 </div>
           </div>

@@ -12,14 +12,12 @@
  */
 
 define('io.ox/mail/api', [
+    'io.ox/mail/api-legacy',
     'io.ox/core/http',
-    'io.ox/core/cache',
     'settings!io.ox/core',
     'io.ox/core/api/factory',
     'io.ox/core/folder/api',
-    'io.ox/contacts/api',
     'io.ox/core/api/account',
-    'io.ox/core/notifications',
     'io.ox/mail/util',
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
@@ -28,7 +26,7 @@ define('io.ox/mail/api', [
     'gettext!io.ox/mail',
     'io.ox/core/capabilities',
     'io.ox/mail/sanitizer'
-], function (http, cache, coreSettings, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities, sanitizer) {
+], function (legacyAPI, http, coreSettings, apiFactory, folderAPI, accountAPI, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities, sanitizer) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -48,7 +46,8 @@ define('io.ox/mail/api', [
     var fixtoccbcc = settings.get('features/fixtoccbcc'),
         showDeleted = !settings.get('features/ignoreDeleted', false),
         sanitize = sanitizer.isEnabled(),
-        sandboxedCSS = settings.get('features/sandboxedCSS', true);
+        sandboxedCSS = settings.get('features/sandboxedCSS', true),
+        enablePdfPreconversion = coreSettings.get('pdf/enablePreconversionOnMailFetch', true);
 
     pool.map = function (data) {
         var cid = _.cid(data), model = this.get(cid);
@@ -188,6 +187,9 @@ define('io.ox/mail/api', [
         }
     });
 
+    // support old compose api endpoints backward compatibility
+    _.extend(api, legacyAPI);
+
     /**
      * updates the view used for get requests, used on mail settings save to be responsive
      */
@@ -201,14 +203,6 @@ define('io.ox/mail/api', [
     };
 
     api.separator = settings.get('defaultseparator', '/');
-
-    api.SENDTYPE = {
-        NORMAL:     0,
-        REPLY:      1,
-        FORWARD:    2,
-        EDIT_DRAFT: 3,
-        DRAFT:      4
-    };
 
     api.FLAGS = {
         ANSWERD:     1,
@@ -257,7 +251,6 @@ define('io.ox/mail/api', [
 
     var get = api.get,
         getAll = api.getAll,
-        getList = api.getList,
         search = api.search;
 
     // update thread model
@@ -329,6 +322,9 @@ define('io.ox/mail/api', [
         // do not process plain text if we prettify text client-side
         obj.process_plain_text = false;
 
+        // PDF pre-conversion for mail attachments
+        obj.pregenerate_previews = String(enablePdfPreconversion);
+
         // never use factory's internal cache, therefore always 'false' at this point
         return get.call(api, obj, false).done(function (data) {
             // don't save raw data in our models. We only want preformated content there
@@ -369,21 +365,6 @@ define('io.ox/mail/api', [
         }
 
         return getAll.call(this, options, useCache);
-    };
-
-    /**
-     * pipes getList() to remove typesuffix from sender
-     * @param  {array} ids
-     * @param  {boolean} useCache (default is true)
-     * @param  {object} options
-     * @return { deferred }
-     */
-    api.getList = function (ids, useCache, options) {
-        //TOOD: use this until backend removes channel suffix
-        return getList.call(this, ids, useCache, options).then(function (data) {
-            _.each(data, util.removeChannelSuffix);
-            return data;
-        });
     };
 
     api.search = function (query, options) {
@@ -1026,7 +1007,7 @@ define('io.ox/mail/api', [
         // clear affected collections
         _(pool.getByFolder(source)).each(function (collection) {
             collection.reset([]);
-            collection.complete = true;
+            collection.setComplete(true);
         });
 
         return http.wait(
@@ -1083,81 +1064,6 @@ define('io.ox/mail/api', [
             // try/finally is used to set up http.wait() first
             if (obj.msgref) prepareRemove(util.parseMsgref(api.separator, obj.msgref));
         }
-    };
-
-    // composition space id
-    api.csid = function () {
-        return _.uniqueId() + '.' + _.now();
-    };
-
-    var react = function (action, obj, view) {
-        var isDraft = (action === 'edit'),
-            isAlternative = (view === 'alternative');
-
-        if (isAlternative) view = obj.content_type === 'text/plain' ? 'text' : 'html';
-
-        // get proper view first
-        view = $.trim(view || 'text').toLowerCase();
-        view = view === 'text/plain' ? 'text' : view;
-        view = view === 'text/html' ? 'html' : view;
-
-        if (view === 'html' && obj.content_type === 'text/plain' && !isDraft) view = 'text';
-        if (view === 'text' && obj.content_type === 'text/plain' && isDraft) view = 'raw';
-
-        // attach original message on touch devices?
-        var attachOriginalMessage = obj.attachOriginalMessage || (view === 'text' && _.device('touch') && settings.get('attachOriginalMessage', false) === true),
-            csid = api.csid();
-
-        return http.PUT({
-            module: 'mail',
-            // using jQuery's params because it ignores undefined values
-
-            params: $.extend({}, {
-                action: isDraft ? 'get' : action || '',
-                attachOriginalMessage: attachOriginalMessage,
-                view: view,
-                setFrom: (/reply|replyall|forward/.test(action)),
-                csid: csid,
-                embedded: obj.embedded,
-                max_size: obj.max_size,
-                decrypt: (obj.security && obj.security.decrypted),
-                process_plain_text: false
-            }),
-            data: _([].concat(obj)).map(function (obj) {
-                return api.reduce(obj);
-            }),
-            appendColumns: false
-        })
-        .then(function (data) {
-            var text = '',
-                tmp = '';
-            // inject csid
-            data.csid = csid;
-            // transform pseudo-plain text to real text
-            if (data.attachments && data.attachments.length) {
-                data.attachments = data.attachments.map(sanitizer.sanitize);
-                if (data.attachments[0].content === '') {
-                    // nothing to do - nothing to break
-                } else if (data.attachments[0].content_type === 'text/html') {
-                    // content-type specific
-                    // robust approach for large mails
-                    tmp = document.createElement('DIV');
-                    tmp.innerHTML = data.attachments[0].content;
-                    _(tmp.getElementsByTagName('BLOCKQUOTE')).each(function (node) {
-                        node.removeAttribute('style');
-                    });
-                    text = tmp.innerHTML;
-                    tmp = null;
-                } else {
-                    text = $.trim(data.attachments[0].content);
-                }
-            } else {
-                data.attachments = data.attachments || [{}];
-            }
-            // replace
-            data.attachments[0].content = text;
-            return data;
-        });
     };
 
     /**
@@ -1228,254 +1134,6 @@ define('io.ox/mail/api', [
         }, false);
     };
 
-    /**
-     * prepares object content for 'replayall' action
-     * @param  {object} obj (mail object)
-     * @param  {string} view (html or text)
-     * @return { deferred} done returns prepared object
-     */
-    api.replyall = function (obj, view) {
-        return react('replyall', obj, view);
-    };
-
-    /**
-     * prepares object content for 'reply' action
-     * @param  {object} obj (mail object)
-     * @param  {string} view (html or text)
-     * @return { deferred} done returns prepared object
-     */
-    api.reply = function (obj, view) {
-        return react('reply', obj, view);
-    };
-
-    /**
-     * prepares object content for 'forward' action
-     * @param  {object} obj (mail object)
-     * @param  {string} view (html or text)
-     * @return { deferred} done returns prepared object
-     */
-    api.forward = function (obj, view) {
-        return react('forward', obj, view);
-    };
-
-    /**
-     * prepares object content for 'edit' action
-     * @param  {object} obj (mail object)
-     * @param  {string} view (html or text)
-     * @return { deferred} done returns prepared object
-     */
-    api.edit = function (obj, view) {
-        return react('edit', obj, view);
-    };
-
-    /**
-     * sends a mail
-     * @param  {object} data (mail object)
-     * @param  {array} files
-     * @param  {jquery} form (for 'oldschool')
-     * @fires  api#refresh.all
-     * @fires  api#refresh.list
-     * @return { deferred }
-     */
-    api.send = function (data, files, form) {
-        var deferred,
-            flatten = function (recipient) {
-                var name = $.trim(recipient[0] || '').replace(/^["']+|["']+$/g, ''),
-                    address = String(recipient[1] || ''),
-                    typesuffix = recipient[2] || '',
-                    isMSISDN = typesuffix === '/TYPE=PLMN';
-
-                // don't send display name for MSISDN numbers
-                if (isMSISDN && !/\/TYPE=PLMN$/.test(address)) {
-                    name = null;
-                    address = address + typesuffix;
-                }
-                // otherise ... check if name is empty or name and address are identical
-                if (name === '' || name === address) name = null;
-                return [name, address];
-            };
-
-        // clone data (to avoid side-effects)
-        data = _.clone(data);
-
-        // flatten from, to, cc, bcc
-        data.from = _(data.from).map(flatten);
-        data.to = _(data.to).map(flatten);
-        data.cc = _(data.cc).map(flatten);
-        data.bcc = _(data.bcc).map(flatten);
-        if (data.share_attachments && data.share_attachments.expiry_date) {
-            // explicitedy clone share attachments before doing some computations
-            data.share_attachments = _.clone(data.share_attachments);
-            // expiry date should count from mail send
-            data.share_attachments.expiry_date = _.now() + parseInt(data.share_attachments.expiry_date, 10);
-        }
-        function mapArgs(obj) {
-            return {
-                'args': [{ 'com.openexchange.groupware.contact.pairs': [{ 'folder': obj.folder_id, 'id': obj.id }] }],
-                'identifier': 'com.openexchange.contact'
-            };
-        }
-
-        if (data.contacts_ids) {
-            data.datasources = _.chain(data.contacts_ids).map(mapArgs).value();
-        }
-
-        api.trigger('beforesend', { data: data, files: files, form: form });
-        ox.trigger('mail:send:start', data, files);
-
-        deferred = handleSendXHR2(data, files, deferred);
-
-        var DELAY = api.SEND_REFRESH_DELAY,
-            isSaveDraft = data.flags === api.FLAGS.DRAFT,
-            csid = data.csid;
-
-        api.queue.add(csid, deferred.abort);
-
-        return deferred
-            .done(function () {
-                contactsAPI.trigger('maybeNewContact');
-                api.trigger('send', { data: data, files: files, form: form });
-                ox.trigger('mail:send:stop', data, files);
-                if (data.share_attachments) ox.trigger('please:refresh refresh^');
-            })
-            .fail(function () {
-                ox.trigger('mail:send:fail');
-            })
-            .progress(function (e) {
-                // no progress for saving a draft
-                if (isSaveDraft) return;
-                api.queue.update(csid, e.loaded, e.total);
-            })
-            .always(function () {
-                api.queue.remove(csid);
-            })
-            .then(function (text) {
-                // wait a moment, then update mail index
-                setTimeout(function () {
-                    // reset collections and folder (to update total count)
-                    var affectedFolders = _(['inbox', 'sent', 'drafts'])
-                        .chain()
-                        .map(function (type) {
-                            var folders = accountAPI.getFoldersByType(type);
-                            pool.resetFolder(folders);
-                            return folders;
-                        })
-                        .flatten()
-                        .value();
-                    folderAPI.multiple(affectedFolders, { cache: false });
-                    api.trigger('refresh.all');
-                }, DELAY);
-                // IE9
-                if (_.isObject(text)) return text;
-                // process HTML-ish non-JSONP response
-                var a = text.indexOf('{'),
-                    b = text.lastIndexOf('}');
-                if (a > -1 && b > -1) {
-                    return JSON.parse(text.substr(a, b - a + 1));
-                }
-                return {};
-            })
-            .then(function (result) {
-                if (result.error) {
-                    return $.Deferred().reject(result).promise();
-                } else if (result.data) {
-                    var base = _(result.data.toString().split(api.separator)),
-                        id = base.last(),
-                        folder = base.without(id).join(api.separator);
-                    $.when(accountAPI.getUnifiedMailboxName(), accountAPI.getPrimaryAddress())
-                    .done(function (isUnified, senderAddress) {
-                        // check if mail was sent to self to update inbox counters correctly
-                        var sendToSelf = false;
-                        _.chain(_.union(data.to, data.cc, data.bcc)).each(function (item) {
-                            if (item[1] === senderAddress[1]) {
-                                sendToSelf = true;
-                                return;
-                            }
-                        });
-                        // wait a moment, then update folders as well
-                        setTimeout(function () {
-                            if (isUnified !== null) {
-                                folderAPI.refresh();
-                            } else if (sendToSelf) {
-                                folderAPI.reload(folder, accountAPI.getInbox());
-                            } else {
-                                folderAPI.reload(folder);
-                            }
-                        }, DELAY);
-                    });
-                }
-                return result;
-            });
-    };
-
-    // delay to refresh mail list and folders after sending a message
-    api.SEND_REFRESH_DELAY = 5000;
-
-    function handleSendXHR2(data, files) {
-
-        var form = new FormData();
-
-        // add mail data
-        form.append('json_0', JSON.stringify(data));
-        // add files
-        _(files).each(function (file, index) {
-            if (file.name) {
-                form.append('file_' + index, file, file.name);
-            } else {
-                form.append('file_' + index, file);
-            }
-        });
-
-        return http.UPLOAD({
-            module: 'mail',
-            params: {
-                action: 'new',
-                lineWrapAfter: 0,
-                // force the response to be json(ish) instead of plain html (fixes some error messages)
-                force_json_response: true
-            },
-            data: form,
-            dataType: 'json',
-            fixPost: true
-        });
-    }
-
-    api.queue = (function () {
-
-        function pct(loaded, total) {
-            if (!total) return 0;
-            return Math.max(0, Math.min(100, Math.round(loaded / total * 100))) / 100;
-        }
-
-        return {
-
-            collection: new Backbone.Collection().on('add remove change:pct', function () {
-                var loaded = 0, total = 0, abort;
-                this.each(function (model) {
-                    loaded += model.get('loaded');
-                    total += model.get('total');
-                    abort = model.get('abort');
-                });
-                this.trigger('progress', { count: this.length, loaded: loaded, pct: pct(loaded, total), total: total, abort: abort });
-            }),
-
-            add: function (csid, abort) {
-                this.collection.add(new Backbone.Model({ id: csid, loaded: 0, pct: 0, total: 0, abort: abort }));
-            },
-
-            remove: function (csid) {
-                var model = this.collection.get(csid);
-                this.collection.remove(model);
-            },
-
-            update: function (csid, loaded, total) {
-                var model = this.collection.get(csid);
-                if (!model) return;
-                model.set({ loaded: loaded, pct: pct(loaded, total), total: total });
-            }
-        };
-    }());
-
     api.fetchTextPreview = function (ids) {
         return http.fixList(ids, http.PUT({
             module: 'mail',
@@ -1543,7 +1201,7 @@ define('io.ox/mail/api', [
      */
     api.getUrl = function (data, mode, options) {
 
-        var opt = _.extend({ scaleType: 'contain' }, options),
+        var opt = _.extend({ scaleType: 'contain', session: true }, options),
             url = ox.apiRoot + '/mail', first;
         if (mode === 'zip') {
             first = _(data).first();
@@ -1583,6 +1241,12 @@ define('io.ox/mail/api', [
 
             return url;
         }
+
+        if (data.space) {
+            url = ox.apiRoot + '/mail/compose/' + data.space + '/attachments/' + data.id;
+            if (opt.session) url += '?session=' + ox.session;
+            return url;
+        }
         // inject filename for more convenient file downloads
         var filename = data.filename ? data.filename.replace(/[\\:/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined,
             // scaling options
@@ -1595,11 +1259,16 @@ define('io.ox/mail/api', [
                 attachment: data.id,
                 user: ox.user_id,
                 context: ox.context_id,
-                decrypt: (data.security && data.security.decrypted), // All actions must be decrypted if Guard emails
                 // mails don't have a last modified attribute, just use 1
                 sequence: 1,
                 session: ox.session
             });
+        if (data.security && data.security.decrypted) {
+            url += '&decrypt=true';
+            if (data.security.authentication) {
+                url += '&cryptoAuth=' + encodeURIComponent(data.security.authentication);
+            }
+        }
         switch (mode) {
             case 'view':
             case 'open':
@@ -1639,6 +1308,8 @@ define('io.ox/mail/api', [
      * @return { deferred} done returns { unseen: [], recent: [] }
      */
     api.checkInbox = function () {
+        // ox.openedInBrowserTab is only true, when ox.tabHandlingEnabled is true and the window is no a core tab
+        if (ox.openedInBrowserTab) return;
         // look for new unseen mails in INBOX
         return http.GET({
             module: 'mail',
@@ -1693,7 +1364,8 @@ define('io.ox/mail/api', [
      */
     api.refresh = function () {
         // do not react on events when user has no mail (e.g. drive only)
-        if (!ox.online || !capabilities.has('webmail')) return;
+        // ox.openedInBrowserTab is only true, when ox.tabHandlingEnabled is true and the window is no a core tab
+        if (!ox.online || !capabilities.has('webmail') || ox.openedInBrowserTab) return;
         return api.checkInbox().always(function () {
             api.trigger('refresh.all');
         });
@@ -1836,7 +1508,7 @@ define('io.ox/mail/api', [
         });
 
         function tick() {
-            document.title = (alt = !alt) ? gt('New Mail') : document.customTitle;
+            document.title = (alt = !alt) ? gt('New mail') : document.customTitle;
         }
 
         function blink() {

@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-10-16 15:48+0300\n"
+"PO-Revision-Date: 2019-04-29 13:36+0300\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -643,6 +643,82 @@ msgstr ""
 #: apps/io.ox/tours/main.js module:io.ox/tours
 msgid "Getting started"
 msgstr "Iepazīstināšana"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr "Otrā faktora autentifikācija"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Tagad jūs varat pievienot papildus verifikācijas opcijas sava konta drošības "
+"līmeņa paaugstināšanai."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "Pievienot verifikācijas opciju"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr ""
+"Pieejamās papildus verifikācijas opcijas ir atkarīgas no jūsu instalācijas."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "Pievienot kodu teksta ziņojumā"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr ""
+"Piemēram, izvēloties kodu teksta ziņojumā, jums tiks prasīts telefona numurs "
+"koda nosūtīšanai."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "Autentifikācijas pieprasījumi"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr ""
+"Nākamreiz pieslēdzoties jums tiks prasīts verificēt jūsu identitāti, ievadot "
+"uz jūsu telefonu nosūtīto kodu."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "Noņemšana"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr ""
+"Ierīces pēc to pievienošanas var tikt noņemtas, ja tas ir nepieciešams.  "
+"Detalizēta informācija ir atrodama sistēmas palīgā."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "Nākošais"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+"Papildus drošībai pieslēdzoties savam kontam, jūs tagad varat pieprasīt otro "
+"autorizācijas līdzekli kā, piemēram, teksta ziņojumu. Vai vēlaties tagad "
+"skatīt atbilstošo papildus informāciju?"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr "Uzsākt tūri"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
@@ -6007,9 +6083,6 @@ msgstr ""
 
 #~ msgid "New..."
 #~ msgstr "Jauns..."
-
-#~ msgid "Next"
-#~ msgstr "Nākošais"
 
 #~ msgid "Next Day"
 #~ msgstr "Nākošā diena"

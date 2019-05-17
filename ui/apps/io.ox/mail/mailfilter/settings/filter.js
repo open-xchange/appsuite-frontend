@@ -23,7 +23,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'gettext!io.ox/mail',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/mini-views/settings-list-view',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'settings!io.ox/mail',
     'io.ox/mail/mailfilter/settings/filter/defaults',
     'static/3rd.party/jquery-ui.min.js',
@@ -404,6 +404,25 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                 self.$el.toggleClass('active', self.model.get('active'));
                                 self.$el.toggleClass('disabled', !self.model.get('active'));
                                 $(e.target).text(self.model.get('active') ? gt('Disable') : gt('Enable'));
+
+                                if (_.indexOf(self.model.get('flags'), 'autoforward') !== -1) {
+                                    require(['io.ox/mail/mailfilter/autoforward/model'], function (Model) {
+                                        var autoforwardModel = new Model();
+                                        autoforwardModel.set(self.model.attributes);
+                                        ox.trigger('mail:change:auto-forward', autoforwardModel);
+
+                                    });
+                                }
+
+                                if (_.indexOf(self.model.get('flags'), 'vacation') !== -1) {
+                                    require(['io.ox/mail/mailfilter/vacationnotice/model'], function (Model) {
+                                        var vacationnoticeModel = new Model();
+                                        vacationnoticeModel.set(self.model.attributes);
+                                        ox.trigger('mail:change:vacation-notice', vacationnoticeModel);
+
+                                    });
+                                }
+
                             })
                         );
                     },

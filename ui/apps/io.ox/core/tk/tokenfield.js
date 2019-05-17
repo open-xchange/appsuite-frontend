@@ -99,6 +99,28 @@ define('io.ox/core/tk/tokenfield', [
         this.preventCreateTokens = false;
     };
 
+    // and another overwrite. This time because of bug 61477
+    $.fn.tokenfield.Constructor.prototype.keypress = function (e) {
+        // Comma
+        if ($.inArray(e.which, this._triggerKeys) !== -1 && this.$input.is(document.activeElement)) {
+            var val = this.$input.val(),
+                quoting = /^"[^"]*$/.test(val);
+            if (quoting) return;
+            if (val) {
+                // if we are in edit mode, wait for the comma to actually appear in the input field. This way the token is divided correctly.
+                if (this.$input.data('edit')) {
+                    var self = this;
+                    this.$input.one('input', function () {
+                        self.createTokensFromInput(e);
+                    });
+                    return;
+                }
+                this.createTokensFromInput(e);
+            }
+            return false;
+        }
+    };
+
     var uniqPModel = pModel.Participant.extend({
         setPID: function () {
             uniqPModel.__super__.setPID.call(this);
@@ -311,6 +333,13 @@ define('io.ox/core/tk/tokenfield', [
                         return;
                     }
 
+                    // if we dont have a model already, check if the topmost suggestion fits to our current input
+                    var topSuggestion = self.hiddenapi.dropdown.getDatumForTopSuggestion();
+                    if (!e.attrs.model && topSuggestion && e.attrs.value === topSuggestion.value && topSuggestion.raw && topSuggestion.raw.model) {
+                        e.attrs.model = topSuggestion.raw.model;
+                        e.attrs.label = e.attrs.model.getDisplayName({ isMail: self.options.isMail });
+                    }
+
                     // create model for unknown participants
                     if (!e.attrs.model) {
                         newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
@@ -416,7 +445,7 @@ define('io.ox/core/tk/tokenfield', [
 
                         // mouse hover tooltip / a11y title
                         label.attr({ 'aria-hidden': true, 'title': title });
-                        //.# Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
+                        //#. Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
                         node.attr('aria-label', gt('%1$s. Press backspace to delete.', title));
 
                         // customize token
@@ -520,23 +549,7 @@ define('io.ox/core/tk/tokenfield', [
             // this.hiddenapi.dropdown.close = $.noop;
             // this.hiddenapi.dropdown.empty = $.noop;
 
-            // ignore mouse events when dropdown gets programatically scrolled (see bug 55757)
-            function hasMouseMoved(e) {
-                if (!e || !e.originalEvent) return true;
-                var x = e.originalEvent.movementX,
-                    y = e.originalEvent.movementY;
-                if (x !== 0 || y !== 0) return true;
-            }
             var dropdown = _.extend(this.hiddenapi.dropdown, {
-                _onSuggestionMouseEnter: function (e) {
-                    if (!hasMouseMoved(e)) return;
-                    this._removeCursor();
-                    this._setCursor($(e.currentTarget), true);
-                },
-                _onSuggestionMouseLeave: function (e) {
-                    if (!hasMouseMoved(e)) return;
-                    this._removeCursor();
-                },
                 onDropdownMouseEnter: function () {
                     mouseIsInDropdown = true;
                 },
@@ -544,10 +557,6 @@ define('io.ox/core/tk/tokenfield', [
                     mouseIsInDropdown = false;
                 }
             });
-
-            dropdown.$menu.off('mouseenter.tt mouseleave.tt')
-                .on('mouseenter.tt mousemove.tt', '.tt-suggestion', dropdown._onSuggestionMouseEnter.bind(dropdown))
-                .on('mouseleave.tt', '.tt-suggestion', dropdown._onSuggestionMouseLeave.bind(dropdown));
 
             if (_.browser.IE || _.browser.Edge) {
 
@@ -594,15 +603,23 @@ define('io.ox/core/tk/tokenfield', [
                 }
             }.bind(this.hiddenapi);
 
+            // workaround: select suggestion by space key
+            this.hiddenapi.input.$input.on('keydown', function (e) {
+                var isSuggestionSelected = !!this.hiddenapi.dropdown.getDatumForCursor();
+                if (e.which !== 32 || !isSuggestionSelected) return;
+                this.hiddenapi._onEnterKeyed('ox.spaceKeyed', e);
+            }.bind(this));
+
             // workaround: register handler for delayed autoselect
             if (this.options.delayedautoselect) {
                 this.input.on('keydown', function (e) {
                     var enter = e.which === 13,
+                        space = e.which === 32,
                         validquery = !!self.input.val() && self.input.val().length >= o.minLength,
                         runningrequest = self.model.get('query') !== self.input.val(),
                         automated = e.which === 38 || e.which === 40;
                     // clear dropdown when query changes
-                    if (runningrequest && !enter && !automated) {
+                    if (runningrequest && !enter && !space && !automated) {
                         self.hiddenapi.dropdown.empty();
                         self.hiddenapi.dropdown.close();
                     }

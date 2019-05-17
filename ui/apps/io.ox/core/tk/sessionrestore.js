@@ -19,30 +19,50 @@ define('io.ox/core/tk/sessionrestore', function () {
         return true;
     }
 
-    function getAllData() {
-        var allData = null;
+    /**
+     * Names of properties in the `window.name` object to be processed here.
+     */
+    var TAB_HANDLING_PROPS = ['windowName', 'windowType', 'parentName', 'loggingOut'];
+
+    function getWindowNameObj() {
+
+        var windowNameObj = null;
         if (window.name) {
             try {
-                allData = JSON.parse(window.name);
+                windowNameObj = JSON.parse(window.name);
             } catch (e) {
-                allData = {};
+                windowNameObj = {};
             }
         } else {
-            allData = {};
+            windowNameObj = {};
         }
-        return allData;
+        return windowNameObj;
+    }
+
+    /**
+    * Grabs all session restore properties from the window.name.
+    *
+    * note: For legacy reasons we retain the 'old' getAllData function, that
+    * means window.name filtered by information that are just used for the tab handling
+    *
+    * @returns {Object}
+    *  Return session restore object.
+    */
+    function getAllData() {
+        return _.omit(getWindowNameObj(), TAB_HANDLING_PROPS);
     }
 
     function setAllData(data) {
+        var windowNameObj = getWindowNameObj();
         if (_.isEmpty(data)) {
-            window.name = '';
+            window.name = JSON.stringify(_.pick(windowNameObj, TAB_HANDLING_PROPS));
         } else {
-            window.name = JSON.stringify(data);
+            window.name = JSON.stringify(_.extend(_.pick(windowNameObj, TAB_HANDLING_PROPS), data));
         }
     }
 
     function resetAllData() {
-        window.name = '';
+        window.name = JSON.stringify(_.pick(getWindowNameObj(), TAB_HANDLING_PROPS));
     }
 
     // class SessionRestore ================================================
@@ -90,7 +110,6 @@ define('io.ox/core/tk/sessionrestore', function () {
                 resetAllData();
                 return null;
             }
-            //console.warn('state', id, state);
 
             var allData = getAllData();
             var result = allData[id];
@@ -109,6 +128,7 @@ define('io.ox/core/tk/sessionrestore', function () {
             if (_.isUndefined(result)) {
                 result = null;
             }
+
             return result;
         }
     }; // class SessionRestore

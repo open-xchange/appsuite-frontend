@@ -1,7 +1,5 @@
 
 const actor = require('@open-xchange/codecept-helper').actor;
-const axe = require('axe-core');
-const _ = require('underscore');
 
 module.exports = actor({
     //remove previously created appointments by appointment title
@@ -23,38 +21,48 @@ module.exports = actor({
         this.click('#io-ox-refresh-icon');
         this.waitForDetached('#io-ox-refresh-icon .fa-spin');
     },
-    grabAxeReport: async function (context, options) {
-        const report = await this.executeAsyncScript(function (axeSource, context, options, done) {
-            if (typeof axe === 'undefined') {
-                // eslint-disable-next-line no-eval
-                window.eval(axeSource);
-            }
-            // Arity needs to be correct here so we need to compact arguments
-            window.axe.run.apply(this, _.compact([context || $('html'), options])).then(function (report) {
-                try {
-                    var nodes = [];
-                    for (const violation of report.violations) {
-                        for (const node of violation.nodes) {
-                            nodes.push(node.target);
-                            for (const combinedNodes of [node.all, node.any, node.none]) {
-                                if (!_.isEmpty(combinedNodes)) {
-                                    for (const any of combinedNodes) {
-                                        for (const relatedNode of any.relatedNodes) {
-                                            nodes.push(relatedNode.target);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    $(nodes.join(',')).css('border', '2px solid red');
-                } catch (err) {
-                    done(err.message);
-                }
-                done(report);
-            });
-        }, axe.source, context, options);
-        if (typeof report === 'string') throw report;
-        return report;
+
+    createAppointment({ subject, location, folder, startDate, startTime, endDate, endTime }) {
+        // select calendar
+        this.selectFolder(folder);
+        this.waitForElement('li.selected[aria-label="' + folder + '"] .color-label');
+
+        this.clickToolbar('New');
+        this.waitForVisible('.io-ox-calendar-edit-window');
+
+        this.fillField('Subject', subject);
+        this.see(folder, '.io-ox-calendar-edit-window .folder-selection');
+
+        if (location) {
+            this.fillField('Location', location);
+        }
+
+        if (startDate) {
+            this.click('~Date (M/D/YYYY)');
+            this.pressKey(['Control', 'a']);
+            this.pressKey(startDate);
+            this.pressKey('Enter');
+        }
+
+        if (startTime) {
+            this.click('~Start time');
+            this.click(startTime);
+        }
+
+        if (endDate) {
+            this.click('~Date (M/D/YYYY)', '.dateinput[data-attribute="endDate"]');
+            this.pressKey(['Control', 'a']);
+            this.pressKey(startDate);
+            this.pressKey('Enter');
+        }
+
+        if (endTime) {
+            this.click('~End time');
+            this.click(endTime);
+        }
+
+        // save
+        this.click('Create', '.io-ox-calendar-edit-window');
+        this.waitForDetached('.io-ox-calendar-edit-window', 5);
     }
 });

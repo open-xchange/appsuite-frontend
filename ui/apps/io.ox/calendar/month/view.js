@@ -382,8 +382,8 @@ define('io.ox/calendar/month/view', [
             var startMoment = moment.max(model.getMoment('startDate'), this.model.get('startDate')).clone(),
                 endMoment = moment.min(model.getMoment('endDate'), this.model.get('endDate')).clone();
 
-            // fix full-time values
-            if (util.isAllday(model)) endMoment.subtract(1, 'millisecond');
+            // subtract 1ms. This will not be visible and will fix appointments till 12am to not be drawn on the next day (e.g. allday appointments)
+            endMoment.subtract(1, 'millisecond');
 
             if (_.device('smartphone')) {
                 var node = $('#' + startMoment.format('YYYY-M-D') + ' .list', this.$el).empty();
@@ -444,7 +444,8 @@ define('io.ox/calendar/month/view', [
             this.app = opt.app;
 
             this.model = new Backbone.Model({
-                date: opt.startDate || moment(this.app.props.get('date'))
+                date: opt.startDate || moment(this.app.props.get('date')),
+                currentDate: moment() // stores the current date to detect day changes and update the today label
             });
             this.initializeSubviews();
 
@@ -520,6 +521,12 @@ define('io.ox/calendar/month/view', [
             return this;
         },
 
+        rerender: function () {
+            this.toolbarView.update();
+            this.monthView.render();
+            return this;
+        },
+
         getRequestParam: function () {
             var params = {
                 start: this.model.get('startDate').valueOf(),
@@ -542,9 +549,16 @@ define('io.ox/calendar/month/view', [
                 });
             }
 
+            // Rerender the view when the date changes (e.g. keep appsuite open overnight)
+            if (!this.model.get('currentDate').isSame(moment(), 'day')) {
+                this.model.set('currentDate', moment());
+                this.rerender();
+            }
+
             this.setCollection(collection);
             $.when(this.app.folder.getData(), this.app.folders.getData()).done(function (folder, folders) {
                 self.model.set('folders', folders);
+                collection.folders = _(folders).pluck('id');
                 collection.sync();
             });
         },
@@ -582,13 +596,13 @@ define('io.ox/calendar/month/view', [
         print: function () {
             var folders = this.model.get('folders'),
                 title = gt('Appointments');
-            if (_(folders).keys().length === 1) title = folders[_(folders).keys()[0]].display_title || folders[_(folders).keys()[0]].title;
+            if (folders.length === 1) title = folders[0].display_title || folders[0].title;
 
             print.request('io.ox/calendar/month/print', {
                 current: this.model.get('startOfMonth').valueOf(),
                 start: this.model.get('startDate').valueOf(),
                 end: this.model.get('endDate').valueOf(),
-                folders: folders,
+                folders: _(folders).pluck('id'),
                 title: title
             });
         },

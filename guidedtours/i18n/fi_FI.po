@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-11-05 16:01+0200\n"
+"PO-Revision-Date: 2019-04-18 11:49+0300\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -626,6 +626,79 @@ msgstr ""
 #: apps/io.ox/tours/main.js module:io.ox/tours
 msgid "Getting started"
 msgstr "Aluksi"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr "Toinen tekijän todennus"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Voit nyt lisätä lisää varmennusvaihtoehtoja tilisi turvallisuuden "
+"parantamiseksi."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "Vahvistusvaihtoehdon lisääminen"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr "Erilaiset lisävahvistusvaihtoehdot riippuvat asennuksesta."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "Koodin lisääminen tekstiviestillä"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr ""
+"Jos valitset esimerkiksi tekstiviestin avulla lähetettävän koodin, sinulta "
+"kysytään puhelinnumeroa."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "Todennuspyynnöt"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr ""
+"Kirjautuessasi sisään seuraavan kerran, sinun on todistettava "
+"henkilöllisyytesi antamalla puhelimeesi lähetetty numero."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "Poistetaan"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr "Lisätyt laitteet voidaan poistaa. Katso lisätietoja lisäohjeista."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "Seuraava"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+"Lisäturvaominaisuutena voit nyt vaatia toisen tunnistustavan, kuten "
+"tekstiviestin, ennen kuin kirjaudut sisään tilillesi. Haluatko lisää tietoa "
+"aiheesta?"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr "Aloita opastus"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
@@ -3395,9 +3468,6 @@ msgstr ""
 
 #~ msgid "New subscription"
 #~ msgstr "Uusi tilaus"
-
-#~ msgid "Next"
-#~ msgstr "Seuraava"
 
 #~ msgid "Next Day"
 #~ msgstr "Seuraava päivä"

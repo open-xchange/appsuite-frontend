@@ -26,21 +26,30 @@ define('io.ox/oauth/settings', [
 
     var accountTypeAppMapping = {
         mail: gt.pgettext('app', 'Mail'),
-        fileStorage: gt.pgettext('app', 'Drive')
+        fileStorage: gt.pgettext('app', 'Drive'),
+        infostore: gt.pgettext('app', 'Drive'),
+        calendar: gt.pgettext('app', 'Calendar'),
+        contacts: gt.pgettext('app', 'Address Book')
     };
+
+    function mapModuleLaunch(m) {
+        return m === 'infostore' ? 'files' : m;
+    }
 
     function OAuthAccountDetailExtension(serviceId) {
         this.id = serviceId;
 
         this.draw = function (args) {
             var account = oauthKeychain.accounts.get(args.data.id),
-                collection = new Backbone.Collection();
-
-            account.fetchRelatedAccounts().then(function (accounts) {
-                collection.push(accounts);
-            });
+                collection = new Backbone.Collection([].concat(account.get('associations')).map(function (as) {
+                    return _.extend({
+                        serviceId: account.get('serviceId'),
+                        accountType: as.module
+                    }, as);
+                }));
 
             new ModalDialog({
+                focus: 'input',
                 async: true,
                 title: account.get('displayName'),
                 point: 'io.ox/settings/accounts/' + serviceId + '/settings/detail/dialog',
@@ -65,13 +74,39 @@ define('io.ox/oauth/settings', [
                 },
                 text: function () {
                     var guid,
+                        dialog = this,
                         relatedAccountsView = new ListView({
                             tagName: 'ul',
                             childView: AccountViews.ListItem.extend({
+                                events: function () {
+                                    return _.extend({
+                                        'click .deeplink': 'openModule'
+                                    }, AccountViews.ListItem.prototype.events);
+                                },
                                 getTitle: function () {
-                                    var customTitle = accountTypeAppMapping[this.model.get('accountType')];
+                                    var customTitle = this.model.get('name') || accountTypeAppMapping[this.model.get('module')];
                                     // fall back to default implementation if we can not figure out a custom title
                                     return customTitle || AccountViews.ListItem.prototype.getTitle.apply(this);
+                                },
+                                renderTitle: function (title) {
+                                    return $('<div class="list-item-title">').append(
+                                        $('<button type="button" class="btn btn-link deeplink">').attr({
+                                            //#. link title for related accounts into the corresponding folder
+                                            //#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+                                            //#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+                                            title: gt('Open %1$s in %2$s', title, accountTypeAppMapping[this.model.get('module')])
+                                        }).append(title)
+                                    );
+                                },
+                                openModule: function () {
+                                    var model = this.model;
+                                    ox.launch(
+                                        'io.ox/' + mapModuleLaunch(this.model.get('module')) + '/main',
+                                        { folder: model.get('folder') }
+                                    ).done(function () {
+                                        this.folder.set(model.get('folder'));
+                                        dialog.close();
+                                    });
                                 }
                             }),
                             collection: this.options.relatedAccountsCollection
@@ -92,16 +127,6 @@ define('io.ox/oauth/settings', [
                 action: 'save',
                 label: gt('Save')
             })
-            .addAlternativeButton({
-                action: 'reauthorize',
-                label: gt('Reauthorize')
-            })
-            .on('reauthorize', function () {
-                this.options.account.reauthorize();
-                // reauthorization is always independent, because it kicks of an external process and we don't always get a response
-                // however, there might be unsaved changes to the model, so do not close the dialog, yet.
-                this.idle();
-            })
             .on('save', function () {
                 var dialog = this,
                     account = this.options.account,
@@ -121,58 +146,14 @@ define('io.ox/oauth/settings', [
                 $el = this;
             if (!account) return;
 
-            account.fetchRelatedAccounts().then(function (accounts) {
-                $el.append(accounts.map(function (a) {
-                    var mapping = accountTypeAppMapping[a.accountType];
-                    return mapping || a.displayName;
-                }).join(', '));
-            });
+            $el.append($.txt(account.get('associations').map(function (association) {
+                return accountTypeAppMapping[association.module] || account.get('displayName');
+            }).join(', ')));
         };
     }
 
     _(oauthKeychain.serviceIDs).each(function (serviceId) {
         ext.point('io.ox/settings/accounts/' + serviceId + '/settings/detail').extend(new OAuthAccountDetailExtension(serviceId));
-    });
-
-    ext.point('io.ox/settings/accounts/fileStorage/settings/detail').extend({
-        id: 'fileStorage',
-        draw: function (args) {
-            new ModalDialog({
-                async: true,
-                title: args.data.model.get('displayName'),
-                point: 'io.ox/settings/accounts/fileStorage/settings/detail/dialog',
-                account: args.data.model
-            })
-            .extend({
-                text: function () {
-                    var account = this.options.account,
-                        guid = _.uniqueId('input');
-                    this.$body.append(
-                        $('<div class="form-group">').append(
-                            $('<label>', { 'for': guid }).text(gt('Folder name')),
-                            new MiniViews.InputView({ name: 'displayName', model: account, id: guid }).render().$el
-                        )
-                    );
-                }
-            })
-            .addCancelButton()
-            .addButton({
-                action: 'save',
-                label: gt('Save')
-            })
-            .on('save', function () {
-                var dialog = this,
-                    account = this.options.account;
-                require(['io.ox/core/api/filestorage']).then(function (fsAPI) {
-                    return fsAPI.updateAccount(account.toJSON());
-                }).then(function () {
-                    dialog.close();
-                }, function () {
-                    dialog.idle();
-                });
-            })
-            .open();
-        }
     });
 
     return {};

@@ -77,7 +77,7 @@ define('io.ox/core/folder/actions/move', [
                 isMove = /^move/.test(type),
                 onlyFolder = false,
                 multiple = type === 'moveAll' || options.list.length > 1,
-                current = options.source || options.list[0].folder_id;
+                current = String(options.source || options.list[0].folder_id);
 
             function success() {
                 notifications.yell('success', multiple ? options.success.multiple : options.success.single);

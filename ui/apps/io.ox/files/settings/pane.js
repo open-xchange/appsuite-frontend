@@ -67,6 +67,48 @@ define('io.ox/files/settings/pane', [
                             i = String(i);
                             return { value: i, label: gt('%1$d seconds', i) };
                         });
+                    },
+                    getRetentionDaysOptions: function (retentionDays) {
+                        var entries = [
+                            { label: gt('Forever'), value: 0 },
+                            { label: gt('1 day'), value: 1 },
+                            { label: gt('7 days'), value: 7 },
+                            { label: gt('30 days'), value: 30 },
+                            { label: gt('60 days'), value: 60 },
+                            { label: gt('90 days'), value: 90 },
+                            { label: gt('1 year'), value: 365 }
+                        ];
+                        var entry = _.findWhere(entries, { value: retentionDays });
+                        if (!entry) {
+                            entries.unshift({
+                                label: gt.format(gt.ngettext('%1$d day', '%1$d days', retentionDays), retentionDays), value: retentionDays
+                            });
+                        }
+                        return entries;
+                    },
+                    getMaxVersionsOptions: function (maxVersions) {
+                        var entries = [
+                            { label: gt('Keep all versions'), value: 0 },
+                            { label: gt('1 version'), value: 2 },
+                            { label: gt('5 versions'), value: 6 },
+                            { label: gt('10 versions'), value: 11 },
+                            { label: gt('20 versions'), value: 21 },
+                            { label: gt('30 versions'), value: 31 },
+                            { label: gt('40 versions'), value: 41 },
+                            { label: gt('50 versions'), value: 51 },
+                            { label: gt('60 versions'), value: 61 },
+                            { label: gt('70 versions'), value: 71 },
+                            { label: gt('80 versions'), value: 81 },
+                            { label: gt('90 versions'), value: 91 },
+                            { label: gt('100 versions'), value: 101 }
+                        ];
+                        var entry = _.findWhere(entries, { value: maxVersions });
+                        if (!entry) {
+                            entries.unshift({
+                                label: gt.format(gt.ngettext('%1$d version', '%1$d versions', maxVersions - 1), maxVersions - 1), value: maxVersions
+                            });
+                        }
+                        return entries;
                     }
                 })
                 .render().$el
@@ -115,7 +157,9 @@ define('io.ox/files/settings/pane', [
                     util.fieldset(gt('Slideshow / Autoplay mode for images'),
                         $('<div class="form-group">').append(
                             new mini.CustomRadioView({ name: 'autoplayLoopMode', model: settings, list: this.getAutoPlayOptions() }).render().$el
-                        ),
+                        )
+                    ).css('margin-bottom', '0'),
+                    $('<fieldset style="padding-top:0">').append(
                         util.compactSelect('autoplayPause', gt('Duration per image'), settings, this.getAutoPlayPauseOptions(), { width: 3 })
                     )
                 );
@@ -137,6 +181,77 @@ define('io.ox/files/settings/pane', [
                         util.checkbox('showHidden', gt('Show hidden files and folders'), settings)
                     )
                 );
+            }
+        },
+        //
+        // Automatic version cleanup
+        //
+        {
+            id: 'versionCleanup',
+            index: INDEX += 100,
+            render: function () {
+
+                var retentionDays = settings.get('features/autodelete/retentionDays'),
+                    maxVersions = settings.get('features/autodelete/maxVersions'),
+                    editable = settings.get('features/autodelete/editable');
+
+                // disabled
+                if (!capabilities.has('autodelete_file_versions')) {
+
+                    // nothing configured
+                    if (!retentionDays && !maxVersions) return;
+
+                    // configured by admin
+                    this.$el.append(
+                        util.fieldset(
+                            gt('File version history'),
+                            $('<span>').append(gt('Timeframe')),
+                            $('<ul>').append($('<li>').append((retentionDays <= 0) ? gt('The timeframe is not limited') : gt.format(gt.ngettext('The timeframe is limited to 1 day.', 'The timeframe is limited to %1$d days.', retentionDays), retentionDays))),
+                            $('<span>').append(gt('File version limit')),
+                            $('<ul>').append($('<li>').append((maxVersions <= 0) ? gt('The number of versions is not limited') : gt.format(gt.ngettext('The number of versions is limited to 1 version.', 'The number of versions is limited to %1$d versions.', maxVersions - 1), maxVersions - 1)))
+                        )
+                    );
+
+                    return;
+                }
+
+                var summaryContainer = $('<div>').addClass('help-block');
+
+                this.getSummary = function () {
+                    // appends legend list for explanation
+                    var summaryList = $('<ul>'),
+                        summary = $('<span>').text(gt('Summary')).append(summaryList);
+
+                    if (maxVersions <= 0 && retentionDays <= 0) {
+                        summaryList.append($('<li>').text(gt('All file versions are retained')));
+                        return summary;
+                    }
+
+                    if (retentionDays > 0) summaryList.append($('<li>').append(gt.format(gt.ngettext('All file versions older than 1 day will be deleted after next login', 'All file versions older than %1$d days will be deleted after next login', retentionDays), retentionDays)));
+                    if (maxVersions > 0) summaryList.append($('<li>').append(gt.format(gt.ngettext('When a file has more than 1 additional version, older versions will be deleted when a new version is created', 'When a file has more than %1$d additional versions, older versions will be deleted when a new version is created', maxVersions - 1), maxVersions - 1)));
+
+                    return summary;
+                };
+
+                this.$el.append(
+                    util.fieldset(
+                        gt('File version history'),
+                        $('<span>').append(gt('Timeframe')),
+                        util.compactSelect('features/autodelete/retentionDays', gt('Keep saved versions'), settings, this.getRetentionDaysOptions(retentionDays), { width: 4, integer: true }),
+                        $('<span>').append(gt('File version limit')),
+                        util.compactSelect('features/autodelete/maxVersions', gt('Keep number of recent versions'), settings, this.getMaxVersionsOptions(maxVersions), { width: 4, integer: true }),
+                        summaryContainer.append(this.getSummary())
+                    )
+                );
+                if (!editable) {
+                    this.$el.find('#settings-features\\/autodelete\\/retentionDays').attr('disabled', true);
+                    this.$el.find('#settings-features\\/autodelete\\/maxVersions').attr('disabled', true);
+                }
+                this.listenTo(settings, 'change:features/autodelete/maxVersions change:features/autodelete/retentionDays', function () {
+                    retentionDays = settings.get('features/autodelete/retentionDays');
+                    maxVersions = settings.get('features/autodelete/maxVersions');
+                    summaryContainer.empty().append(this.getSummary());
+                }).bind(this);
             }
         }
     );

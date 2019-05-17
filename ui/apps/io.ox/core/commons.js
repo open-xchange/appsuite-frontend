@@ -13,14 +13,15 @@
 
 define('io.ox/core/commons', [
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
     'gettext!io.ox/core',
     'io.ox/core/folder/api',
     'io.ox/core/api/account',
+    'io.ox/backbone/mini-views/helplink',
     'settings!io.ox/core',
     'io.ox/backbone/mini-views/upsell',
+    'io.ox/backbone/views/actions/util',
     'io.ox/core/capabilities'
-], function (ext, links, gt, folderAPI, accountAPI, coreSettings, UpsellView, capabilities) {
+], function (ext, gt, folderAPI, accountAPI, HelpLinkView, coreSettings, UpsellView, actionsUtil, capabilities) {
 
     'use strict';
 
@@ -55,61 +56,6 @@ define('io.ox/core/commons', [
             );
         },
 
-        mobileMultiSelection: (function () {
-            var points = {};
-
-            // counter is always shown
-            ext.point('io.ox/core/commons/mobile/multiselect').extend({
-                id: 'selectCounter',
-                index: '100',
-                draw: function (data) {
-                    this.append(
-                        $('<div class="toolbar-button select-counter">')
-                            .text(data.count)
-                    );
-                }
-            });
-
-            function draw(id, selection, grid) {
-                var node = $('<div>');
-
-                ext.point('io.ox/core/commons/mobile/multiselect').invoke('draw', node, { count: selection.length });
-
-                (points[id] || (points[id] = ext.point(id + '/mobileMultiSelect/toolbar')))
-                    .invoke('draw', node, { data: selection, grid: grid });
-                return node;
-            }
-
-            return function (id, node, selection, api, grid) {
-
-                // get current app's window container as context
-                var context = $(node).closest('.window-container'),
-                    buttons = $('.window-toolbar .toolbar-button', context),
-                    toolbar = $('.window-toolbar', context),
-                    toolbarID = 'multi-select-toolbar',
-                    container;
-
-                if ($('#' + toolbarID).length > 0) {
-                    // reuse old toolbar
-                    container = $('#' + toolbarID);
-                } else {
-                    // or creaet a new one
-                    container = $('<div>', { id: toolbarID });
-                }
-                _.defer(function () {
-                    if (selection.length > 0) {
-                        // update selection in toolbar
-                        buttons.hide();
-                        $('#' + toolbarID).remove();
-                        toolbar.append(container.append(draw(id, selection, grid)));
-                    } else {
-                        // selection empty
-                        $('#' + toolbarID).remove();
-                        buttons.show();
-                    }
-                }, 10);
-            };
-        }()),
 
         wireGridAndSelectionChange: function (grid, id, draw, node, api) {
             var last = '', label;
@@ -170,10 +116,6 @@ define('io.ox/core/commons', [
                     // remember current selection
                     last = flat;
                 }
-            });
-
-            grid.selection.on('_m_change', function () {
-                commons.mobileMultiSelection(id, node, this.unique(this.unfold()), api, grid);
             });
 
             // look for id change
@@ -315,22 +257,21 @@ define('io.ox/core/commons', [
                 });
             }
 
-            grid.on({
-                'change:prop:folder change:mode change:ids': function () {
-
-                    var folder_id = grid.prop('folder'), mode = grid.getMode();
-                    if (mode === 'all') {
-                        // non-search; show foldername
-                        drawFolderInfo(folder_id);
-                    } else if (mode === 'search') {
-                        var node = getInfoNode();
-                        node.find('.folder-name')
-                            .text(gt('Results'));
-                        node.find('.folder-count')
-                            .text('(' + grid.getIds().length + ')');
-                    }
+            function updateFolderInfo() {
+                var folder_id = grid.prop('folder'), mode = grid.getMode();
+                if (mode === 'all') {
+                    // non-search; show foldername
+                    drawFolderInfo(folder_id);
+                } else if (mode === 'search') {
+                    var node = getInfoNode();
+                    node.find('.folder-name')
+                        .text(gt('Results'));
+                    node.find('.folder-count')
+                        .text('(' + grid.getIds().length + ')');
                 }
-            });
+            }
+            grid.on('change:prop:folder change:mode change:ids', updateFolderInfo);
+            folderAPI.on('after:rename', updateFolderInfo);
 
             // unread counter for mail
             folderAPI.on('update:total', function (id) {
@@ -613,10 +554,28 @@ define('io.ox/core/commons', [
             };
         }()),
 
-        mediateFolderView: function (app) {
+        help: function (baton) {
+            if (_.device('smartphone')) return;
 
+            var helpLinkView = new HelpLinkView({
+                href: getLink(baton && baton.app && baton.app.id)
+            });
+            this.find('.generic-toolbar.bottom').append(
+                helpLinkView.render().$el
+            );
+
+            function getLink(id) {
+                if (id === 'io.ox/mail') return 'ox.appsuite.user.sect.email.gui.foldertree.html';
+                if (id === 'io.ox/files') return 'ox.appsuite.user.sect.drive.gui.foldertree.html';
+                if (id === 'io.ox/contacts') return 'ox.appsuite.user.sect.contacts.gui.foldertree.html';
+                if (id === 'io.ox/calendar') return 'ox.appsuite.user.sect.calendar.gui.foldertree.html';
+                if (id === 'io.ox/tasks') return 'ox.appsuite.user.sect.tasks.gui.foldertree.html';
+                return 'ox.appsuite.user.sect.dataorganisation.folder.html';
+            }
+        },
+
+        mediateFolderView: function (app) {
             function toggleFolderView(e) {
-                e.preventDefault();
                 e.data.app.folderView.toggle(e.data.state);
             }
 
@@ -637,7 +596,7 @@ define('io.ox/core/commons', [
                 index: 100,
                 draw: function () {
                     this.addClass('visual-focus').append(
-                        $('<a href="#" class="toolbar-item" data-action="open-folder-view">')
+                        $('<button type="button" class="btn btn-link toolbar-item" data-action="open-folder-view">')
                         .attr('aria-label', gt('Open folder view'))
                         .append($('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view')))
                         .on('click', { app: app, state: true }, toggleFolderView)
@@ -650,8 +609,8 @@ define('io.ox/core/commons', [
                 index: 1000,
                 draw: function () {
                     this.addClass('bottom-toolbar').append(
-                        $('<div class="generic-toolbar bottom visual-focus">').append(
-                            $('<a href="#" class="toolbar-item" role="button" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
+                        $('<div class="generic-toolbar bottom visual-focus" role="region">').append(
+                            $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
                             .append(
                                 $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                             )
@@ -659,6 +618,12 @@ define('io.ox/core/commons', [
                         )
                     );
                 }
+            });
+
+            ext.point(app.get('name') + '/sidepanel').extend({
+                id: 'help',
+                index: 1100,
+                draw: commons.help
             });
 
             app.on({
@@ -671,6 +636,39 @@ define('io.ox/core/commons', [
             onFolderViewClose(app);
 
             if (app.folderViewIsVisible()) _.defer(onFolderViewOpen, app);
+        },
+
+        addFolderViewToggle: function (app) {
+            if (_.device('smartphone')) return;
+            app.toggleFolderView = function (e) {
+                e.preventDefault();
+                app.trigger('before:change:folderview');
+                app.folderView.toggle(e.data.state);
+            };
+
+            ext.point(app.get('name') + '/sidepanel').extend({
+                id: 'toggle-folderview',
+                index: 1000,
+                draw: function () {
+                    if (_.device('smartphone')) return;
+                    this.addClass('bottom-toolbar').append(
+                        $('<div class="generic-toolbar bottom visual-focus" role="region">').append(
+                            $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
+                            .append(
+                                $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
+                            )
+                            .on('click', { state: false }, app.toggleFolderView)
+                        )
+                    );
+                }
+            });
+
+            ext.point(app.get('name') + '/sidepanel').extend({
+                id: 'help',
+                index: 1100,
+                draw: commons.help
+            });
+
         },
 
         addPremiumFeatures: function (app, opt) {
@@ -695,9 +693,23 @@ define('io.ox/core/commons', [
                 )
             );
 
-            ext.point(app.get('name') + '/folderview/premium-area').invoke('draw', container, {});
+            function renderActions(ref, baton) {
+                return ext.point(ref).list().map(function (item) {
+                    return $('<p>').append(
+                        $('<a href="#" role="button">')
+                            .attr('data-action', item.action)
+                            .data({ baton: baton })
+                            .text(item.title)
+                    );
+                });
+            }
 
-            if (container.find('li').length === 0) return;
+            var baton = actionsUtil.getBaton([], { app: app, renderActions: renderActions });
+            ext.point(app.get('name') + '/folderview/premium-area').invoke('draw', container, baton);
+
+            if (container.find('a[data-action]').length === 0) return;
+
+            container.on('click', 'a[data-action]', actionsUtil.invokeByEvent);
 
             var upsellView = new UpsellView({
                 id: opt.upsellId || 'folderview/' + app.get('name') + '/bottom',

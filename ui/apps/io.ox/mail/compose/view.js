@@ -13,29 +13,23 @@
 
 define('io.ox/mail/compose/view', [
     'io.ox/mail/compose/extensions',
-    'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/extensions',
+    'io.ox/mail/compose/api',
     'io.ox/mail/api',
     'io.ox/mail/util',
-    'io.ox/core/tk/textproc',
     'settings!io.ox/mail',
-    'settings!io.ox/core',
     'io.ox/core/notifications',
-    'io.ox/core/api/snippets',
-    'io.ox/core/api/account',
     'gettext!io.ox/mail',
-    'io.ox/mail/actions/attachmentEmpty',
-    'io.ox/mail/actions/attachmentQuota',
     'io.ox/core/attachments/backbone',
     'io.ox/core/tk/dialogs',
     'io.ox/mail/compose/signatures',
     'io.ox/mail/sanitizer',
-    'io.ox/core/attachments/backbone',
+    'io.ox/mail/compose/util',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send',
     'io.ox/mail/compose/actions/save'
-], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, Attachments, dialogs, signatureUtil, sanitizer, attachmentModel) {
+], function (extensions, ext, composeAPI, mailAPI, mailUtil, settings, notifications, gt, Attachments, dialogs, signatureUtil, sanitizer, composeUtil) {
 
     'use strict';
 
@@ -47,11 +41,6 @@ define('io.ox/mail/compose/view', [
             index: 100,
             id: 'send',
             draw: extensions.buttons.send
-        },
-        {
-            index: 200,
-            id: 'save',
-            draw: extensions.buttons.save
         },
         {
             index: 300,
@@ -193,7 +182,7 @@ define('io.ox/mail/compose/view', [
         {
             id: 'signatures',
             index: 200,
-            draw: extensions.signaturemenu
+            draw: signatureUtil.extensions.menu
         },
         {
             id: 'options',
@@ -201,12 +190,6 @@ define('io.ox/mail/compose/view', [
             draw: extensions.optionsmenu
         }
     );
-
-    ext.point(POINT + '/signatures').extend({
-        id: 'signature',
-        index: 100,
-        draw: extensions.signature
-    });
 
     ext.point(POINT + '/editors').extend(
         {
@@ -243,11 +226,11 @@ define('io.ox/mail/compose/view', [
                 this.data('view')
                     .header(gt.pgettext('E-Mail', 'Priority'))
                     //#. E-Mail priority
-                    .option('priority', 1, gt.pgettext('E-Mail priority', 'High'), { prefix: gt.pgettext('E-Mail', 'Priority'), radio: true })
+                    .option('priority', 'high', gt.pgettext('E-Mail priority', 'High'), { prefix: gt.pgettext('E-Mail', 'Priority'), radio: true })
                     //#. E-Mail priority
-                    .option('priority', 3, gt.pgettext('E-Mail priority', 'Normal'), { prefix: gt.pgettext('E-Mail', 'Priority'), radio: true })
+                    .option('priority', 'normal', gt.pgettext('E-Mail priority', 'Normal'), { prefix: gt.pgettext('E-Mail', 'Priority'), radio: true })
                     //#. E-Mail priority
-                    .option('priority', 5, gt.pgettext('E-Mail priority', 'Low'), { prefix: gt.pgettext('E-Mail', 'Priority'), radio: true });
+                    .option('priority', 'low', gt.pgettext('E-Mail priority', 'Low'), { prefix: gt.pgettext('E-Mail', 'Priority'), radio: true });
             }
         },
         {
@@ -257,7 +240,7 @@ define('io.ox/mail/compose/view', [
                 this.data('view')
                     .header(gt('Options'))
                     .option('vcard', 1, gt('Attach Vcard'), { prefix: gt('Options'), toggleValue: 0 })
-                    .option('disp_notification_to', true, gt('Request read receipt'), { prefix: gt('Options') });
+                    .option('requestReadReceipt', true, gt('Request read receipt'), { prefix: gt('Options') });
             }
         }
     );
@@ -267,8 +250,10 @@ define('io.ox/mail/compose/view', [
             id: 'add_attachments',
             index: 100,
             draw: function (baton) {
-                var node = $('<div data-extension-id="add_attachments" class="mail-input col-xs-3">');
-                if (_.device('!smartphone')) node.addClass('col-xs-offset-2');
+                var node = $('<div data-extension-id="add_attachments" class="mail-input">');
+                // dont use col-xs and col-sm here, breaks style in landscape mode
+                node.addClass(_.device('smartphone') ? 'col-xs-5' : 'col-xs-offset-2 col-xs-3');
+
                 extensions.attachment.call(node, baton);
                 this.append(node);
             }
@@ -282,10 +267,7 @@ define('io.ox/mail/compose/view', [
                 ext.point(POINT + '/menu').invoke('draw', node, baton);
 
                 this.append(
-                    // $('<div data-extension-id="composetoolbar-menu" class="col-xs-7">').append(node)
-                    $('<div data-extension-id="composetoolbar-menu">')
-                        .addClass(_.device('smartphone') ? 'col-xs-9' : 'col-xs-7')
-                        .append(node)
+                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-7">').append(node)
                 );
             }
         }
@@ -298,50 +280,125 @@ define('io.ox/mail/compose/view', [
             var node = $('<div data-extension-id="attachmentPreview" class="col-xs-12">');
             extensions.attachmentPreviewList.call(node, baton);
             extensions.attachmentSharing.call(node, baton);
+            extensions.mailSize.call(node, baton);
             extensions.imageResizeOption.call(node, baton);
             node.appendTo(this);
         }
     });
 
-    ext.point(POINT + '/autosave/error').extend({
-        id: 'default',
-        handler: function (baton) {
-            if (!baton.isLogout && !ox.handleLogoutError) {
-                notifications.yell('error', baton.error);
-            }
-            baton.returnValue.reject(baton.error);
+    // disable attachmentList by default
+    ext.point(POINT + '/attachments').disable('attachmentList');
+
+    // via ext.cascade
+    ext.point(POINT + '/editor/load').extend({
+        id: 'options',
+        index: 100,
+        perform: function (baton) {
+            baton.options = {
+                useFixedWithFont: settings.get('useFixedWithFont'),
+                app: this,
+                config: baton.config,
+                view: baton.view,
+                model:  baton.model,
+                oxContext: { view: baton.view }
+            };
+        }
+    }, {
+        id: 'image-loader',
+        index: 200,
+        perform: function (baton) {
+            var self = this;
+            if (this.config.get('editorMode') !== 'html') return;
+            baton.options.imageLoader = {
+                upload: function (file) {
+                    var attachment = new Attachments.Model({ filename: file.name, uploaded: 0, contentDisposition: 'INLINE' }),
+                        def = new $.Deferred();
+                    composeUtil.uploadAttachment({
+                        model: self.model,
+                        filename: file.name,
+                        origin: { file: file },
+                        attachment: attachment,
+                        contentDisposition: 'inline'
+                    });
+                    attachment.once('upload:complete', def.resolve);
+                    self.model.attachFiles([attachment]);
+                    return def;
+                },
+                getUrl: function (response) {
+                    return mailAPI.getUrl(_.extend({ space: self.model.get('id') }, response), 'view', { session: false });
+                }
+            };
+        }
+    }, {
+        id: 'editor',
+        index: 300,
+        perform: function (baton) {
+            var def = $.Deferred();
+            ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + baton.config.get('editorMode')).then(function (Editor) {
+                new Editor(baton.view.editorContainer, baton.options).done(function (editor) {
+                    baton.editor = editor;
+                    def.resolve();
+                });
+            }, function () {
+                // something went wrong
+                def.reject({ error: gt("Couldn't load editor") });
+            });
+            return def;
+        }
+    }, {
+        id: 'pick',
+        index: 400,
+        perform: function (baton) {
+            return baton.editor;
         }
     });
 
-    // invoke extensions as a waterfall, but jQuery deferreds don't have an API for this
-    // TODO: at the moment, this resolves with the result of the last extension point.
-    // not sure if this is desired.
-    // TODO: factor this out into a library or util class
-    function extensionCascade(point, baton) {
-        return point.reduce(function (def, p) {
-            if (!def || !def.then) def = $.when(def);
-            return def.then(function (result, newData) {
-                if (result && result.data) baton.resultData = result.data;
-                if (newData) baton.newData = newData;
-                return $.when();
-            }, function (result) {
-                //TODO: think about the naming, here
-                if (result) baton.result = result;
-                //handle errors/warnings in reject case
-                if (result && result.error) baton.error = result.error;
-                if (result && result.warnings) baton.warning = result.warnings;
-                baton.rejected = true;
-                return $.when();
-            }).then(function () {
-                if (baton.isPropagationStopped()) return;
-                if (baton.isDisabled(point.id, p.id)) return;
-                return p.perform.apply(undefined, [baton]);
+    ext.point(POINT + '/editor/use').extend({
+        id: 'register',
+        index: 100,
+        perform: function (baton) {
+            var view = baton.view;
+            if (view.editor) view.stopListening(view.editor);
+            view.listenTo(baton.editor, 'change', view.syncMail);
+            view.listenTo(baton.config, 'change:signature', view.syncMail);
+        }
+    }, {
+        id: 'content',
+        index: 200,
+        perform: function (baton) {
+            var model = baton.model,
+                editor = baton.editor,
+                htmlToText = model.get('contentType') === 'text/html' && editor.getMode() === 'text',
+                textToHTML = model.get('contentType') === 'text/plain' && editor.getMode() === 'html',
+                setMethod = htmlToText || textToHTML ? 'setPlainText' : 'setContent';
+            return $.when(editor[setMethod](baton.content));
+        }
+    }, {
+        id: 'model',
+        index: 300,
+        perform: function (baton) {
+            var contentType = baton.editor.content_type;
+            if (contentType.toLowerCase() === 'alternative') contentType = 'text/html';
+            baton.model.set({
+                content: baton.editor.getContent(),
+                contentType: contentType
             });
-        }, $.when());
-    }
-
-    // disable attachmentList by default
-    ext.point(POINT + '/attachments').disable('attachmentList');
+        }
+    }, {
+        id: 'show',
+        index: 400,
+        perform: function (baton) {
+            var editor = baton.editor;
+            editor.show();
+            baton.view.editor = editor;
+        }
+    }, {
+        id: 'pick',
+        index: 400,
+        perform: function (baton) {
+            return baton.editor;
+        }
+    });
 
     var MailComposeView = Backbone.View.extend({
 
@@ -358,15 +415,10 @@ define('io.ox/mail/compose/view', [
         initialize: function (options) {
             _.extend(this, signatureUtil.view, this);
             this.app = options.app;
+            this.config = options.config;
             this.editorHash = {};
-            this.autosave = {};
-            this.blocked = [];
             this.messageFormat = options.messageFormat || settings.get('messageFormat', 'html');
 
-            // Open Drafts in HTML mode if content type is html even if text-editor is default
-            if (this.model.get('mode') === 'edit' && this.model.get('content_type') === 'text/html' && settings.get('messageFormat', 'html') === 'text') {
-                this.messageFormat = 'html';
-            }
             this.editor = null;
             this.composeMode = 'compose';
             this.editorId = _.uniqueId('editor-');
@@ -376,19 +428,26 @@ define('io.ox/mail/compose/view', [
 
             this.baton = ext.Baton({
                 model: this.model,
-                view: this
+                config: this.config,
+                view: this,
+                app: this.app
             });
 
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
 
             this.listenTo(this.model, 'keyup:subject change:subject', this.setTitle);
-            this.listenTo(this.model, 'change:editorMode', this.toggleEditorMode);
-            this.listenTo(this.model, 'needsync', this.syncMail);
+            this.listenTo(this.model, 'change', _.throttle(this.onChangeSaved.bind(this, 'dirty'), 100));
+            this.listenTo(this.model, 'before:save', this.onChangeSaved.bind(this, 'saving'));
+            this.listenTo(this.model, 'success:save', this.onChangeSaved.bind(this, 'saved'));
+            this.listenTo(this.config, 'change:editorMode', this.toggleEditorMode);
+            this.listenTo(this.config, 'change:vcard', this.onAttachVcard);
+            this.listenTo(this.model, 'change:content', this.onChangeContent);
+
             // handler can be found in signatures.js
-            this.listenTo(this.model, 'change:signatureId', this.setSignature);
-            this.listenTo(this.model, 'change:signatures', this.updateSignatures);
-            this.listenTo(this.model, 'change:signature', this.redrawSignature);
+            this.listenTo(this.config, 'change:signatureId', this.setSignature);
+            this.listenTo(this.config, 'change:signatures', this.updateSignatures);
+            this.listenTo(this.config, 'change:signature', this.redrawSignature);
 
             var mailto, params, self = this;
             // triggered by mailto?
@@ -415,12 +474,12 @@ define('io.ox/mail/compose/view', [
 
                 params.body = sanitizer.sanitize({ content: params.body, content_type: 'text/html' }, { WHOLE_DOCUMENT: false }).content;
                 this.setSubject(params.subject || '');
-                this.model.setContent(params.body || '');
+                this.model.set('content', params.body || '');
                 // clear hash
                 _.url.hash('mailto', null);
             }
 
-            this.listenTo(mailAPI.queue.collection, 'change:pct', this.onSendProgress);
+            this.listenTo(composeAPI.queue.collection, 'change:pct', this.onSendProgress);
 
             ext.point(POINT + '/mailto').invoke('setup');
 
@@ -431,187 +490,25 @@ define('io.ox/mail/compose/view', [
                 id: this.logoutPointId,
                 index: 1000 + this.app.guid,
                 logout: function () {
-                    return self.autoSaveDraft({ isLogout: true }).then(function (result) {
-                        var base = _(result.split(mailAPI.separator)),
-                            id = base.last(),
-                            folder = base.without(id).join(mailAPI.separator),
-                            // use JSlob to save the draft ID so it can be used as a restore point.
-                            idSavePoints = coreSettings.get('savepoints', []);
-
-                        idSavePoints.push({
-                            module: 'io.ox/mail/compose',
-                            // flag to indicate that this savepoint is non default but uses cid to restore the application
-                            restoreById: true,
-                            id: self.app.get('uniqueID'),
-                            version: ox.version,
-                            description: gt('Mail') + ': ' + (self.model.get('subject') || gt('No subject')),
-                            // data that is send to restore function. Also include flag so it can detect the non default savepoint
-                            point: { id: id, folder_id: folder, restoreById: true }
-                        });
-
-                        return coreSettings.set('savepoints', idSavePoints).save();
-                    });
+                    return self.model.save();
                 }
             });
         },
 
         onSendProgress: function (model, value) {
-            var csid = this.model.get('csid');
-            if (csid !== model.get('id')) return;
+            var id = this.model.get('id');
+            if (id !== model.get('id')) return;
             if (value >= 0) this.app.getWindow().busy(value);
+        },
+
+        onChangeContent: function (model, value) {
+            // easy one: when content get's removed completely set signature to 'no signature'
+            if (value && value !== '<div style="" class="default-style"><br></div>') return;
+            this.config.set('signatureId', '');
         },
 
         ariaLiveUpdate: function (e, msg) {
             this.$('[data-extension-id="arialive"]').text(msg);
-        },
-
-        fetchMail: function (obj) {
-            // Empty compose (early exit)
-            if (obj.mode === 'compose') return $.when();
-
-            // keep attachments (mail body) for restored reply
-            if (obj.restored) return $.when();
-
-            var self = this,
-                mode = obj.mode,
-                mailReference = _(obj).pick('id', 'folder_id');
-
-            delete obj.mode;
-
-            if (obj.initial === false) {
-                obj.attachments = new Attachments.Collection(_.clone(obj.attachments));
-                this.model.set(obj);
-                obj = null;
-                return $.when();
-            } else if (mode === 'forward' && !obj.id) {
-                obj = _(obj).map(function (o) {
-                    return _.pick(o, 'id', 'folder_id', 'csid', 'security');
-                });
-            } else {
-                obj = _.pick(obj, 'id', 'folder_id', 'csid', 'content_type', 'security');
-            }
-
-            // use CSS sanitizing and size limit (large than detail view)
-            obj.embedded = true;
-            obj.max_size = settings.get('maxSize/compose', 1024 * 512);
-
-            return mailAPI[mode](obj, this.messageFormat)
-                .then(accountAPI.getValidAddress)
-                .then(function checkTruncated(data) {
-                    //check for truncated message content, warn the user, provide alternative
-                    if (data.attachments[0].truncated) {
-                        //only truncated if forwarded inline and too large
-                        var dialog = new dialogs.ModalDialog(),
-                            def = $.Deferred();
-
-                        dialog
-                            .header($('<h4>').text(gt('This message has been truncated due to size limitations.')))
-                            .append(gt('Loading the full mail might lead to performance problems.'))
-                            .addPrimaryButton('useInline', gt('Continue'), 'useInline')
-                            .addButton('useInlineComplete', gt('Load full mail'), 'useInlineComplete')
-                            .addButton('useAttachment', gt('Add original message as attachment'), 'useAttachment')
-                            .on('useAttachment', function () {
-                                obj.attachOriginalMessage = true;
-                                def.resolve(obj);
-                            })
-                            .on('useInline', def.reject)
-                            .on('useInlineComplete', function () {
-                                delete obj.max_size;
-                                def.resolve(obj);
-                            })
-                            .show();
-                        return def.always(function () {
-                            dialog.close();
-                        }).then(function (obj) {
-                            return mailAPI[mode](obj, this.messageFormat);
-                        }, function () {
-                            return $.when(data);
-                        });
-                    }
-                    return data;
-                })
-                .then(function (data) {
-                    if (mode !== 'edit') {
-                        data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
-                    } else {
-                        data.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                    }
-                    data.mode = mode;
-
-                    var attachments = _.clone(data.attachments);
-                    // to keep the previews working we copy data from the original mail
-                    if (mode === 'forward' || mode === 'edit') {
-                        attachments.forEach(function (file) {
-                            _.extend(file, { group: 'mail', mail: mailReference, security: obj.security });
-                        });
-                    }
-
-                    delete data.attachments;
-
-                    //FIXME: remove this if statement? Should still work without it
-                    if (mode === 'forward' || mode === 'edit' || mode === 'reply' || mode === 'replyall') {
-                        // move nested messages into attachment array
-                        _(data.nested_msgs).each(function (obj) {
-                            attachments.push({
-                                id: obj.id,
-                                filename: obj.subject + '.eml',
-                                content_type: 'message/rfc822',
-                                msgref: obj.msgref
-                            });
-                        });
-                        delete data.nested_msgs;
-                    }
-
-                    // custom display names
-                    var address = _.first(data.from);
-                    if (_.isArray(address) && settings.get(['customDisplayNames', address[1], 'overwrite'])) {
-                        address[0] = settings.get(['customDisplayNames', address[1], 'name'], address[0]);
-                    }
-
-                    // recover notification option (boolean)
-                    if (mode === 'edit') data.disp_notification_to = !!data.disp_notification_to;
-
-                    self.model.set(data);
-
-                    var attachmentCollection = self.model.get('attachments');
-                    attachmentCollection.reset(_(attachments).map(function (attachment) {
-                        return new attachmentModel.Model(attachment);
-                    }));
-                    var content = attachmentCollection.at(0).get('content'),
-                        content_type = attachmentCollection.at(0).get('content_type');
-
-                    // Force text edit mode when alternative editorMode and text/plain mail
-                    if (mode === 'edit' && self.model.get('editorMode') === 'alternative' && content_type === 'text/plain') {
-                        self.model.set('editorMode', 'text', { silent: true });
-                    }
-
-                    var def = $.Deferred();
-                    if (content_type === 'text/plain' && self.model.get('editorMode') === 'html') {
-                        require(['io.ox/mail/detail/content'], function (proc) {
-                            var html = proc.transformForHTMLEditor(content);
-                            attachmentCollection.at(0).set('content_type', 'text/html');
-                            content = html;
-                            def.resolve();
-                        });
-                    } else {
-                        // TODO
-                        // In e.g. edit mode middleware wraps content in a div this should be solved in middleware!
-                        if (/^<div id="ox-\w+"[^>]*>/.test(content.trim())) {
-                            content = content.trim().replace(/^<div id="ox-\w+"[^>]*>/, '').replace(/<\/div>$/, '');
-                        }
-                        def.resolve();
-                    }
-                    return $.when(def).then(function () {
-                        attachmentCollection.at(0).set('content', content);
-                        self.model.unset('attachments');
-                        self.model.set('attachments', attachmentCollection);
-                        obj = data = attachmentCollection = null;
-                    });
-                })
-                .fail(function () {
-                    // Mark model as clean to prevent save/discard dialog when server side error occurs
-                    self.clean();
-                });
         },
 
         setSubject: function (e) {
@@ -624,18 +521,11 @@ define('io.ox/mail/compose/view', [
                 this.editor.focus();
                 node.removeAttr('data-enter-keydown');
             }
-            this.model.set('subject', value, { silent: true }).trigger('keyup:subject', value);
+            this.model.set('subject', value).trigger('keyup:subject', value);
         },
 
         setTitle: function () {
             this.app.setTitle(this.model.get('subject') || gt('Compose'));
-        },
-
-        parseMsgref: function (msgref) {
-            var base = _(msgref.toString().split(mailAPI.separator)),
-                id = base.last(),
-                folder = base.without(id).join(mailAPI.separator);
-            return { folder_id: folder, id: id };
         },
 
         saveDraft: function () {
@@ -643,130 +533,54 @@ define('io.ox/mail/compose/view', [
             // make sure the tokenfields have created all tokens and updated the to cc, bcc attributes
             this.trigger('updateTokens');
             if (win) win.busy();
-            // get mail
-            var mail = this.model.getMailForDraft();
-
-            // disabled for fix of bug 56704
-            //delete mail.vcard;
 
             var view = this,
                 baton = new ext.Baton({
-                    mail: mail,
                     model: this.model,
+                    config: this.config,
                     app: this.app,
-                    view: view
+                    view: view,
+                    catchErrors: true
                 });
 
-            var point = ext.point('io.ox/mail/compose/actions/save');
-
-            return extensionCascade(point, baton).always(function () {
+            return ext.point('io.ox/mail/compose/actions/save').cascade(this, baton).always(function () {
                 if (win) win.idle();
             });
         },
 
-        autoSaveDraft: function (options) {
-            options = options || {};
-            var def = new $.Deferred(),
-                model = this.model,
-                self = this,
-                mail = this.model.getMailForAutosave();
-
-            mailAPI.autosave(mail).always(function (result) {
-                if (result.error) {
-                    var baton = new ext.Baton(result);
-                    baton.model = model;
-                    baton.view = self;
-                    baton.isLogout = options.isLogout;
-                    baton.returnValue = def;
-                    ext.point('io.ox/mail/compose/autosave/error').invoke('handler', self, baton);
-                    def = baton.returnValue;
-                } else {
-                    model.set({
-                        'autosavedAsDraft': true,
-                        'msgref': result,
-                        'sendtype': mailAPI.SENDTYPE.EDIT_DRAFT,
-                        'infostore_ids_saved': [].concat(model.get('infostore_ids_saved'), mail.infostore_ids || [])
-                    });
-                    model.dirty(model.previous('sendtype') !== mailAPI.SENDTYPE.EDIT_DRAFT);
-                    //#. %1$s is the time, the draft was saved
-                    //#, c-format
-                    self.inlineYell(gt('Draft saved at %1$s', moment().format('LT')));
-                    def.resolve(result);
-                }
-            });
-
-            this.initAutoSaveAsDraft();
-
-            return def;
-        },
-
-        stopAutoSave: function () {
-            if (this.autosave) {
-                window.clearTimeout(this.autosave.timer);
-            }
-        },
-
-        initAutoSaveAsDraft: function () {
-
-            var timeout = settings.get('autoSaveDraftsAfter', false),
-                timerScale = {
-                    seconds: 1000,
-                    minute: 60000,
-                    minutes: 60000
-                },
-                scale,
-                delay,
-                timer,
-                self = this;
-
-            if (!timeout) return;
-
-            timeout = timeout.split('_');
-            scale = timerScale[timeout[1]];
-            timeout = timeout[0];
-
-            // settings not parsable
-            if (!timeout || !scale) return;
-
-            this.stopAutoSave();
-
-            delay = function () {
-                self.autosave.timer = _.delay(timer, timeout * scale);
-            };
-
-            timer = function () {
-                // only auto-save if something changed (see Bug #26927)
-                if (self.model.dirty()) {
-                    self.autoSaveDraft();
-                } else {
-                    delay();
-                }
-            };
-
-            this.autosave = {};
-            delay();
+        // has three states, dirty, saving, saved
+        onChangeSaved: function (state) {
+            if (this.autoSaveState === state) return;
+            if (state === 'dirty') this.inlineYell('');
+            else if (state === 'saving') this.inlineYell('Saving...');
+            else if (state === 'saved' && this.autoSaveState === 'saving') this.inlineYell('Saved');
+            this.autoSaveState = state;
         },
 
         inlineYell: function (text) {
-            // no inline yell on smartphones, use default yell as fallback
-            if (_.device('smartphone')) {
-                notifications.yell('success', text);
-                return;
-            }
+            if (!this.$el.is(':visible')) return;
+            if (_.device('smartphone')) return;
+
             // only fade in once, then leave it there
             this.$el.closest('.io-ox-mail-compose-window').find('.inline-yell').text(text).fadeIn();
         },
 
+        dirty: function (state) {
+            if (state === false) this.initialModel = this.model.toJSON();
+            else if (state === true) this.initialModel = {};
+            else return !_.isEmpty(this.model.deepDiff(this.initialModel));
+        },
+
         clean: function () {
             // mark as not dirty
-            this.model.dirty(false);
+            this.dirty(false);
             // clean up editors
             for (var id in this.editorHash) {
-                this.editorHash[id].destroy();
+                this.editorHash[id].then(function (editor) {
+                    editor.destroy();
+                });
                 delete this.editorHash[id];
             }
-            // clear timer for autosave
-            this.stopAutoSave();
         },
 
         removeLogoutPoint: function () {
@@ -787,7 +601,7 @@ define('io.ox/mail/compose/view', [
                 isDraft = this.model.keepDraftOnClose();
 
             // This dialog gets automatically dismissed
-            if ((this.model.dirty() || this.model.get('autosavedAsDraft') || isDraft) && !this.model.get('autoDismiss')) {
+            if ((this.dirty() || isDraft) && !this.config.get('autoDismiss')) {
                 var discardText = isDraft ? gt.pgettext('dialog', 'Delete draft') : gt.pgettext('dialog', 'Discard message'),
                     saveText = isDraft ? gt('Keep draft') : gt('Save as draft'),
                     modalText = isDraft ? gt('Do you really want to delete this draft?') : gt('Do you really want to discard your message?');
@@ -810,8 +624,11 @@ define('io.ox/mail/compose/view', [
                     .show()
                     .then(function (action) {
                         if (action === 'delete') {
-                            if (isDraft) mailAPI.remove([self.parseMsgref(self.model.get('msgref'))]);
-                            self.model.discard();
+                            var isAutoDiscard = self.config.get('autoDiscard'),
+                                editFor = self.model.get('meta').editFor;
+                            if (!isDraft || !isAutoDiscard || !editFor) return;
+                            // only delete autosaved drafts that are not saved manually and have a msgref
+                            mailAPI.remove([{ id: editFor.originalId, folder_id: editFor.originalFolderId }]);
                         } else if (action === 'savedraft') {
                             return self.saveDraft();
                         } else {
@@ -839,24 +656,24 @@ define('io.ox/mail/compose/view', [
             }
             // make sure the tokenfields have created all tokens and updated the to cc, bcc attributes
             this.trigger('updateTokens');
-            var mail = this.model.getMail(),
-                view = this,
+            var view = this,
                 baton = new ext.Baton({
-                    mail: mail,
                     model: this.model,
+                    config: this.config,
                     app: this.app,
-                    view: view
+                    view: view,
+                    catchErrors: true
                 }),
                 win = this.app.getWindow(),
                 point = ext.point('io.ox/mail/compose/actions/send');
 
             // don't ask wether the app can be closed if we have unsaved data, we just want to send
-            baton.model.set('autoDismiss', true);
+            baton.config.set('autoDismiss', true);
 
             win.busy();
-            return extensionCascade(point, baton).then(function () {
+            return point.cascade(this, baton).then(function () {
                 // a check/user intaction aborted the flow or app is re-opened after a request error; we want to be asked before any unsaved data is discarded again
-                if (baton.rejected || baton.error) baton.model.set('autoDismiss', false);
+                if (baton.rejected || baton.error) baton.config.set('autoDismiss', false);
             }).always(win.idle.bind(win));
         },
 
@@ -885,56 +702,34 @@ define('io.ox/mail/compose/view', [
             if (!isString) e.preventDefault();
             if (input.hasClass('hidden') || isString) {
                 input.removeClass('hidden');
-                button.addClass('active').attr('aria-checked', true);
+                button.addClass('active');
+                if (type === 'cc') button.attr('title', gt('Hide carbon copy input field'));
+                if (type === 'bcc') button.attr('title', gt('Hide blind carbon copy input field'));
             } else if (!this.model.has(type) || _.isEmpty(this.model.get(type))) {
                 //We don't want to close it automatically! Bug: 35730
                 this.model.set(type, []);
                 input.addClass('hidden');
-                button.removeClass('active').attr('aria-checked', false);
+                button.removeClass('active');
+                if (type === 'cc') button.attr('title', gt('Show carbon copy input field'));
+                if (type === 'bcc') button.attr('title', gt('Show blind carbon copy input field'));
             }
             $(window).trigger('resize');
             return input;
         },
 
         loadEditor: function (content) {
-            if (this.editorHash[this.model.get('editorMode')]) {
-                return this.reuseEditor(content);
-            }
-            var self = this,
-                def = $.Deferred(),
-                options = {};
-
-            options.useFixedWithFont = settings.get('useFixedWithFont');
-            options.app = this.app;
-            options.view = this;
-            options.model = this.model;
-            options.oxContext = { view: this };
-            ox.manifests.loadPluginsFor('io.ox/mail/compose/editor/' + this.model.get('editorMode')).then(function (Editor) {
-                new Editor(self.editorContainer, options).done(function (editor) {
-                    def.resolve(editor);
-                });
-            }, function () {
-                // something went wrong
-                def.reject({ error: gt("Couldn't load editor") });
-            });
+            var mode = this.config.get('editorMode'),
+                baton = new ext.Baton({ view: this, model: this.model, config: this.config, content: content }),
+                def = this.editorHash[mode] = this.editorHash[mode] || ext.point(POINT + '/editor/load').cascade(this.app, baton);
+            // load or reuse editor
             return def.then(function (editor) {
-                self.editorHash[self.model.get('editorMode')] = editor;
-                // maybe there will be a better place for the following line in the future, but until then it will stay here
-                // attaches listeners to the tinymce instance
-                if (editor.tinymce) $(editor.tinymce().getElement()).on('removeInlineImage', self.onRemoveInlineImage.bind(self));
-                return self.reuseEditor(content);
-            });
+                baton.editor = editor;
+                // returns editor
+                return ext.point(POINT + '/editor/use').cascade(this.app, baton);
+            }.bind(this));
         },
 
-        reuseEditor: function (content) {
-            var self = this;
-            this.editor = this.editorHash[this.model.get('editorMode')];
-            return $.when(this.editor.setPlainText(content)).then(function () {
-                self.editor.show();
-                return self.editor;
-            });
-        },
-
+        // metrics
         getEditor: function () {
             var def = $.Deferred();
             if (this.editor) {
@@ -947,36 +742,40 @@ define('io.ox/mail/compose/view', [
 
         toggleEditorMode: function () {
 
-            var content;
+            var self = this, content;
 
             if (this.editor) {
                 // this.removeSignature();
                 content = this.editor.getPlainText();
                 this.editor.hide();
+            } else if (this.model.get('contentType') === 'text/html' && this.config.get('editorMode') === 'text') {
+                // intial set, transfrom html to text
+                content = require(['io.ox/core/tk/textproc']).then(function (textproc) {
+                    return textproc.htmltotext(self.model.get('content'));
+                });
+            } else {
+                content = this.model.get('content');
             }
 
             this.editorContainer.busy();
-            return this.loadEditor(content).then(function () {
+            return $.when(content).then(function (content) {
+                return self.loadEditor(content);
+            }).then(function () {
                 this.editorContainer.idle();
-                // update the content type of the mail
-                // FIXME: may be, do this somewhere else? in the model?
-                this.model.setMailContentType(this.editor.content_type);
                 // reset tinyMCE's undo stack
                 if (!_.isFunction(this.editor.tinymce)) return;
                 this.editor.tinymce().undoManager.clear();
             }.bind(this));
         },
 
-        onRemoveInlineImage: function (e, id) {
-            var attachments = this.model.get('attachments'),
-                image = attachments.findWhere({ cid: '<' + id + '>' });
-            if (image) attachments.remove(image);
+        onAttachVcard: function () {
+            if (this.config.get('vcard') === 1) this.model.attachVCard();
+            this.config.set('vcard', 0);
         },
 
         syncMail: function () {
-            if (this.editor) {
-                this.model.setContent(this.editor.getContent());
-            }
+            if (!this.editor) return;
+            this.model.set('content', this.editor.getContent());
         },
 
         setBody: function (content) {
@@ -987,7 +786,7 @@ define('io.ox/mail/compose/view', [
                 content = content.replace(/[\s\uFEFF\xA0]+$/, '');
             }
 
-            if (this.model.get('mode') !== 'compose') {
+            if (this.model.get('meta').type !== 'new') {
                 // Remove extranous <br>
                 content = content.replace(/\n<br>&nbsp;$/, '\n');
             }
@@ -1008,25 +807,25 @@ define('io.ox/mail/compose/view', [
 
         prependNewLine: function () {
             // Prepend newline in all modes except when editing draft
-            if (this.model.get('mode') === 'edit') return;
+            if (this.config.get('type') === 'edit') return;
             var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<div[^>]*class="default-style"[^>]*><br><\/div>)+/, '');
-            var nl = this.model.get('editorMode') === 'html' ? mailUtil.getDefaultStyle().node.get(0).outerHTML : '\n';
+            var nl = this.config.get('editorMode') === 'html' ? mailUtil.getDefaultStyle().node.get(0).outerHTML : '\n';
             this.editor.setContent(nl + content);
         },
 
         setMail: function () {
-            var self = this;
-
-            this.model.setInitialMailContentType();
+            var self = this,
+                model = this.model,
+                config = this.config;
 
             return this.toggleEditorMode().then(function () {
                 return self.signaturesLoading;
             })
             .done(function () {
-                var target, mode = self.model.get('mode');
+                var target;
                 // set focus in compose and forward mode to recipient tokenfield
                 if (_.device('!ios')) {
-                    if (/(compose|forward)/.test(mode)) {
+                    if (config.is('new|forward')) {
                         target = self.$('.tokenfield:first .token-input');
                     } else {
                         target = self.editor;
@@ -1041,31 +840,19 @@ define('io.ox/mail/compose/view', [
                     }
                     target.focus();
                 }
-                self.model.setAutoBCC();
-                if (mode === 'replyall' || mode === 'edit') {
-                    if (!_.isEmpty(self.model.get('cc'))) self.toggleTokenfield('cc');
+
+                if (config.is('replyall|edit')) {
+                    if (!_.isEmpty(model.get('cc'))) self.toggleTokenfield('cc');
                 }
-                if (!_.isEmpty(self.model.get('bcc'))) self.toggleTokenfield('bcc');
-                self.setBody(self.model.getContent());
-                // Set model as dirty only when attaching infostore ids initially (Send as pdf from text)
-                self.model.dirty(self.model.get('mode') === 'compose' && !_.isEmpty(self.model.get('infostore_ids')));
-                // compose vs. edit
-                self.model.setInitialSignature();
+                if (!_.isEmpty(model.get('bcc'))) self.toggleTokenfield('bcc');
+
+                self.setBody(model.get('content'));
             });
         },
 
         setSimpleMail: function (content) {
-            if (this.model.get('editorMode') === 'text') return;
+            if (this.config.get('editorMode') === 'text') return;
             if (!/<table/.test(content)) this.editorContainer.find('.editable.mce-content-body').addClass('simple-mail');
-        },
-
-        blockReuse: function (sendtype) {
-            this.blocked[sendtype] = (this.blocked[sendtype] || 0) + 1;
-        },
-
-        unblockReuse: function (sendtype) {
-            this.blocked[sendtype] = (this.blocked[sendtype] || 0) - 1;
-            if (this.blocked[sendtype] <= 0) delete this.blocked[sendtype];
         },
 
         focusEditor: function () {
@@ -1136,12 +923,11 @@ define('io.ox/mail/compose/view', [
 
             this.$el.append(this.editorContainer);
 
-            this.initAutoSaveAsDraft();
-
             return this;
         }
 
     });
+
 
     return MailComposeView;
 });

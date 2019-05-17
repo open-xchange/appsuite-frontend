@@ -248,6 +248,12 @@ define.async('io.ox/oauth/keychain', [
                 haloAPI.halo.refreshServices();
             });
         });
+        accounts.listenTo(require('io.ox/core/folder/api'), 'remove', function (folder) {
+            var relatedAccount = accounts.filter(function (a) {
+                return a.get('associations').map(function (as) { return as.folder; }).indexOf(folder) >= 0;
+            })[0];
+            if (relatedAccount) relatedAccount.fetch();
+        });
     }
 
     var def = $.Deferred(),

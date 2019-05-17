@@ -185,6 +185,10 @@
 
 .modal.share-permissions-dialog {
 
+    .twitter-typeahead .tt-hint {
+        color: #757575;
+    }
+
     html:not(.ie11) & {
         .modal-content {
             min-height: 250px;
@@ -315,6 +319,11 @@
             line-height: 40px;
         }
 
+        // vertical align with padded dropdown button
+        .role:not(.dropdown) {
+            padding: 4px 27px;
+        }
+
         .detail-dropdown,
         .entity-actions { text-align: right; }
 
@@ -323,7 +332,7 @@
         .role,
         .detail-dropdown { .ellipsis(); }
 
-        .post-description { color: #aaa; }
+        .post-description { color: #767676; }
 
         .display_name {
             font-weight: bold;

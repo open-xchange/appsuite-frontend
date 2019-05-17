@@ -56,12 +56,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
                     };
                 }
 
-                // do not use listen to here, does not work with dom events, see http://stackoverflow.com/questions/14460855/
-                $(window).on('resize', $.proxy(this.computeWidth, this));
-
-                this.on('dispose', function () {
-                    $(window).off('resize', this.computeWidth);
-                });
+                this.listenToDOM(window, 'resize', this.computeWidth);
             }
         },
 
@@ -183,13 +178,30 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             if (this.handler) this.handler(id, module);
         },
 
-        onFolderChange: function () {
-            this.render();
+        onFolderModelChange: function (model) {
+            // when the shown folder is moved to external storage the folder id is changed, so we must update the
+            // current folder id to the new one before rendering the path
+            if (model.changed && model.previous('id') === this.folder) {
+                this.onChangeFolder(model.get('id'));
+            } else {
+                this.render();
+            }
+        },
+
+        onFolderPathModified: function (oldId, newId) {
+            if (oldId === newId) return;
+            // when the shown folder is moved to external storage the folder id is changed, so we must update the
+            // current folder id to the new one before rendering the path
+            if (this.folder === oldId) {
+                this.onChangeFolder(newId);
+            } else {
+                this.render();
+            }
         },
 
         listener: function (data) {
             this.listenToFolderChange(data);
-            this.listenToModelChange(data);
+            this.listenToFolderModelChange(data);
         },
 
         stopListeningModels: function () {
@@ -200,14 +212,14 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             breadcrumb.models = [];
         },
 
-        listenToModelChange: function (data) {
+        listenToFolderModelChange: function (data) {
             var model = api.pool.getModel(data.id);
             this.models.push(model);
-            this.listenTo(model, 'change', this.onFolderChange.bind(this));
+            this.listenTo(model, 'change', this.onFolderModelChange.bind(this));
         },
 
         listenToFolderChange: function (data) {
-            this.listenTo(api, 'update:' + data.id, this.onFolderChange.bind(this));
+            this.listenTo(api, 'update:' + data.id, this.onFolderPathModified.bind(this));
         }
     });
 

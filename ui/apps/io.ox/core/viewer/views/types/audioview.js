@@ -47,9 +47,6 @@ define('io.ox/core/viewer/views/types/audioview', [
                 self = this,
                 coverUrl = FilesAPI.getUrl(this.model.toJSON(), 'cover', { width: 280, height: 280 });
 
-            // run own disposer function on dispose event from DisposableView
-            this.on('dispose', this.disposeView.bind(this));
-
             // remove event listeners from audio element before removing it from the DOM
             this.$el.find('audio').off();
             this.$el.empty().append(
@@ -181,7 +178,7 @@ define('io.ox/core/viewer/views/types/audioview', [
         /**
          * Destructor function of this view.
          */
-        disposeView: function () {
+        onDispose: function () {
             // remove event listeners from audio element and cover image
             this.$el.find('audio, img.cover, .play-button').off();
             this.disposeElement();

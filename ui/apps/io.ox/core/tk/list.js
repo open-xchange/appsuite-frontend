@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/tk/list', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/core/tk/list-selection',
     'io.ox/core/tk/list-dnd',
@@ -116,12 +116,8 @@ define('io.ox/core/tk/list', [
 
         // use throttle instead of debouce in order to respond during scroll momentum
         onScroll: _.throttle(function () {
-            if (this.complete) {
-                this.removeBusyIndicator();
-                this.isBusy = false;
-                return;
-            }
-            if (this.isBusy || !this.loader.collection || !this.$el.is(':visible')) return;
+
+            if (this.disposed || this.isBusy || !this.loader.collection || this.collection.complete || !this.$el.is(':visible')) return;
 
             var height = this.$el.outerHeight(),
                 scrollTop = this.el.scrollTop,
@@ -144,7 +140,7 @@ define('io.ox/core/tk/list', [
             this.idle();
             // trigger scroll event after initial load
             // takes care of the edge-case that the initial list cannot fill the viewport (see bug 37728)
-            if (!this.complete) this.onScroll();
+            if (!this.isComplete()) this.onScroll();
         },
 
         onComplete: function (complete) {
@@ -153,8 +149,7 @@ define('io.ox/core/tk/list', [
 
         // load more data (wraps paginate call)
         processPaginate: function () {
-            // Bug 54793: this.complete could be undefined
-            if (!this.options.pagination || this.isBusy || !!this.complete) return;
+            if (!this.options.pagination || this.isBusy || this.isComplete()) return;
             this.paginate();
         },
 
@@ -554,7 +549,6 @@ define('io.ox/core/tk/list', [
             this.app = options.app;
             this.model = new Backbone.Model();
             this.isBusy = false;
-            this.complete = false;
             this.firstReset = true;
             this.firstContent = true;
 
@@ -590,15 +584,6 @@ define('io.ox/core/tk/list', [
                 }
             }
 
-            if (this.options.pagination) {
-                // respond to window resize (see bug 37728)
-                $(window).on('resize.list-view', this.onScroll.bind(this));
-            }
-
-            this.on('dispose', function () {
-                $(window).off('resize.list-view');
-            });
-
             this.queue = {
 
                 list: [],
@@ -633,7 +618,7 @@ define('io.ox/core/tk/list', [
             // remove listeners; make sure this.collection is an object otherwise we remove all listeners
             if (this.collection) this.stopListening(this.collection);
             this.collection = collection;
-            this.toggleComplete(false);
+            this.toggleComplete(this.collection.complete);
             this.toggleExpired(false);
             this.listenTo(collection, {
                 // forward events
@@ -684,7 +669,10 @@ define('io.ox/core/tk/list', [
         toggleComplete: function (state) {
             if (!this.options.pagination) state = true;
             this.$el.toggleClass('complete', state);
-            this.complete = !!state;
+        },
+
+        isComplete: function () {
+            return this.collection && this.collection.complete;
         },
 
         // shows/hides checkboxes
@@ -720,6 +708,13 @@ define('io.ox/core/tk/list', [
             // remove listeners; make sure this.collection is an object otherwise we remove all listeners
             if (this.collection) this.stopListening(this.collection);
             this.collection = loader.getDefaultCollection();
+            // register listener as soon as the first loader is connected
+            if (this.options.pagination && !this.loader) {
+                // respond to window resize (see bug 37728)
+                // make onScroll unique function first (all instance share same function otherwise)
+                this.onScroll = this.onScroll.bind(this);
+                this.listenToDOM(window, 'resize', this.onScroll);
+            }
             this.loader = loader;
 
             this.load = function (options) {
@@ -789,8 +784,7 @@ define('io.ox/core/tk/list', [
         },
 
         renderListLabel: function (label) {
-            return $('<li class="list-item list-item-label">')
-                .text(label);
+            return $('<li class="list-item list-item-label" role="presentation">').text(label);
         },
 
         renderListItem: function (model, drawlabels) {
@@ -917,7 +911,7 @@ define('io.ox/core/tk/list', [
         hasNext: function () {
             if (!this.collection) return false;
             var index = this.getPosition() + 1;
-            return index < this.collection.length || !this.complete;
+            return index < this.collection.length || !this.isComplete();
         },
 
         next: function () {

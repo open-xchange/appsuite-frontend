@@ -197,10 +197,10 @@ define('io.ox/core/links', [
             }
 
             // go!
-            ox.registry.call('mail-compose', 'compose', {
+            ox.registry.call('mail-compose', 'open', {
                 to: [[name, address]],
                 subject: params.subject || '',
-                attachments: [{ content: sanitizer.sanitize({ content: params.body || '', content_type: 'text/html' }, { WHOLE_DOCUMENT: false }).content, disp: 'inline' }]
+                content: sanitizer.sanitize({ content: params.body || '', content_type: 'text/html' }, { WHOLE_DOCUMENT: false }).content
             });
         });
     };

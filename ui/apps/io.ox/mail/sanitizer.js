@@ -16,30 +16,34 @@ define('io.ox/mail/sanitizer', [
     'static/3rd.party/purify.min.js'
 ], function (mailSettings, DOMPurify) {
 
-    var whitelist = mailSettings.get('whitelist', {});
-    if (_.isEmpty(whitelist)) console.warn('No sanitizing whitelist defined. Falling back to strict sanitizing');
+    var whitelist = mailSettings.get('whitelist', {}),
+        specialAttributes = ['desktop', 'mobile', 'tablet', 'id', 'class', 'style'],
+        defaultOptions = {
+            SAFE_FOR_JQUERY: true,
+            FORCE_BODY: true,
+            // keep HTML and style tags to display mails correctly in iframes
+            WHOLE_DOCUMENT: true
+        };
 
-    // TODO: Backend seems to leave out a few necessary attributes
-    whitelist.allowedAttributes = ['desktop', 'mobile', 'tablet', 'id', 'class', 'style'].concat(whitelist.allowedAttributes || []);
-
-    // See: https://github.com/cure53/DOMPurify for all available options
-    var defaultOptions = {
-        SAFE_FOR_JQUERY: true,
-        FORCE_BODY: true,
-        ALLOWED_ATTR: whitelist.allowedAttributes,
-        // keep HTML and style tags to display mails correctly in iframes
-        WHOLE_DOCUMENT: true
-    };
-
-    // strange handling of options by DOMPurify: breaks on undefined or empty array
-    if (whitelist.allowedTags && whitelist.allowedTags.length) defaultOptions.ALLOWED_TAGS = whitelist.allowedTags;
+    if (_.isEmpty(whitelist)) {
+        // fallback to DOMPurify defaults without replacling them (only add some). This should
+        // never happen so we print an error to console.
+        console.error('Sanitizer: No whitelist defined in "io.ox/mail//whitelist". HTML sanitizer will not work correctly.');
+        defaultOptions.ADD_ATTR = ['desktop', 'mobile', 'tablet'];
+    } else {
+        // extend MW defaults with some more attributes. Should be removed as soon as MW adds our
+        // extended list to their defaults
+        defaultOptions.ALLOWED_ATTR = specialAttributes.concat(whitelist.allowedAttributes || []);
+        // set new default. This will overwrite DOMPurify's default
+        defaultOptions.ALLOWED_TAGS = whitelist.allowedTags;
+    }
 
     // add hook before sanitizing, to catch some issues
     DOMPurify.addHook('beforeSanitizeElements', function (currentNode) {
         // dompurify removes the title tag but keeps the text in it, creating strange artefacts
         if (currentNode.tagName === 'TITLE') currentNode.innerHTML = '';
         // add a class namespace to style nodes so that they overrule our stylesheets without !important
-        if (currentNode.tagName === 'STYLE') {
+        if (currentNode.tagName === 'STYLE' && currentNode.sheet && currentNode.sheet.cssRules) {
             var rules = '';
             _(currentNode.sheet.cssRules).each(function (rule) {
                 rules = rules + '.mail-detail-content ' + rule.cssText + ' ';

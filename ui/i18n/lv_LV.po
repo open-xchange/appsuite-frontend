@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-01-09 12:10+0100\n"
+"PO-Revision-Date: 2019-04-29 12:03+0300\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -38,8 +38,6 @@ msgid "Audio"
 msgstr "Audio"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js
 msgid "Mail"
 msgstr "Pasts"
 
@@ -513,7 +511,8 @@ msgstr "Laiks"
 msgid "Please enter a valid date"
 msgstr "Ievadiet derīgu datumu"
 
-#: apps/io.ox/backbone/mini-views/help.js module:io.ox/core
+#: apps/io.ox/backbone/mini-views/helplink.js module:io.ox/core
+#: apps/io.ox/help/main.js module:io.ox/help
 msgid "Online help"
 msgstr "Tiešsaistes palīgs"
 
@@ -530,12 +529,14 @@ msgstr "Tiešsaistes palīgs"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
-#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/contextmenu.js
-#: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
+#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js
 #: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
@@ -556,13 +557,13 @@ msgstr "Dzēst"
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/favorite/toolbar.js
-#: apps/io.ox/files/main.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/main.js apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal apps/io.ox/settings/accounts/views.js
-#: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/main.js
+#: module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/main.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/toolbar.js
@@ -628,11 +629,13 @@ msgstr "Visas laika joslas"
 
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#: apps/io.ox/backbone/views/toolbar.js
 msgid "%1$s Toolbar"
 msgstr "%1$s rīkjosla"
 
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#: apps/io.ox/backbone/views/toolbar.js
 msgid "Actions. Use cursor keys to navigate."
 msgstr "Darbības. Lai pārvietotos, izmantojiet kursora taustiņus."
 
@@ -651,10 +654,6 @@ msgstr "Lūdzu ievadiet derīgu e-pasta adresi"
 #: apps/io.ox/backbone/validation.js module:io.ox/core
 msgid "Please enter a valid phone number. Allowed characters are: %1$s"
 msgstr "Lūdzu ievadiet derīgu Telefona numuru. Atļautie simboli ir: %1$s"
-
-#: apps/io.ox/backbone/validation.js module:io.ox/core
-msgid "Please enter a valid email address or phone number"
-msgstr "Lūdzu ievadiet derīgu e-pasta adresi vai telefonu"
 
 #: apps/io.ox/backbone/validation.js module:io.ox/core
 msgid "Please enter a valid object"
@@ -759,6 +758,8 @@ msgstr "Rotēt attēlu"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-folder-alarms.js
+#: apps/io.ox/calendar/actions/change-organizer.js
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
@@ -789,9 +790,22 @@ msgid "Close"
 msgstr "Aizvērt"
 
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Download"
+msgstr "Lejupielāde"
+
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/change-alarms.js
+#: apps/io.ox/calendar/actions/change-folder-alarms.js
+#: apps/io.ox/calendar/actions/change-organizer.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
@@ -799,7 +813,8 @@ msgstr "Aizvērt"
 #: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
-#: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/download.js
+#: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js
@@ -809,7 +824,8 @@ msgstr "Aizvērt"
 #: apps/io.ox/core/upsell.js
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
-#: apps/io.ox/files/actions/delete.js module:io.ox/files
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
 #: apps/io.ox/files/actions/upload-new-version.js
@@ -818,14 +834,15 @@ msgstr "Aizvērt"
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
-#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/actions/delete.js module:io.ox/mail
+#: apps/io.ox/mail/actions/reminder.js apps/io.ox/mail/categories/edit.js
 #: apps/io.ox/mail/compose/actions/extensions.js
 #: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
+#: apps/io.ox/mail/compose/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot apps/io.ox/multifactor/views/constants.js
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
 #: apps/io.ox/settings/apps/settings/pane.js
@@ -903,7 +920,6 @@ msgstr "Intervāls"
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/notifications.js module:io.ox/core
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#: apps/io.ox/mail/settings/compose/settings/pane.js
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "Never"
 msgstr "Nekad"
@@ -970,6 +986,18 @@ msgstr "Agrāk"
 msgid "Search"
 msgstr "Meklēšana"
 
+#: apps/io.ox/backbone/views/toolbar.js module:io.ox/core
+#: apps/io.ox/core/extPatterns/links.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Actions"
+msgstr "Darbības"
+
+#: apps/io.ox/backbone/views/toolbar.js module:io.ox/core
+#: apps/io.ox/core/extPatterns/links.js
+msgid "More actions"
+msgstr "Vairāk darbību"
+
 #: apps/io.ox/backbone/views/window.js module:io.ox/core
 msgid "Minimized windows"
 msgstr "Minimizētie logi"
@@ -1011,10 +1039,10 @@ msgstr "Kompakts"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/folder/contextmenu.js
 #: module:io.ox/core apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
-#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/contextmenu.js
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/actions/move.js apps/io.ox/tasks/mobile-toolbar-actions.js
 #: apps/io.ox/tasks/toolbar.js
 msgid "Move"
@@ -1067,6 +1095,7 @@ msgid "Change status"
 msgstr "Izmainīt statusu"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Change reminder"
 msgstr "Mainīt atgādinājumu"
 
@@ -1081,7 +1110,8 @@ msgstr "Sekot"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/export.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/toolbar.js
+#: module:io.ox/tasks apps/io.ox/tasks/mobile-toolbar-actions.js
+#: apps/io.ox/tasks/toolbar.js
 msgid "Export"
 msgstr "Eksportēt"
 
@@ -1090,7 +1120,9 @@ msgstr "Eksportēt"
 #: module:io.ox/contacts apps/io.ox/contacts/actions/print.js
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js
 msgid "Print"
 msgstr "Drukāt"
@@ -1100,8 +1132,8 @@ msgid "Participant related actions"
 msgstr "Dalībnieku darbības"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-msgid "Send mail to all participants"
-msgstr "Nosūtīt vēstuli visiem dalībniekiem"
+msgid "Send email to all participants"
+msgstr "Nosūtīt e-pastu visiem dalībniekiem"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Invite to new appointment"
@@ -1112,6 +1144,11 @@ msgstr "Uzaicināt uz jaunu mītiņu"
 #: module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "Saglabāt kā izplatīšanas sarakstu"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-organizer.js
+msgid "Change organizer"
+msgstr "Mainīt organizētāju"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Synchronize calendar"
@@ -1164,8 +1201,56 @@ msgid "Tentative"
 msgstr "Pagaidu"
 
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/change-folder-alarms.js
 msgid "Change reminders"
 msgstr "Mainīt atgādinājumus"
+
+#. %1$s:  is the calendar's name
+#: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
+msgid "Edit all reminders for calendar: %1$s"
+msgstr "Rediģēt visus atgādinājumus kalendāram: %1$s"
+
+#: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js
+msgid "Default reminder"
+msgstr "Noklusētais atgādinājums"
+
+#: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js
+msgid "Default reminder for appointments in birthday calendar"
+msgstr "Noklusētais atgādinājums dzimšanas dienu kalendāra mītiņiem"
+
+#: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js
+msgid "Default reminder for all-day appointments"
+msgstr "Noklusētais atgādinājums visas dienas mītiņiem"
+
+#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
+msgid "New organizer"
+msgstr "Jauns organizators"
+
+#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
+msgid "Select new organizer"
+msgstr "Izvēlēties jaunu organizētāju"
+
+#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/delete.js
+msgid "Add a message to the notification email for the other participants."
+msgstr "Pievienot ziņojumu paziņojuma citiem dalībniekiem e-pastam."
+
+#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/delete.js
+#: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot apps/io.ox/core/relogin.js module:io.ox/core
+#: apps/io.ox/files/share/wizard.js module:io.ox/files
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+msgid "Password"
+msgstr "Parole"
+
+#: apps/io.ox/calendar/actions/change-organizer.js module:io.ox/calendar
+msgid "Organizer changed"
+msgstr "Organizators ir mainīts"
 
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Appointments in shared calendars"
@@ -1211,19 +1296,6 @@ msgstr ""
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid "Create in public calendar"
 msgstr "Izveidot publiskajā kalendārā"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Add a message to the notification email for the other participants."
-msgstr "Pievienot ziņojumu paziņojuma citiem dalībniekiem e-pastam."
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/core/boot/i18n.js
-#: module:io.ox/core/boot apps/io.ox/core/relogin.js module:io.ox/core
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "Password"
-msgstr "Parole"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid ""
@@ -1279,6 +1351,10 @@ msgid "Login"
 msgstr "Pieslēgties"
 
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
+msgid "Your default reminders will be applied to this calendar."
+msgstr "Šim kalendāram tiks lietoti jūsu noklusējuma atgādinājumi."
+
+#: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 msgid "Subscribe to iCal feed"
 msgstr "Abonēt iCal straumi"
 
@@ -1291,12 +1367,67 @@ msgstr "Abonēt"
 msgid "iCal feed has been imported successfully"
 msgstr "iCal straume ir veiksmīgi importēta"
 
-#: apps/io.ox/calendar/color-picker.js module:io.ox/calendar
-msgid "no color"
-msgstr "bez krāsas"
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js
+msgid "Subscribe shared calendars"
+msgstr "Abonēt koplietojamos kalendārus"
+
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
+#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
+#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/names.js
+#: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/plugins/administration/groups/settings/edit.js
+#: apps/plugins/administration/resources/settings/edit.js
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#: apps/plugins/portal/mail/register.js apps/plugins/portal/rss/register.js
+#: module:io.ox/portal apps/plugins/portal/tumblr/register.js
+msgid "Save"
+msgstr "Saglabāt"
+
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+msgid "subscribe to calendar"
+msgstr "abonēt kalendāru"
+
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+msgid "Sync via DAV"
+msgstr "DAV sinhronizācija"
+
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+msgid "sync via DAV"
+msgstr "DAV sinhronizācija"
+
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Public calendars"
+msgstr "Publiskie kalendāri"
+
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Shared calendars"
+msgstr "Koplietojuma kalendāri"
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
-#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
@@ -1304,6 +1435,10 @@ msgstr "bez krāsas"
 #: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Privāts"
+
+#: apps/io.ox/calendar/color-picker.js module:io.ox/calendar
+msgid "no color"
+msgstr "bez krāsas"
 
 #. appointment flag: 'secret' does not show up for other users in any cases; 'private' may be shown to other users under certain conditions
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
@@ -1405,32 +1540,6 @@ msgstr "Rediģēt mītiņu"
 #: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "Izveidot mītiņu"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules
-#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/edit/view-form.js
-#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
-#: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
-#: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/mailfilter/settings/filter.js
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/plugins/administration/groups/settings/edit.js
-#: apps/plugins/administration/resources/settings/edit.js
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-#: apps/plugins/portal/mail/register.js apps/plugins/portal/rss/register.js
-#: module:io.ox/portal apps/plugins/portal/tumblr/register.js
-msgid "Save"
-msgstr "Saglabāt"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
@@ -1537,16 +1646,6 @@ msgstr "Mani kalendāri"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Public calendars"
-msgstr "Publiskie kalendāri"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Shared calendars"
-msgstr "Koplietojuma kalendāri"
-
-#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden calendars"
 msgstr "Apslēptie kalendāri"
 
@@ -1619,6 +1718,10 @@ msgstr "neviens"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Show as free"
 msgstr "Rādīt kā brīvu"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Participants can make changes"
+msgstr "Dalībnieki var veikt izmaiņas"
 
 #. Sort by messages that have attachments
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1693,42 +1796,6 @@ msgstr "Izmainīt laika joslu"
 msgid "Change"
 msgstr "Mainīt"
 
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please select at least one participant"
-msgstr "Lūdzu izvēlieties vismaz vienu dalībnieku"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js
-msgid "Create distribution list"
-msgstr "Izveidot izplatīšanas sarakstu"
-
-#. Name of distribution list
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
-#: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
-#: apps/io.ox/files/view-options.js apps/io.ox/mail/categories/edit.js
-#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-msgid "Name"
-msgstr "Vārds"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please note that distribution lists cannot contain resources."
-msgstr "Lūdzu ievērojiet ka izplatīšanas saraksti nevar saturēt resursus."
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-#: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
-msgid "Distribution list has been saved"
-msgstr "Izplatīšanas saraksts ir saglabāts"
-
-#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-msgid "Please enter a name for the distribution list"
-msgstr "Lūdzu ievadiet izplatīšanas saraksta vārdu"
-
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
 msgctxt "app"
@@ -1802,6 +1869,11 @@ msgstr "Paslēpt ne-darbalaiku"
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Blocked time frame"
 msgstr "Bloķēts laika apgabals"
+
+#. %1$s = apppointment creator name
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Created by: %1$s"
+msgstr "Izveidoja: %1$s"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Could not get appointment information"
@@ -1928,10 +2000,12 @@ msgid "Error: Failed to load appointments"
 msgstr "Kļūda: Nevar ielādēt mītiņus"
 
 #: apps/io.ox/calendar/list/listview.js module:io.ox/calendar
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/commons.js module:io.ox/core
-#: apps/io.ox/core/main/autologout.js apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
+#: module:io.ox/files apps/io.ox/mail/detail/view.js module:io.ox/mail
+#: apps/io.ox/mail/listview.js apps/plugins/portal/twitter/register.js
+#: module:plugins/portal
 msgid "Retry"
 msgstr "Vēlreiz"
 
@@ -1968,10 +2042,11 @@ msgstr "Nevar ielādēt mītiņa datus."
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
-#: apps/io.ox/core/folder/view.js apps/io.ox/files/favorite/toolbar.js
-#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/files/share/toolbar.js apps/io.ox/mail/main.js module:io.ox/mail
-#: apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
+#: module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/files/share/toolbar.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Mapes"
 
@@ -1987,13 +2062,6 @@ msgstr "Atpakaļ"
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendars"
 msgstr "Kalendāri"
-
-#: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/core/commons.js
-#: module:io.ox/core apps/io.ox/files/main.js module:io.ox/files
-#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
-msgid "Close folder view"
-msgstr "Aizvērt mapes skatu"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendar account error"
@@ -2062,17 +2130,6 @@ msgstr "Rādīt iepriekšējo mēnesi"
 msgid "Today"
 msgstr "Šodien"
 
-#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
-#: apps/io.ox/files/mobile-toolbar-actions.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
-msgid "Actions"
-msgstr "Darbības"
-
 #: apps/io.ox/calendar/model.js module:io.ox/calendar
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "The end date must be after the start date."
@@ -2135,8 +2192,9 @@ msgstr "%1$d minūtes"
 
 #. estimated upload duration
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js apps/io.ox/files/upload/main.js
-#: module:io.ox/files apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#: apps/io.ox/calendar/util.js apps/io.ox/files/settings/pane.js
+#: module:io.ox/files apps/io.ox/files/upload/main.js
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d day"
 msgid_plural "%1$d days"
 msgstr[0] "%1$d diena"
@@ -2144,7 +2202,8 @@ msgstr[1] "%1$d dienas"
 msgstr[2] "%1$d dienas"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalendārs"
@@ -2200,20 +2259,12 @@ msgid "New appointment"
 msgstr "Jauns mītiņš"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Default reminder"
-msgstr "Noklusētais atgādinājums"
-
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Default reminder for all-day appointments"
-msgstr "Noklusētais atgādinājums visas dienas mītiņiem"
-
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Default reminder for appointments in birthday calendar"
-msgstr "Noklusētais atgādinājums dzimšanas dienu kalendāra mītiņiem"
-
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Mark all day appointments as free"
 msgstr "Iestatīt visas dienas mītiņu laiku kā brīvu"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Participants can edit appointments"
+msgstr "Dalībnieki var rediģēt mītiņus"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -2222,8 +2273,12 @@ msgid "Email notifications"
 msgstr "E-pasta paziņojumi"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Receive notification for appointment changes"
-msgstr "Saņemt paziņojumus par mītiņu izmaiņām"
+msgid ""
+"Receive notifications when an appointment in which you participate is "
+"created, modified or deleted"
+msgstr ""
+"Saņemt paziņojumus par mītiņu, kuros esat dalībnieks, izveidi, izmaiņām vai "
+"dzēšanu"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid ""
@@ -2267,11 +2322,6 @@ msgid "The integration of the subscribed calendars might take a while."
 msgstr "Abonēto kalendāru integrēšana var prasīt zināmu laiku."
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
-#: module:io.ox/calendar/settings/schedjoules
-msgid "subscribe to calendar"
-msgstr "abonēt kalendāru"
-
-#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules apps/io.ox/core/boot/i18n.js
 #: module:io.ox/core/boot apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -2283,6 +2333,11 @@ msgstr "Valoda"
 #: module:io.ox/contacts
 msgid "Country"
 msgstr "Valsts"
+
+#: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
+#: module:io.ox/calendar/settings/schedjoules
+msgid "Your default reminders will be applied to these calendars."
+msgstr "Šim kalendāram tiks lietoti jūsu noklusējuma atgādinājumi."
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -2330,19 +2385,11 @@ msgstr "Favorītās laika zonas"
 msgid "New"
 msgstr "Jauns"
 
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js module:io.ox/tasks
-msgid "Status"
-msgstr "Statuss"
-
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#: apps/io.ox/core/pim/actions.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
-#: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "View"
@@ -2831,6 +2878,12 @@ msgstr "Vai vēlaties rediģēt visu sēriju vai tikai šo atsevišķo mītiņu?
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
+"Do you want to edit this and all future appointments or the whole series?"
+msgstr ""
+"Vai vēlaties rediģēt šo un turpmākos mītiņus vai arī visu šo mītiņu sēriju?"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid ""
 "Do you want to edit this and all future appointments or just this "
 "appointment within the series?"
 msgstr ""
@@ -2861,6 +2914,23 @@ msgstr "Tieša saite"
 msgctxt "a11y"
 msgid "at %1$s"
 msgstr "vieta: %1$s"
+
+#. %1$s A month name
+#. %2$s Another month name
+#. %3$s A four digit year
+#. Example: January - February 2019
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "%1$s - %2$s %3$s"
+msgstr "%1$s - %2$s %3$s"
+
+#. %1$s A month name
+#. %2$s A four digit year
+#. %3$s Another month name
+#. %4$s Another year
+#. Example: December 2019 - January 2020
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid "%1$s %2$s - %3$s %4$s"
+msgstr "%1$s %2$s - %3$s %4$s"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Next Day"
@@ -2929,9 +2999,9 @@ msgstr "Kontakts ir pārvietots"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/contextmenu.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js apps/io.ox/mail/contextmenu.js
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
+#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js
 msgid "Copy"
 msgstr "Kopēt"
 
@@ -2961,14 +3031,13 @@ msgstr "Pievienot adrešu grāmatai"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
-msgid "Send mail"
+msgid "Send email"
 msgstr "Sūtīt e-pastu"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
-msgid "Send as vCard"
-msgstr "Sūtīt kā vCard"
+msgid "Invite"
+msgstr "Uzaicināt"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -2977,10 +3046,16 @@ msgid "Invite to appointment"
 msgstr "Uzaicināt uz mītiņu"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
+#: apps/io.ox/contacts/toolbar.js
+msgid "Send as vCard"
+msgstr "Sūtīt kā vCard"
+
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/viewer/views/toolbarview.js
 #: module:io.ox/core apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js
 msgid "Add to portal"
 msgstr "Pievienot portālam"
 
@@ -3132,8 +3207,25 @@ msgstr "Izveidot"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
+msgid "Create distribution list"
+msgstr "Izveidot izplatīšanas sarakstu"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js
 msgid "Edit distribution list"
 msgstr "Rediģēt izplatīšanas sarakstu"
+
+#. Name of distribution list
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
+#: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/categories/edit.js
+#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Name"
+msgstr "Vārds"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -3151,6 +3243,10 @@ msgstr ""
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution List"
 msgstr "Izplatīšanas saraksts"
+
+#: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
+msgid "Distribution list has been saved"
+msgstr "Izplatīšanas saraksts ir saglabāts"
 
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Failed to save distribution list."
@@ -3222,6 +3318,10 @@ msgid "Job description"
 msgstr "Darba apsraksts"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+msgid "Advanced"
+msgstr "Paplašināti"
+
+#: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "User fields"
 msgstr "Lietotāja definēts"
 
@@ -3232,8 +3332,8 @@ msgstr "Lietotāja definēts"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js apps/plugins/halo/xing/register.js
-#: module:plugins/portal
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/view-detail.js
+#: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "%1$s\n"
 "%2$s %3$s\n"
@@ -3475,10 +3575,6 @@ msgstr "Telefons (cits)"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Fax (alt)"
 msgstr "Fakss (alt.)"
-
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Email 1 / Phone number"
-msgstr "E-pasts 1 / Telefons"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Email 1"
@@ -3776,10 +3872,6 @@ msgid "Link postal addresses with map service"
 msgstr "Saistīt pasta adreses ar karšu srevisu"
 
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-msgid "Invite"
-msgstr "Uzaicināt"
-
-#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 msgid "Delete contact"
 msgstr "Dzēst kontaktpersonu"
 
@@ -4070,6 +4162,18 @@ msgstr "Iestājies pieslēguma noilgums. Lūdzu pārlādējiet lapu."
 msgid "Something went wrong. Please close this browser tab and try again."
 msgstr "Reģistrēta kļūda. Lūdzu aizveriet šo pārlūka lapu un mēģiniet vēlreiz."
 
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Connection error"
+msgstr "Pieslēguma kļūda"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "The service is not available right now."
+msgstr "Pakalpojums pašlaik nav pieejams."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Reload"
+msgstr "Pārlādēt"
+
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
 msgstr "Brīdinājums!"
@@ -4111,6 +4215,12 @@ msgid "Item list"
 msgstr "Vienību saraksts"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+msgid "Close folder view"
+msgstr "Aizvērt mapes skatu"
+
+#: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Premium features"
 msgstr "Papildus funkcijas"
 
@@ -4147,19 +4257,6 @@ msgstr "Sākt meklēšanu"
 msgid "Cancel search"
 msgstr "Atcelt meklešanu"
 
-#. search feature help text for screenreaders
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid ""
-"Search results page lists all active facets to allow them to be easly "
-"adjustable/removable. Below theses common facets additonal advanced facets "
-"are listed. To narrow down search result please adjust active facets or add "
-"new ones"
-msgstr ""
-"Meklēšanas rezultātu lapa uzrāda visus aktīvos vienumus, ļaujot tos ērti "
-"modificēt/noņemt. Zem šiem parasti lietotajiem vienumiem ir uzrādīti "
-"papildus vienumu iestatījumi. Lai samazinātu meklēšanas rezultātus, lūdzu "
-"pielāgojiet aktīvos vienumus vai pievienojiet jaunus"
-
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
@@ -4167,6 +4264,18 @@ msgid ""
 msgstr ""
 "Kļūda pie aplikācijas uzsākšanas. Iespējams, ka ir radušās komunikāciju "
 "problēmas. Lūdzu mēģiniet vēlreiz."
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Download infected file"
+msgstr "Lejupielādēt inficētu failu"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Download unscanned file"
+msgstr "Lejupielādēt neskenētu failu"
+
+#: apps/io.ox/core/download.js module:io.ox/core
+msgid "Anti-Virus Warning"
+msgstr "Anti-vīrusa brīdinājumus"
 
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
 msgid "Reset this list"
@@ -4254,10 +4363,6 @@ msgid "Inline menu %1$s"
 msgstr "Ietvertā izvēlne %1$s"
 
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
-msgid "More actions"
-msgstr "Vairāk darbību"
-
-#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 #: apps/io.ox/find/extensions-api.js apps/io.ox/search/facets/extensions.js
 msgid "More"
 msgstr "Vairāk"
@@ -4299,8 +4404,7 @@ msgid "Address book name"
 msgstr "Adrešu grāmatas vārds"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/core/folder/actions/rename.js
 msgid "Folder name"
 msgstr "Mapes vārds"
 
@@ -4486,8 +4590,7 @@ msgstr "Pārdēvēt mapi"
 #: apps/io.ox/core/folder/contextmenu.js
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/actions/rename.js
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
-#: apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 msgid "Rename"
 msgstr "Pārsaukt"
 
@@ -4548,8 +4651,7 @@ msgid "Delete all messages"
 msgstr "Izdzēst visas ziņas"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
-#: module:io.ox/files
+#: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Delete forever"
 msgstr "Dzēst pavisam"
 
@@ -4590,7 +4692,8 @@ msgid "Create sharing link"
 msgstr "Izveidot koplietojuma saiti"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
+#: module:io.ox/files
 msgid "Show in Drive"
 msgstr "Rādīt diskā"
 
@@ -4694,6 +4797,10 @@ msgid "Subscribe via URL (iCal)"
 msgstr "Abonēt ar URL (iCal)"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe shared Calendar"
+msgstr "Abonēt koplietojamos kalendārus"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Import calendar"
 msgstr "Importēt kalendāru"
 
@@ -4714,25 +4821,21 @@ msgstr "Jūs koplietojat šo mapi ar citiem lietotājiem"
 msgid "This folder has subscriptions"
 msgstr "Šai mapei ir abonementi"
 
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "This folder has publications and/or subscriptions"
-msgstr "Šai mapei ir publikācijas un/vai abonementi"
-
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/favorites.js
-#: apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/favorites.js apps/io.ox/files/toolbar.js
 msgid "Remove from favorites"
 msgstr "Izņemt no izlases"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorites.js
+#: apps/io.ox/files/favorites.js apps/io.ox/files/toolbar.js
 msgid "Add to favorites"
 msgstr "Pievienot izlasei"
 
+#. Used for the total count of objects or mails in a folder
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Total: %1$d"
 msgstr "Kopā: %1$d"
@@ -4741,6 +4844,7 @@ msgstr "Kopā: %1$d"
 msgid "%1$d total"
 msgstr "%1$ d kopā"
 
+#. Used for the count of unread mails in a folder
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Nelasīts: %1$d"
@@ -4888,8 +4992,12 @@ msgid "Navigate to:"
 msgstr "Pāriet uz:"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "Skip to main content"
+msgstr "Pāriet uz galveno saturu"
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 #: apps/io.ox/core/main/topbar_right.js apps/io.ox/core/sub/settings/pane.js
-#: module:io.ox/core/sub
+#: module:io.ox/core/sub apps/io.ox/multifactor/login/loginScreen.js
 msgid "Refresh"
 msgstr "Jaunināt"
 
@@ -4905,7 +5013,8 @@ msgctxt "app"
 msgid "Mail"
 msgstr "Pasts"
 
-#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgctxt "app"
 msgid "Address Book"
 msgstr "Adrešu grāmata"
@@ -4974,6 +5083,16 @@ msgid "Logout failed."
 msgstr "Atslēgšanās kļūda."
 
 #: apps/io.ox/core/main/logout.js module:io.ox/core
+#: apps/io.ox/core/main/topbar_right.js
+#: apps/io.ox/settings/security/sessions/settings/pane.js
+msgid "Sign out"
+msgstr "Atslēgties"
+
+#: apps/io.ox/core/main/logout.js module:io.ox/core
+msgid "Are you sure you want to sign out from all related browser tabs?"
+msgstr "Vai tiešām vēlaties izrakstīties no visām saistītajām pārlūka cilnēm?"
+
+#: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr ""
 "Nesaglabātie dokumenti tiks zaudēti. Vai tiešām vēlaties tagad atslēgties?"
@@ -5031,7 +5150,7 @@ msgid "Upgrade your account"
 msgstr "Jaunināt savu kontu"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/settings/main.js
+#: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Iestatījumi"
 
@@ -5057,18 +5176,13 @@ msgid "Change password"
 msgstr "Paroles maiņa"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/help/center.js module:io.ox/help
+#: apps/io.ox/core/viewer/views/toolbarview.js
 msgid "Help"
 msgstr "Palīgs"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 msgid "About"
 msgstr "Par"
-
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/settings/security/sessions/settings/pane.js
-msgid "Sign out"
-msgstr "Atslēgties"
 
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
 msgid ""
@@ -5319,16 +5433,6 @@ msgstr "Lai meklētu lietotājus, sāciet rakstīt"
 msgid "Attachments have been saved!"
 msgstr "Pievienojumi ir saglabāti!"
 
-#: apps/io.ox/core/pim/actions.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/notes/toolbar.js
-#: module:io.ox/notes apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
-msgid "Download"
-msgstr "Lejupielāde"
-
 #. %1$s is usually "Drive" (product name; might be customized)
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/mail/actions.js
@@ -5384,6 +5488,7 @@ msgstr "Kļūda pieslēdzoties"
 msgid "Download the %s client for %s"
 msgstr "Lejupielādēt %s klientu priekš %s"
 
+#. String will include the product name, i.e. "OX Drive for Windows"
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Windows"
 msgstr "%s klients priekš Windows"
@@ -5392,14 +5497,17 @@ msgstr "%s klients priekš Windows"
 msgid "Download installation file"
 msgstr "Lejupielādēt instalēšanas failu"
 
+#. String will include the product name, "OX Drive for Mac OS"
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Mac OS"
 msgstr "%s klients priekš Mac OS"
 
+#. String will include the product name, i.e. "OX Drive for iOS"
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for iOS"
 msgstr "%s klients priekš iOS"
 
+#. String will include the product name, i.e. "OX Drive for Android"
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Android"
 msgstr "%s klients priekš Android"
@@ -5500,7 +5608,6 @@ msgid "Uptime: %1$s minutes"
 msgstr "Darbības laiks: %1$s minūtes"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
-#: apps/io.ox/files/guidance/main.js module:io.ox/files
 msgid "Reload statistics"
 msgstr "Pārlādēt statistiku"
 
@@ -5582,6 +5689,7 @@ msgstr "Daudzkrāsu"
 msgid "Purple/Magenta"
 msgstr "Purpura"
 
+#. Option label for the automatic theme changer (changes theme depending on time)
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Automatic"
 msgstr "Automātisks"
@@ -5591,14 +5699,12 @@ msgid "Time-dependent"
 msgstr "Atkarīgs no laika"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-#: apps/io.ox/settings/security/settings/pane.js
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minūtes"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-#: apps/io.ox/settings/security/settings/pane.js
+#: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 minūtes"
 
@@ -5730,14 +5836,6 @@ msgid "%1$d %2$s"
 msgstr "%1$d %2$s"
 
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "Publication must have a target."
-msgstr "Publikācijai ir jāsatur mērķis."
-
-#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
-msgid "Publication must have a site."
-msgstr "Publikācija ir jāsatur vietne."
-
-#: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 msgid "Model is incomplete."
 msgstr "Modelis nav pabeigts."
 
@@ -5821,7 +5919,6 @@ msgid "You don't have any subscriptions yet"
 msgstr "Jums vēl nav neviena abonementa"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
-#: apps/io.ox/core/sub/settings/register.js
 msgid "Publications"
 msgstr "Publikācijas"
 
@@ -5829,10 +5926,6 @@ msgstr "Publikācijas"
 #: apps/io.ox/core/sub/settings/register.js
 msgid "Subscriptions"
 msgstr "Abonementi"
-
-#: apps/io.ox/core/sub/settings/register.js module:io.ox/core/sub
-msgid "Publications and Subscriptions"
-msgstr "Publikācijas un abonementi"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "No subscription services available for this module"
@@ -5966,6 +6059,10 @@ msgid "Don't remind me again"
 msgstr "Vairs neatgādināt"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 msgid "OK"
 msgstr "Labi"
 
@@ -6047,6 +6144,7 @@ msgstr "Pievienots %1$s, %2$s."
 msgid "Added %1$s."
 msgstr "Pievienots %1$s."
 
+#. Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "%1$s. Press backspace to delete."
 msgstr "%1$s. Lai dzēstu, piespiediet atpakaļatkāpes taustiņu."
@@ -6092,6 +6190,10 @@ msgstr "Pasts nav importēts. Atbalstīti tiek tikai .eml faili."
 msgid "Multiselect"
 msgstr "Vairāku izvēle"
 
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+msgid "Deselect all"
+msgstr "Atcelt izvēli"
+
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Item list options"
@@ -6120,6 +6222,7 @@ msgstr "Uzsākt tūri"
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
 #: apps/io.ox/tours/whats-new.js apps/io.ox/wizards/upsell.js
 #: module:io.ox/wizards
 msgid "Next"
@@ -6199,7 +6302,7 @@ msgstr "Apraksta teksts"
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
 #: module:io.ox/core apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/toolbar.js
 msgid "Edit description"
 msgstr "Rediģēt apsrakstu"
 
@@ -6215,6 +6318,36 @@ msgstr "Pievienot aprakstu"
 #: module:io.ox/mail apps/io.ox/mail/view-options.js
 msgid "Size"
 msgstr "Izmērs"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "Resolution"
+msgstr "Izšķirtspēja"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "Device make"
+msgstr "Iekārta"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "Device model"
+msgstr "Modelis"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "Shot"
+msgstr "Šāviņš"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "ISO"
+msgstr "ISO"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "Capture date"
+msgstr "Izguves datums"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
@@ -6291,6 +6424,11 @@ msgstr "Faila versiju tabula. Pirmajā rindā ir uzrādīta pašreizējā versij
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "File"
 msgstr "Fails"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
+#: module:io.ox/core/viewer
+msgid "View this version"
+msgstr "Skatīt šo versiju"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
@@ -6384,16 +6522,22 @@ msgid "View details"
 msgstr "Skatīt detaļas"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Pop out"
-msgstr "Izlekt"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Pop out standalone viewer"
 msgstr "Parādīt atsevišķu apskatlogu"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
 msgstr "Aizvērt skatītāju"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
+#: module:io.ox/files apps/plugins/portal/xing/actions.js module:plugins/portal
+msgid "Share"
+msgstr "Koplietot"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid "Share this file"
+msgstr "Koplietot failu"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Open attachment"
@@ -6404,35 +6548,19 @@ msgid "Print as PDF"
 msgstr "Drukāt kā PDF"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/plugins/portal/xing/actions.js module:plugins/portal
-msgid "Share"
-msgstr "Koplietot"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Share this file"
-msgstr "Koplietot failu"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Invite people"
 msgstr "Uzaicināt cilvēkus"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/contextmenu.js apps/io.ox/files/favorite/toolbar.js
-#: apps/io.ox/files/toolbar.js apps/io.ox/notes/toolbar.js module:io.ox/notes
-msgid "Send by mail"
-msgstr "Sūtīt ar pastu"
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
+msgid "Send by email"
+msgstr "Sūtīt ar e-pastu"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "of %1$d"
 msgstr "no %1$d"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Viewer Toolbar"
-msgstr "Skatītāja rīkjosla"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Previous page"
@@ -6494,6 +6622,18 @@ msgstr "Lapa %1$d no %2$d"
 msgid "Sorry, this page is not available at the moment."
 msgstr "Atvainojiet, šī lapa pašlaik nav pieejama."
 
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid "Your preview is being generated."
+msgstr "Priekšskatījums tiek ģenerēts."
+
+#: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
+msgid ""
+"\n"
+" Alternatively you can download the file."
+msgstr ""
+"\n"
+"Alternatīvi, jūs varat arī lejupielādēt failu."
+
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Atvainojiet, šim attēlam nav apskata iespēju."
@@ -6525,11 +6665,11 @@ msgstr "Sākt video"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
-#: apps/io.ox/core/yell.js module:io.ox/core
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: apps/io.ox/tasks/util.js apps/plugins/notifications/tasks/register.js
-#: module:plugins/notifications
+#: apps/io.ox/core/yell.js module:io.ox/core apps/io.ox/tasks/actions.js
+#: module:io.ox/tasks apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/print.js
+#: apps/io.ox/tasks/toolbar.js apps/io.ox/tasks/util.js
+#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Done"
 msgstr "Paveikts"
 
@@ -6687,9 +6827,8 @@ msgid "Revoked access."
 msgstr "Atsaukt piekļuvi."
 
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Add local file"
-msgstr "Pievienot lokālu failu"
+msgid "Upload files"
+msgstr "Augšupielādēt failus"
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
@@ -6715,21 +6854,13 @@ msgstr ""
 "Ikviens saņems vienu un to pašu saiti. Saite atļauj tikai skatīt mapi vai "
 "failu."
 
-#: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Lock"
 msgstr "Noslēgs"
 
-#: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Unlock"
 msgstr "Atslēgt"
-
-#: apps/io.ox/files/actions.js module:io.ox/files
-msgid "Open"
-msgstr "Atvērt"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
@@ -6739,6 +6870,10 @@ msgstr "Iestatīt šo kā pašreizējo versiju"
 #: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr "Dzēst versiju"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+msgid "Delete all previous versions"
+msgstr "Dzēst visas iepriekšējās versijas"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
@@ -6774,6 +6909,14 @@ msgstr "Konts nevar tikt pievienots"
 #: apps/io.ox/files/actions/add-to-portal.js module:io.ox/files
 msgid "This file has been added to the portal"
 msgstr "Šis fails ir pievienots portālam"
+
+#: apps/io.ox/files/actions/delete-previous-versions.js module:io.ox/files
+msgid ""
+"Do you really want to delete all previous versions except the current "
+"version?"
+msgstr ""
+"Vai tiešām vēlaties dzēst visas iepriekšējās versijas, izņemot pašreizējo "
+"versiju?"
 
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 msgid "This file has not been deleted, as it is locked by its owner."
@@ -6840,7 +6983,7 @@ msgstr ""
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
-#: apps/io.ox/files/favorite/toolbar.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/toolbar.js
 msgid "Save as PDF"
 msgstr "Saglabāt kā PDF"
 
@@ -6916,10 +7059,6 @@ msgid "Locked"
 msgstr "Noslēgts"
 
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
-msgid "Add folder"
-msgstr "Pievienot mapi"
-
-#: apps/io.ox/files/contextmenu.js module:io.ox/core
 msgid "Edit Share"
 msgstr "Rediģēt kolietojumu"
 
@@ -6932,32 +7071,6 @@ msgstr "Atsaukt piekļuvi"
 #: apps/io.ox/files/detail/main.js module:io.ox/files
 msgid "File Details"
 msgstr "Faila detaļas"
-
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Share selected objects"
-msgstr "Koplietot izvēlētos objektus"
-
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Share selected folder"
-msgid_plural "Share selected folders"
-msgstr[0] "Koplietot izvēlēto mapi"
-msgstr[1] "Koplietot izvēlētās mapes"
-msgstr[2] "Koplietot izvēlētās mapes"
-
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Share selected file"
-msgid_plural "Share selected files"
-msgstr[0] "Koplietot izvēlētos failus"
-msgstr[1] "Koplietot izvēlētos failus"
-msgstr[2] "Koplietot izvēlētos failus"
-
-#: apps/io.ox/files/favorite/toolbar.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Share current folder"
-msgstr "Koplietot pašreizējo mapi"
 
 #. Sort options drop-down
 #: apps/io.ox/files/favorite/view-options.js module:io.ox/core
@@ -7000,79 +7113,9 @@ msgstr[2] "Neviens no ielādētajiem failiem neatbilst prasītajam faila tipam."
 msgid "Upload local file"
 msgstr "Augšupielādēt lokālu failu"
 
-#: apps/io.ox/files/guidance/main.js module:io.ox/files
-msgctxt "help"
-msgid "The Drive App"
-msgstr "Drive aplikācija"
-
-#: apps/io.ox/files/guidance/main.js module:io.ox/files
-msgctxt "help"
-msgid "Creating Files"
-msgstr "Failu izveide"
-
-#: apps/io.ox/files/guidance/main.js module:io.ox/files
-msgctxt "help"
-msgid "Managing Files"
-msgstr "Failu pārvaldīšana"
-
-#: apps/io.ox/files/guidance/main.js module:io.ox/files
-msgctxt "help"
-msgid "Accessing Files with WebDAV"
-msgstr "Piekļuve failiem, izmantojot WebDAV"
-
-#: apps/io.ox/files/guidance/main.js module:io.ox/files
-msgctxt "help"
-msgid "Drive Settings"
-msgstr "Aplikācijas Drive iestatījumi"
-
-#: apps/io.ox/files/guidance/main.js module:io.ox/files
-msgid "Related articles"
-msgstr "Saistītie raksti"
-
-#: apps/io.ox/files/guidance/statistics.js module:io.ox/files
-msgid "Capacity"
-msgstr "Kapacitāte"
-
-#. %1$s used disk space
-#. %2$s total disk space
-#. %3$s free disk space
-#: apps/io.ox/files/guidance/statistics.js module:io.ox/files
-msgid ""
-"Your capacity is shared with all members of your group. Your group is "
-"currently using %1$s of its %2$s available disk space. The amount of free "
-"space is %3$s. "
-msgstr ""
-"Jūsu kapacitāte tiek koplietota ar visiem grupas dalībniekiem. Jūsu grupa "
-"pašreiz izmanto %1$s no atļautā %2$s diska apjoma. Atlikušais brīvais apjoms "
-"ir %3$s. "
-
-#. %1$s used disk space
-#. %2$s total disk space
-#. %3$s free disk space
-#: apps/io.ox/files/guidance/statistics.js module:io.ox/files
-msgid ""
-"You are currently using %1$s of your %2$s available disk space. You have "
-"%3$s left. "
-msgstr ""
-"Jūs pašreiz izmantojiet %1$s no jums pieejamā %2$s diska apjoma. Atlikušais "
-"jums pieejamais apjoms ir %3$s. "
-
-#: apps/io.ox/files/guidance/statistics.js module:io.ox/files
-msgid "Top 10 folder size"
-msgstr "10 lielāko mapju izmērs"
-
-#. %1$s name of the current folder
-#: apps/io.ox/files/guidance/statistics.js module:io.ox/files
-msgid ""
-"These statistics only include folders, which have a depth less than four in "
-"the folder structure from the folder \"%1$s\"."
-msgstr ""
-"Statistika ietver tikai mapes ar mazāk par četru hierarhijas līmeņu "
-"ietvērumu sākot no mapes \"%1$s\"."
-
-#: apps/io.ox/files/guidance/statistics.js module:io.ox/files
-msgid "Top 10 file types"
-msgstr "10 lielāko failu tipi"
+#: apps/io.ox/files/listview.js module:io.ox/files
+msgid "Error: Failed to load files"
+msgstr "Kļūda: Nesekmīga failu ielāde"
 
 #. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
@@ -7148,6 +7191,93 @@ msgid "%1$d seconds"
 msgstr "%1$d sekundes"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Forever"
+msgstr "Vienmēr"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "1 day"
+msgstr "1 diena"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "7 days"
+msgstr "7 dienas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "30 days"
+msgstr "30 dienas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "60 days"
+msgstr "60 dienas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "90 days"
+msgstr "90 dienas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "1 year"
+msgstr "1 gads"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Keep all versions"
+msgstr "Saglabāt visas versijas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "1 version"
+msgstr "1 versija"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "5 versions"
+msgstr "5 versijas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "10 versions"
+msgstr "10 versijas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "20 versions"
+msgstr "20 versijas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "30 versions"
+msgstr "30 versijas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "40 versions"
+msgstr "40 versijas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "50 versions"
+msgstr "50 versijas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "60 versions"
+msgstr "60 versijas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "70 versions"
+msgstr "70 versijas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "80 versions"
+msgstr "80 versijas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "90 versions"
+msgstr "90 versijas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "100 versions"
+msgstr "100 versijas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "%1$d version"
+msgid_plural "%1$d versions"
+msgstr[0] "%1$d versija"
+msgstr[1] "%1$d versijas"
+msgstr[2] "%1$d versijas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Adding files with identical names"
 msgstr "Pievieno failus ar vienādiem vārdiem"
 
@@ -7167,6 +7297,89 @@ msgstr "Papildu iestatījumi"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Show hidden files and folders"
 msgstr "Rādīt paslēptos failus un mapes"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "File version history"
+msgstr "Faila versiju vēsture"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Timeframe"
+msgstr "Laika apgabals"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "The timeframe is not limited"
+msgstr "Neierobežots laiks"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "The timeframe is limited to 1 day."
+msgid_plural "The timeframe is limited to %1$d days."
+msgstr[0] "Laiks ir ierobežots līdz 1 dienai."
+msgstr[1] "Laiks ir ierobežots līdz %1$d dienām."
+msgstr[2] "Laiks ir ierobežots līdz %1$d dienām."
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "File version limit"
+msgstr "Faila versiju limits"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "The number of versions is not limited"
+msgstr "Neierobežots versiju skaits"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "The number of versions is limited to 1 version."
+msgid_plural "The number of versions is limited to %1$d versions."
+msgstr[0] "Versiju skaits ir ierobežots līdz 1 versijai."
+msgstr[1] "Versiju skaits ir ierobežots līdz %1$d versijām."
+msgstr[2] "Versiju skaits ir ierobežots līdz %1$d versijām."
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#: apps/io.ox/participants/chronos-detail.js module:io.ox/core
+#: apps/io.ox/participants/detail.js
+msgid "Summary"
+msgstr "Kopsavilkums"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "All file versions are retained"
+msgstr "Visas faila versijas tiek paturētas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "All file versions older than 1 day will be deleted after next login"
+msgid_plural ""
+"All file versions older than %1$d days will be deleted after next login"
+msgstr[0] ""
+"Visas faila versijas, kuri ir vecākas par 1 dienu pie nākošās pieslēgšanās "
+"tiks dzēstas"
+msgstr[1] ""
+"Visas faila versijas, kuri ir vecākas par %1$d dienām pie nākošās "
+"pieslēgšanās tiks dzēstas"
+msgstr[2] ""
+"Visas faila versijas, kuri ir vecākas par %1$d dienām pie nākošās "
+"pieslēgšanās tiks dzēstas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid ""
+"When a file has more than 1 additional version, older versions will be "
+"deleted when a new version is created"
+msgid_plural ""
+"When a file has more than %1$d additional versions, older versions will be "
+"deleted when a new version is created"
+msgstr[0] ""
+"Ja failam ir vairāk kā 1 papildu versija, izveidojot jaunu versiju, vecākās "
+"versijas tiks dzēstas"
+msgstr[1] ""
+"Ja failam ir vairāk kā %1$d papildu versijas, izveidojot jaunu versiju, "
+"vecākās versijas tiks dzēstas"
+msgstr[2] ""
+"Ja failam ir vairāk kā %1$d papildu versijas, izveidojot jaunu versiju, "
+"vecākās versijas tiks dzēstas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Keep saved versions"
+msgstr "Paturēt saglabātās versijas"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Keep number of recent versions"
+msgstr "Saglabāt pēdējās versijas"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -7417,14 +7630,6 @@ msgid "Enter Password"
 msgstr "Ievadiet paroli"
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "New file"
-msgstr "Jauns fails"
-
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Add to Favorites"
-msgstr "Pievienot izlasei"
-
-#: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Icons"
 msgstr "Ikonas"
 
@@ -7620,9 +7825,13 @@ msgstr "Meklēt visās mapēs"
 msgid "Search facets"
 msgstr "Meklēt vienumus"
 
-#: apps/io.ox/help/center.js module:io.ox/help
-msgid "Click here to quit the help center"
-msgstr "Noklikšķiniet šeit lai aizvērt palīdzības centru"
+#: apps/io.ox/help/main.js module:io.ox/help
+msgid "%1$s Help"
+msgstr "%1$s palīdzība"
+
+#: apps/io.ox/help/main.js module:io.ox/help
+msgid "loading"
+msgstr "ielāde"
 
 #: apps/io.ox/keychain/api.js module:io.ox/keychain
 msgid ""
@@ -7887,24 +8096,23 @@ msgid "[Copy] %1$s"
 msgstr "[Kopija] %1$s"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Mails have been moved"
-msgstr "Vēstules ir pārvietotas"
+msgid "Email has been moved"
+msgstr "E-pasts ir pārvietots"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Mail has been moved"
-msgstr "Vēstules ir pārvietotas"
+msgid "Emails have been moved"
+msgstr "E-pasti ir pārvietoti"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Mails have been copied"
-msgstr "Pasts ir nokopēts"
+msgid "Email has been copied"
+msgstr "E-pasts ir nokopēts"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Mail has been copied"
-msgstr "Pasts ir nokopēts"
+msgid "Emails have been copied"
+msgstr "E-pasti ir nokopēti"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
-#: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
-#: module:plugins/portal
+#: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Reply"
 msgstr "Atbildēt"
 
@@ -7929,8 +8137,8 @@ msgid "Not spam"
 msgstr "Nav mēstule"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Send new mail"
-msgstr "Sūtīt  jaunu pastu"
+msgid "Send new email"
+msgstr "Sūtīt jaunu e-pastu"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/mail/toolbar.js
@@ -7953,13 +8161,12 @@ msgid "Add to calendar"
 msgstr "Pievienot kalendāram"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Drop here to import this mail"
-msgstr "Lai importētu pastu, pārvelciet šeit"
+msgid "Drop here to import this email"
+msgstr "Lai importētu e-pastu, pārvelciet to šeit"
 
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
-#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/compose/view.js
 #: apps/io.ox/mail/util.js module:io.ox/core
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #: apps/plugins/portal/mail/register.js module:plugins/portal
@@ -7968,20 +8175,8 @@ msgid "No subject"
 msgstr "Nav temata"
 
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
-msgid "This mail has been added to the portal"
-msgstr "Šī vēstule ir pievienota portālam"
-
-#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
-msgid ""
-"You attached an empty file. It could be, that this file has been deleted on "
-"your hard drive. Send it anyway?"
-msgstr ""
-"Ir pievienots tukšs fails. Iespējams, ka šis fails ir no jūsu diska "
-"izdzēsts. Vai vienalga veikt nosūtīšanu?"
-
-#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
-msgid "Yes, with empty attachment"
-msgstr "Jā, ar tukšu pievienojumu"
+msgid "This email has been added to the portal"
+msgstr "Šis e-pasts ir pievienots portālam"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -8134,7 +8329,8 @@ msgid "Saved mail attachment"
 msgstr "Pievienojums saglabāts"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
-msgid "New Mail"
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "New mail"
 msgstr "Jaunais pasts"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
@@ -8340,13 +8536,6 @@ msgstr "Izskatās, ka ir aizmirsts pievienot pielikumus."
 msgid "You mentioned \"%s\" in your email, but there are no files attached."
 msgstr "Ziņojumā jūs rakstiet \"%s\", bet vēstulei nav pievienoti faili."
 
-#. %1$s is the time, the draft was saved
-#: apps/io.ox/mail/compose/actions/save.js module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js
-#, c-format
-msgid "Draft saved at %1$s"
-msgstr "Melnraksts saglabāts %1$s"
-
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "Vēstulei nav saņēmēja."
@@ -8362,6 +8551,10 @@ msgstr "Jā, nosūtīt bez temata"
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Add subject"
 msgstr "Pievienot tematu"
+
+#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
+msgid "error"
+msgstr "kļūda"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The sending of the message has been canceled."
@@ -8429,8 +8622,9 @@ msgid "Edit names"
 msgstr "Rediģēt vārdus"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Compose new mail"
-msgstr "Sastādīšana"
+#: apps/io.ox/mail/toolbar.js
+msgid "Compose new email"
+msgstr "Sastādīt jaunu e-pastu"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
@@ -8447,41 +8641,32 @@ msgstr ""
 "netiek izmantots."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js
 msgid "Show carbon copy input field"
 msgstr "Rādīt CC ievada lauku"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js
 msgid "Show blind carbon copy input field"
 msgstr "Rādīt BCC ievada lauku"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
-msgid "Signatures"
-msgstr "Paraksti"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
-msgid "No signature"
-msgstr "Nav paraksta"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Manage signatures"
-msgstr "Pārvaldīt parakstus"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Drop attachments here"
 msgstr "Novietot pielikumus šeit"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Image size:"
-msgstr "Attēla izmērs:"
+msgid "Mail size: %1$s"
+msgstr "Pasta izmērs: %1$s"
 
 #. %s is a list of filenames separeted by commas
 #. it is used by screenreaders to indicate which files are currently added to the list of attachments
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Added %s to attachments."
 msgstr "%s pievienots pielikumiem."
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Add local file"
+msgstr "Pievienot lokālu failu"
 
 #. broken image inside a mail
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
@@ -8506,11 +8691,64 @@ msgstr "Ievietot"
 msgid "Please select a valid image File to insert"
 msgstr "Lūdzu izvēlieties derīgu attēla failu"
 
+#. %s is the product name
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Sent from %s via mobile"
+msgstr "Nosūtīts no %s ar mobilo ierīci"
+
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
 #: apps/io.ox/mail/settings/compose/register.js apps/io.ox/mail/toolbar.js
 msgid "Compose"
 msgstr "Sastādīšana"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid ""
+"The mail draft could not be found on the server. It was sent or deleted in "
+"the meantime."
+msgstr ""
+"Pasta melnraksts serverī nav atrasts. Tas ir vai nu nosūtīts vai izdzēsts."
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "You cannot open more than %1$s drafts at the same time."
+msgstr "Vienlaicīgi nevar atvērt vairāk kā %1$s melnrakstus."
+
+#. %1$s A date
+#. %2$s An email address
+#. Example: On January 8, 2019 2:23 PM richard@open-xchange.com wrote:
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+msgid "On %1$s %2$s wrote:"
+msgstr "%1$s %2$s rakstīja:"
+
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+msgid "---------- Original Message ----------"
+msgstr "---------- Sākotnējais ziņojums ----------"
+
+#. %1$s An email address
+#. Example: From: richard@open-xchange.com
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+msgid "From: %1$s"
+msgstr "No: %1$s"
+
+#. %1$s An email address or a comma separated list of mail addresses
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+msgid "To: %1$s"
+msgstr "Kam: %1$s"
+
+#. Used to quote the addresses of an address in carbon copy
+#. %1$s An email address or a comma separated list of mail addresses
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+msgid "Cc: %1$s"
+msgstr "Cc: %1$s"
+
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+msgid "Date: %1$s"
+msgstr "Datums: %1$s"
+
+#. %1$s The subject of an email
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+msgid "Subject: %1$s"
+msgstr "Temats: %1$s"
 
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
@@ -8535,42 +8773,51 @@ msgstr ""
 msgid "Edit real names"
 msgstr "Rediģēt īstos vārdus"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
+msgid "Image size"
+msgstr "Attēla izmērs"
+
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
+msgid ""
+"The image cannot not be resized because it was not found on your hard drive."
+msgstr "Attēls nevar tikt mērogots, jo tas nav atrasts jūsu datu glabātuvē."
+
+#. Small (number px) is used as an option for resizing images and refers to a small sized image
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
+msgid "Small (%1$s px)"
+msgstr "Mazs (%1$s px)"
+
+#. Medium (number px) is used as an option for resizing images and refers to a medium sized image
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
+msgid "Medium (%1$s px)"
+msgstr "Vidējs (%1$s px)"
+
+#. Large (number px) is used as an option for resizing images and refers to a large sized image
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
+msgid "Large (%1$s px)"
+msgstr "Liels (%1$s px)"
+
+#. Original is used as an option for resizing images and refers to the original image size
+#. In the context of resizing images before uploading them this text is used as a label for a dropdown
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
 msgid "Original"
 msgstr "Oriģināls"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#. In the context of resizing images before uploading them this text is used as a label for a dropdown
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
 msgid "Small"
 msgstr "Mazs"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#. In the context of resizing images before uploading them this text is used as a label for a dropdown
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
 msgstr "Vidējs"
 
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
+#. In the context of resizing images before uploading them this text is used as a label for a dropdown
+#: apps/io.ox/mail/compose/resize-view.js module:io.ox/mail
 msgid "Large"
 msgstr "Liels"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-msgid "Image size"
-msgstr "Attēla izmērs"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-msgid "Small (%1$s px)"
-msgstr "Mazs (%1$s px)"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-msgid "Medium (%1$s px)"
-msgstr "Vidējs (%1$s px)"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-msgid "Large (%1$s px)"
-msgstr "Liels (%1$s px)"
-
-#: apps/io.ox/mail/compose/resizeUtils.js module:io.ox/mail
-msgid "Mail size:"
-msgstr "Pasta izmērs:"
 
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "%1$d month"
@@ -8635,10 +8882,20 @@ msgstr "Izmantot %1$s"
 msgid "%1$s options"
 msgstr "%1$s opcijas"
 
-#. %s is the product name
 #: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
-msgid "Sent from %s via mobile"
-msgstr "Nosūtīts no %s ar mobilo ierīci"
+#: apps/io.ox/mail/settings/signatures/register.js
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+msgid "Signatures"
+msgstr "Paraksti"
+
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+msgid "No signature"
+msgstr "Nav paraksta"
+
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
+msgid "Manage signatures"
+msgstr "Pārvaldīt parakstus"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Plain Text"
@@ -8682,25 +8939,8 @@ msgid "Request read receipt"
 msgstr "Prasīt piegādes apstiprinājumu"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-#: apps/io.ox/mail/detail/mobileView.js apps/io.ox/mail/detail/view.js
-msgid "This message has been truncated due to size limitations."
-msgstr "Ziņojums ir saīsināts saskaņā ar apjoma ierobežojumiem."
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Loading the full mail might lead to performance problems."
-msgstr "Pilnīga pasta ielāde var izraisīt ātrdarbības problēmas."
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Continue"
-msgstr "Turpināt"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Load full mail"
-msgstr "Ielādēt pilnu pastu"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Add original message as attachment"
-msgstr "Pievienot sākotnējo ziņojumu kā pielikumu"
+msgid "Couldn't load editor"
+msgstr "Nevar ielādēt redaktoru"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -8736,8 +8976,12 @@ msgid "[Copy] "
 msgstr "[Kopija] "
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Couldn't load editor"
-msgstr "Nevar ielādēt redaktoru"
+msgid "Hide carbon copy input field"
+msgstr "Paslēpt CC ievada lauku"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Hide blind carbon copy input field"
+msgstr "Paslēpt BCC ievada lauku"
 
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/contextmenu.js module:io.ox/mail apps/io.ox/mail/toolbar.js
@@ -8782,6 +9026,11 @@ msgstr "Saite"
 
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
 #: apps/io.ox/mail/detail/view.js
+msgid "This message has been truncated due to size limitations."
+msgstr "Ziņojums ir saīsināts saskaņā ar apjoma ierobežojumiem."
+
+#: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js
 msgid "Show entire message"
 msgstr "Rādīt pilnu paziņojumu"
 
@@ -8817,14 +9066,6 @@ msgstr "Vēstules ir importētas"
 msgid "Drop EML file here for import"
 msgstr "Lai importētu EML fialu, pārvelciet to šeit"
 
-#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
-msgid "Reply to all"
-msgstr "Atbildēt visiem"
-
-#: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
-msgid "Quick reply: %1$s"
-msgstr "Ātrā atbilde: %1$s"
-
 #: apps/io.ox/mail/listview.js module:io.ox/mail
 msgid "Error: Failed to load messages"
 msgstr "Kļūda pie ziņojumu ielādēšanas"
@@ -8835,7 +9076,7 @@ msgstr "Automātiskā pārsūtīšana ir aktīva"
 
 #: apps/io.ox/mail/mailfilter/autoforward/model.js module:io.ox/mail
 msgid "autoforward"
-msgstr "Automātiski pārsūtīt"
+msgstr "automātiski pārsūtīt"
 
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
@@ -9108,13 +9349,13 @@ msgstr "Adresātu saraksts"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is bigger than (Size: B/KB/MB/GB)"
-msgstr "Ir lielāks par (Izmērs: B/KB/MB/GB)"
+msgid "Is bigger than"
+msgstr "Ir lielāks par"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Is smaller than (Size: B/KB/MB/GB)"
-msgstr "Ir mazāks par (Izmērs: B/KB/MB/GB)"
+msgid "Is smaller than"
+msgstr "Ir mazāks par"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -9611,11 +9852,6 @@ msgstr[2] "Sūta %1$d ziņojumus ... %2$d%"
 msgid "Reply to all recipients"
 msgstr "Atbildēt visiem saņēmējiem"
 
-#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
-msgid "Edit draft"
-msgstr "Rediģēt melnrakstu"
-
 #: apps/io.ox/mail/print.js module:io.ox/mail
 msgctxt "BCC"
 msgid "Blind copy"
@@ -9636,14 +9872,6 @@ msgstr "Vienkāršs teksts"
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "HTML and plain text"
 msgstr "HTML un vienkāršs teksts"
-
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "1 minute"
-msgstr "1 minūte"
-
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "3 minutes"
-msgstr "3 minūtes"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Use browser default"
@@ -9685,10 +9913,6 @@ msgstr "Ietvert oriģinālā e-pasta tekstu atildē"
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Confirm recipients when replying to a mailing list"
 msgstr "Apstiprināt saņēmējus pie atbildēšanas izplatīšanas sarakstiem"
-
-#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "Auto-save email drafts"
-msgstr "Automātiski saglabāt e-pasta melnrakstus"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Default sender address"
@@ -9879,8 +10103,8 @@ msgid "Close all messages"
 msgstr "Aizvērt visus ziņojumus"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Compose new email"
-msgstr "Sastādīt jaunu e-pastu"
+msgid "Edit draft"
+msgstr "Rediģēt melnrakstu"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Edit copy"
@@ -10020,6 +10244,363 @@ msgctxt "dropdown"
 msgid "All"
 msgstr "Viss"
 
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "SMS Code"
+msgstr "SMS kods"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Web auth"
+msgstr "Tīmeklis"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Security Token"
+msgstr "Drošības žetons"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Yubikey"
+msgstr "Yubikey"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Google Authenticator"
+msgstr "Google Authenticator"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "Recovery code"
+msgstr "Atgūšanas kods"
+
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+msgid "UNKNOWN"
+msgstr "NEZINĀMS"
+
+#: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
+msgid ""
+"There are no backup devices available for this account.  Please notify "
+"support for help."
+msgstr ""
+"Šim kontam nav pieejamas rezerves kopiju ierīces.  Lūdzu sazinieties ar "
+"atbalsta darbiniekiem."
+
+#: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
+msgid "Authentication failure.  Please reload browser and try again."
+msgstr "Autorizācijas kļūda. Lūdzu pārstartējiet pārlūku un mēģiniet vēlreiz."
+
+#: apps/io.ox/multifactor/settings.js module:io.ox/core/boot
+#: apps/io.ox/multifactor/views/constants.js
+msgid "2-Step Verification"
+msgstr "Divpakāpju verifikācija"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgctxt "app"
+msgid "2-Step Verification"
+msgstr "Divpakāpju verifikācija"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Verification Options"
+msgstr "Verifikācijas opcijas"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Recovery Options"
+msgstr "Atgūšanas opcijas"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "No 2-Step verification options configured yet."
+msgstr "Divpakāpju verifikācijas opcijas vēl nav konfigurētas."
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Add recovery option"
+msgstr "Pievienot atgūšanas opciju"
+
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Add verification option"
+msgstr "Pievienot verifikācijas opciju"
+
+#. Error message when trying to get available providers from middleware
+#: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
+msgid "Problem getting 2-step verification providers"
+msgstr "Nevar iegūt divpakāpju verifikācijas nodrošinātājus"
+
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Add Multifactor Device"
+msgstr "Pievienot daudzfaktoru ierīci"
+
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Please enter the phone number for the device."
+msgstr "Lūdzu ievadiet ierīces telefona numuru."
+
+#. Catch all error when trying to set up a new 2step device
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Something went wrong.  Please try again later."
+msgstr "Reģistrēta kļūda.  Lūdzu mēģiniet vēlāk vēlreiz."
+
+#: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
+msgid "Please only use numeric characters for phone number"
+msgstr "Lūdzu telefona numuram izmantojiet tikai ciparu simbolus"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Add Recovery Option"
+msgstr "Pievienot atgūšanas opciju"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Add Verification Option"
+msgstr "Pievienot verifikācijas opciju"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid ""
+"In the event you lose or are unable to use your authentication device, your "
+"account will be locked out unless you set up a recovery method.  We strongly "
+"recommend that you do so now."
+msgstr ""
+"Gadījumā, ja atgūšanas metode nebūs iestatīta un jūs pazaudēsiet vai "
+"nevarēsiet izmantot autorizācijas ierīci, piekļuve jūsu kontam nebūs "
+"iespējama. Mēs stingri rekomendējam tūlīt iestatīt atgūšanas metodi."
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "No providers available"
+msgstr "Nodrošinātāji nav pieejami"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Code via text message"
+msgstr "Kods teksta ziņojumā"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Use a FIDO2 compatible device to authenticate your identity."
+msgstr "Identitātes autorizēšanai izmantot FIDO2 saderīgu ierīci."
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Yubikey, Google Security Keys, or compatible FIDO device"
+msgstr "Yubikey, Google Security Keys, vai cita FIDO saderīga ierīce"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Use Yubikey's One Time Password System"
+msgstr "Izmantot Yubikey One Time Password sisēmu"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Google Authenticator or compatible"
+msgstr "Google Authenticator vai savietojama"
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Backup code to access your account."
+msgstr "Rezerves kods konta piekļuvei."
+
+#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Unknown system"
+msgstr "Nezināma sistēma"
+
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/printBackupString.js
+msgid "Recovery Code"
+msgstr "Atgūšanas kods"
+
+#. this is a file name that stores the a long recovery code
+#: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
+#: module:io.ox/core/boot
+msgid "recovery"
+msgstr "atgūšana"
+
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Delete Multifactor Device"
+msgstr "Dzēst daudzfaktoru ierīci"
+
+#. Devices are named.  This is the text for the deleting a multifactor device
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot
+msgid "This will delete the device named %s."
+msgstr "Ierīce ar vārdu %s tiks izdzēsta."
+
+#: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Unable to delete"
+msgstr "Dzēšana nav iespējama"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Edit Multifactor Device"
+msgstr "Rediģēt daudzfaktoru ierīci"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "This will edit the name for device (%s)"
+msgstr "Tiks mainīts ierīces vārds (%s)"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "This will assign a name to the device"
+msgstr "Ierīcei tiks piešķirts vārds"
+
+#: apps/io.ox/multifactor/settings/views/editMultifactorView.js
+#: module:io.ox/core/boot
+msgid "Unable to edit name."
+msgstr "Vārda rediģēšana nav iespējama."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+msgid "Confirm Code"
+msgstr "Apstiprināt kodu"
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+msgid "Bad input or server error.  Please try again."
+msgstr "Nepareizs ievads vai servera kļūda.  Lūdzu mēģiniet vēlreiz."
+
+#: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
+#: module:io.ox/core/boot
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+msgid "Bad verification code.  Please try again"
+msgstr "Nepareizs verifikācijas kods.  Lūdzu mēģiniet vēlreiz."
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Authenticator Registration"
+msgstr "Autentifikācijas reģistrācija"
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Click to copy URL to clipboard"
+msgstr "Noklikšķiniet, lai kopētu starpliktuvē"
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"If scanning doesn't work, you may be able to enter the following setup code."
+msgstr ""
+"Ja skenēšana nedarbojas, jūs varat ievadīt sekojošo iiestatīšanas kodu."
+
+#: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
+#: module:io.ox/core/boot
+msgid ""
+"Once complete, please enter an authentication code to verify everything is "
+"configured properly."
+msgstr ""
+"Kad pabeigts, lūdzu ievadiet autentifikācijas kodu, lai pārliecinātos, ka "
+"viss ir pareizi konfigurēts."
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Device is already registered"
+msgstr "Ierīce jau ir reģistrēta"
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Problem registering device"
+msgstr "Kļūda pie ierīces reģistrēšanas"
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Failed to register device"
+msgstr "Kļūda pie ierīces reģistrēšanas"
+
+#: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
+#: module:io.ox/core/boot
+msgid "Failed to register device."
+msgstr "Kļūda pie ierīces reģistrēšanas."
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Upload Recovery File"
+msgstr "Augšupielādēt atgūšanas failu"
+
+#: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
+msgid "Next 4 characters of the backup string"
+msgstr "Rezerves teksta nākošie 4 simboli"
+
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
+msgid "I lost my device"
+msgstr "Ierīce ir pazaudēta"
+
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
+msgid "Reauthentication required for this action"
+msgstr "Šai darbībai ir nepieciešama atkārtota autentifikācija"
+
+#: apps/io.ox/multifactor/views/constants.js module:io.ox/core/boot
+msgid "Select 2-Step Verification Method"
+msgstr "Izvēlieties divpakāpju verifikācijas metodi"
+
+#: apps/io.ox/multifactor/views/selectDeviceView.js module:io.ox/core/boot
+msgid "Please select a device to use for additional authentication"
+msgstr "Lūdzu izvēlieties ierīci papildus autentifikācijai"
+
+#: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
+msgid "New code sent."
+msgstr "Jaunais kods ir nosūtīts."
+
+#: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
+msgid "A new code was sent to your SMS device.  Please enter the code."
+msgstr "Jaunais kods ir nosūtīts uz jūsu SMS ierīci.  Lūdzu ievadiet kodu."
+
+#: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
+msgid ""
+"You secured your account with 2-Step Verification.  Please enter the "
+"verification code we sent to the phone *****%s."
+msgstr ""
+"Jūsu konts ir aizsargāts ar divpakāpju verifikāciju.  Lūdzu ievadiet "
+"verifikācijas kodu, kurš tika nosūtīts uz telefonu *****%s."
+
+#: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
+msgid ""
+"You secured your account with 2-Step Verification.  Please enter the "
+"verification code from the Authenticator App."
+msgstr ""
+"Jūsu konts ir aizsargāts ar divpakāpju verifikāciju.  Lūdzu ievadiet "
+"verifikācijas kodu no autentifikācijas aplikācijas."
+
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid ""
+"You secured your account with 2-Step Verification.  Please use your "
+"authentication token to complete verification."
+msgstr ""
+"Jūsu konts ir aizsargāts ar divpakāpju verifikāciju.  Lai pabeigtu "
+"verifikāciju, lūdzu izmantojiet autentifikācijas žetonu."
+
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid ""
+"This browser is not compatible with your configured authentication device.  "
+"Please use Chrome browser, or Firefox with U2F enabled."
+msgstr ""
+"Šī pārlūka programma nav saderīga ar konfigurēto autentifikācijas ierīci. "
+"Lūdzu izmantojiet Chrome pārlūku, vai arī Firefox ar iespējotu U2F."
+
+#. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid ""
+"Bad parameters for authenticating with this key.  Possibly wrong URL domain "
+"for this key."
+msgstr ""
+"Nepareizi parametri autentifikācijai ar šo atslēgu.  Iespējams, ka atslēgas "
+"URL domēns nav pareizs."
+
+#. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "Configuration not supported"
+msgstr "Konfigurācija netiek atbalstīta"
+
+#. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "This device is not eligible for this request.  Wrong hardware key?"
+msgstr "Šī ierīce nav atbilstoša šim pieprasījumam.  Vai atslēga ir pareiza?"
+
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "Timeout"
+msgstr "Taimauts"
+
+#. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
+#: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
+msgid "Error authenticating.  Please reload browser and try again."
+msgstr "Autorizācijas kļūda. Lūdzu pārstartējiet pārlūku un mēģiniet vēlreiz."
+
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
 msgid "Topics"
 msgstr "Tēmas"
@@ -10031,6 +10612,10 @@ msgstr "Apskats nav iespējams"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "New note"
 msgstr "Jauna piezīme"
+
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes
+msgid "Send by mail"
+msgstr "Sūtīt ar pastu"
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
@@ -10046,9 +10631,15 @@ msgid "My %1$s account (%2$d)"
 msgstr "Mans %1$s konts (%2$d)"
 
 #: apps/io.ox/oauth/reauth_handler.js module:io.ox/core
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Reauthorize"
 msgstr "Pārautorizēties"
+
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+msgid "Open %1$s in %2$s"
+msgstr "Atvērt %1$s iekš %2$s"
 
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Account Name"
@@ -10282,11 +10873,6 @@ msgstr "Ārējie dalībnieki"
 #: apps/plugins/administration/resources/settings/pane.js
 msgid "Resources"
 msgstr "Resursi"
-
-#: apps/io.ox/participants/chronos-detail.js module:io.ox/core
-#: apps/io.ox/participants/detail.js
-msgid "Summary"
-msgstr "Kopsavilkums"
 
 #: apps/io.ox/participants/chronos-views.js module:io.ox/core
 #: apps/io.ox/participants/views.js
@@ -10838,6 +11424,12 @@ msgstr "Vienmēr uzticēties sekojošu sūtītāju e-pastiem"
 msgid "Comma-separated list e.g. \"example.org, alice@example.com\""
 msgstr "Ar komatu atdalīts saraksts, piem. \"example.org, alice@example.com\""
 
+#. Task: "Due" like in "Change due date"
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/print.js
+#: apps/io.ox/tasks/toolbar.js
+msgid "Due"
+msgstr "Termiņš"
+
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Change due date"
 msgstr "Mainīt izpildes datumu"
@@ -10847,6 +11439,11 @@ msgstr "Mainīt izpildes datumu"
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Mark as done"
 msgstr "Iezīmēt kā paveiktu"
+
+#. Task: Undone like in "Mark as undone"
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
+msgid "Undone"
+msgstr "Atsaukts"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
@@ -10891,14 +11488,6 @@ msgid_plural "Tasks marked as done"
 msgstr[0] "Uzdevums iezīmēts kā pabeigts"
 msgstr[1] "Uzdevumi iezīmēti kā pabeigti"
 msgstr[2] "Uzdevumi iezīmēti kā pabeigti"
-
-#: apps/io.ox/tasks/actions/doneUndone.js module:io.ox/tasks
-msgid "A severe error occurred!"
-msgstr "Reģistrēta smaga kļūda!"
-
-#: apps/io.ox/tasks/actions/doneUndone.js module:io.ox/tasks
-msgid "Task was modified before, please reload"
-msgstr "Uzdevums ir pārveidots. Lūdzu jauniniet"
 
 #: apps/io.ox/tasks/actions/move.js module:io.ox/tasks
 msgid "Tasks can not be moved to or out of shared folders"
@@ -10995,6 +11584,11 @@ msgstr "Gaidīšana"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/util.js
 msgid "Deferred"
 msgstr "Atlikts"
+
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
+msgid "Status"
+msgstr "Statuss"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Progress in %"
@@ -11136,11 +11730,6 @@ msgstr "Zema"
 msgid "High"
 msgstr "Augsta"
 
-#. Task: "Due" like in "Change due date"
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-msgid "Due"
-msgstr "Termiņš"
-
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
 msgid "Date completed"
 msgstr "Izpildes datums"
@@ -11176,11 +11765,6 @@ msgstr ""
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "New task"
 msgstr "Jauns uzdevums"
-
-#. Task: Undone like in "Mark as undone"
-#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
-msgid "Undone"
-msgstr "Atsaukts"
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Delete task"
@@ -11359,6 +11943,19 @@ msgid ""
 msgstr ""
 "Minimizētie logi tiks uzrādīti visās aplikācijās ērtai piekļuvei tiem. Jūs "
 "variet maksimizēt logus vienkārši noklikšķinot uz tiem."
+
+#. Title of tour step, demonstrating options available for 2-step verification
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid "2-step Verification Options"
+msgstr "Divpakāpju verifikācijas opcijas"
+
+#: apps/io.ox/tours/whats-new.js module:io.ox/core
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Tagad jūs varat pievienot papildus verifikācijas opcijas sava konta drošības "
+"līmeņa paaugstināšanai."
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
@@ -11794,10 +12391,6 @@ msgid "Hide all appointment invitations."
 msgstr "Paslēpt visus mītiņu uzaicinājumus."
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
-msgid "New mail"
-msgstr "Jaunais pasts"
-
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New mails"
 msgstr "Jaunās vēstules"
 
@@ -11991,6 +12584,8 @@ msgstr "Lejupielādēt %s"
 msgid "Please use the \"Connect your device\" wizard to download %s"
 msgstr "Lai lejupielādētu %s, lūdzu izmantojiet ierīču pieslēgšanas vedni"
 
+#. Product name will be inserted to advertise the product. I.e. "Get OX Drive" but meant in terms of gettings a piece of software from a online store
+#. Product name will be inserted to adevertise the product. I.e. "Get OX Drive" but meant in terms of gettings a piece of software from a online store
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "Get %s"
 msgstr "Iegūt %s"
@@ -12502,15 +13097,251 @@ msgstr "Uzaicināt %s"
 msgid "Add on %s"
 msgstr "Pievienot %s"
 
-#~ msgid "Your preview is being generated."
-#~ msgstr "Priekšskatījums tiek ģenerēts."
+#~ msgid "Please leave a comment for other participants."
+#~ msgstr "Lūdzu, atstājiet komentāru citiem dalībniekiem."
+
+#~ msgid "Participants can edit the appointment"
+#~ msgstr "Dalībnieki var rediģēt mītiņu"
+
+#~ msgid "Participant permissions"
+#~ msgstr "Dalībnieku tiesības"
+
+#~ msgid "Your default reminders will be applied to this calendars."
+#~ msgstr "Šim kalendāram tiks lietoti jūsu noklusējuma atgādinājumi."
+
+#~ msgid "All file versions older than 1 day will be deleted"
+#~ msgid_plural "All file versions older than %1$d days will be deleted"
+#~ msgstr[0] "Visas failu versijas, kuras ir vecākas par 1 dienu, tiks dzēstas"
+#~ msgstr[1] ""
+#~ "Visas failu versijas, kuras ir vecākas par %1$d dienām, tiks dzēstas"
+#~ msgstr[2] ""
+#~ "Visas failu versijas, kuras ir vecākas par %1$d dienām, tiks dzēstas"
 
 #~ msgid ""
-#~ "\n"
-#~ " Alternatively you can download the file."
+#~ "When a file has more than 1 additional version, older versions of the "
+#~ "file will be deleted"
+#~ msgid_plural ""
+#~ "When a file has more than %1$d additional versions, older versions of the "
+#~ "file will be deleted"
+#~ msgstr[0] ""
+#~ "Ja failam būs vairāk par 1 papildus versiju, visas pārējās vecākās "
+#~ "versijas tiks dzēstas"
+#~ msgstr[1] ""
+#~ "Ja failam būs vairāk par %1$d papildus versijām, visas pārējās vecākās "
+#~ "versijas tiks dzēstas"
+#~ msgstr[2] ""
+#~ "Ja failam būs vairāk par %1$d papildus versijām, visas pārējās vecākās "
+#~ "versijas tiks dzēstas"
+
+#~ msgid ""
+#~ "Older versions will be deleted after next login or when a new version is "
+#~ "created"
 #~ msgstr ""
-#~ "\n"
-#~ "Alternatīvi, jūs varat arī lejupielādēt failu."
+#~ "Vecākās versijas tiks dzēstas pie nākamās pieslēgšanās vai pie jaunas "
+#~ "versijas izveides"
+
+#~ msgid "1 minute"
+#~ msgstr "1 minūte"
+
+#~ msgid "3 minutes"
+#~ msgstr "3 minūtes"
+
+#~ msgid "A severe error occurred!"
+#~ msgstr "Reģistrēta smaga kļūda!"
+
+#~ msgctxt "help"
+#~ msgid "Accessing Files with WebDAV"
+#~ msgstr "Piekļuve failiem, izmantojot WebDAV"
+
+#~ msgid "Add folder"
+#~ msgstr "Pievienot mapi"
+
+#~ msgid "Add original message as attachment"
+#~ msgstr "Pievienot sākotnējo ziņojumu kā pielikumu"
+
+#~ msgid "Add to Favorites"
+#~ msgstr "Pievienot izlasei"
+
+#~ msgid "Auto-save email drafts"
+#~ msgstr "Automātiski saglabāt e-pasta melnrakstus"
+
+#~ msgid "Capacity"
+#~ msgstr "Kapacitāte"
+
+#~ msgid "Click here to quit the help center"
+#~ msgstr "Noklikšķiniet šeit lai aizvērt palīdzības centru"
+
+#~ msgid "Compose new mail"
+#~ msgstr "Sastādīšana"
+
+#~ msgid "Continue"
+#~ msgstr "Turpināt"
+
+#~ msgctxt "help"
+#~ msgid "Creating Files"
+#~ msgstr "Failu izveide"
+
+#~ msgid "Draft saved at %1$s"
+#~ msgstr "Melnraksts saglabāts %1$s"
+
+#~ msgctxt "help"
+#~ msgid "Drive Settings"
+#~ msgstr "Aplikācijas Drive iestatījumi"
+
+#~ msgid "Drop here to import this mail"
+#~ msgstr "Lai importētu pastu, pārvelciet šeit"
+
+#~ msgid "Email 1 / Phone number"
+#~ msgstr "E-pasts 1 / Telefons"
+
+#~ msgid "Image size:"
+#~ msgstr "Attēla izmērs:"
+
+#~ msgid "Is bigger than (Size: B/KB/MB/GB)"
+#~ msgstr "Ir lielāks par (Izmērs: B/KB/MB/GB)"
+
+#~ msgid "Is smaller than (Size: B/KB/MB/GB)"
+#~ msgstr "Ir mazāks par (Izmērs: B/KB/MB/GB)"
+
+#~ msgid "Load full mail"
+#~ msgstr "Ielādēt pilnu pastu"
+
+#~ msgid "Loading the full mail might lead to performance problems."
+#~ msgstr "Pilnīga pasta ielāde var izraisīt ātrdarbības problēmas."
+
+#~ msgid "Mail has been copied"
+#~ msgstr "Pasts ir nokopēts"
+
+#~ msgid "Mail has been moved"
+#~ msgstr "Vēstules ir pārvietotas"
+
+#~ msgid "Mail size:"
+#~ msgstr "Pasta izmērs:"
+
+#~ msgid "Mails have been copied"
+#~ msgstr "Pasts ir nokopēts"
+
+#~ msgid "Mails have been moved"
+#~ msgstr "Vēstules ir pārvietotas"
+
+#~ msgctxt "help"
+#~ msgid "Managing Files"
+#~ msgstr "Failu pārvaldīšana"
+
+#~ msgid "New Mail"
+#~ msgstr "Jaunais pasts"
+
+#~ msgid "New file"
+#~ msgstr "Jauns fails"
+
+#~ msgid "Open"
+#~ msgstr "Atvērt"
+
+#~ msgid "Please enter a valid email address or phone number"
+#~ msgstr "Lūdzu ievadiet derīgu e-pasta adresi vai telefonu"
+
+#~ msgid "Pop out"
+#~ msgstr "Izlekt"
+
+#~ msgid "Publication must have a site."
+#~ msgstr "Publikācija ir jāsatur vietne."
+
+#~ msgid "Publication must have a target."
+#~ msgstr "Publikācijai ir jāsatur mērķis."
+
+#~ msgid "Publications and Subscriptions"
+#~ msgstr "Publikācijas un abonementi"
+
+#~ msgid "Quick reply: %1$s"
+#~ msgstr "Ātrā atbilde: %1$s"
+
+#~ msgid "Related articles"
+#~ msgstr "Saistītie raksti"
+
+#~ msgid "Reply to all"
+#~ msgstr "Atbildēt visiem"
+
+#~ msgid "Send mail"
+#~ msgstr "Sūtīt e-pastu"
+
+#~ msgid "Send mail to all participants"
+#~ msgstr "Nosūtīt vēstuli visiem dalībniekiem"
+
+#~ msgid "Send new mail"
+#~ msgstr "Sūtīt  jaunu pastu"
+
+#~ msgid "Share current folder"
+#~ msgstr "Koplietot pašreizējo mapi"
+
+#~ msgid "Share selected file"
+#~ msgid_plural "Share selected files"
+#~ msgstr[0] "Koplietot izvēlētos failus"
+#~ msgstr[1] "Koplietot izvēlētos failus"
+#~ msgstr[2] "Koplietot izvēlētos failus"
+
+#~ msgid "Share selected folder"
+#~ msgid_plural "Share selected folders"
+#~ msgstr[0] "Koplietot izvēlēto mapi"
+#~ msgstr[1] "Koplietot izvēlētās mapes"
+#~ msgstr[2] "Koplietot izvēlētās mapes"
+
+#~ msgid "Share selected objects"
+#~ msgstr "Koplietot izvēlētos objektus"
+
+#~ msgid "Task was modified before, please reload"
+#~ msgstr "Uzdevums ir pārveidots. Lūdzu jauniniet"
+
+#~ msgctxt "help"
+#~ msgid "The Drive App"
+#~ msgstr "Drive aplikācija"
+
+#~ msgid ""
+#~ "These statistics only include folders, which have a depth less than four "
+#~ "in the folder structure from the folder \"%1$s\"."
+#~ msgstr ""
+#~ "Statistika ietver tikai mapes ar mazāk par četru hierarhijas līmeņu "
+#~ "ietvērumu sākot no mapes \"%1$s\"."
+
+#~ msgid "This folder has publications and/or subscriptions"
+#~ msgstr "Šai mapei ir publikācijas un/vai abonementi"
+
+#~ msgid "This mail has been added to the portal"
+#~ msgstr "Šī vēstule ir pievienota portālam"
+
+#~ msgid "Top 10 file types"
+#~ msgstr "10 lielāko failu tipi"
+
+#~ msgid "Top 10 folder size"
+#~ msgstr "10 lielāko mapju izmērs"
+
+#~ msgid "Viewer Toolbar"
+#~ msgstr "Skatītāja rīkjosla"
+
+#~ msgid "Yes, with empty attachment"
+#~ msgstr "Jā, ar tukšu pievienojumu"
+
+#~ msgid ""
+#~ "You are currently using %1$s of your %2$s available disk space. You have "
+#~ "%3$s left. "
+#~ msgstr ""
+#~ "Jūs pašreiz izmantojiet %1$s no jums pieejamā %2$s diska apjoma. "
+#~ "Atlikušais jums pieejamais apjoms ir %3$s. "
+
+#~ msgid ""
+#~ "You attached an empty file. It could be, that this file has been deleted "
+#~ "on your hard drive. Send it anyway?"
+#~ msgstr ""
+#~ "Ir pievienots tukšs fails. Iespējams, ka šis fails ir no jūsu diska "
+#~ "izdzēsts. Vai vienalga veikt nosūtīšanu?"
+
+#~ msgid ""
+#~ "Your capacity is shared with all members of your group. Your group is "
+#~ "currently using %1$s of its %2$s available disk space. The amount of free "
+#~ "space is %3$s. "
+#~ msgstr ""
+#~ "Jūsu kapacitāte tiek koplietota ar visiem grupas dalībniekiem. Jūsu grupa "
+#~ "pašreiz izmanto %1$s no atļautā %2$s diska apjoma. Atlikušais brīvais "
+#~ "apjoms ir %3$s. "
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -12800,9 +13631,6 @@ msgstr "Pievienot %s"
 #~ msgid "0 minutes"
 #~ msgstr "0 minūtes"
 
-#~ msgid "1 day"
-#~ msgstr "1 diena"
-
 #~ msgid "1 hour"
 #~ msgstr "1 stunda"
 
@@ -12817,9 +13645,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "150%"
 #~ msgstr "150%"
-
-#~ msgid "2 days"
-#~ msgstr "2 dienas"
 
 #~ msgid "2 hour"
 #~ msgstr "2 stundas"
@@ -12850,9 +13675,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "50%"
 #~ msgstr "50%"
-
-#~ msgid "6 days"
-#~ msgstr "6 dienas"
 
 #~ msgid "6 hour"
 #~ msgstr "6 stundas"
@@ -14426,6 +15248,12 @@ msgstr "Pievienot %s"
 #~ msgid "Do you already have a %s account?"
 #~ msgstr "Vai jums jau ir %s konts?"
 
+#, fuzzy
+#~| msgctxt "One file only"
+#~| msgid "Do you really want to delete this version?"
+#~ msgid "Do you really want to delete all older versions?"
+#~ msgstr "Vai tiešām vēlaties dzēst šo versiju?"
+
 #~ msgid "Do you really want to delete the following blog?"
 #~ msgstr "Vai tiešām vēlaties dzēst šo blogu?"
 
@@ -14447,13 +15275,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Do you really want to discard this mail?"
 #~ msgstr "Vai tiešām vēlaties izmest šo vēstuli?"
-
-#, fuzzy
-#~| msgid "Do you really want to delete this account?"
-#~ msgid ""
-#~ "Do you really want to terminate all active sessions except the current "
-#~ "one?"
-#~ msgstr "Vai tiešām vēlaties dzēst šo kontu?"
 
 #, fuzzy
 #~| msgctxt "One file only"
@@ -15081,9 +15902,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "File type:"
 #~ msgstr "Faila tips:"
-
-#~ msgid "File versions"
-#~ msgstr "Failu versijas"
 
 #~ msgid "File..."
 #~ msgstr "Fails..."
@@ -15847,12 +16665,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Is at most"
 #~ msgstr "Ir ne vairāk"
-
-#~ msgid "Is bigger than"
-#~ msgstr "Ir lielāks par"
-
-#~ msgid "Is smaller than"
-#~ msgstr "Ir mazāks par"
 
 #~ msgid "Isle of Man"
 #~ msgstr "Menas sala"
@@ -16956,6 +17768,9 @@ msgstr "Pievienot %s"
 #~ msgid "Please enter a correct number."
 #~ msgstr "Lūdzu ievadiet pareizu skaitli."
 
+#~ msgid "Please enter a name for the distribution list"
+#~ msgstr "Lūdzu ievadiet izplatīšanas saraksta vārdu"
+
 #~ msgid "Please enter a valid date."
 #~ msgstr "Lūdzu ievadiet derīgu datumu"
 
@@ -16975,6 +17790,9 @@ msgstr "Pievienot %s"
 #~ msgstr ""
 #~ "Lūdzu apskatiet %sInteresanto UWA moduļu%s lapu. Tajā ir uzrādīts dažādo "
 #~ "logrīku saraksts ar tiem atbilstošajiem datiem."
+
+#~ msgid "Please note that distribution lists cannot contain resources."
+#~ msgstr "Lūdzu ievērojiet ka izplatīšanas saraksti nevar saturēt resursus."
 
 #~ msgid "Please note that distribution lists cannot contain ressources."
 #~ msgstr "Lūdzu, ņemiet vērā, ka adresātu saraksti nevar saturēt resursus."
@@ -17014,6 +17832,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Please select a country for the start address"
 #~ msgstr "Lūdzu izvēlieties valsti sākuma adresē"
+
+#~ msgid "Please select at least one participant"
+#~ msgstr "Lūdzu izvēlieties vismaz vienu dalībnieku"
 
 #~ msgid "Please select only one Publication"
 #~ msgstr "Lūdzu izvēlieties tikai vienu publikāciju"
@@ -17250,6 +18071,9 @@ msgstr "Pievienot %s"
 
 #~ msgid "Rebuild Tree..."
 #~ msgstr "Pārbūvēt koku..."
+
+#~ msgid "Receive notification for appointment changes"
+#~ msgstr "Saņemt paziņojumus par mītiņu izmaiņām"
 
 #~ msgid "Received:"
 #~ msgstr "Saņemts:"
@@ -17543,6 +18367,17 @@ msgstr "Pievienot %s"
 #~ msgid "Search here"
 #~ msgstr "Meklēšt šeit"
 
+#~ msgid ""
+#~ "Search results page lists all active facets to allow them to be easly "
+#~ "adjustable/removable. Below theses common facets additonal advanced "
+#~ "facets are listed. To narrow down search result please adjust active "
+#~ "facets or add new ones"
+#~ msgstr ""
+#~ "Meklēšanas rezultātu lapa uzrāda visus aktīvos vienumus, ļaujot tos ērti "
+#~ "modificēt/noņemt. Zem šiem parasti lietotajiem vienumiem ir uzrādīti "
+#~ "papildus vienumu iestatījumi. Lai samazinātu meklēšanas rezultātus, lūdzu "
+#~ "pielāgojiet aktīvos vienumus vai pievienojiet jaunus"
+
 #~ msgid "Search within application"
 #~ msgstr "Meklēt aplikācijā"
 
@@ -17644,9 +18479,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Send as mail"
 #~ msgstr "Sūtīt kā e-pastu"
-
-#~ msgid "Send email"
-#~ msgstr "Sūtīt e-pastu"
 
 #~ msgid "Send feedback"
 #~ msgstr "Nosūtīt atsauksmi"
@@ -17849,9 +18681,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Show task"
 #~ msgstr "Rādīt uzdevumu"
-
-#~ msgid "Show version history"
-#~ msgstr "Rādīt versiju vēsturi"
 
 #, fuzzy
 #~ msgid "Show/hide folder"
@@ -20350,9 +21179,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "seconds"
 #~ msgstr "sekundes"
-
-#~ msgid "select all"
-#~ msgstr "izvēlēties visu"
 
 #~ msgid "september"
 #~ msgstr "septembris"

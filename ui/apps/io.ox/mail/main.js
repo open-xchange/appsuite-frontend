@@ -15,13 +15,13 @@
 define('io.ox/mail/main', [
     'io.ox/mail/util',
     'io.ox/mail/api',
+    'io.ox/mail/compose/api',
     'io.ox/core/commons',
     'io.ox/mail/listview',
     'io.ox/core/tk/list-control',
     'io.ox/mail/threadview',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/actions',
-    'io.ox/core/extPatterns/links',
+    'io.ox/backbone/views/actions/util',
     'io.ox/core/api/account',
     'io.ox/core/notifications',
     'io.ox/core/toolbars-mobile',
@@ -31,6 +31,7 @@ define('io.ox/mail/main', [
     'io.ox/core/folder/view',
     'io.ox/core/folder/api',
     'io.ox/backbone/mini-views/quota',
+    'io.ox/backbone/views/action-dropdown',
     'io.ox/mail/categories/mediator',
     'io.ox/core/api/account',
     'gettext!io.ox/mail',
@@ -45,7 +46,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings, coreSettings, certificateAPI, certUtils) {
+], function (util, api, composeAPI, commons, MailListView, ListViewControl, ThreadView, ext, actionsUtil, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, ActionDropdownView, categories, accountAPI, gt, settings, coreSettings, certificateAPI, certUtils) {
 
     'use strict';
 
@@ -440,8 +441,7 @@ define('io.ox/mail/main', [
 
             // register load listener which triggers complete
             collection.on('load reload', function () {
-                this.complete = true;
-                this.trigger('complete');
+                this.setComplete(true);
             });
 
             // use mail API's "all-unseen" event to update counter (that is also used in top-bar)
@@ -625,6 +625,16 @@ define('io.ox/mail/main', [
             app.isThreaded = function () {
                 if (app.listView.loader.mode === 'search') return false;
                 return app.props.get('thread');
+            };
+        },
+
+        'getContextualData': function (app) {
+            // get data required for toolbars and context menus
+            // selection is array of strings (cid)
+            app.getContextualData = function (selection) {
+                var isThreaded = app.isThreaded(),
+                    data = api.resolve(selection, isThreaded);
+                return { app: app, data: data, folder_id: app.folder.get(), isThread: isThreaded };
             };
         },
 
@@ -1015,7 +1025,8 @@ define('io.ox/mail/main', [
                             isThread = this.collection.get(cid).get('threadSize') > 1;
 
                         if (isDraftFolder) {
-                            ox.registry.call('mail-compose', 'edit', _.cid(cid));
+                            var data = _.cid(cid);
+                            ox.registry.call('mail-compose', 'open', { type: 'copy', original: { folderId: data.folder_id, id: data.id } });
                         } else if (isThread) {
                             app.showThreadOverview(cid);
                             app.pages.changePage('threadView');
@@ -1249,22 +1260,32 @@ define('io.ox/mail/main', [
         'auto-select': function (app) {
 
             // no auto-selection needed on smartphones
-            if (_.device('smartphone')) return;
+            if (!settings.get('autoselectMailOnStart', true) || _.device('smartphone')) return;
+
+            var select = function () {
+                app.listView.collection.find(function (model, index) {
+                    if (!util.isUnseen(model.get('flags'))) {
+                        app.autoSelect = true;
+                        // select but keep focus in topbar. Don't use set here, as it breaks alternative selection mode (message is selected instead of displayed)
+                        app.listView.selection.select(index, false, false);
+                        // scroll node into view
+                        app.listView.selection.getItems().eq(index).attr('tabindex', '0').intoViewport();
+                        return true;
+                    }
+                });
+            };
 
             app.listView.on('first-reset', function () {
-                // defer to have a visible window
-                _.defer(function () {
-                    app.listView.collection.find(function (model, index) {
-                        if (!util.isUnseen(model.get('flags'))) {
-                            app.autoSelect = true;
-                            // select but keep focus in topbar. Don't use set here, as it breaks alternative selection mode (message is selected instead of displayed)
-                            app.listView.selection.select(index, false, false);
-                            // scroll node into view
-                            app.listView.selection.getItems().eq(index).attr('tabindex', '0').intoViewport();
-                            return true;
-                        }
+                if (app.props.get('layout') === 'list') {
+                    app.props.once('change:layout', function () {
+                        if (app.listView.selection.get().length) return;
+                        // defer to have a visible window
+                        _.defer(select);
                     });
-                });
+                    return;
+                }
+                // defer to have a visible window
+                _.defer(select);
             });
         },
 
@@ -1303,7 +1324,7 @@ define('io.ox/mail/main', [
                             if (_.isString(obj)) obj = _.cid(obj);
                             // most recent or first unseen? (in line with threadview's autoSelectMail)
                             if ((i === 0 || util.isUnseen(obj)) && !util.isDeleted(obj)) {
-                                api.get({ unseen: true, id: obj.id, folder: obj.folder_id });
+                                api.get({ folder: obj.folder_id, id: obj.id, unseen: true });
                                 break;
                             }
                         }
@@ -1385,6 +1406,9 @@ define('io.ox/mail/main', [
                 // looks for intersection
                 if (_.intersection(ids, selection).length) {
                     app.listView.selection.dodge();
+                    // we might have removed the mail defining the thread, so we need to refresh
+                    // the list or the thread will be gone until next refresh
+                    if (app.isThreaded()) api.one('deleted-mails', function () { app.listView.reload(); });
                     if (ids.length === 1) return;
                     app.listView.onBatchRemove(ids.slice(1));
                 }
@@ -1411,15 +1435,10 @@ define('io.ox/mail/main', [
          * Add support for drag & drop
          */
         'drag-drop': function () {
-            app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
-                // remember if this list is based on a single thread
-                baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
-                // resolve thread
-                baton.data = api.resolve(baton.data, app.isThreaded());
-                // call action
-                actions.check('io.ox/mail/actions/move', baton.data).done(function () {
-                    actions.invoke('io.ox/mail/actions/move', null, baton);
-                });
+            app.getWindow().nodes.outer.on('selection:drop', function (e, _baton) {
+                var baton = ext.Baton(app.getContextualData(_baton.data));
+                baton.target = _baton.target;
+                actionsUtil.invoke('io.ox/mail/actions/move', baton);
             });
         },
 
@@ -1427,16 +1446,10 @@ define('io.ox/mail/main', [
          * Handle archive event based on keyboard shortcut
          */
         'selection-archive': function () {
-            app.listView.on('selection:archive', function (list) {
-                var baton = ext.Baton({ data: list });
-                // remember if this list is based on a single thread
-                baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
-                // resolve thread
-                baton.data = api.resolve(baton.data, app.isThreaded());
-                // call action
-                actions.check('io.ox/mail/actions/archive', baton.data).done(function () {
-                    actions.invoke('io.ox/mail/actions/archive', null, baton);
-                });
+            // selection is array of strings (cid)
+            app.listView.on('selection:archive', function (selection) {
+                var baton = ext.Baton(app.getContextualData(selection));
+                actionsUtil.invoke('io.ox/mail/actions/archive', baton);
             });
         },
 
@@ -1444,17 +1457,10 @@ define('io.ox/mail/main', [
          * Handle delete event based on keyboard shortcut or swipe gesture
          */
         'selection-delete': function () {
-            app.listView.on('selection:delete', function (list, shiftDelete) {
-                var baton = ext.Baton({ data: list, options: { shiftDelete: shiftDelete } });
-                // remember if this list is based on a single thread
-                baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
-                // resolve thread
-                baton.data = api.resolve(baton.data, app.isThreaded());
-                // call action
-                // check if action can be called
-                actions.check('io.ox/mail/actions/delete', baton.data).done(function () {
-                    actions.invoke('io.ox/mail/actions/delete', null, baton);
-                });
+            app.listView.on('selection:delete', function (selection, shiftDelete) {
+                var baton = ext.Baton(app.getContextualData(selection));
+                baton.options.shiftDelete = shiftDelete;
+                actionsUtil.invoke('io.ox/mail/actions/delete', baton);
             });
         },
 
@@ -1472,7 +1478,7 @@ define('io.ox/mail/main', [
                     isDraft = account.is('drafts', obj.folder_id);
                 if (isDraft) {
                     api.get(obj).then(function (data) {
-                        actions.invoke('io.ox/mail/actions/edit', null, ext.Baton({ data: data }));
+                        actionsUtil.invoke('io.ox/mail/actions/edit', data);
                     });
                 } else {
                     ox.launch('io.ox/mail/detail/main', { cid: cid });
@@ -1484,18 +1490,15 @@ define('io.ox/mail/main', [
          * Add support for selection:
          */
         'selection-mobile-swipe': function (app) {
+
             if (_.device('!smartphone')) return;
 
-            ext.point('io.ox/mail/mobile/swipeButtonMore').extend(new links.Dropdown({
-                id: 'actions',
-                index: 1,
-                classes: '',
-                label: '',
-                ariaLabel: '',
-                icon: '',
-                noCaret: true,
-                ref: 'io.ox/mail/links/inline'
-            }));
+            ext.point('io.ox/mail/mobile/swipeButtonMore').extend({
+                draw: function (baton) {
+                    new ActionDropdownView({ el: this, point: 'io.ox/mail/links/inline' })
+                    .setSelection(baton.array(), { data: baton.array(), app: app, isThread: baton.isThread });
+                }
+            });
 
             app.listView.on('selection:more', function (list, node) {
                 var baton = ext.Baton({ data: list });
@@ -1506,7 +1509,7 @@ define('io.ox/mail/main', [
                 // call action
                 // we open a dropdown here with options.
                 ext.point('io.ox/mail/mobile/swipeButtonMore').invoke('draw', node, baton);
-                node.find('a').click();
+                node.find('a.dropdown-toggle').click();
             });
         },
 
@@ -1675,7 +1678,7 @@ define('io.ox/mail/main', [
                 }
             });
             // detail view: return back to list view via <escape>
-            app.threadView.$el.attr('tabindex', -1).on('keydown', function (e) {
+            app.threadView.$el.on('keydown', function (e) {
                 if (e.which !== 27) return;
                 if ($(e.target).is('.dropdown-toggle, :input')) return;
                 // make sure the detail view closes in list layout
@@ -1717,9 +1720,11 @@ define('io.ox/mail/main', [
         },
 
         'save-draft': function (app) {
-            api.on('beforesend before:autosave', function (e, obj) {
-                if (!obj.data.msgref) return;
-                var cid = _.cid(util.parseMsgref(api.separator, obj.data.msgref)),
+            composeAPI.on('before:send before:save', function (id, data) {
+                var editFor = data.meta.editFor;
+                if (!editFor) return;
+
+                var cid = _.cid({ id: editFor.originalId, folder_id: editFor.originalFolderId }),
                     draftsId = account.getFoldersByType('drafts');
                 _(draftsId).each(function (id) {
                     _(api.pool.getByFolder(id)).each(function (collection) {
@@ -1727,11 +1732,12 @@ define('io.ox/mail/main', [
                     });
                 });
             });
-            api.on('autosave send', function () {
+            composeAPI.on('after:send after:save', function () {
                 var folder = app.folder.get();
                 if (account.is('drafts', folder)) app.listView.reload();
             });
         },
+
 
         'mail-progress': function () {
             if (_.device('smartphone')) return;
@@ -1753,7 +1759,7 @@ define('io.ox/mail/main', [
                                 )
                             )
                         );
-                    api.queue.collection.on('progress', function (data) {
+                    composeAPI.queue.collection.on('progress', function (data) {
                         if (!data.count) {
                             // Workaround for Safari flex layout issue (see bug 46496)
                             if (_.device('safari')) $el.closest('.window-sidepanel').find('.folder-tree')[0].scrollTop += 1;
@@ -1765,15 +1771,68 @@ define('io.ox/mail/main', [
                             caption = gt.ngettext('Sending 1 message ... %2$d%', 'Sending %1$d messages ... %2$d%', n, n, pct);
                         $el.find('.progress-bar').css('width', pct + '%');
                         $el.find('.caption span').text(caption);
-                        $el.find('[data-action="close"]').off();
-                        $el.find('[data-action="close"]').on('click', function () {
-                            if (_.isFunction(data.abort)) data.abort();
-                        });
+                        $el.find('[data-action="close"]').off().on('click', function (e) {
+                            e.preventDefault();
+                            data.abort();
+                        }).toggle(data.pct < 1);
                         $el.show();
                     });
 
                     this.append($el);
                 }
+            });
+        },
+
+        'refresh-folders': function () {
+            var resetMailFolders = _.throttle(function () {
+                // reset collections and folder (to update total count)
+                var affectedFolders = _(['inbox', 'sent', 'drafts'])
+                    .chain()
+                    .map(function (type) {
+                        var folders = accountAPI.getFoldersByType(type);
+                        api.pool.resetFolder(folders);
+                        return folders;
+                    })
+                    .flatten()
+                    .value();
+                folderAPI.multiple(affectedFolders, { cache: false });
+                api.trigger('refresh.all');
+            }, 5000, { leading: false });
+
+            function refreshFolders(data, result) {
+                if (result.error) {
+                    return $.Deferred().reject(result).promise();
+                } else if (result.data) {
+                    var base = _(result.data.toString().split(api.separator)),
+                        id = base.last(),
+                        folder = base.without(id).join(api.separator);
+                    $.when(accountAPI.getUnifiedMailboxName(), accountAPI.getPrimaryAddress())
+                    .done(function (isUnified, senderAddress) {
+                        // check if mail was sent to self to update inbox counters correctly
+                        var sendToSelf = false;
+                        _.chain(_.union(data.to, data.cc, data.bcc)).each(function (item) {
+                            if (item[1] === senderAddress[1]) {
+                                sendToSelf = true;
+                                return;
+                            }
+                        });
+                        // wait a moment, then update folders as well
+                        setTimeout(function () {
+                            if (isUnified !== null) {
+                                folderAPI.refresh();
+                            } else if (sendToSelf) {
+                                folderAPI.reload(folder, accountAPI.getInbox());
+                            } else {
+                                folderAPI.reload(folder);
+                            }
+                        }, 5000);
+                    });
+                }
+            }
+
+            composeAPI.on('after:save after:send', function (data, result) {
+                resetMailFolders();
+                refreshFolders(data, result);
             });
         },
 
@@ -1805,7 +1864,6 @@ define('io.ox/mail/main', [
 
         'metrics': function (app) {
 
-            // hint: toolbar metrics are registery by extension 'metrics-toolbar'
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
 
@@ -1824,35 +1882,52 @@ define('io.ox/mail/main', [
                     type: 'click',
                     action: 'add'
                 });
-                // detail view actions
-                app.right.on('mousedown', '.detail-view-header .io-ox-action-link', function (e) {
+
+                function track(target, node) {
+                    node = $(node);
+                    var isSelect = !!node.attr('data-name');
                     metrics.trackEvent({
                         app: 'mail',
-                        target: 'detail/toolbar',
+                        target: target,
                         type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
+                        action: isSelect ? node.attr('data-name') : node.attr('data-action'),
+                        detail: isSelect ? node.attr('data-value') : ''
                     });
+                }
+
+                // categories
+                nodes.body.on('mousedown', '.categories-toolbar-container .category', function (e) {
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: 'select-tab',
+                        detail: $(e.currentTarget).attr('data-id')
+                    });
+                });
+
+                // main toolbar: actions, view dropdown
+                nodes.body.on('track', '.classic-toolbar-container', function (e, node) {
+                    track('toolbar', node);
+                });
+                // detail view: actions
+                nodes.body.on('track', '.thread-view-control', function (e, node) {
+                    track('detail/toolbar', node);
                 });
                 // listview toolbar
                 nodes.main.find('.list-view-control .toolbar').on('mousedown', 'a[data-name], a[data-action]', function (e) {
-                    var node = $(e.currentTarget);
-                    var action = node.attr('data-name') || node.attr('data-action');
-                    if (!action) return;
-                    metrics.trackEvent({
-                        app: 'mail',
-                        target: 'list/toolbar',
-                        type: 'click',
-                        action: action,
-                        detail: node.attr('data-value')
-                    });
+                    track('list/toolbar', e.currentTarget);
                 });
+
                 // folder tree action
-                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
-                    metrics.trackEvent({
-                        app: 'mail',
-                        target: 'folder/context-menu',
-                        type: 'click',
-                        action: $(e.currentTarget).attr('data-action')
+                _.defer(function () {
+                    sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
+                        metrics.trackEvent({
+                            app: 'mail',
+                            target: 'folder/context-menu',
+                            type: 'click',
+                            action: $(e.currentTarget).attr('data-action')
+                        });
                     });
                 });
                 sidepanel.find('.bottom').on('mousedown', 'a[data-action]', function (e) {
@@ -2054,7 +2129,7 @@ define('io.ox/mail/main', [
             find: capabilities.has('search')
         });
 
-        if (_.url.hash('mailto')) ox.registry.call('mail-compose', 'compose');
+        if (_.url.hash('mailto')) ox.registry.call('mail-compose', 'open');
 
         app.setWindow(win);
         app.settings = settings;

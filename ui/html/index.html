@@ -135,7 +135,7 @@
                 <div id="io-ox-desktop" class="abs"></div>
             </div>
             <!-- container for embeded windows, used to manage flexbox overflow-->
-            <div id="io-ox-taskbar-container" class="abs">
+            <div id="io-ox-taskbar-container" role="region" class="abs">
                 <!-- embedded windows -->
                 <ul id="io-ox-taskbar"></ul>
             </div>
@@ -245,25 +245,54 @@
         </div>
         <script>
             /* inject correct language here at the very start manually*/
-            (function () {
-                var language = (navigator.language || navigator.userLanguage).substr(0, 2),
-                    messages = {
-                        timeout: {
-                            'en': ['Connection timed out. Please try reloading the page.', 'Reload'],
-                            'de': ['Zeitüberschreitung bei der Verbindung. Bitte laden Sie die Seite erneut.', 'Neu laden'],
-                            'it': ['Connessione scaduta. Prova a ricaricare la pagina.', 'Ricarica la pagina']
-                        },
-                        session: {
-                            'en': ['Something went wrong. Please close this browser tab and try again.'],
-                            'de': ['Es gab einen Fehler. Bitte schließen Sie dieses Browser-Tab und versuchen es erneut.']
-                        }
-                    };
-                for (var type in messages) {
-                    var msg = messages[type][language] || messages[type].en;
-                    document.querySelector('#showstopper .' + type).innerHTML = '<span>' + msg[0] +'</span>' +
-                        (msg[1] ? '<br><a href="#" class="reload">' + msg[1] + '</a>' : '');
-                }
+            var staticGt = (function () {
+                var messages = {
+                    'Connection error': {
+                        de: 'Verbindungsfehler',
+                        es: 'Error de conexión',
+                        fr: 'Erreur de connexion',
+                        it: 'Errore di connessione'
+                    },
+                    'The service is not available right now.': {
+                        de: 'Der Dienst ist zurzeit nicht verfügbar.',
+                        es: 'El servicio no está disponible en estos momentos.',
+                        fr: 'Le service n\'est pas disponible actuellement.',
+                        it: 'Il servizio non è disponibile in questo momento.'
+                    },
+                    'Retry': {
+                        de: 'Erneut versuchen',
+                        es: 'Reintentar',
+                        fr: 'Réessayer',
+                        it: 'Ritenta'
+                    },
+                    'Connection timed out. Please try reloading the page.': {
+                        de: 'Zeitüberschreitung bei der Verbindung. Bitte laden Sie die Seite erneut.',
+                        es: 'Conexión caducada. Por favor, pruebe a cargar de nuevo la página.',
+                        fr: 'Délai de la connexion dépassé. Veuillez recharger la page.',
+                        it: 'Connessione scaduta. Prova a ricaricare la pagina.'
+                    },
+                    'Reload': {
+                        de: 'Neu laden',
+                        es: 'Recargar',
+                        fr: 'Recharger',
+                        it: 'Ricarica'
+                    },
+                    'Something went wrong. Please close this browser tab and try again.': {
+                        de: 'Es gab einen Fehler. Bitte schließen Sie dieses Browser-Tab und versuchen es erneut.',
+                        es: 'Algo ha ido mal. Por favor, cierre esta pestaña del navegador e inténtelo de nuevo.',
+                        fr: 'Quelque chose s\'est mal passé. Veuillez fermer votre onglet de navigateur et réessayer.',
+                        it: 'Qualcosa è andato storto. Chiudi questa scheda del browser e prova ancora.'
+                    }
+                };
+                return function gt(str) {
+                    var language = (ox.language || navigator.language || navigator.userLanguage).substr(0, 2);
+                    if (!messages[str]) return str;
+                    return messages[str][language] || str;
+                };
             }());
+
+            document.querySelector('#showstopper .timeout').innerHTML = '<span>' + staticGt('Connection timed out. Please try reloading the page.') + '</span><br><a href="#" class="reload">' + staticGt('Reload') + '</a>';
+            document.querySelector('#showstopper .session').innerHTML = '<span>' + staticGt('Something went wrong. Please close this browser tab and try again.') +'</span>';
         </script>
         <script src="<%= base %>/boot.js"></script>
         <noscript>

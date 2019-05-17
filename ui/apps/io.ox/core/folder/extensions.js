@@ -178,7 +178,7 @@ define('io.ox/core/folder/extensions', [
     }
 
     function getAvailableServices() {
-        var services = ['google', 'dropbox', 'boxcom', 'msliveconnect'];
+        var services = ['google', 'dropbox', 'boxcom', 'graph'];
 
         ext.point('io.ox/core/folder/storage-accounts/list').invoke('customize', services);
 
@@ -192,7 +192,7 @@ define('io.ox/core/folder/extensions', [
             return _(keychainApi.submodules).filter(function (submodule) {
                 if (services.indexOf(submodule.id) < 0) return false;
                 // we need support for both accounts, Oauth accounts and filestorage accounts.
-                return availableFilestorageServices.indexOf(submodule.id) >= 0;
+                return (!submodule.canAdd || submodule.canAdd.apply(this)) && availableFilestorageServices.indexOf(submodule.id) >= 0;
             });
         });
     }
@@ -327,7 +327,7 @@ define('io.ox/core/folder/extensions', [
                     isRemote: true,
                     empty: false
                 })
-                .render().$el.addClass('remote-folders')
+                .render().$el.addClass('remote-folders').attr('role', 'presentation')
             );
         },
 
@@ -342,7 +342,7 @@ define('io.ox/core/folder/extensions', [
                     tree: tree,
                     parent: tree
                 })
-                .render().$el.addClass('filestorage-folders')
+                .render().$el.addClass('filestorage-folders').attr('role', 'presentation')
             );
         },
 
@@ -448,7 +448,7 @@ define('io.ox/core/folder/extensions', [
                     tree: tree,
                     parent: tree
                 })
-                .render().$el.addClass('other-folders')
+                .render().$el.addClass('other-folders').attr('role', 'treeitem')
             );
         },
 
@@ -505,7 +505,7 @@ define('io.ox/core/folder/extensions', [
                     tree: tree,
                     parent: tree
                 })
-                .render().$el.addClass('private-drive-folders')
+                .render().$el.addClass('private-drive-folders').attr('role', 'presentation')
             );
         },
 
@@ -520,7 +520,7 @@ define('io.ox/core/folder/extensions', [
                     tree: tree,
                     parent: tree
                 })
-                .render().$el.addClass('private-drive-folders')
+                .render().$el.addClass('private-drive-folders').attr('role', 'presentation')
             );
         },
 
@@ -535,7 +535,7 @@ define('io.ox/core/folder/extensions', [
                     tree: tree,
                     parent: tree
                 })
-                .render().$el.addClass('public-drive-folders')
+                .render().$el.addClass('public-drive-folders').attr('role', 'presentation')
             );
         }
     };
@@ -839,270 +839,280 @@ define('io.ox/core/folder/extensions', [
                 }
             });
         }
-
-        //
-        // Upsell
-        //
-
-        ext.point('io.ox/core/foldertree/calendar/links/subscribe').extend({
-            id: 'default',
-            index: 100,
-            draw: function () {
-                var folder = api.getDefaultFolder('calendar');
-                // guests might have no default folder
-                if (!folder) return;
-                this.link('folder', gt('Personal calendar'), function (e) {
-                    e.data = { folder: folder, module: 'event' };
-                    addFolder(e);
-                });
-            }
-        }, {
-            id: 'divider-1',
-            index: 200,
-            draw: function () {
-                if (!capabilities.has('calendar_schedjoules') &&
-                    !capabilities.has('calendar_google') &&
-                    !capabilities.has('calendar_ical')) return;
-
-                this.divider();
-                this.header(gt('Subscribe to calendar'));
-            }
-        }, {
-            id: 'schedjoules',
-            index: 300,
-            draw: function () {
-                if (!capabilities.has('calendar_schedjoules')) return;
-                this.link('schedjoules', gt('Browse calendars of interest'), function () {
-                    require(['io.ox/calendar/settings/schedjoules/schedjoules'], function (schedjoules) {
-                        schedjoules.open();
-                    });
-                });
-            }
-        }, {
-            id: 'google',
-            index: 400,
-            draw: function () {
-                if (!capabilities.has('calendar_google')) return;
-                var subscribeGoogle, link;
-                // make sure the subscrioption code is available when the action is triggered
-                // otherwise, the oauth popup will be blocked
-                require(['io.ox/calendar/actions/subscribe-google'], function (func) {
-                    subscribeGoogle = func;
-                    link.removeClass('hidden');
-                });
-                this.link('google', gt('Google calendar'), function () { subscribeGoogle(); });
-                link = this.$ul.find('li').last().addClass('hidden');
-            }
-        }, {
-            id: 'ical',
-            index: 500,
-            draw: function () {
-                if (!capabilities.has('calendar_ical')) return;
-                this.link('ical', gt('Subscribe via URL (iCal)'), function () {
-                    require(['io.ox/calendar/actions/subscribe-ical'], function (importICal) {
-                        importICal();
-                    });
-                });
-            }
-        }, {
-            id: 'import',
-            index: 600,
-            draw: function () {
-                if (_.device('ios || android')) return;
-                this.divider();
-                this.header(gt('Import calendar'));
-                this.link('import', gt('Upload file'), function () {
-                    require(['io.ox/core/import/import'], function (importer) {
-                        importer.show('calendar');
-                    });
-                });
-            }
-        });
-
-        ext.point('io.ox/core/foldertree/calendar/links').extend({
-            index: 200,
-            id: 'private',
-            draw: function (baton) {
-                if (baton.context !== 'app') return;
-                if (capabilities.has('guest')) return;
-                var dropdown = new DropdownView({
-                    attributes: { role: 'presentation' },
-                    tagName: 'li',
-                    className: 'dropdown',
-                    $toggle: $('<a href="#" class="dropdown-toggle"data-action="add-subfolder" data-toggle="dropdown">').append(
-                        gt('Add new calendar'),
-                        $('<i class="fa fa-caret-down" aria-hidden="true">')
-                    )
-                });
-                ext.point('io.ox/core/foldertree/calendar/links/subscribe').invoke('draw', dropdown);
-                if (dropdown.$ul.children().length === 0) return;
-                this.append(dropdown.render().$el);
-                // make sure, this is a treeitem. render-function of dropdown appends role="button" to $toggle
-                dropdown.$toggle.attr('role', 'treeitem');
-            }
-        });
-
-        ext.point('io.ox/core/foldertree/contacts/links').extend({
-            index: 1000,
-            id: 'upsell-contacts',
-            draw: function (baton) {
-                if (baton.context !== 'app') return;
-
-                this.append(new UpsellView({
-                    id: 'folderview/contacts',
-                    requires: 'carddav',
-                    title: gt('Synchronize with your tablet or smartphone')
-                }).render().$el);
-            }
-        });
-
-        ext.point('io.ox/core/foldertree/calendar/links').extend({
-            index: 1000,
-            id: 'upsell-calendar',
-            draw: function (baton) {
-                if (baton.context !== 'app') return;
-
-                this.append(new UpsellView({
-                    id: 'folderview/calendar',
-                    requires: 'caldav',
-                    title: gt('Synchronize with your tablet or smartphone')
-                }).render().$el);
-            }
-        });
-
-        //
-        // Shared folders
-        //
-
-        function openPermissions(e) {
-            require(['io.ox/files/share/permissions'], function (controller) {
-                controller.showFolderPermissions(e.data.id);
-            });
-        }
-
-        function openSubSettings(e) {
-            // TODO make sure chronos module is used here
-            var options = { id: 'io.ox/core/sub', data: e.data.folder, refresh: true };
-            ox.launch('io.ox/settings/main', options).done(function () {
-                this.setSettingsPane(options);
-            });
-        }
-
-        function toggleFolder(e) {
-            if (e.type === 'keydown') {
-                if (e.which !== 32) return;
-                e.stopImmediatePropagation();
-            }
-            var target = e.data.target,
-                app = e.data.app,
-                folder = e.data.folder;
-            if (target.closest('.single-selection').length > 0) return;
-            e.preventDefault();
-            if (app.folders.isSelected(folder.id)) app.folders.remove(folder.id);
-            else app.folders.add(folder.id);
-            target.toggleClass('selected', app.folders.isSelected(folder.id));
-            target.closest('.folder').attr('aria-checked', app.folders.isSelected(folder.id));
-        }
-
-        ext.point('io.ox/core/foldertree/node').extend(
-            {
-                id: 'shared-by',
-                index: 100,
-                draw: function (baton) {
-
-                    var model = baton.view.model, data = model.toJSON();
-                    if (!/^(contacts|calendar|tasks)$/.test(data.module)) return;
-                    if (!api.is('shared', data)) return;
-
-                    baton.view.addA11yDescription(gt('Shared by other users'));
-                }
-            },
-            {
-                id: 'shared',
-                index: 200,
-                draw: function (baton) {
-
-                    this.find('.folder-node:first .folder-shared:first').remove();
-
-                    if (_.device('smartphone')) return;
-                    // drive has virtual folder 'Shared by me'
-                    if (baton.data.module === 'infostore') return;
-                    if (!api.is('unlocked', baton.data)) return;
-
-                    // TODO - A11y: Click handler on icon?
-                    baton.view.$.buttons.append(
-                        $('<i class="fa folder-shared" aria-hidden="true">').attr('title', gt('You share this folder with other users')).on('click', { id: baton.data.id }, openPermissions)
-                    );
-                    baton.view.addA11yDescription(gt('You share this folder with other users'));
-                }
-            },
-            {
-                id: 'sub',
-                index: 300,
-                draw: function (baton) {
-
-                    if (!api.isVirtual(baton.view.folder)) {
-                        this.find('.folder-sub:first').remove();
-                    }
-
-                    // ignore shared folders
-                    if (api.is('shared', baton.data)) return;
-                    if (!api.is('subscribed', baton.data)) return;
-
-                    // TODO - A11y: Click handler on icon?
-                    baton.view.$.buttons.append(
-                        $('<i class="fa folder-sub">').attr('title', gt('This folder has subscriptions')).on('click', { folder: baton.data }, openSubSettings)
-                    );
-                    baton.view.addA11yDescription(gt('This folder has publications and/or subscriptions'));
-                }
-            },
-            {
-                id: 'is-selected',
-                index: 400,
-                draw: function (baton) {
-                    if (!/^calendar$/.test(baton.data.module)) return;
-
-                    var self = this,
-                        folderLabel = this.find('.folder-label'),
-                        app = ox.ui.apps.get('io.ox/calendar');
-
-                    if (!app) return;
-
-                    this.attr('aria-checked', app.folders.isSelected(baton.data.id));
-
-                    require(['io.ox/calendar/util'], function (util) {
-                        var folderColor = util.getFolderColor(baton.data),
-                            target = folderLabel.find('.color-label');
-
-                        if (target.length === 0) target = $('<div class="color-label" aria-hidden="true">');
-                        target.toggleClass('selected', app.folders.isSelected(baton.data.id));
-                        target.css({
-                            'background-color': folderColor,
-                            'color': util.getForegroundColor(folderColor)
-                        });
-                        target.off('click', toggleFolder).on('click', { folder: baton.data, app: app, target: target }, toggleFolder);
-                        self.off('keydown', toggleFolder).on('keydown', { folder: baton.data, app: app, target: target }, toggleFolder);
-                        folderLabel.prepend(target);
-                    });
-                }
-            },
-            {
-                id: 'account-errors',
-                index: 500,
-                draw: function (baton) {
-                    if (!/^calendar$/.test(baton.data.module)) return;
-
-                    var accountError = baton.data['com.openexchange.calendar.accountError'];
-                    if (accountError) {
-                        baton.view.showStatusIcon(accountError.error, 'click:account-error', baton.data);
-                        ox.trigger('http:error:' + accountError.code, accountError);
-                    } else {
-                        baton.view.hideStatusIcon();
-                    }
-                }
-            }
-        );
     });
+
+    //
+    // Upsell
+    //
+
+    ext.point('io.ox/core/foldertree/calendar/links/subscribe').extend({
+        id: 'default',
+        index: 100,
+        draw: function () {
+            var folder = api.getDefaultFolder('calendar');
+            // guests might have no default folder
+            if (!folder) return;
+            this.link('folder', gt('Personal calendar'), function (e) {
+                e.data = { folder: folder, module: 'event' };
+                addFolder(e);
+            });
+        }
+    }, {
+        id: 'divider-1',
+        index: 200,
+        draw: function () {
+            if (!capabilities.has('calendar_schedjoules') &&
+                !capabilities.has('calendar_google') &&
+                !capabilities.has('calendar_ical')) return;
+
+            this.divider();
+            this.header(gt('Subscribe to calendar'));
+        }
+    }, {
+        id: 'schedjoules',
+        index: 300,
+        draw: function () {
+            if (!capabilities.has('calendar_schedjoules')) return;
+            this.link('schedjoules', gt('Browse calendars of interest'), function () {
+                require(['io.ox/calendar/settings/schedjoules/schedjoules'], function (schedjoules) {
+                    schedjoules.open();
+                });
+            });
+        }
+    }, {
+        id: 'google',
+        index: 400,
+        draw: function () {
+            if (!capabilities.has('calendar_google')) return;
+            var subscribeGoogle, link;
+            // make sure the subscrioption code is available when the action is triggered
+            // otherwise, the oauth popup will be blocked
+            require(['io.ox/calendar/actions/subscribe-google'], function (func) {
+                subscribeGoogle = func;
+                link.removeClass('hidden');
+            });
+            this.link('google', gt('Google calendar'), function () { subscribeGoogle(); });
+            link = this.$ul.find('li').last().addClass('hidden');
+        }
+    }, {
+        id: 'ical',
+        index: 500,
+        draw: function () {
+            if (!capabilities.has('calendar_ical')) return;
+            this.link('ical', gt('Subscribe via URL (iCal)'), function () {
+                require(['io.ox/calendar/actions/subscribe-ical'], function (importICal) {
+                    importICal();
+                });
+            });
+        }
+    }, {
+        id: 'shared',
+        index: 500,
+        draw: function () {
+            this.link('shared', gt('Subscribe shared Calendar'), function () {
+                require(['io.ox/calendar/actions/subscribe-shared'], function (subscribe) {
+                    subscribe.open();
+                });
+            });
+        }
+    }, {
+        id: 'import',
+        index: 600,
+        draw: function () {
+            if (_.device('ios || android')) return;
+            this.divider();
+            this.header(gt('Import calendar'));
+            this.link('import', gt('Upload file'), function () {
+                require(['io.ox/core/import/import'], function (importer) {
+                    importer.show('calendar');
+                });
+            });
+        }
+    });
+
+    ext.point('io.ox/core/foldertree/calendar/links').extend({
+        index: 200,
+        id: 'private',
+        draw: function (baton) {
+            if (baton.context !== 'app') return;
+            if (capabilities.has('guest')) return;
+            var dropdown = new DropdownView({
+                attributes: { role: 'presentation' },
+                tagName: 'li',
+                className: 'dropdown',
+                $toggle: $('<a href="#" class="dropdown-toggle"data-action="add-subfolder" data-toggle="dropdown">').append(
+                    gt('Add new calendar'),
+                    $('<i class="fa fa-caret-down" aria-hidden="true">')
+                )
+            });
+            ext.point('io.ox/core/foldertree/calendar/links/subscribe').invoke('draw', dropdown);
+            if (dropdown.$ul.children().length === 0) return;
+            this.append(dropdown.render().$el);
+            // make sure, this is a treeitem. render-function of dropdown appends role="button" to $toggle
+            dropdown.$toggle.attr('role', 'treeitem');
+        }
+    });
+
+    ext.point('io.ox/core/foldertree/contacts/links').extend({
+        index: 1000,
+        id: 'upsell-contacts',
+        draw: function (baton) {
+            if (baton.context !== 'app') return;
+
+            this.append(new UpsellView({
+                id: 'folderview/contacts',
+                requires: 'carddav',
+                title: gt('Synchronize with your tablet or smartphone')
+            }).render().$el);
+        }
+    });
+
+    ext.point('io.ox/core/foldertree/calendar/links').extend({
+        index: 1000,
+        id: 'upsell-calendar',
+        draw: function (baton) {
+            if (baton.context !== 'app') return;
+
+            this.append(new UpsellView({
+                id: 'folderview/calendar',
+                requires: 'caldav',
+                title: gt('Synchronize with your tablet or smartphone')
+            }).render().$el);
+        }
+    });
+
+    //
+    // Shared folders
+    //
+
+    function openPermissions(e) {
+        require(['io.ox/files/share/permissions'], function (controller) {
+            controller.showFolderPermissions(e.data.id);
+        });
+    }
+
+    function openSubSettings(e) {
+        // TODO make sure chronos module is used here
+        var options = { id: 'io.ox/core/sub', data: e.data.folder, refresh: true };
+        ox.launch('io.ox/settings/main', options).done(function () {
+            this.setSettingsPane(options);
+        });
+    }
+
+    function toggleFolder(e) {
+        if (e.type === 'keydown') {
+            if (e.which !== 32) return;
+            e.stopImmediatePropagation();
+        }
+        var target = e.data.target,
+            app = e.data.app,
+            folder = e.data.folder;
+        if (target.closest('.single-selection').length > 0) return;
+        e.preventDefault();
+        if (app.folders.isSelected(folder.id)) app.folders.remove(folder.id);
+        else app.folders.add(folder.id);
+        target.toggleClass('selected', app.folders.isSelected(folder.id));
+        target.closest('.folder').attr('aria-checked', app.folders.isSelected(folder.id));
+    }
+
+    ext.point('io.ox/core/foldertree/node').extend(
+        {
+            id: 'shared-by',
+            index: 100,
+            draw: function (baton) {
+
+                var model = baton.view.model, data = model.toJSON();
+                if (!/^(contacts|calendar|tasks)$/.test(data.module)) return;
+                if (!api.is('shared', data)) return;
+
+                baton.view.addA11yDescription(gt('Shared by other users'));
+            }
+        },
+        {
+            id: 'shared',
+            index: 200,
+            draw: function (baton) {
+
+                this.find('.folder-node:first .folder-shared:first').remove();
+
+                if (_.device('smartphone')) return;
+                // drive has virtual folder 'Shared by me'
+                if (baton.data.module === 'infostore') return;
+                if (!api.is('unlocked', baton.data)) return;
+
+                // TODO - A11y: Click handler on icon?
+                baton.view.$.buttons.append(
+                    $('<i class="fa folder-shared" aria-hidden="true">').attr('title', gt('You share this folder with other users')).on('click', { id: baton.data.id }, openPermissions)
+                );
+                baton.view.addA11yDescription(gt('You share this folder with other users'));
+            }
+        },
+        {
+            id: 'sub',
+            index: 300,
+            draw: function (baton) {
+
+                if (!api.isVirtual(baton.view.folder)) {
+                    this.find('.folder-sub:first').remove();
+                }
+
+                // ignore shared folders
+                if (api.is('shared', baton.data)) return;
+                if (!api.is('subscribed', baton.data)) return;
+
+                // TODO - A11y: Click handler on icon?
+                baton.view.$.buttons.append(
+                    $('<i class="fa folder-sub">').attr('title', gt('This folder has subscriptions')).on('click', { folder: baton.data }, openSubSettings)
+                );
+                baton.view.addA11yDescription(gt('This folder has subscriptions'));
+            }
+        },
+        {
+            id: 'is-selected',
+            index: 400,
+            draw: function (baton) {
+                if (!/^calendar$/.test(baton.data.module)) return;
+
+                var self = this,
+                    folderLabel = this.find('.folder-label'),
+                    app = ox.ui.apps.get('io.ox/calendar');
+
+                if (!app) return;
+
+                this.attr('aria-checked', app.folders.isSelected(baton.data.id));
+
+                require(['io.ox/calendar/util'], function (util) {
+                    var folderColor = util.getFolderColor(baton.data),
+                        target = folderLabel.find('.color-label');
+
+                    if (target.length === 0) target = $('<div class="color-label" aria-hidden="true">');
+                    target.toggleClass('selected', app.folders.isSelected(baton.data.id));
+                    target.css({
+                        'background-color': folderColor,
+                        'color': util.getForegroundColor(folderColor)
+                    });
+                    target.off('click', toggleFolder).on('click', { folder: baton.data, app: app, target: target }, toggleFolder);
+                    self.off('keydown', toggleFolder).on('keydown', { folder: baton.data, app: app, target: target }, toggleFolder);
+                    folderLabel.prepend(target);
+                });
+            }
+        },
+        {
+            id: 'account-errors',
+            index: 500,
+            draw: function (baton) {
+                if (!/^calendar$/.test(baton.data.module)) return;
+
+                var accountError = baton.data['com.openexchange.calendar.accountError'];
+                if (accountError) {
+                    baton.view.showStatusIcon(accountError.error, 'click:account-error', baton.data);
+                    ox.trigger('http:error:' + accountError.code, accountError);
+                } else {
+                    baton.view.hideStatusIcon();
+                }
+            }
+        }
+    );
 
     return extensions;
 });

@@ -191,9 +191,10 @@ define('io.ox/core/import/import', [
     });
 
     var references = {
-        'calendar': 'ox.appsuite.user.sect.calendar.manage.import.html',
-        'contacts': 'ox.appsuite.user.sect.contacts.manage.import.html',
-        'tasks':    'ox.appsuite.user.sect.tasks.manage.import.html'
+        'calendar':              'ox.appsuite.user.sect.calendar.manage.import.html',
+        'calendar:folderImport': 'ox.appsuite.user.sect.calendar.folder.import.html',
+        'contacts':              'ox.appsuite.user.sect.contacts.manage.import.html',
+        'tasks':                 'ox.appsuite.user.sect.tasks.manage.import.html'
     };
 
     return {
@@ -203,7 +204,7 @@ define('io.ox/core/import/import', [
             new ModalDialog({
                 focus: module === 'calendar' ? 'input[name="file"]' : 'select[name="format"]',
                 async: true,
-                help: references[module],
+                help: module === 'calendar' && !id ? references['calendar:folderImport'] : references[module],
                 point: 'io.ox/core/import',
                 title: gt('Import from file'),
                 model: new Backbone.Model({

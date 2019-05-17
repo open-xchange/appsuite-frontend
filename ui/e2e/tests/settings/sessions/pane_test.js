@@ -13,7 +13,7 @@
 
 /// <reference path="../../../steps.d.ts" />
 
-Feature('Sessions settings');
+Feature('Settings');
 
 Before(async function (users) {
     await users.create();
@@ -38,6 +38,4 @@ Scenario('lists all sessions', function (I) {
     I.see('Safari(iOS)');
     I.see('Firefox(Mac)');
     I.see('Chrome(Mac)');
-
-    I.logout();
 });

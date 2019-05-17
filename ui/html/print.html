@@ -120,37 +120,22 @@
                     </div>
                     <div class="contact-details">
                         <div>
-                            <% if (element.original.street_business || element.city_business || element.original.state_business || element.original.country_business) { %>
+                            <% if (element.businessAddress) { %>
                             <fieldset>
                                 <legend><%- i18n.businessAddress %></legend>
-                                <address>
-                                    <% if (element.original.street_business) { %><div><%- element.original.street_business %></div><% } %>
-                                    <% if (element.city_business) { %><div><%- element.city_business %></div><% } %>
-                                    <% if (element.original.state_business) { %><div><%- element.original.state_business %></div><% } %>
-                                    <% if (element.original.country_business) { %><div><%- element.original.country_business %></div><% } %>
-                                </address>
+                                <address><%- element.businessAddress %></address>
                             </fieldset>
                             <% } %>
-                            <% if (element.original.street_home || element.city_home || element.original.state_home || element.original.country_home) { %>
+                            <% if (element.homeAddress) { %>
                             <fieldset>
                                 <legend><%- i18n.homeAddress %></legend>
-                                <address>
-                                    <% if (element.original.street_home) { %><div><%- element.original.street_home %></div><% } %>
-                                    <% if (element.city_home) { %><div><%- element.city_home %></div><% } %>
-                                    <% if (element.original.state_home) { %><div><%- element.original.state_home %></div><% } %>
-                                    <% if (element.original.country_home) { %><div><%- element.original.country_home %></div><% } %>
-                                </address>
+                                <address><%- element.homeAddress %></address>
                             </fieldset>
                             <% } %>
-                            <% if (element.original.street_other || element.city_other || element.original.state_other || element.original.country_other) { %>
+                            <% if (element.otherAddress) { %>
                             <fieldset>
                                 <legend><%- i18n.otherAddress %></legend>
-                                <address>
-                                    <% if (element.original.street_other) { %><div><%- element.original.street_other %></div><% } %>
-                                    <% if (element.city_other) { %><div><%- element.city_other %></div><% } %>
-                                    <% if (element.original.state_other) { %><div><%- element.original.state_other %></div><% } %>
-                                    <% if (element.original.country_other) { %><div><%- element.original.country_other %></div><% } %>
-                                </address>
+                                <address><%- element.otherAdress %></address>
                             </fieldset>
                             <% } %>
                         </div>
@@ -288,6 +273,16 @@
                 <% if (element.participants > 0) { %>
                     <span class="participants"><label class="label-compact"><%- i18n.participants %>:</label> <%- element.participants %></span>
                 <% }%>
+            </section>
+        <% }); %>
+        </script>
+
+        <script type="text/template" class="recovery">
+        <% _.each(data, function(element) { %>
+            <section class="item-compact">
+                <h1><%- i18n.code %></h1>
+                <br>
+                <span class="recovery-code"><%- element.code %></span>
             </section>
         <% }); %>
         </script>

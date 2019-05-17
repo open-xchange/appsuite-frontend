@@ -25,7 +25,7 @@ define('io.ox/calendar/actions/follow-up', [
         );
 
         // check isBefore once for the startDate; then reuse that information for endDate (see bug 44647)
-        var isBefore = false,
+        var needsShift = false,
             isAllday = util.isAllday(model),
             format = isAllday ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
 
@@ -33,27 +33,24 @@ define('io.ox/calendar/actions/follow-up', [
         ['startDate', 'endDate'].forEach(function (field) {
             var ref = model.getMoment(field),
                 // set date to today, keep time, then use same weekday
-                d = moment({ hour: ref.hour(), minute: ref.minute() }).weekday(ref.weekday());
-            // add 1 week if date is in the past
-            if (isBefore || d.isBefore(moment())) {
-                d.add(1, 'w');
-                isBefore = true;
+                d = moment({ hour: ref.hour(), minute: ref.minute() }).weekday(ref.weekday()),
+                target = moment.max(d, ref);
+
+            // shift about one week?
+            if (needsShift || target.isBefore(moment()) || target.isSameOrBefore(ref)) {
+                target.add(1, 'w');
+                needsShift = true;
             }
-            copy[field] = { value: d.format(format), tzid: model.get(field).tzid };
+
+            // if this is the endDate and the appointment is an all day appointment we need to subtract 1 day
+            // (see bug 63806)
+            if (field === 'endDate' && isAllday) target.subtract(1, 'day');
+
+            copy[field] = { value: target.format(format), tzid: model.get(field).tzid };
         });
 
         // clean up attendees (remove confirmation status comments etc)
-        copy.attendees = _(copy.attendees).map(function (attendee) {
-            var temp = _(attendee).pick('cn', 'cuType', 'email', 'uri', 'entity', 'contact');
-            // resources are always set to accepted
-            if (temp.cn === 'RESOURCE') {
-                temp.partStat = 'ACCEPTED';
-                if (attendee.comment) temp.comment = attendee.comment;
-            } else {
-                temp.partStat = 'NEEDS-ACTION';
-            }
-            return temp;
-        });
+        copy.attendees = util.cleanupAttendees(copy.attendees);
 
         // use ox.launch to have an indicator for slow connections
         ox.load(['io.ox/calendar/edit/main']).done(function (edit) {

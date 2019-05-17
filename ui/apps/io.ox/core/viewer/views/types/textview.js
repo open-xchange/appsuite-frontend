@@ -37,8 +37,6 @@ define('io.ox/core/viewer/views/types/textview', [
             this.size = 13;
             // quick hack to get rid of flex box
             this.$el.empty().css('display', 'block');
-            // run own disposer function on dispose event from DisposableView
-            this.on('dispose', this.disposeView.bind(this));
             return this;
         },
 
@@ -103,16 +101,12 @@ define('io.ox/core/viewer/views/types/textview', [
         /**
          * "Prefetches" the text file
          *
-         * @param {Object} options
-         *  @param {Object} options.version
-         *      an alternate version than the current version.
-         *
          * @returns {TextView}
          *  the TextView instance.
          */
-        prefetch: function (options) {
+        prefetch: function () {
             // simply load the document content via $.ajax
-            var previewUrl = this.getPreviewUrl(options);
+            var previewUrl = this.getPreviewUrl();
 
             this.$el.busy();
             // send AJAX request
@@ -172,9 +166,10 @@ define('io.ox/core/viewer/views/types/textview', [
          * Destructor function of this view.
          *  Aborts the AJAX request and clears the load timeout.
          */
-        disposeView: function () {
+        onDispose: function () {
             this.abortAjaxRequest();
             this.clearLoadTimeout();
+            this.$el.css('display', '');
         }
 
     });

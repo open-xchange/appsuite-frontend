@@ -55,15 +55,6 @@ define('io.ox/mail/settings/compose/settings/pane', [
                             { label: gt('HTML and plain text'), value: 'alternative' }
                         ];
                     },
-                    getAutoSaveOptions: function () {
-                        return [
-                            { label: gt('Never'), value: 'disabled' },
-                            { label: gt('1 minute'), value: '1_minute' },
-                            { label: gt('3 minutes'), value: '3_minutes' },
-                            { label: gt('5 minutes'), value: '5_minutes' },
-                            { label: gt('10 minutes'), value: '10_minutes' }
-                        ];
-                    },
                     getFontNameOptions: function () {
                         return [{ label: gt('Use browser default'), value: 'browser-default' }].concat(
                             mailUtil.getFontFormats().split(';')
@@ -98,31 +89,11 @@ define('io.ox/mail/settings/compose/settings/pane', [
                          *
                          * THIS COMMENT IS IMPORTANT, DON’T REMOVE
                          */
-                        var accounts = api.getSenderAddresses(0).then(function (addresses) {
+                        return api.getSenderAddresses(0).then(function (addresses) {
                             return _(addresses).map(function (address) {
                                 //use value also as label
                                 return { value: address[1], label: address[1] };
                             });
-                        });
-
-                        // get msisdn numbers
-                        var msisdns = !capabilities.has('msisdn') ? [] : userAPI.get().then(function (data) {
-                            return _(contactsAPI.getMapping('msisdn', 'names'))
-                                .chain()
-                                .map(function (field) {
-                                    if (data[field]) {
-                                        return {
-                                            label: data[field],
-                                            value: mailUtil.cleanupPhone(data[field]) + mailUtil.getChannelSuffixes().msisdn
-                                        };
-                                    }
-                                })
-                                .compact()
-                                .value();
-                        });
-
-                        return $.when(accounts, msisdns).then(function (addresses, numbers) {
-                            return [].concat(addresses, numbers);
                         });
                     },
                     // overwrite render to resolve async stuff first
@@ -294,8 +265,6 @@ define('io.ox/mail/settings/compose/settings/pane', [
                             // mailing lists
                             util.checkbox('confirmReplyToMailingLists', gt('Confirm recipients when replying to a mailing list'), settings)
                         ),
-                        // Auto save
-                        util.compactSelect('autoSaveDraftsAfter', gt('Auto-save email drafts'), settings, this.getAutoSaveOptions()),
                         // Default sender
                         util.compactSelect('defaultSendAddress', gt('Default sender address'), settings, this.getSenderOptions()),
                         // BCC

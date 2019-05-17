@@ -180,7 +180,6 @@ define('io.ox/participants/add', [
             list = this.getValidAddresses(list);
 
             if (this.options.convertToAttendee) {
-
                 list = _(list).chain().map(function (item) {
                     if (!(item.attributes && item.attributes.mark_as_distributionlist)) {
                         return calendarUtil.createAttendee(item);

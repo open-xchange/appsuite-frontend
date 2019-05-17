@@ -195,15 +195,12 @@ define('io.ox/core/api/attachment', [
             switch (mode) {
                 case 'view':
                 case 'open':
-                    url += '&delivery=view' + scaling;
-                    break;
+                    return util.getShardingRoot(url + '&delivery=view' + scaling);
                 case 'download':
-                    url += '&delivery=download';
-                    break;
+                    return ox.apiRoot + url + '&delivery=download';
                 default:
-                    break;
+                    return util.getShardingRoot(url);
             }
-            return util.getShardingRoot(url);
         },
 
         /**

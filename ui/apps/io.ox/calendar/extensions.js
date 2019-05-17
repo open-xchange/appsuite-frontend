@@ -28,7 +28,16 @@ define('io.ox/calendar/extensions', [
                 var folder = folderAPI.pool.getModel(model.get('folder')).toJSON(),
                     color = util.getAppointmentColor(folder, model),
                     foregroundColor = util.getForegroundColor(color);
-                if (!color) return;
+                if (!color) {
+                    // cleanup possible previous styles
+                    node.css({
+                        'background-color': '',
+                        'color': '',
+                        'border-left-color': ''
+                    }).data('background-color', null);
+                    node.removeClass('white black');
+                    return;
+                }
                 node.css({
                     'background-color': color,
                     'color': foregroundColor,
@@ -41,11 +50,15 @@ define('io.ox/calendar/extensions', [
             }
 
             return function (baton) {
-                var model = baton.model,
-                    folder = folderAPI.pool.getModel(model.get('folder')).toJSON();
 
-                var folderId = model.get('folder'),
+                var model = baton.model,
+                    folderModel = folderAPI.pool.getModel(model.get('folder')),
+                    folder = folderModel.toJSON(),
+                    folderId = model.get('folder'),
                     title = _([model.get('summary'), model.get('location')]).compact().join(', ');
+
+                // cleanup classes to redraw correctly
+                this.removeClass('modify private disabled needs-action accepted declined tentative');
 
                 if (String(folder.id) === String(folderId)) addColors(this, model);
                 else if (folderId !== undefined) folderAPI.get(folderId).done(addColors.bind(this, this, model));
@@ -55,7 +68,7 @@ define('io.ox/calendar/extensions', [
                 if (util.isPrivate(model) && ox.user_id !== (model.get('createdBy') || {}).entity && !folderAPI.is('private', folder)) {
                     this.addClass('private disabled');
                 } else {
-                    var canModifiy = folderAPI.can('write', folder, model.attributes) && util.allowedToEdit(model, { synced: true, folderData: folder }),
+                    var canModifiy = folderAPI.can('write', folder, model.attributes) && util.allowedToEdit(model.toJSON(), folderModel),
                         conf = util.getConfirmationStatus(model);
                     if (util.isPrivate(model)) this.addClass('private');
                     if (canModifiy) this.addClass('modify');

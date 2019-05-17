@@ -1,7 +1,5 @@
 ---
 title: Manifests
-description: Manifest files in the OX App Suite declare plugins loaded at runtime.
-source: http://oxpedia.org/wiki/index.php?title=AppSuite:UI_manifests_explained
 ---
 
 They tell the OX App Suite runtime which files to load when, so the code in it can take effect at the appropriate time.

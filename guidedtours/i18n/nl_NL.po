@@ -1,12 +1,12 @@
 # Antje Faber <antje.faber@open-xchange.com>, 2010, 2011, 2013.
-# Ivar Snaaijer <ivar@workshop-chapina.com >, 2010, 2011, 2012, 2013, 2016, 2018.
+# Ivar Snaaijer <ivar@workshop-chapina.com >, 2010, 2011, 2012, 2013, 2016, 2018, 2019.
 # Reinout van Schouwen <reinout@workshop-chapina.com>, 2012, 2013, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-10-12 22:00+0100\n"
+"PO-Revision-Date: 2019-04-22 07:47+0100\n"
 "Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -647,6 +647,82 @@ msgstr ""
 #: apps/io.ox/tours/main.js module:io.ox/tours
 msgid "Getting started"
 msgstr "Aan de slag"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr "Twee-factor-authenticatie"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"U kan nu extra controles opties toevoegen om de beveiliging van uw account te"
+" verbeteren."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "Controle optie toevoegen"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr ""
+"Verschillende opties voor extra controle zijn afhankelijk vaan uw installatie."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "Code via tekstbericht toevoegen"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr ""
+"Bijvoorbeeld, als u de optie voor een code via tekstbericht selecteert, zal"
+" de groupware om uw telefoonnummer vragen."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "Authenticatie Verzoeken"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr ""
+"De volgende keer als u zich aanmeld, moet u uw identiteit bevestigen door de"
+" code in te voeren die naar uw telefoon wordt gestuurd."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "Verwijderen"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr ""
+"Apparaten kunnen verwijderd worden als u deze heeft toegevoegd. Zie help voor"
+" extra details."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "Volgende"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+"Als een extra beveiligingsoptie kan u nu een tweede authenticatie methode"
+" toevoegen, zoals een tekstbericht, voordat u aanmeld in uw account. Wilt u"
+" hier meer informatie over?"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr "Start rondleiding"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
@@ -3472,9 +3548,6 @@ msgstr ""
 
 #~ msgid "New subscription"
 #~ msgstr "Nieuw abonnement"
-
-#~ msgid "Next"
-#~ msgstr "Volgende"
 
 #~ msgid "Next Day"
 #~ msgstr "Volgende Dag"

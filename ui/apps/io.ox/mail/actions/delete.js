@@ -69,55 +69,51 @@ define('io.ox/mail/actions/delete', [
         });
     }
 
-    return {
+    return function (baton) {
 
-        multiple: function (list, baton) {
+        var list = folderAPI.ignoreSentItems(baton.array()),
+            all = list.slice(),
+            shiftDelete = baton && baton.options.shiftDelete && settings.get('features/shiftDelete'),
+            showPrompt = !shiftDelete && (settings.get('removeDeletedPermanently') || _(list).any(function (o) {
+                return accountAPI.is('trash', o.folder_id);
+            }));
 
-            list = folderAPI.ignoreSentItems(list);
+        // pragmatic approach for bug 55442 cause mail is so special (weak spot: empty folder)
+        list = ignoreCurrentlyEdited(list);
+        if (all.length !== list.length) {
+            notifications.yell({
+                headline: gt('Note'),
+                type: 'info',
+                message: gt('Currently edited drafts with attachments can not be deleted until you close the correspondig mail compose window.')
+            });
+            // no messages left
+            if (!list.length) return;
+            all = list.slice();
+        }
 
-            var all = list.slice(),
-                shiftDelete = baton && baton.options.shiftDelete && settings.get('features/shiftDelete'),
-                showPrompt = !shiftDelete && (settings.get('removeDeletedPermanently') || _(list).any(function (o) {
-                    return accountAPI.is('trash', o.folder_id);
-                }));
+        if (showPrompt) {
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                new dialogs.ModalDialog()
+                    .addPrimaryButton('delete', gt('Delete'))
+                    .addButton('cancel', gt('Cancel'))
+                    .text(getQuestion(list))
+                    .show()
+                    .done(function (action) {
+                        if (action === 'delete') {
+                            api.remove(list, all).fail(notifications.yell);
+                        } else {
+                            // trigger back event, used for mobile swipe delete reset
+                            ox.trigger('delete:canceled', list);
+                        }
 
-            // pragmatic approach for bug 55442 cause mail is so special (weak spot: empty folder)
-            list = ignoreCurrentlyEdited(list);
-            if (all.length !== list.length) {
-                notifications.yell({
-                    headline: gt('Note'),
-                    type: 'info',
-                    message: gt('Currently edited drafts with attachments can not be deleted until you close the correspondig mail compose window.')
-                });
-                // no messages left
-                if (!list.length) return;
-                all = list.slice();
-            }
-
-            if (showPrompt) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog()
-                        .addPrimaryButton('delete', gt('Delete'))
-                        .addButton('cancel', gt('Cancel'))
-                        .text(getQuestion(list))
-                        .show()
-                        .done(function (action) {
-                            if (action === 'delete') {
-                                api.remove(list, all).fail(notifications.yell);
-                            } else {
-                                // trigger back event, used for mobile swipe delete reset
-                                ox.trigger('delete:canceled', list);
-                            }
-
-                        });
-                });
-            } else {
-                api.remove(list, all, shiftDelete).fail(function (e) {
-                    // mail quota exceeded? see above
-                    if (e.code === 'MSG-0039') return;
-                    notifications.yell(e);
-                });
-            }
+                    });
+            });
+        } else {
+            api.remove(list, all, shiftDelete).fail(function (e) {
+                // mail quota exceeded? see above
+                if (e.code === 'MSG-0039') return;
+                notifications.yell(e);
+            });
         }
     };
 });

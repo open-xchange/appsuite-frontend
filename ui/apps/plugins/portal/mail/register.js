@@ -20,7 +20,7 @@ define('plugins/portal/mail/register', [
     'io.ox/portal/widgets',
     'io.ox/core/tk/dialogs',
     'gettext!plugins/portal',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/api/collection-loader',
     'io.ox/core/capabilities',
     'io.ox/core/http',
@@ -117,7 +117,7 @@ define('plugins/portal/mail/register', [
                     })
                 );
             } else {
-                this.$el.empty().text(gt('No mails in your inbox'));
+                this.$el.empty().append($('<li>').text(gt('No mails in your inbox')));
             }
             return this;
         }

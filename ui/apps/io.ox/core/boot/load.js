@@ -65,6 +65,48 @@ define('io.ox/core/boot/load', [
             });
         }
     }, {
+        id: 'tabHandling',
+        run: function () {
+            util.debug('Load "tabHandling"');
+
+            if (!util.checkTabHandlingSupport()) return;
+
+            require(['io.ox/core/api/tab']);
+        }
+    }, {
+        id: 'multifactor',
+        run: function (baton) {
+            if (baton.sessionData && baton.sessionData.requires_multifactor) {
+                return loadUserTheme().then(doMultifactor);
+            }
+        }
+    }, {
+        id: 'compositionSpaces',
+        run: function () {
+            ox.rampup.compositionSpaces = $.when(
+                http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject' } }),
+                require(['gettext!io.ox/mail'])
+            ).then(function (data, gt) {
+                var list = _(data).first() || [];
+                return list.map(function (compositionSpace) {
+                    return {
+                        //#. $1$s is the subject of an email
+                        description: gt('Mail: %1$s', compositionSpace.subject || gt('No subject')),
+                        floating: true,
+                        id: compositionSpace.id + Math.random().toString(16),
+                        keepOnRestore: false,
+                        module: 'io.ox/mail/compose',
+                        point: compositionSpace.id,
+                        timestamp: new Date().valueOf(),
+                        ua: navigator.userAgent
+                    };
+                });
+            }).catch(function (e) {
+                // add a catch such that the boot process is not stopped due to errors
+                if (ox.debug) console.error(e);
+            });
+        }
+    }, {
         id: 'load',
         run: function () {
             util.restore();
@@ -125,11 +167,33 @@ define('io.ox/core/boot/load', [
         return themes.set('default').catch(fail);
     }
 
+    // Do multifactor authentication.  If successful, load full rampup data
+    function doMultifactor() {
+        var def = $.Deferred();
+        require(['io.ox/multifactor/auth', 'io.ox/multifactor/login/loginScreen'], function (auth, loginScreen) {  // Couldn't be loaded until themes loaded
+            loginScreen.create();
+            auth.doAuthentication().then(function () {
+                loginScreen.destroy();
+                session.rampup().then(function () {
+                    def.resolve();
+                });
+            }, function (e) {
+                console.error(e);
+                console.error('Failed multifactor login. Reloading');
+                session.logout().always(function () {
+                    window.location.reload(true);  // Hard fail here.  Reload
+                    def.reject();
+                });
+            });
+        });
+        return def;
+    }
+
     // greedy prefetch for mail app
     // we need to get the default all/threadedAll request out as soon as possible
     function prefetch(mailSettings) {
 
-        if (!capabilities.has('webmail')) return;
+        if (!capabilities.has('webmail') || !mailSettings.get('features/prefetchOnBoot', true)) return;
 
         var columns = http.defaultColumns.mail;
 

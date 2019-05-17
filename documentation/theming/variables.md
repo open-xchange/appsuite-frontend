@@ -23,7 +23,7 @@ title: Variables
  * 1.1 Base colors
  */
 
-@brand-primary:                         #3c73aa;    /* Bootstrap overwrite */
+@brand-primary:                         #283f73;    /* was #3c73aa;*/    /* Bootstrap overwrite */
 @brand-success:                         #008500;    /* Bootstrap overwrite */
 // e.g. used for window-content
 @background:                            @white;
@@ -45,6 +45,25 @@ title: Variables
 @orange:                                #f89406;
 @pink:                                  #e01cd9;
 @purple:                                #7e16cf;
+@grey-light:                            #ebebeb;
+@dark-silver:                           #aaa;
+@silver:                                #bbb;
+@light-silver:                          #ccc;
+
+/*
+ * 1.2.1 Application colors
+ */
+@app-color-standard:                    #7a7a7a;
+// not used for 7.10
+@app-color-mail:                        #4c68ac;
+@app-color-addressbook:                 #43a047;
+@app-color-calendar:                    #c62828;
+@app-color-drive:                       #444444;
+@app-color-tasks:                       #f57c00;
+@app-color-portal:                      #999;
+@app-color-text:                        #2c569a; //M$ word
+@app-color-spreadsheet:                 #227643; //M$ excel
+@app-color-presentation:                #d24727; //M$ PP
 
 /*
  * 1.3 High contrast colors
@@ -60,13 +79,12 @@ title: Variables
  * 1.4 Typographie
  */
 
-@light-font-family:                     -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+@light-font-family:                     -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Arial, sans-serif;
 @normal-font-family:                    @light-font-family;
 @font-family-sans-serif:                @light-font-family;     /* Bootstrap overwrite */
 
 @font-size-touch:                       16px;
 @topbar-font-size:                      13px;
-@window-head-font-size:                 13px;
 @vgrid-font-size:                       13px;
 @inline-link-font-size:                 14px;
 
@@ -86,7 +104,7 @@ title: Variables
  * 1.6 Links
  */
 
-@link-color:                            #3c73aa;    /* Bootstrap overwrite */
+@link-color:                            #3c61aa;    /* Bootstrap overwrite */
 @link-on-dark:                          #3bf;
 @person-link-color:                     @link-color;
 @inline-link-color:                     @link-color;
@@ -133,9 +151,11 @@ title: Variables
 
 // matches smartphone detection threshold in browser.js
 @smartphone-breakpoint:                 540px;
-@pagecontroller-animation-duration:     350ms;
+@pagecontroller-animation-duration:     600ms;
 // size of the menu launcher in the top left
 @mobile-launcher-icon-size:             18px;
+//toolbar height
+@mobile-toolbar-height:                 50px;
 
 /*
  * 1.11 Misc
@@ -144,7 +164,7 @@ title: Variables
 @default-border-color:                  #ddd;
 @error-text-color:                      #a94442;
 @outline-color:                         @brand-primary;
-@ui-disabled-color:                     #ccc;
+@ui-disabled-color:                     @light-silver;
 
 // session expired blur class
 @bluriness: 4px;
@@ -165,8 +185,8 @@ title: Variables
  * f.e. unread messages count in folder tree
  */
 
-@badge-color:                           @white;     /* Bootstrap overwrite */
-@badge-bg:                              #aaa;       /* Bootstrap overwrite */
+@badge-color:                           @white;       /* Bootstrap overwrite */
+@badge-bg:                              @dark-silver;  /* Bootstrap overwrite */
 
 /*
  * 2.3 Buttons
@@ -192,9 +212,9 @@ title: Variables
  */
 
 @selected-color:                        #f0faff;
-@selected-background:                   @brand-primary;
 @selected-unfocussed-background:        #ddd;
-@selected-focussed-background:          darken(@selected-background, 10%);
+@selected-focussed-background:          @brand-primary;
+@selected-background:                   @brand-primary;
 
 /*
  * 2.6 Wallpaper
@@ -215,19 +235,16 @@ title: Variables
 
 // window head (e.g used as button bar in mail compose or contacts edit)
 @window-header-color:                   #f5f5f5;
-@window-head-color:                     @white;
-@window-head-border-color:              #eee;
-@window-head-width:                     50px;
 @window-title-color:                    @white;
 
 /*
  * 3.2 Topbar
  */
 
-@topbar-background:                     @brand-primary;
+@topbar-background:                     @brand-primary; //obsolete
 @topbar-icon-color:                     @white;
-@topbar-launcher-color:                 rgba(255, 255, 255, 0.95);
-@topbar-launcher-color-hover:           @white;
+@topbar-launcher-color:                 @white; //rgba(255, 255, 255, 0.95);
+@topbar-launcher-color-hover:           rgba(0,0,0,.4);//@white;
 @topbar-launcher-color-active:          @white;
 @topbar-launcher-background-hover:      rgba(0, 0, 0, 0.15);
 @topbar-launcher-background-active:     rgba(0, 0, 0, 0.25);
@@ -247,25 +264,25 @@ title: Variables
  * 3.4 Folder tree
  */
 
-@foldertree-badge-background:           @badge-bg;
-@foldertree-badge-color:                @badge-color;
-@foldertree-badge-focus-background:     #006597;
+@foldertree-badge-background:                   @badge-bg;
+@foldertree-badge-color:                        @badge-color;
+@foldertree-badge-focus-background:             #006597;
 
-@foldertree-selected-label-color:       #333;
-@foldertree-focused-label-color:        @white;
-@foldertree-active-label-color:         #333;
-@foldertree-passive-label-color:        @hc-gray;
+@foldertree-selected-label-color:               #333;
+@foldertree-focused-label-color:                @white;
+@foldertree-active-label-color:                 #333;
+@foldertree-passive-label-color:                @hc-gray;
 
 @foldertree-selected-background:                rgba(0, 0, 0, 0.10);
 @foldertree-selected-focus-background:          @selected-background;
 @foldertree-selected-focus-counter-color:       rgba(255, 255, 255, 0.95);
 @foldertree-selected-focus-options-background:  rgba(0, 0, 0, 0.20);
 
-@foldertree-account-link-color:         #333;
-@foldertree-counter-color:              #0076b3;
-@foldertree-sidepanel-background:       #f5f5f5;
-@foldertree-section-title-color:        #888;
-@foldertree-hover-background:           rgba(0, 0, 0, 0.05);
+@foldertree-account-link-color:                 #333;
+@foldertree-counter-color:                      @link-color;
+@foldertree-sidepanel-background:               #f5f5f5;
+@foldertree-section-title-color:                #888;
+@foldertree-hover-background:                   rgba(0, 0, 0, 0.05);
 
 /*
  * 3.5 Toolbar
@@ -273,7 +290,7 @@ title: Variables
 
 @toolbar:                               @brand-primary;
 @toolbar-button-accent:                 lighten(@link-color, 0%);
-@toolbar-button-color:                  #bbb;
+@toolbar-button-color:                  @silver;
 
 @toolbar-link-color:                    lighten(@toolbar, 25%);
 @toolbar-link-disabled-color:           @link-disabled-color;
@@ -286,7 +303,7 @@ title: Variables
 @toolbar-vertical-padding:              8px;
 @toolbar-height:                        @toolbar-line-height + 2 * @toolbar-vertical-padding;
 
-@link-disabled-color:                   #aaa;
+@link-disabled-color:                   @dark-silver;
 @link-accent-color:                     #ffad00;
 
 /*
@@ -302,13 +319,13 @@ title: Variables
  * 3.7 Custom controls
  */
 
-@control-color: white;
-@control-background: @brand-primary;
-@control-border-color: #aaa;
-@control-border-color-checked: transparent;
-@control-focus: #03a9f4;
-@checkbox-radius: 3px;
-@switch-background: #558B2F; /* green */
+@control-color:                         @white;
+@control-background:                    @brand-primary;
+@control-border-color:                  @dark-silver;
+@control-border-color-checked:          transparent;
+@control-focus:                         #03a9f4;
+@checkbox-radius:                       3px;
+@switch-background:                     #558B2F; /* apple-green */
 
 /*
  * 3.8 Grid
@@ -323,12 +340,12 @@ title: Variables
  * 3.9 Wizard & tours
  */
 
-@wizard-backdrop-color: rgba(0, 0, 0, 0.15);
+@wizard-backdrop-color:                 rgba(0, 0, 0, 0.15);
 
 // hotspot (e.g. used as visual marker in guided tours)
-@hotspot-color: #FD057C;
-@pulse-color: fade(@hotspot-color, 70%);
-@pulse-border-color: @hotspot-color;
+@hotspot-color:                         #FD057C;
+@pulse-color:                           fade(@hotspot-color, 70%);
+@pulse-border-color:                    @hotspot-color;
 
 
 /*
@@ -346,7 +363,7 @@ title: Variables
 @mail-attachment-link-color-hover:      #000;
 
 @mail-thread-size-color:                darken(@brand-primary, 20%);
-@mail-thread-size-background:           fade(lighten(@brand-primary, 5%), 15%);
+@mail-thread-size-background:           rgba(0, 0, 0, 0.05);
 
 @mail-unseen-icon:                      "\f111";    /* fa-circle */
 @mail-unseen-icon-seen:                 "\f1db";    /* fa-circle-thin */
@@ -356,13 +373,10 @@ title: Variables
  */
 
 @appointment-reserved:                  #3774a8;    /* blue */
-@appointment-temporary:                 #ffbb00;    /* yellow */
-@appointment-absent:                    #913f3f;    /* red */
 @appointment-free:                      #8eb360;    /* green */
-@appointment-free-dark:                 #198819;    /* dark green */
 @appointment-private:                   #555;       /* dark gray */
 @appointment-unconfirmed-font:          #555;       /* dark gray */
-@appointment-declined-font:             #6b6b6b;    /* gray */
+@appointment-declined-font:             #686868;    /* gray */
 @appointment-unconfirmed:               #f0f0f0;
 @appointment-declined:                  #e8e8e8;
 
@@ -379,13 +393,13 @@ title: Variables
 
 @monthview-border:                      #ddd;
 // not in focus
-@monthview-appointment-out:             #aaa;       /* light gray */
+@monthview-appointment-out:             @dark-silver;
 @monthview-cw-width:                    80px;
 
 @calendar-today-background:             #f5f5f5;    /* gray */
 @calendar-today:                        #cf3239;    /* red */
 @calendar-toolbar-height:               35px;
-@calendar-toolbar-top-padding:          13px;
+@calendar-toolbar-top-padding:          14px;
 
 // calender custom colors (ordered by spectrum)
 // used in a a LESS loop by color-label-bg-@{counter}
@@ -438,5 +452,3 @@ title: Variables
 @badge-waiting-color:                   @white;
 @badge-overdue-bg:                      @blue;
 @badge-overdue-color:                   @white;
-
-```

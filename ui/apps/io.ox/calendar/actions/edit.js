@@ -20,35 +20,31 @@ define('io.ox/calendar/actions/edit', [
 
     'use strict';
 
-    return function (baton) {
-        var o = api.reduce(baton.data);
+    return function (originalData) {
 
-        util.showRecurrenceDialog(baton.data)
-            .done(function (action) {
-                if (action === 'cancel') return;
+        var o = api.reduce(originalData);
 
-                // use series master for this and future
-                if (action === 'series' || action === 'thisandfuture') {
-                    // edit the series, discard recurrenceId and reference to seriesId if exception
-                    delete o.recurrenceId;
-                    o.id = baton.data.seriesId || baton.data.id;
-                }
-
-
-                // disable cache with second param
-                api.get(o, false).then(
-                    function (data) {
-                        data = data.toJSON();
-                        if (action === 'thisandfuture') data = util.createUpdateData(data, baton.data);
-
-                        if (m.reuse('edit', data, { action: action })) return;
-                        m.getApp().launch().done(function () {
-                            this.edit(data, { action: action });
-                        });
-                    },
-                    notifications.yell
-                );
-            });
+        // allow editing the series on last occurence. This allows people to prolong the series by changing the rrule
+        util.showRecurrenceDialog(originalData, { allowEditOnLastOccurence: true }).done(function (action) {
+            if (action === 'cancel') return;
+            // use series master for this and future
+            if (action === 'series' || action === 'thisandfuture') {
+                // edit the series, discard recurrenceId and reference to seriesId if exception
+                delete o.recurrenceId;
+                o.id = originalData.seriesId || originalData.id;
+            }
+            // disable cache with second param
+            api.get(o, false).then(
+                function (data) {
+                    data = data.toJSON();
+                    if (action === 'thisandfuture') data = util.createUpdateData(data, originalData);
+                    if (m.reuse('edit', data, { action: action })) return;
+                    m.getApp().launch().done(function () {
+                        this.edit(data, { action: action });
+                    });
+                },
+                notifications.yell
+            );
+        });
     };
-
 });

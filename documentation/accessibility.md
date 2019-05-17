@@ -11,7 +11,9 @@ Accessibility typically covers keyboard support, tab order, focus management, co
 
 We perform screen reader testing with the following typical setups: [NVDA][NVDA] with Firefox, [JAWS][Jaws] with Internet Explorer and [Voiceover][VO] with Safari (with accessibility option turned on, i.e. tab highlights each item).
 
-Annual accessibility audits are conducted by [the Paciello Group][TPG].
+Automated testing with [axe-core][AXE] is also part of e2e tests in our build pipeline.
+
+Annual accessibility audits are conducted by [the Paciello Group][TPG] or [DEQUE][DQ].
 
 # History
 
@@ -73,14 +75,14 @@ Mar 18 | 7.10.0  | Attended CSUN 2018
 Mar 18 | 7.10.0  | Added focus management for new windows
 May 18 | 7.10.0  | Toolbars and menus focus management and roving tabindex
 May 18 | 7.10.0  | Reworked landmark roles
-
-# Roadmap
-
-TBD
-
-# Open issues
-
-TBD
+Jun 18 | 7.10.1  | Introduced axe-core to developer workflow
+Jun 18 | 7.10.1  | Fixed several issues found with axe-core
+Sep 18 | 7.10.1  | Accessibility audit by [DEQUE][DQ]
+Oct 18 | 7.10.1  | Fixed most issues found in last Audit
+Nov 18 | 7.10.1  | Retest / Validation audit by [DEQUE][DQ]
+Nov 18 | 7.10.1  | Added axe-core to e2e tests in our pipeline and added first tests
+Jan 19 | 7.10.2  | Fixed several issues found by automated testing
+Feb 19 | 7.10.2  | Added e2e tests for all apps and settings
 
 [WCAG-TR]: https://www.w3.org/TR/WCAG21/
 [WCAG-WAI]: https://www.w3.org/WAI/WCAG2AA-Conformance
@@ -89,6 +91,9 @@ TBD
 [NVDA]: http://www.nvaccess.org/
 [JAWS]: http://www.freedomscientific.com/Products/Blindness/JAWS
 [VO]: http://www.apple.com/accessibility/osx/voiceover/
+[AXE]: https://www.deque.com/axe/
 
 [TPG]: https://www.paciellogroup.com/
+[DQ]: https://www.deque.com
 [MZ]: https://www.marcozehe.de/
+

@@ -22,12 +22,13 @@ define('io.ox/calendar/perspective', [
     'gettext!io.ox/calendar',
     'io.ox/core/capabilities',
     'settings!io.ox/calendar',
-    'io.ox/core/folder/api'
-], function (ext, api, calendarModel, util, detailView, dialogs, yell, gt, capabilities, settings, folderAPI) {
+    'io.ox/core/folder/api',
+    'io.ox/backbone/views/disposable'
+], function (ext, api, calendarModel, util, detailView, dialogs, yell, gt, capabilities, settings, folderAPI, disposableView) {
 
     'use strict';
 
-    return Backbone.View.extend({
+    return disposableView.extend({
 
         clickTimer:     null, // timer to separate single and double click
         clicks:         0, // click counter
@@ -38,24 +39,23 @@ define('io.ox/calendar/perspective', [
             };
             if (_.device('touch')) {
                 _.extend(events, {
-                    'swipeleft': 'onPrevious',
-                    'swiperight': 'onNext'
+                    'swipeleft': 'onNext',
+                    'swiperight': 'onPrevious'
                 });
             }
             return events;
         },
 
-        initialize: function () {
+        initialize: function (options) {
             this.listenTo(this.model, 'change:date', this.onChangeDate);
             this.listenTo(api, 'refresh.all', this.refresh.bind(this, true));
-            this.listenTo(api, 'create update', this.onCreateUpdateAppointment);
             this.listenTo(this.app, 'folders:change', this.refresh);
             this.listenTo(this.app.props, 'change:date', this.getCallback('onChangeDate'));
             this.app.getWindow().on('show', this.onWindowShow.bind(this));
             this.listenTo(settings, 'change:showDeclinedAppointments', this.getCallback('onResetAppointments'));
             this.listenTo(folderAPI, 'before:update', this.beforeUpdateFolder);
 
-            this.followDeepLink();
+            _.defer(this.followDeepLink.bind(this, options.deepLink));
         },
 
         // needs to be implemented by the according view
@@ -186,7 +186,7 @@ define('io.ox/calendar/perspective', [
                     api.get(obj).done(function (model) {
                         if (self.dialog) self.dialog.close();
                         ext.point('io.ox/calendar/detail/actions/edit')
-                            .invoke('action', self, { data: model.toJSON() });
+                            .invoke('action', self, new ext.Baton({ data: model.toJSON() }));
                     });
                 }
             }
@@ -277,9 +277,10 @@ define('io.ox/calendar/perspective', [
 
                                 updateModel.set({
                                     startDate: model.get('startDate'),
-                                    endDate: model.get('endDate')
+                                    endDate: model.get('endDate'),
+                                    rrule: model.get('rrule')
                                 });
-                                util.updateRecurrenceDate(model, oldStartDate);
+                                util.updateRecurrenceDate(updateModel, oldStartDate);
                                 apiUpdate(updateModel, _.extend(util.getCurrentRangeOptions(), {
                                     checkConflicts: true,
                                     recurrenceRange: 'THISANDFUTURE'
@@ -331,38 +332,21 @@ define('io.ox/calendar/perspective', [
         },
 
         // id must be set in URL
-        followDeepLink: function () {
-            var cid = _.url.hash('id'), e, self = this;
-            if (cid) {
-                cid = cid.split(',', 1)[0];
+        followDeepLink: function (cid) {
+            if (!cid) return;
+            var e, self = this;
 
-                // see if id is missing the folder
-                if (cid.indexOf('.') === -1) {
-                    // cid is missing folder appointment cannot be restored
-                    if (!_.url.hash('folder')) return;
-                    // url has folder attribute. Add this
-                    cid = _.url.hash('folder') + '.' + cid;
+            api.get(api.cid(cid)).done(function (model) {
+                // list perspective doesn't have a setStartDate function
+                if (self.setStartDate) self.setStartDate(model.getMoment('startDate'));
+
+                if (_.device('smartphone')) {
+                    ox.launch('io.ox/calendar/detail/main', { cid: cid });
+                } else {
+                    e = $.Event('click', { target: self.$el });
+                    self.showAppointment(e, util.cid(cid), { arrow: false });
                 }
-
-                api.get(api.cid(cid)).done(function (model) {
-                    self.setStartDate(model.getMoment('startDate'));
-                    if (_.device('smartphone')) {
-                        ox.launch('io.ox/calendar/detail/main', { cid: cid });
-                    } else {
-                        e = $.Event('click', { target: self.$el });
-                        self.showAppointment(e, util.cid(cid), { arrow: false });
-                    }
-                });
-            }
-        },
-
-        onCreateUpdateAppointment: function (obj) {
-            var current = ox.ui.App.getCurrentApp().getName();
-            if (!/^io.ox\/calendar/.test(current)) return;
-            if (obj.seriesId && obj.seriesId === obj.id) return;
-            if (!this.selectAppointment) return;
-
-            this.selectAppointment(new calendarModel.Model(obj));
+            });
         }
 
     });

@@ -15,7 +15,7 @@ define('io.ox/calendar/freetime/participantsView', [
     'io.ox/participants/add',
     'io.ox/participants/chronos-views',
     'io.ox/core/extensions',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'gettext!io.ox/calendar'
 ], function (AddParticipantsView, participantsViews, ext, DisposableView, gt) {
 

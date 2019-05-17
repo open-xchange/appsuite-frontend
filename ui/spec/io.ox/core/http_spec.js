@@ -39,5 +39,58 @@ define([
                 });
             });
         });
+
+        describe('disconnect mode', function () {
+            beforeEach(function () {
+                this.server.respondWith('GET', /api\/needs_auth\?action=wait/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'application/json' }, '{ "data": { "status": "success" } }');
+                });
+            });
+
+            it('should not fulfill promise until reconnected', function () {
+                expect(http.isDisconnected()).to.equal(false);
+                http.disconnect();
+                var def = http.GET({
+                    module: 'needs_auth',
+                    params: { action: 'wait' }
+                }).then(function (result) {
+                    expect(result.status).to.equal('success');
+                });
+                expect(def.state(), 'request in pending state').to.equal('pending');
+                expect(http.isDisconnected()).to.equal(true);
+                http.reconnect();
+                return def;
+            });
+
+            describe('events triggered on http module', function () {
+                it('should be synchronuous if no requests happened', function () {
+                    var spy = sinon.spy();
+                    http.on('disconnect', spy);
+                    http.on('reconnect', spy);
+                    http.disconnect();
+                    expect(spy.calledOnce, 'event handler called once').to.equal(true);
+                    http.reconnect();
+                    expect(spy.calledTwice, 'event handler called twice').to.equal(true);
+                });
+
+                it('should defer reconnect event until after pending requests finished', function () {
+                    var spy = sinon.spy(),
+                        def = $.Deferred();
+                    http.on('disconnect', spy);
+                    http.on('reconnect', def.resolve);
+                    http.disconnect();
+
+                    http.GET({
+                        module: 'needs_auth',
+                        params: { action: 'wait' }
+                    }).then(function (result) {
+                        expect(result.status).to.equal('success');
+                    });
+                    expect(spy.calledOnce, 'event handler called once').to.equal(true);
+                    http.reconnect();
+                    return def;
+                });
+            });
+        });
     });
 });

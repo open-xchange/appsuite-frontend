@@ -1,0 +1,12 @@
+[
+    {
+        "title": "Multifactor",
+        "path": "io.ox/multifactor/settings",
+        "namespace": "io.ox/settings/main"
+    },
+    {
+        "namespace": "login",
+        "path": "io.ox/multifactor/login/error_handler",
+        "requires": "multifactor"
+    }
+]

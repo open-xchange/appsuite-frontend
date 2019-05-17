@@ -31,12 +31,13 @@ define('io.ox/calendar/model', [
         'FLD-0008', // folder not found
         'FLD-0003', // permission denied
         'CAL-4060', // folder is not supported
-        'CAL-4030' // permission denied
+        'CAL-4030', // permission denied
+        'CAL-4044'  // account not found
     ];
 
     var // be careful with the add method. If the option resolveGroups is present it changes from synchronous to asynchronous (must get the proper user data first)
         AttendeeCollection = Backbone.Collection.extend({
-            // if an email is present distinguisch the attendees by email address (provides support for attendee with multiple mail addresses).
+            // if an email is present distinguish the attendees by email address (provides support for attendee with multiple mail addresses).
             // Some attendee types don't have an email address (groups and resources), but have entity numbers. Use those as id to prevent duplicates
             modelId: function (attrs) {
                 return attrs.email || attrs.entity;
@@ -85,6 +86,11 @@ define('io.ox/calendar/model', [
                     if (!self.options.noInitialResolve && model.cuType === 'GROUP' || (model.get && model.get('cuType') === 'GROUP')) {
                         var users = model instanceof Backbone.Model ? model.get('members') : model.members,
                             entity = model instanceof Backbone.Model ? model.get('entity') : model.entity;
+
+                        // make sure id 0 works
+                        if (entity !== undefined) {
+                            self.usedGroups = _.uniq((self.usedGroups || []).concat(entity));
+                        }
 
                         if (users) {
                             // we have user ids
@@ -405,9 +411,7 @@ define('io.ox/calendar/model', [
     ext.point('io.ox/chronos/model/validation').extend({
         id: 'start-date-before-end-date',
         validate: function (attr, err, model) {
-            var isLess = model.getTimestamp('endDate') < model.getTimestamp('startDate'),
-                isLequal = model.getTimestamp('endDate') <= model.getTimestamp('startDate');
-            if (isLess || (!util.isAllday(model) && isLequal)) {
+            if (model.getTimestamp('endDate') < model.getTimestamp('startDate')) {
                 this.add('endDate', gt('The end date must be after the start date.'));
             }
         }

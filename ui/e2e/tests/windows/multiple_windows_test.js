@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Floating windows');
+Feature('General > Floating windows');
 
 Before(async function (users) {
     await users.create();
@@ -57,6 +57,7 @@ Scenario('Opening multiple windows', async function (I, users) {
         expect(Number.parseInt(composeIndex, 10)).to.be.above(sidePopupIndex);
     });
 
+    I.waitForVisible('.window-blocker.io-ox-busy');
     I.waitForInvisible('.window-blocker.io-ox-busy');
 
     I.click('Discard');

@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/files/api',
     'io.ox/core/folder/api',
     'io.ox/core/tk/dialogs',
@@ -140,8 +140,6 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
 
         initialize: function (options) {
             options = options || {};
-            // attach event handlers
-            this.on('dispose', this.disposeView.bind(this));
             if (!this.model || !this.model.isFile()) {
                 this.$el.hide();
             }
@@ -190,10 +188,8 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         /**
          * Destructor function of this view.
          */
-        disposeView: function () {
-            if (this.model) {
-                this.model = null;
-            }
+        onDispose: function () {
+            if (this.model) this.model = null;
         }
 
     });

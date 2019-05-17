@@ -40,8 +40,6 @@ define('io.ox/core/api/group', [
                 action: 'search',
                 columns: '1,20,500,524',
                 extendColumns: 'io.ox/core/api/group/search',
-                sort: '500',
-                order: 'asc',
                 getData: function (query) {
                     return { pattern: query };
                 }

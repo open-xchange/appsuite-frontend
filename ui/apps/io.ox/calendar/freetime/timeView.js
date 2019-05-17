@@ -12,7 +12,7 @@
  */
 
 define('io.ox/calendar/freetime/timeView', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/extensions',
     'gettext!io.ox/calendar',
     'io.ox/calendar/api',
@@ -330,13 +330,17 @@ define('io.ox/calendar/freetime/timeView', [
                                 )
                             );
                         }
+                        eventNode.attr('aria-label', event.summary);
+                    }
 
+                    if (event.summary || event.location || (event.createdBy && settings.get('freeBusyStrict', true) === false)) {
                         eventNode.attr({
-                            title: event.summary + (event.location ? ' ' + event.location : ''),
-                            'aria-label': event.summary,
+                            //#. %1$s = apppointment creator name
+                            title: ((event.summary || '') + (event.location ? ' ' + event.location : '') + (event.createdBy && settings.get('freeBusyStrict', true) === false ? ' ' + gt('Created by: %1$s', event.createdBy.cn) : '')).trim(),
                             'data-toggle': 'tooltip'
                         }).tooltip({ container: tooltipContainer });
                     }
+
                     if (event.location && event.location !== '') {
                         eventNode.addClass('has-location').append($('<div class="location">').text(event.location));
                     }
@@ -476,10 +480,7 @@ define('io.ox/calendar/freetime/timeView', [
             }
             this.updateVisibility();
 
-            $(window).on('resize', this.onResize);
-            this.on('dispose', function () {
-                $(window).off('resize', this.onResize);
-            });
+            this.listenToDOM(window, 'resize', this.onResize);
         },
 
         updateZoom: function () {
@@ -542,7 +543,14 @@ define('io.ox/calendar/freetime/timeView', [
         },
 
         renderBody: function () {
-            if (this.model.get('attendees').length !== _(this.model.get('timeSlots')).keys().length) {
+            var missingAppointmentInfo = false,
+                self = this;
+
+            _(this.model.get('attendees').toJSON()).each(function (attendee) {
+                if (!missingAppointmentInfo && !_(self.model.get('timeSlots')).has([attendee.entity || attendee.uri])) missingAppointmentInfo = true;
+            });
+
+            if (missingAppointmentInfo) {
                 this.getAppointmentsInstant();
             } else {
                 var baton = new ext.Baton({ view: this, model: this.model });

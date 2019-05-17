@@ -18,7 +18,7 @@ define('io.ox/portal/settings/widgetview', [
     'io.ox/core/manifests',
     'io.ox/core/upsell',
     'gettext!io.ox/portal',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'less!io.ox/portal/style'
 ], function (ext, dialogs, manifests, upsell, gt, DisposableView) {
 

@@ -26,6 +26,10 @@ define('io.ox/core/tk/text-editor', [
         opt = _.extend({ useFixedWithFont: false }, opt);
         var textarea = $('<textarea class="plain-text">').toggleClass('monospace', opt.useFixedWidthFont);
 
+        _.extend(this, Backbone.Events);
+        textarea.on('change', this.trigger.bind(this, 'change'));
+        textarea.on('input', _.throttle(this.trigger.bind(this, 'change'), 100));
+
         $(el).append(textarea);
 
         if (_.device('tablet && iOS >= 6')) {
@@ -194,17 +198,15 @@ define('io.ox/core/tk/text-editor', [
         this.replaceParagraph = function (str, rep) {
             var content = this.getContent(), top,
                 length = content.length,
-                strSanitized = textproc.htmltotext(str);
+                strSanitized = textproc.htmltotext(str),
+                reParagraph = new RegExp('(' + str + '|' + strSanitized + ')');
             // workaround: compose vs. edit (sanitized signature)
-            content = content.replace(str.trim(), (rep || ''));
-            content = content.replace(strSanitized, (rep || ''));
-            if (content.length !== length) {
-                top = this.scrollTop();
-                this.setContent(content);
-                this.scrollTop(top);
-                return true;
-            }
-            return false;
+            content = content.replace(reParagraph, (rep || ''));
+            if (content.length === length) return false;
+            top = this.scrollTop();
+            this.setContent(content);
+            this.scrollTop(top);
+            return true;
         };
 
         function resizeEditor() {

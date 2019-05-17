@@ -254,7 +254,10 @@ define('io.ox/core/main/stages', [
             debug('Stage "load" > autoLaunch ...');
 
             // restore apps
-            return ox.ui.App.restore();
+            if (!ox.tabHandlingEnabled) return ox.ui.App.restore();
+            require(['io.ox/core/api/tab'], function (TabAPI) {
+                return TabAPI.TabHandling.isParent() ? ox.ui.App.restore() : true;
+            });
         }
     }, {
         id: 'restoreLaunch',

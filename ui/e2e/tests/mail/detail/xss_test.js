@@ -13,7 +13,7 @@
 
 const expect = require('chai').expect;
 
-Feature('Mail Detail View');
+Feature('Mail > Detail');
 
 Before(async function (users) {
     await users.create();

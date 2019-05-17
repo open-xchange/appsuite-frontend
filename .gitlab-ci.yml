@@ -11,6 +11,7 @@ stages:
   - test
   - deploy
   - e2e
+  - report
   - cleanup
 
 .default_cache: &default_cache
@@ -22,10 +23,10 @@ stages:
 
 .build_ui: &build_ui
   <<: *default_cache
-  image: gitlab.open-xchange.com:4567/frontend/dev_env:0.0.3
+  image: gitlab.open-xchange.com:4567/frontend/dev_env:latest
   script:
     - cd ui
-    - yarn --cache-folder ../.yarn-cache
+    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
     - grunt ${CI_JOB_NAME}
   stage: build
   artifacts:
@@ -72,11 +73,11 @@ run e2e tests:
 
 .build_ui_plugin_template: &build_ui_plugin
   <<: *default_cache
-  image: gitlab.open-xchange.com:4567/frontend/dev_env:0.0.3
+  image: gitlab.open-xchange.com:4567/frontend/dev_env:latest
   stage: build
   script:
     - cd ${PROJECT_PATH}
-    - yarn --cache-folder ../.yarn-cache
+    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
     - grunt dist:build
   artifacts:
     expire_in: 2hours
@@ -84,6 +85,9 @@ run e2e tests:
       - ${PROJECT_PATH}/build
       - ${PROJECT_PATH}/dist
       - ${PROJECT_PATH}/node_modules
+  only:
+    changes:
+      - ${PROJECT_PATH}/**/*
 
 build_help:
   variables:

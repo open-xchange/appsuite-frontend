@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/folder/node', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
     'io.ox/core/api/account',
@@ -511,12 +511,12 @@ define('io.ox/core/folder/node', [
                 // wrong counts for unifiedroot folder
                 if (account.isUnifiedRoot(this.model.get('id'))) data = _.pick(data, 'title');
                 if (_.isNumber(data.total) && data.total >= 0) {
-                    //.# Used for the total count of objects or mails in a folder
+                    //#. Used for the total count of objects or mails in a folder
                     summary.push(gt('Total: %1$d', data.total));
                     if (data.total > 0) a11ysummary.push(gt('%1$d total', data.total));
                 }
                 if (_.isNumber(data.unread) && data.unread >= 0) {
-                    //.# Used for the count of unread mails in a folder
+                    //#. Used for the count of unread mails in a folder
                     summary.push(gt('Unread: %1$d', data.unread));
                     if (data.unread > 0) a11ysummary.push(gt('%1$d unread', data.unread));
                 }

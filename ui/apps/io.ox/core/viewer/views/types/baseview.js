@@ -14,12 +14,12 @@ define('io.ox/core/viewer/views/types/baseview', [
     'io.ox/files/api',
     'io.ox/mail/api',
     'io.ox/core/api/attachment',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/viewer/util',
-    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/views/actions/util',
     'io.ox/core/extensions',
     'gettext!io.ox/core'
-], function (FilesAPI, MailAPI, AttachmentAPI, DisposableView, Util, ActionsPattern, ext, gt) {
+], function (FilesAPI, MailAPI, AttachmentAPI, DisposableView, Util, actionsUtil, ext, gt) {
 
     'use strict';
 
@@ -90,10 +90,11 @@ define('io.ox/core/viewer/views/types/baseview', [
             //#. %1$s is the file size "Download 2mb" for example
             var downloadButton = $('<button type="button" class="btn btn-primary btn-file">').text(gt('Download %1$s', fileSize)).attr('aria-label', gt('Downlad')).attr('id', 'downloadviewerfile');
             notificationNode.append(downloadButton);
-            var self = this;
-            downloadButton.on('click', function () {
-                var data = self.model.isFile() ? self.model.toJSON() : self.model.get('origData');
-                ActionsPattern.invoke(Util.getRefByModelSource(self.model.get('source')), self, ext.Baton({ model: self.model, data: data }));
+            downloadButton.on('click', { model: this.model }, function (e) {
+                var model = e.data.model,
+                    data = model.isFile() ? model.toJSON() : model.get('origData');
+                // Tested: No
+                actionsUtil.invoke(Util.getRefByModelSource(model.get('source')), ext.Baton({ model: model, data: data }));
             });
         },
 
@@ -117,7 +118,7 @@ define('io.ox/core/viewer/views/types/baseview', [
                 }
                 return FilesAPI.getUrl(modelJSON, 'thumbnail', options);
 
-            } else if (this.model.isMailAttachment()) {
+            } else if (this.model.isMailAttachment() || this.model.isComposeAttachment()) {
                 return MailAPI.getUrl(this.model.get('origData'), 'view', options);
 
             } else if (this.model.isPIMAttachment()) {

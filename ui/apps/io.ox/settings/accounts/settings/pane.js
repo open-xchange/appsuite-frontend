@@ -111,7 +111,7 @@ define('io.ox/settings/accounts/settings/pane', [
                     });
 
                 require(['io.ox/oauth/keychain'], function (oauthAPI) {
-                    view.listenTo(oauthAPI.accounts, 'add remove', function () {
+                    view.listenTo(oauthAPI.accounts, 'add remove change', function () {
                         collection.reset(keychainModel.wrap(api.getAll()).models);
                     });
                 });

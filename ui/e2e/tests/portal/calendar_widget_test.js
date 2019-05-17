@@ -10,7 +10,7 @@
  * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
  */
 
-Feature('Portal: Create widget');
+Feature('Portal');
 
 Before(async function (users) {
     await users.create();
@@ -20,8 +20,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Create new appointment and check display in portal widget', async function (I, users) {
-    let [user] = users;
+Scenario('Create new appointment and check display in portal widget', async function (I) {
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
@@ -29,7 +28,7 @@ Scenario('Create new appointment and check display in portal widget', async func
     // make ssure there are no upcommig appointments
     I.clickToolbar('View');
     I.click('List');
-    I.dontSeeElement('[data-page-id="io.ox/calendar/list"] li.appointment')
+    I.dontSeeElement('[data-page-id="io.ox/calendar/list"] li.appointment');
 
     // make sure portal widget is empty
     I.openApp('Portal');

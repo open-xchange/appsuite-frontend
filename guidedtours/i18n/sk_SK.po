@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-10-13 01:17+0200\n"
+"PO-Revision-Date: 2019-04-11 22:40+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -633,6 +633,81 @@ msgstr ""
 #: apps/io.ox/tours/main.js module:io.ox/tours
 msgid "Getting started"
 msgstr "Začíname"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr "Druhý autentifikačný krok"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Teraz môžete pridať ďalšie možnosti overenia, aby ste zvýšili zabezpečenie "
+"svojho účtu."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "Pridáva sa možnosť overenia"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr "Rôzne možnosti pre ďalšieho overenia závisia na vašej inštalácii."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "Pridáva sa kód prostredníctvom SMS"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr ""
+"Ak napríklad vyberiete voľbu zaslania kódu prostredníctvom SMS, budete "
+"požiadaný, aby ste zadali telefónne číslo."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "Autentifikačné požiadavky"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr ""
+"Keď sa najbližšie prihlásite, budete musieť overiť svoju identitu zadaním "
+"čísla, ktoré odošleme na váš telefón."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "Odstránenie"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr ""
+"Zariadenia je možné po pridaní odstrániť, ak sa tak rozhodnete. Ďalšie "
+"podrobnosti nájdete v Pomocníkovi."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "Ďalší"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+"Na zvýšenie zabezpečenia je teraz možné požadovať pred prihlásením do vášho "
+"účtu druhý krok overenia totožnosti (napr. SMS). Chcete sa o tejto možnosti "
+"dozvedieť viac?"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr "Spustiť prehliadku"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
@@ -5981,9 +6056,6 @@ msgstr ""
 
 #~ msgid "New..."
 #~ msgstr "Nový..."
-
-#~ msgid "Next"
-#~ msgstr "Ďalší"
 
 #~ msgid "Next Day"
 #~ msgstr "Ďalší deň"

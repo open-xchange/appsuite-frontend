@@ -1,1164 +1,655 @@
 ---
-title: Settings List
+title: Settings list
 ---
+# Introduction
+This page shows a list of useful config option to customize App Suite UI. We recommend to read the [main article](../configuration.html) on how to configure App Suite UI first.
 
-# Types
+## Namespaces
+Settings are logically divided via namespaces for each module. The namespace itself is divided by a doube slash `//` from the setting's name when written down to a config file.
+Ensure to always use the double slash in your settings string, otherwise this will lead to errors and your setting will
+not work.
 
-As flexible presistant storage Settings (sometimes 'jslob' as name of the API is used synonymously) covering more than one purpose.
+For example `io.ox/core//someSetting` or `io.ox/mail//anotherMailSetting`.
 
-## Configuration
+In this case we have two different namespaces, `io.ox/core` and `io.ox/mail`. The setting `someSetting` only exists in the core namespace, `anotherMailSetting` only in mail accordingly.
 
-Defined on the middlware by setting up property files this type of settings control availability and determine configurational details for different features.
+# Feature toggles
 
-_example: features/dedicatedLogoutButton_
+App Suite UI offers different feature toggles. These toggles control the
+ appearance (or flavor) of different features in the UI.
 
-## User preferences
+<config>io.ox/core//features/dedicatedLogoutButton=`<bool>`</config>
+Show a logout button at the topbar.
 
-Individually adjustable user preferences defined via ui interaction elements in App Suites settings module or by in-app dropdowns/checkboxes.
+<config>io.ox/core//features/folderIcons=`<bool>`</config>
+Show icons in the folder tree next to folder labels.
 
-_example: allowHtmlImages_
+<config>io.ox/core//features/logoutButtonHint=`<bool>`</config>
+Shows a reminder tooltip if the user has not logged during the last page visit.
 
-## Dynamic storage
+<config>io.ox/core//features/reloginPopup=`<bool>`</config>
+Show a modal dialog to enable an inline relogin without showing the login page.
 
-Used to store ui related informations persistently like open/close states of foldertree items.
+<config>io.ox/core//features/storeSavePoints=`<bool>`</config>
+Enable/disable restorepoints for edit dialogs.
 
-_example: folderview/open/large_
+<config>io.ox/core//features/storeMailSavePoints=`<bool>`</config>
+Depends on features/storeSavePoints. Enable/disable restore point for mail compose.
 
-# Core
+<config>io.ox/core//features/validateMailAddresses=`<bool>`</config>
+Enable validiation for email addresses in mail compose dialog.
 
-```
-settings!io.ox/core
-```
+<config>io.ox/core//features/validatePhoneNumbers=`<bool>`</config>
+Enable validiation for phone numbers.
 
-## Accessibility
+<config>io.ox/core//features/windowHeaderPosition=`<string>`</config>
+Placement of buttons in new/edit dialogs. Default is 'bottom' (`'top', 'bottom'`)
 
-**features/accessibility**
-> Use accessibility improvements (true/false) **Deprecated**
+<config>io.ox/core//disabledSettingsPanes=`<string>`</config>
+Disable one or more settings panes vie extension point ids of _io.ox/settings/pane_
 
-**highcontrast**
-> enable/disable high contrast theme (true/false) **Deprecated**
+<config>io.ox/core//pdf/enablePreconversionOnUpload=`<bool>`</config>
+Enable/disable PDF preconversion of office documents on file upload and when a new file version is added. Default is `true`.
 
+<config>io.ox/core//pdf/enablePreconversionOnMailFetch=`<bool>`</config>
+Enable/disable PDF preconversion of office documents for mail attachments. Default is `true`.
 
-## Settings
+<config>io.ox/core//pdf/enableRangeRequests=`<bool>`</config>
+Enable/disable range requests support to fetch PDF rendering data in chunks. Default is 'true'.
 
-**disabledSettingsPanes**
-> comma separated list of disabled extension ids of point _io.ox/settings/pane_
+## Topbar / Apps
 
-**features/dedicatedLogoutButton**
-> adds a extra logout icon to the topbar (true/false)
+<config>io.ox/core//apps/quickLaunchCount=`<number>`</config>
+How many quick launch icons should appear in the Topbar by default (default: `3`)
 
-**features/folderIcons**
-> show icons in the folder tree (true/false)
+<config>io.ox/core//apps/quickLaunch=`<string>`</config>
+Default Apps for quick launcher. Comma-separated string of App IDs
+Default: `'io.ox/mail/main,io.ox/calendar/main,io.ox/files/main'`
 
-**features/logoutButtonHint**
-> shows little reminder tooltip when user didn't logged out last time  (true/false)
+<config>io.ox/core//apps/logoFileName=`<string>`</config>
+Change the default file name for the logo in the topbar. Default (`logo.png`)
 
-**features/reloginPopup**
-> if session expires, the user gets a popup that says what went wrong (true/false)
-
-**forceDesktopLaunchers**
-> By default all launchers on smartphone will be hidden in the laucher menu  (true/false)
-
-
-## Restore and save points
-
-**features/storeSavePoints**
-> no saving in the background, no restore dialog  (true/false)
-
-**features/storeMailSavePoints**
-> mail: no saving in the background, no restore dialog. only relevant in case 'features/storeSavePoints' is set to true (true/false)
-
-
-## Validation
-
-**features/validateMailAddresses**
-> enable validiation for mail addresse (true/false)
-
-**features/validatePhoneNumbers**
-> enable validiation for phone numbers (true/false)
-
-**features/windowHeaderPosition**
-> mainly relevant for actions toolbar in new/edit dialogs ('top', 'bottom')
+<config>io.ox/core//apps/logoAction=`<string>`</config>
+Change the action when clicking on the topbar logo. Either a URI to open in a new tab
+or an App ID. I.e. `https://sample.com` or `io.ox/mail/main`. Default is unset.
 
 ## Notifications
 
-**autoOpenNotificationarea**
-> open notification area automatically (true/false)
+<config>io.ox/core//autoOpenNotificationarea=`<bool>`</config>
+Open notification area automatically on new notification.
 
-**notificationsHidingTimer**
-> hide notifications for a period of x milliseconds when user clicks on 'Notify me again later' (default is half an hour (1800000))
+<config>io.ox/core//notificationsHidingTimer=`<number>`</config>
+Hide notifications for n milliseconds after the user clicks on 'Notify me again later' (default is 1800000 (30 minutes)).
 
-**showDesktopNotifications**
-> determines if the appsuite should try to send desktop notifications (true/false).
-> Important: To actually see desktop notifications they also have to be enabled in the browser.
+<config>io.ox/core//showDesktopNotifications=`<bool>`</config>
+Show native desktop notifications. Default `true`.
+Important: Depends also on browser settings.
 
+<config>io.ox/core//properties/contactImageMaxWidth=`<number>`</config>
+Maximum target image width when croping contact/user images in pixels (default: 500).
 
-## Ping
+## Feedback dialog
 
-**ping/enabled**
-> frequently ping calls for health check (true/false)
+<config>io.ox/core//feedback/show=`<bool>`</config>
+Show one or more feedback buttons. Default value is 'both' which shows a dropdown entry in the settings menu and a button in the main content window. (topbar/side/both).
 
-**ping/interval**
-> specifies frequency in milliseconds
+<config>io.ox/core//feedback/supportlink`<string>`</config>
+Hyperlink to a support site referenced in the feedback dialog.
 
+<config>io.ox/core//feedback/position`<string>`</config>
+Set position of the feedback button. Default value is `right`. (`left|right`).
 
-## I18n
+<config>io.ox/core//feedback/showHover=`<bool>`</config>
+Show rating string on mouse hover in feedback dialog.
 
-**language**
-> current locale as a combination of language and country ('en_GB', ...)
+<config>io.ox/core//feedback/showModuleSelect=`<bool>`</config>
+Defines if the feedback dialog is aware of it's current App and the rating is based on this. If set to "true" every App can be rated regardless which App is currently running.
 
-**timezone**
->  IANA time zone database ('Europe/Berlin', ...)
+## Misc
 
-**settingOptions/availableTimeZones**
-> list of available time zones
+<config>io.ox/core//refreshInterval=`<number>`</config>
+Automatic UI refresh interval in milliseconds (default 300000 (5 minutes)).
 
+<config>io.ox/core//settings/downloadsDisabled=`<bool>`</config>
+Enables/disables download pane for additional software components in settings.
 
-## Quota and limits
-
-**properties/maxBodySize**
-> ...
-
-**properties/attachmentQuota**
-> defines limit for summarized file size of all mail attachments
-
-**properties/attachmentQuotaPerFile**
-> defines limit for the file size of a single mail attachment
-
-**properties/attachmentMaxUploadSize**
-> defines limit for summarized file size of all attachments for a single appointment/task
-
-**properties/infostoreMaxUploadSize**
-> defines limit for summarized file size of all mail attachments published via infostore
-
-**properties/infostoreQuota**
-> defines limit for summarized file size of all inforstore files
-
-**properties/infostoreUsage**
-> current summarized file size of all inforstore files
-
-**properties/contactImageMaxWidth**
-> max target image width when croping contact/user images (default: 500)
-
-## Feedback
-
-**feedback/supportlink**
-> stores a link to a support site
-
-**feedback/mode**
-> provided by middleware. Defines the type used when sending the feedback request. 'star-rating-v1' is the only possible value.
-
-**feedback/dialog**
-> used to switch feedback dialogs. 'modules' is the default value . Should only be changed for testing purpose, since only 'modules' has proper mw support yet. (stars/modules/nps)
-
-**feedback/position**
-> defines the position of the feedback button. Default value is 'right'. (left/right)
-
-**feedback/show**
-> defines which feedback buttons to show. Default value is 'both'. (topbar/side/both)
-
-**feedback/showHover**
-> defines if the rating should show when hovering with the mose over it. (true/false)
-
-**feedback/showModuleSelect**
-> only applies to 'modules' dialog. Defines if the select box for he module selection should be replaced by a static text, resembling the current app. (true/false)
-
-## Special
-
-**refreshInterval**
-> automatic refresh interval in milliseconds
-
-**security/acceptUntrustedCertificates**
-> Allow connections with untrusted certificates (true/false)
-
-**settings/downloadsDisabled**
-> enables/disables download pane in settings (true/false)
-
-**shardingSubdomains**
-> list of available sharding domains
-
-**theme**
-> current theme
-
-**topbar/order**
-> defines order of apps in topbar
-
-## Mail compose: tinyMCE
-
-**maxUploadIdleTimeout**
-> timeout for contenteditable-editor in milliseconds when adding inline imagesF
-
-**tinyMCE/theme_advanced_buttons1**
-> list of tinyMCE toolbar actions separated by space - targets toolbar1
-
-**tinyMCE/theme_advanced_buttons2**
-> list of tinyMCE toolbar actions separated by space - targets toolbar2)
-
-**tinyMCE/theme_advanced_buttons3**
-> list of tinyMCE toolbar actions separated by space - targets toolbar3
-
-**tinyMCE/font_format**
-> list of availabe fonts (also used for settings pane). Details: [link](http://archive.tinymce.com/wiki.php/Configuration:font_formats)
-
-## Folders
-
-**folder/blacklist**
-> folders that are filtered out of folder api responses
-
-**folder/hidden**
-> Important: call via ```settings.get(['folder/hidden'])```
-
-**folder/calendar**
-> default folder for calendar
-
-**folder/tasks**
-> default folder for tasks
-
-**folder/contacts**
-> default folder for contacts
-
-**folder/infostore**
-> default folder for infostore
-
-**folder/mailattachments/all**
-> folder where to look for all attachments when attachmentView is available
-
-**folder/mailattachments/received**
-> folder where to look for received attachments when attachmentView is available
-
-**folder/mailattachments/sent**
-> folder where to look for sent attachments when attachmentView is available
-
-**favorites/mail**
-> list of favorite folders
-
-**favorites/infostore**
-> list of favorite folders
-
-**favorites/contacts**
-> list of favorite folders
-
-**favorites/calendar**
-> list of favorite folders
-
-**favorites/infostore**
-> list of favorite folders
+<config>io.ox/core//theme=`<string>`</config>
+Current user theme. Default `default`
 
 
-## Search
+## Mail compose: tinyMCE text editor
 
-**search/allfolders/[module]**
-> a boolean that indicates if search among all folders is supported
+<config>io.ox/core//maxUploadIdleTimeout</config>
+Timeout for contenteditable-editor in milliseconds when adding inline images
 
-**search/mandatory/[facet-id]**
-> a list of apps that facet is mandatory for
+<config>io.ox/core//tinyMCE/theme_advanced_buttons1=`<string>`</config>
+List of tinyMCE toolbar actions separated by space - targets toolbar1<br>
+Default: `'*undo *redo | bold italic underline | bullist numlist outdent indent'`
 
-**search/default**
-> default app when search is used as a separate module on mobile
+<config>io.ox/core//tinyMCE/theme_advanced_buttons2=`<string>`</config>
+List of tinyMCE toolbar actions separated by space - targets toolbar2)
+Default: empty
 
-**search/modules**
-> list of apps that are supported  when search is used as a separate module on mobile
+<config>io.ox/core//tinyMCE/theme_advanced_buttons3=`<string>`</config>
+List of tinyMCE toolbar actions separated by space - targets toolbar3
+Default: empty
+
+<config>io.ox/core//tinyMCE/font_format=`<string>`</config>
+List of availabe fonts (also used for settings pane).
+Default:
+
+    "System=-apple-system,BlinkMacSystemFont,helvetica,sans-serif;Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats"
 
 
 ## Metrics
 
-**tracking/donottrack**
-> respect donottrack already on client side
+<config>io.ox/core//tracking/enabled=`<bool>`</config>
+Enable tracking in App Suite UI
 
-**tracking/enabled**
-> tracking enabled in general
+<config>io.ox/core//tracking/donottrack=`<bool>`</config>
+Respect "do not track" browser setting
+
 
 ### PIWIK
 
-**tracking/piwik/enabled**
-> enable piwik adapter
+<config>io.ox/core//tracking/piwik/enabled=`<bool>`</config>
+Enable Piwik adapter for tracking
 
-**tracking/piwik/url**
-> piwik server url
+<config>io.ox/core//tracking/piwik/url=`<string>`</config>
+Piwik server url
 
-**tracking/piwik/id**
-> piwik id
+<config>io.ox/core//tracking/piwik/id=`<string>`</config>
+Piwik id
 
 ### Google Analytics
 
-**tracking/analytics/enabled**
-> enabled
+<config>io.ox/core//tracking/analytics/enabled=`<bool>`</config>
+Enable Google Analytics adapter
 
-**tracking/analytics/id**
-> google analytics id
+<config>io.ox/core//tracking/analytics/id=`<string>`</config>
+Google analytics id
 
-**tracking/analytics/url**
-> usually `https://www.google-analytics.com/analytics.js`
+<config>io.ox/core//tracking/analytics/url=`<string>`</config>
+Analytics URL, usually `https://www.google-analytics.com/analytics.js`
 
-**tracking/analytics/mapping**
-> optional mappings for custom dimensions
+<config>io.ox/core//tracking/analytics/mapping=`<string>`</config>
+Optional mappings for custom dimensions
 
 
 ### Misc
 
-**tracking/console/enabled**
-> enables console adapter that logs events to browser console
+<config>io.ox/core//tracking/console/enabled=`<bool>`</config>
+Enables debugging console adapter that logs events to browser console.
 
-**tracking/context/enabled**
-> enabled context tracker that provides last 10 tracked events via `window.ox.metricss
+<config>io.ox/core//tracking/context/enabled=`<bool>`</config>
+Enabled context tracker that provides last 10 tracked events via `window.ox.metrics`
 
 
 ## Upsell
 
-**upsell/enabled**
-> list of capabilities that are available for upsell
+<config>io.ox/core//upsell/enabled=`<bool>`</config>
+List of capabilities that are available for upsell.
 
-**upsell/defaultIcon**
-> default icon used for upsell 'decoration'
+<config>io.ox/core//upsell/defaultIcon=`<string>`</config>
+Default icon used for upsell 'decoration'.
 
-**upsell/premium/folderView/visible**
-> show premium link in folder tree
+<config>io.ox/core//upsell/premium/folderView/visible=`<bool>`</config>
+Show premium link in folder tree.
 
-**upsell/premium/folderView/closedByUser**
-> is user allowed to hide the premium link permanently
+<config>io.ox/core//upsell/premium/folderView/closedByUser=`<bool>`</config>
+Is the user allowed to hide the premium link permanently.
 
-**features/upsell/[custom-id]/enabled**
-> upsell enabled for feature
+<config>io.ox/core//features/upsell/[feature-id]/enabled=`<bool>`</config>
+Upsell enabled for feature.
 
-**features/upsell/[custom-id]/color**
-> customize upsell 'decoration' appearance
+<config>io.ox/core//features/upsell/[feature-id]/color=`<string>`</config>
+Customize upsell 'decoration' appearance.
 
-**features/upsell/[custom-id]/icon**
-> customize upsell 'decoration' appearance
+<config>io.ox/core//features/upsell/[custom-id]/icon=`<string>`</config>
+Customize upsell 'decoration' appearance.
 
 
 ## Password
+If the capability `'edit_password'` is set, a user can change his own password in App Suite UI.
 
-**password/showStrength**
-> show strength of entered password - capability `'edit_password'
+<config>io.ox/core//password/showStrength=`<bool>`</config>
+Show password strength
 
-**password/minLength**
-> requirement for new passwords - capability `'edit_password'
+<config>io.ox/core//password/minLength=`<number>`</config>
+Passwort minimum length
 
-**password/maxLength**
-> requirement for new passwords - capability `'edit_password'
+<config>io.ox/core//password/maxLength=`<number>`</config>
+Password max length
 
-**password/regexp**
-> requirement for new passwords - capability `'edit_password'
+<config>io.ox/core//password/regexp=`<string>`</config>
+Check new password against a regular expression (i.e. "is there at least one upper case letter")
 
-**password/special**
-> required special characters for new passwords - capability `'edit_password'
+<config>io.ox/core//password/special=`<string>`</config>
+Required special characters for new passwords
 
 
 ### Client Onboarding
+<config>io.ox/core//features/clientOnboardingHint/enabled=`<bool>`</config>
+Enables a hint on mobiles to inform about the onboarding Wizard (true/false)
 
-**features/clientOnboardingHint/enabled**
-> enables hint on mobile (true/false)
-
-**features/clientOnboardingHint/remaining**
-> sets number of times hint is beeing shown.
-> IMPORTANT: The protection of this setting needs to be disabled in `/opt/open-xchange/etc/meta/ui.yml` cause it's used as starting value AND as storage for the remaining hints afterwards.
+<config>io.ox/core//features/clientOnboardingHint/remaining=`<number>`</config>
+Number of times hint is beeing shown. The protection of this setting needs to be disabled in any case.
 
 
 ## Misc
 
-**autoLogout**
-> timespan in milliseconds when autologout is triggered
+<config>io.ox/core//autoLogout=`<bool>`</config>
+Timeout until a user is logged out automatically if inactive
 
-**autoStart, autoStartMobile**
->  starting app defined via app-id
+<config>io.ox/core//autoStart=`<string>`</config>
+First App to start after login, Default: `io.ox/mail/main`
 
-**banner/visible**
-> show top banner (true/false)
+<config>io.ox/core//autoStartMobile=`<string>`</config>
+First App to start after login on mobile devices. Default: `io.ox/mail/main`
 
-**customLocations/guestLogin**<br>
-**customLocations/login**<br>
-**customLocations/logout**<br>
-> custom redirections as url
-
-**selectionMode**
-> specifies behavior when selecting items in mail listview. ('normal'|'alternative'|'simple')
-
-**wizards/firstStart/finished**
-> stores if firststart wizard finished
-
-**states**
-> migration state for each signature
-
-**user/internalUserEdit**
-> is user allowed to edit his/her own data
-
-**registry/[id]**
-> allows different targets for 'mail-compose' and 'client-onboarding'
-
+<config>io.ox/core//selectionMode=`<string>`</config>
+Specifies behavior when selecting items in mail listview. Default: `normal` ('normal'|'alternative'|'simple')
 
 # Portal
 
-```
-settings!io.ox/portal
-```
-
-## API keys
-
-**apiKeys/flickr**
-> API key for flickr usage
-
-**apiKeys/tumblr**
-> API key for tumblr usage
-
-## Sets
-
-**widgetSet**
-> defines a widget set that is used as part of the settings path ('widgets/deleted' + widgetSet )
-
-**widgets/user**
-> all widgets added/created by the user
-
-**widgets/deleted\[widgetSet\]/gen_\[generation\]**
-> list of deleted widgets
-
-**widgets/eager\[widgetSet\]/gen_\[generation\]**
-> list of eager widgets
-
-**widgets/protected\[widgetSet\]**
-> list of protected widgets that are not disableable and not deletable
-
-**widgets/deleted**
-> ...
-
-**generation**
->  current active generation starting with 0
-
+Please read http://oxpedia.org/wiki/index.php?title=AppSuite:Configuring_portal_plugins for detailed
+information and expamples how to customize the App Suite UI Portal and pre configure widgets for users.
 
 ## First Start Widget
 
-**settings\hadData**
-> list of app ids that where already shown to the user with real data once
-
-**settings\getStartedLink**
-> target of 'get started' labled link in 'getting started' widget
-
+<config>io.ox/portal//settings/getStartedLink=`<string>`</config>
+Target of 'get started' labled link in 'getting started' widget
 
 ## Widget properties
 
-**widgets/defaults**
-> default properties
+<config>io.ox/portal//widgets/user/\[widgetid\]/color=`<string>`</config>
+Color of title and highligting within widget preview/content
 
-**widgets/user/\[widgetid\]/id**
-> ...
+<config>io.ox/portal//widgets/user/\[widgetid\]/enabled=`<bool>`</config>
+Enabled state
 
-**widgets/user/\[widgetid\]/color**
-> color of title and highligting within widget preview/content
+<config>io.ox/portal//widgets/user/\[widgetid\]/index=`<string>`</config>
+Specifies order of widgets. I.e. `first` or numeric value
 
-**widgets/user/\[widgetid\]/enabled**
-> enabled state
+<config>io.ox/portal//widgets/user/\[widgetid\]/inverse=`<bool>`</config>
+Use color for background instead of title
 
-**widgets/user/\[widgetid\]/index**
-> specifies order of widgets
+<config>io.ox/portal//widgets/user/\[widgetid\]/plugin=`<string>`</config>
+Reference to tht plugin id/path. I.e `"plugins/portal/birthdays/register"`
 
-**widgets/user/\[widgetid\]/inverse**
-> use color for background instead of title
+<config>io.ox/portal//widgets/user/\[widgetid\]/props=`<string>`</config>
+Additional data like custom description or related configuration
 
-**widgets/user/\[widgetid\]/plugin**
-> reference to tht plugin id/path
-
-**widgets/user/\[widgetid\]/props**
-> additional data like custom description or related configuration
-
-**widgets/user/\[widgetid\]/type**
-> widget type like 'rss' or 'stickyfile'
-
-**widgets/user/\[widgetid\]/userWidget**
-> is user created widget
+<config>io.ox/portal//widgets/user/\[widgetid\]/type=`<string>`</config>
+Widget type like `rss` or `stickyfile`
 
 
 ## Misc
 
-**mobile/summaryView**
-> show only summary of portal widgets on mobile
+<config>io.ox/portal//mobile/summaryView=`<bool>`</config>
+User setting, show only a small summary view of each widget on smartphones
 
 
 # Mail
 
-```
-settings!io.ox/mail
-```
+<config>io.ox/mail//allowHtmlImages=`<bool>`</config>
+Allow pre-loading of externally linked images.
 
-## Folders
+<config>io.ox/mail//allowHtmlMessages=`<bool>`</config>
+Allow HTML formatted emails.
 
-**allMessagesFolder**
-> id of virtual folder with all messages
+<config>io.ox/mail//displayEmoticons=`<bool>`</config>
+Display emoticons as graphics in text emails.
 
-**features/unseenFolder**
-> id of virtual folder with all unread messages
+<config>io.ox/mail//isColorQuoted=`<bool>`</config>
+Colored quotes in emails.
 
-**contactCollectFolder**
-> folder id for collect contacts feature - depends on capability 'collect_email_addresses'`
+<config>io.ox/mail//useFixedWidthFont=`<bool>`</config>
+Use fixed-width font for text emails.
 
-**folder/inbox**
-> folder id of inbox
+<config>io.ox/mail//beautifyPlainText=`<bool>`</config>
+Prettify plain text emails.
 
-**namespace**
-> Check if 'altnamespace' is enabled that does not has a 'INBOX' part
+<config>io.ox/mail//sendDispositionNotification=`<bool>`</config>
+Show requests for read receipts.
 
-**defaultFolder/[type]**
-> Name of default folder or `null` of not existing
-
-**usePrimaryAccountNameInTree**
-> When disabled "My Folders" string is used for private mail folders (default value is true)
-
-
-## Folderpopup
-
-**folderpopup/[id]/last**
-> stores state of folder popups
-
-**folderpopup/[id]/open**
-> stores state of folder popups
-
-
-## User Preferences: Display
-
-**allowHtmlImages**
-> Allow pre-loading of externally linked images
-
-**allowHtmlMessages**
-> Allow html formatted emails
-
-**displayEmoticons**
-> Display emoticons as graphics in text emails
-
-**isColorQuoted**
-> Color quoted lines
-
-**useFixedWidthFont**
-> Use fixed-width font for text mails
-
-**beautifyPlainText**
-> Prettify plain text mails
-
-**sendDispositionNotification**
-> Show requests for read receipts
-
+<config>io.ox/mail//autoselectMailOnStart=`<bool>`</config>
+Automatically select first read mail on mail app start. (Default `true`)
 
 ## User Preferences:
 
-### Common
+<config>io.ox/mail//removeDeletedPermanently=`<bool>`</config>
+Permanently remove deleted emails instead of moving them to the trash folder first (`true|false`)
 
-**removeDeletedPermanently**
-> Permanently remove deleted emails instead of moving them to the trash folder first(true/false)
+<config>io.ox/mail//contactCollectOnMailTransport=`<bool>`</config>
+Automatically collect contacts in the folder "Collected addresses" while sending - depends on capability `'collect_email_addresses'` (`true|false`)
 
-**contactCollectOnMailTransport**
-> Automatically collect contacts in the folder "Collected addresses" while sending - depends on capability `'collect_email_addresses'` (true/false)
+<config>io.ox/mail//contactCollectOnMailAccess=`<bool>`</config>
+Automatically collect contacts in the folder "Collected addresses" while reading - depends on capability `'collect_email_addresses'` (`true|false`)
 
-**contactCollectOnMailAccess**
-> Automatically collect contacts in the folder "Collected addresses" while reading - depends on capability `'collect_email_addresses'` (true/false)
+<config>io.ox/mail//features/registerProtocolHandler=`<bool>`</config>
+Ask for mailto link registration (`true|false`)
 
-**features/registerProtocolHandler**
-> Ask for mailto link registration (true/false)
+<config>io.ox/mail//features/trusted/user=`<string>`</config>
+User-defined, comma-separated list of mail adresses or specific domains
+which will be whitlisted for loading external images in HTML mails.
 
-**features/trusted/user**
-> user-defined comma-separated list of mail adresses or specific domains
+<config>io.ox/mail//features/trusted/admin=`<string>`</config>
+Admin-defined, comma-separated list of mail adresses or specific domains
+which will be whitlisted for loading external images in HTML mails. I.e. useful for
+customer care email addresses or domains.
 
-**features/trusted/admin**
-> admin-defined comma-separated list of mail adresses or specific domains
+<config>io.ox/mail//unseenMessagesFolder=`<bool>`</config>
+Show folder with all unseen messages (`true|false`)
 
-**unseenMessagesFolder**
-> Show folder with all unseen messages (true/false)
+<config>io.ox/mail//playSound=`<bool>`</config>
+Play sound on incoming push email - depends on capability `'websocket'` otherwise
+the option will not be shown.
 
-**playSound**
-> Play sound on incoming push e-mail - depends on capability `'websocket'` (true/false)
+<config>io.ox/mail//notificationSoundName=`<string>`</config>
+Default sound to play on incoming push mail. Default `bell`, can be one of
+`bell, marimba, wood, chimes`
 
 ### Compose
 
-**appendVcard**
-> Append vCard (true/false)
+<config>io.ox/mail//appendVcard=`<bool>`</config>
+Append vCard to email.
 
-**appendMailTextOnReply**
-> Insert the original email text to a reply (true/false)
+<config>io.ox/mail//appendMailTextOnReply=`<bool>`</config>
+Insert the original email text to a reply.
 
-**confirmReplyToMailingLists**
-> Confirm recipients when replying to a mailing list (true/false)
+<config>io.ox/mail//confirmReplyToMailingLists=`<bool>`</config>
+Confirm recipients when replying to a mailing list. Useful to avoid
+flooding mailing lists with unwanted replies to the list.
 
-**forwardMessageAs**
-> value 'Inline' or Attachment'
+<config>io.ox/mail//forwardMessageAs=`<string>`</config>
+Value `Inline` (default) or `Attachment`.
 
-**messageFormat**
-> value 'html', 'text' or 'alternative'
+<config>io.ox/mail//messageFormat=`<string>`</config>
+Value `html` (default), `text` or `alternative`.
 
-**defaultSendAddress**
-> a single default sender address out of available accounts
+<config>io.ox/mail//defaultSendAddress=`<string>`</config>
+Default sender address from available accounts. Default not set.
 
-**autoSaveDraftsAfter**
-> values 'disabled', '1_minute', '3_minutes', '5_minutes' or '10_minutes'
+<config>io.ox/mail//autoSaveAfter=`<number>`</config>
+Interval to update composition space during compose in milliseconds. Default: `15000` (15 seconds)
 
-**autobcc**
-> Always add the following recipient to blind carbon copy
+<config>io.ox/mail//autoSaveDraftsAfter=`<string>`</config>
+Interval to safe drafts during compose. One of `disabled`, `1_minute`, `3_minutes`, `5_minutes` or `10_minutes`
 
-**defaultFontStyle/family**
-> value 'browser-default', 'Andale Mono' or [...] for desktop only
+<config>io.ox/mail//autobcc=`<bool>`</config>
+Always add the following recipient to BCC.
 
-**defaultFontStyle/size**
-> value 'browser-default, '8pt' or [...] for desktop only
+<config>io.ox/mail//defaultFontStyle/family=`<string>`</config>
+Value `browser-default`, `Andale Mono` or one of `io.ox/core//tinyMCE/font_format`. Desktop only.
 
-**defaultFontStyle/color**
-> css compatible value for for desktop only
+<config>io.ox/mail//defaultFontStyle/size=`<string>`</config>
+Value `browser-default` or i.e. `8pt`. Desktop only.
 
+<config>io.ox/mail//defaultFontStyle/color=`<string>`</config>
+Default font color as CSS color string. I.e. `#334455`
 
-## Compose
+<config>io.ox/mail//showReplyTo/configurable=`<bool>`</config>
+Show 'reply to' field
 
-**customDisplayNames**
-> accounts hash with defaultName, name and overwrite property - editable via  ui via 'from > click on mail address > edit names'
+<config>io.ox/mail//maxSize/compose=`<number>`</config>
+Max size of returned characters for mail reply/forward in bytes (API parameter) Default: `524288` (512 kB)
 
-**showReplyTo/configurable**
-> show 'reply to' field
+<config>io.ox/mail//maxSize/view=`<number>`</config>
+Max size of returned characters for mail viewing in bytes. Default: `102400` (100 kB)
 
-**maxSize/compose**
-> size in byte used as param for mail api server requests with a default value of 512kb
+### Mail compose: Image resize
 
-**maxSize/view**
-> size in byte used as param for mail api server requests with a default value of 100kb
+<config>io.ox/mail//features/imageResize/enabled=`<bool>`</config>
+Feature toggle to enable resizing of images
 
-**sendDisplayName**
-> ...
+<config>io.ox/mail//features/imageResize/default=`<string>`</config>
+Feature toggle to enable resizing of images (default `320`)
 
-**compose/simpleLineBreaks**
-> EXPERIMENTAL WORKAROUND: use simple line breaks
+<config>io.ox/mail//features/imageResize/small=`<number>`</config>
+Size of the target image (longest edge) for a small image as integer (default `320`)
 
-**imageResize/enabled**
-> feature toggle to enable resizing of images
+<config>io.ox/mail//features/imageResize/medium=`<number>`</config>
+Size of the target image (longest edge) for a medium image as integer (default `640`)
 
-**imageResize/small**
-> size of the target image (longest edge) for a small image as integer (default 320)
+<config>io.ox/mail//features/imageResize/large=`<number>`</config>
+Size of the target image (longest edge) for a large image as integer (default `1280`)
 
-**imageResize/medium**
-> size of the target image (longest edge) for a medium image as integer (default 640)
+<config>io.ox/mail//features/imageResize/quality=`<number>`</config>
+Quality for the compression while resizing as float (default `0.75`)
 
-**imageResize/large**
-> size of the target image (longest edge) for a large image as integer (default 1024)
+<config>io.ox/mail//features/imageResize/imageSizeThreshold=`<number>`</config>
+Threshold for the size in pixel of the longest edge after which a resize is recommended as integer (default `1024`)
 
-**imageResize/quality**
-> quality for the compression while resizing as float (default 0.75)
-
-**imageResize/imageSizeThreshold**
-> threshold for the size in pixel of the longest edge after which a resize is recommended as integer (default 1024)
-
-**imageResize/fileSizeThreshold**
-> threshold for the size in byte of the image after which a resize is recommended as integer (default 1048576)
-
-**imageResize/fileSizeMax**
-> maximum size in bytes that will be resized as integer, if one image exceeds this threshold the resize dropdown will not be displayed (default 10485760)
-
-## Compose: Attachments and Drive Mail
-
-[middleware configuration](https://documentation.open-xchange.com/components/middleware/config{{ site.baseurl }}/index.html#mode=search&term=compose.share)
-
-**attachments/layout/compose/\[small|medium|large\]**
-> value is 'list' or 'preview'
-
-**compose/shareAttachments/enabled**
-> feature toggle for 'drive mail'
-
-**compose/shareAttachments/expiryDates**<br>
-**compose/shareAttachments/defaultExpiryDate**
-> list of aliases (example: '1M') for available expire dates - respectively the preselected default
-
-**compose/shareAttachments/forceAutoDelete**
-> auto delete option is activated and listed as disabled/read only option
-
-**compose/shareAttachments/requiredExpiration**
-> hides possible expire option 'no expiry date'
-
-**compose/shareAttachments/name**
-> product name that usually is 'Drive Mail'
-
-**compose/shareAttachments/enableNotifications**
-> feature toggle to show notification options for the user
-
-**compose/shareAttachments/threshold**
-> maximal file size for sum of all attachments in Bytes. Beyond this size drive mail is activated automatically and can not be disabled by user.
-
-
-## Emoji
-
-**emoji/availableCollections**
-> default is 'unified'
-
-**emoji/defaultCollection**
-> default is 'unified'
-
-**emoji/userCollection**
-> default is value of 'emoji/defaultCollection'
-
-**emoji/overrideUserCollection**
-> ...
-
-**emoji/recently**
-> stores recently used emojis
-
-**emoji/sendEncoding**
-> default is 'unified'
+<config>io.ox/mail//features/imageResize/fileSizeMax=`<number>`</config>
+Maximum size in bytes that will be resized as integer, if one image exceeds this threshold the resize dropdown will not be displayed (default `10485760`)
 
 
 ## Signatures
 
-**defaultSignature**<br>
-**mobileSignature**
-> default signature
+<config>io.ox/mail//defaultSignature=`<number>`</config>
+ID of default signature. Signatures are stored as Snippets on MW (DB)
 
-**defaultReplyForwardSignature**
-> fallback is value of 'defaultSignature'
+<config>io.ox/mail//defaultReplyForwardSignature=`<number>`</config>
+ID of default forward and reply signature. Fallback is value of 'defaultSignature'
 
-**defaultSignaturePosition**
-> value is 'above' or 'below'
+<config>io.ox/mail//defaultSignaturePosition=`<number>`</config>
+value is `above` or `below`
 
-**mobileSignatureType**
-> value is 'custom' or 'none'
+<config>io.ox/mail//mobileSignatureType=`<string>`</config>
+Value is `custom` or `none`. If `custom` is set, signature from `io.ox/mail//mobileSignature`is taken.
 
-
-## Flags
-
-**features/flag/color**
-> color flagging enabled
-
-**features/flag/star**
-> star flagging enabled
-
-
-## Categories
-
-**categories/initialized**
-> read only value of initial migration status
-
-**categories/enabled**
-> currently enabled state based on users preference
-
-**categories/list**
-> list of category object that properties are partly writeable
-
-
-## Malicious folders
-
-**maliciousCheck**
-> feature toggle
-
-**maliciousFolders**
-> extends list of considered folders
+<config>io.ox/mail//mobileSignature=`<string>`</config>
+Mobile signature as plain text string.
 
 ## Misc
 
-**attachOriginalMessage**
-> attach original message on touch devices
+<config>io.ox/mail//attachOriginalMessage=`<bool>`</config>
+Attach original message on touch devices
 
-**unifiedInboxIdentifier**
-> example value is 'default1729/INBOX"'
+<config>io.ox/mail//features/accounts/configureUnifiedInboxOnCreate=`<bool>`</config>
+Allow enabling unified inbox for an account at the "Add Mail account" dialog
 
-**phishing/headers**
-> used reference in mail header that indicates a potential phising mail.
+<config>io.ox/mail//features/authenticity=`<bool>`</config>
+Enables the authenticity feature. Please note that `com.openexchange.mail.authenticity.enabled` on MW has to be turned on as well. (default: false)
 
-**attachments/layout/detail/\[small|medium|large\]**
-> value is 'list' or 'preview'
+<-- currently hardcoded as 'fail_neutral_trusted' and 'protected' by MW and not adjustable by any property file change or user interaction.
+<config>io.ox/mail//authenticity/level=`<string>`</config>
+If authenticity is enabled on MW and UI (see `features/authenticity`) and this value is not marked as proteced, the user can select a level which
+controls how strict the authenticty results are shown at UI side. (default: `none`, values: `none`, `fail_neutral_trusted` and `all`)
+-->
 
-**defaultseparator**
-> separator for folder tree that usually is '/'
+<config>io.ox/mail//features/autoCollapseBlockquotes=`<bool>`</config>
+If enabled, blockquotes larger than 300 chars will be collapsed.
 
-**features/accounts/configureUnifiedInboxOnCreate**
-> allow enabling unified inbox for an account during creation
+<config>io.ox/mail//features/cleanSubjects=`<bool>`</config>
+Remove clutter from subjects like `AW:` or `RE:`
 
-**features/anonymousAliases**
-> ...
+<config>io.ox/mail//features/notifyOnSent=`<bool>`</config>
+Show an infopopup after mail was send successfully. Default `false`
 
-**features/authenticity**
-> when enabled (default: false) email authentication status gets highlighted
+<config>io.ox/mail//listview/primaryPageSize=`<number>`</config>
+Initial size of mail list until pagination will start. Default `50`
 
-**authenticity/level**
-> user setting which statuses are highlighted (default: false, values: none/fail_neutral/all)
+<config>io.ox/mail//listview/secondaryPageSize=`<bool>`</config>
+Sets how many mails will loaded on each paginate call. Default `200`
 
-**features/autoCollapseBlockquotes**
-> when enabled the limit of 300 chars is applied
+<config>io.ox/mail//prefetch/count=`<bool>`</config>
+Prefetch N mails on Mail App startup. Default `5`
 
-**features/autoExpunge**
-> ...
+<config>io.ox/mail//features/prefetchOnBoot='<bool>'</config>
+Prefetch the first chunk of mail data (action=all) already on App Suite boot.
+Only disable this if you want to customize mail columns later on. Default `true`
 
-**features/cleanSubjects**
-> removes square brackets including content (example: '[fwd]')
+<config>io.ox/mail//prefetch/next=`<bool>`</config>
+Prefetch next mail in line during list traversing via cursor or selection. Default `true`
 
-**features/deleteDraftOnClose**
-> ...
+<config>io.ox/mail//transform/multipleEmptyLines=`<bool>`</config>
+reduce multiple empty lines in plain text mails to a maximum of 2 (detail view, compose: html-to-text). Default `true`
 
-**features/fixtoccbcc**
-> client-side fix for missing to/cc/bcc fields
-
-**features/inplaceReply**
-> allow replying of mails within mail detail view
-
-**features/notifyOnSent**
-> `yell` after mail was send successfully
-
-**features/recognizeDates**
-> ...
-
-**features/setFromInVacationNotice**
-> ...
-
-**listview/primaryPageSize**
-> size of first chunk as integer
-
-**listview/secondaryPageSize**
-> size of every chunk after the first one as integer
-
-**prefetch/count**
-> Prefetch first \[number\] relevant unseen mails
-
-**prefetch/next**
-> Prefetch the next \[number\] mails in line
-
-**transform/multipleEmptyLines**
-> reduce multiple empty lines in plain text mails to a maximum of 2 (detail view, compose: html-to-text)
-
-**viewOptions/<folder>/order**<br>
-**viewOptions/<folder>/sort**<br>
-**viewOptions/<folder>/thread**<br>
-> stores display settings for each folder individually
+<config>io.ox/mail//features/usePrimaryAccountNameInTree=`<bool>`</config>
+Use the primary account name as label for the folder tree root node of non standard folders. If set to false the the String 'My Folders' will be used. Default `true`
 
 # Contacts
 
-```
-settings!io.ox/contacts
-```
-
 ## General
 
-**showAdmin**
-> show the context admin in addressbook (true/false)
+<config>io.ox/contacts//showAdmin=`<bool>`</config>
+Show context admin in addressbook. Default `false`
 
-**showDepartment**
-> whenever a contact from the global addressbook is rendered, additionally show the department next to the name (true/false)
+<config>io.ox/contacts//showDepartment=`<bool>`</config>
+Whenever a contact from the global addressbook is rendered, additionally show the department (field) next to the name. Default `false`
 
-**startInGlobalAddressbook**
-> Start in global addressbook when Contacts App is launched (true/false)
+<config>io.ox/contacts//startInGlobalAddressbook=`<bool>`</config>
+Start in global addressbook when Contacts App is launched. Default `true`
 
-**mapService**
-> Which external map service should be used by default to generate the href for the contact address ('google', 'osm' or 'apple'). Defaults to 'google'. 'osm' is Open Street Maps. 'apple' only works on iOS and MacOS
+<config>io.ox/contacts//mapService=`<string>`</config>
+External map service to locate addresses. One of `google` (Google Maps, default), `osm` (Open Street Map) or `apple` (Apple Maps, only works on iOS and MacOS)
 
 ## Addressbook picker
 
-**picker/limits/departments**
-> Maxium departments to show (Default 100)
+<config>io.ox/contacts//picker/limits/departments=`<number>`</config>
+Maxium departments to show. Default `100`
 
-**picker/limits/fetch**
-> Contact fetch limit for the HTTP request (Default 10000)
+<config>io.ox/contacts//picker/limits/fetch=`<number>`</config>
+Maximum number of concacts to fetch. Default `10000`
 
-**picker/limits/more**
-> Paginate limit, shows n elements more on reached scroll threshold (default 100)
+<config>io.ox/contacts//picker/limits/list=`<number>`</config>
+Max elements shown in the list before first paginate. Default `100`
 
-**picker/limits/list**
-> Max elements shown in the list before first paginate, (default 100)
+<config>io.ox/contacts//picker/limits/more=`<number>`</config>
+Elements for addition loading on each subsequent paginate call. Default `100`
 
-**picker/limits/search**
-> Maximum search results (default 50)
+<config>io.ox/contacts//picker/limits/search=`<number>`</config>
+Maximum search results. Default `50`
 
 # Calendar
 
-```
-settings!io.ox/calendar
-```
-
 ## User settings
 
-### General
+<config>io.ox/calendar//startTime=`<number>`</config>
+Start of working time as hour of the day in current timezone. Default `8`
 
-**interval**
-> time scale in minutes
+<config>io.ox/calendar//endTime=`<number>`</config>
+End of working time as hour of the day in current timezone. Default `18`
 
-**startTime**
-> start of working time
+<config>io.ox/calendar//interval=`<number>`</config>
+Selected calendar grid scale interval in minutes. One of `5, 10, 15, 20, 30, 60`. Default `30`.
 
-**endTime**
-> end of working time
+<config>io.ox/calendar//showDeclinedAppointments=`<bool>`</config>
+Should declined appointments be displayed in the user calendar. Default `true`
 
-**showDeclinedAppointments**
-> ...
+<config>io.ox/calendar//deleteInvitationMailAfterAction=`<bool>`</config>
+Automatically delete appointment invitation emails after the appointment has been accepted or declined.
 
-**deleteInvitationMailAfterAction**
-> automatically delete the invitation email after the appointment has been accepted or declined
+<config>io.ox/calendar//markFulltimeAppointmentsAsFree=`<bool>`</config>
+Mark all day appointments as 'free' for free/busy views. Default `false`
 
-### Expert
+<config>io.ox/calendar//notifyNewModifiedDeleted=`<bool>`</config>
+Receive notification emails for appointment changes where the user is participants. Default `true`
 
-**defaultReminder**
-> value in minutes
+<config>io.ox/calendar//notifyAcceptedDeclinedAsCreator=`<bool>`</config>
+Receive notification emails as appointment organizer when participants accept or decline. Default `false`
 
-**markFulltimeAppointmentsAsFree**
-> mark all day appointments as free
+<config>io.ox/calendar//notifyAcceptedDeclinedAsParticipant=`<bool>`</config>
+Receive notification emails as appointment participants when other participants accept or decline. Default `false`
 
-### Email notifications
-
-**notifyNewModifiedDeleted**
-> receive notification for appointment changes
-
-**notifyAcceptedDeclinedAsCreator**
-> receive notification as appointment creator when participants accept or decline
-
-**notifyAcceptedDeclinedAsParticipant**
-> receive notification as appointment participant when other participants accept or decline
-
-**deleteInvitationMailAfterAction**
-> automatically delete the invitation email after the appointment has been accepted or declined
-
-### Workweek
-
-**numDaysWorkweek**
-> number of days in work week
-
-**workweekStart**
-> work week starts on
+<config>io.ox/calendar//deleteInvitationMailAfterAction=`<bool>`</config>
+Automatically delete invitation emails after the appointment has been accepted or declined. Default `true`
 
 
-## user setting: timezones
+<config>io.ox/calendar//numDaysWorkweek=`<number>`</config>
+Number of days in a work week. Default `5`
 
-**favoriteTimezones**
-> array of timezones like 'America/Jamaica'
+<config>io.ox/calendar//workweekStart=`<number>`</config>
+Day to start the workweek. Numeric where Sunday is `0`. Default `1` (Monday)
 
-**renderTimezones**
-> array of timzones that specifies that timezones out of the favoriteTimeszones that should be displayed
+<config>io.ox/calendar//favoriteTimezones=`<string>`</config>
+Array of timezones like `['Europe/Berlin']`
 
-
-## Folderpopup
-
-**folderpopup/[id]/last**
-> stores state of folder popups
-
-**folderpopup/[id]/open**
-> stores state of folder popups
-
+<config>io.ox/calendar//renderTimezones=`<bool>`</config>
+Array of timzones that specifies that timezones out of the favoriteTimeszones that should be displayed
 
 ## Scheduling view
 
-**scheduling/zoom**
-> value is 100, 200, 400 or 1000
+<config>io.ox/calendar//scheduling/zoom=`<number>`</config>
+Zoom level in percent. One of 10, 25, 50, 100, 200, 400 or 1000. Default `100`
 
-**scheduling/compact**
-> in compact mode rows are thinner (true/false)
+<config>io.ox/calendar//scheduling/compact=`<bool>`</config>
+Use compact mode for scheduling view, rows take less vertical space. Default `false`
 
-**scheduling/showFree**
-> (true/false)
+<config>io.ox/calendar//scheduling/showFree=`<bool>`</config>
+Show/hide appointments that are marked as free. Default `false`
 
-**scheduling/showTemporary**
-> (true/false)
+<config>io.ox/calendar//scheduling/showReserved=`<bool>`</config>
+Show/hide appointments that are marked as reserved. Default `false`
 
-**scheduling/showReserved**
-> (true/false)
+<config>io.ox/calendar//scheduling/onlyWorkingHours=`<bool>`</config>
+Show only working hours in scheduling view. Default `true`
 
-**scheduling/showAbsent**
-> (true/false)
-
-**scheduling/onlyWorkingHours**
-> (true/false)
-
+<config>io.ox/calendar//scheduling/dateRange=`<string>`</config>
+Show either one week or the complete month in the view (`week` or `month`). Default `week`
 
 ## Misc
 
-**colorScheme**
-> value is 'classic', 'dark' or 'custom'
+<config>io.ox/calendar//defaultFolderColor=`<string>`</config>
+Calendar folder color as CSS HEX string, defaults to `#CFE6FF`
 
-**defaultFolderColor**
-> value is between 1 and 11 as final part of css class 'color-label-'
+<config>io.ox/calendar//freeBusyStrict=`<bool>`</config>
+Hide appointment data in planning view for all appointment where the user is not an participants. Default `true`
 
-**freeBusyStrict**
->  no detail view in scheduling view for appointments the user is not part of
+<config>io.ox/calendar//participantBlacklist=`<string>`</config>
+List of blacklisted participants which can not be added to appointments. Useful for mailing lists.
 
-**participantBlacklist**
-> comma separated list of of mail adresses
-
-**viewView**
-> value is 'week:day', 'week:workweek', 'week:week', 'month' or 'list'
+<config>io.ox/calendar//viewView=`<string>`</config>
+value is 'week:day', 'week:workweek', 'week:week', 'month' or 'list'
 
 
 # Files
 
-```
-settings!io.ox/files
-```
+<config>io.ox/files//showHidden=`<bool>`</config>
+Show hidden files and folders. Default `false`
 
-## User preferences
+<config>io.ox/files//uploadHandling=`<string>`</config>
+Strategy how to handle files with identical names. One of `newVersion`, `announceNewVersion` or `newFile`. Default `announceNewVersion`.
 
-**showHidden**
-> Show hidden files and folders
+<config>io.ox/files//autoplayPause=`<number>`</config>
+Slideshow / Autoplay mode pause in seconds. Default `5`
 
-**uploadHandling**
-> Strategy how to handle files with identical names is 'newVersion', 'announceNewVersion' or 'newFile'
+<config>io.ox/files//audioEnabled=`<bool>`</config>
+Play audio files in viewer. Default `true`
 
-**autoplayPause**
-> Slideshow / Autoplay mode pause in seconds
+<config>io.ox/files//videoEnabled=`<bool>`</config>
+Play video files in viewer. Default `true`.
 
-## Mediaplayer and mediasupport
+<config>io.ox/files//autoplayLoopMode=`<string>`</config>
+Autoplaymode of the viewer. `loopEndlessly` or `loopOnlyOnce`. Default `loopEndlessly`
 
-**audioEnabled**
-> (true/false)
-
-**videoEnabled**
-> (true/false)
-
-
-## Folderpopup
-
-**folderpopup/[id]/last**
-> stores state of folder popups
-
-**folderpopup/[id]/open**
-> stores state of folder popups
-
-## Misc
-
-**autoplayLoopMode**
-> File Viewer setting is'loopendlessly' or  _something falsy_
-
-**features/comments**
-> allow comments when uploaded a new version of a file
-
+<config>io.ox/files//features/comments=`<bool>`</config>
+Allow comments when uploaded a new version of a file. Default `true`
 
 # Tasks
 
-```
-settings!io.ox/tasks
-```
+<config>io.ox/tasks//notifyAcceptedDeclinedAsCreator=`<bool>`</config>
+Receive notifications when a participant accepted or declined a task created by you. Default `false`
 
-## Mail notifications
+<config>io.ox/tasks//notifyAcceptedDeclinedAsParticipant=`<bool>`</config>
+Receive notifications when a participant accepted or declined a task in which you participate. Default `false`
 
-**notifyAcceptedDeclinedAsCreator**
-> Receive notifications when a participant accepted or declined a task created by you
+<config>io.ox/tasks//notifyNewModifiedDeleted=`<bool>`</config>
+Receive notifications when a task in which you participate is created, modified or deleted. Default `false`
 
-**notifyAcceptedDeclinedAsParticipant**
-> Receive notifications when a participant accepted or declined a task in which you participate
+# Portal: OX Drive Clients Widget
 
-**notifyNewModifiedDeleted**
-> Receive notifications when a task in which you participate is created, modified or deleted
+<config>plugins/portal//oxdriveclients/appIconAsBase64=`<string>`</config>
+App icon encoded as base64 string.
 
-## Folderview
+<config>plugins/portal//oxdriveclients/l10nImages=`<string>`</config>
+Array of language strings like 'en,de,es'. This will indicate which localized app store images are present. Default `['de', 'en', 'es', 'fr', 'it', 'nl']`
 
-**folderview/blacklist**
-> hides folder nodes in tree view
+<config>plugins/portal//oxdriveclients/linkTo/[windows|android|ios|macos]=`<string>`</config>
+Link to Appstore or download location
 
-**folderview/\[open|visible|width\]/\[small|medium|large\]**
-> stores lists for different states
+<config>plugins/portal//oxdriveclients/productName=`<string>`</config>
+Customized product name for OX Drive. Default `OX Drive`
 
-
-## Folderpopup
-
-**folderpopup/[id]/last**
-> stores state of folder popups
-
-**folderpopup/[id]/open**
-> stores state of folder popups
-
-
-## VGrid
-
-**showCheckboxes**
-> are checkboxes shown in grid view
-
-**vgrid/width/\[small|medium|large\]**
-> stores lists for different states
-
-
-## Misc
-
-**currencies**
-> list of available currencies (3-digits) in edit/new dialog
-
-
-# Other
-
-## Portal: oxdriveclients
-
-```
-settings!plugins/portal/oxdriveclients
-```
-
-**appIconAsBase64**
-> App icon encoded as base64 string to be displayed in the UI
-
-**l10nImages**
-> array of languages like 'en'
-
-**linkTo/[Windows|Android|iOS|Mac OS]**
-> url
-
-**productName**
-> customized product name for OX Drive
-
-**standaloneWindowsClient**
-> (true/false)
-
-## Tours
-
-```
-settings!io.ox/tours
-```
-
-**server/disableTours**
-> feature toggle
-
-**server/startOnFirstLogin**
-> starts the first start tour on the first login
-
-**user/alreadySeenVersion**
-> determine if the first start tour was seen at all
-
-**whatsNew/autoShow**
-> number of times the what's new tour should be shown to the user
-
-**whatsNew/neverShowAgain**
-> overwrites the autoshow counter and disables the autostart of the tour
-
-**whatsNew/whatsNew/menuEntry**
-> Determines if a menu entry for the what's new tour should be created
-
-**whatsNew/whatsNew/helpUrl**
-> url to the what's new help page (https://www.open-xchange.com/whats-new-7-10)
-
-## Upsell
-
-```
-settings!plugins/upsell
-```
-
-**shop/products**
-> list of products as hash
-
-**ads/delayInMilliseconds**
-> adInterval
-
-**driveAd**
-> ...
-
-**bubbles/skipFirstLogin**
-> do on first login ever?
-
-**bubbles/repeatPerLogins**
-> how many logins does this appear?
-
-**bubbles/repeatInMilliseconds**
-> after login in, how often does it appear?
-
-## Upsell: simple wizard
-
-```
-settings!plugins/upsell/simple-wizard
-```
-
-**closeButton**
-> adds close button
-
-**height**
-> max-height in px
-
-**width**
-> width in px
-
-**overlayColor**
-> background color
-
-**overlayOpacity**
-> background opacity
-
-**url**
-> ...
-
-**zeroPadding**
-> adds class 'zero-padding'

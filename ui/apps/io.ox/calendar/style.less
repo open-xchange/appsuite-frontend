@@ -18,7 +18,7 @@
         @media (max-width:  @smartphone-breakpoint) and (orientation: portrait),
                (max-height: @smartphone-breakpoint) and (orientation: landscape) { display: none; }
 
-        .flex-display(flex);
+        display: flex;
         height: @calendar-toolbar-height;
         padding-top: 9px;
 
@@ -160,6 +160,15 @@
 
         .footer-container .footer { left: @adjusted-width; }
     }
+}
+
+.change-organizer-dialog .tt-dropdown-menu {
+    // twitter plugin overides this so important must be used
+    // needed so dropdown opens over modal dialog
+    position: fixed !important;
+    top: auto !important;
+    left: auto !important;
+    width: ~"calc(100% - 32px)";
 }
 
 .io-ox-calendar-main {
@@ -410,7 +419,7 @@
     .io-ox-inline-links:empty { display: none; }
 
     h1.subject {
-        display: inline-block;
+        //display: inline-block;
         line-height: 1.2em;
         margin: 0;
         width: 100%;
@@ -449,8 +458,9 @@
     .location { font-weight: bold; }
 
     .private-flag {
+        float: left;
         font-size: 18pt;
-        margin-right: 11px;
+        margin: 5px 12px 0 0;
         color: #aaa;
     }
 
@@ -472,7 +482,10 @@
         cursor: text;
     }
 
-    .attachment-list .dropdown.attachment-link { display: inline-block; }
+    .attachment-list .dropdown {
+        display: inline-block;
+        margin-right: 16px;
+    }
 
     fieldset {
         margin: 0 0 16px 0;
@@ -504,8 +517,6 @@
         }
 
         .io-ox-inline-links.embedded { text-align: left; }
-
-        .private-flag { line-height: 20px; }
 
         h1.subject {
             line-height: 24px;
@@ -790,4 +801,56 @@
     }
 
     .date { white-space: nowrap; }
+}
+
+.shared-calendars {
+
+    h4 {
+        margin-bottom: 15px;
+    }
+
+    .item {
+        display: flex;
+    }
+
+    .item-name {
+        flex: 1;
+        margin-top: 12px;
+    }
+
+    .item-block {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .checkbox label {
+        padding-left: 0px;
+    }
+    .checkbox,  .checkbox + .checkbox {
+        margin: 10px 16px;
+    }
+
+    .disabled .checkbox.custom i.toggle{
+        background-color: #eeeeee;
+    }
+
+    .list-group-item {
+        padding: 5px 15px;
+
+        &.page {
+            cursor: pointer;
+        }
+
+        &.disabled {
+            cursor: auto;
+        }
+    }
+    .list-group-item.disabled {
+        background-color: #fff;
+    }
+
+    li:focus {
+        outline: 2px solid #3c73aa;
+        text-decoration: underline;
+    }
 }

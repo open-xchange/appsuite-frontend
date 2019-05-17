@@ -71,7 +71,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         setDropdownOverlay: function () {
             var self = this;
 
-            this.$overlay = $('<div class="smart-dropdown-container dropdown open">', this.onReady.bind(this))
+            this.$overlay = $('<div class="smart-dropdown-container dropdown open" role="navigation">', this.onReady.bind(this))
                 .addClass(this.$el.prop('className'));
 
             this.$ul.data('style', this.$ul.attr('style'));
@@ -206,6 +206,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 this.$placeholder.append(node);
                 // lazy metrics support
                 this.$el.trigger(_.extend({}, e, { type: 'mousedown' }));
+                this.$el.trigger('track', e.currentTarget);
+
                 this.$el.trigger(e);
                 $temp.replaceWith(node);
             }
@@ -383,11 +385,15 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 this.trigger('ready');
             }.bind(this));
             var label = getLabel(this.options.label),
-                ariaLabel = this.options.aria ? this.options.aria : null;
+                ariaLabel = this.options.aria ? this.options.aria : null,
+                toggleNode = '<a href="#" draggable="false">';
 
             if (_.isString(label)) ariaLabel += (' ' + label);
+
+            if (this.options.buttonToggle) toggleNode = '<button type="button" draggable="false" class="btn btn-link">';
+
             this.$el.append(
-                this.$toggle = this.options.$toggle || this.$toggle || $('<a href="#" draggable="false">').attr({
+                this.$toggle = this.options.$toggle || this.$toggle || $(toggleNode).attr({
                     'aria-label': ariaLabel,
                     'data-action': this.options.dataAction,
                     'title': this.options.title || null,

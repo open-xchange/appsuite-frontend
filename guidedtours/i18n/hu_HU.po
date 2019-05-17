@@ -1,11 +1,11 @@
 # Gabor Kelemen <gabor@workshop-chapina.com>, 2012, 2013, 2014.
-# Kálmán Kéménczy <kalman@workshop-chapina.com>, 2013, 2014, 2015, 2016, 2017, 2018.
+# Kálmán Kéménczy <kalman@workshop-chapina.com>, 2013, 2014, 2015, 2016, 2017, 2018, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-10-09 13:12+0200\n"
+"PO-Revision-Date: 2019-04-09 09:29+0200\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -405,7 +405,7 @@ msgstr "Az egyes alkalmazások részletes leírása a Rendszer menü Súgó men�
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Composing a new E-Mail"
-msgstr "Új levél írása"
+msgstr "Új levél szerkesztése"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To compose a new E-Mail, click on Compose in the toolbar."
@@ -428,7 +428,7 @@ msgstr "Tárgy megadása"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Enter the subject into the subject field."
-msgstr "Adja meg "
+msgstr "Írja be a témát a tárgy mezőbe. "
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Further functions"
@@ -527,6 +527,70 @@ msgstr "A levelezés beállításainak megnyitásához kattintson a menüsor job
 #: apps/io.ox/tours/main.js module:io.ox/tours
 msgid "Getting started"
 msgstr "Első lépések"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr "Kétfaktoros hitelesítés"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr "A fiók biztonságának növelése érdekében további hitelesítési lehetőségeket lehet hozzáadni."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "Ellenőrzési lehetőség hozzáadása"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr "A további hitelesítés lehetőségei a kialakítástól függenek."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "Kód szöveges üzenetben"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr "Ha például egy szöveges üzenetben kéri a kódot, akkor elkérjük a telefonszámot."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "Hitelesítési kérelmek"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr "Ezután a következő alkalommal, amikor bejelentkezik, meg kell erősítenie a személyazonosságát a telefonra küldött szám megadásával."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "Eltávolítás"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr "A hozzáadott eszközök szükség esetén eltávolíthatók. További információkért lásd a súgót."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "Ezután"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr "Kiegészítő biztonsági szolgáltatásként a fiókba való bejelentkezés előtt most már szükség van egy második hitelesítési módra, például szöveges üzenetre. Szeretne erről többet megtudni?"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr "Termékbemutató"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"

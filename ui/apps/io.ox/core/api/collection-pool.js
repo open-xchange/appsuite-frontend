@@ -155,6 +155,12 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
                 this.trigger('expire');
             };
 
+            collection.setComplete = function (state) {
+                if (state === this.complete) return;
+                this.complete = state;
+                this.trigger('complete', state);
+            };
+
             // to simplify debugging
             collection.cid = cid;
 

@@ -18,7 +18,6 @@ define('io.ox/core/desktop', [
     'io.ox/core/event',
     'io.ox/backbone/views/window',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
     'io.ox/core/cache',
     'io.ox/core/notifications',
     'io.ox/core/upsell',
@@ -29,7 +28,7 @@ define('io.ox/core/desktop', [
     'io.ox/core/main/icons',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Events, FloatingWindow, ext, links, cache, notifications, upsell, adaptiveLoader, folderAPI, apps, findFactory, icons, coreSettings, gt) {
+], function (Events, FloatingWindow, ext, cache, notifications, upsell, adaptiveLoader, folderAPI, apps, findFactory, icons, coreSettings, gt) {
 
     'use strict';
 
@@ -66,6 +65,8 @@ define('io.ox/core/desktop', [
             this.id = this.id || (this.options.refreshable ? this.options.name : '') || 'app-' + this.guid;
             this.set('path', this.options.path ? this.options.path : this.getName() + '/main');
             this.set('id', this.id);
+            this.set('openInTab', this.options.openInTab);
+            this.set('tabUrl', this.options.tabUrl);
             this.getInstance = function () {
                 return self;
             };
@@ -160,6 +161,10 @@ define('io.ox/core/desktop', [
 
                 var folder = null, that, win = null, grid = null, type, initialized = $.Deferred();
 
+                folderAPI.on('after:rename', function (id, data) {
+                    if (win) win.setTitle(data.title || '');
+                });
+
                 that = {
 
                     initialized: initialized.promise(),
@@ -180,15 +185,6 @@ define('io.ox/core/desktop', [
 
                     set: (function () {
 
-                        /**
-                         * Change folder if the app has changed
-                         * @param {String} id
-                         * @param {file|folder} data
-                         * @param {Application} app
-                         * @param {Deferred} def
-                         * @param {Boolean} favorite
-                         *  change to the favorite section in the tree or not
-                         */
                         function change(id, data, app, def, favorite) {
                             //app has changed while folder was requested
                             var appchange = _.url.hash('app') !== app;
@@ -284,11 +280,15 @@ define('io.ox/core/desktop', [
                     },
 
                     getData: function () {
-
                         if (folder === null) return $.Deferred().resolve({});
-
                         var model = folderAPI.pool.getModel(folder);
                         return $.Deferred().resolve(model.toJSON());
+                    },
+
+                    // getData() became internally sync over time, but it kept its async return value
+                    // getModel() is sync; return undefined if model doesn't exist (yet)
+                    getModel: function () {
+                        return folderAPI.pool.getModel(folder);
                     },
 
                     can: function (action) {
@@ -522,7 +522,7 @@ define('io.ox/core/desktop', [
         },
 
         setState: function (obj) {
-            if (this.options.floating) return;
+            if (this.options.floating || this.options.plugged) return;
             for (var id in obj) {
                 _.url.hash(id, ((obj[id] !== null) ? String(obj[id]) : null));
             }
@@ -537,12 +537,14 @@ define('io.ox/core/desktop', [
                 self = this,
                 name = this.getName();
 
-            // update hash
-            if (!this.options.floating && name !== _.url.hash('app')) {
-                _.url.hash({ folder: null, perspective: null, id: null });
-            }
-            if (!this.options.floating && name) {
-                _.url.hash('app', name);
+            // update hash (not for floating apps, e.g. mail editor; or plugged apps, e.g. spreadsheet viewer)
+            if (!this.options.floating && !this.options.plugged) {
+                if (name !== _.url.hash('app')) {
+                    _.url.hash({ folder: null, perspective: null, id: null });
+                }
+                if (name) {
+                    _.url.hash('app', name);
+                }
             }
 
             if (this.get('state') === 'ready') {
@@ -573,7 +575,8 @@ define('io.ox/core/desktop', [
                         throw arguments;
                     }
                 );
-            } else if (this.has('window')) {
+                // don't resume apps that are currently initializing
+            } else if (this.get('state') !== 'initializing' && this.has('window')) {
                 // toggle app window
                 this.get('window').show();
                 this.trigger('resume', this);
@@ -684,7 +687,7 @@ define('io.ox/core/desktop', [
 
         removeRestorePoint: function () {
             var uniqueID = this.get('uniqueID');
-            ox.ui.App.removeRestorePoint(uniqueID);
+            return ox.ui.App.removeRestorePoint(uniqueID);
         }
 
     });
@@ -801,9 +804,9 @@ define('io.ox/core/desktop', [
 
             this.cleanupSavepoints();
 
-            return this.getSavePoints().then(function (list) {
+            return $.when(this.getSavePoints(), ox.rampup.compositionSpaces).then(function (list, compositionSpaces) {
                 return $.when.apply($,
-                    _(list).map(function (obj) {
+                    _([].concat(list, compositionSpaces || [])).map(function (obj) {
                         adaptiveLoader.stop();
                         var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
                         return ox.load(requirements).then(function (m) {
@@ -833,12 +836,12 @@ define('io.ox/core/desktop', [
                                             // replace restore point with old id with restore point with new id (prevents duplicates)
                                             self.removeRestorePoint(oldId).then(self.getSavePoints).then(function (sp) {
                                                 sp.push(obj);
-                                                self.setSavePoints(sp);
+                                                if (obj.keepOnRestore !== false) self.setSavePoints(sp);
                                                 if (model.get('quitAfterLaunch')) model.trigger('quit');
                                             });
                                         }).fail(function (e) {
                                             if (!e || e.code !== 'MSG-0032') return;
-                                            // restoreById-savepoint after draft got deleted
+                                            // restoreById-savepoint after draft/composition space got deleted
                                             _.delay(function () {
                                                 ox.ui.App.removeRestorePoint(oldId);
                                                 model.trigger('close');
@@ -914,6 +917,7 @@ define('io.ox/core/desktop', [
         getCurrentFloatingApp: function () {
             return _.chain(ox.ui.apps.pluck('window')).compact()
                 .map(function (win) {
+                    if (win.app.get('name') === 'io.ox/help') return undefined;
                     return win.floating && win.floating.model && win.floating.model.get('active') ? win.app : undefined;
                 }).compact().first().value();
         },
@@ -1124,11 +1128,14 @@ define('io.ox/core/desktop', [
         that.on('window.open window.show', function (e, win) {
             // show window manager
             this.show();
-
             // move/add window to top of stack
             windows = _(windows).without(win);
-            _(windows).each(function (w) { w.nodes.body.removeAttr('role'); });
-            win.nodes.body.attr('role', 'main');
+            if (!win.options.floating) {
+                _(windows).each(function (w) { w.nodes.body.removeAttr('role'); });
+                win.nodes.body.attr('role', 'main');
+            } else {
+                win.nodes.body.attr('role', 'region');
+            }
             windows.unshift(win);
             // add current windows to cache
             if (windows.length > 1) {
@@ -1288,9 +1295,10 @@ define('io.ox/core/desktop', [
 
                 this.show = function (cont, resume) {
                     var appchange = false;
+                    var appPlugged = this.app && this.app.options.plugged;
                     //todo URL changes on app change? direct links?
                     //use the url app string before the first ':' to exclude parameter additions (see how mail write adds the current mode here)
-                    if (!this.floating && currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
+                    if (!this.floating && !appPlugged && currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
                         appchange = true;
                     }
                     ox.trigger('change:document:title', this.app.get('title'));
@@ -1316,7 +1324,7 @@ define('io.ox/core/desktop', [
                         this.trigger('beforeshow');
                         this.updateToolbar();
                         //set current appname in url, was lost on returning from edit app
-                        if (!this.floating && (!_.url.hash('app') || self.app.getName() !== _.url.hash('app').split(':', 1)[0])) {
+                        if (!this.floating && !appPlugged && (!_.url.hash('app') || self.app.getName() !== _.url.hash('app').split(':', 1)[0])) {
                             //just get everything before the first ':' to exclude parameter additions
                             _.url.hash('app', self.app.getName());
                         }
@@ -1598,7 +1606,7 @@ define('io.ox/core/desktop', [
                         // window SIDEPANEL
                         win.nodes.sidepanel = $('<div class="window-sidepanel collapsed">'),
                         // window BODY
-                        win.nodes.body = $('<div class="window-body" role="main">'),
+                        win.nodes.body = $('<div class="window-body">'),
 
                         win.nodes.footer = $('<div class="window-footer">')
                     )
@@ -1664,15 +1672,14 @@ define('io.ox/core/desktop', [
                         // share data
                         _.extend(baton.data, {
                             label: gt('Search'),
-                            id:  _.uniqueId(win.name + '-search-field'),
-                            guid:  _.uniqueId('form-control-description-')
+                            id: _.uniqueId('search')
+                            // guid:  _.uniqueId('form-control-description-')
                         });
                         // search box form
                         baton.$.group = $('<div class="form-group has-feedback">').append(
                             $('<input type="text" class="form-control has-feedback search-field tokenfield-placeholder f6-target">').attr({
-                                id: baton.data.id,
-                                placeholder: baton.data.label + '...',
-                                'aria-describedby': baton.data.guid
+                                'aria-labelledby': baton.data.id,
+                                placeholder: baton.data.label + '...'
                             })
                         );
                         // add to searchbox area
@@ -1691,7 +1698,8 @@ define('io.ox/core/desktop', [
                             $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
                                 .attr({
                                     'data-original-title': gt('Start search'),
-                                    'aria-label': gt('Start search')
+                                    'aria-label': gt('Start search'),
+                                    'id': baton.data.id
                                 }).append($('<i class="fa fa-search" aria-hidden="true">'))
                                 .tooltip(),
                             // cancel/reset
@@ -1704,6 +1712,11 @@ define('io.ox/core/desktop', [
                         );
                     }
                 });
+
+                /*
+
+                A11y NOTE: This does not work like this. Instructions indicating a position on screen has no meaning to blind users.
+                Also the label serves no purpose here, the best workaround in the moment is to attach a title to the input field.
 
                 ext.point('io.ox/find/view').extend({
                     id: 'screenreader',
@@ -1723,24 +1736,15 @@ define('io.ox/core/desktop', [
                         );
                     }
                 });
+                */
 
                 // draw searchfield and attach lazy load listener
                 ext.point('io.ox/find/view').invoke('draw', win, ext.Baton.ensure({}));
             }
 
             // fix height/position/appearance
-            if (opt.chromeless) {
+            if (opt.chromeless) win.setChromeless(true);
 
-                win.setChromeless(true);
-
-            } else if (opt.name) {
-
-                // toolbar
-                ext.point(opt.name + '/toolbar').extend(new links.ToolbarLinks({
-                    id: 'links',
-                    ref: opt.name + '/links/toolbar'
-                }));
-            }
             // inc
             guid++;
 
@@ -1850,16 +1854,6 @@ define('io.ox/core/desktop', [
         }
         return def;
     };
-
-    // retrigger jquery events to allow listenTo event registration
-    ox.dom = _.extend({
-        retrigger: function (e) { ox.dom.trigger(e.type, e); }
-    }, ox.dom, Backbone.Events);
-    $(document).on('dragover', ox.dom.retrigger);
-    $(document).on('mouseout', ox.dom.retrigger);
-    $(document).on('dragleave', ox.dom.retrigger);
-    $(document).on('drop', ox.dom.retrigger);
-    $(window).on('resize', ox.dom.retrigger);
 
     apps.on('resume', function (app) {
         adaptiveLoader.stop();

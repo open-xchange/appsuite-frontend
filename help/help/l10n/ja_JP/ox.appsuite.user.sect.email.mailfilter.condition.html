@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="ユーザ ガイド">
-<link rel="up" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.7. メールフィルタの使用">
+<link rel="up" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.7. メールフィルターの使用">
 <link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.7.1. 新規のルールの作成">
 <link rel="next" href="ox.appsuite.user.sect.email.mailfilter.action.html" title="5.7.3. アクションを追加">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
@@ -30,16 +30,16 @@
 </div></nav></div>
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">メール</span></h1>
-<h2 class="sr-only">メールフィルタの使用</h2>
+<h2 class="sr-only">メールフィルターの使用</h2>
 <div class="sect2" id="ox.appsuite.user.sect.email.mailfilter.condition">
 <div class="titlepage"><div><div><h3 class="title">5.7.2. 条件を追加</h3></div></div></div>
-<a class="indexterm" name="id-1.6.13.10.2"></a><a class="indexterm" name="id-1.6.13.10.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.condition">条件によって操作が適用されるメールを指定できます。１つまたは複数の条件を設定できます。</p>
+<a class="indexterm" name="id-1.6.13.11.2"></a><a class="indexterm" name="id-1.6.13.11.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.condition">条件によって操作が適用されるメールを指定できます。１つまたは複数の条件を設定できます。</p>
 <div class="task" id="ox.appsuite.user.task.email.mailfilter.condition">
-<p class="title"><span class="guilabel"><strong>新規ルールを作成</strong></span>ウィンドウで条件を追加する</p>
+<p class="title"><span class="guilabel"><strong>新規ルールを作成</strong></span>ウィンドウで条件を追加する：</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p role="presentation"><span class="guibutton"><strong>条件を追加</strong></span> をクリックします。ドロップダウンメニューから目的の条件を選択します。次のことに注意してください。<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">リストにないメール要素を使用するには、<span class="guibutton"><strong>ヘッダ</strong></span>を選択します。<span class="guilabel"><strong>名前</strong></span>入力フィールドにヘッダのエントリを入力します。ソース データの表示 で、メールのヘッダを確認することもできます。</p></li>
-<li class="listitem"><p role="presentation"><span class="guilabel"><strong>BCC</strong></span>を考慮する場合は、<span class="guibutton"><strong>エンベロープ - To</strong></span>を選択します。エンベロープには、<span class="guilabel"><strong>To</strong></span>、<span class="guilabel"><strong>CC</strong></span>または<span class="guilabel"><strong>BCC</strong></span>フィールドに入力したメールの受取人を含みます。</p></li>
+<li class="listitem"><p role="presentation">リストにないメール要素を使用するには、<span class="guibutton"><strong>ヘッダ</strong></span>を選択します。名前 入力フィールドにヘッダのエントリを入力します。ソース データの表示 で、メールのヘッダを確認することもできます。</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>BCC</strong></span>を考慮する場合は、<span class="guibutton"><strong>エンベロープ - To</strong></span>を選択します。エンベロープには、<span class="guibutton"><strong>To</strong></span>、<span class="guibutton"><strong>CC</strong></span>または<span class="guibutton"><strong>BCC</strong></span>フィールドに入力したメールの受取人を含みます。</p></li>
 <li class="listitem"><p role="presentation">条件のメールの内容の一部を使用するには、<span class="guibutton"><strong>内容</strong></span>を選択します。</p></li>
 <li class="listitem"><p role="presentation">条件の受信日を使用するには、<span class="guibutton"><strong>現在の日付</strong></span>を選択します。</p></li>
 </ul>
@@ -58,7 +58,7 @@
 <li class="listitem"><p role="presentation">基準は「次の文字列と完全に一致」</p></li>
 <li class="listitem"><p role="presentation">引数は「議事録」</p></li>
 </ul>
-<p>上記の場合、メールの件名が引数の「議事録」に完全に一致するかどうかが検証されます。件名でメールにフィルタをかける例：</p>
+<p>上記の場合、メールの件名が引数の「議事録」に完全に一致するかどうかが検証されます。件名でメールにフィルターをかける例：</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p role="presentation">判定基準：「次の文字列を含む」引数の文字が件名に含まれる場合、条件を満たします。例：引数を「minutes」とします。</p>
@@ -89,12 +89,17 @@
 </ul>
 <p>
       </p>
-<p class="title">詳細は、次のページを参照してください。</p>
-<ul class="itemizedlist" id="ox.appsuite.user.related.email.mailfilter.condition" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html">新規のルールの作成</a></p></li>
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.action.html">アクションを追加</a></p></li>
-</ul>
-<p id="ox.appsuite.user.parent.email.mailfilter.condition">親記事：<a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html">メールフィルタの使用</a></p>
+<p id="ox.appsuite.user.related.email.mailfilter.condition">
+        </p>
+<p class="title">従属アクション：</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html">新規のルールの作成</a></p></li></ul>
+<p>
+        </p>
+<p class="title">同等アクション</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.action.html">アクションを追加</a></p></li></ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.email.mailfilter.condition">親記事：<a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html">メールフィルターの使用</a></p>
 </div>
           </div>
         </body>

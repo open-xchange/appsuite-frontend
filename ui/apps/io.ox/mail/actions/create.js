@@ -14,7 +14,6 @@
  */
 
 define('io.ox/mail/actions/create', [
-    'io.ox/core/capabilities',
     'io.ox/contacts/api',
     'io.ox/core/api/user',
     'io.ox/mail/util',
@@ -23,7 +22,7 @@ define('io.ox/mail/actions/create', [
     'settings!io.ox/calendar',
     'gettext!io.ox/core',
     'io.ox/calendar/util'
-], function (capabilities, contactAPI, userAPI, util, yell, settings, calendarSettings, gt, calendarUtil) {
+], function (contactAPI, userAPI, util, yell, settings, calendarSettings, gt, calendarUtil) {
 
     'use strict';
 
@@ -37,14 +36,13 @@ define('io.ox/mail/actions/create', [
     function fetch(data) {
         return userAPI.get()
             .then(function (user) {
-                // filter current user (is added automatically as organisator); filter msisdn;
+                // filter current user (is added automatically as organisator);
                 var useraddresses = _.compact([user.email1, user.email2, user.email3]);
                 return _.chain([].concat(data.to, data.cc, data.from))
                     .compact()
                     .map(function (obj) { return obj[1]; })
                     .unique()
                     .reject(function (mail) { return _.contains(useraddresses, mail); })
-                    .reject(function (mail) { return capabilities.has('msisdn') ? false : util.getChannel(mail, false) === 'phone'; })
                     .value();
             }).
             then(function (recipients) {
@@ -68,7 +66,7 @@ define('io.ox/mail/actions/create', [
         var refDate = moment().startOf('hour').add(1, 'hours'),
             data = {
                 attendees: attendees,
-                title: title,
+                summary: title,
                 folder_id: calendarSettings.get('chronos/defaultFolderId'),
                 startDate: { value: refDate.format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() },
                 endDate: { value: refDate.add(1, 'hours').format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() }
@@ -106,13 +104,13 @@ define('io.ox/mail/actions/create', [
                         contact.user_id = contact.internal_userid;
                     } else {
                         contact.type = 5;
-                        contact.display_name = contact.display_name;
                         contact.mail = contact.email1;
                     }
 
                     participants.push(calendarUtil.createAttendee(contact));
 
                 });
+                console.log(baton.data.subject);
                 launchCalendar(participants, baton.data.subject);
             });
 

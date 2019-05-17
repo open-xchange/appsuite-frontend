@@ -52,7 +52,7 @@ define('io.ox/calendar/year/view', [
                 _.range(firstDayOfWeek, firstDayOfWeek + 7).map(function (index) {
                     var day = moment().day(index % 7),
                         cell = $('<th>').text(day.format('dd'));
-                    if (index === 0 || index === 6) cell.addClass('weekend');
+                    if (day.day() === 0 || day.day() === 6) cell.addClass('weekend');
                     return cell;
                 })
             );
@@ -218,8 +218,8 @@ define('io.ox/calendar/year/view', [
             });
 
             this.listenTo(this.model, 'change:year', this.getCallback('onChangeYear'));
-            this.listenTo(ox.dom, 'resize', this.onWindowResize);
             this.listenTo(this.app, 'change:folderview', this.onWindowResize);
+            this.listenToDOM(window, 'resize', this.onWindowResize);
             this.on('show', this.onShow);
 
             PerspectiveView.prototype.initialize.call(this, opt);

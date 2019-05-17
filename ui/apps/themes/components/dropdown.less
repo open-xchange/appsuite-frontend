@@ -113,6 +113,8 @@
     a b.caret {
         color:#333;
     }
+
+    button.btn.btn-link .fa-caret-down { margin-left: 5px; }
 }
 
 .attachment-list {
@@ -159,9 +161,10 @@ ul.dropdown-menu li a.disabled {
     .dropdown-menu.io-ox-busy {
         min-height: 100px;
     }
+}
 
-    .dropdown-menu:empty,
-    .divider:first-child, .divider:last-child, .divider + .divider { display: none; }
+.dropdown-menu {
+    &:empty, .divider:first-child, .divider:last-child, .divider + .divider { display: none; }
 }
 
 .smart-dropdown-container {
@@ -173,6 +176,9 @@ ul.dropdown-menu li a.disabled {
     ul {
         overflow-y: auto;
         overflow-x: hidden;
+        li:first-child.divider {
+            display: none;
+        }
     }
 }
 

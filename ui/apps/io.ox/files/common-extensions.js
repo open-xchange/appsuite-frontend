@@ -87,10 +87,18 @@ define('io.ox/files/common-extensions', [
         },
         filenameTooltip: function (baton) {
             var filename = baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename || baton.data.title || '';
-
             var parent = this.parent();
+            var title = _.breakWord(filename);
+
+            /*
+             * The Tooltip object uses the value provided through the options or the data-original-title attribute value.
+             * The only alternative is an explicit Tooltip object destruction before recreation (including cumbersome timeout because of async function).
+             * The repeated initialization by invoking parent.tooltip() is necessary to not loose the tooltip feature when switching view layouts.
+             * See bug 62650 and 64518 for further information.
+             */
+            parent.attr('data-original-title', title).tooltip('hide');
             parent.tooltip({ // http://getbootstrap.com/javascript/#tooltips // https://codepen.io/jasondavis/pen/mlnEe
-                title: _.breakWord(filename),
+                title: title,
                 trigger: 'hover',                       // click | hover | focus | manual. You may pass multiple triggers; separate them with a space.
                 //placement: 'right auto',                // top | bottom | left | right | auto.
                 placement: 'bottom auto',               // top | bottom | left | right | auto.

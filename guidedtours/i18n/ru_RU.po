@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-10-09 13:13+0200\n"
+"PO-Revision-Date: 2019-04-09 09:30+0200\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -617,6 +617,69 @@ msgstr ""
 msgid "Getting started"
 msgstr "Начало работы"
 
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr "Двухфакторная аутентификация"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr "Теперь вы можете усилить безопасность своего аккаунта, включив дополнительные опции аутентификации."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "Добавление опций верификации"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Various options for additional verification depends on your installation."
+msgstr "В зависимости от конфигурации вашей установки вам будут доступны разные опции верификации."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "Активация SMS-кода"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr "Для получения кода в СМС-сообщении необходимо указать номер телефона."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "Запросы аутентификации"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr "Во время следующего входа вы должны будете ввести код, который вы получите в SMS-сообщении. "
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "Удаление"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr "Добавленные устройства могут быть удалены. Подробную информацию можно найти в справке."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "Вперед"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr "В качестве дополнительной меры защиты вы можете добавить дополнительный способ аутентификации, например проверку кода, полученного SMS-сообщением. Хотите узнать, как это сделать?"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr "Начать знакомство"
+
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "Портал"
@@ -919,7 +982,6 @@ msgstr ""
 
 #~ msgid "%1$s mail"
 #~ msgid_plural "%1$s mails"
-
 #~ msgstr[0] "%1$s сообщение"
 #~ msgstr[1] "%1$s сообщения"
 #~ msgstr[2] "%1$s сообщений"
@@ -969,6 +1031,7 @@ msgstr ""
 #~ msgctxt "in"
 #~ msgid "%d hour"
 #~ msgid_plural "%d hours"
+
 #~ msgstr[0] "%d час"
 #~ msgstr[1] "%d часа"
 #~ msgstr[2] "%d часов"
@@ -1746,6 +1809,7 @@ msgstr ""
 #~ msgstr "Знаки"
 
 #, fuzzy
+
 #~ msgid "Checkboxes"
 #~ msgstr "Переключить флажки"
 
@@ -2157,6 +2221,7 @@ msgstr ""
 
 #~ msgid "Delete account"
 #~ msgstr "Удалить учетную запись"
+
 
 #~ msgid "Delete all accounts"
 #~ msgstr "Удалить все учетные записи"
@@ -3561,6 +3626,7 @@ msgstr ""
 #~ msgstr "Минуты"
 
 #~ msgid "Miscellaneous"
+
 #~ msgstr "Другое"
 
 #~ msgid "Mobile"
@@ -3674,9 +3740,6 @@ msgstr ""
 
 #~ msgid "New subscription"
 #~ msgstr "Новая подписка"
-
-#~ msgid "Next"
-#~ msgstr "Вперед"
 
 #~ msgid "Next Day"
 #~ msgstr "Следующий день"
@@ -3996,6 +4059,7 @@ msgstr ""
 #~ msgid "Optional 18"
 #~ msgstr "Дополнительно 18"
 
+
 #~ msgid "Optional 19"
 #~ msgstr "Дополнительно 19"
 
@@ -4089,6 +4153,7 @@ msgstr ""
 
 #~ msgid "Phone (business)"
 #~ msgstr "Телефон (рабочий)"
+
 
 #~ msgid "Phone (car)"
 #~ msgstr "Телефон (авто)"
@@ -4621,7 +4686,6 @@ msgstr ""
 #~ msgid "Save changes"
 #~ msgstr "Сохранить изменения"
 
-
 #~ msgid "Save in file store"
 #~ msgstr "Сохранить в хранилище файлов"
 
@@ -5139,7 +5203,6 @@ msgstr ""
 #~ msgstr "Телефон (ISDN)"
 
 #~ msgid "Telephone callback"
-
 #~ msgstr "Телефон (обратный вызов)"
 
 #~ msgid "Telephone primary"
@@ -5290,6 +5353,7 @@ msgstr ""
 #, fuzzy
 #~ msgid ""
 #~ "The appointment is repeated every <a href=\"#\" data-widget=\"options\" "
+
 #~ "data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options"
 #~ "\" data-attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget="
 #~ "\"options\" data-attribute=\"month\">October</a>."

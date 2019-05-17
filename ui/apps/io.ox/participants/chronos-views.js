@@ -15,11 +15,12 @@ define('io.ox/participants/chronos-views', [
     'io.ox/contacts/api',
     'io.ox/core/util',
     'io.ox/contacts/util',
+    'io.ox/calendar/util',
     'io.ox/core/folder/api',
     'gettext!io.ox/core',
     'io.ox/core/capabilities',
     'less!io.ox/participants/style'
-], function (api, util, contactsUtil, folderAPI, gt, capabilities) {
+], function (api, util, contactsUtil, calendarUtil, folderAPI, gt, capabilities) {
 
     'use strict';
 
@@ -141,7 +142,11 @@ define('io.ox/participants/chronos-views', [
             if (!this.options.baton) return false;
             var appointment = this.options.baton.model.toJSON();
             // participants can be removed unless they are organizer
-            if (!appointment.organizer || this.model.get('entity') !== appointment.organizer.entity) return true;
+            if (!appointment.organizer || this.model.get('entity') !== appointment.organizer.entity) {
+                // special case, users cannot remove themselves unless acting on behalf of the organizer
+                if (appointment.id && this.model.get('entity') === ox.user_id && !calendarUtil.hasFlag(appointment, 'organizer_on_behalf')) return false;
+                return true;
+            }
             // special case: organizer can be removed from public folders
             return folderAPI.pool.getModel(appointment.folder).is('public');
         },
@@ -156,13 +161,13 @@ define('io.ox/participants/chronos-views', [
                     // set organizer
                     if (this.isOrganizer()) {
                         extra = gt('Organizer');
-                        // don't remove organizer
-                        if (!this.isRemovable()) this.$el.removeClass('removable');
                     }
+
+                    if (!this.isRemovable()) this.$el.removeClass('removable');
 
                     if (mail && this.options.halo) {
                         this.nodes.$mail
-                            .attr({ href: '#' })
+                            .attr({ href: 'mailto:' + mail })
                             .data({ email1: mail })
                             .addClass('halo-link');
                     }

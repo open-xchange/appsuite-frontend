@@ -13,8 +13,6 @@
 
 define('io.ox/mail/common-extensions', [
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
-    'io.ox/core/extPatterns/actions',
     'io.ox/mail/util',
     'io.ox/mail/api',
     'io.ox/core/api/account',
@@ -28,10 +26,13 @@ define('io.ox/mail/common-extensions', [
     'io.ox/core/api/collection-pool',
     'io.ox/core/tk/flag-picker',
     'io.ox/core/capabilities',
+    'io.ox/backbone/views/toolbar',
     'settings!io.ox/mail',
     'io.ox/core/attachments/view',
+    'io.ox/backbone/views/action-dropdown',
+    'io.ox/backbone/views/actions/util',
     'gettext!io.ox/mail'
-], function (ext, links, actions, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, contactsUtil, userAPI, Pool, flagPicker, capabilities, settings, attachment, gt) {
+], function (ext, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, contactsUtil, userAPI, Pool, flagPicker, capabilities, ToolbarView, settings, attachment, ActionDropdownView, actionsUtil, gt) {
 
     'use strict';
 
@@ -474,7 +475,7 @@ define('io.ox/mail/common-extensions', [
         },
 
         //#. empty message for list view
-        empty: function () { this.text(gt('Empty')); },
+        empty: function () { this.attr('role', 'option').text(gt('Empty')); },
 
         // add orignal folder as label to search result items
         folder: function (baton) {
@@ -487,15 +488,6 @@ define('io.ox/mail/common-extensions', [
         },
 
         recipients: (function () {
-
-            // var drawAllDropDown = function (node, label, data) {
-            //     // use extension pattern
-            //     new links.Dropdown({
-            //         label: label,
-            //         classes: 'all-link',
-            //         ref: 'io.ox/mail/all/actions'
-            //     }).draw.call(node, data);
-            // };
 
             var showAllRecipients = function (e) {
                 e.preventDefault();
@@ -570,27 +562,19 @@ define('io.ox/mail/common-extensions', [
 
         attachmentList: (function attachmentList() {
 
-            function drawInlineLinks(node, data) {
-                var extension = new links.InlineLinks({
-                    dropdown: false,
-                    ref: 'io.ox/mail/attachment/links'
-                });
-                return extension.draw.call(node, ext.Baton({ data: data }));
-            }
-
             var CustomAttachmentView,
                 renderContent = function () {
 
-                    var node = this.$('.file'),
-                        data = this.model.toJSON(),
-                        url, contentType;
+                    var data = this.model.toJSON(), url, contentType;
 
-                    new links.Dropdown({
-                        label: $.txt(this.model.getShortTitle()),
-                        noCaret: true,
-                        ref: 'io.ox/mail/attachment/links'
-                    })
-                    .draw.call(node, ext.Baton({ context: this.model.collection.toJSON(), data: data, $el: node }));
+                    new ActionDropdownView({
+                        backdrop: true,
+                        caret: false,
+                        data: data,
+                        el: this.$('.file'),
+                        point: 'io.ox/mail/attachment/links',
+                        title: this.model.getShortTitle()
+                    });
 
                     url = api.getUrl(data, 'download');
                     contentType = (this.model.get('content_type') || 'unknown').split(/;/)[0];
@@ -604,6 +588,9 @@ define('io.ox/mail/common-extensions', [
                         $(this).css({ display: 'inline-block' });
                         e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
                     });
+
+                    // previews for documents etc have a different style
+                    if (contentType && !(/^image\//).test(contentType)) this.$el.addClass('no-image');
                 };
 
             return function (baton) {
@@ -627,7 +614,8 @@ define('io.ox/mail/common-extensions', [
                         return m;
                     }),
                     collection = new attachment.Collection(list),
-                    view = new attachment.List({
+                    reuse = !!$el.data('view'),
+                    view = $el.data('view') || new attachment.List({
                         AttachmentView: CustomAttachmentView,
                         collection: collection,
                         el: $el,
@@ -635,38 +623,46 @@ define('io.ox/mail/common-extensions', [
                     });
                 view.openByDefault = settings.get('attachments/layout/detail/open', view.openByDefault);
 
-                $el.append(view.render().$el);
+                view.$header.empty();
+                view.render();
+
+                // add attachment actions
+                var toolbarView = new ToolbarView({ el: view.$header.find('.links')[0], inline: true, simple: true, dropdown: false, point: 'io.ox/mail/attachment/links' });
 
                 view.renderInlineLinks = function () {
-                    var models = this.getValidModels(), $links = this.$header.find('.links').empty();
-                    if (models.length >= 1) drawInlineLinks($links, _(models).invoke('toJSON'));
+                    var models = this.getValidModels();
+                    if (!models.length) return;
+                    toolbarView.setSelection(_(models).pluck('id'), { data: _(models).invoke('toJSON') });
                 };
 
                 view.listenTo(view.collection, 'add remove reset', view.renderInlineLinks);
                 view.listenTo(baton.model, 'change:imipMail', view.renderInlineLinks);
                 view.renderInlineLinks();
 
-                view.$el.on('click', 'li.item', function (e) {
-                    var node = $(e.currentTarget),
-                        clickTarget = $(e.target), id, data, baton;
+                if (!reuse) {
+                    view.$el.on('click', 'li.item', function (e) {
+                        var node = $(e.currentTarget),
+                            clickTarget = $(e.target), id, data, baton;
 
-                    // skip if click was on the dropdown
-                    if (!clickTarget.attr('data-original')) return;
+                        // skip if click was on the dropdown
+                        if (!clickTarget.attr('data-original')) return;
 
-                    // skip attachments without preview
-                    if (!node.attr('data-original')) return;
+                        // skip attachments without preview
+                        if (!node.attr('data-original')) return;
 
-                    id = node.attr('data-id');
-                    data = collection.get(id).toJSON();
-                    baton = ext.Baton({ startItem: data, data: list, restoreFocus: clickTarget });
+                        id = node.attr('data-id');
+                        data = collection.get(id).toJSON();
+                        baton = ext.Baton({ simple: true, startItem: data, data: list, restoreFocus: clickTarget });
+                        actionsUtil.invoke('io.ox/mail/attachment/actions/view', baton);
+                    });
 
-                    actions.invoke('io.ox/mail/actions/view-attachment', null, baton);
-                });
+                    view.on('change:layout', function (mode) {
+                        settings.set('attachments/layout/detail/' + _.display(), mode).save();
+                    });
+                }
 
-                view.on('change:layout', function (mode) {
-                    settings.set('attachments/layout/detail/' + _.display(), mode).save();
-                });
-
+                // A11y: Fixup roles
+                view.$el.find('[role="toolbar"]').find('a[role="menuitem"]').attr('role', 'button');
                 return view;
             };
         }()),

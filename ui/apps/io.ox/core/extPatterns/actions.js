@@ -16,8 +16,9 @@ define('io.ox/core/extPatterns/actions', [
     'io.ox/core/extensions',
     'io.ox/core/upsell',
     'io.ox/core/collection',
-    'io.ox/core/capabilities'
-], function (ext, upsell, Collection, capabilities) {
+    'io.ox/core/capabilities',
+    'io.ox/backbone/views/actions/util'
+], function (ext, upsell, Collection, capabilities, util) {
 
     'use strict';
 
@@ -32,6 +33,7 @@ define('io.ox/core/extPatterns/actions', [
     };
 
     var Action = function (id, options) {
+        if (ox.debug) console.warn('Action is DEPRECATED with 7.10.2 (io.ox/core/extPatterns/actions.js)', options);
         // get options - use 'requires one' as default
         var o = _.extend({ id: 'default', index: 100, requires: requiresOne }, options);
         // string?
@@ -140,36 +142,53 @@ define('io.ox/core/extPatterns/actions', [
         // combine actions
         var defs = ext.point(ref).map(function (action) {
 
-            var ret = true, params;
+            var retRequires, retStatic, retMatches, actionBaton, params = {};
 
-            if (stopped) {
-                return $.Deferred().resolve(false);
-            }
+            if (stopped) return $.when(false);
 
-            if (_.isFunction(action.requires)) {
-                params = {
-                    baton: baton,
-                    collection: collection,
-                    context: baton.data,
-                    extension: action,
-                    point: ref,
-                    stopPropagation: stopPropagation
-                };
-                try {
-                    ret = action.requires(params);
-                } catch (e) {
-                    params.exception = e;
-                    console.error(
-                        'point("' + ref + '") > "' + action.id + '" > processActions() > requires()', e.message, e.stack, params
-                    );
+            try {
+                if (action.matches || action.collection || action.device || action.folder || ('toogle' in action)) {
+                    // new school
+                    actionBaton = ext.Baton({
+                        app: baton.app,
+                        collection: collection,
+                        data: [].concat(baton.data),
+                        folder_id: baton.app && baton.app.folder.get(),
+                        stopPropagation: stopPropagation
+                    });
+                    if (!util.checkActionAvailability(action)) {
+                        retStatic = false;
+                    } else if (!util.checkActionEnabled(actionBaton, action)) {
+                        retStatic = false;
+                    } else {
+                        retStatic = true;
+                        if (_.isFunction(action.matches)) {
+                            retMatches = action.matches(actionBaton);
+                        }
+                    }
+                } else if (_.isFunction(action.requires)) {
+                    // old school
+                    params = {
+                        baton: baton,
+                        collection: collection,
+                        context: baton.data,
+                        extension: action,
+                        point: ref,
+                        stopPropagation: stopPropagation
+                    };
+                    retRequires = action.requires(params);
                 }
+            } catch (e) {
+                params.exception = e;
+                console.error(
+                    'point("' + ref + '") > "' + action.id + '" > processActions() > requires()', e.message, e.stack, params
+                );
             }
 
-            // is not deferred?
-            if (ret !== undefined && !ret.promise) {
-                ret = $.Deferred().resolve(ret);
-            }
-            return ret;
+            if (retRequires) return $.when(retRequires);
+            if (retStatic === false) return $.when(false);
+            if (retMatches) return $.when(retMatches);
+            return $.when(true);
         })
         .value();
 

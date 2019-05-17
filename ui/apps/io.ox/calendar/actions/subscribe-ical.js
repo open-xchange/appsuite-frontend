@@ -19,8 +19,9 @@ define('io.ox/calendar/actions/subscribe-ical', [
     'io.ox/backbone/mini-views/common',
     'io.ox/core/http',
     'io.ox/core/folder/api',
-    'gettext!io.ox/calendar'
-], function (notifications, ext, ModalDialog, mini, http, folderAPI, gt) {
+    'gettext!io.ox/calendar',
+    'settings!io.ox/calendar'
+], function (notifications, ext, ModalDialog, mini, http, folderAPI, gt, settings) {
 
     'use strict';
 
@@ -111,12 +112,23 @@ define('io.ox/calendar/actions/subscribe-ical', [
         }
     });
 
+    ext.point('io.ox/calendar/subscribe/ical').extend({
+        id: 'alarms',
+        index: 600,
+        render: function () {
+            this.$body.append(
+                $('<div class="alert alert-info">').text(gt('Your default reminders will be applied to this calendar.'))
+            );
+        }
+    });
+
     return function () {
         new ModalDialog({
             title: gt('Subscribe to iCal feed'),
             point: 'io.ox/calendar/subscribe/ical',
-            help: 'ox.appsuite.user.sect.calendar.folder.ical.html',
+            help: 'ox.appsuite.user.sect.calendar.folder.subscribe.html',
             model: new Backbone.Model(),
+            focus: 'input',
             async: true,
             width: 500
         })
@@ -126,6 +138,12 @@ define('io.ox/calendar/actions/subscribe-ical', [
             var self = this;
             iCalProbe(this.model).then(function (data) {
                 data.module = 'event';
+                // apply default alarms
+                data['com.openexchange.calendar.config'] = _.extend({}, data['com.openexchange.calendar.config'], {
+                    defaultAlarmDate: settings.get('chronos/defaultAlarmDate', []),
+                    defaultAlarmDateTime: settings.get('chronos/defaultAlarmDateTime', [])
+                });
+
                 return folderAPI.create('1', data);
             }).then(function () {
                 notifications.yell('success', gt('iCal feed has been imported successfully'));

@@ -172,10 +172,18 @@
         padding: 2px 8px;
         margin: 0 2px 2px 0;
 
+        .progress-container {
+            z-index: 1;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 3px;
+        }
+
         .progress {
             background-color: rgba(255, 0, 0, 0.3);
             height: 3px;
-            position: absolute;
             top: 0;
             width: 0;
         }
@@ -243,14 +251,21 @@
             height: 120px;
             padding: 0;
             margin: 0 1px 0 0;
-            border: 0;
+            border:1px solid #ddd;
             cursor: pointer;
             background-color: #f5f5f5;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
 
+            // show top parts of text previews etc, to reduce blank preview images
+            &.no-image {
+                border:1px solid #ddd;
+                background-position: top;
+            }
+
             &:focus {
+                border:1px solid #ddd;
                 position: relative;
                 z-index: 1;
             }
@@ -306,4 +321,6 @@
 
         &:hover .control { display: block; }
     }
+
+    footer { display: flex; }
 }

@@ -17,7 +17,7 @@ define('io.ox/core/main/topbar_right', [
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
     'io.ox/core/notifications',
-    'io.ox/backbone/mini-views/help',
+    'io.ox/backbone/mini-views/helplink',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/upsell',
     'io.ox/core/main/logout',
@@ -27,7 +27,7 @@ define('io.ox/core/main/topbar_right', [
     'io.ox/core/api/user',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (session, http, ext, capabilities, notifications, HelpView, Dropdown, UpsellView, logout, refresh, addLauncher, contactAPI, userAPI, settings, gt) {
+], function (session, http, ext, capabilities, notifications, HelpLinkView, Dropdown, UpsellView, logout, refresh, addLauncher, contactAPI, userAPI, settings, gt) {
 
     function getHelp() {
         var currentApp = ox.ui.App.getCurrentFloatingApp() || ox.ui.App.getCurrentApp();
@@ -123,7 +123,7 @@ define('io.ox/core/main/topbar_right', [
         index: 300,
         draw: function () {
             if (_.device('smartphone')) return;
-            var helpView = new HelpView({
+            var helpView = new HelpLinkView({
                 iconClass: 'fa-question launcher-icon',
                 href: getHelp
             });
@@ -243,7 +243,7 @@ define('io.ox/core/main/topbar_right', [
         index: 200,
         extend: function () {
             //replaced by module
-            var helpView = new HelpView({
+            var helpView = new HelpLinkView({
                 attributes: {
                     role: 'menuitem',
                     tabindex: -1
@@ -295,7 +295,7 @@ define('io.ox/core/main/topbar_right', [
         extend: function () {
             this.link('logout', gt('Sign out'), function (e) {
                 e.preventDefault();
-                logout();
+                logout({ manualLogout: true });
             });
         }
     });
@@ -305,7 +305,7 @@ define('io.ox/core/main/topbar_right', [
         index: 1000,
         draw: function () {
             var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
-                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('title', gt('Settings')),
+                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('title', ox.openedInBrowserTab ? gt('Sign out') : gt('Settings')),
                 dropdown = new Dropdown({
                     attributes: { role: 'presentation' },
                     tagName: 'li',
@@ -345,7 +345,7 @@ define('io.ox/core/main/topbar_right', [
             index: 2000,
             draw: function () {
                 var logoutButton = addLauncher('right', $('<i class="fa fa-sign-out launcher-icon" aria-hidden="true">'), function () {
-                    logout();
+                    logout({ manualLogout: true });
                 }, gt('Sign out'));
                 logoutButton.find('a')
                 .attr('data-action', 'sign-out')

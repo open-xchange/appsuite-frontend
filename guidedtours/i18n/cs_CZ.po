@@ -5,15 +5,17 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-10-14 14:14+0100\n"
+"PO-Revision-Date: 2019-04-09 09:28+0200\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Generator: Poedit 2.1.1\n"
+"X-Language: cs\n"
+"X-Source-Language: en\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -379,7 +381,8 @@ msgstr "Spouštění aplikace"
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Chcete-li spustit aplikaci, klikněte na položku v menu pro spouštění aplikací."
+"Chcete-li spustit aplikaci, klikněte na položku v menu pro spouštění "
+"aplikací."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -626,6 +629,78 @@ msgstr ""
 #: apps/io.ox/tours/main.js module:io.ox/tours
 msgid "Getting started"
 msgstr "Začínáme"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr "Dvoufaktorová autentizace"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Pro zvýšení bezpečnosti svého účtu můžete přidat další možnosti ověření."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "Přidat možnost ověření"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr "Různé možnosti pro další ověření záleží na vaší instalaci."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "Přidání kódu přes textovou zprávu"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr ""
+"Zvolení možnosti kódu přes textovou zprávu váš napřiklad požádá o telefonní "
+"číslo."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "Autentizační požadavky"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr ""
+"Při příštím přihlášení budete muset ověřit svou totožnost zadáním čísla "
+"poslaného na váš telefon."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "Odebírám"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr "Zařízení je možné odebrat. Viz nápověda."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "Další"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+"Pro zvýšení bezpečnosti můžete vyžadovat druhou metodu autentizace, "
+"například textovou zprávu, než se přihlásíte k účtu. Přejete si zobrazit "
+"více informací o této možnosti?"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr "Začít prohlídku"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
@@ -933,11 +1008,9 @@ msgstr ""
 #~ msgstr[1] "%1$d zprávy"
 #~ msgstr[2] "%1$d zpráv"
 
-#, fuzzy
 #~ msgid "%1$d messages in this conversation"
 #~ msgstr "Nedávné konverzace"
 
-#, fuzzy
 #~ msgid "%1$d messages selected"
 #~ msgstr "<b>%1$d</b> prvků vybráno"
 
@@ -962,7 +1035,6 @@ msgstr ""
 #~ msgid "%1$s %2$s the invitation: %3$s"
 #~ msgstr "%1$s %2$s pozvánku: %3$s"
 
-#, fuzzy
 #~ msgid "%1$s (Tentative)"
 #~ msgstr "%1$s (předběžně)"
 
@@ -1072,7 +1144,6 @@ msgstr ""
 #~ "%1$s si přeje aktuální informace o schůzce %2$s. Pošlete, prosím, další "
 #~ "pozvánku."
 
-#, fuzzy
 #~ msgid "%1$s%2$s %3$s%4$s%5$s"
 #~ msgstr ""
 #~ "%1$s\n"
@@ -2986,8 +3057,8 @@ msgstr ""
 #~ "Are you sure you want to permanently delete all E-Mails from this folder? "
 #~ "The deleted E-Mails will be irrevocably lost."
 #~ msgstr ""
-#~ "Opravdu chcete natrvalo smazat všechny e-maily z této složky? Smazané e-"
-#~ "maily budou nenávratně ztraceny."
+#~ "Opravdu chcete natrvalo smazat všechny e-maily z této složky? Smazané "
+#~ "e-maily budou nenávratně ztraceny."
 
 #~ msgid "Are you sure?"
 #~ msgstr "Jste si jistí?"
@@ -4959,8 +5030,8 @@ msgstr ""
 #~ msgstr "Provést následující:"
 
 #~ msgid ""
-#~ "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
-#~ "\" ?"
+#~ "Do you really want to change the file extension from  \".%1$s\" to "
+#~ "\".%2$s\" ?"
 #~ msgstr "Opravdu chcete příponu souboru změnit z „.%1$s“ na „.%2$s“?"
 
 #~ msgid "Do you really want to delete folder \"%s\"?"
@@ -5397,7 +5468,6 @@ msgstr ""
 #~ msgid "Email addresses"
 #~ msgstr "E-mailové adresy"
 
-#, fuzzy
 #~ msgid "Email from %1$s: %2$s"
 #~ msgstr "Každý %1$s %2$s"
 
@@ -6637,8 +6707,9 @@ msgstr ""
 #~ "If a folder contains images, you can display a slideshow. To do so click "
 #~ "the View slideshow icon in the toolbar."
 #~ msgstr ""
-#~ "Pokud složka obsahuje obrázky, můžete je zobrazit jako slideshow. Chcete-"
-#~ "li to udělat, klikněte na ikonku Zobrazit Slideshow na nástrojové liště."
+#~ "Pokud složka obsahuje obrázky, můžete je zobrazit jako slideshow. "
+#~ "Chcete-li to udělat, klikněte na ikonku Zobrazit Slideshow na nástrojové "
+#~ "liště."
 
 #~ msgid ""
 #~ "If the authorization expired or was revoked, you can repeat the "
@@ -6665,8 +6736,8 @@ msgstr ""
 
 #~ msgid ""
 #~ "If you spot a free time, just select this area. To do this, move the "
-#~ "cursor to the start time, hold the mouse button, and <b>drag the mouse</"
-#~ "b> to the end time."
+#~ "cursor to the start time, hold the mouse button, and <b>drag the "
+#~ "mouse</b> to the end time."
 #~ msgstr ""
 #~ "Pokud najdete volný čas, označte tuto oblast. Provedete to tak, že "
 #~ "přesunute kurzor nad počáteční čas, podržíte tlačítko a <b>potáhnete "
@@ -6856,7 +6927,6 @@ msgstr ""
 #~ msgid "Inline With Text"
 #~ msgstr "Do řádku textu"
 
-#, fuzzy
 #~ msgid "Inline menu %1$s"
 #~ msgstr "Přihlášený(á) jako %1$s"
 
@@ -7652,7 +7722,6 @@ msgstr ""
 #~ msgid "Minimize"
 #~ msgstr "Minimalizovat"
 
-#, fuzzy
 #~ msgid "Minimum password length is %1$d."
 #~ msgstr "Minimální délka hesla je %1$s."
 
@@ -7920,9 +7989,6 @@ msgstr ""
 
 #~ msgid "New..."
 #~ msgstr "Nová..."
-
-#~ msgid "Next"
-#~ msgstr "Další"
 
 #~ msgid "Next Day"
 #~ msgstr "Další den"
@@ -8762,7 +8828,6 @@ msgstr ""
 #~ msgid "Password has changed"
 #~ msgstr "Heslo se změnilo"
 
-#, fuzzy
 #~ msgid "Password length must be between %1$d and %2$d characters."
 #~ msgstr "Délka hesla musí být mezi %1$s a %2$s znaky."
 
@@ -11104,27 +11169,29 @@ msgstr ""
 
 #, fuzzy
 #~ msgid ""
-#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" "
+#~ "data-attribute=\"interval\">every <span class=\"number-control\">2</span> "
 #~ "days</a>."
 #~ msgstr ""
-#~ "Schůzka se opakuje <a href=\"#\"  data-widget=\"number\" data-attribute="
-#~ "\"interval\">každé <span class=\"number-control\">2</span> dny</a>."
+#~ "Schůzka se opakuje <a href=\"#\"  data-widget=\"number\" "
+#~ "data-attribute=\"interval\">každé <span class=\"number-control\">2</span> "
+#~ "dny</a>."
 
 #, fuzzy
 #~ msgid ""
-#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
-#~ "weeks</a> on <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days"
-#~ "\">monday</a>."
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" "
+#~ "data-attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "weeks</a> on <a href=\"#\"  data-widget=\"custom\" "
+#~ "data-attribute=\"days\">monday</a>."
 #~ msgstr ""
-#~ "Schůzka se opakuje <a href=\"#\"  data-widget=\"number\" data-attribute="
-#~ "\"interval\">každé <span class=\"number-control\">2</span> týdny</a> v <a "
-#~ "href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">pondělí</a>. "
+#~ "Schůzka se opakuje <a href=\"#\"  data-widget=\"number\" "
+#~ "data-attribute=\"interval\">každé <span class=\"number-control\">2</span> "
+#~ "týdny</a> v <a href=\"#\"  data-widget=\"custom\" "
+#~ "data-attribute=\"days\">pondělí</a>. "
 
 #~ msgid ""
-#~ "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType"
-#~ "\" data-widget=\"options\">weekly</a>."
+#~ "The appointment is repeated <a href=\"#\" "
+#~ "data-attribute=\"recurrenceType\" data-widget=\"options\">weekly</a>."
 #~ msgstr ""
 #~ "Tato schůzka se opakuje <a href=\"#\" data-attribute=\"recurrenceType\" "
 #~ "data-widget=\"options\">týdně</a>."
@@ -11132,52 +11199,54 @@ msgstr ""
 #, fuzzy
 #~ msgid ""
 #~ "The appointment is repeated every <a href=\"#\" data-widget=\"options\" "
-#~ "data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options"
-#~ "\" data-attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget="
-#~ "\"options\" data-attribute=\"month\">October</a>."
+#~ "data-attribute=\"ordinal\">first</a> <a href=\"#\" "
+#~ "data-widget=\"options\" data-attribute=\"day\">Wednesday</a> in <a "
+#~ "href=\"#\" data-widget=\"options\" data-attribute=\"month\">October</a>."
 #~ msgstr ""
-#~ "Schůzka se opakuje vždy <a href=\"#\" data-widget=\"options\" data-"
-#~ "attribute=\"ordinal\">první</a> <a href=\"#\" data-widget=\"options\" "
-#~ "data-attribute=\"day\">středu</a> v <a href=\"#\" data-widget=\"options\" "
-#~ "data-attribute=\"month\">říjnu</a>. "
+#~ "Schůzka se opakuje vždy <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">první</a> <a href=\"#\" "
+#~ "data-widget=\"options\" data-attribute=\"day\">středu</a> v <a href=\"#\" "
+#~ "data-widget=\"options\" data-attribute=\"month\">říjnu</a>. "
 
 #, fuzzy
 #~ msgid ""
-#~ "The appointment is repeated every year on day <a href=\"#\" data-widget="
-#~ "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control"
-#~ "\">10</span></a> of <a href=\"#\" data-widget=\"options\" data-attribute="
-#~ "\"month\">October</a>."
+#~ "The appointment is repeated every year on day <a href=\"#\" "
+#~ "data-widget=\"number\" data-attribute=\"dayInMonth\"><span "
+#~ "class=\"number-control\">10</span></a> of <a href=\"#\" "
+#~ "data-widget=\"options\" data-attribute=\"month\">October</a>."
 #~ msgstr ""
 #~ "Tato schůzka se opakuje každý rok <a href=\"#\" data-widget=\"number\" "
-#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10.</span></"
-#~ "a> <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">října</"
-#~ "a>. "
+#~ "data-attribute=\"dayInMonth\"><span "
+#~ "class=\"number-control\">10.</span></a> <a href=\"#\" "
+#~ "data-widget=\"options\" data-attribute=\"month\">října</a>. "
 
 #, fuzzy
 #~ msgid ""
 #~ "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" "
-#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></"
-#~ "a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every "
-#~ "<span class=\"number-control\">2</span> months</a>."
+#~ "data-attribute=\"dayInMonth\"><span "
+#~ "class=\"number-control\">10</span></a> <a href=\"#\" "
+#~ "data-widget=\"number\" data-attribute=\"interval\">every <span "
+#~ "class=\"number-control\">2</span> months</a>."
 #~ msgstr ""
-#~ "Tato schůzka se opakuje vždy <a href=\"#\" data-widget=\"number\" data-"
-#~ "attribute=\"dayInMonth\"><span class=\"number-control\">10. den</span></"
-#~ "a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">každé "
-#~ "<span class=\"number-control\">2</span> měsíce</a>. "
+#~ "Tato schůzka se opakuje vždy <a href=\"#\" data-widget=\"number\" "
+#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10. "
+#~ "den</span></a> <a href=\"#\" data-widget=\"number\" "
+#~ "data-attribute=\"interval\">každé <span class=\"number-control\">2</span> "
+#~ "měsíce</a>. "
 
 #, fuzzy
 #~ msgid ""
 #~ "The appointment is repeated the <a href=\"#\" data-widget=\"options\" "
-#~ "data-attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options"
-#~ "\" data-attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number"
-#~ "\" data-attribute=\"interval\">every <span class=\"number-control\">2</"
-#~ "span> months</a>."
+#~ "data-attribute=\"ordinal\">second</a> <a href=\"#\" "
+#~ "data-widget=\"options\" data-attribute=\"day\">Wednesday</a> <a "
+#~ "href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span "
+#~ "class=\"number-control\">2</span> months</a>."
 #~ msgstr ""
-#~ "Schůzka se opakuje <a href=\"#\" data-widget=\"options\" data-attribute="
-#~ "\"ordinal\">druhou</a> <a href=\"#\" data-widget=\"options\" data-"
-#~ "attribute=\"day\">středu</a> <a href=\"#\" data-widget=\"number\" data-"
-#~ "attribute=\"interval\">každé <span class=\"number-control\">2</span> "
-#~ "měsíce</a>. "
+#~ "Schůzka se opakuje <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">druhou</a> <a href=\"#\" "
+#~ "data-widget=\"options\" data-attribute=\"day\">středu</a> <a href=\"#\" "
+#~ "data-widget=\"number\" data-attribute=\"interval\">každé <span "
+#~ "class=\"number-control\">2</span> měsíce</a>. "
 
 #~ msgid "The appointment takes place in a new location: %1$s."
 #~ msgstr "Schůzka proběhne na jiném místě: %1$s."
@@ -11413,29 +11482,31 @@ msgstr ""
 #~ msgstr "Odesílatel si přeje dostat potvrzení, když si zprávu přečtete"
 
 #~ msgid ""
-#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-#~ "\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
-#~ "\"number\">after <span class=\"number-control\">2</span> appointments</a>."
+#~ "The series <a href=\"#\" data-attribute=\"ending\" "
+#~ "data-widget=\"options\">ends</a> <a href=\"#\" "
+#~ "data-attribute=\"occurrences\" data-widget=\"number\">after <span "
+#~ "class=\"number-control\">2</span> appointments</a>."
 #~ msgstr ""
-#~ "Série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-#~ "\">končí</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
-#~ "\"number\">po <span class=\"number-control\">2</span> schůzkách</a>."
+#~ "Série <a href=\"#\" data-attribute=\"ending\" "
+#~ "data-widget=\"options\">končí</a> <a href=\"#\" "
+#~ "data-attribute=\"occurrences\" data-widget=\"number\">po <span "
+#~ "class=\"number-control\">2</span> schůzkách</a>."
 
 #~ msgid ""
-#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-#~ "\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget=\"custom"
-#~ "\">11/03/2013</a>."
+#~ "The series <a href=\"#\" data-attribute=\"ending\" "
+#~ "data-widget=\"options\">ends</a> on <a href=\"#\" "
+#~ "data-attribute=\"until\" data-widget=\"custom\">11/03/2013</a>."
 #~ msgstr ""
-#~ "Série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-#~ "\">končí</a> <a href=\"#\" data-attribute=\"until\" data-widget=\"custom"
-#~ "\">3. 11. 2013</a>."
+#~ "Série <a href=\"#\" data-attribute=\"ending\" "
+#~ "data-widget=\"options\">končí</a> <a href=\"#\" data-attribute=\"until\" "
+#~ "data-widget=\"custom\">3. 11. 2013</a>."
 
 #~ msgid ""
-#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-#~ "\">never ends</a>."
+#~ "The series <a href=\"#\" data-attribute=\"ending\" "
+#~ "data-widget=\"options\">never ends</a>."
 #~ msgstr ""
-#~ "Série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-#~ "\">nikdy nekončí</a>."
+#~ "Série <a href=\"#\" data-attribute=\"ending\" "
+#~ "data-widget=\"options\">nikdy nekončí</a>."
 
 #~ msgid "The server didn't respond!"
 #~ msgstr "Server nereagoval!"
@@ -11527,9 +11598,9 @@ msgstr ""
 #~ msgstr "Uživatel má práva administrátora"
 
 #~ msgid ""
-#~ "The window could not be opened. Most likely it has been blocked by a pop-"
-#~ "up or advertisement blocker. Please check your browser settings and make "
-#~ "sure pop-ups are allowed for this domain."
+#~ "The window could not be opened. Most likely it has been blocked by a "
+#~ "pop-up or advertisement blocker. Please check your browser settings and "
+#~ "make sure pop-ups are allowed for this domain."
 #~ msgstr ""
 #~ "Okno se nepodařilo otevřít. Pravděpodobně bylo zablokováno nástrojem pro "
 #~ "potlačení vyskakovacích oken nebo reklam. Zkontrolujte, prosím, nastavení "
@@ -12179,8 +12250,8 @@ msgstr ""
 #~ msgstr "Pro %s"
 
 #~ msgid ""
-#~ "To add contacts manually, just provide a valid email address (e.g john."
-#~ "doe@example.com or \"John Doe\" <jd@example.com>)"
+#~ "To add contacts manually, just provide a valid email address (e.g "
+#~ "john.doe@example.com or \"John Doe\" <jd@example.com>)"
 #~ msgstr ""
 #~ "Chcete-li přidat kontakty ručně, zadejte platnou e-mailovou adresu (např. "
 #~ "jan.novak@priklad.cz nebo „Jan Novák\" <jan.novak@priklad.cz>)"
@@ -12958,7 +13029,6 @@ msgstr ""
 #~ "Chystáte se změnit svůj stav potvrzení. Zanechte, prosím, komentář pro "
 #~ "ostatní účastníky."
 
-#, fuzzy
 #~ msgid ""
 #~ "You are currently using %1$s of your %2$s available disk space. You have "
 #~ "%3$s left."
@@ -13058,7 +13128,6 @@ msgstr ""
 #~ "IDN domény nefungují tak, jak se od nich očekává. Přejete si ji přesto "
 #~ "přidat?"
 
-#, fuzzy
 #~| msgid "You have %1$d notification"
 #~| msgid_plural "You have %1$d notifications"
 #~ msgid "You have %1$d notification."
@@ -13243,7 +13312,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Váš prohlížeč má vypnutou možnost ukládat cookie. Zapněte ji, prosím."
 
-#, fuzzy
 #~ msgid ""
 #~ "Your capacity is shared with all members of your group. Your group is "
 #~ "currently using %1$s of its %2$s available disk space. The amount of free "

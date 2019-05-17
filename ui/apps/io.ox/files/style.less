@@ -546,6 +546,7 @@
             .thumbnail(@thumbnail_height);
             display: table;
             width: 100%;
+            max-width: 100%;
 
             .folder-name, .file-icon {
                 display: table-cell;
@@ -565,10 +566,15 @@
 
             .icon-thumbnail {
                 background-color: #e6e6e6;
+                table-layout: fixed;
               //background-color: #eee;
 
                 .folder-name {
                     width: 100%;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    padding: 10px;
                 }
                 .folder-icon {
                     position: absolute;

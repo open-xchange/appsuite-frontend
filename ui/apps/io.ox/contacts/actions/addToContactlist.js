@@ -18,12 +18,6 @@ define('io.ox/contacts/actions/addToContactlist', [
 
     'use strict';
 
-    function isMSISDN(value) {
-        if (/\/TYPE=PLMN$/.test(value)) return true;
-        if (/^\+?\d+$/.test(value)) return true;
-        return false;
-    }
-
     return function (baton) {
 
         var container = $(this).closest('.contact-detail.view'),
@@ -37,11 +31,6 @@ define('io.ox/contacts/actions/addToContactlist', [
 
         // create in default folder
         contact.folder_id = String(coreSettings.get('folder/contacts'));
-        // MSISDN fix: email1 might be a phone number, so we should move that to cellular_telephone1
-        if (isMSISDN(contact.email1)) {
-            contact.cellular_telephone1 = contact.email1;
-            delete contact.email1;
-        }
 
         // launch edit app
         editApp.getApp(contact).launch(def);

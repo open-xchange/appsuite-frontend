@@ -22,12 +22,13 @@
 */
 define('io.ox/core/api/snippets', [
     'io.ox/core/http',
-    'io.ox/core/event'
-], function (http, Events) {
+    'io.ox/core/event',
+    'settings!io.ox/mail'
+], function (http, Events, settings) {
 
     'use strict';
 
-    var api = {}, cache = null;
+    var api = {}, cache = null, collection = new Backbone.Collection();
 
     Events.extend(api);
 
@@ -35,6 +36,18 @@ define('io.ox/core/api/snippets', [
      * get all snippets
      * @return { deferred} array of snippet objects
      */
+
+    // ensure sig.misc.insertion (migration)
+    function fixOutdated(sig) {
+        if (_.isString(sig.misc)) sig.misc = JSON.parse(sig.misc);
+        sig.misc = $.extend({ insertion: settings.get('defaultSignaturePosition', 'below') }, sig.misc || {});
+        return sig;
+    }
+
+    api.getCollection = function () {
+        return collection;
+    };
+
     api.getAll = function () {
 
         if (cache) return $.Deferred().resolve(cache);
@@ -43,15 +56,14 @@ define('io.ox/core/api/snippets', [
             module: 'snippet',
             params: {
                 action: 'all'
-            }
+            },
+            // See bug 62222, we add a timeout as this should be a highly available service and should not block the ui
+            timeout: 15000
         })
         .then(
             function success(data) {
-                cache = _(data).map(function (sig) {
-                    // robustness: snippet migration
-                    sig.misc = $.extend({ insertion: 'below' }, sig.misc || {});
-                    return sig;
-                });
+                cache = _(data).map(fixOutdated);
+                collection.reset(cache);
                 return cache;
             },
             function fail() {
@@ -75,8 +87,9 @@ define('io.ox/core/api/snippets', [
             },
             data: snippet
         })
-        .done(function () {
+        .done(function (id) {
             cache = null;
+            collection.add(_({}, snippet, { id: id }));
             api.trigger('refresh.all');
         });
     };
@@ -98,6 +111,7 @@ define('io.ox/core/api/snippets', [
         })
         .done(function () {
             cache = null;
+            collection.add(snippet, { merge: true });
             api.trigger('refresh.all');
         });
     };
@@ -150,6 +164,7 @@ define('io.ox/core/api/snippets', [
         })
         .done(function () {
             cache = null;
+            collection.remove(id);
             api.trigger('refresh.all');
         });
     };

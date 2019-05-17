@@ -38,7 +38,6 @@ define('io.ox/calendar/edit/main', [
             userContent: true,
             closable: true,
             floating: !_.device('smartphone'),
-            sendInternalNotifications: true,
             size: 'width-sm'
         });
 
@@ -102,6 +101,11 @@ define('io.ox/calendar/edit/main', [
                     self.setWindow(win);
 
                     self.model.setDefaultAttendees({ create: opt.mode === 'create' }).done(function () {
+
+                        if (opt.mode === 'create') {
+                            self.model.set('attendeePrivileges', settings.get('chronos/allowAttendeeEditsByDefault', false) && !folderAPI.pool.getModel(self.model.get('folder')).is('public') ? 'MODIFY' : 'DEFAULT');
+                        }
+
                         if (opt.mode === 'edit' && util.isAllday(self.model)) {
                             // allday apointments do not include the last day. To not misslead the user we subtract a day (so one day appointments only show one date for example)
                             // this day will be added again on save
@@ -113,7 +117,9 @@ define('io.ox/calendar/edit/main', [
                             app: self,
                             callbacks: {
                                 extendDescription: app.extendDescription
-                            }
+                            },
+                            // restore meta data for used groups if given
+                            usedGroups: opt.usedGroups || []
                         });
 
                         self.model.on({
@@ -150,7 +156,9 @@ define('io.ox/calendar/edit/main', [
                         });
 
                         // restore points give their old initial model data as options. This way the dirty check stays correct
-                        self.initialModelData = opt.initialModelData || self.model.toJSON();
+
+                        // use deepclone so we dont have accidental references
+                        self.initialModelData = _.deepClone(opt.initialModelData || self.model.toJSON());
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));
                         //used by guided tours so they can show the next step when everything is ready
@@ -179,21 +187,6 @@ define('io.ox/calendar/edit/main', [
                     }
                 }
 
-                // if we restore alarms, check if they differ from the defaults
-                var isDefault = JSON.stringify(_(data.alarms).pluck('action', 'trigger')) === JSON.stringify(_(util.getDefaultAlarms(data)).pluck('action', 'trigger'));
-
-                // change default alarm when allDay changes and the user did not change the alarm before (we don't want data loss)
-                if (isDefault) {
-                    self.model.on('change:startDate change:endDate', _.debounce(function () {
-                        if (util.isAllday(this.previousAttributes()) === util.isAllday(this)) return;
-                        if (!this.userChangedAlarms) {
-                            this.set('alarms', util.getDefaultAlarms(this));
-                        }
-                    }, 0));
-                    self.model.on('userChangedAlarms', function () {
-                        this.userChangedAlarms = true;
-                    });
-                }
                 loadFolder();
             },
 
@@ -319,20 +312,22 @@ define('io.ox/calendar/edit/main', [
                                 }
                             })
                             .on('ignore', function () {
-                                var sendNotifications = self.get('sendInternalNotifications');
                                 if (self.view.options.mode === 'create') {
                                     api.create(
                                         self.model,
-                                        _.extend(util.getCurrentRangeOptions(), { attachments: self.attachmentsFormData || [], sendInternalNotifications: sendNotifications, checkConflicts: false })
+                                        _.extend(util.getCurrentRangeOptions(), {
+                                            usedGroups: self.model._attendees.usedGroups,
+                                            attachments: self.attachmentsFormData || [],
+                                            checkConflicts: false })
                                     ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 } else {
                                     api.update(
                                         self.getDelta(),
                                         _.extend(util.getCurrentRangeOptions(), {
                                             attachments: self.attachmentsFormData || [],
-                                            sendInternalNotifications: sendNotifications,
                                             checkConflicts: false,
-                                            recurrenceRange: self.view.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined
+                                            recurrenceRange: self.view.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
+                                            usedGroups: self.model._attendees.usedGroups
                                         })
                                     ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 }
@@ -395,6 +390,8 @@ define('io.ox/calendar/edit/main', [
                         module: 'io.ox/calendar/edit',
                         point:  {
                             data: this.model.attributes,
+                            action: this.model.mode,
+                            meta: { usedGroups: this.model._attendees.usedGroups },
                             // save this so the dirty check works correctly after the restore
                             initialModelData: this.initialModelData
                         }
@@ -408,7 +405,9 @@ define('io.ox/calendar/edit/main', [
                 var data = point.data || point;
                 this.edit(data, {
                     mode: _.isUndefined(data.id) ? 'create' : 'edit',
-                    initialModelData: point.initialModelData
+                    initialModelData: point.initialModelData,
+                    action: point.action,
+                    usedGroups: point.meta ? point.meta.usedGroups : []
                 });
                 return $.when();
             },

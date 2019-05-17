@@ -1,20 +1,20 @@
 # Luiz Fernando Ranghetti <luiz@workshop-chapina.com>, 2013, 2014.
 # Aracele Torres <aracele@workshop-chapina.com>, 2013, 2014, 2016, 2018.
-# Bianca Oliveira <bianca@workshop-chapina.com>, 2013, 2014, 2015.
+# Bianca Oliveira <bianca@workshop-chapina.com>, 2013, 2014, 2015, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-10-23 21:27-0300\n"
-"Last-Translator: Aracele Torres <aracele@workshop-chapina.com >\n"
-"Language-Team: Portuguese <>\n"
+"PO-Revision-Date: 2019-04-25 09:22-0300\n"
+"Last-Translator: Luiz Fernando Ranghetti <luiz@workshop-chapina.com>\n"
+"Language-Team: Portuguese <bianca@workshop-chapina.com >\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -395,8 +395,8 @@ msgstr "Iniciando um aplicativo"
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "To launch an app click on an entry inside the app launcher menu."
 msgstr ""
-"Para iniciar um aplicativo, clique em uma entrada no menu do lançador de"
-" aplicativos."
+"Para iniciar um aplicativo, clique em uma entrada no menu do lançador de "
+"aplicativos."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -649,6 +649,81 @@ msgstr ""
 #: apps/io.ox/tours/main.js module:io.ox/tours
 msgid "Getting started"
 msgstr "Iniciando"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr "Autenticação de segundo fator"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Agora você pode adicionar outras opções de verificação para melhorar a "
+"segurança de sua conta."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "Adicionando opções de verificação"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr "Várias opções para verificação adicional dependem de sua instalação."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "Adicionando um código via mensagem de texto"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr ""
+"A seleção da opção para um código via mensagem de texto, por exemplo, "
+"solicitará um número de telefone."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "Solicitações de autenticação"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr ""
+"Na próxima vez que fizer login, você terá que confirmar sua identidade "
+"digitando o número enviado para o seu telefone."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "Removendo"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr ""
+"Se desejar os dispositivos podem ser removidos após adicionados. Veja a "
+"ajuda para detalhes adicionais."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "Próximo"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+"Como um recurso de segurança adicional agora você pode exigir um segundo "
+"método de autenticação, como uma mensagem de texto, antes de fazer login na "
+"sua conta. Gostaria de ver algumas informações sobre isso agora?"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr "Iniciar passeio"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"

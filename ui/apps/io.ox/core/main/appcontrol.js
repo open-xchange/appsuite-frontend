@@ -71,6 +71,13 @@ define('io.ox/core/main/appcontrol', [
                     this.model.launch();
                     return;
                 }
+                if (ox.tabHandlingEnabled && this.model.get('openInTab')) {
+                    // we must stay synchronous to prevent popup-blocker
+                    // we can be sure that 'io.ox/core/api/tab' is cached when 'ox.tabHandlingEnabled' is true
+                    var TabAPI = require('io.ox/core/api/tab');
+                    TabAPI.TabHandling.openChild(this.model.get('tabUrl'));
+                    return;
+                }
                 ox.launch(this.model.get('path'));
             } else {
                 var requires = this.model.get('requires');
@@ -115,7 +122,9 @@ define('io.ox/core/main/appcontrol', [
             if (id === 'io.ox/calendar' || /calendar/.test(this.model.getName())) this.drawDate();
 
             var cell = $('<div class="lcell" aria-hidden="true">').append(
-                this.badge = $('<div class="indicator">').toggle(this.model.get('hasBadge')),
+                // important: do not add circle element via append (https://stackoverflow.com/a/3642265)
+                this.badge = $('<svg height="8" width="8" class="indicator"><circle cx="4" cy="4" r="4"></svg>')
+                    .toggleClass('hidden', !this.model.get('hasBadge')),
                 $('<div class="icon">').append(this.$icon),
                 $('<div class="title">').text(this.model.get('title'))
             );
@@ -124,7 +133,7 @@ define('io.ox/core/main/appcontrol', [
             return cell;
         },
         toggleBadge: function () {
-            this.badge.toggle(this.model.get('hasBadge'));
+            this.badge.toggleClass('hidden', !this.model.get('hasBadge'));
         },
         updateTooltip: function () {
             var tooltipAttribute = this.quicklaunch ? 'title' : 'aria-label';
@@ -150,14 +159,18 @@ define('io.ox/core/main/appcontrol', [
     });
 
     var api = {
-        quickLauncherLimit: 3,
+        quickLaunchLimit: 3,
+        /*getQuickLauncherLimit: function () {
+            return settings.get('apps/quickLaunchLimit', 3);
+        },*/
+        getQuickLauncherCount: function () {
+            var n = settings.get('apps/quickLaunchCount', 3);
+            if (!_.isNumber(n)) return 0;
+            return Math.min(this.quickLaunchLimit, ox.ui.apps.forLauncher().length, n);
+        },
         getQuickLauncherDefaults: function () {
             return 'io.ox/mail/main,io.ox/calendar/main,io.ox/files/main';
-        },
-        getQuickLauncherCount: function () {
-            var n = settings.get('apps/quickLaunchCount', 0);
-            if (!_.isNumber(n)) return 0;
-            return Math.min(this.quickLauncherLimit, ox.ui.apps.forLauncher().length, n);
+
         },
         getQuickLauncherItems: function () {
             var count = this.getQuickLauncherCount(),
@@ -226,7 +239,8 @@ define('io.ox/core/main/appcontrol', [
         className: 'launcher dropdown',
         id: 'io-ox-launcher',
         $ul: $('<ul class="launcher-dropdown dropdown-menu dropdown-menu-right" role="menu">'),
-        $toggle: $('<button type="button" class="launcher-btn btn btn-link dropdown-toggle">').attr('aria-label', gt('Navigate to:')).append(icons.launcher),
+        // this should be a link. Otherwise, this can cause strange focus issues on iOS when having the cursor inside an iframe before clicking this (see Bug 63441)
+        $toggle: $('<a href="#" class="launcher-btn btn btn-link dropdown-toggle">').attr('aria-label', gt('Navigate to:')).append($(icons.launcher).attr('title', gt('All Applications'))),
         initialize: function () {
             Dropdown.prototype.initialize.apply(this, arguments);
             this.listenTo(this.collection, 'add remove', this.update);
@@ -249,8 +263,10 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
-        ext.point('io.ox/core/notifications/badge').invoke('register', self, {});
+    ox.once('core:load', function () {
+        ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
+            ext.point('io.ox/core/notifications/badge').invoke('register', self, {});
+        });
     });
 
     ext.point('io.ox/core/appcontrol').extend({
@@ -287,6 +303,18 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
+    ext.point('io.ox/core/appcontrol').extend({
+        id: 'skiplinks',
+        index: 150,
+        draw: function () {
+            this.append(
+                $('<a class="skip-links sr-only sr-only-focusable" href="#">').append(
+                    $('<span>').text(gt('Skip to main content'))
+                )
+            );
+        }
+    });
+
     // ext.point('io.ox/core/appcontrol').extend({
     //     id: 'launcher',
     //     index: 200,
@@ -306,12 +334,14 @@ define('io.ox/core/main/appcontrol', [
         id: 'logo',
         index: 300,
         draw: function () {
-            var logo, action = settings.get('logoAction', false);
+            var logo,
+                logoFileName = settings.get('logoFileName', 'logo.png'),
+                action = settings.get('logoAction', false);
             this.append(
                 logo = $('<div id="io-ox-top-logo">').append(
                     $('<img>').attr({
                         alt: ox.serverConfig.productName,
-                        src: ox.base + '/apps/themes/' + ox.theme + '/logo.png'
+                        src: ox.base + '/apps/themes/' + ox.theme + '/' + logoFileName
                     })
                 )
             );
@@ -322,7 +352,8 @@ define('io.ox/core/main/appcontrol', [
                         target: '_blank'
                     })
                 );
-            } else if (action) {
+            } else if (action && !ox.openedInBrowserTab) {
+                // ox.openedInBrowserTab is only true, when ox.tabHandlingEnabled is true and the window is no a core tab
                 var autoStart = settings.get('autoStart');
                 if (action === 'autoStart') {
                     if (autoStart === 'none') return;
@@ -371,7 +402,6 @@ define('io.ox/core/main/appcontrol', [
             //ext.point('io.ox/core/appcontrol/search').invoke('draw', search);
         }
     });
-
 
     ext.point('io.ox/core/appcontrol').extend({
         id: 'right',

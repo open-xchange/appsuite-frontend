@@ -96,7 +96,7 @@
 .tasks-detailview {
     .io-ox-inline-links:first-child { margin: 0 0 26px 0; }
 
-    header {
+    .task-header {
        margin-bottom: 15px;
        padding-top: 1px;
 
@@ -142,23 +142,24 @@
     	margin-bottom: 4px;
     }
 
-    .attachments {
-        font-family: @light-font-family;
-        color: #aaa;
-    }
-
     .attachments-container {
+
         border-top: 1px solid #ddd;
         padding-top: 15px;
         margin-bottom: 7px;
-        font-weight: 300;
         line-height: 24px;
 
+        .attachments {
+            color: #333;
+            font-weight: bold;
+            margin-right: 16px;
+        }
+
         .dropdown {
-            margin-right: 1em;
+            margin-right: 16px;
             display: inline-block;
             padding-bottom: 2px;
-            line-height: 22px;
+            line-height: 24px;
         }
     }
 
@@ -256,6 +257,33 @@
 
     div.io-ox-tasks-edit.task-edit-wrapper.container.default-content-padding { padding-bottom: 40px; }
 
+}
+
+//portal widget
+
+.io-ox-portal [data-widget-type="tasks"] .item{
+    display: flex;
+    white-space: nowrap;
+    justify-content: space-between;
+
+    .bold {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .accent {
+        margin-left: 5px;
+    }
+
+    .flex-wrapper {
+        overflow: hidden;
+        display: flex;
+    }
+
+    .badge {
+        margin-left: 5px;
+        flex-shrink: 0;
+    }
 }
 
 //io.ox/tasks/listview, io.ox/tasks/common-extensions

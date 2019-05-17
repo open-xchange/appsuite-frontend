@@ -430,7 +430,7 @@ define('io.ox/calendar/util', [
             }
 
             function getTitle(data) {
-                return that.getTimeInterval(data, moment().tz()) + ' ' + moment().zoneAbbr();
+                return that.getTimeInterval(data, that.getMoment(data.startDate).tz()) + ' ' + that.getMoment(data.startDate).zoneAbbr();
             }
 
             function addA11ySupport(parent) {
@@ -871,20 +871,21 @@ define('io.ox/calendar/util', [
             return ret;
         },
 
-        resolveParticipants: function (data) {
+        // returns array of {mail, displayName} objects
+        // resolves groups, eliminates duplicates, uses provided mail address of attendee, filters out resources
+        resolveAttendees: function (data, options) {
+            options = options || {};
             // clone array
             var attendees = data.attendees.slice(),
-                IDs = {
-                    user: [],
-                    group: [],
-                    ext: []
-                };
+                users = [],
+                groups = [],
+                result = [];
 
-            var organizerIsExternalParticipant = !data.organizer.entity && _.isString(data.organizer.email) && _.find(attendees, function (p) {
+            var organizerIsExternalParticipant = data.organizer && !data.organizer.entity && _.isString(data.organizer.email) && _.find(attendees, function (p) {
                 return p.mail === data.organizer.email;
             });
 
-            if (!organizerIsExternalParticipant) {
+            if (data.organizer && !organizerIsExternalParticipant) {
                 attendees.unshift(data.organizer);
             }
 
@@ -892,23 +893,21 @@ define('io.ox/calendar/util', [
                 switch (attendee.cuType) {
                     case undefined:
                     case 'INDIVIDUAL':
+                        if (!attendee.email) return;
                         // internal user
                         if (attendee.entity) {
-                            // user API expects array of integer [1337]
-                            IDs.user.push(attendee.entity);
-                        } else {
-                            // external attendee
-                            IDs.ext.push({
-                                display_name: attendee.cn,
-                                mail: attendee.email,
-                                mail_field: 0
-                            });
+                            if (options.filterSelf && attendee.entity === ox.user_id) return;
+                            users.push(attendee.entity);
                         }
+                        result.push({
+                            display_name: attendee.cn,
+                            mail: attendee.email
+                        });
                         break;
                     // group
                     case 'GROUP':
                         // group expects array of object [{ id: 1337 }], yay (see bug 47207)
-                        IDs.group.push({ id: attendee.entity });
+                        groups.push({ id: attendee.entity });
                         break;
                     // resource or rescource group
                     case 'RESOURCE':
@@ -918,39 +917,29 @@ define('io.ox/calendar/util', [
                 }
             });
 
-            return groupAPI.getList(IDs.group)
+            if (!groups.length) return $.Deferred().resolve(result);
+
+            return groupAPI.getList(groups)
                 // resolve groups
                 .then(function (groups) {
+                    var members = [];
                     _.each(groups, function (single) {
-                        IDs.user = _.union(single.members, IDs.user);
+                        members = _.union(single.members, members);
                     });
-                    return userAPI.getList(IDs.user);
+                    members = _(members).difference(users);
+                    if (!members.length) return result;
+                    return userAPI.getList(members);
                 })
-                // add mail to user objects
                 .then(function (users) {
-                    // add user type 1 to all internal users
-                    _.each(users, function (obj) {
-                        _.extend(obj, { type: 1 });
-                    });
-                    // search for external users in contacts
-                    var defs = _(IDs.ext).map(function (ext) {
-                        return contactAPI.search(ext.mail);
-                    });
-                    return $.when.apply($, defs).then(function () {
-                        _(arguments).each(function (result, i) {
-                            if (_.isArray(result) && result.length) {
-                                IDs.ext[i] = result[0];
-                            }
-                        });
-                        // combine results with groups and map
-                        return _([].concat(IDs.ext, users))
-                            .chain()
-                            .uniq()
-                            .map(function (user) {
-                                return $.extend(user, { mail: user.email1, mail_field: 1 });
-                            })
-                            .value();
-                    });
+                    return result.concat(_(_(users).map(function (user) {
+                        return {
+                            display_name: user.display_name,
+                            mail:  user.email1 || user.email2 || user.email3
+                        };
+                    })).filter(function (user) {
+                        // don't add if mail address is missing (yep, edge-case)
+                        return !!user.mail;
+                    }));
                 });
         },
 
@@ -1130,7 +1119,11 @@ define('io.ox/calendar/util', [
                     perspective = opt.perspective || _.url.hash('perspective') || app.props.get('layout');
 
                 function cont(perspective) {
-                    if (perspective.selectAppointment) perspective.selectAppointment(model);
+                    if (perspective.selectAppointment) {
+                        perspective.selectAppointment(model);
+                        // early return to avoud doubled detail view
+                        return;
+                    }
                     if (opt.showDetails) {
                         var e = $.Event('click', { target: app.perspective.$el });
                         perspective.showAppointment(e, model.toJSON(), { arrow: false });
@@ -1159,23 +1152,28 @@ define('io.ox/calendar/util', [
                     .addButton('cancel', gt('Cancel'), 'cancel');
         },
 
-        showRecurrenceDialog: function (model) {
+        showRecurrenceDialog: function (model, options) {
             if (!(model instanceof Backbone.Model)) model = new (require('io.ox/calendar/model').Model)(model);
             if (model.get('recurrenceId')) {
+                options = options || {};
                 var dialog = new dialogs.ModalDialog();
                 // first occurence
                 if (model.hasFlag('first_occurrence')) {
+                    if (options.dontAllowExceptions) return $.when('series');
                     dialog.text(gt('Do you want to edit the whole series or just this appointment within the series?'));
                     dialog.addPrimaryButton('series', gt('Series'), 'series');
-                } else if (model.hasFlag('last_occurrence')) {
+                } else if (model.hasFlag('last_occurrence') && !options.allowEditOnLastOccurence) {
                     return $.when('appointment');
+                } else if (options.dontAllowExceptions) {
+                    dialog.text(gt('Do you want to edit this and all future appointments or the whole series?'));
+                    dialog.addPrimaryButton('thisandfuture', gt('All future appointments'), 'thisandfuture');
+                    dialog.addPrimaryButton('series', gt('Series'), 'series');
                 } else {
                     dialog.text(gt('Do you want to edit this and all future appointments or just this appointment within the series?'));
                     dialog.addPrimaryButton('thisandfuture', gt('All future appointments'), 'thisandfuture');
                 }
-
-                return dialog.addButton('appointment', gt('This appointment'), 'appointment')
-                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel')
+                if (!options.dontAllowExceptions) dialog.addButton('appointment', gt('This appointment'), 'appointment');
+                return dialog.addAlternativeButton('cancel', gt('Cancel'), 'cancel')
                     .show();
             }
             return $.when('appointment');
@@ -1277,7 +1275,8 @@ define('io.ox/calendar/util', [
             };
 
             if (attendee.cuType !== 'RESOURCE') {
-                if ((user.user_id !== undefined || user.contact_id) && user.type !== 5) attendee.entity = user.user_id || user.id;
+                // guests have a user id but are still considered external, so dont add an entity here (normal users have guest_created_by === 0)
+                if (!user.guest_created_by && (user.user_id !== undefined || user.contact_id) && user.type !== 5) attendee.entity = user.user_id || user.id;
                 attendee.email = user.field && user[user.field] ? user[user.field] : (user.email1 || user.mail);
                 if (!attendee.cn) attendee.cn = attendee.email;
                 attendee.uri = 'mailto:' + attendee.email;
@@ -1286,6 +1285,7 @@ define('io.ox/calendar/util', [
                 if (user.description) attendee.comment = user.description;
                 attendee.entity = user.id;
                 attendee.resource = user;
+                if (user.mailaddress) attendee.email = user.mailaddress;
             }
 
             if (attendee.cuType === 'GROUP') {
@@ -1295,7 +1295,6 @@ define('io.ox/calendar/util', [
             }
             // not really needed. Added just for convenience. Helps if distribution list should be created
             if (attendee.cuType === 'INDIVIDUAL' || !attendee.cuType) {
-                attendee.contactInformation = { folder: user.folder_id, contact_id: user.contact_id || user.id };
                 attendee.contact = {
                     display_name: user.display_name,
                     first_name: user.first_name,
@@ -1339,52 +1338,32 @@ define('io.ox/calendar/util', [
         },
 
         // checks if the user is allowed to edit an event
-        // can be used in synced or deferred mode(deferred is default) by setting options.synced
-        // If synced mode is used make sure to give the folder data in the options.folderData attribute
-        allowedToEdit: function (event, options) {
-            options = options || {};
-            var result = function (val) { return options.synced ? val : $.when(val); };
+        // data is plain object, folder is folderModel (e.g. via app.folder.getModel())
+        allowedToEdit: function (data, folder) {
 
-            // no event
-            if (!event) return result(false);
-
-            // support objects and models
-            var data = event.attributes || event,
-                folder = data.folder;
-            // no id or folder
-            if (!data.id || !data.folder) return result(false);
+            if (!data || !folder) return false;
+            if (!data.id || !data.folder) return false;
 
             // organizer is allowed to edit
-            if (this.hasFlag(data, 'organizer') || this.hasFlag(data, 'organizer_on_behalf')) return result(true);
-
+            if (this.hasFlag(data, 'organizer') || this.hasFlag(data, 'organizer_on_behalf')) return true;
             // if user is neither organizer nor attendee editing is not allowed
-            if (!this.hasFlag(data, 'attendee') && !this.hasFlag(data, 'attendee_on_behalf')) return result(false);
+            if (!this.hasFlag(data, 'attendee') && !this.hasFlag(data, 'attendee_on_behalf')) return true;
+            // if user is attendee, check if modify privileges are granted
+            if ((this.hasFlag(data, 'attendee') || this.hasFlag(data, 'attendee_on_behalf')) && data.attendeePrivileges === 'MODIFY') return true;
 
-            // if both settings are the same, we don't need a folder check, all attendees are allowed to edit or not, no matter which folder the event is in
-            if (settings.get('chronos/restrictAllowedAttendeeChanges', true) === settings.get('chronos/restrictAllowedAttendeeChangesPublic', true)) return result(!settings.get('chronos/restrictAllowedAttendeeChanges', true));
+            var restrictChanges = settings.get('chronos/restrictAllowedAttendeeChanges', true),
+                restrictChangesPublic = settings.get('chronos/restrictAllowedAttendeeChangesPublic', true);
 
-            // synced mode needs folderData at this point. Stop if not given
-            if (options.synced && !options.folderData) return result(false);
-            if (options.synced) {
-                // public folder
-                if (folderAPI.is('public', options.folderData)) return !settings.get('chronos/restrictAllowedAttendeeChangesPublic', true);
-                // no public folder
-                return !settings.get('chronos/restrictAllowedAttendeeChanges', true);
-            }
+            // if both settings are the same, we don't need a folder check
+            // all attendees are allowed to edit or not, no matter which folder the event is in
+            if (restrictChanges === restrictChangesPublic) return !restrictChanges;
 
-            // check if this is a public or non public folder
-            return folderAPI.get(folder).then(function (folderData) {
-                // public folder
-                if (folderAPI.is('public', folderData)) return !settings.get('chronos/restrictAllowedAttendeeChangesPublic', true);
-                // no public folder
-                return !settings.get('chronos/restrictAllowedAttendeeChanges', true);
-            });
+            return folder.is('public') ? !restrictChangesPublic : !restrictChanges;
         },
 
         hasFlag: function (data, flag) {
             // support for arrays (used in multiple selection). returns true if all items in the array have the flag
             if (_.isArray(data) && data.length > 0) return _(data).reduce(function (oldVal, item) { return oldVal && that.hasFlag(item, flag); }, true);
-
             if (data instanceof Backbone.Model) return data.hasFlag(flag);
             if (!data.flags || !data.flags.length) return false;
             return data.flags.indexOf(flag) >= 0;
@@ -1408,6 +1387,21 @@ define('io.ox/calendar/util', [
                 moment.tz(moment(result.startDate.value).valueOf() + moment(master.endDate.value).valueOf() - moment(master.startDate.value).valueOf(), result.startDate.tzid).format('YYYYMMDD[T]HHmmss');
 
             return result;
+        },
+        // cleans attendee confrmations and comments, used when data from existing appointments should be used to create a new one (invite, follow up)
+        cleanupAttendees: function (attendees) {
+            // clean up attendees (remove confirmation status comments etc)
+            return _(attendees).map(function (attendee) {
+                var temp = _(attendee).pick('cn', 'cuType', 'email', 'uri', 'entity', 'contact');
+                // resources are always set to accepted
+                if (temp.cn === 'RESOURCE') {
+                    temp.partStat = 'ACCEPTED';
+                    if (attendee.comment) temp.comment = attendee.comment;
+                } else {
+                    temp.partStat = 'NEEDS-ACTION';
+                }
+                return temp;
+            });
         }
     };
 

@@ -17,7 +17,7 @@ BuildRequires:  npm6
 BuildRequires:  nodejs >= 0.10.0
 %endif
 Version:        @OXVERSION@
-%define         ox_release 12
+%define         ox_release 3
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -60,22 +60,14 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -DkeepCache=tru
 /opt/open-xchange/etc/settings/guidedtours.properties
 
 %changelog
-* Mon May 06 2019 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2019-05-13 (5235)
-* Fri Apr 26 2019 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2019-04-29 (5211)
-* Mon Apr 01 2019 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2019-04-01 (5180)
-* Mon Mar 04 2019 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2019-03-11 (5149)
-* Mon Feb 18 2019 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2019-02-25 (5133)
-* Mon Feb 04 2019 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2019-02-11 (5108)
-* Mon Jan 21 2019 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2019-01-28 (5076)
-* Wed Jan 09 2019 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2019-01-14 (5023)
+* Fri May 10 2019 Marcus Klein <marcus.klein@open-xchange.com>
+First candidate of 7.10.2 release
+* Wed May 01 2019 Marcus Klein <marcus.klein@open-xchange.com>
+Second preview of 7.10.2 release
+* Thu Mar 28 2019 Marcus Klein <marcus.klein@open-xchange.com>
+First preview of 7.10.2 release
+* Mon Mar 11 2019 Marcus Klein <marcus.klein@open-xchange.com>
+prepare for 7.10.2
 * Wed Nov 28 2018 Marcus Klein <marcus.klein@open-xchange.com>
 Second candidate for 7.10.1 release
 * Fri Nov 23 2018 Marcus Klein <marcus.klein@open-xchange.com>

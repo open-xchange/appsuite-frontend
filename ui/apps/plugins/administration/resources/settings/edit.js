@@ -12,7 +12,7 @@
  */
 
 define('plugins/administration/resources/settings/edit', [
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/backbone/mini-views/common',
     'io.ox/core/tk/dialogs',
     'io.ox/core/api/resource',

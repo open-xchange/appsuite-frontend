@@ -15,15 +15,16 @@ define('plugins/xing/main', [
     'io.ox/core/extPatterns/stage',
     'io.ox/core/extensions',
     'io.ox/xing/api',
-    'io.ox/core/extPatterns/links',
+    'io.ox/backbone/views/actions/util',
     'io.ox/core/notifications',
     'io.ox/keychain/api',
     'gettext!plugins/portal'
-], function (Stage, ext, api, links, notifications, keychain, gt) {
+], function (Stage, ext, api, actionsUtil, notifications, keychain, gt) {
 
     'use strict';
 
-    var XING_NAME = gt('XING'),
+    var Action = actionsUtil.Action,
+        XING_NAME = gt('XING'),
         isAlreadyOnXing,
         hasXingAccount;
 
@@ -35,13 +36,12 @@ define('plugins/xing/main', [
         return api.findByMail(emailArray).then(function (data) {
             if (!data.results) return false;
             return _(data.results.items).some(function (inquiry) {
-
                 return !!inquiry.user;
             });
         });
     };
 
-    new links.Action('io.ox/xing/actions/invite', {
+    new Action('io.ox/xing/actions/invite', {
         id: 'invite-xing',
         capabilities: 'xing',
         requires: function (e) {
@@ -76,7 +76,7 @@ define('plugins/xing/main', [
         }
     });
 
-    new links.Action('io.ox/xing/actions/add', {
+    new Action('io.ox/xing/actions/add', {
         id: 'add-on-xing',
         capabilities: 'xing',
         requires: function (e) {
@@ -116,50 +116,51 @@ define('plugins/xing/main', [
         run: function () {
 
             /* invite to xing actions in toolbars */
-            ext.point('io.ox/contacts/links/inline').extend(new links.Link({
+            ext.point('io.ox/contacts/links/inline').extend({
                 id: 'invite-contact-to-xing',
                 index: 610,
-                label: gt('Invite to %s', XING_NAME),
+                title: gt('Invite to %s', XING_NAME),
                 ref: 'io.ox/xing/actions/invite'
-            }));
+            });
 
-            ext.point('io.ox/mail/all/actions').extend(new links.Link({
+            ext.point('io.ox/mail/all/actions').extend({
                 id: 'invite-email-to-xing',
                 index: 310, /* Preferably closely following 300, "invite to appointment" */
-                label: gt('Invite to %s', XING_NAME),
+                title: gt('Invite to %s', XING_NAME),
                 ref: 'io.ox/xing/actions/invite'
-            }));
+            });
 
-            ext.point('io.ox/contacts/classic-toolbar/links').extend(new links.Link({
+            ext.point('io.ox/contacts/toolbar/links').extend({
                 id: 'invite-contact-to-xing-classic',
                 prio: 'lo',
                 mobile: 'lo',
-                label: gt('Invite to %s', XING_NAME),
+                title: gt('Invite to %s', XING_NAME),
                 ref: 'io.ox/xing/actions/invite'
-            }));
+            });
 
             /* add on xing actions in toolbars */
-            ext.point('io.ox/contacts/links/inline').extend(new links.Link({
+            ext.point('io.ox/contacts/links/inline').extend({
                 id: 'add-on-xing-by-contact',
                 index: 610, /* same index as 'invite to XING', because it is mutually exclusive */
-                label: gt('Add on %s', XING_NAME),
+                title: gt('Add on %s', XING_NAME),
                 ref: 'io.ox/xing/actions/add'
-            }));
+            });
 
-            ext.point('io.ox/mail/all/actions').extend(new links.Link({
+            ext.point('io.ox/mail/all/actions').extend({
                 id: 'add-on-xing-by-e-mail',
                 index: 310, /* same index as 'invite to XING', because it is mutually exclusive */
-                label: gt('Add on %s', XING_NAME),
+                title: gt('Add on %s', XING_NAME),
                 ref: 'io.ox/xing/actions/add'
-            }));
+            });
 
-            ext.point('io.ox/contacts/classic-toolbar/links').extend(new links.Link({
+            ext.point('io.ox/contacts/toolbar/links').extend({
                 id: 'add-on-xing-by-contact-classic',
                 prio: 'lo',
                 mobile: 'lo',
-                label: gt('Add on %s', XING_NAME),
+                title: gt('Add on %s', XING_NAME),
                 ref: 'io.ox/xing/actions/add'
-            }));
+            });
+
             return $.when();
         }
     });

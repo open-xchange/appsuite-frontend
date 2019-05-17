@@ -58,10 +58,9 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             .text(name);
     }
 
-    function renderDateString(model) {
-        var modified = model.get('last_modified');
-        var isToday = moment().isSame(moment(modified), 'day');
-        var dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-';
+    function createDateString(date) {
+        var isToday = moment().isSame(moment(date), 'day');
+        var dateString = date ? moment(date).format(isToday ? 'LT' : 'l LT') : '-';
 
         return dateString;
     }
@@ -76,8 +75,9 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             var model = baton.model;
             var options = baton.options || {};
             var modifiedBy = model.get('modified_by');
-            var dateString = renderDateString(model);
+            var dateString = createDateString(model.get('last_modified'));
             var folder_id = model.get('folder_id');
+            var media = model.get('media') || {};
             var dl = $('<dl>');
             var isAttachmentView = !_.isEmpty(model.get('com.openexchange.file.storage.mail.mailMetadata'));
 
@@ -92,12 +92,66 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 $('<dd class="size">').text(ViewerUtil.renderItemSize(model))
             );
             if (!isAttachmentView) {
+
+                if (media.width && media.height) {
+                    dl.append(
+                        $('<dt>').text(gt('Resolution')),
+                        $('<dd class="resolution">').text(media.width + ' x ' + media.height)
+                    );
+                }
+
+                if (media.camera_make) {
+                    dl.append(
+                        $('<dt>').text(gt('Device make')),
+                        $('<dd class="camera_make">').text(media.camera_make)
+                    );
+                }
+
+                if (media.camera_model) {
+                    dl.append(
+                        $('<dt>').text(gt('Device model')),
+                        $('<dd class="camera_model">').text(media.camera_model)
+                    );
+                }
+
+                if (media.camera_aperture || media.camera_exposure_time || media.camera_focal_length) {
+                    var t = '';
+                    if (media.camera_aperture) {
+                        t = media.camera_aperture + ' ';
+                    }
+                    if (media.camera_exposure_time) {
+                        t = t + media.camera_exposure_time + ' ';
+                    }
+                    if (media.camera_focal_length) {
+                        t = t + media.camera_focal_length;
+                    }
+                    //#. german translation should be "Aufnahme".
+                    dl.append(
+                        $('<dt>').text(gt('Shot')),
+                        $('<dd class="camera_shot">').text(t)
+                    );
+                }
+
+                if (media.camera_iso_speed) {
+                    dl.append(
+                        $('<dt>').text(gt('ISO')),
+                        $('<dd class="camera_iso_speed">').text(media.camera_iso_speed)
+                    );
+                }
+
+                if (model.get('capture_date')) {
+                    dl.append(
+                        $('<dt>').text(gt('Capture date')),
+                        $('<dd class="camera_capture_date">').text(createDateString(model.get('capture_date')))
+                    );
+                }
+
                 dl.append(
                     // modified
                     $('<dt>').text(gt('Modified')),
                     $('<dd class="modified">').append(
                         $('<span class="modifiedAt">').text(dateString),
-                        $('<span class="modifiedBy">').append(UserAPI.getTextNode(modifiedBy))
+                        $('<span class="modifiedBy">').append(document.createTextNode('\u200B')).append(UserAPI.getTextNode(modifiedBy))
                     )
                 );
 
@@ -224,8 +278,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             //#. File and folder details
             this.setPanelHeader(gt('Details'));
             // attach event handlers
-            this.listenTo(this.model, 'change:cid change:filename change:title change:com.openexchange.file.sanitizedFilename change:file_size change:last_modified change:folder_id change:object_permissions change:permissions', this.render);
-            this.on('dispose', this.disposeView.bind(this));
+            this.listenTo(this.model, 'change:media change:cid change:filename change:title change:com.openexchange.file.sanitizedFilename change:file_size change:last_modified change:folder_id change:object_permissions change:permissions', this.render);
         },
 
         render: function () {
@@ -249,7 +302,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         /**
          * Destructor function of this view.
          */
-        disposeView: function () {
+        onDispose: function () {
             if (this.model) this.model = null;
         }
 

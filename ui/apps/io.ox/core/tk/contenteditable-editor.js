@@ -43,6 +43,8 @@ define('io.ox/core/tk/contenteditable-editor', [
             ed.on('keydown', function (e) {
                 // pressed enter?
                 if (!e.shiftKey && e.which === 13) splitContent(ed, e);
+                if (e.which === 13 || e.which === 40) setTimeout(throttledScrollOnEnter, 0, ed);
+                if (e.which === 38 || e.which === 8) setTimeout(throttledScrollOnCursorUp, 0, ed);
             });
         }
     });
@@ -87,31 +89,11 @@ define('io.ox/core/tk/contenteditable-editor', [
     });
 
     ext.point(POINT + '/setup').extend({
-        id: 'image-remove',
+        id: 'retrigger-change',
         index: INDEX += 100,
-        draw: (function () {
-            function getImageIds(content) {
-                // content can be just a string when e.g. pasting
-                var images = $('<div>' + content + '</div>').find('img');
-                return _(images.toArray()).chain().map(function (img) {
-                    return $(img).attr('id');
-                }).compact().value();
-            }
-            return function (ed) {
-                var oldsIds = [];
-                ed.on('BeforeSetContent change Focus Blur', function (e) {
-                    // use e.content for BeforeSetContent events
-                    // no events is important or the style nodes get the mce-bogus attribute. this causes the toolbar buttons to have the wrong state aver a couple of clicks, see Bug 59394
-                    var ids = getImageIds(e.content || ed.getContent({ no_events: true })),
-                        removed = _.difference(oldsIds, ids);
-                    removed.forEach(function (id) {
-                        var editorElement = $(ed.getElement());
-                        editorElement.trigger('removeInlineImage', id);
-                    });
-                    oldsIds = ids;
-                });
-            };
-        }())
+        draw: function (ed) {
+            ed.on('keyup SetContent Change', _.throttle(this.trigger.bind(this, 'change'), 50));
+        }
     });
 
     /*
@@ -194,13 +176,13 @@ define('io.ox/core/tk/contenteditable-editor', [
 
     function splitContent_W3C(ed) {
         // get current range
-        var range = ed.selection.getRng();
+        var range = ed.contentWindow.getSelection().getRangeAt(0);
         // range collapsed?
         if (!range.collapsed) {
             // delete selected content now
             ed.execCommand('Delete', false, null);
             // reselect new range
-            range = ed.selection.getRng();
+            range = ed.contentWindow.getSelection().getRangeAt(0);
         }
         // do magic
         var container = range.commonAncestorContainer;
@@ -267,7 +249,12 @@ define('io.ox/core/tk/contenteditable-editor', [
             }
         }
         // create new elements
-        range.insertNode(mailUtil.getDefaultStyle().node.get(0));
+        var newNode = mailUtil.getDefaultStyle().node.get(0);
+        range.insertNode(newNode);
+        range.setStart(newNode, 0);
+        range.setEnd(newNode, 0);
+        ed.contentWindow.getSelection().empty();
+        ed.contentWindow.getSelection().addRange(range);
     }
 
     function isInsideBlockquote(range) {
@@ -282,7 +269,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
     function splitContent(ed, e) {
         // get current range
-        var range = ed.selection.getRng();
+        var range = ed.contentWindow.getSelection().getRangeAt(0);
         // inside blockquote?
         if (!isInsideBlockquote(range)) return;
         if (!range.startContainer) return;
@@ -292,16 +279,19 @@ define('io.ox/core/tk/contenteditable-editor', [
         ed.focus();
     }
 
-    // This is to keep the caret visible at all times, otherwise the fixed menubar may hide it.
-    // See Bug #56677
-    function scrollOnCursorUp(ed) {
-        var scrollable = $(ed).closest('.scrollable'),
-            bottom = scrollable.offset().top + 40,
-            selection = window.getSelection(),
+    function getCursorPosition(ed) {
+        var scrollable = $(ed.container).closest('.scrollable'),
+            selection = ed.contentWindow.getSelection(),
             range = selection.getRangeAt(0),
-            rect = range.getBoundingClientRect(),
-            top = rect.top,
-            container;
+            // Safari behaves strange here and gives a boundingClientRect with 0 for all properties
+            rect = _.device('safari') ? range.getClientRects()[0] : range.getBoundingClientRect(),
+            top = rect ? rect.top : 0,
+            composeFieldsHeight = scrollable.find('.mail-compose-fields').height(),
+            footerHeight = scrollable.parents('.window-container-center').find('.window-footer').outerHeight(),
+            marginBottom = scrollable.find('.contenteditable-editor').css('margin-bottom') || '0px',
+            editorBottomMargin = parseInt(marginBottom.replace('px', ''), 10) || 0,
+            bottom = scrollable.height() - footerHeight - editorBottomMargin * 2;
+
         // for empty lines we get no valid rect
         if (top === 0) {
             if (selection.modify) {
@@ -310,12 +300,40 @@ define('io.ox/core/tk/contenteditable-editor', [
                 rect = range.getBoundingClientRect();
                 range.collapse();
                 top = rect.top + rect.height;
+                // Safari will keep the selection if we do not collapse it
+                selection.collapseToEnd();
             } else {
-                container = range.commonAncestorContainer;
+                var container = range.commonAncestorContainer;
                 top = $(container).offset().top + container.clientHeight;
             }
         }
-        if (top > 0 && top < bottom) scrollable[0].scrollTop += top - scrollable.offset().top - 40;
+        var pos = top - scrollable.scrollTop() + composeFieldsHeight;
+
+        return { pos: pos, top: top, bottom: bottom, scrollable: scrollable };
+    }
+
+    var duration = 300,
+        easing = 'swing',
+        throttledScrollOnCursorUp = _.throttle(scrollOnCursorUp, duration),
+        throttledScrollOnEnter = _.throttle(scrollOnEnter, duration);
+
+    // This is to keep the caret visible at all times, otherwise the fixed menubar may hide it.
+    // See Bug #56677
+    function scrollOnCursorUp(ed) {
+        var cursorPosition = getCursorPosition(ed);
+
+        // Scroll to cursor position (If you manually set this to something else, it doesn't feel native)
+        if (cursorPosition.top > 0 && cursorPosition.pos < 0) cursorPosition.scrollable.animate({ scrollTop: cursorPosition.top }, duration, easing);
+        // Scroll whole window to the top, if cursor reaches top of the editable area
+        if (cursorPosition.top < 16) cursorPosition.scrollable.animate({ scrollTop: 0 }, duration, easing);
+    }
+
+    function scrollOnEnter(ed) {
+        var cursorPosition = getCursorPosition(ed);
+
+        if (cursorPosition.pos >= cursorPosition.bottom) {
+            cursorPosition.scrollable.animate({ scrollTop: cursorPosition.top }, duration, easing);
+        }
     }
 
     function lookupTinyMCELanguage() {
@@ -335,9 +353,11 @@ define('io.ox/core/tk/contenteditable-editor', [
 
     function Editor(el, opt) {
 
-        var $el, initialized = $.Deferred(), ed;
+        var $el, initialized = $.Deferred(), ed, self = this;
         var editor, editorId = el.data('editorId');
         var defaultStyle = mailUtil.getDefaultStyle();
+
+        _.extend(this, Backbone.Events);
 
         el.append(
             $el = $('<div class="contenteditable-editor">').attr('data-editor-id', editorId).on('keydown', function (e) { if (e.which === 27) e.preventDefault(); }).append(
@@ -355,7 +375,8 @@ define('io.ox/core/tk/contenteditable-editor', [
             toolbar3: '',
             plugins: 'autoresize autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
             theme: 'modern',
-            height: null
+            height: null,
+            imageLoader: null // is required to upload images. should have upload(file) and getUrl(response) methods
         }, opt);
 
         editor.addClass(opt.class);
@@ -454,7 +475,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             setup: function (ed) {
                 if (opt.oxContext) ed.oxContext = opt.oxContext;
-                ext.point(POINT + '/setup').invoke('draw', this, ed);
+                ext.point(POINT + '/setup').invoke('draw', self, ed);
                 ed.on('init', function () {
                     // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
                     $(fixed_toolbar).find('span.mce-txt').attr('tabindex', -1);
@@ -469,8 +490,15 @@ define('io.ox/core/tk/contenteditable-editor', [
                         $(this).toggleClass('mce-btn-group-visible-xs', $(this).has('.mce-widget:not([data-hidden])').length > 0);
                     });
 
+                    ed.on('SetContent', function (o) {
+                        if (!o.paste) return;
+                        setTimeout(throttledScrollOnEnter, 0, ed);
+                    });
+
                 });
-            }
+            },
+
+            oxImageLoader: opt.imageLoader
         };
 
         ext.point(POINT + '/options').invoke('config', options, opt.oxContext);
@@ -581,8 +609,8 @@ define('io.ox/core/tk/contenteditable-editor', [
                 return trimEnd(content);
             };
 
-        //special handling for alternative mode, send HTML to backend and it will create text/plain part of the mail automagically
-        this.content_type = opt.model && opt.model.get('preferredEditorMode') === 'alternative' ? 'ALTERNATIVE' : 'text/html';
+        // special handling for alternative mode, send HTML to backend and it will create text/plain part of the mail automagically
+        this.content_type = opt.config && opt.config.get('preferredEditorMode') === 'alternative' ? 'ALTERNATIVE' : 'text/html';
 
         // publish internal 'done'
         this.done = function (fn) {
@@ -690,9 +718,9 @@ define('io.ox/core/tk/contenteditable-editor', [
                 isForwardUnquoted = opt.view.model.get('mode') === 'forward' && mailSettings.get('forwardunquoted', false),
                 index = content.indexOf(isForwardUnquoted ? '----' : '<blockquote type="cite">');
             // special case: initially replied/forwarded text mail
-            if (content.substring(0, 15) === '<blockquote><div>') index = 0;
+            if (content.substring(0, 15) === '<blockquote type="cite"><div>') index = 0;
             // special case: switching between signatures in such a mail
-            if (content.substring(0, 23) === '<div><br></div><blockquote>') index = 0;
+            if (content.substring(0, 23) === '<div><br></div><blockquote type="cite">') index = 0;
             if (index < 0) return { content: content };
             return {
                 // content without trailing whitespace
@@ -799,8 +827,8 @@ define('io.ox/core/tk/contenteditable-editor', [
         (function () {
             if (_.device('smartphone')) return;
             var scrollPane = opt.scrollpane || opt.app && opt.app.getWindowNode(),
-                fixed = false,
-                top = 14;
+                composeFields = scrollPane.find('.mail-compose-fields'),
+                fixed = false;
 
             // keep fixed toolbar in window, when window is dragged
             if (opt.app && opt.app.get('floating') && opt.app.get('window').floating) {
@@ -812,24 +840,13 @@ define('io.ox/core/tk/contenteditable-editor', [
             }
 
             scrollPane.on('scroll', function () {
-                if (scrollPane.scrollTop() - scrollPane.find('.mail-compose-fields').height() > top) {
-                    // toolbar leaves viewport
-                    if (!fixed) {
-                        fixed = true;
-                        $(fixed_toolbar).css('top', opt.view.$el.parent().offset().top);
-                        $el.find('.mce-edit-area').css('margin-top', 40);
-                        $(window).trigger('resize.tinymce');
-                    }
-                    //editor.css('margin-top', $(fixed_toolbar).height());
-                } else if (fixed) {
-                    fixed = false;
-                    $(fixed_toolbar).css('top', 0);
-                    //editor.css('margin-top', 0);
-                    $el.find('.mce-edit-area').css('margin-top', 0);
-                }
+                var scrollTop = scrollPane.scrollTop() || 0;
+                fixed = scrollTop > (composeFields.height() + 14);
+                $(fixed_toolbar).css('top', fixed ? opt.view.$el.parent().offset().top : 0);
+                composeFields.css('margin-bottom', fixed ? 40 : 0);
                 $el.toggleClass('toolbar-fixed', fixed);
             });
-            scrollPane.on('scroll', _.debounce(function () { $('body').click(); }, 1000, true));
+
         }());
 
         this.destroy = function () {
@@ -853,10 +870,6 @@ define('io.ox/core/tk/contenteditable-editor', [
         }
 
         editor.on('addInlineImage', function (e, id) { addKeepalive(id); });
-
-        // track cursor up; needs to be done via setTimeout otherwise the selection is not yet updated
-        editor.on('keydown.scrollOnCursorUp', function (e) { if (e.which === 38) setTimeout(scrollOnCursorUp, 0, this); });
-
     }
 
     return Editor;

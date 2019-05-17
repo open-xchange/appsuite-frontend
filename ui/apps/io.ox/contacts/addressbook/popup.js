@@ -242,6 +242,9 @@ define('io.ox/contacts/addressbook/popup', [
                 } else {
                     // get sort name
                     names.forEach(function (name) {
+                        // use diplay name as fallback only, to avoid inconsistencies
+                        // example if we would not do this: yomiLastname: a => sort_name: a, lastname: a => sortname: a_a, reason behind this is that for yomis no display name is created
+                        if (name === 'display_name' && sort_name.length) return;
                         if (item[name]) sort_name.push(item[name]);
                     });
                     if (opt.useGABOnly) addresses = ['email1'];
@@ -709,7 +712,10 @@ define('io.ox/contacts/addressbook/popup', [
                     var list = this.store.get();
                     // pick relavant values
                     this.tokenview.render(_.map(list, function (obj) {
-                        return { title: obj.email, cid: obj.cid };
+                        return {
+                            title: obj.list ? obj.display_name + ' - ' + gt('Distribution list') : obj.email,
+                            cid: obj.cid,
+                            dist_list_length: obj.list ? obj.list.length : undefined };
                     }));
 
                     if (!list.length) return;
@@ -884,13 +890,39 @@ define('io.ox/contacts/addressbook/popup', [
         appeared[$(e.target).attr('data-original')] = true;
     }
 
+    // keeps order
+    function groupBy(list, iteratee) {
+        var result = [];
+        _(list).each(function (item, index) {
+            var cid = iteratee(item, index),
+                group = this[cid] = this[cid] || [];
+            // when empty it was not added to result list yet
+            if (!group.length) result.push(group);
+            group.push(item);
+        }, {});
+        return result;
+    }
+
+    function flattenBy(list, iteratee) {
+        return _(list).map(function (group) {
+            return _.chain(group)
+                    .sortBy(iteratee)
+                    .first()
+                    .value();
+        });
+    }
+
     function renderItems(list, options) {
         // avoid duplicates (name + email address; see bug 56040)
-        list = _(list).filter(function (item) {
-            if (item.label) return true;
-            var cid = item.full_name + ' ' + item.email;
-            if (this[cid]) return false; return (this[cid] = true);
-        }, {});
+        list = groupBy(list, function (item) {
+            // returns cid as grouping criteria
+            return item.label ? _.uniqueId(item.keywords) : item.full_name + ' ' + item.email;
+        });
+        list = flattenBy(list, function (item) {
+            // returns sort order to prefer users to contacts
+            return item.user_id ? -1 : 1;
+        });
+
         // get defaults
         options = _.extend({
             limit: options.isSearch ? LIMITS.search : LIMITS.render,
@@ -1023,7 +1055,9 @@ define('io.ox/contacts/addressbook/popup', [
         },
 
         render: function (list) {
-            var length = list.length,
+            var length = _(list).reduce(function (agg, item) {
+                    return agg + (item.dist_list_length ? item.dist_list_length : 1);
+                }, 0),
                 selectionLabel, description;
 
             this.$el.empty();

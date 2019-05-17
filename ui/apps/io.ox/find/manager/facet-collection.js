@@ -199,6 +199,8 @@ define('io.ox/find/manager/facet-collection', [
         // TODO: We just need a 'cid' attribute in the backend response
         getResponseCid: function () {
             return 'search/' +
+                // prevent caching of smart date requests (e.g. 'yesterday')
+                moment().format('YYYY-MM-DD') + '/' +
                 _(this.getRequest())
                 .chain()
                 .map(function (obj) {

@@ -66,8 +66,8 @@ define('io.ox/tours/files', [
                     if ($('.launcher-dropdown:visible').length) $('.launcher-btn').click();
                 })
                 .waitFor('.launcher-dropdown:visible')
-                .hotspot('[data-app-name="io.ox/files"]')
-                .spotlight('[data-app-name="io.ox/files"]')
+                .hotspot('.launcher-dropdown [data-app-name="io.ox/files"]')
+                .spotlight('.launcher-dropdown [data-app-name="io.ox/files"]')
                 .on('close', cleanup)
                 .end()
             .step()
@@ -106,23 +106,23 @@ define('io.ox/tours/files', [
             .step()
                 .title(gt('Toolbar'))
                 .content(gt('At the top you can find the toolbar with many functions and additional options. You can easily create new folders, new files and much more.'))
-                .spotlight('.classic-toolbar-container [data-action="create"] + ul', { position: 'left' })
-                .hotspot('.classic-toolbar-container [data-action="create"] + ul', { position: 'left' })
+                .spotlight('.classic-toolbar-container [data-action="io.ox/files/actions/add-folder"]', { position: 'left' })
+                .hotspot('.classic-toolbar-container [data-action="io.ox/files/actions/add-folder"]', { position: 'left' })
                 .on('before:show', function () {
-                    if ($('.classic-toolbar-container [data-action="create"]').closest('.dropdown.open:visible').length === 0) {
+                    if ($('.classic-toolbar-container [data-action="io.ox/files/actions/add-folder"]').closest('.dropdown.open:visible').length === 0) {
 
-                        $('.classic-toolbar-container [data-action="create"]').closest('.dropdown').addClass('open');
+                        $('.classic-toolbar-container [data-action="io.ox/files/actions/add-folder"]').closest('.dropdown').addClass('open');
                     }
                 })
                 .end()
             .step()
                 .title(gt('Upload a new file'))
                 .content(gt('To upload a new file from your local device, simply click on Add local file and select the file you would like to upload. It is even easier if you just drag and drop files from your local device into Drive. The uploaded file is now available in Drive on all your devices.'))
-                .spotlight('.classic-toolbar-container [data-action="create"] + ul', { position: 'left' })
-                .hotspot('.classic-toolbar-container [data-action="create"] + ul li', { position: 'top' })
+                .spotlight('.classic-toolbar-container [data-action="io.ox/files/actions/upload"]', { position: 'left' })
+                .hotspot('.classic-toolbar-container [data-action="io.ox/files/actions/upload"]', { position: 'top' })
                 .on('before:show', function () {
-                    if ($('.classic-toolbar-container [data-action="create"]').closest('.dropdown.open:visible').length === 0) {
-                        $('.classic-toolbar-container [data-action="create"]').closest('.dropdown').addClass('open');
+                    if ($('.classic-toolbar-container [data-action="io.ox/files/actions/upload"]').closest('.dropdown.open:visible').length === 0) {
+                        $('.classic-toolbar-container [data-action="io.ox/files/actions/upload"]').closest('.dropdown').addClass('open');
                     }
                 })
                 .on('next', function () {
@@ -136,15 +136,15 @@ define('io.ox/tours/files', [
                     if (_.device('touch')) return $('.list-view li[data-cid="' + key + '"]').tap();
                     $('.list-view li[data-cid="' + key + '"]').click();
                 })
-                .waitFor('.classic-toolbar-container [data-action="viewer"]')
-                .spotlight('.classic-toolbar-container [data-action="viewer"]', { position: 'right' })
-                .hotspot('.classic-toolbar-container [data-action="viewer"] i', { position: 'right' })
+                .waitFor('.classic-toolbar-container [data-action="io.ox/files/actions/viewer"]')
+                .spotlight('.classic-toolbar-container [data-action="io.ox/files/actions/viewer"]', { position: 'right' })
+                .hotspot('.classic-toolbar-container [data-action="io.ox/files/actions/viewer"] i', { position: 'right' })
                 .end()
             .step()
                 .title(gt('Preview mode'))
                 .content(gt('From preview you can also select other options to help you manage and work on your files.'))
                 .on('before:show', function () {
-                    $('.classic-toolbar-container [data-action="viewer"]').click();
+                    $('.classic-toolbar-container [data-action="io.ox/files/actions/viewer"]').click();
                 })
                 .on('back', function () {
                     $('.viewer-toolbar [data-action="close"]').click();
@@ -157,23 +157,23 @@ define('io.ox/tours/files', [
                 .title(gt('Share files'))
                 .content(gt('Here you can share files with your colleagues and external contacts. You can also collaborate on a document and set different access rights.'))
                 .on('before:show', function () {
-                    $('.viewer-toolbar [data-action="close"]').click();
+                    $('.viewer-toolbar [data-action="io.ox/core/viewer/actions/toolbar/close"]').click();
                 })
 
-                .waitFor('.classic-toolbar-container [data-action="share"]')
-                .spotlight('.classic-toolbar-container [data-action="share"]', { position: 'right' })
-                .hotspot('.classic-toolbar-container [data-action="share"] i', { position: 'left' })
+                .waitFor('.classic-toolbar-container [data-dropdown="io.ox/files/toolbar/share"]')
+                .spotlight('.classic-toolbar-container [data-dropdown="io.ox/files/toolbar/share"]', { position: 'right' })
+                .hotspot('.classic-toolbar-container [data-dropdown="io.ox/files/toolbar/share"] i', { position: 'left' })
                 .on('close', cleanup)
                 .end()
             .step()
                 .title(gt('Sharing options'))
                 .content(gt('Choose from two alternatives to share your files and folders. Use Invite people if you want to manage access rights and allow recipients to create and edit files. Or just get a link to let others view and download your files. You can use an expiration date and password protection if you like.'))
-                .spotlight('.classic-toolbar-container [data-action="share"] + ul', { position: 'right' })
-                .hotspot('.classic-toolbar-container [data-action="share"] + ul li.divider', { position: 'left' })
+                .spotlight('.classic-toolbar-container .dropdown-menu', { position: 'right' })
+                .hotspot('.classic-toolbar-container .dropdown-menu', { position: 'left' })
                 .hide()
                 .on('before:show', function () {
-                    if ($('.classic-toolbar-container [data-action="share"]').closest('.dropdown.open:visible').length === 0) {
-                        $('.classic-toolbar-container [data-action="share"]').closest('.dropdown').addClass('open');
+                    if ($('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown.open:visible').length === 0) {
+                        $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown').addClass('open');
                     }
                 })
                 .end()
@@ -181,34 +181,34 @@ define('io.ox/tours/files', [
             .step()
                 .title(gt('Collaborating'))
                 .content(gt('Sharing files by inviting people does not only offer your recipients the option to create and edit files. Internal and external participants are also able to collaborate with you on text documents and spreadsheets at the same time.'))
-                .spotlight('.classic-toolbar-container [data-action="share"] + ul', { position: 'right' })
-                .hotspot('.classic-toolbar-container [data-action="share"] + ul li', { position: 'left' })
+                .spotlight('.classic-toolbar-container .dropdown-menu', { position: 'right' })
+                .hotspot('.classic-toolbar-container .dropdown-menu', { position: 'left' })
                 .on('before:show', function () {
-                    if ($('.classic-toolbar-container [data-action="share"]').closest('.dropdown.open:visible').length === 0) {
-                        $('.classic-toolbar-container [data-action="share"]').closest('.dropdown').addClass('open');
+                    if ($('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown.open:visible').length === 0) {
+                        $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown').addClass('open');
                     }
                 })
                 .on('next', function () {
-                    $('.classic-toolbar-container [data-action="share"]').closest('.dropdown').removeClass('open');
+                    $('.classic-toolbar-container [data-action="io.ox/files/toolbar/share"]').closest('.dropdown').removeClass('open');
                 })
                 .end()
             .step()
                 .title(gt('Edit documents'))
                 .content(gt('Did you know that you can edit text documents and spreadsheets online? Drive will automatically update your edited file, but thanks to versioning the original file stays available.'))
 
-                .spotlight('.classic-toolbar-container [data-action="edit"]', { position: 'right' })
-                .hotspot('.classic-toolbar-container [data-action="edit"]', { position: 'right' })
+                .spotlight('.classic-toolbar-container [data-action="io.ox/files/actions/editor"]', { position: 'right' })
+                .hotspot('.classic-toolbar-container [data-action="io.ox/files/actions/editor"]', { position: 'right' })
                 .end()
             .step()
                 .title(gt('File details'))
                 .content(gt('The file details side bar offers additional information about your files. Just enable the File details option from the View drop down menu and select a file to see the details.'))
 
                 .on('before:show', function () {
-                    if ($('.classic-toolbar-container [data-action="share"]').closest('.dropdown.open').length > 0) {
-                        $('.classic-toolbar-container [data-action="share"]').closest('.dropdown').removeClass('open');
+                    if ($('.classic-toolbar-container [data-action="io.ox/files/toolbar/share"]').closest('.dropdown.open').length > 0) {
+                        $('.classic-toolbar-container [data-action="io.ox/files/toolbar/share"]').closest('.dropdown').removeClass('open');
                     }
                     if ($('.viewer-sidebar:visible').length === 0) {
-                        $('.classic-toolbar-container [data-dropdown="view"] li [data-name="details"]').click();
+                        $('.classic-toolbar-container [data-dropdown="io.ox/files/action/view"] li [data-name="details"]').click();
                     }
                 })
                 .spotlight('.viewer-sidebar', { position: 'left' })
@@ -247,6 +247,7 @@ define('io.ox/tours/files', [
 
             function cont() {
                 if (current.view === 'tile') app.props.set('layout', 'list');
+                ox.trigger('refresh^');
                 tour.start();
             }
         });

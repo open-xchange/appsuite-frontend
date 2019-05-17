@@ -34,9 +34,6 @@ define('io.ox/core/viewer/views/types/imageview', [
 
         initialize: function () {
             this.isPrefetched = false;
-
-            // call view destroyer on viewer global dispose event
-            this.on('dispose', this.disposeView.bind(this));
         },
 
         /**
@@ -96,7 +93,8 @@ define('io.ox/core/viewer/views/types/imageview', [
             // on retina screen request larger previews to render sharp images
             var width    = retina ? carousel.width() * RETINA_FACTOR : carousel.width();
             var height   = retina ? carousel.height() * RETINA_FACTOR : carousel.height();
-            var size     = { width: width, height: height };
+            // use floor to make sure that the image size will never be bigger than the reported values (scrollbar)
+            var size     = { width: Math.floor(width), height: Math.floor(height) };
 
             return size;
         },
@@ -109,26 +107,16 @@ define('io.ox/core/viewer/views/types/imageview', [
          *  A Promise that if resolved contains the Base64 preview URL.
          */
         getLocalFilePreviewUrl: function () {
-            var fileObj = this.model.get('fileObj');
+            var fileObj = this.model.get('fileObj') || this.model.get('originalFile');
             var size    = this.getImageSize();
 
             return require(['io.ox/contacts/widgets/canvasresize']).then(function (canvasResize) {
-
-                var def = $.Deferred();
-
                 var options = _.extend({
                     crop: false,
-                    quality: 80,
-                    callback: callback
+                    quality: 80
                 }, size);
 
-                function callback(data) {
-                    def.resolve(data);
-                }
-
-                canvasResize(fileObj, options);
-
-                return def;
+                return canvasResize(fileObj, options);
             });
         },
 
@@ -199,7 +187,7 @@ define('io.ox/core/viewer/views/types/imageview', [
         /**
          * Destructor function of this view.
          */
-        disposeView: function () {
+        onDispose: function () {
             this.unload();
             this.$el.find('img.viewer-displayer-image').off();
             this.$el.off();

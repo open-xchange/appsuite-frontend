@@ -15,19 +15,19 @@ define('io.ox/core/tk/dialogs', [
     'io.ox/core/event',
     'io.ox/core/extensions',
     'io.ox/core/a11y',
-    'io.ox/backbone/mini-views/help',
+    'io.ox/backbone/mini-views/helplink',
     'gettext!io.ox/core'
-], function (Events, ext, a11y, HelpView, gt) {
+], function (Events, ext, a11y, HelpLinkView, gt) {
 
     'use strict';
 
     // scaffolds
     function getUnderlay() {
-        return $('<div class="abs io-ox-dialog-underlay" tabindex="-1">').hide();
+        return $('<div class="modal-backdrop in" aria-hidden="true">').hide();
     }
 
     function getPopup() {
-        return $('<div class="io-ox-dialog-popup" tabindex="-1" role="dialog" aria-labelledby="dialog-title">').hide()
+        return $('<div class="io-ox-dialog-popup" role="dialog" aria-labelledby="dialog-title">').hide()
             .append(
                 $('<div role="document">').append(
                     $('<div class="modal-header" id="dialog-title">'),
@@ -236,7 +236,7 @@ define('io.ox/core/tk/dialogs', [
         // append all elements
         o.container.append(
             nodes.wrapper
-                .append(nodes.underlay, nodes.popup)
+                .append(nodes.popup, nodes.underlay)
         );
 
         _(['header', 'body', 'footer']).each(function (part) {
@@ -433,7 +433,7 @@ define('io.ox/core/tk/dialogs', [
                 nodes.header.remove();
             }
 
-            if (o.help) nodes.header.addClass('help').append(new HelpView({ href: o.help }).render().$el);
+            if (o.help) nodes.header.addClass('help').append(new HelpLinkView({ href: o.help, modal: true }).render().$el);
 
             // show but keep invisible
             // this speeds up calculation of dimenstions
@@ -612,6 +612,23 @@ define('io.ox/core/tk/dialogs', [
 
         var popups, target = $(e.target);
 
+        function isWhitelisted(target) {
+            var whiteList = [
+                //check if we are inside a floating-window, a modal dialog or pressed a button in the footer (footer buttons usually close the dialog so check with .io-ox-dialog-popup would fail)
+                '.io-ox-dialog-popup',
+                '.modal.in',
+                '.modal-backdrop.in',
+                '.modal-footer',
+                '.floating-window',
+                // see bug 63561
+                '.participant-wrapper.removable',
+                '.autocomplete-item',
+                // see bug 41822
+                '.io-ox-dialog-sidepopup-toggle'
+            ].join(', ');
+            return target.closest(whiteList).length > 0;
+        }
+
         if (target.hasClass('apptitle')) {
             popups = $('.io-ox-sidepopup:not(.preserve-on-appchange)');
         } else {
@@ -619,10 +636,8 @@ define('io.ox/core/tk/dialogs', [
         }
 
         if (popups.length === 0) return;
-        //check if we are inside a floating-window, amodal dialog or pressed a button in the footer (footer buttons usually close the dialog so check with .io-ox-dialog-popup would fail)
-        if (target.closest('.io-ox-dialog-popup, .io-ox-dialog-underlay, .modal-footer, .floating-window').length > 0) return;
-        // see bug 41822
-        if (target.closest('.io-ox-dialog-sidepopup-toggle').length > 0) return;
+
+        if (isWhitelisted(target)) return;
 
         var inside = $(e.target).closest('.io-ox-sidepopup'),
             index = popups.index(inside);

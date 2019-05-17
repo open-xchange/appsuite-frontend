@@ -90,6 +90,18 @@ define('io.ox/calendar/settings/pane', [
             }
         },
         //
+        // Buttons
+        //
+        {
+            id: 'buttons',
+            index: INDEX += 100,
+            render: function (baton) {
+                this.$el.append(
+                    baton.branch('buttons', null, $('<div class="form-group buttons">'))
+                );
+            }
+        },
+        //
         // View
         //
         {
@@ -161,6 +173,12 @@ define('io.ox/calendar/settings/pane', [
                     view.listenTo(model, 'change:birthday', _.debounce(function (model) {
                         if (_.isUndefined(model.previous('birthday'))) return;
                         folderAPI.update(folderId, { subscribed: !!model.get('birthday') });
+                        // update selected folders
+                        var app = ox.ui.apps.get('io.ox/calendar');
+                        if (!app) return;
+                        var folders = app.folders;
+                        if (!folders) return;
+                        app.folders[!!model.get('birthday') ? 'add' : 'remove'](folderId);
                     }, 500));
 
                     this.$el.append(
@@ -223,7 +241,8 @@ define('io.ox/calendar/settings/pane', [
                             new AlarmsView.linkView({ model: settings, attribute: 'birthdays/defaultAlarmDate' }).render().$el
                         ) : '',
                         // all day
-                        util.checkbox('markFulltimeAppointmentsAsFree', gt('Mark all day appointments as free'), settings)
+                        util.checkbox('markFulltimeAppointmentsAsFree', gt('Mark all day appointments as free'), settings),
+                        util.checkbox('chronos/allowAttendeeEditsByDefault', gt('Participants can edit appointments'), settings)
                     )
                 );
             }
@@ -238,12 +257,37 @@ define('io.ox/calendar/settings/pane', [
                 this.$el.append(
                     util.fieldset(gt('Email notifications'),
                         $('<div class="form-group">').append(
-                            util.checkbox('notifyNewModifiedDeleted', gt('Receive notification for appointment changes'), settings),
+                            util.checkbox('notifyNewModifiedDeleted', gt('Receive notifications when an appointment in which you participate is created, modified or deleted'), settings),
                             util.checkbox('notifyAcceptedDeclinedAsCreator', gt('Receive notification as appointment creator when participants accept or decline'), settings),
                             util.checkbox('notifyAcceptedDeclinedAsParticipant', gt('Receive notification as appointment participant when other participants accept or decline'), settings),
                             util.checkbox('deleteInvitationMailAfterAction', gt('Automatically delete the invitation email after the appointment has been accepted or declined'), settings)
                         )
                     )
+                );
+            }
+        }
+    );
+
+    //
+    // Buttons
+    //
+    ext.point('io.ox/calendar/settings/detail/view/buttons').extend(
+        {
+            id: 'shared-calendars',
+            index: 100,
+            render: function () {
+                function openDialog() {
+                    require(['io.ox/calendar/actions/subscribe-shared'], function (subscribe) {
+                        subscribe.open();
+                    });
+                }
+
+                this.append(
+                    $('<button type="button" class="btn btn-default" data-action="subscribe-shared-calendars">')
+                    .append(
+                        $.txt(gt('Subscribe shared calendars'))
+                    )
+                    .on('click', openDialog)
                 );
             }
         }

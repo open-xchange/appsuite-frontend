@@ -123,6 +123,7 @@ define('io.ox/settings/security/settings/pane', [
             var isEnabled = mailSettings.get('features/authenticity', false),
                 isConfigurable = this.model.isConfigurable('authenticity/level');
 
+            // IMPORTANT: level currently hardcoded as 'fail_neutral_trusted' and 'protected' by MW and not adjustable by any property file change or user interaction.
             if (!isEnabled || !isConfigurable) return;
 
             // fallback default value

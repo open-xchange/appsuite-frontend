@@ -223,15 +223,12 @@
         min-width: @quicklaunch-width;
         min-height: auto;
 
-        .indicator {
-            width: 8px;
-            height: 8px;
-            background-color: #eb4400;
-            border-radius: 50%;
+        svg.indicator {
             position: absolute;
             z-index: 1;
             top: 18px;
             left: 33px;
+            circle { fill: #eb4400 }
         }
 
         .title {
@@ -354,6 +351,10 @@
     .smartphone & {
         padding: 5px 0;
         width: 100%;
+
+        .standalone& {
+            padding: 20px 0;
+        }
     }
 
     li {
@@ -378,6 +379,8 @@
         margin: @launcher-spacing;
         height: @launcher-size;
         width: @launcher-size;
+
+        svg.indicator { display: none; }
 
         .closer {
             font-size: 15px;
@@ -539,4 +542,13 @@
     left: 0;
     bottom: 0;
     z-index: 1;
+}
+
+@media (max-width: 320px)  {
+    // reduce spacings to fit topbar on really small devices
+    .smartphone #io-ox-appcontrol {
+        #io-ox-topsearch { margin-right: 0; }
+        #io-ox-toprightbar .launcher > a { padding: 16px 9px; }
+        #io-ox-launcher > button.launcher-btn { width: 44px; }
+    }
 }

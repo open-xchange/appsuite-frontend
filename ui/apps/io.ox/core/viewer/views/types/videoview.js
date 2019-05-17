@@ -40,12 +40,10 @@ define('io.ox/core/viewer/views/types/videoview', [
          *  the VideoView instance.
          */
         render: function () {
+
             var video = $('<video controls="true" class="viewer-displayer-item viewer-displayer-video player-hidden">'),
                 previewUrl = this.getPreviewUrl() || '',
                 contentType = this.model.get('file_mimetype') || '';
-
-            // run own disposer function on dispose event from DisposableView
-            this.on('dispose', this.disposeView.bind(this));
 
             // remove event listeners from video element before removing it from the DOM
             this.$el.find('video').off();
@@ -155,11 +153,10 @@ define('io.ox/core/viewer/views/types/videoview', [
         /**
          * Destructor function of this view.
          */
-        disposeView: function () {
+        onDispose: function () {
             // remove event listeners from video element
             this.$el.find('video').off();
             this.$el.find('viewer-displayer-audio-video-placeholder').off();
-
             this.disposeElement();
         }
 

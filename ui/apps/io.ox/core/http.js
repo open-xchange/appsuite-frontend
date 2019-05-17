@@ -349,13 +349,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 'displayName': 'displayName',
                 'enabled': 'enabled'
             },
-            'publications': {
-                'id': 'id',
-                'entity': 'entity',
-                'entityModule': 'entityModule',
-                'target': 'target',
-                'enabled': 'enabled'
-            },
             'subscriptionSources': {
                 'id': 'id',
                 'displayName': 'displayName',
@@ -366,8 +359,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         },
         // extended permissions
         idMappingExcludes = ['3060', '7010'],
+
         // list of error codes, which are not logged (see bug 46098)
-        errorBlacklist = ['SVL-0003', 'SVL-0015', 'LGI-0006'];
+        errorBlacklist = ['SVL-0003', 'SVL-0015', 'LGI-0006', 'MFA-0001'];
 
     // extend with commons (not all modules use common columns, e.g. folders)
     $.extend(idMapping.contacts, idMapping.common);
@@ -556,24 +550,30 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         }
         // publish request before a potential use of JSON.stringify that omits undefined values
         ox.trigger('http:before:send', o);
-        // data & body
-        if (type === 'GET' || type === 'POST') {
-            // GET & POST
-            o.data = o.params;
-        } else if (type === 'PUT' || type === 'DELETE') {
-            // PUT & DELETE
-            o._url += '?' + _.serialize(o.params);
-            o.original = o.data;
-            o.data = typeof o.data !== 'string' ? JSON.stringify(o.data) : o.data;
-            o.contentType = 'text/javascript; charset=UTF-8';
-        } else if (type === 'UPLOAD') {
-            // POST with FormData object
-            o._url += '?' + _.serialize(o.params);
-            o.contentType = false;
-            o.processData = false;
-            o.processResponse = false;
+
+        switch (type) {
+            case 'GET':
+            case 'POST':
+                o._url += '?' + $.param(_.omit(o.params, _.isUndefined));
+                break;
+            case 'PUT':
+            case 'PATCH':
+            case 'DELETE':
+                o._url += '?' + _.serialize(o.params);
+                o.original = o.data;
+                o.data = typeof o.data !== 'string' ? JSON.stringify(o.data) : o.data;
+                o.contentType = 'text/javascript; charset=UTF-8';
+                break;
+            case 'UPLOAD':
+                // POST with FormData object
+                o._url += '?' + _.serialize(o.params);
+                o.contentType = false;
+                o.processData = false;
+                o.processResponse = false;
+                break;
+            // no default
         }
-        // done
+
         return o;
     };
 
@@ -610,6 +610,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             // forward all errors to respond to special codes
             ox.trigger('http:error:' + response.code, response, o);
             ox.trigger('http:error', response, o);
+
             // session expired?
             var isSessionError = (/^SES-/i).test(response.code),
                 isLogin = o.module === 'login' && o.data && /^(login|autologin|store|tokens)$/.test(o.data.action);
@@ -620,6 +621,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 ox.trigger('relogin:required', o, deferred, response);
                 return;
             }
+            if (that.isDisconnected() && !o.force) {
+                disconnectedQueue.push({ deferred: deferred, options: o });
+                return;
+            }
+
             // genereal error
             deferred.reject(response);
             return;
@@ -700,6 +706,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         slow = _.url.hash('slow') !== undefined,
         // fail mode
         fail = _.url.hash('fail') !== undefined || ox.fail !== undefined;
+
+    var disconnected = false,
+        disconnectedQueue = [];
 
     var ajax = (function () {
 
@@ -889,51 +898,52 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             return JSON.parse(JSON.stringify(data));
         }
 
-        function send(r) {
-
-            var hash = null;
+        function isConcurrent(r) {
+            var hash;
 
             // look for concurrent identical GET/PUT requests
-            if (r.o.type === 'GET' || r.o.type === 'PUT') {
+            if (r.o.type !== 'GET' && r.o.type !== 'PUT') return;
 
-                // get hash value - we just use stringify here (xhr contains payload for unique PUT requests)
-                try { hash = JSON.stringify(r.xhr); } catch (e) { if (ox.debug) console.error(e); }
+            // get hash value - we just use stringify here (xhr contains payload for unique PUT requests)
+            try { hash = JSON.stringify(r.xhr); } catch (e) { if (ox.debug) console.error(e); }
 
-                if (r.o.consolidate !== false && hash && _.isArray(requests[hash])) {
+            if (r.o.consolidate !== false && hash && _.isArray(requests[hash])) {
 
-                    if (r.o.consolidate === 'reject') {
-                        r.def.reject({ error: 'request is already pending and consolidate parameter is set to reject', code: 'UI_CONSREJECT' });
-                        return;
-                    }
-
-                    // enqueue callbacks
-                    requests[hash].push(r);
-                    r = hash = null;
-                } else {
-                    // init queue
-                    requests[hash] = [];
-                    // create new request
-                    r.def.always(function () {
-                        // success or failure?
-                        var success = r.def.state() === 'resolved';
-                        // at first, remove request from hash (see bug 37113)
-                        var reqs = requests[hash];
-                        delete requests[hash];
-                        if (!reqs || !reqs.length) return;
-                        // now resolve all callbacks
-                        var args = _(arguments).map(clone);
-                        _(reqs).each(function (r) {
-                            r.def[success ? 'resolve' : 'reject'].apply(r.def, args);
-                            that.trigger('stop ' + (success ? 'done' : 'fail'), r.xhr);
-                        });
-                        r = hash = null;
-                    });
-                    limitedSend(r);
+                if (r.o.consolidate === 'reject') {
+                    r.def.reject({ error: 'request is already pending and consolidate parameter is set to reject', code: 'UI_CONSREJECT' });
+                    return;
                 }
-            } else {
-                limitedSend(r);
-                r = null;
+
+                // enqueue callbacks
+                requests[hash].push(r);
+                r = hash = null;
+                return true;
             }
+
+            // init queue
+            requests[hash] = [];
+            // create new request
+            r.def.always(function () {
+                // success or failure?
+                var success = r.def.state() === 'resolved';
+                // at first, remove request from hash (see bug 37113)
+                var reqs = requests[hash];
+                delete requests[hash];
+                if (!reqs || !reqs.length) return;
+                // now resolve all callbacks
+                var args = _(arguments).map(clone);
+                _(reqs).each(function (r) {
+                    r.def[success ? 'resolve' : 'reject'].apply(r.def, args);
+                    that.trigger('stop ' + (success ? 'done' : 'fail'), r.xhr);
+                });
+                r = hash = null;
+            });
+        }
+
+        function send(r) {
+
+            if (!isConcurrent(r)) limitedSend(r);
+
         }
 
         return function (o, type) {
@@ -958,11 +968,12 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 }
             }
 
-            // paused?
-            if (paused === true) {
-                queue.push({ deferred: def, options: o });
+            // If http disconnected and the call isn't being forced, add to queue
+            if (disconnected === true && !o.force) {
+                disconnectedQueue.push({ deferred: def, options: o });
                 return def;
             }
+
             // build request object
             r = {
                 def: def,
@@ -980,6 +991,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     beforeSend: o.beforeSend
                 }
             };
+            // paused?
+            if (paused === true) {
+                if (!isConcurrent(r)) queue.push({ deferred: def, options: o });
+                return def;
+            }
             // use timeout?
             if (typeof o.timeout === 'number') {
                 r.xhr.timeout = o.timeout;
@@ -1056,6 +1072,17 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
          */
         POST: function (options) {
             return ajax(options, 'POST');
+        },
+
+        /**
+         * Send a PATCH request
+         * @param {Object} options Request options
+         * @param {string} options.module Module, e.g. folder, mail, calendar etc.
+         * @param {Object} options.params URL parameters
+         * @returns {Object} jQuery's Deferred
+         */
+        PATCH: function (options) {
+            return ajax(options, 'PATCH');
         },
 
         /**
@@ -1264,6 +1291,42 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             return paused;
         },
 
+        // Shut down http service due to some other required action.  Queue requests
+        disconnect: function () {
+            that.trigger('disconnect');
+            disconnected = true;
+        },
+
+        isDisconnected: function () {
+            return disconnected;
+        },
+
+        // Resume http service, executing pending requests as individual requests
+        reconnect: function () {
+            disconnected = false;
+            var pending = disconnectedQueue.slice().map(function (req) {
+                req.options.consolidate = false;
+                return ajax(req.options, req.options.type)
+                    .then(req.deferred.resolve, req.deferred.reject);
+            });
+
+            $.when.apply(null, pending).always(function () {
+                that.trigger('reconnect');
+            });
+
+            disconnectedQueue = [];
+        },
+        // Wipe the disconnect queue and resume
+        resetDisconnect: function (resp) {
+            var pending = disconnectedQueue.slice().map(function (req) {
+                req.deferred.reject(resp);
+                return req.deferred;
+            });
+
+            disconnectedQueue = [];
+            $.when.apply(null, pending).always(that.reconnect);
+        },
+
         /**
          * Resume HTTP API. Send all queued requests as one multiple
          */
@@ -1395,6 +1458,21 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
     };
 
     Events.extend(that);
+
+    (function (http) {
+        var waitSeconds;
+
+        http.on('disconnect', function () {
+            if (typeof waitSeconds === 'undefined') waitSeconds = require.s.contexts._.config.waitSeconds;
+            require.config({ waitSeconds: 0 });  // Requires will time out if sitting in queue
+        });
+        http.on('reconnect', function () {
+            window.setTimeout(function () {
+                require.config({ waitSeconds: waitSeconds });
+                waitSeconds = undefined;
+            }, 100);
+        });
+    }(that));
 
     return that;
 });

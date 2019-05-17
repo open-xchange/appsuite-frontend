@@ -312,7 +312,7 @@ define('io.ox/tasks/edit/view-template', [
                     model: baton.model,
                     display: 'DATETIME',
                     ignoreToggle: true,
-                    className: 'col-xs-6 collapsible',
+                    className: 'col-xs-12 col-sm-6 collapsible',
                     attribute: 'alarm',
                     label: gt('Reminder date'),
                     clearButton: true

@@ -32,6 +32,21 @@
         .leftside  { width: 240px; }
         .rightside { left:  240px; }
     }
+
+    .mail-item .list-item {
+        .drag-title, .person {
+            width: 100%;
+            display: inline-block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        &.unread .drag-title {
+            width: calc(~"100% - 19px");
+        }
+        .from {
+            max-height: 16px;
+        }
+    }
 }
 
 .io-ox-mail-window .vsplit .leftside .alert {
@@ -97,7 +112,6 @@
             display: block;
         }
     }
-    .inplace-reply { margin: 14px; }
 }
 
 .preview-none {
@@ -480,7 +494,12 @@ html.macos, html.ios {
     .detail-view-row {
         position: relative;
 
-        .recipients { float: left; }
+        .recipients {
+            float: left;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
         .priority { font-size: 14px; }
         .flag-picker {
             text-align: right;
@@ -525,7 +544,7 @@ html.macos, html.ios {
             font-size: 15px;
         }
 
-        .detail-view-row.row-5, .inplace-reply { display: none; }
+        .detail-view-row.row-5 { display: none; }
 
         .unread-toggle, .flag-picker > a, .recipients, .row-4 { opacity: 0.6; }
 
@@ -691,6 +710,7 @@ html.macos, html.ios {
         }
 
         .subject {
+            height: 16px;
             overflow: hidden;
             text-overflow: ellipsis;
         }
@@ -835,15 +855,12 @@ html.macos, html.ios {
         padding: 10px @default-padding 9px @default-padding;
         border-bottom: 1px solid #ddd;
 
-        .io-ox-inline-links {
+        .inline-toolbar {
             display: inline;
             font-family: @normal-font-family;
             font-size: 13px;
             margin-left: @default-padding;
-
             a:hover { text-decoration: underline; }
-
-            li { margin-right: @default-padding; }
         }
 
         .fa-paperclip {
@@ -929,7 +946,7 @@ html.macos, html.ios {
             &:focus { color: @link-color; }
             padding: 0;
             margin: 8px @default-padding 4px 0;
-            .flex(0 0 auto);
+            flex: 0 0 auto;
             .align-self(flex-start);
         }
     }
@@ -973,50 +990,6 @@ html.macos, html.ios {
         display: inline-block;
         padding-right: 10px;
     }
-}
-
-//
-// Inplace/quick reply
-//
-
-.inplace-reply {
-
-    margin: 0;
-    padding: @default-padding;
-    height: 100%;
-
-    .form-group { margin-bottom: 0; }
-
-    .progress {
-        height: 4px;
-        margin-bottom: 20px;
-        position: relative;
-        top: 8px;
-    }
-
-    .success {
-        font-size: 14px;
-        font-weight: 500;
-        text-align: right;
-        color: #358000; // green
-        padding: 2px 0;
-    }
-}
-
-.floating-quick-reply {
-    max-height: 320px;
-    top: ~"calc(50% - 160px)";
-}
-
-textarea.inplace-editor {
-    color: #333;
-    font-size: 14px;
-    font-weight: 500; // for better readability
-    line-height: normal;
-    width: 100%;
-    height: 100%;
-    padding: 15px;
-    resize: none;
 }
 
 .thread-view-control {
@@ -1228,7 +1201,7 @@ body.dragging .categories-toolbar-container {
 
     .free-space { flex: 1; }
 
-    .category:not(.selected) button, .free-space { border-bottom: 1px solid #dddddd; }
+    .category:not(.selected) button, .free-space, .help { border-bottom: 1px solid #dddddd; }
 
     .category {
         font-size: 13px;
@@ -1433,10 +1406,10 @@ body.dragging .categories-toolbar-container {
             line-height: 24px;
 
             .from {
+                flex-wrap: wrap;
                 max-height: none;
 
                 .person-link.person-from { font-weight: 500; }
-                .address { display: none; }
 
                 &.show-address {
                     flex-wrap: wrap;
@@ -1524,6 +1497,10 @@ body.dragging .categories-toolbar-container {
 
             &.unread.selected .subject { color: #000; }
 
+            .subject {
+                height: @phone-line-height;
+            }
+
             &.complete > .list-item:last-child {
                 margin-bottom: @toolbar-height;
                 border-bottom: 0;
@@ -1534,6 +1511,8 @@ body.dragging .categories-toolbar-container {
             .list-item-content {
                 font-size: @phone-font-size;
                 line-height: @phone-line-height;
+
+                i { line-height: @phone-line-height; }
             }
             .thread-size {
                 margin-top: 3px;

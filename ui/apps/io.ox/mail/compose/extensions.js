@@ -17,22 +17,24 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/backbone/mini-views/common',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/views/actions/util',
     'io.ox/core/tk/tokenfield',
     'io.ox/core/dropzone',
     'io.ox/core/capabilities',
     'io.ox/mail/actions/attachmentQuota',
     'io.ox/core/util',
     'io.ox/core/attachments/view',
-    'io.ox/core/yell',
+    'io.ox/mail/compose/util',
     'io.ox/mail/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
-    'io.ox/core/extPatterns/links',
-    'settings!io.ox/core',
     'settings!io.ox/contacts',
+    'io.ox/core/attachments/backbone',
+    'io.ox/core/strings',
+    'io.ox/mail/compose/resize-view',
+    'io.ox/mail/compose/resize',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, Attachments, yell, mailUtil, settings, gt, links, coreSettings, settingsContacts) {
+], function (contactAPI, sender, mini, Dropdown, ext, actionsUtil, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, settingsContacts, Attachments, strings, ResizeView, imageResize) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -50,22 +52,64 @@ define('io.ox/mail/compose/extensions', [
         reply_to: /*#. Must not exceed 8 characters. e.g. German would be: "Antworten an", needs to be abbreviated like "Antw. an" as space is very limited */ gt.pgettext('compose', 'Reply to')
     };
 
+    var IntermediateModel = Backbone.Model.extend({
+        initialize: function (opt) {
+            this.config = opt.config;
+            this.model = opt.model;
+            this.configFields = opt.configFields;
+            this.modelFields = opt.modelFields;
+
+            delete this.attributes.config;
+            delete this.attributes.model;
+            delete this.attributes.configFields;
+            delete this.attributes.modelFields;
+
+            this.listenTo(this.config, this.configFields.map(this.changeMapper).join(' '), this.getData);
+            this.listenTo(this.model, this.modelFields.map(this.changeMapper).join(' '), this.getData);
+            this.getData();
+            this.on('change', this.updateModels);
+        },
+        changeMapper: function (str) {
+            return 'change:' + str;
+        },
+        getData: function () {
+            this.configFields.forEach(function (attr) {
+                this.set(attr, this.config.get(attr));
+            }.bind(this));
+            this.modelFields.forEach(function (attr) {
+                this.set(attr, this.model.get(attr));
+            }.bind(this));
+        },
+        updateModels: function () {
+            _(this.changed).forEach(function (value, key) {
+                if (this.configFields.indexOf(key) >= 0) return this.config.set(key, value);
+                if (this.modelFields.indexOf(key) >= 0) return this.model.set(key, value);
+            }.bind(this));
+        }
+    });
+
     var SenderView = Backbone.DisposableView.extend({
 
         className: 'row sender',
 
         attributes: { 'data-extension-id': 'sender' },
 
-        initialize: function () {
+        initialize: function (options) {
+            this.config = options.config;
             this.dropdown = new Dropdown({
-                model: this.model,
+                model: new IntermediateModel({
+                    model: this.model,
+                    config: this.config,
+                    configFields: ['sendDisplayName', 'editorMode'],
+                    modelFields: ['from']
+                }),
                 label: this.getItemNode.bind(this),
                 aria: gt('From'),
                 caret: true
             });
 
             this.listenTo(this.model, 'change:from', this.renderDropdown);
-            this.listenTo(this.model, 'change:sendDisplayName', function (model, value) {
+            this.listenTo(this.config, 'change:sendDisplayName', function (model, value) {
                 settings.set('sendDisplayName', value);
             });
         },
@@ -88,11 +132,13 @@ define('io.ox/mail/compose/extensions', [
         },
 
         renderDropdown: function () {
+            var from = this.model.get('from') ? this.model.get('from')[1] : undefined;
             // reset
             this.dropdown.$ul.empty().css('width', 'auto');
             // render
             this.setDropdownOptions();
             this.dropdown.$toggle.find('.dropdown-label').empty().append(this.getItemNode());
+            this.dropdown.$toggle.attr('href', from ? 'mailto:' + from : '#');
             if (this.dropdown.$el.hasClass('open')) this.dropdown.adjustBounds();
             // re-focus element otherwise the bootstap a11y closes the drop-down
             this.dropdown.$ul.find('[data-name="sendDisplayName"]').focus();
@@ -108,7 +154,7 @@ define('io.ox/mail/compose/extensions', [
             var sortedAddresses = _(this.list.sortedAddresses)
                 .chain()
                 .map(function (address) {
-                    var array = mailUtil.getSender(address.option, self.model.get('sendDisplayName'));
+                    var array = mailUtil.getSender(address.option, self.config.get('sendDisplayName'));
                     return { key: _(array).compact().join(' ').toLowerCase(), array: array };
                 })
                 .sortBy('key')
@@ -118,7 +164,7 @@ define('io.ox/mail/compose/extensions', [
             // draw default address first
             sortedAddresses = _(sortedAddresses).filter(function (item) {
                 if (item[1] !== defaultAddress) return true;
-                self.dropdown.option('from', [item], function () {
+                self.dropdown.option('from', item, function () {
                     return self.getItemNode(item);
                 });
                 if (sortedAddresses.length > 1) self.dropdown.divider();
@@ -126,7 +172,7 @@ define('io.ox/mail/compose/extensions', [
             });
 
             _(sortedAddresses).each(function (item) {
-                self.dropdown.option('from', [item], function () {
+                self.dropdown.option('from', item, function () {
                     return self.getItemNode(item);
                 });
             });
@@ -142,7 +188,7 @@ define('io.ox/mail/compose/extensions', [
         },
 
         getItemNode: function (item) {
-            item = item || _(this.model.get('from')).first();
+            item = item || this.model.get('from');
             if (!item) return;
             var name = item[0], address = item[1];
             return [
@@ -170,7 +216,7 @@ define('io.ox/mail/compose/extensions', [
 
         title: function () {
             this.append(
-                $('<h1 class="sr-only">').text(gt('Compose new mail'))
+                $('<h1 class="sr-only">').text(gt('Compose new email'))
             );
         },
 
@@ -182,17 +228,6 @@ define('io.ox/mail/compose/extensions', [
                         .text(baton.model.keepDraftOnClose() ? gt('Delete') : gt('Discard'))
                         .appendTo(this)
                 );
-            },
-            save: function (baton) {
-                this.append($('<button type="button" class="btn btn-default" data-action="save">')
-                    .on('click', function () {
-                        if (baton.view.isSaving === true) return false;
-                        baton.view.isSaving = true;
-                        baton.view.saveDraft().always(function () {
-                            baton.view.isSaving = false;
-                        });
-                    })
-                    .text(gt('Save')));
             },
             send: function (baton) {
                 this.append($('<button type="button" class="btn btn-primary" data-action="send">')
@@ -210,19 +245,19 @@ define('io.ox/mail/compose/extensions', [
         },
 
         sender: function (baton) {
-            var view = new SenderView({ model: baton.model });
+            var view = new SenderView({ model: baton.model, config: baton.config });
             this.append(view.render().$el);
         },
 
         senderRealName: function (baton) {
             var fields = this,
-                model = baton.model;
+                config = baton.config;
 
             function toggleVisibility() {
-                fields.toggleClass('no-realname', !model.get('sendDisplayName'));
+                fields.toggleClass('no-realname', !config.get('sendDisplayName'));
             }
 
-            model.on('change:sendDisplayName', toggleVisibility);
+            config.on('change:sendDisplayName', toggleVisibility);
             toggleVisibility();
 
             this.append(
@@ -233,25 +268,13 @@ define('io.ox/mail/compose/extensions', [
             );
         },
 
-        // TODO: only used by search
-        tokenPicture: function (model) {
-            // add contact picture
-            $(this).prepend(
-                contactAPI.pictureHalo(
-                    $('<div class="contact-image">'),
-                    model.toJSON(),
-                    { width: 16, height: 16, scaleType: 'contain' }
-                )
-            );
-        },
-
         recipientActionLink: function (type) {
             return function () {
-                var node = $('<a href="#" data-action="add" role="checkbox" aria-checked="false">');
+                var node = $('<button type="button" class="btn btn-link" data-action="add">');
                 if (type === 'cc') {
-                    node.attr({ 'data-type': 'cc', 'aria-label': gt('Show carbon copy input field') }).text(gt('CC'));
+                    node.attr({ 'data-type': 'cc', 'title': gt('Show carbon copy input field') }).text(gt('CC'));
                 } else {
-                    node.attr({ 'data-type': 'bcc', 'aria-label': gt('Show blind carbon copy input field') }).text(gt('BCC'));
+                    node.attr({ 'data-type': 'bcc', 'title': gt('Show blind carbon copy input field') }).text(gt('BCC'));
                 }
                 this.append(node);
             };
@@ -298,16 +321,16 @@ define('io.ox/mail/compose/extensions', [
                     tokenfieldView = new Tokenfield({
                         id: guid,
                         className: attr,
-                        extPoint: POINT,
+                        extPoint: POINT + '/' + attr,
                         isMail: true,
                         apiOptions: {
                             users: true,
                             limit: settings.get('compose/autocompleteApiLimit', 20),
                             contacts: true,
                             distributionlists: true,
-                            msisdn: true,
                             emailAutoComplete: true
                         },
+                        keepInComposeWindow: true,
                         maxResults: settings.get('compose/autocompleteDrawLimit', 30),
                         placeholder: tokenfieldTranslations[attr], // for a11y and easy access for custom dev when they want to display placeholders (these are made transparent via less)
                         ariaLabel: tokenfieldTranslations['aria' + attr]
@@ -435,70 +458,36 @@ define('io.ox/mail/compose/extensions', [
             var guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div data-extension-id="subject" class="row subject">').append(
-                    $('<label class="maillabel hidden-xs col-sm-2">').text(gt('Subject')).attr('for', guid),
-                    $('<div class="mail-input col-xs-12 col-sm-10">').append(
+                    // dont use col-xs and col-sm here, breaks style in landscape mode
+                    $('<label class="maillabel" >').addClass(_.device('smartphone') ? 'hidden-md hidden-sm hidden-xs' : 'col-xs-2').text(gt('Subject')).attr('for', guid),
+                    $('<div class="mail-input" >').addClass(_.device('smartphone') ? 'col-xs-12' : 'col-xs-10').append(
                         new mini.InputView({ model: baton.model, id: guid, name: 'subject', autocomplete: false }).render().$el.attr('placeholder', gt('Subject'))
                     )
                 )
             );
         },
 
-        signature: function (baton) {
-            if (_.device('smartphone')) return;
-            baton.view.signaturesLoading = baton.model.initializeSignatures(this);
-        },
+        optionsmenu: (function () {
+            return function (baton) {
+                var dropdown = new Dropdown({ model: new IntermediateModel({
+                    model: baton.model,
+                    config: baton.config,
+                    configFields: ['editorMode', 'vcard'],
+                    modelFields: ['priority', 'requestReadReceipt']
+                }), label: gt('Options'), caret: true });
 
-        signaturemenu: function (baton) {
-            if (_.device('smartphone')) return;
+                ext.point(POINT + '/menuoptions').invoke('draw', dropdown.$el, baton);
 
-            var self = this,
-                dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true });
-
-            // IDEA: move to view to have a reference or trigger a refresh?!
-
-            function draw() {
-                dropdown.prepareReuse();
-                dropdown.option('signatureId', '', gt('No signature'));
-                ext.point(POINT + '/signatures').invoke('draw', dropdown.$el, baton);
                 dropdown.$ul.addClass('pull-right');
-                baton.view.signaturesLoading.done(function () {
-                    dropdown.divider();
-                    dropdown.link('settings', gt('Manage signatures'), function () {
-                        var options = { id: 'io.ox/mail/settings/signatures' };
-                        ox.launch('io.ox/settings/main', options).done(function () {
-                            // minimize this window, so it doesn't overlap the setting the user wants to manage now
-                            if (baton.view.app.getWindow().floating) baton.view.app.getWindow().floating.onMinimize();
-                            this.setSettingsPane(options);
-                        });
-                    });
-                    dropdown.$ul.addClass('pull-right');
-                    dropdown.render();
-                });
-            }
 
-            require(['io.ox/core/api/snippets'], function (snippetAPI) {
-                // use normal event listeners since view.listenTo does not trigger correctly.
-                snippetAPI.on('refresh.all', draw);
-                baton.view.$el.one('dispose', function () { snippetAPI.off('refresh.all', draw); });
-
-                draw();
-            });
-            self.append(dropdown.$el.addClass('signatures text-left'));
-        },
-
-        optionsmenu: function (baton) {
-            var dropdown = new Dropdown({ model: baton.model, label: gt('Options'), caret: true });
-            ext.point(POINT + '/menuoptions').invoke('draw', dropdown.$el, baton);
-
-            dropdown.$ul.addClass('pull-right');
-
-            this.append(dropdown.render().$el.addClass('text-left'));
-        },
+                this.append(dropdown.render().$el.addClass('text-left'));
+            };
+        }()),
 
         attachmentPreviewList: function (baton) {
             var $el = this;
 
-            var view = baton.attachmentsView = new Attachments.List({
+            var view = baton.attachmentsView = new AttachmentView.List({
                 point: 'io.ox/mail/compose/attachment/header',
                 collection: baton.model.get('attachments'),
                 editable: true,
@@ -521,11 +510,17 @@ define('io.ox/mail/compose/extensions', [
                     $(window).trigger('resize');
                 },
                 'drop': function (files) {
-                    baton.model.attachFiles(
-                        _(files).map(function (file) {
-                            return _.extend(file, { group: 'localFile' });
-                        })
-                    );
+                    var models = _(files).map(function (file) {
+                        var attachment = new Attachments.Model({ filename: file.name, origin: { file: file } });
+                        composeUtil.uploadAttachment({
+                            model: baton.model,
+                            filename: file.filename,
+                            origin: { file: file },
+                            attachment: attachment
+                        });
+                        return attachment;
+                    });
+                    baton.model.attachFiles(models);
                     $(window).trigger('resize');
                 }
             });
@@ -583,23 +578,24 @@ define('io.ox/mail/compose/extensions', [
                 list = view.collection.filter(function (a) {
                     return a.get('disp') === 'attachment';
                 })
-                .map(function (a) {
-                    var obj = a.toJSON();
+
+                .map(function (model) {
+                    var obj = model.toJSON();
+                    // map name attibute for composition space attachments
+                    obj.filename = obj.filename || obj.name;
                     if (obj.group === 'localFile') {
-                        obj.fileObj = a.fileObj;
+                        obj.fileObj = model.fileObj;
                         // generate pseudo id so multiple localFile attachments do not overwrite themselves in the Viewer collection
-                        obj.id = 'localFileAttachment-' + a.cid;
+                        obj.id = 'localFileAttachment-' + model.cid;
                     }
                     return obj;
                 });
 
-                baton = ext.Baton({ startItem: data, data: list, openedBy: 'io.ox/mail/compose', restoreFocus: $(e.target) });
-
-                actions.invoke('io.ox/mail/actions/view-attachment', null, baton);
+                baton = ext.Baton({ simple: true, startItem: data, data: list, openedBy: 'io.ox/mail/compose', restoreFocus: $(e.target) });
+                actionsUtil.invoke('io.ox/mail/attachment/actions/view', baton);
             });
 
-            // needed when adding several contacts via 'send as vcard'
-            view.updateScrollControls();
+            baton.app.once('ready', view.updateScrollControls.bind(view, undefined));
 
             view.on('change:layout', function (mode) {
                 settings.set('attachments/layout/compose/' + _.display(), mode).save();
@@ -609,7 +605,6 @@ define('io.ox/mail/compose/extensions', [
         attachmentSharing: function (baton) {
             if (!settings.get('compose/shareAttachments/enabled', false)) return;
             if (!capabilities.has('infostore')) return;
-            // TODO: accidently deactivated on mobile?
             if (_.device('smartphone')) return;
 
             require(['io.ox/mail/compose/sharing'], function (SharingView) {
@@ -620,23 +615,53 @@ define('io.ox/mail/compose/extensions', [
             });
         },
 
-        imageResizeOption: function (baton) {
-            if (!settings.get('features/imageResize/enabled', true)) return;
-            require(['io.ox/mail/compose/resizeUtils'], function (resizeUtils) {
-                var view = baton.resizeView = resizeUtils.getDropDown(baton.model),
-                    $dropDown = view.render().$el.prepend($('<span>').text(gt('Image size:')).addClass('image-resize-lable'));
-                baton.attachmentsView.$el.append($dropDown.addClass('pull-right').hide());
-                baton.attachmentsView.$el.append($('<span>').addClass('mail-size').text(resizeUtils.getMailSizeString(baton.model)));
 
-                function onResizeOptionChange() {
-                    resizeUtils.resizeIntoArray(baton.model.get('attachments'), baton.model.get('imageResizeOption')).then(function (resizedFiles) {
-                        baton.attachmentsView.$el.find('.mail-size').text(resizeUtils.getMailSizeString(baton.model));
-                        baton.model.set('resizedImages', resizedFiles);
-                    });
-                }
-                baton.model.on('change:imageResizeOption', onResizeOptionChange);
-                baton.attachmentsView.collection.on('add remove reset', onResizeOptionChange);
-            });
+        mailSize: function (baton) {
+            var attachmentView = baton.attachmentsView,
+                node = $('<span class="mail-size">');
+
+            attachmentView.$footer.append(node);
+
+            // set mail size
+            attachmentView.listenTo(attachmentView.collection, 'add remove reset change:size', update);
+            attachmentView.listenTo(baton.model, 'change:sharedAttachments', update);
+            update();
+
+            function update() {
+                var hasUploadedAttachments = baton.model.get('attachments').some(function (model) {
+                        return model.get('group') === 'mail';
+                    }),
+                    isDriveMail = !!(baton.model.get('sharedAttachments') || {}).enabled,
+                    visible = hasUploadedAttachments && !isDriveMail;
+                node.text(gt('Mail size: %1$s', getMailSize())).toggleClass('invisible', !visible);
+            }
+
+            function getMailSize() {
+                var mailSize = baton.model.get('content').length,
+                    attachmentSize = baton.model.get('attachments').reduce(function (memo, attachment) {
+                        return memo + (attachment.getSize() || 0);
+                    }, 0);
+                return strings.fileSize(mailSize + attachmentSize, 1);
+            }
+        },
+
+        imageResizeOption: function (baton) {
+            var attachmentView = baton.attachmentsView,
+                resizeView = new ResizeView({ model: baton.config, collection: attachmentView.collection });
+
+            attachmentView.$footer.append(
+                resizeView.render().$el
+            );
+
+            attachmentView.listenTo(attachmentView.collection, 'add remove reset', _.debounce(update, 0));
+            update();
+
+            function update() {
+                var models = baton.model.get('attachments').models;
+                imageResize.containsResizables(models).then(function (show) {
+                    resizeView.$el.toggle(show);
+                });
+            }
         },
 
         attachment: (function () {
@@ -654,11 +679,17 @@ define('io.ox/mail/compose/extensions', [
                     //#. %s is a list of filenames separeted by commas
                     //#. it is used by screenreaders to indicate which files are currently added to the list of attachments
                     self.trigger('aria-live-update', gt('Added %s to attachments.', _(e.target.files).map(function (file) { return file.name; }).join(', ')));
-                    model.attachFiles(
-                        _(e.target.files).map(function (file) {
-                            return _.extend(file, { group: 'localFile' });
-                        })
-                    );
+                    var models = _(e.target.files).map(function (file) {
+                        var attachment = new Attachments.Model({ filename: file.name, origin: { file: file } });
+                        composeUtil.uploadAttachment({
+                            model: model,
+                            filename: file.filename,
+                            origin: { file: file },
+                            attachment: attachment
+                        });
+                        return attachment;
+                    });
+                    model.attachFiles(models);
                 }
             }
 
@@ -674,11 +705,17 @@ define('io.ox/mail/compose/extensions', [
                     })
                     .done(function (files) {
                         self.trigger('aria-live-update', gt('Added %s to attachments.', _(files).map(function (file) { return file.filename; }).join(', ')));
-                        model.attachFiles(
-                            _(files).map(function (file) {
-                                return _.extend(file, { group: 'file' });
-                            })
-                        );
+                        var models = files.map(function (file) {
+                            var attachment = new Attachments.Model({ filename: file.filename });
+                            composeUtil.uploadAttachment({
+                                model: model,
+                                filename: file.filename,
+                                origin: { origin: 'drive', id: file.id, folderId: file.folder_id },
+                                attachment: attachment
+                            });
+                            return attachment;
+                        });
+                        model.attachFiles(models);
                     });
                 });
             }

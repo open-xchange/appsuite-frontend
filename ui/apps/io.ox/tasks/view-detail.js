@@ -16,13 +16,14 @@ define('io.ox/tasks/view-detail', [
     'io.ox/calendar/util',
     'gettext!io.ox/tasks',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/links',
     'io.ox/tasks/api',
     'io.ox/participants/detail',
     'io.ox/core/tk/attachments',
+    'io.ox/backbone/views/toolbar',
+    'io.ox/backbone/views/action-dropdown',
     'io.ox/tasks/actions',
     'less!io.ox/tasks/style'
-], function (util, calendarUtil, gt, ext, links, api, ParticipantsView, attachments) {
+], function (util, calendarUtil, gt, ext, api, ParticipantsView, attachments, ToolbarView, ActionDropdownView) {
 
     'use strict';
 
@@ -33,28 +34,33 @@ define('io.ox/tasks/view-detail', [
             // make sure we have a baton
             baton = ext.Baton.ensure(baton);
             var data = baton.data;
-
             if (!data) return $('<div>');
 
-            var task = util.interpretTask(data), self = this;
+            var task = util.interpretTask(data),
+                self = this,
+                node = $.createViewContainer(data, api)
+                    .on('redraw', function (e, tmp) {
+                        baton.data = tmp;
+                        node.replaceWith(self.draw(baton));
+                    })
+                    .addClass('tasks-detailview');
 
-            var node = $.createViewContainer(data, api)
-                .on('redraw', function (e, tmp) {
-                    baton.data = tmp;
-                    node.replaceWith(self.draw(baton));
-                })
-                .addClass('tasks-detailview');
             baton.interpretedData = task;
-
-            // inline links
             ext.point('io.ox/tasks/detail-inline').invoke('draw', node, baton);
-
-            //content
             ext.point('io.ox/tasks/detail-view').invoke('draw', node, baton);
-
             return node;
         }
     };
+
+    // inline links
+    ext.point('io.ox/tasks/detail-inline').extend({
+        index: 10,
+        id: 'inline-links',
+        draw: function (baton) {
+            new ToolbarView({ el: this, point: 'io.ox/tasks/links/inline', inline: true })
+                .setSelection(baton.array(), { data: baton.array() });
+        }
+    });
 
     // detail-view
     ext.point('io.ox/tasks/detail-view').extend({
@@ -79,7 +85,7 @@ define('io.ox/tasks/view-detail', [
                     $.txt(task.title)
                 );
             this.append(
-                $('<header>').append(
+                $('<div class="task-header">').append(
                     _.device('smartphone') ? [title, infoPanel] : [infoPanel, title]
                 )
             );
@@ -218,36 +224,27 @@ define('io.ox/tasks/view-detail', [
         }
     });
 
-    // inline links
-    ext.point('io.ox/tasks/detail-inline').extend(new links.InlineLinks({
-        index: 100,
-        id: 'inline-links',
-        ref: 'io.ox/tasks/links/inline'
-    }));
-
     //attachments
     ext.point('io.ox/tasks/detail-attach').extend({
         index: 100,
         id: 'attachments',
         draw: function (task) {
             var attachmentNode;
-            //if attachmentrequest fails the container is already there
+            // if attachmentrequest fails the container is already there
             if (this.hasClass('attachments-container')) {
                 attachmentNode = this;
             } else {
-                //else build new
-                attachmentNode = $('<div>').addClass('attachments-container').appendTo(this);
+                attachmentNode = $('<div class="attachments-container">').appendTo(this);
             }
             // TODO: Use io.ox/core/tk/attachments here!
-            $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments').appendTo(attachmentNode);
+            $('<span class="attachments">').text(gt('Attachments')).appendTo(attachmentNode);
             require(['io.ox/core/api/attachment'], function (api) {
                 api.getAll({ folder_id: task.folder_id, id: task.id, module: 4 }).done(function (data) {
                     _(data).each(function (a) {
-                        // draw
-                        buildDropdown(attachmentNode, $.txt(a.filename), a);
+                        buildDropdown(attachmentNode, a.filename, a);
                     });
                     if (data.length > 1) {
-                        buildDropdown(attachmentNode, gt('All attachments'), data).find('a').removeClass('attachment-item');
+                        buildDropdown(attachmentNode, gt('All attachments'), data);
                     }
                     attachmentNode.on('click', 'a', function (e) { e.preventDefault(); });
                 }).fail(function () {
@@ -265,18 +262,11 @@ define('io.ox/tasks/view-detail', [
         );
     };
 
-    var buildDropdown = function (container, label, data) {
-        var bla = new links.Dropdown({
-            label: label,
-            classes: 'attachment-item',
-            ref: 'io.ox/core/tk/attachment/links'
-        }).draw.call(container, data);
-
-        //no inline style for mobile
-        if (_.device('smartphone')) {
-            $(bla).css('display', 'block');
-        }
-        return bla;
+    var buildDropdown = function (container, title, data) {
+        var dropdown = new ActionDropdownView({ point: 'io.ox/core/tk/attachment/links', data: data, title: title });
+        container.append(dropdown.$el);
+        // no inline style for mobile
+        if (_.device('smartphone')) dropdown.$el.css('display', 'block');
     };
 
     return taskDetailView;

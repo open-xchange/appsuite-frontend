@@ -87,11 +87,11 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             if (options.help) {
                 var helpPlaceholder = $('<a class="io-ox-context-help">');
                 this.$header.append(helpPlaceholder);
-                require(['io.ox/backbone/mini-views/help'], function (HelpView) {
+                require(['io.ox/backbone/mini-views/helplink'], function (HelpLinkView) {
                     var parent = helpPlaceholder.parent();
                     parent.addClass('help');
                     helpPlaceholder.replaceWith(
-                        new HelpView({ href: options.help }).render().$el
+                        new HelpLinkView({ href: options.help, modal: true }).render().$el
                     );
                 });
             }
@@ -100,15 +100,14 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             if (_.device('smartphone') && options.smartphoneInputFocus) {
                 // make sure scrolling actually works
                 this.$el.find('.modal-content').css('overflow-y', 'auto');
-                $(window).on('resize', this.scrollToInput);
+                this.listenToDOM(window, 'resize', this.scrollToInput);
             }
 
             // track focusin
-            $(document).on('focusin', $.proxy(this.keepFocus, this));
-            this.on('dispose', function () {
-                $(document).off('focusin', this.keepFocus);
-                $(window).off('resize', this.scrollToInput);
-            });
+            // keep focus is a prototype function and all listeners will be removed from document with off
+            // make it unique by binding to this
+            this.keepFocus = this.keepFocus.bind(this);
+            this.listenToDOM(document, 'focusin', this.keepFocus);
         },
 
         scrollToInput: function () {
@@ -149,7 +148,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 this.$el.addClass('mobile-dialog');
                 this.$footer.rowfluid = $('<div class="row">');
                 this.$footer.append(this.$footer.rowfluid);
-                this.$buttons = this.$footer.find('button');
+                this.$buttons = this.$footer.find('button,a.btn');
                 _.each(this.$buttons, function (buttonNode) {
                     self.$footer.rowfluid.prepend($(buttonNode).addClass('btn-medium'));
                     $(buttonNode).wrap('<div class="col-xs-12 col-md-3">');
@@ -216,6 +215,25 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 $('<button type="button" class="btn">')
                     .addClass(o.className)
                     .attr('data-action', o.action)
+                    .text(o.label)
+            );
+            return this;
+        },
+
+        // special button (a with href and download attribute)
+        // needed for downloads in safari to prevent the Frame load interrupted error
+        addDownloadButton: function (options) {
+            var o = _.extend({ placement: 'right', className: 'btn-primary', label: gt('Download'), action: 'cancel', href: '#' }, options),
+                left = o.placement === 'left', fn = left ? 'prepend' : 'append';
+            if (left) o.className += ' pull-left';
+            this.$footer[fn](
+                $('<a role="button" class="btn">')
+                    .addClass(o.className)
+                    .attr({
+                        'data-action': o.action,
+                        href: o.href,
+                        download: 'download'
+                    })
                     .text(o.label)
             );
             return this;
@@ -299,13 +317,21 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         // hide dialog without disposing it
         pause: function () {
             $(document).off('focusin', this.keepFocus);
-            this.$el.next().addBack().hide();
+            if (this.options.render !== false) {
+                this.$el.next('.modal-backdrop.in:visible').addBack().hide();
+            } else {
+                this.$el.prev('.modal-backdrop.in:visible').addBack().hide();
+            }
             this.toggleAriaHidden(false);
         },
 
         resume: function () {
-            $(document).on('focusin', $.proxy(this.keepFocus, this));
-            this.$el.next().addBack().show();
+            $(document).on('focusin', this.keepFocus);
+            if (this.options.render !== false) {
+                this.$el.next('.modal-backdrop.in:hidden').addBack().show();
+            } else {
+                this.$el.prev('.modal-backdrop.in:hidden').addBack().show();
+            }
             // add marker class again(needed by yells for example)
             $(document.body).addClass('modal-open');
             this.toggleAriaHidden(true);

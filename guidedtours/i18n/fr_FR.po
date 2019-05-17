@@ -1,21 +1,21 @@
 # Antje Faber <antje.faber@open-xchange.com>, 2010, 2011, 2013.
 # Éric Bischoff <eric@workshop-chapina.com>, 2010, 2012, 2013, 2014.
-# Sandrine Burriel <sandrine@workshop-chapina.com>, 2014, 2016, 2018.
+# Sandrine Burriel <sandrine@workshop-chapina.com>, 2014, 2016, 2018, 2019.
 # Nicolas Ternisien <nicolas@workshop-chapina.com>, 2015, 2016, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-11-01 21:47+0900\n"
-"Last-Translator: Sandrine Burriel <sandrine@workshop-chapina.com>\n"
+"PO-Revision-Date: 2019-04-27 10:58+0900\n"
+"Last-Translator: sandrine <sandrine@workshop-chapina.com>\n"
 "Language-Team: French <fr@workshop-chapina.com>\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 18.12.2\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -661,6 +661,84 @@ msgstr ""
 #: apps/io.ox/tours/main.js module:io.ox/tours
 msgid "Getting started"
 msgstr "Premiers pas"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr "Deuxième facteur d'authentification"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Vous pouvez désormais ajouter des options de vérification supplémentaire pour "
+"renforcer la sécurité de votre compte."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "Ajouter une option de vérification"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr ""
+"Les différentes options de vérification supplémentaire dépendent de votre"
+" installation."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "Ajouter un code envoyé par SMS"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr ""
+"L'option d'envoi d'un code par SMS, par exemple, vous demande ensuite de "
+"saisir un numéro de téléphone."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "Requêtes d'authentification"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr ""
+"À la connexion suivante, vous devrez vérifier votre identité en saisissant le "
+"code envoyé à votre téléphone."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "Retirer"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr ""
+"Une fois que vous avez ajouté un appareil, vous pouvez le retirer si vous le "
+"souhaitez. Pour plus de détails, consultez l'aide."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "Suivant"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+"Une fonctionnalité de sécurité supplémentaire vous permet désormais "
+"d'exiger une seconde méthode d'authentification, par exemple sous la "
+"forme d'un SMS, avant d'autoriser la connexion à vtre compte. "
+"Souhaitez-vous voir davantage d'informations sur cette fonction ?"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr "Démarrer la visite guidée"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
@@ -4037,9 +4115,6 @@ msgstr ""
 
 #~ msgid "New subscription"
 #~ msgstr "Nouvel abonnement"
-
-#~ msgid "Next"
-#~ msgstr "Suivant"
 
 #~ msgid "Next Day"
 #~ msgstr "Jour suivant"

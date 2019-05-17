@@ -14,7 +14,7 @@
 
 define('io.ox/files/share/permissions', [
     'io.ox/core/extensions',
-    'io.ox/backbone/disposable',
+    'io.ox/backbone/views/disposable',
     'io.ox/core/yell',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/dropdown',
@@ -592,7 +592,7 @@ define('io.ox/files/share/permissions', [
                 if (!baton.parentModel.isAdmin() || isOwner || !supportsWritePrivileges || baton.model.isAnonymous()) {
                     $el.text(description);
                 } else {
-                    dropdown = new DropdownView({ el: $el.addClass('dropdown')[0], caret: true, label: description, title: gt('Current role'), model: baton.model, smart: true })
+                    dropdown = new DropdownView({ el: $el.addClass('dropdown')[0], caret: true, label: description, title: gt('Current role'), model: baton.model, smart: true, buttonToggle: true })
                         .option('role', 'viewer', function () {
                             return [$.txt(gt('Viewer')), $.txt(' '), $('<small>').text(gt('(Read only)'))];
                         })
@@ -661,50 +661,50 @@ define('io.ox/files/share/permissions', [
                     maxWrite = model.get('write') === 64 ? 64 : 2,
                     maxDelete = model.get('delete') === 64 ? 64 : 2;
 
-                var dropdown = new DropdownView({ caret: true, keep: true, label: gt('Details'), title: gt('Detailed access rights'), model: model, smart: true })
+                var dropdown = new DropdownView({ caret: true, keep: true, label: gt('Details'), title: gt('Detailed access rights'), model: model, smart: true, buttonToggle: true })
                     //
                     // FOLDER access
                     //
-                    .header(gt('Folder'))
+                    .group(gt('Folder'))
                     //#. folder permissions
-                    .option('folder', 1, gt('View the folder'))
+                    .option('folder', 1, gt('View the folder'), { radio: true, group: true })
                     //#. folder permissions
-                    .option('folder', 2, gt('Create objects'))
+                    .option('folder', 2, gt('Create objects'), { radio: true, group: true })
                     //#. folder permissions
-                    .option('folder', maxFolder, gt('Create objects and subfolders'))
+                    .option('folder', maxFolder, gt('Create objects and subfolders'), { radio: true, group: true })
                     //
                     // READ access
                     //
                     .divider()
-                    .header(gt('Read permissions'))
+                    .group(gt('Read permissions'))
                     //#. object permissions - read
-                    .option('read', 0, gt('None'))
+                    .option('read', 0, gt('None'), { radio: true, group: true })
                     //#. object permissions - read
-                    .option('read', 1, gt('Read own objects'))
+                    .option('read', 1, gt('Read own objects'), { radio: true, group: true })
                     //#. object permissions - read
-                    .option('read', maxRead, gt('Read all objects'))
+                    .option('read', maxRead, gt('Read all objects'), { radio: true, group: true })
                     //
                     // WRITE access
                     //
                     .divider()
-                    .header(gt('Write permissions'))
+                    .group(gt('Write permissions'))
                     //#. object permissions - edit/modify
-                    .option('write', 0, gt('None'))
+                    .option('write', 0, gt('None'), { radio: true, group: true })
                     //#. object permissions - edit/modify
-                    .option('write', 1, gt('Edit own objects'))
+                    .option('write', 1, gt('Edit own objects'), { radio: true, group: true })
                     //#. object permissions - edit/modify
-                    .option('write', maxWrite, gt('Edit all objects'))
+                    .option('write', maxWrite, gt('Edit all objects'), { radio: true, group: true })
                     //
                     // DELETE access
                     //
                     .divider()
-                    .header(gt('Delete permissions'))
+                    .group(gt('Delete permissions'))
                     //#. object permissions - delete
-                    .option('delete', 0, gt('None'))
+                    .option('delete', 0, gt('None'), { radio: true, group: true })
                     //#. object permissions - delete
-                    .option('delete', 1, gt('Delete own objects'))
+                    .option('delete', 1, gt('Delete own objects'), { radio: true, group: true })
                     //#. object permissions - delete
-                    .option('delete', maxDelete, gt('Delete all objects'));
+                    .option('delete', maxDelete, gt('Delete all objects'), { radio: true, group: true });
 
                 // add admin role?
                 if (baton.view.supportsAdminRole()) {
@@ -713,11 +713,11 @@ define('io.ox/files/share/permissions', [
                     //
                     dropdown
                     .divider()
-                    .header(gt('Administrative role'))
+                    .group(gt('Administrative role'))
                     //#. object permissions - user role
-                    .option('admin', 0, gt('User'))
+                    .option('admin', 0, gt('User'), { radio: true, group: true })
                     //#. object permissions - admin role
-                    .option('admin', 1, gt('Administrator'));
+                    .option('admin', 1, gt('Administrator'), { radio: true, group: true });
                 }
 
                 dropdown.render();
@@ -744,7 +744,7 @@ define('io.ox/files/share/permissions', [
                 if (!baton.parentModel.isAdmin()) return;
                 if (isFolderAdmin && baton.model.isOwner(baton.parentModel)) return;
 
-                var dropdown = new DropdownView({ label: $('<i class="fa fa-bars" aria-hidden="true">'), smart: true, title: gt('Actions') }),
+                var dropdown = new DropdownView({ label: $('<i class="fa fa-bars" aria-hidden="true">'), smart: true, title: gt('Actions'), buttonToggle: true }),
                     type = baton.model.get('type'),
                     myself = baton.model.isMyself(),
                     isNew = baton.model.has('new'),

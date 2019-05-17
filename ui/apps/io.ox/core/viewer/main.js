@@ -115,6 +115,14 @@ define('io.ox/core/viewer/main', [
 
                     self.mainView.on('dispose', close);
 
+                    self.mainView.viewerEvents.listenTo(self.mainView.viewerEvents, 'viewer:beforeclose', beforeClose);
+                });
+            }
+
+            function beforeClose() {
+                // Remove file decode parameters from file models once viewer closes
+                self.fileCollection.each(function (model) {
+                    model.set('file_options', {});
                 });
             }
 

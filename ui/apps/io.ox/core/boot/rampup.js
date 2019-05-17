@@ -12,9 +12,20 @@
  */
 
 define('io.ox/core/boot/rampup', [
-], function () {
+    'io.ox/core/http',
+    'io.ox/core/extensions'
+], function (http, ext) {
     'use strict';
 
-    // placeholder to define extensions for rampup phase
-    // does nothing for now, since we still fetch rampup from MW during login
+    ext.point('io.ox/core/boot/rampup').extend([{
+        id: 'http_pause',
+        fetch: function () {
+            http.pause();
+        }
+    }, {
+        id: 'http_resume',
+        fetch: function () {
+            return http.resume();
+        }
+    }]);
 });

@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="ユーザ ガイド">
-<link rel="up" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. 予定表の画面構成">
+<link rel="up" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. カレンダーの画面構成">
 <link rel="prev" href="ox.appsuite.user.sect.calendar.gui.scheduling.html" title="7.1.11. スケジューリングビュー">
 <link rel="next" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. 予定の表示">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
@@ -29,9 +29,9 @@
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <h1 class="sr-only"><span class="phrase">予定表</span></h1>
+  <h1 class="sr-only"><span class="phrase">カレンダー</span></h1>
 <h2 class="sr-only">
-<span class="phrase"><span class="guilabel"><strong>予定表</strong></span></span>の画面構成</h2>
+<span class="phrase">カレンダー</span>の画面構成</h2>
 <div class="sect2" id="ox.appsuite.user.sect.calendar.gui.create">
 <div class="titlepage"><div><div><h3 class="title">7.1.12. 予定編集ウィンドウ</h3></div></div></div>
 <a class="indexterm" name="id-1.8.6.16.2"></a><p id="ox.appsuite.user.concept.calendar.gui.create">このウィンドウは、予定の作成または編集時に使用されます。</p>
@@ -48,19 +48,9 @@
 <p class="title">コンテンツ</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p role="presentation">タイトルバーには、次の要素が表示されます。</p>
-<ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p role="presentation">ウィンドウタイトル</p></li>
-<li class="listitem"><p role="presentation">ウィンドウ位置を調整するアイコン、キャンセルアイコン</p></li>
-</ul>
-<p role="presentation">
-            </p>
-</li>
-<li class="listitem">
 <p role="presentation">予定データ</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>件名</strong></span>入力フィールド。このフィールドに件名を入力します。件名は、予定タイトルとして表示されます。</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>場所</strong></span>ボタンここで、予定が実施される場所を入力できます。</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>件名</strong></span>, <span class="guibutton"><strong>場所</strong></span>, <span class="guibutton"><strong>内容</strong></span> 入力フィールド件名は、予定タイトルとして表示されます。場所と内容はおションとして入力できます。</p></li>
 <li class="listitem">
 <p role="presentation"><span class="guibutton"><strong>開始日時</strong></span>および<span class="guibutton"><strong>終了日時</strong></span>予定の開始日時と終了日時を設定します。クリックすると、日付ピッカーが表示されます。</p>
 <p role="presentation"><span class="guibutton"><strong>終日</strong></span>を無効にすると、開始時刻と終了時刻を設定できます。</p>
@@ -68,9 +58,9 @@
 <li class="listitem"><p role="presentation">時間の横にあるタイムゾーンボタンをクリックすると、ウィンドウが表示され、予定の開始時刻と終了時刻のタイムゾーンを選択できます。予定表の設定で<a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html">お気に入りとしてよく使用するタイムゾーンを設定</a>できます。</p></li>
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>終日</strong></span>予定が終日続くかどうかを指定します。</p></li>
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>空き時間を検索</strong></span>スケジューリングビューを直接表示します。このビューでは、複数の参加者の予定のスケジューリングのときに空き時間を検索できます。</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>繰り返し</strong></span>予定が終日続くかどうかを指定します。設定例は、<a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.serial">予定と仕事に関する質問</a> を参照してください。</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>説明</strong></span>入力フィールドこのフィールドに予定の説明を入力できます。</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>予定表</strong></span>予定が作成される予定表を表示します。クリックすると、予定表選択メニューが表示されます。</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>繰り返し</strong></span>予定を繰り返すかどうかを設定します。</p></li>
+<li class="listitem"><p role="presentation">予定の出席者。</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>連絡先/リソースを追加</strong></span>入力フィールド参加者またはリソースの名前を入力します。</p></li>
 </ul>
 <p role="presentation">
             </p>
@@ -78,8 +68,9 @@
 <li class="listitem">
 <p role="presentation">予定表ビュー</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>空き時間として表示</strong></span>予定を空き時間として表示するかどうかを指定します。予定が重ならないようにするために、このチェックボックスを有効にします。</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>予定の色</strong></span>予定が表示される色を指定できます。<span class="guibutton"><strong>色なし</strong></span>チェックボックスが有効な場合、予定が予定表の色で表示されます。予定に異なる色を設定するには、色フィールドをクリックします。</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>予定表</strong></span>予定が作成される予定表を表示します。クリックすると、予定表選択メニューが表示されます。</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>アラーム</strong></span>予定の終了日時をいつにするか、どのように知らせるかを指定します。</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>予定の色</strong></span>予定が表示される色を指定できます。</p></li>
 <li class="listitem">
 <p role="presentation"><span class="guibutton"><strong>表示</strong></span>共有予定表の予定を表示するかどうかを指定します。</p>
 <ul class="itemizedlist" style="list-style-type: square; ">
@@ -90,36 +81,34 @@
 <p role="presentation">                 
                   </p>
 </li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>空き時間として表示</strong></span>予定を空き時間として表示するかどうかを指定します。予定が重ならないようにするために、このチェックボックスを有効にします。</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>参加者は予定を編集できます。</strong></span>参加者が予定を編集できるかどうかを指定します。</p></li>
 </ul>
 <p role="presentation">
             </p>
 </li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>アラーム</strong></span>予定の終了日時をいつにするか、どのように知らせるかを指定します。</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>連絡先/リソースを追加</strong></span>入力フィールド参加者またはリソースの名前を入力します。</p></li>
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>添付ファイルを追加</strong></span>ファイルを追加します。</p></li>
-<li class="listitem">
-<p role="presentation">ボタンバー</p>
-<ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>作成</strong></span>現在の予定データを保存します。書式ウィンドウを閉じます。</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>キャンセル</strong></span>予定を作成または編集</p></li>
-</ul>
-<p role="presentation">
-            </p>
-</li>
 </ul>
 <p>
       </p>
-<p class="title">詳細は、次のページを参照してください。</p>
-<ul class="itemizedlist" id="ox.appsuite.user.related.calendar.gui.create" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.firststeps.gui.create.html">編集ウィンドウの概要</a></p></li>
-<li class="listitem" style="list-style-type: none">
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.gui.datepicker.html">日付ピッカー</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.gui.scheduling.html">スケジューリングビュー</a></p>
+<p id="ox.appsuite.user.related.calendar.gui.create">
+        </p>
+<p class="title">アクション</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html">新規予定の作成</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html">予定の編集</a></p>
-</li>
-</ul>
-<p id="ox.appsuite.user.parent.calendar.gui.create">親記事：<a class="xref" href="ox.appsuite.user.sect.calendar.gui.html"><span class="phrase"><span class="guilabel"><strong>予定表</strong></span></span>の画面構成</a></p>
+</li></ul>
+<p>
+        </p>
+<p class="title">関連トピック</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.gui.datepicker.html">日付ピッカー</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.gui.scheduling.html">スケジューリングビュー</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.firststeps.gui.create.html">編集ウィンドウ</a></p>
+</li></ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.calendar.gui.create">親記事：<a class="xref" href="ox.appsuite.user.sect.calendar.gui.html"><span class="phrase">カレンダー</span>の画面構成</a></p>
 </div>
           </div>
         </body>

@@ -11,7 +11,7 @@
  */
 
 
-Feature('Tasks');
+Feature('Tasks > Create');
 
 Before(async function (users) {
     await users.create();

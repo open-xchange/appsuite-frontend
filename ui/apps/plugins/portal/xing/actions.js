@@ -21,10 +21,9 @@ define('plugins/portal/xing/actions', [
     'io.ox/core/extensions',
     'io.ox/xing/api',
     'io.ox/core/notifications',
-    'io.ox/core/extPatterns/links',
     'gettext!plugins/portal',
     'less!plugins/portal/xing/xing'
-], function (ext, api, notifications, links, gt) {
+], function (ext, api, notifications, gt) {
 
     'use strict';
 

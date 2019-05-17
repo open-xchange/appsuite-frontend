@@ -33,7 +33,11 @@ define('io.ox/core/main/autologout', [
             timeoutStart,
             // init warning dialog
             dialog = null,
-            changed = false;
+            changed = false,
+            // tab handling: only the leader can propagate to other tabs
+            leader = false,
+            // tab handling: pause the logout timer
+            pause = false;
 
         var getTimeLeft = function () {
             return Math.ceil((timeoutStart + interval - _.now()) / 1000);
@@ -53,8 +57,16 @@ define('io.ox/core/main/autologout', [
             changed = false;
         };
 
+        var isAutoLogoutRunning = function () {
+            return timeout !== null && checker !== null;
+        };
+
+        var propagatePause = $.noop;
+
         // check activity status
         var check = function () {
+            if (ox.tabHandlingEnabled && pause) { propagatePause(); }
+
             if (changed && dialog === null) {
                 resetTimeout();
             } else {
@@ -78,7 +90,6 @@ define('io.ox/core/main/autologout', [
                                 if (countdown <= 0) {
                                     //make sure, this does not run again in a second
                                     clearInterval(countdownTimer);
-
                                     logout({ autologout: true });
                                 } else {
                                     countdown--;
@@ -187,7 +198,6 @@ define('io.ox/core/main/autologout', [
                 // check every x seconds to reduce setTimeout operations
                 checker = setInterval(check, 1000 * CHECKINTERVAL);
             }
-
         };
 
         var stop = function () {
@@ -195,6 +205,9 @@ define('io.ox/core/main/autologout', [
                 clearTimeout(timeout);
                 clearInterval(checker);
                 timeout = checker = null;
+
+                if (ox.tabHandlingEnabled) { interval = 0; }
+
                 $(document).off('mousedown mousemove scroll touchstart touchmove keydown', change);
             }
         };
@@ -219,9 +232,159 @@ define('io.ox/core/main/autologout', [
             logout: logout.bind(null, { autologout: true })
         };
 
+        if (ox.tabHandlingEnabled) {
+            require(['io.ox/core/api/tab'], function (TabApi) {
+
+                function propagateLeaderChanged() {
+                    TabApi.TabCommunication.propagateToAllExceptWindow('propagateLeaderChanged', TabApi.TabHandling.windowName, {});
+                }
+
+                function propagateResetTimeout() {
+                    TabApi.TabCommunication.propagateToAllExceptWindow('propagateResetAutoLogoutTimeout', TabApi.TabHandling.windowName, {});
+                }
+
+                function propagateSettingsAutoLogout(val) {
+                    TabApi.TabCommunication.propagateToAllExceptWindow('propagateSettingsAutoLogout', TabApi.TabHandling.windowName, { val: val });
+                }
+
+                // overwrite propagatePause for tabHandling
+                propagatePause = function propagatePause() {
+                    TabApi.TabCommunication.propagateToAll('propagatePause', TabApi.TabHandling.windowName, {});
+                };
+
+                function receivedResetTimeout() {
+                    leader = false;
+                    // resetTimeout doesn't cancel the logout when the dialog is open
+                    // better to close the dialog first
+                    if (dialog) { dialog.close(); }
+
+                    if (isAutoLogoutRunning()) { resetTimeout(); }
+
+                }
+
+                function receivedChangedAutoLogoutSetting(propagateData) {
+
+                    var value = parseInt(propagateData.val, 10);
+
+                    // do not start/stop when settings were received from other tab.
+                    // this setting change must not be propagated again to other tabs (be careful with endless-loop here)
+                    settings.set('autoLogout', value, { silent: true });
+
+                    // make sure that we start/stop the timers without propagation
+                    if (value === 0) {
+                        stop();
+                    } else {
+                        start();
+                    }
+                }
+
+                function receivedLeaderChanged() {
+                    leader = false;
+                    // leader change is always propagated, but resetTimeout must not be called when no timer is running (instant logout + overhead)
+                    if (isAutoLogoutRunning()) { resetTimeout(); }
+                }
+
+                function receivedNewLeaderStatus() {
+                    // do not reset self TODO check
+                    leader = true;
+                    propagateLeaderChanged();
+                }
+
+                function receivedBeforeLogout() {
+                    // important to close the dialog first before calling stop,
+                    // because closing the dialog calls a reset and stop set interval to 0
+                    if (dialog) { dialog.close(); }
+                    stop();
+                }
+
+                function receivedPause() {
+                    // never silent
+                    if (leader) { resetTimeout(); }
+                }
+
+                function startPause() {
+                    pause = true;
+                }
+
+                function stopPause() {
+                    pause = false;
+                }
+
+                resetTimeout = function () {
+                    clearTimeout(timeout);
+                    // just for safety
+                    if (interval <= 0) { return; }
+                    timeout = setTimeout(function () {
+                        logout({ autologout: true });
+                    }, interval);
+                    timeoutStart = _.now();
+                    changed = false;
+
+                    // small delta for resets from other tabs that the leader has a small safety buffer
+                    if (!leader) { timeoutStart = _.now() + 1000; }
+                    // taking lead for the timer
+                    if (leader) { propagateResetTimeout(); }
+                };
+
+                // propagate new timeout setting to other tabs
+                settings.on('change:autoLogout', propagateSettingsAutoLogout);
+
+                // got reset from other tab
+                TabApi.TabCommunication.events.listenTo(TabApi.TabCommunication.events, 'propagateResetAutoLogoutTimeout', receivedResetTimeout);
+                // got new auto logout setting value from other tab
+                TabApi.TabCommunication.events.listenTo(TabApi.TabCommunication.events, 'propagateSettingsAutoLogout', receivedChangedAutoLogoutSetting);
+                // received new leader status from other tab
+                TabApi.TabCommunication.events.listenTo(TabApi.TabCommunication.events, 'nextWindowActive', receivedNewLeaderStatus);
+                // received a pause ping, could be in any tab
+                TabApi.TabCommunication.events.listenTo(TabApi.TabCommunication.events, 'propagatePause', receivedPause);
+                // received the leader state from other tab
+                TabApi.TabCommunication.events.listenTo(TabApi.TabCommunication.events, 'propagateLeaderChanged', receivedLeaderChanged);
+
+                // received a logout from another tab
+                TabApi.TabSession.events.listenTo(TabApi.TabSession.events, 'before:propagatedLogout', receivedBeforeLogout);
+
+                require(['io.ox/core/tk/visibility-api-util']).done(function (visibilityApi) {
+                    $(visibilityApi).on('visibility-changed', function (e, data) {
+
+                        if (data.currentHiddenState === false) {
+                            leader = true;
+                            propagateLeaderChanged();
+
+                            if (isAutoLogoutRunning()) {
+                                resetTimeout();
+                            }
+                        }
+                    });
+                });
+
+                function getNextWindowName() {
+                    // can be optimized, but this is flexible in case of code changes at the moment
+                    var nextCandidate = _.first(_.filter(TabApi.TabHandling.getWindowList(), function (item) { return item.windowName !== TabApi.TabHandling.windowName; }));
+                    return nextCandidate ? nextCandidate.windowName : '';
+                }
+
+                TabApi.TabCommunication.events.listenTo(TabApi.TabCommunication.events, 'beforeunload', function (unsavedChanges) {
+                    // we must always set a new leader when the tab is closed
+                    // better set the state too often (self repairing...)
+                    if (!unsavedChanges) {
+                        var next = getNextWindowName();
+                        if (next) { TabApi.TabCommunication.propagateToWindow('nextWindowActive', next); }
+                    }
+                });
+
+                // needed for use-case upload
+                _.extend(ox.autoLogout, { start: stopPause, stop: startPause });
+
+                //init
+                leader = true;
+                propagateLeaderChanged();
+
+            });
+        }
+
         settings.on('change:autoLogout', function (val) {
-            if (parseInt(val, 10) === 0) return ox.autoLogout.stop();
-            ox.autoLogout.start();
+            if (parseInt(val, 10) === 0) return stop();
+            start();
         });
 
         start();

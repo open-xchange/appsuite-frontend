@@ -326,7 +326,7 @@ define('io.ox/contacts/edit/main', [
         };
 
         app.getContextualHelp = function () {
-            return this.userMode ? 'ox.appsuite.user.sect.firststeps.personaldata.html' : 'ox.appsuite.user.sect.contacts.gui.create.html';
+            return this.userMode ? 'ox.appsuite.user.sect.settings.personaldata.html' : 'ox.appsuite.user.sect.contacts.gui.create.html';
         };
 
         ext.point('io.ox/contacts/edit/main/model').extend({

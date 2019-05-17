@@ -10,9 +10,13 @@
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
-'use strict';
 
-define('io.ox/core/tk/textproc', ['settings!io.ox/mail'], function (mailSettings) {
+define('io.ox/core/tk/textproc', [
+    'settings!io.ox/mail',
+    'static/3rd.party/purify.min.js'
+], function (mailSettings, DOMPurify) {
+
+    'use strict';
 
     // simplify DOM tree
     function simplify(memo, elem) {
@@ -192,223 +196,114 @@ define('io.ox/core/tk/textproc', ['settings!io.ox/mail'], function (mailSettings
 
         htmltotext: function (string) {
 
-            var ELEMENTS = [
-                {
-                    patterns: 'p',
-                    replacement: function (str, attrs, innerHTML) {
-                        return innerHTML ? ('\n\n' + innerHTML + '\n') : '';
-                    }
-                },
-                {
-                    patterns: ['br'],
-                    type: 'void',
-                    replacement: '\n'
-                },
-                {
-                    patterns: 'h([1-6])',
-                    replacement: function (str, hLevel, attrs, innerHTML) {
-                        return '\n\n' + innerHTML + '\n';
-                    }
-                },
-                {
-                    patterns: 'hr',
-                    type: 'void',
-                    replacement: '\n\n---\n'
-                },
-                {
-                    patterns: 'a',
-                    replacement: function (str, attrs, innerHTML) {
-                        var href = attrs.match(attrRegExp('href'));
-
-                        if (href && href[1].indexOf('mailto:') === 0) {
-                            return href[1].substr(7);
-                        } else if (href && innerHTML === href[1]) {
-                            return innerHTML;
-                        }
-
-                        return '[' + (innerHTML || '') + '](' + (href && href[1] || '') + ')';
-                    }
-                }
-            ];
-
-            for (var i = 0, len = ELEMENTS.length; i < len; i++) {
-                if (typeof ELEMENTS[i].patterns === 'string') {
-                    string = replaceEls(string, { tag: ELEMENTS[i].patterns, replacement: ELEMENTS[i].replacement, type:  ELEMENTS[i].type });
-                } else {
-                    for (var j = 0, pLen = ELEMENTS[i].patterns.length; j < pLen; j++) {
-                        string = replaceEls(string, { tag: ELEMENTS[i].patterns[j], replacement: ELEMENTS[i].replacement, type:  ELEMENTS[i].type });
-                    }
-                }
-            }
-
-            function replaceEls(html, el) {
-
-                var markdown,
-                    pattern = el.type === 'void' ? '<' + el.tag + '\\b([^>]*)\\/?>' : '<' + el.tag + '\\b([^>]*)>([\\s\\S]*?)<\\/' + el.tag + '>',
-                    regex = new RegExp(pattern, 'gi');
-
-                if (typeof el.replacement === 'string') {
-                    markdown = html.replace(regex, el.replacement);
-                } else {
-                    markdown = html.replace(regex, function (str, p1, p2, p3) {
-                        return el.replacement.call(this, str, p1, p2, p3);
-                    });
-                }
-                return markdown;
-            }
-
-            function attrRegExp(attr) {
-                return new RegExp(attr + '\\s*=\\s*["\']?([^"\']*)["\']?', 'i');
-            }
-
-            // Pre code blocks
-
-            string = string.replace(/<pre\b[^>]*>`([\s\S]*?)`<\/pre>/gi, function (str, innerHTML) {
-                var text = innerHTML;
-                text = text.replace(/^\t+/g, '  '); // convert tabs to spaces (you know it makes sense)
-                text = text.replace(/\n/g, '\n    ');
-                return '\n\n    ' + text + '\n';
+            var node = DOMPurify.sanitize(string, {
+                FORBID_TAGS: ['STYLE', 'SCRIPT', 'TITLE'],
+                ALLOWED_ATTR: ['href', 'type', 'value', 'checked', 'start', 'class'],
+                RETURN_DOM: true
             });
 
-            // Lists
+            return finalize(traverse(node, {}));
 
-            // Escape numbers that could trigger an ol
-            // If there are more than three spaces before the code, it would be in a pre tag
-            // Make sure we are escaping the period not matching any character
-            string = string.replace(/^(\s{0,3}\d+)\. /g, '$1\\. ');
-
-            // Converts lists that have no child lists (of same type) first, then works its way up
-            var noChildrenRegex = /<(ul|ol)\b[^>]*>(?:(?!<ul|<ol)[\s\S])*?<\/\1>/gi;
-            while (string.match(noChildrenRegex)) {
-                string = string.replace(noChildrenRegex, replaceLists);
+            function traverse(node, flags) {
+                return removeMarkers(_(node.childNodes).map(processElement.bind(null, flags)).join(''));
             }
 
-            function replaceLists(html) {
+            function processElement(flags, item, i, all) {
+                if (item.nodeType === 3) {
+                    if (flags.preserveWhitespace) return item.nodeValue;
 
-                html = html.replace(/<(ul|ol)\b[^>]*>([\s\S]*?)<\/\1>/gi, function (str, listType, innerHTML) {
-
-                    var lis = innerHTML.split('</li>');
-                    lis.splice(lis.length - 1, 1);
-
-                    function fixupList(str, innerHTML) {
-                        innerHTML = innerHTML
-                            .replace(/(^\s+|\n$)/g, '')
-                            .replace(/\n\n/g, '\n ')
-                            // indent nested lists
-                            .replace(/\n([ ]*)+(\*|\d+\.) /g, '\n$1  $2 ');
-                        return innerHTML;
-                    }
-
-                    for (var i = 0, len = lis.length; i < len; i++) {
-                        if (lis[i]) {
-                            var prefix = (listType === 'ol') ? (i + 1) + '. ' : '* ';
-                            lis[i] = prefix + lis[i].replace(/\s*<li[^>]*>([\s\S]*)/i, fixupList);
-                        }
-                        lis[i] = lis[i].replace(/(.) +$/m, '$1');
-                    }
-                    return lis.join('\n');
-                });
-
-                return '\n\n' + html.replace(/[ \t]+\n|\s+$/g, '');
-            }
-
-            // Blockquotes iterate
-            var deepest = /<blockquote\b[^>]*>((?:(?!<blockquote)[\s\S])*?)<\/blockquote>/gi;
-            while (string.match(deepest)) {
-                string = string.replace(deepest, replaceBlockquotes);
-            }
-
-            function replaceBlockquotes(html) {
-                return html.replace(/<blockquote\b[^>]*>([\s\S]*?)<\/blockquote>/gi, function (string, inner) {
-                    inner = inner.replace(/^\s+|\s+$/g, '');
-                    inner = cleanUp(inner);
-                    inner = inner
-                        .replace(/^/gm, '> ')
-                        .replace(/^(>([ \t]{2,}>)+)/gm, '> >');
-                    return inner;
-                });
-            }
-
-            function cleanUp(string) {
-                string = string
-                    .replace(/<!--(.*?)-->/g, '')             // Remove comments
-                    .replace(/<img[^>]* data-emoji-unicode="([^"]*)"[^>]*>/gi, '$1')
-                    .replace(/(<\/?\w+(\s[^<>]*)?\/?>)/g, '') // Remove all remaining tags except mail addresses
-                    .replace(/^[\t\r\n]+|[\t\r\n]+$/g, '');    // Trim leading/trailing whitespace
-
-                // limit consecutive linebreaks to 2
-                if (mailSettings.get('transform/emptyLines', true)) {
-                    string = string
-                        .replace(/\n\s+\n\s+\n/g, '\n\n\n')
-                        .replace(/\n{3,}/g, '\n\n\n');
+                    // https://www.w3.org/TR/css-text-3/#white-space-processing
+                    var str = item.nodeValue;
+                    // remove leading whitespace only after a segment brak
+                    if (i === 0 || isBlockElement(all[i - 1].nodeType)) str = str.replace(/^\s+/g, '');
+                    // remove trailing whitespace only before a segment break
+                    if (i === all.length - 1 || isBlockElement(all[i + 1].nodeType)) str = str.replace(/\s+$/g, '');
+                    return str
+                        // replace all newlines and tags by spaces
+                        .replace(/[\n\t]/g, ' ')
+                        // remove multiple space
+                        .replace(/\s{2,}/g, ' ');
                 }
-
-                //replace html entities last, because things like &gt; and &lt; might get removed otherwise
-                return string
-                    .replace(/&nbsp;/g, ' ')
-                    .replace(/&gt;/g, '>')
-                    .replace(/&lt;/g, '<')
-                    .replace(/&amp;/g, '&');
+                return processEmptyElements(item, i, all.length) || markBlockElements(item, processNestedElements(item, flags));
             }
 
-            string = cleanUp(string);
-            string = string.replace(/^\s+\n\n/, '\n');
-            // only insert newline when content starts with quote
-            if (!/^\n>\s/.test(string)) {
-                string = string.replace(/^\n/, '');
+            function processEmptyElements(item, i, length) {
+                switch (item.nodeName) {
+                    case 'BR':
+                        // <br> at first or last position doesn't necessarily add a line break
+                        // \u0001 = line break, \u200B = zero width space
+                        var first = i === 0, last = i === length - 1, alone = length === 1;
+                        return (first && alone) || last ? '\u200B' : '\u0001';
+                    case 'HR':
+                        return '\0------------------------------\0';
+                    case 'INPUT':
+                        switch (item.getAttribute('type')) {
+                            case 'checkbox':
+                            case 'radio':
+                                return '[' + (item.hasAttribute('checked') ? 'X' : ' ') + ']';
+                            default:
+                                return '[' + (item.getAttribute('value') || '') + ']';
+                        }
+                    // no default
+                }
             }
-            return string;
-        },
 
-        texttohtml: function (string) {
-            var noop = { exec: $.noop },
-                def = $.Deferred();
-            require(['static/3rd.party/marked.js']).then(function (marked) {
+            function processNestedElements(item, flags) {
+                var str = traverse(item, { preserveWhitespace: flags.preserveWhitespace || item.nodeName === 'PRE' });
 
-                marked.prototype.constructor.Parser.prototype.parse = function (src) {
-                    this.inline = new marked.InlineLexer(src.links, this.options, this.renderer);
-                    _.extend(this.inline.rules, {
-                        em:       noop,
-                        strong:   noop,
-                        escape:   noop,
-                        del:      noop,
-                        image:    noop,
-                        codespan: noop,
-                        autolink: noop
-                    });
-                    this.tokens = src.reverse();
+                switch (item.nodeName) {
+                    case 'DIV':
+                        return item.classList.contains('io-ox-signature') ? '\0' + str + '\n' : str;
+                    case 'A':
+                        var href = item.getAttribute('href');
+                        if (!/^https?:\/\//i.test(href)) return str;
+                        return str && str !== href ? str + ' (' + href + ')' : href;
+                    case 'BLOCKQUOTE':
+                        return str.replace(/^/gm, '> ').replace(/\u0001/gm, '\n> ');
+                    case 'UL':
+                        return str.replace(/^/gm, '  ');
+                    case 'OL':
+                        var count = parseInt(item.getAttribute('start') || '1', 10);
+                        return str.replace(/^\* /gm, function () {
+                            return '  ' + (count++) + '. ';
+                        });
+                    case 'LI':
+                        return '* ' + str.replace(/\u0001/g, '\n  ');
+                    case 'TD':
+                        return str + '\t';
+                    case 'H1':
+                    case 'H2':
+                    case 'H3':
+                        return '\n' + str;
+                    default:
+                        return str;
+                }
+            }
 
-                    var out = '';
-                    while (this.next()) {
-                        out += this.tok();
-                    }
+            function markBlockElements(item, str) {
+                return isBlockElement(item) ? '\0' + str + '\0' : str;
+            }
 
-                    return out;
-                };
+            function isBlockElement(item) {
+                return /^(P|DIV|BLOCKQUOTE|UL|OL|LI|PRE|H\d|DL|ADDRESS|FIELDSET|FORM|NOSCRIPT|SECTION|TABLE|TR)$/.test(item.nodeName);
+            }
 
-                marked.setOptions({
-                    renderer: new marked.Renderer(),
-                    gfm: true,
-                    tables: false,
-                    breaks: true,
-                    pedantic: false,
-                    sanitize: true,
-                    smartLists: true,
-                    smartypants: false
-                });
+            function removeMarkers(str) {
+                return str
+                    // remove superfluous markers (head & tail)
+                    .replace(/(^\0+|\0+$)/g, '')
+                    // finally replace block element markers by \n
+                    .replace(/\0+/g, '\n');
+            }
 
-                var lexer = new marked.Lexer();
+            function finalize(str) {
+                return str
+                    // remove zero width space
+                    .replace(/\u200B/g, '')
+                    // finally convert all <br> to \n
+                    .replace(/\u0001+/g, '\n');
+            }
 
-                _.extend(lexer.rules, {
-                    heading:  noop,
-                    code: noop,
-                    hr: noop,
-                    lheading: noop
-                });
-
-                def.resolve(marked.parser(lexer.lex(string)));
-            });
-            return def;
         }
     };
 });
