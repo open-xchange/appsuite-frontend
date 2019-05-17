@@ -397,6 +397,7 @@ Scenario('[C7403] Forward a single mail', function (I, users) {
     I.login('app=io.ox/mail', { user: users[2] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
+    I.waitForText('Fwd: ' + testrailID + ' - ' + timestamp);
     I.click('[title="Fwd: ' + testrailID + ' - ' + timestamp + '"]');
     I.waitForText('Fwd: ' + testrailID + ' - ' + timestamp, 5, '.thread-view-header .subject');
 });
