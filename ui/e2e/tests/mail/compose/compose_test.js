@@ -275,9 +275,10 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     // workflow 17: Edit copy
     I.clickToolbar('Edit copy');
     I.waitForText('Subject');
-    I.wait(0.2); // add a short wait period until the ui has eventually focused the editor
+    I.wait(1); // add a short wait period until the ui has eventually focused the editor
 
     I.fillField('To', user2.get('primaryEmail'));
+    I.wait(1);
     I.pressKey('Enter');
     I.click('Send');
     I.waitForInvisible('.floating-window');
@@ -296,6 +297,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.seeNumberOfVisibleElements('.inline-items > li', 1);
 
     I.fillField('To', user.get('primaryEmail'));
+    I.wait(1);
     I.fillField('Subject', 'Testsubject');
     I.click('Send');
     I.waitForInvisible('.floating-window');
