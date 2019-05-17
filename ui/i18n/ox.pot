@@ -1812,6 +1812,15 @@ msgstr ""
 msgid "Private"
 msgstr ""
 
+#: apps/io.ox/calendar/actions/subscribe-shared.js
+#: module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js
+#: module:io.ox/calendar/edit/main
+#: apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core
+msgid "Hidden calendars"
+msgstr ""
+
 #: apps/io.ox/calendar/color-picker.js
 #: module:io.ox/calendar
 msgid "no color"
@@ -2083,13 +2092,6 @@ msgstr ""
 #: apps/io.ox/core/folder/extensions.js
 #: module:io.ox/core
 msgid "My calendars"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/extensions.js
-#: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/extensions.js
-#: module:io.ox/core
-msgid "Hidden calendars"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js

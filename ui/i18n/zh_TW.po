@@ -5029,6 +5029,7 @@ msgstr "説明"
 msgid "Hidden address books"
 msgstr "隱藏的通訊錄"
 
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden calendars"

@@ -5127,6 +5127,7 @@ msgstr "Súgó"
 msgid "Hidden address books"
 msgstr "Rejtett címjegyzékek"
 
+#: apps/io.ox/calendar/actions/subscribe-shared.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden calendars"
