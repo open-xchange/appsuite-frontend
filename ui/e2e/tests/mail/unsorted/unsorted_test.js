@@ -273,7 +273,8 @@ Scenario('[C7387] Send mail with attachment from upload @shaky', function (I, us
     I.waitForVisible('.selected .contextmenu-control');
 
     I.say('Open mail as floating window', 'blue');
-    I.see(testrailID + ' - ' + timestamp);
+    I.waitForText(testrailID + ' - ' + timestamp);
+
     I.doubleClick('[title="' + testrailID + ' - ' + timestamp + '"]');
     I.waitForVisible('.floating-window-content');
     within('.floating-window-content .attachments.mail-attachment-list', function () {
