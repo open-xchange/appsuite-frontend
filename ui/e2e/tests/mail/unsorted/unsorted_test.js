@@ -175,7 +175,7 @@ Scenario('[C7385] Write mail to BCC recipients', function (I, users) {
     I.login('app=io.ox/mail', { user: users[2] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.waitForElement('[title="' + testrailID + ' - ' + timestamp + '"]', 5);
+    I.waitForText(testrailID + ' - ' + timestamp);
     I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
     I.waitForText(users[0].userdata.primaryEmail, 5, '.detail-view-header');
     I.waitForElement('[title="' + users[1].userdata.primaryEmail + '"]', 5, '.detail-view-header');
