@@ -159,10 +159,7 @@ define('io.ox/core/main/appcontrol', [
     });
 
     var api = {
-        quickLaunchLimit: 3,
-        /*getQuickLauncherLimit: function () {
-            return settings.get('apps/quickLaunchLimit', 3);
-        },*/
+        quickLaunchLimit: 5,
         getQuickLauncherCount: function () {
             var n = settings.get('apps/quickLaunchCount', 3);
             if (!_.isNumber(n)) return 0;
