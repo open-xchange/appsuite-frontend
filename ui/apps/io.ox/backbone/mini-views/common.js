@@ -366,12 +366,7 @@ define('io.ox/backbone/mini-views/common', [
         render: function () {
             this.$el.attr({ name: this.name });
             if (this.id) this.$el.attr({ id: this.id });
-            this.$el.append(
-                this.options.groups ?
-                    this.renderOptionGroups(this.options.list) :
-                    this.renderOptions(this.options.list)
-            );
-            this.update();
+            this.rerender();
             return this;
         },
         renderOptionGroups: function (items) {
@@ -390,6 +385,18 @@ define('io.ox/backbone/mini-views/common', [
             return _(items).map(function (item) {
                 return $('<option>').attr({ value: item.value }).text(item.label);
             });
+        },
+        rerender: function () {
+            this.$el.empty().append(
+                this.options.groups ?
+                    this.renderOptionGroups(this.options.list) :
+                    this.renderOptions(this.options.list)
+            );
+            this.update();
+        },
+        setOptions: function (list) {
+            this.options.list = list;
+            this.rerender();
         }
     });
 

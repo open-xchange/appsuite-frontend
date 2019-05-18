@@ -23,8 +23,9 @@ define('io.ox/core/boot/load', [
     'io.ox/core/capabilities',
     'io.ox/core/manifests',
     'io.ox/core/sockets',
+    'io.ox/core/locale',
     'io.ox/core/moment'
-], function (themes, gettext, ext, config, util, session, http, coreSettings, capabilities, manifests, socket) {
+], function (themes, gettext, ext, config, util, session, http, coreSettings, capabilities, manifests, socket, locale) {
 
     'use strict';
 
@@ -49,7 +50,7 @@ define('io.ox/core/boot/load', [
             // make sure we have loaded precore.js now
             return $.when(
                 require([ox.base + '/precore.js']),
-                gettext.setLanguage(ox.language),
+                gettext.setLanguage(locale.deriveSupportedLanguageFromLocale(ox.language)),
                 manifests.manager.loadPluginsFor('i18n')
             ).then(function () {
                 util.debug('Load UI > current language and i18n plugins DONE.');

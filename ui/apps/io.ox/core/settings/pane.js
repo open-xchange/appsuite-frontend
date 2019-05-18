@@ -69,7 +69,16 @@ define('io.ox/core/settings/pane', [
                         gt('Some settings (e.g. language and timezone) require a relogin to take effect.'),
 
                     getLanguageOptions: function () {
-                        return locale.getOptions();
+                        var isCustomized = !_.isEmpty(settings.get('localeData')),
+                            current = locale.current();
+                        return _(locale.getSupportedLocales())
+                            .map(function (label, value) {
+                                label = isCustomized && value === current ? label + ' / ' + gt('Customized') : label;
+                                return { label: label, value: value };
+                            })
+                            .sort(function (a, b) {
+                                return a.label.localeCompare(b.label);
+                            });
                     },
 
                     getThemeOptions: function () {
@@ -303,7 +312,8 @@ define('io.ox/core/settings/pane', [
                 if (!settings.isConfigurable('language')) return;
 
                 var getOptions = this.getLanguageOptions.bind(this),
-                    select = util.compactSelect('language', gt('Language'), this.model, getOptions());
+                    select = util.compactSelect('language', gt('Language'), this.model, getOptions()),
+                    view = select.find('select').data('view');
 
                 select.find('.col-md-6').append(
                     $('<div class="help-block locale-example" style="white-space: pre">').text(getExample()),
@@ -313,12 +323,13 @@ define('io.ox/core/settings/pane', [
                     )
                 );
 
-                this.listenTo(this.model, 'change:language', function (language) {
+                view.listenTo(this.model, 'change:language', function (language) {
                     _.setCookie('language', language);
                 });
 
-                this.listenTo(ox, 'change:locale', function () {
-                    this.$('.locale-example').text(getExample());
+                view.listenTo(ox, 'change:locale:data', function () {
+                    this.$el.siblings('.locale-example').text(getExample());
+                    this.setOptions(getOptions());
                 });
 
                 baton.$el.append(select);

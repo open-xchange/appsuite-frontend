@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2018 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2019 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  *
@@ -35,7 +35,7 @@ define('io.ox/core/settings/editLocale', [
             model: new Backbone.Model(),
             point: POINT,
             title: gt('Regional settings'),
-            width: 480
+            width: 560
         })
         .inject({
             getTimeOptions: function () {
@@ -56,17 +56,43 @@ define('io.ox/core/settings/editLocale', [
                 return locale.getNumberFormats().map(function (format) {
                     return { label: format, value: format };
                 });
+            },
+            getFirstDayOfWeekOptions: function () {
+                // these values can be used to directly set "dow" (see doy)
+                return [
+                    { label: gt('Monday'), value: 1 },
+                    { label: gt('Saturday'), value: 6 },
+                    { label: gt('Sunday'), value: 0 }
+                ];
+            },
+            getFirstDayOfYearOptions: function () {
+                // these values define the first day, not "doy" because it depends on "dow".
+                // the active DOY needs to be calculated on the fly
+                // formula: doy = 7 + dow - janX
+                // existing values for doy (in moment locales): 4, 6, 7, 12
+                // combinations:
+                // - US: dow=0 first=Jan 1st -> doy=6
+                // - Europe: dow=1 first=Jan 4th -> doy=4
+                // - Arab: dow=6 first=Jan 1st -> doy=12
+                // - 1/7: dow=1 first=Jan 1st -> doy=7
+                // So we need to offer two days:
+                return [
+                    { label: gt('Week that contains January 1st (e.g. US, Canada)'), value: 1 },
+                    { label: gt('Week that contains January 4th (e.g. Europe, ISO-8601)'), value: 4 }
+                ];
             }
         })
-        .build(function () {
-        })
+        .addAlternativeButton({ label: gt('Reset'), action: 'reset' })
         .addCancelButton()
-        .addButton({ label: gt('Apply changes'), action: 'save' })
+        .addButton({ label: gt('Save'), action: 'save' })
         .on('open', function () {
             this.model.set(locale.getLocaleData());
         })
         .on('save', function () {
             locale.setLocaleData(this.model.toJSON());
+        })
+        .on('reset', function () {
+            locale.setLocaleData({});
         })
         .open();
     }
@@ -105,6 +131,30 @@ define('io.ox/core/settings/editLocale', [
             render: function () {
                 this.$body.append(
                     util.compactSelect('number', gt('Number format'), this.model, this.getNumberOptions(), { width: 12 })
+                );
+            }
+        },
+        //
+        // First day of week
+        //
+        {
+            index: INDEX += 100,
+            id: 'first-day-week',
+            render: function () {
+                this.$body.append(
+                    util.compactSelect('firstDayOfWeek', gt('First day of the week'), this.model, this.getFirstDayOfWeekOptions(), { width: 12 })
+                );
+            }
+        },
+        //
+        // First day of year
+        //
+        {
+            index: INDEX += 100,
+            id: 'first-day-year',
+            render: function () {
+                this.$body.append(
+                    util.compactSelect('firstDayOfYear', gt('First week of the year'), this.model, this.getFirstDayOfYearOptions(), { width: 12 })
                 );
             }
         }

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2018 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2019 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  *
@@ -141,8 +141,8 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
 
     function getSupportedLocales() {
         // check against server-side list of available translations
-        var languages = ox.serverConfig.languages, result = {};
-        for (var id in languages) {
+        var result = {};
+        for (var id in ox.serverConfig.languages) {
             switch (id) {
                 case 'de_DE':
                     add('de_DE de_AT de_CH');
@@ -168,7 +168,6 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
             }
         }
         return result;
-
         function add(ids) {
             String(ids).split(' ').forEach(function (id) {
                 result[id] = supportedLocales[id];
@@ -205,7 +204,10 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
         localeDefinitions[localeId] = {
             time: data.longDateFormat('LT'),
             date: data.longDateFormat('L'),
-            number: getDefaultNumberFormat(localeId)
+            number: getDefaultNumberFormat(localeId),
+            firstDayOfWeek: data.firstDayOfWeek(),
+            // reverse formula: doy = 7 + dow - JanX <=> JanX = 7 + dow - doy
+            firstDayOfYear: 7 + data.firstDayOfWeek() - data.firstDayOfYear()
         };
     }
 
@@ -215,9 +217,13 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
         var id = deriveMomentLocale(localeId);
         moment.updateLocale(id, {
             // time and date format
-            longDateFormat: { LT: localeData.time, L: localeData.date }
+            longDateFormat: { LT: localeData.time, L: localeData.date },
+            // dow = first day of week (0=Sunday, 1=Monday, ...)
+            // doy = 7 + dow - janX (first day of year)
+            week: { dow: localeData.firstDayOfWeek, doy: 7 + localeData.firstDayOfWeek - localeData.firstDayOfYear }
         });
         ox.trigger('change:locale');
+        ox.trigger('change:locale:data');
     }
 
     function onChangeLanguage(value) {
@@ -274,7 +280,7 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
 
         // utility functions
 
-        getLocale: function () {
+        current: function () {
             return currentLocaleId;
         },
 
@@ -286,21 +292,7 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
             settings.set('localeData', undefined, { silent: true }).set('localeData', data).save();
         },
 
-        getOptions: function () {
-            return _(getSupportedLocales())
-                .map(function (label, value) {
-                    return { label: label, value: value };
-                })
-                .sort(function (a, b) {
-                    return a.label.localeCompare(b.label);
-                });
-        },
-
         getSupportedLocales: getSupportedLocales,
-
-        isCustomized: function () {
-            return !_.isEmpty(settings.get('localeData'));
-        },
 
         getNumberFormats: function () {
             return _(numberFormats).keys();
@@ -312,6 +304,19 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
 
         getFirstDayOfWeek: function () {
             return moment().startOf('week').format('dddd');
+        },
+
+        deriveSupportedLanguageFromLocale: function (localeId) {
+
+            var longMap = { en_DE: 'en_US' },
+                shortMap = { de: 'de_DE', en: 'en_GB', es: 'es_MX', fr: 'fr_FR', it: 'it_IT', nl: 'nl_NL' },
+                language = get(localeId);
+            return language in ox.serverConfig.languages ? language : 'en_US';
+
+            function get(localeId) {
+                if (/^(en_US|es_ES|fr_CA)$/.test(localeId)) return localeId;
+                return longMap[localeId] || shortMap[String(localeId).substr(0, 2)] || localeId;
+            }
         }
     };
 
