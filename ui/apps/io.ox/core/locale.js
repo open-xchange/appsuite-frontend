@@ -242,7 +242,8 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
         '1,234.56': 'en-us',
         '1.234,56': 'de-de',
         '1’234.56': 'de-ch',
-        '1 234,56': 'de-at',
+        // space must be nbsp
+        '1 234,56': 'de-at',
         '1234.56': 'en-us',
         '1234,56': 'de-de'
     };
@@ -256,11 +257,34 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
     }
 
     function getDefaultNumberFormat(localeId) {
-        var locale = localeId.toLowerCase().replace(/_/, '-');
-        return Number(1234.56).toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        var locale = (localeId || currentLocaleId).toLowerCase().replace(/_/, '-');
+        return Number(1234.56)
+            .toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+            // fr-be, for example, uses narrow nbsp
+            .replace(/\u202F/, '\u00a0');
     }
 
-    var dateFormats = ['MM/DD/YYYY', 'M/D/YYYY', 'MM/DD/YY', 'M/D/YY', 'DD.MM.YYYY', 'D.M.YYYY', 'DD.MM.YY', 'D.M.YY', 'DD/MM/YYYY', 'DD/MM/YY', 'D/M/YY', 'YYYY-MM-DD'];
+    var dateFormats = [
+        // M D Y
+        'M/D/YY',
+        'M/D/YYYY',
+        'MM/DD/YY',
+        'MM/DD/YYYY',
+        // D M Y
+        'D.M.YY',
+        'D.M.YYYY',
+        'DD.MM.YY',
+        'DD.MM.YYYY',
+        'DD.MM.YYYY.',
+        'D/M/YY',
+        'DD/MM/YY',
+        'DD/MM/YYYY',
+        'DD-MM-YYYY',
+        // Y M D
+        'YYYY/MM/DD',
+        'YYYY.MM.DD.',
+        'YYYY-MM-DD'
+    ];
 
     var api = {
 
@@ -297,6 +321,8 @@ define('io.ox/core/locale', ['settings!io.ox/core'], function (settings) {
         getNumberFormats: function () {
             return _(numberFormats).keys();
         },
+
+        getDefaultNumberFormat: getDefaultNumberFormat,
 
         getDateFormats: function () {
             return dateFormats.slice();

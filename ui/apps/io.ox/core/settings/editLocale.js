@@ -43,7 +43,9 @@ define('io.ox/core/settings/editLocale', [
                     { label: gt('9:00 AM (12 hours)'), value: 'h:mm A' },
                     { label: gt('09:00 AM (12 hours)'), value: 'hh:mm A' },
                     { label: gt('9:00 (24 hours)'), value: 'H:mm' },
-                    { label: gt('09:00 (24 hours)'), value: 'HH:mm' }
+                    { label: gt('09:00 (24 hours)'), value: 'HH:mm' },
+                    { label: gt('9.00 (24 hours)'), value: 'H.mm' },
+                    { label: gt('09.00 (24 hours)'), value: 'HH.mm' }
                 ];
             },
             getDateOptions: function () {
@@ -59,10 +61,11 @@ define('io.ox/core/settings/editLocale', [
             },
             getFirstDayOfWeekOptions: function () {
                 // these values can be used to directly set "dow" (see doy)
+                var weekdays = moment.localeData().weekdays();
                 return [
-                    { label: gt('Monday'), value: 1 },
-                    { label: gt('Saturday'), value: 6 },
-                    { label: gt('Sunday'), value: 0 }
+                    { label: weekdays[1], value: 1 },
+                    { label: weekdays[6], value: 6 },
+                    { label: weekdays[0], value: 0 }
                 ];
             },
             getFirstDayOfYearOptions: function () {
