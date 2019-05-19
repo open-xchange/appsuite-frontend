@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/core/session'], function (gettext, util, session) {
+define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/core/session', 'io.ox/core/locale/meta'], function (gettext, util, session, meta) {
 
     'use strict';
 
@@ -19,10 +19,11 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
 
     var exports = {
 
-        change: function (id) {
+        change: function (localeId) {
             // if the user sets a language on the login page, it will be used for the rest of the session, too
-            gettext.setLanguage(id).done(function () {
-                $('html').attr('lang', id.split('_')[0]);
+            var language = meta.deriveSupportedLanguageFromLocale(localeId);
+            gettext.setLanguage(language).done(function () {
+                $('html').attr('lang', language.split('_')[0]);
                 gettext.enable();
                 // get all nodes
                 $('[data-i18n]').each(function () {
@@ -47,8 +48,8 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                     });
                 });
                 // Set Cookie
-                _.setCookie('language', (ox.language = id));
-                ox.trigger('language', id, util.gt);
+                _.setCookie('language', (ox.language = language));
+                ox.trigger('language', language, util.gt);
             });
         },
 
@@ -78,20 +79,19 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
 
         render: function () {
 
-            var lang = ox.serverConfig.languages,
+            var locales = meta.getSupportedLocales(),
                 node = $('#io-ox-languages'),
-                count = _.size(lang),
-                maxCount = 30,
+                count = _.size(locales),
+                maxCount = 100,
                 languageToTag = function (language) { return language.replace(/_/, '-'); };
 
             // show languages if more than one
             if (count > 1) {
 
-                util.debug('Render languages', lang);
+                util.debug('Render languages', locales);
 
-                var self = this,
+                var changeByUser = this.changeByUser.bind(this),
                     defaultLanguage = _.getCookie('language') || session.getBrowserLanguage(),
-                    languageArray = _.toArray(_.invert(lang)),
                     toggle, list;
 
                 // Display native select box for languages if there are up to 'maxLang' languages
@@ -102,23 +102,21 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                         $('<div class="dropup">').append(
                             toggle = $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').append(
                                 $('<span class="sr-only" data-i18n="Language:" data-i18n-attr="text">'),
-                                $('<span class="toggle-text">').attr('lang', languageToTag(defaultLanguage)).text(lang[defaultLanguage]),
+                                $('<span class="toggle-text">').attr('lang', languageToTag(defaultLanguage)).text(meta.getLocaleName(defaultLanguage)),
                                 $('<span class="caret">')
                             ),
                             list = $('<ul id="io-ox-language-list" class="dropdown-menu" role="menu" data-i18n="Languages" data-i18n-attr="aria-label">')
                         )
                     );
 
-                    // add to column layout
-                    if (count > 15) list.addClass('multi');
                     list.append(
-                        _(languageArray).map(function (value) {
+                        _(locales).map(function (locale) {
                             return $('<li role="presentation">').append(
                                 $('<a href="#" role="menuitem">').attr({
-                                    'lang': languageToTag(value),
-                                    'data-value': value
+                                    'lang': languageToTag(locale.id),
+                                    'data-value': locale.id
                                 })
-                                .text(lang[value])
+                                .text(locale.name)
                             );
                         })
                     );
@@ -126,8 +124,8 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                     list.on('click', 'a', function (e) {
                         var node = $(e.currentTarget), value = node.attr('data-value');
                         e.preventDefault();
-                        self.changeByUser(value);
-                        $(e.delegateTarget).parent().find('.toggle-text').text(lang[value]).attr('lang', languageToTag(value));
+                        changeByUser(value);
+                        $(e.delegateTarget).parent().find('.toggle-text').text(meta.getLocaleName(value)).attr('lang', languageToTag(value));
                     });
 
                     // init dropdown
@@ -140,12 +138,12 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                                 exports.changeByUser($(this).val());
                             })
                             .append(
-                                _(languageArray).map(function (value) {
+                                _(locales).map(function (locale) {
                                     return $('<option>').attr({
-                                        'lang': languageToTag(value),
-                                        'data-value': value,
-                                        'value': value
-                                    }).text(lang[value]);
+                                        'lang': languageToTag(locale.id),
+                                        'data-value': locale.id,
+                                        'value': locale.id
+                                    }).text(locale.name);
                                 })
                             )
                             .val(defaultLanguage)

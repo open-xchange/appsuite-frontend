@@ -72,12 +72,9 @@ define('io.ox/core/settings/pane', [
                         var isCustomized = !_.isEmpty(settings.get('localeData')),
                             current = locale.current();
                         return _(locale.getSupportedLocales())
-                            .map(function (label, value) {
-                                label = isCustomized && value === current ? label + ' / ' + gt('Customized') : label;
-                                return { label: label, value: value };
-                            })
-                            .sort(function (a, b) {
-                                return a.label.localeCompare(b.label);
+                            .map(function (locale) {
+                                locale.name = isCustomized && locale.id === current ? locale.name + ' / ' + gt('Customized') : locale.name;
+                                return { label: locale.name, value: locale.id };
                             });
                     },
 
@@ -337,7 +334,7 @@ define('io.ox/core/settings/pane', [
                 function getExample() {
                     return moment().format('dddd, L LT') + '   ' +
                         locale.currency(1234.56, 'EUR') + '\n' +
-                        gt('First day of week: %1$s', locale.getFirstDayOfWeek());
+                        gt('First day of the week: %1$s', locale.getFirstDayOfWeek());
                 }
 
                 function editLocale(e) {
