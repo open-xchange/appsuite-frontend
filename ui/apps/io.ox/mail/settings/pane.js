@@ -265,7 +265,8 @@ define('io.ox/mail/settings/pane', [
             render: function () {
 
                 // we don't really need that on a smartphone (I guess) nor guests
-                if (_.device('smartphone') || capabilities.has('guest')) return;
+                // also  don't show it if diabled via server property
+                if (settings.get('ignoreSubscription', false) || _.device('smartphone') || capabilities.has('guest')) return;
 
                 this.append(
                     $('<button type="button" class="btn btn-default">')
