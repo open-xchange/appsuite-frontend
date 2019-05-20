@@ -153,7 +153,8 @@ define('io.ox/contacts/toolbar', [
         index: 10000,
         setup: function (app) {
 
-            var toolbarView = new ToolbarView({ point: 'io.ox/contacts/toolbar/links', title: app.getTitle() });
+            // yep strict false (otherwise toolbar does not redraw when changing between empty folders => contacts are created in the wrong folder)
+            var toolbarView = new ToolbarView({ point: 'io.ox/contacts/toolbar/links', title: app.getTitle(), strict: false });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbarView.$el
