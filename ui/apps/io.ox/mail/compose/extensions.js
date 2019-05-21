@@ -591,7 +591,7 @@ define('io.ox/mail/compose/extensions', [
                     return obj;
                 });
 
-                baton = ext.Baton({ simple: true, startItem: data, data: list, openedBy: 'io.ox/mail/compose', restoreFocus: $(e.target) });
+                baton = ext.Baton({ simple: true, data: data, list: list, restoreFocus: $(e.target), openedBy: 'io.ox/mail/compose' });
                 actionsUtil.invoke('io.ox/mail/attachment/actions/view', baton);
             });
 

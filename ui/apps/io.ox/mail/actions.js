@@ -443,16 +443,16 @@ define('io.ox/mail/actions', [
             });
         },
         action: function (baton) {
-            var list = baton.array();
+            // mappings for different invokation sources
+            var files = baton.list || baton.array(),
+                selection =  baton.array()[0];
             ox.load(['io.ox/mail/actions/viewer']).done(function (action) {
-                var options = { files: list, restoreFocus: baton.restoreFocus };
-                if (baton.startItem) {
-                    options.selection = baton.startItem;
-                }
-                if (baton.openedBy) {
-                    options.openedBy = baton.openedBy;
-                }
-                action(options);
+                action({
+                    files: files,
+                    selection: selection,
+                    restoreFocus: baton.restoreFocus,
+                    openedBy: baton.openedBy
+                });
             });
         }
     });

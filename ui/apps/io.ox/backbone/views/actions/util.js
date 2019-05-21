@@ -467,7 +467,7 @@ define('io.ox/backbone/views/actions/util', [
     function addFinalize(fn) {
         fn.setSelectionFinalize = function (options, selection, collection) {
             if (this.disposed) return;
-            var baton = ext.Baton(_.extend(options, { selection: selection, collection: collection }));
+            var baton = ext.Baton(_.extend(options, { selection: selection, collection: collection, list: this.options.list, restoreFocus: '' }));
             this.render(baton);
         };
     }
