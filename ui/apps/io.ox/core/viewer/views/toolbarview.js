@@ -388,14 +388,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'export',
                     ref: Util.getRefByModelSource('guardDrive')
                 },
-                'open': {
-                    prio: 'lo',
-                    mobile: 'hi',
-                    title: gt('Open attachment'),
-                    icon: _.device('ios && ios < 12') ? 'fa fa-download' : '',
-                    section: 'export',
-                    ref: 'oxguard/open'
-                },
                 'sendbymail': {
                     prio: 'lo',
                     mobile: 'lo',
