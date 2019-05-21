@@ -49,6 +49,9 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
             this.appLaunchDelayId = null;
             this.spreadsheetApp = null;
             this.tempFileModel = null;
+
+            // in popout mode the (plugged) documents app needs to be quit before the popout Viewer app
+            this.listenTo(this.viewerEvents, 'viewer:beforeclose', this.onDispose);
         },
 
         /**
@@ -338,8 +341,9 @@ define('io.ox/core/viewer/views/types/spreadsheetview', [
          * Destructor function of this view.
          */
         onDispose: function () {
-            this.unload(true);
-            this.$el.off();
+            this.unload();
+            this.off().stopListening();
+            this.disposed = true;
             this.documentContainer = null;
         }
 
