@@ -260,7 +260,7 @@ define('io.ox/mail/compose/signatures', [
         appendSignature: function (signature) {
             var text, proc,
                 isHTML = !!this.editor.find,
-                isEmpty = !textproc.htmltotext(signature.content).trim();
+                isEmpty = !/<img\s[^>]*?src\s*=\s*['"]([^'"]*?)['"][^>]*?>/.test(signature.content || '') && !textproc.htmltotext(signature.content).trim();
 
             // add signature?
             if (!isEmpty && this.model.get('signatures').length > 0) {
