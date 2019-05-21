@@ -22,8 +22,9 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
+    'io.ox/files/util',
     'gettext!io.ox/core'
-], function (Dropdown, DisposableView, ToolbarView, Ext, actionsUtil, FilesAPI, HelpView, DocConverterUtils, Util, Settings, gt) {
+], function (Dropdown, DisposableView, ToolbarView, Ext, actionsUtil, FilesAPI, HelpView, DocConverterUtils, Util, Settings, FileUtils, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -37,6 +38,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         TOOLBAR_LINKS_ID = TOOLBAR_ID + '/links',
         TOOLBAR_ACTION_ID = 'io.ox/core/viewer/actions/toolbar',
         TOOLBAR_ACTION_DROPDOWN_ID = TOOLBAR_ACTION_ID + '/dropdown',
+        FILE_VERSION_IS_UPLOADING_MSG = gt('This document cannot be viewed at the moment because a new version is being uploaded. Please wait until the upload is completed.'),
         // define extension points for this ToolbarView
         // toolbarPoint = Ext.point(TOOLBAR_ID),
         // toolbar link meta object used to generate extension points later
@@ -489,8 +491,10 @@ define('io.ox/core/viewer/views/toolbarview', [
             return model.get('group') !== 'localFile' && !baton.context.standalone;
         },
         action: function (baton) {
-            var fileModel = baton.model.isFile() ? baton.model : { file: baton.data };
-            ox.launch('io.ox/files/detail/main', fileModel);
+            if (!FileUtils.isFileVersionUploading(baton.data.id, FILE_VERSION_IS_UPLOADING_MSG)) {
+                var fileModel = baton.model.isFile() ? baton.model : { file: baton.data };
+                ox.launch('io.ox/files/detail/main', fileModel);
+            }
         }
     });
 
