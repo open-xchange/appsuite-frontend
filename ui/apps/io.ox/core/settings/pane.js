@@ -27,8 +27,9 @@ define('io.ox/core/settings/pane', [
     'settings!io.ox/core/settingOptions',
     'gettext!io.ox/core',
     'io.ox/backbone/mini-views/timezonepicker',
-    'io.ox/core/main/appcontrol'
-], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol) {
+    'io.ox/core/main/appcontrol',
+    'io.ox/core/settings/quicklauncherDialog'
+], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol, quicklauncherDialog) {
 
     'use strict';
 
@@ -44,11 +45,6 @@ define('io.ox/core/settings/pane', [
                 value: o.get('path')
             };
         }).concat([{ label: gt('None'), value: 'none' }]);
-
-    // Check that the app exists in available applications
-    function getAvailablePath(app) {
-        return _(availableApps).findWhere({ 'value': app }) ? app : '';
-    }
 
     // this is the offical point for settings
     ext.point('io.ox/core/settings/detail').extend({
@@ -384,19 +380,6 @@ define('io.ox/core/settings/pane', [
         }
     );
 
-    var QuickLaunchModel = Backbone.Model.extend({
-        initialize: function () {
-            appcontrol.getQuickLauncherItems().forEach(function (item, i) {
-                this.set('apps/quickLaunch' + i, getAvailablePath(item));
-            }.bind(this));
-        },
-        toString: function () {
-            return _.range(appcontrol.getQuickLauncherCount()).map(function (i) {
-                return this.get('apps/quickLaunch' + i);
-            }.bind(this)).join(',');
-        }
-    });
-
     INDEX = 0;
 
     ext.point('io.ox/core/settings/detail/view/fieldset/second').extend(
@@ -425,56 +408,11 @@ define('io.ox/core/settings/pane', [
             render: function (baton) {
                 if (!settings.isConfigurable('apps/quickLaunch') || appcontrol.getQuickLauncherCount() === 0 || _.device('smartphone')) return;
                 baton.$el.append(
-                    new quickLauncherSettingsView({ settings: this.model, model: new QuickLaunchModel() }).render().$el
+                    $('<button>').text(gt('Configure Quicklaunchers')).on('click', quicklauncherDialog.openDialog)
                 );
             }
         }
     );
-
-    var quickLauncherSettingsView = DisposableView.extend({
-        initialize: function (options) {
-            this.listenTo(this.model, 'change', function () {
-                options.settings.set('apps/quickLaunch', this.model.toString());
-            });
-        },
-        render: function () {
-            this.$el.append(
-                _.range(appcontrol.getQuickLauncherCount()).map(function (i) {
-                    //#. %s is the number of the quicklauncher (1-3)
-                    return this.getMultiSelect('apps/quickLaunch' + i, gt('Quick launch %s', i + 1), { pos: i });
-                }, this)
-            );
-            return this;
-        },
-        getMultiSelect: function (name, label, options) {
-            options = options || {};
-            var id = 'settings-' + name,
-                view = new mini.SelectView({ id: id, name: name, model: this.model, list: this.appsForPos(options.pos), pos: options.pos }),
-                appsForPos = this.appsForPos.bind(this);
-
-            view.listenTo(this.model, 'change', function () {
-                this.options.list = appsForPos(this.options.pos);
-                this.$el.empty();
-                this.render();
-            });
-
-            return $('<div class="form-group row">').append(
-                $('<div class="col-md-6">').append(
-                    $('<label>').attr('for', id).text(label),
-                    view.render().$el
-                )
-            );
-        },
-        appsForPos: function (pos) {
-            // This function filters the select box, in order to prevent duplicate quicklaunchers
-            return _.range(appcontrol.getQuickLauncherCount())
-                .filter(function (i) { return i !== pos; })
-                .map(function (i) { return this.model.get('apps/quickLaunch' + i); }, this)
-                .reduce(function (acc, app) {
-                    return acc.filter(function (a) { return a.value !== app || app === 'none'; });
-                }, availableApps);
-        }
-    });
 
     INDEX = 0;
 
