@@ -7942,6 +7942,11 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: module:io.ox/core
+msgid "This document cannot be viewed at the moment because a new version is being uploaded. Please wait until the upload is completed."
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/toolbarview.js
+#: module:io.ox/core
 msgid "File name"
 msgstr ""
 

@@ -10701,6 +10701,12 @@ msgstr "Tämä laite ei ole kelvollinen tätä pyyntöä varten. Väärä laitea
 msgid "This distribution list has been added to the portal"
 msgstr "Tämä jakelulista on lisätty portaaliin"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid ""
+"This document cannot be viewed at the moment because a new version is being "
+"uploaded. Please wait until the upload is completed."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 msgid "This document is password protected and cannot be displayed."

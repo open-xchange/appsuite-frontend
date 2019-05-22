@@ -10592,6 +10592,12 @@ msgstr "此裝置無法發出此請求，插錯硬體金鑰了？"
 msgid "This distribution list has been added to the portal"
 msgstr "此通訊組清單已被加入到入口畫面"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid ""
+"This document cannot be viewed at the moment because a new version is being "
+"uploaded. Please wait until the upload is completed."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 msgid "This document is password protected and cannot be displayed."
