@@ -233,6 +233,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     const user2 = await users.create();
     await I.haveSetting('io.ox/mail//messageFormat', 'html');
     await I.haveSetting('io.ox/mail//features/deleteDraftOnClose', true);
+    await user.hasConfig('com.openexchange.mail.deleteDraftOnTransport', true);
 
     I.login('app=io.ox/files');
 
@@ -291,7 +292,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.waitForText('Subject');
 
     I.waitForText('Use Drive Mail');
-    // TODO this should be checked
+
     I.retry(5).click('Use Drive Mail');
     I.seeCheckboxIsChecked('Use Drive Mail');
     I.seeNumberOfVisibleElements('.inline-items > li', 1);
