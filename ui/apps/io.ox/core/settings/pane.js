@@ -408,7 +408,12 @@ define('io.ox/core/settings/pane', [
             render: function (baton) {
                 if (!settings.isConfigurable('apps/quickLaunch') || appcontrol.getQuickLauncherCount() === 0 || _.device('smartphone')) return;
                 baton.$el.append(
-                    $('<button>').text(gt('Configure Quicklaunchers')).on('click', quicklauncherDialog.openDialog)
+                    $('<div class="form-group row">').append(
+                        $('<div class="col-md-6">').append(
+                            $('<label>').text(gt('Quick launchers')),
+                            $('<button type="button" class="btn btn-default" style="display: block;">').text(gt('Configure quick launchers')).on('click', quicklauncherDialog.openDialog)
+                        )
+                    )
                 );
             }
         }

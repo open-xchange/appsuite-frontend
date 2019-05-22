@@ -18,8 +18,9 @@ define('io.ox/core/settings/quicklauncherDialog', [
     'io.ox/core/api/apps',
     'io.ox/core/upsell',
     'io.ox/backbone/mini-views/common',
+    'settings!io.ox/core',
     'io.ox/core/main/appcontrol'
-], function (DisposableView, gt, ModalDialog, apps, upsell, mini, appcontrol) {
+], function (DisposableView, gt, ModalDialog, apps, upsell, mini, settings, appcontrol) {
 
     'use strict';
 
@@ -52,9 +53,9 @@ define('io.ox/core/settings/quicklauncherDialog', [
         }),
 
         quickLauncherSettingsView = DisposableView.extend({
-            initialize: function (options) {
+            initialize: function () {
                 this.listenTo(this.model, 'change', function () {
-                    options.settings.set('apps/quickLaunch', this.model.toString());
+                    settings.set('apps/quickLaunch', this.model.toString());
                 });
             },
             render: function () {
@@ -79,7 +80,7 @@ define('io.ox/core/settings/quicklauncherDialog', [
                 });
 
                 return $('<div class="form-group row">').append(
-                    $('<div class="col-md-6">').append(
+                    $('<div class="col-md-12">').append(
                         $('<label>').attr('for', id).text(label),
                         view.render().$el
                     )
@@ -97,22 +98,22 @@ define('io.ox/core/settings/quicklauncherDialog', [
         }),
 
         openDialog = function () {
-            var model = new QuickLaunchModel();
+            var prevSettings = settings.get('apps/quickLaunch');
             new ModalDialog({
-                title: gt('Edit reminders'),
-                width: 600
+                title: gt('Configure quick launchers'),
+                width: 360
             })
             .build(function () {
                 this.$body.append(
-                    new quickLauncherSettingsView({ settings: this.model, model: new QuickLaunchModel() }).render().$el
+                    new quickLauncherSettingsView({ model: new QuickLaunchModel() }).render().$el
                 );
             })
             .addCancelButton({ left: true })
             .addButton({ action: 'apply', label: gt('Apply') })
-            .on('apply', function () {
+            .on('cancel', function () {
+                settings.set('apps/quickLaunch', prevSettings);
             })
             .open();
-            console.log(model, availableApps);
         };
 
     return {
