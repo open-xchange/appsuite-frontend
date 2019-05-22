@@ -247,7 +247,7 @@ define('plugins/core/feedback/register', [
                 async: true,
                 enter: 'send',
                 point: 'plugins/core/feedback',
-                title: gt('Your feedback'),
+                title: gt('How do you like this software?'),
                 class: dialogMode + '-feedback-view'
             };
 
