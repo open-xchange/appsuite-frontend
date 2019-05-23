@@ -11,7 +11,12 @@
  * @author Björn Köster <bjoern.koester@open-xchange.com>
  */
 
-define('io.ox/help/main', ['io.ox/backbone/views/modal', 'gettext!io.ox/help', 'less!io.ox/help/style'], function (ModalDialogView, gt) {
+define('io.ox/help/main', [
+    'io.ox/backbone/views/modal',
+    'gettext!io.ox/help',
+    'io.ox/core/capabilities',
+    'less!io.ox/help/style'
+], function (ModalDialogView, gt, capabilities) {
 
     'use strict';
 
@@ -108,11 +113,17 @@ define('io.ox/help/main', ['io.ox/backbone/views/modal', 'gettext!io.ox/help', '
             }.bind(this);
 
             iframe.on('load', function () {
+                var caps = capabilities.getFlat();
+                console.log('%c CAPS: ', 'background: #222; color: #bada55', { caps: caps });
                 // mark the iframes html as embedded class and modal to override the styles in the help less files
                 var classesToAdd = opt.modal ? 'embedded in-modal' : 'embedded',
                     contents = $('.inline-help-iframe').contents(),
                     firstTabbable = contents.find('.navbar-nav > li > a:first'),
                     lastTabbable = contents.find('body a:last');
+
+                _(caps.enabled).each(function (cap) {
+                    classesToAdd += ' no-' + cap;
+                });
 
                 contents.find('html')
                     .addClass(classesToAdd)
