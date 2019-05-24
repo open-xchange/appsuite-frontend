@@ -49,7 +49,7 @@ async function getTooltipValue(I, opt) {
     return [].concat(tooltips)[0];
 }
 
-Scenario('[C114381] Sender address is shown in tooltip', async function (I, users) {
+Scenario('[C114381] Sender address is shown in tooltip @shaky', async function (I, users) {
     const user1 = users[0];
     const user2 = users[1];
 

@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C114353] Mail address parsing supports multiple delimiters', async (I) => {
+Scenario('[C114353] Mail address parsing supports multiple delimiters @shaky', async (I) => {
 
     await I.haveSetting({ 'io.ox/mail': { 'features/registerProtocolHandler': false } });
     I.login('app=io.ox/mail');
