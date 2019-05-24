@@ -96,7 +96,7 @@ Scenario('[C83385] Copy to clipboard', async function (I) {
     I.selectFolder('Music');
     I.clickToolbar('Share');
     I.click('Create sharing link');
-    I.waitForElement('.clippy');
+    I.waitForVisible('.clippy');
     const [url] = await I.grabValueFrom('.share-wizard input[type="text"]');
     I.click('~Copy to clipboard');
     I.see('Copied');
