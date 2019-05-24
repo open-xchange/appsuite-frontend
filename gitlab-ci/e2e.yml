@@ -74,6 +74,8 @@ generate e2e report:
   dependencies:
     - run e2e tests
   script:
+    # fail if there are no test results, prevents history from getting lost in some cases
+    - find ui/build/e2e/ -name *.xml > /dev/null
     # fetch current version of history
     - wget http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/history.tar -q -O - | tar x &>/dev/null && mv ui/build/allure-report/history ui/build/e2e/ || echo "No history found"
     - allure generate ui/build/e2e/ -o ui/build/allure-report/$CI_PIPELINE_ID
@@ -103,6 +105,8 @@ publish e2e report:
   dependencies:
     - generate e2e report
   script:
+    # fail if there is no history being generated. Prevents empty reports from being "published".
+    - find ui/build/allure-report/ -name history.json > /dev/null
     - docker cp ui/build/allure-report/. reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG
     - docker exec reports rm -f /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
     - docker exec reports ln -sf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
