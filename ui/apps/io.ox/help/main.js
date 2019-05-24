@@ -121,7 +121,7 @@ define('io.ox/help/main', [
                     firstTabbable = contents.find('.navbar-nav > li > a:first'),
                     lastTabbable = contents.find('body a:last');
 
-                _(caps.enabled).each(function (cap) {
+                _(caps.disabled).each(function (cap) {
                     classesToAdd += ' no-' + cap;
                 });
 
