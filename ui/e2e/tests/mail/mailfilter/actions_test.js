@@ -146,7 +146,7 @@ Scenario('[C7803] Redirect filtered mail @shaky', async function (I, users) {
 
     I.login('app=io.ox/mail', { user: users[1] });
     I.waitForElement('~Inbox, 1 unread, 1 total');
-    I.see('TestCase0388', '.subject');
+    I.waitForText('TestCase0388', 5, '.subject');
 
 });
 
