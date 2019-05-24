@@ -22,12 +22,13 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7495] Quota update', async (I, users) => {
+Scenario('[C7495] Quota update', async (I, users, contexts) => {
 
     const assert = require('chai').assert;
 
     // clear the portal settings
     await I.haveSetting('io.ox/portal//widgets/user', '{}');
+    await contexts[0].hasQuota(1000);
 
     //Add Recently changed files widget to Portal
     I.login('app=io.ox/portal');
