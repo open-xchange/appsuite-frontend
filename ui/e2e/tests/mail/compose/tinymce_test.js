@@ -557,7 +557,7 @@ Scenario('[C7395] Send mail with text indentations', async function (I, users) {
     });
 });
 
-Scenario('[C7396] Send mail with different text fonts', async function (I, users) {
+Scenario('[C7396] Send mail with different text fonts @shaky', async function (I, users) {
 
     const selectFont = (action) => {
         I.click(locate('button').inside('~Font Family'));

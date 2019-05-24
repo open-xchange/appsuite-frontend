@@ -114,7 +114,7 @@ Scenario('[C83385] Copy to clipboard', async function (I) {
     I.waitForText('Music');
 });
 
-Scenario('[C85625] My Shares default sort order', async function (I, users) {
+Scenario('[C85625] My Shares default sort order @shaky', async function (I, users) {
     function share(I, item) {
         I.click(locate('li.list-item').withText(item));
         I.clickToolbar('Share');

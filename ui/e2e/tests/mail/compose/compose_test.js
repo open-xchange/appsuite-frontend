@@ -227,7 +227,7 @@ Scenario('Compose with inline image, which is removed again', async function (I,
     I.logout();
 });
 
-Scenario('Compose with drivemail attachment and edit draft', async function (I, users) {
+Scenario('Compose with drivemail attachment and edit draft @shaky', async function (I, users) {
     const [user] = users;
 
     const user2 = await users.create();

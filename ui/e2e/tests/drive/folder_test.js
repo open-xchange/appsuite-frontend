@@ -90,7 +90,7 @@ Scenario('[C8376] Add a subfolder', async (I) => {
     I.waitForText('Testfolder', 5, '.file-list-view');
 });
 
-Scenario('[C8377] Invite a person', (I, users) => {
+Scenario('[C8377] Invite a person @shaky', (I, users) => {
     function share(publicFolder) {
         I.clickToolbar('Share');
         I.click('Invite people');
