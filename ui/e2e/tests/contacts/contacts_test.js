@@ -177,7 +177,7 @@ Scenario('[C7356] - Create a new public folder', function (I) {
     I.waitForText('C7356 ' + timestamp, '[data-id="virtual/flat/contacts/public"] .folder-node');
 });
 
-Scenario('[C7358] - Remove contact picture', function (I, search) {
+Scenario('[C7358] - Remove contact picture @shaky', function (I, search) {
     const testrailID = 'C7358';
     const phone = '+4917113371337';
 

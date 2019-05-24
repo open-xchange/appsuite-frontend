@@ -930,7 +930,7 @@ Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, use
     expect(await I.grabTextFrom('.io-ox-sidepopup-pane .date-time')).to.equal(momentRange().add(1, 'hours').format('ddd') + ', ' + momentRange().add(1, 'hours').format('M/D/YYYY') + '   12:00 – 1:00 PMCEST');
 });
 
-Scenario('[C7462] Remove a participant', async function (I, users) {
+Scenario('[C7462] Remove a participant @shaky', async function (I, users) {
     const moment = require('moment');
     let testrailID = 'C7462';
     I.haveSetting('io.ox/core//autoOpenNotification', false);
