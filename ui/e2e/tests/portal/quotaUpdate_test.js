@@ -52,7 +52,7 @@ Scenario('[C7495] Quota update', async (I, users, contexts) => {
     await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testspreadsheed.xlsm');
 
     I.waitForVisible('~Refresh');
-    I.click('~Refresh', '#io-ox-appcontrol');
+    I.retry(5).click('~Refresh', '#io-ox-appcontrol');
     I.waitForElement('#io-ox-refresh-icon .fa-spin');
     I.waitForDetached('#io-ox-refresh-icon .fa-spin');
 
@@ -60,7 +60,7 @@ Scenario('[C7495] Quota update', async (I, users, contexts) => {
     I.openApp('Portal');
     I.waitForVisible('.io-ox-portal-window');
     I.waitForVisible('~Refresh');
-    I.click('~Refresh', '#io-ox-appcontrol');
+    I.retry(5).click('~Refresh', '#io-ox-appcontrol');
     I.waitForElement('#io-ox-refresh-icon .fa-spin');
     I.waitForDetached('#io-ox-refresh-icon .fa-spin');
 
