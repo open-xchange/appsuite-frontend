@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C244799] Set new default reminder for all-day appointments', async function (I) {
+Scenario('[C244799] Set new default reminder for all-day appointments @shaky', async function (I) {
     const alaramNotification = 'Notification';
     const alaramTime = '1 day';
     const alaramRelated = 'before start';

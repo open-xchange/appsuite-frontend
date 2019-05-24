@@ -640,7 +640,7 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
 
 });
 
-Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thursday never ends', async function (I) {
+Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thursday never ends @shaky', async function (I) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
