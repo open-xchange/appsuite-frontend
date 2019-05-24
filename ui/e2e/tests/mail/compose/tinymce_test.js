@@ -786,7 +786,7 @@ Scenario('[C7397] Send mail with different text styles', async function (I, user
     I.click('~More actions', '.detail-view-header');
     I.waitForVisible('[data-action="io.ox/mail/actions/source"]', 'body > .dropdown');
     I.click('[data-action="io.ox/mail/actions/source"]', 'body > .dropdown');
-    I.waitForVisible('body .mail-source-dialog');
+    I.waitForVisible('textarea.mail-source-view');
 
     // check mail source of recently sent mail (Last of C7383)
     let [source] = await I.grabValueFrom('body .mail-source-view');
