@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7737] Create Task from email', async (I, users) => {
+Scenario('[C7737] Create Task from email @shaky', async (I, users) => {
 
     // Precondition: Have an email from an other user in the inbox.
 

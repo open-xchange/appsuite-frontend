@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users) {
+Scenario('[C45032] Edit Permissions at "My shares" @shaky', async function (I, users) {
     session('Alice', () => {
         I.login('app=io.ox/files');
 
@@ -179,7 +179,7 @@ Scenario('[C107063] Revoke Permissions at "My shares" @shaky', async function (I
     });
 });
 
-Scenario('[C73919] Copy a shared file to another folder', async function (I, users) {
+Scenario('[C73919] Copy a shared file to another folder @shaky', async function (I, users) {
     // the test case also shares with an external user, this is left out for now.
 
     const folder = await I.grabDefaultFolder('infostore');

@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C83383] mail folders using “Permisions” dialog', async (I, users) => {
+Scenario('[C83383] mail folders using “Permisions” dialog @shaky', async (I, users) => {
     // Alice shares a mail folder
     I.login('app=io.ox/mail');
     I.waitForText('Spam', 5, '.folder-tree');
