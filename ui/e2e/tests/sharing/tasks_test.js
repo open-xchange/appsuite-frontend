@@ -47,7 +47,8 @@ Scenario('[C104304] tasks using “Permisions” dialog and sharing link @shaky'
         I.waitForElement('.modal .list-view.address-picker li.list-item');
         I.fillField('Search', users[1].get('name'));
         I.waitForText(users[1].get('name'), 5, '.address-picker');
-        I.click('.address-picker .list-item');
+        I.waitForText(users[1].get('primaryEmail'));
+        I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
         I.click({ css: 'button[data-action="select"]' });
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.click('Author');
