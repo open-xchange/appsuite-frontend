@@ -90,7 +90,7 @@ Scenario('[C45022] Generate simple link for sharing with password', async functi
     I.see('Music', '.folder-tree .selected');
 });
 
-Scenario('[C83385] Copy to clipboard', async function (I) {
+Scenario('[C83385] Copy to clipboard @shaky', async function (I) {
     I.login('app=io.ox/files');
     I.click('My files', '.folder-tree');
     I.selectFolder('Music');

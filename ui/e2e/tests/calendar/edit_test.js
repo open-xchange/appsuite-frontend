@@ -1191,7 +1191,7 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
     I.waitForText('2:00 PM');
 });
 
-Scenario('[C7460] Add attachments', async function (I) {
+Scenario('[C7460] Add attachments @shaky', async function (I) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }

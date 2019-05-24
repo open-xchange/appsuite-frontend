@@ -697,7 +697,7 @@ Scenario('[C7396] Send mail with different text fonts @shaky', async function (I
 });
 
 // combined with [C7383] Compose HTML mail
-Scenario('[C7397] Send mail with different text styles', async function (I, users) {
+Scenario('[C7397] Send mail with different text styles @shaky', async function (I, users) {
 
     const selectHeading = (action) => {
         I.click(locate('button').withChild(locate('span').withText('Formats')));
@@ -925,7 +925,7 @@ function getRGBValue(toConvert) {
     return toConvert;
 }
 
-Scenario('[C7399] Send mail with different text colours', async function (I, users) {
+Scenario('[C7399] Send mail with different text colours @shaky', async function (I, users) {
 
     const selectColor = (action) => {
         I.click(locate('.mce-open').inside('~Text color'));

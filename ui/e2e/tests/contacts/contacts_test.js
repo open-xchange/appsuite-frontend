@@ -338,7 +338,7 @@ Scenario('[C7359] - Expand/collapse all contact edit sections', function (I) {
     I.see('a comment in the comment field');
 });
 
-Scenario('[C7363] - Add files to a contact', async function (I) {
+Scenario('[C7363] - Add files to a contact @shaky', async function (I) {
     const testrailID = 'C7363';
     const contact = {
         display_name: '' + testrailID + ', ' + testrailID + '',
