@@ -95,9 +95,9 @@ Scenario('[C125311] Change confimation status as participant @shaky', async func
         // wait until sidepopup got updated
         I.wait(1);
 
-        if (action === 'Tentative') I.seeElement('.fa-question-circle');
-        if (action === 'Decline') I.seeElement('.fa-times');
-        if (action === 'Accept') I.seeElement('.fa-check');
+        if (action === 'Tentative') I.waitForVisible('.fa-question-circle');
+        if (action === 'Decline') I.waitForVisible('.fa-times');
+        if (action === 'Accept') I.waitForVisible('.fa-check');
 
     });
 });
