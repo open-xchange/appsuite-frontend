@@ -114,7 +114,7 @@ Scenario('[C7802] Discard filtered mail', async function (I, users) {
 
 });
 
-Scenario('[C7803] Redirect filtered mail', async function (I, users) {
+Scenario('[C7803] Redirect filtered mail @shaky', async function (I, users) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }

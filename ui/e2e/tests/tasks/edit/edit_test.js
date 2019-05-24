@@ -386,7 +386,7 @@ Scenario('[C7749] Edit existing Task as participant', async function (I, users) 
     I.waitForText(testrailID + ' - 2', 5, '.tasks-detailview .title');
 });
 
-Scenario('[C7750] Edit existing Task in a shared folder', async function (I, users) {
+Scenario('[C7750] Edit existing Task in a shared folder @shaky', async function (I, users) {
     const testrailID = 'C7750',
         testrailName = 'Edit existing Task in a shared folder',
         createFolder = await I.createFolder({

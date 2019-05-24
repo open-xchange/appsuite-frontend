@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7391] Send mail with attachment from Drive', async (I, users) => {
+Scenario('[C7391] Send mail with attachment from Drive @shaky', async (I, users) => {
     let [sender, recipient] = users;
     // Log in and navigate to mail app
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
