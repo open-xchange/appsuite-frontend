@@ -104,7 +104,7 @@ Scenario('[C8377] Invite a person @shaky', (I, users) => {
         I.waitForElement('.modal .list-view.address-picker li.list-item');
         I.fillField('Search', users[1].get('name'));
         I.waitForText(users[1].get('name'), 5, '.address-picker');
-        I.click('.address-picker .list-item');
+        I.retry(5).click('.address-picker .list-item');
         I.click({ css: 'button[data-action="select"]' });
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.dontSee('Guest', '.permissions-view');
