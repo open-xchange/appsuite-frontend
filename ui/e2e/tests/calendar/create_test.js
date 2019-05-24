@@ -1114,7 +1114,7 @@ Scenario('[C7428] Create appointment with internal participants', async function
     I.waitForText('New appointment: Einkaufen');
 });
 
-Scenario('[C7425] Create appointment with a group', async function (I, users) {
+Scenario('[C7425] Create appointment with a group @shaky', async function (I, users) {
 
     const group = {
         name: 'Awesome guys',
@@ -1743,7 +1743,7 @@ Scenario('[C7414] Create two appointments at the same time (one is shown as free
     I.waitForDetached(locate('.modal-open .modal-title').withText('Conflicts detected'));
 });
 
-Scenario('[C7415] Create two reserved appointments at the same time', async function (I, users) {
+Scenario('[C7415] Create two reserved appointments at the same time @shaky', async function (I, users) {
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
@@ -1786,7 +1786,7 @@ Scenario('[C7415] Create two reserved appointments at the same time', async func
     I.waitForElement(locate('.modal-open .modal-title').withText('Conflicts detected'));
     I.click('Ignore conflicts');
     I.waitForDetached('.modal-open');
-    I.click('~Refresh');
+    I.retry(5).click('~Refresh');
     I.waitForElement('#io-ox-refresh-icon .fa-spin');
     I.waitForDetached('#io-ox-refresh-icon .fa-spin');
 
