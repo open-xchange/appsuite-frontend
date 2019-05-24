@@ -138,7 +138,8 @@ Scenario('[C107063] Revoke Permissions at "My shares" @shaky', async function (I
         I.waitForElement('.modal .list-view.address-picker li.list-item');
         I.fillField('Search', users[1].get('name'));
         I.waitForText(users[1].get('name'), 5, '.address-picker');
-        I.click('.address-picker .list-item');
+        I.waitForText(users[1].get('primaryEmail'));
+        I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
         I.click({ css: 'button[data-action="select"]' });
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.dontSee('Guest', '.permissions-view');
@@ -151,7 +152,7 @@ Scenario('[C107063] Revoke Permissions at "My shares" @shaky', async function (I
         I.selectFolder('My shares');
         I.waitForElement(locate('.displayname').withText('Music').inside('.list-view'));
         I.seeNumberOfElements('.list-view li.list-item', 1);
-        I.see('Music', '.list-view');
+        I.waitForText('Music', 5, '.list-view');
 
         I.click('Music', '.list-view .displayname');
     });
