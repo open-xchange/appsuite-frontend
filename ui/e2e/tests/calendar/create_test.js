@@ -663,6 +663,7 @@ Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thu
     I.wait(0.2); // gently wait for some UI updates
     I.pressKey('Enter');
 
+    I.waitForInvisible('.date-picker.open');
     I.click('Repeat', '.io-ox-calendar-edit-window');
     I.click('Every Tuesday.');
 
