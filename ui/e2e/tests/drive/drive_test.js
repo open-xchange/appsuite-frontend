@@ -130,7 +130,7 @@ Scenario.skip('[C45048] Edit description', async function (I, users) {
     expect(await I.grabTextFrom('.io-ox-viewer .description')).to.equal('C45048');
 });
 
-Scenario('[C45052] Delete file @shaky', async function (I, users) {
+Scenario('[C45052] Delete file', async function (I, users) {
     const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
     await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');
     I.login('app=io.ox/files', { user: users[0] });
@@ -138,7 +138,8 @@ Scenario('[C45052] Delete file @shaky', async function (I, users) {
     I.waitForElement(locate('.filename').withText('testdocument.odt'));
     I.click(locate('.filename').withText('testdocument.odt'));
     I.clickToolbar('~Delete');
-    I.click('Delete');
+    I.waitForElement('.modal');
+    I.click('Delete', '.modal');
     I.waitForDetached(locate('.filename').withText('testdocument.odt'));
 });
 
