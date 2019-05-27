@@ -493,7 +493,7 @@ define('io.ox/core/api/tab', [
                     require('io.ox/core/main').logout({ force: true, skipSessionLogout: true, autologout: data.parameters && data.parameters.autologout });
                     break;
                 case 'propagateLogin':
-                    if (ox.session) return;
+                    if (ox.session && !data.parameters.relogin) return;
                     TabSession.events.trigger(data.propagate, data.parameters);
                     break;
                 default:
@@ -506,7 +506,7 @@ define('io.ox/core/api/tab', [
         });
 
         TabSession.events.listenTo(TabSession.events, 'propagateLogin', function (parameters) {
-            if (!ox.signin) return;
+            if (!ox.signin && !parameters.relogin) return;
             require(['io.ox/core/boot/login/tabSession'], function (tabSessionLogin) {
                 tabSessionLogin(parameters);
             });
@@ -616,14 +616,15 @@ define('io.ox/core/api/tab', [
     /**
      * Send a session over localStorage to login logged out tabs
      */
-    TabSession.propagateLogin = function () {
+    TabSession.propagateLogin = function (relogin) {
         TabSession.propagate('propagateLogin', {
             session: ox.session,
             language: ox.language,
             theme: ox.theme,
             user: ox.user,
             user_id: ox.user_id,
-            context_id: ox.context_id
+            context_id: ox.context_id,
+            relogin: relogin
         });
     };
 
