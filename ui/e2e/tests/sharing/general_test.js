@@ -39,8 +39,9 @@ Scenario('[C45021] Generate simple link for sharing', async function (I) {
     I.see('Music', '.folder-tree .selected');
 });
 
-Scenario('[C252159] Generate link for sharing including subfolders', async function (I) {
+Scenario('[C252159] Generate link for sharing including subfolders @shaky', async function (I) {
     I.login('app=io.ox/files');
+    I.waitForText('My files');
     I.click('My files', '.folder-tree');
     I.selectFolder('Music');
     I.clickToolbar('New');
@@ -49,7 +50,7 @@ Scenario('[C252159] Generate link for sharing including subfolders', async funct
     I.fillField('Folder name', 'A subfolder');
     I.click('Add');
     I.waitToHide('.modal');
-    I.click('New');
+    I.retry(5).click('New');
     I.click('Add new folder');
     I.waitForText('Add new folder');
     I.fillField('Folder name', 'Second subfolder');
