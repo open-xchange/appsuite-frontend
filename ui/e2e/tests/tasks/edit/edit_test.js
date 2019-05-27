@@ -415,6 +415,7 @@ Scenario('[C7750] Edit existing Task in a shared folder @shaky', async function 
     function waitAndCheck(id, text) {
         text = text ? id + text : id;
         I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+        I.waitForText('My tasks');
         I.selectFolder(id);
         I.waitForText(text, 15, '.window-body');
         I.waitForText(text, 15, '.tasks-detailview .title');
