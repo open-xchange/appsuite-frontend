@@ -143,6 +143,7 @@ Scenario('[C85625] My Shares default sort order @shaky', async function (I, user
     share(I, 'Testfolder');
 
     I.selectFolder('My shares');
+    I.waitForText('Testfolder', undefined, '.myshares-list');
     const itemNames = (await I.grabTextFrom(locate('li.list-item'))).map((line) => line.split('\n')[0]);
     expect(itemNames).to.deep.equal(['Testfolder', 'testpresentation.ppsm', 'testdocument.rtf', 'document.txt']);
     I.click('Sort by');
