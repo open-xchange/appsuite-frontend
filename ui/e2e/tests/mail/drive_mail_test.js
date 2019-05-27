@@ -157,9 +157,8 @@ Scenario('[C85690] Expire date can be forced @shaky', async function (I, users) 
     I.click('Send');
     I.dontSee('.io-ox-mail-compose .contenteditable-editor');
 
-    await I.openApp('Drive');
-    const locateClickableFolder = (text) => locate('li.list-item.selectable').withDescendant(locate('div').withText(text));
     I.openApp('Drive');
+    const locateClickableFolder = (text) => locate('li.list-item.selectable').withDescendant(locate('div').withText(text));
     I.waitForText('Drive Mail', undefined, '.file-list-view');
     I.doubleClick(locateClickableFolder('Drive Mail'), '.file-list-view');
     I.waitForText('Plus Ultra!');
