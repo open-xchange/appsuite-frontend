@@ -11,7 +11,7 @@
  */
 
 /// <reference path="../../../steps.d.ts" />
-
+const moment = require('moment');
 Feature('Settings > Basic');
 
 Before(async (users) => {
@@ -39,8 +39,7 @@ Scenario('[C244801] Set design @shaky', async (I) => {
     // time-based
     await I.haveSetting({ 'io.ox/core': { design: 'time' } });
     I.login();
-    var h = new Date().getHours(), design = 'night';
-    console.log(h);
+    var h = moment().format('H'), design = 'night';
     // 00:00 Indigo
     // 06:00 Green
     // 09:00 Turquoise
