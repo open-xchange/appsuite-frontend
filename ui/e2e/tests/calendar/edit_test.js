@@ -1281,7 +1281,11 @@ Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
     I.waitForElement('.appointment');
-
+    // have to scroll appointment into view for drag & drop to work
+    I.executeScript(function () {
+        // select first appointment element
+        $('.appointment-content')[0].scrollIntoView(true);
+    });
     I.dragAndDrop('.appointment .appointment-content', '.day .timeslot:nth-child(27)');
 
     I.click(summary, '.appointment');
