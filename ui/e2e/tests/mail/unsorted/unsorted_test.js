@@ -275,18 +275,14 @@ Scenario('[C7387] Send mail with attachment from upload @shaky', function (I, us
 
     I.say('Open mail as floating window', 'blue');
     I.waitForText(testrailID + ' - ' + timestamp);
-
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.waitForVisible('.floating-window-content');
-    within('.floating-window-content .attachments.mail-attachment-list', function () {
-        I.say('Show attachments as list', 'blue');
-        I.click('.toggle-details[aria-expanded="false"]');
-        I.waitForVisible('.list-container');
-        I.see('testdocument.odt');
-        I.see('testdocument.rtf');
-        I.see('testpresentation.ppsm');
-        I.see('testspreadsheed.xlsm');
-    });
+    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.say('Show attachments as list', 'blue');
+    I.click('.toggle-details[aria-expanded="false"]');
+    I.waitForVisible('.list-container');
+    I.see('testdocument.odt');
+    I.see('testdocument.rtf');
+    I.see('testpresentation.ppsm');
+    I.see('testspreadsheed.xlsm');
 });
 
 Scenario('[C7388] Send mail with different priorities', function (I, users) {

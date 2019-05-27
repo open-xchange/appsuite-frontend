@@ -40,6 +40,7 @@ Scenario('[C244801] Set design @shaky', async (I) => {
     await I.haveSetting({ 'io.ox/core': { design: 'time' } });
     I.login();
     var h = new Date().getHours(), design = 'night';
+    console.log(h);
     // 00:00 Indigo
     // 06:00 Green
     // 09:00 Turquoise
