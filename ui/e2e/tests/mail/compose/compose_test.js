@@ -233,8 +233,10 @@ Scenario('Compose with drivemail attachment and edit draft @shaky', async functi
     const user2 = await users.create();
     await I.haveSetting('io.ox/mail//messageFormat', 'html');
     await I.haveSetting('io.ox/mail//features/deleteDraftOnClose', true);
-    await I.haveSetting('io.ox/mail//deleteDraftOnTransport', true);
     await user.hasConfig('com.openexchange.mail.deleteDraftOnTransport', true);
+    I.wait(5);
+    await I.haveSetting('io.ox/mail//deleteDraftOnTransport', true);
+
 
     I.login('app=io.ox/files');
     // create textfile in drive
