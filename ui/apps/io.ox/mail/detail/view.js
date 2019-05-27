@@ -282,6 +282,9 @@ define('io.ox/mail/detail/view', [
         id: 'inline-links',
         index: 100,
         draw: function (baton) {
+            // no need for a toolbar if the mail is collapsed
+            // extension point is invoked again on expand anyway
+            if (!baton.view.$el.hasClass('expanded')) return;
             var toolbarView = new ToolbarView({ el: this[0], point: 'io.ox/mail/links/inline', inline: true });
             toolbarView.$el.attr('data-toolbar', 'io.ox/mail/links/inline');
             toolbarView.setSelection([_.cid(baton.data)], { data: baton.data });
