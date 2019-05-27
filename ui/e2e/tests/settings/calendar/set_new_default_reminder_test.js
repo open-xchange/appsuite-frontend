@@ -23,7 +23,7 @@ After(async (users) => {
 });
 
 
-Scenario('[C7867] Set new default reminder', async function (I) {
+Scenario('[C7867] Set new default reminder @shaky', async function (I) {
     const alaramNotification = 'Notification';
     const alaramTime = '45 minutes';
     const alaramRelated = 'before start';
@@ -32,6 +32,7 @@ Scenario('[C7867] Set new default reminder', async function (I) {
     /////////Default reminder
     I.click('#io-ox-topbar-dropdown-icon');
     I.click('Settings');
+    I.waitForVisible('li[data-id="virtual/settings/io.ox/calendar"]');
     I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
     I.waitForElement('.alarms-link-view .btn-link');
 
