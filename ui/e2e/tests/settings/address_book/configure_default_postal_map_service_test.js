@@ -63,6 +63,7 @@ async function verifyMapType(I, mapName, link) {
     I.see('Link postal addresses with map service');
     I.waitForText(mapName);
     I.click(mapName);
+    I.click('~Refresh');
     I.waitForVisible('.fa-refresh.fa-spin');
     I.waitForDetached('.fa-refresh.fa-spin');
 
