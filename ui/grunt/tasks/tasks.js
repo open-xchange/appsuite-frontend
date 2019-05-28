@@ -37,7 +37,7 @@ module.exports = function (grunt) {
     grunt.registerTask('force_update', ['bootjs', 'copy:build_base']);
 
     grunt.registerTask('workaround_fetch', function () {
-        var appserver = require('appserver'),
+        var appserver = require('@open-xchange/appserver'),
             mirrorFile = appserver.tools.mirrorFile,
             config = appserver.tools.unifyOptions(grunt.config('local.appserver')),
             done = this.async();
@@ -53,7 +53,7 @@ module.exports = function (grunt) {
         })).then(done);
     });
     grunt.registerTask('prefetch:static', function () {
-        var appserver = require('appserver'),
+        var appserver = require('@open-xchange/appserver'),
             mirrorFile = appserver.tools.mirrorFile,
             config = appserver.tools.unifyOptions(grunt.config('local.appserver')),
             fileName = grunt.option('output'),
@@ -62,7 +62,7 @@ module.exports = function (grunt) {
             .then(done);
     });
     grunt.registerTask('prefetch:appsLoad', function () {
-        var appserver = require('appserver'),
+        var appserver = require('@open-xchange/appserver'),
             mirrorFile = appserver.tools.mirrorFile,
             config = appserver.tools.unifyOptions(grunt.config('local.appserver')),
             fileName = grunt.option('output'),

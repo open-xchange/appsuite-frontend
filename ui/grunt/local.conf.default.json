@@ -1,0 +1,44 @@
+{
+    "appserver": {
+        "protocol": "https",
+        "rejectUnauthorized": false,
+        "livereload": true,
+        "server": "https://appsuite.open-xchange.com/appsuite",
+        "verbose": [],
+        "disbled_prefixes": [
+            "/Users/frankpaczynski/gitrep/guard/oxguard-ui/build"
+        ],
+        "prefixes": [
+            "build/",
+            "../help/build",
+            "/Users/frankpaczynski/gitrep/7.10.1/guidedtours/build",
+            "/Users/frankpaczynski/gitrep/ox-plugins/custom/build",
+            "/Users/frankpaczynski/gitrep/ox-plugins/debug/build",
+            "/Users/frankpaczynski/gitrep/ox-plugins/bugzilla/build"
+        ],
+        "manifests": [
+            "build/manifests/"
+        ]
+    },
+    "proxy": false,
+    "cap": "-messenger,-websocket",
+    "debug": true,
+    "coreDir": "build",
+    "e2e": {
+        "helpers": {
+            "WebDriverIO": {
+                "host": "localhost",
+                "url": "http://e2e-develop.ui.cloud.open-xchange.com/appsuite/"
+            },
+            "_WebDriverIO": {
+                "host": "localhost",
+                "url": "https://localhost:8337/appsuite/"
+            }
+        },
+        "users": [{
+            "username": "mwagner",
+            "password": "secret",
+            "mail": "mwagner@ox-e2e-backend.novalocal"
+        }]
+    }
+}
