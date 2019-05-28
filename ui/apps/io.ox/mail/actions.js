@@ -34,7 +34,7 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/compose', {
         device: '!guest',
         action: function (baton) {
-            ox.registry.call('mail-compose', 'open', null, { folderId: baton.folder_id });
+            ox.registry.call('mail-compose', 'open', null, { folderId: baton.app.folder.get() });
         }
     });
 
