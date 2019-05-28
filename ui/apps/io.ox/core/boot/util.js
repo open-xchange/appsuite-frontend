@@ -155,7 +155,9 @@ define('io.ox/core/boot/util', [], function () {
                 .find('input').prop('disabled', true);
             $('#io-ox-login-blocker').show();
             //$('#io-ox-login-feedback').busy().empty();
-        }
+        },
+
+        checkTabHandlingSupport: _.constant(false)
 
     };
 
