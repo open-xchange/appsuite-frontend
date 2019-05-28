@@ -32,7 +32,7 @@
     "@open-xchange/codecept-helper": "^0.1.1",
     "axe-core": "^3.1.2",
     "chai": "^4.0.2",
-    "codeceptjs": "^2.0.2",
+    "codeceptjs": "2.1.1",
     "eslint-plugin-codeceptjs": "^0.4.0",
     "grunt-contrib-connect": "^1.0.2",
     "grunt-contrib-watch": "^1.0.0",
@@ -52,6 +52,9 @@
     "sinon-chai": "^3.3.0",
     "time-grunt": "^2.0.0",
     "webdriverio": "^5.2.6"
+  },
+  "resolutions": {
+    "codeceptjs": "2.1.1"
   },
   "engines": {
     "node": ">=0.10"
