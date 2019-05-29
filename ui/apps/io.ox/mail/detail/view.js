@@ -836,12 +836,8 @@ define('io.ox/mail/detail/view', [
 
             this.$el.data({ view: this, model: this.model });
 
-            this.$el.off('click');
-
             if (!this.placeholder) {
                 ext.point('io.ox/mail/detail').invoke('draw', this.$el, baton);
-            } else {
-                this.$el.on('click', this.onToggle.bind(this));
             }
 
             this.$el.toggleClass('placeholder', this.placeholder);
