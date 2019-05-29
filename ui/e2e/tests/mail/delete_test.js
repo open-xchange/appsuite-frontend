@@ -127,7 +127,8 @@ Scenario('[C265146] Delete with setting selectBeforeDelete=false', async functio
 
     I.login('app=io.ox/mail', { user: user2 });
     let loc = locate('li.list-item.selectable').withAttr({ 'data-index': '0' });
-    I.click(loc);
+    I.waitForText('Test Mail 1');
+    I.retry(5).click(loc);
     I.clickToolbar('Delete');
     I.waitForText('No message selected');
 });
