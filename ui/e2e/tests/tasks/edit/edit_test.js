@@ -386,7 +386,7 @@ Scenario('[C7749] Edit existing Task as participant', async function (I, users) 
     I.waitForText(testrailID + ' - 2', 5, '.tasks-detailview .title');
 });
 
-Scenario('[C7750] Edit existing Task in a shared folder', async function (I, users) {
+Scenario('[C7750] Edit existing Task in a shared folder @shaky', async function (I, users) {
     const testrailID = 'C7750',
         testrailName = 'Edit existing Task in a shared folder',
         createFolder = await I.createFolder({
@@ -415,6 +415,7 @@ Scenario('[C7750] Edit existing Task in a shared folder', async function (I, use
     function waitAndCheck(id, text) {
         text = text ? id + text : id;
         I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+        I.waitForText('My tasks');
         I.selectFolder(id);
         I.waitForText(text, 15, '.window-body');
         I.waitForText(text, 15, '.tasks-detailview .title');

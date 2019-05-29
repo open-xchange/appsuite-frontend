@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7391] Send mail with attachment from Drive', async (I, users) => {
+Scenario('[C7391] Send mail with attachment from Drive @shaky', async (I, users) => {
     let [sender, recipient] = users;
     // Log in and navigate to mail app
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
@@ -74,11 +74,11 @@ Scenario('[C7391] Send mail with attachment from Drive', async (I, users) => {
     // Log in as second user and navigate to mail app
     I.login('app=io.ox/mail', { user: recipient });
 
-    I.waitForText('Principia Discordia', 2);
+    I.waitForText('Principia Discordia');
     // Open mail
     I.click(locate('.list-item').withText('Principia Discordia').inside('.list-view'));
     // Verify Attachment
-    I.waitForText('1 attachment', 2);
+    I.waitForText('1 attachment');
     I.click('1 attachment');
     I.see('Principia.txt');
     // Let's view the content

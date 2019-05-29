@@ -90,20 +90,6 @@ define('io.ox/files/main', [
             });
         },
 
-        /**
-         * Add listener for browser tab communication. Event needs a
-         * 'propagate' string for propagation
-         */
-        'remove-from-broadcast': function () {
-            if (!ox.tabHandlingEnabled) return;
-            // we can be sure that 'io.ox/core/api/tab' is cached when 'ox.tabHandlingEnabled' is true
-            var TabAPI = require('io.ox/core/api/tab');
-            var events = TabAPI.TabCommunication.events;
-            events.listenTo(events, 'remove-file', function (file) {
-                api.remove([file]);
-            });
-        },
-
         /*
          * Init pages for mobile use
          * Each View will get a single page with own

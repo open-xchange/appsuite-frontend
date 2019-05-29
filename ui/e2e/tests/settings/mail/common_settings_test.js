@@ -23,14 +23,14 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7779] Mail formatting', async function (I, users) {
+Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
 
     const [user] = users;
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/compose']);
 
-
-    I.retry(5).checkOption(locate('label').withText('Plain text'));
+    I.waitForText('Mail Compose');
+    I.checkOption('Plain text');
     I.seeCheckboxIsChecked('[name="messageFormat"][value="text"]');
 
     I.openApp('Mail');
@@ -58,7 +58,7 @@ Scenario('[C7779] Mail formatting', async function (I, users) {
     I.waitForVisible('#topbar-settings-dropdown');
     I.click('Settings');
 
-    I.retry(5).checkOption(locate('label').withText('HTML'));
+    I.checkOption('HTML');
     I.seeCheckboxIsChecked('[name="messageFormat"][value="html"]');
 
     I.openApp('Mail');
@@ -88,7 +88,7 @@ Scenario('[C7779] Mail formatting', async function (I, users) {
     I.waitForVisible('#topbar-settings-dropdown');
     I.click('Settings');
 
-    I.retry(5).checkOption(locate('label').withText('HTML and plain text'));
+    I.checkOption('HTML and plain text');
     I.seeCheckboxIsChecked('[name="messageFormat"][value="alternative"]');
 
     I.openApp('Mail');

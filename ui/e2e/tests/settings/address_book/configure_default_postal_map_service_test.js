@@ -26,7 +26,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C85624] Configure postal addresses map service', async (I) =>{
+Scenario('[C85624] Configure postal addresses map service @shaky', async (I) =>{
     await I.haveContact({
         folder_id: `${await I.grabDefaultFolder('contacts')}`,
         last_name: 'Bar',
@@ -63,6 +63,7 @@ async function verifyMapType(I, mapName, link) {
     I.see('Link postal addresses with map service');
     I.waitForText(mapName);
     I.click(mapName);
+    I.click('~Refresh');
     I.waitForVisible('.fa-refresh.fa-spin');
     I.waitForDetached('.fa-refresh.fa-spin');
 

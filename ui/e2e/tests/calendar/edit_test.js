@@ -434,7 +434,7 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
 
 });
 
-Scenario('[C7467] Delete recurring appointment in shared folder as author', async function (I, users) {
+Scenario('[C7467] Delete recurring appointment in shared folder as author @shaky', async function (I, users) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -930,7 +930,7 @@ Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, use
     expect(await I.grabTextFrom('.io-ox-sidepopup-pane .date-time')).to.equal(momentRange().add(1, 'hours').format('ddd') + ', ' + momentRange().add(1, 'hours').format('M/D/YYYY') + '   12:00 – 1:00 PMCEST');
 });
 
-Scenario('[C7462] Remove a participant', async function (I, users) {
+Scenario('[C7462] Remove a participant @shaky', async function (I, users) {
     const moment = require('moment');
     let testrailID = 'C7462';
     I.haveSetting('io.ox/core//autoOpenNotification', false);
@@ -984,27 +984,25 @@ Scenario('[C7462] Remove a participant', async function (I, users) {
     I.login('app=io.ox/calendar', { user: users[0] });
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
     I.clickToolbar('Today');
-    I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]', 5);
+    I.waitForElement('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
     I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
-    I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
-    I.waitForElement('[data-action="io.ox/calendar/detail/actions/edit"]', 5);
+    I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup');
+    I.waitForElement('[data-action="io.ox/calendar/detail/actions/edit"]');
     I.waitForElement('.io-ox-sidepopup-pane a[title="' + users[1].userdata.primaryEmail + '"]');
     I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
     I.waitForElement('.io-ox-calendar-edit.container');
     I.waitForVisible('.io-ox-calendar-edit.container');
-    I.waitForElement('//a[contains(text(),"' + users[1].userdata.primaryEmail + '")]/../../a[contains(@class, "remove")]', 5);
+    I.waitForElement('//a[contains(text(),"' + users[1].userdata.primaryEmail + '")]/../../a[contains(@class, "remove")]');
     I.click('//a[contains(text(),"' + users[1].userdata.primaryEmail + '")]/../../a[contains(@class, "remove")]');
     I.waitForDetached('//a[contains(text(),"' + users[1].userdata.primaryEmail + '")]/../../a[contains(@class, "remove")]');
     I.click('Save');
-    I.waitForDetached('.io-ox-calendar-edit.container', 5);
-    I.click('.appointment-container [aria-label="' + testrailID + ', ' + testrailID + '"]');
-    I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
-    I.waitForElement('[data-action="io.ox/calendar/detail/actions/edit"]', 5);
-    I.waitForDetached('.io-ox-sidepopup-pane a[title="' + users[1].userdata.primaryEmail + '"]');
+    I.waitForVisible('.io-ox-calendar-main .io-ox-sidepopup');
+    I.waitForElement('[data-action="io.ox/calendar/detail/actions/edit"]');
+    I.dontSeeElement('.io-ox-sidepopup-pane a[title="' + users[1].userdata.primaryEmail + '"]');
     I.logout();
 });
 
-Scenario('[C7461] Add a participant/ressource', async function (I, users) {
+Scenario('[C7461] Add a participant/ressource @shaky', async function (I, users) {
     await users.create();
     await users.create();
     const [userA, userB, weebl, bob] = users;
@@ -1191,7 +1189,7 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
     I.waitForText('2:00 PM');
 });
 
-Scenario('[C7460] Add attachments', async function (I) {
+Scenario('[C7460] Add attachments @shaky', async function (I) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
@@ -1281,7 +1279,11 @@ Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
     I.waitForElement('.appointment');
-
+    // have to scroll appointment into view for drag & drop to work
+    I.executeScript(function () {
+        // select first appointment element
+        $('.appointment-content')[0].scrollIntoView(true);
+    });
     I.dragAndDrop('.appointment .appointment-content', '.day .timeslot:nth-child(27)');
 
     I.click(summary, '.appointment');
@@ -1308,7 +1310,7 @@ Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
     I.waitForText('2:00 PM');
 });
 
-Scenario('[C7459] Remove attachments', async function (I) {
+Scenario('[C7459] Remove attachments @shaky', async function (I) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },

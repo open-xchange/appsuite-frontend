@@ -257,7 +257,8 @@ define('io.ox/files/share/api', [
                     tree: 0,
                     all: 0,
                     altNames: true,
-                    columns: '1,2,5,300,301,302,305,317,3060'
+                    columns: '1,2,5,300,301,302,305,317,3060',
+                    timezone: 'UTC'
                 }
             });
         },
@@ -275,7 +276,8 @@ define('io.ox/files/share/api', [
                     tree: 0,
                     all: 0,
                     altNames: true,
-                    columns: '1,2,5,20,109,700,7010'
+                    columns: '1,2,5,20,109,700,7010',
+                    timezone: 'UTC'
                 }
             });
         },

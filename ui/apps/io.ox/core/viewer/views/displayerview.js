@@ -623,6 +623,8 @@ define('io.ox/core/viewer/views/displayerview', [
             slideView.unload().dispose();
 
             slidePromise = this.createView(versionModel, { el: slideNode }).then(function (view) {
+                if (self.disposed) { return; }
+
                 // transfer attributes to new view
                 setAttributes(view.el, slideNodeAttrs);
 
@@ -641,6 +643,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 duplicateView.unload().dispose();
 
                 duplicatePromise = this.createView(versionModel, { el: duplicateNode }).then(function (view) {
+                    if (self.disposed) { return; }
+
                     // transfer attributes to new view
                     setAttributes(view.el, duplicateNodeAttrs);
 
@@ -658,6 +662,8 @@ define('io.ox/core/viewer/views/displayerview', [
             }
 
             $.when(slidePromise, duplicatePromise).then(function () {
+                if (self.disposed) { return; }
+
                 // show the duplicate if it is present and active, or the original slide
                 if (isActiveDuplicate) {
                     self.slideDuplicateViews[index].show();

@@ -557,7 +557,7 @@ Scenario('[C7395] Send mail with text indentations', async function (I, users) {
     });
 });
 
-Scenario('[C7396] Send mail with different text fonts', async function (I, users) {
+Scenario('[C7396] Send mail with different text fonts @shaky', async function (I, users) {
 
     const selectFont = (action) => {
         I.click(locate('button').inside('~Font Family'));
@@ -697,7 +697,7 @@ Scenario('[C7396] Send mail with different text fonts', async function (I, users
 });
 
 // combined with [C7383] Compose HTML mail
-Scenario('[C7397] Send mail with different text styles', async function (I, users) {
+Scenario('[C7397] Send mail with different text styles @shaky', async function (I, users) {
 
     const selectHeading = (action) => {
         I.click(locate('button').withChild(locate('span').withText('Formats')));
@@ -786,7 +786,7 @@ Scenario('[C7397] Send mail with different text styles', async function (I, user
     I.click('~More actions', '.detail-view-header');
     I.waitForVisible('[data-action="io.ox/mail/actions/source"]', 'body > .dropdown');
     I.click('[data-action="io.ox/mail/actions/source"]', 'body > .dropdown');
-    I.waitForVisible('body .mail-source-dialog');
+    I.waitForVisible('textarea.mail-source-view');
 
     // check mail source of recently sent mail (Last of C7383)
     let [source] = await I.grabValueFrom('body .mail-source-view');
@@ -925,7 +925,7 @@ function getRGBValue(toConvert) {
     return toConvert;
 }
 
-Scenario('[C7399] Send mail with different text colours', async function (I, users) {
+Scenario('[C7399] Send mail with different text colours @shaky', async function (I, users) {
 
     const selectColor = (action) => {
         I.click(locate('.mce-open').inside('~Text color'));
@@ -1083,7 +1083,7 @@ const selectFontSize = (I, fontSize) => {
     I.click(locate('span.mce-text').withText(fontSize));
     I.waitForInvisible('.mce-floatpanel');
 };
-Scenario('[C7400] Send mail with multiple different text formatting - set before writting', async function (I, users) {
+Scenario('[C7400] Send mail with multiple different text formatting - set before writting @shaky', async function (I, users) {
 
     let [sender, recipient] = users;
 

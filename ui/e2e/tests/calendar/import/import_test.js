@@ -262,10 +262,10 @@ Data(examples).Scenario('Import Calendar data', async (I, current) => {
     I.waitForText('Birthdays');
     // go to 2016-11-27
     I.executeScript(function gotoDate(t) { ox.ui.App.getCurrentApp().setDate(t); }, 1480201200000);
-
-    I.waitForElement('.folder-options.contextmenu-control');
-    I.click('.folder-options.contextmenu-control');
+    I.waitForVisible('li[data-id="virtual/flat/event/private"] .folder-options.contextmenu-control');
+    I.click('li[data-id="virtual/flat/event/private"] .folder-options.contextmenu-control');
     I.waitForText('Import');
+    I.wait(1);
     I.click('Import');
     I.waitForElement('.modal');
     I.attachFile('.file-input', `e2e/media/imports/calendar/${current.filename}.ics`);

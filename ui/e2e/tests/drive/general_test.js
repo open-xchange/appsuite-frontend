@@ -58,7 +58,7 @@ Scenario.skip('[C8364] Upload new file', (I) => {
 });
 
 // Note: This is not accessible H4 and textarea does not have a label
-Scenario('[C8366] Edit description', async (I) => {
+Scenario('[C8366] Edit description @shaky', async (I) => {
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
     prepare(I);
@@ -243,7 +243,7 @@ Scenario('[C45041] Select files', async (I, users) => {
     I.dontSeeElementInDOM('.file-list-view .list-item.selected');
 });
 
-Scenario('[C45042] Filter files', async (I, users) => {
+Scenario('[C45042] Filter files @shaky', async (I, users) => {
     // BUG: This menu should be grouped as it has 2 sets of menuitemradios
     // to make matters worse there are two "All" menuitems without a relation
     // to a group.

@@ -11,7 +11,7 @@
  */
 
 /// <reference path="../../../steps.d.ts" />
-
+const moment = require('moment');
 Feature('Settings > Basic');
 
 Before(async (users) => {
@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C244801] Set design', async (I) => {
+Scenario('[C244801] Set design @shaky', async (I) => {
 
     // dusk
     await I.haveSetting({ 'io.ox/core': { design: 'dusk' } });
@@ -39,7 +39,7 @@ Scenario('[C244801] Set design', async (I) => {
     // time-based
     await I.haveSetting({ 'io.ox/core': { design: 'time' } });
     I.login();
-    var h = new Date().getHours(), design = 'night';
+    var h = moment().format('H'), design = 'night';
     // 00:00 Indigo
     // 06:00 Green
     // 09:00 Turquoise

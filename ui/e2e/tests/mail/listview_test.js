@@ -49,7 +49,7 @@ async function getTooltipValue(I, opt) {
     return [].concat(tooltips)[0];
 }
 
-Scenario('[C114381] Sender address is shown in tooltip', async function (I, users) {
+Scenario('[C114381] Sender address is shown in tooltip @shaky', async function (I, users) {
     const user1 = users[0];
     const user2 = users[1];
 
@@ -97,7 +97,7 @@ Scenario('[C114381] Sender address is shown in tooltip', async function (I, user
     I.logout();
 });
 
-Scenario('remove mail from thread', async (I, users) => {
+Scenario('remove mail from thread @shaky', async (I, users) => {
     I.haveSetting('io.ox/mail//viewOptions', {
         'default0/INBOX': {
             order: 'desc',

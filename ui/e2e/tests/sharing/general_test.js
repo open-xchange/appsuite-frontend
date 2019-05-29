@@ -39,8 +39,9 @@ Scenario('[C45021] Generate simple link for sharing', async function (I) {
     I.see('Music', '.folder-tree .selected');
 });
 
-Scenario('[C252159] Generate link for sharing including subfolders', async function (I) {
+Scenario('[C252159] Generate link for sharing including subfolders @shaky', async function (I) {
     I.login('app=io.ox/files');
+    I.waitForText('My files');
     I.click('My files', '.folder-tree');
     I.selectFolder('Music');
     I.clickToolbar('New');
@@ -49,7 +50,7 @@ Scenario('[C252159] Generate link for sharing including subfolders', async funct
     I.fillField('Folder name', 'A subfolder');
     I.click('Add');
     I.waitToHide('.modal');
-    I.click('New');
+    I.retry(5).click('New');
     I.click('Add new folder');
     I.waitForText('Add new folder');
     I.fillField('Folder name', 'Second subfolder');
@@ -90,13 +91,13 @@ Scenario('[C45022] Generate simple link for sharing with password', async functi
     I.see('Music', '.folder-tree .selected');
 });
 
-Scenario('[C83385] Copy to clipboard', async function (I) {
+Scenario('[C83385] Copy to clipboard @shaky', async function (I) {
     I.login('app=io.ox/files');
     I.click('My files', '.folder-tree');
     I.selectFolder('Music');
     I.clickToolbar('Share');
     I.click('Create sharing link');
-    I.waitForElement('.clippy');
+    I.waitForVisible('.clippy');
     const [url] = await I.grabValueFrom('.share-wizard input[type="text"]');
     I.click('~Copy to clipboard');
     I.see('Copied');
@@ -114,7 +115,7 @@ Scenario('[C83385] Copy to clipboard', async function (I) {
     I.waitForText('Music');
 });
 
-Scenario('[C85625] My Shares default sort order', async function (I, users) {
+Scenario('[C85625] My Shares default sort order @shaky', async function (I, users) {
     function share(I, item) {
         I.click(locate('li.list-item').withText(item));
         I.clickToolbar('Share');
@@ -142,6 +143,7 @@ Scenario('[C85625] My Shares default sort order', async function (I, users) {
     share(I, 'Testfolder');
 
     I.selectFolder('My shares');
+    I.waitForText('Testfolder', undefined, '.myshares-list');
     const itemNames = (await I.grabTextFrom(locate('li.list-item'))).map((line) => line.split('\n')[0]);
     expect(itemNames).to.deep.equal(['Testfolder', 'testpresentation.ppsm', 'testdocument.rtf', 'document.txt']);
     I.click('Sort by');

@@ -25,9 +25,10 @@ define('io.ox/calendar/month/extensions', [
             var contentContainer = this.children('.appointment-content'),
                 titleContainer = contentContainer.children('.title-container');
             titleContainer.replaceWith(titleContainer.children());
-            if (util.isAllday(model)) return;
             var model = baton.model;
-            if (!util.isAllday(model)) contentContainer.prepend($('<span class="start">').text(model.getMoment('startDate').tz(moment().tz()).format('LT')));
+            if (util.isAllday(model)) return;
+            var start = moment.max(baton.startDate.clone(), model.getMoment('startDate'));
+            contentContainer.prepend($('<span class="start">').text(start.tz(moment().tz()).format('LT')));
         }
     });
 

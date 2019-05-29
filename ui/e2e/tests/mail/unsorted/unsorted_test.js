@@ -23,7 +23,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('[C7380] Send saved draft mail', function (I, users) {
+Scenario('[C7380] Send saved draft mail @shaky', function (I, users) {
     const [user] = users;
     var testrailId = 'C7380';
     var text = Math.round(+new Date() / 1000);
@@ -167,6 +167,7 @@ Scenario('[C7385] Write mail to BCC recipients', function (I, users) {
     I.logout();
     I.login('app=io.ox/mail', { user: users[1] });
     I.selectFolder('Inbox');
+    I.waitForText(testrailID);
     I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
     I.waitForText(users[0].userdata.primaryEmail, 5, '.detail-view-header');
     I.waitForElement('[title="' + users[1].userdata.primaryEmail + '"]', 5, '.detail-view-header');
@@ -175,14 +176,14 @@ Scenario('[C7385] Write mail to BCC recipients', function (I, users) {
     I.login('app=io.ox/mail', { user: users[2] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.waitForElement('[title="' + testrailID + ' - ' + timestamp + '"]', 5);
+    I.waitForText(testrailID + ' - ' + timestamp);
     I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
     I.waitForText(users[0].userdata.primaryEmail, 5, '.detail-view-header');
     I.waitForElement('[title="' + users[1].userdata.primaryEmail + '"]', 5, '.detail-view-header');
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
 });
 
-Scenario('[C7386] Write mail to CC recipients', function (I, users) {
+Scenario('[C7386] Write mail to CC recipients @shaky', function (I, users) {
     let [user] = users;
     var testrailID = 'C7386';
     var timestamp = Math.round(+new Date() / 1000);
@@ -240,7 +241,7 @@ function addFile(I, path) {
     I.waitForText(ext.toUpperCase(), 5, '.inline-items.preview');
 }
 
-Scenario('[C7387] Send mail with attachment from upload', function (I, users) {
+Scenario('[C7387] Send mail with attachment from upload @shaky', function (I, users) {
     let [user] = users;
     var testrailID = 'C7387';
     var timestamp = Math.round(+new Date() / 1000);
@@ -273,18 +274,15 @@ Scenario('[C7387] Send mail with attachment from upload', function (I, users) {
     I.waitForVisible('.selected .contextmenu-control');
 
     I.say('Open mail as floating window', 'blue');
-    I.see(testrailID + ' - ' + timestamp);
-    I.doubleClick('[title="' + testrailID + ' - ' + timestamp + '"]');
-    I.waitForVisible('.floating-window-content');
-    within('.floating-window-content .attachments.mail-attachment-list', function () {
-        I.say('Show attachments as list', 'blue');
-        I.click('.toggle-details[aria-expanded="false"]');
-        I.waitForVisible('.list-container');
-        I.see('testdocument.odt');
-        I.see('testdocument.rtf');
-        I.see('testpresentation.ppsm');
-        I.see('testspreadsheed.xlsm');
-    });
+    I.waitForText(testrailID + ' - ' + timestamp);
+    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.say('Show attachments as list', 'blue');
+    I.click('.toggle-details[aria-expanded="false"]');
+    I.waitForVisible('.list-container');
+    I.see('testdocument.odt');
+    I.see('testdocument.rtf');
+    I.see('testpresentation.ppsm');
+    I.see('testspreadsheed.xlsm');
 });
 
 Scenario('[C7388] Send mail with different priorities', function (I, users) {
@@ -367,7 +365,7 @@ Scenario('[C7389] Send mail with attached vCard', function (I, users) {
     I.waitForText(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, 5, '.io-ox-contacts-window .header-name');
 });
 
-Scenario('[C7403] Forward a single mail', function (I, users) {
+Scenario('[C7403] Forward a single mail @shaky', function (I, users) {
     let [user] = users;
     var testrailID = 'C7403';
     var timestamp = Math.round(+new Date() / 1000);
@@ -397,6 +395,7 @@ Scenario('[C7403] Forward a single mail', function (I, users) {
     I.login('app=io.ox/mail', { user: users[2] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
+    I.waitForText('Fwd: ' + testrailID + ' - ' + timestamp);
     I.click('[title="Fwd: ' + testrailID + ' - ' + timestamp + '"]');
     I.waitForText('Fwd: ' + testrailID + ' - ' + timestamp, 5, '.thread-view-header .subject');
 });

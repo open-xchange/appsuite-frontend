@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C248441] Configure to show/hide birthday calendar', async function (I) {
+Scenario('[C248441] Configure to show/hide birthday calendar @shaky', async function (I) {
     I.login();
     I.click('#io-ox-topbar-dropdown-icon');
     I.click('Settings');
@@ -31,14 +31,17 @@ Scenario('[C248441] Configure to show/hide birthday calendar', async function (I
     I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
     I.waitForElement('[name="birthday"]');
     I.waitForText('Show birthday calendar');
-    I.selectFolder('Birthdays');
+    I.seeCheckboxIsChecked('birthday');
+    I.openApp('Calendar');
+    I.waitForText('Birthdays');
+
 
     ///////Check whether birthday calendar is not shown on Calendar App
-    I.openApp('Calendar');
     I.click('#io-ox-topbar-dropdown-icon');
     I.click('Settings');
     I.click('Show birthday calendar');
     I.openApp('Calendar');
     I.waitForText('My calendars');
     I.dontSee('Birthdays');
+
 });

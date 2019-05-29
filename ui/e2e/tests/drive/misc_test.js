@@ -23,7 +23,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C114352] Create folder in copy/move dialog', async (I, users) => {
+Scenario('[C114352] Create folder in copy/move dialog @shaky', async (I, users) => {
 
     // Preconditions: At least one file in Drive
 
@@ -71,7 +71,7 @@ Scenario('[C114352] Create folder in copy/move dialog', async (I, users) => {
 
 });
 
-Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', async (I, users) => {
+Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users @shaky', async (I, users) => {
 
     /*
      * Preconditions:
@@ -139,7 +139,7 @@ Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', a
 
 });
 
-Scenario('[C257247] Restore deleted items', async (I, users) => {
+Scenario('[C257247] Restore deleted items @shaky', async (I, users) => {
 
     // Preconditions: At least one file and one folder in Drive
 

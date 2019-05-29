@@ -368,7 +368,9 @@ define('io.ox/contacts/edit/view-form', [
             // update hidden
             node.find('.block').each(function () {
                 var block = $(this),
-                    hidden = isCompact && block.children('div.has-content, div.always').length === 0;
+                    // hide completely empty blocks or blocks with no content when in compact mode
+                    hidden = (block.find('div.row.field > *').length === 0 && block.children('div.always').length === 0) || (isCompact && block.children('div.has-content, div.always').length === 0);
+
                 block.removeClass('odd even hidden');
                 if (hidden) block.addClass('hidden');
             });

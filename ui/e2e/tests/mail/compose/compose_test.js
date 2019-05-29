@@ -227,15 +227,18 @@ Scenario('Compose with inline image, which is removed again', async function (I,
     I.logout();
 });
 
-Scenario('Compose with drivemail attachment and edit draft', async function (I, users) {
+Scenario('Compose with drivemail attachment and edit draft @shaky', async function (I, users) {
     const [user] = users;
 
     const user2 = await users.create();
     await I.haveSetting('io.ox/mail//messageFormat', 'html');
     await I.haveSetting('io.ox/mail//features/deleteDraftOnClose', true);
+    await user.hasConfig('com.openexchange.mail.deleteDraftOnTransport', true);
+    I.wait(5);
+    await I.haveSetting('io.ox/mail//deleteDraftOnTransport', true);
+
 
     I.login('app=io.ox/files');
-
     // create textfile in drive
     I.clickToolbar('New');
     I.click('Add note');
@@ -275,9 +278,10 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     // workflow 17: Edit copy
     I.clickToolbar('Edit copy');
     I.waitForText('Subject');
-    I.wait(0.2); // add a short wait period until the ui has eventually focused the editor
+    I.wait(1); // add a short wait period until the ui has eventually focused the editor
 
     I.fillField('To', user2.get('primaryEmail'));
+    I.wait(1);
     I.pressKey('Enter');
     I.click('Send');
     I.waitForInvisible('.floating-window');
@@ -290,12 +294,13 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.waitForText('Subject');
 
     I.waitForText('Use Drive Mail');
-    // TODO this should be checked
+
     I.retry(5).click('Use Drive Mail');
     I.seeCheckboxIsChecked('Use Drive Mail');
     I.seeNumberOfVisibleElements('.inline-items > li', 1);
 
     I.fillField('To', user.get('primaryEmail'));
+    I.wait(1);
     I.fillField('Subject', 'Testsubject');
     I.click('Send');
     I.waitForInvisible('.floating-window');

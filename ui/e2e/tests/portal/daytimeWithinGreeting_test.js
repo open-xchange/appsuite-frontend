@@ -34,7 +34,7 @@ function changeTimezoneAndGoToPortal(I, timezone) {
     I.waitForVisible('.greeting-phrase');
 }
 
-Scenario('[C7497] Daytime within Greeting', async (I) => {
+Scenario('[C7497] Daytime within Greeting @shaky', async (I) => {
 
     const expect = require('chai').expect;
     const moment = require('moment');
@@ -69,14 +69,12 @@ Scenario('[C7497] Daytime within Greeting', async (I) => {
 
         expect(greeting).to.have.string('Hello');
         // Change time zone to -04:00
-
         changeTimezoneAndGoToPortal(I, 'America/Aruba');
         //Verify greeting
         const updated_greeting_7 = await I.grabTextFrom('.greeting-phrase');
         expect(updated_greeting_7).to.have.string('Good evening');
 
         // Change time zone to +07:00
-
         changeTimezoneAndGoToPortal(I, 'Asia/Tomsk'); // +7
 
         //Verify greeting
@@ -87,7 +85,6 @@ Scenario('[C7497] Daytime within Greeting', async (I) => {
 
         // Change time zone to -04:00
         changeTimezoneAndGoToPortal(I, 'Cuba'); // -4
-
 
         //Verify greeting
         const updated_greeting_4 = await I.grabTextFrom('.greeting-phrase');
@@ -100,8 +97,7 @@ Scenario('[C7497] Daytime within Greeting', async (I) => {
         const updated_greeting_9 = await I.grabTextFrom('.greeting-phrase');
         expect(updated_greeting_9).to.have.string('Hello');
 
-    } else if (currenttime >= 60000 && currenttime < 110000) {
-
+    } else if (currenttime >= 60000 && currenttime < 120000) {
         expect(greeting).to.have.string('Good morning');
         // Change time zone to -07:00
         changeTimezoneAndGoToPortal(I, 'US/Pacific'); // -7
@@ -117,8 +113,7 @@ Scenario('[C7497] Daytime within Greeting', async (I) => {
         const updated_greeting_5 = await I.grabTextFrom('.greeting-phrase');
         expect(updated_greeting_5).to.have.string('Hello');
 
-    } else if (currenttime >= 110000 && currenttime < 160000) {
-
+    } else if (currenttime >= 120000 && currenttime < 160000) {
         expect(greeting).to.have.string('Hello');
 
         // Change time zone to -07:00

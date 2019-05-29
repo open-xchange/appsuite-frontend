@@ -1,6 +1,8 @@
+/* eslint-env node, es6  */
 var fs = require('fs');
 var _ = require('underscore');
 var localConf = {};
+var defaultContext;
 
 if (fs.existsSync('grunt/local.conf.json')) {
     localConf = JSON.parse(fs.readFileSync('grunt/local.conf.json')) || {};
@@ -15,7 +17,7 @@ module.exports.config = {
     helpers: {
         WebDriver: _.extend({}, {
             url: process.env.LAUNCH_URL || 'http://localhost:8337/appsuite/',
-            host: process.env.SELENIUM_HOST || '10.50.0.94',
+            host: process.env.SELENIUM_HOST || 'localhost',
             smartWait: 1000,
             waitForTimeout: 30000,
             browser: 'chrome',
@@ -35,7 +37,8 @@ module.exports.config = {
         OpenXchange: _.extend({}, {
             require: './e2e/helper',
             mxDomain: 'ox-e2e-backend.novalocal',
-            serverURL: localConf.appserver && localConf.appserver.server || process.env.LAUNCH_URL
+            serverURL: process.env.PROVISIONING_URL || localConf.appserver && localConf.appserver.server || process.env.LAUNCH_URL,
+            contextId: process.env.CONTEXT_ID || '10'
         }, localConf.e2e.helpers.OpenXchange || {})
     },
     include: {
@@ -51,22 +54,62 @@ module.exports.config = {
         // setup axe matchers
         require('./e2e/axe-matchers');
 
-        var config = require('codeceptjs').config.get();
-        if (config.helpers.WebDriver && /127\.0\.0\.1/.test(config.helpers.WebDriver.host)) {
-            require('@open-xchange/codecept-helper').selenium
-                .start(localConf.e2e.selenium)
-                .then(done);
-        } else {
-            done();
-        }
-
         // set moment defaults
         // note: no need to require moment-timezone later on. requiring moment is enough
         var moment = require('moment');
         require('moment-timezone');
         moment.tz.setDefault('Europe/Berlin');
+
+        var codecept = require('codeceptjs'),
+            config = codecept.config.get(),
+            seleniumReady;
+        seleniumReady = new Promise(function (resolve, reject) {
+            if (config.helpers.WebDriver && /127\.0\.0\.1/.test(config.helpers.WebDriver.host)) {
+                require('@open-xchange/codecept-helper').selenium
+                    .start(localConf.e2e.selenium)
+                    .then(resolve, reject);
+            } else {
+                resolve();
+            }
+        });
+
+        var contexts = codecept.container.support('contexts'),
+            testContextReady;
+        testContextReady = new Promise(function (resolve) {
+            contexts.create({
+                id: config.helpers.OpenXchange.contextId,
+                // provide filestore id, otherwise it's not possible to create more then 5
+                // contexts existing at a time.
+                filestoreId: 2
+            }).then(function (ctx) {
+                defaultContext = ctx;
+                resolve();
+            }, function () {
+                defaultContext = (function () {
+                    return {
+                        id: config.helpers.OpenXchange.contextId,
+                        ctxdata: { id: config.helpers.OpenXchange.contextId },
+                        auth: { login: 'oxadminmaster', password: 'secret' }
+                    };
+                }());
+                resolve();
+            });
+        });
+
+        Promise.all([
+            seleniumReady,
+            testContextReady
+        ]).then(() => done());
     },
     teardown: function () {
+        const helper = new (require('@open-xchange/codecept-helper').helper)();
+        defaultContext.remove = function (auth) {
+            helper.executeSoapRequest('OXContextService', 'delete', {
+                ctx: { id: this.ctxdata.id },
+                auth: auth || this.auth
+            });
+        };
+        if (defaultContext.id !== 10) defaultContext.remove();
         //HACK: defer killing selenium, because it's still needed for a few ms
         setTimeout(function () {
             require('@open-xchange/codecept-helper').selenium.stop();

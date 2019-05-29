@@ -573,7 +573,8 @@ define('io.ox/mail/common-extensions', [
                         data: data,
                         el: this.$('.file'),
                         point: 'io.ox/mail/attachment/links',
-                        title: this.model.getShortTitle()
+                        title: this.model.getShortTitle(),
+                        list: this.model.collection.toJSON()
                     });
 
                     url = api.getUrl(data, 'download');
@@ -654,7 +655,7 @@ define('io.ox/mail/common-extensions', [
                         // start viewer in general (see bug 65016)
                         id = node.attr('data-id');
                         data = collection.get(id).toJSON();
-                        baton = ext.Baton({ simple: true, startItem: data, data: list, restoreFocus: clickTarget });
+                        baton = ext.Baton({ simple: true, data: data, list: list, restoreFocus: clickTarget, openedBy: 'io.ox/mail/details' });
                         actionsUtil.invoke('io.ox/mail/attachment/actions/view', baton);
                     });
 

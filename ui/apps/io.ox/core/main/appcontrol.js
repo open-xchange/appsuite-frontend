@@ -121,24 +121,27 @@ define('io.ox/core/main/appcontrol', [
 
             if (id === 'io.ox/calendar' || /calendar/.test(this.model.getName())) this.drawDate();
 
-            var cell = $('<div class="lcell" aria-hidden="true">').append(
+            this.$cell = $('<div class="lcell">').append(
                 // important: do not add circle element via append (https://stackoverflow.com/a/3642265)
-                this.badge = $('<svg height="8" width="8" class="indicator"><circle cx="4" cy="4" r="4"></svg>')
+                this.badge = $('<svg height="8" width="8" class="indicator" focusable="false"><circle cx="4" cy="4" r="4"></svg>')
                     .toggleClass('hidden', !this.model.get('hasBadge')),
                 $('<div class="icon">').append(this.$icon),
                 $('<div class="title">').text(this.model.get('title'))
             );
             // checks for upsell and append an icon if needed
-            this.drawUpsellIcon(cell.find('.title'));
-            return cell;
+            this.drawUpsellIcon(this.$cell.find('.title'));
+            return this.$cell;
         },
         toggleBadge: function () {
             this.badge.toggleClass('hidden', !this.model.get('hasBadge'));
         },
         updateTooltip: function () {
-            var tooltipAttribute = this.quicklaunch ? 'title' : 'aria-label';
-            var tooltip = this.model.get('tooltip') ? ' (' + this.model.get('tooltip') + ')' : '';
-            this.$el.attr(tooltipAttribute, this.model.get('title') + tooltip);
+            if (!this.quicklaunch) return;
+            var tooltip = this.model.get('tooltip'),
+                title = this.model.get('title');
+            tooltip = title + (tooltip ? ' (' + tooltip + ')' : '');
+            this.$el.attr('aria-label', tooltip);
+            this.$cell.attr({ 'aria-hidden': true, 'title': tooltip });
         },
         updateTitle: function (model, newTitle) {
             var $title = this.icon.find('.title');
@@ -159,10 +162,7 @@ define('io.ox/core/main/appcontrol', [
     });
 
     var api = {
-        quickLaunchLimit: 3,
-        /*getQuickLauncherLimit: function () {
-            return settings.get('apps/quickLaunchLimit', 3);
-        },*/
+        quickLaunchLimit: 5,
         getQuickLauncherCount: function () {
             var n = settings.get('apps/quickLaunchCount', 3);
             if (!_.isNumber(n)) return 0;
@@ -222,7 +222,7 @@ define('io.ox/core/main/appcontrol', [
                 this.collection.map(function (model) {
                     return new LauncherView({
                         tagName: 'button',
-                        attributes: { tabindex: -1 },
+                        attributes: { tabindex: -1, type: 'button' },
                         model: model,
                         quicklaunch: true
                     }).render().$el.attr('tabindex', -1);

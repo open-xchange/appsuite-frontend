@@ -61,7 +61,7 @@ async function createDistributionListExample(I, users, testrailID) {
     return display_name;
 }
 
-Scenario('[C7372] Create new distribution list', function (I, users) {
+Scenario('[C7372] Create new distribution list @shaky', function (I, users) {
     const display_name = uniqueName('C7372');
     prepare(I);
 

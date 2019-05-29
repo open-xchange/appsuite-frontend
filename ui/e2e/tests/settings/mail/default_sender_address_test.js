@@ -25,16 +25,16 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[7781] Default sender address', async (I, users) => {
+Scenario('[C7781] Default sender address', async (I, users, contexts) => {
     const user = users[0];
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
-    await I.haveAnAlias('urbi@orbi.it');
+    await I.haveAnAlias('urbi@orbi.it', { user, ctx: { id: contexts[0].id } });
     I.login('app=io.ox/mail');
     I.waitForText('Compose');
     I.click('Compose');
     // Wait for the compose dialog
-    I.waitForVisible('.io-ox-mail-compose .row.sender');
+    I.waitForFocus('input[placeholder="To"]');
     I.click(user.get('primaryEmail'));
     I.waitForText('urbi@orbi.it');
     I.click('urbi@orbi.it');

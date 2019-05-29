@@ -269,7 +269,7 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
     I.see('17', '.weekview-container .weekview-toolbar .weekday');
 });
 
-Scenario('[C244785] Open event from invite notification in calendar', async (I, users) => {
+Scenario('[C244785] Open event from invite notification in calendar @shaky', async (I, users) => {
     const [userA, userB] = users;
 
     await I.haveSetting({ 'io.ox/core': { autoOpenNotification: false } }, { user: userB });
@@ -323,7 +323,7 @@ Scenario('[C244785] Open event from invite notification in calendar', async (I, 
     I.see(`${userB.userdata.sur_name}, ${userB.userdata.given_name}`, '.io-ox-sidepopup');
 });
 
-Scenario('[C252158] All my public appointments', (I, users) => {
+Scenario('[C252158] All my public appointments @shaky', (I, users) => {
     const [userA, userB] = users;
 
     // 1. User#A: Login and go to Calendar
@@ -379,6 +379,7 @@ Scenario('[C252158] All my public appointments', (I, users) => {
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
     // 6. User#B: Enable "All my public appointments" view and disable Cal#A
+    I.waitForVisible('~Public calendars');
     I.click('.fa.fa-caret-right', '~Public calendars');
     I.seeElement('div[title="All my public appointments"] .color-label.selected');
     I.dontSeeElement('div[title="Cal#A"] .color-label.selected');

@@ -138,7 +138,8 @@ Scenario('[C45052] Delete file', async function (I, users) {
     I.waitForElement(locate('.filename').withText('testdocument.odt'));
     I.click(locate('.filename').withText('testdocument.odt'));
     I.clickToolbar('~Delete');
-    I.click('Delete');
+    I.waitForElement('.modal');
+    I.click('Delete', '.modal');
     I.waitForDetached(locate('.filename').withText('testdocument.odt'));
 });
 

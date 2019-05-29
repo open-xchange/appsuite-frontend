@@ -347,7 +347,7 @@ Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December
     });
 });
 
-Scenario('[C7418] Create a Yearly recurring appointment last day of week in december, ends after 5', async function (I) {
+Scenario('[C7418] Create a Yearly recurring appointment last day of week in december, ends after 5 @shaky', async function (I) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -488,7 +488,7 @@ Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/20
 
 });
 
-Scenario('[C7420] Create a monthly recurring appointment every second Monday every month never ends', async function (I) {
+Scenario('[C7420] Create a monthly recurring appointment every second Monday every month never ends @shaky', async function (I) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -640,7 +640,7 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
 
 });
 
-Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thursday never ends', async function (I) {
+Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thursday never ends @shaky', async function (I) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -663,6 +663,7 @@ Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thu
     I.wait(0.2); // gently wait for some UI updates
     I.pressKey('Enter');
 
+    I.waitForInvisible('.date-picker.open');
     I.click('Repeat', '.io-ox-calendar-edit-window');
     I.click('Every Tuesday.');
 
@@ -1114,7 +1115,7 @@ Scenario('[C7428] Create appointment with internal participants', async function
     I.waitForText('New appointment: Einkaufen');
 });
 
-Scenario('[C7425] Create appointment with a group', async function (I, users) {
+Scenario('[C7425] Create appointment with a group @shaky', async function (I, users) {
 
     const group = {
         name: 'Awesome guys',
@@ -1743,7 +1744,7 @@ Scenario('[C7414] Create two appointments at the same time (one is shown as free
     I.waitForDetached(locate('.modal-open .modal-title').withText('Conflicts detected'));
 });
 
-Scenario('[C7415] Create two reserved appointments at the same time', async function (I, users) {
+Scenario('[C7415] Create two reserved appointments at the same time @shaky', async function (I, users) {
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
@@ -1786,7 +1787,7 @@ Scenario('[C7415] Create two reserved appointments at the same time', async func
     I.waitForElement(locate('.modal-open .modal-title').withText('Conflicts detected'));
     I.click('Ignore conflicts');
     I.waitForDetached('.modal-open');
-    I.click('~Refresh');
+    I.retry(5).click('~Refresh');
     I.waitForElement('#io-ox-refresh-icon .fa-spin');
     I.waitForDetached('#io-ox-refresh-icon .fa-spin');
 
@@ -1915,7 +1916,7 @@ Scenario('[C7448] Cannot create private appointment', async function (I, users) 
     expect(await I.grabNumberOfVisibleElements('option[value="CONFIDENTIAL"]')).to.equal(0);
 });
 
-Scenario('[C234658] Create appointments and show this in cumulatively view', async function (I, users) {
+Scenario('[C234658] Create appointments and show this in cumulatively view @shaky', async function (I, users) {
     const
         Moment = require('moment'),
         MomentRange = require('moment-range'),

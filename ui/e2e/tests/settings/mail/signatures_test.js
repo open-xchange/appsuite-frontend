@@ -72,7 +72,7 @@ Scenario('[C7766] Create new signature', function (I) {
 
 });
 
-Scenario('[C7767] Define signature position', async function (I, users) {
+Scenario('[C7767] Define signature position @shaky', async function (I, users) {
     const [user] = users;
     await I.haveMail({
         attachments: [{
@@ -116,7 +116,7 @@ Scenario('[C7767] Define signature position', async function (I, users) {
     I.openApp('Mail');
 
     // reply to mail
-    I.click('.io-ox-mail-window .leftside ul li.list-item');
+    I.retry(5).click('.io-ox-mail-window .leftside ul li.list-item');
     I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
     I.click('Reply');
 

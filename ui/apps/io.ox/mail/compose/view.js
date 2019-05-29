@@ -566,9 +566,15 @@ define('io.ox/mail/compose/view', [
         },
 
         dirty: function (state) {
-            if (state === false) this.initialModel = this.model.toJSON();
-            else if (state === true) this.initialModel = {};
-            else return !_.isEmpty(this.model.deepDiff(this.initialModel));
+            if (state === false) {
+                // update content here as the update events from the editor might be throttled
+                if (this.editor) this.model.set('content', this.editor.getContent());
+                this.initialModel = this.model.toJSON();
+            } else if (state === true) {
+                this.initialModel = {};
+            } else {
+                return !_.isEmpty(this.model.deepDiff(this.initialModel));
+            }
         },
 
         clean: function () {

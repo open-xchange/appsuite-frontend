@@ -23,7 +23,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[7776] Insert the original email text to a reply', async (I, users) => {
+Scenario('[C7776] Insert the original email text to a reply', async (I, users) => {
     const user = users[0];
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
@@ -38,7 +38,7 @@ Scenario('[7776] Insert the original email text to a reply', async (I, users) =>
     I.click('.list-item.selectable');
     I.waitForVisible('h1.subject');
     I.click('Reply');
-    I.waitForText('Re: plain text');
+    I.waitForElement('.io-ox-mail-compose textarea');
     I.seeInField('textarea', '> This is simple plain text!');
 
     I.click('Discard');
@@ -54,7 +54,7 @@ Scenario('[7776] Insert the original email text to a reply', async (I, users) =>
     I.waitForVisible('h1.subject');
     I.click('Reply');
     I.waitForText('Re: plain text');
-    I.waitForVisible('.editor');
+    I.waitForElement('.io-ox-mail-compose .editor iframe');
     await within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
         I.dontSee('This is simple plain text!');
     });

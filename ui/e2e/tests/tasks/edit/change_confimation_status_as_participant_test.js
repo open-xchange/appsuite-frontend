@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C125311] Change confimation status as participant', async function (I, users) {
+Scenario('[C125311] Change confimation status as participant @shaky', async function (I, users) {
 
     I.haveSetting('io.ox/core//autoOpenNotification', false, { user: users[1] });
     I.haveSetting('io.ox/calendar//deleteInvitationMailAfterAction', false, { user: users[1] });
@@ -95,9 +95,9 @@ Scenario('[C125311] Change confimation status as participant', async function (I
         // wait until sidepopup got updated
         I.wait(1);
 
-        if (action === 'Tentative') I.seeElement('.fa-question-circle');
-        if (action === 'Decline') I.seeElement('.fa-times');
-        if (action === 'Accept') I.seeElement('.fa-check');
+        if (action === 'Tentative') I.waitForVisible('.fa-question-circle');
+        if (action === 'Decline') I.waitForVisible('.fa-times');
+        if (action === 'Accept') I.waitForVisible('.fa-check');
 
     });
 });

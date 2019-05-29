@@ -50,7 +50,7 @@ Scenario('[C7338] Change language', function (I) {
     I.waitForText('Nome utente');
 });
 
-Scenario('[C7339] Stay signed in checkbox', function (I) {
+Scenario('[C7339] Stay signed in checkbox @shaky', function (I) {
     I.amOnPage('/');
     I.wait(1);
     I.seeCheckboxIsChecked('Stay signed in');

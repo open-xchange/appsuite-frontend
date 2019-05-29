@@ -16,10 +16,11 @@ define('io.ox/core/relogin', [
     'io.ox/core/session',
     'io.ox/core/notifications',
     'io.ox/core/capabilities',
+    'io.ox/core/boot/util',
     'io.ox/backbone/views/modal',
     'gettext!io.ox/core',
     'settings!io.ox/core'
-], function (ext, session, notifications, capabilities, ModalDialog, gt, settings) {
+], function (ext, session, notifications, capabilities, util, ModalDialog, gt, settings) {
 
     'use strict';
 
@@ -159,6 +160,13 @@ define('io.ox/core/relogin', [
                             $blocker.css('z-index', '');
                             $('html').removeClass('relogin-required');
                             $('#io-ox-core').removeClass('blur');
+
+                            if (util.checkTabHandlingSupport()) {
+                                require(['io.ox/core/api/tab'], function (TabAPI) {
+                                    TabAPI.TabSession.propagateLogin(true);
+                                });
+
+                            }
                         },
                         function fail(e) {
                             // eloquentify standard error message ;-)

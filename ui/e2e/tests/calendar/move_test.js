@@ -24,7 +24,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Move event to different folder', async function (I) {
+Scenario('Move event to different folder @shaky', async function (I) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -46,6 +46,7 @@ Scenario('Move event to different folder', async function (I) {
     I.login('app=io.ox/calendar');
 
     // unselect folder
+    I.waitForVisible('~New calendar');
     I.click(locate('~New calendar').find('.color-label'));
     I.waitForVisible('.weekview-container.workweek .appointment');
     I.click('.weekview-container.workweek .appointment');

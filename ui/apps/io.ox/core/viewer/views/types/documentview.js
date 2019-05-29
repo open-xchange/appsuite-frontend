@@ -982,7 +982,7 @@ define('io.ox/core/viewer/views/types/documentview', [
          * Destructor function of this view.
          */
         onDispose: function () {
-            this.unload(true);
+            this.unload();
             // save disposed status
             this.disposed = true;
             this.$el.off();

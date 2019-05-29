@@ -62,7 +62,7 @@ Scenario('Contacts - Modal Dialog - Import', async (I) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', async (I) => {
+Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions) @shaky', async (I) => {
     // Exceptions:
     // Typeahead missing label (critical)
     // Textinput, password and textarea have missing visual labels (critical)

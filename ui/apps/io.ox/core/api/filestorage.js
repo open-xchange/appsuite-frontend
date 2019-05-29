@@ -398,7 +398,13 @@ define('io.ox/core/api/filestorage', [
 
     // add event support
     Events.extend(api);
-
+    require(['io.ox/core/folder/api'], function (folderApi) {
+        folderApi.on('remove:infostore', function (data) {
+            var accountId = /.*:\/\/(\d+)/.exec(data.account_id)[1];
+            if (!accountId) return;
+            accountsCache.remove(accountId);
+        });
+    });
     return api;
 
 });

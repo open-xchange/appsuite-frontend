@@ -24,7 +24,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users) {
+Scenario('[C45032] Edit Permissions at "My shares" @shaky', async function (I, users) {
     session('Alice', () => {
         I.login('app=io.ox/files');
 
@@ -44,7 +44,8 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users) {
         I.waitForElement('.modal .list-view.address-picker li.list-item');
         I.fillField('Search', users[1].get('name'));
         I.waitForText(users[1].get('name'), 5, '.address-picker');
-        I.click('.address-picker .list-item');
+        I.waitForText(users[1].get('primaryEmail'));
+        I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
         I.click({ css: 'button[data-action="select"]' });
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.dontSee('Guest', '.permissions-view');
@@ -116,7 +117,7 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users) {
     });
 });
 
-Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users) {
+Scenario('[C107063] Revoke Permissions at "My shares" @shaky', async function (I, users) {
     session('Alice', () => {
         I.login('app=io.ox/files');
 
@@ -137,7 +138,8 @@ Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users
         I.waitForElement('.modal .list-view.address-picker li.list-item');
         I.fillField('Search', users[1].get('name'));
         I.waitForText(users[1].get('name'), 5, '.address-picker');
-        I.click('.address-picker .list-item');
+        I.waitForText(users[1].get('primaryEmail'));
+        I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
         I.click({ css: 'button[data-action="select"]' });
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.dontSee('Guest', '.permissions-view');
@@ -150,7 +152,7 @@ Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users
         I.selectFolder('My shares');
         I.waitForElement(locate('.displayname').withText('Music').inside('.list-view'));
         I.seeNumberOfElements('.list-view li.list-item', 1);
-        I.see('Music', '.list-view');
+        I.waitForText('Music', 5, '.list-view');
 
         I.click('Music', '.list-view .displayname');
     });
@@ -179,7 +181,7 @@ Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users
     });
 });
 
-Scenario('[C73919] Copy a shared file to another folder', async function (I, users) {
+Scenario('[C73919] Copy a shared file to another folder @shaky', async function (I, users) {
     // the test case also shares with an external user, this is left out for now.
 
     const folder = await I.grabDefaultFolder('infostore');
@@ -205,7 +207,8 @@ Scenario('[C73919] Copy a shared file to another folder', async function (I, use
     I.waitForElement('.modal .list-view.address-picker li.list-item');
     I.fillField('Search', users[1].get('name'));
     I.waitForText(users[1].get('name'), 5, '.address-picker');
-    I.click('.address-picker .list-item');
+    I.waitForText(users[1].get('primaryEmail'));
+    I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
     I.click({ css: 'button[data-action="select"]' });
     I.waitForElement(locate('.permissions-view .row').at(1));
     I.click('Share', '.modal');
