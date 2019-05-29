@@ -345,8 +345,8 @@ Scenario('[C7389] Send mail with attached vCard', function (I, users) {
     I.login('app=io.ox/mail', { user: users[1] });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
-    I.waitForElement('[title="' + testrailID + ' - ' + timestamp + '"]', 5);
-    I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.waitForVisible('[title="' + testrailID + ' - ' + timestamp + '"]');
+    I.retry(5).click('[title="' + testrailID + ' - ' + timestamp + '"]');
     I.waitForElement('.io-ox-mail-window .toggle-details', 5);
     I.click('.io-ox-mail-window .toggle-details');
     I.waitForElement('.list-container .dropdown-toggle[data-dropdown="io.ox/mail/attachment/links"]', 5);
@@ -357,10 +357,10 @@ Scenario('[C7389] Send mail with attached vCard', function (I, users) {
     I.click('Save');
     I.waitForDetached('.io-ox-contacts-edit-window', 5);
     I.openApp('Address Book');
-    I.waitForElement('.io-ox-contacts-window', 5);
+    I.waitForVisible('.io-ox-contacts-window');
     I.selectFolder('Contacts');
-    I.waitForElement('//*[contains(@class, "contact-grid-container")]//div[contains(text(), "' + users[0].userdata.primaryEmail + '")]/..');
-    I.click('//*[contains(@class, "contact-grid-container")]//div[contains(text(), "' + users[0].userdata.primaryEmail + '")]/..');
+    I.waitForVisible('//*[contains(@class, "contact-grid-container")]//div[contains(text(), "' + users[0].userdata.primaryEmail + '")]/..');
+    I.retry(5).click('//*[contains(@class, "contact-grid-container")]//div[contains(text(), "' + users[0].userdata.primaryEmail + '")]/..');
     I.waitForElement('[href="mailto:' + users[0].userdata.primaryEmail + '"]');
     I.waitForText(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, 5, '.io-ox-contacts-window .header-name');
 });

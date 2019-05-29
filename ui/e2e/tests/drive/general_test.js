@@ -21,7 +21,7 @@ Feature('Drive > General');
 
 const prepare = (I, folder) => {
     I.login('app=io.ox/files' + (folder ? '&folder=' + folder : ''));
-    I.waitForElement('.file-list-view.complete');
+    I.waitForVisible('.file-list-view.complete');
 };
 
 Before(async (I, users) => {
@@ -173,7 +173,7 @@ Scenario('[C45039] Breadcrumb navigation', async (I, users) => {
     const subsubFolder = await I.haveFolder('subsubfolder_1', 'infostore', subFolder.data, { user: users[0] });
     await I.haveFolder('subsubfolder_2', 'infostore', subFolder.data, { user: users[0] });
     prepare(I, subsubFolder.data);
-    I.click('subfolder_3', '.breadcrumb-view');
+    I.retry(5).click('subfolder_3', '.breadcrumb-view');
     I.waitForText('subsubfolder_1', 1, '.list-view');
     I.waitForText('subsubfolder_2', 1, '.list-view');
     I.click('Drive', '.breadcrumb-view');
