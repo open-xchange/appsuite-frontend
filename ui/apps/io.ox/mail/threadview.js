@@ -61,7 +61,7 @@ define('io.ox/mail/threadview', [
                 $('<div class="thread-view-list scrollable abs">').hide().append(
                     $('<div class="thread-view-header">').attr('aria-label', gt('Conversation')),
                     this.$messages = $('<div class="thread-view list-view" role="region">')
-                )
+                ).on('scroll', this.onScrollEnd.bind(this))
             );
         }
     });
@@ -212,6 +212,20 @@ define('io.ox/mail/threadview', [
                 }
             }
         },
+
+        onScrollEnd: _.debounce(function () {
+            var listNode = this.$el.find('.thread-view-list');
+            this.getItems().each(function () {
+                if (!$(this).hasClass('placeholder')) return;
+                if ((this.offsetTop + $(this).height()) > listNode.scrollTop() && this.offsetTop < (listNode.scrollTop() + listNode.height())) {
+                    var view = $(this).data('view');
+                    if (view) {
+                        view.placeholder = false;
+                        view.render();
+                    }
+                }
+            });
+        }, 100),
 
         show: function (cid, threaded) {
             // strip 'thread.' prefix
@@ -470,6 +484,7 @@ define('io.ox/mail/threadview', [
             items.each(function (index) {
                 $(this).css('zIndex', length - index);
             });
+            this.onScrollEnd();
         }
     });
 
@@ -482,7 +497,7 @@ define('io.ox/mail/threadview', [
                 $('<div class="thread-view-list scrollable abs">').hide().append(
                     $('<div class="thread-view-header">').attr('aria-label', gt('Conversation')),
                     this.$messages = $('<ul class="thread-view list-view">')
-                )
+                ).on('scroll', this.onScrollEnd.bind(this))
             );
         }
     });
