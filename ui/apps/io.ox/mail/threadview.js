@@ -156,7 +156,7 @@ define('io.ox/mail/threadview', [
             return this;
         },
 
-        onToggle: _.debounce(function () {
+        onToggle: _.debounce(function (e) {
             var items = this.getItems(),
                 open = items.filter('.expanded'),
                 state = open.length === 0,
@@ -164,6 +164,8 @@ define('io.ox/mail/threadview', [
                 toggleButton = this.$el.find('.toggle-all');
             toggleButton.attr('aria-label', state ? gt('Open all messages') : gt('Close all messages'));
             toggleButton.find('i').attr('class', 'fa ' + icon);
+            // only check if we need to replace placeholders when mail is collapsed
+            if (!e || !$(e.target).hasClass('expanded')) this.onScrollEnd();
         }, 10),
 
         onToggleAll: function (e) {
@@ -435,6 +437,12 @@ define('io.ox/mail/threadview', [
                     $(e.target).closest('article').focus();
                 });
             }
+            var resizeCallback = $.proxy(this.onScrollEnd, this);
+            this.$el.one('remove', function () {
+                $(window).off('resize', resizeCallback);
+            });
+
+            $(window).on('resize', resizeCallback);
         },
 
         // return alls items of this list
