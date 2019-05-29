@@ -231,10 +231,12 @@ Scenario('Compose with drivemail attachment and edit draft @shaky', async functi
     const [user] = users;
 
     const user2 = await users.create();
+    await user.hasConfig('com.openexchange.mail.deleteDraftOnTransport', true);
+
     await I.haveSetting('io.ox/mail//messageFormat', 'html');
     await I.haveSetting('io.ox/mail//features/deleteDraftOnClose', true);
-    await user.hasConfig('com.openexchange.mail.deleteDraftOnTransport', true);
-    I.wait(2);
+    //Wait for SOAP request of user.hasConfig to finish before haveSetting
+    I.wait(10);
     await I.haveSetting('io.ox/mail//deleteDraftOnTransport', true);
 
 
