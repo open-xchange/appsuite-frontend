@@ -234,7 +234,7 @@ Scenario('Compose with drivemail attachment and edit draft @shaky', async functi
     await I.haveSetting('io.ox/mail//messageFormat', 'html');
     await I.haveSetting('io.ox/mail//features/deleteDraftOnClose', true);
     await user.hasConfig('com.openexchange.mail.deleteDraftOnTransport', true);
-    I.wait(5);
+    I.wait(2);
     await I.haveSetting('io.ox/mail//deleteDraftOnTransport', true);
 
 
@@ -305,7 +305,7 @@ Scenario('Compose with drivemail attachment and edit draft @shaky', async functi
     I.click('Send');
     I.waitForInvisible('.floating-window');
     I.wait(1);
-    I.dontSeeElement('.io-ox-mail-window li.list-item');
+    I.waitForDetached('.io-ox-mail-window li.list-item');
 
     I.selectFolder('Inbox');
 
