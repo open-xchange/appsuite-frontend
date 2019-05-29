@@ -43,6 +43,10 @@
 	padding-left: 0;
 }
 
+.oxhelp-content .index .indexdiv dl > dd {
+	padding-left: 16px;
+}
+
 ul.oxhelp-bottom-nav {
 	list-style-type: none;
 }
