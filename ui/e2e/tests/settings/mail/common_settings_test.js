@@ -47,7 +47,7 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
 
     I.retry(10).click(locate('span').withText('Testsubject'));
 
-    I.waitForElement('.mail-detail-frame');
+    I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, function () {
         I.see('Testcontent');
         I.dontSeeElement(locate('strong').withText('Testcontent'));
@@ -65,6 +65,7 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
     I.retry(5).click('Compose');
 
     I.waitForVisible('.io-ox-mail-compose-window .editor iframe');
+    I.wait(0.5);
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', 'Testsubject2');
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
@@ -78,7 +79,7 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
 
     I.retry(10).click(locate('span').withText('Testsubject2'));
 
-    I.waitForElement('.mail-detail-frame');
+    I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, function () {
         I.seeElement(locate('strong').withText('Testcontent2'));
     });
@@ -95,6 +96,7 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
     I.retry(5).click('Compose');
 
     I.waitForVisible('.io-ox-mail-compose-window .editor iframe');
+    I.wait(0.5);
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', 'Testsubject3');
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
@@ -108,7 +110,7 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
 
     I.retry(10).click(locate('span').withText('Testsubject3'));
 
-    I.waitForElement('.mail-detail-frame');
+    I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, function () {
         I.seeElement(locate('strong').withText('Testcontent3'));
     });
