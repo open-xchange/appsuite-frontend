@@ -185,11 +185,14 @@ Scenario('[C7729] Create Task with participants', async function (I, users) {
     I.click('Expand form');
     I.fillField('Add contact', users[1].userdata.primaryEmail);
     I.pressKey('Enter');
+    I.wait(1);
     I.waitForText('Participants (1)');
     I.fillField('Add contact', users[2].userdata.primaryEmail);
     I.pressKey('Enter');
+    I.wait(1);
     I.waitForText('Participants (2)');
     I.click('Create');
+    I.waitForDetached('.floating-window-content');
     I.seeElement('.tasks-detailview');
     I.see(testrailID);
     I.see(testrailName);
