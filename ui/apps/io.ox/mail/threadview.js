@@ -282,34 +282,13 @@ define('io.ox/mail/threadview', [
 
             this.$el.find('.thread-view-list').show();
 
-            // draw thread list
-            var self = this,
-                threadId = this.collection.first().get('cid'),
-                autoOpenModel;
-            // used on mailapp start
-            if (this.autoSelect) {
-                autoOpenModel = this.collection.reduce(function (acc, model) {
-                    return !util.isUnseen(model.toJSON()) ? model : acc;
-                }, this.collection.last());
-            } else {
-                autoOpenModel = this.collection.reduce(function (acc, model) {
-                    return util.isUnseen(model.toJSON()) ? model : acc;
-                }, this.collection.first());
-            }
+            this.$messages.append(
+                this.collection.chain().map(this.renderListItem, this).value()
+            );
 
-            function renderItem(list, finalCallback) {
-                var model = list.shift();
-                if (threadChanged()) return;
-                self.$messages.append(self.renderListItem(model));
-                if (autoOpenModel === model) self.autoSelectMail();
-                if (list.length) self.renderItemTimoutId = setTimeout(renderItem, 0, list, finalCallback); else finalCallback();
-            }
+            this.zIndex();
+            this.autoSelectMail();
 
-            function threadChanged() {
-                return self.collection.first().get('cid') !== threadId;
-            }
-
-            renderItem(this.collection.toArray(), this.zIndex.bind(this));
         },
 
         onAdd: function (model) {
