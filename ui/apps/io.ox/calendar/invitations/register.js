@@ -199,7 +199,8 @@ define('io.ox/calendar/invitations/register', [
             var dateStrings = this.getDateTimeIntervalMarkup(),
                 recurrenceString = calendarUtil.getRecurrenceString(this.model),
                 title = this.getTitle(),
-                separator = title ? $.txt(', ') : $.txt('');
+                hasDateOrTime = dateStrings.dateStr || dateStrings.timeStr || recurrenceString,
+                separator = title && hasDateOrTime ? $.txt(', ') : $.txt('');
 
             this.$el.find('.itip-details').append(
                 $('<b>').text(title), separator,
@@ -215,7 +216,7 @@ define('io.ox/calendar/invitations/register', [
         },
 
         getTitle: function () {
-            this.model.get('summary');
+            return this.model.get('summary');
         },
 
         getDateTimeIntervalMarkup: function () {
