@@ -26,8 +26,11 @@ define('io.ox/files/detail/main', [
     ox.ui.App.mediator(NAME, {
         'show-file': function (app) {
 
-            var detailApp = app;
             var fileModel = null;
+
+            function fileRenameHandler(model) {
+                app.setTitle(model.getDisplayName());
+            }
 
             function showModel(data) {
                 var label = gt('File Details'),
@@ -37,7 +40,7 @@ define('io.ox/files/detail/main', [
                     $('<div class="f6-target detail-view-container" tabindex="-1" role="complementary">').attr('aria-label', label)
                 );
 
-                fileModel = api.pool.get('detail').get(_.cid(data));
+                fileModel = api.pool.get('detail').get(_.cid(data)) || null;
 
                 require(['io.ox/core/viewer/main'], function (Viewer) {
                     var launchParams = {
@@ -54,12 +57,14 @@ define('io.ox/files/detail/main', [
                 app.setTitle(title);
 
                 if (fileModel) {
-                    app.listenTo(fileModel, 'change:filename change:title', function (model) {
-                        detailApp.setTitle(model.getDisplayName());
+                    app.listenTo(fileModel, 'change:com.openexchange.file.sanitizedFilename change:filename change:title', fileRenameHandler);
+
+                    app.on('quit', function () {
+                        app.stopListening(fileModel, 'change:com.openexchange.file.sanitizedFilename change:filename change:title', fileRenameHandler);
                     });
 
                     api.once('delete:' + _.ecid(data), function () {
-                        detailApp.quit();
+                        app.quit();
                     });
                 }
             }
