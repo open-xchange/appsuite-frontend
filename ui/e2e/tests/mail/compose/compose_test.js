@@ -229,18 +229,32 @@ Scenario('Compose with inline image, which is removed again', async function (I,
 
 Scenario('Compose with drivemail attachment and edit draft @shaky', async function (I, users) {
     const [user] = users;
-
     const user2 = await users.create();
-    await user.hasConfig('com.openexchange.mail.deleteDraftOnTransport', true);
+    let counter = 5;
 
-    await I.haveSetting('io.ox/mail//messageFormat', 'html');
-    await I.haveSetting('io.ox/mail//features/deleteDraftOnClose', true);
-    //Wait for SOAP request of user.hasConfig to finish before haveSetting
-    I.wait(10);
-    await I.haveSetting('io.ox/mail//deleteDraftOnTransport', true);
+    async function setSettings() {
+        await user.hasConfig('com.openexchange.mail.deleteDraftOnTransport', true);
+        await I.haveSetting('io.ox/mail//messageFormat', 'html');
+        await I.haveSetting('io.ox/mail//features/deleteDraftOnClose', true);
+        I.wait(1);
+        await I.haveSetting('io.ox/mail//deleteDraftOnTransport', true);
+    }
+    async function checkSettings() {
+        let settingSet = await I.executeScript(function () {
+            return require('settings!io.ox/mail').get('deleteDraftOnTransport');
+        });
+        return settingSet;
+    }
 
-
+    await setSettings();
     I.login('app=io.ox/files');
+    let setting = await checkSettings();
+
+    while (!setting && counter > 0) {
+        await setSettings();
+        setting = await checkSettings();
+        counter--;
+    }
     // create textfile in drive
     I.clickToolbar('New');
     I.click('Add note');
