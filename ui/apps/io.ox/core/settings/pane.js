@@ -259,6 +259,14 @@ define('io.ox/core/settings/pane', [
             render: function () {
 
                 var $group = $('<div class="form-group buttons">');
+                // Quicklaunch apps
+                if (settings.isConfigurable('apps/quickLaunch') && appcontrol.getQuickLauncherCount() !== 0 && !_.device('smartphone')) {
+                    $group.append(
+                        $('<button type="button" class="btn btn-default">')
+                            .text(gt('Configure quick launchers') + ' ...')
+                            .on('click', quickLauncherDialog.openDialog)
+                    );
+                }
 
                 // check if users can edit their own data (see bug 34617)
                 if (settings.get('user/internalUserEdit', true)) {
@@ -397,23 +405,6 @@ define('io.ox/core/settings/pane', [
 
                 baton.$el.append(
                     util.compactSelect('autoStart', gt('Default app after sign in'), this.model, availableApps)
-                );
-            }
-        },
-
-        // Quicklaunch apps
-        {
-            id: 'quickLaunch',
-            index: INDEX += 100,
-            render: function (baton) {
-                if (!settings.isConfigurable('apps/quickLaunch') || appcontrol.getQuickLauncherCount() === 0 || _.device('smartphone')) return;
-                baton.$el.append(
-                    $('<div class="form-group row">').append(
-                        $('<div class="col-md-6">').append(
-                            $('<label>').text(gt('Quick launchers')),
-                            $('<button type="button" class="btn btn-default" style="display: block;">').text(gt('Configure quick launchers')).on('click', quickLauncherDialog.openDialog)
-                        )
-                    )
                 );
             }
         }
