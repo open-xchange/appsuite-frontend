@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/core/settings/quicklauncherDialog', [
+define('io.ox/core/settings/quickLauncherDialog', [
     'io.ox/backbone/views/disposable',
     'gettext!io.ox/core',
     'io.ox/backbone/views/modal',
@@ -111,7 +111,10 @@ define('io.ox/core/settings/quicklauncherDialog', [
             .addCancelButton({ left: true })
             .addButton({ action: 'apply', label: gt('Apply') })
             .on('cancel', function () {
-                settings.set('apps/quickLaunch', prevSettings);
+                settings.set('apps/quickLaunch', prevSettings).save();
+            })
+            .on('apply', function () {
+                settings.save();
             })
             .open();
         };

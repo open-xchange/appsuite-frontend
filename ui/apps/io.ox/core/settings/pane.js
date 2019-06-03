@@ -28,8 +28,8 @@ define('io.ox/core/settings/pane', [
     'gettext!io.ox/core',
     'io.ox/backbone/mini-views/timezonepicker',
     'io.ox/core/main/appcontrol',
-    'io.ox/core/settings/quicklauncherDialog'
-], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol, quicklauncherDialog) {
+    'io.ox/core/settings/quickLauncherDialog'
+], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol, quickLauncherDialog) {
 
     'use strict';
 
@@ -411,7 +411,7 @@ define('io.ox/core/settings/pane', [
                     $('<div class="form-group row">').append(
                         $('<div class="col-md-6">').append(
                             $('<label>').text(gt('Quick launchers')),
-                            $('<button type="button" class="btn btn-default" style="display: block;">').text(gt('Configure quick launchers')).on('click', quicklauncherDialog.openDialog)
+                            $('<button type="button" class="btn btn-default" style="display: block;">').text(gt('Configure quick launchers')).on('click', quickLauncherDialog.openDialog)
                         )
                     )
                 );
