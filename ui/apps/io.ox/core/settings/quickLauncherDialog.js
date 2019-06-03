@@ -70,13 +70,18 @@ define('io.ox/core/settings/quickLauncherDialog', [
             getMultiSelect: function (name, label, options) {
                 options = options || {};
                 var id = 'settings-' + name,
-                    view = new mini.SelectView({ id: id, name: name, model: this.model, list: this.appsForPos(options.pos), pos: options.pos }),
-                    appsForPos = this.appsForPos.bind(this);
+                    view = new mini.SelectView({ id: id, name: name, model: this.model, list: availableApps, pos: options.pos });
 
-                view.listenTo(this.model, 'change', function () {
-                    this.options.list = appsForPos(this.options.pos);
-                    this.$el.empty();
-                    this.render();
+                view.listenTo(this.model, 'change:' + name, function () {
+                    var appName = this.model.get(name),
+                        model = this.model;
+                    // remove duplicates if appName is not 'none'
+                    if (appName === 'none') return;
+                    _(this.model.attributes).each(function (value, slotName) {
+                        if (slotName !== name && value === appName) {
+                            model.set(slotName, 'none');
+                        }
+                    });
                 });
 
                 return $('<div class="form-group row">').append(
@@ -85,15 +90,6 @@ define('io.ox/core/settings/quickLauncherDialog', [
                         view.render().$el
                     )
                 );
-            },
-            appsForPos: function (pos) {
-                // This function filters the select box, in order to prevent duplicate quicklaunchers
-                return _.range(appcontrol.getQuickLauncherCount())
-                    .filter(function (i) { return i !== pos; })
-                    .map(function (i) { return this.model.get('apps/quickLaunch' + i); }, this)
-                    .reduce(function (acc, app) {
-                        return acc.filter(function (a) { return a.value !== app || app === 'none'; });
-                    }, availableApps);
             }
         }),
 
