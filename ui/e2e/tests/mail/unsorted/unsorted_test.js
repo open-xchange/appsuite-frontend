@@ -366,33 +366,38 @@ Scenario('[C7389] Send mail with attached vCard', function (I, users) {
 });
 
 Scenario('[C7403] Forward a single mail @shaky', function (I, users) {
-    let [user] = users;
-    var testrailID = 'C7403';
-    var timestamp = Math.round(+new Date() / 1000);
+    let [userA, userB, userC] = users,
+        testrailID = 'C7403',
+        timestamp = Math.round(+new Date() / 1000);
+
     I.haveSetting('io.ox/mail//messageFormat', 'text');
-    I.login('app=io.ox/mail', { user });
+
+    I.login('app=io.ox/mail', { user: userA });
     I.waitForVisible('.io-ox-mail-window');
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.waitForElement('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 5);
-    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', userB.userdata.primaryEmail);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose');
     I.logout();
-    I.login('app=io.ox/mail', { user: users[1] });
+
+    I.login('app=io.ox/mail', { user: userB });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
     I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.thread-view-header .subject');
     I.clickToolbar('Forward');
     I.waitForElement('.io-ox-mail-compose', 5);
-    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[2].userdata.primaryEmail);
+    I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', userC.userdata.primaryEmail);
+    I.wait(1);
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose');
     I.logout();
-    I.login('app=io.ox/mail', { user: users[2] });
+
+    I.login('app=io.ox/mail', { user: userC });
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
     I.waitForText('Fwd: ' + testrailID + ' - ' + timestamp);
