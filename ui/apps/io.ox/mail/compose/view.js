@@ -521,7 +521,8 @@ define('io.ox/mail/compose/view', [
                 this.editor.focus();
                 node.removeAttr('data-enter-keydown');
             }
-            this.model.set('subject', value).trigger('keyup:subject', value);
+            // silent: true is needed only for safari - see bugs 35053 and 65438
+            this.model.set('subject', value, { silent: _.device('safari') }).trigger('keyup:subject', value);
         },
 
         setTitle: function () {
