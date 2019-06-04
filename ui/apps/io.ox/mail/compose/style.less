@@ -11,9 +11,11 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
+@lightFocusColor: rgba(0,123,255,.25);
+@darkFocusColor: #283f73;
+
 .io-ox-mail-compose-window {
     .inline-yell {
-        display: inline-block;
         float: right;
         color: #437d00;
         font-weight: 500;
@@ -23,6 +25,25 @@
 }
 
 .io-ox-mail-compose {
+    .toggle-encryption {
+        .fa { .fa-icon-flip(-1, 1, 0); }
+    }
+
+    .text-left > a {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    a:focus {
+        background: @darkFocusColor;
+        color: #fff !important;
+        text-decoration: none;
+        outline-offset: 0;
+        outline: 4px solid @darkFocusColor;
+        span, i {
+            color: #fff !important;
+        }
+    }
 
     // baseline adjustment
     padding-top: 8px;
@@ -78,7 +99,7 @@
             font-weight: bold;
             line-height: 20px;
             display: inline-block;
-            padding-top: 5px;
+            margin-top: 5px;
             margin-bottom: 4px;
         }
     }
@@ -116,6 +137,14 @@
             color: @hc-gray;
             text-decoration: none;
         }
+        .btn-link:focus {
+            outline: 0;
+            border: 1px solid #3B61AA;
+            background: #3B61AA;
+            color: white;
+            //font-weight: bold;
+            border-radius: 3px;
+        }
 
         @media (max-width: 767px) { right: 10px; }
     }
@@ -125,13 +154,21 @@
     }
 
     .open-addressbook-popup {
-        font-size: 18px;
+        font-size: 17px;
         position: absolute;
-        top: 1px;
+        top: 2px;
         right: 24px;
-        padding: 2px;
+        padding: 0px 2px 0 2px;
         color: @hc-gray;
         text-decoration: none;
+        &.btn-link:focus {
+            outline: 0;
+            border: 1px solid #3B61AA;
+            background: #3B61AA;
+            color: white;
+            //font-weight: bold;
+            border-radius: 3px;
+        }
     }
 
     .contenteditable-editor {

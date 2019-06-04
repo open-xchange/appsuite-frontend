@@ -76,7 +76,10 @@
                 align-items: center;
 
                 &:focus {
-                    border-color: #00c7ff;
+                    background-color: #fff;
+                    border-color: #80bdff;
+                    outline: 0;
+                    box-shadow: 0 0 0 .3rem @lightFocusColor;
                     font-weight: bold;
                 }
 
@@ -742,5 +745,6 @@
     .window-sidepanel {
         display: block;
         -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
     }
 }

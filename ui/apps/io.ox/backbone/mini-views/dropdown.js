@@ -152,6 +152,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         onKeyDown: function (e) {
+            if (e.which === 40 || e.which === 38) e.preventDefault();
             // select first or last item, if already open
             if (!this.$el.hasClass('open') || !this.$overlay) return;
             // special focus handling, because the $ul is no longer a child of the view

@@ -396,7 +396,7 @@ define('plugins/core/feedback/register', [
             var node, button,
                 position = settings.get('feedback/position', 'right');
             node = $('<div role="region" class="feedback-button">').attr('aria-label', gt('Feedback')).addClass('feedback-' + position).append(
-                button = $('<button type="button">').text(gt('Feedback')).on('click', this.show)
+                button = $('<button type="button" class="btn btn-primary">').text(gt('Feedback')).on('click', this.show)
             );
             $('#io-ox-screens').append(node);
             if (position === 'right') node.css('bottom', button.width() + 128 + 'px');

@@ -40,3 +40,14 @@
     white-space: normal;
   }
 }
+
+@lightFocusColor: rgba(0,123,255,.25);
+@darkFocusColor: #283f73;
+
+div textarea:focus, div .form-control:focus, .toggle-encryption:focus, div .tokenfield.focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 .3rem @lightFocusColor;
+}

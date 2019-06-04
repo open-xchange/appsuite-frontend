@@ -484,3 +484,18 @@ label.unstyled {
 
 /* Override Edge's Clear input behaviour */
 ::-ms-clear { display: none; }
+
+@lightFocusColor: rgba(0,123,255,.25);
+@darkFocusColor: #283f73;
+
+.btn-primary:focus, .btn-primary.focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.3rem @lightFocusColor;
+    border-color: @lightFocusColor;
+}
+.btn-default:focus, .btn-default.focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.3rem @lightFocusColor;
+    border-color: @lightFocusColor;
+    background-color: #fff;
+}
