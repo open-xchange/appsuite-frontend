@@ -1100,10 +1100,10 @@ Scenario('[C7400] Send mail with multiple different text formatting - set before
     // Open the mail composer
     I.retry(5).click('Compose');
     I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
-    I.click('~Maximize');
 
     // Fill out to and subject
     I.waitForFocus('input[placeholder="To"]');
+    I.click('~Maximize');
     I.fillField('To', recipient.get('primaryEmail'));
     I.fillField('Subject', mailSubject);
 
@@ -1180,10 +1180,11 @@ Scenario('[C7400] Send mail with multiple different text formatting - set after 
     // Open the mail composer
     I.retry(5).click('Compose');
     I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
-    I.click('~Maximize');
+
 
     // Fill out to and subject
     I.waitForFocus('input[placeholder="To"]');
+    I.click('~Maximize');
     I.fillField('To', recipient.get('primaryEmail'));
     I.fillField('Subject', mailSubject);
 
