@@ -60,8 +60,11 @@ Scenario('[C114353] Mail address parsing supports multiple delimiters @shaky', a
         I.seeElement(locate('.token-label').withText('Jane Doe'));
         I.wait(1);
         I.pressKey('Backspace');
+        I.wait(0.5);
         I.pressKey('Backspace');
+        I.wait(0.5);
         I.pressKey('Backspace');
+        I.wait(0.5);
         I.pressKey('Backspace');
     }
 
@@ -71,6 +74,7 @@ Scenario('[C114353] Mail address parsing supports multiple delimiters @shaky', a
         I.seeElement(locate('.token-label').withText(text));
         I.wait(1);
         I.pressKey('Backspace');
+        I.wait(0.5);
         I.pressKey('Backspace');
     }
 
