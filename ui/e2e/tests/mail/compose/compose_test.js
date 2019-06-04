@@ -236,7 +236,7 @@ Scenario('Compose with drivemail attachment and edit draft @shaky', async functi
         await user.hasConfig('com.openexchange.mail.deleteDraftOnTransport', true);
         await I.haveSetting('io.ox/mail//messageFormat', 'html');
         await I.haveSetting('io.ox/mail//features/deleteDraftOnClose', true);
-        I.wait(1);
+        I.wait(1.5);
         await I.haveSetting('io.ox/mail//deleteDraftOnTransport', true);
     }
     async function checkSettings() {
@@ -249,10 +249,12 @@ Scenario('Compose with drivemail attachment and edit draft @shaky', async functi
     await setSettings();
     I.login('app=io.ox/files');
     let setting = await checkSettings();
+    I.say(`DeleteDraftOnTranport = ${setting}`);
 
     while (!setting && counter > 0) {
         await setSettings();
         setting = await checkSettings();
+        I.say(`DeleteDraftOnTranport = ${setting}`);
         counter--;
     }
     // create textfile in drive
