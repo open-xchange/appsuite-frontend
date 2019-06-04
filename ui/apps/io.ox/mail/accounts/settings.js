@@ -460,7 +460,8 @@ define('io.ox/mail/accounts/settings', [
                 new ModalDialog({
                     model: new Backbone.Model(),
                     title: gt('Add mail account'),
-                    enter: 'add'
+                    enter: 'add',
+                    async: true
                 })
                     .build(function () {
                         baton.popup = this;
