@@ -4,6 +4,8 @@ var _ = require('underscore');
 var localConf = {};
 var defaultContext;
 
+require('dotenv').config();
+
 if (fs.existsSync('grunt/local.conf.json')) {
     localConf = JSON.parse(fs.readFileSync('grunt/local.conf.json')) || {};
 }
