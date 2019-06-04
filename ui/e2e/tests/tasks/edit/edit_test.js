@@ -417,6 +417,8 @@ Scenario('[C7750] Edit existing Task in a shared folder @shaky', async function 
         I.waitForVisible('*[data-app-name="io.ox/tasks"]');
         I.waitForText('My tasks');
         I.selectFolder(id);
+        I.waitForText(testrailID, undefined, 'li.tasks.even');
+        I.click('li.tasks.even[data-index="0"]');
         I.waitForText(text, 15, '.window-body');
         I.waitForText(text, 15, '.tasks-detailview .title');
     }
