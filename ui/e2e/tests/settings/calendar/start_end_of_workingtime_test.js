@@ -29,12 +29,14 @@ Scenario('[C7869] Set new start and end of working time', async function (I) {
 
     I.login();
     I.click('#io-ox-topbar-dropdown-icon');
+    I.waitForText('Settings');
     I.click('Settings');
+    I.waitForVisible('[data-id="virtual/settings/io.ox/calendar"]');
     I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
     I.selectOption('#settings-startTime', workingStartTime);
     I.selectOption('#settings-endTime', workingEndTime);
     I.openApp('Calendar');
-    I.waitForElement('.working-time-border');
+    I.waitForVisible('.working-time-border');
 
     //////////Check to see number of working hours
     I.see('7 AM', '.time.in');
