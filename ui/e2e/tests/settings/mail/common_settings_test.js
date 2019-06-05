@@ -27,8 +27,29 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
 
     const [user] = users;
 
-    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/compose']);
+    let waitForMail = async (subject, timeout = 60, retries = 10) => {
+        let mailCount = await I.grabNumberOfVisibleElements(locate('span').withText(subject)),
+            remaining = retries;
 
+        I.say(`Trying to get the mail with subject "${subject}"`);
+        while (mailCount < 1) {
+            if (remaining > 0) {
+                I.say(`Try ${retries - remaining + 1} of ${retries}`);
+                I.waitForElement('#io-ox-refresh-icon', 5, '.taskbar');
+                I.click('#io-ox-refresh-icon', '.taskbar');
+                I.waitForElement('.launcher .fa-spin-paused', 5);
+                I.say(`No mail(s) found. Waiting ${timeout} seconds ...`);
+                I.wait(timeout);
+                mailCount = await I.grabNumberOfVisibleElements(locate('span').withText(subject));
+                remaining--;
+            } else {
+                I.say('Timeout exceeded. No mails found.');
+                break;
+            }
+        }
+    };
+
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/compose']);
     I.waitForText('Mail Compose');
     I.checkOption('Plain text');
     I.seeCheckboxIsChecked('[name="messageFormat"][value="text"]');
@@ -45,7 +66,8 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose-window');
 
-    I.retry(10).click(locate('span').withText('Testsubject'));
+    await waitForMail('Testsubject', 10, 60);
+    I.click(locate('span').withText('Testsubject'));
 
     I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, function () {
@@ -77,7 +99,8 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose-window');
 
-    I.retry(10).click(locate('span').withText('Testsubject2'));
+    await waitForMail('Testsubject2', 10, 60);
+    I.click(locate('span').withText('Testsubject2'));
 
     I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, function () {
@@ -108,7 +131,8 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose-window');
 
-    I.retry(10).click(locate('span').withText('Testsubject3'));
+    await waitForMail('Testsubject3', 10, 60);
+    I.click(locate('span').withText('Testsubject3'));
 
     I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, function () {
