@@ -6,7 +6,7 @@ require('dotenv').config();
 
 ['LAUNCH_URL', 'SELENIUM_HOST', 'PROVISIONING_URL', 'CONTEXT_ID'].forEach(function notdefined(key) {
     if (process.env[key]) return;
-    console.error('\x1b[31m', `ERROR: Missing value for environment variable '${key}'. Please specific in a '.evn' file analog to '.evn-example'.`);
+    console.error('\x1b[31m', `ERROR: Missing value for environment variable '${key}'. Please specify a '.evn' file analog to '.evn-example'.`);
     process.exit();
 });
 
