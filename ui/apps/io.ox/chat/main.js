@@ -98,6 +98,12 @@ define('io.ox/chat/main', [
         },
 
         startPrivateChat: function (cmd) {
+            // try to reuse chat
+            var chat = data.chats.find(function (model) {
+                return model.get('type') === 'private' && model.get('members').indexOf(cmd.id) >= 0;
+            });
+            if (chat) return this.showChat(chat.id);
+
             data.chats.create({ type: 'private', members: [cmd.id] }).done(function (result) {
                 this.showChat(result.id);
             }.bind(this));
