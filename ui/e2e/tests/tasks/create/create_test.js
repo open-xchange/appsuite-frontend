@@ -296,6 +296,7 @@ Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
     };
 
     I.login('app=io.ox/tasks&folder=' + sharedFolderId, { user: users[1] });
+    I.waitForText('New');
     I.clickToolbar('New');
     I.waitForVisible('.io-ox-tasks-edit-window');
     I.fillField('Subject', id);
