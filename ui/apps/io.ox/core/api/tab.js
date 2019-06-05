@@ -597,7 +597,7 @@ define('io.ox/core/api/tab', [
                 TabHandling.disable();
                 def.reject();
             } else {
-                def.resolve();
+                def.resolve(loginData);
             }
         });
 
