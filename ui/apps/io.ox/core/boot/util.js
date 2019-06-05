@@ -160,7 +160,7 @@ define('io.ox/core/boot/util', [
         },
 
         checkTabHandlingSupport: function () {
-            return !_.url.hash('session') && !ox.serverConfig.openInSingleTab && (capabilities.has('text') || capabilities.has('spreadsheet') || capabilities.has('presentation')) && !_.device('ie && ie <= 11') && !_.device('smartphone') && !_.device('tablet');
+            return !ox.serverConfig.openInSingleTab && (capabilities.has('text') || capabilities.has('spreadsheet') || capabilities.has('presentation')) && !_.device('ie && ie <= 11') && !_.device('smartphone') && !_.device('tablet');
         }
 
     };
