@@ -67,6 +67,7 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
     I.waitForDetached('.io-ox-mail-compose-window');
 
     await waitForMail('Testsubject', 10, 60);
+    I.waitForVisible(locate('span').withText('Testsubject'));
     I.click(locate('span').withText('Testsubject'));
 
     I.waitForText('Testsubject', 'h1.subject');
@@ -101,6 +102,7 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
     I.waitForDetached('.io-ox-mail-compose-window');
 
     await waitForMail('Testsubject2', 10, 60);
+    I.waitForVisible(locate('span').withText('Testsubject2'));
     I.click(locate('span').withText('Testsubject2'));
 
     I.waitForText('Testsubject2', 'h1.subject');
@@ -134,6 +136,7 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
     I.waitForDetached('.io-ox-mail-compose-window');
 
     await waitForMail('Testsubject3', 10, 60);
+    I.waitForVisible(locate('span').withText('Testsubject3'));
     I.click(locate('span').withText('Testsubject3'));
 
     I.waitForText('Testsubject3', 'h1.subject');
