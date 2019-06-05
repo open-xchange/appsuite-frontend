@@ -1040,7 +1040,7 @@ Scenario('[C7461] Add a participant/ressource @shaky', async function (I, users)
 
     // Expected Result: The calendar app is shown, including the existing appointment
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
-    I.see(subject, '.appointment');
+    I.waitForText(subject, 5, '.appointment');
 
     // 2. Select the appointment and click "Edit"
     I.click(subject, '.appointment');
@@ -1066,7 +1066,7 @@ Scenario('[C7461] Add a participant/ressource @shaky', async function (I, users)
         weebl.userdata.primaryEmail,
         bob.userdata.primaryEmail,
         'foo@bar'
-    ].forEach(mail => I.see(mail, '.participant-wrapper'));
+    ].forEach(mail => I.waitForText(mail, 5, '.participant-wrapper'));
 
     // 4. Save the appointment and check it in all calendar views
     const getSectionLocator = (sectionName) => locate('fieldset').withDescendant(locate('h2').withText(sectionName));
@@ -1081,10 +1081,10 @@ Scenario('[C7461] Add a participant/ressource @shaky', async function (I, users)
         I.waitForText(subject, 5, '.page.current .appointment');
         I.click(subject, '.page.current .appointment');
         if (view === 'List') {
-            I.waitForElement('.calendar-detail-pane');
+            I.waitForVisible('.calendar-detail-pane');
             I.see(subject, '.calendar-detail-pane');
         } else {
-            I.waitForElement('.io-ox-sidepopup');
+            I.waitForVisible('.io-ox-sidepopup');
             I.see(subject, '.io-ox-sidepopup');
         }
         I.seeElement('a[aria-label="unconfirmed 4"]');
@@ -1106,19 +1106,19 @@ Scenario('[C7461] Add a participant/ressource @shaky', async function (I, users)
 
     // Expected Result: A mail has been received, informing about the new appointment.
     let mailCount = await I.grabNumberOfVisibleElements('.list-item');
-    let retries = 10;
+    let retries = 60;
 
     while (mailCount < 1) {
         if (retries > 0) {
             I.waitForElement('#io-ox-refresh-icon', 5, '.taskbar');
             I.click('#io-ox-refresh-icon', '.taskbar');
             I.waitForElement('.launcher .fa-spin-paused', 5);
-            I.wait(60);
-            console.log('No mail(s) found. Waiting 1 minute ...');
+            I.say('No mail(s) found. Waiting 10 seconds ...');
+            I.wait(10);
             mailCount = await I.grabNumberOfVisibleElements('.list-item');
             retries--;
         } else {
-            console.log('Timeout exceeded. No mails found.');
+            I.say('Timeout exceeded. No mails found.');
             break;
         }
     }
