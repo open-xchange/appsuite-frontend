@@ -76,10 +76,12 @@ define('io.ox/chat/main', [
         },
 
         startChat: function () {
+            var self = this;
             require(['io.ox/contacts/addressbook/popup'], function (picker) {
                 picker.open(
                     function callback(items) {
                         var members = _(items).pluck('user_id');
+                        if (members.length === 1) return self.startPrivateChat({ id: members[0] });
                         data.chats.create({ type: 'group', members: members });
                     },
                     {
