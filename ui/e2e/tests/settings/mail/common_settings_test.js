@@ -69,6 +69,7 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
     await waitForMail('Testsubject', 10, 60);
     I.click(locate('span').withText('Testsubject'));
 
+    I.waitForText('Testsubject', 'h1.subject');
     I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, function () {
         I.see('Testcontent');
@@ -102,6 +103,7 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
     await waitForMail('Testsubject2', 10, 60);
     I.click(locate('span').withText('Testsubject2'));
 
+    I.waitForText('Testsubject2', 'h1.subject');
     I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, function () {
         I.seeElement(locate('strong').withText('Testcontent2'));
@@ -134,6 +136,7 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
     await waitForMail('Testsubject3', 10, 60);
     I.click(locate('span').withText('Testsubject3'));
 
+    I.waitForText('Testsubject3', 'h1.subject');
     I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, function () {
         I.seeElement(locate('strong').withText('Testcontent3'));
