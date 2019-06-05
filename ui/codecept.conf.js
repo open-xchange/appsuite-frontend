@@ -1,25 +1,23 @@
 /* eslint-env node, es6  */
-var fs = require('fs');
-var _ = require('underscore');
-var localConf = {};
 var defaultContext;
 
+// please create .env file based on .evn-example
 require('dotenv').config();
 
-if (fs.existsSync('grunt/local.conf.json')) {
-    localConf = JSON.parse(fs.readFileSync('grunt/local.conf.json')) || {};
-}
-localConf.e2e = localConf.e2e || {};
-localConf.e2e.helpers = localConf.e2e.helpers || {};
+['LAUNCH_URL', 'SELENIUM_HOST', 'PROVISIONING_URL', 'CONTEXT_ID'].forEach(function notdefined(key) {
+    if (process.env[key]) return;
+    console.error('\x1b[31m', `ERROR: Missing value for environment variable '${key}'. Please specific in a '.evn' file analog to '.evn-example'.`);
+    process.exit();
+});
 
 module.exports.config = {
     tests: './e2e/tests/**/*_test.js',
     timeout: 10000,
     output: './build/e2e/',
     helpers: {
-        WebDriver: _.extend({}, {
-            url: process.env.LAUNCH_URL || 'http://localhost:8337/appsuite/',
-            host: process.env.SELENIUM_HOST || 'localhost',
+        WebDriver: {
+            url: process.env.LAUNCH_URL,
+            host: process.env.SELENIUM_HOST,
             smartWait: 1000,
             waitForTimeout: 30000,
             browser: 'chrome',
@@ -35,13 +33,13 @@ module.exports.config = {
             timeouts: {
                 script: 5000
             }
-        }, localConf.e2e.helpers.WebDriver || {}),
-        OpenXchange: _.extend({}, {
+        },
+        OpenXchange: {
             require: './e2e/helper',
             mxDomain: 'ox-e2e-backend.novalocal',
-            serverURL: process.env.PROVISIONING_URL || localConf.appserver && localConf.appserver.server || process.env.LAUNCH_URL,
-            contextId: process.env.CONTEXT_ID || '10'
-        }, localConf.e2e.helpers.OpenXchange || {})
+            serverURL: process.env.PROVISIONING_URL,
+            contextId: process.env.CONTEXT_ID
+        }
     },
     include: {
         I: './e2e/actor',
@@ -68,7 +66,7 @@ module.exports.config = {
         seleniumReady = new Promise(function (resolve, reject) {
             if (config.helpers.WebDriver && /127\.0\.0\.1/.test(config.helpers.WebDriver.host)) {
                 require('@open-xchange/codecept-helper').selenium
-                    .start(localConf.e2e.selenium)
+                    .start()
                     .then(resolve, reject);
             } else {
                 resolve();
