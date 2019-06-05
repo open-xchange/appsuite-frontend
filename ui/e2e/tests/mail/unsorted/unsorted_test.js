@@ -254,6 +254,7 @@ Scenario('[C7387] Send mail with attachment from upload @shaky', function (I, us
     within('.io-ox-mail-compose-window', function () {
         I.say('Fill TO and SUBJECT', 'blue');
         I.fillField('div[data-extension-id="to"] input.tt-input', users[1].userdata.primaryEmail);
+        I.wait(1);
         I.fillField('[name="subject"]', '' + testrailID + ' - ' + timestamp);
         I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
         I.say('Add attachments', 'blue');
@@ -378,6 +379,7 @@ Scenario('[C7403] Forward a single mail @shaky', function (I, users) {
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.waitForElement('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 5);
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', userB.userdata.primaryEmail);
+    I.wait(1);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
     I.click('Send');
