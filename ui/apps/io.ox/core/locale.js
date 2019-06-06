@@ -21,7 +21,29 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
         localeDefinitions = {};
 
     function getLocaleData(localeId) {
-        return _.extend({}, localeDefinitions[localeId || currentLocaleId], settings.get('localeData'));
+        return deriveLocaleData(_.extend({}, localeDefinitions[localeId || currentLocaleId], settings.get('localeData')));
+    }
+
+    function deriveLocaleData(data) {
+        // derive formats for Java
+        var result = _.extend({}, data), dateLong, timeLong;
+        if (data.date) {
+            dateLong = meta.translateMomentToCLDR(moment.localeData().longDateFormat('LL'));
+            _.extend(result, {
+                dateShort: data.date || 'M/d/yy',
+                dateMedium: data.date || 'M/d/yyyy',
+                dateLong: dateLong,
+                dateFull: 'EEEE, ' + dateLong
+            });
+        }
+        if (data.timeLong) {
+            timeLong = String(data.timeLong || 'h:mm:ss A');
+            _.extend(result, {
+                time: timeLong.replace(/.ss/, ''),
+                timeLong: timeLong
+            });
+        }
+        return result;
     }
 
     function setMomentLocale(localeId) {
@@ -48,7 +70,7 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
             data = moment.localeData(id),
             dow = data.firstDayOfWeek();
         localeDefinitions[localeId] = {
-            time: data.longDateFormat('LTS'),
+            timeLong: data.longDateFormat('LTS'),
             date: meta.translateMomentToCLDR(data.longDateFormat('L')),
             number: getDefaultNumberFormat(localeId),
             firstDayOfWeek: meta.weekday.name(dow),
@@ -62,6 +84,8 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
         localeData = getLocaleData(localeId);
         if (_.isEmpty(localeData)) return;
         var id = meta.deriveMomentLocale(localeId),
+            timeLong = localeData.timeLong,
+            time = timeLong.replace(/.ss/, ''),
             dow = meta.weekday.index(localeData.firstDayOfWeek),
             doy = localeData.firstDayOfYear;
         moment.updateLocale(id, {
@@ -69,10 +93,9 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
             longDateFormat: {
                 L: meta.translateCLDRToMoment(localeData.date),
                 // we also need to override LLL; let's see if all locales are happy with a space
-                LLL: meta.translateCLDRToMoment(localeData.date) + ' ' + localeData.time,
-                // remove 'seconds' for LT
-                LT: localeData.time.replace(/.ss/, ''),
-                LTS: localeData.time
+                LLL: meta.translateCLDRToMoment(localeData.date) + ' ' + time,
+                LT: time,
+                LTS: timeLong
             },
             // dow = first day of week (0=Sunday, 1=Monday, ...)
             // doy = 7 + dow - janX (first day of year)
@@ -119,7 +142,7 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
         },
 
         percent: function (n, d) {
-            return getNumber(n, { style: 'percent', minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 });
+            return getNumber(n / 100, { style: 'percent', minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 });
         },
 
         // utility functions
@@ -133,26 +156,10 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
 
         setLocaleData: function (data) {
             // reset locale first to get proper change event everywhere
-            settings.set('localeData', undefined, { silent: true });
-            // derive formats for Java
-            var dateLong, timeLong;
-            if (data.date) {
-                dateLong = meta.translateMomentToCLDR(moment.localeData().longDateFormat('LL'));
-                _.extend(data, {
-                    dateShort: data.date || 'M/d/yy',
-                    dateMedium: data.date || 'M/d/yyyy',
-                    dateLong: dateLong,
-                    dateFull: 'EEEE, ' + dateLong
-                });
-            }
-            if (data.time) {
-                timeLong = String(data.timeLong || 'h:mm:ss A');
-                _.extend(data, {
-                    time: timeLong.replace(/.ss/, ''),
-                    timeLong: timeLong
-                });
-            }
-            settings.set('localeData', data).save();
+            settings
+                .set('localeData', undefined, { silent: true })
+                .set('localeData', deriveLocaleData(data))
+                .save();
         },
 
         getSupportedLocales: meta.getSupportedLocales,

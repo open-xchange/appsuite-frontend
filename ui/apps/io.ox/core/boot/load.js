@@ -48,7 +48,6 @@ define('io.ox/core/boot/load', [
             // we have to clear the device function cache or there might be invalid return values, like for example wrong locale data (see Bug 51405).
             _.device.cache = {};
             // make sure we have loaded precore.js now
-            console.log('set LOCALE', ox.locale, locale.deriveSupportedLanguageFromLocale(ox.locale));
             return $.when(
                 require([ox.base + '/precore.js']),
                 gettext.setLanguage(locale.deriveSupportedLanguageFromLocale(ox.locale)),
