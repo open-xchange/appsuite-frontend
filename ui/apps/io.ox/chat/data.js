@@ -160,6 +160,11 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
             var index = this.collection.indexOf(this);
             if (index <= 0) return false;
             return this.collection.at(index - 1).get('senderId') === this.get('senderId');
+        },
+
+        updateDelivery: function (state) {
+            var url = data.API_ROOT + '/delivery/' + this.get('id');
+            $.post(url, { state: state });
         }
     });
 
@@ -372,17 +377,17 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
         if (!collection) return;
         var message = collection.messages.get(id);
         if (!message) return;
-        var deliveries = _.clone(message.get('delivery'));
-        if (!deliveries) return;
+        var delivery = _.clone(message.get('delivery'));
+        if (!delivery) return;
         if (changes.userId) {
-            var delivery = _(deliveries).findWhere({ userId: id });
-            if (delivery) _.extend(delivery, changes);
+            var index = _(delivery).findIndex({ userId: changes.userId });
+            if (index >= 0) delivery[index] = _.extend({}, delivery[index], changes);
         } else {
-            deliveries.forEach(function (delivery) {
-                _.extend(delivery, changes);
+            delivery = delivery.map(function (delivery) {
+                return _.extend({}, delivery, changes);
             });
         }
-        message.set('delivery', deliveries);
+        message.set('delivery', delivery);
     });
 
     socket.on('message:new', function (roomId, message) {
@@ -391,8 +396,9 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
         // fetch room unless it's already known
         data.chats.fetchUnlessExists(roomId).done(function (model) {
             // add new message to room
-            model.messages.add(message);
+            var newMessage = model.messages.add(message);
             model.set({ modified: +moment(), unseen: model.get('unseen') + 1 });
+            newMessage.updateDelivery('client');
         });
     });
 
