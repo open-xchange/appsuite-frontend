@@ -40,6 +40,7 @@ define('io.ox/backbone/mini-views/upsell', [
             this.opt = _.extend({
                 icon: settings.get('upsell/defaultIcon', 'fa-star'),
                 enabled: true
+                // language; not locale
             }, opt, settings.get('features/upsell/' + opt.id), settings.get('features/upsell/' + opt.id + '/i18n/' + ox.language));
 
             // A11y: Links in foldertree need to be nested in li with role presentation

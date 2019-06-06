@@ -45,27 +45,38 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
         // avoid overrides
         if (localeDefinitions[localeId]) return;
         var id = meta.deriveMomentLocale(localeId),
-            data = moment.localeData(id);
+            data = moment.localeData(id),
+            dow = data.firstDayOfWeek();
         localeDefinitions[localeId] = {
-            time: data.longDateFormat('LT'),
-            date: data.longDateFormat('L'),
+            time: data.longDateFormat('LTS'),
+            date: meta.translateMomentToCLDR(data.longDateFormat('L')),
             number: getDefaultNumberFormat(localeId),
-            firstDayOfWeek: data.firstDayOfWeek(),
+            firstDayOfWeek: meta.weekday.name(dow),
             // reverse formula: doy = 7 + dow - JanX <=> JanX = 7 + dow - doy
-            firstDayOfYear: 7 + data.firstDayOfWeek() - data.firstDayOfYear()
+            firstDayOfYear: 7 + dow - data.firstDayOfYear()
         };
     }
+
 
     function updateLocale(localeId) {
         localeData = getLocaleData(localeId);
         if (_.isEmpty(localeData)) return;
-        var id = meta.deriveMomentLocale(localeId);
+        var id = meta.deriveMomentLocale(localeId),
+            dow = meta.weekday.index(localeData.firstDayOfWeek),
+            doy = localeData.firstDayOfYear;
         moment.updateLocale(id, {
             // time and date format
-            longDateFormat: { LT: localeData.time, L: localeData.date },
+            longDateFormat: {
+                L: meta.translateCLDRToMoment(localeData.date),
+                // we also need to override LLL; let's see if all locales are happy with a space
+                LLL: meta.translateCLDRToMoment(localeData.date) + ' ' + localeData.time,
+                // remove 'seconds' for LT
+                LT: localeData.time.replace(/.ss/, ''),
+                LTS: localeData.time
+            },
             // dow = first day of week (0=Sunday, 1=Monday, ...)
             // doy = 7 + dow - janX (first day of year)
-            week: { dow: localeData.firstDayOfWeek, doy: 7 + localeData.firstDayOfWeek - localeData.firstDayOfYear }
+            week: { dow: dow, doy: 7 + dow - doy }
         });
         ox.trigger('change:locale');
         ox.trigger('change:locale:data');
@@ -122,7 +133,26 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
 
         setLocaleData: function (data) {
             // reset locale first to get proper change event everywhere
-            settings.set('localeData', undefined, { silent: true }).set('localeData', data).save();
+            settings.set('localeData', undefined, { silent: true });
+            // derive formats for Java
+            var dateLong, timeLong;
+            if (data.date) {
+                dateLong = meta.translateMomentToCLDR(moment.localeData().longDateFormat('LL'));
+                _.extend(data, {
+                    dateShort: data.date || 'M/d/yy',
+                    dateMedium: data.date || 'M/d/yyyy',
+                    dateLong: dateLong,
+                    dateFull: 'EEEE, ' + dateLong
+                });
+            }
+            if (data.time) {
+                timeLong = String(data.timeLong || 'h:mm:ss A');
+                _.extend(data, {
+                    time: timeLong.replace(/.ss/, ''),
+                    timeLong: timeLong
+                });
+            }
+            settings.set('localeData', data).save();
         },
 
         getSupportedLocales: meta.getSupportedLocales,
@@ -133,8 +163,11 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
 
         getDefaultNumberFormat: getDefaultNumberFormat,
 
-        getDateFormats: function () {
-            return meta.dateFormats.slice();
+        getDateFormatOptions: function () {
+            var m = moment().month(0).date(29);
+            return meta.dateFormats.map(function (format) {
+                return { label: m.format(meta.translateCLDRToMoment(format)), value: format };
+            });
         },
 
         getFirstDayOfWeek: function () {

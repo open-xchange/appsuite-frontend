@@ -33,8 +33,6 @@ define('io.ox/core/boot/login/tabSession', [
     function tabSessionLoginSuccess(loginData) {
         util.debug('TabSession: logging in');
         ox.session = loginData.session;
-        //TODO: move this somewhere else?
-        loginData.locale = loginData.language;
         ox.secretCookie = true;
         util.debug('TabSession: logged in');
         ox.trigger('login:success', loginData);

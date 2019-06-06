@@ -148,7 +148,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
             });
 
             it('Only works for de_DE', function () {
-                expect(ox.language).to.equal('de_DE');
+                expect(ox.locale).to.equal('de_DE');
             });
 
             // Daily

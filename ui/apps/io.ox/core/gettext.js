@@ -165,7 +165,7 @@ define('io.ox/core/gettext', function () {
         return gettext;
     }
 
-    // probably we can clean that up here since we now have "ox.language" right from the start
+    // probably we can clean that up here since we now have "ox.language/locale" right from the start
     var lang = new $.Deferred();
 
     gt.setLanguage = function (language) {

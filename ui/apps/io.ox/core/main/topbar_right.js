@@ -384,6 +384,7 @@ define('io.ox/core/main/topbar_right', [
                 var link = this.find('[data-action="sign-out"], #io-ox-topbar-dropdown-icon > a').first();
                 // popover
                 link.popover({
+                    // language; not locale
                     content: data[ox.language] || gt('You forgot to sign out last time. Always use the sign-out button when you finished your work.'),
                     template: '<div class="popover popover-signout" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-signout"></div></div>',
                     placement: 'bottom',

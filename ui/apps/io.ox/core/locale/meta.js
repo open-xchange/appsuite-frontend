@@ -132,26 +132,43 @@ define('io.ox/core/locale/meta', function () {
     };
 
     var dateFormats = [
-        // M D Y
-        'M/D/YY',
-        'M/D/YYYY',
-        'MM/DD/YY',
-        'MM/DD/YYYY',
-        // D M Y
-        'D.M.YY',
-        'D.M.YYYY',
-        'DD.MM.YY',
-        'DD.MM.YYYY',
-        'DD.MM.YYYY.',
-        'D/M/YY',
-        'DD/MM/YY',
-        'DD/MM/YYYY',
-        'DD-MM-YYYY',
-        // Y M D
-        'YYYY/MM/DD',
-        'YYYY.MM.DD.',
-        'YYYY-MM-DD'
+        // M d y
+        'M/d/yy',
+        'M/d/yyyy',
+        'MM/dd/yy',
+        'MM/dd/yyyy',
+        // d M y
+        'd.M.yy',
+        'd.M.yyyy',
+        'dd.MM.yy',
+        'dd.MM.yyyy',
+        'dd.MM.yyyy.',
+        'd/M/yy',
+        'dd/MM/yy',
+        'dd/MM/yyyy',
+        'dd-MM-yyyy',
+        // y M d
+        'yyyy/MM/dd',
+        'yyyy.MM.dd.',
+        'yyyy-MM-dd'
     ];
+
+    // CLDR/Java -> moment
+    // (see http://cldr.unicode.org/translation/date-time-patterns)
+    function translateCLDRToMoment(format) {
+        return format
+            .replace(/d/g, 'D')
+            .replace(/E/g, 'd')
+            .replace(/y/g, 'Y');
+    }
+
+    function translateMomentToCLDR(format) {
+        return format
+            .replace(/d/g, 'E')
+            .replace(/D/g, 'd')
+            .replace(/Y/g, 'y');
+    }
+
 
     // Number formatting
     // we just need a proper match for custom formats
@@ -167,48 +184,39 @@ define('io.ox/core/locale/meta', function () {
 
     var grouping = { '1234.56': false, '1234,56': false };
 
+    // server-side we store a string (e.g. 'monday')
+    // to avoid confusion between JavaScript and Java
+    var weekdays = 'sunday monday tuesday wednesday thursday friday saturday'.split(' ');
+
     function deriveMomentLocale(localeId) {
         return mapToMoment[localeId] || 'en';
     }
 
     function getSupportedLocales() {
-        // check against server-side list of available translations
-        var result = [{ id: 'en_US', name: locales.en_US }];
-        for (var id in ox.serverConfig.languages) {
-            switch (id) {
-                case 'en_US':
-                    break;
-                case 'de_DE':
-                    add('de_DE de_AT de_CH');
-                    break;
-                case 'en_GB':
-                    add('en_GB en_AU en_CA en_DE en_IE en_NZ en_SG en_ZA');
-                    break;
-                case 'es_MX':
-                    add('es_MX es_AR es_BO es_CL es_CO es_CR es_DO es_EC es_SV es_GT es_HN es_NI es_PA es_PE es_PR es_US');
-                    break;
-                case 'fr_FR':
-                    add('fr_FR fr_CH fr_BE');
-                    break;
-                case 'it_IT':
-                    add('it_IT it_CH');
-                    break;
-                case 'nl_NL':
-                    add('nl_NL nl_BE');
-                    break;
-                default:
-                    add(id);
-                    break;
-            }
-        }
-        return result.sort(function (a, b) {
-            return a.name.localeCompare(b.name);
-        });
-        function add(ids) {
-            String(ids).split(' ').forEach(function (id) {
-                result.push({ id: id, name: locales[id] });
+        return _(locales)
+            .map(function (name, id) {
+                return { id: id, name: name };
+            })
+            .filter(function (item) {
+                return isSupportedLocale(item.id);
+            })
+            .sort(function (a, b) {
+                return a.name.localeCompare(b.name);
             });
-        }
+    }
+
+    function isSupportedLocale(id) {
+        if (id === 'en_US') return true;
+        // check against server-side list of available translations
+        var hash = ox.serverConfig.languages;
+        if (hash[id]) return true;
+        if (hash.de_DE && /^de_(AT|CH)$/.test(id)) return true;
+        if (hash.en_GB && /^en_(GB|AU|CA|DE|IE|NZ|SG|ZA)$/.test(id)) return true;
+        if (hash.es_MX && /^es_(AR|BO|CL|CO|CR|DO|EC|SV|GT|HN|NI|PA|PE|PR|US)$/.test(id)) return true;
+        if (hash.fr_FR && /^fr_(CH|BE)$/.test(id)) return true;
+        if (hash.it_IT && id === 'it_CH') return true;
+        if (hash.nl_NL && id === 'nl_BE') return true;
+        return false;
     }
 
     function getLocaleName(id) {
@@ -233,7 +241,18 @@ define('io.ox/core/locale/meta', function () {
         grouping: grouping,
         getLocaleName: getLocaleName,
         deriveMomentLocale: deriveMomentLocale,
+        isSupportedLocale: isSupportedLocale,
         getSupportedLocales: getSupportedLocales,
-        deriveSupportedLanguageFromLocale: deriveSupportedLanguageFromLocale
+        deriveSupportedLanguageFromLocale: deriveSupportedLanguageFromLocale,
+        translateCLDRToMoment: translateCLDRToMoment,
+        translateMomentToCLDR: translateMomentToCLDR,
+        weekday: {
+            index: function (str) {
+                return weekdays.indexOf(str);
+            },
+            name: function (index) {
+                return weekdays[index];
+            }
+        }
     };
 });

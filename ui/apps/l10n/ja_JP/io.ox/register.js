@@ -90,7 +90,7 @@ define('l10n/ja_JP/io.ox/register', [
         // Edit view
         // change order only if language is set to japanese
         // this file is also loaded for other languages if the setting io.ox/contacts/features/furigana is set to true
-        if (ox.language === 'ja_JP') {
+        if (ox.locale === 'ja_JP') {
             ext.point(ref + '/edit/personal')
                 .replace({ id: 'last_name', index: 200 })
                 .replace({ id: 'first_name', index: 300 });
@@ -274,9 +274,9 @@ define('l10n/ja_JP/io.ox/register', [
         ],
         kana = _.map(letters, function (c) { return String.fromCharCode(c); });
 
-    // add japanese labels and thumbindex only if language is set to japanese
+    // add japanese labels and thumbindex only if locale is set to japanese
     // this file is also loaded for other languages if the setting io.ox/contacts/features/furigana is set to true
-    if (ox.language !== 'ja_JP') return;
+    if (ox.locale !== 'ja_JP') return;
     ext.point('io.ox/contacts/getLabel').extend({
         id: 'furigana',
         getLabel: function (data) {

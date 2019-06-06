@@ -617,7 +617,7 @@ define('io.ox/core/api/tab', [
         }
         TabSession.propagate('propagateSession', {
             session: ox.session,
-            language: ox.language,
+            locale: ox.locale,
             theme: ox.theme,
             user: ox.user,
             user_id: ox.user_id,
@@ -638,7 +638,7 @@ define('io.ox/core/api/tab', [
     TabSession.propagateLogin = function (relogin) {
         TabSession.propagate('propagateLogin', {
             session: ox.session,
-            language: ox.language,
+            locale: ox.locale,
             theme: ox.theme,
             user: ox.user,
             user_id: ox.user_id,

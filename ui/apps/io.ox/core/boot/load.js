@@ -40,20 +40,21 @@ define('io.ox/core/boot/load', [
             if (baton.sessionData) session.set(baton.sessionData);
             ox.trigger('change:document:title');
             // load UI
-            util.debug('Load UI > load i18n plugins and set current language', ox.language);
+            util.debug('Load UI > load i18n plugins and set current locale', ox.locale);
 
             // signin phase is over (important for gettext)
             ox.signin = false;
 
-            // we have to clear the device function cache or there might be invalid return values, like for example wrong language data.(see Bug 51405)
+            // we have to clear the device function cache or there might be invalid return values, like for example wrong locale data (see Bug 51405).
             _.device.cache = {};
             // make sure we have loaded precore.js now
+            console.log('set LOCALE', ox.locale, locale.deriveSupportedLanguageFromLocale(ox.locale));
             return $.when(
                 require([ox.base + '/precore.js']),
-                gettext.setLanguage(locale.deriveSupportedLanguageFromLocale(ox.language)),
+                gettext.setLanguage(locale.deriveSupportedLanguageFromLocale(ox.locale)),
                 manifests.manager.loadPluginsFor('i18n')
             ).then(function () {
-                util.debug('Load UI > current language and i18n plugins DONE.');
+                util.debug('Load UI > current locale and i18n plugins DONE.');
                 gettext.enable();
             });
         }

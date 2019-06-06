@@ -298,9 +298,9 @@
         // combination of browser & display
         device: memoize(function (condition, debug) {
             // add support for language checks
-            var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
-            misc[lang] = true;
-            misc[lang.split('_')[0] + '_*'] = true;
+            var misc = {}, locale = (ox.locale || 'en_US').toLowerCase();
+            misc[locale] = true;
+            misc[locale.split('_')[0] + '_*'] = true;
             misc.touch = isTouch;
             misc.standalone = standalone;
             misc.emoji = underscoreExtends.hasNativeEmoji();

@@ -11,17 +11,17 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/core/session', 'io.ox/core/locale/meta'], function (gettext, util, session, meta) {
+define('io.ox/core/boot/locale', ['gettext', 'io.ox/core/boot/util', 'io.ox/core/session', 'io.ox/core/locale/meta'], function (gettext, util, session, meta) {
 
     'use strict';
 
-    var selectedLanguage;
+    var selectedLocale;
 
     var exports = {
 
-        change: function (localeId) {
+        change: function (locale) {
             // if the user sets a language on the login page, it will be used for the rest of the session, too
-            var language = meta.deriveSupportedLanguageFromLocale(localeId);
+            var language = meta.deriveSupportedLanguageFromLocale(locale);
             gettext.setLanguage(language).done(function () {
                 $('html').attr('lang', language.split('_')[0]);
                 gettext.enable();
@@ -47,24 +47,25 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                         }
                     });
                 });
-                // Set Cookie
-                _.setCookie('language', (ox.language = language));
+                ox.locale = locale;
+                ox.language = language;
+                _.setCookie('locale', locale);
                 ox.trigger('language', language, util.gt);
             });
         },
 
-        getCurrentLanguage: function () {
-            return selectedLanguage || ox.language || 'en_US';
+        getCurrentLocale: function () {
+            return selectedLocale || ox.locale || 'en_US';
         },
 
-        getSelectedLanguage: function () {
-            return selectedLanguage;
+        getSelectedLocale: function () {
+            return selectedLocale;
         },
 
-        setDefaultLanguage: function () {
+        setDefaultLocale: function () {
             // use preferred language or browser language.
-            var language = _.getCookie('language') || session.getBrowserLanguage();
-            return this.change(language);
+            var locale = _.getCookie('locale') || session.getBrowserLocale();
+            return this.change(locale);
         },
 
         gettDefaultLanguage: function () {
@@ -74,7 +75,7 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
         changeByUser: function (id) {
             if (!id) return;
             this.change(id);
-            selectedLanguage = id;
+            selectedLocale = id;
         },
 
         render: function () {
@@ -88,13 +89,13 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
             // show languages if more than one
             if (count > 1) {
 
-                util.debug('Render languages', locales);
+                util.debug('Render locales', locales);
 
                 var changeByUser = this.changeByUser.bind(this),
-                    defaultLanguage = _.getCookie('language') || session.getBrowserLanguage(),
+                    defaultLocale = _.getCookie('locale') || session.getBrowserLocale(),
                     toggle, list;
 
-                // Display native select box for languages if there are up to 'maxLang' languages
+                // Display native select box for locales if there are up to 'maxLang' locales
                 if (count < maxCount && !_.url.hash('language-select') && _.device('!smartphone')) {
 
                     node.append(
@@ -102,7 +103,7 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                         $('<div class="dropup">').append(
                             toggle = $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').append(
                                 $('<span class="sr-only" data-i18n="Language:" data-i18n-attr="text">'),
-                                $('<span class="toggle-text">').attr('lang', languageToTag(defaultLanguage)).text(meta.getLocaleName(defaultLanguage)),
+                                $('<span class="toggle-text">').attr('lang', languageToTag(defaultLocale)).text(meta.getLocaleName(defaultLocale)),
                                 $('<span class="caret">')
                             ),
                             list = $('<ul id="io-ox-language-list" class="dropdown-menu" role="menu" data-i18n="Languages" data-i18n-attr="aria-label">')
@@ -146,7 +147,7 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                                     }).text(locale.name);
                                 })
                             )
-                            .val(defaultLanguage)
+                            .val(defaultLocale)
                     );
                 }
             } else {

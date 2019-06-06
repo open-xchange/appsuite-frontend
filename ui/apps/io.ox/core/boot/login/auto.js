@@ -43,8 +43,8 @@ define('io.ox/core/boot/login/auto', [
                 // now we're sure the server is up
                 ox.trigger('server:up');
                 // set user language - see bug #31433
-                ox.language = data.locale;
-                _.setCookie('language', ox.language);
+                ox.locale = data.locale;
+                _.setCookie('locale', ox.locale);
                 // event
                 ox.trigger('login:success', data);
             }, function failAutoLogin(error) {

@@ -30,7 +30,7 @@ define('io.ox/backbone/mini-views/date', [
 
     // core/date.js would be a better place but who cares
     function localize(name, text) {
-        if (ox.language === 'ja_JP') {
+        if (ox.locale === 'ja_JP') {
             if (name === 'year') return text + '年';
             if (name === 'date') return text + '日';
         }
