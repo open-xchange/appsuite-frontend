@@ -165,7 +165,7 @@ Scenario('remove mail from thread @shaky', async (I, users) => {
     I.wait(0.5);
 
     // this should even be in the '.list-view .selected' context, but it needs more logic for threads
-    I.see('Test subject', '.list-view');
+    I.waitForText('Test subject', 5, '.list-view');
 
     I.seeNumberOfVisibleElements('.list-view .selectable', 2);
     I.clickToolbar('~Delete');
