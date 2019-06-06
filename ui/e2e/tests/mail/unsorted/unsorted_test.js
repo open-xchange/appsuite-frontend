@@ -239,6 +239,7 @@ function addFile(I, path) {
     var ext = path.match(/\.(.{3,4})$/)[1];
     I.attachFile('input[type=file]', path);
     I.waitForText(ext.toUpperCase(), 5, '.inline-items.preview');
+    I.wait(1);
 }
 
 Scenario('[C7387] Send mail with attachment from upload @shaky', function (I, users) {
@@ -280,10 +281,10 @@ Scenario('[C7387] Send mail with attachment from upload @shaky', function (I, us
     I.say('Show attachments as list', 'blue');
     I.click('.toggle-details[aria-expanded="false"]');
     I.waitForVisible('.list-container');
-    I.see('testdocument.odt');
-    I.see('testdocument.rtf');
-    I.see('testpresentation.ppsm');
-    I.see('testspreadsheed.xlsm');
+    I.waitForText('testdocument.odt');
+    I.waitForText('testdocument.rtf');
+    I.waitForText('testpresentation.ppsm');
+    I.waitForText('testspreadsheed.xlsm');
 });
 
 Scenario('[C7388] Send mail with different priorities', function (I, users) {
