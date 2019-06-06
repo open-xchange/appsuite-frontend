@@ -654,6 +654,7 @@ Scenario('[C12119] Edit recipients', async function (I, users) {
         I.waitForText('lol@ox.io', 5, '.io-ox-mail-compose div.token');
         I.waitForText('bla@trash.com', 5, '.io-ox-mail-compose div.token');
         I.doubleClick({ css: '.io-ox-mail-compose div.token:nth-of-type(3)' });
+        I.wait(1);
         I.pressKey('super@ox.com,');
         I.dontSee('bla@trash.com', '.io-ox-mail-compose div.token');
         I.waitForText('foo@bar.de', 5, '.io-ox-mail-compose div.token');
