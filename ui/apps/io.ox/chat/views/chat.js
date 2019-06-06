@@ -155,6 +155,17 @@ define('io.ox/chat/views/chat', [
             return $('<h2 class="title">').append(this.model.getTitle() || '\u00a0');
         },
 
+        getDeliveryClass: function (model) {
+            // compute the minimal delivery status of none < server < client < seen
+            var deliveryClass = model.get('delivery').reduce(function (memo, delivery) {
+                if (delivery.state === 'server') memo = 'server';
+                else if (delivery.state === 'client' && memo !== 'server') memo = 'client';
+                return memo;
+            }, 'seen');
+            if (!model.has('delivery') || model.get('delivery').length === 0) deliveryClass = '';
+            return deliveryClass;
+        },
+
         renderMessage: function (model) {
             return $('<div class="message">')
                 // here we use cid instead of id, since the id might be unknown
@@ -169,7 +180,7 @@ define('io.ox/chat/views/chat', [
                     // time
                     $('<div class="time">').text(model.getTime()),
                     // delivery state
-                    $('<div class="fa delivery">').addClass(model.get('delivery'))
+                    $('<div class="fa delivery">').addClass(this.getDeliveryClass(model))
                 );
         },
 
@@ -235,7 +246,7 @@ define('io.ox/chat/views/chat', [
         },
 
         onChangeDelivery: function (model) {
-            this.getMessageNode(model, '.delivery').attr('class', 'fa delivery ' + model.get('delivery'));
+            this.getMessageNode(model, '.delivery').attr('class', 'fa delivery ' + this.getDeliveryClass(model));
         }
     });
 
