@@ -443,6 +443,13 @@ define('io.ox/core/api/tab', [
         return !TabHandling.parentName;
     };
 
+    TabHandling.disable = function () {
+        ox.tabHandlingEnabled = false;
+        util.checkTabHandlingSupport = function () {
+            return false;
+        };
+    };
+
     /**
      * An Object for Session Handling
      * @type {{}}
@@ -479,7 +486,7 @@ define('io.ox/core/api/tab', [
 
             switch (data.propagate) {
                 case 'getSession':
-                    TabSession.propagateSession();
+                    TabSession.propagateSession(data.parameters);
                     break;
                 case 'propagateSession':
                     TabSession.events.trigger(data.propagate, data.parameters);
@@ -501,8 +508,8 @@ define('io.ox/core/api/tab', [
             }
         });
 
-        TabSession.events.listenTo(TabSession.events, 'getSession', function () {
-            TabSession.propagateSession();
+        TabSession.events.listenTo(TabSession.events, 'getSession', function (parameters) {
+            TabSession.propagateSession(parameters);
         });
 
         TabSession.events.listenTo(TabSession.events, 'propagateLogin', function (parameters) {
@@ -568,7 +575,9 @@ define('io.ox/core/api/tab', [
                 delete windowNameObject.loggingOut;
                 window.name = JSON.stringify(windowNameObject);
             } else {
-                TabSession.propagate('getSession', {});
+                var param = {};
+                if (_.url.hash('session')) _.extend(param, { session: _.url.hash('session') });
+                TabSession.propagate('getSession', param);
             }
         }
     };
@@ -583,7 +592,14 @@ define('io.ox/core/api/tab', [
                 def.reject();
             }, 50);
 
-        TabSession.events.listenTo(TabSession.events, 'propagateSession', def.resolve);
+        TabSession.events.listenTo(TabSession.events, 'propagateSession', function (loginData) {
+            if (_.url.hash('session') && loginData.session !== _.url.hash('session')) {
+                TabHandling.disable();
+                def.reject();
+            } else {
+                def.resolve(loginData);
+            }
+        });
 
         return def.done(function () { window.clearTimeout(timeout); });
     };
@@ -591,9 +607,12 @@ define('io.ox/core/api/tab', [
     /**
      * Send a session over localStorage to other tabs
      */
-    TabSession.propagateSession = function () {
+    TabSession.propagateSession = function (parameters) {
         if (!ox.session) {
             TabSession.propagate('propagateNoSession');
+            return;
+        }
+        if (parameters.session && parameters.session !== ox.session) {
             return;
         }
         TabSession.propagate('propagateSession', {
@@ -817,9 +836,7 @@ define('io.ox/core/api/tab', [
 
     /**
      * Set ox-object params
-     * @param {String} key
-     *  object key
-     * @param {String} parameter
+     * @param {String} parameters
      *  parameter to set
      *
      * @returns {boolean}

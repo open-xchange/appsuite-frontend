@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-09 09:26+0200\n"
+"PO-Revision-Date: 2019-05-28 12:55+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -580,7 +580,7 @@ msgstr "２ステップ検証"
 #. Title of tour step, demonstrating options available for 2-step verification
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "2-step Verification Options"
-msgstr "２ステップ検証オプション"
+msgstr "２段階検証オプション"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "20 versions"
@@ -657,8 +657,6 @@ msgid "A folder cannot be moved to one of its subfolders"
 msgstr "フォルダーは、その配下のいずれのサブフォルダーにも移動できません。"
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "A new code was sent to your SMS device.  Please enter the code."
 msgid "A new code was sent to your SMS device. Please enter the code."
 msgstr ""
 "新しいコードがお使いのSMSデバイスに送信されました。コードを入力してください。"
@@ -1244,7 +1242,7 @@ msgid_plural ""
 msgstr[0] ""
 "1日以上たったすべてのファイルバージョンが次回のログイン後に削除されます。"
 msgstr[1] ""
-"%1$d以上たったすべてのファイルバージョンが次回のログイン後に削除されます。"
+"%1$d日以上たったすべてのファイルバージョンが次回のログイン後に削除されます。"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -1369,8 +1367,6 @@ msgid "Anniversary"
 msgstr "記念日"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-#, fuzzy
-#| msgid "Anti-Virus Warning"
 msgid "Anti-Virus warning"
 msgstr "アンチウイルス警告"
 
@@ -1540,7 +1536,7 @@ msgstr "このツイートを削除しますか？"
 
 #: apps/io.ox/core/main/logout.js module:io.ox/core
 msgid "Are you sure you want to sign out from all related browser tabs?"
-msgstr "すべての関連ブラウザタブからサインアウトしますか？"
+msgstr "すべての関連ブラウザタブからログアウトしますか？"
 
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
 msgid "Are you sure?"
@@ -1617,10 +1613,8 @@ msgid "Authentication details"
 msgstr "認証の詳細"
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Connection timed out. Please try reloading the page."
 msgid "Authentication failure. Please try reloading the page."
-msgstr "接続がタイムアウトです。ページをもう一度読み込んでください。"
+msgstr "認証に失敗しました。ページをもう一度読み込んでください。"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
@@ -1731,17 +1725,11 @@ msgstr "ご利用のアカウントのアクセス用バックアップコード
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-#, fuzzy
-#| msgid "Bad input or server error.  Please try again."
 msgid "Bad input or server error. Please try again."
 msgstr "無効な入力またはサーバーエラーです。もう一度やり直してください。"
 
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-#, fuzzy
-#| msgid ""
-#| "Bad parameters for authenticating with this key.  Possibly wrong URL "
-#| "domain for this key."
 msgid ""
 "Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
@@ -1752,8 +1740,6 @@ msgstr ""
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-#, fuzzy
-#| msgid "Bad verification code.  Please try again"
 msgid "Bad verification code. Please try again"
 msgstr "無効な検証コードです。もう一度やり直してください。"
 
@@ -4001,10 +3987,11 @@ msgctxt "vgrid"
 msgid "Empty"
 msgstr "(空)"
 
+#. empty is a verb in this case. Used when the contents of a folder should be deleted
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
 msgid "Empty folder"
-msgstr "フォルダーが空です。"
+msgstr "フォルダーを空にする"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Empty name and description found."
@@ -4113,8 +4100,6 @@ msgstr "エラー"
 
 #. Error message when trying to use a USB Keyfob to verify identity  Error with authenticating
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Error authenticating.  Please reload browser and try again."
 msgid "Error authenticating. Please reload browser and try again."
 msgstr "認証エラー。ブラウザを再読み込みして、もう一度やり直してください。"
 
@@ -5269,10 +5254,6 @@ msgstr "アイコン"
 
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
-#, fuzzy
-#| msgid ""
-#| "If scanning doesn't work, you may be able to enter the following setup "
-#| "code."
 msgid ""
 "If scanning does not work, you may be able to enter the following setup code."
 msgstr "スキャニングができなければ、次の設定コードを入力してください。"
@@ -5380,11 +5361,6 @@ msgstr ""
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
-#, fuzzy
-#| msgid ""
-#| "In the event you lose or are unable to use your authentication device, "
-#| "your account will be locked out unless you set up a recovery method.  We "
-#| "strongly recommend that you do so now."
 msgid ""
 "In the event you lose or are unable to use your authentication device, your "
 "account will be locked out unless you set up a recovery method. We strongly "
@@ -5742,7 +5718,7 @@ msgstr "内部ユーザーの場合、姓は空にできません"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 msgid "Last name, First name"
-msgstr "姓、名"
+msgstr "姓, 名"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 msgid "Last updated"
@@ -6050,10 +6026,8 @@ msgid "Make this the current version"
 msgstr "このファイルを最新のバージョンにする"
 
 #: apps/io.ox/core/download.js module:io.ox/core
-#, fuzzy
-#| msgid "Conflicts detected"
 msgid "Malicious file detected"
-msgstr "競合する予定があります"
+msgstr "悪質なファイルが検出されました"
 
 #. Opens a native browser popup to decide if this applications/website is allowed to show notifications
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
@@ -7755,17 +7729,13 @@ msgid "Please enter the phone number for the device."
 msgstr "デバイスに電話番号を入力してください。"
 
 #: apps/io.ox/multifactor/views/backupProvider.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Please enter a search query"
 msgid "Please enter the recovery code"
-msgstr "検索クエリを入力してください"
+msgstr "復元コードを入力してください。"
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
-#, fuzzy
-#| msgid "Please enter the phone number for the device."
 msgid "Please enter the validation code we just sent to your device."
-msgstr "デバイスに電話番号を入力してください。"
+msgstr "お使いのデバイスに送信した認証コードを入力してください。"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Please enter value between 0 and 100."
@@ -7909,10 +7879,8 @@ msgstr "続行するにはもう一度ログインしてください"
 
 #: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
 #: module:io.ox/core/boot
-#, fuzzy
-#| msgid "Please select the platform of your device."
 msgid "Please touch/activate your device"
-msgstr "デバイスのプラットフォームを選択してください。"
+msgstr "お使いのデバイスをタッチ／起動してください。"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please update your browser."
@@ -8133,7 +8101,7 @@ msgstr "プライベートアドレス"
 #. Error message when trying to get available providers from middleware
 #: apps/io.ox/multifactor/settings/pane.js module:io.ox/core/boot
 msgid "Problem getting 2-step verification providers"
-msgstr "２ステップ検証プロバイダ取得に問題"
+msgstr "２段階検証プロバイダ取得に問題"
 
 #: apps/io.ox/multifactor/settings/views/u2fRegistrationView.js
 #: module:io.ox/core/boot
@@ -9011,7 +8979,7 @@ msgstr[1] "添付ファイルを保存しています..."
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
 #: module:io.ox/core/boot
 msgid "Scan the QR code with your authenticator."
-msgstr ""
+msgstr "認証システムで QR コードをスキャンします。"
 
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -9265,7 +9233,7 @@ msgstr[1] "%1$d通のメッセージを送信しています ... %2$d%"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer
 msgid "Sent"
-msgstr "送信日時"
+msgstr "送信済み"
 
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 msgid "Sent by"
@@ -9741,8 +9709,6 @@ msgstr ""
 
 #. Catch all error when trying to set up a new 2step device
 #: apps/io.ox/multifactor/settings/views/addDevice.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Something went wrong.  Please try again later."
 msgid "Something went wrong. Please try again later."
 msgstr "エラーが発生しました。後でもう一度やり直してください。"
 
@@ -10611,10 +10577,6 @@ msgid ""
 msgstr "現在お使いのデバイスに利用できる対応メディアデバイスがありません。"
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
-#, fuzzy
-#| msgid ""
-#| "There are no backup devices available for this account.  Please notify "
-#| "support for help."
 msgid ""
 "There are no backup devices available for this account. Please notify "
 "support for help."
@@ -10688,10 +10650,6 @@ msgid ""
 msgstr "この予定は例外です。例外の変更はシリーズに影響しません。"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-#, fuzzy
-#| msgid ""
-#| "This browser is not compatible with your configured authentication "
-#| "device.  Please use Chrome browser, or Firefox with U2F enabled."
 msgid ""
 "This browser is not compatible with your configured authentication device. "
 "Please use Chrome browser, or Firefox with U2F enabled."
@@ -10716,8 +10674,6 @@ msgstr "プライベートな連絡先として共有不可にする"
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Probably wrong key
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "This device is not eligible for this request.  Wrong hardware key?"
 msgid "This device is not eligible for this request. Wrong hardware key?"
 msgstr ""
 "このデバイスはこのリクエストを受け付けられません。ハードウェアキーが間違って"
@@ -10920,6 +10876,8 @@ msgid ""
 "This is your recovery code. Please write it down, print it, or save the "
 "file. Be sure to save this in a secure location."
 msgstr ""
+"復元コードです。復元コードを書き留める、印刷、またはファイルに保存してくださ"
+"い。必ずセキュリティ保護された場所に保存してください。"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -11290,7 +11248,7 @@ msgstr "ご利用の休暇通知が読み込みません。後でやり直して
 
 #: apps/io.ox/core/download.js module:io.ox/core
 msgid "Unable to perform Anti-Virus check for the requested file(s)"
-msgstr ""
+msgstr "要求されたファイルのアンチウィルスチェックが実行できません。"
 
 #: apps/io.ox/core/tk/upload-problems.js module:io.ox/core
 msgid "Unable to upload file"
@@ -12188,10 +12146,6 @@ msgid "You need to use iOS %n or higher."
 msgstr "iOS %n 以上を使用する必要があります。"
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
-#, fuzzy
-#| msgid ""
-#| "You secured your account with 2-Step Verification.  Please enter the "
-#| "verification code from the Authenticator App."
 msgid ""
 "You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
@@ -12200,10 +12154,6 @@ msgstr ""
 "ら検証コードを入力してください。"
 
 #: apps/io.ox/multifactor/views/smsProvider.js module:io.ox/core/boot
-#, fuzzy
-#| msgid ""
-#| "You secured your account with 2-Step Verification.  Please enter the "
-#| "verification code we sent to the phone *****%s."
 msgid ""
 "You secured your account with 2-Step Verification. Please enter the "
 "verification code we sent to the phone *****%s."
@@ -12212,10 +12162,6 @@ msgstr ""
 "%sに送信された検証コードを入力してください。"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
-#, fuzzy
-#| msgid ""
-#| "You secured your account with 2-Step Verification.  Please use your "
-#| "authentication token to complete verification."
 msgid ""
 "You secured your account with 2-Step Verification. Please use your "
 "authentication token to complete verification."
@@ -13478,6 +13424,11 @@ msgstr "ご利用のプラットフォーム"
 #~ "さい。読み込みがうまくいかない場合は、ご利用のシステムの管理者にご連絡くだ"
 #~ "さい。"
 
+#~ msgid "A new code was sent to your SMS device.  Please enter the code."
+#~ msgstr ""
+#~ "新しいコードがお使いのSMSデバイスに送信されました。コードを入力してくださ"
+#~ "い。"
+
 #~ msgid "A severe error occurred!"
 #~ msgstr "エラーが発生しました"
 
@@ -14141,6 +14092,9 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Antarctica/Palmer"
 #~ msgstr "南極/パーマー"
 
+#~ msgid "Anti-Virus Warning"
+#~ msgstr "アンチウイルス警告"
+
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "アンティグア‐バルブダ"
 
@@ -14642,6 +14596,19 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Background 2"
 #~ msgstr "背景色 2"
+
+#~ msgid "Bad input or server error.  Please try again."
+#~ msgstr "無効な入力またはサーバーエラーです。もう一度やり直してください。"
+
+#~ msgid ""
+#~ "Bad parameters for authenticating with this key.  Possibly wrong URL "
+#~ "domain for this key."
+#~ msgstr ""
+#~ "このキーでの認証には無効のパラメータです。このキーのURLドメインが間違って"
+#~ "いる可能性があります。"
+
+#~ msgid "Bad verification code.  Please try again"
+#~ msgstr "無効な検証コードです。もう一度やり直してください。"
 
 #~ msgid "Bahamas"
 #~ msgstr "バハマ"
@@ -16198,6 +16165,9 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Eritrea"
 #~ msgstr "エリトレア"
 
+#~ msgid "Error authenticating.  Please reload browser and try again."
+#~ msgstr "認証エラー。ブラウザを再読み込みして、もう一度やり直してください。"
+
 #~ msgid "Error-ID: %1$s"
 #~ msgstr "エラー ID: %1$s"
 
@@ -16927,6 +16897,11 @@ msgstr "ご利用のプラットフォーム"
 #~ "うには、右上にある [スライドショー] をクリックします。"
 
 #~ msgid ""
+#~ "If scanning doesn't work, you may be able to enter the following setup "
+#~ "code."
+#~ msgstr "スキャニングができなければ、次の設定コードを入力してください。"
+
+#~ msgid ""
 #~ "If the authorization expired or was revoked, you can repeat the "
 #~ "authorization process by clicking on the button below. The authorization "
 #~ "will proceed in a separate window."
@@ -17056,6 +17031,15 @@ msgstr "ご利用のプラットフォーム"
 #~ msgstr ""
 #~ "アイコン ビューでは、選択したフォルダーにあるファイルが表示エリアに表示さ"
 #~ "れます。"
+
+#~ msgid ""
+#~ "In the event you lose or are unable to use your authentication device, "
+#~ "your account will be locked out unless you set up a recovery method.  We "
+#~ "strongly recommend that you do so now."
+#~ msgstr ""
+#~ "お使いの認証デバイスを失くした、または使用できない場合、復元方法を設定しな"
+#~ "ければアカウントがロックされたままになるので、復元方法の設定をお勧めしま"
+#~ "す。"
 
 #~ msgid "In your timezone (%1$s): %2$s (Duration: %3$s)"
 #~ msgstr "お使いのタイムゾーン(%1$s): %2$s (期間: %3$s)"
@@ -19713,6 +19697,9 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Something went wrong saving your changes."
 #~ msgstr "変更の保存中にエラーが発生しました。"
 
+#~ msgid "Something went wrong.  Please try again later."
+#~ msgstr "エラーが発生しました。後でもう一度やり直してください。"
+
 #~ msgid "Sorry, common mails couldn't be assigned automatically."
 #~ msgstr "一般的なメールが自動的に割り当てることができませんでした。"
 
@@ -20621,6 +20608,13 @@ msgstr "ご利用のプラットフォーム"
 #~ "現在のカレンダーには %n 件以上の予定があります。パフォーマンスに影響するた"
 #~ "め、いくつかの機能が無効になります。"
 
+#~ msgid ""
+#~ "There are no backup devices available for this account.  Please notify "
+#~ "support for help."
+#~ msgstr ""
+#~ "このアカウントに利用できるバックアップ用デバイスがありません。サポートに連"
+#~ "絡してください。"
+
 #~ msgid "There is already %1$d appointment in this timeframe."
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
 #~ msgstr[0] "この期間には既に %1$d 件のアポイントがあります。"
@@ -20650,6 +20644,18 @@ msgstr "ご利用のプラットフォーム"
 #~ msgstr ""
 #~ "この予定は例外の予定です。繰り返しの予定に対する変更はこの予定を変更しませ"
 #~ "ん。"
+
+#~ msgid ""
+#~ "This browser is not compatible with your configured authentication "
+#~ "device.  Please use Chrome browser, or Firefox with U2F enabled."
+#~ msgstr ""
+#~ "このブラウザはお使いの構成認証デバイスに対応していません。Chrome、または"
+#~ "U2Fを有効にしてFirefoxをお使いください。"
+
+#~ msgid "This device is not eligible for this request.  Wrong hardware key?"
+#~ msgstr ""
+#~ "このデバイスはこのリクエストを受け付けられません。ハードウェアキーが間違っ"
+#~ "ていませんか？"
 
 #~ msgid "This document contains unsaved changes. Do you really want to close?"
 #~ msgstr ""
@@ -21790,6 +21796,27 @@ msgstr "ご利用のプラットフォーム"
 #~ msgstr ""
 #~ "自身のアカウントの使用を %1$s に許可する必要があります。下のボタンをクリッ"
 #~ "クすると、 認証が別のウィンドウで実行されます。"
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code from the Authenticator App."
+#~ msgstr ""
+#~ "お使いのアカウントが２ステップ検証でセキュリティ保護されました。認証アプリ"
+#~ "から検証コードを入力してください。"
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please enter the "
+#~ "verification code we sent to the phone *****%s."
+#~ msgstr ""
+#~ "お使いのアカウントが２ステップ検証でセキュリティ保護されました。電話番号"
+#~ "*****%sに送信された検証コードを入力してください。"
+
+#~ msgid ""
+#~ "You secured your account with 2-Step Verification.  Please use your "
+#~ "authentication token to complete verification."
+#~ msgstr ""
+#~ "お使いのアカウントが２ステップ検証でセキュリティ保護されました。認証トーク"
+#~ "ンを使用して検証を完了してください。"
 
 #~ msgid "You seem to have been inactive for %d minute."
 #~ msgid_plural "You seem to have been inactive for %d minutes."

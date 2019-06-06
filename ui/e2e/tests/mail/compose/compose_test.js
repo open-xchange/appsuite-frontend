@@ -229,16 +229,34 @@ Scenario('Compose with inline image, which is removed again', async function (I,
 
 Scenario('Compose with drivemail attachment and edit draft @shaky', async function (I, users) {
     const [user] = users;
-
     const user2 = await users.create();
-    await I.haveSetting('io.ox/mail//messageFormat', 'html');
-    await I.haveSetting('io.ox/mail//features/deleteDraftOnClose', true);
-    await user.hasConfig('com.openexchange.mail.deleteDraftOnTransport', true);
-    I.wait(5);
-    await I.haveSetting('io.ox/mail//deleteDraftOnTransport', true);
+    let counter = 5;
 
+    async function setSettings() {
+        await user.hasConfig('com.openexchange.mail.deleteDraftOnTransport', true);
+        await I.haveSetting('io.ox/mail//messageFormat', 'html');
+        await I.haveSetting('io.ox/mail//features/deleteDraftOnClose', true);
+        I.wait(1.5);
+        await I.haveSetting('io.ox/mail//deleteDraftOnTransport', true);
+    }
+    async function checkSettings() {
+        let settingSet = await I.executeScript(function () {
+            return require('settings!io.ox/mail').get('deleteDraftOnTransport');
+        });
+        return settingSet;
+    }
 
+    await setSettings();
     I.login('app=io.ox/files');
+    let setting = await checkSettings();
+    I.say(`DeleteDraftOnTranport = ${setting}`);
+
+    while (!setting && counter > 0) {
+        await setSettings();
+        setting = await checkSettings();
+        I.say(`DeleteDraftOnTranport = ${setting}`);
+        counter--;
+    }
     // create textfile in drive
     I.clickToolbar('New');
     I.click('Add note');
@@ -305,7 +323,7 @@ Scenario('Compose with drivemail attachment and edit draft @shaky', async functi
     I.click('Send');
     I.waitForInvisible('.floating-window');
     I.wait(1);
-    I.dontSeeElement('.io-ox-mail-window li.list-item');
+    I.waitForDetached('.io-ox-mail-window li.list-item');
 
     I.selectFolder('Inbox');
 

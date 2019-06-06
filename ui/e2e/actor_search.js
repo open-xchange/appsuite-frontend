@@ -12,10 +12,10 @@ module.exports = {
     // introducing methods
     doSearch(query) {
         I.click('.search-box');
-        I.waitForElement(this.fields.search);
+        I.waitForVisible(this.fields.search);
         I.fillField(this.fields.search, query);
         I.pressKey('Enter');
-        I.seeElement('.search-box span[title="' + query + '"]');
+        I.waitForVisible('.search-box span[title="' + query + '"]');
         I.waitForElement('.fa-spin-paused');
     }
 };

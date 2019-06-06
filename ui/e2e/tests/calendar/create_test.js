@@ -1631,7 +1631,7 @@ Scenario('[C274406] Change organizer of appointment with external attendees', as
     I.click('Save');
 
     I.waitForText(subject, undefined, '.appointment');
-    I.click(subject, '.appointment');
+    I.retry().click(subject, '.appointment');
     I.click('.calendar-detail .more-dropdown');
     I.waitForVisible('.dropdown-menu');
     I.dontSee('Change organizer');

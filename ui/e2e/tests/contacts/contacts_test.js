@@ -349,8 +349,9 @@ Scenario('[C7363] - Add files to a contact @shaky', async function (I) {
     await I.haveContact(contact);
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+    I.waitForText('My address books');
     I.selectFolder('Contacts');
-    I.click(locate().withText('C7363, C7363').inside('.vgrid-scrollpane-container'));
+    I.retry(5).click(locate().withText('C7363, C7363').inside('.vgrid-scrollpane-container'));
     I.clickToolbar('Edit');
     I.waitForVisible('[data-app-name="io.ox/contacts/edit"]');
     I.attachFile('.contact_attachments_buttons input[type=file]', 'e2e/media/files/generic/contact_picture.png');

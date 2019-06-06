@@ -64,7 +64,7 @@ Scenario('check auto select behavior in list view', async (I, users) => {
 
     I.waitForText('First mail!', 5, '.subject');
     I.waitForElement('.list-item.selectable.unread [title="First mail!"]');
-    I.click('.list-item.selectable.unread [title="First mail!"]');
+    I.retry().click('.list-item.selectable.unread [title="First mail!"]');
     I.waitForElement('.list-item.selected');
 
     I.logout();

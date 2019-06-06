@@ -55,27 +55,32 @@ Scenario('[C114353] Mail address parsing supports multiple delimiters @shaky', a
     function pasteTriple(str) {
         paste(str);
         I.seeNumberOfElements('.mail-compose-fields .token-label', 3);
-        I.seeElement(locate('.token-label').withText('Foo Bar'));
-        I.seeElement(locate('.token-label').withText('John Doe'));
-        I.seeElement(locate('.token-label').withText('Jane Doe'));
+        I.waitForVisible(locate('.token-label').withText('Foo Bar'));
+        I.waitForVisible(locate('.token-label').withText('John Doe'));
+        I.waitForVisible(locate('.token-label').withText('Jane Doe'));
         I.wait(1);
         I.pressKey('Backspace');
+        I.wait(0.5);
         I.pressKey('Backspace');
+        I.wait(0.5);
         I.pressKey('Backspace');
+        I.wait(0.5);
         I.pressKey('Backspace');
     }
 
     function pasteSingle(str, text) {
         paste(str);
         I.seeNumberOfElements('.mail-compose-fields .token-label', 1);
-        I.seeElement(locate('.token-label').withText(text));
+        I.waitForVisible(locate('.token-label').withText(text));
         I.wait(1);
         I.pressKey('Backspace');
+        I.wait(0.5);
         I.pressKey('Backspace');
     }
 
     function paste(str) {
         I.fillField('.mail-compose-fields .token-input.tt-input', str);
+        I.wait(1);
         I.pressKey('Enter');
     }
 });

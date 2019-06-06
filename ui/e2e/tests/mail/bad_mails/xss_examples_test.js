@@ -68,7 +68,7 @@ async function run(I, start, end) {
     I.login('app=io.ox/mail');
     I.waitForVisible('.io-ox-mail-window .list-view');
     for (let i = (size - 1); i >= 0; i--) {
-        I.seeElement(`.list-view .list-item[data-index="${i}"] .drag-title`);
+        I.retry().waitForElement(`.list-view .list-item[data-index="${i}"] .drag-title`);
     }
     I.logout();
 }

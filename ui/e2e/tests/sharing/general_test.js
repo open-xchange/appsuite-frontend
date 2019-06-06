@@ -117,12 +117,16 @@ Scenario('[C83385] Copy to clipboard @shaky', async function (I) {
 
 Scenario('[C85625] My Shares default sort order @shaky', async function (I, users) {
     function share(I, item) {
-        I.click(locate('li.list-item').withText(item));
+        I.retry(5).click(locate('li.list-item').withText(item));
         I.clickToolbar('Share');
         I.click('Create sharing link');
         I.waitForText('Sharing link created for');
         I.click('Close');
 
+    }
+    function selectAndWait(I, folder) {
+        I.selectFolder(folder);
+        I.waitForText(folder, undefined, 'div.breadcrumb-view.toolbar-item');
     }
     const { expect } = require('chai');
     const folder = await I.grabDefaultFolder('infostore');
@@ -136,13 +140,13 @@ Scenario('[C85625] My Shares default sort order @shaky', async function (I, user
     I.waitForElement('.file-list-view.complete');
 
     share(I, 'document.txt');
-    I.selectFolder('Testfolder');
+    selectAndWait(I, 'Testfolder');
     share(I, 'testdocument.rtf');
     share(I, 'testpresentation.ppsm');
-    I.selectFolder('My files');
+    selectAndWait(I, 'My files');
     share(I, 'Testfolder');
 
-    I.selectFolder('My shares');
+    selectAndWait(I, 'My shares');
     I.waitForText('Testfolder', undefined, '.myshares-list');
     const itemNames = (await I.grabTextFrom(locate('li.list-item'))).map((line) => line.split('\n')[0]);
     expect(itemNames).to.deep.equal(['Testfolder', 'testpresentation.ppsm', 'testdocument.rtf', 'document.txt']);

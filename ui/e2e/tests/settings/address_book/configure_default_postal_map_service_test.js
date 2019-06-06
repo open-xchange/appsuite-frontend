@@ -40,16 +40,16 @@ Scenario('[C85624] Configure postal addresses map service @shaky', async (I) =>{
 
     I.login();
 
-    await verifyMapType(I, 'Google Maps', 'google.com');
+    await verifyMapType(I, 'Google Maps', 'google.com', 'google');
 
-    await verifyMapType(I, 'Open Street Map', 'openstreetmap.org');
+    await verifyMapType(I, 'Open Street Map', 'openstreetmap.org', 'osm');
 
-    await verifyMapType(I, 'No link');
+    await verifyMapType(I, 'No link', '', 'none');
 
     I.logout();
 });
 
-async function verifyMapType(I, mapName, link) {
+async function verifyMapType(I, mapName, link, value) {
     // Go back to settings and switch to other display style
     I.click('#io-ox-topbar-dropdown-icon');
     I.waitForVisible('#topbar-settings-dropdown');
@@ -62,7 +62,8 @@ async function verifyMapType(I, mapName, link) {
 
     I.see('Link postal addresses with map service');
     I.waitForText(mapName);
-    I.click(mapName);
+    I.checkOption(`input[value="${value}"`);
+    I.seeCheckboxIsChecked(`input[value="${value}"]`);
     I.click('~Refresh');
     I.waitForVisible('.fa-refresh.fa-spin');
     I.waitForDetached('.fa-refresh.fa-spin');

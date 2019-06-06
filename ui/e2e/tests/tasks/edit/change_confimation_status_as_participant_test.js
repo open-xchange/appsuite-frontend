@@ -79,7 +79,7 @@ Scenario('[C125311] Change confimation status as participant @shaky', async func
     // 5. Set the task status alternating to 'Accepted', 'Tentative' and 'Declined'
 
     I.click('Accept');
-    I.see('You have accepted this task');
+    I.waitForText('You have accepted this task');
     I.click('Show task details');
     I.waitForVisible('.io-ox-sidepopup');
 

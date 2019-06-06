@@ -65,8 +65,9 @@ Scenario('[C114352] Create folder in copy/move dialog @shaky', async (I, users) 
 
     // Folder is already selected by default.
     I.click('Move', '[data-point="io.ox/core/folder/picker"]');
-    I.doubleClick('.list-item[aria-label*="Foobar"]');
     I.wait(1);
+    I.doubleClick('.list-item[aria-label*="Foobar"]');
+    I.wait(2);
     I.see('testdocument.odt');
 
 });

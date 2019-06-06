@@ -82,6 +82,7 @@ define('io.ox/core/folder/actions/common', [
                 folderAPI.get(id).done(function (folder) {
                     new ModalDialog({ title: gt('Do you really want to empty folder "%s"?', folderAPI.getFolderTitle(folder.title, 30)) })
                         .addCancelButton()
+                        //#. empty is a verb in this case. Used when the contents of a folder should be deleted
                         .addButton({ label: gt('Empty folder'), action: 'delete' })
                         .on('delete', function () {
                             if (account.is('spam|confirmed_spam', id)) {

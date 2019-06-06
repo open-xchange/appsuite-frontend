@@ -33,6 +33,7 @@
     "axe-core": "^3.2.2",
     "chai": "^4.0.2",
     "codeceptjs": "^2.0.2",
+    "dotenv": "8.0.0",
     "eslint-plugin-codeceptjs": "^0.4.0",
     "grunt-contrib-connect": "^2.0.0",
     "grunt-contrib-watch": "^1.0.0",

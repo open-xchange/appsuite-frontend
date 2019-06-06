@@ -65,8 +65,8 @@ Scenario('Add a distribution list to an existing distribution list @shaky', func
     I.waitForEnabled('.modal-header input.search-field', 5);
     I.fillField('~Search', 'test distribution list one');
     I.waitForText('test distribution list one', 5, '.modal li.list-item');
+    I.click('test distribution list one', '.modal li.list-item');
     I.pressKey('Enter');
-
     I.waitForText('4 addresses selected', 5);
     I.see('test distribution list one', 'li.token');
 

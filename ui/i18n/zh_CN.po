@@ -3925,6 +3925,7 @@ msgctxt "vgrid"
 msgid "Empty"
 msgstr "空置"
 
+#. empty is a verb in this case. Used when the contents of a folder should be deleted
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
 msgid "Empty folder"

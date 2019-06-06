@@ -140,7 +140,9 @@ define('io.ox/mail/accounts/settings', [
         index: 100,
         draw: function (baton) {
             var $el = this;
+            $el.append('<div>');
             require(['io.ox/oauth/keychain', 'io.ox/oauth/backbone']).then(function (oauthAPI, OAuth) {
+                $el.empty();
                 var mailServices = new Backbone.Collection(oauthAPI.services.filter(function (service) {
                         return service.canAdd({ scopes: ['mail'] }) &&
                             oauthAPI.accounts.forService(service.id, { scope: 'mail' }).map(function (account) {
@@ -460,7 +462,8 @@ define('io.ox/mail/accounts/settings', [
                 new ModalDialog({
                     model: new Backbone.Model(),
                     title: gt('Add mail account'),
-                    enter: 'add'
+                    enter: 'add',
+                    async: true
                 })
                     .build(function () {
                         baton.popup = this;
