@@ -69,14 +69,14 @@ Scenario('[C114381] Sender address is shown in tooltip @shaky', async function (
 
     I.say('Check to in "send objects"', 'blue');
     I.selectFolder('Sent');
-    I.seeElement('.leftside .list-view .list-item .from');
+    I.waitForVisible('.leftside .list-view .list-item .from');
     I.see('C114381:sent');
     let to = await getTooltipValue(I, { locator: '.leftside .list-view .list-item .from', attribute: 'title' });
     expect(to).to.be.equal(user2.get('primaryEmail'));
 
     I.say('Check to in "drafts"', 'blue');
     I.selectFolder('Drafts');
-    I.seeElement('.leftside .list-view .list-item .from');
+    I.waitForVisible('.leftside .list-view .list-item .from');
     I.see('C114381:draft');
     let to2 = await getTooltipValue(I, { locator: '.leftside .list-view .list-item .from', attribute: 'title' });
     expect(to2).to.be.equal(user2.get('primaryEmail'));
@@ -88,7 +88,7 @@ Scenario('[C114381] Sender address is shown in tooltip @shaky', async function (
     I.say(`login "${user2.get('primaryEmail')}"`, 'blue');
     I.login('app=io.ox/mail', { user: user2 });
     I.waitForVisible('.io-ox-mail-window');
-    I.seeElement('.leftside .list-view .list-item .from');
+    I.waitForVisible('.leftside .list-view .list-item .from');
 
     I.see('C114381:sent');
     let from = await getTooltipValue(I, { locator: '.leftside .list-view .list-item .from', attribute: 'title' });
