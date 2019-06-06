@@ -103,7 +103,7 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
     var MessageModel = Backbone.Model.extend({
 
         defaults: function () {
-            return { body: '', senderId: data.user_id, sent: +moment(), type: 'text' };
+            return { body: '', senderId: data.user_id, sent: +moment(), type: 'text', delivery: [] };
         },
 
         getBody: function () {
@@ -371,7 +371,18 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
         var collection = data.chats.get(roomId);
         if (!collection) return;
         var message = collection.messages.get(id);
-        if (message) message.set(changes);
+        if (!message) return;
+        var deliveries = _.clone(message.get('delivery'));
+        if (!deliveries) return;
+        if (changes.userId) {
+            var delivery = _(deliveries).findWhere({ userId: id });
+            if (delivery) _.extend(delivery, changes);
+        } else {
+            deliveries.forEach(function (delivery) {
+                _.extend(delivery, changes);
+            });
+        }
+        message.set('delivery', deliveries);
     });
 
     socket.on('message:new', function (roomId, message) {
