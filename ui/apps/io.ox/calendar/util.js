@@ -1039,7 +1039,9 @@ define('io.ox/calendar/util', [
             }
 
             return function (rgb) {
-                return 0.2126 * val(rgb[0]) + 0.7152 * val(rgb[1]) + 0.0722 * val(rgb[2]);
+                var l = 0.2126 * val(rgb[0]) + 0.7152 * val(rgb[1]) + 0.0722 * val(rgb[2]);
+                // round to 3 digits (rather useful for unit testing)
+                return Math.round(l * 1000) / 1000;
             };
         }()),
 

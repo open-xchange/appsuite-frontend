@@ -126,7 +126,9 @@ define(['io.ox/core/locale', 'settings!io.ox/core'], function (locale, settings)
                 expect(locale.number(1234.56, 2)).to.equal('1,234.56');
                 var m = moment([2019, 5, 5, 13, 37]);
                 expect(m.format('L')).to.equal('06/05/2019');
-                done();
+                // finally change back to de_DE
+                ox.once('change:locale', done);
+                settings.set('language', 'de_DE');
             });
             settings.set('language', 'es_US');
         });
