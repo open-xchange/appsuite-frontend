@@ -78,5 +78,26 @@ define(['io.ox/core/locale'], function (locale) {
         it('return start of week', function () {
             expect(locale.getFirstDayOfWeek()).to.equal('Montag');
         });
+
+        it('returns default locale', function () {
+            expect(locale.meta.getDefaultLocale()).to.equal('de_DE');
+        });
+
+        it('returns default locale from cookie', function () {
+            _.setCookie('locale', 'de_CH');
+            expect(locale.meta.getValidDefaultLocale()).to.equal('de_CH');
+        });
+
+        it('returns valid default locale', function () {
+            _.setCookie('locale', 'de_DE');
+            ox.serverConfig.languages = _(locale.meta.locales).omit('de_DE');
+            expect(locale.meta.getValidDefaultLocale()).to.equal('en_US');
+        });
+
+        it('returns valid default locale if en_US is not listed', function () {
+            _.setCookie('locale', 'en_US');
+            ox.serverConfig.languages = _(locale.meta.locales).omit('en_US');
+            expect(locale.meta.getValidDefaultLocale()).to.equal('ca_ES');
+        });
     });
 });

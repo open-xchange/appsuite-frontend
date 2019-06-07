@@ -25,24 +25,6 @@ define('io.ox/core/session', [
         CLIENT = 'open-xchange-appsuite',
         isAutoLogin = false;
 
-    var getBrowserLocale = function () {
-        var language = (navigator.language || navigator.userLanguage).substr(0, 2),
-            languages = ox.serverConfig.languages || {};
-        // special treatment for 'en' (return en_US instead of en_UK which comes first in the list)
-        if (language === 'en') return 'en_US';
-        var result = _.chain(languages).keys().find(function (id) {
-            return id.substr(0, 2) === language;
-        }).value();
-        // never ever return undefined!!!111eleven
-        // This causes a js error which prevents the display of the login page. Thus preventing users from login in.
-        result = result || (languages.en_US ? 'en_US' : _(languages).keys()[0] || 'en_US');
-        return result;
-    };
-
-    var check = function (locale) {
-        return meta.isSupportedLocale(locale) ? locale : false;
-    };
-
     var set = function (data, locale) {
         if ('session' in data) ox.session = data.session || '';
         // might have a domain; depends on what the user entered on login
@@ -50,7 +32,7 @@ define('io.ox/core/session', [
         if ('user_id' in data) ox.user_id = data.user_id || 0;
         if ('context_id' in data) ox.context_id = data.context_id || 0;
         // if the user has set the language on the login page, use this language instead of server settings lang
-        ox.locale = locale || check(data.locale) || check(getBrowserLocale()) || 'en_US';
+        ox.locale = locale || meta.getValidDefaultLocale();
         _.setCookie('locale', ox.locale);
         manifests.reset();
         $('html').attr('lang', ox.locale.split('_')[0]);
@@ -345,9 +327,7 @@ define('io.ox/core/session', [
 
         isAutoLogin: function () {
             return isAutoLogin;
-        },
-
-        getBrowserLocale: getBrowserLocale
+        }
     };
 
     return that;

@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/boot/locale', ['gettext', 'io.ox/core/boot/util', 'io.ox/core/session', 'io.ox/core/locale/meta'], function (gettext, util, session, meta) {
+define('io.ox/core/boot/locale', ['gettext', 'io.ox/core/boot/util', 'io.ox/core/locale/meta'], function (gettext, util, meta) {
 
     'use strict';
 
@@ -63,9 +63,7 @@ define('io.ox/core/boot/locale', ['gettext', 'io.ox/core/boot/util', 'io.ox/core
         },
 
         setDefaultLocale: function () {
-            // use preferred language or browser language.
-            var locale = _.getCookie('locale') || session.getBrowserLocale();
-            return this.change(locale);
+            return this.change(meta.getValidDefaultLocale());
         },
 
         gettDefaultLanguage: function () {
@@ -92,7 +90,7 @@ define('io.ox/core/boot/locale', ['gettext', 'io.ox/core/boot/util', 'io.ox/core
                 util.debug('Render locales', locales);
 
                 var changeByUser = this.changeByUser.bind(this),
-                    defaultLocale = _.getCookie('locale') || session.getBrowserLocale(),
+                    defaultLocale = meta.getValidDefaultLocale(),
                     toggle, list;
 
                 // Display native select box for locales if there are up to 'maxLang' locales

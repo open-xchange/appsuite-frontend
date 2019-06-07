@@ -206,7 +206,6 @@ define('io.ox/core/locale/meta', function () {
     }
 
     function isSupportedLocale(id) {
-        if (id === 'en_US') return true;
         // check against server-side list of available translations
         var hash = ox.serverConfig.languages;
         if (hash[id]) return true;
@@ -234,6 +233,35 @@ define('io.ox/core/locale/meta', function () {
         }
     }
 
+    // for "irregular" ids
+    var defaultLocaleMappings = {
+        ca: 'ca_ES', cs: 'cs_CZ', da: 'da_DK', en: 'en_US', ja: 'ja_JP', no: 'nb_NO', nb: 'nb_NO', sv: 'sv_SE'
+    };
+
+    function getDefaultLocale() {
+        // do we have a cookie?
+        var locale = _.getCookie('locale');
+        if (locale) return locale;
+        // if not we try the browser language
+        locale = String(navigator.language || navigator.userLanguage);
+        // irregular?
+        if (defaultLocaleMappings[locale]) return defaultLocaleMappings[locale];
+        // compare against existing locales
+        var split = locale.split('-');
+        locale = split[0] + '_' + (split[1] || split[0]).toUpperCase();
+        return locales[locales] || 'en_US';
+    }
+
+    function getValidDefaultLocale() {
+        var localeId = getDefaultLocale();
+        if (isSupportedLocale(localeId)) return localeId;
+        // special case: even en_US is not listed
+        var list = ox.serverConfig.languages;
+        if (list.en_US) return 'en_US';
+        // return first valid locale with en_US as ultimate default
+        return _(list).keys()[0] || 'en_US';
+    }
+
     return {
         locales: locales,
         dateFormats: dateFormats,
@@ -243,6 +271,8 @@ define('io.ox/core/locale/meta', function () {
         deriveMomentLocale: deriveMomentLocale,
         isSupportedLocale: isSupportedLocale,
         getSupportedLocales: getSupportedLocales,
+        getDefaultLocale: getDefaultLocale,
+        getValidDefaultLocale: getValidDefaultLocale,
         deriveSupportedLanguageFromLocale: deriveSupportedLanguageFromLocale,
         translateCLDRToMoment: translateCLDRToMoment,
         translateMomentToCLDR: translateMomentToCLDR,
