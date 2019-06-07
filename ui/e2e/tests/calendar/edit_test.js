@@ -589,6 +589,7 @@ Scenario('[C274402] Change organizer of appointment with internal attendees', as
     I.click('Ok');
     I.waitForDetached('.modal-dialog');
 
+    I.waitForText('Details');
     I.click('Details');
     I.waitForText(`Organizer ${users[1].userdata.display_name}`, undefined, '.io-ox-sidepopup');
 });
