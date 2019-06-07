@@ -166,9 +166,9 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
     I.waitForVisible(locate('[role="presentation"]').withText('ox-e2e-backend.novalocal'));
 
     I.click('[data-id="virtual/myfolders"] .folder-arrow', '.folder-picker-dialog');
-    I.waitForVisible(`[data-id="default0/INBOX/${folder}"]`, 5, '.folder-picker-dialog');
+    I.waitForVisible(`[data-id="default0/INBOX/${folder}"]`, 5);
     I.click(`[data-id="default0/INBOX/${folder}"]`, '.folder-picker-dialog');
-    I.waitForVisible(`[data-id="default0/INBOX/${folder}"].selected`, 5, '.folder-picker-dialog');
+    I.waitForVisible(`[data-id="default0/INBOX/${folder}"].selected`, 5);
     I.wait(1);
     I.click('Ok');
 
@@ -193,9 +193,9 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
     I.wait(1);
     I.waitForVisible('~Inbox');
     I.click('[data-id="virtual/myfolders"] .folder-arrow', '.io-ox-mail-window .window-sidepanel');
-    I.waitForVisible(`[data-id="default0/INBOX/${folder}"]`, 5, '.io-ox-mail-window .window-sidepanel');
+    I.waitForVisible(`[data-id="default0/INBOX/${folder}"]`, 5);
     I.click(`[data-id="default0/INBOX/${folder}"]`, '.io-ox-mail-window .window-sidepanel');
-    I.waitForVisible(`[data-id="default0/INBOX/${folder}"].selected`, 5, '.io-ox-mail-window .window-sidepanel');
+    I.waitForVisible(`[data-id="default0/INBOX/${folder}"].selected`, 5);
     I.wait(1);
     I.waitForVisible('~TestCase0389, 1 unread');
     I.see('TestCase0389', '.subject');
