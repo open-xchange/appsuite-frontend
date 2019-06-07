@@ -92,7 +92,7 @@ define('io.ox/core/settings/editLocale', [
             locale.setLocaleData(this.model.toJSON());
         })
         .on('reset', function () {
-            locale.setLocaleData({});
+            locale.resetLocaleData();
         })
         .open();
     }

@@ -107,12 +107,16 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
 
     function onChangeLanguage(value) {
         currentLocaleId = value;
-        settings.set('localeData', undefined).save();
+        resetLocaleData();
         setMomentLocale(currentLocaleId);
     }
 
     function onChangeLocaleData() {
         updateLocale(currentLocaleId);
+    }
+
+    function resetLocaleData() {
+        settings.set('localeData', undefined).save();
     }
 
     function getNumber(n, options) {
@@ -161,6 +165,8 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
                 .set('localeData', deriveLocaleData(data))
                 .save();
         },
+
+        resetLocaleData: resetLocaleData,
 
         getSupportedLocales: meta.getSupportedLocales,
 

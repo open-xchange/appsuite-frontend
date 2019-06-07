@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define(['io.ox/core/locale'], function (locale) {
+define(['io.ox/core/locale', 'settings!io.ox/core'], function (locale, settings) {
 
     describe('Locale', function () {
 
@@ -23,6 +23,7 @@ define(['io.ox/core/locale'], function (locale) {
             var m = moment([2019, 5, 5, 13, 37]);
             expect(m.format('L')).to.equal('05.06.2019');
             expect(m.format('LL')).to.equal('5. Juni 2019');
+            expect(m.format('LLL')).to.equal('05.06.2019 13:37');
             expect(m.format('LT')).to.equal('13:37');
         });
 
@@ -72,7 +73,17 @@ define(['io.ox/core/locale'], function (locale) {
             var m = moment([2019, 5, 5, 13, 37]);
             expect(m.format('L')).to.equal('05-06-2019');
             expect(m.format('LL')).to.equal('5. Juni 2019');
+            expect(m.format('LLL')).to.equal('05-06-2019 13.37');
             expect(m.format('LT')).to.equal('13.37');
+        });
+
+        it('resets custom formats correctly', function () {
+            locale.resetLocaleData();
+            var m = moment([2019, 5, 5, 13, 37]);
+            expect(m.format('L')).to.equal('05.06.2019');
+            expect(m.format('LL')).to.equal('5. Juni 2019');
+            expect(m.format('LLL')).to.equal('05.06.2019 13:37');
+            expect(m.format('LT')).to.equal('13:37');
         });
 
         it('return start of week', function () {
@@ -98,6 +109,26 @@ define(['io.ox/core/locale'], function (locale) {
             _.setCookie('locale', 'en_US');
             ox.serverConfig.languages = _(locale.meta.locales).omit('en_US');
             expect(locale.meta.getValidDefaultLocale()).to.equal('ca_ES');
+        });
+
+        it('changes locale (de_CH)', function (done) {
+            ox.once('change:locale', function () {
+                expect(locale.number(1234.56, 2)).to.equal('1’234.56');
+                var m = moment([2019, 5, 5, 13, 37]);
+                expect(m.format('L')).to.equal('05.06.2019');
+                done();
+            });
+            settings.set('language', 'de_CH');
+        });
+
+        it('changes locale (es_US)', function (done) {
+            ox.once('change:locale', function () {
+                expect(locale.number(1234.56, 2)).to.equal('1,234.56');
+                var m = moment([2019, 5, 5, 13, 37]);
+                expect(m.format('L')).to.equal('06/05/2019');
+                done();
+            });
+            settings.set('language', 'es_US');
         });
     });
 });
