@@ -38,48 +38,6 @@ define('io.ox/core/settings/downloads/pane', [
         });
     });
 
-    // disabled with 7.10
-    /*
-     * Default download: Updater
-     */
-    /*if (capabilities.has('oxupdater') && driveClientsSettings.get('standaloneWindowsClient') !== true) {
-        ext.point('io.ox/core/settings/downloads/pane/detail').extend({
-            id: 'updater',
-            index: 100,
-            draw: function () {
-                var href = ox.apiRoot + '/updater/installer/oxupdater-install.exe?session=' + ox.session;
-                this.append(
-                    $('<section>').append(
-                        $('<h2>').text(gt('Updater')),
-                        $('<p>').append(
-                            $('<i class="fa fa-download" aria-hidden="true">'),
-                            $.txt(' '),
-                            $('<a target="_blank" class="action">', { href: href, download: '' }).text(gt('Download installation file (for Windows)'))
-                        ),
-                        $('<p>').text(
-                            gt('When executing the downloaded file, an installation wizard will be launched. ' +
-                            'Follow the instructions and install the updater. ' +
-                            'Installs latest versions of Windows® client software. The Updater automatically informs about new updates. ' +
-                            'You can download the updates from within the Updater.')
-                        )
-                    ),
-                    $('<section>').addClass(products['com.openexchange.outlook.updater.oxtender2'] ? '' : 'hidden').append(
-                        $('<h2>').text(gt('Connector for Microsoft Outlook®')),
-                        $('<p>').text(
-                            gt('Synchronization of Emails, Calendar, Contacts and Tasks, along with Public, Shared and System Folders to Microsoft Outlook® clients.')
-                        )
-                    ),
-                    $('<section>').addClass(products['com.openexchange.oxnotifier'] ? '' : 'hidden').append(
-                        $('<h2>').text(gt('Notifier')),
-                        $('<p>').text(
-                            gt('Informs about the current status of Emails and appointments without having to display the user interface or another Windows® client.')
-                        )
-                    )
-                );
-            }
-        });
-    }*/
-
     // add OX Drive download links
     if (capabilities.has('drive')) {
 
