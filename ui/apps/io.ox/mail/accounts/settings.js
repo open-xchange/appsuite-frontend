@@ -353,6 +353,13 @@ define('io.ox/mail/accounts/settings', [
                                     popup.close();
                                     if (collection) collection.add([response]);
                                     successDialog();
+                                    // update oauth scope to keep settings account collection in sync
+                                    if (response.mail_oauth !== undefined) {
+                                        require(['io.ox/oauth/keychain'], function (oauthAPI) {
+                                            var acc = oauthAPI.accounts.get(response.mail_oauth);
+                                            if (acc) acc.fetch();
+                                        });
+                                    }
                                     def.resolve(response);
                                 }
                             },
