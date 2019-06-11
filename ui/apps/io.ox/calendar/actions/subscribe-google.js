@@ -38,8 +38,13 @@ define('io.ox/calendar/actions/subscribe-google', [
                     'oauthId': account.id
                 }
             });
-        }).then(function () {
+        }).then(function (res) {
             yell('success', gt('Account added successfully'));
+            require('io.ox/core/folder/api').once('pool:add', function () {
+                // fetch account again - there should be new "associations" for this account
+                var a = oauthAPI.accounts.get(res['com.openexchange.calendar.config'].oauthId);
+                if (a) a.fetch();
+            });
         });
     }
 
