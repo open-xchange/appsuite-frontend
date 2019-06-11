@@ -495,7 +495,7 @@ define('io.ox/mail/detail/content', [
 
     function setLinkTarget(match /*, link*/) {
         //replace or add link target to '_blank'
-        return (/target/).test(match) ? match.replace(/(target="[^"]*")/i, 'target="_blank"') : match.replace('>', ' target="_blank">');
+        return (/target="[^"]*"/).test(match) ? match.replace(/(target="[^"]*")/i, 'target="_blank"') : match.replace('>', ' target="_blank" rel="noopener">');
     }
 
     function addMissingProtocol(match, url) {
