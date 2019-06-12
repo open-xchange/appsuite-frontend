@@ -64,6 +64,7 @@ async function verifyMapType(I, mapName, link, value) {
     I.waitForText(mapName);
     I.checkOption(`input[value="${value}"`);
     I.seeCheckboxIsChecked(`input[value="${value}"]`);
+    I.wait(1);
     I.click('~Refresh');
     I.waitForVisible('.fa-refresh.fa-spin');
     I.waitForDetached('.fa-refresh.fa-spin');
@@ -80,10 +81,10 @@ async function verifyMapType(I, mapName, link, value) {
 
     I.selectFolder('Contacts');
 
-    I.waitForElement('~Bar, Foo', 5);
+    I.waitForVisible('~Bar, Foo');
     I.click('~Bar, Foo');
 
-    I.waitForText('Home Address', 5, '.contact-detail');
+    I.waitForText('Home Address', undefined, '.contact-detail');
 
     if (mapName !== 'No link') {
         I.waitForText('Open in ' + mapName);
