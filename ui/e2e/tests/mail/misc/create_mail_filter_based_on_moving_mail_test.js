@@ -49,12 +49,11 @@ Scenario('[C83387] Create mail filter based on moving mail', async (I, users) =>
     I.click('.list-item[aria-label*="Subject#1"]');
 
     // 5. Open context menu either in detailed view or in top bar
-
+    I.waitForVisible('~More actions');
     I.click('~More actions');
     I.waitForVisible('.smart-dropdown-container');
 
     // 6. Click "Move"
-
     I.click('Move', '.smart-dropdown-container');
     I.waitForText('Move');
 
@@ -89,8 +88,8 @@ Scenario('[C83387] Create mail filter based on moving mail', async (I, users) =>
     I.seeInField('[id*="move"]', 'Trash');
 
     // 11. Save filter
-
     I.click('Save');
+    I.waitForDetached('.modal-dialog');
 
     // 12. As User#A send again a mail to User#B
 
