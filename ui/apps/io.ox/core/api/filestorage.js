@@ -229,7 +229,9 @@ define('io.ox/core/api/filestorage', [
             },
             // utility function to create a filestorage account from an existing oauth account
             // fails if rampup was not done before (configscache empty)
-            createAccountFromOauth: function (oauthAccount) {
+            createAccountFromOauth: function (oauthAccount, options) {
+                options = options || {};
+
                 if (!oauthAccount) {
                     return $.Deferred().reject();
                 }
@@ -242,7 +244,7 @@ define('io.ox/core/api/filestorage', [
                 }
                 var config = _.copy(serviceConfigsCache[oauthAccount.serviceId], true);
                 if (config) {
-                    config.displayName = oauthAccount.displayName;
+                    config.displayName = options.displayName || oauthAccount.displayName;
                     config.configuration.account = String(oauthAccount.id);
                     return api.createAccount(config);
                 }
