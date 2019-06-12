@@ -34,6 +34,7 @@ Scenario('[C101624] Parsing CSS in HTML mails', async function (I) {
     I.say('check c101624_1.eml', 'blue');
     I.click('.list-item[data-index="0"]', '.list-view');
     I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
+    I.waitForVisible('.mail-detail-frame');
     await within({ frame: '.mail-detail-frame' }, async function () {
         I.seeTextEquals('HTML BODY', 'body');
     });
@@ -41,6 +42,7 @@ Scenario('[C101624] Parsing CSS in HTML mails', async function (I) {
     I.say('check c101624_2.eml', 'blue');
     I.click('.list-item[data-index="1"]', '.list-view');
     I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
+    I.waitForVisible('.mail-detail-frame');
     await within({ frame: '.mail-detail-frame' }, async function () {
         I.seeTextEquals('BODY 1', 'body');
     });

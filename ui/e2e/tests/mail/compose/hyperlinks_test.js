@@ -39,6 +39,7 @@ Scenario('[C8821] Send mail with Hyperlink', function (I) {
     I.fillField('.mce-combobox input.mce-textbox', hyperLink);
     I.fillField('input.mce-last', linkText);
     I.click('Ok');
+    I.waitForVisible('#mce_0_ifr');
     within({ frame: '#mce_0_ifr' }, () => {
         I.waitForText(linkText);
         I.click(linkText);
@@ -53,6 +54,7 @@ Scenario('[C8821] Send mail with Hyperlink', function (I) {
     I.selectFolder('Sent');
     I.waitForText('test subject');
     I.click('li[data-index="0"]');
+    I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, () => {
         I.waitForText(linkText);
         I.click(linkText);
@@ -95,6 +97,7 @@ Scenario('[C8823] Send Mail with Hyperlink by typing the link', function (I) {
     I.fillField('input[type="email"].token-input.tt-input', 'foo@bar');
     I.wait(1);
     I.fillField('input[name="subject"]', 'test subject');
+    I.wait(0.5);
     within({ frame: '#mce_0_ifr' }, () => {
         I.fillField('.mce-content-body', testText);
         I.seeElement('a');
@@ -104,6 +107,7 @@ Scenario('[C8823] Send Mail with Hyperlink by typing the link', function (I) {
     I.selectFolder('Sent');
     I.waitForText('test subject');
     I.click('li[data-index="0"]');
+    I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, () => {
         I.waitForText(testText);
         I.seeElement('a[href="https://foo.bar"]');
