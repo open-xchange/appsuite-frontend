@@ -142,7 +142,9 @@ define('io.ox/mail/compose/api', [
 
             var def = http.UPLOAD({
                 url: 'api/mail/compose/' + id + '/send',
-                data: formData
+                data: formData,
+                // this call always expects a json response. avoid errors in html format (user only sees json parsing error in this case)
+                params: { force_json_response: true }
             });
 
             def.progress(function (e) {

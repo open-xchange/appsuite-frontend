@@ -29,6 +29,7 @@ Scenario('Drive - Icon view w/o files', async (I) => {
 
 Scenario('Drive - Tiles view w/o files', async (I) => {
     I.login('app=io.ox/files');
+    I.waitForText('View');
     I.clickToolbar('View');
     I.click('Tiles');
     I.waitForElement('.file-list-view.complete.tile-layout');

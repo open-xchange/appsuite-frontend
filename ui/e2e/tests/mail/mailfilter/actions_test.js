@@ -161,14 +161,14 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
 
     createFilterRule(I, 'TestCase0389', 'File into');
     I.click('Select folder');
-    I.waitForElement('.folder-picker-dialog');
+    I.waitForVisible('.folder-picker-dialog');
 
-    I.waitForElement(locate('[role="presentation"]').withText('ox-e2e-backend.novalocal'));
+    I.waitForVisible(locate('[role="presentation"]').withText('ox-e2e-backend.novalocal'));
 
     I.click('[data-id="virtual/myfolders"] .folder-arrow', '.folder-picker-dialog');
-    I.waitForElement(`[data-id="default0/INBOX/${folder}"]`, '.folder-picker-dialog');
+    I.waitForVisible(`[data-id="default0/INBOX/${folder}"]`, 5);
     I.click(`[data-id="default0/INBOX/${folder}"]`, '.folder-picker-dialog');
-    I.waitForElement(`[data-id="default0/INBOX/${folder}"].selected`, '.folder-picker-dialog');
+    I.waitForVisible(`[data-id="default0/INBOX/${folder}"].selected`, 5);
     I.wait(1);
     I.click('Ok');
 
@@ -189,15 +189,15 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
 
     I.click('Send');
 
-    I.waitForElement('~Sent, 1 total');
+    I.waitForVisible('~Sent, 1 total');
     I.wait(1);
-    I.waitForElement('~Inbox');
+    I.waitForVisible('~Inbox');
     I.click('[data-id="virtual/myfolders"] .folder-arrow', '.io-ox-mail-window .window-sidepanel');
-    I.waitForElement(`[data-id="default0/INBOX/${folder}"]`, '.io-ox-mail-window .window-sidepanel');
+    I.waitForVisible(`[data-id="default0/INBOX/${folder}"]`, 5);
     I.click(`[data-id="default0/INBOX/${folder}"]`, '.io-ox-mail-window .window-sidepanel');
-    I.waitForElement(`[data-id="default0/INBOX/${folder}"].selected`, '.io-ox-mail-window .window-sidepanel');
+    I.waitForVisible(`[data-id="default0/INBOX/${folder}"].selected`, 5);
     I.wait(1);
-    I.waitForElement('~TestCase0389, 1 unread');
+    I.waitForVisible('~TestCase0389, 1 unread');
     I.see('TestCase0389', '.subject');
 
 });

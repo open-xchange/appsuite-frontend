@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-05-28 12:55+0200\n"
+"PO-Revision-Date: 2019-06-07 13:56+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -2956,11 +2956,11 @@ msgstr "既定署名"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
-msgstr "新規メッセージ用の既定署名"
+msgstr "新規メッセージの既定の署名"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for replies or forwardings"
-msgstr "返信または転送用既定署名"
+msgstr "返信または転送メッセージの既定の署名"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for replies or forwards"
@@ -3220,6 +3220,7 @@ msgid "Disable categories"
 msgstr "カテゴリを無効にする"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
+#: apps/plugins/portal/files/register.js module:plugins/portal
 msgid "Disable widget"
 msgstr "ウィジェットを無効化"
 
@@ -3416,7 +3417,7 @@ msgstr "メッセージを本当に破棄しますか?"
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Do you really want to empty folder \"%s\"?"
-msgstr "フォルダー \"%s\" の中身を削除しますか？"
+msgstr "\\\"%s\\\" フォルダーの中身を削除しますか？"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
@@ -4613,7 +4614,7 @@ msgstr "名"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 msgid "First name Last name"
-msgstr "名 姓"
+msgstr "名, 姓"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "First name must not be empty for internal users"
@@ -5054,7 +5055,7 @@ msgstr "HTML とテキスト"
 #. Context: mail search. Label for checbbox.
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Has attachments"
-msgstr "添付ファイルあります"
+msgstr "添付ファイルあり"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -5091,7 +5092,7 @@ msgstr "非表示のタスク"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Hide"
-msgstr "非表示にする"
+msgstr "非表示"
 
 #. Invitations (notifications) about appointments
 #: apps/plugins/notifications/calendar/register.js
@@ -5432,7 +5433,7 @@ msgstr "画像ファイルをインライン挿入"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Insert the original email text to a reply"
-msgstr "返信に元のメールの本文を残す"
+msgstr "返信時に元のメールの本文を含める"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -5666,7 +5667,7 @@ msgstr "言語"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 msgid "Language-specific default"
-msgstr "言語に固有の既定値"
+msgstr "言語固有の既定値"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Language:"
@@ -6951,25 +6952,25 @@ msgstr "通知"
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notify %1$s after end."
-msgstr "終了後に%1$sを通知します。"
+msgstr "終了 %1$s 後に通知"
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notify %1$s after start."
-msgstr "開始後に%1$sを通知します。"
+msgstr "開始 %1$s 後に通知"
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notify %1$s before end."
-msgstr "終了前に%1$sを通知します。"
+msgstr "終了 %1$s 前に通知"
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. relative date: 15 minutes, 3 days etc
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 msgid "Notify %1$s before start."
-msgstr "開始前に%1$sを通知します。"
+msgstr "開始 %1$s 前に通知"
 
 #. Used to display reminders for appointments
 #. %1$s: the time the reminder should pop up. absolute date with time: something like September 4, 1986 8:30 PM
@@ -11938,7 +11939,7 @@ msgstr "あなたは現在カレンダーの所有者の代理です。"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "You are currently signed in with the following devices"
-msgstr "現在次のデバイスでログインしています。"
+msgstr "次のデバイスからログインしています。"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "You are no longer using a shared calendar. You were added as organizer."
@@ -12634,7 +12635,7 @@ msgstr "緑"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "has attachments"
-msgstr "添付ファイルあります"
+msgstr "添付ファイルあり"
 
 #. message for screenreaders in case selected task has participants
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks

@@ -136,7 +136,7 @@ define('plugins/core/feedback/register', [
                 this.appSelect.val(preSelect.length > 0 && preSelect[0].val() || apps.apps[0].val());
             } else if (apps.currentApp) {
                 popupBody.append(
-                    $('<div class="form-control">').text(apps.currentApp.get('name')),
+                    $('<div class="form-control">').text(apps.currentApp.get('title')),
                     this.appSelect = $('<div aria-hidden="true">').val(apps.currentApp.get('name')).hide()
                 );
             } else {

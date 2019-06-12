@@ -3465,6 +3465,7 @@ msgid "Disable categories"
 msgstr "Adreça de correu electrònic"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
+#: apps/plugins/portal/files/register.js module:plugins/portal
 msgid "Disable widget"
 msgstr "Desactiva el widget"
 

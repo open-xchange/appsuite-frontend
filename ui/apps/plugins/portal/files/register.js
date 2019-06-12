@@ -29,6 +29,20 @@ define('plugins/portal/files/register', [
 
         load: function (baton) {
             var props = baton.model.get('props') || {};
+
+            function updateWidgetTitle(title) {
+                var $node = baton.model.node;
+
+                $node.find('.title').text(title);
+                $node.attr('aria-label', title);
+                $node.find('a.disable-widget').attr({
+                    'aria-label': title + ', ' + gt('Disable widget')
+                });
+                $node.find('.content.pointer').attr({
+                    'aria-label': gt.format('Press [enter] to jump to %1$s', title)
+                });
+            }
+
             return api.get({ folder: props.folder_id, id: props.id }).then(
                 function success(data) {
                     baton.data = data;
@@ -41,10 +55,37 @@ define('plugins/portal/files/register', [
                             api.on('remove:' + _.ecid(mail), removeWidget);
                         });
                     }
+
+                    // the file model instance
+                    baton.fileModel = api.pool.get('detail').get(_.cid(data)) || null;
+                    // respond to file rename
+                    function fileRenameHandler(model) {
+                        // call get without cache in order to get com.openexchange.file.sanitizedFilename updated
+                        api.get(model.toJSON(), { cache: false }).then(
+                            function success(data) {
+                                baton.data = data;
+                                var filename = data['com.openexchange.file.sanitizedFilename'] || data.filename || data.title;
+                                if (props.title !== filename) {
+                                    props.title = filename;
+                                    // unset first to get change event for set with an object
+                                    baton.model.unset('props', { silent: true });
+                                    baton.model.set('props', props);
+
+                                    updateWidgetTitle(filename);
+                                }
+                            });
+                    }
+                    if (baton.fileModel) {
+                        baton.fileModel.on('change:com.openexchange.file.sanitizedFilename change:filename change:title', fileRenameHandler);
+                    }
+
                     // respond to file removal
                     api.on('remove:file:' + _.ecid(data), removeWidget);
                     // remove widget from portal
                     function removeWidget() {
+                        if (baton.fileModel) {
+                            baton.fileModel.off('change:com.openexchange.file.sanitizedFilename change:filename change:title', fileRenameHandler);
+                        }
                         portalWidgets.getCollection().remove(baton.model);
                     }
                 },
@@ -66,7 +107,7 @@ define('plugins/portal/files/register', [
                 data = { folder_id: baton.data.folder_id, id: baton.data.id };
                 content.html(_.escape(baton.data.description).replace(/\n/g, '<br>'));
             } else if ((/(png|jpe?g|gif|bmp)$/i).test(filename)) {
-                data = { folder_id: baton.data.folder_id, id: baton.data.id };
+                data = { folder_id: baton.data.folder_id, id: baton.data.id, version: baton.data.version };
                 options = { width: 300, height: 300, scaleType: 'cover' };
                 url = api.getUrl(data, 'view') + '&' + $.param(options);
                 this.addClass('photo-stream');
