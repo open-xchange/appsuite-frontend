@@ -397,7 +397,7 @@ define('plugins/core/feedback/register', [
 
         drawButton: function () {
             var button;
-            $('#io-ox-core').append(
+            $('#io-ox-screens').append(
                 button = $('<button type="button" class="feedback-button">')
                 .text(gt('Feedback'))
                 .addClass(settings.get('feedback/position', 'right') + 'side-button')
