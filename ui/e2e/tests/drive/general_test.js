@@ -119,6 +119,7 @@ const searchFor = (I, query) => {
     I.waitForElement('.token-input');
     I.fillField('.token-input', query);
     I.pressKey('Enter');
+    I.waitForDetached('.busy-indicator.io-ox-busy');
 };
 
 Scenario('[C8369] Search', async (I, users) => {
