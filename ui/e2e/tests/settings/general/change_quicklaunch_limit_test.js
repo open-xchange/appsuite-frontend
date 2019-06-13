@@ -26,12 +26,16 @@ Scenario('[C276001] Change Quicklaunch limit', async (I) =>{
     await I.haveSetting('io.ox/core//apps/quickLaunchCount', 5);
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
     I.waitForVisible({ css: 'div[data-point="io.ox/core/settings/detail/view"]' });
-  
+
+    I.click('Configure quick launchers ...');
+
     I.selectOption('Quick launch 1', 'Mail');
     I.selectOption('Quick launch 2', 'Calendar');
     I.selectOption('Quick launch 3', 'Address Book');
     I.selectOption('Quick launch 4', 'Drive');
     I.selectOption('Quick launch 5', 'Portal');
+
+    I.click('Apply');
 
     I.click('#io-ox-refresh-icon');
 
