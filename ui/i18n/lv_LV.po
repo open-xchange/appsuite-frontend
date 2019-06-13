@@ -6479,6 +6479,15 @@ msgstr "Vairāku izvēle"
 msgid "Music"
 msgstr "Mūzika"
 
+#. Folder name for an external file storage (dropbox, google drive etc)
+#. %1$s - the name of the file storage service (dropbox, one drive, google drive, box drive)
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgctxt "a11y"
+#| msgid "at %1$s"
+msgid "My %1$s"
+msgstr "vieta: %1$s"
+
 #. %1$s is the display name of the account
 #. e.g. My Xing account
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
