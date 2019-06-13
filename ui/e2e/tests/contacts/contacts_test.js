@@ -585,3 +585,31 @@ Scenario('[C7360] - Cancel contact modification', async function (I, search) {
     I.waitForDetached('.io-ox-contacts-edit-window');
     I.dontSee('Holger');
 });
+
+Scenario('[C7361] - Edit partial data of a contact', async function (I, search) {
+    const phone = '+4917113371337';
+    const testrailID = 'C7361';
+    //Create Contact
+    const contact = {
+        display_name: '' + testrailID + ', ' + testrailID + '',
+        folder_id: await I.grabDefaultFolder('contacts'),
+        first_name: testrailID,
+        last_name: testrailID,
+        cellular_telephone1: phone
+    };
+    await I.haveContact(contact);
+
+    I.login('app=io.ox/contacts');
+    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+
+    I.waitForVisible('.classic-toolbar [data-action]');
+    I.selectFolder('Contacts');
+    I.click(locate('.contact').withText(contact.display_name).inside('.vgrid-scrollpane-container'));
+    I.clickToolbar('Edit');
+    I.waitForVisible('.io-ox-contacts-edit-window');
+    I.fillField('cellular_telephone1', '+3913371337');
+    I.click('Save');
+    I.waitForDetached('.io-ox-contacts-edit-window');
+    I.dontSee(phone);
+    I.see('+3913371337');
+});
