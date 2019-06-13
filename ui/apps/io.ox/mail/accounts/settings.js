@@ -494,7 +494,7 @@ define('io.ox/mail/accounts/settings', [
                             this.idle();
                         }
                     })
-                    .on('show', function () {
+                    .on('open', function () {
                         this.$footer.find('[data-action="add"]').hide();
                     })
                     .open();
