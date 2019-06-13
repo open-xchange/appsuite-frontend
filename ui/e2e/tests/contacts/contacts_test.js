@@ -557,3 +557,31 @@ Scenario.skip('[C273805] - Download infected file', async function (I) {
     I.waitForElement(locate('.modal-open button').withText('Download infected file'));
     I.waitForElement(locate('.modal-open button').withText('Cancel'));
 });
+
+Scenario('[C7360] - Cancel contact modification', async function (I, search) {
+    const phone = '+4917113371337';
+    const testrailID = 'C7360';
+    //Create Contact
+    const contact = {
+        display_name: '' + testrailID + ', ' + testrailID + '',
+        folder_id: await I.grabDefaultFolder('contacts'),
+        first_name: testrailID,
+        last_name: testrailID,
+        cellular_telephone1: phone
+    };
+    await I.haveContact(contact);
+
+    I.login('app=io.ox/contacts');
+    I.waitForVisible('*[data-app-name="io.ox/contacts"]');
+
+    I.waitForVisible('.classic-toolbar [data-action]');
+    I.selectFolder('Contacts');
+    I.click(locate('.contact').withText(contact.display_name).inside('.vgrid-scrollpane-container'));
+    I.clickToolbar('Edit');
+    I.waitForVisible('.io-ox-contacts-edit-window');
+    I.fillField('department', 'Holger');
+    I.click('Discard');
+    I.click('Discard changes');
+    I.waitForDetached('.io-ox-contacts-edit-window');
+    I.dontSee('Holger');
+});
