@@ -48,6 +48,11 @@ define('io.ox/oauth/settings', [
                     }, as);
                 }));
 
+            // sync data on scope remove
+            collection.on('remove', function () {
+                account.fetch();
+            });
+
             new ModalDialog({
                 focus: 'input',
                 async: true,
