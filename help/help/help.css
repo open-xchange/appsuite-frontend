@@ -69,7 +69,7 @@ ul.oxhelp-bottom-nav li:before {
 	line-height: 20px;
 	font-weight: bold;
 }
-.chapter h3, .titlepage h3 {
+.chapter h3, .titlepage h3, .sect1 h3, .sect2 h4 {
 	font-size: 14px;
 	line-height: 16px;
 	font-weight: bold;
