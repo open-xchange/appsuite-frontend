@@ -1402,8 +1402,9 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main apps/io.ox/mail/compose/sharing.js
-#: module:io.ox/mail
+#: module:io.ox/calendar/edit/main
+#: apps/io.ox/core/settings/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Apply"
 msgstr "適用"
 
@@ -2405,6 +2406,13 @@ msgstr "カテゴリの設定"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
 msgstr "今構成する"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/core/settings/quickLauncherDialog.js
+#, fuzzy
+#| msgid "Configure categories"
+msgid "Configure quick launchers"
+msgstr "カテゴリの設定"
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
@@ -6865,6 +6873,7 @@ msgstr "タイトルなし"
 #. Auth type. None. No authentication
 #. Connection security. None.
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/core/settings/quickLauncherDialog.js
 #: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/flag-picker.js
 #: module:io.ox/mail apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/view-options.js module:io.ox/files
@@ -8203,7 +8212,7 @@ msgid "Purple/Magenta"
 msgstr "紫／マゼンタ"
 
 #. %s is the number of the quicklauncher (1-3)
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/core/settings/quickLauncherDialog.js module:io.ox/core
 msgid "Quick launch %s"
 msgstr "クイック起動 %s"
 
