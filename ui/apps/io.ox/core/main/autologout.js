@@ -164,13 +164,16 @@ define('io.ox/core/main/autologout', [
                             // the error is part of the dialog here
                             ox.handleLogoutError = true;
 
+                            // work with strings or error objects
+                            var errorText = error[0] && error[0].error ? error[0].error : error[0];
+
                             dialog.idle();
                             dialog.$el.toggleClass('logout-failed', true);
                             dialog.$el.find('[data-action="force"]').text(gt('Force sign out'));
                             dialog.$body.empty().append(
                                 $('<div class="alert alert-danger">').append(
                                     $('<div>').text(gt('Logout failed.')),
-                                    $('<div>').text(error[0])
+                                    (_.isString(errorText) ? $('<div>').text(errorText) : '')
                                 )
                             );
                         };
