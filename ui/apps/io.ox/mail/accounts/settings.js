@@ -438,7 +438,6 @@ define('io.ox/mail/accounts/settings', [
                         })
                         .on('cancel', function () {
                             def.reject();
-                            this.close();
                         })
                         .open()
                         .$body.append(gt('Cannot establish secure connection. Do you want to proceed anyway?'));
