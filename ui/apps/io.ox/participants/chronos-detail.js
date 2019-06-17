@@ -100,8 +100,8 @@ define('io.ox/participants/chronos-detail', [
 
     function isOrganizer(baton) {
         var appointment = baton.appointment.toJSON();
-        if (!appointment.organizer || !appointment.organizer.entity) return false;
-        return baton.data.entity === appointment.organizer.entity;
+        if (!appointment.organizer || !(appointment.organizer.entity || appointment.organizer.email)) return false;
+        return baton.data.entity ? baton.data.entity === appointment.organizer.entity : baton.data.email === appointment.organizer.email;
     }
 
     function drawParticipant(obj, appointment, options) {
