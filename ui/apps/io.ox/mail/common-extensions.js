@@ -338,17 +338,24 @@ define('io.ox/mail/common-extensions', [
                 $(node).attr('aria-label', label).find('.fa').attr('title', label);
             }
 
-            function toggle(e) {
+            function update(e) {
                 e.preventDefault();
                 var data = e.data.model.toJSON();
                 // toggle 'flagged' bit
                 if (util.isFlagged(data)) api.flag(data, false); else api.flag(data, true);
-                $(this).each(_.partial(makeAccessible, data));
+            }
+
+            function toggle(view, model) {
+                var toggleElement = view.$('a.flag.io-ox-action-link');
+                makeAccessible(model.toJSON(), undefined, toggleElement);
             }
 
             return function (baton) {
                 if (!settings.get('features/flag/star') || util.isEmbedded(baton.data)) return;
                 var self = this;
+
+                baton.view.listenTo(baton.view.model, 'change:flags', _.partial(toggle, baton.view));
+
                 folderAPI.get(baton.data.folder_id).done(function (data) {
                     // see if the user is allowed to modify the flag status - always allows for unified folder
                     if (!folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data)) return;
@@ -356,7 +363,7 @@ define('io.ox/mail/common-extensions', [
                         $('<a href="#" role="button" class="flag io-ox-action-link" data-action="flag">')
                         .append(extensions.flagIcon.call(this))
                         .each(_.partial(makeAccessible, baton.data))
-                        .on('click', { model: baton.view.model }, toggle)
+                        .on('click', { model: baton.view.model }, update)
                     );
                 });
             };
@@ -680,21 +687,27 @@ define('io.ox/mail/common-extensions', [
             function makeAccessible(data, index, node) {
                 var label = util.isUnseen(data) ? gt('Mark as read') : gt('Mark as unread');
                 $(node).attr({ 'aria-label': label })
-                       .find('.fa').attr('title', label);
+                    .find('.fa').attr('title', label);
             }
 
-            function toggle(e) {
+            function update(e) {
                 e.preventDefault();
                 var data = e.data.model.toJSON();
                 // toggle 'unseen' bit
                 if (util.isUnseen(data)) api.markRead(data); else api.markUnread(data);
-                $(this).each(_.partial(makeAccessible, data));
+            }
+
+            function toggle(view, model) {
+                var toggleElement = view.$('a.unread-toggle');
+                makeAccessible(model.toJSON(), undefined, toggleElement);
             }
 
             return function (baton) {
-
                 if (util.isEmbedded(baton.data)) return;
                 var self = this;
+
+                baton.view.listenTo(baton.view.model, 'change:flags', _.partial(toggle, baton.view));
+
                 folderAPI.get(baton.data.folder_id).done(function (data) {
                     // see if the user is allowed to modify the read/unread status
                     // always allows for unifeid folder
@@ -704,7 +717,7 @@ define('io.ox/mail/common-extensions', [
                         $('<a href="#" role="button" class="unread-toggle io-ox-action-link" data-action="unread-toggle">')
                         .append('<i class="fa" aria-hidden="true">')
                         .each(_.partial(makeAccessible, baton.data))
-                        .on('click', { model: baton.view.model }, toggle)
+                        .on('click', { model: baton.view.model }, update)
                     );
                 });
             };
