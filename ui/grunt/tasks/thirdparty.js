@@ -124,6 +124,20 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
+                        flatten: true,
+                        src: ['requirejs/require.js'],
+                        cwd: 'node_modules/',
+                        dest: 'build/static/3rd.party/requirejs'
+                    },
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['crypto-js/crypto-js.js'],
+                        cwd: 'node_modules/',
+                        dest: 'build/static/3rd.party/crypto-js'
+                    },
+                    {
+                        expand: true,
                         src: ['unorm.js'],
                         cwd: 'node_modules/unorm/lib/',
                         dest: 'build/static/3rd.party/unorm'
