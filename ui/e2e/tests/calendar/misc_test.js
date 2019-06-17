@@ -445,9 +445,10 @@ Scenario('[C265147] Appointment organizer should be marked in attendee list', as
     // 6. Go to Calendar
     I.login(['app=io.ox/calendar&perspective=week:week'], { user: userB });
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible('.appointment');
 
     // 7. Open Appointment
-    I.click(subject, '.appointment');
+    I.retry(5).click(subject, '.appointment');
     I.waitForElement('.calendar-detail.view');
     I.seeNumberOfElements('.calendar-detail.view', 1);
 
