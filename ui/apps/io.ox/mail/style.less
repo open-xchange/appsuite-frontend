@@ -35,11 +35,15 @@
 
     .mail-item .list-item {
         .drag-title, .person {
-            width: 100%;
             display: inline-block;
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
+        .drag-title {
+            width: 100%;
+        }
+
         &.unread .drag-title {
             width: calc(~"100% - 19px");
         }
