@@ -140,7 +140,7 @@ define('io.ox/core/boot/form', [
         function redeemToken() {
             return http.GET({
                 module: 'share/redeem/token',
-                params: { token: _.url.hash('token'), language: language.getSelectedLanguage() },
+                params: { token: _.url.hash('token'), language: language.gettDefaultLanguage() },
                 appendSession: false,
                 processResponse: false
             });
@@ -189,8 +189,7 @@ define('io.ox/core/boot/form', [
 
         $('#io-ox-login-feedback');
 
-        // handle message params
-        if (_.url.hash('token')) {
+        var redeem = function () {
             redeemToken()
                 .done(function (data) {
                     if (data.message_type === 'ERROR') {
@@ -204,7 +203,14 @@ define('io.ox/core/boot/form', [
                     util.feedback('error', e.error);
                     if (showContinue) hideFormElements();
                 });
+        };
+
+        // handle message params
+        if (_.url.hash('token')) {
+            redeem();
         }
+
+        ox.on('language', redeem);
 
         language.render();
 

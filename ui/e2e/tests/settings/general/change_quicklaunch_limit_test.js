@@ -7,7 +7,7 @@
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  * © 2019 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Benedikt Kroening <benedikt.kroening@open-xchange.com>
+ * @author Daniel Pondruff <daniel.pondruff@open-xchange.com>
  */
 
 /// <reference path="../../../steps.d.ts" />
@@ -22,42 +22,28 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C274141] Customize default app, order and count for Quicklauncher @contentReview', async (I) =>{
-
+Scenario('[C276001] Change Quicklaunch limit', async (I) =>{
+    await I.haveSetting('io.ox/core//apps/quickLaunchCount', 5);
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
     I.waitForVisible({ css: 'div[data-point="io.ox/core/settings/detail/view"]' });
 
-    I.selectOption('[name=autoStart]', 'Portal');
-
     I.click('Configure quick launchers ...');
 
-    I.selectOption('Quick launch 1', 'None');
-    I.selectOption('Quick launch 2', 'None');
-    I.selectOption('Quick launch 3', 'None');
+    I.selectOption('Quick launch 1', 'Mail');
+    I.selectOption('Quick launch 2', 'Calendar');
+    I.selectOption('Quick launch 3', 'Address Book');
+    I.selectOption('Quick launch 4', 'Drive');
+    I.selectOption('Quick launch 5', 'Portal');
 
     I.click('Apply');
 
     I.click('#io-ox-refresh-icon');
-
-    I.click('Configure quick launchers ...');
-
-    I.selectOption('Quick launch 1', 'Calendar');
-    I.selectOption('Quick launch 2', 'Address Book');
-    I.selectOption('Quick launch 3', 'io.ox/mail/main');
-
-    I.click('Apply');
-
-    I.click('#io-ox-refresh-icon');
-
-    I.logout();
-    I.login();
-
-    // Check that the above settings are made
-    I.waitForVisible({ css: '.io-ox-portal' });
 
     await within('#io-ox-quicklaunch', async () => {
+        I.seeElement('[data-app-name="io.ox/mail"]');
         I.seeElement('[data-app-name="io.ox/calendar"]');
         I.seeElement('[data-app-name="io.ox/contacts"]');
-        I.seeElement('[data-app-name="io.ox/mail"]');
+        I.seeElement('[data-app-name="io.ox/files"]');
+        I.seeElement('[data-app-name="io.ox/portal"]');
     });
 });

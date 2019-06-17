@@ -282,6 +282,9 @@ define('io.ox/mail/detail/view', [
         id: 'inline-links',
         index: 100,
         draw: function (baton) {
+            // no need for a toolbar if the mail is collapsed
+            // extension point is invoked again on expand anyway
+            if (!baton.view.$el.hasClass('expanded')) return;
             var toolbarView = new ToolbarView({ el: this[0], point: 'io.ox/mail/links/inline', inline: true });
             toolbarView.$el.attr('data-toolbar', 'io.ox/mail/links/inline');
             toolbarView.setSelection([_.cid(baton.data)], { data: baton.data });
@@ -450,6 +453,8 @@ define('io.ox/mail/detail/view', [
             function onImmediateResize(e) {
                 // scrollHeight consdiers paddings, border, and margins
                 // set height for iframe and its parent
+                // prevent js errors on too early calls
+                if (!this.document.body) return;
                 e.data.iframe.parent().addBack().height(this.document.body.scrollHeight);
             }
 
@@ -772,6 +777,11 @@ define('io.ox/mail/detail/view', [
                 // trigger resize to restart resizeloop
                 this.$el.find('.mail-detail-frame').contents().find('.mail-detail-content').trigger('resize');
             }
+            // fill the placeholder if this is still one
+            if (this.placeholder === true) {
+                this.placeholder = false;
+                this.redraw();
+            }
 
             return this;
         },
@@ -788,6 +798,7 @@ define('io.ox/mail/detail/view', [
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
             this.listenTo(this.model, 'change:attachments', this.onChangeAttachments);
             this.listenTo(this.model, 'change:to change:cc change:bcc', this.onChangeRecipients);
+            this.placeholder = true;
 
             this.on({
                 'load': function () {
@@ -825,7 +836,11 @@ define('io.ox/mail/detail/view', [
 
             this.$el.data({ view: this, model: this.model });
 
-            ext.point('io.ox/mail/detail').invoke('draw', this.$el, baton);
+            if (!this.placeholder) {
+                ext.point('io.ox/mail/detail').invoke('draw', this.$el, baton);
+            }
+
+            this.$el.toggleClass('placeholder', this.placeholder);
 
             // global event for tracking purposes
             ox.trigger('mail:detail:render', this);

@@ -61,7 +61,7 @@ define('io.ox/mail/threadview', [
                 $('<div class="thread-view-list scrollable abs">').hide().append(
                     $('<div class="thread-view-header">').attr('aria-label', gt('Conversation')),
                     this.$messages = $('<div class="thread-view list-view" role="region">')
-                )
+                ).on('scroll', this.onScrollEnd.bind(this))
             );
         }
     });
@@ -156,7 +156,7 @@ define('io.ox/mail/threadview', [
             return this;
         },
 
-        onToggle: _.debounce(function () {
+        onToggle: _.debounce(function (e) {
             var items = this.getItems(),
                 open = items.filter('.expanded'),
                 state = open.length === 0,
@@ -164,6 +164,8 @@ define('io.ox/mail/threadview', [
                 toggleButton = this.$el.find('.toggle-all');
             toggleButton.attr('aria-label', state ? gt('Open all messages') : gt('Close all messages'));
             toggleButton.find('i').attr('class', 'fa ' + icon);
+            // only check if we need to replace placeholders when mail is collapsed
+            if (!e || !$(e.target).hasClass('expanded')) this.onScrollEnd();
         }, 10),
 
         onToggleAll: function (e) {
@@ -212,6 +214,20 @@ define('io.ox/mail/threadview', [
                 }
             }
         },
+
+        onScrollEnd: _.debounce(function () {
+            var listNode = this.$el.find('.thread-view-list');
+            this.getItems().each(function () {
+                if (!$(this).hasClass('placeholder')) return;
+                if ((this.offsetTop + $(this).height()) > listNode.scrollTop() && this.offsetTop < (listNode.scrollTop() + listNode.height())) {
+                    var view = $(this).data('view');
+                    if (view) {
+                        view.placeholder = false;
+                        view.render();
+                    }
+                }
+            });
+        }, 100),
 
         show: function (cid, threaded) {
             // strip 'thread.' prefix
@@ -268,34 +284,13 @@ define('io.ox/mail/threadview', [
 
             this.$el.find('.thread-view-list').show();
 
-            // draw thread list
-            var self = this,
-                threadId = this.collection.first().get('cid'),
-                autoOpenModel;
-            // used on mailapp start
-            if (this.autoSelect) {
-                autoOpenModel = this.collection.reduce(function (acc, model) {
-                    return !util.isUnseen(model.toJSON()) ? model : acc;
-                }, this.collection.last());
-            } else {
-                autoOpenModel = this.collection.reduce(function (acc, model) {
-                    return util.isUnseen(model.toJSON()) ? model : acc;
-                }, this.collection.first());
-            }
+            this.$messages.append(
+                this.collection.chain().map(this.renderListItem, this).value()
+            );
 
-            function renderItem(list, finalCallback) {
-                var model = list.shift();
-                if (threadChanged()) return;
-                self.$messages.append(self.renderListItem(model));
-                if (autoOpenModel === model) self.autoSelectMail();
-                if (list.length) self.renderItemTimoutId = setTimeout(renderItem, 0, list, finalCallback); else finalCallback();
-            }
+            this.zIndex();
+            this.autoSelectMail();
 
-            function threadChanged() {
-                return self.collection.first().get('cid') !== threadId;
-            }
-
-            renderItem(this.collection.toArray(), this.zIndex.bind(this));
         },
 
         onAdd: function (model) {
@@ -442,6 +437,12 @@ define('io.ox/mail/threadview', [
                     $(e.target).closest('article').focus();
                 });
             }
+            var resizeCallback = $.proxy(this.onScrollEnd, this);
+            this.$el.one('remove', function () {
+                $(window).off('resize', resizeCallback);
+            });
+
+            $(window).on('resize', resizeCallback);
         },
 
         // return alls items of this list
@@ -470,6 +471,7 @@ define('io.ox/mail/threadview', [
             items.each(function (index) {
                 $(this).css('zIndex', length - index);
             });
+            this.onScrollEnd();
         }
     });
 
@@ -482,7 +484,7 @@ define('io.ox/mail/threadview', [
                 $('<div class="thread-view-list scrollable abs">').hide().append(
                     $('<div class="thread-view-header">').attr('aria-label', gt('Conversation')),
                     this.$messages = $('<ul class="thread-view list-view">')
-                )
+                ).on('scroll', this.onScrollEnd.bind(this))
             );
         }
     });

@@ -208,7 +208,8 @@ define('io.ox/core/main/appcontrol', [
             'role': 'toolbar'
         },
         events: {
-            'click button': 'onClick'
+            'click button': 'onClick',
+            'contextmenu': 'onContextmenu'
         },
         initialize: function () {
             this.collection = new QuickLaunchersCollection();
@@ -216,6 +217,12 @@ define('io.ox/core/main/appcontrol', [
         },
         onClick: function () {
             toggleOverlay(false);
+        },
+        onContextmenu: function (e) {
+            e.preventDefault();
+            require(['io.ox/core/settings/quickLauncherDialog'], function (quickLauncherDialog) {
+                quickLauncherDialog.openDialog();
+            });
         },
         render: function () {
             this.$el.empty().append(

@@ -203,7 +203,6 @@ Scenario('[C7393] Send mail with bullet point and numbering - bullet points', as
     // Open the mail composer
     I.retry(5).click('Compose');
     I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
-    I.click('~Maximize');
 
     // Fill out to and subject
     I.waitForFocus('input[placeholder="To"]');
@@ -289,7 +288,6 @@ Scenario('[C7393] Send mail with bullet point and numbering - numbering', async 
     // Open the mail composer
     I.retry(5).click('Compose');
     I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
-    I.click('~Maximize');
 
     // Fill out to and subject
     I.waitForFocus('input[placeholder="To"]');
@@ -381,12 +379,14 @@ Scenario('[C7394] Send mail with different text alignments', async function (I, 
 
     // Open the mail composer
     I.retry(5).click('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    I.waitForVisible('.io-ox-mail-compose .contenteditable-editor');
     I.click('~Maximize');
+    I.wait(0.5);
 
     // Fill out to and subject
-    I.waitForFocus('input[placeholder="To"]');
+    I.waitForVisible('div.row[data-extension-id="to"]')
     I.fillField('To', recipient.get('primaryEmail'));
+    I.wait(0.5);
     I.fillField('Subject', mailSubject);
 
     // Write some text with the default settings

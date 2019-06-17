@@ -70,43 +70,29 @@ Scenario('[C125004] App aware user feedback', function (I) {
 });
 
 Scenario('[C125005] Provide user feedback', function (I) {
+
+    const appArr = ['Mail', 'General', 'Calendar', 'Address Book', 'Drive'];
+    const giveFeedback = (app) => {
+        I.click('~Feedback');
+        I.waitForVisible('select.feedback-select-box');
+        I.waitForText('Please rate the following application:');
+        I.see(app);
+        I.selectOption('.feedback-select-box', app);
+        I.click(locate('.star-rating label').at(getRandom()));
+        I.fillField('.feedback-note', 'It is awesome');
+        I.click('Send');
+        I.waitForText('Thank you for your feedback');
+        I.waitForDetached('.modal-dialog');
+    };
+    const getRandom = () => {
+        return Math.floor(Math.random() * (5)) + 1;
+    };
+
     I.login();
-    I.click('~Feedback');
-    I.see('Please rate the following application:');
-    I.see('Mail');
-    I.selectOption('.feedback-select-box', 'General');
-    I.click(locate('.star-rating label').at(5));
-    I.fillField('.feedback-note', 'Its awsome');
-    I.click('Send');
-    I.waitForText('Thank you for your feedback');
-    I.click('~Feedback');
-    I.see('Please rate the following application:');
-    I.selectOption('.feedback-select-box', 'Mail');
-    I.click(locate('.star-rating label').at(3));
-    I.fillField('.feedback-note', 'Its good');
-    I.click('Send');
-    I.waitForText('Thank you for your feedback');
-    I.click('~Feedback');
-    I.see('Please rate the following application:');
-    I.selectOption('.feedback-select-box', 'Calendar');
-    I.click(locate('.star-rating label').at(4));
-    I.fillField('.feedback-note', 'Its very good');
-    I.click('Send');
-    I.waitForText('Thank you for your feedback');
-    I.click('~Feedback');
-    I.see('Please rate the following application:');
-    I.selectOption('.feedback-select-box', 'Address Book');
-    I.click(locate('.star-rating label').at(4));
-    I.fillField('.feedback-note', 'Its excellent');
-    I.click('Send');
-    I.waitForText('Thank you for your feedback');
-    I.click('~Feedback');
-    I.see('Please rate the following application:');
-    I.selectOption('.feedback-select-box', 'Drive');
-    I.click(locate('.star-rating label').at(2));
-    I.fillField('.feedback-note', 'Its ok');
-    I.click('Send');
-    I.waitForText('Thank you for your feedback');
+    I.waitForVisible('~Feedback');
+    //Open Feedback dialog and rate each app in turn
+    appArr.forEach(giveFeedback);
+
 });
 
 Scenario('[C125003] Disable user feedback dialog', async function (I) {

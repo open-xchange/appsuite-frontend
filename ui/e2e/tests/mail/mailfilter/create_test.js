@@ -459,6 +459,7 @@ Scenario('[C83386] Create mail filter based on mail', async function (I, users) 
     I.click('Ok');
     // save the form
     I.click('Save');
+    I.waitForDetached('.modal-backdrop.in');
 
     I.logout();
 

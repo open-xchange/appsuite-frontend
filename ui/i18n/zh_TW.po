@@ -1386,8 +1386,9 @@ msgstr "在此問題解決前應用程式可能暫時無法使用。"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main apps/io.ox/mail/compose/sharing.js
-#: module:io.ox/mail
+#: module:io.ox/calendar/edit/main
+#: apps/io.ox/core/settings/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Apply"
 msgstr "套用"
 
@@ -2391,6 +2392,13 @@ msgstr "設定分類"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
 msgstr "立刻設定"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/core/settings/quickLauncherDialog.js
+#, fuzzy
+#| msgid "Configure categories"
+msgid "Configure quick launchers"
+msgstr "設定分類"
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
@@ -6363,6 +6371,15 @@ msgstr "多重選擇"
 msgid "Music"
 msgstr "音樂"
 
+#. Folder name for an external file storage (dropbox, google drive etc)
+#. %1$s - the name of the file storage service (dropbox, one drive, google drive, box drive)
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#, fuzzy
+#| msgctxt "a11y"
+#| msgid "at %1$s"
+msgid "My %1$s"
+msgstr "位於 %1$s"
+
 #. %1$s is the display name of the account
 #. e.g. My Xing account
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -6809,6 +6826,7 @@ msgstr "無標題。"
 #. Auth type. None. No authentication
 #. Connection security. None.
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/core/settings/quickLauncherDialog.js
 #: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/flag-picker.js
 #: module:io.ox/mail apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/view-options.js module:io.ox/files
@@ -8135,7 +8153,7 @@ msgid "Purple/Magenta"
 msgstr "紫/洋紅"
 
 #. %s is the number of the quicklauncher (1-3)
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/core/settings/quickLauncherDialog.js module:io.ox/core
 msgid "Quick launch %s"
 msgstr "快速啟動 %s"
 

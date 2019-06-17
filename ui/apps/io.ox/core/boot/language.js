@@ -66,6 +66,10 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
             return this.change(language);
         },
 
+        gettDefaultLanguage: function () {
+            return _.getCookie('language') || session.getBrowserLanguage();
+        },
+
         changeByUser: function (id) {
             if (!id) return;
             this.change(id);
