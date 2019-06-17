@@ -116,7 +116,7 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
     }
 
     function resetLocaleData() {
-        settings.set('localeData', undefined).save();
+        settings.set('localeData', {}).save();
     }
 
     function getNumber(n, options) {
