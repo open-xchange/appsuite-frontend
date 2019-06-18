@@ -115,7 +115,7 @@ define('io.ox/backbone/views/window', [
 
             if (!this.model) {
                 this.model = new WindowModel(
-                    _(this.options).pick('title', 'minimized', 'active', 'closable', 'win', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size', 'mode')
+                    _(this.options).pick('title', 'minimized', 'active', 'closable', 'win', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size', 'mode', 'floating', 'sticky')
                 );
             }
 
@@ -127,6 +127,8 @@ define('io.ox/backbone/views/window', [
                 'change:mode': this.onChangeMode,
                 'change:minimized': this.toggle,
                 'change:count': this.onChangeCount,
+                'change:floating': this.onChangeDisplayMode,
+                'change:sticky': this.onChangeDisplayMode,
                 'close': function () { this.$el.remove(); }
             });
             this.$body = this.options.$body || $('<div>');
@@ -279,6 +281,15 @@ define('io.ox/backbone/views/window', [
         },
 
         open: function () {
+            var isSticky = this.model.get('sticky') === true;
+            if (isSticky) {
+                $('#io-ox-windowmanager').append(
+                    $('<div class="io-ox-windowmanager-sticky-panel border-left">').append(
+                        this.$body
+                    )
+                );
+                return this;
+            }
             $(container).append(this.$el);
             this.$el.focus();
             //if (backdrop.parents().length === 0) $('#io-ox-screens').append(backdrop);
@@ -349,6 +360,19 @@ define('io.ox/backbone/views/window', [
 
         onChangeCount: function () {
             this.$header.find('h1 .count').toggle(this.model.get('count') > 0).text(this.model.get('count'));
+        },
+
+        onChangeDisplayMode: function () {
+            var changed = this.model.changed, mode;
+            if (changed.floating) mode = 'floating';
+            else if (changed.sticky) mode = 'sticky';
+
+            this.model.set({ floating: mode === 'floating', sticky: mode === 'sticky' }, { silent: true });
+
+            if (this.$el.is(':visible')) this.$el.remove();
+            else this.$body.remove();
+
+            this.open();
         },
 
         minimize: function () {
