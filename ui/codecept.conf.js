@@ -4,7 +4,7 @@ var defaultContext;
 // please create .env file based on .evn-example
 require('dotenv').config();
 
-['LAUNCH_URL', 'SELENIUM_HOST', 'PROVISIONING_URL', 'CONTEXT_ID'].forEach(function notdefined(key) {
+['LAUNCH_URL', 'SELENIUM_HOST', 'PROVISIONING_URL', 'CONTEXT_ID', 'FILESTORAGE_ID'].forEach(function notdefined(key) {
     if (process.env[key]) return;
     console.error('\x1b[31m', `ERROR: Missing value for environment variable '${key}'. Please specify a '.env' file analog to '.env-example'.`);
     process.exit();
@@ -38,7 +38,8 @@ module.exports.config = {
             require: './e2e/helper',
             mxDomain: 'ox-e2e-backend.novalocal',
             serverURL: process.env.PROVISIONING_URL,
-            contextId: process.env.CONTEXT_ID
+            contextId: process.env.CONTEXT_ID,
+            filestorageId: process.env.FILESTORAGE_ID
         }
     },
     include: {
@@ -80,7 +81,7 @@ module.exports.config = {
                 id: config.helpers.OpenXchange.contextId,
                 // provide filestore id, otherwise it's not possible to create more then 5
                 // contexts existing at a time.
-                filestoreId: 2
+                filestoreId: config.helpers.OpenXchange.filestorageId
             }).then(function (ctx) {
                 defaultContext = ctx;
                 resolve();
