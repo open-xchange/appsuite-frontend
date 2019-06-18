@@ -98,6 +98,7 @@ define('io.ox/chat/views/chat', [
         render: function () {
             this.$el.append(
                 $('<div class="header abs">').append(
+                    $('<button type="button" class="btn btn-default" data-cmd="close-chat"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
                     new ChatAvatar({ model: this.model }).render().$el,
                     this.model.isPrivate() ?
                         // private chat
@@ -148,8 +149,8 @@ define('io.ox/chat/views/chat', [
                 $ul.append(renderItem('Add member', { 'data-cmd': 'add-member', 'data-id': this.model.id }));
             }
 
-            // close
-            $ul.append(renderItem('Close chat', { 'data-cmd': 'close-chat', 'data-id': this.model.id }));
+            // unsubscribe
+            $ul.append(renderItem('Close chat', { 'data-cmd': 'unsubscribe-chat', 'data-id': this.model.id }));
 
             return $ul;
         },

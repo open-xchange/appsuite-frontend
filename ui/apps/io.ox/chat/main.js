@@ -61,6 +61,7 @@ define('io.ox/chat/main', [
                 case 'start-private-chat': this.startPrivateChat(data); break;
                 case 'join-channel': this.joinChannel(data); break;
                 case 'show-chat': this.showChat(data.id || data.cid); break;
+                case 'close-chat': this.closeChat(); break;
                 case 'show-recent-conversations': this.showRecentConversations(); break;
                 case 'show-channels': this.showChannels(); break;
                 case 'show-all-files': this.showAllFiles(); break;
@@ -69,7 +70,7 @@ define('io.ox/chat/main', [
                 case 'next-file': this.moveFile(+1); break;
                 case 'close-file': this.closeFile(); break;
                 case 'open-chat': this.toggleChat(data.id, true); break;
-                case 'close-chat': this.toggleChat(data.id, false); break;
+                case 'unsubscribe-chat': this.toggleChat(data.id, false); break;
                 case 'add-member': this.addMember(data.id); break;
                 // no default
             }
@@ -117,7 +118,13 @@ define('io.ox/chat/main', [
         showChat: function (id) {
             var view = new ChatView({ room: id });
             this.$rightside.empty().append(view.render().$el);
+            this.$body.addClass('open');
             view.scrollToBottom();
+        },
+
+        closeChat: function () {
+            this.$rightside.empty();
+            this.$body.removeClass('open');
         },
 
         showRecentConversations: function () {
@@ -177,6 +184,7 @@ define('io.ox/chat/main', [
             var model = data.chats.get(id);
             if (!model) return;
             model.toggle(state);
+            this.$body.toggleClass('open', state);
             if (state) this.showChat(id); else this.$rightside.empty();
         },
 
@@ -205,13 +213,13 @@ define('io.ox/chat/main', [
 
     data.fetchUsers().done(function () {
 
-        var window = new Window({ title: 'OX Chat' }).render().open(),
+        var window = new Window({ title: 'OX Chat', sticky: true }).render().open(),
             user = data.users.get(data.user_id);
 
         // start with BAD style and hard-code stuff
 
-        window.$body.addClass('ox-chat').append(
-            $('<div class="leftside abs">').append(
+        window.$body.addClass('ox-chat columns').append(
+            $('<div class="leftside">').append(
                 $('<div class="header">').append(
                     contactsAPI.pictureHalo(
                         $('<div class="picture" aria-hidden="true">'), { internal_userid: data.user_id }, { width: 40, height: 40 }
@@ -243,7 +251,7 @@ define('io.ox/chat/main', [
                     )
                 )
             ),
-            window.$rightside = $('<div class="rightside abs">').append(
+            window.$rightside = $('<div class="rightside">').append(
                 new EmptyView().render().$el
             )
         );
