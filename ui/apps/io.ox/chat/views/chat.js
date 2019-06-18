@@ -30,7 +30,9 @@ define('io.ox/chat/views/chat', [
 
         events: {
             'keydown textarea': 'onEditorKeydown',
-            'input textarea': 'onEditorInput'
+            'input textarea': 'onEditorInput',
+            'click .file-upload-btn': 'onTriggerFileupload',
+            'change .file-upload-input': 'onFileupload'
         },
 
         initialize: function (options) {
@@ -46,6 +48,7 @@ define('io.ox/chat/views/chat', [
                 'add': this.onAdd,
                 'remove': this.onRemove,
                 'change:body': this.onChangeBody,
+                'change:fileId': this.onChangeBody,
                 'change:time': this.onChangeTime,
                 'change:delivery': this.onChangeDelivery
             });
@@ -104,6 +107,9 @@ define('io.ox/chat/views/chat', [
                             this.renderTitle().addClass('small-line'),
                             new ChatMember({ collection: this.model.members }).render().$el
                         ),
+                    $('<button type="button" class="btn btn-default btn-circle pull-right file-upload-btn">')
+                        .append('<i class="fa fa-paperclip" aria-hidden="true">'),
+                    $('<input type="file" class="file-upload-input hidden">'),
                     // burger menu (pull-right just to have the popup right aligned)
                     $('<div class="dropdown pull-right">').append(
                         $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
@@ -210,6 +216,16 @@ define('io.ox/chat/views/chat', [
             data.socket.emit('typing', { roomId: this.model.id, state: state });
         },
 
+        onTriggerFileupload: function () {
+            this.$('.file-upload-input').trigger('click');
+        },
+
+        onFileupload: function () {
+            var $input = this.$('.file-upload-input');
+            this.model.postMessage({ body: '' }, $input[0].files[0]);
+            $input.val('');
+        },
+
         onPostMessage: function (body) {
             this.model.postMessage({ body: body });
         },
@@ -239,7 +255,12 @@ define('io.ox/chat/views/chat', [
         },
 
         onChangeBody: function (model) {
-            this.getMessageNode(model, '.body').html(model.getBody());
+            var $message = this.getMessageNode(model);
+            var $body = $message.find('.body');
+            $message
+                .removeClass('system text image file audio')
+                .addClass(model.isSystem() ? 'system' : model.get('type'));
+            $body.html(model.getBody());
         },
 
         onChangeTime: function (model) {
