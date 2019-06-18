@@ -76,7 +76,7 @@ module.exports.config = {
 
         var contexts = codecept.container.support('contexts'),
             testContextReady;
-        testContextReady = new Promise(function (resolve, reject) {
+        testContextReady = new Promise(function (resolve) {
             const ctxData = {
                 id: config.helpers.OpenXchange.contextId
             };
