@@ -133,7 +133,8 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
         },
 
         getImage: function () {
-            return '<img src="' + this.get('body') + '" alt="">';
+            var url = data.API_ROOT + '/files/' + this.get('fileId');
+            return '<img src="' + url + '" alt="">';
         },
 
         getTime: function () {
@@ -237,8 +238,21 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
             return this.get('type') === 'channel';
         },
 
-        postMessage: function (attr) {
-            this.messages.add(attr).save();
+        postMessage: function (attr, file) {
+            var formData = new FormData();
+            _.each(attr, function (value, key) {
+                formData.append(key, value);
+            });
+
+            // add file
+            if (file) formData.append('file', file);
+
+            var model = this.messages.add(attr);
+            model.save(formData, {
+                data: formData,
+                processData: false,
+                contentType: false
+            });
             this.set('modified', +moment());
         },
 
