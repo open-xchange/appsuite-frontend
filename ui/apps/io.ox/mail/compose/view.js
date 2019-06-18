@@ -584,6 +584,7 @@ define('io.ox/mail/compose/view', [
             // clean up editors
             for (var id in this.editorHash) {
                 this.editorHash[id].then(function (editor) {
+                    editor.setContent('');
                     editor.destroy();
                 });
                 delete this.editorHash[id];
