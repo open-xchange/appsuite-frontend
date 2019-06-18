@@ -30,23 +30,42 @@
 @gray: #707070;
 @black: #303030;
 
-.flex-center() {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .ox-chat {
 
+    display: flex;
+
+    &.columns {
+        .rightside { display: none; }
+
+        &.open {
+            .leftside { display: none; }
+            .rightside {
+                display: block;
+
+                button[data-cmd="close-chat"] {
+                    display: block;
+                }
+            }
+        }
+    }
+
     .leftside {
-        width: @width;
-        right: auto;
+        flex: 0 0 @width;
         background-color: @backgroundColor;
         border-right: 1px solid @borderColor;
     }
 
     .rightside {
-        left: @width;
+        flex: 1;
+        left: 0;
+
+        .title {
+            .ellipsis();
+        }
+
+        button[data-cmd="close-chat"] {
+            display: none;
+        }
     }
 
     .header {
