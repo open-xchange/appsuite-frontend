@@ -191,13 +191,14 @@ define('io.ox/mail/threadview', [
         showMail: function (cid) {
             this.toggleMail(cid, true);
         },
-
-        autoSelectMail: function () {
+        //idOnly returns the cid of the next mail to autoselect, without actually opening it
+        autoSelectMail: function (idOnly) {
             // automatic selection of first seen mail on mailapp start
             if (this.autoSelect) {
                 for (var a = 0, mail; mail = this.collection.at(a); a++) {
                     // last or first seen?
                     if (a === this.collection.length - 1 || !util.isUnseen(mail.toJSON())) {
+                        if (idOnly) return mail.cid;
                         this.showMail(mail.cid);
                         break;
                     }
@@ -209,6 +210,7 @@ define('io.ox/mail/threadview', [
             for (var i = this.collection.length - 1, model; model = this.collection.at(i); i--) {
                 // most recent or first unseen?
                 if (i === 0 || util.isUnseen(model.toJSON())) {
+                    if (idOnly) return model.cid;
                     this.showMail(model.cid);
                     break;
                 }
@@ -284,12 +286,12 @@ define('io.ox/mail/threadview', [
 
             this.$el.find('.thread-view-list').show();
 
+            this.nextAutoSelect = this.autoSelectMail(true);
             this.$messages.append(
                 this.collection.chain().map(this.renderListItem, this).value()
             );
 
             this.zIndex();
-            this.autoSelectMail();
 
         },
 
@@ -462,7 +464,12 @@ define('io.ox/mail/threadview', [
             view.on('mail:detail:body:render', function (data) {
                 self.trigger('mail:detail:body:render', data);
             });
-            return view.render().$el.attr({ tabindex: -1 });
+            view.render();
+            if (this.nextAutoSelect === model.cid) {
+                delete this.nextAutoSelect;
+                view.expand();
+            }
+            return view.$el.attr({ tabindex: -1 });
         },
 
         // update zIndex for all list-items (descending)
