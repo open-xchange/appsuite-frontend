@@ -4,7 +4,7 @@ var defaultContext;
 // please create .env file based on .evn-example
 require('dotenv').config();
 
-['LAUNCH_URL', 'SELENIUM_HOST', 'PROVISIONING_URL', 'CONTEXT_ID', 'FILESTORAGE_ID'].forEach(function notdefined(key) {
+['LAUNCH_URL', 'SELENIUM_HOST', 'PROVISIONING_URL', 'CONTEXT_ID'].forEach(function notdefined(key) {
     if (process.env[key]) return;
     console.error('\x1b[31m', `ERROR: Missing value for environment variable '${key}'. Please specify a '.env' file analog to '.env-example'.`);
     process.exit();
@@ -39,7 +39,7 @@ module.exports.config = {
             mxDomain: 'ox-e2e-backend.novalocal',
             serverURL: process.env.PROVISIONING_URL,
             contextId: process.env.CONTEXT_ID,
-            filestorageId: process.env.FILESTORAGE_ID
+            filestoreId: process.env.FILESTORE_ID
         }
     },
     include: {
@@ -76,24 +76,20 @@ module.exports.config = {
 
         var contexts = codecept.container.support('contexts'),
             testContextReady;
-        testContextReady = new Promise(function (resolve) {
-            contexts.create({
-                id: config.helpers.OpenXchange.contextId,
-                // provide filestore id, otherwise it's not possible to create more then 5
-                // contexts existing at a time.
-                filestoreId: config.helpers.OpenXchange.filestorageId
-            }).then(function (ctx) {
+        testContextReady = new Promise(function (resolve, reject) {
+            const ctxData = {
+                id: config.helpers.OpenXchange.contextId
+            };
+            // provide filestore id, otherwise it's not possible to create more then 5
+            // contexts existing at a time.
+            if (typeof config.helpers.OpenXchange.filestoreId !== 'undefined') ctxData.filestoreId = config.helpers.OpenXchange.filestoreId;
+
+            contexts.create(ctxData).then(function (ctx) {
                 defaultContext = ctx;
                 resolve();
-            }, function () {
-                defaultContext = (function () {
-                    return {
-                        id: config.helpers.OpenXchange.contextId,
-                        ctxdata: { id: config.helpers.OpenXchange.contextId },
-                        auth: { login: 'oxadminmaster', password: 'secret' }
-                    };
-                }());
-                resolve();
+            }, function (err) {
+                console.error(`Could not create context ${JSON.stringify(ctxData, null, 4)}.\nError: ${err.faultstring}`);
+                process.exit(1);
             });
         });
 
