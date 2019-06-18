@@ -247,7 +247,8 @@ define('plugins/core/feedback/register', [
                 async: true,
                 enter: 'send',
                 point: 'plugins/core/feedback',
-                title: gt('Your feedback'),
+                //#. %1$s is the product name, for example 'OX App Suite'
+                title: gt('How do you like %1$s?', ox.serverConfig.productName),
                 class: dialogMode + '-feedback-view'
             };
 
