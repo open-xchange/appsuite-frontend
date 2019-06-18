@@ -224,8 +224,8 @@ define('io.ox/chat/main', [
                     contactsAPI.pictureHalo(
                         $('<div class="picture" aria-hidden="true">'), { internal_userid: data.user_id }, { width: 40, height: 40 }
                     ),
-                    $('<button type="button" class="btn btn-default btn-circle" data-cmd="start-chat"><i class="fa fa-plus"></i></button>'),
-                    $('<i class="fa state online fa-check-circle">'),
+                    $('<button type="button" class="btn btn-default btn-circle" data-cmd="start-chat"><i class="fa fa-plus" aria-hidden="true"></i></button>'),
+                    $('<i class="fa state online fa-check-circle" aria-hidden="true">'),
                     $('<div class="name">').text(user.getName())
                 ),
                 new searchView().render().$el,
