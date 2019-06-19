@@ -136,6 +136,9 @@ define('io.ox/core/folder/selection', [], function () {
             // trigger action event
             this.view.trigger('selection:action', items, index);
 
+            // Bug 64624: remove selection from tree when drive is the previewed folder
+            if (this.view.app && this.view.app.get('name') === 'io.ox/files' && this.view.app.folder.get() === '9') current.removeClass('selected');
+
             // do nothing if already selected
             if (current.hasClass('selected')) return;
 
