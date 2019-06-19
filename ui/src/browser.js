@@ -146,7 +146,7 @@
                     ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
                 /** is Edge chromium browser? */
                 EdgeChromium: edgeChromium && webkit && chrome && !iOS && !opera ?
-                    ua.split('Edg/')[1].split(' ')[0] : undefined,
+                    ua.split('Edg/')[1].split(' ')[0].split('.')[0] : undefined,
                 /** is Firefox? */
                 Firefox: (firefox && !iOS && !Android) ? ua.split(/Firefox(\/| )/)[2].split('.')[0] : undefined,
                 ChromeiOS: chromeIOS ? ua.split('CriOS/')[1].split(' ')[0].split('.')[0] : undefined,
@@ -346,7 +346,6 @@
     // helper for browser support
     function isBrowserSupported() {
         var supported = false;
-        debugger;
         for (var b in us.browserSupport) {
             if (us.browser[b] >= us.browserSupport[b]) {
                 supported = true;
