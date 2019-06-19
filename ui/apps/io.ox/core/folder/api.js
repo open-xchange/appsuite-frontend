@@ -457,7 +457,7 @@ define('io.ox/core/folder/api', [
             folder_id: 'default0/INBOX',
             id: 'virtual/all-unseen',
             module: 'mail',
-            title: gt('Unread messages')
+            title: gt('Unread')
         });
     }
 
