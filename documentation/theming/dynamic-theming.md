@@ -1,18 +1,12 @@
 ---
 title: Dynamic Theming
-description: The dynamic theme plugin allows to have custom colors and logo without creating a real theme for each possible color combination.
-source: http://oxpedia.org/wiki/index.php?title=AppSuite:Dynamic_Theme
----
-
-The customization information is stored in the [Configuration Cascade](http://oxpedia.org/wiki/index.php?title=ConfigCascade) and applied at runtime, immediately after login.
+The dynamic theme plugin allows to have custom colors and logo without creating a real theme for each possible color combination. The customization information is stored in the [Configuration Cascade](http://oxpedia.org/wiki/index.php?title=ConfigCascade) and applied at runtime; once for the login screen, and then again immediately after login. This is necessary because before the login, the user's identity (and therefore the context ID) is not known yet. The only available information which can be used to select a theme is the domain name, i.e. the brand.
 
 # Installation
 
-The theme generator consists of the single package open-xchange-dynamic-theme, which is installed on the OX middleware.
+The theme generator consists of the single package `open-xchange-dynamic-theme`, which is installed on the OX middleware.
 
-# Configuration
-
-## Enabling the Plugin
+# Enabling the Plugin
 
 The plugin is enabled or disabled by the capability `dynamic-theme`, e.g. in a file `/opt/open-xchange/etc/dynamic-theme.properties` set
 
@@ -32,7 +26,7 @@ io.ox/core//theme:
 If some users won't use dynamic themes, this approach won't work. Instead, the theme selector can be disabled an enabled by controlling the list of available themes. The theme selector is hidden if the list is empty. 
 To be able to do that with the Configuration Cascade, the entire list of themes needs to be specified as a single JSON value, e.g. by changing the file `/opt/open-xchange/etc/settings/appsuite.properties` as follows:
 
-```bash
+```
 io.ox/core/settingOptions//themes={"default":"Default Theme"}
 ```
 
@@ -46,10 +40,6 @@ The package installs the file `/opt/open-xchange/etc/settings/open-xchange-dynam
 | --------------------- | --------------------- | ---------- | -----------
 | `mainColor`           | `#283f73`             | dark       | The main highlight color. Setting only this variable might already be enough.
 | `linkColor`           | same as `mainColor`   | dark       | Text color for links and border-less buttons.
-| `loginColor`          | `#1f3d66`             | dark       | Background color of the login screen.
-| `headerPrefixColor`   | `#6cbafc`             | light      | Text color of the "OX" prefix on the login screen.
-| `headerColor`         | `#fff`                | light      | Text color of the "App Suite" product name on the login screen.
-| `headerLogo`          |                       |            | URL of an image which replaces the "OX App Suite" header text on the login screen.
 | `logoURL`             |                       |            | URL of the logo in the top left corner of the top bar.
 | `logoWidth`           | `auto`                |            | Optional width of the logo as number of pixels or any CSS length unit. For best display on high-resolution screens, it is recommended to use a bigger image and specify a smaller size here.
 | `logoHeight`          | `auto`                |            | Optional height of the logo as number of pixels or any CSS length unit. The maximum value is 64. For best display on high-resolution screens, it is recommended to use a bigger image and specify a smaller size here.
@@ -69,3 +59,24 @@ When referring to the value of other variables on the right side of the equals s
 The colors can be any CSS color. `headerLogo` and `logoURL` can be relative (to `/appsuite/`), or absolute.
 When using absolute URLs to point to different hosts, use the form `//hostname/path`
 to keep the protocol (HTTP or HTTPS) and avoid any unnecessary security warnings.
+
+# Theming the Login Screen
+
+Since the login screen does not have access to a user's configuration before the user logs in, all configuration is done via `/opt/open-xchange/etc/as-config.yml`. The settings in the following table apply to the login screen:
+
+| Variable              | Default               | Dark/Light | Description
+| --------------------- | --------------------- | ---------- | -----------
+| `loginColor`          | `#1f3d66`             | dark       | Background color of the login screen.
+| `headerPrefixColor`   | `#6cbafc`             | light      | Text color of the "OX" prefix on the login screen.
+| `headerColor`         | `#fff`                | light      | Text color of the "App Suite" product name on the login screen.
+| `headerLogo`          |                       |            | URL of an image which replaces the "OX App Suite" header text on the login screen.
+
+Each of these settings should be placed under the key `dynamicTheme` like in the following example:
+
+```yaml
+default:
+  hosts: all
+  dynamicTheme:
+    loginColor: "#040"
+    headerPrefixColor: "#fff"
+```
