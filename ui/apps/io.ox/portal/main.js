@@ -719,7 +719,7 @@ define('io.ox/portal/main', [
             });
 
             // add side popup
-            sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer, .action.pointer', openSidePopup);
+            sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer, .action.pointer', _.debounce(openSidePopup, 100));
 
             // react on 'remove'
             win.nodes.main.on('click', '.disable-widget', function (e) {

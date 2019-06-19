@@ -40,7 +40,7 @@ define('plugins/portal/mail/register', [
                     // no threads - no different subject
                     disable: { 'io.ox/mail/detail/header/row3': 'different-subject' }
                 });
-                popup.idle().append(view.render().expand().$el.addClass('no-padding'));
+                popup.idle().empty().append(view.render().expand().$el.addClass('no-padding'));
                 data = null;
                 // response to "remove" event
                 view.listenTo(view.model, 'remove', function () {
@@ -61,7 +61,6 @@ define('plugins/portal/mail/register', [
         },
 
         render: function (baton) {
-
             var self = this,
                 subject = this.model.get('subject') ? _.ellipsis(this.model.get('subject'), { max: 50 }) : gt('No subject'),
                 received = moment(this.model.get('received_date')).format('l');
