@@ -5252,6 +5252,11 @@ msgstr "Sunucu ado"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "How do you like %1$s?"
+msgstr ""
+
+#. %1$s is the product name, for example 'OX App Suite'
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "How likely is it that you would recommend %1$s to a friend?"
 msgstr "%1$s ürününü arkadaşlarınıza önerme olasılığınız nedir?"
 
@@ -12345,10 +12350,6 @@ msgstr "Varsayılan anımsatıcılarınız bu takvimlere uygulanacak."
 msgid "Your default reminders will be applied to this calendar."
 msgstr "Varsayılan anımsatıcılarınız bu takvime uygulanacak."
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your feedback"
-msgstr "Görüşünüz"
-
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
 msgstr "E-posta adresiniz"
@@ -13537,3 +13538,6 @@ msgstr "platformunuz"
 
 #~ msgid "Your default reminders will be applied to this calendars."
 #~ msgstr "Varsayılan anımsatıcılarınız bu takvimlere uygulanacak."
+
+#~ msgid "Your feedback"
+#~ msgstr "Görüşünüz"

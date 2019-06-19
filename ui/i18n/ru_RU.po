@@ -5281,6 +5281,11 @@ msgstr "Имя узла"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "How do you like %1$s?"
+msgstr ""
+
+#. %1$s is the product name, for example 'OX App Suite'
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "How likely is it that you would recommend %1$s to a friend?"
 msgstr "С какой вероятностью вы порекомендуете %1$s друзьям?"
 
@@ -12398,10 +12403,6 @@ msgstr "К этим календарям будут применены стан�
 msgid "Your default reminders will be applied to this calendar."
 msgstr "Настроенные по умолчанию напоминания будут добавлены в этот календарь."
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your feedback"
-msgstr "Ваш отзыв"
-
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
 msgstr "Почтовый адрес"
@@ -17236,6 +17237,9 @@ msgstr "вашей платформы"
 
 #~ msgid "Your email address will be included when sending this feedback"
 #~ msgstr "Ваш электронный адрес будет добавлен в отзыв"
+
+#~ msgid "Your feedback"
+#~ msgstr "Ваш отзыв"
 
 #~ msgid "Your messages"
 #~ msgstr "Ваши сообщения"

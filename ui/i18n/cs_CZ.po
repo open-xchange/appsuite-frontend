@@ -5282,6 +5282,11 @@ msgstr "Hostname"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "How do you like %1$s?"
+msgstr ""
+
+#. %1$s is the product name, for example 'OX App Suite'
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "How likely is it that you would recommend %1$s to a friend?"
 msgstr "Jak pravděpodobné je, že byste doporučili %1$s svým přátelům?"
 
@@ -12395,10 +12400,6 @@ msgstr "Pro tyto kalendáře budou nastaveny vaše výchozí upomínky."
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 msgid "Your default reminders will be applied to this calendar."
 msgstr "Pro tento kalendář budou nastaveny vaše výchozí upomínky."
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your feedback"
-msgstr "Vaše zpětná vazba"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -23623,6 +23624,9 @@ msgstr "vaše platforma"
 #~ msgid "Your email address will be included when sending this feedback"
 #~ msgstr ""
 #~ "Při odesílání této zpětné vazby bude poslána i vaše e-mailová adresa"
+
+#~ msgid "Your feedback"
+#~ msgstr "Vaše zpětná vazba"
 
 #~ msgid "Your messages"
 #~ msgstr "Vaše zprávy"

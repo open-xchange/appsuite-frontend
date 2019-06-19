@@ -5288,6 +5288,11 @@ msgstr "Nombre de equipo"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "How do you like %1$s?"
+msgstr ""
+
+#. %1$s is the product name, for example 'OX App Suite'
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "How likely is it that you would recommend %1$s to a friend?"
 msgstr "¿Cómo de probable es que recomiende %1$s a un amigo?"
 
@@ -12443,10 +12448,6 @@ msgstr "Sus recordatorios predeterminados se aplicarán a estos calendarios."
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 msgid "Your default reminders will be applied to this calendar."
 msgstr "Sus recordatorios predeterminados se aplicarán a este calendario."
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your feedback"
-msgstr "Sus comentarios"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -23757,6 +23758,9 @@ msgstr "su plataforma"
 
 #~ msgid "Your email address will be included when sending this feedback"
 #~ msgstr "Su dirección de correo se incluirá al enviar este comentario"
+
+#~ msgid "Your feedback"
+#~ msgstr "Sus comentarios"
 
 #~ msgid "Your messages"
 #~ msgstr "Sus mensajes"

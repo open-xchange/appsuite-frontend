@@ -5176,6 +5176,11 @@ msgstr "主機名稱"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "How do you like %1$s?"
+msgstr ""
+
+#. %1$s is the product name, for example 'OX App Suite'
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "How likely is it that you would recommend %1$s to a friend?"
 msgstr "您向朋友或同事推薦 %1$s 的可能性有多大？"
 
@@ -12131,10 +12136,6 @@ msgstr "將套用預設提醒到下列行事曆。"
 msgid "Your default reminders will be applied to this calendar."
 msgstr "將套用您的預設提醒至此行事曆。"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your feedback"
-msgstr "您的意見回饋"
-
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
 msgstr "您的電子郵件位址"
@@ -18292,6 +18293,9 @@ msgstr "您的平台"
 
 #~ msgid "Your email address will be included when sending this feedback"
 #~ msgstr "傳送此意見回饋時將會自動包含您的電子郵件地址"
+
+#~ msgid "Your feedback"
+#~ msgstr "您的意見回饋"
 
 #~ msgid "Your messages"
 #~ msgstr "您的訊息"

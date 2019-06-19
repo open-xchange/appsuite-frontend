@@ -5286,6 +5286,11 @@ msgstr "Resursvārds"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "How do you like %1$s?"
+msgstr ""
+
+#. %1$s is the product name, for example 'OX App Suite'
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "How likely is it that you would recommend %1$s to a friend?"
 msgstr "Cik ticami jūs ieteiktu saviem draugiem izmantot %1$s?"
 
@@ -12388,10 +12393,6 @@ msgstr "Šim kalendāram tiks lietoti jūsu noklusējuma atgādinājumi."
 #: apps/io.ox/calendar/actions/subscribe-ical.js module:io.ox/calendar
 msgid "Your default reminders will be applied to this calendar."
 msgstr "Šim kalendāram tiks lietoti jūsu noklusējuma atgādinājumi."
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your feedback"
-msgstr "Atsausmes"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -20951,6 +20952,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "Your email address will be included when sending this feedback"
 #~ msgstr "Nosūtītajām atsauksmēm tiks pievienota jūsu e-pasta adrese"
+
+#~ msgid "Your feedback"
+#~ msgstr "Atsausmes"
 
 #~ msgid "Your messages"
 #~ msgstr "Jūsu ziņojumi"

@@ -14477,9 +14477,10 @@ msgstr ""
 msgid "Please rate the following application:"
 msgstr ""
 
+#. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-msgid "Your feedback"
+msgid "How do you like %1$s?"
 msgstr ""
 
 #: apps/plugins/core/feedback/register.js
