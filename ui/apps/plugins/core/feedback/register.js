@@ -329,9 +329,17 @@ define('plugins/core/feedback/register', [
                             data.operating_system = key;
                         }
                         if (!found && _.isNumber(val)) {
+                            // distinguish correctly between IE and edge
+                            // TODO can be removed when edge is no longer recognized as IE with higher version
+                            if (key === 'IE' && _.browser.edge) {
+                                data.browser = 'Edge';
+                                // round to one decimal place
+                                data.browser_version = parseInt(_.browser.Edge * 10, 10) / 10;
+                            } else {
+                                data.browser = key;
+                                data.browser_version = val;
+                            }
                             found = true;
-                            data.browser = key;
-                            data.browser_version = val;
                         }
                     });
 
