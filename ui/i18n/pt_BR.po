@@ -11492,12 +11492,12 @@ msgstr "Desbloquear"
 msgid "Unnamed subscription"
 msgstr "Inscrição sem nome"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Unread"
 msgstr "Não lido"
 
-#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Unread messages"
 msgstr "Mensagens não lidas"
@@ -12180,10 +12180,6 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
 msgstr "Você não pode mover itens para esta pasta"
-
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-msgid "You cannot move items to virtual folders"
-msgstr "Você não pode mover itens para pastas virtuais"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -20025,6 +20021,9 @@ msgstr "sua plataforma"
 
 #~ msgid "You can't present the same document more than once."
 #~ msgstr "Você não pode apresentar o mesmo documento mais de uma vez."
+
+#~ msgid "You cannot move items to virtual folders"
+#~ msgstr "Você não pode mover itens para pastas virtuais"
 
 #~ msgid ""
 #~ "You cannot remove the owner of the shared folder from this appointment."

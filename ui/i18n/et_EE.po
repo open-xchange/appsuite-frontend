@@ -11712,12 +11712,12 @@ msgstr "Vabasta"
 msgid "Unnamed subscription"
 msgstr "Nimetu tellimus"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Unread"
 msgstr "Lugemata"
 
-#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Unread messages"
 msgstr "Lugemata sõnumid"
@@ -12393,10 +12393,6 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
 msgstr "Üksusi ei saa sellesse kausta teisaldada"
-
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-msgid "You cannot move items to virtual folders"
-msgstr "Üksusi ei saa virtuaalsetesse kaustadesse teisaldada"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -14892,6 +14888,9 @@ msgstr "teie platvorm"
 #~ "You can manage desktop notifications at any time, by vitising your "
 #~ "settings"
 #~ msgstr "Võite töölauateateid igal ajal seadete kaudu hallata"
+
+#~ msgid "You cannot move items to virtual folders"
+#~ msgstr "Üksusi ei saa virtuaalsetesse kaustadesse teisaldada"
 
 #~ msgid "You do not have the appropriate permissions to read the document."
 #~ msgstr "Teil puuduvad dokumendi lugemiseks nõutavad õigused."

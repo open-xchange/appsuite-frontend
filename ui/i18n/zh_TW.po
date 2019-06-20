@@ -11245,12 +11245,12 @@ msgstr "解鎖"
 msgid "Unnamed subscription"
 msgstr "未命名的訂閱"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Unread"
 msgstr "未讀"
 
-#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Unread messages"
 msgstr "未讀訊息"
@@ -11904,10 +11904,6 @@ msgstr "當約會會占用資源時，就無法標示為秘密約會。"
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
 msgstr "您無法將項目移動至此資料夾"
-
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-msgid "You cannot move items to virtual folders"
-msgstr "您無法將項目移動至虛擬資料夾"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -18214,6 +18210,9 @@ msgstr "您的平台"
 
 #~ msgid "You can't present the same document more than once."
 #~ msgstr "您無法提供相同文件超過一次。"
+
+#~ msgid "You cannot move items to virtual folders"
+#~ msgstr "您無法將項目移動至虛擬資料夾"
 
 #~ msgid "You do not have the appropriate permissions to read the document."
 #~ msgstr "您沒有能夠讀取文件的權限。"

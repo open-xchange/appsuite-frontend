@@ -5586,11 +5586,6 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js
 #: module:io.ox/core
-msgid "You cannot move items to virtual folders"
-msgstr ""
-
-#: apps/io.ox/core/folder/actions/move.js
-#: module:io.ox/core
 msgid "You cannot move items to this folder"
 msgstr ""
 
@@ -5732,9 +5727,10 @@ msgstr ""
 
 #: apps/io.ox/core/folder/api.js
 #: module:io.ox/core
-#: apps/io.ox/mail/categories/tabs.js
+#: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
-msgid "Unread messages"
+#: apps/io.ox/mail/view-options.js
+msgid "Unread"
 msgstr ""
 
 #: apps/io.ox/core/folder/api.js
@@ -10156,6 +10152,11 @@ msgstr ""
 
 #: apps/io.ox/mail/categories/tabs.js
 #: module:io.ox/mail
+msgid "Unread messages"
+msgstr ""
+
+#: apps/io.ox/mail/categories/tabs.js
+#: module:io.ox/mail
 msgid "Drop here!"
 msgstr ""
 
@@ -10176,12 +10177,6 @@ msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural "Do you want to move all messages from selected senders to that category?"
 msgstr[0] ""
 msgstr[1] ""
-
-#: apps/io.ox/mail/common-extensions.js
-#: module:io.ox/mail
-#: apps/io.ox/mail/view-options.js
-msgid "Unread"
-msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail

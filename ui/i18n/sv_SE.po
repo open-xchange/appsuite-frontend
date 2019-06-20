@@ -11438,12 +11438,12 @@ msgstr "Lås upp"
 msgid "Unnamed subscription"
 msgstr "Namnlös prenumeration"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Unread"
 msgstr "Oläst"
 
-#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Unread messages"
 msgstr "Olästa meddelanden"
@@ -12117,10 +12117,6 @@ msgstr "Du får inte märka mötet som hemligt när en resurs blockeras."
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
 msgstr "Du kan inte flytta objekt till den här mappen"
-
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-msgid "You cannot move items to virtual folders"
-msgstr "Du kan inte flytta objekt till virtuella mappar"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -20714,6 +20710,9 @@ msgstr "din plattform"
 
 #~ msgid "You can't present the same document more than once."
 #~ msgstr "Du kan inte presentera samma dokument mer än en gång."
+
+#~ msgid "You cannot move items to virtual folders"
+#~ msgstr "Du kan inte flytta objekt till virtuella mappar"
 
 #~ msgid "You cannot unlock this document."
 #~ msgstr "Du kan inte låsa upp detta dokument."

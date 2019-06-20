@@ -11475,12 +11475,12 @@ msgstr "Feloldás"
 msgid "Unnamed subscription"
 msgstr "Névtelen feliratkozások"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Unread"
 msgstr "Olvasatlan"
 
-#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Unread messages"
 msgstr "Olvasatlan üzenetek"
@@ -12159,10 +12159,6 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
 msgstr "Nem mozgathat elemeket ebbe a mappába"
-
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-msgid "You cannot move items to virtual folders"
-msgstr "Nem mozgathat elemeket virtuális mappákba."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -15481,6 +15477,9 @@ msgstr "az Ön rendszere"
 
 #~ msgid "You can't present the same document more than once."
 #~ msgstr "Nem jelenítheti meg ugyanazt a dokumentumot egyidőben."
+
+#~ msgid "You cannot move items to virtual folders"
+#~ msgstr "Nem mozgathat elemeket virtuális mappákba."
 
 #~ msgid "You do not have the appropriate permissions to read the document."
 #~ msgstr "Nincs megfelelő jogosultsága a dokumentum olvasásához."

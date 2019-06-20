@@ -11538,12 +11538,12 @@ msgstr "Deblokkeren"
 msgid "Unnamed subscription"
 msgstr "Naamloos abonnement"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Unread"
 msgstr "Ongelezen"
 
-#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Unread messages"
 msgstr "Ongelezen berichten"
@@ -12224,10 +12224,6 @@ msgstr "U kan de afspraak niet als geheim markeren als deze bronnen blokkeert."
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
 msgstr "U kan geen items verplaatsen naar deze map"
-
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-msgid "You cannot move items to virtual folders"
-msgstr "U kan geen items verplaatsen naar virtuele mappen"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -16936,6 +16932,9 @@ msgstr "uw platform"
 
 #~ msgid "You can't present the same document more than once."
 #~ msgstr "U kan het zelfde document maar één keer aanbieden."
+
+#~ msgid "You cannot move items to virtual folders"
+#~ msgstr "U kan geen items verplaatsen naar virtuele mappen"
 
 #~ msgid "You do not have the appropriate permissions to read the document."
 #~ msgstr "U heeft niet de juiste rechten om dit document te lezen."

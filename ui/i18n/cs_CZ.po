@@ -11481,12 +11481,12 @@ msgstr "Odemknout"
 msgid "Unnamed subscription"
 msgstr "Přihlášení k odběru, bez názvu"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Unread"
 msgstr "Nepřečtené"
 
-#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Unread messages"
 msgstr "Nepřečtené zprávy"
@@ -12158,10 +12158,6 @@ msgstr "Schůzku není možné označit jako důvěrnou, blokuje-li zdroje."
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
 msgstr "Do této složky nelze přesouvat položky"
-
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-msgid "You cannot move items to virtual folders"
-msgstr "Do virtuálních složek nelze přesouvat položky"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -23438,6 +23434,9 @@ msgstr "vaše platforma"
 
 #~ msgid "You can't present the same document more than once."
 #~ msgstr "Jeden dokument nelze prezentovat více než jednou."
+
+#~ msgid "You cannot move items to virtual folders"
+#~ msgstr "Do virtuálních složek nelze přesouvat položky"
 
 #~ msgid ""
 #~ "You cannot remove the owner of the shared folder from this appointment."

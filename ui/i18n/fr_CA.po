@@ -11592,12 +11592,12 @@ msgstr "Déverrouiller"
 msgid "Unnamed subscription"
 msgstr "Abonnement sans nom"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Unread"
 msgstr "Non lu"
 
-#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Unread messages"
 msgstr "Messages non lus"
@@ -12289,10 +12289,6 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
 msgstr "Vous ne pouvez pas déplacer d'objets vers ce dossier"
-
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-msgid "You cannot move items to virtual folders"
-msgstr "Impossible de déplacer des objets vers des dossiers virtuels"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -17738,6 +17734,9 @@ msgstr "votre plate-forme"
 
 #~ msgid "You can't present the same document more than once."
 #~ msgstr "Vous ne pouvez pas présenter le même document plus d'une fois."
+
+#~ msgid "You cannot move items to virtual folders"
+#~ msgstr "Impossible de déplacer des objets vers des dossiers virtuels"
 
 #~ msgid "You do not have the appropriate permissions to read the document."
 #~ msgstr "Vous n'avez pas les droits nécessaires pour lire ce document."

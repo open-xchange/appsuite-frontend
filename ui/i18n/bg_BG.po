@@ -11721,12 +11721,12 @@ msgstr "Отключи"
 msgid "Unnamed subscription"
 msgstr "Непосочен абонамент"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Unread"
 msgstr "Непрочетен"
 
-#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Unread messages"
 msgstr "Непрочетени съобщения"
@@ -12400,10 +12400,6 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
 msgstr "Не можете да премествате елементи в тази папка"
-
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-msgid "You cannot move items to virtual folders"
-msgstr "Не можете да премествате елементи във виртуални папки"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -14154,6 +14150,9 @@ msgstr "вашата платформа"
 #~ msgstr ""
 #~ "Прикрепихте празен файл. Възможно е този файл да е изтрит на твърдия ви "
 #~ "диск. Изпрати го така или иначе?"
+
+#~ msgid "You cannot move items to virtual folders"
+#~ msgstr "Не можете да премествате елементи във виртуални папки"
 
 #~ msgid ""
 #~ "Your capacity is shared with all members of your group. Your group is "

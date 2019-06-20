@@ -11185,12 +11185,12 @@ msgstr "解锁"
 msgid "Unnamed subscription"
 msgstr "未命名订阅"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Unread"
 msgstr "未读"
 
-#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Unread messages"
 msgstr "未读消息"
@@ -11841,10 +11841,6 @@ msgstr "于封锁资源时，您就不能标记约会成秘密。"
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
 msgstr "您不能移动项目到此文件夹"
-
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-msgid "You cannot move items to virtual folders"
-msgstr "您不能移动项目到虚拟文件夹。"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -18273,6 +18269,9 @@ msgstr "您的平台"
 
 #~ msgid "You can't present the same document more than once."
 #~ msgstr "你不能出示此文件超过一次。"
+
+#~ msgid "You cannot move items to virtual folders"
+#~ msgstr "您不能移动项目到虚拟文件夹。"
 
 #~ msgid "You do not have the appropriate permissions to read the document."
 #~ msgstr "您没有读取文档的适当权限。"

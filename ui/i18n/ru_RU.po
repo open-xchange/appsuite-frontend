@@ -11481,12 +11481,12 @@ msgstr "Разблокировать"
 msgid "Unnamed subscription"
 msgstr "Безымянная подписка"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Unread"
 msgstr "Непрочитанное"
 
-#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Unread messages"
 msgstr "Непрочитанные"
@@ -12160,10 +12160,6 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
 msgstr "Вы не можете перемещать объекты в эту папку"
-
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-msgid "You cannot move items to virtual folders"
-msgstr "Вы не можете перемещать объекты в виртуальные папки"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -17153,6 +17149,9 @@ msgstr "вашей платформы"
 
 #~ msgid "You can't present the same document more than once."
 #~ msgstr "Невозможно предоставить один и тот же документ более одного раза."
+
+#~ msgid "You cannot move items to virtual folders"
+#~ msgstr "Вы не можете перемещать объекты в виртуальные папки"
 
 #~ msgid "You do not have the appropriate permissions to read the document."
 #~ msgstr "Недостаточно разрешений для чтения документа."

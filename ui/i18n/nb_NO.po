@@ -11724,12 +11724,12 @@ msgstr "Låse opp"
 msgid "Unnamed subscription"
 msgstr "Abonnement uten navn"
 
+#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Unread"
 msgstr "Ulest"
 
-#: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Unread messages"
 msgstr "Uleste meldinger"
@@ -12404,10 +12404,6 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
 msgstr "Du kan ikke flytte elementer til denne mappen"
-
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-msgid "You cannot move items to virtual folders"
-msgstr "Du kan ikke flytte elementer til virtuelle mapper"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -15494,6 +15490,9 @@ msgstr "plattformen din"
 #~ msgstr ""
 #~ "Du kan importere eksisterende signaturer fra den forrige "
 #~ "produktgenerasjonen."
+
+#~ msgid "You cannot move items to virtual folders"
+#~ msgstr "Du kan ikke flytte elementer til virtuelle mapper"
 
 #~ msgid "You do not have the appropriate permissions to read the document."
 #~ msgstr "Du har ikke de nødvendige tillatelser for å lese dokumentet."
