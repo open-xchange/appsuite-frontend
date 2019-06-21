@@ -284,7 +284,7 @@ define('io.ox/mail/detail/view', [
         draw: function (baton) {
             // no need for a toolbar if the mail is collapsed
             // extension point is invoked again on expand anyway
-            if (!baton.view.$el.hasClass('expanded')) return;
+            if (!baton.view.$el.hasClass('expanded') || baton.view.placeholder) return;
             var toolbarView = new ToolbarView({ el: this[0], point: 'io.ox/mail/links/inline', inline: true });
             toolbarView.$el.attr('data-toolbar', 'io.ox/mail/links/inline');
             toolbarView.setSelection([_.cid(baton.data)], { data: baton.data });
@@ -696,7 +696,6 @@ define('io.ox/mail/detail/view', [
         },
 
         onLoad: function (data) {
-
             // since this function is a callback we have to check this.model
             // as an indicator whether this view has been destroyed meanwhile
             if (this.model === null) return;
@@ -711,6 +710,10 @@ define('io.ox/mail/detail/view', [
             this.trigger('load:done');
             // draw
             // nested mails do not have a subject before loading, so trigger change as well
+            if (!this.$el.find('.detail-view-row.row-5').hasClass('inline-toolbar-container')) {
+                this.$el.empty();
+                this.render();
+            }
             this.onChangeSubject();
             this.onChangeAttachments();
             this.onChangeContent();
@@ -740,17 +743,18 @@ define('io.ox/mail/detail/view', [
         },
 
         toggle: function (state) {
+            this.placeholder = false;
             var $li = this.$el,
                 $button = $li.find('.toggle-mail-body-btn');
 
             $li.toggleClass('expanded', state);
+            var isExpanded = $li.hasClass('expanded');
 
-            $button.attr('aria-expanded', $li.hasClass('expanded'));
+            $button.attr('aria-expanded', isExpanded);
 
             // trigger DOM event that bubbles
             this.$el.trigger('toggle');
-
-            if ($li.attr('data-loaded') === 'false' && $li.hasClass('expanded')) {
+            if ($li.attr('data-loaded') === 'false' && isExpanded) {
                 $li.attr('data-loaded', true);
                 $li.find('section.body').addClass('loading');
                 this.trigger('load');
@@ -773,14 +777,9 @@ define('io.ox/mail/detail/view', [
                         );
                     }
                 }
-            } else if ($li.hasClass('expanded')) {
+            } else if (isExpanded) {
                 // trigger resize to restart resizeloop
                 this.$el.find('.mail-detail-frame').contents().find('.mail-detail-content').trigger('resize');
-            }
-            // fill the placeholder if this is still one
-            if (this.placeholder === true) {
-                this.placeholder = false;
-                this.redraw();
             }
 
             return this;
