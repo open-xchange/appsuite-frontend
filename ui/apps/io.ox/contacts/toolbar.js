@@ -35,7 +35,7 @@ define('io.ox/contacts/toolbar', [
         'create': {
             prio: 'hi',
             mobile: 'hi',
-            title: gt('New'),
+            title: gt('New contact'),
             dropdown: 'io.ox/contacts/toolbar/new',
             drawDisabled: true
         },
@@ -51,7 +51,6 @@ define('io.ox/contacts/toolbar', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('Send email'),
-            tooltip: gt('Send email'),
             ref: 'io.ox/contacts/actions/send'
         },
         'invite': {

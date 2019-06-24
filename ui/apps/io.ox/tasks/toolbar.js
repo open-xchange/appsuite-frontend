@@ -39,8 +39,7 @@ define('io.ox/tasks/toolbar', [
         'create': {
             prio: 'hi',
             mobile: 'hi',
-            title: gt('New'),
-            tooltip: gt('New task'),
+            title: gt('New task'),
             drawDisabled: true,
             ref: 'io.ox/tasks/actions/create'
         },
