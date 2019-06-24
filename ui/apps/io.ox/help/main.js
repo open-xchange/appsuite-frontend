@@ -113,13 +113,12 @@ define('io.ox/help/main', [
             }.bind(this);
 
             iframe.on('load', function () {
-                var caps = capabilities.getFlat();
-                console.log('%c CAPS: ', 'background: #222; color: #bada55', { caps: caps });
                 // mark the iframes html as embedded class and modal to override the styles in the help less files
                 var classesToAdd = opt.modal ? 'embedded in-modal' : 'embedded',
                     contents = $('.inline-help-iframe').contents(),
                     firstTabbable = contents.find('.navbar-nav a:eq(1)'),
-                    lastTabbable = contents.find('body a:last');
+                    lastTabbable = contents.find('body a:last'),
+                    caps = capabilities.getFlat();
 
                 _(caps.enabled).each(function (cap) {
                     classesToAdd += ' cap-' + cap;
