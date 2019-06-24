@@ -207,10 +207,9 @@ define('io.ox/core/boot/form', [
 
         // handle message params
         if (_.url.hash('token')) {
+            ox.on('language', redeem);
             redeem();
         }
-
-        ox.on('language', redeem);
 
         language.render();
 
