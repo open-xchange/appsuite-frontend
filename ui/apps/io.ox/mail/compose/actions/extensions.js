@@ -30,6 +30,11 @@ define('io.ox/mail/compose/actions/extensions', [
                 var def = new $.Deferred();
                 model.trigger('force:upload');
                 model.once('upload:complete', def.resolve);
+                model.once('upload:failed', function (error) {
+                    // to stop the cascade and result in an idle window instead of closing (prevent data loss)
+                    baton.stopPropagation();
+                    def.reject(error);
+                });
                 return def;
             })
             .compact()
