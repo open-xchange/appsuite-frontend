@@ -215,7 +215,7 @@
 
             .priority { float: none; }
 
-            .from span.person { .fontWeight(normal); }
+            .from span.person { font-weight: normal; }
 
             .subject {
                 display: inline;
@@ -231,12 +231,12 @@
             }
 
             &.unread {
-                .from span.person, .subject, .date { .fontWeight(bold); }
+                .from span.person, .subject, .date { font-weight: bold; }
             }
         }
 
         &.unread {
-            .date { opacity: 1; .fontWeight(bold); }
+            .date { opacity: 1; font-weight: bold; }
         }
     }
 }
@@ -371,7 +371,7 @@ html.macos, html.ios {
 
         span.person {
             color: inherit;
-            .fontWeight(bold);
+            font-weight: bold;
         }
 
         &.list { display: block; }
@@ -379,7 +379,7 @@ html.macos, html.ios {
         .person-link {
             .ellipsis();
             &.person-from {
-                .fontWeight(bold);
+                font-weight: bold;
                 color: black;
             }
         }
@@ -446,7 +446,7 @@ html.macos, html.ios {
     .priority {
         float: right;
         font-size: @icon-size;
-        .fontWeight(bold);
+        font-weight: bold;
         display: inline-block;
         margin-left: 7px;
 
@@ -649,14 +649,14 @@ html.macos, html.ios {
         max-height: 20px;
         span.person {
             color: inherit;
-            //.fontWeight(700);
+            //font-weight: bold;
         }
     }
 
     .unread .from span.person { font-weight: bold; }
 
     .date, .size {
-        .fontWeight(400);
+        font-weight: normal;
         display: inline-block;
         margin-left: @default-padding / 2;
         float: right;
@@ -790,7 +790,7 @@ html.macos, html.ios {
         float: right;
         overflow: visible;
         text-align: center;
-        .fontWeight(normal);
+        font-weight: normal;
         border-radius: @border-radius-small;
     }
 
@@ -841,7 +841,7 @@ html.macos, html.ios {
     .thread-item {
         padding: 5px @list-view-padding 5px (@list-view-padding + 30px);
 
-        .from span.person { .fontWeight(normal); }
+        .from span.person { font-weight: normal; }
 
         i.icon-unread {
             color: @link-color;
