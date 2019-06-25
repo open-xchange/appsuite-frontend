@@ -17,4 +17,7 @@ module.exports = function (grunt) {
     grunt.config.set('connect.server.options.key', conf.key);
     grunt.config.set('connect.server.options.cert', conf.cert);
     grunt.config.set('connect.server.options.ca', conf.ca);
+
+    // prefer environment variables over local conf
+    grunt.config.set('local.appserver.server', process.env.SERVER || grunt.config.get('local.appserver.server'));
 };

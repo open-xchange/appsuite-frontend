@@ -9,6 +9,9 @@
 'use strict';
 
 module.exports = function (grunt) {
+
+    require('dotenv').config();
+
     grunt.loadNpmTasks('@open-xchange/shared-grunt-config');
 
     // load custom tasks
