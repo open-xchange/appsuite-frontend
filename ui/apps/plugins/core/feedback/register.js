@@ -213,6 +213,12 @@ define('plugins/core/feedback/register', [
             };
         }
     });
+    // for custom dev
+    ext.point('plugins/core/feedback').extend({
+        id: 'process',
+        index: 200,
+        process: $.noop
+    });
 
     var modes = {
             nps: {
@@ -387,6 +393,10 @@ define('plugins/core/feedback/register', [
                             break;
                         // no default
                     }
+
+                    var baton = ext.Baton.ensure(data);
+                    ext.point('plugins/core/feedback').invoke('process', this, baton);
+                    data = baton.data;
                     sendFeedback(data)
                         .done(function () {
                             //#. popup info message
