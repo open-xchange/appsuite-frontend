@@ -1,11 +1,18 @@
 ---
 
+stages:
+  - test
+  - deploy
+
 build ui docker image:
   script:
     - docker build --pull -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG} ui/
     - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
     - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG}
   stage: test
+  only:
+    changes:
+      - ui/**/*
 
 .tag docker image: &add_tag
   stage: deploy

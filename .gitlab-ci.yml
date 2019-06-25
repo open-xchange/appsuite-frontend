@@ -1,10 +1,10 @@
 image: docker:latest
 
 include:
-  - "/gitlab-ci/docker.yml"
-  - "/gitlab-ci/preview_apps.yml"
-  - "/gitlab-ci/documentation.yml"
-  - "/gitlab-ci/e2e.yml"
+  - local: "/gitlab-ci/docker.yml"
+  - local: "/gitlab-ci/preview_apps.yml"
+  - local: "/gitlab-ci/documentation.yml"
+  - local: "/gitlab-ci/e2e.yml"
 
 stages:
   - build
@@ -14,46 +14,62 @@ stages:
   - report
   - cleanup
 
-.default_cache: &default_cache
+.default_cache:
   cache:
     # use one cache
     key: "yarn"
     paths:
       - ".yarn-cache"
 
-.build_ui: &build_ui
-  <<: *default_cache
+.build ui plugin:
+  extends: .default_cache
   image: gitlab.open-xchange.com:4567/frontend/dev_env:latest
+  variables:
+    build_tasks: dist:build
   script:
-    - cd ui
+    - cd ${PROJECT_PATH}
     - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
-    - grunt ${CI_JOB_NAME}
+    - grunt ${build_tasks}
   stage: build
   artifacts:
     expire_in: 2hours
     paths:
-      - ui/build
-      - ui/dist
-      - ui/node_modules
+      - "*/build"
+      - "*/dist"
+      - "*/node_modules"
+  only:
+    changes:
+      - ${PROJECT_PATH}/**/*
 
 # split build_ui into 2 build jobs (running on 2 different runners in parallel)
 # this distributes workload onto 2 runners instead of one and basically halves build time
-lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist:
-  <<: *build_ui
+build ui:
+  extends: .build ui plugin
+  parallel: 2
+  variables:
+    PROJECT_PATH: ui
+    build_tasks_1: lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist
+    build_tasks_2: copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist
+  script:
+    - cd ${PROJECT_PATH}
+    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
+    - eval "grunt \${build_tasks_$CI_NODE_INDEX}"
   tags:
     - openstack
-
-copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist:
-  <<: *build_ui
-  tags:
-    - openstack
+  only:
+    changes:
+      - ${PROJECT_PATH}/**/*
+      - open-xchange-appsuite/**/*
+      - open-xchange-appsuite-l10n/**/*
+      - open-xchange-appsuite-manifest/**/*
+      - gitlab_ci
+      - .gitlab-ci.yml
 
 build ui docker image:
   dependencies:
-    - lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist
-    - copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist
+    - build ui
 
-test_ui:
+test ui:
   image: gitlab.open-xchange.com:4567/frontend/dev_env/browser:latest
   variables:
     BROWSERS: DockerHeadless
@@ -62,49 +78,33 @@ test_ui:
     - yarn test
   stage: test
   dependencies:
-    - lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist
-    - copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist
+    - build ui
   artifacts:
     reports:
       junit: ui/build/reports/unit/*/result.xml
 
 run e2e tests:
-  <<: *default_cache
+  extends: .default_cache
+  # don't change the cache, just pull should be up-to-date due to previous build jobs
+  cache:
+    policy: pull
 
-.build_ui_plugin_template: &build_ui_plugin
-  <<: *default_cache
-  image: gitlab.open-xchange.com:4567/frontend/dev_env:latest
-  stage: build
-  script:
-    - cd ${PROJECT_PATH}
-    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
-    - grunt dist:build
-  artifacts:
-    expire_in: 2hours
-    paths:
-      - ${PROJECT_PATH}/build
-      - ${PROJECT_PATH}/dist
-      - ${PROJECT_PATH}/node_modules
-  only:
-    changes:
-      - ${PROJECT_PATH}/**/*
-
-build_help:
+build help:
+  extends: .build ui plugin
   variables:
     PROJECT_PATH: help
-  <<: *build_ui_plugin
 
-build_guidedtours:
+build guidedtours:
+  extends: .build ui plugin
   variables:
     PROJECT_PATH: guidedtours
-  <<: *build_ui_plugin
 
-build_spamexperts:
+build spamexperts:
+  extends: .build ui plugin
   variables:
     PROJECT_PATH: open-xchange-appsuite-spamexperts
-  <<: *build_ui_plugin
 
-build_dynamic-theme:
+build dynamic-theme:
+  extends: .build ui plugin
   variables:
     PROJECT_PATH: open-xchange-dynamic-theme
-  <<: *build_ui_plugin
