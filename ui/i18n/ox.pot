@@ -3016,20 +3016,6 @@ msgctxt "app"
 msgid "Favorite timezones"
 msgstr ""
 
-#: apps/io.ox/calendar/toolbar.js
-#: module:io.ox/calendar
-#: apps/io.ox/contacts/mobile-toolbar-actions.js
-#: module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js
-#: module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js
-#: module:io.ox/files
-#: apps/io.ox/tasks/mobile-toolbar-actions.js
-#: module:io.ox/tasks
-#: apps/io.ox/tasks/toolbar.js
-msgid "New"
-msgstr ""
-
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #: apps/io.ox/calendar/toolbar.js
 #: module:io.ox/calendar
@@ -4134,6 +4120,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/edit/main.js
 #: module:io.ox/contacts
+#: apps/io.ox/contacts/toolbar.js
 msgid "New contact"
 msgstr ""
 
@@ -4251,6 +4238,15 @@ msgstr ""
 #: apps/io.ox/contacts/main.js
 #: module:io.ox/contacts
 msgid "Contacts toolbar"
+msgstr ""
+
+#: apps/io.ox/contacts/mobile-toolbar-actions.js
+#: module:io.ox/mail
+#: apps/io.ox/files/toolbar.js
+#: module:io.ox/files
+#: apps/io.ox/tasks/mobile-toolbar-actions.js
+#: module:io.ox/tasks
+msgid "New"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js

@@ -6619,12 +6619,9 @@ msgstr "Nunca"
 msgid "Never show again"
 msgstr "Nunca mais mostrar"
 
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
-#: apps/io.ox/tasks/toolbar.js
 msgid "New"
 msgstr "Novo"
 
@@ -6678,6 +6675,7 @@ msgid "New code sent."
 msgstr "Novo código enviado."
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
+#: apps/io.ox/contacts/toolbar.js
 msgid "New contact"
 msgstr "Novo contato"
 

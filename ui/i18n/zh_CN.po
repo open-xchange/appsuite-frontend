@@ -6463,12 +6463,9 @@ msgstr "从来没有"
 msgid "Never show again"
 msgstr "不再显示"
 
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
-#: apps/io.ox/tasks/toolbar.js
 msgid "New"
 msgstr "新建"
 
@@ -6522,6 +6519,7 @@ msgid "New code sent."
 msgstr "发送了新代码。"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
+#: apps/io.ox/contacts/toolbar.js
 msgid "New contact"
 msgstr "新联系人"
 
