@@ -544,9 +544,18 @@ define('io.ox/mail/compose/view', [
                     catchErrors: true
                 });
 
-            return ext.point('io.ox/mail/compose/actions/save').cascade(this, baton).always(function () {
+            var def = $.Deferred();
+            ext.point('io.ox/mail/compose/actions/save').cascade(this, baton).then(function (res) {
+                // reject if something went wrong
+                if (baton.rejected) {
+                    def.reject(baton.error);
+                    return res;
+                }
+                def.resolve(res);
+            }, def.reject).always(function () {
                 if (win) win.idle();
             });
+            return def;
         },
 
         // has three states, dirty, saving, saved
@@ -622,7 +631,8 @@ define('io.ox/mail/compose/view', [
                 // button texts may become quite large in some languages (e. g. french, see Bug 35581)
                 // add some extra space
                 // TODO maybe we could use a more dynamical approach
-                def = new dialogs.ModalDialog({ width: 550, container: _.device('smartphone') ? self.$el.closest('.window-container-center') : $('#io-ox-core') })
+                def = $.Deferred();
+                new dialogs.ModalDialog({ width: 550, container: _.device('smartphone') ? self.$el.closest('.window-container-center') : $('#io-ox-core') })
                     .text(modalText)
                     //#. "Discard message" appears in combination with "Cancel" (this action)
                     //#. Translation should be distinguishable for the user
@@ -634,13 +644,14 @@ define('io.ox/mail/compose/view', [
                         if (action === 'delete') {
                             var isAutoDiscard = self.config.get('autoDiscard'),
                                 editFor = self.model.get('meta').editFor;
+                            def.resolve();
                             if (!isDraft || !isAutoDiscard || !editFor) return;
                             // only delete autosaved drafts that are not saved manually and have a msgref
                             mailAPI.remove([{ id: editFor.originalId, folder_id: editFor.originalFolderId }]);
                         } else if (action === 'savedraft') {
-                            return self.saveDraft();
+                            self.saveDraft().then(def.resolve, def.reject);
                         } else {
-                            return $.Deferred().reject();
+                            def.reject();
                         }
                     });
             }
