@@ -5,13 +5,14 @@ buildscript {
         }
     }
     dependencies {
+        classpath("com.openexchange.build", "licensing")
         classpath("com.openexchange.build", "packaging", "3.1.0")
         classpath("com.openexchange.build", "opensuse-build-service-client", "1.4.0")
     }
 }
 
 apply {
-    // TODO required by the packaging plugin on the subproject
+    plugin("com.openexchange.build.licensing")
     plugin("com.openexchange.build.install")
     plugin("com.openexchange.build.gradle-git")
     plugin("com.openexchange.opensuse-build-service-client")
@@ -21,6 +22,14 @@ subprojects {
     apply {
         plugin("com.openexchange.build.install")
         plugin("com.openexchange.build.packaging")
+    }
+}
+
+configure<com.openexchange.build.licensing.LicensingExtension> {
+    licenses {
+        register("core/ui") {
+            this.sourceFile = File(project.projectDir, "LICENSE")
+        }
     }
 }
 
