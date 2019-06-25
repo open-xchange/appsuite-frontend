@@ -360,6 +360,8 @@ define('io.ox/calendar/week/view', [
             this.on('collection:before:reset', this.onBeforeReset);
             this.on('collection:after:reset', this.onAfterReset);
 
+            this.listenTo(opt.app.props, 'change:layout', this.adjustPlacement);
+
             if (this.model.get('mode') === 'day') {
                 this.listenTo(this.model, 'change:mergeView', this.render);
                 this.listenTo(opt.app, 'folders:change', this.onFoldersChange);
