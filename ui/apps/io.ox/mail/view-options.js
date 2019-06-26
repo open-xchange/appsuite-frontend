@@ -101,11 +101,11 @@ define('io.ox/mail/view-options', [
                 SECONDARY_PAGE_SIZE: 100
             });
 
-            var $el = $('<div>').appendTo(this);
+            var $el = $('<div class="_hurz">').appendTo(this);
 
             require(['io.ox/backbone/views/search'], function (SearchView) {
 
-                new SearchView({ $el: $el, point: 'io.ox/mail/search/dropdown' })
+                new SearchView({ el: $el[0], point: 'io.ox/mail/search/dropdown' })
                 .build(function () {
                     var view = this;
                     baton.app.on('folder:change', function () {
@@ -132,7 +132,9 @@ define('io.ox/mail/view-options', [
         }
     };
 
-    if (settings.get('prototypes/search', false)) {
+    // search-prototype: changed "false" to "true"
+    var useSearchPrototype = _.device('desktop') && settings.get('prototypes/search', true);
+    if (useSearchPrototype) {
         ext.point('io.ox/mail/list-view/toolbar/top').extend(searchPrototype);
     }
 
@@ -220,7 +222,7 @@ define('io.ox/mail/view-options', [
         node.toggle(!app.props.get('find-result'));
     }
 
-    ext.point('io.ox/mail/list-view/toolbar/top').extend({
+    ext.point('io.ox/mail/list-view/toolbar/' + (useSearchPrototype ? 'bottom' : 'top')).extend({
         id: 'dropdown',
         index: 1000,
         draw: function (baton) {
@@ -282,7 +284,7 @@ define('io.ox/mail/view-options', [
         }
     });
 
-    ext.point('io.ox/mail/list-view/toolbar/top').extend({
+    ext.point('io.ox/mail/list-view/toolbar/' + (useSearchPrototype ? 'bottom' : 'top')).extend({
         id: 'all',
         index: 200,
         draw: function (baton) {
@@ -329,13 +331,21 @@ define('io.ox/mail/view-options', [
 
     function onFolderViewOpen(app) {
         app.getWindow().nodes.sidepanel.show();
-        app.getWindow().nodes.main.find('.list-view-control').removeClass('toolbar-bottom-visible');
+        if (useSearchPrototype) {
+            app.getWindow().nodes.main.find('.toolbar-item[data-action="open-folder-view"]').hide();
+        } else {
+            app.getWindow().nodes.main.find('.list-view-control').removeClass('toolbar-bottom-visible');
+        }
     }
 
     function onFolderViewClose(app) {
         // hide sidepanel so invisible objects are not tabbable
         app.getWindow().nodes.sidepanel.hide();
-        app.getWindow().nodes.main.find('.list-view-control').addClass('toolbar-bottom-visible');
+        if (useSearchPrototype) {
+            app.getWindow().nodes.main.find('.toolbar-item[data-action="open-folder-view"]').show();
+        } else {
+            app.getWindow().nodes.main.find('.list-view-control').addClass('toolbar-bottom-visible');
+        }
     }
 
     ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
@@ -346,8 +356,14 @@ define('io.ox/mail/view-options', [
             this.append(
                 $('<button type="button" class="btn btn-link toolbar-item pull-left" data-action="open-folder-view">').attr('aria-label', gt('Open folder view')).append(
                     $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view'))
-                ).on('click', { app: baton.app, state: true }, toggleFolderView)
+                )
+                .hide()
+                .on('click', { app: baton.app, state: true }, toggleFolderView)
             );
+
+            if (useSearchPrototype) {
+                baton.app.getWindow().nodes.main.find('.list-view-control').removeClass('toolbar-bottom-visible');
+            }
 
             baton.app.on({
                 'folderview:open': onFolderViewOpen.bind(null, baton.app),

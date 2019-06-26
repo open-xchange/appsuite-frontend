@@ -25,8 +25,6 @@ define('io.ox/backbone/views/search', [
 
     var SearchView = ExtensibleView.extend({
 
-        className: 'search-view',
-
         events: {
             'click .dropdown-toggle': 'onToggle',
             'input .search-field': 'onInput',
@@ -39,7 +37,9 @@ define('io.ox/backbone/views/search', [
         constructor: function () {
             this.model = new Backbone.Model({ words: '', folder: 'current' });
             ExtensibleView.prototype.constructor.apply(this, arguments);
-            this.$el.one('focus', '.search-field', this.onFirstFocus.bind(this));
+            this.$el
+                .addClass('search-view')
+                .one('focus', '.search-field', this.onFirstFocus.bind(this));
         },
 
         render: function () {
