@@ -167,3 +167,13 @@ stop e2e testserver:
     - docker container wait $CONTAINER_NAME || true
     - docker container rm $CONTAINER_NAME || true
   when: always
+  only:
+    refs:
+      - develop
+      - master
+      - /^master-/
+      - /^release-/
+      - /^feature\//
+      - /^bug\//
+    changes:
+      - ui/**/*
