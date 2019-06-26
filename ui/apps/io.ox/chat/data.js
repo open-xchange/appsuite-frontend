@@ -103,7 +103,7 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
     var MessageModel = Backbone.Model.extend({
 
         defaults: function () {
-            return { body: '', senderId: data.user_id, sent: +moment(), type: 'text', delivery: [] };
+            return { body: '', senderId: data.user_id, sent: +moment(), type: 'text', state: undefined };
         },
 
         getBody: function () {
@@ -191,6 +191,7 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
         defaults: { open: true, type: 'group', unreadCount: 0 },
 
         initialize: function (attr) {
+            var self = this;
             this.set('modified', +moment());
             this.unset('messages', { silent: true });
             this.members = new MemberCollection(attr.members, { parse: true, roomId: attr.id });
@@ -203,15 +204,21 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
             this.listenTo(this.messages, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('message:' + name);
             });
-            this.listenTo(this.messages, 'add', function () {
+            this.listenTo(this.messages, 'add', _.debounce(function () {
+                function updateLastMessage() {
+                    this.set('lastMessage', _.extend({}, this.get('lastMessage'), lastMessage.toJSON()));
+                }
+
                 var lastMessage = this.messages.max(function (message) {
                     return moment(message.get('sent').valueOf());
                 });
+
                 if (!lastMessage) return;
-                if (!this.get('lastMessage') || this.get('lastMessage').id !== lastMessage.get('id')) {
-                    this.set('lastMessage', lastMessage.toJSON());
+                if (!this.get('lastMessage') || this.get('lastMessage').id !== lastMessage.get('id') || !lastMessage.has('id')) {
+                    if (!lastMessage.has('id')) self.listenToOnce(lastMessage, 'change:id', updateLastMessage.bind(this));
+                    else updateLastMessage.call(this);
                 }
-            });
+            }, 10));
         },
 
         getTitle: function () {
@@ -275,7 +282,7 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
             if (file) formData.append('file', file);
 
             var model = this.messages.add(attr);
-            model.save(formData, {
+            model.save(attr, {
                 data: formData,
                 processData: false,
                 contentType: false
@@ -413,22 +420,20 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
         console.log('Connected socket to server');
     });
 
-    socket.on('message:change', function (roomId, id, changes) {
-        var collection = data.chats.get(roomId);
-        if (!collection) return;
-        var message = collection.messages.get(id);
-        if (!message) return;
-        var delivery = _.clone(message.get('delivery'));
-        if (!delivery) return;
-        if (changes.userId) {
-            var index = _(delivery).findIndex({ userId: changes.userId });
-            if (index >= 0) delivery[index] = _.extend({}, delivery[index], changes);
-        } else {
-            delivery = delivery.map(function (delivery) {
-                return _.extend({}, delivery, changes);
-            });
+    socket.on('message:change', function (roomId, messageId, state) {
+        var room = data.chats.get(roomId);
+        if (!room) return;
+
+        var lastMessage = room.get('lastMessage');
+        // update state if necessary
+        if (messageId === lastMessage.id && lastMessage.state !== state) {
+            lastMessage = _.extend({}, lastMessage, { state: state });
+            room.set('lastMessage', lastMessage);
         }
-        message.set('delivery', delivery);
+
+        var message = room.messages.get(messageId);
+        if (!message) return;
+        message.set('state', state);
     });
 
     socket.on('message:new', function (roomId, message) {

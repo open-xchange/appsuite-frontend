@@ -145,6 +145,7 @@ define('io.ox/chat/views/chatList', [
             node.find('.text-preview').text(model.getLastMessage());
             node.find('.delivery')
                 .toggleClass('hidden', !isCurrentUser)
+                .removeClass('server client seen')
                 .addClass(model.get('lastMessage').state);
             node.find('.sender')
                 .toggleClass('hidden', isCurrentUser || isPrivate)
