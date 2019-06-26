@@ -82,6 +82,9 @@ test ui:
   artifacts:
     reports:
       junit: ui/build/reports/unit/*/result.xml
+  only:
+    changes:
+      - ui/**/*
 
 run e2e tests:
   extends: .default_cache

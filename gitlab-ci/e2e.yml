@@ -33,6 +33,9 @@ deploy e2e testserver:
     - docker container create --name $CONTAINER_NAME -e SERVER=$SERVER -v /app/build/e2e $DOCKER_IMAGE e2e
     - docker container cp ui/e2e/fixtures $CONTAINER_NAME:/app/build/e2e
     - docker container start $CONTAINER_NAME
+  only:
+    changes:
+      - ui/**/*
 
 run e2e tests:
   stage: e2e
@@ -67,6 +70,9 @@ run e2e tests:
     paths:
       - ui/build/e2e/
     expire_in: 1 day
+  only:
+    changes:
+      - ui/**/*
 
 generate e2e report:
   stage: report
@@ -92,12 +98,15 @@ generate e2e report:
       - ui/build/allure-report
     expire_in: 1 day
   only:
-    - develop
-    - master
-    - /^master-/
-    - /^release-/
-    - /^feature\//
-    - /^bug\//
+    refs:
+      - develop
+      - master
+      - /^master-/
+      - /^release-/
+      - /^feature\//
+      - /^bug\//
+    changes:
+      - ui/**/*
 
 publish e2e report:
   stage: cleanup
@@ -118,12 +127,15 @@ publish e2e report:
     on_stop: remove e2e report
   when: always
   only:
-    - develop
-    - master
-    - /^master-/
-    - /^release-/
-    - /^feature\//
-    - /^bug\//
+    refs:
+      - develop
+      - master
+      - /^master-/
+      - /^release-/
+      - /^feature\//
+      - /^bug\//
+    changes:
+      - ui/**/*
 
 remove e2e report:
   stage: cleanup
