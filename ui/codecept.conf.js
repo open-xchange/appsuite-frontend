@@ -84,12 +84,30 @@ module.exports.config = {
             // contexts existing at a time.
             if (typeof config.helpers.OpenXchange.filestoreId !== 'undefined') ctxData.filestoreId = config.helpers.OpenXchange.filestoreId;
 
-            contexts.create(ctxData).then(function (ctx) {
-                defaultContext = ctx;
-                resolve();
-            }, function (err) {
-                console.error(`Could not create context ${JSON.stringify(ctxData, null, 4)}.\nError: ${err.faultstring}`);
-                process.exit(1);
+            function createDefaultContext() {
+                return contexts.create(ctxData).then(function (ctx) {
+                    defaultContext = ctx;
+                    resolve();
+                }, function (err) {
+                    console.error(`Could not create context ${JSON.stringify(ctxData, null, 4)}.\nError: ${err.faultstring}`);
+                    if (Number(ctxData.id) === 10) {
+                        console.error('Won\'t delete default context, use a different one.');
+                        process.exit(1);
+                    }
+                    throw err;
+                });
+            }
+            createDefaultContext().catch(function () {
+                console.warn('##--## Waiting 5s until context is removed. Press Ctrl+C to abort. ##--##');
+                return new Promise(function (resolve) {
+                    global.setTimeout(resolve, 5000);
+                }).then(function () {
+                    const helper = new (require('@open-xchange/codecept-helper').helper)();
+                    return helper.executeSoapRequest('OXContextService', 'delete', {
+                        ctx: { id: ctxData.id },
+                        auth: { login: 'oxadminmaster', password: 'secret' }
+                    }).then(createDefaultContext);
+                });
             });
         });
 
