@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/core/settings/quickLauncherDialog', [
+define('io.ox/core/settings/dialogs/quickLauncherDialog', [
     'io.ox/backbone/views/disposable',
     'gettext!io.ox/core',
     'io.ox/backbone/views/modal',

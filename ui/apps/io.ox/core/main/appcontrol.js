@@ -220,7 +220,7 @@ define('io.ox/core/main/appcontrol', [
         },
         onContextmenu: function (e) {
             e.preventDefault();
-            require(['io.ox/core/settings/quickLauncherDialog'], function (quickLauncherDialog) {
+            require(['io.ox/core/settings/dialogs/quickLauncherDialog'], function (quickLauncherDialog) {
                 quickLauncherDialog.openDialog();
             });
         },
