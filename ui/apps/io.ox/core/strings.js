@@ -11,7 +11,7 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
+define('io.ox/core/strings', ['io.ox/core/locale', 'gettext!io.ox/core'], function (locale, gt) {
 
     'use strict';
 
@@ -76,7 +76,7 @@ define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
                 //#. File size
                 //#. %1$d is the number
                 //#. %2$s is the unit (B, KB, MB etc.)
-                gt('%1$d %2$s', size, n_size[i])
+                gt('%1$d %2$s', locale.number(size, decimalPlaces), n_size[i])
             );
         },
 

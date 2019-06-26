@@ -297,7 +297,7 @@
                     }
                 };
                 return function gt(str) {
-                    var language = (ox.language || navigator.language || navigator.userLanguage).substr(0, 2);
+                    var language = (ox.locale || navigator.language || navigator.userLanguage).substr(0, 2);
                     if (!messages[str]) return str;
                     return messages[str][language] || str;
                 };

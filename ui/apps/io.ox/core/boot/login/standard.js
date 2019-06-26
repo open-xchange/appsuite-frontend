@@ -12,12 +12,10 @@
  */
 
 define('io.ox/core/boot/login/standard', [
-
     'io.ox/core/boot/util',
-    'io.ox/core/boot/language',
+    'io.ox/core/boot/locale',
     'io.ox/core/session'
-
-], function (util, language, session) {
+], function (util, locale, session) {
 
     'use strict';
 
@@ -76,10 +74,10 @@ define('io.ox/core/boot/login/standard', [
             name: name,
             password: password,
             store: $('#io-ox-login-store-box').prop('checked'),
-            // temporary language for error messages
-            language: language.getCurrentLanguage(),
-            // permanent language change!?
-            forceLanguage: language.getSelectedLanguage()
+            // temporary locale for error messages
+            locale: locale.getCurrentLocale(),
+            // permanent locale change!?
+            forceLocale: locale.getSelectedLocale()
         };
 
         if (_.url.hash('login_type') && _.url.hash('share') && _.url.hash('target')) {

@@ -21,9 +21,10 @@ define('io.ox/tasks/view-detail', [
     'io.ox/core/tk/attachments',
     'io.ox/backbone/views/toolbar',
     'io.ox/backbone/views/action-dropdown',
+    'io.ox/core/locale',
     'io.ox/tasks/actions',
     'less!io.ox/tasks/style'
-], function (util, calendarUtil, gt, ext, api, ParticipantsView, attachments, ToolbarView, ActionDropdownView) {
+], function (util, calendarUtil, gt, ext, api, ParticipantsView, attachments, ToolbarView, ActionDropdownView, locale) {
 
     'use strict';
 
@@ -142,34 +143,31 @@ define('io.ox/tasks/view-detail', [
                     companies: gt('Companies'),
                     date_completed: gt('Date completed')
                 },
-                $details = $('<dl class="task-details dl-horizontal">'),
-                hasDetails = false;
+                $details = $('<dl class="task-details dl-horizontal">');
 
             if (task.recurrence_type) {
                 $details.append(
                     $('<dt class="detail-label">').text(gt('This task recurs')),
-                    $('<dd class="detail-value">').text(calendarUtil.getRecurrenceString(baton.data)));
-                hasDetails = true;
+                    $('<dd class="detail-value">').text(calendarUtil.getRecurrenceString(baton.data))
+                );
             }
 
             _(fields).each(function (label, key) {
-                //0 is valid
-                if (task[key] !== undefined && task[key] !== null && task[key] !== '') {
-                    $details.append($('<dt class="detail-label">').text(label));
-                    if ((key === 'target_costs' || key === 'actual_costs') && task.currency) {
-                        $details.append($('<dd class="detail-value">').text(task[key] + ' ' + task.currency));
-                    } else {
-                        $details.append($('<dd class="detail-value">').text(task[key]));
-                    }
-                    hasDetails = true;
+                // 0 is valid; skip undefined, null, and ''
+                var value = task[key];
+                if (!value && value !== 0) return;
+                if (key === 'target_costs' || key === 'actual_costs') {
+                    value = task.currency ? locale.currency(value, task.currency) : locale.number(value, 2);
                 }
+                $details.append(
+                    $('<dt class="detail-label">').text(label),
+                    $('<dd class="detail-value">').text(value)
+                );
             });
 
-            if (hasDetails) {
+            if ($details.children().length) {
                 this.append(
-                    $('<fieldset class="details">').append(
-                        $details
-                    )
+                    $('<fieldset class="details">').append($details)
                 );
             }
         }

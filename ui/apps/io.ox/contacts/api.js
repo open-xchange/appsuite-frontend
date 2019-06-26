@@ -80,7 +80,7 @@ define('io.ox/contacts/api', [
             all: {
                 action: 'all',
                 folder: '6',
-                columns:  ox.language === 'ja_JP' ? '20,1,101,555,556,557,607' : '20,1,101,607',
+                columns:  ox.locale === 'ja_JP' ? '20,1,101,555,556,557,607' : '20,1,101,607',
                 extendColumns: 'io.ox/contacts/api/all',
                 // 607 = magic field
                 sort: '607',
@@ -232,7 +232,7 @@ define('io.ox/contacts/api', [
                 if (data.user_id) data.internal_userid = data.user_id;
 
                 // japanese sorting
-                if (data && data.distribution_list && data.distribution_list.length && ox.language === 'ja_JP') {
+                if (data && data.distribution_list && data.distribution_list.length && ox.locale === 'ja_JP') {
 
                     // add some additional info for sorting
                     _(data.distribution_list).each(function (obj) {
@@ -252,7 +252,7 @@ define('io.ox/contacts/api', [
             },
             all: function (response) {
                 // japanese sorting
-                if (ox.language === 'ja_JP') {
+                if (ox.locale === 'ja_JP') {
 
                     // add some additional info for sorting
                     _(response).each(function (obj) {

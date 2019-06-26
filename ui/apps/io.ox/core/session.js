@@ -15,8 +15,9 @@ define('io.ox/core/session', [
     'io.ox/core/http',
     'io.ox/core/manifests',
     'io.ox/core/uuids',
-    'io.ox/core/boot/config'
-], function (http, manifests, uuids, config) {
+    'io.ox/core/boot/config',
+    'io.ox/core/locale/meta'
+], function (http, manifests, uuids, config, meta) {
 
     'use strict';
 
@@ -24,40 +25,17 @@ define('io.ox/core/session', [
         CLIENT = 'open-xchange-appsuite',
         isAutoLogin = false;
 
-    var getBrowserLanguage = function () {
-        var language = (navigator.language || navigator.userLanguage).substr(0, 2),
-            languages = ox.serverConfig.languages || {};
-
-        // special treatment for 'en' (return en_US instead of en_UK which comes first in the list)
-        if (language === 'en') return 'en_US';
-        var result = _.chain(languages).keys().find(function (id) {
-            return id.substr(0, 2) === language;
-        }).value();
-
-        // never ever return undefined!!!111eleven
-        // This causes a js error which prevents the display of the login page. Thus preventing users from login in.
-        result = result || (languages.en_US ? 'en_US' : _(languages).keys()[0] || 'en_US');
-
-        return result;
-    };
-
-    var check = function (language) {
-        var languages = ox.serverConfig.languages || {};
-        return language in languages ? language : false;
-    };
-
-    var set = function (data, language) {
+    var set = function (data, locale) {
         if ('session' in data) ox.session = data.session || '';
         // might have a domain; depends on what the user entered on login
         if ('user' in data) ox.user = data.user || '';
         if ('user_id' in data) ox.user_id = data.user_id || 0;
         if ('context_id' in data) ox.context_id = data.context_id || 0;
         // if the user has set the language on the login page, use this language instead of server settings lang
-        ox.language = language || check(data.locale) || check(getBrowserLanguage()) || 'en_US';
-
-        _.setCookie('language', ox.language);
+        ox.locale = locale || meta.getValidDefaultLocale();
+        _.setCookie('locale', ox.locale);
         manifests.reset();
-        $('html').attr('lang', ox.language.split('_')[0]);
+        $('html').attr('lang', ox.locale.split('_')[0]);
         // should not hide store() request here; made debugging hard
         ox.trigger('change:session', ox.session);
     };
@@ -205,7 +183,7 @@ define('io.ox/core/session', [
 
                 if (!ox.online) {
                     // don't try when offline
-                    set({ session: 'offline', user: options.username }, options.language);
+                    set({ session: 'offline', user: options.username }, options.locale);
                     return $.when({ session: ox.session, user: ox.user });
                 }
 
@@ -217,18 +195,18 @@ define('io.ox/core/session', [
                         action: 'login',
                         name: '',
                         password: '',
-                        // current browser language; required for proper error messages
-                        language: 'en_US',
+                        // current browser locale; required for proper error messages
+                        locale: 'en_US',
                         client: that.client(),
                         version: that.version(),
                         timeout: TIMEOUTS.LOGIN,
                         rampup: true,
                         rampUpFor: 'open-xchange-appsuite'
                     },
-                    _(options).pick('action', 'name', 'password', 'language', 'rampup', 'rampUpFor', 'share', 'target', 'secret_code')
+                    _(options).pick('action', 'name', 'password', 'locale', 'rampup', 'rampUpFor', 'share', 'target', 'secret_code')
                 );
 
-                if (options.forceLanguage) params.storeLanguage = true;
+                if (options.forceLocale) params.storeLocale = true;
 
                 return (
                     pending = http.POST({
@@ -243,8 +221,8 @@ define('io.ox/core/session', [
                             // store rampup data
                             ox.rampup = data.rampup || ox.rampup || {};
                             // store session
-                            // we pass forceLanguage (might be undefined); fallback is data.locale
-                            set(data, options.forceLanguage);
+                            // we pass forceLocale (might be undefined); fallback is data.locale
+                            set(data, options.forceLocale);
 
                             // global event
                             ox.trigger('login', data);
@@ -349,9 +327,7 @@ define('io.ox/core/session', [
 
         isAutoLogin: function () {
             return isAutoLogin;
-        },
-
-        getBrowserLanguage: getBrowserLanguage
+        }
     };
 
     return that;

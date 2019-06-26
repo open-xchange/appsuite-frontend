@@ -216,7 +216,7 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
                     // (5) note: The allocated data for this var is quite big, so it should be assured that the js GC can delete it later
                     var permanentCache = localStorage.getItem('appsuite.office-fonts'),
                         permanentWindowHandling = localStorage.getItem('appsuite.window-handling'),
-                        savepointId = _(['appsuite.cache', ox.user, ox.language, 'app-cache.index.savepoints']).compact().join('.'),
+                        savepointId = _(['appsuite.cache', ox.user, ox.locale, 'app-cache.index.savepoints']).compact().join('.'),
                         // keep savepoints after version update too.
                         savepoints = localStorage.getItem(savepointId),
                         keys = localStorage.getItem('openpgp-private-keys');

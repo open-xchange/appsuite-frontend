@@ -21,6 +21,7 @@ define('io.ox/core/settings/pane', [
     'io.ox/core/upsell',
     'io.ox/core/capabilities',
     'io.ox/core/notifications',
+    'io.ox/core/locale',
     'io.ox/core/desktopNotifications',
     'plugins/portal/userSettings/register',
     'settings!io.ox/core',
@@ -29,7 +30,7 @@ define('io.ox/core/settings/pane', [
     'io.ox/backbone/mini-views/timezonepicker',
     'io.ox/core/main/appcontrol',
     'io.ox/core/settings/quickLauncherDialog'
-], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol, quickLauncherDialog) {
+], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, locale, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol, quickLauncherDialog) {
 
     'use strict';
 
@@ -64,13 +65,17 @@ define('io.ox/core/settings/pane', [
                     },
 
                     reloadHint: AUTOLOGIN ?
-                        gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.') :
-                        gt('Some settings (language, timezone, theme) require a relogin to take effect.'),
+                        gt('Some settings (e.g. language and timezone) require a page reload or relogin to take effect.') :
+                        gt('Some settings (e.g. language and timezone) require a relogin to take effect.'),
 
                     getLanguageOptions: function () {
-                        return _(ox.serverConfig.languages).map(function (key, val) {
-                            return { label: key, value: val };
-                        });
+                        var isCustomized = !_.isEmpty(settings.get('localeData')),
+                            current = locale.current();
+                        return _(locale.getSupportedLocales())
+                            .map(function (locale) {
+                                locale.name = isCustomized && locale.id === current ? locale.name + ' / ' + gt('Customized') : locale.name;
+                                return { label: locale.name, value: locale.id };
+                            });
                     },
 
                     getThemeOptions: function () {
@@ -303,13 +308,41 @@ define('io.ox/core/settings/pane', [
 
                 if (!settings.isConfigurable('language')) return;
 
-                baton.$el.append(
-                    util.compactSelect('language', gt('Language'), this.model, this.getLanguageOptions())
+                var getOptions = this.getLanguageOptions.bind(this),
+                    select = util.compactSelect('language', gt('Language'), this.model, getOptions()),
+                    view = select.find('select').data('view');
+
+                select.find('.col-md-6').append(
+                    $('<div class="help-block locale-example" style="white-space: pre">').text(getExample()),
+                    $('<div class="help-block">').append(
+                        $('<button role="button" class="btn btn-default" data-action="reload">')
+                        .text(gt('More regional settings') + ' ...').on('click', editLocale)
+                    )
                 );
 
-                this.listenTo(this.model, 'change:language', function (language) {
+                view.listenTo(this.model, 'change:language', function (language) {
                     _.setCookie('language', language);
                 });
+
+                view.listenTo(ox, 'change:locale:data', function () {
+                    this.$el.siblings('.locale-example').text(getExample());
+                    this.setOptions(getOptions());
+                });
+
+                baton.$el.append(select);
+
+                function getExample() {
+                    return moment().format('dddd, L LT') + '   ' +
+                        locale.currency(1234.56, 'EUR') + '\n' +
+                        gt('First day of the week: %1$s', locale.getFirstDayOfWeek());
+                }
+
+                function editLocale(e) {
+                    e.preventDefault();
+                    require(['io.ox/core/settings/editLocale'], function (dialog) {
+                        dialog.open();
+                    });
+                }
             }
         },
         //
