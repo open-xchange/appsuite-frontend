@@ -142,6 +142,8 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
         },
 
         getTextBody: function () {
+            if (this.isSystem()) return '';
+            if (this.isImage()) return ''; // TODO return image preview
             return _.escape(this.get('body'));
         },
 
