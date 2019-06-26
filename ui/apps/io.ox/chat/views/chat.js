@@ -160,12 +160,8 @@ define('io.ox/chat/views/chat', [
         },
 
         renderMessage: function (model) {
-            var delivery = model.get('delivery'),
-                userDelivery = delivery.find(function (d) {
-                    return d.userId.toString() === data.user_id.toString();
-                });
             // mark message as seen as soon as it is rendered
-            if (userDelivery && userDelivery.state !== 'seen') model.updateDelivery('seen');
+            if (model.get('state') !== 'seen' && model.get('senderId').toString() !== data.user_id.toString()) model.updateDelivery('seen');
             return $('<div class="message">')
                 // here we use cid instead of id, since the id might be unknown
                 .attr('data-cid', model.cid)
