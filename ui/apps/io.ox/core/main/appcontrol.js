@@ -75,7 +75,7 @@ define('io.ox/core/main/appcontrol', [
                     // we must stay synchronous to prevent popup-blocker
                     // we can be sure that 'io.ox/core/api/tab' is cached when 'ox.tabHandlingEnabled' is true
                     var TabAPI = require('io.ox/core/api/tab');
-                    TabAPI.TabHandling.openChild(this.model.get('tabUrl'));
+                    TabAPI.openChildTab(this.model.get('tabUrl'));
                     return;
                 }
                 ox.launch(this.model.get('path'));

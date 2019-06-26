@@ -84,7 +84,7 @@ define('io.ox/files/main', [
             if (!ox.tabHandlingEnabled) return;
             // we can be sure that 'io.ox/core/api/tab' is cached when 'ox.tabHandlingEnabled' is true
             var TabAPI = require('io.ox/core/api/tab');
-            var events = TabAPI.TabCommunication.events;
+            var events = TabAPI.communicationEvents;
             events.listenTo(events, 'refresh-file', function (parameters) {
                 api.propagate('refresh:file', _.pick(parameters, 'folder_id', 'id'));
             });

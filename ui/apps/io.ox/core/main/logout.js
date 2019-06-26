@@ -48,7 +48,7 @@ define('io.ox/core/main/logout', [
                 require(['io.ox/core/api/tab'], function (TabAPI) {
                     // session can already be destroyed here by the active tab, better be safe than sorry
                     try {
-                        TabAPI.TabHandling.setLoggingOutState('follower');
+                        TabAPI.setLoggingOutState(TabAPI.LOGGING_OUT_STATE.FOLLOWER);
                         // stop websockets
                         ox.trigger('logout');
                         // stop requests/rt polling
@@ -83,7 +83,7 @@ define('io.ox/core/main/logout', [
             var def = $.Deferred();
             require(['io.ox/core/api/tab'], function (TabApi) {
 
-                TabApi.TabCommunication.otherTabsLiving().then(
+                TabApi.otherTabsLiving().then(
                     // when other tabs exists, user must confirm logout
                     function () {
                         require(['io.ox/backbone/views/modal'], function (ModalDialog) {
@@ -132,9 +132,9 @@ define('io.ox/core/main/logout', [
             require(['io.ox/core/api/tab'], function (TabAPI) {
                 // require does catch errors, so we handle them to ensure a resolved deferred
                 try {
-                    TabAPI.TabHandling.setLoggingOutState('leader');
+                    TabAPI.setLoggingOutState(TabAPI.LOGGING_OUT_STATE.LEADER);
                     // notify other tabs that a logout happened
-                    TabAPI.TabSession.propagateLogout({ autologout: baton.autologout });
+                    TabAPI.propagateLogout({ autologout: baton.autologout });
                 } catch (e) {
                     if (ox.debug) console.warn('propagate logout did not work', e);
                 } finally {
