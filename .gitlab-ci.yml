@@ -37,9 +37,6 @@ stages:
       - "*/build"
       - "*/dist"
       - "*/node_modules"
-  only:
-    changes:
-      - ${PROJECT_PATH}/**/*
 
 # split build_ui into 2 build jobs (running on 2 different runners in parallel)
 # this distributes workload onto 2 runners instead of one and basically halves build time
@@ -58,7 +55,7 @@ build ui:
     - openstack
   only:
     changes:
-      - ${PROJECT_PATH}/**/*
+      - ui/**/*
       - open-xchange-appsuite/**/*
       - open-xchange-appsuite-l10n/**/*
       - open-xchange-appsuite-manifest/**/*
@@ -96,18 +93,30 @@ build help:
   extends: .build ui plugin
   variables:
     PROJECT_PATH: help
+  only:
+    changes:
+      - help/**/*
 
 build guidedtours:
   extends: .build ui plugin
   variables:
     PROJECT_PATH: guidedtours
+  only:
+    changes:
+      - guidedtours/**/*
 
 build spamexperts:
   extends: .build ui plugin
   variables:
     PROJECT_PATH: open-xchange-appsuite-spamexperts
+  only:
+    changes:
+      - open-xchange-appsuite-spamexperts/**/*
 
 build dynamic-theme:
   extends: .build ui plugin
   variables:
     PROJECT_PATH: open-xchange-dynamic-theme
+  only:
+    changes:
+      - open-xchange-dynamic-theme/**/*
