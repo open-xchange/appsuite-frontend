@@ -175,19 +175,85 @@
     .chats {
         flex-grow: 1;
         margin-bottom: 32px;
+        padding: 0;
+        list-style-type: none;
+
+        li {
+            border-bottom: 1px solid @borderColor;
+            display: flex;
+            cursor: pointer;
+
+            &:first-child { border-top: 1px solid @borderColor; }
+
+            &:hover {
+                background-color: white;
+            }
+
+            .chats-container {
+                padding: 8px 4px;
+                flex: 1;
+                overflow: hidden;
+
+                .chats-row {
+                    display: flex;
+                }
+            }
+        }
+
+        .picture {
+            width: 48px;
+            height: 48px;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            border-radius: 50%;
+            flex: 0 0 auto;
+            margin: 4px 8px;
+        }
+
         .title {
             .ellipsis();
+            font-weight: 600;
+            flex: 1;
         }
+
+        .sender {
+            margin-right: 5px;
+        }
+
+        .delivery {
+            padding-top: 3px;
+            margin-right: 5px;
+        }
+
+        .text-preview {
+            flex: 1;
+            .ellipsis();
+        }
+
         .label {
-            float: right;
-            position: relative;
-            margin-left: 4px;
-            top: 1px;
+            flex: 0 0 auto;
             display: none;
         }
-        .unseen .label {
-            display: inline-block;
+
+        // .label {
+        //     float: right;
+        //     position: relative;
+        //     margin-left: 4px;
+        //     top: 1px;
+        //     display: none;
+        // }
+
+        .unseen {
+            .text-preview {
+                font-weight: 600;
+            }
+
+            .label {
+                display: block;
+            }
         }
+
         .fa-check-circle {
             color: @green;
         }
@@ -256,6 +322,25 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
+    }
+
+    .fa.delivery {
+        font-size: 14px;
+        color: @gray;
+
+        &:before {
+            content: "\f017"; // clock-o
+        }
+        &.server:before {
+            content: "\f10c"; // circle-o
+        }
+        &.client:before {
+            content: "\f05d"; // check-circle-o
+        }
+        &.seen:before {
+            color: @lightblue;
+            content: "\f058"; // check-circle
+        }
     }
 
     .message {
@@ -335,21 +420,6 @@
                 position: absolute;
                 top: 16px;
                 right: 0;
-                font-size: 14px;
-                color: @gray;
-                &:before {
-                    content: "\f017"; // clock-o
-                }
-                &.server:before {
-                    content: "\f10c"; // circle-o
-                }
-                &.client:before {
-                    content: "\f05d"; // check-circle-o
-                }
-                &.seen:before {
-                    color: @lightblue;
-                    content: "\f058"; // check-circle
-                }
             }
         }
     }
