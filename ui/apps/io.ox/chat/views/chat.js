@@ -205,7 +205,7 @@ define('io.ox/chat/views/chat', [
 
         scrollToBottom: function () {
             this.$('.scrollpane').scrollTop(0xFFFF);
-            this.model.set('unseen', 0);
+            this.model.set('unreadCount', 0);
         },
 
         onEditorKeydown: function (e) {

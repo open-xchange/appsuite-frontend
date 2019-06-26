@@ -28,7 +28,7 @@ define('io.ox/chat/views/chatList', [
                 'add': this.onAdd,
                 'remove': this.onRemove,
                 'change:title': this.onChangeTitle,
-                'change:unseen': this.onChangeUnseen,
+                'change:unreadCount': this.onChangeUnreadCount,
                 'change:modified': this.onChangeModified,
                 'change:open': this.onChangeOpen
             });
@@ -42,8 +42,8 @@ define('io.ox/chat/views/chatList', [
 
         renderItem: function (model) {
             return $('<button type="button" class="btn-nav" data-cmd="show-chat">')
+                .toggleClass('unseen', model.get('unreadCount') > 0)
                 .attr('data-cid', model.cid)
-                .toggleClass('unseen', model.get('unseen') > 0)
                 .append(
                     this.renderIcon(model),
                     $('<span class="label label-default">').text(model.get('unseen')),
@@ -91,8 +91,8 @@ define('io.ox/chat/views/chatList', [
             this.getNode(model).find('.title').text(model.getTitle() || '\u00A0');
         },
 
-        onChangeUnseen: function (model) {
-            var count = model.get('unseen');
+        onChangeUnreadCount: function (model) {
+            var count = model.get('unreadCount');
             this.getNode(model).toggleClass('unseen', count > 0).find('.label').text(count);
         },
 
