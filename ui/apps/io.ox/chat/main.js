@@ -128,14 +128,17 @@ define('io.ox/chat/main', [
         },
 
         showRecentConversations: function () {
+            this.$body.addClass('open');
             this.$rightside.empty().append(new History().render().$el);
         },
 
         showChannels: function () {
+            this.$body.addClass('open');
             this.$rightside.empty().append(new ChannelList().render().$el);
         },
 
         showAllFiles: function () {
+            this.$body.addClass('open');
             this.$rightside.empty().append(new FileList().render().$el);
         },
 
