@@ -188,7 +188,7 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
 
     var ChatModel = Backbone.Model.extend({
 
-        defaults: { open: true, type: 'group', unseen: 0 },
+        defaults: { open: true, type: 'group', unreadCount: 0 },
 
         initialize: function (attr) {
             this.set('modified', +moment());
@@ -278,7 +278,7 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
         },
 
         initialize: function () {
-            this.on('change:unseen', this.onChangeUnseen);
+            this.on('change:unreadCount', this.onChangeUnreadCount);
         },
 
         create: function (attr) {
@@ -289,9 +289,9 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
             });
         },
 
-        onChangeUnseen: function () {
+        onChangeUnreadCount: function () {
             this.trigger('unseen', this.reduce(function (sum, model) {
-                return sum + (model.get('unseen') > 0 ? 1 : 0);
+                return sum + (model.get('unreadCount') > 0 ? 1 : 0);
             }, 0));
         },
 
@@ -413,7 +413,7 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
         data.chats.fetchUnlessExists(roomId).done(function (model) {
             // add new message to room
             var newMessage = model.messages.add(message);
-            model.set({ modified: +moment(), unseen: model.get('unseen') + 1 });
+            model.set({ modified: +moment(), unreadCount: model.get('unreadCount') + 1 });
             newMessage.updateDelivery('client');
         });
     });
