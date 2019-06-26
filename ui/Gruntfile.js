@@ -10,7 +10,14 @@
 
 module.exports = function (grunt) {
 
-    require('dotenv').config();
+    try {
+        require('dotenv').config();
+    } catch (e) {
+        // silently ignore if no dotenv module is installed,
+        // makes the module optional
+        if (e.code === 'MODULE_NOT_FOUND') return;
+        throw e;
+    }
 
     grunt.loadNpmTasks('@open-xchange/shared-grunt-config');
 
