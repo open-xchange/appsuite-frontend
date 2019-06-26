@@ -74,8 +74,12 @@ define('plugins/portal/mail/register', [
                                 return $('<i class="fa fa-circle new-item accent">');
                             }
                         })(),
-                        $('<div class="date accent">').text(_.noI18n(received)),
-                        $('<div class="sender">').text(_.noI18n(util.getDisplayName(this.model.get('from')[0]))), $.txt(' ')
+                        // same markup as mail's common-extensions.from
+                        $('<div class="from">').attr('title', this.model.get('from')[0][1]).append(
+                            $('<span class="flags">'),
+                            $('<div class="person">').text(_.noI18n(util.getDisplayName(this.model.get('from')[0]))), $.txt(' ')
+                        ),
+                        $('<div class="date accent">').text(_.noI18n(received))
                     ),
                     $('<div class="row2">').append(
                         $('<div class="subject ellipsis">').text(subject),

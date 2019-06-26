@@ -14,21 +14,22 @@
 .io-ox-portal .mailwidget {
     li {
         .new-item {
-            float: left;
             left: 1px;
             top: 3px;
             margin-right: 8px;
         }
-        .sender {
-            font-weight: bold;
-            margin-right: 70px;
-            .ellipsis();
+        .from {
+            min-width: 0;
+            flex: 1;
+            .person  {
+                // portal special: always bold - not only for unread or macos/ios
+                font-weight: bold;
+                padding-right: 8px;
+                .ellipsis();
+            }
         }
-        .date {
-            float: right;
-        }
-        .row1 {
-            line-height: 16px;
+        .row1, .row2 {
+            display: flex;
         }
     }
 }
