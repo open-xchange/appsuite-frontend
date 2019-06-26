@@ -14,12 +14,15 @@
 define('io.ox/chat/views/chatList', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/state',
+    'io.ox/contacts/api',
     'io.ox/chat/data'
-], function (DisposableView, StateView) {
+], function (DisposableView, StateView, contactsAPI, data) {
 
     'use strict';
 
     var ChatListView = DisposableView.extend({
+
+        tagName: 'ul',
 
         className: 'chats',
 
@@ -29,6 +32,7 @@ define('io.ox/chat/views/chatList', [
                 'remove': this.onRemove,
                 'change:title': this.onChangeTitle,
                 'change:unreadCount': this.onChangeUnreadCount,
+                'change:lastMessage': this.onChangeLastMessage,
                 'change:modified': this.onChangeModified,
                 'change:open': this.onChangeOpen
             });
@@ -41,13 +45,34 @@ define('io.ox/chat/views/chatList', [
         },
 
         renderItem: function (model) {
-            return $('<button type="button" class="btn-nav" data-cmd="show-chat">')
+            var isCurrentUser = model.get('lastMessage').senderId.toString() === data.user_id.toString(),
+                isPrivate = model.get('type') === 'private';
+
+            return $('<li data-cmd="show-chat">')
                 .toggleClass('unseen', model.get('unreadCount') > 0)
                 .attr('data-cid', model.cid)
                 .append(
-                    this.renderIcon(model),
-                    $('<span class="label label-default">').text(model.get('unseen')),
-                    $('<div class="title">').text(model.getTitle())
+                    contactsAPI.pictureHalo(
+                        $('<div class="picture" aria-hidden="true">'), { internal_userid: model.get('id') }, { width: 40, height: 40 }
+                    ),
+                    $('<div class="chats-container">').append(
+                        $('<div class="chats-row">').append(
+                            $('<div class="title">').text(model.getTitle()),
+                            $('<div class="last-modified">').text(model.getLastMessageDate())
+                        ),
+                        $('<div class="chats-row">').append(
+                            $('<div class="fa delivery">')
+                                .toggleClass('hidden', !isCurrentUser)
+                                .addClass(model.get('lastMessage').state),
+                            $('<div class="sender">')
+                                .toggleClass('hidden', isCurrentUser || isPrivate)
+                                .text(model.getLastSenderName()),
+                            $('<div class="text-preview">').text(model.getLastMessage()),
+                            $('<div class="label-container">').append(
+                                $('<span class="label label-info">').text(model.get('unreadCount'))
+                            )
+                        )
+                    )
                 );
         },
 
@@ -107,6 +132,21 @@ define('io.ox/chat/views/chatList', [
             } else {
                 this.onRemove(model);
             }
+        },
+
+        onChangeLastMessage: function (model) {
+            var node = this.getNode(model),
+                isCurrentUser = model.get('lastMessage').senderId.toString() === data.user_id.toString(),
+                isPrivate = model.get('type') === 'private';
+
+            node.find('.last-modified').text(model.getLastMessageDate());
+            node.find('.text-preview').text(model.getLastMessage());
+            node.find('.delivery')
+                .toggleClass('hidden', !isCurrentUser)
+                .addClass(model.get('lastMessage').state);
+            node.find('.sender')
+                .toggleClass('hidden', isCurrentUser || isPrivate)
+                .text(model.getLastSenderName());
         }
     });
 

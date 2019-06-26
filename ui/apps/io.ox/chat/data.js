@@ -203,6 +203,15 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
             this.listenTo(this.messages, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('message:' + name);
             });
+            this.listenTo(this.messages, 'add', function () {
+                var lastMessage = this.messages.max(function (message) {
+                    return moment(message.get('sent').valueOf());
+                });
+                if (!lastMessage) return;
+                if (!this.get('lastMessage') || this.get('lastMessage').id !== lastMessage.get('id')) {
+                    this.set('lastMessage', lastMessage.toJSON());
+                }
+            });
         },
 
         getTitle: function () {
@@ -216,12 +225,28 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
 
         getLastMessageDate: function () {
             var last = this.get('lastMessage');
-            return last ? moment(new MessageModel(last).get('sent')).format('LT') : '\u00a0';
+            if (!last) return '\u00a0';
+            var date = moment(new MessageModel(last).get('sent'));
+            return date.calendar(null, {
+                sameDay: 'LT',
+                lastDay: '[Yesterday]',
+                lastWeek: '[Last] dddd',
+                sameElse: 'DD/MM/YYYY'
+            });
         },
 
         getFirstMember: function () {
             // return first member that is not current user
             return this.members.reject({ id: data.user_id })[0];
+        },
+
+        getLastSenderName: function () {
+            var lastMessage = this.get('lastMessage');
+            if (!lastMessage) return '';
+            var senderId = lastMessage.senderId,
+                member = this.members.findWhere({ id: senderId });
+            if (!member) return;
+            return member.getName();
         },
 
         isOpen: function () {
