@@ -42,7 +42,7 @@ Scenario('[C7866] Set all-day appointments to be marked as free', async function
 
     // Create all day appointment and dont mark as free
     I.openApp('Calendar');
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForText('Subject');
     I.fillField('summary', reservedappointmentsubject);
     I.fillField('location', location);

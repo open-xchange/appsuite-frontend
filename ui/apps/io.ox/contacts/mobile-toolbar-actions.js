@@ -27,7 +27,7 @@ define('io.ox/contacts/mobile-toolbar-actions', [
         'create': {
             prio: 'hi',
             mobile: 'hi',
-            title: gt('New'),
+            title: gt('New contact'),
             icon: 'fa fa-plus',
             drawDisabled: true,
             ref: 'io.ox/contacts/actions/create'

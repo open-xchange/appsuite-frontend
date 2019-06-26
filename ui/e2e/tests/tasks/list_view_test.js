@@ -25,7 +25,7 @@ Scenario('check actions', async function (I) {
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New task');
     I.waitForVisible('.io-ox-tasks-edit-window');
 
     I.fillField('Subject', 'Test Task');

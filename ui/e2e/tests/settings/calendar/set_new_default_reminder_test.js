@@ -50,8 +50,8 @@ Scenario('[C7867] Set new default reminder @shaky', async function (I) {
     I.click({ css: '[data-action="apply"]' });
     I.openApp('Calendar');
 
-    ////////Check whether Notify 45 minutes before start is shown on appoitment creation window
-    I.clickToolbar('New');
+    // Check whether Notify 45 minutes before start is shown on appoitment creation window
+    I.clickToolbar('New appointment');
     I.waitForText('Subject');
     I.see('Notify 45 minutes before start.');
 });

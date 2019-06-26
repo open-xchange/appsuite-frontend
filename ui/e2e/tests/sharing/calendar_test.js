@@ -31,13 +31,13 @@ Scenario.skip('[C104305] calendar folders using “Permisions” dialog and shar
     // Alice shares a folder with 2 appointments
     session('Alice', async () => {
         I.login('app=io.ox/calendar');
-        I.clickToolbar('New');
+        I.clickToolbar('New appointment');
         I.waitForText('Subject');
         I.fillField('Subject', 'simple appointment 1');
         I.click('Create');
         I.waitToHide('.io-ox-calendar-edit');
         I.click('~Close');
-        I.clickToolbar('New');
+        I.clickToolbar('New appointment');
         I.waitForText('Subject');
         I.fillField('Subject', 'simple appointment 2');
         // select tomorrow

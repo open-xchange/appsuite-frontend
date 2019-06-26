@@ -26,7 +26,7 @@ Scenario('[C237267] Check if specific apps open as floating windows @contentRevi
     I.login(['app=io.ox/tasks']);
     I.waitForVisible('.io-ox-tasks-window');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New task');
     I.waitForVisible('.floating-window');
 
     within('.floating-window', async () => {
@@ -38,7 +38,7 @@ Scenario('[C237269] Toggle display styles of floating windows @contentReview', f
     I.login(['app=io.ox/tasks']);
     I.waitForVisible('.io-ox-tasks-window');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New task');
     I.waitForVisible('.floating-window');
 
     I.click('[data-action=maximize]');

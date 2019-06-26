@@ -29,7 +29,7 @@ Scenario('[C7730] Create a private Task with participant', async function (I, us
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New task');
     I.waitForVisible('.io-ox-tasks-edit-window');
 
     I.fillField('Subject', testrailID);
@@ -51,7 +51,7 @@ Scenario('[C7728] Create simple Task', async function (I) {
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New task');
     I.waitForVisible('.io-ox-tasks-edit-window', 5);
 
     I.fillField('Subject', testrailID);
@@ -103,7 +103,7 @@ Scenario('[C7727] Create task with all fields', async function (I) {
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New task');
     I.waitForVisible('.io-ox-tasks-edit-window');
 
     I.fillField('Subject', testrailID);
@@ -178,7 +178,7 @@ Scenario('[C7729] Create Task with participants', async function (I, users) {
     let testrailName = 'Create Task with participants';
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-    I.clickToolbar('New');
+    I.clickToolbar('New task');
     I.waitForVisible('.io-ox-tasks-edit-window');
     I.fillField('Subject', testrailID);
     I.fillField('Description', testrailName);
@@ -228,7 +228,7 @@ Scenario('[C7729] Create Task with participants', async function (I, users) {
 Scenario('[C7734] Create Task without any information', async function (I) {
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-    I.clickToolbar('New');
+    I.clickToolbar('New task');
     I.waitForVisible('.io-ox-tasks-edit-window');
     I.seeElement('.floating-window-content .btn-primary[disabled=""][data-action="save"]');
     I.logout();
@@ -240,7 +240,7 @@ Scenario('[C7733] Set Task startdate behind due date', async function (I) {
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New task');
     I.waitForVisible('.io-ox-tasks-edit-window');
 
     I.fillField('Subject', testrailID);
@@ -296,8 +296,8 @@ Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
     };
 
     I.login('app=io.ox/tasks&folder=' + sharedFolderId, { user: users[1] });
-    I.waitForText('New');
-    I.clickToolbar('New');
+    I.waitForText('New task');
+    I.clickToolbar('New task');
     I.waitForVisible('.io-ox-tasks-edit-window');
     I.fillField('Subject', id);
     I.fillField('Description', desc);

@@ -27,7 +27,7 @@ module.exports = actor({
         this.selectFolder(folder);
         this.waitForElement('li.selected[aria-label="' + folder + '"] .color-label');
 
-        this.clickToolbar('New');
+        this.clickToolbar('New appointment');
         this.waitForVisible('.io-ox-calendar-edit-window');
 
         this.fillField('Subject', subject);

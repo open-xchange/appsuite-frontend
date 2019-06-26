@@ -28,7 +28,7 @@ After(async (users) => {
 //helper function for creating appointments, added ability to select color
 let uncurriedCreateAppointment = (I) => ({ subject, folder, startTime, color }) => {
     // select calendar
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForText('Appointments in public calendar');
     I.click('Create in public calendar');
     I.waitForVisible('.io-ox-calendar-edit-window');

@@ -146,7 +146,7 @@ Scenario('[C207509] Year view', async (I) => {
 
 Scenario('[C236795] Visibility Flags', (I) => {
     const createAppointment = (subject, startDate, startTime, visibility) => {
-        I.clickToolbar('New');
+        I.clickToolbar('New appointment');
         I.waitForVisible('.io-ox-calendar-edit-window');
         I.fillField('Subject', subject);
         I.click('~Date (M/D/YYYY)');
@@ -277,7 +277,7 @@ Scenario('[C244785] Open event from invite notification in calendar @shaky', asy
     // 1. User#A: Create an appointment which starts in less than 15 minutes and invite User#B
     I.login(['app=io.ox/calendar&perspective=week:week'], { user: userA });
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.fillField('Subject', 'Totally nerdy event');
     const startTime = moment().add(10, 'minutes'),
@@ -356,7 +356,7 @@ Scenario('[C252158] All my public appointments @shaky', (I, users) => {
 
     // 4. User#A: Create a new appointment in that calendar and invite User#B
     const subject = `${userA.userdata.name}s awesome appointment`;
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForText('Appointments in public calendar');
     I.click('Create in public calendar');
     I.waitForVisible('.io-ox-calendar-edit-window');
@@ -423,7 +423,7 @@ Scenario('[C265147] Appointment organizer should be marked in attendee list', as
 
     // 3. Create new appointment
     const subject = `${userA.userdata.name}s awesome appointment`;
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.fillField('Subject', subject);
     const startTime = moment().add(10, 'minutes');

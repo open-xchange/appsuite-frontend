@@ -46,9 +46,9 @@ Scenario('[C244799] Set new default reminder for all-day appointments @shaky', a
     I.selectOption('.alarm-related', alaramRelated);
     I.click({ css: '[data-action="apply"]' });
 
-    ///////verify reminder is set as a notification to 1 day before start by default.
+    // verify reminder is set as a notification to 1 day before start by default.
     I.openApp('Calendar');
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForText('Subject');
     I.fillField('summary', 'subject');
     I.fillField('location', 'Dortmund');

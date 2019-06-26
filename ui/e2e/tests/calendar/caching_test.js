@@ -54,7 +54,7 @@ Scenario('Create never ending appointment and check display in several views', a
     I.selectFolder('Calendar');
     I.clickToolbar('View');
     I.click('List');
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'test caching');

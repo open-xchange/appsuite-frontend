@@ -26,7 +26,7 @@ After(async (users) => {
 Scenario('[C7865] Configure to show/hide declined appointments', async (I) => {
     I.login('app=io.ox/calendar');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'Appointment 1');
@@ -38,7 +38,7 @@ Scenario('[C7865] Configure to show/hide declined appointments', async (I) => {
     I.click('Create');
     I.waitForDetached('.io-ox-calendar-edit-window');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'Appointment 2');

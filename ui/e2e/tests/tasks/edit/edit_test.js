@@ -442,7 +442,7 @@ Scenario('[C7750] Edit existing Task in a shared folder @shaky', async function 
 Scenario('[C7751] Close Task with the X', function (I) {
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-    I.clickToolbar('New');
+    I.clickToolbar('New task');
     I.waitForVisible('.io-ox-tasks-edit-window');
     I.see('Create');
     I.see('Discard');
@@ -456,7 +456,7 @@ Scenario('[C7752] Close Task with the X after adding some information', function
         testrailName = 'Close Task with the X after adding some information';
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-    I.clickToolbar('New');
+    I.clickToolbar('New task');
     I.waitForVisible('.io-ox-tasks-edit-window');
     I.fillField('Subject', testrailID);
     I.fillField('Description', testrailName);

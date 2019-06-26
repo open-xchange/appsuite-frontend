@@ -36,7 +36,7 @@ Scenario('[C125311] Change confimation status as participant @shaky', async func
 
     // 2. Create a new task and add another user to the task
 
-    I.clickToolbar('New');
+    I.clickToolbar('New task');
     I.waitForVisible('[data-app-name="io.ox/tasks/edit"]');
 
     I.fillField('Subject', 'Yo, I\'ll tell you what I want, what I really really want');

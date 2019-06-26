@@ -33,7 +33,7 @@ Scenario('use planning view opened from edit view', async function (I) {
     I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
 
     I.fillField('Subject', 'Planning View Test');
@@ -220,7 +220,7 @@ Scenario('[C7443] Check availability of participants', async function (I, users)
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'Abdancen');
@@ -231,7 +231,7 @@ Scenario('[C7443] Check availability of participants', async function (I, users)
 
     I.click('Create');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     addAttendee(I, users[1].get('name'));
@@ -256,7 +256,7 @@ Scenario('[C7444] Check availability of resources', async function (I) {
     await I.haveResource({ description: 'Evil lair under an active volcano', display_name: 'Evil Lair', name: 'Evil Lair', mailaddress: 'lair@evil.inc' });
     await I.haveResource({ description: 'Evil sharks equipped with lazers', display_name: 'Laser Sharks', name: 'Laser Sharks', mailaddress: 'lasersharks@evil.inc' });
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'How to conquer the world');
@@ -267,7 +267,7 @@ Scenario('[C7444] Check availability of resources', async function (I) {
 
     I.click('Create');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     addAttendee(I, 'Evil Lair');
@@ -296,7 +296,7 @@ Scenario('[C7445] Check availability of resources and participants', async funct
     await I.haveResource({ description: 'Eggs from happy chickens', display_name: 'Eggs', name: 'Eggs', mailaddress: 'eggs@easter.bunny' });
     await I.haveResource({ description: 'Colors for Easter Eggs. 100% gluten free, organic', display_name: 'Colors', name: 'Colors', mailaddress: 'colors@easter.bunny' });
 
-    I.clickToolbar('New');
+    I.clickToolbar('Ne appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'Color Easter Eggs');
@@ -310,7 +310,7 @@ Scenario('[C7445] Check availability of resources and participants', async funct
 
     I.click('Create');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.click('Find a free time');

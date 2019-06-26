@@ -296,7 +296,7 @@ Scenario('[C234659] Split appointment series', async function (I, users) {
     });
     I.login('app=io.ox/calendar');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'Testsubject');
@@ -362,7 +362,7 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
     });
     I.login('app=io.ox/calendar');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'Testsubject');

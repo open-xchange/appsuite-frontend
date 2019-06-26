@@ -37,7 +37,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.selectFolder('Calendar');
     I.clickToolbar('View');
     I.click('List');
-    I.clickToolbar('New');
+    I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'test recurring');

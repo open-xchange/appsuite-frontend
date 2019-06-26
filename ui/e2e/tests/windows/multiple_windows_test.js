@@ -29,7 +29,7 @@ Scenario('Opening multiple windows', async function (I, users) {
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
     I.waitForDetached('#io-ox-refresh-icon .fa-spin');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New task');
     I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
 
     I.fillField('Subject', 'Participants test');

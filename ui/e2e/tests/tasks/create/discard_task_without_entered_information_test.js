@@ -30,7 +30,7 @@ Scenario('[C7735] Discard Task without entered information', async (I) => {
     I.login('app=io.ox/tasks');
     I.waitForVisible('[data-app-name="io.ox/tasks"]');
 
-    I.clickToolbar('New');
+    I.clickToolbar('New task');
     I.waitForVisible('[data-app-name="io.ox/tasks/edit"]');
 
     I.click('Discard');

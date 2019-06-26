@@ -36,9 +36,9 @@ Scenario('Add a distribution list to an existing distribution list @shaky', func
     // create distribution list
     I.selectFolder('test address book');
     I.waitForText('Empty'); // Empty in list view
-    I.waitForText('New');
-    I.clickToolbar('New');
-    I.click('Add distribution list');
+    I.waitForText('New contact');
+    I.clickToolbar('New contact');
+    I.click('New distribution list');
     I.waitForVisible('.io-ox-contacts-distrib-window', 5);
     I.fillField('Name', 'test distribution list one');
     I.fillField('Add contact', 'testdude1@test.case');
@@ -54,8 +54,8 @@ Scenario('Add a distribution list to an existing distribution list @shaky', func
     I.waitForText('test distribution list one', 5, '.vgrid-cell');
 
     // create second list
-    I.clickToolbar('New');
-    I.click('Add distribution list');
+    I.clickToolbar('New contact');
+    I.click('New distribution list');
     I.waitForVisible('.io-ox-contacts-distrib-window', 5);
     I.fillField('Name', 'test distribution list two');
 

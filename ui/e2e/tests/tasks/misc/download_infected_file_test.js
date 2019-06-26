@@ -24,18 +24,9 @@ After(async (users) => {
 });
 
 Scenario.skip('[C273807] Download infected file', function (I) {
-
-    // 1. Login
-
     I.login();
-
-    // 2. Go to Tasks
-
     I.openApp('Tasks');
-
-    // 3. Create a taks with the attached virus file (eicar.txt)
-
-    I.clickToolbar('New');
+    I.clickToolbar('New task');
     I.waitForVisible('[data-app-name="io.ox/tasks/edit"]');
 
     I.fillField('Subject', 'My Subject');
@@ -47,35 +38,23 @@ Scenario.skip('[C273807] Download infected file', function (I) {
     I.waitForVisible('.tasks-detailview');
     I.waitForText('eicar.exe');
 
-    // 4. Download the attachment
-
     I.click('eicar.exe');
-    I.waitForVisible('.dropdown-menu'); // legacy container. shouldn't this be a 'smart-dropdown-container'?
+    // legacy container. shouldn't this be a 'smart-dropdown-container'?
+    I.waitForVisible('.dropdown-menu');
 
     I.click('Download');
     I.waitForText('Anti-Virus Warning');
 
     I.see('The file \'eicar.exe\' you are trying to download seems to be infected with \'Eicar-Test-Signature\'.');
-
-    // 5. Hit 'Cancel'
-
     I.click('Cancel');
 
-    // 6. Download the attachment again
-
     I.click('eicar.exe');
-    I.waitForVisible('.dropdown-menu'); // legacy container. shouldn't this be a 'smart-dropdown-container'?
+    // legacy container. shouldn't this be a 'smart-dropdown-container'?
+    I.waitForVisible('.dropdown-menu');
 
     I.click('Download');
     I.waitForText('Anti-Virus Warning');
 
     I.see('The file \'eicar.exe\' you are trying to download seems to be infected with \'Eicar-Test-Signature\'.');
-
-    // 7. Hit 'Download infected file'
-
     I.click('Download infected file');
-
-    // 8. Download and verify the file
-
-    // It's not possible to verify the file on the filesystem.
 });
