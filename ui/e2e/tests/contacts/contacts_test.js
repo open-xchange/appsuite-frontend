@@ -219,7 +219,7 @@ Scenario('[C7359] - Expand/collapse all contact edit sections', function (I) {
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
     I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
-    I.clickToolbar('New contacnt');
+    I.clickToolbar('New contact');
     I.click('New contact');
     I.waitForVisible('.io-ox-contacts-edit-window');
 
