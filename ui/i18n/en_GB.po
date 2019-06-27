@@ -516,6 +516,22 @@ msgstr ", "
 msgid "---------- Original Message ----------"
 msgstr "---------- Original Message ----------"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "09.00 (24 hours)"
+msgstr "24 hours"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "09:00 (24 hours)"
+msgstr "24 hours"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "09:00 AM (12 hours)"
+msgstr ""
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "1 day"
 msgstr "1 day"
@@ -558,10 +574,6 @@ msgstr "100 versions"
 msgid "100%"
 msgstr "100%"
 
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "12 hours"
-msgstr "12 hours"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "15 minutes"
@@ -585,10 +597,6 @@ msgstr "2-step Verification Options"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "20 versions"
 msgstr "20 versions"
-
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "24 hours"
-msgstr "24 hours"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "30 days"
@@ -640,6 +648,12 @@ msgstr "70 versions"
 msgid "80 versions"
 msgstr "80 versions"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "9.00 (24 hours)"
+msgstr "24 hours"
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "90 days"
 msgstr "90 days"
@@ -647,6 +661,18 @@ msgstr "90 days"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "90 versions"
 msgstr "90 versions"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "9:00 (24 hours)"
+msgstr "24 hours"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "12 hours"
+msgid "9:00 AM (12 hours)"
+msgstr "12 hours"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved into itself"
@@ -1408,14 +1434,13 @@ msgstr "Application may not work as expected until this problem is solved."
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Apply"
 msgstr "Apply"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
@@ -2427,8 +2452,8 @@ msgstr "Configure categories"
 msgid "Configure now"
 msgstr "Configure now"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/core/settings/quickLauncherDialog.js
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js
 #, fuzzy
 #| msgid "Configure categories"
 msgid "Configure quick launchers"
@@ -2836,6 +2861,12 @@ msgstr "Custom name"
 msgid "Customize this page"
 msgstr "Customise this page"
 
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Customizing"
+msgid "Customized"
+msgstr "Customising"
+
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "DAVdroid"
 msgstr "DAVdroid"
@@ -2875,7 +2906,7 @@ msgstr "Data only partially imported (%1$s of %2$s records)"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -2888,6 +2919,12 @@ msgstr "Date"
 #: apps/io.ox/tasks/view-detail.js
 msgid "Date completed"
 msgstr "Date completed"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Text format"
+msgid "Date format"
+msgstr "Text format"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -2930,10 +2967,8 @@ msgstr "Decline"
 msgid "Declined"
 msgstr "Declined"
 
-#. default in terms of standard value
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Default"
 msgstr "Default"
 
@@ -4648,7 +4683,15 @@ msgid "Firefox"
 msgstr "Firefox"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "First day of week"
+#, fuzzy
+#| msgid "First day of week"
+msgid "First day of the week"
+msgstr "First day of week"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "First day of week"
+msgid "First day of the week: %1$s"
 msgstr "First day of week"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -4666,7 +4709,9 @@ msgid "First name must not be empty for internal users"
 msgstr "First name must not be empty for internal users"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "First week of year"
+#, fuzzy
+#| msgid "First week of year"
+msgid "First week of the year"
 msgstr "First week of year"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
@@ -6358,10 +6403,6 @@ msgstr "Model is incomplete."
 msgid "Modified"
 msgstr "Modified"
 
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Monday"
-msgstr "Monday"
-
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -6389,6 +6430,12 @@ msgstr "More"
 #: apps/io.ox/core/extPatterns/links.js
 msgid "More actions"
 msgstr "More actions"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Regional settings"
+msgid "More regional settings"
+msgstr "Regional settings"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
@@ -6926,12 +6973,12 @@ msgstr "No title."
 #. object permissions - delete
 #. Auth type. None. No authentication
 #. Connection security. None.
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/core/settings/quickLauncherDialog.js
-#: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/flag-picker.js
-#: module:io.ox/mail apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/core/tk/attachments.js
+#: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/view-options.js
+#: module:io.ox/files apps/io.ox/mail/accounts/view-form.js
+#: module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "None"
@@ -7070,8 +7117,10 @@ msgid "Now active"
 msgstr "Now active"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Numbers"
-msgstr "Numbers"
+#, fuzzy
+#| msgid "Text format"
+msgid "Number format"
+msgstr "Text format"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -8273,7 +8322,7 @@ msgid "Purple/Magenta"
 msgstr "Purple/Magenta"
 
 #. %s is the number of the quicklauncher (1-3)
-#: apps/io.ox/core/settings/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
 msgid "Quick launch %s"
 msgstr "Quick launch %s"
 
@@ -8805,6 +8854,10 @@ msgstr "Resent-To"
 msgid "Reserved"
 msgstr "Reserved"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Reset"
+msgstr "Reset"
+
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
 msgid "Reset this list"
 msgstr "Reset this list"
@@ -8986,7 +9039,8 @@ msgstr "Saturday"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/settings/editLocale.js apps/io.ox/editor/main.js
 #: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
 #: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
 #: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
@@ -9774,16 +9828,24 @@ msgid "Some fields contain invalid data"
 msgstr "Some fields contain invalid data"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Some settings (language, timezone, theme) require a page reload or "
+#| "relogin to take effect."
 msgid ""
-"Some settings (language, timezone, theme) require a page reload or relogin "
+"Some settings (e.g. language and timezone) require a page reload or relogin "
 "to take effect."
 msgstr ""
 "Some settings (language, timezone, theme) require a page reload or relogin "
 "to take effect."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Some settings (language, timezone, theme) require a relogin to take "
+#| "effect."
 msgid ""
-"Some settings (language, timezone, theme) require a relogin to take effect."
+"Some settings (e.g. language and timezone) require a relogin to take effect."
 msgstr ""
 "Some settings (language, time zone, theme) require a re-login to take effect."
 
@@ -10087,10 +10149,6 @@ msgstr "Suffix"
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
 msgstr "Summary"
-
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Sunday"
-msgstr "Sunday"
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -11085,9 +11143,14 @@ msgid "Tiles"
 msgstr "Tiles"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "Time"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Text format"
+msgid "Time format"
+msgstr "Text format"
 
 #. Context: Calendar settings. Default time scale in minutes for new appointments.
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
@@ -11844,12 +11907,16 @@ msgid "Week start"
 msgstr "Week start"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Week that contains January 1st"
+#, fuzzy
+#| msgid "Week that contains January 1st"
+msgid "Week that contains January 1st (e.g. US, Canada)"
 msgstr "Week that contains January 1st"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Week that contains the first Thursday"
-msgstr "Week that contains the first Thursday"
+#, fuzzy
+#| msgid "Week that contains January 1st"
+msgid "Week that contains January 4th (e.g. Europe, ISO-8601)"
+msgstr "Week that contains January 1st"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -13995,9 +14062,6 @@ msgstr "your platform"
 #~ msgid "Custom colors"
 #~ msgstr "Custom colours"
 
-#~ msgid "Customizing"
-#~ msgstr "Customising"
-
 #~ msgid "Dangerous and trusted"
 #~ msgstr "Dangerous and trusted"
 
@@ -15011,6 +15075,9 @@ msgstr "your platform"
 #~ msgid "Modified by"
 #~ msgstr "Modified by"
 
+#~ msgid "Monday"
+#~ msgstr "Monday"
+
 #~ msgid "Month View"
 #~ msgstr "Month View"
 
@@ -15164,6 +15231,9 @@ msgstr "your platform"
 
 #~ msgid "Number of messages"
 #~ msgstr "Number of messages"
+
+#~ msgid "Numbers"
+#~ msgstr "Numbers"
 
 #~ msgid "October"
 #~ msgstr "October"
@@ -15516,9 +15586,6 @@ msgstr "your platform"
 
 #~ msgid "Reply to all"
 #~ msgstr "Reply to all"
-
-#~ msgid "Reset"
-#~ msgstr "Reset"
 
 #~ msgid "Resource name"
 #~ msgstr "Resource name"
@@ -15954,6 +16021,9 @@ msgstr "your platform"
 #~ msgid "Such data will never be uploaded"
 #~ msgstr "Such data will never be uploaded"
 
+#~ msgid "Sunday"
+#~ msgstr "Sunday"
+
 #, fuzzy
 #~| msgid "Your name"
 #~ msgid "Suriname"
@@ -16002,9 +16072,6 @@ msgstr "your platform"
 
 #~ msgid "Text"
 #~ msgstr "Text"
-
-#~ msgid "Text format"
-#~ msgstr "Text format"
 
 #~ msgctxt "help"
 #~ msgid "The Drive App"
@@ -16890,6 +16957,9 @@ msgstr "your platform"
 
 #~ msgid "Week View"
 #~ msgstr "Week View"
+
+#~ msgid "Week that contains the first Thursday"
+#~ msgstr "Week that contains the first Thursday"
 
 #~ msgid "Weekly on %1$s"
 #~ msgstr "Weekly on %1$s"

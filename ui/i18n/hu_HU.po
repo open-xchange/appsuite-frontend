@@ -515,6 +515,22 @@ msgstr ",  "
 msgid "---------- Original Message ----------"
 msgstr "---------- Eredeti üzenet ----------"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "09.00 (24 hours)"
+msgstr "24 óra"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "09:00 (24 hours)"
+msgstr "24 óra"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "09:00 AM (12 hours)"
+msgstr ""
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "1 day"
 msgstr "1 nap"
@@ -557,10 +573,6 @@ msgstr "100 verzió"
 msgid "100%"
 msgstr "100%"
 
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "12 hours"
-msgstr "12 óra"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "15 minutes"
@@ -584,10 +596,6 @@ msgstr "Kétlépcsős ellenőrzési beállítások"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "20 versions"
 msgstr "20 verzió"
-
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "24 hours"
-msgstr "24 óra"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "30 days"
@@ -639,6 +647,12 @@ msgstr "70 verzió"
 msgid "80 versions"
 msgstr "80 verzió"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "9.00 (24 hours)"
+msgstr "24 óra"
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "90 days"
 msgstr "90 nap"
@@ -646,6 +660,18 @@ msgstr "90 nap"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "90 versions"
 msgstr "90 verzió"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "9:00 (24 hours)"
+msgstr "24 óra"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "12 hours"
+msgid "9:00 AM (12 hours)"
+msgstr "12 óra"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved into itself"
@@ -1413,14 +1439,13 @@ msgstr ""
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Apply"
 msgstr "Alkalmazás"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
@@ -2437,8 +2462,8 @@ msgstr "Kategóriák beállítása"
 msgid "Configure now"
 msgstr "Beállítás"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/core/settings/quickLauncherDialog.js
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js
 #, fuzzy
 #| msgid "Configure categories"
 msgid "Configure quick launchers"
@@ -2846,6 +2871,12 @@ msgstr "Egyéni név használata"
 msgid "Customize this page"
 msgstr "Oldal testre szabása"
 
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Custom name"
+msgid "Customized"
+msgstr "Egyéni név használata"
+
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "DAVdroid"
 msgstr "DAVdroid"
@@ -2885,7 +2916,7 @@ msgstr "Csak részben importált adatok (%1$s / %2$s rekord)"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -2898,6 +2929,12 @@ msgstr "Dátum"
 #: apps/io.ox/tasks/view-detail.js
 msgid "Date completed"
 msgstr "Befejezés dátuma"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "select format"
+msgid "Date format"
+msgstr "formátum kiválasztása"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -2940,10 +2977,8 @@ msgstr "Visszautasítás"
 msgid "Declined"
 msgstr "Elutasítva"
 
-#. default in terms of standard value
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Default"
 msgstr "Alapértelmezett"
 
@@ -4658,7 +4693,15 @@ msgid "Firefox"
 msgstr "Firefox"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "First day of week"
+#, fuzzy
+#| msgid "First day of week"
+msgid "First day of the week"
+msgstr "A hét első napja"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "First day of week"
+msgid "First day of the week: %1$s"
 msgstr "A hét első napja"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -4676,7 +4719,9 @@ msgid "First name must not be empty for internal users"
 msgstr "Az első név nem lehet üres a belső felhasználóknak"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "First week of year"
+#, fuzzy
+#| msgid "First week of year"
+msgid "First week of the year"
 msgstr "Az év első hete"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
@@ -6372,10 +6417,6 @@ msgstr "A modell befejezetlen."
 msgid "Modified"
 msgstr "Módosítva"
 
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Monday"
-msgstr "Hétfő"
-
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -6403,6 +6444,12 @@ msgstr "Tovább"
 #: apps/io.ox/core/extPatterns/links.js
 msgid "More actions"
 msgstr "További műveletek"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Regional settings"
+msgid "More regional settings"
+msgstr "Területi beállítások"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
@@ -6941,12 +6988,12 @@ msgstr "Nincs cím."
 #. object permissions - delete
 #. Auth type. None. No authentication
 #. Connection security. None.
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/core/settings/quickLauncherDialog.js
-#: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/flag-picker.js
-#: module:io.ox/mail apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/core/tk/attachments.js
+#: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/view-options.js
+#: module:io.ox/files apps/io.ox/mail/accounts/view-form.js
+#: module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "None"
@@ -7086,8 +7133,10 @@ msgid "Now active"
 msgstr "Most aktív"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Numbers"
-msgstr "Számok"
+#, fuzzy
+#| msgid "Number of messages"
+msgid "Number format"
+msgstr "Üzenetek száma"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -8290,7 +8339,7 @@ msgid "Purple/Magenta"
 msgstr "Lila/Magenta"
 
 #. %s is the number of the quicklauncher (1-3)
-#: apps/io.ox/core/settings/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
 msgid "Quick launch %s"
 msgstr "%s gyorsindítás"
 
@@ -8821,6 +8870,12 @@ msgstr "Újraküldött-címzett"
 msgid "Reserved"
 msgstr "Foglalt"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Resent-To"
+msgid "Reset"
+msgstr "Újraküldött-címzett"
+
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
 msgid "Reset this list"
 msgstr "Lista visszaállítása"
@@ -9004,7 +9059,8 @@ msgstr "Szombat"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/settings/editLocale.js apps/io.ox/editor/main.js
 #: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
 #: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
 #: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
@@ -9795,16 +9851,24 @@ msgid "Some fields contain invalid data"
 msgstr "Néhány mező hibás adatokat tartalmaz"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Some settings (language, timezone, theme) require a page reload or "
+#| "relogin to take effect."
 msgid ""
-"Some settings (language, timezone, theme) require a page reload or relogin "
+"Some settings (e.g. language and timezone) require a page reload or relogin "
 "to take effect."
 msgstr ""
 "Néhány beállítás (nyelv, időzóna, téma) módosításához újra kell tölteni az "
 "oldalt vagy újra be kell lépni."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Some settings (language, timezone, theme) require a relogin to take "
+#| "effect."
 msgid ""
-"Some settings (language, timezone, theme) require a relogin to take effect."
+"Some settings (e.g. language and timezone) require a relogin to take effect."
 msgstr ""
 "Néhány beállítás (nyelv, időzóna, téma) módosításához újra be kell lépni."
 
@@ -10109,10 +10173,6 @@ msgstr "Utótag"
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
 msgstr "Összegzés"
-
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Sunday"
-msgstr "Vasárnap"
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -11119,9 +11179,14 @@ msgid "Tiles"
 msgstr "Mozaik"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "Idő"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Timeframe"
+msgid "Time format"
+msgstr "Időkeret"
 
 #. Context: Calendar settings. Default time scale in minutes for new appointments.
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
@@ -11889,12 +11954,16 @@ msgid "Week start"
 msgstr "Hét kezdete"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Week that contains January 1st"
+#, fuzzy
+#| msgid "Week that contains January 1st"
+msgid "Week that contains January 1st (e.g. US, Canada)"
 msgstr "Január 1-jét tartalmazó hét"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Week that contains the first Thursday"
-msgstr "Az első csütörtöki hét"
+#, fuzzy
+#| msgid "Week that contains January 1st"
+msgid "Week that contains January 4th (e.g. Europe, ISO-8601)"
+msgstr "Január 1-jét tartalmazó hét"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -14334,6 +14403,9 @@ msgstr "az Ön rendszere"
 #~ msgid "Minutes"
 #~ msgstr "Perc"
 
+#~ msgid "Monday"
+#~ msgstr "Hétfő"
+
 #~ msgid "Monthly on day %1$d"
 #~ msgstr "Havonta a(z) %1$d. napon"
 
@@ -14416,8 +14488,8 @@ msgstr "az Ön rendszere"
 #~ msgid "Number of items"
 #~ msgstr "Elemszám"
 
-#~ msgid "Number of messages"
-#~ msgstr "Üzenetek száma"
+#~ msgid "Numbers"
+#~ msgstr "Számok"
 
 #~ msgid "October"
 #~ msgstr "Október"
@@ -14916,6 +14988,9 @@ msgstr "az Ön rendszere"
 #~ msgid "Subscribe calendar"
 #~ msgstr "Feliratkozás a naptárra"
 
+#~ msgid "Sunday"
+#~ msgstr "Vasárnap"
+
 #, fuzzy
 #~| msgid "Your name"
 #~ msgid "Suriname"
@@ -15377,6 +15452,9 @@ msgstr "az Ön rendszere"
 
 #~ msgid "Week View"
 #~ msgstr "Hét nézet"
+
+#~ msgid "Week that contains the first Thursday"
+#~ msgstr "Az első csütörtöki hét"
 
 #~ msgid "Welcome. Please provide your feedback about this product"
 #~ msgstr "Üdvözöljük, kérjük adjon visszajelzést a termékkel kapcsolatban."

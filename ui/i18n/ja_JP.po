@@ -516,6 +516,22 @@ msgstr "、 "
 msgid "---------- Original Message ----------"
 msgstr "---------- 元のメッセージ ----------"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "09.00 (24 hours)"
+msgstr "24 時間"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "09:00 (24 hours)"
+msgstr "24 時間"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "09:00 AM (12 hours)"
+msgstr ""
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "1 day"
 msgstr "1日"
@@ -558,10 +574,6 @@ msgstr "100バージョン"
 msgid "100%"
 msgstr "100%"
 
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "12 hours"
-msgstr "12 時間"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "15 minutes"
@@ -585,10 +597,6 @@ msgstr "２段階検証オプション"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "20 versions"
 msgstr "20バージョン"
-
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "24 hours"
-msgstr "24 時間"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "30 days"
@@ -640,6 +648,12 @@ msgstr "70バージョン"
 msgid "80 versions"
 msgstr "80バージョン"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "9.00 (24 hours)"
+msgstr "24 時間"
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "90 days"
 msgstr "90日"
@@ -647,6 +661,18 @@ msgstr "90日"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "90 versions"
 msgstr "90バージョン"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "9:00 (24 hours)"
+msgstr "24 時間"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "12 hours"
+msgid "9:00 AM (12 hours)"
+msgstr "12 時間"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved into itself"
@@ -1403,14 +1429,13 @@ msgstr ""
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Apply"
 msgstr "適用"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
@@ -2407,8 +2432,8 @@ msgstr "カテゴリの設定"
 msgid "Configure now"
 msgstr "今構成する"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/core/settings/quickLauncherDialog.js
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js
 #, fuzzy
 #| msgid "Configure categories"
 msgid "Configure quick launchers"
@@ -2814,6 +2839,12 @@ msgstr "カスタム名"
 msgid "Customize this page"
 msgstr "このページをカスタマイズ"
 
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Customizing"
+msgid "Customized"
+msgstr "カスタマイズ"
+
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "DAVdroid"
 msgstr "DAVdroid"
@@ -2853,7 +2884,7 @@ msgstr "データの一部のみしました ( %1$s レコード / %2$s レコ�
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -2866,6 +2897,12 @@ msgstr "日付"
 #: apps/io.ox/tasks/view-detail.js
 msgid "Date completed"
 msgstr "完了日"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Date format:"
+msgid "Date format"
+msgstr "日付フォーマット:"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -2908,10 +2945,8 @@ msgstr "辞退"
 msgid "Declined"
 msgstr "辞退"
 
-#. default in terms of standard value
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Default"
 msgstr "既定"
 
@@ -4611,7 +4646,15 @@ msgid "Firefox"
 msgstr "Firefox"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "First day of week"
+#, fuzzy
+#| msgid "First day of week"
+msgid "First day of the week"
+msgstr "週の最初の日\\t"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "First day of week"
+msgid "First day of the week: %1$s"
 msgstr "週の最初の日\\t"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -4629,7 +4672,9 @@ msgid "First name must not be empty for internal users"
 msgstr "内部ユーザーの場合、名前は空にできません"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "First week of year"
+#, fuzzy
+#| msgid "First week of year"
+msgid "First week of the year"
 msgstr "年の最初の週"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
@@ -6306,10 +6351,6 @@ msgstr "モデルが不完全です。"
 msgid "Modified"
 msgstr "更新日"
 
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Monday"
-msgstr "月曜"
-
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -6337,6 +6378,12 @@ msgstr "さらに表示"
 #: apps/io.ox/core/extPatterns/links.js
 msgid "More actions"
 msgstr "その他のアクション"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Regional settings"
+msgid "More regional settings"
+msgstr "地域設定"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
@@ -6875,12 +6922,12 @@ msgstr "タイトルなし"
 #. object permissions - delete
 #. Auth type. None. No authentication
 #. Connection security. None.
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/core/settings/quickLauncherDialog.js
-#: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/flag-picker.js
-#: module:io.ox/mail apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/core/tk/attachments.js
+#: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/view-options.js
+#: module:io.ox/files apps/io.ox/mail/accounts/view-form.js
+#: module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "None"
@@ -7020,8 +7067,10 @@ msgid "Now active"
 msgstr "現在有効"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Numbers"
-msgstr "数値"
+#, fuzzy
+#| msgid "Text format"
+msgid "Number format"
+msgstr "本文のフォーマット"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -8215,7 +8264,7 @@ msgid "Purple/Magenta"
 msgstr "紫／マゼンタ"
 
 #. %s is the number of the quicklauncher (1-3)
-#: apps/io.ox/core/settings/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
 msgid "Quick launch %s"
 msgstr "クイック起動 %s"
 
@@ -8735,6 +8784,10 @@ msgstr "再送信先"
 msgid "Reserved"
 msgstr "予定あり"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Reset"
+msgstr "リセット"
+
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
 msgid "Reset this list"
 msgstr "このリストをリセット"
@@ -8916,7 +8969,8 @@ msgstr "土曜"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/settings/editLocale.js apps/io.ox/editor/main.js
 #: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
 #: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
 #: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
@@ -9706,16 +9760,24 @@ msgid "Some fields contain invalid data"
 msgstr "無効なデータ入力されているフィールドがあります"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Some settings (language, timezone, theme) require a page reload or "
+#| "relogin to take effect."
 msgid ""
-"Some settings (language, timezone, theme) require a page reload or relogin "
+"Some settings (e.g. language and timezone) require a page reload or relogin "
 "to take effect."
 msgstr ""
 "言語、タイムゾーン、またはテーマの設定変更を有効にするために、ページのリロー"
 "ドまたは再ログインが必要です。"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Some settings (language, timezone, theme) require a relogin to take "
+#| "effect."
 msgid ""
-"Some settings (language, timezone, theme) require a relogin to take effect."
+"Some settings (e.g. language and timezone) require a relogin to take effect."
 msgstr ""
 "設定（言語、タイムゾーン、テーマ）によっては、設定を有効にするには、ログオン"
 "しなおしてください。"
@@ -10019,10 +10081,6 @@ msgstr "称号"
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
 msgstr "概要"
-
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Sunday"
-msgstr "日曜"
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -11007,9 +11065,14 @@ msgid "Tiles"
 msgstr "タイル"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "時間"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Text format"
+msgid "Time format"
+msgstr "本文のフォーマット"
 
 #. Context: Calendar settings. Default time scale in minutes for new appointments.
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
@@ -11767,12 +11830,16 @@ msgid "Week start"
 msgstr "週の開始日"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Week that contains January 1st"
+#, fuzzy
+#| msgid "Week that contains January 1st"
+msgid "Week that contains January 1st (e.g. US, Canada)"
 msgstr "1月1日を含む週"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Week that contains the first Thursday"
-msgstr "第一木曜日を含む週"
+#, fuzzy
+#| msgid "Week that contains January 1st"
+msgid "Week that contains January 4th (e.g. Europe, ISO-8601)"
+msgstr "1月1日を含む週"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -15387,9 +15454,6 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Custom colors"
 #~ msgstr "カスタム"
 
-#~ msgid "Customizing"
-#~ msgstr "カスタマイズ"
-
 #~ msgid "Cut"
 #~ msgstr "切り取り"
 
@@ -15435,9 +15499,6 @@ msgstr "ご利用のプラットフォーム"
 #~ msgstr ""
 #~ "ご利用のローカル (Windows) マシンとデータを同期します。同期する対象のフォ"
 #~ "ルダをDrive Clientで構成できます。"
-
-#~ msgid "Date format:"
-#~ msgstr "日付フォーマット:"
 
 #~ msgid "Date of birth:"
 #~ msgstr "生年月日:"
@@ -17768,6 +17829,9 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Monaco"
 #~ msgstr "モナコ"
 
+#~ msgid "Monday"
+#~ msgstr "月曜"
+
 #~ msgid "Mongolia"
 #~ msgstr "モンゴル"
 
@@ -18132,6 +18196,9 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Numbering On/Off"
 #~ msgstr "段落番号のオン/オフ"
+
+#~ msgid "Numbers"
+#~ msgstr "数値"
 
 #~ msgid "OAuth Accounts"
 #~ msgstr "OAuth アカウント"
@@ -19033,9 +19100,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Reply-to Address"
 #~ msgstr "返信先アドレス"
-
-#~ msgid "Reset"
-#~ msgstr "リセット"
 
 #~ msgid "Resource email"
 #~ msgstr "設備メール"
@@ -19939,6 +20003,9 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Sun"
 #~ msgstr "日曜日"
 
+#~ msgid "Sunday"
+#~ msgstr "日曜"
+
 #~ msgid "Superscript"
 #~ msgstr "上付き文字"
 
@@ -20160,9 +20227,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Text Fill Color"
 #~ msgstr "テキストの塗りつぶしの色"
-
-#~ msgid "Text format"
-#~ msgstr "本文のフォーマット"
 
 #~ msgid "Text:"
 #~ msgstr "テキスト:"
@@ -21514,6 +21578,9 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Week View"
 #~ msgstr "週ビュー"
+
+#~ msgid "Week that contains the first Thursday"
+#~ msgstr "第一木曜日を含む週"
 
 #~ msgid "Week(s) on"
 #~ msgstr "週間おき"

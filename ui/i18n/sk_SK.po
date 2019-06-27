@@ -538,6 +538,22 @@ msgstr ", "
 msgid "---------- Original Message ----------"
 msgstr "---------- Pôvodná správa ----------"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "09.00 (24 hours)"
+msgstr "24 hodín"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "09:00 (24 hours)"
+msgstr "24 hodín"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "09:00 AM (12 hours)"
+msgstr ""
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "1 day"
 msgstr "1 deň"
@@ -581,10 +597,6 @@ msgstr "100 verzií"
 msgid "100%"
 msgstr "100 %"
 
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "12 hours"
-msgstr "12 hodín"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "15 minutes"
@@ -608,10 +620,6 @@ msgstr "Možnosti dvojkrokového overenia"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "20 versions"
 msgstr "20 verzií"
-
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "24 hours"
-msgstr "24 hodín"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "30 days"
@@ -663,6 +671,12 @@ msgstr "70 verzií"
 msgid "80 versions"
 msgstr "80 verzií"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "9.00 (24 hours)"
+msgstr "24 hodín"
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "90 days"
 msgstr "90 dní"
@@ -670,6 +684,18 @@ msgstr "90 dní"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "90 versions"
 msgstr "90 verzií"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "9:00 (24 hours)"
+msgstr "24 hodín"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "12 hours"
+msgid "9:00 AM (12 hours)"
+msgstr "12 hodín"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved into itself"
@@ -1438,14 +1464,13 @@ msgstr ""
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Apply"
 msgstr "Aplikovať rolu"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
@@ -2460,8 +2485,8 @@ msgstr "Nastaviť kategórie"
 msgid "Configure now"
 msgstr "Nastaviť teraz"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/core/settings/quickLauncherDialog.js
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js
 #, fuzzy
 #| msgid "Configure categories"
 msgid "Configure quick launchers"
@@ -2873,6 +2898,12 @@ msgstr "Vlastné meno"
 msgid "Customize this page"
 msgstr "Prispôsobiť túto stránku"
 
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Customizing"
+msgid "Customized"
+msgstr "Prispôsobenie"
+
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "DAVdroid"
 msgstr "DAVdroid"
@@ -2912,7 +2943,7 @@ msgstr "Údaje boli naimportované iba čiastočne (%1$s z %2$s záznamov)"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -2925,6 +2956,12 @@ msgstr "Dátum"
 #: apps/io.ox/tasks/view-detail.js
 msgid "Date completed"
 msgstr "Dátum dokončenia"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Date format:"
+msgid "Date format"
+msgstr "Formát dátumu:"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -2967,10 +3004,8 @@ msgstr "Zamietnuť"
 msgid "Declined"
 msgstr "Zamietnuté"
 
-#. default in terms of standard value
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Default"
 msgstr "Predvolené"
 
@@ -4691,7 +4726,15 @@ msgid "Firefox"
 msgstr "Firefox"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "First day of week"
+#, fuzzy
+#| msgid "First day of week"
+msgid "First day of the week"
+msgstr "Prvý deň týždňa"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "First day of week"
+msgid "First day of the week: %1$s"
 msgstr "Prvý deň týždňa"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -4709,7 +4752,9 @@ msgid "First name must not be empty for internal users"
 msgstr "Krstné meno interných používateľov nesmie byť prázdne"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "First week of year"
+#, fuzzy
+#| msgid "First week of year"
+msgid "First week of the year"
 msgstr "Prvý týždeň roka"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
@@ -6405,10 +6450,6 @@ msgstr "Model je neúplný."
 msgid "Modified"
 msgstr "Zmenené"
 
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Monday"
-msgstr "pondelok"
-
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -6436,6 +6477,12 @@ msgstr "Ďalšie"
 #: apps/io.ox/core/extPatterns/links.js
 msgid "More actions"
 msgstr "Ďalšie operácie"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Regional settings"
+msgid "More regional settings"
+msgstr "Regionálne nastavenia"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
@@ -6974,12 +7021,12 @@ msgstr "Bez názvu."
 #. object permissions - delete
 #. Auth type. None. No authentication
 #. Connection security. None.
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/core/settings/quickLauncherDialog.js
-#: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/flag-picker.js
-#: module:io.ox/mail apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/core/tk/attachments.js
+#: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/view-options.js
+#: module:io.ox/files apps/io.ox/mail/accounts/view-form.js
+#: module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "None"
@@ -7122,8 +7169,10 @@ msgid "Now active"
 msgstr "Teraz aktívne"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Numbers"
-msgstr "Čísla"
+#, fuzzy
+#| msgid "Text format"
+msgid "Number format"
+msgstr "Formát textu"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -8329,7 +8378,7 @@ msgid "Purple/Magenta"
 msgstr "Fialová/purpurová"
 
 #. %s is the number of the quicklauncher (1-3)
-#: apps/io.ox/core/settings/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
 msgid "Quick launch %s"
 msgstr "Rýchle spustenie %s"
 
@@ -8861,6 +8910,10 @@ msgstr "Znovu odoslané komu"
 msgid "Reserved"
 msgstr "Vyhradené"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Reset"
+msgstr "Obnoviť"
+
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
 msgid "Reset this list"
 msgstr "Obnoviť tento zoznam"
@@ -9042,7 +9095,8 @@ msgstr "Sobota"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/settings/editLocale.js apps/io.ox/editor/main.js
 #: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
 #: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
 #: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
@@ -9836,16 +9890,24 @@ msgid "Some fields contain invalid data"
 msgstr "Niektoré polia obsahujú neplatné údaje"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Some settings (language, timezone, theme) require a page reload or "
+#| "relogin to take effect."
 msgid ""
-"Some settings (language, timezone, theme) require a page reload or relogin "
+"Some settings (e.g. language and timezone) require a page reload or relogin "
 "to take effect."
 msgstr ""
 "Niektoré nastavenia (jazyk, časové pásmo, téma) vyžadujú znova načítať "
 "stránku alebo znova sa prihlásiť, aby sa prejavili."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Some settings (language, timezone, theme) require a relogin to take "
+#| "effect."
 msgid ""
-"Some settings (language, timezone, theme) require a relogin to take effect."
+"Some settings (e.g. language and timezone) require a relogin to take effect."
 msgstr ""
 "Niektoré nastavenia (jazyk, časové pásmo, téma vzhľadu) vyžadujú opätovné "
 "prihlásenie, aby sa prejavili."
@@ -10151,10 +10213,6 @@ msgstr "Prípona"
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
 msgstr "Zhrnutie"
-
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Sunday"
-msgstr "nedeľa"
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -11174,9 +11232,14 @@ msgid "Tiles"
 msgstr "Dlaždice"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "Čas"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Text format"
+msgid "Time format"
+msgstr "Formát textu"
 
 #. Context: Calendar settings. Default time scale in minutes for new appointments.
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
@@ -11945,12 +12008,16 @@ msgid "Week start"
 msgstr "Začiatok pracovného týždňa"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Week that contains January 1st"
+#, fuzzy
+#| msgid "Week that contains January 1st"
+msgid "Week that contains January 1st (e.g. US, Canada)"
 msgstr "Týždeň, ktorý obsahuje 1. januára"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Week that contains the first Thursday"
-msgstr "Týždeň, ktorý obsahuje prvý štvrtok"
+#, fuzzy
+#| msgid "Week that contains January 1st"
+msgid "Week that contains January 4th (e.g. Europe, ISO-8601)"
+msgstr "Týždeň, ktorý obsahuje 1. januára"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -14944,9 +15011,6 @@ msgstr "vaša platforma"
 #~ msgid "Custom colors"
 #~ msgstr "Vlastné farby"
 
-#~ msgid "Customizing"
-#~ msgstr "Prispôsobenie"
-
 #~ msgid "Cut"
 #~ msgstr "Vystrihnúť"
 
@@ -14992,9 +15056,6 @@ msgstr "vaša platforma"
 #~ msgstr ""
 #~ "Synchronizácia údajov s vašim lokálnym počítačom (Windows). Klient Drive "
 #~ "umožňuje konfigurovať priečinky, ktoré sa majú synchronizovať."
-
-#~ msgid "Date format:"
-#~ msgstr "Formát dátumu:"
 
 #~ msgid "Date of birth:"
 #~ msgstr "Dátum narodenia:"
@@ -17132,6 +17193,9 @@ msgstr "vaša platforma"
 #~ msgid "Monaco"
 #~ msgstr "Monako"
 
+#~ msgid "Monday"
+#~ msgstr "pondelok"
+
 #~ msgid "Mongolia"
 #~ msgstr "Mongolsko"
 
@@ -17485,6 +17549,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Numbering On/Off"
 #~ msgstr "Číslovanie zap./vyp."
+
+#~ msgid "Numbers"
+#~ msgstr "Čísla"
 
 #~ msgid "Oct"
 #~ msgstr "Okt"
@@ -18203,9 +18270,6 @@ msgstr "vaša platforma"
 
 #~ msgid "Reply-to Address"
 #~ msgstr "Odpovedať-na adresu:"
-
-#~ msgid "Reset"
-#~ msgstr "Obnoviť"
 
 #~ msgid "Resource email"
 #~ msgstr "Email zdroja"
@@ -19076,6 +19140,9 @@ msgstr "vaša platforma"
 #~ msgid "Sun"
 #~ msgstr "Ned"
 
+#~ msgid "Sunday"
+#~ msgstr "nedeľa"
+
 #~ msgid "Superscript"
 #~ msgstr "Horný index"
 
@@ -19250,9 +19317,6 @@ msgstr "vaša platforma"
 
 #~ msgid "Text Fill Color"
 #~ msgstr "Farba textu"
-
-#~ msgid "Text format"
-#~ msgstr "Formát textu"
 
 #~ msgid "Text:"
 #~ msgstr "Text:"
@@ -20509,6 +20573,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Week View"
 #~ msgstr "Zobrazenie týždňa"
+
+#~ msgid "Week that contains the first Thursday"
+#~ msgstr "Týždeň, ktorý obsahuje prvý štvrtok"
 
 #~ msgid "Week(s) on"
 #~ msgstr "Týždne"

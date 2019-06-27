@@ -509,6 +509,22 @@ msgstr "、"
 msgid "---------- Original Message ----------"
 msgstr "---------- 原始訊息 ----------"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "09.00 (24 hours)"
+msgstr "24 小時"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "09:00 (24 hours)"
+msgstr "24 小時"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "09:00 AM (12 hours)"
+msgstr ""
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "1 day"
 msgstr "1 天"
@@ -551,10 +567,6 @@ msgstr "100 個版本"
 msgid "100%"
 msgstr "100%"
 
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "12 hours"
-msgstr "12 小時"
-
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "15 minutes"
@@ -578,10 +590,6 @@ msgstr "兩階段驗證選項"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "20 versions"
 msgstr "20 個版本"
-
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "24 hours"
-msgstr "24 小時"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "30 days"
@@ -633,6 +641,12 @@ msgstr "70 個版本"
 msgid "80 versions"
 msgstr "80 個版本"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "9.00 (24 hours)"
+msgstr "24 小時"
+
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "90 days"
 msgstr "90 天"
@@ -640,6 +654,18 @@ msgstr "90 天"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "90 versions"
 msgstr "90 個版本"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "24 hours"
+msgid "9:00 (24 hours)"
+msgstr "24 小時"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "12 hours"
+msgid "9:00 AM (12 hours)"
+msgstr "12 小時"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "A folder cannot be moved into itself"
@@ -1387,14 +1413,13 @@ msgstr "在此問題解決前應用程式可能暫時無法使用。"
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Apply"
 msgstr "套用"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
@@ -2393,8 +2418,8 @@ msgstr "設定分類"
 msgid "Configure now"
 msgstr "立刻設定"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/core/settings/quickLauncherDialog.js
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js
 #, fuzzy
 #| msgid "Configure categories"
 msgid "Configure quick launchers"
@@ -2797,6 +2822,12 @@ msgstr "自訂名稱"
 msgid "Customize this page"
 msgstr "自訂此頁面"
 
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Customizing"
+msgid "Customized"
+msgstr "自訂"
+
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "DAVdroid"
 msgstr "DAVdroid"
@@ -2836,7 +2867,7 @@ msgstr "只匯入部分資料〈%1$s 筆記錄，共 %2$s 筆〉"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -2849,6 +2880,12 @@ msgstr "日期"
 #: apps/io.ox/tasks/view-detail.js
 msgid "Date completed"
 msgstr "完成日期"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Date format:"
+msgid "Date format"
+msgstr "日期格式："
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -2891,10 +2928,8 @@ msgstr "拒絕"
 msgid "Declined"
 msgstr "拒絕"
 
-#. default in terms of standard value
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Default"
 msgstr "預設"
 
@@ -4566,7 +4601,15 @@ msgid "Firefox"
 msgstr "Firefox"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "First day of week"
+#, fuzzy
+#| msgid "First day of week"
+msgid "First day of the week"
+msgstr "每週第一天"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "First day of week"
+msgid "First day of the week: %1$s"
 msgstr "每週第一天"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -4584,7 +4627,9 @@ msgid "First name must not be empty for internal users"
 msgstr "內部使用者的名字不得為空白"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "First week of year"
+#, fuzzy
+#| msgid "First week of year"
+msgid "First week of the year"
 msgstr "每年的第一週"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
@@ -6261,10 +6306,6 @@ msgstr "模型不完整。"
 msgid "Modified"
 msgstr "已修改"
 
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Monday"
-msgstr "星期一"
-
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -6292,6 +6333,12 @@ msgstr "更多"
 #: apps/io.ox/core/extPatterns/links.js
 msgid "More actions"
 msgstr "更多行為"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Regional settings"
+msgid "More regional settings"
+msgstr "區域設定"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
@@ -6828,12 +6875,12 @@ msgstr "無標題。"
 #. object permissions - delete
 #. Auth type. None. No authentication
 #. Connection security. None.
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/core/settings/quickLauncherDialog.js
-#: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/flag-picker.js
-#: module:io.ox/mail apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/pane.js apps/io.ox/core/tk/attachments.js
+#: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/view-options.js
+#: module:io.ox/files apps/io.ox/mail/accounts/view-form.js
+#: module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "None"
@@ -6971,8 +7018,10 @@ msgid "Now active"
 msgstr "目前連線中"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Numbers"
-msgstr "數字"
+#, fuzzy
+#| msgid "Text format"
+msgid "Number format"
+msgstr "文字格式"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "OK"
@@ -8156,7 +8205,7 @@ msgid "Purple/Magenta"
 msgstr "紫/洋紅"
 
 #. %s is the number of the quicklauncher (1-3)
-#: apps/io.ox/core/settings/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
 msgid "Quick launch %s"
 msgstr "快速啟動 %s"
 
@@ -8676,6 +8725,10 @@ msgstr "重寄至"
 msgid "Reserved"
 msgstr "已保留"
 
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+msgid "Reset"
+msgstr "重設"
+
 #: apps/io.ox/core/emoji/view.js module:io.ox/mail
 msgid "Reset this list"
 msgstr "重設此清單"
@@ -8857,7 +8910,8 @@ msgstr "星期六"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/editor/main.js
+#: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/settings/editLocale.js apps/io.ox/editor/main.js
 #: module:io.ox/editor apps/io.ox/files/actions/edit-description.js
 #: module:io.ox/files apps/io.ox/files/actions/save-as-pdf.js
 #: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
@@ -9644,14 +9698,22 @@ msgid "Some fields contain invalid data"
 msgstr "某些欄位包含無效資料"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Some settings (language, timezone, theme) require a page reload or "
+#| "relogin to take effect."
 msgid ""
-"Some settings (language, timezone, theme) require a page reload or relogin "
+"Some settings (e.g. language and timezone) require a page reload or relogin "
 "to take effect."
 msgstr "某些設定（語言、時區、佈景主題）需要重新載入頁面或重新登入後才會生效。"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Some settings (language, timezone, theme) require a relogin to take "
+#| "effect."
 msgid ""
-"Some settings (language, timezone, theme) require a relogin to take effect."
+"Some settings (e.g. language and timezone) require a relogin to take effect."
 msgstr "某些設定（語言、時區、佈景主題）需要重新登入才能生效。"
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
@@ -9954,10 +10016,6 @@ msgstr "尾碼"
 #: apps/io.ox/participants/detail.js
 msgid "Summary"
 msgstr "摘要"
-
-#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Sunday"
-msgstr "星期日"
 
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
@@ -10899,9 +10957,14 @@ msgid "Tiles"
 msgstr "磚塊"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr "時間"
+
+#: apps/io.ox/core/settings/editLocale.js module:io.ox/core
+#, fuzzy
+#| msgid "Text format"
+msgid "Time format"
+msgstr "文字格式"
 
 #. Context: Calendar settings. Default time scale in minutes for new appointments.
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
@@ -11652,12 +11715,16 @@ msgid "Week start"
 msgstr "每週開始於"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Week that contains January 1st"
+#, fuzzy
+#| msgid "Week that contains January 1st"
+msgid "Week that contains January 1st (e.g. US, Canada)"
 msgstr "包含 1 月 1 日的當週"
 
 #: apps/io.ox/core/settings/editLocale.js module:io.ox/core
-msgid "Week that contains the first Thursday"
-msgstr "包含第一個週四的當週"
+#, fuzzy
+#| msgid "Week that contains January 1st"
+msgid "Week that contains January 4th (e.g. Europe, ISO-8601)"
+msgstr "包含 1 月 1 日的當週"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -14510,9 +14577,6 @@ msgstr "您的平台"
 #~ msgid "Custom colors"
 #~ msgstr "自訂色彩"
 
-#~ msgid "Customizing"
-#~ msgstr "自訂"
-
 #~ msgid "Cut"
 #~ msgstr "剪切"
 
@@ -14558,9 +14622,6 @@ msgstr "您的平台"
 #~ msgstr ""
 #~ "與您的本機 (Windows) 進行資料同步。Drive 客戶端讓您可以挑選要同步那些資料"
 #~ "夾。"
-
-#~ msgid "Date format:"
-#~ msgstr "日期格式："
 
 #~ msgid "Date of birth:"
 #~ msgstr "出生日期："
@@ -16064,6 +16125,9 @@ msgstr "您的平台"
 #~ msgid "Modified by"
 #~ msgstr "修改者"
 
+#~ msgid "Monday"
+#~ msgstr "星期一"
+
 #, fuzzy
 #~| msgid "Angola"
 #~ msgid "Mongolia"
@@ -16255,6 +16319,9 @@ msgstr "您的平台"
 
 #~ msgid "Numbering On/Off"
 #~ msgstr "編號開關"
+
+#~ msgid "Numbers"
+#~ msgstr "數字"
 
 #~ msgid "October"
 #~ msgstr "十月"
@@ -16653,9 +16720,6 @@ msgstr "您的平台"
 
 #~ msgid "Reply to all"
 #~ msgstr "回覆所有人"
-
-#~ msgid "Reset"
-#~ msgstr "重設"
 
 #~ msgid "Resource name"
 #~ msgstr "資源名稱"
@@ -17162,6 +17226,9 @@ msgstr "您的平台"
 #~ msgid "Such data will never be uploaded"
 #~ msgstr "這類資料將不會被上傳"
 
+#~ msgid "Sunday"
+#~ msgstr "星期日"
+
 #~ msgid "Superscript"
 #~ msgstr "上標"
 
@@ -17228,9 +17295,6 @@ msgstr "您的平台"
 
 #~ msgid "Text Fill Color"
 #~ msgstr "填入文字顏色"
-
-#~ msgid "Text format"
-#~ msgstr "文字格式"
 
 #~ msgid "Text:"
 #~ msgstr "文"
@@ -18049,6 +18113,9 @@ msgstr "您的平台"
 
 #~ msgid "Week View"
 #~ msgstr "周視圖"
+
+#~ msgid "Week that contains the first Thursday"
+#~ msgstr "包含第一個週四的當週"
 
 #~ msgid "Weekly on %1$s"
 #~ msgstr "每週的 %1$s"

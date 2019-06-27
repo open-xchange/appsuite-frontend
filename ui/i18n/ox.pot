@@ -317,7 +317,7 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/quickLauncherDialog.js
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js
 #: module:io.ox/core
 #: apps/io.ox/mail/compose/sharing.js
 #: module:io.ox/mail
@@ -590,7 +590,6 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/editLocale.js
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js
@@ -612,7 +611,6 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/datepicker.js
 #: module:io.ox/core
-#: apps/io.ox/core/settings/editLocale.js
 msgid "Time"
 msgstr ""
 
@@ -1729,6 +1727,7 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/imap-subscription.js
 #: module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/core/settings/editLocale.js
 #: apps/io.ox/editor/main.js
 #: module:io.ox/editor
 #: apps/io.ox/files/actions/edit-description.js
@@ -2206,8 +2205,6 @@ msgstr ""
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/editLocale.js
-#: module:io.ox/core
 #: apps/io.ox/mail/mailfilter/autoforward/view.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js
@@ -6776,6 +6773,39 @@ msgstr ""
 msgid "Failed to sign in"
 msgstr ""
 
+#. object permissions - read
+#. object permissions - edit/modify
+#. object permissions - delete
+#. Auth type. None. No authentication
+#. Connection security. None.
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js
+#: module:io.ox/core
+#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/tk/attachments.js
+#: apps/io.ox/core/tk/flag-picker.js
+#: module:io.ox/mail
+#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/view-options.js
+#: module:io.ox/files
+#: apps/io.ox/mail/accounts/view-form.js
+#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "None"
+msgstr ""
+
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js
+#: module:io.ox/core
+msgid "Quick launch %s"
+msgstr ""
+
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js
+#: module:io.ox/core
+#: apps/io.ox/core/settings/pane.js
+msgid "Configure quick launchers"
+msgstr ""
+
 #: apps/io.ox/core/settings/downloads/pane.js
 #: module:io.ox/core
 #: apps/plugins/portal/oxdriveclients/register.js
@@ -6822,58 +6852,74 @@ msgstr ""
 msgid "Regional settings"
 msgstr ""
 
-#. default in terms of standard value
 #: apps/io.ox/core/settings/editLocale.js
 #: module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
-#: apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal
-msgid "Default"
+msgid "9:00 AM (12 hours)"
 msgstr ""
 
 #: apps/io.ox/core/settings/editLocale.js
 #: module:io.ox/core
-msgid "12 hours"
+msgid "09:00 AM (12 hours)"
 msgstr ""
 
 #: apps/io.ox/core/settings/editLocale.js
 #: module:io.ox/core
-msgid "24 hours"
+msgid "9:00 (24 hours)"
 msgstr ""
 
 #: apps/io.ox/core/settings/editLocale.js
 #: module:io.ox/core
-msgid "Sunday"
+msgid "09:00 (24 hours)"
 msgstr ""
 
 #: apps/io.ox/core/settings/editLocale.js
 #: module:io.ox/core
-msgid "Monday"
+msgid "9.00 (24 hours)"
 msgstr ""
 
 #: apps/io.ox/core/settings/editLocale.js
 #: module:io.ox/core
-msgid "Week that contains January 1st"
+msgid "09.00 (24 hours)"
 msgstr ""
 
 #: apps/io.ox/core/settings/editLocale.js
 #: module:io.ox/core
-msgid "Week that contains the first Thursday"
+msgid "Week that contains January 1st (e.g. US, Canada)"
 msgstr ""
 
 #: apps/io.ox/core/settings/editLocale.js
 #: module:io.ox/core
-msgid "Numbers"
+msgid "Week that contains January 4th (e.g. Europe, ISO-8601)"
 msgstr ""
 
 #: apps/io.ox/core/settings/editLocale.js
 #: module:io.ox/core
-msgid "First day of week"
+msgid "Reset"
 msgstr ""
 
 #: apps/io.ox/core/settings/editLocale.js
 #: module:io.ox/core
-msgid "First week of year"
+msgid "Time format"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/core
+msgid "Date format"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/core
+msgid "Number format"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/core
+msgid "First day of the week"
+msgstr ""
+
+#: apps/io.ox/core/settings/editLocale.js
+#: module:io.ox/core
+msgid "First week of the year"
 msgstr ""
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
@@ -6971,35 +7017,19 @@ msgstr ""
 msgid "No lost requests"
 msgstr ""
 
-#. object permissions - read
-#. object permissions - edit/modify
-#. object permissions - delete
-#. Auth type. None. No authentication
-#. Connection security. None.
 #: apps/io.ox/core/settings/pane.js
 #: module:io.ox/core
-#: apps/io.ox/core/settings/quickLauncherDialog.js
-#: apps/io.ox/core/tk/attachments.js
-#: apps/io.ox/core/tk/flag-picker.js
-#: module:io.ox/mail
-#: apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/view-options.js
-#: module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js
-#: module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-msgid "None"
+msgid "Some settings (e.g. language and timezone) require a page reload or relogin to take effect."
 msgstr ""
 
 #: apps/io.ox/core/settings/pane.js
 #: module:io.ox/core
-msgid "Some settings (language, timezone, theme) require a page reload or relogin to take effect."
+msgid "Some settings (e.g. language and timezone) require a relogin to take effect."
 msgstr ""
 
 #: apps/io.ox/core/settings/pane.js
 #: module:io.ox/core
-msgid "Some settings (language, timezone, theme) require a relogin to take effect."
+msgid "Customized"
 msgstr ""
 
 #: apps/io.ox/core/settings/pane.js
@@ -7010,6 +7040,13 @@ msgstr ""
 #: apps/io.ox/core/settings/pane.js
 #: module:io.ox/core
 msgid "Unicolor"
+msgstr ""
+
+#: apps/io.ox/core/settings/pane.js
+#: module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
+msgid "Default"
 msgstr ""
 
 #: apps/io.ox/core/settings/pane.js
@@ -7091,8 +7128,12 @@ msgstr ""
 
 #: apps/io.ox/core/settings/pane.js
 #: module:io.ox/core
-#: apps/io.ox/core/settings/quickLauncherDialog.js
-msgid "Configure quick launchers"
+msgid "More regional settings"
+msgstr ""
+
+#: apps/io.ox/core/settings/pane.js
+#: module:io.ox/core
+msgid "First day of the week: %1$s"
 msgstr ""
 
 #: apps/io.ox/core/settings/pane.js
@@ -7134,12 +7175,6 @@ msgstr ""
 #: apps/io.ox/core/settings/pane.js
 #: module:io.ox/core
 msgid "Show desktop notifications"
-msgstr ""
-
-#. %s is the number of the quicklauncher (1-3)
-#: apps/io.ox/core/settings/quickLauncherDialog.js
-#: module:io.ox/core
-msgid "Quick launch %s"
 msgstr ""
 
 #. Bytes
