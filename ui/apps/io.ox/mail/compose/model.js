@@ -137,7 +137,6 @@ define('io.ox/mail/compose/model', [
 
                 // get the content inside the body of the mail
                 if (data.contentType === 'text/html') {
-                    data.content = data.content.replace(/^[\s\S]*?<body[^>]*>([\s\S]*?)<\/body>[\s\S]*?$/i, '$1').trim();
                     data.content = sanitizer.simpleSanitize(data.content);
                 }
 
