@@ -45,10 +45,10 @@ define('io.ox/core/main/logout', [
 
             // when logged out by other tab, just redirect to logout location and clear
             if (baton.skipSessionLogout) {
-                require(['io.ox/core/api/tab'], function (TabAPI) {
+                require(['io.ox/core/api/tab'], function (tabAPI) {
                     // session can already be destroyed here by the active tab, better be safe than sorry
                     try {
-                        TabAPI.setLoggingOutState(TabAPI.LOGGING_OUT_STATE.FOLLOWER);
+                        tabAPI.setLoggingOutState(tabAPI.LOGGING_OUT_STATE.FOLLOWER);
                         // stop websockets
                         ox.trigger('logout');
                         // stop requests/rt polling
@@ -81,9 +81,9 @@ define('io.ox/core/main/logout', [
             if (!ox.tabHandlingEnabled || !baton.manualLogout) return $.when();
 
             var def = $.Deferred();
-            require(['io.ox/core/api/tab'], function (TabApi) {
+            require(['io.ox/core/api/tab'], function (tabApi) {
 
-                TabApi.otherTabsLiving().then(
+                tabApi.otherTabsLiving().then(
                     // when other tabs exists, user must confirm logout
                     function () {
                         require(['io.ox/backbone/views/modal'], function (ModalDialog) {

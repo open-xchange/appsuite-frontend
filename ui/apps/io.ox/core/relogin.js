@@ -162,8 +162,8 @@ define('io.ox/core/relogin', [
                             $('#io-ox-core').removeClass('blur');
 
                             if (util.checkTabHandlingSupport()) {
-                                require(['io.ox/core/api/tab'], function (TabAPI) {
-                                    TabAPI.propagateLogin(true);
+                                require(['io.ox/core/api/tab'], function (tabAPI) {
+                                    tabAPI.propagateLogin(true);
                                 });
 
                             }

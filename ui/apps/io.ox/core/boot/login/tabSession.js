@@ -15,7 +15,7 @@ define('io.ox/core/boot/login/tabSession', [
     'io.ox/core/boot/util',
     'io.ox/core/extensions',
     'io.ox/core/api/tab'
-], function (util, ext, TabAPI) {
+], function (util, ext, tabAPI) {
 
     'use strict';
 
@@ -24,7 +24,7 @@ define('io.ox/core/boot/login/tabSession', [
         index: 195,
         login: function () {
             if (!util.checkTabHandlingSupport()) return;
-            return TabAPI.login().then(tabSessionLoginSuccess, function () {
+            return tabAPI.login().then(tabSessionLoginSuccess, function () {
                 util.debug('TabSession: login timed out');
             });
         }

@@ -236,23 +236,23 @@ define('io.ox/core/main/autologout', [
         };
 
         if (ox.tabHandlingEnabled) {
-            require(['io.ox/core/api/tab'], function (TabApi) {
+            require(['io.ox/core/api/tab'], function (tabApi) {
 
                 function propagateLeaderChanged() {
-                    TabApi.propagateToAllExceptWindow('propagateLeaderChanged', TabApi.getWindowName(), {});
+                    tabApi.propagateToAllExceptWindow('propagateLeaderChanged', tabApi.getWindowName(), {});
                 }
 
                 function propagateResetTimeout() {
-                    TabApi.propagateToAllExceptWindow('propagateResetAutoLogoutTimeout', TabApi.getWindowName(), {});
+                    tabApi.propagateToAllExceptWindow('propagateResetAutoLogoutTimeout', tabApi.getWindowName(), {});
                 }
 
                 function propagateSettingsAutoLogout(val) {
-                    TabApi.propagateToAllExceptWindow('propagateSettingsAutoLogout', TabApi.getWindowName(), { val: val });
+                    tabApi.propagateToAllExceptWindow('propagateSettingsAutoLogout', tabApi.getWindowName(), { val: val });
                 }
 
                 // overwrite propagatePause for tabHandling
                 propagatePause = function propagatePause() {
-                    TabApi.propagateToAll('propagatePause', {});
+                    tabApi.propagateToAll('propagatePause', {});
                 };
 
                 function receivedResetTimeout() {
@@ -333,18 +333,18 @@ define('io.ox/core/main/autologout', [
                 settings.on('change:autoLogout', propagateSettingsAutoLogout);
 
                 // got reset from other tab
-                TabApi.communicationEvents.listenTo(TabApi.communicationEvents, 'propagateResetAutoLogoutTimeout', receivedResetTimeout);
+                tabApi.communicationEvents.listenTo(tabApi.communicationEvents, 'propagateResetAutoLogoutTimeout', receivedResetTimeout);
                 // got new auto logout setting value from other tab
-                TabApi.communicationEvents.listenTo(TabApi.communicationEvents, 'propagateSettingsAutoLogout', receivedChangedAutoLogoutSetting);
+                tabApi.communicationEvents.listenTo(tabApi.communicationEvents, 'propagateSettingsAutoLogout', receivedChangedAutoLogoutSetting);
                 // received new leader status from other tab
-                TabApi.communicationEvents.listenTo(TabApi.communicationEvents, 'nextWindowActive', receivedNewLeaderStatus);
+                tabApi.communicationEvents.listenTo(tabApi.communicationEvents, 'nextWindowActive', receivedNewLeaderStatus);
                 // received a pause ping, could be in any tab
-                TabApi.communicationEvents.listenTo(TabApi.communicationEvents, 'propagatePause', receivedPause);
+                tabApi.communicationEvents.listenTo(tabApi.communicationEvents, 'propagatePause', receivedPause);
                 // received the leader state from other tab
-                TabApi.communicationEvents.listenTo(TabApi.communicationEvents, 'propagateLeaderChanged', receivedLeaderChanged);
+                tabApi.communicationEvents.listenTo(tabApi.communicationEvents, 'propagateLeaderChanged', receivedLeaderChanged);
 
                 // received a logout from another tab
-                TabApi.sessionEvents.listenTo(TabApi.sessionEvents, 'before:propagatedLogout', receivedBeforeLogout);
+                tabApi.sessionEvents.listenTo(tabApi.sessionEvents, 'before:propagatedLogout', receivedBeforeLogout);
 
                 require(['io.ox/core/tk/visibility-api-util']).done(function (visibilityApi) {
                     $(visibilityApi).on('visibility-changed', function (e, data) {
@@ -362,16 +362,16 @@ define('io.ox/core/main/autologout', [
 
                 function getNextWindowName() {
                     // can be optimized, but this is flexible in case of code changes at the moment
-                    var nextCandidate = _.first(_.filter(TabApi.getWindowList(), function (item) { return item.windowName !== TabApi.getWindowName(); }));
+                    var nextCandidate = _.first(_.filter(tabApi.getWindowList(), function (item) { return item.windowName !== tabApi.getWindowName(); }));
                     return nextCandidate ? nextCandidate.windowName : '';
                 }
 
-                TabApi.communicationEvents.listenTo(TabApi.communicationEvents, 'beforeunload', function (unsavedChanges) {
+                tabApi.communicationEvents.listenTo(tabApi.communicationEvents, 'beforeunload', function (unsavedChanges) {
                     // we must always set a new leader when the tab is closed
                     // better set the state too often (self repairing...)
                     if (!unsavedChanges) {
                         var next = getNextWindowName();
-                        if (next) { TabApi.propagateToWindow('nextWindowActive', next, {}); }
+                        if (next) { tabApi.propagateToWindow('nextWindowActive', next, {}); }
                     }
                 });
 

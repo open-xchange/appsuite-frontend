@@ -139,17 +139,17 @@ define('io.ox/core/settings/pane', [
                     },
 
                     propagateSettingsLanguage: function (val) {
-                        require(['io.ox/core/api/tab'], function (TabApi) {
-                            TabApi.propagateToAllExceptWindow('update-ox-object', TabApi.getWindowName(), { language: val });
-                            TabApi.updateOxObject({ language: val });
+                        require(['io.ox/core/api/tab'], function (tabApi) {
+                            tabApi.propagateToAllExceptWindow('update-ox-object', tabApi.getWindowName(), { language: val });
+                            tabApi.updateOxObject({ language: val });
                         });
 
                     },
 
                     propagateSettingsTheme: function (val) {
-                        require(['io.ox/core/api/tab'], function (TabApi) {
-                            TabApi.propagateToAllExceptWindow('update-ox-object', TabApi.getWindowName(), { theme: val });
-                            TabApi.updateOxObject({ theme: val });
+                        require(['io.ox/core/api/tab'], function (tabApi) {
+                            tabApi.propagateToAllExceptWindow('update-ox-object', tabApi.getWindowName(), { theme: val });
+                            tabApi.updateOxObject({ theme: val });
                         });
 
                     }
