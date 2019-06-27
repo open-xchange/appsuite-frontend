@@ -773,7 +773,8 @@ define('io.ox/calendar/api', [
                     action: 'ack',
                     folder: obj.folder,
                     id: obj.eventId,
-                    alarmId: obj.alarmId
+                    alarmId: obj.alarmId,
+                    fields: api.defaultFields
                 };
 
                 if (ox.socketConnectionId) params.pushToken = ox.socketConnectionId;
@@ -797,7 +798,8 @@ define('io.ox/calendar/api', [
                     folder: obj.folder,
                     id: obj.eventId,
                     alarmId: obj.alarmId,
-                    snoozeTime: obj.time || 300000
+                    snoozeTime: obj.time || 300000,
+                    fields: api.defaultFields
                 };
 
                 if (ox.socketConnectionId) params.pushToken = ox.socketConnectionId;
@@ -818,7 +820,8 @@ define('io.ox/calendar/api', [
                     action: 'changeOrganizer',
                     folder: obj.folder,
                     id: obj.id,
-                    timestamp: _.then()
+                    timestamp: _.then(),
+                    fields: api.defaultFields
                 };
 
                 if (options.recurrenceRange) params.recurrenceRange = options.recurrenceRange;
