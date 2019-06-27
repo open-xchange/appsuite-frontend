@@ -29,8 +29,10 @@ Scenario('adds a contact with all fields', function (I) {
     I.doubleClick('~My address books');
     I.click('~Contacts');
     I.waitForDetached('.classic-toolbar [data-dropdown="io.ox/contacts/toolbar/new"].disabled');
-    I.clickToolbar('New contact');
+    // toolbar dropdown
     I.click('New contact');
+    // real action in dropdown
+    I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
     I.waitForVisible('.io-ox-contacts-edit-window');
 
     I.checkOption('Show all fields');

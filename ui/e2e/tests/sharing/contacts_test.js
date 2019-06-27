@@ -34,17 +34,17 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
         I.waitForText('Contacts', 5, '.folder-tree');
         I.selectFolder('Contacts');
 
-        I.clickToolbar('New contact');
-        I.waitForText('New contact');
+        // toolbar dropdown
         I.click('New contact');
+        // real action in dropdown
+        I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
         I.waitForText('Create contact');
         I.fillField('First name', 'Alice');
         I.fillField('Last name', 'Wonderland');
         I.click('Save');
         I.waitToHide('.abs.window-blocker');
-        I.clickToolbar('New contact');
-        I.waitForText('New contact');
         I.click('New contact');
+        I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
         I.waitForText('Create contact');
         I.fillField('First name', 'Bob');
         I.fillField('Last name', 'Builder');

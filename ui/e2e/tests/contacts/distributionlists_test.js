@@ -65,7 +65,7 @@ Scenario('[C7372] Create new distribution list @shaky', function (I, users) {
     const display_name = uniqueName('C7372');
     prepare(I);
 
-    I.clickToolbar('New contact');
+    I.click('New contact');
     I.click('New distribution list');
     I.waitForVisible('.floating-window-content');
     I.fillField('Name', display_name);

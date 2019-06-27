@@ -89,8 +89,10 @@ Scenario('Contacts - New contact window', async (I) => {
 
     prepare(I);
     I.waitForDetached('.classic-toolbar [data-dropdown="io.ox/contacts/toolbar/new"].disabled');
-    I.clickToolbar('New contact');
+    // toolbar dropdown
     I.click('New contact');
+    // real action in dropdown
+    I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
     I.waitForText('Personal information');
 
     expect(await I.grabAxeReport()).to.be.accessible;
@@ -103,8 +105,7 @@ Scenario('Contacts - New distribution list window (with exceptions)', async (I) 
 
     prepare(I);
     I.waitForElement('[title="Actions for Contacts"]');
-    I.clickToolbar('New contact');
-    I.waitForText('New distribution list');
+    I.click('New contact');
     I.click('New distribution list');
     I.waitForText('Participants');
 

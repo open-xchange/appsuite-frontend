@@ -28,7 +28,7 @@ Scenario('adds a unsaved contact', function (I) {
     I.doubleClick('~My address books');
     I.click('~Contacts');
     I.waitForDetached('.classic-toolbar [data-dropdown="io.ox/contacts/toolbar/new"].disabled');
-    I.clickToolbar('New contact');
+    I.click('New contact');
     I.click('New distribution list');
     I.waitForVisible('.io-ox-contacts-distrib-window');
     I.fillField('Name', 'Testlist');

@@ -29,9 +29,10 @@ Scenario('[C7354] - Create new contact', function (I) {
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
     I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
-    I.clickToolbar('New contact');
-    I.wait(0.3); //dirty quickfix. sometimes test fails - > Need a more solid helper/actor for toolbar (with dropdown)
+    // toolbar dropdown
     I.click('New contact');
+    // real action in dropdown
+    I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
     I.waitForVisible('.io-ox-contacts-edit-window');
     I.checkOption('Show all fields');
     I.fillField('Title', 'Sir');
@@ -186,8 +187,10 @@ Scenario('[C7358] - Remove contact picture @shaky', function (I, search) {
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
     I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
-    I.clickToolbar('New contact');
+    // toolbar dropdown
     I.click('New contact');
+    // real action in dropdown
+    I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
     I.waitForVisible('.io-ox-contacts-edit-window');
     I.fillField('First name', testrailID);
     I.fillField('Last name', testrailID);
@@ -219,8 +222,10 @@ Scenario('[C7359] - Expand/collapse all contact edit sections', function (I) {
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
     I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
-    I.clickToolbar('New contact');
+    // toolbar dropdown
     I.click('New contact');
+    // real action in dropdown
+    I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
     I.waitForVisible('.io-ox-contacts-edit-window');
 
     I.checkOption('Show all fields');
