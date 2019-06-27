@@ -66,7 +66,7 @@ define('io.ox/chat/views/chatList', [
                                 .addClass(model.get('lastMessage').state),
                             $('<div class="sender">')
                                 .toggleClass('hidden', isCurrentUser || isPrivate)
-                                .text(model.getLastSenderName()),
+                                .text(model.getLastSenderName() + ':'),
                             $('<div class="text-preview">').text(model.getLastMessage()),
                             $('<div class="label-container">').append(
                                 $('<span class="label label-info">').text(model.get('unreadCount'))
