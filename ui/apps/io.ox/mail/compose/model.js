@@ -145,14 +145,14 @@ define('io.ox/mail/compose/model', [
 
                 return mailAPI.get({ id: original.originalId, folder: original.originalFolderId }, { cache: !settings.get('features/fixContentType', false) }).then(function (mail) {
                     var header = [];
-                    if (/^(REPLY|REPLY_ALL)$/.test(data.meta.type)) {
+                    if (/^(reply|replyall)$/.test(data.meta.type)) {
                         //#. %1$s A date
                         //#. %2$s An email address
                         //#. Example: On January 8, 2019 2:23 PM richard@open-xchange.com wrote:
                         header.push(gt('On %1$s %2$s wrote:', moment(data.meta.date).format('LLL'), mail.from.map(function (sender) {
                             return mailUtil.formatSender(sender, false);
                         }).join(', ')));
-                    } else if (/^FORWARD_INLINE$/.test(data.meta.type)) {
+                    } else if (/^forward-inline$/.test(data.meta.type)) {
                         header.push(
                             gt('---------- Original Message ----------'),
                             //#. %1$s An email address
