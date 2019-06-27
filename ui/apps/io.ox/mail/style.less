@@ -20,6 +20,11 @@
 @a-color-trusted: #5c7f31;
 @a-color-fail: #c50000;
 
+// helpers
+.mail-item .from {
+    &.no-max-height { max-height: none; }
+}
+
 // preview panes
 .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height; }
 .window-container.mail-categories-visible .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height * 2; }
@@ -365,19 +370,15 @@ html.macos, html.ios {
 
     .from {
 
-        display: flex;
-        align-content: flex-start;
-        & > * { margin-right: 8px; }
-
-        span.person {
-            color: inherit;
-            font-weight: bold;
+        > a {
+            display: flex;
+            align-content: flex-start;
         }
-
-        &.list { display: block; }
 
         .person-link {
             .ellipsis();
+            min-width: 0;
+
             &.person-from {
                 font-weight: bold;
                 color: black;
@@ -385,7 +386,16 @@ html.macos, html.ios {
         }
 
         .address {
+            &:before { content: "\00a0"; }
             color: #767676;
+        }
+        .authenticity {
+            margin-right: 8px;
+        }
+
+        .delimiter {
+            margin-right: 8px;
+            & .smartphone { display: none }
         }
     }
 
@@ -1410,7 +1420,6 @@ body.dragging .categories-toolbar-container {
 
             .from {
                 flex-wrap: wrap;
-                max-height: none;
 
                 .person-link.person-from { font-weight: 500; }
 
@@ -1650,8 +1659,8 @@ body.dragging .categories-toolbar-container {
         &.no-padding .detail-view-header { padding-left: 0; }
 
         // portal widget fixes
-        .subject {
-            padding-bottom: 12px;
+        .subject {            display: flex;
+
         }
 
         .detail-view-header {

@@ -194,22 +194,24 @@ define('io.ox/mail/common-extensions', [
             // from is special as we need to consider the "sender" header
             // plus making the mail address visible (see bug 56407)
 
-            _(from).each(function (item, i) {
+            _(from).each(function (item) {
 
                 var email = String(item[1] || '').toLowerCase(),
-                    name = util.getDisplayName(item);
+                    name = util.getDisplayName(item),
+                    $container;
                 if (!email) return;
-
-                $el.append(
-                    $('<a href="#" role="button" class="halo-link person-link person-from ellipsis">')
+                $el.addClass(length > 1 || _.device('smartphone') ? 'no-max-height' : '')
+                   .append(
+                       $container = $('<a href="#" role="button" class="halo-link">')
                         .data({ email: email, email1: email })
-                        .text(name)
+                        .append($('<span class="sr-only">').text(gt('From:')))
+                        .append($('<span class="person-link person-from ellipsis">').text(name))
                         .addClass((name === email && status) ? 'authenticity-sender ' + status : '')
 
-                );
+                   );
 
                 if (name !== email) {
-                    $el.append(
+                    $container.append(
                         $('<span class="address">')
                             .text('<' + email + '>')
                             .addClass(status ? 'authenticity-sender ' + status : '')
@@ -217,8 +219,8 @@ define('io.ox/mail/common-extensions', [
                 }
 
                 if (status) {
-                    $el.append(
-                        $('<a role="button" tabindex="0" style="border: 0; padding: 0" data-toggle="popover" data-container="body">').attr('aria-label', util.getAuthenticityMessage(status, email)).popover({
+                    $container.prepend(
+                        $('<span data-toggle="popover" data-container="body" class="authenticity">').attr('aria-label', util.getAuthenticityMessage(status, email)).popover({
                             placement: _.device('smartphone') ? 'auto' : 'right',
                             trigger: 'focus hover',
                             content: util.getAuthenticityMessage(status, email)
@@ -237,8 +239,6 @@ define('io.ox/mail/common-extensions', [
 
                 // save space on mobile by showing address only for suspicious mails
                 if (_.device('smartphone') && name.indexOf('@') > -1) $el.addClass('show-address');
-
-                if (i < length - 1) $el.append('<span class="delimiter">,</span>');
             });
 
             this.append($el);
