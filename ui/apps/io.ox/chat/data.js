@@ -162,7 +162,9 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
         hasSameSender: function () {
             var index = this.collection.indexOf(this);
             if (index <= 0) return false;
-            return this.collection.at(index - 1).get('senderId') === this.get('senderId');
+            var prev = this.collection.at(index - 1);
+            if (prev.isSystem()) return false;
+            return prev.get('senderId') === this.get('senderId');
         },
 
         updateDelivery: function (state) {
