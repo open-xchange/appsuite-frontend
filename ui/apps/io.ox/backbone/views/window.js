@@ -101,6 +101,7 @@ define('io.ox/backbone/views/window', [
         events: {
             'click [data-action="minimize"]':    'onMinimize',
             'click [data-action="close"]':       'onQuit',
+            'click [data-action="stick"]':       'onStick',
             'click [data-action="normalize"]':   'toggleMode',
             'click [data-action="maximize"]':    'toggleMode',
             'dblclick .floating-header':         'toggleMode',
@@ -115,7 +116,7 @@ define('io.ox/backbone/views/window', [
 
             if (!this.model) {
                 this.model = new WindowModel(
-                    _(this.options).pick('title', 'minimized', 'active', 'closable', 'win', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size', 'mode', 'floating', 'sticky')
+                    _(this.options).pick('title', 'minimized', 'active', 'closable', 'win', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size', 'mode', 'floating', 'sticky', 'stickable')
                 );
             }
 
@@ -146,6 +147,7 @@ define('io.ox/backbone/views/window', [
         renderControls: function () {
             var isNormal = this.model.get('mode') === 'normal';
             return $('<div class="controls" role="toolbar">').append(
+                this.model.get('stickable') ? $('<button type="button" class="btn btn-link" data-action="stick" tabindex="-1">').attr('aria-label', gt('Close')).append($('<i class="fa fa-external-link" aria-hidden="true">').attr('title', gt('Stick to the right side'))) : '',
                 //#. window resize
                 $('<button type="button" class="btn btn-link" data-action="minimize">').attr('aria-label', gt('Minimize')).append($('<i class="fa fa-window-minimize" aria-hidden="true">').attr('title', gt('Minimize'))),
                 //#. window resize
@@ -263,6 +265,10 @@ define('io.ox/backbone/views/window', [
             this.model.trigger('quit');
         },
 
+        onStick: function () {
+            this.model.set('sticky', true);
+        },
+
         onKeydown: function (e) {
             this.onEscape(e);
             this.onTab(e);
@@ -290,6 +296,7 @@ define('io.ox/backbone/views/window', [
                 );
                 return this;
             }
+            this.$('.floating-body').append(this.$body);
             $(container).append(this.$el);
             this.$el.focus();
             //if (backdrop.parents().length === 0) $('#io-ox-screens').append(backdrop);
@@ -369,8 +376,8 @@ define('io.ox/backbone/views/window', [
 
             this.model.set({ floating: mode === 'floating', sticky: mode === 'sticky' }, { silent: true });
 
-            if (this.$el.is(':visible')) this.$el.remove();
-            else this.$body.remove();
+            if (this.$el.is(':visible')) this.$el.detach();
+            else this.$body.closest('.io-ox-windowmanager-sticky-panel').detach();
 
             this.open();
         },
