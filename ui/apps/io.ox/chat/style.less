@@ -57,6 +57,11 @@
                 }
             }
         }
+
+        .message {
+            padding-left: 0;
+            .avatar { display: none; }
+        }
     }
 
     .chat-leftside {
@@ -345,7 +350,6 @@
 
     .fa.delivery {
         font-size: 14px;
-        color: @gray;
 
         &:before {
             content: "\f017"; // clock-o
@@ -364,7 +368,7 @@
 
     .message {
 
-        padding: 0 96px 0 64px;
+        padding: 0 64px;
         margin-bottom: 8px;
         position: relative;
 
@@ -380,24 +384,11 @@
             font-weight: bold;
         }
         &.text {
-            .body {
-                padding: 8px 16px;
+            .content {
                 background-color: #eee;
                 border-radius: 8px;
                 display: inline-block;
-                text-align: left;
-            }
-        }
-        &.system {
-            padding: 0 48px;
-            margin-bottom: 16px;
-            .body {
-                color: #707070;
-                text-align: center;
-            }
-            .name {
-                font-weight: 500;
-                color: @black;
+                padding: 8px 16px;
             }
         }
         &.image {
@@ -408,10 +399,11 @@
                 border-radius: 8px;
             }
         }
-        .time {
-            position: absolute;
-            top: 0;
-            right: 0;
+        .foot {
+            float: right;
+            margin: -2px -6px -7px 0px;
+
+            > * { display: inline-block; }
         }
         .state, .delivery {
             display: none;
@@ -423,22 +415,40 @@
         }
         &.myself {
             text-align: right;
-            padding: 0 64px 0 96px;
+            padding-right: 0;
+            padding-left: 64px;
+
             .sender {
                 display: none;
             }
-            .time {
-                line-height: 16px;
+            .time, .delivery {
+                color: #eee;;
             }
-            &.text .body {
+            &.text .content {
                 color: #fff;
                 background-color: @gray;
             }
+            .body {
+                text-align: left;
+            }
             .delivery {
-                display: block;
-                position: absolute;
-                top: 16px;
-                right: 0;
+                margin-left: 5px;
+                display: inline-block;
+            }
+        }
+        &.system {
+            padding: 0 12px;
+            margin-bottom: 16px;
+            .body {
+                color: #707070;
+                text-align: center;
+            }
+            .name {
+                font-weight: 500;
+                color: @black;
+            }
+            .delivery, .time {
+                display: none;
             }
         }
     }
