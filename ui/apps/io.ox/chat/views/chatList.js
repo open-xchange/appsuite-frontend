@@ -45,8 +45,10 @@ define('io.ox/chat/views/chatList', [
         },
 
         renderItem: function (model) {
-            var isCurrentUser = model.get('lastMessage').senderId.toString() === data.user_id.toString(),
-                isPrivate = model.get('type') === 'private';
+            var lastMessage = model.get('lastMessage'),
+                isCurrentUser = lastMessage.senderId.toString() === data.user_id.toString(),
+                isPrivate = model.get('type') === 'private',
+                isSystemMessage = lastMessage.type === 'system';
 
             return $('<li data-cmd="show-chat">')
                 .toggleClass('unseen', model.get('unreadCount') > 0)
@@ -60,10 +62,10 @@ define('io.ox/chat/views/chatList', [
                         ),
                         $('<div class="chats-row">').append(
                             $('<div class="fa delivery">')
-                                .toggleClass('hidden', !isCurrentUser)
-                                .addClass(model.get('lastMessage').state),
+                                .toggleClass('hidden', !isCurrentUser || isSystemMessage)
+                                .addClass(lastMessage.state),
                             $('<div class="sender">')
-                                .toggleClass('hidden', isCurrentUser || isPrivate)
+                                .toggleClass('hidden', isCurrentUser || isPrivate || isSystemMessage)
                                 .text(model.getLastSenderName() + ':'),
                             $('<div class="text-preview">').text(model.getLastMessage()),
                             $('<div class="label-container">').append(
