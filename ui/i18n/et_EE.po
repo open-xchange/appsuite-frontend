@@ -972,8 +972,7 @@ msgstr ""
 msgid "Add condition"
 msgstr "Lisa tingimus"
 
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "Lisa kontakt"
@@ -981,10 +980,6 @@ msgstr "Lisa kontakt"
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add contact/resource"
 msgstr "Lisa kontakt/ressurss"
-
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Add distribution list"
-msgstr "Lisa leviloend"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Add files"
@@ -6795,9 +6790,7 @@ msgstr "Mitte kunagi"
 msgid "Never show again"
 msgstr ""
 
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "New"
 msgstr "Uus"
 
@@ -6854,10 +6847,18 @@ msgstr "Uus kalender"
 msgid "New code sent."
 msgstr "Uus kontakt"
 
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js
+#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
 msgid "New contact"
 msgstr "Uus kontakt"
+
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add distribution list"
+msgid "New distribution list"
+msgstr "Lisa leviloend"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "New folder"
@@ -6907,7 +6908,8 @@ msgstr "Uus reegel"
 msgid "New search ... (prototype)"
 msgstr ""
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/toolbar.js
 msgid "New task"
 msgstr "Uus ülesanne"
 

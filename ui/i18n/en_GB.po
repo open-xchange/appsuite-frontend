@@ -917,8 +917,7 @@ msgstr "Add calendar"
 msgid "Add condition"
 msgstr "Add condition"
 
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "Add contact"
@@ -926,10 +925,6 @@ msgstr "Add contact"
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add contact/resource"
 msgstr "Add contact/resource"
-
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Add distribution list"
-msgstr "Add distribution list"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Add files"
@@ -6643,9 +6638,7 @@ msgstr "Never"
 msgid "Never show again"
 msgstr "Never show again"
 
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "New"
 msgstr "New"
 
@@ -6698,10 +6691,18 @@ msgstr "New calendar name"
 msgid "New code sent."
 msgstr "New code sent."
 
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js
+#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
 msgid "New contact"
 msgstr "New contact"
+
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add distribution list"
+msgid "New distribution list"
+msgstr "Add distribution list"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "New folder"
@@ -6749,7 +6750,8 @@ msgstr "New rule"
 msgid "New search ... (prototype)"
 msgstr "New search ... (prototype)"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/toolbar.js
 msgid "New task"
 msgstr "New task"
 

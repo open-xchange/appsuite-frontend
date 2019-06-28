@@ -941,8 +941,7 @@ msgstr "Adaugă calendar"
 msgid "Add condition"
 msgstr "Adaugă condiție"
 
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "Adaugă contact"
@@ -950,10 +949,6 @@ msgstr "Adaugă contact"
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add contact/resource"
 msgstr "Adaugă contact/resursă"
-
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Add distribution list"
-msgstr "Adaugă listă de distribuție"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Add files"
@@ -6702,9 +6697,7 @@ msgstr "Niciodată"
 msgid "Never show again"
 msgstr "Nu mai afișa"
 
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "New"
 msgstr "Nou"
 
@@ -6757,10 +6750,18 @@ msgstr "Numele noului calendar"
 msgid "New code sent."
 msgstr "Cod nou trimis."
 
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js
+#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
 msgid "New contact"
 msgstr "Contact nou"
+
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "New Distribution List"
+msgid "New distribution list"
+msgstr "Listă de distribuție nouă"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "New folder"
@@ -6808,7 +6809,8 @@ msgstr "Regulă nouă"
 msgid "New search ... (prototype)"
 msgstr "Căutare nouă ... (prototip)"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/toolbar.js
 msgid "New task"
 msgstr "Sarcină nouă"
 
@@ -13870,6 +13872,9 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Add cipher code"
 #~ msgstr "Adaugă cod de criptare"
 
+#~ msgid "Add distribution list"
+#~ msgstr "Adaugă listă de distribuție"
+
 #~ msgid "Add feed"
 #~ msgstr "Adaugă flux"
 
@@ -17381,9 +17386,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "New Caledonia"
 #~ msgstr "Noua Caledonie"
-
-#~ msgid "New Distribution List"
-#~ msgstr "Listă de distribuție nouă"
 
 #~ msgid "New Infoitem"
 #~ msgstr "Element de informație nou"

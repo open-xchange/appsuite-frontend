@@ -935,8 +935,7 @@ msgstr "Pievienot kalendāru"
 msgid "Add condition"
 msgstr "Pievienot nosacījumu"
 
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "Pievienot kontaktu"
@@ -944,10 +943,6 @@ msgstr "Pievienot kontaktu"
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add contact/resource"
 msgstr "Pievienot dalībnieku/resursu"
-
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Add distribution list"
-msgstr "Pievienot izplatīšanas sarakstu"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Add files"
@@ -6662,9 +6657,7 @@ msgstr "Nekad"
 msgid "Never show again"
 msgstr "Nekad vairs nerādīt"
 
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "New"
 msgstr "Jauns"
 
@@ -6717,10 +6710,18 @@ msgstr "Jauna kalendāra vārds"
 msgid "New code sent."
 msgstr "Jaunais kods ir nosūtīts."
 
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js
+#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
 msgid "New contact"
 msgstr "Jauns kontaksts"
+
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "New Distribution List"
+msgid "New distribution list"
+msgstr "Jauns izplatīšanas saraksts"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "New folder"
@@ -6768,7 +6769,8 @@ msgstr "Jauns noteikums"
 msgid "New search ... (prototype)"
 msgstr "Jauna meklēšana ... (prototips)"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/toolbar.js
 msgid "New task"
 msgstr "Jauns uzdevums"
 
@@ -13762,6 +13764,9 @@ msgstr "jūsu platforma"
 #~ msgid "Add cipher code"
 #~ msgstr "Pievienot šifra kodu"
 
+#~ msgid "Add distribution list"
+#~ msgstr "Pievienot izplatīšanas sarakstu"
+
 #~ msgid "Add feed"
 #~ msgstr "Pievienot avotu"
 
@@ -17275,9 +17280,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "New Caledonia"
 #~ msgstr "Jaunkaledonija"
-
-#~ msgid "New Distribution List"
-#~ msgstr "Jauns izplatīšanas saraksts"
 
 #~ msgid "New Infoitem"
 #~ msgstr "Jauna infovienība"

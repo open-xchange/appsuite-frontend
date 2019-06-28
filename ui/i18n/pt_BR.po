@@ -921,8 +921,7 @@ msgstr "Adicionar calendário"
 msgid "Add condition"
 msgstr "Adicionar condição"
 
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "Adicionar contato"
@@ -930,10 +929,6 @@ msgstr "Adicionar contato"
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add contact/resource"
 msgstr "Adicionar contato/recurso"
-
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Add distribution list"
-msgstr "Adicionar lista de distribuição"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Add files"
@@ -6666,9 +6661,7 @@ msgstr "Nunca"
 msgid "Never show again"
 msgstr "Nunca mais mostrar"
 
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "New"
 msgstr "Novo"
 
@@ -6721,10 +6714,18 @@ msgstr "Novo nome do calendário"
 msgid "New code sent."
 msgstr "Novo código enviado."
 
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js
+#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
 msgid "New contact"
 msgstr "Novo contato"
+
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "New Distribution List"
+msgid "New distribution list"
+msgstr "Nova lista de distribuição"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "New folder"
@@ -6772,7 +6773,8 @@ msgstr "Nova regra"
 msgid "New search ... (prototype)"
 msgstr "Nova busca ... (protótipo)"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/toolbar.js
 msgid "New task"
 msgstr "Nova tarefa"
 
@@ -13717,6 +13719,9 @@ msgstr "sua plataforma"
 #~ msgid "Add cipher code"
 #~ msgstr "Adicionar código de cifra"
 
+#~ msgid "Add distribution list"
+#~ msgstr "Adicionar lista de distribuição"
+
 #, fuzzy
 #~| msgid "Add files"
 #~ msgid "Add file"
@@ -16800,9 +16805,6 @@ msgstr "sua plataforma"
 
 #~ msgid "New Contact"
 #~ msgstr "Novo contato"
-
-#~ msgid "New Distribution List"
-#~ msgstr "Nova lista de distribuição"
 
 #~ msgid "New Infoitem"
 #~ msgstr "Novo item de informação"

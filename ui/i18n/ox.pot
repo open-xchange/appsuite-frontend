@@ -3781,15 +3781,16 @@ msgstr ""
 
 #: apps/io.ox/contacts/actions.js
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/create-dist-view.js
-#: apps/io.ox/tasks/edit/view-template.js
-#: module:io.ox/tasks/edit
-msgid "Add contact"
+#: apps/io.ox/contacts/edit/main.js
+#: apps/io.ox/contacts/mobile-toolbar-actions.js
+#: module:io.ox/mail
+#: apps/io.ox/contacts/toolbar.js
+msgid "New contact"
 msgstr ""
 
 #: apps/io.ox/contacts/actions.js
 #: module:io.ox/contacts
-msgid "Add distribution list"
+msgid "New distribution list"
 msgstr ""
 
 #: apps/io.ox/contacts/actions.js
@@ -4065,6 +4066,13 @@ msgstr ""
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js
 #: module:io.ox/contacts
+#: apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
+msgid "Add contact"
+msgstr ""
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js
+#: module:io.ox/contacts
 msgid "To add contacts manually, just provide a valid email address (e.g john.doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
 
@@ -4113,12 +4121,6 @@ msgstr ""
 #: apps/io.ox/contacts/edit/main.js
 #: module:io.ox/contacts
 msgid "Some fields contain invalid data"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/main.js
-#: module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js
-msgid "New contact"
 msgstr ""
 
 #: apps/io.ox/contacts/edit/main.js
@@ -4235,15 +4237,6 @@ msgstr ""
 #: apps/io.ox/contacts/main.js
 #: module:io.ox/contacts
 msgid "Contacts toolbar"
-msgstr ""
-
-#: apps/io.ox/contacts/mobile-toolbar-actions.js
-#: module:io.ox/mail
-#: apps/io.ox/files/toolbar.js
-#: module:io.ox/files
-#: apps/io.ox/tasks/mobile-toolbar-actions.js
-#: module:io.ox/tasks
-msgid "New"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js
@@ -9326,6 +9319,11 @@ msgstr ""
 
 #: apps/io.ox/files/toolbar.js
 #: module:io.ox/files
+msgid "New"
+msgstr ""
+
+#: apps/io.ox/files/toolbar.js
+#: module:io.ox/files
 msgid "Icons"
 msgstr ""
 
@@ -13981,6 +13979,12 @@ msgstr ""
 msgid "Show done tasks"
 msgstr ""
 
+#: apps/io.ox/tasks/mobile-toolbar-actions.js
+#: module:io.ox/tasks
+#: apps/io.ox/tasks/toolbar.js
+msgid "New task"
+msgstr ""
+
 #: apps/io.ox/tasks/model.js
 #: module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -14051,11 +14055,6 @@ msgstr ""
 #: apps/io.ox/tasks/settings/pane.js
 #: module:io.ox/tasks
 msgid "Receive notifications when a participant accepted or declined a task in which you participate"
-msgstr ""
-
-#: apps/io.ox/tasks/toolbar.js
-#: module:io.ox/tasks
-msgid "New task"
 msgstr ""
 
 #: apps/io.ox/tasks/toolbar.js

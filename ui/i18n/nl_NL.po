@@ -922,8 +922,7 @@ msgstr "Agenda toevoegen"
 msgid "Add condition"
 msgstr "Voorwaarde toevoegen"
 
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "Contactpersoon toevoegen"
@@ -931,10 +930,6 @@ msgstr "Contactpersoon toevoegen"
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add contact/resource"
 msgstr "Contacten/bronnen toevoegen"
-
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Add distribution list"
-msgstr "Distributielijst toevoegen"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Add files"
@@ -6679,9 +6674,7 @@ msgstr "Nooit"
 msgid "Never show again"
 msgstr "Toon dit nooit meer"
 
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "New"
 msgstr "Nieuw"
 
@@ -6734,10 +6727,18 @@ msgstr "Nieuwe agendanaam"
 msgid "New code sent."
 msgstr "Nieuwe code verzonden."
 
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js
+#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
 msgid "New contact"
 msgstr "Nieuw contact"
+
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add distribution list"
+msgid "New distribution list"
+msgstr "Distributielijst toevoegen"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "New folder"
@@ -6785,7 +6786,8 @@ msgstr "Nieuwe regel"
 msgid "New search ... (prototype)"
 msgstr "Nieuwe zoekopdracht ... (prototype)"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/toolbar.js
 msgid "New task"
 msgstr "Nieuwe taak"
 

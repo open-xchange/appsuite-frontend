@@ -922,8 +922,7 @@ msgstr "Añadir calendario"
 msgid "Add condition"
 msgstr "Añadir condición"
 
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "Añadir contacto"
@@ -931,10 +930,6 @@ msgstr "Añadir contacto"
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add contact/resource"
 msgstr "Añadir contacto/recurso"
-
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Add distribution list"
-msgstr "Añadir lista de distribución"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Add files"
@@ -6675,9 +6670,7 @@ msgstr "Nunca"
 msgid "Never show again"
 msgstr "No mostrar de nuevo"
 
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "New"
 msgstr "Nuevo"
 
@@ -6730,10 +6723,18 @@ msgstr "Nuevo nombre de calendario"
 msgid "New code sent."
 msgstr "Nuevo código enviado."
 
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js
+#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
 msgid "New contact"
 msgstr "Nuevo contacto"
+
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "New Distribution List"
+msgid "New distribution list"
+msgstr "Nueva lista de distribución"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "New folder"
@@ -6781,7 +6782,8 @@ msgstr "Nueva regla"
 msgid "New search ... (prototype)"
 msgstr "Nueva búsqueda ... (prototipo)"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/toolbar.js
 msgid "New task"
 msgstr "Nueva tarea"
 
@@ -14213,6 +14215,9 @@ msgstr "su plataforma"
 #~ msgid "Add cipher code"
 #~ msgstr "Añadir código de cifrado"
 
+#~ msgid "Add distribution list"
+#~ msgstr "Añadir lista de distribución"
+
 #~ msgid "Add feed"
 #~ msgstr "Añadir feed"
 
@@ -19214,9 +19219,6 @@ msgstr "su plataforma"
 
 #~ msgid "New Caledonia"
 #~ msgstr "Nueva Caledonia"
-
-#~ msgid "New Distribution List"
-#~ msgstr "Nueva lista de distribución"
 
 #~ msgid "New Infoitem"
 #~ msgstr "Nuevo elemento de información"

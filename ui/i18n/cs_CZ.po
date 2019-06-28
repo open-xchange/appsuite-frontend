@@ -941,8 +941,7 @@ msgstr "Přidat kalendář"
 msgid "Add condition"
 msgstr "Přidat stav"
 
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "Přidat kontakt"
@@ -950,10 +949,6 @@ msgstr "Přidat kontakt"
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add contact/resource"
 msgstr "Přidat kontakt/zdroj"
-
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Add distribution list"
-msgstr "Přidat distribuční seznam"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Add files"
@@ -6663,9 +6658,7 @@ msgstr "Nikdy"
 msgid "Never show again"
 msgstr "Nikdy už nezobrazovat"
 
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "New"
 msgstr "Nový"
 
@@ -6718,10 +6711,18 @@ msgstr "Nový název kalendáře"
 msgid "New code sent."
 msgstr "Odeslán nový kód."
 
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js
+#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
 msgid "New contact"
 msgstr "Nový kontakt"
+
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "New Distribution List"
+msgid "New distribution list"
+msgstr "Nový distribuční seznam"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "New folder"
@@ -6769,7 +6770,8 @@ msgstr "Nové pravidlo"
 msgid "New search ... (prototype)"
 msgstr "Nové vyhledávání... (prototyp)"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/toolbar.js
 msgid "New task"
 msgstr "Nový úkol"
 
@@ -14171,6 +14173,9 @@ msgstr "vaše platforma"
 #~ msgid "Add cipher code"
 #~ msgstr "Přidat šifrovací kód"
 
+#~ msgid "Add distribution list"
+#~ msgstr "Přidat distribuční seznam"
+
 #~ msgid "Add feed"
 #~ msgstr "Přidat kanál"
 
@@ -19148,9 +19153,6 @@ msgstr "vaše platforma"
 
 #~ msgid "New Caledonia"
 #~ msgstr "Nová Kaledonie"
-
-#~ msgid "New Distribution List"
-#~ msgstr "Nový distribuční seznam"
 
 #~ msgid "New Infoitem"
 #~ msgstr "Nová informační položka"

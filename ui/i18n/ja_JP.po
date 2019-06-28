@@ -916,8 +916,7 @@ msgstr "カレンダーを追加"
 msgid "Add condition"
 msgstr "条件を追加"
 
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "連絡先を追加"
@@ -925,10 +924,6 @@ msgstr "連絡先を追加"
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add contact/resource"
 msgstr "連絡先/リソースを追加"
-
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Add distribution list"
-msgstr "連絡先グループを追加"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Add files"
@@ -6591,9 +6586,7 @@ msgstr "無期限"
 msgid "Never show again"
 msgstr "再表示しない"
 
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
 msgid "New"
 msgstr "新規"
 
@@ -6646,10 +6639,18 @@ msgstr "新規カレンダー名"
 msgid "New code sent."
 msgstr "新しいコードが送信されました。"
 
-#: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js
+#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
 msgid "New contact"
 msgstr "新規連絡先"
+
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#, fuzzy
+#| msgid "New Distribution List"
+msgid "New distribution list"
+msgstr "新しい予定"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "New folder"
@@ -6697,7 +6698,8 @@ msgstr "新しいルール"
 msgid "New search ... (prototype)"
 msgstr "新規検索...（プロトタイプ）"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/tasks/mobile-toolbar-actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/toolbar.js
 msgid "New task"
 msgstr "新規のタスク"
 
@@ -13622,6 +13624,9 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Add cipher code"
 #~ msgstr "暗号コードを追加"
 
+#~ msgid "Add distribution list"
+#~ msgstr "連絡先グループを追加"
+
 #~ msgid "Add feed"
 #~ msgstr "フィードを追加"
 
@@ -17932,9 +17937,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "New Caledonia"
 #~ msgstr "ニューカレドニア"
-
-#~ msgid "New Distribution List"
-#~ msgstr "新しい予定"
 
 #~ msgid "New Infoitem"
 #~ msgstr "新規インフォアイテム"
