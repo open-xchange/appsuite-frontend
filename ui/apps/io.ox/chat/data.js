@@ -395,6 +395,7 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
     //
 
     function getName(id) {
+        if (id.toString() === data.user_id.toString()) return '<span class="name">You</span>';
         return getNames([id]);
     }
 
