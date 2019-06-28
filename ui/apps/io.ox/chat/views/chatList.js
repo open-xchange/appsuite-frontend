@@ -14,9 +14,9 @@
 define('io.ox/chat/views/chatList', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/state',
-    'io.ox/contacts/api',
+    'io.ox/chat/views/chatAvatar',
     'io.ox/chat/data'
-], function (DisposableView, StateView, contactsAPI, data) {
+], function (DisposableView, StateView, ChatAvatar, data) {
 
     'use strict';
 
@@ -52,9 +52,7 @@ define('io.ox/chat/views/chatList', [
                 .toggleClass('unseen', model.get('unreadCount') > 0)
                 .attr('data-cid', model.cid)
                 .append(
-                    contactsAPI.pictureHalo(
-                        $('<div class="picture" aria-hidden="true">'), { internal_userid: model.get('id') }, { width: 40, height: 40 }
-                    ),
+                    new ChatAvatar({ model: model }).render().$el,
                     $('<div class="chats-container">').append(
                         $('<div class="chats-row">').append(
                             $('<div class="title">').text(model.getTitle()),
