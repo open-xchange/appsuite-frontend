@@ -26,7 +26,7 @@ define('io.ox/chat/views/chat', [
 
     var ChatView = DisposableView.extend({
 
-        className: 'chat',
+        className: 'chat abs',
 
         events: {
             'keydown textarea': 'onEditorKeydown',

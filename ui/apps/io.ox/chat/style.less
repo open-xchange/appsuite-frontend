@@ -33,17 +33,23 @@
 .ox-chat {
 
     display: flex;
+    height: 100%;
 
     &.columns {
-        .leftside {
+        width: 320px;
+
+        .chat-leftside {
             flex: 1;
             width: 100%;
+
+            .header { display: none; }
+            .classic-toolbar-container { display: block; }
         }
-        .rightside { display: none; }
+        .chat-rightside { display: none; }
 
         &.open {
-            .leftside { display: none; }
-            .rightside {
+            .chat-leftside { display: none; }
+            .chat-rightside {
                 display: block;
 
                 button[data-cmd="close-chat"] {
@@ -53,15 +59,20 @@
         }
     }
 
-    .leftside {
-        flex: 0 0 @width;
+    .chat-leftside {
+        flex: 0 0 auto;
+        width: @width;
         background-color: @backgroundColor;
         border-right: 1px solid @borderColor;
+
+        display: flex;
+        flex-direction: column;
+        height: 100%;
     }
 
-    .rightside {
+    .chat-rightside {
         flex: 1;
-        left: 0;
+        position: relative;
 
         .title {
             .ellipsis();
@@ -89,7 +100,7 @@
         }
     }
 
-    .leftside .header {
+    .chat-leftside .header {
 
         .picture {
             .picture(@pictureSize, @pictureSize);
@@ -116,11 +127,18 @@
         }
     }
 
+    .chat-leftside .classic-toolbar-container {
+        position: relative;
+        height: 40px;
+        display: none;
+    }
+
     .search {
         border: 0;
         background-color: white;
-        border-bottom: 1px solid @borderColor;
         height: @searchHeight;
+        position: relative;
+
         input {
             border: 0;
             width: 100%;
@@ -138,11 +156,11 @@
 
     .left-navigation {
 
+        flex: 1;
         display: flex;
         flex-direction: column;
         overflow-y: auto;
-        top: @headerHeight + @searchHeight;
-        padding: 8px 0;
+        padding-bottom: 8px;
 
         .btn-nav {
             position: relative;
@@ -223,6 +241,10 @@
 
         .sender {
             margin-right: 5px;
+        }
+
+        .last-modified {
+            margin-left: 8px;
         }
 
         .delivery {
