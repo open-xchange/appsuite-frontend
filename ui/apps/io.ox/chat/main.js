@@ -25,9 +25,10 @@ define('io.ox/chat/main', [
     'io.ox/chat/views/search',
     'io.ox/chat/views/searchResult',
     'io.ox/contacts/api',
+    'io.ox/backbone/views/toolbar',
     'io.ox/chat/socket',
     'less!io.ox/chat/style'
-], function (data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI) {
+], function (ext, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView) {
 
     'use strict';
 
@@ -73,6 +74,7 @@ define('io.ox/chat/main', [
                 case 'open-chat': this.toggleChat(data.id, true); break;
                 case 'unsubscribe-chat': this.toggleChat(data.id, false); break;
                 case 'add-member': this.addMember(data.id); break;
+                case 'switch-to-floating': this.toggleWindowMode('floating'); break;
                 // no default
             }
         },
@@ -212,8 +214,41 @@ define('io.ox/chat/main', [
                     }
                 );
             });
+        },
+
+        toggleWindowMode: function (mode) {
+            win.model.set(mode, true);
+            this.$body.toggleClass('columns', mode === 'sticky');
+        }
+    });
 
     var win;
+
+    ext.point('io.ox/chat/list/toolbar').extend({
+        id: 'switch-to-floating',
+        index: 100,
+        prio: 'hi',
+        mobile: 'lo',
+        custom: true,
+        draw: function () {
+            this.attr('data-prio', 'hi').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="switch-to-floating">').append(
+                    $('<i class="fa fa-external-link" aria-hidden="true">')
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/list/toolbar').extend({
+        id: 'create-group',
+        index: 200,
+        prio: 'lo',
+        mobile: 'lo',
+        custom: true,
+        draw: function () {
+            this.attr('data-prio', 'lo').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="start-chat">').text('Create group')
+            );
         }
     });
 
