@@ -264,8 +264,8 @@ define('io.ox/chat/main', [
 
         // start with BAD style and hard-code stuff
 
-        window.$body.addClass('ox-chat columns').append(
-            $('<div class="leftside">').append(
+        win.$body.addClass('ox-chat columns').append(
+            $('<div class="chat-leftside">').append(
                 $('<div class="header">').append(
                     contactsAPI.pictureHalo(
                         $('<div class="picture" aria-hidden="true">'), { internal_userid: data.user_id }, { width: 40, height: 40 }
@@ -274,8 +274,9 @@ define('io.ox/chat/main', [
                     $('<i class="fa state online fa-check-circle" aria-hidden="true">'),
                     $('<div class="name">').text(user.getName())
                 ),
+                new ToolbarView({ point: 'io.ox/chat/list/toolbar', title: 'Chat actions' }).render(new ext.Baton()).$el,
                 new searchView().render().$el,
-                $('<div class="left-navigation abs">').append(
+                $('<div class="left-navigation">').append(
                     // search results
                     new SearchResultView().render().$el,
                     // chats
@@ -297,7 +298,7 @@ define('io.ox/chat/main', [
                     )
                 )
             ),
-            window.$rightside = $('<div class="rightside">').append(
+            win.$rightside = $('<div class="chat-rightside">').append(
                 new EmptyView().render().$el
             )
         );
