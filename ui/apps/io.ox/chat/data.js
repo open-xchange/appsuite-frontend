@@ -167,7 +167,9 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
 
         updateDelivery: function (state) {
             var url = data.API_ROOT + '/delivery/' + this.get('id');
-            $.post(url, { state: state });
+            $.post(url, { state: state }).done(function () {
+                this.set('state', state);
+            }.bind(this));
         }
     });
 
