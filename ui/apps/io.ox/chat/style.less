@@ -217,24 +217,29 @@
             }
 
             .chats-container {
-                padding: 8px 4px;
+                padding: 8px;
                 flex: 1;
                 overflow: hidden;
 
                 .chats-row {
                     display: flex;
+                    line-height: 24px;
                 }
             }
         }
 
         .chat-avatar {
-            padding: 4px;
+            margin: 8px;
         }
 
         .title {
             .ellipsis();
             font-weight: 600;
             flex: 1;
+        }
+
+        .sender, .delivery, .text-preview {
+            color: @gray;
         }
 
         .sender {
@@ -246,7 +251,7 @@
         }
 
         .delivery {
-            padding-top: 3px;
+            margin-top: 5px;
             margin-right: 5px;
         }
 
