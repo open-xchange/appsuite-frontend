@@ -50,7 +50,7 @@ define('io.ox/chat/views/chat', [
                 'change:body': this.onChangeBody,
                 'change:fileId': this.onChangeBody,
                 'change:time': this.onChangeTime,
-                'change:delivery': this.onChangeDelivery
+                'change:state': this.onChangeDelivery
             });
 
             this.model.messages.fetch();
@@ -174,11 +174,15 @@ define('io.ox/chat/views/chat', [
                     // sender avatar & name
                     this.renderSender(model),
                     // message boby
-                    $('<div class="body">').addClass().html(model.getBody()),
-                    // time
-                    $('<div class="time">').text(model.getTime()),
-                    // delivery state
-                    $('<div class="fa delivery">').addClass(model.get('state'))
+                    $('<div class="content">').append(
+                        $('<div class="body">').html(model.getBody()),
+                        $('<div class="foot">').append(
+                            // time
+                            $('<div class="time">').text(model.getTime()),
+                            // delivery state
+                            $('<div class="fa delivery">').addClass(model.get('state'))
+                        )
+                    )
                 );
         },
 
