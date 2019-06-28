@@ -12,6 +12,7 @@
  */
 
 define('io.ox/chat/main', [
+    'io.ox/core/extensions',
     'io.ox/chat/data',
     'io.ox/chat/events',
     'io.ox/backbone/views/window',
@@ -211,13 +212,20 @@ define('io.ox/chat/main', [
                     }
                 );
             });
+
+    var win;
         }
     });
 
     data.fetchUsers().done(function () {
 
-        var window = new Window({ title: 'OX Chat', sticky: true }).render().open(),
-            user = data.users.get(data.user_id);
+        var user = data.users.get(data.user_id);
+
+        win = new Window({ title: 'OX Chat', floating: false, sticky: true, stickable: true }).render().open();
+        win.listenTo(win.model, 'change:sticky', function () {
+            if (!this.model.get('sticky')) return;
+            this.$body.addClass('columns');
+        });
 
         // start with BAD style and hard-code stuff
 
