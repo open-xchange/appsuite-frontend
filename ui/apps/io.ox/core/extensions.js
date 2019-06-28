@@ -340,11 +340,12 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
                 } finally {
                     baton.invoke = previousInvoke;
                 }
-            }
-            try {
-                return o.invoke.apply(o, args);
-            } catch (e) {
-                error(e);
+            } else {
+                try {
+                    return o.invoke.apply(o, args);
+                } catch (e) {
+                    error(e);
+                }
             }
         };
 

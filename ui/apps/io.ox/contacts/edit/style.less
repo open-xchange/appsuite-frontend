@@ -151,3 +151,120 @@
         }
     }
 }
+
+.contact-edit {
+
+    margin-top: 32px;
+    margin-bottom: 40px;
+
+    .prototype {
+        color: #333;
+        font-weight: bold;
+        text-align: center;
+        line-height: 24px;
+        padding: 16px;
+        background-color: rgb(255, 207, 26);
+        background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(255, 255, 255, 0.3) 8px, rgba(255, 255, 255, 0.3) 16px);
+        position: relative;
+        top: -32px;
+    }
+
+    .prototype-bottom {
+        top: 0;
+        height: 16px;
+    }
+
+    .form-group {
+        margin-bottom: 8px;
+    }
+
+    label {
+        color: #333;
+    }
+
+    input, select {
+        height: 32px;
+    }
+
+    textarea {
+        min-height: 120px;
+    }
+
+    .header {
+        height: 144px;
+    }
+
+    @size: 120px;
+
+    .contact-picture {
+        width: @size;
+        height: @size;
+        background-repeat: no-repeat;
+        background-size: cover;
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 0 3px #000;
+        float: right;
+        /* click to add picture */
+        font-size: 14px;
+        color: #555;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        background-color: #f5f5f5;
+        cursor: pointer;
+    }
+
+    .contact-summary {
+        height: @size;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    h1 {
+        font-size: 24px;
+        line-height: 32px;
+        font-weight: normal;
+        margin: 0;
+    }
+
+    h2 {
+        font-size: 13px;
+        line-height: 16px;
+        color: #707070;
+        margin: 0;
+    }
+
+    .section {
+        margin-bottom: 32px;
+    }
+
+    .section-title {
+        font-weight: 500;
+        line-height: 32px;
+        color: #707070;
+    }
+
+    button[data-remove] {
+        padding: 0;
+        outline: 0;
+        .fa-stack {
+            .fa-times { color: #6A6A6A; }
+            .fa-circle { color: #eee; }
+        }
+        &:hover, &:focus {
+            .fa-times { color: #fff; }
+            .fa-circle { color: #A00; }
+        }
+    }
+}
+
+.contact-edit-add {
+    display: inline-block;
+    float: right;
+    select {
+        height: 32px;
+        min-width: 240px;
+    }
+}

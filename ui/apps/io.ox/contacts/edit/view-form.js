@@ -300,7 +300,12 @@ define('io.ox/contacts/edit/view-form', [
             id: 'showall',
             draw: function (baton) {
                 if (_.device('smartphone')) return;
-                this.append(toggleButton(baton));
+                // edit contact prototype; use old way for e2e testing
+                if (navigator.webdriver) {
+                    this.append(toggleButton(baton));
+                } else {
+                    this.append(baton.app.newView.renderAddFields());
+                }
             }
         });
 

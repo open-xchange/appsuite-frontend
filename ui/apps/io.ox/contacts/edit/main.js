@@ -12,6 +12,7 @@
  */
 
 define('io.ox/contacts/edit/main', [
+    'io.ox/contacts/edit/view',
     'io.ox/contacts/edit/view-form',
     'io.ox/contacts/model',
     'gettext!io.ox/contacts',
@@ -26,7 +27,7 @@ define('io.ox/contacts/edit/main', [
     'io.ox/backbone/views/modal',
     'settings!io.ox/core',
     'less!io.ox/contacts/edit/style'
-], function (view, model, gt, upload, userApi, ext, util, capabilities, notifications, coreUtil, a11y, ModalDialog, settings) {
+], function (View, view, model, gt, upload, userApi, ext, util, capabilities, notifications, coreUtil, a11y, ModalDialog, settings) {
 
     'use strict';
 
@@ -44,7 +45,8 @@ define('io.ox/contacts/edit/main', [
             title: gt('Edit Contact'),
             userContent: true,
             closable: true,
-            floating: !_.device('smartphone')
+            floating: !_.device('smartphone'),
+            size: 'width-sm'
         });
 
         app.setLauncher(function () {
@@ -60,7 +62,9 @@ define('io.ox/contacts/edit/main', [
 
             app.setWindow(win);
 
-            container = win.nodes.main.scrollable();
+            // seems to be outdated since we have floating windows
+            // container = win.nodes.main.scrollable();
+            container = win.nodes.main;
 
             var cont = function (data) {
 
@@ -90,8 +94,10 @@ define('io.ox/contacts/edit/main', [
 
                         app.contact = contact;
                         var editViewtoUse = app.userMode ? view.protectedMethods.createContactEdit('io.ox/core/user') : view.ContactEditView;
+                        app.newView = new View({ model: new Backbone.Model(data) });
                         app.view = editView = new editViewtoUse({ model: contact, app: app });
                         container.append(
+                            navigator.webdriver ? [] : app.newView.render().$el,
                             editView.render().$el
                         );
                         // no autofocus on smartphone and for iOS in special (see bug #36921)

@@ -21,7 +21,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('adds a contact with all fields', function (I) {
+Scenario.skip('adds a contact with all fields', function (I) {
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
 

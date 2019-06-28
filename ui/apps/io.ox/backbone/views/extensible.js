@@ -35,6 +35,8 @@ define('io.ox/backbone/views/extensible', ['io.ox/backbone/views/disposable', 'i
             this.idle = idle.bind(this);
             // simplify debugging
             this.$el.attr('data-point', this.options.point);
+            // run over static extensions
+            if (this.extensions) this.extend(this.extensions);
         },
 
         // convenience function to add multiple extensions

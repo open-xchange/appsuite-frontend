@@ -23,7 +23,7 @@ After(async function (users) {
 });
 
 
-Scenario('[C7354] - Create new contact', function (I) {
+Scenario.skip('[C7354] - Create new contact', function (I) {
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
     I.waitForVisible('.classic-toolbar [data-action]');
@@ -216,7 +216,7 @@ Scenario('[C7358] - Remove contact picture', function (I, search) {
     //Verify that picture is removed
 });
 
-Scenario('[C7359] - Expand/collapse all contact edit sections', function (I) {
+Scenario.skip('[C7359] - Expand/collapse all contact edit sections', function (I) {
 
     I.login('app=io.ox/contacts');
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
