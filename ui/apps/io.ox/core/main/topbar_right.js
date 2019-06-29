@@ -134,6 +134,19 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
+    ext.point('io.ox/core/appcontrol/right').extend({
+        id: 'settings',
+        index: 400,
+        draw: function () {
+            this.append(
+                addLauncher('right', $('<i class="fa fa-cog launcher-icon" aria-hidden="true">'), function () {
+                    ox.launch('io.ox/settings/main');
+                }, gt('Settings'))
+                .attr('id', 'io-ox-settings-topbar-icon')
+            );
+        }
+    });
+
     ext.point('io.ox/core/appcontrol/right/dropdown').extend({
         id: 'upsell',
         index: 50,
@@ -154,17 +167,6 @@ define('io.ox/core/main/topbar_right', [
                 );
                 this.divider();
             }
-        }
-    });
-
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
-        id: 'settings',
-        index: 100,
-        extend: function () {
-            this.link('io.ox/settings', gt('Settings'), function (e) {
-                e.preventDefault();
-                ox.launch('io.ox/settings/main');
-            });
         }
     });
 

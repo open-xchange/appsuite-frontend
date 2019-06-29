@@ -250,7 +250,6 @@
 
     #io-ox-topsearch {
         margin-top: 15px;
-        margin-right: 24px;
         flex-grow: 1;
 
         .search-box > .form-group { margin-bottom: 0; }
@@ -311,6 +310,8 @@
 
     #io-ox-toprightbar {
         padding-right: 12px; // break alignment on purpose
+        // more space needed on smartphones
+        .smartphone & { padding-right: 0}
         .launcher {
             & > a {
                 padding: 16px 11px;
