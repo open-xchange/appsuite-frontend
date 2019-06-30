@@ -11,6 +11,8 @@
  */
 /// <reference path="../../steps.d.ts" />
 
+let assert = require('assert');
+
 Feature('Portal');
 
 Before(async function (users) {
@@ -138,6 +140,7 @@ Scenario('[C7472] Check if the portalpage is up to date', async function (I, use
     //const moment = require('moment');
     let testrailID = 'C7472';
     let testrailName = 'Check if the portalpage is up to date';
+    let retries = 5;
 
     I.login('app=io.ox/portal', { user: users[0] });
     I.waitForVisible('.io-ox-portal-window');
@@ -148,13 +151,14 @@ Scenario('[C7472] Check if the portalpage is up to date', async function (I, use
         to: [[users[0].userdata.display_name, users[0].userdata.primaryEmail]]
     });
     let element = await I.grabNumberOfVisibleElements('[aria-label="Inbox"] .item .person');
-    while (element === 0) {
-        //TODO: need a limiter to avoid an endless loop
+    while (element === 0 && retries) {
+        retries--;
         I.waitForElement('#io-ox-refresh-icon', 5, '.taskbar');
         I.click('#io-ox-refresh-icon', '.taskbar');
         I.waitForElement('.launcher .fa-spin-paused', 5);
         I.wait(0.5);
         element = await I.grabNumberOfVisibleElements('[aria-label="Inbox"] .item .person');
+        if (!retries) assert.fail('Timeout waiting for element');
     }
     //Verifiy Inbox Widget
     I.waitForElement('.widget[aria-label="Inbox"] .item', 5);
