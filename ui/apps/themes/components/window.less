@@ -490,11 +490,11 @@
     z-index: 12;
     background: transparent;
     outline: 0;
+
+    .floating-window-content { .elevation-2(); }
     &.active {
         z-index: 14;
-    }
-    .floating-window-content {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+        .floating-window-content { .elevation-3(); }
     }
 
     .window-body, .container {
