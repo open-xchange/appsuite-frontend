@@ -55,6 +55,21 @@ define('io.ox/chat/views/chat', [
             );
         }
     });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'close-chat',
+        index: 300,
+        prio: 'lo',
+        mobile: 'lo',
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            this.attr('data-prio', 'lo').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="unsubscribe-chat">').attr('data-id', model.id).text('Close chat').on('click', events.forward)
+            );
+        }
+    });
+
     var ChatView = DisposableView.extend({
 
         className: 'chat abs',
