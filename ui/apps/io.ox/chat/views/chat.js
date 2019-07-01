@@ -139,6 +139,7 @@ define('io.ox/chat/views/chat', [
 
             this.$messages = $();
             this.$editor = $();
+            this.updateDelivery = _.debounce(this.updateDelivery.bind(this), 10);
         },
 
         render: function () {
@@ -207,7 +208,7 @@ define('io.ox/chat/views/chat', [
 
         renderMessage: function (model) {
             // mark message as seen as soon as it is rendered
-            if (model.get('state') !== 'seen' && model.get('senderId').toString() !== data.user_id.toString()) model.updateDelivery('seen');
+            if (model.get('state') !== 'seen' && model.get('senderId').toString() !== data.user_id.toString()) this.updateDelivery(model, 'seen');
             return $('<div class="message">')
                 // here we use cid instead of id, since the id might be unknown
                 .attr('data-cid', model.cid)
@@ -227,6 +228,10 @@ define('io.ox/chat/views/chat', [
                         )
                     )
                 );
+        },
+
+        updateDelivery: function (model, state) {
+            model.updateDelivery(state);
         },
 
         renderSender: function (model) {
