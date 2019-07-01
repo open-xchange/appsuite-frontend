@@ -247,11 +247,7 @@ define('io.ox/chat/main', [
         custom: true,
         draw: function () {
             this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1">').text('Create group').on('click', function (e) {
-                    var node = $(e.currentTarget), data = node.data();
-                    data.cmd = 'start-chat';
-                    events.trigger('cmd cmd:' + data.cmd, data);
-                })
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="start-chat">').text('Create group').on('click', events.forward)
             );
         }
     });
