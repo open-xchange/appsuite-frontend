@@ -26,9 +26,10 @@ define('io.ox/chat/main', [
     'io.ox/chat/views/searchResult',
     'io.ox/contacts/api',
     'io.ox/backbone/views/toolbar',
+    'settings!io.ox/core',
     'io.ox/chat/socket',
     'less!io.ox/chat/style'
-], function (ext, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView) {
+], function (ext, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, settings) {
 
     'use strict';
 
@@ -218,6 +219,7 @@ define('io.ox/chat/main', [
 
         toggleWindowMode: function (mode) {
             win.model.set(mode, true);
+            settings.set('chat/mode', mode).save();
             this.$body.toggleClass('columns', mode === 'sticky');
         },
 
@@ -244,6 +246,7 @@ define('io.ox/chat/main', [
             function mouseup() {
                 $(document).off('mousemove.resize mouseup.resize');
                 populateResize();
+                settings.set('chat/width', this.$body.width()).save();
             }
 
             function mousedown(e) {
@@ -294,17 +297,19 @@ define('io.ox/chat/main', [
 
     data.fetchUsers().done(function () {
 
-        var user = data.users.get(data.user_id);
+        var user = data.users.get(data.user_id),
+            mode = settings.get('chat/mode') || 'sticky';
 
-        win = new Window({ title: 'OX Chat', floating: false, sticky: true, stickable: true }).render().open();
+        win = new Window({ title: 'OX Chat', floating: mode === 'floating', sticky: mode === 'sticky', stickable: true }).render().open();
         win.listenTo(win.model, 'change:sticky', function () {
             if (!this.model.get('sticky')) return;
+            settings.set('chat/mode', 'sticky').save();
             this.$body.addClass('columns');
         });
 
         // start with BAD style and hard-code stuff
 
-        win.$body.addClass('ox-chat columns').append(
+        win.$body.addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('chat/width', 320)).append(
             win.getResizeBar(),
             $('<div class="chat-leftside">').append(
                 $('<div class="header">').append(
