@@ -79,9 +79,9 @@ Scenario('create complete task', async function (I) {
     I.see('Actual duration in minutes');
     I.see('45');
     I.see('Estimated costs');
-    I.see('27 EUR');
+    I.see('€27');
     I.see('Actual costs');
-    I.see('1337 EUR');
+    I.see('€1,337');
     I.see('Distance');
     I.see('1337mm');
     I.see('Billing information');
