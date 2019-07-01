@@ -41,3 +41,7 @@ upload:
   dependencies:
     - build ui
     - build update-themes
+    - build help
+    - build guidedtours
+    - build spamexperts
+    - build dynamic-theme

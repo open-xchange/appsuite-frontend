@@ -129,9 +129,13 @@ build guidedtours:
   extends: .build ui plugin
   variables:
     PROJECT_PATH: guidedtours
+    PACKAGE_NAME: open-xchange-guidedtours
   only:
     changes:
       - guidedtours/**/*
+      - open-xchange-guidedtours/**/*
+      - gitlab_ci/*
+      - .gitlab-ci.yml
 
 build spamexperts:
   extends: .build ui plugin
@@ -140,6 +144,8 @@ build spamexperts:
   only:
     changes:
       - open-xchange-appsuite-spamexperts/**/*
+      - gitlab_ci/*
+      - .gitlab-ci.yml
 
 build dynamic-theme:
   extends: .build ui plugin
@@ -148,3 +154,5 @@ build dynamic-theme:
   only:
     changes:
       - open-xchange-dynamic-theme/**/*
+      - gitlab_ci/*
+      - .gitlab-ci.yml
