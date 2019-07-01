@@ -270,10 +270,10 @@ define('io.ox/chat/views/chat', [
             this.$('.title').text(model.getTitle() || '\u00a0');
         },
 
-        onAdd: _.debounce(function (model, collection, options) {
+        onAdd: _.debounce(function (model, collection) {
             // render
-            this.$messages.append(
-                options.changes.added.map(this.renderMessage.bind(this))
+            this.$messages.empty().append(
+                collection.map(this.renderMessage.bind(this))
             );
             // too many messages?
             var children = this.$messages.children();
