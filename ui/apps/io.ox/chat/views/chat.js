@@ -12,18 +12,49 @@
  */
 
 define('io.ox/chat/views/chat', [
+    'io.ox/core/extensions',
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/avatar',
     'io.ox/chat/views/chatAvatar',
     'io.ox/chat/views/chatMember',
     'io.ox/chat/events',
-    'io.ox/chat/data'
-], function (DisposableView, Avatar, ChatAvatar, ChatMember, events, data) {
+    'io.ox/chat/data',
+    'io.ox/backbone/views/toolbar'
+], function (ext, DisposableView, Avatar, ChatAvatar, ChatMember, events, data, ToolbarView) {
 
     'use strict';
 
     var MESSAGE_LIMIT = 20;
 
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'back',
+        index: 200,
+        prio: 'hi',
+        mobile: 'lo',
+        custom: true,
+        draw: function () {
+            this.attr('data-prio', 'hi').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="close-chat">').append(
+                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), 'Back'
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'switch-to-floating',
+        index: 200,
+        prio: 'hi',
+        mobile: 'lo',
+        custom: true,
+        draw: function () {
+            this.attr('data-prio', 'hi').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="switch-to-floating">').append(
+                    $('<i class="fa fa-external-link" aria-hidden="true">')
+                )
+            );
+        }
+    });
     var ChatView = DisposableView.extend({
 
         className: 'chat abs',
@@ -100,8 +131,7 @@ define('io.ox/chat/views/chat', [
 
         render: function () {
             this.$el.append(
-                $('<div class="header abs">').append(
-                    $('<button type="button" class="btn btn-default" data-cmd="close-chat"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
+                $('<div class="header">').append(
                     new ChatAvatar({ model: this.model }).render().$el,
                     this.model.isPrivate() ?
                         // private chat
@@ -111,9 +141,6 @@ define('io.ox/chat/views/chat', [
                             this.renderTitle().addClass('small-line'),
                             new ChatMember({ collection: this.model.members }).render().$el
                         ),
-                    $('<button type="button" class="btn btn-default btn-circle pull-right file-upload-btn">')
-                        .append('<i class="fa fa-paperclip" aria-hidden="true">'),
-                    $('<input type="file" class="file-upload-input hidden">'),
                     // burger menu (pull-right just to have the popup right aligned)
                     $('<div class="dropdown pull-right">').append(
                         $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
@@ -121,7 +148,8 @@ define('io.ox/chat/views/chat', [
                         this.renderDropdown()
                     )
                 ),
-                $('<div class="scrollpane abs">').append(
+                new ToolbarView({ point: 'io.ox/chat/detail/toolbar', title: 'Chat actions' }).render(new ext.Baton({ model: this.model })).$el,
+                $('<div class="scrollpane">').append(
                     $('<div class="conversation">').append(
                         this.$messages = $('<div class="messages">').append(
                             this.model.messages.last(MESSAGE_LIMIT).map(this.renderMessage, this)
@@ -129,8 +157,11 @@ define('io.ox/chat/views/chat', [
                         this.typing.$el
                     )
                 ),
-                $('<div class="controls abs">').append(
-                    this.$editor = $('<textarea class="form-control" placeholder="Enter message here">')
+                $('<div class="controls">').append(
+                    this.$editor = $('<textarea class="form-control" placeholder="Enter message here">'),
+                    $('<button type="button" class="btn btn-default btn-circle pull-right file-upload-btn">')
+                        .append('<i class="fa fa-paperclip" aria-hidden="true">'),
+                    $('<input type="file" class="file-upload-input hidden">')
                 )
             );
 

@@ -41,21 +41,16 @@
         .chat-leftside {
             flex: 1;
             width: 100%;
-
-            .header { display: none; }
-            .classic-toolbar-container { display: block; }
         }
         .chat-rightside { display: none; }
 
+        .header { display: none; }
+        .chat .header { display: none; }
+        .classic-toolbar-container { display: block; }
+
         &.open {
             .chat-leftside { display: none; }
-            .chat-rightside {
-                display: block;
-
-                button[data-cmd="close-chat"] {
-                    display: block;
-                }
-            }
+            .chat-rightside { display: block; }
         }
 
         .message {
@@ -81,10 +76,6 @@
 
         .title {
             .ellipsis();
-        }
-
-        button[data-cmd="close-chat"] {
-            display: none;
         }
     }
 
@@ -132,7 +123,7 @@
         }
     }
 
-    .chat-leftside .classic-toolbar-container {
+    .classic-toolbar-container {
         position: relative;
         height: 40px;
         display: none;
@@ -293,7 +284,6 @@
     }
 
     .scrollpane {
-        top: @headerHeight;
         overflow-y: auto;
     }
 
@@ -329,6 +319,9 @@
     }
 
     .chat {
+        display: flex;
+        flex-direction: column;
+
         .header {
             display: flex;
             h2.small-line { line-height: 24px; }
@@ -341,7 +334,7 @@
             }
         }
         .scrollpane {
-            bottom: @controlsHeight;
+            flex: 1;
         }
     }
 
@@ -462,7 +455,7 @@
         top: auto;
         border-top: 1px solid @borderColor;
         background-color: @backgroundColor;
-        padding: 16px;
+        padding: 8px;
     }
 
     .footer {
@@ -478,11 +471,19 @@
     }
 
     .controls {
+        display: flex;
+        align-items: center;
         height: @controlsHeight;
+
         textarea {
+            flex: 1;
             padding: 8px;
             line-height: 16px;
-            height: 48px;
+            height: 100%;
+        }
+
+        button {
+            margin-left: 8px;
         }
     }
 
