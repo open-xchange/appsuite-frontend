@@ -103,15 +103,17 @@ Scenario('[C7739] Change tasks due date in dropdown', async function (I) {
 
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-    I.waitForElement('.tasks-detailview', 5);
+    I.waitForElement('.tasks-detailview');
 
     ['tomorrow', 2, 3, 4, 5, 6, 'in one week'].forEach(function (day, i) {
         I.clickToolbar('Due');
+        I.waitForVisible('.dropdown-menu');
         if (i === 0) I.clickToolbar(day);
         else if (i === 6) I.clickToolbar(day);
         else I.clickToolbar(moment().add(i + 1, 'days').format('dddd'));
         I.waitForText('Due ' + moment().add(i + 1, 'days').format('M/D/YYYY'), 5, '.tasks-detailview .end-date');
         I.waitForText(moment().add(i + 1, 'days').format('M/D/YYYY'), 5, '.vgrid .end_date');
+        I.waitForDetached('div.io-ox-alert');
     });
 });
 

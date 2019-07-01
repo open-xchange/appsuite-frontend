@@ -1083,7 +1083,7 @@ const selectFontSize = (I, fontSize) => {
     I.click(locate('span.mce-text').withText(fontSize));
     I.waitForInvisible('.mce-floatpanel');
 };
-Scenario('[C7400] Send mail with multiple different text formatting - set before writting @shaky', async function (I, users) {
+Scenario('[C7400] Send mail with multiple different text formatting - set before writting', async function (I, users) {
 
     let [sender, recipient] = users;
 
@@ -1140,7 +1140,7 @@ Scenario('[C7400] Send mail with multiple different text formatting - set before
     I.login('app=io.ox/mail', { user: recipient });
 
     // Open the mail
-    I.waitForText(mailSubject, 2);
+    I.waitForText(mailSubject);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
     I.waitForVisible('iframe.mail-detail-frame');
 
@@ -1226,7 +1226,7 @@ Scenario('[C7400] Send mail with multiple different text formatting - set after 
     I.login('app=io.ox/mail', { user: recipient });
 
     // Open the mail
-    I.waitForText(mailSubject, 2);
+    I.waitForText(mailSubject);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
     I.waitForVisible('iframe.mail-detail-frame');
 
