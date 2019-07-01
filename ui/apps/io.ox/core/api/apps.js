@@ -25,30 +25,36 @@ define('io.ox/core/api/apps', [
         'io.ox/notes'
     ];
 
-    function createIndexMap() {
-        var list = settings.get('apps/list', defaultList.join(',')).split(','),
-            blacklist = settings.get('apps/blacklist', '').split(',');
-        return list.reduce(function (acc, id, index) {
-            acc[id] = _(blacklist).contains(id) ? -1 : index;
-            return acc;
-        }, {});
-    }
+    var blacklist = _.reduce(settings.get('apps/blacklist', '').split(','),
+        function (memo, id) { memo[id] = true; return memo; }, {});
+
+    function validApp(app) { return app && !blacklist[app.id]; }
+
+    var AppID = Backbone.Model.extend({
+        constructor: function AppID(id, options) {
+            Backbone.Model.call(this, { id: id }, options);
+        }
+    });
+
+    var LauncherCollection = Backbone.Collection.extend({ model: AppID });
 
     var AppsCollection = Backbone.Collection.extend({
         initialize: function () {
-            this._indexMap = createIndexMap();
+            this.launcher = new LauncherCollection(defaultList);
+            if (settings.contains('apps/list')) {
+                var list = settings.get('apps/list').split(',');
+                this._launcher = new LauncherCollection(list);
+            } else {
+                this._launcher = this.launcher;
+            }
+            this._launcher.on('all', function () {
+                var args = Array.prototype.slice.call(arguments);
+                args[0] = 'launcher:' + args[0];
+                this.trigger.apply(this, args);
+            }, this);
         },
         forLauncher: function getAppsForLauncher() {
-            return this.filter(function (a) {
-                return this._indexOf(a) >= 0;
-            }.bind(this));
-        },
-        _indexOf: function indexOf(app) {
-            var index = this._indexMap[_.isString(app) ? app : app.id];
-            return typeof index === 'number' ? index : -1;
-        },
-        comparator: function (a, b) {
-            return this._indexOf(a) - this._indexOf(b);
+            return _.filter(this._launcher.map(this.get.bind(this)), validApp);
         }
     });
 

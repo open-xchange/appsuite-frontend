@@ -251,7 +251,7 @@ define('io.ox/core/main/appcontrol', [
         $toggle: $('<a href="#" class="launcher-btn btn btn-link dropdown-toggle" dontprocessonmobile="true">').attr('aria-label', gt('Navigate to:')).append($(icons.launcher).attr('title', gt('All Applications'))),
         initialize: function () {
             Dropdown.prototype.initialize.apply(this, arguments);
-            this.listenTo(this.collection, 'add remove', this.update);
+            this.listenTo(this.collection, 'add remove launcher:update launcher:sort', this.update);
             this.update();
         },
         update: function () {
