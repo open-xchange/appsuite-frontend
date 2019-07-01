@@ -219,7 +219,47 @@ define('io.ox/chat/main', [
         toggleWindowMode: function (mode) {
             win.model.set(mode, true);
             this.$body.toggleClass('columns', mode === 'sticky');
-        }
+        },
+
+        getResizeBar: (function () {
+
+            var cursorStart,
+                baseWidth,
+                MAX_WIDTH = 500,
+                MIN_WIDTH = 240;
+
+            function populateResize() {
+                // trigger generic resize event so that other components can respond to it
+                $(document).trigger('resize');
+            }
+
+            function mousemove(e) {
+                var deltaX = -(e.pageX - cursorStart),
+                    width = baseWidth + deltaX;
+                width = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, width));
+                this.$body.width(width);
+                populateResize();
+            }
+
+            function mouseup() {
+                $(document).off('mousemove.resize mouseup.resize');
+                populateResize();
+            }
+
+            function mousedown(e) {
+                e.preventDefault();
+                cursorStart = e.pageX;
+                baseWidth = this.$body.width();
+                $(document).on({
+                    'mousemove.resize': mousemove.bind(this),
+                    'mouseup.resize': mouseup.bind(this)
+                });
+            }
+
+            return function () {
+                return $('<div class="resizebar">').on('mousedown.resize', mousedown.bind(this));
+            };
+        }())
     });
 
     var win;
@@ -265,6 +305,7 @@ define('io.ox/chat/main', [
         // start with BAD style and hard-code stuff
 
         win.$body.addClass('ox-chat columns').append(
+            win.getResizeBar(),
             $('<div class="chat-leftside">').append(
                 $('<div class="header">').append(
                     contactsAPI.pictureHalo(

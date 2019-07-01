@@ -36,8 +36,6 @@
     height: 100%;
 
     &.columns {
-        width: 320px;
-
         .chat-leftside {
             flex: 1;
             width: 100%;
@@ -57,6 +55,12 @@
             padding-left: 0;
             .avatar { display: none; }
         }
+
+        .resizebar { display: block; }
+    }
+
+    &:not(.columns) {
+        width: auto!important;
     }
 
     .chat-leftside {
@@ -94,6 +98,22 @@
             margin: -1px 0 0 0;
             padding: 0;
         }
+    }
+
+    .resizebar {
+        position: absolute;
+        top: 0;
+        left: -3;
+        bottom: 0;
+        background: transparent;
+        width: 5px;
+
+        z-index: 10000;
+        cursor: e-resize;
+        cursor: ew-resize;
+        cursor: col-resize;
+
+        display: none;
     }
 
     .chat-leftside .header {
