@@ -384,7 +384,7 @@ Scenario('[C7394] Send mail with different text alignments', async function (I, 
     I.wait(0.5);
 
     // Fill out to and subject
-    I.waitForVisible('div.row[data-extension-id="to"]')
+    I.waitForVisible('div.row[data-extension-id="to"]');
     I.fillField('To', recipient.get('primaryEmail'));
     I.wait(0.5);
     I.fillField('Subject', mailSubject);
