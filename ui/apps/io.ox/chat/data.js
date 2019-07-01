@@ -436,9 +436,11 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
             room.set('lastMessage', lastMessage);
         }
 
-        var message = room.messages.get(messageId);
-        if (!message) return;
-        message.set('state', state);
+        room.messages.forEach(function (message) {
+            if (message.id > messageId) return;
+            if (message.get('state') === 'seen') return;
+            message.set('state', state);
+        });
     });
 
     socket.on('message:new', function (roomId, message) {
