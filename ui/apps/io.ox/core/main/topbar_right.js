@@ -84,6 +84,21 @@ define('io.ox/core/main/topbar_right', [
     });
 
     ext.point('io.ox/core/appcontrol/right').extend({
+        id: 'chat',
+        index: 125,
+        draw: function () {
+            if (!capabilities.has('chat')) return;
+
+            var node = $('<li role="presentation" class="launcher">').hide();
+            this.append(node);
+
+            require(['io.ox/chat/views/launcher'], function (ChatIcon) {
+                node.show().append(new ChatIcon().render().$el);
+            });
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/right').extend({
         id: 'search-mobile',
         index: 150,
         draw: function () {
