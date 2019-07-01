@@ -463,7 +463,7 @@ define('io.ox/calendar/main', [
                     app.perspective = views[item];
                     // trigger change perspective so toolbar is redrawn (no more lost today button)
                     app.getWindow().trigger('change:perspective', views[item]);
-                    if (_.device('smartphone')) settings.set('viewView', item);
+                    if (_.device('!smartphone')) settings.set('viewView', item);
                 });
                 node.on('pageshow', function () {
                     // update the indicator arrows after the page is visible, otherwise we get wrong calculations
