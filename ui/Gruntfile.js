@@ -17,7 +17,6 @@ module.exports = function (grunt) {
         // makes the module optional
         if (e.code !== 'MODULE_NOT_FOUND') throw e;
     }
-    console.log('foo')
 
     grunt.loadNpmTasks('@open-xchange/shared-grunt-config');
 
