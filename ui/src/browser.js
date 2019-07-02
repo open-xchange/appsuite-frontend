@@ -46,9 +46,9 @@
 
     // supported browsers
     us.browserSupport = {
-        'Chrome':    60,
+        'Chrome':    70,
         'Safari':    10,
-        'Firefox':   52,
+        'Firefox':   60,
         'IE':        11
     };
 
