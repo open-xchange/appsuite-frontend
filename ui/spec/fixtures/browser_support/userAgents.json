@@ -28,12 +28,12 @@
                 "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.104 Safari/537.36"
             },
             "60": {
-                "supported": true,
+                "supported": false,
                 "userAgent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.1847.131 Safari/537.36"
             },
-            "64": {
+            "70": {
                 "supported": true,
-                "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36"
+                "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3282.186 Safari/537.36"
             }
         },
         "ChromeiOS": {
@@ -54,20 +54,28 @@
                 "userAgent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/26.0"
             },
             "52": {
-                "supported": true,
                 "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:52.0) Gecko/20100101 Firefox/52.0"
             },
             "52 Windows": {
-                "supported": true,
                 "userAgent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0"
             },
             "52 Linux": {
-                "supported": true,
                 "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0"
             },
             "58": {
-                "supported": true,
                 "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:58.0) Gecko/20100101 Firefox/58.0"
+            },
+            "67": {
+                "supported": true,
+                "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:67.0) Gecko/20100101 Firefox/67.0"
+            },
+            "67 Windows": {
+                "supported": true,
+                "userAgent": "Mozilla/5.0 ((Windows NT 6.1; WOW64; rv:67.0) Gecko/20100101 Firefox/67.0"
+            },
+            "67 Linux": {
+                "supported": true,
+                "userAgent": "Mozilla/5.0 (X11; Linuxx86_64; rv:67.0) Gecko/20100101 Firefox/67.0"
             }
         },
         "FirefoxAndroid": {
@@ -121,7 +129,7 @@
             "6": {
                 "supported": true,
                 "platformSupport": true,
-                "userAgent": "Mozilla/5.0 (Linux; Android 6.0.1; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/60.0.1025.133 Mobile Safari/535.19"
+                "userAgent": "Mozilla/5.0 (Linux; Android 6.0.1; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/70.0.1025.133 Mobile Safari/535.19"
             }
         },
         "Blackberry": {
