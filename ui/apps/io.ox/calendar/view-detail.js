@@ -86,7 +86,20 @@ define('io.ox/calendar/view-detail', [
         {
             index: 200,
             id: 'recurrence',
-            draw: extensions.recurrence
+            draw: function (baton) {
+                var draw = _.bind(function (recurrenceMaster) {
+                    if (recurrenceMaster) baton.recurrenceMaster = recurrenceMaster;
+                    extensions.recurrence.call(this, baton);
+                }, this);
+
+                // get recurrenceMaster for exceptions too if the exception was not moved (just a simple check if the start date is still the same), to show some additional info like rrules etc.
+                if (util.hasFlag(baton.model, 'overridden') && moment(baton.model.get('recurrenceId')).valueOf() === util.getMoment(baton.model.get('startDate')).valueOf()) {
+                    calAPI.get({ id: baton.model.get('seriesId'), folder: baton.model.get('folder') }).then(draw, function () { draw(); });
+                    return;
+                }
+
+                draw();
+            }
         }
     );
 
