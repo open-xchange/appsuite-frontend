@@ -979,7 +979,7 @@ define('io.ox/calendar/util', [
             //     return 'color-label-' + folderColor;
             // }
 
-            if (!eventModel.hasFlag('organizer')) return folderColor;
+            if (!eventModel.hasFlag('organizer') && !eventModel.hasFlag('organizer_on_behalf')) return folderColor;
 
             // set color of appointment. if color is 0, then use color of folder
             return !eventColor ? folderColor : eventColor;
