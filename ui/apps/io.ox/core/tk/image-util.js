@@ -29,7 +29,7 @@ define('io.ox/core/tk/image-util', [
         var URL = window.URL || window.webkitURL,
             args = _(obj).map(function (value, key) {
                 var content = value.toString(),
-                    name = value.name || content.match(/^function\s*([^\s(]+)/)[1];
+                    name = value.name || (content.match(/^function\s*([^\s(]+)/) || [])[1];
                 if (!name || name === key) return 'var ' + key + ' = ' + content;
                 return 'var ' + key + ' = ' + name + ' = ' + content;
             }),
