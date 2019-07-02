@@ -24,7 +24,8 @@ define('io.ox/backbone/views/window', [
         // selector for window container for convenience purpose
         container = '#io-ox-core',
         // used when dragging, prevents iframe event issues
-        backdrop = $('<div id="floating-window-backdrop">');
+        backdrop = $('<div id="floating-window-backdrop">'),
+        minimalPixelsInside = 100;
 
     var TaskbarView = DisposableView.extend({
         tagName: 'ul',
@@ -161,9 +162,9 @@ define('io.ox/backbone/views/window', [
             if (this.model.get('minimized') || this.minimizing || this.$el.parent().length === 0) return;
 
             // move window
-            if (this.el.offsetLeft !== 0 || this.el.offsetTop !== 0) {
-                var left = Math.max(0, Math.min($(container).width() - this.el.offsetWidth, this.el.offsetLeft)),
-                    top = Math.max(0, Math.min($(container).height() - this.el.offsetHeight, this.el.offsetTop));
+            if (this.el.offsetLeft !== (minimalPixelsInside - this.el.offsetWidth) || this.el.offsetTop !== 0) {
+                var left = Math.max(minimalPixelsInside - this.el.offsetWidth, Math.min($(container).width() - minimalPixelsInside, this.el.offsetLeft)),
+                    top = Math.max(0, Math.min($(container).height() - minimalPixelsInside, this.el.offsetTop));
 
                 if (usePadding) {
                     var spaceLeftX = $(container).width() - this.el.offsetWidth,
@@ -191,8 +192,10 @@ define('io.ox/backbone/views/window', [
             }
 
             // resize window
+            // doesn't really work if we allow overlapping
+
             // if there is enough space available, expand the window to original proportions, if not make it smaller
-            if (this.el.offsetLeft === 0) {
+            /*if (this.el.offsetLeft === 0) {
                 if (this.model.get('initialWidth') === undefined) this.model.set('initialWidth', this.el.offsetWidth);
                 this.$el.css('width', Math.min($(container).width(), this.model.get('initialWidth')) + 'px');
             }
@@ -201,7 +204,7 @@ define('io.ox/backbone/views/window', [
             if (this.model.get('mode') === 'normal' && this.el.offsetTop === 0) {
                 if (this.model.get('initialHeight') === undefined) this.model.set('initialHeight', this.el.offsetHeight);
                 this.$el.css('height', Math.min($(container).height(), this.model.get('initialHeight')) + 'px');
-            }
+            }*/
         },
 
         startDrag: function (e) {

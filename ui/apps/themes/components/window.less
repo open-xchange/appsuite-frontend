@@ -485,7 +485,8 @@
 
 .floating-window {
 
-    position: absolute;
+    // needed or you move the UI when the window overlaps at the right side or bottom
+    position: fixed;
     // higher than taskbar
     z-index: 12;
     background: transparent;
@@ -495,6 +496,17 @@
     &.active {
         z-index: 14;
         .floating-window-content { .elevation-3(); }
+        .floating-header {
+            background: #333;
+            h1 {
+                color: white;
+            }
+            .controls {
+                button {
+                    color: white;
+                }
+            }
+        }
     }
 
     .window-body, .container {
@@ -574,9 +586,11 @@
     .floating-header {
         height: @headerHeight;
         bottom: auto;
-        background: #333;
+        background: #ddd;
         padding: 0 8px 0 16px;
         display: flex;
+
+
         cursor: move;
 
         h1 {
@@ -585,7 +599,7 @@
             font-size: 13px;
             font-weight: bold;
             line-height: @headerHeight;
-            color: white;
+            color: #5b5b5b;
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
@@ -601,7 +615,7 @@
             flex-shrink: 0;
 
             button {
-                color: white;
+                color: #5b5b5b;
                 line-height: @headerHeight - 2;
                 padding: 0 8px;
                 display: inline-block;
