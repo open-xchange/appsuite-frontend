@@ -28,6 +28,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             this.label = options.label;
             this.exclude = options.exclude;
             this.disable = options.disable;
+            this.display = options.display || 'inline';
             this.rootAlwaysVisible = options.rootAlwaysVisible;
             // render folder as link although the user has only a read right
             this.linkReadOnly = options.linkReadOnly;
@@ -36,6 +37,9 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
 
             // last item is a normal item (not a unclickable tail node)
             this.notail = options.notail;
+
+            // when container is used as single block element
+            if (this.display === 'block') this.computeWidth = $.noop;
 
             if (options.app) {
 
@@ -56,7 +60,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
                     };
                 }
 
-                this.listenToDOM(window, 'resize', this.computeWidth);
+                if (this.display !== 'block') this.listenToDOM(window, 'resize', this.computeWidth);
             }
         },
 
