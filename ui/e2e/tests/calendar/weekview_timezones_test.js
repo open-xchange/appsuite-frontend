@@ -43,8 +43,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.seeNumberOfElements('//div[contains(concat(" ", @class, " "), "workweek")]//div[@class="title" and text()="test timezones"]', 1);
 
     // switch to settings
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings', '#topbar-settings-dropdown');
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
 
     I.waitForVisible('.io-ox-settings-window .leftside [title="Calendar"]');
 
@@ -103,8 +102,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.waitForDetached('.io-ox-sidepopup');
 
     // switch to settings
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings', '#topbar-settings-dropdown');
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
 
     I.waitForVisible('.io-ox-settings-window');
 
@@ -125,8 +123,7 @@ Scenario('Create appointment and switch timezones', async function (I) {
     I.see('7 AM', '.week-container-label:not(.secondary-timezone) .working-time-border .number');
 
     // switch to settings
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings', '#topbar-settings-dropdown');
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
 
     I.waitForVisible('.io-ox-settings-window');
 

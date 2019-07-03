@@ -133,9 +133,7 @@ Test
     I.dontSee('Erisian Dialectic');
 
     // Change the setting
-    I.click('[title=Settings]');
-    I.waitForVisible('#topbar-settings-dropdown');
-    I.click('Settings');
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
 
     I.waitForElement(locate('.folder[aria-label=Calendar]'));
     I.click(locate('.folder[aria-label=Calendar]'));

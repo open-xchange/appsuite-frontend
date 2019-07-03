@@ -51,9 +51,7 @@ Scenario('[C85624] Configure postal addresses map service @shaky', async (I) =>{
 
 async function verifyMapType(I, mapName, link, value) {
     // Go back to settings and switch to other display style
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.waitForVisible('#topbar-settings-dropdown');
-    I.click('Settings');
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
 
     // Select address book settings
     I.waitForText('Address Book', 5, '.folder-node');

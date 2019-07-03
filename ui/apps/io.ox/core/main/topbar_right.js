@@ -139,7 +139,7 @@ define('io.ox/core/main/topbar_right', [
         index: 400,
         draw: function () {
             this.append(
-                addLauncher('right', $('<i class="fa fa-cog launcher-icon" aria-hidden="true">'), function () {
+                addLauncher('right', $('<i class="fa fa-cog launcher-icon" aria-hidden="true">').attr('title', gt('Settings')), function () {
                     ox.launch('io.ox/settings/main');
                 }, gt('Settings'))
                 .attr('id', 'io-ox-settings-topbar-icon')

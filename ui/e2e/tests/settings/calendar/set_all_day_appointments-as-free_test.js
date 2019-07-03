@@ -33,8 +33,8 @@ Scenario('[C7866] Set all-day appointments to be marked as free', async function
     I.login(['app=io.ox/calendar&perspective=week:week']);
 
     // Make sure setting is set correctly
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings');
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
+
     I.waitForVisible('div[data-point="io.ox/core/settings/detail/view"]');
     I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
     I.waitForElement('.alarms-link-view .btn-link');
@@ -53,8 +53,7 @@ Scenario('[C7866] Set all-day appointments to be marked as free', async function
     I.waitForElement('div.appointment.reserved');
 
     // Change setting
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings');
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
     I.waitForVisible('div[data-point="io.ox/calendar/settings/detail/view"]');
     I.waitForElement('.alarms-link-view .btn-link');
     I.click('Mark all day appointments as free');

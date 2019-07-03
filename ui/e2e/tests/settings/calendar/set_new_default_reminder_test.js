@@ -29,14 +29,13 @@ Scenario('[C7867] Set new default reminder @shaky', async function (I) {
     const alaramRelated = 'before start';
     I.login();
 
-    /////////Default reminder
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings');
+    // Default reminder
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
     I.waitForVisible('li[data-id="virtual/settings/io.ox/calendar"]');
     I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
     I.waitForElement('.alarms-link-view .btn-link');
 
-    //  I.click('.alarms-link-view .btn-link');
+    //I.click('.alarms-link-view .btn-link');
     I.click(
         locate('.form-group')
             .withChild(locate('label').withText('Default reminder'))

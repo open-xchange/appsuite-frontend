@@ -45,8 +45,7 @@ Scenario('Compose and discard with/without prompts', async function (I, users) {
     I.dontSee('Do you really want to discard your message?');
 
     // workflow 3: Compose & discard with signature and vcard
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings', '#topbar-settings-dropdown');
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
 
     I.selectFolder('Mail');
     I.waitForVisible('.rightside h1');

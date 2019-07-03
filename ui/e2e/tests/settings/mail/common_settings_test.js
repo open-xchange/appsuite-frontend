@@ -78,9 +78,7 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
     });
 
     // switch back to settings
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.waitForVisible('#topbar-settings-dropdown');
-    I.click('Settings');
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
 
     I.checkOption('HTML');
     I.seeCheckboxIsChecked('[name="messageFormat"][value="html"]');
@@ -112,9 +110,7 @@ Scenario('[C7779] Mail formatting @shaky', async function (I, users) {
     });
 
     // switch back to settings
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.waitForVisible('#topbar-settings-dropdown');
-    I.click('Settings');
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
 
     I.checkOption('HTML and plain text');
     I.seeCheckboxIsChecked('[name="messageFormat"][value="alternative"]');

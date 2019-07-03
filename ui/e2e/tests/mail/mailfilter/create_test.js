@@ -491,9 +491,7 @@ Scenario('[C83386] Create mail filter based on mail', async function (I, users) 
 
 Scenario('[C274412] Filter mail by size', async function (I, users) {
     function createOrEditFilterRule(I, name, oldSize, newSize, edit) {
-        I.click('[title=Settings]');
-        I.waitForVisible('#topbar-settings-dropdown');
-        I.click('Settings');
+        I.click('~Settings', '#io-ox-settings-topbar-icon');
 
         I.waitForVisible('.io-ox-settings-main');
         I.selectFolder('Mail');

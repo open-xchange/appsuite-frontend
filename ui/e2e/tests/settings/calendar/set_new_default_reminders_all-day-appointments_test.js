@@ -28,9 +28,8 @@ Scenario('[C244799] Set new default reminder for all-day appointments @shaky', a
     const alaramRelated = 'before start';
     I.login();
 
-    /////////Default reminder
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings');
+    // Default reminder
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
     I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
     I.waitForElement('.alarms-link-view .btn-link');
     I.click(

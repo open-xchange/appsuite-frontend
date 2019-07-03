@@ -33,8 +33,7 @@ Scenario('Change working time and check in weekview', async function (I) {
     I.see('5 PM', '.week-container-label .working-time-border.in .number');
 
     // switch to settings
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('Settings', '#topbar-settings-dropdown');
+    I.click('~Settings', '#io-ox-settings-topbar-icon');
 
     I.waitForVisible('.io-ox-settings-window .leftside [title="Calendar"]');
     I.click('~Calendar', '.leftside');
