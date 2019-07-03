@@ -40,10 +40,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
      * e.g. guest account is realized too late
      */
     function disable() {
-        ox.tabHandlingEnabled = false;
-        util.checkTabHandlingSupport = function () {
-            return false;
-        };
+        require('io.ox/core/api/tab').disable();
     }
 
     /**

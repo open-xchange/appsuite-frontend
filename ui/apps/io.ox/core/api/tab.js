@@ -23,7 +23,9 @@ define('io.ox/core/api/tab', [
     // PRIVATE --------------------------------------------------
 
     var initialized = false,
-        api;
+        api,
+        _api = {},
+        _checkTabHandlingSupport;
 
     /**
      * Initialization of the TabAPI.
@@ -37,7 +39,43 @@ define('io.ox/core/api/tab', [
 
         tabCommunication.setWindowNameObject(tabHandling.getWindowNameObject());
         initListener();
+
+        _.extend(_api, api); // backup api functions
+        _checkTabHandlingSupport = util.checkTabHandlingSupport; // backup function
+
+        if (util.checkTabHandlingSupport) {
+            enable();
+        } else {
+            disable();
+        }
+
         initialized = true;
+    }
+
+    /**
+     * Disable the whole TabAPI
+     */
+    function disable() {
+        for (var key in api) {
+            if (api.hasOwnProperty(key)) {
+                api[key] = $.noop;
+            }
+        }
+
+        ox.tabHandlingEnabled = false;
+        util.checkTabHandlingSupport = function () {
+            return false;
+        };
+    }
+
+    /**
+     * Enable the whole TabAPI
+     */
+    function enable() {
+        _.extend(api, _api);
+
+        ox.tabHandlingEnabled = true;
+        util.checkTabHandlingSupport = _checkTabHandlingSupport;
     }
 
     /**
@@ -78,6 +116,12 @@ define('io.ox/core/api/tab', [
         openNewTab: function (url, windowNameObject) {
             return tabHandling.openTab(url, windowNameObject);
         },
+
+        // Disable the TabAPI
+        disable: disable,
+
+        // Enable the TabAPI
+        enable: enable,
 
         // Creates the URL for a new browser tab. Adds the anchor parameters of the
         // current URL (except for specific parameters) to the new URL.
