@@ -26,7 +26,7 @@ function getToday() {
 }
  
 module.exports = (config) => {
-	if (config.enabled){
+	if (config.enabled === true){
 		config = Object.assign(defaultConfig, config);
 		if (config.host === '' || config.user === '' || config.password === '') throw new Error('Please provide proper Testrail host or credentials');
 		if (!config.project_id) throw new Error('Please provide project id');
