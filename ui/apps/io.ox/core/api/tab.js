@@ -514,7 +514,6 @@ define('io.ox/core/api/tab', [
 
         TabSession.events.listenTo(TabSession.events, 'propagateLogin', function (parameters) {
             if (!ox.signin && !parameters.relogin) return;
-            if (ox.debug) console.warn('TabHandling.listener(propagateLogin)', _.clone(parameters));
             require(['io.ox/core/boot/login/tabSession'], function (tabSessionLogin) {
                 tabSessionLogin(parameters);
             });
@@ -594,7 +593,6 @@ define('io.ox/core/api/tab', [
             }, 50);
 
         TabSession.events.listenTo(TabSession.events, 'propagateSession', function (loginData) {
-            if (ox.debug) console.warn('TabHandling.listener(propagateSession)', _.clone(loginData), { hash: _.url.hash('session') });
             if (_.url.hash('session') && loginData.session !== _.url.hash('session')) {
                 TabHandling.disable();
                 def.reject();
@@ -611,22 +609,11 @@ define('io.ox/core/api/tab', [
      */
     TabSession.propagateSession = function (parameters) {
         if (!ox.session) {
-            if (ox.debug) console.warn('TabHandling.propagateSession', 'propagateNoSession');
             TabSession.propagate('propagateNoSession');
             return;
         }
         if (parameters.session && parameters.session !== ox.session) {
             return;
-        }
-        if (ox.debug) {
-            console.warn('TabHandling.propagateSession', {
-                session: ox.session,
-                locale: ox.locale,
-                theme: ox.theme,
-                user: ox.user,
-                user_id: ox.user_id,
-                context_id: ox.context_id
-            });
         }
         TabSession.propagate('propagateSession', {
             session: ox.session,
@@ -649,17 +636,6 @@ define('io.ox/core/api/tab', [
      * Send a session over localStorage to login logged out tabs
      */
     TabSession.propagateLogin = function (relogin) {
-        if (ox.debug) {
-            console.warn('TabHandling.propagateLogin', {
-                session: ox.session,
-                locale: ox.locale,
-                theme: ox.theme,
-                user: ox.user,
-                user_id: ox.user_id,
-                context_id: ox.context_id,
-                relogin: relogin
-            });
-        }
         TabSession.propagate('propagateLogin', {
             session: ox.session,
             locale: ox.locale,
