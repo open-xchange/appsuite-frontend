@@ -221,10 +221,11 @@ Scenario('[C7359] - Expand/collapse all contact edit sections', function (I) {
 
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
-    I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
+    I.waitForDetached('a.dropdown-toggle.disabled');
     // toolbar dropdown
     I.click('New contact');
     // real action in dropdown
+    I.waitForVisible('.dropdown-menu');
     I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
     I.waitForVisible('.io-ox-contacts-edit-window');
 
@@ -283,6 +284,7 @@ Scenario('[C7359] - Expand/collapse all contact edit sections', function (I) {
     I.fillField('note', 'a comment in the comment field');
     I.click('Show all fields');
 
+    I.wait(1);
     I.click('Save');
     I.waitForDetached('.io-ox-contacts-edit-window');
 
