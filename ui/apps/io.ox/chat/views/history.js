@@ -60,7 +60,7 @@ define('io.ox/chat/views/history', [
                     new ChatAvatar({ model: model }).render().$el,
                     $('<div class="title">').text(model.getTitle()),
                     $('<div class="date">').text(model.getLastMessageDate()),
-                    $('<div class="body">').text(model.getLastMessage()),
+                    $('<div class="body">').append(model.getLastMessage()),
                     $('<button type="button" class="btn btn-default btn-action" >')
                         .attr({ 'data-cmd': 'open-chat', 'data-id': model.id })
                         .text('Open')

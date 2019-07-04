@@ -22,7 +22,7 @@ define('io.ox/chat/views/chatListEntry', [
         attributes: function () {
             return {
                 'data-cmd': 'show-chat',
-                'data-cid': this.model.cid
+                'data-cid': this.model.get('id') || this.model.cid
             };
         },
 
@@ -58,7 +58,7 @@ define('io.ox/chat/views/chatListEntry', [
                             $('<div class="sender">')
                                 .toggleClass('hidden', isCurrentUser || isPrivate || isSystemMessage)
                                 .text(model.getLastSenderName() + ':'),
-                            $('<div class="text-preview">').text(model.getLastMessage()),
+                            $('<div class="text-preview">').append(model.getLastMessage()),
                             $('<div class="label-container">').append(
                                 $('<span class="label label-info">').text(model.get('unreadCount'))
                             )
@@ -84,7 +84,7 @@ define('io.ox/chat/views/chatListEntry', [
                 isPrivate = model.get('type') === 'private';
 
             this.$('.last-modified').text(model.getLastMessageDate());
-            this.$('.text-preview').text(model.getLastMessage());
+            this.$('.text-preview').append(model.getLastMessage());
             this.$('.delivery')
                 .toggleClass('hidden', !isCurrentUser)
                 .removeClass('server client seen')
