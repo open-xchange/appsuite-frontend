@@ -618,14 +618,16 @@ define('io.ox/core/api/tab', [
         if (parameters.session && parameters.session !== ox.session) {
             return;
         }
-        if (ox.debug) console.warn('TabHandling.propagateSession', {
-            session: ox.session,
-            locale: ox.locale,
-            theme: ox.theme,
-            user: ox.user,
-            user_id: ox.user_id,
-            context_id: ox.context_id
-        });
+        if (ox.debug) {
+            console.warn('TabHandling.propagateSession', {
+                session: ox.session,
+                locale: ox.locale,
+                theme: ox.theme,
+                user: ox.user,
+                user_id: ox.user_id,
+                context_id: ox.context_id
+            });
+        }
         TabSession.propagate('propagateSession', {
             session: ox.session,
             locale: ox.locale,
@@ -647,15 +649,17 @@ define('io.ox/core/api/tab', [
      * Send a session over localStorage to login logged out tabs
      */
     TabSession.propagateLogin = function (relogin) {
-        if (ox.debug) console.warn('TabHandling.propagateLogin', {
-            session: ox.session,
-            locale: ox.locale,
-            theme: ox.theme,
-            user: ox.user,
-            user_id: ox.user_id,
-            context_id: ox.context_id,
-            relogin: relogin
-        });
+        if (ox.debug) {
+            console.warn('TabHandling.propagateLogin', {
+                session: ox.session,
+                locale: ox.locale,
+                theme: ox.theme,
+                user: ox.user,
+                user_id: ox.user_id,
+                context_id: ox.context_id,
+                relogin: relogin
+            });
+        }
         TabSession.propagate('propagateLogin', {
             session: ox.session,
             locale: ox.locale,
