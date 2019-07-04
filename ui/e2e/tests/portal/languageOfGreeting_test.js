@@ -44,7 +44,7 @@ Scenario('[C7496] Language of Greeting', async (I) => {
     I.click('#topbar-settings-dropdown a[data-name="io.ox/settings"]');
     I.waitForText('Grundeinstellungen');
     I.waitForText('Sprache');
-    I.selectOption('select[name="language"]', 'Français');
+    I.selectOption('select[name="language"]', 'fr_FR');
     I.waitForText('Zeitzone');
     I.waitForVisible('.io-ox-alert');
 

@@ -86,13 +86,13 @@ Scenario('Create never ending appointment and check display in several views', a
     I.click('Week');
     I.waitForVisible('.weekview-container.week button.weekday.today', 5);
 
-    I.see('test caching', '.weekview-container.week .appointment .title');
+    I.waitForText('test caching', undefined, '.weekview-container.week .appointment .title');
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 6);
     I.click('~Next Week', '.weekview-container.week');
     I.wait(2); // Nothing else seems to work here
     I.dontSeeElement('.weekview-container.week button.weekday.today');
 
-    I.see('test caching', '.weekview-container.week .appointment .title');
+    I.waitForText('test caching', undefined, '.weekview-container.week .appointment .title');
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 7);
     I.click('~Previous Week', '.weekview-container.week');
     I.waitForVisible('.weekview-container.week button.weekday.today', 5);
@@ -110,7 +110,7 @@ Scenario('Create never ending appointment and check display in several views', a
     I.click('~Next Month', '.monthview-container');
     I.dontSeeElement('.monthview-container td.day.today:not(.out)');
 
-    I.see('test caching', '.monthview-container .appointment .title');
+    I.waitForText('test caching', undefined, '.monthview-container .appointment .title');
     I.seeNumberOfElements('.monthview-container .day:not(.out) .appointment .title', moment().add(2, 'months').daysInMonth());
 
     I.logout();
