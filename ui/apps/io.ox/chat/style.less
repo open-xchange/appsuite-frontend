@@ -39,6 +39,7 @@
         .chat-leftside {
             flex: 1;
             width: 100%;
+            background-color: #fff;
         }
         .chat-rightside { display: none; }
 
@@ -57,6 +58,8 @@
         }
 
         .resizebar { display: block; }
+
+        .chats li:hover { background-color: @backgroundColor; }
     }
 
     &:not(.columns) {
@@ -154,6 +157,7 @@
         background-color: white;
         height: @searchHeight;
         position: relative;
+        border-bottom: 1px solid @borderColor;
 
         input {
             border: 0;
@@ -180,6 +184,7 @@
     }
 
     .navigation-actions {
+        border-top: 1px solid @borderColor;
 
         .btn-nav {
             position: relative;
@@ -223,8 +228,6 @@
             border-bottom: 1px solid @borderColor;
             display: flex;
             cursor: pointer;
-
-            &:first-child { border-top: 1px solid @borderColor; }
 
             &:hover {
                 background-color: white;
