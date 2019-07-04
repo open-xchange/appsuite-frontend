@@ -326,21 +326,21 @@ define('io.ox/chat/main', [
                     // search results
                     new SearchResultView().render().$el,
                     // chats
-                    new ChatListView({ collection: data.chats }).render().$el,
-                    // navigation
-                    $('<div class="navigation">').append(
-                        $('<button type="button" class="btn-nav" data-cmd="show-recent-conversations">').append(
-                            $('<i class="fa fa-clock-o btn-icon">'),
-                            $.txt('Recent conversations')
-                        ),
-                        $('<button type="button" class="btn-nav" data-cmd="show-channels">').append(
-                            $('<i class="fa fa-hashtag btn-icon">'),
-                            $.txt('All channels')
-                        ),
-                        $('<button type="button" class="btn-nav" data-cmd="show-all-files">').append(
-                            $('<i class="fa fa-paperclip btn-icon">'),
-                            $.txt('All files')
-                        )
+                    new ChatListView({ collection: data.chats }).render().$el
+                ),
+                // recent, all channels, all files
+                $('<div class="navigation-actions">').append(
+                    $('<button type="button" class="btn-nav" data-cmd="show-recent-conversations">').append(
+                        $('<i class="fa fa-clock-o btn-icon">'),
+                        $.txt('Recent conversations')
+                    ),
+                    $('<button type="button" class="btn-nav" data-cmd="show-channels">').append(
+                        $('<i class="fa fa-hashtag btn-icon">'),
+                        $.txt('All channels')
+                    ),
+                    $('<button type="button" class="btn-nav" data-cmd="show-all-files">').append(
+                        $('<i class="fa fa-paperclip btn-icon">'),
+                        $.txt('All files')
                     )
                 )
             ),
