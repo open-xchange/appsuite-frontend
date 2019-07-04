@@ -35,8 +35,7 @@ Scenario('[C7886] Enable hidden folders and files', async function (I) {
     //check for hidden file and folder
     I.see('.hiddenfolder', '.list-view');
     I.see('.hiddenfile.dat', '.list-view');
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('.open [data-name="io.ox/settings"]');
+    I.click('#io-ox-settings-topbar-icon');
     I.waitForVisible('.settings-detail-pane');
     I.click('.folder-node[title="Drive"]');
     I.waitForVisible('[data-point="io.ox/files/settings/detail/view"]');
@@ -60,8 +59,7 @@ Scenario('[C7887] Disable hidden folders and files', async function (I) {
     //check for hidden file and folder
     I.dontSee('.hiddenfolder', '.list-view');
     I.dontSee('.hiddenfile.dat', '.list-view');
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.click('.open [data-name="io.ox/settings"]');
+    I.click('#io-ox-settings-topbar-icon');
     I.waitForVisible('.folder-node[title="Drive"]');
     I.click('.folder-node[title="Drive"]');
     I.waitForVisible('[data-point="io.ox/files/settings/detail/view"]');

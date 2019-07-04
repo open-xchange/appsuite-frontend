@@ -21,9 +21,7 @@ After(async (users) => {
 });
 
 function changeTimezoneAndGoToPortal(I, timezone) {
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.waitForVisible('#topbar-settings-dropdown');
-    I.click('#topbar-settings-dropdown a[data-name="io.ox/settings"]');
+    I.click('#io-ox-settings-topbar-icon');
     I.waitForText('Basic settings');
     I.waitForText('Time zone');
     I.selectOption('select[name="timezone"]', timezone); // -7
