@@ -11,7 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3rd.party/socket.io.slim.js'], function (events, api, io) {
+define('io.ox/chat/data', [
+    'io.ox/chat/events',
+    'io.ox/contacts/api',
+    'static/3rd.party/socket.io.slim.js',
+    'io.ox/mail/sanitizer'
+], function (events, api, io, sanitizer) {
 
     'use strict';
 
@@ -144,7 +149,7 @@ define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3r
         getTextBody: function () {
             if (this.isSystem()) return $(this.getSystemMessage()).text();
             if (this.isImage()) return ''; // TODO return image preview
-            return _.escape(this.get('body'));
+            return sanitizer.simpleSanitize(this.get('body'));
         },
 
         isSystem: function () {

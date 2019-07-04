@@ -181,6 +181,11 @@
         flex-direction: column;
         overflow-y: auto;
         padding-bottom: 8px;
+
+        &.show-search {
+            .chats { display: none; }
+            .search-result { display: block; }
+        }
     }
 
     .navigation-actions {
@@ -218,7 +223,7 @@
         padding: 0;
     }
 
-    .chats {
+    .chats, .search-result {
         flex-grow: 1;
         margin-bottom: 32px;
         padding: 0;
@@ -717,14 +722,9 @@
     }
 
     .search-result {
-        border-bottom: 1px solid @borderColor;
-        margin-bottom: 16px;
-        list-style-type: none;
-        padding: 8px 0;
-        li {
-            padding: 8px 16px;
-            b { background-color: #FFD54F; }
-        }
+        display: none;
+
+        b.search-highlight { background-color: #FFD54F; }
     }
 
     .typing .name {
