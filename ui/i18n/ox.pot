@@ -6381,16 +6381,16 @@ msgstr[1] ""
 
 #: apps/io.ox/core/main/topbar_right.js
 #: module:io.ox/core
-#: apps/plugins/portal/upsell/register.js
-#: module:plugins/portal
-msgid "Upgrade your account"
+#: apps/io.ox/multifactor/login/loginScreen.js
+#: apps/io.ox/settings/main.js
+msgid "Settings"
 msgstr ""
 
 #: apps/io.ox/core/main/topbar_right.js
 #: module:io.ox/core
-#: apps/io.ox/multifactor/login/loginScreen.js
-#: apps/io.ox/settings/main.js
-msgid "Settings"
+#: apps/plugins/portal/upsell/register.js
+#: module:plugins/portal
+msgid "Upgrade your account"
 msgstr ""
 
 #. starts the client onboarding wizard that helps users
