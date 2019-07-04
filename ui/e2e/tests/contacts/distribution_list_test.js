@@ -57,6 +57,7 @@ Scenario('Add a distribution list to an existing distribution list @shaky', func
 
     // create second list
     I.click('New contact');
+    I.waitForVisible('.dropdown-menu');
     I.click('New distribution list');
     I.waitForVisible('.io-ox-contacts-distrib-window', 5);
     I.fillField('Name', 'test distribution list two');

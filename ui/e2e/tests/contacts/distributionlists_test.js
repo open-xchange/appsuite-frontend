@@ -64,8 +64,9 @@ async function createDistributionListExample(I, users, testrailID) {
 Scenario('[C7372] Create new distribution list @shaky', function (I, users) {
     const display_name = uniqueName('C7372');
     prepare(I);
-
+    I.waitForDetached('a.dropdown-toggle.disabled');
     I.click('New contact');
+    I.waitForVisible('.dropdown-menu');
     I.click('New distribution list');
     I.waitForVisible('.floating-window-content');
     I.fillField('Name', display_name);

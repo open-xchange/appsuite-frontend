@@ -88,10 +88,11 @@ Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions) @shaky
 Scenario('Contacts - New contact window', async (I) => {
 
     prepare(I);
-    I.waitForDetached('.classic-toolbar [data-dropdown="io.ox/contacts/toolbar/new"].disabled');
+    I.waitForDetached('a.dropdown-toggle.disabled');
     // toolbar dropdown
     I.click('New contact');
     // real action in dropdown
+    I.waitForVisible('.dropdown-menu');
     I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
     I.waitForText('Personal information');
 
@@ -105,7 +106,9 @@ Scenario('Contacts - New distribution list window (with exceptions)', async (I) 
 
     prepare(I);
     I.waitForElement('[title="Actions for Contacts"]');
+    I.waitForDetached('a.dropdown-toggle.disabled');
     I.click('New contact');
+    I.waitForVisible('.dropdown-menu');
     I.click('New distribution list');
     I.waitForText('Participants');
 

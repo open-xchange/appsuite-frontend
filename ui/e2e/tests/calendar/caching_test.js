@@ -35,6 +35,7 @@ Scenario('Create never ending appointment and check display in several views', a
     I.dontSeeElement('.weekview-container.week button.weekday.today');
     I.click('~Previous Week', '.weekview-container.week');
     I.waitForVisible('.weekview-container.week button.weekday.today');
+    I.click('.date.today', '.date-picker');
 
     // toggle months to activate caching
     I.clickToolbar('View');
@@ -96,6 +97,7 @@ Scenario('Create never ending appointment and check display in several views', a
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 7);
     I.click('~Previous Week', '.weekview-container.week');
     I.waitForVisible('.weekview-container.week button.weekday.today', 5);
+    I.click('.date.today', '.date-picker');
     // check in month view
     I.clickToolbar('View');
     I.click('Month');

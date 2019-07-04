@@ -28,10 +28,11 @@ Scenario('[C7354] - Create new contact', function (I) {
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
-    I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
+    I.waitForDetached('a.dropdown-toggle.disabled');
     // toolbar dropdown
     I.click('New contact');
     // real action in dropdown
+    I.waitForVisible('.dropdown-menu');
     I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
     I.waitForVisible('.io-ox-contacts-edit-window');
     I.checkOption('Show all fields');
@@ -186,10 +187,11 @@ Scenario('[C7358] - Remove contact picture @shaky', function (I, search) {
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
-    I.waitForDetached('.classic-toolbar [data-action="create"].disabled');
+    I.waitForDetached('a.dropdown-toggle.disabled');
     // toolbar dropdown
     I.click('New contact');
     // real action in dropdown
+    I.waitForVisible('.dropdown-menu');
     I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
     I.waitForVisible('.io-ox-contacts-edit-window');
     I.fillField('First name', testrailID);
