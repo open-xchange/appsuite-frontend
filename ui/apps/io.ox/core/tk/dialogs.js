@@ -834,6 +834,10 @@ define('io.ox/core/tk/dialogs', [
                     sidepopup.close();
                 }
 
+                if (e) {
+                    e.stopPropagation();
+                }
+
                 // remember as current trigger
                 self.lastTrigger = this;
                 previousProp = sidepopup;
