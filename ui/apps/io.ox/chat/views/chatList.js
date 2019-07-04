@@ -14,9 +14,8 @@
 define('io.ox/chat/views/chatList', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/state',
-    'io.ox/chat/views/chatAvatar',
-    'io.ox/chat/data'
-], function (DisposableView, StateView, ChatAvatar, data) {
+    'io.ox/chat/views/chatListEntry'
+], function (DisposableView, StateView, ChatListEntryView) {
 
     'use strict';
 
@@ -30,11 +29,8 @@ define('io.ox/chat/views/chatList', [
             this.listenTo(this.collection, {
                 'add': this.onAdd,
                 'remove': this.onRemove,
-                'change:title': this.onChangeTitle,
-                'change:unreadCount': this.onChangeUnreadCount,
-                'change:lastMessage': this.onChangeLastMessage,
-                'change:modified': this.onChangeModified,
-                'change:open': this.onChangeOpen
+                'change:open': this.onChangeOpen,
+                'change:modified': this.onChangeModified
             });
         },
 
@@ -45,35 +41,7 @@ define('io.ox/chat/views/chatList', [
         },
 
         renderItem: function (model) {
-            var lastMessage = model.get('lastMessage'),
-                isCurrentUser = lastMessage.senderId.toString() === data.user_id.toString(),
-                isPrivate = model.get('type') === 'private',
-                isSystemMessage = lastMessage.type === 'system';
-
-            return $('<li data-cmd="show-chat">')
-                .toggleClass('unseen', model.get('unreadCount') > 0)
-                .attr('data-cid', model.cid)
-                .append(
-                    new ChatAvatar({ model: model }).render().$el,
-                    $('<div class="chats-container">').append(
-                        $('<div class="chats-row">').append(
-                            $('<div class="title">').text(model.getTitle()),
-                            $('<div class="last-modified">').text(model.getLastMessageDate())
-                        ),
-                        $('<div class="chats-row">').append(
-                            $('<div class="fa delivery">')
-                                .toggleClass('hidden', !isCurrentUser || isSystemMessage)
-                                .addClass(lastMessage.state),
-                            $('<div class="sender">')
-                                .toggleClass('hidden', isCurrentUser || isPrivate || isSystemMessage)
-                                .text(model.getLastSenderName() + ':'),
-                            $('<div class="text-preview">').text(model.getLastMessage()),
-                            $('<div class="label-container">').append(
-                                $('<span class="label label-info">').text(model.get('unreadCount'))
-                            )
-                        )
-                    )
-                );
+            return new ChatListEntryView({ model: model }).render().$el;
         },
 
         renderIcon: function (model) {
@@ -112,22 +80,6 @@ define('io.ox/chat/views/chatList', [
             this.getNode(model).remove();
         },
 
-        onChangeTitle: function (model) {
-            this.getNode(model).find('.title').text(model.getTitle() || '\u00A0');
-        },
-
-        onChangeUnreadCount: function (model) {
-            var count = model.get('unreadCount');
-            this.getNode(model).toggleClass('unseen', count > 0).find('.label').text(count);
-        },
-
-        onChangeModified: function (model) {
-            var node = this.getNode(model),
-                hasFocus = node[0] === document.activeElement;
-            this.$el.prepend(node);
-            if (hasFocus) node.focus();
-        },
-
         onChangeOpen: function (model, value) {
             if (value) {
                 this.$el.prepend(this.renderItem(model));
@@ -136,20 +88,11 @@ define('io.ox/chat/views/chatList', [
             }
         },
 
-        onChangeLastMessage: function (model) {
+        onChangeModified: function (model) {
             var node = this.getNode(model),
-                isCurrentUser = model.get('lastMessage').senderId.toString() === data.user_id.toString(),
-                isPrivate = model.get('type') === 'private';
-
-            node.find('.last-modified').text(model.getLastMessageDate());
-            node.find('.text-preview').text(model.getLastMessage());
-            node.find('.delivery')
-                .toggleClass('hidden', !isCurrentUser)
-                .removeClass('server client seen')
-                .addClass(model.get('lastMessage').state);
-            node.find('.sender')
-                .toggleClass('hidden', isCurrentUser || isPrivate)
-                .text(model.getLastSenderName());
+                hasFocus = node[0] === document.activeElement;
+            this.$el.prepend(node);
+            if (hasFocus) node.focus();
         }
     });
 
