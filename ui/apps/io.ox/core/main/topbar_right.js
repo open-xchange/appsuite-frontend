@@ -306,8 +306,12 @@ define('io.ox/core/main/topbar_right', [
         id: 'dropdown',
         index: 1000,
         draw: function () {
-            var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
-                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('title', ox.openedInBrowserTab ? gt('Sign out') : gt('Settings')),
+            var title = ox.openedInBrowserTab ?
+                    gt('Sign out') :
+                    //#. tooltip of dropdown menu in topbar (contact image icon)
+                    gt('Support'),
+                ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
+                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('aria-title', title),
                 dropdown = new Dropdown({
                     attributes: { role: 'presentation' },
                     tagName: 'li',
@@ -330,7 +334,7 @@ define('io.ox/core/main/topbar_right', [
             function updatePicture() {
                 a.empty().append(
                     contactAPI.pictureHalo(
-                        $('<div class="contact-picture" aria-hidden="true">')
+                        $('<div class="contact-picture" aria-hidden="true">').attr('title', title)
                         .append(userAPI.getTextNode(ox.user_id, { type: 'initials' })),
                         { internal_userid: ox.user_id },
                         { width: 40, height: 40, fallback: false }
