@@ -124,6 +124,7 @@ define('io.ox/contacts/util', [
             var first_name = $.trim(obj.first_name),
                 last_name = $.trim(obj.last_name),
                 display_name = $.trim(obj.display_name || obj.cn),
+                company = $.trim(obj.company),
                 title = $.trim(obj.title);
 
             // combine title, last_name, and first_name
@@ -166,7 +167,10 @@ define('io.ox/contacts/util', [
             // fallback #2: just first_name
             if (first_name) return single(1, first_name);
 
-            // fallback #3: use existing display name?
+            // fallback #3: use existing company?
+            if (company) return single(1, company);
+
+            // fallback #4: use existing display name?
             if (display_name) return single(4, util.unescapeDisplayName(display_name));
 
             return { format: '', params: [] };

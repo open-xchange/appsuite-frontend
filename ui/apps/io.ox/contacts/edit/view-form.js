@@ -16,7 +16,7 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/contacts/model',
     'io.ox/backbone/views',
     'io.ox/backbone/views/actions/util',
-    'io.ox/contacts/widgets/pictureUpload',
+    // 'io.ox/contacts/widgets/pictureUpload',
     'io.ox/contacts/api',
     'io.ox/contacts/util',
     'io.ox/core/capabilities',
@@ -28,7 +28,7 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/core/folder/util',
     'settings!io.ox/core',
     'less!io.ox/contacts/edit/style'
-], function (model, views, actionsUtil, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt, folderApi, folderUtils, settings) {
+], function (model, views, actionsUtil, api, util, capabilities, ext, mini, attachmentViews, gt, folderApi, folderUtils, settings) {
 
     'use strict';
 
@@ -213,16 +213,16 @@ define('io.ox/contacts/edit/view-form', [
                 }
             });
 
-        point.extend(new PictureUpload({
-            id: ref + '/edit/picture',
-            index: 100,
-            customizeNode: function () {
-                // before 7.4.2 (?) we had to check if global address book is available
-                // apparently the user API has been improved and handles the contact image as well
-                // so we just go on here
-                this.$el.addClass('contact-picture-upload f6-target');
-            }
-        }));
+        // point.extend(new PictureUpload({
+        //     id: ref + '/edit/picture',
+        //     index: 100,
+        //     customizeNode: function () {
+        //         // before 7.4.2 (?) we had to check if global address book is available
+        //         // apparently the user API has been improved and handles the contact image as well
+        //         // so we just go on here
+        //         this.$el.addClass('contact-picture-upload f6-target');
+        //     }
+        // }));
 
         point.basicExtend({
             id: 'header',
@@ -275,40 +275,6 @@ define('io.ox/contacts/edit/view-form', [
             }
         });
 
-        function toggleButton(baton) {
-            var guid = _.uniqueId('contacts-');
-            return $('<label class="checkbox-inline">').attr('for', guid).append(
-                $('<input type="checkbox" class="toggle-check">').attr('id', guid)
-                    .on('change', function (e) {
-                        e.preventDefault();
-                        toggle.call(baton.parentView.$el);
-                    }),
-                $.txt(gt('Show all fields'))
-            );
-        }
-
-        function drawToggleRow(options, model, baton) {
-            if (!_.device('smartphone')) return;
-            var group = $('<fieldset class="col-lg-12 form-group">');
-            this.append(
-                group.append(toggleButton(baton))
-            );
-        }
-
-        ext.point(ref + '/edit/buttons').extend({
-            index: 300,
-            id: 'showall',
-            draw: function (baton) {
-                if (_.device('smartphone')) return;
-                // edit contact prototype; use old way for e2e testing
-                if (navigator.webdriver) {
-                    this.append(toggleButton(baton));
-                } else {
-                    this.append(baton.app.newView.renderAddFields());
-                }
-            }
-        });
-
         ext.point(ref + '/edit/buttons').extend({
             index: 100,
             id: 'metrics',
@@ -325,15 +291,6 @@ define('io.ox/contacts/edit/view-form', [
                             type: 'click',
                             action: node.attr('data-action') || node.attr('data-name'),
                             detail: node.attr('data-value')
-                        });
-                    });
-                    // toggle
-                    self.on('mousedown', '.checkbox-inline', function () {
-                        metrics.trackEvent({
-                            app: 'contacts',
-                            target: 'edit/contact/toolbar',
-                            type: 'click',
-                            action: 'show-all-fields'
                         });
                     });
                 });
@@ -641,7 +598,6 @@ define('io.ox/contacts/edit/view-form', [
                 anniversary: drawDate,
                 note: drawTextarea,
                 private_flag: drawCheckbox,
-                toggle: drawToggleRow,
                 attachments_list: drawAttachments
             };
 

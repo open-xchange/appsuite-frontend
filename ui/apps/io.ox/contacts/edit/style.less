@@ -23,7 +23,7 @@
         .ellipsis();
     }
 
-    // needed for furigana
+    /* needed for furigana */
     .row label { width: 100%; }
 
     h2.job {
@@ -152,27 +152,12 @@
     }
 }
 
+@size: 120px;
+
 .contact-edit {
 
     margin-top: 32px;
     margin-bottom: 40px;
-
-    .prototype {
-        color: #333;
-        font-weight: bold;
-        text-align: center;
-        line-height: 24px;
-        padding: 16px;
-        background-color: rgb(255, 207, 26);
-        background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(255, 255, 255, 0.3) 8px, rgba(255, 255, 255, 0.3) 16px);
-        position: relative;
-        top: -32px;
-    }
-
-    .prototype-bottom {
-        top: 0;
-        height: 16px;
-    }
 
     .form-group {
         margin-bottom: 8px;
@@ -180,6 +165,7 @@
 
     label {
         color: #333;
+        &.control-label { padding-top: 7px; }
     }
 
     input, select {
@@ -191,32 +177,12 @@
     }
 
     .header {
-        height: 144px;
-    }
-
-    @size: 120px;
-
-    .contact-picture {
-        width: @size;
-        height: @size;
-        background-repeat: no-repeat;
-        background-size: cover;
-        border-radius: 50%;
-        border: 3px solid white;
-        box-shadow: 0 0 3px #000;
-        float: right;
-        /* click to add picture */
-        font-size: 14px;
-        color: #555;
-        display: flex;
-        align-items: center;
-        text-align: center;
-        background-color: #f5f5f5;
-        cursor: pointer;
+        height: 120px;
+        margin-bottom: 32px;
     }
 
     .contact-summary {
-        height: @size;
+        height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -224,9 +190,12 @@
 
     h1 {
         font-size: 24px;
-        line-height: 32px;
+        line-height: 24px;
         font-weight: normal;
-        margin: 0;
+        margin: 0 0 8px 0;
+        .first_name, .last_name {
+            white-space: nowrap;
+        }
     }
 
     h2 {
@@ -236,7 +205,7 @@
         margin: 0;
     }
 
-    .section {
+    .section, fieldset {
         margin-bottom: 32px;
     }
 
@@ -246,17 +215,93 @@
         color: #707070;
     }
 
-    button[data-remove] {
+    .dropdown[data-add] button {
+        color: #555;
+        height: 32px;
+        .fa-plus-circle {
+            color: #4b7916;
+            font-size: 20px;
+            margin-right: 8px;
+            position: relative;
+            top: 2px;
+        }
+    }
+
+    button.remove {
         padding: 0;
         outline: 0;
-        .fa-stack {
-            .fa-times { color: #6A6A6A; }
-            .fa-circle { color: #eee; }
+        .fa-minus-circle {
+            color: #a00;
+            font-size: 20px;
+            position: relative;
+            top: 5px;
         }
         &:hover, &:focus {
-            .fa-times { color: #fff; }
-            .fa-circle { color: #A00; }
+            .fa-minus-circle {
+                color: #333;
+            }
         }
+    }
+}
+
+.contact-image-upload {
+
+    .contact-image {
+
+        width: @size;
+        height: @size;
+        background-repeat: no-repeat;
+        background-size: cover;
+        border-radius: 50%;
+        /* border: 3px solid white; */
+        box-shadow: 0 0 3px #000, 0 0 0px 3px white inset;
+        float: right;
+
+        /* click to add image */
+        padding: 8px;
+        font-size: 14px;
+        color: #555;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        background-color: #f5f5f5;
+        cursor: pointer;
+        position: relative;
+
+        label {
+            margin: 0;
+            font-weight: normal;
+            line-height: 16px;
+            cursor: pointer;
+        }
+
+        &.focus {
+            border: 1px solid @link-color;
+            box-shadow: 0 0 8px 2px @link-color, 0 0 0px 2px white inset;
+        }
+    }
+
+    button.remove {
+        font-size: 18px;
+        position: absolute;
+        bottom: -4px;
+        right: @size + 4px;
+        outline: 0;
+    }
+
+    form {
+        position: absolute;
+        z-index: 1;
+    }
+
+    input[type=file] {
+        position: absolute;
+        top: 0;
+        width: @size;
+        height: @size;
+        opacity: 0;
+        cursor: pointer;
+        right: 16px;
     }
 }
 
@@ -266,5 +311,57 @@
     select {
         height: 32px;
         min-width: 240px;
+    }
+}
+
+@media (max-width: @smartphone-breakpoint) {
+
+    @size: 72px;
+
+    .contact-edit {
+
+        margin-left: 15px;
+        margin-right: 15px;
+
+        .header {
+            height: @size;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin: 0;
+        }
+
+        label.control-label {
+            padding-top: 9px;
+            margin-bottom: 3px;
+        }
+
+        button.remove {
+            .fa-minus-circle {
+                color: #a00;
+                font-size: 22px;
+                position: relative;
+                top: 4px;
+            }
+        }
+
+        .dropdown[data-add] button {
+            padding: 4px;
+        }
+    }
+
+    .contact-image-upload {
+        .contact-image {
+            width: @size;
+            height: @size;
+            float: none;
+            border: 0;
+            box-shadow: none;
+        }
+        button.remove {
+            font-size: 14px;
+        }
     }
 }

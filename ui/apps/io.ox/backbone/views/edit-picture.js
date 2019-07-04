@@ -63,7 +63,7 @@ define('io.ox/backbone/views/edit-picture', [
         getDialog: function (opt) {
 
             return new ModalDialog({
-                title: gt('Edit image'),
+                title: opt.title || gt('Edit image'),
                 point: 'io.ox/backbone/crop',
                 width: 500,
                 async: true,
@@ -141,7 +141,7 @@ define('io.ox/backbone/views/edit-picture', [
                     // reserve some more space for the stacked buttons on small devices
                     var dimension = Math.min(window.innerWidth - 64, window.innerHeight - 64, _.device('small') ? 322.25 : 466);
                     var options = {
-                        viewport: { width: dimension - 100, height: dimension - 100, type: 'square' },
+                        viewport: { width: dimension - 100, height: dimension - 100, type: 'circle' },
                         boundary: { width: dimension, height: dimension },
                         showZoomer: true,
                         enableResize: false,
@@ -184,7 +184,7 @@ define('io.ox/backbone/views/edit-picture', [
                 },
                 'croppie-focus': function () {
                     this.$body.find('.cr-boundary').on('mousedown click', function () {
-                        $(this).find('.cr-viewport.cr-vp-square').focus();
+                        $(this).find('.cr-viewport.cr-vp-circle').focus();
                     });
                 },
                 'inline-actions': function () {
@@ -214,8 +214,12 @@ define('io.ox/backbone/views/edit-picture', [
                     );
                 }
             })
+            .addAlternativeButton({ label: gt('Remove image'), action: 'remove' })
             .addCancelButton()
-            .addButton({ label: gt('Ok'), action: 'apply' })
+            .addButton({ label: gt('Apply'), action: 'apply' })
+            .on('remove', function () {
+                this.onCancel();
+            })
             .on('cancel', function () {
                 this.onCancel();
             })
