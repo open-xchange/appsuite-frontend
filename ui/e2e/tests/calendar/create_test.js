@@ -1996,3 +1996,20 @@ Scenario('[C265153] Create appointment with a link in the description', async fu
     I.switchToNextTab();
     I.waitInUrl('https://www.google.de/', 5);
 });
+
+Scenario('Prevent XSS in folder dropdown', async function (I) {
+    const W = require('./../contacts/edit-picture_commands')(I);
+
+    I.login('app=io.ox/mail');
+    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+
+    W.myContactData('open');
+    I.fillField('last_name', 'ayb"><img src=x onerror=alert(document.domain)>');
+    W.myContactData('save');
+
+    I.openApp('Calendar');
+    I.clickToolbar('New');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+
+    I.logout();
+});
