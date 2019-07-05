@@ -28,9 +28,7 @@ define('io.ox/chat/views/chat', [
 
     ext.point('io.ox/chat/detail/toolbar').extend({
         id: 'back',
-        index: 200,
-        prio: 'hi',
-        mobile: 'lo',
+        index: 100,
         custom: true,
         draw: function () {
             this.attr('data-prio', 'hi').append(
@@ -42,10 +40,17 @@ define('io.ox/chat/views/chat', [
     });
 
     ext.point('io.ox/chat/detail/toolbar').extend({
-        id: 'switch-to-floating',
+        id: 'title',
         index: 200,
-        prio: 'hi',
-        mobile: 'lo',
+        custom: true,
+        draw: function (baton) {
+            this.addClass('toolbar-title').attr('data-prio', 'hi').text(baton.model.getTitle());
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'switch-to-floating',
+        index: 300,
         custom: true,
         draw: function () {
             this.attr('data-prio', 'hi').append(
@@ -58,9 +63,7 @@ define('io.ox/chat/views/chat', [
 
     ext.point('io.ox/chat/detail/toolbar').extend({
         id: 'close-chat',
-        index: 300,
-        prio: 'lo',
-        mobile: 'lo',
+        index: 400,
         custom: true,
         draw: function (baton) {
             var model = baton.model;
