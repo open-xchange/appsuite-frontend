@@ -542,7 +542,6 @@ define('io.ox/calendar/edit/extensions', [
                     if (i !== 0) self.dropDown.divider();
                     self.dropDown.header(text);
 
-
                     _(folderSection).forEach(function (folder) {
                         var checkboxColor = self.getColor(folder);
                         self.dropDown.option(
@@ -550,7 +549,7 @@ define('io.ox/calendar/edit/extensions', [
                             folder.id,
                             function () {
                                 return [
-                                    folder.display_title || folder.title,
+                                    $.txt(folder.display_title || folder.title),
                                     $('<span class="sr-only">').text(', ' + gt('Color') + ': ' + checkboxColor.label)
                                 ];
                             },
