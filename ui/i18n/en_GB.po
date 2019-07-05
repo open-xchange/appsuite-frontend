@@ -10159,6 +10159,13 @@ msgctxt "superessive"
 msgid "Sunday"
 msgstr "Sunday"
 
+#. tooltip of dropdown menu in topbar (contact image icon)
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#, fuzzy
+#| msgid "SMTP port"
+msgid "Support"
+msgstr "SMTP port"
+
 #. all variables are version strings of the browsers, like 52 in Chrome 52
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
@@ -15647,9 +15654,6 @@ msgstr "your platform"
 
 #~ msgid "SMTP login"
 #~ msgstr "SMTP login"
-
-#~ msgid "SMTP port"
-#~ msgstr "SMTP port"
 
 #~ msgid "SMTP secure"
 #~ msgstr "SMTP secure"

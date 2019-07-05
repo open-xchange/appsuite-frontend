@@ -6429,6 +6429,12 @@ msgstr ""
 msgid "About"
 msgstr ""
 
+#. tooltip of dropdown menu in topbar (contact image icon)
+#: apps/io.ox/core/main/topbar_right.js
+#: module:io.ox/core
+msgid "Support"
+msgstr ""
+
 #: apps/io.ox/core/main/topbar_right.js
 #: module:io.ox/core
 msgid "You forgot to sign out last time. Always use the sign-out button when you finished your work."

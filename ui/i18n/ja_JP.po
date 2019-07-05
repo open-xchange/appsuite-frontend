@@ -10091,6 +10091,13 @@ msgctxt "superessive"
 msgid "Sunday"
 msgstr "日曜"
 
+#. tooltip of dropdown menu in topbar (contact image icon)
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#, fuzzy
+#| msgid "SMTP port"
+msgid "Support"
+msgstr "SMTP ポート"
+
 #. all variables are version strings of the browsers, like 52 in Chrome 52
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid ""
@@ -19219,9 +19226,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "SMTP login"
 #~ msgstr "SMTP ログイン"
-
-#~ msgid "SMTP port"
-#~ msgstr "SMTP ポート"
 
 #~ msgid "SMTP secure"
 #~ msgstr "安全な SMTP"
