@@ -311,7 +311,7 @@ define('io.ox/core/main/topbar_right', [
                     //#. tooltip of dropdown menu in topbar (contact image icon)
                     gt('Support'),
                 ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
-                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('aria-title', title),
+                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('aria-label', title),
                 dropdown = new Dropdown({
                     attributes: { role: 'presentation' },
                     tagName: 'li',
