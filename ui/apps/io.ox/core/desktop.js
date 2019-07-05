@@ -1287,6 +1287,7 @@ define('io.ox/core/desktop', [
 
                 this.show = function (cont, resume) {
                     var appchange = false;
+                    // the viewer can be a plugged application that must have a different handling that the root application
                     var appPlugged = this.app && this.app.options.plugged;
                     //todo URL changes on app change? direct links?
                     //use the url app string before the first ':' to exclude parameter additions (see how mail write adds the current mode here)
@@ -1327,7 +1328,7 @@ define('io.ox/core/desktop', [
                         if (!this.floating && currentWindow && currentWindow !== self && !this.page) {
                             currentWindow.hide();
                         }
-                        if (!this.floating) {
+                        if (!this.floating && !appPlugged) {
                             currentWindow = self;
                         }
                         _.call(cont);
