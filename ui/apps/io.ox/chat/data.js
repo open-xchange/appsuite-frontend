@@ -241,8 +241,8 @@ define('io.ox/chat/data', [
 
         getLastMessageDate: function () {
             var last = this.get('lastMessage');
-            if (!last) return '\u00a0';
-            var date = moment(new MessageModel(last).get('sent'));
+            if (!last || !last.sent) return '\u00a0';
+            var date = moment(last.sent);
             return date.calendar(null, {
                 sameDay: 'LT',
                 lastDay: '[Yesterday]',

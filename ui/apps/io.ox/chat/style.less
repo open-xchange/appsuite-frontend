@@ -59,7 +59,7 @@
 
         .resizebar { display: block; }
 
-        .chats li:hover { background-color: @backgroundColor; }
+        .chats li:hover, .search-result li:hover { background-color: @backgroundColor; }
     }
 
     &:not(.columns) {
@@ -153,19 +153,30 @@
     }
 
     .search {
-        border: 0;
         background-color: white;
         height: @searchHeight;
         position: relative;
+        border: 0;
         border-bottom: 1px solid @borderColor;
 
         input {
             border: 0;
             width: 100%;
-            padding: 0 16px;
+            padding: 0 32px 0 16px;
             line-height: @searchHeight - 1;
             height: @searchHeight - 1;
         }
+
+        button {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 0;
+            color: @gray;
+            padding: 9px;
+        }
+
+        &.closable button { display: block; }
     }
 
     .start-chat {
@@ -233,6 +244,16 @@
             border-bottom: 1px solid @borderColor;
             display: flex;
             cursor: pointer;
+
+            &.no-results {
+                cursor: initial;
+                display: block;
+                text-align: center;
+                border: none;
+                padding: 20px;
+
+                &:hover { background-color: transparent; }
+            }
 
             &:hover {
                 background-color: white;
