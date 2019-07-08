@@ -27,11 +27,12 @@ define('io.ox/contacts/view-detail', [
     'settings!io.ox/contacts',
     'io.ox/core/tk/attachments',
     'io.ox/core/http',
+    'io.ox/core/locale/postal-address',
     'io.ox/backbone/views/toolbar',
     'io.ox/backbone/views/action-dropdown',
     'static/3rd.party/purify.min.js',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, coreUtil, capabilities, gt, settings, attachments, http, ToolbarView, ActionDropdownView, DOMPurify) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, coreUtil, capabilities, gt, settings, attachments, http, postalAddress, ToolbarView, ActionDropdownView, DOMPurify) {
 
     'use strict';
 
@@ -410,21 +411,9 @@ define('io.ox/contacts/view-detail', [
     // type is 'business' or 'home' or 'other'
     function address(data, type) {
 
-        data = _(['street', 'postal_code', 'city', 'state', 'country']).map(function (field) {
-            return data[field + '_' + type] || '';
-        });
+        var text = postalAddress.format(data, type);
 
-        if (!_.some(data)) return null;
-
-        var text =
-            //#. Format of addresses
-            //#. %1$s is the street
-            //#. %2$s is the postal code
-            //#. %3$s is the city
-            //#. %4$s is the state
-            //#. %5$s is the country
-            gt('%1$s\n%2$s %3$s\n%4$s\n%5$s', data[0], data[1], data[2], data[3], data[4]);
-
+        if (!text) return null;
         var services = {
             google: { label: gt('Google Maps'), url: 'https://www.google.com/maps?q=' },
             osm: { label: gt('Open Street Map'), url: 'https://www.openstreetmap.org/search?query=' },
