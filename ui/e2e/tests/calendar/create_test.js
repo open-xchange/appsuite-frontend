@@ -1193,6 +1193,7 @@ Scenario('[C7429] Create appointment via Contact', async function (I, users) {
     let appointment = appointmentSelector.inside('.weekview-container.day')
         .as('appointment element in day view');
 
+    I.waitForVisible(appointment);
     I.waitForText('Wichtige Dinge tun', appointment);
     I.waitForText('Kneipe', appointment);
 
@@ -1202,7 +1203,7 @@ Scenario('[C7429] Create appointment via Contact', async function (I, users) {
     I.wait(1);
     appointment = appointmentSelector.inside('.weekview-container.week')
         .as('appointment element in week view');
-
+    I.waitForVisible(appointment);
     I.waitForText('Wichtige Dinge tun', appointment);
     I.waitForText('Kneipe', appointment);
 
@@ -1212,7 +1213,7 @@ Scenario('[C7429] Create appointment via Contact', async function (I, users) {
     I.wait(1);
     appointment = appointmentSelector.inside('.monthview-container')
         .as('appointment element in month view');
-
+    I.waitForVisible(appointment);
     I.waitForText('Wichtige Dinge tun', appointment);
 
     // // 4) list view
@@ -1222,6 +1223,7 @@ Scenario('[C7429] Create appointment via Contact', async function (I, users) {
     appointment = appointmentSelector.inside('.calendar-list-view')
         .as('appointment element in list view');
 
+    I.waitForVisible(appointment);
     I.waitForText('Wichtige Dinge tun', appointment);
     I.waitForText('Kneipe', appointment);
 

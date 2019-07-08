@@ -378,13 +378,15 @@ Scenario('[C7403] Forward a single mail @shaky', function (I, users) {
     I.waitForVisible('.io-ox-mail-window');
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.waitForElement('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 5);
+    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', userB.userdata.primaryEmail);
     I.wait(1);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose');
+    I.waitForDetached('.launcher .fa-spin');
+    I.waitForElement('.launcher .fa-spin-paused');
     I.logout();
 
     I.login('app=io.ox/mail', { user: userB });
@@ -393,11 +395,14 @@ Scenario('[C7403] Forward a single mail @shaky', function (I, users) {
     I.click('[title="' + testrailID + ' - ' + timestamp + '"]');
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.thread-view-header .subject');
     I.clickToolbar('Forward');
-    I.waitForElement('.io-ox-mail-compose', 5);
+    I.waitForVisible('.io-ox-mail-compose');
+    I.waitForFocus('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', userC.userdata.primaryEmail);
     I.wait(1);
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose');
+    I.waitForDetached('.launcher .fa-spin');
+    I.waitForElement('.launcher .fa-spin-paused');
     I.logout();
 
     I.login('app=io.ox/mail', { user: userC });
