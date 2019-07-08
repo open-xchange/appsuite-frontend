@@ -181,13 +181,15 @@ Scenario('[C7494] Refresh widgets', async (I, users) => {
 
     I.openApp('Portal');
     I.waitForVisible('.io-ox-portal-window');
-
     // refresh is throttled, so we wait for the refresh button do be active again
     I.wait(15);
+    I.waitForDetached('#io-ox-refresh-icon .fa-spin');
+    I.waitForVisible('#io-ox-refresh-icon .fa-spin-paused');
     //Refresh the page
-    I.click('~Refresh', '#io-ox-appcontrol');
+    I.retry(5).click('~Refresh', '#io-ox-appcontrol');
     I.waitForElement('#io-ox-refresh-icon .fa-spin');
     I.waitForDetached('#io-ox-refresh-icon .fa-spin');
+    I.waitForElement('#io-ox-refresh-icon .fa-spin-paused');
 
     //Verify all widgets are refreshed
     I.waitNumberOfVisibleElements('.widget[aria-label="Inbox"] ul li', 3, 15);

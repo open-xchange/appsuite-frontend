@@ -112,7 +112,7 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
     I.waitForText(testrailID + ', ' + testrailID, 5, '.io-ox-sidepopup-pane .birthday .name');
     I.waitForText(moment().add(2, 'days').format('M/D/YYYY'), 5, '.io-ox-sidepopup-pane .birthday .date');
     I.waitForText('In 2 days', 5, '.io-ox-sidepopup-pane .birthday .distance');
-    I.click('.item', '.widget[aria-label="Birthdays"]');
+    I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup', 5);
 
     //Verify latest files

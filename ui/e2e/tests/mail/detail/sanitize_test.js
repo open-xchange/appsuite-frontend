@@ -32,6 +32,7 @@ Scenario('[C101624] Parsing CSS in HTML mails', async function (I) {
     I.waitForVisible('.io-ox-mail-window .list-view');
 
     I.say('check c101624_1.eml', 'blue');
+    I.waitForVisible('.list-item[data-index="0"]');
     I.click('.list-item[data-index="0"]', '.list-view');
     I.waitForVisible('.io-ox-mail-window .mail-detail-pane .subject');
     I.waitForVisible('.mail-detail-frame');
