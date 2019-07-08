@@ -361,11 +361,11 @@ define('io.ox/core/tab/handling', ['io.ox/core/boot/util'], function (util) {
         openTab: function (url, windowObject) {
             var urlToOpen = url || ox.abs + ox.root + '/busy.html', windowName;
 
-            if (_.isEmpty(windowObject)) windowObject = _.pick(TabHandling, 'windowName', 'windowType', 'parentName');
+            if (_.isEmpty(windowObject)) windowObject = _.pick(this, 'windowName', 'windowType', 'parentName');
             windowName = JSON.stringify(_.pick(windowObject, 'windowName', 'windowType', 'parentName'));
 
             // try to open via window.opener property
-            if (windowObject.windowType === TabHandling.WINDOW_TYPE.PARENT && window.opener && window.opener.name) windowName = window.opener.name;
+            if (windowObject.windowType === this.WINDOW_TYPE.PARENT && window.opener && window.opener.name) windowName = window.opener.name;
 
             return window.open(urlToOpen, windowName);
         },
@@ -386,10 +386,10 @@ define('io.ox/core/tab/handling', ['io.ox/core/boot/util'], function (util) {
          *  returns the new created or reused window Object
          */
         openParent: function (urlOrParams, options) {
-            var url = _.isString(urlOrParams) ? urlOrParams : TabHandling.createURL(urlOrParams, options);
-            var newWindow = TabHandling.openTab(url, {
-                windowName: TabHandling.parentName,
-                windowType: TabHandling.WINDOW_TYPE.PARENT
+            var url = _.isString(urlOrParams) ? urlOrParams : this.createURL(urlOrParams, options);
+            var newWindow = this.openTab(url, {
+                windowName: this.parentName,
+                windowType: this.WINDOW_TYPE.PARENT
             });
             if (!window.opener) window.opener = newWindow;
             return newWindow;
@@ -411,11 +411,11 @@ define('io.ox/core/tab/handling', ['io.ox/core/boot/util'], function (util) {
          *  returns the new created window Object
          */
         openChild: function (urlOrParams, options) {
-            var url = _.isString(urlOrParams) ? urlOrParams : TabHandling.createURL(urlOrParams, options);
-            return TabHandling.openTab(url, {
-                windowName: createIdentifier(TabHandling.WINDOW_TYPE.CHILD),
-                windowType: TabHandling.WINDOW_TYPE.CHILD,
-                parentName: TabHandling.windowType === TabHandling.WINDOW_TYPE.CHILD ? TabHandling.parentName : TabHandling.windowName
+            var url = _.isString(urlOrParams) ? urlOrParams : this.createURL(urlOrParams, options);
+            return this.openTab(url, {
+                windowName: createIdentifier(this.WINDOW_TYPE.CHILD),
+                windowType: this.WINDOW_TYPE.CHILD,
+                parentName: this.windowType === this.WINDOW_TYPE.CHILD ? this.parentName : this.windowName
             });
         },
 
@@ -425,7 +425,7 @@ define('io.ox/core/tab/handling', ['io.ox/core/boot/util'], function (util) {
          * @returns {boolean}
          */
         isParent: function () {
-            return !TabHandling.parentName;
+            return !this.parentName;
         },
 
         /**
@@ -434,7 +434,7 @@ define('io.ox/core/tab/handling', ['io.ox/core/boot/util'], function (util) {
          * @returns {windowNameObject}
          */
         getWindowNameObject: function () {
-            return _.pick(TabHandling, 'windowName', 'windowType', 'parentName');
+            return _.pick(this, 'windowName', 'windowType', 'parentName');
         },
 
         /**

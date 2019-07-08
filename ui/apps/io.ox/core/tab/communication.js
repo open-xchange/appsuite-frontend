@@ -118,7 +118,7 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
                 if (ox.debug) console.warn('TabCommunication.propagate', e);
             }
             localStorage.setItem(storageKey, jsonString);
-            TabCommunication.clearStorage();
+            this.clearStorage();
         },
 
         /**
@@ -145,11 +145,11 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
          *  parameters that should be passed to the trigger
          */
         propagateToAll: function (propagate, parameters) {
-            TabCommunication.propagate(propagate, {
+            this.propagate(propagate, {
                 parameters: parameters,
-                exceptWindow: TabCommunication.windowName
+                exceptWindow: this.windowName
             });
-            TabCommunication.events.trigger(propagate, parameters);
+            this.events.trigger(propagate, parameters);
         },
 
         /**
@@ -165,7 +165,7 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
          *  parameters that should be passed to the trigger
          */
         propagateToAllExceptWindow: function (propagate, windowName, parameters) {
-            TabCommunication.propagate(propagate, {
+            this.propagate(propagate, {
                 parameters: parameters,
                 exceptWindow: windowName
             });
@@ -184,7 +184,7 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
          *  parameters that should be passed to the trigger
          */
         propagateToWindow: function (propagate, windowName, parameters) {
-            TabCommunication.propagate(propagate, {
+            this.propagate(propagate, {
                 parameters: parameters,
                 targetWindow: windowName
             });
@@ -196,13 +196,13 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
          * @returns {Deferred}
          */
         otherTabsLiving: function () {
-            TabCommunication.propagateToAllExceptWindow('get-active-windows', TabCommunication.windowName);
+            this.propagateToAllExceptWindow('get-active-windows', this.windowName);
             var def     = $.Deferred(),
                 timeout = setTimeout(function () {
                     def.reject();
                 }, 100);
 
-            TabCommunication.events.listenToOnce(TabCommunication.events, 'propagate-active-window', def.resolve);
+            this.events.listenToOnce(this.events, 'propagate-active-window', def.resolve);
 
             return def.done(function () {
                 window.clearTimeout(timeout);
@@ -259,7 +259,7 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
          */
         getActiveWindows: function (targetWindow) {
             if (!ox.session) return;
-            TabCommunication.propagateToWindow('propagate-active-window', targetWindow, { windowName: TabCommunication.windowName });
+            this.propagateToWindow('propagate-active-window', targetWindow, { windowName: this.windowName });
         },
 
         /**

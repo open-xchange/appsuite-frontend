@@ -139,7 +139,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
             }
 
             localStorage.setItem(storageKey, jsonString);
-            TabSession.clearStorage();
+            this.clearStorage();
         },
 
         /**
@@ -162,7 +162,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
                 } else {
                     var param = {};
                     if (_.url.hash('session')) _.extend(param, { session: _.url.hash('session') });
-                    TabSession.propagate('getSession', param);
+                    this.propagate('getSession', param);
                 }
             }
         },
@@ -172,13 +172,13 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          * @returns {Deferred}
          */
         login: function () {
-            TabSession.propagateGetSession();
+            this.propagateGetSession();
             var def     = $.Deferred(),
                 timeout = setTimeout(function () {
                     def.reject();
                 }, 50);
 
-            TabSession.events.listenTo(TabSession.events, 'propagateSession', function (loginData) {
+            this.events.listenTo(TabSession.events, 'propagateSession', function (loginData) {
                 if (_.url.hash('session') && loginData.session !== _.url.hash('session')) {
                     disable();
                     def.reject();
@@ -200,13 +200,13 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          */
         propagateSession: function (parameters) {
             if (!ox.session) {
-                TabSession.propagate('propagateNoSession');
+                this.propagate('propagateNoSession');
                 return;
             }
             if (parameters.session && parameters.session !== ox.session) {
                 return;
             }
-            TabSession.propagate('propagateSession', {
+            this.propagate('propagateSession', {
                 session: ox.session,
                 language: ox.language,
                 theme: ox.theme,
@@ -223,7 +223,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          *  If the relogin flag is set, the login is propagated to the other tabs
          */
         propagateLogin: function (relogin) {
-            TabSession.propagate('propagateLogin', {
+            this.propagate('propagateLogin', {
                 session: ox.session,
                 language: ox.language,
                 theme: ox.theme,
@@ -241,7 +241,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          *  Optional options to send via the logout event
          */
         propagateLogout: function (options) {
-            TabSession.propagate('propagateLogout', options);
+            this.propagate('propagateLogout', options);
         }
     };
 

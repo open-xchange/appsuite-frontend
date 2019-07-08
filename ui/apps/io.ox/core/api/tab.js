@@ -102,6 +102,12 @@ define('io.ox/core/api/tab', [
 
         // tabHandling
 
+        // Logging out states definition object
+        LOGGING_OUT_STATE: tabHandling.LOGGING_OUT_STATE,
+
+        // Window types definition object
+        WINDOW_TYPE: tabHandling.WINDOW_TYPE,
+
         // Opens a child browser tab.
         openChildTab: function (urlOrParams, options) {
             tabHandling.openChild(urlOrParams, options);
