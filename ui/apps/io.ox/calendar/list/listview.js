@@ -277,7 +277,8 @@ define('io.ox/calendar/list/listview', [
                     this.collection.remove(data);
                 },
                 'remove sort': function () {
-                    this.collection.sort();
+                    // check for comparator first
+                    if (this.collection.comparator) this.collection.sort();
                 }.bind(this)
             });
 

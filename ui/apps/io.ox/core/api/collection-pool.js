@@ -39,6 +39,9 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
                 skip = true;
                 entry.collection.remove(target);
             });
+        // these errors need to be catched, otherwise the code just stops working silently, without giving a hint what happened, causes bug 65985 for example
+        } catch (e) {
+            if (ox.debug) console.warn('error in collection pool propagateRemove', e);
         } finally {
             // use try/finally to make sure we always reset 'skip'
             skip = false;
@@ -58,6 +61,9 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
                 delete data.index;
                 target.set(data);
             });
+        // these errors need to be catched, otherwise the code just stops working silently, without giving a hint what happened, causes bug 65985 for example
+        } catch (e) {
+            if (ox.debug) console.warn('error in collection pool propagateChange', e);
         } finally {
             // use try/finally to make sure we always reset 'skip'
             skip = false;
