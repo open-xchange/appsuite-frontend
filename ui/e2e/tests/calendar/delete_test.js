@@ -74,7 +74,7 @@ Scenario('[C7466] Delete one appointment of an series', async function (I, users
     I.waitForText('Delete', undefined, '.io-ox-sidepopup');
     I.click('Delete', '.io-ox-sidepopup');
     I.waitForVisible('.modal');
-    I.click('This appointment', '.modal');
+    I.click('Delete this appointment', '.modal');
     I.waitForDetached('.modal');
     I.waitForDetached('.appointment-panel [aria-label="' + testrailID + ', ' + testrailID + '"]');
     I.click('Today');
