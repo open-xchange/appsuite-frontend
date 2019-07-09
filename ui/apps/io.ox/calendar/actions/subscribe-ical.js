@@ -53,7 +53,10 @@ define('io.ox/calendar/actions/subscribe-ical', [
         }
     });
 
-    ext.point('io.ox/calendar/subscribe/ical').extend({
+    // Seems this misses the point. instead of preventing autofill, it triggers it.
+    // TODO check why this was added
+
+    /*ext.point('io.ox/calendar/subscribe/ical').extend({
         id: 'hidden',
         index: 200,
         render: function () {
@@ -63,7 +66,7 @@ define('io.ox/calendar/actions/subscribe-ical', [
                 $('<input type="password">').hide()
             );
         }
-    });
+    });*/
 
     ext.point('io.ox/calendar/subscribe/ical').extend({
         id: 'alert',
