@@ -354,6 +354,7 @@ define('io.ox/calendar/week/view', [
     var AppointmentContainer = BasicView.extend({
 
         initialize: function (opt) {
+            var self = this;
             this.on('collection:add', this.onAddAppointment);
             this.on('collection:change', this.onChangeAppointment);
             this.on('collection:remove', this.onRemoveAppointment);
@@ -361,6 +362,9 @@ define('io.ox/calendar/week/view', [
             this.on('collection:after:reset', this.onAfterReset);
 
             this.listenTo(opt.app.props, 'change:layout', this.adjustPlacement);
+            this.listenTo(ox.ui.windowManager, 'window.show', function (e, window) {
+                if (window.app.get('id') === self.opt.app.get('id')) self.adjustPlacement();
+            });
 
             if (this.model.get('mode') === 'day') {
                 this.listenTo(this.model, 'change:mergeView', this.render);
