@@ -112,6 +112,8 @@ define('io.ox/core/folder/contextmenu', [
         //
         empty: function (baton) {
 
+            // skip if folder is empty
+            if (baton.data.total === 0) return;
             var isTrash = api.is('trash', baton.data);
             //#. empty is a verb in this case. Used when the contents of a folder should be deleted
             var label = gt('Empty folder');
