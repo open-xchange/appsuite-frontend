@@ -167,7 +167,7 @@ Scenario('[C7472] Check if the portalpage is up to date', async function (I, use
     I.waitForText(testrailID + ' - ' + testrailName, 5, '.io-ox-sidepopup-pane .subject');
     I.waitForText(users[0].userdata.display_name, 5, '.io-ox-sidepopup-pane .person-from');
     I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-sidepopup-pane .address');
-    I.click('.item', '.widget[aria-label="Inbox"]');
+    I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup', 5);
     I.logout();
     //TODO: Same for appointments, tasks birthdays and latest files.
