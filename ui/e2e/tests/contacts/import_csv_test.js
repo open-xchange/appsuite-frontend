@@ -108,7 +108,7 @@ Scenario('[C104269] Import App Suite CSV', async (I) => {
     I.see('Open-Xchange GmbH', { css: 'dd' });
     I.see('+49 1111 111111', { css: 'dd a' });
     I.see('ox@example.com', { css: 'dd a' });
-    I.see('Bei Der Arbeit 14\n1337\n\nBerlin\nÄgypten', { css: 'address' });
+    I.see('Bei Der Arbeit 14\n1337 Berlin\nÄgypten', { css: 'address' });
 
     deleteSelectedContacts();
 
@@ -142,8 +142,8 @@ Scenario('[C104269] Import App Suite CSV', async (I) => {
         I.see('+49 111 11111', { css: 'dd a' });
         I.see('foo@example.com', { css: 'dd a' });
         I.see('work@example.com', { css: 'dd a' });
-        I.see('Home Street 23\nCity Home\n\n12345\nCountry Home', { css: 'address' });
-        I.see('Workstreet 43\nSomewhere\n\n424242\nWorkcountry', { css: 'address' });
+        I.see('Home Street 23\nCity Home 12345\nCountry Home', { css: 'address' });
+        I.see('Workstreet 43\nSomewhere 424242\nWorkcountry', { css: 'address' });
         I.see('Some notes\n\nwith linebreakös\n!!!', { css: '.comment' });
         // delete on first iteration
         if (suffix === 'contact') deleteSelectedContacts();
@@ -196,8 +196,8 @@ Scenario('[C104269] Import App Suite CSV', async (I) => {
         I.see('Some notes\n\nFor Hans', { css: '.comment' });
         I.see('hans@example.com', { css: 'dd a' });
         I.see('+11 111 1111', { css: 'dd a' });
-        I.see('Business St. 23\nBerlin\nBerlin\n13370', { css: 'address' });
-        I.see('Homestreet 23\nHometown\nNRW\n44135', { css: 'address' });
+        I.see('Business St. 23\nBerlin Berlin 13370', { css: 'address' });
+        I.see('Homestreet 23\nHometown NRW 44135', { css: 'address' });
         // delete on first iteration
         if (suffix === 'contact') deleteSelectedContacts();
     }
