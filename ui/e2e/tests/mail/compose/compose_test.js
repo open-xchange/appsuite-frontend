@@ -23,7 +23,9 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Compose and discard with/without prompts', async function (I, users) {
+// needs to be skipped due to incompatible change on the MW on the develop branch
+// Reply won't work, as we won't inject the reply text
+Scenario.skip('Compose and discard with/without prompts', async function (I, users) {
     const [user] = users;
 
     // preparations
