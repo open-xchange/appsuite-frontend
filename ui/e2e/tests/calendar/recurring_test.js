@@ -205,7 +205,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.click('[data-action="io.ox/calendar/detail/actions/delete"]');
 
     I.waitForVisible('.modal-dialog');
-    I.click('This appointment', '.modal-dialog');
+    I.click('Delete this appointment', '.modal-dialog');
 
     I.waitForDetached('.modal-dialog');
 
