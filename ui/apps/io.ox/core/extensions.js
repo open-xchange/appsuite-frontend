@@ -520,6 +520,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
         dispose: function () {
             for (var id in this) {
+                /* eslint no-prototype-builtins: "off" */
                 if (this.hasOwnProperty(id)) this[id] = null;
             }
             this.disposed = true;

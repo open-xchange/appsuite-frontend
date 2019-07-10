@@ -235,7 +235,7 @@ define('io.ox/contacts/edit/main', [
                                 delete changes.display_name;
                             }
                             for (var k in changes) {
-                                if (changes.hasOwnProperty(k) && !changes[k]) {
+                                if (Object.prototype.hasOwnProperty.call(changes, k) && !changes[k]) {
                                     delete changes[k];
                                 }
                             }

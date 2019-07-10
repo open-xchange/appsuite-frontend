@@ -2,10 +2,9 @@
 // seems like phantom has problems with a non cleared localstorage
 localStorage.clear();
 
-/* eslint block-scoped-var:0 */
 var tests = [];
 for (var file in window.__karma__.files) {
-    if (window.__karma__.files.hasOwnProperty(file)) {
+    if (Object.prototype.hasOwnProperty.call(window.__karma__.files, file)) {
         if (/spec\.js$/.test(file)) {
             tests.push(file);
         }
@@ -81,12 +80,6 @@ require([
         }
     });
 });
-
-try {
-    jasmine;
-} catch (e) {
-    var jasmine = null;
-}
 
 if (sinon) {
     ox.testUtils.modules = (function () {

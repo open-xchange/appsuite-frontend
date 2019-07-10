@@ -13,9 +13,6 @@
  * Provides a simple implementation for chaining tasks back to back.
  *
  */
-/*global
-define: true
-*/
 
 define('io.ox/core/taskQueue', function () {
 

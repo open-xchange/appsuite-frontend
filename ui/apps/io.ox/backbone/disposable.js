@@ -49,6 +49,7 @@ define('io.ox/backbone/disposable', [], function () {
             // by removing the node from the DOM or by this.$el.off()
             // now remove all "local" references
             for (var id in this) {
+                /* eslint no-prototype-builtins: "off" */
                 if (this.hasOwnProperty(id)) this[id] = null;
             }
             // finally, mark as disposed
