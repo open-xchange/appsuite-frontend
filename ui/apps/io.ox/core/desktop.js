@@ -194,7 +194,7 @@ define('io.ox/core/desktop', [
                             if (!appchange) {
                                 // update window title & toolbar?
                                 if (win) {
-                                    win.setTitle(data.title || '');
+                                    win.setTitle(data.display_title || data.title || '');
                                     win.updateToolbar();
                                 }
                                 // update grid?
