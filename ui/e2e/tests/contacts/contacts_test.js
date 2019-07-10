@@ -595,7 +595,7 @@ Scenario('[C7360] - Cancel contact modification', async function (I) {
     I.dontSee('Holger');
 });
 
-Scenario('[C7361] - Edit partial data of a contact', async function (I) {
+Scenario('[C7361] - Edit partial data of a contact @shaky', async function (I) {
     const phone = '+4917113371337';
     const testrailID = 'C7361';
     //Create Contact
