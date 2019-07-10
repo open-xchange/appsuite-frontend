@@ -27,6 +27,67 @@ After(async (users) => {
 });
 
 const iframeLocator = '.io-ox-mail-compose-window .editor iframe';
+
+Scenario('Use default font style for new mails', async function (I, users) {
+
+    let [sender] = users;
+
+    const defaultText = 'This text has a default style.';
+
+    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
+    await I.haveSetting('io.ox/mail//defaultFontStyle/family', 'helvetica');
+
+    I.login('app=io.ox/mail', { user: sender });
+
+    I.retry(5).click('Compose');
+    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    I.waitForFocus('input[placeholder="To"]');
+    await within({ frame: iframeLocator }, async () => {
+        I.click('.default-style');
+        I.pressKey(defaultText);
+        expect(await I.grabAttributeFrom(locate('.default-style'), 'style')).that.include('font-family: helvetica;');
+    });
+});
+
+Scenario('Use default font style in replies', async function (I, users) {
+
+    let [sender] = users;
+
+    const mailSubject = 'Use default font style in replies';
+    const defaultText = 'This text has a default style.';
+
+    await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
+    await I.haveSetting('io.ox/mail//defaultFontStyle/family', 'helvetica');
+
+    await I.haveMail({
+        attachments: [{
+            content: 'Hello world!',
+            content_type: 'text/html',
+            disp: 'inline'
+        }],
+        from: [[sender.get('display_name'), sender.get('primaryEmail')]],
+        sendtype: 0,
+        subject: mailSubject,
+        to: [[sender.get('display_name'), sender.get('primaryEmail')]]
+    }, { sender });
+
+    I.login('app=io.ox/mail', { user: sender });
+
+    I.waitForText(mailSubject, 2);
+    I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
+    I.waitForVisible('iframe.mail-detail-frame');
+
+    I.see('Reply');
+    I.click('Reply');
+    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    // please note that tinymce get's focused when a custom default style is set
+    I.waitForFocus(iframeLocator);
+    await within({ frame: iframeLocator }, async () => {
+        I.pressKey(defaultText);
+        I.seeElementInDOM('span[style="font-family: helvetica;"]');
+    });
+});
+
 Scenario('[C7392] Send mail with different text highlighting', async function (I, users) {
 
     const selectInline = (action) => {
