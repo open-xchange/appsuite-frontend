@@ -277,7 +277,7 @@ define('io.ox/core/session', [
             .always(def.resolve);
             return def;
         },
-
+        /*
         redeemToken: function (token) {
             console.warn('WARNING: Redeem-token is deprecated and will be remove in the near future.');
             return http.POST({
@@ -293,7 +293,7 @@ define('io.ox/core/session', [
                     secret: 'notifier-123'
                 }
             });
-        },
+        },*/
 
         logout: function () {
             if (ox.online) {
