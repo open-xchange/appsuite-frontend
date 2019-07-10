@@ -41,15 +41,14 @@ define('io.ox/contacts/widgets/pictureUpload', [
 
     var ImageUploadView = DisposableView.extend({
 
-        className: 'contact-image-upload',
+        className: 'contact-photo-upload',
 
         events: {
-            //'click [data-remove-image]': 'removeImage',
             'change .file': 'onFileSelect',
             'focus .file': 'toggleFocus',
             'blur .file': 'toggleFocus',
             'click .file': 'onClick',
-            'click .contact-image': 'onClickContainer'
+            'click .contact-photo': 'onClickContainer'
         },
 
         initialize: function () {
@@ -87,7 +86,7 @@ define('io.ox/contacts/widgets/pictureUpload', [
         openEditDialog: function () {
             if (this.editPictureDialog && this.editPictureDialog.close) this.editPictureDialog.close();
             this.editPictureDialog = editPicture
-                .getDialog({ model: this.model, title: gt('Change contact image') })
+                .getDialog({ model: this.model, title: gt('Change contact photo') })
                 .open()
                 .on('upload', this.openFilePicker.bind(this));
         },
@@ -99,7 +98,7 @@ define('io.ox/contacts/widgets/pictureUpload', [
             if (maxSizeViolation(file)) {
                 this.model.unset('pictureFileEdited', { silent: true });
                 //#. %1$s maximum file size
-                notifications.yell('error', gt('Your image exceeds the allowed file size of %1$s', strings.fileSize(settings.get('maxImageSize'), 2)));
+                notifications.yell('error', gt('The photo exceeds the allowed file size of %1$s', strings.fileSize(settings.get('maxImageSize'), 2)));
             }
             if (!file || !(file.lastModified || file.lastModifiedDate)) return;
             // update preview
@@ -118,7 +117,7 @@ define('io.ox/contacts/widgets/pictureUpload', [
                 file = input.files[0];
             // check for valid image type. especially, svg is not allowed (see Bug 50748)
             if (file && !/(jpg|jpeg|gif|bmp|png)/i.test(file.type)) {
-                return notifications.yell('error', gt('The file type "%1$s" cannot be used as contact image. Supported file types are JPEG, GIF, BMP, and PNG.', file.type));
+                return notifications.yell('error', gt('The file type "%1$s" cannot be used as a contact photo. Supported file types are JPEG, GIF, BMP, and PNG.', file.type));
             }
             // may happen if a user first selects a picture and then when trying to choose a new one presses cancel
             if (!file) return;
@@ -148,18 +147,9 @@ define('io.ox/contacts/widgets/pictureUpload', [
             var guid = _.uniqueId('image-upload-');
 
             this.$el.append(
-                this.$thumbnail = $('<div class="contact-image">').append(
-                    $('<label>').attr('for', guid).text(gt('Click to add image'))
+                this.$thumbnail = $('<div class="contact-photo">').append(
+                    $('<label>').attr('for', guid).text(gt('Click to add photo'))
                 ),
-                // $('<button type="button" class="btn btn-link remove">')
-                //     .attr('title', gt('Remove image'))
-                //     .attr('data-remove-image', 'image1_url')
-                //     .append(
-                //         $('<span class="fa-stack" aria-hidden="true">').append(
-                //             $('<i class="fa fa-circle fa-stack-2x">'),
-                //             $('<i class="fa fa-times fa-stack-1x">')
-                //         )
-                //     ),
                 $('<form>').append(
                     $('<input type="file" name="file" class="file" accept="image/*">')
                     .attr('id', guid)

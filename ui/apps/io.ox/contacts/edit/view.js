@@ -23,7 +23,7 @@ define('io.ox/contacts/edit/view', [
     'io.ox/contacts/widgets/pictureUpload',
     'settings!io.ox/contacts',
     'gettext!io.ox/contacts'
-], function (ExtensibleView, common, Dropdown, util, api, userApi, a11y, coreUtil, ImageUploadView, settings, gt) {
+], function (ExtensibleView, common, Dropdown, util, api, userApi, a11y, coreUtil, PhotoUploadView, settings, gt) {
 
     'use strict';
 
@@ -59,7 +59,7 @@ define('io.ox/contacts/edit/view', [
             this.$el.append(
                 $('<div class="header form-group">').append(
                     $('<div class="col-xs-3 col-sm-4">').append(
-                        this.renderContactImage()
+                        this.renderContactPhoto()
                     ),
                     $('<div class="col-xs-9 col-sm-8 contact-summary">').append(
                         this.renderContactSummary()
@@ -91,8 +91,8 @@ define('io.ox/contacts/edit/view', [
             return this.renderRightShortColumn(node).addClass('col-xs-offset-0 col-sm-offset-4');
         },
 
-        renderContactImage: function () {
-            return new ImageUploadView({ model: this.model }).render().$el;
+        renderContactPhoto: function () {
+            return new PhotoUploadView({ model: this.model }).render().$el;
         },
 
         renderContactSummary: function () {
@@ -390,8 +390,8 @@ define('io.ox/contacts/edit/view', [
 
         allFields: {
             personal: {
-                //#. Contact edit dialog.
-                add: gt('Add personal information'),
+                //#. Contact edit dialog. Personal information.
+                add: gt('Add personal info'),
                 fields: [
                     'title', 'first_name', 'last_name',
                     'nickname', 'second_name', 'suffix',
@@ -400,8 +400,8 @@ define('io.ox/contacts/edit/view', [
                 ]
             },
             business: {
-                //#. Contact edit dialog.
-                add: gt('Add business information'),
+                //#. Contact edit dialog. Business information.
+                add: gt('Add business info'),
                 fields: [
                     'company', 'department', 'position', 'profession', 'manager_name',
                     'room_number', 'assistant_name',
