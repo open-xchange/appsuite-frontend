@@ -95,7 +95,7 @@ define('io.ox/tours/mail', [
             .end()
         .step()
             .title(gt('Selecting a view'))
-            .content(gt('To choose between the different views. click on View in the toolbar. Select a menu entry in the layout.'))
+            .content(gt('To choose between the different views, click on View in the toolbar. Select a menu entry in the layout.'))
             .spotlight('.classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
             .referTo('.classic-toolbar [data-dropdown="view"] ul')
             .waitFor('.classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
