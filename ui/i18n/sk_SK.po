@@ -1308,8 +1308,7 @@ msgstr "Všetky súbory boli zmazané"
 msgid "All folders"
 msgstr "Všetky priečinky"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "All future appointments"
 msgstr "Všetky budúce schôdzky"
 
@@ -3070,7 +3069,6 @@ msgstr "Odložené"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
@@ -3113,6 +3111,18 @@ msgstr "Odstrániť zariadenie viackrokového overenia"
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Delete account"
 msgstr "Zmazať účet"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Delete all appointments"
+msgstr "Zmazať schôdzku"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "All future appointments"
+msgid "Delete all future appointments"
+msgstr "Všetky budúce schôdzky"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Delete all messages"
@@ -3175,6 +3185,12 @@ msgstr "Zmazať zdroj"
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Delete task"
 msgstr "Zmazať úlohu"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Delete this appointment"
+msgstr "Zmazať schôdzku"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/actions/versions-delete.js
@@ -3563,20 +3579,6 @@ msgid ""
 "series?"
 msgstr ""
 "Skutočne chcete zamietnuť celú sériu alebo len jedinú schôdzku v sérii?"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid ""
-"Do you want to delete the whole series or just this appointment within the "
-"series?"
-msgstr "Skutočne chcete zmazať celú sériu alebo len túto schôdzku v sérii?"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid ""
-"Do you want to delete this and all future appointments or just this "
-"appointment within the series?"
-msgstr ""
-"Skutočne chcete zmazať túto a všetky budúce schôdzky alebo len túto schôdzku "
-"v sérii?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid "Do you want to delete this appointment?"
@@ -9471,8 +9473,7 @@ msgstr "Sériové číslo"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
-#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Séria"
 
@@ -10881,8 +10882,7 @@ msgstr "Nenašiel sa žiaden vhodný server pre túto kombináciu emailu a hesla
 msgid "There was no task data to import"
 msgstr "Žiadne údaje o úlohách neboli k dispozícii na importovanie"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "This appointment"
 msgstr "Túto schôdzku"
 
@@ -10891,6 +10891,28 @@ msgid ""
 "This appointment is an exception. Changing the exception does not affect the "
 "series."
 msgstr "Táto schôdzka je výnimka. Zmena výnimky neovplyvní sériu."
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete the whole series or just this appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to delete all appointments "
+"of the series or just this appointment?"
+msgstr "Skutočne chcete zmazať celú sériu alebo len túto schôdzku v sérii?"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete this and all future appointments or just this "
+#| "appointment within the series?"
+msgid ""
+"This appointment is part of a series. Do you want to delete this and all "
+"future appointments of the series or just this appointment?"
+msgstr ""
+"Skutočne chcete zmazať túto a všetky budúce schôdzky alebo len túto schôdzku "
+"v sérii?"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 #, fuzzy

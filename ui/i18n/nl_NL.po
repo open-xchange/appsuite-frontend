@@ -730,7 +730,8 @@ msgstr "Over"
 msgid "Accept"
 msgstr "Accepteren"
 
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "Accept / Decline"
 msgstr "Accepteren / Afwijzen"
 
@@ -738,18 +739,18 @@ msgstr "Accepteren / Afwijzen"
 msgid "Accept changes"
 msgstr "Wijzigingen accepteren"
 
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 msgid "Accept invitation"
 msgstr "Uitnodiging accepteren"
 
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 msgid "Accept/Decline"
 msgstr "Accepteren/Afwijzen"
 
-#: apps/io.ox/calendar/print.js module:io.ox/calendar apps/io.ox/tasks/print.js
-#: module:io.ox/tasks
+#: apps/io.ox/calendar/print.js module:io.ox/calendar
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Accepted"
 msgstr "Geaccepteerd"
 
@@ -813,8 +814,8 @@ msgid "Account updated"
 msgstr "Account bijgewerkt"
 
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-#: apps/io.ox/settings/main.js
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js
 msgid "Accounts"
 msgstr "Accounts"
 
@@ -841,20 +842,23 @@ msgid "Active clients"
 msgstr "Active clients"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "Actual costs"
 msgstr "Werkelijke kosten"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "Actual duration in minutes"
 msgstr "Werkelijke duur in minuten"
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar apps/io.ox/core/folder/actions/add.js
-#: module:io.ox/core apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#: module:io.ox/core apps/io.ox/core/sub/subscriptions.js
+#: module:io.ox/core/sub apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
 msgid "Add"
 msgstr "Toevoegen"
 
@@ -1200,7 +1204,8 @@ msgstr "Geavanceerde instellingen"
 msgid "After"
 msgstr "Na"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "After a number of occurrences"
 msgstr "Na een specifiek aantal gebeurtenissen"
 
@@ -1236,8 +1241,8 @@ msgstr "Alle Mappen"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail apps/io.ox/tasks/view-detail.js
-#: module:io.ox/tasks
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "All attachments"
 msgstr "Alle bijlagen"
 
@@ -1285,8 +1290,7 @@ msgstr "Alle bestanden zijn verwijderd"
 msgid "All folders"
 msgstr "Alle mappen"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "All future appointments"
 msgstr "Alle toekomstige afspraken"
 
@@ -1329,7 +1333,8 @@ msgstr "Al mijn publieke afspraken"
 msgid "All timezones"
 msgstr "Alle tijdzones"
 
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "Allow connections with untrusted certificates"
 msgstr "Verbindingen met onvertrouwde certificaten toestaan"
 
@@ -1437,7 +1442,8 @@ msgstr ""
 "opgelost."
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Apply"
@@ -1491,7 +1497,8 @@ msgid "Appointment color"
 msgstr "Afspraakkleur"
 
 #. Invitations (notifications) about appointments
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "Appointment invitations"
 msgstr "Afspraakuitnodigingen"
 
@@ -1500,12 +1507,14 @@ msgstr "Afspraakuitnodigingen"
 msgid "Appointment options"
 msgstr "Afspraak options"
 
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "Appointment reminder"
 msgstr "Afspraakherinnering"
 
 #. Reminders (notifications) about appointments
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "Appointment reminders"
 msgstr "Afspraakherinneringen"
 
@@ -1744,10 +1753,10 @@ msgstr "BCC"
 
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/core/commons.js
-#: module:io.ox/core apps/io.ox/core/tk/wizard.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/mail/threadview.js apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/mail/threadview.js
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Back"
 msgstr "Terug"
 
@@ -1826,7 +1835,8 @@ msgid "Bell"
 msgstr "Bel"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "Billing information"
 msgstr "Facturatie-informatie"
 
@@ -1923,7 +1933,8 @@ msgstr "Koop nu!"
 msgid "CC"
 msgstr "Kopie aan"
 
-#: apps/io.ox/core/export.js module:io.ox/core apps/io.ox/core/import/import.js
+#: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
 msgid "CSV"
 msgstr "CSV"
 
@@ -2007,10 +2018,10 @@ msgstr "Camera %1$s"
 #: apps/io.ox/calendar/actions/change-alarms.js
 #: apps/io.ox/calendar/actions/change-folder-alarms.js
 #: apps/io.ox/calendar/actions/change-organizer.js apps/io.ox/calendar/main.js
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/core/desktop.js
-#: apps/io.ox/core/download.js apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
-#: module:io.ox/core/sub
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#: apps/io.ox/core/desktop.js apps/io.ox/core/download.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/relogin.js
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/files/main.js module:io.ox/files
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -2400,7 +2411,8 @@ msgid "Compact"
 msgstr "Compact"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "Companies"
 msgstr "Bedrijven"
 
@@ -2875,11 +2887,13 @@ msgstr "Aanpassingen"
 msgid "DAVdroid"
 msgstr "DAVdroid"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Daily"
 msgstr "Dagelijks"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Daily on workdays"
 msgstr "Dagelijks op werkdagen"
 
@@ -2907,7 +2921,8 @@ msgid "Data only partially imported (%1$s of %2$s records)"
 msgstr "Gegevens zijn gedeeltelijk geïmporteerd (%1$s van %2$s records)"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -2916,7 +2931,8 @@ msgstr "Gegevens zijn gedeeltelijk geïmporteerd (%1$s van %2$s records)"
 msgid "Date"
 msgstr "Datum"
 
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "Date completed"
 msgstr "Datum voltooid"
 
@@ -2962,8 +2978,8 @@ msgstr "Beslis nu"
 msgid "Decline"
 msgstr "Afwijzen"
 
-#: apps/io.ox/calendar/print.js module:io.ox/calendar apps/io.ox/tasks/print.js
-#: module:io.ox/tasks
+#: apps/io.ox/calendar/print.js module:io.ox/calendar
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Declined"
 msgstr "Afgewezen"
 
@@ -3039,11 +3055,10 @@ msgstr "Uitgesteld"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-#: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/actions/delete.js
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
+#: module:io.ox/contacts apps/io.ox/contacts/actions/delete.js
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
@@ -3053,7 +3068,8 @@ msgstr "Uitgesteld"
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/contextmenu.js
+#: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 #: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
@@ -3081,6 +3097,18 @@ msgstr "Multifactor Apparaat Verwijderen"
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Delete account"
 msgstr "Account verwijderen"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Delete all appointments"
+msgstr "Afspraak verwijderen"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "All future appointments"
+msgid "Delete all future appointments"
+msgstr "Alle toekomstige afspraken"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Delete all messages"
@@ -3143,6 +3171,12 @@ msgstr "Verwijder bron"
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Delete task"
 msgstr "Verwijder taak"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Delete this appointment"
+msgstr "Afspraak verwijderen"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/actions/versions-delete.js
@@ -3345,7 +3379,8 @@ msgid "Display of names"
 msgstr "Weergeven van namen"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "Distance"
 msgstr "Afstand"
 
@@ -3530,20 +3565,6 @@ msgid ""
 "series?"
 msgstr ""
 "Wilt u de hele reeks of slechts enkele afspraken uit de reeks afwijzen?"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid ""
-"Do you want to delete the whole series or just this appointment within the "
-"series?"
-msgstr "Wilt u de hele reeks of alleen deze afspraak uit de reeks verwijderen?"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid ""
-"Do you want to delete this and all future appointments or just this "
-"appointment within the series?"
-msgstr ""
-"Wilt u alleen deze afspraak of alle toekomstige afspraken uit deze reeks "
-"verwijderen?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid "Do you want to delete this appointment?"
@@ -3935,7 +3956,8 @@ msgstr "Bewerk eigen objecten"
 msgid "Edit real names"
 msgstr "Bewerk echte naam"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Edit recurrence"
 msgstr "Bewerk herhaling"
 
@@ -4123,7 +4145,8 @@ msgstr "Einde van werktijd"
 msgid "End time"
 msgstr "Eindtijd"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Ends"
 msgstr "Eindigt"
 
@@ -4133,8 +4156,8 @@ msgstr "Eindigt"
 msgid "Ends not with"
 msgstr "Eindigt niet met"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/extensions.js
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/extensions.js
 msgid "Ends on"
 msgstr "Eindigt op"
 
@@ -4230,12 +4253,14 @@ msgid "Errors"
 msgstr "Fouten"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "Estimated costs"
 msgstr "Geschatte kosten"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "Estimated duration in minutes"
 msgstr "Geschatte duur in minuten"
 
@@ -4382,13 +4407,13 @@ msgid "Expires on"
 msgstr "Verloopt op"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js apps/io.ox/core/export.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/mobile-toolbar-actions.js
-#: apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
+#: module:io.ox/contacts apps/io.ox/contacts/mobile-toolbar-actions.js
+#: module:io.ox/mail apps/io.ox/contacts/toolbar.js apps/io.ox/core/export.js
+#: module:io.ox/core apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 msgid "Export"
 msgstr "Exporteren"
 
@@ -4629,8 +4654,8 @@ msgstr "Bestanden"
 
 #. %1$s is an upload limit like for example 10mb
 #: apps/io.ox/calendar/model.js module:io.ox/calendar
-#: apps/io.ox/contacts/model.js module:io.ox/contacts apps/io.ox/tasks/model.js
-#: module:io.ox/tasks
+#: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Files can not be uploaded, because upload limit of %1$s is exceeded."
 msgstr ""
 "Bestanden kunnen niet worden geüpload omdat de uploadgrens van %1$s is "
@@ -4852,7 +4877,8 @@ msgstr "Voor het beste resultaat adviseren wij Google Chrome voor Android."
 msgid "For best results, please use "
 msgstr "Voor het beste resultaat gebruikt u "
 
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid ""
 "For security reasons, all credentials are encrypted with your primary "
 "account password. If you change your primary password, your external "
@@ -4885,7 +4911,8 @@ msgid "Forgot your password?"
 msgstr "Uw wachtwoord vergeten?"
 
 #. file format for data export
-#: apps/io.ox/core/export.js module:io.ox/core apps/io.ox/core/import/import.js
+#: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
 msgid "Format"
 msgstr "Formaat"
 
@@ -5187,12 +5214,14 @@ msgid "Hide"
 msgstr "Verbergen"
 
 #. Invitations (notifications) about appointments
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "Hide all appointment invitations."
 msgstr "Verberg alle afspraakuitnodigen."
 
 #. Reminders (notifications) about appointments
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "Verberg alle afspraakherinneringen."
 
@@ -5579,14 +5608,15 @@ msgstr "Interne gebruikers"
 msgid "Internet Explorer"
 msgstr "Internet Explorer"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Interval"
 msgstr "Interval"
 
 #. %1$s Appointment title
 #. %1$s task title
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 #, c-format
 msgid "Invitation for %1$s."
 msgstr "Uitnodiging voor %1$s."
@@ -6418,7 +6448,8 @@ msgstr "Maandag"
 msgid "Month"
 msgstr "Maand"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Monthly"
 msgstr "Maandelijks"
 
@@ -6443,11 +6474,12 @@ msgid "More than the currently displayed %1$s items were found"
 msgstr "Er zijn meer dan de momenteel getoonde %1$s elementen gevonden"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js apps/io.ox/core/folder/contextmenu.js
-#: module:io.ox/core apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
+#: module:io.ox/contacts apps/io.ox/contacts/mobile-toolbar-actions.js
+#: module:io.ox/mail apps/io.ox/contacts/toolbar.js
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
@@ -6632,9 +6664,9 @@ msgid "Nested condition"
 msgstr "Gekoppelde voorwaarden"
 
 #. declines the use of desktop notifications
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/notifications.js module:io.ox/core
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main apps/io.ox/core/notifications.js
+#: module:io.ox/core apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "Never"
 msgstr "Nooit"
@@ -6667,17 +6699,20 @@ msgstr "Nieuwe afspraak"
 
 #. Title of generic desktop notification about new invitations to appointments
 #. Title of the desktop notification about new invitation to a specific appointment
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "New appointment invitation"
 msgstr "Nieuwe afspraakuitnodigingen"
 
 #. Title of the desktop notification about new reminder for a specific appointment
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "New appointment reminder"
 msgstr "Nieuwe afspraakherinneringen"
 
 #. Title of generic desktop notification about new reminders for appointments
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "New appointment reminders"
 msgstr "Nieuwe afspraakherinneringen"
 
@@ -7149,7 +7184,8 @@ msgstr "Objectrechten"
 msgid "Objects"
 msgstr "Voorwerpen"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Occurrences"
 msgstr "Gebeurtenissen"
 
@@ -7190,7 +7226,8 @@ msgstr "Op %1$s schreef %2$s:"
 msgid "On behalf of the owner"
 msgstr "Namens de eigenaar"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "On specific date"
 msgstr "Op een specifieke dag"
 
@@ -7296,7 +7333,8 @@ msgstr "Mappenoverzicht openen"
 msgid "Open in %1$s"
 msgstr "Open in %1$s"
 
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "Open in calendar"
 msgstr "Open in Agenda"
 
@@ -7503,7 +7541,8 @@ msgstr "Pager"
 msgid "Part"
 msgstr "Deel"
 
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "Participant not found"
 msgstr "Deelnemer niet gevonden"
 
@@ -7547,7 +7586,8 @@ msgstr "Wachtwoord"
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "De wachtwoordlengte moet tussen %1$d en %2$d tekens zijn."
 
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "Password recovery"
 msgstr "Wachtwoord herstel"
 
@@ -7805,7 +7845,8 @@ msgstr "Voer een omschrijving in."
 msgid "Please enter a feed URL."
 msgstr "Voer een feed URL in."
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Please enter a positive number"
 msgstr "Voer alstublieft een positief nummer in"
 
@@ -7901,7 +7942,8 @@ msgstr "Voer alstublieft uw wachtwoord in."
 msgid "Please grant access to your webcam first."
 msgstr "Geef eerst toestemming om uw webcam te gebruiken."
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Please insert a date after the start date"
 msgstr "Voer een datum in die na de startdatum valt"
 
@@ -7987,7 +8029,8 @@ msgstr "Selecteer een geldig iCal bestand voor import"
 msgid "Please select a valid image File to insert"
 msgstr "Selecteer een geldig afbeeldingsbestand om in te voegen"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Please select at least one day"
 msgstr "Selecteer alstublieft minimaal één dag"
 
@@ -8126,8 +8169,8 @@ msgid "Press [enter] to jump to the twitter feed."
 msgstr "Druk op [enter] om naar de Twitter feed te springen."
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 msgid "Press to open Details"
 msgstr "Klik om Details te openen"
 
@@ -8234,9 +8277,10 @@ msgstr "Prioriteit"
 #: apps/io.ox/calendar/common-extensions.js
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/listview.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
-#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
-#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Privé"
 
@@ -8476,7 +8520,8 @@ msgid "Recover"
 msgstr "Herstellen"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "Recover passwords"
 msgstr "Wachtwoorden terughalen"
 
@@ -8714,7 +8759,8 @@ msgid "Remove IMAP keyword"
 msgstr "Verwijder IMAP sleutelwoord"
 
 #. notification pane: action  to remove/acknowledge all reminders (they don't show up anymore)
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "Remove all reminders"
 msgstr "Verwijder alle herinneringen"
 
@@ -8792,13 +8838,15 @@ msgstr "Bestand Hernoemen"
 msgid "Rename folder"
 msgstr "Map hernoemen"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Repeat"
 msgstr "Herhaal"
 
 #. Used as label for the following selection: 'date' or 'weekday'
 #. Thus an appointment/task will be repeated by date (e.g. every 4th of a month) or by weekday (e.g. every second tuesday)
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Repeat by"
 msgstr "Herhaal"
 
@@ -9427,8 +9475,7 @@ msgstr "Serienummer"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
-#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Reeksen"
 
@@ -9479,7 +9526,8 @@ msgstr "Instellingen"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
-#: module:io.ox/files apps/plugins/portal/xing/actions.js module:plugins/portal
+#: module:io.ox/files apps/plugins/portal/xing/actions.js
+#: module:plugins/portal
 msgid "Share"
 msgstr "Delen"
 
@@ -9678,7 +9726,8 @@ msgstr "Toon in Drive"
 
 #. Shown in settings page for accounts. Should use the indefinite form, it's a general information
 #. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "Show information about account recovery"
 msgstr "Toon informatie over account herstel"
 
@@ -9786,7 +9835,8 @@ msgid "Signed in as"
 msgstr "Aangemeld als"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/files/view-options.js module:io.ox/files
+#: module:io.ox/core/viewer apps/io.ox/files/view-options.js
+#: module:io.ox/files
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter apps/io.ox/mail/settings/compose/settings/pane.js
 #: module:io.ox/mail apps/io.ox/mail/view-options.js
@@ -10000,7 +10050,8 @@ msgstr "Zoeken starten"
 msgid "Start time"
 msgstr "Begintijd"
 
-#: apps/io.ox/core/tk/wizard.js module:io.ox/core apps/io.ox/tours/whats-new.js
+#: apps/io.ox/core/tk/wizard.js module:io.ox/core
+#: apps/io.ox/tours/whats-new.js
 msgid "Start tour"
 msgstr "Start rondleiding"
 
@@ -10364,8 +10415,8 @@ msgstr "Voorlopig"
 
 # Reinout: Onder voorbehoud?
 # Elma: Ik heb geen idee, geen context gevonden???
-#: apps/io.ox/calendar/print.js module:io.ox/calendar apps/io.ox/tasks/print.js
-#: module:io.ox/tasks
+#: apps/io.ox/calendar/print.js module:io.ox/calendar
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Tentatively accepted"
 msgstr "Voorlopig geaccepteerd"
 
@@ -10675,7 +10726,8 @@ msgid "The service is not available right now."
 msgstr "De dienst is nu niet benaderbaar."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "De gemaakte wijziging vereist dat u de pagina ververst of dat u zich opnieuw "
@@ -10831,8 +10883,7 @@ msgstr ""
 msgid "There was no task data to import"
 msgstr "Er waren geen taakgegevens om te importeren"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "This appointment"
 msgstr "Deze afspraak"
 
@@ -10843,6 +10894,28 @@ msgid ""
 msgstr ""
 "De afspraak is een uitzondering. Het aanpassen van de uitzondering heeft "
 "geen effect op de serie."
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete the whole series or just this appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to delete all appointments "
+"of the series or just this appointment?"
+msgstr "Wilt u de hele reeks of alleen deze afspraak uit de reeks verwijderen?"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete this and all future appointments or just this "
+#| "appointment within the series?"
+msgid ""
+"This appointment is part of a series. Do you want to delete this and all "
+"future appointments of the series or just this appointment?"
+msgstr ""
+"Wilt u alleen deze afspraak of alle toekomstige afspraken uit deze reeks "
+"verwijderen?"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 #, fuzzy
@@ -11144,7 +11217,8 @@ msgstr "Deze regel bevat niet ondersteunde eigenschappen. "
 msgid "This task has no participants yet"
 msgstr "Deze taak heeft nog geen deelnemers"
 
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "This task recurs"
 msgstr "Dit is een terugkerende taak"
 
@@ -11475,8 +11549,8 @@ msgid_plural "Unable to upload files"
 msgstr[0] "Bestand uploaden niet mogelijk"
 msgstr[1] "Bestanden uploaden niet mogelijk"
 
-#: apps/io.ox/calendar/print.js module:io.ox/calendar apps/io.ox/tasks/print.js
-#: module:io.ox/tasks
+#: apps/io.ox/calendar/print.js module:io.ox/calendar
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Unconfirmed"
 msgstr "Niet bevestigd"
 
@@ -11830,10 +11904,11 @@ msgstr "Videos"
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+#: apps/io.ox/core/pim/actions.js module:io.ox/core
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "View"
 msgstr "Overzicht"
 
@@ -11982,7 +12057,8 @@ msgstr "Week waarin 1 januari valt"
 msgid "Week that contains January 4th (e.g. Europe, ISO-8601)"
 msgstr "Week waarin 1 januari valt"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Weekday"
 msgstr "Weekdag"
 
@@ -11990,7 +12066,8 @@ msgstr "Weekdag"
 msgid "Weekends"
 msgstr "Weekeinden"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Weekly"
 msgstr "Wekelijks"
 
@@ -12126,7 +12203,8 @@ msgstr "YB"
 msgid "Year"
 msgstr "Jaar"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Yearly"
 msgstr "Jaarlijks"
 
@@ -12307,12 +12385,14 @@ msgid "You have declined the appointment"
 msgstr "U heeft de afspraak afgewezen"
 
 #. Body text of generic desktop notification about new invitations to appointments
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "You have new appointment invitations"
 msgstr "U heeft nieuwe afspraakuitnodigen"
 
 #. Body text of generic desktop notification about new reminders for appointments
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "You have new appointment reminders"
 msgstr "U heeft nieuwe afspraakherinneringen"
 
@@ -12779,7 +12859,8 @@ msgstr "donkergeel"
 msgid "datepicker"
 msgstr "datumselectie"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "day(s)"
 msgstr "dag(en)"
 
@@ -12906,7 +12987,8 @@ msgstr "iCalendar"
 msgid "iOS"
 msgstr "iOS"
 
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgctxt "in"
 msgid "in %d minute"
 msgid_plural "in %d minutes"
@@ -13033,7 +13115,8 @@ msgstr "bericht"
 msgid "modified"
 msgstr "gewijzigd"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "month(s)"
 msgstr "maand(en)"
 
@@ -13253,7 +13336,8 @@ msgstr "onbekende verzender"
 msgid "unlimited"
 msgstr "ongelimiteerd"
 
-#: apps/io.ox/core/export.js module:io.ox/core apps/io.ox/core/import/import.js
+#: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
 msgid "vCard"
 msgstr "vCard"
 
@@ -13266,11 +13350,13 @@ msgstr "afwezigheidsmelding"
 msgid "view the folder"
 msgstr "toon de map"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "week(s)"
 msgstr "week(en)"
 
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/backbone/views/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "year(s)"
 msgstr "jaar(en)"
 

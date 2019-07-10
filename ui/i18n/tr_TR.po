@@ -1272,8 +1272,7 @@ msgstr "Tüm dosyalar silindi"
 msgid "All folders"
 msgstr "Tüm klasörler"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "All future appointments"
 msgstr "Gelecekteki tüm randevuları"
 
@@ -3024,7 +3023,6 @@ msgstr "Ertelendi"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
@@ -3067,6 +3065,18 @@ msgstr "Çok faktörlü doğrulama cihazını sil"
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Delete account"
 msgstr "Hesabı sil"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Delete all appointments"
+msgstr "Randevuyu sil"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "All future appointments"
+msgid "Delete all future appointments"
+msgstr "Gelecekteki tüm randevuları"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Delete all messages"
@@ -3129,6 +3139,12 @@ msgstr "Kaynağı sil"
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Delete task"
 msgstr "Görevi sil"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Delete this appointment"
+msgstr "Randevuyu sil"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/actions/versions-delete.js
@@ -3517,22 +3533,6 @@ msgid ""
 "series?"
 msgstr ""
 "Tüm diziyi mi yoksa serideki tek bir randevuyu mu reddetmek istiyorsunuz?"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid ""
-"Do you want to delete the whole series or just this appointment within the "
-"series?"
-msgstr ""
-"Tüm diziyi mi yoksa yalnızca dizinin içindeki bu randevuyu mu silmek "
-"istiyorsunuz?"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid ""
-"Do you want to delete this and all future appointments or just this "
-"appointment within the series?"
-msgstr ""
-"Bununla birlikte gelecekteki tüm randevuları mı yoksa yalnızca dizinin "
-"içindeki bu randevuyu mu silmek istiyorsunuz?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid "Do you want to delete this appointment?"
@@ -9402,8 +9402,7 @@ msgstr "Seri numarası"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
-#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Dizi"
 
@@ -10788,8 +10787,7 @@ msgstr "Bu e-posta/parola kombinasyonu için uygun bir sunucu bulunamadı"
 msgid "There was no task data to import"
 msgstr "İçe aktarılacak görev verisi bulunamadı"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "This appointment"
 msgstr "Bu randevuyu"
 
@@ -10798,6 +10796,30 @@ msgid ""
 "This appointment is an exception. Changing the exception does not affect the "
 "series."
 msgstr "Bu randevu bir istisnadır. İstisnayı değiştirmeniz diziyi etkilemez."
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete the whole series or just this appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to delete all appointments "
+"of the series or just this appointment?"
+msgstr ""
+"Tüm diziyi mi yoksa yalnızca dizinin içindeki bu randevuyu mu silmek "
+"istiyorsunuz?"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete this and all future appointments or just this "
+#| "appointment within the series?"
+msgid ""
+"This appointment is part of a series. Do you want to delete this and all "
+"future appointments of the series or just this appointment?"
+msgstr ""
+"Bununla birlikte gelecekteki tüm randevuları mı yoksa yalnızca dizinin "
+"içindeki bu randevuyu mu silmek istiyorsunuz?"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 #, fuzzy

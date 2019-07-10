@@ -1283,8 +1283,7 @@ msgstr "Minden fájl törölve"
 msgid "All folders"
 msgstr "Összes mappa"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "All future appointments"
 msgstr "Összes jövőbeni találkozó"
 
@@ -3044,7 +3043,6 @@ msgstr "Elhalasztott"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
@@ -3087,6 +3085,18 @@ msgstr "Többfaktoros eszköz törlése"
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Delete account"
 msgstr "Fiók törlése"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Delete all appointments"
+msgstr "Találkozó törlése"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "All future appointments"
+msgid "Delete all future appointments"
+msgstr "Összes jövőbeni találkozó"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Delete all messages"
@@ -3149,6 +3159,12 @@ msgstr "Erőforrás törlése"
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Delete task"
 msgstr "Feladat törlése"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Delete this appointment"
+msgstr "Találkozó törlése"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/actions/versions-delete.js
@@ -3540,22 +3556,6 @@ msgid ""
 msgstr ""
 "A teljes ismétlődést, vagy csak az ismétlődésen belüli egyik találkozót "
 "kívánja visszautasítani?"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid ""
-"Do you want to delete the whole series or just this appointment within the "
-"series?"
-msgstr ""
-"A teljes ismétlődést, vagy csak az ismétlődésen belüli ezt a találkozót "
-"kívánja törölni?"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid ""
-"Do you want to delete this and all future appointments or just this "
-"appointment within the series?"
-msgstr ""
-"Szeretné törölni ezt és az összes jövőbeni találkozót, vagy csak ezt a "
-"találkozót a sorozaton belül?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid "Do you want to delete this appointment?"
@@ -9434,8 +9434,7 @@ msgstr "Sorozatszám"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
-#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Ismétlődések"
 
@@ -10834,8 +10833,7 @@ msgstr "Nem található megfelelő kiszolgáló ehhez a cím/jelszó kombináci�
 msgid "There was no task data to import"
 msgstr "Nem volt importálható feladat"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "This appointment"
 msgstr "Ez a találkozó"
 
@@ -10845,6 +10843,30 @@ msgid ""
 "series."
 msgstr ""
 "Ez a találkozó kivétel. A kivétel módosítása nincs hatással a ismétlődésre."
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete the whole series or just this appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to delete all appointments "
+"of the series or just this appointment?"
+msgstr ""
+"A teljes ismétlődést, vagy csak az ismétlődésen belüli ezt a találkozót "
+"kívánja törölni?"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete this and all future appointments or just this "
+#| "appointment within the series?"
+msgid ""
+"This appointment is part of a series. Do you want to delete this and all "
+"future appointments of the series or just this appointment?"
+msgstr ""
+"Szeretné törölni ezt és az összes jövőbeni találkozót, vagy csak ezt a "
+"találkozót a sorozaton belül?"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 #, fuzzy

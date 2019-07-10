@@ -1290,8 +1290,7 @@ msgstr "Se han borrado todos los archivos"
 msgid "All folders"
 msgstr "Todas las carpetas"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "All future appointments"
 msgstr "Todas las citas futuras"
 
@@ -3057,7 +3056,6 @@ msgstr "Retrasada"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
@@ -3100,6 +3098,18 @@ msgstr "Borrar dispositivo multifactor"
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Delete account"
 msgstr "Borrar cuenta"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Delete all appointments"
+msgstr "Borrar cita"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "All future appointments"
+msgid "Delete all future appointments"
+msgstr "Todas las citas futuras"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Delete all messages"
@@ -3162,6 +3172,12 @@ msgstr "Borrar recurso"
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Delete task"
 msgstr "Borrar tarea"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Delete this appointment"
+msgstr "Borrar cita"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/actions/versions-delete.js
@@ -3550,20 +3566,6 @@ msgid ""
 "Do you want to decline the whole series or just one appointment within the "
 "series?"
 msgstr "¿Quiere rechazar toda la serie o solo una cita de la serie?"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid ""
-"Do you want to delete the whole series or just this appointment within the "
-"series?"
-msgstr "¿Quiere borrar toda la serie o solo una cita de la serie?"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid ""
-"Do you want to delete this and all future appointments or just this "
-"appointment within the series?"
-msgstr ""
-"¿Quiere borrar esta cita y todas las citas futuras o solo esta cita de la "
-"serie?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid "Do you want to delete this appointment?"
@@ -9463,8 +9465,7 @@ msgstr "Número de serie"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
-#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Serie"
 
@@ -10870,8 +10871,7 @@ msgstr ""
 msgid "There was no task data to import"
 msgstr "No había datos de tareas para importar"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "This appointment"
 msgstr "Esta cita"
 
@@ -10880,6 +10880,28 @@ msgid ""
 "This appointment is an exception. Changing the exception does not affect the "
 "series."
 msgstr "Esta cita es una excepción. Cambiar la excepción no afecta a la serie."
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete the whole series or just this appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to delete all appointments "
+"of the series or just this appointment?"
+msgstr "¿Quiere borrar toda la serie o solo una cita de la serie?"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete this and all future appointments or just this "
+#| "appointment within the series?"
+msgid ""
+"This appointment is part of a series. Do you want to delete this and all "
+"future appointments of the series or just this appointment?"
+msgstr ""
+"¿Quiere borrar esta cita y todas las citas futuras o solo esta cita de la "
+"serie?"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 #, fuzzy
