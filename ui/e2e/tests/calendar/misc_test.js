@@ -348,7 +348,9 @@ Scenario('[C252158] All my public appointments @shaky', (I, users) => {
     I.waitForVisible('a[title="Actions for Cal#A"]');
     I.click('a[title="Actions for Cal#A"]');
     I.waitForText('Permissions');
+    I.wait(1);
     I.click('Permissions');
+    I.waitForVisible('.share-permissions-dialog');
     I.waitForFocus('.form-control.tt-input');
     I.fillField('.form-control.tt-input', userB.get('primaryEmail'));
     I.pressKey('Enter');
@@ -365,7 +367,7 @@ Scenario('[C252158] All my public appointments @shaky', (I, users) => {
     I.click('~Start time');
     I.pressKey('Enter');
     I.pressKey(['Control', 'a']);
-    I.pressKey(moment().format('hh:mm P'));
+    I.pressKey(moment().format('hh:mm'));
     I.pressKey('Enter');
     I.fillField('Add contact/resource', userB.userdata.primaryEmail);
     I.wait(0.5);
