@@ -491,7 +491,7 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author @shaky
     I.click('Delete', '.io-ox-sidepopup .inline-toolbar-container');
 
     I.waitForText('Do you want to delete the whole series or just this appointment within the series?');
-    I.click('Delete series');
+    I.click('Delete all appointments');
 
     I.waitForDetached('.io-ox-sidepopup');
 
@@ -535,7 +535,7 @@ Scenario('[C7470] Delete a recurring appointment', async function (I) {
     I.retry(5).click('Delete');
 
     I.waitForText('Do you want to delete the whole series or just this appointment within the series?');
-    I.click('Delete series');
+    I.click('Delete all appointments');
 
     I.waitForDetached('.io-ox-sidepopup');
 
@@ -707,7 +707,7 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.waitForVisible('.io-ox-sidepopup');
     I.retry(5).click('Delete');
     I.waitForText('Do you want to delete the whole series or just this appointment within the series?');
-    I.click('Series', '.modal-dialog');
+    I.click('Delete all appointments', '.modal-dialog');
     I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
 
@@ -717,7 +717,7 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.retry(5).click('Delete');
     I.waitForText('Delete appointment');
     I.see('Add a message to the notification email for the other participants.');
-    I.click('Delete', '.modal-dialog');
+    I.click('Delete this appointment', '.modal-dialog');
     I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
 
@@ -727,7 +727,7 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.retry(5).click('Delete');
     I.waitForText('Delete appointment');
     I.see('Add a message to the notification email for the other participants.');
-    I.click('Series', '.modal-dialog');
+    I.click('Delete all appointments', '.modal-dialog');
     I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
 
