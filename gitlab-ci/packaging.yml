@@ -5,7 +5,7 @@ stages:
   - deploy
   - cleanup
 
-cleanup packaging repo:
+delete project on obs:
   image: gitlab.open-xchange.com:4567/frontend/osc_env:latest
   stage: cleanup
   dependencies: []
@@ -14,8 +14,7 @@ cleanup packaging repo:
   before_script:
     - echo "${OBS_OSCRC}" >> ~/.oscrc
   script:
-    - for P in open-xchange-appsuite open-xchange-appsuite-manifest open-xchange-appsuite-l10n open-xchange-dynamic-theme open-xchange-guidedtours open-xchange-appsuite-help open-xchange-appsuite-saml open-xchange-appsuite-spamexperts; do osc rdelete frontend-${CI_COMMIT_REF_SLUG} $P -m "GitLab CI environment stopped for $P" || echo "Could not remove $P, ignoring"; done
-    - osc rdelete frontend-${CI_COMMIT_REF_SLUG} -m "GitLab CI environment stopped" || echo "Leaving non-empty project on OBS"
+    - osc rdelete -r frontend-${CI_COMMIT_REF_SLUG} -m "GitLab CI environment stopped"
   when: manual
   environment:
     name: packages/$CI_COMMIT_REF_NAME
@@ -36,7 +35,7 @@ upload:
     - /^poc\//
   environment:
     name: packages/$CI_COMMIT_REF_NAME
-    on_stop: "cleanup packaging repo"
+    on_stop: "delete project on obs"
     url: https://buildservice.open-xchange.com/frontend-$CI_COMMIT_REF_SLUG/
   dependencies:
     - build ui
