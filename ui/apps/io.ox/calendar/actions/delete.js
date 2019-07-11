@@ -76,7 +76,7 @@ define('io.ox/calendar/actions/delete', [
                     ? gt('This appointment is part of a series. Do you want to delete all appointments of the series or just this appointment?')
                     : gt('This appointment is part of a series. Do you want to delete this and all future appointments of the series or just this appointment?');
             } else {
-                text = gt('Do you want to delete this appointment?');
+                text = gt('Do you really want to delete this appointment?');
             }
             dialog = new ModalDialog({
                 title: gt('Delete appointment'),
@@ -97,7 +97,7 @@ define('io.ox/calendar/actions/delete', [
                 if (hasFirstOccurence) dialog.addButton({ label: gt('Delete all appointments'), action: 'series' });
                 else dialog.addButton({ label: gt('Delete all future appointments'), action: 'thisandfuture' });
             } else {
-                dialog.addButton({ label: gt('Delete this appointment'), action: 'appointment' });
+                dialog.addButton({ label: gt('Delete appointment'), action: 'appointment' });
             }
             dialog.open();
         });
