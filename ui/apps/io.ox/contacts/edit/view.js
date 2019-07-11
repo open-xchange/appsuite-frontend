@@ -29,8 +29,8 @@ define('io.ox/contacts/edit/view', [
 
     var View = ExtensibleView.extend({
 
-        className: 'contact-edit form-horizontal',
         point: 'io.ox/contacts/edit/view',
+        className: 'contact-edit form-horizontal',
 
         events: {
             'click [data-remove]': 'onRemoveField'
@@ -57,11 +57,11 @@ define('io.ox/contacts/edit/view', [
 
         renderHeader: function () {
             this.$el.append(
-                $('<div class="header form-group">').append(
+                $('<div class="contact-header form-group">').append(
                     $('<div class="col-xs-3 col-sm-4">').append(
                         this.renderContactPhoto()
                     ),
-                    $('<div class="col-xs-9 col-sm-8 contact-summary">').append(
+                    $('<div class="col-xs-9 col-sm-8 height-100">').append(
                         this.renderContactSummary()
                     )
                 )
@@ -98,60 +98,34 @@ define('io.ox/contacts/edit/view', [
         renderContactSummary: function () {
 
             var $h1 = $('<h1>'),
-                $h2 = $('<h2 class="hidden-xs">'),
-                $h3 = $('<h2 class="hidden-xs">'),
-                $h4 = $('<h2 class="hidden-xs">');
+                $h2 = $('<h2 class="business hidden-xs">'),
+                $h3 = $('<h2 class="location hidden-xs">');
 
             this.listenTo(this.model, 'change:title change:first_name change:last_name', updateName);
-            this.listenTo(this.model, 'change:email1 change:email2 change:email3', updateEmail);
             this.listenTo(this.model, 'change:company change:department change:position', updateBusiness);
             this.listenTo(this.model, 'change:city_home change:city_business change:country_home change:country_business', updateLocation);
             // ... and for diabloc testers
             this.listenTo(settings, 'change:fullNameFormat', updateName);
 
             updateName.call(this);
-            updateEmail.call(this);
             updateBusiness.call(this);
             updateLocation.call(this);
 
-            return [$h1, $h2, $h3, $h4];
+            return $('<div class="contact-summary">').append($h1, $h2, $h3);
 
             function updateName() {
-                $h1.empty().append(this.getContactSummaryName());
-            }
-
-            function updateEmail() {
-                $h2.text(this.getContactSummaryEmail());
+                $h1.empty().append(
+                    util.getFullName(this.model.toJSON(), true)
+                );
             }
 
             function updateBusiness() {
-                $h3.text(this.getContactSummaryBusiness());
+                $h2.text(util.getSummaryBusiness(this.model.toJSON()));
             }
 
             function updateLocation() {
-                $h4.text(this.getContactSummaryLocation());
+                $h3.text(util.getSummaryLocation(this.model.toJSON()));
             }
-        },
-
-        getContactSummaryName: function () {
-            var data = this.model.toJSON();
-            return util.getFullName(data, true);
-        },
-
-        getContactSummaryEmail: function () {
-            var data = this.model.toJSON();
-            return data.email1 || data.email2 || data.email3;
-        },
-
-        getContactSummaryBusiness: function () {
-            var data = this.model.toJSON();
-            return [data.company, data.department, data.position].filter(Boolean).join(', ');
-        },
-
-        getContactSummaryLocation: function () {
-            var data = this.model.toJSON();
-            if (data.city_home) return [data.city_home, data.country_home].filter(Boolean).join(', ');
-            return [data.city_business, data.country_business].filter(Boolean).join(', ');
         },
 
         renderField: function (name, callback) {
@@ -190,10 +164,6 @@ define('io.ox/contacts/edit/view', [
 
         renderRemoveIcon: function () {
             return $('<i class="fa fa-minus-circle">');
-            // return $('<span class="fa-stack" aria-hidden="true">').append(
-            //     $('<i class="fa fa-circle fa-stack-2x">'),
-            //     $('<i class="fa fa-minus fa-stack-1x">')
-            // );
         },
 
         renderTextField: function (name) {
@@ -501,7 +471,7 @@ define('io.ox/contacts/edit/view', [
         last_name: gt('Last name'),
         second_name: gt('Middle name'),
         suffix: gt('Suffix'),
-        birthday: gt('Date of birth'),
+        birthday: gt('Birthday'),
         marital_status: gt('Marital status'),
         number_of_children: gt('Children'),
         nickname: gt('Nickname'),

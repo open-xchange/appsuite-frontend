@@ -322,14 +322,31 @@ define('io.ox/contacts/util', [
 
         // little helper to get birthdays
         // @birthday is either a timestamp or a momentjs instance
-        getBirthday: function (birthday) {
+        getBirthday: function (birthday, withAge) {
             // ensure instance of moment
             birthday = moment.utc(birthday);
             // Year 1 and year 1604 are  special for birthdays without year
             // therefore, return full date if year is not 1
-            if (birthday.year() > 1 && birthday.year() !== 1604) return birthday.format('l');
+            if (birthday.year() > 1 && birthday.year() !== 1604) {
+                return birthday.format('l') +
+                    //#. %1$d is age in years (number)
+                    (withAge ? ' (' + gt('Age: %1$d', moment().diff(birthday, 'years')) + ')' : '');
+            }
             // get localized format without the year otherwise
             return birthday.formatCLDR('Md');
+        },
+
+        getSummaryBusiness: function (data) {
+            var array = [data.position, data.company, data.department];
+            // pretty sure we don't **really** need the company when we are in
+            // global address book; let's see which bug report will come around.
+            if (String(data.folder_id) === '6') array.splice(1, 1);
+            return array.map($.trim).filter(Boolean).join(', ');
+        },
+
+        getSummaryLocation: function (data) {
+            var list = data.city_business ? [data.city_business, data.country_business] : [data.city_home, data.country_home];
+            return list.map($.trim).filter(Boolean).join(', ');
         },
 
         // @arg is either a string (image1_url) or an object with image1_url

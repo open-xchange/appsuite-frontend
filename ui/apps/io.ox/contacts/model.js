@@ -229,7 +229,7 @@ define('io.ox/contacts/model', [
         city_home: gt('City'),
         state_home: gt('State'),
         country_home: gt('Country'),
-        birthday: gt('Date of birth'),
+        birthday: gt('Birthday'),
         marital_status: gt('Marital status'),
         number_of_children: gt('Children'),
         profession: gt('Profession'),

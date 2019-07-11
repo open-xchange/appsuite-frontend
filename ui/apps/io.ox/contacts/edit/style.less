@@ -9,6 +9,7 @@
  * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
 .edit-contact {
@@ -156,11 +157,19 @@
 
 .contact-edit {
 
-    margin-top: 32px;
-    margin-bottom: 40px;
+    margin: 32px 0;
 
     .form-group {
         margin-bottom: 8px;
+    }
+
+    .contact-header {
+        height: @size;
+        margin-bottom: 32px;
+    }
+
+    .height-100 {
+        height: 100%;
     }
 
     label {
@@ -174,35 +183,6 @@
 
     textarea {
         min-height: 120px;
-    }
-
-    .header {
-        height: 120px;
-        margin-bottom: 32px;
-    }
-
-    .contact-summary {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    h1 {
-        font-size: 24px;
-        line-height: 24px;
-        font-weight: normal;
-        margin: 0 0 8px 0;
-        .first_name, .last_name {
-            white-space: nowrap;
-        }
-    }
-
-    h2 {
-        font-size: 13px;
-        line-height: 16px;
-        color: #707070;
-        margin: 0;
     }
 
     .section, fieldset {
@@ -323,7 +303,7 @@
         margin-left: 15px;
         margin-right: 15px;
 
-        .header {
+        .contact-header {
             height: @size;
             margin-bottom: 16px;
         }

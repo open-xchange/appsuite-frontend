@@ -91,7 +91,7 @@ define('io.ox/contacts/api', [
             },
             list: {
                 action: 'list',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,616,617,5,2',
+                columns: '20,1,101,500,501,502,505,508,510,519,520,524,526,528,555,556,557,569,592,602,606,607,616,617,5,2',
                 extendColumns: 'io.ox/contacts/api/list'
             },
             get: {
@@ -700,6 +700,13 @@ define('io.ox/contacts/api', [
         return ox.base + '/apps/themes/' + ox.theme + '/fallback-image-' + (type || 'contact') + '.png';
     };
 
+    // for cache busting
+    var uniq = ox.t0;
+    // update uniq on picture change
+    api.on('update:image', function () {
+        uniq = _.now();
+    });
+
     /**
      * show default image or assigned image (in case it's available)
      * @param  {jquery} node    placeholder node that gets background-image OR null
@@ -712,13 +719,7 @@ define('io.ox/contacts/api', [
 
         // local hash to recognize URLs that have been fetched already
         var cachedURLs = {},
-            uniq = ox.t0,
             fallback = api.getFallbackImage();
-
-        // update uniq on picture change
-        api.on('update:image', function () {
-            uniq = _.now();
-        });
 
         function getType(data, opt) {
             // duck checks
@@ -733,7 +734,6 @@ define('io.ox/contacts/api', [
 
         function getParams(data, opt, type) {
             var params = {};
-
             switch (type) {
                 case 'user':
                     params.user_id = data.user_id || data.userid || data.userId || data.internal_userid;
@@ -747,18 +747,8 @@ define('io.ox/contacts/api', [
                     break;
                 default:
             }
-
-            return _.extend(params, {
-                width: _.device('retina') ? opt.width * 2 : opt.width,
-                height: _.device('retina') ? opt.height * 2 : opt.height,
-                scaleType: opt.scaleType,
-                // allow multiple public-session cookies per browser (see bug 44812)
-                user: ox.user_id,
-                context: ox.context_id,
-                // ui only caching trick
-                sequence: data.last_modified || 1,
-                uniq: uniq
-            });
+            params.sequence = data.last_modified || 1;
+            return _.extend(params, pictureParams(opt));
         }
 
         function load(node, url, opt) {
@@ -797,6 +787,7 @@ define('io.ox/contacts/api', [
         }
 
         return function (node, data, options) {
+
             var opt = _.extend({
                     width: 48,
                     height: 48,
@@ -847,6 +838,37 @@ define('io.ox/contacts/api', [
             }
         };
     }());
+
+    // simple variant
+    api.getContactPhoto = function (data, options) {
+        options = _.extend({ size: 48, fallback: false, initials: true }, options);
+        var url = this.getContactPhotoUrl(data, options.size) || (options.fallback && api.getFallbackImage()),
+            $el = $('<div class="contact-photo" aria-hidden="true">');
+        if (!url && options.initials) $el.text(util.getInitials(data));
+        if (url) $el.css('background-image', 'url(' + url + ')');
+        return $el;
+    };
+
+    api.getContactPhotoUrl = function (data, size) {
+        // contact picture URLs meanwhile contain a timestamp so we don't need sequence or uniq
+        var options = { width: size, height: size, sequence: false, uniq: false };
+        if (!data.image1_url) return '';
+        return coreUtil.getShardingRoot(coreUtil.replacePrefix(data.image1_url) + '&' + $.param(pictureParams(options)));
+    };
+
+    function pictureParams(options) {
+        return $.extend({}, {
+            width: _.device('retina') ? options.width * 2 : options.width,
+            height: _.device('retina') ? options.height * 2 : options.height,
+            scaleType: options.scaleType,
+            // allow multiple public-session cookies per browser (see bug 44812)
+            user: ox.user_id,
+            context: ox.context_id,
+            // ui only caching trick
+            sequence: options.sequence !== false ? options.sequence : undefined,
+            uniq: options.uniq !== false ? uniq : undefined
+        });
+    }
 
     /**
     * get div node with callbacks managing fetching/updating

@@ -20,43 +20,78 @@
 
     &.abs { left: @thumbIndexWidth; }
 
+    @photoSize: 48px;
+    @paddingLeft: @photoSize + 32;
+    @checkboxWidth: 32px;
+
     .vgrid-cell {
 
         &.contact {
-            height: 60px;
+
+            height: 72px;
+            padding: 7px 16px 0 @paddingLeft;
+            line-height: 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+            .contact-photo {
+                position: absolute;
+                left: 16px;
+                top: 12px;
+                width: @photoSize;
+                height: @photoSize;
+            }
 
             .private_flag {
                 float: left;
-                color: #AAA;
+                color: #aaa;
                 font-size: 17px;
                 margin-right: 3px;
             }
 
             .fullname {
-                &>span {
+                font-weight: 500;
+                font-size: 15px;
+                line-height: 24px;
+                margin-bottom: -3px;
+                & > span {
                     display: flex;
-                    &>*:not(:first-child) {
+                    & > *:not(:first-child) {
                         margin-left: 0.3em;
                     }
-                };
-                font-weight: normal;
+                }
                 .last_name { font-weight: bold; }
+            }
+
+            .description {
+                font-weight: normal;
             }
         }
 
         &.vgrid-label {
-            text-align: left;
+            width: @photoSize;
+            font-size: @photoSize - 8px;
+            line-height: 1em;
+            text-align: center;
             font-weight: bold;
-            font-size: 24px;
-            line-height: 32px;
-            color: @link-color;
-            padding-top: 16px;
-            padding-bottom: 8px;
+            color: #333;
+            padding: 32px 0 16px 0;
+            margin-left: 16px;
             background-image: none;
             background-color: #fff;
             border-top: 0 none;
             border-bottom: 0 none;
         }
+    }
+
+
+
+    &.editable .vgrid-cell.contact {
+        padding-left: @paddingLeft + @checkboxWidth;
+        .contact-photo { left: @checkboxWidth + 16; }
+    }
+
+    &.editable .vgrid-cell.vgrid-label  {
+        margin-left: @checkboxWidth + 16;
     }
 }
 
@@ -72,7 +107,7 @@
     .thumb-index {
         font-size: 11px;
         line-height: 20px;
-        padding: 0 5px;
+        padding: 0 4px;
         font-weight: bold;
         text-align: center;
         white-space: nowrap;
@@ -90,6 +125,12 @@
             cursor: default;
         }
     }
+
+    @media (min-height: 800px) {
+        .thumb-index {
+            line-height: 24px;
+        }
+    }
 }
 
 // Detail view
@@ -97,70 +138,12 @@
 .contact-detail-edit  { width: 100%; }
 
 .contact-detail {
+
     width: 100%;
 
     .inline-toolbar:first-child {
         margin-top: 0;
         margin-bottom: 16px;
-    }
-
-    .contact-header {
-        margin-bottom: 24px;
-        min-height: 80px;
-
-        .picture {
-            float: left;
-            display: inline-block;
-            // to match h1's cap-line
-            margin-top: 5px;
-            .picture();
-        }
-
-        // .next-to-picture but this selector works better if picture if not availabel
-
-        .picture + div {
-            display: table;
-            padding-left: 20px;
-        }
-
-        .private-flag {
-            color: @hc-gray;
-            font-size: 32px;
-            line-height: 32px;
-            margin-right: 10px;
-            float: left;
-        }
-
-        h1 {
-            font-family: @light-font-family;
-            font-weight: normal;
-            font-size: 24px;
-            line-height: 32px;
-            margin: -1px 0 1px 0;
-
-            &.header-name {
-                word-break: break-all;
-                display: inline-block;
-            }
-        }
-
-        h2 {
-            font-size: 16px;
-            line-height: 24px;
-            font-weight: normal;
-
-            &.header-company { margin: 0 0 2px 0; padding-top: 6px; }
-
-            &.header-job {
-                color: @hc-gray;
-                margin: -2px 0 2px 0;
-                word-break: break-all;
-            }
-
-        }
-
-        h1:empty + h2.header-company { margin-top: 0; }
-
     }
 
     .attachments-container {
@@ -178,30 +161,28 @@
         word-break: break-all;
     }
 
-    .comment, .description {
-        font-weight: normal;
-        // twice block-width plus margin
-        max-width: 720px;
-        line-height: 24px;
-        margin-top: -2px;
-        margin-bottom: 18px;
-        clear: both;
+    .dl-horizontal {
+        margin-bottom: 32px;
+        dt, dd { line-height: 24px; }
     }
 
-    .block {
-        display: inline-block;
-        float: left;
-        width: 560px;
-        margin: 0 16px 24px 0;
-
-        h2 {
-            font-size: 13px;
-            color: black;
-            font-weight: bold;
-            line-height: 16px;
-            margin-top: 2px;
-            margin-bottom: 6px;
+    @media (min-width: 768px) {
+        @width: 200px;
+        .dl-horizontal {
+            dt { width: @width; }
+            dd { margin-left: @width + 32px; }
         }
+    }
+
+    dd.note {
+        line-height: 16px;
+        padding-top: 4px;
+        margin-bottom: 4px;
+    }
+
+    /*.block {
+
+        margin: 0 0 32px 0;
 
         dl {
             margin-bottom: 0;
@@ -209,23 +190,26 @@
             dt {
                 font-size:13px;
                 width: 192px;
-                text-align: left;
-                color: #767676;
+                text-align: right;
+                color: #333;
                 line-height: 24px;
                 margin-top: -2px;
                 margin-bottom: 2px;
             }
 
             dd {
-                margin-left: 200px;
+                margin-left: 216px;
                 word-break: break-all;
             }
         }
-    }
+    }*/
 
     address {
         color: #333;
         white-space: pre;
+        margin-bottom: 4px;
+        padding-top: 4px;
+        line-height: 16px;
     }
 
     .member {
@@ -244,6 +228,77 @@
         font-weight: bold;
         padding-top: 4px;
     }
+}
+
+/* general blueprint for contact photo */
+.contact-photo {
+    /* default size */
+    width: 40px;
+    height: 40px;
+    /* photo as background image */
+    background-color: rgba(0, 0, 0, 0.05);
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* shape is circle */
+    border-radius: 50%;
+    /* for initials */
+    color: rgba(0, 0, 0, 0.60);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* shared between contact detail and edit view */
+
+.contact-header {
+
+    height: 120px;
+    margin-bottom: 40px;
+
+    @photo-size: 120px;
+
+    .contact-photo {
+        width: @photo-size;
+        height: @photo-size;
+        font-size: 24px;
+        float: right;
+    }
+
+    .contact-summary {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    h1 {
+        font-size: 24px;
+        line-height: 24px;
+        font-weight: normal;
+        margin: 0 0 8px 0;
+        .first_name, .last_name {
+            white-space: nowrap;
+        }
+    }
+
+    h2 {
+        font-size: 14px;
+        line-height: 16px;
+        font-weight: normal;
+        color: #707070;
+        margin: 0;
+    }
+
+    h2.business {
+        font-weight: 500;
+        color: #333;
+    }
+}
+
+.distribution-list .contact-header {
+    height: auto;
+    margin-bottom: 32px;
 }
 
 // smartphone
@@ -307,24 +362,6 @@
 
                 span.io-ox-action-link.dropdown { float: right; }
 
-            }
-
-            .block {
-                width: 100%;
-                margin: 8px 16px 16px 0;
-                line-height: 24px;
-
-                legend {
-                    padding-top: 0;
-                    border-bottom: 1px solid #ccc;
-                    padding-bottom: 8px;
-                    margin-bottom: 8px;
-                }
-
-                .dl-horizontal {
-                    dt, dd { margin-left: 0; }
-                    dd { margin-bottom: 16px; }
-                }
             }
         }
 
