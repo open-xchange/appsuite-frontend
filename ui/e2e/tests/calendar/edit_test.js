@@ -534,7 +534,7 @@ Scenario('[C7470] Delete a recurring appointment', async function (I) {
 
     I.retry(5).click('Delete');
 
-    I.waitForText('Do you want to delete the whole series or just this appointment within the series?');
+    I.waitForText('Do you want to delete all appointments of the series or just this appointment?');
     I.click('Delete all appointments');
 
     I.waitForDetached('.io-ox-sidepopup');
@@ -697,8 +697,8 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.click('Appointment1', '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
     I.retry(5).click('Delete');
-    I.waitForText('Do you want to delete this appointment');
-    I.click('Delete', '.modal-dialog');
+    I.waitForText('Do you really want to delete this appointment?');
+    I.click('Delete appointment', '.modal-dialog');
     I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
 
