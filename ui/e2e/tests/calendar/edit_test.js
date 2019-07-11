@@ -717,7 +717,7 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.retry(5).click('Delete');
     I.waitForText('Delete appointment');
     I.see('Add a message to the notification email for the other participants.');
-    I.click('Delete this appointment', '.modal-dialog');
+    I.click('Delete appointment', '.modal-dialog');
     I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
 
