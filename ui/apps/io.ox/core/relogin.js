@@ -163,7 +163,7 @@ define('io.ox/core/relogin', [
 
                             if (util.checkTabHandlingSupport()) {
                                 require(['io.ox/core/api/tab'], function (tabAPI) {
-                                    tabAPI.propagateLogin(true);
+                                    tabAPI.propagateLogin({ reloginOtherTabs: true });
                                 });
 
                             }

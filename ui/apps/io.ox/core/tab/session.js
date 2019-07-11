@@ -219,10 +219,13 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
         /**
          * Send a session over localStorage to login logged out tabs
          *
-         * @param {Boolean} [relogin]
-         *  If the relogin flag is set, the login is propagated to the other tabs
+         * @param {Object} [params]
+         *  Optional parameters:
+         *  - {Boolean} [params.reloginOtherTabs]
+         *      If the flag is set, the login is propagated to the other tabs and trigger a tabSessionLogin
          */
-        propagateLogin: function (relogin) {
+        propagateLogin: function (params) {
+            var options = params || {};
             this.propagate('propagateLogin', {
                 session: ox.session,
                 language: ox.language,
@@ -230,7 +233,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
                 user: ox.user,
                 user_id: ox.user_id,
                 context_id: ox.context_id,
-                relogin: relogin
+                relogin: options.reloginOtherTabs
             });
         },
 

@@ -206,8 +206,8 @@ define('io.ox/core/api/tab', [
         },
 
         // Send a session over localStorage to login logged out tabs
-        propagateLogin: function (relogin) {
-            tabSession.propagateLogin(relogin);
+        propagateLogin: function (options) {
+            tabSession.propagateLogin(options);
         },
 
         // Perform a login workflow (i.e. ask for a session and wait for an event)
