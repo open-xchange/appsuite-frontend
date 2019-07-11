@@ -136,6 +136,7 @@ Scenario('remove mail from thread @shaky', async (I, users) => {
     I.waitForText('Test subject', 5, '.subject');
     I.click('.list-item[aria-label*="Test subject"]');
 
+    I.waitForText('Reply', undefined, '.inline-toolbar');
     I.click('Reply');
     I.waitForVisible('.window-blocker.io-ox-busy');
     I.waitForInvisible('.window-blocker.io-ox-busy');

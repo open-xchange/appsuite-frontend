@@ -280,8 +280,15 @@ Scenario('[C244785] Open event from invite notification in calendar @shaky', asy
     I.clickToolbar('New appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.fillField('Subject', 'Totally nerdy event');
+
     const startTime = moment().add(10, 'minutes'),
         endTime = moment().add(70, 'minutes');
+
+    // check if start and end time is transitioning between am/pm
+    const isTransitionTime = function () {
+        return startTime.format('A') !== endTime.format('A');
+    };
+
     I.click('~Start time');
     I.pressKey('Enter');
     I.pressKey(['Control', 'a']);
@@ -318,7 +325,12 @@ Scenario('[C244785] Open event from invite notification in calendar @shaky', asy
     I.seeNumberOfElements('.calendar-detail.view', 1);
     I.see('Totally nerdy event', '.io-ox-sidepopup');
     I.see(`${startTime.format('ddd, M/D/YYYY')}`, '.io-ox-sidepopup .date');
-    I.see(`${startTime.format('h:mm')} – ${endTime.format('h:mm')} ${startTime.format('A')}CEST`, '.io-ox-sidepopup .time');
+
+    // Have to check since transition times are shown differently
+    isTransitionTime() ? I.see(`${startTime.format('h:mm')} ${startTime.format('A')} – ${endTime.format('h:mm')} ${endTime.format('A')}CEST`) :
+        I.see(`${startTime.format('h:mm')} – ${endTime.format('h:mm')} ${startTime.format('A')}CEST`);
+
+    //I.see(`${startTime.format('h:mm')} – ${endTime.format('h:mm')} ${startTime.format('A')}CEST`, '.io-ox-sidepopup .time');
     I.see(`${userA.userdata.sur_name}, ${userA.userdata.given_name}`, '.io-ox-sidepopup');
     I.see(`${userB.userdata.sur_name}, ${userB.userdata.given_name}`, '.io-ox-sidepopup');
 });
