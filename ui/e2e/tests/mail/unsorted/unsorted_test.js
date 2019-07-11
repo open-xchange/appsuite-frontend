@@ -42,9 +42,10 @@ Scenario('[C7380] Send saved draft mail @shaky', function (I, users) {
     I.click('Discard');
     I.waitForElement('.io-ox-dialog-wrapper .modal-backdrop');
     I.click('Save as draft');
+    I.wait(1);
     I.waitForDetached('.io-ox-dialog-wrapper .modal-backdrop');
     I.selectFolder('Drafts');
-    I.waitForText('' + testrailId + ' - ' + subject, 5, '.subject');
+    I.waitForText('' + testrailId + ' - ' + subject, undefined, '.subject');
     I.doubleClick('.list-item[aria-label*="' + testrailId + ' - ' + subject + '"]');
     I.see(testrailId + ' - ' + subject);
     I.see(text);
@@ -520,7 +521,7 @@ Scenario('[C8820] Forward attachments', function (I, users) {
     I.selectFolder('Inbox');
     I.waitForVisible('.selected .contextmenu-control');
     I.waitForVisible('[title="Fwd: ' + testrailID + ' - ' + timestamp + '"]');
-    I.click('[title="Fwd: ' + testrailID + ' - ' + timestamp + '"]');
+    I.retry(5).click('[title="Fwd: ' + testrailID + ' - ' + timestamp + '"]');
     I.waitForElement('.attachments .toggle-details');
     I.click('.attachments .toggle-details');
     I.waitForElement('.mail-attachment-list.open');

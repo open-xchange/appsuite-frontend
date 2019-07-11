@@ -1185,6 +1185,7 @@ Scenario('[C7429] Create appointment via Contact', async function (I, users) {
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
     // cannot use check in all views here because i click toolbar is broken after appchange
+    I.waitForText('View');
     I.click('View', '.io-ox-calendar-main .classic-toolbar');
     I.click('Day', '.smart-dropdown-container');
 
