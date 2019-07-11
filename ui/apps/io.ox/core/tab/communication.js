@@ -68,10 +68,14 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
 
             if (!data.propagate) return;
 
-            if (data.targetWindow && data.targetWindow !== TabCommunication.windowName) return;
-            if (data.exceptWindow && data.exceptWindow === TabCommunication.windowName) return;
+            if (data.targetWindow && data.targetWindow !== windowNameObject.windowName) return;
+            if (data.exceptWindow && data.exceptWindow === windowNameObject.windowName) return;
 
-            if (data.propagate === 'show-in-drive') return TabCommunication.showInDrive(data.parameters);
+            if (data.propagate === 'show-in-drive') {
+                return ox.load(['io.ox/files/actions/show-in-drive']).done(function (action) {
+                    action(data.parameters);
+                });
+            }
             if (data.propagate === 'get-active-windows') return TabCommunication.getActiveWindows(data.exceptWindow);
             if (data.propagate === 'update-ox-object') return TabCommunication.updateOxObject(data.parameters);
 
@@ -206,33 +210,6 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
 
             return def.done(function () {
                 window.clearTimeout(timeout);
-            });
-        },
-
-        /**
-         * Handle the propagate showInDrive
-         *
-         * @param {Object} parameters
-         *  FileDescriptor
-         *  @param {String} parameters.folder_id
-         *   Folder to show in drive
-         *  @param {String} parameters.id
-         *   FileId to focus in drive
-         */
-        showInDrive: function (parameters) {
-            require(['io.ox/files/api', 'io.ox/backbone/views/actions/util', 'io.ox/core/extensions'], function (FilesAPI, actionsUtil, ext) {
-                FilesAPI.get(_.pick(parameters, 'folder_id', 'id')).done(function (fileDesc) {
-                    var app = ox.ui.apps.get('io.ox/files');
-                    var fileModel = new FilesAPI.Model(fileDesc);
-                    ox.launch('io.ox/files/main', { folder: fileModel.get('folder_id') }).done(function () {
-                        actionsUtil.invoke('io.ox/files/actions/show-in-folder', ext.Baton({
-                            models: [fileModel],
-                            app: app,
-                            alwaysChange: true,
-                            portal: true
-                        }));
-                    });
-                });
             });
         },
 
