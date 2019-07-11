@@ -78,6 +78,16 @@
     .io-ox-pagecontroller.page .mail-detail .mail-detail-content { margin: 0; }
 }
 
+// hide text preview if expanded or if setting is disabled
+.thread-view-control.hide-text-preview .mail-detail .text-preview, .mail-detail.expanded .text-preview {
+    display: none;
+}
+
+.mail-detail .text-preview {
+    line-height: 16px;
+    padding: 0px 16px 8px 40px;
+}
+
 .toggle-mail-body, .toggle-mail-body-btn {
     position: absolute;
     left: 0;

@@ -408,6 +408,8 @@ define('io.ox/mail/threadview', [
             options = options || {};
             this.standalone = options.standalone || false;
 
+            this.app = options.app;
+
             this.listenTo(this.collection, {
                 add: this.onAdd,
                 remove: this.onRemove,
@@ -444,6 +446,13 @@ define('io.ox/mail/threadview', [
                 $(window).off('resize', resizeCallback);
             });
 
+            if (options.app) {
+                this.listenTo(options.app.props, 'change:textPreview', function (model, value) {
+                    this.$el.toggleClass('hide-text-preview', !value);
+                    resizeCallback();
+                });
+            }
+
             $(window).on('resize', resizeCallback);
         },
 
@@ -454,13 +463,14 @@ define('io.ox/mail/threadview', [
 
         // render scaffold
         render: function () {
+            this.$el.toggleClass('hide-text-preview', this.app ? !this.app.useTextPreview() : true);
             ext.point('io.ox/mail/thread-view').invoke('draw', this);
             return this;
         },
 
         // render an email
         renderListItem: function (model) {
-            var self = this, view = new detail.View({ tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
+            var self = this, view = new detail.View({ supportsTextPreview: this.app ? this.app.supportsTextPreviewConfiguration() : false, tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
             view.on('mail:detail:body:render', function (data) {
                 self.trigger('mail:detail:body:render', data);
             });

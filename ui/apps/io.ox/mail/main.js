@@ -699,12 +699,36 @@ define('io.ox/mail/main', [
             app.listControl.resizable();
         },
 
+        'textPreview': function (app) {
+
+            // default is true (for testing) until we have cross-stack support
+            var support = settings.get('features/textPreview', true);
+
+            app.supportsTextPreview = function () {
+                return support;
+            };
+
+            app.supportsTextPreviewConfiguration = function () {
+                var id = app.folder.get();
+                return support && (account.isPrimary(id) || id === 'virtual/all-unseen');
+            };
+
+            app.useTextPreview = function () {
+                return app.supportsTextPreviewConfiguration() && app.props.get('textPreview');
+            };
+
+            app.on('resume', function () {
+                // Viewport calculations are invalid when app is invisible (See Bug 58552)
+                this.listView.fetchTextPreview();
+            });
+        },
+
         /*
          * Setup thread view
          */
         'thread-view': function (app) {
             if (_.device('smartphone')) return;
-            app.threadView = new ThreadView.Desktop();
+            app.threadView = new ThreadView.Desktop({ app: app });
             app.right.append(app.threadView.render().$el);
         },
 
@@ -1583,30 +1607,6 @@ define('io.ox/mail/main', [
                     // reset selection
                     app.listView.selection.selectNone();
                 }
-            });
-        },
-
-        'textPreview': function (app) {
-
-            // default is true (for testing) until we have cross-stack support
-            var support = settings.get('features/textPreview', true);
-
-            app.supportsTextPreview = function () {
-                return support;
-            };
-
-            app.supportsTextPreviewConfiguration = function () {
-                var id = app.folder.get();
-                return support && (account.isPrimary(id) || id === 'virtual/all-unseen');
-            };
-
-            app.useTextPreview = function () {
-                return app.supportsTextPreviewConfiguration() && app.props.get('textPreview');
-            };
-
-            app.on('resume', function () {
-                // Viewport calculations are invalid when app is invisible (See Bug 58552)
-                this.listView.fetchTextPreview();
             });
         },
 

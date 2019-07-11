@@ -311,6 +311,16 @@ define('io.ox/mail/detail/view', [
         }
     });
 
+    ext.point('io.ox/mail/detail').extend({
+        id: 'preview-text',
+        index: INDEX += 100,
+        draw: function (baton) {
+            if (!baton.view.supportsTextPreview || !baton.data.text_preview) return;
+            // add dots or it looks weird
+            this.append($('<section class="text-preview">').text(baton.data.text_preview + '...'));
+        }
+    });
+
     ext.point('io.ox/mail/detail/warnings').extend({
         id: 'plaintextfallback',
         index: 100,
@@ -798,6 +808,7 @@ define('io.ox/mail/detail/view', [
             this.listenTo(this.model, 'change:attachments', this.onChangeAttachments);
             this.listenTo(this.model, 'change:to change:cc change:bcc', this.onChangeRecipients);
             this.placeholder = true;
+            this.supportsTextPreview = options.supportsTextPreview;
 
             this.on({
                 'load': function () {
