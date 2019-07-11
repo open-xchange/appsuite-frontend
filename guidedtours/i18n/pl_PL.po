@@ -624,8 +624,12 @@ msgid ""
 msgstr "Aby zmienić układ, przeciągnij tytuł pola w inne miejsce i upuść tam."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To choose between the different views. click on View in the toolbar. "
+#| "Select a menu entry in the layout."
 msgid ""
-"To choose between the different views. click on View in the toolbar. Select "
+"To choose between the different views, click on View in the toolbar. Select "
 "a menu entry in the layout."
 msgstr ""
 "Aby wybrać jeden z widoków, kliknij przycisk Widok na pasku narzędzi. W "

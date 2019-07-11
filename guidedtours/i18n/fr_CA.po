@@ -637,8 +637,12 @@ msgstr ""
 "emplacement et déposez-le là."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To choose between the different views. click on View in the toolbar. "
+#| "Select a menu entry in the layout."
 msgid ""
-"To choose between the different views. click on View in the toolbar. Select "
+"To choose between the different views, click on View in the toolbar. Select "
 "a menu entry in the layout."
 msgstr ""
 "Pour basculer d'une vue à l'autre, cliquez sur « Vue » dans la barre "

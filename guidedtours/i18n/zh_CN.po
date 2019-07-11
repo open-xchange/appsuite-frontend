@@ -569,8 +569,12 @@ msgid ""
 msgstr "要更改布局，请把一个方块标题拖到别的位置后放在那里。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To choose between the different views. click on View in the toolbar. "
+#| "Select a menu entry in the layout."
 msgid ""
-"To choose between the different views. click on View in the toolbar. Select "
+"To choose between the different views, click on View in the toolbar. Select "
 "a menu entry in the layout."
 msgstr ""
 "要在不同视图之间选择，在工具条里的视图上单击。在布局里选择一个菜单项目。"

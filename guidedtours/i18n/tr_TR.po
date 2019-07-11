@@ -620,8 +620,12 @@ msgstr ""
 "bırakabilirsiniz."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To choose between the different views. click on View in the toolbar. "
+#| "Select a menu entry in the layout."
 msgid ""
-"To choose between the different views. click on View in the toolbar. Select "
+"To choose between the different views, click on View in the toolbar. Select "
 "a menu entry in the layout."
 msgstr ""
 "Görünümler arasından seçim yapmak için araç çubuğundaki \"Görünüm\"e "

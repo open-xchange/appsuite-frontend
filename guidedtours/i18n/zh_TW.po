@@ -570,8 +570,12 @@ msgid ""
 msgstr "要修改版面，將方塊的標題拖曳到其他地方並放下。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "To choose between the different views. click on View in the toolbar. "
+#| "Select a menu entry in the layout."
 msgid ""
-"To choose between the different views. click on View in the toolbar. Select "
+"To choose between the different views, click on View in the toolbar. Select "
 "a menu entry in the layout."
 msgstr "要選擇不同視圖，點擊工具列列中的視圖。在版面中選擇一個清單項目。"
 
