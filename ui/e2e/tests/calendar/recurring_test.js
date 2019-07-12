@@ -112,7 +112,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.click('Change status');
 
     I.waitForElement('.modal-dialog');
-    I.click('Series', '.modal-dialog');
+    I.click('Change series', '.modal-dialog');
     I.click('Accept', '.modal-dialog');
 
     I.waitForDetached('.modal-dialog', 5);
