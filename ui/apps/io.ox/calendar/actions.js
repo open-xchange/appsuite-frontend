@@ -442,16 +442,19 @@ define('io.ox/calendar/actions', [
             // check if only one appointment or the whole series should be accepted
             // exceptions don't have the same id and seriesId
             if (baton.data.seriesId === baton.data.id && appointment.recurrenceId) {
-                // TODO: IS THIS STILL USED?
                 new ModalDialog({
-                    title: accept
-                        ? gt('Do you want to confirm the whole series or just one appointment within the series?')
-                        : gt('Do you want to decline the whole series or just one appointment within the series?')
+                    title: gt('Change appointment status')
                 })
-                .addCancelButton()
-                .addButton({ label: gt('Appointment'), action: 'appointment', className: 'btn-default' })
+                .build(function () {
+                    this.$body.append(accept
+                        ? gt('This appointment is part of a series. Do you want to confirm the whole series or just one appointment within the series?')
+                        : gt('This appointment is part of a series. Do you want to decline the whole series or just one appointment within the series?')
+                    );
+                })
+                .addCancelButton({ left: true })
+                .addButton({ label: accept ? gt('Accept appointment') : gt('Decline appointment'), action: 'appointment', className: 'btn-default' })
                 //#. Use singular in this context
-                .addButton({ label: gt('Series'), action: 'series' })
+                .addButton({ label: accept ? gt('Accept series') : gt('Decline series'), action: 'series' })
                 .on('action', function (action) {
                     if (action === 'cancel') return;
                     if (action === 'series') delete appointment.recurrenceId;

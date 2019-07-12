@@ -191,12 +191,15 @@ define('io.ox/calendar/actions/acceptdeny', [
 
         // series?
         if (!options.taskmode && o.recurrenceId && o.seriesId) {
-            return new ModalDialog({ title: gt('Do you want to confirm the whole series or just one appointment within the series?') })
+            return new ModalDialog({ title: gt('Change appointment status') })
+                .build(function () {
+                    this.$body.append(gt('This appointment is part of a series. Do you want to change your confirmation for the whole series or just for this appointment within the series?'));
+                })
                 .addCancelButton({ left: true })
-                .addButton({ className: 'btn-default', label: gt('Appointment'), action: 'appointment' })
+                .addButton({ className: 'btn-default', label: gt('Change appointment'), action: 'appointment' })
                 .addButton({ action: 'series',
                     //#. Use singular in this context
-                    label: gt('Series') })
+                    label: gt('Change series') })
                 .on('series', function () { _.defer(cont, true); })
                 .on('appointment', function () { _.defer(cont, false); })
                 .open();

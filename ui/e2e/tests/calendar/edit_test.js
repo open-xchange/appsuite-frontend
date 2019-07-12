@@ -171,7 +171,7 @@ Scenario('[C7451] Edit yearly series via dubbleclick', async function (I) {
     I.waitForVisible('.io-ox-sidepopup .inline-toolbar-container');
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
-    I.click('Series');
+    I.click('Edit series');
 
     I.waitForVisible('.io-ox-calendar-edit-window');
 
@@ -333,7 +333,7 @@ Scenario('[C234659] Split appointment series', async function (I, users) {
 
     I.click('Edit');
     I.waitForText('Do you want to edit this and all future appointments or just this appointment within the series?');
-    I.click('All future appointments');
+    I.click('Edit all future appointments');
 
     I.waitForVisible('.io-ox-calendar-edit-window');
 
@@ -399,7 +399,7 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
     I.waitForText('Edit', undefined, '.io-ox-sidepopup');
     I.click('Edit');
     I.waitForText('Do you want to edit this and all future appointments or just this appointment within the series?');
-    I.click('This appointment');
+    I.click('Edit this appointment');
 
     I.waitForVisible('.io-ox-calendar-edit-window');
 
@@ -416,7 +416,7 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
     I.waitForText('Edit', undefined, '.io-ox-sidepopup');
     I.click('Edit');
     I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
-    I.click('Series');
+    I.click('Edit series');
 
     I.waitForVisible('.io-ox-calendar-edit-window');
 
@@ -623,7 +623,7 @@ Scenario('[274409] Change organizer of series with internal attendees', async fu
     I.click('Change organizer');
 
     I.waitForText('Do you want to edit this and all future appointments or the whole series?');
-    I.click('All future appointments');
+    I.click('Edit all future appointments');
 
     I.waitForVisible('.modal-dialog');
     I.fillField('Select new organizer', users[1].userdata.primaryEmail);
@@ -697,8 +697,8 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.click('Appointment1', '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
     I.retry(5).click('Delete');
-    I.waitForText('Do you want to delete this appointment');
-    I.click('Delete', '.modal-dialog');
+    I.waitForText('Do you really want to delete this appointment?');
+    I.click('Delete appointment', '.modal-dialog');
     I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
 
@@ -717,7 +717,7 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.retry(5).click('Delete');
     I.waitForText('Delete appointment');
     I.see('Add a message to the notification email for the other participants.');
-    I.click('Delete', '.modal-dialog');
+    I.click('Delete appointment', '.modal-dialog');
     I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
 
@@ -727,7 +727,7 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
     I.retry(5).click('Delete');
     I.waitForText('Delete appointment');
     I.see('Add a message to the notification email for the other participants.');
-    I.click('Delete this appointment', '.modal-dialog');
+    I.click('Delete all appointments', '.modal-dialog');
     I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-sidepopup');
 
@@ -757,7 +757,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
     // use 3rd child here as the container has another child before the first .day
     I.dragAndDrop('.page.current .appointment', locate('.timeslot').at(21).inside('.day:nth-child(3)'));
     I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
-    I.click('Series');
+    I.click('Edit series');
 
     I.waitForInvisible('.page.current .appointment.io-ox-busy');
     I.see('Testappointment', locate('.day').at(2));
@@ -771,7 +771,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
     // use 5th child here as the container has another child before the first .day
     I.dragAndDrop(locate('.appointment').inside('.page.current'), locate('.timeslot').at(21).inside('.day:nth-child(5)').inside('.page.current'));
     I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
-    I.click('Series');
+    I.click('Edit series');
 
     I.waitForInvisible('.page.current .appointment.io-ox-busy');
     I.see('Testappointment', locate('.day').at(4));
@@ -786,7 +786,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
     time.add(1, 'day');
     I.dragAndDrop(locate('.appointment').inside('.page.current'), `[id="${time.format('YYYY-M-D')}"]`);
     I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
-    I.click('Series');
+    I.click('Edit series');
 
     I.waitForInvisible('.page.current .appointment.io-ox-busy');
     I.see('Testappointment', `[id="${time.format('YYYY-M-D')}"]`);
