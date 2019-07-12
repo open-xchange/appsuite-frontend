@@ -150,7 +150,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     // TODO: Needs a fix. "All future appointments" is wrong since apppointment has flag "first_occurence"
     I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
     I.waitForVisible('.modal-dialog');
-    I.click('All future appointments', '.modal-dialog');
+    I.click('Edit all future appointments', '.modal-dialog');
 
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.fillField('Subject', 'test recurring edit');
@@ -174,7 +174,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
 
     I.waitForVisible('.modal-dialog');
-    I.click('This appointment', '.modal-dialog');
+    I.click('Edit this appointment', '.modal-dialog');
 
     I.waitForVisible('.io-ox-calendar-edit-window');
 
@@ -190,7 +190,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.click('[data-action="io.ox/calendar/detail/actions/edit"]');
 
     I.waitForVisible('.modal-dialog');
-    I.click('This appointment', '.modal-dialog');
+    I.click('Edit this appointment', '.modal-dialog');
 
     I.waitForVisible('.io-ox-calendar-edit-window');
 
