@@ -490,7 +490,7 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author @shaky
     I.waitForText('Delete', '.io-ox-sidepopup .inline-toolbar');
     I.click('Delete', '.io-ox-sidepopup .inline-toolbar-container');
 
-    I.waitForText('Do you want to delete the whole series or just this appointment within the series?');
+    I.waitForText('Do you want to delete all appointments of the series or just this appointment?');
     I.click('Delete all appointments');
 
     I.waitForDetached('.io-ox-sidepopup');
