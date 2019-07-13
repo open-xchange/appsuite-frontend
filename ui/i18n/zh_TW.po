@@ -721,6 +721,12 @@ msgstr "接受"
 msgid "Accept / Decline"
 msgstr "接受 / 拒絕"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "New appointment"
+msgid "Accept appointment"
+msgstr "新約會"
+
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Accept changes"
 msgstr "接受變更"
@@ -729,6 +735,13 @@ msgstr "接受變更"
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 msgid "Accept invitation"
 msgstr "接受邀請"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Accept / Decline"
+msgid "Accept series"
+msgstr "接受 / 拒絕"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
@@ -1264,10 +1277,6 @@ msgstr "已刪除所有檔案"
 msgid "All folders"
 msgstr "所有資料夾"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "All future appointments"
-msgstr "所有未來的約會"
-
 #. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid ""
@@ -1441,9 +1450,8 @@ msgstr "若符合任何條件就套用規則"
 msgid "Apply to all subfolders"
 msgstr "套用至所有子資料夾"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/view.js
+#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail
 msgid "Appointment"
@@ -2091,6 +2099,19 @@ msgid "Change IMAP subscriptions"
 msgstr "修改 IMAP 訂閱"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create appointment"
+msgid "Change appointment"
+msgstr "建立約會"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
+#, fuzzy
+#| msgid "Change confirmation status"
+msgid "Change appointment status"
+msgstr "修改確認狀態"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 msgid "Change confirmation status"
@@ -2123,6 +2144,13 @@ msgstr "變更提醒"
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-folder-alarms.js
 msgid "Change reminders"
+msgstr "變更提醒"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Change reminders"
+msgid "Change series"
 msgstr "變更提醒"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -2916,6 +2944,19 @@ msgstr "立刻決定"
 msgid "Decline"
 msgstr "拒絕"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Decline appointment"
+msgstr "刪除約會"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete whole series"
+msgid "Decline series"
+msgstr "刪除整個系列"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Declined"
@@ -3398,6 +3439,12 @@ msgstr "確定要刪除這些項目？"
 msgid "Do you really want to delete this account?"
 msgstr "確定要刪除此帳號？"
 
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Do you want to delete this appointment?"
+msgid "Do you really want to delete this appointment?"
+msgstr "您是否想刪除此約會？"
+
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 msgid "Do you really want to delete this contact?"
 msgstr "確定要刪除此聯絡人？"
@@ -3479,23 +3526,6 @@ msgstr "您真的要從該裝置登出嗎？"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Do you want the appointments printed in detail or as a compact list?"
 msgstr "您想要列印約會的詳細資訊或是精簡清單？"
-
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
-msgid ""
-"Do you want to confirm the whole series or just one appointment within the "
-"series?"
-msgstr "您想確認整個系列或系列中的單個約會？"
-
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-msgid ""
-"Do you want to decline the whole series or just one appointment within the "
-"series?"
-msgstr "您要拒絕參加整個約會序列，還是序列中的單次約會？"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Do you want to delete this appointment?"
-msgstr "您是否想刪除此約會？"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
@@ -3801,6 +3831,12 @@ msgstr "編輯共享項目"
 msgid "Edit Tumblr feed"
 msgstr "編輯 Tumblr 資訊來源"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "All future appointments"
+msgid "Edit all future appointments"
+msgstr "所有未來的約會"
+
 #. object permissions - edit/modify
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Edit all objects"
@@ -3813,7 +3849,7 @@ msgstr "編輯行事曆: %1$s"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/toolbar.js
-#: module:io.ox/calendar
+#: module:io.ox/calendar apps/io.ox/calendar/util.js
 msgid "Edit appointment"
 msgstr "編輯約會"
 
@@ -3884,6 +3920,12 @@ msgstr "編輯資源"
 msgid "Edit rule"
 msgstr "編輯規則"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Edit series"
+msgstr "可用類別："
+
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
 msgid "Edit share"
 msgstr "編輯分享"
@@ -3897,6 +3939,12 @@ msgstr "編輯簽名"
 #: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js
 msgid "Edit task"
 msgstr "編輯任務"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Edit appointment"
+msgid "Edit this appointment"
+msgstr "編輯約會"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Edit to set a name."
@@ -9285,9 +9333,7 @@ msgstr "寄件備份"
 msgid "Serial number"
 msgstr "序號"
 
-#. Use singular in this context
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Series"
 msgstr "系列"
 
@@ -9331,7 +9377,8 @@ msgstr "設定色彩"
 msgid "Set color flag"
 msgstr "設定色彩標示"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/topbar_right.js
 #: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "選項"
@@ -10638,15 +10685,48 @@ msgstr "此帳號密碼組合無法登入任何可用的伺服器"
 msgid "There was no task data to import"
 msgstr "沒有任務資料可匯入"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "This appointment"
-msgstr "此約會"
-
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid ""
 "This appointment is an exception. Changing the exception does not affect the "
 "series."
 msgstr "此約會是例外約會，修改例外將不會影響整個系列約會。"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "The appointment is visible for all users in shared folders."
+msgid "This appointment is part of a series."
+msgstr "共享資料夾中的所有使用者都能看到此約會。"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete the whole series or just this appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to change your "
+"confirmation for the whole series or just for this appointment within the "
+"series?"
+msgstr "您要刪除整個約會序列，還是序列中的單次約會？"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to confirm the whole series or just one appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to confirm the whole "
+"series or just one appointment within the series?"
+msgstr "您想確認整個系列或系列中的單個約會？"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to decline the whole series or just one appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to decline the whole "
+"series or just one appointment within the series?"
+msgstr "您要拒絕參加整個約會序列，還是序列中的單次約會？"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #, fuzzy
@@ -14756,9 +14836,6 @@ msgstr "您的平台"
 #~ msgid "Delete the draft after sending."
 #~ msgstr "傳送後刪除草稿。"
 
-#~ msgid "Delete whole series"
-#~ msgstr "刪除整個系列"
-
 #, fuzzy
 #~| msgid "Return Receipt"
 #~ msgid "Delivery Receipt"
@@ -15114,11 +15191,6 @@ msgstr "您的平台"
 
 #~ msgid "Edit as new"
 #~ msgstr "以新檔案編輯"
-
-#, fuzzy
-#~| msgid "Available Categories:"
-#~ msgid "Edit categories"
-#~ msgstr "可用類別："
 
 #~ msgid "Edit feed"
 #~ msgstr "編輯資訊來源"
@@ -17453,9 +17525,6 @@ msgstr "您的平台"
 #~ "widget=\"options\" data-attribute=\"ordinal\">第二個</a> <a href=\"#\" "
 #~ "data-widget=\"options\" data-attribute=\"day\">週三</a>重複。 "
 
-#~ msgid "The appointment is visible for all users in shared folders."
-#~ msgstr "共享資料夾中的所有使用者都能看到此約會。"
-
 #~ msgid "The calendar views"
 #~ msgstr "行事曆視圖"
 
@@ -17661,6 +17730,9 @@ msgstr "您的平台"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "無法驗證此帳號"
+
+#~ msgid "This appointment"
+#~ msgstr "此約會"
 
 #~ msgid ""
 #~ "This appointment is an exception. Changing the series does not affect "

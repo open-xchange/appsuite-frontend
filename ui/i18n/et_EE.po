@@ -783,6 +783,12 @@ msgstr "Kinnita"
 msgid "Accept / Decline"
 msgstr "Nõustu / Keeldu"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "New appointment"
+msgid "Accept appointment"
+msgstr "Uus kohtumine"
+
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Accept changes"
 msgstr "Kinnita muudatused"
@@ -791,6 +797,13 @@ msgstr "Kinnita muudatused"
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 msgid "Accept invitation"
 msgstr "Nõustu kutsega"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Accept / Decline"
+msgid "Accept series"
+msgstr "Nõustu / Keeldu"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
@@ -1350,10 +1363,6 @@ msgstr "Kõik failid on kustutatud"
 msgid "All folders"
 msgstr "Kõik kaustad"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "All future appointments"
-msgstr ""
-
 #. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 #, fuzzy
@@ -1536,9 +1545,8 @@ msgstr "Rakenda reeglit, kui mõni tingimus on täidetud."
 msgid "Apply to all subfolders"
 msgstr "Rakenda kõigil alamkaustadel"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/view.js
+#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail
 msgid "Appointment"
@@ -2208,6 +2216,19 @@ msgid "Change IMAP subscriptions"
 msgstr "Muuda IMAP tellimusi"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create appointment"
+msgid "Change appointment"
+msgstr "Loo kohtumine"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
+#, fuzzy
+#| msgid "Change confirmation status"
+msgid "Change appointment status"
+msgstr "Muuda kinnituse olek"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 msgid "Change confirmation status"
@@ -2246,6 +2267,13 @@ msgstr "Loo meeldetuletus"
 #, fuzzy
 #| msgid "Create reminder"
 msgid "Change reminders"
+msgstr "Loo meeldetuletus"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create reminder"
+msgid "Change series"
 msgstr "Loo meeldetuletus"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -3066,6 +3094,19 @@ msgstr "Otsustage nüüd"
 msgid "Decline"
 msgstr "Keeldu"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Decline appointment"
+msgstr "Kustuta kohtumine"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete whole series"
+msgid "Decline series"
+msgstr "Kustuta kogu sari"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Declined"
@@ -3565,6 +3606,12 @@ msgstr "Kas soovite tõesti need üksused kustutada­?"
 msgid "Do you really want to delete this account?"
 msgstr "Kas soovite tõesti selle konto kustutada?"
 
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Do you want to delete this appointment?"
+msgid "Do you really want to delete this appointment?"
+msgstr "Kas soovite kustutada selle kohtumise?"
+
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 msgid "Do you really want to delete this contact?"
 msgstr "Kas soovite tõesti selle kontakti kustutada?"
@@ -3646,23 +3693,6 @@ msgstr ""
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Do you want the appointments printed in detail or as a compact list?"
 msgstr "Kas soovite printida kohtumised üksikasjadega või kompaktse loendina?"
-
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
-msgid ""
-"Do you want to confirm the whole series or just one appointment within the "
-"series?"
-msgstr "Kas soovite kinnitada terve sarja või vaid ühe kohtumise sarjas?"
-
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-msgid ""
-"Do you want to decline the whole series or just one appointment within the "
-"series?"
-msgstr ""
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Do you want to delete this appointment?"
-msgstr "Kas soovite kustutada selle kohtumise?"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
@@ -3980,6 +4010,12 @@ msgstr ""
 msgid "Edit Tumblr feed"
 msgstr "Muuda Tumblr'i voogu"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Edit all future appointments"
+msgstr "Kustuta kohtumine"
+
 #. object permissions - edit/modify
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Edit all objects"
@@ -3994,7 +4030,7 @@ msgstr "Sulge %1$s meeldetuletus"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/toolbar.js
-#: module:io.ox/calendar
+#: module:io.ox/calendar apps/io.ox/calendar/util.js
 msgid "Edit appointment"
 msgstr "Muuda kohtumist"
 
@@ -4066,6 +4102,12 @@ msgstr "Muuda ressurssi"
 msgid "Edit rule"
 msgstr "Muuda reeglit"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Edit share"
+msgid "Edit series"
+msgstr "Jagatu muutmine"
+
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
 msgid "Edit share"
 msgstr "Jagatu muutmine"
@@ -4079,6 +4121,12 @@ msgstr "Muuda allkiri"
 #: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js
 msgid "Edit task"
 msgstr "Muuda ülesannet"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Edit appointment"
+msgid "Edit this appointment"
+msgstr "Muuda kohtumist"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Edit to set a name."
@@ -9645,9 +9693,7 @@ msgstr "Saadetud sõnumid"
 msgid "Serial number"
 msgstr ""
 
-#. Use singular in this context
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Series"
 msgstr "Sari"
 
@@ -9691,7 +9737,8 @@ msgstr "Vali värv"
 msgid "Set color flag"
 msgstr "Vali värv"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/topbar_right.js
 #: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Seaded"
@@ -11058,10 +11105,6 @@ msgstr ""
 msgid "There was no task data to import"
 msgstr "Imporditavaid ülesande andmeid ei leitud"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "This appointment"
-msgstr ""
-
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #, fuzzy
 #| msgid ""
@@ -11071,6 +11114,42 @@ msgid ""
 "This appointment is an exception. Changing the exception does not affect the "
 "series."
 msgstr "See kohtumine on erand sarjas. Muudatused sarjas ei muuda erandeid."
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+msgid "This appointment is part of a series."
+msgstr "Kohtumised jagatud kalendrites"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to edit the whole series or just one appointment within the "
+#| "series?"
+msgid ""
+"This appointment is part of a series. Do you want to change your "
+"confirmation for the whole series or just for this appointment within the "
+"series?"
+msgstr "Kas soovite muuta kogu sarja või vaid üht kohtumist sarjas?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to confirm the whole series or just one appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to confirm the whole "
+"series or just one appointment within the series?"
+msgstr "Kas soovite kinnitada terve sarja või vaid ühe kohtumise sarjas?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete the whole series or just one appointment within the "
+#| "series?"
+msgid ""
+"This appointment is part of a series. Do you want to decline the whole "
+"series or just one appointment within the series?"
+msgstr "Kas soovite kustutada kogu sarja või vaid ühe kohtumise sarjas?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid ""
@@ -13924,9 +14003,6 @@ msgstr "teie platvorm"
 #~ msgid "December"
 #~ msgstr "Detsember"
 
-#~ msgid "Delete whole series"
-#~ msgstr "Kustuta kogu sari"
-
 #~ msgid "Direct link: %1$s"
 #~ msgstr "Otselink: %1$s"
 
@@ -13950,11 +14026,6 @@ msgstr "teie platvorm"
 #~| msgid "Do you really want to delete this version?"
 #~ msgid "Do you really want to terminate that session?"
 #~ msgstr "Kas soovite tõesti seda versiooni kustutada?"
-
-#~ msgid ""
-#~ "Do you want to delete the whole series or just one appointment within the "
-#~ "series?"
-#~ msgstr "Kas soovite kustutada kogu sarja või vaid ühe kohtumise sarjas?"
 
 #~ msgctxt "app"
 #~ msgid "Documents"

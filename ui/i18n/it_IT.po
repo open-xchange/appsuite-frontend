@@ -735,6 +735,12 @@ msgstr "Accetta"
 msgid "Accept / Decline"
 msgstr "Accetta / Rifiuta"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "New appointment"
+msgid "Accept appointment"
+msgstr "Nuovo appuntamento"
+
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Accept changes"
 msgstr "Accetta le modifiche"
@@ -743,6 +749,13 @@ msgstr "Accetta le modifiche"
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 msgid "Accept invitation"
 msgstr "Accetta l'invito"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Accept / Decline"
+msgid "Accept series"
+msgstr "Accetta / Rifiuta"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
@@ -1291,10 +1304,6 @@ msgstr "Tutti i file sono stati eliminati"
 msgid "All folders"
 msgstr "Tutte le cartelle"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "All future appointments"
-msgstr "Tutti gli appuntamenti futuri"
-
 #. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid ""
@@ -1481,9 +1490,8 @@ msgstr "Applica la regola se qualsiasi condizione viene verificata"
 msgid "Apply to all subfolders"
 msgstr "Applica a tutte le sottocartelle"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/view.js
+#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail
 msgid "Appointment"
@@ -2148,6 +2156,19 @@ msgid "Change IMAP subscriptions"
 msgstr "Cambia sottoscrizioni IMAP"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create appointment"
+msgid "Change appointment"
+msgstr "Crea appuntamento"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
+#, fuzzy
+#| msgid "Change confirmation status"
+msgid "Change appointment status"
+msgstr "Cambia lo stato di conferma"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 msgid "Change confirmation status"
@@ -2180,6 +2201,13 @@ msgstr "Cambia promemoria"
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-folder-alarms.js
 msgid "Change reminders"
+msgstr "Cambia promemoria"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Change reminders"
+msgid "Change series"
 msgstr "Cambia promemoria"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -2981,6 +3009,19 @@ msgstr "Decidi ora"
 msgid "Decline"
 msgstr "Rifiuta"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Decline appointment"
+msgstr "Elimina l'appuntamento"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete whole series"
+msgid "Decline series"
+msgstr "Elimina l'intera serie"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Declined"
@@ -3471,6 +3512,12 @@ msgstr "Vuoi davvero eliminare questi elementi?"
 msgid "Do you really want to delete this account?"
 msgstr "Vuoi davvero eliminare questo account?"
 
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Do you want to delete this appointment?"
+msgid "Do you really want to delete this appointment?"
+msgstr "Vuoi davvero eliminare questo appuntamento?"
+
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 msgid "Do you really want to delete this contact?"
 msgstr "Vuoi davvero eliminare questo contatto?"
@@ -3554,23 +3601,6 @@ msgid "Do you want the appointments printed in detail or as a compact list?"
 msgstr ""
 "Vuoi che gli appuntamenti siano stampati in dettaglio o come un elenco "
 "compatto?"
-
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
-msgid ""
-"Do you want to confirm the whole series or just one appointment within the "
-"series?"
-msgstr "Vuoi confermare l'intera serie o solo un appuntamento della serie?"
-
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-msgid ""
-"Do you want to decline the whole series or just one appointment within the "
-"series?"
-msgstr "Vuoi rifiutare l'intera serie o solo un appuntamento della serie?"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Do you want to delete this appointment?"
-msgstr "Vuoi davvero eliminare questo appuntamento?"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
@@ -3885,6 +3915,12 @@ msgstr "Modifica condivisione"
 msgid "Edit Tumblr feed"
 msgstr "Modifica fonte Tumblr"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "All future appointments"
+msgid "Edit all future appointments"
+msgstr "Tutti gli appuntamenti futuri"
+
 #. object permissions - edit/modify
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Edit all objects"
@@ -3897,7 +3933,7 @@ msgstr "Modifica tutti i promemoria per il calendario: %1$s"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/toolbar.js
-#: module:io.ox/calendar
+#: module:io.ox/calendar apps/io.ox/calendar/util.js
 msgid "Edit appointment"
 msgstr "Modifica appuntamento"
 
@@ -3968,6 +4004,12 @@ msgstr "Modifica risorsa"
 msgid "Edit rule"
 msgstr "Modifica regola"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Edit series"
+msgstr "Categorie disponibili:"
+
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
 msgid "Edit share"
 msgstr "Modifica condivisione"
@@ -3981,6 +4023,12 @@ msgstr "Modifica firma"
 #: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js
 msgid "Edit task"
 msgstr "Modifica attività"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Edit appointment"
+msgid "Edit this appointment"
+msgstr "Modifica appuntamento"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Edit to set a name."
@@ -9459,9 +9507,7 @@ msgstr "Messaggi inviati"
 msgid "Serial number"
 msgstr "Numero di serie"
 
-#. Use singular in this context
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Series"
 msgstr "Serie"
 
@@ -9505,7 +9551,8 @@ msgstr "Imposta il colore"
 msgid "Set color flag"
 msgstr "Imposta contrassegno di colore"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/topbar_right.js
 #: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Impostazioni"
@@ -10871,10 +10918,6 @@ msgstr ""
 msgid "There was no task data to import"
 msgstr "Non c'erano dati di attività da importare"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "This appointment"
-msgstr "Questo appuntamento"
-
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid ""
 "This appointment is an exception. Changing the exception does not affect the "
@@ -10882,6 +10925,44 @@ msgid ""
 msgstr ""
 "Questo appuntamento è un'eccezione. La modifica dell'eccezione non interessa "
 "la serie."
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "The appointment is visible for all users in shared folders."
+msgid "This appointment is part of a series."
+msgstr ""
+"L'appuntamento è visibile per tutti gli utenti nelle cartelle condivise."
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete the whole series or just this appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to change your "
+"confirmation for the whole series or just for this appointment within the "
+"series?"
+msgstr "Vuoi eliminare l'intera serie o solo questo appuntamento della serie?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to confirm the whole series or just one appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to confirm the whole "
+"series or just one appointment within the series?"
+msgstr "Vuoi confermare l'intera serie o solo un appuntamento della serie?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to decline the whole series or just one appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to decline the whole "
+"series or just one appointment within the series?"
+msgstr "Vuoi rifiutare l'intera serie o solo un appuntamento della serie?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #, fuzzy
@@ -15184,9 +15265,6 @@ msgstr "la tua piattaforma"
 #~ msgid "Delete the draft after sending."
 #~ msgstr "Elimina la bozza dopo l'invio."
 
-#~ msgid "Delete whole series"
-#~ msgstr "Elimina l'intera serie"
-
 #, fuzzy
 #~| msgid "Return Receipt"
 #~ msgid "Delivery Receipt"
@@ -15563,11 +15641,6 @@ msgstr "la tua piattaforma"
 
 #~ msgid "Edit as new"
 #~ msgstr "Modifica come nuovo"
-
-#, fuzzy
-#~| msgid "Available Categories:"
-#~ msgid "Edit categories"
-#~ msgstr "Categorie disponibili:"
 
 #~ msgid "Edit feed"
 #~ msgstr "Modifica fonte"
@@ -18006,10 +18079,6 @@ msgstr "la tua piattaforma"
 #~ "data-attribute=\"interval\">ogni <span class=\"number-control\">2</span> "
 #~ "mesi</a>."
 
-#~ msgid "The appointment is visible for all users in shared folders."
-#~ msgstr ""
-#~ "L'appuntamento è visibile per tutti gli utenti nelle cartelle condivise."
-
 #~ msgid "The calendar views"
 #~ msgstr "Le viste del calendario"
 
@@ -18264,6 +18333,9 @@ msgstr "la tua piattaforma"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "Questo account non può essere verificato"
+
+#~ msgid "This appointment"
+#~ msgstr "Questo appuntamento"
 
 #~ msgid ""
 #~ "This appointment is an exception. Changing the series does not affect "

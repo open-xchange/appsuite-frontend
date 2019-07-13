@@ -795,6 +795,12 @@ msgstr "Accepta"
 msgid "Accept / Decline"
 msgstr "Accepta / Rebutja"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "New appointment"
+msgid "Accept appointment"
+msgstr "Nova cita"
+
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Accept changes"
 msgstr "Accepta els canvis"
@@ -803,6 +809,13 @@ msgstr "Accepta els canvis"
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 msgid "Accept invitation"
 msgstr "Accepta el convit"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Accept / Decline"
+msgid "Accept series"
+msgstr "Accepta / Rebutja"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
@@ -1387,10 +1400,6 @@ msgstr ""
 msgid "All folders"
 msgstr "Totes les carpetes"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "All future appointments"
-msgstr ""
-
 #. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 #, fuzzy
@@ -1584,9 +1593,8 @@ msgstr "Aplica la regla si es compleix alguna condició"
 msgid "Apply to all subfolders"
 msgstr "Totes les carpetes"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/view.js
+#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail
 msgid "Appointment"
@@ -2264,6 +2272,19 @@ msgid "Change IMAP subscriptions"
 msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create appointment"
+msgid "Change appointment"
+msgstr "Crea una cita"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
+#, fuzzy
+#| msgid "Change confirmation status"
+msgid "Change appointment status"
+msgstr "Canvia l'estat de confirmació"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 msgid "Change confirmation status"
@@ -2302,6 +2323,13 @@ msgstr "Crea'n un recordatori"
 #, fuzzy
 #| msgid "Create reminder"
 msgid "Change reminders"
+msgstr "Crea'n un recordatori"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create reminder"
+msgid "Change series"
 msgstr "Crea'n un recordatori"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -3147,6 +3175,19 @@ msgstr ""
 msgid "Decline"
 msgstr "Rebutja"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Decline appointment"
+msgstr "Esborra la cita"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete whole series"
+msgid "Decline series"
+msgstr "Esborra la sèrie sencera"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Declined"
@@ -3659,6 +3700,12 @@ msgstr "Realment voleu suprimir aquests elements?"
 msgid "Do you really want to delete this account?"
 msgstr "Segur que voleu suprimir aquest compte?"
 
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Do you want to delete this appointment?"
+msgid "Do you really want to delete this appointment?"
+msgstr "Voleu esborrar aquesta cita?"
+
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 msgid "Do you really want to delete this contact?"
 msgstr "Realment voleu suprimir aquest contacte?"
@@ -3744,23 +3791,6 @@ msgstr ""
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Do you want the appointments printed in detail or as a compact list?"
 msgstr ""
-
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
-msgid ""
-"Do you want to confirm the whole series or just one appointment within the "
-"series?"
-msgstr "Voleu confirmar la sèrie sencera o només una cita dins aquesta?"
-
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-msgid ""
-"Do you want to decline the whole series or just one appointment within the "
-"series?"
-msgstr ""
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Do you want to delete this appointment?"
-msgstr "Voleu esborrar aquesta cita?"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
@@ -4081,6 +4111,12 @@ msgstr ""
 msgid "Edit Tumblr feed"
 msgstr "Edita un feed de Tumblr"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Edit all future appointments"
+msgstr "Esborra la cita"
+
 #. object permissions - edit/modify
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Edit all objects"
@@ -4094,7 +4130,7 @@ msgstr "tanca per %1$s"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/toolbar.js
-#: module:io.ox/calendar
+#: module:io.ox/calendar apps/io.ox/calendar/util.js
 msgid "Edit appointment"
 msgstr "Edita cita"
 
@@ -4174,6 +4210,12 @@ msgstr "Edita regla"
 msgid "Edit rule"
 msgstr "Edita regla"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Mail address"
+msgid "Edit series"
+msgstr "Adreça de correu electrònic"
+
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
 msgid "Edit share"
 msgstr ""
@@ -4187,6 +4229,12 @@ msgstr "Edita la firma"
 #: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js
 msgid "Edit task"
 msgstr "Edita la tasca"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Edit appointment"
+msgid "Edit this appointment"
+msgstr "Edita cita"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Edit to set a name."
@@ -9925,9 +9973,7 @@ msgstr "Missatges enviats"
 msgid "Serial number"
 msgstr ""
 
-#. Use singular in this context
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Series"
 msgstr "Sèrie"
 
@@ -9974,7 +10020,8 @@ msgstr "Assigna-hi color"
 msgid "Set color flag"
 msgstr "Assigna-hi color"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/topbar_right.js
 #: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Preferències"
@@ -11345,10 +11392,6 @@ msgstr ""
 msgid "There was no task data to import"
 msgstr ""
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "This appointment"
-msgstr ""
-
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #, fuzzy
 msgid ""
@@ -11357,6 +11400,42 @@ msgid ""
 msgstr ""
 "Si canviau la data d'aquesta cita, creareu una excepció en la sèrie "
 "recurrent. Voleu continuar?"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+msgid "This appointment is part of a series."
+msgstr "Recordatoris de cites"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to edit the whole series or just one appointment within the "
+#| "series?"
+msgid ""
+"This appointment is part of a series. Do you want to change your "
+"confirmation for the whole series or just for this appointment within the "
+"series?"
+msgstr "Voleu editar la sèrie sencera o només una cita dins aquesta?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to confirm the whole series or just one appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to confirm the whole "
+"series or just one appointment within the series?"
+msgstr "Voleu confirmar la sèrie sencera o només una cita dins aquesta?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete the whole series or just one appointment within the "
+#| "series?"
+msgid ""
+"This appointment is part of a series. Do you want to decline the whole "
+"series or just one appointment within the series?"
+msgstr "Voleu esborrar la sèrie sencera o cites individuals dins aquesta?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 msgid ""
@@ -14349,9 +14428,6 @@ msgstr "la vostra plataforma"
 #~ msgid "Default calendar view"
 #~ msgstr "Vista de calendari predeterminada"
 
-#~ msgid "Delete whole series"
-#~ msgstr "Esborra la sèrie sencera"
-
 #, fuzzy
 #~ msgid "Detailed contact list"
 #~ msgstr "Crea un contacte"
@@ -14380,11 +14456,6 @@ msgstr "la vostra plataforma"
 #, fuzzy
 #~ msgid "Do you really want to terminate that session?"
 #~ msgstr "Realment voleu suprimir aquest fitxer?"
-
-#~ msgid ""
-#~ "Do you want to delete the whole series or just one appointment within the "
-#~ "series?"
-#~ msgstr "Voleu esborrar la sèrie sencera o cites individuals dins aquesta?"
 
 #~ msgctxt "app"
 #~ msgid "Documents"
@@ -14420,11 +14491,6 @@ msgstr "la vostra plataforma"
 #, fuzzy
 #~ msgid "Edit Tabs"
 #~ msgstr "Edita la tasca"
-
-#, fuzzy
-#~| msgid "Mail address"
-#~ msgid "Edit categories"
-#~ msgstr "Adreça de correu electrònic"
 
 #~ msgid "Email 1 / Phone number"
 #~ msgstr "Correu electrònic 1 / N. de telèfon"

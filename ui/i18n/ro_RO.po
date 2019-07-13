@@ -755,6 +755,12 @@ msgstr "Acceptă"
 msgid "Accept / Decline"
 msgstr "Acceptă / Respinge"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "New appointment"
+msgid "Accept appointment"
+msgstr "Întâlnire nouă"
+
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Accept changes"
 msgstr "Acceptă modificările"
@@ -763,6 +769,13 @@ msgstr "Acceptă modificările"
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 msgid "Accept invitation"
 msgstr "Acceptă invitația"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Accept / Decline"
+msgid "Accept series"
+msgstr "Acceptă / Respinge"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
@@ -1309,10 +1322,6 @@ msgstr "Toate fișierele au fost șterse"
 msgid "All folders"
 msgstr "Toate dosarele"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "All future appointments"
-msgstr "Toate întâlnirile viitoare"
-
 #. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid ""
@@ -1496,9 +1505,8 @@ msgstr "Aplică regula dacă una din condiții este respectată"
 msgid "Apply to all subfolders"
 msgstr "Aplică pentru toate dosarele subordonate"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/view.js
+#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail
 msgid "Appointment"
@@ -2162,6 +2170,19 @@ msgid "Change IMAP subscriptions"
 msgstr "Modifică abonamentele IMAP"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create appointment"
+msgid "Change appointment"
+msgstr "Creează o întâlnire"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
+#, fuzzy
+#| msgid "Change confirmation status"
+msgid "Change appointment status"
+msgstr "Modifică starea confirmării"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 msgid "Change confirmation status"
@@ -2194,6 +2215,13 @@ msgstr "Modifică mementoul"
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-folder-alarms.js
 msgid "Change reminders"
+msgstr "Modifică mementourile"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Change reminders"
+msgid "Change series"
 msgstr "Modifică mementourile"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -2996,6 +3024,19 @@ msgstr "Decideți acum"
 msgid "Decline"
 msgstr "Respinge"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Decline appointment"
+msgstr "Șterge întâlnirea"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete whole series"
+msgid "Decline series"
+msgstr "Șterge toată seria"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Declined"
@@ -3483,6 +3524,12 @@ msgstr "Sigur doriți să ștergeți elementele?"
 msgid "Do you really want to delete this account?"
 msgstr "Sigur doriți să ștergeți acest cont?"
 
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Do you want to delete this appointment?"
+msgid "Do you really want to delete this appointment?"
+msgstr "Doriți să ștergeți întâlnirea?"
+
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 msgid "Do you really want to delete this contact?"
 msgstr "Sigur doriți să ștergeți contactul?"
@@ -3568,23 +3615,6 @@ msgstr "Sigur doriți să vă deconectați de la acest dispozitiv?"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Do you want the appointments printed in detail or as a compact list?"
 msgstr "Doriți să imprimați întâlnirile detaliat sau ca listă compactă?"
-
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
-msgid ""
-"Do you want to confirm the whole series or just one appointment within the "
-"series?"
-msgstr "Doriți să confirmați toată seria sau doar o întâlnire din serie?"
-
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-msgid ""
-"Do you want to decline the whole series or just one appointment within the "
-"series?"
-msgstr "Doriți să refuzați toată seria sau doar o întâlnire din serie?"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Do you want to delete this appointment?"
-msgstr "Doriți să ștergeți întâlnirea?"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
@@ -3906,6 +3936,12 @@ msgstr "Editează partajare"
 msgid "Edit Tumblr feed"
 msgstr "Editează un flux Tumblr"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "All future appointments"
+msgid "Edit all future appointments"
+msgstr "Toate întâlnirile viitoare"
+
 #. object permissions - edit/modify
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Edit all objects"
@@ -3918,7 +3954,7 @@ msgstr "Editați toate mementourile pentru calendar: %1$s"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/toolbar.js
-#: module:io.ox/calendar
+#: module:io.ox/calendar apps/io.ox/calendar/util.js
 msgid "Edit appointment"
 msgstr "Editează întâlnirea"
 
@@ -3989,6 +4025,12 @@ msgstr "Editează resursa"
 msgid "Edit rule"
 msgstr "Editează regula"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Categories"
+msgid "Edit series"
+msgstr "Categorii"
+
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
 msgid "Edit share"
 msgstr "Editează partajarea"
@@ -4002,6 +4044,12 @@ msgstr "Editează semnătura"
 #: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js
 msgid "Edit task"
 msgstr "Editează sarcina"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Edit appointment"
+msgid "Edit this appointment"
+msgstr "Editează întâlnirea"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Edit to set a name."
@@ -9487,9 +9535,7 @@ msgstr "Mesaje trimise"
 msgid "Serial number"
 msgstr "Număr de serie"
 
-#. Use singular in this context
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Series"
 msgstr "Serie"
 
@@ -9533,7 +9579,8 @@ msgstr "Setează culoarea"
 msgid "Set color flag"
 msgstr "Setează marcajul culoare"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/topbar_right.js
 #: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Setări"
@@ -10902,16 +10949,50 @@ msgstr ""
 msgid "There was no task data to import"
 msgstr "Nu s-a găsit nicio dată despre sarcini de importat"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "This appointment"
-msgstr "Această întâlnire"
-
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid ""
 "This appointment is an exception. Changing the exception does not affect the "
 "series."
 msgstr ""
 "Această întâlnire este o excepție. Modificarea excepției nu afectează seria."
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "The appointment is visible for all users in shared folders."
+msgid "This appointment is part of a series."
+msgstr ""
+"Întâlnirea este vizibilă pentru toți utilizatorii din dosarele partajate."
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete the whole series or just this appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to change your "
+"confirmation for the whole series or just for this appointment within the "
+"series?"
+msgstr "Doriți să ștergeți toată seria sau doar această întâlnire din serie?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to confirm the whole series or just one appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to confirm the whole "
+"series or just one appointment within the series?"
+msgstr "Doriți să confirmați toată seria sau doar o întâlnire din serie?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to decline the whole series or just one appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to decline the whole "
+"series or just one appointment within the series?"
+msgstr "Doriți să refuzați toată seria sau doar o întâlnire din serie?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #, fuzzy
@@ -15263,9 +15344,6 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Delete the draft after sending."
 #~ msgstr "Sterge schița după trimitere."
 
-#~ msgid "Delete whole series"
-#~ msgstr "Șterge toată seria"
-
 #, fuzzy
 #~| msgid "Return Receipt"
 #~ msgid "Delivery Receipt"
@@ -15643,11 +15721,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Edit as new"
 #~ msgstr "Editează ca nou"
-
-#, fuzzy
-#~| msgid "Categories"
-#~ msgid "Edit categories"
-#~ msgstr "Categorii"
 
 #~ msgid "Edit feed"
 #~ msgstr "Editează flux"
@@ -19618,10 +19691,6 @@ msgstr "platforma dumneavoastră"
 #~ "attribute=\"interval\">o dată la <span class=\"number-control\">2</span> "
 #~ "luni</a>. "
 
-#~ msgid "The appointment is visible for all users in shared folders."
-#~ msgstr ""
-#~ "Întâlnirea este vizibilă pentru toți utilizatorii din dosarele partajate."
-
 #~ msgid "The calendar views"
 #~ msgstr "Vederile calendarului"
 
@@ -19941,6 +20010,9 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "Contul nu poate fi validat"
+
+#~ msgid "This appointment"
+#~ msgstr "Această întâlnire"
 
 #~ msgid ""
 #~ "This appointment is an exception. Changing the series does not affect "

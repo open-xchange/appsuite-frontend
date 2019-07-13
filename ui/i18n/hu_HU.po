@@ -730,6 +730,12 @@ msgstr "Elfogadás"
 msgid "Accept / Decline"
 msgstr "Elfogadás/visszautasítás"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "New appointment"
+msgid "Accept appointment"
+msgstr "Új találkozó"
+
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Accept changes"
 msgstr "Változások elfogadása"
@@ -738,6 +744,13 @@ msgstr "Változások elfogadása"
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 msgid "Accept invitation"
 msgstr "Meghívó elfogadása"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Accept / Decline"
+msgid "Accept series"
+msgstr "Elfogadás/visszautasítás"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
@@ -1283,10 +1296,6 @@ msgstr "Minden fájl törölve"
 msgid "All folders"
 msgstr "Összes mappa"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "All future appointments"
-msgstr "Összes jövőbeni találkozó"
-
 #. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid ""
@@ -1467,9 +1476,8 @@ msgstr "Szabály alkalmazása, ha bármely feltétel teljesül"
 msgid "Apply to all subfolders"
 msgstr "Alkalmazás az összes mappára"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/view.js
+#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail
 msgid "Appointment"
@@ -2132,6 +2140,19 @@ msgid "Change IMAP subscriptions"
 msgstr "IMAP feliratkozás módosítása"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create appointment"
+msgid "Change appointment"
+msgstr "Találkozó létrehozása"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
+#, fuzzy
+#| msgid "Change confirmation status"
+msgid "Change appointment status"
+msgstr "Megerősítési állapot módosítása"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 msgid "Change confirmation status"
@@ -2164,6 +2185,13 @@ msgstr "Emlékeztető módosítása"
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-folder-alarms.js
 msgid "Change reminders"
+msgstr "Emlékeztetők módosítása"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Change reminders"
+msgid "Change series"
 msgstr "Emlékeztetők módosítása"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -2965,6 +2993,19 @@ msgstr "Beállítás most"
 msgid "Decline"
 msgstr "Visszautasítás"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Decline appointment"
+msgstr "Találkozó törlése"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete whole series"
+msgid "Decline series"
+msgstr "Teljes ismétlődés törlése"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Declined"
@@ -3456,6 +3497,12 @@ msgstr "Biztos, hogy törölni szeretné ezeket az elemeket?"
 msgid "Do you really want to delete this account?"
 msgstr "Biztos, hogy törölni szeretné ezt a fiókot?"
 
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Do you want to delete this appointment?"
+msgid "Do you really want to delete this appointment?"
+msgstr "Valóban törölni akarja ezt a találkozót?"
+
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 msgid "Do you really want to delete this contact?"
 msgstr "Biztos, hogy törölni szeretné ezt a névjegyet?"
@@ -3539,27 +3586,6 @@ msgid "Do you want the appointments printed in detail or as a compact list?"
 msgstr ""
 "A találkozók részleteit is ki szeretné nyomtatni vagy csak egy kompakt "
 "listában?"
-
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
-msgid ""
-"Do you want to confirm the whole series or just one appointment within the "
-"series?"
-msgstr ""
-"A teljes ismétlődést, vagy csak az ismétlődésen belüli egyik találkozót "
-"kívánja jóváhagyni?"
-
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-msgid ""
-"Do you want to decline the whole series or just one appointment within the "
-"series?"
-msgstr ""
-"A teljes ismétlődést, vagy csak az ismétlődésen belüli egyik találkozót "
-"kívánja visszautasítani?"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Do you want to delete this appointment?"
-msgstr "Valóban törölni akarja ezt a találkozót?"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
@@ -3877,6 +3903,12 @@ msgstr "Megosztás szerkesztése"
 msgid "Edit Tumblr feed"
 msgstr "Tumblr hírforrás szerkesztése"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "All future appointments"
+msgid "Edit all future appointments"
+msgstr "Összes jövőbeni találkozó"
+
 #. object permissions - edit/modify
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Edit all objects"
@@ -3889,7 +3921,7 @@ msgstr "A(z) %1$s naptár összes emlékeztetőjének szerkesztése"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/toolbar.js
-#: module:io.ox/calendar
+#: module:io.ox/calendar apps/io.ox/calendar/util.js
 msgid "Edit appointment"
 msgstr "Találkozó szerkesztése"
 
@@ -3960,6 +3992,12 @@ msgstr "Erőforrás szerkesztése"
 msgid "Edit rule"
 msgstr "Szabály szerkesztése"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Edit resource"
+msgid "Edit series"
+msgstr "Erőforrás szerkesztése"
+
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
 msgid "Edit share"
 msgstr "Megosztás szerkesztése"
@@ -3973,6 +4011,12 @@ msgstr "Aláírás szerkesztése"
 #: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js
 msgid "Edit task"
 msgstr "Feladat szerkesztése"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Edit appointment"
+msgid "Edit this appointment"
+msgstr "Találkozó szerkesztése"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Edit to set a name."
@@ -9432,9 +9476,7 @@ msgstr "Elküldött üzenetek"
 msgid "Serial number"
 msgstr "Sorozatszám"
 
-#. Use singular in this context
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Series"
 msgstr "Ismétlődések"
 
@@ -9478,7 +9520,8 @@ msgstr "Szín beállítása"
 msgid "Set color flag"
 msgstr "Jelölőszín beállítása"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/topbar_right.js
 #: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Beállítások"
@@ -10833,16 +10876,55 @@ msgstr "Nem található megfelelő kiszolgáló ehhez a cím/jelszó kombináci�
 msgid "There was no task data to import"
 msgstr "Nem volt importálható feladat"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "This appointment"
-msgstr "Ez a találkozó"
-
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid ""
 "This appointment is an exception. Changing the exception does not affect the "
 "series."
 msgstr ""
 "Ez a találkozó kivétel. A kivétel módosítása nincs hatással a ismétlődésre."
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "The appointment is visible for all users in shared folders."
+msgid "This appointment is part of a series."
+msgstr "A találkozó látható a megosztott mappák összes felhasználójánál."
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete the whole series or just this appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to change your "
+"confirmation for the whole series or just for this appointment within the "
+"series?"
+msgstr ""
+"A teljes ismétlődést, vagy csak az ismétlődésen belüli ezt a találkozót "
+"kívánja törölni?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to confirm the whole series or just one appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to confirm the whole "
+"series or just one appointment within the series?"
+msgstr ""
+"A teljes ismétlődést, vagy csak az ismétlődésen belüli egyik találkozót "
+"kívánja jóváhagyni?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to decline the whole series or just one appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to decline the whole "
+"series or just one appointment within the series?"
+msgstr ""
+"A teljes ismétlődést, vagy csak az ismétlődésen belüli egyik találkozót "
+"kívánja visszautasítani?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #, fuzzy
@@ -13877,9 +13959,6 @@ msgstr "az Ön rendszere"
 #~ msgid "December"
 #~ msgstr "December"
 
-#~ msgid "Delete whole series"
-#~ msgstr "Teljes ismétlődés törlése"
-
 #, fuzzy
 #~| msgid "Delete contact"
 #~ msgid "Detailed contact list"
@@ -13985,11 +14064,6 @@ msgstr "az Ön rendszere"
 
 #~ msgid "Edit Tabs"
 #~ msgstr "Lapok szerkesztése"
-
-#, fuzzy
-#~| msgid "Edit resource"
-#~ msgid "Edit categories"
-#~ msgstr "Erőforrás szerkesztése"
 
 #~ msgid "Email 1 / Phone number"
 #~ msgstr "1. e-mail / telefonszám"
@@ -15135,9 +15209,6 @@ msgstr "az Ön rendszere"
 #~ "\"#\" data-widget=\"options\" data-attribute=\"day\">szerdai</a> napján "
 #~ "ismétlődik."
 
-#~ msgid "The appointment is visible for all users in shared folders."
-#~ msgstr "A találkozó látható a megosztott mappák összes felhasználójánál."
-
 #~ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 #~ msgstr "A(z) \"%1$s\" mező elérte a maximális %2$d karakterszámot."
 
@@ -15268,6 +15339,9 @@ msgstr "az Ön rendszere"
 #~ msgstr ""
 #~ "Ez a statisztika csak a mappastruktúrában a(z) „%1$s” mappától számítva "
 #~ "négy szintnél kisebb mélységű mappákat tartalmazza."
+
+#~ msgid "This appointment"
+#~ msgstr "Ez a találkozó"
 
 #~ msgid ""
 #~ "This appointment is an exception. Changing the series does not affect "

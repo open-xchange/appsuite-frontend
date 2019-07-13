@@ -731,6 +731,12 @@ msgstr "Acceptera"
 msgid "Accept / Decline"
 msgstr "Acceptera / Neka"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "New appointment"
+msgid "Accept appointment"
+msgstr "Nytt möte"
+
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Accept changes"
 msgstr "Acceptera ändringar"
@@ -739,6 +745,13 @@ msgstr "Acceptera ändringar"
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 msgid "Accept invitation"
 msgstr "Acceptera inbjudan"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Accept / Decline"
+msgid "Accept series"
+msgstr "Acceptera / Neka"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
@@ -1286,10 +1299,6 @@ msgstr "Alla filer har tagits bort"
 msgid "All folders"
 msgstr "Alla mappar"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "All future appointments"
-msgstr "Alla framtida möten"
-
 #. informs user about the consequences when creating a rule for selected mails
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid ""
@@ -1469,9 +1478,8 @@ msgstr "Verkställ regel om något villkor uppfylls"
 msgid "Apply to all subfolders"
 msgstr "Verkställ för alla underliggande mappar"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/view.js
+#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail
 msgid "Appointment"
@@ -2131,6 +2139,19 @@ msgid "Change IMAP subscriptions"
 msgstr "Ändra IMAP-prenumerationer"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create appointment"
+msgid "Change appointment"
+msgstr "Skapa möte"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
+#, fuzzy
+#| msgid "Change confirmation status"
+msgid "Change appointment status"
+msgstr "Ändra bekräftelsestatus"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 msgid "Change confirmation status"
@@ -2163,6 +2184,13 @@ msgstr "Ändra påminnelse"
 #: apps/io.ox/calendar/actions/change-alarms.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-folder-alarms.js
 msgid "Change reminders"
+msgstr "Ändra påminnelser"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Change reminders"
+msgid "Change series"
 msgstr "Ändra påminnelser"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
@@ -2963,6 +2991,19 @@ msgstr "Bestäm nu"
 msgid "Decline"
 msgstr "Neka"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete appointment"
+msgid "Decline appointment"
+msgstr "Ta bort möte"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Delete whole series"
+msgid "Decline series"
+msgstr "Ta bort hela serien"
+
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Declined"
@@ -3447,6 +3488,12 @@ msgstr "Vill du verkligen ta bort dessa objekt?"
 msgid "Do you really want to delete this account?"
 msgstr "Vill du verkligen ta bort kontot?"
 
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Do you want to delete this appointment?"
+msgid "Do you really want to delete this appointment?"
+msgstr "Vill du ta bort mötet?"
+
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 msgid "Do you really want to delete this contact?"
 msgstr "Vill du verkligen ta bort den här kontakten?"
@@ -3529,23 +3576,6 @@ msgstr "Vill du verkligen logga ut från den enheten?"
 msgid "Do you want the appointments printed in detail or as a compact list?"
 msgstr ""
 "Vill du visa mötena med detaljerad information eller som en kompakt lista?"
-
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js
-msgid ""
-"Do you want to confirm the whole series or just one appointment within the "
-"series?"
-msgstr "Vill du bekräfta hela serien, eller bara ett enstaka möte i serien?"
-
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-msgid ""
-"Do you want to decline the whole series or just one appointment within the "
-"series?"
-msgstr "Vill du neka hela serien eller bara ett möte i serien?"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Do you want to delete this appointment?"
-msgstr "Vill du ta bort mötet?"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
@@ -3858,6 +3888,12 @@ msgstr "Redigera delning"
 msgid "Edit Tumblr feed"
 msgstr "Redigera Tumblr-flöde"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "All future appointments"
+msgid "Edit all future appointments"
+msgstr "Alla framtida möten"
+
 #. object permissions - edit/modify
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Edit all objects"
@@ -3870,7 +3906,7 @@ msgstr "Redigera alla påminnelser för kalender: %1$s"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/toolbar.js
-#: module:io.ox/calendar
+#: module:io.ox/calendar apps/io.ox/calendar/util.js
 msgid "Edit appointment"
 msgstr "Redigera möte"
 
@@ -3941,6 +3977,12 @@ msgstr "Redigera resurs"
 msgid "Edit rule"
 msgstr "Redigera regel"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Mail address"
+msgid "Edit series"
+msgstr "E-postadress"
+
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
 msgid "Edit share"
 msgstr "Redigera delning"
@@ -3954,6 +3996,12 @@ msgstr "Redigera signatur"
 #: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js
 msgid "Edit task"
 msgstr "Redigera uppgift"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Edit appointment"
+msgid "Edit this appointment"
+msgstr "Redigera möte"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Edit to set a name."
@@ -9400,9 +9448,7 @@ msgstr "Skickade meddelanden"
 msgid "Serial number"
 msgstr "Serienummer"
 
-#. Use singular in this context
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/acceptdeny.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Series"
 msgstr "Serie"
 
@@ -9446,7 +9492,8 @@ msgstr "Ange färg"
 msgid "Set color flag"
 msgstr "Ange färgflagga"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/core/main/topbar_right.js
 #: apps/io.ox/multifactor/login/loginScreen.js apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Inställningar"
@@ -10795,10 +10842,6 @@ msgstr ""
 msgid "There was no task data to import"
 msgstr "Det fanns ingen uppgiftsdata att importera"
 
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "This appointment"
-msgstr "Detta möte"
-
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid ""
 "This appointment is an exception. Changing the exception does not affect the "
@@ -10806,6 +10849,43 @@ msgid ""
 msgstr ""
 "Det här mötet är ett undantag. Att ändra undantaget kommer inte påverka "
 "serien."
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "The appointment is visible for all users in shared folders."
+msgid "This appointment is part of a series."
+msgstr "Mötet är synligt för alla användare i delade mappar."
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to delete the whole series or just this appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to change your "
+"confirmation for the whole series or just for this appointment within the "
+"series?"
+msgstr "Vill du ta bort hela serien eller bara detta möte i serien?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to confirm the whole series or just one appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to confirm the whole "
+"series or just one appointment within the series?"
+msgstr "Vill du bekräfta hela serien, eller bara ett enstaka möte i serien?"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "Do you want to decline the whole series or just one appointment within "
+#| "the series?"
+msgid ""
+"This appointment is part of a series. Do you want to decline the whole "
+"series or just one appointment within the series?"
+msgstr "Vill du neka hela serien eller bara ett möte i serien?"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
 #, fuzzy
@@ -15146,9 +15226,6 @@ msgstr "din plattform"
 #~ msgid "Delete exceptions: %1$s"
 #~ msgstr "Ta bort undantag: %1$s"
 
-#~ msgid "Delete whole series"
-#~ msgstr "Ta bort hela serien"
-
 #~ msgid "Deletion of folder %1$s failed"
 #~ msgstr "Borttagande av mapp %1$s misslyckades"
 
@@ -15378,11 +15455,6 @@ msgstr "din plattform"
 #~ msgstr ""
 #~ "Ändra en inställning till höger. I de flesta fallen tillämpas ändringarna "
 #~ "omedelbart."
-
-#, fuzzy
-#~| msgid "Mail address"
-#~ msgid "Edit categories"
-#~ msgstr "E-postadress"
 
 #~ msgid "Editing multiple E-Mails"
 #~ msgstr "Redigera flera e-brev"
@@ -18637,9 +18709,6 @@ msgstr "din plattform"
 #~ "attribute=\"interval\">var <span class=\"number-control\">2</span>:a "
 #~ "månad</a>."
 
-#~ msgid "The appointment is visible for all users in shared folders."
-#~ msgstr "Mötet är synligt för alla användare i delade mappar."
-
 #~ msgid ""
 #~ "The attachment you requested no longer exists. Please refresh the view."
 #~ msgstr "Bilagan som du bad om finns inte längre. Uppdatera."
@@ -19135,6 +19204,9 @@ msgstr "din plattform"
 #~ msgstr ""
 #~ "Denna handling stöds inte av denna LDAP-adressboken: Mapp %1$d Kontext "
 #~ "%2$d"
+
+#~ msgid "This appointment"
+#~ msgstr "Detta möte"
 
 #~ msgid ""
 #~ "This appointment does not take place.\n"
