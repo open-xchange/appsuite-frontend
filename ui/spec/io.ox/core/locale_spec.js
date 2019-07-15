@@ -17,7 +17,7 @@ define([
     'settings!io.ox/core'
 ], function (locale, postal, settings) {
 
-    describe.only('Postal address', function () {
+    describe('Postal address', function () {
 
         var data = {
             street_home: '  street  ',
@@ -63,8 +63,10 @@ define([
             });
 
             it('formated address with a valid fallback countrycode (US)', function () {
+                var loc = ox.locale;
                 ox.locale = undefined;
                 expect(postal.format(data, 'home')).to.equal('street\ncity state postal-code\nCOUNTRY');
+                ox.locale = loc;
             });
         });
 
