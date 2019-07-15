@@ -11,14 +11,66 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define(['io.ox/core/locale', 'settings!io.ox/core'], function (locale, settings) {
+define([
+    'io.ox/core/locale',
+    'io.ox/core/locale/postal-address',
+    'settings!io.ox/core'
+], function (locale, postal, settings) {
 
-    describe('Locale', function () {
+    describe.only('Postal address', function () {
 
-        it('returns current locale as de_DE', function () {
-            expect(locale.current()).to.equal('de_DE');
+        var data = {
+            street_home: '  street  ',
+            postal_code_home: '  postal-code  ',
+            city_home: '  city  ',
+            state_home: '  state  ',
+            country_home: '  country  '
+        };
+
+        describe('identifies country code', function () {
+
+            it('based on country-part of address', function () {
+                expect(postal.getCountryCode('Deutschland')).to.equal('DE');
+                expect(postal.getCountryCode('USA')).to.equal('US');
+                expect(postal.getCountryCode('Großbritannien')).to.equal('GB');
+                expect(postal.getCountryCode('Niederlande')).to.equal('NL');
+                // fallback
+                expect(postal.getCountryCode('Dorne')).to.be.equal('');
+            });
+
         });
 
+        describe('returns', function () {
+
+            it('formated address', function () {
+                var countrycode = 'BE';
+                expect(postal.format(data, 'home', countrycode)).to.equal('street\npostal-code city state\nCOUNTRY');
+                countrycode = 'US';
+                expect(postal.format(data, 'home', countrycode)).to.equal('street\ncity state postal-code\nCOUNTRY');
+                countrycode = 'GB';
+                expect(postal.format(data, 'home', countrycode)).to.equal('street\ncity\nstate postal-code\nCOUNTRY');
+            });
+
+            it('formated address without needless whitespace', function () {
+                var countrycode = 'BE';
+                expect(postal.format(_.omit(data, 'city_home'), 'home', countrycode)).to.equal('street\npostal-code state\nCOUNTRY');
+                expect(postal.format(_.pick(data, 'street_home', 'country_home'), 'home', countrycode)).to.equal('street\nCOUNTRY');
+            });
+
+            it('formated address with ommited STATE for specific countries', function () {
+                var countrycode = 'DE';
+                expect(postal.format(data, 'home', countrycode)).to.equal('street\npostal-code city\nCOUNTRY');
+            });
+
+            it('formated address with a valid fallback countrycode (US)', function () {
+                ox.locale = undefined;
+                expect(postal.format(data, 'home')).to.equal('street\ncity state postal-code\nCOUNTRY');
+            });
+        });
+
+    });
+
+    describe('Locale', function () {
         it('set proper date format', function () {
             var m = moment([2019, 5, 5, 13, 37]);
             expect(m.format('L')).to.equal('05.06.2019');
