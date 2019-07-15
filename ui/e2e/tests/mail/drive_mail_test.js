@@ -133,7 +133,7 @@ Scenario('[C85690] Expire date can be forced @shaky', async function (I, users) 
     I.waitForElement('.io-ox-mail-window');
 
     I.clickToolbar('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
+    I.waitForVisible('.io-ox-mail-compose .contenteditable-editor');
 
     I.executeScript(function () {
         require('settings!io.ox/mail').set('compose/shareAttachments/requiredExpiration', true);
@@ -166,5 +166,5 @@ Scenario('[C85690] Expire date can be forced @shaky', async function (I, users) 
     I.logout();
     I.login('app=io.ox/mail', { user: users[1] });
     I.waitForElement('.io-ox-mail-window');
-    I.see('Plus Ultra!');
+    I.waitForText('Plus Ultra!');
 });

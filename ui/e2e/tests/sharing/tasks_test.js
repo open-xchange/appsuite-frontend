@@ -34,23 +34,25 @@ Scenario('[C104304] tasks using “Permisions” dialog and sharing link @shaky'
         I.fillField('Subject', 'simple task 1');
         I.fillField('Description', 'world domination');
         I.click('Create');
+        I.waitForDetached('.io-ox-tasks-edit-window');
         I.clickToolbar('New');
         I.waitForText('Subject');
         I.fillField('Subject', 'simple task 2');
         I.fillField('Description', 'peace on earth');
         I.click('Create');
+        I.waitForDetached('.io-ox-tasks-edit-window');
 
         I.click({ css: '.folder-tree [title="Actions for Tasks"]' });
         I.click(locate('a').withText('Permissions / Invite people').inside('.dropdown'));
 
         I.click('~Select contacts');
-        I.waitForElement('.modal .list-view.address-picker li.list-item');
+        I.waitForVisible('.modal .list-view.address-picker li.list-item');
         I.fillField('Search', users[1].get('name'));
         I.waitForText(users[1].get('name'), 5, '.address-picker');
         I.waitForText(users[1].get('primaryEmail'));
         I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
         I.click({ css: 'button[data-action="select"]' });
-        I.waitForElement(locate('.permissions-view .row').at(2));
+        I.waitForVisible(locate('.permissions-view .row').at(2));
         I.click('Author');
         I.waitForText('Viewer', '.dropdown');
         I.click('Viewer');
@@ -88,7 +90,7 @@ Scenario('[C104304] tasks using “Permisions” dialog and sharing link @shaky'
     // Eve uses external link to shared folder
     session('Eve', () => {
         I.amOnPage(url);
-        I.waitForText('simple task 1', 5, '.io-ox-tasks-main .vgrid');
+        I.waitForText('simple task 1', undefined, '.io-ox-tasks-main .vgrid');
         I.see(`${users[0].get('sur_name')}, ${users[0].get('given_name')}: Tasks`, '.folder-tree');
         I.seeNumberOfElements('.io-ox-tasks-main .vgrid li.vgrid-cell', 2);
         I.see('simple task 2');
