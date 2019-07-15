@@ -133,19 +133,19 @@ Scenario('adds a contact with all fields', function (I) {
     I.see('Business City');
     I.see('Business State');
     I.see('12345');
-    I.see('Business County');
+    I.see('BUSINESS COUNTY');
     // home address
     I.see('Home Street');
     I.see('Home City');
     I.see('Home State');
     I.see('23456');
-    I.see('Home County');
+    I.see('HOME COUNTY');
     // other address
     I.see('Other Street');
     I.see('Other City');
     I.see('Other State');
     I.see('34567');
-    I.see('Other County');
+    I.see('OTHER COUNTY');
     // comment
     I.see('a comment in the comment field');
 

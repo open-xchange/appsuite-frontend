@@ -120,8 +120,8 @@ Scenario('[C208269] Edit contact information @shaky', async (I, users) => {
         if (/^(first_name|last_name|url|note)$/.test(name)) return;
         // no union here (too slow)
         if (/telephone/.test(name)) I.seeElement('//dd/a[text()="' + name + '"]');
-        else if (/street|postal|city|state|country/.test(name)) I.seeElement('//address[contains(text(), "' + name + '")]');
-
+        else if (/street|postal|city|state/.test(name)) I.seeElement('//address[contains(text(), "' + name + '")]');
+        else if (/country/.test(name)) I.seeElement('//address[contains(text(), "' + name.toUpperCase() + '")]');
         else I.seeElement('//dd[text()="' + name + '"]');
     });
 

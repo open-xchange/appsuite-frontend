@@ -56,7 +56,7 @@ Scenario('[C104269] Import App Suite CSV', async (I) => {
             I.seeElement('//dd/a[text()="' + name + '"]');
         });
 
-        var addresses = ['Street Home', '12345', 'Town Home', 'State Home', 'Country Home'];
+        var addresses = ['Street Home', '12345', 'Town Home', 'State Home', 'COUNTRY HOME'];
         addresses.forEach(function (name) {
             I.seeElement('//address[contains(text(), "' + name + '")]');
         });
@@ -108,7 +108,7 @@ Scenario('[C104269] Import App Suite CSV', async (I) => {
     I.see('Open-Xchange GmbH', { css: 'dd' });
     I.see('+49 1111 111111', { css: 'dd a' });
     I.see('ox@example.com', { css: 'dd a' });
-    I.see('Bei Der Arbeit 14\n1337 Berlin\nÄgypten', { css: 'address' });
+    I.see('Bei Der Arbeit 14\n1337 Berlin\nÄGYPTEN', { css: 'address' });
 
     deleteSelectedContacts();
 
@@ -142,8 +142,8 @@ Scenario('[C104269] Import App Suite CSV', async (I) => {
         I.see('+49 111 11111', { css: 'dd a' });
         I.see('foo@example.com', { css: 'dd a' });
         I.see('work@example.com', { css: 'dd a' });
-        I.see('Home Street 23\nCity Home 12345\nCountry Home', { css: 'address' });
-        I.see('Workstreet 43\nSomewhere 424242\nWorkcountry', { css: 'address' });
+        I.see('Home Street 23\nCity Home 12345\nCOUNTRY HOME', { css: 'address' });
+        I.see('Workstreet 43\nSomewhere 424242\nWORKCOUNTRY', { css: 'address' });
         I.see('Some notes\n\nwith linebreakös\n!!!', { css: '.comment' });
         // delete on first iteration
         if (suffix === 'contact') deleteSelectedContacts();
@@ -196,8 +196,8 @@ Scenario('[C104269] Import App Suite CSV', async (I) => {
         I.see('Some notes\n\nFor Hans', { css: '.comment' });
         I.see('hans@example.com', { css: 'dd a' });
         I.see('+11 111 1111', { css: 'dd a' });
-        I.see('Business St. 23\nBerlin Berlin 13370', { css: 'address' });
-        I.see('Homestreet 23\nHometown NRW 44135', { css: 'address' });
+        I.see('Business St. 23\n13370 Berlin', { css: 'address' });
+        I.see('Homestreet 23\n44135 Hometown', { css: 'address' });
         // delete on first iteration
         if (suffix === 'contact') deleteSelectedContacts();
     }
