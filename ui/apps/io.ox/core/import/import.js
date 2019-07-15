@@ -215,7 +215,7 @@ define('io.ox/core/import/import', [
             .inject({
                 createFolder: function (module, title) {
                     var invalid = false,
-                        folder = module === 'calendar' ? '1' : folderAPI.getDefaultFolder(module);
+                        folder = folderAPI.getDefaultFolder(module);
                     ext.point('io.ox/core/filename')
                         .invoke('validate', null, title, 'folder')
                         .find(function (result) {
