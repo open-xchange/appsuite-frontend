@@ -34,9 +34,6 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
         // object for the tab communication
         TabCommunication,
 
-        // key for the localStorage
-        storageKey       = 'appsuite.window-communication',
-
         // object with the windowName properties
         windowNameObject = {};
 
@@ -54,8 +51,10 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
      * initialize the localStorage listener
      */
     function initListener() {
+        var self = this;
         window.addEventListener('storage', function (e) {
-            if (e.key !== storageKey) return;
+            if (!e.key) return;
+
             var eventData = e.newValue || JSON.stringify({}),
                 data;
 
@@ -71,10 +70,17 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
             if (data.targetWindow && data.targetWindow !== windowNameObject.windowName) return;
             if (data.exceptWindow && data.exceptWindow === windowNameObject.windowName) return;
 
-            if (data.propagate === 'show-in-drive') {
-                return ox.load(['io.ox/files/actions/show-in-drive']).done(function (action) {
-                    action(data.parameters);
-                });
+            switch (e.key) {
+                case TabCommunication.DEFAULT_STORAGE_KEYS.COMMUNICATION:
+                    self.handleListener(data);
+                    break;
+                case TabCommunication.DEFAULT_STORAGE_KEYS.SESSION:
+                    require(['io.ox/core/tab/session']).done(function (tabSession) {
+                        tabSession.handleListener(data);
+                    });
+                    break;
+                default:
+                    break;
             }
             if (data.propagate === 'get-active-windows') return TabCommunication.getActiveWindows(data.exceptWindow);
             if (data.propagate === 'update-ox-object') return TabCommunication.updateOxObject(data.parameters);
@@ -88,6 +94,13 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
     TabCommunication = {
         // events object to trigger changes
         events: _.extend({}, Backbone.Events),
+
+        /**
+         * Keys to handle the localStorage
+         * @readonly
+         * @enum {String}
+         */
+        DEFAULT_STORAGE_KEYS: { COMMUNICATION: 'appsuite.window-communication', SESSION: 'appsuite.session-management' },
 
         /**
          * Write a new localStorage item to spread to all other tabs or to a
@@ -104,10 +117,19 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
          *   propagate to all windows except this
          *  @param {String} [options.targetWindow]
          *   propagate to this window
+         *  @param {String} [options.storageKey]
+         *   key to use in the localStorage. Default key is TabHandling.DEFAULT_STORAGE_KEYS.COMMUNICATION
          */
         propagate: function (propagate, options) {
             options = options || {};
-            var jsonString;
+            var jsonString, propagateToSelfWindow,
+                storageKey = options.storageKey || this.DEFAULT_STORAGE_KEYS.COMMUNICATION;
+
+            // propagateToAll means that the event is triggered on the own window via the event and not via the localStorage
+            if (!options.exceptWindow && !options.targetWindow) {
+                options.exceptWindow = windowNameObject.windowName;
+                propagateToSelfWindow = true;
+            }
 
             try {
                 jsonString = JSON.stringify({
@@ -122,13 +144,15 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
                 if (ox.debug) console.warn('TabCommunication.propagate', e);
             }
             localStorage.setItem(storageKey, jsonString);
-            this.clearStorage();
+            this.clearStorage(storageKey);
+
+            if (propagateToSelfWindow) this.events.trigger(propagate, options.parameters);
         },
 
         /**
          * Clear Storage for TabCommunication
          */
-        clearStorage: function () {
+        clearStorage: function (storageKey) {
             try {
                 localStorage.removeItem(storageKey);
             } catch (e) {
@@ -149,6 +173,7 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
          *  parameters that should be passed to the trigger
          */
         propagateToAll: function (propagate, parameters) {
+            console.warn('(Deprecated) TabHandling: TabCommunication.propagateToAll', propagate, _.clone(parameters));
             this.propagate(propagate, {
                 parameters: parameters,
                 exceptWindow: windowNameObject.windowName
@@ -169,6 +194,7 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
          *  parameters that should be passed to the trigger
          */
         propagateToAllExceptWindow: function (propagate, windowName, parameters) {
+            console.warn('(Deprecated) TabHandling: TabCommunication.propagateToAllExceptWindow', propagate, windowName, _.clone(parameters));
             this.propagate(propagate, {
                 parameters: parameters,
                 exceptWindow: windowName
@@ -188,6 +214,7 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
          *  parameters that should be passed to the trigger
          */
         propagateToWindow: function (propagate, windowName, parameters) {
+            console.warn('(Deprecated) TabHandling: TabCommunication.propagateToWindow', propagate, windowName, _.clone(parameters));
             this.propagate(propagate, {
                 parameters: parameters,
                 targetWindow: windowName
@@ -246,6 +273,26 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
          */
         setWindowNameObject: function (newWindowNameObject) {
             _.extend(windowNameObject, newWindowNameObject);
+        },
+
+        handleListener: function (data) {
+            console.warn('TabHandling: TabCommunication.handleListener', data.propagate, _.clone(data));
+            switch (data.propagate) {
+                case 'show-in-drive':
+                    ox.load(['io.ox/files/actions/show-in-drive']).done(function (action) {
+                        action(data.parameters);
+                    });
+                    break;
+                case 'get-active-windows':
+                    TabCommunication.getActiveWindows(data.exceptWindow);
+                    break;
+                case 'update-ox-object':
+                    TabCommunication.updateOxObject(data.parameters);
+                    break;
+                default:
+                    TabCommunication.events.trigger(data.propagate, data.parameters);
+                    break;
+            }
         }
     };
 

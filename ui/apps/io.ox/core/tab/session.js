@@ -109,6 +109,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          * Clear localStorage for TabSession
          */
         clearStorage: function () {
+            console.warn('(Deprecated) TabHandling: TabSession.clearStorage');
             try {
                 localStorage.removeItem(storageKey);
             } catch (e) {
@@ -125,6 +126,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          *  parameters that should be passed to the trigger
          */
         propagate: function (propagate, parameters) {
+            console.warn('(Deprecated) TabHandling: TabSession.propagate', propagate, _.clone(parameters));
             var jsonString;
 
             try {
@@ -146,6 +148,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          * Ask over localStorage if another tab has a session
          */
         propagateGetSession: function () {
+            console.warn('(Deprecated) TabHandling: TabSession.propagateGetSession');
             if (ox.session) return;
             var windowName = window.name || JSON.stringify({}),
                 windowNameObject;
@@ -199,6 +202,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          *  parameters to be propagated
          */
         propagateSession: function (parameters) {
+            console.warn('(Deprecated) TabHandling: TabSession.propagateSession', _.clone(parameters));
             if (!ox.session) {
                 this.propagate('propagateNoSession');
                 return;
@@ -225,6 +229,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          *      If the flag is set, the login is propagated to the other tabs and trigger a tabSessionLogin
          */
         propagateLogin: function (params) {
+            console.warn('(Deprecated) TabHandling: TabSession.propagateLogin', _.clone(params));
             var options = params || {};
             this.propagate('propagateLogin', {
                 session: ox.session,
@@ -244,7 +249,38 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          *  Optional options to send via the logout event
          */
         propagateLogout: function (options) {
+            console.warn('(Deprecated) TabHandling: TabSession.propagateLogout', _.clone(options));
             this.propagate('propagateLogout', options);
+        },
+
+        handleListener: function (data) {
+            console.warn('TabHandling: TabSession.handleListener', data.propagate, _.clone(data));
+            switch (data.propagate) {
+                case 'getSession':
+                    this.propagateSession(data.parameters);
+                    break;
+                case 'propagateSession':
+                    this.events.trigger(data.propagate, data.parameters);
+                    break;
+                case 'propagateNoSession':
+                    this.events.trigger(data.propagate);
+                    break;
+                case 'propagateLogout':
+                    if (ox.signin) return;
+                    this.events.trigger('before:propagatedLogout');
+                    require('io.ox/core/main').logout({
+                        force: true,
+                        skipSessionLogout: true,
+                        autologout: data.parameters && data.parameters.autologout
+                    });
+                    break;
+                case 'propagateLogin':
+                    if (ox.session && !data.parameters.relogin) return;
+                    this.events.trigger(data.propagate, data.parameters);
+                    break;
+                default:
+                    break;
+            }
         }
     };
 

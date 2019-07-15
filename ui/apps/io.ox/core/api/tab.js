@@ -57,7 +57,7 @@ define('io.ox/core/api/tab', [
      */
     function disable() {
         for (var key in api) {
-            if (api.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(api, key)) {
                 api[key] = $.noop;
             }
         }
@@ -172,17 +172,24 @@ define('io.ox/core/api/tab', [
 
         // Propagate to all windows, except the specified by the localStorage
         propagateToAllExceptWindow: function (propagate, exceptWindow, parameters) {
+            console.warn('(Deprecated) TabHandling: TabAPI.propagateToAllExceptWindow', propagate, exceptWindow, _.clone(parameters));
             tabCommunication.propagateToAllExceptWindow(propagate, exceptWindow, parameters);
         },
 
         // Propagate to specified window by the localStorage
         propagateToWindow: function (propagate, targetWindow, parameters) {
+            console.warn('(Deprecated) TabHandling: TabAPI.propagateToWindow', propagate, targetWindow, _.clone(parameters));
             tabCommunication.propagateToWindow(propagate, targetWindow, parameters);
         },
 
         // Propagate to all windows by the localStorage.
         propagateToAll: function (propagate, parameters) {
+            console.warn('(Deprecated) TabHandling: TabAPI.propagateToAll', propagate, _.clone(parameters));
             tabCommunication.propagateToAll(propagate, parameters);
+        },
+
+        propagate: function (options) {
+            tabCommunication.propagate(options);
         },
 
         // Ask for other windows by localStorage
@@ -202,11 +209,13 @@ define('io.ox/core/api/tab', [
 
         // Send a message to other tabs to logout these tabs
         propagateLogout: function (options) {
+            console.warn('(Deprecated) TabHandling: TabAPI.propagateLogout', _.clone(options));
             tabSession.propagateLogout(options);
         },
 
         // Send a session over localStorage to login logged out tabs
         propagateLogin: function (options) {
+            console.warn('(Deprecated) TabHandling: TabAPI.propagateLogin', _.clone(options));
             tabSession.propagateLogin(options);
         },
 
