@@ -172,43 +172,33 @@ var checkInAllViews = async function (I, subject, location) {
     I.clickToolbar('View');
     I.click('Day', '.smart-dropdown-container');
 
-    const cid = await I.grabAttributeFrom('.appointment', 'data-cid'),
-        appointmentSelector = locate(`.appointment[data-cid="${cid}"]`);
-    let appointment = appointmentSelector.inside('.weekiew-container.day')
-        .as('appointment element in day view');
 
-    I.waitForText(subject, appointment);
-    I.waitForText(location, appointment);
+    I.waitForText(subject, '.weekview-container.day');
+    I.waitForText(location, '.weekview-container.day');
 
     // // 2) week view
-    appointment = appointmentSelector.inside('.weekview-container.week')
-        .as('appointment element in week view');
     I.clickToolbar('View');
     I.click('Week', '.smart-dropdown-container');
     I.wait(1);
 
-    I.waitForText(subject, appointment);
-    I.waitForText(location, appointment);
+    I.waitForText(subject, '.weekview-container.week');
+    I.waitForText(location, '.weekview-container.week');
 
     // // 3) month view
     I.clickToolbar('View');
     I.click('Month', '.smart-dropdown-container');
     I.wait(1);
-    appointment = appointmentSelector.inside('.monthview-container')
-        .as('appointment element in month view');
 
     // don't look for location in month view (usually subject is too long so location is out of view)
-    I.waitForText(subject, appointment);
+    I.waitForText(subject, '.month-view-container');
 
     // // 4) list view
     I.clickToolbar('View');
     I.click('List', '.smart-dropdown-container');
     I.wait(1);
-    appointment = appointmentSelector.inside('.calendar-list-view')
-        .as('appointment element in list view');
 
-    I.waitForText(subject, appointment);
-    I.waitForText(location, appointment);
+    I.waitForText(subject, '.calendar-list-view');
+    I.waitForText(location, '.calendar-list-view');
 
 };
 

@@ -28,9 +28,10 @@ Scenario('[C45032] Edit Permissions at "My shares" @shaky', async function (I, u
     session('Alice', () => {
         I.login('app=io.ox/files');
 
+        I.waitForText('My shares');
         I.selectFolder('My shares');
         // sometimes this is not fast enough and there are 4 objects
-        I.retry(3).seeNumberOfElements('.list-view li.list-item', 0);
+        I.retry(5).seeNumberOfElements('.list-view li.list-item', 0);
 
         //I.shareFolder('Music');
         I.click('My files', '.folder-tree');

@@ -29,7 +29,7 @@ const A = {
         subjects = [].concat(subjects);
         I.selectFolder(folder);
         subjects.forEach(function (subject) {
-            I.waitForText(subject, 1, '.leftside .list-view .subject .drag-title');
+            I.waitForText(subject, 5, '.leftside .list-view .subject .drag-title');
         });
     },
     clickMoreAction: function (I, toolbar, action) {
