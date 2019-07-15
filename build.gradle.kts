@@ -5,6 +5,7 @@ buildscript {
         }
     }
     dependencies {
+        classpath("com.openexchange.build", "project-type-scanner", "1.2.1")
         classpath("com.openexchange.build", "licensing")
         classpath("com.openexchange.build", "packaging", "3.1.0")
         classpath("com.openexchange.build", "opensuse-build-service-client", "1.4.0")
