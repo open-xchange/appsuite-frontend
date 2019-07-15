@@ -75,11 +75,11 @@ Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions) @shaky
     ] };
 
     prepare(I);
-    I.waitForElement('[title="Actions for Contacts"]');
+    I.waitForVisible('[title="Actions for Contacts"]');
     I.click('*[title="Actions for Contacts"]');
     I.waitForText('Create sharing link');
     I.click('Create sharing link');
-    I.waitForElement('h1.modal-title');
+    I.waitForVisible('h1.modal-title');
     I.waitForText('Password required');
 
     expect(await I.grabAxeReport(excludes)).to.be.accessible;

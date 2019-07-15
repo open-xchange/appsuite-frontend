@@ -228,7 +228,7 @@ Scenario('[C7359] - Expand/collapse all contact edit sections', function (I) {
     I.click('New contact');
     // real action in dropdown
     I.waitForVisible('.dropdown-menu');
-    I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');
+    I.retry(5).click('New contact', '[data-action="io.ox/contacts/actions/create"]');
     I.waitForVisible('.io-ox-contacts-edit-window');
 
     I.checkOption('Show all fields');
