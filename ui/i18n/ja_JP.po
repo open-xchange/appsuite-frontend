@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-07-16 09:10+0200\n"
+"PO-Revision-Date: 2019-07-16 09:12+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -2995,7 +2995,7 @@ msgstr "既定の通知時間"
 #: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
 #: apps/io.ox/calendar/settings/pane.js
 msgid "Default reminder for all-day appointments"
-msgstr "終日の予定の既定アラーム"
+msgstr "終日の予定の既定の通知時間"
 
 #: apps/io.ox/calendar/actions/change-folder-alarms.js module:io.ox/calendar
 #: apps/io.ox/calendar/settings/pane.js
