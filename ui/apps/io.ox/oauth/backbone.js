@@ -251,7 +251,7 @@ define('io.ox/oauth/backbone', [
     var MailServiceItemView = ServiceItemView.extend({
         render: function () {
             var shortId = this.model.get('icon') || this.model.id.match(/\.?(\w*)$/)[1] || 'fallback';
-            var label = (this.model.get('displayName') === 'Google') ? gt('Sign in with Google. This will add your GMail Account') : this.model.get('displayName');
+            var label = (this.model.get('displayName') === 'Google') ? gt('Sign in with Google. This will add your Gmail account.') : this.model.get('displayName');
             this.$el.append(
                 $('<button type="button" class="btn btn-default">').data({ cid: this.model.cid }).append(
                     $('<i class="service-icon fa">').addClass('logo-' + shortId)
@@ -261,6 +261,7 @@ define('io.ox/oauth/backbone', [
             return this;
         }
     });
+
     var ServicesListView = Backbone.View.extend({
         tagName: 'ul',
         className: 'list-unstyled services-list-view',
