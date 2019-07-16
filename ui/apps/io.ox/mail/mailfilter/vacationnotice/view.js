@@ -80,7 +80,11 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                 this.$('.date-range ' + formclass).prop('disabled', !enabled);
             },
             getAddresses: function () {
-                var name = contactsUtil.getMailFullName(this.data.user).trim();
+                var name = contactsUtil.getMailFullName(this.data.user).trim(),
+                    regex = /^[A-Za-z0-9 ]+$/,
+                    needsQuoting = !regex.test(name);
+                if (needsQuoting) name = '"' + name + '"';
+
                 return [].concat(
                     // default sender
                     { value: 'default', label: gt('Default sender') },
