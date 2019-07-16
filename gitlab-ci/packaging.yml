@@ -23,8 +23,6 @@ delete project on obs:
 upload:
   image: gradle:5.5-jre8
   stage: deploy
-  variables:
-    OBS_PROJECT: frontend-$CI_COMMIT_REF_SLUG
   script:
     # only run subtasks for projects which have been build previously (contain some built project files)
     - export TASKS=$(ls */build/pkg -d | sed -E "s,([^\/ ]+)\/[^ ]+,:\1:upload,g")

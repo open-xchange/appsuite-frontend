@@ -1,3 +1,5 @@
+import com.openexchange.build.git.GitExtension
+
 buildscript {
     repositories {
         maven {
@@ -6,6 +8,7 @@ buildscript {
     }
     dependencies {
         classpath("com.openexchange.build", "project-type-scanner", "1.2.1")
+        classpath("com.openexchange.build", "gradle-git", "2.2.0")
         classpath("com.openexchange.build", "licensing")
         classpath("com.openexchange.build", "packaging", "3.1.0")
         classpath("com.openexchange.build", "opensuse-build-service-client", "1.4.0")
@@ -39,7 +42,15 @@ configure<com.openexchange.obs.gradle.plugin.BuildserviceExtension> {
     login  = System.getenv("OBS_USERNAME")
     password = System.getenv("OBS_PASSWORD")
     project(closureOf<com.openexchange.obs.gradle.plugin.Project> {
-        name = System.getenv("OBS_PROJECT")
+        val gitExtension = extensions.getByType(GitExtension::class.java)
+        val versionTag = gitExtension.newestVersionTag
+        val regex = Regex("[^A-Za-z0-9-_]")
+        val extension = when {
+            versionTag?.commitDistance == 0L -> "${versionTag.versionWithoutRevision}-rev${versionTag.revisionMajor}"
+            System.getenv("CI_COMMIT_REF_SLUG") != null -> System.getenv("CI_COMMIT_REF_SLUG")
+            else -> regex.replace(gitExtension.branchName, "_")
+        }
+        name = "frontend-$extension"
         this.repositories(closureOf<NamedDomainObjectContainer<com.openexchange.obs.gradle.plugin.Repository>> {
             create("DebianStretch") {
                 depends(kotlin.collections.mapOf("project" to "Debian:Stretch", "repository" to "standard"))
