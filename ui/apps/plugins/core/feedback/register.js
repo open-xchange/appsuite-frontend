@@ -213,6 +213,12 @@ define('plugins/core/feedback/register', [
             };
         }
     });
+    // for custom dev
+    ext.point('plugins/core/feedback').extend({
+        id: 'process',
+        index: 200,
+        process: $.noop
+    });
 
     var modes = {
             nps: {
@@ -326,9 +332,17 @@ define('plugins/core/feedback/register', [
                             data.operating_system = key;
                         }
                         if (!found && _.isNumber(val)) {
+                            // distinguish correctly between IE and edge
+                            // TODO can be removed when edge is no longer recognized as IE with higher version
+                            if (key === 'IE' && _.browser.edge) {
+                                data.browser = 'Edge';
+                                // round to one decimal place
+                                data.browser_version = parseInt(_.browser.Edge * 10, 10) / 10;
+                            } else {
+                                data.browser = key;
+                                data.browser_version = val;
+                            }
                             found = true;
-                            data.browser = key;
-                            data.browser_version = val;
                         }
                     });
 
@@ -378,6 +392,10 @@ define('plugins/core/feedback/register', [
                             break;
                         // no default
                     }
+
+                    var baton = ext.Baton.ensure(data);
+                    ext.point('plugins/core/feedback').invoke('process', this, baton);
+                    data = baton.data;
                     sendFeedback(data)
                         .done(function () {
                             //#. popup info message
