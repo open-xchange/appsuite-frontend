@@ -1,3 +1,9 @@
+open-xchange-guidedtours (7.10.1-15) stable; urgency=medium
+
+  * Build for patch 2019-07-15 (5309)
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 09 Jul 2019 13:01:59 +0000
+
 open-xchange-guidedtours (7.10.1-14) stable; urgency=medium
 
   * Build for patch 2019-07-01 (5290)

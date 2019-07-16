@@ -5,6 +5,8 @@ define('io.ox/dynamic-theme/signin', [
 ], function (ext, less, theme) {
     'use strict';
 
+    if (!window.ox || !ox.serverConfig || !ox.serverConfig.dynamicTheme) return;
+
     var vars = ox.serverConfig.dynamicTheme;
 
     if (vars.headerLogo) {
