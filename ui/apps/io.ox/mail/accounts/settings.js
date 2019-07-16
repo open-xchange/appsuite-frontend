@@ -171,7 +171,7 @@ define('io.ox/mail/accounts/settings', [
                 mailServices.push({
                     id: 'mailwizard',
                     type: 'wizard',
-                    displayName: gt('Add other email account')
+                    displayName: gt('Add other mail account')
                 });
 
                 $el.append(
