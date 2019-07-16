@@ -29,6 +29,8 @@ define('io.ox/files/upload/dropzone', [
                     caption: gt('Drop files here to upload')
                 });
 
+            zone.isEnabled = undefined;
+
             zone.on({
                 'show': function () {
                     app.listView.$el.stop().hide();
