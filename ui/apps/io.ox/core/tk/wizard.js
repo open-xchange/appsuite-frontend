@@ -896,7 +896,7 @@ define('io.ox/core/tk/wizard', [
         };
 
         // touch/swipe support
-        var self = this, offset = 0, pageX = 0, x, moved, width, minX, maxX;
+        var self = this, offset = 0, pageX = 0, x, moved, width, minX, maxX, onInput;
 
         this.container.find('.wizard-pages').on({
 
@@ -904,6 +904,13 @@ define('io.ox/core/tk/wizard', [
 
                 var touches = e.originalEvent.targetTouches;
                 if (touches.length !== 1) return;
+
+                // no swiping when on an inputfield (interferes with magnifying glass etc)
+                if ($(e.target).is('input')) {
+                    onInput = true;
+                    return;
+                }
+
                 pageX = touches[0].pageX;
                 moved = false;
 
@@ -917,6 +924,10 @@ define('io.ox/core/tk/wizard', [
             touchmove: function (e) {
                 var touches = e.originalEvent.targetTouches;
                 if (touches.length !== 1) return;
+
+                // no swiping when on an inputfield (interferes with magnifying glass etc)
+                if (onInput) return;
+
                 e.preventDefault();
                 x = touches[0].pageX - pageX;
                 if (!moved) {
@@ -935,6 +946,9 @@ define('io.ox/core/tk/wizard', [
             },
 
             touchend: function () {
+
+                onInput = false;
+
                 if (!moved) return;
                 var pct = x / width * 100;
                 // paused?
