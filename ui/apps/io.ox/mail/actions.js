@@ -746,4 +746,15 @@ define('io.ox/mail/actions', [
             app.queues.importEML.offer(file, { folder: app.folder.get() });
         }
     });
+
+    ext.point('io.ox/mail/folderview/premium-area').extend({
+        index: 100,
+        id: 'inline-premium-links',
+        draw: function (baton) {
+            this.append(
+                baton.renderActions('io.ox/mail/links/premium-links', baton)
+            );
+        }
+    });
+
 });
