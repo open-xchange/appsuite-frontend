@@ -84,8 +84,8 @@ define('io.ox/core/api/tab', [
     function initListener() {
         // initialize listener for beforeunload event to remove window from localStorage and clear the storage
         window.addEventListener('beforeunload', function () {
-            tabSession.clearStorage();
-            tabCommunication.clearStorage();
+            tabCommunication.clearStorage(tabCommunication.DEFAULT_STORAGE_KEYS.SESSION);
+            tabCommunication.clearStorage(tabCommunication.DEFAULT_STORAGE_KEYS.COMMUNICATION);
             // TODO: check if the window from the windowList at the localStorage must be removed earlier.
             //  otherwise the element is not removed before initialization when the tab is closed.
             tabHandling.removeFromWindowList(tabHandling.windowName);
@@ -100,7 +100,7 @@ define('io.ox/core/api/tab', [
 
     api = {
 
-        // tabHandling
+        // tabHandling --------------------------------------------------
 
         // Logging out states definition object
         LOGGING_OUT_STATE: tabHandling.LOGGING_OUT_STATE,
@@ -165,31 +165,16 @@ define('io.ox/core/api/tab', [
             return tabHandling.getWindowList();
         },
 
-        // tabCommunication
+        // tabCommunication --------------------------------------------------
 
         // Backbone events
         communicationEvents: tabCommunication.events,
 
-        // Propagate to all windows, except the specified by the localStorage
-        propagateToAllExceptWindow: function (propagate, exceptWindow, parameters) {
-            console.warn('(Deprecated) TabHandling: TabAPI.propagateToAllExceptWindow', propagate, exceptWindow, _.clone(parameters));
-            tabCommunication.propagateToAllExceptWindow(propagate, exceptWindow, parameters);
-        },
+        DEFAULT_STORAGE_KEYS: tabCommunication.DEFAULT_STORAGE_KEYS,
 
-        // Propagate to specified window by the localStorage
-        propagateToWindow: function (propagate, targetWindow, parameters) {
-            console.warn('(Deprecated) TabHandling: TabAPI.propagateToWindow', propagate, targetWindow, _.clone(parameters));
-            tabCommunication.propagateToWindow(propagate, targetWindow, parameters);
-        },
-
-        // Propagate to all windows by the localStorage.
-        propagateToAll: function (propagate, parameters) {
-            console.warn('(Deprecated) TabHandling: TabAPI.propagateToAll', propagate, _.clone(parameters));
-            tabCommunication.propagateToAll(propagate, parameters);
-        },
-
-        propagate: function (options) {
-            tabCommunication.propagate(options);
+        // Propagate over the localStorage
+        propagate: function (propagate, parameters) {
+            tabCommunication.propagate(propagate, parameters);
         },
 
         // Ask for other windows by localStorage
@@ -202,22 +187,10 @@ define('io.ox/core/api/tab', [
             return tabCommunication.updateOxObject(parameters);
         },
 
-        // tabSession
+        // tabSession --------------------------------------------------
 
         // Backbone events
         sessionEvents: tabSession.events,
-
-        // Send a message to other tabs to logout these tabs
-        propagateLogout: function (options) {
-            console.warn('(Deprecated) TabHandling: TabAPI.propagateLogout', _.clone(options));
-            tabSession.propagateLogout(options);
-        },
-
-        // Send a session over localStorage to login logged out tabs
-        propagateLogin: function (options) {
-            console.warn('(Deprecated) TabHandling: TabAPI.propagateLogin', _.clone(options));
-            tabSession.propagateLogin(options);
-        },
 
         // Perform a login workflow (i.e. ask for a session and wait for an event)
         login: function () {

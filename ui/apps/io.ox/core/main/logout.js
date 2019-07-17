@@ -134,7 +134,7 @@ define('io.ox/core/main/logout', [
                 try {
                     TabAPI.setLoggingOutState(TabAPI.LOGGING_OUT_STATE.LEADER);
                     // notify other tabs that a logout happened
-                    TabAPI.propagateLogout({ autologout: baton.autologout });
+                    TabAPI.propagate('propagateLogout', { autologout: baton.autologout, exceptWindow: TabAPI.getWindowName(), storageKey: TabAPI.DEFAULT_STORAGE_KEYS.SESSION });
                 } catch (e) {
                     if (ox.debug) console.warn('propagate logout did not work', e);
                 } finally {

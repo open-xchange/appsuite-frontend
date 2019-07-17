@@ -20,10 +20,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
     var initialized = false,
 
         // An Object for Session Handling
-        TabSession,
-
-        // key for the localStorage
-        storageKey  = 'appsuite.session-management';
+        TabSession;
 
     /**
      * Initialize localStorage listener if localStorage is available
@@ -47,48 +44,12 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
      * Initialize listener for storage events and listener for propagation
      */
     function initListener() {
-        window.addEventListener('storage', function (e) {
-            if (e.key !== storageKey) return;
-            var eventData = e.newValue || JSON.stringify({}),
-                data;
-
-            try {
-                data = JSON.parse(eventData);
-            } catch (e) {
-                data = {};
-                if (ox.debug) console.warn('TabSession.initListener', e);
-            }
-
-            switch (data.propagate) {
-                case 'getSession':
-                    TabSession.propagateSession(data.parameters);
-                    break;
-                case 'propagateSession':
-                    TabSession.events.trigger(data.propagate, data.parameters);
-                    break;
-                case 'propagateNoSession':
-                    TabSession.events.trigger(data.propagate);
-                    break;
-                case 'propagateLogout':
-                    if (ox.signin) return;
-                    TabSession.events.trigger('before:propagatedLogout');
-                    require('io.ox/core/main').logout({
-                        force: true,
-                        skipSessionLogout: true,
-                        autologout: data.parameters && data.parameters.autologout
-                    });
-                    break;
-                case 'propagateLogin':
-                    if (ox.session && !data.parameters.relogin) return;
-                    TabSession.events.trigger(data.propagate, data.parameters);
-                    break;
-                default:
-                    break;
-            }
-        });
-
         TabSession.events.listenTo(TabSession.events, 'getSession', function (parameters) {
-            TabSession.propagateSession(parameters);
+            var tabAPI = require('io.ox/core/api/tab');
+            tabAPI.propagate('propagateLogin', _.extend(parameters, {
+                exceptWindow: tabAPI.getWindowName(),
+                storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION
+            }));
         });
 
         TabSession.events.listenTo(TabSession.events, 'propagateLogin', function (parameters) {
@@ -106,52 +67,13 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
         events: _.extend({}, Backbone.Events),
 
         /**
-         * Clear localStorage for TabSession
-         */
-        clearStorage: function () {
-            console.warn('(Deprecated) TabHandling: TabSession.clearStorage');
-            try {
-                localStorage.removeItem(storageKey);
-            } catch (e) {
-                if (ox.debug) console.warn('TabSession.clearStorage', e);
-            }
-        },
-
-        /**
-         * Propagate Session Handling over the localStorage
-         *
-         * @param {String} propagate
-         *  the key to trigger event
-         * @param {Object} parameters
-         *  parameters that should be passed to the trigger
-         */
-        propagate: function (propagate, parameters) {
-            console.warn('(Deprecated) TabHandling: TabSession.propagate', propagate, _.clone(parameters));
-            var jsonString;
-
-            try {
-                jsonString = JSON.stringify({
-                    propagate: propagate,
-                    parameters: parameters,
-                    date: Date.now()
-                });
-            } catch (e) {
-                jsonString = JSON.stringify({});
-                if (ox.debug) console.warn('TabSession.propagate', e);
-            }
-
-            localStorage.setItem(storageKey, jsonString);
-            this.clearStorage();
-        },
-
-        /**
          * Ask over localStorage if another tab has a session
          */
         propagateGetSession: function () {
-            console.warn('(Deprecated) TabHandling: TabSession.propagateGetSession');
             if (ox.session) return;
             var windowName = window.name || JSON.stringify({}),
-                windowNameObject;
+                windowNameObject,
+                tabAPI = require('io.ox/core/api/tab');
 
             try {
                 windowNameObject = JSON.parse(windowName);
@@ -165,10 +87,11 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
                 } else {
                     var param = {};
                     if (_.url.hash('session')) _.extend(param, { session: _.url.hash('session') });
-                    this.propagate('getSession', param);
+                    tabAPI.propagate('getSession', { parameters: param, exceptWindow: tabAPI.getWindowName(), storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION });
                 }
             }
         },
+
         /**
          * Perform a login workflow (i.e. ask for a session and wait for an event)
          *
@@ -202,59 +125,36 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          *  parameters to be propagated
          */
         propagateSession: function (parameters) {
-            console.warn('(Deprecated) TabHandling: TabSession.propagateSession', _.clone(parameters));
+            var tabAPI = require('io.ox/core/api/tab');
             if (!ox.session) {
-                this.propagate('propagateNoSession');
+                tabAPI.propagate('propagateNoSession', { exceptWindow: tabAPI.getWindowName(), storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION });
                 return;
             }
             if (parameters.session && parameters.session !== ox.session) {
                 return;
             }
-            this.propagate('propagateSession', {
-                session: ox.session,
-                language: ox.language,
-                theme: ox.theme,
-                user: ox.user,
-                user_id: ox.user_id,
-                context_id: ox.context_id
-            });
-        },
-
-        /**
-         * Send a session over localStorage to login logged out tabs
-         *
-         * @param {Object} [params]
-         *  Optional parameters:
-         *  - {Boolean} [params.reloginOtherTabs]
-         *      If the flag is set, the login is propagated to the other tabs and trigger a tabSessionLogin
-         */
-        propagateLogin: function (params) {
-            console.warn('(Deprecated) TabHandling: TabSession.propagateLogin', _.clone(params));
-            var options = params || {};
-            this.propagate('propagateLogin', {
+            tabAPI.propagate('propagateSession', {
                 session: ox.session,
                 language: ox.language,
                 theme: ox.theme,
                 user: ox.user,
                 user_id: ox.user_id,
                 context_id: ox.context_id,
-                relogin: options.reloginOtherTabs
+                exceptWindow: tabAPI.getWindowName(),
+                storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION
             });
         },
 
         /**
-         * Send a message to other tabs to logout these tabs
-         *
-         * @param {Object} [options]
-         *  Optional options to send via the logout event
+         * handles all trigger from the localStorage with the key TabHandling.DEFAULT_STORAGE_KEYS.SESSION
+         * @param {Object} data
+         *  an object which contains the propagation parameters
+         *  @param {String} data.propagate
+         *   the key of the propagation event
+         *  @param {Object} data.parameters
+         *   tha parameters passed over the the localStorage
          */
-        propagateLogout: function (options) {
-            console.warn('(Deprecated) TabHandling: TabSession.propagateLogout', _.clone(options));
-            this.propagate('propagateLogout', options);
-        },
-
         handleListener: function (data) {
-            console.warn('TabHandling: TabSession.handleListener', data.propagate, _.clone(data));
             switch (data.propagate) {
                 case 'getSession':
                     this.propagateSession(data.parameters);

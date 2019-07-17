@@ -239,20 +239,20 @@ define('io.ox/core/main/autologout', [
             require(['io.ox/core/api/tab'], function (tabApi) {
 
                 function propagateLeaderChanged() {
-                    tabApi.propagateToAllExceptWindow('propagateLeaderChanged', tabApi.getWindowName(), {});
+                    tabApi.propagate('propagateLeaderChanged', { exceptWindow: tabApi.getWindowName() });
                 }
 
                 function propagateResetTimeout() {
-                    tabApi.propagateToAllExceptWindow('propagateResetAutoLogoutTimeout', tabApi.getWindowName(), {});
+                    tabApi.propagate('propagateResetAutoLogoutTimeout', { exceptWindow: tabApi.getWindowName() });
                 }
 
                 function propagateSettingsAutoLogout(val) {
-                    tabApi.propagateToAllExceptWindow('propagateSettingsAutoLogout', tabApi.getWindowName(), { val: val });
+                    tabApi.propagate('propagateSettingsAutoLogout', { val: val, exceptWindow: tabApi.getWindowName() });
                 }
 
                 // overwrite propagatePause for tabHandling
                 propagatePause = function propagatePause() {
-                    tabApi.propagateToAll('propagatePause', {});
+                    tabApi.propagate('propagatePause', {});
                 };
 
                 function receivedResetTimeout() {
@@ -371,7 +371,7 @@ define('io.ox/core/main/autologout', [
                     // better set the state too often (self repairing...)
                     if (!unsavedChanges) {
                         var next = getNextWindowName();
-                        if (next) { tabApi.propagateToWindow('nextWindowActive', next, {}); }
+                        if (next) { tabApi.propagate('nextWindowActive', { targetWindow: next }); }
                     }
                 });
 

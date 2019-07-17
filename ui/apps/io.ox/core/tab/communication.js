@@ -51,12 +51,13 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
      * initialize the localStorage listener
      */
     function initListener() {
-        var self = this;
         window.addEventListener('storage', function (e) {
             if (!e.key) return;
 
             var eventData = e.newValue || JSON.stringify({}),
                 data;
+
+            if (eventData === 'modernizr') return;
 
             try {
                 data = JSON.parse(eventData);
@@ -72,7 +73,7 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
 
             switch (e.key) {
                 case TabCommunication.DEFAULT_STORAGE_KEYS.COMMUNICATION:
-                    self.handleListener(data);
+                    TabCommunication.handleListener(data);
                     break;
                 case TabCommunication.DEFAULT_STORAGE_KEYS.SESSION:
                     require(['io.ox/core/tab/session']).done(function (tabSession) {
@@ -106,13 +107,11 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
          * Write a new localStorage item to spread to all other tabs or to a
          * specified tab.
          *
-         * @param {String} propagate
+         * @param {String} key
          *  the key to trigger event
          *
          * @param {Object} [options]
-         *  options object
-         *  @param {String} [options.parameters]
-         *   parameters that should be passed to the trigger
+         *  the keys not described below are passed as parameters to the other windows.
          *  @param {String} [options.exceptWindow]
          *   propagate to all windows except this
          *  @param {String} [options.targetWindow]
@@ -120,10 +119,11 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
          *  @param {String} [options.storageKey]
          *   key to use in the localStorage. Default key is TabHandling.DEFAULT_STORAGE_KEYS.COMMUNICATION
          */
-        propagate: function (propagate, options) {
+        propagate: function (key, options) {
             options = options || {};
             var jsonString, propagateToSelfWindow,
-                storageKey = options.storageKey || this.DEFAULT_STORAGE_KEYS.COMMUNICATION;
+                storageKey = options.storageKey || this.DEFAULT_STORAGE_KEYS.COMMUNICATION,
+                parameters = _.omit(options, 'targetWindow', 'exceptWindow', 'storageKey');
 
             // propagateToAll means that the event is triggered on the own window via the event and not via the localStorage
             if (!options.exceptWindow && !options.targetWindow) {
@@ -133,8 +133,8 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
 
             try {
                 jsonString = JSON.stringify({
-                    propagate: propagate,
-                    parameters: options.parameters,
+                    propagate: key,
+                    parameters: parameters,
                     date: Date.now(),
                     exceptWindow: options.exceptWindow,
                     targetWindow: options.targetWindow
@@ -146,7 +146,7 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
             localStorage.setItem(storageKey, jsonString);
             this.clearStorage(storageKey);
 
-            if (propagateToSelfWindow) this.events.trigger(propagate, options.parameters);
+            if (propagateToSelfWindow) this.events.trigger(key, parameters);
         },
 
         /**
@@ -161,73 +161,13 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
         },
 
         /**
-         * Propagate to all windows by the localStorage.
-         *
-         * Note: Due to different browser behaviour in handling localStorage events in the current tab, this function uses
-         * the localStorage only for all other browser tabs and triggers the event for the current tab directly.
-         *
-         * @param {String} propagate
-         *  the key to trigger event
-         *
-         * @param {Object} [parameters]
-         *  parameters that should be passed to the trigger
-         */
-        propagateToAll: function (propagate, parameters) {
-            console.warn('(Deprecated) TabHandling: TabCommunication.propagateToAll', propagate, _.clone(parameters));
-            this.propagate(propagate, {
-                parameters: parameters,
-                exceptWindow: windowNameObject.windowName
-            });
-            this.events.trigger(propagate, parameters);
-        },
-
-        /**
-         * Propagate to all windows, except the specified by the localStorage
-         *
-         * @param {String} propagate
-         *  the key to trigger event
-         *
-         * @param {String} windowName
-         *  the windowName to exclude
-         *
-         * @param {Object} [parameters]
-         *  parameters that should be passed to the trigger
-         */
-        propagateToAllExceptWindow: function (propagate, windowName, parameters) {
-            console.warn('(Deprecated) TabHandling: TabCommunication.propagateToAllExceptWindow', propagate, windowName, _.clone(parameters));
-            this.propagate(propagate, {
-                parameters: parameters,
-                exceptWindow: windowName
-            });
-        },
-
-        /**
-         * Propagate to specified window by the localStorage
-         *
-         * @param {String} propagate
-         *  the key to trigger event
-         *
-         * @param {String} windowName
-         *  the windowName to propagate to
-         *
-         * @param {Object} [parameters]
-         *  parameters that should be passed to the trigger
-         */
-        propagateToWindow: function (propagate, windowName, parameters) {
-            console.warn('(Deprecated) TabHandling: TabCommunication.propagateToWindow', propagate, windowName, _.clone(parameters));
-            this.propagate(propagate, {
-                parameters: parameters,
-                targetWindow: windowName
-            });
-        },
-
-        /**
          * Ask for other windows by localStorage
          *
          * @returns {Deferred}
          */
         otherTabsLiving: function () {
-            this.propagateToAllExceptWindow('get-active-windows', windowNameObject.windowName);
+            var tabAPI = require('io.ox/core/api/tab');
+            tabAPI.propagate('get-active-windows', { exceptWindow: windowNameObject.windowName });
             var def     = $.Deferred(),
                 timeout = setTimeout(function () {
                     def.reject();
@@ -243,7 +183,7 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
         /**
          * Set ox-object params. Returns true if the parameters were set.
          *
-         * @param {String} parameters
+         * @param {Object} parameters
          *  parameter to set
          *
          * @returns {boolean}
@@ -263,7 +203,8 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
          */
         getActiveWindows: function (targetWindow) {
             if (!ox.session) return;
-            this.propagateToWindow('propagate-active-window', targetWindow, { windowName: windowNameObject.windowName });
+            var tabAPI = require('io.ox/core/api/tab');
+            tabAPI.propagate('propagate-active-window', { targetWindow: targetWindow, windowName: windowNameObject.windowName });
         },
 
         /**
@@ -275,8 +216,18 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
             _.extend(windowNameObject, newWindowNameObject);
         },
 
+        /**
+         * handles all trigger from the localStorage with the key TabHandling.DEFAULT_STORAGE_KEYS.COMMUNICATION
+         * @param {Object} data
+         *  an object which contains the propagation parameters
+         *  @param {String} data.propagate
+         *   the key of the propagation event
+         *  @param {Object} data.parameters
+         *   the parameters passed over the the localStorage
+         *  @param {String} [data.exceptWindow]
+         *   excluded window from propagation
+         */
         handleListener: function (data) {
-            console.warn('TabHandling: TabCommunication.handleListener', data.propagate, _.clone(data));
             switch (data.propagate) {
                 case 'show-in-drive':
                     ox.load(['io.ox/files/actions/show-in-drive']).done(function (action) {

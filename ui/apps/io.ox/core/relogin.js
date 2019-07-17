@@ -163,7 +163,17 @@ define('io.ox/core/relogin', [
 
                             if (util.checkTabHandlingSupport()) {
                                 require(['io.ox/core/api/tab'], function (tabAPI) {
-                                    tabAPI.propagateLogin({ reloginOtherTabs: true });
+                                    tabAPI.propagate('propagateLogin', {
+                                        session: ox.session,
+                                        language: ox.language,
+                                        theme: ox.theme,
+                                        user: ox.user,
+                                        user_id: ox.user_id,
+                                        context_id: ox.context_id,
+                                        relogin: true,
+                                        exceptWindow: tabAPI.getWindowName(),
+                                        storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION
+                                    });
                                 });
 
                             }

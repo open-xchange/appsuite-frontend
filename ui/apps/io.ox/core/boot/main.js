@@ -174,7 +174,16 @@ define.async('io.ox/core/boot/main', [
                 if (!util.checkTabHandlingSupport()) return;
 
                 require(['io.ox/core/api/tab'], function (tabAPI) {
-                    tabAPI.propagateLogin();
+                    tabAPI.propagate('propagateLogin', {
+                        session: ox.session,
+                        language: ox.language,
+                        theme: ox.theme,
+                        user: ox.user,
+                        user_id: ox.user_id,
+                        context_id: ox.context_id,
+                        exceptWindow: tabAPI.getWindowName(),
+                        storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION
+                    });
                 });
             });
         },
