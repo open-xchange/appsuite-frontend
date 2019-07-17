@@ -1152,7 +1152,9 @@ define('io.ox/calendar/util', [
                 options = options || {};
                 var text,
                     teaser = gt('This appointment is part of a series.'),
-                    dialog = new ModalDialog().addCancelButton({ left: true });
+                    dialog = new ModalDialog({
+                        width: 600
+                    }).addCancelButton({ left: true });
                 if (!options.dontAllowExceptions) dialog.addButton({ label: gt('Edit this appointment'), action: 'appointment', className: 'btn-default' });
 
                 if (model.hasFlag('first_occurrence')) {

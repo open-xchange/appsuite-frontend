@@ -443,7 +443,8 @@ define('io.ox/calendar/actions', [
             // exceptions don't have the same id and seriesId
             if (baton.data.seriesId === baton.data.id && appointment.recurrenceId) {
                 new ModalDialog({
-                    title: gt('Change appointment status')
+                    title: gt('Change appointment status'),
+                    width: 600
                 })
                 .build(function () {
                     this.$body.append(accept

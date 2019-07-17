@@ -191,7 +191,7 @@ define('io.ox/calendar/actions/acceptdeny', [
 
         // series?
         if (!options.taskmode && o.recurrenceId && o.seriesId) {
-            return new ModalDialog({ title: gt('Change appointment status') })
+            return new ModalDialog({ title: gt('Change appointment status'), width: 600 })
                 .build(function () {
                     this.$body.append(gt('This appointment is part of a series. Do you want to change your confirmation for the whole series or just for this appointment within the series?'));
                 })

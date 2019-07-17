@@ -81,7 +81,7 @@ define('io.ox/calendar/actions/delete', [
             dialog = new ModalDialog({
                 title: gt('Delete appointment'),
                 // those buttons can get quite large
-                width: '600px',
+                width: 600,
                 // we need a flat array to avoid object object text here
                 description: displayComment ? _([$('<div>').text(text), commentView]).flatten() : $('<div>').text(text)
             })
