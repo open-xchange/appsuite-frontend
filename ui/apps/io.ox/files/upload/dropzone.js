@@ -29,8 +29,6 @@ define('io.ox/files/upload/dropzone', [
                     caption: gt('Drop files here to upload')
                 });
 
-            zone.isEnabled = undefined;
-
             zone.on({
                 'show': function () {
                     app.listView.$el.stop().hide();
@@ -67,6 +65,7 @@ define('io.ox/files/upload/dropzone', [
             var size = 100 / baton.dropZones.length;
             app.getWindowNode().find('.list-view-control').append(
                 baton.dropZones.map(function (zone, index) {
+                    // check folder grants first
                     if (!_.isFunction(zone.isEnabled)) {
                         zone.isEnabled = function () {
                             var id = app.folder.get();

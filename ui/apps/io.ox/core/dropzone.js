@@ -148,13 +148,12 @@ define('io.ox/core/dropzone', [], function () {
         },
 
         isValid: function (e) {
+            if (!_.isFunction(this.isEnabled)) return this.isFile(e);
             return this.isEnabled(e) && this.isFile(e);
         },
 
         // overwrite for custom checks
-        isEnabled: function (e) {
-            return !!e;
-        },
+        isEnabled: true,
 
         isFile: function (e) {
             var dt = e.originalEvent.dataTransfer;
