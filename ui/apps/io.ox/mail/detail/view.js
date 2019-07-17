@@ -316,8 +316,8 @@ define('io.ox/mail/detail/view', [
         index: INDEX += 100,
         draw: function (baton) {
             if (!baton.view.supportsTextPreview || !baton.data.text_preview) return;
-            // add dots or it looks weird
-            this.append($('<section class="text-preview">').text(baton.data.text_preview + '...'));
+            // add dots if max length or it looks weird
+            this.append($('<section class="text-preview">').text(baton.data.text_preview + (baton.data.text_preview.length >= 100 ? '...' : '')));
         }
     });
 
