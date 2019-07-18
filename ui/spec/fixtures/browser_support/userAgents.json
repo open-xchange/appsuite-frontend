@@ -38,12 +38,7 @@
         },
         "EdgeChromium": {
             "76": {
-                "supported": false,
                 "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.12 Safari/537.36 Edg/76.0.182.6"
-            },
-            "76 Windows": {
-                "supported": false,
-                "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.12 Safari/537.36 Edg/76.0.182.6"
             }
         },
         "ChromeiOS": {
