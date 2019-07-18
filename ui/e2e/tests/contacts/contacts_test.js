@@ -225,7 +225,7 @@ Scenario('[C7359] - Expand/collapse all contact edit sections', function (I) {
     I.selectFolder('Contacts');
     I.waitForDetached('a.dropdown-toggle.disabled');
     // toolbar dropdown
-    I.click('New contact');
+    I.retry(5).click('New contact');
     // real action in dropdown
     I.waitForVisible('.dropdown-menu');
     I.retry(5).click('New contact', '[data-action="io.ox/contacts/actions/create"]');
@@ -585,6 +585,7 @@ Scenario('[C7360] - Cancel contact modification', async function (I) {
 
     I.waitForVisible('.classic-toolbar [data-action]');
     I.selectFolder('Contacts');
+    I.waitForText(contact.first_name);
     I.click(locate('.contact').withText(contact.display_name).inside('.vgrid-scrollpane-container'));
     I.clickToolbar('Edit');
     I.waitForVisible('.io-ox-contacts-edit-window');

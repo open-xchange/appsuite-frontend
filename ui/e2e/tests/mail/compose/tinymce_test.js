@@ -317,7 +317,7 @@ Scenario('[C7393] Send mail with bullet point and numbering - bullet points', as
     I.login('app=io.ox/mail', { user: recipient });
 
     // Open the mail
-    I.waitForText(mailSubject, 2);
+    I.waitForText(mailSubject);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
     I.waitForVisible('iframe.mail-detail-frame');
 
@@ -402,7 +402,7 @@ Scenario('[C7393] Send mail with bullet point and numbering - numbering', async 
     I.login('app=io.ox/mail', { user: recipient });
 
     // Open the mail
-    I.waitForText(mailSubject, 2);
+    I.waitForText(mailSubject);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
     I.waitForVisible('iframe.mail-detail-frame');
 
