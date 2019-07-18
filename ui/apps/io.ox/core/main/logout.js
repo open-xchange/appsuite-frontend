@@ -129,12 +129,12 @@ define('io.ox/core/main/logout', [
 
             var def = $.Deferred();
 
-            require(['io.ox/core/api/tab'], function (TabAPI) {
+            require(['io.ox/core/api/tab'], function (tabAPI) {
                 // require does catch errors, so we handle them to ensure a resolved deferred
                 try {
-                    TabAPI.setLoggingOutState(TabAPI.LOGGING_OUT_STATE.LEADER);
+                    tabAPI.setLoggingOutState(tabAPI.LOGGING_OUT_STATE.LEADER);
                     // notify other tabs that a logout happened
-                    TabAPI.propagate('propagateLogout', { autologout: baton.autologout, exceptWindow: TabAPI.getWindowName(), storageKey: TabAPI.DEFAULT_STORAGE_KEYS.SESSION });
+                    tabAPI.propagate('propagateLogout', { autologout: baton.autologout, exceptWindow: tabAPI.getWindowName(), storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION });
                 } catch (e) {
                     if (ox.debug) console.warn('propagate logout did not work', e);
                 } finally {
