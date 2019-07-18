@@ -28,6 +28,7 @@
         chrome,
         firefox,
         edge,
+        edgeChromium,
         phantom,
         MacOS,
         Linux,
@@ -82,11 +83,12 @@
             ua = nav.userAgent;
             opera = ua.indexOf('OPR/') > -1;
             webkit = ua.indexOf('AppleWebKit/') > -1;
-            chrome = ua.indexOf('Chrome/') > -1;
+            chrome = ua.indexOf('Chrome/') > -1 && ua.indexOf('Edg/') === -1;
             firefox = ua.indexOf('Gecko') > -1 && ua.indexOf('Firefox') > -1 && ua.indexOf('KHTML') === -1;
             // TODO: This needs to be updated, if better user agent is available
             // http://dev.modern.ie/platform/faq/what-is-the-microsoft-edge-user-agent-st
             edge = ua.indexOf('Edge/') > -1;
+            edgeChromium = ua.indexOf('Edg/') > -1;
             phantom = ua.indexOf('PhantomJS/') > -1;
             MacOS = ua.indexOf('Macintosh') > -1;
             Linux = ua.indexOf('Linux') > -1;
@@ -140,8 +142,11 @@
                 PhantomJS: webkit && phantom ?
                     ua.split('PhantomJS/')[1].split(' ')[0] : undefined,
                 /** Chrome */
-                Chrome: webkit && chrome && !iOS && !opera ?
+                Chrome: webkit && chrome && !iOS && !opera && !edgeChromium ?
                     ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
+                /** is Edge chromium browser? */
+                EdgeChromium: edgeChromium && webkit && !chrome && !iOS && !opera ?
+                    ua.split('Edg/')[1].split(' ')[0].split('.')[0] : undefined,
                 /** is Firefox? */
                 Firefox: (firefox && !iOS && !Android) ? ua.split(/Firefox(\/| )/)[2].split('.')[0] : undefined,
                 ChromeiOS: chromeIOS ? ua.split('CriOS/')[1].split(' ')[0].split('.')[0] : undefined,
