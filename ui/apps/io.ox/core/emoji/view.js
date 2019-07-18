@@ -79,10 +79,6 @@ define('io.ox/core/emoji/view', [
             var node = $('<div class="table-cell-fix">');
 
             node.append(
-                $('<div class="emoji-header">').append(
-                    // category name
-                    $('<span class="emoji-category">')
-                ),
                 $('<div class="emoji-icons">'),
                 $('<div class="emoji-footer">')
             );
@@ -144,7 +140,7 @@ define('io.ox/core/emoji/view', [
         setCategory: function (category) {
             // always draw emojis because the collection might have changed
             this.currentCategory = category || util.getDefaultCategory();
-            this.$('.emoji-category').text(util.getTitle(this.currentCategory));
+            this.$el.closest('.tox-dialog').find('.tox-dialog__title').text(util.getTitle(this.currentCategory));
             this.$('.emoji-footer > button').removeClass('active');
             this.$('.emoji-footer > [data-category="' + this.currentCategory + '"]').addClass('active');
             this.drawEmojis();

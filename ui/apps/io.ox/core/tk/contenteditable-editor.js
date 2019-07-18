@@ -373,9 +373,8 @@ define('io.ox/core/tk/contenteditable-editor', [
             advanced: '*styleselect | *fontselect fontsizeselect | link image *emoji | forecolor backcolor',
             toolbar2: '',
             toolbar3: '',
-            plugins: 'autoresize autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
-            theme: 'modern',
-            height: null,
+            plugins: 'autolink oxpaste oxdrop link paste  lists code', // oximage emoji
+            theme: 'silver',
             imageLoader: null // is required to upload images. should have upload(file) and getUrl(response) methods
         }, opt);
 
@@ -400,7 +399,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         var originalToolbarConfig = opt.toolbar1.replace(/\s*\|\s*/g, ' ');
         opt.toolbar1 = opt.toolbar1.replace(/\*/g, '');
 
-        var fixed_toolbar = '.contenteditable-editor[data-editor-id="' + editorId + '"] > .mce-tinymce > .mce-stack-layout > .mce-top-part';
+        var fixed_toolbar = '.contenteditable-editor[data-editor-id="' + editorId + '"] > .tox-tinymce > .tox-editor-container > .tox-toolbar-overlord > .tox-toolbar';
 
         var options = {
             script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.min.js',
@@ -449,8 +448,9 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             theme: opt.theme,
             mobile: {
-                theme: 'modern',
-                toolbar: false
+                theme: 'silver',
+                toolbar: false,
+                toolbar1: false
             },
 
             init_instance_callback: function (editor) {
@@ -476,18 +476,19 @@ define('io.ox/core/tk/contenteditable-editor', [
             setup: function (ed) {
                 if (opt.oxContext) ed.oxContext = opt.oxContext;
                 ext.point(POINT + '/setup').invoke('draw', self, ed);
-                ed.on('init', function () {
+                ed.on('ed_init', function () {
                     // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
                     $(fixed_toolbar).find('span.mce-txt').attr('tabindex', -1);
+
                     // adjust toolbar
-                    var widgets = $(fixed_toolbar).find('.mce-widget');
+                    var widgets = $(fixed_toolbar).find('.tox-tbtn');
                     originalToolbarConfig.split(' ').forEach(function (id, index) {
                         widgets.eq(index).attr('data-name', id);
                         if (/^\*/.test(id)) widgets.eq(index).attr('data-hidden', 'xs');
                     });
                     // find empty groups
-                    $(fixed_toolbar).find('.mce-btn-group').each(function () {
-                        $(this).toggleClass('mce-btn-group-visible-xs', $(this).has('.mce-widget:not([data-hidden])').length > 0);
+                    $(fixed_toolbar).find('.tox-toolbar__group').each(function () {
+                        $(this).toggleClass('tox-toolbar__group-visible-xs', $(this).has('button:not([data-hidden])').length > 0);
                     });
 
                     ed.on('SetContent', function (o) {
@@ -523,7 +524,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             if (el === null) return;
 
             // This is needed for keyboard to work in small windows with buttons that are hidden
-            var buttons = el.find('.mce-btn').filter('[data-hidden="xs"]');
+            var buttons = el.find('button').filter('[data-hidden="xs"]');
             buttons.filter(':hidden').attr({ role: 'presentation', 'aria-hidden': true });
             buttons.filter(':visible').removeAttr('aria-hidden').attr('role', 'button');
 
@@ -531,6 +532,8 @@ define('io.ox/core/tk/contenteditable-editor', [
                 top = 0,
                 iframe = el.find('iframe'),
                 iframeContents = iframe.contents().height(),
+                editContainer = el.find('.tox-edit-area'),
+                applicationContainer = el.find('.tox.tox-tinymce'),
                 container = el.closest('.window-container'),
                 header = container.find('.window-header:visible').outerHeight() || 0,
                 footer = container.find('.window-footer:visible').outerHeight() || 0,
@@ -552,6 +555,8 @@ define('io.ox/core/tk/contenteditable-editor', [
             }
 
             editor.css('min-height', availableHeight + 'px');
+            applicationContainer.css('height', 'auto');
+            editContainer.css('min-height', availableHeight + 'px');
             iframe.css('min-height', availableHeight + 'px');
             if (opt.css) editor.css(opt.css);
         }
@@ -615,6 +620,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         // publish internal 'done'
         this.done = function (fn) {
             return $.when(initialized).then(function () {
+                ed.fire('ed_init');
                 fn(this);
                 return this;
             }.bind(this));

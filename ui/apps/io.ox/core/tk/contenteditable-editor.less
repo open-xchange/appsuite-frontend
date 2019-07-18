@@ -96,7 +96,15 @@
 
     &.mce-container:not(.mce-floatpanel):not(.mce-edit-area) { border-width:0 !important; }
 
-    &.mce-edit-area { border:1px solid #ccc !important; }
+}
+
+.tox.tox-tinymce { border: 0; }
+
+.tox .tox-edit-area {
+    border: 1px solid #ccc;
+    .smartphone & {
+        border: 0;
+    }
 }
 
 .mce-btn button { background:transparent; }
@@ -147,13 +155,14 @@
 .mce-container [data-name="fontsizeselect"] button { width: 72px; overflow: hidden }
 
 /* do not show toolbar separators in small windows */
-.floating-window.width-xs:not(.maximized) .mce-btn-group {
-    border-left: 0;
-    padding-left: 0;
-    margin-left: 0;
+.floating-window.width-xs:not(.maximized) .tox .tox-toolbar__group {
+    border-right: 0;
+    padding-right: 0;
+    margin-right: 0;
 }
 
-.floating-window.width-xs:not(.maximized) .mce-btn-group-visible-xs:not(:last-of-type) {
+.floating-window.width-xs:not(.maximized) .tox .tox-toolbar__group-visible-xs:not(:last-of-type) {
+
     border-right: 1px solid #d9d9d9;
     padding-right: 8px;
     margin-right: 7px;

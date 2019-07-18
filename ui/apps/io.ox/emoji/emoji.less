@@ -29,8 +29,13 @@ img.emoji {
 
 .mceIcon.mce_emoji { background-position:-60px -20px; }
 
+.tox .tox-dialog.emoji {
+    height: 309px;
+    width: 296px;
+}
+
 //work-around for Bug 34943 - the second rule can be removed for 7.8.0
-.mceEmojiPane, .mce-container .mceEmojiPane {
+.mceEmojiPane, .tox-dialog .mceEmojiPane {
 
     @background: #f5f5f5;
 
@@ -38,27 +43,15 @@ img.emoji {
     width: 296px;
     vertical-align: top;
 
-    .emoji-header, .emoji-icons, .emoji-footer {
+   .emoji-icons, .emoji-footer {
         position: absolute;
         left: 0;
         right: 0;
     }
 
-    .emoji-header {
-        height: 32px;
-        border-bottom: 1px solid #ddd;
-        background-color: @background;
-        bottom: auto;
-        padding: 0 16px;
-        .emoji-category {
-            font-weight: bold;
-            line-height: 32px;
-        }
-    }
-
     .emoji-icons {
-        top: 32px + 1;
-        bottom: 40px + 16 + 1;
+        top: 56px + 1;
+        bottom: 25px + 16 + 1;
         padding: 16px;
         white-space: normal;
         overflow: auto;
@@ -97,7 +90,6 @@ img.emoji {
     .emoji-footer {
         top: auto;
         bottom: 0;
-        height: 40px;
         padding: 8px 16px;
         white-space: normal;
         border-top: 1px solid #ddd;
