@@ -16,9 +16,9 @@
 @flag-color: #ffb300;
 @flag-icon: "\f005"; // fa-star
 @flag-icon-unset: "\f006"; // fa-star-o
-@a-color-neutral: #f8e400;
-@a-color-trusted: #5c7f31;
-@a-color-fail: #c50000;
+@a-color-neutral:    #888888;
+@a-color-trusted:    #5c7f31;
+@a-color-fail:       #c50000;
 
 // helpers
 .mail-item .from {
@@ -1268,46 +1268,11 @@ body.dragging .categories-toolbar-container {
     }
 }
 
-.authenticity() {
-    padding: 0px 4px;
-    border-radius: 4px;
-}
-
-.authenticity-trusted,
-.authenticity-pass {
-    .authenticity();
-    color: white;
-    background-color: @a-color-trusted;
-}
-
-.authenticity-fail {
-    .authenticity();
-    color: white;
-    background-color: @a-color-fail;
-}
-
-.authenticity-neutral {
-    .authenticity();
-    background-color: @a-color-neutral;
-}
-
-.contact-picture.authenticity-image,
-.mail-item .contact-picture.authenticity-image,
-.mail-detail .contact-picture.authenticity-image {
-    .flex-center();
-    // fallback image main color
-    background-color: #e6e6e6;
-    color: white;
-    .fa {
-        font-size: 24px;
-        padding: 0;
-        margin: 0;
-    }
-}
-
+// checkmark icon next to sender address
 .authenticity-icon-trusted,
 .authenticity-icon-pass,
 .authenticity-icon-neutral,
+.authenticity-icon-suspicious,
 .authenticity-icon-fail {
     font-size: 15px;
 }
@@ -1316,14 +1281,15 @@ body.dragging .categories-toolbar-container {
     color: @a-color-trusted;
 }
 .authenticity-icon-neutral {
-    color: #888;
+    color: @a-color-neutral;
 }
+.authenticity-icon-suspicious,
 .authenticity-icon-fail {
     color: @a-color-fail;
 }
 
 .mail-detail .from .authenticity-sender {
-    &.fail {
+    &.fail, &.suspicious {
         color: @a-color-fail;
     }
     &.trusted, &.pass {
@@ -1331,16 +1297,19 @@ body.dragging .categories-toolbar-container {
     }
 }
 
+// colored info box with message
 .mail-detail section.authenticity  {
     padding: 0;
-    .fail, .trusted {
+    .message {
         color: #fff;
         padding: 16px 40px;
         line-height: 16px;
         .smartphone & { padding: 16px; }
     }
+    .neutral { background-color: @a-color-neutral; }
+    .suspicious,
     .fail { background-color: @a-color-fail; }
-    .trusted {background-color: @a-color-trusted; }
+    .trusted, .pass { background-color: @a-color-trusted; }
 }
 
 .touch {
@@ -1624,9 +1593,6 @@ body.dragging .categories-toolbar-container {
                 // last element handling
                 &:last-child {
                     margin-bottom: @toolbar-height;
-                    .detail-view-header {
-                    //    border-bottom: 0;
-                    }
                 }
             }
 

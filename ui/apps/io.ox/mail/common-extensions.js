@@ -45,8 +45,9 @@ define('io.ox/mail/common-extensions', [
     function pictureHalo(node, data, baton) {
 
         // authenticity
-        var status = util.authenticity('image', baton && baton.model.toJSON());
-        if (status) return node.text(status === 'neutral' ? '?' : '!');
+        var maildata = baton.data.thread ? baton.data.thread[0] || baton.data : baton.data,
+            status = util.authenticity('image', maildata);
+        if (status) return node.text('!');
 
         // add initials
         var initials = getInitials(baton.data.from);
@@ -106,19 +107,19 @@ define('io.ox/mail/common-extensions', [
 
             var section = $('<section class="authenticity">'),
                 data = baton.data,
-                from = data.from || [], email;
+                from = data.from || [],
+                mails = _.chain(from).map(function (item) {
+                    return String(item[1] || '').toLowerCase();
+                }).compact().value().join(', ');
 
-            _(from).each(function (item) {
-                email = String(item[1] || '').toLowerCase();
-                section.append(
-                    $('<div>')
-                        .addClass(status.toLowerCase())
-                        .append(
-                            $('<b>').text(status === 'fail' ? gt('Warning:') + ' ' : gt('Note:') + ' '),
-                            $.txt(util.getAuthenticityMessage(status, email))
-                        )
-                );
-            });
+            section.append(
+                $('<div>')
+                    .addClass('message ' + status.toLowerCase())
+                    .append(
+                        $('<b>').text(/(fail|suspicious)/.test(status) ? gt('Warning:') + ' ' : gt('Note:') + ' '),
+                        $.txt(util.getAuthenticityMessage(status, mails))
+                    )
+            );
 
             this.append(section);
         },
@@ -227,9 +228,9 @@ define('io.ox/mail/common-extensions', [
                         })
                         .append(
                             $('<i class="fa" aria-hidden="true">').addClass(function () {
-                                if (status === 'neutral') return 'fa-question'; //fa-question
-                                if (status === 'fail') return 'fa-exclamation';
-                                return 'fa-check';
+                                if (/(pass|trusted)/.test(status)) return 'fa-check';
+                                if (/(fail|suspicious)/.test(status)) return 'fa-exclamation-triangle';
+                                return 'fa-question';
                             })
                             .addClass(status ? 'authenticity-icon-' + status : '')
                         )
