@@ -569,7 +569,7 @@ define('io.ox/mail/compose/view', [
                     }
 
                     // recover notification option (boolean)
-                    if (mode === 'edit') data.disp_notification_to = !!data.disp_notification_to;
+                    if (mode === 'edit') data.disp_notification_to = (data.disp_notification_to === 'false' ? false : !!data.disp_notification_to);
 
                     self.model.set(data);
 
