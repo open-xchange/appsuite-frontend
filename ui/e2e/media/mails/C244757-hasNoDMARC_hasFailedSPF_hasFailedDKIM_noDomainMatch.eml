@@ -1,0 +1,57 @@
+Return-Path: <mheiland@sender.ox>
+Delivered-To: mheiland@recipient.ox
+Received: from mx.sender.ox (unknown [10.50.0.4])
+	by mx.recipient.ox (Postfix) with ESMTP id D02AE42430
+	for <mheiland@recipient.ox>; Tue, 27 Mar 2018 08:28:42 +0000 (UTC)
+Authentication-Results: mx.recipient.ox; spf=fail smtp.mailfrom=mheiland@sender.ox
+Authentication-Results: mx.recipient.ox;
+    dkim=fail reason="key not found in DNS" (0-bit key; unprotected) header.d=sender.ox header.i=@sender.ox header.b="K281rQ/r";
+    dkim-atps=neutral
+Received: from null (localhost [127.0.0.1])
+	by mx.sender.ox (Postfix) with ESMTPS id C652961C36
+	for <mheiland@recipient.ox>; Tue, 27 Mar 2018 08:28:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=sender.ox; s=mail;
+	t=1522139322; bh=Go2d/ZbBt/q2Bh7NuKL+EFjEBarkRTlGn7Pzu1qCNEo=;
+	h=Date:From:Reply-To:To:Subject:From;
+	b=k65zxdCYL6cjs3JRU15Tn03D7I2ofEoIB/x2O0GSIghrayMCKKyu+Gcg6c1b65VXD
+	 XpagJs3x826s4wRFyO4hjpokhf7SbhCsC9Xd9jGSXa4CerjvLZ81r3sxP60x9W56Wn
+	 WXS49mNjdYmTwxgVhAcTLMWOW59DZPkLFRPLmmvM=
+Date: Tue, 27 Mar 2018 10:28:42 +0200 (CEST)
+From: Martin Heiland <mheiland@fake.ox>
+Reply-To: Martin Heiland <mheiland@sender.ox>
+To: Recipient <mheiland@recipient.ox>
+Message-ID: <1244815448.95.1522139322733@10.50.0.4>
+Subject: C244757-hasNoDMARC_hasFailedSPF_hasFailedDKIM_noDomainMatch
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary="----=_Part_94_1807744706.1522139322708"
+X-Priority: 3
+Importance: Medium
+X-Mailer: Open-Xchange Mailer v7.10.0-Rev3
+X-Originating-Client: open-xchange-appsuite
+X-OX-Marker: 75ac455c-942c-49fa-b304-15ade484f341
+
+------=_Part_94_1807744706.1522139322708
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+C244757-hasNoDMARC_hasFailedSPF_hasFailedDKIM_noDomainMatch
+------=_Part_94_1807744706.1522139322708
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+ </head>
+ <body>
+  <div>
+   C244757-hasNoDMARC_hasFailedSPF_hasFailedDKIM_noDomainMatch<br>
+   <a href="https://www.arandomlink.com">A random link</a>
+  </div>
+ </body>
+</html>
+------=_Part_94_1807744706.1522139322708--
