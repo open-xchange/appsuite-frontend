@@ -90,7 +90,7 @@ Scenario('Contacts - New contact window', async (I) => {
     prepare(I);
     I.waitForDetached('a.dropdown-toggle.disabled');
     // toolbar dropdown
-    I.click('New contact');
+    I.retry(5).click('New contact');
     // real action in dropdown
     I.waitForVisible('.dropdown-menu');
     I.click('New contact', '[data-action="io.ox/contacts/actions/create"]');

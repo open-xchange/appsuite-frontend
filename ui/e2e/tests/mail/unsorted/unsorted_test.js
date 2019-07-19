@@ -140,8 +140,9 @@ Scenario('[C7384] Save draft', function (I, users) {
     I.waitForElement('.io-ox-dialog-wrapper .modal-backdrop');
     I.click('Save as draft');
     I.waitForDetached('.io-ox-dialog-wrapper .modal-backdrop');
+    I.wait(1);
     I.selectFolder('Drafts');
-    I.waitForText('' + testrailid + ' - ' + subject, 5, '.subject');
+    I.waitForText('' + testrailid + ' - ' + subject, undefined, '.subject');
     I.doubleClick('.list-item[aria-label*="' + testrailid + ' - ' + subject + '"]');
     I.see(testrailid + ' - ' + subject);
     I.see(text);

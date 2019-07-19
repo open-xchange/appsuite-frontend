@@ -42,6 +42,7 @@ Scenario('[C110279] Primary mail account name can be changed', function (I) {
     I.say('check mail folder view', 'blue');
     I.openApp('Mail');
     I.waitForVisible('.tree-container');
+    I.waitForText(name);
     I.seeTextEquals(name, '[data-id= "virtual/myfolders"] > .folder-node .folder-label');
 
     I.logout();
