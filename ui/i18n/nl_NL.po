@@ -1820,6 +1820,12 @@ msgstr "Basisinstellingen"
 msgid "Bcc"
 msgstr "Bcc"
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+#, fuzzy
+#| msgid "Warning: This message might be a phishing or scam mail"
+msgid "Be careful with this message. It might be spam or a phishing mail."
+msgstr "Waarschuwing: Dit bericht kan e-mailzwendel zijn"
+
 #. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "Before"
@@ -5010,6 +5016,12 @@ msgstr "Vrijdag"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
 msgid "From"
+msgstr "Van"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "From"
+msgid "From:"
 msgstr "Van"
 
 #. %1$s An email address
@@ -11205,17 +11217,13 @@ msgstr ""
 "kopiëren en dat hier te plakken, kan het zijn dat iemand uw account probeert "
 "over te nemen. Voer geen script code uit als u niet begrijpt wat het doet."
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+msgid "This is a dangerous email containing spam or malware."
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Dit is een standaard-map, deze kan niet hernoemd worden."
-
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid ""
-"This is a suspicious email because we could not verify that it is really "
-"from %1$s."
-msgstr ""
-"Dit is een verdachte e-mail omdat we niet konden vaststellen dat deze "
-"werkelijk van %1$s afkomstig is."
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
@@ -16510,6 +16518,13 @@ msgstr "uw platform"
 #~ msgstr ""
 #~ "Deze map is gedeeld met anderen. Deze zal niet beschikbaar zijn voor de "
 #~ "uitgenodigde gasten."
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "Dit is een verdachte e-mail omdat we niet konden vaststellen dat deze "
+#~ "werkelijk van %1$s afkomstig is."
 
 #~ msgid "This mail has been added to the portal"
 #~ msgstr "Dit e-mailbericht is toegevoegd aan het portaal"

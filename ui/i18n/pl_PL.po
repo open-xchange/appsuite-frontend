@@ -1837,6 +1837,12 @@ msgstr "Ustawienia podstawowe"
 msgid "Bcc"
 msgstr "UDW"
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+#, fuzzy
+#| msgid "Warning: This message might be a phishing or scam mail"
+msgid "Be careful with this message. It might be spam or a phishing mail."
+msgstr "Ostrzeżenie: wiadomość może być próbą oszustwa."
+
 #. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "Before"
@@ -5031,6 +5037,12 @@ msgstr "Piątek"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
 msgid "From"
+msgstr "Od"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "From"
+msgid "From:"
 msgstr "Od"
 
 #. %1$s An email address
@@ -11215,17 +11227,13 @@ msgstr ""
 "przejąć Twoje konto. Nie wprowadzaj żadnego kodu skryptu, jeśli nie wiesz "
 "dokładnie, jakie jest jego działanie."
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+msgid "This is a dangerous email containing spam or malware."
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
 msgstr "To jest folder standardowy. Zmiana jego nazwy nie jest możliwa."
-
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid ""
-"This is a suspicious email because we could not verify that it is really "
-"from %1$s."
-msgstr ""
-"Ponieważ nie mogliśmy zweryfikować, czy ta wiadomość e-mail rzeczywiście "
-"pochodzi od użytkownika %1$s, może to być coś podejrzanego."
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
@@ -16815,6 +16823,13 @@ msgstr "Twoja platforma"
 #~ msgstr ""
 #~ "Ten folder jest udostępniony innym osobom. Nie będzie dłużej dostępny dla "
 #~ "zaproszonych gości."
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "Ponieważ nie mogliśmy zweryfikować, czy ta wiadomość e-mail rzeczywiście "
+#~ "pochodzi od użytkownika %1$s, może to być coś podejrzanego."
 
 #~ msgid "This mail has been added to the portal"
 #~ msgstr "Wiadomość została dodana do portalu"

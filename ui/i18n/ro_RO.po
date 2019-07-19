@@ -1836,6 +1836,12 @@ msgstr "Setări de bază"
 msgid "Bcc"
 msgstr "Bcc"
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+#, fuzzy
+#| msgid "Warning: This message might be a phishing or scam mail"
+msgid "Be careful with this message. It might be spam or a phishing mail."
+msgstr "Avertisment: Este posibil ca acest mesaj să fie o escrocherie"
+
 #. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "Before"
@@ -5031,6 +5037,13 @@ msgstr "Vineri"
 #: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
 msgid "From"
 msgstr "De la"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "when"
+#| msgid "From:"
+msgid "From:"
+msgstr "De la:"
 
 #. %1$s An email address
 #. Example: From: richard@open-xchange.com
@@ -11230,17 +11243,13 @@ msgstr ""
 "preia contul. Nu introduceți nici un fel de script fără să știți ce efect "
 "are."
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+msgid "This is a dangerous email containing spam or malware."
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Acesta este un dosar standard, care nu poate fi redenumit."
-
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid ""
-"This is a suspicious email because we could not verify that it is really "
-"from %1$s."
-msgstr ""
-"Acesta este un mesaj suspicios, deoarece nu s-a putut verifica dacă este "
-"într-adevăr de la %1$s."
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
@@ -16264,10 +16273,6 @@ msgstr "platforma dumneavoastră"
 #~ msgid "From %s"
 #~ msgstr "De la %s"
 
-#~ msgctxt "when"
-#~ msgid "From:"
-#~ msgstr "De la:"
-
 #~ msgctxt "who"
 #~ msgid "From:"
 #~ msgstr "De la:"
@@ -20100,6 +20105,13 @@ msgstr "platforma dumneavoastră"
 #~ msgstr ""
 #~ "Acest dosar este partajat. Nu va mai fi disponibil pentru utilizatorii "
 #~ "invitați."
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "Acesta este un mesaj suspicios, deoarece nu s-a putut verifica dacă este "
+#~ "într-adevăr de la %1$s."
 
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Acest e-mail conține o legătură către o publicație."

@@ -1820,6 +1820,12 @@ msgstr "Configuración básica"
 msgid "Bcc"
 msgstr "Cco"
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+#, fuzzy
+#| msgid "Warning: This message might be a phishing or scam mail"
+msgid "Be careful with this message. It might be spam or a phishing mail."
+msgstr "Atención: Este correo podría ser un intento de phishing o estafa"
+
 #. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "Before"
@@ -5004,6 +5010,13 @@ msgstr "Viernes"
 #: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
 msgid "From"
 msgstr "De"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "when"
+#| msgid "From:"
+msgid "From:"
+msgstr "De:"
 
 #. %1$s An email address
 #. Example: From: richard@open-xchange.com
@@ -11186,17 +11199,13 @@ msgstr ""
 "copiara y pegara algo aquí, alguien podría querer tomar el control de su "
 "cuenta. No introduzca ningún código de script sin saber lo que hace."
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+msgid "This is a dangerous email containing spam or malware."
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Esta es una carpeta estándar, que no puede ser renombrada."
-
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid ""
-"This is a suspicious email because we could not verify that it is really "
-"from %1$s."
-msgstr ""
-"Este es un correo electrónico sospechoso porque no se pudo verificar que "
-"realmente provenga de %1$s."
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
@@ -17989,10 +17998,6 @@ msgstr "su plataforma"
 #~ msgid "From %s"
 #~ msgstr "De %s"
 
-#~ msgctxt "when"
-#~ msgid "From:"
-#~ msgstr "De:"
-
 #
 #~ msgctxt "who"
 #~ msgid "From:"
@@ -22542,6 +22547,13 @@ msgstr "su plataforma"
 #~ "Nota: Este acuse de recibo sólo certifica que el mensaje se mostró en el "
 #~ "ordenador del destinatario. No hay ninguna garantía de que el "
 #~ "destinatario haya leído ni comprendido el contenido del mensaje."
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "Este es un correo electrónico sospechoso porque no se pudo verificar que "
+#~ "realmente provenga de %1$s."
 
 #~ msgid ""
 #~ "This is an update to an appointment that already changed in the meantime. "

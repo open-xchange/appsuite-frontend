@@ -1809,6 +1809,14 @@ msgstr "Grundeinstellungen"
 msgid "Bcc"
 msgstr "BCC"
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+#, fuzzy
+#| msgid "Warning: This message might be a phishing or scam mail"
+msgid "Be careful with this message. It might be spam or a phishing mail."
+msgstr ""
+"Warnhinweis: Bei dieser Nachricht könnte es sich um Pishing oder ein E-Mail "
+"Scam handeln."
+
 #. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "Before"
@@ -4998,6 +5006,12 @@ msgstr "Freitag"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
 msgid "From"
+msgstr "Von"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "From"
+msgid "From:"
 msgstr "Von"
 
 #. %1$s An email address
@@ -11179,17 +11193,13 @@ msgstr ""
 "wollen. Geben Sie keinen Script-Code ein, von dem Sie nicht wissen, was er "
 "bewirkt."
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+msgid "This is a dangerous email containing spam or malware."
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Dies ist ein Standardordner, der nicht umbenannt werden kann."
-
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid ""
-"This is a suspicious email because we could not verify that it is really "
-"from %1$s."
-msgstr ""
-"Dies ist eine verdächtige E-Mail, da wir nicht verifizieren konnten, dass "
-"sie tatsächlich von %1$s stammt."
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
@@ -18945,6 +18955,13 @@ msgstr "Ihre Plattform"
 #~ "Diese Tour gibt Ihnen eine kurze Einführung in das Produkt. Weitere "
 #~ "Informationen finden Sie in den Guided Tours für die einzelnen Apps und "
 #~ "in der Online-Hilfe."
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "Dies ist eine verdächtige E-Mail, da wir nicht verifizieren konnten, dass "
+#~ "sie tatsächlich von %1$s stammt."
 
 #, fuzzy
 #~ msgid "This is how your message text will look."

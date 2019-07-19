@@ -1815,6 +1815,12 @@ msgstr "Configurações básicas"
 msgid "Bcc"
 msgstr "Cco"
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+#, fuzzy
+#| msgid "Warning: This message might be a phishing or scam mail"
+msgid "Be careful with this message. It might be spam or a phishing mail."
+msgstr "Aviso: Esta mensagem pode ser um golpe ou e-mail fraudulento"
+
 #. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "Before"
@@ -4998,6 +5004,13 @@ msgstr "Sexta-feira"
 #: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
 msgid "From"
 msgstr "De"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "when"
+#| msgid "From:"
+msgid "From:"
+msgstr "De:"
 
 #. %1$s An email address
 #. Example: From: richard@open-xchange.com
@@ -11163,17 +11176,13 @@ msgstr ""
 "copiar e colar alguma coisa aqui, alguém está querendo assumir sua conta. "
 "Não digite qualquer código de script sem saber o que ele faz."
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+msgid "This is a dangerous email containing spam or malware."
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Esta é uma pasta padrão, que não pode ser renomeada."
-
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid ""
-"This is a suspicious email because we could not verify that it is really "
-"from %1$s."
-msgstr ""
-"Este é um email suspeito porque não conseguimos confirmar se é realmentede "
-"%1$s."
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
@@ -15819,10 +15828,6 @@ msgstr "sua plataforma"
 #~ msgid "From %s"
 #~ msgstr "De %s"
 
-#~ msgctxt "when"
-#~ msgid "From:"
-#~ msgstr "De:"
-
 #~ msgctxt "who"
 #~ msgid "From:"
 #~ msgstr "De:"
@@ -19292,6 +19297,13 @@ msgstr "sua plataforma"
 
 #~ msgid "This group has no members"
 #~ msgstr "Este grupo não tem membros"
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "Este é um email suspeito porque não conseguimos confirmar se é "
+#~ "realmentede %1$s."
 
 #~ msgid "This mail has been added to the portal"
 #~ msgstr "O e-mail foi adicionado ao portal"

@@ -1808,6 +1808,12 @@ msgstr "Alapbeállítások"
 msgid "Bcc"
 msgstr "Titkos másolat"
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+#, fuzzy
+#| msgid "Warning: This message might be a phishing or scam mail"
+msgid "Be careful with this message. It might be spam or a phishing mail."
+msgstr "Figyelem: Ez az üzenet egy adathalász vagy becsapós e-mail lehet"
+
 #. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "Before"
@@ -4984,6 +4990,12 @@ msgstr "Péntek"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
 msgid "From"
+msgstr "Feladó"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "From"
+msgid "From:"
 msgstr "Feladó"
 
 #. %1$s An email address
@@ -11148,17 +11160,13 @@ msgstr ""
 "ide egy kódrészletet, lehet, hogy át akarja venni a fiókját. Ne írjon ide "
 "semmilyen kódot ha nincs tisztában azzal, hogy mire szolgál."
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+msgid "This is a dangerous email containing spam or malware."
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Ez egy szabványos mappa, amely nem nevezhető át."
-
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid ""
-"This is a suspicious email because we could not verify that it is really "
-"from %1$s."
-msgstr ""
-"Ez egy gyanús levél, mert nem tudtuk ellenőrizni, hogy ez az e-mail valóban "
-"a(z) %1$s feladótól származik-e."
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
@@ -15385,6 +15393,13 @@ msgstr "az Ön rendszere"
 #~ msgstr ""
 #~ "Ez a mappa meg van osztva másokkal. Nem lesz elérhető a meghívottak "
 #~ "számára a továbbiakban."
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "Ez egy gyanús levél, mert nem tudtuk ellenőrizni, hogy ez az e-mail "
+#~ "valóban a(z) %1$s feladótól származik-e."
 
 #~ msgid "This mail has been added to the portal"
 #~ msgstr "A levél hozzáadva a portálhoz"

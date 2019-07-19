@@ -1747,6 +1747,12 @@ msgstr "基本设置"
 msgid "Bcc"
 msgstr "密件抄送"
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+#, fuzzy
+#| msgid "Warning: This message might be a phishing or scam mail"
+msgid "Be careful with this message. It might be spam or a phishing mail."
+msgstr "警告：该邮件可能存在邮件欺诈！"
+
 #. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "Before"
@@ -4863,6 +4869,13 @@ msgstr "星期五"
 #: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
 msgid "From"
 msgstr "从"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "when"
+#| msgid "From:"
+msgid "From:"
+msgstr "从："
 
 #. %1$s An email address
 #. Example: From: richard@open-xchange.com
@@ -10871,15 +10884,13 @@ msgstr ""
 "这是开发者的浏览器功能。如果您被问及要复制和粘贴在这里的任何东西，有人可能会"
 "想要接管您的户口。请不要不明所以就输入任何脚本代码。"
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+msgid "This is a dangerous email containing spam or malware."
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
 msgstr "这是标准文件夹，不能更名。"
-
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid ""
-"This is a suspicious email because we could not verify that it is really "
-"from %1$s."
-msgstr "由于我们不能鉴定此电子邮件是否来自%1$s，因此此为一封可疑的电子邮件。"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
@@ -15657,10 +15668,6 @@ msgstr "您的平台"
 #~ msgid "From %s"
 #~ msgstr "从 %s"
 
-#~ msgctxt "when"
-#~ msgid "From:"
-#~ msgstr "从："
-
 #~ msgid "Fullscreen"
 #~ msgstr "全屏幕"
 
@@ -17858,6 +17865,12 @@ msgstr "您的平台"
 #~ "This folder is shared with others. It won't be available for the invited "
 #~ "guests any more."
 #~ msgstr "此文件夹与其他人分享。它将不再为邀请访客可用。"
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "由于我们不能鉴定此电子邮件是否来自%1$s，因此此为一封可疑的电子邮件。"
 
 #~ msgid "This mail has been added to the portal"
 #~ msgstr "此邮件已添加到门户"

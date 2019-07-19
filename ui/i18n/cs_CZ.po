@@ -1828,6 +1828,12 @@ msgstr "Základní nastavení"
 msgid "Bcc"
 msgstr "Bcc"
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+#, fuzzy
+#| msgid "Warning: This message might be a phishing or scam mail"
+msgid "Be careful with this message. It might be spam or a phishing mail."
+msgstr "Varování: Tato zpráva je možná e-mailový podvod"
+
 #. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "Before"
@@ -4999,6 +5005,13 @@ msgstr "pátek"
 #: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
 msgid "From"
 msgstr "Od"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "when"
+#| msgid "From:"
+msgid "From:"
+msgstr "Od:"
 
 #. %1$s An email address
 #. Example: From: richard@open-xchange.com
@@ -11151,17 +11164,13 @@ msgstr ""
 "cokoliv nakopírovali, někdo se možná snaží ukrást váš účet. Nevkládejte sem "
 "žádný kód skriptu, aniž byste věděli, co dělá."
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+msgid "This is a dangerous email containing spam or malware."
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Toto je standardní složka, kterou nelze přejmenovat."
-
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid ""
-"This is a suspicious email because we could not verify that it is really "
-"from %1$s."
-msgstr ""
-"Tato zpráva je podezřelá, protože se nám nepodařilo ověřit, že by skutečně "
-"byla od %1$s."
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
@@ -17936,10 +17945,6 @@ msgstr "vaše platforma"
 #~ msgid "From %s"
 #~ msgstr "Od %s"
 
-#~ msgctxt "when"
-#~ msgid "From:"
-#~ msgstr "Od:"
-
 #
 #~ msgctxt "who"
 #~ msgid "From:"
@@ -22433,6 +22438,13 @@ msgstr "vaše platforma"
 #~ "Poznámka: Toto potvrzení o doručení pouze říká, že byla zpráva zobrazena "
 #~ "na počítači adresáta. Nelze zaručit, že adresát zpráv četl nebo rozuměl "
 #~ "jejímu obsahu."
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "Tato zpráva je podezřelá, protože se nám nepodařilo ověřit, že by "
+#~ "skutečně byla od %1$s."
 
 #~ msgid ""
 #~ "This is an update to an appointment that already changed in the meantime. "

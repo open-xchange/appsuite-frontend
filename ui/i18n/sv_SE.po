@@ -1808,6 +1808,12 @@ msgstr "Grundinställningar"
 msgid "Bcc"
 msgstr "Dold kopia"
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+#, fuzzy
+#| msgid "Warning: This message might be a phishing or scam mail"
+msgid "Be careful with this message. It might be spam or a phishing mail."
+msgstr "Varning: Meddelandet kan vara phishing eller bluffpost"
+
 #. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "Before"
@@ -4972,6 +4978,12 @@ msgstr "fredag"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
 msgid "From"
+msgstr "Från"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "From"
+msgid "From:"
 msgstr "Från"
 
 #. %1$s An email address
@@ -11109,17 +11121,13 @@ msgstr ""
 "och klistra in något här kan det vara någon som försöker ta över ditt konto. "
 "Mata inte in någon skriptkod om du inte vet vad den gör."
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+msgid "This is a dangerous email containing spam or malware."
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Det här är en standardmapp och kan inte döpas om."
-
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid ""
-"This is a suspicious email because we could not verify that it is really "
-"from %1$s."
-msgstr ""
-"Detta är ett misstänkt meddelande eftersom vi inte kunde verifiera att det "
-"verkligen kommer från %1$s."
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
@@ -19465,6 +19473,13 @@ msgstr "din plattform"
 #~ "Notera: Detta returkvitto bekräftar bara att meddelandet visats på "
 #~ "mottagarens dator. Det finns ingen garanti att mottagaren har läst eller "
 #~ "förstått meddelandets innehåll."
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "Detta är ett misstänkt meddelande eftersom vi inte kunde verifiera att "
+#~ "det verkligen kommer från %1$s."
 
 #~ msgid "This mail has been added to the portal"
 #~ msgstr "Meddelandet har lagts till i portalen"

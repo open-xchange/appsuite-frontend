@@ -1820,6 +1820,12 @@ msgstr "Pamata iestatījumi"
 msgid "Bcc"
 msgstr "Bcc"
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+#, fuzzy
+#| msgid "Warning: This message might be a phishing or scam mail"
+msgid "Be careful with this message. It might be spam or a phishing mail."
+msgstr "Brīdinājums: Šis ziņojums var būt e-pasta krāpniecība"
+
 #. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "Before"
@@ -5004,6 +5010,13 @@ msgstr "Piektdienā"
 #: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
 msgid "From"
 msgstr "Sūtītājs"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "when"
+#| msgid "From:"
+msgid "From:"
+msgstr "Sūtītājs:"
 
 #. %1$s An email address
 #. Example: From: richard@open-xchange.com
@@ -11145,17 +11158,13 @@ msgstr ""
 "ielīmēt kaut ko šeit, kāds varētu mēģināt pārņemtu jūsu kontu. Neievadiet "
 "skripta kodu, nezinot, ko tas dara."
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+msgid "This is a dangerous email containing spam or malware."
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Šī ir standarta mape, kura nevar tikt pārdēvēta."
-
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid ""
-"This is a suspicious email because we could not verify that it is really "
-"from %1$s."
-msgstr ""
-"Šis ir šaubīgs e-pasts jo nevar pārliecināties, ka tā sūtītājs tiešām ir "
-"%1$s."
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
@@ -16156,10 +16165,6 @@ msgstr "jūsu platforma"
 #~ msgid "From %s"
 #~ msgstr "No %s"
 
-#~ msgctxt "when"
-#~ msgid "From:"
-#~ msgstr "Sūtītājs:"
-
 #~ msgctxt "who"
 #~ msgid "From:"
 #~ msgstr "Sūtītājs:"
@@ -19986,6 +19991,13 @@ msgstr "jūsu platforma"
 #~ msgstr ""
 #~ "Šī mape tiek koplietota ar citiem. Tā vairs nebūs pieejama ielūgtajiem "
 #~ "viesiem."
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr ""
+#~ "Šis ir šaubīgs e-pasts jo nevar pārliecināties, ka tā sūtītājs tiešām ir "
+#~ "%1$s."
 
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Šis pasts satur URL uz publikāciju."

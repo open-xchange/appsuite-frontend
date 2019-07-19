@@ -10294,6 +10294,11 @@ msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
+msgid "From:"
+msgstr ""
+
+#: apps/io.ox/mail/common-extensions.js
+#: module:io.ox/mail
 msgid "Not flagged"
 msgstr ""
 
@@ -12279,7 +12284,12 @@ msgstr ""
 
 #: apps/io.ox/mail/util.js
 #: module:io.ox/core
-msgid "This is a suspicious email because we could not verify that it is really from %1$s."
+msgid "Be careful with this message. It might be spam or a phishing mail."
+msgstr ""
+
+#: apps/io.ox/mail/util.js
+#: module:io.ox/core
+msgid "This is a dangerous email containing spam or malware."
 msgstr ""
 
 #: apps/io.ox/mail/util.js

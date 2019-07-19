@@ -1758,6 +1758,10 @@ msgstr ""
 msgid "Bcc"
 msgstr ""
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+msgid "Be careful with this message. It might be spam or a phishing mail."
+msgstr ""
+
 #. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "Before"
@@ -4829,6 +4833,10 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
 msgid "From"
+msgstr ""
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "From:"
 msgstr ""
 
 #. %1$s An email address
@@ -10753,14 +10761,12 @@ msgid ""
 "enter any script code without knowing what it does."
 msgstr ""
 
-#: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
-msgid "This is a standard folder, which can't be renamed."
+#: apps/io.ox/mail/util.js module:io.ox/core
+msgid "This is a dangerous email containing spam or malware."
 msgstr ""
 
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid ""
-"This is a suspicious email because we could not verify that it is really "
-"from %1$s."
+#: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
+msgid "This is a standard folder, which can't be renamed."
 msgstr ""
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail

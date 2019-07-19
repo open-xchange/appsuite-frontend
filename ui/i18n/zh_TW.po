@@ -1770,6 +1770,12 @@ msgstr "基礎設定"
 msgid "Bcc"
 msgstr "密件抄送"
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+#, fuzzy
+#| msgid "Warning: This message might be a phishing or scam mail"
+msgid "Be careful with this message. It might be spam or a phishing mail."
+msgstr "警告：該郵件可能存在郵件欺詐"
+
 #. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "Before"
@@ -4896,6 +4902,12 @@ msgstr "星期五"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
 msgid "From"
+msgstr "從"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "From"
+msgid "From:"
 msgstr "從"
 
 #. %1$s An email address
@@ -10928,15 +10940,13 @@ msgstr ""
 "這是給開發者使用的瀏覽器功能。若您被要求複製貼上某些東西到這裡，可能是有人想"
 "要盜取您的帳號。如果您不知道您在做什麼就不要在此輸入任何指令碼。"
 
+#: apps/io.ox/mail/util.js module:io.ox/core
+msgid "This is a dangerous email containing spam or malware."
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
 msgstr "這是標準資料夾，無法更名。"
-
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid ""
-"This is a suspicious email because we could not verify that it is really "
-"from %1$s."
-msgstr "這是一封可疑電子郵件，我們無法驗證它是否真來自 %1$s。"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look like."
@@ -17802,6 +17812,11 @@ msgstr "您的平台"
 #~ "This folder is shared with others. It won't be available for the invited "
 #~ "guests any more."
 #~ msgstr "已與其他人分享此資料夾，被邀請的訪客將無法再使用。"
+
+#~ msgid ""
+#~ "This is a suspicious email because we could not verify that it is really "
+#~ "from %1$s."
+#~ msgstr "這是一封可疑電子郵件，我們無法驗證它是否真來自 %1$s。"
 
 #~ msgid "This mail has been added to the portal"
 #~ msgstr "此郵件已被加入入口畫面"
