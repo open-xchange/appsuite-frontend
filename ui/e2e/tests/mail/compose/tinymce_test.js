@@ -119,11 +119,12 @@ Scenario('[C7392] Send mail with different text highlighting', async function (I
 
     // Open the mail composer
     I.retry(5).click('Compose');
-    I.waitForElement('.io-ox-mail-compose .contenteditable-editor');
-    I.click('~Maximize');
+    I.waitForVisible('.io-ox-mail-compose .contenteditable-editor');
+
 
     // Fill out to and subject
     I.waitForFocus('input[placeholder="To"]');
+    I.click('~Maximize');
     I.fillField('To', recipient.get('primaryEmail'));
     I.fillField('Subject', mailSubject);
 
@@ -502,7 +503,7 @@ Scenario('[C7394] Send mail with different text alignments', async function (I, 
     I.login('app=io.ox/mail', { user: recipient });
 
     // Open the mail
-    I.waitForText(mailSubject, 2);
+    I.waitForText(mailSubject);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
     I.waitForVisible('iframe.mail-detail-frame');
 
