@@ -458,9 +458,7 @@ define('io.ox/calendar/actions', [
                 .addButton({ label: accept ? gt('Accept series') : gt('Decline series'), action: 'series' })
                 .on('action', function (action) {
                     if (action === 'cancel') return;
-                    if (action === 'series') {
-                        delete appointment.recurrenceId;
-                    }
+                    if (action === 'series') delete appointment.recurrenceId;
                     $(baton.e.target).addClass('disabled');
                     // those links are for fast accept/decline, so don't check conflicts
                     api.confirm(appointment, util.getCurrentRangeOptions()).fail(function (e) {

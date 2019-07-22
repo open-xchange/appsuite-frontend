@@ -68,22 +68,23 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
             return $.when();
         }
 
-        // load the missing cldr data (only needed for en_US)
-        if (localeDefinitions[localeId] && !CLDRDefinitions[localeId]) {
-            return require([meta.getCLDRDateFilePath(localeId)], function (dateFormatData) {
-                CLDRDefinitions[localeId] = JSON.parse(dateFormatData).main[meta.mapToCLDRFiles[localeId]].dates.calendars.gregorian;
-            });
-        }
+        // load cldr data
+        return require([meta.getCLDRDateFilePath(localeId)], function (dateFormatData) {
+            CLDRDefinitions[localeId] = JSON.parse(dateFormatData).main[meta.mapToCLDRFiles[localeId]].dates.calendars.gregorian;
 
-        // load the file that contains the define, then load the define itself
-        // we need do it this way to avoid the use of anonymous defines
-        return require(['static/3rd.party/moment/locale/' + id + '.js'], function () {
-            return require([meta.getCLDRDateFilePath(localeId), 'moment/locale/' + id], function (dateFormatData) {
-                CLDRDefinitions[localeId] = JSON.parse(dateFormatData).main[meta.mapToCLDRFiles[localeId]].dates.calendars.gregorian;
-
-                // create backup on first definition
-                backupLocale(localeId);
+            if (localeDefinitions[localeId]) {
                 updateLocale(localeId);
+                return $.when();
+            }
+
+            // load the file that contains the define, then load the define itself
+            // we need do it this way to avoid the use of anonymous defines
+            return require(['static/3rd.party/moment/locale/' + id + '.js'], function () {
+                return require(['moment/locale/' + id], function () {
+                    // create backup on first definition
+                    backupLocale(localeId);
+                    updateLocale(localeId);
+                });
             });
         });
     }
