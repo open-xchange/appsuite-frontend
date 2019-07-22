@@ -373,7 +373,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             advanced: '*styleselect | *fontselect fontsizeselect | link image *emoji | forecolor backcolor',
             toolbar2: '',
             toolbar3: '',
-            plugins: 'autolink oxpaste oxdrop link paste  lists code', // oximage emoji
+            plugins: 'autolink oximage emoji oxpaste oxdrop link paste  lists code',
             theme: 'silver',
             imageLoader: null // is required to upload images. should have upload(file) and getUrl(response) methods
         }, opt);
