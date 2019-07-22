@@ -65,7 +65,7 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core', 'r
     function setMomentLocale(localeId) {
         var id = meta.deriveMomentLocale(localeId);
 
-        if (localeDefinitions[localeId] && localeDefinitions[localeId].specialDateFormats) {
+        if (localeDefinitions[localeId]) {
             updateLocale(localeId);
             return $.when();
         }
@@ -85,7 +85,7 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core', 'r
 
     function backupLocale(localeId) {
         // avoid overrides
-        if (localeDefinitions[localeId] && localeDefinitions[localeId].specialDateFormats) return;
+        if (localeDefinitions[localeId]) return;
         var id = meta.deriveMomentLocale(localeId),
             data = moment.localeData(id),
             dow = data.firstDayOfWeek();
@@ -109,8 +109,6 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core', 'r
             dow = meta.weekday.index(localeData.firstDayOfWeek),
             doy = localeData.firstDayOfYear;
         moment.updateLocale(id, {
-            // special non Moment standard localized date formats
-            specialDateFormats: localeData.specialDateFormats,
             // time and date format
             longDateFormat: {
                 L: meta.translateCLDRToMoment(localeData.date),
