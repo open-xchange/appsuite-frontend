@@ -441,7 +441,7 @@ define('io.ox/calendar/actions', [
 
             // check if only one appointment or the whole series should be accepted
             // exceptions don't have the same id and seriesId
-            if (baton.data.seriesId === baton.data.id && appointment.recurrenceId) {
+            if (data.seriesId === data.id && appointment.recurrenceId) {
                 new ModalDialog({
                     title: gt('Change appointment status'),
                     width: 600
@@ -458,7 +458,9 @@ define('io.ox/calendar/actions', [
                 .addButton({ label: accept ? gt('Accept series') : gt('Decline series'), action: 'series' })
                 .on('action', function (action) {
                     if (action === 'cancel') return;
-                    if (action === 'series') delete appointment.recurrenceId;
+                    if (action === 'series') {
+                        delete appointment.recurrenceId;
+                    }
                     $(baton.e.target).addClass('disabled');
                     // those links are for fast accept/decline, so don't check conflicts
                     api.confirm(appointment, util.getCurrentRangeOptions()).fail(function (e) {
