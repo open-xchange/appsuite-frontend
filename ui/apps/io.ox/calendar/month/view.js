@@ -79,7 +79,7 @@ define('io.ox/calendar/month/view', [
         },
 
         update: function () {
-            this.monthText.text(this.model.get('startOfMonth').format('MMMM YYYY'));
+            this.monthText.text(this.model.get('startOfMonth').format('monthYear'));
         },
 
         render: function () {

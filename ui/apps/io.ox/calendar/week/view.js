@@ -105,7 +105,7 @@ define('io.ox/calendar/week/view', [
                     toYear = endDate.format('YYYY');
 
                 if (fromMonth === toMonth) {
-                    this.monthText.text(startDate.format('MMMM YYYY'));
+                    this.monthText.text(startDate.format('monthYear'));
                 } else if (fromYear === toYear) {
                     //#. %1$s A month name
                     //#. %2$s Another month name

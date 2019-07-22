@@ -325,10 +325,7 @@ define('io.ox/contacts/util', [
             // therefore, return full date if year is not 1
             if (birthday.year() > 1 && birthday.year() !== 1604) return birthday.format('l');
             // get localized format without the year otherwise
-            // i.e. remove dashes and slashes but keep dots
-            return birthday.format(
-                moment.localeData().longDateFormat('l').replace(/[/-]*Y+[/-]*/, '')
-            );
+            return birthday.format('dayMonthExtraShort');
         },
 
         // @arg is either a string (image1_url) or an object with image1_url

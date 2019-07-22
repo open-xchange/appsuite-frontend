@@ -131,6 +131,64 @@ define('io.ox/core/locale/meta', function () {
         zh_TW: 'zh-tw'
     };
 
+    // used to locate correct date format files
+    var mapToCLDRFiles = {
+        ca_ES: 'ca',
+        cs_CZ: 'cs',
+        da_DK: 'da',
+        de_DE: 'de',
+        de_AT: 'de-AT',
+        de_CH: 'de-CH',
+        en_US: 'en',
+        en_GB: 'en-GB',
+        en_AU: 'en-AU',
+        en_CA: 'en-CA',
+        en_DE: 'en-DE',
+        en_IE: 'en-IE',
+        en_NZ: 'en-NZ',
+        en_SG: 'en-SG',
+        en_ZA: 'en-ZA',
+        es_ES: 'es',
+        es_MX: 'es-MX',
+        es_AR: 'es-AR',
+        es_BO: 'es-BO',
+        es_CL: 'es-CL',
+        es_CO: 'es-CO',
+        es_CR: 'es-CR',
+        es_DO: 'es-DO',
+        es_EC: 'es-EC',
+        es_SV: 'es-SV',
+        es_GT: 'es-GT',
+        es_HN: 'es-HN',
+        es_NI: 'es-NI',
+        es_PA: 'es-PA',
+        es_PY: 'es-PY',
+        es_PE: 'es-PE',
+        es_PR: 'es-PR',
+        es_US: 'es-US',
+        fi_FI: 'fi',
+        fr_FR: 'fr',
+        fr_CA: 'fr-CA',
+        fr_CH: 'fr-CH',
+        fr_BE: 'fr-BE',
+        hu_HU: 'hu',
+        it_IT: 'it',
+        it_CH: 'it-CH',
+        lv_LV: 'lv',
+        nl_NL: 'nl',
+        nl_BE: 'nl-BE',
+        nb_NO: 'nb',
+        pl_PL: 'pl',
+        pt_BR: 'pt',
+        ru_RU: 'ru',
+        ro_RO: 'ro',
+        sk_SK: 'sk',
+        sv_SE: 'sv',
+        ja_JP: 'ja',
+        zh_CN: 'zh',
+        zh_TW: 'zh'
+    };
+
     var dateFormats = [
         // M d y
         'M/d/yy',
@@ -262,6 +320,11 @@ define('io.ox/core/locale/meta', function () {
         return _(list).keys()[0] || 'en_US';
     }
 
+    function getCLDRDateFilePath(locale) {
+        // add raw! so it works with require
+        return 'raw!3rd.party/cldr-dates/' + (mapToCLDRFiles[locale] || 'en-US') + '/ca-gregorian.json';
+    }
+
     return {
         locales: locales,
         dateFormats: dateFormats,
@@ -276,6 +339,8 @@ define('io.ox/core/locale/meta', function () {
         deriveSupportedLanguageFromLocale: deriveSupportedLanguageFromLocale,
         translateCLDRToMoment: translateCLDRToMoment,
         translateMomentToCLDR: translateMomentToCLDR,
+        getCLDRDateFilePath: getCLDRDateFilePath,
+        mapToCLDRFiles: mapToCLDRFiles,
         weekday: {
             index: function (str) {
                 return weekdays.indexOf(str);

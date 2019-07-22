@@ -55,21 +55,42 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
         // load the file that contains the define, then load the define itself
         // we need do it this way to avoid the use of anonymous defines
         return require(['static/3rd.party/moment/locale/' + id + '.js'], function () {
-            return require(['moment/locale/' + id], function () {
+            return require([meta.getCLDRDateFilePath(localeId), 'moment/locale/' + id], function (dateFormatData) {
+
+                // parse data and reduce the data to the subset we need (there is a lot more data in this JSON)
+                var specialDateFormats = JSON.parse(dateFormatData).main[meta.mapToCLDRFiles[localeId]].dates.calendars.gregorian.dateTimeFormats.availableFormats;
+
+                // special formats that default moment is missing
+                // useful for mini calendar/datepicker or display of birthday without year
+                // if you want to add a format to this list, please also add it to the tokenlist in io.ox/core/moment (moment has a fixed list of long date format tokens unfortunately)
+                specialDateFormats = {
+                    // example: Januar 2019
+                    monthYear: meta.translateCLDRToMoment(specialDateFormats.yMMMM),
+                    // example: Jan. 2019
+                    monthYearShort: meta.translateCLDRToMoment(specialDateFormats.yMMM),
+                    // example: 29. Januar
+                    dayMonth: meta.translateCLDRToMoment(specialDateFormats.MMMMd),
+                    // example: 29. Jan.
+                    dayMonthShort: meta.translateCLDRToMoment(specialDateFormats.MMMd),
+                    // example: 29.1.
+                    dayMonthExtraShort: meta.translateCLDRToMoment(specialDateFormats.Md)
+                };
+
                 // create backup on first definition
-                backupLocale(localeId);
+                backupLocale(localeId, specialDateFormats);
                 updateLocale(localeId);
             });
         });
     }
 
-    function backupLocale(localeId) {
+    function backupLocale(localeId, specialDateFormats) {
         // avoid overrides
         if (localeDefinitions[localeId]) return;
         var id = meta.deriveMomentLocale(localeId),
             data = moment.localeData(id),
             dow = data.firstDayOfWeek();
         localeDefinitions[localeId] = {
+            specialDateFormats: specialDateFormats,
             timeLong: data.longDateFormat('LTS'),
             date: meta.translateMomentToCLDR(data.longDateFormat('L')),
             number: getDefaultNumberFormat(localeId),
@@ -89,6 +110,8 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
             dow = meta.weekday.index(localeData.firstDayOfWeek),
             doy = localeData.firstDayOfYear;
         moment.updateLocale(id, {
+            // special non Moment standard localized date formats
+            specialDateFormats: localeData.specialDateFormats,
             // time and date format
             longDateFormat: {
                 L: meta.translateCLDRToMoment(localeData.date),

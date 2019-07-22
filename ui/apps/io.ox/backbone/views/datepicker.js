@@ -249,7 +249,7 @@ define('io.ox/backbone/views/datepicker', [
                         'data-mode': 'year',
                         'data-value': m.year()
                     })
-                    .text(m.format('MMMM YYYY'))
+                    .text(m.format('monthYear'))
             );
 
             this.setNavigationLabels(gt('Go to previous month'), gt('Go to next month'));
@@ -334,7 +334,7 @@ define('io.ox/backbone/views/datepicker', [
                                 return $('<td role="gridcell" class="month switch-mode">')
                                     .attr({
                                         'id': 'month_' + m.format('YYYY-MM'),
-                                        'aria-label': m.format('MMMM YYYY'),
+                                        'aria-label': m.format('monthYear'),
                                         'aria-selected': m.month() === current,
                                         'data-mode': 'month',
                                         'data-value': m.month()

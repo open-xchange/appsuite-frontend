@@ -89,6 +89,7 @@
     "u2f-api": "1.0.11",
     "underscore": "1.9.1",
     "unorm": "1.4.1",
-    "velocity-animate": "1.5.2"
+    "velocity-animate": "1.5.2",
+    "cldr-dates-modern": "35.1.0"
   }
 }
