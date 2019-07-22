@@ -32,6 +32,7 @@ Scenario('[C7869] Set new start and end of working time', async function (I) {
 
     I.waitForVisible('[data-id="virtual/settings/io.ox/calendar"]');
     I.click({ css: '[data-id="virtual/settings/io.ox/calendar"]' });
+    I.waitForText('Calendar', undefined, 'h1');
     I.selectOption('#settings-startTime', workingStartTime);
     I.selectOption('#settings-endTime', workingEndTime);
     I.openApp('Calendar');
