@@ -325,7 +325,7 @@ define('io.ox/contacts/util', [
             // therefore, return full date if year is not 1
             if (birthday.year() > 1 && birthday.year() !== 1604) return birthday.format('l');
             // get localized format without the year otherwise
-            return birthday.format('dayMonthExtraShort');
+            return birthday.formatCLDR('Md');
         },
 
         // @arg is either a string (image1_url) or an object with image1_url

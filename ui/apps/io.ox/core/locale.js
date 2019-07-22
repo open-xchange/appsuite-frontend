@@ -12,17 +12,33 @@
  *
  */
 
-define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], function (meta, settings) {
+define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core', 'raw!3rd.party/cldr-dates/en/ca-gregorian.json'], function (meta, settings, cldrEnUsData) {
 
     'use strict';
 
     var currentLocaleId = settings.get('language', 'en_US'),
         localeData = settings.get('localeData', {}),
-        localeDefinitions = {};
+        localeDefinitions = {},
+        CLDRDefinitions = {
+            'en_US':  JSON.parse(cldrEnUsData).main.en.dates.calendars.gregorian
+        };
 
     function getLocaleData(localeId) {
         return deriveLocaleData(_.extend({}, localeDefinitions[localeId || currentLocaleId], settings.get('localeData')));
     }
+
+    function getCLDRData() {
+        return CLDRDefinitions[currentLocaleId];
+    }
+
+    // support CLDR format strings for localized formats Moment does not know (see http://cldr.unicode.org/) or check the json files in the npm module
+    moment.fn.formatCLDR = function (inputstring) {
+        // check if the input string matches a CLDR format
+        if (getCLDRData().dateTimeFormats.availableFormats[inputstring]) {
+            inputstring = meta.translateCLDRToMoment(getCLDRData().dateTimeFormats.availableFormats[inputstring]);
+        }
+        return moment.prototype.format.apply(this, [inputstring]);
+    };
 
     function deriveLocaleData(data) {
         // derive formats for Java
@@ -48,49 +64,32 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
 
     function setMomentLocale(localeId) {
         var id = meta.deriveMomentLocale(localeId);
-        if (localeDefinitions[localeId]) {
+
+        if (localeDefinitions[localeId] && localeDefinitions[localeId].specialDateFormats) {
             updateLocale(localeId);
             return $.when();
         }
+
         // load the file that contains the define, then load the define itself
         // we need do it this way to avoid the use of anonymous defines
         return require(['static/3rd.party/moment/locale/' + id + '.js'], function () {
             return require([meta.getCLDRDateFilePath(localeId), 'moment/locale/' + id], function (dateFormatData) {
-
-                // parse data and reduce the data to the subset we need (there is a lot more data in this JSON)
-                var specialDateFormats = JSON.parse(dateFormatData).main[meta.mapToCLDRFiles[localeId]].dates.calendars.gregorian.dateTimeFormats.availableFormats;
-
-                // special formats that default moment is missing
-                // useful for mini calendar/datepicker or display of birthday without year
-                // if you want to add a format to this list, please also add it to the tokenlist in io.ox/core/moment (moment has a fixed list of long date format tokens unfortunately)
-                specialDateFormats = {
-                    // example: Januar 2019
-                    monthYear: meta.translateCLDRToMoment(specialDateFormats.yMMMM),
-                    // example: Jan. 2019
-                    monthYearShort: meta.translateCLDRToMoment(specialDateFormats.yMMM),
-                    // example: 29. Januar
-                    dayMonth: meta.translateCLDRToMoment(specialDateFormats.MMMMd),
-                    // example: 29. Jan.
-                    dayMonthShort: meta.translateCLDRToMoment(specialDateFormats.MMMd),
-                    // example: 29.1.
-                    dayMonthExtraShort: meta.translateCLDRToMoment(specialDateFormats.Md)
-                };
+                CLDRDefinitions[localeId] = JSON.parse(dateFormatData).main[meta.mapToCLDRFiles[localeId]].dates.calendars.gregorian;
 
                 // create backup on first definition
-                backupLocale(localeId, specialDateFormats);
+                backupLocale(localeId);
                 updateLocale(localeId);
             });
         });
     }
 
-    function backupLocale(localeId, specialDateFormats) {
+    function backupLocale(localeId) {
         // avoid overrides
-        if (localeDefinitions[localeId]) return;
+        if (localeDefinitions[localeId] && localeDefinitions[localeId].specialDateFormats) return;
         var id = meta.deriveMomentLocale(localeId),
             data = moment.localeData(id),
             dow = data.firstDayOfWeek();
         localeDefinitions[localeId] = {
-            specialDateFormats: specialDateFormats,
             timeLong: data.longDateFormat('LTS'),
             date: meta.translateMomentToCLDR(data.longDateFormat('L')),
             number: getDefaultNumberFormat(localeId),
@@ -178,6 +177,7 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
             return currentLocaleId;
         },
 
+        getCLDRData: getCLDRData,
         getLocaleData: getLocaleData,
         localeDefinitions: localeDefinitions,
 

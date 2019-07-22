@@ -59,15 +59,6 @@ define('io.ox/core/moment', [
         return this;
     };
 
-    // support non standard time format strings (see io.ox/core/locale.js for more info)
-    var originalMomentFormat = moment.prototype.format;
-
-    moment.fn.format = function (inputString) {
-        // check if the input string is one ouf our non standard Moment formats
-        inputString = moment.localeData()._specialDateFormats && moment.localeData()._specialDateFormats[inputString] ? moment.localeData()._specialDateFormats[inputString] : inputString;
-        return originalMomentFormat.apply(this, [inputString]);
-    };
-
     // make global
     window.moment = moment;
 

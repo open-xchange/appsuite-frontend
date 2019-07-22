@@ -109,7 +109,6 @@ define([
 
         it('returns localeData correctly', function () {
             expect(locale.getLocaleData()).to.deep.equal({
-                specialDateFormats: { monthYear: 'MMMM Y', monthYearShort: 'MMM Y', dayMonth: 'D. MMMM', dayMonthShort: 'D. MMM', dayMonthExtraShort: 'D.M.' },
                 date: 'dd.MM.yyyy',
                 dateFull: 'EEEE, d. MMMM yyyy',
                 dateLong: 'd. MMMM yyyy',
