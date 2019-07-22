@@ -12,16 +12,14 @@
  *
  */
 
-define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core', 'raw!3rd.party/cldr-dates/en/ca-gregorian.json'], function (meta, settings, cldrEnUsData) {
+define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], function (meta, settings) {
 
     'use strict';
 
     var currentLocaleId = settings.get('language', 'en_US'),
         localeData = settings.get('localeData', {}),
         localeDefinitions = {},
-        CLDRDefinitions = {
-            'en_US':  JSON.parse(cldrEnUsData).main.en.dates.calendars.gregorian
-        };
+        CLDRDefinitions = {};
 
     function getLocaleData(localeId) {
         return deriveLocaleData(_.extend({}, localeDefinitions[localeId || currentLocaleId], settings.get('localeData')));
@@ -65,9 +63,16 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core', 'r
     function setMomentLocale(localeId) {
         var id = meta.deriveMomentLocale(localeId);
 
-        if (localeDefinitions[localeId]) {
+        if (localeDefinitions[localeId] && CLDRDefinitions[localeId]) {
             updateLocale(localeId);
             return $.when();
+        }
+
+        // load the missing cldr data (only needed for en_US)
+        if (localeDefinitions[localeId] && !CLDRDefinitions[localeId]) {
+            return require([meta.getCLDRDateFilePath(localeId)], function (dateFormatData) {
+                CLDRDefinitions[localeId] = JSON.parse(dateFormatData).main[meta.mapToCLDRFiles[localeId]].dates.calendars.gregorian;
+            });
         }
 
         // load the file that contains the define, then load the define itself
