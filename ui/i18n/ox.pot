@@ -4818,8 +4818,6 @@ msgstr ""
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js
 #: module:io.ox/contacts
-#: apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr ""
 
@@ -9699,7 +9697,12 @@ msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
-msgid "Please select your mail account provider"
+msgid "Add other mail account"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
+msgid "Please choose your mail account provider."
 msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js
@@ -12756,6 +12759,11 @@ msgstr ""
 #: apps/io.ox/notes/toolbar.js
 #: module:io.ox/notes
 msgid "Send by mail"
+msgstr ""
+
+#: apps/io.ox/oauth/backbone.js
+#: module:io.ox/oauth
+msgid "Sign in with Google. This will add your Gmail account."
 msgstr ""
 
 #. %1$s is the display name of the account
