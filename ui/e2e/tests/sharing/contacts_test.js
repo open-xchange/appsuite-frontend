@@ -45,7 +45,7 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
         I.fillField('Last name', 'Wonderland');
         I.click('Save');
         I.waitToHide('.abs.window-blocker');
-
+        I.wait(1);
         I.retry(5).click('New contact');
         I.waitForVisible('.dropdown-menu');
         I.retry(5).click('New contact', '[data-action="io.ox/contacts/actions/create"]');
