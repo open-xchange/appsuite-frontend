@@ -73,6 +73,7 @@ Scenario('[C7372] Create new distribution list @shaky', function (I, users) {
     for (let i = 0; i <= 3; i++) {
         I.fillField('Add contact', users[i].userdata.primaryEmail);
         I.pressKey('Enter');
+        I.wait(0.5);
     }
     I.click('Create list');
     I.waitForDetached('.floating-window-content');

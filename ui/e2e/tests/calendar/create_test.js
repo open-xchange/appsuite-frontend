@@ -981,7 +981,6 @@ Scenario('[C274515] Attendees are not allowed to change their own permission sta
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//chronos/allowAttendeeEditsByDefault', true);
-    I.haveSetting('io.ox/calendar//viewView', 'week:week');
     //Create Appointment
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
     I.haveAppointment({
@@ -1005,6 +1004,8 @@ Scenario('[C274515] Attendees are not allowed to change their own permission sta
             }
         ]
     }, { user: users[0] });
+
+    I.haveSetting('io.ox/calendar//viewView', 'week:week', { user: users[1] });
     I.login('app=io.ox/calendar', { user: users[1] });
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
     I.clickToolbar('Today');
@@ -1025,6 +1026,7 @@ Scenario('[C274484] Attendees can change the appointment', async function (I, us
     I.haveSetting('io.ox/core//showDesktopNotifications', false, { user: users[1] });
     I.haveSetting('io.ox/calendar//chronos/allowAttendeeEditsByDefault', true, { user: users[1] });
     I.haveSetting('io.ox/calendar//viewView', 'week:week', { user: users[1] });
+    I.haveSetting('io.ox/calendar//viewView', 'week:week', { user: users[0] });
     //Create Appointment
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
     I.haveAppointment({

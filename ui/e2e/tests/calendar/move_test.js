@@ -27,7 +27,7 @@ After(async function (users) {
 Scenario('Move event to different folder @shaky', async function (I) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true }
+        'io.ox/calendar': { showCheckboxes: true, viewView: 'week:week' }
     });
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
     const time = moment().startOf('day').add(10, 'hours');
@@ -48,8 +48,8 @@ Scenario('Move event to different folder @shaky', async function (I) {
     // unselect folder
     I.waitForVisible('~New calendar');
     I.click(locate('~New calendar').find('.color-label'));
-    I.waitForVisible('.weekview-container.workweek .appointment');
-    I.click('.weekview-container.workweek .appointment');
+    I.waitForVisible('.weekview-container.week .appointment');
+    I.click('.weekview-container.week .appointment');
     I.waitForVisible('.io-ox-sidepopup');
     I.click('.io-ox-sidepopup .inline-toolbar .more-dropdown');
     I.waitForElement('.smart-dropdown-container.dropdown.open');
@@ -69,8 +69,8 @@ Scenario('Move event to different folder @shaky', async function (I) {
     I.click('Move');
 
     I.waitForDetached('.folder-picker-dialog');
-    I.waitForVisible('.weekview-container.workweek .appointment');
-    I.seeElement('.weekview-container.workweek .appointment');
+    I.waitForVisible('.weekview-container.week .appointment');
+    I.seeElement('.weekview-container.week .appointment');
     I.seeElement('[aria-label="New calendar"][aria-checked="true"]');
 
 });
