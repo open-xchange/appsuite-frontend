@@ -38,9 +38,17 @@ module.exports = function (grunt) {
                     src: [
                         'package.json',
                         'lib/**/*',
-                        '!lib/rhino/**/*',
-                        'node_modules/**/*'],
+                        '!lib/rhino/**/*'],
                     dest: 'dist/appsuite/share/update-themes/',
+                    filter: function (f) {
+                        return !/\.bak$/.test(f);
+                    }
+                },
+                {
+                    expand: true,
+                    src: ['**/*'],
+                    dest: 'dist/appsuite/share/update-themes/node_modules',
+                    cwd: 'deps/',
                     filter: function (f) {
                         return !/\.bak$/.test(f);
                     }
