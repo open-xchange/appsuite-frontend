@@ -34,7 +34,7 @@ define('io.ox/participants/detail', [
         id: 'resource',
         draw: function (baton) {
             var data = baton.data;
-            if (!data.isRessource) return;
+            if (!data.isResource) return;
             if (!baton.options.halo) return this.append($.txt(data.name));
 
             this.append(
@@ -51,7 +51,7 @@ define('io.ox/participants/detail', [
         index: 200,
         id: 'person',
         draw: function (baton) {
-            if (baton.data.isRessource) return;
+            if (baton.data.isResource) return;
 
             var data = baton.data,
                 display_name = mailUtil.getDisplayName([data.name, data.email], { showMailAddress: true }),
@@ -77,11 +77,11 @@ define('io.ox/participants/detail', [
 
             this.children().first()
                 .addClass(statusClass)
-                .addClass(baton.data.isRessource ? '' : 'person');
+                .addClass(baton.data.isResource ? '' : 'person');
 
             this.append(
                 // pause for screenreader
-                !baton.data.isRessource ? $('<span class="sr-only">').text(', ' + util.getConfirmationLabel(conf.status) + '.') : '',
+                !baton.data.isResource ? $('<span class="sr-only">').text(', ' + util.getConfirmationLabel(conf.status) + '.') : '',
                 // has confirmation icon?
                 confirm ? $('<span class="status" aria-hidden="true">').addClass(statusClass).append(confirm) : '',
                 // has confirmation comment?
@@ -105,7 +105,7 @@ define('io.ox/participants/detail', [
             name: obj.display_name,
             email: obj.mail || obj.mailaddress || obj.email1,
             user_id: obj.user_id || obj.internal_userid,
-            isRessource: 'mailaddress' in obj && 'description' in obj
+            isResource: 'mailaddress' in obj && 'description' in obj
         };
 
         var baton = new ext.Baton({ obj: obj, data: data, conf: conf, options: options });

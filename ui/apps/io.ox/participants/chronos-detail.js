@@ -84,7 +84,7 @@ define('io.ox/participants/chronos-detail', [
 
             baton.flexWrapper.append(
                 // pause for screenreader
-                !baton.data.isRessource ? $('<span class="sr-only">').text(', ' + util.getConfirmationLabel(data.partStat) + '.') : '',
+                !baton.data.isResource ? $('<span class="sr-only">').text(', ' + util.getConfirmationLabel(data.partStat) + '.') : '',
                 // has confirmation icon?
                 confirm ? $('<span class="status" aria-hidden="true">').addClass(statusClass).append(confirm) : ''
             );
