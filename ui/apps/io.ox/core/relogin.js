@@ -162,18 +162,8 @@ define('io.ox/core/relogin', [
                             $('#io-ox-core').removeClass('blur');
 
                             if (util.checkTabHandlingSupport()) {
-                                require(['io.ox/core/api/tab'], function (tabAPI) {
-                                    tabAPI.propagate('propagateLogin', {
-                                        session: ox.session,
-                                        language: ox.language,
-                                        theme: ox.theme,
-                                        user: ox.user,
-                                        user_id: ox.user_id,
-                                        context_id: ox.context_id,
-                                        relogin: true,
-                                        exceptWindow: tabAPI.getWindowName(),
-                                        storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION
-                                    });
+                                require(['io.ox/core/api/tab'], function (TabAPI) {
+                                    TabAPI.TabSession.propagateLogin(true);
                                 });
 
                             }

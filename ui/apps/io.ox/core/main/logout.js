@@ -45,10 +45,10 @@ define('io.ox/core/main/logout', [
 
             // when logged out by other tab, just redirect to logout location and clear
             if (baton.skipSessionLogout) {
-                require(['io.ox/core/api/tab'], function (tabAPI) {
+                require(['io.ox/core/api/tab'], function (TabAPI) {
                     // session can already be destroyed here by the active tab, better be safe than sorry
                     try {
-                        tabAPI.setLoggingOutState(tabAPI.LOGGING_OUT_STATE.FOLLOWER);
+                        TabAPI.TabHandling.setLoggingOutState('follower');
                         // stop websockets
                         ox.trigger('logout');
                         // stop requests/rt polling
@@ -81,9 +81,9 @@ define('io.ox/core/main/logout', [
             if (!ox.tabHandlingEnabled || !baton.manualLogout) return $.when();
 
             var def = $.Deferred();
-            require(['io.ox/core/api/tab'], function (tabApi) {
+            require(['io.ox/core/api/tab'], function (TabApi) {
 
-                tabApi.otherTabsLiving().then(
+                TabApi.TabCommunication.otherTabsLiving().then(
                     // when other tabs exists, user must confirm logout
                     function () {
                         require(['io.ox/backbone/views/modal'], function (ModalDialog) {
@@ -129,12 +129,12 @@ define('io.ox/core/main/logout', [
 
             var def = $.Deferred();
 
-            require(['io.ox/core/api/tab'], function (tabAPI) {
+            require(['io.ox/core/api/tab'], function (TabAPI) {
                 // require does catch errors, so we handle them to ensure a resolved deferred
                 try {
-                    tabAPI.setLoggingOutState(tabAPI.LOGGING_OUT_STATE.LEADER);
+                    TabAPI.TabHandling.setLoggingOutState('leader');
                     // notify other tabs that a logout happened
-                    tabAPI.propagate('propagateLogout', { autologout: baton.autologout, exceptWindow: tabAPI.getWindowName(), storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION });
+                    TabAPI.TabSession.propagateLogout({ autologout: baton.autologout });
                 } catch (e) {
                     if (ox.debug) console.warn('propagate logout did not work', e);
                 } finally {
