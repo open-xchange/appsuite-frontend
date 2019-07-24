@@ -8,7 +8,7 @@ ROOT = $(CURDIR)/debian
 override_dh_auto_install:
 	for PACKAGE in $$(ls opt/open-xchange/etc/languages/appsuite | sed -E "s,(.*)\.properties,\1,"); do \
 		mkdir -vp $(ROOT)/$${PACKAGE}/opt/open-xchange/etc/languages/appsuite/; \
-        cp -v --preserve=mode opt/open-xchange/etc/languages/appsuite/$${PACKAGE}.properties $(ROOT)/$${PACKAGE}/opt/open-xchange/etc/languages/appsuite/; \
+        mv -v opt/open-xchange/etc/languages/appsuite/$${PACKAGE}.properties $(ROOT)/$${PACKAGE}/opt/open-xchange/etc/languages/appsuite/; \
 	done
 
 %:
