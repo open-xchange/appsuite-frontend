@@ -36,6 +36,9 @@ deploy e2e testserver:
   only:
     changes:
       - ui/**/*
+  except:
+    refs:
+      - /^poc\//
 
 run e2e tests:
   stage: e2e
@@ -73,6 +76,9 @@ run e2e tests:
   only:
     changes:
       - ui/**/*
+  except:
+    refs:
+      - /^poc\//
 
 generate e2e report:
   stage: report
@@ -150,9 +156,11 @@ remove e2e report:
     action: stop
   when: manual
   except:
-    - develop
-    - master
-    - master-*
+    refs:
+      - develop
+      - master
+      - /^master-/
+      - /^poc\//
 
 stop e2e testserver:
   stage: cleanup
@@ -168,12 +176,8 @@ stop e2e testserver:
     - docker container rm $CONTAINER_NAME || true
   when: always
   only:
-    refs:
-      - develop
-      - master
-      - /^master-/
-      - /^release-/
-      - /^feature\//
-      - /^bug\//
     changes:
       - ui/**/*
+  except:
+    refs:
+      - /^poc\//
