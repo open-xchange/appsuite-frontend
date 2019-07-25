@@ -1,4 +1,5 @@
 import com.openexchange.build.git.GitExtension
+import kotlin.collections.mapOf as kmapOf
 
 buildscript {
     repositories {
@@ -53,19 +54,22 @@ configure<com.openexchange.obs.gradle.plugin.BuildserviceExtension> {
         name = "frontend-$extension"
         this.repositories(closureOf<NamedDomainObjectContainer<com.openexchange.obs.gradle.plugin.Repository>> {
             create("DebianStretch") {
-                depends(kotlin.collections.mapOf("project" to "Debian:Stretch", "repository" to "standard"))
+                depends(kmapOf("project" to "Debian:Stretch", "repository" to "standard"))
+            }
+            create("DebianBuster") {
+                depends(kmapOf("project" to "Debian:Buster", "repository" to "standard"))
             }
             create("RHEL6") {
                 // TODO go down to the base RHEL 6 repository
-                depends(kotlin.collections.mapOf("project" to "backend-master", "repository" to "RHEL6"))
+                depends(kmapOf("project" to "backend-master", "repository" to "RHEL6"))
             }
             create("RHEL7") {
                 // TODO go down to the base RHEL 7 repository
-                depends(kotlin.collections.mapOf("project" to "backend-master", "repository" to "RHEL7"))
+                depends(kmapOf("project" to "backend-master", "repository" to "RHEL7"))
             }
             create("SLE_12") {
                 // TODO go to SP4
-                depends(kotlin.collections.mapOf("project" to "backend-master", "repository" to "SLE_12"))
+                depends(kmapOf("project" to "backend-master", "repository" to "SLE_12"))
             }
         })
     })

@@ -11,5 +11,5 @@ ui/lib/bootstrap/node_modules
 *.kate-swp
 npm-debug.log
 nbproject
-.gradle
+/.gradle/
 .env
