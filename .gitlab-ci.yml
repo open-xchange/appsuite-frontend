@@ -68,7 +68,7 @@ build ui:
       - open-xchange-appsuite/**/*
       - open-xchange-appsuite-l10n/**/*
       - open-xchange-appsuite-manifest/**/*
-      - gitlab_ci/*
+      - gitlab-ci/*
       - .gitlab-ci.yml
 
 build update-themes:
@@ -89,7 +89,7 @@ build update-themes:
       - open-xchange-appsuite/**/*
       - open-xchange-appsuite-l10n/**/*
       - open-xchange-appsuite-manifest/**/*
-      - gitlab_ci/*
+      - gitlab-ci/*
       - .gitlab-ci.yml
 
 build ui docker image:
@@ -128,7 +128,7 @@ build help:
     changes:
       - help/**/*
       - open-xchange-appsuite-help/**/*
-      - gitlab_ci/*
+      - gitlab-ci/*
       - .gitlab-ci.yml
 
 build guidedtours:
@@ -140,7 +140,7 @@ build guidedtours:
     changes:
       - guidedtours/**/*
       - open-xchange-guidedtours/**/*
-      - gitlab_ci/*
+      - gitlab-ci/*
       - .gitlab-ci.yml
 
 build spamexperts:
@@ -150,7 +150,7 @@ build spamexperts:
   only:
     changes:
       - open-xchange-appsuite-spamexperts/**/*
-      - gitlab_ci/*
+      - gitlab-ci/*
       - .gitlab-ci.yml
 
 build dynamic-theme:
@@ -160,5 +160,5 @@ build dynamic-theme:
   only:
     changes:
       - open-xchange-dynamic-theme/**/*
-      - gitlab_ci/*
+      - gitlab-ci/*
       - .gitlab-ci.yml
