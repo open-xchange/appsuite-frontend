@@ -202,5 +202,14 @@ define('io.ox/core/api/tab', [
         initialize();
     }
 
+    // expose old API for compatibility reasons
+    // can be removed once all stacks got updated
+    api.TabHandling = {
+        createURL: function () {
+            if (ox.debug) console.warn('Deprecated: switch to new tab API.');
+            api.createUrl.apply(this, arguments);
+        }
+    };
+
     return api;
 });
