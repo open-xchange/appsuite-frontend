@@ -476,11 +476,13 @@ Scenario('[C8820] Forward attachments', function (I, users) {
     I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
+
     //login user 1 and send mail with attachements
     I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-    I.waitForElement('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 5);
+    I.waitForVisible('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user2.userdata.primaryEmail);
+    I.wait(1);
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
     I.attachFile('.io-ox-mail-compose-window input[type=file]', 'e2e/media/files/generic/testdocument.odt');
@@ -497,6 +499,7 @@ Scenario('[C8820] Forward attachments', function (I, users) {
     I.waitForVisible(`div[title="${user2.userdata.primaryEmail}"]`);
     I.wait(1);
     I.logout();
+
     //login user 2, check mail and forward to user 3
     I.login('app=io.ox/mail', { user: user2 });
     I.selectFolder('Inbox');
@@ -514,9 +517,11 @@ Scenario('[C8820] Forward attachments', function (I, users) {
     I.clickToolbar('Forward');
     I.waitForVisible('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input');
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', user3.userdata.primaryEmail);
+    I.wait(1);
     I.click('Send');
     I.waitForDetached('.io-ox-mail-compose');
     I.logout();
+
     //login user 3 and check mail
     I.login('app=io.ox/mail', { user: user3 });
     I.selectFolder('Inbox');

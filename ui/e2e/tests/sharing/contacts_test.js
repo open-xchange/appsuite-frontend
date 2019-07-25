@@ -92,6 +92,7 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
         });
 
         I.waitForText('Builder', 30, '.io-ox-contacts-window');
+        I.waitForVisible('li[aria-label="Shared address books"] .subfolders .folder.selectable');
         I.see(`${users[0].get('sur_name')}, ${users[0].get('given_name')}: Contacts`, '.folder-tree');
         I.seeNumberOfElements(locate('.contact.vgrid-cell').inside('.io-ox-contacts-window'), 2);
         I.see('Wonderland', '.io-ox-contacts-window');

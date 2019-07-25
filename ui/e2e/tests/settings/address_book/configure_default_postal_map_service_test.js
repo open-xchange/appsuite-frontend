@@ -60,7 +60,8 @@ async function verifyMapType(I, mapName, link, value) {
 
     I.see('Link postal addresses with map service');
     I.waitForText(mapName);
-    I.checkOption(`input[value="${value}"`);
+    I.wait(1);
+    I.checkOption(`input[value="${value}"]`);
     I.seeCheckboxIsChecked(`input[value="${value}"]`);
     I.wait(1);
     I.click('~Refresh');
