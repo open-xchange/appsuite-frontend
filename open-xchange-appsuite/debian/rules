@@ -18,9 +18,8 @@ override_dh_auto_install:
 	cp -rv --preserve=mode opt $(ROOT)
 	cp -rv --preserve=mode htdoc/* $(ROOT)/$(HTDOC)
 
-	sed -i -e "s:## cd ##:cd /$(HTDOC)/appsuite:" "$(ROOT)/opt/open-xchange/sbin/touch-appsuite"
-
 override_dh_installdeb:
+	sed -i -e "s:## cd ##:cd /$(HTDOC)/appsuite:" "$(ROOT)/opt/open-xchange/sbin/touch-appsuite"
 	sed -i "s:@DOCROOT@:$(HTDOC):g" $(CURDIR)/debian/open-xchange-appsuite.conffiles
 	dh_installdeb
 
