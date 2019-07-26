@@ -29,7 +29,7 @@ Scenario('[C7886] Enable hidden folders and files', async function (I) {
     await I.haveSetting('io.ox/files//showHidden', true);
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
     await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/.hiddenfile.dat');
-    await I.haveFolder('.hiddenfolder', 'infostore', infostoreFolderID);
+    await I.haveFolder({ title: '.hiddenfolder', module: 'infostore', parent: infostoreFolderID });
     I.login('app=io.ox/files');
     I.waitForVisible('.list-view.complete');
     //check for hidden file and folder
@@ -53,7 +53,7 @@ Scenario('[C7887] Disable hidden folders and files', async function (I) {
     await I.haveSetting('io.ox/files//showHidden', false);
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
     await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/.hiddenfile.dat');
-    await I.haveFolder('.hiddenfolder', 'infostore', infostoreFolderID);
+    await I.haveFolder({ title: '.hiddenfolder', module: 'infostore', parent: infostoreFolderID });
     I.login('app=io.ox/files');
     I.waitForVisible('.list-view.complete');
     //check for hidden file and folder

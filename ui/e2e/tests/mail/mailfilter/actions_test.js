@@ -157,7 +157,7 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
-    await I.haveFolder(folder, 'mail', 'default0/INBOX');
+    await I.haveFolder({ title: folder, module: 'mail', parent: 'default0/INBOX' });
 
     createFilterRule(I, 'TestCase0389', 'File into');
     I.click('Select folder');

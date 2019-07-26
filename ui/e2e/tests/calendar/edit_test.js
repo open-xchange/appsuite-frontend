@@ -32,7 +32,7 @@ Scenario('[C7449] Move appointment to folder', async function (I) {
         'io.ox/calendar': { showCheckboxes: true }
     });
     const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    await I.haveFolder('New calendar', 'event', defaultFolderId);
+    await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
     const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
     await I.haveAppointment({
         folder:  defaultFolderId,
@@ -220,10 +220,10 @@ Scenario.skip('[C7465] Edit appointment in shared folder as author', async funct
         'io.ox/calendar': { showCheckboxes: true }
     });
     const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    const folder = await I.haveFolder('New calendar', 'event', defaultFolderId);
+    const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
     const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
     await I.haveAppointment({
-        folder:  folder.data,
+        folder:  folder,
         summary: 'Testappointment',
         startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
         endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
@@ -441,10 +441,10 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author @shaky
         'io.ox/calendar': { showCheckboxes: true }
     });
     const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    const folder = await I.haveFolder('New calendar', 'event', defaultFolderId);
+    const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
     const time = moment().startOf('week').add(1, 'days').add(10, 'hours');
     await I.haveAppointment({
-        folder:  folder.data,
+        folder:  folder,
         summary: 'Testappointment',
         startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
         endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
@@ -508,10 +508,10 @@ Scenario('[C7470] Delete a recurring appointment', async function (I) {
         'io.ox/calendar': { showCheckboxes: true }
     });
     const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    const folder = await I.haveFolder('New calendar', 'event', defaultFolderId);
+    const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
     const time = moment().startOf('week').add(1, 'days').add(10, 'hours');
     await I.haveAppointment({
-        folder:  folder.data,
+        folder:  folder,
         summary: 'Testappointment',
         startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
         endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
@@ -1330,7 +1330,7 @@ Scenario('[C7459] Remove attachments @shaky', async function (I) {
             startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
             endDate: { value: endTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
         }),
-        updatedAppointment = await I.haveAttachment('calendar', appointment.data.data.created[0], 'e2e/media/files/generic/testdocument.odt');
+        updatedAppointment = await I.haveAttachment('calendar', appointment, 'e2e/media/files/generic/testdocument.odt');
     await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testdocument.rtf');
 
     // 1. Switch to Calendar

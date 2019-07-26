@@ -197,8 +197,8 @@ Scenario('[C8378] Invite a group', async (I, users) => {
     await I.dontHaveGroup(groupName);
     await I.haveGroup(group);
 
-    const folder = await I.haveFolder(folderName, 'infostore', await I.grabDefaultFolder('infostore'), { user: users[0] });
-    I.login('app=io.ox/files&folder=' + folder.data, { user: users[0] });
+    const folder = await I.haveFolder({ title: folderName, module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
+    I.login('app=io.ox/files&folder=' + folder, { user: users[0] });
     I.waitForElement('.file-list-view.complete');
     I.clickToolbar('Share');
     I.waitForText('Invite people');
@@ -213,7 +213,7 @@ Scenario('[C8378] Invite a group', async (I, users) => {
     I.logout();
 
     for (let i = 1; i <= 2; i++) {
-        I.login('app=io.ox/files&folder=' + folder.data, { user: users[i] });
+        I.login('app=io.ox/files&folder=' + folder, { user: users[i] });
         I.waitForElement('.file-list-view.complete');
         I.waitForText(folderName, 2, '.folder-tree');
         I.see(folderName, '.folder-tree');
@@ -364,9 +364,9 @@ Scenario('[C8386] Uninvite a group', async (I, users) => {
     await I.dontHaveGroup(groupName);
     await I.haveGroup(group);
 
-    const folder = await I.haveFolder(folderName, 'infostore', await I.grabDefaultFolder('infostore'), { user: users[0] });
+    const folder = await I.haveFolder({ title: folderName, module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
     session('Alice', () => {
-        I.login('app=io.ox/files&folder=' + folder.data, { user: users[0] });
+        I.login('app=io.ox/files&folder=' + folder, { user: users[0] });
         I.waitForElement('.file-list-view.complete');
         I.clickToolbar('Share');
         I.waitForText('Invite people');
@@ -381,7 +381,7 @@ Scenario('[C8386] Uninvite a group', async (I, users) => {
     });
 
     session('Bob', () => {
-        I.login('app=io.ox/files&folder=' + folder.data, { user: users[1] });
+        I.login('app=io.ox/files&folder=' + folder, { user: users[1] });
         I.waitForElement('.file-list-view.complete');
         I.waitForText(folderName, 2, '.folder-tree');
         I.see(folderName, '.folder-tree');
@@ -423,8 +423,8 @@ Scenario('[C8387] Rename a folder', async (I, users) => {
     // 6. Click the gear button in folder tree (No "Rename" option is available)
     // 7. Rename a folder on the same level as the standard folders with a name of a standard folder.For example: Rename the folder "foo" to "Documents" (Error: "A folder named "Documents" already exists")
     const folderName = 'C8387';
-    const folder = await I.haveFolder(folderName, 'infostore', await I.grabDefaultFolder('infostore'), { user: users[0] });
-    prepare(I, folder.data);
+    const folder = await I.haveFolder({ title: folderName, module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
+    prepare(I, folder);
     I.click('[title="Actions for ' + folderName + '"]');
     I.click('Rename', '.smart-dropdown-container');
     I.waitForText('Rename folder');
@@ -453,8 +453,8 @@ Scenario('[C8388] Delete a folder', async (I, users) => {
     // 4. Confirm your action (Folder is deleted)
     // 5. Choose a standard folder(documents, music, pictures or videos) and click the context menu (No "Delete" option is available)
     const folderName = 'C8388';
-    const folder = await I.haveFolder(folderName, 'infostore', await I.grabDefaultFolder('infostore'), { user: users[0] });
-    prepare(I, folder.data);
+    const folder = await I.haveFolder({ title: folderName, module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
+    prepare(I, folder);
     I.click('[title="Actions for ' + folderName + '"]');
     I.click('Delete', '.smart-dropdown-container');
     I.waitForText('Do you really want to delete folder "' + folderName + '"?');
@@ -483,10 +483,10 @@ Scenario('[C8389] Move a folder', async (I, users) => {
     // 6. Choose a standard folder (documents, music, pictures or videos) (no context menu available in top bar, only in folder tree)
     // 7. Click the gear button in folder tree (No "Move" option is available)
     const myfiles = await I.grabDefaultFolder('infostore');
-    const folder = await I.haveFolder('Subfolder a', 'infostore', myfiles, { user: users[0] });
-    await I.haveFolder('Subfolder b', 'infostore', myfiles, { user: users[0] });
-    await I.haveFolder('SubSubFolder 1', 'infostore', folder.data, { user: users[0] });
-    prepare(I, folder.data);
+    const folder = await I.haveFolder({ title: 'Subfolder a', module: 'infostore', parent: myfiles });
+    await I.haveFolder({ title: 'Subfolder b', module: 'infostore', parent: myfiles });
+    await I.haveFolder({ title: 'SubSubFolder 1', module: 'infostore', parent: folder });
+    prepare(I, folder);
     I.waitForElement(locate('.filename').withText('SubSubFolder 1').inside('.list-view'));
     I.click(locate('.filename').withText('SubSubFolder 1').inside('.list-view'));
     I.clickToolbar('~More actions');
@@ -509,18 +509,18 @@ Scenario('[C8389] Move a folder', async (I, users) => {
     });
 });
 
-Scenario('[C8390] Folder tree', async (I, users) => {
+Scenario('[C8390] Folder tree', async (I) => {
     // Testrail description:
     // A folder tree with some items in it
     // 1. Go to My files (Subfolders including virtual folders are displayed in the drive main view)
     // 2. Open every subfolder
     // 3. Close every subfolder
-    const folder = await I.haveFolder('Folders', 'infostore', await I.grabDefaultFolder('infostore'), { user: users[0] });
-    await I.haveFolder('subfolder_1', 'infostore', folder.data, { user: users[0] });
-    await I.haveFolder('subfolder_2', 'infostore', folder.data, { user: users[0] });
-    const subFolder = await I.haveFolder('subfolder_3', 'infostore', folder.data, { user: users[0] });
-    await I.haveFolder('subsubfolder_1', 'infostore', subFolder.data, { user: users[0] });
-    await I.haveFolder('subsubfolder_2', 'infostore', subFolder.data, { user: users[0] });
+    const folder = await I.haveFolder({ title: 'Folders', module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
+    await I.haveFolder({ title: 'subfolder_1', module: 'infostore', parent: folder });
+    await I.haveFolder({ title: 'subfolder_2', module: 'infostore', parent: folder });
+    const subFolder = await I.haveFolder({ title: 'subfolder_3', module: 'infostore', parent: folder });
+    await I.haveFolder({ title: 'subsubfolder_1', module: 'infostore', parent: subFolder });
+    await I.haveFolder({ title: 'subsubfolder_2', module: 'infostore', parent: subFolder });
     prepare(I);
     I.click('My files', '.folder-tree');
     I.pressKey('Tab');

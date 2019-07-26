@@ -93,7 +93,7 @@ Scenario('[C7407] Move mail from inbox to a sub-folder', async function (I, user
         subject = 'C7407';
 
     await H.fillInbox(I, user, [subject]);
-    await I.haveFolder(folder, 'mail', 'default0/INBOX');
+    await I.haveFolder({ title: folder, module: 'mail', parent: 'default0/INBOX' });
 
     I.login('app=io.ox/mail');
     I.waitForVisible('.io-ox-mail-window');
@@ -117,7 +117,7 @@ Scenario('[C7408] Move several mails from inbox to a sub-folder', async function
 
     I.haveSetting('io.ox/mail//showCheckboxes', true);
     await H.fillInbox(I, user, subjects);
-    await I.haveFolder(folder, 'mail', 'default0/INBOX');
+    await I.haveFolder({ title: folder, module: 'mail', parent: 'default0/INBOX' });
 
     I.login('app=io.ox/mail');
     I.waitForVisible('.io-ox-mail-window');
@@ -140,7 +140,7 @@ Scenario('[C7409] Copy mail from inbox to a sub-folder', async function (I, user
         subject = 'C7409';
 
     await H.fillInbox(I, user, [subject]);
-    await I.haveFolder(folder, 'mail', 'default0/INBOX');
+    await I.haveFolder({ title: folder, module: 'mail', parent: 'default0/INBOX' });
 
     I.login('app=io.ox/mail');
     I.waitForVisible('.io-ox-mail-window');
@@ -164,7 +164,7 @@ Scenario('[C7410] Copy several mails from inbox to a sub-folder', async function
 
     I.haveSetting('io.ox/mail//showCheckboxes', true);
     await H.fillInbox(I, user, subjects);
-    await I.haveFolder(folder, 'mail', 'default0/INBOX');
+    await I.haveFolder({ title: folder, module: 'mail', parent: 'default0/INBOX' });
 
     I.login('app=io.ox/mail');
     I.waitForVisible('.io-ox-mail-window');
