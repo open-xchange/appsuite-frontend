@@ -116,9 +116,13 @@ define('io.ox/help/main', [
                 // mark the iframes html as embedded class and modal to override the styles in the help less files
                 var classesToAdd = opt.modal ? 'embedded in-modal' : 'embedded',
                     contents = $('.inline-help-iframe').contents(),
-                    firstTabbable = contents.find('.navbar-nav a:eq(1)'),
-                    lastTabbable = contents.find('body a:last'),
-                    caps = capabilities.getFlat();
+                    firstTabbable = contents.find('.oxhelp-content a:first'),
+                    lastTabbable = contents.find('.navbar-nav a:eq(2)'),
+                    caps = capabilities.getFlat(),
+                    navigation = contents.find('.oxhelp-navigation-top'),
+                    helpContent = contents.find('.oxhelp-content');
+
+                navigation.before(helpContent);
 
                 _(caps.enabled).each(function (cap) {
                     classesToAdd += ' cap-' + cap;
