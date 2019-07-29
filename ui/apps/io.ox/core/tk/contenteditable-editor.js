@@ -369,10 +369,8 @@ define('io.ox/core/tk/contenteditable-editor', [
         );
 
         opt = _.extend({
-            toolbar1: '*undo *redo | bold italic underline | bullist numlist outdent indent',
-            advanced: '*styleselect | *fontselect fontsizeselect | link image *emoji | forecolor backcolor',
-            toolbar2: '',
-            toolbar3: '',
+            toolbar: '*undo *redo | bold italic underline | bullist numlist outdent indent',
+            advanced: ' *emoji | forecolor backcolor | *fontselect fontsizeselect | link image *styleselect',
             plugins: 'autolink oximage emoji oxpaste oxdrop link paste  lists code',
             theme: 'silver',
             imageLoader: null // is required to upload images. should have upload(file) and getUrl(response) methods
@@ -380,24 +378,20 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         editor.addClass(opt.class);
 
-        opt.toolbar1 += ' | ' + opt.advanced;
+        opt.toolbar += ' | ' + opt.advanced;
 
         // consider custom configurations
-        opt.toolbar1 = settings.get('tinyMCE/theme_advanced_buttons1', opt.toolbar1);
-        opt.toolbar2 = settings.get('tinyMCE/theme_advanced_buttons2', opt.toolbar2);
-        opt.toolbar3 = settings.get('tinyMCE/theme_advanced_buttons3', opt.toolbar3);
+        opt.toolbar = settings.get('tinyMCE/theme_advanced_buttons1', opt.toolbar);
 
         // remove unsupported stuff
-        if (!capabilities.has('emoji')) {
-            opt.toolbar1 = opt.toolbar1.replace(/( \| )?\*?emoji( \| )?/g, ' | ');
-            opt.toolbar2 = opt.toolbar2.replace(/( \| )?\*?emoji( \| )?/g, ' | ');
-            opt.toolbar3 = opt.toolbar3.replace(/( \| )?\*?emoji( \| )?/g, ' | ');
+        if (capabilities.has('emoji')) {
+            opt.toolbar = opt.toolbar.replace(/( \| )?\*?emoji( \| )?/g, ' | ');
             opt.plugins = opt.plugins.replace(/emoji/g, '').trim();
         }
 
         // store a copy of original toolbar to adjust toolbar in DOM later
-        var originalToolbarConfig = opt.toolbar1.replace(/\s*\|\s*/g, ' ');
-        opt.toolbar1 = opt.toolbar1.replace(/\*/g, '');
+        var originalToolbarConfig = opt.toolbar.replace(/\s*\|\s*/g, ' ');
+        opt.toolbar = opt.toolbar.replace(/\*/g, '');
 
         var fixed_toolbar = '.contenteditable-editor[data-editor-id="' + editorId + '"] > .tox-tinymce > .tox-editor-container > .tox-toolbar-overlord > .tox-toolbar';
 
@@ -411,15 +405,14 @@ define('io.ox/core/tk/contenteditable-editor', [
             autoresize_bottom_margin: 0,
             menubar: false,
             statusbar: false,
+            toolbar_drawer: 'floating',
 
             skin: opt.skin,
 
             body_class: 'ox-mce',
             content_style: contentCss,
 
-            toolbar1: opt.toolbar1,
-            toolbar2: opt.toolbar2,
-            toolbar3: opt.toolbar3,
+            toolbar: opt.toolbar,
 
             relative_urls: false,
             remove_script_host: false,
@@ -518,6 +511,11 @@ define('io.ox/core/tk/contenteditable-editor', [
                 return match.replace(/\sdata-mce-\S+=("[^"]*"|'[^']*')/g, '');
             });
         };
+
+        function closeFloatingToolbar() {
+            var button = el.find('.tox-tbtn.tox-tbtn--enabled[aria-label="More..."]');
+            if (button.length) button.click();
+        }
 
         function resizeEditor() {
 
@@ -822,12 +820,14 @@ define('io.ox/core/tk/contenteditable-editor', [
             $(fixed_toolbar).css('display', '');
             window.toolbar = $(fixed_toolbar);
             $(window).on('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', resizeEditorDebounced);
+            $(window).on('changefloatingstyle.tinymce', closeFloatingToolbar);
             $(window).trigger('resize');
         };
 
         this.hide = function () {
             $el.hide();
             $(window).off('resize.tinymce xorientationchange.tinymce changefloatingstyle.tinymce', resizeEditorDebounced);
+            $(window).off('changefloatingstyle.tinymce', closeFloatingToolbar);
         };
 
         (function () {
