@@ -18,6 +18,8 @@ define('io.ox/core/api/tab', [
     'io.ox/core/tab/communication'
 ], function (util, tabHandling, tabSession, tabCommunication) {
 
+    /* global blankshield:true */
+
     'use strict';
 
     // PRIVATE --------------------------------------------------
@@ -121,6 +123,30 @@ define('io.ox/core/api/tab', [
         // Opens a new tab
         openNewTab: function (url, windowNameObject) {
             return tabHandling.openTab(url, windowNameObject);
+        },
+
+        // Open a blank new tab window
+        /**
+         * Open a blank new tab window
+         *
+         * @param url
+         *  The url which should be opened in the new blank tab
+         *
+         * @returns {Window}
+         *  The new browser tab window
+         */
+        openBlank: function (url) {
+            var newWindow;
+
+            if (_.browser.chrome >= 72) {
+                newWindow = window.open('', '_blank');
+                newWindow.opener = null;
+                newWindow.location = url;
+            } else {
+                newWindow = blankshield.open(url, '_blank');
+            }
+
+            return newWindow;
         },
 
         // Disable the TabAPI
