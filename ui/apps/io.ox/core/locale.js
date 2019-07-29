@@ -38,6 +38,51 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
         return moment.prototype.format.apply(this, [inputstring]);
     };
 
+    // eslint-disable-next-line no-useless-escape
+    var regex = /(G+|y+|Y+|M+|w+|W+|D+|d+|F+|E+|u+|a+|H+|k+|K+|h+|m+|s+|S+|z+|Z+|v+|V+)|\[((?:[^\[\]]|\[\])+)\]|(\[\])/g;
+
+    // use CLDR Data to get interval formats
+    moment.fn.formatInterval = function (end, format) {
+        var start = this,
+            intervals = getCLDRData().dateTimeFormats.intervalFormats;
+
+        // some backwards compatibility (for custom code etc)
+        if (format === 'time') format = 'Hm';
+        if (!format || format === 'date') format = 'yMMMd';
+
+        // no format found, use fallback
+        if (!intervals[format]) return intervals.intervalFormatFallback.replace('{0}', start.format('l')).replace('{1}', end.format('l'));
+
+        // find biggest difference
+        var keys = _(intervals[format]).keys(),
+            finalFormat = intervals[format][keys[0]];
+
+        for (var i = 0; i < keys.length; i++) {
+            if (!start.isSame(end, keys[i])) {
+                finalFormat = intervals[format][keys[i]];
+            } else break;
+        }
+
+        console.log(finalFormat);
+        // convert to moment
+        finalFormat = meta.translateCLDRToMoment(finalFormat);
+        console.log(finalFormat);
+        // replace format string with actual times
+        var fields = {}, match;
+        regex.lastIndex = 0;
+        while ((match = regex.exec(finalFormat))) {
+            if (!match[1]) continue;
+            var letter = match[1].charAt(0);
+            if (fields[letter]) break;
+            fields[letter] = true;
+        }
+
+        if (regex.lastIndex) {
+            return this.format(finalFormat.slice(0, match.index)) + end.format(finalFormat.slice(match.index));
+        }
+        return this.format(finalFormat);
+    };
+
     function deriveLocaleData(data) {
         // derive formats for Java
         var result = _.extend({}, data), dateLong, timeLong;

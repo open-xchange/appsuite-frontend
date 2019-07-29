@@ -214,17 +214,20 @@ define('io.ox/core/locale/meta', function () {
     // CLDR/Java -> moment
     // (see http://cldr.unicode.org/translation/date-time-patterns)
     function translateCLDRToMoment(format) {
-        return format
-            .replace(/d/g, 'D')
+        format = format.replace(/d/g, 'D')
             .replace(/E/g, 'd')
             .replace(/y/g, 'Y');
+        // moment uses [] to mark strings inside the formats, cldr uses ''
+        return _(format.split('\'')).reduce(function (str, part, index) { return str + (index % 2 === 1 ? '[' : ']') + part; });
     }
 
     function translateMomentToCLDR(format) {
         return format
             .replace(/d/g, 'E')
             .replace(/D/g, 'd')
-            .replace(/Y/g, 'y');
+            .replace(/Y/g, 'y')
+            // moment uses [] to mark strings inside the formats, cldr uses ''
+            .replace(/(\[|\])/, '\'');
     }
 
 
