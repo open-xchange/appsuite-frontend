@@ -207,7 +207,8 @@ define('io.ox/mail/common-extensions', [
                         .data({ email: email, email1: email })
                         .append($('<span class="sr-only">').text(gt('From:')))
                         .append($('<span class="person-link person-from ellipsis">').text(name))
-                        .addClass((name === email && status) ? 'authenticity-sender ' + status : '')
+                        .addClass((name === email && status) ? 'authenticity-sender ' + status : ''),
+                       '<div class="spacer">'
 
                    );
 

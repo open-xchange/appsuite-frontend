@@ -573,6 +573,7 @@ define('io.ox/mail/detail/view', [
         events: {
             'keydown': 'onToggle',
             'click .detail-view-header': 'onToggle',
+            'click .text-preview': 'onToggle',
             'click .toggle-mail-body-btn': 'onToggle',
             'click a[data-action="retry"]': 'onRetry'
         },

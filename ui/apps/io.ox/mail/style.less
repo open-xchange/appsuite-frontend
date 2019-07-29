@@ -369,16 +369,17 @@ html.macos, html.ios {
     }
 
     .from {
+        display: flex;
 
         > a {
             display: flex;
             align-content: flex-start;
+            .ellipsis();
         }
 
         .person-link {
             .ellipsis();
             min-width: 0;
-
             &.person-from {
                 font-weight: bold;
                 color: black;
@@ -388,14 +389,16 @@ html.macos, html.ios {
         .address {
             &:before { content: "\00a0"; }
             color: #767676;
+            .smartphone & { .ellipsis(); }
         }
+
         .authenticity {
             margin-right: 8px;
         }
 
-        .delimiter {
-            margin-right: 8px;
-            & .smartphone { display: none }
+        .spacer {
+            flex: 1;
+            .smartphone & { display: none }
         }
     }
 
