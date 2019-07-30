@@ -185,8 +185,10 @@ define('io.ox/core/folder/util', [
     function canMove(folder, target) {
 
         // if the target folder is not known, check effectively reduces to 'remove:folder'
-        // except for external folders which can be removed but never "moved" elsewhere
-        if (_.isEmpty(target) && !is('external', folder)) return can('remove:folder', folder);
+        // except for external _root_ folders which can be removed but never "moved" elsewhere
+        var isExternalRoot = is('external', folder) && folder.virtual_parents[0];
+        if (_.isEmpty(target) && !isExternalRoot) return can('remove:folder', folder);
+
         // new target?
         if (folder.folder_id === target.id) return false;
         // Prevent moving into folder itself
