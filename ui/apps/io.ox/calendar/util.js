@@ -267,7 +267,7 @@ define('io.ox/calendar/util', [
                     //#, c-format
                     return gt('%1$s to %2$s', startDate.format(fmtstr), endDate.format(fmtstr));
                 }
-                return startDate.formatInterval(endDate, fmtstr);
+                return startDate.formatInterval(endDate, 'yMMMEd');
             }
             return '';
         },

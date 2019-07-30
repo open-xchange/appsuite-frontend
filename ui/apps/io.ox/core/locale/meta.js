@@ -215,7 +215,8 @@ define('io.ox/core/locale/meta', function () {
     // (see http://cldr.unicode.org/translation/date-time-patterns)
     function translateCLDRToMoment(format) {
         format = format.replace(/d/g, 'D')
-            .replace(/E/g, 'd')
+             .replace(/EEEE/g, 'dddd')
+            .replace(/E/g, 'ddd')
             .replace(/y/g, 'Y');
         // moment uses [] to mark strings inside the formats, cldr uses ''
         return _(format.split('\'')).reduce(function (str, part, index) { return str + (index % 2 === 1 ? '[' : ']') + part; });
@@ -223,7 +224,8 @@ define('io.ox/core/locale/meta', function () {
 
     function translateMomentToCLDR(format) {
         return format
-            .replace(/d/g, 'E')
+            .replace(/dddd/g, 'EEEE')
+            .replace(/(ddd|dd|d)/g, 'E')
             .replace(/D/g, 'd')
             .replace(/Y/g, 'y')
             // moment uses [] to mark strings inside the formats, cldr uses ''

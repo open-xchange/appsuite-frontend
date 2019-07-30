@@ -63,10 +63,9 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
             } else break;
         }
 
-        console.log(finalFormat);
         // convert to moment
         finalFormat = meta.translateCLDRToMoment(finalFormat);
-        console.log(finalFormat);
+
         // replace format string with actual times
         var fields = {}, match;
         regex.lastIndex = 0;
