@@ -46,12 +46,13 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
         var start = this,
             intervals = getCLDRData().dateTimeFormats.intervalFormats;
 
-        // some backwards compatibility (for custom code etc)
-        if (format === 'time') format = 'Hm';
+        // use old shorthands, no need to change our whole code
+        // use 12h/24h format correctly
+        if (format === 'time') format = getCLDRData().timeFormats.short.indexOf('a') === -1 ? 'Hm' : 'hm';
         if (!format || format === 'date') format = 'yMMMd';
 
         // no format found, use fallback
-        if (!intervals[format]) return intervals.intervalFormatFallback.replace('{0}', start.format('l')).replace('{1}', end.format('l'));
+        if (!intervals[format]) return intervals.intervalFormatFallback.replace('{0}', start.format(format)).replace('{1}', end.format(format));
 
         // find biggest difference
         var keys = _(intervals[format]).keys(),
