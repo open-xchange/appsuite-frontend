@@ -35,7 +35,8 @@ define('io.ox/calendar/detail/main', [
                             'aria-label': gt('Appointment Details')
                         }).append(detailView.draw(data)));
 
-                        api.one('delete:' + _.ecid(data), function () {
+                        // make sure this works for single events and whole series
+                        api.one('delete:' + _.ecid(data) + (data.recurrence_position === undefined ? '' : ' delete:' + (data.folder || data.folder_id) + ':' + data.id), function () {
                             app.quit();
                         });
                     },

@@ -15,35 +15,21 @@ define('io.ox/contacts/print-details', [
     'io.ox/core/print',
     'io.ox/contacts/api',
     'io.ox/contacts/util',
+    'io.ox/core/locale/postal-address',
     'settings!io.ox/contacts',
     'gettext!io.ox/contacts'
-], function (print, api, util, settings, gt) {
+], function (print, api, util, postalAddress, settings, gt) {
 
     'use strict';
-
-    function getCity(data, type) {
-        data = _(['street', 'postal_code', 'city', 'state', 'country']).map(function (field) {
-            return data[field + '_' + type] || '';
-        });
-
-        //#. Format of addresses
-        //#. %1$s is the street
-        //#. %2$s is the postal code
-        //#. %3$s is the city
-        //#. %4$s is the state
-        //#. %5$s is the country
-        var text = gt('%1$s\n%2$s %3$s\n%4$s\n%5$s', data[0], data[1], data[2], data[3], data[4]).trim();
-        return $.trim(text);
-    }
 
     function process(data) {
         return {
             original: data,
             name: util.getFullName(data) || '-',
             birthday: _.isNumber(data.birthday) ? util.getBirthday(data.birthday) : undefined,
-            businessAddress: getCity(data, 'business'),
-            homeAddress: getCity(data, 'home'),
-            otherAdress: getCity(data, 'other')
+            businessAddress: postalAddress.format(data, 'business'),
+            homeAddress: postalAddress.format(data, 'home'),
+            otherAdress: postalAddress.format(data, 'other')
         };
     }
 

@@ -1,6 +1,6 @@
 Name:           open-xchange-appsuite-saml
 Version:        @OXVERSION@
-%define         ox_release 53
+%define         ox_release 54
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Francisco Laguna <francisco.laguna@open-xchange.com>
@@ -54,6 +54,8 @@ if [ -x %{update} ]; then %{update} --later; fi
 /opt/open-xchange/appsuite
 
 %changelog
+* Tue Jul 23 2019 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2019-07-29 (5339)
 * Tue Jun 04 2019 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2019-06-11 (5275)
 * Mon May 06 2019 Markus Wagner <markus.wagner@open-xchange.com>

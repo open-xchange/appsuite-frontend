@@ -493,7 +493,12 @@
     .detail-view-row {
         position: relative;
 
-        .recipients { float: left; }
+        .recipients {
+            float: left;
+            max-width: 100%;
+            padding-right: 16px;
+            .ellipsis();
+        }
         .priority { font-size: 14px; }
         .flag-picker {
             text-align: right;
