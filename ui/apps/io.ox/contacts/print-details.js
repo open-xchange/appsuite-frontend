@@ -15,28 +15,21 @@ define('io.ox/contacts/print-details', [
     'io.ox/core/print',
     'io.ox/contacts/api',
     'io.ox/contacts/util',
+    'io.ox/core/locale/postal-address',
     'settings!io.ox/contacts',
     'gettext!io.ox/contacts'
-], function (print, api, util, settings, gt) {
+], function (print, api, util, postalAddress, settings, gt) {
 
     'use strict';
-
-    function getCity(data, type) {
-        var zipCode = data['postal_code_' + type],
-            city = data['city_' + type];
-
-        if (!zipCode && !city) return;
-        return _([zipCode, city]).compact().join(' ');
-    }
 
     function process(data) {
         return {
             original: data,
             name: util.getFullName(data) || '-',
             birthday: _.isNumber(data.birthday) ? util.getBirthday(data.birthday) : undefined,
-            'city_business': getCity(data, 'business'),
-            'city_home': getCity(data, 'home'),
-            'city_other': getCity(data, 'other')
+            businessAddress: postalAddress.format(data, 'business'),
+            homeAddress: postalAddress.format(data, 'home'),
+            otherAdress: postalAddress.format(data, 'other')
         };
     }
 

@@ -120,37 +120,22 @@
                     </div>
                     <div class="contact-details">
                         <div>
-                            <% if (element.original.street_business || element.city_business || element.original.state_business || element.original.country_business) { %>
+                            <% if (element.businessAddress) { %>
                             <fieldset>
                                 <legend><%- i18n.businessAddress %></legend>
-                                <address>
-                                    <% if (element.original.street_business) { %><div><%- element.original.street_business %></div><% } %>
-                                    <% if (element.city_business) { %><div><%- element.city_business %></div><% } %>
-                                    <% if (element.original.state_business) { %><div><%- element.original.state_business %></div><% } %>
-                                    <% if (element.original.country_business) { %><div><%- element.original.country_business %></div><% } %>
-                                </address>
+                                <address><%- element.businessAddress %></address>
                             </fieldset>
                             <% } %>
-                            <% if (element.original.street_home || element.city_home || element.original.state_home || element.original.country_home) { %>
+                            <% if (element.homeAddress) { %>
                             <fieldset>
                                 <legend><%- i18n.homeAddress %></legend>
-                                <address>
-                                    <% if (element.original.street_home) { %><div><%- element.original.street_home %></div><% } %>
-                                    <% if (element.city_home) { %><div><%- element.city_home %></div><% } %>
-                                    <% if (element.original.state_home) { %><div><%- element.original.state_home %></div><% } %>
-                                    <% if (element.original.country_home) { %><div><%- element.original.country_home %></div><% } %>
-                                </address>
+                                <address><%- element.homeAddress %></address>
                             </fieldset>
                             <% } %>
-                            <% if (element.original.street_other || element.city_other || element.original.state_other || element.original.country_other) { %>
+                            <% if (element.otherAddress) { %>
                             <fieldset>
                                 <legend><%- i18n.otherAddress %></legend>
-                                <address>
-                                    <% if (element.original.street_other) { %><div><%- element.original.street_other %></div><% } %>
-                                    <% if (element.city_other) { %><div><%- element.city_other %></div><% } %>
-                                    <% if (element.original.state_other) { %><div><%- element.original.state_other %></div><% } %>
-                                    <% if (element.original.country_other) { %><div><%- element.original.country_other %></div><% } %>
-                                </address>
+                                <address><%- element.otherAdress %></address>
                             </fieldset>
                             <% } %>
                         </div>
@@ -293,31 +278,31 @@
         </script>
 
         <script type="text/template" class="calendar-month-view">
-            <h1 class="calendar-title"><%= meta.title %></h1>
+            <h1 class="calendar-title"><%- meta.title %></h1>
         <% _.each(data, function (month) { %>
             <table class="month-view">
                 <thead>
                     <tr>
                     <% _.each(meta.labels, function (label) { %>
-                        <th><%= label %></th>
+                        <th><%- label %></th>
                     <% }); %>
                     <tr>
                 </thead>
             <% _.each(month, function (week) { %>
                 <tr>
                 <% _.each(week.days, function (day) { %>
-                    <td class="<%= day.className || '' %>">
+                    <td class="<%- day.className || '' %>">
                         <ul>
                         <% _.each(day.events, function (event) { %>
-                            <li style="color: <%= event.color %>; background-color: <%= event.backgroundColor %>;">
+                            <li style="color: <%- event.color %>; background-color: <%- event.backgroundColor %>;">
                             <% if (event.time) { %>
-                                <span class="time"><%= event.time %></span>
+                                <span class="time"><%- event.time %></span>
                             <% } %>
-                                <span><%= event.title %></span>
+                                <span><%- event.title %></span>
                             </li>
                         <% }); %>
                         </ul>
-                        <span class="date"><%= day.date %></span>
+                        <span class="date"><%- day.date %></span>
                     </td>
                 <% }); %>
                 </tr>
@@ -327,14 +312,14 @@
         </script>
 
         <script type="text/template" class="calendar-week-view">
-            <h1 class="calendar-title"><%= meta.title %></h1>
+            <h1 class="calendar-title"><%- meta.title %></h1>
         <% data.forEach(function (week) { %>
             <table class="week-view">
                 <thead>
                     <tr>
                         <th></th>
                     <% _.each(meta.weekdays, function (label) { %>
-                        <th><%= label %></th>
+                        <th><%- label %></th>
                     <% }); %>
                     <tr>
                 </thead>
@@ -344,8 +329,8 @@
                     <% week.forEach(function (day) { %>
                         <td class="allday-slot">
                         <% (day.slots['allDay'] || []).forEach(function (event) { %>
-                            <div class="event"  style="color: <%= event.color %>; background-color: <%= event.backgroundColor %>;">
-                                <%= event.title %>
+                            <div class="event"  style="color: <%- event.color %>; background-color: <%- event.backgroundColor %>;">
+                                <%- event.title %>
                             </div>
                         <% }) %>
                         </td>
@@ -353,14 +338,14 @@
                     <tr>
                 <% _.range(week[0].start, week[0].end).forEach(function (index) { %>
                     <tr>
-                        <td class="label"><span><%= meta.timeLabels[index].label %></span></td>
+                        <td class="label"><span><%- meta.timeLabels[index].label %></span></td>
                     <% week.forEach(function (day) { %>
                         <td class="slot">
                             <div class="slot-border"></div>
                         <% (day.slots[index] || []).forEach(function (event) { %>
-                            <div class="event absolute" style="top: <%= event.top %>px; height: <%= event.height %>px; left: <%= event.left %>%; width: <%= event.width %>%; color: <%= event.color %>; background-color: <%= event.backgroundColor %>;">
-                                <span class="time"><%= event.time %></span>
-                                <span><%= event.title %></span>
+                            <div class="event absolute" style="top: <%- event.top %>px; height: <%- event.height %>px; left: <%- event.left %>%; width: <%- event.width %>%; color: <%- event.color %>; background-color: <%- event.backgroundColor %>;">
+                                <span class="time"><%- event.time %></span>
+                                <span><%- event.title %></span>
                             </div>
                         <% }) %>
                         </td>
