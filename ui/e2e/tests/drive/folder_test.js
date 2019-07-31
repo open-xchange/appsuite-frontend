@@ -210,6 +210,7 @@ Scenario('[C8378] Invite a group', async (I, users) => {
     I.pressKey('Enter');
     I.waitForText('Group', 5);
     I.click('Share', '.modal-dialog');
+    I.waitToHide('.modal');
     I.logout();
 
     for (let i = 1; i <= 2; i++) {
@@ -522,8 +523,9 @@ Scenario('[C8390] Folder tree', async (I) => {
     await I.haveFolder({ title: 'subsubfolder_1', module: 'infostore', parent: subFolder });
     await I.haveFolder({ title: 'subsubfolder_2', module: 'infostore', parent: subFolder });
     prepare(I);
-    I.click('My files', '.folder-tree');
-    I.pressKey('Tab');
+    const myfiles = locate('.folder-tree .folder-label').withText('My files');
+    I.waitForElement(myfiles);
+    I.click(myfiles);
     I.pressKey('ArrowRight');
     I.see('Documents', '.folder-tree');
     I.see('Music', '.folder-tree');
