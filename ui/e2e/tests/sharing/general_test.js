@@ -25,7 +25,8 @@ After(async (users) => {
 
 Scenario('[C45021] Generate simple link for sharing', async function (I) {
     I.login('app=io.ox/files');
-    I.click('My files', '.folder-tree');
+    const myfiles = locate('.folder-tree .folder-label').withText('My files');
+    I.waitForElement(myfiles);
     I.selectFolder('Music');
     I.clickToolbar('Share');
     I.click('Create sharing link');
@@ -41,8 +42,8 @@ Scenario('[C45021] Generate simple link for sharing', async function (I) {
 
 Scenario('[C252159] Generate link for sharing including subfolders @shaky', async function (I) {
     I.login('app=io.ox/files');
-    I.waitForText('My files');
-    I.click('My files', '.folder-tree');
+    const myfiles = locate('.folder-tree .folder-label').withText('My files');
+    I.waitForElement(myfiles);
     I.selectFolder('Music');
     I.clickToolbar('New');
     I.click('Add new folder');
@@ -72,7 +73,8 @@ Scenario('[C252159] Generate link for sharing including subfolders @shaky', asyn
 
 Scenario('[C45022] Generate simple link for sharing with password', async function (I) {
     I.login('app=io.ox/files');
-    I.click('My files', '.folder-tree');
+    const myfiles = locate('.folder-tree .folder-label').withText('My files');
+    I.waitForElement(myfiles);
     I.selectFolder('Music');
     I.clickToolbar('Share');
     I.click('Create sharing link');
@@ -93,8 +95,8 @@ Scenario('[C45022] Generate simple link for sharing with password', async functi
 
 Scenario('[C83385] Copy to clipboard @shaky', async function (I) {
     I.login('app=io.ox/files');
-    I.waitForText('My files');
-    I.click('My files', '.folder-tree');
+    const myfiles = locate('.folder-tree .folder-label').withText('My files');
+    I.waitForElement(myfiles);
     I.selectFolder('Music');
     I.clickToolbar('Share');
     I.click('Create sharing link');
