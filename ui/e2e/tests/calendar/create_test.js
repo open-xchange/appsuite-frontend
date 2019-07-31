@@ -220,28 +220,21 @@ Scenario.skip('[C7412] Create private appointment @contentReview @bug', async fu
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
 
-    const testrailID = 'C7412';
-    const timestamp = Math.round(+new Date() / 1000);
-    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
-    const folder = {
-        module: 'event',
-        subscribed: 1,
-        title: testrailID,
-        permissions: [
-            {
-                bits: 403710016,
-                entity: users[0].userdata.id,
-                group: false
-            }, {
-                bits: 4227332,
-                entity: users[1].userdata.id,
-                group: false
-            }
-        ]
-    };
-    const sharedFolderID = await I.createFolder(folder, 'cal://0/' + appointmentDefaultFolder, { user: users[0] });
+    const title = 'C7412',
+        timestamp = Math.round(+new Date() / 1000),
+        appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] }),
+        permissions = [{
+            bits: 403710016,
+            entity: users[0].userdata.id,
+            group: false
+        }, {
+            bits: 4227332,
+            entity: users[1].userdata.id,
+            group: false
+        }];
+    const sharedFolderID = await I.haveFolder({ title, permissions, module: 'event', parent: 'cal://0/' + appointmentDefaultFolder }, { user: users[0] });
     await I.haveAppointment({
-        folder: sharedFolderID.data.data,
+        folder: sharedFolderID,
         summary: timestamp,
         location: timestamp,
         description: timestamp,
@@ -259,8 +252,8 @@ Scenario.skip('[C7412] Create private appointment @contentReview @bug', async fu
 
     I.login('app=io.ox/calendar', { user: users[1] });
     I.doubleClick('~Shared calendars');
-    I.waitForVisible(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${testrailID}"]`);
-    I.doubleClick(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${testrailID}"]`);
+    I.waitForVisible(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${title}"]`);
+    I.doubleClick(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: ${title}"]`);
     ['Workweek', 'Week', 'Day', 'Month', 'List'].forEach((view) => {
         I.clickToolbar('View');
         I.click(view);
@@ -1655,11 +1648,12 @@ Scenario.skip('[C274651] Create secret appointment @contentReview', async functi
                 entity: users[1].userdata.id,
                 group: false
             }
-        ]
+        ],
+        parent: 'cal://0/' + appointmentDefaultFolder
     };
-    const sharedFolderID = await I.createFolder(folder, 'cal://0/' + appointmentDefaultFolder, { user: users[0] });
+    const sharedFolderID = await I.haveFolder(folder, { user: users[0] });
     await I.haveAppointment({
-        folder: sharedFolderID.data.data,
+        folder: sharedFolderID,
         endDate: {
             tzid: 'Europe/Berlin',
             value: moment().startOf('isoWeek').add(10, 'hours').format('YYYYMMDD[T]HHmm00')
@@ -1871,28 +1865,13 @@ Scenario('[C7447] Private appointment with participants', async function (I, use
 });
 
 Scenario('[C7448] Cannot create private appointment', async function (I, users) {
-    let testrailID = 'C7448';
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
-    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
-    const folder = {
-        module: 'event',
-        subscribed: 1,
-        title: testrailID,
-        permissions: [
-            {
-                bits: 403710016,
-                entity: users[0].userdata.id,
-                group: false
-            }, {
-                bits: 4227332,
-                entity: users[1].userdata.id,
-                group: false
-            }
-        ]
-    };
-    I.createFolder(folder, 'cal://0/' + appointmentDefaultFolder, { user: users[0] });
+    const parent = `cal://0/${await I.grabDefaultFolder('calendar', { user: users[0] })}`,
+        title = 'C7448',
+        permissions = [{ entity: users[0].userdata.id, bits: 403710016, group: false }, { user: users[1], access: 'author' }];
+    await I.haveFolder({ title, permissions, module: 'event', parent });
     I.login('app=io.ox/calendar', { user: users[1] });
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
     I.clickToolbar('Today');
@@ -1903,7 +1882,7 @@ Scenario('[C7448] Cannot create private appointment', async function (I, users) 
     I.waitForDetached('#io-ox-refresh-icon .fa-spin');
 
     I.waitForText('Shared calendars');
-    I.selectFolder(testrailID);
+    I.selectFolder(title);
     I.clickToolbar('New');
     I.waitForText('Appointments in shared calendars');
     I.click('On behalf of the owner');
@@ -1911,7 +1890,7 @@ Scenario('[C7448] Cannot create private appointment', async function (I, users) 
     expect(await I.grabNumberOfVisibleElements('option[value="CONFIDENTIAL"]')).to.equal(0);
 });
 
-Scenario('[C234658] Create appointments and show this in cumulatively view @shaky', async function (I, users) {
+Scenario('[C234658] Create appointments and show this in cumulatively view @shaky', async function (I) {
     const
         Moment = require('moment'),
         MomentRange = require('moment-range'),
@@ -1921,17 +1900,12 @@ Scenario('[C234658] Create appointments and show this in cumulatively view @shak
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
     I.haveSetting('io.ox/calendar//selectedFolders', {});
-    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
+    const appointmentDefaultFolder = await I.grabDefaultFolder('calendar');
     const numberOfRuns = 2;
     for (let i = 0; i < numberOfRuns; i++) {
-        var folder = {
-            module: 'event',
-            subscribed: 1,
-            title: testrailID + ' - ' + i
-        };
-        var folderID = await I.createFolder(folder, 'cal://0/' + appointmentDefaultFolder, { user: users[0] });
+        const folder = await I.haveFolder({ title: `${testrailID} - ${i}`, module: 'event', parent: 'cal://0/' + appointmentDefaultFolder });
         var appointment = {
-            folder: folderID.data.data,
+            folder,
             summary: testrailID,
             location: testrailID,
             description: testrailID,
@@ -1944,15 +1918,15 @@ Scenario('[C234658] Create appointments and show this in cumulatively view @shak
                 value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00')
             }
         };
-        await I.haveAppointment(appointment, { user: users[0] });
+        await I.haveAppointment(appointment);
     }
-    I.login('app=io.ox/calendar', { user: users[0] });
+    I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
     I.clickToolbar('Today');
     I.seeNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]', 0);
-    I.click('[data-id="virtual/flat/event/private"] [title="' + testrailID + ' - 0' + '"] .color-label');
+    I.click(`[data-id="virtual/flat/event/private"] [title="${testrailID} - 0"] .color-label`);
     I.waitNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]', 1);
-    I.click('[data-id="virtual/flat/event/private"] [title="' + testrailID + ' - 1' + '"] .color-label');
+    I.click(`[data-id="virtual/flat/event/private"] [title="${testrailID} - 1"] .color-label`);
     I.waitNumberOfVisibleElements('.appointment-container [aria-label="C234658, C234658"]', 2);
 });
 

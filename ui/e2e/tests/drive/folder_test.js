@@ -21,7 +21,7 @@ function prepare(I, folder) {
 }
 
 // Returns permission bitmasks for shared folder (user 1 is owner, user 2 is viewer)
-function sharedFolder(folderName, users) {
+function sharedFolder(folderName, parent, users) {
     return {
         module: 'infostore',
         subscribed: 1,
@@ -36,7 +36,8 @@ function sharedFolder(folderName, users) {
                 entity: users[1].userdata.id,
                 group: false
             }
-        ]
+        ],
+        parent
     };
 }
 
@@ -232,11 +233,8 @@ Scenario('[C8379] Add a file', async (I, users) => {
     // No rights to upload a file, "Viewer" role
     // 1. Try to upload a file (Denied of missing permission)
 
-    const folderName = 'C8379';
-    const folder = sharedFolder(folderName, users);
-    var defaultFolder = await I.grabDefaultFolder('infostore');
-    var newFolder = await I.createFolder(folder, defaultFolder, { user: users[0] });
-    I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[1] });
+    var folder = await I.haveFolder(sharedFolder('C8379', await I.grabDefaultFolder('infostore'), users), { user: users[0] });
+    I.login(`app=io.ox/files&folder=${folder}`, { user: users[1] });
     I.waitForElement('.file-list-view.complete');
     I.dontSee('New', '.classic-toolbar');
 });
@@ -247,10 +245,9 @@ Scenario('[C8381] Lock a file', async (I, users) => {
     // 1. Choose a file (Popup window)
     // 2. "More"-->"Lock" (File is locked for you)
     // 3. Verify with other user
-    var defaultFolder = await I.grabDefaultFolder('infostore');
-    var newFolder = await I.createFolder(sharedFolder('C8381', users), defaultFolder, { user: users[0] });
-    await I.haveFile(newFolder.data.data, 'e2e/media/files/0kb/document.txt');
-    I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[0] });
+    var folder = await I.haveFolder(sharedFolder('C8381', await I.grabDefaultFolder('infostore'), users), { user: users[0] });
+    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    I.login('app=io.ox/files&folder=' + folder, { user: users[0] });
     I.waitForElement(locate('.filename').withText('document.txt').inside('.list-view'));
     I.click(locate('.filename').withText('document.txt').inside('.list-view'));
     I.clickToolbar('~More actions');
@@ -259,7 +256,7 @@ Scenario('[C8381] Lock a file', async (I, users) => {
     I.waitForText('document.txt (Locked)');
     I.logout();
 
-    I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[1] });
+    I.login('app=io.ox/files&folder=' + folder, { user: users[1] });
     I.waitForText('document.txt (Locked)');
 });
 
@@ -268,10 +265,9 @@ Scenario('[C8382] Delete a file', async (I, users) => {
     // Shared or public folder with other member
     // 1. Select a file
     // 2. Delete it (File removed)
-    var defaultFolder = await I.grabDefaultFolder('infostore');
-    var newFolder = await I.createFolder(sharedFolder('C8382', users), defaultFolder, { user: users[0] });
-    await I.haveFile(newFolder.data.data, 'e2e/media/files/0kb/document.txt');
-    I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[0] });
+    var folder = await I.haveFolder(sharedFolder('C8382', await I.grabDefaultFolder('infostore'), users), { user: users[0] });
+    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    I.login('app=io.ox/files&folder=' + folder, { user: users[0] });
     I.waitForElement('.file-list-view.complete');
     I.waitForText('document.txt', 1, '.file-list-view');
     I.click(locate('li.list-item').withText('document.txt'));
@@ -279,7 +275,7 @@ Scenario('[C8382] Delete a file', async (I, users) => {
     I.waitForText('Do you really want to delete this item?');
     I.click('Delete');
     I.logout();
-    I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[1] });
+    I.login('app=io.ox/files&folder=' + folder, { user: users[1] });
     I.waitForElement('.file-list-view.complete');
     I.dontSee('document.txt');
 });
@@ -289,11 +285,10 @@ Scenario('[C8383] Unlock a file', async (I, users) => {
     // 1. Choose a locked file
     // 2. "More"-- > "Unlock" (File is unlocked)
     // 3. Verify with another user
-    var defaultFolder = await I.grabDefaultFolder('infostore');
-    var newFolder = await I.createFolder(sharedFolder('C8383', users), defaultFolder, { user: users[0] });
-    var data = await I.haveFile(newFolder.data.data, 'e2e/media/files/0kb/document.txt');
+    var folder = await I.haveFolder(sharedFolder('C8383', await I.grabDefaultFolder('infostore'), users), { user: users[0] });
+    var data = await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
     await I.haveLockedFile(data);
-    I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[0] });
+    I.login('app=io.ox/files&folder=' + folder, { user: users[0] });
     I.waitForElement(locate('.filename').withText('document.txt (Locked)').inside('.list-view'));
     I.click(locate('.filename').withText('document.txt').inside('.list-view'));
     I.clickToolbar('~More actions');
@@ -303,7 +298,7 @@ Scenario('[C8383] Unlock a file', async (I, users) => {
     I.dontSee('Locked');
     I.logout();
 
-    I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[1] });
+    I.login('app=io.ox/files&folder=' + folder, { user: users[1] });
     I.waitForElement('.file-list-view.complete');
     I.waitForText('document.txt');
     I.dontSee('Locked');
@@ -319,11 +314,10 @@ Scenario('[C8385] Uninvite a person', async (I, users) => {
     // 5. Click on "Revoke access" (The person disappears from the list.)
     // 6. Log in with Person B. (Person B is logged in.)
     // 7. Go to Drive. (The folder from Person A is not longer visible in the left section in Drive.)
-    var defaultFolder = await I.grabDefaultFolder('infostore');
-    var newFolder = await I.createFolder(sharedFolder('C8385', users), defaultFolder, { user: users[0] });
+    var folder = await I.haveFolder(sharedFolder('C8385', await I.grabDefaultFolder('infostore'), users), { user: users[0] });
 
     session('Bob', () => {
-        I.login('app=io.ox/files&folder=' + newFolder.data.data, { user: users[0] });
+        I.login('app=io.ox/files&folder=' + folder, { user: users[0] });
     });
 
     session('Alice', () => {

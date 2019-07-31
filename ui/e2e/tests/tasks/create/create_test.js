@@ -70,7 +70,7 @@ Scenario('[C7728] Create simple Task', async function (I) {
     I.logout();
 });
 
-Scenario.skip('[C7732] Create a Task in a shared folder without rights @bug', async function (I, users) {
+Scenario('[C7732] Create a Task in a shared folder without rights', async function (I, users) {
     let testrailID = 'C7732';
 
     const folder = {
@@ -87,9 +87,10 @@ Scenario.skip('[C7732] Create a Task in a shared folder without rights @bug', as
                 entity: users[1].userdata.id,
                 group: false
             }
-        ]
+        ],
+        parent: await I.grabDefaultFolder('tasks')
     };
-    I.createFolder(folder, '2', { user: users[0] });
+    I.haveFolder(folder, { user: users[0] });
     I.login('app=io.ox/tasks', { user: users[1] });
     I.waitForText('Empty');
     I.selectFolder(testrailID);
@@ -265,8 +266,7 @@ Scenario('[C7733] Set Task startdate behind due date', async function (I) {
 Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
     const id = 'C7731',
         desc = 'Create a Task in a shared folder',
-        defaultFolder = await I.grabDefaultFolder('tasks'),
-        sharedFolder = await I.createFolder({
+        sharedFolder = await I.haveFolder({
             module: 'tasks',
             subscribed: 1,
             title: id,
@@ -280,9 +280,9 @@ Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
                     entity: users[1].userdata.id,
                     group: false
                 }
-            ]
-        }, defaultFolder, { user: users[0] }),
-        sharedFolderId = sharedFolder.data.data;
+            ],
+            parent: await I.grabDefaultFolder('tasks')
+        }, { user: users[0] });
 
     const checkTask = () => {
         I.waitForText(id, 5, '.vgrid-cell');
@@ -295,7 +295,7 @@ Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
         });
     };
 
-    I.login('app=io.ox/tasks&folder=' + sharedFolderId, { user: users[1] });
+    I.login('app=io.ox/tasks&folder=' + sharedFolder, { user: users[1] });
     I.waitForText('New task');
     I.clickToolbar('New task');
     I.waitForVisible('.io-ox-tasks-edit-window');
@@ -306,6 +306,6 @@ Scenario('[C7731] Create a Task in a shared folder', async function (I, users) {
     checkTask();
     I.logout();
 
-    I.login('app=io.ox/tasks&folder=' + sharedFolderId, { user: users[0] });
+    I.login('app=io.ox/tasks&folder=' + sharedFolder, { user: users[0] });
     checkTask();
 });

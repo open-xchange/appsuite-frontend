@@ -64,19 +64,6 @@ class MyHelper extends Helper {
         return report;
     }
 
-    async createFolder(folder, id, options) {
-        const { httpClient, session } = await util.getSessionForUser(options);
-        return httpClient.put('/appsuite/api/folders', folder, {
-            params: {
-                action: 'new',
-                autorename: true,
-                folder_id: id,
-                session: session,
-                tree: 1
-            }
-        });
-    }
-
     async haveGroup(group, options) {
         const { httpClient, session } = await util.getSessionForUser(options);
         const response = await httpClient.put('/appsuite/api/group', group, {
