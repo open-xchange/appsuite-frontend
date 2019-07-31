@@ -51,14 +51,14 @@ Scenario('[C244799] Set new default reminder for all-day appointments @shaky', a
     I.waitForText('Subject');
     I.fillField('summary', 'subject');
     I.fillField('location', 'Dortmund');
-    I.click('All day');
+    I.checkOption('All day');
     I.fillField('description', 'description');
     I.click('Create');
 
     I.waitForText('subject', '.appointment-content');
     I.click('subject', '.appointment-content');
 
-    I.waitForVisible('.io-ox-sidepopup');
+    I.waitForVisible(locate('li > a').withText('Edit').inside('.io-ox-sidepopup'));
     I.click('Edit');
     I.waitForElement('.io-ox-calendar-edit');
     I.waitForText('Notify 1 day before start.');
