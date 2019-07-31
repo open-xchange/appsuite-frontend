@@ -46,8 +46,10 @@ define('io.ox/mail/common-extensions', [
 
         // authenticity
         var maildata = baton.data.thread ? baton.data.thread[0] || baton.data : baton.data,
-            status = util.authenticity('image', maildata);
-        if (status) return node.text('!');
+            status = util.authenticity('image', maildata),
+            isSpam = account.is('spam', baton.data.folder_id);
+
+        if (status || isSpam) return node.text('!');
 
         // add initials
         var initials = getInitials(baton.data.from);
