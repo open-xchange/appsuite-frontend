@@ -54,6 +54,7 @@ define('io.ox/files/toolbar', [
                 prio: 'hi',
                 mobile: 'lo',
                 icon: 'fa fa-eye',
+                //#. used as a verb here. label of a button to view files
                 title: gt('View'),
                 ref: 'io.ox/files/actions/viewer'
             },

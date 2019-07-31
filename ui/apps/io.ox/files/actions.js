@@ -1218,6 +1218,7 @@ define('io.ox/files/actions', [
             id: 'openviewer',
             prio: 'hi',
             mobile: 'hi',
+            //#. used as a verb here. label of a button to view files
             title: gt('View'),
             ref: 'io.ox/files/actions/viewer'
         },
@@ -1363,6 +1364,7 @@ define('io.ox/files/actions', [
             index: 100,
             prio: 'lo',
             mobile: 'lo',
+            //#. used as a verb here. label of a button to view files
             title: gt('View'),
             ref: 'io.ox/files/actions/viewer',
             section: 'view'

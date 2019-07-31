@@ -708,6 +708,7 @@ define('io.ox/mail/actions', [
             id: 'view_new',
             index: 100,
             mobile: 'hi',
+            //#. used as a verb here. label of a button to view attachments
             title: gt('View'),
             ref: 'io.ox/mail/attachment/actions/view'
         },
@@ -731,6 +732,7 @@ define('io.ox/mail/actions', [
             id: 'viewer',
             index: 600,
             mobile: 'hi',
+            //#. used as a verb here. label of a button to view attachments
             label: gt('View'),
             ref: 'io.ox/mail/actions/viewer'
         }
