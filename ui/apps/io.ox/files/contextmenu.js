@@ -194,6 +194,7 @@ define('io.ox/files/contextmenu', [
             index: 1000,
             ref: 'io.ox/files/actions/viewer',
             section: '10',
+            //#. used as a verb here. label of a button to view files
             label: gt('View')
         },
         {

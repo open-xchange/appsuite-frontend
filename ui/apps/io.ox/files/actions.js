@@ -1288,6 +1288,7 @@ define('io.ox/files/actions', [
         index: index += 100,
         prio: 'hi',
         mobile: 'hi',
+        //#. used as a verb here. label of a button to view files
         label: gt('View'),
         ref: 'io.ox/files/actions/viewer'
     }));
