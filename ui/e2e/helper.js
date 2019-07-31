@@ -147,19 +147,6 @@ class MyHelper extends Helper {
         return response.data;
     }
 
-    async haveAppointment(appointment, options) {
-        const { httpClient, session } = await util.getSessionForUser(options);
-        const response = await httpClient.put('/appsuite/api/chronos', appointment, {
-            params: {
-                action: 'new',
-                session: session,
-                folder: appointment.folder
-            }
-        });
-        assert.strictEqual(response.data.error, undefined, JSON.stringify(response.data));
-        return response;
-    }
-
 }
 
 module.exports = MyHelper;
