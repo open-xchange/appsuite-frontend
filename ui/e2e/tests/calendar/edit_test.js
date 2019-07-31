@@ -1452,10 +1452,10 @@ Scenario('[C7463] Remove a resource', async function (I, users) {
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
     const resource = {
-        'description': timestamp,
-        'display_name': timestamp,
-        'name': timestamp,
-        'mailaddress': timestamp + '@bla.de'
+        description: timestamp,
+        display_name: timestamp,
+        name: timestamp,
+        mailaddress: timestamp + '@bla.de'
     };
     const resourceID = await I.haveResource(resource, { user: users[0] });
     await I.haveAppointment({
@@ -1498,5 +1498,5 @@ Scenario('[C7463] Remove a resource', async function (I, users) {
     I.click('Save');
     I.waitForDetached('.io-ox-calendar-edit.container', 5);
     expect(await I.grabNumberOfVisibleElements(locate('.halo-resource-link').inside('.participant-list').withText(JSON.stringify(resource.display_name)))).to.equal(0);
-    I.deleteResource({ id: resourceID }, { user: users[0] });
+    await I.dontHaveResource(resource.name, { user: users[0] });
 });
