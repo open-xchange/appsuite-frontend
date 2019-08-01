@@ -92,6 +92,10 @@
             line-height: 22px;
             font-weight: 600;
         }
+
+        .scrollpane {
+            flex: 1;
+        }
     }
 
     .classic-toolbar {
@@ -394,9 +398,6 @@
                 margin-left: 16px;
             }
         }
-        .scrollpane {
-            flex: 1;
-        }
     }
 
     .conversation {
@@ -639,37 +640,42 @@
         }
     }
 
-    .history .scrollpane {
-        padding: 16px;
-        li {
-            position: relative;
-            line-height: 16px;
-            padding: 11px 80px 13px 64px;
-            margin-bottom: 8px;
-        }
-        .chat-avatar {
-            position: absolute;
-            left: 0;
-            top: 4px;
-        }
-        .title {
-            font-weight: bold;
-            float: left;
-            .ellipsis();
-        }
-        .date {
-            color: @gray;
-            float: right;
-        }
-        .body {
-            color: @gray;
-            clear: both;
-            .ellipsis();
-        }
-        .btn-action {
-            position: absolute;
-            right: 0;
-            top: 13px;
+    .history {
+        display: flex;
+        flex-direction: column;
+
+        .scrollpane {
+            padding: 16px;
+            li {
+                position: relative;
+                line-height: 16px;
+                padding: 11px 80px 13px 64px;
+                margin-bottom: 8px;
+            }
+            .chat-avatar {
+                position: absolute;
+                left: 0;
+                top: 4px;
+            }
+            .title {
+                font-weight: bold;
+                float: left;
+                .ellipsis();
+            }
+            .date {
+                color: @gray;
+                float: right;
+            }
+            .body {
+                color: @gray;
+                clear: both;
+                .ellipsis();
+            }
+            .btn-action {
+                position: absolute;
+                right: 0;
+                top: 13px;
+            }
         }
     }
 
