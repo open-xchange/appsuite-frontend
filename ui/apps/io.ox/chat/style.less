@@ -682,19 +682,24 @@
         }
     }
 
-    .files ul {
-        padding: 16px 0 0 16px;
-        li {
-            width: ~"calc(33.3333% - 16px)";
-            height: 128px;
-            margin: 0 16px 16px 0;
-            float: left;
-            button {
-                width: 100%;
+    .files {
+        display: flex;
+        flex-direction: column;
+
+        .scrollpane ul {
+            padding: 16px 0 0 16px;
+            li {
+                width: ~"calc(33.3333% - 16px)";
                 height: 128px;
-                border: 0;
-                background-size: cover;
-                background-color: #eee;
+                margin: 0 16px 16px 0;
+                float: left;
+                button {
+                    width: 100%;
+                    height: 128px;
+                    border: 0;
+                    background-size: cover;
+                    background-color: #eee;
+                }
             }
         }
     }
