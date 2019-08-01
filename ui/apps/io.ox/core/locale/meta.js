@@ -330,6 +330,20 @@ define('io.ox/core/locale/meta', function () {
         return 'raw!3rd.party/cldr-dates/' + (mapToCLDRFiles[locale] || 'en-US') + '/ca-gregorian.json';
     }
 
+    var CLDRDefinitions = {};
+
+    function loadCLDRData(locale) {
+        var def = $.Deferred();
+        if (CLDRDefinitions[locale]) def.resolve(CLDRDefinitions[locale]);
+
+        require([getCLDRDateFilePath(locale)], function (dateFormatData) {
+            CLDRDefinitions[locale] = JSON.parse(dateFormatData).main[mapToCLDRFiles[locale]].dates.calendars.gregorian;
+            def.resolve(CLDRDefinitions[locale]);
+        });
+
+        return def;
+    }
+
     return {
         locales: locales,
         dateFormats: dateFormats,
@@ -346,6 +360,8 @@ define('io.ox/core/locale/meta', function () {
         translateMomentToCLDR: translateMomentToCLDR,
         getCLDRDateFilePath: getCLDRDateFilePath,
         mapToCLDRFiles: mapToCLDRFiles,
+        CLDRDefinitions: CLDRDefinitions,
+        loadCLDRData: loadCLDRData,
         weekday: {
             index: function (str) {
                 return weekdays.indexOf(str);

@@ -18,15 +18,14 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
 
     var currentLocaleId = settings.get('language', 'en_US'),
         localeData = settings.get('localeData', {}),
-        localeDefinitions = {},
-        CLDRDefinitions = {};
+        localeDefinitions = {};
 
     function getLocaleData(localeId) {
         return deriveLocaleData(_.extend({}, localeDefinitions[localeId || currentLocaleId], settings.get('localeData')));
     }
 
     function getCLDRData() {
-        return CLDRDefinitions[currentLocaleId];
+        return meta.CLDRDefinitions[currentLocaleId];
     }
 
     // support CLDR format strings for localized formats Moment does not know (see http://cldr.unicode.org/) or check the json files in the npm module
@@ -108,15 +107,13 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
     function setMomentLocale(localeId) {
         var id = meta.deriveMomentLocale(localeId);
 
-        if (localeDefinitions[localeId] && CLDRDefinitions[localeId]) {
+        if (localeDefinitions[localeId] && meta.CLDRDefinitions[localeId]) {
             updateLocale(localeId);
             return $.when();
         }
 
         // load cldr data
-        return require([meta.getCLDRDateFilePath(localeId)], function (dateFormatData) {
-            CLDRDefinitions[localeId] = JSON.parse(dateFormatData).main[meta.mapToCLDRFiles[localeId]].dates.calendars.gregorian;
-
+        return meta.loadCLDRData(localeId).then(function () {
             if (localeDefinitions[localeId]) {
                 updateLocale(localeId);
                 return $.when();
