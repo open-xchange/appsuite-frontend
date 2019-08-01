@@ -3049,6 +3049,8 @@ msgid "Favorite timezones"
 msgstr ""
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#. used as a verb here. label of a button to view attachments
+#. used as a verb here. label of a button to view files
 #: apps/io.ox/calendar/toolbar.js
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js
