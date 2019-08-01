@@ -61,9 +61,21 @@ define('io.ox/chat/views/chat', [
         }
     });
 
+    ext.point().extend({
+        id: 'add member',
+        index: 400,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            this.attr('data-prio', 'lo').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="add-member">').attr('data-id', model.id).text('Add member').on('click', events.forward)
+            );
+        }
+    });
+
     ext.point('io.ox/chat/detail/toolbar').extend({
         id: 'close-chat',
-        index: 400,
+        index: 500,
         custom: true,
         draw: function (baton) {
             var model = baton.model;
