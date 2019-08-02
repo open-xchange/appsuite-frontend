@@ -29,10 +29,10 @@
   },
   "devDependencies": {
     "@open-xchange/appserver": "^0.8.0-pre3",
-    "@open-xchange/codecept-helper": "^0.1.1",
+    "@open-xchange/codecept-helper": "0.2.0",
     "axe-core": "^3.2.2",
     "chai": "^4.0.2",
-    "codeceptjs": "^2.0.2",
+    "codeceptjs": "^2.2.0",
     "dotenv": "8.0.0",
     "eslint-plugin-codeceptjs": "^1.0.0",
     "grunt-contrib-connect": "^2.0.0",
@@ -52,7 +52,7 @@
     "sinon": "^7.0.0",
     "sinon-chai": "^3.3.0",
     "time-grunt": "^2.0.0",
-    "webdriverio": "^5.2.6"
+    "webdriverio": "^5.11.10"
   },
   "engines": {
     "node": ">=0.10"
@@ -70,6 +70,7 @@
     "blankshield": "0.6.3",
     "bootstrap": "3.4.1",
     "chart.js": "2.8.0",
+    "cldr-dates-modern": "35.1.0",
     "clipboard": "2.0.4",
     "croppie": "2.6.4",
     "crypto-js": "3.1.9-1",
@@ -89,7 +90,6 @@
     "u2f-api": "1.0.11",
     "underscore": "1.9.1",
     "unorm": "1.4.1",
-    "velocity-animate": "1.5.2",
-    "cldr-dates-modern": "35.1.0"
+    "velocity-animate": "1.5.2"
   }
 }

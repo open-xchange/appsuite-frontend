@@ -64,100 +64,6 @@ class MyHelper extends Helper {
         return report;
     }
 
-    async createFolder(folder, id, options) {
-        const { httpClient, session } = await util.getSessionForUser(options);
-        return httpClient.put('/appsuite/api/folders', folder, {
-            params: {
-                action: 'new',
-                autorename: true,
-                folder_id: id,
-                session: session,
-                tree: 1
-            }
-        });
-    }
-
-    async haveGroup(group, options) {
-        const { httpClient, session } = await util.getSessionForUser(options);
-        const response = await httpClient.put('/appsuite/api/group', group, {
-            params: {
-                action: 'new',
-                session: session
-            }
-        });
-        return response.data.data;
-    }
-
-    async dontHaveGroup(name, options) {
-        const { httpClient, session } = await util.getSessionForUser(options);
-        const { data: { data } } = await httpClient.put('/appsuite/api/group', '', {
-            params: {
-                action: 'all',
-                columns: '1,701',
-                session
-            }
-        });
-        const timestamp = require('moment')().add(30, 'years').format('x');
-        const test = typeof name.test === 'function' ? g => name.test(g[1]) : g => name === g[1];
-
-        const ids = data.filter(test).map(g => g[0]);
-        return Promise.all(ids.map(async (id) => {
-            await httpClient.put('/appsuite/api/group', { id }, {
-                params: {
-                    action: 'delete',
-                    session,
-                    timestamp
-                }
-            });
-            return { id, name };
-        }));
-    }
-
-    async haveResource(data, options) {
-        const { httpClient, session } = await util.getSessionForUser(options);
-        const response = await httpClient.put('/appsuite/api/resource', data, {
-            params: {
-                action: 'new',
-                session: session
-            }
-        });
-        return response.data.data.id;
-    }
-
-    async dontHaveResource(pattern, options) {
-        const { httpClient, session } = await util.getSessionForUser(options);
-        const { data: { data } } = await httpClient.put('/appsuite/api/resource', { pattern }, {
-            params: {
-                action: 'search',
-                session
-            }
-        });
-
-        const timestamp = require('moment')().add(30, 'years').format('x');
-        return Promise.all(data.map(async ({ id }) => {
-
-            await httpClient.put('/appsuite/api/resource', { id }, {
-                params: {
-                    action: 'delete',
-                    session,
-                    timestamp
-                }
-            });
-            return { id, pattern };
-        }));
-    }
-
-    async deleteResource(data, options) {
-        const { httpClient, session } = await util.getSessionForUser(options);
-        const response = await httpClient.put('/appsuite/api/resource', data, {
-            params: {
-                action: 'delete',
-                session: session
-            }
-        });
-        return response;
-    }
-
     async haveLockedFile(data, options) {
         const { httpClient, session } = await util.getSessionForUser(options);
         const response = await httpClient.put('/appsuite/api/files', data, {
@@ -169,19 +75,6 @@ class MyHelper extends Helper {
             }
         });
         return response.data;
-    }
-
-    async haveAppointment(appointment, options) {
-        const { httpClient, session } = await util.getSessionForUser(options);
-        const response = await httpClient.put('/appsuite/api/chronos', appointment, {
-            params: {
-                action: 'new',
-                session: session,
-                folder: appointment.folder
-            }
-        });
-        assert.strictEqual(response.data.error, undefined, JSON.stringify(response.data));
-        return response;
     }
 
 }

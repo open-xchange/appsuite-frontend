@@ -32,7 +32,7 @@ Scenario('[C7449] Move appointment to folder', async function (I) {
         'io.ox/calendar': { showCheckboxes: true }
     });
     const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    await I.haveFolder('New calendar', 'event', defaultFolderId);
+    await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
     const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
     await I.haveAppointment({
         folder:  defaultFolderId,
@@ -220,10 +220,10 @@ Scenario.skip('[C7465] Edit appointment in shared folder as author', async funct
         'io.ox/calendar': { showCheckboxes: true }
     });
     const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    const folder = await I.haveFolder('New calendar', 'event', defaultFolderId);
+    const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
     const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
     await I.haveAppointment({
-        folder:  folder.data,
+        folder:  folder,
         summary: 'Testappointment',
         startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
         endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
@@ -441,10 +441,10 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author @shaky
         'io.ox/calendar': { showCheckboxes: true }
     });
     const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    const folder = await I.haveFolder('New calendar', 'event', defaultFolderId);
+    const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
     const time = moment().startOf('week').add(1, 'days').add(10, 'hours');
     await I.haveAppointment({
-        folder:  folder.data,
+        folder:  folder,
         summary: 'Testappointment',
         startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
         endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
@@ -508,10 +508,10 @@ Scenario('[C7470] Delete a recurring appointment', async function (I) {
         'io.ox/calendar': { showCheckboxes: true }
     });
     const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    const folder = await I.haveFolder('New calendar', 'event', defaultFolderId);
+    const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
     const time = moment().startOf('week').add(1, 'days').add(10, 'hours');
     await I.haveAppointment({
-        folder:  folder.data,
+        folder:  folder,
         summary: 'Testappointment',
         startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
         endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
@@ -1191,7 +1191,7 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
     I.waitForText('2:00 PM');
 });
 
-Scenario('[C7460] Add attachments @shaky', async function (I) {
+Scenario('[C7460] Add attachments', async function (I) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
@@ -1211,14 +1211,11 @@ Scenario('[C7460] Add attachments @shaky', async function (I) {
 
     // 1. Switch to Calendar
     I.login(['app=io.ox/calendar&perspective=week:week']);
-
-    // Expected Result: The calendar app is shown with the existing appointment
-    I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
-    I.see(subject, '.appointment');
+    I.waitForElement(locate('.appointment').withText(subject));
 
     // 2. Select the existing appointment, click "Edit"
     I.click(subject, '.appointment');
-    I.waitForElement('.io-ox-sidepopup');
+    I.waitForText('Edit', undefined, '.io-ox-sidepopup');
     I.click('Edit');
 
     // Expected Result: The appointment edit dialog is shown
@@ -1330,7 +1327,7 @@ Scenario('[C7459] Remove attachments @shaky', async function (I) {
             startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
             endDate: { value: endTime.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
         }),
-        updatedAppointment = await I.haveAttachment('calendar', appointment.data.data.created[0], 'e2e/media/files/generic/testdocument.odt');
+        updatedAppointment = await I.haveAttachment('calendar', appointment, 'e2e/media/files/generic/testdocument.odt');
     await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testdocument.rtf');
 
     // 1. Switch to Calendar
@@ -1452,10 +1449,10 @@ Scenario('[C7463] Remove a resource', async function (I, users) {
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
     const resource = {
-        'description': timestamp,
-        'display_name': timestamp,
-        'name': timestamp,
-        'mailaddress': timestamp + '@bla.de'
+        description: timestamp,
+        display_name: timestamp,
+        name: timestamp,
+        mailaddress: timestamp + '@bla.de'
     };
     const resourceID = await I.haveResource(resource, { user: users[0] });
     await I.haveAppointment({
@@ -1498,5 +1495,5 @@ Scenario('[C7463] Remove a resource', async function (I, users) {
     I.click('Save');
     I.waitForDetached('.io-ox-calendar-edit.container', 5);
     expect(await I.grabNumberOfVisibleElements(locate('.halo-resource-link').inside('.participant-list').withText(JSON.stringify(resource.display_name)))).to.equal(0);
-    I.deleteResource({ id: resourceID }, { user: users[0] });
+    await I.dontHaveResource(resource.name, { user: users[0] });
 });

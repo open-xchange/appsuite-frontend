@@ -41,7 +41,7 @@ Scenario('Move event to different folder @shaky', async function (I) {
         attendees: []
     });
 
-    await I.haveFolder(movefolder, 'event', folder);
+    await I.haveFolder({ title: movefolder, module: 'event', parent: folder });
 
     I.login('app=io.ox/calendar');
 

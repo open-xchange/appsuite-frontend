@@ -488,7 +488,7 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
     });
 
     const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    await I.haveFolder('New calendar', 'event', defaultFolderId);
+    await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
 
     // share folder for preconditions
     // TODO should be part of the haveFolder helper

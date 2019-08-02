@@ -29,8 +29,8 @@ const changeSubscription = (I, toggle) => {
 
 const prepare = async (I) => {
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
-    await I.haveFolder('Krawall', 'mail', 'default0/INBOX');
-    await I.haveFolder('Remmidemmi', 'mail', 'default0/INBOX');
+    await I.haveFolder({ title: 'Krawall', module: 'mail', parent: 'default0/INBOX' });
+    await I.haveFolder({ title: 'Remmidemmi', module: 'mail', parent: 'default0/INBOX' });
 };
 
 const goToMail = (I) => {

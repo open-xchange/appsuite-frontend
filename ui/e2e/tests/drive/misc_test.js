@@ -88,9 +88,9 @@ Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users @sh
 
     const myFiles = await I.grabDefaultFolder('infostore', { user: users[0] });
 
-    const folderA = await I.haveFolder('folderA', 'infostore', myFiles);
-    const folderB = await I.haveFolder('folderB', 'infostore', folderA.data);
-    await I.haveFolder('folderC', 'infostore', folderB.data);
+    const folderA = await I.haveFolder({ title: 'folderA', module: 'infostore',parent: myFiles });
+    const folderB = await I.haveFolder({ title: 'folderB', module: 'infostore', parent: folderA });
+    await I.haveFolder({ title: 'folderC', module: 'infostore', parent: folderB });
 
     // 1. Login
 
@@ -147,7 +147,7 @@ Scenario('[C257247] Restore deleted items @shaky', async (I, users) => {
     const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
 
     I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');
-    I.haveFolder('testfolder', 'infostore', infostoreFolderID);
+    I.haveFolder({ title: 'testfolder', module: 'infostore', parent: infostoreFolderID });
 
     I.login('app=io.ox/files');
 

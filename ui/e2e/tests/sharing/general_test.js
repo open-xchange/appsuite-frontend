@@ -25,7 +25,8 @@ After(async (users) => {
 
 Scenario('[C45021] Generate simple link for sharing', async function (I) {
     I.login('app=io.ox/files');
-    I.click('My files', '.folder-tree');
+    const myfiles = locate('.folder-tree .folder-label').withText('My files');
+    I.waitForElement(myfiles);
     I.selectFolder('Music');
     I.clickToolbar('Share');
     I.click('Create sharing link');
@@ -41,8 +42,8 @@ Scenario('[C45021] Generate simple link for sharing', async function (I) {
 
 Scenario('[C252159] Generate link for sharing including subfolders @shaky', async function (I) {
     I.login('app=io.ox/files');
-    I.waitForText('My files');
-    I.click('My files', '.folder-tree');
+    const myfiles = locate('.folder-tree .folder-label').withText('My files');
+    I.waitForElement(myfiles);
     I.selectFolder('Music');
     I.clickToolbar('New');
     I.click('Add new folder');
@@ -72,7 +73,8 @@ Scenario('[C252159] Generate link for sharing including subfolders @shaky', asyn
 
 Scenario('[C45022] Generate simple link for sharing with password', async function (I) {
     I.login('app=io.ox/files');
-    I.click('My files', '.folder-tree');
+    const myfiles = locate('.folder-tree .folder-label').withText('My files');
+    I.waitForElement(myfiles);
     I.selectFolder('Music');
     I.clickToolbar('Share');
     I.click('Create sharing link');
@@ -93,8 +95,8 @@ Scenario('[C45022] Generate simple link for sharing with password', async functi
 
 Scenario('[C83385] Copy to clipboard @shaky', async function (I) {
     I.login('app=io.ox/files');
-    I.waitForText('My files');
-    I.click('My files', '.folder-tree');
+    const myfiles = locate('.folder-tree .folder-label').withText('My files');
+    I.waitForElement(myfiles);
     I.selectFolder('Music');
     I.clickToolbar('Share');
     I.click('Create sharing link');
@@ -132,11 +134,11 @@ Scenario('[C85625] My Shares default sort order @shaky', async function (I, user
     const { expect } = require('chai');
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
-    const testFolder = await I.haveFolder('Testfolder', 'infostore', folder, { user: users[0] });
-    await I.haveFile(testFolder.data, 'e2e/media/files/0kb/document.txt');
-    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testdocument.rtf');
-    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testdocument.odt');
-    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testpresentation.ppsm');
+    const testFolder = await I.haveFolder({ title: 'Testfolder', module: 'infostore', parent: folder });
+    await I.haveFile(testFolder, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.rtf');
+    await I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.odt');
+    await I.haveFile(testFolder, 'e2e/media/files/generic/testpresentation.ppsm');
     I.login('app=io.ox/files&folder=' + folder);
     I.waitForElement('.file-list-view.complete');
 

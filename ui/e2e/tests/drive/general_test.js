@@ -122,14 +122,14 @@ const searchFor = (I, query) => {
     I.waitForDetached('.busy-indicator.io-ox-busy');
 };
 
-Scenario('[C8369] Search', async (I, users) => {
+Scenario('[C8369] Search', async (I) => {
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
-    const testFolder = await I.haveFolder('Testfolder', 'infostore', folder, { user: users[0] });
-    await I.haveFile(testFolder.data, 'e2e/media/files/0kb/document.txt');
-    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testdocument.rtf');
-    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testdocument.odt');
-    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testpresentation.ppsm');
+    const testFolder = await I.haveFolder({ title: 'Testfolder', module: 'infostore', parent: folder });
+    await I.haveFile(testFolder, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.rtf');
+    await I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.odt');
+    await I.haveFile(testFolder, 'e2e/media/files/generic/testpresentation.ppsm');
     prepare(I);
     I.selectFolder('Testfolder');
     searchFor(I, 'document.txt');
@@ -166,14 +166,14 @@ Scenario.skip('[C8372] Upload a 0KB file', () => {
     // Also drag and drop testing is quite complicated and not sure if at all possible atm
 });
 
-Scenario('[C45039] Breadcrumb navigation', async (I, users) => {
-    const folder = await I.haveFolder('Folders', 'infostore', await I.grabDefaultFolder('infostore'), { user: users[0] });
-    await I.haveFolder('subfolder_1', 'infostore', folder.data, { user: users[0] });
-    await I.haveFolder('subfolder_2', 'infostore', folder.data, { user: users[0] });
-    const subFolder = await I.haveFolder('subfolder_3', 'infostore', folder.data, { user: users[0] });
-    const subsubFolder = await I.haveFolder('subsubfolder_1', 'infostore', subFolder.data, { user: users[0] });
-    await I.haveFolder('subsubfolder_2', 'infostore', subFolder.data, { user: users[0] });
-    prepare(I, subsubFolder.data);
+Scenario('[C45039] Breadcrumb navigation', async (I) => {
+    const parent = await I.haveFolder({ title: 'Folders', module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
+    await I.haveFolder({ title: 'subfolder_1', module: 'infostore', parent });
+    await I.haveFolder({ title: 'subfolder_2', module: 'infostore', parent });
+    const subFolder = await I.haveFolder({ title: 'subfolder_3', module: 'infostore', parent });
+    const subsubFolder = await I.haveFolder({ title: 'subsubfolder_1', module: 'infostore', parent: subFolder });
+    await I.haveFolder({ title: 'subsubfolder_2', module: 'infostore', parent: subFolder });
+    prepare(I, subsubFolder);
     I.retry(5).click('subfolder_3', '.breadcrumb-view');
     I.waitForText('subsubfolder_1', 1, '.list-view');
     I.waitForText('subsubfolder_2', 1, '.list-view');
@@ -187,13 +187,13 @@ const checkFileOrder = (I, files) => {
     files.forEach((name, index) => { I.see(name, '.list-item:nth-child(' + (index + 2) + ')'); });
 };
 
-Scenario('[C45040] Sort files', async (I, users) => {
+Scenario('[C45040] Sort files', async (I) => {
     const folder = await I.grabDefaultFolder('infostore');
-    const testFolder = await I.haveFolder('Testfolder', 'infostore', folder, { user: users[0] });
-    await I.haveFile(testFolder.data, 'e2e/media/files/0kb/document.txt');
-    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testdocument.rtf');
-    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testdocument.odt');
-    await I.haveFile(testFolder.data, 'e2e/media/files/generic/testpresentation.ppsm');
+    const testFolder = await I.haveFolder({ title: 'Testfolder', module: 'infostore', parent: folder });
+    await I.haveFile(testFolder, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.rtf');
+    await I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.odt');
+    await I.haveFile(testFolder, 'e2e/media/files/generic/testpresentation.ppsm');
     prepare(I);
     I.selectFolder('Testfolder');
     // Begins with Name ascending order
@@ -217,15 +217,15 @@ Scenario('[C45040] Sort files', async (I, users) => {
     checkFileOrder(I, ['testdocument.rtf', 'testpresentation.ppsm', 'testdocument.odt', 'document.txt']);
 });
 
-Scenario('[C45041] Select files', async (I, users) => {
-    const testFolder = await I.haveFolder('Selecttest', 'infostore', await I.grabDefaultFolder('infostore'), { user: users[0] }),
+Scenario('[C45041] Select files', async (I) => {
+    const testFolder = await I.haveFolder({ title: 'Selecttest', module: 'infostore', parent: await I.grabDefaultFolder('infostore') }),
         filePath = 'e2e/media/files/0kb/',
         files = await readdir(filePath);
 
-    await I.haveFolder('Subfolder', 'infostore', testFolder.data);
+    await I.haveFolder({ title: 'Subfolder', module: 'infostore', parent: testFolder });
 
     files.forEach((name) => {
-        if (name !== '.DS_Store') I.haveFile(testFolder.data, filePath + name);
+        if (name !== '.DS_Store') I.haveFile(testFolder, filePath + name);
     });
     prepare(I);
     I.selectFolder('Selecttest');
@@ -249,12 +249,12 @@ Scenario('[C45042] Filter files @shaky', async (I, users) => {
     // to make matters worse there are two "All" menuitems without a relation
     // to a group.
 
-    const testFolder = await I.haveFolder('Filtertest', 'infostore', await I.grabDefaultFolder('infostore'), { user: users[0] }),
+    const testFolder = await I.haveFolder({ title: 'Filtertest', module: 'infostore', parent: await I.grabDefaultFolder('infostore') }),
         filePath = 'e2e/media/files/0kb/',
         files = await readdir(filePath);
 
     files.forEach((name) => {
-        if (name !== '.DS_Store') I.haveFile(testFolder.data, filePath + name);
+        if (name !== '.DS_Store') I.haveFile(testFolder, filePath + name);
     });
     prepare(I);
     I.selectFolder('Filtertest');

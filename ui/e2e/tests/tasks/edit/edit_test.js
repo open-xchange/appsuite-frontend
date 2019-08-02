@@ -170,7 +170,7 @@ Scenario('[C7743] Move single Task', async function (I) {
         testrailName = 'Move single Task',
         taskDefaultFolder = await I.grabDefaultFolder('tasks');
 
-    await I.createFolder({ module: 'tasks', title: testrailID }, taskDefaultFolder);
+    await I.haveFolder({ module: 'tasks', title: testrailID, parent: taskDefaultFolder });
     await I.haveTask({ title: testrailID, folder_id: taskDefaultFolder, note: testrailName });
 
     I.login('app=io.ox/tasks');
@@ -274,7 +274,7 @@ Scenario('[C7746] Move several tasks to an other folder at the same time', async
         );
     }
     await Promise.all(tasks);
-    await I.createFolder({ module: 'tasks', title: testrailID }, taskDefaultFolder);
+    await I.haveFolder({ module: 'tasks', title: testrailID, parent: taskDefaultFolder });
 
     I.login('app=io.ox/tasks');
     I.waitForVisible('*[data-app-name="io.ox/tasks"]');
@@ -391,21 +391,22 @@ Scenario('[C7749] Edit existing Task as participant', async function (I, users) 
 Scenario('[C7750] Edit existing Task in a shared folder @shaky', async function (I, users) {
     const testrailID = 'C7750',
         testrailName = 'Edit existing Task in a shared folder',
-        createFolder = await I.createFolder({
+        folder_id = await I.haveFolder({
             module: 'tasks',
             subscribed: 1,
             title: testrailID,
             permissions: [
                 { bits: 403710016, entity: users[0].userdata.id, group: false },
-                { bits: 403710016, entity: users[1].userdata.id, group: false }
-            ]
-        }, '2');
+                { user: users[1], access: 'author' }
+            ],
+            parent: await I.grabDefaultFolder('tasks')
+        });
 
     await I.haveTask({
         title: testrailID,
         status: '1',
         percent_completed: '0',
-        folder_id: createFolder.data.data,
+        folder_id,
         recurrence_type: '0',
         full_time: true,
         private_flag: false,

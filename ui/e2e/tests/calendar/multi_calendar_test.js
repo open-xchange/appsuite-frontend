@@ -26,7 +26,7 @@ Scenario('Create appointments in workweekview', async function (I, users) {
         'io.ox/calendar': { showCheckboxes: true }
     });
     const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    await I.haveFolder('New calendar', 'event', defaultFolderId);
+    await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
@@ -78,7 +78,7 @@ Scenario('Create appointments in weekview', async function (I, users) {
         'io.ox/calendar': { showCheckboxes: true }
     });
     const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    await I.haveFolder('New calendar', 'event', defaultFolderId);
+    await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
@@ -116,7 +116,7 @@ Scenario('Create appointments in monthview', async function (I, users) {
         'io.ox/calendar': { showCheckboxes: true }
     });
     const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    await I.haveFolder('New calendar', 'event', defaultFolderId);
+    await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);
@@ -154,7 +154,7 @@ Scenario('Create appointments in dayview', async function (I, users) {
         'io.ox/calendar': { showCheckboxes: true }
     });
     const defaultFolderId = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    await I.haveFolder('New calendar', 'event', defaultFolderId);
+    await I.haveFolder({ title: 'New calendar', module: 'event', parent: defaultFolderId });
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);

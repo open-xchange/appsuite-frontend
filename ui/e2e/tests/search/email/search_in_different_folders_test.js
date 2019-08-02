@@ -28,7 +28,7 @@ Scenario('[C8402] Search in different folders', async (I, users) => {
     // Precondition: Some emails are in the inbox- and in a subfolder and have the subject "test".
 
     const INBOX = 'default0/INBOX';
-    const SUBFOLDER = (await I.haveFolder('Subfolder', 'mail', 'default0/INBOX')).data;
+    const SUBFOLDER = await I.haveFolder({ title: 'Subfolder', module: 'mail', parent: 'default0/INBOX' });
 
     const USER = users[0];
     const USER_MAILDOMAINPART = users[0].get('primaryEmail').split('@')[1];
