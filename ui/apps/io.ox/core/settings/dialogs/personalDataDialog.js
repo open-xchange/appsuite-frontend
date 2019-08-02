@@ -98,28 +98,42 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
             }
         },
         personalDataView = DisposableView.extend({
-            initialize: function () {
+            initialize: function (options) {
                 var self = this;
                 // create one model for each submodule
                 // makes it easier to use checkbox miniviews later on since data is not nested anymore
                 this.models = {};
                 _(_(modules).keys()).each(function (moduleName) {
+                    if (!self.model.get(moduleName)) return;
                     self.models[moduleName] = new Backbone.Model(self.model.get(moduleName));
                     self.models[moduleName].on('change:enabled', function (model) {
                         self.$el.find('.' + moduleName + '-sub-option').toggleClass('disabled', !model.get('enabled')).find('input').attr('aria-disabled', true).prop('disabled', model.get('enabled') ? '' : 'disabled');
                     });
                 });
+                // second model, that contains currently available downloads and the current job status if there is any
+                this.availableDownloads = options.availableDownloads;
             },
             render: function () {
                 var self = this;
                 this.$el.empty();
+
+                // status message
+                console.log(this);
+                if (this.availableDownloads.get('status') === 'running') {
+                    //#. %1$s: date and time the download was requested
+                    this.$el.append($('<div class="alert alert-info">')
+                        .text(gt('Your download request from %1$s is currently being prepared. You can only request one download at a time.', moment(this.availableDownloads.get('creationTime')).format('LLL'))));
+                    return this;
+                }
+
+                // data selection
                 this.$el.append(
                     $('<div>').text(gt('Please select the data to be included in your download'))
                 ).addClass('personal-data-view');
 
                 // build Checkboxes
                 _(modules).each(function (data, moduleName) {
-                    if (!self.model.get(moduleName).enabled) return;
+                    if (!self.model.get(moduleName)) return;
                     // main checkbox for the module (mail)
                     self.$el.append(new mini.CustomCheckboxView({ name: 'enabled', label: modules[moduleName].label, model: self.models[moduleName] }).render().$el.addClass('main-option '));
                     // sub checkboxes (include trash folder etc)
@@ -129,14 +143,6 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                     });
 
                 });
-
-                // status message
-                if (this.model.get('status') === 'running') {
-                    this.$el.find('.checkbox').addClass('disabled').find('input').attr('aria-disabled', true).prop('disabled', 'disabled');
-                    //#. %1$s: date and time the download was requested
-                    this.$el.append($('<div class="alert alert-info">')
-                        .text(gt('Your download request from %1$s is currently being prepared. You can only request one download at a time.', moment(this.model.get('started')).format('LLL'))));
-                }
 
                 return this;
             },
@@ -150,7 +156,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
         });
 
     var openDialog = function () {
-        api.getAvailableModules().then(function (status) {
+        $.when(api.getAvailableDownloads(), api.getAvailableModules()).then(function (availableDownloads, availableModules) {
 
             var pdView;
 
@@ -161,11 +167,11 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
             .addButton({ action: 'generate', label: gt('Generate download') })
             .build(function () {
 
-                pdView = new personalDataView({ model: new Backbone.Model(status) });
+                pdView = new personalDataView({ model: new Backbone.Model(availableModules), availableDownloads: new Backbone.Model(availableDownloads) });
                 this.$body.append(
                     pdView.render().$el
                 );
-                this.$footer.find('.btn[data-action="generate"]').prop('disabled', pdView.model.get('status') === 'running' ? 'disabled' : '');
+                this.$footer.find('.btn[data-action="generate"]').prop('disabled', pdView.availableDownloads.get('status') === 'running' ? 'disabled' : '');
             })
             .on('generate', function () {
                 pdView.requestDownload();
