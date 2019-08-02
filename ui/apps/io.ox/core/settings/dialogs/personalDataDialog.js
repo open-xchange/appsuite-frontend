@@ -26,14 +26,10 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
     // same structure as api response
     var modules = {
             'mail': {
-                'label': gt('Mail Box'),
+                'label': gt('Mails'),
                 'includeTrash': {
                     //#. shown when a download of mail data is requested
                     'label': gt('include trash folder')
-                },
-                'includeShared': {
-                    //#. shown when a download of mail data is requested
-                    'label': gt('include shared folders')
                 },
                 'subscribedOnly': {
                     //#. shown when a download of mail data is requested
@@ -49,6 +45,10 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                 'includeShared': {
                     //#. shown when a download of calendar data is requested
                     'label': gt('include shared calendars')
+                },
+                'subscribedOnly': {
+                    //#. shown when a download of calendar data is requested
+                    'label': gt('include subscribed calendars only')
                 }
             },
             'contacts': {
@@ -60,11 +60,15 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                 'includeShared': {
                     //#. shown when a download of contact data is requested
                     'label': gt('include shared address books')
+                },
+                'includeDistributionLists': {
+                    //#. shown when a download of contact data is requested
+                    'label': gt('include distribution lists')
                 }
             },
-            'files': {
+            'infostore': {
                 'label': gt('Files'),
-                'includeAllFileVersions': {
+                'includeAllVersions': {
                     //#. shown when a download of (cloud) drive files is requested
                     'label': gt('include all file versions')
                 },
@@ -146,7 +150,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
         });
 
     var openDialog = function () {
-        api.getStatus().then(function (status) {
+        api.getAvailableModules().then(function (status) {
 
             var pdView;
 

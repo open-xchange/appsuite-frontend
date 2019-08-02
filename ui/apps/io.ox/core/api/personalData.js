@@ -12,46 +12,66 @@
  */
 
 define('io.ox/core/api/personalData', [
-    'io.ox/core/event'
-], function (Events) {
+    'io.ox/core/event',
+    'io.ox/core/http'
+], function (Events, http) {
 
     'use strict';
 
     var mockRequestData = {
-        'status': 'none',
-        'mail': {
-            'enabled': true,
-            'includeTrash': false,
-            'includeShared': false,
-            'subscribedOnly': true
+        calendar: {
+            enabled: true,
+            includePublic: false,
+            includeShared: false,
+            subscribedOnly: true
         },
-        'calendar': {
-            'enabled': true,
-            'includePublic': false,
-            'includeShared': false
+        infostore: {
+            enabled: true,
+            includePublic: false,
+            includeShared: false,
+            includeTrash: false,
+            includeAllVersions: false
         },
-        'contacts': {
-            'enabled': true,
-            'includePublic': false,
-            'includeShared': false
+        mail: {
+            enabled: true,
+            includeTrash: false,
+            subscribedOnly: true
         },
-        'files': {
-            'enabled': true,
-            'includeAllFileVersions': false,
-            'includeTrash': false,
-            'includePublic': false,
-            'includeShared': false
+        contacts: {
+            enabled: true,
+            includePublic: false,
+            includeShared: false,
+            includeDistributionLists: false
         },
-        'tasks': {
-            'enabled': true,
-            'includePublic': false,
-            'includeShared': false
+        tasks: {
+            enabled: true,
+            includePublic: false,
+            includeShared: false
         },
-        'maxArchiveSize': '2G'
+        maxFileSize: 1073741824
     };
+
     var api = {
-        getStatus: function () {
-            return $.Deferred().resolve(mockRequestData);
+        downloadFile: function (id, packageNumber) {
+            return http.GET({
+                url: 'api/gdpr/dataexport/' + id,
+                params: {
+                    id: id,
+                    number: packageNumber
+                }
+            });
+        },
+
+        getAvailableDownloads: function () {
+            return http.GET({
+                url: 'api/gdpr/dataexport'
+            });
+        },
+
+        cancelDownloadRequest: function () {
+            return http.DELETE({
+                url: 'api/gdpr/dataexport'
+            });
         },
 
         requestDownload: function (data) {
@@ -59,6 +79,23 @@ define('io.ox/core/api/personalData', [
             data.status = 'running';
             mockRequestData = data;
             console.log('download requested', data, mockRequestData);
+            return http.POST({
+                url: 'api/gdpr/dataexport',
+                data: data
+            });
+        },
+
+        getAvailableModules: function () {
+            return $.Deferred().resolve(mockRequestData);
+            /*return http.get({
+                url: 'api/gdpr/dataexport/availableModules,
+            });*/
+        },
+
+        deleteAllFiles: function () {
+            return http.DELETE({
+                url: 'api/gdpr/dataexport/delete'
+            });
         }
     };
 
