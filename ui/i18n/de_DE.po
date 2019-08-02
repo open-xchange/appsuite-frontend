@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-08-01 15:44+0200\n"
+"PO-Revision-Date: 2019-08-02 16:19+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -3392,7 +3392,7 @@ msgstr "A-Z Index"
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Couldn't load contact data."
-msgstr "Kontaktdaten konnten nicht geladen werden"
+msgstr "Kontaktdaten konnten nicht geladen werden."
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Contacts"
@@ -4458,7 +4458,7 @@ msgid ""
 msgstr ""
 "Ein öffentlicher Ordner ist für Inhalte vorgesehen, die für alle Benutzer "
 "von Interesse sind. Damit andere Benutzer die Inhalte lesen oder bearbeiten "
-"können, müssen Sie entsprechende Berechtigungen an dem öffentlichen Ordner "
+"können, müssen Sie entsprechende Berechtigungen für den öffentlichen Ordner "
 "erteilen."
 
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
@@ -4661,7 +4661,7 @@ msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
 msgstr ""
-"Einstellungen konnten nicht gespeichert werden.Es muss mindestens einen "
+"Einstellungen konnten nicht gespeichert werden. Es muss mindestens einen "
 "Benutzer mit administrativen Rechten geben."
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
@@ -6298,7 +6298,7 @@ msgstr "Leer"
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Could not load this list"
-msgstr "Liste konnte nicht geladen werden"
+msgstr "Diese Liste konnte nicht geladen werden."
 
 #. finish the tour
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
@@ -8190,7 +8190,7 @@ msgstr "Konto-Einstellungen"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Account name"
-msgstr "Account-Name"
+msgstr "Kontoname"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
@@ -9602,22 +9602,22 @@ msgstr "stimmt nicht mit einem Teilstring überein"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "an exact, full match"
-msgstr "eine genaue, volle Übereinstimmung"
+msgstr "eine genaue, exakte Übereinstimmung"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "not an exact, full match "
-msgstr "keine genaue, volle Übereinstimmung "
+msgstr "keine genaue, exakte Übereinstimmung "
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "a full match (allows DOS-style wildcards)"
-msgstr "eine volle Übereinstimmung (erlaubt Wildcards im DOS-Stil)"
+msgstr "eine exakte Übereinstimmung (erlaubt Wildcards im DOS-Stil)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "not a full match (allows DOS-style wildcards)"
-msgstr "keine volle Übereinstimmung (erlaubt Wildcards im DOS-Stil)"
+msgstr "keine exakte Übereinstimmung (erlaubt Wildcards im DOS-Stil)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -10822,7 +10822,7 @@ msgstr "%1$s in %2$s öffnen"
 
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Account Name"
-msgstr "Konto-Name"
+msgstr "Kontoname"
 
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -11897,7 +11897,7 @@ msgstr "Das Fälligkeitsdatum darf nicht vor dem Startdatum liegen."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Costs must be between -%1$d and %1$d."
-msgstr "Kosten müssen zwischen -%1$d und %1$d liegen."
+msgstr "Die Kosten müssen zwischen -%1$d und %1$d liegen."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Costs must only have two decimal places."
@@ -12406,7 +12406,7 @@ msgstr "Erhaltene E-Mails"
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Cannot find any messages this contact sent to you."
-msgstr "Keine Nachricht von diesem Kontakt an Sie gefunden"
+msgstr "Es wurden keine Nachrichten von diesem Kontakt an Sie gefunden."
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Sent mails"
@@ -12414,7 +12414,7 @@ msgstr "Gesendete E-Mails"
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Cannot find any messages you sent to this contact."
-msgstr "Keine Nachricht von Ihnen an diesen Kontakt gefunden"
+msgstr "Es wurden keine Nachrichten von Ihnen an diesen Kontakt gefunden."
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 #: apps/plugins/portal/xing/register.js apps/plugins/xing/main.js
@@ -12718,7 +12718,7 @@ msgstr "Durch Drücken der Eingabetaste öffnen Sie den Flicker-Stream."
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Cannot find user with given name."
-msgstr "Kein Benutzer mit dem angegebenen Namen gefunden"
+msgstr "Es wurde kein Benutzer mit dem angegebenen Namen gefunden."
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Edit Flickr photo stream"
