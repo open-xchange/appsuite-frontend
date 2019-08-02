@@ -758,6 +758,7 @@ Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12',
     I.retry(5).click('~Go to next month', '.window-sidepanel');
     I.click(`~${date.format('l, dddd')}, CW ${date.week()}`, '.window-sidepanel');
 
+    I.waitForDetached(locate('#io-ox-refresh-icon .fa-spin'));
     I.clickToolbar('New');
     I.waitForText('Subject');
     I.fillField('Subject', 'Testappointment');
