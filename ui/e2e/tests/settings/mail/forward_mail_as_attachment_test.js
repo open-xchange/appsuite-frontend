@@ -55,6 +55,7 @@ Scenario('[C7778] Forwarding mail inline/attachment @shaky', async (I, users) =>
     I.click('.list-item.selectable');
     I.waitForVisible('h1.subject');
     I.click('Forward');
+    I.waitToHide('.io-ox-mail-compose-window');
     I.waitForText('Fwd: Richtig gutes Zeug');
     I.see('1 attachment');
     I.waitForFocus('[placeholder="To"]');
