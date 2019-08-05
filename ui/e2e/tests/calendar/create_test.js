@@ -702,6 +702,7 @@ Scenario('[C7423] Create daily recurring appointment every day ends after 5', as
     I.pressKey(['Control', 'a']);
     I.pressKey(date.format('l'));
     I.pressKey('Enter');
+    I.waitForDetached('.date-picker.open');
 
     I.click('Repeat', '.io-ox-calendar-edit-window');
     I.click('Every Monday.');

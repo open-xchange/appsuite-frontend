@@ -29,6 +29,7 @@ Scenario('[C104304] tasks using “Permisions” dialog and sharing link @shaky'
     // Alice shares a folder with 2 tasks
     session('Alice', async () => {
         I.login('app=io.ox/tasks');
+        I.waitForVisible('li a[data-action="io.ox/tasks/actions/create"]');
         I.clickToolbar('New');
         I.waitForText('Subject');
         I.fillField('Subject', 'simple task 1');

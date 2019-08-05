@@ -40,7 +40,7 @@ Scenario('[C7778] Forwarding mail inline/attachment @shaky', async (I, users) =>
     I.click('Forward');
     I.waitForText('Fwd: Richtig gutes Zeug');
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
-        I.see('---------- Original Message ----------');
+        I.waitForText('---------- Original Message ----------');
     });
 
     I.click('Discard');
