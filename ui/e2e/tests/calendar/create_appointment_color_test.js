@@ -51,7 +51,7 @@ let uncurriedCreateAppointment = (I) => ({ subject, folder, startTime, color }) 
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 };
 
-Scenario('[C264519] Create appointments with colors in public folder @shaky', async function (I, users) {
+Scenario('[C264519] Create appointments with colors in public folder', async function (I, users) {
 
     let [user_a, user_b] = users;
     let selectInsideFolder = (node) => locate(node)
@@ -97,8 +97,7 @@ Scenario('[C264519] Create appointments with colors in public folder @shaky', as
     //check if public appointments are there
     I.see('testing is fun', '.workweek .appointment .title-container');
     I.see('testing is awesome', '.workweek .appointment .title-container');
-    //see if appointment colors are still the standard folder color
-    const [folderColor] = await I.grabCssPropertyFrom(selectInsideFolder('div.color-label'), 'background-color');
-    let [appointmentColor] = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
-    expect(folderColor).equal(appointmentColor);
+    //see if appointment colors still drawn with customized color (See Bug 65410)
+    const appointmentColors = await I.grabCssPropertyFrom('.workweek .appointment', 'background-color');
+    expect(appointmentColors).to.deep.equal(['rgba(55, 107, 39, 1)', 'rgba(57, 109, 123, 1)']);
 });
