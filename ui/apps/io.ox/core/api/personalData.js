@@ -75,6 +75,10 @@ define('io.ox/core/api/personalData', [
             ]
         },
         downloadRequested = false;
+
+    // super simple cache to save available modules config, you really only need to get this data once. Not likely to ever change
+    var cache = {};
+
     /*eslint-disable no-unreachable */
     var api = {
         downloadFile: function (id, packageNumber) {
@@ -111,8 +115,12 @@ define('io.ox/core/api/personalData', [
 
         getAvailableModules: function () {
             return $.Deferred().resolve(mockRequestData);
+            if (cache.availableModules) $.Deferred().resolve(cache.availableModules);
             return http.get({
                 url: 'api/gdpr/dataexport/availableModules'
+            }).then(function (data) {
+                cache.availableModules = data;
+                return data;
             });
         },
 

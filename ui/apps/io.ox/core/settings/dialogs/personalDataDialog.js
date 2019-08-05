@@ -98,7 +98,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
             }
         },
         personalDataView = DisposableView.extend({
-            initialize: function (options) {
+            initialize: function () {
                 var self = this;
                 // create one model for each submodule
                 // makes it easier to use checkbox miniviews later on since data is not nested anymore
@@ -110,21 +110,10 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                         self.$el.find('.' + moduleName + '-sub-option').toggleClass('disabled', !model.get('enabled')).find('input').attr('aria-disabled', true).prop('disabled', model.get('enabled') ? '' : 'disabled');
                     });
                 });
-                // second model, that contains currently available downloads and the current job status if there is any
-                this.availableDownloads = options.availableDownloads;
             },
             render: function () {
                 var self = this;
                 this.$el.empty();
-
-                // status message
-                console.log(this);
-                if (this.availableDownloads.get('status') === 'running') {
-                    //#. %1$s: date and time the download was requested
-                    this.$el.append($('<div class="alert alert-info">')
-                        .text(gt('Your download request from %1$s is currently being prepared. You can only request one download at a time.', moment(this.availableDownloads.get('creationTime')).format('LLL'))));
-                    return this;
-                }
 
                 // data selection
                 this.$el.append(
@@ -156,27 +145,36 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
         });
 
     var openDialog = function () {
-        $.when(api.getAvailableDownloads(), api.getAvailableModules()).then(function (availableDownloads, availableModules) {
+        $.when(api.getAvailableDownloads(), api.getAvailableModules()).then(function (downloadStatus, availableModules) {
 
-            var pdView;
+            var availableModulesModel = new Backbone.Model(availableModules),
+                status = new Backbone.Model(downloadStatus),
+                pdView,
+                dialog;
 
-            new ModalDialog({
-                title: gt('Personal data')
-            })
-            .addCancelButton({ left: true })
-            .addButton({ action: 'generate', label: gt('Generate download') })
-            .build(function () {
+            dialog = new ModalDialog({ title: gt('Personal data') })
+                .addCancelButton({ left: true })
+                .build(function () {
+                    if (status.get('status') !== 'running') {
+                        pdView = new personalDataView({ model: availableModulesModel });
+                        this.$body.append(
+                            pdView.render().$el
+                        );
+                        return;
+                    }
+                    //#. %1$s: date and time the download was requested
+                    this.$body.append($('<div class="alert alert-info">')
+                        .text(gt('Your download request from %1$s is currently being prepared. You can only request one download at a time.', moment(status.get('creationTime')).format('LLL'))));
+                });
 
-                pdView = new personalDataView({ model: new Backbone.Model(availableModules), availableDownloads: new Backbone.Model(availableDownloads) });
-                this.$body.append(
-                    pdView.render().$el
-                );
-                this.$footer.find('.btn[data-action="generate"]').prop('disabled', pdView.availableDownloads.get('status') === 'running' ? 'disabled' : '');
-            })
-            .on('generate', function () {
-                pdView.requestDownload();
-            })
-            .open();
+            if (status.get('status') !== 'running') {
+                dialog.addButton({ action: 'generate', label: gt('Generate download') })
+                    .on('generate', function () {
+                        pdView.requestDownload();
+                    });
+            }
+
+            dialog.open();
         });
     };
 
