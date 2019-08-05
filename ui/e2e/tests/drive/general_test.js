@@ -146,13 +146,13 @@ Scenario('[C8371] Delete file', async (I) => {
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
     prepare(I);
-    I.waitForText('document.txt', 1, '.file-list-view');
+    I.waitForText('document.txt', undefined, '.file-list-view');
     I.click(locate('li.list-item').withText('document.txt'));
     I.clickToolbar('~Delete');
     I.waitForText('Do you really want to delete this item?');
     I.click('Delete');
     I.selectFolder('Trash');
-    I.waitForText('document.txt', 1, '.file-list-view');
+    I.waitForText('document.txt', undefined, '.file-list-view');
     I.click(locate('li.list-item').withText('document.txt'));
     I.clickToolbar('~Delete forever');
     I.waitForText('Do you really want to delete this item?');

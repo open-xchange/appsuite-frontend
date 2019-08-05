@@ -114,7 +114,7 @@ Scenario('fullday appointments', async function (I) {
 
     I.clickToolbar('View');
     I.click('Week');
-
+    I.wait(1);
     I.clickToolbar('New');
     I.waitForVisible('*[data-app-name="io.ox/calendar/edit"]');
     I.fillField('Subject', 'Fullday test');
@@ -135,8 +135,9 @@ Scenario('fullday appointments', async function (I) {
     I.click('Fullday test', '.weekview-container.week .appointment');
 
     I.see('5 days', '.io-ox-sidepopup .calendar-detail');
-
+    I.waitForText('Delete');
     I.click('Delete', '.io-ox-sidepopup .calendar-detail');
+    I.waitForText('Delete');
     I.click('Delete', '.modal-dialog .modal-footer');
 
     I.logout();
@@ -367,7 +368,7 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
 
     // create
     I.click('Create', '.io-ox-calendar-edit-window');
-    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+    I.waitForDetached('.io-ox-calendar-edit-window');
 
     if (moment().isSame(date, 'week')) {
         I.waitForVisible('.io-ox-sidepopup');
