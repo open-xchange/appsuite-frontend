@@ -58,7 +58,7 @@
   "dependencies": {
     "@open-xchange/hopscotch": "0.0.1",
     "@open-xchange/moment-interval": "0.0.1",
-    "@open-xchange/tinymce": "5.0.0",
+    "@open-xchange/tinymce": "5.0.2",
     "backbone": "1.3.3",
     "backbone-validation": "0.11.5",
     "bigscreen": "2.0.5",
