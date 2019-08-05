@@ -186,7 +186,7 @@ define('io.ox/contacts/view-detail', [
             index: 100,
             id: 'fullname',
             draw: function (baton) {
-                var options = { html: util.getFullName(baton.data, true), tagName: 'h1 class="fullname"' };
+                var options = { html: util.getFullNameWithFurigana(baton.data), tagName: 'h1 class="fullname"' };
                 this.append(coreUtil.renderPersonalName(options, baton.data));
             }
         },
@@ -195,6 +195,7 @@ define('io.ox/contacts/view-detail', [
             id: 'flag',
             draw: function (baton) {
                 if (!countryFlag) return;
+                if (_.device('smartphone')) return;
                 var country = baton.data.country_home || baton.data.country_business;
                 if (!country) return;
                 var flag = flags[postalAddress.getCountryCode(country)];

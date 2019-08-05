@@ -101,7 +101,7 @@ define('io.ox/contacts/edit/view', [
                 $h2 = $('<h2 class="business hidden-xs">'),
                 $h3 = $('<h2 class="location hidden-xs">');
 
-            this.listenTo(this.model, 'change:title change:first_name change:last_name', updateName);
+            this.listenTo(this.model, 'change:title change:first_name change:last_name change:company change:yomiFirstName change:yomiLastName change:yomiCompany', updateName);
             this.listenTo(this.model, 'change:company change:department change:position', updateBusiness);
             this.listenTo(this.model, 'change:city_home change:city_business change:country_home change:country_business', updateLocation);
             // ... and for diabloc testers
@@ -115,7 +115,7 @@ define('io.ox/contacts/edit/view', [
 
             function updateName() {
                 $h1.empty().append(
-                    util.getFullName(this.model.toJSON(), true)
+                    util.getFullNameWithFurigana(this.model.toJSON())
                 );
             }
 
@@ -197,8 +197,19 @@ define('io.ox/contacts/edit/view', [
             return _(this.sets[name]).any(this.fieldHasContent, this);
         },
 
+        showDisplayName: function () {
+            // show display_name only if display_name is set
+            // but first name, last name, and company are all empty
+            if (this.model.get('first_name')) return false;
+            if (this.model.get('last_name')) return false;
+            if (this.model.get('company')) return false;
+            if (!this.model.get('display_name')) return false;
+            return true;
+        },
+
         isRemovable: function (name) {
             if (this.alwaysVisible[name]) return false;
+            if (name === 'display_name') return false;
             if (/^(street|postal_code|city|state|country)_/.test(name)) return false;
             return true;
         },
@@ -225,17 +236,22 @@ define('io.ox/contacts/edit/view', [
             }
 
             function renderField(name) {
+                var visible;
                 switch (name) {
                     case 'address_home':
                     case 'address_business':
                     case 'address_other':
-                        var visible = (this.visible[name] = this.addressHasContent(name));
                         // show address if at least one field has content
+                        visible = (this.visible[name] = this.addressHasContent(name));
                         return this.renderAddress(name).toggleClass('hidden', !visible);
                     case 'birthday':
                         return this.renderBirthday();
                     case 'note':
                         return this.renderNote();
+                    case 'display_name':
+                        // show display name in special case
+                        visible = (this.visible[name] = this.showDisplayName());
+                        return this.renderTextField(name).toggleClass('hidden', !visible);
                     default:
                         return this.renderTextField(name);
                 }
@@ -348,6 +364,9 @@ define('io.ox/contacts/edit/view', [
             first_name: true,
             last_name: true,
             company: true,
+            yomiFirstName: true,
+            yomiLastName: true,
+            yomiCompany: true,
             department: true,
             email1: true,
             cellular_telephone1: true,
@@ -363,7 +382,7 @@ define('io.ox/contacts/edit/view', [
                 //#. Contact edit dialog. Personal information.
                 add: gt('Add personal info'),
                 fields: [
-                    'title', 'first_name', 'last_name',
+                    'title', 'first_name', 'last_name', 'display_name',
                     'nickname', 'second_name', 'suffix',
                     'birthday', 'anniversary',
                     'marital_status', 'number_of_children', 'url'
@@ -408,6 +427,7 @@ define('io.ox/contacts/edit/view', [
             }
         },
 
+        // needed to draw dropdown options
         sections: {
             personal: [
                 'title', 'first_name', 'last_name',
@@ -453,6 +473,14 @@ define('io.ox/contacts/edit/view', [
             postal_code_other: 3
         }
     });
+
+
+    // add support for yomi fields (Japanese)
+    if (ox.locale === 'ja_JP') {
+        View.prototype.allFields.personal.fields
+            .splice(1, 2, 'yomiLastName', 'last_name', 'yomiFirstName', 'first_name');
+        View.prototype.allFields.business.fields.unshift('yomiCompany');
+    }
 
     // add reverse lookup and flat list
     var reverse = {}, all = [];
@@ -546,6 +574,10 @@ define('io.ox/contacts/edit/view', [
         //#. Notes on a contact in the address book.
         //#. Like in "adding a note". "Notizen" in German, for example.
         note: gt.pgettext('contact', 'Note'),
+        // yomi
+        yomiFirstName: gt('Furigana for first name'),
+        yomiLastName: gt('Furigana for last name'),
+        yomiCompany: gt('Furigana for company'),
         // all other
         image1: gt('Image 1'),
         userfield01: gt('Optional 01'),
@@ -575,10 +607,16 @@ define('io.ox/contacts/edit/view', [
         initialize: function (options) {
             this.isUser = options.isUser;
             this.on('change:title change:first_name change:last_name change:company', _.debounce(this.deriveDisplayName));
-            this.adddDirtyCheck();
+            this.addDirtyCheck();
         },
 
-        adddDirtyCheck: function () {
+        toJSON: function () {
+            // whitelist approach
+            var names = _(View.i18n).keys().concat('id', 'folder_id', 'image1_url');
+            return _(this.attributes).pick(names);
+        },
+
+        addDirtyCheck: function () {
 
             var dirty = false;
 
@@ -600,28 +638,6 @@ define('io.ox/contacts/edit/view', [
 
         deriveDisplayName: function () {
             this.set('display_name', util.getFullName(this.toJSON()));
-        },
-
-        maxLength: {
-            // most fields have a maxlength of 64
-            first_name: 128,
-            last_name: 128,
-            position: 128,
-            tax_id: 128,
-            url: 256,
-            profession: 256,
-            street_home: 256,
-            street_other: 256,
-            street_business: 256,
-            email1: 512,
-            email2: 512,
-            email3: 512,
-            company: 512,
-            note: 5680
-        },
-
-        getMaxLength: function (name) {
-            return this.maxLength[name] || 64;
         },
 
         // add missing promise support
@@ -726,6 +742,28 @@ define('io.ox/contacts/edit/view', [
                 if (coreUtil.isValidMailAddress(value)) return;
                 return gt('This is invalid email address.', View.i18n[name]);
             });
+        },
+
+        maxLength: {
+            // most fields have a maxlength of 64
+            first_name: 128,
+            last_name: 128,
+            position: 128,
+            tax_id: 128,
+            url: 256,
+            profession: 256,
+            street_home: 256,
+            street_other: 256,
+            street_business: 256,
+            email1: 512,
+            email2: 512,
+            email3: 512,
+            company: 512,
+            note: 5680
+        },
+
+        getMaxLength: function (name) {
+            return this.maxLength[name] || 64;
         }
     });
 

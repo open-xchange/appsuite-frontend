@@ -69,7 +69,7 @@
 
         &.vgrid-label {
             width: @photoSize;
-            font-size: @photoSize - 8px;
+            font-size: @photoSize - 16px;
             line-height: 1em;
             text-align: center;
             font-weight: bold;
@@ -80,10 +80,11 @@
             background-color: #fff;
             border-top: 0 none;
             border-bottom: 0 none;
+            /* overflow and nowrap for longer labels (e.g. Japanese) */
+            white-space: nowrap;
+            overflow: visible;
         }
     }
-
-
 
     &.editable .vgrid-cell.contact {
         padding-left: @paddingLeft + @checkboxWidth;
@@ -303,28 +304,36 @@
 
 // smartphone
 @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
-    .io-ox-contacts-window, .io-ox-halo, .io-ox-sidepopup, .io-ox-search-window {
 
-        .vgrid-cell.contact {
-            font-size: 16px;
-            padding: 8px 16px;
+    .contact-header {
 
-            .fullname {
-                font-weight: 500;
+        height: 64px;
+        margin-bottom: 16px;
 
-                .last_name {
-                    font-weight: 500;
-                }
-            }
+        h1 {
+            font-size: 20px;
         }
+
+        .contact-photo {
+            width: 64px;
+            height: 64px;
+            font-size: 24px;
+            float: left;
+            margin-right: 16px;
+        }
+    }
+
+    .contact-detail {
+        .dl-horizontal {
+            dt, dd { line-height: 20px; }
+            dd { margin-bottom: 8px; }
+        }
+    }
+
+    .io-ox-contacts-window, .io-ox-halo, .io-ox-sidepopup, .io-ox-search-window {
 
         .editable .vgrid-cell.contact {
             padding-left: 48px;
-        }
-
-        .vgrid-cell.vgrid-label {
-            padding-top: 16px;
-            padding-left: 16px;
         }
 
         .vgrid.top-toolbar .vgrid-scrollpane {
@@ -333,20 +342,6 @@
         }
 
         .contact-detail {
-
-            .contact-header {
-                margin-bottom: 16px;
-                h1 { font-weight: bold; }
-                h1, h2 {
-                    margin: 0;
-                    padding: 0;
-                    font-size: 16px;
-                    line-height: initial;
-                }
-                h2 {
-                    padding-top: 8px;
-                }
-            }
 
             .comment {
                 margin-bottom: 16px;
@@ -359,9 +354,7 @@
             .io-ox-inline-links:first-child {
                 margin: 0;
                 padding: 15px 0;
-
                 span.io-ox-action-link.dropdown { float: right; }
-
             }
         }
 

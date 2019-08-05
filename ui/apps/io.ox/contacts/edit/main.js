@@ -52,22 +52,20 @@ define('io.ox/contacts/edit/main', [
 
             app.setWindow(win);
 
-            var id, folder_id, def = $.Deferred();
+            var def = $.Deferred();
 
             if (data) {
-                id = data.id;
-                folder_id = data.folder && !data.folder_id ? data.folder : data.folder_id;
-                app.setState(id ? { folder: folder_id, id: id } : { folder: folder_id });
+                // we start with data from a save point
+                app.setState(data.id ? { folder: data.folder_id, id: data.id } : { folder: data.folder_id });
             } else {
-                id = app.getState().id;
-                folder_id = app.getState().folder;
+                // clean start / id might still be undefined
+                data = { id: app.getState().id, folder_id: app.getState().folder };
             }
 
-
-            var isNewContact = !id,
+            var isNewContact = !data.id,
                 // check whether we edit some contact or the current user
-                isUser = String(folder_id) === '6' && String(id) === String(ox.user_id),
-                view = app.view = new View({ data: { id: id, folder_id: folder_id }, isUser: isUser });
+                isUser = String(data.folder_id) === '6' && String(data.id) === String(ox.user_id),
+                view = app.view = new View({ data: data, isUser: isUser });
 
             if (isUser) {
                 app.setTitle(gt('My contact data'));
@@ -105,215 +103,54 @@ define('io.ox/contacts/edit/main', [
                 )
             );
 
-            win.show();
+            win.show(onWindowShow);
 
-            if (isNewContact) {
-                view.render();
-            } else {
-                win.busy();
-                view.model.fetch(data)
-                    .fail(function (e) {
-                        yell(e);
-                        app.quit();
-                    })
-                    .done(function () {
-                        win.idle();
-                        view.render();
-                    });
+            function onWindowShow() {
+
+                if (isNewContact) {
+                    view.render();
+                    onRender();
+                } else {
+                    win.busy();
+                    view.model.fetch(data)
+                        .fail(function (e) {
+                            yell(e);
+                            app.quit();
+                            def.reject();
+                        })
+                        .done(function () {
+                            win.idle();
+                            view.render();
+                            onRender();
+                        });
+                }
             }
 
-            // seems to be outdated since we have floating windows
-            // container = win.nodes.main.scrollable();
-            // container = ;
+            function onRender() {
 
-            // var cont = function (data) {
+                // if edit mode
+                if (data.id) {
+                    app.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
+                }
 
-            //     // if edit mode
-            //     if (data.id) {
-            //         app.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
-            //     }
+                // no autofocus on smartphone and for iOS in special (see bug #36921)
+                if (_.device('!smartphone && !iOS')) {
+                    a11y.getTabbable(view.$el).first().focus();
+                }
 
-            //     win.show(function () {
+                def.resolve();
+            }
 
-            //         var considerSaved = false;
-
-            //         function cont(contact) {
-            //             // fix "display_name only" contacts, e.g. in collected addresses folder
-            //             var data = contact.toJSON();
-            //             if (($.trim(data.first_name) + $.trim(data.yomiFirstName) === '') &&
-            //                 ($.trim(data.last_name) + $.trim(data.yomiLastName)) === '') {
-            //                 contact.set('last_name', coreUtil.unescapeDisplayName(contact.get('display_name')), { silent: true });
-            //             }
-
-            //             if (app.userMode) {
-            //                 app.setTitle(gt('My contact data'));
-            //             } else {
-            //                 app.setTitle(getTitle(contact));
-            //                 win.setTitle(contact.has('id') ? gt('Edit contact') : gt('Create contact'));
-            //             }
-
-            //             app.contact = contact;
-            //             var editViewtoUse = app.userMode ? view.protectedMethods.createContactEdit('io.ox/core/user') : view.ContactEditView;
-            //             app.newView = new View({ model: new Backbone.Model(data) });
-            //             app.view = editView = new editViewtoUse({ model: contact, app: app });
-            //             container.append(app.newView.render().$el);
-            //             // just render, no longer add
-            //             editView.render();
-
-            //             // no autofocus on smartphone and for iOS in special (see bug #36921)
-            //             if (_.device('!smartphone && !iOS')) {
-            //                 a11y.getTabbable(container).first().focus();
-            //             }
-
-            //             editView.on('save:start', function () {
-            //                 win.busy();
-            //                 // reset error marker
-            //                 container.find('[data-field]').removeClass('has-error');
-            //             });
-
-            //             editView.on('save:fail', function (e, error) {
-
-            //                 // invalid data?
-            //                 var invalid = false, field;
-            //                 if (error && error.model) {
-            //                     _(error.model.attributeValidity).each(function (valid, id) {
-
-            //                         if (!valid && !invalid) {
-            //                             field = container.find('[data-field="' + id + '"]');
-            //                             invalid = true;
-            //                         }
-            //                     });
-            //                 }
-
-            //                 win.idle();
-
-            //                 if (invalid) {
-            //                     if (error && _.isArray(error.error)) {
-            //                         // specific errors
-            //                         var allErrors = '';
-            //                         _(error.error).each(function (err) {
-            //                             // concat issues
-            //                             allErrors += err + '\n';
-            //                         });
-            //                         if (allErrors) notifications.yell('error', allErrors);
-            //                     } else {
-            //                         // unspecific case
-            //                         notifications.yell('error', gt('Some fields contain invalid data'));
-            //                     }
-            //                     // set error marker and scroll
-            //                     field = field.addClass('has-error').get(0);
-            //                     if (field) field.scrollIntoView();
-            //                     field = null;
-            //                 } else {
-            //                     notifications.yell(error);
-            //                 }
-            //             });
-
-            //             editView.listenTo(contact, 'server:error', function (error) {
-            //                 notifications.yell(error);
-            //             });
-
-            //             function fnToggleSave(isDirty) {
-            //                 var node = win.nodes.footer.find('.btn[data-action="save"]');
-            //                 if (_.device('smartphone')) node = container.parent().parent().find('.btn[data-action="save"]');
-            //                 node.prop('disabled', !isDirty);
-            //             }
-
-            //             if (!data.id) {
-            //                 editView.listenTo(contact, 'change', function () {
-            //                     if (!getDirtyStatus) return;
-            //                     var isDirty = getDirtyStatus();
-            //                     fnToggleSave(isDirty);
-            //                 });
-
-            //                 if (contact.id === undefined && _.values(_(contact.attributes).compact()).length <= 1) {
-            //                     win.nodes.footer.find('.btn[data-action="save"]').prop('disabled', true);
-            //                 }
-
-            //                 container.find('input[type="text"]').on('keyup', _.debounce(function () {
-            //                     var isDirty = getDirtyStatus();
-            //                     if (!isDirty && $(this).val()) {
-            //                         fnToggleSave(true);
-            //                     } else if (!isDirty) {
-            //                         fnToggleSave(false);
-            //                     }
-            //                 }, 100));
-            //             }
-
-            //             editView.on('save:success', function (e, data) {
-            //                 if (def.resolve) {
-            //                     def.resolve(data);
-            //                 }
-            //                 considerSaved = true;
-            //                 win.idle();
-            //                 app.quit();
-            //             });
-
-            //             if (settings.get('features/PIMAttachments', capabilities.has('filestore'))) {
-            //                 // using parent here cause it's top padding affects 'getDimensions'
-            //                 app.view.$el.parent().append(
-            //                     new upload.dnd.FloatingDropzone({
-            //                         app: app,
-            //                         point: 'io.ox/contacts/edit/dnd/actions'
-            //                     }).render().$el
-            //                 );
-            //             }
-            //             win.on('show', function () {
-            //                 if (contact.get('id')) {
-            //                     //set url parameters
-            //                     app.setState({ folder: contact.get('folder_id'), id: contact.get('id') });
-            //                 } else {
-            //                     app.setState({ folder: contact.get('folder_id'), id: null });
-            //                 }
-            //             });
-
-            //             ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
-
-            //             contact.on('change:first_name change:last_name change:display_name', function () {
-            //                 app.setTitle(getTitle(contact));
-            //             });
-
-            //             def.resolve();
-            //         }
-
-            //         // create model & view
-            //         if (data.id) {
-            //             app.userMode = data.id === data.user_id || (data.folder === '6' && data.id === String(ox.user_id));
-            //             var factory = app.userMode ? model.protectedMethods.buildFactory('io.ox/core/user/model', userApi) : model.factory;
-
-            //             factory.realm('edit').retain().get({
-            //                 id: data.id,
-            //                 folder: data.folder_id
-            //             })
-            //             .done(function (model) {
-            //                 cont(model);
-            //             });
-            //         } else {
-            //             cont(model.factory.create(data));
-            //             container.find('[data-extension-id="io.ox/contacts/edit/view/display_name_header"]').text(gt('New contact'));
-            //         }
-
-            //         getDirtyStatus = function () {
-            //             var isNew = !data.id,
-            //                 changes = app.contact.changedSinceLoading();
-            //             if (isNew) {
-            //                 if (changes.display_name && (!changes.first_name && !changes.last_name)) {
-            //                     delete changes.display_name;
-            //                 }
-            //                 for (var k in changes) {
-            //                     if (changes.hasOwnProperty(k) && !changes[k]) {
-            //                         delete changes[k];
-            //                     }
-            //                 }
-            //             }
-            //             if (considerSaved) return false;
-            //             if (changes.folder_id && _(changes).size() === 1) return false;
-            //             if (changes.display_name && _(changes).size() === 1) return false;
-            //             return app.contact && !_.isEmpty(app.contact.changedSinceLoading());
-            //         };
-
-            //     });
-            // };
+            // TODO (pre-hardeing)
+            // - fail save & restore -> DONE
+            // - support for Furigana -> DONE
+            // - support for YOMI fields -> DONE
+            // - fix "display_name only" contacts, e.g. in collected addresses folder -> DONE
+            // - too much code for disabling "Save"; just show it (cp. https://axesslab.com/disabled-buttons-suck/) -> DONE
+            // - a11y (make automated audits happy) -> DONE
+            // - Smartphone support (it looks okay) -> DONE
+            // - check server-side errors
+            // - support for PIM attachments
 
             return def;
         });
@@ -344,48 +181,20 @@ define('io.ox/contacts/edit/main', [
         });
 
         app.failSave = function () {
-            // if (this.contact) {
-            //     var title = this.contact.get('display_name'),
-            //         savePoint = {
-            //             description: gt('Contact') + (title ? ': ' + title : ''),
-            //             module: 'io.ox/contacts/edit',
-            //             point: _.omit(this.contact.attributes, 'crop', 'pictureFile', 'pictureFileEdited'),
-            //             passPointOnGetApp: true
-            //         };
-
-            //     return savePoint;
-            // }
-            return false;
-        };
-
-        app.failRestore = function () {
-            // if (_.isUndefined(point.id)) {
-            //     this.contact.set(point);
-            // } else {
-            //     this.contact.set(point);
-            //     this.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
-            //     //this.setTitle(point.title || gt('Edit Contact'));
-            // }
-            // editView.trigger('restore');
-            return $.when();
+            if (!this.view || !this.view.model) return false;
+            var model = this.view.model,
+                title = model.get('display_name');
+            return {
+                description: gt('Contact') + (title ? ': ' + title : ''),
+                module: 'io.ox/contacts/edit',
+                point: model.toJSON(),
+                passPointOnGetApp: true
+            };
         };
 
         app.getContextualHelp = function () {
             return this.userMode ? 'ox.appsuite.user.sect.settings.personaldata.html' : 'ox.appsuite.user.sect.contacts.gui.create.html';
         };
-
-        // ext.point('io.ox/contacts/edit/main/model').extend({
-        //     id: 'io.ox/contacts/edit/main/model/auto_display_name',
-        //     customizeModel: function (contact) {
-        //         contact.on('change:first_name change:last_name change:title',
-        //             function (model) {
-        //                 if (model.changed.display_name) return;
-        //                 var mod = model.toJSON();
-        //                 delete mod.display_name;
-        //                 model.set('display_name', util.getFullName(mod));
-        //             });
-        //     }
-        // });
 
         return app;
     }
@@ -400,5 +209,4 @@ define('io.ox/contacts/edit/main', [
             }
         }
     };
-
 });

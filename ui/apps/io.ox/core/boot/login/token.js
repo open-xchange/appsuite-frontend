@@ -66,7 +66,7 @@ define('io.ox/core/boot/login/token', [
         var def = $.Deferred();
 
         ox.session = data.session;
-        ox.secretCookie = hash.secretCookie === 'true';
+        ox.secretCookie = (hash.secretCookie || _.getCookie('secretCookie')) === 'true';
 
         // ramup is uncritical, it may
         // fail but will not block the UI. So we use always

@@ -80,7 +80,7 @@ define('io.ox/contacts/util', [
         var copy = obj;
         if (htmlOutput === true) {
             copy = {};
-            _(['title', 'first_name', 'last_name', 'display_name', 'cn']).each(function (id) {
+            _(['title', 'first_name', 'last_name', 'company', 'display_name', 'cn']).each(function (id) {
                 var text = $.trim(obj[id]);
                 if (!text) {
                     // yomi as fallback
@@ -88,6 +88,8 @@ define('io.ox/contacts/util', [
                         text = $.trim(obj.yomiLastName);
                     } else if (id === 'first_name' && $.trim(obj.yomiFirstName)) {
                         text = $.trim(obj.yomiFirstName);
+                    } else if (id === 'company' && $.trim(obj.yomiCompany)) {
+                        text = $.trim(obj.yomiCompany);
                     } else {
                         return;
                     }
@@ -179,6 +181,11 @@ define('io.ox/contacts/util', [
         getFullName: function (obj, htmlOutput) {
             var fmt = getFullNameFormatHelper(obj, false, htmlOutput);
             return gt.format(fmt.format, fmt.params);
+        },
+
+        // this gets overridden in case of ja_JP
+        getFullNameWithFurigana: function (data) {
+            return this.getFullName(data, true);
         },
 
         getDisplayName: function (obj) {
