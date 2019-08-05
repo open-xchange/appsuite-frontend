@@ -99,13 +99,13 @@ define('io.ox/core/api/personalData', [
         },
 
         cancelDownloadRequest: function () {
+            downloadRequested = false;
             return http.DELETE({
                 url: 'api/gdpr/dataexport'
             });
         },
 
         requestDownload: function (data) {
-            console.log('download requested', data);
             downloadRequested = true;
             return http.POST({
                 url: 'api/gdpr/dataexport',

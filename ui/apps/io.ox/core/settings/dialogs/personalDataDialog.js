@@ -142,6 +142,17 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                 });
                 api.requestDownload(this.model.toJSON());
             }
+        }),
+        statusView = DisposableView.extend({
+            render: function () {
+                this.$el.empty();
+
+                //#. %1$s: date and time the download was requested
+                this.$el.append($('<div class="alert alert-info">')
+                .text(gt('Your download request from %1$s is currently being prepared. You can only request one download at a time.', moment(this.model.get('creationTime')).format('LLL'))));
+
+                return this;
+            }
         });
 
     var openDialog = function () {
@@ -149,8 +160,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
 
             var availableModulesModel = new Backbone.Model(availableModules),
                 status = new Backbone.Model(downloadStatus),
-                pdView,
-                dialog;
+                pdView, stView, dialog;
 
             dialog = new ModalDialog({ title: gt('Personal data') })
                 .addCancelButton({ left: true })
@@ -162,9 +172,11 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                         );
                         return;
                     }
-                    //#. %1$s: date and time the download was requested
-                    this.$body.append($('<div class="alert alert-info">')
-                        .text(gt('Your download request from %1$s is currently being prepared. You can only request one download at a time.', moment(status.get('creationTime')).format('LLL'))));
+
+                    stView = new statusView({ model: status });
+                    this.$body.append(
+                        stView.render().$el
+                    );
                 });
 
             if (status.get('status') !== 'running') {
@@ -172,6 +184,11 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                     .on('generate', function () {
                         pdView.requestDownload();
                     });
+            } else {
+                dialog.addButton({ action: 'cancelDownload', label: gt('Cancel download request') })
+                .on('cancelDownload', function () {
+                    api.cancelDownloadRequest();
+                });
             }
 
             dialog.open();
