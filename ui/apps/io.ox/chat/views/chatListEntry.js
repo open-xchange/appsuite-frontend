@@ -91,7 +91,7 @@ define('io.ox/chat/views/chatListEntry', [
                 isPrivate = model.get('type') === 'private';
 
             this.$('.last-modified').text(model.getLastMessageDate());
-            this.$('.text-preview').append(model.getLastMessage());
+            this.$('.text-preview').empty().append(model.getLastMessage());
             this.$('.delivery')
                 .toggleClass('hidden', !isCurrentUser)
                 .removeClass('server client seen')
