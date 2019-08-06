@@ -185,6 +185,32 @@ define('io.ox/chat/data', [
         comparator: 'sent',
         initialize: function (models, options) {
             this.roomId = options.roomId;
+            this.nextComplete = options.nextComplete || true;
+        },
+        paginate: function (direction) {
+            var id;
+            if (direction === 'prev') id = this.first().get('id');
+            else if (direction === 'next') id = this.last().get('id');
+
+            return this.load({ id: id, direction: direction, limit: 40 });
+        },
+        load: function (params) {
+            $.ajax({ url: this.url() + '?' + $.param(params) })
+            .then(function (list) {
+                this.add(list);
+                params.direction = params.direction || 'prev';
+                if (list.length < params.limit) {
+                    this[params.direction + 'Complete'] = true;
+                    this.trigger('complete:' + params.direction);
+                }
+            }.bind(this));
+        },
+        sync: function (method, collection, options) {
+            if (method === 'read') {
+                var limit = Math.max(collection.length, 40);
+                return this.load({ limit: limit });
+            }
+            return Backbone.Collection.prototype.sync.call(this, method, collection, options);
         },
         url: function () {
             return data.API_ROOT + '/rooms/' + this.roomId + '/messages';

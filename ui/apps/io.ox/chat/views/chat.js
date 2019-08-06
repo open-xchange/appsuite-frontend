@@ -24,8 +24,6 @@ define('io.ox/chat/views/chat', [
 
     'use strict';
 
-    var MESSAGE_LIMIT = 20;
-
     ext.point('io.ox/chat/detail/toolbar').extend({
         id: 'back',
         index: 100,
@@ -111,7 +109,9 @@ define('io.ox/chat/views/chat', [
                 'change:body': this.onChangeBody,
                 'change:fileId': this.onChangeBody,
                 'change:time': this.onChangeTime,
-                'change:state': this.onChangeDelivery
+                'change:state': this.onChangeDelivery,
+                'complete:prev': this.onComplete.bind(this, 'prev'),
+                'complete:next': this.onComplete.bind(this, 'next')
             });
 
             this.model.messages.fetch();
@@ -180,13 +180,15 @@ define('io.ox/chat/views/chat', [
                     )
                 ),
                 new ToolbarView({ point: 'io.ox/chat/detail/toolbar', title: 'Chat actions' }).render(new ext.Baton({ model: this.model })).$el,
-                $('<div class="scrollpane">').append(
+                $('<div class="scrollpane">').on('scroll', $.proxy(this.onScroll, this)).append(
+                    $('<div class="paginate prev">').toggle(!this.model.messages.prevComplete),
                     $('<div class="conversation">').append(
                         this.$messages = $('<div class="messages">').append(
-                            this.model.messages.last(MESSAGE_LIMIT).map(this.renderMessage, this)
+                            this.model.messages.map(this.renderMessage, this)
                         ),
                         this.typing.$el
-                    )
+                    ),
+                    $('<div class="paginate next">').toggle(!this.model.messages.nextComplete)
                 ),
                 $('<div class="controls">').append(
                     this.$editor = $('<textarea class="form-control" placeholder="Enter message here">'),
@@ -293,6 +295,24 @@ define('io.ox/chat/views/chat', [
             this.$('.title').text(model.getTitle() || '\u00a0');
         },
 
+        onScroll: _.throttle(function () {
+            if (this.$('.messages').is(':empty')) return;
+            if (!this.model.messages.prevComplete) {
+                var $paginatePrev = this.$('.paginate.prev');
+                if ($paginatePrev.hasClass('io-ox-busy')) return;
+                if ($paginatePrev.position().top <= 0) return;
+                $paginatePrev.busy();
+                this.model.messages.paginate('prev');
+            }
+            if (!this.model.messages.nextComplete) {
+                var $paginateNext = this.$('.paginate.next');
+                if ($paginateNext.hasClass('io-ox-busy')) return;
+                if ($paginateNext.position().top <= 0) return;
+                $paginateNext.busy();
+                this.model.messages.paginate('next');
+            }
+        }, 300),
+
         onAdd: _.debounce(function (model, collection) {
             if (this.disposed) return;
 
@@ -300,12 +320,13 @@ define('io.ox/chat/views/chat', [
             this.$messages.empty().append(
                 collection.map(this.renderMessage.bind(this))
             );
-            // too many messages?
-            var children = this.$messages.children();
-            if (children.length > MESSAGE_LIMIT) children.slice(0, children.length - MESSAGE_LIMIT).remove();
             // proper scroll position
             this.scrollToBottom();
         }, 1),
+
+        onComplete: function (direction) {
+            this.$('.paginate.' + direction).idle().hide();
+        },
 
         getMessageNode: function (model, selector) {
             return this.$('.message[data-cid="' + model.cid + '"] ' + (selector || ''));
