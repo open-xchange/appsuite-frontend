@@ -116,8 +116,9 @@ define('io.ox/chat/views/chat', [
                 'paginate': this.toggleAutoScroll.bind(this, false)
             });
 
-            this.model.messages.fetch();
             this.model.messages.messageId = this.messageId;
+            if (this.messageId && !this.model.messages.get(this.messageId)) this.model.messages.reset();
+            _.delay(this.model.messages.fetch.bind(this.model.messages));
 
             // tracking typing
             this.typing = {
