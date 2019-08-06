@@ -265,7 +265,18 @@ define('io.ox/chat/views/chat', [
         },
 
         scrollToBottom: function () {
-            this.$('.scrollpane').scrollTop(0xFFFF);
+            var position = 0xFFFF,
+                scrollpane = this.$('.scrollpane');
+            if (this.messageId) {
+                var model = this.model.messages.get(this.messageId);
+                if (model) {
+                    var elem = this.$messages.find('[data-cid="' + model.cid + '"]'),
+                        delta = elem.position().top - scrollpane.height() / 2;
+                    position = scrollpane.scrollTop() + delta;
+                    delete this.messageId;
+                }
+            }
+            scrollpane.scrollTop(position);
             this.model.set('unreadCount', 0);
         },
 
@@ -301,25 +312,29 @@ define('io.ox/chat/views/chat', [
 
         onScroll: _.throttle(function () {
             if (this.$('.messages').is(':empty')) return;
-            if (!this.model.messages.prevComplete) {
-                var $paginatePrev = this.$('.paginate.prev');
-                if ($paginatePrev.hasClass('io-ox-busy')) return;
-                if ($paginatePrev.position().top < -$paginatePrev.height() * 2) return;
-                $paginatePrev.busy();
-                this.model.messages.paginate('prev').then(function () {
-                    console.log('on paginate end');
-                    $paginatePrev.idle();
-                });
-            }
-            if (!this.model.messages.nextComplete) {
-                var $paginateNext = this.$('.paginate.next');
-                if ($paginateNext.hasClass('io-ox-busy')) return;
-                if ($paginateNext.position().top - $paginateNext.height() > $paginateNext.parent().height()) return;
-                $paginateNext.busy();
-                this.model.messages.paginate('next').then(function () {
-                    $paginateNext.idle();
-                });
-            }
+            (function (view) {
+                if (!view.model.messages.prevComplete) {
+                    var $paginatePrev = view.$('.paginate.prev');
+                    if ($paginatePrev.hasClass('io-ox-busy')) return;
+                    if ($paginatePrev.position().top < -$paginatePrev.height() * 2) return;
+                    $paginatePrev.busy();
+                    view.model.messages.paginate('prev').then(function () {
+                        $paginatePrev.idle();
+                    });
+                }
+            }(this));
+
+            (function (view) {
+                if (!view.model.messages.nextComplete) {
+                    var $paginateNext = view.$('.paginate.next');
+                    if ($paginateNext.hasClass('io-ox-busy')) return;
+                    if ($paginateNext.position().top - $paginateNext.height() > $paginateNext.parent().height()) return;
+                    $paginateNext.busy();
+                    view.model.messages.paginate('next').then(function () {
+                        $paginateNext.idle();
+                    });
+                }
+            }(this));
         }, 300),
 
         toggleAutoScroll: function (autoScroll) {
@@ -343,7 +358,7 @@ define('io.ox/chat/views/chat', [
             }.bind(this));
 
             if (this.autoScroll) this.scrollToBottom();
-            else scrollpane.scrollTop(firstChild.position().top - prevTop);
+            else if (firstChild.position().top - prevTop) scrollpane.scrollTop(firstChild.position().top - prevTop);
 
             this.toggleAutoScroll(true);
         }, 1),
