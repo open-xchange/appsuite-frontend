@@ -150,7 +150,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                 if (this.model.get('status') === 'running') {
                     //#. %1$s: date and time the download was requested
                     this.$el.append($('<div class="alert alert-info">')
-                    .text(gt('Your download request from %1$s is currently being prepared. You can only request one download at a time.', moment(this.model.get('creationTime')).format('LLL'))));
+                    .text(gt('Your download request from %1$s is currently being prepared. You can only request one download at a time.\n\nYou will be noticed by e-mail when your download is ready.', moment(this.model.get('creationTime')).format('LLL'))));
                 }
 
                 if (this.model.get('results') && this.model.get('results').length) {
@@ -184,7 +184,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                 status = new Backbone.Model(downloadStatus),
                 pdView, dlView, dialog;
 
-            dialog = new ModalDialog({ title: gt('Personal data') })
+            dialog = new ModalDialog({ title: gt('Data Export') })
                 .addCancelButton({ left: true })
                 .build(function () {
                     if (status.get('status') !== 'running' && !(status.get('results') && status.get('results').length)) {
@@ -192,7 +192,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                         this.$body.append(
                             pdView.render().$el
                         );
-                        this.on('generate', _.bind(pdView.requestDownload, pdView));
+                        this.on('create', _.bind(pdView.requestDownload, pdView));
                     }
 
                     dlView = new downloadView({ model: status });
@@ -204,10 +204,10 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                 .on('removefiles', api.deleteAllFiles);
 
             if (status.get('status') !== 'running' && !(status.get('results') && status.get('results').length)) {
-                dialog.addButton({ action: 'generate', label: gt('Generate download') });
+                dialog.addButton({ action: 'create', label: gt('Create download') });
             }
             if (status.get('status') === 'running') {
-                dialog.addButton({ action: 'cancelDownload', label: gt('Cancel download request') })
+                dialog.addButton({ action: 'cancelDownload', label: gt('Cancel download creation') })
                     //mock
                     .on('cancel', function () {
                         api.requestFinished = true;
