@@ -98,6 +98,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
             }
         },
         personalDataView = DisposableView.extend({
+            className: 'personal-data-view',
             initialize: function () {
                 var self = this;
                 // create one model for each submodule
@@ -116,9 +117,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                 this.$el.empty();
 
                 // data selection
-                this.$el.append(
-                    $('<div>').text(gt('Please select the data to be included in your download'))
-                ).addClass('personal-data-view');
+                this.$el.append($('<div>').text(gt('Please select the data to be included in your download')));
 
                 // build Checkboxes
                 _(modules).each(function (data, moduleName) {
@@ -143,13 +142,36 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                 api.requestDownload(this.model.toJSON());
             }
         }),
-        statusView = DisposableView.extend({
+        downloadView = DisposableView.extend({
+            className: 'personal-data-download-view',
             render: function () {
                 this.$el.empty();
 
-                //#. %1$s: date and time the download was requested
-                this.$el.append($('<div class="alert alert-info">')
-                .text(gt('Your download request from %1$s is currently being prepared. You can only request one download at a time.', moment(this.model.get('creationTime')).format('LLL'))));
+                if (this.model.get('status') === 'running') {
+                    //#. %1$s: date and time the download was requested
+                    this.$el.append($('<div class="alert alert-info">')
+                    .text(gt('Your download request from %1$s is currently being prepared. You can only request one download at a time.', moment(this.model.get('creationTime')).format('LLL'))));
+                }
+
+                if (this.model.get('results') && this.model.get('results').length) {
+                    this.$el.append(
+                        //#. %1$s: date and time when the download expires
+                        $('<label>').text(gt('Files ready for download. Available until %1$s.', moment(this.model.get('avaiableUntil')).format('LLL'))),
+                        $('<ul class="list-unstyled downloads">').append(
+                            _(this.model.get('results')).map(function (file) {
+                                return $('<li class="file">')
+                                    .append(
+                                        $('<span>').text(file.fileInfo),
+                                        $('<button type="button" class="btn fa fa-download">')
+                                            //#. %1$s: filename
+                                            .attr('title', gt('Download %1$s.', file.fileInfo))
+                                            .on('click', function () {
+                                                api.downloadFile(file.taskId, file.number);
+                                            })
+                                    );
+                            })
+                        ));
+                }
 
                 return this;
             }
@@ -160,35 +182,39 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
 
             var availableModulesModel = new Backbone.Model(availableModules),
                 status = new Backbone.Model(downloadStatus),
-                pdView, stView, dialog;
+                pdView, dlView, dialog;
 
             dialog = new ModalDialog({ title: gt('Personal data') })
                 .addCancelButton({ left: true })
                 .build(function () {
-                    if (status.get('status') !== 'running') {
+                    if (status.get('status') !== 'running' && !(status.get('results') && status.get('results').length)) {
                         pdView = new personalDataView({ model: availableModulesModel });
                         this.$body.append(
                             pdView.render().$el
                         );
-                        return;
+                        this.on('generate', _.bind(pdView.requestDownload, pdView));
                     }
 
-                    stView = new statusView({ model: status });
+                    dlView = new downloadView({ model: status });
                     this.$body.append(
-                        stView.render().$el
+                        dlView.render().$el
                     );
-                });
+                })
+                .on('cancelDownload', api.cancelDownloadRequest)
+                .on('removefiles', api.deleteAllFiles);
 
-            if (status.get('status') !== 'running') {
-                dialog.addButton({ action: 'generate', label: gt('Generate download') })
-                    .on('generate', function () {
-                        pdView.requestDownload();
-                    });
-            } else {
+            if (status.get('status') !== 'running' && !(status.get('results') && status.get('results').length)) {
+                dialog.addButton({ action: 'generate', label: gt('Generate download') });
+            }
+            if (status.get('status') === 'running') {
                 dialog.addButton({ action: 'cancelDownload', label: gt('Cancel download request') })
-                .on('cancelDownload', function () {
-                    api.cancelDownloadRequest();
-                });
+                    //mock
+                    .on('cancel', function () {
+                        api.requestFinished = true;
+                    });
+            }
+            if (status.get('results') && status.get('results').length) {
+                dialog.addButton({ action: 'removefiles', label: gt('Delete all avaliable downloads') });
             }
 
             dialog.open();

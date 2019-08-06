@@ -54,6 +54,11 @@ define('io.ox/core/api/personalData', [
         mockDownloadData = {
             id: 'EvilMasterPlan1',
             status: 'running',
+            startTime: moment('2019-10-17').valueOf()
+        },
+        mockFileData = {
+            id: 'EvilMasterPlan1',
+            status: 'finished',
             creationTime: moment('2019-10-22').valueOf(),
             startTime: moment('2019-10-17').valueOf(),
             duration: moment.duration(5, 'days').valueOf(),
@@ -64,13 +69,12 @@ define('io.ox/core/api/personalData', [
                     number: 1,
                     contentType: 'zip',
                     taskId: '1337'
-                }
-            ],
-            workItems: [
+                },
                 {
-                    id: 'TopSecretPlans',
-                    module: 'mail',
-                    status: 'ready'
+                    fileInfo: 'LazorSharksReceipt',
+                    number: 2,
+                    contentType: 'pdf',
+                    taskId: '1337'
                 }
             ]
         },
@@ -92,6 +96,7 @@ define('io.ox/core/api/personalData', [
         },
 
         getAvailableDownloads: function () {
+            if (this.requestFinished) return $.Deferred().resolve(mockFileData);
             return downloadRequested ? $.Deferred().resolve(mockDownloadData) : $.Deferred().resolve({ status: 'idle', results: [] });
             return http.GET({
                 url: 'api/gdpr/dataexport'
@@ -125,10 +130,13 @@ define('io.ox/core/api/personalData', [
         },
 
         deleteAllFiles: function () {
+            api.requestFinished = false;
+            downloadRequested = false;
             return http.DELETE({
                 url: 'api/gdpr/dataexport/delete'
             });
-        }
+        },
+        requestFinished: false
     };
     /*eslint-enable no-unreachable */
     Events.extend(api);
