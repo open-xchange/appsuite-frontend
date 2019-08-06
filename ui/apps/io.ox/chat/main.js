@@ -69,9 +69,6 @@ define('io.ox/chat/main', [
                 case 'show-channels': this.showChannels(); break;
                 case 'show-all-files': this.showAllFiles(); break;
                 case 'show-file': this.showFile(data); break;
-                case 'prev-file': this.moveFile(-1); break;
-                case 'next-file': this.moveFile(+1); break;
-                case 'close-file': this.closeFile(); break;
                 case 'open-chat': this.toggleChat(data.id, true); break;
                 case 'unsubscribe-chat': this.toggleChat(data.id, false); break;
                 case 'add-member': this.addMember(data.id); break;
@@ -147,29 +144,28 @@ define('io.ox/chat/main', [
         },
 
         showFile: function (cmd) {
-            renderOverlay().appendTo(this.$body).focus();
-            this.updateFile(cmd.index);
-        },
+            var options = {
+                files: data.files.map(function (file) {
+                    return _.extend({
+                        url: file.getPreviewUrl(),
+                        // try to fake mail compose attachement
+                        space: true
+                    }, file.pick('name', 'size', 'id'));
+                }),
+                opt: {
+                    disableFolderInfo: true,
+                    disableFileDetail: true
+                },
+                selection: {
+                    id: data.files.at(cmd.index).get('id')
+                }
+            };
 
-        moveFile: function (step) {
-            var index = parseInt(this.$('.overlay').attr('data-index'), 10) + step,
-                length = data.files.length;
-            if (index < 0) index = length - 1; else if (index >= length) index = 0;
-            this.updateFile(index);
-        },
-
-        updateFile: function (index) {
-            this.$('.overlay')
-                .attr('data-index', index)
-                .find('img').remove().end()
-                .append(
-                    $('<img>', { alt: '', src: data.files.at(index).getPreviewUrl() })
-                );
-        },
-
-        closeFile: function () {
-            this.$('.overlay').remove();
-            this.$el.focus();
+            require(['io.ox/core/viewer/main'], function (Viewer) {
+                var viewer = new Viewer();
+                // disable file details: data unavailbale for mail attachments
+                viewer.launch(options);
+            });
         },
 
         onLeftNavigationKeydown: function (e) {
@@ -349,14 +345,6 @@ define('io.ox/chat/main', [
             )
         );
     });
-
-    function renderOverlay() {
-        return $('<div class="overlay abs" tabindex="-1">').append(
-            $('<button type="button" data-cmd="prev-file"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
-            $('<button type="button" data-cmd="next-file"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>'),
-            $('<button type="button" data-cmd="close-file"><i class="fa fa-close" aria-hidden="true"></i></button>')
-        );
-    }
 
     ox.chat = {
         data: data
