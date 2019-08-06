@@ -192,17 +192,21 @@ define('io.ox/chat/data', [
             if (direction === 'prev') id = this.first().get('id');
             else if (direction === 'next') id = this.last().get('id');
 
-            return this.load({ id: id, direction: direction, limit: 40 });
+            return this.load({ id: id, direction: direction, limit: 40 }, 'paginate');
         },
-        load: function (params) {
-            $.ajax({ url: this.url() + '?' + $.param(params) })
+        load: function (params, type) {
+            type = type || 'load';
+            this.trigger('before:' + type);
+            return $.ajax({ url: this.url() + '?' + $.param(params) })
             .then(function (list) {
+                this.trigger(type);
                 this.add(list);
                 params.direction = params.direction || 'prev';
                 if (list.length < params.limit) {
                     this[params.direction + 'Complete'] = true;
                     this.trigger('complete:' + params.direction);
                 }
+                this.trigger('after:' + type);
             }.bind(this));
         },
         sync: function (method, collection, options) {
