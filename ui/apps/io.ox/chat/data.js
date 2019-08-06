@@ -197,14 +197,36 @@ define('io.ox/chat/data', [
         load: function (params, type) {
             type = type || 'load';
             this.trigger('before:' + type);
+
+            // special handling for search
+            if (type === 'load' && this.messageId) {
+                params = { direction: 'siblings', id: this.messageId, limit: 40 };
+                delete this.messageId;
+            }
+
+            if (!params.id) {
+                this.nextComplete = true;
+                this.trigger('complete:next');
+            }
+
             return $.ajax({ url: this.url() + '?' + $.param(params) })
             .then(function (list) {
                 this.trigger(type);
                 this.add(list);
                 params.direction = params.direction || 'prev';
-                if (list.length < params.limit) {
-                    this[params.direction + 'Complete'] = true;
-                    this.trigger('complete:' + params.direction);
+                if (params.direction === 'siblings') {
+                    var index = _(list).findIndex({ id: params.id });
+                    if (index < params.limit / 2 - 1) {
+                        this.prevComplete = true;
+                        this.trigger('complete:prev');
+                    }
+                    if (index < list.length - params.limit / 2 - 1) {
+                        this.nextComplete = true;
+                        this.tigger('complete:next');
+                    }
+                } else {
+                    this[params.direction + 'Complete'] = list.length < params.limit;
+                    if (this[params.direction + 'Complete']) this.trigger('complete:' + params.direction);
                 }
                 this.trigger('after:' + type);
             }.bind(this));
