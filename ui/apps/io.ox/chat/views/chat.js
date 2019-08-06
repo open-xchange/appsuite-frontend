@@ -59,8 +59,8 @@ define('io.ox/chat/views/chat', [
         }
     });
 
-    ext.point().extend({
-        id: 'add member',
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'add-member',
         index: 400,
         custom: true,
         draw: function (baton) {
