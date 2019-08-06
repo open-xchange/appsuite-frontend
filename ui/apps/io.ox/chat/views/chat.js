@@ -97,6 +97,7 @@ define('io.ox/chat/views/chat', [
         initialize: function (options) {
 
             this.room = options.room;
+            this.messageId = options.messageId;
             this.model = data.chats.get(this.room);
 
             this.listenTo(this.model, {
@@ -116,6 +117,7 @@ define('io.ox/chat/views/chat', [
             });
 
             this.model.messages.fetch();
+            this.model.messages.messageId = this.messageId;
 
             // tracking typing
             this.typing = {
