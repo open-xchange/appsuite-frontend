@@ -111,7 +111,8 @@ define('io.ox/chat/views/chat', [
                 'change:time': this.onChangeTime,
                 'change:state': this.onChangeDelivery,
                 'complete:prev': this.onComplete.bind(this, 'prev'),
-                'complete:next': this.onComplete.bind(this, 'next')
+                'complete:next': this.onComplete.bind(this, 'next'),
+                'paginate': this.toggleAutoScroll.bind(this, false)
             });
 
             this.model.messages.fetch();
@@ -158,6 +159,7 @@ define('io.ox/chat/views/chat', [
             this.$messages = $();
             this.$editor = $();
             this.updateDelivery = _.debounce(this.updateDelivery.bind(this), 10);
+            this.autoScroll = _.isUndefined(options.autoScroll) ? true : options.autoScroll;
         },
 
         render: function () {
@@ -300,28 +302,48 @@ define('io.ox/chat/views/chat', [
             if (!this.model.messages.prevComplete) {
                 var $paginatePrev = this.$('.paginate.prev');
                 if ($paginatePrev.hasClass('io-ox-busy')) return;
-                if ($paginatePrev.position().top <= 0) return;
+                if ($paginatePrev.position().top < -$paginatePrev.height() * 2) return;
                 $paginatePrev.busy();
-                this.model.messages.paginate('prev');
+                this.model.messages.paginate('prev').then(function () {
+                    console.log('on paginate end');
+                    $paginatePrev.idle();
+                });
             }
             if (!this.model.messages.nextComplete) {
                 var $paginateNext = this.$('.paginate.next');
                 if ($paginateNext.hasClass('io-ox-busy')) return;
-                if ($paginateNext.position().top <= 0) return;
+                if ($paginateNext.position().top - $paginateNext.height() > $paginateNext.parent().height()) return;
                 $paginateNext.busy();
-                this.model.messages.paginate('next');
+                this.model.messages.paginate('next').then(function () {
+                    $paginateNext.idle();
+                });
             }
         }, 300),
 
-        onAdd: _.debounce(function (model, collection) {
+        toggleAutoScroll: function (autoScroll) {
+            if (autoScroll === undefined) autoScroll = !this.autoScroll;
+            this.autoScroll = autoScroll;
+        },
+
+        onAdd: _.debounce(function (model, collection, options) {
             if (this.disposed) return;
 
-            // render
-            this.$messages.empty().append(
-                collection.map(this.renderMessage.bind(this))
-            );
-            // proper scroll position
-            this.scrollToBottom();
+            var scrollpane = this.$('.scrollpane'),
+                firstChild = this.$messages.children().first(),
+                prevTop = (firstChild.position() || {}).top || 0;
+
+            options.changes.added.forEach(function (model) {
+                var index = collection.indexOf(model);
+                if (index === 0) return this.$messages.prepend(this.renderMessage(model));
+
+                var prev = collection.at(index - 1);
+                this.$messages.find('[data-cid="' + prev.cid + '"]').after(this.renderMessage(model));
+            }.bind(this));
+
+            if (this.autoScroll) this.scrollToBottom();
+            else scrollpane.scrollTop(firstChild.position().top - prevTop);
+
+            this.toggleAutoScroll(true);
         }, 1),
 
         onComplete: function (direction) {
