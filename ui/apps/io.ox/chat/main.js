@@ -63,7 +63,7 @@ define('io.ox/chat/main', [
                 case 'start-chat': this.startChat(data); break;
                 case 'start-private-chat': this.startPrivateChat(data); break;
                 case 'join-channel': this.joinChannel(data); break;
-                case 'show-chat': this.showChat(data.id || data.cid); break;
+                case 'show-chat': this.showChat(data.id || data.cid, data.messageId); break;
                 case 'close-chat': this.closeChat(); break;
                 case 'show-recent-conversations': this.showRecentConversations(); break;
                 case 'show-channels': this.showChannels(); break;
@@ -116,8 +116,8 @@ define('io.ox/chat/main', [
             this.showChat(cmd.id);
         },
 
-        showChat: function (id) {
-            var view = new ChatView({ room: id });
+        showChat: function (id, messageId) {
+            var view = new ChatView({ room: id, messageId: messageId });
             this.$rightside.empty().append(view.render().$el);
             this.$body.addClass('open');
             view.scrollToBottom();

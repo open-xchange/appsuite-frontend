@@ -82,6 +82,7 @@ define('io.ox/chat/views/searchResult', [
                         if (!room) return;
                         room = room.clone();
                         room.set('lastMessage', message);
+                        room.set('searchResult', true);
                         ids[room.get('id')] = true;
 
                         return room;

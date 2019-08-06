@@ -29,7 +29,8 @@ define('io.ox/chat/views/chatListEntry', [
 
             return {
                 'data-cmd': 'show-chat',
-                'data-cid': this.model.get('id') || this.model.cid
+                'data-cid': this.model.get('id') || this.model.cid,
+                'data-message-id': this.model.get('searchResult') ? this.model.get('lastMessage').id : undefined
             };
         },
 
