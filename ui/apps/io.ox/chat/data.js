@@ -185,7 +185,6 @@ define('io.ox/chat/data', [
         comparator: 'sent',
         initialize: function (models, options) {
             this.roomId = options.roomId;
-            this.nextComplete = options.nextComplete || true;
         },
         paginate: function (direction) {
             var id;
