@@ -101,7 +101,7 @@ define('io.ox/chat/views/fileList', [
         },
 
         onAdd: _.debounce(function (model, collection, options) {
-            this.$('ul').prepend(
+            this.$('.scrollpane ul').prepend(
                 options.changes.added.map(this.renderItem, this)
             );
         }, 1)
