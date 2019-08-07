@@ -356,7 +356,8 @@ define('io.ox/chat/views/chat', [
         onReset: function () {
             if (!this.$messages) return;
             this.$messages.empty();
-            this.onAdd(undefined, this, { changes: { added: this } });
+            var collection = this.model.messages;
+            this.onAdd(undefined, collection, { changes: { added: collection } });
         },
 
         onAdd: _.debounce(function (model, collection, options) {
