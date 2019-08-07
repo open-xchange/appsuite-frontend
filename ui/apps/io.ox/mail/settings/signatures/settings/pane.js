@@ -60,7 +60,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     'min-height': '266px',
                     'height': '266px'
                 }).append(
-                    container = $('<div class="editor-container">').attr('data-editor-id', _.uniqueId('editor-'))
+                    container = $('<div class="editor">').attr('data-editor-id', _.uniqueId('editor-'))
                 )
             );
 
