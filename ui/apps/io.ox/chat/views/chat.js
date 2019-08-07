@@ -102,7 +102,8 @@ define('io.ox/chat/views/chat', [
             this.model = data.chats.get(this.room);
 
             this.listenTo(this.model, {
-                'change:title': this.onChangeTitle
+                'change:title': this.onChangeTitle,
+                'change:unreadCount': this.onChangeUnreadCount
             });
 
             this.listenTo(this.model.messages, {
@@ -201,7 +202,10 @@ define('io.ox/chat/views/chat', [
                     this.$paginateNext = $('<div class="paginate next">').toggle(!this.model.messages.nextComplete)
                 ),
                 $('<div class="controls">').append(
-                    this.$jumpDown = $('<button class="btn btn-default btn-circle jump-down">').append($('<i class="fa fa-chevron-down" aria-hidden="true">')),
+                    this.$jumpDown = $('<button class="btn btn-default btn-circle jump-down">').append(
+                        $('<i class="fa fa-chevron-down" aria-hidden="true">'),
+                        this.$unreadCounter = $('<span class="badge">').text(this.model.get('unreadCount') || '')
+                    ),
                     this.$editor = $('<textarea class="form-control" placeholder="Enter message here">'),
                     $('<button type="button" class="btn btn-default btn-circle pull-right file-upload-btn">')
                         .append('<i class="fa fa-paperclip" aria-hidden="true">'),
@@ -333,6 +337,10 @@ define('io.ox/chat/views/chat', [
             this.$('.title').text(model.getTitle() || '\u00a0');
         },
 
+        onChangeUnreadCount: function () {
+            this.$unreadCounter.text(this.model.get('unreadCount') || '');
+        },
+
         onScroll: _.throttle(function () {
             this.$jumpDown.toggle(this.$scrollpane.scrollTop() + this.$scrollpane.height() < this.$scrollpane.prop('scrollHeight') - 50);
 
@@ -381,7 +389,9 @@ define('io.ox/chat/views/chat', [
 
             var scrollpane = this.$scrollpane,
                 firstChild = this.$messages.children().first(),
-                prevTop = (firstChild.position() || {}).top || 0;
+                prevTop = (firstChild.position() || {}).top || 0,
+                // check this before adding the new messages
+                isScrolledDown = this.$scrollpane.scrollTop() + this.$scrollpane.height() > this.$scrollpane.prop('scrollHeight') - 30;
 
             options.changes.added.forEach(function (model) {
                 var index = collection.indexOf(model);
@@ -391,7 +401,10 @@ define('io.ox/chat/views/chat', [
                 this.$messages.find('[data-cid="' + prev.cid + '"]').after(this.renderMessage(model));
             }.bind(this));
 
-            if (options.changes.added.length !== 1 || options.changes.added[0].get('senderId').toString() === data.user_id.toString()) {
+            // determine whether to scroll to new or selected message
+            var multipleMessages = options.changes.added.length > 1,
+                isCurrentUser = options.changes.added[0].get('senderId').toString() === data.user_id.toString();
+            if (multipleMessages || isCurrentUser || isScrolledDown) {
                 if (this.autoScroll) this.scrollToBottom();
                 else if (firstChild.position().top - prevTop) scrollpane.scrollTop(firstChild.position().top - prevTop);
             }
