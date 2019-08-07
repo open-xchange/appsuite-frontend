@@ -581,6 +581,16 @@
             top: -60px;
             right: 8px;
             background-color: white;
+
+            .badge {
+                position: absolute;
+                top: auto;
+                bottom: -3px;
+                right: -2px;
+                background-color: @notification-icon-background;
+
+                &:empty { display: none; }
+            }
         }
     }
 
