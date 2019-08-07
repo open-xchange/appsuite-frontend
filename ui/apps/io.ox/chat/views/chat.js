@@ -91,6 +91,7 @@ define('io.ox/chat/views/chat', [
             'keydown textarea': 'onEditorKeydown',
             'input textarea': 'onEditorInput',
             'click .file-upload-btn': 'onTriggerFileupload',
+            'click .jump-down': 'onJumpDown',
             'change .file-upload-input': 'onFileupload'
         },
 
@@ -200,6 +201,7 @@ define('io.ox/chat/views/chat', [
                     this.$paginateNext = $('<div class="paginate next">').toggle(!this.model.messages.nextComplete)
                 ),
                 $('<div class="controls">').append(
+                    this.$jumpDown = $('<button class="btn btn-default btn-circle jump-down">').append($('<i class="fa fa-chevron-down" aria-hidden="true">')),
                     this.$editor = $('<textarea class="form-control" placeholder="Enter message here">'),
                     $('<button type="button" class="btn btn-default btn-circle pull-right file-upload-btn">')
                         .append('<i class="fa fa-paperclip" aria-hidden="true">'),
@@ -307,6 +309,15 @@ define('io.ox/chat/views/chat', [
             $input.val('');
         },
 
+        onJumpDown: function () {
+            if (!this.model.messages.nextComplete) {
+                this.model.messages.reset();
+                this.model.messages.fetch();
+            } else {
+                this.scrollToBottom();
+            }
+        },
+
         onPostMessage: function (body) {
             // reset and fetch messages when in search and collection is not complete
             if (!this.model.messages.nextComplete) {
@@ -322,6 +333,8 @@ define('io.ox/chat/views/chat', [
         },
 
         onScroll: _.throttle(function () {
+            this.$jumpDown.toggle(this.$scrollpane.scrollTop() + this.$scrollpane.height() < this.$scrollpane.prop('scrollHeight') - 50);
+
             if (this.$('.messages').is(':empty')) return;
             (function (view) {
                 if (!view.model.messages.prevComplete) {
