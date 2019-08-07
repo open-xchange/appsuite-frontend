@@ -245,6 +245,7 @@ define('io.ox/chat/views/chat', [
                 .attr('data-cid', model.cid)
                 .addClass(model.isSystem() ? 'system' : model.get('type'))
                 .toggleClass('myself', model.isMyself())
+                .toggleClass('highlight', !!model.get('id') && model.get('id') === this.messageId)
                 .append(
                     // sender avatar & name
                     this.renderSender(model),
@@ -375,6 +376,8 @@ define('io.ox/chat/views/chat', [
 
         onAdd: _.debounce(function (model, collection, options) {
             if (this.disposed) return;
+            // need to check if view is not disposed since this function is debounced
+            if (!this.$messages) return;
 
             var scrollpane = this.$scrollpane,
                 firstChild = this.$messages.children().first(),

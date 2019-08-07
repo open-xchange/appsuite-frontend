@@ -476,6 +476,10 @@
             top: 22px;
             left: 8px;
         }
+        &.highlight .content {
+            animation-name: highlightMessage;
+            animation-duration: 3s;
+        }
         &.myself {
             text-align: right;
             padding-right: 0;
@@ -497,6 +501,9 @@
             .delivery {
                 margin-left: 5px;
                 display: inline-block;
+            }
+            &.highlight .content{
+                animation-name: highlightOwnMessage;
             }
         }
         &.image {
@@ -832,5 +839,23 @@
         right: 0px;
 
         &:empty { display: none; }
+    }
+}
+
+@keyframes highlightMessage {
+    0% {
+        background-color: @lightblue;
+    }
+    100% {
+        background-color: #eee;
+    }
+}
+
+@keyframes highlightOwnMessage {
+    0% {
+        background-color: @lightblue;
+    }
+    100% {
+        background-color: @gray;
     }
 }
