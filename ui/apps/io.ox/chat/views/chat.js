@@ -106,6 +106,7 @@ define('io.ox/chat/views/chat', [
 
             this.listenTo(this.model.messages, {
                 'add': this.onAdd,
+                'reset': this.onReset,
                 'remove': this.onRemove,
                 'change:body': this.onChangeBody,
                 'change:fileId': this.onChangeBody,
@@ -304,6 +305,12 @@ define('io.ox/chat/views/chat', [
         },
 
         onPostMessage: function (body) {
+            // reset and fetch messages when in search and collection is not complete
+            if (!this.model.messages.nextComplete) {
+                this.model.messages.reset();
+                this.model.messages.fetch();
+            }
+
             this.model.postMessage({ body: body });
         },
 
@@ -341,6 +348,12 @@ define('io.ox/chat/views/chat', [
         toggleAutoScroll: function (autoScroll) {
             if (autoScroll === undefined) autoScroll = !this.autoScroll;
             this.autoScroll = autoScroll;
+        },
+
+        onReset: function () {
+            if (!this.$messages) return;
+            this.$messages.empty();
+            this.onAdd(undefined, this, { changes: { added: this } });
         },
 
         onAdd: _.debounce(function (model, collection, options) {

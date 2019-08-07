@@ -347,6 +347,7 @@ define('io.ox/chat/data', [
                 processData: false,
                 contentType: false
             });
+            model.set('sent', moment().toISOString());
             this.set('modified', +moment());
         },
 
