@@ -509,7 +509,12 @@ define('io.ox/chat/data', [
         // fetch room unless it's already known
         data.chats.fetchUnlessExists(roomId).done(function (model) {
             // add new message to room
-            var newMessage = model.messages.add(message);
+            var newMessage = new model.messages.model(message);
+
+            // either add message to chatroom or update last message manually
+            if (model.messages.nextComplete) model.messages.add(message);
+            else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
+
             model.set({ modified: +moment(), unreadCount: model.get('unreadCount') + 1 });
             newMessage.updateDelivery('client');
         });
