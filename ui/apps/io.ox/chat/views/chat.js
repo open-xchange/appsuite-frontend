@@ -118,7 +118,10 @@ define('io.ox/chat/views/chat', [
             });
 
             this.model.messages.messageId = this.messageId;
-            if (this.messageId && !this.model.messages.get(this.messageId)) this.model.messages.reset();
+            // there are two cases when to reset the collection before usage
+            // 1) We have a messageId but the requested messageId is not in the collection
+            // 2) We don't have a messageId but the collection is not fully fetched
+            if ((this.messageId && !this.model.messages.get(this.messageId)) || (!this.messageId && !this.model.messages.nextComplete)) this.model.messages.reset();
             _.delay(this.model.messages.fetch.bind(this.model.messages));
 
             // tracking typing
