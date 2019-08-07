@@ -553,6 +553,7 @@
     }
 
     .controls {
+        position: relative;
         display: flex;
         align-items: center;
         height: @controlsHeight;
@@ -566,6 +567,13 @@
 
         button {
             margin-left: 8px;
+        }
+
+        .jump-down {
+            position: absolute;
+            top: -60px;
+            right: 8px;
+            background-color: white;
         }
     }
 
