@@ -21,7 +21,8 @@ define('io.ox/chat/data', [
     'use strict';
 
     var user_id = parseInt(_.url.hash('chatUser'), 10) || ox.user_id,
-        chatHost = _.url.hash('chatHost');
+        chatHost = _.url.hash('chatHost'),
+        DEFAULT_LIMIT = 40;
 
     var data = {
         // yes, it contains the user_id; just a POC; no auth
@@ -191,7 +192,7 @@ define('io.ox/chat/data', [
             if (direction === 'prev') id = this.first().get('id');
             else if (direction === 'next') id = this.last().get('id');
 
-            return this.load({ id: id, direction: direction, limit: 40 }, 'paginate');
+            return this.load({ id: id, direction: direction, limit: DEFAULT_LIMIT }, 'paginate');
         },
         load: function (params, type) {
             type = type || 'load';
@@ -199,11 +200,12 @@ define('io.ox/chat/data', [
 
             // special handling for search
             if (type === 'load' && this.messageId) {
-                params = { direction: 'siblings', id: this.messageId, limit: 40 };
+                params = { direction: 'siblings', id: this.messageId, limit: DEFAULT_LIMIT };
                 delete this.messageId;
             }
 
             if (!params.id) {
+                if (!this.nextComplete) params.limit = DEFAULT_LIMIT;
                 this.nextComplete = true;
                 this.trigger('complete:next');
             }
@@ -232,7 +234,7 @@ define('io.ox/chat/data', [
         },
         sync: function (method, collection, options) {
             if (method === 'read') {
-                var limit = Math.max(collection.length, 40);
+                var limit = Math.max(collection.length, DEFAULT_LIMIT);
                 return this.load({ limit: limit });
             }
             return Backbone.Collection.prototype.sync.call(this, method, collection, options);
