@@ -86,9 +86,12 @@ define('io.ox/core/settings/editLocale', [
         .addCancelButton()
         .addButton({ label: gt('Save'), action: 'save' })
         .on('open', function () {
-            this.model.set(locale.getLocaleData());
+            this.initial = locale.getLocaleData();
+            this.model.set(this.initial);
         })
         .on('save', function () {
+            var changed = this.model.changedAttributes(this.initial);
+            if (!changed) return;
             locale.setLocaleData(this.model.toJSON());
         })
         .on('reset', function () {
