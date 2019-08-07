@@ -189,15 +189,15 @@ define('io.ox/chat/views/chat', [
                     )
                 ),
                 new ToolbarView({ point: 'io.ox/chat/detail/toolbar', title: 'Chat actions' }).render(new ext.Baton({ model: this.model })).$el,
-                $('<div class="scrollpane">').on('scroll', $.proxy(this.onScroll, this)).append(
-                    $('<div class="paginate prev">').toggle(!this.model.messages.prevComplete),
+                this.$scrollpane = $('<div class="scrollpane">').on('scroll', $.proxy(this.onScroll, this)).append(
+                    this.$paginatePrev = $('<div class="paginate prev">').toggle(!this.model.messages.prevComplete),
                     $('<div class="conversation">').append(
                         this.$messages = $('<div class="messages">').append(
                             this.model.messages.map(this.renderMessage, this)
                         ),
                         this.typing.$el
                     ),
-                    $('<div class="paginate next">').toggle(!this.model.messages.nextComplete)
+                    this.$paginateNext = $('<div class="paginate next">').toggle(!this.model.messages.nextComplete)
                 ),
                 $('<div class="controls">').append(
                     this.$editor = $('<textarea class="form-control" placeholder="Enter message here">'),
@@ -271,7 +271,7 @@ define('io.ox/chat/views/chat', [
 
         scrollToBottom: function () {
             var position = 0xFFFF,
-                scrollpane = this.$('.scrollpane');
+                scrollpane = this.$scrollpane;
             if (this.messageId) {
                 var model = this.model.messages.get(this.messageId);
                 if (model) {
@@ -325,7 +325,7 @@ define('io.ox/chat/views/chat', [
             if (this.$('.messages').is(':empty')) return;
             (function (view) {
                 if (!view.model.messages.prevComplete) {
-                    var $paginatePrev = view.$('.paginate.prev');
+                    var $paginatePrev = view.$paginatePrev;
                     if ($paginatePrev.hasClass('io-ox-busy')) return;
                     if ($paginatePrev.position().top < -$paginatePrev.height() * 2) return;
                     $paginatePrev.busy();
@@ -337,7 +337,7 @@ define('io.ox/chat/views/chat', [
 
             (function (view) {
                 if (!view.model.messages.nextComplete) {
-                    var $paginateNext = view.$('.paginate.next');
+                    var $paginateNext = view.$paginateNext;
                     if ($paginateNext.hasClass('io-ox-busy')) return;
                     if ($paginateNext.position().top - $paginateNext.height() > $paginateNext.parent().height()) return;
                     $paginateNext.busy();
@@ -362,7 +362,7 @@ define('io.ox/chat/views/chat', [
         onAdd: _.debounce(function (model, collection, options) {
             if (this.disposed) return;
 
-            var scrollpane = this.$('.scrollpane'),
+            var scrollpane = this.$scrollpane,
                 firstChild = this.$messages.children().first(),
                 prevTop = (firstChild.position() || {}).top || 0;
 
