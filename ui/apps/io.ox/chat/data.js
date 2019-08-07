@@ -266,6 +266,7 @@ define('io.ox/chat/data', [
             });
             this.listenTo(this.messages, 'add', _.debounce(function () {
                 function updateLastMessage() {
+                    if (!this.messages.nextComplete) return;
                     this.set('lastMessage', _.extend({}, this.get('lastMessage'), lastMessage.toJSON()));
                 }
 
