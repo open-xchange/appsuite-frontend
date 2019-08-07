@@ -391,8 +391,10 @@ define('io.ox/chat/views/chat', [
                 this.$messages.find('[data-cid="' + prev.cid + '"]').after(this.renderMessage(model));
             }.bind(this));
 
-            if (this.autoScroll) this.scrollToBottom();
-            else if (firstChild.position().top - prevTop) scrollpane.scrollTop(firstChild.position().top - prevTop);
+            if (options.changes.added.length !== 1 || options.changes.added[0].get('senderId').toString() === data.user_id.toString()) {
+                if (this.autoScroll) this.scrollToBottom();
+                else if (firstChild.position().top - prevTop) scrollpane.scrollTop(firstChild.position().top - prevTop);
+            }
 
             this.toggleAutoScroll(true);
         }, 1),
