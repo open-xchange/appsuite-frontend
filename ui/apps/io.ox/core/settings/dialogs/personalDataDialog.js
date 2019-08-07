@@ -18,8 +18,9 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/common',
     'io.ox/core/api/personalData',
+    'io.ox/core/yell',
     'less!io.ox/core/settings/dialogs/style'
-], function (DisposableView, gt, ModalDialog, ext, mini, api) {
+], function (DisposableView, gt, ModalDialog, ext, mini, api, yell) {
 
     'use strict';
 
@@ -139,7 +140,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                 _(_(this.models).keys()).each(function (moduleName) {
                     self.model.set(moduleName, self.models[moduleName].toJSON());
                 });
-                api.requestDownload(this.model.toJSON());
+                api.requestDownload(this.model.toJSON()).fail(yell);
             }
         }),
         downloadView = DisposableView.extend({
@@ -166,7 +167,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                                             //#. %1$s: filename
                                             .attr('title', gt('Download %1$s.', file.fileInfo))
                                             .on('click', function () {
-                                                api.downloadFile(file.taskId, file.number);
+                                                api.downloadFile(file.taskId, file.number).fail(yell);
                                             })
                                     );
                             })
@@ -178,6 +179,18 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
         });
 
     var openDialog = function () {
+
+        var deleteDialog = function () {
+            var def = $.Deferred();
+            new ModalDialog({ title: gt('Do you really want to delete all available downloads?') })
+                .addCancelButton({ left: true })
+                .addButton({ action: 'delete', label: gt('Delete all avaliable downloads') })
+                .on('action', def.resolve)
+                .open();
+
+            return def;
+        };
+
         $.when(api.getAvailableDownloads(), api.getAvailableModules()).then(function (downloadStatus, availableModules) {
 
             var availableModulesModel = new Backbone.Model(availableModules),
@@ -200,8 +213,14 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                         dlView.render().$el
                     );
                 })
-                .on('cancelDownload', api.cancelDownloadRequest)
-                .on('removefiles', api.deleteAllFiles);
+                .on('cancelDownload', function () {
+                    api.cancelDownloadRequest().fail(yell);
+                })
+                .on('removefiles', function () {
+                    deleteDialog().then(function (action) {
+                        if (action === 'delete') api.deleteAllFiles().fail(yell);
+                    });
+                });
 
             if (status.get('status') !== 'running' && !(status.get('results') && status.get('results').length)) {
                 dialog.addButton({ action: 'create', label: gt('Create download') });
@@ -218,7 +237,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
             }
 
             dialog.open();
-        });
+        }, yell);
     };
 
     return {
