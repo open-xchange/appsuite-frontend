@@ -326,6 +326,8 @@
         .text-preview {
             flex: 1;
             .ellipsis();
+
+            .icon { margin-left: 0.3em; }
         }
 
         .label {
@@ -539,19 +541,8 @@
                 padding: 4px 8px;
             }
 
-            .icon{
-                margin-right: 0.7em;
-                &:before {
-                    content: "\f016"; // file-o
-                }
-
-                &.pdf:before {
-                    content: "\f1c1"; // file-pdf-o
-                }
-            }
-
             .download {
-                margin-left: 0.7em;
+                margin-left: 0.5em;
             }
         }
         &.system {
@@ -568,6 +559,21 @@
             .delivery, .time {
                 display: none;
             }
+        }
+    }
+
+    .icon{
+        margin-right: 0.5em;
+        &:before {
+            content: "\f016"; // file-o
+        }
+
+        &.pdf:before {
+            content: "\f1c1"; // file-pdf-o
+        }
+
+        &.image:before {
+            content: "\f1c5"; // file-image-o
         }
     }
 
