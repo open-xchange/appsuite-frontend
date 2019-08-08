@@ -146,21 +146,29 @@ define('io.ox/chat/data', [
 
         getFile: (function () {
             var classNames = {
-                'application/pdf': 'pdf'
+                'application/pdf': 'pdf',
+                'image/jpeg': 'image',
+                'image/gif': 'image',
+                'image/bmp': 'image',
+                'image/png': 'image'
             };
 
-            return function () {
-                // TODO additional colors or so according to mimetype
+            return function (opt) {
+                opt = _.extend({
+                    icon: true,
+                    download: true
+                }, opt);
+
                 var $elem = $('<div>').busy();
                 $.ajax(data.API_ROOT + '/files/' + this.get('fileId')).then(function (file) {
-                    $elem.idle().append(
-                        $('<i class="fa icon">').addClass(classNames[file.mimetype]),
+                    $elem.replaceWith(
+                        opt.icon ? $('<i class="fa icon">').addClass(classNames[file.mimetype]) : '',
                         $.txt(file.name),
                         $('<a class="download">').attr({
                             href: data.API_ROOT + '/files/' + file.id + '/download/' + file.name,
                             download: file.name
                         }).append(
-                            $('<i class="fa fa-download">')
+                            opt.download ? $('<i class="fa fa-download">') : ''
                         )
                     );
                 });
@@ -174,7 +182,7 @@ define('io.ox/chat/data', [
 
         getTextBody: function () {
             if (this.isSystem()) return $(this.getSystemMessage()).text();
-            if (this.isImage()) return ''; // TODO return image preview
+            if (this.isImage() || this.isFile()) return this.getFile();
             return sanitizer.simpleSanitize(this.get('body'));
         },
 
@@ -319,7 +327,10 @@ define('io.ox/chat/data', [
 
         getLastMessage: function () {
             var last = this.get('lastMessage');
-            return last ? new MessageModel(last).getTextBody() : '\u00a0';
+            if (!last) return '\u00a0';
+            var message = new MessageModel(last);
+            if (message.isFile()) return message.getFile({ download: false });
+            return message.getTextBody();
         },
 
         getLastMessageDate: function () {
