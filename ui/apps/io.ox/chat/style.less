@@ -53,7 +53,11 @@
         }
 
         .message {
-            padding-left: 0;
+            padding: 0 48px 0 0;
+            &.myself {
+                padding-right: 0;
+                padding-left: 64px;
+            }
             .avatar { display: none; }
         }
 
@@ -439,7 +443,7 @@
 
     .message {
 
-        padding: 0 64px;
+        padding: 0 48px 0 64px;
         margin-bottom: 8px;
         position: relative;
 
@@ -482,8 +486,7 @@
         }
         &.myself {
             text-align: right;
-            padding-right: 0;
-            padding-left: 64px;
+            padding: 0 0 0 128px;
 
             .sender {
                 display: none;
