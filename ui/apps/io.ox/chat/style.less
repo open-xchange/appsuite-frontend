@@ -572,17 +572,14 @@
 
     .icon{
         margin-right: 0.5em;
-        &:before {
-            content: "\f016"; // file-o
-        }
-
-        &.pdf:before {
-            content: "\f1c1"; // file-pdf-o
-        }
-
-        &.image:before {
-            content: "\f1c5"; // file-image-o
-        }
+        &:before { content: "\f016"; } // file-o
+        &.pdf:before { content: "\f1c1"; color: #C01E07; } // file-pdf-o
+        &.doc:before { content: '\f0f6'; color: #376CB8; }  // fa-file-text-o
+        &.xls:before { content: '\f0ce'; color: #26935D; }  // fa-table
+        &.ppt:before { content: '\f022'; color: #F4502A; }  // fa-list-alt
+        &.zip:before { content: '\f187'; color: #FF940A; }  // fa-archive
+        &.svg:before { content: '\f1c9'; color: #F4502A; }  // fa-file-code-o
+        &.image:before { content: "\f1c5"; } // file-image-o
     }
 
     .controls, .footer {
