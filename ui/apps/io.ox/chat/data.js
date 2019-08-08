@@ -15,8 +15,9 @@ define('io.ox/chat/data', [
     'io.ox/chat/events',
     'io.ox/contacts/api',
     'static/3rd.party/socket.io.slim.js',
-    'io.ox/mail/sanitizer'
-], function (events, api, io, sanitizer) {
+    'io.ox/mail/sanitizer',
+    'io.ox/chat/util'
+], function (events, api, io, sanitizer, util) {
 
     'use strict';
 
@@ -151,57 +152,28 @@ define('io.ox/chat/data', [
             return placeholder;
         },
 
-        getFile: (function () {
-            var classNames = {
-                'application/pdf': 'pdf',
-                'image/svg': 'svg',
-                'application/zip': 'zip',
+        getFile: function (opt) {
+            opt = _.extend({
+                icon: true,
+                download: true,
+                text: true
+            }, opt);
 
-                // images
-                'image/jpeg': 'image',
-                'image/gif': 'image',
-                'image/bmp': 'image',
-                'image/png': 'image',
-
-                // documents
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'doc',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.template': 'doc',
-                'application/msword': 'doc',
-
-                // excel
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xls',
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.template': 'xls',
-                'application/vnd.ms-excel': 'xls',
-
-                // ppt
-                'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'ppt',
-                'application/vnd.openxmlformats-officedocument.presentationml.slideshow': 'ppt',
-                'application/vnd.openxmlformats-officedocument.presentationml.template': 'ppt',
-                'application/vnd.ms-powerpoint': 'ppt'
-            };
-
-            return function (opt) {
-                opt = _.extend({
-                    icon: true,
-                    download: true
-                }, opt);
-
-                var $elem = $('<div>').busy();
-                $.ajax(data.API_ROOT + '/files/' + this.get('fileId')).then(function (file) {
-                    $elem.replaceWith(
-                        opt.icon ? $('<i class="fa icon">').addClass(classNames[file.mimetype]) : '',
-                        $.txt(file.name),
-                        $('<a class="download">').attr({
-                            href: data.API_ROOT + '/files/' + file.id + '/download/' + file.name,
-                            download: file.name
-                        }).append(
-                            opt.download ? $('<i class="fa fa-download">') : ''
-                        )
-                    );
-                });
-                return $elem;
-            };
-        }()),
+            var $elem = $('<div>').busy();
+            $.ajax(data.API_ROOT + '/files/' + this.get('fileId')).then(function (file) {
+                $elem.replaceWith(
+                    opt.icon ? $('<i class="fa icon">').addClass(util.getClassFromMimetype(file.mimetype)) : '',
+                    opt.text ? $.txt(file.name) : '',
+                    opt.download ? $('<a class="download">').attr({
+                        href: data.API_ROOT + '/files/' + file.id + '/download/' + file.name,
+                        download: file.name
+                    }).append(
+                        $('<i class="fa fa-download">')
+                    ) : ''
+                );
+            });
+            return $elem;
+        },
 
         getTime: function () {
             return moment(this.get('sent')).format('LT');
@@ -502,6 +474,10 @@ define('io.ox/chat/data', [
 
         getPreviewUrl: function () {
             return data.API_ROOT + '/files/' + this.get('id') + '/preview';
+        },
+
+        isImage: function () {
+            return /(jpg|jpeg|gif|bmp|png)/i.test(this.get('mimetype'));
         }
     });
 

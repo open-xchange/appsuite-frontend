@@ -15,8 +15,9 @@ define('io.ox/chat/views/fileList', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/disposable',
     'io.ox/chat/data',
-    'io.ox/backbone/views/toolbar'
-], function (ext, DisposableView, data, ToolbarView) {
+    'io.ox/backbone/views/toolbar',
+    'io.ox/chat/util'
+], function (ext, DisposableView, data, ToolbarView, util) {
 
     'use strict';
 
@@ -90,9 +91,18 @@ define('io.ox/chat/views/fileList', [
         },
 
         renderItem: function (model, index) {
+            var button = $('<button type="button" data-cmd="show-file">').attr('data-index', index);
+            if (model.isImage()) {
+                button.css('backgroundImage', 'url(' + model.getThumbnailUrl() + ')');
+            } else {
+                button.append(
+                    $('<i class="fa icon">').addClass(util.getClassFromMimetype(model.get('mimetype'))),
+                    $('<div class="filename">').text(model.get('name'))
+                );
+            }
+
             return $('<li>').append(
-                $('<button type="button" data-cmd="show-file">').attr('data-index', index)
-                .css('backgroundImage', 'url(' + model.getThumbnailUrl() + ')')
+                button
             );
         },
 
