@@ -203,6 +203,10 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         },
 
         disableFormElements: function () {
+            // function may not be run 2 times in a row, "disabled" marker class would be applied to every input, therefore keep track of it
+            if (this.formElementsDisabled) return;
+            this.formElementsDisabled = true;
+
             // disable all form elements; mark already disabled elements via CSS class
             this.$(':input').each(function () {
                 if ($(this).attr('data-action') === 'cancel' || $(this).attr('data-state') === 'manual') return;
@@ -211,10 +215,12 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         },
 
         enableFormElements: function () {
+            this.formElementsDisabled = false;
             // enable all form elements
             this.$(':input').each(function () {
                 if ($(this).attr('data-state') === 'manual') return;
-                $(this).prop('disabled', false).removeClass('disabled');
+                // input elements that have the "disabled" class, were already disabled when disableFormElements was called. Leave them disabled to recreate the previous state and remove the marker class.
+                $(this).prop('disabled', $(this).hasClass('disabled')).removeClass('disabled');
             });
         },
 
@@ -358,6 +364,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             } else {
                 this.$el.prev('.modal-backdrop.in:visible').addBack().hide();
             }
+            // use disableFormElements here, so when resuming, the correct disabled status can be set again (resume -> idle -> enableFormElements needs the correct marker classes)
+            this.disableFormElements();
             this.toggleAriaHidden(false);
         },
 
