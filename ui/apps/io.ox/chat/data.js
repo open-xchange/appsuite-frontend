@@ -115,6 +115,7 @@ define('io.ox/chat/data', [
         getBody: function () {
             if (this.isSystem()) return this.getSystemMessage();
             if (this.isImage()) return this.getImage();
+            if (this.isFile()) return this.getFile();
             return this.getFormattedBody();
         },
 
@@ -139,9 +140,33 @@ define('io.ox/chat/data', [
         },
 
         getImage: function () {
-            var url = data.API_ROOT + '/files/' + this.get('fileId');
+            var url = data.API_ROOT + '/files/' + this.get('fileId') + '/thumbnail';
             return '<img src="' + url + '" alt="">';
         },
+
+        getFile: (function () {
+            var classNames = {
+                'application/pdf': 'pdf'
+            };
+
+            return function () {
+                // TODO additional colors or so according to mimetype
+                var $elem = $('<div>').busy();
+                $.ajax(data.API_ROOT + '/files/' + this.get('fileId')).then(function (file) {
+                    $elem.idle().append(
+                        $('<i class="fa icon">').addClass(classNames[file.mimetype]),
+                        $.txt(file.name),
+                        $('<a class="download">').attr({
+                            href: data.API_ROOT + '/files/' + file.id + '/download/' + file.name,
+                            download: file.name
+                        }).append(
+                            $('<i class="fa fa-download">')
+                        )
+                    );
+                });
+                return $elem;
+            };
+        }()),
 
         getTime: function () {
             return moment(this.get('sent')).format('LT');
@@ -163,6 +188,10 @@ define('io.ox/chat/data', [
 
         isImage: function () {
             return this.get('type') === 'image';
+        },
+
+        isFile: function () {
+            return this.get('type') === 'file';
         },
 
         hasSameSender: function () {
@@ -434,7 +463,7 @@ define('io.ox/chat/data', [
         },
 
         getPreviewUrl: function () {
-            return data.API_ROOT + '/files/' + this.get('id') + '/thumbnail';
+            return data.API_ROOT + '/files/' + this.get('id') + '/preview';
         }
     });
 
