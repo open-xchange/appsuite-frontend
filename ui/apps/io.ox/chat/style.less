@@ -509,7 +509,7 @@
                 animation-name: highlightOwnMessage;
             }
         }
-        &.image {
+        &.image, &.file {
             img {
                 border: 0;
                 max-width: 100%;
@@ -520,10 +520,38 @@
             .foot {
                 margin-right: 2px;
                 margin-top: 1px;
+                float: none;
 
                 .time, .delivery {
                     color: @black;
                 }
+            }
+        }
+        &.file {
+            .body {
+                display: inline-block;
+                background-color: #707070;
+                color: white;
+                text-align: center;
+                min-width: 100px;
+                min-height: 28px;
+                border-radius: 8px;
+                padding: 4px 8px;
+            }
+
+            .icon{
+                margin-right: 0.7em;
+                &:before {
+                    content: "\f016"; // file-o
+                }
+
+                &.pdf:before {
+                    content: "\f1c1"; // file-pdf-o
+                }
+            }
+
+            .download {
+                margin-left: 0.7em;
             }
         }
         &.system {
