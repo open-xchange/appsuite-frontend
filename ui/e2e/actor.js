@@ -3,7 +3,7 @@ const actor = require('@open-xchange/codecept-helper').actor;
 
 module.exports = actor({
     //remove previously created appointments by appointment title
-    removeAllAppointments: async function (title) {
+    async removeAllAppointments(title) {
         const { skipRefresh } = await this.executeAsyncScript(function (title, done) {
             const appointments = $('.appointment')
                 .toArray()
