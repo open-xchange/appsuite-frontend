@@ -327,7 +327,10 @@
             flex: 1;
             .ellipsis();
 
-            .icon { margin-left: 0.3em; }
+            .icon {
+                margin-left: 0.3em;
+                margin-right: 0.5em;
+            }
         }
 
         .label {
@@ -545,9 +548,8 @@
                 background-color: @gray;
             }
 
-            .download {
-                margin-left: 0.5em;
-            }
+            .icon { margin-right: 0.5em; }
+            .download { margin-left: 0.5em; }
 
             &.myself .download {
                 color: lighten(@lightblue, 10%);
@@ -571,7 +573,6 @@
     }
 
     .icon{
-        margin-right: 0.5em;
         &:before { content: "\f016"; } // file-o
         &.pdf:before { content: "\f1c1"; color: #C01E07; } // file-pdf-o
         &.doc:before { content: '\f0f6'; color: #376CB8; }  // fa-file-text-o
@@ -781,11 +782,19 @@
                 margin: 0 16px 16px 0;
                 float: left;
                 button {
+                    position: relative;
                     width: 100%;
                     height: 128px;
                     border: 0;
                     background-size: cover;
                     background-color: #eee;
+                    .icon { font-size: 32px; }
+                    .filename {
+                        position: absolute;
+                        bottom: 10;
+                        .ellipsis();
+                        width: calc(100% - 14px);
+                    }
                 }
             }
         }
