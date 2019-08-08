@@ -154,10 +154,30 @@ define('io.ox/chat/data', [
         getFile: (function () {
             var classNames = {
                 'application/pdf': 'pdf',
+                'image/svg': 'svg',
+                'application/zip': 'zip',
+
+                // images
                 'image/jpeg': 'image',
                 'image/gif': 'image',
                 'image/bmp': 'image',
-                'image/png': 'image'
+                'image/png': 'image',
+
+                // documents
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'doc',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.template': 'doc',
+                'application/msword': 'doc',
+
+                // excel
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xls',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.template': 'xls',
+                'application/vnd.ms-excel': 'xls',
+
+                // ppt
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'ppt',
+                'application/vnd.openxmlformats-officedocument.presentationml.slideshow': 'ppt',
+                'application/vnd.openxmlformats-officedocument.presentationml.template': 'ppt',
+                'application/vnd.ms-powerpoint': 'ppt'
             };
 
             return function (opt) {
