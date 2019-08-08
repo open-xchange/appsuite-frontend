@@ -532,8 +532,7 @@
         &.file {
             .body {
                 display: inline-block;
-                background-color: #707070;
-                color: white;
+                background-color: #eee;
                 text-align: center;
                 min-width: 100px;
                 min-height: 28px;
@@ -541,8 +540,17 @@
                 padding: 4px 8px;
             }
 
+            &.myself .body {
+                color: #fff;
+                background-color: @gray;
+            }
+
             .download {
                 margin-left: 0.5em;
+            }
+
+            &.myself .download {
+                color: lighten(@lightblue, 10%);
             }
         }
         &.system {
