@@ -92,7 +92,8 @@ define('io.ox/chat/views/chat', [
             'input textarea': 'onEditorInput',
             'click .file-upload-btn': 'onTriggerFileupload',
             'click .jump-down': 'onJumpDown',
-            'change .file-upload-input': 'onFileupload'
+            'change .file-upload-input': 'onFileupload',
+            'changeheight': 'onChangeHeight'
         },
 
         initialize: function (options) {
@@ -414,6 +415,14 @@ define('io.ox/chat/views/chat', [
 
         onComplete: function (direction) {
             this.$('.paginate.' + direction).idle().hide();
+        },
+
+        onChangeHeight: function (e, opt) {
+            var scrollpane = this.$scrollpane;
+            if ($(e.target).position().top > scrollpane.height) return;
+            // scroll to bottom again if height of image changes
+            scrollpane.scrollTop(scrollpane.scrollTop() + opt.value - opt.prev);
+
         },
 
         getMessageNode: function (model, selector) {

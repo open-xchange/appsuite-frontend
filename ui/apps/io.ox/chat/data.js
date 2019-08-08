@@ -140,8 +140,15 @@ define('io.ox/chat/data', [
         },
 
         getImage: function () {
-            var url = data.API_ROOT + '/files/' + this.get('fileId') + '/thumbnail';
-            return '<img src="' + url + '" alt="">';
+            var url = data.API_ROOT + '/files/' + this.get('fileId') + '/thumbnail',
+                placeholder = $('<div>').height('100%');
+            $('<img>').on('load', function () {
+                var $img = $(this),
+                    oldHeight = placeholder.height();
+                placeholder.replaceWith($img);
+                $img.trigger('changeheight', { prev: oldHeight, value: $img.height() });
+            }).attr('src', url);
+            return placeholder;
         },
 
         getFile: (function () {
