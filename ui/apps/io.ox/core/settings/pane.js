@@ -29,9 +29,8 @@ define('io.ox/core/settings/pane', [
     'gettext!io.ox/core',
     'io.ox/backbone/mini-views/timezonepicker',
     'io.ox/core/main/appcontrol',
-    'io.ox/core/settings/dialogs/quickLauncherDialog',
-    'io.ox/core/settings/dialogs/personalDataDialog'
-], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, locale, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol, quickLauncherDialog, personalDataDialog) {
+    'io.ox/core/settings/dialogs/quickLauncherDialog'
+], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, locale, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol, quickLauncherDialog) {
 
     'use strict';
 
@@ -267,11 +266,17 @@ define('io.ox/core/settings/pane', [
                     );
                 }
 
-                $group.append(
-                    $('<button type="button" class="btn btn-default">')
-                        .text(gt('Download your personal data') + ' ...')
-                        .on('click', personalDataDialog.openDialog)
-                );
+                if (capabilities.has('dataexport')) {
+                    $group.append(
+                        $('<button type="button" class="btn btn-default">')
+                            .text(gt('Download your personal data') + ' ...')
+                            .on('click', function () {
+                                require(['io.ox/core/settings/dialogs/personalDataDialog'], function (personalDataDialog) {
+                                    personalDataDialog.openDialog();
+                                });
+                            })
+                    );
+                }
 
                 // check if users can edit their own data (see bug 34617)
                 if (settings.get('user/internalUserEdit', true)) {
