@@ -293,31 +293,31 @@
         </script>
 
         <script type="text/template" class="calendar-month-view">
-            <h1 class="calendar-title"><%= meta.title %></h1>
+            <h1 class="calendar-title"><%- meta.title %></h1>
         <% _.each(data, function (month) { %>
             <table class="month-view">
                 <thead>
                     <tr>
                     <% _.each(meta.labels, function (label) { %>
-                        <th><%= label %></th>
+                        <th><%- label %></th>
                     <% }); %>
                     <tr>
                 </thead>
             <% _.each(month, function (week) { %>
                 <tr>
                 <% _.each(week.days, function (day) { %>
-                    <td class="<%= day.className || '' %>">
+                    <td class="<%- day.className || '' %>">
                         <ul>
                         <% _.each(day.events, function (event) { %>
-                            <li style="color: <%= event.color %>; background-color: <%= event.backgroundColor %>;">
+                            <li style="color: <%- event.color %>; background-color: <%- event.backgroundColor %>;">
                             <% if (event.time) { %>
-                                <span class="time"><%= event.time %></span>
+                                <span class="time"><%- event.time %></span>
                             <% } %>
-                                <span><%= event.title %></span>
+                                <span><%- event.title %></span>
                             </li>
                         <% }); %>
                         </ul>
-                        <span class="date"><%= day.date %></span>
+                        <span class="date"><%- day.date %></span>
                     </td>
                 <% }); %>
                 </tr>
@@ -327,14 +327,14 @@
         </script>
 
         <script type="text/template" class="calendar-week-view">
-            <h1 class="calendar-title"><%= meta.title %></h1>
+            <h1 class="calendar-title"><%- meta.title %></h1>
         <% data.forEach(function (week) { %>
             <table class="week-view">
                 <thead>
                     <tr>
                         <th></th>
                     <% _.each(meta.weekdays, function (label) { %>
-                        <th><%= label %></th>
+                        <th><%- label %></th>
                     <% }); %>
                     <tr>
                 </thead>
@@ -344,8 +344,8 @@
                     <% week.forEach(function (day) { %>
                         <td class="allday-slot">
                         <% (day.slots['allDay'] || []).forEach(function (event) { %>
-                            <div class="event"  style="color: <%= event.color %>; background-color: <%= event.backgroundColor %>;">
-                                <%= event.title %>
+                            <div class="event"  style="color: <%- event.color %>; background-color: <%- event.backgroundColor %>;">
+                                <%- event.title %>
                             </div>
                         <% }) %>
                         </td>
@@ -353,14 +353,14 @@
                     <tr>
                 <% _.range(week[0].start, week[0].end).forEach(function (index) { %>
                     <tr>
-                        <td class="label"><span><%= meta.timeLabels[index].label %></span></td>
+                        <td class="label"><span><%- meta.timeLabels[index].label %></span></td>
                     <% week.forEach(function (day) { %>
                         <td class="slot">
                             <div class="slot-border"></div>
                         <% (day.slots[index] || []).forEach(function (event) { %>
-                            <div class="event absolute" style="top: <%= event.top %>px; height: <%= event.height %>px; left: <%= event.left %>%; width: <%= event.width %>%; color: <%= event.color %>; background-color: <%= event.backgroundColor %>;">
-                                <span class="time"><%= event.time %></span>
-                                <span><%= event.title %></span>
+                            <div class="event absolute" style="top: <%- event.top %>px; height: <%- event.height %>px; left: <%- event.left %>%; width: <%- event.width %>%; color: <%- event.color %>; background-color: <%- event.backgroundColor %>;">
+                                <span class="time"><%- event.time %></span>
+                                <span><%- event.title %></span>
                             </div>
                         <% }) %>
                         </td>
