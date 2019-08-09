@@ -112,7 +112,7 @@ define('io.ox/core/api/tab', [
 
         // Opens a child browser tab.
         openChildTab: function (urlOrParams, options) {
-            tabHandling.openChild(urlOrParams, options);
+            return tabHandling.openChild(urlOrParams, options);
         },
 
         // Opens a parent browser tab.
