@@ -31,7 +31,7 @@ define('io.ox/contacts/view-detail', [
     'io.ox/core/http',
     'static/3rd.party/purify.min.js',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, postalAddress, capabilities, gt, settings, coreSettings, attachments, http, DOMPurify) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, postalAddress, capabilities, gt, settings, attachments, http, DOMPurify) {
 
     'use strict';
 

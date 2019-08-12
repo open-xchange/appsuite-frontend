@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-01-09 12:10+0100\n"
+"PO-Revision-Date: 2019-08-05 11:49+0200\n"
 "Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -9513,7 +9513,7 @@ msgstr "Label e-mailberichten met onderwerp %1$s met %2$s"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js module:io.ox/mail
 msgid "Your vacation notice is active"
-msgstr "Uw afwezigheidsmelding is niet actief"
+msgstr "Uw afwezigheidsmelding is actief"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "vacation notice"
