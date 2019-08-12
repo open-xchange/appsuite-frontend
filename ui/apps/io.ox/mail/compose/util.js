@@ -46,9 +46,16 @@ define('io.ox/mail/compose/util', [
                 }).then(function success(data) {
                     data = _({ group: 'mail', space: space, uploaded: 1 }).extend(data);
                     attachment.set(data);
+                    // trigger is important, extensionpoint cascade on save needs it to resolve or fail correctly.
                     attachment.trigger('upload:complete', data);
                 }, function fail(error) {
                     if (error.error === 'abort') return;
+                    // trigger is important, extensionpoint cascade on save needs it to resolve or fail correctly.
+                    attachment.trigger('upload:failed', error);
+                    // yell error, magically disappearing attachments are bad ux (some quota errors can even be solved by users)
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell(error);
+                    });
                     attachment.destroy();
                 }).always(process);
             }

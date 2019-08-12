@@ -91,9 +91,9 @@ define('io.ox/tours/calendar', [
             .step()
                 .title(gt('Using the reminder function'))
                 .content(gt('To not miss the appointment, use the reminder function.'))
-                .spotlight('.io-ox-calendar-edit-window.active [data-extension-id="alarms"]')
+                .spotlight('.io-ox-calendar-edit-window.active .alarms-link-view')
                 .on('before:show', function () {
-                    $('.io-ox-calendar-edit-window.active [data-extension-id="alarms"]')[0].scrollIntoView();
+                    $('.io-ox-calendar-edit-window.active [data-extension-id="alarms-container"]')[0].scrollIntoView();
                 })
                 .end()
             .step()

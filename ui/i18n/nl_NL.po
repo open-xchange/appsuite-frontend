@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-05-06 20:27+0200\n"
+"PO-Revision-Date: 2019-08-05 11:51+0200\n"
 "Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 18.12.3\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -4289,8 +4289,8 @@ msgstr "Ongecontroleerd bestand downloaden"
 #: apps/io.ox/core/download.js module:io.ox/core
 msgid "Unable to perform Anti-Virus check for the requested file(s)"
 msgstr ""
-"Het is niet mogelijk om de Anti-Virus controle uit te voeren op de gevraagde"
-" bestanden."
+"Het is niet mogelijk om de Anti-Virus controle uit te voeren op de gevraagde "
+"bestanden."
 
 #: apps/io.ox/core/download.js module:io.ox/core
 msgid "Malicious file detected"
@@ -9760,7 +9760,7 @@ msgstr "Label e-mailberichten met onderwerp %1$s met %2$s"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js module:io.ox/mail
 msgid "Your vacation notice is active"
-msgstr "Uw afwezigheidsmelding is niet actief"
+msgstr "Uw afwezigheidsmelding is actief"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "vacation notice"
@@ -10298,8 +10298,8 @@ msgid ""
 "There are no backup devices available for this account. Please notify "
 "support for help."
 msgstr ""
-"Er is geen backup apparaat beschikbaar voor dit account. Meld dit bij"
-" ondersteuning voor hulp."
+"Er is geen backup apparaat beschikbaar voor dit account. Meld dit bij "
+"ondersteuning voor hulp."
 
 #: apps/io.ox/multifactor/lost.js module:io.ox/core/boot
 msgid "Authentication failure. Please try reloading the page."
@@ -10374,9 +10374,9 @@ msgid ""
 "account will be locked out unless you set up a recovery method. We strongly "
 "recommend that you do so now."
 msgstr ""
-"In het geval dat u het autorisatie apparaat verliest of tijdelijk niet kan"
-" gebruiken, wordt uw account geblokkeerd tenzij u een herstel methode"
-" instelt. We adviseren dat u dit direct doet."
+"In het geval dat u het autorisatie apparaat verliest of tijdelijk niet kan "
+"gebruiken, wordt uw account geblokkeerd tenzij u een herstel methode "
+"instelt. We adviseren dat u dit direct doet."
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
@@ -10431,8 +10431,8 @@ msgid ""
 "This is your recovery code. Please write it down, print it, or save the "
 "file. Be sure to save this in a secure location."
 msgstr ""
-"Dit is uw herstelcode. Schrijf deze alstublieft op, druk deze af of sla het"
-" bestand op. Verzeker uzelf van een veilige locatie."
+"Dit is uw herstelcode. Schrijf deze alstublieft op, druk deze af of sla het "
+"bestand op. Verzeker uzelf van een veilige locatie."
 
 #. this is a file name that stores the a long recovery code
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
@@ -10486,8 +10486,8 @@ msgstr "Bevestig Code"
 #: module:io.ox/core/boot
 msgid "Please enter the validation code we just sent to your device."
 msgstr ""
-"Voer alstublieft de controlecode in die we zojuist naar uw apparaat hebben"
-" gestuurd."
+"Voer alstublieft de controlecode in die we zojuist naar uw apparaat hebben "
+"gestuurd."
 
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: module:io.ox/core/boot
@@ -10598,34 +10598,34 @@ msgid ""
 "You secured your account with 2-Step Verification. Please enter the "
 "verification code we sent to the phone *****%s."
 msgstr ""
-"U heeft uw account beveiligd met Twee Factor Authenticatie. Geef alstublieft"
-" de verificatiecode die we hebben gestuurd naar de telefoon met het nummer"
-" *****%s."
+"U heeft uw account beveiligd met Twee Factor Authenticatie. Geef alstublieft "
+"de verificatiecode die we hebben gestuurd naar de telefoon met het nummer "
+"*****%s."
 
 #: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
 msgstr ""
-"U heeft uw account beveiligd met Twee Factor Authenticatie. Geef alstublieft"
-" de verificatiecode uit de Authenticator App."
+"U heeft uw account beveiligd met Twee Factor Authenticatie. Geef alstublieft "
+"de verificatiecode uit de Authenticator App."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification. Please use your "
 "authentication token to complete verification."
 msgstr ""
-"U heeft uw account beveiligd met Twee Factor Authenticatie. Gebruik"
-" alstublieft uw authenticatie-token om de controle te voltooien."
+"U heeft uw account beveiligd met Twee Factor Authenticatie. Gebruik "
+"alstublieft uw authenticatie-token om de controle te voltooien."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
 "This browser is not compatible with your configured authentication device. "
 "Please use Chrome browser, or Firefox with U2F enabled."
 msgstr ""
-"Deze browser is niet compatibel met de door u ingestelde authenticatie"
-" apparaat. Gebruik alstublieft de Chrome browser, of Firefox met U2F"
-" ingeschakeld."
+"Deze browser is niet compatibel met de door u ingestelde authenticatie "
+"apparaat. Gebruik alstublieft de Chrome browser, of Firefox met U2F "
+"ingeschakeld."
 
 #. Error message when trying to use a USB Keyfob to verify identity, maybe wrong website
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10633,8 +10633,8 @@ msgid ""
 "Bad parameters for authenticating with this key. Possibly wrong URL domain "
 "for this key."
 msgstr ""
-"Verkeerde parameters voor het authenticeren met deze sleutel. Mogelijk is dit"
-" de verkeerde URL of domein voor deze sleutel."
+"Verkeerde parameters voor het authenticeren met deze sleutel. Mogelijk is "
+"dit de verkeerde URL of domein voor deze sleutel."
 
 #. Error message when trying to use a USB Keyfob to verify identity.  Some configuration is wrong
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
@@ -10645,8 +10645,8 @@ msgstr "Configuratie wordt niet ondersteund"
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid "This device is not eligible for this request. Wrong hardware key?"
 msgstr ""
-"Dit apparaat is niet toegestaan voor deze aanvraag. Verkeerde hardware"
-" sleutel?"
+"Dit apparaat is niet toegestaan voor deze aanvraag. Verkeerde hardware "
+"sleutel?"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid "Timeout"
