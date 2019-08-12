@@ -18,110 +18,41 @@ define('io.ox/core/api/personalData', [
 
     'use strict';
 
-    // mock data to test UI
-    var mockRequestData = {
-            calendar: {
-                enabled: true,
-                includePublic: false,
-                includeShared: false,
-                subscribedOnly: true
-            },
-            infostore: {
-                enabled: true,
-                includePublic: false,
-                includeShared: false,
-                includeTrash: false,
-                includeAllVersions: false
-            },
-            mail: {
-                enabled: true,
-                includeTrash: false,
-                subscribedOnly: true
-            },
-            contacts: {
-                enabled: true,
-                includePublic: false,
-                includeShared: false,
-                includeDistributionLists: false
-            },
-            tasks: {
-                enabled: true,
-                includePublic: false,
-                includeShared: false
-            },
-            maxFileSize: 1073741824
-        },
-        mockDownloadData = {
-            id: 'EvilMasterPlan1',
-            status: 'running',
-            startTime: moment('2019-10-17').valueOf()
-        },
-        mockFileData = {
-            id: 'EvilMasterPlan1',
-            status: 'finished',
-            creationTime: moment('2019-10-22').valueOf(),
-            startTime: moment('2019-10-17').valueOf(),
-            duration: moment.duration(5, 'days').valueOf(),
-            availableUntil: moment('2020-12-24').valueOf(),
-            results: [
-                {
-                    fileInfo: 'BluePrintsOfSecretVolcanoLair',
-                    number: 1,
-                    contentType: 'zip',
-                    taskId: '1337'
-                },
-                {
-                    fileInfo: 'LazorSharksReceipt',
-                    number: 2,
-                    contentType: 'pdf',
-                    taskId: '1337'
-                }
-            ]
-        },
-        downloadRequested = false;
-
     // super simple cache to save available modules config, you really only need to get this data once. Not likely to ever change
     var cache = {};
 
-    /*eslint-disable no-unreachable */
     var api = {
         downloadFile: function (id, packageNumber) {
-            return http.GET({
-                url: 'api/gdpr/dataexport/' + id,
-                params: {
-                    id: id,
-                    number: packageNumber
-                }
+            return require(['io.ox/core/download']).then(function (download) {
+                download[_.device('ios') ? 'window' : 'url'](
+                    ox.apiRoot + '/gdpr/dataexport/' + id + '?' + $.param({ id: id, number: packageNumber, session: ox.session })
+                );
             });
         },
 
         getAvailableDownloads: function () {
-            if (this.requestFinished) return $.Deferred().resolve(mockFileData);
-            return downloadRequested ? $.Deferred().resolve(mockDownloadData) : $.Deferred().resolve({ status: 'idle', results: [] });
             return http.GET({
                 url: 'api/gdpr/dataexport'
             });
         },
 
         cancelDownloadRequest: function () {
-            downloadRequested = false;
             return http.DELETE({
                 url: 'api/gdpr/dataexport'
             });
         },
 
         requestDownload: function (data) {
-            downloadRequested = true;
             return http.POST({
                 url: 'api/gdpr/dataexport',
-                data: data
+                data: JSON.stringify(data),
+                contentType: 'application/json'
             });
         },
 
         getAvailableModules: function () {
-            return $.Deferred().resolve(mockRequestData);
             if (cache.availableModules) $.Deferred().resolve(cache.availableModules);
-            return http.get({
+            return http.GET({
                 url: 'api/gdpr/dataexport/availableModules'
             }).then(function (data) {
                 cache.availableModules = data;
@@ -131,14 +62,12 @@ define('io.ox/core/api/personalData', [
 
         deleteAllFiles: function () {
             api.requestFinished = false;
-            downloadRequested = false;
             return http.DELETE({
                 url: 'api/gdpr/dataexport/delete'
             });
         },
         requestFinished: false
     };
-    /*eslint-enable no-unreachable */
     Events.extend(api);
 
     return api;

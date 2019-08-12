@@ -148,7 +148,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
             render: function () {
                 this.$el.empty();
 
-                if (this.model.get('status') === 'running') {
+                if (this.model.get('status') === 'PENDING') {
                     //#. %1$s: date and time the download was requested
                     this.$el.append($('<div class="alert alert-info">')
                     .text(gt('Your download request from %1$s is currently being prepared. You can only request one download at a time.\n\nYou will be noticed by e-mail when your download is ready.', moment(this.model.get('creationTime')).format('LLL'))));
@@ -180,64 +180,70 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
 
     var openDialog = function () {
 
-        var deleteDialog = function () {
+        var deleteDialog = function (options) {
+
             var def = $.Deferred();
-            new ModalDialog({ title: gt('Do you really want to delete all available downloads?') })
+            new ModalDialog({ title: options.text })
                 .addCancelButton({ left: true })
-                .addButton({ action: 'delete', label: gt('Delete all avaliable downloads') })
+                .addButton({ action: options.action, label: options.label })
                 .on('action', def.resolve)
                 .open();
 
             return def;
         };
 
-        $.when(api.getAvailableDownloads(), api.getAvailableModules()).then(function (downloadStatus, availableModules) {
+        // no when here, behaves strange if there are mixed results that are resolved and rejected
+        api.getAvailableModules().then(function (availableModules) {
+            api.getAvailableDownloads().always(function (downloadStatus) {
+                // no current download, not good designed. The only way to find out if there's a download is to request it and expect an error
+                if (downloadStatus.code === 'GDPR-EXPORT-0006') {
+                    downloadStatus = { status: 'idle' };
+                }
 
-            var availableModulesModel = new Backbone.Model(availableModules),
-                status = new Backbone.Model(downloadStatus),
-                pdView, dlView, dialog;
+                var availableModulesModel = new Backbone.Model(availableModules),
+                    status = new Backbone.Model(downloadStatus),
+                    pdView, dlView, dialog;
 
-            dialog = new ModalDialog({ title: gt('Data Export') })
-                .addCancelButton({ left: true })
-                .build(function () {
-                    if (status.get('status') !== 'running' && !(status.get('results') && status.get('results').length)) {
-                        pdView = new personalDataView({ model: availableModulesModel });
+                dialog = new ModalDialog({ title: gt('Data Export') })
+                    .addCancelButton({ left: true })
+                    .build(function () {
+                        if (status.get('status') !== 'PENDING' && !(status.get('results') && status.get('results').length)) {
+                            pdView = new personalDataView({ model: availableModulesModel });
+                            this.$body.append(
+                                pdView.render().$el
+                            );
+                            this.on('create', _.bind(pdView.requestDownload, pdView));
+                        }
+
+                        dlView = new downloadView({ model: status });
                         this.$body.append(
-                            pdView.render().$el
+                            dlView.render().$el
                         );
-                        this.on('create', _.bind(pdView.requestDownload, pdView));
-                    }
-
-                    dlView = new downloadView({ model: status });
-                    this.$body.append(
-                        dlView.render().$el
-                    );
-                })
-                .on('cancelDownload', function () {
-                    api.cancelDownloadRequest().fail(yell);
-                })
-                .on('removefiles', function () {
-                    deleteDialog().then(function (action) {
-                        if (action === 'delete') api.deleteAllFiles().fail(yell);
+                    })
+                    .on('cancelDownload', function () {
+                        deleteDialog({ text: gt('Do you really want to cancel your download creation?'), action: 'delete', label: gt('Cancel download creation') }).then(function (action) {
+                            if (action === 'delete') api.cancelDownloadRequest().fail(yell);
+                        });
+                    })
+                    .on('removefiles', function () {
+                        deleteDialog({ text: gt('Do you really want to delete all available downloads?'), action: 'delete', label: gt('Delete all avaliable downloads') }).then(function (action) {
+                            if (action === 'delete') api.deleteAllFiles().fail(yell);
+                        });
                     });
-                });
 
-            if (status.get('status') !== 'running' && !(status.get('results') && status.get('results').length)) {
-                dialog.addButton({ action: 'create', label: gt('Create download') });
-            }
-            if (status.get('status') === 'running') {
-                dialog.addButton({ action: 'cancelDownload', label: gt('Cancel download creation') })
-                    //mock
-                    .on('cancel', function () {
-                        api.requestFinished = true;
-                    });
-            }
-            if (status.get('results') && status.get('results').length) {
-                dialog.addButton({ action: 'removefiles', label: gt('Delete all avaliable downloads') });
-            }
+                if (status.get('status') !== 'PENDING' && !(status.get('results') && status.get('results').length)) {
+                    dialog.addButton({ action: 'create', label: gt('Create download') });
+                }
+                if (status.get('status') === 'PENDING') {
+                    dialog.addButton({ action: 'cancelDownload', label: gt('Cancel download creation') });
+                }
+                if (status.get('results') && status.get('results').length) {
+                    dialog.addButton({ action: 'removefiles', label: gt('Delete all avaliable downloads') });
+                }
 
-            dialog.open();
-        }, yell);
+                dialog.open();
+            });
+        });
     };
 
     return {
