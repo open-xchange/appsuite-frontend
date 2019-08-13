@@ -52,13 +52,9 @@ define('io.ox/participants/chronos-detail', [
             if (baton.data.cuType === 'RESOURCE') return;
 
             var display_name, html, opt;
-            if (baton.data.contact) {
-                display_name = mailUtil.getDisplayName([baton.data.cn, baton.data.email], { showMailAddress: true });
-                html = baton.data.full_name ? $(baton.data.full_name) : $.txt(display_name);
-                opt = _.extend({ html: html }, baton.data);
-            } else {
-                opt = _.extend({ html: $.txt(calendarUtil.getAttendeeName(baton.data)) }, baton.data);
-            }
+            display_name = mailUtil.getDisplayName([calendarUtil.getAttendeeName(baton.data), baton.data.email], { showMailAddress: true });
+            html = baton.data.full_name ? $(baton.data.full_name) : $.txt(display_name);
+            opt = _.extend({ html: html }, baton.data);
 
             if (!baton.options.halo) opt.$el = $('<span>');
             if (baton.data.entity) opt.user_id = baton.data.entity;
@@ -145,25 +141,28 @@ define('io.ox/participants/chronos-detail', [
             //no inline links (provide extensionpoint id here to make them show)
             inlineLinks: false,
             //halo views
-            halo: true
+            halo: true,
+            // external participants and users in the same list
+            unifiedList: true
         }, options);
 
         this.draw = function () {
 
             var list = baton.model.get('attendees') || [],
-                participantsContainer = list.length ? $('<div class="participants-view">') : $();
+                participantsContainer = list.length ? $('<div class="participants-view">') : $(),
+                unifiedList = true;
 
             if (list.length) {
                 participantsContainer.busy();
                 // get users
                 var users = _(list)
                     .filter(function (obj) {
-                        return (!obj.cuType || obj.cuType === 'INDIVIDUAL') && obj.entity;
+                        return (!obj.cuType || obj.cuType === 'INDIVIDUAL') && (unifiedList || obj.entity);
                     });
                 // get external
                 var external = _(list)
                     .filter(function (obj) {
-                        return (!obj.cuType || obj.cuType === 'INDIVIDUAL') && !obj.entity;
+                        return !unifiedList && (!obj.cuType || obj.cuType === 'INDIVIDUAL') && !obj.entity;
                     });
                 // get resources
                 var resources = _(list)
