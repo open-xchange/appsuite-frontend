@@ -73,8 +73,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 expect(util.getDateInterval({ startDate: { value: '20121111' }, endDate: { value: '20121112' } })).to.equal('So., 11.11.2012');
             });
 
-            // test works but karma cannot read the raw cldr json files correctly - becomes â. Renable when fixed
-            it.skip('one week difference', function () {
+            it('one week difference', function () {
                 expect(util.getDateInterval({ startDate: { value: '20121111' }, endDate: { value: '20121119' } })).to.equal('So., 11.11.2012 – So., 18.11.2012');
             });
 
@@ -85,12 +84,12 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
             it('no given dates', function () {
                 expect(util.getTimeInterval()).to.be.empty;
             });
-            // test works but karma cannot read the raw cldr json files correctly - becomes â. Renable when fixed
-            it.skip('same time', function () {
+
+            it('same time', function () {
                 expect(util.getTimeInterval({ startDate: { value: '20121111T111100' }, endDate: { value: '20121111T111100' } })).to.equal('11:11');
             });
-            // test works but karma cannot read the raw cldr json files correctly - becomes â. Renable when fixed
-            it.skip('same day', function () {
+
+            it('same day', function () {
                 expect(util.getTimeInterval({ startDate: { value: '20121111T111100' }, endDate: { value: '20121111T121100' } })).to.equal('11:11\u201312:11 Uhr');
             });
 

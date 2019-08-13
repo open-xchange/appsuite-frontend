@@ -73,6 +73,13 @@ define([
     });
 
     describe('Locale', function () {
+
+        after(function (done) {
+            // finally change back to de_DE
+            ox.once('change:locale', done);
+            settings.set('language', 'de_DE');
+        });
+
         it('set proper date format', function () {
             var m = moment([2019, 5, 5, 13, 37]);
             expect(m.format('L')).to.equal('05.06.2019');
@@ -180,9 +187,7 @@ define([
                 expect(locale.number(1234.56, 2)).to.equal('1,234.56');
                 var m = moment([2019, 5, 5, 13, 37]);
                 expect(m.format('L')).to.equal('06/05/2019');
-                // finally change back to de_DE
-                ox.once('change:locale', done);
-                settings.set('language', 'de_DE');
+                done();
             });
             settings.set('language', 'es_US');
         });

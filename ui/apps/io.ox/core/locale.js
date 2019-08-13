@@ -41,26 +41,38 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
     var regex = /(G+|y+|Y+|M+|w+|W+|D+|d+|F+|E+|u+|a+|H+|k+|K+|h+|m+|s+|S+|z+|Z+|v+|V+)|\[((?:[^\[\]]|\[\])+)\]|(\[\])/g;
 
     // use CLDR Data to get interval formats
-    moment.fn.formatInterval = function (end, format) {
+    moment.fn.formatInterval = function (end, format, options) {
         var start = this,
             intervals = getCLDRData().dateTimeFormats.intervalFormats;
+        options = options || {};
 
         // use old shorthands, no need to change our whole code
         // use 12h/24h format correctly
         if (format === 'time') format = getCLDRData().timeFormats.short.indexOf('a') === -1 ? 'Hm' : 'hm';
-        if (!format || format === 'date') format = 'yMMMd';
+        if (!format || format === 'date') format = 'yMd';
+
+        // no real interval
+        if (!end || this.isSame(end)) return this.formatCLDR(format);
 
         // no format found, use fallback
         if (!intervals[format]) return intervals.intervalFormatFallback.replace('{0}', start.format(format)).replace('{1}', end.format(format));
 
-        // find biggest difference
-        var keys = _(intervals[format]).keys(),
-            finalFormat = intervals[format][keys[0]];
 
-        for (var i = 0; i < keys.length; i++) {
-            if (!start.isSame(end, keys[i])) {
-                finalFormat = intervals[format][keys[i]];
-            } else break;
+        var keys = _(intervals[format]).keys(), finalFormat;
+
+        // smart date (checks for the biggest difference) or always full date (just displays the complete date)?
+        if (options.alwaysFullDate) {
+            // just choose the full format
+            finalFormat = intervals[format][keys[keys.length - 1]];
+
+        } else {
+            // find biggest difference
+            finalFormat = intervals[format][keys[0]];
+            for (var i = 0; i < keys.length; i++) {
+                if (!start.isSame(end, keys[i])) {
+                    finalFormat = intervals[format][keys[i]];
+                } else break;
+            }
         }
 
         // convert to moment

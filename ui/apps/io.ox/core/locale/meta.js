@@ -326,8 +326,8 @@ define('io.ox/core/locale/meta', function () {
     }
 
     function getCLDRDateFilePath(locale) {
-        // add raw! so it works with require
-        return 'raw!3rd.party/cldr-dates/' + (mapToCLDRFiles[locale] || 'en-US') + '/ca-gregorian.json';
+        // add text! so it works with require
+        return 'text!3rd.party/cldr-dates/' + (mapToCLDRFiles[locale] || 'en-US') + '/ca-gregorian.json';
     }
 
     var CLDRDefinitions = {};
