@@ -19,8 +19,9 @@ define('io.ox/participants/chronos-detail', [
     'io.ox/mail/util',
     'io.ox/core/util',
     'gettext!io.ox/core',
+    'settings!io.ox/calendar',
     'less!io.ox/participants/style'
-], function (util, ext, contactsUtil, calendarUtil, mailUtil, coreUtil, gt) {
+], function (util, ext, contactsUtil, calendarUtil, mailUtil, coreUtil, gt, settings) {
 
     'use strict';
 
@@ -142,27 +143,26 @@ define('io.ox/participants/chronos-detail', [
             inlineLinks: false,
             //halo views
             halo: true,
-            // external participants and users in the same list
-            unifiedList: true
+            // external participants and users in the same list or not
+            separateLists: settings.get('separateExternalParticipantList', false)
         }, options);
 
         this.draw = function () {
 
             var list = baton.model.get('attendees') || [],
-                participantsContainer = list.length ? $('<div class="participants-view">') : $(),
-                unifiedList = true;
+                participantsContainer = list.length ? $('<div class="participants-view">') : $();
 
             if (list.length) {
                 participantsContainer.busy();
                 // get users
                 var users = _(list)
                     .filter(function (obj) {
-                        return (!obj.cuType || obj.cuType === 'INDIVIDUAL') && (unifiedList || obj.entity);
+                        return (!obj.cuType || obj.cuType === 'INDIVIDUAL') && (!options.separateLists || obj.entity);
                     });
                 // get external
                 var external = _(list)
                     .filter(function (obj) {
-                        return !unifiedList && (!obj.cuType || obj.cuType === 'INDIVIDUAL') && !obj.entity;
+                        return options.separateLists && (!obj.cuType || obj.cuType === 'INDIVIDUAL') && !obj.entity;
                     });
                 // get resources
                 var resources = _(list)
