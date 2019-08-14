@@ -456,14 +456,33 @@ define('io.ox/chat/data', [
 
         create: function (attr) {
             var collection = this,
-                data = { open: true, members: attr.members, title: '', type: attr.type || 'group' };
+                data = _.extend({
+                    open: true, title: '', type: 'group'
+                }, _(attr).pick('title', 'type', 'members', 'description', 'file')),
+                formData = new FormData();
+
+            _.each(data, function (value, key) {
+                if (_.isUndefined(value)) return;
+
+                if (_.isArray(value)) {
+                    value.forEach(function (val, index) {
+                        formData.append(key + '[' + index + ']', val);
+                    });
+                    return;
+                }
+
+                formData.append(key, value);
+            });
+
             return $.ajax({
-                method: 'POST',
+                type: 'POST',
                 url: this.url(),
-                data: data,
+                data: formData,
+                processData: false,
+                contentType: false,
                 xhrFields: { withCredentials: true }
-            }).done(function (data) {
-                collection.add(data);
+            }).then(function (data) {
+                return collection.add(data);
             });
         },
 

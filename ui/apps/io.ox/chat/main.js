@@ -60,6 +60,7 @@ define('io.ox/chat/main', [
         onCommand: function (data) {
             switch (data.cmd) {
                 case 'start-chat': this.startChat(data); break;
+                case 'start-group-chat': this.startGroupChat(data); break;
                 case 'start-private-chat': this.startPrivateChat(data); break;
                 case 'join-channel': this.joinChannel(data); break;
                 case 'show-chat': this.showChat(data.id || data.cid, data.messageId); break;
@@ -95,6 +96,16 @@ define('io.ox/chat/main', [
                         button: 'Start conversation'
                     }
                 );
+            });
+        },
+
+        startGroupChat: function () {
+            var self = this;
+
+            require(['io.ox/chat/actions/openGroupDialog'], function (openGroupDialog) {
+                openGroupDialog().then(function (id) {
+                    self.showChat(id);
+                });
             });
         },
 
@@ -348,14 +359,27 @@ define('io.ox/chat/main', [
     });
 
     ext.point('io.ox/chat/list/toolbar').extend({
-        id: 'create-group',
+        id: 'create-new',
         index: 200,
         prio: 'lo',
         mobile: 'lo',
         custom: true,
         draw: function () {
             this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="start-chat">').text('Create group').on('click', events.forward)
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="start-chat">').text('Create new chat').on('click', events.forward)
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/list/toolbar').extend({
+        id: 'create-group',
+        index: 300,
+        prio: 'lo',
+        mobile: 'lo',
+        custom: true,
+        draw: function () {
+            this.attr('data-prio', 'lo').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="start-group-chat">').text('Create new group').on('click', events.forward)
             );
         }
     });
