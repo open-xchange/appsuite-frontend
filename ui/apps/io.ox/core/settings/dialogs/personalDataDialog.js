@@ -194,68 +194,62 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
             return def;
         };
 
-        // no when here, behaves strange if there are mixed results that are resolved and rejected
-        api.getAvailableModules().then(function (availableModules) {
-            api.getAvailableDownloads().always(function (downloadStatus) {
-                // no current download, not good designed. The only way to find out if there's a download is to request it and expect an error
-                if (downloadStatus.code === 'GDPR-EXPORT-0006') {
-                    downloadStatus = { status: 'none' };
-                }
+        $.when(api.getAvailableModules(), api.getAvailableDownloads()).then(function (availableModules, downloadStatus) {
+            // check if this is [data, timestamp]
+            downloadStatus = _.isArray(downloadStatus) ? downloadStatus[0] : downloadStatus;
+            var availableModulesModel = new Backbone.Model(availableModules),
+                status = new Backbone.Model(downloadStatus),
+                pdView, dlView, dialog;
 
-                var availableModulesModel = new Backbone.Model(availableModules),
-                    status = new Backbone.Model(downloadStatus),
-                    pdView, dlView, dialog;
-
-                dialog = new ModalDialog({ title: gt('Data Export') })
-                    .build(function () {
-                        if (status.get('status') === 'none') {
-                            pdView = new personalDataView({ model: availableModulesModel });
-                            this.$body.append(
-                                pdView.render().$el
-                            );
-                            this.on('create', _.bind(pdView.requestDownload, pdView));
-                            return;
-                        }
-
-                        dlView = new downloadView({ model: status });
+            dialog = new ModalDialog({ title: gt('Data Export') })
+                .build(function () {
+                    if (status.get('status') === 'none') {
+                        pdView = new personalDataView({ model: availableModulesModel });
                         this.$body.append(
-                            dlView.render().$el
+                            pdView.render().$el
                         );
-                    })
-                    .on('cancelDownload', function () {
-                        deleteDialog({ text: gt('Do you really want to cancel your download creation?'), action: 'delete', label: gt('Cancel download creation') }).then(function (action) {
-                            if (action === 'delete') api.cancelDownloadRequest().fail(yell);
-                        });
-                    })
-                    .on('removefiles', function () {
-                        deleteDialog({ text: gt('Do you really want to delete all available downloads?'), action: 'delete', label: gt('Delete all avaliable downloads') }).then(function (action) {
-                            if (action === 'delete') api.deleteAllFiles().fail(yell);
-                        });
+                        this.on('create', _.bind(pdView.requestDownload, pdView));
+                        return;
+                    }
+
+                    dlView = new downloadView({ model: status });
+                    this.$body.append(
+                        dlView.render().$el
+                    );
+                })
+                .on('cancelDownload', function () {
+                    deleteDialog({ text: gt('Do you really want to cancel your download creation?'), action: 'delete', label: gt('Cancel download creation') }).then(function (action) {
+                        if (action === 'delete') api.cancelDownloadRequest().fail(yell);
                     });
+                })
+                .on('removefiles', function () {
+                    deleteDialog({ text: gt('Do you really want to delete all available downloads?'), action: 'delete', label: gt('Delete all avaliable downloads') }).then(function (action) {
+                        if (action === 'delete') api.deleteAllFiles().fail(yell);
+                    });
+                });
 
-                // display the correct buttons depending on the current download state
-                switch (downloadStatus.status) {
-                    case 'none':
-                        dialog.addCancelButton({ left: true })
-                            .addButton({ action: 'create', label: gt('Create download') });
-                        break;
-                    case 'PENDING':
-                        dialog.addButton({ className: 'btn-danger', placement: 'left', action: 'cancelDownload', label: gt('Cancel download creation') })
-                            .addButton({ action: 'cancel', label: gt('Ok') });
-                        break;
-                    case 'DONE':
-                        dialog.addButton({ className: 'btn-danger', placement: 'left', action: 'removefiles', label: gt('Delete all avaliable downloads') })
-                            .addButton({ action: 'cancel', label: gt('Ok') });
-                        break;
-                    // failsave
-                    default:
-                        dialog.addCancelButton({ left: true });
-                        break;
-                }
+            // display the correct buttons depending on the current download state
+            switch (downloadStatus.status) {
+                case 'none':
+                    dialog.addCancelButton({ left: true })
+                        .addButton({ action: 'create', label: gt('Create download') });
+                    break;
+                case 'PENDING':
+                    dialog.addButton({ className: 'btn-danger', placement: 'left', action: 'cancelDownload', label: gt('Cancel download creation') })
+                        .addButton({ action: 'cancel', label: gt('Ok') });
+                    break;
+                case 'DONE':
+                    dialog.addButton({ className: 'btn-danger', placement: 'left', action: 'removefiles', label: gt('Delete all avaliable downloads') })
+                        .addButton({ action: 'cancel', label: gt('Ok') });
+                    break;
+                // failsave
+                default:
+                    dialog.addCancelButton({ left: true });
+                    break;
+            }
 
-                dialog.open();
-            });
-        });
+            dialog.open();
+        }, yell);
     };
 
     return {
