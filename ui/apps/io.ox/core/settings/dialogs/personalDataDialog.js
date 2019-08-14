@@ -98,6 +98,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                 }
             }
         },
+        // displays a lot of checkboxes to select the data to download
         personalDataView = DisposableView.extend({
             className: 'personal-data-view',
             initialize: function () {
@@ -143,6 +144,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                 api.requestDownload(this.model.toJSON()).fail(yell);
             }
         }),
+        // used to display the current state if a download was requested
         downloadView = DisposableView.extend({
             className: 'personal-data-download-view',
             render: function () {
@@ -154,7 +156,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                     .text(gt('Your download request from %1$s is currently being prepared. You can only request one download at a time.\n\nYou will be noticed by e-mail when your download is ready.', moment(this.model.get('creationTime')).format('LLL'))));
                 }
 
-                if (this.model.get('results') && this.model.get('results').length) {
+                if (this.model.get('status') === 'DONE' && this.model.get('results') && this.model.get('results').length) {
                     this.$el.append(
                         //#. %1$s: date and time when the download expires
                         $('<label>').text(gt('Files ready for download. Available until %1$s.', moment(this.model.get('avaiableUntil')).format('LLL'))),
@@ -185,7 +187,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
             var def = $.Deferred();
             new ModalDialog({ title: options.text })
                 .addCancelButton({ left: true })
-                .addButton({ action: options.action, label: options.label })
+                .addButton({ className: 'btn-danger', action: options.action, label: options.label })
                 .on('action', def.resolve)
                 .open();
 
@@ -197,7 +199,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
             api.getAvailableDownloads().always(function (downloadStatus) {
                 // no current download, not good designed. The only way to find out if there's a download is to request it and expect an error
                 if (downloadStatus.code === 'GDPR-EXPORT-0006') {
-                    downloadStatus = { status: 'idle' };
+                    downloadStatus = { status: 'none' };
                 }
 
                 var availableModulesModel = new Backbone.Model(availableModules),
@@ -205,14 +207,14 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                     pdView, dlView, dialog;
 
                 dialog = new ModalDialog({ title: gt('Data Export') })
-                    .addCancelButton({ left: true })
                     .build(function () {
-                        if (status.get('status') !== 'PENDING' && !(status.get('results') && status.get('results').length)) {
+                        if (status.get('status') === 'none') {
                             pdView = new personalDataView({ model: availableModulesModel });
                             this.$body.append(
                                 pdView.render().$el
                             );
                             this.on('create', _.bind(pdView.requestDownload, pdView));
+                            return;
                         }
 
                         dlView = new downloadView({ model: status });
@@ -231,14 +233,24 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                         });
                     });
 
-                if (status.get('status') !== 'PENDING' && !(status.get('results') && status.get('results').length)) {
-                    dialog.addButton({ action: 'create', label: gt('Create download') });
-                }
-                if (status.get('status') === 'PENDING') {
-                    dialog.addButton({ action: 'cancelDownload', label: gt('Cancel download creation') });
-                }
-                if (status.get('results') && status.get('results').length) {
-                    dialog.addButton({ action: 'removefiles', label: gt('Delete all avaliable downloads') });
+                // display the correct buttons depending on the current download state
+                switch (downloadStatus.status) {
+                    case 'none':
+                        dialog.addCancelButton({ left: true })
+                            .addButton({ action: 'create', label: gt('Create download') });
+                        break;
+                    case 'PENDING':
+                        dialog.addButton({ className: 'btn-danger', placement: 'left', action: 'cancelDownload', label: gt('Cancel download creation') })
+                            .addButton({ action: 'cancel', label: gt('Ok') });
+                        break;
+                    case 'DONE':
+                        dialog.addButton({ className: 'btn-danger', placement: 'left', action: 'removefiles', label: gt('Delete all avaliable downloads') })
+                            .addButton({ action: 'cancel', label: gt('Ok') });
+                        break;
+                    // failsave
+                    default:
+                        dialog.addCancelButton({ left: true });
+                        break;
                 }
 
                 dialog.open();
