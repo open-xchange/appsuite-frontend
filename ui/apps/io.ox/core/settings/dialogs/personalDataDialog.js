@@ -19,8 +19,9 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
     'io.ox/backbone/mini-views/common',
     'io.ox/core/api/personalData',
     'io.ox/core/yell',
+    'io.ox/core/strings',
     'less!io.ox/core/settings/dialogs/style'
-], function (DisposableView, gt, ModalDialog, ext, mini, api, yell) {
+], function (DisposableView, gt, ModalDialog, ext, mini, api, yell, strings) {
 
     'use strict';
 
@@ -98,6 +99,18 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                 }
             }
         },
+        filesizelimits = [
+            // 512mb is hardcoded backend minimum
+            // 512mb
+            536870912,
+            // 1gb
+            1073741824
+        ],
+        dialogTitles = {
+            'none': gt('Data Export'),
+            'PENDING': gt('Download is being created'),
+            'DONE': gt('Download data archive')
+        },
         // displays a lot of checkboxes to select the data to download
         personalDataView = DisposableView.extend({
             className: 'personal-data-view',
@@ -115,24 +128,37 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                 });
             },
             render: function () {
-                var self = this;
+                var self = this, checkboxes,
+                    supportedFilesizes = _(filesizelimits).filter(function (value) { return value <= self.model.get('maxFileSize'); });
                 this.$el.empty();
 
                 // data selection
-                this.$el.append($('<div>').text(gt('Please select the data to be included in your download')));
+                this.$el.append(checkboxes = $('<div class="form-group">').append($('<label>').text(gt('Please select the data to be included in your download'))));
 
                 // build Checkboxes
                 _(modules).each(function (data, moduleName) {
                     if (!self.model.get(moduleName)) return;
                     // main checkbox for the module (mail)
-                    self.$el.append(new mini.CustomCheckboxView({ name: 'enabled', label: modules[moduleName].label, model: self.models[moduleName] }).render().$el.addClass('main-option '));
+                    checkboxes.append(new mini.CustomCheckboxView({ name: 'enabled', label: modules[moduleName].label, model: self.models[moduleName] }).render().$el.addClass('main-option '));
                     // sub checkboxes (include trash folder etc)
                     _(_(data).keys()).each(function (subOption) {
                         if (subOption === 'label') return;
-                        self.$el.append(new mini.CustomCheckboxView({ name: subOption, label: modules[moduleName][subOption].label, model: self.models[moduleName] }).render().$el.addClass('sub-option ' + moduleName + '-sub-option'));
+                        checkboxes.append(new mini.CustomCheckboxView({ name: subOption, label: modules[moduleName][subOption].label, model: self.models[moduleName] }).render().$el.addClass('sub-option ' + moduleName + '-sub-option'));
                     });
-
                 });
+
+                if (supportedFilesizes.length) {
+                    this.$el.append(
+                        $('<div class="form-group">').append(
+                            $('<label>').attr('for', 'personaldata-filesizepicker').text(gt('Maximum file size')),
+                            new mini.SelectView({ name: 'maxFileSize', id: 'personaldata-filesizepicker', model: self.model,
+                                list: _(supportedFilesizes).map(function (fileSize) {
+                                    return { label: strings.fileSize(fileSize), value: fileSize };
+                                })
+                            }).render().$el.val(supportedFilesizes[supportedFilesizes.length - 1])
+                        )
+                    );
+                }
 
                 return this;
             },
@@ -153,13 +179,13 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                 if (this.model.get('status') === 'PENDING') {
                     //#. %1$s: date and time the download was requested
                     this.$el.append($('<div class="alert alert-info">')
-                    .text(gt('Your download request from %1$s is currently being prepared. You can only request one download at a time.\n\nYou will be noticed by e-mail when your download is ready.', moment(this.model.get('creationTime')).format('LLL'))));
+                    .text(gt('Your requested archive from %1$s is currently being created. You will be informed via email when your download is ready.', moment(this.model.get('creationTime')).format('LLL'))));
                 }
 
                 if (this.model.get('status') === 'DONE' && this.model.get('results') && this.model.get('results').length) {
                     this.$el.append(
                         //#. %1$s: date and time when the download expires
-                        $('<label>').text(gt('Files ready for download. Available until %1$s.', moment(this.model.get('avaiableUntil')).format('LLL'))),
+                        $('<label>').text(gt('Your data archive is ready for download. The download is vailable until %1$s.', moment(this.model.get('avaiableUntil')).format('LLL'))),
                         $('<ul class="list-unstyled downloads">').append(
                             _(this.model.get('results')).map(function (file) {
                                 return $('<li class="file">')
@@ -187,7 +213,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
             var def = $.Deferred();
             new ModalDialog({ title: options.text })
                 .addCancelButton({ left: true })
-                .addButton({ className: 'btn-danger', action: options.action, label: options.label })
+                .addButton({ className: 'btn-default', action: options.action, label: options.label })
                 .on('action', def.resolve)
                 .open();
 
@@ -201,7 +227,7 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                 status = new Backbone.Model(downloadStatus),
                 pdView, dlView, dialog;
 
-            dialog = new ModalDialog({ title: gt('Data Export') })
+            dialog = new ModalDialog({ title: dialogTitles[status.get('status')] })
                 .build(function () {
                     if (status.get('status') === 'none') {
                         pdView = new personalDataView({ model: availableModulesModel });
@@ -235,12 +261,12 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                         .addButton({ action: 'create', label: gt('Create download') });
                     break;
                 case 'PENDING':
-                    dialog.addButton({ className: 'btn-danger', placement: 'left', action: 'cancelDownload', label: gt('Cancel download creation') })
-                        .addButton({ action: 'cancel', label: gt('Ok') });
+                    dialog.addButton({ className: 'btn-default', action: 'cancelDownload', label: gt('Cancel download creation') })
+                        .addButton({ action: 'cancel', label: gt('Close') });
                     break;
                 case 'DONE':
-                    dialog.addButton({ className: 'btn-danger', placement: 'left', action: 'removefiles', label: gt('Delete all avaliable downloads') })
-                        .addButton({ action: 'cancel', label: gt('Ok') });
+                    dialog.addButton({ className: 'btn-default', action: 'removefiles', label: gt('Delete all avaliable downloads') })
+                        .addButton({ action: 'cancel', label: gt('Close') });
                     break;
                 // failsave
                 default:
