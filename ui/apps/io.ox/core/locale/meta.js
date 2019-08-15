@@ -217,6 +217,7 @@ define('io.ox/core/locale/meta', function () {
         format = format.replace(/d/g, 'D')
              .replace(/EEEE/g, 'dddd')
             .replace(/E/g, 'ddd')
+            .replace(/a/g, 'A')
             .replace(/y/g, 'Y');
         // moment uses [] to mark strings inside the formats, cldr uses ''
         return _(format.split('\'')).reduce(function (str, part, index) { return str + (index % 2 === 1 ? '[' : ']') + part; });
@@ -226,6 +227,7 @@ define('io.ox/core/locale/meta', function () {
         return format
             .replace(/dddd/g, 'EEEE')
             .replace(/(ddd|dd|d)/g, 'E')
+            .replace(/A/g, 'a')
             .replace(/D/g, 'd')
             .replace(/Y/g, 'y')
             // moment uses [] to mark strings inside the formats, cldr uses ''
