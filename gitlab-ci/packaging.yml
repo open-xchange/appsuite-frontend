@@ -1,0 +1,48 @@
+---
+
+stages:
+  - test
+  - deploy
+  - cleanup
+
+delete project on obs:
+  image: gitlab.open-xchange.com:4567/frontend/osc_env:latest
+  stage: cleanup
+  dependencies: []
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - echo "${OBS_OSCRC}" >> ~/.oscrc
+  script:
+    - osc rdelete -r frontend-${CI_COMMIT_REF_SLUG} -m "GitLab CI environment stopped"
+  when: manual
+  environment:
+    name: packages/$CI_COMMIT_REF_NAME
+    action: stop
+
+upload:
+  image: gradle:5.5-jre8
+  stage: deploy
+  script:
+    # only run subtasks for projects which have been build previously (contain some built project files)
+    - export TASKS=$(ls */build/pkg -d | sed -E "s,([^\/ ]+)\/[^ ]+,:\1:upload,g")
+    - gradle --no-daemon $TASKS
+  only:
+    - develop
+    - master
+    - master-*
+    - release-*
+    - /^feature\//
+    - /^bug\//
+    - /^poc\//
+  environment:
+    name: packages/$CI_COMMIT_REF_NAME
+    on_stop: "delete project on obs"
+    url: https://buildservice.open-xchange.com/frontend-$CI_COMMIT_REF_SLUG/
+  dependencies:
+    - build ui
+    - build update-themes
+    - build help
+    - build guidedtours
+    - build spamexperts
+    - build dynamic-theme

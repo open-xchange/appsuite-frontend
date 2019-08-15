@@ -4,9 +4,12 @@ ui/.project
 ui/watch.sh
 ui/node_modules
 ui/lib/bootstrap/node_modules
+*/build/
 *.sublime-*
 *~
 *.swp
 *.kate-swp
 npm-debug.log
 nbproject
+/.gradle/
+.env
