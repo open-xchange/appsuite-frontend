@@ -126,10 +126,13 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          */
         propagateSession: function (parameters) {
             var tabAPI = require('io.ox/core/api/tab');
-            if (!ox.session) {
+
+            // the login process is finished when session, user and user_id are set in the ox object
+            if (!ox.session || !ox.user || !ox.user_id) {
                 tabAPI.propagate('propagateNoSession', { exceptWindow: tabAPI.getWindowName(), storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION });
                 return;
             }
+            // the requested session is differently to ox.session. e.g. guest user vs normal login
             if (parameters.session && parameters.session !== ox.session) {
                 return;
             }
