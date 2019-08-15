@@ -928,7 +928,9 @@ Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, use
     I.waitForElement(appointmentSelector, 5);
     I.click(appointmentSelector);
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
-    expect(await I.grabTextFrom('.io-ox-sidepopup-pane .date-time')).to.equal(momentRange().add(1, 'hours').format('ddd') + ', ' + momentRange().add(1, 'hours').format('M/D/YYYY') + '   12:00 – 1:00 PMCEST');
+    const newTime = momentRange().add(1, 'hours')
+    expect(await I.grabTextFrom('.io-ox-sidepopup-pane .date-time')).to
+        .equal(`${newTime.format('ddd')}, ${newTime.format('M/D/YYYY')}   12:00 – 1:00 PMCEST`);
 });
 
 Scenario('[C7462] Remove a participant @shaky', async function (I, users) {
@@ -1157,17 +1159,19 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
 
     I.waitForVisible('.appointment');
     I.dragAndDrop('.appointment .resizable-n', '.day .timeslot:nth-child(23)');
+    I.wait(0.5);
 
     I.click(summary, '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
-    I.waitForText('11:00 AM – 1:00 PMCEST');
+    I.waitForText('11:00 – 1:00 PMCEST');
     I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup');
     I.dragAndDrop('.appointment .resizable-s', '.day .timeslot:nth-child(28)');
+    I.wait(0.5);
 
     I.click(summary, '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
-    I.waitForText('11:00 AM – 2:00 PMCEST');
+    I.waitForText('11:00 – 2:00 PMCEST');
     I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup');
 
@@ -1175,13 +1179,13 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async function (I
     I.click('Week', '.smart-dropdown-container');
 
     I.click('.io-ox-pagecontroller.current .appointment');
-    I.waitForText('11:00 AM – 2:00 PMCEST');
+    I.waitForText('11:00 – 2:00 PMCEST');
 
     I.clickToolbar('View');
     I.click('Month', '.smart-dropdown-container');
 
     I.click('.io-ox-pagecontroller.current .appointment');
-    I.waitForText('11:00 AM – 2:00 PMCEST');
+    I.waitForText('11:00 – 2:00 PMCEST');
 
     I.clickToolbar('View');
     I.click('List', '.smart-dropdown-container');
@@ -1284,6 +1288,7 @@ Scenario('[C7456] Edit appointment via Drag & Drop', async function (I, users) {
         $('.appointment-content')[0].scrollIntoView(true);
     });
     I.dragAndDrop('.appointment .appointment-content', '.day .timeslot:nth-child(27)');
+    I.wait(0.5);
 
     I.click(summary, '.appointment');
     I.waitForVisible('.io-ox-sidepopup');
