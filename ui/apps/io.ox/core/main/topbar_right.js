@@ -29,6 +29,13 @@ define('io.ox/core/main/topbar_right', [
     'gettext!io.ox/core'
 ], function (session, http, ext, capabilities, notifications, HelpLinkView, Dropdown, UpsellView, logout, refresh, addLauncher, contactAPI, userAPI, settings, gt) {
 
+    var DOCUMENTS_SETTINGS_IN_OFFICE_TABS_OPTIONS = {
+        id: 'io.ox/office',
+        title: gt('Settings'),
+        floating: true,
+        closable: true
+    };
+
     function getHelp() {
         var currentApp = ox.ui.App.getCurrentFloatingApp() || ox.ui.App.getCurrentApp();
 
@@ -38,6 +45,10 @@ define('io.ox/core/main/topbar_right', [
             base: 'help',
             target: 'index.html'
         }, currentApp && currentApp.get('help'));
+    }
+
+    function isDocumentsApplicationInOfficeTab() {
+        return ox.tabHandlingEnabled && $('html').hasClass('office-tab');
     }
 
     ext.point('io.ox/core/appcontrol/right').extend({
@@ -140,7 +151,10 @@ define('io.ox/core/main/topbar_right', [
         draw: function () {
             this.append(
                 addLauncher('right', $('<i class="fa fa-cog launcher-icon" aria-hidden="true">').attr('title', gt('Settings')), function () {
-                    ox.launch('io.ox/settings/main');
+                    // launch options, for documents in office tab launch settings in floating window
+                    var options = isDocumentsApplicationInOfficeTab() ? DOCUMENTS_SETTINGS_IN_OFFICE_TABS_OPTIONS : {};
+                    ox.launch('io.ox/settings/main', options);
+
                 }, gt('Settings'))
                 .attr('id', 'io-ox-settings-topbar-icon')
             );
