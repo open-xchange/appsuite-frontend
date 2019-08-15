@@ -31,11 +31,11 @@ Scenario('[C287803] Configure quick launchers', function (I) {
     I.seeElement('~Drive', '#io-ox-quicklaunch');
     I.click('Configure quick launchers');
     I.waitForText('Configure quick launchers');
-    I.see('Quick launch 1');
+    I.see('Position 1');
     I.see('Mail', '[id="settings-apps/quickLaunch0"]');
-    I.see('Quick launch 2');
+    I.see('Position 2');
     I.see('Calendar', '[id="settings-apps/quickLaunch0"]');
-    I.see('Quick launch 3');
+    I.see('Position 3');
     I.see('Drive', '[id="settings-apps/quickLaunch0"]');
     I.selectOption('[id="settings-apps/quickLaunch0"]', 'Address Book');
     I.waitForText('Calendar','5','[id="settings-apps/quickLaunch0"]');
@@ -50,11 +50,11 @@ Scenario('[C287803] Configure quick launchers', function (I) {
     I.seeElement('~Drive', '#io-ox-quicklaunch');
     I.click('Configure quick launchers');
     I.waitForText('Configure quick launchers');
-    I.see('Quick launch 1');
+    I.see('Position 1');
     I.see('Mail', '[id="settings-apps/quickLaunch0"]');
-    I.see('Quick launch 2');
+    I.see('Position 2');
     I.see('Calendar', '[id="settings-apps/quickLaunch0"]');
-    I.see('Quick launch 3');
+    I.see('Position 3');
     I.see('Drive', '[id="settings-apps/quickLaunch0"]');
     I.selectOption('[id="settings-apps/quickLaunch0"]', 'Address Book');
     I.waitForText('Calendar','5','[id="settings-apps/quickLaunch0"]');
@@ -62,7 +62,7 @@ Scenario('[C287803] Configure quick launchers', function (I) {
     I.waitForText('Calendar','5','[id="settings-apps/quickLaunch0"]');
     I.selectOption('[id="settings-apps/quickLaunch2"]', 'Portal');
     I.waitForText('Calendar','5','[id="settings-apps/quickLaunch0"]');
-    I.click('Apply');
+    I.click('Save changes');
     I.waitForInvisible('Configure quick launchers');
     I.seeElement('~Address Book', '#io-ox-quicklaunch');
     I.seeElement('~Tasks', '#io-ox-quicklaunch');

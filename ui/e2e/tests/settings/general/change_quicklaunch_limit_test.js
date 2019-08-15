@@ -29,13 +29,13 @@ Scenario('[C276001] Change Quicklaunch limit', async (I) =>{
 
     I.click('Configure quick launchers ...');
 
-    I.selectOption('Quick launch 1', 'Mail');
-    I.selectOption('Quick launch 2', 'Calendar');
-    I.selectOption('Quick launch 3', 'Address Book');
-    I.selectOption('Quick launch 4', 'Drive');
-    I.selectOption('Quick launch 5', 'Portal');
+    I.selectOption('Position 1', 'Mail');
+    I.selectOption('Position 2', 'Calendar');
+    I.selectOption('Position 3', 'Address Book');
+    I.selectOption('Position 4', 'Drive');
+    I.selectOption('Position 5', 'Portal');
 
-    I.click('Apply');
+    I.click('Save changes');
 
     I.click('#io-ox-refresh-icon');
 

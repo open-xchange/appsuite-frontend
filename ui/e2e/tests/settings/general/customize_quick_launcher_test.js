@@ -31,21 +31,21 @@ Scenario('[C274141] Customize default app, order and count for Quicklauncher @co
 
     I.click('Configure quick launchers ...');
 
-    I.selectOption('Quick launch 1', 'None');
-    I.selectOption('Quick launch 2', 'None');
-    I.selectOption('Quick launch 3', 'None');
+    I.selectOption('Position 1', 'None');
+    I.selectOption('Position 2', 'None');
+    I.selectOption('Position 3', 'None');
 
-    I.click('Apply');
+    I.click('Save changes');
 
     I.click('#io-ox-refresh-icon');
 
     I.click('Configure quick launchers ...');
 
-    I.selectOption('Quick launch 1', 'Calendar');
-    I.selectOption('Quick launch 2', 'Address Book');
-    I.selectOption('Quick launch 3', 'io.ox/mail/main');
+    I.selectOption('Position 1', 'Calendar');
+    I.selectOption('Position 2', 'Address Book');
+    I.selectOption('Position 3', 'io.ox/mail/main');
 
-    I.click('Apply');
+    I.click('Save changes');
 
     I.click('#io-ox-refresh-icon');
 
