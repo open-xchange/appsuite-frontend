@@ -62,7 +62,7 @@ define('io.ox/core/settings/dialogs/quickLauncherDialog', [
                 this.$el.append(
                     _.range(appcontrol.getQuickLauncherCount()).map(function (i) {
                         //#. %s is the number of the quicklauncher (1-3)
-                        return this.getMultiSelect('apps/quickLaunch' + i, gt('Quick launch %s', i + 1), { pos: i });
+                        return this.getMultiSelect('apps/quickLaunch' + i, gt('Position %s', i + 1), { pos: i });
                     }, this)
                 );
                 return this;
@@ -96,7 +96,7 @@ define('io.ox/core/settings/dialogs/quickLauncherDialog', [
         openDialog = function () {
             var prevSettings = settings.get('apps/quickLaunch');
             new ModalDialog({
-                title: gt('Configure quick launchers'),
+                title: gt('Change quick launch icons'),
                 width: 360
             })
             .build(function () {
@@ -104,8 +104,8 @@ define('io.ox/core/settings/dialogs/quickLauncherDialog', [
                     new quickLauncherSettingsView({ model: new QuickLaunchModel() }).render().$el
                 );
             })
-            .addCancelButton({ left: true })
-            .addButton({ action: 'apply', label: gt('Apply') })
+            .addCancelButton()
+            .addButton({ action: 'apply', label: gt('Save changes') })
             .on('cancel', function () {
                 settings.set('apps/quickLaunch', prevSettings).save();
             })
