@@ -80,7 +80,7 @@ build update-themes:
   before_script:
     - cd ${PROJECT_PATH}
     # add production dependencies to different modules folder, so those can be picked up by grunt copy tasks
-    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache --flat --no-lockfile --production --modules-folder=deps
+    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache --production --modules-folder=deps
     - cd ..
   only:
     changes:
