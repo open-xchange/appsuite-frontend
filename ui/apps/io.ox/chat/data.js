@@ -27,9 +27,8 @@ define('io.ox/chat/data', [
 
     var data = {
         // yes, it contains the user_id; just a POC; no auth
-        API_ROOT: 'https://' + chatHost + '/api/' + user_id,
-        SOCKET: 'https://' + chatHost,
-        user_id: user_id
+        API_ROOT: 'https://' + chatHost + '/api',
+        SOCKET: 'https://' + chatHost
     };
 
     //
@@ -43,13 +42,14 @@ define('io.ox/chat/data', [
         },
 
         isMyself: function () {
-            return this.get('id') === data.user_id;
+            var user = data.users.getByMail(data.user.email);
+            return this === user;
         },
 
         getName: function () {
             var first = $.trim(this.get('first_name')), last = $.trim(this.get('last_name'));
             if (first && last) return first + ' ' + last;
-            return first || last || '\u00a0';
+            return first || last || this.get('email') || '\u00a0';
         },
 
         getState: function () {
@@ -65,18 +65,28 @@ define('io.ox/chat/data', [
         }
     });
 
-    var UserCollection = Backbone.Collection.extend({ model: UserModel });
+    var UserCollection = Backbone.Collection.extend({
+
+        model: UserModel,
+
+        getByMail: _.memoize(function (email) {
+            return this.find(function (model) {
+                return model.get('email1') === email || model.get('email2') === email || model.get('email3') === email;
+            });
+        })
+
+    });
     data.users = new UserCollection([]);
 
     data.fetchUsers = function () {
-        return api.getAll({ folder: 6, columns: '501,502,524,570' }, false).then(function (result) {
+        return api.getAll({ folder: 6, columns: '501,502,524,555,556,557,570' }, false).then(function (result) {
             result = _(result).map(function (item) {
-                return {
+                return _.extend({
                     id: item.internal_userid,
                     first_name: item.first_name,
                     last_name: item.last_name,
                     image: !!item['570']
-                };
+                }, _(item).pick('email1', 'email2', 'email3'));
             });
             return data.users.reset(result);
         });
@@ -96,7 +106,7 @@ define('io.ox/chat/data', [
 
         parse: function (array) {
             return _(array).map(function (item) {
-                return _.isNumber(item) ? data.users.get(item) : item;
+                return data.users.getByMail(item.email) || item;
             });
         },
 
@@ -335,7 +345,8 @@ define('io.ox/chat/data', [
         },
 
         getTitle: function () {
-            return this.get('title') || _(this.members.reject({ id: data.user_id })).invoke('getName').sort().join('; ');
+            var user = data.users.getByMail(data.user.email);
+            return this.get('title') || _(this.members.reject(user)).invoke('getName').sort().join('; ');
         },
 
         getLastMessage: function () {
@@ -360,14 +371,15 @@ define('io.ox/chat/data', [
 
         getFirstMember: function () {
             // return first member that is not current user
-            return this.members.reject({ id: data.user_id })[0];
+            var user = data.users.getByMail(data.user.email);
+            return this.members.reject(user)[0];
         },
 
         getLastSenderName: function () {
             var lastMessage = this.get('lastMessage');
             if (!lastMessage) return '';
-            var senderId = lastMessage.senderId,
-                member = this.members.findWhere({ id: senderId });
+            var sender = lastMessage.sender,
+                member = this.members.findWhere({ email: sender });
             if (!member) return;
             return member.getName();
         },
@@ -641,7 +653,7 @@ define('io.ox/chat/data', [
     // Socket support
     //
 
-    var socket = data.socket = io.connect(data.SOCKET, { query: 'userId=' + data.user_id });
+    var socket = data.socket = io.connect(data.SOCKET);
 
     socket.on('alive', function () {
         console.log('Connected socket to server');
@@ -682,8 +694,9 @@ define('io.ox/chat/data', [
         });
     });
 
-    socket.on('user:change:state', function (userId, state) {
-        var model = data.users.get(userId);
+    socket.on('user:change:state', function (email, state) {
+        if (!data.users.length) return;
+        var model = data.users.getByMail(email);
         if (model) model.set('state', state);
     });
 
