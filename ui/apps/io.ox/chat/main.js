@@ -377,6 +377,7 @@ define('io.ox/chat/main', [
     }).then(function success() {
         win.draw();
     }, function fail() {
+        win.$body.parent().idle();
         win.drawAuthorizePane();
     });
 
