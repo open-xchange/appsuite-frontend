@@ -147,10 +147,10 @@ define('io.ox/oauth/backbone', [
                             oauthAPI.accounts.add(model);
                             return res;
                         });
-                    }).always(function () {
+                    }).done(options.success).fail(options.error).always(function () {
                         // FIXME: should the caller close the popup?
                         popupWindow.close();
-                    }).done(options.success).fail(options.error);
+                    });
                 case 'update':
                     return model.reauthorize({ force: false }).then(function () {
                         return http.PUT({
