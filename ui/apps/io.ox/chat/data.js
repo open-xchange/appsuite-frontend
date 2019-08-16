@@ -58,8 +58,10 @@ define('io.ox/chat/data', [
 
         fetchState: function () {
             if (this.has('state')) return;
-            $.get({ url: data.API_ROOT + '/users/' + this.get('id') + '/state' })
-                .done(function (state) { this.set('state', state); }.bind(this));
+            $.ajax({
+                url: data.API_ROOT + '/users/' + this.get('id') + '/state',
+                xhrFields: { withCredentials: true }
+            }).done(function (state) { this.set('state', state); }.bind(this));
         }
     });
 
@@ -160,7 +162,10 @@ define('io.ox/chat/data', [
             }, opt);
 
             var $elem = $('<div>').busy();
-            $.ajax(data.API_ROOT + '/files/' + this.get('fileId')).then(function (file) {
+            $.ajax({
+                url: data.API_ROOT + '/files/' + this.get('fileId'),
+                xhrFields: { withCredentials: true }
+            }).then(function (file) {
                 $elem.replaceWith(
                     opt.icon ? $('<i class="fa icon">').addClass(util.getClassFromMimetype(file.mimetype)) : '',
                     opt.text ? $.txt(file.name) : '',
@@ -211,7 +216,12 @@ define('io.ox/chat/data', [
 
         updateDelivery: function (state) {
             var url = data.API_ROOT + '/delivery/' + this.get('id');
-            $.post(url, { state: state }).done(function () {
+            $.ajax({
+                method: 'POST',
+                url: url,
+                data: { state: state },
+                xhrFields: { withCredentials: true }
+            }).done(function () {
                 this.set('state', state);
             }.bind(this));
         }
@@ -246,7 +256,10 @@ define('io.ox/chat/data', [
                 this.trigger('complete:next');
             }
 
-            return $.ajax({ url: this.url() + '?' + $.param(params) })
+            return $.ajax({
+                url: this.url() + '?' + $.param(params),
+                xhrFields: { withCredentials: true }
+            })
             .then(function (list) {
                 this.trigger(type);
                 this.add(list);
@@ -273,6 +286,7 @@ define('io.ox/chat/data', [
                 var limit = Math.max(collection.length, DEFAULT_LIMIT);
                 return this.load({ limit: limit });
             }
+            options.xhrFields = _.extend({}, options.xhrFields, { withCredentials: true });
             return Backbone.Collection.prototype.sync.call(this, method, collection, options);
         },
         url: function () {
@@ -387,7 +401,8 @@ define('io.ox/chat/data', [
             model.save(attr, {
                 data: formData,
                 processData: false,
-                contentType: false
+                contentType: false,
+                xhrFields: { withCredentials: true }
             });
             model.set('sent', moment().toISOString());
             this.set('modified', +moment());
@@ -419,7 +434,12 @@ define('io.ox/chat/data', [
         create: function (attr) {
             var collection = this,
                 data = { open: true, members: attr.members, title: '', type: attr.type || 'group' };
-            return $.post(this.url(), data).done(function (data) {
+            return $.ajax({
+                method: 'POST',
+                url: this.url(),
+                data: data,
+                xhrFields: { withCredentials: true }
+            }).done(function (data) {
                 collection.add(data);
             });
         },
@@ -457,6 +477,11 @@ define('io.ox/chat/data', [
             if (!model || !model.isChannel()) return;
             model.addMembers([user_id]);
             model.set({ joined: true, open: true });
+        },
+
+        sync: function (method, model, options) {
+            options.xhrFields = _.extend({}, options.xhrFields, { withCredentials: true });
+            return Backbone.Collection.prototype.sync.call(this, method, model, options);
         }
     });
 
@@ -488,25 +513,119 @@ define('io.ox/chat/data', [
 
         url: function () {
             return data.API_ROOT + '/files';
+        },
+
+        sync: function (method, model, options) {
+            options.xhrFields = _.extend({}, options.xhrFields, { withCredentials: true });
+            return Backbone.Collection.prototype.sync.call(this, method, model, options);
         }
     });
 
     data.files = new FilesCollection();
 
+
+    //
+    // Session Model
+    //
+
+    var SessionModel = Backbone.Model.extend({
+
+        waitForMessage: function () {
+            var def = new $.Deferred();
+            function listener(event) {
+                if (event.origin !== data.SOCKET) return;
+                def.resolve(event.data);
+                window.removeEventListener('message', listener);
+            }
+            window.addEventListener('message', listener, false);
+            return def;
+        },
+
+        getAuthURL: function () {
+            return $.ajax({
+                url: data.SOCKET + '/auth/url',
+                xhrFields: { withCredentials: true }
+            });
+        },
+
+        getUserId: function () {
+            return $.ajax({
+                url: data.SOCKET + '/auth/user',
+                xhrFields: { withCredentials: true }
+            }).then(function (user) {
+                data.user_id = user.id;
+                data.user = user;
+                return user;
+            });
+        },
+
+        checkIdPSession: function (url) {
+            url = url += '&prompt=none';
+            var frame = $('<iframe>').attr('src', url).hide(),
+                def = this.waitForMessage();
+            $('body').append(frame);
+            def.done(function () {
+                frame.remove();
+            });
+            return def;
+        },
+
+        authenticateSilent: function () {
+            return this.getAuthURL().then(function (url) {
+                return this.checkIdPSession(url);
+            }.bind(this)).then(function (status) {
+                if (!status) throw new Error('No active session');
+                return this.getUserId();
+            }.bind(this));
+        },
+
+        getIdPSession: function (url) {
+            var def = this.waitForMessage(),
+                popup = window.open(url, '_blank', 'width=972,height=660,modal=yes,alwaysRaised=yes');
+            def.done(function () {
+                popup.close();
+            });
+            return def;
+        },
+
+        authenticate: function () {
+            return this.getAuthURL().then(function (url) {
+                return this.getIdPSession(url);
+            }.bind(this)).then(function () {
+                return this.getUserId();
+            }.bind(this));
+        },
+
+        login: function () {
+            return this.authenticate();
+        },
+
+        autologin: function () {
+            return this.getUserId().catch(function () {
+                return this.authenticateSilent();
+            }.bind(this)).then(function (user) {
+                this.set('userId', user.id);
+                return user.id;
+            }.bind(this));
+        }
+    });
+
+    data.session = new SessionModel();
+
     //
     // Helpers
     //
 
-    function getName(id) {
-        if (id.toString() === data.user_id.toString()) return '<span class="name">You</span>';
-        return getNames([id]);
+    function getName(email) {
+        if (email === data.user.email) return '<span class="name">You</span>';
+        return getNames([email]);
     }
 
     function getNames(list) {
         return join(
             _(list)
-            .map(function (id) {
-                var model = data.users.get(id);
+            .map(function (email) {
+                var model = data.users.getByMail(email);
                 return '<span class="name">' + (model ? model.getName() : 'Unknown user') + '</span>';
             })
             .sort()

@@ -60,7 +60,10 @@ define('io.ox/chat/views/searchResult', [
         searchMessages: function (query) {
             var url = data.API_ROOT + '/messages?' + $.param({ q: query }),
                 regexQuery = new RegExp('(\\b' + escape(query) + ')', 'ig');
-            return $.getJSON(url).then(function (result) {
+            return $.ajax({
+                url: url,
+                xhrFields: { withCredentials: true }
+            }).then(function (result) {
                 result.forEach(function (data) {
                     data.body = data.body.replace(regexQuery, '<b class="search-highlight">$1</b>');
                 });
