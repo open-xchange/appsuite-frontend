@@ -1473,9 +1473,8 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#: module:io.ox/calendar/edit/main apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
 msgid "Apply"
 msgstr "Použít"
 
@@ -2209,6 +2208,12 @@ msgstr "Změnit heslo"
 msgid "Change password and sign out"
 msgstr "Změnit heslo a odhlásit se"
 
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Configure categories"
+msgid "Change quick launch icons"
+msgstr "Nastavit kategorie"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Change reminder"
@@ -2513,8 +2518,7 @@ msgstr "Nastavit kategorie"
 msgid "Configure now"
 msgstr "Nastavit"
 
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Configure categories"
 msgid "Configure quick launchers"
@@ -8159,6 +8163,13 @@ msgstr "Widgety portálu"
 msgid "Position"
 msgstr "Místo"
 
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Position"
+msgid "Position %s"
+msgstr "Místo"
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Post a status update"
 msgstr "Sdílet aktuální stav"
@@ -8416,11 +8427,6 @@ msgstr "purpurová"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
 msgstr "Purpurová/tmavě purpurová"
-
-#. %s is the number of the quicklauncher (1-3)
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-msgid "Quick launch %s"
-msgstr "Rychlý start %s"
 
 #. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
@@ -9177,6 +9183,12 @@ msgstr "Uložit jako soubor"
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Save attachment"
 msgstr "Uložit přílohu"
+
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Accept changes"
+msgid "Save changes"
+msgstr "Přijmout změny"
 
 #. %1$s is usually "Drive" (product name; might be customized)
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
@@ -20354,6 +20366,9 @@ msgstr "vaše platforma"
 
 #~ msgid "Quick config"
 #~ msgstr "Rychlé nastavení"
+
+#~ msgid "Quick launch %s"
+#~ msgstr "Rychlý start %s"
 
 #~ msgid "Quick launch 1"
 #~ msgstr "Rychlý start 1"

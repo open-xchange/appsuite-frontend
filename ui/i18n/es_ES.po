@@ -1456,9 +1456,8 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#: module:io.ox/calendar/edit/main apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
 msgid "Apply"
 msgstr "Aplicar"
 
@@ -2203,6 +2202,12 @@ msgstr "Cambiar contraseña"
 msgid "Change password and sign out"
 msgstr "Cambiar contraseña y cerrar la sesión"
 
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Configure categories"
+msgid "Change quick launch icons"
+msgstr "Configurar categorías"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Change reminder"
@@ -2507,8 +2512,7 @@ msgstr "Configurar categorías"
 msgid "Configure now"
 msgstr "Configurar ahora"
 
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Configure categories"
 msgid "Configure quick launchers"
@@ -8170,6 +8174,13 @@ msgstr "Widgets del Portal"
 msgid "Position"
 msgstr "Puesto"
 
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Position"
+msgid "Position %s"
+msgstr "Puesto"
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Post a status update"
 msgstr "Publicar una actualización de estado"
@@ -8427,11 +8438,6 @@ msgstr "Morado"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
 msgstr "Púrpura/Magenta"
-
-#. %s is the number of the quicklauncher (1-3)
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-msgid "Quick launch %s"
-msgstr "Lanzador rápido %s"
 
 #. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
@@ -9195,6 +9201,12 @@ msgstr "Guardar como fichero"
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Save attachment"
 msgstr "Guardar adjunto"
+
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Accept changes"
+msgid "Save changes"
+msgstr "Aceptar cambios"
 
 #. %1$s is usually "Drive" (product name; might be customized)
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
@@ -20437,6 +20449,9 @@ msgstr "su plataforma"
 
 #~ msgid "Quick config"
 #~ msgstr "Configuración rápida"
+
+#~ msgid "Quick launch %s"
+#~ msgstr "Lanzador rápido %s"
 
 #~ msgid "Quick launch 1"
 #~ msgstr "Lanzamiento rápido 1"

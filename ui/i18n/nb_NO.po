@@ -1516,9 +1516,8 @@ msgstr "Programmet vil ikke fungere som forventet før dette problemet er løst.
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#: module:io.ox/calendar/edit/main apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
 msgid "Apply"
 msgstr "Bruk"
 
@@ -2271,6 +2270,12 @@ msgstr "Endre passord"
 msgid "Change password and sign out"
 msgstr "Endre passord og logg ut"
 
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Configure categories"
+msgid "Change quick launch icons"
+msgstr "Konfigurer kategorier"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #, fuzzy
@@ -2585,8 +2590,7 @@ msgstr "Konfigurer kategorier"
 msgid "Configure now"
 msgstr "Konfigurer nå"
 
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Configure categories"
 msgid "Configure quick launchers"
@@ -8331,6 +8335,13 @@ msgstr "Portal-widgets"
 msgid "Position"
 msgstr "Stilling"
 
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Position"
+msgid "Position %s"
+msgstr "Stilling"
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Post a status update"
 msgstr "Publiser en statusoppdatering"
@@ -8589,11 +8600,6 @@ msgstr "Lilla"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
-msgstr ""
-
-#. %s is the number of the quicklauncher (1-3)
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-msgid "Quick launch %s"
 msgstr ""
 
 #. Quota means a general quota for mail and files
@@ -9372,6 +9378,12 @@ msgstr "Lagre som fil"
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Save attachment"
 msgstr "Lagre vedlegg"
+
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Accept changes"
+msgid "Save changes"
+msgstr "Godta endringer"
 
 #. %1$s is usually "Drive" (product name; might be customized)
 #: apps/io.ox/core/pim/actions.js module:io.ox/core

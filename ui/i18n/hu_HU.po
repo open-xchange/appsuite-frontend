@@ -1446,9 +1446,8 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#: module:io.ox/calendar/edit/main apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
 msgid "Apply"
 msgstr "Alkalmazás"
 
@@ -2189,6 +2188,12 @@ msgstr "Jelszó megváltoztatása"
 msgid "Change password and sign out"
 msgstr "Jelszó megváltoztatása és kilépés"
 
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Configure categories"
+msgid "Change quick launch icons"
+msgstr "Kategóriák beállítása"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Change reminder"
@@ -2495,8 +2500,7 @@ msgstr "Kategóriák beállítása"
 msgid "Configure now"
 msgstr "Beállítás"
 
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Configure categories"
 msgid "Configure quick launchers"
@@ -8140,6 +8144,13 @@ msgstr "Portál widgetek"
 msgid "Position"
 msgstr "Beosztás"
 
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Position"
+msgid "Position %s"
+msgstr "Beosztás"
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Post a status update"
 msgstr "Állapotfrissítés küldése"
@@ -8397,11 +8408,6 @@ msgstr "Bíbor"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
 msgstr "Lila/Magenta"
-
-#. %s is the number of the quicklauncher (1-3)
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-msgid "Quick launch %s"
-msgstr "%s gyorsindítás"
 
 #. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
@@ -9164,6 +9170,12 @@ msgstr "Mentés fájlként"
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Save attachment"
 msgstr "Melléklet mentése"
+
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Accept changes"
+msgid "Save changes"
+msgstr "Változások elfogadása"
 
 #. %1$s is usually "Drive" (product name; might be customized)
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
@@ -14785,6 +14797,9 @@ msgstr "az Ön rendszere"
 
 #~ msgid "Publications and Subscriptions"
 #~ msgstr "Publikációk és feliratkozások"
+
+#~ msgid "Quick launch %s"
+#~ msgstr "%s gyorsindítás"
 
 #~ msgid "Quick launch 1"
 #~ msgstr "Gyorsindítás 1"

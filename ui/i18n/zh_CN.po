@@ -1398,9 +1398,8 @@ msgstr "在此问题被修复前，应用程序可能未能如常工作。"
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#: module:io.ox/calendar/edit/main apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
 msgid "Apply"
 msgstr "套用"
 
@@ -2124,6 +2123,12 @@ msgstr "更改密码"
 msgid "Change password and sign out"
 msgstr "更改密码后注销"
 
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Configure categories"
+msgid "Change quick launch icons"
+msgstr "配置类别"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Change reminder"
@@ -2427,8 +2432,7 @@ msgstr "配置类别"
 msgid "Configure now"
 msgstr "现在设置"
 
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Configure categories"
 msgid "Configure quick launchers"
@@ -7977,6 +7981,13 @@ msgstr "门户小部件"
 msgid "Position"
 msgstr "职位"
 
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Position"
+msgid "Position %s"
+msgstr "职位"
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Post a status update"
 msgstr "发送一个状态更新"
@@ -8234,11 +8245,6 @@ msgstr "紫色"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
 msgstr "紫色/洋红"
-
-#. %s is the number of the quicklauncher (1-3)
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-msgid "Quick launch %s"
-msgstr "快速启动％s"
 
 #. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
@@ -8986,6 +8992,12 @@ msgstr "另存为文件"
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Save attachment"
 msgstr "保存附件"
+
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Accept changes"
+msgid "Save changes"
+msgstr "接受更改"
 
 #. %1$s is usually "Drive" (product name; might be customized)
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
@@ -16807,6 +16819,9 @@ msgstr "您的平台"
 
 #~ msgid "Pull To Refresh"
 #~ msgstr "下拉刷新"
+
+#~ msgid "Quick launch %s"
+#~ msgstr "快速启动％s"
 
 #~ msgid "Quick launch 1"
 #~ msgstr "快速启动1"

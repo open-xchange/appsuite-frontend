@@ -1436,9 +1436,8 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+#: module:io.ox/calendar/edit/main apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
 msgid "Apply"
 msgstr "適用"
 
@@ -2160,6 +2159,12 @@ msgstr "パスワードを変更"
 msgid "Change password and sign out"
 msgstr "パスワードを変更しログアウト"
 
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Configure categories"
+msgid "Change quick launch icons"
+msgstr "カテゴリの設定"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Change reminder"
@@ -2465,8 +2470,7 @@ msgstr "カテゴリの設定"
 msgid "Configure now"
 msgstr "今構成する"
 
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Configure categories"
 msgid "Configure quick launchers"
@@ -8071,6 +8075,13 @@ msgstr "ポータル ウィジェット"
 msgid "Position"
 msgstr "役職"
 
+#. %s is the number of the quicklauncher (1-3)
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Position"
+msgid "Position %s"
+msgstr "役職"
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Post a status update"
 msgstr "ステータス アップデートを投稿"
@@ -8329,11 +8340,6 @@ msgstr "紫"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Purple/Magenta"
 msgstr "紫／マゼンタ"
-
-#. %s is the number of the quicklauncher (1-3)
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
-msgid "Quick launch %s"
-msgstr "クイック起動 %s"
 
 #. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
@@ -9081,6 +9087,12 @@ msgstr "ファイルとして保存"
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Save attachment"
 msgstr "添付ファイルを保存"
+
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#, fuzzy
+#| msgid "Accept changes"
+msgid "Save changes"
+msgstr "変更を承諾"
 
 #. %1$s is usually "Drive" (product name; might be customized)
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
@@ -19078,6 +19090,9 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Quick config"
 #~ msgstr "クイック構成"
+
+#~ msgid "Quick launch %s"
+#~ msgstr "クイック起動 %s"
 
 #~ msgid "Quick launch 1"
 #~ msgstr "クイック起動 1"
