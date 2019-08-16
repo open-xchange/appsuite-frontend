@@ -273,7 +273,7 @@ define('io.ox/chat/views/chat', [
 
         renderSender: function (model) {
             if (model.isSystem() || model.isMyself() || model.hasSameSender()) return $();
-            var user = data.users.get(model.get('senderId'));
+            var user = data.users.getByMail(model.get('sender'));
             return [new Avatar({ model: user }).render().$el, $('<div class="sender">').text(user.getName())];
         },
 

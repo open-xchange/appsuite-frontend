@@ -82,8 +82,8 @@ define('io.ox/chat/main', [
             require(['io.ox/contacts/addressbook/popup'], function (picker) {
                 picker.open(
                     function callback(items) {
-                        var members = _(items).pluck('user_id');
-                        if (members.length === 1) return self.startPrivateChat({ id: members[0] });
+                        var members = _(items).pluck('email');
+                        if (members.length === 1) return self.startPrivateChat({ email: members[0] });
                         data.chats.create({ type: 'group', members: members });
                     },
                     {
@@ -102,11 +102,11 @@ define('io.ox/chat/main', [
         startPrivateChat: function (cmd) {
             // try to reuse chat
             var chat = data.chats.find(function (model) {
-                return model.get('type') === 'private' && model.get('members').indexOf(cmd.id) >= 0;
+                return model.get('type') === 'private' && model.get('members').indexOf(cmd.email) >= 0;
             });
             if (chat) return this.showChat(chat.id);
 
-            data.chats.create({ type: 'private', members: [cmd.id] }).done(function (result) {
+            data.chats.create({ type: 'private', members: [cmd.email] }).done(function (result) {
                 this.showChat(result.id);
             }.bind(this));
         },
@@ -258,7 +258,75 @@ define('io.ox/chat/main', [
             return function () {
                 return $('<div class="resizebar">').on('mousedown.resize', mousedown.bind(this));
             };
-        }())
+        }()),
+
+        draw: function () {
+            var user = data.users.getByMail(data.user.email),
+                mode = settings.get('chat/mode') || 'sticky';
+
+            // start with BAD style and hard-code stuff
+            this.$body.empty().addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('chat/width', 320)).append(
+                this.getResizeBar(),
+                $('<div class="chat-leftside">').append(
+                    $('<div class="header">').append(
+                        contactsAPI.pictureHalo(
+                            $('<div class="picture" aria-hidden="true">'), { internal_userid: data.user_id }, { width: 40, height: 40 }
+                        ),
+                        $('<button type="button" class="btn btn-default btn-circle" data-cmd="start-chat"><i class="fa fa-plus" aria-hidden="true"></i></button>'),
+                        $('<i class="fa state online fa-check-circle" aria-hidden="true">'),
+                        $('<div class="name">').text(user.getName())
+                    ),
+                    new ToolbarView({ point: 'io.ox/chat/list/toolbar', title: 'Chat actions' }).render(new ext.Baton()).$el,
+                    new searchView().render().$el,
+                    $('<div class="left-navigation">').append(
+                        // search results
+                        new SearchResultView().render().$el,
+                        // chats
+                        new ChatListView({ collection: data.chats }).render().$el
+                    ),
+                    // recent, all channels, all files
+                    $('<div class="navigation-actions">').append(
+                        $('<button type="button" class="btn-nav" data-cmd="show-recent-conversations">').append(
+                            $('<i class="fa fa-clock-o btn-icon">'),
+                            $.txt('Recent conversations')
+                        ),
+                        $('<button type="button" class="btn-nav" data-cmd="show-channels">').append(
+                            $('<i class="fa fa-hashtag btn-icon">'),
+                            $.txt('All channels')
+                        ),
+                        $('<button type="button" class="btn-nav" data-cmd="show-all-files">').append(
+                            $('<i class="fa fa-paperclip btn-icon">'),
+                            $.txt('All files')
+                        )
+                    )
+                ),
+                this.$rightside = $('<div class="chat-rightside">').append(
+                    new EmptyView().render().$el
+                )
+            );
+        },
+
+        drawAuthorizePane: function (errorMessage) {
+            var self = this,
+                mode = settings.get('chat/mode') || 'sticky';
+            this.$body.empty().addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('chat/width', 320)).append(
+                $('<div class="auth-container">').append(
+                    $('<div>').append(
+                        $('<button class="btn btn-primary">').text('Authorize').on('click', function () {
+                            self.$body.empty().parent().busy();
+                            data.session.login().then(function success() {
+                                self.$body.parent().idle();
+                                self.draw();
+                            }, function fail() {
+                                self.drawAuthorizePane('Cannot connect. Please try again later.');
+                            });
+                        }),
+                        $('<div class="text-danger">').text(errorMessage)
+                    )
+                )
+            );
+        }
+
     });
 
     var win;
@@ -291,59 +359,25 @@ define('io.ox/chat/main', [
         }
     });
 
-    data.fetchUsers().done(function () {
+    var mode = settings.get('chat/mode') || 'sticky';
 
-        var user = data.users.get(data.user_id),
-            mode = settings.get('chat/mode') || 'sticky';
+    win = new Window({ title: 'OX Chat', floating: mode === 'floating', sticky: mode === 'sticky', stickable: true }).render().open();
+    win.listenTo(win.model, 'change:sticky', function () {
+        if (!this.model.get('sticky')) return;
+        settings.set('chat/mode', 'sticky').save();
+        this.$body.addClass('columns');
+    });
 
-        win = new Window({ title: 'OX Chat', floating: mode === 'floating', sticky: mode === 'sticky', stickable: true }).render().open();
-        win.listenTo(win.model, 'change:sticky', function () {
-            if (!this.model.get('sticky')) return;
-            settings.set('chat/mode', 'sticky').save();
-            this.$body.addClass('columns');
-        });
+    win.$body.parent().busy();
 
-        // start with BAD style and hard-code stuff
-
-        win.$body.addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('chat/width', 320)).append(
-            win.getResizeBar(),
-            $('<div class="chat-leftside">').append(
-                $('<div class="header">').append(
-                    contactsAPI.pictureHalo(
-                        $('<div class="picture" aria-hidden="true">'), { internal_userid: data.user_id }, { width: 40, height: 40 }
-                    ),
-                    $('<button type="button" class="btn btn-default btn-circle" data-cmd="start-chat"><i class="fa fa-plus" aria-hidden="true"></i></button>'),
-                    $('<i class="fa state online fa-check-circle" aria-hidden="true">'),
-                    $('<div class="name">').text(user.getName())
-                ),
-                new ToolbarView({ point: 'io.ox/chat/list/toolbar', title: 'Chat actions' }).render(new ext.Baton()).$el,
-                new searchView().render().$el,
-                $('<div class="left-navigation">').append(
-                    // search results
-                    new SearchResultView().render().$el,
-                    // chats
-                    new ChatListView({ collection: data.chats }).render().$el
-                ),
-                // recent, all channels, all files
-                $('<div class="navigation-actions">').append(
-                    $('<button type="button" class="btn-nav" data-cmd="show-recent-conversations">').append(
-                        $('<i class="fa fa-clock-o btn-icon">'),
-                        $.txt('Recent conversations')
-                    ),
-                    $('<button type="button" class="btn-nav" data-cmd="show-channels">').append(
-                        $('<i class="fa fa-hashtag btn-icon">'),
-                        $.txt('All channels')
-                    ),
-                    $('<button type="button" class="btn-nav" data-cmd="show-all-files">').append(
-                        $('<i class="fa fa-paperclip btn-icon">'),
-                        $.txt('All files')
-                    )
-                )
-            ),
-            win.$rightside = $('<div class="chat-rightside">').append(
-                new EmptyView().render().$el
-            )
-        );
+    data.fetchUsers().then(function () {
+        return data.session.autologin();
+    }).always(function () {
+        win.$body.parent().idle();
+    }).then(function success() {
+        win.draw();
+    }, function fail() {
+        win.drawAuthorizePane();
     });
 
     ox.chat = {
