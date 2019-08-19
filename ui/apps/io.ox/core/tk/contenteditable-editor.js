@@ -464,6 +464,10 @@ define('io.ox/core/tk/contenteditable-editor', [
                 if (opt.oxContext) ed.oxContext = opt.oxContext;
                 ext.point(POINT + '/setup').invoke('draw', self, ed);
                 ed.on('init', function () {
+                    // marker class to fix scroll behavior
+                    if (this.oxContext && this.oxContext.signature) {
+                        $(this.contentDocument.getElementsByTagName('html')[0]).addClass('signature-editor');
+                    }
                     // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
                     $(fixed_toolbar).find('span.mce-txt').attr('tabindex', -1);
                     // adjust toolbar
