@@ -53,7 +53,7 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -DkeepCache=tru
 /opt/open-xchange/appsuite/manifests/open-xchange-guidedtours.json
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/settings
-/opt/open-xchange/etc/settings/guidedtours.properties
+%config(noreplace) /opt/open-xchange/etc/settings/guidedtours.properties
 
 %changelog
 * Mon Aug 12 2019 Marcus Klein <marcus.klein@open-xchange.com>
