@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-01-09 12:08+0100\n"
+"PO-Revision-Date: 2019-08-19 14:01+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -2361,6 +2361,8 @@ msgid "Status"
 msgstr "Status"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#. used as a verb here. label of a button to view attachments
+#. used as a verb here. label of a button to view files
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
@@ -2370,7 +2372,7 @@ msgstr "Status"
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "View"
-msgstr "Ansicht"
+msgstr "Anzeigen"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
@@ -3249,8 +3251,7 @@ msgstr "Benutzerdefinierte Felder"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js apps/plugins/halo/xing/register.js
-#: module:plugins/portal
+#: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid ""
 "%1$s\n"
 "%2$s %3$s\n"
