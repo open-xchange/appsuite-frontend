@@ -40,6 +40,6 @@ cp -rv --preserve=mode * %{buildroot}
 /opt/open-xchange/appsuite/manifests/open-xchange-guidedtours.json
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/settings
-/opt/open-xchange/etc/settings/guidedtours.properties
+%config(noreplace) /opt/open-xchange/etc/settings/guidedtours.properties
 
 @OXCHANGELOG@
