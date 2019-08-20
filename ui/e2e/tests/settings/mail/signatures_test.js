@@ -33,6 +33,43 @@ After(async (users) => {
     await users.removeAll();
 });
 
+Scenario('Sanitize entered signature source code', async function (I) {
+
+    var dialog = locate('.mce-window');
+
+    I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/signatures']);
+
+    I.waitForText('Add new signature');
+    I.click('Add new signature');
+
+    I.waitForVisible('.contenteditable-editor iframe');
+    I.fillField('Signature name', 'Sanitize me!');
+
+    await set('A<svg><svg onload=alert(document.cookie)>Z', 'AZ');
+
+    async function set(text, clean) {
+        I.say('Add: source code');
+        I.click('~Source code', '.mce-top-part');
+        I.waitForElement(dialog);
+        within(dialog, () => {
+            I.appendField('textarea', text);
+            I.click('Ok');
+        });
+
+        I.say('Check: alert');
+        let alerttext = await I.grabPopupText();
+        expect(alerttext).to.be.undefined;
+
+        I.say('Check: value');
+        I.waitForDetached(dialog);
+        I.click('~Source code', '.mce-top-part');
+        I.waitForElement(dialog);
+        within(dialog, () => {
+            I.seeInField('textarea', clean);
+        });
+    }
+});
+
 Scenario('[C7766] Create new signature', function (I) {
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/mail/settings/signatures']);
