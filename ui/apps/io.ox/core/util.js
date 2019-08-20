@@ -11,7 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core', 'static/3rd.party/purify.min.js'], function (ext, settings, DOMPurify) {
+define('io.ox/core/util', [
+    'io.ox/core/extensions',
+    'settings!io.ox/core',
+    'static/3rd.party/purify.min.js'
+], function (ext, settings, DOMPurify) {
 
     'use strict';
 
