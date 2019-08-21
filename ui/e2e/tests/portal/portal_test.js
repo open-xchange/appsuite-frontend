@@ -148,13 +148,20 @@ Scenario('[C7472] Check if the portalpage is up to date', async function (I, use
         to: [[users[0].userdata.display_name, users[0].userdata.primaryEmail]]
     });
     let element = await I.grabNumberOfVisibleElements('[aria-label="Inbox"] .item .sender');
+    let retries = 10;
     while (element === 0) {
-        //TODO: need a limiter to avoid an endless loop
-        I.waitForElement('#io-ox-refresh-icon', 5, '.taskbar');
-        I.click('#io-ox-refresh-icon', '.taskbar');
-        I.waitForElement('.launcher .fa-spin-paused', 5);
-        I.wait(0.5);
-        element = await I.grabNumberOfVisibleElements('[aria-label="Inbox"] .item .sender');
+        if (retries > 0) {
+            I.waitForElement('#io-ox-refresh-icon', 5, '.taskbar');
+            I.click('#io-ox-refresh-icon', '.taskbar');
+            I.waitForElement('.launcher .fa-spin-paused', 5);
+            I.wait(0.5);
+            element = await I.grabNumberOfVisibleElements('[aria-label="Inbox"] .item .sender');
+            retries--;
+        } else {
+            // eslint-disable-next-line no-alert
+            alert('Timeout exceeded. No mails found.');
+            break;
+        }
     }
     //Verifiy Inbox Widget
     I.waitForElement('.widget[aria-label="Inbox"] .item', 5);
