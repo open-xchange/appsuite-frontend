@@ -817,6 +817,7 @@ define('io.ox/core/desktop', [
                                 }
                                 win.listenToOnce(model, 'lazyload', function () {
                                     var oldId = obj.id;
+                                    obj = _.clone(obj);
                                     if (app.options.floating) {
                                         // copy app options over to window model
                                         model.set(_(app.options).pick('closable', 'displayStyle', 'size', 'taskbarIcon', 'title'));
