@@ -542,6 +542,62 @@ define('io.ox/chat/data', [
 
     var SessionModel = Backbone.Model.extend({
 
+        connectSocket: function () {
+            var socket = data.socket = io.connect(data.SOCKET);
+
+            socket.on('alive', function () {
+                console.log('Connected socket to server');
+            });
+
+            socket.on('message:change', function (roomId, messageId, state) {
+                var room = data.chats.get(roomId);
+                if (!room) return;
+
+                var lastMessage = room.get('lastMessage');
+                // update state if necessary
+                if (messageId === lastMessage.id && lastMessage.state !== state) {
+                    lastMessage = _.extend({}, lastMessage, { state: state });
+                    room.set('lastMessage', lastMessage);
+                }
+
+                room.messages.forEach(function (message) {
+                    if (message.id > messageId) return;
+                    if (message.get('state') === 'seen') return;
+                    message.set('state', state);
+                });
+            });
+
+            socket.on('message:new', function (roomId, message) {
+                // stop typing
+                events.trigger('typing:' + roomId, message.senderId, false);
+                // fetch room unless it's already known
+                data.chats.fetchUnlessExists(roomId).done(function (model) {
+                    // add new message to room
+                    var newMessage = new model.messages.model(message);
+
+                    // either add message to chatroom or update last message manually
+                    if (model.messages.nextComplete) model.messages.add(message);
+                    else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
+
+                    model.set({ modified: +moment(), unreadCount: model.get('unreadCount') + 1 });
+                    newMessage.updateDelivery('client');
+                });
+            });
+
+            socket.on('user:change:state', function (email, state) {
+                if (!data.users.length) return;
+                var model = data.users.getByMail(email);
+                if (model) model.set('state', state);
+            });
+
+            socket.on('typing', function (roomId, userId, state) {
+                events.trigger('typing:' + roomId, userId, state);
+            });
+
+            // send heartbeat every minute
+            setInterval(function () { socket.emit('heartbeat'); }, 60000);
+        },
+
         waitForMessage: function () {
             var def = new $.Deferred();
             function listener(event) {
@@ -648,64 +704,6 @@ define('io.ox/chat/data', [
         if (list.length <= 2) return list.join(' and ');
         return list.slice(0, -1).join(', ') + ', and ' + list[list.length - 1];
     }
-
-    //
-    // Socket support
-    //
-
-    var socket = data.socket = io.connect(data.SOCKET);
-
-    socket.on('alive', function () {
-        console.log('Connected socket to server');
-    });
-
-    socket.on('message:change', function (roomId, messageId, state) {
-        var room = data.chats.get(roomId);
-        if (!room) return;
-
-        var lastMessage = room.get('lastMessage');
-        // update state if necessary
-        if (messageId === lastMessage.id && lastMessage.state !== state) {
-            lastMessage = _.extend({}, lastMessage, { state: state });
-            room.set('lastMessage', lastMessage);
-        }
-
-        room.messages.forEach(function (message) {
-            if (message.id > messageId) return;
-            if (message.get('state') === 'seen') return;
-            message.set('state', state);
-        });
-    });
-
-    socket.on('message:new', function (roomId, message) {
-        // stop typing
-        events.trigger('typing:' + roomId, message.senderId, false);
-        // fetch room unless it's already known
-        data.chats.fetchUnlessExists(roomId).done(function (model) {
-            // add new message to room
-            var newMessage = new model.messages.model(message);
-
-            // either add message to chatroom or update last message manually
-            if (model.messages.nextComplete) model.messages.add(message);
-            else model.set('lastMessage', _.extend({}, model.get('lastMessage'), newMessage.toJSON()));
-
-            model.set({ modified: +moment(), unreadCount: model.get('unreadCount') + 1 });
-            newMessage.updateDelivery('client');
-        });
-    });
-
-    socket.on('user:change:state', function (email, state) {
-        if (!data.users.length) return;
-        var model = data.users.getByMail(email);
-        if (model) model.set('state', state);
-    });
-
-    socket.on('typing', function (roomId, userId, state) {
-        events.trigger('typing:' + roomId, userId, state);
-    });
-
-    // send heartbeat every minute
-    setInterval(function () { socket.emit('heartbeat'); }, 60000);
 
     return data;
 });
