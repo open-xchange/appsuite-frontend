@@ -231,6 +231,10 @@ define('io.ox/mail/compose/main', [
         app.failRestore = function (point) {
             var data = { id: point };
             if (_.isObject(point)) {
+                // common case: mail is already a draft. So we can just edit it
+                if (point.restoreById) {
+                    return app.open({ type: 'edit', original: { folderId: point.folder_id, id: point.id, security: point.security } });
+                }
                 // create composition space from old restore point
                 data = _(point).pick('to', 'cc', 'bcc', 'subject');
                 if (point.from && point.from[0]) data.from = point.from[0];
