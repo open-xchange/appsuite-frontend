@@ -9953,7 +9953,7 @@ msgstr "新規メッセージの既定の署名"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for replies or forwards"
-msgstr "返信または転送用既定署名"
+msgstr "返信または転送メッセージの既定の署名"
 
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Top 10 you sent mail to"
