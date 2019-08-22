@@ -21,9 +21,10 @@ define('io.ox/chat/views/chatListEntry', [
         tagName: 'li',
         attributes: function () {
             if (!this.model.get('id')) {
+                var member = this.model.getFirstMember();
                 return {
                     'data-cmd': 'start-private-chat',
-                    'data-id': this.model.getFirstMember().id
+                    'data-email': member.get('email1') || member.get('email2') || member.get('email3')
                 };
             }
 
