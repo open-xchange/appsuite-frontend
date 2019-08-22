@@ -206,7 +206,7 @@ define('io.ox/chat/views/chat', [
                     this.$jumpDown = $('<button class="btn btn-default btn-circle jump-down">').append(
                         $('<i class="fa fa-chevron-down" aria-hidden="true">'),
                         this.$unreadCounter = $('<span class="badge">').text(this.model.get('unreadCount') || '')
-                    ),
+                    ).toggle(this.isJumpDownVisible()),
                     this.$editor = $('<textarea class="form-control" placeholder="Enter message here">'),
                     $('<button type="button" class="btn btn-default btn-circle pull-right file-upload-btn">')
                         .append('<i class="fa fa-paperclip" aria-hidden="true">'),
@@ -343,7 +343,7 @@ define('io.ox/chat/views/chat', [
         },
 
         onScroll: _.throttle(function () {
-            this.$jumpDown.toggle(this.$scrollpane.scrollTop() + this.$scrollpane.height() < this.$scrollpane.prop('scrollHeight') - 50);
+            this.$jumpDown.toggle(this.isJumpDownVisible());
 
             if (this.$('.messages').is(':empty')) return;
             (function (view) {
@@ -370,6 +370,10 @@ define('io.ox/chat/views/chat', [
                 }
             }(this));
         }, 300),
+
+        isJumpDownVisible: function () {
+            return this.$scrollpane.scrollTop() + this.$scrollpane.height() < this.$scrollpane.prop('scrollHeight') - 50;
+        },
 
         toggleAutoScroll: function (autoScroll) {
             if (autoScroll === undefined) autoScroll = !this.autoScroll;
