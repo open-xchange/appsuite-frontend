@@ -23,18 +23,15 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario.skip('[C273807] Download infected file', function (I) {
+Scenario.skip('[C273807] Download infected file', async function (I) {
+    const folder = await I.grabDefaultFolder('tasks');
+    const { id } = await I.haveTask({ folder_id: folder, title: 'My Subject', note: 'My Description' });
+
+    await I.haveAttachment('tasks', { id, folder_id: folder }, { name: 'eicar.exe', content: `${'X5O!P%@AP[4\\PZX54(P^)7CC)7}'}${'$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*'}` });
+
     I.login();
     I.openApp('Tasks');
-    I.clickToolbar('New task');
-    I.waitForVisible('[data-app-name="io.ox/tasks/edit"]');
 
-    I.fillField('Subject', 'My Subject');
-    I.fillField('Description', 'My Description');
-
-    I.attachFile('[data-app-name="io.ox/tasks/edit"] input[type="file"]', 'e2e/media/files/eicar.exe');
-
-    I.click('Create');
     I.waitForVisible('.tasks-detailview');
     I.waitForText('eicar.exe');
 
