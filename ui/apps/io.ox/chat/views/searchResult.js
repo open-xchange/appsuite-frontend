@@ -93,12 +93,13 @@ define('io.ox/chat/views/searchResult', [
                     chatsByAddress = addresses.map(function (address) {
                         // find according room
                         var room = data.chats.find(function (model) {
-                            return model.get('type') === 'private' && model.get('members').indexOf(address.user_id) >= 0;
+                            if (model.get('type') !== 'private') return;
+                            return _(model.get('members')).findWhere({ email: address.email });
                         });
                         if (room) return room;
                         return new data.chats.model({
-                            lastMessage: { id: 15, roomId: 4, senderId: 4, body: 'Create new chat', type: 'text' },
-                            members: [data.user_id, address.user_id],
+                            lastMessage: { id: 1.337, roomId: 13, senderId: 37, body: 'Create new chat', type: 'text' },
+                            members: [{ email: data.user.email }, { email: address.email }],
                             type: 'private',
                             unreadCount: 0
                         });

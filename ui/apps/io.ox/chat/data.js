@@ -69,11 +69,18 @@ define('io.ox/chat/data', [
 
         model: UserModel,
 
-        getByMail: _.memoize(function (email) {
-            return this.find(function (model) {
-                return model.get('email1') === email || model.get('email2') === email || model.get('email3') === email;
-            });
-        })
+        // no memoize here to prevent pointing always to undefined
+        getByMail: (function () {
+            var cache = [];
+            return function (email) {
+                if (!cache[email]) {
+                    cache[email] = this.find(function (model) {
+                        return model.get('email1') === email || model.get('email2') === email || model.get('email3') === email;
+                    });
+                }
+                return cache[email];
+            };
+        }())
 
     });
     data.users = new UserCollection([]);
@@ -106,7 +113,7 @@ define('io.ox/chat/data', [
 
         parse: function (array) {
             return _(array).map(function (item) {
-                return data.users.getByMail(item.email) || item;
+                return data.users.getByMail(item.email) || { email1: item.email };
             });
         },
 
@@ -321,7 +328,11 @@ define('io.ox/chat/data', [
             // forward specific events
             this.listenTo(this.members, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('member:' + name);
-                this.set('members', this.members.toArray());
+                if (/^(add|remove|reset)$/.test(name)) {
+                    this.set('members', this.members.map(function (model) {
+                        return model.get('email1') || model.get('email2') || model.get('email3');
+                    }));
+                }
             });
             this.listenTo(this.messages, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('message:' + name);
