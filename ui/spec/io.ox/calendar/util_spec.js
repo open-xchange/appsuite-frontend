@@ -553,8 +553,8 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
         it('computes relative luminance', function () {
             expect(util.getRelativeLuminance(util.colorToRGB('white'))).to.equal(1);
             expect(util.getRelativeLuminance(util.colorToRGB('black'))).to.equal(0);
-            expect(util.getRelativeLuminance(util.colorToRGB('#aaaaaa'))).to.equal(0.4019777798321958);
-            expect(util.getRelativeLuminance(util.colorToRGB('#3c61aa'))).to.equal(0.12412326645354393);
+            expect(util.getRelativeLuminance(util.colorToRGB('#aaaaaa'))).to.equal(0.402);
+            expect(util.getRelativeLuminance(util.colorToRGB('#3c61aa'))).to.equal(0.124);
         });
 
         it('computes foreground color for background-color with an appropriate contrast ratio', function () {
