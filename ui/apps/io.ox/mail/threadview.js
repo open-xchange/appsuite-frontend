@@ -506,12 +506,13 @@ define('io.ox/mail/threadview', [
         }
     });
 
-    // Mobile, remove halo links in thread-overview
-    ext.point('io.ox/mail/mobile').extend({
+    // Mobile, remove halo links in thread-overview (placeholder handling in detail/view.js)
+    ext.point('io.ox/mail/detail').extend({
         id: 'remove-halo-link',
         index: 'last',
-        customize: function () {
-            this.$el.find('.halo-link').removeClass('halo-link');
+        draw: function () {
+            if (_.device('!smartphone')) return;
+            this.find('.halo-link').removeClass('halo-link');
         }
     });
 
@@ -549,8 +550,6 @@ define('io.ox/mail/threadview', [
             });
 
             view.render().$el.attr({ role: 'listitem', tabindex: '0' });
-
-            ext.point('io.ox/mail/mobile').invoke('customize', view);
 
             return view.$el;
         },
