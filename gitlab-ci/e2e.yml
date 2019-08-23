@@ -50,7 +50,6 @@ run e2e tests:
     LAUNCH_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/appsuite/
     PROVISIONING_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/
     CONTEXT_ID: $CI_JOB_ID
-    FILESTORE_ID: 2
     SELENIUM_HOST: selenium-standalone-chrome
     PARTITIONS: '@shaky ^Accessibility ^Contacts ^Login ^Mail\sCompose ^Calendar(:|\s>) ^Calendar\s[^>] ^Mail\s> ^Drive ^Portal ^Sharing ^General ^Settings ^Tasks ^Mailfilter'
   script:
