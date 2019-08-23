@@ -21,8 +21,7 @@ define('io.ox/chat/data', [
 
     'use strict';
 
-    var user_id = parseInt(_.url.hash('chatUser'), 10) || ox.user_id,
-        chatHost = _.url.hash('chatHost'),
+    var chatHost = _.url.hash('chatHost'),
         DEFAULT_LIMIT = 40;
 
     var data = {
@@ -120,7 +119,13 @@ define('io.ox/chat/data', [
 
         toArray: function () {
             return this.pluck('id').sort();
+        },
+
+        sync: function (method, model, options) {
+            options.xhrFields = _.extend({}, options.xhrFields, { withCredentials: true });
+            return Backbone.Collection.prototype.sync.call(this, method, model, options);
         }
+
     });
 
     //
@@ -147,6 +152,8 @@ define('io.ox/chat/data', [
         getSystemMessage: function () {
             var data = JSON.parse(this.get('body'));
             switch (data.type) {
+                case 'createRoom':
+                    return _.printf('%1$s created this conversation', getName(data.originator));
                 case 'joinMember':
                     return _.printf('%1$s joined the conversation', getName(data.member));
                 case 'addMember':
@@ -432,7 +439,12 @@ define('io.ox/chat/data', [
 
         addMembers: function (ids) {
             this.members.add(ids, { parse: true });
-            return $.post(this.members.url(), { members: ids });
+            return $.ajax({
+                method: 'POST',
+                url: this.members.url(),
+                data: { members: ids },
+                xhrFields: { withCredentials: true }
+            });
         },
 
         toggle: function (state) {
@@ -532,7 +544,7 @@ define('io.ox/chat/data', [
         joinChannel: function (roomId) {
             var model = this.get(roomId);
             if (!model || !model.isChannel()) return;
-            model.addMembers([user_id]);
+            model.addMembers([data.user.email]);
             model.set({ joined: true, open: true });
         },
 

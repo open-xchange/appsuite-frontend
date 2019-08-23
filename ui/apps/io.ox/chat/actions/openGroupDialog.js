@@ -27,7 +27,7 @@ define('io.ox/chat/actions/openGroupDialog', [
 
     'use strict';
 
-    function open(id) {
+    function open(id, type) {
         var userIds;
         var originalModel;
 
@@ -45,6 +45,7 @@ define('io.ox/chat/actions/openGroupDialog', [
 
         return contactsAPI.getList(userIds).then(function (users) {
             model = model || new Backbone.Model();
+            model.set('type', model.get('type') || type || 'group');
             var participants = new Backbone.Collection(users.map(function (user) {
                 return new pModel.Participant(user);
             }));
@@ -67,6 +68,7 @@ define('io.ox/chat/actions/openGroupDialog', [
         .extend({
             header: function () {
                 var title = this.model.get('id') ? 'Edit group' : 'Create new group';
+                if (this.model.get('type') === 'channel') title = this.model.get('id') ? 'Edit channel' : 'Create new channel';
 
                 var title_id = _.uniqueId('title');
                 this.$('.modal-header').append(
@@ -81,11 +83,11 @@ define('io.ox/chat/actions/openGroupDialog', [
                     $('<div class="row details-container">').append(
                         $('<div class="col-xs-6">').append(
                             $('<div class="form-group">').append(
-                                $('<label class="control-label">').attr('for', guidTitle).text('Group Name'),
+                                $('<label class="control-label">').attr('for', guidTitle).text('Name'),
                                 new mini.InputView({ id: guidTitle, model: this.model, name: 'title' }).render().$el
                             ),
                             $('<div class="form-group">').append(
-                                $('<label class="control-label">').attr('for', guidDescription).text('Group Description'),
+                                $('<label class="control-label">').attr('for', guidDescription).text('Description'),
                                 new mini.TextView({ id: guidDescription, model: this.model, name: 'description' }).render().$el
                             )
                         )
@@ -93,6 +95,8 @@ define('io.ox/chat/actions/openGroupDialog', [
                 );
             },
             participants: function () {
+                if (this.model.get('type') === 'channel') return;
+
                 var baton = new ext.Baton({ model: this.model });
                 this.collection = this.collection || new Backbone.Collection();
 

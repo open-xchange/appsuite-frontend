@@ -25,6 +25,9 @@ function (DisposableView, data) {
 
         initialize: function () {
             this.listenTo(this.model, 'change:fileId', this.update);
+
+            if (this.model.isChannel()) this.$icon = $('<i class="fa fa-hashtag">');
+            else if (this.model.isGroup()) this.$icon = $('<i class="fa fa-group">');
         },
 
         render: function () {
@@ -38,7 +41,7 @@ function (DisposableView, data) {
             if (this.model.has('fileId')) {
                 this.$el.css('background-image', 'url(' + data.API_ROOT + '/files/' + this.model.get('fileId') + '/thumbnail)');
             } else {
-                this.$el.append('<i class="fa fa-group">');
+                this.$el.append(this.$icon);
             }
         }
     });
