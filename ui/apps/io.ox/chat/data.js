@@ -155,7 +155,7 @@ define('io.ox/chat/data', [
                 case 'createRoom':
                     return _.printf('%1$s created this conversation', getName(data.originator));
                 case 'joinMember':
-                    return _.printf('%1$s joined the conversation', getName(data.member));
+                    return _.printf('%1$s joined the conversation', getNames(data.members));
                 case 'addMember':
                     return _.printf('%1$s added %2$s to the conversation', getName(data.originator), getNames(data.members));
                 case 'me':
