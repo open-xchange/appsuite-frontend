@@ -115,7 +115,7 @@ define('io.ox/chat/views/channelList', [
         onAdd: _.debounce(function () {
             if (this.disposed) return;
 
-            this.$('ul').empty().append(
+            this.$('.scrollpane ul').empty().append(
                 this.getItems().map(this.renderItem.bind(this))
             );
         }, 1),

@@ -60,7 +60,7 @@ define('io.ox/chat/main', [
         onCommand: function (data) {
             switch (data.cmd) {
                 case 'start-chat': this.startChat(data); break;
-                case 'open-group-dialog': this.openGroupDialog(data.id); break;
+                case 'open-group-dialog': this.openGroupDialog(data); break;
                 case 'start-private-chat': this.startPrivateChat(data); break;
                 case 'join-channel': this.joinChannel(data); break;
                 case 'show-chat': this.showChat(data.id || data.cid, data.messageId); break;
@@ -98,11 +98,11 @@ define('io.ox/chat/main', [
             });
         },
 
-        openGroupDialog: function (id) {
+        openGroupDialog: function (data) {
             var self = this;
 
             require(['io.ox/chat/actions/openGroupDialog'], function (openGroupDialog) {
-                openGroupDialog(id).then(function (id) {
+                openGroupDialog(data.id, data.type).then(function (id) {
                     self.showChat(id);
                 });
             });
@@ -287,13 +287,21 @@ define('io.ox/chat/main', [
                             $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
                                 .append($('<i class="fa fa-plus" aria-hidden="true">')),
                             $('<ul class="dropdown-menu" id="new-chat-ul">').append(
+                                $('<li class="dropdown-header" role="separator">').append('<span aria-hidden="true">').text('New'),
                                 $('<li>').append(
                                     $('<a href="#" role="button">')
                                         .attr({ 'data-cmd': 'start-chat', 'data-id': this.model.id })
-                                        .text('Create new chat'),
+                                        .text('Private chat')
+                                ),
+                                $('<li>').append(
                                     $('<a href="#" role="button">')
                                         .attr({ 'data-cmd': 'open-group-dialog', 'data-id': this.model.id })
-                                        .text('Create new group')
+                                        .text('Group chat')
+                                ),
+                                $('<li>').append(
+                                    $('<a href="#" role="button">')
+                                        .attr({ 'data-cmd': 'open-group-dialog', 'data-id': this.model.id, 'data-type': 'channel' })
+                                        .text('Public channel')
                                 )
                             )
                         ),
@@ -393,6 +401,19 @@ define('io.ox/chat/main', [
         draw: function () {
             this.attr('data-prio', 'lo').append(
                 $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="open-group-dialog">').text('Create new group').on('click', events.forward)
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/list/toolbar').extend({
+        id: 'create-channel',
+        index: 400,
+        prio: 'lo',
+        mobile: 'lo',
+        custom: true,
+        draw: function () {
+            this.attr('data-prio', 'lo').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="open-group-dialog" data-type="channel">').text('Create new channel').on('click', events.forward)
             );
         }
     });

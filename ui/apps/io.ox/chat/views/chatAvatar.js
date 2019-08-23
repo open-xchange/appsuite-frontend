@@ -29,7 +29,7 @@ define('io.ox/chat/views/chatAvatar', [
             switch (this.model.get('type')) {
                 case 'private': this.renderPrivateChat(); break;
                 case 'group': this.renderGroupChat(); break;
-                case 'channel': this.renderChannel(); break;
+                case 'channel': this.renderGroupChat(); break;
                 // no default
             }
             return this;
@@ -47,11 +47,8 @@ define('io.ox/chat/views/chatAvatar', [
             this.$el.append(
                 new GroupAvatarView({ model: this.model }).render().$el
             );
-        },
-
-        renderChannel: function () {
-            this.$el.append('<i class="fa fa-hashtag">');
         }
+
     });
 
     return ChatAvatarView;
