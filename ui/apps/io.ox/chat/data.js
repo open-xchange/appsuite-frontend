@@ -210,7 +210,7 @@ define('io.ox/chat/data', [
         },
 
         getTextBody: function () {
-            if (this.isSystem()) return $(this.getSystemMessage()).text();
+            if (this.isSystem()) return this.getSystemMessage();
             if (this.isImage() || this.isFile()) return this.getFile();
             return sanitizer.simpleSanitize(this.get('body'));
         },
