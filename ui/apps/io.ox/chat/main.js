@@ -339,10 +339,11 @@ define('io.ox/chat/main', [
                         $('<button class="btn btn-primary">').text('Authorize').on('click', function () {
                             self.$body.empty().parent().busy();
                             data.session.login().then(function success() {
-                                self.$body.parent().idle();
                                 self.draw();
                             }, function fail() {
                                 self.drawAuthorizePane('Cannot connect. Please try again later.');
+                            }).always(function () {
+                                self.$body.parent().idle();
                             });
                         }),
                         $('<div class="text-danger">').text(errorMessage)
