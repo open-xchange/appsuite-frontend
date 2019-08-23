@@ -112,18 +112,13 @@ define('io.ox/chat/actions/openGroupDialog', [
                             users: true
                         } }).render().$el
                 );
-            },
-            footer: function () {
-                this.$('.modal-footer');
-                this.$('.modal-footer').append($('<button type="button" class="btn btn-primary save" data-action="save">')
-                    .text('Save'));
-                this.$('.modal-footer').append($('<button type="button" class="btn btn-default discard" data-action="discard">')
-                    .text('Discard'));
             }
         })
         .build(function () {
             this.$el.addClass('ox-chat-popup');
         })
+        .addCancelButton()
+        .addButton({ action: 'save', label: 'Save' })
         .on('save', function () {
             var dataObj = this.model.toJSON();
             dataObj.members = this.collection.pluck('email1');
