@@ -376,9 +376,14 @@
 
     .chat-avatar {
         position: relative;
-        .initials {
+        .initials, .group{
             width: 48px;
             height: 48px;
+        }
+        .group {
+            position: relative;
+            border-radius: 50%;
+            background-size: cover;
         }
         .state {
             position: absolute;

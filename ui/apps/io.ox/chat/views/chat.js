@@ -227,9 +227,9 @@ define('io.ox/chat/views/chat', [
                 );
             }
 
-            // add member
+            // edit group
             if (this.model.isGroup()) {
-                $ul.append(renderItem('Add member', { 'data-cmd': 'add-member', 'data-id': this.model.id }));
+                $ul.append(renderItem('Edit group', { 'data-cmd': 'open-group-dialog', 'data-id': this.model.id }));
             }
 
             // unsubscribe

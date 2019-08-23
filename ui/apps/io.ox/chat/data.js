@@ -86,13 +86,14 @@ define('io.ox/chat/data', [
     data.users = new UserCollection([]);
 
     data.fetchUsers = function () {
-        return api.getAll({ folder: 6, columns: '501,502,524,555,556,557,570' }, false).then(function (result) {
+        return api.getAll({ folder: 6, columns: '1,20,501,502,524,555,556,557,606' }, false).then(function (result) {
             result = _(result).map(function (item) {
                 return _.extend({
+                    cid: _.cid(item),
                     id: item.internal_userid,
                     first_name: item.first_name,
                     last_name: item.last_name,
-                    image: !!item['570']
+                    image: !!item['606']
                 }, _(item).pick('email1', 'email2', 'email3'));
             });
             return data.users.reset(result);
@@ -328,11 +329,9 @@ define('io.ox/chat/data', [
             // forward specific events
             this.listenTo(this.members, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('member:' + name);
-                if (/^(add|remove|reset)$/.test(name)) {
-                    this.set('members', this.members.map(function (model) {
-                        return model.get('email1') || model.get('email2') || model.get('email3');
-                    }));
-                }
+            });
+            this.on('change:members', function () {
+                this.members.set(this.get('members'), { parse: true, merge: true });
             });
             this.listenTo(this.messages, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('message:' + name);
@@ -454,7 +453,9 @@ define('io.ox/chat/data', [
             this.on('change:unreadCount', this.onChangeUnreadCount);
         },
 
-        create: function (attr) {
+        addAsync: function (attr) {
+            var url = attr.id ? this.url() + '/' + attr.id : this.url();
+
             var collection = this,
                 data = _.extend({
                     open: true, title: '', type: 'group'
@@ -476,13 +477,27 @@ define('io.ox/chat/data', [
 
             return $.ajax({
                 type: 'POST',
-                url: this.url(),
+                url: url,
                 data: formData,
                 processData: false,
                 contentType: false,
                 xhrFields: { withCredentials: true }
             }).then(function (data) {
-                return collection.add(data);
+                return collection.add(data, { merge: true });
+            });
+        },
+
+        leaveGroup: function (groupId) {
+            console.log(this.url());
+            return $.ajax({
+                type: 'DELETE',
+                url: this.url(),
+                data: groupId,
+                xhrFields: { withCredentials: true }
+            }).then(function (data) {
+                console.log(data);
+                // return collection.add(data, { merge: true });
+                return true;
             });
         },
 
