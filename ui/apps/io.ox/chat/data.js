@@ -706,7 +706,7 @@ define('io.ox/chat/data', [
             var def = this.waitForMessage(),
                 popup = window.open(url, '_blank', 'width=972,height=660,modal=yes,alwaysRaised=yes');
             def.done(function () {
-                popup.close();
+                if (popup) popup.close();
             });
             return def;
         },
