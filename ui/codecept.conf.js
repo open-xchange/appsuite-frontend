@@ -36,7 +36,7 @@ module.exports.config = {
         },
         OpenXchange: {
             require: './e2e/helper',
-            mxDomain: 'ox-e2e-backend.novalocal',
+            mxDomain: process.env.MX_DOMAIN,
             serverURL: process.env.PROVISIONING_URL,
             contextId: process.env.CONTEXT_ID,
             filestoreId: process.env.FILESTORE_ID
@@ -74,20 +74,42 @@ module.exports.config = {
             }
         });
 
-        var contexts = codecept.container.support('contexts'),
-            testContextReady;
-        testContextReady = new Promise(function (resolve) {
+        const contexts = codecept.container.support('contexts'),
+            helper = new (require('@open-xchange/codecept-helper').helper)();
+
+        function getDefaultContext () {
+            return helper.executeSoapRequest('OXContextService', 'list', {
+                search_pattern: 'defaultcontext',
+                auth: { login: 'oxadminmaster', password: 'secret' }
+            }).then(function (result) {
+                return result[0].return[0];
+            });
+        }
+        function guessMXDomain (ctx) {
+            return helper.executeSoapRequest('OXUserService', 'getData', {
+                ctx,
+                user: { name: 'oxadmin' },
+                auth: { login: 'oxadmin', password: 'secret' }
+            }).then(function (result) {
+                return result[0].return.primaryEmail.replace(/.*@/, '');
+            });
+        }
+        const testContextReady = getDefaultContext().then(function (ctx) {
+            if (typeof config.helpers.OpenXchange.mxDomain !== 'undefined') return ctx.filestoreId;
+            return guessMXDomain(ctx).then(mxDomain => {
+                config.helpers.OpenXchange.mxDomain = mxDomain
+                return mxDomain;
+            }).then(() => ctx.filestoreId);
+        }).then(function(filestoreId) {
+            if (typeof config.helpers.OpenXchange.filestoreId !== 'undefined') filestoreId = config.helpers.OpenXchange.filestoreId;
             const ctxData = {
-                id: config.helpers.OpenXchange.contextId
+                id: config.helpers.OpenXchange.contextId,
+                filestoreId
             };
-            // provide filestore id, otherwise it's not possible to create more then 5
-            // contexts existing at a time.
-            if (typeof config.helpers.OpenXchange.filestoreId !== 'undefined') ctxData.filestoreId = config.helpers.OpenXchange.filestoreId;
 
             function createDefaultContext() {
                 return contexts.create(ctxData).then(function (ctx) {
                     defaultContext = ctx;
-                    resolve();
                 }, function (err) {
                     console.error(`Could not create context ${JSON.stringify(ctxData, null, 4)}.\nError: ${err.faultstring}`);
                     if (Number(ctxData.id) === 10) {
@@ -97,12 +119,11 @@ module.exports.config = {
                     throw err;
                 });
             }
-            createDefaultContext().catch(function () {
+            return createDefaultContext().catch(function () {
                 console.warn('##--## Waiting 5s until context is removed. Press Ctrl+C to abort. ##--##');
                 return new Promise(function (resolve) {
                     global.setTimeout(resolve, 5000);
                 }).then(function () {
-                    const helper = new (require('@open-xchange/codecept-helper').helper)();
                     return helper.executeSoapRequest('OXContextService', 'delete', {
                         ctx: { id: ctxData.id },
                         auth: { login: 'oxadminmaster', password: 'secret' }
@@ -114,7 +135,11 @@ module.exports.config = {
         Promise.all([
             seleniumReady,
             testContextReady
-        ]).then(() => done());
+        ]).then(() => done())
+        .catch(function (err) {
+            console.error(err);
+            done(err);
+        });
     },
     teardown: function () {
         const helper = new (require('@open-xchange/codecept-helper').helper)();
