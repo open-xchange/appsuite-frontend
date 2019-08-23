@@ -394,7 +394,7 @@ define('io.ox/chat/data', [
             var lastMessage = this.get('lastMessage');
             if (!lastMessage) return '';
             var sender = lastMessage.sender,
-                member = this.members.findWhere({ email: sender });
+                member = data.users.getByMail(sender);
             if (!member) return;
             return member.getName();
         },
