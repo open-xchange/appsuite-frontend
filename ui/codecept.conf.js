@@ -77,7 +77,7 @@ module.exports.config = {
         const contexts = codecept.container.support('contexts'),
             helper = new (require('@open-xchange/codecept-helper').helper)();
 
-        function getDefaultContext () {
+        function getDefaultContext() {
             return helper.executeSoapRequest('OXContextService', 'list', {
                 search_pattern: 'defaultcontext',
                 auth: { login: 'oxadminmaster', password: 'secret' }
@@ -85,7 +85,7 @@ module.exports.config = {
                 return result[0].return[0];
             });
         }
-        function guessMXDomain (ctx) {
+        function guessMXDomain(ctx) {
             return helper.executeSoapRequest('OXUserService', 'getData', {
                 ctx,
                 user: { name: 'oxadmin' },
@@ -97,10 +97,10 @@ module.exports.config = {
         const testContextReady = getDefaultContext().then(function (ctx) {
             if (typeof config.helpers.OpenXchange.mxDomain !== 'undefined') return ctx.filestoreId;
             return guessMXDomain(ctx).then(mxDomain => {
-                config.helpers.OpenXchange.mxDomain = mxDomain
+                config.helpers.OpenXchange.mxDomain = mxDomain;
                 return mxDomain;
             }).then(() => ctx.filestoreId);
-        }).then(function(filestoreId) {
+        }).then(function (filestoreId) {
             if (typeof config.helpers.OpenXchange.filestoreId !== 'undefined') filestoreId = config.helpers.OpenXchange.filestoreId;
             const ctxData = {
                 id: config.helpers.OpenXchange.contextId,
