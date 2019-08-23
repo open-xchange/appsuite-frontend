@@ -60,7 +60,7 @@ define('io.ox/chat/main', [
         onCommand: function (data) {
             switch (data.cmd) {
                 case 'start-chat': this.startChat(data); break;
-                case 'start-group-chat': this.startGroupChat(data); break;
+                case 'open-group-dialog': this.openGroupDialog(data.id); break;
                 case 'start-private-chat': this.startPrivateChat(data); break;
                 case 'join-channel': this.joinChannel(data); break;
                 case 'show-chat': this.showChat(data.id || data.cid, data.messageId); break;
@@ -78,7 +78,6 @@ define('io.ox/chat/main', [
         },
 
         startChat: function () {
-            var self = this;
             require(['io.ox/contacts/addressbook/popup'], function (picker) {
                 picker.open(
                     function callback(items) {
@@ -99,11 +98,11 @@ define('io.ox/chat/main', [
             });
         },
 
-        startGroupChat: function () {
+        openGroupDialog: function (id) {
             var self = this;
 
             require(['io.ox/chat/actions/openGroupDialog'], function (openGroupDialog) {
-                openGroupDialog().then(function (id) {
+                openGroupDialog(id).then(function (id) {
                     self.showChat(id);
                 });
             });
@@ -284,7 +283,20 @@ define('io.ox/chat/main', [
                         contactsAPI.pictureHalo(
                             $('<div class="picture" aria-hidden="true">'), { internal_userid: data.user_id }, { width: 40, height: 40 }
                         ),
-                        $('<button type="button" class="btn btn-default btn-circle" data-cmd="start-chat"><i class="fa fa-plus" aria-hidden="true"></i></button>'),
+                        $('<div class="dropdown pull-right">').append(
+                            $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
+                                .append($('<i class="fa fa-plus" aria-hidden="true">')),
+                            $('<ul class="dropdown-menu" id="new-chat-ul">').append(
+                                $('<li>').append(
+                                    $('<a href="#" role="button">')
+                                        .attr({ 'data-cmd': 'start-chat', 'data-id': this.model.id })
+                                        .text('Create new chat'),
+                                    $('<a href="#" role="button">')
+                                        .attr({ 'data-cmd': 'open-group-dialog', 'data-id': this.model.id })
+                                        .text('Create new group')
+                                )
+                            )
+                        ),
                         $('<i class="fa state online fa-check-circle" aria-hidden="true">'),
                         $('<div class="name">').text(user.getName())
                     ),
@@ -379,7 +391,7 @@ define('io.ox/chat/main', [
         custom: true,
         draw: function () {
             this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="start-group-chat">').text('Create new group').on('click', events.forward)
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="open-group-dialog">').text('Create new group').on('click', events.forward)
             );
         }
     });

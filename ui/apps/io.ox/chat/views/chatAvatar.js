@@ -14,8 +14,9 @@
 define('io.ox/chat/views/chatAvatar', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/avatar',
-    'io.ox/chat/views/state'
-], function (DisposableView, AvatarView, StateView) {
+    'io.ox/chat/views/state',
+    'io.ox/chat/views/groupAvatar'
+], function (DisposableView, AvatarView, StateView, GroupAvatarView) {
 
     'use strict';
 
@@ -43,7 +44,9 @@ define('io.ox/chat/views/chatAvatar', [
         },
 
         renderGroupChat: function () {
-            this.$el.append('<i class="fa fa-group">');
+            this.$el.append(
+                new GroupAvatarView({ model: this.model }).render().$el
+            );
         },
 
         renderChannel: function () {
