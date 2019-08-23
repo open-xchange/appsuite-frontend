@@ -41,15 +41,6 @@ Scenario('[C7337] Unsuccessful Login', function (I, users) {
     I.waitForText('The user name or password is incorrect.');
 });
 
-Scenario('[C7338] Change language', function (I) {
-    I.amOnPage('/');
-    I.wait(1);
-    I.click('Language');
-    I.waitForElement('~Languages');
-    I.click('Italiano');
-    I.waitForText('Nome utente');
-});
-
 Scenario('[C7339] Stay signed in checkbox @shaky', function (I) {
     I.amOnPage('/');
     I.wait(1);

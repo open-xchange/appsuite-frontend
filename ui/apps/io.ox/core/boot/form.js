@@ -137,15 +137,6 @@ define('io.ox/core/boot/form', [
             }
         }
 
-        function redeemToken() {
-            return http.GET({
-                module: 'share/redeem/token',
-                params: { token: _.url.hash('token'), language: locale.getSelectedLocale() },
-                appendSession: false,
-                processResponse: false
-            });
-        }
-
         var loginType = _.url.hash('login_type'), showContinue = false;
 
         switch (loginType) {
@@ -189,26 +180,29 @@ define('io.ox/core/boot/form', [
 
         $('#io-ox-login-feedback');
 
-        var redeem = function () {
-            redeemToken()
-                .done(function (data) {
-                    if (data.message_type === 'ERROR') {
-                        util.feedback('error', data.message);
-                    } else {
-                        $('#io-ox-login-help').text(data.message);
-                    }
-                    if (showContinue) displayContinue(data);
-                })
-                .fail(function (e) {
-                    util.feedback('error', e.error);
-                    if (showContinue) hideFormElements();
-                });
+        var redeem = function (lang) {
+            http.GET({
+                module: 'share/redeem/token',
+                params: { token: _.url.hash('token'), language: lang },
+                appendSession: false,
+                processResponse: false
+            }).done(function (data) {
+                if (data.message_type === 'ERROR') {
+                    util.feedback('error', data.message);
+                } else {
+                    $('#io-ox-login-help').text(data.message);
+                }
+                if (showContinue) displayContinue(data);
+            })
+            .fail(function (e) {
+                util.feedback('error', e.error);
+                if (showContinue) hideFormElements();
+            });
         };
 
         // handle message params
         if (_.url.hash('token')) {
             ox.on('language', redeem);
-            redeem();
         }
 
         locale.render();
