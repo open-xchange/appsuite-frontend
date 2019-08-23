@@ -349,11 +349,9 @@ define('io.ox/chat/data', [
                     this.set('lastMessage', _.extend({}, this.get('lastMessage'), lastMessage.toJSON()));
                 }
 
-                var lastMessage = this.messages.max(function (message) {
-                    return moment(message.get('sent').valueOf());
-                });
-
+                var lastMessage = this.messages.max('id');
                 if (!lastMessage) return;
+
                 if (!this.get('lastMessage') || this.get('lastMessage').id !== lastMessage.get('id') || !lastMessage.has('id')) {
                     if (!lastMessage.has('id')) self.listenToOnce(lastMessage, 'change:id', updateLastMessage.bind(this));
                     else updateLastMessage.call(this);
