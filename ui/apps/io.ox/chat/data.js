@@ -400,6 +400,11 @@ define('io.ox/chat/data', [
             return this.members.reject(user)[0];
         },
 
+        isMember: function (email) {
+            email = email || data.user.email;
+            return !!_(this.get('members')).findWhere({ email: email });
+        },
+
         getLastSenderName: function () {
             var lastMessage = this.get('lastMessage');
             if (!lastMessage) return '';
