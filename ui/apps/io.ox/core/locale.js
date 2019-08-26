@@ -46,6 +46,12 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
             intervals = getCLDRData().dateTimeFormats.intervalFormats;
         options = options || {};
 
+        // customized?
+        if (!_.isEmpty(settings.get('localeData', {})) && (!format || format === 'date' || format === 'time')) {
+            format = format === 'time' ? localeData.time : localeData.dateShort;
+            return intervals.intervalFormatFallback.replace('{0}', start.format(format)).replace('{1}', end.format(format));
+        }
+
         // use old shorthands, no need to change our whole code
         // use 12h/24h format correctly
         if (format === 'time') format = getCLDRData().timeFormats.short.indexOf('a') === -1 ? 'Hm' : 'hm';
