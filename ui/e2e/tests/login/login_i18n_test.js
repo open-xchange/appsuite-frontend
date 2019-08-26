@@ -19,8 +19,7 @@ Scenario('[C7338] on form login page', function (I) {
     I.waitForText('Nome utente');
 });
 
-// skipped until we test against latest backends (supporting this feature)
-Scenario.skip('[OXUI-700] for guest users with password', async (I, users) => {
+Scenario('[OXUI-700] for guest users with password', async (I, users) => {
     await users.create();
     I.login('app=io.ox/files');
     const myfiles = locate('.folder-tree .folder-label').withText('My files');
