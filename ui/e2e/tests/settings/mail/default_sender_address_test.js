@@ -17,7 +17,7 @@ Feature('Settings > Mail');
 
 Before(async (users) => {
     var user = users.getRandom();
-    user.aliases = user.name + '@ox-e2e-backend.novalocal,foo@ox.io';
+    user.aliases = `${user.name}@${user.domain},foo@ox.io`;
     await users.create(user);
 });
 

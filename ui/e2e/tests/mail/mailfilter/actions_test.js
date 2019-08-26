@@ -161,9 +161,7 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users) {
 
     createFilterRule(I, 'TestCase0389', 'File into');
     I.click('Select folder');
-    I.waitForVisible('.folder-picker-dialog');
-
-    I.waitForVisible(locate('[role="presentation"]').withText('ox-e2e-backend.novalocal'));
+    I.waitForVisible(locate('.folder-picker-dialog [data-id="virtual/myfolders"] .folder-arrow'));
 
     I.click('[data-id="virtual/myfolders"] .folder-arrow', '.folder-picker-dialog');
     I.waitForVisible(`[data-id="default0/INBOX/${folder}"]`, 5);
