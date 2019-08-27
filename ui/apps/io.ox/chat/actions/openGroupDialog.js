@@ -127,6 +127,9 @@ define('io.ox/chat/actions/openGroupDialog', [
             var dataObj = this.model.toJSON();
             dataObj.members = this.collection.pluck('email1');
 
+            if (this.model.get('title') === originalModel.get('title')) delete dataObj.title;
+            if (this.model.get('description') === originalModel.get('description')) delete dataObj.description;
+
             if (dataObj.pictureFileEdited === '') {
                 dataObj.file = null;
             } else if (this.model.get('pictureFile') === originalModel.get('pictureFile')) {

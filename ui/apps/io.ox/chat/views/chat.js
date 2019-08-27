@@ -73,6 +73,19 @@ define('io.ox/chat/views/chat', [
     });
 
     ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'leave-group',
+        index: 450,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            if (!model.isGroup()) return;
+            this.attr('data-prio', 'lo').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="leave-group">').attr('data-id', model.id).text('Leave group').on('click', events.forward)
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
         id: 'edit-channel',
         index: 500,
         custom: true,
@@ -243,6 +256,7 @@ define('io.ox/chat/views/chat', [
 
             if (this.model.isGroup()) {
                 $ul.append(renderItem('Edit group', { 'data-cmd': 'open-group-dialog', 'data-id': this.model.id }));
+                $ul.append(renderItem('Leave group', { 'data-cmd': 'leave-group', 'data-id': this.model.id }));
             }
 
             if (this.model.isChannel()) {

@@ -46,9 +46,10 @@ define('io.ox/chat/views/chatListEntry', [
         render: function () {
             var model = this.model,
                 lastMessage = model.get('lastMessage'),
-                isCurrentUser = lastMessage.senderId.toString() === data.user_id.toString(),
+                isCurrentUser = lastMessage ? lastMessage.senderId.toString() === data.user_id.toString() : false,
                 isPrivate = model.get('type') === 'private',
-                isSystemMessage = lastMessage.type === 'system';
+                isSystemMessage = lastMessage ? lastMessage.type === 'system' : false,
+                stateClass = lastMessage ? lastMessage.state : '';
 
             this.$el
                 .empty()
@@ -63,7 +64,7 @@ define('io.ox/chat/views/chatListEntry', [
                         $('<div class="chats-row">').append(
                             $('<div class="fa delivery">')
                                 .toggleClass('hidden', !isCurrentUser || isSystemMessage)
-                                .addClass(lastMessage.state),
+                                .addClass(stateClass),
                             $('<div class="sender">')
                                 .toggleClass('hidden', isCurrentUser || isPrivate || isSystemMessage)
                                 .text(model.getLastSenderName() + ':'),

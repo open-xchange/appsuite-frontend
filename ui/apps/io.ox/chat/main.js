@@ -61,6 +61,7 @@ define('io.ox/chat/main', [
             switch (data.cmd) {
                 case 'start-chat': this.startChat(data); break;
                 case 'open-group-dialog': this.openGroupDialog(data); break;
+                case 'leave-group': this.leaveGroup(data.id); break;
                 case 'start-private-chat': this.startPrivateChat(data); break;
                 case 'join-channel': this.joinChannel(data); break;
                 case 'show-chat': this.showChat(data.id || data.cid, data.messageId); break;
@@ -78,12 +79,16 @@ define('io.ox/chat/main', [
         },
 
         startChat: function () {
+            var self = this;
+
             require(['io.ox/contacts/addressbook/popup'], function (picker) {
                 picker.open(
                     function callback(items) {
                         var members = _(items).pluck('email');
                         if (members.length === 1) return self.startPrivateChat({ email: members[0] });
-                        data.chats.create({ type: 'group', members: members });
+                        data.chats.addAsync({ type: 'group', members: members }).done(function (result) {
+                            self.showChat(result.id);
+                        });
                     },
                     {
                         help: false,
@@ -115,9 +120,14 @@ define('io.ox/chat/main', [
             });
             if (chat) return this.showChat(chat.id);
 
-            data.chats.create({ type: 'private', members: [cmd.email] }).done(function (result) {
+            data.chats.addAsync({ type: 'private', members: [cmd.email] }).done(function (result) {
                 this.showChat(result.id);
             }.bind(this));
+        },
+
+        leaveGroup: function (groupId) {
+            data.chats.get(groupId).destroy();
+            this.closeChat();
         },
 
         joinChannel: function (cmd) {
