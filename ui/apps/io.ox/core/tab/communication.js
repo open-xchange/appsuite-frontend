@@ -240,9 +240,6 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
                 case 'update-ox-object':
                     TabCommunication.updateOxObject(data.parameters);
                     break;
-                case 'office-settings-changed':
-                    ox.trigger('change:settings:office', data.parameters);
-                    break;
                 default:
                     TabCommunication.events.trigger(data.propagate, data.parameters);
                     break;
