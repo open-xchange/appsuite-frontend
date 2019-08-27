@@ -17,12 +17,13 @@ define('io.ox/settings/personalData/settings/pane', [
     'io.ox/backbone/views/modal',
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/common',
+    'io.ox/backbone/mini-views/dropdown',
     'io.ox/settings/personalData/api',
     'io.ox/core/yell',
     'io.ox/core/capabilities',
     'io.ox/core/strings',
     'less!io.ox/settings/personalData/settings/style'
-], function (DisposableView, gt, ModalDialog, ext, mini, api, yell, capabilities, strings) {
+], function (DisposableView, gt, ModalDialog, ext, mini, Dropdown, api, yell, capabilities, strings) {
 
     'use strict';
 
@@ -33,77 +34,90 @@ define('io.ox/settings/personalData/settings/pane', [
             'mail': {
                 'label': gt('Email'),
                 'description': gt('Includes all emails from your primary mail account as eml files.'),
+                //#. header for a dropdown
+                'header': gt('Included folders'),
                 'includeTrash': {
                     //#. shown when a download of mail data is requested
-                    'label': gt('include trash folder')
+                    'label': gt('Trash folder')
                 },
                 'subscribedOnly': {
                     //#. shown when a download of mail data is requested
-                    'label': gt('include subscribed folders only')
+                    'label': gt('Subscribed folders only')
                 }
             },
             'calendar': {
                 'label': gt('Calendar'),
                 'description': gt('Includes all appointments from your calendars as ical files.'),
+                //#. header for a dropdown
+                'header': gt('Included calendars'),
                 'includePublic': {
                     //#. shown when a download of calendar data is requested
-                    'label': gt('include public calendars')
+                    'label': gt('Public calendars')
                 },
                 'includeShared': {
                     //#. shown when a download of calendar data is requested
-                    'label': gt('include shared calendars')
+                    'label': gt('Shared calendars')
                 },
                 'subscribedOnly': {
                     //#. shown when a download of calendar data is requested
-                    'label': gt('include subscribed calendars only')
+                    'label': gt('Subscribed calendars only')
                 }
             },
             'contacts': {
                 'label': gt('Address book'),
                 'description': gt('Includes all contact data from your address books as vcard files.'),
+                //#. header for a dropdown
+                'header': gt('Included address books'),
                 'includePublic': {
                     //#. shown when a download of contact data is requested
-                    'label': gt('include public address books')
+                    'label': gt('Public address books')
                 },
                 'includeShared': {
                     //#. shown when a download of contact data is requested
-                    'label': gt('include shared address books')
+                    'label': gt('Shared address books')
                 },
                 'includeDistributionLists': {
+                    divider: true,
                     //#. shown when a download of contact data is requested
                     'label': gt('include distribution lists')
                 }
             },
             'infostore': {
-                'label': gt('Drive'),
-                'description': gt('Includes all files from Drive.'),
-                'includeAllVersions': {
-                    //#. shown when a download of (cloud) drive files is requested
-                    'label': gt('include all file versions')
-                },
+                'label': gt.pgettext('app', 'Drive'),
+                //#. %1$s is usually "Drive" (product name; might be customized)
+                'description': gt('Includes all files from %1$s.', gt.pgettext('app', 'Drive')),
+                //#. header for a dropdown
+                'header': gt('Included folders'),
                 'includeTrash':  {
                     //#. shown when a download of (cloud) drive files is requested
-                    'label': gt('include trash folder')
+                    'label': gt('Trash folder')
                 },
                 'includePublic':  {
                     //#. shown when a download of (cloud) drive files is requested
-                    'label': gt('include public folders')
+                    'label': gt('Public folders')
                 },
                 'includeShared': {
                     //#. shown when a download of (cloud) drive files is requested
-                    'label': gt('include shared folders')
+                    'label': gt('Shared folders')
+                },
+                'includeAllVersions': {
+                    divider: true,
+                    //#. shown when a download of (cloud) drive files is requested
+                    'label': gt('include all file versions')
                 }
             },
             'tasks': {
                 'label': gt('Tasks'),
                 'description': gt('Includes all tasks as ical files.'),
+                //#. header for a dropdown
+                'header': gt('Included folders'),
                 'includePublic':  {
                     //#. shown when a download of task data is requested
-                    'label': gt('include public folders')
+                    'label': gt('Public folders')
                 },
                 'includeShared': {
                     //#. shown when a download of task data is requested
-                    'label': gt('include shared folders')
+                    'label': gt('Shared folders')
                 }
             }
         },
@@ -154,15 +168,20 @@ define('io.ox/settings/personalData/settings/pane', [
                 // build Checkboxes
                 _(modules).each(function (data, moduleName) {
                     if (!self.model.get(moduleName)) return;
-                    // main checkbox for the module (mail)
-                    checkboxes.append(new mini.CustomCheckboxView({ name: 'enabled', label: modules[moduleName].label, model: self.models[moduleName] }).render().$el.addClass('main-option '),
-                        $('<div>').text(modules[moduleName].description));
+                    var dropdownView = new Dropdown({ caret: true, model: self.models[moduleName], label: gt('Options') })
+                        .header(modules[moduleName].header);
 
                     // sub checkboxes (include trash folder etc)
                     _(_(data).keys()).each(function (subOption) {
-                        if (subOption === 'label' || subOption === 'description') return;
-                        checkboxes.append(new mini.CustomCheckboxView({ name: subOption, label: modules[moduleName][subOption].label, model: self.models[moduleName] }).render().$el.addClass('sub-option ' + moduleName + '-sub-option'));
+                        if (subOption === 'label' || subOption === 'description' || subOption === 'header') return;
+                        if (modules[moduleName][subOption].divider) dropdownView.divider();
+                        dropdownView.option(subOption, true, modules[moduleName][subOption].label);
                     });
+
+                    // main checkbox for the module
+                    checkboxes.append(new mini.CustomCheckboxView({ name: 'enabled', label: modules[moduleName].label, model: self.models[moduleName] }).render().$el.addClass('main-option '),
+                        $('<div>').text(modules[moduleName].description),
+                        dropdownView.render().$el);
                 });
 
                 if (supportedFilesizes.length) {
