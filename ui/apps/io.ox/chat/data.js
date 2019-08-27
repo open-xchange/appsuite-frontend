@@ -157,7 +157,17 @@ define('io.ox/chat/data', [
                 case 'joinMember':
                     return _.printf('%1$s joined the conversation', getNames(data.members));
                 case 'addMember':
-                    return _.printf('%1$s added %2$s to the conversation', getName(data.originator), getNames(data.members));
+                    return _.printf('%1$s added %2$s to the conversation', getName(data.originator), getNames(data.addedMembers));
+                case 'removeMember':
+                    return _.printf('%1$s removed %2$s from the conversation', getName(data.originator), getNames(data.removedMembers));
+                case 'changeGroupImage':
+                    return _.printf('%1$s changed the group image', getName(data.originator));
+                case 'changeTitle':
+                    return _.printf('%1$s changed the group title to "%2$s"', getName(data.originator), data.title);
+                case 'changeDescription':
+                    return _.printf('%1$s changed the group description to "%2$s"', getName(data.originator), data.description);
+                case 'leftRoom':
+                    return _.printf('%1$s left the conversation', getName(data.originator));
                 case 'me':
                     return _.printf('%1$s %2$s', getName(data.originator), data.message);
                 case 'text':
@@ -447,6 +457,11 @@ define('io.ox/chat/data', [
 
         toggle: function (state) {
             this.set('open', !!state).save({ open: !!state }, { patch: true });
+        },
+
+        sync: function (method, model, options) {
+            options.xhrFields = _.extend({}, options.xhrFields, { withCredentials: true });
+            return Backbone.Model.prototype.sync.call(this, method, model, options);
         }
     });
 
@@ -486,7 +501,7 @@ define('io.ox/chat/data', [
             });
 
             return $.ajax({
-                type: 'POST',
+                type: attr.id ? 'PATCH' : 'POST',
                 url: url,
                 data: formData,
                 processData: false,
@@ -494,20 +509,6 @@ define('io.ox/chat/data', [
                 xhrFields: { withCredentials: true }
             }).then(function (data) {
                 return collection.add(data, { merge: true });
-            });
-        },
-
-        leaveGroup: function (groupId) {
-            console.log(this.url());
-            return $.ajax({
-                type: 'DELETE',
-                url: this.url(),
-                data: groupId,
-                xhrFields: { withCredentials: true }
-            }).then(function (data) {
-                console.log(data);
-                // return collection.add(data, { merge: true });
-                return true;
             });
         },
 

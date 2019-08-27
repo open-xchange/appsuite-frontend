@@ -63,7 +63,7 @@ define('io.ox/chat/views/chatList', [
         },
 
         getNode: function (model) {
-            return this.$('[data-cid="' + model.cid + '"]');
+            return this.$('[data-cid="' + model.get('id') + '"]');
         },
 
         onAdd: _.debounce(function (model, collection, options) {
