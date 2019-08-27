@@ -107,7 +107,7 @@ define('io.ox/chat/main', [
             var self = this;
 
             require(['io.ox/chat/actions/openGroupDialog'], function (openGroupDialog) {
-                openGroupDialog(data.id, data.type).then(function (id) {
+                openGroupDialog(_(data).pick('id', 'type')).then(function (id) {
                     self.showChat(id);
                 });
             });

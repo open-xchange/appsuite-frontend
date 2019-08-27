@@ -27,25 +27,28 @@ define('io.ox/chat/actions/openGroupDialog', [
 
     'use strict';
 
-    function open(id, type) {
-        var userIds;
-        var originalModel;
-
-        var model = data.chats.get(id);
+    function open(obj) {
+        var userIds, originalModel,
+            model = data.chats.get(obj.id);
 
         if (model) {
             userIds = model.members.map(function (user) {
                 return _.cid(user.get('cid'));
             });
         } else {
-            var user_id = parseInt(_.url.hash('chatUser'), 10) || ox.user_id;
-            var user = data.users.findWhere({ id: user_id });
-            userIds = [_.cid(user.get('cid'))];
+            var mailAddresses = [data.user.email];
+            if (obj.members) mailAddresses.push.apply(mailAddresses, obj.members);
+            userIds = mailAddresses.map(function (address) {
+                var user = data.users.getByMail(address);
+                if (!user) return;
+                return _.cid(user.get('cid'));
+            });
+            userIds = _(userIds).chain().compact().unique().value();
         }
 
         return contactsAPI.getList(userIds).then(function (users) {
-            model = model || new Backbone.Model();
-            model.set('type', model.get('type') || type || 'group');
+            model = model || new Backbone.Model(obj);
+            model.set('type', model.get('type') || obj.type || 'group');
             var participants = new Backbone.Collection(users.map(function (user) {
                 return new pModel.Participant(user);
             }));
