@@ -359,7 +359,7 @@ define('io.ox/chat/data', [
                     this.set('lastMessage', _.extend({}, this.get('lastMessage'), lastMessage.toJSON()));
                 }
 
-                var lastMessage = this.messages.max('id');
+                var lastMessage = this.messages.last();
                 if (!lastMessage) return;
 
                 if (!this.get('lastMessage') || this.get('lastMessage').id !== lastMessage.get('id') || !lastMessage.has('id')) {
@@ -614,7 +614,7 @@ define('io.ox/chat/data', [
                 var room = data.chats.get(roomId);
                 if (!room) return;
 
-                var lastMessage = room.get('lastMessage');
+                var lastMessage = room.get('lastMessage') || {};
                 // update state if necessary
                 if (messageId === lastMessage.id && lastMessage.state !== state) {
                     lastMessage = _.extend({}, lastMessage, { state: state });
