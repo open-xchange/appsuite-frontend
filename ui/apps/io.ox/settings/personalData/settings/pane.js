@@ -31,7 +31,8 @@ define('io.ox/settings/personalData/settings/pane', [
     // same structure as api response
     var modules = {
             'mail': {
-                'label': gt('Mails'),
+                'label': gt('Email'),
+                'description': gt('Includes all emails from your primary mail account as eml files.'),
                 'includeTrash': {
                     //#. shown when a download of mail data is requested
                     'label': gt('include trash folder')
@@ -43,6 +44,7 @@ define('io.ox/settings/personalData/settings/pane', [
             },
             'calendar': {
                 'label': gt('Calendar'),
+                'description': gt('Includes all appointments from your calendars as ical files.'),
                 'includePublic': {
                     //#. shown when a download of calendar data is requested
                     'label': gt('include public calendars')
@@ -57,7 +59,8 @@ define('io.ox/settings/personalData/settings/pane', [
                 }
             },
             'contacts': {
-                'label': gt('Address books'),
+                'label': gt('Address book'),
+                'description': gt('Includes all contact data from your address books as vcard files.'),
                 'includePublic': {
                     //#. shown when a download of contact data is requested
                     'label': gt('include public address books')
@@ -72,7 +75,8 @@ define('io.ox/settings/personalData/settings/pane', [
                 }
             },
             'infostore': {
-                'label': gt('Files'),
+                'label': gt('Drive'),
+                'description': gt('Includes all files from Drive.'),
                 'includeAllVersions': {
                     //#. shown when a download of (cloud) drive files is requested
                     'label': gt('include all file versions')
@@ -92,6 +96,7 @@ define('io.ox/settings/personalData/settings/pane', [
             },
             'tasks': {
                 'label': gt('Tasks'),
+                'description': gt('Includes all tasks as ical files.'),
                 'includePublic':  {
                     //#. shown when a download of task data is requested
                     'label': gt('include public folders')
@@ -138,22 +143,24 @@ define('io.ox/settings/personalData/settings/pane', [
             },
             render: function () {
                 this.$el.empty();
-                if (this.status.get('status') !== 'none') return this;
+                if (this.status.get('status') === 'PENDING') return this;
 
                 var self = this, checkboxes,
                     supportedFilesizes = _(filesizelimits).filter(function (value) { return value <= self.model.get('maxFileSize'); });
 
                 // data selection
-                this.$el.append(checkboxes = $('<div class="form-group">').append($('<label>').text(gt('Please select the data to be included in your download'))));
+                this.$el.append(checkboxes = $('<div class="form-group">').append($('<div>').text(gt('You can download a copy of your personal data from your account, if you want to save it or transfer it to a nother provider.'))));
 
                 // build Checkboxes
                 _(modules).each(function (data, moduleName) {
                     if (!self.model.get(moduleName)) return;
                     // main checkbox for the module (mail)
-                    checkboxes.append(new mini.CustomCheckboxView({ name: 'enabled', label: modules[moduleName].label, model: self.models[moduleName] }).render().$el.addClass('main-option '));
+                    checkboxes.append(new mini.CustomCheckboxView({ name: 'enabled', label: modules[moduleName].label, model: self.models[moduleName] }).render().$el.addClass('main-option '),
+                        $('<div>').text(modules[moduleName].description));
+
                     // sub checkboxes (include trash folder etc)
                     _(_(data).keys()).each(function (subOption) {
-                        if (subOption === 'label') return;
+                        if (subOption === 'label' || subOption === 'description') return;
                         checkboxes.append(new mini.CustomCheckboxView({ name: subOption, label: modules[moduleName][subOption].label, model: self.models[moduleName] }).render().$el.addClass('sub-option ' + moduleName + '-sub-option'));
                     });
                 });
@@ -205,7 +212,7 @@ define('io.ox/settings/personalData/settings/pane', [
                 if (this.model.get('status') === 'PENDING') {
                     //#. %1$s: date and time the download was requested
                     this.$el.append($('<div class="alert alert-info">')
-                    .text(gt('Your requested archive from %1$s is currently being created. You will be informed via email when your download is ready.', moment(this.model.get('creationTime')).format('LLL'))));
+                    .text(gt('Your requested archive is currently being created. Depending on the size of the requested data this may take hours or days. You will be informed via email when your download is ready.', moment(this.model.get('creationTime')).format('LLL'))));
                 }
 
                 if (this.model.get('status') === 'DONE' && this.model.get('results') && this.model.get('results').length) {
@@ -244,24 +251,28 @@ define('io.ox/settings/personalData/settings/pane', [
                 // display the correct buttons depending on the current download state
                 switch (this.model.get('status')) {
                     case 'none':
-                        this.$el.append($('<button type="button" class="btn btn-primary">').text(gt('Create download'))
+                        this.$el.append($('<button type="button" class="btn btn-primary">').text(gt('Request download'))
                             .on('click', function () {
                                 api.requestDownload(self.selectView.getDownloadConfig()).fail(yell);
                             }));
                         break;
                     case 'PENDING':
-                        this.$el.append($('<button type="button" class="btn btn-primary">').text(gt('Cancel download creation'))
+                        this.$el.append($('<button type="button" class="btn btn-default">').text(gt('Cancel download request'))
                             .on('click', function () {
-                                deleteDialog({ text: gt('Do you really want to cancel your download creation?'), action: 'delete', label: gt('Cancel download creation') }).then(function (action) {
+                                deleteDialog({ text: gt('Do you really want to cancel your download request?'), action: 'delete', label: gt('Cancel download request') }).then(function (action) {
                                     if (action === 'delete') api.cancelDownloadRequest().fail(yell);
                                 });
                             }));
                         break;
                     case 'DONE':
-                        this.$el.append($('<button type="button" class="btn btn-primary">').text(gt('Delete all avaliable downloads'))
+                        this.$el.append($('<button type="button" class="btn btn-primary">').text(gt('Request new download'))
                             .on('click', function () {
-                                deleteDialog({ text: gt('Do you really want to delete all available downloads?'), action: 'delete', label: gt('Delete all avaliable downloads') }).then(function (action) {
-                                    if (action === 'delete') api.deleteAllFiles().fail(yell);
+                                deleteDialog({ text: gt('By requesting a new download, your currently available downloads will be deleted.'), action: 'delete', label: gt('Delete all avaliable downloads') }).then(function (action) {
+                                    if (action === 'delete') {
+                                        api.deleteAllFiles().then(function () {
+                                            api.requestDownload(self.selectView.getDownloadConfig()).fail(yell);
+                                        }, yell);
+                                    }
                                 });
                             }));
                         break;
