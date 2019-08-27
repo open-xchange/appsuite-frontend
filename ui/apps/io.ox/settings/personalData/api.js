@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/core/api/personalData', [
+define('io.ox/settings/personalData/api', [
     'io.ox/core/event',
     'io.ox/core/http'
 ], function (Events, http) {
@@ -39,6 +39,9 @@ define('io.ox/core/api/personalData', [
         cancelDownloadRequest: function () {
             return http.DELETE({
                 url: 'api/gdpr/dataexport'
+            }).then(function (result) {
+                api.trigger('updateStatus');
+                return result;
             });
         },
 
@@ -47,6 +50,9 @@ define('io.ox/core/api/personalData', [
                 url: 'api/gdpr/dataexport',
                 data: JSON.stringify(data),
                 contentType: 'application/json'
+            }).then(function (result) {
+                api.trigger('updateStatus');
+                return result;
             });
         },
 
@@ -61,12 +67,13 @@ define('io.ox/core/api/personalData', [
         },
 
         deleteAllFiles: function () {
-            api.requestFinished = false;
             return http.DELETE({
                 url: 'api/gdpr/dataexport/delete'
+            }).then(function (result) {
+                api.trigger('updateStatus');
+                return result;
             });
-        },
-        requestFinished: false
+        }
     };
     Events.extend(api);
 

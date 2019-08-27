@@ -11,19 +11,22 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/core/settings/dialogs/personalDataDialog', [
+define('io.ox/settings/personalData/settings/pane', [
     'io.ox/backbone/views/disposable',
     'gettext!io.ox/core',
     'io.ox/backbone/views/modal',
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/common',
-    'io.ox/core/api/personalData',
+    'io.ox/settings/personalData/api',
     'io.ox/core/yell',
+    'io.ox/core/capabilities',
     'io.ox/core/strings',
-    'less!io.ox/core/settings/dialogs/style'
-], function (DisposableView, gt, ModalDialog, ext, mini, api, yell, strings) {
+    'less!io.ox/settings/personalData/settings/style'
+], function (DisposableView, gt, ModalDialog, ext, mini, api, yell, capabilities, strings) {
 
     'use strict';
+
+    if (!capabilities.has('dataexport')) return;
 
     // same structure as api response
     var modules = {
@@ -100,22 +103,28 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
             }
         },
         filesizelimits = [
-            // 512mb is hardcoded backend minimum
-            // 512mb
+            // 512mb (is hardcoded backend minimum)
             536870912,
             // 1gb
             1073741824
         ],
-        dialogTitles = {
-            'none': gt('Data Export'),
-            'PENDING': gt('Download is being created'),
-            'DONE': gt('Download data archive')
+        deleteDialog = function (options) {
+            var def = $.Deferred();
+            new ModalDialog({ title: options.text })
+                .addCancelButton({ left: true })
+                .addButton({ className: 'btn-default', action: options.action, label: options.label })
+                .on('action', def.resolve)
+                .open();
+
+            return def;
         },
         // displays a lot of checkboxes to select the data to download
-        personalDataView = DisposableView.extend({
+        selectDataView = DisposableView.extend({
             className: 'personal-data-view',
-            initialize: function () {
+            initialize: function (options) {
                 var self = this;
+                this.status = options.status;
+                this.status.on('change:status', this.render.bind(this));
                 // create one model for each submodule
                 // makes it easier to use checkbox miniviews later on since data is not nested anymore
                 this.models = {};
@@ -128,9 +137,11 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
                 });
             },
             render: function () {
+                this.$el.empty();
+                if (this.status.get('status') !== 'none') return this;
+
                 var self = this, checkboxes,
                     supportedFilesizes = _(filesizelimits).filter(function (value) { return value <= self.model.get('maxFileSize'); });
-                this.$el.empty();
 
                 // data selection
                 this.$el.append(checkboxes = $('<div class="form-group">').append($('<label>').text(gt('Please select the data to be included in your download'))));
@@ -162,17 +173,32 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
 
                 return this;
             },
-            requestDownload: function () {
+            getDownloadConfig: function () {
                 var self = this;
                 _(_(this.models).keys()).each(function (moduleName) {
                     self.model.set(moduleName, self.models[moduleName].toJSON());
                 });
-                api.requestDownload(this.model.toJSON()).fail(yell);
+
+                return this.model.toJSON();
             }
         }),
         // used to display the current state if a download was requested
         downloadView = DisposableView.extend({
             className: 'personal-data-download-view',
+            initialize: function () {
+                var self = this;
+                this.listenTo(api, 'updateStatus', function () {
+                    api.getAvailableDownloads().then(function (downloadStatus) {
+                        // update attributes
+                        self.model.set(downloadStatus);
+                        // remove attributes that are no longer there
+                        _(self.model.keys()).each(function (key) {
+                            if (!_(downloadStatus).has(key)) self.model.unset(key);
+                        });
+                        self.render();
+                    });
+                });
+            },
             render: function () {
                 this.$el.empty();
 
@@ -204,82 +230,90 @@ define('io.ox/core/settings/dialogs/personalDataDialog', [
 
                 return this;
             }
+        }),
+        // used to display the correct buttons depending on the current state
+        buttonView = DisposableView.extend({
+            className: 'personal-data-button-view',
+            initialize: function (options) {
+                this.selectView = options.selectView;
+                this.model.on('change:status', this.render.bind(this));
+            },
+            render: function () {
+                this.$el.empty();
+                var self = this;
+                // display the correct buttons depending on the current download state
+                switch (this.model.get('status')) {
+                    case 'none':
+                        this.$el.append($('<button type="button" class="btn btn-primary">').text(gt('Create download'))
+                            .on('click', function () {
+                                api.requestDownload(self.selectView.getDownloadConfig()).fail(yell);
+                            }));
+                        break;
+                    case 'PENDING':
+                        this.$el.append($('<button type="button" class="btn btn-primary">').text(gt('Cancel download creation'))
+                            .on('click', function () {
+                                deleteDialog({ text: gt('Do you really want to cancel your download creation?'), action: 'delete', label: gt('Cancel download creation') }).then(function (action) {
+                                    if (action === 'delete') api.cancelDownloadRequest().fail(yell);
+                                });
+                            }));
+                        break;
+                    case 'DONE':
+                        this.$el.append($('<button type="button" class="btn btn-primary">').text(gt('Delete all avaliable downloads'))
+                            .on('click', function () {
+                                deleteDialog({ text: gt('Do you really want to delete all available downloads?'), action: 'delete', label: gt('Delete all avaliable downloads') }).then(function (action) {
+                                    if (action === 'delete') api.deleteAllFiles().fail(yell);
+                                });
+                            }));
+                        break;
+                    // no default
+                }
+
+                return this;
+            }
         });
 
-    var openDialog = function () {
+    ext.point('io.ox/settings/pane/personalData').extend({
+        id: 'personaldata',
+        title: gt('Download personal data'),
+        ref: 'io.ox/settings/personalData',
+        index: 100
+    });
 
-        var deleteDialog = function (options) {
+    ext.point('io.ox/settings/personalData/settings/detail').extend({
+        id: 'title',
+        index: 100,
+        draw: function () {
+            this.addClass('io-ox-personal-data-settings');
+            this.append(
+                $('<h1>').text(gt('Download your personal data'))
+            );
+        }
+    });
 
-            var def = $.Deferred();
-            new ModalDialog({ title: options.text })
-                .addCancelButton({ left: true })
-                .addButton({ className: 'btn-default', action: options.action, label: options.label })
-                .on('action', def.resolve)
-                .open();
+    ext.point('io.ox/settings/personalData/settings/detail').extend({
+        id: 'select-view',
+        index: 200,
+        draw: function () {
+            var node = this;
+            $.when(api.getAvailableModules(), api.getAvailableDownloads()).then(function (availableModules, downloadStatus) {
+                // check if this is [data, timestamp]
+                downloadStatus = _.isArray(downloadStatus) ? downloadStatus[0] : downloadStatus;
 
-            return def;
-        };
+                var availableModulesModel = new Backbone.Model(availableModules),
+                    status = new Backbone.Model(downloadStatus),
+                    sdView = new selectDataView({ model: availableModulesModel, status: status }),
+                    dlView = new downloadView({ model: status }),
+                    bView = new buttonView({ model: status, selectView: sdView });
 
-        $.when(api.getAvailableModules(), api.getAvailableDownloads()).then(function (availableModules, downloadStatus) {
-            // check if this is [data, timestamp]
-            downloadStatus = _.isArray(downloadStatus) ? downloadStatus[0] : downloadStatus;
-            var availableModulesModel = new Backbone.Model(availableModules),
-                status = new Backbone.Model(downloadStatus),
-                pdView, dlView, dialog;
+                node.append(
+                    sdView.render().$el,
+                    dlView.render().$el,
+                    bView.render().$el
+                );
 
-            dialog = new ModalDialog({ title: dialogTitles[status.get('status')] })
-                .build(function () {
-                    if (status.get('status') === 'none') {
-                        pdView = new personalDataView({ model: availableModulesModel });
-                        this.$body.append(
-                            pdView.render().$el
-                        );
-                        this.on('create', _.bind(pdView.requestDownload, pdView));
-                        return;
-                    }
+            }, yell);
+        }
+    });
 
-                    dlView = new downloadView({ model: status });
-                    this.$body.append(
-                        dlView.render().$el
-                    );
-                })
-                .on('cancelDownload', function () {
-                    deleteDialog({ text: gt('Do you really want to cancel your download creation?'), action: 'delete', label: gt('Cancel download creation') }).then(function (action) {
-                        if (action === 'delete') api.cancelDownloadRequest().fail(yell);
-                    });
-                })
-                .on('removefiles', function () {
-                    deleteDialog({ text: gt('Do you really want to delete all available downloads?'), action: 'delete', label: gt('Delete all avaliable downloads') }).then(function (action) {
-                        if (action === 'delete') api.deleteAllFiles().fail(yell);
-                    });
-                });
-
-            // display the correct buttons depending on the current download state
-            switch (downloadStatus.status) {
-                case 'none':
-                    dialog.addCancelButton({ left: true })
-                        .addButton({ action: 'create', label: gt('Create download') });
-                    break;
-                case 'PENDING':
-                    dialog.addButton({ className: 'btn-default', action: 'cancelDownload', label: gt('Cancel download creation') })
-                        .addButton({ action: 'cancel', label: gt('Close') });
-                    break;
-                case 'DONE':
-                    dialog.addButton({ className: 'btn-default', action: 'removefiles', label: gt('Delete all avaliable downloads') })
-                        .addButton({ action: 'cancel', label: gt('Close') });
-                    break;
-                // failsave
-                default:
-                    dialog.addCancelButton({ left: true });
-                    break;
-            }
-
-            dialog.open();
-        }, yell);
-    };
-
-    return {
-        openDialog: openDialog
-    };
-
+    return true;
 });

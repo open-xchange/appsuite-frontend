@@ -266,18 +266,6 @@ define('io.ox/core/settings/pane', [
                     );
                 }
 
-                if (capabilities.has('dataexport')) {
-                    $group.append(
-                        $('<button type="button" class="btn btn-default">')
-                            .text(gt('Download your personal data') + ' ...')
-                            .on('click', function () {
-                                require(['io.ox/core/settings/dialogs/personalDataDialog'], function (personalDataDialog) {
-                                    personalDataDialog.openDialog();
-                                });
-                            })
-                    );
-                }
-
                 // check if users can edit their own data (see bug 34617)
                 if (settings.get('user/internalUserEdit', true)) {
                     $group.append(
