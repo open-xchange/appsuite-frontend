@@ -114,7 +114,7 @@ define('io.ox/core/api/mailfilter', [
             apply: function (params) {
                 return http.GET({
                     module: 'mailfilter/v2',
-                    params: _.extend(params, { action: 'apply' })
+                    params: _.extend({ action: 'apply' }, params)
                 });
             }
         };

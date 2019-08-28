@@ -448,7 +448,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                 dialog.close();
                                 var rule = self.$el.find('a[data-action="apply"]');
                                 rule.empty().append($('<i aria-hidden="true">').addClass('fa fa-refresh fa-spin'));
-                                api.apply({ username: ox.user, folderId: id, scriptId: scriptId })
+                                api.apply({ folderId: id, id: scriptId })
                                     .done(function () {
                                         rule.empty().text(gt('Apply...'));
                                         mailAPI.expunge(id);
