@@ -223,7 +223,7 @@ define('io.ox/mail/common-extensions', [
                 }
 
                 if (status) {
-                    $container.prepend(
+                    $container.append(
                         $('<span data-toggle="popover" data-container="body" class="authenticity">').attr('aria-label', util.getAuthenticityMessage(status, email)).popover({
                             placement: _.device('smartphone') ? 'auto' : 'right',
                             trigger: 'focus hover',
