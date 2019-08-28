@@ -260,12 +260,14 @@ html.macos, html.ios {
     z-index: -5;
 
     .swipe-button {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        flex-direction: column;
         height: 100%;
         width: 95px;
         color:#fff;
-        line-height: 84px;
         font-size: 30px;
-        text-align: center;
         float: right;
 
         &.delete { background: #FF4105; }
