@@ -481,6 +481,8 @@ define('io.ox/chat/data', [
 
         initialize: function () {
             this.on('change:unreadCount', this.onChangeUnreadCount);
+            this.initialized = new $.Deferred();
+            this.once('sync', this.initialized.resolve);
         },
 
         addAsync: function (attr) {
