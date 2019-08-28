@@ -16,11 +16,11 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
 
     var socket,
         // disable debugging for release
-        URI = /*_.url.hash('socket-uri') ? _.url.hash('socket-uri') :*/ ox.abs,
+        URI = _.url.hash('socket-uri') ? _.url.hash('socket-uri') : ox.abs,
         PATH = '/socket.io/appsuite',
         isConnected = false,
         supported,
-        debug = true, //_.url.hash('socket-debug') || ox.debug,
+        debug = _.url.hash('socket-debug') || ox.debug,
         connectionId = getId(),
         options = {
             path: PATH,
