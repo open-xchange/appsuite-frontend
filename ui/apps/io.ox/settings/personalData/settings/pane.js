@@ -125,7 +125,9 @@ define('io.ox/settings/personalData/settings/pane', [
             // 512mb (is hardcoded backend minimum)
             536870912,
             // 1gb
-            1073741824
+            1073741824,
+            // 2gb
+            2147483648
         ],
         deleteDialog = function (options) {
             var def = $.Deferred();
@@ -156,8 +158,7 @@ define('io.ox/settings/personalData/settings/pane', [
                 });
             },
             render: function () {
-                this.$el.empty();
-                if (this.status.get('status') === 'PENDING') return this;
+                this.$el.removeClass('disabled').empty();
 
                 var self = this, checkboxes,
                     supportedFilesizes = _(filesizelimits).filter(function (value) { return value <= self.model.get('maxFileSize'); });
@@ -170,6 +171,9 @@ define('io.ox/settings/personalData/settings/pane', [
                     if (!self.model.get(moduleName)) return;
                     var dropdownView = new Dropdown({ caret: true, model: self.models[moduleName], label: gt('Options') })
                         .header(modules[moduleName].header);
+                    self.models[moduleName].on('change:enabled', function () {
+                        dropdownView.$toggle.attr('aria-disabled', !self.models[moduleName].get('enabled')).toggleClass('disabled', !self.models[moduleName].get('enabled'));
+                    });
 
                     // sub checkboxes (include trash folder etc)
                     _(_(data).keys()).each(function (subOption) {
@@ -180,21 +184,57 @@ define('io.ox/settings/personalData/settings/pane', [
 
                     // main checkbox for the module
                     checkboxes.append(new mini.CustomCheckboxView({ name: 'enabled', label: modules[moduleName].label, model: self.models[moduleName] }).render().$el.addClass('main-option '),
-                        $('<div>').text(modules[moduleName].description),
+                        $('<div class="description">').text(modules[moduleName].description),
                         dropdownView.render().$el);
                 });
 
                 if (supportedFilesizes.length) {
                     this.$el.append(
-                        $('<div class="form-group">').append(
-                            $('<label>').attr('for', 'personaldata-filesizepicker').text(gt('Maximum file size')),
-                            new mini.SelectView({ name: 'maxFileSize', id: 'personaldata-filesizepicker', model: self.model,
-                                list: _(supportedFilesizes).map(function (fileSize) {
-                                    return { label: strings.fileSize(fileSize), value: fileSize };
-                                })
-                            }).render().$el.val(supportedFilesizes[supportedFilesizes.length - 1])
+                        $('<div class="form-group row">').append(
+                            $('<div class="col-md-12">').append(
+                                $('<label>').attr('for', 'personaldata-filesizepicker').text(gt('Maximum file size')),
+                                $('<div class="filepicker-description">').text(gt('Select the maximum allowed filezise before the archive will be split into multiple parts.'))
+                            ),
+                            $('<div class="col-md-6">').append(
+                                new mini.SelectView({ name: 'maxFileSize', id: 'personaldata-filesizepicker', model: self.model,
+                                    list: _(supportedFilesizes).map(function (fileSize) {
+                                        return { label: strings.fileSize(fileSize), value: fileSize };
+                                    })
+                                }).render().$el.val(supportedFilesizes[supportedFilesizes.length - 1])
+                            )
                         )
                     );
+
+                    if (this.status.get('status') === 'PENDING') {
+                        this.$el.addClass('disabled').find('.checkbox,a').addClass('disabled');
+                        this.$el.find('input,select').attr('aria-disabled', true).prop('disabled', 'disabled');
+                    }
+                }
+
+                // display the correct buttons depending on the current download state
+                switch (this.status.get('status')) {
+                    case 'none':
+                        this.$el.append($('<button type="button" class="btn btn-primary">').text(gt('Request download'))
+                            .on('click', function () {
+                                api.requestDownload(self.getDownloadConfig()).fail(yell);
+                            }));
+                        break;
+                    case 'PENDING':
+                        this.$el.append($('<button type="button" class="btn btn-primary">').prop('disabled', 'disabled').text(gt('Request download')));
+                        break;
+                    case 'DONE':
+                        this.$el.append($('<button type="button" class="btn btn-primary">').text(gt('Request new download'))
+                            .on('click', function () {
+                                deleteDialog({ text: gt('By requesting a new download, your currently available downloads will be deleted.'), action: 'delete', label: gt('Delete all avaliable downloads') }).then(function (action) {
+                                    if (action === 'delete') {
+                                        api.deleteAllFiles().then(function () {
+                                            api.requestDownload(self.getDownloadConfig()).fail(yell);
+                                        }, yell);
+                                    }
+                                });
+                            }));
+                        break;
+                    // no default
                 }
 
                 return this;
@@ -210,7 +250,7 @@ define('io.ox/settings/personalData/settings/pane', [
         }),
         // used to display the current state if a download was requested
         downloadView = DisposableView.extend({
-            className: 'personal-data-download-view',
+            className: 'personal-data-download-view row',
             initialize: function () {
                 var self = this;
                 this.listenTo(api, 'updateStatus', function () {
@@ -230,15 +270,23 @@ define('io.ox/settings/personalData/settings/pane', [
 
                 if (this.model.get('status') === 'PENDING') {
                     //#. %1$s: date and time the download was requested
-                    this.$el.append($('<div class="alert alert-info">')
-                    .text(gt('Your requested archive is currently being created. Depending on the size of the requested data this may take hours or days. You will be informed via email when your download is ready.', moment(this.model.get('creationTime')).format('LLL'))));
+                    this.$el.append(
+                        $('<div class="col-xs-12">')
+                            .text(gt('Your requested archive is currently being created. Depending on the size of the requested data this may take hours or days. You will be informed via email when your download is ready.', moment(this.model.get('creationTime')).format('LLL'))),
+                        $('<button type="button" class="cancel-button btn btn-primary">').text(gt('Cancel download'))
+                            .on('click', function () {
+                                deleteDialog({ text: gt('Do you really want to cancel your download request?'), action: 'delete', label: gt('Cancel download') }).then(function (action) {
+                                    if (action === 'delete') api.cancelDownloadRequest().fail(yell);
+                                });
+                            })
+                    );
                 }
 
                 if (this.model.get('status') === 'DONE' && this.model.get('results') && this.model.get('results').length) {
                     this.$el.append(
                         //#. %1$s: date and time when the download expires
-                        $('<label>').text(gt('Your data archive is ready for download. The download is vailable until %1$s.', moment(this.model.get('avaiableUntil')).format('LLL'))),
-                        $('<ul class="list-unstyled downloads">').append(
+                        $('<label class="col-xs-12">').text(gt('Your data archive is ready for download. The download is vailable until %1$s.', moment(this.model.get('avaiableUntil')).format('LLL'))),
+                        $('<ul class="col-md-8 list-unstyled downloads">').append(
                             _(this.model.get('results')).map(function (file) {
                                 return $('<li class="file">')
                                     .append(
@@ -252,50 +300,6 @@ define('io.ox/settings/personalData/settings/pane', [
                                     );
                             })
                         ));
-                }
-
-                return this;
-            }
-        }),
-        // used to display the correct buttons depending on the current state
-        buttonView = DisposableView.extend({
-            className: 'personal-data-button-view',
-            initialize: function (options) {
-                this.selectView = options.selectView;
-                this.model.on('change:status', this.render.bind(this));
-            },
-            render: function () {
-                this.$el.empty();
-                var self = this;
-                // display the correct buttons depending on the current download state
-                switch (this.model.get('status')) {
-                    case 'none':
-                        this.$el.append($('<button type="button" class="btn btn-primary">').text(gt('Request download'))
-                            .on('click', function () {
-                                api.requestDownload(self.selectView.getDownloadConfig()).fail(yell);
-                            }));
-                        break;
-                    case 'PENDING':
-                        this.$el.append($('<button type="button" class="btn btn-default">').text(gt('Cancel download request'))
-                            .on('click', function () {
-                                deleteDialog({ text: gt('Do you really want to cancel your download request?'), action: 'delete', label: gt('Cancel download request') }).then(function (action) {
-                                    if (action === 'delete') api.cancelDownloadRequest().fail(yell);
-                                });
-                            }));
-                        break;
-                    case 'DONE':
-                        this.$el.append($('<button type="button" class="btn btn-primary">').text(gt('Request new download'))
-                            .on('click', function () {
-                                deleteDialog({ text: gt('By requesting a new download, your currently available downloads will be deleted.'), action: 'delete', label: gt('Delete all avaliable downloads') }).then(function (action) {
-                                    if (action === 'delete') {
-                                        api.deleteAllFiles().then(function () {
-                                            api.requestDownload(self.selectView.getDownloadConfig()).fail(yell);
-                                        }, yell);
-                                    }
-                                });
-                            }));
-                        break;
-                    // no default
                 }
 
                 return this;
@@ -329,16 +333,14 @@ define('io.ox/settings/personalData/settings/pane', [
                 // check if this is [data, timestamp]
                 downloadStatus = _.isArray(downloadStatus) ? downloadStatus[0] : downloadStatus;
 
-                var availableModulesModel = new Backbone.Model(availableModules),
+                var availableModulesModel = availableModulesModel || new Backbone.Model(availableModules),
                     status = new Backbone.Model(downloadStatus),
                     sdView = new selectDataView({ model: availableModulesModel, status: status }),
-                    dlView = new downloadView({ model: status }),
-                    bView = new buttonView({ model: status, selectView: sdView });
+                    dlView = new downloadView({ model: status });
 
                 node.append(
-                    sdView.render().$el,
                     dlView.render().$el,
-                    bView.render().$el
+                    sdView.render().$el
                 );
 
             }, yell);

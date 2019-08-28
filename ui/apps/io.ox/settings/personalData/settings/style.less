@@ -12,19 +12,71 @@
  */
 
 .personal-data-view {
+
+    &.disabled, .dropdown a.disabled {
+        color: #767676;
+        cursor: not-allowed;
+        &:hover {
+            text-decoration: none;
+        }
+    }
+
+    padding-top: 2px;
+
+    .checkbox.custom label {
+        font-weight: 500;
+    }
+
+    .checkbox.custom:not(.disabled) label {
+        color: #333;
+    }
+
     .main-option {
-        margin-top: 24px
+        margin-top: 26px;
+        margin-bottom: 0px;
+    }
+
+    .description {
+        line-height: 24px;
+        margin-bottom: 2px;
+    }
+
+    .filepicker-description {
+        margin-bottom: 8px;
     }
 
     .sub-option {
         margin-left: 32px;
     }
+    .form-group {
+        margin-bottom: 20px;
+
+        &.row label {
+            margin-bottom: 4px;
+        }
+    }
+
+
 }
 
 
 .personal-data-download-view {
+
+    margin-bottom: 25px;
+
+    .cancel-button {
+        margin-top: 8px;
+        margin-left: 15px;
+    }
+
     .alert {
         white-space: pre-line;
+        margin-bottom: 14px;
+    }
+
+    label {
+        padding-top: 2px;
+        padding-bottom: 10px;
     }
 
     .file {
