@@ -1101,6 +1101,7 @@ define('io.ox/calendar/week/view', [
                     });
 
                 var index = startLocal.day() - this.model.get('startDate').day();
+                if (index < 0) index += 7;
                 if (this.model.get('mergeView')) index = this.opt.app.folders.list().indexOf(model.get('folder'));
                 // append at the right place
                 this.$('.day').eq(index).append(node);
