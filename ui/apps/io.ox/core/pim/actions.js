@@ -81,6 +81,7 @@ define('io.ox/core/pim/actions', [
     };
 
     var labels = {
+        //#. used as a verb here. label of a button to view attachments
         view: gt('View'),
         download: gt('Download'),
         //#. %1$s is usually "Drive" (product name; might be customized)
