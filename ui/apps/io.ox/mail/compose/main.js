@@ -323,7 +323,7 @@ define('io.ox/mail/compose/main', [
 
         reuse: function (method, data) {
             // only reuse for draft edit
-            if (data.type === 'edit') {
+            if (data && data.type === 'edit') {
                 return ox.ui.App.reuse('io.ox/mail/compose:' + _.cid(data.original) + ':edit');
             }
             return false;
