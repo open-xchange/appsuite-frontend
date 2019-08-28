@@ -17,9 +17,10 @@ define('io.ox/contacts/toolbar', [
     'io.ox/backbone/views/toolbar',
     'gettext!io.ox/contacts',
     'io.ox/contacts/api',
+    'settings!io.ox/contacts',
     'io.ox/contacts/actions',
     'less!io.ox/contacts/style'
-], function (ext, Dropdown, ToolbarView, gt, api) {
+], function (ext, Dropdown, ToolbarView, gt, api, settings) {
 
     'use strict';
 
@@ -153,7 +154,8 @@ define('io.ox/contacts/toolbar', [
         setup: function (app) {
 
             // yep strict false (otherwise toolbar does not redraw when changing between empty folders => contacts are created in the wrong folder)
-            var toolbarView = new ToolbarView({ point: 'io.ox/contacts/toolbar/links', title: app.getTitle(), strict: false });
+            var toolbarView = new ToolbarView({ point: 'io.ox/contacts/toolbar/links', title: app.getTitle(), strict: false }),
+                limit = settings.get('toolbar/limits/fetch', 100);
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbarView.$el
@@ -164,7 +166,7 @@ define('io.ox/contacts/toolbar', [
                 var options = { data: [], folder_id: this.folder.get(), app: this };
                 toolbarView.setSelection(list, function () {
                     if (!list.length) return options;
-                    return (list.length <= 100 ? api.getList(list) : $.when(list)).pipe(function (data) {
+                    return (list.length <= limit ? api.getList(list) : $.when(list)).then(function (data) {
                         options.data = data;
                         return options;
                     });
