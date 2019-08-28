@@ -45,7 +45,9 @@ define('io.ox/core/print', [
 
                 // edge has problems if the content is not trimmed and there is more than one node. So trim and put a wrapper around it.
                 $(document.body).html('<div class="print-wrapper">' + $.trim(_.template(template)(it)) + '</div>');
-                //hint: in case title contains a '.' chrome will cut off at this char when suggesting a filename
+                // Add custom classes, for example to make html mails with custom css work properly
+                if (options.meta.classes) $(document.body).addClass(options.meta.classes);
+                // hint: in case title contains a '.' chrome will cut off at this char when suggesting a filename
                 document.title = escapeTitle(ox.serverConfig.pageTitle || '') + escapeTitle(title.length ? ' ' + title : '') + ' ' + gt('Printout');
             } catch (e) {
                 console.error(e);

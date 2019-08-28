@@ -97,7 +97,9 @@ define('io.ox/mail/print', [
 
                 meta: {
                     fixedWidthFont: settings.get('useFixedWidthFont', false) ? 'fixed-width-font' : '',
-                    format: getType()
+                    format: getType(),
+                    // extra class so css rules work correctly in html mails
+                    classes: 'mail-detail-content'
                 },
 
                 i18n: {

@@ -19,6 +19,7 @@ define('io.ox/files/contextmenu', ['io.ox/core/extensions', 'gettext!io.ox/core'
         // favorites use the same contextmenu as main list view
         'io.ox/files/listview/contextmenu': [
             // #1
+            //#. used as a verb here. label of a button to view files
             ['viewer', '10', gt('View')],
             // #2
             ['favorites/add', '20', gt('Add to favorites')],

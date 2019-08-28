@@ -89,6 +89,7 @@ define('io.ox/core/pim/actions', [
     };
 
     var titles = {
+        //#. used as a verb here. label of a button to view attachments
         view: gt('View'),
         download: gt('Download'),
         downloadZip: gt('Download'),

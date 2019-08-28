@@ -521,7 +521,8 @@ define('io.ox/mail/compose/view', [
                 this.editor.focus();
                 node.removeAttr('data-enter-keydown');
             }
-            this.model.set('subject', value).trigger('keyup:subject', value);
+            // silent: true is needed only for safari - see bugs 35053 and 65438
+            this.model.set('subject', value, { silent: _.device('safari') }).trigger('keyup:subject', value);
         },
 
         setTitle: function () {
@@ -835,22 +836,7 @@ define('io.ox/mail/compose/view', [
             .done(function () {
                 var target;
                 // set focus in compose and forward mode to recipient tokenfield
-                if (_.device('!ios')) {
-                    if (config.is('new|forward')) {
-                        target = self.$('.tokenfield:first .token-input');
-                    } else {
-                        target = self.editor;
-                    }
-                    if (self.editor.tinymce) {
-                        var defaultFontStyle = settings.get('defaultFontStyle', {}),
-                            family = (defaultFontStyle.family || '').split(',')[0];
-                        if (!_.isEmpty(defaultFontStyle)) {
-                            if (family && family !== 'browser-default') self.editor.tinymce().execCommand('fontName', false, family);
-                            if (defaultFontStyle.size && defaultFontStyle.size !== 'browser-default') self.editor.tinymce().execCommand('fontSize', false, defaultFontStyle.size);
-                        }
-                    }
-                    target.focus();
-                }
+                if (_.device('!ios')) target = config.is('new|forward') ? self.$('.tokenfield:first .token-input') : self.editor;
 
                 if (config.is('replyall|edit')) {
                     if (!_.isEmpty(model.get('cc'))) self.toggleTokenfield('cc');
@@ -858,6 +844,17 @@ define('io.ox/mail/compose/view', [
                 if (!_.isEmpty(model.get('bcc'))) self.toggleTokenfield('bcc');
 
                 self.setBody(model.get('content'));
+
+                if (_.device('!ios') && self.editor.tinymce) {
+                    var defaultFontStyle = settings.get('defaultFontStyle', {}),
+                        family = (defaultFontStyle.family || '').split(',')[0];
+                    if (!_.isEmpty(defaultFontStyle)) {
+                        if (family && family !== 'browser-default') self.editor.tinymce().execCommand('fontName', false, family);
+                        if (defaultFontStyle.size && defaultFontStyle.size !== 'browser-default') self.editor.tinymce().execCommand('fontSize', false, defaultFontStyle.size);
+                    }
+                }
+
+                if (target) target.focus();
             });
         },
 
