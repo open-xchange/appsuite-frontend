@@ -53,7 +53,7 @@ define('io.ox/chat/actions/openGroupDialog', [
                 return new pModel.Participant(user);
             }));
 
-            originalModel = model.clone();
+            originalModel = model.has('id') ? model.clone() : new Backbone.Model();
 
             return openDialog(model, participants, originalModel);
         });

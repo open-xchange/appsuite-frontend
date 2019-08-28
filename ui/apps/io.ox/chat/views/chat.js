@@ -241,6 +241,10 @@ define('io.ox/chat/views/chat', [
                 )
             );
 
+            _.defer(function () {
+                this.$editor.focus();
+            }.bind(this));
+
             return this;
         },
 
@@ -279,8 +283,8 @@ define('io.ox/chat/views/chat', [
             return $('<div class="message">')
                 // here we use cid instead of id, since the id might be unknown
                 .attr('data-cid', model.cid)
-                .addClass(model.isSystem() ? 'system' : model.get('type'))
-                .toggleClass('myself', model.isMyself())
+                .addClass(model.get('type'))
+                .toggleClass('myself', !model.isSystem() && model.isMyself())
                 .toggleClass('highlight', !!model.get('id') && model.get('id') === this.messageId)
                 .append(
                     // sender avatar & name
