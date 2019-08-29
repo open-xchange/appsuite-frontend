@@ -1,6 +1,6 @@
 /// <reference path="../../steps.d.ts" />
 
-Feature('Switch translations on the login page');
+Feature('Login: Switch translations');
 
 Before(async (users) => {
     await users.create();
@@ -12,7 +12,7 @@ After(async (users) => {
 
 Scenario('[C7338] on form login page', function (I) {
     I.amOnPage('/');
-    I.wait(1);
+    I.waitForFocus('input[name="username"]');
     I.click('Language');
     I.waitForElement('~Languages');
     I.click('Italiano');
@@ -33,6 +33,7 @@ Scenario('[OXUI-700] for guest users with password', async (I, users) => {
     I.fillField('Enter Password', 'CorrectHorseBatteryStaple');
     const [url] = await I.grabValueFrom('.share-wizard input[type="text"]');
     I.click('Close');
+    I.waitToHide('Create sharing link');
     I.logout();
     I.amOnPage(url.replace(/^https?:\/\/[^\/]+\//, '/'));
     I.waitForFocus('input[name="password"]');

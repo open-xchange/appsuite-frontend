@@ -13,6 +13,8 @@
 
 /// <reference path="../../steps.d.ts" />
 
+const { expect } = require('chai');
+
 Feature('Login');
 
 Before(async (users) => {
@@ -25,7 +27,7 @@ After(async (users) => {
 
 Scenario('[C7336] Successful Login', function (I, users) {
     I.amOnPage('/');
-    I.wait(1);
+    I.waitForFocus('input[name="username"]');
     I.fillField('User name', `${users[0].get('name')}@${users[0].context.id}`);
     I.fillField('Password', users[0].get('password'));
     I.click('Sign in');
@@ -34,26 +36,42 @@ Scenario('[C7336] Successful Login', function (I, users) {
 
 Scenario('[C7337] Unsuccessful Login', function (I, users) {
     I.amOnPage('/');
-    I.wait(1);
+    I.waitForFocus('input[name="username"]');
     I.fillField('User name', `${users[0].get('name')}@${users[0].context.id}`);
     I.fillField('Password', 'wrong password');
     I.click('Sign in');
     I.waitForText('The user name or password is incorrect.');
 });
 
-Scenario('[C7339] Stay signed in checkbox @shaky', function (I) {
+Scenario('[C7339] Stay signed in checkbox', async function (I, users) {
     I.amOnPage('/');
-    I.wait(1);
+    I.waitForFocus('input[name="username"]');
+    I.fillField('User name', `${users[0].get('name')}@${users[0].context.id}`);
+    I.fillField('Password', `${users[0].get('password')}`);
     I.seeCheckboxIsChecked('Stay signed in');
-    I.login();
+    I.click('Sign in');
+    I.waitForVisible('#io-ox-core');
+    let cookies = await I.grabCookie(),
+        secretCookie = cookies.filter(c => c.name.indexOf('open-xchange-secret') === 0)[0];
+
+    expect(secretCookie, 'browser session cookies don\'t have expiry set').to.haveOwnProperty('expiry');
     I.refreshPage();
     I.waitForVisible('#io-ox-core');
     I.logout();
 
-    I.waitForVisible('#io-ox-login-screen');
-    I.waitForInvisible('#background-loader');
+    I.waitForFocus('input[name="username"]');
     I.uncheckOption('Stay signed in');
     I.login();
+    I.waitForVisible('#io-ox-core');
+    cookies = await I.grabCookie();
+    secretCookie = cookies.filter(c => c.name.indexOf('open-xchange-secret') === 0)[0];
+    const sessionCookies = cookies.filter(c => typeof c.expiry === 'undefined');
+
+    expect(secretCookie, 'browser session cookies don\'t have expiry set').not.to.haveOwnProperty('expiry');
+    // simulate a browser restart by removing all session cookies
+    for (let cookie of sessionCookies) {
+        I.clearCookie(cookie.name);
+    }
     I.refreshPage();
     I.waitForVisible('#io-ox-login-screen');
 });
