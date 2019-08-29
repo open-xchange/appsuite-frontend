@@ -205,6 +205,22 @@ define('io.ox/core/links', [
         });
     };
 
+    //
+    // GDPR direct link to settings page
+    //
+    var gdprHandler = function (e) {
+        e.preventDefault();
+        var data = $(this).data();
+        ox.launch('io.ox/settings/main', { folder: data.folder }).done(function () {
+            // special handling for settings (bad, but apparently solved differently)
+            if (_.isFunction(this.setSettingsPane)) this.setSettingsPane({ folder: data.folder });
+            // set proper folder
+            else if (data.folder && this.folder.get() !== data.folder) this.folder.set(data.folder);
+        });
+    };
+
+    $(document).on('click', '.deep-link-gdpr', gdprHandler);
+
     if (capabilities.has('webmail')) {
         $(document).on('click', '.mailto-link', mailHandler);
     }
@@ -217,6 +233,7 @@ define('io.ox/core/links', [
         else if (types.indexOf('deep-link-contacts') >= 0) contactsHandler.call(scope, e);
         else if (types.indexOf('deep-link-calendar') >= 0) calendarHandler.call(scope, e);
         else if (types.indexOf('deep-link-tasks') >= 0) tasksHandler.call(scope, e);
+        else if (types.indexOf('deep-link-gdpr') >= 0) gdprHandler.call(scope, e);
         else if (types.indexOf('deep-link-app') >= 0) appHandler.call(scope, e);
         else if (types.indexOf('mailto-link') >= 0) mailHandler.call(scope, e);
     });
