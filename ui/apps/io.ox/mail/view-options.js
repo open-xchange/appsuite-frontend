@@ -133,7 +133,7 @@ define('io.ox/mail/view-options', [
     };
 
     // search-prototype: changed "false" to "true"
-    var useSearchPrototype = _.device('desktop') && !navigator.webdriver && settings.get('prototypes/search', true);
+    var useSearchPrototype = _.device('desktop') && !navigator.webdriver && settings.get('prototypes/search', false);
     if (useSearchPrototype) {
         ext.point('io.ox/mail/list-view/toolbar/top').extend(searchPrototype);
     }
