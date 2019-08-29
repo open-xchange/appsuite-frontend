@@ -285,13 +285,23 @@ define('io.ox/chat/main', [
 
             data.session.connectSocket();
 
+            contactsAPI.on('reset:image update:image', updatePicture);
+
+            function updatePicture() {
+                $('.picture').replaceWith(
+                    contactsAPI.pictureHalo(
+                        $('<div class="picture" aria-hidden="true">'), { internal_userid: user.id }, { width: 40, height: 40 }
+                    )
+                );
+            }
+
             // start with BAD style and hard-code stuff
             this.$body.empty().addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('chat/width', 320)).append(
                 this.getResizeBar(),
                 $('<div class="chat-leftside">').append(
                     $('<div class="header">').append(
                         contactsAPI.pictureHalo(
-                            $('<div class="picture" aria-hidden="true">'), { internal_userid: data.user_id }, { width: 40, height: 40 }
+                            $('<div class="picture" aria-hidden="true">'), { internal_userid: user.id }, { width: 40, height: 40 }
                         ),
                         $('<div class="dropdown pull-right">').append(
                             $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')

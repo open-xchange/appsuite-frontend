@@ -92,7 +92,7 @@ define('io.ox/chat/data', [
                     id: item.internal_userid,
                     first_name: item.first_name,
                     last_name: item.last_name,
-                    image: !!item['606']
+                    image: !!item.image1_url
                 }, _(item).pick('email1', 'email2', 'email3'));
             });
             return data.users.reset(result);
