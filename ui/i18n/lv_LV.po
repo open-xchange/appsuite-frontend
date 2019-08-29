@@ -8716,10 +8716,6 @@ msgstr "Pārlādēt lapu"
 msgid "Reload statistics"
 msgstr "Pārlādēt statistiku"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Relogin"
-msgstr "Pieslēgties no jauna"
-
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
@@ -9951,16 +9947,6 @@ msgstr ""
 "Daži iestatījumi (valoda, laika zona, tēma) prasa lapas pārlādi vai "
 "atkārtotu pieslēgšnos."
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a relogin to take "
-#| "effect."
-msgid ""
-"Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr ""
-"Daži iestatījumi (valoda, laika zona, tēma) prasa atkārtotu pieslēgšanos."
-
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "Kļūda pie %s konta atkārtotas autorizēšanas."
@@ -10775,10 +10761,6 @@ msgstr "Pakalpojums pašlaik nav pieejams."
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Lai iestatījumi stātos spēkā ir jāveic pārlāde vai atkārtota pielēgšanās."
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "The setting requires a relogin to take effect."
-msgstr "Lai iestatījumi stātos spēkā ir jāveic atkārtota pieslēgšanās."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -18344,6 +18326,9 @@ msgstr "jūsu platforma"
 #~ msgid "Reload current view every:"
 #~ msgstr "Pārlādēt pašreizējo skatu katras:"
 
+#~ msgid "Relogin"
+#~ msgstr "Pieslēgties no jauna"
+
 #~ msgid "Remind me again %1$s"
 #~ msgstr "Atgādināt man pēc %1$s"
 
@@ -19033,6 +19018,16 @@ msgstr "jūsu platforma"
 #~ msgstr ""
 #~ "Daži faili nevar tikt augšupielādēti, jo tie pārsniedz maksimālie "
 #~ "pieļaujamo %1$s izmēra limitu"
+
+#, fuzzy
+#~| msgid ""
+#~| "Some settings (language, timezone, theme) require a relogin to take "
+#~| "effect."
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "Daži iestatījumi (valoda, laika zona, tēma) prasa atkārtotu pieslēgšanos."
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Kāds ir ar jums koplietojis failu"
@@ -19811,6 +19806,9 @@ msgstr "jūsu platforma"
 #~ msgstr ""
 #~ "Iestatījums ir saglabāts un tiks aktivizēts nākamreiz, kad pieslēgsieties "
 #~ "aplikācijai."
+
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr "Lai iestatījumi stātos spēkā ir jāveic atkārtota pieslēgšanās."
 
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "

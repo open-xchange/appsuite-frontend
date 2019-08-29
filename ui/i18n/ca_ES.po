@@ -9152,10 +9152,6 @@ msgstr "Actualitza la pàgina"
 msgid "Reload statistics"
 msgstr "Recarrega les estadístiques"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Relogin"
-msgstr ""
-
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
@@ -10448,12 +10444,6 @@ msgid ""
 "to take effect."
 msgstr "La configuració requereix una recàrrega o reinici per a ser efectiva."
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-msgid ""
-"Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr "La configuració requereix una recàrrega o reinici per a ser efectiva."
-
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "S'ha produït un error en tornar a autoritzar el compte %s."
@@ -11281,12 +11271,6 @@ msgstr "Vista prèvia no disponible"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
-msgstr "La configuració requereix una recàrrega o reinici per a ser efectiva."
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "The setting requires a reload or relogin to take effect."
-msgid "The setting requires a relogin to take effect."
 msgstr "La configuració requereix una recàrrega o reinici per a ser efectiva."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
@@ -15206,6 +15190,13 @@ msgstr "la vostra plataforma"
 #~ "Els comptes de xarxes socials només s'empren per a la descàrrega de "
 #~ "contactes i/o dades del calendari"
 
+#, fuzzy
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "La configuració requereix una recàrrega o reinici per a ser efectiva."
+
 #~ msgid "Something went wrong saving your changes."
 #~ msgstr "S'ha produït un error a l'hora de desar el vostres canvis."
 
@@ -15402,6 +15393,12 @@ msgstr "la vostra plataforma"
 #~ msgstr ""
 #~ "Els ajustaments s'han desat i s'activaran la pròxima vegada que entreu a "
 #~ "l'aplicació."
+
+#, fuzzy
+#~| msgid "The setting requires a reload or relogin to take effect."
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr ""
+#~ "La configuració requereix una recàrrega o reinici per a ser efectiva."
 
 #~ msgid ""
 #~ "The settings for collecting contacts in this folder will become disabled "

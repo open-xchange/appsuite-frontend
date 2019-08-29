@@ -8718,10 +8718,6 @@ msgstr "Znovu načíst"
 msgid "Reload statistics"
 msgstr "Znovu načíst statistiky"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Relogin"
-msgstr "Opětovné přihlášení"
-
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
@@ -9952,17 +9948,6 @@ msgstr ""
 "Některá nastavení (jazyk, časové pásmo, motiv) vyžadují znovunačtení stránky "
 "nebo opětovné přihlášení, aby se projevila."
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a relogin to take "
-#| "effect."
-msgid ""
-"Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr ""
-"Některá nastavení (jazyk, časové pásmo, motiv) vyžadují opětovné přihlášení, "
-"aby se projevila."
-
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "Při opětovné autorizaci účtu %s došlo k chybě."
@@ -10770,10 +10755,6 @@ msgstr "Služba nyní není k dispozici."
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
-msgstr "Aby se nastavení projevilo, je nutné se odhlásit a znovu přihlásit."
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "The setting requires a relogin to take effect."
 msgstr "Aby se nastavení projevilo, je nutné se odhlásit a znovu přihlásit."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
@@ -20477,6 +20458,9 @@ msgstr "vaše platforma"
 #~ msgid "Reload current view every:"
 #~ msgstr "Obnovit stávající pohled každých:"
 
+#~ msgid "Relogin"
+#~ msgstr "Opětovné přihlášení"
+
 #~ msgid "Remind me again %1$s"
 #~ msgstr "Připomenout znovu za %1$s"
 
@@ -21227,6 +21211,17 @@ msgstr "vaše platforma"
 #~ msgstr ""
 #~ "Některé soubory nelze nahrát, protože přesahují maximální povolenou "
 #~ "velikost %1$s"
+
+#, fuzzy
+#~| msgid ""
+#~| "Some settings (language, timezone, theme) require a relogin to take "
+#~| "effect."
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "Některá nastavení (jazyk, časové pásmo, motiv) vyžadují opětovné "
+#~ "přihlášení, aby se projevila."
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Někdo s vámi sdílel soubor"
@@ -22099,6 +22094,9 @@ msgstr "vaše platforma"
 #~ "application the next time."
 #~ msgstr ""
 #~ "Nastavení bylo uloženo a bude aktivováno po příštím vstupu do aplikace."
+
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr "Aby se nastavení projevilo, je nutné se odhlásit a znovu přihlásit."
 
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "

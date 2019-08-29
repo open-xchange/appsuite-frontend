@@ -8641,10 +8641,6 @@ msgstr "Lataa sivu uudelleen"
 msgid "Reload statistics"
 msgstr "Päivitä tilastot"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Relogin"
-msgstr "Kirjaudu sisään"
-
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
@@ -9871,17 +9867,6 @@ msgstr ""
 "Jotkut asetukset (kieli, aikavyöhyke, aihe) tulevat voimaan lataamalla sivu "
 "uudelleen tai uudelleen sisällekirjautumalla."
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a relogin to take "
-#| "effect."
-msgid ""
-"Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr ""
-"Jotkut asetukset (kieli, aikavyöhyke, aihe) tulevat voimaan uudelleen "
-"sisäänkirjautumalla."
-
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "Jotakin meni pieleen uudelleenvaltuutettaessa tiliä %s."
@@ -10688,10 +10673,6 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Asetus vaatii uudelleenlatauksen tai uudelleenkirjautumisen alkaakseen "
 "toimia."
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "The setting requires a relogin to take effect."
-msgstr "Asetus vaatii uudelleenkirjautumisen alkaakseen toimia."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -15400,6 +15381,9 @@ msgstr "alustasi"
 #~ msgid "Related articles"
 #~ msgstr "Samankaltaiset artikkelit"
 
+#~ msgid "Relogin"
+#~ msgstr "Kirjaudu sisään"
+
 #~ msgid "Remind me again %1$s"
 #~ msgstr "Muistuta minua uudestaan %1$s"
 
@@ -15729,6 +15713,17 @@ msgstr "alustasi"
 #~ "of %1$s"
 #~ msgstr ""
 #~ "Joitakin tiedostoja ei voida ladata, koska ne ylittävät %1$s enimmäiskoon"
+
+#, fuzzy
+#~| msgid ""
+#~| "Some settings (language, timezone, theme) require a relogin to take "
+#~| "effect."
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "Jotkut asetukset (kieli, aikavyöhyke, aihe) tulevat voimaan uudelleen "
+#~ "sisäänkirjautumalla."
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Joku jakoi kanssasi tiedoston"
@@ -16137,6 +16132,9 @@ msgstr "alustasi"
 #~ msgstr ""
 #~ "Asetukset ovat tallentuneet ja astuvat voimaan, kun seuraavaksi kirjaudut "
 #~ "ohjelmaan."
+
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr "Asetus vaatii uudelleenkirjautumisen alkaakseen toimia."
 
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "

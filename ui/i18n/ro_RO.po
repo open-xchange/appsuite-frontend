@@ -8763,10 +8763,6 @@ msgstr "Reîncarcă pagina"
 msgid "Reload statistics"
 msgstr "Reîncarcă statisticile"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Relogin"
-msgstr "Reautentificare"
-
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
@@ -9997,17 +9993,6 @@ msgstr ""
 "Anumite setări (limbă, fus orar, temă) necesită o reîncărcare a paginii sau "
 "o reautentificare pentru a avea efect."
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a relogin to take "
-#| "effect."
-msgid ""
-"Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr ""
-"Anumite setări (limbă, fus orar, temă) necesită o reautentificare pentru a "
-"avea efect."
-
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "A apărut o eroare la noua autorizare a contului %s."
@@ -10828,10 +10813,6 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Această setare necesită o reîncărcare sau o reautentificare pentru a avea "
 "efect."
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "The setting requires a relogin to take effect."
-msgstr "Această setare necesită o reautentificare pentru a avea efect."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -18472,6 +18453,9 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Reload current view every:"
 #~ msgstr "Reîncarcă vederea curentă la fiecare:"
 
+#~ msgid "Relogin"
+#~ msgstr "Reautentificare"
+
 #~ msgid "Remind me again %1$s"
 #~ msgstr "Amintește-mi din nou %1$s"
 
@@ -19157,6 +19141,17 @@ msgstr "platforma dumneavoastră"
 #~ msgstr ""
 #~ "Unele fișiere nu pot fi încărcate deoarece depășesc dimensiunea maximă "
 #~ "pentru fișiere de %1$s"
+
+#, fuzzy
+#~| msgid ""
+#~| "Some settings (language, timezone, theme) require a relogin to take "
+#~| "effect."
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "Anumite setări (limbă, fus orar, temă) necesită o reautentificare pentru "
+#~ "a avea efect."
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Un alt utilizator a partajat un fișier cu dumneavoastră"
@@ -19940,6 +19935,9 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "The setting has been saved."
 #~ msgstr "Setarea a fost salvată."
+
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr "Această setare necesită o reautentificare pentru a avea efect."
 
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "

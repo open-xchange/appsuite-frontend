@@ -8787,10 +8787,6 @@ msgstr "Recharger la page"
 msgid "Reload statistics"
 msgstr "Actualiser les statistiques"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Relogin"
-msgstr "Réauthentification"
-
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
@@ -10019,17 +10015,6 @@ msgstr ""
 "Certains réglages (langue, fuseau horaire, thème) nécessitent de recharger "
 "la page ou de vous réauthentifier pour prendre effet."
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a relogin to take "
-#| "effect."
-msgid ""
-"Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr ""
-"Certains réglages (langue, fuseau horaire, thème) nécessitent de vous "
-"réauthentifier pour prendre effet."
-
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "Quelque chose s'est mal passé en autorisant à nouveau le compte %s."
@@ -10856,10 +10841,6 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Ce réglage nécessite de recharger la page ou de vous réauthentifier pour "
 "prendre effet."
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "The setting requires a relogin to take effect."
-msgstr "Ce réglage nécessite de vous réauthentifier pour prendre effet."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -16248,6 +16229,9 @@ msgstr "votre plate-forme"
 #~ msgid "Related articles"
 #~ msgstr "Articles à ce sujet"
 
+#~ msgid "Relogin"
+#~ msgstr "Réauthentification"
+
 #~ msgid "Remind me again %1$s"
 #~ msgstr "Me rappeler à nouveau %1$s"
 
@@ -16642,6 +16626,17 @@ msgstr "votre plate-forme"
 #~ msgstr ""
 #~ "Certains fichiers ne peuvent pas être téléversés car leur taille excède "
 #~ "la taille maximale d'un fichier %1$s"
+
+#, fuzzy
+#~| msgid ""
+#~| "Some settings (language, timezone, theme) require a relogin to take "
+#~| "effect."
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "Certains réglages (langue, fuseau horaire, thème) nécessitent de vous "
+#~ "réauthentifier pour prendre effet."
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Quelqu'un a partagé un fichier avec vous"
@@ -17141,6 +17136,9 @@ msgstr "votre plate-forme"
 #~ msgstr ""
 #~ "Le réglage a été enregistré et sera activé la prochaine fois que vous "
 #~ "entrerez dans l'application."
+
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr "Ce réglage nécessite de vous réauthentifier pour prendre effet."
 
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "

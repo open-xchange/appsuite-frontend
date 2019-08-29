@@ -8899,12 +8899,6 @@ msgstr "Lae lehekülg uuesti"
 msgid "Reload statistics"
 msgstr "Statistika värskendamine"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Login"
-msgid "Relogin"
-msgstr "Kasutajatunnus"
-
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
@@ -10164,17 +10158,6 @@ msgstr ""
 "Mõningate seadete (keel, ajavöönd, kujundusteema) jõustumine eeldab "
 "lehekülje uuesti laadimist või uuesti sisselogimist."
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a page reload or "
-#| "relogin to take effect."
-msgid ""
-"Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr ""
-"Mõningate seadete (keel, ajavöönd, kujundusteema) jõustumine eeldab "
-"lehekülje uuesti laadimist või uuesti sisselogimist."
-
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "%s konto taaskinnitamisel läks miski viltu."
@@ -10994,13 +10977,6 @@ msgstr "Soovitud rakendus ei ole hetkel kättesaadav."
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
-msgstr ""
-"Seadistuse jõustumine eeldab uuesti laadimist või uuesti sisselogimist."
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "The setting requires a reload or relogin to take effect."
-msgid "The setting requires a relogin to take effect."
 msgstr ""
 "Seadistuse jõustumine eeldab uuesti laadimist või uuesti sisselogimist."
 
@@ -14539,6 +14515,11 @@ msgstr "teie platvorm"
 #~ msgid "Related articles"
 #~ msgstr "Seotud artiklid"
 
+#, fuzzy
+#~| msgid "Login"
+#~ msgid "Relogin"
+#~ msgstr "Kasutajatunnus"
+
 #~ msgid "Remind me again %1$s"
 #~ msgstr "Meenutage uuesti %1$s pärast"
 
@@ -14667,6 +14648,17 @@ msgstr "teie platvorm"
 #~ msgstr ""
 #~ "Mõningaid faile ei saa üles laadida, sest need ületavad maksimaalse "
 #~ "failisuuruse piirangut %1$s"
+
+#, fuzzy
+#~| msgid ""
+#~| "Some settings (language, timezone, theme) require a page reload or "
+#~| "relogin to take effect."
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "Mõningate seadete (keel, ajavöönd, kujundusteema) jõustumine eeldab "
+#~ "lehekülje uuesti laadimist või uuesti sisselogimist."
 
 #~ msgid "Something went wrong saving your changes."
 #~ msgstr "Midagi läks muudatuste salvestamisel viltu."
@@ -14887,6 +14879,12 @@ msgstr "teie platvorm"
 #~ msgstr ""
 #~ "Seadistus on salvestatud ja muutub aktiivseks, kui te rakendusse "
 #~ "järgmisel korral sisenete."
+
+#, fuzzy
+#~| msgid "The setting requires a reload or relogin to take effect."
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr ""
+#~ "Seadistuse jõustumine eeldab uuesti laadimist või uuesti sisselogimist."
 
 #~ msgid "The start date must be before the end date."
 #~ msgstr "Alguskuupäev peab olema enne lõppkuupäeva."

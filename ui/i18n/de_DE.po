@@ -8672,10 +8672,6 @@ msgstr "Seite neu laden"
 msgid "Reload statistics"
 msgstr "Statistiken neu laden"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Relogin"
-msgstr "Erneut anmelden"
-
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
@@ -9896,13 +9892,6 @@ msgstr ""
 "Einige Einstellungen (z.B. Sprache und Zeitzone) werden erst nach dem "
 "erneuten Laden der Seite oder einer Neuanmeldung wirksam."
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid ""
-"Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr ""
-"Einige Einstellungen (z.B. Sprache und Zeitzone) werden erst nach einer "
-"Neuanmeldung wirksam."
-
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "Beim erneuten Autorisieren des %s-Kontos trat ein Fehler auf."
@@ -10722,10 +10711,6 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Zum Aktivieren der Einstellung ist ein erneutes Laden oder Anmelden "
 "erforderlich."
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "The setting requires a relogin to take effect."
-msgstr "Zum Aktivieren der Einstellung ist ein erneutes Anmelden erforderlich."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -17560,6 +17545,9 @@ msgstr "Ihre Plattform"
 #~ msgid "Related articles"
 #~ msgstr "Verwandte Artikel"
 
+#~ msgid "Relogin"
+#~ msgstr "Erneut anmelden"
+
 #~ msgid "Remind me again %1$s"
 #~ msgstr "Erneut erinnern %1$s"
 
@@ -18117,6 +18105,13 @@ msgstr "Ihre Plattform"
 #~ msgstr ""
 #~ "Einige Dateien können nicht hochgeladen werden, da sie die maximale "
 #~ "Dateigröße von %1$s überschreiten."
+
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "Einige Einstellungen (z.B. Sprache und Zeitzone) werden erst nach einer "
+#~ "Neuanmeldung wirksam."
 
 #~ msgid ""
 #~ "Some settings (language, timezone, theme) require a page reload or "
@@ -18741,6 +18736,10 @@ msgstr "Ihre Plattform"
 
 #~ msgid "The setting has been saved."
 #~ msgstr "Die Einstellung wurde gespeichert."
+
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr ""
+#~ "Zum Aktivieren der Einstellung ist ein erneutes Anmelden erforderlich."
 
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "

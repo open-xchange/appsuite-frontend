@@ -8564,10 +8564,6 @@ msgstr "重新載入頁面"
 msgid "Reload statistics"
 msgstr "重新載入統計資訊"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Relogin"
-msgstr "重新登入"
-
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
@@ -9789,15 +9785,6 @@ msgid ""
 "to take effect."
 msgstr "某些設定（語言、時區、佈景主題）需要重新載入頁面或重新登入後才會生效。"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a relogin to take "
-#| "effect."
-msgid ""
-"Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr "某些設定（語言、時區、佈景主題）需要重新登入才能生效。"
-
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "重新授權 %s 帳號時發生某些錯誤。"
@@ -10579,10 +10566,6 @@ msgstr "服務目前暫時無法使用。"
 #: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
 msgstr "此選項需要重新載入或重新登入才能生效。"
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "The setting requires a relogin to take effect."
-msgstr "此選項需要重新登入才能生效。"
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -16834,6 +16817,9 @@ msgstr "您的平台"
 #~ msgid "Related articles"
 #~ msgstr "相關文件"
 
+#~ msgid "Relogin"
+#~ msgstr "重新登入"
+
 #~ msgid "Remind me again %1$s"
 #~ msgstr "%1$s 後再次提醒我"
 
@@ -17247,6 +17233,15 @@ msgstr "您的平台"
 #~ "Some files cannot be uploaded because they exceed the maximum file size "
 #~ "of %1$s"
 #~ msgstr "因為超過了檔案大小限制 %1$s，無法上傳檔案"
+
+#, fuzzy
+#~| msgid ""
+#~| "Some settings (language, timezone, theme) require a relogin to take "
+#~| "effect."
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr "某些設定（語言、時區、佈景主題）需要重新登入才能生效。"
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "某人與您分享了檔案"
@@ -17706,6 +17701,9 @@ msgstr "您的平台"
 #~ "The setting has been saved and will become active when you enter the "
 #~ "application the next time."
 #~ msgstr "選項已被儲存，將會在您下次進入應用程式時生效。"
+
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr "此選項需要重新登入才能生效。"
 
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "

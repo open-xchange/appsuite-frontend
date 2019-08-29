@@ -8714,10 +8714,6 @@ msgstr "Перезагрузить страницу"
 msgid "Reload statistics"
 msgstr "Обновить статистику"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Relogin"
-msgstr "Войти снова"
-
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
@@ -9950,17 +9946,6 @@ msgstr ""
 "Для активации некоторых параметров (языка, часового пояса, темы) необходимо "
 "перезагрузить страницу или заново авторизоваться."
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a relogin to take "
-#| "effect."
-msgid ""
-"Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr ""
-"Для активации некоторых параметров (языка, часового пояса, темы) необходимо "
-"заново авторизоваться."
-
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "Не удалось повторно авторизовать %s."
@@ -10770,10 +10755,6 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Чтобы изменения вступили в силу, необходимо перезагрузить или авторизоваться "
 "заново."
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "The setting requires a relogin to take effect."
-msgstr "Изменения вступят в силу после следующей авторизации."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -15802,6 +15783,9 @@ msgstr "вашей платформы"
 #~ msgid "Related articles"
 #~ msgstr "Связанные статьи"
 
+#~ msgid "Relogin"
+#~ msgstr "Войти снова"
+
 #~ msgid "Remind me again %1$s"
 #~ msgstr "Напомнить снова %1$s"
 
@@ -16178,6 +16162,17 @@ msgstr "вашей платформы"
 #~ msgstr ""
 #~ "Некоторые файлы не были добавлены, так как их размер превышает "
 #~ "максимально допустимый размер (%1$s)"
+
+#, fuzzy
+#~| msgid ""
+#~| "Some settings (language, timezone, theme) require a relogin to take "
+#~| "effect."
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "Для активации некоторых параметров (языка, часового пояса, темы) "
+#~ "необходимо заново авторизоваться."
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Вам предоставлен общий доступ к файлу"
@@ -16608,6 +16603,9 @@ msgstr "вашей платформы"
 #~ "application the next time."
 #~ msgstr ""
 #~ "Параметр сохранен и вступит в силу при следующем запуске приложения."
+
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr "Изменения вступят в силу после следующей авторизации."
 
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "

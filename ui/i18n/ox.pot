@@ -7084,11 +7084,6 @@ msgstr ""
 
 #: apps/io.ox/core/settings/pane.js
 #: module:io.ox/core
-msgid "Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr ""
-
-#: apps/io.ox/core/settings/pane.js
-#: module:io.ox/core
 msgid "Customized"
 msgstr ""
 
@@ -7173,17 +7168,7 @@ msgstr ""
 
 #: apps/io.ox/core/settings/pane.js
 #: module:io.ox/core
-msgid "The setting requires a relogin to take effect."
-msgstr ""
-
-#: apps/io.ox/core/settings/pane.js
-#: module:io.ox/core
 msgid "Reload page"
-msgstr ""
-
-#: apps/io.ox/core/settings/pane.js
-#: module:io.ox/core
-msgid "Relogin"
 msgstr ""
 
 #: apps/io.ox/core/settings/pane.js

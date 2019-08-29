@@ -8697,10 +8697,6 @@ msgstr ""
 msgid "Reload statistics"
 msgstr ""
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Relogin"
-msgstr ""
-
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
@@ -9933,11 +9929,6 @@ msgid ""
 "to take effect."
 msgstr ""
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid ""
-"Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr ""
-
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
 msgstr ""
@@ -10721,10 +10712,6 @@ msgstr ""
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
-msgstr ""
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "The setting requires a relogin to take effect."
 msgstr ""
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks

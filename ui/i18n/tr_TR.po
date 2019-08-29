@@ -8644,10 +8644,6 @@ msgstr "Sayfayı yenile"
 msgid "Reload statistics"
 msgstr "İstatistikleri yenile"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Relogin"
-msgstr "Yeniden giriş yap"
-
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
@@ -9874,17 +9870,6 @@ msgstr ""
 "Bazı ayarların (dil, saat dilimi, tema) etkinleşmesi için sayfayı "
 "yenilemeniz veya yeniden giriş yapmanız gerekir."
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a relogin to take "
-#| "effect."
-msgid ""
-"Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr ""
-"Bazı ayarların (dil, saat dilimi, tema) etkinleşmesi için yeniden giriş "
-"yapmanız gerekir."
-
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "%s hesabı yeniden yetkilendirilirken bir sorun oluştu."
@@ -10688,10 +10673,6 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Ayarların etkili olması için sayfayı yeniden yüklemeli veya yeniden giriş "
 "yapmalısınız."
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "The setting requires a relogin to take effect."
-msgstr "Ayarların etkili olması için yeniden giriş yapmalısınız."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -13565,6 +13546,9 @@ msgstr "platformunuz"
 #~ msgid "Related articles"
 #~ msgstr "İlgili makaleler"
 
+#~ msgid "Relogin"
+#~ msgstr "Yeniden giriş yap"
+
 #~ msgid "Reply to all"
 #~ msgstr "Tümünü yanıtla"
 
@@ -13626,6 +13610,17 @@ msgstr "platformunuz"
 #~ "Bazı dosyalar %1$s olan maksimum dosya boyutunu geçtiği için "
 #~ "yüklenemiyorlar"
 
+#, fuzzy
+#~| msgid ""
+#~| "Some settings (language, timezone, theme) require a relogin to take "
+#~| "effect."
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "Bazı ayarların (dil, saat dilimi, tema) etkinleşmesi için yeniden giriş "
+#~ "yapmanız gerekir."
+
 #~ msgid "Something went wrong.  Please try again later."
 #~ msgstr "Bir hata oluştu.  Lütfen daha sonra yeniden deneyin."
 
@@ -13645,6 +13640,9 @@ msgstr "platformunuz"
 #~ msgstr ""
 #~ "Tüm dosyalar %1$s olan maksimum dosya boyutunu geçtiği için "
 #~ "yüklenemiyorlar"
+
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr "Ayarların etkili olması için yeniden giriş yapmalısınız."
 
 #~ msgid ""
 #~ "There are more than %n appointments in the current calendar. Some "

@@ -8686,10 +8686,6 @@ msgstr "Genindlæs side"
 msgid "Reload statistics"
 msgstr "Genindlæs statistikker"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Relogin"
-msgstr "Login igen"
-
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
@@ -9915,17 +9911,6 @@ msgstr ""
 "Visse indstillinger (sprog, tidszone, tema) kræver at du genindlæser siden "
 "eller logger ud og ind igen, for at træde i kraft."
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a relogin to take "
-#| "effect."
-msgid ""
-"Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr ""
-"Visse indstillinger (sprog, tidszone, tema) kræver at du logger ud og ind "
-"igen, for at træde i kraft."
-
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "Der gik noget galt med at re-godkende denne %s konto."
@@ -10736,10 +10721,6 @@ msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Indstillingen kræver en genindlæsning, eller at der logges ind igen, for at "
 "træde i kraft."
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "The setting requires a relogin to take effect."
-msgstr "Denne indstilling kræver at der logges ind igen."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -15694,6 +15675,9 @@ msgstr "din platform"
 #~ msgid "Related articles"
 #~ msgstr "Relaterede artikler"
 
+#~ msgid "Relogin"
+#~ msgstr "Login igen"
+
 #~ msgid "Remind me again %1$s"
 #~ msgstr "Påmind mig igen %1$s"
 
@@ -16055,6 +16039,17 @@ msgstr "din platform"
 #~ "of %1$s"
 #~ msgstr ""
 #~ "Nogle filer kan ikke overføres, da deres størrelser er over loftet på %1$s"
+
+#, fuzzy
+#~| msgid ""
+#~| "Some settings (language, timezone, theme) require a relogin to take "
+#~| "effect."
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "Visse indstillinger (sprog, tidszone, tema) kræver at du logger ud og ind "
+#~ "igen, for at træde i kraft."
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Der var en der delte en fil med dig"
@@ -16476,6 +16471,9 @@ msgstr "din platform"
 #~ msgstr ""
 #~ "Indstillingen er blevet gemt, og vil være aktiv næste gang du starter "
 #~ "programmet."
+
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr "Denne indstilling kræver at der logges ind igen."
 
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "

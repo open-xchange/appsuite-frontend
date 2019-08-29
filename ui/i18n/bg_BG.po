@@ -8907,12 +8907,6 @@ msgstr "Презареждане на страницата"
 msgid "Reload statistics"
 msgstr "Презареждане на статистическите данни"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Login"
-msgid "Relogin"
-msgstr "Вход"
-
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
@@ -10169,17 +10163,6 @@ msgstr ""
 "Някои настройки (език, часова зона, тема) изискват презареждане или "
 "релефване на страницата, за да влезе в сила."
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a page reload or "
-#| "relogin to take effect."
-msgid ""
-"Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr ""
-"Някои настройки (език, часова зона, тема) изискват презареждане или "
-"релефване на страницата, за да влезе в сила."
-
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "Нещо се обърка, като повторната оторизация на %s  акаунт."
@@ -10990,12 +10973,6 @@ msgstr "Поисканото заявление в момента не е нал
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
-msgstr "Настройката изисква презареждане, за да влезе в сила."
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "The setting requires a reload or relogin to take effect."
-msgid "The setting requires a relogin to take effect."
 msgstr "Настройката изисква презареждане, за да влезе в сила."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
@@ -14163,6 +14140,11 @@ msgstr "вашата платформа"
 #~ msgstr "Свързани статии"
 
 #, fuzzy
+#~| msgid "Login"
+#~ msgid "Relogin"
+#~ msgstr "Вход"
+
+#, fuzzy
 #~ msgid "Remove restore point: \"%1$s\""
 #~ msgstr "Покани към нова среща"
 
@@ -14256,6 +14238,17 @@ msgstr "вашата платформа"
 #~ msgstr "Размер (байтове)"
 
 #, fuzzy
+#~| msgid ""
+#~| "Some settings (language, timezone, theme) require a page reload or "
+#~| "relogin to take effect."
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "Някои настройки (език, часова зона, тема) изискват презареждане или "
+#~ "релефване на страницата, за да влезе в сила."
+
+#, fuzzy
 #~ msgid "Start local presentation"
 #~ msgstr "Започни отдалечена презентация"
 
@@ -14282,6 +14275,11 @@ msgstr "вашата платформа"
 #~ msgctxt "help"
 #~ msgid "The Drive App"
 #~ msgstr "Приложението \"Драйв\""
+
+#, fuzzy
+#~| msgid "The setting requires a reload or relogin to take effect."
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr "Настройката изисква презареждане, за да влезе в сила."
 
 #~ msgid ""
 #~ "There are more than %n appointments in the current calendar. Some "

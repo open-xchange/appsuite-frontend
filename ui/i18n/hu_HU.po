@@ -8701,10 +8701,6 @@ msgstr "Oldal újratöltése"
 msgid "Reload statistics"
 msgstr "Statisztika újratöltése"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Relogin"
-msgstr "Bejelentkezés újra"
-
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
@@ -9936,16 +9932,6 @@ msgstr ""
 "Néhány beállítás (nyelv, időzóna, téma) módosításához újra kell tölteni az "
 "oldalt vagy újra be kell lépni."
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a relogin to take "
-#| "effect."
-msgid ""
-"Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr ""
-"Néhány beállítás (nyelv, időzóna, téma) módosításához újra be kell lépni."
-
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "Hiba történt a %s fiók újra felhatalmazásakor."
@@ -10761,10 +10747,6 @@ msgstr "A szolgáltatás jelenleg nem érhető el."
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "A beállítás módosításához újratöltés vagy újra bejelentkezés szükséges."
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "The setting requires a relogin to take effect."
-msgstr "A beállítás módosításához újra be kell jelentkezni."
 
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -14846,6 +14828,9 @@ msgstr "az Ön rendszere"
 #~ msgid "Related articles"
 #~ msgstr "Kapcsolódó leírások"
 
+#~ msgid "Relogin"
+#~ msgstr "Bejelentkezés újra"
+
 #~ msgid "Remind me again %1$s"
 #~ msgstr "Emlékeztessen újra: %1$s"
 
@@ -15081,6 +15066,16 @@ msgstr "az Ön rendszere"
 #~ "of %1$s"
 #~ msgstr ""
 #~ "Néhány fájl nem tölthető fel, mert meghaladja a maximális %1$s fájlméretet"
+
+#, fuzzy
+#~| msgid ""
+#~| "Some settings (language, timezone, theme) require a relogin to take "
+#~| "effect."
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "Néhány beállítás (nyelv, időzóna, téma) módosításához újra be kell lépni."
 
 #~ msgid "Something went wrong reauthorizing the account."
 #~ msgstr "Hiba történt a fiók újra felhatalmazásakor."
@@ -15331,6 +15326,9 @@ msgstr "az Ön rendszere"
 #~ msgstr ""
 #~ "A beállítás mentésre került, és az alkalmazásba való következő belépéskor "
 #~ "lesz aktív."
+
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr "A beállítás módosításához újra be kell jelentkezni."
 
 #~ msgid "The start date must be before the end date."
 #~ msgstr "A kezdő dátumnak a befejező dátum előtt kell lennie."

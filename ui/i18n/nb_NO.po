@@ -8908,12 +8908,6 @@ msgstr "Last siden på nytt"
 msgid "Reload statistics"
 msgstr "Oppdater statistikk"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Login"
-msgid "Relogin"
-msgstr "Innlogging"
-
 #. %1$s remaining upload time
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "Remaining time: %1$s"
@@ -10171,17 +10165,6 @@ msgstr ""
 "Noen innstillinger (f. eks. språk eller tidssone) krever at siden "
 "oppdateres, eller at du logger ut og inn igjen, for å se endringene."
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Some settings (language, timezone, theme) require a page reload or "
-#| "relogin to take effect."
-msgid ""
-"Some settings (e.g. language and timezone) require a relogin to take effect."
-msgstr ""
-"Noen innstillinger (f. eks. språk eller tidssone) krever at siden "
-"oppdateres, eller at du logger ut og inn igjen, for å se endringene."
-
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "Noe gikk galt ved reautorisering av %s-kontoen."
@@ -10994,13 +10977,6 @@ msgstr "Den forespurte applikasjonen er ikke tilgjengelig for øyeblikket."
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
 msgid "The setting requires a reload or relogin to take effect."
-msgstr ""
-"Innstillingen krever en oppdatering eller logg inn på nytt for å få effekt."
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "The setting requires a reload or relogin to take effect."
-msgid "The setting requires a relogin to take effect."
 msgstr ""
 "Innstillingen krever en oppdatering eller logg inn på nytt for å få effekt."
 
@@ -14870,6 +14846,11 @@ msgstr "plattformen din"
 #~ msgid "Related articles"
 #~ msgstr "Relaterte artikler"
 
+#, fuzzy
+#~| msgid "Login"
+#~ msgid "Relogin"
+#~ msgstr "Innlogging"
+
 #~ msgid "Remind me again %1$s"
 #~ msgstr "Minn meg på dette igjen %1$s"
 
@@ -15091,6 +15072,17 @@ msgstr "plattformen din"
 #~ msgstr ""
 #~ "Noen filer kunne ikke lastes opp fordi de overskrider den maksimalt "
 #~ "tillatte filstørrelsen på %1$s"
+
+#, fuzzy
+#~| msgid ""
+#~| "Some settings (language, timezone, theme) require a page reload or "
+#~| "relogin to take effect."
+#~ msgid ""
+#~ "Some settings (e.g. language and timezone) require a relogin to take "
+#~ "effect."
+#~ msgstr ""
+#~ "Noen innstillinger (f. eks. språk eller tidssone) krever at siden "
+#~ "oppdateres, eller at du logger ut og inn igjen, for å se endringene."
 
 #~ msgid "Someone shared a file with you"
 #~ msgstr "Noen delte en fil med deg"
@@ -15346,6 +15338,13 @@ msgstr "plattformen din"
 #~ msgstr ""
 #~ "Innstillingen er lagret og vil bli aktiv når du går inn i programmet "
 #~ "neste gang."
+
+#, fuzzy
+#~| msgid "The setting requires a reload or relogin to take effect."
+#~ msgid "The setting requires a relogin to take effect."
+#~ msgstr ""
+#~ "Innstillingen krever en oppdatering eller logg inn på nytt for å få "
+#~ "effekt."
 
 #~ msgid "The start date must be before the end date."
 #~ msgstr "Startdatoen må være før sluttdatoen."
