@@ -172,18 +172,21 @@ define('io.ox/chat/extensions/register', [
         action: function (baton) {
             if (!data.user) return console.log('Please authenticate in chat first');
 
-            var mail = baton.data,
-                reference = mail.headers['Message-ID'] || mail.cid,
-                addresses = [].concat(mail.from, mail.to, mail.cc, mail.bcc);
+            require(['io.ox/mail/api']).then(function (api) {
+                return api.get(_.cid(baton.data));
+            }).then(function (mail) {
+                var reference = mail.headers['Message-ID'] || mail.cid,
+                    addresses = [].concat(mail.from, mail.to, mail.cc, mail.bcc);
 
-            addresses = _(addresses).chain().map(function (address) {
-                return address[1];
-            }).compact().unique().without(data.user.email).value();
+                addresses = _(addresses).chain().map(function (address) {
+                    return address[1];
+                }).compact().unique().without(data.user.email).value();
 
-            startGroupChat({
-                title: mail.subject,
-                members: addresses,
-                reference: 'mail//' + reference
+                startGroupChat({
+                    title: mail.subject,
+                    members: addresses,
+                    reference: 'mail//' + reference
+                });
             });
         }
     });
