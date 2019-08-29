@@ -151,31 +151,27 @@ define('io.ox/chat/actions/openGroupDialog', [
         return def.promise();
     }
 
-    var point = views.point('io.ox/chat/actions/openGroupDialog');
-    point.extend(new PictureUpload({
-        id: 'upload-group-picture',
-        index: 250,
-        customizeNode: function () {
-            this.$el.addClass('contact-picture-upload f6-target');
-        },
-        render: function () {
-            var guid = _.uniqueId('form-picture-upload-');
-            var fileId = this.model.get('fileId');
-            var imageUrl = fileId ? data.API_ROOT + '/files/' + fileId + '/thumbnail' : undefined;
+    var point = views.point('io.ox/chat/actions/openGroupDialog'),
+        pictureUpload = new PictureUpload({
+            id: 'upload-group-picture',
+            index: 250,
+            customizeNode: function () {
+                this.$el.addClass('contact-picture-upload f6-target');
+            }
+        });
 
-            this.$el.append(
-                this.imgCon = $('<div class="picture-uploader thumbnail">').append(
-                    this.closeBtn = $('<button type="button" class="reset close">').attr('title', 'Remove')
-                        .append('<i class="fa fa-times" aria-hidden="true">'),
-                    this.addImgText = $('<div class="add-img-text">')
-                        .append($('<label>').attr('for', guid).text('Upload image'))
-                ),
-                $('<form>').append(this.fileInput = $('<input type="file" name="file" class="file" accept="image/*">').attr('id', guid))
-            );
+    pictureUpload.render = _.wrap(pictureUpload.render, function (render) {
+        render.call(this);
+        var fileId = this.model.get('fileId'),
+            imageUrl = fileId ? data.API_ROOT + '/files/' + fileId + '/thumbnail' : undefined;
 
-            this.setPreview(imageUrl);
-        }
-    }), {
+        if (imageUrl) this.setPreview(imageUrl);
+        this.fileInput.attr('data-state', 'manual');
+
+        return this;
+    });
+
+    point.extend(pictureUpload, {
         // need to use render function here because view encapsulation requires the draw function to be called
         // but dialogs invoke render
         render: function (baton) {
