@@ -450,7 +450,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                 rule.empty().append($('<i aria-hidden="true">').addClass('fa fa-refresh fa-spin'));
                                 api.apply({ folderId: id, id: scriptId })
                                     .then(function () {
-                                        rule.empty().text(gt('Apply...'));
                                         return mailAPI.expunge(id);
                                     })
                                     .fail(function (response) {
@@ -461,6 +460,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                             o.collection.expire();
                                         });
                                         mailAPI.refresh();
+                                        rule.empty().text(gt('Apply...'));
                                     });
                             },
                             module: 'mail',

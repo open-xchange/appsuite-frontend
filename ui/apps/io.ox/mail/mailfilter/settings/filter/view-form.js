@@ -340,7 +340,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 var self = this,
                     scriptId;
 
-                this.model.save().then(function (id) {
+                var ruleStored = this.model.save().then(function (id) {
                     scriptId = id;
                     //first rule gets 0
                     if (!_.isUndefined(id) && !_.isNull(id) && !_.isUndefined(self.listView)) {
@@ -358,18 +358,25 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     context: 'filter',
                     title: gt('Select the folder to apply the rule to'),
                     done: function (id, dialog) {
-
-                        var rule = self.listView.$el.find('li[data-id="' + scriptId + '"] a[data-action="apply"]');
-                        rule.empty().append($('<i aria-hidden="true">').addClass('fa fa-refresh fa-spin'));
-
+                        var rule;
                         dialog.close();
-                        api.apply({ username: ox.user, folderId: id, scriptId: scriptId })
-                            .done(function () {
-                                mailAPI.expunge(id);
-                                rule.empty().text(gt('Apply...'));
-                            }).fail(function (response) {
-                                notifications.yell('error', response.error);
+                        ruleStored.then(function () {
+                            rule = self.listView.$el.find('li[data-id="' + scriptId + '"] a[data-action="apply"]');
+                            rule.empty().append($('<i aria-hidden="true">').addClass('fa fa-refresh fa-spin'));
+
+                            return api.apply({ folderId: id, id: scriptId });
+                        }).then(function () {
+                            return mailAPI.expunge(id);
+                        }).fail(function (response) {
+                            notifications.yell('error', response.error);
+                        }).then(function () {
+                            // applied rule might have moved mails into folders or changed mails
+                            _(mailAPI.pool.getCollections()).forEach(function (o) {
+                                o.collection.expire();
                             });
+                            mailAPI.refresh();
+                            rule.empty().text(gt('Apply...'));
+                        });
                     },
                     cancel: function () {
                         self.dialog.idle();
