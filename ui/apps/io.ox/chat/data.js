@@ -490,7 +490,7 @@ define('io.ox/chat/data', [
 
             var collection = this,
                 data = _.extend({
-                    open: true, title: '', type: 'group'
+                    open: true, type: 'group'
                 }, _(attr).pick('title', 'type', 'members', 'description', 'file', 'reference')),
                 formData = new FormData();
 
