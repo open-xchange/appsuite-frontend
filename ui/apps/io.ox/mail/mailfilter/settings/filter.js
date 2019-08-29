@@ -449,12 +449,18 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                 var rule = self.$el.find('a[data-action="apply"]');
                                 rule.empty().append($('<i aria-hidden="true">').addClass('fa fa-refresh fa-spin'));
                                 api.apply({ folderId: id, id: scriptId })
-                                    .done(function () {
+                                    .then(function () {
                                         rule.empty().text(gt('Apply...'));
-                                        mailAPI.expunge(id);
+                                        return mailAPI.expunge(id);
                                     })
                                     .fail(function (response) {
                                         notifications.yell('error', response.error);
+                                    }).then(function () {
+                                        // applied rule might have moved mails into folders or changed mails
+                                        _(mailAPI.pool.getCollections()).forEach(function (o) {
+                                            o.collection.expire();
+                                        });
+                                        mailAPI.refresh();
                                     });
                             },
                             module: 'mail',
