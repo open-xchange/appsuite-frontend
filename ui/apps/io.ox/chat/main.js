@@ -116,7 +116,9 @@ define('io.ox/chat/main', [
         startPrivateChat: function (cmd) {
             // try to reuse chat
             var chat = data.chats.find(function (model) {
-                return model.get('type') === 'private' && model.get('members').indexOf(cmd.email) >= 0;
+                return model.get('type') === 'private' && model.get('members').map(function (a) {
+                    return a.email;
+                }).indexOf(cmd.email) >= 0;
             });
             if (chat) return this.showChat(chat.id);
 
