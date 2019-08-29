@@ -34,9 +34,9 @@ define('io.ox/settings/personalData/settings/pane', [
             'mail': {
                 'label': gt('Email'),
                 'description': gt('Includes all emails from your primary mail account as eml files.'),
-                //#. header for a dropdown
-                'header': gt('Included folders'),
                 'includeTrash': {
+                    //#. header for a dropdown
+                    'header': gt('Included folders'),
                     //#. shown when a download of mail data is requested
                     'label': gt('Trash folder')
                 },
@@ -48,9 +48,9 @@ define('io.ox/settings/personalData/settings/pane', [
             'calendar': {
                 'label': gt('Calendar'),
                 'description': gt('Includes all appointments from your calendars as ical files.'),
-                //#. header for a dropdown
-                'header': gt('Included calendars'),
                 'includePublic': {
+                    //#. header for a dropdown
+                    'header': gt('Included calendars'),
                     //#. shown when a download of calendar data is requested
                     'label': gt('Public calendars')
                 },
@@ -66,9 +66,9 @@ define('io.ox/settings/personalData/settings/pane', [
             'contacts': {
                 'label': gt('Address book'),
                 'description': gt('Includes all contact data from your address books as vcard files.'),
-                //#. header for a dropdown
-                'header': gt('Included address books'),
                 'includePublic': {
+                    //#. header for a dropdown
+                    'header': gt('Included address books'),
                     //#. shown when a download of contact data is requested
                     'label': gt('Public address books')
                 },
@@ -77,18 +77,20 @@ define('io.ox/settings/personalData/settings/pane', [
                     'label': gt('Shared address books')
                 },
                 'includeDistributionLists': {
+                    //#. header for a dropdown
+                    'header': gt('Additional options'),
                     divider: true,
                     //#. shown when a download of contact data is requested
-                    'label': gt('include distribution lists')
+                    'label': gt('Include distribution lists')
                 }
             },
             'infostore': {
                 'label': gt.pgettext('app', 'Drive'),
                 //#. %1$s is usually "Drive" (product name; might be customized)
                 'description': gt('Includes all files from %1$s.', gt.pgettext('app', 'Drive')),
-                //#. header for a dropdown
-                'header': gt('Included folders'),
                 'includeTrash':  {
+                    //#. header for a dropdown
+                    'header': gt('Included folders'),
                     //#. shown when a download of (cloud) drive files is requested
                     'label': gt('Trash folder')
                 },
@@ -101,17 +103,19 @@ define('io.ox/settings/personalData/settings/pane', [
                     'label': gt('Shared folders')
                 },
                 'includeAllVersions': {
+                    //#. header for a dropdown
+                    'header': gt('Additional options'),
                     divider: true,
                     //#. shown when a download of (cloud) drive files is requested
-                    'label': gt('include all file versions')
+                    'label': gt('Include all file versions')
                 }
             },
             'tasks': {
                 'label': gt('Tasks'),
                 'description': gt('Includes all tasks as ical files.'),
-                //#. header for a dropdown
-                'header': gt('Included folders'),
                 'includePublic':  {
+                    //#. header for a dropdown
+                    'header': gt('Included folders'),
                     //#. shown when a download of task data is requested
                     'label': gt('Public folders')
                 },
@@ -131,7 +135,10 @@ define('io.ox/settings/personalData/settings/pane', [
         ],
         deleteDialog = function (options) {
             var def = $.Deferred();
-            new ModalDialog({ title: options.text })
+            new ModalDialog({ title: options.title })
+                .build(function () {
+                    this.$body.append($('<div>').text(options.text));
+                })
                 .addCancelButton({ left: true })
                 .addButton({ className: 'btn-default', action: options.action, label: options.label })
                 .on('action', def.resolve)
@@ -164,21 +171,21 @@ define('io.ox/settings/personalData/settings/pane', [
                     supportedFilesizes = _(filesizelimits).filter(function (value) { return value <= self.model.get('maxFileSize'); });
 
                 // data selection
-                this.$el.append(checkboxes = $('<div class="form-group">').append($('<div>').text(gt('You can download a copy of your personal data from your account, if you want to save it or transfer it to a nother provider.'))));
+                this.$el.append(checkboxes = $('<div class="form-group">').append($('<div>').text(gt('You can download a copy of your personal data from your account, if you want to save it or transfer it to another provider.'))));
 
                 // build Checkboxes
                 _(modules).each(function (data, moduleName) {
                     if (!self.model.get(moduleName)) return;
-                    var dropdownView = new Dropdown({ caret: true, model: self.models[moduleName], label: gt('Options') })
-                        .header(modules[moduleName].header);
+                    var dropdownView = new Dropdown({ caret: true, model: self.models[moduleName], label: gt('Options') });
                     self.models[moduleName].on('change:enabled', function () {
                         dropdownView.$toggle.attr('aria-disabled', !self.models[moduleName].get('enabled')).toggleClass('disabled', !self.models[moduleName].get('enabled'));
                     });
 
                     // sub checkboxes (include trash folder etc)
                     _(_(data).keys()).each(function (subOption) {
-                        if (subOption === 'label' || subOption === 'description' || subOption === 'header') return;
+                        if (subOption === 'label' || subOption === 'description') return;
                         if (modules[moduleName][subOption].divider) dropdownView.divider();
+                        if (modules[moduleName][subOption].header) dropdownView.header(modules[moduleName][subOption].header);
                         dropdownView.option(subOption, true, modules[moduleName][subOption].label);
                     });
 
@@ -193,7 +200,7 @@ define('io.ox/settings/personalData/settings/pane', [
                         $('<div class="form-group row">').append(
                             $('<div class="col-md-12">').append(
                                 $('<label>').attr('for', 'personaldata-filesizepicker').text(gt('Maximum file size')),
-                                $('<div class="filepicker-description">').text(gt('Select the maximum allowed filezise before the archive will be split into multiple parts.'))
+                                $('<div class="filepicker-description">').text(gt('Archives larger than the selected size will be split into multiple files.'))
                             ),
                             $('<div class="col-md-6">').append(
                                 new mini.SelectView({ name: 'maxFileSize', id: 'personaldata-filesizepicker', model: self.model,
@@ -225,7 +232,7 @@ define('io.ox/settings/personalData/settings/pane', [
                     case 'DONE':
                         this.$el.append($('<button type="button" class="btn btn-primary">').text(gt('Request new download'))
                             .on('click', function () {
-                                deleteDialog({ text: gt('By requesting a new download, your currently available downloads will be deleted.'), action: 'delete', label: gt('Delete all avaliable downloads') }).then(function (action) {
+                                deleteDialog({ title: gt('Request new download'), text: gt('By requesting a new download, your currently available downloads will be deleted.'), action: 'delete', label: gt('Delete all avaliable downloads') }).then(function (action) {
                                     if (action === 'delete') {
                                         api.deleteAllFiles().then(function () {
                                             api.requestDownload(self.getDownloadConfig()).fail(yell);
@@ -266,7 +273,7 @@ define('io.ox/settings/personalData/settings/pane', [
                 });
             },
             render: function () {
-                this.$el.empty();
+                this.$el.empty().toggle(this.model.get('status') !== 'none');
 
                 if (this.model.get('status') === 'PENDING') {
                     //#. %1$s: date and time the download was requested
@@ -275,7 +282,7 @@ define('io.ox/settings/personalData/settings/pane', [
                             .text(gt('Your requested archive is currently being created. Depending on the size of the requested data this may take hours or days. You will be informed via email when your download is ready.', moment(this.model.get('creationTime')).format('LLL'))),
                         $('<button type="button" class="cancel-button btn btn-primary">').text(gt('Cancel download'))
                             .on('click', function () {
-                                deleteDialog({ text: gt('Do you really want to cancel your download request?'), action: 'delete', label: gt('Cancel download') }).then(function (action) {
+                                deleteDialog({ title: gt('Cancel download request'), text: gt('Do you really want to cancel your download request?'), action: 'delete', label: gt('Cancel download') }).then(function (action) {
                                     if (action === 'delete') api.cancelDownloadRequest().fail(yell);
                                 });
                             })

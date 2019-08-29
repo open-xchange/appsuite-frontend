@@ -42,6 +42,10 @@ define('io.ox/settings/personalData/api', [
             }).then(function (result) {
                 api.trigger('updateStatus');
                 return result;
+            }, function (error) {
+                // no export there or already finished. Update views, accordingly
+                if (error.code === 'GDPR-EXPORT-0009') api.trigger('updateStatus');
+                return error;
             });
         },
 
@@ -76,6 +80,11 @@ define('io.ox/settings/personalData/api', [
         }
     };
     Events.extend(api);
+
+    ox.on('refresh^', function () {
+        // just trigger updatestatus on refresh, the views will update themselves then if needed
+        api.trigger('updateStatus');
+    });
 
     return api;
 });
