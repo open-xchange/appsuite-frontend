@@ -340,7 +340,7 @@ define('io.ox/chat/main', [
                         $('<div class="dropdown pull-right">').append(
                             $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
                                 .append($('<i class="fa fa-plus" aria-hidden="true">')),
-                            $('<ul class="dropdown-menu" id="new-chat-ul">').append(
+                            $('<ul class="dropdown-menu">').append(
                                 $('<li class="dropdown-header" role="separator">').append('<span aria-hidden="true">').text('New'),
                                 $('<li>').append(
                                     $('<a href="#" role="button">')
@@ -419,8 +419,20 @@ define('io.ox/chat/main', [
     var win;
 
     ext.point('io.ox/chat/list/toolbar').extend({
-        id: 'switch-to-floating',
+        id: 'create',
         index: 100,
+        prio: 'hi',
+        icon: 'fa fa-plus',
+        dropdown: 'io.ox/chat/list/toolbar/create',
+        caret: false,
+        customize: function () {
+            this.siblings('.dropdown-menu').addClass('pull-right');
+        }
+    });
+
+    ext.point('io.ox/chat/list/toolbar').extend({
+        id: 'switch-to-floating',
+        index: 200,
         prio: 'hi',
         mobile: 'lo',
         custom: true,
@@ -434,52 +446,74 @@ define('io.ox/chat/main', [
     });
 
     ext.point('io.ox/chat/list/toolbar').extend({
+        id: 'close',
+        index: 300,
+        prio: 'hi',
+        mobile: 'lo',
+        custom: true,
+        draw: function () {
+            this.attr('data-prio', 'hi').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="discard-app">').append(
+                    $('<i class="fa fa-times" aria-hidden="true">')
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/list/toolbar/create').extend({
+        id: 'caption',
+        index: 100,
+        custom: true,
+        draw: function () {
+            this.append(
+                $('<li class="dropdown-header" role="separator">').append('<span aria-hidden="true">').text('New')
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/list/toolbar/create').extend({
         id: 'create-new',
         index: 200,
-        prio: 'lo',
-        mobile: 'lo',
         custom: true,
         draw: function () {
-            this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="start-chat">').text('Create new chat').on('click', events.forward)
+            this.append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="start-chat" data-action="null">').text('Private chat').on('click', events.forward)
             );
         }
     });
 
-    ext.point('io.ox/chat/list/toolbar').extend({
+    ext.point('io.ox/chat/list/toolbar/create').extend({
         id: 'create-group',
         index: 300,
-        prio: 'lo',
-        mobile: 'lo',
         custom: true,
         draw: function () {
-            this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="open-group-dialog">').text('Create new group').on('click', events.forward)
+            this.append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="open-group-dialog" data-action="null">').text('Group chat').on('click', events.forward)
             );
         }
     });
 
-    ext.point('io.ox/chat/list/toolbar').extend({
+    ext.point('io.ox/chat/list/toolbar/create').extend({
         id: 'create-channel',
         index: 400,
-        prio: 'lo',
-        mobile: 'lo',
         custom: true,
         draw: function () {
-            this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="open-group-dialog" data-type="channel">').text('Create new channel').on('click', events.forward)
+            this.append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="open-group-dialog" data-type="channel" data-action="none">').text('Public channel').on('click', events.forward)
             );
         }
     });
 
     var mode = settings.get('chat/mode') || 'sticky';
 
-    win = new Window({ title: 'OX Chat', floating: mode === 'floating', sticky: mode === 'sticky', stickable: true }).render().open();
-    win.listenTo(win.model, 'change:sticky', function () {
-        if (!this.model.get('sticky')) return;
-        settings.set('chat/mode', 'sticky').save();
-        this.$body.addClass('columns');
-    });
+    win = new Window({
+        title: 'OX Chat',
+        floating: mode === 'floating',
+        sticky: mode === 'sticky',
+        stickable: true,
+        resizable: false,
+        closable: true
+    }).render().open();
 
     win.$body.parent().busy();
 
@@ -497,5 +531,7 @@ define('io.ox/chat/main', [
     ox.chat = {
         data: data
     };
+
+    return win;
 
 });
