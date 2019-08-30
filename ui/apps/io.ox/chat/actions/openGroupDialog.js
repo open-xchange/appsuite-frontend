@@ -125,7 +125,7 @@ define('io.ox/chat/actions/openGroupDialog', [
             this.$el.addClass('ox-chat-popup');
         })
         .addCancelButton()
-        .addButton({ action: 'save', label: 'Save' })
+        .addButton({ action: 'save', label: model.get('id') ? 'Edit' : 'Create' })
         .on('save', function () {
             var dataObj = this.model.toJSON();
             dataObj.members = this.collection.pluck('email1');
