@@ -55,7 +55,7 @@ define('io.ox/core/locale/meta', function () {
         fr_CA: 'Français (Canada)',
         fr_CH: 'Français (Suisse)',
         fr_BE: 'Français (Belgique)',
-        hu_HU: 'Magyar (Magyarorszag)',
+        hu_HU: 'Magyar (Magyarország)',
         it_IT: 'Italiano (Italia)',
         it_CH: 'Italiano (Svizzera)',
         lv_LV: 'Latviešu (Latvija)',
