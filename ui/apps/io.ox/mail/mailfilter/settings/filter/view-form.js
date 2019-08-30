@@ -12,17 +12,12 @@
  */
 
 define('io.ox/mail/mailfilter/settings/filter/view-form', [
-    'io.ox/core/notifications',
     'gettext!io.ox/settings',
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/dropdown',
-    'settings!io.ox/core',
-    'io.ox/core/folder/picker',
-    'io.ox/core/api/mailfilter',
-    'settings!io.ox/mail',
-    'io.ox/mail/api'
-], function (notifications, gt, ext, mini, Dropdown, coreSettings, picker, api, mailSettings, mailAPI) {
+    'settings!io.ox/core'
+], function (gt, ext, mini, Dropdown, coreSettings) {
 
     'use strict';
 
@@ -204,7 +199,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
             },
 
-            prepareModel: function () {
+            onSave: function () {
                 var self = this,
                     testsPart = this.model.get('test'),
                     actionArray = this.model.get('actioncmds'),
@@ -314,14 +309,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     actionArray.push({ id: 'stop' });
                     this.model.set('actioncmds', actionArray);
                 }
-            },
 
-            onSave: function () {
-
-                this.prepareModel();
-                var self = this;
-
-                this.model.save().then(function (id) {
+                return this.model.save().then(function (id) {
                     //first rule gets 0
                     if (!_.isUndefined(id) && !_.isNull(id) && !_.isUndefined(self.listView)) {
                         self.model.set('id', id);
@@ -335,52 +324,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             },
 
             onApply: function () {
-
-                this.prepareModel();
-                var self = this;
-
-                var ruleStored = this.model.save().then(function (id) {
-                    //first rule gets 0
-                    if (!_.isUndefined(id) && !_.isNull(id) && !_.isUndefined(self.listView)) {
-                        self.model.set('id', id);
-                        self.listView.collection.add(self.model);
-                    } else if (!_.isUndefined(id) && !_.isNull(id) && !_.isUndefined(self.collection)) {
-                        self.model.set('id', id);
-                        self.collection.add(self.model);
-                    }
-                    self.dialog.close();
-                }, self.dialog.idle);
-
-                picker({
-                    async: true,
-                    context: 'filter',
-                    title: gt('Select the folder to apply the rule to'),
-                    done: function (id, dialog) {
-                        var rule;
-                        dialog.close();
-                        ruleStored.then(function () {
-                            var scriptId = self.model.get('id');
-                            rule = self.listView.$el.find('li[data-id="' + scriptId + '"] a[data-action="apply"]');
-                            rule.empty().append($('<i aria-hidden="true">').addClass('fa fa-refresh fa-spin'));
-
-                            return api.apply({ folderId: id, id: scriptId });
-                        }).then(function () {
-                            return mailAPI.expunge(id);
-                        }).fail(function (response) {
-                            notifications.yell('error', response.error);
-                        }).then(function () {
-                            // applied rule might have moved mails into folders or changed mails
-                            _(mailAPI.pool.getCollections()).forEach(function (o) {
-                                o.collection.expire();
-                            });
-                            mailAPI.refresh();
-                            rule.empty().text(gt('Apply...'));
-                        });
-                    },
-                    module: 'mail',
-                    root: '1',
-                    settings: mailSettings,
-                    persistent: 'folderpopup'
+                var model = this.model;
+                return this.onSave().then(function () {
+                    model.trigger('apply');
                 });
             },
 

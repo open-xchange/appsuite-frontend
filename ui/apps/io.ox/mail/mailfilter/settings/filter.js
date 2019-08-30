@@ -160,11 +160,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
         myView.collection = collection;
 
         myView.dialog.on('save', function () {
-            myView.dialog.$body.find('.io-ox-mailfilter-edit').trigger('save');
+            myView.onSave();
         });
 
         myView.dialog.on('apply', function () {
-            myView.dialog.$body.find('.io-ox-mailfilter-edit').trigger('apply');
+            myView.onApply();
         });
 
         myView.dialog.on('cancel', function () {
@@ -287,6 +287,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     initialize: function () {
                         if (_.indexOf(this.model.get('flags'), 'vacation') !== -1) this.listenTo(ox, 'mail:change:vacation-notice', this.handleToogleState);
                         if (_.indexOf(this.model.get('flags'), 'autoforward') !== -1) this.listenTo(ox, 'mail:change:auto-forward', this.handleToogleState);
+                        this.listenTo(this.model, 'apply', function () {
+                            this.onApply();
+                        });
                     },
 
                     handleToogleState: function (model) {
@@ -433,9 +436,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     },
 
                     onApply: function (e) {
-                        e.preventDefault();
-                        var scriptId = this.model.id,
-                            self = this;
+                        if (e) e.preventDefault();
+                        var self = this;
                         picker({
                             async: true,
                             context: 'filter',
@@ -444,20 +446,19 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                 dialog.close();
                                 var rule = self.$el.find('a[data-action="apply"]');
                                 rule.empty().append($('<i aria-hidden="true">').addClass('fa fa-refresh fa-spin'));
-                                api.apply({ folderId: id, id: scriptId })
-                                    .then(function () {
-                                        return mailAPI.expunge(id);
-                                    })
-                                    .fail(function (response) {
-                                        notifications.yell('error', response.error);
-                                    }).then(function () {
-                                        // applied rule might have moved mails into folders or changed mails
-                                        _(mailAPI.pool.getCollections()).forEach(function (o) {
-                                            o.collection.expire();
-                                        });
-                                        mailAPI.refresh();
-                                        rule.empty().text(gt('Apply...'));
+
+                                api.apply({ folderId: id, id: self.model.id }).then(function () {
+                                    return mailAPI.expunge(id);
+                                }).fail(function (response) {
+                                    notifications.yell('error', response.error);
+                                }).then(function () {
+                                    // applied rule might have moved mails into folders or changed mails
+                                    _(mailAPI.pool.getCollections()).forEach(function (o) {
+                                        o.collection.expire();
                                     });
+                                    mailAPI.refresh();
+                                    rule.empty().text(gt('Apply...'));
+                                });
                             },
                             module: 'mail',
                             root: '1',
