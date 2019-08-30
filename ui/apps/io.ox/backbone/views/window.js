@@ -121,7 +121,7 @@ define('io.ox/backbone/views/window', [
 
             if (!this.model) {
                 this.model = new WindowModel(
-                    _(this.options).pick('title', 'minimized', 'active', 'closable', 'win', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size', 'mode', 'floating', 'sticky', 'stickable')
+                    _(this.options).pick('title', 'minimized', 'active', 'closable', 'win', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size', 'mode', 'floating', 'sticky', 'stickable', 'resizable')
                 );
             }
 
@@ -154,11 +154,11 @@ define('io.ox/backbone/views/window', [
             return $('<div class="controls" role="toolbar">').append(
                 this.model.get('stickable') ? $('<button type="button" class="btn btn-link" data-action="stick" tabindex="-1">').attr('aria-label', gt('Close')).append($('<i class="fa fa-external-link" aria-hidden="true">').attr('title', gt('Stick to the right side'))) : '',
                 //#. window resize
-                $('<button type="button" class="btn btn-link" data-action="minimize">').attr('aria-label', gt('Minimize')).append($('<i class="fa fa-window-minimize" aria-hidden="true">').attr('title', gt('Minimize'))),
+                this.model.get('resizable') !== false ? $('<button type="button" class="btn btn-link" data-action="minimize">').attr('aria-label', gt('Minimize')).append($('<i class="fa fa-window-minimize" aria-hidden="true">').attr('title', gt('Minimize'))) : '',
                 //#. window resize
-                $('<button type="button" class="btn btn-link" data-action="normalize" tabindex="-1">').attr('aria-label', gt('Shrink')).append($('<i class="fa fa-compress" aria-hidden="true">').attr('title', gt('Shrink'))).toggleClass('hidden', isNormal),
+                this.model.get('resizable') !== false ? $('<button type="button" class="btn btn-link" data-action="normalize" tabindex="-1">').attr('aria-label', gt('Shrink')).append($('<i class="fa fa-compress" aria-hidden="true">').attr('title', gt('Shrink'))).toggleClass('hidden', isNormal) : '',
                 //#. window resize
-                $('<button type="button" class="btn btn-link" data-action="maximize" tabindex="-1">').attr('aria-label', gt('Maximize')).append($('<i class="fa fa-expand" aria-hidden="true">').attr('title', gt('Maximize'))).toggleClass('hidden', !isNormal),
+                this.model.get('resizable') !== false ? $('<button type="button" class="btn btn-link" data-action="maximize" tabindex="-1">').attr('aria-label', gt('Maximize')).append($('<i class="fa fa-expand" aria-hidden="true">').attr('title', gt('Maximize'))).toggleClass('hidden', !isNormal) : '',
                 this.model.get('closable') ? $('<button type="button" class="btn btn-link" data-action="close" tabindex="-1">').attr('aria-label', gt('Close')).append($('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Close'))) : ''
             );
         },
@@ -387,6 +387,7 @@ define('io.ox/backbone/views/window', [
         toggleMode: function () {
             // do nothing if the minimizing animation is playing
             if (this.minimizing) return;
+            if (this.model.get('resizable') === false) return;
             this.model.set('mode', this.model.get('mode') === 'maximized' ? 'normal' : 'maximized');
         },
 

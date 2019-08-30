@@ -64,6 +64,14 @@ define('io.ox/chat/main', [
             this.listenTo(data.chats, 'unseen', function (count) {
                 this.setCount(count);
             });
+            this.listenTo(this.model, {
+                'change:sticky': function () {
+                    if (!this.model.get('sticky')) return;
+                    settings.set('chat/mode', 'sticky').save();
+                    this.$body.addClass('columns');
+                },
+                'quit': this.hideApp
+            });
 
             this.listenTo(events, 'cmd', this.onCommand);
         },
@@ -89,6 +97,7 @@ define('io.ox/chat/main', [
                 case 'unsubscribe-chat': this.toggleChat(data.id, false); break;
                 case 'add-member': this.addMember(data.id); break;
                 case 'switch-to-floating': this.toggleWindowMode('floating'); break;
+                case 'discard-app': this.hideApp(); break;
                 // no default
             }
         },
@@ -293,6 +302,16 @@ define('io.ox/chat/main', [
                 return $('<div class="resizebar">').on('mousedown.resize', mousedown.bind(this));
             };
         }()),
+
+        hideApp: function () {
+            if (this.$el.is(':visible')) return this.$el.hide();
+            this.$body.hide();
+        },
+
+        showApp: function () {
+            this.$el.show();
+            this.$body.show();
+        },
 
         draw: function () {
             var user = data.users.getByMail(data.user.email),

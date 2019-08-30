@@ -19,6 +19,10 @@ define('io.ox/chat/views/launcher', ['io.ox/chat/data', 'less!io.ox/chat/style']
         className: 'apptitle',
         id: 'io-ox-chat-icon',
 
+        events: {
+            'click': 'onClick'
+        },
+
         initialize: function () {
             this.$badge = $('<span class="badge">');
 
@@ -38,6 +42,12 @@ define('io.ox/chat/views/launcher', ['io.ox/chat/data', 'less!io.ox/chat/style']
                 return memo + (model.get('unreadCount') || 0);
             }, 0);
             this.$badge.text(count || '');
+        },
+
+        onClick: function () {
+            require(['io.ox/chat/main'], function (win) {
+                win.showApp();
+            });
         }
 
     });
