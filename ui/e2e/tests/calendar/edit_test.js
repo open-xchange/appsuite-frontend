@@ -753,28 +753,27 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
     I.login('app=io.ox/calendar');
 
     I.waitForText('Testappointment');
-    I.see('Testappointment', locate('.day').at(1));
-    // use 3rd child here as the container has another child before the first .day
-    I.dragAndDrop('.page.current .appointment', locate('.timeslot').at(21).inside('.day:nth-child(3)'));
+    I.see('Testappointment', locate('.page.current .day').at(1));
+    I.dragAndDrop('.page.current .appointment', locate('.page.current .day').at(2).find('.timeslot').at(21));
     I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
     I.click('Edit series');
 
     I.waitForInvisible('.page.current .appointment.io-ox-busy');
-    I.see('Testappointment', locate('.day').at(2));
+    I.see('Testappointment', locate('.page.current .day').at(2));
 
     I.clickToolbar('View');
     I.click('Week');
 
     I.waitForVisible('.appointment');
-    I.see('Testappointment', locate('.day').at(3));
+    I.see('Testappointment', locate('.page.current .day').at(3));
 
     // use 5th child here as the container has another child before the first .day
-    I.dragAndDrop(locate('.appointment').inside('.page.current'), locate('.timeslot').at(21).inside('.day:nth-child(5)').inside('.page.current'));
+    I.dragAndDrop(locate('.page.current .appointment'), locate('.page.current .day').at(4).find('.timeslot').at(21));
     I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
     I.click('Edit series');
 
     I.waitForInvisible('.page.current .appointment.io-ox-busy');
-    I.see('Testappointment', locate('.day').at(4));
+    I.see('Testappointment', locate('.page.current .day').at(4));
 
     I.clickToolbar('View');
     I.click('Month');
@@ -784,7 +783,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
     I.see('Testappointment', `[id="${time.format('YYYY-M-D')}"]`);
 
     time.add(1, 'day');
-    I.dragAndDrop(locate('.appointment').inside('.page.current'), `[id="${time.format('YYYY-M-D')}"]`);
+    I.dragAndDrop(locate('.page.current .appointment'), `[id="${time.format('YYYY-M-D')}"]`);
     I.waitForText('Do you want to edit the whole series or just this appointment within the series?');
     I.click('Edit series');
 
