@@ -138,14 +138,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
             myView.render().el
         );
 
-        if (data.id === undefined) {
-            myView.dialog.addButton({
-                label: gt('Save and apply...'),
-                action: 'apply'
-            });
-        }
-
         myView.dialog.addButton({
+            label: gt('Save and apply...'),
+            action: 'apply'
+        }).addButton({
             label: gt('Save'),
             action: 'save'
         })

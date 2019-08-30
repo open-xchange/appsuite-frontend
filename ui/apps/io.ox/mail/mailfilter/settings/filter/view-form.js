@@ -337,11 +337,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             onApply: function () {
 
                 this.prepareModel();
-                var self = this,
-                    scriptId;
+                var self = this;
 
                 var ruleStored = this.model.save().then(function (id) {
-                    scriptId = id;
                     //first rule gets 0
                     if (!_.isUndefined(id) && !_.isNull(id) && !_.isUndefined(self.listView)) {
                         self.model.set('id', id);
@@ -361,6 +359,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         var rule;
                         dialog.close();
                         ruleStored.then(function () {
+                            var scriptId = self.model.get('id');
                             rule = self.listView.$el.find('li[data-id="' + scriptId + '"] a[data-action="apply"]');
                             rule.empty().append($('<i aria-hidden="true">').addClass('fa fa-refresh fa-spin'));
 
@@ -377,9 +376,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             mailAPI.refresh();
                             rule.empty().text(gt('Apply...'));
                         });
-                    },
-                    cancel: function () {
-                        self.dialog.idle();
                     },
                     module: 'mail',
                     root: '1',
