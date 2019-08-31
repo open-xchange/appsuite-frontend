@@ -11090,6 +11090,16 @@ msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: module:io.ox/mail
+msgid "Save and apply..."
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js
+#: module:io.ox/mail
+msgid "Apply..."
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js
+#: module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 #: apps/io.ox/settings/accounts/views.js
@@ -11120,6 +11130,11 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: module:io.ox/mail
 msgid "Drag to reorder filter rules"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js
+#: module:io.ox/mail
+msgid "Select the folder to apply the rule to"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js

@@ -1455,6 +1455,12 @@ msgstr "若符合任何條件就套用規則"
 msgid "Apply to all subfolders"
 msgstr "套用至所有子資料夾"
 
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply"
+msgid "Apply..."
+msgstr "套用"
+
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
@@ -9001,6 +9007,10 @@ msgstr "星期六"
 msgid "Save"
 msgstr "保存"
 
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+msgid "Save and apply..."
+msgstr ""
+
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/toolbar.js
@@ -9193,6 +9203,10 @@ msgstr "選擇新主辦人"
 #: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 msgid "Select print layout"
 msgstr "選擇列印版面"
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+msgid "Select the folder to apply the rule to"
+msgstr ""
 
 #. %1$s is a date: october 12th 2017 for example
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
