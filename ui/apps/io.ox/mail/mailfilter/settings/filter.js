@@ -138,10 +138,14 @@ define('io.ox/mail/mailfilter/settings/filter', [
             myView.render().el
         );
 
+        if (defaults.applyMailFilterSupport) {
+            myView.dialog.addButton({
+                label: gt('Save and apply'),
+                action: 'apply'
+            });
+        }
+
         myView.dialog.addButton({
-            label: gt('Save and apply'),
-            action: 'apply'
-        }).addButton({
             label: gt('Save'),
             action: 'save'
         })
@@ -194,7 +198,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 actioncmds = model.get('actioncmds'),
                 faClass = containsStop(actioncmds) ? 'fa-ban' : 'fa-arrow-down',
                 actionValue,
-                applyToggle = flag === 'vacation' || flag === 'autoforward' ? [] : listUtils.applyToggle(applytoggle);
+                applyToggle = flag === 'vacation' || flag === 'autoforward' || !defaults.applyMailFilterSupport ? [] : listUtils.applyToggle(applytoggle);
 
             if (flag === 'vacation') {
                 actionValue = 'edit-vacation';
