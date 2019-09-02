@@ -304,7 +304,6 @@ define('io.ox/core/folder/api', [
             _.each(this.models, function (model, id) {
                 if (!model.get('account_id')) return true;
                 if (model.get('account_id') !== accountId) return true;
-                api.trigger('remove', id, this.models[id].toJSON());
                 delete this.models[id];
             }.bind(this));
         },

@@ -51,30 +51,11 @@ define('io.ox/files/favorites', [
         var folders = [];
         var files = [];
 
-        collection.models.forEach(function (obj) {
-            var id = obj;
-            if (typeof obj === 'object' && obj.attributes && obj.attributes.id) {
-                if (obj.attributes.folder_name) {
-                    folders.push(obj.id);
-                } else if (obj.attributes.folder_id) {
-                    files.push({
-                        id: obj.attributes.id,
-                        folder_id: obj.attributes.folder_id
-                    });
-                }
-            } else if (typeof obj === 'object' && obj.id) {
-                if (obj.folder_name) {
-                    folders.push(obj.id);
-                } else if (obj.folder_id) {
-                    files.push({
-                        id: obj.id,
-                        folder_id: obj.folder_id
-                    });
-                }
-            } else {
-
-                var model = filesAPI.pool.get('detail').get(id);
-                if (model && model.attributes && model.attributes.folder_id) {
+        _.each(collection.models, function (model) {
+            if (model.attributes && model.attributes.id) {
+                if (model.attributes.folder_name) {
+                    folders.push(model.attributes.id);
+                } else {
                     files.push({
                         id: model.attributes.id,
                         folder_id: model.attributes.folder_id
@@ -172,12 +153,6 @@ define('io.ox/files/favorites', [
     api.on('remove', function (id, data) {
         collection.remove(_.cid(data));
         storeCollection();
-    });
-
-    // error:FLD-1004 is storage was removed (dropbox, googledrive folder etc)
-    // error:OAUTH-0040 token no longer valid
-    folderAPI.on('error:FLD-1004 remove move collection:remove', function (id, data) {
-        removeFavorites([data]);
     });
 
     // Register listener for file changes
