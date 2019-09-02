@@ -22,7 +22,7 @@ After(async function (users) {
     await users.removeAll();
 });
 
-Scenario('Create never ending appointment and check display in several views', async function (I) {
+Scenario('Create never ending appointment and check display in several views @shaky', async function (I) {
 
     I.login('app=io.ox/calendar');
     I.waitForVisible('[data-app-name="io.ox/calendar"]', 5);

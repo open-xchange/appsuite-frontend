@@ -22,7 +22,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7866] Set all-day appointments to be marked as free', async function (I) {
+Scenario('[C7866] Set all-day appointments to be marked as free @shaky', async function (I) {
 
     const freeappointmentsubject = 'Free Appt',
         reservedappointmentsubject = 'Reserved Appt',

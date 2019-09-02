@@ -185,7 +185,8 @@ Scenario('[C7743] Move single Task', async function (I) {
     I.click(`.modal [aria-label="${testrailID}"]`);
     I.waitForEnabled('.modal button.btn-primary');
     I.click('Move', '.modal');
-    I.waitForDetached('.modal,.launcher-icon.fa-refresh.fa-spin');
+    I.waitForElement('.launcher-icon.fa-refresh.fa-spin');
+    I.waitForDetached('.launcher-icon.fa-refresh.fa-spin');
     I.selectFolder(testrailID);
     I.waitForElement(locate('.vgrid-cell').withText(testrailID));
     I.click(locate('.vgrid-cell').withText(testrailID));

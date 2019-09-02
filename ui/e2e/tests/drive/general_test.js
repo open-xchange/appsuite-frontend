@@ -244,7 +244,7 @@ Scenario('[C45041] Select files', async (I) => {
     I.dontSeeElementInDOM('.file-list-view .list-item.selected');
 });
 
-Scenario('[C45042] Filter files @shaky', async (I, users) => {
+Scenario('[C45042] Filter files', async (I) => {
     // BUG: This menu should be grouped as it has 2 sets of menuitemradios
     // to make matters worse there are two "All" menuitems without a relation
     // to a group.

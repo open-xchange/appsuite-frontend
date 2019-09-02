@@ -23,7 +23,7 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('[C7778] Forwarding mail inline/attachment @shaky', async (I, users) => {
+Scenario('[C7778] Forwarding mail inline/attachment', async (I, users) => {
     const user = users[0];
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
@@ -43,6 +43,7 @@ Scenario('[C7778] Forwarding mail inline/attachment @shaky', async (I, users) =>
         I.waitForText('---------- Original Message ----------');
     });
 
+    I.waitToHide('Saving');
     I.click('Discard');
     I.logout();
 

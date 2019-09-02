@@ -220,7 +220,8 @@ Scenario('[C8378] Invite a group', async (I, users) => {
         I.waitForText(folderName, 2, '.folder-tree');
         I.see(folderName, '.folder-tree');
         I.click('[title="Actions for ' + folderName + '"]');
-        I.click('[data-action="invite"]', '.smart-dropdown-container');
+        I.waitForElement('.smart-dropdown-container [data-action="invite"]');
+        I.click('.smart-dropdown-container [data-action="invite"]');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.see('Author', '.permissions-view .row .role');
         I.click('Close', '.modal-dialog');

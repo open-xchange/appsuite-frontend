@@ -256,22 +256,26 @@ examples.add(['[C104276] Import emClient iCal', 'yahoo_2016_full', function (I) 
     I.seeNumberOfElements(fulltime, 1);
 }]);
 
-Data(examples).Scenario('Import Calendar data', async (I, current) => {
+Data(examples).Scenario('Import Calendar data', async (I, current, users) => {
     I.login('app=io.ox/calendar&perspective=week:week');
     I.waitForText('My calendars');
     I.waitForText('Birthdays');
     // go to 2016-11-27
     I.executeScript(function gotoDate(t) { ox.ui.App.getCurrentApp().setDate(t); }, 1480201200000);
-    I.waitForVisible('li[data-id="virtual/flat/event/private"] .folder-options.contextmenu-control');
-    I.click('li[data-id="virtual/flat/event/private"] .folder-options.contextmenu-control');
-    I.waitForText('Import');
-    I.wait(1);
-    I.click('Import');
+    const folderName = `${users[0].get('sur_name')}, ${users[0].get('given_name')}`;
+    I.waitForVisible(
+        locate('.folder.selected .folder-label')
+            .withText(folderName)
+    );
+    I.click(`.folder-options[title="Actions for ${folderName}"]`);
+    I.waitForElement(locate('.dropdown.open').withText('Import'));
+    I.retry(3).click('Import');
     I.waitForElement('.modal');
     I.attachFile('.file-input', `e2e/media/imports/calendar/${current.filename}.ics`);
     // click('Import') -> element not interactable
     I.click('.modal [data-action="import"]');
-    I.waitForText('Data imported successfully');
+    I.waitForText('Data imported successfully', 30, '.io-ox-alert');
+    I.waitToHide('.io-ox-alert');
 
     current.assertions(I);
 });

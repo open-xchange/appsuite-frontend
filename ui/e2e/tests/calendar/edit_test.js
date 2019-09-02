@@ -99,8 +99,7 @@ Scenario('[C7449] Move appointment to folder', async function (I) {
     });
 });
 
-// TODO Skip this as the double click does not work. See Bug 64313
-Scenario.skip('[C7450] Edit private appointment', async function (I) {
+Scenario('[C7450] Edit private appointment', async function (I) {
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
     const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
     await I.haveAppointment({
@@ -126,7 +125,7 @@ Scenario.skip('[C7450] Edit private appointment', async function (I) {
     });
 
     // edit the appointment
-    I.doubleClick('.appointment');
+    I.doubleClick('.page.current .appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.selectOption('Visibility', 'Standard');
 
@@ -213,8 +212,7 @@ Scenario('[C7464] Change appointment in shared folder as guest', async function 
     I.logout();
 });
 
-// TODO Skip this as the double click does not work. See Bug 64313
-Scenario.skip('[C7465] Edit appointment in shared folder as author', async function (I, users) {
+Scenario('[C7465] Edit appointment in shared folder as author', async function (I, users) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -255,14 +253,14 @@ Scenario.skip('[C7465] Edit appointment in shared folder as author', async funct
     I.login('app=io.ox/calendar', { user: users[1] });
 
     // switch on New calendar
-    I.doubleClick('~Shared calendars');
+    I.click('.folder[data-id="virtual/flat/event/shared"] .folder-arrow');
     I.click(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New calendar"] .color-label`);
     I.click('~Next Week', '.page.current');
 
     I.waitForText('Testappointment');
 
     // 1. Double click to the appointment
-    I.doubleClick('.appointment');
+    I.doubleClick('.page.current .appointment');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     // 2. Change Subject, Location and Description.
@@ -280,7 +278,7 @@ Scenario.skip('[C7465] Edit appointment in shared folder as author', async funct
         I.click(view);
         I.waitForVisible(locate('.appointment').inside('.page.current'));
         I.click('.appointment', '.page.current');
-        I.see('Changedappointment');
+        I.waitForText('Changedappointment', 5, '.calendar-detail');
         I.see('Changedlocation');
         I.see('Changeddescription');
     });
@@ -434,7 +432,7 @@ Scenario('[C234679] Exceptions changes on series modification', async function (
 
 });
 
-Scenario('[C7467] Delete recurring appointment in shared folder as author @shaky', async function (I, users) {
+Scenario('[C7467] Delete recurring appointment in shared folder as author', async function (I, users) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -484,10 +482,9 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author @shaky
     I.waitForText('Testappointment');
 
     // delete appointment
-    I.click('.appointment');
-    I.wait(1);
+    I.click('.page.current .appointment');
 
-    I.waitForText('Delete', '.io-ox-sidepopup .inline-toolbar');
+    I.waitForText('Delete', 5, '.io-ox-sidepopup .inline-toolbar');
     I.click('Delete', '.io-ox-sidepopup .inline-toolbar-container');
 
     I.waitForText('Do you want to delete all appointments of the series or just this appointment?');
@@ -791,8 +788,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async functi
     I.see('Testappointment', `[id="${time.format('YYYY-M-D')}"]`);
 });
 
-// TODO Skip this as the double click does not work. See Bug 64313
-Scenario.skip('[C7453] Edit appointment, set the all day checkmark', async function (I) {
+Scenario('[C7453] Edit appointment, set the all day checkmark', async function (I) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true, 'chronos/allowChangeOfOrganizer': true }
@@ -805,16 +801,21 @@ Scenario.skip('[C7453] Edit appointment, set the all day checkmark', async funct
         startDate: { value: time.format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' },
         endDate: { value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid: 'Europe/Berlin' }
     });
+    const appointment = locate('.page.current .appointment-container .appointment')
+        .withText('Testsubject')
+        .as('Test appointment container');
 
     I.login('app=io.ox/calendar');
-    I.waitForVisible(locate('*').withText('Testsubject').inside('.appointment-container'));
+    I.waitForElement(appointment);
 
-    I.doubleClick('.appointment');
-    I.retry(5).click('All day');
+    I.doubleClick(appointment);
+    I.waitForElement('.io-ox-calendar-edit-window');
+    I.waitForText('All day');
+    I.checkOption('All day');
     I.click('Save');
 
-    I.waitForInvisible(locate('*').withText('Testsubject').inside('.appointment-container'));
-    I.waitForVisible(locate('*').withText('Testsubject').inside('.fulltime-container'));
+    I.waitForInvisible(appointment);
+    I.waitForVisible(locate('.page.current .fulltime-container .appointment').withText('Testsubject'));
 
 });
 
@@ -932,7 +933,7 @@ Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, use
         .equal(`${newTime.format('ddd')}, ${newTime.format('M/D/YYYY')}   12:00 – 1:00 PMCEST`);
 });
 
-Scenario('[C7462] Remove a participant @shaky', async function (I, users) {
+Scenario('[C7462] Remove a participant', async function (I, users) {
     const moment = require('moment');
     let testrailID = 'C7462';
     I.haveSetting('io.ox/core//autoOpenNotification', false);
@@ -1012,7 +1013,7 @@ Scenario('[C7461] Add a participant/ressource @shaky', async function (I, users)
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
-        'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true }
+        'io.ox/calendar': { showCheckboxes: true, notifyNewModifiedDeleted: true, separateExternalParticipantList: true }
     });
 
     const timestamp = Math.round(+new Date() / 1000);

@@ -299,7 +299,7 @@ Scenario('[C7393] Send mail with bullet point and numbering - bullet points', as
 
     I.click(locate('button').inside('~Decrease indent'));
 
-    await within({ frame: iframeLocator }, async () => {
+    within({ frame: iframeLocator }, () => {
         I.pressKey(textBullet1_1);
         I.pressKey('Enter');
         I.pressKey('Enter');
@@ -322,12 +322,12 @@ Scenario('[C7393] Send mail with bullet point and numbering - bullet points', as
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
     I.waitForVisible('iframe.mail-detail-frame');
 
-    await within({ frame: '.mail-detail-frame' }, async () => {
-        I.waitForElement(locate('div').withText(defaultText));
-        I.waitForElement((locate('li').inside('ul')).at(1).withText(textBullet1));
-        I.waitForElement((locate('li').inside('ul')).at(2).withText(textBullet2));
-        I.waitForElement((locate('li').withText(textBullet21)).inside('ul').inside('li').inside('ul'));
-        I.waitForElement((locate('li').inside('ul')).at(3).withText(textBullet1_1));
+    within({ frame: '.mail-detail-frame' }, () => {
+        I.seeElement(locate('div').withText(defaultText));
+        I.seeElement(locate('.mail-detail-content > ul > li').at(1).withText(textBullet1));
+        I.seeElement(locate('.mail-detail-content > ul > li').at(2).withText(textBullet2));
+        I.seeElement(locate('.mail-detail-content > ul > li').at(2).find('ul > li').withText(textBullet21));
+        I.seeElement(locate('.mail-detail-content > ul > li').at(3).withText(textBullet1_1));
     });
 });
 
@@ -408,11 +408,11 @@ Scenario('[C7393] Send mail with bullet point and numbering - numbering', async 
     I.waitForVisible('iframe.mail-detail-frame');
 
     await within({ frame: '.mail-detail-frame' }, async () => {
-        I.waitForElement(locate('div').withText(defaultText));
-        I.waitForElement((locate('li').inside('ol')).at(1).withText(textNumber1));
-        I.waitForElement((locate('li').inside('ol')).at(2).withText(textNumber2));
-        I.waitForElement((locate('li').withText(textNumber21)).inside('ol').inside('li').inside('ol'));
-        I.waitForElement((locate('li').inside('ol')).at(3).withText(textNumber1_1));
+        I.seeElement(locate('div').withText(defaultText));
+        I.seeElement(locate('.mail-detail-content > ol > li').at(1).withText(textNumber1));
+        I.seeElement(locate('.mail-detail-content > ol > li').at(2).withText(textNumber2));
+        I.seeElement(locate('.mail-detail-content > ol > li').at(2).find('ol > li').withText(textNumber21));
+        I.seeElement(locate('.mail-detail-content > ol > li').at(3).withText(textNumber1_1));
     });
 });
 
