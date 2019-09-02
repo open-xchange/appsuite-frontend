@@ -704,7 +704,8 @@ define('io.ox/backbone/views/recurrence-view', [
                     'until',
                     'startDate',
                     'start_time',
-                    'start_date'
+                    'start_date',
+                    'timezone'
                 )),
                 focus: 'select'
             })

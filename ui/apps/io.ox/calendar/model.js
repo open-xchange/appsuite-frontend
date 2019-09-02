@@ -143,6 +143,7 @@ define('io.ox/calendar/model', [
 
         initialize: function () {
             this.model = this.get('model');
+            this.set('timezone', (this.model.get('startDate') && this.model.get('startDate').tzid) ? this.model.get('startDate').tzid : moment().tz());
             this.unset('model');
             this.listenTo(this.model, 'change', this.deserialize);
             this.deserialize();
@@ -187,7 +188,8 @@ define('io.ox/calendar/model', [
                 default:
             }
             if (this.get('interval') > 1) args.push('INTERVAL=' + this.get('interval'));
-            if (this.get('until')) args.push('UNTIL=' + moment(this.get('until')).utc().endOf('day').format(util.ZULU_FORMAT));
+            // when this is an allday appointment the util part of an rrule must not have a Time
+            if (this.get('until')) args.push(util.isAllday(this.model) ? 'UNTIL=' + moment(this.get('until')).format('YYYYMMDD') : 'UNTIL=' + moment(this.get('until')).utc().endOf('day').format(util.ZULU_FORMAT));
             if (this.get('occurrences')) args.push('COUNT=' + this.get('occurrences'));
             if (args.length > 0) this.model.set('rrule', args.join(';'));
             else this.model.set('rrule', null);
