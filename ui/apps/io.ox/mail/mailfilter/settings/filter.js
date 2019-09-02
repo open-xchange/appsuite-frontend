@@ -139,7 +139,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
         );
 
         myView.dialog.addButton({
-            label: gt('Save and apply...'),
+            label: gt('Save and apply'),
             action: 'apply'
         }).addButton({
             label: gt('Save'),
@@ -189,7 +189,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
         draw: function (model) {
             var flag = (model.get('flags') || [])[0];
             var title = model.get('rulename'),
-                applytoggle = gt('Apply...'),
+                applytoggle = gt('Apply'),
                 texttoggle = model.get('active') ? gt('Disable') : gt('Enable'),
                 actioncmds = model.get('actioncmds'),
                 faClass = containsStop(actioncmds) ? 'fa-ban' : 'fa-arrow-down',
