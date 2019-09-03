@@ -17,10 +17,12 @@ define('io.ox/chat/views/chat', [
     'io.ox/chat/views/avatar',
     'io.ox/chat/views/chatAvatar',
     'io.ox/chat/views/chatMember',
+    'io.ox/chat/views/messages',
+    'io.ox/chat/views/reference-preview',
     'io.ox/chat/events',
     'io.ox/chat/data',
     'io.ox/backbone/views/toolbar'
-], function (ext, DisposableView, Avatar, ChatAvatar, ChatMember, events, data, ToolbarView) {
+], function (ext, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, ToolbarView) {
 
     'use strict';
 
@@ -127,7 +129,9 @@ define('io.ox/chat/views/chat', [
 
             this.room = options.room;
             this.messageId = options.messageId;
+            this.reference = options.reference;
             this.model = data.chats.get(this.room);
+            this.messagesView = new MessagesView({ collection: this.model.messages });
 
             this.listenTo(this.model, {
                 'change:title': this.onChangeTitle,
@@ -135,17 +139,17 @@ define('io.ox/chat/views/chat', [
             });
 
             this.listenTo(this.model.messages, {
-                'add': this.onAdd,
-                'reset': this.onReset,
-                'remove': this.onRemove,
-                'change:body': this.onChangeBody,
-                'change:fileId': this.onChangeBody,
-                'change:time': this.onChangeTime,
-                'change:state': this.onChangeDelivery,
                 'complete:prev': this.onComplete.bind(this, 'prev'),
                 'complete:next': this.onComplete.bind(this, 'next'),
                 'paginate': this.toggleAutoScroll.bind(this, false)
             });
+
+            this.listenTo(this.messagesView, {
+                'before:add': this.onBeforeAdd,
+                'after:add': this.onAfterAdd
+            });
+
+            this.listenTo(events, 'cmd:remove-reference', this.onRemoveReference);
 
             this.model.messages.messageId = this.messageId;
             // there are two cases when to reset the collection before usage
@@ -193,9 +197,7 @@ define('io.ox/chat/views/chat', [
                 this.typing.toggle(userId, state);
             });
 
-            this.$messages = $();
             this.$editor = $();
-            this.updateDelivery = _.debounce(this.updateDelivery.bind(this), 10);
             this.autoScroll = _.isUndefined(options.autoScroll) ? true : options.autoScroll;
         },
 
@@ -222,13 +224,12 @@ define('io.ox/chat/views/chat', [
                 this.$scrollpane = $('<div class="scrollpane">').on('scroll', $.proxy(this.onScroll, this)).append(
                     this.$paginatePrev = $('<div class="paginate prev">').toggle(!this.model.messages.prevComplete),
                     $('<div class="conversation">').append(
-                        this.$messages = $('<div class="messages">').append(
-                            this.model.messages.map(this.renderMessage, this)
-                        ),
+                        this.messagesView.render().$el,
                         this.typing.$el
                     ),
                     this.$paginateNext = $('<div class="paginate next">').toggle(!this.model.messages.nextComplete)
                 ),
+                this.$referencePreview = this.reference ? new ReferencePreview({ reference: this.reference }).render().$el : undefined,
                 $('<div class="controls">').append(
                     this.$jumpDown = $('<button class="btn btn-default btn-circle jump-down">').append(
                         $('<i class="fa fa-chevron-down" aria-hidden="true">'),
@@ -277,62 +278,31 @@ define('io.ox/chat/views/chat', [
             return $('<h2 class="title">').append(this.model.getTitle() || '\u00a0');
         },
 
-        renderMessage: function (model) {
-            // mark message as seen as soon as it is rendered
-            if (model.get('state') !== 'seen' && model.get('senderId').toString() !== data.user_id.toString()) this.updateDelivery(model, 'seen');
-            var message = $('<div class="message">')
-                // here we use cid instead of id, since the id might be unknown
-                .attr('data-cid', model.cid)
-                .addClass(model.get('type'))
-                .toggleClass('myself', !model.isSystem() && model.isMyself())
-                .toggleClass('highlight', !!model.get('id') && model.get('id') === this.messageId)
-                .append(
-                    this.renderDateInformation(model),
-                    // sender avatar & name
-                    this.renderSender(model),
-                    // message boby
-                    $('<div class="content">').append(
-                        $('<div class="body">').html(model.getBody()),
-                        $('<div class="foot">').append(
-                            // time
-                            $('<div class="time">').text(model.getTime()),
-                            // delivery state
-                            $('<div class="fa delivery">').addClass(model.get('state'))
-                        )
-                    )
-                );
-
-            return message;
+        onBeforeAdd: function () {
+            var scrollpane = this.$scrollpane,
+                firstChild = this.messagesView.$el.children().first(),
+                prevTop = (firstChild.position() || {}).top || 0,
+                // check this before adding the new messages
+                isScrolledDown = scrollpane.scrollTop() + scrollpane.height() > scrollpane.prop('scrollHeight') - 30;
+            this.scrollInfo = { firstChild: firstChild, prevTop: prevTop, isScrolledDown: isScrolledDown };
         },
 
-        updateDelivery: function (model, state) {
-            model.updateDelivery(state);
-        },
+        onAfterAdd: function (added) {
+            // determine whether to scroll to new or selected message
+            var scrollpane = this.$scrollpane,
+                firstChild = this.scrollInfo.firstChild,
+                prevTop = this.scrollInfo.prevTop,
+                isScrolledDown = this.scrollInfo.isScrolledDown,
+                multipleMessages = added.length > 1,
+                isCurrentUser = added[0].get('senderId').toString() === data.user_id.toString();
 
-        renderDateInformation: function (model) {
-            var index = model.collection.indexOf(model),
-                prev = index === 0 ? undefined : model.collection.at(index - 1);
-
-            if (index === 0 || moment(prev.get('sent')).startOf('day').isBefore(moment(model.get('sent')).startOf('day'))) {
-                var date = moment(model.get('sent'));
-
-                var formattedDate = date.calendar(null, {
-                    sameDay: '[Today]',
-                    lastDay: '[Yesterday]',
-                    lastWeek: '[Last] dddd',
-                    sameElse: 'LL'
-                });
-
-                return $('<div class="date">').html(formattedDate);
+            if (multipleMessages || isCurrentUser || isScrolledDown) {
+                if (this.autoScroll) this.scrollToBottom();
+                else if (firstChild.position().top - prevTop) scrollpane.scrollTop(firstChild.position().top - prevTop);
             }
 
-            return $();
-        },
-
-        renderSender: function (model) {
-            if (model.isSystem() || model.isMyself() || model.hasSameSender()) return $();
-            var user = data.users.getByMail(model.get('sender'));
-            return [new Avatar({ model: user }).render().$el, $('<div class="sender">').text(user.getName())];
+            this.toggleAutoScroll(true);
+            delete this.scrollInfo;
         },
 
         scrollToBottom: function () {
@@ -341,7 +311,7 @@ define('io.ox/chat/views/chat', [
             if (this.messageId) {
                 var model = this.model.messages.get(this.messageId);
                 if (model) {
-                    var elem = this.$messages.find('[data-cid="' + model.cid + '"]'),
+                    var elem = this.messagesView.$('[data-cid="' + model.cid + '"]'),
                         delta = elem.position().top - scrollpane.height() / 2;
                     position = scrollpane.scrollTop() + delta;
                     delete this.messageId;
@@ -349,6 +319,11 @@ define('io.ox/chat/views/chat', [
             }
             scrollpane.scrollTop(position);
             this.model.set('unreadCount', 0);
+        },
+
+        toggleAutoScroll: function (autoScroll) {
+            if (autoScroll === undefined) autoScroll = !this.autoScroll;
+            this.autoScroll = autoScroll;
         },
 
         onEditorKeydown: function (e) {
@@ -389,7 +364,18 @@ define('io.ox/chat/views/chat', [
                 this.model.messages.fetch();
             }
 
-            this.model.postMessage({ body: body });
+            var data = { body: body };
+            if (this.reference) data.reference = this.reference;
+            this.model.postMessage(data);
+
+            // remove reference preview
+            this.onRemoveReference();
+        },
+
+        onRemoveReference: function () {
+            if (this.$referencePreview) this.$referencePreview.remove();
+            delete this.$referencePreview;
+            delete this.reference;
         },
 
         onChangeTitle: function (model) {
@@ -433,48 +419,6 @@ define('io.ox/chat/views/chat', [
             return this.$scrollpane.scrollTop() + this.$scrollpane.height() < this.$scrollpane.prop('scrollHeight') - 50;
         },
 
-        toggleAutoScroll: function (autoScroll) {
-            if (autoScroll === undefined) autoScroll = !this.autoScroll;
-            this.autoScroll = autoScroll;
-        },
-
-        onReset: function () {
-            if (!this.$messages) return;
-            this.$messages.empty();
-            var collection = this.model.messages;
-            this.onAdd(undefined, collection, { changes: { added: collection } });
-        },
-
-        onAdd: _.debounce(function (model, collection, options) {
-            if (this.disposed) return;
-            // need to check if view is not disposed since this function is debounced
-            if (!this.$messages) return;
-
-            var scrollpane = this.$scrollpane,
-                firstChild = this.$messages.children().first(),
-                prevTop = (firstChild.position() || {}).top || 0,
-                // check this before adding the new messages
-                isScrolledDown = this.$scrollpane.scrollTop() + this.$scrollpane.height() > this.$scrollpane.prop('scrollHeight') - 30;
-
-            options.changes.added.forEach(function (model) {
-                var index = collection.indexOf(model);
-                if (index === 0) return this.$messages.prepend(this.renderMessage(model));
-
-                var prev = collection.at(index - 1);
-                this.$messages.find('[data-cid="' + prev.cid + '"]').after(this.renderMessage(model));
-            }.bind(this));
-
-            // determine whether to scroll to new or selected message
-            var multipleMessages = options.changes.added.length > 1,
-                isCurrentUser = options.changes.added[0].get('senderId').toString() === data.user_id.toString();
-            if (multipleMessages || isCurrentUser || isScrolledDown) {
-                if (this.autoScroll) this.scrollToBottom();
-                else if (firstChild.position().top - prevTop) scrollpane.scrollTop(firstChild.position().top - prevTop);
-            }
-
-            this.toggleAutoScroll(true);
-        }, 1),
-
         onComplete: function (direction) {
             this.$('.paginate.' + direction).idle().hide();
         },
@@ -489,28 +433,8 @@ define('io.ox/chat/views/chat', [
 
         getMessageNode: function (model, selector) {
             return this.$('.message[data-cid="' + model.cid + '"] ' + (selector || ''));
-        },
-
-        onRemove: function (model) {
-            this.getMessageNode(model).remove();
-        },
-
-        onChangeBody: function (model) {
-            var $message = this.getMessageNode(model);
-            var $body = $message.find('.body');
-            $message
-                .removeClass('system text image file audio')
-                .addClass(model.isSystem() ? 'system' : model.get('type'));
-            $body.html(model.getBody());
-        },
-
-        onChangeTime: function (model) {
-            this.getMessageNode(model, '.time').text(model.getTime());
-        },
-
-        onChangeDelivery: function (model) {
-            this.getMessageNode(model, '.delivery').attr('class', 'fa delivery ' + model.get('state'));
         }
+
     });
 
     return ChatView;

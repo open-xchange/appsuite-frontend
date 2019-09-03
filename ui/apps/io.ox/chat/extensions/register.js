@@ -83,6 +83,30 @@ define('io.ox/chat/extensions/register', [
         ref: 'io.ox/chat/actions/start-chat-from-appointment'
     });
 
+    ext.point('io.ox/calendar/detail').extend({
+        index: 900,
+        id: 'chat',
+        draw: function (baton) {
+            var $fieldset = $('<fieldset class="details ox-chat">').hide().append(
+                $('<legend class="io-ox-label">').append(
+                    $('<h2>').text('Recent chat messages')
+                )
+            );
+            this.append($fieldset);
+            data.chats.initialized.then(function () {
+                var reference = 'calendar//' + baton.model.get('id'),
+                    room = data.chats.findWhere({ reference: reference });
+                if (!room) return $fieldset.remove();
+                room.messages.fetch();
+                return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
+                    $fieldset.append(
+                        new MessagesView({ collection: room.messages, limit: 5 }).render().$el
+                    ).show();
+                });
+            });
+        }
+    });
+
     new Action('io.ox/chat/actions/start-chat-from-appointment', {
         capabilities: 'chat',
         collection: 'some',
@@ -90,7 +114,8 @@ define('io.ox/chat/extensions/register', [
             startGroupChat({
                 title: baton.model.get('summary'),
                 description: baton.model.get('description'),
-                members: _(baton.model.get('attendees')).pluck('email')
+                members: _(baton.model.get('attendees')).pluck('email'),
+                reference: 'calendar//' + baton.model.get('id')
             });
         }
     });

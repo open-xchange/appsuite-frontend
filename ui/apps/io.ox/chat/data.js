@@ -241,9 +241,10 @@ define('io.ox/chat/data', [
             return this.get('type') === 'file';
         },
 
-        hasSameSender: function () {
+        hasSameSender: function (limit) {
+            limit = limit ? this.collection.length - limit : 0;
             var index = this.collection.indexOf(this);
-            if (index <= 0) return false;
+            if (index <= limit) return false;
             var prev = this.collection.at(index - 1);
             if (prev.isSystem()) return false;
             return prev.get('senderId') === this.get('senderId');
