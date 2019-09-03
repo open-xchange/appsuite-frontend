@@ -56,7 +56,7 @@ function extendedLogin(I) {
 }
 
 function checkForFilteredMail(I) {
-    I.waitForText('Apply...');
+    I.waitForText('Apply');
     I.waitForElement('#io-ox-refresh-icon .fa-spin');
     I.waitForElement('#io-ox-refresh-icon .fa-spin-paused');
 
@@ -73,7 +73,7 @@ Scenario('Refilter mails in INBOX folder', async (I, users) => {
     await sampleRule(I);
     extendedLogin(I);
 
-    I.click('Apply...');
+    I.click('Apply');
     I.waitForElement(locate('.folder.selected').withText('Inbox'));
     I.click('Ok');
 
@@ -103,7 +103,7 @@ Scenario('Create and apply new filter rule', async (I, users) => {
     I.click(locate('.modal .folder.selectable').withText('foo'));
     I.click('Ok');
 
-    I.click('Save and apply...');
+    I.click('Save and apply');
     I.waitForVisible(locate('.folder.selected').withText('Inbox'));
     I.click('Ok');
 
@@ -119,7 +119,7 @@ Scenario('Edit and apply existing filter rule', async (I, users) => {
     I.click('Edit');
     I.fillField('Rule name', 'no foo in inbox');
     I.fillField('Subject Contains', 'foo');
-    I.click('Save and apply...');
+    I.click('Save and apply');
     I.waitForVisible(locate('.folder.selected').withText('Inbox'));
     I.click('Ok');
 
