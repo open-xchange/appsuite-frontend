@@ -315,12 +315,13 @@ define('io.ox/chat/views/chat', [
 
             if (index === 0 || moment(prev.get('sent')).startOf('day').isBefore(moment(model.get('sent')).startOf('day'))) {
                 var date = moment(model.get('sent'));
-                var today = moment(new Date()).startOf('day');
-                var yesterday = moment(new Date()).clone().subtract(1, 'days').startOf('day');
 
-                var formattedDate = moment(date).format('LL');
-                if (date.isSame(today, 'd')) formattedDate = 'today';
-                if (date.isSame(yesterday, 'd')) formattedDate = 'yesterday';
+                var formattedDate = date.calendar(null, {
+                    sameDay: '[Today]',
+                    lastDay: '[Yesterday]',
+                    lastWeek: '[Last] dddd',
+                    sameElse: 'LL'
+                });
 
                 return $('<div class="date">').html(formattedDate);
             }
