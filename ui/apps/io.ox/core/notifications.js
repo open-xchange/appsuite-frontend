@@ -248,13 +248,15 @@ define('io.ox/core/notifications', [
                         // prevent the dropdown from closing as long as the sidepopup is open
                         self.dropdown.forceOpen(true);
                         // open SidePopup without arrow
-                        var popup = new dialogs.SidePopup({ arrow: false, side: 'left' })
+                        var e = $.Event('click', { target: self.sidepopupNode.empty() });
+                        // focus is handled in on close sidepopup. We want to avoid strange hopping in the list
+                        var popup = new dialogs.SidePopup({ arrow: false, side: 'left', focus: false })
                             .setTarget(self.sidepopupNode.empty())
-                            .show({ target: self.sidepopupNode.empty() }, function (popup) {
+                            .show(e, function (popup) {
                                 var node = popup.closest('.io-ox-sidepopup');
                                 if (!_.device('smartphone')) {
                                     node.css({
-                                        right: '550px'
+                                        right: '585px'
                                     });
                                 }
                                 node.addClass('io-ox-notifications-sidepopup first');
@@ -348,8 +350,14 @@ define('io.ox/core/notifications', [
             this.dropdown.forceOpen(false);
             this.sidepopupIsClosing = false;
             if (this.listNode.find('.item:visible')) {
-                // focus first for now
-                this.listNode.find('.item').first().focus();
+                if (this.listNode.find('.item.has-focus')) {
+                    this.listNode.find('.item.has-focus').focus();
+                } else if (this.sidepopupNode.attr('data-cid') && this.listNode.find('.item:visible[data-cid="' + this.sidepopupNode.attr('data-cid') + '"]')) {
+                    this.listNode.find('.item[data-cid="' + this.sidepopupNode.attr('data-cid') + '"]').focus();
+                } else {
+                    // focus first for now
+                    this.listNode.find('.item').first().focus();
+                }
             }
 
             var self = this,
