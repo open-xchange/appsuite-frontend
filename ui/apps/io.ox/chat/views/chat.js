@@ -280,13 +280,14 @@ define('io.ox/chat/views/chat', [
         renderMessage: function (model) {
             // mark message as seen as soon as it is rendered
             if (model.get('state') !== 'seen' && model.get('senderId').toString() !== data.user_id.toString()) this.updateDelivery(model, 'seen');
-            return $('<div class="message">')
+            var message = $('<div class="message">')
                 // here we use cid instead of id, since the id might be unknown
                 .attr('data-cid', model.cid)
                 .addClass(model.get('type'))
                 .toggleClass('myself', !model.isSystem() && model.isMyself())
                 .toggleClass('highlight', !!model.get('id') && model.get('id') === this.messageId)
                 .append(
+                    this.renderDateInformation(model),
                     // sender avatar & name
                     this.renderSender(model),
                     // message boby
@@ -300,10 +301,31 @@ define('io.ox/chat/views/chat', [
                         )
                     )
                 );
+
+            return message;
         },
 
         updateDelivery: function (model, state) {
             model.updateDelivery(state);
+        },
+
+        renderDateInformation: function (model) {
+            var index = model.collection.indexOf(model),
+                prev = index === 0 ? undefined : model.collection.at(index - 1);
+
+            if (index === 0 || moment(prev.get('sent')).startOf('day').isBefore(moment(model.get('sent')).startOf('day'))) {
+                var date = moment(model.get('sent'));
+                var today = moment(new Date()).startOf('day');
+                var yesterday = moment(new Date()).clone().subtract(1, 'days').startOf('day');
+
+                var formattedDate = moment(date).format('LL');
+                if (date.isSame(today, 'd')) formattedDate = 'today';
+                if (date.isSame(yesterday, 'd')) formattedDate = 'yesterday';
+
+                return $('<div class="date">').html(formattedDate);
+            }
+
+            return $();
         },
 
         renderSender: function (model) {
