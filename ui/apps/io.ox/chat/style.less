@@ -438,18 +438,19 @@
     .fa.delivery {
         font-size: 14px;
 
-        &:before {
-            content: "\f017"; // clock-o
-        }
         &.server:before {
-            content: "\f10c"; // circle-o
+            content: "\f00c"; // check
         }
         &.client:before {
-            content: "\f05d"; // check-circle-o
+            letter-spacing: -8px;
+            margin: 0 2px 0 -2px;
+            content: "\f00c\f00c"; // check
         }
         &.seen:before {
             color: @lightblue;
-            content: "\f058"; // check-circle
+            letter-spacing: -8px;
+            margin: 0 2px 0 -2px;
+            content: "\f00c\f00c"; // check
         }
     }
 
