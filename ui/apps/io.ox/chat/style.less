@@ -913,6 +913,24 @@
             text-align: center;
         }
     }
+
+    .reference-preview {
+        padding: 8px;
+        background-color: @backgroundColor;
+        border-top: 1px solid @borderColor;
+        display: flex;
+
+        > * { flex: 1; overflow: hidden; }
+        .close { flex: 0 0 auto; }
+
+        .title, .body {
+            .ellipsis();
+        }
+
+        .title {
+            font-weight: bold;
+        }
+    }
 }
 
 .ox-chat-popup {
