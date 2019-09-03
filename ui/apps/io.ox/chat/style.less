@@ -53,12 +53,15 @@
         }
 
         .message {
-            padding: 0 48px 0 0;
             &.myself {
                 padding-right: 0;
-                padding-left: 64px;
+                 padding-left: 0px;
             }
             .avatar { display: none; }
+             .sender { margin: 0px; }
+             &.text {
+                 .content { margin: 0px; }
+             }
         }
 
         .resizebar { display: block; }
@@ -452,8 +455,6 @@
     }
 
     .message {
-
-        padding: 0 48px 0 64px;
         margin-bottom: 8px;
         position: relative;
 
@@ -467,6 +468,7 @@
         }
         .sender {
             font-weight: bold;
+             margin: 0 48px 0 64px;
         }
         &.text {
             .content {
@@ -474,6 +476,7 @@
                 border-radius: 8px;
                 display: inline-block;
                 padding: 8px 16px;
+                 margin: 0 48px 0 64px;
             }
         }
         .foot {
@@ -487,19 +490,21 @@
         }
         .initials {
             position: absolute;
-            top: 22px;
+            //  top: 22px;
             left: 8px;
         }
         &.highlight .content {
             animation-name: highlightMessage;
             animation-duration: 3s;
+             margin: 0 48px 0 64px;
         }
         &.myself {
             text-align: right;
-            padding: 0 0 0 128px;
+             padding: 0px;
 
             .sender {
                 display: none;
+                 margin: 0 48px 0 64px;
             }
             .time, .delivery {
                 color: #eee;;
@@ -507,6 +512,7 @@
             &.text .content {
                 color: #fff;
                 background-color: @gray;
+                 margin: 0 0 0 128px;
             }
             .body {
                 text-align: left;
@@ -517,6 +523,7 @@
             }
             &.highlight .content{
                 animation-name: highlightOwnMessage;
+                 margin: 0 0 0 128px;
             }
         }
         &.image, &.file {
@@ -575,6 +582,19 @@
                 display: none;
             }
         }
+         .date {
+             color:rgb(112, 112, 112);
+             font-size: 12px;
+             text-align: center;
+             width: fit-content;
+             padding: 2px 10px 2px 10px;
+             border-radius: 4px;
+             border: 1px solid rgba(40,63,115, 0.2);
+             margin-bottom: 8px;
+             margin-top: 8px;
+             margin-left: auto;
+             margin-right: auto;
+         }
     }
 
     .icon{
