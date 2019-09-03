@@ -32,6 +32,21 @@ define('io.ox/chat/main', [
 
     'use strict';
 
+    var point = ext.point('io.ox/contacts/addressbook-popup-single');
+    point.disable('tokenview')
+    .disable('footer')
+    .extend({
+        id: 'single-selection',
+        after: 'list',
+        render: function () {
+            this.listView.selection.pickSingle = function (node) {
+                this.selectNone();
+                this.check(node);
+            };
+            this.listView.selection.isMultiple = function () { return false; };
+        }
+    });
+
     var Window = FloatingWindow.View.extend({
 
         events: function () {
@@ -85,10 +100,7 @@ define('io.ox/chat/main', [
                 picker.open(
                     function callback(items) {
                         var members = _(items).pluck('email');
-                        if (members.length === 1) return self.startPrivateChat({ email: members[0] });
-                        data.chats.addAsync({ type: 'group', members: members }).done(function (result) {
-                            self.showChat(result.id);
-                        });
+                        return self.startPrivateChat({ email: members[0] });
                     },
                     {
                         help: false,
@@ -97,7 +109,8 @@ define('io.ox/chat/main', [
                         },
                         useGABOnly: true,
                         title: 'Start new conversation',
-                        button: 'Start conversation'
+                        button: 'Start conversation',
+                        point: 'io.ox/contacts/addressbook-popup-single'
                     }
                 );
             });
