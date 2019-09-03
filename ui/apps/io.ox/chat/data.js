@@ -378,7 +378,7 @@ define('io.ox/chat/data', [
             var last = this.get('lastMessage');
             if (!last) return '\u00a0';
             var message = new MessageModel(last);
-            if (message.isFile()) return message.getFile({ download: false });
+            if (message.isFile() || message.isImage()) return message.getFile({ download: false });
             return message.getTextBody();
         },
 
