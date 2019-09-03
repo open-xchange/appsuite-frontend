@@ -32,8 +32,10 @@
 
 .ox-chat {
 
-    display: flex;
-    height: 100%;
+    &:not(.embedded) {
+        display: flex;
+        height: 100%;
+    }
 
     &.columns {
         .chat-leftside {

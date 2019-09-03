@@ -43,6 +43,36 @@ define('io.ox/chat/extensions/register', [
         ref: 'io.ox/chat/actions/start-chat-from-contacts'
     });
 
+    ext.point('io.ox/halo/contact:renderer').extend({
+        id: 'chat',
+        index: '1000000',
+        handles: function (type) {
+            // looks like we belong to mail, but it works
+            return type === 'com.openexchange.halo.mail';
+        },
+        draw: function (baton) {
+            var node;
+            this.after(
+                node = $('<div class="ray ox-chat embedded" data-prodiver="com.openexchange.halo.chat">').append(
+                    $('<h2 class="widget-title clear-title">').text('Recent chat messages')
+                ).hide()
+            );
+            data.chats.initialized.then(function () {
+                var room = data.chats.find(function (chat) {
+                    if (!chat.isPrivate()) return;
+                    return _(chat.get('members')).findWhere({ email: baton.contact.email });
+                });
+                if (!room) return node.remove();
+                room.messages.fetch();
+                return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
+                    node.append(
+                        new MessagesView({ collection: room.messages, limit: 5, markAsRead: false }).render().$el
+                    ).show();
+                });
+            });
+        }
+    });
+
     new Action('io.ox/chat/actions/start-chat-from-contacts', {
         capabilities: 'chat',
         collection: 'some',
@@ -87,7 +117,7 @@ define('io.ox/chat/extensions/register', [
         index: 900,
         id: 'chat',
         draw: function (baton) {
-            var $fieldset = $('<fieldset class="details ox-chat">').hide().append(
+            var $fieldset = $('<fieldset class="details ox-chat embedded">').hide().append(
                 $('<legend class="io-ox-label">').append(
                     $('<h2>').text('Recent chat messages')
                 )
@@ -100,7 +130,7 @@ define('io.ox/chat/extensions/register', [
                 room.messages.fetch();
                 return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
                     $fieldset.append(
-                        new MessagesView({ collection: room.messages, limit: 5 }).render().$el
+                        new MessagesView({ collection: room.messages, limit: 5, markAsRead: false }).render().$el
                     ).show();
                 });
             });
