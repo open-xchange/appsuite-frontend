@@ -213,9 +213,7 @@ define('io.ox/core/links', [
         var data = $(this).data();
         ox.launch('io.ox/settings/main', { folder: data.folder }).done(function () {
             // special handling for settings (bad, but apparently solved differently)
-            if (_.isFunction(this.setSettingsPane)) this.setSettingsPane({ folder: data.folder });
-            // set proper folder
-            else if (data.folder && this.folder.get() !== data.folder) this.folder.set(data.folder);
+            this.setSettingsPane({ folder: data.folder });
         });
     };
 

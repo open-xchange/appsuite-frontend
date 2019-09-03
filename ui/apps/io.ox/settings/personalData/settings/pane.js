@@ -40,9 +40,9 @@ define('io.ox/settings/personalData/settings/pane', [
                     //#. shown when a download of mail data is requested
                     'label': gt('Trash folder')
                 },
-                'subscribedOnly': {
-                    //#. shown when a download of mail data is requested
-                    'label': gt('Subscribed folders only')
+                'includeUnsubscribed': {
+                    //#. shown when a download of mail data is requested (has header "Included folders ...")
+                    'label': gt('Unsubscribed folders')
                 }
             },
             'calendar': {
@@ -58,9 +58,9 @@ define('io.ox/settings/personalData/settings/pane', [
                     //#. shown when a download of calendar data is requested
                     'label': gt('Shared calendars')
                 },
-                'subscribedOnly': {
-                    //#. shown when a download of calendar data is requested
-                    'label': gt('Subscribed calendars only')
+                'includeUnsubscribed': {
+                    //#. shown when a download of calendar data is requested (has header "Included folders ...")
+                    'label': gt('Unsubscribed calendars')
                 }
             },
             'contacts': {
@@ -234,9 +234,7 @@ define('io.ox/settings/personalData/settings/pane', [
                             .on('click', function () {
                                 deleteDialog({ title: gt('Request new download'), text: gt('By requesting a new download, your currently available downloads will be deleted.'), action: 'delete', label: gt('Delete all avaliable downloads') }).then(function (action) {
                                     if (action === 'delete') {
-                                        api.deleteAllFiles().then(function () {
-                                            api.requestDownload(self.getDownloadConfig()).fail(yell);
-                                        }, yell);
+                                        api.requestDownload(self.getDownloadConfig(), true).fail(yell);
                                     }
                                 });
                             }));

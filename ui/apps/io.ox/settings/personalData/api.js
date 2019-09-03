@@ -49,11 +49,15 @@ define('io.ox/settings/personalData/api', [
             });
         },
 
-        requestDownload: function (data) {
+        // deleteOldDataExport removes files from previously requested downloads. Careful here. Can cause data loss
+        requestDownload: function (data, deleteOldDataExport) {
             return http.POST({
                 url: 'api/gdpr/dataexport',
                 data: JSON.stringify(data),
-                contentType: 'application/json'
+                contentType: 'application/json',
+                params: {
+                    deleteOldDataExport: deleteOldDataExport
+                }
             }).then(function (result) {
                 api.trigger('updateStatus');
                 return result;
