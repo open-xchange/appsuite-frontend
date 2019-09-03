@@ -1399,7 +1399,7 @@ msgstr "在此问题被修复前，应用程序可能未能如常工作。"
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main apps/io.ox/mail/compose/sharing.js
-#: module:io.ox/mail
+#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter.js
 msgid "Apply"
 msgstr "套用"
 
@@ -8971,8 +8971,10 @@ msgid "Save"
 msgstr "保存"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-msgid "Save and apply..."
-msgstr ""
+#, fuzzy
+#| msgid "Save as file"
+msgid "Save and apply"
+msgstr "另存为文件"
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core

@@ -319,6 +319,7 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/compose/sharing.js
 #: module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js
 msgid "Apply"
 msgstr ""
 
@@ -11090,12 +11091,7 @@ msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: module:io.ox/mail
-msgid "Save and apply..."
-msgstr ""
-
-#: apps/io.ox/mail/mailfilter/settings/filter.js
-#: module:io.ox/mail
-msgid "Apply..."
+msgid "Save and apply"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -11135,6 +11131,11 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: module:io.ox/mail
 msgid "Select the folder to apply the rule to"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js
+#: module:io.ox/mail
+msgid "Apply..."
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js

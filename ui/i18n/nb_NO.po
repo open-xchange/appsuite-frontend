@@ -1517,7 +1517,7 @@ msgstr "Programmet vil ikke fungere som forventet før dette problemet er løst.
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main apps/io.ox/mail/compose/sharing.js
-#: module:io.ox/mail
+#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter.js
 msgid "Apply"
 msgstr "Bruk"
 
@@ -9355,8 +9355,10 @@ msgid "Save"
 msgstr "Lagre"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-msgid "Save and apply..."
-msgstr ""
+#, fuzzy
+#| msgid "Save as file"
+msgid "Save and apply"
+msgstr "Lagre som fil"
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
