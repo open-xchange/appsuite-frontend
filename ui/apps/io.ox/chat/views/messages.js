@@ -128,7 +128,7 @@ define('io.ox/chat/views/messages', [
             if (this.disposed) return;
             this.$el.empty();
             var collection = this.collection;
-            this.onAdd(undefined, collection, { changes: { added: collection.toArray() } });
+            this.onAdd(collection, { changes: { added: collection.toArray() } });
         },
 
         onRemove: function (model) {
