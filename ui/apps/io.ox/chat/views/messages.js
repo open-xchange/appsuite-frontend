@@ -27,7 +27,7 @@ define('io.ox/chat/views/messages', [
             this.options = options;
 
             this.listenTo(this.collection, {
-                'add': this.onAdd,
+                'update': this.onAdd,
                 'reset': this.onReset,
                 'remove': this.onRemove,
                 'change:body': this.onChangeBody,
@@ -48,7 +48,7 @@ define('io.ox/chat/views/messages', [
 
         renderMessage: function (model) {
             // mark message as seen as soon as it is rendered
-            if (model.get('state') !== 'seen' && model.get('senderId').toString() !== data.user_id.toString()) this.updateDelivery(model, 'seen');
+            if (this.options.markAsRead !== false && model.get('state') !== 'seen' && model.get('senderId').toString() !== data.user_id.toString()) this.updateDelivery(model, 'seen');
             return $('<div class="message">')
                 // here we use cid instead of id, since the id might be unknown
                 .attr('data-cid', model.cid)
@@ -103,16 +103,13 @@ define('io.ox/chat/views/messages', [
             model.updateDelivery(state);
         },
 
-        onAdd: _.debounce(function (model, collection, options) {
-            // need to check if view is not disposed since this function is debounced
-            if (this.disposed) return;
+        onAdd: function (collection, options) {
+            var added = options.changes.added;
+            if (added.length === 0) return;
 
             // special case when there is a limit. calculating diffs is too complicated
             // and it is fast enough to just rerender, if there is a limit
             if (this.options.limit) return this.render();
-
-            var added = options.changes.added;
-            if (added.length === 0) return;
 
             this.trigger('before:add', added);
 
@@ -125,7 +122,7 @@ define('io.ox/chat/views/messages', [
             }.bind(this));
 
             this.trigger('after:add', added);
-        }, 1),
+        },
 
         onReset: function () {
             if (this.disposed) return;
