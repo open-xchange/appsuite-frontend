@@ -184,8 +184,8 @@ define('plugins/portal/flickr/register', [
             $q = $('<input id="flickr_search" type="text" class="form-control" tabindex="0">'),
             $description = $('<input id="flickr_desc" type="text" class="form-control" tabindex="0">'),
             $method = $('<select id="flickr_option" class="form-control" tabindex="0">').append(
-                $('<option>').attr('value', 'flickr.photos.search').text(gt('flickr.photos.search')),
-                $('<option>').attr('value', 'flickr.people.getPublicPhotos').text(gt('flickr.people.getPublicPhotos'))
+                $('<option>').attr('value', 'flickr.photos.search').text(gt('Search photos')),
+                $('<option>').attr('value', 'flickr.people.getPublicPhotos').text(gt('Public photos by user'))
             ),
             $error = $('<div>').addClass('alert alert-danger').css('margin-top', '15px').hide(),
             props = model.get('props') || {};
