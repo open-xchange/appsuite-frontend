@@ -26,9 +26,10 @@ define('io.ox/chat/main', [
     'io.ox/chat/views/searchResult',
     'io.ox/contacts/api',
     'io.ox/backbone/views/toolbar',
+    'io.ox/backbone/views/modal',
     'settings!io.ox/core',
     'less!io.ox/chat/style'
-], function (ext, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, settings) {
+], function (ext, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, ModalDialog, settings) {
 
     'use strict';
 
@@ -150,8 +151,21 @@ define('io.ox/chat/main', [
         },
 
         leaveGroup: function (groupId) {
+            var self = this;
+
+            new ModalDialog({
+                point: 'io.ox/chat/actions/confirmLeavingGroup',
+                backdrop: true,
+                title: 'Leave group',
+                description: 'Do you really want to leave the group?'
+            })
+            .addCancelButton({ left: true })
+            .addButton({ action: 'continue', label: 'Yes' })
+            .on('continue', function () {
             data.chats.get(groupId).destroy();
-            this.closeChat();
+                self.closeChat();
+            })
+            .open();
         },
 
         joinChannel: function (cmd) {
