@@ -265,7 +265,7 @@ define('io.ox/chat/data', [
 
     var MessageCollection = Backbone.Collection.extend({
         model: MessageModel,
-        comparator: 'sent',
+        comparator: 'id',
         initialize: function (models, options) {
             this.roomId = options.roomId;
         },

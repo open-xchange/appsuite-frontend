@@ -41,7 +41,7 @@ define('io.ox/chat/views/messages', [
 
         render: function () {
             this.$el.empty().append(
-                this.collection.last(this.options.limit || Infinity).map(this.renderMessage, this)
+                _.flatten(this.collection.last(this.options.limit || Infinity).map(this.renderMessage, this))
             );
             return this;
         },
@@ -49,14 +49,13 @@ define('io.ox/chat/views/messages', [
         renderMessage: function (model) {
             // mark message as seen as soon as it is rendered
             if (this.options.markAsRead !== false && model.get('state') !== 'seen' && model.get('senderId').toString() !== data.user_id.toString()) this.updateDelivery(model, 'seen');
-            return $('<div class="message">')
+            var message = $('<div class="message">')
                 // here we use cid instead of id, since the id might be unknown
                 .attr('data-cid', model.cid)
                 .addClass(model.get('type'))
                 .toggleClass('myself', !model.isSystem() && model.isMyself())
                 .toggleClass('highlight', !!model.get('id') && model.get('id') === this.messageId)
                 .append(
-                    this.renderDateInformation(model),
                     // sender avatar & name
                     this.renderSender(model),
                     // message boby
@@ -70,6 +69,11 @@ define('io.ox/chat/views/messages', [
                         )
                     )
                 );
+
+            var date = this.renderDate(model);
+
+            if (date) return [date, message];
+            return message;
         },
 
         renderSender: function (model) {
@@ -78,12 +82,13 @@ define('io.ox/chat/views/messages', [
             return [new Avatar({ model: user }).render().$el, $('<div class="sender">').text(user.getName())];
         },
 
-        renderDateInformation: function (model) {
+        renderDate: function (model) {
             var index = model.collection.indexOf(model),
                 prev = index === 0 ? undefined : model.collection.at(index - 1),
                 start = this.options.limit ? model.collection.length - this.options.limit : 0;
 
-            if (index === start || moment(prev.get('sent')).startOf('day').isBefore(moment(model.get('sent')).startOf('day'))) {
+            if (index !== start && moment(prev.get('sent')).startOf('day').isSameOrAfter(moment(model.get('sent')).startOf('day'))) return;
+
                 var date = moment(model.get('sent'));
 
                 var formattedDate = date.calendar(null, {
@@ -94,9 +99,6 @@ define('io.ox/chat/views/messages', [
                 });
 
                 return $('<div class="date">').html(formattedDate);
-            }
-
-            return $();
         },
 
         updateDelivery: function (model, state) {
@@ -106,6 +108,14 @@ define('io.ox/chat/views/messages', [
         onAdd: function (collection, options) {
             var added = options.changes.added;
             if (added.length === 0) return;
+
+            var lastAdded = added[added.length - 1];
+            var firstPrev = collection.at(collection.indexOf(lastAdded) + 1);
+            if (firstPrev && moment(lastAdded.get('sent')).startOf('day').isSame(moment(firstPrev.get('sent')).startOf('day'))) {
+                $('.messages').find('[data-cid=' + firstPrev.cid + ']')
+                    .prev().remove().end()
+                    .replaceWith(this.renderMessage(firstPrev));
+            }
 
             // special case when there is a limit. calculating diffs is too complicated
             // and it is fast enough to just rerender, if there is a limit
