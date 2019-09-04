@@ -235,10 +235,11 @@ define('io.ox/oauth/backbone', [
         tagName: 'li',
         className: 'service-item',
         render: function () {
-            var shortId = this.model.get('icon') || this.model.id.match(/\.?(\w*)$/)[1] || 'fallback';
+            var shortId = this.model.get('icon') || this.model.id.match(/\.?(\w*)$/)[1] || 'fallback',
+                mod = this.model.get('module') || '';
             this.$el.append(
                 $('<button type="button" class="btn btn-default">').append(
-                    $('<i class="service-icon fa">').addClass('logo-' + shortId),
+                    $('<i class="service-icon fa">').addClass('logo-' + shortId + ' ' + mod),
                     $('<div class="service-label">').text(this.model.get('displayName'))
                 ).data({
                     cid: this.model.cid
