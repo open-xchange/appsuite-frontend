@@ -461,7 +461,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                         o.collection.expire();
                                     });
                                     mailAPI.refresh();
-                                    rule.empty().text(gt('Apply...'));
+                                    rule.empty().text(gt('Apply'));
                                 });
                             },
                             module: 'mail',
