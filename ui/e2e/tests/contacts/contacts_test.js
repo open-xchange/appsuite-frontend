@@ -615,7 +615,7 @@ Scenario('[C7361] - Edit partial data of a contact @shaky', async function (I) {
     I.waitForVisible('.classic-toolbar [data-action]');
     I.click('.folder[data-id="virtual/flat/contacts/private"] .folder-arrow');
     I.selectFolder('Contacts');
-    I.click(locate(contact.display_name, '.vgrid-scrollpane-container .contact'));
+    I.click(locate('.vgrid-scrollpane-container .contact').withText(contact.display_name));
     I.clickToolbar('Edit');
     I.waitForVisible('.io-ox-contacts-edit-window');
     I.fillField('cellular_telephone1', '+3913371337');
