@@ -299,5 +299,17 @@ define('io.ox/core/util', [
 
     };
 
+    console.log('Add listener');
+
+    window.addEventListener('popstate', function (e) {
+        this.console.log('POPSTATE!!!', ox.changeTitle);
+        if (ox.changeTitle) return;
+        e.preventDefault();
+        $('.dropdown.open, io-ox-sidepopup, .floating-window.active, .floating-window')
+            .first()
+            .trigger($.Event('keydown', { which: 27, keyCode: 27 }));
+        this.console.log('USER WARS!!!');
+    });
+
     return that;
 });
