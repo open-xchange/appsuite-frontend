@@ -162,7 +162,7 @@ define('io.ox/chat/main', [
             .addCancelButton({ left: true })
             .addButton({ action: 'continue', label: 'Yes' })
             .on('continue', function () {
-            data.chats.get(groupId).destroy();
+                data.chats.get(groupId).destroy();
                 self.closeChat();
             })
             .open();
