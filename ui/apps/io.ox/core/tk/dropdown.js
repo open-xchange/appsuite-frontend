@@ -101,11 +101,10 @@
     function toggle(e, f) {
         var $this = $(this),
             $parent = getParent($this),
-            dontProcessOnMobile = $parent.attr('dontProcessOnMobile'),
+            dontProcessOnMobile = !!$parent.attr('dontProcessOnMobile'),
             isActive = $parent.hasClass('open');
 
         if ($this.is('.disabled, :disabled')) return;
-
         // on a phone detach the menu and attach it to the body again
         // with position fixed. Then it will be a modal menu in fullscreen
         if (phone && !dontProcessOnMobile) {

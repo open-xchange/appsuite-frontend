@@ -241,13 +241,14 @@ define('io.ox/core/main/appcontrol', [
     });
 
     var LaunchersView = Dropdown.extend({
-        attributes: { role: 'presentation' },
+        attributes: { role: 'presentation', dontprocessonmobile: 'true' },
         tagName: 'li',
+        options: { dontProcessOnMobile: true },
         className: 'launcher dropdown',
         id: 'io-ox-launcher',
         $ul: $('<ul class="launcher-dropdown dropdown-menu dropdown-menu-right" role="menu">'),
         // this should be a link. Otherwise, this can cause strange focus issues on iOS when having the cursor inside an iframe before clicking this (see Bug 63441)
-        $toggle: $('<a href="#" class="launcher-btn btn btn-link dropdown-toggle">').attr('aria-label', gt('Navigate to:')).append($(icons.launcher).attr('title', gt('All Applications'))),
+        $toggle: $('<a href="#" class="launcher-btn btn btn-link dropdown-toggle" dontprocessonmobile="true">').attr('aria-label', gt('Navigate to:')).append($(icons.launcher).attr('title', gt('All Applications'))),
         initialize: function () {
             Dropdown.prototype.initialize.apply(this, arguments);
             this.listenTo(this.collection, 'add remove', this.update);
@@ -393,7 +394,8 @@ define('io.ox/core/main/appcontrol', [
         index: 120,
         draw: function () {
             var launchers = window.launchers = new LaunchersView({
-                collection: ox.ui.apps
+                collection: ox.ui.apps,
+                dontProcessOnMobile: true
             });
             this.append(launchers.render().$el);
         }
