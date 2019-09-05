@@ -1356,8 +1356,8 @@ body.dragging .categories-toolbar-container {
 .smartphone {
 
     // phone
-    @phone-font-size: 16px;
-    @phone-line-height: 26px;
+    @phone-font-size: 15px;
+    @phone-line-height: 20px;
 
     // helper
     .fixed-width() {
@@ -1480,6 +1480,10 @@ body.dragging .categories-toolbar-container {
     .list-view.mail-item {
 
         .list-item {
+
+            padding-top: 14px;
+            padding-bottom: 15px;
+
             border-right: 1px solid rgba(0, 0, 0, 0.15);
             margin-right: -1px;
             background-color: #fff;
@@ -1495,16 +1499,21 @@ body.dragging .categories-toolbar-container {
                 border-bottom: 0;
             }
 
-            .from { max-height: initial; }
+            .from {
+                font-size: 16px;
+                max-height: initial;
+            }
 
             .list-item-content {
                 font-size: @phone-font-size;
                 line-height: @phone-line-height;
-
                 i { line-height: @phone-line-height; }
             }
+
             .thread-size {
-                margin-top: 3px;
+                font-size: inherit;
+                line-height: inherit;
+                margin-top: 0;
             }
 
             .list-item-row > i {
@@ -1512,6 +1521,17 @@ body.dragging .categories-toolbar-container {
             }
 
             &:hover { background-color: rgb(238, 238, 238); }
+
+            .text-preview.multiline {
+                font-size: inherit;
+                line-height: inherit;
+                height: 40px;
+            }
+
+            .fa-paperclip.has-attachments, .fa-cloud-download.is-shared-attachement, i.fa.signed, i.fa.encrypted {
+                font-size: 18px;
+                margin: 0 0 0 10px;
+            }
         }
 
         &.complete > .list-item:last-child {
