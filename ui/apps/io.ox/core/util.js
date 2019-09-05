@@ -305,6 +305,7 @@ define('io.ox/core/util', [
         this.console.log('POPSTATE!!!', ox.changeTitle);
         if (ox.changeTitle) return;
         e.preventDefault();
+
         this.console.log('USER WARS!!!');
 
         // close dropdowns first
@@ -313,12 +314,20 @@ define('io.ox/core/util', [
             dropdown.trigger($.Event('keydown', { which: 27, keyCode: 27 }));
             return;
         }
-        // close apps
+
+        // get current app
         var active = _(ox.ui.windowManager.getWindows()).filter(function (win) {
             return win.state.visible && win.state.open && win.state.running;
         });
 
-        if (active[0] && active[0].app && active[0].app.get('closable')) active[0].app.quit();
+        // close app
+        if (active[0] && active[0].app && active[0].app.get('closable')) {
+            active[0].app.quit();
+            return;
+        }
+
+        // click back button in pagecontroller
+        if (active[0] && active[0].app && active[0] && active[0].app.pages) active[0].app.pages.goBack();
     });
 
     return that;
