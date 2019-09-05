@@ -305,10 +305,20 @@ define('io.ox/core/util', [
         this.console.log('POPSTATE!!!', ox.changeTitle);
         if (ox.changeTitle) return;
         e.preventDefault();
-        $('.dropdown.open, io-ox-sidepopup, .floating-window.active, .floating-window')
-            .first()
-            .trigger($.Event('keydown', { which: 27, keyCode: 27 }));
         this.console.log('USER WARS!!!');
+
+        // close dropdowns first
+        var dropdown = $('.dropdown-menu:visible');
+        if (dropdown.length) {
+            dropdown.trigger($.Event('keydown', { which: 27, keyCode: 27 }));
+            return;
+        }
+        // close apps
+        var active = _(ox.ui.windowManager.getWindows()).filter(function (win) {
+            return win.state.visible && win.state.open && win.state.running;
+        });
+
+        if (active[0] && active[0].app && active[0].app.get('closable')) active[0].app.quit();
     });
 
     return that;
