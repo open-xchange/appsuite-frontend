@@ -1471,12 +1471,6 @@ msgstr "いずれかの条件を満たす場合にルールを適用"
 msgid "Apply to all subfolders"
 msgstr "すべてのサブフォルダーに適用"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply"
-msgid "Apply..."
-msgstr "適用"
-
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
@@ -8319,6 +8313,12 @@ msgstr "パブリックカレンダー"
 msgid "Public link"
 msgstr "パブリックリンク"
 
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Public tasks"
+msgid "Public photos by user"
+msgstr "パブリックタスク"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Public servant"
 msgstr "公務員"
@@ -9176,6 +9176,12 @@ msgstr "検索…"
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "Search in all folders"
 msgstr "すべてのフォルダーを検索"
+
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Search Options"
+msgid "Search photos"
+msgstr "検索オプション"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
@@ -12825,14 +12831,6 @@ msgstr "第1"
 msgid "flagged"
 msgstr "フラグ"
 
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.people.getPublicPhotos"
-msgstr "flickr.people.getPublicPhotos"
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.photos.search"
-msgstr "flickr.photos.search"
-
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -14328,6 +14326,11 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Apply to all messages?"
 #~ msgstr "すべてのメッセージに適用されますか。"
+
+#, fuzzy
+#~| msgid "Apply"
+#~ msgid "Apply..."
+#~ msgstr "適用"
 
 #~ msgid "Appointment '%s' not found."
 #~ msgstr "アポイント '%s' が見つかりません。"
@@ -19435,9 +19438,6 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Scheduling"
 #~ msgstr "スケジューリング"
 
-#~ msgid "Search Options"
-#~ msgstr "検索オプション"
-
 #~ msgid "Search here"
 #~ msgstr "ここを検索"
 
@@ -22376,6 +22376,12 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "february"
 #~ msgstr "2 月"
+
+#~ msgid "flickr.people.getPublicPhotos"
+#~ msgstr "flickr.people.getPublicPhotos"
+
+#~ msgid "flickr.photos.search"
+#~ msgstr "flickr.photos.search"
 
 #~ msgid "forward"
 #~ msgstr "進む"

@@ -1510,12 +1510,6 @@ msgstr "Aplică regula dacă una din condiții este respectată"
 msgid "Apply to all subfolders"
 msgstr "Aplică pentru toate dosarele subordonate"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply"
-msgid "Apply..."
-msgstr "Aplică"
-
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
@@ -8444,6 +8438,12 @@ msgstr "Calendare publice"
 msgid "Public link"
 msgstr "Legătură publică"
 
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Public tasks"
+msgid "Public photos by user"
+msgstr "Sarcini publice"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Public servant"
 msgstr "Funcționar"
@@ -9318,6 +9318,12 @@ msgstr "Caută în"
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "Search in all folders"
 msgstr "Căutare în toate dosarele"
+
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Search Options"
+msgid "Search photos"
+msgstr "Opțiuni de căutare"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
@@ -13064,14 +13070,6 @@ msgstr "prima"
 msgid "flagged"
 msgstr "marcat"
 
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.people.getPublicPhotos"
-msgstr "flickr.people.getPublicPhotos"
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.photos.search"
-msgstr "flickr.photos.search"
-
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -14212,6 +14210,11 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Apply to all messages?"
 #~ msgstr "Doriți să aplicați pentru toate mesajele?"
+
+#, fuzzy
+#~| msgid "Apply"
+#~ msgid "Apply..."
+#~ msgstr "Aplică"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
@@ -18712,9 +18715,6 @@ msgstr "platforma dumneavoastră"
 #~ msgid "Scheduling"
 #~ msgstr "Programare"
 
-#~ msgid "Search Options"
-#~ msgstr "Opțiuni de căutare"
-
 #~ msgid "Search here"
 #~ msgstr "Caută aici"
 
@@ -21534,6 +21534,12 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "february"
 #~ msgstr "februarie"
+
+#~ msgid "flickr.people.getPublicPhotos"
+#~ msgstr "flickr.people.getPublicPhotos"
+
+#~ msgid "flickr.photos.search"
+#~ msgstr "flickr.photos.search"
 
 #~ msgid "forward"
 #~ msgstr "înainte"

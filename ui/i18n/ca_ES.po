@@ -1598,11 +1598,6 @@ msgstr "Aplica la regla si es compleix alguna condició"
 msgid "Apply to all subfolders"
 msgstr "Totes les carpetes"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-msgid "Apply..."
-msgstr "Aplica rol"
-
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
@@ -8820,6 +8815,11 @@ msgstr "Nou calendari públic"
 msgid "Public link"
 msgstr ""
 
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+msgid "Public photos by user"
+msgstr "Imprimeix les tasques"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Public servant"
 msgstr "Funcionari públic"
@@ -9729,6 +9729,11 @@ msgstr "Cerca"
 #, fuzzy
 msgid "Search in all folders"
 msgstr "Carpetes estàndard"
+
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+msgid "Search photos"
+msgstr "Cerca elements"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
@@ -13486,14 +13491,6 @@ msgstr "primer"
 msgid "flagged"
 msgstr "No començada"
 
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.people.getPublicPhotos"
-msgstr "flickr.people.getPublicPhotos"
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.photos.search"
-msgstr "flickr.photos.search"
-
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -14207,6 +14204,10 @@ msgstr "la vostra plataforma"
 #, fuzzy
 #~ msgid "Apply to all messages?"
 #~ msgstr "Totes les carpetes"
+
+#, fuzzy
+#~ msgid "Apply..."
+#~ msgstr "Aplica rol"
 
 #~ msgid ""
 #~ "Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open"
@@ -15819,6 +15820,12 @@ msgstr "la vostra plataforma"
 #, fuzzy
 #~ msgid "expanded"
 #~ msgstr "desplega"
+
+#~ msgid "flickr.people.getPublicPhotos"
+#~ msgstr "flickr.people.getPublicPhotos"
+
+#~ msgid "flickr.photos.search"
+#~ msgstr "flickr.photos.search"
 
 #~ msgid "iCal"
 #~ msgstr "iCal"

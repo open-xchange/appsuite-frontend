@@ -1495,10 +1495,6 @@ msgstr ""
 msgid "Apply to all subfolders"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-msgid "Apply..."
-msgstr ""
-
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
@@ -8386,6 +8382,10 @@ msgstr ""
 msgid "Public link"
 msgstr ""
 
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+msgid "Public photos by user"
+msgstr ""
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Public servant"
 msgstr ""
@@ -9245,6 +9245,11 @@ msgstr "Энд хайх"
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "Search in all folders"
 msgstr ""
+
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+msgid "Search photos"
+msgstr "Энд хайх"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
@@ -12822,14 +12827,6 @@ msgstr "эхний"
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "flagged"
-msgstr ""
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.people.getPublicPhotos"
-msgstr ""
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.photos.search"
 msgstr ""
 
 #. %1$s determines whether setting permissions for a file or folder

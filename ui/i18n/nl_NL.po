@@ -1493,12 +1493,6 @@ msgstr "Toepassen als minimaal één van de voorwaarden is gehaald"
 msgid "Apply to all subfolders"
 msgstr "Toepassen op alle sub-mappen"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply"
-msgid "Apply..."
-msgstr "Toepassen"
-
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
@@ -8433,6 +8427,12 @@ msgstr "Publieke agenda's"
 msgid "Public link"
 msgstr "Publieke link"
 
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Public tasks"
+msgid "Public photos by user"
+msgstr "Publieke taken"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Public servant"
 msgstr "Ambtenaar"
@@ -9303,6 +9303,12 @@ msgstr "Zoeken in"
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "Search in all folders"
 msgstr "Zoek in alle mappen"
+
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Search Options"
+msgid "Search photos"
+msgstr "Zoekopties"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
@@ -13037,14 +13043,6 @@ msgstr "eerste"
 msgid "flagged"
 msgstr "gemarkeerd"
 
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.people.getPublicPhotos"
-msgstr "flickr.people.getPublicPhotos"
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.photos.search"
-msgstr "flickr.photos.search"
-
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -13849,6 +13847,11 @@ msgstr "uw platform"
 
 #~ msgid "Apply to all messages?"
 #~ msgstr "Toepassen op alle berichten?"
+
+#, fuzzy
+#~| msgid "Apply"
+#~ msgid "Apply..."
+#~ msgstr "Toepassen"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
@@ -15740,9 +15743,6 @@ msgstr "uw platform"
 #~ msgid "Scheduling"
 #~ msgstr "Planning"
 
-#~ msgid "Search Options"
-#~ msgstr "Zoekopties"
-
 #~ msgid "Search here"
 #~ msgstr "Zoek hier"
 
@@ -17342,6 +17342,12 @@ msgstr "uw platform"
 
 #~ msgid "expanded"
 #~ msgstr "uitgeklapt"
+
+#~ msgid "flickr.people.getPublicPhotos"
+#~ msgstr "flickr.people.getPublicPhotos"
+
+#~ msgid "flickr.photos.search"
+#~ msgstr "flickr.photos.search"
 
 #~ msgid "hostname"
 #~ msgstr "servernaam"

@@ -1476,12 +1476,6 @@ msgstr "Apply rule if any condition is met"
 msgid "Apply to all subfolders"
 msgstr "Apply to all subfolders"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply"
-msgid "Apply..."
-msgstr "Apply"
-
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
@@ -8370,6 +8364,12 @@ msgstr "Public calendars"
 msgid "Public link"
 msgstr "Public link"
 
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Public tasks"
+msgid "Public photos by user"
+msgstr "Public tasks"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Public servant"
 msgstr "Public servant"
@@ -9239,6 +9239,12 @@ msgstr "Search in"
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "Search in all folders"
 msgstr "Search in all folders"
+
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Search Options"
+msgid "Search photos"
+msgstr "Search Options"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
@@ -12917,14 +12923,6 @@ msgstr "first"
 msgid "flagged"
 msgstr "flagged"
 
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.people.getPublicPhotos"
-msgstr "flickr.people.getPublicPhotos"
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.photos.search"
-msgstr "flickr.photos.search"
-
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -13743,6 +13741,11 @@ msgstr "your platform"
 
 #~ msgid "Apply to all messages?"
 #~ msgstr "Apply to all messages?"
+
+#, fuzzy
+#~| msgid "Apply"
+#~ msgid "Apply..."
+#~ msgstr "Apply"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
@@ -15814,9 +15817,6 @@ msgstr "your platform"
 #~ msgid "Scheduling"
 #~ msgstr "Scheduling"
 
-#~ msgid "Search Options"
-#~ msgstr "Search Options"
-
 #~ msgid "Search here"
 #~ msgstr "Search here"
 
@@ -17480,6 +17480,12 @@ msgstr "your platform"
 
 #~ msgid "february"
 #~ msgstr "February"
+
+#~ msgid "flickr.people.getPublicPhotos"
+#~ msgstr "flickr.people.getPublicPhotos"
+
+#~ msgid "flickr.photos.search"
+#~ msgstr "flickr.photos.search"
 
 #~ msgid "hCard Export"
 #~ msgstr "hCard Export"

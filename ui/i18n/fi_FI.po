@@ -1472,12 +1472,6 @@ msgstr "Käytä sääntöä jos jokin ehto täyttyy"
 msgid "Apply to all subfolders"
 msgstr "Käytä kaikkiin alakansioihin"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply"
-msgid "Apply..."
-msgstr "Käytä"
-
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
@@ -8327,6 +8321,12 @@ msgstr "Julkiset kalenterit"
 msgid "Public link"
 msgstr "Julkinen linkki"
 
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Public tasks"
+msgid "Public photos by user"
+msgstr "Julkiset tehtävät"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Public servant"
 msgstr "Virkamies"
@@ -9195,6 +9195,12 @@ msgstr "Hae"
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "Search in all folders"
 msgstr "Etsi kaikista kansioista"
+
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Search Options"
+msgid "Search photos"
+msgstr "Hakuvaihtoehdot"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
@@ -12857,14 +12863,6 @@ msgstr "ensimmäisenä"
 msgid "flagged"
 msgstr "merkitty"
 
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.people.getPublicPhotos"
-msgstr "flickr.people.getPublicPhotos"
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.photos.search"
-msgstr "flickr.photos.search"
-
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -13659,6 +13657,11 @@ msgstr "alustasi"
 
 #~ msgid "Apply to all messages?"
 #~ msgstr "Käytä kaikkiin viesteihin?"
+
+#, fuzzy
+#~| msgid "Apply"
+#~ msgid "Apply..."
+#~ msgstr "Käytä"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
@@ -15499,9 +15502,6 @@ msgstr "alustasi"
 #~ msgid "Scheduling"
 #~ msgstr "Suunnittelu"
 
-#~ msgid "Search Options"
-#~ msgstr "Hakuvaihtoehdot"
-
 #~ msgid "Search here"
 #~ msgstr "Etsi tässä"
 
@@ -17090,6 +17090,12 @@ msgstr "alustasi"
 
 #~ msgid "expanded"
 #~ msgstr "laajennettu"
+
+#~ msgid "flickr.people.getPublicPhotos"
+#~ msgstr "flickr.people.getPublicPhotos"
+
+#~ msgid "flickr.photos.search"
+#~ msgstr "flickr.photos.search"
 
 #~ msgid "hostname"
 #~ msgstr "host-nimi"

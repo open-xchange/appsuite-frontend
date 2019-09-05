@@ -1550,12 +1550,6 @@ msgstr "Rakenda reeglit, kui mõni tingimus on täidetud."
 msgid "Apply to all subfolders"
 msgstr "Rakenda kõigil alamkaustadel"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply"
-msgid "Apply..."
-msgstr "Rakenda"
-
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
@@ -8571,6 +8565,12 @@ msgstr "Avalikud kalendrid"
 msgid "Public link"
 msgstr "Avalik link"
 
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Public tasks"
+msgid "Public photos by user"
+msgstr "Avalikud ülesanded"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Public servant"
 msgstr "Riigiteenistuja"
@@ -9457,6 +9457,12 @@ msgstr "Otsi"
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "Search in all folders"
 msgstr "Otsi kõigist kaustadest"
+
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Search facets"
+msgid "Search photos"
+msgstr "Otsingu aspektid"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
@@ -13166,14 +13172,6 @@ msgstr "esimene"
 msgid "flagged"
 msgstr "märgistatud"
 
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.people.getPublicPhotos"
-msgstr "flickr.people.getPublicPhotos"
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.photos.search"
-msgstr "flickr.photos.search"
-
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -13812,6 +13810,11 @@ msgstr "teie platvorm"
 
 #~ msgid "Application Toolbar"
 #~ msgstr "Rakenduste tööriistariba"
+
+#, fuzzy
+#~| msgid "Apply"
+#~ msgid "Apply..."
+#~ msgstr "Rakenda"
 
 #~ msgid "Appointment list"
 #~ msgstr "Kohtumiste loend"
@@ -15215,6 +15218,12 @@ msgstr "teie platvorm"
 
 #~ msgid "expanded"
 #~ msgstr "laiendatud"
+
+#~ msgid "flickr.people.getPublicPhotos"
+#~ msgstr "flickr.people.getPublicPhotos"
+
+#~ msgid "flickr.photos.search"
+#~ msgstr "flickr.photos.search"
 
 #~ msgid "iCal"
 #~ msgstr "iCal"

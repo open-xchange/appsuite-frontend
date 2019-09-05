@@ -1495,12 +1495,6 @@ msgstr "Applica la regola se qualsiasi condizione viene verificata"
 msgid "Apply to all subfolders"
 msgstr "Applica a tutte le sottocartelle"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply"
-msgid "Apply..."
-msgstr "Applica"
-
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
@@ -8422,6 +8416,12 @@ msgstr "Calendari pubblici"
 msgid "Public link"
 msgstr "Collegamento pubblico"
 
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Public tasks"
+msgid "Public photos by user"
+msgstr "Attività pubbliche"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Public servant"
 msgstr "Funzionario pubblico"
@@ -9291,6 +9291,12 @@ msgstr "Cerca in"
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "Search in all folders"
 msgstr "Cerca in tutte le cartelle"
+
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Search Options"
+msgid "Search photos"
+msgstr "Opzioni di ricerca"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
@@ -13018,14 +13024,6 @@ msgstr "primo"
 msgid "flagged"
 msgstr "contrassegnato"
 
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.people.getPublicPhotos"
-msgstr "flickr.people.getPublicPhotos"
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.photos.search"
-msgstr "flickr.photos.search"
-
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -14126,6 +14124,11 @@ msgstr "la tua piattaforma"
 
 #~ msgid "Apply to all messages?"
 #~ msgstr "Vuoi applicare a tutti i messaggi?"
+
+#, fuzzy
+#~| msgid "Apply"
+#~ msgid "Apply..."
+#~ msgstr "Applica"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
@@ -17488,9 +17491,6 @@ msgstr "la tua piattaforma"
 #~ msgid "Scheduling"
 #~ msgstr "Pianificazione"
 
-#~ msgid "Search Options"
-#~ msgstr "Opzioni di ricerca"
-
 #~ msgid "Search here"
 #~ msgstr "Cerca qui"
 
@@ -19375,6 +19375,12 @@ msgstr "la tua piattaforma"
 
 #~ msgid "february"
 #~ msgstr "febbraio"
+
+#~ msgid "flickr.people.getPublicPhotos"
+#~ msgstr "flickr.people.getPublicPhotos"
+
+#~ msgid "flickr.photos.search"
+#~ msgstr "flickr.photos.search"
 
 #~ msgid "hCard Export"
 #~ msgstr "Esportazione hCard"

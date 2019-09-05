@@ -1506,12 +1506,6 @@ msgstr "Použiť pravidlo, ak je akékoľvek podmienka splnená"
 msgid "Apply to all subfolders"
 msgstr "Použiť na všetky podpriečinky"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply"
-msgid "Apply..."
-msgstr "Aplikovať rolu"
-
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
@@ -8432,6 +8426,12 @@ msgstr "Verejné kalendáre"
 msgid "Public link"
 msgstr "Verejný odkaz"
 
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Public tasks"
+msgid "Public photos by user"
+msgstr "Verejné úlohy"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Public servant"
 msgstr "Zamestnanec verejnej správy"
@@ -9302,6 +9302,12 @@ msgstr "Hľadať v"
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "Search in all folders"
 msgstr "Vyhľadávať vo všetkých priečinkoch"
+
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Search Options"
+msgid "Search photos"
+msgstr "Možnosti vyhľadávania"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
@@ -13031,14 +13037,6 @@ msgstr "prvý"
 msgid "flagged"
 msgstr "označené"
 
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.people.getPublicPhotos"
-msgstr "flickr.people.getPublicPhotos"
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.photos.search"
-msgstr "flickr.photos.search"
-
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -14160,6 +14158,11 @@ msgstr "vaša platforma"
 
 #~ msgid "Apply to all messages?"
 #~ msgstr "Použiť na všetky správy?"
+
+#, fuzzy
+#~| msgid "Apply"
+#~ msgid "Apply..."
+#~ msgstr "Aplikovať rolu"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
@@ -18608,9 +18611,6 @@ msgstr "vaša platforma"
 #~ msgid "Scheduling"
 #~ msgstr "Plánovanie"
 
-#~ msgid "Search Options"
-#~ msgstr "Možnosti vyhľadávania"
-
 #~ msgid "Search here"
 #~ msgstr "Hľadať tu"
 
@@ -21352,6 +21352,12 @@ msgstr "vaša platforma"
 
 #~ msgid "february"
 #~ msgstr "Február"
+
+#~ msgid "flickr.people.getPublicPhotos"
+#~ msgstr "flickr.people.getPublicPhotos"
+
+#~ msgid "flickr.photos.search"
+#~ msgstr "flickr.photos.search"
 
 #~ msgid "forward"
 #~ msgstr "preposlať"

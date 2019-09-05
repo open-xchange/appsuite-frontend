@@ -1552,12 +1552,6 @@ msgstr "Прилагайте правило, ако е изпълнено няк
 msgid "Apply to all subfolders"
 msgstr "Прилагане към всички подпапки"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply"
-msgid "Apply..."
-msgstr "Приложи"
-
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
@@ -8579,6 +8573,12 @@ msgstr "Публични календари"
 msgid "Public link"
 msgstr "Публична връзка"
 
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Public tasks"
+msgid "Public photos by user"
+msgstr "Публични задачи"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Public servant"
 msgstr "Държавен служител"
@@ -9464,6 +9464,12 @@ msgstr "Търсене в"
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "Search in all folders"
 msgstr "Търсене във всички папки"
+
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Search facets"
+msgid "Search photos"
+msgstr "Търсете аспекти"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
@@ -13185,14 +13191,6 @@ msgstr "първи"
 msgid "flagged"
 msgstr "маркиран"
 
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.people.getPublicPhotos"
-msgstr "flickr.people.getPublicPhotos"
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.photos.search"
-msgstr "flickr.photos.search"
-
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -13788,6 +13786,11 @@ msgstr "вашата платформа"
 
 #~ msgid "Add to Favorites"
 #~ msgstr "Добави към любими"
+
+#, fuzzy
+#~| msgid "Apply"
+#~ msgid "Apply..."
+#~ msgstr "Приложи"
 
 #~ msgid "Appointment list"
 #~ msgstr "Списък със срещи"
@@ -14425,6 +14428,12 @@ msgstr "вашата платформа"
 
 #~ msgid "every month"
 #~ msgstr "всеки месец"
+
+#~ msgid "flickr.people.getPublicPhotos"
+#~ msgstr "flickr.people.getPublicPhotos"
+
+#~ msgid "flickr.photos.search"
+#~ msgstr "flickr.photos.search"
 
 #~ msgid "monthly"
 #~ msgstr "месечно"

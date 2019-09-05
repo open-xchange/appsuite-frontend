@@ -1483,12 +1483,6 @@ msgstr "Verkställ regel om något villkor uppfylls"
 msgid "Apply to all subfolders"
 msgstr "Verkställ för alla underliggande mappar"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply"
-msgid "Apply..."
-msgstr "Verkställ"
-
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
@@ -8367,6 +8361,12 @@ msgstr "Offentlig kalendrar"
 msgid "Public link"
 msgstr "Offentlig länk"
 
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Public tasks"
+msgid "Public photos by user"
+msgstr "Offentliga uppgifter"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Public servant"
 msgstr "Offentlig tjänsteman"
@@ -9232,6 +9232,12 @@ msgstr "Sök i"
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "Search in all folders"
 msgstr "Sök i alla mappar"
+
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Search Options"
+msgid "Search photos"
+msgstr "Sökalternativ"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
@@ -12922,14 +12928,6 @@ msgstr "första"
 msgid "flagged"
 msgstr "flaggad"
 
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.people.getPublicPhotos"
-msgstr "flickr.people.getPublicPhotos"
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.photos.search"
-msgstr "flickr.photos.search"
-
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -14288,6 +14286,11 @@ msgstr "din plattform"
 
 #~ msgid "Apply to all messages?"
 #~ msgstr "Verkställ för alla meddelanden?"
+
+#, fuzzy
+#~| msgid "Apply"
+#~ msgid "Apply..."
+#~ msgstr "Verkställ"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
@@ -18079,9 +18082,6 @@ msgstr "din plattform"
 #~ msgid "Scheduling"
 #~ msgstr "Schemaläggning"
 
-#~ msgid "Search Options"
-#~ msgstr "Sökalternativ"
-
 #~ msgid "Search here"
 #~ msgstr "Sök här"
 
@@ -21306,6 +21306,12 @@ msgstr "din plattform"
 
 #~ msgid "expanded"
 #~ msgstr "expanderat"
+
+#~ msgid "flickr.people.getPublicPhotos"
+#~ msgstr "flickr.people.getPublicPhotos"
+
+#~ msgid "flickr.photos.search"
+#~ msgstr "flickr.photos.search"
 
 #~ msgid "hCard Export"
 #~ msgstr "Exportera till hCard"

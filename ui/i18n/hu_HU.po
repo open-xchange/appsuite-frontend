@@ -1481,12 +1481,6 @@ msgstr "Szabály alkalmazása, ha bármely feltétel teljesül"
 msgid "Apply to all subfolders"
 msgstr "Alkalmazás az összes mappára"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply"
-msgid "Apply..."
-msgstr "Alkalmazás"
-
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
@@ -8387,6 +8381,12 @@ msgstr "Nyilvános naptárak"
 msgid "Public link"
 msgstr "Nyilvános hivatkozás"
 
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Public tasks"
+msgid "Public photos by user"
+msgstr "Nyilvános feladatok"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Public servant"
 msgstr "Közszolga"
@@ -9259,6 +9259,12 @@ msgstr "Keresés itt:"
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "Search in all folders"
 msgstr "Keresés az összes mappában"
+
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Search facets"
+msgid "Search photos"
+msgstr "Lapok keresése"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
@@ -12967,14 +12973,6 @@ msgstr "első"
 msgid "flagged"
 msgstr "megjelölt"
 
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.people.getPublicPhotos"
-msgstr "flickr.people.getPublicPhotos"
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.photos.search"
-msgstr "flickr.photos.search"
-
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -13683,6 +13681,11 @@ msgstr "az Ön rendszere"
 
 #~ msgid "Apply to all messages?"
 #~ msgstr "Alkalmazza az összes üzenetre?"
+
+#, fuzzy
+#~| msgid "Apply"
+#~ msgid "Apply..."
+#~ msgstr "Alkalmazás"
 
 #~ msgid "Appointment list"
 #~ msgstr "Találkozólista"
@@ -15853,6 +15856,12 @@ msgstr "az Ön rendszere"
 
 #~ msgid "expanded"
 #~ msgstr "kibontott"
+
+#~ msgid "flickr.people.getPublicPhotos"
+#~ msgstr "flickr.people.getPublicPhotos"
+
+#~ msgid "flickr.photos.search"
+#~ msgstr "flickr.photos.search"
 
 #~ msgid "hostname"
 #~ msgstr "gépnév"

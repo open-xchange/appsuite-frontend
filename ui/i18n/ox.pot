@@ -11135,11 +11135,6 @@ msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: module:io.ox/mail
-msgid "Apply..."
-msgstr ""
-
-#: apps/io.ox/mail/mailfilter/settings/filter.js
-#: module:io.ox/mail
 msgid "Do you really want to delete this filter rule?"
 msgstr ""
 
@@ -15042,12 +15037,12 @@ msgstr ""
 
 #: apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
-msgid "flickr.photos.search"
+msgid "Search photos"
 msgstr ""
 
 #: apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
-msgid "flickr.people.getPublicPhotos"
+msgid "Public photos by user"
 msgstr ""
 
 #: apps/plugins/portal/flickr/register.js

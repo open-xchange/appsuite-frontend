@@ -1433,12 +1433,6 @@ msgstr "如果达到任何条件，套用规则"
 msgid "Apply to all subfolders"
 msgstr "套用到所有子文件夹"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply"
-msgid "Apply..."
-msgstr "套用"
-
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
@@ -8224,6 +8218,12 @@ msgstr "公共日历"
 msgid "Public link"
 msgstr "公共链接"
 
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Public tasks"
+msgid "Public photos by user"
+msgstr "公共任务"
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Public servant"
 msgstr "公共服务者"
@@ -9080,6 +9080,12 @@ msgstr "搜寻在"
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "Search in all folders"
 msgstr "搜寻所有文件夹"
+
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Search Options"
+msgid "Search photos"
+msgstr "搜寻选项"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
@@ -12637,14 +12643,6 @@ msgstr "第一个"
 msgid "flagged"
 msgstr "已标记"
 
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.people.getPublicPhotos"
-msgstr "flickr.people.getPublicPhotos"
-
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-msgid "flickr.photos.search"
-msgstr "flickr.photos.search"
-
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -13728,6 +13726,11 @@ msgstr "您的平台"
 
 #~ msgid "Apply to all messages?"
 #~ msgstr "套用到所有消息？"
+
+#, fuzzy
+#~| msgid "Apply"
+#~ msgid "Apply..."
+#~ msgstr "套用"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
@@ -17015,9 +17018,6 @@ msgstr "您的平台"
 #~ msgid "Scheduling"
 #~ msgstr "安排时间"
 
-#~ msgid "Search Options"
-#~ msgstr "搜寻选项"
-
 #~ msgid "Search here"
 #~ msgstr "搜索这里"
 
@@ -18699,6 +18699,12 @@ msgstr "您的平台"
 
 #~ msgid "february"
 #~ msgstr "二月"
+
+#~ msgid "flickr.people.getPublicPhotos"
+#~ msgstr "flickr.people.getPublicPhotos"
+
+#~ msgid "flickr.photos.search"
+#~ msgstr "flickr.photos.search"
 
 #~ msgid "hCard Export"
 #~ msgstr "hCard 汇出"
