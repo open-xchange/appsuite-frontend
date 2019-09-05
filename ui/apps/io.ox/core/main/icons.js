@@ -22,7 +22,7 @@ define('io.ox/core/main/icons', [
      * point for customizing icons
      */
 
-    var icons, map;
+    var map, icons;
 
     function exposeIcons() {
         // just some sugar
@@ -56,15 +56,15 @@ define('io.ox/core/main/icons', [
         index: 1000,
         run: function () {
             // reverted for 7.10
-            /*icons = JSON.parse(rawIcons);*/
+            //icons = JSON.parse(icons);
             // use FA icons for 7.10
             icons = {
                 'io.ox/mail': '<i class="fa fa-envelope-o app-icon-mail">',
-                'io.ox/calendar': '<i class="fa fa-calendar">',
-                'io.ox/contacts': '<i class="fa fa-address-book-o">',
-                'io.ox/files': '<i class="fa fa-cloud">',
-                'io.ox/portal': '<i class="fa fa-th-large">',
-                'io.ox/tasks': '<i class="fa fa-check-square-o">',
+                'io.ox/calendar': '<i class="fa fa-calendar app-icon-calendar">',
+                'io.ox/contacts': '<i class="fa fa-address-book-o app-icon-addressbook">',
+                'io.ox/files': '<i class="fa fa-cloud app-icon-drive">',
+                'io.ox/portal': '<i class="fa fa-th-large app-icon-portal">',
+                'io.ox/tasks': '<i class="fa fa-check-square-o app-icon-tasks">',
                 'launcher': '<i class="fa fa-th" aria-hidden="true">',
                 'fallback': '<i class="fa fa-question">'
             };
