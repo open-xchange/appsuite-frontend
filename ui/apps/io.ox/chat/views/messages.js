@@ -89,16 +89,16 @@ define('io.ox/chat/views/messages', [
 
             if (index !== start && moment(prev.get('sent')).startOf('day').isSameOrAfter(moment(model.get('sent')).startOf('day'))) return;
 
-                var date = moment(model.get('sent'));
+            var date = moment(model.get('sent'));
 
-                var formattedDate = date.calendar(null, {
-                    sameDay: '[Today]',
-                    lastDay: '[Yesterday]',
-                    lastWeek: '[Last] dddd',
-                    sameElse: 'LL'
-                });
+            var formattedDate = date.calendar(null, {
+                sameDay: '[Today]',
+                lastDay: '[Yesterday]',
+                lastWeek: '[Last] dddd',
+                sameElse: 'LL'
+            });
 
-                return $('<div class="date">').html(formattedDate);
+            return $('<div class="date">').html(formattedDate);
         },
 
         updateDelivery: function (model, state) {
