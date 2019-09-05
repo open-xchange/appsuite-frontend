@@ -349,14 +349,11 @@
     padding: @launcher-outer-spacing;
     width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 2;
 
-    /*.smartphone & {
-        padding: 5px 0;
-        width: 100%;
-
-        .standalone& {
-            padding: 20px 0;
-        }
-    }*/
+    .smartphone & {
+        width: 100% !important;
+        left: 0px !important;
+        right: 0px !important;
+    }
 
     li {
         float: left;
@@ -388,13 +385,12 @@
             color: #666;
             height: 42px;
         }
-        /*.smartphone & {
-            width: 100%;
-            height: 42px;
-            flex-direction: row;
+
+        .smartphone & {
+            width: ~"calc(100vw/3 - 8px)";
             padding: 0;
             margin: 0;
-        }*/
+        }
 
         cursor: pointer;
 
@@ -406,15 +402,13 @@
             font-size: @launcher-text-size;
             text-align: center;
             width: @launcher-size;
-            /*.smartphone & {
-                top: auto;
-                color: inherit;
-                font-size: 18px;
-                font-weight: 300;
+            .smartphone & {
+                font-size: 14px;
+                top: 70%;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 width: 100%;
-            }*/
+            }
             .flex-center(row);
             &.upsell i {
                 margin-left: 4px;
@@ -458,38 +452,47 @@
             // overwrite stroke colors if coloredicons are configured
             &.colored {
                 &.app-icon-mail {
+                    color: @app-color-mail;
                     .stroke-c1 { stroke: @app-color-mail; }
                     .fill-c1 { fill: @app-color-mail; }
                 }
                 &.app-icon-calendar {
+                    color: @app-color-calendar;
                     .stroke-c1 { stroke: @app-color-calendar; }
                     .fill-c1 { fill: @app-color-calendar; }
                 }
                 &.app-icon-addressbook {
+                    color: @app-color-addressbook;
                     .stroke-c1 { stroke: @app-color-addressbook; }
                     .fill-c1 { fill: @app-color-addressbook; }
                 }
                 &.app-icon-drive {
+                    color: @app-color-drive;
                     .stroke-c1 { stroke: @app-color-drive; }
                     .fill-c1 { fill: @app-color-drive; }
                 }
                 &.app-icon-tasks {
+                    color: @app-color-tasks;
                     .stroke-c1 { stroke: @app-color-tasks; }
                     .fill-c1 { fill: @app-color-tasks; }
                 }
                 &.app-icon-portal {
+                    color: @app-color-portal;
                     .stroke-c1 { stroke: @app-color-portal; }
                     .fill-c1 { fill: @app-color-portal; }
                 }
                 &.app-icon-text {
+                    color: @app-color-text;
                     .stroke-c1 { stroke: @app-color-text; }
                     .fill-c1 { fill: @app-color-text; }
                 }
                 &.app-icon-spreadsheet {
+                    color: @app-color-spreadsheet;
                     .stroke-c1 { stroke: @app-color-spreadsheet; }
                     .fill-c1 { fill: @app-color-spreadsheet; }
                 }
                 &.app-icon-presentation {
+                    color: @app-color-presentation;
                     .stroke-c1 { stroke: @app-color-presentation; }
                     .fill-c1 { fill: @app-color-presentation; }
                 }
