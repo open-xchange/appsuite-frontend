@@ -349,19 +349,19 @@
     padding: @launcher-outer-spacing;
     width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 2;
 
-    .smartphone & {
+    /*.smartphone & {
         padding: 5px 0;
         width: 100%;
 
         .standalone& {
             padding: 20px 0;
         }
-    }
+    }*/
 
     li {
         float: left;
 
-        .smartphone & { float: initial; }
+        //.smartphone & { float: initial; }
 
         .fa { width: auto; }
         a:focus {
@@ -388,13 +388,13 @@
             color: #666;
             height: 42px;
         }
-        .smartphone & {
+        /*.smartphone & {
             width: 100%;
             height: 42px;
             flex-direction: row;
             padding: 0;
             margin: 0;
-        }
+        }*/
 
         cursor: pointer;
 
@@ -406,7 +406,7 @@
             font-size: @launcher-text-size;
             text-align: center;
             width: @launcher-size;
-            .smartphone & {
+            /*.smartphone & {
                 top: auto;
                 color: inherit;
                 font-size: 18px;
@@ -414,7 +414,7 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 width: 100%;
-            }
+            }*/
             .flex-center(row);
             &.upsell i {
                 margin-left: 4px;
@@ -435,9 +435,7 @@
             width: @svg-wrap-size;
             height: 100%;
             // no icons on smartphone as it is a dropdown there
-            .smartphone & {
-                display: none;
-            }
+
         }
 
         svg, i {
@@ -449,14 +447,14 @@
             font-size: 36px;
             color: @app-color-standard;
             overflow: visible;
-            .smartphone & {
+            /*.smartphone & {
                 // top: -10px;
 
                 // for FA icons
                 top: auto;
                 line-height: 42px;
                 font-size: 24px;
-            }
+            }*/
             // overwrite stroke colors if coloredicons are configured
             &.colored {
                 &.app-icon-mail {

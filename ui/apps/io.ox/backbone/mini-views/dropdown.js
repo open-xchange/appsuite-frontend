@@ -297,7 +297,6 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         option: function (name, value, text, options) {
-
             options = _.extend({ prefix: '', toggleValue: undefined, radio: false }, options);
 
             var currentValue = this.model ? this.model.get(name) : undefined,
