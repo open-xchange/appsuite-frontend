@@ -190,6 +190,10 @@ define('io.ox/core/page-controller', [], function () {
             this.changePage(target, o);
         };
 
+        this.getLastPage = function () {
+            return (backButtonRules && backButtonRules[current]) ? backButtonRules[current] : lastPage;
+        };
+
         /**
          * addPage creates a new page and adds it to the current
          * page stack

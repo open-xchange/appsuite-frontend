@@ -279,7 +279,7 @@
             };
 
             url.update = function () {
-                ox.changeTitle = true;
+                ox.changeUrl = true;
                 // update hash
                 var hashStr = _.serialize(url.encrypt(url.data), '&', function (v) {
                     // need strict encoding for Japanese characters, for example
@@ -294,7 +294,7 @@
                 if (document && document.location) {
                     document.location.hash = hashStr;
                 }
-                ox.changeTitle = false;
+                ox.changeUrl = false;
             };
 
             function decode() {

@@ -299,14 +299,18 @@ define('io.ox/core/util', [
 
     };
 
-    console.log('Add listener');
-
     window.addEventListener('popstate', function (e) {
-        this.console.log('POPSTATE!!!', ox.changeTitle);
-        if (ox.changeTitle) return;
+        this.history.pushState({ name: 'Leberwurstbaum' }, '');
+        if (ox.changeUrl) return;
         e.preventDefault();
 
-        this.console.log('USER WARS!!!');
+        if (!_.device('smartphone')) {
+            console.log('desktop mode');
+            $('.dropdown.open, .io-ox-sidepopup, .floating-window.active, .floating-window')
+                .first()
+                .trigger($.Event('keydown', { which: 27, keyCode: 27 }));
+            return;
+        }
 
         // close dropdowns first
         var dropdown = $('.dropdown-menu:visible');
@@ -327,7 +331,9 @@ define('io.ox/core/util', [
         }
 
         // click back button in pagecontroller
-        if (active[0] && active[0].app && active[0] && active[0].app.pages) active[0].app.pages.goBack();
+        if (active[0] && active[0].app && active[0] && active[0].app.pages && active[0].app.pages.getLastPage() !== 'folderTree') {
+            active[0].app.pages.goBack();
+        }
     });
 
     return that;
