@@ -371,9 +371,6 @@ define('io.ox/core/main/stages', [
         id: 'curtain',
         index: 700,
         run: function () {
-            // to make backbutton function work initially (prevent back button from going to previous site)
-            history.pushState({ name: 'Leberwurstbaum' }, '');
-            history.pushState({ name: 'Leberwurstbaum' }, '');
             debug('Stage "curtain"');
 
             var def = $.Deferred();

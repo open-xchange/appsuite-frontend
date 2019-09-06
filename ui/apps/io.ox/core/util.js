@@ -299,6 +299,7 @@ define('io.ox/core/util', [
 
     };
 
+    // todo, keep user on the site initially, before the first popstate event
     window.addEventListener('popstate', function (e) {
         this.history.pushState({ name: 'Leberwurstbaum' }, '');
         if (ox.changeUrl) return;
@@ -312,10 +313,17 @@ define('io.ox/core/util', [
             return;
         }
 
-        // close dropdowns first
+        // close dropdowns
         var dropdown = $('.dropdown-menu:visible');
         if (dropdown.length) {
             dropdown.trigger($.Event('keydown', { which: 27, keyCode: 27 }));
+            return;
+        }
+
+        // close dialogs if they have a cancel button
+        var dialogbutton = $('.modal-dialog:visible .modal-footer button[data-action="cancel"]');
+        if (dialogbutton.length) {
+            dialogbutton.trigger('click');
             return;
         }
 
