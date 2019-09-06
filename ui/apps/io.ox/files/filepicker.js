@@ -598,7 +598,7 @@ define('io.ox/files/filepicker', [
 
             addClass: 'zero-padding add-infostore-file',
             button: options.primaryButtonText,
-            alternativeButton: options.uploadButton ? gt('Upload local file') : undefined,
+            alternativeButton: options.uploadButton ? gt('Upload local image') : undefined,
             height: _.device('desktop') ? 350 : containerHeight,
             module: 'infostore',
             persistent: 'folderpopup/filepicker',
