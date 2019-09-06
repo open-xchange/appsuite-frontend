@@ -594,7 +594,7 @@ html.macos, html.ios {
             padding: 5px 0;
             font-size: 16px;
         }
-        .smartphone & { padding: @default-padding; }
+        .smartphone & { padding: 10px 15px; }
     }
 
     .notification-item + .notification-item { border-top: none; }
@@ -1358,6 +1358,7 @@ body.dragging .categories-toolbar-container {
     // phone
     @phone-font-size: 15px;
     @phone-line-height: 20px;
+    @border-color: #ddd;
 
     // helper
     .fixed-width() {
@@ -1389,14 +1390,26 @@ body.dragging .categories-toolbar-container {
         }
 
         .detail-view-header {
-            padding: 0;
+
+            @padding-h: 15px;
+            @padding-v: 10px;
+
+            padding: (@padding-v + 4) 0 (@padding-v + 5) 0;
             font-size: @phone-font-size;
-            line-height: 24px;
+            line-height: @phone-line-height;
+
+            .from, .recipients, .subject, time {
+                padding: 0 @padding-h;
+            }
 
             .from {
+
                 flex-wrap: wrap;
 
-                .person-link.person-from { font-weight: 500; }
+                .person-link.person-from {
+                    font-size: 16px;
+                    font-weight: bold;
+                }
 
                 &.show-address {
                     flex-wrap: wrap;
@@ -1408,25 +1421,26 @@ body.dragging .categories-toolbar-container {
                 }
             }
 
-            .recipients { border-bottom: 1px solid #eee; }
+            .recipients {
+                border-bottom: 1px solid @border-color;
+                padding-bottom: (@padding-v + 5);
+            }
 
             .subject {
                 font-size: 16px;
-                font-weight: 700;
-                margin-right: 32px;
+                font-weight: bold;
+                line-height: @phone-line-height;
+                margin: 0;
+                padding-top: (@padding-v + 4);
                 overflow: hidden;
                 text-overflow: ellipsis;
-            }
-
-            time {
-                padding-left: @default-padding;
             }
 
             .sp { margin-right: 4px; }
         }
 
         section {
-            .attachments, .body { border-top: 1px solid #ddd; }
+            .attachments, .body { border-top: 1px solid @border-color; }
             .attachments { margin-bottom: 0; }
             .body { padding: 8px @default-padding; }
         }
@@ -1473,7 +1487,15 @@ body.dragging .categories-toolbar-container {
 
         section.authenticity {
             padding: 0;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid @border-color;
+        }
+
+        .notification-item.external-images {
+            background-color: #eee;
+            .comment {
+                font-size: 12px;
+                margin-right: 10px;
+            }
         }
     }
 
@@ -1646,24 +1668,6 @@ body.dragging .categories-toolbar-container {
 
             .row-2, .row-4, .row-5 { display: none; }
 
-        }
-    }
-
-    // mail detail
-    .mobile-detail-view-mail {
-        @unit: 2px;
-        .from, .subject, .unread-toggle {
-            // leading element in block
-            padding: (@unit * 2) (@unit * 8);
-            padding-top: (@unit * 3);
-            padding-bottom: @unit;
-         }
-
-        .recipients, time, .flags {
-            // trailing element in block
-            padding: (@unit * 2) (@unit * 8);
-            padding-top: @unit;
-            padding-bottom: (@unit * 3);
         }
     }
 

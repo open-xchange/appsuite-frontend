@@ -211,10 +211,13 @@ define('io.ox/mail/common-extensions', [
                         .append($('<span class="person-link person-from ellipsis">').text(name))
                         .addClass((name === email && status) ? 'authenticity-sender ' + status : ''),
                        '<div class="spacer">'
-
                    );
 
-                if (name !== email) {
+                // don't show email address on smartphones if status is pass
+                var skipEmail = _.device('smartphone') && !!name && status === 'pass',
+                    showEmailAddress = name !== email && !skipEmail;
+
+                if (showEmailAddress) {
                     $container.append(
                         $('<span class="address">')
                             .text('<' + email + '>')
@@ -239,7 +242,6 @@ define('io.ox/mail/common-extensions', [
                         )
                     );
                 }
-
 
                 // save space on mobile by showing address only for suspicious mails
                 if (_.device('smartphone') && name.indexOf('@') > -1) $el.addClass('show-address');
