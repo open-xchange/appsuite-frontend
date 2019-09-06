@@ -71,7 +71,7 @@ define('io.ox/core/relogin', [
     });
 
     function showSessionLostDialog(error) {
-        new ModalDialog({ width: 400, async: true, title: getReason(error) })
+        new ModalDialog({ async: true, title: getReason(error) })
             .build(function () {
                 this.$el.addClass('relogin');
                 this.$body.append(
@@ -113,7 +113,7 @@ define('io.ox/core/relogin', [
             // set flag
             pending = true;
 
-            new ModalDialog({ async: true, width: '400px', enter: 'relogin', backdrop: 'static', focus: 'input', title: getReason(error) })
+            new ModalDialog({ async: true, enter: 'relogin', backdrop: 'static', focus: 'input', title: getReason(error) })
                 .build(function () {
                     var guid = _.uniqueId('form-control-label-');
                     this.$el.addClass('relogin');
