@@ -92,11 +92,11 @@ define('io.ox/mail/detail/mobileView', [
         draw: extensions.recipients
     });
 
-    ext.point('io.ox/mail/mobile/detail/header').extend({
+    /*ext.point('io.ox/mail/mobile/detail/header').extend({
         id: 'unread-toggle',
         index: INDEX_header += 100,
         draw: extensions.unreadToggle
-    });
+    });*/
 
     ext.point('io.ox/mail/mobile/detail/header').extend({
         id: 'subject',
@@ -115,14 +115,14 @@ define('io.ox/mail/detail/mobileView', [
         draw: extensions.fulldate
     });
 
-    ext.point('io.ox/mail/mobile/detail/header').extend({
+    /*ext.point('io.ox/mail/mobile/detail/header').extend({
         id: 'flags',
         index: INDEX_header += 100,
         draw: function (baton) {
             var node = $('<span class="flags">').appendTo(this);
             ext.point('io.ox/mail/mobile/detail/header/flags').invoke('draw', node, baton);
         }
-    });
+    });*/
 
     ext.point('io.ox/mail/mobile/detail/header/flags').extend({
         id: 'security',

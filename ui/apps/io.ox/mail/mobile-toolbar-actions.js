@@ -112,6 +112,18 @@ define('io.ox/mail/mobile-toolbar-actions', [
             mobile: 'lo',
             title: gt('Not spam'),
             ref: 'io.ox/mail/actions/nospam'
+        },
+        'flag': {
+            prio: 'hi',
+            mobile: 'lo',
+            title: gt('Flag'),
+            ref: 'io.ox/mail/actions/flag'
+        },
+        'unflag': {
+            prio: 'hi',
+            mobile: 'lo',
+            title: gt('Unflag'),
+            ref: 'io.ox/mail/actions/unflag'
         }
     };
 
@@ -125,7 +137,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
     mobile.addAction(points.listView, meta, ['compose']);
     mobile.addAction(points.multiselect, meta, ['compose', 'delete', 'forward', 'move', 'archive']);
     mobile.addAction(points.threadView, meta, ['compose']);
-    mobile.addAction(points.detailView, meta, ['reply', 'reply-all', 'delete', 'forward', 'mark-read', 'mark-unread', 'spam', 'nospam', 'copy']);
+    mobile.addAction(points.detailView, meta, ['reply', 'reply-all', 'delete', 'forward', 'mark-read', 'mark-unread', 'spam', 'flag', 'unflag', 'nospam', 'copy']);
     mobile.createToolbarExtensions(points);
 
     var updateToolbar = _.debounce(function (selection) {
