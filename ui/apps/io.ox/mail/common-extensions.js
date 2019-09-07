@@ -213,8 +213,8 @@ define('io.ox/mail/common-extensions', [
                        '<div class="spacer">'
                    );
 
-                // don't show email address on smartphones if status is pass
-                var skipEmail = _.device('smartphone') && !!name && status === 'pass',
+                // don't show email address on smartphones if status is pass or it's myself
+                var skipEmail = _.device('smartphone') && !!name && (status === 'pass' || account.is('sent', data.folder_id)),
                     showEmailAddress = name !== email && !skipEmail;
 
                 if (showEmailAddress) {

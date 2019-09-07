@@ -1389,6 +1389,11 @@ body.dragging .categories-toolbar-container {
             margin-left: 0;
         }
 
+        .io-ox-label {
+            font-weight: 100;
+            color: #707070;
+        }
+
         .detail-view-header {
 
             @padding-h: 15px;
@@ -1602,16 +1607,19 @@ body.dragging .categories-toolbar-container {
 
         // thread header
         .thread-view-header {
-            background-color: #aaa;
-            color: #fff;
+
+            background-color: #eee;
+            color: #333;
+            border-bottom: 1px solid #ccc;
 
             // currently actually just subject
             & > * { font-size: @phone-font-size; }
 
             .subject {
                 line-height: 20px;
-                padding: 12px 16px;
-                font-weight: normal;
+                padding: 14px 15px 15px 25px;
+                font-weight: bold;
+                font-size: 16px;
             }
         }
 
@@ -1619,20 +1627,21 @@ body.dragging .categories-toolbar-container {
         .thread-view {
 
             .list-item {
+
+                border-bottom: 0;
                 margin-bottom: 0;
 
                 .detail-view-header {
+                    padding: 14px 15px 16px 25px;
                     border-bottom: 1px solid #ccc;
-                    padding: 16px 15px;
-                    //min-height: auto;
 
                     .detail-view-row {
                         margin: 0;
                     }
 
                     .unread-toggle {
-                        left: 15px;
-                        top: 18px;
+                        left: 8px;
+                        top: 15px;
                         padding: 0;
                         position: absolute;
                     }
@@ -1646,17 +1655,19 @@ body.dragging .categories-toolbar-container {
                         line-height: @phone-line-height;
                     }
 
-                    // row 1
-                    .from {
-                        padding-left: 20px;
-                    }
-
                     .recipients {
                         padding: 0;
                         margin-bottom: -1px;
                         border-bottom: 0;
+                        .person-link {
+                            white-space: nowrap;
+                        }
                     }
                     .person-from { flex: 1 }
+
+                    .show-all-recipients {
+                        display: none;
+                    }
                 }
                 // do not show recipients
                 &:not(.expanded) .recipients { max-height: initial; }
@@ -1666,8 +1677,10 @@ body.dragging .categories-toolbar-container {
                 }
             }
 
-            .row-2, .row-4, .row-5 { display: none; }
+            .list-item .unread-toggle { display: none; }
+            .list-item.unread .unread-toggle { display: inline-block; }
 
+            .row-2, .row-4, .row-5 { display: none; }
         }
     }
 
