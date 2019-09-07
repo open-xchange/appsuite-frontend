@@ -11644,8 +11644,9 @@ msgid "Upload image"
 msgstr "Зураг аплод хийхийн тулд дарна уу"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
-msgid "Upload local file"
-msgstr ""
+#, fuzzy
+msgid "Upload local image"
+msgstr "Зураг аплод хийхийн тулд дарна уу"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js

@@ -11720,7 +11720,9 @@ msgid "Upload image"
 msgstr "Overfør billede"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
-msgid "Upload local file"
+#, fuzzy
+#| msgid "Upload local file"
+msgid "Upload local image"
 msgstr "Overfør lokal fil"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js

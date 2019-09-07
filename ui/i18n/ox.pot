@@ -8769,7 +8769,7 @@ msgstr[1] ""
 
 #: apps/io.ox/files/filepicker.js
 #: module:io.ox/files
-msgid "Upload local file"
+msgid "Upload local image"
 msgstr ""
 
 #: apps/io.ox/files/listview.js
