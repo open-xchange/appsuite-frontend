@@ -95,6 +95,14 @@ Breaks: open-xchange-guard-help-pl-pl (<< 2.10.0)
 Replaces: open-xchange-guard-help-pl-pl (<< 2.10.0)
 Description: Online help for OX App Suite (pl_PL)
 
+Package: open-xchange-appsuite-help-tr-tr
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Breaks: open-xchange-guard-help-tr-tr (<< 2.10.0)
+Replaces: open-xchange-guard-help-tr-tr (<< 2.10.0)
+Description: Online help for OX App Suite (tr_TR)
+
 Package: open-xchange-appsuite-help-zh-cn
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-appsuite-help-common
