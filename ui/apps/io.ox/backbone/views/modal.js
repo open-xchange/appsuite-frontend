@@ -220,7 +220,11 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.$(':input').each(function () {
                 if ($(this).attr('data-state') === 'manual') return;
                 // input elements that have the "disabled" class, were already disabled when disableFormElements was called. Leave them disabled to recreate the previous state and remove the marker class.
-                $(this).prop('disabled', $(this).hasClass('disabled')).removeClass('disabled');
+                if ($(this).hasClass('disabled')) {
+                    $(this).removeClass('disabled');
+                    return;
+                }
+                $(this).prop('disabled', false);
             });
         },
 
