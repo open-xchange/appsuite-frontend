@@ -68,6 +68,7 @@ define('io.ox/core/locale/meta', function () {
         ro_RO: 'Română (România)',
         sk_SK: 'Slovenčina (Slovensko)',
         sv_SE: 'Svenska (Sverige)',
+        tr_TR: 'Türkçe (Türkiye)',
         ja_JP: '日本語 (日本)',
         zh_CN: '中文 (简体)',
         zh_TW: '中文 (繁體)'
@@ -126,6 +127,7 @@ define('io.ox/core/locale/meta', function () {
         ro_RO: 'ro',
         sk_SK: 'sk',
         sv_SE: 'sv',
+        tr_TR: 'tr',
         ja_JP: 'ja',
         zh_CN: 'zh-cn',
         zh_TW: 'zh-tw'
@@ -184,6 +186,7 @@ define('io.ox/core/locale/meta', function () {
         ro_RO: 'ro',
         sk_SK: 'sk',
         sv_SE: 'sv',
+        tr_TR: 'tr',
         ja_JP: 'ja',
         zh_CN: 'zh',
         zh_TW: 'zh'
