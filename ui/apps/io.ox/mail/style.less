@@ -270,9 +270,13 @@ html.macos, html.ios {
         color:#fff;
         font-size: 30px;
         float: right;
-
+        transition: width .35s ease-in-out;
+        i { transition: opacity .3s; }
         &.delete { background: #FF4105; }
-        &.more   { background: rgb(255, 169, 8); }
+        &.more   {
+            background: rgb(255, 169, 8);
+            i { opacity: 1; }
+        }
     }
 }
 
