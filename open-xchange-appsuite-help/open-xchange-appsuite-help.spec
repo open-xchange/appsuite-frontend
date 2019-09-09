@@ -156,6 +156,17 @@ Provides:      open-xchange-guard-help-pl-pl
 %description   pl-pl
 Online help for OX App Suite (pl_PL)
 
+%package       tr-tr
+Group:         Applications/Productivity
+Summary:       Online help for OX App Suite (tr_TR)
+Provides:      open-xchange-appsuite-help
+Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-tr-tr
+Provides:      open-xchange-guard-help-tr-tr
+
+%description   tr-tr
+Online help for OX App Suite (tr_TR)
+
 %package       zh-cn
 Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (zh_CN)
@@ -250,6 +261,11 @@ done
 %defattr(-,root,root)
 %dir %{docroot}/appsuite/help/l10n
 %{docroot}/appsuite/help/l10n/pl_PL
+
+%files tr-tr
+%defattr(-,root,root)
+%dir %{docroot}/appsuite/help/l10n
+%{docroot}/appsuite/help/l10n/tr_TR
 
 %files zh-cn
 %defattr(-,root,root)
