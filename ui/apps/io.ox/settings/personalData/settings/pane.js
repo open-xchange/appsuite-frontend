@@ -190,7 +190,8 @@ define('io.ox/settings/personalData/settings/pane', [
                     });
 
                     // main checkbox for the module
-                    checkboxes.append(new mini.CustomCheckboxView({ name: 'enabled', label: modules[moduleName].label, model: self.models[moduleName] }).render().$el.addClass('main-option '),
+                    // a11y does not like it when multiple nodes have the same name attribute, so despite all having the attribute name in the model ("enabled") we use different name attributes for the nodes
+                    checkboxes.append(new mini.CustomCheckboxView({ name: 'enabled', nodeName: moduleName, label: modules[moduleName].label, model: self.models[moduleName] }).render().$el.addClass('main-option '),
                         $('<div class="description">').text(modules[moduleName].description),
                         dropdownView.render().$el);
                 });
