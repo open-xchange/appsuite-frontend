@@ -88,14 +88,15 @@ define('io.ox/chat/main', [
                 case 'leave-group': this.leaveGroup(data.id); break;
                 case 'start-private-chat': this.startPrivateChat(data); break;
                 case 'join-channel': this.joinChannel(data); break;
+                case 'leave-channel': this.leaveChannel(data.id, false); break;
                 case 'show-chat': this.showChat(data.id || data.cid, data); break;
                 case 'close-chat': this.closeChat(); break;
                 case 'show-recent-conversations': this.showRecentConversations(); break;
                 case 'show-channels': this.showChannels(); break;
                 case 'show-all-files': this.showAllFiles(); break;
                 case 'show-file': this.showFile(data); break;
-                case 'open-chat': this.toggleChat(data.id, true); break;
-                case 'unsubscribe-chat': this.toggleChat(data.id, false); break;
+                case 'open-chat': this.resubscribeChat(data.id); break;
+                case 'unsubscribe-chat': this.unsubscribeChat(data.id, false); break;
                 case 'add-member': this.addMember(data.id); break;
                 case 'switch-to-floating': this.toggleWindowMode('floating'); break;
                 case 'discard-app': this.hideApp(); break;
@@ -173,6 +174,11 @@ define('io.ox/chat/main', [
             this.showChat(cmd.id);
         },
 
+        leaveChannel: function (id) {
+            data.chats.leaveChannel(id);
+            this.closeChat();
+        },
+
         showChat: function (id, opt) {
             var view = new ChatView(_.extend({ room: id }, _(opt).pick('messageId', 'reference')));
             this.showApp();
@@ -241,34 +247,21 @@ define('io.ox/chat/main', [
             this.moveFile(e.which === 37 ? -1 : +1);
         },
 
-        toggleChat: function (id, state) {
+        unsubscribeChat: function (id) {
+            var self = this;
             var model = data.chats.get(id);
             if (!model) return;
-            model.toggle(state);
-            this.$body.toggleClass('open', state);
-            if (state) this.showChat(id); else this.$rightside.empty();
+            data.chats.toggleRecent(id);
+            self.closeChat();
         },
 
-        addMember: function (id) {
-            var model = data.chats.get(id);
-            if (!model) return;
-            require(['io.ox/contacts/addressbook/popup'], function (picker) {
-                picker.open(
-                    function callback(items) {
-                        var ids = _(items).pluck('user_id');
-                        model.addMembers(ids);
-                    },
-                    {
-                        help: false,
-                        build: function () {
-                            this.$el.addClass('ox-chat-popup');
-                        },
-                        useGABOnly: true,
-                        title: 'Add members',
-                        button: 'Add'
-                    }
-                );
-            });
+        resubscribeChat: function (id, opt) {
+            data.chats.toggleRecent(id);
+            var view = new ChatView(_.extend({ room: id }, _(opt).pick('messageId', 'reference')));
+            this.showApp();
+            this.$rightside.empty().append(view.render().$el);
+            this.$body.addClass('open');
+            view.scrollToBottom();
         },
 
         toggleWindowMode: function (mode) {

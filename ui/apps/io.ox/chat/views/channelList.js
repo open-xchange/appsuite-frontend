@@ -109,7 +109,7 @@ define('io.ox/chat/views/channelList', [
         },
 
         getItems: function () {
-            return this.collection.getChannelsUnjoined();
+            return this.collection.getChannels();
         },
 
         getNode: function (model) {
@@ -126,10 +126,6 @@ define('io.ox/chat/views/channelList', [
 
         onRemove: function (model) {
             this.getNode(model).remove();
-        },
-
-        onChangeJoined: function (model) {
-            this.onRemove(model);
         },
 
         onChangeTitle: function (model) {
