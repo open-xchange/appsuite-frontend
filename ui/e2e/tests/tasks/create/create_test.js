@@ -178,7 +178,7 @@ Scenario('[C7729] Create Task with participants', async function (I, users) {
     let testrailID = 'C7729';
     let testrailName = 'Create Task with participants';
     I.login('app=io.ox/tasks');
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    I.waitForElement('.classic-toolbar');
     I.clickToolbar('New task');
     I.waitForVisible('.io-ox-tasks-edit-window');
     I.fillField('Subject', testrailID);
@@ -186,11 +186,9 @@ Scenario('[C7729] Create Task with participants', async function (I, users) {
     I.click('Expand form');
     I.fillField('Add contact', users[1].userdata.primaryEmail);
     I.pressKey('Enter');
-    I.wait(1);
     I.waitForText('Participants (1)');
     I.fillField('Add contact', users[2].userdata.primaryEmail);
     I.pressKey('Enter');
-    I.wait(1);
     I.waitForText('Participants (2)');
     I.click('Create');
     I.waitForDetached('.floating-window-content');
@@ -204,8 +202,7 @@ Scenario('[C7729] Create Task with participants', async function (I, users) {
     I.seeElement('.participant-list .participant [title="' + users[2].userdata.primaryEmail + '"]');
     I.logout();
     I.login('app=io.ox/tasks', { user: users[1] });
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-    I.seeElement('.tasks-detailview');
+    I.waitForElement('.tasks-detailview');
     I.see(testrailID);
     I.see(testrailName);
     I.dontSeeElement({ css: '[title="High priority"]' });
@@ -215,8 +212,7 @@ Scenario('[C7729] Create Task with participants', async function (I, users) {
     I.seeElement('.participant-list .participant [title="' + users[2].userdata.primaryEmail + '"]');
     I.logout();
     I.login('app=io.ox/tasks', { user: users[2] });
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
-    I.seeElement('.tasks-detailview');
+    I.waitForElement('.tasks-detailview');
     I.see(testrailID);
     I.see(testrailName);
     I.dontSeeElement({ css: '[title="High priority"]' });
@@ -224,11 +220,10 @@ Scenario('[C7729] Create Task with participants', async function (I, users) {
     I.see('Not started');
     I.seeElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');
     I.seeElement('.participant-list .participant [title="' + users[2].userdata.primaryEmail + '"]');
-    I.logout();
 });
 Scenario('[C7734] Create Task without any information', async function (I) {
     I.login('app=io.ox/tasks');
-    I.waitForVisible('*[data-app-name="io.ox/tasks"]');
+    I.waitForElement('.classic-toolbar');
     I.clickToolbar('New task');
     I.waitForVisible('.io-ox-tasks-edit-window');
     I.seeElement('.floating-window-content .btn-primary[disabled=""][data-action="save"]');
