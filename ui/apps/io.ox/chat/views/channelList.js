@@ -92,20 +92,22 @@ define('io.ox/chat/views/channelList', [
 
         renderItem: function (model) {
             var isMember = model.isMember();
-            return $('<li class="channel">').append(
-                $('<div>').append(
-                    new ChatAvatar({ model: model }).render().$el,
-                    $('<span class="title">').text(model.getTitle()),
-                    $('<span class="members">').text((model.get('members') || []).length + ' member(s)')
-                ),
-                $('<div class="description">').text(model.get('description')),
-                $('<button type="button" class="btn btn-default btn-action" >')
-                    .attr({ 'data-cmd': 'join-channel', 'data-id': model.get('id') })
-                    .prop('disabled', isMember)
-                    .toggleClass('join', !isMember)
-                    .toggleClass('btn-success', isMember)
-                    .append(isMember ? $('<i class="fa fa-check">') : 'Join')
-            );
+            return $('<li class="channel">')
+                .attr({ 'data-cmd': 'view-channel', 'data-id': model.get('id') })
+                .append(
+                    $('<div>').append(
+                        new ChatAvatar({ model: model }).render().$el,
+                        $('<span class="title">').text(model.getTitle()),
+                        $('<span class="members">').text((model.get('members') || []).length + ' member(s)')
+                    ),
+                    $('<div class="description">').text(model.get('description')),
+                    $('<button type="button" class="btn btn-default btn-action" >')
+                        .attr({ 'data-cmd': 'join-channel', 'data-id': model.get('id') })
+                        .prop('disabled', isMember)
+                        .toggleClass('join', !isMember)
+                        .toggleClass('btn-success', isMember)
+                        .append(isMember ? $('<i class="fa fa-check">') : 'Join')
+                );
         },
 
         getItems: function () {
