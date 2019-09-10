@@ -933,7 +933,8 @@ define('io.ox/mail/main', [
             if (!_.device('smartphone')) return;
             app.showMail = function (cid) {
                 // render mail view and append it to detailview's page
-                app.pages.getPage('detailView').empty().append(app.threadView.renderMail(cid));
+                app.pages.getPage('detailView')
+                    .empty().append(app.threadView.renderMail(cid));
             };
         },
 
@@ -1637,6 +1638,7 @@ define('io.ox/mail/main', [
             if (_.device('!smartphone')) return;
             // force lazyload to load, otherwise the whole pane will stay empty...
             app.pages.getPage('detailView').on('pageshow', function () {
+                $(this).scrollTop(0);
                 $(this).find('li.lazy').trigger('scroll');
             });
         },
