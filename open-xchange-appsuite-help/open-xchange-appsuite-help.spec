@@ -17,7 +17,7 @@ BuildRequires:  npm6
 BuildRequires:  nodejs >= 0.10.0
 %endif
 Version:        @OXVERSION@
-%define         ox_release 9
+%define         ox_release 10
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -156,6 +156,17 @@ Provides:      open-xchange-guard-help-pl-pl
 %description   pl-pl
 Online help for OX App Suite (pl_PL)
 
+%package       tr-tr
+Group:         Applications/Productivity
+Summary:       Online help for OX App Suite (tr_TR)
+Provides:      open-xchange-appsuite-help
+Requires:      open-xchange-appsuite-help-common
+Obsoletes:     open-xchange-guard-help-tr-tr
+Provides:      open-xchange-guard-help-tr-tr
+
+%description   tr-tr
+Online help for OX App Suite (tr_TR)
+
 %package       zh-cn
 Group:         Applications/Productivity
 Summary:       Online help for OX App Suite (zh_CN)
@@ -187,7 +198,7 @@ Online help for OX App Suite (zh_TW)
 %install
 export NO_BRP_CHECK_BYTECODE_VERSION=true
 ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docroot} -Dlanguages=false -DkeepCache=true -f build/build.xml build
-for LANG in de_DE en_GB en_US es_ES es_MX fr_FR it_IT ja_JP nl_NL pl_PL zh_CN zh_TW; do
+for LANG in de_DE en_GB en_US es_ES es_MX fr_FR it_IT ja_JP nl_NL pl_PL tr_TR zh_CN zh_TW; do
     ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docroot} -DinstallTarget=${LANG} -DkeepCache=true -Dnoclean=true -f build/build.xml clean build
 done
 
@@ -251,6 +262,11 @@ done
 %dir %{docroot}/appsuite/help/l10n
 %{docroot}/appsuite/help/l10n/pl_PL
 
+%files tr-tr
+%defattr(-,root,root)
+%dir %{docroot}/appsuite/help/l10n
+%{docroot}/appsuite/help/l10n/tr_TR
+
 %files zh-cn
 %defattr(-,root,root)
 %dir %{docroot}/appsuite/help/l10n
@@ -262,6 +278,8 @@ done
 %{docroot}/appsuite/help/l10n/zh_TW
 
 %changelog
+* Mon Sep 09 2019 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2019-09-10 (5409)
 * Thu Aug 22 2019 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2019-08-26 (5374)
 * Fri Aug 09 2019 Marcus Klein <marcus.klein@open-xchange.com>
