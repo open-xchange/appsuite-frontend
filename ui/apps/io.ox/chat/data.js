@@ -451,12 +451,14 @@ define('io.ox/chat/data', [
             this.set('modified', +moment());
         },
 
-        addMembers: function (ids) {
-            this.members.add(ids, { parse: true });
+        addMembers: function (emails) {
+            var members = emails.map(function (email) { return { email: email }; });
+            this.set('members', [].concat(this.get('members').concat(members)));
+
             return $.ajax({
                 method: 'POST',
                 url: this.members.url(),
-                data: { members: ids },
+                data: { members: emails },
                 xhrFields: { withCredentials: true }
             });
         },
@@ -520,6 +522,19 @@ define('io.ox/chat/data', [
             });
         },
 
+        toggleRecent: function (roomId) {
+            var room = this.get(roomId);
+            return $.ajax({
+                type: 'POST',
+                url: this.url() + '/state/' + roomId,
+                processData: false,
+                contentType: false,
+                xhrFields: { withCredentials: true }
+            }).then(function () {
+                room.set('open', !room.get('open'));
+            });
+        },
+
         onChangeUnreadCount: function () {
             this.trigger('unseen', this.reduce(function (sum, model) {
                 return sum + (model.get('unreadCount') > 0 ? 1 : 0);
@@ -531,7 +546,7 @@ define('io.ox/chat/data', [
         },
 
         getHistory: function () {
-            return this.filter({ open: false, joined: true }).slice(0, 100);
+            return this.filter({ open: false, type: 'private' }).slice(0, 100);
         },
 
         getChannels: function () {
@@ -553,6 +568,11 @@ define('io.ox/chat/data', [
             if (!model || !model.isChannel()) return;
             model.addMembers([data.user.email]);
             model.set({ joined: true, open: true });
+        },
+
+        leaveChannel: function (roomId) {
+            var room = this.get(roomId);
+            room.destroy();
         },
 
         sync: function (method, model, options) {
