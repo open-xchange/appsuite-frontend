@@ -235,10 +235,7 @@ define('io.ox/chat/views/chat', [
                         $('<i class="fa fa-chevron-down" aria-hidden="true">'),
                         this.$unreadCounter = $('<span class="badge">').text(this.model.get('unreadCount') || '')
                     ).toggle(this.isJumpDownVisible()),
-                    this.$editor = $('<textarea class="form-control" placeholder="Enter message here">'),
-                    $('<button type="button" class="btn btn-default btn-circle pull-right file-upload-btn">')
-                        .append('<i class="fa fa-paperclip" aria-hidden="true">'),
-                    $('<input type="file" class="file-upload-input hidden">')
+                    this.$editor = this.renderEditor()
                 )
             );
 
@@ -247,6 +244,19 @@ define('io.ox/chat/views/chat', [
             }.bind(this));
 
             return this;
+        },
+
+        renderEditor: function () {
+            if (this.isMember()) {
+                return [$('<textarea class="form-control" placeholder="Enter message here">'),
+                    $('<button type="button" class="btn btn-default btn-circle pull-right file-upload-btn">')
+                        .append('<i class="fa fa-paperclip" aria-hidden="true">'),
+                    $('<input type="file" class="file-upload-input hidden">')];
+            }
+
+            return $('<button type="button" class="btn btn-default btn-action join" >')
+                .attr({ 'data-cmd': 'join-channel', 'data-id': this.model.get('id') })
+                .append('Join');
         },
 
         renderDropdown: function () {
@@ -427,6 +437,12 @@ define('io.ox/chat/views/chat', [
             // scroll to bottom again if height of image changes
             scrollpane.scrollTop(scrollpane.scrollTop() + opt.value - opt.prev);
 
+        },
+
+        isMember: function () {
+            return this.model.get('members').filter(function (member) {
+                return member.email === data.user.email;
+            }).length > 0;
         },
 
         getMessageNode: function (model, selector) {

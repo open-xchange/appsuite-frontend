@@ -87,6 +87,7 @@ define('io.ox/chat/main', [
                 case 'open-group-dialog': this.openGroupDialog(data); break;
                 case 'leave-group': this.leaveGroup(data.id); break;
                 case 'start-private-chat': this.startPrivateChat(data); break;
+                case 'view-channel': this.viewChannel(data); break;
                 case 'join-channel': this.joinChannel(data); break;
                 case 'leave-channel': this.leaveChannel(data.id, false); break;
                 case 'show-chat': this.showChat(data.id || data.cid, data); break;
@@ -167,6 +168,10 @@ define('io.ox/chat/main', [
                 self.closeChat();
             })
             .open();
+        },
+
+        viewChannel: function (cmd) {
+            this.showChat(cmd.id);
         },
 
         joinChannel: function (cmd) {
