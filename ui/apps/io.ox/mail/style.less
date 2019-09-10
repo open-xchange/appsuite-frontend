@@ -1461,9 +1461,18 @@ body.dragging .categories-toolbar-container {
         .has-attachments { display: none; }
 
         .mail-attachment-list {
+            padding: 10px 0 9px 0;
+            &.open { padding-bottom: 0; }
+            .header  { padding: 0 15px; }
             ul.inline-items {
-                li.item { line-height: 35px; }
-                &.preview li.item .file { display: block; }
+                margin: 0;
+                &:not(.preview) > li.item {
+                    padding: 10px 15px 9px 15px;
+                }
+                &.preview {
+                    margin: 0 15px;
+                    li.item .file { display: block; }
+                }
             }
             .links { display:none; }
         }
