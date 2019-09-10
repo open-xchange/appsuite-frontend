@@ -231,12 +231,14 @@ define('io.ox/core/main/topbar_right', [
 
             if (!capabilities.has('edit_password && guest')) return;
 
-            this.link('change-password', gt('Change password'), function (e) {
-                e.preventDefault();
-                require(['plugins/portal/userSettings/register'], function (userSettings) {
-                    userSettings.changePassword();
+            this.link('change-password',
+                settings.get('password/emptyCurrent') ? gt('Add login password') : gt('Change login password'),
+                function (e) {
+                    e.preventDefault();
+                    require(['plugins/portal/userSettings/register'], function (userSettings) {
+                        userSettings.changePassword();
+                    });
                 });
-            });
         }
     });
 
