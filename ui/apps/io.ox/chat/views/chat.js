@@ -235,12 +235,12 @@ define('io.ox/chat/views/chat', [
                         $('<i class="fa fa-chevron-down" aria-hidden="true">'),
                         this.$unreadCounter = $('<span class="badge">').text(this.model.get('unreadCount') || '')
                     ).toggle(this.isJumpDownVisible()),
-                    this.$editor = this.renderEditor()
+                    this.renderEditor()
                 )
             );
 
             _.defer(function () {
-                this.$editor.focus();
+                if (this.$editor) this.$editor.focus();
             }.bind(this));
 
             return this;
@@ -248,7 +248,8 @@ define('io.ox/chat/views/chat', [
 
         renderEditor: function () {
             if (this.isMember()) {
-                return [$('<textarea class="form-control" placeholder="Enter message here">'),
+                this.$editor = $('<textarea class="form-control" placeholder="Enter message here">');
+                return [this.$editor,
                     $('<button type="button" class="btn btn-default btn-circle pull-right file-upload-btn">')
                         .append('<i class="fa fa-paperclip" aria-hidden="true">'),
                     $('<input type="file" class="file-upload-input hidden">')];
