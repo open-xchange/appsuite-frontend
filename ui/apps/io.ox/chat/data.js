@@ -25,7 +25,6 @@ define('io.ox/chat/data', [
         DEFAULT_LIMIT = 40;
 
     var data = {
-        // yes, it contains the user_id; just a POC; no auth
         API_ROOT: 'https://' + chatHost + '/api',
         SOCKET: 'https://' + chatHost
     };
@@ -55,6 +54,16 @@ define('io.ox/chat/data', [
             return this.get('state') || 'offline';
         },
 
+        setState: function (state) {
+            $.ajax({
+                method: 'POST',
+                url: data.API_ROOT + '/users/' + state,
+                xhrFields: { withCredentials: true }
+            }).then(function () {
+                this.set('state', state);
+            }.bind(this));
+        },
+
         fetchState: function () {
             if (this.has('state')) return;
             $.ajax({
@@ -67,6 +76,11 @@ define('io.ox/chat/data', [
     var UserCollection = Backbone.Collection.extend({
 
         model: UserModel,
+
+        initialize: function () {
+            this.initialized = new $.Deferred();
+            this.once('reset', this.initialized.resolve);
+        },
 
         // no memoize here to prevent pointing always to undefined
         getByMail: (function () {
@@ -626,6 +640,10 @@ define('io.ox/chat/data', [
 
     var SessionModel = Backbone.Model.extend({
 
+        initialize: function () {
+            this.initialized = new $.Deferred();
+        },
+
         connectSocket: function () {
             var socket = data.socket = io.connect(data.SOCKET);
 
@@ -707,8 +725,9 @@ define('io.ox/chat/data', [
             }).then(function (user) {
                 data.user_id = user.id;
                 data.user = user;
+                this.initialized.resolve();
                 return user;
-            });
+            }.bind(this));
         },
 
         checkIdPSession: function (url) {

@@ -359,6 +359,7 @@ define('io.ox/core/main/topbar_right', [
                 dropdown = new Dropdown({
                     attributes: { role: 'presentation' },
                     tagName: 'li',
+                    model: new Backbone.Model(),
                     id: 'io-ox-topbar-dropdown-icon',
                     className: 'launcher dropdown',
                     $ul: ul,

@@ -22,6 +22,81 @@ define('io.ox/chat/extensions/register', [
     var Action = actionsUtil.Action;
 
     //
+    // Topbar
+    //
+
+    ext.point('io.ox/core/appcontrol/right').extend({
+        id: 'online-state',
+        after: 'dropdown',
+        draw: function () {
+            require(['io.ox/chat/views/state'], function (StateView) {
+                data.users.initialized.then(function () {
+                    return data.session.initialized;
+                }).then(function () {
+                    var user = data.users.findWhere({ id: ox.user_id });
+                    this.find('#io-ox-topbar-dropdown-icon')
+                        .addClass('ox-chat')
+                        .find('> a').after(
+                            new StateView({ model: user }).render().$el
+                        );
+                }.bind(this));
+            }.bind(this));
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+        id: 'chat/register',
+        before: 'chat/online',
+        extend: function () {
+            this.model.set('state', 'online');
+
+            this.model.on('change:state', function (model) {
+                var user = data.users.findWhere({ id: ox.user_id });
+                user.setState(model.get('state'));
+            });
+
+            data.users.initialized.then(function () {
+                var user = data.users.findWhere({ id: ox.user_id });
+                this.model.listenTo(user, 'change:state', function (user, state) {
+                    this.set('state', state);
+                });
+            }.bind(this));
+        }
+    });
+
+    ['online', 'absent', 'busy', 'offline'].forEach(function (state, index, arr) {
+        ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+            id: 'chat/' + state,
+            index: index + 1,
+            extend: function () {
+                if (index === 0) {
+                    this.group('Online state');
+                    this.$ul.find('.dropdown-header').last().attr('data-controller', 'chat');
+                    this.$ul.find('[role="group"]').last().attr('data-controller', 'chat');
+                }
+                this.option('state', state, function () {
+                    return state + ' <span class="fa state ' + state + '"></span>';
+                }, { radio: true, group: true });
+                if (index === arr.length - 1) {
+                    this.divider();
+                    this.$ul.find('.divider').last().attr('data-controller', 'chat');
+                }
+            }
+        });
+    });
+
+    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+        id: 'chat/controller',
+        index: 10,
+        extend: function () {
+            var set = this.$ul.find('[data-controller="chat"]').hide();
+            data.session.initialized.then(function () {
+                set.show();
+            });
+        }
+    });
+
+    //
     // Contacts / Halo
     //
 

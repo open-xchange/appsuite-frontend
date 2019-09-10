@@ -27,9 +27,10 @@ define('io.ox/chat/main', [
     'io.ox/contacts/api',
     'io.ox/backbone/views/toolbar',
     'io.ox/backbone/views/modal',
+    'io.ox/chat/views/state',
     'settings!io.ox/core',
     'less!io.ox/chat/style'
-], function (ext, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, ModalDialog, settings) {
+], function (ext, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, ModalDialog, StateView, settings) {
 
     'use strict';
 
@@ -372,7 +373,7 @@ define('io.ox/chat/main', [
                                 )
                             )
                         ),
-                        $('<i class="fa state online fa-check-circle" aria-hidden="true">'),
+                        new StateView({ model: user }).render().$el,
                         $('<div class="name">').text(user.getName())
                     ),
                     new ToolbarView({ point: 'io.ox/chat/list/toolbar', title: 'Chat actions' }).render(new ext.Baton()).$el,
