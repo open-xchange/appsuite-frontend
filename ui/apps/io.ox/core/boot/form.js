@@ -110,7 +110,12 @@ define('io.ox/core/boot/form', [
             }
             $('#io-ox-forgot-password, #io-ox-backtosignin').find('a').click(function (e) {
                 e.preventDefault();
-                $('#io-ox-password-forget-form, #io-ox-login-form').toggle();
+                // If restore email is already populated and readOnly, submit the form
+                if ($('#io-ox-login-restoremail, #io-ox-login-username').prop('readOnly')) {
+                    $('#io-ox-password-forget-form').submit();
+                } else {
+                    $('#io-ox-password-forget-form, #io-ox-login-form').toggle();
+                }
             });
             $('#io-ox-password-forget-form').append(
                 $('<input type="hidden" name="share">').val(_.url.hash('share'))
