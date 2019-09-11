@@ -196,6 +196,8 @@ define('io.ox/mail/detail/content', [
                     link.addClass(data.className).data(data);
                     // if this is a sharing link add the generic deep link class so event handlers work properly and it doesn't get opened in a new tab
                     if (shareLinkUrl && link.attr('href') === shareLinkUrl) link.addClass('deep-link-app');
+                    // Bug 66616: Internal links, does not need a noopener. this attr opens a new window.
+                    if (link.hasClass('deep-link-files')) link.attr('rel', '');
                     return;
                 }
 
