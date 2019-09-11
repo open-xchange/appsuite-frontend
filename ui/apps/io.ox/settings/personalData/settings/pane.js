@@ -140,7 +140,7 @@ define('io.ox/settings/personalData/settings/pane', [
                     this.$body.append($('<div>').text(options.text));
                 })
                 .addCancelButton({ left: true })
-                .addButton({ className: 'btn-default', action: options.action, label: options.label })
+                .addButton({ className: 'btn-primary', action: options.action, label: options.label })
                 .on('action', def.resolve)
                 .open();
 
@@ -171,7 +171,10 @@ define('io.ox/settings/personalData/settings/pane', [
                     supportedFilesizes = _(filesizelimits).filter(function (value) { return value <= self.model.get('maxFileSize'); });
 
                 // data selection
-                this.$el.append(checkboxes = $('<div class="form-group">').append($('<div>').text(gt('You can download a copy of your personal data from your account, if you want to save it or transfer it to another provider.'))));
+                this.$el.append(
+                    $('<h1>').text(gt('Download your personal data')),
+                    checkboxes = $('<div class="form-group">').append($('<div>').text(gt('You can download a copy of your personal data from your account, if you want to save it or transfer it to another provider.')))
+                );
 
                 // build Checkboxes
                 _(modules).each(function (data, moduleName) {
@@ -233,7 +236,7 @@ define('io.ox/settings/personalData/settings/pane', [
                     case 'DONE':
                         this.$el.append($('<button type="button" class="btn btn-primary">').text(gt('Request new download'))
                             .on('click', function () {
-                                deleteDialog({ title: gt('Request new download'), text: gt('By requesting a new download, your currently available downloads will be deleted.'), action: 'delete', label: gt('Delete all avaliable downloads') }).then(function (action) {
+                                deleteDialog({ title: gt('Request new download'), text: gt('There is currently an archive download available. By requesting a new download the current archive will be deleted and is no longer available.'), action: 'delete', label: gt('Request new download') }).then(function (action) {
                                     if (action === 'delete') {
                                         api.requestDownload(self.getDownloadConfig(), true).fail(yell);
                                     }
@@ -274,14 +277,17 @@ define('io.ox/settings/personalData/settings/pane', [
             render: function () {
                 this.$el.empty().toggle(this.model.get('status') !== 'none');
 
+                //#. header for zip archive download list
+                this.$el.append($('<h1 class="col-xs-12">').text(gt('Your archives')));
+
                 if (this.model.get('status') === 'PENDING') {
                     //#. %1$s: date and time the download was requested
                     this.$el.append(
                         $('<div class="col-xs-12">')
-                            .text(gt('Your requested archive is currently being created. Depending on the size of the requested data this may take hours or days. You will be informed via email when your download is ready.', moment(this.model.get('creationTime')).format('LLL'))),
-                        $('<button type="button" class="cancel-button btn btn-primary">').text(gt('Cancel download'))
+                            .text(gt('Your requested archive is currently being created. Depending on the size of the requested data this may take hours or days. You will be informed via email when your download is ready.')),
+                        $('<button type="button" class="cancel-button btn btn-primary">').text(gt('Abort download request'))
                             .on('click', function () {
-                                deleteDialog({ title: gt('Cancel download request'), text: gt('Do you really want to cancel your download request?'), action: 'delete', label: gt('Cancel download') }).then(function (action) {
+                                deleteDialog({ title: gt('Abort download request'), text: gt('Do you really want to abort the current download request?'), action: 'delete', label: gt('Abort download request') }).then(function (action) {
                                     if (action === 'delete') api.cancelDownloadRequest().fail(yell);
                                 });
                             })
@@ -291,7 +297,8 @@ define('io.ox/settings/personalData/settings/pane', [
                 if (this.model.get('status') === 'DONE' && this.model.get('results') && this.model.get('results').length) {
                     this.$el.append(
                         //#. %1$s: date and time when the download expires
-                        $('<label class="col-xs-12">').text(gt('Your data archive is ready for download. The download is vailable until %1$s.', moment(this.model.get('avaiableUntil')).format('LLL'))),
+                        //#. %1$s: date when the download was requested
+                        $('<label class="col-xs-12">').text(gt('Your data archive %2$s from is ready for download. The download is available until %1$s.', moment(this.model.get('avaiableUntil')).format('LLL'), moment(this.model.get('creationTime')).format('L'))),
                         $('<ul class="col-md-8 list-unstyled downloads">').append(
                             _(this.model.get('results')).map(function (file) {
                                 return $('<li class="file">')
@@ -320,13 +327,10 @@ define('io.ox/settings/personalData/settings/pane', [
     });
 
     ext.point('io.ox/settings/personalData/settings/detail').extend({
-        id: 'title',
+        id: 'addClass',
         index: 100,
         draw: function () {
             this.addClass('io-ox-personal-data-settings');
-            this.append(
-                $('<h1>').text(gt('Download your personal data'))
-            );
         }
     });
 
