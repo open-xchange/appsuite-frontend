@@ -64,13 +64,14 @@ define('io.ox/mail/sanitizer', [
         options = _.extend({}, defaultOptions, options);
 
         if (data.content_type !== 'text/html') return data;
-        data.content = DOMPurify.sanitize(data.content, options);
+        // See bug 66936, ensure sanitize returns a string
+        data.content = (DOMPurify.sanitize(data.content, options) + '');
         return data;
     }
 
     // used for non mail related sanitizing (for example used in rss feeds)
     function simpleSanitize(str) {
-        return DOMPurify.sanitize(str, _.extend({}, defaultOptions, { WHOLE_DOCUMENT: false }));
+        return (DOMPurify.sanitize(str, _.extend({}, defaultOptions, { WHOLE_DOCUMENT: false })) + '');
     }
 
     return {
