@@ -68,7 +68,8 @@ define('io.ox/multifactor/api', [
                 }).then(function (data) {
                     if (_.isArray(data)) {
                         data.forEach(function (device) {
-                            device.name = DOMPurify.sanitize(device.name);
+                            // make sure name is a string (See Bug 66936)
+                            device.name = DOMPurify.sanitize(device.name) + '';
                             switch (type) {
                                 case 'BACKUP':
                                     if (device.backup) {
