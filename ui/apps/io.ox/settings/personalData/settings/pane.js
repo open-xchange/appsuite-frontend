@@ -285,9 +285,9 @@ define('io.ox/settings/personalData/settings/pane', [
                     this.$el.append(
                         $('<div class="col-xs-12">')
                             .text(gt('Your requested archive is currently being created. Depending on the size of the requested data this may take hours or days. You will be informed via email when your download is ready.')),
-                        $('<button type="button" class="cancel-button btn btn-primary">').text(gt('Abort download request'))
+                        $('<button type="button" class="cancel-button btn btn-primary">').text(gt('Cancel download request'))
                             .on('click', function () {
-                                deleteDialog({ title: gt('Abort download request'), text: gt('Do you really want to abort the current download request?'), action: 'delete', label: gt('Abort download request') }).then(function (action) {
+                                deleteDialog({ title: gt('Cancel download request'), text: gt('Do you really want to cancel the current download request?'), action: 'delete', label: gt('Cancel download request') }).then(function (action) {
                                     if (action === 'delete') api.cancelDownloadRequest().fail(yell);
                                 });
                             })
