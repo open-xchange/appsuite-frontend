@@ -23,10 +23,10 @@
   resolved "https://registry.yarnpkg.com/@open-xchange/moment-interval/-/moment-interval-0.0.1.tgz#293778b2e4fe1605c9949692f9f8259ce11a3c33"
   integrity sha512-ovLY+eYBpABccARwqSuZSTupR36Flid8TcfJwP8K7ShICY2p5EtgNQs1+wYlbdCBDEEY0khNCx/pnQslUmkypA==
 
-"@open-xchange/tinymce@5.0.2":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@open-xchange/tinymce/-/tinymce-5.0.2.tgz#95e6fabd93df6b2aae6d204c46a81c00f4c34cd4"
-  integrity sha512-UzFNHeHLa6kwVum+zympwbOB0uPjIzyHpBMBcVwg7cOICVIBExVZ/MKdh4pCVsx3dRgQPFUMh6fJULF2jQokQw==
+"@open-xchange/tinymce@5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@open-xchange/tinymce/-/tinymce-5.0.3.tgz#0cc9f9d3bf9dd947591574d58e5d9c6f42080cd9"
+  integrity sha512-K/utS3mWUSFMoW6lzhSHRJVyaFReeIbHvHfN7MVwRPRIysfJIhXUx3tqEv9VTbQSXk/0Q5EUWPCZNpOIaTH8ZA==
   dependencies:
     tinymce "^4.8.0"
 
