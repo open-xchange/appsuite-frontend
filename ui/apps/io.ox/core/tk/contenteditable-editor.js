@@ -68,7 +68,9 @@ define('io.ox/core/tk/contenteditable-editor', [
         draw: function (ed) {
             var sanitizeAttributes = function (e) {
                 if (!e.content) return;
-                e.content = DOMPurify.sanitize(e.content);
+                // aways cast to String (See Bug 66936) - since this is handed over to tinyMCE
+                // we have no choice but making this a String
+                e.content = DOMPurify.sanitize(e.content) + '';
             };
             if (ed.oxContext && ed.oxContext.signature) {
                 ed.on('BeforeSetContent', sanitizeAttributes);
