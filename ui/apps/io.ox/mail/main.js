@@ -695,6 +695,12 @@ define('io.ox/mail/main', [
                     .attr('aria-label', gt('Messages options'))
                     .end()
             );
+            // turn top toolbar into bottom toolbar on smartphones
+            if (_.device('smartphone')) {
+                app.listControl.$('.toolbar.bottom').hide();
+                app.listControl.$('.toolbar.top').removeClass('top').addClass('bottom');
+                app.listControl.$el.removeClass('toolbar-top-visible');
+            }
             // make resizable
             app.listControl.resizable();
         },
@@ -1587,11 +1593,11 @@ define('io.ox/mail/main', [
             if (_.device('!smartphone')) return;
 
             // intial hide
-            app.listControl.$el.toggleClass('toolbar-top-visible', false);
+            app.listControl.$el.toggleClass('toolbar-bottom-visible', false);
 
             app.props.on('change:checkboxes', function (model, value) {
                 app.listView.toggleCheckboxes(value);
-                app.listControl.$el.toggleClass('toolbar-top-visible', value);
+                app.listControl.$el.toggleClass('toolbar-bottom-visible', value);
                 if (value) {
                     app.pages.getNavbar('listView')
                         .setRight(gt('Cancel'))
