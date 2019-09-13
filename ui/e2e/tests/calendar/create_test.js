@@ -1737,7 +1737,7 @@ Scenario('[C7414] Create two appointments at the same time (one is shown as free
     I.waitForDetached(locate('.modal-open .modal-title').withText('Conflicts detected'));
 });
 
-Scenario('[C7415] Create two reserved appointments at the same time @shaky', async function (I, users) {
+Scenario('[C7415] Create two reserved appointments at the same time', async function (I, users) {
     I.haveSetting('io.ox/core//autoOpenNotification', false);
     I.haveSetting('io.ox/core//showDesktopNotifications', false);
     I.haveSetting('io.ox/calendar//viewView', 'week:week');
@@ -1784,7 +1784,7 @@ Scenario('[C7415] Create two reserved appointments at the same time @shaky', asy
     I.waitForElement('#io-ox-refresh-icon .fa-spin');
     I.waitForDetached('#io-ox-refresh-icon .fa-spin');
 
-    expect(await I.grabNumberOfVisibleElements(`.appointment-container [aria-label="${testrailID}, ${testrailID}"]`)).to.equal(2);
+    I.seeNumberOfVisibleElements(`.appointment-container [aria-label="${testrailID}, ${testrailID}"]`, 2);
 });
 
 Scenario('[C7446] Create recurring whole-day appointment', async function (I, users) {
