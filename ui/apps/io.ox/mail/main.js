@@ -499,7 +499,7 @@ define('io.ox/mail/main', [
             var left = app.pages.getPage('listView'),
                 right = app.pages.getPage('detailView');
 
-            app.left = left.addClass('border-right');
+            app.left = left.toggleClass('border-right', _.device('!smartphone'));
             app.right = right.addClass('mail-detail-pane');
         },
 
