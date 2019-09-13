@@ -184,7 +184,7 @@ define('io.ox/settings/personalData/settings/pane', [
                         dropdownView.$toggle.attr('aria-disabled', !self.models[moduleName].get('enabled')).toggleClass('disabled', !self.models[moduleName].get('enabled'));
                     });
 
-                    // sub checkboxes (include trash folder etc)
+                    // sub options as dropdown (include trash folder etc)
                     _(_(data).keys()).each(function (subOption) {
                         if (subOption === 'label' || subOption === 'description') return;
                         if (modules[moduleName][subOption].divider) dropdownView.divider();
@@ -215,11 +215,6 @@ define('io.ox/settings/personalData/settings/pane', [
                             )
                         )
                     );
-
-                    if (this.status.get('status') === 'PENDING') {
-                        this.$el.addClass('disabled').find('.checkbox,a').addClass('disabled');
-                        this.$el.find('input,select').attr('aria-disabled', true).prop('disabled', 'disabled');
-                    }
                 }
 
                 // display the correct buttons depending on the current download state
@@ -231,6 +226,8 @@ define('io.ox/settings/personalData/settings/pane', [
                             }));
                         break;
                     case 'PENDING':
+                        this.$el.addClass('disabled').find('.checkbox,a').addClass('disabled');
+                        this.$el.find('input,select').attr('aria-disabled', true).prop('disabled', 'disabled');
                         this.$el.append($('<button type="button" class="btn btn-primary">').prop('disabled', 'disabled').text(gt('Request download')));
                         break;
                     case 'DONE':
@@ -278,7 +275,7 @@ define('io.ox/settings/personalData/settings/pane', [
                 this.$el.empty().toggle(this.model.get('status') !== 'none');
 
                 //#. header for zip archive download list
-                this.$el.append($('<h1 class="col-xs-12">').text(gt('Your archives')));
+                this.$el.append($('<h1 class="col-xs-12">').text(gt('Your archive')));
 
                 if (this.model.get('status') === 'PENDING') {
                     //#. %1$s: date and time the download was requested
@@ -327,17 +324,10 @@ define('io.ox/settings/personalData/settings/pane', [
     });
 
     ext.point('io.ox/settings/personalData/settings/detail').extend({
-        id: 'addClass',
+        id: 'select-view',
         index: 100,
         draw: function () {
             this.addClass('io-ox-personal-data-settings');
-        }
-    });
-
-    ext.point('io.ox/settings/personalData/settings/detail').extend({
-        id: 'select-view',
-        index: 200,
-        draw: function () {
             var node = this;
             $.when(api.getAvailableModules(), api.getAvailableDownloads()).then(function (availableModules, downloadStatus) {
                 // check if this is [data, timestamp]
