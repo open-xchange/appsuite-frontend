@@ -516,7 +516,7 @@ Scenario('[C7420] Create a monthly recurring appointment every second Monday eve
 
     // create
     I.click('Create', '.io-ox-calendar-edit-window');
-    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+    I.waitForInvisible('.io-ox-calendar-edit-window', 5);
 
     // open all views and load the appointments there
     ['Week', 'Day', 'Month'].forEach((view) => {
