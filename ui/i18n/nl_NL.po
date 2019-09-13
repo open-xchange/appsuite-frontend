@@ -956,6 +956,13 @@ msgstr "Toevoegen vanuit Drive"
 msgid "Add local file"
 msgstr "Lokaal bestand toevoegen"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "optional password"
+msgid "Add login password"
+msgstr "optioneel wachtwoord"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
@@ -2186,13 +2193,19 @@ msgstr "Wijzig bevestigingsstatus"
 msgid "Change due date"
 msgstr "Vervaldatum aanpassen"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "Change password"
+msgid "Change login password"
+msgstr "Wachtwoord wijzigen"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
 msgid "Change organizer"
 msgstr "Verander organisator"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change password"
 msgstr "Wachtwoord wijzigen"
@@ -17419,9 +17432,6 @@ msgstr "uw platform"
 
 #~ msgid "open"
 #~ msgstr "openen"
-
-#~ msgid "optional password"
-#~ msgstr "optioneel wachtwoord"
 
 #~ msgid "original timezone"
 #~ msgstr "originele tijdzone"

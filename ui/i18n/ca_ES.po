@@ -1027,6 +1027,12 @@ msgstr "Afegeix des de Drive"
 msgid "Add local file"
 msgstr "Afegeix-hi un fitxer local"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+msgid "Add login password"
+msgstr "La vostra contrasenya anterior"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
@@ -2305,6 +2311,13 @@ msgstr "Canvia l'estat de confirmació"
 msgid "Change due date"
 msgstr "Canvia la data de venciment"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "Change password"
+msgid "Change login password"
+msgstr "Canvia la contrasenya"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
 #, fuzzy
@@ -2312,8 +2325,7 @@ msgstr "Canvia la data de venciment"
 msgid "Change organizer"
 msgstr "Crea'n un recordatori"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change password"
 msgstr "Canvia la contrasenya"
@@ -15860,10 +15872,6 @@ msgstr "la vostra plataforma"
 
 #~ msgid "next Wednesday"
 #~ msgstr "dimecres"
-
-#, fuzzy
-#~ msgid "optional password"
-#~ msgstr "La vostra contrasenya anterior"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "Processa les regles següents"

@@ -968,6 +968,12 @@ msgstr ""
 msgid "Add local file"
 msgstr ""
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+msgid "Add login password"
+msgstr "Нууц үгээ мартсан"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
@@ -2176,6 +2182,12 @@ msgstr "Баталгаажуулалтын статусаа өөрчлөх"
 msgid "Change due date"
 msgstr ""
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+msgid "Change login password"
+msgstr "Нууц үгээ мартсан"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
 #, fuzzy
@@ -2183,8 +2195,7 @@ msgstr ""
 msgid "Change organizer"
 msgstr "Харах байдлыг өөрчлөх"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change password"
 msgstr ""
@@ -13526,10 +13537,6 @@ msgstr ""
 
 #~ msgid "monthly"
 #~ msgstr "сар бүр"
-
-#, fuzzy
-#~ msgid "optional password"
-#~ msgstr "Нууц үгээ мартсан"
 
 #~ msgid "weekly"
 #~ msgstr "7 хоног бүр"

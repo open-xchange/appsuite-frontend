@@ -938,6 +938,13 @@ msgstr "自雲端空間新增"
 msgid "Add local file"
 msgstr "新增本機檔案"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "optional password"
+msgid "Add login password"
+msgstr "非必要的密碼"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
@@ -2132,13 +2139,19 @@ msgstr "修改確認狀態"
 msgid "Change due date"
 msgstr "更改到期日"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "Change password"
+msgid "Change login password"
+msgstr "更改密碼"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
 msgid "Change organizer"
 msgstr "更改主辦人"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change password"
 msgstr "更改密碼"
@@ -18762,9 +18775,6 @@ msgstr "您的平台"
 
 #~ msgid "open"
 #~ msgstr "開啟"
-
-#~ msgid "optional password"
-#~ msgstr "非必要的密碼"
 
 #~ msgid "original timezone"
 #~ msgstr "原始時區"

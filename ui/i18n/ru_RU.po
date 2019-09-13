@@ -971,6 +971,13 @@ msgstr "Добавить с Диска"
 msgid "Add local file"
 msgstr "Добавить локальный файл"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "optional password"
+msgid "Add login password"
+msgstr "дополнительный пароль"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
@@ -2192,13 +2199,19 @@ msgstr "Изменить статус подтверждения"
 msgid "Change due date"
 msgstr "Изменить срок"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "Change password"
+msgid "Change login password"
+msgstr "Изменить пароль"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
 msgid "Change organizer"
 msgstr "Изменить организатора"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change password"
 msgstr "Изменить пароль"
@@ -17701,9 +17714,6 @@ msgstr "вашей платформы"
 
 #~ msgid "open"
 #~ msgstr "открыть"
-
-#~ msgid "optional password"
-#~ msgstr "дополнительный пароль"
 
 #~ msgid "original timezone"
 #~ msgstr "исходный часовой пояс"

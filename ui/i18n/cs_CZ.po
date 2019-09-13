@@ -975,6 +975,13 @@ msgstr "Přidat z Drive"
 msgid "Add local file"
 msgstr "Připojit lokální soubor"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "optional password"
+msgid "Add login password"
+msgstr "Volitelné heslo"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
@@ -2193,13 +2200,19 @@ msgstr "Změnit stav potvrzení"
 msgid "Change due date"
 msgstr "Změnit datum dokončení"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "Change password"
+msgid "Change login password"
+msgstr "Změnit heslo"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
 msgid "Change organizer"
 msgstr "Změnit organizátora"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change password"
 msgstr "Změnit heslo"
@@ -24447,9 +24460,6 @@ msgstr "vaše platforma"
 
 #~ msgid "open"
 #~ msgstr "otevřít"
-
-#~ msgid "optional password"
-#~ msgstr "Volitelné heslo"
 
 #~ msgid "organized by %s"
 #~ msgstr "organizuje %s"

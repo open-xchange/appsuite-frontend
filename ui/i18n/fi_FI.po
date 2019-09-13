@@ -947,6 +947,13 @@ msgstr "Lisää Driveltä"
 msgid "Add local file"
 msgstr "Lisää paikallinen tiedosto"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "optional password"
+msgid "Add login password"
+msgstr "Valinnainen salasana"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
@@ -2149,13 +2156,19 @@ msgstr "Muuta vahvistustilanne"
 msgid "Change due date"
 msgstr "Vaihda valmistumispäivämäärää"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "Change password"
+msgid "Change login password"
+msgstr "Vaihda salasana"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
 msgid "Change organizer"
 msgstr "Muuta järjestäjä"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change password"
 msgstr "Vaihda salasana"
@@ -17171,9 +17184,6 @@ msgstr "alustasi"
 
 #~ msgid "open"
 #~ msgstr "avaa"
-
-#~ msgid "optional password"
-#~ msgstr "Valinnainen salasana"
 
 #~ msgid "original timezone"
 #~ msgstr "Alkuperäinen aikavyöhyke"

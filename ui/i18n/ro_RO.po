@@ -975,6 +975,13 @@ msgstr "Adaugă din Drive"
 msgid "Add local file"
 msgstr "Adaugă fișier local"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "optional password"
+msgid "Add login password"
+msgstr "parolă opțională"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
@@ -2203,13 +2210,19 @@ msgstr "Modifică starea confirmării"
 msgid "Change due date"
 msgstr "Modifică data scadentă"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "Change password"
+msgid "Change login password"
+msgstr "Modifică parola"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
 msgid "Change organizer"
 msgstr "Modifică organizatorul"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change password"
 msgstr "Modifică parola"
@@ -21674,9 +21687,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "open"
 #~ msgstr "deschis"
-
-#~ msgid "optional password"
-#~ msgstr "parolă opțională"
 
 #~ msgid "organized by %s"
 #~ msgstr "organizat de %s"

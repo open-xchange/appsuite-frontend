@@ -1005,6 +1005,13 @@ msgstr "Legg til fra Drive"
 msgid "Add local file"
 msgstr "Legg til lokal fil"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "optional password"
+msgid "Add login password"
+msgstr "valgfritt passord"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
@@ -2253,6 +2260,13 @@ msgstr "Endre bekreftelse-status"
 msgid "Change due date"
 msgstr "Endre forfallsdato"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "Change password"
+msgid "Change login password"
+msgstr "Endre passord"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
 #, fuzzy
@@ -2260,8 +2274,7 @@ msgstr "Endre forfallsdato"
 msgid "Change organizer"
 msgstr "Opprett ny påminnelse"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change password"
 msgstr "Endre passord"
@@ -15878,9 +15891,6 @@ msgstr "plattformen din"
 
 #~ msgid "no expiry date"
 #~ msgstr "ingen utløpsdato"
-
-#~ msgid "optional password"
-#~ msgstr "valgfritt passord"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "Behandle underliggende regler"

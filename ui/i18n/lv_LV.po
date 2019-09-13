@@ -969,6 +969,13 @@ msgstr "Pievienot no diska"
 msgid "Add local file"
 msgstr "Pievienot lokālu failu"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "optional password"
+msgid "Add login password"
+msgstr "parole (neobligāta)"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
@@ -2185,13 +2192,19 @@ msgstr "Izmaiņu apstiprinājuma statuss"
 msgid "Change due date"
 msgstr "Mainīt izpildes datumu"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "Change password"
+msgid "Change login password"
+msgstr "Paroles maiņa"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
 msgid "Change organizer"
 msgstr "Mainīt organizētāju"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change password"
 msgstr "Paroles maiņa"
@@ -21557,9 +21570,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "open"
 #~ msgstr "atvērts"
-
-#~ msgid "optional password"
-#~ msgstr "parole (neobligāta)"
 
 #~ msgid "organized by %s"
 #~ msgstr "Organizē %s"

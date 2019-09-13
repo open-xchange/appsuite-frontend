@@ -949,6 +949,13 @@ msgstr "Tilføj fra Drive"
 msgid "Add local file"
 msgstr "Tilføj lokal fil"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "optional password"
+msgid "Add login password"
+msgstr "mulig adgangskode"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
@@ -2171,13 +2178,19 @@ msgstr "Ret bekræftelsesstatus"
 msgid "Change due date"
 msgstr "Ret afleveringsdato"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "Change password"
+msgid "Change login password"
+msgstr "Ændr adgangskode"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
 msgid "Change organizer"
 msgstr "Skift den ud der har organiseret"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change password"
 msgstr "Ændr adgangskode"
@@ -17505,9 +17518,6 @@ msgstr "din platform"
 
 #~ msgid "open"
 #~ msgstr "åbn"
-
-#~ msgid "optional password"
-#~ msgstr "mulig adgangskode"
 
 #~ msgid "original timezone"
 #~ msgstr "oprindelig tidszone"

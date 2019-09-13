@@ -6471,9 +6471,14 @@ msgstr ""
 
 #: apps/io.ox/core/main/topbar_right.js
 #: module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
-msgid "Change password"
+msgid "Add login password"
+msgstr ""
+
+#: apps/io.ox/core/main/topbar_right.js
+#: module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change login password"
 msgstr ""
 
 #: apps/io.ox/core/main/topbar_right.js
@@ -7175,6 +7180,12 @@ msgstr ""
 #: apps/io.ox/core/settings/pane.js
 #: module:io.ox/core
 msgid "Configure quick launchers"
+msgstr ""
+
+#: apps/io.ox/core/settings/pane.js
+#: module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+msgid "Change password"
 msgstr ""
 
 #: apps/io.ox/core/settings/pane.js
@@ -15370,6 +15381,11 @@ msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js
 #: module:io.ox/core
+msgid "Change password and sign out"
+msgstr ""
+
+#: apps/plugins/portal/userSettings/register.js
+#: module:io.ox/core
 msgid "Password strength: Too short"
 msgstr ""
 
@@ -15448,11 +15464,6 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js
 #: module:io.ox/core
 msgid "If you change the password, you will be signed out. Please ensure that everything is closed and saved."
-msgstr ""
-
-#: apps/plugins/portal/userSettings/register.js
-#: module:io.ox/core
-msgid "Change password and sign out"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js

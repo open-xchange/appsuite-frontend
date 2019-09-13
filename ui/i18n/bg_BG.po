@@ -1006,6 +1006,13 @@ msgstr "Добави от Драйв"
 msgid "Add local file"
 msgstr "Добави от компютър"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "Your password"
+msgid "Add login password"
+msgstr "Вашата парола"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
@@ -2252,6 +2259,13 @@ msgstr "Промяна на състоянието на потвърждение
 msgid "Change due date"
 msgstr "Промяна на датата на падежа"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "Change password"
+msgid "Change login password"
+msgstr "Промени парола"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
 #, fuzzy
@@ -2259,8 +2273,7 @@ msgstr "Промяна на датата на падежа"
 msgid "Change organizer"
 msgstr "Създай напомняне"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change password"
 msgstr "Промени парола"

@@ -956,6 +956,13 @@ msgstr "Ajouter depuis Drive"
 msgid "Add local file"
 msgstr "Ajouter un fichier local"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "optional password"
+msgid "Add login password"
+msgstr "mot de passe optionnel"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
@@ -2194,13 +2201,19 @@ msgstr "Modifier l'état de confirmation"
 msgid "Change due date"
 msgstr "Modifier la date d'échéance"
 
+#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js
+#, fuzzy
+#| msgid "Change password"
+msgid "Change login password"
+msgstr "Changer le mot de passe"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
 msgid "Change organizer"
 msgstr "Changer l'organisateur"
 
-#: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/io.ox/core/settings/pane.js
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js
 msgid "Change password"
 msgstr "Changer le mot de passe"
@@ -18304,9 +18317,6 @@ msgstr "votre plate-forme"
 
 #~ msgid "open"
 #~ msgstr "ouvert"
-
-#~ msgid "optional password"
-#~ msgstr "mot de passe optionnel"
 
 #~ msgid "original timezone"
 #~ msgstr "fuseau horaire d'origine"
