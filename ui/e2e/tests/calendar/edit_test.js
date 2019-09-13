@@ -165,7 +165,7 @@ Scenario('[C7451] Edit yearly series via dubbleclick', async function (I) {
     I.clickToolbar('View');
     I.click('Week');
 
-    I.waitForVisible(locate('.appointment').inside(`.day:nth-child(${time.weekday() + 2})`).inside('.page.current'));
+    I.waitForVisible(`.page.current .day:nth-child(${time.weekday() + 2}) .appointment`);
     I.click('.appointment', '.page.current');
     I.waitForVisible('.io-ox-sidepopup .inline-toolbar-container');
     I.click('Edit', '.io-ox-sidepopup');
@@ -175,6 +175,7 @@ Scenario('[C7451] Edit yearly series via dubbleclick', async function (I) {
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.click('~Date (M/D/YYYY)');
+    I.waitForVisible('.date-picker.open', 2);
     I.pressKey(['Control', 'a']);
     I.pressKey(time.add(1, 'day').format('l'));
     I.pressKey('Enter');
@@ -182,13 +183,13 @@ Scenario('[C7451] Edit yearly series via dubbleclick', async function (I) {
     I.click('Save');
     I.waitForDetached('.io-ox-calendar-edit-window');
 
-    I.waitForVisible(locate('.appointment').inside(`.day:nth-child(${time.weekday() + 2})`).inside('.page.current'));
+    I.waitForVisible(`.page.current .day:nth-child(${time.weekday() + 2}) .appointment`);
 
     time.add(1, 'year');
     for (let i = 0; i < 12; i++) I.click('~Go to next month', '.window-sidepanel');
     I.click(`~${time.format('l, dddd')}, CW ${time.week()}`, '.window-sidepanel');
 
-    I.waitForVisible(locate('.appointment').inside(`.day:nth-child(${time.weekday() + 2})`).inside('.page.current'));
+    I.waitForVisible(`.page.current .day:nth-child(${time.weekday() + 2}) .appointment`);
 });
 
 Scenario('[C7464] Change appointment in shared folder as guest', async function (I, users) {
