@@ -52,8 +52,8 @@ define('io.ox/core/toolbars-mobile', ['io.ox/core/extensions'], function (ext) {
         events: {
             'touchstart .navbar-action': 'cantTouchThis',
             'touchend .navbar-action': 'cantTouchThis',
-            'click .navbar-action.right:not(.custom)': 'onRightAction',
-            'click .navbar-action.left:not(.custom)': 'onLeftAction'
+            'tap .navbar-action.right:not(.custom)': 'onRightAction',
+            'tap .navbar-action.left:not(.custom)': 'onLeftAction'
         },
 
         initialize: function (opt) {
