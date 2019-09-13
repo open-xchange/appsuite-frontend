@@ -80,7 +80,7 @@ Scenario('Create never ending appointment and check display in several views @sh
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
 
-    I.waitForDetached('.io-ox-calendar-edit-window', 5);
+    I.waitForInvisible('.io-ox-calendar-edit-window', 5);
 
     // check in week view
     I.clickToolbar('View');
