@@ -253,6 +253,7 @@ Scenario('[C7465] Edit appointment in shared folder as author', async function (
     }, { user: users[1] });
     I.login('app=io.ox/calendar', { user: users[1] });
 
+    I.waitForElement('.folder[data-id="virtual/flat/event/shared"]');
     // switch on New calendar
     I.click('.folder[data-id="virtual/flat/event/shared"] .folder-arrow');
     I.click(`[title="${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New calendar"] .color-label`);
