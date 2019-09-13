@@ -72,7 +72,7 @@ Scenario('[C114352] Create folder in copy/move dialog @shaky', async (I, users) 
 
 });
 
-Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users @shaky', async (I, users) => {
+Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', async (I, users) => {
 
     /*
      * Preconditions:
