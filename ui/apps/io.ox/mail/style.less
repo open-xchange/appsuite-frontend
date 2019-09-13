@@ -1709,6 +1709,18 @@ body.dragging .categories-toolbar-container {
         }
     }
 
+    .generic-toolbar {
+        height: @mobile-toolbar-height;
+        line-height: @mobile-toolbar-height - 1;
+        .toolbar-item {
+            line-height: inherit;
+        }
+    }
+
+    .list-view-control:not(.upside-down).toolbar-bottom-visible .list-view {
+        bottom: @mobile-toolbar-height;
+    }
+
     // mail detail popup (portal)
     .io-ox-sidepopup-pane .mail-detail {
 
