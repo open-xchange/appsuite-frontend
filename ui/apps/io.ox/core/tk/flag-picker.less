@@ -34,7 +34,11 @@
 .flag_bg_9  { background-color: @blue-light;  }
 .flag_bg_10 { background-color: @yellow;      }
 
+ul.classic-toolbar li.flag-picker .dropdown-toggle:focus i { outline: 0; }
+
 .flag-picker {
+    float: right;
+    position: relative;
 
     .dropdown-toggle {
         font-size: 14px;
@@ -46,16 +50,8 @@
             outline-offset: -2px;
         }
     }
-}
-ul.classic-toolbar li.flag-picker .dropdown-toggle:focus i { outline: 0; }
-
-.flag-picker {
-    float: right;
-    display: inline-block;
-    position: relative;
 
     .flag-example {
-        display: inline-block;
         float: right;
         width: 28px;
         height: 22px;

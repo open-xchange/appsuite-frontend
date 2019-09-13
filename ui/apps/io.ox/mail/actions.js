@@ -237,6 +237,18 @@ define('io.ox/mail/actions', [
         }
     });
 
+    new Action('io.ox/mail/actions/triggerFlags', {
+        collection: 'some',
+        action: function (baton) {
+            console.log(baton.e);
+            var dropDown = $('.dropdown.flag-picker').data();
+            $(document).trigger('click.bs.dropdown.data-api');
+            _.delay(function () {
+                dropDown.view.open();
+            }, 200);
+        }
+    });
+
     function checkForArchiveAction(memo, obj) {
         // already false?
         if (memo === false) return false;
