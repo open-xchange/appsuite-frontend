@@ -977,11 +977,18 @@ html.macos, html.ios {
 
 .list-item {
     .flag {
+        .smartphone & {
+            display: none;
+        }
         font-size: 14px;
         color: rgba(0, 0, 0, 0.5);
         .fa:before { content: @flag-icon-unset; }
     }
     &.flagged .flag {
+        .smartphone & {
+            pointer-events: none;
+            display: initial;
+        }
         color: @flag-color;
         .fa:before { content: @flag-icon; }
     }
@@ -1482,7 +1489,12 @@ body.dragging .categories-toolbar-container {
         & > header {
             &.mobile-detail-view-mail {
                 // use fa-fw for mobile
-                .fa { .fixed-width(); }
+                .fa {
+                    .fixed-width();
+                    &.flag_0 {
+                        display: none;
+                    }
+                }
                 .date {
                     margin-left: 0;
                     display: inline-block;
@@ -1490,10 +1502,10 @@ body.dragging .categories-toolbar-container {
                     color: #767676;
                 }
                 .flags {
-                    display: inline-block;
+
                     float: right;
                     & > * {
-                        margin-left: 8px;
+                        margin: 0 16px 0 0;
                         float: none;
                     }
                 }

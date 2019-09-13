@@ -115,14 +115,14 @@ define('io.ox/mail/detail/mobileView', [
         draw: extensions.fulldate
     });
 
-    /*ext.point('io.ox/mail/mobile/detail/header').extend({
+    ext.point('io.ox/mail/mobile/detail/header').extend({
         id: 'flags',
         index: INDEX_header += 100,
         draw: function (baton) {
             var node = $('<span class="flags">').appendTo(this);
             ext.point('io.ox/mail/mobile/detail/header/flags').invoke('draw', node, baton);
         }
-    });*/
+    });
 
     ext.point('io.ox/mail/mobile/detail/header/flags').extend({
         id: 'security',
@@ -139,7 +139,10 @@ define('io.ox/mail/detail/mobileView', [
     ext.point('io.ox/mail/mobile/detail/header/flags').extend({
         id: 'color-picker',
         index: INDEX_header += 100,
-        draw: extensions.flagPicker
+        draw: function (baton) {
+            //if (_.device('smartphone')) return;
+            extensions.flagPicker.call(this, baton);
+        }
     });
 
 
