@@ -329,16 +329,32 @@ define('io.ox/calendar/month/view', [
         },
 
         onDrag: function (e) {
-            var node, model, startDate, diff, first = true;
+            var node, model, startDate, diff,
+                first = true,
+                // area where nothing happens. Mouse must move at least this far from starting position for drag to trigger (prevents accidental dragging, when appointment detail view should be opened instead)
+                // note: set this to at least 1. disabling this causes issues on windows, somehow the first mousemove is triggered directly after mousedown, without movement involved.
+                //       This causes issues as it prevents appointments from opening the detail view
+                // deadzone is just a square for now, no pythagoras to determine the distance
+                deadzone  = 5,
+                startCoords = { x: 0, y: 0 },
+                inDeadzone = true;
+
             this.mouseDragHelper({
                 event: e,
                 updateContext: '.day',
                 start: function (e) {
+                    inDeadzone = true;
                     node = $(e.target).closest('.appointment');
                     model = this.opt.view.collection.get(node.attr('data-cid'));
                     startDate = moment(node.closest('.day').data('date'));
+                    startCoords.x = e.pageX;
+                    startCoords.y = e.pageY;
                 },
                 update: function (e) {
+                    if (inDeadzone && (Math.abs(startCoords.x - e.pageX) > deadzone || Math.abs(startCoords.y - e.pageY) > deadzone)) {
+                        inDeadzone = false;
+                    }
+                    if (inDeadzone) return;
                     if (first) {
                         this.$('[data-cid="' + model.cid + '"]').addClass('resizing').removeClass('current hover');
                         this.$el.addClass('no-select');
