@@ -105,11 +105,11 @@ define('io.ox/core/folder/picker', [
                 // request and open create-folder-dialog
                 add(mapIds(parentview.folder, true), { module: o.module === 'calendar' ? 'event' : o.module }).then(
                     function (data) {
-                        // add additonal 5ms to tree nodes debounced onSort handler
+                        // high delay because of tree nodes debounced onSort handler
                         _.delay(function () {
                             tree.selection.set(data.id);
                             tree.selection.scrollIntoView(data.id);
-                        }, 15);
+                        }, 300);
                     }
                 );
             });
