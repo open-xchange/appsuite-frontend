@@ -97,6 +97,7 @@ define('io.ox/chat/main', [
                 case 'show-channels': this.showChannels(); break;
                 case 'show-all-files': this.showAllFiles(); break;
                 case 'show-file': this.showFile(data); break;
+                case 'show-message-file': this.showMessageFile(data); break;
                 case 'open-chat': this.resubscribeChat(data.id); break;
                 case 'unsubscribe-chat': this.unsubscribeChat(data.id, false); break;
                 case 'add-member': this.addMember(data.id); break;
@@ -214,8 +215,23 @@ define('io.ox/chat/main', [
         },
 
         showFile: function (cmd) {
+            var selectedFile = data.files.at(cmd.index).get('id');
+            this.openPictureViewer(data.files, selectedFile);
+        },
+
+        showMessageFile: function (cmd) {
+            // TODO: consider pagination for nonprototype implementation
+            var files = new data.RoomFilesCollection([], { roomId: cmd.id });
+            files.fetch();
+
+            files.initialized.then(function () {
+                this.openPictureViewer(files, cmd.fileId);
+            }.bind(this));
+        },
+
+        openPictureViewer: function (fileList, selectedFile) {
             var options = {
-                files: data.files.map(function (file) {
+                files: fileList.map(function (file) {
                     return _.extend({
                         url: file.getPreviewUrl(),
                         // try to fake mail compose attachement
@@ -227,7 +243,7 @@ define('io.ox/chat/main', [
                     disableFileDetail: true
                 },
                 selection: {
-                    id: data.files.at(cmd.index).get('id')
+                    id: selectedFile
                 }
             };
 
