@@ -207,46 +207,42 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
                         console.warn('LocalStorage: Clearing persistent caches due to UI update');
                     }
 
-                    // Docs-392: Temporary save data from the localStorage to restore it later.
+                    // DOCS-392: Temporary save data from the local storage to restore it later.
                     // Background:
                     // (1) The 'permanentCache' contains quite big office web-font data, which will NEVER change and that should not be cleared from localStorage when possible.
                     // (2) These cached web-fonts should survive a version change to reduce traffic.
                     // (3) note: This 'clear()' method is not only called at a version change, but also at other circumstances (e.g. logout->login->real browser refresh).
                     // (4) note: When the key doesn't exists in localStorage, 'getItem' returns 'null' (see w3c spec)
                     // (5) note: The allocated data for this var is quite big, so it should be assured that the js GC can delete it later
-                    var permanentCache = localStorage.getItem('appsuite.office-fonts'),
-                        permanentWindowHandling = localStorage.getItem('appsuite.window-handling'),
-                        savepointId = _(['appsuite.cache', ox.user, ox.locale, 'app-cache.index.savepoints']).compact().join('.'),
-                        // keep savepoints after version update too.
-                        savepoints = localStorage.getItem(savepointId),
-                        keys = localStorage.getItem('openpgp-private-keys');
+
+                    // the keys of all storage items to be restored
+                    var savepointId = _(['appsuite.cache', ox.user, ox.locale, 'app-cache.index.savepoints']).compact().join('.');
+                    var RESTORE_ITEM_KEYS = [
+                        savepointId,                // keep savepoints after version update
+                        'openpgp-private-keys',
+                        'appsuite.office-fonts',    // webfonts used in Documents applications (DOCS-392)
+                        'appsuite.window-handling', // multi-tab GUI (DOCS-1063)
+                        'appsuite.office-debug'     // debugging settings for Documents
+                    ];
+
+                    // read the values of all storage items to be restored
+                    var restoreItems = RESTORE_ITEM_KEYS.map(function (key) {
+                        return { key: key, value: localStorage.getItem(key) };
+                    });
 
                     localStorage.clear();
                     localStorage.setItem('appsuite-ui', JSON.stringify({ version: ox.version }));
 
-                    // restore savepoints
-                    if (savepoints) localStorage.setItem(savepointId, savepoints);
-
-                    // Restore saved private keys
-                    if (keys) localStorage.setItem('openpgp-private-keys', keys);
-
-                    // Docs-392: Restore the permanentCache data after the localStorage was cleared. But only when the key existed (!== null) before.
-                    if (permanentCache !== null) {
-                        try {
-                            localStorage.setItem('appsuite.office-fonts', permanentCache);
-                        } catch (e) {
-                            console.warn('localStorage: could not restore permanentCache:', e);
-                        }
+                    // restore all values saved above
+                    if (restoreItems) {
+                        restoreItems.forEach(function (entry) {
+                            try {
+                                localStorage.setItem(entry.key, entry.value);
+                            } catch (err) {
+                                console.warn('cannot restore item "' + entry.key + '" in local storage', err);
+                            }
+                        });
                     }
-
-                    if (permanentWindowHandling !== null) {
-                        try {
-                            localStorage.setItem('appsuite.window-handling', permanentWindowHandling);
-                        } catch (e) {
-                            console.warn('localStorage: could not restore permanentCache:', e);
-                        }
-                    }
-
                 }
                 firstRun = false;
             }
@@ -276,6 +272,7 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
             // (e.g. do not delete them at logout).
             fileList.push('appsuite.office-fonts');
             fileList.push('appsuite.window-handling');
+            fileList.push('appsuite.office-debug');
 
             toDelete = _.difference(allKeys, fileList);
 
