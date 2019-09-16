@@ -113,10 +113,18 @@ define('io.ox/chat/views/fileList', [
         onAdd: _.debounce(function (model, collection, options) {
             if (this.disposed) return;
 
+            this.updateIndices();
             this.$('.scrollpane ul').prepend(
                 options.changes.added.map(this.renderItem, this)
             );
-        }, 1)
+        }, 1),
+
+        updateIndices: function () {
+            this.$('.scrollpane ul li').each(function () {
+                var index = parseInt($(this).children().attr('data-index'), 10);
+                $(this).children().attr('data-index', index + 1);
+            });
+        }
     });
 
     return FileList;
