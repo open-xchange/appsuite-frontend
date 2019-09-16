@@ -507,7 +507,7 @@ define('io.ox/chat/main', [
         custom: true,
         draw: function () {
             this.append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="start-chat" data-action="null">').text('Private chat').on('click', events.forward)
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="start-chat" data-action="null">').text('Private chat')
             );
         }
     });
@@ -518,7 +518,7 @@ define('io.ox/chat/main', [
         custom: true,
         draw: function () {
             this.append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="open-group-dialog" data-action="null">').text('Group chat').on('click', events.forward)
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="open-group-dialog" data-action="null">').text('Group chat')
             );
         }
     });
@@ -529,7 +529,7 @@ define('io.ox/chat/main', [
         custom: true,
         draw: function () {
             this.append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="open-group-dialog" data-type="channel" data-action="none">').text('Public channel').on('click', events.forward)
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="open-group-dialog" data-type="channel" data-action="none">').text('Public channel')
             );
         }
     });
