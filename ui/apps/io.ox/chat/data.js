@@ -199,7 +199,8 @@ define('io.ox/chat/data', [
                     oldHeight = placeholder.height();
                 placeholder.replaceWith($img);
                 $img.trigger('changeheight', { prev: oldHeight, value: $img.height() });
-            }).attr('src', url);
+            }).attr('src', url)
+            .attr({ 'data-cmd': 'show-message-file', 'data-id': this.get('roomId'), 'data-file-id': this.get('fileId') });
             return placeholder;
         },
 
@@ -633,6 +634,21 @@ define('io.ox/chat/data', [
 
     data.files = new FilesCollection();
 
+    var RoomFilesCollection = FilesCollection.extend({
+
+        initialize: function (models, opt) {
+            this.roomId = opt.roomId;
+            this.initialized = new $.Deferred();
+            this.once('sync', this.initialized.resolve);
+        },
+
+        url: function () {
+            return data.API_ROOT + '/files/room/' + this.roomId;
+        }
+
+    });
+
+    data.RoomFilesCollection = RoomFilesCollection;
 
     //
     // Session Model
