@@ -5,15 +5,15 @@ description: Getting ready to develop your own plugins / apps
 ---
 
 There are two ways that your code can interact with the OX App Suite.
-First of all there are **apps** that are described briefly [here](/ui/customize/app/first-app.html).
+First of all there are **apps** that are described briefly [here](customize/app/first-app.html).
 
 The second way is using **extension points and extensions**.
 Stated briefly an extension point is an invitation to contributing an implementation to a part of the UI.
 
 # Prerequisites
 
-Create a new directory in which you will develop your plugin(s) / app(s). 
-Let us call it myplugin for now. 
+Create a new directory in which you will develop your plugin(s) / app(s).
+Let us call it myplugin for now.
 Depending on where you want to keep your projects, do something like this:
 
 ```bash
