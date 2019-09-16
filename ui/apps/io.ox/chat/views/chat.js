@@ -101,13 +101,27 @@ define('io.ox/chat/views/chat', [
     });
 
     ext.point('io.ox/chat/detail/toolbar').extend({
-        id: 'close-chat',
+        id: 'leave-channel',
         index: 600,
         custom: true,
         draw: function (baton) {
             var model = baton.model;
+            if (!model.isChannel()) return;
             this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="unsubscribe-chat">').attr('data-id', model.id).text('Close chat').on('click', events.forward)
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="leave-channel">').attr('data-id', model.id).text('Leave channel').on('click', events.forward)
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'close-chat',
+        index: 700,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            if (!model.isPrivate()) return;
+            this.attr('data-prio', 'lo').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="unsubscribe-chat">').attr('data-id', model.id).text('Hide chat').on('click', events.forward)
             );
         }
     });
