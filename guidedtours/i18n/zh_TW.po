@@ -91,7 +91,7 @@ msgid "Collaborating"
 msgstr "協作"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "撰寫新郵件"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -188,7 +188,7 @@ msgid "Edit documents"
 msgstr "編輯文件"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr "編輯多封郵件"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -240,7 +240,7 @@ msgid "Entering billing information"
 msgstr "輸入帳務資訊"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr "輸入郵件內文"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -362,7 +362,7 @@ msgstr ""
 "料夾。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "在不同視窗開啟郵件"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -370,7 +370,7 @@ msgid "Opening or closing the folder tree"
 msgstr "開啟或關閉資料夾樹"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "開啟郵件選項"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -390,7 +390,7 @@ msgid "Preview mode"
 msgstr "預覽模式"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "閱讀郵件討論串"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -424,11 +424,11 @@ msgid ""
 msgstr "選擇此選項，透過手機簡訊接收驗證碼，然後會要求您提供手機號碼。"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "傳送郵件給某個聯絡人"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "寄送郵件"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -458,7 +458,7 @@ msgid "Sorting tasks"
 msgstr "排序任務"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "排序您的郵件"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -580,11 +580,11 @@ msgid ""
 msgstr "要選擇不同視圖，點擊工具列列中的視圖。在版面中選擇一個清單項目。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "要撰寫新郵件，點選工具列的撰寫。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "要發新信，點擊工具列中的的寫新郵件圖示。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -746,7 +746,7 @@ msgid ""
 msgstr "要傳送郵件給聯絡人，點選工具列中的電子郵件地址或傳送電子郵件。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "要傳送郵件，點擊傳送"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -761,7 +761,7 @@ msgid ""
 msgstr "若要登出，點擊選單列右上角的登出圖示。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr "要排序郵件，點選右上角的排序依照，然後選擇排序條件。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
@@ -907,8 +907,8 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgstr[0] "%1$d 小時和 %2$s"
 #~ msgstr[1] "%1$d 小時和 %2$s"
 
-#~ msgid "%1$d mail"
-#~ msgid_plural "%1$d mails"
+#~ msgid "%1$d email"
+#~ msgid_plural "%1$d emails"
 #~ msgstr[0] "%1$d 封郵件"
 #~ msgstr[1] "%1$d 封郵件"
 
@@ -950,13 +950,13 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "%1$s is now connected with %2$s"
 #~ msgstr "%1$s 現在已與 %2$s 連線"
 
-#~ msgid "%1$s mail"
-#~ msgid_plural "%1$s mails"
+#~ msgid "%1$s email"
+#~ msgid_plural "%1$s emails"
 #~ msgstr[0] "%1$s 封郵件"
 #~ msgstr[1] "%1$s 封郵件"
 
-#~ msgid "%1$s mail, %2$s unread"
-#~ msgid_plural "%1$s mails, %2$s unread"
+#~ msgid "%1$s email, %2$s unread"
+#~ msgid_plural "%1$s emails, %2$s unread"
 #~ msgstr[0] "%1$s 封郵件，%2$s 未讀"
 #~ msgstr[1] "%1$s 封郵件，%2$s 未讀"
 
@@ -1416,7 +1416,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Add group"
 #~ msgstr "新建組"
 
-#~ msgid "Add mail account"
+#~ msgid "Add email account"
 #~ msgstr "新增郵件帳號"
 
 #~ msgid "Add new folder"
@@ -1931,7 +1931,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgstr "寄件時自動將收集到的聯絡人加入到「收集到的地址」？"
 
 #~ msgid ""
-#~ "Automatically delete a notification mail after it has been accepted or "
+#~ "Automatically delete a notification email after it has been accepted or "
 #~ "declined?"
 #~ msgstr "在接受或拒絕邀請後自動刪除通知郵件？"
 
@@ -2553,7 +2553,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Compose new email"
 #~ msgstr "撰寫新郵件"
 
-#~ msgid "Compose new mail"
+#~ msgid "Compose new email"
 #~ msgstr "撰寫新郵件"
 
 #~ msgid "Conditions"
@@ -2740,7 +2740,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Couldn't load your contact data."
 #~ msgstr "無法載入您的聯絡人資料。"
 
-#~ msgid "Couldn't load your mail filters."
+#~ msgid "Couldn't load your email filters."
 #~ msgstr "無法載入您的郵件篩選設定。"
 
 #~ msgid "Couldn't load your vacation notice."
@@ -3272,7 +3272,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Do you really want to delete this widget?"
 #~ msgstr "確定要刪除此小工具嗎？"
 
-#~ msgid "Do you really want to discard this mail?"
+#~ msgid "Do you really want to discard this email?"
 #~ msgstr "您真的想放棄此郵件嗎？"
 
 #~ msgid "Do you really want to discard your changes?"
@@ -3341,11 +3341,11 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ "series?"
 #~ msgstr "您是否想編輯整個系列或單個系列約會？"
 
-#~ msgid "Do you want to keep the draft after sending this mail?"
+#~ msgid "Do you want to keep the draft after sending this email?"
 #~ msgstr "您想要在寄送郵件後保留草稿嗎？"
 
-#~ msgid "Do you want to permanently delete this mail?"
-#~ msgid_plural "Do you want to permanently delete these mails?"
+#~ msgid "Do you want to permanently delete this email?"
+#~ msgid_plural "Do you want to permanently delete these emails?"
 #~ msgstr[0] "您想永久刪除此郵件嗎？"
 #~ msgstr[1] "您想永久刪除這些郵件嗎？"
 
@@ -3429,7 +3429,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Drop EML file here for import"
 #~ msgstr "放到這裡已匯入此郵件"
 
-#~ msgid "Drop here to import this mail"
+#~ msgid "Drop here to import this email"
 #~ msgstr "放到這裡已匯入此郵件"
 
 #~ msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
@@ -3654,7 +3654,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgstr "向任務參與者發送電子郵件通知？"
 
 #~ msgid ""
-#~ "Emails cannot be put into trash folder while your mail quota is exceeded."
+#~ "Emails cannot be put into trash folder while your email quota is exceeded."
 #~ msgstr "當您的空間已滿時，電子郵件無法被到垃圾桶。"
 
 #~ msgid "Embedded windows"
@@ -3721,7 +3721,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Enabled"
 #~ msgstr "啟用"
 
-#~ msgid "Enabled for all mail folders"
+#~ msgid "Enabled for all email folders"
 #~ msgstr "對所有郵件資料夾啟用"
 
 #~ msgid "Enabled for inbox only"
@@ -4078,7 +4078,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Fit to screen width"
 #~ msgstr "調整成螢幕寬度"
 
-#~ msgid "Flag mail with"
+#~ msgid "Flag email with"
 #~ msgstr "為郵件加入旗標"
 
 #~ msgid "Flickr"
@@ -4674,14 +4674,14 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgstr "行距"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after"
+#~ msgid "Line wrap when sending text emails after"
 #~ msgstr "發送純文字郵件時當字數超過下列長度即換行:"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after how much characters"
+#~ msgid "Line wrap when sending text emails after how much characters"
 #~ msgstr "發送純文字郵件時當字數超過下列長度即換行:"
 
-#~ msgid "Line wrap when sending text mails after: "
+#~ msgid "Line wrap when sending text emails after: "
 #~ msgstr "換行當發送純文字郵件超過:"
 
 #~ msgid "Link"
@@ -4711,7 +4711,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Load Error"
 #~ msgstr "載入錯誤"
 
-#~ msgid "Load all mails. This might take some time."
+#~ msgid "Load all emails. This might take some time."
 #~ msgstr "載入所有郵件，可能需要一些時間。"
 
 #~ msgid "Location"
@@ -4865,7 +4865,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Mark all day appointments as free"
 #~ msgstr "將全天約會標示為空閒"
 
-#~ msgid "Mark all mails as read"
+#~ msgid "Mark all emails as read"
 #~ msgstr "將所有郵件標示為已讀"
 
 #~ msgid "Mark as distributionlist"
@@ -4886,7 +4886,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Mark as unread"
 #~ msgstr "標記為未讀"
 
-#~ msgid "Mark mail as"
+#~ msgid "Mark email as"
 #~ msgstr "將郵件標示為"
 
 #~ msgid "Mark read"
@@ -4975,7 +4975,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Move to folder"
 #~ msgstr "移至文件夾"
 
-#~ msgid "Moving mails ... This may take a few seconds."
+#~ msgid "Moving emails ... This may take a few seconds."
 #~ msgstr "正在移動郵件... 可能需要幾秒鐘。"
 
 #~ msgid "My contact data"
@@ -5127,19 +5127,19 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "No lost requests"
 #~ msgstr "無損失請求"
 
-#~ msgid "No mails"
+#~ msgid "No emails"
 #~ msgstr "無郵件"
 
-#~ msgid "No mails at all!"
+#~ msgid "No emails at all!"
 #~ msgstr "完全沒有郵件！"
 
-#~ msgid "No mails found for \"%s\""
+#~ msgid "No emails found for \"%s\""
 #~ msgstr "找不到「%s」的郵件"
 
-#~ msgid "No mails in this folder"
+#~ msgid "No emails in this folder"
 #~ msgstr "此資料夾中無新電子郵件"
 
-#~ msgid "No mails in your inbox"
+#~ msgid "No emails in your inbox"
 #~ msgstr "您的收件匣中沒有郵件"
 
 #~ msgid "No matching templates on this Server"
@@ -5277,7 +5277,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "On every new notification"
 #~ msgstr "每個新通知時"
 
-#~ msgid "On new notifications except mails"
+#~ msgid "On new notifications except emails"
 #~ msgstr "在新通知時，但郵件通知除外"
 
 #~ msgid "On work days"
@@ -5695,7 +5695,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Press to hide all appointment reminders."
 #~ msgstr "按下以隱藏所有約會提醒。"
 
-#~ msgid "Press to hide all notifications for new mails."
+#~ msgid "Press to hide all notifications for new emails."
 #~ msgstr "按下以隱藏所有新郵件通知。"
 
 #~ msgid "Press to hide all notifications for overdue tasks."
@@ -5845,7 +5845,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Reauthorize"
 #~ msgstr "重新授權"
 
-#~ msgid "Received mails"
+#~ msgid "Received emails"
 #~ msgstr "收到的郵件"
 
 #~ msgid "Recent activities"
@@ -6083,7 +6083,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgstr "保存於"
 
 #, fuzzy
-#~ msgid "Saved mail attachment"
+#~ msgid "Saved email attachment"
 #~ msgstr "移除附件"
 
 #, fuzzy
@@ -6155,26 +6155,26 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Send as internal link"
 #~ msgstr "作為內部連結發送"
 
-#~ msgid "Send as mail"
+#~ msgid "Send as email"
 #~ msgstr "以郵件方式寄送"
 
 #~ msgid "Send as vCard"
 #~ msgstr "以 vCard 傳送"
 
-#~ msgid "Send by mail"
+#~ msgid "Send by email"
 #~ msgstr "透過電子郵件寄送"
 
 #, fuzzy
 #~ msgid "Send feedback"
 #~ msgstr "寄送電子郵件"
 
-#~ msgid "Send mail"
+#~ msgid "Send email"
 #~ msgstr "寄送郵件"
 
-#~ msgid "Send mail to all participants"
+#~ msgid "Send email to all participants"
 #~ msgstr "傳送郵件給所有參與者"
 
-#~ msgid "Send new mail"
+#~ msgid "Send new email"
 #~ msgstr "寄送新郵件"
 
 #~ msgid "Send vacation notice during this time only"
@@ -6192,7 +6192,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Sent from %s via mobile"
 #~ msgstr "從行動裝置上的 %s 傳送"
 
-#~ msgid "Sent mails"
+#~ msgid "Sent emails"
 #~ msgstr "寄件輩分"
 
 #~ msgid "September"
@@ -6267,7 +6267,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Show all items"
 #~ msgstr "顯示所有項目"
 
-#~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
+#~ msgid "Show all emails. Note: Mails are no longer grouped by conversation."
 #~ msgstr "顯示所有郵件。請注意：郵件將不再依對話內容分組。"
 
 #~ msgid "Show all my appointments from all calendars"
@@ -6599,7 +6599,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Table"
 #~ msgstr "表格"
 
-#~ msgid "Tag mail with"
+#~ msgid "Tag email with"
 #~ msgstr "為郵件加入標籤"
 
 #~ msgid "Task"
@@ -7060,7 +7060,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgstr "沒有定義規則"
 
 #~ msgid ""
-#~ "There was no suitable server found for this mail/password combination"
+#~ "There was no suitable server found for this email/password combination"
 #~ msgstr "此帳號密碼組合無法登入任何可用的伺服器"
 
 #~ msgid "There were not activities in your network"
@@ -7180,7 +7180,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "This is not a valid email address"
 #~ msgstr "這是無效的電子郵件位址"
 
-#~ msgid "This is not a valid mail address"
+#~ msgid "This is not a valid email address"
 #~ msgstr "這是無效的電子郵件位址"
 
 #~ msgid "This is not a valid user or group."
@@ -7189,10 +7189,10 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "This list has no contacts yet"
 #~ msgstr "該組無成員"
 
-#~ msgid "This mail has been added to the portal"
+#~ msgid "This email has been added to the portal"
 #~ msgstr "此郵件已被加入入口畫面"
 
-#~ msgid "This mail has no content"
+#~ msgid "This email has no content"
 #~ msgstr "此郵件沒有內容"
 
 #~ msgid "This note will not be printed"
@@ -7322,7 +7322,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ "right side of the toolbar."
 #~ msgstr "要選擇清單、圖示或方塊視圖清單，點擊工具列右邊的視圖。"
 
-#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgid "To send the email, click on Send on the upper right side."
 #~ msgstr "要傳送郵件，點選右上角的傳送。"
 
 #~ msgid "To upload a file, click on New > Upload new file in the toolbar."
@@ -7357,10 +7357,10 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Top 10 folder size"
 #~ msgstr "前十大資料夾大小"
 
-#~ msgid "Top 10 you got mail from"
+#~ msgid "Top 10 you got email from"
 #~ msgstr "前十名寄件者"
 
-#~ msgid "Top 10 you sent mail to"
+#~ msgid "Top 10 you sent email to"
 #~ msgstr "前十名收件者"
 
 #~ msgid "Total cost"
@@ -7381,7 +7381,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Trash folder"
 #~ msgstr "垃圾桶"
 
-#~ msgid "Trying to auto-configure your mail account"
+#~ msgid "Trying to auto-configure your email account"
 #~ msgstr "正在嘗試自動設定您的郵件帳號"
 
 #~ msgid "Tuesday"
@@ -7411,7 +7411,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "URL:"
 #~ msgstr "URL："
 
-#~ msgid "Unable to load mail filter settings."
+#~ msgid "Unable to load email filter settings."
 #~ msgstr "無法連絡後端郵件過濾器"
 
 #~ msgid "Unconfirmed"
@@ -7527,7 +7527,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Use cursor keys to change the item position"
 #~ msgstr "使用方向鍵修改物件位置"
 
-#~ msgid "Use fixed-width font for text mails"
+#~ msgid "Use fixed-width font for text emails"
 #~ msgstr "針對純文字郵件使用固定寬度字體顯示"
 
 #~ msgid ""
@@ -7538,7 +7538,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ "使用資料夾樹存取自己的、公開的或共享的檔案。若資料夾樹被隱藏了，點擊工具列"
 #~ "右邊的檢視 > 資料夾視圖。"
 
-#~ msgid "Use unified mail for this account"
+#~ msgid "Use unified email for this account"
 #~ msgstr "為此帳戶使用統一郵件"
 
 #~ msgid "Use username and password"
@@ -7587,7 +7587,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Waiting"
 #~ msgstr "等待中"
 
-#~ msgid "Warning: This message might be a phishing or scam mail"
+#~ msgid "Warning: This message might be a phishing or scam email"
 #~ msgstr "警告：該郵件可能存在郵件欺詐"
 
 #~ msgid "Weather • Season"
@@ -7860,7 +7860,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Your data has been saved"
 #~ msgstr "已儲存您的資料"
 
-#~ msgid "Your mail address"
+#~ msgid "Your email address"
 #~ msgstr "您的電子郵件位址"
 
 #~ msgid "Your messages"
@@ -7881,7 +7881,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Your password has been changed"
 #~ msgstr "您的密碼已更改"
 
-#~ msgid "Your primary mail account can not be deleted."
+#~ msgid "Your primary email account can not be deleted."
 #~ msgstr "無法刪除您的主要郵件帳號。"
 
 #~ msgid "Your selected picture will be displayed after saving"

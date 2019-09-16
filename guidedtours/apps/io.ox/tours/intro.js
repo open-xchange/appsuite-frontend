@@ -70,7 +70,7 @@ define('io.ox/tours/intro', [
             .end()*/
         .step()
             .title(gt('Creating new items'))
-            .content(gt('To create a new E-Mail, click the Compose new E-Mail in the toolbar.'))
+            .content(gt('To compose a new email, click on Compose in the toolbar.'))
             .navigateTo('io.ox/mail/main')
             .waitFor('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar [data-action="io.ox/mail/actions/compose"]:visible')
             .hotspot('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar [data-action="io.ox/mail/actions/compose"]:visible')

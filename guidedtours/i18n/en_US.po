@@ -83,7 +83,7 @@ msgid "Collaborating"
 msgstr ""
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr ""
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -176,7 +176,7 @@ msgid "Edit documents"
 msgstr ""
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr ""
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -224,7 +224,7 @@ msgid "Entering billing information"
 msgstr ""
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr ""
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -339,7 +339,7 @@ msgid ""
 msgstr ""
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -347,7 +347,7 @@ msgid "Opening or closing the folder tree"
 msgstr ""
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr ""
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -367,7 +367,7 @@ msgid "Preview mode"
 msgstr ""
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr ""
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -401,11 +401,11 @@ msgid ""
 msgstr ""
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr ""
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr ""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -433,7 +433,7 @@ msgid "Sorting tasks"
 msgstr ""
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr ""
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -543,11 +543,11 @@ msgid ""
 msgstr ""
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -696,7 +696,7 @@ msgid ""
 msgstr ""
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr ""
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -711,7 +711,7 @@ msgid ""
 msgstr ""
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours

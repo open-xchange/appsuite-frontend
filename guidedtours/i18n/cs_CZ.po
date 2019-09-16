@@ -101,7 +101,7 @@ msgid "Collaborating"
 msgstr "Spolupráce"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "Psaní nové zprávy"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -205,7 +205,7 @@ msgid "Edit documents"
 msgstr "Upravit dokumenty"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr "Úprava více zpráv"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -259,7 +259,7 @@ msgid "Entering billing information"
 msgstr "Zadání účtovacích informací"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr "Zadání textu zprávy"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -386,7 +386,7 @@ msgstr ""
 "vložili jsme tam již složky pro vaše dokumenty, hudbu, obrázky a videa."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "Otevření zprávy v samostatném okně"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -394,7 +394,7 @@ msgid "Opening or closing the folder tree"
 msgstr "Otevírání a zavírání oblasti se složkami"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "Otevření nastavení zpráv"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -414,7 +414,7 @@ msgid "Preview mode"
 msgstr "Režim náhledu"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "Čtení e-mailových konverzací"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -450,11 +450,11 @@ msgstr ""
 "číslo."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "Poslání zprávy kontaktu"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "Odeslání zprávy"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -485,7 +485,7 @@ msgid "Sorting tasks"
 msgstr "Řazení úkolů"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "Řazení zpráv"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -620,13 +620,13 @@ msgstr ""
 "liště. Pak v menu vyberte rozvržení."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "Chcete-li napsat novou zprávu, klikněte na Napsat novou zprávu na nástrojové "
 "liště."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "Chcete-li vytvořit novou zprávu, klikněte na ikonu Napsat novou zprávu na "
 "nástrojové liště."
@@ -820,7 +820,7 @@ msgstr ""
 "Poslat zprávu na nástrojové liště."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "Zprávu odešlete kliknutím na Poslat"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -839,7 +839,7 @@ msgstr ""
 "menu."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 "Chcete-li zpráv seřadit, klikněte Řadit podle. Pak zvolte kritérium řazení."
 
@@ -1006,8 +1006,8 @@ msgstr ""
 #~ msgstr[1] "%1$d hodiny a %2$s"
 #~ msgstr[2] "%1$d hodin a %2$s"
 
-#~ msgid "%1$d mail"
-#~ msgid_plural "%1$d mails"
+#~ msgid "%1$d email"
+#~ msgid_plural "%1$d emails"
 #~ msgstr[0] "%1$d zpráva"
 #~ msgstr[1] "%1$d zprávy"
 #~ msgstr[2] "%1$d zpráv"
@@ -1114,14 +1114,14 @@ msgstr ""
 #~ msgid "%1$s is organizing an event on your behalf."
 #~ msgstr "%1$s organizuje vaším jménem událost."
 
-#~ msgid "%1$s mail"
-#~ msgid_plural "%1$s mails"
+#~ msgid "%1$s email"
+#~ msgid_plural "%1$s emails"
 #~ msgstr[0] "%1$d zpráva"
 #~ msgstr[1] "%1$d zprávy"
 #~ msgstr[2] "%1$d zpráv"
 
-#~ msgid "%1$s mail, %2$s unread"
-#~ msgid_plural "%1$s mails, %2$s unread"
+#~ msgid "%1$s email, %2$s unread"
+#~ msgid_plural "%1$s emails, %2$s unread"
 #~ msgstr[0] "%1$s z %2$s nepřečtená"
 #~ msgstr[1] "%1$s z %2$s nepřečtené"
 #~ msgstr[2] "%1$s z %2$s nepřečtených"
@@ -1949,7 +1949,7 @@ msgstr ""
 #~ msgid "Add group"
 #~ msgstr "Přidat skupinu"
 
-#~ msgid "Add mail account"
+#~ msgid "Add email account"
 #~ msgstr "Přidat poštovní účet"
 
 #~ msgid "Add member"
@@ -3589,7 +3589,7 @@ msgstr ""
 #~ "Při odesílání automaticky sbírat kontakty ve složce „Sebrané adresy“?"
 
 #~ msgid ""
-#~ "Automatically delete a notification mail after it has been accepted or "
+#~ "Automatically delete a notification email after it has been accepted or "
 #~ "declined?"
 #~ msgstr ""
 #~ "Automaticky vymazat potvrzovací zprávu, po té co byla přijata nebo "
@@ -3652,7 +3652,7 @@ msgstr ""
 #~ msgid "Bars"
 #~ msgstr "Sloupce"
 
-#~ msgid "Based on mailing list"
+#~ msgid "Based on emailing list"
 #~ msgstr "Podle e-mailové konference"
 
 #~ msgid "Based on sender"
@@ -4314,7 +4314,7 @@ msgstr ""
 #~ msgid "Compose new email"
 #~ msgstr "Psát novou zprávu"
 
-#~ msgid "Compose new mail"
+#~ msgid "Compose new email"
 #~ msgstr "Psát novou zprávu"
 
 #~ msgid "Conditions"
@@ -4516,7 +4516,7 @@ msgstr ""
 #~ msgid "Couldn't load your contact data."
 #~ msgstr "Nepodařilo se načíst vaše kontaktní údaje."
 
-#~ msgid "Couldn't load your mail filters."
+#~ msgid "Couldn't load your email filters."
 #~ msgstr "Nepodařilo se načíst vaše filtry zpráv."
 
 #~ msgid "Couldn't load your vacation notice."
@@ -5083,7 +5083,7 @@ msgstr ""
 #~ msgid "Do you really want to delete this widget?"
 #~ msgstr "Opravdu chcete smazat tento widget?"
 
-#~ msgid "Do you really want to discard this mail?"
+#~ msgid "Do you really want to discard this email?"
 #~ msgstr "Opravdu chcete tuto zprávu zahodit?"
 
 #~ msgid "Do you really want to discard your changes?"
@@ -5152,11 +5152,11 @@ msgstr ""
 #~ "series?"
 #~ msgstr "Chcete upravit celou sérii, nebo jednu schůzku ze série?"
 
-#~ msgid "Do you want to keep the draft after sending this mail?"
+#~ msgid "Do you want to keep the draft after sending this email?"
 #~ msgstr "Chcete po odeslání e-mailu koncept ponechat?"
 
-#~ msgid "Do you want to permanently delete this mail?"
-#~ msgid_plural "Do you want to permanently delete these mails?"
+#~ msgid "Do you want to permanently delete this email?"
+#~ msgid_plural "Do you want to permanently delete these emails?"
 #~ msgstr[0] "Opravdu chcete navždy smazat tuto zprávu?"
 #~ msgstr[1] "Opravdu chcete navždy smazat tyto zprávy?"
 #~ msgstr[2] "Opravdu chcete navždy smazat tyto zprávy?"
@@ -5250,7 +5250,7 @@ msgstr ""
 #~ msgid "Drop EML file here for import"
 #~ msgstr "Upusťte zde pro importování této zprávy"
 
-#~ msgid "Drop here to import this mail"
+#~ msgid "Drop here to import this email"
 #~ msgstr "Upusťte zde pro importování této zprávy"
 
 #~ msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
@@ -5500,7 +5500,7 @@ msgstr ""
 #~ msgstr "E-mailové oznámení pro účastníka úkolu?"
 
 #~ msgid ""
-#~ "Emails cannot be put into trash folder while your mail quota is exceeded."
+#~ "Emails cannot be put into trash folder while your email quota is exceeded."
 #~ msgstr ""
 #~ "E-maily nelze přesunout do koše, protože je váš prostor pro e-maily "
 #~ "zaplněný."
@@ -5569,7 +5569,7 @@ msgstr ""
 #~ msgid "Enabled"
 #~ msgstr "Povoleno"
 
-#~ msgid "Enabled for all mail folders"
+#~ msgid "Enabled for all email folders"
 #~ msgstr "Povolený pro všechny poštovní složky"
 
 #~ msgid "Enabled for inbox only"
@@ -6190,7 +6190,7 @@ msgstr ""
 #~ msgid "Flag #%d"
 #~ msgstr "Příznak #%d"
 
-#~ msgid "Flag mail with"
+#~ msgid "Flag email with"
 #~ msgstr "Označit zprávu příznakem"
 
 #~ msgid "Flags"
@@ -6530,7 +6530,7 @@ msgstr ""
 #~ msgid "HTML and plain text"
 #~ msgstr "HTML a prostý text"
 
-#~ msgid "HTML-only mail"
+#~ msgid "HTML-only email"
 #~ msgstr "Zprávy pouze v HTML"
 
 #~ msgid "Haiti"
@@ -7285,14 +7285,14 @@ msgstr ""
 #~ msgstr "Řádkování"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after"
+#~ msgid "Line wrap when sending text emails after"
 #~ msgstr "Lámání řádků při posílání textových zpráv po"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after how much characters"
+#~ msgid "Line wrap when sending text emails after how much characters"
 #~ msgstr "Lámání řádků při posílání textových zpráv po"
 
-#~ msgid "Line wrap when sending text mails after: "
+#~ msgid "Line wrap when sending text emails after: "
 #~ msgstr "Lámání slov při posílání textových zpráv po: "
 
 #~ msgid "Link"
@@ -7334,7 +7334,7 @@ msgstr ""
 #~ msgid "Load Error"
 #~ msgstr "Chyba načítání"
 
-#~ msgid "Load all mails. This might take some time."
+#~ msgid "Load all emails. This might take some time."
 #~ msgstr "Načíst všechny zprávy. To může chvilku trvat."
 
 #~ msgid "Location"
@@ -7595,7 +7595,7 @@ msgstr ""
 #~ msgid "Mark all day appointments as free"
 #~ msgstr "Označit všechny denní schůzky jako volné"
 
-#~ msgid "Mark all mails as read"
+#~ msgid "Mark all emails as read"
 #~ msgstr "Označit všechny zprávy jako přečtené"
 
 #~ msgid "Mark as distributionlist"
@@ -7619,7 +7619,7 @@ msgstr ""
 #~ msgid "Mark folder read"
 #~ msgstr "Označit složku jako přečtenou"
 
-#~ msgid "Mark mail as"
+#~ msgid "Mark email as"
 #~ msgstr "Označit zprávu jako"
 
 #~ msgid "Mark read"
@@ -7831,7 +7831,7 @@ msgstr ""
 #~ msgid "Move to folder"
 #~ msgstr "Přesunout do složky"
 
-#~ msgid "Moving mails ... This may take a few seconds."
+#~ msgid "Moving emails ... This may take a few seconds."
 #~ msgstr "Přesouvám zprávy... To může několik sekund trvat."
 
 #~ msgid "Mozambique"
@@ -8120,19 +8120,19 @@ msgstr ""
 #~ msgid "No lost requests"
 #~ msgstr "Žádné ztracené požadavky"
 
-#~ msgid "No mails"
+#~ msgid "No emails"
 #~ msgstr "Žádné zprávy"
 
-#~ msgid "No mails at all!"
+#~ msgid "No emails at all!"
 #~ msgstr "Vůbec žádné zprávy!"
 
-#~ msgid "No mails found for \"%s\""
+#~ msgid "No emails found for \"%s\""
 #~ msgstr "Pro „%s“ nebyly nalezeny žádné zprávy"
 
-#~ msgid "No mails in this folder"
+#~ msgid "No emails in this folder"
 #~ msgstr "Žádné zprávy v této složce"
 
-#~ msgid "No mails in your inbox"
+#~ msgid "No emails in your inbox"
 #~ msgstr "Vaše složka příchozích zpráv je prázdná"
 
 #~ msgid "No matching templates on this Server"
@@ -8427,7 +8427,7 @@ msgstr ""
 #~ msgid "On every new notification"
 #~ msgstr "Při každém novém oznámení"
 
-#~ msgid "On new notifications except mails"
+#~ msgid "On new notifications except emails"
 #~ msgstr "Při nových oznámeních kromě při příchozích zprávách"
 
 #~ msgid "On work days"
@@ -9288,7 +9288,7 @@ msgstr ""
 #~ msgid "Press to hide all appointment reminders."
 #~ msgstr "Stisknutím skryjete všechny upomínky na schůzky."
 
-#~ msgid "Press to hide all notifications for new mails."
+#~ msgid "Press to hide all notifications for new emails."
 #~ msgstr "Stisknutím skryjete všechna upozornění na nové zprávy."
 
 #~ msgid "Press to hide all notifications for overdue tasks."
@@ -9546,7 +9546,7 @@ msgstr ""
 #~ msgid "Rebuild Tree..."
 #~ msgstr "Znovu sestavit strom..."
 
-#~ msgid "Received mails"
+#~ msgid "Received emails"
 #~ msgstr "Přijaté zprávy"
 
 #~ msgid "Received:"
@@ -9961,7 +9961,7 @@ msgstr ""
 #~ msgstr "Uloženo v"
 
 #, fuzzy
-#~ msgid "Saved mail attachment"
+#~ msgid "Saved email attachment"
 #~ msgstr "Poslat jako přílohu"
 
 #, fuzzy
@@ -10015,7 +10015,7 @@ msgstr ""
 #~ msgid "Secure SMTP connection"
 #~ msgstr "Bezpečné SMTP spojení"
 
-#~ msgid "Secure mail connection"
+#~ msgid "Secure email connection"
 #~ msgstr "Bezpečné poštovní spojení"
 
 #~ msgid "Security"
@@ -10127,13 +10127,13 @@ msgstr ""
 #~ msgid "Send as internal link"
 #~ msgstr "Odeslat jako interní odkaz"
 
-#~ msgid "Send as mail"
+#~ msgid "Send as email"
 #~ msgstr "Poslat jako zprávu"
 
 #~ msgid "Send as vCard"
 #~ msgstr "Poslat jako vCard"
 
-#~ msgid "Send by mail"
+#~ msgid "Send by email"
 #~ msgstr "Poslat ve zprávě"
 
 #~ msgid "Send email"
@@ -10143,13 +10143,13 @@ msgstr ""
 #~ msgid "Send feedback"
 #~ msgstr "Druhé pole"
 
-#~ msgid "Send mail"
+#~ msgid "Send email"
 #~ msgstr "Poslat zprávu"
 
-#~ msgid "Send mail to all participants"
+#~ msgid "Send email to all participants"
 #~ msgstr "Poslat zprávu všem účastníkům"
 
-#~ msgid "Send new mail"
+#~ msgid "Send new email"
 #~ msgstr "Poslat novou zprávu"
 
 #~ msgid "Send vacation notice during this time only"
@@ -10176,7 +10176,7 @@ msgstr ""
 #~ msgid "Sent from %s via mobile"
 #~ msgstr "Posláno z %s z mobilního telefonu"
 
-#~ msgid "Sent mails"
+#~ msgid "Sent emails"
 #~ msgstr "Odeslané zprávy"
 
 #~ msgid "Sent objects"
@@ -10319,7 +10319,7 @@ msgstr ""
 #~ msgid "Show all items"
 #~ msgstr "Zobrazit všechny položky"
 
-#~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
+#~ msgid "Show all emails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""
 #~ "Zobrazit všechny zprávy. Poznámka: Zprávy již nejsou seskupené podle "
 #~ "konverzací."
@@ -10924,7 +10924,7 @@ msgstr ""
 #~ msgid "Tabs example"
 #~ msgstr "Příklad karet"
 
-#~ msgid "Tag mail with"
+#~ msgid "Tag email with"
 #~ msgstr "Dát zprávě příznak"
 
 #~ msgid "Tags"
@@ -11626,7 +11626,7 @@ msgstr ""
 #~ msgstr "Není určeno žádné pravidlo"
 
 #~ msgid ""
-#~ "There was no suitable server found for this mail/password combination"
+#~ "There was no suitable server found for this email/password combination"
 #~ msgstr "Pro tuto kombinaci adresy/hesla nebyl nalezen žádný vhodný server"
 
 #~ msgid "There were not activities in your network"
@@ -11928,7 +11928,7 @@ msgstr ""
 #~ "vytvořit v soukromé složce uživatele, ke které nemáte právo k zápisu."
 
 #~ msgid ""
-#~ "This is a delivery receipt for the mail that you sent on #DATE# to "
+#~ "This is a delivery receipt for the email that you sent on #DATE# to "
 #~ "#RECIPIENT# with subject \"#SUBJECT#\".\n"
 #~ "\n"
 #~ "Note: This delivery receipt only acknowledges that the message was "
@@ -11955,7 +11955,7 @@ msgstr ""
 #~ msgid "This is not a valid email address"
 #~ msgstr "Toto není platná poštovní adresa"
 
-#~ msgid "This is not a valid mail address"
+#~ msgid "This is not a valid email address"
 #~ msgstr "Toto není platná poštovní adresa"
 
 #~ msgid "This is not a valid user or group."
@@ -11964,16 +11964,16 @@ msgstr ""
 #~ msgid "This list has no contacts yet"
 #~ msgstr "Tento seznam zatím nemá žádné kontakty"
 
-#~ msgid "This mail contains a reply to an invitation."
+#~ msgid "This email contains a reply to an invitation."
 #~ msgstr "Tato zpráva obsahuje odpověď na pozvánku."
 
-#~ msgid "This mail contains an URL to a publication."
+#~ msgid "This email contains an URL to a publication."
 #~ msgstr "Tato zpráva obsahuje URL publikace."
 
-#~ msgid "This mail has been added to the portal"
+#~ msgid "This email has been added to the portal"
 #~ msgstr "Tato zpráva byla přidána do portálu"
 
-#~ msgid "This mail has no content"
+#~ msgid "This email has no content"
 #~ msgstr "Tato zpráva nemá žádný obsah"
 
 #~ msgid ""
@@ -12323,7 +12323,7 @@ msgstr ""
 #~ "Chcete-li vybrat pohled Seznam, Ikony nebo Dlaždice, klikněte na Pohled "
 #~ "na pravé straně nástrojové lišty."
 
-#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgid "To send the email, click on Send on the upper right side."
 #~ msgstr "Chcete-li zprávu poslat, klikněte na Odeslat vpravo nahoře."
 
 #~ msgid "To upload a file, click on New > Upload new file in the toolbar."
@@ -12385,10 +12385,10 @@ msgstr ""
 #~ msgid "Top 10 folder size"
 #~ msgstr "Velikost 10 největších složek"
 
-#~ msgid "Top 10 you got mail from"
+#~ msgid "Top 10 you got email from"
 #~ msgstr "10 nejčastějších odesílatelů"
 
-#~ msgid "Top 10 you sent mail to"
+#~ msgid "Top 10 you sent email to"
 #~ msgstr "10 nejčastějších adresátů"
 
 #~ msgid "Total cost"
@@ -12415,7 +12415,7 @@ msgstr ""
 #~ msgid "Trinidad and Tobago"
 #~ msgstr "Trinidad a Tobago"
 
-#~ msgid "Trying to auto-configure your mail account"
+#~ msgid "Trying to auto-configure your email account"
 #~ msgstr "Pokouším se automaticky nastavit váš poštovní účet"
 
 #~ msgid "Tue"
@@ -12537,7 +12537,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "Unable to establish a connection to the E-Mail server. Possible reasons: "
-#~ "the mail server is (temporarily) down or there are network connection "
+#~ "the email server is (temporarily) down or there are network connection "
 #~ "problems. To prevent further errors the module has been disabled. Please "
 #~ "contact your administrator."
 #~ msgstr ""
@@ -12546,7 +12546,7 @@ msgstr ""
 #~ "Aby se zabránilo dalším chybám, byl modul vypnut. Kontaktujte, prosím, "
 #~ "svého administrátora."
 
-#~ msgid "Unable to load mail filter settings."
+#~ msgid "Unable to load email filter settings."
 #~ msgstr "Nepodařilo se načíst nastavení pro filtrování pošty."
 
 #~ msgid "Unanswered"
@@ -12577,7 +12577,7 @@ msgstr ""
 #~ msgid "Unified"
 #~ msgstr "Spojené"
 
-#~ msgid "Unified mail enabled"
+#~ msgid "Unified email enabled"
 #~ msgstr "Spojená pošta zapnuta"
 
 #~ msgid "United Arab Emirates"
@@ -12719,7 +12719,7 @@ msgstr ""
 #~ msgid "Use cursor keys to change the item position"
 #~ msgstr "Pozici položky změňte pomocí kurzorových kláves."
 
-#~ msgid "Use fixed-width font for text mails"
+#~ msgid "Use fixed-width font for text emails"
 #~ msgstr "Pro textové e-maily používat písmo s pevnou šířkou"
 
 #~ msgid "Use for appointment"
@@ -12755,7 +12755,7 @@ msgstr ""
 #~ "ze serveru. Pak zavřete okno prohlížeče. To zabrání neautorizovanému "
 #~ "přístupu k vašim datům."
 
-#~ msgid "Use unified mail for this account"
+#~ msgid "Use unified email for this account"
 #~ msgstr "Použít pro tento účet spojenou poštu"
 
 #~ msgid "Use username and password"
@@ -12881,7 +12881,7 @@ msgstr ""
 #~ msgid "Warning: %2$s"
 #~ msgstr "Varování: %2$s"
 
-#~ msgid "Warning: This message might be a phishing or scam mail"
+#~ msgid "Warning: This message might be a phishing or scam email"
 #~ msgstr "Varování: Tato zpráva je možná e-mailový podvod"
 
 #~ msgid "Warnings:"
@@ -13193,19 +13193,19 @@ msgstr ""
 #~ msgstr "Znovu jste autorizovali tento účet."
 
 #~ msgid ""
-#~ "You have received this mail because this appointment contains the "
+#~ "You have received this email because this appointment contains the "
 #~ "resource %1$s, that you manage."
 #~ msgstr ""
 #~ "Dostal(a) jste tuto zprávu, protože tato schůzka obsahuje zdroj %1$s, "
 #~ "který spravujete."
 
 #~ msgid ""
-#~ "You have received this mail because your are the chair for this "
+#~ "You have received this email because your are the chair for this "
 #~ "appointment."
 #~ msgstr "Dostal(a) jste tuto zprávu, protože této schůzce předsedáte."
 
 #~ msgid ""
-#~ "You have received this mail because your are the organizer of this "
+#~ "You have received this email because your are the organizer of this "
 #~ "appointment."
 #~ msgstr ""
 #~ "Dostal(a) jste tuto zprávu, protože jste organizátorem této schůzky."
@@ -13327,7 +13327,7 @@ msgstr ""
 #~ msgid "Your data has been saved"
 #~ msgstr "Vaše data byla uložena"
 
-#~ msgid "Your mail address"
+#~ msgid "Your email address"
 #~ msgstr "Vaše poštovní adresa"
 
 #~ msgid "Your messages"
@@ -13367,7 +13367,7 @@ msgstr ""
 #~ "Vaše heslo bude bezpečnější, když bude obsahovat také velká písmena, "
 #~ "čísla a speciální znaky jako %1$s."
 
-#~ msgid "Your primary mail account can not be deleted."
+#~ msgid "Your primary email account can not be deleted."
 #~ msgstr "Váš primární poštovní účet nelze smazat."
 
 #~ msgid ""

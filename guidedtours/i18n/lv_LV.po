@@ -100,7 +100,7 @@ msgid "Collaborating"
 msgstr "Kopdarbība"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "Jauna e-pasta sastādīšana"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -209,7 +209,7 @@ msgid "Edit documents"
 msgstr "Dokumentu rediģēšana"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr "Vairāku e-apstu rediģēšana"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -266,7 +266,7 @@ msgid "Entering billing information"
 msgstr "Norēķinu informācijas pievienošana"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr "Vēstules teksta ievadīšana"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -399,7 +399,7 @@ msgstr ""
 "un video."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "E-pasta atvēršana atsevišķā logā"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -407,7 +407,7 @@ msgid "Opening or closing the folder tree"
 msgstr "Mapju koka atvēršana un aizvēršana"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "E-pasta iestatījumu atvēršana"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -427,7 +427,7 @@ msgid "Preview mode"
 msgstr "Apskata režīms"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "E-pasta sarunu lasīšana"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -463,11 +463,11 @@ msgstr ""
 "koda nosūtīšanai."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "E-pasta nosūtīšana kontaktpersonai"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "E-pasta nosūtīšana"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -498,7 +498,7 @@ msgid "Sorting tasks"
 msgstr "Uzdevumu kārtošana"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "E-pasta šķirošana"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -635,13 +635,13 @@ msgstr ""
 "un zvēlieties vēlamo režīmu."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "Jauna e-pasta sastādīšanai noklikšķiniet uz e-pasta sastādīšanas ikonas "
 "rīkjoslā."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "Lai izveidotu jaunu e-pasta vēstuli, noklikšķiniet uz jauna e-pasta ikonas "
 "rīkjoslā."
@@ -836,7 +836,7 @@ msgstr ""
 "adreses vai rīkjoslā izvēlieties 'Sūtīt e-pastu'."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "Lai nosūtītu e-pastu, noklikšķiniet uz Sūtīt"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -855,7 +855,7 @@ msgstr ""
 "malā."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 "E-pasta kārtošanai noklikšķiniet uz 'Kārtot pēc' un izvēlieties atbilstošo "
 "kritēriju."
@@ -1025,8 +1025,8 @@ msgstr ""
 #~ msgstr[1] "%1$d stundas un %2$s"
 #~ msgstr[2] "%1$d stundas un %2$s"
 
-#~ msgid "%1$d mail"
-#~ msgid_plural "%1$d mails"
+#~ msgid "%1$d email"
+#~ msgid_plural "%1$d emails"
 #~ msgstr[0] "%1$d vēstule"
 #~ msgstr[1] "%1$d vēstules"
 #~ msgstr[2] "%1$d vēstules"
@@ -1070,14 +1070,14 @@ msgstr ""
 #~ msgid "%1$s is now connected with %2$s"
 #~ msgstr "%1$s tagad ir sasaistīts ar %2$s"
 
-#~ msgid "%1$s mail"
-#~ msgid_plural "%1$s mails"
+#~ msgid "%1$s email"
+#~ msgid_plural "%1$s emails"
 #~ msgstr[0] "%1$s vēstule"
 #~ msgstr[1] "%1$s vēstules"
 #~ msgstr[2] "%1$s vēstules"
 
-#~ msgid "%1$s mail, %2$s unread"
-#~ msgid_plural "%1$s mails, %2$s unread"
+#~ msgid "%1$s email, %2$s unread"
+#~ msgid_plural "%1$s emails, %2$s unread"
 #~ msgstr[0] "%1$s vēstule, %2$s nelasīta"
 #~ msgstr[1] "%1$s vēstules, %2$s nelasītas"
 #~ msgstr[2] "%1$s vēstules, %2$s nelasītas"
@@ -1551,7 +1551,7 @@ msgstr ""
 #~ msgid "Add group"
 #~ msgstr "Pievienot grupu"
 
-#~ msgid "Add mail account"
+#~ msgid "Add email account"
 #~ msgstr "Pievienot pasta kontu"
 
 #~ msgid "Add member"
@@ -2102,7 +2102,7 @@ msgstr ""
 #~ "pie sūtīšanas"
 
 #~ msgid ""
-#~ "Automatically delete a notification mail after it has been accepted or "
+#~ "Automatically delete a notification email after it has been accepted or "
 #~ "declined?"
 #~ msgstr ""
 #~ "Vai automātiski dzēst paziņojuma e-pastu pēc tam kad tas ir vai nu "
@@ -2165,7 +2165,7 @@ msgstr ""
 #~ msgid "Bars"
 #~ msgstr "Stabiņi"
 
-#~ msgid "Based on mailing list"
+#~ msgid "Based on emailing list"
 #~ msgstr "Pamatots un sūtīšans sarakstu"
 
 #~ msgid "Based on sender"
@@ -2752,7 +2752,7 @@ msgstr ""
 #~ msgid "Compose new email"
 #~ msgstr "Sastādīšana"
 
-#~ msgid "Compose new mail"
+#~ msgid "Compose new email"
 #~ msgstr "Sastādīšana"
 
 #~ msgid "Conditions"
@@ -2945,7 +2945,7 @@ msgstr ""
 #~ msgid "Couldn't load your contact data."
 #~ msgstr "Nevar ielādēt jūsu kontaktpersonas datus."
 
-#~ msgid "Couldn't load your mail filters."
+#~ msgid "Couldn't load your email filters."
 #~ msgstr "Nevar ielādēt jūsu pasta filtrus."
 
 #~ msgid "Couldn't load your vacation notice."
@@ -3496,7 +3496,7 @@ msgstr ""
 #~ msgid "Do you really want to delete this widget?"
 #~ msgstr "Vai tiešām vēlaties dzēst šo vidžetu?"
 
-#~ msgid "Do you really want to discard this mail?"
+#~ msgid "Do you really want to discard this email?"
 #~ msgstr "Vai tiešām vēlaties izmest šo vēstuli?"
 
 #~ msgid "Do you really want to discard your changes?"
@@ -3567,11 +3567,11 @@ msgstr ""
 #~ "series?"
 #~ msgstr "Vai vēlaties rediģēt visu sēriju vai tikai atsevišķu tikšanos?"
 
-#~ msgid "Do you want to keep the draft after sending this mail?"
+#~ msgid "Do you want to keep the draft after sending this email?"
 #~ msgstr "Vai vēlaties saglabāt melnrakstu pēc vēstules nosūtīšanas?"
 
-#~ msgid "Do you want to permanently delete this mail?"
-#~ msgid_plural "Do you want to permanently delete these mails?"
+#~ msgid "Do you want to permanently delete this email?"
+#~ msgid_plural "Do you want to permanently delete these emails?"
 #~ msgstr[0] "Vai tiešām vēlaties neatgriezeniski dzēst šo vēstuli?"
 #~ msgstr[1] "Vai tiešām vēlaties neatgriezeniski dzēst šīs vēstules?"
 #~ msgstr[2] "Vai tiešām vēlaties neatgriezeniski dzēst šīs vēstules?"
@@ -3659,7 +3659,7 @@ msgstr ""
 #~ msgid "Drop EML file here for import"
 #~ msgstr "Lai importētu pastu, pārvelciet šeit"
 
-#~ msgid "Drop here to import this mail"
+#~ msgid "Drop here to import this email"
 #~ msgstr "Lai importētu pastu, pārvelciet šeit"
 
 #~ msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
@@ -3900,7 +3900,7 @@ msgstr ""
 #~ msgstr "E-pasta paziņojums uzdevuma dalībniekiem?"
 
 #~ msgid ""
-#~ "Emails cannot be put into trash folder while your mail quota is exceeded."
+#~ "Emails cannot be put into trash folder while your email quota is exceeded."
 #~ msgstr ""
 #~ "E-pasta vēstules nevar tikt pārvietotas uz atkritni kamēr ir pārsniegta "
 #~ "pasta kvota."
@@ -3969,7 +3969,7 @@ msgstr ""
 #~ msgid "Enabled"
 #~ msgstr "Iespējots"
 
-#~ msgid "Enabled for all mail folders"
+#~ msgid "Enabled for all email folders"
 #~ msgstr "Iespējots visām pasta mapēm"
 
 #~ msgid "Enabled for inbox only"
@@ -4405,7 +4405,7 @@ msgstr ""
 #~ msgid "Flag #%d"
 #~ msgstr "Iezīmēt #%d"
 
-#~ msgid "Flag mail with"
+#~ msgid "Flag email with"
 #~ msgstr "Iezīmēt pastu ar"
 
 #~ msgid "Flags"
@@ -4738,7 +4738,7 @@ msgstr ""
 #~ msgid "HTML and plain text"
 #~ msgstr "HTML un vienkāršs teksts"
 
-#~ msgid "HTML-only mail"
+#~ msgid "HTML-only email"
 #~ msgstr "Tikai HTML pasts"
 
 #~ msgid "Haiti"
@@ -5432,14 +5432,14 @@ msgstr ""
 #~ msgstr "Rindu atstarpes"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after"
+#~ msgid "Line wrap when sending text emails after"
 #~ msgstr "Rindu 'satinums' nosūtot teksta pastu pēc"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after how much characters"
+#~ msgid "Line wrap when sending text emails after how much characters"
 #~ msgstr "Rindu 'satinums' nosūtot teksta pastu pēc"
 
-#~ msgid "Line wrap when sending text mails after: "
+#~ msgid "Line wrap when sending text emails after: "
 #~ msgstr "Rindu 'satinums' nosūtot teksta pastu pēc:"
 
 #~ msgid "Link"
@@ -5481,7 +5481,7 @@ msgstr ""
 #~ msgid "Load Error"
 #~ msgstr "Ielādes kļūda"
 
-#~ msgid "Load all mails. This might take some time."
+#~ msgid "Load all emails. This might take some time."
 #~ msgstr "Ielādēt visas vēstules. Tas var prasīt zināmu laiku."
 
 #~ msgid "Location"
@@ -5725,7 +5725,7 @@ msgstr ""
 #~ msgid "Mark all day appointments as free"
 #~ msgstr "Iestatīt visas dienas tikšanās laiku kā brīvu"
 
-#~ msgid "Mark all mails as read"
+#~ msgid "Mark all emails as read"
 #~ msgstr "Iestatīt visu pastu kā izlasītu"
 
 #~ msgid "Mark as distributionlist"
@@ -5749,7 +5749,7 @@ msgstr ""
 #~ msgid "Mark folder read"
 #~ msgstr "Iestatīt mapi kā izlasītu"
 
-#~ msgid "Mark mail as"
+#~ msgid "Mark email as"
 #~ msgstr "Iestatīt pastu kā"
 
 #~ msgid "Mark read"
@@ -5935,7 +5935,7 @@ msgstr ""
 #~ msgid "Move to folder"
 #~ msgstr "Pārvietot uz mapi"
 
-#~ msgid "Moving mails ... This may take a few seconds."
+#~ msgid "Moving emails ... This may take a few seconds."
 #~ msgstr "Pasta pārvietošana... Tas var aizņemt vairākas sekundes."
 
 #~ msgid "Mozambique"
@@ -6197,19 +6197,19 @@ msgstr ""
 #~ msgid "No lost requests"
 #~ msgstr "Nav zaudētu pieprasījumu"
 
-#~ msgid "No mails"
+#~ msgid "No emails"
 #~ msgstr "Nav vēstuļu"
 
-#~ msgid "No mails at all!"
+#~ msgid "No emails at all!"
 #~ msgstr "Nav nevienas vēstules!"
 
-#~ msgid "No mails found for \"%s\""
+#~ msgid "No emails found for \"%s\""
 #~ msgstr "Neviena vēstule nav atrasta priekš \"%s\""
 
-#~ msgid "No mails in this folder"
+#~ msgid "No emails in this folder"
 #~ msgstr "Šajā mapē nav vēstuļu"
 
-#~ msgid "No mails in your inbox"
+#~ msgid "No emails in your inbox"
 #~ msgstr "Jūsu pasta kastē nav vēstuļu"
 
 #~ msgid "No matching templates on this Server"
@@ -6471,7 +6471,7 @@ msgstr ""
 #~ msgid "On every new notification"
 #~ msgstr "Pie katra jauna paziņojuma"
 
-#~ msgid "On new notifications except mails"
+#~ msgid "On new notifications except emails"
 #~ msgstr "Pie jauniem paziņojumiem, izņemot pastu"
 
 #~ msgid "On work days"
@@ -7160,7 +7160,7 @@ msgstr ""
 #~ msgid "Press to hide all appointment reminders."
 #~ msgstr "Piespiediet, lai paslēptu visu tikšanās atgādinājumus."
 
-#~ msgid "Press to hide all notifications for new mails."
+#~ msgid "Press to hide all notifications for new emails."
 #~ msgstr "Piespiediet, lai paslēptu visus jauna pasta paziņojumus."
 
 #~ msgid "Press to hide all notifications for overdue tasks."
@@ -7377,7 +7377,7 @@ msgstr ""
 #~ msgid "Rebuild Tree..."
 #~ msgstr "Pārbūvēt koku..."
 
-#~ msgid "Received mails"
+#~ msgid "Received emails"
 #~ msgstr "Saņemtais pasts"
 
 #~ msgid "Received:"
@@ -7757,7 +7757,7 @@ msgstr ""
 #~ msgstr "Saglabāt iekš"
 
 #, fuzzy
-#~ msgid "Saved mail attachment"
+#~ msgid "Saved email attachment"
 #~ msgstr "Sūtīt kā pievienojumu"
 
 #, fuzzy
@@ -7912,13 +7912,13 @@ msgstr ""
 #~ msgid "Send as internal link"
 #~ msgstr "Sūtīt kā iekšēju saiti"
 
-#~ msgid "Send as mail"
+#~ msgid "Send as email"
 #~ msgstr "Sūtīt kā e-pastu"
 
 #~ msgid "Send as vCard"
 #~ msgstr "Sūtīt kā vCard"
 
-#~ msgid "Send by mail"
+#~ msgid "Send by email"
 #~ msgstr "Sūtīt ar pastu"
 
 #~ msgid "Send email"
@@ -7928,13 +7928,13 @@ msgstr ""
 #~ msgid "Send feedback"
 #~ msgstr "Otrais lauks"
 
-#~ msgid "Send mail"
+#~ msgid "Send email"
 #~ msgstr "Sūtīt e-pastu"
 
-#~ msgid "Send mail to all participants"
+#~ msgid "Send email to all participants"
 #~ msgstr "Nosūtīt vēstuli visiem dalībniekiem"
 
-#~ msgid "Send new mail"
+#~ msgid "Send new email"
 #~ msgstr "Sūtīt  jaunu pastu"
 
 #~ msgid "Send vacation notice during this time only"
@@ -7958,7 +7958,7 @@ msgstr ""
 #~ msgid "Sent from %s via mobile"
 #~ msgstr "Nosūtīts no %s ar mobilo ierīci"
 
-#~ msgid "Sent mails"
+#~ msgid "Sent emails"
 #~ msgstr "Nosūtītais pasts"
 
 #~ msgid "Sep"
@@ -8075,7 +8075,7 @@ msgstr ""
 #~ msgid "Show all items"
 #~ msgstr "Rādīt visu"
 
-#~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
+#~ msgid "Show all emails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""
 #~ "Rādīt visas vēstules. Piezīme: vēstules vairs netiek grupētas pēc sarunām."
 
@@ -8653,7 +8653,7 @@ msgstr ""
 #~ msgid "Tabs example"
 #~ msgstr "Tabulatoru piemērs"
 
-#~ msgid "Tag mail with"
+#~ msgid "Tag email with"
 #~ msgstr "Marķēt pastu ar"
 
 #~ msgid "Taiwan"
@@ -9280,7 +9280,7 @@ msgstr ""
 #~ msgstr "Nav definēts nosacījums"
 
 #~ msgid ""
-#~ "There was no suitable server found for this mail/password combination"
+#~ "There was no suitable server found for this email/password combination"
 #~ msgstr ""
 #~ "Norādītajai pasta/paroles kombinācijai nav atrasts neviens atbilstošs "
 #~ "serveris"
@@ -9422,7 +9422,7 @@ msgstr ""
 #~ msgid "This is not a valid email address"
 #~ msgstr "Šī nav derīga e-pasta adrese"
 
-#~ msgid "This is not a valid mail address"
+#~ msgid "This is not a valid email address"
 #~ msgstr "Šī nav derīga e-pasta adrese"
 
 #~ msgid "This is not a valid user or group."
@@ -9431,13 +9431,13 @@ msgstr ""
 #~ msgid "This list has no contacts yet"
 #~ msgstr "Šai sarakstā pagaidām nav neviena kontakta"
 
-#~ msgid "This mail contains an URL to a publication."
+#~ msgid "This email contains an URL to a publication."
 #~ msgstr "Šis pasts satur URL uz publikāciju."
 
-#~ msgid "This mail has been added to the portal"
+#~ msgid "This email has been added to the portal"
 #~ msgstr "Šī vēstule ir pievienota portālam"
 
-#~ msgid "This mail has no content"
+#~ msgid "This email has no content"
 #~ msgstr "Šai vēstulei nav satura"
 
 #~ msgid "This note will not be printed"
@@ -9618,7 +9618,7 @@ msgstr ""
 #~ "Lai izvēlētos ikonu, saraksta vai apskatlapu skatu, rīkjoslā "
 #~ "noklikšķiniet uz skata izvēles ikonas."
 
-#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgid "To send the email, click on Send on the upper right side."
 #~ msgstr "Lai nosūtītu vēstuli noklikšķiniet uz 'Sūtīt' augšējā labajā malā."
 
 #~ msgid "To upload a file, click on New > Upload new file in the toolbar."
@@ -9680,10 +9680,10 @@ msgstr ""
 #~ msgid "Top 10 folder size"
 #~ msgstr "10 lielāko mapju izmērs"
 
-#~ msgid "Top 10 you got mail from"
+#~ msgid "Top 10 you got email from"
 #~ msgstr "Top 10 no kuriem ir saņemts pasts"
 
-#~ msgid "Top 10 you sent mail to"
+#~ msgid "Top 10 you sent email to"
 #~ msgstr "Top 10 kuriem ir nosūtīts pasts"
 
 #~ msgid "Total cost"
@@ -9707,7 +9707,7 @@ msgstr ""
 #~ msgid "Trinidad and Tobago"
 #~ msgstr "Trinidada un Tobago"
 
-#~ msgid "Trying to auto-configure your mail account"
+#~ msgid "Trying to auto-configure your email account"
 #~ msgstr "Mēģinājums automātiski konfigurēt jūsu pasta kontu"
 
 #~ msgid "Tue"
@@ -9790,7 +9790,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "Unable to establish a connection to the E-Mail server. Possible reasons: "
-#~ "the mail server is (temporarily) down or there are network connection "
+#~ "the email server is (temporarily) down or there are network connection "
 #~ "problems. To prevent further errors the module has been disabled. Please "
 #~ "contact your administrator."
 #~ msgstr ""
@@ -9799,7 +9799,7 @@ msgstr ""
 #~ "Lai izvairītos no turpmākām kļūdām modulis ir atspējots. Lūdzu "
 #~ "sazinieties ar administratoru."
 
-#~ msgid "Unable to load mail filter settings."
+#~ msgid "Unable to load email filter settings."
 #~ msgstr "Nevar iestatīt pasta filtru."
 
 #~ msgid "Unanswered"
@@ -9962,7 +9962,7 @@ msgstr ""
 #~ msgstr ""
 #~ "Lai izmainītu vienības atrašanās vietu, izmantojiet kursora taustiņus"
 
-#~ msgid "Use fixed-width font for text mails"
+#~ msgid "Use fixed-width font for text emails"
 #~ msgstr "Lietot fiksēta garuma fontu teksta formāta vēstulēs"
 
 #~ msgid "Use for appointment"
@@ -9995,7 +9995,7 @@ msgstr ""
 #~ "ar sistēmu vispirms atslēdzieties no servera un tad aizveriet "
 #~ "pārlūkprogrammas logu."
 
-#~ msgid "Use unified mail for this account"
+#~ msgid "Use unified email for this account"
 #~ msgstr "Šim kontam lietot vienoto pastu"
 
 #~ msgid "Use username and password"
@@ -10117,7 +10117,7 @@ msgstr ""
 #~ msgid "Warning: %2$s"
 #~ msgstr "Brīdinājums: %2$s"
 
-#~ msgid "Warning: This message might be a phishing or scam mail"
+#~ msgid "Warning: This message might be a phishing or scam email"
 #~ msgstr "Brīdinājums: Šis ziņojums var būt e-pasta krāpniecība!"
 
 #~ msgid "Warnings:"
@@ -10541,7 +10541,7 @@ msgstr ""
 #~ msgid "Your data has been saved"
 #~ msgstr "Jūsu dati ir saglabāti"
 
-#~ msgid "Your mail address"
+#~ msgid "Your email address"
 #~ msgstr "Jūsu e-pasta adrese"
 
 #~ msgid "Your messages"
@@ -10581,7 +10581,7 @@ msgstr ""
 #~ "Jūsu parole būs drošāka ja tā saturēs lielos burtus, ciparus un speciālos "
 #~ "simbolus, tādus kā %1$s."
 
-#~ msgid "Your primary mail account can not be deleted."
+#~ msgid "Your primary email account can not be deleted."
 #~ msgstr "Jūsu primārais pasta konts nevar tikt dzēsts."
 
 #~ msgid ""

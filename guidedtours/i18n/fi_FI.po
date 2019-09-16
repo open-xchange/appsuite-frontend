@@ -97,7 +97,7 @@ msgid "Collaborating"
 msgstr "Yhteistyöskentely"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "Uuden sähköpostin laatiminen"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -200,7 +200,7 @@ msgid "Edit documents"
 msgstr "Muokkaa asiakirjoja"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr "Useamman sähköpostin muokkaus"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -256,7 +256,7 @@ msgid "Entering billing information"
 msgstr "Laskutustietojen syöttäminen"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr "Sähköpostin tekstin syöttäminen"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -384,7 +384,7 @@ msgstr ""
 "varten."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "Sähköpostin avaaminen erilliseen ikkunaan"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -392,7 +392,7 @@ msgid "Opening or closing the folder tree"
 msgstr "Kansiopuun avaaminen ja sulkeminen"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "Sähköpostiasetusten avaaminen"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -412,7 +412,7 @@ msgid "Preview mode"
 msgstr "Esikatselu"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "Sähköpostikeskustelun lukeminen"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -448,11 +448,11 @@ msgstr ""
 "kysytään puhelinnumeroa."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "Sähköpostin lähettäminen yhteystietoa käyttäen"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "Sähköpostin lähettäminen"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -484,7 +484,7 @@ msgid "Sorting tasks"
 msgstr "Tehtävien lajittelu"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "Sähköpostien lajittelu"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -620,12 +620,12 @@ msgstr ""
 "näkymä."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "Uuden sähköpostin laatimiseksi, napsauta työkalupalkin Uusi viesti kuvaketta."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "Luodaksesi uuden sähköpostin, napsauta yläreunan Uusi viesti kuvaketta."
 
@@ -821,7 +821,7 @@ msgstr ""
 "sähköpostiosoitetta tai työkalupalkista Lähetä sähköposti."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "Lähetä sähköposti napsauttamalla Lähetä"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -840,7 +840,7 @@ msgstr ""
 "yläreunassa."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr "Lajitellaksesi viestejä, napsauta lajittele. Valitse lajitteluperuste."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
@@ -973,8 +973,8 @@ msgstr ""
 #~ msgstr[0] "%1$d tunti ja %2$s"
 #~ msgstr[1] "%1$d tuntia ja %2$s"
 
-#~ msgid "%1$d mail"
-#~ msgid_plural "%1$d mails"
+#~ msgid "%1$d email"
+#~ msgid_plural "%1$d emails"
 #~ msgstr[0] "%1$d posti"
 #~ msgstr[1] "%1$d viestiä"
 
@@ -1004,13 +1004,13 @@ msgstr ""
 #~ msgid "%1$s is now connected with %2$s"
 #~ msgstr "%1$s on nyt yhteydessä %2$s kanssa"
 
-#~ msgid "%1$s mail"
-#~ msgid_plural "%1$s mails"
+#~ msgid "%1$s email"
+#~ msgid_plural "%1$s emails"
 #~ msgstr[0] "%1$s viesti"
 #~ msgstr[1] "%1$s viestiä"
 
-#~ msgid "%1$s mail, %2$s unread"
-#~ msgid_plural "%1$s mails, %2$s unread"
+#~ msgid "%1$s email, %2$s unread"
+#~ msgid_plural "%1$s emails, %2$s unread"
 #~ msgstr[0] "%1$s viesti, %2$s lukematonta"
 #~ msgstr[1] "%1$s viestiä, %2$s lukematonta"
 
@@ -1281,7 +1281,7 @@ msgstr ""
 #~ msgid "Add folder"
 #~ msgstr "Lisää kansio"
 
-#~ msgid "Add mail account"
+#~ msgid "Add email account"
 #~ msgstr "Lisää postitili"
 
 #~ msgid "Add new folder for this subscription"
@@ -1552,7 +1552,7 @@ msgstr ""
 #~ "addresses\""
 
 #~ msgid ""
-#~ "Automatically delete a notification mail after it has been accepted or "
+#~ "Automatically delete a notification email after it has been accepted or "
 #~ "declined?"
 #~ msgstr ""
 #~ "Automaattisesti poista ilmoitusposti, kun se on hyväksytty tai hylätty?"
@@ -1832,11 +1832,11 @@ msgstr ""
 #~ msgid "Compose"
 #~ msgstr "Uusi viesti"
 
-#~| msgid "Compose new mail"
+#~| msgid "Compose new email"
 #~ msgid "Compose new email"
 #~ msgstr "Uusi viesti"
 
-#~ msgid "Compose new mail"
+#~ msgid "Compose new email"
 #~ msgstr "Uusi viesti"
 
 #~ msgid "Conditions"
@@ -1974,7 +1974,7 @@ msgstr ""
 #~ msgid "Couldn't load your contact data."
 #~ msgstr "Yhteystietojasi ei voitu ladata."
 
-#~ msgid "Couldn't load your mail filters."
+#~ msgid "Couldn't load your email filters."
 #~ msgstr "Postisuodattimiasi ei voitu ladata."
 
 #~ msgid "Couldn't load your vacation notice."
@@ -2220,7 +2220,7 @@ msgstr ""
 #~ msgid "Do you really want to delete this widget?"
 #~ msgstr "Haluatko varmasti poistaa tämä widgetin?"
 
-#~ msgid "Do you really want to discard this mail?"
+#~ msgid "Do you really want to discard this email?"
 #~ msgstr "Haluatko varmasti hylätä tämän viestin?"
 
 #~ msgid "Do you really want to discard your changes?"
@@ -2254,8 +2254,8 @@ msgstr ""
 #~ "series?"
 #~ msgstr "Haluatko muokata koko sarjaa vai ainoastaan yhtä tapaamista?"
 
-#~ msgid "Do you want to permanently delete this mail?"
-#~ msgid_plural "Do you want to permanently delete these mails?"
+#~ msgid "Do you want to permanently delete this email?"
+#~ msgid_plural "Do you want to permanently delete these emails?"
 #~ msgstr[0] "Haluatko lopullisesti poistaa tämän viestin?"
 #~ msgstr[1] "Haluatko lopullisesti poistaa nämä viestit?"
 
@@ -2292,11 +2292,11 @@ msgstr ""
 #~ msgid "Drive Settings"
 #~ msgstr "Driven asetukset"
 
-#~| msgid "Drop here to import this mail"
+#~| msgid "Drop here to import this email"
 #~ msgid "Drop EML file here for import"
 #~ msgstr "Tiputa tähän tuodaksesi tämä viesti"
 
-#~ msgid "Drop here to import this mail"
+#~ msgid "Drop here to import this email"
 #~ msgstr "Tiputa tähän tuodaksesi tämä viesti"
 
 #~ msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
@@ -2422,7 +2422,7 @@ msgstr ""
 #~ msgstr "Sähköposti-ilmoitus tehtävän osallistujalle?"
 
 #~ msgid ""
-#~ "Emails cannot be put into trash folder while your mail quota is exceeded."
+#~ "Emails cannot be put into trash folder while your email quota is exceeded."
 #~ msgstr ""
 #~ "Viestikiintiön ollessa ylitettynä, et voi siirtää viestejä roskakansioon."
 
@@ -2451,7 +2451,7 @@ msgstr ""
 #~ msgid "Enabled"
 #~ msgstr "Käytössä"
 
-#~ msgid "Enabled for all mail folders"
+#~ msgid "Enabled for all email folders"
 #~ msgstr "Käytössä kaikille viestikansioille"
 
 #~ msgid "Enabled for inbox only"
@@ -2702,7 +2702,7 @@ msgstr ""
 #~ msgid "First name Last name"
 #~ msgstr "Etunimi Sukunimi"
 
-#~ msgid "Flag mail with"
+#~ msgid "Flag email with"
 #~ msgstr "Aseta tunniste"
 
 #~ msgid "Flickr"
@@ -3149,7 +3149,7 @@ msgstr ""
 #~ msgid "Liked a link: %s"
 #~ msgstr "Tykkäsit linkistä: %s"
 
-#~ msgid "Line wrap when sending text mails after "
+#~ msgid "Line wrap when sending text emails after "
 #~ msgstr "Rivitä tekstimuotoiset postit "
 
 #~ msgid "LinkedIn"
@@ -3303,7 +3303,7 @@ msgstr ""
 #~ msgid "Mark all day appointments as free"
 #~ msgstr "Näytä koko päivän tapaamiset vapaana"
 
-#~ msgid "Mark all mails as read"
+#~ msgid "Mark all emails as read"
 #~ msgstr "Merkitse kaikki viestit luetuiksi"
 
 #~ msgid "Mark as distributionlist"
@@ -3324,7 +3324,7 @@ msgstr ""
 #~ msgid "Mark as unread"
 #~ msgstr "Merkitse lukemattomaksi"
 
-#~ msgid "Mark mail as"
+#~ msgid "Mark email as"
 #~ msgstr "Merkitse"
 
 #~ msgid "Mark read"
@@ -3407,7 +3407,7 @@ msgstr ""
 #~ msgid "Move to folder"
 #~ msgstr "Siirrä kansioon"
 
-#~ msgid "Moving mails ... This may take a few seconds."
+#~ msgid "Moving emails ... This may take a few seconds."
 #~ msgstr "Siirretään posteja... Tämä voi kestää muutaman sekunnin."
 
 #~ msgid "My contact data"
@@ -3494,7 +3494,7 @@ msgstr ""
 #~ msgid "No Tweets yet."
 #~ msgstr "Ei vielä tweettejä."
 
-#~| msgid "No mails found for \"%s\""
+#~| msgid "No emails found for \"%s\""
 #~ msgid "No appointments found for \"%s\""
 #~ msgstr "Ei viestejä \"%s\":lle"
 
@@ -3532,13 +3532,13 @@ msgstr ""
 #~ msgid "No lost requests"
 #~ msgstr "Ei kadotettuja pyyntöjä"
 
-#~ msgid "No mails"
+#~ msgid "No emails"
 #~ msgstr "Ei viestejä"
 
-#~ msgid "No mails in this folder"
+#~ msgid "No emails in this folder"
 #~ msgstr "Ei viestejä tässä kansiossa"
 
-#~ msgid "No mails in your inbox"
+#~ msgid "No emails in your inbox"
 #~ msgstr "Ei viestejä saapuneet laatikossasi"
 
 #~ msgid "No matching templates on this Server"
@@ -3662,7 +3662,7 @@ msgstr ""
 #~ msgid "On every new notification"
 #~ msgstr "Kaikista uusista ilmoituksista"
 
-#~ msgid "On new notifications except mails"
+#~ msgid "On new notifications except emails"
 #~ msgstr "Uusista ilmoituksista paitsi posteista"
 
 #~ msgid "On work days"
@@ -4030,7 +4030,7 @@ msgstr ""
 #~ msgid "Press to hide all appointment reminders."
 #~ msgstr "Paina pillottaaksesi kaikki tapaamismuistutukset."
 
-#~ msgid "Press to hide all notifications for new mails."
+#~ msgid "Press to hide all notifications for new emails."
 #~ msgstr "Paina pillottaaksesi ilmoitukset uusista posteista."
 
 #~ msgid "Press to hide all notifications for overdue tasks."
@@ -4138,7 +4138,7 @@ msgstr ""
 #~ msgid "Reauthorize"
 #~ msgstr "Uudelleenvaltuuta"
 
-#~ msgid "Received mails"
+#~ msgid "Received emails"
 #~ msgstr "Saapuneet viestit"
 
 #~ msgid "Recent activities"
@@ -4346,7 +4346,7 @@ msgstr ""
 #~ msgstr "Tallennettu"
 
 #~| msgid "Remove attachment"
-#~ msgid "Saved mail attachment"
+#~ msgid "Saved email attachment"
 #~ msgstr "Poista liite"
 
 #~| msgid "Saving attachment to drive"
@@ -4412,16 +4412,16 @@ msgstr ""
 #~ msgid "Send as vCard"
 #~ msgstr "Lähetä vCard muodossa"
 
-#~ msgid "Send by mail"
+#~ msgid "Send by email"
 #~ msgstr "Lähetä postitse"
 
-#~ msgid "Send mail"
+#~ msgid "Send email"
 #~ msgstr "Lähetä viesti"
 
-#~ msgid "Send mail to all participants"
+#~ msgid "Send email to all participants"
 #~ msgstr "Lähetä postia kaikille osallistujille"
 
-#~ msgid "Send new mail"
+#~ msgid "Send new email"
 #~ msgstr "Lähetä uusi viesti"
 
 #~ msgid "Send vacation notice during this time only"
@@ -4439,7 +4439,7 @@ msgstr ""
 #~ msgid "Sent from %s via mobile"
 #~ msgstr "Sent from %s via mobile"
 
-#~ msgid "Sent mails"
+#~ msgid "Sent emails"
 #~ msgstr "Lähetetyt viestit"
 
 #~ msgid "September"
@@ -4507,7 +4507,7 @@ msgstr ""
 #~ msgid "Show all items"
 #~ msgstr "Näytä kaikki kohdat"
 
-#~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
+#~ msgid "Show all emails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""
 #~ "Näytä kaikki viestit. Huom: Viestit eivät enää ole ryhmiteltynä "
 #~ "keskusteluittain."
@@ -4742,7 +4742,7 @@ msgstr ""
 #~ msgid "TTY/TDD"
 #~ msgstr "kaukokirjoitin/tekstipuhelin"
 
-#~ msgid "Tag mail with"
+#~ msgid "Tag email with"
 #~ msgstr "Aseta avainsana"
 
 #~ msgid "Task"
@@ -5229,7 +5229,7 @@ msgstr ""
 #~ msgstr "Ei sääntöjä määriteltynä"
 
 #~ msgid ""
-#~ "There was no suitable server found for this mail/password combination"
+#~ "There was no suitable server found for this email/password combination"
 #~ msgstr "Tälle posti/salasana yhdistelmälle ei löytynyt sopivaa palvelinta"
 
 #~ msgid "There were not activities in your network"
@@ -5354,7 +5354,7 @@ msgstr ""
 #~ msgid "This is not a valid email address"
 #~ msgstr "Tämä ei ole käypä sähköpostiosoite"
 
-#~ msgid "This is not a valid mail address"
+#~ msgid "This is not a valid email address"
 #~ msgstr "Tämä ei ole käypä postiosoite"
 
 #~ msgid "This is not a valid user or group."
@@ -5363,10 +5363,10 @@ msgstr ""
 #~ msgid "This list has no contacts yet"
 #~ msgstr "Tällä listalla ei vielä ole yhteystietoja"
 
-#~ msgid "This mail has been added to the portal"
+#~ msgid "This email has been added to the portal"
 #~ msgstr "Tämä viesti on lisätty portaaliin"
 
-#~ msgid "This mail has no content"
+#~ msgid "This email has no content"
 #~ msgstr "Tässä viestissä ei ole sisältöä"
 
 #~ msgid "This note will not be printed"
@@ -5508,7 +5508,7 @@ msgstr ""
 #~ "Valitaksesi joko kuvake, lista tai ruutunäkymän napsauta kuvaketta \"Näytä"
 #~ "\" työkalupalkin oikealla puolella."
 
-#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgid "To send the email, click on Send on the upper right side."
 #~ msgstr "Lähettääksesi posti, napsauta oikeasta yläkulmasta Lähetä."
 
 #~ msgid "To upload a file, click on New > Upload new file in the toolbar."
@@ -5547,10 +5547,10 @@ msgstr ""
 #~ msgid "Top 10 folder size"
 #~ msgstr "Kymmenen suurinta kansiota"
 
-#~ msgid "Top 10 you got mail from"
+#~ msgid "Top 10 you got email from"
 #~ msgstr "Top 10 sähköpostiesi lähdettä"
 
-#~ msgid "Top 10 you sent mail to"
+#~ msgid "Top 10 you sent email to"
 #~ msgstr "Top 10 sähköpostiesi kohdetta"
 
 #~ msgid "Total cost"
@@ -5568,7 +5568,7 @@ msgstr ""
 #~ msgid "Trash folder"
 #~ msgstr "Roskat"
 
-#~ msgid "Trying to auto-configure your mail account"
+#~ msgid "Trying to auto-configure your email account"
 #~ msgstr "Yritetään auto-konfiguroida postitilisi"
 
 #~ msgid "Tuesday"
@@ -5592,7 +5592,7 @@ msgstr ""
 #~ msgid "URL"
 #~ msgstr "URL"
 
-#~ msgid "Unable to load mail filter settings."
+#~ msgid "Unable to load email filter settings."
 #~ msgstr "Postisuodattimien asetuksia ei voitu ladata."
 
 #~ msgid "Unconfirmed"
@@ -5697,7 +5697,7 @@ msgstr ""
 #~ msgid "Use cursor keys to change the item position"
 #~ msgstr "Käytä nuolinäppäimiä muuttaaksesi kohdan sijaintia"
 
-#~ msgid "Use fixed-width font for text mails"
+#~ msgid "Use fixed-width font for text emails"
 #~ msgstr "Näytä tekstimuotoiset postit vakiolevyisellä kirjasimella"
 
 #~ msgid ""
@@ -5709,7 +5709,7 @@ msgstr ""
 #~ "tarkasteluun. Mikäli kansiopuu ei ole näkyvissä, napsauta työkalupalkin "
 #~ "oikealta puolelta Näytä > Kansionäkymä."
 
-#~ msgid "Use unified mail for this account"
+#~ msgid "Use unified email for this account"
 #~ msgstr "Käytä tälle tilille yhtenäistä postia"
 
 #~ msgid "Use username and password"
@@ -5755,7 +5755,7 @@ msgstr ""
 #~ msgid "Waiting"
 #~ msgstr "Odottaa"
 
-#~ msgid "Warning: This message might be a phishing or scam mail"
+#~ msgid "Warning: This message might be a phishing or scam email"
 #~ msgstr "Varoitus: Tämä viesti voi olla urkinta- tai huijausposti"
 
 #~ msgid "Weather • Season"
@@ -6025,7 +6025,7 @@ msgstr ""
 #~ msgid "Your current password"
 #~ msgstr "Nykyinen salasanasi"
 
-#~ msgid "Your mail address"
+#~ msgid "Your email address"
 #~ msgstr "Postiosoitteesi"
 
 #~ msgid "Your messages"

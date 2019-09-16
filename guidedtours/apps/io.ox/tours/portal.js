@@ -28,7 +28,7 @@ define('io.ox/tours/portal', [
         new Tour()
         .step()
             .title(gt('The Portal'))
-            .content(gt('The Portal informs you about current E-Mails, appointments or social network news.'))
+            .content(gt('The Portal informs you about current emails, appointments or social network news.'))
             .hotspot('.launcher[data-app-name="io.ox/portal"]')
             .end()
         .step()

@@ -102,7 +102,7 @@ msgid "Collaborating"
 msgstr "Samarbeta"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "Skriv nytt meddelande"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -209,7 +209,7 @@ msgid "Edit documents"
 msgstr "Redigera dokument"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr "Redigera flera meddelanden"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -265,7 +265,7 @@ msgid "Entering billing information"
 msgstr "Ange faktureringsinformation"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr "Skriv in meddelandets text"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -395,7 +395,7 @@ msgstr ""
 "dina Videor."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "Öppna meddelanden i ett separat fönster"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -403,7 +403,7 @@ msgid "Opening or closing the folder tree"
 msgstr "Öppna eller stäng mappträdet"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "Öppna e-postinställningarna"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -423,7 +423,7 @@ msgid "Preview mode"
 msgstr "Granskningsläge"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "Läsa e-postkonversationer"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -459,11 +459,11 @@ msgstr ""
 "tillfrågas om ett telefonnummer."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "Skicka e-post till en kontakt"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "Skicka e-post"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -494,7 +494,7 @@ msgid "Sorting tasks"
 msgstr "Sortera uppgifter"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "Sortera din e-post"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -631,13 +631,13 @@ msgstr ""
 "en menypost i layouten."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "För att skriva ett nytt meddelande, klicka på Skriv nytt meddelande i "
 "verktygsraden."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "För att skapa ett nytt meddelande, klicka på ikonen Skriv nytt meddelande i "
 "verktygsraden."
@@ -826,7 +826,7 @@ msgstr ""
 "Skicka e-post i verktygsraden."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "För att skicka meddelandet, klicka på Skicka"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -845,7 +845,7 @@ msgstr ""
 "menyfältet."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 "För att sortera din e-post, klicka på Sortera efter. Välj ett kriterium."
 
@@ -980,8 +980,8 @@ msgstr ""
 #~ msgstr[0] "%1$d timme och %2$s"
 #~ msgstr[1] "%1$d timmar och %2$s"
 
-#~ msgid "%1$d mail"
-#~ msgid_plural "%1$d mails"
+#~ msgid "%1$d email"
+#~ msgid_plural "%1$d emails"
 #~ msgstr[0] "%1$d e-brev"
 #~ msgstr[1] "%1$d e-brev"
 
@@ -1014,13 +1014,13 @@ msgstr ""
 #~ msgid "%1$s is now connected with %2$s"
 #~ msgstr "%1$s är nu ansluten till %2$s"
 
-#~ msgid "%1$s mail"
-#~ msgid_plural "%1$s mails"
+#~ msgid "%1$s email"
+#~ msgid_plural "%1$s emails"
 #~ msgstr[0] "%1$s e-brev"
 #~ msgstr[1] "%1$s e-brev"
 
-#~ msgid "%1$s mail, %2$s unread"
-#~ msgid_plural "%1$s mails, %2$s unread"
+#~ msgid "%1$s email, %2$s unread"
+#~ msgid_plural "%1$s emails, %2$s unread"
 #~ msgstr[0] "%1$s e-brev, %2$s oläst"
 #~ msgstr[1] "%1$s e-brev, %2$s oläst"
 
@@ -1517,7 +1517,7 @@ msgstr ""
 #~ "========================================== "
 
 #~ msgid ""
-#~ "A part's content could not be read from message %1$s in mail folder %2$s"
+#~ "A part's content could not be read from message %1$s in email folder %2$s"
 #~ msgstr ""
 #~ "En del av innehållet kunde inte läsas från meddelandet %1$s i e-post-"
 #~ "mappen %2$s"
@@ -1684,7 +1684,7 @@ msgstr ""
 #~ msgid "Add folder menu"
 #~ msgstr "Lägg till mappmeny"
 
-#~ msgid "Add mail account"
+#~ msgid "Add email account"
 #~ msgstr "Lägg till e-postkonto"
 
 #~ msgid "Add new folder"
@@ -2085,7 +2085,7 @@ msgstr ""
 #~ msgstr[0] "Bilaga"
 #~ msgstr[1] "Bilagor"
 
-#~ msgid "Attachment %1$s not found inside mail %2$s of mail folder %3$s"
+#~ msgid "Attachment %1$s not found inside email %2$s of email folder %3$s"
 #~ msgstr "Bilaga %1$s finns inte i e-posten %2$s i e-post-mappen %3$s"
 
 #~ msgid "Attachment B: Synchronized data fields"
@@ -2172,7 +2172,7 @@ msgstr ""
 #~ "överföringen?"
 
 #~ msgid ""
-#~ "Automatically delete a notification mail after it has been accepted or "
+#~ "Automatically delete a notification email after it has been accepted or "
 #~ "declined?"
 #~ msgstr ""
 #~ "Ta automatiskt bort notifierings-e-post efter att det har accepterats "
@@ -2439,7 +2439,7 @@ msgstr ""
 #~ msgstr ""
 #~ "Kan inte importera sådan information. Använd metoden canImport() först."
 
-#~ msgid "Cannot initialize mail module"
+#~ msgid "Cannot initialize email module"
 #~ msgstr "Kan inte initialisera e-post-modul"
 
 #~ msgid "Cannot instantiate class %1$s."
@@ -2490,7 +2490,7 @@ msgstr ""
 #~ msgid "Cannot remove object %s from cache."
 #~ msgstr "Kan inte ta bort objekt %s från cache."
 
-#~ msgid "Cannot resolve mailadmin for context %d."
+#~ msgid "Cannot resolve emailadmin for context %d."
 #~ msgstr "Kan inte hitta e-post-administratör för kontext %d."
 
 #~ msgid "Cannot return connection to pool %d."
@@ -2720,7 +2720,7 @@ msgstr ""
 #~ msgid "Compose new email"
 #~ msgstr "Skriv ny e-post"
 
-#~ msgid "Compose new mail"
+#~ msgid "Compose new email"
 #~ msgstr "Skriv ny e-post"
 
 #~ msgid "Conditions"
@@ -3021,7 +3021,7 @@ msgstr ""
 #~ msgid "Couldn't load your contact data."
 #~ msgstr "Kunde inte ladda din kontaktdata."
 
-#~ msgid "Couldn't load your mail filters."
+#~ msgid "Couldn't load your email filters."
 #~ msgstr "Kunde inte ladda dina e-postfilter."
 
 #~ msgid "Couldn't load your vacation notice."
@@ -3333,7 +3333,7 @@ msgstr ""
 #~ msgid "Do you really want to delete this widget?"
 #~ msgstr "Vill du verkligen ta bort komponenten?"
 
-#~ msgid "Do you really want to discard this mail?"
+#~ msgid "Do you really want to discard this email?"
 #~ msgstr "Vill du verkligen kasta brevet?"
 
 #~ msgid "Do you really want to discard your changes?"
@@ -3368,8 +3368,8 @@ msgstr ""
 #~ "series?"
 #~ msgstr "Vill du redigera hela serien, eller bara ett enstaka möte i serien?"
 
-#~ msgid "Do you want to permanently delete this mail?"
-#~ msgid_plural "Do you want to permanently delete these mails?"
+#~ msgid "Do you want to permanently delete this email?"
+#~ msgid_plural "Do you want to permanently delete these emails?"
 #~ msgstr[0] "Vill du verkligen ta bort e-brevet permanent?"
 #~ msgstr[1] "Vill du verkligen ta bort e-breven permanent?"
 
@@ -3417,7 +3417,7 @@ msgstr ""
 #~ msgid "Drop EML file here for import"
 #~ msgstr "Släpp här för att importera e-brevet"
 
-#~ msgid "Drop here to import this mail"
+#~ msgid "Drop here to import this email"
 #~ msgstr "Släpp här för att importera e-brevet"
 
 #~ msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
@@ -3620,7 +3620,7 @@ msgstr ""
 #~ msgstr "E-postnotifiering för uppgiftsdeltagare?"
 
 #~ msgid ""
-#~ "Emails cannot be put into trash folder while your mail quota is exceeded."
+#~ "Emails cannot be put into trash folder while your email quota is exceeded."
 #~ msgstr ""
 #~ "E-post kan inte flyttas till papperskorgen när e-postkvoten överskrids."
 
@@ -3655,7 +3655,7 @@ msgstr ""
 #~ msgid "Enabled"
 #~ msgstr "Aktiverad"
 
-#~ msgid "Enabled for all mail folders"
+#~ msgid "Enabled for all email folders"
 #~ msgstr "Aktiverad för alla e-postmappar"
 
 #~ msgid "Enabled for inbox only"
@@ -4068,7 +4068,7 @@ msgstr ""
 #~ msgid "Flag %1$s could not be changed due to following reason: %2$s"
 #~ msgstr "Flagga %1$s kunde inte ändras på grund av följande orsak: %2$s"
 
-#~ msgid "Flag mail with"
+#~ msgid "Flag email with"
 #~ msgstr "Flagga e-post med"
 
 #~ msgid "Flickr"
@@ -4571,7 +4571,7 @@ msgstr ""
 #~ msgstr "Bild 1"
 
 #~ msgid ""
-#~ "Image attachment with Content-Id \"%1$s\" not found inside mail %2$s of "
+#~ "Image attachment with Content-Id \"%1$s\" not found inside email %2$s of "
 #~ "mail folder %3$s"
 #~ msgstr ""
 #~ "Bifogad bild med innehålls-id \"%1$s\" inte hittat i brev %2$s i e-post-"
@@ -4714,7 +4714,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "Insufficient folder attributes: Either existence status or fullname have "
-#~ "to be present to determine if a mail folder create or update shall be "
+#~ "to be present to determine if an email folder create or update shall be "
 #~ "performed"
 #~ msgstr ""
 #~ "Otillräckliga mappattribut: Existens-status eller fullt namn måste finnas "
@@ -4938,14 +4938,14 @@ msgstr ""
 #~ msgstr "Gillade en länk: %s"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after"
+#~ msgid "Line wrap when sending text emails after"
 #~ msgstr "Radbryt när text-e-post skickas efter "
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after how much characters"
+#~ msgid "Line wrap when sending text emails after how much characters"
 #~ msgstr "Radbryt när text-e-post skickas efter "
 
-#~ msgid "Line wrap when sending text mails after: "
+#~ msgid "Line wrap when sending text emails after: "
 #~ msgstr "Radbrytning när textbrev skickas efter: "
 
 #~ msgid "Link"
@@ -5030,7 +5030,7 @@ msgstr ""
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "E-post och sociala nätverk"
 
-#~ msgid "Mail cannot be parsed. Invalid or incomplete mail data."
+#~ msgid "Mail cannot be parsed. Invalid or incomplete email data."
 #~ msgstr "Brev kan inte tolkas. Ogiltig eller ofullständig brevinformation."
 
 #~ msgid "Mail count quota"
@@ -5165,7 +5165,7 @@ msgstr ""
 #~ msgid "Mandatory field last name is not set."
 #~ msgstr "Obligatoriskt fält, efternamn ej inskrivet."
 
-#~ msgid "Mandatory field mail address for external participants"
+#~ msgid "Mandatory field email address for external participants"
 #~ msgstr "Obligatoriskt fält, e-post-adress för externa deltagare"
 
 #~ msgid "Manual"
@@ -5183,7 +5183,7 @@ msgstr ""
 #~ msgid "Mark all day appointments as free"
 #~ msgstr "Märk heldagsmöten som ledig"
 
-#~ msgid "Mark all mails as read"
+#~ msgid "Mark all emails as read"
 #~ msgstr "Märk all e-post som läst"
 
 #~ msgid "Mark as distributionlist"
@@ -5204,7 +5204,7 @@ msgstr ""
 #~ msgid "Mark as unread"
 #~ msgstr "Märk som oläst"
 
-#~ msgid "Mark mail as"
+#~ msgid "Mark email as"
 #~ msgstr "Märk e-post som"
 
 #~ msgid "Mark read"
@@ -5303,7 +5303,7 @@ msgstr ""
 #~ msgid "Miscellaneous"
 #~ msgstr "Övrigt"
 
-#~ msgid "Missing %1$s folder in mail move operation"
+#~ msgid "Missing %1$s folder in email move operation"
 #~ msgstr "Saknar mappen %1$s i flyttoperationen"
 
 #~ msgid "Missing AJAX request handler for module %s"
@@ -5333,7 +5333,7 @@ msgstr ""
 #~ msgid "Missing configuration property: %1$s"
 #~ msgstr "Konfigurationegenskap saknas: %1$s"
 
-#~ msgid "Missing default %1$s folder in user mail settings"
+#~ msgid "Missing default %1$s folder in user email settings"
 #~ msgstr "Saknar standard-%1$s-mappen i användars e-post-inställningar"
 
 #~ msgid "Missing field %1$s"
@@ -5348,7 +5348,7 @@ msgstr ""
 #~ msgid "Missing folder mapping for task %1$d."
 #~ msgstr "Saknar mappning för uppgift %1$d."
 
-#~ msgid "Missing mail folder fullname"
+#~ msgid "Missing email folder fullname"
 #~ msgstr "Saknar e-post-mappens fullständiga namn"
 
 #~ msgid "Missing mandatory field(s) in given resource."
@@ -5360,7 +5360,7 @@ msgstr ""
 #~ msgid "Missing parameter %1$s"
 #~ msgstr "Parameter saknas %1$s"
 
-#~ msgid "Missing parameter in user's mail config: %1$s"
+#~ msgid "Missing parameter in user's email config: %1$s"
 #~ msgstr "Saknar parameter i användarens e-post-inställningar: %1$s"
 
 #~ msgid "Missing payload data in client's body chunk package"
@@ -5483,7 +5483,7 @@ msgstr ""
 #~ msgstr ""
 #~ "Flytta poster till eller från delade mappar %1$s (%2$d) är inte tillåtet."
 
-#~ msgid "Moving mails ... This may take a few seconds."
+#~ msgid "Moving emails ... This may take a few seconds."
 #~ msgstr "Flyttar e-post... Det kan ta en liten stund."
 
 #~ msgid "Multiple rows found."
@@ -5596,13 +5596,13 @@ msgstr ""
 #~ msgid "No VCard to import found."
 #~ msgstr "Kunde inte hitta VCard för import"
 
-#~ msgid "No access to mail folder %1$s"
+#~ msgid "No access to email folder %1$s"
 #~ msgstr "Ingen tillgång till e-post-mappen %1$s"
 
 #~ msgid "No admin user found in context %1$s"
 #~ msgstr "Ingen administratör hittad i kontext %1$s"
 
-#~ msgid "No administer access to mail folder %1$s"
+#~ msgid "No administer access to email folder %1$s"
 #~ msgstr "Ingen administrativ tillgång till e-post-mappen %1$s"
 
 #~ msgid "No administer permission specified for folder %1$s"
@@ -5633,7 +5633,7 @@ msgstr ""
 #~ "Inga ändringar hittades. Ingen uppdatering behövs. Kontext %1$d Objekt "
 #~ "%2$d"
 
-#~ msgid "No connection available to access mailbox"
+#~ msgid "No connection available to access emailbox"
 #~ msgstr "Ingen anslutning ledig för att nå postboxen"
 
 #~ msgid ""
@@ -5642,10 +5642,10 @@ msgstr ""
 #~ "Ingen anslutning till servern. Kontrollera din internetanslutning och "
 #~ "försök igen."
 
-#~ msgid "No content available in mail part"
+#~ msgid "No content available in email part"
 #~ msgstr "Inget innehåll tillgängligt i e-post-delen"
 
-#~ msgid "No create access to mail folder %1$s"
+#~ msgid "No create access to email folder %1$s"
 #~ msgstr "Ingen åtkomst att skapa objekt i e-post-mapp %1$s"
 
 #~ msgid ""
@@ -5667,7 +5667,7 @@ msgstr ""
 #~ "Ingen standardmapp kunde hittas i modulen %1$s för användare %2$s i "
 #~ "kontext %3$s"
 
-#~ msgid "No delete access to mail folder %1$s"
+#~ msgid "No delete access to email folder %1$s"
 #~ msgstr "Du har ingen åtkomst att ta bort e-post-mappen %1$s"
 
 #~ msgid "No delete exceptions"
@@ -5691,7 +5691,7 @@ msgstr ""
 #~ msgid "No group given."
 #~ msgstr "Ingen grupp angiven."
 
-#~ msgid "No insert access to mail folder %1$s"
+#~ msgid "No insert access to email folder %1$s"
 #~ msgstr "Du har inga tilläggsrättigheter till e-post-mappen %1$s"
 
 #, fuzzy
@@ -5699,32 +5699,32 @@ msgstr ""
 #~ msgid "No items found"
 #~ msgstr "Inga RSS-flöden hittades."
 
-#~ msgid "No keep-seen access to mail folder %1$s"
+#~ msgid "No keep-seen access to email folder %1$s"
 #~ msgstr "Du har inte åtkomst att spara läs-status i e-post-mappen %1$s"
 
-#~ msgid "No lookup access to mail folder %1$s"
+#~ msgid "No lookup access to email folder %1$s"
 #~ msgstr "Du har inte åtkomst att se brev i mappen %1$s"
 
 #~ msgid "No lost requests"
 #~ msgstr "Inga förlorade sökningar"
 
-#~ msgid "No mail account exists for admin user in context %1$s"
+#~ msgid "No email account exists for admin user in context %1$s"
 #~ msgstr ""
 #~ "Inget e-post-konto finns för administrationsanvändare i kontext %1$s"
 
-#~ msgid "No mail module access permitted"
+#~ msgid "No email module access permitted"
 #~ msgstr "Du har ingen åtkomst till e-post-modulen"
 
-#~ msgid "No mails"
+#~ msgid "No emails"
 #~ msgstr "Ingen e-post"
 
-#~ msgid "No mails found for \"%s\""
+#~ msgid "No emails found for \"%s\""
 #~ msgstr "Ingen e-post hittades för \"%s\""
 
-#~ msgid "No mails in this folder"
+#~ msgid "No emails in this folder"
 #~ msgstr "Ingen e-post i den här mappen"
 
-#~ msgid "No mails in your inbox"
+#~ msgid "No emails in your inbox"
 #~ msgstr "Ingen e-post i din inkorg"
 
 #~ msgid "No matching templates on this Server"
@@ -5759,7 +5759,7 @@ msgstr ""
 #~ msgid "No provider could be found for protocol/URL \"%1$s\""
 #~ msgstr "Ingen leverantör kunde hittas för protokoll/URL \"%1$s\""
 
-#~ msgid "No read access to mail folder %1$s"
+#~ msgid "No read access to email folder %1$s"
 #~ msgstr "Du har ingen läsåtkomst till post-mappen %1$s"
 
 #~ msgid "No recipients"
@@ -5962,7 +5962,7 @@ msgstr ""
 #~ msgid "On every new notification"
 #~ msgstr "Vid varje ny notifiering"
 
-#~ msgid "On new notifications except mails"
+#~ msgid "On new notifications except emails"
 #~ msgstr "Vid nya notifieringar förutom e-post"
 
 #~ msgid "On work days"
@@ -6428,7 +6428,7 @@ msgstr ""
 #~ msgid "Press to hide all appointment reminders."
 #~ msgstr "Tryck för att dölja alla mötespåminnelser."
 
-#~ msgid "Press to hide all notifications for new mails."
+#~ msgid "Press to hide all notifications for new emails."
 #~ msgstr "Tryck för att dölja alla notifieringar om ny e-post."
 
 #~ msgid "Press to hide all notifications for overdue tasks."
@@ -6529,7 +6529,7 @@ msgstr ""
 #~ msgstr "Behandla efterföljande regler"
 
 #~ msgid ""
-#~ "Process was interrupted while waiting for a free mail connection. Please "
+#~ "Process was interrupted while waiting for a free email connection. Please "
 #~ "try again."
 #~ msgstr ""
 #~ "Processen blev avbruten när du väntade på en ledig e-post-förbindelse. "
@@ -6638,7 +6638,7 @@ msgstr ""
 #~ msgid "Reauthorize"
 #~ msgstr "Kontrollera igen"
 
-#~ msgid "Received mails"
+#~ msgid "Received emails"
 #~ msgstr "Mottagen e-post"
 
 #~ msgid "Recent activities"
@@ -6925,7 +6925,7 @@ msgstr ""
 #~ msgstr "Sparades i"
 
 #, fuzzy
-#~ msgid "Saved mail attachment"
+#~ msgid "Saved email attachment"
 #~ msgstr "Ta bort bilaga"
 
 #, fuzzy
@@ -7000,22 +7000,22 @@ msgstr ""
 #~ msgid "Send as internal link"
 #~ msgstr "Skicka som intern länk"
 
-#~ msgid "Send as mail"
+#~ msgid "Send as email"
 #~ msgstr "Skicka som e-post"
 
 #~ msgid "Send as vCard"
 #~ msgstr "Skicka som vCard"
 
-#~ msgid "Send by mail"
+#~ msgid "Send by email"
 #~ msgstr "Skicka via e-post"
 
-#~ msgid "Send mail"
+#~ msgid "Send email"
 #~ msgstr "Skicka e-post"
 
-#~ msgid "Send mail to all participants"
+#~ msgid "Send email to all participants"
 #~ msgstr "Skicka e-post till alla deltagare"
 
-#~ msgid "Send new mail"
+#~ msgid "Send new email"
 #~ msgstr "Skicka ny e-post"
 
 #~ msgid "Send vacation notice during this time only"
@@ -7033,7 +7033,7 @@ msgstr ""
 #~ msgid "Sent from %s via mobile"
 #~ msgstr "Skickades från %s med mobiltelefon"
 
-#~ msgid "Sent mails"
+#~ msgid "Sent emails"
 #~ msgstr "Skickad e-post"
 
 #~ msgid "September"
@@ -7141,7 +7141,7 @@ msgstr ""
 #~ msgid "Show all items"
 #~ msgstr "Visa alla objekt"
 
-#~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
+#~ msgid "Show all emails. Note: Mails are no longer grouped by conversation."
 #~ msgstr "Visa all e-post. OBS: E-post grupperas inte i konversationer."
 
 #~ msgid "Show all my appointments from all calendars"
@@ -7464,7 +7464,7 @@ msgstr ""
 #~ msgstr ""
 #~ "Uppdatering av tabell misslyckades. Diagram %1$s kunde inte låsas upp."
 
-#~ msgid "Tag mail with"
+#~ msgid "Tag email with"
 #~ msgstr "Etikettera e-post med"
 
 #~ msgid "Target and source folder cannot be equal in context %1$s"
@@ -8245,7 +8245,7 @@ msgstr ""
 #~ "användare=%2$s)"
 
 #~ msgid ""
-#~ "There was no suitable server found for this mail/password combination"
+#~ "There was no suitable server found for this email/password combination"
 #~ msgstr ""
 #~ "Ingen lämplig server hittades för den här e-post/lösenordskombinationen"
 
@@ -8550,7 +8550,7 @@ msgstr ""
 #~ "att accepteras"
 
 #~ msgid ""
-#~ "This is a Return Receipt for the mail that you sent on #DATE# to "
+#~ "This is a Return Receipt for the email that you sent on #DATE# to "
 #~ "#RECIPIENT# with subject \"#SUBJECT#\".\n"
 #~ "\n"
 #~ "Note: This return receipt only acknowledges that the message was "
@@ -8570,7 +8570,7 @@ msgstr ""
 #~ msgid "This is not a valid email address"
 #~ msgstr "Det här inte en giltig e-postadress"
 
-#~ msgid "This is not a valid mail address"
+#~ msgid "This is not a valid email address"
 #~ msgstr "Det här är inte en giltig e-postadress"
 
 #~ msgid "This is not a valid user or group."
@@ -8579,10 +8579,10 @@ msgstr ""
 #~ msgid "This list has no contacts yet"
 #~ msgstr "Den här listan har inga medlemmar än"
 
-#~ msgid "This mail has been added to the portal"
+#~ msgid "This email has been added to the portal"
 #~ msgstr "E-brevet har lagts till i portalen"
 
-#~ msgid "This mail has no content"
+#~ msgid "This email has no content"
 #~ msgstr "E-brevet har inget innehåll"
 
 #~ msgid "This method is not applicable to an IMAP permission"
@@ -8901,7 +8901,7 @@ msgstr ""
 #~ "För att välja en av vyerna - Lista, Ikoner eller Rutor - klicka på Visa "
 #~ "till högeri verktygsraden."
 
-#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgid "To send the email, click on Send on the upper right side."
 #~ msgstr "För att skicka e-brevet, klicka på Skicka på den övre högra sidan."
 
 #~ msgid "To upload a file, click on New > Upload new file in the toolbar."
@@ -8946,10 +8946,10 @@ msgstr ""
 #~ msgid "Top 10 folder size"
 #~ msgstr "Topp 10 mappstorlek"
 
-#~ msgid "Top 10 you got mail from"
+#~ msgid "Top 10 you got email from"
 #~ msgstr "De 10 du oftast får e-post från"
 
-#~ msgid "Top 10 you sent mail to"
+#~ msgid "Top 10 you sent email to"
 #~ msgstr "De 10 du oftast skickar e-post till"
 
 #~ msgid "Total cost"
@@ -8976,7 +8976,7 @@ msgstr ""
 #~ msgid "Tried to delete %1$d participants but only %2$d were deleted."
 #~ msgstr "Försökte ta bort %1$d deltagare men endast %2$d togs bort."
 
-#~ msgid "Trying to auto-configure your mail account"
+#~ msgid "Trying to auto-configure your email account"
 #~ msgstr "Försöker konfigurera ditt e-postkonto automatiskt"
 
 #~ msgid "Tuesday"
@@ -9152,8 +9152,8 @@ msgstr ""
 #~ msgid "Unable to load linked contacts : Context %1$d Contact %2$d"
 #~ msgstr "Oförmögen att ladda länkade kontakter : Kontext %1$d Kontakt %2$d"
 
-#~ msgid "Unable to load mail filter settings."
-#~ msgstr "Kan inte få kontakt med mailfilter-bakgrundsprogrammet."
+#~ msgid "Unable to load email filter settings."
+#~ msgstr "Kan inte få kontakt med emailfilter-bakgrundsprogrammet."
 
 #~ msgid "Unable to load objects. Context %1$d User %2$d"
 #~ msgstr "Oförmögen att ladda objekt. Kontext %1$d Användare %2$d"
@@ -9533,7 +9533,7 @@ msgstr ""
 #~ msgid "Use cursor keys to change the item position"
 #~ msgstr "Använd piltangenterna för att ändra objektets position"
 
-#~ msgid "Use fixed-width font for text mails"
+#~ msgid "Use fixed-width font for text emails"
 #~ msgstr "Använd teckensnitt med fast bredd för text-e-post"
 
 #~ msgid ""
@@ -9544,7 +9544,7 @@ msgstr ""
 #~ "Använd mappträdet för att komma åt egna, offentliga, eller delade filer. "
 #~ "Om mappträdet är dolt, klicka på Visa > Mappvy till höger i verktygsraden."
 
-#~ msgid "Use unified mail for this account"
+#~ msgid "Use unified email for this account"
 #~ msgstr "Använd enhetlig e-post för det här kontot"
 
 #~ msgid "Use username and password"
@@ -9584,7 +9584,7 @@ msgstr ""
 #~ "Användaren %1$s har inte tillåtelse att skapa undermapp i mapp %2$s i "
 #~ "kontext %3$s"
 
-#~ msgid "User %1$s has no mail module access due to user configuration"
+#~ msgid "User %1$s has no email module access due to user configuration"
 #~ msgstr ""
 #~ "Användaren %1$s har ingen access till e-post-modulen på grund av "
 #~ "användarinställningar"
@@ -9715,7 +9715,7 @@ msgstr ""
 #~ msgid "Waiting"
 #~ msgstr "Väntar"
 
-#~ msgid "Warning: This message might be a phishing or scam mail"
+#~ msgid "Warning: This message might be a phishing or scam email"
 #~ msgstr "Varning: Meddelandet kan vara phishing eller bluffpost"
 
 #~ msgid "Warnings when importing file: %i warnings"
@@ -10147,7 +10147,7 @@ msgstr ""
 #~ msgid "Your data has been saved"
 #~ msgstr "Din data har sparats"
 
-#~ msgid "Your mail address"
+#~ msgid "Your email address"
 #~ msgstr "Din e-postadress"
 
 #~ msgid "Your messages"

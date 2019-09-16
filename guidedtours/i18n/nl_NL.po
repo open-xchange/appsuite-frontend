@@ -102,7 +102,7 @@ msgid "Collaborating"
 msgstr "Samenwerken"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "Nieuw e-mailbericht opstellen"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -212,7 +212,7 @@ msgid "Edit documents"
 msgstr "Documenten bewerken"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr "Bewerken van meerdere e-mailberichten"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -269,7 +269,7 @@ msgid "Entering billing information"
 msgstr "Facturatie-informatie ingeven"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr "Voer het e-mailbericht in"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -404,7 +404,7 @@ msgstr ""
 "Muziek, Afbeeldingen en Video's"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "Een e-mailbericht openen in een apert scherm"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -412,7 +412,7 @@ msgid "Opening or closing the folder tree"
 msgstr "Openen of sluiten van de mappenboom"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "De e-mailinstellingen openen"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -432,7 +432,7 @@ msgid "Preview mode"
 msgstr "Voorbeeldoverzicht"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "E-mailconversaties lezen"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -468,11 +468,11 @@ msgstr ""
 "de groupware om uw telefoonnummer vragen."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "Versturen van e-mailberichten naar een contactpersoon"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "Versturen van het e-mailbericht"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -504,7 +504,7 @@ msgid "Sorting tasks"
 msgstr "Taken sorteren"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "Sorteren van e-mailberichten"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -642,13 +642,13 @@ msgstr ""
 "werkbalk. Selecteer een menu item in de layout sectie."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "Om een nieuw e-mailbericht te maken klikt u op Nieuw e-mailbericht opstellen "
 "in de werkbalk."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "Om een nieuw e-mailbericht te maken klikt u op 'Nieuw e-mailbericht "
 "opstellen' in de werkbalk."
@@ -841,7 +841,7 @@ msgstr ""
 "mailadres of op E-mailbericht verzenden in de werkbalk."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "Om een e-mailbericht te versturen klikt u op Verzenden"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -860,7 +860,7 @@ msgstr ""
 "van de menubalk."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 "Om e-mailberichten te sorteren klikt u op Sorteren op en kiest u een sorteer "
 "optie."
@@ -998,8 +998,8 @@ msgstr ""
 #~ msgstr[0] "%1$d uur en %2$s"
 #~ msgstr[1] "%1$d uur en %2$s"
 
-#~ msgid "%1$d mail"
-#~ msgid_plural "%1$d mails"
+#~ msgid "%1$d email"
+#~ msgid_plural "%1$d emails"
 #~ msgstr[0] "%1$d e-mailbericht"
 #~ msgstr[1] "%1$d e-mailberichten"
 
@@ -1031,13 +1031,13 @@ msgstr ""
 #~ msgid "%1$s is now connected with %2$s"
 #~ msgstr "%1$s is nu verbonden met %2$s"
 
-#~ msgid "%1$s mail"
-#~ msgid_plural "%1$s mails"
+#~ msgid "%1$s email"
+#~ msgid_plural "%1$s emails"
 #~ msgstr[0] "%1$s e-mailbericht"
 #~ msgstr[1] "%1$s e-mailberichten"
 
-#~ msgid "%1$s mail, %2$s unread"
-#~ msgid_plural "%1$s mails, %2$s unread"
+#~ msgid "%1$s email, %2$s unread"
+#~ msgid_plural "%1$s emails, %2$s unread"
 #~ msgstr[0] "%1$s e-mailbericht, %2$s ongelezen"
 #~ msgstr[1] "%1$s e-mailberichten, %2$s ongelezen"
 
@@ -1307,7 +1307,7 @@ msgstr ""
 #~ msgid "Add folder"
 #~ msgstr "Toevoegen map"
 
-#~ msgid "Add mail account"
+#~ msgid "Add email account"
 #~ msgstr "E-mailaccount toevoegen"
 
 #~ msgid "Add new account"
@@ -1583,7 +1583,7 @@ msgstr ""
 #~ "contactpersonen\" bij het versturen"
 
 #~ msgid ""
-#~ "Automatically delete a notification mail after it has been accepted or "
+#~ "Automatically delete a notification email after it has been accepted or "
 #~ "declined?"
 #~ msgstr ""
 #~ "Automatisch kennisgevingsberichten verwijderen als deze zijn geaccepteerd "
@@ -1875,7 +1875,7 @@ msgstr ""
 #~ msgid "Compose new email"
 #~ msgstr "Nieuw e-mailbericht opstellen"
 
-#~ msgid "Compose new mail"
+#~ msgid "Compose new email"
 #~ msgstr "Nieuw e-mailbericht opstellen"
 
 #~ msgid "Conditions"
@@ -2013,7 +2013,7 @@ msgstr ""
 #~ msgid "Couldn't load your contact data."
 #~ msgstr "Kan uw contactgegevens niet laden"
 
-#~ msgid "Couldn't load your mail filters."
+#~ msgid "Couldn't load your email filters."
 #~ msgstr "Kan uw e-mailfilters niet laden."
 
 #~ msgid "Couldn't load your vacation notice."
@@ -2264,8 +2264,8 @@ msgstr ""
 #~ msgid "Do you really want to delete this widget?"
 #~ msgstr "Weet u zeker dat u deze widget wilt verwijderen?"
 
-#~ msgid "Do you really want to discard this mail?"
-#~ msgstr "Weet u zeker dat u het opstellen van deze mail wilt afbreken?"
+#~ msgid "Do you really want to discard this email?"
+#~ msgstr "Weet u zeker dat u het opstellen van deze email wilt afbreken?"
 
 #~ msgid "Do you really want to discard your changes?"
 #~ msgstr "Weet u zeker dat u deze wijziging wilt afbreken?"
@@ -2303,8 +2303,8 @@ msgstr ""
 #~ msgstr ""
 #~ "Wilt u de hele reeks of slechts enkele afspraken van de reeks bewerken?"
 
-#~ msgid "Do you want to permanently delete this mail?"
-#~ msgid_plural "Do you want to permanently delete these mails?"
+#~ msgid "Do you want to permanently delete this email?"
+#~ msgid_plural "Do you want to permanently delete these emails?"
 #~ msgstr[0] "Weet u zeker dat u deze e-mail permanent wilt verwijderen?"
 #~ msgstr[1] "Weet u zeker dat u deze e-mails permanent wilt verwijderen?"
 
@@ -2349,7 +2349,7 @@ msgstr ""
 #~ msgid "Drop EML file here for import"
 #~ msgstr "Sleep hiernaartoe om deze e-mail te importeren"
 
-#~ msgid "Drop here to import this mail"
+#~ msgid "Drop here to import this email"
 #~ msgstr "Sleep hiernaartoe om deze e-mail te importeren"
 
 #~ msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
@@ -2482,7 +2482,7 @@ msgstr ""
 #~ msgstr "E-mailattentie voor deelnemer aan de taak?"
 
 #~ msgid ""
-#~ "Emails cannot be put into trash folder while your mail quota is exceeded."
+#~ "Emails cannot be put into trash folder while your email quota is exceeded."
 #~ msgstr ""
 #~ "E-mailberichten kunnen niet in de vuilnisbak worden geplaatst als uw "
 #~ "mailquota is overschreden."
@@ -2513,7 +2513,7 @@ msgstr ""
 #~ msgstr "Activeren"
 
 # (Reinout) Portal = portaal, niet portable
-#~ msgid "Enabled for all mail folders"
+#~ msgid "Enabled for all email folders"
 #~ msgstr "Ingeschakeld voor alle e-mailmappen"
 
 #~ msgid "Enabled for inbox only"
@@ -2763,7 +2763,7 @@ msgstr ""
 #~ msgid "First name Last name"
 #~ msgstr "Voornaam Achternaam"
 
-#~ msgid "Flag mail with"
+#~ msgid "Flag email with"
 #~ msgstr "Markeer met vlag"
 
 #~ msgid "Flickr"
@@ -3219,11 +3219,11 @@ msgstr ""
 #~ msgstr "Liked een link: %s"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after"
+#~ msgid "Line wrap when sending text emails after"
 #~ msgstr "Regel afbreken bij het verzenden van berichten in platte tekst na:"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after how much characters"
+#~ msgid "Line wrap when sending text emails after how much characters"
 #~ msgstr "Regel afbreken bij het verzenden van berichten in platte tekst na:"
 
 #~ msgid "LinkedIn"
@@ -3384,7 +3384,7 @@ msgstr ""
 #~ msgid "Mark all day appointments as free"
 #~ msgstr "Markeer alle dagafspraken als vrij"
 
-#~ msgid "Mark all mails as read"
+#~ msgid "Mark all emails as read"
 #~ msgstr "Alle e-mailberichten markeren als gelezen"
 
 #~ msgid "Mark as distributionlist"
@@ -3405,7 +3405,7 @@ msgstr ""
 #~ msgid "Mark as unread"
 #~ msgstr "Markeren als ongelezen"
 
-#~ msgid "Mark mail as"
+#~ msgid "Mark email as"
 #~ msgstr "Markeer e-mail als"
 
 #~ msgid "Mark read"
@@ -3488,7 +3488,7 @@ msgstr ""
 #~ msgid "Move to folder"
 #~ msgstr "Verplaats naar map"
 
-#~ msgid "Moving mails ... This may take a few seconds."
+#~ msgid "Moving emails ... This may take a few seconds."
 #~ msgstr "E-mailberichten verplaatsen ... Dit kan enkele seconden duren."
 
 #~ msgid "My contact data"
@@ -3609,16 +3609,16 @@ msgstr ""
 #~ msgid "No lost requests"
 #~ msgstr "Geen verloren verzoeken"
 
-#~ msgid "No mails"
+#~ msgid "No emails"
 #~ msgstr "Geen e-mailberichten"
 
-#~ msgid "No mails found for \"%s\""
+#~ msgid "No emails found for \"%s\""
 #~ msgstr "Geen e-mailberichten gevonden voor \"%s\""
 
-#~ msgid "No mails in this folder"
+#~ msgid "No emails in this folder"
 #~ msgstr "Geen e-mailberichten in deze map"
 
-#~ msgid "No mails in your inbox"
+#~ msgid "No emails in your inbox"
 #~ msgstr "Geen e-mailberichten in uw Postvak IN"
 
 #~ msgid "No matching templates on this Server"
@@ -3745,7 +3745,7 @@ msgstr ""
 #~ msgid "On every new notification"
 #~ msgstr "Bij alle nieuwe meldingen"
 
-#~ msgid "On new notifications except mails"
+#~ msgid "On new notifications except emails"
 #~ msgstr "Bij nieuwe meldingen behalve e-mailberichten"
 
 #~ msgid "On work days"
@@ -4119,7 +4119,7 @@ msgstr ""
 #~ msgid "Press to hide all appointment reminders."
 #~ msgstr "Klik hier om alle afspraakherinneringen te verbergen."
 
-#~ msgid "Press to hide all notifications for new mails."
+#~ msgid "Press to hide all notifications for new emails."
 #~ msgstr ""
 #~ "Klik hier om alle notificaties voor nieuwe e-mailberichten te verbergen."
 
@@ -4236,7 +4236,7 @@ msgstr ""
 #~ msgid "Reauthorize"
 #~ msgstr "Herbevestigen"
 
-#~ msgid "Received mails"
+#~ msgid "Received emails"
 #~ msgstr "Ontvangen berichten"
 
 # Reinout: Onder voorbehoud?
@@ -4450,7 +4450,7 @@ msgstr ""
 #~ msgstr "Opgeslagen in"
 
 #, fuzzy
-#~ msgid "Saved mail attachment"
+#~ msgid "Saved email attachment"
 #~ msgstr "Bijlage verwijderen"
 
 #, fuzzy
@@ -4519,16 +4519,16 @@ msgstr ""
 #~ msgid "Send as vCard"
 #~ msgstr "Versturen als vCard"
 
-#~ msgid "Send by mail"
+#~ msgid "Send by email"
 #~ msgstr "Verzenden via e-mailbericht"
 
-#~ msgid "Send mail"
+#~ msgid "Send email"
 #~ msgstr "E-mailbericht verzenden"
 
-#~ msgid "Send mail to all participants"
+#~ msgid "Send email to all participants"
 #~ msgstr "Verstuur een e-mail naar alle deelnemers"
 
-#~ msgid "Send new mail"
+#~ msgid "Send new email"
 #~ msgstr "Verzend nieuw e-mailbericht"
 
 #~ msgid "Send vacation notice during this time only"
@@ -4546,7 +4546,7 @@ msgstr ""
 #~ msgid "Sent from %s via mobile"
 #~ msgstr "Verzonden van %s via mobiel"
 
-#~ msgid "Sent mails"
+#~ msgid "Sent emails"
 #~ msgstr "Verzonden e-mails"
 
 #~ msgid "September"
@@ -4617,7 +4617,7 @@ msgstr ""
 #~ msgid "Show all items"
 #~ msgstr "Toon meer items"
 
-#~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
+#~ msgid "Show all emails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""
 #~ "Toon alle e-mailberichten. Opmerking: Berichten worden niet meer "
 #~ "gegroepeerd als conversatie."
@@ -4873,7 +4873,7 @@ msgstr ""
 #~ msgid "TTY/TDD"
 #~ msgstr "Teletype/TDD"
 
-#~ msgid "Tag mail with"
+#~ msgid "Tag email with"
 #~ msgstr "Labelen met"
 
 #~ msgid "Task"
@@ -5354,7 +5354,7 @@ msgstr ""
 #~ msgstr "Er zijn geen regels gedefinieerd"
 
 #~ msgid ""
-#~ "There was no suitable server found for this mail/password combination"
+#~ "There was no suitable server found for this email/password combination"
 #~ msgstr ""
 #~ "Er is geen geschikte server gevonden voor deze e-mail/wachtwoord-"
 #~ "combinatie"
@@ -5484,7 +5484,7 @@ msgstr ""
 #~ msgid "This is not a valid email address"
 #~ msgstr "Dit is geen geldig e-mailadres"
 
-#~ msgid "This is not a valid mail address"
+#~ msgid "This is not a valid email address"
 #~ msgstr "Dit is geen geldig e-mailadres!"
 
 #~ msgid "This is not a valid user or group."
@@ -5493,10 +5493,10 @@ msgstr ""
 #~ msgid "This list has no contacts yet"
 #~ msgstr "Deze lijst heeft nog geen contacten"
 
-#~ msgid "This mail has been added to the portal"
+#~ msgid "This email has been added to the portal"
 #~ msgstr "Dit e-mailbericht is toegevoegd aan het portaal"
 
-#~ msgid "This mail has no content"
+#~ msgid "This email has no content"
 #~ msgstr "Dit e-mailbericht heeft geen inhoud"
 
 #~ msgid "This note will not be printed"
@@ -5638,7 +5638,7 @@ msgstr ""
 #~ "Om het Lijst-, Pictogrammen- of Vlakkenoverzicht te selecteren klikt u op "
 #~ "Overzicht aan de rechterkant in de werkbalk."
 
-#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgid "To send the email, click on Send on the upper right side."
 #~ msgstr ""
 #~ "Om een e-mailbericht te versturen klikt u op Verzenden in de "
 #~ "rechterbovenhoek."
@@ -5679,10 +5679,10 @@ msgstr ""
 #~ msgid "Top 10 folder size"
 #~ msgstr "Top 10 mapgrote"
 
-#~ msgid "Top 10 you got mail from"
+#~ msgid "Top 10 you got email from"
 #~ msgstr "Top 10 ontvangen van"
 
-#~ msgid "Top 10 you sent mail to"
+#~ msgid "Top 10 you sent email to"
 #~ msgstr "Top 10 verzendlijst"
 
 #~ msgid "Total cost"
@@ -5697,7 +5697,7 @@ msgstr ""
 #~ msgid "Trash folder"
 #~ msgstr "Prullenbak"
 
-#~ msgid "Trying to auto-configure your mail account"
+#~ msgid "Trying to auto-configure your email account"
 #~ msgstr "Proberen uw e-mailaccount automatisch te configureren"
 
 #~ msgid "Tuesday"
@@ -5721,7 +5721,7 @@ msgstr ""
 #~ msgid "URL"
 #~ msgstr "URL"
 
-#~ msgid "Unable to load mail filter settings."
+#~ msgid "Unable to load email filter settings."
 #~ msgstr "Mailfilter instellingen kunnen niet geladen worden."
 
 #~ msgid "Unconfirmed"
@@ -5832,7 +5832,7 @@ msgstr ""
 #~ msgid "Use cursor keys to change the item position"
 #~ msgstr "Gebruik de pijltjestoetsen om de positie van het item te veranderen"
 
-#~ msgid "Use fixed-width font for text mails"
+#~ msgid "Use fixed-width font for text emails"
 #~ msgstr "Gebruik lettertype met vaste breedte voor tekstberichten"
 
 #~ msgid ""
@@ -5844,8 +5844,8 @@ msgstr ""
 #~ "Als de mappenboom verborgen is klikt u op Overzicht > Mappenoverzicht aan "
 #~ "de rechterkant van de werkbalk."
 
-#~ msgid "Use unified mail for this account"
-#~ msgstr "Gebruik verzamelde mail voor dit account"
+#~ msgid "Use unified email for this account"
+#~ msgstr "Gebruik verzamelde email voor dit account"
 
 #~ msgid "Use username and password"
 #~ msgstr "Gebruik gebruikersnaam en wachtwoord"
@@ -5890,7 +5890,7 @@ msgstr ""
 #~ msgid "Waiting"
 #~ msgstr "Wachten"
 
-#~ msgid "Warning: This message might be a phishing or scam mail"
+#~ msgid "Warning: This message might be a phishing or scam email"
 #~ msgstr "Waarschuwing: Dit bericht kan e-mailzwendel zijn!"
 
 #~ msgid "Weather • Season"
@@ -6164,7 +6164,7 @@ msgstr ""
 #~ msgid "Your current password"
 #~ msgstr "Uw huidige wachtwoord"
 
-#~ msgid "Your mail address"
+#~ msgid "Your email address"
 #~ msgstr "Uw e-mailadres"
 
 #~ msgid "Your messages"

@@ -35,7 +35,7 @@ define('io.ox/tours/utils', [
                         $(that).one('finishedCreating', yielded);//calendar needs some time to set up the view
                         that.create({});
                     } else if (name === 'io.ox/mail/write/main') {
-                        that.compose({ subject: '[Guided tours] Example e-mail' });
+                        that.compose({ subject: '[Guided tours] Example email' });
                         yielded();
                     } else {
                         yielded();

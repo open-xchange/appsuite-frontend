@@ -100,7 +100,7 @@ msgid "Collaborating"
 msgstr "Совместная работа"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "Создание почтового сообщения"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -207,7 +207,7 @@ msgid "Edit documents"
 msgstr "Редактирование документов"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr "Одновременное редактирование"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -260,7 +260,7 @@ msgid "Entering billing information"
 msgstr "Сведения об оплате"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr "Ввод текста сообщения"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -390,7 +390,7 @@ msgstr ""
 "включили папки Documents, Music, Pictures и Videos."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "Открытие письма в новом окне"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -398,7 +398,7 @@ msgid "Opening or closing the folder tree"
 msgstr "Просмотр структуры папок"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "Доступ к почтовым настройкам"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -418,7 +418,7 @@ msgid "Preview mode"
 msgstr "Режим предварительного просмотра"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "Чтение обсуждений"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -452,11 +452,11 @@ msgid ""
 msgstr "Для получения кода в СМС-сообщении необходимо указать номер телефона."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "Отправка сообщения на заданный адрес"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "Отправка сообщения"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -486,7 +486,7 @@ msgid "Sorting tasks"
 msgstr "Сортировка задач"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "Сортировка почты"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -617,11 +617,11 @@ msgstr ""
 "выберите формат."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "Чтобы создать новое письмо, выберите «Создать» в панели инструментов."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "Чтобы создать новое письмо, нажмите значок создания сообщения в верхней "
 "части."
@@ -808,7 +808,7 @@ msgstr ""
 "почту»."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "Чтобы отправить письмо, нажмите «Отправить»"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -825,7 +825,7 @@ msgid ""
 msgstr "Чтобы завершить сеанс, нажмите значок выхода в правом верхнем углу."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 "Чтобы отсортировать сообщения, нажмите «Упорядочить» и выберите критерий "
 "сортировки."
@@ -971,8 +971,8 @@ msgstr ""
 #~ msgstr[1] "%1$d часа %2$s"
 #~ msgstr[2] "%1$d часов %2$s"
 
-#~ msgid "%1$d mail"
-#~ msgid_plural "%1$d mails"
+#~ msgid "%1$d email"
+#~ msgid_plural "%1$d emails"
 #~ msgstr[0] "%1$d сообщение"
 #~ msgstr[1] "%1$d сообщения"
 #~ msgstr[2] "%1$d сообщений"
@@ -1003,14 +1003,14 @@ msgstr ""
 #~ msgid "%1$s is now connected with %2$s"
 #~ msgstr "%1$s теперь связан с %2$s"
 
-#~ msgid "%1$s mail"
-#~ msgid_plural "%1$s mails"
+#~ msgid "%1$s email"
+#~ msgid_plural "%1$s emails"
 #~ msgstr[0] "%1$s сообщение"
 #~ msgstr[1] "%1$s сообщения"
 #~ msgstr[2] "%1$s сообщений"
 
-#~ msgid "%1$s mail, %2$s unread"
-#~ msgid_plural "%1$s mails, %2$s unread"
+#~ msgid "%1$s email, %2$s unread"
+#~ msgid_plural "%1$s emails, %2$s unread"
 #~ msgstr[0] "%1$s сообщение, не прочитано: %2$s"
 #~ msgstr[1] "%1$s сообщения, не прочитано: %2$s"
 #~ msgstr[2] "%1$s сообщений, не прочитано: %2$s"
@@ -1322,7 +1322,7 @@ msgstr ""
 #~ msgid "Add folder menu"
 #~ msgstr "Добавить папку меню"
 
-#~ msgid "Add mail account"
+#~ msgid "Add email account"
 #~ msgstr "Добавить учетную запись почты"
 
 #~ msgid "Add new folder"
@@ -1647,7 +1647,7 @@ msgstr ""
 #~ "сообщений"
 
 #~ msgid ""
-#~ "Automatically delete a notification mail after it has been accepted or "
+#~ "Automatically delete a notification email after it has been accepted or "
 #~ "declined?"
 #~ msgstr "Автоматически удалять уведомление после его принятия или отказа."
 
@@ -1954,7 +1954,7 @@ msgstr ""
 #~ msgid "Compose new email"
 #~ msgstr "Создать новое сообщение"
 
-#~ msgid "Compose new mail"
+#~ msgid "Compose new email"
 #~ msgstr "Создать новое сообщение"
 
 #~ msgid "Conditions"
@@ -2111,7 +2111,7 @@ msgstr ""
 #~ msgid "Couldn't load your contact data."
 #~ msgstr "Не удалось загрузить контактные данные."
 
-#~ msgid "Couldn't load your mail filters."
+#~ msgid "Couldn't load your email filters."
 #~ msgstr "Не удалось загрузить фильтры."
 
 #~ msgid "Couldn't load your vacation notice."
@@ -2370,7 +2370,7 @@ msgstr ""
 #~ msgid "Do you really want to delete this widget?"
 #~ msgstr "Удалить модуль?"
 
-#~ msgid "Do you really want to discard this mail?"
+#~ msgid "Do you really want to discard this email?"
 #~ msgstr "Удалить сообщение?"
 
 #~ msgid "Do you really want to discard your changes?"
@@ -2405,11 +2405,11 @@ msgstr ""
 #~ "series?"
 #~ msgstr "Изменить всю группу или отдельную встречу?"
 
-#~ msgid "Do you want to keep the draft after sending this mail?"
+#~ msgid "Do you want to keep the draft after sending this email?"
 #~ msgstr "Хранить черновик после отправки сообщения?"
 
-#~ msgid "Do you want to permanently delete this mail?"
-#~ msgid_plural "Do you want to permanently delete these mails?"
+#~ msgid "Do you want to permanently delete this email?"
+#~ msgid_plural "Do you want to permanently delete these emails?"
 #~ msgstr[0] "Удалить сообщение безвозвратно?"
 #~ msgstr[1] "Удалить сообщения безвозвратно?"
 #~ msgstr[2] "Удалить сообщения безвозвратно?"
@@ -2458,7 +2458,7 @@ msgstr ""
 #~ msgid "Drop EML file here for import"
 #~ msgstr "Перетащите сюда для импорта сообщения"
 
-#~ msgid "Drop here to import this mail"
+#~ msgid "Drop here to import this email"
 #~ msgstr "Перетащите сюда для импорта сообщения"
 
 #~ msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
@@ -2605,7 +2605,7 @@ msgstr ""
 #~ msgstr "Уведомлять участника задачи?"
 
 #~ msgid ""
-#~ "Emails cannot be put into trash folder while your mail quota is exceeded."
+#~ "Emails cannot be put into trash folder while your email quota is exceeded."
 #~ msgstr "Если квота превышена, сообщения не могут перемещаться в корзину."
 
 #~ msgid "Employee ID"
@@ -2633,7 +2633,7 @@ msgstr ""
 #~ msgid "Enabled"
 #~ msgstr "Включено"
 
-#~ msgid "Enabled for all mail folders"
+#~ msgid "Enabled for all email folders"
 #~ msgstr "Включено для всех папок"
 
 #~ msgid "Enabled for inbox only"
@@ -2897,7 +2897,7 @@ msgstr ""
 #~ msgid "Fit to screen width"
 #~ msgstr "По ширине экрана"
 
-#~ msgid "Flag mail with"
+#~ msgid "Flag email with"
 #~ msgstr "Флаг: "
 
 #~ msgid "Flickr"
@@ -3393,14 +3393,14 @@ msgstr ""
 #~ msgstr "Понравилось: %s"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after"
+#~ msgid "Line wrap when sending text emails after"
 #~ msgstr "Перенос строк после"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after how much characters"
+#~ msgid "Line wrap when sending text emails after how much characters"
 #~ msgstr "Перенос строк после"
 
-#~ msgid "Line wrap when sending text mails after: "
+#~ msgid "Line wrap when sending text emails after: "
 #~ msgstr "Перенос строк после:"
 
 #~ msgid "Link"
@@ -3430,7 +3430,7 @@ msgstr ""
 #~ msgid "Load Error"
 #~ msgstr "Ошибка загрузки"
 
-#~ msgid "Load all mails. This might take some time."
+#~ msgid "Load all emails. This might take some time."
 #~ msgstr "Загрузить все сообщения. Это может занять некоторое время."
 
 #~ msgid "Location"
@@ -3584,7 +3584,7 @@ msgstr ""
 #~ msgid "Mark all day appointments as free"
 #~ msgstr "Отметить назначенные на день встречи как незанятые"
 
-#~ msgid "Mark all mails as read"
+#~ msgid "Mark all emails as read"
 #~ msgstr "Отметить все как прочитанные"
 
 #~ msgid "Mark as distributionlist"
@@ -3605,7 +3605,7 @@ msgstr ""
 #~ msgid "Mark as unread"
 #~ msgstr "Непрочитанное"
 
-#~ msgid "Mark mail as"
+#~ msgid "Mark email as"
 #~ msgstr "Отметить как"
 
 #~ msgid "Mark read"
@@ -3694,7 +3694,7 @@ msgstr ""
 #~ msgid "Move to folder"
 #~ msgstr "Переместить в папку"
 
-#~ msgid "Moving mails ... This may take a few seconds."
+#~ msgid "Moving emails ... This may take a few seconds."
 #~ msgstr "Перемещение сообщений... Это может занять несколько секунд."
 
 #~ msgid "My contact data"
@@ -3824,19 +3824,19 @@ msgstr ""
 #~ msgid "No lost requests"
 #~ msgstr "Нет потерянных запросов"
 
-#~ msgid "No mails"
+#~ msgid "No emails"
 #~ msgstr "Нет писем"
 
-#~ msgid "No mails at all!"
+#~ msgid "No emails at all!"
 #~ msgstr "Нет сообщений."
 
-#~ msgid "No mails found for \"%s\""
+#~ msgid "No emails found for \"%s\""
 #~ msgstr "Нет сообщений для «%s»."
 
-#~ msgid "No mails in this folder"
+#~ msgid "No emails in this folder"
 #~ msgstr "Нет сообщений в папке"
 
-#~ msgid "No mails in your inbox"
+#~ msgid "No emails in your inbox"
 #~ msgstr "Нет входящих сообщений."
 
 #~ msgid "No matching templates on this Server"
@@ -3978,7 +3978,7 @@ msgstr ""
 #~ msgid "On every new notification"
 #~ msgstr "При новых уведомлениях"
 
-#~ msgid "On new notifications except mails"
+#~ msgid "On new notifications except emails"
 #~ msgstr "При новых уведомлениях за исключением почтовых"
 
 #~ msgid "On work days"
@@ -4367,7 +4367,7 @@ msgstr ""
 #~ msgid "Press to hide all appointment reminders."
 #~ msgstr "Нажмите, чтобы скрыть напоминания о встречах."
 
-#~ msgid "Press to hide all notifications for new mails."
+#~ msgid "Press to hide all notifications for new emails."
 #~ msgstr "Нажмите, чтобы скрыть уведомления о новых сообщениях."
 
 #~ msgid "Press to hide all notifications for overdue tasks."
@@ -4496,7 +4496,7 @@ msgstr ""
 #~ msgid "Reauthorize"
 #~ msgstr "Авторизовать повторно"
 
-#~ msgid "Received mails"
+#~ msgid "Received emails"
 #~ msgstr "Полученные сообщения"
 
 #~ msgid "Recent activities"
@@ -4714,7 +4714,7 @@ msgstr ""
 #~ msgstr "Сохранено в"
 
 #, fuzzy
-#~ msgid "Saved mail attachment"
+#~ msgid "Saved email attachment"
 #~ msgstr "Удалить вложение"
 
 #, fuzzy
@@ -4787,26 +4787,26 @@ msgstr ""
 #~ msgid "Send as internal link"
 #~ msgstr "Отправить как внутреннюю ссылку"
 
-#~ msgid "Send as mail"
+#~ msgid "Send as email"
 #~ msgstr "Отправить по почте"
 
 #~ msgid "Send as vCard"
 #~ msgstr "Отправить vCard"
 
-#~ msgid "Send by mail"
+#~ msgid "Send by email"
 #~ msgstr "Отправить по почте"
 
 #, fuzzy
 #~ msgid "Send feedback"
 #~ msgstr "Отправить почту"
 
-#~ msgid "Send mail"
+#~ msgid "Send email"
 #~ msgstr "Отправить почту"
 
-#~ msgid "Send mail to all participants"
+#~ msgid "Send email to all participants"
 #~ msgstr "Отправить сообщение участникам"
 
-#~ msgid "Send new mail"
+#~ msgid "Send new email"
 #~ msgstr "Отправить новое сообщение"
 
 #~ msgid "Send vacation notice during this time only"
@@ -4824,7 +4824,7 @@ msgstr ""
 #~ msgid "Sent from %s via mobile"
 #~ msgstr "Отправлено с мобильного из %s"
 
-#~ msgid "Sent mails"
+#~ msgid "Sent emails"
 #~ msgstr "Отправленные"
 
 #~ msgid "September"
@@ -4892,7 +4892,7 @@ msgstr ""
 #~ msgid "Show all items"
 #~ msgstr "Показать все"
 
-#~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
+#~ msgid "Show all emails. Note: Mails are no longer grouped by conversation."
 #~ msgstr "Показать все сообщения. Они не будут сгруппированы по обсуждениям."
 
 #~ msgid "Show all my appointments from all calendars"
@@ -5166,7 +5166,7 @@ msgstr ""
 #~ msgid "TTY/TDD"
 #~ msgstr "TTY/TDD"
 
-#~ msgid "Tag mail with"
+#~ msgid "Tag email with"
 #~ msgstr "Метка: "
 
 #~ msgid "Task"
@@ -5639,7 +5639,7 @@ msgstr ""
 #~ msgstr "Нет правил."
 
 #~ msgid ""
-#~ "There was no suitable server found for this mail/password combination"
+#~ "There was no suitable server found for this email/password combination"
 #~ msgstr "Не найден сервер для заданной комбинации почты и пароля."
 
 #~ msgid "There were not activities in your network"
@@ -5776,7 +5776,7 @@ msgstr ""
 #~ msgid "This is not a valid email address"
 #~ msgstr "Недопустимый электронный адрес"
 
-#~ msgid "This is not a valid mail address"
+#~ msgid "This is not a valid email address"
 #~ msgstr "Недопустимый электронный адрес"
 
 #~ msgid "This is not a valid user or group."
@@ -5785,10 +5785,10 @@ msgstr ""
 #~ msgid "This list has no contacts yet"
 #~ msgstr "В списке нет участников"
 
-#~ msgid "This mail has been added to the portal"
+#~ msgid "This email has been added to the portal"
 #~ msgstr "Это сообщение добавлено в портал"
 
-#~ msgid "This mail has no content"
+#~ msgid "This email has no content"
 #~ msgstr "Пустое сообщение"
 
 #~ msgid "This note will not be printed"
@@ -5933,7 +5933,7 @@ msgstr ""
 #~ "Для переключения между списком, значками и секциями выберите «Вид» в "
 #~ "правой части панели инструментов."
 
-#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgid "To send the email, click on Send on the upper right side."
 #~ msgstr "Чтобы отправить письмо, нажмите «Отправить»."
 
 #~ msgid "To upload a file, click on New > Upload new file in the toolbar."
@@ -5970,10 +5970,10 @@ msgstr ""
 #~ msgid "Top 10 folder size"
 #~ msgstr "Топ 10 размеров папок"
 
-#~ msgid "Top 10 you got mail from"
+#~ msgid "Top 10 you got email from"
 #~ msgstr "10 популярных отправителей"
 
-#~ msgid "Top 10 you sent mail to"
+#~ msgid "Top 10 you sent email to"
 #~ msgstr "10 популярных получателей"
 
 #~ msgid "Total cost"
@@ -5994,7 +5994,7 @@ msgstr ""
 #~ msgid "Trash folder"
 #~ msgstr "Папка корзины"
 
-#~ msgid "Trying to auto-configure your mail account"
+#~ msgid "Trying to auto-configure your email account"
 #~ msgstr "Автоматическая конфигурация вашей учетной записи..."
 
 #~ msgid "Tuesday"
@@ -6021,7 +6021,7 @@ msgstr ""
 #~ msgid "URL"
 #~ msgstr "URL"
 
-#~ msgid "Unable to load mail filter settings."
+#~ msgid "Unable to load email filter settings."
 #~ msgstr "Не удалось загрузить параметры почтового фильтра."
 
 #~ msgid "Unconfirmed"
@@ -6132,7 +6132,7 @@ msgstr ""
 #~ msgid "Use cursor keys to change the item position"
 #~ msgstr "Чтобы изменить позицию элемента, используйте клавиши стрелок."
 
-#~ msgid "Use fixed-width font for text mails"
+#~ msgid "Use fixed-width font for text emails"
 #~ msgstr "Фиксированный шрифт для текстовых сообщений"
 
 #~ msgid ""
@@ -6144,7 +6144,7 @@ msgstr ""
 #~ "своим и общим файлам. Если дерево скрыто, в панели инструментов выберите "
 #~ "«Вид > Папки»."
 
-#~ msgid "Use unified mail for this account"
+#~ msgid "Use unified email for this account"
 #~ msgstr "Использовать Unified Mail"
 
 #~ msgid "Use username and password"
@@ -6193,7 +6193,7 @@ msgstr ""
 #~ msgid "Waiting"
 #~ msgstr "Ожидание"
 
-#~ msgid "Warning: This message might be a phishing or scam mail"
+#~ msgid "Warning: This message might be a phishing or scam email"
 #~ msgstr ""
 #~ "Предупреждение. Возможно, это поддельное или мошенническое сообщение."
 
@@ -6476,7 +6476,7 @@ msgstr ""
 #~ msgid "Your data has been saved"
 #~ msgstr "Данные сохранены"
 
-#~ msgid "Your mail address"
+#~ msgid "Your email address"
 #~ msgstr "Почтовый адрес"
 
 #~ msgid "Your messages"
@@ -6497,7 +6497,7 @@ msgstr ""
 #~ msgid "Your password has been changed"
 #~ msgstr "Ваш пароль был изменен"
 
-#~ msgid "Your primary mail account can not be deleted."
+#~ msgid "Your primary email account can not be deleted."
 #~ msgstr "Основная учетная запись не может быть удалена."
 
 #~ msgid "Your selected picture will be displayed after saving"

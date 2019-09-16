@@ -97,7 +97,7 @@ msgid "Collaborating"
 msgstr "Сътрудничество"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "Съставяне на нова електронна поща"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -203,7 +203,7 @@ msgid "Edit documents"
 msgstr "Редактиране на документи"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr "Редактиране на няколко електронни писма"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -260,7 +260,7 @@ msgid "Entering billing information"
 msgstr "Въвеждане на информация за плащане"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr "Въвеждане на текста на електронната поща"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -392,7 +392,7 @@ msgstr ""
 "снимки и видеоклипове."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "Отваряне на електронна поща в отделен прозорец"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -400,7 +400,7 @@ msgid "Opening or closing the folder tree"
 msgstr "Отваряне или затваряне на дървото на папките"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "Отваряне на настройките за електронна поща"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -420,7 +420,7 @@ msgid "Preview mode"
 msgstr "Режим на визуализация"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "Четене на разговори по електронната поща"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -454,11 +454,11 @@ msgid ""
 msgstr ""
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "Изпращане на електронна поща до контакт"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "Изпращане на електронната поща"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -490,7 +490,7 @@ msgid "Sorting tasks"
 msgstr "Сортиране на задачи"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "Сортиране на имейлите ви"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -628,13 +628,13 @@ msgstr ""
 "инструменти. Изберете елемент от менюто в оформлението."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "За да създадете нова електронна поща, кликнете върху \"Изготвяне\" в лентата "
 "с инструменти."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "За да създадете нова електронна поща, кликнете върху \"Създаване на нова "
 "електронна поща\" в лентата с инструменти."
@@ -835,7 +835,7 @@ msgstr ""
 "електронна поща или върху Изпращане на имейл в лентата с инструменти."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "За да изпратите електронната поща, кликнете върху Изпращане"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -855,7 +855,7 @@ msgstr ""
 "горната дясна част на лентата с менюта. Изберете Изход."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 "За да сортирате имейлите, кликнете върху Сортиране по. Изберете критерии за "
 "сортиране."

@@ -99,7 +99,7 @@ msgid "Collaborating"
 msgstr "Samarbejde"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "Skriver en ny e-mail"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -208,7 +208,7 @@ msgid "Edit documents"
 msgstr "Redigér dokumenter"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr "Redigering af flere e-mails"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -264,7 +264,7 @@ msgid "Entering billing information"
 msgstr "Indtaster faktureringsoplysninger"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr "Indtastning af e-mail-teksten"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -394,7 +394,7 @@ msgstr ""
 "billeder og dine videoer."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "Åbne en e-mail i et separat vindue"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -402,7 +402,7 @@ msgid "Opening or closing the folder tree"
 msgstr "Åbning eller lukning af mappetræet"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "Åbner E-mail-indstillingerne"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -422,7 +422,7 @@ msgid "Preview mode"
 msgstr "Forhåndsvisningsmodus"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "Læs e-mail-samtaler"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -458,11 +458,11 @@ msgstr ""
 "spurgt om et telefonnummer."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "Send en e-mail til en kontakt"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "Sender e-mail'en"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -493,7 +493,7 @@ msgid "Sorting tasks"
 msgstr "Sorterer opgaver"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "Sortering af dine e-mails"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -628,11 +628,11 @@ msgstr ""
 "Vælg en menuindgang i layoutet."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "For skrive en ny e-mail, klik på Skriv e-mail i værktøjslinjen."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "For at oprette en ny e-mail, klik på Skriv ny e-mail i værktøjslinjen."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -818,7 +818,7 @@ msgstr ""
 "Send e-mail i værktøjslinjen."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "For at sende e-mail'en, klik på Send."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -835,7 +835,7 @@ msgid ""
 msgstr "For at logge ud, klik på ikonet log-ud øverst til højre i menubjælken."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 "For at sortere e-mail, klik på Sortér efter. Vælg et sorteringskriterie."
 
@@ -968,8 +968,8 @@ msgstr ""
 #~ msgstr[0] "%1$d time og %2$s"
 #~ msgstr[1] "%1$d timer og %2$s"
 
-#~ msgid "%1$d mail"
-#~ msgid_plural "%1$d mails"
+#~ msgid "%1$d email"
+#~ msgid_plural "%1$d emails"
 #~ msgstr[0] "%1$d e-mail"
 #~ msgstr[1] "%1$d e-mails"
 
@@ -999,13 +999,13 @@ msgstr ""
 #~ msgid "%1$s is now connected with %2$s"
 #~ msgstr "%1$s er nu forbundet med %2$s"
 
-#~ msgid "%1$s mail"
-#~ msgid_plural "%1$s mails"
+#~ msgid "%1$s email"
+#~ msgid_plural "%1$s emails"
 #~ msgstr[0] "%1$s e-mail"
 #~ msgstr[1] "%1$s e-mails"
 
-#~ msgid "%1$s mail, %2$s unread"
-#~ msgid_plural "%1$s mails, %2$s unread"
+#~ msgid "%1$s email, %2$s unread"
+#~ msgid_plural "%1$s emails, %2$s unread"
 #~ msgstr[0] "%1$s e-mail, %2$s ulæst"
 #~ msgstr[1] "%1$s e-mails, %2$s ulæste"
 
@@ -1287,7 +1287,7 @@ msgstr ""
 #~ msgid "Add folder menu"
 #~ msgstr "Tilføj mappemnu"
 
-#~ msgid "Add mail account"
+#~ msgid "Add email account"
 #~ msgstr "Tilføj e-mail konto"
 
 #~ msgid "Add member"
@@ -1601,7 +1601,7 @@ msgstr ""
 #~ "sendes?"
 
 #~ msgid ""
-#~ "Automatically delete a notification mail after it has been accepted or "
+#~ "Automatically delete a notification email after it has been accepted or "
 #~ "declined?"
 #~ msgstr ""
 #~ "Slet automatisk en e-mailunderretning efter at den er blevet accepteret "
@@ -1897,7 +1897,7 @@ msgstr ""
 #~ msgid "Compose new email"
 #~ msgstr "Skriv ny e-mail"
 
-#~ msgid "Compose new mail"
+#~ msgid "Compose new email"
 #~ msgstr "Skriv ny e-mail"
 
 #~ msgid "Conditions"
@@ -2044,7 +2044,7 @@ msgstr ""
 #~ msgid "Couldn't load your contact data."
 #~ msgstr "Dine kontaktdata kunne ikke indlæses."
 
-#~ msgid "Couldn't load your mail filters."
+#~ msgid "Couldn't load your email filters."
 #~ msgstr "Kunne ikke indlæse dine e-mail-filtre."
 
 #~ msgid "Couldn't load your vacation notice."
@@ -2296,7 +2296,7 @@ msgstr ""
 #~ msgid "Do you really want to delete this widget?"
 #~ msgstr "Vil du virkelig slette denne widget?"
 
-#~ msgid "Do you really want to discard this mail?"
+#~ msgid "Do you really want to discard this email?"
 #~ msgstr "Vil du virkelig kassere denne e-mail?"
 
 #~ msgid "Do you really want to discard your changes?"
@@ -2331,8 +2331,8 @@ msgstr ""
 #~ "series?"
 #~ msgstr "Vil du redigere hele serien, eller kun én aftale i serien?"
 
-#~ msgid "Do you want to permanently delete this mail?"
-#~ msgid_plural "Do you want to permanently delete these mails?"
+#~ msgid "Do you want to permanently delete this email?"
+#~ msgid_plural "Do you want to permanently delete these emails?"
 #~ msgstr[0] "Vil du virkelig slette denne e-mail permanent? "
 #~ msgstr[1] "Vil du virkelig slette disse e-mails permanent?"
 
@@ -2377,7 +2377,7 @@ msgstr ""
 #~ msgid "Drop EML file here for import"
 #~ msgstr "Slip her for at importere denne e-mail"
 
-#~ msgid "Drop here to import this mail"
+#~ msgid "Drop here to import this email"
 #~ msgstr "Slip her for at importere denne e-mail"
 
 #~ msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
@@ -2520,7 +2520,7 @@ msgstr ""
 #~ msgstr "E-mailunderretning for deltager af opgave?"
 
 #~ msgid ""
-#~ "Emails cannot be put into trash folder while your mail quota is exceeded."
+#~ "Emails cannot be put into trash folder while your email quota is exceeded."
 #~ msgstr ""
 #~ "E-mails kan ikke kommes i skraldemappen mens din e-mail-kvote er "
 #~ "overskredet."
@@ -2550,7 +2550,7 @@ msgstr ""
 #~ msgid "Enabled"
 #~ msgstr "Aktiveret"
 
-#~ msgid "Enabled for all mail folders"
+#~ msgid "Enabled for all email folders"
 #~ msgstr "Aktiveret for alle e-mail-mapper"
 
 #~ msgid "Enabled for inbox only"
@@ -2816,7 +2816,7 @@ msgstr ""
 #~ msgid "Fit to screen width"
 #~ msgstr "Tilpas til skærmbredde"
 
-#~ msgid "Flag mail with"
+#~ msgid "Flag email with"
 #~ msgstr "Flag e-mail med"
 
 #~ msgid "Flickr"
@@ -3294,14 +3294,14 @@ msgstr ""
 #~ msgstr "Syntes om et link: %s"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after"
+#~ msgid "Line wrap when sending text emails after"
 #~ msgstr "Linieombryd når tekst e-mails sendes efter "
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after how much characters"
+#~ msgid "Line wrap when sending text emails after how much characters"
 #~ msgstr "Linieombryd når tekst e-mails sendes efter "
 
-#~ msgid "Line wrap when sending text mails after: "
+#~ msgid "Line wrap when sending text emails after: "
 #~ msgstr "Linieombryd når tekst e-mails sendes efter: "
 
 #~ msgid "Link"
@@ -3479,7 +3479,7 @@ msgstr ""
 #~ msgid "Mark all day appointments as free"
 #~ msgstr "Markér alle dagens aftaler som frie"
 
-#~ msgid "Mark all mails as read"
+#~ msgid "Mark all emails as read"
 #~ msgstr "Markér alle e-mails som læst"
 
 #~ msgid "Mark as distributionlist"
@@ -3500,7 +3500,7 @@ msgstr ""
 #~ msgid "Mark as unread"
 #~ msgstr "Markér som ulæst"
 
-#~ msgid "Mark mail as"
+#~ msgid "Mark email as"
 #~ msgstr "Markér e-mail som"
 
 #~ msgid "Mark read"
@@ -3589,7 +3589,7 @@ msgstr ""
 #~ msgid "Move to folder"
 #~ msgstr "Flyt til mappe"
 
-#~ msgid "Moving mails ... This may take a few seconds."
+#~ msgid "Moving emails ... This may take a few seconds."
 #~ msgstr "Flytter e-mails... Dette kan tage nogle sekunder."
 
 #~ msgid "My contact data"
@@ -3719,16 +3719,16 @@ msgstr ""
 #~ msgid "No lost requests"
 #~ msgstr "Ingen tabte forespørgsler"
 
-#~ msgid "No mails"
+#~ msgid "No emails"
 #~ msgstr "Ingen e-mails"
 
-#~ msgid "No mails found for \"%s\""
+#~ msgid "No emails found for \"%s\""
 #~ msgstr "Ingen e-mails findet for \"%s\""
 
-#~ msgid "No mails in this folder"
+#~ msgid "No emails in this folder"
 #~ msgstr "Ingen e-mails i denne mappe"
 
-#~ msgid "No mails in your inbox"
+#~ msgid "No emails in your inbox"
 #~ msgstr "Ingen e-mails i din indbakke"
 
 #~ msgid "No matching templates on this Server"
@@ -3866,7 +3866,7 @@ msgstr ""
 #~ msgid "On every new notification"
 #~ msgstr "På alle nye påmindelser"
 
-#~ msgid "On new notifications except mails"
+#~ msgid "On new notifications except emails"
 #~ msgstr "På nye påmindelser undtagen e-mail"
 
 #~ msgid "On work days"
@@ -4257,7 +4257,7 @@ msgstr ""
 #~ msgid "Press to hide all appointment reminders."
 #~ msgstr "Klik for at skjule alle aftalepåmindelser."
 
-#~ msgid "Press to hide all notifications for new mails."
+#~ msgid "Press to hide all notifications for new emails."
 #~ msgstr "Klik for at skjule alle påmindelser om ny e-mail."
 
 #~ msgid "Press to hide all notifications for overdue tasks."
@@ -4380,7 +4380,7 @@ msgstr ""
 #~ msgid "Reauthorize"
 #~ msgstr "Re-godkend"
 
-#~ msgid "Received mails"
+#~ msgid "Received emails"
 #~ msgstr "Modtaget e-mails"
 
 #~ msgid "Recent activities"
@@ -4598,7 +4598,7 @@ msgstr ""
 #~ msgstr "Gemt i"
 
 #, fuzzy
-#~ msgid "Saved mail attachment"
+#~ msgid "Saved email attachment"
 #~ msgstr "Fjern vedhæftning"
 
 #, fuzzy
@@ -4664,22 +4664,22 @@ msgstr ""
 #~ msgid "Send as internal link"
 #~ msgstr "Send som internt link"
 
-#~ msgid "Send as mail"
+#~ msgid "Send as email"
 #~ msgstr "Send som e-mail"
 
 #~ msgid "Send as vCard"
 #~ msgstr "Send som vCard"
 
-#~ msgid "Send by mail"
+#~ msgid "Send by email"
 #~ msgstr "Send med e-mail"
 
-#~ msgid "Send mail"
+#~ msgid "Send email"
 #~ msgstr "Send e-mail"
 
-#~ msgid "Send mail to all participants"
+#~ msgid "Send email to all participants"
 #~ msgstr "Send e-mail til alle deltagere"
 
-#~ msgid "Send new mail"
+#~ msgid "Send new email"
 #~ msgstr "Send ny e-mail"
 
 #~ msgid "Send vacation notice during this time only"
@@ -4697,7 +4697,7 @@ msgstr ""
 #~ msgid "Sent from %s via mobile"
 #~ msgstr "Sendt fra %s via mobil"
 
-#~ msgid "Sent mails"
+#~ msgid "Sent emails"
 #~ msgstr "Sendte e-mails"
 
 #~ msgid "September"
@@ -4765,7 +4765,7 @@ msgstr ""
 #~ msgid "Show all items"
 #~ msgstr "Vis alle elementer"
 
-#~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
+#~ msgid "Show all emails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""
 #~ "Vis alle e-mails. Bemærk: E-mails er ikke længere samlet i samtaler."
 
@@ -5039,7 +5039,7 @@ msgstr ""
 #~ msgid "TTY/TDD"
 #~ msgstr "TTY/TDD"
 
-#~ msgid "Tag mail with"
+#~ msgid "Tag email with"
 #~ msgstr "Mærk e-mail med"
 
 #~ msgid "Task"
@@ -5505,7 +5505,7 @@ msgstr ""
 #~ msgstr "Der er ingen regel defineret"
 
 #~ msgid ""
-#~ "There was no suitable server found for this mail/password combination"
+#~ "There was no suitable server found for this email/password combination"
 #~ msgstr ""
 #~ "Der blev ikke fundet en passende server for denne e-mail/adgangskode-"
 #~ "kombination"
@@ -5630,7 +5630,7 @@ msgstr ""
 #~ msgid "This is not a valid email address"
 #~ msgstr "Dette er ikke en gyldig e-mailadresse"
 
-#~ msgid "This is not a valid mail address"
+#~ msgid "This is not a valid email address"
 #~ msgstr "Dette er ikke en gyldig e-mailadresse"
 
 #~ msgid "This is not a valid user or group."
@@ -5639,10 +5639,10 @@ msgstr ""
 #~ msgid "This list has no contacts yet"
 #~ msgstr "Denne liste har endnu ikke nogen kontakter"
 
-#~ msgid "This mail has been added to the portal"
+#~ msgid "This email has been added to the portal"
 #~ msgstr "Denne e-mail er blevet tilføjet portalen"
 
-#~ msgid "This mail has no content"
+#~ msgid "This email has no content"
 #~ msgstr "Denne e-mail har ikke noget indhold"
 
 #~ msgid "This note will not be printed"
@@ -5782,7 +5782,7 @@ msgstr ""
 #~ "For at vælge en af visningerne Liste, Ikon eller Fliser, klik Visning i "
 #~ "højre side af værktøjslinjen."
 
-#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgid "To send the email, click on Send on the upper right side."
 #~ msgstr "For at sende e-mail'en, klikkes der på Send i højre øverste hjørne."
 
 #~ msgid "To upload a file, click on New > Upload new file in the toolbar."
@@ -5820,10 +5820,10 @@ msgstr ""
 #~ msgid "Top 10 folder size"
 #~ msgstr "Top 10 mappestørrelse"
 
-#~ msgid "Top 10 you got mail from"
+#~ msgid "Top 10 you got email from"
 #~ msgstr "Top 10 du har modtaget e-mail fra"
 
-#~ msgid "Top 10 you sent mail to"
+#~ msgid "Top 10 you sent email to"
 #~ msgstr "Top 10 du har sendt e-mail til"
 
 #~ msgid "Total cost"
@@ -5844,7 +5844,7 @@ msgstr ""
 #~ msgid "Trash folder"
 #~ msgstr "Skrald mappe"
 
-#~ msgid "Trying to auto-configure your mail account"
+#~ msgid "Trying to auto-configure your email account"
 #~ msgstr "Prøver at konfigurere din e-mail konto automatisk"
 
 #~ msgid "Tuesday"
@@ -5871,7 +5871,7 @@ msgstr ""
 #~ msgid "URL"
 #~ msgstr "URL"
 
-#~ msgid "Unable to load mail filter settings."
+#~ msgid "Unable to load email filter settings."
 #~ msgstr "Kan ikke indlæse e-mail-filter-opsætning."
 
 #~ msgid "Unconfirmed"
@@ -5980,7 +5980,7 @@ msgstr ""
 #~ msgid "Use cursor keys to change the item position"
 #~ msgstr "Brug piltaster for at ændre elementets position"
 
-#~ msgid "Use fixed-width font for text mails"
+#~ msgid "Use fixed-width font for text emails"
 #~ msgstr "Brug fast-bredde skrifttype for e-mails"
 
 #~ msgid ""
@@ -5992,7 +5992,7 @@ msgstr ""
 #~ "mappetræet er skjult, klik Visning > Mappevisning i højre side af "
 #~ "værktøjslinjen."
 
-#~ msgid "Use unified mail for this account"
+#~ msgid "Use unified email for this account"
 #~ msgstr "Brug forenet e-mail for denne konto"
 
 #~ msgid "Use username and password"
@@ -6038,7 +6038,7 @@ msgstr ""
 #~ msgid "Waiting"
 #~ msgstr "Venter"
 
-#~ msgid "Warning: This message might be a phishing or scam mail"
+#~ msgid "Warning: This message might be a phishing or scam email"
 #~ msgstr "Advarsel: Denne besked kan være en phishing eller fidus e-mail"
 
 #~ msgid "Weather • Season"
@@ -6314,7 +6314,7 @@ msgstr ""
 #~ msgid "Your data has been saved"
 #~ msgstr "Dine data er blevet gemt"
 
-#~ msgid "Your mail address"
+#~ msgid "Your email address"
 #~ msgstr "Din e-mailadresse"
 
 #~ msgid "Your messages"

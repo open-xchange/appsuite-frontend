@@ -134,7 +134,7 @@ msgstr ""
 
 #: apps/io.ox/tours/contacts.js
 #: module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr ""
 
 #: apps/io.ox/tours/contacts.js
@@ -334,7 +334,7 @@ msgstr ""
 
 #: apps/io.ox/tours/intro.js
 #: module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 
 #: apps/io.ox/tours/intro.js
@@ -409,12 +409,12 @@ msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 
 #: apps/io.ox/tours/mail.js
@@ -449,32 +449,32 @@ msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "Enter the E-Mail text into the main area. If the text format was set to HTML in the options, you can format the E-Mail text. To do so select a text part and then click an icon in the formatting bar."
+msgid "Enter the email text into the main area. If the text format was set to HTML in the options, you can format the email text. To do so select a text part and then click an icon in the formatting bar."
 msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 
 #: apps/io.ox/tours/mail.js
@@ -484,22 +484,22 @@ msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "If double-clicking on an E-Mail in the list, the E-Mail is opened in a separate window."
+msgid "If double-clicking on an email in the list, the email is opened in a separate window."
 msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "To open or close an E-Mail in a conversation, click on a free area in the header."
+msgid "To open or close an email in a conversation, click on a free area in the header."
 msgstr ""
 
 #: apps/io.ox/tours/mail.js
@@ -514,22 +514,22 @@ msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "In order to edit multiple E-Mails at once, enable the checkboxes on the left side of the E-Mails. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar."
+msgid "In order to edit multiple emails at once, enable the checkboxes on the left side of the emails. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar."
 msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "To open the E-Mail settings, click the System menu icon on the upper right side of the menu bar. Select Settings. Click on E-Mail on the left side."
+msgid "To open the email settings, click the System menu icon on the upper right side of the menu bar. Select Settings. Click on email on the left side."
 msgstr ""
 
 #. Tour name; general introduction
@@ -610,7 +610,7 @@ msgstr ""
 
 #: apps/io.ox/tours/portal.js
 #: module:io.ox/tours
-msgid "The Portal informs you about current E-Mails, appointments or social network news."
+msgid "The Portal informs you about current emails, appointments or social network news."
 msgstr ""
 
 #: apps/io.ox/tours/portal.js
@@ -670,7 +670,7 @@ msgstr ""
 
 #: apps/io.ox/tours/settings.js
 #: module:io.ox/tours
-msgid "The settings are organized in topics. Select the topic on the left side, e.g Basic settings or E-Mail."
+msgid "The settings are organized in topics. Select the topic on the left side, e.g Basic settings or Mail."
 msgstr ""
 
 #: apps/io.ox/tours/settings.js

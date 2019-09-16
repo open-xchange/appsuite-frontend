@@ -103,7 +103,7 @@ msgid "Collaborating"
 msgstr "Colaborando"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "Escrevendo um novo e-mail"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -213,7 +213,7 @@ msgid "Edit documents"
 msgstr "Editando documentos"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr "Editando vários e-mails"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -269,7 +269,7 @@ msgid "Entering billing information"
 msgstr "Inserindo informações de faturamento"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr "Inserindo o texto do e-mail"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -401,7 +401,7 @@ msgstr ""
 "Fotos e Vídeos."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "Abrindo e-mail em uma janela separada"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -409,7 +409,7 @@ msgid "Opening or closing the folder tree"
 msgstr "Abrindo ou fechando a árvore de pastas"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "Abrindo as configurações de e-mail"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -429,7 +429,7 @@ msgid "Preview mode"
 msgstr "Modo de pré-visualização"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "Lendo as conversas de e-mail"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -465,11 +465,11 @@ msgstr ""
 "solicitará um número de telefone."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "Enviando um e-mail para um contato"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "Enviando o e-mail"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -501,7 +501,7 @@ msgid "Sorting tasks"
 msgstr "Classificando tarefas"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "Classificando seus e-mails"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -639,13 +639,13 @@ msgstr ""
 "ferramentas. Selecionar uma entrada de menu no layout."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "Para escrever um novo e-mail, clique no ícone Escrever na barra de "
 "ferramentas."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "Para criar um novo e-mail, clique no ícone Escrever novo e-mail na barra de "
 "ferramentas."
@@ -843,7 +843,7 @@ msgstr ""
 "Enviar e-mail na barra de ferramentas."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "Para enviar o e-mail, clique em Enviar"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -862,7 +862,7 @@ msgstr ""
 "direito da barra de menu."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 "Para classificar os e-mails, clique em Classificar por. Selecione um "
 "critério de classificação."
@@ -1147,7 +1147,7 @@ msgstr ""
 #~ "Para selecionar uma das Visualizações em Lista, Ícone ou Quadrado, clique "
 #~ "em Visualizar no lado direito da barra de ferramentas."
 
-#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgid "To send the email, click on Send on the upper right side."
 #~ msgstr "Para enviar o e-mail, clique em Enviar no lado superior direito."
 
 #~ msgid "To upload a file, click on New > Upload new file in the toolbar."

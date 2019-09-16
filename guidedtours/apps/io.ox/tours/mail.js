@@ -29,10 +29,10 @@ define('io.ox/tours/mail', [
         app: 'io.ox/mail',
         priority: 1
     }, function () {
-        var mailTour = new Tour()
+        var emailTour = new Tour()
         .step()
-            .title(gt('Composing a new E-Mail'))
-            .content(gt('To compose a new E-Mail, click on Compose in the toolbar.'))
+            .title(gt('Composing a new email'))
+            .content(gt('To compose a new email, click on Compose in the toolbar.'))
             .hotspot('.io-ox-mail-window .primary-action .btn:visible, .classic-toolbar [data-action="io.ox/mail/actions/compose"]:visible')
             .on('next', function () {
                 if (composeApp) {
@@ -66,14 +66,14 @@ define('io.ox/tours/mail', [
             .hotspot('.active [data-extension-id=composetoolbar] > div:first')
             .end()
         .step()
-            .title(gt('Entering the E-Mail text'))
-            .content(gt('Enter the E-Mail text into the main area. If the text format was set to HTML in the options, you can format the E-Mail text. To do so select a text part and then click an icon in the formatting bar.'))
+            .title(gt('Entering the email text'))
+            .content(gt('Enter the email text into the main area. If the text format was set to HTML in the options, you can format the email text. To do so select a text part and then click an icon in the formatting bar.'))
             .referTo('.io-ox-mail-compose-container')
             .hotspot('.active .io-ox-mail-compose.container .editor .editable')
             .end()
         .step()
-            .title(gt('Sending the E-Mail'))
-            .content(gt('To send the E-Mail, click on Send'))
+            .title(gt('Sending the email'))
+            .content(gt('To send the email, click on Send'))
             .hotspot('.io-ox-mail-compose-window.active button[data-action=send]')
             .on('before:show', function () {
                 if (composeApp && composeApp.getWindow().floating.model.get('minimized')) {
@@ -87,8 +87,8 @@ define('io.ox/tours/mail', [
                     composeApp.getWindow().floating.onMinimize();
                 }
             })
-            .title(gt('Sorting your E-Mails'))
-            .content(gt('To sort the E-Mails, click on Sort by. Select a sort criteria.'))
+            .title(gt('Sorting your emails'))
+            .content(gt('To sort the emails, click on Sort by. Select a sort criteria.'))
             .waitFor('.io-ox-mail-window')
             .hotspot('.list-view-control > .toolbar > .dropdown:last')
             .navigateTo('io.ox/mail/main')
@@ -107,13 +107,13 @@ define('io.ox/tours/mail', [
             })
             .end()
         .step()
-            .title(gt('Opening an E-Mail in a separate window'))
-            .content(gt('If double-clicking on an E-Mail in the list, the E-Mail is opened in a separate window.'))
+            .title(gt('Opening an email in a separate window'))
+            .content(gt('If double-clicking on an email in the list, the email is opened in a separate window.'))
             .spotlight('.list-view.mail-item > li.list-item:first')
             .end()
         .step()
-            .title(gt('Reading E-Mail conversations'))
-            .content(gt('To open or close an E-Mail in a conversation, click on a free area in the header.'))
+            .title(gt('Reading email conversations'))
+            .content(gt('To open or close an email in a conversation, click on a free area in the header.'))
             .hotspot('.thread-view .detail-view-header')
             .end()
         .step()
@@ -123,9 +123,9 @@ define('io.ox/tours/mail', [
             .end();
 
         if (settings.get('selectionMode') !== 'alternative') {
-            mailTour.step()
-                .title(gt('Editing multiple E-Mails'))
-                .content(gt('In order to edit multiple E-Mails at once, enable the checkboxes on the left side of the E-Mails. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar.'))
+            emailTour.step()
+                .title(gt('Editing multiple emails'))
+                .content(gt('In order to edit multiple emails at once, enable the checkboxes on the left side of the emails. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar.'))
                 .hotspot('.classic-toolbar [data-dropdown="view"] ul a[data-name="checkboxes"]')
                 .referTo('.classic-toolbar [data-dropdown="view"] ul')
                 .waitFor('.classic-toolbar [data-dropdown="view"] ul a[data-name="checkboxes"]')
@@ -137,9 +137,9 @@ define('io.ox/tours/mail', [
                 })
                 .end();
         }
-        mailTour.step()
-            .title(gt('Opening the E-Mail settings'))
-            .content(gt('To open the E-Mail settings, click the System menu icon on the upper right side of the menu bar. Select Settings. Click on E-Mail on the left side.'))
+        emailTour.step()
+            .title(gt('Opening the email settings'))
+            .content(gt('To open the email settings, click the System menu icon on the upper right side of the menu bar. Select Settings. Click on email on the left side.'))
             .referTo('#io-ox-topbar-dropdown-icon')
             .hotspot('#io-ox-topbar-dropdown-icon')
             .end()

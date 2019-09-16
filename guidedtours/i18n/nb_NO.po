@@ -97,7 +97,7 @@ msgid "Collaborating"
 msgstr "Samarbeid"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "Opprette en ny epost"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -202,7 +202,7 @@ msgid "Edit documents"
 msgstr "Redigere dokumenter"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr "Redigere flere eposter"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -258,7 +258,7 @@ msgid "Entering billing information"
 msgstr "Legge til kostnads- og fakturadetaljer"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr "Skrive inn epostteksten"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -386,7 +386,7 @@ msgstr ""
 "Videoer."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "Åpne en epost i et nytt vindu"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -394,7 +394,7 @@ msgid "Opening or closing the folder tree"
 msgstr "Åpne eller lukke mappetreet"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "Innstillinger for epost"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -414,7 +414,7 @@ msgid "Preview mode"
 msgstr "Forhåndsvisningsmodus"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "Lese epostsamtaler"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -448,11 +448,11 @@ msgid ""
 msgstr ""
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "Send en epost til en kontakt"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "Sende eposten"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -483,7 +483,7 @@ msgid "Sorting tasks"
 msgstr "Sortere oppgaver"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "Sortere eposter"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -616,11 +616,11 @@ msgstr ""
 "verktøylinjen, og velg ønsket visning. "
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "For å opprette en ny epost, klikk \"Opprett\" i verktøylinjen."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "For å opprette en ny epost, klikk \"Opprett\" i verktøylinjen."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -812,7 +812,7 @@ msgstr ""
 "\"Send epost\" i verktøylinjen. "
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "For å sende eposten, klikk \"Send\". "
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -832,7 +832,7 @@ msgstr ""
 "Velg \"Logg ut\". "
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 "For å sortere epostene, klikk \"Sorter etter\", og velg et søkekriterium."
 

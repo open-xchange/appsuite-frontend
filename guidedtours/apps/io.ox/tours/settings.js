@@ -46,7 +46,7 @@ define('io.ox/tours/settings', [
             .end()
         .step()
             .title(gt('How the settings are organized'))
-            .content(gt('The settings are organized in topics. Select the topic on the left side, e.g Basic settings or E-Mail.'))
+            .content(gt('The settings are organized in topics. Select the topic on the left side, e.g Basic settings or Mail.'))
             .navigateTo('io.ox/settings/main')
             .waitFor('.io-ox-settings-window .folder-tree')
             .spotlight('.io-ox-settings-window .folder-tree')

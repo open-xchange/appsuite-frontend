@@ -105,7 +105,7 @@ msgid "Collaborating"
 msgstr "Colaborare"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "Compunerea unui e-mail nou"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -213,7 +213,7 @@ msgid "Edit documents"
 msgstr "Editează documentele"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr "Editarea mai multor e-mailuri"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -270,7 +270,7 @@ msgid "Entering billing information"
 msgstr "Introducerea de informații de facturare"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr "Introducerea textului e-mailului"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -403,7 +403,7 @@ msgstr ""
 "înregistrări video."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "Deschiderea unui e-mail într-o fereastră separată"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -411,7 +411,7 @@ msgid "Opening or closing the folder tree"
 msgstr "Deschiderea sau închiderea arborelui de dosare"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "Deschiderea setărilor de e-mail"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -431,7 +431,7 @@ msgid "Preview mode"
 msgstr "Mod previzualizare"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "Citirea conversațiilor de e-mail"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -467,11 +467,11 @@ msgstr ""
 "de telefon mobil."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "Trimiterea unui e-mail către un contact"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "Trimiterea e-mailului"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -503,7 +503,7 @@ msgid "Sorting tasks"
 msgstr "Sortarea sarcinilor"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "Sortarea e-mailurilor"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -641,11 +641,11 @@ msgstr ""
 "Selectați o intrare din meniu în aspect."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "Pentru a compune un e-mail nou, apăsați pe Compune în bara de unelte."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "Pentru a crea un e-mail nou, apăsați pe Compune e-mail nou în bara de unelte."
 
@@ -843,7 +843,7 @@ msgstr ""
 "pe Trimite un e-mail în bara de unelte."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "Pentru a trimite un e-mail, apăsați pe Trimite"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -862,7 +862,7 @@ msgstr ""
 "dreapta sus a barei de meniu."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 "Pentru sortarea e-mailurilor, apăsați pe Sortează după. Selectați un "
 "criteriu de sortare."
@@ -1032,11 +1032,11 @@ msgstr ""
 #~ msgstr[1] "%1$d ore și %2$s"
 #~ msgstr[2] "%1$d de ore și %2$s"
 
-#~ msgid "%1$d mail"
-#~ msgid_plural "%1$d mails"
-#~ msgstr[0] "%1$d mail"
-#~ msgstr[1] "%1$d mailuri"
-#~ msgstr[2] "%1$d de mailuri"
+#~ msgid "%1$d email"
+#~ msgid_plural "%1$d emails"
+#~ msgstr[0] "%1$d email"
+#~ msgstr[1] "%1$d emailuri"
+#~ msgstr[2] "%1$d de emailuri"
 
 #, fuzzy
 #~ msgid "%1$d messages in this conversation"
@@ -1077,14 +1077,14 @@ msgstr ""
 #~ msgid "%1$s is now connected with %2$s"
 #~ msgstr "%1$s este acum în conexiune cu %2$s"
 
-#~ msgid "%1$s mail"
-#~ msgid_plural "%1$s mails"
+#~ msgid "%1$s email"
+#~ msgid_plural "%1$s emails"
 #~ msgstr[0] "%1$s mesaj"
 #~ msgstr[1] "%1$s mesaje"
 #~ msgstr[2] "%1$s de mesaje"
 
-#~ msgid "%1$s mail, %2$s unread"
-#~ msgid_plural "%1$s mails, %2$s unread"
+#~ msgid "%1$s email, %2$s unread"
+#~ msgid_plural "%1$s emails, %2$s unread"
 #~ msgstr[0] "%1$s mesaj, %2$s necitite"
 #~ msgstr[1] "%1$s mesaje, %2$s necitite"
 #~ msgstr[2] "%1$s de mesaje, %2$s necitite"
@@ -1570,8 +1570,8 @@ msgstr ""
 #~ msgid "Add group"
 #~ msgstr "Adaugă grup"
 
-#~ msgid "Add mail account"
-#~ msgstr "Adaugă cont de mail"
+#~ msgid "Add email account"
+#~ msgstr "Adaugă cont de email"
 
 #~ msgid "Add member"
 #~ msgstr "Adaugă un membru"
@@ -2121,10 +2121,10 @@ msgstr ""
 #~ "trimitere?"
 
 #~ msgid ""
-#~ "Automatically delete a notification mail after it has been accepted or "
+#~ "Automatically delete a notification email after it has been accepted or "
 #~ "declined?"
 #~ msgstr ""
-#~ "Doriți să ștergeți automat mailurile de notificare după ce le aceptați "
+#~ "Doriți să ștergeți automat emailurile de notificare după ce le aceptați "
 #~ "sau le respingeți?"
 
 #~ msgid "Automatically select first E-Mail"
@@ -2184,7 +2184,7 @@ msgstr ""
 #~ msgid "Bars"
 #~ msgstr "Bare"
 
-#~ msgid "Based on mailing list"
+#~ msgid "Based on emailing list"
 #~ msgstr "Pe baza listei de discuții"
 
 #~ msgid "Based on sender"
@@ -2776,10 +2776,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Compose new email"
-#~ msgstr "Compune un mail nou"
+#~ msgstr "Compune un email nou"
 
-#~ msgid "Compose new mail"
-#~ msgstr "Compune un mail nou"
+#~ msgid "Compose new email"
+#~ msgstr "Compune un email nou"
 
 #~ msgid "Conditions"
 #~ msgstr "Condiții"
@@ -2971,7 +2971,7 @@ msgstr ""
 #~ msgid "Couldn't load your contact data."
 #~ msgstr "Nu s-au putut încărca datele de contact."
 
-#~ msgid "Couldn't load your mail filters."
+#~ msgid "Couldn't load your email filters."
 #~ msgstr "Nu s-au putut încărca filtrele dumneavoastră de mesaje."
 
 #~ msgid "Couldn't load your vacation notice."
@@ -3523,8 +3523,8 @@ msgstr ""
 #~ msgid "Do you really want to delete this widget?"
 #~ msgstr "Sigur doriți să ștergeți această aplicație?"
 
-#~ msgid "Do you really want to discard this mail?"
-#~ msgstr "Sigur doriți să renunțați la acest mail?"
+#~ msgid "Do you really want to discard this email?"
+#~ msgstr "Sigur doriți să renunțați la acest email?"
 
 #~ msgid "Do you really want to discard your changes?"
 #~ msgstr "Sigur doriți să renunțați la modificări?"
@@ -3591,14 +3591,14 @@ msgstr ""
 #~ "series?"
 #~ msgstr "Doriți să editați toată seria sau doar anumite întâlniri din serie?"
 
-#~ msgid "Do you want to keep the draft after sending this mail?"
-#~ msgstr "Doriți să păstrați schița după trimiterea acestui mail?"
+#~ msgid "Do you want to keep the draft after sending this email?"
+#~ msgstr "Doriți să păstrați schița după trimiterea acestui email?"
 
-#~ msgid "Do you want to permanently delete this mail?"
-#~ msgid_plural "Do you want to permanently delete these mails?"
-#~ msgstr[0] "Doriți să ștergeți definitiv acest mail?"
-#~ msgstr[1] "Doriți să ștergeți definitiv aceste mailuri?"
-#~ msgstr[2] "Doriți să ștergeți definitiv aceste mailuri?"
+#~ msgid "Do you want to permanently delete this email?"
+#~ msgid_plural "Do you want to permanently delete these emails?"
+#~ msgstr[0] "Doriți să ștergeți definitiv acest email?"
+#~ msgstr[1] "Doriți să ștergeți definitiv aceste emailuri?"
+#~ msgstr[2] "Doriți să ștergeți definitiv aceste emailuri?"
 
 #~ msgid "Do you want to save your configuration?"
 #~ msgstr "Doriți să salvați configurația?"
@@ -3685,10 +3685,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Drop EML file here for import"
-#~ msgstr "Glisați aici pentru a importa mailul"
+#~ msgstr "Glisați aici pentru a importa emailul"
 
-#~ msgid "Drop here to import this mail"
-#~ msgstr "Glisați aici pentru a importa mailul"
+#~ msgid "Drop here to import this email"
+#~ msgstr "Glisați aici pentru a importa emailul"
 
 #~ msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 #~ msgstr ""
@@ -3930,9 +3930,9 @@ msgstr ""
 #~ msgstr "Notificare pe e-mail pentru participantul la sarcină?"
 
 #~ msgid ""
-#~ "Emails cannot be put into trash folder while your mail quota is exceeded."
+#~ "Emails cannot be put into trash folder while your email quota is exceeded."
 #~ msgstr ""
-#~ "Mesajele nu pot fi plasate în coșul de gunoi deoarece cota de mail este "
+#~ "Mesajele nu pot fi plasate în coșul de gunoi deoarece cota de email este "
 #~ "depășită."
 
 #~ msgid "Embedded windows"
@@ -4000,8 +4000,8 @@ msgstr ""
 #~ msgid "Enabled"
 #~ msgstr "Activat"
 
-#~ msgid "Enabled for all mail folders"
-#~ msgstr "Activat pentru toate dosarele de mail"
+#~ msgid "Enabled for all email folders"
+#~ msgstr "Activat pentru toate dosarele de email"
 
 #~ msgid "Enabled for inbox only"
 #~ msgstr "Activat doar pentru mesajele primite"
@@ -4432,7 +4432,7 @@ msgstr ""
 #~ msgid "Flag #%d"
 #~ msgstr "Marcaj #%d"
 
-#~ msgid "Flag mail with"
+#~ msgid "Flag email with"
 #~ msgstr "Marchează mesajul cu"
 
 #~ msgid "Flags"
@@ -4767,7 +4767,7 @@ msgstr ""
 #~ msgid "HTML and plain text"
 #~ msgstr "HTML și text simplu"
 
-#~ msgid "HTML-only mail"
+#~ msgid "HTML-only email"
 #~ msgstr "Mesaj doar în format HTML"
 
 #~ msgid "Haiti"
@@ -4910,7 +4910,7 @@ msgstr ""
 #~ msgstr "IM (personal):"
 
 #~ msgid "IMAP Mail Server"
-#~ msgstr "Server de mail IMAP"
+#~ msgstr "Server de email IMAP"
 
 #~ msgid "IMAP folder subscription"
 #~ msgstr "Abonare dosar IMAP"
@@ -5474,14 +5474,14 @@ msgstr ""
 #~ msgstr "Spațiere linii"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after"
+#~ msgid "Line wrap when sending text emails after"
 #~ msgstr "Aranjare pe linii la trimiterea de e-mailuri text după"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after how much characters"
+#~ msgid "Line wrap when sending text emails after how much characters"
 #~ msgstr "Aranjare pe linii la trimiterea de e-mailuri text după"
 
-#~ msgid "Line wrap when sending text mails after: "
+#~ msgid "Line wrap when sending text emails after: "
 #~ msgstr "Aranjare pe linii la trimiterea de mesaje text după:"
 
 #~ msgid "Link"
@@ -5523,7 +5523,7 @@ msgstr ""
 #~ msgid "Load Error"
 #~ msgstr "Eroare de încărcare"
 
-#~ msgid "Load all mails. This might take some time."
+#~ msgid "Load all emails. This might take some time."
 #~ msgstr ""
 #~ "Se încarcă toate e-mailurile. Această operație poate să dureze câteva "
 #~ "minute."
@@ -5632,7 +5632,7 @@ msgstr ""
 #~ msgstr "Detalii conversație"
 
 #~ msgid "Mail account"
-#~ msgstr "Cont de mail"
+#~ msgstr "Cont de email"
 
 #~ msgid "Mail and Messaging"
 #~ msgstr "Mail și mesagerie"
@@ -5641,7 +5641,7 @@ msgstr ""
 #~ msgstr "Conturi de e-mail și sociale"
 
 #~ msgid "Mail count quota"
-#~ msgstr "Cotă de număr de mailuri"
+#~ msgstr "Cotă de număr de emailuri"
 
 #~ msgid "Mail has been copied"
 #~ msgstr "Mesajul a fost copiat"
@@ -5659,25 +5659,25 @@ msgstr ""
 #~ msgstr "Mesajul nu are niciun destinatar."
 
 #~ msgid "Mail quota"
-#~ msgstr "Cotă de mail"
+#~ msgstr "Cotă de email"
 
 #~ msgid "Mail quota exceeded"
-#~ msgstr "Cotă de mail depășită"
+#~ msgstr "Cotă de email depășită"
 
 #~ msgid "Mail reminder"
-#~ msgstr "Memento pentru mail"
+#~ msgstr "Memento pentru email"
 
 #~ msgid "Mail reminder for"
-#~ msgstr "Memento pentru mail pentru"
+#~ msgstr "Memento pentru email pentru"
 
 #~ msgid "Mail saved as draft"
 #~ msgstr "Mesaj salvat ca schiță"
 
 #~ msgid "Mail source"
-#~ msgstr "Sursa mailului"
+#~ msgstr "Sursa emailului"
 
 #~ msgid "Mail text"
-#~ msgstr "Textul mailului"
+#~ msgstr "Textul emailului"
 
 #~ msgid "Mail was not imported, only .eml files are supported."
 #~ msgstr "Mailul nu a fost importat, doar fișierele .eml sunt suportate."
@@ -5769,7 +5769,7 @@ msgstr ""
 #~ msgid "Mark all day appointments as free"
 #~ msgstr "Marchează toate întâlnirile de azi ca ore libere"
 
-#~ msgid "Mark all mails as read"
+#~ msgid "Mark all emails as read"
 #~ msgstr "Marchează toate mesajele ca citite"
 
 #~ msgid "Mark as distributionlist"
@@ -5793,7 +5793,7 @@ msgstr ""
 #~ msgid "Mark folder read"
 #~ msgstr "Marchează dosarul ca citit"
 
-#~ msgid "Mark mail as"
+#~ msgid "Mark email as"
 #~ msgstr "Marchează mesajul ca"
 
 #~ msgid "Mark read"
@@ -5979,7 +5979,7 @@ msgstr ""
 #~ msgid "Move to folder"
 #~ msgstr "Mută în dosar"
 
-#~ msgid "Moving mails ... This may take a few seconds."
+#~ msgid "Moving emails ... This may take a few seconds."
 #~ msgstr ""
 #~ "Se mută mesajele ... Această operație poate să dureze câteva secunde."
 
@@ -6192,7 +6192,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "No appointments found for \"%s\""
-#~ msgstr "Nu a fost găsit niciun mail pentru \"%s\""
+#~ msgstr "Nu a fost găsit niciun email pentru \"%s\""
 
 #, fuzzy
 #~ msgid "No appointments found until %s"
@@ -6242,19 +6242,19 @@ msgstr ""
 #~ msgid "No lost requests"
 #~ msgstr "Nicio cerere pierdută"
 
-#~ msgid "No mails"
+#~ msgid "No emails"
 #~ msgstr "Niciun mesaj"
 
-#~ msgid "No mails at all!"
-#~ msgstr "Niciun mail!"
+#~ msgid "No emails at all!"
+#~ msgstr "Niciun email!"
 
-#~ msgid "No mails found for \"%s\""
-#~ msgstr "Nu a fost găsit niciun mail pentru \"%s\""
+#~ msgid "No emails found for \"%s\""
+#~ msgstr "Nu a fost găsit niciun email pentru \"%s\""
 
-#~ msgid "No mails in this folder"
+#~ msgid "No emails in this folder"
 #~ msgstr "Niciun mesaj în acest dosar"
 
-#~ msgid "No mails in your inbox"
+#~ msgid "No emails in your inbox"
 #~ msgstr "Niciun mesaj în dosarul dumneavoastră de mesaje primite"
 
 #~ msgid "No matching templates on this Server"
@@ -6517,7 +6517,7 @@ msgstr ""
 #~ msgid "On every new notification"
 #~ msgstr "La fiecare notificare nouă"
 
-#~ msgid "On new notifications except mails"
+#~ msgid "On new notifications except emails"
 #~ msgstr "La fiecare notificare nouă cu excepția e-mailurilor"
 
 #~ msgid "On work days"
@@ -7210,7 +7210,7 @@ msgstr ""
 #~ msgid "Press to hide all appointment reminders."
 #~ msgstr "Apăsați pentru a ascunde toate mementourile pentru întâlniri."
 
-#~ msgid "Press to hide all notifications for new mails."
+#~ msgid "Press to hide all notifications for new emails."
 #~ msgstr "Apăsați pentru a ascunde toate notificările pentru e-mailuri noi."
 
 #~ msgid "Press to hide all notifications for overdue tasks."
@@ -7429,7 +7429,7 @@ msgstr ""
 #~ msgid "Rebuild Tree..."
 #~ msgstr "Reconstituire arbore..."
 
-#~ msgid "Received mails"
+#~ msgid "Received emails"
 #~ msgstr "Mesaje primite"
 
 #~ msgid "Received:"
@@ -7812,7 +7812,7 @@ msgstr ""
 #~ msgstr "Salvat în"
 
 #, fuzzy
-#~ msgid "Saved mail attachment"
+#~ msgid "Saved email attachment"
 #~ msgstr "Trimite ca fișier atașat"
 
 #, fuzzy
@@ -7966,27 +7966,27 @@ msgstr ""
 #~ msgid "Send as internal link"
 #~ msgstr "Trimite ca legătură internă"
 
-#~ msgid "Send as mail"
-#~ msgstr "Trimite ca mail"
+#~ msgid "Send as email"
+#~ msgstr "Trimite ca email"
 
 #~ msgid "Send as vCard"
 #~ msgstr "Trimite ca vCard"
 
-#~ msgid "Send by mail"
-#~ msgstr "Trimite prin mail"
+#~ msgid "Send by email"
+#~ msgstr "Trimite prin email"
 
 #, fuzzy
 #~ msgid "Send feedback"
-#~ msgstr "Trimite mail"
+#~ msgstr "Trimite email"
 
-#~ msgid "Send mail"
-#~ msgstr "Trimite mail"
+#~ msgid "Send email"
+#~ msgstr "Trimite email"
 
-#~ msgid "Send mail to all participants"
-#~ msgstr "Trimite mailul tuturor participanților"
+#~ msgid "Send email to all participants"
+#~ msgstr "Trimite emailul tuturor participanților"
 
-#~ msgid "Send new mail"
-#~ msgstr "Trimite mail"
+#~ msgid "Send new email"
+#~ msgstr "Trimite email"
 
 #~ msgid "Send vacation notice during this time only"
 #~ msgstr "Trimite mesajul de absență numai în această perioadă"
@@ -8009,7 +8009,7 @@ msgstr ""
 #~ msgid "Sent from %s via mobile"
 #~ msgstr "Trimis de pe %s utilizând un mobil"
 
-#~ msgid "Sent mails"
+#~ msgid "Sent emails"
 #~ msgstr "Mesaje trimise"
 
 #~ msgid "Sep"
@@ -8123,7 +8123,7 @@ msgstr ""
 #~ msgid "Show all items"
 #~ msgstr "Afișează mai puține"
 
-#~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
+#~ msgid "Show all emails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""
 #~ "Afișează toate mesajele. Notă: Mesajele nu mai sunt grupate după "
 #~ "conversație."
@@ -8714,7 +8714,7 @@ msgstr ""
 #~ msgid "Table"
 #~ msgstr "Tabel"
 
-#~ msgid "Tag mail with"
+#~ msgid "Tag email with"
 #~ msgstr "Marcați e-mailul cu"
 
 #~ msgid "Taiwan"
@@ -9340,9 +9340,9 @@ msgstr ""
 #~ msgstr "Nu a fost definită nicio regulă"
 
 #~ msgid ""
-#~ "There was no suitable server found for this mail/password combination"
+#~ "There was no suitable server found for this email/password combination"
 #~ msgstr ""
-#~ "Nu a fost găsit niciun server potrivit pentru această combinație de mail/"
+#~ "Nu a fost găsit niciun server potrivit pentru această combinație de email/"
 #~ "parolă"
 
 #~ msgid "There were not activities in your network"
@@ -9490,10 +9490,10 @@ msgstr ""
 #~ msgstr "Acesta este un dosar standard, care nu poate fi redenumit."
 
 #~ msgid "This is not a valid email address"
-#~ msgstr "Adresa de mail nu este validă"
+#~ msgstr "Adresa de email nu este validă"
 
-#~ msgid "This is not a valid mail address"
-#~ msgstr "Adresa de mail nu este validă"
+#~ msgid "This is not a valid email address"
+#~ msgstr "Adresa de email nu este validă"
 
 #~ msgid "This is not a valid user or group."
 #~ msgstr "Acesta nu este un utilizator sau un grup valid"
@@ -9501,13 +9501,13 @@ msgstr ""
 #~ msgid "This list has no contacts yet"
 #~ msgstr "Lista nu conține niciun contact"
 
-#~ msgid "This mail contains an URL to a publication."
+#~ msgid "This email contains an URL to a publication."
 #~ msgstr "Acest e-mail conține o legătură către o publicație."
 
-#~ msgid "This mail has been added to the portal"
+#~ msgid "This email has been added to the portal"
 #~ msgstr "Mesajul a fost adăugat la portal"
 
-#~ msgid "This mail has no content"
+#~ msgid "This email has no content"
 #~ msgstr "Mesajul nu are niciun conținut"
 
 #~ msgid "This note will not be printed"
@@ -9612,7 +9612,7 @@ msgstr ""
 #~ "To add contacts manually, just provide a valid email address (e.g john."
 #~ "doe@example.com or \"John Doe\" <jd@example.com>)"
 #~ msgstr ""
-#~ "Pentru a adăuga contacte manual, introduceți o adresă de mail validă (de "
+#~ "Pentru a adăuga contacte manual, introduceți o adresă de email validă (de "
 #~ "exemplu john.doe@example.com sau \"John Doe\" <jd@example.com>) "
 
 #~ msgid "To create a note, click on New > Add note in the toolbar."
@@ -9686,7 +9686,7 @@ msgstr ""
 #~ "Pentru a selecta una dintre vederile Listă, Pictograme sau Cadre, apăsați "
 #~ "pe Vedere în partea dreaptă a barei de unelte."
 
-#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgid "To send the email, click on Send on the upper right side."
 #~ msgstr ""
 #~ "Pentru a trimite e-mailul, apăsație pe Trimite în partea dreaptă sus."
 
@@ -9749,10 +9749,10 @@ msgstr ""
 #~ msgid "Top 10 folder size"
 #~ msgstr "Cele mai mari 10 dosare"
 
-#~ msgid "Top 10 you got mail from"
+#~ msgid "Top 10 you got email from"
 #~ msgstr "Primii 10 expeditori de la care ați primit mesaje"
 
-#~ msgid "Top 10 you sent mail to"
+#~ msgid "Top 10 you sent email to"
 #~ msgstr "Primii 10 destinatari cărora le-ați trimis mesaje"
 
 #~ msgid "Total cost"
@@ -9776,8 +9776,8 @@ msgstr ""
 #~ msgid "Trinidad and Tobago"
 #~ msgstr "Trinidad și Tobago"
 
-#~ msgid "Trying to auto-configure your mail account"
-#~ msgstr "Tentativă de auto-configurare a contului dumneavoatră de mail"
+#~ msgid "Trying to auto-configure your email account"
+#~ msgstr "Tentativă de auto-configurare a contului dumneavoatră de email"
 
 #~ msgid "Tue"
 #~ msgstr "Ma"
@@ -9859,7 +9859,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "Unable to establish a connection to the E-Mail server. Possible reasons: "
-#~ "the mail server is (temporarily) down or there are network connection "
+#~ "the email server is (temporarily) down or there are network connection "
 #~ "problems. To prevent further errors the module has been disabled. Please "
 #~ "contact your administrator."
 #~ msgstr ""
@@ -9868,8 +9868,8 @@ msgstr ""
 #~ "rețea. Pentru a evita alte erori, modulul a fost dezactivat. Contactați "
 #~ "administratorul."
 
-#~ msgid "Unable to load mail filter settings."
-#~ msgstr "Nu s-au putut încărca setările de filtrare a mailurilor."
+#~ msgid "Unable to load email filter settings."
+#~ msgstr "Nu s-au putut încărca setările de filtrare an emailurilor."
 
 #~ msgid "Unanswered"
 #~ msgstr "Nu s-a răspuns"
@@ -10033,7 +10033,7 @@ msgstr ""
 #~ msgid "Use cursor keys to change the item position"
 #~ msgstr "Utilizați tastele cursor pentru a schimba poziția elementului"
 
-#~ msgid "Use fixed-width font for text mails"
+#~ msgid "Use fixed-width font for text emails"
 #~ msgstr "Utilizează un font de lățime fixă pentru mesajele text"
 
 #~ msgid "Use for appointment"
@@ -10067,7 +10067,7 @@ msgstr ""
 #~ "de la server. Închideți fereastra de navigare. Aceasta împiedică accesul "
 #~ "neautorizat la datele dumneavoastră din programele partajate."
 
-#~ msgid "Use unified mail for this account"
+#~ msgid "Use unified email for this account"
 #~ msgstr "Folosește mesageria unificată pentru acest cont"
 
 #~ msgid "Use username and password"
@@ -10189,7 +10189,7 @@ msgstr ""
 #~ msgid "Warning: %2$s"
 #~ msgstr "Avertisment: %2$s"
 
-#~ msgid "Warning: This message might be a phishing or scam mail"
+#~ msgid "Warning: This message might be a phishing or scam email"
 #~ msgstr "Avertisment: Este posibil ca acest mesaj să fie o escrocherie"
 
 #~ msgid "Warnings:"
@@ -10618,8 +10618,8 @@ msgstr ""
 #~ msgid "Your data has been saved"
 #~ msgstr "Datele dumneavoastră au fost salvate"
 
-#~ msgid "Your mail address"
-#~ msgstr "Adresa dumneavoastră de mail"
+#~ msgid "Your email address"
+#~ msgstr "Adresa dumneavoastră de email"
 
 #~ msgid "Your messages"
 #~ msgstr "Mesajele dumneavoastră"
@@ -10659,8 +10659,8 @@ msgstr ""
 #~ "Parola este mai sigură dacă include și litere de tipar, cifre și "
 #~ "caractere speciale precum %1$s."
 
-#~ msgid "Your primary mail account can not be deleted."
-#~ msgstr "Contul dumneavoastră principal de mail nu poate fi șters."
+#~ msgid "Your primary email account can not be deleted."
+#~ msgstr "Contul dumneavoastră principal de email nu poate fi șters."
 
 #~ msgid ""
 #~ "Your scheduled appointment conflicts with one or more previously "

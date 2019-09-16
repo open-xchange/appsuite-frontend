@@ -99,7 +99,7 @@ msgid "Collaborating"
 msgstr "Birlikte çalışma"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "Yeni e-posta yazma"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -208,7 +208,7 @@ msgid "Edit documents"
 msgstr "Belgeleri düzenleme"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr "Birden çok e-posta düzenleme"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -265,7 +265,7 @@ msgid "Entering billing information"
 msgstr "Fatura bilgilerini girme"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr "E-posta metnini yazma"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -394,7 +394,7 @@ msgstr ""
 "sizin için oluşturduk."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "E-postayı ayrı bir pencerede açma"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -402,7 +402,7 @@ msgid "Opening or closing the folder tree"
 msgstr "Klasör ağacını açma ve kapatma"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "E-posta ayarlarını açma"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -422,7 +422,7 @@ msgid "Preview mode"
 msgstr "Ön izleme modu"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "E-posta yazışmalarını okuma"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -458,11 +458,11 @@ msgstr ""
 "istenecektir."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "Bir kişiye e-posta gönderme"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "E-postayı gönderme"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -493,7 +493,7 @@ msgid "Sorting tasks"
 msgstr "Görevleri sıralama"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "E-postalarınızı sıralama"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -632,12 +632,12 @@ msgstr ""
 "tıklayın ve \"Düzen\" menüsünden bir öğe seçin."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "Yeni bir e-posta oluşturmak için araç çubuğundaki \"Oluştur\"a tıklayın."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "Yeni bir e-posta oluşturmak için araç çubuğundaki \"E-posta yaz\"a tıklayın."
 
@@ -832,7 +832,7 @@ msgstr ""
 "çubuğundaki \"E-posta gönder\" düğmesine tıklayın."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "E-postayı göndermek için Gönder düğmesine tıklayın"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -851,7 +851,7 @@ msgstr ""
 "tıklayın."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 "E-postaları sıralamak için \"Sırala\"ya tıklayın ve bir sıralama ölçütü "
 "seçin."

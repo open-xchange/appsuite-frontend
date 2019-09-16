@@ -97,7 +97,7 @@ msgid "Collaborating"
 msgstr "共同編集"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "新規メールの作成"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -202,7 +202,7 @@ msgid "Edit documents"
 msgstr "ドキュメントを編集"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr "複数のメールの編集"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -257,7 +257,7 @@ msgid "Entering billing information"
 msgstr "支払条件の入力"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr "メールの本文の入力"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -383,7 +383,7 @@ msgstr ""
 "す。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "メールを別のウィンドウで開く"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -391,7 +391,7 @@ msgid "Opening or closing the folder tree"
 msgstr "フォルダーツリーを開閉する"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "メール設定を開く"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -411,7 +411,7 @@ msgid "Preview mode"
 msgstr "モードのプレビュー"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "メールスレッドの表示"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -446,11 +446,11 @@ msgstr ""
 "テキストメッセージでコードのオプションを選択すると、電話番号を尋ねられます。"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "連絡先へのメールの送信"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "メールの送信"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -481,7 +481,7 @@ msgid "Sorting tasks"
 msgstr "タスクのソート"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "メールのソート"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -616,11 +616,11 @@ msgstr ""
 "のメニュー入力を選択します。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "新規メールを作成するには、ツールバーで [作成] をクリックします。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "新規メールを作成するには、ツールバーの [新規メールを作成] をクリックします。"
 
@@ -812,7 +812,7 @@ msgstr ""
 "で、[メールを送信] をクリックします。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "メールを送信するには、送信をクリックします。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -831,7 +831,7 @@ msgstr ""
 "ログアウトを選択します。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 "メールをソートするには、ソート条件をクリックします。ソート条件を選択します。"
 
@@ -988,8 +988,8 @@ msgstr ""
 #~ msgid_plural "%1$d hours and %2$s"
 #~ msgstr[0] "%1$d 時間 %2$s"
 
-#~ msgid "%1$d mail"
-#~ msgid_plural "%1$d mails"
+#~ msgid "%1$d email"
+#~ msgid_plural "%1$d emails"
 #~ msgstr[0] "%1$d 通のメール"
 
 #~ msgid "%1$d messages in this conversation"
@@ -1027,12 +1027,12 @@ msgstr ""
 #~ msgid "%1$s is now connected with %2$s"
 #~ msgstr "%1$s は現在 %2$s に接続されています。"
 
-#~ msgid "%1$s mail"
-#~ msgid_plural "%1$s mails"
+#~ msgid "%1$s email"
+#~ msgid_plural "%1$s emails"
 #~ msgstr[0] "%1$s 通のメール"
 
-#~ msgid "%1$s mail, %2$s unread"
-#~ msgid_plural "%1$s mails, %2$s unread"
+#~ msgid "%1$s email, %2$s unread"
+#~ msgid_plural "%1$s emails, %2$s unread"
 #~ msgstr[0] "%1$s 通のメールのうち %2$s 通が未読"
 
 #~ msgid "%1$s of %2$s"
@@ -1510,7 +1510,7 @@ msgstr ""
 #~ msgid "Add group"
 #~ msgstr "グループを追加"
 
-#~ msgid "Add mail account"
+#~ msgid "Add email account"
 #~ msgstr "メール アカウントを追加"
 
 #~ msgid "Add new contact"
@@ -2665,7 +2665,7 @@ msgstr ""
 #~ "メールの送信時に \"収集済みアドレス\" フォルダーに連絡先を自動的に収集"
 
 #~ msgid ""
-#~ "Automatically delete a notification mail after it has been accepted or "
+#~ "Automatically delete a notification email after it has been accepted or "
 #~ "declined?"
 #~ msgstr "承諾または辞退した後に通知メールを自動的に削除"
 
@@ -2726,7 +2726,7 @@ msgstr ""
 #~ msgid "Bars"
 #~ msgstr "バー"
 
-#~ msgid "Based on mailing list"
+#~ msgid "Based on emailing list"
 #~ msgstr "メーリング リスト"
 
 #~ msgid "Based on sender"
@@ -3342,7 +3342,7 @@ msgstr ""
 #~ msgid "Compose new email"
 #~ msgstr "新規メールを作成"
 
-#~ msgid "Compose new mail"
+#~ msgid "Compose new email"
 #~ msgstr "新規メールを作成"
 
 #~ msgid "Conditions"
@@ -3537,7 +3537,7 @@ msgstr ""
 #~ msgid "Couldn't load your contact data."
 #~ msgstr "連絡先のデータを読み込めませんでした。"
 
-#~ msgid "Couldn't load your mail filters."
+#~ msgid "Couldn't load your email filters."
 #~ msgstr "メール フィルターを読み込めませんでした。"
 
 #~ msgid "Couldn't load your vacation notice."
@@ -4142,7 +4142,7 @@ msgstr ""
 #~ msgid "Do you really want to delete this widget?"
 #~ msgstr "このウィジェットを削除しますか？"
 
-#~ msgid "Do you really want to discard this mail?"
+#~ msgid "Do you really want to discard this email?"
 #~ msgstr "このメールを破棄しますか？"
 
 #~ msgid "Do you really want to discard your changes?"
@@ -4209,11 +4209,11 @@ msgstr ""
 #~ "定期的なアポイント全体を編集しますか、それともこのアポイントのみを編集しま"
 #~ "すか？"
 
-#~ msgid "Do you want to keep the draft after sending this mail?"
+#~ msgid "Do you want to keep the draft after sending this email?"
 #~ msgstr "メールの送信後にこの下書きを保存しますか？"
 
-#~ msgid "Do you want to permanently delete this mail?"
-#~ msgid_plural "Do you want to permanently delete these mails?"
+#~ msgid "Do you want to permanently delete this email?"
+#~ msgid_plural "Do you want to permanently delete these emails?"
 #~ msgstr[0] "このメールを完全に削除しますか？"
 
 #~ msgid "Do you want to save your configuration?"
@@ -4315,7 +4315,7 @@ msgstr ""
 #~ msgid "Drop EML file here for import"
 #~ msgstr "このメールをインポートするには、ここにドロップしてください。"
 
-#~ msgid "Drop here to import this mail"
+#~ msgid "Drop here to import this email"
 #~ msgstr "このメールをインポートするには、ここにドロップしてください。"
 
 #~ msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
@@ -4564,7 +4564,7 @@ msgstr ""
 #~ msgstr "参加者にメールで通知"
 
 #~ msgid ""
-#~ "Emails cannot be put into trash folder while your mail quota is exceeded."
+#~ "Emails cannot be put into trash folder while your email quota is exceeded."
 #~ msgstr ""
 #~ "メールの割当量を超えたため、メールをごみ箱フォルダーに移動できません。"
 
@@ -4632,7 +4632,7 @@ msgstr ""
 #~ msgid "Enabled"
 #~ msgstr "有効"
 
-#~ msgid "Enabled for all mail folders"
+#~ msgid "Enabled for all email folders"
 #~ msgstr "すべてのメール フォルダー"
 
 #~ msgid "Enabled for inbox only"
@@ -5196,7 +5196,7 @@ msgstr ""
 #~ msgid "Flag #%d"
 #~ msgstr "フラグ #%d"
 
-#~ msgid "Flag mail with"
+#~ msgid "Flag email with"
 #~ msgstr "次のフラグをメールに付ける"
 
 #~ msgid "Flags"
@@ -5535,7 +5535,7 @@ msgstr ""
 #~ msgid "HTML and plain text"
 #~ msgstr "HTML とテキスト"
 
-#~ msgid "HTML-only mail"
+#~ msgid "HTML-only email"
 #~ msgstr "HTML メール"
 
 #~ msgid "Haiti"
@@ -6291,13 +6291,13 @@ msgstr ""
 #~ msgid "Line wrap after:"
 #~ msgstr "行を折り返す文字数:"
 
-#~ msgid "Line wrap when sending text mails after"
+#~ msgid "Line wrap when sending text emails after"
 #~ msgstr "送信メールの本文を折り返す文字数:"
 
-#~ msgid "Line wrap when sending text mails after how much characters"
+#~ msgid "Line wrap when sending text emails after how much characters"
 #~ msgstr "送信メールの本文を折り返す文字数:"
 
-#~ msgid "Line wrap when sending text mails after: "
+#~ msgid "Line wrap when sending text emails after: "
 #~ msgstr "送信メールの本文を折り返す文字数:"
 
 #~ msgid "Link"
@@ -6351,7 +6351,7 @@ msgstr ""
 #~ msgid "Load Error"
 #~ msgstr "読み込みエラー"
 
-#~ msgid "Load all mails. This might take some time."
+#~ msgid "Load all emails. This might take some time."
 #~ msgstr ""
 #~ "すべてのメールを読み込んでいます。しばらく時間がかかる可能性があります。"
 
@@ -6605,7 +6605,7 @@ msgstr ""
 #~ msgid "Mark all day appointments as free"
 #~ msgstr "終日のアポイントを空き時間として表示"
 
-#~ msgid "Mark all mails as read"
+#~ msgid "Mark all emails as read"
 #~ msgstr "すべてのメールを既読にする"
 
 #~ msgid "Mark as distributionlist"
@@ -6626,7 +6626,7 @@ msgstr ""
 #~ msgid "Mark folder read"
 #~ msgstr "フォルダーに既読の印を付ける"
 
-#~ msgid "Mark mail as"
+#~ msgid "Mark email as"
 #~ msgstr "次の印をメールに付ける"
 
 #~ msgid "Mark read"
@@ -6818,7 +6818,7 @@ msgstr ""
 #~ msgid "Move to folder"
 #~ msgstr "フォルダーに移動"
 
-#~ msgid "Moving mails ... This may take a few seconds."
+#~ msgid "Moving emails ... This may take a few seconds."
 #~ msgstr "メールを移動しています... 数秒かかる場合があります。"
 
 #~ msgid "Mozambique"
@@ -7092,19 +7092,19 @@ msgstr ""
 #~ msgid "No lost requests"
 #~ msgstr "失われたリクエストはありません。"
 
-#~ msgid "No mails"
+#~ msgid "No emails"
 #~ msgstr "メールはありません。"
 
-#~ msgid "No mails at all!"
+#~ msgid "No emails at all!"
 #~ msgstr "メールがありません。"
 
-#~ msgid "No mails found for \"%s\""
+#~ msgid "No emails found for \"%s\""
 #~ msgstr "\"%s\" のメールは見つかりませんでした。"
 
-#~ msgid "No mails in this folder"
+#~ msgid "No emails in this folder"
 #~ msgstr "このフォルダーにメールはありません。"
 
-#~ msgid "No mails in your inbox"
+#~ msgid "No emails in your inbox"
 #~ msgstr "受信トレイにメールがありません。"
 
 #~ msgid "No matching templates on this Server"
@@ -7363,7 +7363,7 @@ msgstr ""
 #~ msgid "On every new notification"
 #~ msgstr "すべての新規の通知"
 
-#~ msgid "On new notifications except mails"
+#~ msgid "On new notifications except emails"
 #~ msgstr "メール以外の新規の通知"
 
 #~ msgid "On work days"
@@ -8174,7 +8174,7 @@ msgstr ""
 #~ msgid "Press to hide all appointment reminders."
 #~ msgstr "アポイントのアラームをすべて非表示"
 
-#~ msgid "Press to hide all notifications for new mails."
+#~ msgid "Press to hide all notifications for new emails."
 #~ msgstr "新規メールの通知をすべて非表示"
 
 #~ msgid "Press to hide all notifications for overdue tasks."
@@ -8454,7 +8454,7 @@ msgstr ""
 #~ msgid "Rebuild Tree..."
 #~ msgstr "ツリーを再構築します..."
 
-#~ msgid "Received mails"
+#~ msgid "Received emails"
 #~ msgstr "受信済みメール"
 
 #~ msgid "Received:"
@@ -8838,7 +8838,7 @@ msgstr ""
 #~ msgid "Saved in"
 #~ msgstr "保存先:"
 
-#~ msgid "Saved mail attachment"
+#~ msgid "Saved email attachment"
 #~ msgstr "添付ファイルを保存"
 
 #~ msgid "Saving attachment to Drive"
@@ -8999,25 +8999,25 @@ msgstr ""
 #~ msgid "Send as internal link"
 #~ msgstr "内部リンクとして送信"
 
-#~ msgid "Send as mail"
+#~ msgid "Send as email"
 #~ msgstr "メールで送信"
 
 #~ msgid "Send as vCard"
 #~ msgstr "vCard として送信"
 
-#~ msgid "Send by mail"
+#~ msgid "Send by email"
 #~ msgstr "メールで送信"
 
 #~ msgid "Send feedback"
 #~ msgstr "メールを送信"
 
-#~ msgid "Send mail"
+#~ msgid "Send email"
 #~ msgstr "メールを送信"
 
-#~ msgid "Send mail to all participants"
+#~ msgid "Send email to all participants"
 #~ msgstr "すべての参加者にメールを送信"
 
-#~ msgid "Send new mail"
+#~ msgid "Send new email"
 #~ msgstr "新規メールを送信"
 
 #~ msgid "Send vacation notice during this time only"
@@ -9041,7 +9041,7 @@ msgstr ""
 #~ msgid "Sent from %s via mobile"
 #~ msgstr "%s からモバイル経由で送信されました。"
 
-#~ msgid "Sent mails"
+#~ msgid "Sent emails"
 #~ msgstr "送信済みメール"
 
 #~ msgid "Sep"
@@ -9203,7 +9203,7 @@ msgstr ""
 #~ msgid "Show all items"
 #~ msgstr "すべてのアイテムを表示"
 
-#~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
+#~ msgid "Show all emails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""
 #~ "すべてのメールを表示します。注: メールはスレッドとしてまとめられていませ"
 #~ "ん。"
@@ -9823,7 +9823,7 @@ msgstr ""
 #~ msgid "Table"
 #~ msgstr "表"
 
-#~ msgid "Tag mail with"
+#~ msgid "Tag email with"
 #~ msgstr "次のタグをメールに付ける"
 
 #~ msgid "Tagging"
@@ -10476,7 +10476,7 @@ msgstr ""
 #~ msgstr "定義されているルールはありません。"
 
 #~ msgid ""
-#~ "There was no suitable server found for this mail/password combination"
+#~ "There was no suitable server found for this email/password combination"
 #~ msgstr ""
 #~ "このメールとパスワードの組み合わせが保存されているサーバーがありません。"
 
@@ -10610,7 +10610,7 @@ msgstr ""
 #~ msgid "This is not a valid email address"
 #~ msgstr "このメール アドレスは無効です。"
 
-#~ msgid "This is not a valid mail address"
+#~ msgid "This is not a valid email address"
 #~ msgstr "このメール アドレスは無効です。"
 
 #~ msgid "This is not a valid user or group."
@@ -10619,16 +10619,16 @@ msgstr ""
 #~ msgid "This list has no contacts yet"
 #~ msgstr "このリストにはメンバーが今のところ追加されていません。"
 
-#~ msgid "This mail contains a reply to an invitation."
+#~ msgid "This email contains a reply to an invitation."
 #~ msgstr "このメールには招待への回答が含まれています。"
 
-#~ msgid "This mail contains an URL to a publication."
+#~ msgid "This email contains an URL to a publication."
 #~ msgstr "このメールには公開への URL があります。"
 
-#~ msgid "This mail has been added to the portal"
+#~ msgid "This email has been added to the portal"
 #~ msgstr "このメールをポータルに追加しました。"
 
-#~ msgid "This mail has no content"
+#~ msgid "This email has no content"
 #~ msgstr "このメールには内容がありません。"
 
 #~ msgid "This note will not be printed"
@@ -10817,7 +10817,7 @@ msgstr ""
 #~ "リスト ビュー、アイコン ビュー、またはタイル ビューのいずれかを選択するに"
 #~ "は、ツールバー右側にある [ビュー] をクリックします。"
 
-#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgid "To send the email, click on Send on the upper right side."
 #~ msgstr "メールを送信するには、画面右上にある [送信] をクリックします。"
 
 #~ msgid "To upload a file, click on New > Upload new file in the toolbar."
@@ -10879,10 +10879,10 @@ msgstr ""
 #~ msgid "Top 10 folder size"
 #~ msgstr "上位 10 件のフォルダー サイズ"
 
-#~ msgid "Top 10 you got mail from"
+#~ msgid "Top 10 you got email from"
 #~ msgstr "次のユーザーから受信した上位 10 通のメール"
 
-#~ msgid "Top 10 you sent mail to"
+#~ msgid "Top 10 you sent email to"
 #~ msgstr "次のユーザーに送信した上位 10 通のメール"
 
 #~ msgid "Total cost"
@@ -10906,7 +10906,7 @@ msgstr ""
 #~ msgid "Trinidad and Tobago"
 #~ msgstr "トリニダードトバゴ"
 
-#~ msgid "Trying to auto-configure your mail account"
+#~ msgid "Trying to auto-configure your email account"
 #~ msgstr "メール アカウントを自動構成しています。"
 
 #~ msgid "Tue"
@@ -10992,7 +10992,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "Unable to establish a connection to the E-Mail server. Possible reasons:"
-#~ "the mail server is (temporarily) down or there are network connection "
+#~ "the email server is (temporarily) down or there are network connection "
 #~ "problems. To prevent further errors the module has been disabled. Please "
 #~ "contact your administrator."
 #~ msgstr ""
@@ -11001,7 +11001,7 @@ msgstr ""
 #~ "が発生するのを防ぐため、このモジュールは無効になりました。システム管理者に"
 #~ "連絡してください。"
 
-#~ msgid "Unable to load mail filter settings."
+#~ msgid "Unable to load email filter settings."
 #~ msgstr "メール フィルター バックエンドに接続できません。"
 
 #~ msgid "Unanswered"
@@ -11174,7 +11174,7 @@ msgstr ""
 #~ msgid "Use cursor keys to change the item position"
 #~ msgstr "カーソルキーを使用して、アイテムの位置を変更できます。"
 
-#~ msgid "Use fixed-width font for text mails"
+#~ msgid "Use fixed-width font for text emails"
 #~ msgstr "テキスト メールに固定幅フォントを使用"
 
 #~ msgid "Use for appointment"
@@ -11208,7 +11208,7 @@ msgstr ""
 #~ "ださい。これで、ご利用のグループウェア データへの不正アクセスを防ぐことが"
 #~ "できます。"
 
-#~ msgid "Use unified mail for this account"
+#~ msgid "Use unified email for this account"
 #~ msgstr "このアカウントに統合メールを使用"
 
 #~ msgid "Use username and password"
@@ -11378,7 +11378,7 @@ msgstr ""
 #~ msgid "Warning: %2$s"
 #~ msgstr "警告: %2$s"
 
-#~ msgid "Warning: This message might be a phishing or scam mail"
+#~ msgid "Warning: This message might be a phishing or scam email"
 #~ msgstr "警告: このメッセージは詐欺メールの疑いがあります。"
 
 #~ msgid "Warnings:"
@@ -11795,7 +11795,7 @@ msgstr ""
 #~ msgid "Your data has been saved"
 #~ msgstr "データが保存されました。"
 
-#~ msgid "Your mail address"
+#~ msgid "Your email address"
 #~ msgstr "ご利用のメールアドレス"
 
 #~ msgid "Your messages"
@@ -11834,7 +11834,7 @@ msgstr ""
 #~ "パスワードに大文字、数字、%1$s などの特殊文字を追加すると、より安全になり"
 #~ "ます。"
 
-#~ msgid "Your primary mail account can not be deleted."
+#~ msgid "Your primary email account can not be deleted."
 #~ msgstr "既定のメール アカウントは削除できません。"
 
 #~ msgid ""

@@ -91,7 +91,7 @@ msgid "Collaborating"
 msgstr "协作"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "编写一个新电子邮件"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -188,7 +188,7 @@ msgid "Edit documents"
 msgstr "编辑文档"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr "编辑多个电子邮件"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -240,7 +240,7 @@ msgid "Entering billing information"
 msgstr "输入账项信息"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr "输入电子邮件文本"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -361,7 +361,7 @@ msgstr ""
 "件夹。为了方便您，我们已经包括您文档、音乐、图片、和视频的文件夹。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "在一个分离窗口打开电子邮件"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -369,7 +369,7 @@ msgid "Opening or closing the folder tree"
 msgstr "打开或关闭文件夹树"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "打开电子邮件设定"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -389,7 +389,7 @@ msgid "Preview mode"
 msgstr "预览模式"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "阅读电子邮件交谈"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -423,11 +423,11 @@ msgid ""
 msgstr "例如，通过短信选择代码的选项，就会要求您提供电话号码。"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "发送一个电子邮件的一个联系人中"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "发送电子邮件中"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -457,7 +457,7 @@ msgid "Sorting tasks"
 msgstr "排序任务"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "排序您的电子邮件"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -580,11 +580,11 @@ msgstr ""
 "要在不同视图之间选择，在工具条里的视图上单击。在布局里选择一个菜单项目。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "要编写一个新电子邮件，请单击工具条里的编写。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "要创建一个新电子邮件，请单击工具条里的创建新电子邮件。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -748,7 +748,7 @@ msgstr ""
 "要发送一个电子邮件给联系人，请单击一个电子邮件或工具条里的发送电子邮件。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "要发送电子邮件，单击发送。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -763,7 +763,7 @@ msgid ""
 msgstr "要注销, 请单击菜单栏右上角的注销图标。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr "要排序电子邮件，单击以..排序后选择一个排序准则。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
@@ -909,8 +909,8 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgstr[0] "%1$d 小时和 %2$s"
 #~ msgstr[1] "%1$d 小时和 %2$s"
 
-#~ msgid "%1$d mail"
-#~ msgid_plural "%1$d mails"
+#~ msgid "%1$d email"
+#~ msgid_plural "%1$d emails"
 #~ msgstr[0] "%1$d 封电子邮件"
 #~ msgstr[1] "%1$d 封电子邮件"
 
@@ -952,13 +952,13 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "%1$s is now connected with %2$s"
 #~ msgstr "%1$s 现在与 %2$s 连接"
 
-#~ msgid "%1$s mail"
-#~ msgid_plural "%1$s mails"
+#~ msgid "%1$s email"
+#~ msgid_plural "%1$s emails"
 #~ msgstr[0] "%1$d 封电子邮件"
 #~ msgstr[1] "%1$d 封电子邮件"
 
-#~ msgid "%1$s mail, %2$s unread"
-#~ msgid_plural "%1$s mails, %2$s unread"
+#~ msgid "%1$s email, %2$s unread"
+#~ msgid_plural "%1$s emails, %2$s unread"
 #~ msgstr[0] "共%2$s封, %1$s 封未读"
 #~ msgstr[1] "共%2$s封, %1$s 封未读"
 
@@ -1419,7 +1419,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Add group"
 #~ msgstr "添加组"
 
-#~ msgid "Add mail account"
+#~ msgid "Add email account"
 #~ msgstr "添加邮件帐户"
 
 #~ msgid "Add new folder"
@@ -1933,7 +1933,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgstr "在发送时自动在文件夹 \"Collected addresses\" 中收集联系人？"
 
 #~ msgid ""
-#~ "Automatically delete a notification mail after it has been accepted or "
+#~ "Automatically delete a notification email after it has been accepted or "
 #~ "declined?"
 #~ msgstr "在一个通知邮件接受或拒绝后，自动删除它？"
 
@@ -2558,7 +2558,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Compose new email"
 #~ msgstr "撰写新邮件"
 
-#~ msgid "Compose new mail"
+#~ msgid "Compose new email"
 #~ msgstr "撰写新邮件"
 
 #~ msgid "Conditions"
@@ -2745,7 +2745,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Couldn't load your contact data."
 #~ msgstr "不能加载您的联系人数据。"
 
-#~ msgid "Couldn't load your mail filters."
+#~ msgid "Couldn't load your email filters."
 #~ msgstr "不能加载您的邮件过滤器。"
 
 #~ msgid "Couldn't load your vacation notice."
@@ -3274,7 +3274,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Do you really want to delete this widget?"
 #~ msgstr "您确定要删除这个迷你程序吗？"
 
-#~ msgid "Do you really want to discard this mail?"
+#~ msgid "Do you really want to discard this email?"
 #~ msgstr "您真的想放弃此邮件吗？"
 
 #~ msgid "Do you really want to discard your changes?"
@@ -3338,11 +3338,11 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ "series?"
 #~ msgstr "您是否想编辑整个循环约会或循环约会中的其中一个？"
 
-#~ msgid "Do you want to keep the draft after sending this mail?"
+#~ msgid "Do you want to keep the draft after sending this email?"
 #~ msgstr "您确定要发送此邮件后保留草稿吗？"
 
-#~ msgid "Do you want to permanently delete this mail?"
-#~ msgid_plural "Do you want to permanently delete these mails?"
+#~ msgid "Do you want to permanently delete this email?"
+#~ msgid_plural "Do you want to permanently delete these emails?"
 #~ msgstr[0] "确定要永久删除这封电子邮件吗？"
 #~ msgstr[1] "确定要永久删除这些电子邮件吗？"
 
@@ -3426,7 +3426,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Drop EML file here for import"
 #~ msgstr "拖放到这里以导入此邮件"
 
-#~ msgid "Drop here to import this mail"
+#~ msgid "Drop here to import this email"
 #~ msgstr "拖放到这里以导入此邮件"
 
 #~ msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
@@ -3657,7 +3657,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgstr "向任务参与者发送电子邮件通知？"
 
 #~ msgid ""
-#~ "Emails cannot be put into trash folder while your mail quota is exceeded."
+#~ "Emails cannot be put into trash folder while your email quota is exceeded."
 #~ msgstr "在超过您的邮件限额时，电子邮件未能放到垃圾文件夹。"
 
 #~ msgid "Embedded windows"
@@ -3724,7 +3724,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Enabled"
 #~ msgstr "启用"
 
-#~ msgid "Enabled for all mail folders"
+#~ msgid "Enabled for all email folders"
 #~ msgstr "为所有邮件文件夹启用"
 
 #~ msgid "Enabled for inbox only"
@@ -4139,7 +4139,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Flag #%d"
 #~ msgstr "标志 #%d"
 
-#~ msgid "Flag mail with"
+#~ msgid "Flag email with"
 #~ msgstr "向邮件添加标志"
 
 #~ msgid "Flags"
@@ -4778,14 +4778,14 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgstr "隔行"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after"
+#~ msgid "Line wrap when sending text emails after"
 #~ msgstr "当发送文本邮件后换行"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after how much characters"
+#~ msgid "Line wrap when sending text emails after how much characters"
 #~ msgstr "当发送文本邮件后换行"
 
-#~ msgid "Line wrap when sending text mails after: "
+#~ msgid "Line wrap when sending text emails after: "
 #~ msgstr "当发送文本邮件后换行："
 
 #~ msgid "Link"
@@ -4815,7 +4815,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Load Error"
 #~ msgstr "加载错误"
 
-#~ msgid "Load all mails. This might take some time."
+#~ msgid "Load all emails. This might take some time."
 #~ msgstr "加载所有邮件，可能需时片刻。"
 
 #~ msgid "Location"
@@ -4969,7 +4969,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Mark all day appointments as free"
 #~ msgstr "标记全天约会为空闲"
 
-#~ msgid "Mark all mails as read"
+#~ msgid "Mark all emails as read"
 #~ msgstr "标记所有邮件为已读"
 
 #~ msgid "Mark as distributionlist"
@@ -4990,7 +4990,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Mark as unread"
 #~ msgstr "标记为未读"
 
-#~ msgid "Mark mail as"
+#~ msgid "Mark email as"
 #~ msgstr "标记邮件为"
 
 #~ msgid "Mark read"
@@ -5079,7 +5079,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Move to folder"
 #~ msgstr "移动到文件夹"
 
-#~ msgid "Moving mails ... This may take a few seconds."
+#~ msgid "Moving emails ... This may take a few seconds."
 #~ msgstr "移动邮件中... 可能需时片刻。"
 
 #~ msgid "My contact data"
@@ -5231,19 +5231,19 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "No lost requests"
 #~ msgstr "没有丢失请求"
 
-#~ msgid "No mails"
+#~ msgid "No emails"
 #~ msgstr "没有邮件"
 
-#~ msgid "No mails at all!"
+#~ msgid "No emails at all!"
 #~ msgstr "完全没有邮件！"
 
-#~ msgid "No mails found for \"%s\""
+#~ msgid "No emails found for \"%s\""
 #~ msgstr "没有找到 \"%s\" 的邮件"
 
-#~ msgid "No mails in this folder"
+#~ msgid "No emails in this folder"
 #~ msgstr "此文件夹中无电子邮件"
 
-#~ msgid "No mails in your inbox"
+#~ msgid "No emails in your inbox"
 #~ msgstr "您的文件夹中没有邮件"
 
 #~ msgid "No matching templates on this Server"
@@ -5381,7 +5381,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "On every new notification"
 #~ msgstr "在每一个新通知"
 
-#~ msgid "On new notifications except mails"
+#~ msgid "On new notifications except emails"
 #~ msgstr "在除了邮件的新通知"
 
 #~ msgid "On work days"
@@ -5798,7 +5798,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Press to hide all appointment reminders."
 #~ msgstr "按下隐藏所有约会提醒。"
 
-#~ msgid "Press to hide all notifications for new mails."
+#~ msgid "Press to hide all notifications for new emails."
 #~ msgstr "按下隐藏所有新邮件的通知。"
 
 #~ msgid "Press to hide all notifications for overdue tasks."
@@ -5948,7 +5948,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Reauthorize"
 #~ msgstr "再认证"
 
-#~ msgid "Received mails"
+#~ msgid "Received emails"
 #~ msgstr "已接收邮件"
 
 #~ msgid "Recent activities"
@@ -6186,7 +6186,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgstr "保存在"
 
 #, fuzzy
-#~ msgid "Saved mail attachment"
+#~ msgid "Saved email attachment"
 #~ msgstr "删除附件"
 
 #, fuzzy
@@ -6258,26 +6258,26 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Send as internal link"
 #~ msgstr "作为内部链接发送"
 
-#~ msgid "Send as mail"
+#~ msgid "Send as email"
 #~ msgstr "以邮件方式发送"
 
 #~ msgid "Send as vCard"
 #~ msgstr "以 vCard 发送"
 
-#~ msgid "Send by mail"
+#~ msgid "Send by email"
 #~ msgstr "发送电子邮件"
 
 #, fuzzy
 #~ msgid "Send feedback"
 #~ msgstr "发送电子邮件"
 
-#~ msgid "Send mail"
+#~ msgid "Send email"
 #~ msgstr "发送邮件"
 
-#~ msgid "Send mail to all participants"
+#~ msgid "Send email to all participants"
 #~ msgstr "发送邮件到所有参与者"
 
-#~ msgid "Send new mail"
+#~ msgid "Send new email"
 #~ msgstr "发送新电子邮件"
 
 #~ msgid "Send vacation notice during this time only"
@@ -6295,7 +6295,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Sent from %s via mobile"
 #~ msgstr "从 %s 经过移动网路发送"
 
-#~ msgid "Sent mails"
+#~ msgid "Sent emails"
 #~ msgstr "已发送邮件"
 
 #~ msgid "September"
@@ -6370,7 +6370,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Show all items"
 #~ msgstr "显示所有项目"
 
-#~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
+#~ msgid "Show all emails. Note: Mails are no longer grouped by conversation."
 #~ msgstr "显示所有邮件。备注：邮件不再以谈话分组。"
 
 #~ msgid "Show all my appointments from all calendars"
@@ -6702,7 +6702,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Table"
 #~ msgstr "表格"
 
-#~ msgid "Tag mail with"
+#~ msgid "Tag email with"
 #~ msgstr "标签邮件为"
 
 #~ msgid "Task"
@@ -7166,7 +7166,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgstr "没有定义规则"
 
 #~ msgid ""
-#~ "There was no suitable server found for this mail/password combination"
+#~ "There was no suitable server found for this email/password combination"
 #~ msgstr "没有找到此邮件 / 密码组合的适当服务器"
 
 #~ msgid "There were not activities in your network"
@@ -7286,7 +7286,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "This is not a valid email address"
 #~ msgstr "这不是有效的电子邮件地址"
 
-#~ msgid "This is not a valid mail address"
+#~ msgid "This is not a valid email address"
 #~ msgstr "这不是有效的电子邮件地址"
 
 #~ msgid "This is not a valid user or group."
@@ -7295,10 +7295,10 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "This list has no contacts yet"
 #~ msgstr "本列表还没有成员"
 
-#~ msgid "This mail has been added to the portal"
+#~ msgid "This email has been added to the portal"
 #~ msgstr "此邮件已添加到门户"
 
-#~ msgid "This mail has no content"
+#~ msgid "This email has no content"
 #~ msgstr "此邮件没有内容"
 
 #~ msgid "This note will not be printed"
@@ -7428,7 +7428,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ "right side of the toolbar."
 #~ msgstr "要选择列表、图标、方块视图其中一个，单击在工具条右边的视图。"
 
-#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgid "To send the email, click on Send on the upper right side."
 #~ msgstr "要发送电子邮件，单击在右上方的发送。"
 
 #~ msgid "To upload a file, click on New > Upload new file in the toolbar."
@@ -7464,10 +7464,10 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Top 10 folder size"
 #~ msgstr "前十文件夹体织"
 
-#~ msgid "Top 10 you got mail from"
+#~ msgid "Top 10 you got email from"
 #~ msgstr "最高十个您收到邮件的人"
 
-#~ msgid "Top 10 you sent mail to"
+#~ msgid "Top 10 you sent email to"
 #~ msgstr "最高十个您发送邮件的人"
 
 #~ msgid "Total cost"
@@ -7488,7 +7488,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Trash folder"
 #~ msgstr "垃圾文件夹"
 
-#~ msgid "Trying to auto-configure your mail account"
+#~ msgid "Trying to auto-configure your email account"
 #~ msgstr "正在尝试自动设置您的邮件户口"
 
 #~ msgid "Tuesday"
@@ -7518,7 +7518,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "URL:"
 #~ msgstr "URL："
 
-#~ msgid "Unable to load mail filter settings."
+#~ msgid "Unable to load email filter settings."
 #~ msgstr "无法联系邮件过滤后台。"
 
 #~ msgid "Unconfirmed"
@@ -7633,7 +7633,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Use cursor keys to change the item position"
 #~ msgstr "使用方向键以更改项目位置"
 
-#~ msgid "Use fixed-width font for text mails"
+#~ msgid "Use fixed-width font for text emails"
 #~ msgstr "文本邮件使用固定宽度"
 
 #~ msgid ""
@@ -7644,7 +7644,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ "使用文件夹树以访问自己、公共、共享的文件。如果文件夹树隐藏了，单击在工具条"
 #~ "右边的视图 > 文件夹视图。"
 
-#~ msgid "Use unified mail for this account"
+#~ msgid "Use unified email for this account"
 #~ msgstr "该户口使用统一邮件"
 
 #~ msgid "Use username and password"
@@ -7693,7 +7693,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Waiting"
 #~ msgstr "等待中"
 
-#~ msgid "Warning: This message might be a phishing or scam mail"
+#~ msgid "Warning: This message might be a phishing or scam email"
 #~ msgstr "警告：该邮件可能存在邮件欺诈！"
 
 #~ msgid "Weather • Season"
@@ -7968,7 +7968,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Your data has been saved"
 #~ msgstr "您的数据已被保存"
 
-#~ msgid "Your mail address"
+#~ msgid "Your email address"
 #~ msgstr "您的电子邮件地址"
 
 #~ msgid "Your messages"
@@ -7989,7 +7989,7 @@ msgstr "现在，您能够添加额外验证选项，以增强您的户口安全
 #~ msgid "Your password has been changed"
 #~ msgstr "您的密码已更改"
 
-#~ msgid "Your primary mail account can not be deleted."
+#~ msgid "Your primary email account can not be deleted."
 #~ msgstr "不能删除您的主要邮件户口。"
 
 #~ msgid "Your selected picture will be displayed after saving"

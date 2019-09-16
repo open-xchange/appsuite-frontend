@@ -102,7 +102,7 @@ msgid "Collaborating"
 msgstr "Współpraca"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new E-Mail"
+msgid "Composing a new email"
 msgstr "Pisanie nowej wiadomości e-mail"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -213,7 +213,7 @@ msgid "Edit documents"
 msgstr "Edytuj dokumenty"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple E-Mails"
+msgid "Editing multiple emails"
 msgstr "Edycja wielu wiadomości e-mail"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -269,7 +269,7 @@ msgid "Entering billing information"
 msgstr "Wprowadzanie informacji rozliczeniowych"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the E-Mail text"
+msgid "Entering the email text"
 msgstr "Wpisywanie treści wiadomości e-mail"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
@@ -400,7 +400,7 @@ msgstr ""
 "ułatwienia dodaliśmy już foldery Dokumenty, Muzyka, Obrazy i Filmy."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
+msgid "Opening an email in a separate window"
 msgstr "Otwieranie wiadomości e-mail w osobnym oknie"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
@@ -408,7 +408,7 @@ msgid "Opening or closing the folder tree"
 msgstr "Otwieranie lub zamykanie drzewa folderów"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the E-Mail settings"
+msgid "Opening the email settings"
 msgstr "Otwieranie ustawień poczty e-mail"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -428,7 +428,7 @@ msgid "Preview mode"
 msgstr "Tryb podglądu"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading E-Mail conversations"
+msgid "Reading email conversations"
 msgstr "Czytanie konwersacji e-mail"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
@@ -464,11 +464,11 @@ msgstr ""
 "wiadomości tekstowej. Po jej wybraniu podaj numer telefonu."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
+msgid "Sending an email to a contact"
 msgstr "Wysyłanie wiadomości e-mail do kontaktu"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the E-Mail"
+msgid "Sending the email"
 msgstr "Wysyłanie wiadomości e-mail"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -500,7 +500,7 @@ msgid "Sorting tasks"
 msgstr "Sortowanie zadań"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your E-Mails"
+msgid "Sorting your emails"
 msgstr "Sortowanie wiadomości e-mail"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -636,13 +636,13 @@ msgstr ""
 "sekcji Układ wybierz pozycję menu."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "Aby napisać nową wiadomość e-mail, kliknij pozycję Redagowanie na pasku "
 "narzędzi."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
 "Aby utworzyć nową wiadomość e-mail, kliknij przycisk Nowa wiadomość e-mail "
 "na pasku narzędzi."
@@ -837,7 +837,7 @@ msgstr ""
 "Wyślij wiadomość e-mail na pasku narzędzi."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
+msgid "To send the email, click on Send"
 msgstr "Aby wysłać wiadomość e-mail, kliknij przycisk Wyślij"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -856,7 +856,7 @@ msgstr ""
 "paska menu."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
 msgstr ""
 "Aby posortować wiadomości e-mail, kliknij pozycję Sortuj według. Wybierz "
 "kryteria sortowania."
@@ -1002,8 +1002,8 @@ msgstr ""
 #~ msgstr[1] "%1$d godziny i %2$s"
 #~ msgstr[2] "%1$d godzin i %2$s"
 
-#~ msgid "%1$d mail"
-#~ msgid_plural "%1$d mails"
+#~ msgid "%1$d email"
+#~ msgid_plural "%1$d emails"
 #~ msgstr[0] "%1$d wiadomość"
 #~ msgstr[1] "%1$d wiadomości"
 #~ msgstr[2] "%1$d wiadomości"
@@ -1034,14 +1034,14 @@ msgstr ""
 #~ msgid "%1$s is now connected with %2$s"
 #~ msgstr "%1$s jest teraz połączone z %2$s"
 
-#~ msgid "%1$s mail"
-#~ msgid_plural "%1$s mails"
+#~ msgid "%1$s email"
+#~ msgid_plural "%1$s emails"
 #~ msgstr[0] "%1$d wiadomość"
 #~ msgstr[1] "%1$d wiadomości"
 #~ msgstr[2] "%1$d wiadomości"
 
-#~ msgid "%1$s mail, %2$s unread"
-#~ msgid_plural "%1$s mails, %2$s unread"
+#~ msgid "%1$s email, %2$s unread"
+#~ msgid_plural "%1$s emails, %2$s unread"
 #~ msgstr[0] "%1$s wiadomość, %2$s nieprzeczytana"
 #~ msgstr[1] "%1$s wiadomości, %2$s nieprzeczytane"
 #~ msgstr[2] "%1$s wiadomości, %2$s nieprzeczytanych"
@@ -1332,7 +1332,7 @@ msgstr ""
 #~ msgid "Add folder menu"
 #~ msgstr "Dodaj menu folderu"
 
-#~ msgid "Add mail account"
+#~ msgid "Add email account"
 #~ msgstr "Dodaj konto e-mail"
 
 #~ msgid "Add member"
@@ -1660,7 +1660,7 @@ msgstr ""
 #~ "podczas wysyłania wiadomości?"
 
 #~ msgid ""
-#~ "Automatically delete a notification mail after it has been accepted or "
+#~ "Automatically delete a notification email after it has been accepted or "
 #~ "declined?"
 #~ msgstr ""
 #~ "Usunąć automatycznie wiadomość e-mail z powiadomieniem po jej przyjęciu "
@@ -1964,7 +1964,7 @@ msgstr ""
 #~ msgid "Compose new email"
 #~ msgstr "Nowa wiadomość e-mail"
 
-#~ msgid "Compose new mail"
+#~ msgid "Compose new email"
 #~ msgstr "Nowa wiadomość e-mail"
 
 #~ msgid "Conditions"
@@ -2121,7 +2121,7 @@ msgstr ""
 #~ msgid "Couldn't load your contact data."
 #~ msgstr "Nie można wczytać danych kontaktu."
 
-#~ msgid "Couldn't load your mail filters."
+#~ msgid "Couldn't load your email filters."
 #~ msgstr "Nie można wczytać filtrów poczty."
 
 #~ msgid "Couldn't load your vacation notice."
@@ -2382,7 +2382,7 @@ msgstr ""
 #~ msgid "Do you really want to delete this widget?"
 #~ msgstr "Czy na pewno chcesz usunąć ten widget?"
 
-#~ msgid "Do you really want to discard this mail?"
+#~ msgid "Do you really want to discard this email?"
 #~ msgstr "Czy na pewno chcesz porzucić tę wiadomość?"
 
 #~ msgid "Do you really want to discard your changes?"
@@ -2417,11 +2417,11 @@ msgstr ""
 #~ "series?"
 #~ msgstr "Czy chcesz edytować cały cykl, czy tylko jedno spotkanie z cyklu?"
 
-#~ msgid "Do you want to keep the draft after sending this mail?"
+#~ msgid "Do you want to keep the draft after sending this email?"
 #~ msgstr "Czy chcesz zachować wersję roboczą po wysłaniu tej wiadomości?"
 
-#~ msgid "Do you want to permanently delete this mail?"
-#~ msgid_plural "Do you want to permanently delete these mails?"
+#~ msgid "Do you want to permanently delete this email?"
+#~ msgid_plural "Do you want to permanently delete these emails?"
 #~ msgstr[0] "Czy na pewno chcesz trwale usunąć tę wiadomość?"
 #~ msgstr[1] "Czy na pewno chcesz trwale usunąć te wiadomości?"
 #~ msgstr[2] "Czy na pewno chcesz trwale usunąć te wiadomości?"
@@ -2467,7 +2467,7 @@ msgstr ""
 #~ msgid "Drop EML file here for import"
 #~ msgstr "Aby zaimportować pocztę, przeciągnij ją tutaj"
 
-#~ msgid "Drop here to import this mail"
+#~ msgid "Drop here to import this email"
 #~ msgstr "Aby zaimportować pocztę, przeciągnij ją tutaj"
 
 #~ msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
@@ -2612,7 +2612,7 @@ msgstr ""
 #~ msgstr "Powiadomienie e-mail dla uczestnika zadania?"
 
 #~ msgid ""
-#~ "Emails cannot be put into trash folder while your mail quota is exceeded."
+#~ "Emails cannot be put into trash folder while your email quota is exceeded."
 #~ msgstr ""
 #~ "W przypadku przekroczenia limitu miejsca na pocztę nie można przenosić "
 #~ "wiadomości e-mail do folderu kosza."
@@ -2642,7 +2642,7 @@ msgstr ""
 #~ msgid "Enabled"
 #~ msgstr "Włączone"
 
-#~ msgid "Enabled for all mail folders"
+#~ msgid "Enabled for all email folders"
 #~ msgstr "Włączono dla wszystkich folderów poczty"
 
 #~ msgid "Enabled for inbox only"
@@ -2908,7 +2908,7 @@ msgstr ""
 #~ msgid "Fit to screen width"
 #~ msgstr "Dopasuj do szerokości ekranu"
 
-#~ msgid "Flag mail with"
+#~ msgid "Flag email with"
 #~ msgstr "Oznacz wiadomość flagą"
 
 #~ msgid "Flickr"
@@ -3401,14 +3401,14 @@ msgstr ""
 #~ msgstr "Polubiono łącze: %s"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after"
+#~ msgid "Line wrap when sending text emails after"
 #~ msgstr "Zawijanie linii podczas wysyłania wiadomości tekstowych po"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text mails after how much characters"
+#~ msgid "Line wrap when sending text emails after how much characters"
 #~ msgstr "Zawijanie linii podczas wysyłania wiadomości tekstowych po"
 
-#~ msgid "Line wrap when sending text mails after: "
+#~ msgid "Line wrap when sending text emails after: "
 #~ msgstr "Zawijanie linii podczas wysyłania wiadomości tekstowych po: "
 
 #~ msgid "Link"
@@ -3438,7 +3438,7 @@ msgstr ""
 #~ msgid "Load Error"
 #~ msgstr "Błąd wczytywania"
 
-#~ msgid "Load all mails. This might take some time."
+#~ msgid "Load all emails. This might take some time."
 #~ msgstr "Wczytaj wszystkie wiadomość. To może to trochę potrwać."
 
 #~ msgid "Location"
@@ -3592,7 +3592,7 @@ msgstr ""
 #~ msgid "Mark all day appointments as free"
 #~ msgstr "Oznacz spotkania całodniowe jako Wolne"
 
-#~ msgid "Mark all mails as read"
+#~ msgid "Mark all emails as read"
 #~ msgstr "Oznacz wszystkie wiadomości jako przeczytane"
 
 #~ msgid "Mark as distributionlist"
@@ -3613,7 +3613,7 @@ msgstr ""
 #~ msgid "Mark as unread"
 #~ msgstr "Oznacz jako nieprzeczytane"
 
-#~ msgid "Mark mail as"
+#~ msgid "Mark email as"
 #~ msgstr "Oznacz wiadomość jako"
 
 #~ msgid "Mark read"
@@ -3702,7 +3702,7 @@ msgstr ""
 #~ msgid "Move to folder"
 #~ msgstr "Przenieś do folderu"
 
-#~ msgid "Moving mails ... This may take a few seconds."
+#~ msgid "Moving emails ... This may take a few seconds."
 #~ msgstr "Trwa przenoszenie poczty... Może to zająć kilka sekund."
 
 #~ msgid "My contact data"
@@ -3833,16 +3833,16 @@ msgstr ""
 #~ msgid "No lost requests"
 #~ msgstr "Bez zgubionych żądań"
 
-#~ msgid "No mails"
+#~ msgid "No emails"
 #~ msgstr "Brak wiadomości"
 
-#~ msgid "No mails found for \"%s\""
+#~ msgid "No emails found for \"%s\""
 #~ msgstr "Nie znaleziono wiadomości zgodnych z \"%s\""
 
-#~ msgid "No mails in this folder"
+#~ msgid "No emails in this folder"
 #~ msgstr "Brak nowych wiadomości w tym folderze"
 
-#~ msgid "No mails in your inbox"
+#~ msgid "No emails in your inbox"
 #~ msgstr "Brak wiadomości w skrzynce odbiorczej"
 
 #~ msgid "No matching templates on this Server"
@@ -3984,7 +3984,7 @@ msgstr ""
 #~ msgid "On every new notification"
 #~ msgstr "Przy każdym nowym powiadomieniu"
 
-#~ msgid "On new notifications except mails"
+#~ msgid "On new notifications except emails"
 #~ msgstr "Przy nowych powiadomieniach, z wyjątkiem wiadomości"
 
 #~ msgid "On work days"
@@ -4377,7 +4377,7 @@ msgstr ""
 #~ msgid "Press to hide all appointment reminders."
 #~ msgstr "Naciśnij, aby ukryć wszystkie przypomnienia o spotkaniach."
 
-#~ msgid "Press to hide all notifications for new mails."
+#~ msgid "Press to hide all notifications for new emails."
 #~ msgstr "Naciśnij, aby ukryć wszystkie powiadomienia o nowych wiadomościach."
 
 #~ msgid "Press to hide all notifications for overdue tasks."
@@ -4502,7 +4502,7 @@ msgstr ""
 #~ msgid "Reauthorize"
 #~ msgstr "Autoryzuj ponownie"
 
-#~ msgid "Received mails"
+#~ msgid "Received emails"
 #~ msgstr "Odebrane wiadomości"
 
 #~ msgid "Recent activities"
@@ -4720,7 +4720,7 @@ msgstr ""
 #~ msgstr "Zapisano w"
 
 #, fuzzy
-#~ msgid "Saved mail attachment"
+#~ msgid "Saved email attachment"
 #~ msgstr "Usuń załącznik"
 
 #, fuzzy
@@ -4790,22 +4790,22 @@ msgstr ""
 #~ msgid "Send as internal link"
 #~ msgstr "Wyślij jako łącze wewnętrzne"
 
-#~ msgid "Send as mail"
+#~ msgid "Send as email"
 #~ msgstr "Wyślij jako wiadomość"
 
 #~ msgid "Send as vCard"
 #~ msgstr "Wyślij jako wizytówkę vCard"
 
-#~ msgid "Send by mail"
+#~ msgid "Send by email"
 #~ msgstr "Wyślij w wiadomości e-mail"
 
-#~ msgid "Send mail"
+#~ msgid "Send email"
 #~ msgstr "Wyślij wiadomość"
 
-#~ msgid "Send mail to all participants"
+#~ msgid "Send email to all participants"
 #~ msgstr "Wyślij wiadomość e-mail do wszystkich uczestników"
 
-#~ msgid "Send new mail"
+#~ msgid "Send new email"
 #~ msgstr "Wyślij nową wiadomość"
 
 #~ msgid "Send vacation notice during this time only"
@@ -4823,7 +4823,7 @@ msgstr ""
 #~ msgid "Sent from %s via mobile"
 #~ msgstr "Wysłane z %s przez telefon komórkowy"
 
-#~ msgid "Sent mails"
+#~ msgid "Sent emails"
 #~ msgstr "Wysłane wiadomości"
 
 #~ msgid "September"
@@ -4891,7 +4891,7 @@ msgstr ""
 #~ msgid "Show all items"
 #~ msgstr "Pokaż wszystkie elementy"
 
-#~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
+#~ msgid "Show all emails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""
 #~ "Pokaż wszystkie wiadomości. Uwaga: Wiadomości nie będą grupowane wg "
 #~ "konwersacji."
@@ -5170,7 +5170,7 @@ msgstr ""
 #~ msgid "TTY/TDD"
 #~ msgstr "Dalekopis/Dalekopis dla niedosłyszących"
 
-#~ msgid "Tag mail with"
+#~ msgid "Tag email with"
 #~ msgstr "Oznacz wiadomość znacznikiem"
 
 #~ msgid "Task"
@@ -5662,7 +5662,7 @@ msgstr ""
 #~ msgstr "Brak zdefiniowanej reguły"
 
 #~ msgid ""
-#~ "There was no suitable server found for this mail/password combination"
+#~ "There was no suitable server found for this email/password combination"
 #~ msgstr ""
 #~ "Nie znaleziono odpowiedniego serwera pasującego do tego zestawienia "
 #~ "adresu e-mail i hasła."
@@ -5800,7 +5800,7 @@ msgstr ""
 #~ msgid "This is not a valid email address"
 #~ msgstr "To nie jest prawidłowy adres e-mail"
 
-#~ msgid "This is not a valid mail address"
+#~ msgid "This is not a valid email address"
 #~ msgstr "To nie jest prawidłowy adres e-mail"
 
 #~ msgid "This is not a valid user or group."
@@ -5809,10 +5809,10 @@ msgstr ""
 #~ msgid "This list has no contacts yet"
 #~ msgstr "Na tej liście jeszcze nie ma żadnych kontaktów"
 
-#~ msgid "This mail has been added to the portal"
+#~ msgid "This email has been added to the portal"
 #~ msgstr "Wiadomość została dodana do portalu"
 
-#~ msgid "This mail has no content"
+#~ msgid "This email has no content"
 #~ msgstr "Wiadomość nie ma zawartości"
 
 #~ msgid "This note will not be printed"
@@ -5965,7 +5965,7 @@ msgstr ""
 #~ "Aby wybrać jeden z widoków, np. Lista, Ikony lub Pola, kliknij przycisk "
 #~ "Widok z prawej strony paska narzędzi."
 
-#~ msgid "To send the E-Mail, click on Send on the upper right side."
+#~ msgid "To send the email, click on Send on the upper right side."
 #~ msgstr ""
 #~ "Aby wysłać wiadomość e-mail, kliknij dostępny w prawym górnym rogu okna "
 #~ "przycisk Wyślij."
@@ -6006,10 +6006,10 @@ msgstr ""
 #~ msgid "Top 10 folder size"
 #~ msgstr "10 największych folderów"
 
-#~ msgid "Top 10 you got mail from"
+#~ msgid "Top 10 you got email from"
 #~ msgstr "10 najpopularniejszych nadawców"
 
-#~ msgid "Top 10 you sent mail to"
+#~ msgid "Top 10 you sent email to"
 #~ msgstr "10 najpopularniejszych odbiorców"
 
 #~ msgid "Total cost"
@@ -6030,7 +6030,7 @@ msgstr ""
 #~ msgid "Trash folder"
 #~ msgstr "Elementy usunięte"
 
-#~ msgid "Trying to auto-configure your mail account"
+#~ msgid "Trying to auto-configure your email account"
 #~ msgstr "Trwa próba automatycznej konfiguracji tego konta"
 
 #~ msgid "Tuesday"
@@ -6057,7 +6057,7 @@ msgstr ""
 #~ msgid "URL"
 #~ msgstr "URL"
 
-#~ msgid "Unable to load mail filter settings."
+#~ msgid "Unable to load email filter settings."
 #~ msgstr "Nie można załadować ustawień filtru poczty."
 
 #~ msgid "Unconfirmed"
@@ -6167,7 +6167,7 @@ msgstr ""
 #~ msgid "Use cursor keys to change the item position"
 #~ msgstr "Aby zmienić położenie elementu, użyj klawiszy kursora"
 
-#~ msgid "Use fixed-width font for text mails"
+#~ msgid "Use fixed-width font for text emails"
 #~ msgstr "Używaj czcionki o stałej szerokości w wiadomościach tekstowych"
 
 #~ msgid ""
@@ -6179,7 +6179,7 @@ msgstr ""
 #~ "lub udostępnionych plików. Jeśli drzewo folderów jest ukryte, kliknij "
 #~ "pozycje Widok > Widok folderu z prawej strony paska narzędzi."
 
-#~ msgid "Use unified mail for this account"
+#~ msgid "Use unified email for this account"
 #~ msgstr "Użyj ujednoliconej poczty dla tego konta"
 
 #~ msgid "Use username and password"
@@ -6225,7 +6225,7 @@ msgstr ""
 #~ msgid "Waiting"
 #~ msgstr "Oczekujące"
 
-#~ msgid "Warning: This message might be a phishing or scam mail"
+#~ msgid "Warning: This message might be a phishing or scam email"
 #~ msgstr "Ostrzeżenie: wiadomość może być próbą oszustwa."
 
 #~ msgid "Weather • Season"
@@ -6518,7 +6518,7 @@ msgstr ""
 #~ msgid "Your data has been saved"
 #~ msgstr "Dane zostały zapisane"
 
-#~ msgid "Your mail address"
+#~ msgid "Your email address"
 #~ msgstr "Twój adres e-mail"
 
 #~ msgid "Your messages"
@@ -6539,7 +6539,7 @@ msgstr ""
 #~ msgid "Your password has been changed"
 #~ msgstr "Hasło zostało zmienione"
 
-#~ msgid "Your primary mail account can not be deleted."
+#~ msgid "Your primary email account can not be deleted."
 #~ msgstr "Nie można usunąć głównego konta pocztowego."
 
 #~ msgid "Your selected picture will be displayed after saving"
