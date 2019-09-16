@@ -105,10 +105,10 @@ define('io.ox/backbone/views/edit-picture', [
                     var width = coreSettings.get('properties/contactImageMaxWidth', 500);
                     this.storeState();
                     this.$body
-                        .croppie('result', { type: 'blob', size: { width: width }, format: 'png', quality: 0.9 })
+                        .croppie('result', { type: 'blob', size: { width: width }, format: 'jpeg', quality: 1.0 })
                         .then(function (blob) {
                             //store info
-                            var scaled = new File([blob], 'cropped.png', { type: 'image/png' });
+                            var scaled = new File([blob], 'cropped.jpeg', { type: 'image/jpeg' });
                             // trigger proper change events
                             this.model.unset('pictureFileEdited', { silent: true });
                             this.model.set('pictureFileEdited', scaled);
