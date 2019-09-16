@@ -195,7 +195,9 @@ define('io.ox/chat/main', [
         },
 
         closeChat: function () {
-            this.$rightside.empty();
+            this.$rightside.empty().append(
+                new EmptyView().render().$el
+            );
             this.$body.removeClass('open');
         },
 
