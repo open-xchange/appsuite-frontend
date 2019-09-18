@@ -72,7 +72,7 @@ define('io.ox/backbone/mini-views/settings-list-view', [
             // list view must have a collection
             if (!this.collection) this.collection = new Backbone.Collection();
             this.listenTo(this.collection, 'set reset', this.render.bind(this));
-            this.listenTo(this.collection, 'change sort', this.renderChildViews.bind(this));
+            this.listenTo(this.collection, 'change sort', _.debounce(this.renderChildViews, 20));
             this.listenTo(this.collection, 'add', this.onAdd.bind(this));
             this.listenTo(this.collection, 'remove', this.onRemove.bind(this));
         },
