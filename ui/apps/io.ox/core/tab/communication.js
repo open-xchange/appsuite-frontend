@@ -61,6 +61,8 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
 
             try {
                 data = JSON.parse(eventData);
+                // Bug 67076: eventData is maybe an empty String
+                if (!data) data = {};
             } catch (e) {
                 data = {};
                 if (ox.debug) console.warn('TabCommunication.initListener', e);
