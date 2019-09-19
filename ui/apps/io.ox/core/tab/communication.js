@@ -60,9 +60,7 @@ define('io.ox/core/tab/communication', ['io.ox/core/boot/util'], function (util)
             if (eventData === 'modernizr') return;
 
             try {
-                data = JSON.parse(eventData);
-                // Bug 67076: eventData is maybe an empty String
-                if (!data) data = {};
+                data = JSON.parse(eventData) || {};
             } catch (e) {
                 data = {};
                 if (ox.debug) console.warn('TabCommunication.initListener', e);
