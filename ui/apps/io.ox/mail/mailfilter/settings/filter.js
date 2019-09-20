@@ -405,6 +405,25 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         'click [data-action="edit-autoforward"]': 'onEditAutoforward'
                     },
 
+                    propagate: function (model) {
+
+                        if (_.indexOf(model.get('flags'), 'vacation') !== -1) {
+                            require(['io.ox/mail/mailfilter/vacationnotice/model'], function (Model) {
+                                var vacationnoticeModel = new Model();
+                                vacationnoticeModel.set(model.toJSON());
+                                ox.trigger('mail:change:vacation-notice', vacationnoticeModel);
+                            });
+                        }
+
+                        if (_.indexOf(model.get('flags'), 'autoforward') !== -1) {
+                            require(['io.ox/mail/mailfilter/autoforward/model'], function (Model) {
+                                var autoforwardModel = new Model();
+                                autoforwardModel.set(model.toJSON());
+                                ox.trigger('mail:change:auto-forward', autoforwardModel);
+                            });
+                        }
+                    },
+
                     onToggle: function (e) {
                         e.preventDefault();
                         var self = this;
@@ -416,25 +435,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                 self.$el.toggleClass('active', self.model.get('active'));
                                 self.$el.toggleClass('disabled', !self.model.get('active'));
                                 $(e.target).text(self.model.get('active') ? gt('Disable') : gt('Enable'));
-
-                                if (_.indexOf(self.model.get('flags'), 'autoforward') !== -1) {
-                                    require(['io.ox/mail/mailfilter/autoforward/model'], function (Model) {
-                                        var autoforwardModel = new Model();
-                                        autoforwardModel.set(self.model.attributes);
-                                        ox.trigger('mail:change:auto-forward', autoforwardModel);
-
-                                    });
-                                }
-
-                                if (_.indexOf(self.model.get('flags'), 'vacation') !== -1) {
-                                    require(['io.ox/mail/mailfilter/vacationnotice/model'], function (Model) {
-                                        var vacationnoticeModel = new Model();
-                                        vacationnoticeModel.set(self.model.attributes);
-                                        ox.trigger('mail:change:vacation-notice', vacationnoticeModel);
-
-                                    });
-                                }
-
+                                self.propagate(self.model);
                             })
                         );
                     },
@@ -500,18 +501,20 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     onDelete: function (e) {
                         e.preventDefault();
-                        var self = this,
-                            id = self.model.get('id');
 
                         new ModalDialog({ title: gt('Do you really want to delete this filter rule?') })
                             .addCancelButton()
                             .addButton({ label: gt('Delete'), action: 'delete' })
                             .on('delete', function () {
-                                if (id === false) return;
+                                var view = this,
+                                    model = this.model;
+                                if (model.get('id') === false) return;
+                                collection.remove(model);
                                 //yell on reject
-                                self.model.collection.remove(id);
                                 settingsUtil.yellOnReject(
-                                    api.deleteRule(id).done(function () {
+                                    api.deleteRule(model.get('id')).done(function () {
+                                        // for proper handling in mail-settings/mail-list
+                                        view.propagate(model.set('active', false));
                                         $node.find('.controls [data-action="add"]').focus();
                                         var arrayOfFilters = $node.find('li[data-id]'),
                                             data = _.map(arrayOfFilters, function (single) {
@@ -524,7 +527,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                         updatePositionInCollection(collection, data);
                                     })
                                 );
-                            })
+                            }.bind(this))
                             .open();
                     },
 
