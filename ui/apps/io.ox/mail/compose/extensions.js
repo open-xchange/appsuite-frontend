@@ -701,6 +701,7 @@ define('io.ox/mail/compose/extensions', [
                         cancelButtonText: gt('Cancel'),
                         header: gt('Add attachments'),
                         multiselect: true,
+                        createFolderButton: false,
                         extension: 'io.ox/mail/mobile/navbar'
                     })
                     .done(function (files) {
