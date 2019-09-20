@@ -363,7 +363,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                     }),
                     $('<div>').append(
                         $('<button type="button" class="btn btn-link" data-action="select-all">')
-                            .text('Select all')
+                            .text(gt('Select all'))
                             .on('click', { view: this }, onSelectAll)
                     )
                 );
