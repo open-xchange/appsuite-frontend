@@ -449,6 +449,7 @@ define('io.ox/chat/views/chat', [
         onChangeHeight: function (e, opt) {
             var scrollpane = this.$scrollpane;
             if ($(e.target).position().top > scrollpane.height) return;
+
             // scroll to bottom again if height of image changes
             scrollpane.scrollTop(scrollpane.scrollTop() + opt.value - opt.prev);
 

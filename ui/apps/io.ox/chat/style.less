@@ -494,7 +494,7 @@
         .sender {
             font-weight: bold;
         }
-        &.text {
+        &.text, &.file {
             .content {
                 background-color: #eee;
                 border-radius: 8px;
@@ -504,7 +504,7 @@
         }
         .foot {
             float: right;
-            margin: -2px -6px -7px 0px;
+            margin: 5px 0px -10px 30px;
 
             > * { display: inline-block; }
         }
@@ -530,9 +530,11 @@
             .time, .delivery {
                 color: #eee;;
             }
-            &.text .content {
-                color: #fff;
-                background-color: @gray;
+            &.text, &.file {
+                .content {
+                    color: #fff;
+                    background-color: @gray;
+                }
             }
             .body {
                 text-align: left;
@@ -549,7 +551,7 @@
             margin: 0 64px 0 0;
 
             &.myself {
-                margin: 0 0 0 64px;
+                margin: 0 0 8px 64px;
             }
 
             img {
@@ -559,28 +561,29 @@
                 border-radius: 8px;
                 cursor: pointer;
             }
+        }
+        &.image {
+            .body {
+                position: relative;
+                .placeholder {
+                    min-height: 100px;
+                }
+            }
 
             .foot {
-                margin-right: 2px;
-                margin-top: 1px;
-                float: none;
-
-                .time, .delivery {
-                    color: @black;
-                }
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                margin: 0;
+                padding: 0 0.5em;
+                text-align: right;
+                height: 1.6em;
+                border-radius: 8px;
+                background: linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%);
             }
         }
         &.file {
-            .body {
-                display: inline-block;
-                background-color: #eee;
-                text-align: center;
-                min-width: 100px;
-                min-height: 28px;
-                border-radius: 8px;
-                padding: 4px 8px;
-            }
-
             &.myself .body {
                 color: #fff;
                 background-color: @gray;

@@ -60,12 +60,13 @@ define('io.ox/chat/views/messages', [
                     this.renderSender(model),
                     // message boby
                     $('<div class="content">').append(
-                        $('<div class="body">').html(model.getBody()),
-                        $('<div class="foot">').append(
-                            // time
-                            $('<div class="time">').text(model.getTime()),
-                            // delivery state
-                            $('<div class="fa delivery">').addClass(model.get('state'))
+                        $('<div class="body">').html(model.getBody()).append(
+                            $('<div class="foot">').append(
+                                // time
+                                $('<div class="time">').text(model.getTime()),
+                                // delivery state
+                                $('<div class="fa delivery">').addClass(model.get('state'))
+                            )
                         )
                     )
                 );

@@ -193,7 +193,7 @@ define('io.ox/chat/data', [
 
         getImage: function () {
             var url = data.API_ROOT + '/files/' + this.get('fileId') + '/thumbnail',
-                placeholder = $('<div>').height('100%');
+                placeholder = $('<div class="placeholder">').busy();
             $('<img>').on('load', function () {
                 var $img = $(this),
                     oldHeight = placeholder.height();
