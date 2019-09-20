@@ -442,7 +442,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         },
                         addressValues = {
                             'all': gt('All'),
-                            'localpart': gt('Localpart'),
+                            'localpart': gt('Local-part'),
                             'domain': gt('Domain'),
                             'user': gt('User'),
                             'detail': gt('Detail')
@@ -1039,7 +1039,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
                     var addressValues = {
                             'all': gt('All'),
-                            'localpart': gt('Localpart'),
+                            'localpart': gt('Local-part'),
                             'domain': gt('Domain'),
                             'user': gt('User'),
                             'detail': gt('Detail')

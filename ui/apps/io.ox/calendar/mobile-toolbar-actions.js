@@ -37,7 +37,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
         'listView': {
             prio: 'hi',
             mobile: 'hi',
-            title: gt('Listview'),
+            title: gt('List view'),
             icon: 'fa fa-list',
             drawDisabled: true,
             ref: 'io.ox/calendar/actions/switch-to-list-view'
