@@ -36,6 +36,7 @@ define('io.ox/core/boot/load', [
     }, {
         id: 'i18n',
         run: function (baton) {
+            var language = locale.deriveSupportedLanguageFromLocale(ox.locale);
             // apply session data (again) & page title
             if (baton.sessionData) session.set(baton.sessionData);
             ox.trigger('change:document:title');
@@ -48,9 +49,10 @@ define('io.ox/core/boot/load', [
             // we have to clear the device function cache or there might be invalid return values, like for example wrong locale data (see Bug 51405).
             _.device.cache = {};
             // make sure we have loaded precore.js now
+            ox.language = language;
             return $.when(
                 require([ox.base + '/precore.js']),
-                gettext.setLanguage(locale.deriveSupportedLanguageFromLocale(ox.locale)),
+                gettext.setLanguage(language),
                 manifests.manager.loadPluginsFor('i18n')
             ).then(function () {
                 util.debug('Load UI > current locale and i18n plugins DONE.');
