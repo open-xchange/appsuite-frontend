@@ -113,7 +113,7 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
             });
         }
         if (data.timeLong) {
-            timeLong = String(data.timeLong || 'h:mm:ss A');
+            timeLong = String(data.timeLong || 'h:mm:ss a');
             _.extend(result, {
                 time: timeLong.replace(/.ss/, ''),
                 timeLong: timeLong

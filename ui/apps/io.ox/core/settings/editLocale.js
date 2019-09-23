@@ -40,8 +40,8 @@ define('io.ox/core/settings/editLocale', [
         .inject({
             getTimeOptions: function () {
                 return [
-                    { label: gt('9:00 AM (12 hours)'), value: 'h:mm:ss A' },
-                    { label: gt('09:00 AM (12 hours)'), value: 'hh:mm:ss A' },
+                    { label: gt('9:00 AM (12 hours)'), value: 'h:mm:ss a' },
+                    { label: gt('09:00 AM (12 hours)'), value: 'hh:mm:ss a' },
                     { label: gt('9:00 (24 hours)'), value: 'H:mm:ss' },
                     { label: gt('09:00 (24 hours)'), value: 'HH:mm:ss' },
                     { label: gt('9.00 (24 hours)'), value: 'H.mm.ss' },
