@@ -39,7 +39,9 @@ module.exports.config = {
             mxDomain: process.env.MX_DOMAIN,
             serverURL: process.env.PROVISIONING_URL,
             contextId: process.env.CONTEXT_ID,
-            filestoreId: process.env.FILESTORE_ID
+            filestoreId: process.env.FILESTORE_ID,
+            smtpServer: process.env.SMTP_SERVER || 'localhost',
+            imapServer: process.env.IMAP_SERVER || 'localhost'
         }
     },
     include: {
