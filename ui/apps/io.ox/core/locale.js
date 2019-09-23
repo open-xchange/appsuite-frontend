@@ -48,7 +48,7 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
 
         // customized?
         if (!_.isEmpty(settings.get('localeData', {})) && (!format || format === 'date' || format === 'time')) {
-            format = format === 'time' ? localeData.time : localeData.dateShort;
+            format = meta.translateCLDRToMoment(format === 'time' ? localeData.time : localeData.dateShort);
             return intervals.intervalFormatFallback.replace('{0}', start.format(format)).replace('{1}', end.format(format));
         }
 
@@ -170,7 +170,7 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
         localeData = getLocaleData(localeId);
         if (_.isEmpty(localeData)) return;
         var id = meta.deriveMomentLocale(localeId),
-            timeLong = localeData.timeLong,
+            timeLong = meta.translateCLDRToMoment(localeData.timeLong),
             time = timeLong.replace(/.ss/, ''),
             dow = meta.weekday.index(localeData.firstDayOfWeek),
             doy = localeData.firstDayOfYear;

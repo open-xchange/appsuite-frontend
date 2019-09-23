@@ -218,7 +218,7 @@ define('io.ox/core/locale/meta', function () {
     // (see http://cldr.unicode.org/translation/date-time-patterns)
     function translateCLDRToMoment(format) {
         format = format.replace(/d/g, 'D')
-             .replace(/EEEE/g, 'dddd')
+            .replace(/EEEE/g, 'dddd')
             .replace(/E/g, 'ddd')
             .replace(/a/g, 'A')
             .replace(/y/g, 'Y');
