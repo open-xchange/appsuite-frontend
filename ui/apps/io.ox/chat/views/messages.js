@@ -60,14 +60,9 @@ define('io.ox/chat/views/messages', [
                     this.renderSender(model),
                     // message boby
                     $('<div class="content">').append(
-                        $('<div class="body">').html(model.getBody()).append(
-                            $('<div class="foot">').append(
-                                // time
-                                $('<div class="time">').text(model.getTime()),
-                                // delivery state
-                                $('<div class="fa delivery">').addClass(model.get('state'))
-                            )
-                        )
+                        $('<div class="body">')
+                            .html(model.getBody())
+                            .append(this.renderFoot(model))
                     )
                 );
 
@@ -75,6 +70,15 @@ define('io.ox/chat/views/messages', [
 
             if (date) return [date, message];
             return message;
+        },
+
+        renderFoot: function (model) {
+            return $('<div class="foot">').append(
+                // time
+                $('<div class="time">').text(model.getTime()),
+                // delivery state
+                $('<div class="fa delivery">').addClass(model.get('state'))
+            );
         },
 
         renderSender: function (model) {
@@ -156,7 +160,9 @@ define('io.ox/chat/views/messages', [
             $message
                 .removeClass('system text image file audio')
                 .addClass(model.isSystem() ? 'system' : model.get('type'));
-            $body.html(model.getBody());
+            $body
+                .html(model.getBody())
+                .append(this.renderFoot(model));
         },
 
         onChangeTime: function (model) {
