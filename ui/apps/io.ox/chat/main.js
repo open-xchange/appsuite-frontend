@@ -78,6 +78,12 @@ define('io.ox/chat/main', [
             this.listenTo(events, 'cmd', this.onCommand);
         },
 
+        onStick: function () {
+            var cid = this.getCurrentMessageCid();
+            FloatingWindow.View.prototype.onStick.apply(this);
+            this.scrollToMessage(cid);
+        },
+
         setCount: function (count) {
             this.model.set('count', count);
         },
@@ -289,9 +295,34 @@ define('io.ox/chat/main', [
         },
 
         toggleWindowMode: function (mode) {
+            var cid = this.getCurrentMessageCid();
             win.model.set(mode, true);
             settings.set('chat/mode', mode).save();
             this.$body.toggleClass('columns', mode === 'sticky');
+            this.scrollToMessage(cid);
+        },
+
+        getCurrentMessageCid: function () {
+            if (!this.$body.find('.controls')) return;
+
+            var height = this.$body.find('.scrollpane').height(),
+                currentMessage;
+            this.$body.find('.message').each(function () {
+                if ($(this).position().top < height) currentMessage = $(this);
+            });
+
+            return currentMessage.attr('data-cid');
+        },
+
+        scrollToMessage: function (cid) {
+            var scrollpane = this.$body.find('.scrollpane'),
+                position = 0xFFFF,
+                elem = this.$body.find('[data-cid="' + cid + '"]'),
+                delta = elem.position().top - scrollpane.height() + elem.height(),
+                margin = elem.is(':last-child') ? 17 : 8;
+
+            position = scrollpane.scrollTop() + delta;
+            scrollpane.scrollTop(position + margin);
         },
 
         getResizeBar: (function () {
