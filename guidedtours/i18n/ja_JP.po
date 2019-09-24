@@ -619,11 +619,6 @@ msgstr ""
 msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "新規メールを作成するには、ツールバーで [作成] をクリックします。"
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr ""
-"新規メールを作成するには、ツールバーの [新規メールを作成] をクリックします。"
-
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
 msgstr "新規予定を作成するには、ツールバーで、[新規] をクリックします。"

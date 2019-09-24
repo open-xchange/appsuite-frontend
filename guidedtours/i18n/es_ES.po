@@ -642,12 +642,6 @@ msgstr ""
 "Para redactar un nuevo correo electrónico, pulse el icono Redactar nuevo "
 "correo electrónico en la barra de herramientas."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr ""
-"Para crear un nuevo correo electrónico, pulse el icono Redactar nuevo correo "
-"electrónico en la barra de herramientas."
-
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
 msgstr "Para crear una nueva cita, pulse en Nuevo en la barra de herramientas."

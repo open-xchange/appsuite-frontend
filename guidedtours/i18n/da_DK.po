@@ -631,10 +631,6 @@ msgstr ""
 msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "For skrive en ny e-mail, klik på Skriv e-mail i værktøjslinjen."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr "For at oprette en ny e-mail, klik på Skriv ny e-mail i værktøjslinjen."
-
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
 msgstr "For at oprette en aftale, klik på Ny i værktøjslinjen."

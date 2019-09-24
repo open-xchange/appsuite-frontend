@@ -583,10 +583,6 @@ msgstr "要選擇不同視圖，點擊工具列列中的視圖。在版面中選
 msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "要撰寫新郵件，點選工具列的撰寫。"
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr "要發新信，點擊工具列中的的寫新郵件圖示。"
-
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
 msgstr "要建立新約會，點選工具列中的新增。"

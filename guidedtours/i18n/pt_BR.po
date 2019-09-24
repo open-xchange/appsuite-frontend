@@ -644,12 +644,6 @@ msgstr ""
 "Para escrever um novo e-mail, clique no ícone Escrever na barra de "
 "ferramentas."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr ""
-"Para criar um novo e-mail, clique no ícone Escrever novo e-mail na barra de "
-"ferramentas."
-
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
 msgstr ""

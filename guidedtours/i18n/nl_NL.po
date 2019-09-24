@@ -647,12 +647,6 @@ msgstr ""
 "Om een nieuw e-mailbericht te maken klikt u op Nieuw e-mailbericht opstellen "
 "in de werkbalk."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr ""
-"Om een nieuw e-mailbericht te maken klikt u op 'Nieuw e-mailbericht "
-"opstellen' in de werkbalk."
-
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
 msgstr "Om een nieuwe afspraak te maken klikt u op Nieuw in de werkbalk."

@@ -634,10 +634,6 @@ msgstr ""
 msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "Új levél írásához kattintson felül az Új levél írása ikonra."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr ""
-"Új levél írásához kattintson az eszköztárban található Új levél írása ikonra."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."

@@ -625,12 +625,6 @@ msgstr ""
 "Chcete-li napsat novou zprávu, klikněte na Napsat novou zprávu na nástrojové "
 "liště."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr ""
-"Chcete-li vytvořit novou zprávu, klikněte na ikonu Napsat novou zprávu na "
-"nástrojové liště."
-
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
 msgstr ""

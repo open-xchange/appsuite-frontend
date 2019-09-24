@@ -414,11 +414,6 @@ msgstr ""
 
 #: apps/io.ox/tours/mail.js
 #: module:io.ox/tours
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr ""
-
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
 msgid "Entering the recipient's name"
 msgstr ""
 

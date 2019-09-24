@@ -640,12 +640,6 @@ msgstr ""
 "Jauna e-pasta sastādīšanai noklikšķiniet uz e-pasta sastādīšanas ikonas "
 "rīkjoslā."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr ""
-"Lai izveidotu jaunu e-pasta vēstuli, noklikšķiniet uz jauna e-pasta ikonas "
-"rīkjoslā."
-
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
 msgstr "Jaunas mītiņa izveidošanai, rīkjoslā noklikšķiniet uz Jauns."

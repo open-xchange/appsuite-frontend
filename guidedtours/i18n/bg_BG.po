@@ -633,12 +633,6 @@ msgstr ""
 "За да създадете нова електронна поща, кликнете върху \"Изготвяне\" в лентата "
 "с инструменти."
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr ""
-"За да създадете нова електронна поща, кликнете върху \"Създаване на нова "
-"електронна поща\" в лентата с инструменти."
-
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
 msgstr ""

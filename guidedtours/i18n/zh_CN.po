@@ -583,10 +583,6 @@ msgstr ""
 msgid "To compose a new email, click on Compose in the toolbar."
 msgstr "要编写一个新电子邮件，请单击工具条里的编写。"
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr "要创建一个新电子邮件，请单击工具条里的创建新电子邮件。"
-
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
 msgstr "要创建一个新约会，请单击工具条里的新建。"
