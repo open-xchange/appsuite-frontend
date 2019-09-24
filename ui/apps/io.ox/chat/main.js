@@ -303,7 +303,7 @@ define('io.ox/chat/main', [
         },
 
         getCurrentMessageCid: function () {
-            if (!this.$body.find('.controls')) return;
+            if (this.$body.find('.controls').length === 0) return;
 
             var height = this.$body.find('.scrollpane').height(),
                 currentMessage;
@@ -315,6 +315,8 @@ define('io.ox/chat/main', [
         },
 
         scrollToMessage: function (cid) {
+            if (!cid) return;
+
             var scrollpane = this.$body.find('.scrollpane'),
                 position = 0xFFFF,
                 elem = this.$body.find('[data-cid="' + cid + '"]'),
