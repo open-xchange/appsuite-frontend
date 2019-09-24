@@ -236,15 +236,16 @@ define('io.ox/backbone/mini-views/common', [
         isChecked: function () {
             return !!this.$input.prop('checked');
         },
-        setup: function () {
+        setup: function (options) {
             this.$input = this.$el;
+            this.nodeName = options.nodeName;
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
         update: function () {
             this.$input.prop('checked', this.setValue());
         },
         render: function () {
-            this.$input.attr({ name: this.name });
+            this.$input.attr({ name: this.nodeName || this.name });
             if (this.options.id) this.$input.attr('id', this.options.id);
             this.update();
             return this;
@@ -253,7 +254,7 @@ define('io.ox/backbone/mini-views/common', [
 
     //
     // custom checkbox
-    // options: id, name, size (small | large), label
+    // options: id, name, nodeName, size (small | large), label
     //
     var CustomCheckboxView = CheckboxView.extend({
         el: '<div class="checkbox custom">',
@@ -261,7 +262,7 @@ define('io.ox/backbone/mini-views/common', [
             var id = this.options.id || _.uniqueId('custom-');
             this.$el.addClass(this.options.size || 'small').append(
                 $('<label>').attr('for', id).append(
-                    this.$input = $('<input type="checkbox" class="sr-only">').attr({ id: id, name: this.name }),
+                    this.$input = $('<input type="checkbox" class="sr-only">').attr({ id: id, name: this.nodeName || this.name }),
                     $('<i class="toggle" aria-hidden="true">'),
                     $.txt(this.options.label || '\u00a0')
                 )

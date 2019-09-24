@@ -505,7 +505,7 @@ define('io.ox/mail/detail/view', [
                 // e.g. iOS is too fast, i.e. load is triggered before adding to the DOM
                 _.defer(function () {
                     var html = $(this.contentDocument).find('html'),
-                        targets = '.mailto-link, .deep-link-tasks, .deep-link-contacts, .deep-link-calendar, .deep-link-files, .deep-link-app';
+                        targets = '.mailto-link, .deep-link-tasks, .deep-link-contacts, .deep-link-calendar, .deep-link-files, .deep-link-gdpr, .deep-link-app';
                     // forward deep link clicks from iframe scope to document-wide handlers
                     html.on('click', targets, function (e) {
                         ox.trigger('click:deep-link-mail', e, this);

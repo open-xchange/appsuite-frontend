@@ -29,6 +29,7 @@ define('io.ox/settings/main', [
     'io.ox/keychain/api',
     'io.ox/core/settings/errorlog/settings/pane',
     'io.ox/core/settings/downloads/pane',
+    'io.ox/settings/personalData/settings/pane',
     'io.ox/settings/apps/settings/pane',
     'less!io.ox/settings/style'
 ], function (VGrid, apps, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, yell, keychainAPI) {
@@ -493,6 +494,12 @@ define('io.ox/settings/main', [
             subgroup: 'io.ox/settings/pane/external'
         });
 
+        ext.point('io.ox/settings/pane').extend({
+            id: 'personalData',
+            index: 600,
+            subgroup: 'io.ox/settings/pane/personalData'
+        });
+
         // enqueue is probably a bad name, but since it's not exposed …
         // only resolve the last object enqueed
         var enqueue = (function () {
@@ -509,6 +516,7 @@ define('io.ox/settings/main', [
                 }.bind(active));
             };
         }());
+
         var showSettings = function (baton, focus) {
             baton = ext.Baton.ensure(baton);
             baton.tree = tree;
