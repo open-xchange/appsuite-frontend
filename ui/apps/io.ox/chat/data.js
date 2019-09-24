@@ -687,7 +687,7 @@ define('io.ox/chat/data', [
 
             socket.on('message:new', function (roomId, message) {
                 // stop typing
-                events.trigger('typing:' + roomId, message.senderId, false);
+                events.trigger('typing:' + roomId, message.sender, false);
                 // fetch room unless it's already known
                 data.chats.fetchUnlessExists(roomId).done(function (model) {
                     // add new message to room

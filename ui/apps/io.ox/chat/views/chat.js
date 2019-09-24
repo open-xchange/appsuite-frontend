@@ -140,6 +140,7 @@ define('io.ox/chat/views/chat', [
         },
 
         initialize: function (options) {
+            var self = this;
 
             this.room = options.room;
             this.messageId = options.messageId;
@@ -176,39 +177,41 @@ define('io.ox/chat/views/chat', [
             this.typing = {
                 $el: $('<div class="typing">'),
                 timer: {},
-                show: function (userId) {
-                    var model = data.users.get(userId);
+                show: function (email) {
+                    var model = data.users.getByMail(email);
                     if (!model || model.isMyself()) return;
-                    this.reset(userId);
-                    var $span = this.span(userId);
-                    if (!$span.length) this.add(userId, model.getName());
-                    this.timer[userId] = setTimeout(function () {
+                    this.reset(email);
+                    var $span = this.span(email),
+                        atBottom = self.isScrolledToBottom();
+                    if (!$span.length) this.add(email, model.getName());
+                    if (atBottom) self.scrollToBottom();
+                    this.timer[email] = setTimeout(function () {
                         if (this.disposed) return;
-                        this.hide(userId);
+                        this.hide(email);
                     }.bind(this), 5000);
                 },
-                span: function (userId) {
-                    return this.$el.find('[data-user-id="' + userId + '"]');
+                span: function (email) {
+                    return this.$el.find('[data-user-id="' + email + '"]');
                 },
-                reset: function (userId) {
-                    if (!this.timer[userId]) return;
-                    window.clearTimeout(this.timer[userId]);
-                    delete this.timer[userId];
+                reset: function (email) {
+                    if (!this.timer[email]) return;
+                    window.clearTimeout(this.timer[email]);
+                    delete this.timer[email];
                 },
-                add: function (userId, name) {
-                    this.$el.append($('<div class="name">').attr('data-user-id', userId).text(name + ' is typing'));
+                add: function (email, name) {
+                    this.$el.append($('<div class="name">').attr('data-user-id', email).text(name + ' is typing'));
                 },
-                hide: function (userId) {
-                    this.reset(userId);
-                    this.span(userId).remove();
+                hide: function (email) {
+                    this.reset(email);
+                    this.span(email).remove();
                 },
-                toggle: function (userId, state) {
-                    if (state) this.show(userId); else this.hide(userId);
+                toggle: function (email, state) {
+                    if (state) this.show(email); else this.hide(email);
                 }
             };
 
-            this.listenTo(events, 'typing:' + this.model.id, function (userId, state) {
-                this.typing.toggle(userId, state);
+            this.listenTo(events, 'typing:' + this.model.id, function (email, state) {
+                this.typing.toggle(email, state);
             });
 
             this.$editor = $();
@@ -301,12 +304,16 @@ define('io.ox/chat/views/chat', [
             return $('<h2 class="title">').append(this.model.getTitle() || '\u00a0');
         },
 
+        isScrolledToBottom: function () {
+            var scrollpane = this.$scrollpane;
+            return scrollpane.scrollTop() + scrollpane.height() > scrollpane.prop('scrollHeight') - 30;
+        },
+
         onBeforeAdd: function () {
-            var scrollpane = this.$scrollpane,
-                firstChild = this.messagesView.$el.children().first(),
+            var firstChild = this.messagesView.$el.children().first(),
                 prevTop = (firstChild.position() || {}).top || 0,
                 // check this before adding the new messages
-                isScrolledDown = scrollpane.scrollTop() + scrollpane.height() > scrollpane.prop('scrollHeight') - 30;
+                isScrolledDown = this.isScrolledToBottom();
             this.scrollInfo = { firstChild: firstChild, prevTop: prevTop, isScrolledDown: isScrolledDown };
         },
 
