@@ -139,7 +139,7 @@ define('io.ox/tours/mail', [
         }
         emailTour.step()
             .title(gt('Opening the email settings'))
-            .content(gt('To open the email settings, click the System menu icon on the upper right side of the menu bar. Select Settings. Click on email on the left side.'))
+            .content(gt('To open the email settings, click the System menu icon on the upper right side of the menu bar. Select Settings. Click on Mail on the left side.'))
             .referTo('#io-ox-topbar-dropdown-icon')
             .hotspot('#io-ox-topbar-dropdown-icon')
             .end()
