@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-04-12 23:31+0800\n"
+"PO-Revision-Date: 2019-09-25 10:44+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -12,218 +12,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.1\n"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Add another account"
-msgstr "新增其他帳號"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Adding a code via text message"
-msgstr "透過簡訊接收驗證碼"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Adding attachments"
-msgstr "新增附件"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Adding further details"
-msgstr "新增更多詳情"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Adding verification option"
-msgstr "新增驗證選項"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"As an additional security feature, you can now require a second method of "
-"authentication, such as a text message, before logging into your account.  "
-"Would you like to see some information on this now?"
-msgstr ""
-"您可開啟二階段驗證作為另一道安全性防護，例如再登入前輸入傳送到手機簡訊的驗證"
-"碼。您想要了解一些相關資訊嗎？"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"At the top you can find the toolbar with many functions and additional "
-"options. You can easily create new folders, new files and much more."
-msgstr ""
-"您可在頂端找到含有許多功能與選項的工具列。您可以簡單地建立新資料夾、新檔案，"
-"以及其他功能。"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Authentication Requests"
-msgstr "驗證請求"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Choose from two alternatives to share your files and folders. Use Invite "
-"people if you want to manage access rights and allow recipients to create "
-"and edit files. Or just get a link to let others view and download your "
-"files. You can use an expiration date and password protection if you like."
-msgstr ""
-"在兩個選項間選擇以分享您的檔案與資料夾。若您想要管理權限並允許受邀者建立與編"
-"輯檔案，請使用邀請成員功能；若只要將鏈結提供給其他人，即可檢視、下載您的檔"
-"案。若您希望的話，也可指定到期日，並加上密碼保護。"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"Click on a letter on the left side of the navigation bar in order to display "
-"the corresponding contacts from the selected address book."
-msgstr "點選導覽列左方的字母以顯示選擇的通訊錄中對應的聯絡人。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Clicking on a folder displays all the subfolders, documents, media and other "
-"files that it contains."
-msgstr "點擊資料夾後將會顯示當中包含所有的子資料夾、文件、媒體與其他檔案。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Clicking on the view icon leads you to a preview of the selected file."
-msgstr "點擊檢視圖示，將帶您到選擇檔案的預覽畫面。"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Closing a square"
-msgstr "關閉方塊"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Collaborating"
-msgstr "協作"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Composing a new email"
-msgstr "撰寫新郵件"
+"X-Generator: Poedit 2.1.1\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
 msgstr "新增約會"
 
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Creating a new contact"
-msgstr "新增聯絡人"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating a new task"
-msgstr "新建工作"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Creating new items"
-msgstr "建立新項目"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create a new appointment, click on New in the toolbar."
+msgstr "要建立新約會，點選工具列中的新增。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Creating recurring appointments"
-msgstr "建立重複約會"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating recurring tasks"
-msgstr "建立重複任務"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Creating the appointment"
-msgstr "新增約會"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Creating the task"
-msgstr "建立任務"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Customizing the Portal"
-msgstr "自訂 Portal"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Depending on the app, the toolbar contains various functions for creating, "
-"editing and organizing objects."
-msgstr "視應用程式而定，工具列包含了建立、編輯、管理物件的不同功能。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"Detailed instructions for the single apps are located in System menu > Help."
-msgstr "可以在系統選單 > 說明中找到各程式的詳細操作說明。"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Devices can be removed once added if you so choose.  See help for additional "
-"details."
-msgstr "裝置新增後即可隨時移除。請參考說明取得更多詳細資訊。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Did you know that you can edit text documents and spreadsheets online? Drive "
-"will automatically update your edited file, but thanks to versioning the "
-"original file stays available."
-msgstr ""
-"您知道您可直接在線上編輯文件與試算表嗎？Drive 將自動更新您編輯的檔案，受惠於"
-"版本功能，原始版本將永遠存在。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Different views are available. Just select the one you like best."
-msgstr "可選擇不同的視圖，選擇您最喜歡的就好。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Displaying the help or the settings"
-msgstr "顯示選項或說明"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Drag and drop"
-msgstr "拖曳"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Drive allows you to connect to other storage solutions if you already have a "
-"cloud storage account you use to save and sync your files. Simply click on "
-"the appropriate logo to access your existing data."
-msgstr ""
-"若您已經有了雲端儲存空間的帳號，用來儲存與同步檔案的話，您可直接將 Drive 連結"
-"至該線上儲存解決方案。只要點擊對應的圖示後登入即可存取您現有的資料。"
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"Edit a setting on the right side. In most of the cases, the changes are "
-"activated immediately."
-msgstr "編輯右邊的設定，在大多數的情況下變更將會即時生效。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Edit documents"
-msgstr "編輯文件"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Editing multiple emails"
-msgstr "編輯多封郵件"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Editing multiple contacts"
-msgstr "編輯多個聯絡人"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Editing multiple tasks"
-msgstr "編輯多個任務"
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Editing settings"
-msgstr "編輯選項"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTML "
-"in the options, you can format the E-Mail text. To do so select a text part "
-"and then click an icon in the formatting bar."
-msgstr ""
-"在主要區域輸入郵件內文，若文字格式設定為 HTML，您將可以套用格式。若要這麼做請"
-"選擇一段文字，然後點擊格式列中的圖示。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"Enter the recipient's name into the recipients field. As soon as you typed "
-"the first letters, suggestions from the address books are displayed. To "
-"accept a recipient suggestion, click on it."
-msgstr ""
-"請在收件者欄位輸入收件者的姓名。當您輸入首字母後，將顯示來自通訊錄中的建議。"
-"若要接受收件者建議，請點擊。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Enter the subject into the subject field."
-msgstr "在主旨欄位輸入主旨。"
+msgid "Entering the appointment's data"
+msgstr "輸入約會資料"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
@@ -231,259 +32,73 @@ msgid ""
 "details are optional."
 msgstr "輸入約會的主旨、開啟與結束日期，其他資訊皆非必填。"
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Enter the subject, the start date, and a description."
-msgstr "輸入主旨、開始日期以及描述。"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Entering billing information"
-msgstr "輸入帳務資訊"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the email text"
-msgstr "輸入郵件內文"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating recurring appointments"
+msgstr "建立重複約會"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Entering the appointment's data"
-msgstr "輸入約會資料"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the recipient's name"
-msgstr "輸入收件者名稱"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Entering the subject"
-msgstr "輸入主旨"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Entering the task's data"
-msgstr "輸入任務資料"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "File details"
-msgstr "檔案詳情"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Folder content"
-msgstr "資料夾內容"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Folder tree"
-msgstr "資料夾樹"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"From preview you can also select other options to help you manage and work "
-"on your files."
-msgstr "您也可在預覽畫面選擇其他選項來幫助管理與編輯檔案。"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "Further down you can add documents as attachments to the appointment."
-msgstr "您還可以新增文件為附件至約會。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Further functions"
-msgstr "更多功能"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Further information"
-msgstr "更多資訊"
-
-#. Tour name; general introduction
-#: apps/io.ox/tours/main.js module:io.ox/tours
-msgid "Getting started"
-msgstr "開始入門"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Halo view"
-msgstr "Halo View"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Here you can share files with your colleagues and external contacts. You can "
-"also collaborate on a document and set different access rights."
-msgstr ""
-"您可在此與朋友及外部聯絡人分享檔案。您也可以一起編輯文件，並設定不同存取權"
-"限。"
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "How the settings are organized"
-msgstr "設定如何整理"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
-"separate window."
-msgstr "若雙擊清單中的郵件，將於不同視窗中開啟該郵件。"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "If you no longer want to display a square, click the delete icon."
-msgstr "若您不想要顯示方塊，點擊刪除圖示。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"In order to edit multiple E-Mails at once, enable the checkboxes on the left "
-"side of the E-Mails. If the checkboxes are not displayed, click on View > "
-"Checkboxes on the right side of the toolbar."
-msgstr ""
-"要一次編輯多封郵件，點選郵件左邊的選取盒。若選取盒未顯示，點選工具列右邊的視"
-"圖 > 選取盒。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"In this area you can find further functions, e.g. for adding attachments."
-msgstr "在此區域您可以找到更多功能，例如新增附件。"
+"To create recurring appointments, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr "要建立重複約會，選取重複。將會顯示重複發生的選項。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
 msgstr "邀請其他參與者"
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Launching an app"
-msgstr "執行應用程式"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Navigation bar"
-msgstr "導覽列"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Next"
-msgstr "下一個"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
-"On the left you can see the folder tree. It displays your folder structure "
-"and allows you to navigate to specific folders and subfolders. To make your "
-"life easier, we have already included folders for your Documents, Music, "
-"Pictures and Videos."
+"To invite other participants, enter their names in the field below "
+"Participants. To avoid appointment conflicts, click on Find a free time at "
+"the upper right side."
 msgstr ""
-"您可以在左邊看到資料夾樹，當中將會顯示您的資料夾結構，您可在當中切換至任何資"
-"料夾與子資料夾。為了方便您，我們已經為您的文件、音樂、相片、影片準備了專用資"
-"料夾。"
+"要邀請其他參與者，在參與者欄位下方輸入他們的姓名。要避免約會發生衝突，點選右"
+"上角的尋找空閒時間。"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening an email in a separate window"
-msgstr "在不同視窗開啟郵件"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "使用提醒功能"
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Opening or closing the folder tree"
-msgstr "開啟或關閉資料夾樹"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "若不要錯過約會，使用提醒功能。"
 
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Opening the email settings"
-msgstr "開啟郵件選項"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Adding attachments"
+msgstr "新增附件"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Opening the help"
-msgstr "開啟說明"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Further down you can add documents as attachments to the appointment."
+msgstr "您還可以新增文件為附件至約會。"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Opening the settings"
-msgstr "開啟選項"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating the appointment"
+msgstr "新增約會"
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Preview files"
-msgstr "預覽檔案"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Preview mode"
-msgstr "預覽模式"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Reading email conversations"
-msgstr "閱讀郵件討論串"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "Reading the details"
-msgstr "閱讀詳情"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Removing"
-msgstr "移除"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Searching for objects"
-msgstr "搜尋物件"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Second Factor Authentication"
-msgstr "雙因素驗證"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Select a view"
-msgstr "選擇視圖"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create the appointment, click on Create at the lower left side."
+msgstr "要建立約會，點選左下角的「建立」。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
 msgid "Selecting a view"
 msgstr "選擇視圖"
 
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
-"Selecting the option for a code via text message, for example, will then ask "
-"you for a phone number."
-msgstr "選擇此選項，透過手機簡訊接收驗證碼，然後會要求您提供手機號碼。"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid "Sending an email to a contact"
-msgstr "傳送郵件給某個聯絡人"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sending the email"
-msgstr "寄送郵件"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Share files"
-msgstr "分享檔案"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Sharing files by inviting people does not only offer your recipients the "
-"option to create and edit files. Internal and external participants are also "
-"able to collaborate with you on text documents and spreadsheets at the same "
-"time."
+"To select one of the views like Day, Month or List, click on View in the "
+"toolbar. Select a menu entry from the Layout section."
 msgstr ""
-"透過邀請成員來分享檔案不僅能讓受邀者建立、編輯檔案，內外部的其他參與者也能夠"
-"與您同時編輯文件與試算表。"
+"要選擇日、月、清單等視圖，點選工具列中的視圖，然後點選版面段落中的選單項目。"
 
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Sharing options"
-msgstr "分享選項"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "The calendar views"
+msgstr "行事曆視圖"
 
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid "Signing out"
-msgstr "登出"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Sorting tasks"
-msgstr "排序任務"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "Sorting your emails"
-msgstr "排序您的郵件"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid "Start tour"
-msgstr "開始導覽"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The Detail view"
-msgstr "詳細視圖"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
-"The Detail view displays an object's content. Depending on the app, further "
-"functions for organizing objects can be found in the Detail view."
-msgstr ""
-"詳細視圖會顯示物件的內容，視應用程式而定，您可以在詳細視圖中找到更多管理物件"
-"的功能。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "The Drive app"
-msgstr "Drive 應用程式"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "The Drive app tour.txt"
-msgstr "The Drive app tour.txt"
+"The calendar views display a calendar sheet with the appointments for the "
+"selected time range."
+msgstr "行事曆視圖將會顯示包含指定時間範圍中約會的行事曆。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The List view"
@@ -498,134 +113,37 @@ msgstr ""
 "清單視圖會顯示目前資料夾中的約會，點擊約會時，約會資料與一些功能將顯示於詳細"
 "視圖。"
 
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "The Portal"
-msgstr "入口"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid ""
-"The Portal informs you about current E-Mails, appointments or social network "
-"news."
-msgstr "入口可通知您目前有什麼郵件、約會、或社交網路中的消息。"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "The calendar views"
-msgstr "行事曆視圖"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"The calendar views display a calendar sheet with the appointments for the "
-"selected time range."
-msgstr "行事曆視圖將會顯示包含指定時間範圍中約會的行事曆。"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"The file details side bar offers additional information about your files. "
-"Just enable the File details option from the View drop down menu and select "
-"a file to see the details."
-msgstr ""
-"檔案詳細資訊側邊欄提供關於檔案的更多資訊。只要在視圖下拉選單開啟檔案詳情選"
-"項，然後選擇檔案即可看到詳情。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The folder tree"
-msgstr "資料夾樹"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The list"
-msgstr "清單"
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"The settings are organized in topics. Select the topic on the left side, e.g "
-"Basic settings or E-Mail."
-msgstr "設定依照主題排序顯示。點擊左邊的主題，例如「基礎設定」或「電子郵件」。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "The toolbar"
-msgstr "工具列"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Then the next time you log in, you will have to verify your identitity by "
-"entering the number sent to your phone."
-msgstr "下次登入時，就要輸入以簡訊傳送到您的手機的驗證碼。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"This guided tour will briefly introduce you to the product. Get more "
-"detailed information in the tours for the single apps or in the online help."
-msgstr ""
-"本指南將簡明地向您介紹本產品。若需更詳細的資訊，請參照各應用程式的導覽或線上"
-"說明。"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To add further details, click on Expand form."
-msgstr "要新增更多資訊，點選展開表單。"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid ""
-"To change the layout, drag a square's title to another position and drop it "
-"there."
-msgstr "要修改版面，將方塊的標題拖曳到其他地方並放下。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-#, fuzzy
-#| msgid ""
-#| "To choose between the different views. click on View in the toolbar. "
-#| "Select a menu entry in the layout."
-msgid ""
-"To choose between the different views, click on View in the toolbar. Select "
-"a menu entry in the layout."
-msgstr "要選擇不同視圖，點擊工具列列中的視圖。在版面中選擇一個清單項目。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To compose a new email, click on Compose in the toolbar."
-msgstr "要撰寫新郵件，點選工具列的撰寫。"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr "要建立新約會，點選工具列中的新增。"
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Creating a new contact"
+msgstr "新增聯絡人"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "To create a new contact, click on New > Add contact in the toolbar."
 msgstr "要新增聯絡人，點選工具列中的新增 > 新增聯絡人。"
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr "要建立新任務，點選工具列中的新增。"
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Navigation bar"
+msgstr "導覽列"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid ""
-"To create recurring appointments, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
-msgstr "要建立重複約會，選取重複。將會顯示重複發生的選項。"
+"Click on a letter on the left side of the navigation bar in order to display "
+"the corresponding contacts from the selected address book."
+msgstr "點選導覽列左方的字母以顯示選擇的通訊錄中對應的聯絡人。"
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Sending an email to a contact"
+msgstr "傳送郵件給某個聯絡人"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid ""
-"To create recurring tasks, enable Repeat. Functions for setting the "
-"recurrence parameters are shown."
-msgstr "要建立重複發生的任務，點選重複。將會顯示設定重複參數的功能。"
+"To send an E-Mail to the contact, click on an E-Mail address or on Send "
+"email in the toolbar."
+msgstr "要傳送郵件給聯絡人，點選工具列中的電子郵件地址或傳送電子郵件。"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create the appointment, click on Create at the lower left side."
-msgstr "要建立約會，點選左下角的「建立」。"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create the task, click on Create."
-msgstr "要建立任務，點擊「建立」。"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid ""
-"To display a square again or to display further information sources, click "
-"on Customize this page."
-msgstr "要再次顯示方塊或顯示更多資訊來源，點選此頁面的自訂。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To display the help or the settings, click the System menu icon in the menu "
-"bar."
-msgstr "要顯示選項或說明，點擊選單列當中的圖示。"
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Editing multiple contacts"
+msgstr "編輯多個聯絡人"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid ""
@@ -636,137 +154,69 @@ msgstr ""
 "要一次編輯多個聯絡人，選取聯絡人左邊的選取盒。若選取盒未顯示，點選工具列右邊"
 "的視圖 > 選取盒圖示。"
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app"
+msgstr "Drive 應用程式"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To edit multiple tasks at once, enable the checkboxes at the left side of "
-"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
-"on the right side of the toolbar."
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
 msgstr ""
-"要一次編輯多個任務，點選任務左邊的選取盒。若選取盒未顯示，點選工具列右邊的視"
-"圖 > 選取盒。"
+"歡迎使用您的雲端儲存應用程式。此導覽程式將向您介紹全新的線上儲存解決方案：可"
+"存取您所有帳號當中儲存的檔案的單一窗口。您可上傳並儲存檔案於此處，分享並在不"
+"同裝置間同步。"
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To enter billing information, click on Show details."
-msgstr "輸入帳務資訊，點擊顯示詳情。"
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder tree"
+msgstr "資料夾樹"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
+#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. To avoid appointment conflicts, click on Find a free time at "
-"the upper right side."
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
 msgstr ""
-"要邀請其他參與者，在參與者欄位下方輸入他們的姓名。要避免約會發生衝突，點選右"
-"上角的尋找空閒時間。"
+"您可以在左邊看到資料夾樹，當中將會顯示您的資料夾結構，您可在當中切換至任何資"
+"料夾與子資料夾。為了方便您，我們已經為您的文件、音樂、相片、影片準備了專用資"
+"料夾。"
 
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder content"
+msgstr "資料夾內容"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To invite other participants, enter their names in the field below "
-"Participants. You can add documents as attachment to the task."
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr "點擊資料夾後將會顯示當中包含所有的子資料夾、文件、媒體與其他檔案。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Select a view"
+msgstr "選擇視圖"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Different views are available. Just select the one you like best."
+msgstr "可選擇不同的視圖，選擇您最喜歡的就好。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Toolbar"
+msgstr "工具列"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"At the top you can find the toolbar with many functions and additional "
+"options. You can easily create new folders, new files and much more."
 msgstr ""
-"要邀請其他參與者，在下方的參與者欄位輸入他們的名字。您可以新增文件到任務作為"
-"附件。"
+"您可在頂端找到含有許多功能與選項的工具列。您可以簡單地建立新資料夾、新檔案，"
+"以及其他功能。"
 
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To launch an app click on an entry inside the app launcher menu."
-msgstr "要啟動應用程式，點選應用程式啟動器選單內的項目。"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "若不要錯過約會，使用提醒功能。"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To not miss the task, use the reminder function."
-msgstr "避免錯過任務，使用提醒功能。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To open or close an E-Mail in a conversation, click on a free area in the "
-"header."
-msgstr "要開啟或關閉討論串中的郵件，點選檔頭旁的空白區域。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid ""
-"To open or close the folder tree, click on View >  Folder view on the right "
-"side of the toolbar."
-msgstr "要開啟或關閉資料夾樹，點選工具列右邊的視圖 > 資料夾視圖。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To open the E-Mail settings, click the System menu icon on the upper right "
-"side of the menu bar. Select Settings. Click on E-Mail on the left side."
-msgstr ""
-"要開啟郵件設定，點擊選單列右上角的系統選單圖示。選擇設定，點擊左邊的電子郵"
-"件。"
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"To open the help, click the user image on the upper right side of the menu "
-"bar. Select Help. The help for the currently selected app is displayed. To "
-"browse the complete help, click on Start Page or Table Of Contents at the "
-"upper part of the window."
-msgstr ""
-"若要開啟說明，點擊選單列右上角的使用者圖片，然後選擇說明。將顯示目前選擇的應"
-"用程式的使用說明。若要瀏覽完整說明，請點擊開始頁面，或視窗上方的目錄。"
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"To open the settings, click the user image on the upper right side of the "
-"menu bar. Select Settings."
-msgstr "若要開啟設定，點擊選單列右上角的使用者圖片，然後選擇設定。"
-
-#: apps/io.ox/tours/portal.js module:io.ox/tours
-msgid "To read the details, click on an entry in a square."
-msgstr "要閱讀詳情，點選方塊中的項目。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid ""
-"To receive information about the sender or other recipients, open the Halo "
-"view by clicking on a name."
-msgstr "要取得寄件者或其他收件者的資訊，點選姓名中的 Halo View。"
-
-#: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "To search for objects, click the Search icon in the menu bar."
-msgstr "要搜尋物件，點選選單列中的搜尋圖示。"
-
-#: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid ""
-"To select one of the views like Day, Month or List, click on View in the "
-"toolbar. Select a menu entry from the Layout section."
-msgstr ""
-"要選擇日、月、清單等視圖，點選工具列中的視圖，然後點選版面段落中的選單項目。"
-
-#: apps/io.ox/tours/contacts.js module:io.ox/tours
-msgid ""
-"To send an E-Mail to the contact, click on an E-Mail address or on Send "
-"email in the toolbar."
-msgstr "要傳送郵件給聯絡人，點選工具列中的電子郵件地址或傳送電子郵件。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To send the email, click on Send"
-msgstr "要傳送郵件，點擊傳送"
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"To sign out, click the System menu icon on the upper right side of the menu "
-"bar. Select Sign out."
-msgstr "要登出，點選選單列右上角的系統選單，點選登出。"
-
-#: apps/io.ox/tours/settings.js module:io.ox/tours
-msgid ""
-"To sign out, click the logout icon on the upper right side of the menu bar."
-msgstr "若要登出，點擊選單列右上角的登出圖示。"
-
-#: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
-msgstr "要排序郵件，點選右上角的排序依照，然後選擇排序條件。"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To sort the tasks, click on Sort by. Select a sort criteria."
-msgstr "要排序任務，點選排序依照。選擇排序條件。"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To track the editing status, enter the current progress."
-msgstr "要追蹤編輯狀態，輸入目前的進度。"
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Upload a new file"
+msgstr "上傳新檔案"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -780,16 +230,176 @@ msgstr ""
 "Drive 在所有裝置中使用。"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Toolbar"
-msgstr "工具列"
-
-#: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "Tracking the editing status"
-msgstr "追蹤編輯狀態"
+msgid "Preview files"
+msgstr "預覽檔案"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Upload a new file"
-msgstr "上傳新檔案"
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr "點擊檢視圖示，將帶您到選擇檔案的預覽畫面。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview mode"
+msgstr "預覽模式"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"From preview you can also select other options to help you manage and work "
+"on your files."
+msgstr "您也可在預覽畫面選擇其他選項來幫助管理與編輯檔案。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Share files"
+msgstr "分享檔案"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
+msgstr ""
+"您可在此與朋友及外部聯絡人分享檔案。您也可以一起編輯文件，並設定不同存取權"
+"限。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Sharing options"
+msgstr "分享選項"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Choose from two alternatives to share your files and folders. Use Invite "
+"people if you want to manage access rights and allow recipients to create "
+"and edit files. Or just get a link to let others view and download your "
+"files. You can use an expiration date and password protection if you like."
+msgstr ""
+"在兩個選項間選擇以分享您的檔案與資料夾。若您想要管理權限並允許受邀者建立與編"
+"輯檔案，請使用邀請成員功能；若只要將鏈結提供給其他人，即可檢視、下載您的檔"
+"案。若您希望的話，也可指定到期日，並加上密碼保護。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Collaborating"
+msgstr "協作"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
+msgstr ""
+"透過邀請成員來分享檔案不僅能讓受邀者建立、編輯檔案，內外部的其他參與者也能夠"
+"與您同時編輯文件與試算表。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Edit documents"
+msgstr "編輯文件"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Did you know that you can edit text documents and spreadsheets online? Drive "
+"will automatically update your edited file, but thanks to versioning the "
+"original file stays available."
+msgstr ""
+"您知道您可直接在線上編輯文件與試算表嗎？Drive 將自動更新您編輯的檔案，受惠於"
+"版本功能，原始版本將永遠存在。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "File details"
+msgstr "檔案詳情"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
+msgstr ""
+"檔案詳細資訊側邊欄提供關於檔案的更多資訊。只要在視圖下拉選單開啟檔案詳情選"
+"項，然後選擇檔案即可看到詳情。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Add another account"
+msgstr "新增其他帳號"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Drive allows you to connect to other storage solutions if you already have a "
+"cloud storage account you use to save and sync your files. Simply click on "
+"the appropriate logo to access your existing data."
+msgstr ""
+"若您已經有了雲端儲存空間的帳號，用來儲存與同步檔案的話，您可直接將 Drive 連結"
+"至該線上儲存解決方案。只要點擊對應的圖示後登入即可存取您現有的資料。"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app tour.txt"
+msgstr "The Drive app tour.txt"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Welcome to %s"
+msgstr "歡迎使用 %s"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"This guided tour will briefly introduce you to the product. Get more "
+"detailed information in the tours for the single apps or in the online help."
+msgstr ""
+"本指南將簡明地向您介紹本產品。若需更詳細的資訊，請參照各應用程式的導覽或線上"
+"說明。"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Launching an app"
+msgstr "執行應用程式"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To launch an app click on an entry inside the app launcher menu."
+msgstr "要啟動應用程式，點選應用程式啟動器選單內的項目。"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Displaying the help or the settings"
+msgstr "顯示選項或說明"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"To display the help or the settings, click the System menu icon in the menu "
+"bar."
+msgstr "要顯示選項或說明，點擊選單列當中的圖示。"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Creating new items"
+msgstr "建立新項目"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To compose a new email, click on Compose in the toolbar."
+msgstr "要撰寫新郵件，點選工具列的撰寫。"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Opening or closing the folder tree"
+msgstr "開啟或關閉資料夾樹"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"To open or close the folder tree, click on View >  Folder view on the right "
+"side of the toolbar."
+msgstr "要開啟或關閉資料夾樹，點選工具列右邊的視圖 > 資料夾視圖。"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Searching for objects"
+msgstr "搜尋物件"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To search for objects, click the Search icon in the menu bar."
+msgstr "要搜尋物件，點選選單列中的搜尋圖示。"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The toolbar"
+msgstr "工具列"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Depending on the app, the toolbar contains various functions for creating, "
+"editing and organizing objects."
+msgstr "視應用程式而定，工具列包含了建立、編輯、管理物件的不同功能。"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The folder tree"
+msgstr "資料夾樹"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
@@ -798,39 +408,514 @@ msgid ""
 msgstr "使用資料夾樹來開啟包含你想要在清單中檢視的物件的資料夾。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The list"
+msgstr "清單"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr "使用清單來選擇物件，以檢視其內容或套用功能。"
 
-#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "使用提醒功能"
-
-#: apps/io.ox/tours/multifactor.js module:io.ox/tours
-msgid ""
-"Various options for additional verification depends on your installation."
-msgstr "視您的安裝而定，有不同的額外驗證選項。"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The Detail view"
+msgstr "詳細視圖"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "Welcome to %s"
-msgstr "歡迎使用 %s"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Welcome to your cloud storage app. This Guided Tour will introduce you to "
-"your new online storage solution - your one point to access online stored "
-"files from all your accounts. This is where you can upload and save your "
-"files, share them and synchronize them with different devices.  "
+"The Detail view displays an object's content. Depending on the app, further "
+"functions for organizing objects can be found in the Detail view."
 msgstr ""
-"歡迎使用您的雲端儲存應用程式。此導覽程式將向您介紹全新的線上儲存解決方案：可"
-"存取您所有帳號當中儲存的檔案的單一窗口。您可上傳並儲存檔案於此處，分享並在不"
-"同裝置間同步。"
+"詳細視圖會顯示物件的內容，視應用程式而定，您可以在詳細視圖中找到更多管理物件"
+"的功能。"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Further information"
+msgstr "更多資訊"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Detailed instructions for the single apps are located in System menu > Help."
+msgstr "可以在系統選單 > 說明中找到各程式的詳細操作說明。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Composing a new email"
+msgstr "撰寫新郵件"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the recipient's name"
+msgstr "輸入收件者名稱"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"Enter the recipient's name into the recipients field. As soon as you typed "
+"the first letters, suggestions from the address books are displayed. To "
+"accept a recipient suggestion, click on it."
+msgstr ""
+"請在收件者欄位輸入收件者的姓名。當您輸入首字母後，將顯示來自通訊錄中的建議。"
+"若要接受收件者建議，請點擊。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the subject"
+msgstr "輸入主旨"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Enter the subject into the subject field."
+msgstr "在主旨欄位輸入主旨。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Further functions"
+msgstr "更多功能"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"In this area you can find further functions, e.g. for adding attachments."
+msgstr "在此區域您可以找到更多功能，例如新增附件。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the email text"
+msgstr "輸入郵件內文"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"Enter the email text into the main area. If the text format was set to HTML "
+"in the options, you can format the email text. To do so select a text part "
+"and then click an icon in the formatting bar."
+msgstr ""
+"在主要區域輸入郵件內文，若文字格式設定為 HTML，您將可以套用格式。若要這麼做請"
+"選擇一段文字，然後點擊格式列中的圖示。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sending the email"
+msgstr "寄送郵件"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To send the email, click on Send"
+msgstr "要傳送郵件，點擊傳送"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sorting your emails"
+msgstr "排序您的郵件"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To sort the emails, click on Sort by. Select a sort criteria."
+msgstr "要排序郵件，點選右上角的排序依照，然後選擇排序條件。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To choose between the different views, click on View in the toolbar. Select "
+"a menu entry in the layout."
+msgstr "要選擇不同視圖，點擊工具列列中的視圖。在版面中選擇一個清單項目。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Opening an email in a separate window"
+msgstr "在不同視窗開啟郵件"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"If double-clicking on an email in the list, the email is opened in a "
+"separate window."
+msgstr "若雙擊清單中的郵件，將於不同視窗中開啟該郵件。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Reading email conversations"
+msgstr "閱讀郵件討論串"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open or close an email in a conversation, click on a free area in the "
+"header."
+msgstr "要開啟或關閉討論串中的郵件，點選檔頭旁的空白區域。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Halo view"
+msgstr "Halo View"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To receive information about the sender or other recipients, open the Halo "
+"view by clicking on a name."
+msgstr "要取得寄件者或其他收件者的資訊，點選姓名中的 Halo View。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Editing multiple emails"
+msgstr "編輯多封郵件"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"In order to edit multiple emails at once, enable the checkboxes on the left "
+"side of the emails. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"要一次編輯多封郵件，點選郵件左邊的選取盒。若選取盒未顯示，點選工具列右邊的視"
+"圖 > 選取盒。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Opening the email settings"
+msgstr "開啟郵件選項"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the System menu icon on the upper right "
+"side of the menu bar. Select Settings. Click on email on the left side."
+msgstr ""
+"要開啟郵件設定，點擊選單列右上角的系統選單圖示。選擇設定，點擊左邊的電子郵"
+"件。"
+
+#. Tour name; general introduction
+#: apps/io.ox/tours/main.js module:io.ox/tours
+msgid "Getting started"
+msgstr "開始入門"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr "雙因素驗證"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid ""
 "You can now add additional verification options to enhance the security of "
 "your account."
 msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "新增驗證選項"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr "視您的安裝而定，有不同的額外驗證選項。"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "透過簡訊接收驗證碼"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr "選擇此選項，透過手機簡訊接收驗證碼，然後會要求您提供手機號碼。"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "驗證請求"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr "下次登入時，就要輸入以簡訊傳送到您的手機的驗證碼。"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "移除"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr "裝置新增後即可隨時移除。請參考說明取得更多詳細資訊。"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "下一個"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+"您可開啟二階段驗證作為另一道安全性防護，例如再登入前輸入傳送到手機簡訊的驗證"
+"碼。您想要了解一些相關資訊嗎？"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr "開始導覽"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "The Portal"
+msgstr "入口"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"The Portal informs you about current emails, appointments or social network "
+"news."
+msgstr "入口可通知您目前有什麼郵件、約會、或社交網路中的消息。"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Reading the details"
+msgstr "閱讀詳情"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "To read the details, click on an entry in a square."
+msgstr "要閱讀詳情，點選方塊中的項目。"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Drag and drop"
+msgstr "拖曳"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"To change the layout, drag a square's title to another position and drop it "
+"there."
+msgstr "要修改版面，將方塊的標題拖曳到其他地方並放下。"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Closing a square"
+msgstr "關閉方塊"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr "若您不想要顯示方塊，點擊刪除圖示。"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Customizing the Portal"
+msgstr "自訂 Portal"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"To display a square again or to display further information sources, click "
+"on Customize this page."
+msgstr "要再次顯示方塊或顯示更多資訊來源，點選此頁面的自訂。"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the settings"
+msgstr "開啟選項"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To open the settings, click the user image on the upper right side of the "
+"menu bar. Select Settings."
+msgstr "若要開啟設定，點擊選單列右上角的使用者圖片，然後選擇設定。"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "How the settings are organized"
+msgstr "設定如何整理"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"The settings are organized in topics. Select the topic on the left side, e.g "
+"Basic settings or Mail."
+msgstr "設定依照主題排序顯示。點擊左邊的主題，例如「基礎設定」或「電子郵件」。"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Editing settings"
+msgstr "編輯選項"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"Edit a setting on the right side. In most of the cases, the changes are "
+"activated immediately."
+msgstr "編輯右邊的設定，在大多數的情況下變更將會即時生效。"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the help"
+msgstr "開啟說明"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To open the help, click the user image on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
+"upper part of the window."
+msgstr ""
+"若要開啟說明，點擊選單列右上角的使用者圖片，然後選擇說明。將顯示目前選擇的應"
+"用程式的使用說明。若要瀏覽完整說明，請點擊開始頁面，或視窗上方的目錄。"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Signing out"
+msgstr "登出"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To sign out, click the System menu icon on the upper right side of the menu "
+"bar. Select Sign out."
+msgstr "要登出，點選選單列右上角的系統選單，點選登出。"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
+msgstr "若要登出，點擊選單列右上角的登出圖示。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating a new task"
+msgstr "新建工作"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create a new task, click on New in the toolbar."
+msgstr "要建立新任務，點選工具列中的新增。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering the task's data"
+msgstr "輸入任務資料"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Enter the subject, the start date, and a description."
+msgstr "輸入主旨、開始日期以及描述。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Adding further details"
+msgstr "新增更多詳情"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To add further details, click on Expand form."
+msgstr "要新增更多資訊，點選展開表單。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating recurring tasks"
+msgstr "建立重複任務"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To create recurring tasks, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr "要建立重複發生的任務，點選重複。將會顯示設定重複參數的功能。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To not miss the task, use the reminder function."
+msgstr "避免錯過任務，使用提醒功能。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Tracking the editing status"
+msgstr "追蹤編輯狀態"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To track the editing status, enter the current progress."
+msgstr "要追蹤編輯狀態，輸入目前的進度。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. You can add documents as attachment to the task."
+msgstr ""
+"要邀請其他參與者，在下方的參與者欄位輸入他們的名字。您可以新增文件到任務作為"
+"附件。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering billing information"
+msgstr "輸入帳務資訊"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To enter billing information, click on Show details."
+msgstr "輸入帳務資訊，點擊顯示詳情。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating the task"
+msgstr "建立任務"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create the task, click on Create."
+msgstr "要建立任務，點擊「建立」。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Sorting tasks"
+msgstr "排序任務"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+msgstr "要排序任務，點選排序依照。選擇排序條件。"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Editing multiple tasks"
+msgstr "編輯多個任務"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To edit multiple tasks at once, enable the checkboxes at the left side of "
+"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
+"on the right side of the toolbar."
+msgstr ""
+"要一次編輯多個任務，點選任務左邊的選取盒。若選取盒未顯示，點選工具列右邊的視"
+"圖 > 選取盒。"
+
+#~ msgid "Sending an E-Mail to a contact"
+#~ msgstr "傳送郵件給某個聯絡人"
+
+#~ msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+#~ msgstr "要發新信，點擊工具列中的的寫新郵件圖示。"
+
+#~ msgid "Composing a new E-Mail"
+#~ msgstr "撰寫新郵件"
+
+#~ msgid "To compose a new E-Mail, click on Compose in the toolbar."
+#~ msgstr "要撰寫新郵件，點選工具列的撰寫。"
+
+#~ msgid "Entering the E-Mail text"
+#~ msgstr "輸入郵件內文"
+
+#~ msgid ""
+#~ "Enter the E-Mail text into the main area. If the text format was set to "
+#~ "HTML in the options, you can format the E-Mail text. To do so select a "
+#~ "text part and then click an icon in the formatting bar."
+#~ msgstr ""
+#~ "在主要區域輸入郵件內文，若文字格式設定為 HTML，您將可以套用格式。若要這麼"
+#~ "做請選擇一段文字，然後點擊格式列中的圖示。"
+
+#~ msgid "Sending the E-Mail"
+#~ msgstr "寄送郵件"
+
+#~ msgid "To send the E-Mail, click on Send"
+#~ msgstr "要傳送郵件，點擊傳送"
+
+#~ msgid "Sorting your E-Mails"
+#~ msgstr "排序您的郵件"
+
+#~ msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+#~ msgstr "要排序郵件，點選右上角的排序依照，然後選擇排序條件。"
+
+#~ msgid ""
+#~ "To choose between the different views. click on View in the toolbar. "
+#~ "Select a menu entry in the layout."
+#~ msgstr "要選擇不同視圖，點擊工具列列中的視圖。在版面中選擇一個清單項目。"
+
+#~ msgid "Opening an E-Mail in a separate window"
+#~ msgstr "在不同視窗開啟郵件"
+
+#~ msgid ""
+#~ "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+#~ "separate window."
+#~ msgstr "若雙擊清單中的郵件，將於不同視窗中開啟該郵件。"
+
+#~ msgid "Reading E-Mail conversations"
+#~ msgstr "閱讀郵件討論串"
+
+#~ msgid ""
+#~ "To open or close an E-Mail in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr "要開啟或關閉討論串中的郵件，點選檔頭旁的空白區域。"
+
+#~ msgid "Editing multiple E-Mails"
+#~ msgstr "編輯多封郵件"
+
+#~ msgid ""
+#~ "In order to edit multiple E-Mails at once, enable the checkboxes on the "
+#~ "left side of the E-Mails. If the checkboxes are not displayed, click on "
+#~ "View > Checkboxes on the right side of the toolbar."
+#~ msgstr ""
+#~ "要一次編輯多封郵件，點選郵件左邊的選取盒。若選取盒未顯示，點選工具列右邊的"
+#~ "視圖 > 選取盒。"
+
+#~ msgid "Opening the E-Mail settings"
+#~ msgstr "開啟郵件選項"
+
+#~ msgid ""
+#~ "To open the E-Mail settings, click the System menu icon on the upper "
+#~ "right side of the menu bar. Select Settings. Click on E-Mail on the left "
+#~ "side."
+#~ msgstr ""
+#~ "要開啟郵件設定，點擊選單列右上角的系統選單圖示。選擇設定，點擊左邊的電子郵"
+#~ "件。"
+
+#~ msgid ""
+#~ "The Portal informs you about current E-Mails, appointments or social "
+#~ "network news."
+#~ msgstr "入口可通知您目前有什麼郵件、約會、或社交網路中的消息。"
+
+#~ msgid ""
+#~ "The settings are organized in topics. Select the topic on the left side, "
+#~ "e.g Basic settings or E-Mail."
+#~ msgstr ""
+#~ "設定依照主題排序顯示。點擊左邊的主題，例如「基礎設定」或「電子郵件」。"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s)"
@@ -903,8 +988,8 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgstr[0] "%1$d 小時和 %2$s"
 #~ msgstr[1] "%1$d 小時和 %2$s"
 
-#~ msgid "%1$d email"
-#~ msgid_plural "%1$d emails"
+#~ msgid "%1$d mail"
+#~ msgid_plural "%1$d mails"
 #~ msgstr[0] "%1$d 封郵件"
 #~ msgstr[1] "%1$d 封郵件"
 
@@ -946,13 +1031,13 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "%1$s is now connected with %2$s"
 #~ msgstr "%1$s 現在已與 %2$s 連線"
 
-#~ msgid "%1$s email"
-#~ msgid_plural "%1$s emails"
+#~ msgid "%1$s mail"
+#~ msgid_plural "%1$s mails"
 #~ msgstr[0] "%1$s 封郵件"
 #~ msgstr[1] "%1$s 封郵件"
 
-#~ msgid "%1$s email, %2$s unread"
-#~ msgid_plural "%1$s emails, %2$s unread"
+#~ msgid "%1$s mail, %2$s unread"
+#~ msgid_plural "%1$s mails, %2$s unread"
 #~ msgstr[0] "%1$s 封郵件，%2$s 未讀"
 #~ msgstr[1] "%1$s 封郵件，%2$s 未讀"
 
@@ -1412,7 +1497,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Add group"
 #~ msgstr "新建組"
 
-#~ msgid "Add email account"
+#~ msgid "Add mail account"
 #~ msgstr "新增郵件帳號"
 
 #~ msgid "Add new folder"
@@ -1927,7 +2012,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgstr "寄件時自動將收集到的聯絡人加入到「收集到的地址」？"
 
 #~ msgid ""
-#~ "Automatically delete a notification email after it has been accepted or "
+#~ "Automatically delete a notification mail after it has been accepted or "
 #~ "declined?"
 #~ msgstr "在接受或拒絕邀請後自動刪除通知郵件？"
 
@@ -2549,7 +2634,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Compose new email"
 #~ msgstr "撰寫新郵件"
 
-#~ msgid "Compose new email"
+#~ msgid "Compose new mail"
 #~ msgstr "撰寫新郵件"
 
 #~ msgid "Conditions"
@@ -2736,7 +2821,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Couldn't load your contact data."
 #~ msgstr "無法載入您的聯絡人資料。"
 
-#~ msgid "Couldn't load your email filters."
+#~ msgid "Couldn't load your mail filters."
 #~ msgstr "無法載入您的郵件篩選設定。"
 
 #~ msgid "Couldn't load your vacation notice."
@@ -3268,7 +3353,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Do you really want to delete this widget?"
 #~ msgstr "確定要刪除此小工具嗎？"
 
-#~ msgid "Do you really want to discard this email?"
+#~ msgid "Do you really want to discard this mail?"
 #~ msgstr "您真的想放棄此郵件嗎？"
 
 #~ msgid "Do you really want to discard your changes?"
@@ -3337,11 +3422,11 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ "series?"
 #~ msgstr "您是否想編輯整個系列或單個系列約會？"
 
-#~ msgid "Do you want to keep the draft after sending this email?"
+#~ msgid "Do you want to keep the draft after sending this mail?"
 #~ msgstr "您想要在寄送郵件後保留草稿嗎？"
 
-#~ msgid "Do you want to permanently delete this email?"
-#~ msgid_plural "Do you want to permanently delete these emails?"
+#~ msgid "Do you want to permanently delete this mail?"
+#~ msgid_plural "Do you want to permanently delete these mails?"
 #~ msgstr[0] "您想永久刪除此郵件嗎？"
 #~ msgstr[1] "您想永久刪除這些郵件嗎？"
 
@@ -3425,7 +3510,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Drop EML file here for import"
 #~ msgstr "放到這裡已匯入此郵件"
 
-#~ msgid "Drop here to import this email"
+#~ msgid "Drop here to import this mail"
 #~ msgstr "放到這裡已匯入此郵件"
 
 #~ msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
@@ -3650,7 +3735,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgstr "向任務參與者發送電子郵件通知？"
 
 #~ msgid ""
-#~ "Emails cannot be put into trash folder while your email quota is exceeded."
+#~ "Emails cannot be put into trash folder while your mail quota is exceeded."
 #~ msgstr "當您的空間已滿時，電子郵件無法被到垃圾桶。"
 
 #~ msgid "Embedded windows"
@@ -3717,7 +3802,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Enabled"
 #~ msgstr "啟用"
 
-#~ msgid "Enabled for all email folders"
+#~ msgid "Enabled for all mail folders"
 #~ msgstr "對所有郵件資料夾啟用"
 
 #~ msgid "Enabled for inbox only"
@@ -4074,7 +4159,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Fit to screen width"
 #~ msgstr "調整成螢幕寬度"
 
-#~ msgid "Flag email with"
+#~ msgid "Flag mail with"
 #~ msgstr "為郵件加入旗標"
 
 #~ msgid "Flickr"
@@ -4670,14 +4755,14 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgstr "行距"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text emails after"
+#~ msgid "Line wrap when sending text mails after"
 #~ msgstr "發送純文字郵件時當字數超過下列長度即換行:"
 
 #, fuzzy
-#~ msgid "Line wrap when sending text emails after how much characters"
+#~ msgid "Line wrap when sending text mails after how much characters"
 #~ msgstr "發送純文字郵件時當字數超過下列長度即換行:"
 
-#~ msgid "Line wrap when sending text emails after: "
+#~ msgid "Line wrap when sending text mails after: "
 #~ msgstr "換行當發送純文字郵件超過:"
 
 #~ msgid "Link"
@@ -4707,7 +4792,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Load Error"
 #~ msgstr "載入錯誤"
 
-#~ msgid "Load all emails. This might take some time."
+#~ msgid "Load all mails. This might take some time."
 #~ msgstr "載入所有郵件，可能需要一些時間。"
 
 #~ msgid "Location"
@@ -4861,7 +4946,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Mark all day appointments as free"
 #~ msgstr "將全天約會標示為空閒"
 
-#~ msgid "Mark all emails as read"
+#~ msgid "Mark all mails as read"
 #~ msgstr "將所有郵件標示為已讀"
 
 #~ msgid "Mark as distributionlist"
@@ -4882,7 +4967,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Mark as unread"
 #~ msgstr "標記為未讀"
 
-#~ msgid "Mark email as"
+#~ msgid "Mark mail as"
 #~ msgstr "將郵件標示為"
 
 #~ msgid "Mark read"
@@ -4971,7 +5056,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Move to folder"
 #~ msgstr "移至文件夾"
 
-#~ msgid "Moving emails ... This may take a few seconds."
+#~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "正在移動郵件... 可能需要幾秒鐘。"
 
 #~ msgid "My contact data"
@@ -5123,19 +5208,19 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "No lost requests"
 #~ msgstr "無損失請求"
 
-#~ msgid "No emails"
+#~ msgid "No mails"
 #~ msgstr "無郵件"
 
-#~ msgid "No emails at all!"
+#~ msgid "No mails at all!"
 #~ msgstr "完全沒有郵件！"
 
-#~ msgid "No emails found for \"%s\""
+#~ msgid "No mails found for \"%s\""
 #~ msgstr "找不到「%s」的郵件"
 
-#~ msgid "No emails in this folder"
+#~ msgid "No mails in this folder"
 #~ msgstr "此資料夾中無新電子郵件"
 
-#~ msgid "No emails in your inbox"
+#~ msgid "No mails in your inbox"
 #~ msgstr "您的收件匣中沒有郵件"
 
 #~ msgid "No matching templates on this Server"
@@ -5273,7 +5358,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "On every new notification"
 #~ msgstr "每個新通知時"
 
-#~ msgid "On new notifications except emails"
+#~ msgid "On new notifications except mails"
 #~ msgstr "在新通知時，但郵件通知除外"
 
 #~ msgid "On work days"
@@ -5691,7 +5776,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Press to hide all appointment reminders."
 #~ msgstr "按下以隱藏所有約會提醒。"
 
-#~ msgid "Press to hide all notifications for new emails."
+#~ msgid "Press to hide all notifications for new mails."
 #~ msgstr "按下以隱藏所有新郵件通知。"
 
 #~ msgid "Press to hide all notifications for overdue tasks."
@@ -5841,7 +5926,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Reauthorize"
 #~ msgstr "重新授權"
 
-#~ msgid "Received emails"
+#~ msgid "Received mails"
 #~ msgstr "收到的郵件"
 
 #~ msgid "Recent activities"
@@ -6079,7 +6164,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgstr "保存於"
 
 #, fuzzy
-#~ msgid "Saved email attachment"
+#~ msgid "Saved mail attachment"
 #~ msgstr "移除附件"
 
 #, fuzzy
@@ -6151,26 +6236,26 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Send as internal link"
 #~ msgstr "作為內部連結發送"
 
-#~ msgid "Send as email"
+#~ msgid "Send as mail"
 #~ msgstr "以郵件方式寄送"
 
 #~ msgid "Send as vCard"
 #~ msgstr "以 vCard 傳送"
 
-#~ msgid "Send by email"
+#~ msgid "Send by mail"
 #~ msgstr "透過電子郵件寄送"
 
 #, fuzzy
 #~ msgid "Send feedback"
 #~ msgstr "寄送電子郵件"
 
-#~ msgid "Send email"
+#~ msgid "Send mail"
 #~ msgstr "寄送郵件"
 
-#~ msgid "Send email to all participants"
+#~ msgid "Send mail to all participants"
 #~ msgstr "傳送郵件給所有參與者"
 
-#~ msgid "Send new email"
+#~ msgid "Send new mail"
 #~ msgstr "寄送新郵件"
 
 #~ msgid "Send vacation notice during this time only"
@@ -6188,7 +6273,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Sent from %s via mobile"
 #~ msgstr "從行動裝置上的 %s 傳送"
 
-#~ msgid "Sent emails"
+#~ msgid "Sent mails"
 #~ msgstr "寄件輩分"
 
 #~ msgid "September"
@@ -6263,7 +6348,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Show all items"
 #~ msgstr "顯示所有項目"
 
-#~ msgid "Show all emails. Note: Mails are no longer grouped by conversation."
+#~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr "顯示所有郵件。請注意：郵件將不再依對話內容分組。"
 
 #~ msgid "Show all my appointments from all calendars"
@@ -6595,7 +6680,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Table"
 #~ msgstr "表格"
 
-#~ msgid "Tag email with"
+#~ msgid "Tag mail with"
 #~ msgstr "為郵件加入標籤"
 
 #~ msgid "Task"
@@ -7056,7 +7141,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgstr "沒有定義規則"
 
 #~ msgid ""
-#~ "There was no suitable server found for this email/password combination"
+#~ "There was no suitable server found for this mail/password combination"
 #~ msgstr "此帳號密碼組合無法登入任何可用的伺服器"
 
 #~ msgid "There were not activities in your network"
@@ -7176,7 +7261,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "This is not a valid email address"
 #~ msgstr "這是無效的電子郵件位址"
 
-#~ msgid "This is not a valid email address"
+#~ msgid "This is not a valid mail address"
 #~ msgstr "這是無效的電子郵件位址"
 
 #~ msgid "This is not a valid user or group."
@@ -7185,10 +7270,10 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "This list has no contacts yet"
 #~ msgstr "該組無成員"
 
-#~ msgid "This email has been added to the portal"
+#~ msgid "This mail has been added to the portal"
 #~ msgstr "此郵件已被加入入口畫面"
 
-#~ msgid "This email has no content"
+#~ msgid "This mail has no content"
 #~ msgstr "此郵件沒有內容"
 
 #~ msgid "This note will not be printed"
@@ -7318,7 +7403,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ "right side of the toolbar."
 #~ msgstr "要選擇清單、圖示或方塊視圖清單，點擊工具列右邊的視圖。"
 
-#~ msgid "To send the email, click on Send on the upper right side."
+#~ msgid "To send the E-Mail, click on Send on the upper right side."
 #~ msgstr "要傳送郵件，點選右上角的傳送。"
 
 #~ msgid "To upload a file, click on New > Upload new file in the toolbar."
@@ -7353,10 +7438,10 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Top 10 folder size"
 #~ msgstr "前十大資料夾大小"
 
-#~ msgid "Top 10 you got email from"
+#~ msgid "Top 10 you got mail from"
 #~ msgstr "前十名寄件者"
 
-#~ msgid "Top 10 you sent email to"
+#~ msgid "Top 10 you sent mail to"
 #~ msgstr "前十名收件者"
 
 #~ msgid "Total cost"
@@ -7377,7 +7462,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Trash folder"
 #~ msgstr "垃圾桶"
 
-#~ msgid "Trying to auto-configure your email account"
+#~ msgid "Trying to auto-configure your mail account"
 #~ msgstr "正在嘗試自動設定您的郵件帳號"
 
 #~ msgid "Tuesday"
@@ -7407,7 +7492,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "URL:"
 #~ msgstr "URL："
 
-#~ msgid "Unable to load email filter settings."
+#~ msgid "Unable to load mail filter settings."
 #~ msgstr "無法連絡後端郵件過濾器"
 
 #~ msgid "Unconfirmed"
@@ -7523,7 +7608,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Use cursor keys to change the item position"
 #~ msgstr "使用方向鍵修改物件位置"
 
-#~ msgid "Use fixed-width font for text emails"
+#~ msgid "Use fixed-width font for text mails"
 #~ msgstr "針對純文字郵件使用固定寬度字體顯示"
 
 #~ msgid ""
@@ -7534,7 +7619,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ "使用資料夾樹存取自己的、公開的或共享的檔案。若資料夾樹被隱藏了，點擊工具列"
 #~ "右邊的檢視 > 資料夾視圖。"
 
-#~ msgid "Use unified email for this account"
+#~ msgid "Use unified mail for this account"
 #~ msgstr "為此帳戶使用統一郵件"
 
 #~ msgid "Use username and password"
@@ -7583,7 +7668,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Waiting"
 #~ msgstr "等待中"
 
-#~ msgid "Warning: This message might be a phishing or scam email"
+#~ msgid "Warning: This message might be a phishing or scam mail"
 #~ msgstr "警告：該郵件可能存在郵件欺詐"
 
 #~ msgid "Weather • Season"
@@ -7856,7 +7941,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Your data has been saved"
 #~ msgstr "已儲存您的資料"
 
-#~ msgid "Your email address"
+#~ msgid "Your mail address"
 #~ msgstr "您的電子郵件位址"
 
 #~ msgid "Your messages"
@@ -7877,7 +7962,7 @@ msgstr "現在起，您可以新增驗證選項，確保帳號安全。"
 #~ msgid "Your password has been changed"
 #~ msgstr "您的密碼已更改"
 
-#~ msgid "Your primary email account can not be deleted."
+#~ msgid "Your primary mail account can not be deleted."
 #~ msgstr "無法刪除您的主要郵件帳號。"
 
 #~ msgid "Your selected picture will be displayed after saving"
