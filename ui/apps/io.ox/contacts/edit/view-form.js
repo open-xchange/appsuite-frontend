@@ -27,7 +27,7 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/core/folder/api',
     'io.ox/core/folder/util',
     'settings!io.ox/core',
-    'less!io.ox/contacts/edit/style'
+    'less!io.ox/contacts/edit/view-form'
 ], function (model, views, actionsUtil, api, util, capabilities, ext, mini, attachmentViews, gt, folderApi, folderUtils, settings) {
 
     'use strict';

@@ -88,7 +88,8 @@ define('io.ox/contacts/widgets/pictureUpload', [
             this.editPictureDialog = editPicture
                 .getDialog({ model: this.model, title: gt('Change contact photo') })
                 .open()
-                .on('upload', this.openFilePicker.bind(this));
+                .on('upload', this.openFilePicker.bind(this))
+                .on('reset', this.removeImage.bind(this));
         },
 
         // preview prefers edited
@@ -147,7 +148,7 @@ define('io.ox/contacts/widgets/pictureUpload', [
             var guid = _.uniqueId('image-upload-');
 
             this.$el.append(
-                this.$thumbnail = $('<div class="contact-photo">').append(
+                this.$thumbnail = $('<div class="contact-photo empty">').append(
                     $('<label>').attr('for', guid).text(gt('Click to add photo'))
                 ),
                 $('<form>').append(
@@ -162,11 +163,14 @@ define('io.ox/contacts/widgets/pictureUpload', [
         },
 
         renderImage: function () {
-
+            // this function is debounced so it might be called when the view is already disposed
+            if (this.disposed) return;
             var url = this.model.get('image1_data_url') || this.getImageUrl();
             this.$('label').toggleClass('sr-only', !!url);
             this.$('button').toggle(!!url);
-            this.$thumbnail.css('background-image', 'none');
+            this.$thumbnail
+                .css('background-image', 'none')
+                .toggleClass('empty', !url);
 
             // load image
             if (!url) return;
