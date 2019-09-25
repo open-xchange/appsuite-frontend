@@ -1443,11 +1443,12 @@ body.dragging .categories-toolbar-container {
             }
 
             .subject {
-                font-size: 16px;
+                font-size: @phone-font-size + 5;
                 font-weight: bold;
-                line-height: @phone-line-height;
+                line-height: @phone-line-height + 5;
                 margin: 0;
                 padding-top: (@padding-v + 4);
+                padding-bottom: 4px;
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
@@ -1461,7 +1462,12 @@ body.dragging .categories-toolbar-container {
             .body { padding: 8px @default-padding; }
         }
 
-        &.expanded section.attachments:empty { border: 0; }
+        &.expanded {
+            .detail-view-header {
+                border-bottom: none;
+            }
+            section.attachments:empty { border: 0; }
+        }
 
         //.attachments { border-bottom-width: 0; }
 
@@ -1658,8 +1664,10 @@ body.dragging .categories-toolbar-container {
 
                 .detail-view-header {
                     padding: 14px 15px 16px 25px;
-                    border-bottom: 1px solid #ccc;
-
+                    //border-bottom: 1px solid #ccc;
+                    &.expanded {
+                       border-bottom: none;
+                    }
                     .detail-view-row {
                         margin: 0;
                     }
