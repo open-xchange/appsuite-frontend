@@ -104,6 +104,7 @@ define('io.ox/core/main/topbar_right', [
         id: 'refresh',
         index: 200,
         draw: function () {
+            if (_.device('smartphone')) return;
             this.append(
                 addLauncher(
                     'right',
@@ -138,6 +139,7 @@ define('io.ox/core/main/topbar_right', [
         id: 'settings',
         index: 400,
         draw: function () {
+            if (_.device('smartphone')) return;
             this.append(
                 addLauncher('right', $('<i class="fa fa-cog launcher-icon" aria-hidden="true">').attr('title', gt('Settings')), function () {
                     ox.launch('io.ox/settings/main');
@@ -167,6 +169,31 @@ define('io.ox/core/main/topbar_right', [
                 );
                 this.divider();
             }
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+        id: 'refreshMobile',
+        index: 80,
+        extend: function () {
+            if (!_.device('smartphone')) return;
+            this.link('refresh-mobile', gt('Refresh'), function (e) {
+                e.preventDefault();
+                refresh();
+                return $.when();
+            });
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+        id: 'settingsMobile',
+        index: 90,
+        extend: function () {
+            if (!_.device('smartphone')) return;
+            this.link('settings-mobile', gt('Settings'), function (e) {
+                e.preventDefault();
+                return ox.launch('io.ox/settings/main');
+            });
         }
     });
 
