@@ -33,9 +33,6 @@ Show a modal dialog to enable an inline relogin without showing the login page.
 <config>io.ox/core//features/storeSavePoints=`<bool>`</config>
 Enable/disable restorepoints for edit dialogs.
 
-<config>io.ox/core//features/storeMailSavePoints=`<bool>`</config>
-Depends on features/storeSavePoints. Enable/disable restore point for mail compose.
-
 <config>io.ox/core//features/validateMailAddresses=`<bool>`</config>
 Enable validiation for email addresses in mail compose dialog.
 
@@ -373,9 +370,6 @@ Default sender address from available accounts. Default not set.
 
 <config>io.ox/mail//autoSaveAfter=`<number>`</config>
 Interval to update composition space during compose in milliseconds. Default: `15000` (15 seconds)
-
-<config>io.ox/mail//autoSaveDraftsAfter=`<string>`</config>
-Interval to safe drafts during compose. One of `disabled`, `1_minute`, `3_minutes`, `5_minutes` or `10_minutes`
 
 <config>io.ox/mail//autobcc=`<bool>`</config>
 Always add the following recipient to BCC.
