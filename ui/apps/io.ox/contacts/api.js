@@ -91,7 +91,7 @@ define('io.ox/contacts/api', [
             },
             list: {
                 action: 'list',
-                columns: '20,1,101,500,501,502,505,508,510,519,520,524,526,528,555,556,557,569,592,602,606,607,616,617,5,2',
+                columns: '20,1,101,500,501,502,505,508,510,519,520,524,526,528,555,556,557,569,592,597,602,606,607,616,617,5,2',
                 extendColumns: 'io.ox/contacts/api/list'
             },
             get: {
@@ -846,6 +846,7 @@ define('io.ox/contacts/api', [
             $el = $('<div class="contact-photo" aria-hidden="true">');
         if (!url && options.initials) $el.text(util.getInitials(data));
         if (url) $el.css('background-image', 'url(' + url + ')');
+        $el.toggleClass('empty', !url);
         return $el;
     };
 

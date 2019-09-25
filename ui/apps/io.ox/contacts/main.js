@@ -221,7 +221,7 @@ define('io.ox/contacts/main', [
                         fields.photo
                             .empty()
                             .append('<i class="fa fa-bars">')
-                            .css('background-image', null);
+                            .css('background-image', '');
                     } else {
                         fullname = $.trim(util.getFullName(data));
                         if (fullname) {
@@ -244,7 +244,8 @@ define('io.ox/contacts/main', [
                         fields.photo
                             .empty()
                             .text(url ? '' : util.getInitials(data))
-                            .css('background-image', url ? 'url(' + url + ')' : 'none');
+                            .css('background-image', url ? 'url(' + url + ')' : '')
+                            .toggleClass('empty', !url);
                         if (name === '' && description === '') {
                             // nothing is written down, add some text, so user isn’t confused
                             fields.name.addClass('gray').text(gt('Empty name and description found.'));

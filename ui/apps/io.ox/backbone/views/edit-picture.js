@@ -226,6 +226,8 @@ define('io.ox/backbone/views/edit-picture', [
                         break;
                     case 'apply':
                         if (!this.$el.hasClass('empty')) return this.onApply();
+                        // use existing image was removed so update model
+                        if (this.model.get('image1_url')) this.trigger('reset');
                         // simply cancel when no photo was provided
                         this.onCancel();
                         this.close();
