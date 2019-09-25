@@ -226,6 +226,7 @@ define('io.ox/settings/personalData/settings/pane', [
                             }));
                         break;
                     case 'PENDING':
+                    case 'RUNNING':
                         this.$el.addClass('disabled').find('.checkbox,a').addClass('disabled');
                         this.$el.find('input,select').attr('aria-disabled', true).prop('disabled', 'disabled');
                         this.$el.append($('<button type="button" class="btn btn-primary">').prop('disabled', 'disabled').text(gt('Request download')));
@@ -277,7 +278,7 @@ define('io.ox/settings/personalData/settings/pane', [
                 //#. header for zip archive download list
                 this.$el.append($('<h1 class="col-xs-12">').text(gt('Your archive')));
 
-                if (this.model.get('status') === 'PENDING') {
+                if (this.model.get('status') === 'PENDING' || this.model.get('status') === 'RUNNING') {
                     //#. %1$s: date and time the download was requested
                     this.$el.append(
                         $('<div class="col-xs-12">')
