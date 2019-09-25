@@ -21,8 +21,9 @@ define('io.ox/chat/views/chat', [
     'io.ox/chat/views/reference-preview',
     'io.ox/chat/events',
     'io.ox/chat/data',
-    'io.ox/backbone/views/toolbar'
-], function (ext, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, ToolbarView) {
+    'io.ox/backbone/views/toolbar',
+    'io.ox/chat/emoji'
+], function (ext, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ReferencePreview, events, data, ToolbarView, emoji) {
 
     'use strict';
 
@@ -358,8 +359,15 @@ define('io.ox/chat/views/chat', [
 
         onEditorKeydown: function (e) {
             if (e.which !== 13) return;
+            if (e.ctrlKey) {
+                // append newline manually if ctrl is pressed
+                this.$editor.val(this.$editor.val() + '\n');
+                return;
+            }
             e.preventDefault();
-            this.onPostMessage(this.$editor.val());
+            var text = this.$editor.val();
+            text = emoji(text);
+            this.onPostMessage(text);
             this.$editor.val('').focus();
         },
 
