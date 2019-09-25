@@ -90,7 +90,7 @@ define('io.ox/chat/views/messages', [
         renderDate: function (model) {
             var index = model.collection.indexOf(model),
                 prev = index === 0 ? undefined : model.collection.at(index - 1),
-                start = this.options.limit ? model.collection.length - this.options.limit : 0;
+                start = this.options.limit ? Math.max(0, model.collection.length - this.options.limit) : 0;
 
             if (index !== start && moment(prev.get('sent')).startOf('day').isSameOrAfter(moment(model.get('sent')).startOf('day'))) return;
 
