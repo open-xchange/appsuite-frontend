@@ -274,6 +274,8 @@ define('io.ox/core/locale/meta', function () {
     }
 
     function isSupportedLocale(id) {
+        // server down
+        if (_.isEmpty(ox.serverConfig)) return false;
         // check against server-side list of available translations
         var hash = ox.serverConfig.languages;
         if (hash[id]) return true;
@@ -294,7 +296,8 @@ define('io.ox/core/locale/meta', function () {
         var longMap = { en_DE: 'en_US' },
             shortMap = { de: 'de_DE', en: 'en_GB', es: 'es_MX', fr: 'fr_FR', it: 'it_IT', nl: 'nl_NL' },
             language = get(localeId);
-        return language in ox.serverConfig.languages ? language : 'en_US';
+        // server down, so no config available, return en_US
+        return !_.isEmpty(ox.serverConfig) && language in ox.serverConfig.languages ? language : 'en_US';
         function get(localeId) {
             if (/^(en_US|es_ES|fr_CA)$/.test(localeId)) return localeId;
             return longMap[localeId] || shortMap[String(localeId).substr(0, 2)] || localeId;
@@ -323,6 +326,8 @@ define('io.ox/core/locale/meta', function () {
     function getValidDefaultLocale() {
         var localeId = getDefaultLocale();
         if (isSupportedLocale(localeId)) return localeId;
+        // server down, so no config available, return en_US
+        if (_.isEmpty(ox.serverConfig)) return 'en_US';
         // special case: even en_US is not listed
         var list = ox.serverConfig.languages;
         if (list.en_US) return 'en_US';
