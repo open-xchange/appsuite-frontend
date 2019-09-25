@@ -256,39 +256,6 @@ define('io.ox/contacts/view-detail', [
     //     ext.point('io.ox/contacts/detail/attachments').invoke('draw', container, baton.data);
     // }
 
-    // Attachments
-
-    ext.point('io.ox/contacts/detail/attachments').extend({
-        draw: function (contact) {
-
-            var section = this.show();
-            // TODO: Use io.ox/core/tk/attachments for attachment list here
-            require(['io.ox/core/api/attachment'], function (api) {
-                // this request might take a while; not cached
-                api.getAll({ folder_id: contact.folder_id, id: contact.id, module: 7 }).then(
-                    function success(data) {
-                        section.empty();
-                        _(data).each(function (a) {
-                            // draw
-                            buildDropdown(section, a.filename, a);
-                        });
-                        if (data.length > 1) {
-                            buildDropdown(section, gt('All attachments'), data);
-                        }
-                        section.on('a', 'click', function (e) { e.preventDefault(); });
-                    },
-                    function fail() {
-                        section.empty().append(
-                            $.fail(gt('Could not load attachments for this contact.'), function retry() {
-                                ext.point('io.ox/contacts/detail/attachments').invoke('draw', section, contact);
-                            })
-                        );
-                    }
-                );
-            });
-        }
-    });
-
     // Content
 
     ext.point('io.ox/contacts/detail').extend({
@@ -520,6 +487,28 @@ define('io.ox/contacts/view-detail', [
         };
     }
 
+    function attachmentlist(label, list) {
+
+        function dropdown(data, label) {
+            return new ActionDropdownView({
+                point: 'io.ox/core/tk/attachment/links',
+                data: data,
+                title: data.filename || label
+            }).$el;
+        }
+
+        return function () {
+            $(this).append(
+                $('<dt>').text(label),
+                $('<dd>').append(function () {
+                    var nodes = _.map(list, dropdown);
+                    // if more than one attachment add "All Downloads" dropdown
+                    return list.length < 2 ? nodes : nodes.concat(dropdown(list, gt('All attachments')));
+                })
+            );
+        };
+    }
+
     ext.point('io.ox/contacts/detail/content')
 
         .extend({
@@ -719,6 +708,53 @@ define('io.ox/contacts/view-detail', [
                     )
                     .attr('data-block', 'misc')
                 );
+            }
+        })
+
+        .extend({
+            id: 'attachments',
+            index: 1000,
+            draw: function (baton) {
+                // TODO: add proper contact model update after attachment api calls
+                if (!baton.data.number_of_attachments) return;
+                if (baton.data.mark_as_distributionlist) return;
+
+                var section = $('<section class="block hidden">'),
+                    hasPendingAttachments = !!api.pendingAttachments[_.ecid(baton.data)];
+
+                if (hasPendingAttachments) {
+                    var progressview = new attachments.progressView({ cid: _.ecid(baton.data) });
+                    return this.append(progressview.render().$el).show();
+                }
+
+                require(['io.ox/core/api/attachment'], function (api) {
+
+                    function get() {
+                        // this request might take a while; not cached
+                        api.getAll({ folder_id: baton.data.folder_id, id: baton.data.id, module: 7 }).then(success, fail);
+                    }
+
+                    function success(list) {
+                        if (!list.length) return section.remove();
+                        section.replaceWith(
+                            block(
+                                attachmentlist(gt('Attachments'), list)
+                            )
+                            .addClass('contains-dropdown')
+                            .attr('data-block', 'attachments')
+                        );
+                    }
+
+                    function fail() {
+                        section.show().append(
+                            $.fail(gt('Could not load attachments for this contact.'), get)
+                        );
+                    }
+
+                    get();
+                });
+
+                this.append(section);
             }
         });
 

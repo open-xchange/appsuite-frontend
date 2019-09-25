@@ -26,9 +26,7 @@ define('io.ox/contacts/api', [
 
     'use strict';
 
-    var // object to store contacts, that have attachments uploading atm
-        uploadInProgress = {},
-        convertResponseToGregorian = function (response) {
+    var convertResponseToGregorian = function (response) {
             if (response.id) {
                 // single contact: convert birthdays with year 1 or earlier from julian to gregorian calendar
                 // year might be 0 if birthday is on 1.1 or 1.2. (year 1 - 2days difference)
@@ -372,7 +370,6 @@ define('io.ox/contacts/api', [
         }
 
         var method,
-            attachmentHandlingNeeded = data.tempAttachmentIndicator,
             opt = {
                 module: 'contacts',
                 data: data,
@@ -380,7 +377,6 @@ define('io.ox/contacts/api', [
                 fixPost: true
             };
 
-        delete data.tempAttachmentIndicator;
         data = cleanUpData(data, { mode: 'create' });
         if (file) {
             if (window.FormData && file instanceof window.File) {
@@ -413,10 +409,6 @@ define('io.ox/contacts/api', [
                     fetchCache.clear()
                 )
                 .then(function () {
-                    if (attachmentHandlingNeeded) {
-                        // to make the detailview show the busy animation
-                        api.addToUploadList(_.ecid(d));
-                    }
                     api.trigger('create', { id: d.id, folder: d.folder_id });
                     api.trigger('refresh.all');
                     return d;
@@ -434,16 +426,13 @@ define('io.ox/contacts/api', [
      * @return {deferred} returns
      */
     api.update = function (o) {
-
-        var attachmentHandlingNeeded = o.data.tempAttachmentIndicator,
+        var attachmentHandlingNeeded = o.attachments,
             needsCacheWipe = false;
-        delete o.data.tempAttachmentIndicator;
 
         if (_.isEmpty(o.data)) {
             if (attachmentHandlingNeeded) {
                 return $.when().then(function () {
                     // to make the detailview show the busy animation
-                    api.addToUploadList(_.ecid(o));
                     api.trigger('update:' + _.ecid(o));
                     api.trigger('update', o);
                     return { folder_id: o.folder, id: o.id };
@@ -492,10 +481,6 @@ define('io.ox/contacts/api', [
                     data.user_id ? clearUserApiCache(data) : ''
                 )
                 .done(function () {
-                    if (attachmentHandlingNeeded) {
-                        // to make the detailview show the busy animation
-                        api.addToUploadList(_.ecid(data));
-                    }
                     api.trigger('update:' + _.ecid(data), data);
                     api.trigger('update', data);
                     // trigger refresh.all, since position might have changed
@@ -1066,36 +1051,8 @@ define('io.ox/contacts/api', [
         return !!obj.mark_as_distributionlist;
     };
 
-    /**
-     * ask if this contact has attachments uploading at the moment (busy animation in detail View)
-     * @param  {string} key (task id)
-     * @return {boolean}
-     */
-    api.uploadInProgress = function (key) {
-        //return true boolean
-        return uploadInProgress[key] || false;
-    };
-
-    /**
-     * add contact to the list
-     * @param {string} key (task id)
-     * @return {undefined}
-     */
-    api.addToUploadList = function (key) {
-        uploadInProgress[key] = true;
-    };
-
-    /**
-     * remove contact from the list
-     * @param  {string} key (task id)
-     * @fires  api#update: + key
-     * @return {undefined}
-     */
-    api.removeFromUploadList = function (key) {
-        delete uploadInProgress[key];
-        //trigger refresh
-        api.trigger('update:' + key);
-    };
+    // shared api variable as workaround for detail view (progrss bar in detail View)
+    api.pendingAttachments = {};
 
     //
     // Simple auto-complete search

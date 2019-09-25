@@ -15,15 +15,18 @@ define('io.ox/contacts/edit/view', [
     'io.ox/backbone/views/extensible',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/mini-views/attachments',
     'io.ox/contacts/util',
     'io.ox/contacts/api',
     'io.ox/core/api/user',
     'io.ox/core/a11y',
     'io.ox/core/util',
+    'io.ox/core/capabilities',
     'io.ox/contacts/widgets/pictureUpload',
+    'settings!io.ox/core',
     'settings!io.ox/contacts',
     'gettext!io.ox/contacts'
-], function (ExtensibleView, common, Dropdown, util, api, userApi, a11y, coreUtil, PhotoUploadView, settings, gt) {
+], function (ExtensibleView, common, Dropdown, Attachments, util, api, userApi, a11y, coreUtil, capabilities, PhotoUploadView, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -50,6 +53,10 @@ define('io.ox/contacts/edit/view', [
             fields: function () {
                 this.renderAllFields();
             },
+            attachments: function () {
+                this.renderAttachments();
+                this.renderDropzone();
+            },
             footer: function () {
                 this.renderFooter();
             }
@@ -66,6 +73,100 @@ define('io.ox/contacts/edit/view', [
                     )
                 )
             );
+        },
+
+        renderAttachments: function () {
+
+            // Remove attachment handling when infostore is not present
+            if (!coreSettings.get('features/PIMAttachments', capabilities.has('filestore'))) return;
+
+            function propagateAttachmentChange(model, errors) {
+                var id = model.get('id'),
+                    folder_id = model.get('folder_id'),
+                    // check for recently updated attachments
+                    useCache = !model.attachments();
+
+                // TODO: move to listview
+                if (errors.length > 0) {
+                    require(['io.ox/core/notifications'], function (notifications) {
+                        _(errors).each(function (error) {
+                            notifications.yell('error', error.error);
+                        });
+                    });
+                }
+
+                return api.get({ id: id, folder: folder_id }, useCache)
+                    .then(function (data) {
+                        if (useCache) return $.when();
+
+                        return $.when(
+                            api.caches.get.add(data),
+                            api.caches.all.grepRemove(folder_id + api.DELIM),
+                            api.caches.list.remove({ id: id, folder: folder_id }),
+                            api.clearFetchCache()
+                        )
+                        .done(function () {
+                            // to make the detailview remove the busy animation:
+                            api.trigger('update:' + _.ecid(data));
+                            api.trigger('refresh.list');
+                        });
+                    });
+            }
+            this.attachments = {
+                list: new Attachments.ListView({
+                    model: this.model,
+                    module: 7,
+                    changeCallback: propagateAttachmentChange
+                }),
+                upload: new Attachments.UploadView({
+                    model: this.model
+                })
+            };
+
+            this.$el.append(
+                $('<div class="section">').attr('data-section', 'attachments').append(
+                    this.renderField('attachments', function (guid) {
+                        return $('<span>').append(
+                            this.attachments.list.render().$el.attr('id', guid),
+                            this.attachments.upload.render().$el
+                        );
+                    })
+                )
+            );
+        },
+
+        renderDropzone: function () {
+            // Remove attachment handling when infostore is not present
+            if (!coreSettings.get('features/PIMAttachments', capabilities.has('filestore'))) return;
+
+            require(['io.ox/core/tk/upload', 'io.ox/core/extensions'], function (upload, ext) {
+                var POINTID = 'io.ox/contacts/edit/dnd/actions',
+                    SCROLLABLE = '.window-content',
+                    Dropzone = upload.dnd.FloatingDropzone.extend({
+                        getDimensions: function () {
+                            var node = this.$el.closest(SCROLLABLE),
+                                top = node.scrollTop(),
+                                height = node.outerHeight();
+                            return {
+                                'top': top,
+                                'bottom': 0,
+                                'height': height
+                            };
+                        }
+                    });
+
+                ext.point(POINTID).extend({
+                    id: 'attachment',
+                    index: 100,
+                    label: gt('Drop here to upload a <b class="dndignore">new attachment</b>'),
+                    action: this.attachments.list.addFile.bind(this.attachments.list)
+                });
+
+                this.$el.parent().append(
+                    new Dropzone({ point: POINTID, scrollable: SCROLLABLE }).render().$el
+                );
+
+            }.bind(this));
         },
 
         renderFooter: function () {
@@ -370,7 +471,8 @@ define('io.ox/contacts/edit/view', [
             department: true,
             email1: true,
             cellular_telephone1: true,
-            note: true
+            note: true,
+            attachments: true
         },
 
         readonly: {
@@ -579,6 +681,7 @@ define('io.ox/contacts/edit/view', [
         yomiLastName: gt('Furigana for last name'),
         yomiCompany: gt('Furigana for company'),
         // all other
+        attachments: gt('Attachments'),
         image1: gt('Image 1'),
         userfield01: gt('Optional 01'),
         userfield02: gt('Optional 02'),
@@ -675,7 +778,7 @@ define('io.ox/contacts/edit/view', [
                 // we need both values to remove the image
                 if (changes.image1_url === '') changes.image1 = '';
                 // happy debugging: here it's folder, not folder_id, yay.
-                var options = _.extend(this.pick('id', 'last_modified'), { folder: this.get('folder_id'), data: changes });
+                var options = _.extend(this.pick('id', 'last_modified'), { folder: this.get('folder_id'), attachments: attachments, data: changes });
                 return this.getApi().update(_.extend(options, { data: changes }));
             }
         },
@@ -703,6 +806,15 @@ define('io.ox/contacts/edit/view', [
             var r = this.validateFunctions(['validateLength', 'validateAddresses']);
             console.log('validate', r);
             return r;
+        // track pending attachments
+        attachments: function (value) {
+            // getter
+            if (_.isUndefined(value)) return !!this._attachments;
+            // setter
+            this.trigger('pending', value);
+            // shared api variable as workaround for detail view (progrss bar in detail View)
+            this._attachments = api.pendingAttachments[_.ecid(this.toJSON())] = value;
+        },
         },
 
         validateFunctions: function (array) {

@@ -232,6 +232,50 @@
     }
 }
 
+/* general blueprint for attachments */
+.contact-detail, .contact-edit {
+
+    .attachment-list { margin-top: 2px; }
+
+    .attachment-list .attachment {
+        position: relative;
+        margin-bottom: 8px;
+
+        width: 100%;
+        float: left;
+        margin-right: 0;
+
+        .row-1, .row-2 {
+            height: 16px;
+            line-height: 16px;
+        }
+        .filesize {
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        .remove {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom:  0;
+            width: 2em;
+
+            i.fa {
+                position: absolute;
+                top: 50%;
+                left: 0;
+                //left: 58px;
+                right: 0;
+                margin-top: -0.5em;
+                text-align: center;
+            }
+        }
+
+        .row-1, .row-2 { .ellipsis(); }
+    }
+}
+
 /* general blueprint for contact photo */
 .contact-photo {
     /* default size */
