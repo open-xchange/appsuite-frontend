@@ -920,17 +920,17 @@ Scenario('[C7454] Edit appointment, all-day to one hour', async function (I, use
     I.click('Edit');
     I.waitForElement('[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit', 5);
     I.waitForVisible('[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit', 5);
-    I.click('All day');
+    I.uncheckOption({ css: 'input[name="allDay"]' });
     I.click('~Start time');
-    I.click('[data-attribute="startDate"] [data-value="12:00 PM"]');
+    I.click({ css: '[data-attribute="startDate"] [data-value="12:00 PM"]' }, '.dropdown-menu.calendaredit');
     I.click('~End time');
-    I.click('[data-attribute="endDate"] [data-value="1:00 PM"]');
+    I.click({ css: '[data-attribute="endDate"] [data-value="1:00 PM"]' });
     I.click('Save');
     I.waitForDetached('[data-app-name="io.ox/calendar/edit"] .io-ox-calendar-edit');
     I.waitForElement(appointmentSelector, 5);
     I.click(appointmentSelector);
     I.waitForElement('.io-ox-calendar-main .io-ox-sidepopup', 5);
-    const newTime = momentRange().add(1, 'hours')
+    const newTime = momentRange().add(1, 'hours');
     expect(await I.grabTextFrom('.io-ox-sidepopup-pane .date-time')).to
         .equal(`${newTime.format('ddd')}, ${newTime.format('M/D/YYYY')}   12:00 – 1:00 PMCEST`);
 });
@@ -1342,11 +1342,12 @@ Scenario('[C7459] Remove attachments @shaky', async function (I) {
 
     // Expected Result: The calendar app shows up, including the existing appointment
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
+    I.waitForVisible('.appointment');
     I.see(subject, '.appointment');
 
     // 2. Select the existing appointment, click "Edit"
     I.click(subject, '.appointment');
-    I.waitForElement('.io-ox-sidepopup');
+    I.waitForVisible('.io-ox-sidepopup');
     I.waitForText('Edit');
     I.click('Edit');
 

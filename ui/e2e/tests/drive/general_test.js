@@ -79,6 +79,7 @@ Scenario('[C8366] Edit description @shaky', async (I) => {
     I.fillField('.modal-body textarea.form-control', 'Test description changed');
     I.click('Save');
     I.waitForDetached('.modal-body');
+    I.waitForVisible('div.description');
     I.seeTextEquals('Test description changed', 'div.description');
 });
 
