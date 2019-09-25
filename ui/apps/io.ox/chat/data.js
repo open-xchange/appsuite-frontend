@@ -575,7 +575,11 @@ define('io.ox/chat/data', [
         fetchUnlessExists: function (roomId) {
             var model = this.get(roomId);
             if (model) return $.when(model);
-            return $.get({ url: this.url() + '/' + roomId }).then(this.add.bind(this));
+            return $.ajax({
+                method: 'GET',
+                url: this.url() + '/' + roomId,
+                xhrFields: { withCredentials: true }
+            }).then(this.add.bind(this));
         },
 
         joinChannel: function (roomId) {
