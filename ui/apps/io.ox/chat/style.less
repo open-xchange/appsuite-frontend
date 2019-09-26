@@ -616,6 +616,9 @@
         }
     }
 
+    // special code for standalone mode
+    > .messages { flex: 1; }
+
     .icon{
         &:before { content: "\f016"; } // file-o
         &.pdf:before { content: "\f1c1"; color: #C01E07; } // file-pdf-o
@@ -717,17 +720,14 @@
         margin-right: 4px;
         font-size: 12px;
         text-align: center;
-        width: @stateSize!important;
-        height: @stateSize!important;
+        width: @stateSize;
+        height: @stateSize;
         border-radius: 10px;
         padding-top: 3px;
-        // small variant
-        &.small {
-            width: 18px;
-            height: 18px;
-            font-size: 12px;
-            line-height: 16px;
-            padding-top: 0;
+        &.large {
+            height: 16px;
+            width: 16px;
+            margin-bottom: -3px;
         }
         // colors
         &.online { background-color: @green; }
