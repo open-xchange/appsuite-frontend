@@ -93,7 +93,7 @@ Scenario('[C45046] Upload new version', async function (I) {
     I.waitForText(timestamp2);
     I.waitForElement('.io-ox-viewer [data-action="io.ox/core/viewer/actions/toolbar/close"]');
     I.waitForVisible('.io-ox-viewer [data-action="io.ox/core/viewer/actions/toolbar/close"]');
-    I.click('.io-ox-viewer [data-action="io.ox/core/viewer/actions/toolbar/close"]');
+    I.retry(5).click('.io-ox-viewer [data-action="io.ox/core/viewer/actions/toolbar/close"]');
     I.waitForDetached('.io-ox-viewer');
 });
 

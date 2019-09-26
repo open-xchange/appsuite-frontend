@@ -32,7 +32,7 @@ Scenario('[7772] Contact collection when sending mail', async (I) => {
 
     I.click('Mail');
     I.waitForText('Compose');
-    I.clickToolbar('Compose');
+    I.retry(5).clickToolbar('Compose');
 
     I.waitForFocus('[placeholder="To"]');
     I.fillField('To', 'urbi@orbi.vat');

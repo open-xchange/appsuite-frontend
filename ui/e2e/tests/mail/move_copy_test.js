@@ -40,13 +40,12 @@ const A = {
     createFolderInDialog: function (I, folder) {
         I.waitForVisible('.folder-picker-dialog');
         I.click('Create folder', '.folder-picker-dialog');
-
         I.waitForElement('[data-point="io.ox/core/folder/add-popup"]');
         I.fillField('Folder name', folder);
         I.click('Add');
 
         I.waitForDetached('[data-point="io.ox/core/folder/add-popup"]');
-        I.seeTextEquals(folder, '.folder-picker-dialog .selected .folder-label');
+        I.seeTextEquals(folder, '.folder-picker-dialog .selected:not(.disabled) .folder-label');
     },
     selectFolderInDialog: function (I, folder) {
         // toogle 'myfolders'
@@ -194,6 +193,7 @@ Scenario('[C114349] Create folder within move dialog', async function (I, users)
     A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/move');
     A.createFolderInDialog(I, subject);
     I.click('Move', '.folder-picker-dialog');
+    I.waitForDetached('.folder-picker-dialog');
 
     A.isEmpty(I, 'Inbox');
     A.check(I, folder, subject);

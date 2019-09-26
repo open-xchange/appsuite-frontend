@@ -605,7 +605,7 @@ Scenario('[C7395] Send mail with text indentations', async function (I, users) {
     I.login('app=io.ox/mail', { user: recipient });
 
     // Open the mail
-    I.waitForText(mailSubject, 2);
+    I.waitForText(mailSubject);
     I.retry(5).click(locate('.list-item').withText(mailSubject).inside('.list-view'));
     I.waitForVisible('iframe.mail-detail-frame');
 
